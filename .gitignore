@@ -1,0 +1,8 @@
+# Save data (per-player state, not part of the game's source)
+/save/
+
+# OS / editor junk
+Thumbs.db
+desktop.ini
+.DS_Store
+*.tmp

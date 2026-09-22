@@ -1,0 +1,9 @@
+[
+null,
+{"id":1,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":2,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":3,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":4,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":5,"name":"Zapal pochodnię","switchId":1,"trigger":0,"list":[{"code":121,"indent":0,"parameters":[2,2,0]},{"code":124,"indent":0,"parameters":[0,180]},{"code":101,"indent":0,"parameters":["",0,0,2,""]},{"code":401,"indent":0,"parameters":["Zapalasz pochodnię. Rozświetla mrok wokół ciebie,"]},{"code":401,"indent":0,"parameters":["ale nie będzie płonąć wiecznie..."]},{"code":0,"indent":0,"parameters":[]}]},
+{"id":6,"name":"Pochodnia gaśnie","switchId":1,"trigger":0,"list":[{"code":101,"indent":0,"parameters":["",0,0,2,""]},{"code":401,"indent":0,"parameters":["Pochodnia dogasła i zgasła."]},{"code":0,"indent":0,"parameters":[]}]}
+]
