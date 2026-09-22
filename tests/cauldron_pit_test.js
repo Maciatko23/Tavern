@@ -107,7 +107,7 @@ const { launch, sleep } = require("./cdp.js");
         // phase 3: the well - refused without a dug-out 2x2 pit at depth 3 under it, allowed once it is
         // there; the pit also merges visually into one big hole (four distinct quadrants, not four small ones)
         // ==================================================================================================
-        const wx = bx, wy = by + 3;   // reuse the same spot again; front row wy cols wx..wx+2, back row wy-1
+        const wx = bx, wy = by + 3;   // reuse the same spot again; the well is 2x2: front row wy cols wx..wx+1, back row wy-1
         await ev(`$gameParty.gainItem($dataItems[Farming.ITEM.stone], 12); $gameParty.gainItem($dataItems[Farming.ITEM.planks], 3); $gameParty.gainItem($dataItems[Farming.ITEM.rope], 2); $gameParty.gainItem($dataItems[Farming.ITEM.bucket], 1); $gameParty.gainItem($dataItems[Farming.ITEM.shovel], 1); $gameSystem.setStamina(250); 0`);
         const whyBefore = await ev(`Farming.whyNotBuild("well", ${wx}, ${wy})`);
         check("without the pit, the well is refused with the new reason", /dół 2×2/.test(whyBefore || ""), whyBefore);

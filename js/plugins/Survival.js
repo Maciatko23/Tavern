@@ -86,6 +86,11 @@
     const SATED_FACTOR = num(params.satedCostFactor, 0.85);
     const BOOTS_SPEED = num(params.bootsSpeed, 1.1);
     const BACKPACK_BONUS = num(params.backpackBonus, 51);
+    // Total carry weight: on top of (not instead of) the per-item stack caps above. Items are tagged
+    // <Weight:N> in their note (untagged items, mostly small foraged things and seeds, weigh nothing
+    // and are never weight-limited). The backpack raises this the same way it raises the stack caps.
+    const WEIGHT_CAP_BASE = num(params.weightCapBase, 120);   // must clear the biggest single carry-and-place cost (the hut: 30+40+20+6 = 96) with room to spare
+    const WEIGHT_CAP_BACKPACK = num(params.weightCapBackpack, 80);
 
     const ITEM = { knifeStone: 90, knifeIron: 91, rawMeat: 94, rawHide: 96, cloak: 112, boots: 113, backpack: 114 };
     const BUFFS = {
@@ -257,8 +262,30 @@
     const _maxItems = Game_Party.prototype.maxItems;
     Game_Party.prototype.maxItems = function(item) {
         const max = _maxItems.call(this, item);
-        return item && item.itypeId !== 2 && hasItem(ITEM.backpack) ? max + BACKPACK_BONUS : max;
+        const stackMax = item && item.itypeId !== 2 && hasItem(ITEM.backpack) ? max + BACKPACK_BONUS : max;
+        const w = itemWeight(item);
+        if (!item || w <= 0) return stackMax;
+        const budget = weightCap() - carriedWeight(item);
+        if (budget <= 0) return Math.min(stackMax, this.numItems(item));
+        return Math.min(stackMax, Math.floor(budget / w));
     };
+    // <Weight:N> on the item's note (RPG Maker parses it into item.meta.Weight already); untagged = weightless
+    function itemWeight(item) {
+        const w = item && item.meta && item.meta.Weight;
+        return w !== undefined ? Number(w) || 0 : 0;
+    }
+    function weightCap() {
+        return WEIGHT_CAP_BASE + (hasItem(ITEM.backpack) ? WEIGHT_CAP_BACKPACK : 0);
+    }
+    // total weight carried, optionally excluding one item type (to work out how much room is left for it)
+    function carriedWeight(exclude) {
+        let total = 0;
+        for (const it of $gameParty.items()) {
+            if (exclude && it.id === exclude.id) continue;
+            total += itemWeight(it) * $gameParty.numItems(it);
+        }
+        return total;
+    }
 
     // ------------------------------------------------------------------
     // Weather: a fixed plan for every day of the year (rain, snow in winter)
@@ -312,12 +339,69 @@
         this._coldWas = false;
     };
 
+    // one bar: how much of the carry-weight budget is used up (the backpack icon, then a single gauge)
+    function Sprite_WeightBar() {
+        this.initialize(...arguments);
+    }
+    Sprite_WeightBar.prototype = Object.create(Sprite.prototype);
+    Sprite_WeightBar.prototype.constructor = Sprite_WeightBar;
+    Sprite_WeightBar.HEIGHT = 22;
+    const WEIGHT_ICON = 370;   // the backpack's own icon
+    Sprite_WeightBar.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this, new Bitmap(150, Sprite_WeightBar.HEIGHT));
+        this._iconSet = ImageManager.loadSystem("IconSet");
+        this._key = "";
+    };
+    Sprite_WeightBar.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        const hud = this.parent;
+        if (hud && hud._gauge) {
+            this.x = hud._gauge.x;
+            this.y = hud._gauge.y + 36 + (window.Needs && Needs.enabled() ? Needs.HEIGHT : 0);
+            this.visible = hud._gauge.visible;
+        }
+        if (!this._iconSet.isReady()) return;
+        const carried = Math.round(carriedWeight()), cap = weightCap();
+        const key = carried + "/" + cap;
+        if (key === this._key) return;
+        this._key = key;
+        const bmp = this.bitmap, ctx = bmp.context;
+        bmp.clear();
+        bmp.blt(this._iconSet, (WEIGHT_ICON % 16) * 32, Math.floor(WEIGHT_ICON / 16) * 32, 32, 32, 6, 0, 20, 20);
+        const bx = 32, bw = 78, bh = 9, by = 6;
+        ctx.fillStyle = "#1a100a"; ctx.fillRect(bx - 1, by - 1, bw + 2, bh + 2);
+        ctx.fillStyle = "#a67c3a"; ctx.fillRect(bx - 1, by - 1, bw + 2, 1); ctx.fillRect(bx - 1, by + bh, bw + 2, 1);
+        ctx.fillStyle = "#3a2616"; ctx.fillRect(bx, by, bw, bh);
+        const full = Math.min(1, carried / Math.max(1, cap)), w = Math.round(bw * full);
+        if (w > 0) {
+            const g = ctx.createLinearGradient(0, by, 0, by + bh);
+            const c = full >= 0.95 ? "#c2372b" : full >= 0.75 ? "#c98a2c" : "#8fae4a";
+            g.addColorStop(0, c); g.addColorStop(1, "rgba(0,0,0,0.35)");
+            ctx.fillStyle = c; ctx.fillRect(bx, by, w, bh);
+            ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.fillRect(bx, by, w, 2);
+        }
+        bmp.fontSize = 13;
+        bmp.textColor = "#f6e7c4";
+        bmp.outlineColor = "rgba(20,10,4,0.9)";
+        bmp.outlineWidth = 3;
+        bmp.drawText(carried + "/" + cap, bx + bw + 6, -3, 60, 20, "left");
+        bmp._baseTexture.update();
+    };
+    const _Scene_Map_createSurvivalHud2 = Scene_Map.prototype.createSurvivalHud;
+    Scene_Map.prototype.createSurvivalHud = function() {
+        _Scene_Map_createSurvivalHud2.call(this);
+        if (this._survivalHud) {
+            this._weightBar = new Sprite_WeightBar();
+            this._survivalHud.addChild(this._weightBar);
+        }
+    };
+
     Sprite_BuffIcons.prototype.update = function() {
         Sprite.prototype.update.call(this);
         const hud = this.parent;
         if (hud && hud._gauge) {
             this.x = hud._gauge.x;
-            this.y = hud._gauge.y + 36 + (window.Needs && Needs.enabled() ? Needs.HEIGHT : 0);   // under the hunger and thirst bars
+            this.y = hud._gauge.y + 36 + (window.Needs && Needs.enabled() ? Needs.HEIGHT : 0) + Sprite_WeightBar.HEIGHT;   // under the hunger/thirst bars and the weight bar
             this.visible = hud._gauge.visible;
         }
         const list = $gameSystem.activeBuffs(), cold = $gameSystem.isCold();
@@ -359,5 +443,5 @@
         }
     };
 
-    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, costFactor, BUFFS };
+    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight() };
 })();

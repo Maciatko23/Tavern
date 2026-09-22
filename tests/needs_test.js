@@ -31,13 +31,13 @@ fs.mkdirSync(OUT, { recursive: true });
 
         // ================= 1. data and HUD =================
         const item = await ev("(function(){ const i = $dataItems[129]; return i ? [i.name, i.iconIndex, i.itypeId, i.consumable, i.note] : null; })()");
-        check("item 129 Bukłak: an ordinary item, not consumed, note <Drink:35>", JSON.stringify(item) === JSON.stringify(["Bukłak", 389, 1, false, "<Drink:35>"]), item);
+        check("item 129 Bukłak: an ordinary item, not consumed, note <Drink:35>", JSON.stringify(item) === JSON.stringify(["Bukłak", 389, 1, false, "<Drink:35><Weight:2>"]), item);
         const icons = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (const i of [389, 390, 391]) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; out.push(n); } res(out); }; chk(); })`);
         check("icons 389 (flask), 390 (food), 391 (water drop) are drawn", icons.every(n => n > 200), icons);
         const st0 = await ev("Needs.state()");
         check("a new game starts at about 90 / 90", near(st0.food, 90, 1) && near(st0.water, 90, 1), st0);
         const hud = await ev("(function(){ const s = SceneManager._scene; const bars = s._needsBars; const buffs = s._buffIcons; return { bars: !!bars && !!bars.parent, dy: bars && buffs ? Math.round(buffs.y - bars.y) : null, visible: !!bars && bars.visible }; })()");
-        check("two bars sit under the stamina gauge and the buff icons moved below them", hud.bars && hud.visible && hud.dy === 42, hud);
+        check("two bars sit under the stamina gauge, the weight bar under those, and the buff icons moved below all three", hud.bars && hud.visible && hud.dy === 64, hud);
 
         // ================= 2. the meters run down =================
         await set(100, 100);

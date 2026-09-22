@@ -129,7 +129,8 @@ const { launch, sleep } = require("./cdp.js");
             await ev(`(function(){ const b = Farming.buildingAt(${fx}, ${fy}); delete b.job; $gameSystem._farm.rev++; })(); 0`);
         }
         // ---------------------------------------------------------------- the tripod: the food hangs on the hook and roasts by itself
-        await ev(`(function(){ const b = Farming.buildingAt(${fx}, ${fy}); b.type = "tripod"; delete b.job; $gameSystem._farm.rev++; })(); 0`);
+        // (fed back up here: the fire itself was already tested above, this section is about the tripod/hook mechanic)
+        await ev(`(function(){ const b = Farming.buildingAt(${fx}, ${fy}); b.type = "tripod"; delete b.job; b.fuel = 10; b.fuelSince = Farming.clockHours(); $gameSystem._farm.rev++; })(); 0`);
         await frames(20);
         const hang = () => J(`(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === "tripod"); return e ? { raw: !!(e.meatRaw && e.meatRaw.visible), rope: !!(e.rope && e.rope.visible), done: e.meatDone ? e.meatDone.alpha : -1, doneShown: !!(e.meatDone && e.meatDone.visible) } : null; })()`);
         const jobInfo = () => J(`(function(){ const j = Farming.buildingAt(${fx}, ${fy}).job; return j ? { sit: !!j.sit, recipe: j.recipe } : null; })()`);

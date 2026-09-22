@@ -29,8 +29,10 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- geometry (no map needed)
         check("kiln: 3 x 2 now", (await J(`(function(){ const g = Farming.geoOf({ type: "kiln", v: 2 }); return [g.w, g.h, g.image]; })()`)).join() === "3,2,Farm_Kiln_L");
         check("kiln put up before (no v): keeps 2 x 1 and the old picture", (await J(`(function(){ const g = Farming.geoOf({ type: "kiln" }); return [g.w, g.h || 1, g.image, g.vent, g.ventX || 0]; })()`)).join() === "2,1,Farm_Kiln,50,0");
-        check("the stations, the well and the tent grew to 3 x 2 and have a legacy size; the workbench is 2 x 1 (a bit smaller); the brewery is 4 x 2 and the pantry 3 x 2 (checked below)",
-            (await J(`["kiln","sawmill","bakery","brickworks","forge","smokehouse","tannery","dairy","cauldron","well","tent"].filter(t => { const d = Farming.BUILDINGS[t]; return !(d.w === 3 && d.h === 2 && d.legacy && d.legacy.w === 2); })`)).length === 0);
+        check("the stations and the tent grew to 3 x 2 and have a legacy size; the workbench is 2 x 1 (a bit smaller); the brewery is 4 x 2 and the pantry 3 x 2 (checked below)",
+            (await J(`["kiln","sawmill","bakery","brickworks","forge","smokehouse","tannery","dairy","cauldron","tent"].filter(t => { const d = Farming.BUILDINGS[t]; return !(d.w === 3 && d.h === 2 && d.legacy && d.legacy.w === 2); })`)).length === 0);
+        check("the well shrank to a 2 x 2 footprint (same art) and still has a legacy size",
+            (await J(`(function(){ const d = Farming.BUILDINGS.well; return d.w === 2 && d.h === 2 && d.legacy && d.legacy.w === 2; })()`)));
         check("yards: cowshed 8x5, sheep pen 6x5, coop 6x5; each with a gate in the bottom row and the hut inside",
             (await J(`["cowshed","pen","coop"].map(t => { const d = Farming.BUILDINGS[t]; return [d.w, d.h, d.yard.gate < d.w - 1 && d.yard.gate > 0, d.yard.hut.dx >= 1 && d.yard.hut.dx + d.yard.hut.w <= d.w - 1 && d.yard.hut.dy + d.yard.hut.h <= d.h - 1]; })`)).flat().join() === "8,5,true,true,6,5,true,true,6,5,true,true");
         const cow = "Farming.BUILDINGS.cowshed";

@@ -527,6 +527,53 @@
         this._ghost.setBlendColor(problem ? [255, 70, 60, 110] : [0, 0, 0, 0]);
     };
 
+    // the "?" key: a plain tile grid over the visible ground, for lining up buildings by eye. Toggled
+    // (on $gameSystem, so it stays on across a save/load), redrawn only when the view actually scrolls.
+    function Sprite_TileGrid() {
+        this.initialize(...arguments);
+    }
+    Sprite_TileGrid.prototype = Object.create(Sprite.prototype);
+    Sprite_TileGrid.prototype.constructor = Sprite_TileGrid;
+
+    Sprite_TileGrid.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this, new Bitmap(Graphics.width, Graphics.height));
+        this.z = 2.35;   // over the ground, under the characters and the build-mode placer
+        this.visible = false;
+        this._scrollKey = null;
+    };
+
+    Sprite_TileGrid.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        if (!$gameMap || !$gamePlayer || !$gameMessage) return;
+        if (Input.isTriggered("grid") && !$gameMessage.isBusy() && !$gameMap.isEventRunning()) {
+            $gameSystem._gridShown = !$gameSystem._gridShown;
+        }
+        this.visible = !!$gameSystem._gridShown;
+        if (!this.visible) return;
+        const scrollKey = $gameMap.displayX() + "," + $gameMap.displayY();
+        if (scrollKey !== this._scrollKey) {
+            this._scrollKey = scrollKey;
+            this.redraw();
+        }
+    };
+
+    Sprite_TileGrid.prototype.redraw = function() {
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const bmp = this.bitmap, ctx = bmp.context;
+        bmp.clear();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255,255,255,0.28)";
+        const x0 = Math.floor($gameMap.displayX()) - 1, x1 = x0 + Math.ceil(Graphics.width / tw) + 2;
+        const y0 = Math.floor($gameMap.displayY()) - 1, y1 = y0 + Math.ceil(Graphics.height / th) + 2;
+        for (let ty = y0; ty <= y1; ty++) {
+            for (let tx = x0; tx <= x1; tx++) {
+                if (!$gameMap.isValid(tx, ty)) continue;
+                ctx.strokeRect(Math.round($gameMap.adjustX(tx) * tw) + 0.5, Math.round($gameMap.adjustY(ty) * th) + 0.5, tw - 1, th - 1);
+            }
+        }
+        bmp._baseTexture.update();
+    };
+
     // ---- campfire glow: a soft additive light, faint by day and strong at night.
     // It lives on the spriteset itself (not in the tilemap), because the day/night
     // tone filter only covers the base sprite - so the fire is not dimmed with the rest.
@@ -681,7 +728,7 @@
         for (const e of set ? set._sprites : []) {
             if (e.b.site) continue;
             const def = Farming.geoOf(e.b);
-            if (def.fire) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id });
+            if (def.fire && Farming.fireLit(e.b)) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id });
             else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) out.push({ x: e.sprite.x + (def.ventX || 0), y: e.sprite.y - Math.max(20, (def.vent || 40) - 30), r: def.light || 190, i: 0.85, id: e.b.id });
         }
         return out;
@@ -785,7 +832,7 @@
             this.reposition();
         }
         for (const e of this._sprites) {
-            if (e.glow && (e.b.type === "campfire" || (Farming.geoOf(e.b).fire || {}).smoke)) e.glow.alpha = fireGlowAlpha(this._age + e.b.id * 17);   // a fire that is always lit
+            if (e.glow && (e.b.type === "campfire" || (Farming.geoOf(e.b).fire || {}).smoke)) e.glow.alpha = Farming.fireLit(e.b) ? fireGlowAlpha(this._age + e.b.id * 17) : 0;   // lit for as long as there is fuel (or something is already cooking on it)
             if (e.flame) this.updateFlame(e);
             if (e.meatRaw) this.updateHang(e);
             if (e.badge) this.updateStation(e);
@@ -839,6 +886,8 @@
     };
     // the flames flicker through their frames; the smoke of a campfire never stops
     BuildingSprites.prototype.updateFlame = function(e) {
+        e.flame.visible = Farming.fireLit(e.b);
+        if (!e.flame.visible) return;
         const k = Farming.geoOf(e.b).fire.size || 1, frames = flameFrames(k), i = Math.floor((this._age + e.b.id * 3) / 5) % frames.length;
         if (e.flameFrame !== i) {
             e.flameFrame = i;
@@ -846,7 +895,8 @@
         }
     };
     BuildingSprites.prototype.updateStation = function(e) {
-        const b = e.b, def0 = Farming.geoOf(b), ready = Farming.jobReady(b), cooking = !!b.job && !ready, burning = cooking || !!(def0.fire && def0.fire.smoke);
+        const b = e.b, def0 = Farming.geoOf(b), ready = Farming.jobReady(b), cooking = !!b.job && !ready, fireOut = !!def0.fire && !Farming.fireLit(b);
+        const burning = cooking || !!(def0.fire && def0.fire.smoke && !fireOut);
         if (e.puffs) {
             e.puffs.forEach((p, i) => {
                 p.visible = burning;
@@ -859,7 +909,7 @@
                 p.scale.x = p.scale.y = 0.55 + t * 0.9;
             });
         }
-        if (e.glow && b.type !== "campfire" && !(def0.fire && def0.fire.smoke)) e.glow.alpha = fireGlowAlpha(this._age + b.id * 17) * (def0.fire ? (cooking ? 0.75 : 0.45) : burning ? 0.55 : 0);
+        if (e.glow && b.type !== "campfire" && !(def0.fire && def0.fire.smoke)) e.glow.alpha = fireOut ? 0 : fireGlowAlpha(this._age + b.id * 17) * (def0.fire ? (cooking ? 0.75 : 0.45) : burning ? 0.55 : 0);
         e.badge.visible = ready;
         if (ready) {
             const idx = Farming.itemOf(b.job.out[0]).iconIndex, height = (e.sprite.bitmap && e.sprite.bitmap.height) || e.height;
@@ -1050,6 +1100,8 @@
         this._tilemap.addChild(this._stoneLayer);
         this._buildPlacer = new Sprite_BuildPlacer(this._tilemap);
         this._tilemap.addChild(this._buildPlacer);
+        this._tileGrid = new Sprite_TileGrid();
+        this._tilemap.addChild(this._tileGrid);
         this._nightLight = new Sprite_NightLight(this);   // over the world, under the warm glow of the fires and the interface
         this.addChild(this._nightLight);
         this._farmGlowLayer = new Sprite();

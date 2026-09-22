@@ -441,6 +441,7 @@
     const pluginName = "Farming";
     Input.keyMapper[82] = "flip";   // R: mirror the building that is being placed
     Input.keyMapper[69] = "pagedown";   // E, beside Q (= pageup): on the map Q opens the build menu and E the food menu, in windows they still page (W walks now: FreeMovement.js)
+    Input.keyMapper[191] = "grid";   // the "?" key (keyCode 191, the "/" and "?" key): toggles a ground grid overlay, see Sprite_TileGrid in Farming_Render.js
     const params = PluginManager.parameters(pluginName);
     const num = (value, fallback) =>
         value !== undefined && value !== "" && isFinite(Number(value)) ? Number(value) : fallback;
@@ -473,7 +474,7 @@
         cloak: 112, boots: 113, backpack: 114, ironAxe: 115, ironPick: 116, potato: 71, carrot: 72, egg: 75,
         pickaxe: num(params.pickaxeItem, 63),
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
-        honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
     };
     const STAMINA = {
         dig: num(params.staminaDig, 4),
@@ -692,9 +693,19 @@
                 { id: "nails", name: "Wykuj gwoździe", inputs: [[ITEM.iron, 1]], output: [ITEM.nails, 10], manual: true,
                     hours: 1, stamina: 5, startSe: "Hammer", desc: "Na kowadle z pręta żelaza wykuwasz garść gwoździ." },
                 { id: "cauldron_item", name: "Wykuj kociołek", inputs: [[ITEM.iron, 3]], output: [ITEM.cauldronItem, 1], manual: true, unique: true, alsoBuilt: "cauldron",
-                    hours: 2, stamina: 6, startSe: "Hammer", desc: "Żelazny kociołek z uchem do zawieszenia. Zanieś go do ogniska z trójnogiem, żeby go podpiąć." }
+                    hours: 2, stamina: 6, startSe: "Hammer", desc: "Żelazny kociołek z uchem do zawieszenia. Zanieś go do ogniska z trójnogiem, żeby go podpiąć." },
+                { id: "shears", name: "Wykuj nożyce", inputs: [[ITEM.iron, 2], [ITEM.wood, 1]], output: [ITEM.shears, 1], manual: true, unique: true,
+                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Ostre nożyce do strzyżenia owiec. Bez nich wełna zostaje na owcy." },
+                { id: "tongs", name: "Wykuj szczypce", inputs: [[ITEM.iron, 2], [ITEM.wood, 1]], output: [ITEM.tongs, 1], manual: true, unique: true,
+                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Żelazne szczypce do trzymania rozżarzonego metalu. Bez nich w hucie nie przetopisz stali." }
             ],
             desc: "Wytapia żelazo z rudy i węgla, a na kowadle kuje z niego gwoździe, noże oraz głowice i ostrza narzędzi (montuje się je w warsztacie)." },
+        huta: { name: "Huta", cost: [[ITEM.brick, 10], [ITEM.stone, 6]], w: 2, h: 2, stamina: 14, image: "Farm_Huta_L", vent: 76, ventX: 0, smokes: true, working: "Stal się przetapia...",
+            recipes: [
+                { id: "steel", name: "Przetop stal", inputs: [[ITEM.iron, 2], [ITEM.charcoal, 2]], output: [ITEM.steel, 1], tool: ITEM.tongs,
+                    hours: 6, stamina: 5, desc: "Żelazo przetapia się z węglem drzewnym w twardszą stal. Żelazne szczypce trzymają rozżarzony metal, żeby się nie poparzyć." }
+            ],
+            desc: "Piec z cegieł do przetapiania żelaza na stal. Potrzebne są do tego żelazne szczypce (wykuwa się je w kuźni)." },
         snare: { name: "Pułapka", cost: [[ITEM.branch, 4], [ITEM.rope, 2], [ITEM.stone, 1]], w: 2, stamina: 6, image: "Farm_Snare",
             produce: { item: ITEM.carcass, amount: 1, period: 2, cap: 2 },
             desc: "Zwierzyna wpada w sidła: 1 sztuka co 2 dni (maksymalnie 2). Oprawisz ją nożem." },
@@ -720,7 +731,7 @@
             packName: "Zabierz wiadro", packHelp: "Zabierasz puste wiadro do plecaka (z wodą w środku nie da się go podnieść). Postawisz je, gdzie zechcesz. Wiadro jest też potrzebne do budowy studni.", packedText: "Zabrano: Wiadro",
             rain: { max: 6, rate: 1 },
             desc: "Drewniane wiadro z żelaznymi obręczami. Postawione na dworze zbiera deszczówkę (porcja za każdą godzinę deszczu, do 6): napijesz się z niego, podlejesz rośliny w pobliżu albo napełnisz konewkę i bukłak. Możesz je podnieść do plecaka. Jest potrzebne do budowy studni." },
-        well: { name: "Studnia", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2], [ITEM.bucket, 1]], w: 3, h: 2, stamina: 12, image: "Farm_Well_L", refund: [[ITEM.stone, 6], [ITEM.planks, 1], [ITEM.rope, 1], [ITEM.bucket, 1]],
+        well: { name: "Studnia", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2], [ITEM.bucket, 1]], w: 2, h: 2, stamina: 12, image: "Farm_Well_L", refund: [[ITEM.stone, 6], [ITEM.planks, 1], [ITEM.rope, 1], [ITEM.bucket, 1]],
             v2: { cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2]], refund: undefined },   // wells put up before the bucket was needed
             legacy: { w: 2, h: 1, image: "Farm_Well", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2]], refund: undefined }, water: true,
             desc: "Czysta woda: napełnisz konewkę albo się napijesz. Do budowy potrzebne jest wiadro." },
@@ -737,8 +748,8 @@
             desc: "Wisi nad ogniem i zastępuje pieczenie na patyku: gotuje zupy, gulasz, owsiankę i wywary, a przy jego ogniu można się ogrzać. Powstaje z rozbudowy trójnogu. Mięso, ryby i ziemniaki upieczesz na osobnym ognisku." },
         pen: { name: "Owczarnia", cost: [[ITEM.planks, 12], [ITEM.rope, 2], [ITEM.stone, 2]], w: 6, h: 5, stamina: 14, image: "Farm_Pen_L", legacy: { w: 2, h: 1, image: "Farm_Pen", cost: [[ITEM.planks, 6], [ITEM.rope, 2], [ITEM.stone, 2]] },
             yard: { gate: 2, hut: { dx: 2, dy: 3, w: 2, h: 1 }, animal: "sheep", count: 3 },
-            produce: { item: ITEM.wool, amount: 1, period: 3, cap: 3 },
-            desc: "Ogrodzony wygon z szopą: w środku pasą się owce i dają wełnę, 1 sztukę co 3 dni (maksymalnie 3). Z wełny szyje się płaszcz." },
+            produce: { item: ITEM.wool, amount: 1, period: 3, cap: 3, tool: ITEM.shears },
+            desc: "Ogrodzony wygon z szopą: w środku pasą się owce i dają wełnę, 1 sztukę co 3 dni (maksymalnie 3), ale do strzyżenia potrzebne są nożyce (wykuwa się je w kuźni). Z wełny szyje się płaszcz." },
         // The forest bed (type key kept from the old hide bedroll): made in "Wytwórz..." (an item), laid out like the tent, but a night on it
         // restores only part of the strength: sleepRestore of the maximum, sleepBad in rain, snow and winter. refund: what Rozbierz gives back.
         bedroll: { name: "Leśne legowisko", cost: [[ITEM.boughBed, 1]], w: 2, stamina: 2, image: "Farm_Bedroll", instant: true, sleep: true, indoor: true, sleepRestore: 0.6, sleepBad: 0.4,
@@ -752,8 +763,8 @@
         cowshed: { name: "Obora", cost: [[ITEM.planks, 16], [ITEM.rope, 3], [ITEM.nails, 6]], w: 8, h: 5, stamina: 18, image: "Farm_Cowshed_XL",
             v2: { w: 7, h: 5, image: "Farm_Cowshed_L", cost: [[ITEM.planks, 14], [ITEM.rope, 3], [ITEM.nails, 6]], stamina: 16, yard: { gate: 3, hut: { dx: 2, dy: 3, w: 3, h: 1 }, animal: "cow", count: 2 } }, legacy: { w: 2, h: 1, image: "Farm_Cowshed", cost: [[ITEM.planks, 8], [ITEM.rope, 3], [ITEM.nails, 4]] },
             yard: { gate: 3, hut: { dx: 2, dy: 3, w: 4, h: 1 }, animal: "cow", count: 2 },
-            produce: { item: ITEM.milk, amount: 2, period: 1, cap: 6 },
-            desc: "Ogrodzony wybieg z oborą: w środku chodzą krowy, a razem dają 2 dzbany mleka dziennie (najwyżej 6). Mleko szybko kwaśnieje, więc zbieraj je często albo zrób z niego ser." },
+            produce: { item: ITEM.milk, amount: 2, period: 1, cap: 6, tool: ITEM.bucket },
+            desc: "Ogrodzony wybieg z oborą: w środku chodzą krowy, a razem dają 2 dzbany mleka dziennie (najwyżej 6), ale do dojenia potrzeba pustego wiadra w plecaku. Mleko szybko kwaśnieje, więc zbieraj je często albo zrób z niego ser." },
         // The player's first house: a log hut (one per game). Its doorway (door.dx: a passable cell of the bottom row) leads to Map100, a room with
         // a 5 x 2 floor where furniture (the buildings marked indoor) is put with the same build menu.
         hut: { name: "Chatka", cost: [[ITEM.planks, 30], [ITEM.nails, 40], [ITEM.stone, 20], [ITEM.iron, 6]], w: 5, h: 3, stamina: 40, image: "Farm_Hut_L", door: { dx: 3 }, single: true,
@@ -1801,7 +1812,8 @@
             if (at < 0) return;
             list.splice(at, 1);
             const fresh = (b.claimed || []).concat(claimGround(tilesOfBuilding(up.to, ax, ay)));
-            list.push(Object.assign({ id: farm().nextId++, type: up.to, x: ax, y: ay, last: today(), v: 3, claimed: fresh }, b.flip ? { flip: true } : {}));
+            const fuel = b.fuel !== undefined ? { fuel: fuelLeft(b), fuelSince: clockHours() } : {};   // the same fire, still burning down
+            list.push(Object.assign({ id: farm().nextId++, type: up.to, x: ax, y: ay, last: today(), v: 3, claimed: fresh }, b.flip ? { flip: true } : {}, fuel));
             changed();
             playSe(SE.build, 100);
             later(10, () => playSe(SE.build, 90));
@@ -1956,6 +1968,8 @@
     function collect(b) {
         const n = readyProduce(b);
         if (n < 1) return false;
+        const tool = BUILDINGS[b.type].produce.tool;
+        if (tool && !requireItem(tool)) return false;
         swingThen(CROUCH_KIND, () => {
             b.last = today();
             changed();
@@ -1976,6 +1990,38 @@
     function jobReady(b) {
         return !!b.job && (!hasClock() || jobHoursLeft(b) <= 0);
     }
+    // ---- fire fuel: a campfire (and what grows from it - tripod, cauldron) slowly burns down and goes out; lazily
+    // computed from the game clock, same as everything else timed here, so nothing needs to tick every frame.
+    const FUEL_MAX = 10;          // hours of burning it can hold at once
+    const FUEL_START = 4;         // hours it starts with when the site is finished
+    const FUEL_PER_WOOD = 3;      // hours added per piece of firewood
+    const FUEL_PER_BRANCH = 1;    // hours added per branch (worse fuel, but it is often what is on hand)
+    function fuelLeft(b) {
+        const def = geoOf(b);
+        if (!def.fire) return Infinity;   // no animated fire on this building (older cauldrons built before the flame) - never fuel-gated
+        if (b.fuel === undefined) { b.fuel = FUEL_START; b.fuelSince = clockHours(); }
+        return Math.max(0, b.fuel - Math.max(0, clockHours() - b.fuelSince));
+    }
+    function addFuel(b, hours) {
+        b.fuel = Math.min(FUEL_MAX, fuelLeft(b) + hours);
+        b.fuelSince = clockHours();
+    }
+    // lit for display/warming purposes: real fuel, or a job already burning in it (started while it still had fuel -
+    // it does not go dark under food that is mid-roast just because the background clock ran on while you were away)
+    function fireLit(b) {
+        return fuelLeft(b) > 0 || !!b.job;
+    }
+    function feedFireEntries(b) {
+        const def = geoOf(b);
+        if (!def.fire) return [];
+        const left = fuelLeft(b), status = left > 0 ? "Starczy jeszcze na " + hoursText(left) + "." : b.job ? "Bez drewna zgaśnie, gdy skończy się to, co się teraz piecze." : "Ogień wygasł.";
+        return [
+            { name: "Dorzuć drewna", icon: itemOf(ITEM.wood).iconIndex, right: "×1", enabled: countOf(ITEM.wood) > 0,
+                help: status + " Drewno daje " + hoursText(FUEL_PER_WOOD) + " ognia.", run: () => { $gameParty.loseItem(itemOf(ITEM.wood), 1, false); addFuel(b, FUEL_PER_WOOD); changed(); playSe(SE.build, 95); popup(itemOf(ITEM.wood).iconIndex, "Dorzucono drewna", "#f3e0a0"); return true; } },
+            { name: "Dorzuć gałąź", icon: itemOf(ITEM.branch).iconIndex, right: "×1", enabled: countOf(ITEM.branch) > 0,
+                help: status + " Gałąź daje " + hoursText(FUEL_PER_BRANCH) + " ognia - gorzej niż drewno.", run: () => { $gameParty.loseItem(itemOf(ITEM.branch), 1, false); addFuel(b, FUEL_PER_BRANCH); changed(); playSe(SE.build, 95); popup(itemOf(ITEM.branch).iconIndex, "Dorzucono gałąź", "#f3e0a0"); return true; } }
+        ];
+    }
     function recipeOf(b, id) {
         return ((BUILDINGS[b.type] || {}).recipes || []).find(r => r.id === id) || null;
     }
@@ -1985,6 +2031,8 @@
     function startJob(b, recipeId) {
         const r = recipeOf(b, recipeId);
         if (!r || b.job) return false;
+        if (geoOf(b).fire && fuelLeft(b) <= 0) { complain(itemOf(ITEM.wood).iconIndex, "Ogień wygasł. Dorzuć drewna."); return false; }
+        if (r.tool && !requireItem(r.tool)) return false;
         const missing = missingInputs(r);
         if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Brakuje: " + itemOf(missing[0][0]).name); return false; }
         if (!spendStamina(r.stamina || 0)) return false;
@@ -2178,6 +2226,7 @@
             complain(82, "Nie jesteś zmęczony");
             return false;
         }
+        if (def.fire && !fireLit(b)) { complain(itemOf(ITEM.wood).iconIndex, "Ogień wygasł. Dorzuć drewna."); return false; }
         const restore = () => {
             if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(def.restHours || 1);
             if (window.Journal) Journal.afterRest();   // a night on the bedroll ends the day: the summary of it
@@ -2313,9 +2362,10 @@
             for (const r of autoRecipes) {
                 const missing = missingInputs(r), out = itemOf(r.output[0]);
                 const sit = r.roast ? "\n" + (def.hang ? "Zawieszasz to na haczyku trójnogu: piecze się samo, możesz odejść." : "Siedzisz z tym na patyku nad ogniem. Jeśli odejdziesz przed końcem, nic się nie upiecze.") : "";
+                const toolNote = r.tool ? " Potrzebne: " + itemOf(r.tool).name + "." : "";
                 const help = missing.length > 0
-                    ? "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + "."
-                    : "Wynik: " + out.name + " ×" + r.output[1] + ", " + hoursText(r.hours).replace(/\.$/, "") + ".\n" + r.desc + sit;
+                    ? "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + "." + toolNote
+                    : "Wynik: " + out.name + " ×" + r.output[1] + ", " + hoursText(r.hours).replace(/\.$/, "") + ".\n" + r.desc + sit + toolNote;
                 entries.push({ name: r.name, costs: costRows(r.inputs), enabled: missing.length === 0, help, run: () => startJob(b, r.id),
                     tip: "Wynik: " + out.name + " ×" + r.output[1] + ".\n" + r.desc, facts: [r.roast && !def.hang ? "Czas: " + hoursText(r.hours) + " (siedzisz przy ogniu; odejście przerywa pieczenie)" : "Czas: " + hoursText(r.hours) + (def.hang ? " (piecze się na trójnogu, możesz odejść)" : " (piec pracuje w tle)")] });
             }
@@ -2334,14 +2384,19 @@
             const def = geoOf(b);
             const entries = [];
             if (def.door && !b.site) entries.push({ name: "Wejdź do środka", icon: 82, help: "Wchodzisz do chatki. Drzwi otwierasz też, po prostu w nie wchodząc.", run: () => enterHut(b) });
-            if (def.rest) entries.push({ name: b.type === "bench" ? "Usiądź i odpocznij" : b.type === "bedroll" ? "Zdrzemnij się" : "Ogrzej się przy ogniu", icon: 82, right: "+" + def.rest,
-                help: "Odnawia wytrzymałość. Mija " + hoursText(def.restHours || 1), run: () => rest(b) });
+            if (def.rest) {
+                const fireOut = !!def.fire && !fireLit(b);
+                entries.push({ name: b.type === "bench" ? "Usiądź i odpocznij" : b.type === "bedroll" ? "Zdrzemnij się" : "Ogrzej się przy ogniu", icon: 82, right: "+" + def.rest, enabled: !fireOut,
+                    help: fireOut ? "Ogień wygasł. Dorzuć drewna, żeby się ogrzać." : "Odnawia wytrzymałość. Mija " + hoursText(def.restHours || 1), run: () => rest(b) });
+            }
+            entries.push(...feedFireEntries(b));
             if (def.water) entries.push(...wellEntries());
             if (def.rain && !b.site) entries.push(...bucketEntries(b));
             if (def.produce) {
                 const ready = readyProduce(b), item = itemOf(def.produce.item);
+                const toolNote = def.produce.tool ? " Potrzebne: " + itemOf(def.produce.tool).name + "." : "";
                 entries.push({ name: ready > 0 ? "Zbierz: " + item.name + " ×" + ready : "Zbierz: " + item.name, icon: item.iconIndex, enabled: ready > 0,
-                    help: ready > 0 ? "Zabierasz wszystko, co jest gotowe." : "Jeszcze nic nie ma. Następna porcja za " + daysToProduce(b) + " dn.",
+                    help: (ready > 0 ? "Zabierasz wszystko, co jest gotowe." : "Jeszcze nic nie ma. Następna porcja za " + daysToProduce(b) + " dn.") + toolNote,
                     run: () => collect(b) });
             }
             let title = def.name + (def.rain ? " (" + bucketUnits(b) + "/" + def.rain.max + ")" : "");
@@ -3310,6 +3365,6 @@
         water, wateredRecently, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2,
         stoneAt, stoneSpot, pickStone, gatherAt, gatherSpot, pickGather, isWaterTile, waterMenu, fillCan, drink, goFishing, rainWater, canCharges, craftManual, HAND_RECIPES, startPlacement, placementProblem, tileWhyNot, placeSite, strikeSite, cancelSite,
         // used only by Farming_Render.js (@orderAfter Farming), not meant for other plugins
-        BUILD_RANGE, CROP_LIFT, TILE, farm, itemOf, key, mirrorGeo, missingMaterials, onRing, recipeOf, tilesOfBuilding, today, gatherRev
+        BUILD_RANGE, CROP_LIFT, TILE, farm, itemOf, key, mirrorGeo, missingMaterials, onRing, recipeOf, tilesOfBuilding, today, gatherRev, fuelLeft, fireLit
     };
 })();

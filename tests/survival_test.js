@@ -107,6 +107,7 @@ const { launch, sleep } = require("./cdp.js");
         await give(94, 0);
         const cf = "Farming.buildingAt(34, 5)";
         const ci = await recipeIndex("campfire", "roast_meat");
+        await ev(`(function(){ const b = ${cf}; b.fuel = 10; b.fuelSince = Farming.clockHours(); })(); 0`);   // fed back up: plenty of game hours passed above already
         await ev(`Farming.startJob(${cf}, "roast_meat"); 0`); await frames(120);
         check("the campfire is cooking (the player sits by it with the meat on a stick)", (await ev(`!!${cf}.job`)) && (await ev("$gamePlayer.isToolSwinging()")));
         await ev("$gameSystem.advanceDayNight(0.6); 0");   // half an hour of game time: the meat is done and the player gets up with it
@@ -131,8 +132,20 @@ const { launch, sleep } = require("./cdp.js");
         // ------------------------------------------------------------ gear
         await give(97, 6); await give(93, 3); await give(111, 4);
         await doManual("30, 8", "tannery", "boots"); await doManual("30, 8", "tannery", "backpack");
-        const gear = await ev("({ boots: $gameParty.hasItem($dataItems[113]), pack: $gameParty.hasItem($dataItems[114]), max: $gameParty.maxItems($dataItems[64]), maxKey: $gameParty.maxItems($dataItems[63]) })");
-        check("boots and a backpack were sewn; the backpack raises the item limit (99 -> 150)", gear.boots && gear.pack && gear.max === 150 && gear.maxKey === 99, gear);
+        const gear = await ev(`(function(){
+            const totalW = Survival.carriedWeight(), capNow = Survival.weightCap();
+            function expectedMax(item, stackCap) {
+                const w = Survival.itemWeight(item);
+                if (w <= 0) return stackCap;
+                const budget = capNow - (totalW - w * $gameParty.numItems(item));
+                return budget <= 0 ? Math.min(stackCap, $gameParty.numItems(item)) : Math.min(stackCap, Math.floor(budget / w));
+            }
+            return { boots: $gameParty.hasItem($dataItems[113]), pack: $gameParty.hasItem($dataItems[114]),
+                max: $gameParty.maxItems($dataItems[64]), maxKey: $gameParty.maxItems($dataItems[63]),
+                expectedMax: expectedMax($dataItems[64], 150), expectedMaxKey: expectedMax($dataItems[63], 99) };
+        })()`);
+        check("boots and a backpack were sewn; the item limit (99/150 stack caps) now also reflects the carry-weight cap, which the backpack raises",
+            gear.boots && gear.pack && gear.max === gear.expectedMax && gear.maxKey === gear.expectedMaxKey, gear);
         const dpf = await ev("(function(){ const with_ = $gamePlayer.distancePerFrame(); $gameParty.loseItem($dataItems[113], 1, false); const without = $gamePlayer.distancePerFrame(); $gameParty.gainItem($dataItems[113], 1); return { ratio: with_ / without }; })()");
         const bootsParam = Number(await ev("PluginManager.parameters('Survival').bootsSpeed")) || 1.1;   // the user tunes it in the Plugin Manager (1.50 now)
         check("boots make the player faster by the plugin's bootsSpeed (" + bootsParam + ")", Math.abs(dpf.ratio - bootsParam) < 0.001, dpf);

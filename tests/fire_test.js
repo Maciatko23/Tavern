@@ -17,12 +17,13 @@ const { launch, sleep } = require("./cdp.js");
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
         const B = await ev(`(function(){
             const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y);
-            for (let by = 2; by < $gameMap.height() - 9; by++) for (let bx = 2; bx < $gameMap.width() - 10; bx++) {
+            // everything below is placed at by+2 .. by+7, bx .. bx+7 (8 wide, 6 tall) - that is the only part actually needed
+            for (let by = 2; by < $gameMap.height() - 9; by++) for (let bx = 2; bx < $gameMap.width() - 9; bx++) {
                 let ok = true;
-                for (let y = by; y < by + 8 && ok; y++) for (let x = bx; x < bx + 9; x++) { if (!free(x, y)) { ok = false; break; } }
+                for (let y = by + 2; y < by + 8 && ok; y++) for (let x = bx; x < bx + 8; x++) { if (!free(x, y)) { ok = false; break; } }
                 if (ok) {
                     const plots = ($gameSystem._farm.plots[$gameMap.mapId()] = $gameSystem._farm.plots[$gameMap.mapId()] || {});
-                    for (let y = by; y < by + 8; y++) for (let x = bx; x < bx + 9; x++) if (!plots[x + "," + y]) plots[x + "," + y] = { s: "cleared" };
+                    for (let y = by + 2; y < by + 8; y++) for (let x = bx; x < bx + 8; x++) if (!plots[x + "," + y]) plots[x + "," + y] = { s: "cleared" };
                     $gameSystem._farm.rev++;
                     return { bx, by };
                 }
@@ -43,7 +44,7 @@ const { launch, sleep } = require("./cdp.js");
         const tdef = await J(`(function(){ const t = Farming.BUILDINGS.tripod, c = Farming.BUILDINGS.campfire; return { img: t.image, noBuild: t.noBuild, hang: t.hang, fire: !!t.fire, campCost: c.upgrade.cost, tripCost: t.upgrade.cost, tripTo: t.upgrade.to, tool: t.upgrade.tool, recipes: t.recipes.map(r => r.id) }; })()`);
         const IT = async n => ev(`Farming.ITEM.${n}`);
         check("the tripod costs 3 branches and a rope (no hammer); it is not in the build menu", JSON.stringify(tdef.campCost) === JSON.stringify([[await IT("branch"), 3], [await IT("rope"), 1]]) && tdef.noBuild === true && tdef.img === "Farm_Tripod_L" && !!tdef.hang && tdef.fire, tdef);
-        check("the cauldron is hung on the tripod for iron 2, planks 2, stone 2 and a hammer", JSON.stringify(tdef.tripCost) === JSON.stringify([[await IT("iron"), 2], [await IT("planks"), 2], [await IT("stone"), 2]]) && tdef.tripTo === "cauldron" && tdef.tool === (await IT("hammer")), tdef);
+        check("the cauldron is hung on the tripod: it costs the Kociołek item (forged at the forge from 3 iron), no hammer needed", JSON.stringify(tdef.tripCost) === JSON.stringify([[await IT("cauldronItem"), 1]]) && tdef.tripTo === "cauldron" && !tdef.tool, tdef);
         check("the tripod roasts what the campfire roasts", ["roast_meat", "roast_fish", "potatoes", "eggs"].every(id => tdef.recipes.includes(id)), tdef.recipes);
         check("the tripod is marked noBuild (only ever made by upgrading a campfire)", (await ev("Farming.BUILDINGS.tripod.noBuild")) === true);
         check("the cauldron has only its own dishes (soup, stew, cabbage soup, mushroom soup, porridge, brew) and no roasting on a stick", ["soup", "stew", "cabbage_soup", "mushroom_soup", "porridge", "brew"].every(id => def.kRecipes.includes(id)) && !["roast_meat", "roast_fish", "potatoes", "eggs", "mushrooms", "cheese_baked"].some(id => def.kRecipes.includes(id)), def.kRecipes);
@@ -69,14 +70,9 @@ const { launch, sleep } = require("./cdp.js");
         await b.shot("fire_night.png");
         await ev("$gameSystem.setDayNightHour(12); 0");
 
-        // ---------------------------------------------------------------- old cauldrons keep their look
-        await add("cauldron", bx + 5, by + 6, 2);   // first round
-        await add("cauldron", bx + 5, by + 2);      // very old (2 x 1)
-        await frames(20);
-        const olds = await J(`SceneManager._scene._spriteset._buildingSprites._sprites.filter(e => e.b.type === "cauldron").map(e => [e.b.v || 0, !!e.flame, e.sprite.bitmap._url.replace(/.*\\//, "")])`);
-        check("cauldrons of the older rounds have no animated flames and keep their picture", JSON.stringify(olds) === JSON.stringify([[2, false, "Farm_Cauldron_L.png"], [0, false, "Farm_Cauldron.png"]]), olds);
-
         // ---------------------------------------------------------------- the upgrade: campfire -> tripod -> cauldron
+        // (the two old-look cauldrons below are added only after this whole sequence: alsoBuilt on the forge's
+        // "Wykuj kociołek" recipe refuses to forge a second one while any cauldron already stands anywhere)
         await ev(`$gamePlayer.locate(${fx}, ${fy + 1}); $gamePlayer.setDirection(8); 0`);
         const menu = await J(`Farming.menuFor(${fx}, ${fy}).entries.map(e => e.name)`);
         check("the campfire's menu offers 'Dobuduj trójnóg' (and not the cauldron yet)", menu.includes("Dobuduj trójnóg") && !menu.includes("Zawieś kociołek"), menu);
@@ -100,28 +96,38 @@ const { launch, sleep } = require("./cdp.js");
         await b.shot("fire_tripod_day.png");
         const menu2 = await J(`Farming.menuFor(${fx}, ${fy}).entries.map(e => e.name)`);
         check("the tripod's menu: the roasting recipes, and 'Zawieś kociołek'", menu2.includes("Upiecz mięso") && menu2.includes("Zawieś kociołek") && !menu2.includes("Dobuduj trójnóg"), menu2);
-        // 2. the cauldron
-        await setN(iron, 0); await setN(planks, 0); await setN(stone, 0); await setN(hammer, 0);
+        // 2. the cauldron: hung from a Kociołek item, forged at a forge from 3 iron (not paid for in raw materials on the spot)
+        const cauldronItem = await id("cauldronItem");
         await ev(`Farming.upgradeBuilding(Farming.buildingAt(${fx}, ${fy}))`);
         check("no materials: a popup says what is missing, nothing changes", (await pops()).some(t => /Potrzebujesz: /.test(t)) && (await typeHere()) === "tripod");
-        await setN(iron, 2); await setN(planks, 2); await setN(stone, 2);
-        await ev(`Farming.upgradeBuilding(Farming.buildingAt(${fx}, ${fy}))`);
-        check("no hammer: 'Potrzebujesz: Młotek'", (await pops()).some(t => /Potrzebujesz: Młotek/.test(t)) && (await typeHere()) === "tripod");
-        await setN(hammer, 1);
+        const gx = bx + 2, gy = by + 7;   // a temporary forge, well clear of everything else in this small patch
+        await add("forge", gx, gy, 3);
+        await setN(iron, 3);
+        const forged = await ev(`Farming.craftManual(Farming.buildingAt(${gx}, ${gy}), Farming.BUILDINGS.forge.recipes.find(r => r.id === "cauldron_item"))`);
+        await frames(130);
+        check("(setup) forged a Kociołek at the forge: 3 iron -> the carryable item", forged === true && (await ev(`$gameParty.numItems($dataItems[${cauldronItem}])`)) === 1);
         await add("bench", fx - 1, fy);   // something in the way where the cauldron's left tile would be
         await ev(`Farming.upgradeBuilding(Farming.buildingAt(${fx}, ${fy}))`);
         check("no room: 'Za mało miejsca wokół ogniska'", (await pops()).some(t => /Za mało miejsca/.test(t)) && (await typeHere()) === "tripod");
         await ev(`(function(){ const L = $gameSystem._farm.buildings[$gameMap.mapId()]; const i = L.findIndex(b => b.type === "bench"); L.splice(i, 1); $gameSystem._farm.rev++; })(); 0`);
         await ev(`Farming.upgradeBuilding(Farming.buildingAt(${fx}, ${fy}))`);
         await frames(70);
-        const after = await J(`(function(){ const b = Farming.buildingAt(${fx}, ${fy}); return { type: b.type, x: b.x, y: b.y, v: b.v, iron: $gameParty.numItems($dataItems[${iron}]), planks: $gameParty.numItems($dataItems[${planks}]), stone: $gameParty.numItems($dataItems[${stone}]), tripods: $gameSystem._farm.buildings[$gameMap.mapId()].filter(b => b.type === "tripod").length }; })()`);
+        const after = await J(`(function(){ const b = Farming.buildingAt(${fx}, ${fy}); return { type: b.type, x: b.x, y: b.y, v: b.v, tripods: $gameSystem._farm.buildings[$gameMap.mapId()].filter(b => b.type === "tripod").length }; })()`);
         check("the tripod became a cauldron built around the fire (3 x 2, the fire is the middle tile of the bottom row)",
             after.type === "cauldron" && after.x === fx - 1 && after.y === fy && after.v === 3 && after.tripods === 0, after);
-        check("materials were spent (iron, planks, stone)", after.iron === 0 && after.planks === 0 && after.stone === 0, after);
+        check("the Kociołek item was consumed", (await ev(`$gameParty.numItems($dataItems[${cauldronItem}])`)) === 0);
         check("all six tiles are the cauldron's", (await J(`[[${fx - 1},${fy}],[${fx},${fy}],[${fx + 1},${fy}],[${fx - 1},${fy - 1}],[${fx},${fy - 1}],[${fx + 1},${fy - 1}]].map(c => (Farming.buildingAt(c[0], c[1]) || {}).type)`)).every(t => t === "cauldron"));
         const xs = await J(`(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === "cauldron" && e.b.v === 3); return { spriteX: e.sprite.x, fireCentre: Math.round(($gameMap.adjustX(${fx}) + 0.5) * 48), flame: !!e.flame, image: e.sprite.bitmap._url.replace(/.*\\//, "") }; })()`);
         check("the new cauldron's fire ring sits exactly where the fire was (same centre line)", xs.spriteX === xs.fireCentre && xs.flame && xs.image === "Farm_Cauldron_XL.png", xs);
         check("popup 'Zawieszono kociołek'", (await pops()).some(t => /Zawieszono kociołek/.test(t)));
+
+        // ---------------------------------------------------------------- old cauldrons keep their look
+        await add("cauldron", bx + 5, by + 6, 2);   // first round
+        await add("cauldron", bx + 5, by + 2);      // very old (2 x 1)
+        await frames(20);
+        const olds = await J(`SceneManager._scene._spriteset._buildingSprites._sprites.filter(e => e.b.type === "cauldron" && e.b.v !== 3).map(e => [e.b.v || 0, !!e.flame, e.sprite.bitmap._url.replace(/.*\\//, "")])`);
+        check("cauldrons of the older rounds have no animated flames and keep their picture", JSON.stringify(olds) === JSON.stringify([[2, false, "Farm_Cauldron_L.png"], [0, false, "Farm_Cauldron.png"]]), olds);
+
         await frames(20);
         await b.shot("fire_cauldron_day.png");
         await ev("$gameSystem.setDayNightHour(22); 0");

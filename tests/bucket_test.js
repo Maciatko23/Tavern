@@ -197,7 +197,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ const L = $gameSystem._farm.buildings[3]; L.splice(L.indexOf(Farming.buildingAt(${kx + 3}, ${ky})), 1); $gameSystem._farm.rev++; })(); 0`);
 
         // ---------------------------------------------------------------- the well needs the bucket (and, since the pit mechanic, a dug-out 2x2 under it - dug first here so this stays a test of the bucket, not of the pit)
-        const wx = bx + 3, wy = by + 6;   // a 3 x 2 well
+        const wx = bx + 3, wy = by + 6;   // a 2 x 2 well
         await ev(`$gameParty.gainItem($dataItems[62], 1); $gameSystem.setStamina(250); 0`);   // a shovel
         for (const [dx, dy] of [[0, 0], [1, 0], [0, -1], [1, -1]]) {
             for (let hit = 0; hit < 3; hit++) { await ev(`Farming.dig(${wx} + ${dx}, ${wy} + ${dy}); 0`); await frames(15); }

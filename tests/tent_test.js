@@ -106,7 +106,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await press("ok");
         await frames(40);
         const dark = await ev("$gameScreen.brightness()");
-        check("the screen fades out while you go to sleep", dark < 200, dark);
+        check("the screen never dims while you go to sleep (fades were removed everywhere)", dark === 255, dark);
         await frames(90);
         const woke = await ev(`({ day: $gameSystem.dayNightDay(), hour: $gameSystem.dayNightHour(), stamina: $gameSystem.stamina(), max: $gameSystem.maxStamina(), hp: $gameParty.members()[0].hp, mhp: $gameParty.members()[0].mhp, nights: $gameSystem._farm.tentNights, autosave: !!$gameTemp._atmoAutosave, summary: !!$gameTemp._pendingSummary })`);
         console.log("after the night:", JSON.stringify(woke));

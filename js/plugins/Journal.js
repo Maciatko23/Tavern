@@ -191,6 +191,12 @@
             text: "Ostrze piły wykuwasz w kuźni z żelaza, a piłę montujesz w warsztacie. W tartaku tnie deski szybciej i daje ich więcej niż gruba, ręczna piła stołu." },
         { id: "can", ch: 3, title: "Wykuj konewkę", item: 87, recipe: ["forge", "can"], after: ["iron", "planks"], done: () => has(87),
             text: "Blaszana konewka mieści kilka podlań. Napełnisz ją w studni albo w stawie." },
+        { id: "tongs", ch: 3, title: "Wykuj żelazne szczypce", item: 144, recipe: ["forge", "tongs"], after: ["iron"], done: () => has(144),
+            text: "Szczypce do trzymania rozżarzonego metalu. Bez nich w hucie nie przetopisz stali." },
+        { id: "huta", ch: 3, title: "Zbuduj hutę", item: 143, build: "huta", after: ["bricks"], done: () => isBuilt("huta"),
+            text: "Piec z cegieł do przetapiania żelaza na stal. Do pracy w nim potrzebne są żelazne szczypce z kuźni." },
+        { id: "steel", ch: 3, title: "Przetop stal", item: 143, recipe: ["huta", "steel"], after: ["huta", "tongs", "charcoal"], done: () => has(143),
+            text: "W hucie żelazo i węgiel drzewny dają twardszą stal. Trzymasz rozżarzony metal szczypcami. Wytop trwa kilka godzin i toczy się w tle." },
 
         { id: "knife", ch: 4, title: "Zrób nóż", item: 90, recipe: ["workbench", "knife"], after: ["wood", "stone", "branches"], done: () => hasAny([90, 91]),
             text: "Bez noża nie oprawisz zwierzyny. Kamienny zrobisz w warsztacie, żelazny wykujesz w kuźni (daje więcej mięsa)." },
