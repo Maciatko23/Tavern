@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Uprawa i budowanie: ziemia po kłodach, pieńkach i kamieniach -> grabie -> motyka -> nasiona -> wzrost -> zbiór, plus budowa płotu, ławki, ogniska, kurnika, ula, skrzyń, pieca ziemnego, tartaku (stołu do ręcznego piłowania), kompostownika, browaru, piekarni, cegielni i kuźni. Budowle z desek, kilof i gwoździe robi się samemu, małe kamienie leżą na ziemi. Zbieractwo (kamienie, len, jagody, grzyby, zioła), gotowanie na ognisku, pułapki, oprawianie, garbarnia, wędzarnia, studnia z konewką, wędkowanie, legowisko i owczarnia. Podlewanie konewką przyspiesza wzrost, sadzenie zależy od pory roku. Warsztat, w którym powstają i montują się wszystkie narzędzia, piła z żelaznego ostrza oraz namiot: zszyty w garbarni, rozkładany i składany, do spania. v1.12.0
+ * @plugindesc Uprawa i budowanie: ziemia po kłodach, pieńkach i kamieniach -> grabie -> motyka -> nasiona -> wzrost -> zbiór, plus budowa płotu, ławki, ogniska, kurnika, ula, skrzyń, pieca ziemnego, tartaku (stołu do ręcznego piłowania), kompostownika, browaru, piekarni, cegielni i kuźni. Budowle z desek, kilof i gwoździe robi się samemu, małe kamienie leżą na ziemi. Zbieractwo (kamienie, len, jagody, grzyby, zioła), gotowanie na ognisku, pułapki, oprawianie, garbarnia, wędzarnia, studnia z konewką, wędkowanie, legowisko i owczarnia. Podlewanie konewką przyspiesza wzrost, sadzenie zależy od pory roku. Warsztat, w którym powstają i montują się wszystkie narzędzia, piła z żelaznego ostrza oraz namiot: zszyty w garbarni, rozkładany i składany, do spania, oraz odpoczynek na trawie bez żadnego budynku. v1.13.0
  * @author Claude
  * @orderAfter DayNightCycle
  * @orderAfter SurvivalHUD
@@ -382,6 +382,11 @@
  *   Wytwórz...: surowa skóra i len) mieści 4 łyki; "Napełnij bukłak" przy wodzie, a pije się z niego
  *   klawiszem G lub z menu Przedmioty.
  *
+ * ODPOCZYNEK NA ZIEMI (bez żadnego budynku)
+ *   Na zwykłej, nietkniętej trawie (nie na zaoranej ani zagrabionej ziemi) menu ma dodatkowo
+ *   "Odpocznij na ziemi": gracz kładzie się na trawie i po chwili (30 min gry) wstaje z powrotem,
+ *   +10 wytrzymałości - mniej niż ławka czy ognisko, ale zawsze pod ręką, bez budowania niczego.
+ *
  * LEŚNE LEGOWISKO (pierwsze spanie w terenie)
  *   W menu ziemi "Wytwórz..." robisz je z 6 gałęzi i 3 lnu (jedno naraz), a potem rozkładasz w
  *   "Zbuduj..." od razu, bez młotka. "Prześpij noc" działa jak w namiocie (czas do rana,
@@ -468,7 +473,7 @@
         cloak: 112, boots: 113, backpack: 114, ironAxe: 115, ironPick: 116, potato: 71, carrot: 72, egg: 75,
         pickaxe: num(params.pickaxeItem, 63),
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
-        honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
     };
     const STAMINA = {
         dig: num(params.staminaDig, 4),
@@ -520,6 +525,8 @@
         build: "Hammer", demolish: "Break", rest: "Heal2", collect: "Item2", uproot: "Earth1",
         dig: "Earth5", kindle: "Fire2", chest: "Chest1", move: "Item1", water: "Liquid"
     };
+    // lying flat on the ground: a small, quick rest that needs no building at all
+    const LIE_STAMINA = 10, LIE_HOURS = 0.5, LIE_PICTURE_ID = 99;
 
     // ------------------------------------------------------------------
     // Content tables. Add your own crops / buildings here.
@@ -600,8 +607,8 @@
         tripod: { name: "Ognisko z trójnogiem", cost: [[ITEM.wood, 3], [ITEM.stone, 2], [ITEM.branch, 3], [ITEM.rope, 1]], w: 1, stamina: 5, image: "Farm_Tripod_L", rest: 15, working: "Coś się piecze...",
             vent: 66, noBuild: true, refund: [[ITEM.wood, 1], [ITEM.stone, 1], [ITEM.branch, 2]],
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true }, hang: { y: 51, x: 0, rope: 59 },   // the food hangs on a short rope from the hook (px above the foot of the picture: the top of the icon, the top of the rope)
-            upgrade: { to: "cauldron", dx: 1, name: "Zawieś kociołek", cost: [[ITEM.iron, 2], [ITEM.planks, 2], [ITEM.stone, 2]], stamina: 6, tool: ITEM.hammer, done: "Zawieszono kociołek",
-                help: "Na trójnogu zawiśnie żelazny kociołek. Potrzebny młotek i miejsce 3 × 2 pola wokół ogniska. Kociołek gotuje zupy, gulasz, owsiankę i wywary, ale zajmuje cały ogień: mięsa na patyku już przy nim nie upieczesz (do tego zbuduj drugie ognisko)." },
+            upgrade: { to: "cauldron", dx: 1, name: "Zawieś kociołek", cost: [[ITEM.cauldronItem, 1]], stamina: 3, done: "Zawieszono kociołek",
+                help: "Wieszasz na trójnogu kociołek, który niesiesz w plecaku (wykuwa się w kuźni). Potrzebne miejsce 3 × 2 pola wokół ogniska. Kociołek gotuje zupy, gulasz, owsiankę i wywary, ale zajmuje cały ogień: mięsa na patyku już przy nim nie upieczesz (do tego zbuduj drugie ognisko)." },
             desc: "Trzy kijki i lina nad ogniem. Zawieszasz jedzenie na haczyku i możesz odejść: piecze się samo, a gotowe odbierasz z ognia (albo czekasz obok, siedząc). Później zawiesisz na nim żelazny kociołek." },
         scarecrow: { name: "Strach na wróble", cost: [[ITEM.wood, 3]], w: 1, stamina: 4, image: "Farm_Scarecrow",
             desc: "Rośliny w promieniu 2 kratek rosną o 25% szybciej." },
@@ -681,7 +688,9 @@
                 { id: "can", name: "Wykuj konewkę", inputs: [[ITEM.iron, 1], [ITEM.planks, 2]], output: [ITEM.wateringCan, 1], manual: true, unique: true,
                     hours: 1, stamina: 4, startSe: "Hammer", desc: "Blaszana konewka do podlewania. Napełnisz ją w studni albo w stawie." },
                 { id: "nails", name: "Wykuj gwoździe", inputs: [[ITEM.iron, 1]], output: [ITEM.nails, 10], manual: true,
-                    hours: 1, stamina: 5, startSe: "Hammer", desc: "Na kowadle z pręta żelaza wykuwasz garść gwoździ." }
+                    hours: 1, stamina: 5, startSe: "Hammer", desc: "Na kowadle z pręta żelaza wykuwasz garść gwoździ." },
+                { id: "cauldron_item", name: "Wykuj kociołek", inputs: [[ITEM.iron, 3]], output: [ITEM.cauldronItem, 1], manual: true, unique: true, alsoBuilt: "cauldron",
+                    hours: 2, stamina: 6, startSe: "Hammer", desc: "Żelazny kociołek z uchem do zawieszenia. Zanieś go do ogniska z trójnogiem, żeby go podpiąć." }
             ],
             desc: "Wytapia żelazo z rudy i węgla, a na kowadle kuje z niego gwoździe, noże oraz głowice i ostrza narzędzi (montuje się je w warsztacie)." },
         snare: { name: "Pułapka", cost: [[ITEM.branch, 4], [ITEM.rope, 2], [ITEM.stone, 1]], w: 2, stamina: 6, image: "Farm_Snare",
@@ -1060,12 +1069,17 @@
     }
     const onRing = (g, i, j) => i >= 0 && j >= 0 && i < g.w && j < (g.h || 1) && (i === 0 || j === 0 || i === g.w - 1 || j === (g.h || 1) - 1);
     const inHut = (g, i, j) => !!g.yard && i >= g.yard.hut.dx && i < g.yard.hut.dx + g.yard.hut.w && j >= g.yard.hut.dy && j < g.yard.hut.dy + g.yard.hut.h;
-    // does the cell keep the player out? (everything of an ordinary building; the fence except the gate, and the hut, of a yard)
+    // does the cell keep the player out? A house (def.door) is solid but for its doorway; a yard is its ring of fence (but the gate) plus the
+    // hut inside it. An ordinary building only blocks its front row (j === 0, the one the picture stands on): the rows behind it, where
+    // the picture rises above the tiles without anything actually built on them, are open ground - the player can step a little onto the
+    // building, the same way a tree's canopy is free to walk under even though its trunk blocks the tile it grows from.
     function isSolidCell(g, i, j) {
-        if (g.door && j === 0 && i === g.door.dx) return false;   // the doorway of a house
-        if (!g.yard) return true;
-        if (onRing(g, i, j)) return !(j === 0 && i === g.yard.gate);
-        return inHut(g, i, j);
+        if (g.door) return !(j === 0 && i === g.door.dx);   // the doorway of a house
+        if (g.yard) {
+            if (onRing(g, i, j)) return !(j === 0 && i === g.yard.gate);
+            return inHut(g, i, j);
+        }
+        return j === 0;
     }
     // the open ground inside a yard (where the animals walk): [{ x, y }]
     function yardInterior(b) {
@@ -1656,8 +1670,8 @@
         return $gameMap.eventsXy(x, y).every(e => !e.isNormalPriority()) &&
             !($gamePlayer.x === x && $gamePlayer.y === y);
     }
-    // null when it can be built there, otherwise the reason
-    function tileWhyNot(x, y) {
+    // null when it can be built there, otherwise the reason. type: the building being placed (a dug-out pit is fine under a well, which needs one)
+    function tileWhyNot(x, y, type) {
         if (!$gameMap.isValid(x, y)) return "Tu się nie zmieści.";
         if (isHutInterior() && !hutFloor(x, y)) return x === HUT_ROOM.doorX && (y === HUT_ROOM.y1 || y === HUT_ROOM.doorY) ? "Zostaw przejście do drzwi." : "Tu się nie zmieści.";
         const h = hutOf();
@@ -1668,10 +1682,20 @@
         const plot = plotAt(x, y);
         if (!plot) return "Trzeba oczyszczonej ziemi.";
         if (plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
-        if (plot.dug) return "Najpierw zagrab dół.";
+        if (plot.dug && type !== "well") return "Najpierw zagrab dół.";
         if (buildingAt(x, y)) return "Tu już coś stoi.";
         if (!tileIsFree(x, y)) return "Coś tu stoi.";
         return null;
+    }
+    // a 2x2 block, entirely within the given cells, dug to the bottom (depth 3): what a well needs under it
+    function has2x2Pit(cells) {
+        const set = new Set(cells.map(c => key(c.x, c.y)));
+        for (const c of cells) {
+            const corners = [[c.x, c.y], [c.x + 1, c.y], [c.x, c.y + 1], [c.x + 1, c.y + 1]];
+            if (!corners.every(([cx, cy]) => set.has(key(cx, cy)))) continue;
+            if (corners.every(([cx, cy]) => (plotAt(cx, cy) || {}).dug === 3)) return true;
+        }
+        return false;
     }
     function whyNotBuild(type, x, y, flip) {
         const def = flip ? mirrorGeo(BUILDINGS[type]) : BUILDINGS[type];
@@ -1684,9 +1708,10 @@
             if (!$gameMap.isValid(fx, fy) || !$gameMap.checkPassage(fx, fy, 0x0f) || buildingAt(fx, fy) || hasObjectTile(fx, fy)) return "Przed drzwiami musi być wolne miejsce.";
         }
         for (const t of tilesOfBuilding(type, x, y)) {
-            const why = tileWhyNot(t.x, t.y);
+            const why = tileWhyNot(t.x, t.y, type);
             if (why) return why;
         }
+        if (type === "well" && !has2x2Pit(tilesOfBuilding(type, x, y))) return "Potrzebny dół 2×2 wykopany do dna (poziom 3) w miejscu studni.";
         return null;
     }
     // what a building costs now: a piece that can be carried (the bucket) is paid for with the item when there is one in the bag
@@ -2179,6 +2204,34 @@
         });
         return true;
     }
+    // no building needed: the player lies down flat right where they stand, rests a little, gets back up
+    function lieDown(x, y) {
+        if (typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() >= 0.98) {
+            complain(82, "Nie jesteś zmęczony");
+            return false;
+        }
+        const picture = $gamePlayer.direction() === 6 ? "Lie_Down_Flip" : "Lie_Down";
+        lockPlayer(140);   // covers the whole sequence below (22 + 20 + 46 + 22 = 110 to the restore, plus its own fade-in tail)
+        $gameScreen.startFadeOut(20);
+        later(22, () => {
+            $gamePlayer.setTransparent(true);
+            $gameScreen.showPicture(LIE_PICTURE_ID, picture, 1, $gamePlayer.screenX(), $gamePlayer.screenY() - 14, 100, 100, 255, 0);
+            $gameScreen.startFadeIn(20);
+        });
+        later(22 + 20 + 46, () => {
+            $gameScreen.startFadeOut(20);
+        });
+        later(22 + 20 + 46 + 22, () => {
+            $gameScreen.erasePicture(LIE_PICTURE_ID);
+            $gamePlayer.setTransparent(false);
+            if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(LIE_HOURS);
+            if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(LIE_STAMINA);
+            playSe(SE.rest, 100);
+            popup(82, "+" + LIE_STAMINA + " wytrzymałości", "#9ff0a8");
+            $gameScreen.startFadeIn(20);
+        });
+        return true;
+    }
 
     // ------------------------------------------------------------------
     // What the action button offers on a tile: { title, entries } where an entry
@@ -2340,12 +2393,20 @@
             };
         }
         if (plot.s === "cleared") {
-            return { title: plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries: [
+            const entries = [
                 { name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) },
                 digEntry(x, y),
-                handMenuEntry(x, y),
-                { name: "Zbuduj...", help: "Wybierz, co postawić na tym polu.", run: () => openBuildMenu(x, y) },
-                cancelEntry()] };
+                handMenuEntry(x, y)
+            ];
+            if (plot.natural) {
+                const full = typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() >= 0.98;
+                entries.push({ name: "Odpocznij na ziemi", icon: 82, right: "+" + LIE_STAMINA, enabled: !full,
+                    help: full ? "Nie jesteś zmęczony." : "Kładziesz się na trawie na chwilę. Odnawia trochę wytrzymałości (mija " + hoursText(LIE_HOURS) + "), mniej niż ławka czy ognisko.",
+                    run: () => lieDown(x, y) });
+            }
+            entries.push({ name: "Zbuduj...", help: "Wybierz, co postawić na tym polu.", run: () => openBuildMenu(x, y) });
+            entries.push(cancelEntry());
+            return { title: plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries };
         }
         if (plot.s === "raked") {
             return { title: "Zagrabiona ziemia", entries: [

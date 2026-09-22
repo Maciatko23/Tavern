@@ -47,7 +47,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const wbRecipes = await ev("Farming.BUILDINGS.workbench.recipes.map(r => r.id)");
         check("the workbench makes every tool: axe, pickaxe, shovel, rake, hoe, knife, rod, saw, the two iron tools - and the hunting weapons", wbRecipes.join() === "axe_stone,pick_stone,shovel,rake,hoe,knife,rod,saw,axe_iron,pick_iron,sling,bow,arrows", wbRecipes);
         check("the sawmill only saws: planks and planks with the saw", (await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)")).join() === "planks,planks_saw");
-        check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, nails", (await ev("Farming.BUILDINGS.forge.recipes.map(r => r.id)")).join() === "iron,knife_iron,head_axe,head_pick,blade_saw,can,nails");
+        check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, nails, the cauldron", (await ev("Farming.BUILDINGS.forge.recipes.map(r => r.id)")).join() === "iron,knife_iron,head_axe,head_pick,blade_saw,can,nails,cauldron_item");
         check("BUILDINGS lists the workbench first (first entry of the build menu)", (await ev("Farming.BUILDING_IDS ? Farming.BUILDING_IDS[0] : Object.keys(Farming.BUILDINGS)[0]")) === "workbench");
 
         // ================= 2. branches lie on the ground =================

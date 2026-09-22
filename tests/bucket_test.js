@@ -196,14 +196,18 @@ const { launch, sleep } = require("./cdp.js");
         check("put down again: the item is used up, no planks or iron were needed, the new bucket is empty", (await count(IT.bucket)) === 0 && (await ev(`(Farming.buildingAt(${kx + 3}, ${ky}) || {}).type`)) === "bucket" && (await ev(`Farming.buildingAt(${kx + 3}, ${ky}).water`)) === 0);
         await ev(`(function(){ const L = $gameSystem._farm.buildings[3]; L.splice(L.indexOf(Farming.buildingAt(${kx + 3}, ${ky})), 1); $gameSystem._farm.rev++; })(); 0`);
 
-        // ---------------------------------------------------------------- the well needs the bucket
+        // ---------------------------------------------------------------- the well needs the bucket (and, since the pit mechanic, a dug-out 2x2 under it - dug first here so this stays a test of the bucket, not of the pit)
         const wx = bx + 3, wy = by + 6;   // a 3 x 2 well
+        await ev(`$gameParty.gainItem($dataItems[62], 1); $gameSystem.setStamina(250); 0`);   // a shovel
+        for (const [dx, dy] of [[0, 0], [1, 0], [0, -1], [1, -1]]) {
+            for (let hit = 0; hit < 3; hit++) { await ev(`Farming.dig(${wx} + ${dx}, ${wy} + ${dy}); 0`); await frames(15); }
+        }
         for (const [id, n] of [[64, 12], [80, 3], [93, 2]]) await setN(id, n);
         await setN(IT.bucket, 0); await setN(IT.hammer, 1);
         check("stone, planks and rope alone are not enough for a well: 'Brakuje materiałów.'", (await ev(`Farming.placementProblem("well", ${wx}, ${wy})`)) === "Brakuje materiałów.");
         await setN(IT.bucket, 1);
-        await ev(`$gamePlayer.locate(${wx + 1}, ${wy + 1}); 0`);
-        check("with a bucket in the bag it can be placed", (await ev(`Farming.placementProblem("well", ${wx}, ${wy})`)) === null);
+        await ev(`$gamePlayer.locate(${wx + 1}, ${wy + 1}); $gameSystem.setStamina(100); 0`);
+        check("with a bucket in the bag (and the pit already dug out) it can be placed", (await ev(`Farming.placementProblem("well", ${wx}, ${wy})`)) === null);
         await ev(`Farming.placeSite("well", ${wx}, ${wy}); $gameTemp._buildMode = null; 0`);
         await frames(10);
         check("placing the site uses up the bucket with the rest", (await count(IT.bucket)) === 0 && (await count(64)) === 0 && (await ev(`!!Farming.buildingAt(${wx}, ${wy}).site`)));

@@ -186,17 +186,21 @@
         return bitmap;
     }
 
-    // a pit left by the shovel (depth 1-3): a dark hole with the earth piled up around it, hard-edged like the rest of the ground
+    // a pit left by the shovel (depth 1-3): a dark hole with the earth piled up around it, hard-edged like the rest of the ground.
+    // quad ("tl"/"tr"/"bl"/"br"): this tile is one corner of a 2x2 block dug to the bottom, which merges into one big pit - the same
+    // shape as a single pit but drawn twice as large and cropped to this tile's quadrant, so the four tiles tile together seamlessly.
     const pitCache = new Map();
-    function pitTexture(depth) {
-        if (pitCache.has(depth)) return pitCache.get(depth);
-        const bitmap = new Bitmap(Farming.TILE, Farming.TILE), ctx = bitmap.context, image = ctx.createImageData(Farming.TILE, Farming.TILE), data = image.data;
-        const rx = 8 + 3 * depth, ry = 5 + 2 * depth, cx = 24, cy = 25;
-        for (let py = 0; py < Farming.TILE; py++) {
-            for (let px = 0; px < Farming.TILE; px++) {
+    function pitTexture(depth, quad) {
+        const cacheKey = depth + (quad || "");
+        if (pitCache.has(cacheKey)) return pitCache.get(cacheKey);
+        const T = Farming.TILE, scale = quad ? 2 : 1, size = T * scale;
+        const bitmap = new Bitmap(size, size), ctx = bitmap.context, image = ctx.createImageData(size, size), data = image.data;
+        const rx = scale * (8 + 3 * depth), ry = scale * (5 + 2 * depth), cx = scale * 24, cy = scale * 25;
+        for (let py = 0; py < size; py++) {
+            for (let px = 0; px < size; px++) {
                 const e = Math.pow((px - cx) / rx, 2) + Math.pow((py - cy) / ry, 2);
-                const ring = Math.pow((px - cx + 1.5) / (rx + 4), 2) + Math.pow((py - cy + 1.5) / (ry + 3), 2);   // the heap is a little up and to the left
-                const i = (py * Farming.TILE + px) * 4;
+                const ring = Math.pow((px - cx + 1.5 * scale) / (rx + 4 * scale), 2) + Math.pow((py - cy + 1.5 * scale) / (ry + 3 * scale), 2);   // the heap is a little up and to the left
+                const i = (py * size + px) * 4;
                 let c = null;
                 if (e <= 1) {
                     const shade = Math.max(0, Math.min(1, (py - (cy - ry)) / (2 * ry)));   // dark under the upper rim, lighter at the bottom of the hole
@@ -213,8 +217,28 @@
         }
         ctx.putImageData(image, 0, 0);
         if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        pitCache.set(depth, bitmap);
-        return bitmap;
+        if (!quad) { pitCache.set(cacheKey, bitmap); return bitmap; }
+        const qx = (quad === "tr" || quad === "br") ? T : 0, qy = (quad === "bl" || quad === "br") ? T : 0;
+        const cropped = new Bitmap(T, T);
+        cropped.blt(bitmap, qx, qy, T, T, 0, 0);
+        pitCache.set(cacheKey, cropped);
+        return cropped;
+    }
+    // greedily pairs up 2x2 blocks of depth-3 pits (top-left anchored, in reading order) into merged big-pit quadrants: key -> "tl"/"tr"/"bl"/"br"
+    function mergedPitQuads(plots, covered) {
+        const dug = Object.keys(plots).filter(k => !covered.has(k) && plots[k].dug === 3);
+        const dugSet = new Set(dug), consumed = new Set(), quads = new Map();
+        dug.sort((a, b) => { const [ax, ay] = a.split(",").map(Number), [bx, by] = b.split(",").map(Number); return ay - by || ax - bx; });
+        for (const k of dug) {
+            if (consumed.has(k)) continue;
+            const [x, y] = k.split(",").map(Number);
+            const corners = [k, Farming.key(x + 1, y), Farming.key(x, y + 1), Farming.key(x + 1, y + 1)];
+            if (corners.every(kk => dugSet.has(kk) && !consumed.has(kk))) {
+                ["tl", "tr", "bl", "br"].forEach((q, i) => quads.set(corners[i], q));
+                corners.forEach(kk => consumed.add(kk));
+            }
+        }
+        return quads;
     }
 
     // fence: a post with rails toward the neighbouring fences (N 1, E 2, S 4, W 8)
@@ -279,6 +303,7 @@
         for (const b of Farming.farm().buildings[mapId] || []) for (const c of Farming.cellsOfGeo(Farming.geoOf(b), b.x, b.y)) covered.add(Farming.key(c.x, c.y));
         const has = (x, y) => !!plots[Farming.key(x, y)] && !covered.has(Farming.key(x, y));
         const crops = ImageManager.loadSystem("Farm_Crops");
+        const pitQuads = mergedPitQuads(plots, covered);
         for (const k of Object.keys(plots)) {
             const [x, y] = k.split(",").map(Number), plot = plots[k];
             if (covered.has(k)) continue;
@@ -290,7 +315,7 @@
             this._entries.push({ x, y, sprite: soil });
             this.addChild(soil);
             if (plot.dug) {
-                const pit = new Sprite(pitTexture(plot.dug));
+                const pit = new Sprite(pitTexture(plot.dug, pitQuads.get(k)));
                 this._entries.push({ x, y, sprite: pit });
                 this.addChild(pit);
             }
@@ -475,7 +500,7 @@
         // the tiles the building would cover: green where it fits, red where it does not
         const far = Farming.placementProblem(mode.type, mode.x, mode.y, mode.flip) === "Za daleko od ciebie.";
         for (const t of Farming.tilesOfBuilding(mode.type, mode.x, mode.y)) {
-            const bad = far || !!Farming.tileWhyNot(t.x, t.y), sx = Math.round($gameMap.adjustX(t.x) * tw), sy = Math.round($gameMap.adjustY(t.y) * th);
+            const bad = far || !!Farming.tileWhyNot(t.x, t.y, mode.type), sx = Math.round($gameMap.adjustX(t.x) * tw), sy = Math.round($gameMap.adjustY(t.y) * th);
             const open = def.yard && !Farming.isSolidCell(def, t.i, t.j) && !(t.j === 0);   // the open ground inside a yard is only tinted; the fence and the hut are marked strongly
             ctx.fillStyle = bad ? "rgba(235,70,60," + (open ? 0.2 : 0.42) + ")" : "rgba(90,220,110," + (open ? 0.16 : 0.38) + ")";
             ctx.fillRect(sx, sy, tw, th);
