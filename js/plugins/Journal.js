@@ -366,6 +366,8 @@
         96: "Oprawiona zwierzyna (nóż, menu Przedmioty).",
         102: "Dziko rosną na łące latem i jesienią.",
         103: "Dziko rosną na łące jesienią.",
+        139: "Rosną na dzikich jabłoniach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
+        140: "Rosną na dzikich gruszach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
         104: "Dziko rosną na łące.",
         67: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",
         68: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",

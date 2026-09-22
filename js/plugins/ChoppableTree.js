@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Zbieractwo: ścinanie drzew siekierą, kopanie pieńków łopatą, rozbijanie kamieni kilofem, rąbanie kłód, prawdziwa animacja postaci przy machaniu narzędziem, odłamki przy uderzeniu, duże obiekty blokują swoją podstawę, zwalnia ziemię pod uprawy i budowę, animacje grabienia i orki, kucania przy siewie i zbiorze, ścinanie krzaków (dają gałęzie), kamienie w wielu rodzajach (lecą do gracza po rozbiciu), duże krzewy z przechodnim brzegiem, 26 kamieni od małych po ogromne plus żyła rudy żelaza, bezlistne zarośla z gałęzi blokujące drogę, zużywa wytrzymałość. v1.15.0
+ * @plugindesc Zbieractwo: ścinanie drzew siekierą, kopanie pieńków łopatą, rozbijanie kamieni kilofem, rąbanie kłód, prawdziwa animacja postaci przy machaniu narzędziem, odłamki przy uderzeniu, duże obiekty blokują swoją podstawę, zwalnia ziemię pod uprawy i budowę, animacje grabienia i orki, kucania przy siewie i zbiorze, ścinanie krzaków (dają gałęzie), kamienie w wielu rodzajach (lecą do gracza po rozbiciu), duże krzewy z przechodnim brzegiem, 26 kamieni od małych po ogromne plus żyła rudy żelaza, bezlistne zarośla z gałęzi blokujące drogę, zużywa wytrzymałość, dzikie drzewa owocowe (jabłoń, grusza) z sezonowym owocem do zerwania przed ścięciem. v1.16.0
  * @author Claude
  *
  * @param axeItem
@@ -110,6 +110,50 @@
  * @min 0.5
  * @default 6.0
  *
+ * @param fruitItem
+ * @text Owoc: domyślny przedmiot
+ * @desc Używany, gdy notatka <Tree:fruit=...> nie poda innego. 0 = drzewo owocowe bez notatki nie owocuje.
+ * @type item
+ * @default 0
+ *
+ * @param fruitMin
+ * @text Owoc: ile sztuk (minimum)
+ * @type number
+ * @min 1
+ * @default 2
+ *
+ * @param fruitMax
+ * @text Owoc: ile sztuk (maksimum)
+ * @type number
+ * @min 1
+ * @default 4
+ *
+ * @param fruitSeasonFrom
+ * @text Owocowanie: pierwsza pora roku (0 Wiosna, 1 Lato, 2 Jesień, 3 Zima)
+ * @type number
+ * @min 0
+ * @max 3
+ * @default 1
+ *
+ * @param fruitSeasonTo
+ * @text Owocowanie: ostatnia pora roku
+ * @type number
+ * @min 0
+ * @max 3
+ * @default 2
+ *
+ * @param fruitRegrowDays
+ * @text Owoc odrasta po (dni)
+ * @type number
+ * @min 1
+ * @default 5
+ *
+ * @param fruitSe
+ * @text Dźwięk: zerwanie owocu
+ * @type file
+ * @dir audio/se
+ * @default Item1
+ *
  * @param chopSe
  * @text Dźwięk: uderzenie siekiery
  * @type file
@@ -202,6 +246,18 @@
  *           shovel=62,digs=2,digdrop=61,digmin=1,digmax=2>
  *     Sama obecność tagu <Tree> (np. <Tree>) włącza kołysanie drzewa.
  *     sway - kąt kołysania w stopniach (0 = drzewo nie kołysze się).
+ *
+ *   DRZEWO OWOCOWE (dzika jabłoń / grusza): ten sam tag <Tree>, z dodatkowymi
+ *   kluczami fruit=<przedmiot>,fruitmin=,fruitmax=. Dopóki drzewo owocuje,
+ *   przycisk akcji zrywa owoce zamiast rąbać - siekiera działa dopiero, gdy
+ *   nic już na nim nie wisi (zerwane albo nie jego pora roku). Potrzebne są
+ *   DWIE strony: STRONA 1 (Samoprzełącznik C wyłączony - owocuje): grafika
+ *   "!$Tree_Apple" / "!$Tree_Pear" (albo własna), polecenie wtyczki "Zerwij
+ *   owoce z drzewa"; STRONA 2 (Samoprzełącznik C włączony, A wyłączony -
+ *   bez owoców): grafika "!$Tree_FruitBare" (albo własna), polecenie "Uderz
+ *   w drzewo (siekiera)" - od tej strony to już zwykłe ścinane drzewo.
+ *   Pora owocowania i liczba dni do odrośnięcia to parametry wtyczki
+ *   (wspólne dla wszystkich drzew owocowych na mapie).
  *
  * 2) KAMIEŃ (kilof), 2 strony zdarzenia:
  *   STRONA 1: grafika kamienia (kafelek lub obraz), Priorytet: Tak samo jak
@@ -319,8 +375,16 @@
         digmin: 1,
         digmax: 2,
         cost: num(params.staminaChop, 5),
-        digcost: num(params.staminaDig, 4)
+        digcost: num(params.staminaDig, 4),
+        // a tree with fruit=0 (the default) is an ordinary tree; the note tag <Tree:fruit=...> opts it in
+        fruit: num(params.fruitItem, 0),
+        fruitmin: num(params.fruitMin, 2),
+        fruitmax: num(params.fruitMax, 4)
     };
+    const FRUIT_SEASON_FROM = num(params.fruitSeasonFrom, 1);
+    const FRUIT_SEASON_TO = num(params.fruitSeasonTo, 2);
+    const FRUIT_REGROW_DAYS = num(params.fruitRegrowDays, 5);
+    const FRUIT_SE = params.fruitSe || "Item1";
     const ROCK_DEFAULTS = {
         hits: num(params.rockHits, 3),
         tool: num(params.pickaxeItem, 63),
@@ -572,6 +636,52 @@
         return cfg;
     }
     const treeConfig = event => readConfig(event, "Tree", TREE_DEFAULTS);
+
+    // ---- fruit trees: a Tree that also carries fruit while standing (wild apple / pear). Picking
+    // the fruit (self-switch C on) is the only way to make it choppable; it grows back after some
+    // days, only in season. $gameSystem._treeFruit = { "mapId:eventId": dayItWasPicked }
+    function treeFruitStore() {
+        if (!$gameSystem._treeFruit) $gameSystem._treeFruit = {};
+        return $gameSystem._treeFruit;
+    }
+    const fruitKey = event => event._mapId + ":" + event._eventId;
+    function fruitSeasonNow() {
+        if (!(window.Farming && Farming.seasonIndex)) return true;   // no Farming.js loaded: no season gate
+        const s = Farming.seasonIndex($gameSystem.dayNightDay());
+        return s >= FRUIT_SEASON_FROM && s <= FRUIT_SEASON_TO;
+    }
+    // should self-switch C be OFF (fruiting) right now?
+    function shouldFruit(event, cfg) {
+        if (!cfg || !cfg.fruit || !fruitSeasonNow()) return false;
+        const picked = treeFruitStore()[fruitKey(event)];
+        return picked === undefined || $gameSystem.dayNightDay() - picked >= FRUIT_REGROW_DAYS;
+    }
+    // keeps self-switch C in sync with shouldFruit() before the event's page is (re)picked
+    function syncFruitSwitch(event) {
+        const cfg = treeConfig(event);
+        if (!cfg || !cfg.fruit) return;
+        const want = !shouldFruit(event, cfg);   // C on = bare
+        if ($gameSelfSwitches.value([event._mapId, event._eventId, "C"]) !== want) {
+            $gameSelfSwitches.setValue([event._mapId, event._eventId, "C"], want);
+        }
+    }
+    const _Game_Event_refresh = Game_Event.prototype.refresh;
+    Game_Event.prototype.refresh = function() {
+        syncFruitSwitch(this);
+        _Game_Event_refresh.call(this);
+    };
+    // catches regrowth while the player just stands around on the map (refresh() otherwise only
+    // runs on map load and self-switch/variable changes, not every time an hour passes)
+    let lastFruitHour = -1;
+    const _Scene_Map_update_fruit = Scene_Map.prototype.update;
+    Scene_Map.prototype.update = function() {
+        _Scene_Map_update_fruit.call(this);
+        if (!$gameSystem || typeof $gameSystem.dayNightHour !== "function") return;
+        const h = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
+        if (h === lastFruitHour) return;
+        lastFruitHour = h;
+        for (const event of $gameMap.events()) if (treeConfig(event) && treeConfig(event).fruit) event.refresh();
+    };
     // A "!$Rock_..." / "!$Boulder_..." picture on one of the event's pages, if any.
     function rockGraphic(event) {
         const data = event.event();
@@ -1101,6 +1211,16 @@
             strike(this, kind);
         });
     }
+    PluginManager.registerCommand(pluginName, "pickFruit", function() {
+        const event = $gameMap.event(this._eventId);
+        if (!event || event.isTreeAnimating()) return;
+        const cfg = treeConfig(event);
+        if (!cfg || !cfg.fruit) return;
+        giveReward("Zerwano owoce!", cfg.fruit, cfg.fruitmin, cfg.fruitmax);
+        playSe(FRUIT_SE, 105);
+        treeFruitStore()[fruitKey(event)] = $gameSystem.dayNightDay();
+        $gameSelfSwitches.setValue([event._mapId, event._eventId, "C"], true);
+    });
 
     const _Game_Interpreter_updateWaitMode = Game_Interpreter.prototype.updateWaitMode;
     Game_Interpreter.prototype.updateWaitMode = function() {
