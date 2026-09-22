@@ -562,10 +562,10 @@
         return result;
     };
     Scene_Map.prototype.onAutosaveSuccess = function() {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(0, "Gra zapisana (autozapis)", "#9fd4ff");
+        $gameTemp.pushLootPopup(0, "Gra zapisana (autozapis)", "#9fd4ff");
     };
     Scene_Map.prototype.onAutosaveFailure = function() {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(0, "Autozapis nie powiódł się", "#ff9f8f");
+        $gameTemp.pushLootPopup(0, "Autozapis nie powiódł się", "#ff9f8f");
     };
 
     // ------------------------------------------------------------------

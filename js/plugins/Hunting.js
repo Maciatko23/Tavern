@@ -278,7 +278,7 @@
     // Shooting
     // ------------------------------------------------------------------
     function popup(icon, text, color) {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(icon, text, color);
+        $gameTemp.pushLootPopup(icon, text, color);
     }
     const countItem = id => $gameParty.numItems($dataItems[id]);
     // the bow when there are arrows, else the sling when there are stones; null with the reason (a popup) otherwise

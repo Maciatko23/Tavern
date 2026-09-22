@@ -101,7 +101,7 @@
     const leftText = id => left(id) + " " + unitWord(id, left(id));
 
     function popup(icon, text, color) {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(icon, text, color);
+        $gameTemp.pushLootPopup(icon, text, color);
     }
     function broke(id) {
         const item = dataItem(id), g = TOOLS[id].g;

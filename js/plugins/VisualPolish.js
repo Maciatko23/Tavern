@@ -71,10 +71,10 @@
         return !/<Polish:\s*off\s*>/i.test(note);
     }
 
+    // the same deterministic tile hash as Farming.js (Sprite_GrassDetail.build already requires
+    // window.Farming to be loaded before it calls this, see below)
     function hash2(x, y, s) {
-        let h = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263) ^ Math.imul(s | 0, 1103515245);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+        return Farming.hash2(x, y, s);
     }
 
     // ------------------------------------------------------------------

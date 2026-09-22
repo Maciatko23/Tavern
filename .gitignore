@@ -6,3 +6,12 @@ Thumbs.db
 desktop.ini
 .DS_Store
 *.tmp
+
+# Test run artifacts (tests/run.sh output and the screenshots individual tests save next to
+# themselves or in their own subfolder; all regenerated every run, none of it is the test itself)
+/tests/out_*.txt
+/tests/results.txt
+/tests/*.log
+/tests/edge_profile_*/
+/tests/*.png
+/tests/*/*.png

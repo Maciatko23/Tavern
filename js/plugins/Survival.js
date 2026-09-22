@@ -169,7 +169,7 @@
         if (scene && scene._helpWindow && scene.constructor.name !== "Scene_Map") {
             lastFeedback = text;
             scene._helpWindow.setText(text);
-        } else if (typeof $gameTemp.pushLootPopup === "function") {
+        } else {
             $gameTemp.pushLootPopup(icon, text, "#9ff0a8");
         }
     }
@@ -285,7 +285,7 @@
         if (plan && (target !== plan.power || $gameScreen.weatherType() !== plan.type)) {
             $gameScreen.changeWeather(plan.type, plan.power, 90);
             $gameSystem._weatherOwn = true;
-            if (target === 0 && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", "#bcd8ff");
+            if (target === 0) $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", "#bcd8ff");
         } else if (!plan && $gameSystem._weatherOwn) {
             $gameScreen.changeWeather("none", 0, 90);
             $gameSystem._weatherOwn = false;
@@ -322,7 +322,7 @@
         }
         const list = $gameSystem.activeBuffs(), cold = $gameSystem.isCold();
         const key = list.map(b => b.name + Math.ceil(b.left)).join(",") + (cold ? "|cold" : "");
-        if (cold && !this._coldWas && typeof $gameTemp.pushLootPopup === "function") {
+        if (cold && !this._coldWas) {
             $gameTemp.pushLootPopup(0, "Zimno! Płaszcz, ognisko albo ciepły posiłek pomoże", "#bcd8ff");
         }
         this._coldWas = cold;

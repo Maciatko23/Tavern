@@ -262,7 +262,7 @@
     }
 
     function announce(goal) {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(goalIcon(goal), "Cel wykonany: " + goal.title, "#9ff0a8");
+        $gameTemp.pushLootPopup(goalIcon(goal), "Cel wykonany: " + goal.title, "#9ff0a8");
         AudioManager.playSe({ name: "Item3", volume: 80, pitch: 105, pan: 0 });
     }
 
@@ -574,7 +574,7 @@
     // ------------------------------------------------------------------
     // The five tabs: what the list shows and what the details say
     // ------------------------------------------------------------------
-    const TABS = ["Cele", "Surowce", "Budynki", "Receptury", "Notatki"];
+    const TABS = ["Cele", "Surowce", "Budynki", "Receptury", "Notatki", "Zapasy"];
 
     function goalItems() {
         const d = data();
@@ -608,8 +608,35 @@
         if (notes.length === 0) return [{ label: "Brak notatek", mark: "locked", dim: true, empty: true }];
         return notes.slice().reverse().map(n => ({ label: n.title, mark: "todo", right: "dz. " + n.day, note: n }));
     }
+    // worn tools (worst first) and food that will spoil soon (soonest first) - a status view over Durability.js and Spoilage.js
+    function wornTools() {
+        if (!window.Durability || !Durability.enabled()) return [];
+        const ids = Object.keys(Durability.TOOLS).map(Number).filter(id => dataItem(id) && $gameParty.hasItem(dataItem(id)) && Durability.used(id) > 0);
+        ids.sort((a, b) => Durability.left(a) / Durability.lifeOf(a) - Durability.left(b) / Durability.lifeOf(b));
+        return ids.map(id => {
+            const left = Durability.left(id), life = Durability.lifeOf(id), ratio = life > 0 ? left / life : 1;
+            const canFix = Durability.TOOLS[id].fix.every(([mid, n]) => countOf(mid) >= n);
+            return { label: dataItem(id).name, icon: iconOfItem(id), mark: ratio > 0.4 ? "done" : canFix ? "ready" : "todo",
+                right: left + "/" + life, supplyTool: id };
+        });
+    }
+    function spoilingFood() {
+        if (!window.Spoilage || !Spoilage.enabled()) return [];
+        const items = $gameParty.items().filter(it => Spoilage.isPerishable(it) && Spoilage.hoursLeft(it.id) !== null);
+        items.sort((a, b) => Spoilage.hoursLeft(a.id) - Spoilage.hoursLeft(b.id));
+        return items.map(it => {
+            const h = Spoilage.hoursLeft(it.id);
+            return { label: it.name, icon: it.iconIndex, mark: h < 24 ? "ready" : h < 72 ? "todo" : "done",
+                right: h < 1 ? "<1 godz." : Math.round(h) + " godz.", supplyFood: it.id };
+        });
+    }
+    function supplyItems() {
+        const items = wornTools().concat(spoilingFood());
+        if (items.length === 0) items.push({ label: "Nic tu na razie nie wymaga uwagi", mark: "locked", dim: true, empty: true });
+        return items;
+    }
     function itemsForTab(tab) {
-        return [goalItems, materialItems, buildingItems, recipeItems, noteItems][tab]().map(it => Object.assign(it, { tab }));
+        return [goalItems, materialItems, buildingItems, recipeItems, noteItems, supplyItems][tab]().map(it => Object.assign(it, { tab }));
     }
 
     function goalOps(g) {
@@ -672,6 +699,26 @@
     function noteOps(n) {
         return [{ k: "title", text: n.title }, { k: "sub", text: "Dzień " + n.day }, { k: "rule" }, { k: "p", text: n.text }];
     }
+    function toolOps(id) {
+        const it = dataItem(id), left = Durability.left(id), life = Durability.lifeOf(id);
+        const ops = [{ k: "title", text: it.name, icon: it.iconIndex }, { k: "sub", text: "Wytrzymałość: " + left + " z " + life + " (" + Durability.unitWord(id, left) + ")" }, { k: "rule" }];
+        if (it.description) ops.push({ k: "p", text: it.description });
+        ops.push({ k: "gap", n: 8 }, { k: "h", text: "Naprawa" }, ...costRows(Durability.TOOLS[id].fix));
+        ops.push({ k: "gap", n: 6 }, { k: "muted", text: "Naprawiasz to przy warsztacie: wytrzymałość wraca do pełna." });
+        return ops;
+    }
+    function foodOps(itemId) {
+        const it = dataItem(itemId);
+        const ops = [{ k: "title", text: it.name, icon: it.iconIndex }, { k: "sub", text: Spoilage.freshnessText(itemId) || "Jeszcze świeże." }, { k: "rule" }];
+        if (it.description) ops.push({ k: "p", text: it.description });
+        ops.push({ k: "gap", n: 8 }, { k: "muted", text: "W spiżarni psuje się pięć razy wolniej niż w plecaku." });
+        return ops;
+    }
+    function supplyOps(item) {
+        if (!item || item.empty) return [{ k: "title", text: "Zapasy" }, { k: "rule" },
+            { k: "p", text: "Tu widać zużyte narzędzia (i czego trzeba, żeby je naprawić) oraz jedzenie w plecaku, które zaraz się zepsuje." }];
+        return item.supplyTool !== undefined ? toolOps(item.supplyTool) : foodOps(item.supplyFood);
+    }
     function detailFor(tab, item) {
         if (!item) return { ops: [] };
         if (item.tab !== undefined) tab = item.tab;   // a row always explains itself, whatever tab is shown
@@ -679,6 +726,7 @@
         if (tab === 1) return { ops: materialOps(item.itemId) };
         if (tab === 2) return { ops: buildingOps(item.type, item.def), image: item.def.image };
         if (tab === 3) return { ops: recipeOps(item.entry) };
+        if (tab === 5) return { ops: supplyOps(item) };
         if (item.empty) return { ops: [{ k: "title", text: "Notatki" }, { k: "rule" }, { k: "p", text: "Tu trafią poszlaki, plotki i ważne rozmowy. Zapisują się same, gdy dowiesz się czegoś istotnego." }] };
         return { ops: noteOps(item.note) };
     }
@@ -688,6 +736,7 @@
         if (tab === 1) { const ids = materialIds(); return "Poznano " + ids.filter(has).length + " z " + ids.length + " surowców"; }
         if (tab === 2) { const F = Farm(), types = F ? Object.keys(F.BUILDINGS) : []; return "Zbudowano " + types.filter(isBuilt).length + " z " + types.length + " rodzajów budynków"; }
         if (tab === 3) { const rs = allRecipes(); return "Wykonano " + rs.filter(e => has(e.r.output[0])).length + " z " + rs.length + " receptur"; }
+        if (tab === 5) { const n = wornTools().length, f = spoilingFood().length; return n + f === 0 ? "Wszystko w porządku" : "Do ogarnięcia: " + n + " narzędzi, " + f + " potraw"; }
         return "Notatek: " + d.notes.length;
     }
 
@@ -846,7 +895,8 @@
             "Ptaszek: poznane   ←/→ lub Q/E: zakładka   Anuluj: wróć",
             "Ptaszek: zbudowane   Romb: możesz zbudować teraz   ←/→: zakładka",
             "Ptaszek: zrobione   Romb: możesz zrobić teraz   ←/→: zakładka",
-            "←/→ lub Q/E: zakładka   Anuluj: wróć"][this._tab];
+            "←/→ lub Q/E: zakładka   Anuluj: wróć",
+            "Ptaszek: w porządku   Romb: masz na naprawę / zaraz się zepsuje   ←/→ lub Q/E: zakładka"][this._tab];
         w.drawText(keys, 0, 0, w.innerWidth - 300);
         w.changeTextColor(ColorManager.textColor(16));
         w.drawText(legendFor(this._tab), w.innerWidth - 400, 0, 400, "right");
@@ -1151,7 +1201,7 @@
     function addNote(title, text) {
         const d = data();
         d.notes.push({ title: String(title || "Notatka"), text: String(text || ""), day: dayNow() });
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(iconOfItem(59), "Nowa notatka: " + title, "#f0e4c8");
+        $gameTemp.pushLootPopup(iconOfItem(59), "Nowa notatka: " + title, "#f0e4c8");
         AudioManager.playSe({ name: "Bell1", volume: 70, pitch: 100, pan: 0 });
     }
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));

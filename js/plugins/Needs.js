@@ -6,6 +6,7 @@
  * @target MZ
  * @plugindesc Głód i pragnienie: dwa paski pod wytrzymałością. Kto jest głodny albo spragniony, traci więcej sił przy pracy, a jego wytrzymałość ma niższy sufit. Woda ze stawu, studni, deszczu i bukłaka. v1.0.0
  * @author Tawerna
+ * @orderAfter Survival
  *
  * @param enabled
  * @text Głód i pragnienie działają
@@ -102,7 +103,7 @@
         return Math.min(FOOD.cap[l.food], WATER.cap[l.water]);
     }
     function popup(icon, text, color) {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(icon, text, color);
+        $gameTemp.pushLootPopup(icon, text, color);
     }
     const FOOD_ICON = 390, WATER_ICON = 391;
     function warn() {

@@ -36,6 +36,12 @@
  * @type boolean
  * @default true
  *
+ * @param saveDayLine
+ * @text Dzień i chatka na ekranie zapisu
+ * @desc Pod tytułem na liście zapisów dopisuje dzień, porę roku i to, czy chatka jest już zbudowana.
+ * @type boolean
+ * @default true
+ *
  * @help
  * ============================================================================
  * UITheme.js
@@ -72,6 +78,7 @@
     const HIDE_EMPTY = flag(params.hideEmptyCategories, true);
     const COUNT_TIMES = flag(params.countAsTimes, true);
     const GOLD_TITLE = flag(params.goldTitle, true);
+    const SAVE_DAY_LINE = flag(params.saveDayLine, true);
 
     // ------------------------------------------------------------------
     // One font everywhere: bitmaps drawn by plugins (HUD, popups, labels) used to fall back to the
@@ -301,6 +308,41 @@
     // ------------------------------------------------------------------
     // The title screen: gold letters with a dark outline instead of plain white
     // ------------------------------------------------------------------
+    if (SAVE_DAY_LINE) {
+        // stashed into the save's own info at save time, so a slot always shows its own game's day (not the one now running)
+        const _makeSavefileInfo = DataManager.makeSavefileInfo;
+        DataManager.makeSavefileInfo = function() {
+            const info = _makeSavefileInfo.call(this);
+            if ($gameSystem && typeof $gameSystem.dayNightDay === "function") {
+                info.day = $gameSystem.dayNightDay();
+                info.season = window.Farming && Farming.seasonOf ? Farming.seasonOf(info.day) : "";
+                info.hutBuilt = !!(window.Farming && Farming.hutOf && Farming.hutOf());
+            }
+            return info;
+        };
+        // Window_SavefileStatus is private to AltSaveScreen.js's own closure (the whole file is one
+        // IIFE), so it cannot be referenced by name from here. Scene_File.create is where that file
+        // hands the finished window to the scene (this._listWindow.mzkp_statusWindow) - patch that
+        // one instance's drawContents there instead, before anything has drawn with it yet.
+        const _Scene_File_create = Scene_File.prototype.create;
+        Scene_File.prototype.create = function() {
+            _Scene_File_create.call(this);
+            const w = this._listWindow && this._listWindow.mzkp_statusWindow;
+            if (!w || w.__dayLinePatched) return;
+            w.__dayLinePatched = true;
+            const _drawContents = w.drawContents.bind(w);
+            w.drawContents = function(info, rect) {
+                _drawContents(info, rect);
+                if (info.day === undefined) return;   // a save from before this feature: nothing to show
+                this.contents.fontSize = 22;
+                this.changeTextColor(ColorManager.textColor(7));
+                const line = "Dzień " + info.day + (info.season ? "  ·  " + info.season : "") + "  ·  " + (info.hutBuilt ? "chatka zbudowana" : "chatki jeszcze nie ma");
+                this.drawText(line, rect.x + 192, rect.y + this.lineHeight(), rect.width - 192);
+                this.resetFontSettings();
+            };
+        };
+    }
+
     if (GOLD_TITLE) {
         Scene_Title.prototype.drawGameTitle = function() {
             const x = 20;

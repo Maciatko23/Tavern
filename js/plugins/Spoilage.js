@@ -154,7 +154,7 @@
         }
     }
     function popup(icon, text, color) {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(icon, text, color);
+        $gameTemp.pushLootPopup(icon, text, color);
     }
     function spoilBag(dt) {
         const rotItem = $dataItems[ROT];
