@@ -1,0 +1,5 @@
+# Line endings are already mixed on purpose across this project (some plugin files are
+# CRLF, some are LF; the patch scripts preserve whichever a file already uses). Tell git
+# to leave every file's bytes exactly as they are instead of normalizing on commit/checkout,
+# so a checkout never silently rewrites a file the editor or a script wrote.
+* -text
