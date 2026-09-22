@@ -102,7 +102,9 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- the doorway and the walls
         const solid = await J(`(function(){ const at = (x, y) => Farming.solidAt(x, y) ? 1 : 0; return { door: at(${dX}, ${hy}), leftOfDoor: at(${dX - 1}, ${hy}), rightOfDoor: at(${dX + 1}, ${hy}), aboveDoor: at(${dX}, ${hy - 1}), corner: at(${hx}, ${hy}), far: at(${hx + 4}, ${hy - 2}), front: at(${dX}, ${fY}), doorIsHut: (Farming.buildingAt(${dX}, ${hy}) || {}).type }; })()`);
-        check("only the doorway is open: the rest of the 5 x 3 field is solid", solid.door === 0 && solid.leftOfDoor === 1 && solid.rightOfDoor === 1 && solid.aboveDoor === 1 && solid.corner === 1 && solid.far === 1 && solid.front === 0 && solid.doorIsHut === "hut", solid);
+        // the front row (the hut's own doorstep row) is solid but for the doorway; the rows behind it - the roof rising over
+        // them without a floor actually built there - are open, same as any tall building (the player can step a little onto it)
+        check("the front row is solid but for the doorway; the rows behind (the roof) are open", solid.door === 0 && solid.leftOfDoor === 1 && solid.rightOfDoor === 1 && solid.aboveDoor === 0 && solid.corner === 1 && solid.far === 0 && solid.front === 0 && solid.doorIsHut === "hut", solid);
         check("the doorway can be walked into (passable), the wall next to it cannot", (await ev(`$gameMap.isPassable(${dX}, ${hy}, 8)`)) === true && (await ev(`$gameMap.isPassable(${dX + 1}, ${hy}, 8)`)) === false);
         check("nothing may be built on the tile in front of the door", (await ev(`Farming.tileWhyNot(${dX}, ${fY})`)) === "Zostaw wejście do chatki.");
         check("a second hut is refused: 'Masz już chatkę.'", (await ev(`Farming.whyNotBuild("hut", ${bx + 1}, ${by + 6})`)) === "Masz już chatkę.");

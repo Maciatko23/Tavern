@@ -565,7 +565,10 @@
         // (the player stays seated on the impact frame for as long as opts.holdWhile says, see startToolSwing)
         { sheet: "Swing_Roast", tool: -1, frames: 82, impact: 36, hold: 8, reach: 0, hit: [12, 12, 12, 12] },
         // 13: sitting beside a tripod with the food hanging from it (hands free: the same sheet as the plain sitting), same timing as 12
-        { sheet: "Swing_Sit", tool: -1, frames: 82, impact: 36, hold: 8, reach: 0, hit: [12, 12, 12, 12] }
+        { sheet: "Swing_Sit", tool: -1, frames: 82, impact: 36, hold: 8, reach: 0, hit: [12, 12, 12, 12] },
+        // 14: lying down flat on the ground to rest (Farming.js, "Odpocznij na ziemi"): sinks down onto their
+        // side, stays lying (the rest happens on the impact frame), then stands back up
+        { sheet: "Swing_LieDown", tool: -1, frames: 125, impact: 40, hold: 50, reach: 0, hit: [10, 10, 10, 10] }
     ];
     const SWING_KIND = { log: 0, rock: 1, stump: 2, fall: 3, bush: 3 };   // bushes: axe from the side
     const SHAKE_FRAMES = 6;

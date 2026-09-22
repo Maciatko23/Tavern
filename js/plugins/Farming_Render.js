@@ -931,7 +931,7 @@
                 entry.glow.anchor.y = 0.5;
                 entry.glow.blendMode = ADD_BLEND;
                 entry.glow.alpha = def.fire && def.fire.smoke ? fireGlowAlpha(this._age) : 0;
-                entry.glow.scale.x = entry.glow.scale.y = def.fire && def.fire.glow ? def.fire.glow : def.recipes ? 0.6 : 1;
+                entry.glow.scale.x = entry.glow.scale.y = def.fire && def.fire.glow ? def.fire.glow : def.ember && def.ember.scale ? def.ember.scale : def.recipes ? 0.6 : 1;
                 this._glowLayer.addChild(entry.glow);
             }
             if (!b.site && def.fire) {   // animated flames over the embers of the picture, sorted right after the building itself
@@ -1012,8 +1012,8 @@
                 shadow.y = sprite.y - 9;
             }
             if (glow) {
-                glow.x = sprite.x + (def.fire ? 0 : def.ventX || 0);
-                glow.y = sprite.y - (def.fire ? def.fire.y + 10 : def.vent ? def.vent - 2 : 22);   // on the flames / the vent, above the foot of the sprite
+                glow.x = sprite.x + (def.fire ? 0 : def.ember ? (def.ember.x || 0) : def.ventX || 0);
+                glow.y = sprite.y - (def.fire ? def.fire.y + 10 : def.ember ? def.ember.y : def.vent ? def.vent - 2 : 22);   // on the flames / the embers in the opening / the vent, above the foot of the sprite
             }
             if (flame) {
                 flame.x = sprite.x;

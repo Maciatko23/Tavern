@@ -2,7 +2,7 @@
 null,
 {"id":1,"expanded":false,"name":"MAP001","order":8,"parentId":0,"scrollX":0,"scrollY":0,"quick":false},
 {"id":2,"expanded":true,"name":"Domek - Wnętrze","order":1,"parentId":0,"scrollX":540.6666666666666,"scrollY":316.6666666666667},
-{"id":3,"expanded":true,"name":"Domek - Zewnętrze","order":2,"parentId":0,"scrollX":1216.5,"scrollY":724.5},
+{"id":3,"expanded":true,"name":"Domek - Zewnętrze","order":2,"parentId":0,"scrollX":811,"scrollY":965},
 {"id":4,"expanded":true,"name":"Łąka","order":3,"parentId":0,"scrollX":0,"scrollY":0},
 {"id":5,"expanded":true,"name":"Las","order":4,"parentId":0,"scrollX":0,"scrollY":0},
 {"id":6,"expanded":true,"name":"Wzgórza","order":5,"parentId":0,"scrollX":0,"scrollY":0},

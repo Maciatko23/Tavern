@@ -44,11 +44,11 @@ const { launch, sleep } = require("./cdp.js");
             singleTile: Farming.isSolidCell({ w: 1, h: 1 }, 0, 0),
             doorway: Farming.isSolidCell({ door: { dx: 1 }, w: 3, h: 2 }, 1, 0),
             doorFrontWall: Farming.isSolidCell({ door: { dx: 1 }, w: 3, h: 2 }, 0, 0),
-            doorBackWallStillSolid: Farming.isSolidCell({ door: { dx: 1 }, w: 3, h: 2 }, 1, 1)
+            doorBackRowOpen: Farming.isSolidCell({ door: { dx: 1 }, w: 3, h: 2 }, 1, 1)
         })`);
         check("an ordinary building: front row solid, back row open", solid.ordinaryFront === true && solid.ordinaryBack === false, solid);
         check("a plain 1x1 building is unaffected (still solid)", solid.singleTile === true, solid);
-        check("a house's own doorway is still open, but its back wall (even above the doorway) stays solid", solid.doorway === false && solid.doorFrontWall === true && solid.doorBackWallStillSolid === true, solid);
+        check("a house: front row solid but for its doorway, the rows behind (its roof) open just like any building", solid.doorway === false && solid.doorFrontWall === true && solid.doorBackRowOpen === false, solid);
 
         // ==================================================================================================
         // phase 1: a real kiln (w3 h2) - front row blocks movement, back row does not, both still count as

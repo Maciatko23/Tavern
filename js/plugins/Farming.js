@@ -517,6 +517,7 @@
     const HAMMER_KIND = 7;   // striking a building site
     const FISH_KIND = 8;     // casting a fishing rod
     const SHOVEL_KIND = 2;   // digging soil
+    const LIE_KIND = 14;     // lying down flat on the ground to rest, then standing back up
 
     const DIG_YIELD = [2, 3];   // soil per dig
 
@@ -526,7 +527,7 @@
         dig: "Earth5", kindle: "Fire2", chest: "Chest1", move: "Item1", water: "Liquid"
     };
     // lying flat on the ground: a small, quick rest that needs no building at all
-    const LIE_STAMINA = 10, LIE_HOURS = 0.5, LIE_PICTURE_ID = 99;
+    const LIE_STAMINA = 10, LIE_HOURS = 0.5;
 
     // ------------------------------------------------------------------
     // Content tables. Add your own crops / buildings here.
@@ -624,6 +625,7 @@
         chest_l: { name: "Duża skrzynia", cost: [[ITEM.planks, 8], [ITEM.stone, 2], [ITEM.nails, 6]], w: 2, stamina: 8, image: "Farm_ChestL", slots: 30, indoor: true,
             desc: "Schowek: 30 rodzajów przedmiotów, po 99 sztuk każdego. Okuta gwoździami." },
         kiln: { name: "Piec ziemny", cost: [[ITEM.soil, 10], [ITEM.stone, 4]], w: 3, h: 2, stamina: 12, image: "Farm_Kiln_L", legacy: { w: 2, h: 1, image: "Farm_Kiln", vent: 50 }, vent: 91, ventX: -7, smokes: true,
+            ember: { x: 0, y: 29, scale: 0.85 },   // a pulsing glow inside the archway while it burns (smoke keeps rising from the chimney, at vent/ventX, as before)
             recipes: [{
                 id: "charcoal", name: "Wypal węgiel drzewny", inputs: [[ITEM.wood, 6], [ITEM.soil, 2]], output: [ITEM.charcoal, 3],
                 hours: 6, stamina: 3, desc: "Drewno pod warstwą ziemi tli się bez płomienia i zamienia w węgiel."
@@ -1069,12 +1071,12 @@
     }
     const onRing = (g, i, j) => i >= 0 && j >= 0 && i < g.w && j < (g.h || 1) && (i === 0 || j === 0 || i === g.w - 1 || j === (g.h || 1) - 1);
     const inHut = (g, i, j) => !!g.yard && i >= g.yard.hut.dx && i < g.yard.hut.dx + g.yard.hut.w && j >= g.yard.hut.dy && j < g.yard.hut.dy + g.yard.hut.h;
-    // does the cell keep the player out? A house (def.door) is solid but for its doorway; a yard is its ring of fence (but the gate) plus the
-    // hut inside it. An ordinary building only blocks its front row (j === 0, the one the picture stands on): the rows behind it, where
-    // the picture rises above the tiles without anything actually built on them, are open ground - the player can step a little onto the
-    // building, the same way a tree's canopy is free to walk under even though its trunk blocks the tile it grows from.
+    // does the cell keep the player out? A yard is its ring of fence (but the gate) plus the hut inside it. Everything else - an ordinary
+    // building, or a house (def.door) - only blocks its front row (j === 0, the one the picture stands on and, for a house, its doorway):
+    // the rows behind it, where the picture rises above the tiles without anything actually built on them, are open ground - the player
+    // can step a little onto the building, the same way a tree's canopy is free to walk under even though its trunk blocks the tile it grows from.
     function isSolidCell(g, i, j) {
-        if (g.door) return !(j === 0 && i === g.door.dx);   // the doorway of a house
+        if (g.door) return j === 0 && i !== g.door.dx;   // a house: its front row is solid but for the doorway; the rows behind are open, same as any tall building
         if (g.yard) {
             if (onRing(g, i, j)) return !(j === 0 && i === g.yard.gate);
             return inHut(g, i, j);
@@ -1833,7 +1835,7 @@
     }
     // The hour the SurvivalHUD plugin wakes you at (the same as after a night in a bed).
     const wakeHour = () => num(PluginManager.parameters("SurvivalHUD").wakeHour, 7);
-    // A night in a tent = a night in a bed: the screen fades, time jumps to the morning (Journal writes the day summary,
+    // A night in a tent = a night in a bed: time jumps to the morning (Journal writes the day summary,
     // Atmosphere saves the game - both hook sleepUntilHour), strength and health are restored, a message greets the new day.
     // rain, snow or winter: the forest bed is damp and cold (the tent stays dry)
     const harshNight = () => ["rain", "storm", "snow"].includes($gameScreen.weatherType()) || seasonIndex(today()) === 3;
@@ -1844,7 +1846,6 @@
         const restore = bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1;
         const morning = restore >= 1 ? "Czujesz się wypoczęty." : bad ? "Spałeś w zimnie i wilgoci. Sił odzyskałeś niewiele." : "Spałeś twardo. Sił odzyskałeś tylko część.";
         lockPlayer(240);
-        $gameScreen.startFadeOut(40);
         later(45, () => {
             AudioManager.playMe({ name: PluginManager.parameters("SurvivalHUD").sleepMe || "Inn1", volume: 90, pitch: 100, pan: 0 });
             const woke = $gameSystem.sleepUntilHour(wakeHour());
@@ -1854,7 +1855,6 @@
             b.last = today();
         });
         later(115, () => {
-            $gameScreen.startFadeIn(40);
             $gameMessage.add("Dzień " + $gameSystem.dayNightDay() + ". " + $gameSystem.dayNightPeriod().name + ".");
             $gameMessage.add(morning);
         });
@@ -2132,7 +2132,7 @@
     }
 
     // A recipe done by hand (sawing, forging): it happens right now, costs stamina, and the time it
-    // takes passes in front of the player (the screen dims) - nothing keeps working by itself.
+    // takes passes in front of the player (a short swing and pause) - nothing keeps working by itself.
     // unique recipes: the item that makes it pointless (the result itself or one that replaces it), 0 when none
     function ownedOutput(r) {
         if (!r.unique) return 0;
@@ -2155,11 +2155,10 @@
         for (const [id, n] of r.inputs) $gameParty.loseItem(itemOf(id), n, false);
         const se = r.startSe || (b && BUILDINGS[b.type] && BUILDINGS[b.type].startSe) || SE.build;
         swingThen(craftSwing(r), () => {
-            lockPlayer(62);   // the fade out and in below: about a second
+            lockPlayer(62);   // about a second, matching the sounds and the pause below
             playSe(se, 90);
             later(9, () => playSe(se, 80));
             later(18, () => playSe(se, 95));
-            $gameScreen.startFadeOut(26);
             later(32, () => {
                 if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(r.hours);
                 if (r.repair) {
@@ -2169,7 +2168,6 @@
                     $gameParty.gainItem(out, r.output[1]);
                     if (r.tool) useTool(r.tool);
                 }
-                $gameScreen.startFadeIn(26);
             });
         });
         return true;
@@ -2188,47 +2186,32 @@
             playSe(SE.rest, 100);
             popup(82, "+" + def.rest + " wytrzymałości", "#9ff0a8");
         };
-        if (def.fire) {   // by a fire the player sits down on the ground; the swing lasts through the fade, then the player stands up
+        if (def.fire) {   // by a fire the player sits down on the ground, stays seated a moment, then stands back up
             swingThen(SIT_KIND, () => {
                 lockPlayer(60);
-                $gameScreen.startFadeOut(24);
-                later(26, () => { restore(); $gameScreen.startFadeIn(24); });
+                later(26, restore);
             });
             return true;
         }
         lockPlayer(95);
-        $gameScreen.startFadeOut(30);
-        later(35, () => {
-            restore();
-            $gameScreen.startFadeIn(30);
-        });
+        later(35, restore);
         return true;
     }
-    // no building needed: the player lies down flat right where they stand, rests a little, gets back up
+    // no building needed: the player lies down flat right where they stand (a real animation, the swing sheet
+    // replaces the walking sprite the same way a tool swing does), rests a little, then stands back up on their own
     function lieDown(x, y) {
         if (typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() >= 0.98) {
             complain(82, "Nie jesteś zmęczony");
             return false;
         }
-        const picture = $gamePlayer.direction() === 6 ? "Lie_Down_Flip" : "Lie_Down";
-        lockPlayer(140);   // covers the whole sequence below (22 + 20 + 46 + 22 = 110 to the restore, plus its own fade-in tail)
-        $gameScreen.startFadeOut(20);
-        later(22, () => {
-            $gamePlayer.setTransparent(true);
-            $gameScreen.showPicture(LIE_PICTURE_ID, picture, 1, $gamePlayer.screenX(), $gamePlayer.screenY() - 14, 100, 100, 255, 0);
-            $gameScreen.startFadeIn(20);
-        });
-        later(22 + 20 + 46, () => {
-            $gameScreen.startFadeOut(20);
-        });
-        later(22 + 20 + 46 + 22, () => {
-            $gameScreen.erasePicture(LIE_PICTURE_ID);
-            $gamePlayer.setTransparent(false);
-            if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(LIE_HOURS);
-            if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(LIE_STAMINA);
-            playSe(SE.rest, 100);
-            popup(82, "+" + LIE_STAMINA + " wytrzymałości", "#9ff0a8");
-            $gameScreen.startFadeIn(20);
+        swingThen(LIE_KIND, () => {
+            lockPlayer(70);
+            later(24, () => {
+                if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(LIE_HOURS);
+                if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(LIE_STAMINA);
+                playSe(SE.rest, 100);
+                popup(82, "+" + LIE_STAMINA + " wytrzymałości", "#9ff0a8");
+            });
         });
         return true;
     }
