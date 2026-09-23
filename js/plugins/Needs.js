@@ -280,7 +280,9 @@
     }
     Sprite_NeedsBars.prototype = Object.create(Sprite.prototype);
     Sprite_NeedsBars.prototype.constructor = Sprite_NeedsBars;
-    Sprite_NeedsBars.HEIGHT = 40;
+    // two rows under the stamina one, in its look (UITheme.js's UIStyle.hudRow): the drumstick and the drop, bars without numbers
+    const HUD = () => (window.UIStyle && UIStyle.HUD) || { row: 20, step: 23, gap: 6, barW: 112, barH: 8 };
+    Sprite_NeedsBars.HEIGHT = 2 * HUD().step;
     Sprite_NeedsBars.prototype.initialize = function() {
         Sprite.prototype.initialize.call(this, new Bitmap(150, Sprite_NeedsBars.HEIGHT));
         this._iconSet = ImageManager.loadSystem("IconSet");
@@ -292,7 +294,7 @@
         const hud = this.parent;
         if (hud && hud._gauge) {
             this.x = hud._gauge.x;
-            this.y = hud._gauge.y + 34;
+            this.y = hud.rowY ? hud.rowY(1) : hud._gauge.y + HUD().step;
             this.visible = hud._gauge.visible && enabled();
         }
         if (!enabled()) return;
@@ -300,25 +302,18 @@
         this._pulse = (this._pulse + 1) % 40;
         const blink = (l.food === 3 || l.water === 3) && this._pulse < 20;
         const key = Math.round(n.food) + "/" + Math.round(n.water) + (blink ? "b" : "");
-        if (key === this._key || !this._iconSet.isReady()) return;
+        if (key === this._key || !(window.UIStyle || this._iconSet.isReady())) return;
         this._key = key;
         const bmp = this.bitmap, ctx = bmp.context;
         bmp.clear();
-        [[FOOD_ICON, n.food, l.food, ["#e0b24a", "#c98a2c", "#d9622c", "#c2372b"], 3], [WATER_ICON, n.water, l.water, ["#62b6ee", "#4a94d6", "#5a78c4", "#3e58b0"], 21]].forEach(([icon, value, lv, colors, y], i) => {
-            bmp.blt(this._iconSet, (icon % 16) * 32, Math.floor(icon / 16) * 32, 32, 32, 6, y - 2, 20, 20);
-            const bx = 32, bw = 112, bh = 9, by = y + 4;
-            ctx.fillStyle = "#1a100a"; ctx.fillRect(bx - 1, by - 1, bw + 2, bh + 2);
-            ctx.fillStyle = "#a67c3a"; ctx.fillRect(bx - 1, by - 1, bw + 2, 1); ctx.fillRect(bx - 1, by + bh, bw + 2, 1);
-            ctx.fillStyle = "#3a2616"; ctx.fillRect(bx, by, bw, bh);
-            const w = Math.round(bw * value / 100);
-            if (w > 0) {
-                const g = ctx.createLinearGradient(0, by, 0, by + bh);
-                const c = colors[lv];
-                g.addColorStop(0, c); g.addColorStop(1, "rgba(0,0,0,0.35)");
-                ctx.fillStyle = c; ctx.fillRect(bx, by, w, bh);
-                ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.fillRect(bx, by, w, 2);
+        [["food", FOOD_ICON, n.food, l.food, ["#e0b24a", "#c98a2c", "#d9622c", "#c2372b"]], ["water", WATER_ICON, n.water, l.water, ["#62b6ee", "#4a94d6", "#5a78c4", "#3e58b0"]]].forEach(([kind, icon, value, lv, colors], i) => {
+            const H = HUD(), y = i * H.step, bx = H.row + H.gap, by = y + (H.row - H.barH) / 2;
+            if (window.UIStyle) UIStyle.hudRow(ctx, kind, 0, y, value / 100, colors[lv]);
+            else {   // (without UITheme.js: the old icons and a plain bar)
+                bmp.blt(this._iconSet, (icon % 16) * 32, Math.floor(icon / 16) * 32, 32, 32, 0, y, H.row, H.row);
+                ctx.fillStyle = "#16181c"; ctx.fillRect(bx, by, H.barW, H.barH); ctx.fillStyle = colors[lv]; ctx.fillRect(bx, by, Math.round(H.barW * value / 100), H.barH);
             }
-            if (lv === 3 && blink) { ctx.fillStyle = "rgba(255,80,60,0.55)"; ctx.fillRect(bx, by, bw, bh); }
+            if (lv === 3 && blink) { ctx.fillStyle = "rgba(255,80,60,0.5)"; ctx.fillRect(bx, by, H.barW, H.barH); }   // the last level flashes red
         });
         bmp._baseTexture.update();
     };

@@ -570,7 +570,8 @@
         dest.gain.value = (ConfigManager.seVolume / 100) * FOOT_VOL;
         const kind = groundKindAt(x, y), profile = profileOf();
         const precip = precipitation(profile);
-        footstep(c, dest, c.currentTime + 0.005, kind, (dash ? 1.2 : 1) * rand(0.85, 1.12), !!precip && precip.type === "rain" && profile === "outdoor");
+        const sneak = window.Hunting && Hunting.sneaking && Hunting.sneaking();   // sneaking (C, Hunting.js): barely a sound
+        footstep(c, dest, c.currentTime + 0.005, kind, (dash ? 1.2 : sneak ? 0.35 : 1) * rand(0.85, 1.12), !!precip && precip.type === "rain" && profile === "outdoor");
         state.stepSide = -state.stepSide;
         state.steps = (state.steps || 0) + 1;
         state.lastKind = kind;

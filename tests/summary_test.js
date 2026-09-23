@@ -76,8 +76,9 @@ const { launch, sleep } = require("./cdp.js");
         await ev("(function(){ const w = SceneManager._scene._listWindow.mzkp_statusWindow; w.setSavefileId(1); w.refresh(); })()");
         await frames(4);
         const drawn = await J("window.__drawn");
-        const wantSubstr = "Dzień " + before.day + (before.season ? "  ·  " + before.season : "") + "  ·  " + (before.hut ? "chatka zbudowana" : "chatki jeszcze nie ma");
-        check("...and paints 'Dzień N · sezon · chatka ...' on the used slot", drawn.includes(wantSubstr), { wanted: wantSubstr, drawn });
+        // (MenuPanel.js: the row of the file says the day and the season, the panel beside it says the hut too)
+        const wantRow = "Dzień " + before.day + (before.season ? " · " + before.season : ""), wantDay = before.day + (before.season ? "  ·  " + before.season : ""), wantHut = before.hut ? "zbudowana" : "jeszcze nie ma";
+        check("...and paints the day, the season and the hut for the used slot", drawn.some(t => t.startsWith(wantRow)) && drawn.includes(wantDay) && drawn.includes("Chatka") && drawn.includes(wantHut), { wantRow, wantDay, wantHut, drawn: drawn.slice(0, 30) });
         await b.shot(require("path").join(__dirname, "save_card.png"));
         await ev("SceneManager.pop(); 0");
         await frames(20);

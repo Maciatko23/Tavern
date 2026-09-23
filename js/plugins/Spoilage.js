@@ -60,7 +60,8 @@
         94: 60, 95: 120, 98: 40, 99: 96, 101: 48, 102: 72, 103: 72, 104: 168,
         105: 480, 106: 360, 107: 30, 108: 96, 109: 72, 110: 120,
         71: 480, 72: 360, 73: 480, 75: 240, 83: 120, 123: 48, 124: 720,
-        130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96   // gulasz, kapuśniak, zupa grzybowa, owsianka, grzyby, pieczony ser, placek (the mead keeps)
+        130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96,  // gulasz, kapuśniak, zupa grzybowa, owsianka, grzyby, pieczony ser, placek (the mead keeps)
+        149: 72, 150: 168, 151: 96, 153: 72   // pokrzywa, krwawnik (dries well, like the herbs), dziki czosnek, zupa pokrzywowa
     };
     const WARN_AT = 0.8;   // of the life: the popup "zaraz się zepsuje"
 

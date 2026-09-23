@@ -24,9 +24,9 @@ fs.mkdirSync(OUT, { recursive: true });
         // a night: sleep, then close every message and the day summary
         const night = async (b_, hour, stam) => {
             await ev(`$gameSystem.setDayNightHour(${hour}); $gameSystem.setStamina(${stam}); Journal.evaluateGoals(); 0`);
-            await ev(`Farming.sleepInTent(${b_}); 0`);
+            await ev(`$gameTemp._lastDayBanner = ''; Farming.sleepInTent(${b_}); 0`);
             await frames(200);
-            const text = await ev("$gameMessage.hasText() ? $gameMessage.allText() : ''");
+            const text = await ev("$gameTemp._lastDayBanner || ''");   // the greeting of the new day (the plate at the top, SurvivalHUD.js)
             for (let k = 0; k < 14; k++) {
                 const scene = await ev("SceneManager._scene.constructor.name");
                 if (scene === "Scene_Map" && !(await ev("$gameMessage.isBusy()")) && !(await ev("!!$gameTemp._pendingSummary"))) break;
@@ -44,7 +44,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const def = await ev("(function(){ const t = Farming.BUILDINGS.bedroll; return { name: t.name, instant: t.instant, sleep: t.sleep, restore: t.sleepRestore, bad: t.sleepBad, cost: t.cost, rest: t.rest }; })()");
         check("the bedroll is now 'Leśne legowisko': laid out at once, sleeps a night, 60% (40% in bad weather), costs the item, no nap", def.name === "Leśne legowisko" && def.instant === true && def.sleep === true && def.restore === 0.6 && def.bad === 0.4 && JSON.stringify(def.cost) === "[[128,1]]" && def.rest === undefined, def);
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
-        check("the hand menu makes: hammer, forest bed, waterskin, rope", hand.join() === "hammer,bough_bed,waterskin,rope", hand);
+        check("the hand menu makes: hammer, forest bed, waterskin, rope, and from the forest floor pine seeds, a bandage, nettle fibre", hand.join() === "hammer,bough_bed,waterskin,rope,pine_seeds,bandage,nettle_fiber", hand);
         const inputs = await ev("Farming.HAND_RECIPES.find(r => r.id === 'bough_bed').inputs");
         check("the bed is made of branches (6) and flax (3) only", JSON.stringify(inputs) === "[[77,6],[92,3]]", inputs);
         check("its picture loads (96x64)", await ev(`new Promise(res => { const bm = ImageManager.loadSystem("Farm_Bedroll"); bm.addLoadListener(() => res(bm.width === 96 && bm.height === 64)); })`));

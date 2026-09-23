@@ -43,7 +43,7 @@ fs.mkdirSync(OUT, { recursive: true });
         check("at night they are gone (burrowed)", (await ev("Hunting.animals.length")) === 0);
         await ev("$gameSystem.setDayNightHour(8); 0");
         await frames(200);
-        check("and they are back in the morning", (await ev("Hunting.animals.length")) === 3);
+        check("and they are back in the morning (the 3 rabbits; at dawn the boar may be out too)", (await ev("Hunting.animals.filter(a => a.kind() === 'rabbit').length")) === 3);
         check("deer are not out at noon (only dawn and dusk)", await ev(`(function(){ $gameSystem.setDayNightHour(13); return Hunting.SPECIES.deer.hours.every(([a, c]) => 13 < a || 13 >= c); })()`));
         await ev("$gameSystem.setDayNightHour(10); 0");
 
@@ -61,19 +61,20 @@ fs.mkdirSync(OUT, { recursive: true });
         const { x: lx, y: ly } = room;
         const standAt = (x, y, d) => ev(`$gamePlayer.locate(${x}, ${y}); $gamePlayer.setDirection(${d}); $gameMap.setDisplayPos(${x} - 6, ${y} - 7); $gameSystem.setStamina(100); 0`);
         await standAt(lx, ly, 6);
-        const fl = await ev(`(function(){ const a = Hunting.spawn("rabbit", ${lx + 3}, ${ly}); a._wait = 0; return a._x; })()`);
+        const fl = await ev(`(function(){ const a = Hunting.spawn("rabbit", ${lx + 3}, ${ly}); a._wait = 9999; return a._x; })()`);   // (no wandering off before it notices)
         await frames(8);
         const d0 = await ev("Hunting.animals[0]._realX - $gamePlayer._realX");
-        await frames(110);
+        const aware0 = await ev("Hunting.animals[0]._aware");
+        await frames(220);   // (it first notices the player - "?", "!" - then runs)
         const d1 = await ev("Hunting.animals[0]._realX - $gamePlayer._realX");
-        check("a rabbit 3 tiles away runs off (the distance grows)", d1 > d0 + 2, { d0, d1 });
+        check("a rabbit 3 tiles away notices the player, then runs off (the distance grows)", aware0 > 0 && d1 > d0 + 2, { aware0, d0, d1 });
         await ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");
 
         // ================= 4. no weapon, no ammunition =================
         await standAt(lx, ly, 6);
         await clearPopups();
         await ev("Hunting.shoot()");
-        check("without a weapon: popup 'Potrzebujesz procy albo łuku' (icon + short text)", (await popups()).includes("Potrzebujesz procy albo łuku"), await popups());
+        check("without a weapon: popup 'Potrzebujesz procy, łuku albo oszczepu' (icon + short text)", (await popups()).includes("Potrzebujesz procy, łuku albo oszczepu"), await popups());
         await give(125, 1);
         await clearPopups();
         await ev("Hunting.shoot()");
@@ -91,7 +92,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const car0 = await count(101);
         await frames(30);
         await press("shoot");
-        await frames(4);
+        await frames(44);   // F starts aiming: the stone leaves after the whirl (Hunting.WEAPONS.sling.release)
         const flying = await ev("Hunting.projectiles.length");
         check("F fires: a stone flew (or already hit), one stone and 2 stamina are spent", (flying === 1 || (await count(101)) === car0 + 1) && (await count(64)) === 4 && (await ev("$gameSystem.stamina()")) === st0 - 2, { flying });
         await frames(40);
@@ -101,13 +102,13 @@ fs.mkdirSync(OUT, { recursive: true });
         await spawnFrozen("rabbit", 8);
         await frames(30);
         await press("shoot");
-        await frames(60);
+        await frames(100);
         check("the sling does not reach 8 tiles (the rabbit stays, a stone is lost)", (await ev("Hunting.animals.length")) === 1 && (await count(64)) === 3, { n: await ev("Hunting.animals.length"), stones: await count(64) });
         // the bow has range 9 and the arrows are used first
         await give(127, 3);
         await frames(30);
         await press("shoot");
-        await frames(60);
+        await frames(100);
         check("the bow (arrows first) reaches 8 tiles and kills it; one arrow used", (await ev("Hunting.animals.length")) === 0 && (await count(127)) === 2 && (await count(64)) === 3 && (await ev("Hunting.hunt().kills.rabbit")) === 2, { arrows: await count(127) });
         check("what was shot today does not come back before dawn (2 of 3 killed on Map003)", (await ev("Hunting.killedToday(3, 'rabbit')")) === 2);
         await ev("Hunting.populate(); 0"); await frames(20);
@@ -126,7 +127,7 @@ fs.mkdirSync(OUT, { recursive: true });
             if (before === 0) break;
             await frames(30);
             await press("shoot");
-            await frames(40);
+            await frames(90);
             hits.push(await ev("Hunting.animals.length ? Hunting.animals[0]._hp : 0"));
             if (hits[hits.length - 1] === 0) break;
             await ev("if (Hunting.animals[0]) { Hunting.animals[0]._frozen = true; Hunting.animals[0]._wounded = false; Hunting.animals[0]._alarm = 0; } 0");   // stand still for the next test shot
@@ -137,7 +138,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await give(126, 1);
         await spawnFrozen("deer", 6);
         const car1 = await count(101);
-        for (let i = 0; i < 2; i++) { await frames(35); await press("shoot"); await frames(50); if (await ev("Hunting.animals.length ? (Hunting.animals[0]._frozen = true, Hunting.animals[0]._wounded = false, Hunting.animals[0]._alarm = 0, 0) : 0")) { } }
+        for (let i = 0; i < 2; i++) { await frames(35); await press("shoot"); await frames(100); if (await ev("Hunting.animals.length ? (Hunting.animals[0]._frozen = true, Hunting.animals[0]._wounded = false, Hunting.animals[0]._alarm = 0, 0) : 0")) { } }
         check("the bow needs only 2 hits for a deer", (await ev("Hunting.animals.length")) === 0 && (await count(101)) === car1 + 2, { car1, now: await count(101) });
         await ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");
 
@@ -148,7 +149,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await frames(30);
         await ev("Hunting.animals.find(a => a._x === " + lx + " + 3)._frozen = true; 0");
         await press("shoot");
-        await frames(30);
+        await frames(60);
         const scared = await ev("Hunting.animals.map(a => a._alarm)");
         check("a shot scares the animals within 7 tiles (alarm set on the survivor)", scared.length === 1 && scared[0] > 0, scared);
         await ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");

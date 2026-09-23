@@ -352,9 +352,9 @@
  *   terenie. Jedzenie zjadasz z menu (opis w Survival.js).
  *
  * CRAFTING (warsztat, piec ziemny, tartak, kompostownik, browar, piekarnia, cegielnia, kuźnia)
- *   Menu każdego budynku z przepisami (też ogniska, trójnogu i kociołka) ma dwie zakładki: "Akcja"
- *   (to, co się pali lub piecze i "Zbierz", ogrzanie się, dokładanie drewna, rozbudowa, rozbiórka) i
- *   "Przepis" (same przepisy; póki coś jest w środku, są wyszarzone z powodem). Otwiera się na "Akcja";
+ *   Menu każdego budynku z przepisami (też ogniska, trójnogu i kociołka) ma dwie zakładki: najpierw
+ *   "Przepis" (same przepisy; póki coś jest w środku, są wyszarzone z powodem), potem "Akcja" (to, co
+ *   się pali lub piecze i "Zbierz", ogrzanie się, dokładanie drewna, rozbudowa, rozbiórka). Otwiera się na "Przepis";
  *   strzałki lewo / prawo (albo Q / E) przełączają zakładki, góra / dół wybierają.
  *   Każde stanowisko ma własne receptury. Są dwa rodzaje:
  *   - "w tle" (ogień, fermentacja, rozkład): oddajesz surowce, a po ustalonej
@@ -484,7 +484,8 @@
         cloak: 112, boots: 113, backpack: 114, ironAxe: 115, ironPick: 116, potato: 71, carrot: 72, egg: 75,
         pickaxe: num(params.pickaxeItem, 63),
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
-        honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144, bird: 145, feathers: 146,
+        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, wildApple: 139, wildPear: 140   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -900,12 +901,18 @@
         mushroom: { item: ITEM.mushroom, share: 0, respawn: 4, count: [1, 2], seasons: [0, 1, 2] },   // no fixed tiles: they grow and vanish (mushroomBirth)
         bush: { item: ITEM.berries, share: 0, respawn: 0, count: [2, 4] },   // berry bushes: berries, then the bare bush gives fibre (bushState)
         herb: { item: ITEM.herb, share: 0.03, respawn: 4, count: [1, 2], seasons: [0, 1] },
-        branch: { item: ITEM.branch, share: 0.05, respawn: 3, count: [1, 2] }   // last, so the other kinds keep their tiles
+        branch: { item: ITEM.branch, share: 0.05, respawn: 3, count: [1, 2] },
+        // the wild herbs came later: after the branches on the hash line, so the older kinds keep their tiles
+        nettle: { item: ITEM.nettle, share: 0.025, respawn: 4, count: [2, 3], seasons: [0, 1, 2] },   // stings bare hands (pickGather)
+        yarrow: { item: ITEM.yarrow, share: 0.018, respawn: 5, count: [1, 2], seasons: [1, 2] },
+        garlic: { item: ITEM.garlic, share: 0.018, respawn: 5, count: [1, 3], seasons: [0, 1] },
+        cone: { item: ITEM.cone, share: 0, respawn: 5, count: [1, 3] }   // no share: only under a standing pine (coneTiles)
     };
     const GATHER_KINDS = Object.keys(GATHER);
     const BUSH_SHARE = 0.02;        // the part of the tiles that hold a berry bush
     const MUSHROOM_POOL = 0.14;     // the part of the tiles where a mushroom may grow
     const MUSHROOM_LIFE = 3;        // days a mushroom stays before it is gone
+    const CONE_SHARE = 0.22;        // the part of the free tiles under a pine where cones lie
     function gatherKindOf(x, y) {
         if (hash2(x, y, 811) < BUSH_SHARE) return "bush";
         const r = hash2(x, y, 301);
@@ -914,7 +921,26 @@
             acc += GATHER[k].share;
             if (r < acc) return k;
         }
+        if (coneTiles().has(key(x, y)) && hash2(x, y, 907) < CONE_SHARE) return "cone";
         return hash2(x, y, 733) < MUSHROOM_POOL ? "mushroom" : null;
+    }
+    // ---- cones fall under the pines: the tiles within 2 of a standing pine (a "!$Pine_..." picture, not felled; a pine planted by
+    // Forestry.js only once it has grown up). Worked out again each day and when the map or its events change.
+    let coneCache = { stamp: "", tiles: new Set() };
+    function coneTiles() {
+        if (!$gameMap || !$dataMap) return coneCache.tiles;
+        // (asked on every passability check through bushSolid: the stamp is kept cheap, no copy of the event list)
+        const stamp = $gameMap.mapId() + ":" + today() + ":" + $gameMap._events.length;
+        if (coneCache.stamp === stamp) return coneCache.tiles;
+        const tiles = new Set();
+        for (const e of $gameMap.events()) {
+            const data = e.event(), page = data && data.pages && data.pages[0];
+            if (!page || !/Pine/.test(page.image.characterName || "") || e._plantedGrowth < 1) continue;
+            if ($gameSelfSwitches.value([e._mapId, e._eventId, "A"])) continue;
+            for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (dx || dy) tiles.add(key(e.x + dx, e.y + dy));
+        }
+        coneCache = { stamp, tiles };
+        return tiles;
     }
     // ---- mushrooms: on a tile of the pool a new one may appear each day (seldom; in the days after rain many more; never in winter) and it stays for
     // MUSHROOM_LIFE days unless it is picked. Nothing is stored except the day it was picked.
@@ -993,12 +1019,17 @@
         if (kind === "bush") return pickBush(x, y);
         const g = GATHER[kind], item = itemOf(g.item), n = rand(g.count);
         if (!spaceFor(item, n)) { complainNoSpace(item); return false; }
-        if (!spendStamina(STAMINA.pickup)) return false;
+        const sting = kind === "nettle";   // nettles sting bare hands: a little more strength, and a word about it once a day
+        if (!spendStamina(STAMINA.pickup + (sting ? 1 : 0))) return false;
         swingThen(CROUCH_KIND, () => {
             stonesOf($gameMap.mapId())[key(x, y)] = today();
             stoneRev++;
             playSe(SE.collect, 105);
             $gameParty.gainItem(item, n);
+            if (sting && farm().stungDay !== today()) {
+                farm().stungDay = today();
+                popup(item.iconIndex, "Pokrzywa parzy! (-1 wytrzymałości)", "#ffb070");
+            }
         });
         return true;
     }
@@ -1653,18 +1684,22 @@
         const bad = def.sleepBad !== undefined && !isHutInterior() && harshNight();   // under the roof of the hut the weather does not matter
         const restore = bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1;
         const morning = restore >= 1 ? "Czujesz się wypoczęty." : bad ? "Spałeś w zimnie i wilgoci. Sił odzyskałeś niewiele." : "Spałeś twardo. Sił odzyskałeś tylko część.";
-        lockPlayer(240);
+        // the screen goes dark for a moment while the night passes, then the new day comes up; the greeting is a small plate at the
+        // top of the screen (SurvivalHUD.js), shown after the day summary (Journal.js)
+        lockPlayer(150);
+        $gameScreen.startFadeOut(30);
         later(45, () => {
             AudioManager.playMe({ name: PluginManager.parameters("SurvivalHUD").sleepMe || "Inn1", volume: 90, pitch: 100, pan: 0 });
-            const woke = $gameSystem.sleepUntilHour(wakeHour());
+            $gameSystem.sleepUntilHour(wakeHour());
             if (typeof $gameSystem.setStamina === "function") $gameSystem.setStamina(Math.max($gameSystem.stamina(), Math.round($gameSystem.maxStamina() * restore)));
             for (const member of $gameParty.members()) member.recoverAll();
             if (b.type === "tent") farm().tentNights = (farm().tentNights || 0) + 1; else farm().bedNights = (farm().bedNights || 0) + 1;
             b.last = today();
         });
+        later(75, () => $gameScreen.startFadeIn(40));
         later(115, () => {
-            $gameMessage.add("Dzień " + $gameSystem.dayNightDay() + ". " + $gameSystem.dayNightPeriod().name + ".");
-            $gameMessage.add(morning);
+            if (typeof $gameTemp.queueDayBanner === "function") $gameTemp.queueDayBanner(morning);
+            else { $gameMessage.add("Dzień " + $gameSystem.dayNightDay() + ". " + $gameSystem.dayNightPeriod().name + "."); $gameMessage.add(morning); }
         });
         return true;
     }
@@ -1755,7 +1790,7 @@
     function readyProduce(b) {
         const p = BUILDINGS[b.type].produce;
         if (!p) return 0;
-        return Math.min(p.cap, Math.floor(Math.max(0, today() - b.last) / p.period) * p.amount);
+        return Math.min(p.cap, Math.floor(Math.max(0, today() - b.last) / p.period) * p.amount + (b.caught || 0));
     }
     function daysToProduce(b) {
         const p = BUILDINGS[b.type].produce;
@@ -1768,11 +1803,62 @@
         if (tool && !requireItem(tool)) return false;
         swingThen(CROUCH_KIND, () => {
             b.last = today();
+            b.caught = 0;   // (a snare: the rabbit taken out, it is set again)
             changed();
             playSe(SE.collect, 100);
             $gameParty.gainItem(itemOf(BUILDINGS[b.type].produce.item), n);
         });
         return true;
+    }
+    // ---- a snare (a building with `lure`): it catches nothing by itself. Bait in it (b.bait = { item, until: clock hours }) draws
+    // live rabbits (Hunting.js); one may be caught - one at a time, the snare holds the rabbit (b.caught) until it is collected. The
+    // bait lasts lure.baitHours or until the first rabbit (caught, or scared off with it).
+    function snares(mapId) {
+        return (farm().buildings[mapId === undefined ? $gameMap.mapId() : mapId] || []).filter(b => !b.site && BUILDINGS[b.type] && BUILDINGS[b.type].lure);
+    }
+    const snareSprung = b => (b.caught || 0) > 0;
+    function snareBait(b) {
+        if (b.bait && b.bait.until <= clockHours()) { b.bait = null; changed(); }   // gone off / eaten by the ants
+        return b.bait || null;
+    }
+    function snareCatch(b) {
+        if (snareSprung(b)) return false;
+        b.caught = 1;
+        b.bait = null;
+        changed();
+        return true;
+    }
+    function snareEatBait(b) {
+        if (!b.bait) return;
+        b.bait = null;
+        changed();
+    }
+    function baitSnare(b) {
+        const lure = BUILDINGS[b.type].lure, id = lure.baits.find(i => countOf(i) > 0);
+        if (!id) { complain(itemOf(lure.baits[0]).iconIndex, "Nie masz przynęty"); return false; }
+        if (snareSprung(b)) { complain(itemOf(ITEM.carcass).iconIndex, "W pułapce siedzi zając"); return false; }
+        swingThen(CROUCH_KIND, () => {
+            $gameParty.loseItem(itemOf(id), 1);
+            b.bait = { item: id, at: clockHours(), until: clockHours() + lure.baitHours };
+            changed();
+            playSe(SE.move, 110);
+            popup(itemOf(id).iconIndex, "Przynęta w pułapce: " + itemOf(id).name, "#cfe6a8");
+        });
+        return true;
+    }
+    function snareBaitEntry(b, def) {
+        const lure = def.lure, bait = snareBait(b);
+        if (bait) {
+            const left = Math.max(1, Math.round(bait.until - clockHours()));
+            return { name: "Przynęta: " + itemOf(bait.item).name, icon: itemOf(bait.item).iconIndex, right: left + " h", enabled: false,
+                help: "Leży w pułapce jeszcze około " + left + " godz. albo do pierwszego zająca. Zające zwąchają ją nawet z " + lure.radius + " kratek." };
+        }
+        const id = lure.baits.find(i => countOf(i) > 0), sprung = snareSprung(b);
+        return { name: "Załóż przynętę", icon: itemOf(id || lure.baits[0]).iconIndex, right: id ? "-1" : "", enabled: !!id && !sprung,
+            help: sprung ? "W pułapce siedzi zając: najpierw go zabierz."
+                : id ? "Kładziesz w pułapce: " + itemOf(id).name + " (masz " + countOf(id) + "). Bez przynęty pułapka nic nie złapie; tę zające zwąchają z " + lure.radius + " kratek. Wystarczy na dobę albo do pierwszego zająca."
+                : "Nie masz przynęty, a bez niej pułapka nic nie złapie. Zające skuszą się na: " + lure.baits.map(i => itemOf(i).name.toLowerCase()).join(", ") + ".",
+            run: () => baitSnare(b) };
     }
     // ---- crafting stations: one job at a time, timed by the game clock (DayNightCycle)
     const hasClock = () => typeof $gameSystem.dayNightHour === "function";
@@ -1807,15 +1893,34 @@
     function fireLit(b) {
         return fuelLeft(b) > 0 || !!b.job;
     }
+    // A fire that has gone out is lit again with kindling: a pine cone (the best), else one more branch
+    function kindlingFor(fuelId) {
+        if (countOf(ITEM.cone) > 0) return ITEM.cone;
+        return countOf(ITEM.branch) >= (fuelId === ITEM.branch ? 2 : 1) ? ITEM.branch : null;
+    }
     function feedFireEntries(b) {
         const def = geoOf(b);
         if (!def.fire) return [];
-        const left = fuelLeft(b), status = left > 0 ? "Starczy jeszcze na " + hoursText(left) + "." : b.job ? "Bez drewna zgaśnie, gdy skończy się to, co się teraz piecze." : "Ogień wygasł.";
+        const left = fuelLeft(b), out = left <= 0 && !b.job;
+        const status = left > 0 ? "Starczy jeszcze na " + hoursText(left) + "." : b.job ? "Bez drewna zgaśnie, gdy skończy się to, co się teraz piecze." : "Ogień wygasł.";
+        const relight = " Rozpalisz go od nowa: na rozpałkę pójdzie szyszka (bez szyszek - jeszcze jedna gałąź).";
+        const feed = (fuelId, hours, name, done) => {
+            const kindling = out ? kindlingFor(fuelId) : null, fuel = itemOf(fuelId);
+            return { name, icon: fuel.iconIndex, right: "×1", enabled: countOf(fuelId) > 0 && (!out || !!kindling),
+                help: status + (out ? relight + (kindling ? "" : " Nie masz ani szyszki, ani gałęzi.") : "") + " " + done,
+                run: () => {
+                    $gameParty.loseItem(fuel, 1, false);
+                    if (kindling) $gameParty.loseItem(itemOf(kindling), 1, false);
+                    addFuel(b, hours);
+                    changed();
+                    playSe(SE.build, 95);
+                    popup(fuel.iconIndex, kindling ? "Rozpalono ogień (rozpałka: " + itemOf(kindling).name.toLowerCase() + ")" : name === "Dorzuć drewna" ? "Dorzucono drewna" : "Dorzucono gałąź", "#f3e0a0");
+                    return true;
+                } };
+        };
         return [
-            { name: "Dorzuć drewna", icon: itemOf(ITEM.wood).iconIndex, right: "×1", enabled: countOf(ITEM.wood) > 0,
-                help: status + " Drewno daje " + hoursText(FUEL_PER_WOOD) + " ognia.", run: () => { $gameParty.loseItem(itemOf(ITEM.wood), 1, false); addFuel(b, FUEL_PER_WOOD); changed(); playSe(SE.build, 95); popup(itemOf(ITEM.wood).iconIndex, "Dorzucono drewna", "#f3e0a0"); return true; } },
-            { name: "Dorzuć gałąź", icon: itemOf(ITEM.branch).iconIndex, right: "×1", enabled: countOf(ITEM.branch) > 0,
-                help: status + " Gałąź daje " + hoursText(FUEL_PER_BRANCH) + " ognia - gorzej niż drewno.", run: () => { $gameParty.loseItem(itemOf(ITEM.branch), 1, false); addFuel(b, FUEL_PER_BRANCH); changed(); playSe(SE.build, 95); popup(itemOf(ITEM.branch).iconIndex, "Dorzucono gałąź", "#f3e0a0"); return true; } }
+            feed(ITEM.wood, FUEL_PER_WOOD, "Dorzuć drewna", "Drewno daje " + hoursText(FUEL_PER_WOOD) + " ognia."),
+            feed(ITEM.branch, FUEL_PER_BRANCH, "Dorzuć gałąź", "Gałąź daje " + hoursText(FUEL_PER_BRANCH) + " ognia - gorzej niż drewno.")
         ];
     }
     function recipeOf(b, id) {
@@ -2187,10 +2292,11 @@
     }
 
     // menu lines of a crafting station: the running job, its result, or the recipes
-    // a station's menu has two tabs (left/right switch them): "Akcja" - everything that is not choosing a recipe
-    // (the running job and its result, warming up, fuel, upgrades, demolishing) - and "Przepis", the recipes (tab: 1)
-    const TAB_NAMES = ["Akcja", "Przepis"];
-    const splitTabs = entries => TAB_NAMES.map((name, i) => ({ name, entries: entries.filter(e => (e.tab || 0) === i) }));
+    // a station's menu has two tabs (left/right switch them), in this order: "Przepis" - the recipes (entries marked
+    // tab: "recipe"), the one it opens on - and "Akcja", everything else (the running job and its result, warming up,
+    // fuel, upgrades, demolishing)
+    const TABS = [["recipe", "Przepis"], ["action", "Akcja"]];
+    const splitTabs = entries => TABS.map(([id, name]) => ({ name, entries: entries.filter(e => (e.tab || "action") === id) }));
 
     // menu lines of a crafting station: the running job and its result, then the recipes. While something is inside,
     // the background recipes stay on the list, greyed out with the reason, so the "Przepis" tab never goes empty.
@@ -2219,12 +2325,12 @@
                 : missing.length > 0 ? "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + "." + toolNote + waterNote
                 : waterBad ? waterBad + "." + waterNote
                 : "Wynik: " + out.name + " ×" + r.output[1] + ", " + hoursText(r.hours).replace(/\.$/, "") + ".\n" + r.desc + sit + toolNote;
-            entries.push({ name: r.name, costs: costRowsWithWater(r), enabled: !busy && missing.length === 0 && !waterBad, help, run: () => startJob(b, r.id), tab: 1,
+            entries.push({ name: r.name, costs: costRowsWithWater(r), enabled: !busy && missing.length === 0 && !waterBad, help, run: () => startJob(b, r.id), tab: "recipe",
                 tip: (busy ? busy + "\n" : "") + "Wynik: " + out.name + " ×" + r.output[1] + ".\n" + r.desc, facts: [r.roast && !def.hang ? "Czas: " + hoursText(r.hours) + " (siedzisz przy ogniu; odejście przerywa pieczenie)" : "Czas: " + hoursText(r.hours) + (def.hang ? " (piecze się na trójnogu, możesz odejść)" : " (piec pracuje w tle)")] });
         }
         // hand work is available at any time (also while the fire of the same building burns)
-        for (const r of manualRecipes) entries.push(Object.assign(manualEntry(b, r), { tab: 1 }));
-        if (def.repairs && window.Durability) for (const r of Durability.repairRecipes()) entries.push(Object.assign(manualEntry(b, r), { tab: 1 }));
+        for (const r of manualRecipes) entries.push(Object.assign(manualEntry(b, r), { tab: "recipe" }));
+        if (def.repairs && window.Durability) for (const r of Durability.repairRecipes()) entries.push(Object.assign(manualEntry(b, r), { tab: "recipe" }));
         return entries;
     }
 
@@ -2245,9 +2351,12 @@
             const ready = readyProduce(b), item = itemOf(def.produce.item);
             const toolNote = def.produce.tool ? " Potrzebne: " + itemOf(def.produce.tool).name + "." : "";
             entries.push({ name: ready > 0 ? "Zbierz: " + item.name + " ×" + ready : "Zbierz: " + item.name, icon: item.iconIndex, enabled: ready > 0,
-                help: (ready > 0 ? "Zabierasz wszystko, co jest gotowe." : "Jeszcze nic nie ma. Następna porcja za " + daysToProduce(b) + " dn.") + toolNote,
+                help: (snareSprung(b) ? "W pułapce siedzi złapany zając. " : "") + (ready > 0 ? "Zabierasz wszystko, co jest gotowe."
+                    : def.lure ? (snareBait(b) ? "Pusto. Przynęta leży, trzeba poczekać, aż jakiś zając się skusi." : "Pusto. Sama pułapka nic nie złapie: załóż przynętę.")
+                    : "Jeszcze nic nie ma. Następna porcja za " + daysToProduce(b) + " dn.") + toolNote,
                 run: () => collect(b) });
         }
+        if (def.lure && !b.site) entries.push(snareBaitEntry(b, def));
         let title = def.name + (def.rain ? " (" + bucketUnits(b) + "/" + def.rain.max + ")" : "");
         if (def.slots) {
             title += " (" + chestKinds(b) + "/" + def.slots + ")";
@@ -2289,8 +2398,10 @@
             }
             entries.push(handMenuEntry(x, y),
                 digEntry(x, y),
-                { name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) },
-                placeMenuEntry(x, y));
+                { name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) });
+            // with pine seeds in the bag: plant a tree here (Forestry.js)
+            if (window.Forestry && countOf(ITEM.pineSeed) > 0) entries.push(Forestry.plantEntry(x, y));
+            entries.push(placeMenuEntry(x, y));
             return { title: plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries };
         }
         if (plot.s === "raked") {
@@ -2503,6 +2614,12 @@
         this.hide();
         this.deactivate();
     };
+    // the text of these menus (the list, its title plate and the popup) is MENU_SMALLER px smaller than the other windows'
+    const MENU_SMALLER = 4;
+    Window_FarmList.prototype.resetFontSettings = function() {
+        Window_Command.prototype.resetFontSettings.call(this);
+        this.contents.fontSize = $gameSystem.mainFontSize() - MENU_SMALLER;
+    };
 
     Window_FarmList.prototype.makeCommandList = function() {
         for (const e of this._entries || []) this.addCommand(e.name, "entry", e.enabled !== false);
@@ -2628,12 +2745,12 @@
         const c = this.contents;
         c.clear();
         this.resetFontSettings();
-        c.fontSize = 28;
+        c.fontSize = 28 - MENU_SMALLER;
         this.changeTextColor(ColorManager.textColor(16));
         this.drawText(this._text, 0, 0, this.innerWidth, "left");
         if (this._tabs) {
             const y = this.lineHeight();
-            c.fontSize = 24;
+            c.fontSize = 24 - MENU_SMALLER;
             let x = 0;
             this._tabs.forEach((name, i) => {
                 const w = this.textWidth(name), on = i === tab;
@@ -2652,7 +2769,7 @@
     };
 
     // The popup: name, description, facts and what is needed (green when it is in the bag, red when it is not).
-    const TIP_FONT = 24, TIP_LINE = 30;
+    const TIP_FONT = 24 - MENU_SMALLER, TIP_LINE = 30 - MENU_SMALLER;
     function Window_FarmTip() {
         this.initialize(...arguments);
     }
@@ -2708,17 +2825,17 @@
         const ops = [];
         let h = 0;
         const add = (op, height) => { op.y = h; ops.push(op); h += height; };
-        add({ kind: "name", text: entry.name, icon: entry.icon }, 42);
+        add({ kind: "name", text: entry.name, icon: entry.icon }, 42 - MENU_SMALLER);
         add({ kind: "rule" }, 12);
         const body = this.bodyText(entry);
         if (body) for (const line of wrapLines(this, body, inner - 4)) add({ kind: "text", text: line }, TIP_LINE);
         if (entry.facts && entry.facts.length > 0) {
             h += 6;
-            for (const fact of entry.facts) for (const line of wrapLines(this, fact, inner - 4)) add({ kind: "fact", text: line }, 28);
+            for (const fact of entry.facts) for (const line of wrapLines(this, fact, inner - 4)) add({ kind: "fact", text: line }, 28 - MENU_SMALLER);
         }
         if (entry.costs && entry.costs.length > 0) {
             h += 10;
-            add({ kind: "heading", text: "Potrzebne" }, 30);
+            add({ kind: "heading", text: "Potrzebne" }, 30 - MENU_SMALLER);
             for (const cost of entry.costs) add({ kind: "cost", cost }, 34);
         }
         this._ops = ops;
@@ -2738,20 +2855,20 @@
                     this.drawIcon(op.icon, 0, op.y + 4);
                     x = ImageManager.iconWidth + 8;
                 }
-                c.fontSize = 30;
+                c.fontSize = 30 - MENU_SMALLER;
                 this.changeTextColor(ColorManager.textColor(16));
                 this.drawText(op.text, x, op.y, inner - x);
             } else if (op.kind === "rule") {
                 c.fillRect(0, op.y + 2, inner, 2, ColorManager.textColor(26));
             } else if (op.kind === "text") {
-                this.drawText(op.text, 0, op.y - 3, inner);
+                this.drawText(op.text, 0, op.y - 3 - MENU_SMALLER / 2, inner);   // (centred in the shorter row)
             } else if (op.kind === "fact") {
                 this.changeTextColor(ColorManager.textColor(7));
-                c.fontSize = 22;
-                this.drawText(op.text, 0, op.y - 4, inner);
+                c.fontSize = 22 - MENU_SMALLER;
+                this.drawText(op.text, 0, op.y - 4 - MENU_SMALLER / 2, inner);
             } else if (op.kind === "heading") {
                 this.changeTextColor(ColorManager.systemColor());
-                this.drawText(op.text, 0, op.y - 3, inner);
+                this.drawText(op.text, 0, op.y - 3 - MENU_SMALLER / 2, inner);
             } else if (op.kind === "cost") {
                 const [icon, need, have, name] = op.cost;
                 this.drawIcon(icon, 0, op.y + 1);
@@ -2794,12 +2911,12 @@
 
     function makePointerBitmap() {
         const w = 17, h = 28, bmp = new Bitmap(w, h), ctx = bmp.context;
-        ctx.fillStyle = "#1c1410";   // the colour of the window back at its edge
+        ctx.fillStyle = "#0e1013";   // the colour of the window back at its edge (Window.png)
         ctx.beginPath();
         ctx.moveTo(w, 0); ctx.lineTo(2, h / 2); ctx.lineTo(w, h);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = "#a67c3a";
+        ctx.strokeStyle = "#ffd23f";   // the yellow of the corners and the cursor
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(w, 1); ctx.lineTo(2, h / 2); ctx.lineTo(w, h - 1);
@@ -3272,7 +3389,7 @@
         bushState, bushSolid, mushroomBirth, mushroomChance, gatherKindOf, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, claimGround, releaseGround, bucketUnits, bucketSync, takeBucketWater, bucketFor, rainHoursBetween, BUCKET_REACH, bagWater, setBagWater, bagWaterWeight,
         HUT_MAP, HUT_ROOM, hutOf, hutDoorAt, isHutInterior, hutShutsIn, hutSanitize, enterHut, leaveHut,
         upgradeBuilding, roomFor, fillSkin, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS, plotAt, buildingAt, menuFor, isSoilTile, groundIsSoil, naturalFarmland, rake, till, plant, harvest, uproot, build, demolish, collect, rest,
-        groundInfoAt, hasObjectTile, cropStage, isRipe, daysLeft, readyProduce, whyNotBuild, growthRate,   // soilTexture, fenceTexture, nightAmount, fireGlowAlpha: added by Farming_Render.js
+        groundInfoAt, hasObjectTile, cropStage, isRipe, daysLeft, readyProduce, snares, snareBait, snareSprung, snareCatch, snareEatBait, baitSnare, whyNotBuild, growthRate,   // soilTexture, fenceTexture, nightAmount, fireGlowAlpha: added by Farming_Render.js
         dig, startJob, collectJob, jobReady, jobHoursLeft, clockHours, demolishBlock, pitchInstant, packUp, sleepInTent, wakeHour, putInChest, takeFromChest, isFood, ownedOutput,
         chestStacks, chestKinds, chestHolds, packStacks, putInChest, takeFromChest, whyNotMove, openChest, Scene_Chest, Window_ChestList,
         water, wateredRecently, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2,

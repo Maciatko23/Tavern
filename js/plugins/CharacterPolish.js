@@ -147,6 +147,16 @@
         shadow.scale.y = shadow.scale.x;
     };
 
+    // the shadow is a sibling of the sprite (in the tilemap, so it sorts under every character): it has to go with it - a rabbit shot
+    // or caught in a snare (Hunting.js drops its sprite) once left its shadow lying on the grass until the map was built again
+    const _Sprite_Character_destroy = Sprite_Character.prototype.destroy;
+    Sprite_Character.prototype.destroy = function(options) {
+        const shadow = this._groundShadow;
+        if (shadow && shadow.parent) shadow.parent.removeChild(shadow);
+        this._groundShadow = null;
+        _Sprite_Character_destroy.call(this, options);
+    };
+
     Sprite_Character.prototype.updateOutline = function(show) {
         const filter = show ? sharedOutlineFilter() : null;
         const has = !!this._polishOutline;

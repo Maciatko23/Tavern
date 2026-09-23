@@ -340,7 +340,7 @@
  *   po nim w ok. 12 sekund i zostawia je czarne; kilka punktów tli się dalej
  *   do godziny gry. W nocy żar lekko rozjaśnia ciemność wokół siebie. Jest
  *   kruche: pada po połowie uderzeń, lecą z niego czarne drzazgi i popiół,
- *   a zamiast drewna daje 2-4 sztuki węgla drzewnego (parametr "Przedmiot:
+ *   a zamiast drewna daje 6-10 sztuk węgla drzewnego (parametr "Przedmiot:
  *   węgiel drzewny"). Spłonęło do korzeni, więc po ścięciu NIE zostaje pieniek
  *   (od razu strona pusta, samoprzełącznik B) i ziemia pod nim jest wolna.
  *   Samoprzełącznika D nie używaj na drzewach do niczego innego.
@@ -398,7 +398,8 @@
         fruit: num(params.fruitItem, 0),
         fruitmin: num(params.fruitMin, 2),
         fruitmax: num(params.fruitMax, 4),
-        scale: 1   // shrinks the whole picture (and the sway with it) around the foot of the tree; <Tree:scale=0.65>
+        scale: 1,   // shrinks the whole picture (and the sway with it) around the foot of the tree; <Tree:scale=0.65>
+        nostump: 0   // 1: felled, it leaves no stump (a seedling planted by Forestry.js) - the ground is free at once
     };
     const FRUIT_SEASON_FROM = num(params.fruitSeasonFrom, 1);
     const FRUIT_SEASON_TO = num(params.fruitSeasonTo, 2);
@@ -406,7 +407,10 @@
     const FRUIT_SE = params.fruitSe || "Item1";
     // a tree struck by lightning (Storm.js): charcoal instead of wood, from the tree and from its stump
     const CHARCOAL = num(params.charcoalItem, 79);
-    const CHARRED_DROP = [2, 4], CHARRED_STUMP_DROP = [1, 2];
+    // pine cones (Farming.js lays them under the pines, Forestry.js turns their seeds into trees)
+    const CONE = num(params.coneItem, 147);
+    const isPine = event => { const data = event.event(), page = data && data.pages && data.pages[0]; return !!page && /Pine/.test(page.image.characterName || ""); };
+    const CHARRED_DROP = [6, 10], CHARRED_STUMP_DROP = [1, 2];
     const CHARRED_TONE = [-62, -72, -84, 255];   // grey, then darker and a little warm: soot-black wood
     const ROCK_DEFAULTS = {
         hits: num(params.rockHits, 3),
@@ -591,7 +595,9 @@
         { sheet: "Swing_Sit", tool: -1, frames: 82, impact: 36, hold: 8, reach: 0, hit: [12, 12, 12, 12] },
         // 14: lying down flat on the ground to rest (Farming.js, "Odpocznij na ziemi"): sinks down onto their
         // side, stays lying (the rest happens on the impact frame), then stands back up
-        { sheet: "Swing_LieDown", tool: -1, frames: 125, impact: 40, hold: 50, reach: 0, hit: [10, 10, 10, 10] }
+        { sheet: "Swing_LieDown", tool: -1, frames: 125, impact: 40, hold: 50, reach: 0, hit: [10, 10, 10, 10] },
+        // 15: a spear jab (Hunting.js): the spear is drawn back and driven forward with a lunge; the hit lands on the impact frame
+        { sheet: "Swing_Spear", tool: -1, frames: 32, impact: 14, hold: 4, reach: 8, hit: [5, 5, 5, 5] }
     ];
     const SWING_KIND = { log: 0, rock: 1, stump: 2, fall: 3, bush: 3 };   // bushes: axe from the side
     const SHAKE_FRAMES = 6;
@@ -925,9 +931,11 @@
     // started) when there is no such kind of swing or the player is busy, so the
     // caller can simply do the action right away.
     // ------------------------------------------------------------------
-    // opts (optional): { holdWhile, onWait, onHoldEnd, still } - after the impact frame the figure stays in that pose for as long as holdWhile()
-    // returns true (sitting by the fire until the food is ready); onWait(n) runs every frame of the wait; pressing cancel or a direction
-    // key ends the wait early; onHoldEnd(cancelled) runs when it ends. still: no shifting between two poses during the wait.
+    // opts (optional): { holdWhile, onWait, onHoldEnd, still, holdAt, keepOnMove, wobble } - after the impact frame the figure stays in that
+    // pose for as long as holdWhile() returns true (sitting by the fire until the food is ready); onWait(n) runs every frame of the wait;
+    // pressing cancel or a direction key ends the wait early; onHoldEnd(cancelled) runs when it ends. still: no shifting between two poses
+    // during the wait. holdAt: wait at this frame instead, BEFORE the impact (aiming the sling: it whirls until F is let go, then the
+    // stone leaves); keepOnMove: the direction keys do not end the wait (they turn to another target); wobble: frames per pose shift (22).
     Game_Player.prototype.startToolSwing = function(kind, onImpact, onDone, opts) {
         if (!SWING_KINDS[kind] || this._toolSwing || this._swingEvent) return false;
         this._toolSwing = { _swingT: 0, _swingKind: kind, onImpact, onDone, opts: opts || null, _waiting: false, _wait: 0 };
@@ -946,19 +954,22 @@
         if (!swing) return;
         const def = swingKind(swing._swingKind), opts = swing.opts;
         if (swing._waiting) {   // holding the pose until the action is over
-            const cancelled = Input.isTriggered("cancel") || Input.dir4 !== 0;
+            const cancelled = Input.isTriggered("cancel") || (!opts.keepOnMove && Input.dir4 !== 0);
             if (!cancelled && opts.holdWhile()) {
                 swing._wait++;
                 if (opts.onWait) opts.onWait(swing._wait);
                 return;
             }
             swing._waiting = false;
+            swing._cancelled = cancelled;
             if (opts.onHoldEnd) opts.onHoldEnd(cancelled);
         }
         swing._swingT++;
+        if (opts && opts.holdAt && swing._swingT === opts.holdAt && opts.holdWhile && opts.holdWhile()) swing._waiting = true;   // waits before the impact
         if (swing._swingT === def.impact) {
+            if (swing._cancelled) { this._toolSwing = null; if (this._swingEvent === swing) this._swingEvent = null; return; }   // aiming cancelled: no shot
             if (swing.onImpact) swing.onImpact();
-            if (opts && opts.holdWhile && opts.holdWhile()) swing._waiting = true;
+            if (opts && !opts.holdAt && opts.holdWhile && opts.holdWhile()) swing._waiting = true;
         }
         if (swing._swingT >= def.frames) {
             this._toolSwing = null;
@@ -1057,6 +1068,12 @@
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
         } else {
             giveReward("Ścięto drzewo!", cfg.drop, cfg.dropmin, cfg.dropmax);
+            // a grown pine sheds its cones as it falls (a young planted one has none yet)
+            if (isPine(this) && (cfg.scale || 1) >= 0.9 && $dataItems[CONE]) $gameParty.gainItem($dataItems[CONE], 1 + Math.floor(Math.random() * 3));
+            if (cfg.nostump) {   // (a seedling: nothing to dig out afterwards)
+                clearLandUnder(this);
+                $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
+            }
         }
         $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
     };
@@ -1444,19 +1461,26 @@
         // too) - but while it still smoulders it keeps its own picture: the burn creeping down it covers it pixel by pixel
         const charred = isCharred(event), age = charred ? smoulderAge(event) : -1, burning = age >= 0 && age < EMBER_LIFE;
         const sooty = charred && !burning, pic = sooty ? charredBitmap(this.bitmap) : this.bitmap;
-        const frameKey = sx + "," + sy + "," + pw + (sooty ? ",c" : "");   // a new picture resets the strips' frames: set them again
+        // a new picture resets the strips' frames: set them again. The picture itself is part of the key: a fruit tree swapping its bare
+        // sheet for the fruiting one (the same size, so the same sx/sy/pw) would otherwise keep the old frames - and a strip given a
+        // bitmap that is still loading gets the WHOLE sheet as its frame once it loads (every row of it: the tree drawn over and over)
+        const frameKey = (pic._url || "") + "," + sx + "," + sy + "," + pw + (sooty ? ",c" : "");
         const reframe = this._treeFrameKey !== frameKey;
         this._treeFrameKey = frameKey;
         // scale shrinks (or grows) the whole picture around the foot of the tree (local 0,0): both the
-        // strip size and its position get the same factor, so a smaller tree still stands on its own tile
+        // strip size and its position get the same factor, so a smaller tree still stands on its own tile.
+        // Each strip reaches exactly to the whole pixel where the next one starts: a strip of 6 rows at 0.74 is 4.44 px high, and
+        // with its top rounded a gap of up to a pixel was left under it (a line of grass across a young planted pine)
         for (const strip of this._treeStrips) {
             strip.bitmap = pic;
             strip.visible = true;
             if (reframe) strip.setFrame(sx, sy + strip._rowStart, pw, strip._rowHeight);
-            strip.scale.x = strip.scale.y = scale;
+            const top = Math.round((strip._rowStart - ph) * scale), bottom = Math.round((strip._rowStart + strip._rowHeight - ph) * scale);
+            strip.scale.x = scale;
+            strip.scale.y = (bottom - top) / strip._rowHeight;
             const h = 1 - (strip._rowStart + strip._rowHeight / 2) / ph;
             strip.x = Math.round((treeOffset(event, wind, h) - half) * scale);
-            strip.y = Math.round((strip._rowStart - ph) * scale);
+            strip.y = top;
         }
         this.updateEmbers(burning ? age : -1, sx, sy, pw, ph, scale);
     };
@@ -1487,10 +1511,12 @@
     }
     // The burn: after the strike the tree does not turn black at once. From the tip, where the bolt hit, a band of embers creeps
     // down it pixel by pixel (a ragged edge, over EMBER_FRONT hours): each pixel of the tree's own shape flares up yellow, cools
-    // through orange and red and is left soot-black. Behind the band a few pixels keep smouldering, pulsing slowly, until
-    // EMBER_LIFE hours after the strike (Storm.js's smoulder time); then the tree is simply drawn from its charred picture.
-    // $gameSystem._smoulder has the hour each tree was struck ("mapId:eventId").
-    const EMBER_FRONT = 0.2, EMBER_LIFE = 1;   // 0.2 h: about 12 s at the usual clock speed from the tip to the foot
+    // through orange and red and is left soot-black. Behind the band a few pixels keep smouldering, pulsing slowly, for half an
+    // hour after the band has reached the foot (EMBER_LIFE hours after the strike; Storm.js smokes for as long and reads both numbers);
+    // then the tree is simply drawn from its charred picture. $gameSystem._smoulder has the hour each tree was struck ("mapId:eventId").
+    const EMBER_FRONT = 0.2;   // h: about 12 s at the usual clock speed from the tip to the foot
+    const EMBER_SMOULDER = 0.5, EMBER_LIFE = EMBER_FRONT + EMBER_SMOULDER;   // then 30 game minutes of embers and smoke
+    const EMBER_SPOTS = 16;   // glowing pixels handed to Storm.js each time the embers are drawn: the smoke rises from them
     const EMBER_COLOURS = [[128, 34, 16], [214, 72, 24], [255, 128, 32], [255, 184, 64], [255, 236, 170]];
     function smoulderAge(event) {
         const store = $gameSystem._smoulder, at = store && store[event._mapId + ":" + event._eventId];
@@ -1522,9 +1548,9 @@
                 idx.push(i);
                 // (the jitter and the cooling scale with EMBER_FRONT, so the band keeps its thickness whatever its speed)
                 ign.push(Math.max(0, k - 0.04) * EMBER_FRONT + Math.random() * 0.045 * EMBER_FRONT);   // a ragged edge: pixel by pixel
-                const smoulders = Math.random() < 0.035;   // a few keep glowing long after the band has passed
+                const smoulders = Math.random() < 0.04;   // a few keep glowing long after the band has passed, dying out over the half hour
                 slow.push(smoulders ? 1 : 0);
-                cool.push(smoulders ? 0.25 + Math.random() * 0.45 : (0.015 + Math.random() * 0.035) * EMBER_FRONT);
+                cool.push(smoulders ? (0.35 + Math.random() * 0.55) * EMBER_SMOULDER : (0.015 + Math.random() * 0.035) * EMBER_FRONT);
                 const l = 0.299 * src[i * 4] + 0.587 * src[i * 4 + 1] + 0.114 * src[i * 4 + 2];
                 soot.push([Math.max(0, l + CHARRED_TONE[0]), Math.max(0, l + CHARRED_TONE[1]), Math.max(0, l + CHARRED_TONE[2]), a]);
             }
@@ -1548,7 +1574,9 @@
     Sprite_Character.prototype.drawEmbers = function(age, tick, ph) {
         const s = this._emberSites, d = this._emberImg.data;
         d.fill(0);
-        const fade = age > EMBER_LIFE * 0.7 ? Math.max(0, 1 - (age - EMBER_LIFE * 0.7) / (EMBER_LIFE * 0.3)) : 1;
+        const fadeFrom = EMBER_FRONT + EMBER_SMOULDER * 0.7;   // the last embers dim out over the end of the smouldering
+        const fade = age > fadeFrom ? Math.max(0, 1 - (age - fadeFrom) / (EMBER_SMOULDER * 0.3)) : 1;
+        const pw = this._emberBitmap.width, spots = [];
         let lit = 0, sumY = 0;
         for (let j = 0; j < s.n; j++) {
             const dt = age - s.ign[j];
@@ -1564,7 +1592,13 @@
             if (b >= 0.12) {
                 const c = EMBER_COLOURS[b > 0.82 ? 4 : b > 0.62 ? 3 : b > 0.42 ? 2 : b > 0.26 ? 1 : 0];
                 d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2]; d[k + 3] = 255;
-                if (b > 0.26) { lit++; sumY += Math.floor(s.idx[j] / this._emberBitmap.width); }
+                if (b > 0.26) {
+                    lit++;
+                    sumY += Math.floor(s.idx[j] / pw);
+                    // a fair handful of the glowing pixels (reservoir sampling) for the smoke
+                    const r = lit <= EMBER_SPOTS ? lit - 1 : Math.floor(Math.random() * lit);
+                    if (r < EMBER_SPOTS) spots[r] = { x: s.idx[j] % pw, y: Math.floor(s.idx[j] / pw), b };
+                }
             } else {
                 const c = s.soot[j];
                 d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2]; d[k + 3] = c[3];
@@ -1574,12 +1608,14 @@
         this._emberBitmap._baseTexture.update();
         // for the night layer: how much glows and where (from the foot of the picture, px)
         this._emberGlow = lit > 0 ? { heat: Math.min(1, lit / 80), up: ph - sumY / lit } : null;
+        this._emberSpots = spots;
     };
     // age: hours since the strike while it smoulders, -1 otherwise
     Sprite_Character.prototype.updateEmbers = function(age, sx, sy, pw, ph, scale) {
         if (age < 0) {
             if (this._emberStrips) for (const e of this._emberStrips) e.visible = false;
             this._emberGlow = null;
+            this._emberSpots = null;
             return;
         }
         const key = sx + "," + sy + "," + pw + "," + ph + "," + this._treeStrips.length;
@@ -1595,7 +1631,8 @@
             e.visible = true;
             e.x = strip.x;
             e.y = strip.y;
-            e.scale.x = e.scale.y = scale;
+            e.scale.x = strip.scale.x;
+            e.scale.y = strip.scale.y;
         });
     };
     // the embers light the dark around them a little (Farming_Render's night layer cuts these holes): where most of them glow now
@@ -1607,6 +1644,13 @@
             out.push({ x: s.x, y: s.y - g.up * (s._emberScale || 1), r: 40 + 40 * g.heat, i: 0.3 + 0.5 * g.heat, id: 5000 + s._character._eventId });
         }
         return out;
+    }
+    // where the embers of a smouldering tree glow now, on the screen: [{ x, y, b }] (b: 0.26..1, how hot), [] when nothing glows
+    function emberSpots(sprite) {
+        const spots = sprite && sprite._emberSpots, bmp = sprite && sprite._emberBitmap;
+        if (!spots || !bmp || !sprite._treeBody || !sprite._treeBody.visible) return [];
+        const k = sprite._emberScale || 1, half = bmp.width / 2, ph = bmp.height;
+        return spots.filter(Boolean).map(p => ({ x: sprite.x + (p.x - half) * k, y: sprite.y - (ph - p.y) * k, b: p.b }));
     }
 
     // The tile the event turns into after it is felled (its next page's graphic).
@@ -1740,7 +1784,7 @@
         body.bitmap = bitmap;
         let col = swingSheetFrame(kind, frames, row, event._swingT);
         // while it waits the figure shifts a little between two poses - unless opts.still (resting on the ground: sits quite still, hands folded)
-        if (event._waiting && !(event.opts && event.opts.still)) col -= Math.floor(event._wait / 22) % 2;
+        if (event._waiting && !(event.opts && event.opts.still)) col -= Math.floor(event._wait / ((event.opts && event.opts.wobble) || 22)) % 2;
         body.setFrame(col * SHEET_CELL, row * SHEET_CELL, SHEET_CELL, SHEET_CELL);
         body.x = reach.x * lunge;
         body.y = reach.y * lunge;
@@ -1838,7 +1882,8 @@
         const preview = this._stumpPreview;
         body.rotation = (event._treeFallDir || 1) * (Math.PI / 2) * tilt;
         body.alpha = 1 - tilt;
-        preview.alpha = isCharred(event) ? 0 : stumpPreviewAlpha(tilt);   // a charred tree leaves no stump
+        const noStump = isCharred(event) || !!(treeConfig(event) || {}).nostump;
+        preview.alpha = noStump ? 0 : stumpPreviewAlpha(tilt);   // a charred tree (and a seedling) leaves no stump
         preview.visible = preview.alpha > 0 && !!preview.bitmap;
         this.updateHitFlash(event);
     };
@@ -2046,5 +2091,7 @@
     };
 
     // for Storm.js (lightning hitting a tree) and the tests
-    window.ChoppableTree = { isTree: event => !!treeConfig(event), isCharred, charTree, strikeableTrees, emberLights, CHARCOAL };
+    // treeConfig: the parsed (and cached) <Tree:...> numbers of an event - Forestry.js changes scale / hits / drops of a planted tree
+    // in place as it grows
+    window.ChoppableTree = { isTree: event => !!treeConfig(event), treeConfig, isPine, isCharred, charTree, strikeableTrees, emberLights, emberSpots, EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE };
 })();

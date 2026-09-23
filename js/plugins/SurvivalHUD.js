@@ -108,7 +108,7 @@
  *
  * @command wake
  * @text Komunikat po przebudzeniu
- * @desc Pokazuje numer dnia i porę dnia. Użyj po "Rozjaśnij ekran".
+ * @desc Mała ramka u góry ekranu: numer dnia, pora dnia i "Czujesz się wypoczęty" (po podsumowaniu dnia, sama znika). Użyj po "Rozjaśnij ekran".
  *
  * @command lootPopup
  * @text Pokaż łup nad graczem
@@ -198,8 +198,9 @@
     const POPUP_FONT = num(params.popupFontSize, 22);
     const GOLD_ICON = 313;
 
-    // Shared "dark wood + brass rim" palette, so a color change only needs one edit.
-    const PALETTE = { dark: "#1a100a", brass: "#a67c3a", brassLight: "#d6aa50", cream: "#f6e7c4" };
+    // The clock's hands and cap, and the text on the plates: black and bright yellow like the rest of the interface
+    // (the plates, bars and popups themselves are drawn with UITheme.js's window.UIStyle).
+    const PALETTE = { dark: "#0b0c0f", accent: "#ffd23f", accentLight: "#ffe27a", text: "#eceef0" };
 
     // ------------------------------------------------------------------
     // Stamina model
@@ -252,13 +253,9 @@
         }
     });
 
+    // (no message window any more: the greeting of the new day is the small plate at the top of the screen, see Sprite_DayBanner)
     PluginManager.registerCommand(pluginName, "wake", function() {
-        const summary = $gameTemp._sleepSummary;
-        if (summary && typeof $gameSystem.dayNightPeriod === "function") {
-            $gameMessage.add("Dzień " + summary.day + ". " + $gameSystem.dayNightPeriod().name + ".");
-        }
-        $gameMessage.add("Czujesz się wypoczęty.");
-        this.setWaitMode("message");
+        $gameTemp.queueDayBanner("Czujesz się wypoczęty.");
     });
 
     PluginManager.registerCommand(pluginName, "lootPopup", function(args) {
@@ -306,18 +303,17 @@
         const size = 9;
         const bitmap = new Bitmap(size, size);
         const ctx = bitmap.context;
-        ctx.fillStyle = "#46301a";
+        ctx.fillStyle = PALETTE.dark;
         ctx.beginPath(); ctx.arc(size / 2, size / 2, 4.3, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = PALETTE.brassLight;
+        ctx.fillStyle = PALETTE.accent;
         ctx.beginPath(); ctx.arc(size / 2, size / 2, 2.9, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "#f4dc9a";
-        ctx.beginPath(); ctx.arc(size / 2 - 0.8, size / 2 - 0.8, 1, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = PALETTE.dark;
+        ctx.beginPath(); ctx.arc(size / 2, size / 2, 1, 0, Math.PI * 2); ctx.fill();
         bitmap._baseTexture.update();
         bitmap.smooth = true;
         return bitmap;
     }
 
-    // The label and the gauge share one frame style: dark wood with a brass rim, like the clock.
     function roundRect(ctx, x, y, w, h, r) {
         ctx.beginPath();
         ctx.moveTo(x + r, y);
@@ -328,37 +324,15 @@
         ctx.closePath();
     }
 
-    function paintPlaque(bmp, x, y, w, h, radius) {
+    // The label, the icon box and the popups share the panel of the windows (UITheme.js: window.UIStyle)
+    function paintPlaque(bmp, x, y, w, h, opts) {
         const ctx = bmp.context;
-        ctx.save();
-        roundRect(ctx, x + 0.5, y + 0.5, w - 1, h - 1, radius);
-        ctx.fillStyle = PALETTE.dark;
+        if (window.UIStyle) return UIStyle.panel(ctx, x, y, w, h, Object.assign({ cut: 3 }, opts));
+        roundRect(ctx, x + 0.5, y + 0.5, w - 1, h - 1, 4);   // (without UITheme.js: a plain dark plate)
+        ctx.fillStyle = "rgba(11,12,15,0.9)";
         ctx.fill();
-        roundRect(ctx, x + 1.5, y + 1.5, w - 3, h - 3, Math.max(1, radius - 1));
-        ctx.fillStyle = PALETTE.brass;
-        ctx.fill();
-        const wood = ctx.createLinearGradient(0, y + 2, 0, y + h - 2);
-        wood.addColorStop(0, "#4b3321");
-        wood.addColorStop(1, "#26170d");
-        roundRect(ctx, x + 2.5, y + 2.5, w - 5, h - 5, Math.max(1, radius - 2));
-        ctx.fillStyle = wood;
-        ctx.fill();
-        ctx.fillStyle = "rgba(255,226,160,0.16)";
-        ctx.fillRect(x + 4, y + 3, w - 8, 1);
-        ctx.restore();
     }
 
-    function lighten(hex, amount) {
-        const n = parseInt(hex.slice(1), 16);
-        const c = shift => Math.max(0, Math.min(255, Math.round(((n >> shift) & 255) + amount)));
-        return "rgb(" + c(16) + "," + c(8) + "," + c(0) + ")";
-    }
-
-    // Same hex palette, expressed as an rgba() string at a given opacity.
-    function withAlpha(hex, alpha) {
-        const n = parseInt(hex.slice(1), 16);
-        return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + alpha + ")";
-    }
 
     // Blits one icon cell from IconSet onto a destination bitmap; a no-op until the sheet is ready.
     function blitIcon(destBitmap, iconIndex, size, dx, dy) {
@@ -376,10 +350,12 @@
     Sprite_SurvivalHud.prototype.constructor = Sprite_SurvivalHud;
 
     Sprite_SurvivalHud.LABEL_HEIGHT = 24;
-    Sprite_SurvivalHud.ICON_SIZE = 32;
-    Sprite_SurvivalHud.BAR_WIDTH = 112;
-    Sprite_SurvivalHud.BAR_HEIGHT = 20;
-    Sprite_SurvivalHud.GAP = 6;
+    Sprite_SurvivalHud.ICON_SIZE = 32;   // (the loot popups)
+    // the rows under the clock - stamina here, hunger and thirst (Needs.js), the load and the premia (Survival.js) - share one
+    // look (UITheme.js's UIStyle.hudRow): a symbol on a small plate and a flat bar without numbers. Their sizes come from
+    // UIStyle.HUD (row: the plate, step: one row to the next); these are the same numbers for a game without UITheme.js.
+    const HUD_FALLBACK = { row: 20, step: 23, gap: 6, barW: 112, barH: 8 };
+    const hudMetrics = () => (window.UIStyle && UIStyle.HUD) || HUD_FALLBACK;
 
     Sprite_SurvivalHud.prototype.initialize = function() {
         Sprite.prototype.initialize.call(this);
@@ -411,12 +387,13 @@
         this._face = new Sprite(ImageManager.loadSystem(CLOCK_IMAGE));
         this._clock.addChild(this._face);
 
+        // slim yellow hands on the dark face (the minute hand a little lighter)
         const minute = makeHandBitmap(
-            [[-1.7, 9], [1.7, 9], [1.5, -(MINUTE_LENGTH - 7)], [0.6, -MINUTE_LENGTH], [-0.6, -MINUTE_LENGTH], [-1.5, -(MINUTE_LENGTH - 7)]],
-            PALETTE.dark, null);
+            [[-1.4, 9], [1.4, 9], [1.2, -(MINUTE_LENGTH - 7)], [0.5, -MINUTE_LENGTH], [-0.5, -MINUTE_LENGTH], [-1.2, -(MINUTE_LENGTH - 7)]],
+            PALETTE.accentLight, null);
         const hour = makeHandBitmap(
-            [[-2.4, 7], [2.4, 7], [3.2, -3], [1.8, -(HOUR_LENGTH - 6)], [0, -HOUR_LENGTH], [-1.8, -(HOUR_LENGTH - 6)], [-3.2, -3]],
-            PALETTE.dark, "rgba(120,86,50,0.9)");
+            [[-2.2, 7], [2.2, 7], [2.8, -3], [1.6, -(HOUR_LENGTH - 6)], [0, -HOUR_LENGTH], [-1.6, -(HOUR_LENGTH - 6)], [-2.8, -3]],
+            PALETTE.accent, null);
         this._hourHand = this.makeHandSprite(hour);
         this._minuteHand = this.makeHandSprite(minute);
         this._cap = new Sprite(makeCapBitmap());
@@ -458,18 +435,21 @@
         if (bitmap && bitmap.isReady()) bitmap.smooth = this._clockScale !== 1;
         const width = this.clockWidth();
         const height = (bitmap && bitmap.isReady() ? bitmap.height : 108) * this._clockScale;
-        // Everything is left-aligned to the HUD origin (so nothing spills past
-        // the screen edge); the clock is centered over the wider gauge.
-        const gaugeWidth = Sprite_SurvivalHud.ICON_SIZE + Sprite_SurvivalHud.GAP + Sprite_SurvivalHud.BAR_WIDTH;
+        // Everything is left-aligned to the HUD origin (so nothing spills past the screen edge): the plate with the time of day
+        // on top, the clock centred under it, then the rows of bars
+        const H = hudMetrics();
+        const gaugeWidth = H.row + H.gap + H.barW + 2;   // (+ the bar's line)
         const blockWidth = Math.max(width, gaugeWidth);
-        this._clock.x = Math.round((blockWidth - width) / 2);
         this._label.bitmap = new Bitmap(blockWidth, Sprite_SurvivalHud.LABEL_HEIGHT);
         this._label.x = 0;
-        this._label.y = Math.round(height) + 2;
+        this._label.y = 0;
         this._labelKey = "";
-        this._gauge.bitmap = new Bitmap(gaugeWidth, Sprite_SurvivalHud.ICON_SIZE);
-        this._gauge.x = Math.round((blockWidth - gaugeWidth) / 2);
-        this._gauge.y = this._label.y + Sprite_SurvivalHud.LABEL_HEIGHT + 6;
+        this._clock.x = Math.round((blockWidth - width) / 2);
+        this._clock.y = Sprite_SurvivalHud.LABEL_HEIGHT + 4;
+        this._gauge.bitmap = new Bitmap(gaugeWidth, H.step + H.row);   // two rows: health, stamina
+        this._gauge.x = 0;
+        this._gaugeY = this._clock.y + Math.round(height) + 8;
+        this._gauge.y = this._gaugeY;
         this._staminaKey = "";
     };
 
@@ -483,8 +463,8 @@
         this._gauge.visible = showStamina;
         if (showClock) this.updateClock();
         if (showStamina) this.updateStamina();
-        // With the clock hidden the gauge moves up into its place.
-        this._gauge.y = (showClock ? this._label.y + Sprite_SurvivalHud.LABEL_HEIGHT + 6 : 0);
+        // With the clock hidden the bars move up into its place.
+        this._gauge.y = showClock ? this._gaugeY : 0;
     };
 
     // The <Clock:off>/<Stamina:off> map-note check only needs to run once per
@@ -516,70 +496,53 @@
     Sprite_SurvivalHud.prototype.redrawLabel = function(text) {
         const bmp = this._label.bitmap;
         bmp.clear();
-        paintPlaque(bmp, 0, 0, bmp.width, bmp.height, 5);
+        paintPlaque(bmp, 0, 0, bmp.width, bmp.height);
         bmp.fontSize = 15;
-        bmp.textColor = PALETTE.cream;
-        bmp.outlineColor = "rgba(20,10,4,0.9)";
+        bmp.textColor = PALETTE.text;
+        bmp.outlineColor = "rgba(0,0,0,0.9)";
         bmp.outlineWidth = 3;
         bmp.drawText(text, 0, 0, bmp.width, bmp.height, "center");
     };
 
     Sprite_SurvivalHud.prototype.updateStamina = function() {
         const value = Math.ceil($gameSystem.stamina());
-        const low = $gameSystem.staminaRatio() <= 0.15;
+        const health = typeof $gameSystem.healthRatio === "function" ? $gameSystem.healthRatio() : 1;
+        const low = $gameSystem.staminaRatio() <= 0.15 || health <= 0.25;
         if (low) this._pulse = (this._pulse + 1) % 60;
         const pulseOn = low && this._pulse < 30;
-        const key = value + ":" + (low ? (pulseOn ? "a" : "b") : "-");
+        const key = value + ":" + Math.round(health * 200) + ":" + (low ? (pulseOn ? "a" : "b") : "-");
         if (key === this._staminaKey) return;
         this._staminaKey = key;
         this.redrawStamina(value, pulseOn);
     };
 
+    // The y of the i-th row under the gauge's own two (health and stamina): Needs.js and Survival.js stack their rows with it,
+    // 1 = the first one under stamina
+    Sprite_SurvivalHud.prototype.rowY = function(i) {
+        return this._gauge.y + (i + 1) * hudMetrics().step;
+    };
+
+    // two rows: the heart and the health (Survival.js: the hero's HP), the bolt and the stamina - flat bars without numbers,
+    // flashing when nearly empty; the stamina goes green / amber / red as it runs down
     Sprite_SurvivalHud.prototype.redrawStamina = function(value, pulseOn) {
         const bmp = this._gauge.bitmap;
         const ctx = bmp.context;
-        const icon = Sprite_SurvivalHud.ICON_SIZE;
         bmp.clear();
-        paintPlaque(bmp, 0, 0, icon, icon, 6);
-        blitIcon(bmp, STAMINA_ICON, icon, 0, 0);
-        const barX = icon + Sprite_SurvivalHud.GAP;
-        const barH = Sprite_SurvivalHud.BAR_HEIGHT;
-        const barW = Sprite_SurvivalHud.BAR_WIDTH;
-        const barY = Math.round((icon - barH) / 2);
-        const ratio = $gameSystem.staminaRatio();
-        // frame: dark rim, brass rim, dark trough
-        ctx.fillStyle = PALETTE.dark;
-        ctx.fillRect(barX, barY, barW, barH);
-        ctx.fillStyle = PALETTE.brass;
-        ctx.fillRect(barX + 1, barY + 1, barW - 2, barH - 2);
-        ctx.fillStyle = "#21150b";
-        ctx.fillRect(barX + 2, barY + 2, barW - 4, barH - 4);
-        // fill: a lighter top edge over a body that darkens towards the bottom
-        const inner = barW - 6, fillH = barH - 6;
-        const innerW = Math.max(0, Math.round(inner * ratio));
-        let color = ratio > 0.5 ? "#6fcf4f" : ratio > 0.25 ? "#efb432" : "#e04a3a";
-        if (pulseOn) color = "#ff8a70";
-        if (innerW > 0) {
-            const body = ctx.createLinearGradient(0, barY + 3, 0, barY + 3 + fillH);
-            body.addColorStop(0, lighten(color, 30));
-            body.addColorStop(0.45, color);
-            body.addColorStop(1, lighten(color, -55));
-            ctx.fillStyle = body;
-            ctx.fillRect(barX + 3, barY + 3, innerW, fillH);
-            ctx.fillStyle = "rgba(255,255,255,0.32)";
-            ctx.fillRect(barX + 3, barY + 3, innerW, 1);
+        const health = typeof $gameSystem.healthRatio === "function" ? $gameSystem.healthRatio() : 1;
+        const ratio = $gameSystem.staminaRatio(), step = hudMetrics().step;
+        let color = ratio > 0.5 ? "#7ddc6a" : ratio > 0.25 ? "#ffb347" : "#ff5a4f";
+        if (pulseOn && ratio <= 0.15) color = "#ff8a70";
+        const hpColor = pulseOn && health <= 0.25 ? "#ff8a70" : "#e5484d";
+        if (window.UIStyle) {
+            UIStyle.hudRow(ctx, "health", 0, 0, health, hpColor);
+            UIStyle.hudRow(ctx, "stamina", 0, step, ratio, color);
+        } else {   // (without UITheme.js: the old icon and plain bars)
+            const H = HUD_FALLBACK, x = H.row + H.gap, y = (H.row - H.barH) / 2;
+            blitIcon(bmp, STAMINA_ICON, Sprite_SurvivalHud.ICON_SIZE, 0, step);
+            ctx.fillStyle = "#16181c"; ctx.fillRect(x, y, H.barW, H.barH); ctx.fillStyle = hpColor; ctx.fillRect(x, y, Math.round(H.barW * health), H.barH);
+            ctx.fillStyle = "#16181c"; ctx.fillRect(x, step + y, H.barW, H.barH); ctx.fillStyle = color; ctx.fillRect(x, step + y, Math.round(H.barW * ratio), H.barH);
         }
-        // ten segments
-        ctx.fillStyle = "rgba(20,10,4,0.42)";
-        for (let i = 1; i < 10; i++) ctx.fillRect(barX + 3 + Math.round(inner * i / 10), barY + 3, 1, fillH);
         bmp._baseTexture.update();
-        bmp.fontSize = 13;
-        bmp.fontBold = true;
-        bmp.textColor = "#fff8e6";
-        bmp.outlineColor = "rgba(20,10,4,0.95)";
-        bmp.outlineWidth = 4;
-        bmp.drawText(value + " / " + $gameSystem.maxStamina(), barX, barY, barW, barH, "center");
-        bmp.fontBold = false;
     };
 
     // ------------------------------------------------------------------
@@ -650,13 +613,7 @@
         const textWidth = Math.ceil(probe.measureTextWidth(this._data.text));
         const width = pad * 2 + icon + gap + textWidth;
         const bmp = new Bitmap(width, height);
-        const ctx = bmp.context;
-        roundRect(ctx, 0, 0, width, height, 10);
-        ctx.fillStyle = "rgba(22,15,10,0.82)";
-        ctx.fill();
-        ctx.strokeStyle = withAlpha(PALETTE.brass, 0.85);   // the brass rim of the windows
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+        paintPlaque(bmp, 0, 0, width, height, { cut: 5, fill: "rgba(11,12,15,0.86)" });   // the panel of the windows
         bmp.fontSize = POPUP_FONT;
         bmp.textColor = this._data.color;
         bmp.outlineColor = "rgba(0,0,0,0.9)";
@@ -726,6 +683,70 @@
         }
     };
 
+    // ------------------------------------------------------------------
+    // The greeting of a new day: a small plate at the top centre of the screen - "Dzień 2 · Świt" and how the night went - instead
+    // of a message window. It waits until the day summary (Journal.js) has been read and the screen is bright again, fades in,
+    // stays a few seconds and fades out; nothing to click away.
+    // ------------------------------------------------------------------
+    const BANNER = { fadeIn: 20, stay: 210, fadeOut: 40, top: 10 };
+    Game_Temp.prototype.queueDayBanner = function(text) {
+        const title = "Dzień " + $gameSystem.dayNightDay() + (typeof $gameSystem.dayNightPeriod === "function" ? "  ·  " + $gameSystem.dayNightPeriod().name : "");
+        this._dayBanner = { title, text: text || "" };
+        this._lastDayBanner = title + " " + (text || "");   // (tests read what was said)
+    };
+
+    function Sprite_DayBanner() {
+        this.initialize(...arguments);
+    }
+    Sprite_DayBanner.prototype = Object.create(Sprite.prototype);
+    Sprite_DayBanner.prototype.constructor = Sprite_DayBanner;
+    Sprite_DayBanner.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this.anchor.x = 0.5;
+        this._age = -1;
+        this.visible = false;
+    };
+    Sprite_DayBanner.prototype.show = function(data) {
+        const probe = new Bitmap(8, 8);
+        probe.fontSize = 20;
+        const tw = probe.measureTextWidth(data.title);
+        probe.fontSize = 17;
+        const sw = data.text ? probe.measureTextWidth(data.text) : 0;
+        const w = Math.ceil(Math.max(tw, sw)) + 56, h = data.text ? 58 : 36;
+        const bmp = new Bitmap(w, h);
+        paintPlaque(bmp, 0, 0, w, h, { cut: 5, fill: "rgba(11,12,15,0.9)" });
+        bmp.fontSize = 20;
+        bmp.textColor = PALETTE.accent;
+        bmp.outlineColor = "rgba(0,0,0,0.9)";
+        bmp.outlineWidth = 3;
+        bmp.drawText(data.title, 0, 4, w, 28, "center");
+        if (data.text) {
+            bmp.fontSize = 17;
+            bmp.textColor = PALETTE.text;
+            bmp.drawText(data.text, 0, 29, w, 24, "center");
+        }
+        this.bitmap = bmp;
+        this._age = 0;
+        this.visible = true;
+    };
+    Sprite_DayBanner.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        this.x = Graphics.width / 2;
+        if (this._age < 0) {
+            const q = $gameTemp._dayBanner;
+            if (q && !$gameTemp._pendingSummary && !$gameMessage.isBusy() && $gameScreen.brightness() >= 250 && !SceneManager.isSceneChanging()) {
+                $gameTemp._dayBanner = null;
+                this.show(q);
+            }
+            return;
+        }
+        const t = ++this._age, end = BANNER.fadeIn + BANNER.stay + BANNER.fadeOut;
+        const k = t < BANNER.fadeIn ? t / BANNER.fadeIn : t < BANNER.fadeIn + BANNER.stay ? 1 : Math.max(0, (end - t) / BANNER.fadeOut);
+        this.opacity = Math.round(255 * k);
+        this.y = BANNER.top - Math.round(8 * (1 - Math.min(1, t / BANNER.fadeIn)));   // it slides down a little as it appears
+        if (t >= end) { this._age = -1; this.visible = false; }
+    };
+
     // A layer between the map and the windows that is NOT part of the zoomed
     // spriteset, so the HUD keeps its size and place when MapZoom is active.
     const _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
@@ -741,6 +762,8 @@
         this._hudLayer.addChild(this._survivalHud);
         this._lootLayer = new Sprite_LootLayer();
         this._hudLayer.addChild(this._lootLayer);
+        this._dayBanner = new Sprite_DayBanner();
+        this._hudLayer.addChild(this._dayBanner);
     };
 
     Scene_Map.prototype.hudLayer = function() {

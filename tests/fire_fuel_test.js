@@ -57,14 +57,17 @@ const { launch, sleep } = require("./cdp.js");
         check("cooking is refused too, with the fire out", jobBlocked === false, jobBlocked);
 
         // ---------------------------------------------------------------- feeding it: wood and branches both work
-        await ev(`$gameParty.gainItem($dataItems[Farming.ITEM.wood], 3); $gameParty.gainItem($dataItems[Farming.ITEM.branch], 3); 0`);
+        await ev(`$gameParty.gainItem($dataItems[Farming.ITEM.wood], 3); $gameParty.gainItem($dataItems[Farming.ITEM.branch], 3); $gameParty.gainItem($dataItems[Farming.ITEM.cone], 1); 0`);
         const before = await ev(`$gameParty.numItems($dataItems[Farming.ITEM.wood])`);
+        const branchesBefore = await ev(`$gameParty.numItems($dataItems[Farming.ITEM.branch])`);
         const feedEntry = await J(`(function(){ const e = Farming.menuFor(${fx}, ${fy}).entries.find(e => e.name === "Dorzuć drewna"); return e ? { enabled: e.enabled !== false, help: e.help } : null; })()`);
-        check("'Dorzuć drewna' is offered and mentions the fire is out", !!feedEntry && feedEntry.enabled && /wygasł/.test(feedEntry.help), feedEntry);
+        check("'Dorzuć drewna' is offered and mentions the fire is out and the kindling", !!feedEntry && feedEntry.enabled && /wygasł/.test(feedEntry.help) && /rozpałk/.test(feedEntry.help), feedEntry);
         await ev(`(function(){ Farming.menuFor(${fx}, ${fy}).entries.find(e => e.name === "Dorzuć drewna").run(); })()`);
         await frames(5);
         const afterWood = await fuel();
         check("one piece of wood is spent and adds fuel", (await ev(`$gameParty.numItems($dataItems[Farming.ITEM.wood])`)) === before - 1 && afterWood > 0, { before, afterWood });
+        const kindled = await J(`({ cones: $gameParty.numItems($dataItems[Farming.ITEM.cone]), branches: $gameParty.numItems($dataItems[Farming.ITEM.branch]) })`);
+        check("lighting the dead fire used the pine cone as kindling (the branches stay)", kindled.cones === 0 && kindled.branches === branchesBefore, { kindled, branchesBefore });
         const relit = await entry();
         check("relit: the flame, glow and smoke come back", relit.flame && relit.glow > 0 && relit.puffs.every(v => v), relit);
         const beforeBranch = afterWood;

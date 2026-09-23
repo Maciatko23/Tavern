@@ -62,7 +62,8 @@
         use: ["użycie", "użycia", "użyć"],
         cast: ["rzut", "rzuty", "rzutów"],
         cut: ["cięcie", "cięcia", "cięć"],
-        shot: ["strzał", "strzały", "strzałów"]
+        shot: ["strzał", "strzały", "strzałów"],
+        jab: ["pchnięcie", "pchnięcia", "pchnięć"]
     };
     const TOOLS = {
         60: { life: 70, unit: "blow", g: "f", fix: [[77, 1], [92, 1]] },              // kamienna siekiera: gałąź + len
@@ -78,7 +79,8 @@
         91: { life: 70, unit: "use", g: "m", fix: [[86, 1]] },                         // nóż żelazny
         118: { life: 90, unit: "cut", g: "f", fix: [[86, 1]] },                        // piła
         125: { life: 60, unit: "shot", g: "f", fix: [[93, 1], [92, 1]] },             // proca: lina + len
-        126: { life: 80, unit: "shot", g: "m", fix: [[93, 1], [77, 1]] }              // łuk: lina + gałąź
+        126: { life: 80, unit: "shot", g: "m", fix: [[93, 1], [77, 1]] },             // łuk: lina + gałąź
+        154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] }               // oszczep: kamień (grot) + lina
     };
     const WARN_FRACTION = 0.15;
 

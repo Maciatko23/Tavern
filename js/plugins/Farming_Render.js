@@ -396,7 +396,19 @@
             ["........oo..", "...oo..ollo.", "..olloolbbo.", "..obbllbddo.", ".oolbbblloo.", "ollbdddbbllo", "obbdoooddbbo", "oddo...ooddo", ".oo......oo.", ".sssssssss.."],
             ["..o........o", ".olo.....ool", ".oblooooollb", "oodblllllbbd", "llllbbbbbbbo", "bbbbblbbdddo", "dddddbdbloo.", "ooooododbo..", ".....o.odo..", ".sssssssss.."]] },
         herb: { colours: { g: "#3f8a44", G: "#6ec062", y: "#f0cc4e", Y: "#ffe98a", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["....y.y...", "...yYy.y..", "....g.....", ".g..g..g..", "gG.gg.gGg.", ".gGgGgGg..", "..gGgg....", "...gg.....", "..sssss..."]] }
+            ["....y.y...", "...yYy.y..", "....g.....", ".g..g..g..", "gG.gg.gGg.", ".gGgGgGg..", "..gGgg....", "...gg.....", "..sssss..."]] },
+        // the wild herbs: nettle (tall, dark serrated leaves), yarrow (white flat flower heads), wild garlic (broad leaves, white stars)
+        nettle: { colours: { d: "#2c5a2a", g: "#3f7a38", G: "#5e9e48", s: "rgba(10,8,4,0.30)" }, shapes: [
+            ["....G.......", "...gGg...G..", "..gdGdg.gGg.", "...gGg.gdGdg", ".G..g...gGg.", "gGg.g.G..g..", "dGdgg.gGgg..", ".gGg.gdGdg..", "..g..g.gg...", "..g..g..g...", ".sssssssss.."],
+            ["...G....", "..gGg...", ".gdGdg..", "..gGg.G.", "G..g.gGg", "Gg.gdGdg", "dGggGg..", ".gGg.g..", "..g..g..", ".ssssss."]] },
+        yarrow: { colours: { w: "#f4f2e8", W: "#cfcab8", y: "#e8d890", g: "#4f8a44", G: "#6ea85a", s: "rgba(10,8,4,0.30)" }, shapes: [
+            ["..wWw....wWw", ".wwywW..wwyw", "..wWw....wW.", "...g..ww..g.", "...g.wywW.g.", "..Gg..wW..g.", "..g...g..Gg.", ".gG.g.gG.g..", "..gGg..gGg..", ".sssssssss.."]] },
+        garlic: { colours: { G: "#7cc25a", g: "#4f9a3c", d: "#2f6a2a", w: "#ffffff", y: "#eeeebb", s: "rgba(10,8,4,0.30)" }, shapes: [
+            ["....w.w.....", "...wywyw....", "....www.....", "..G..g..G...", ".GGg.g.gGG..", ".GGg.g.gGG..", "..GGg.gGG...", "..dGGgGGd...", "...dGgGd....", ".sssssssss.."]] },
+        // pine cones under the pines: two lying together, or one
+        cone: { colours: { o: "#2e1c10", b: "#6e4220", B: "#9a6030", l: "#c89050", s: "rgba(10,8,4,0.30)" }, shapes: [
+            ["..oo........", ".oBBoo......", ".oblBBo.oo..", "..oBlbBooBo.", "...oobBolbBo", ".....oo.oBlo", "........ooo.", ".sssssssss.."],
+            [".oo.....", "oBBoo...", "oblBBo..", ".oBlbBo.", "..oobBo.", "....oo..", ".ssssss."]] }
     };
     const gatherBitmaps = new Map();
     function gatherBitmap(kind, variant) {
@@ -873,6 +885,7 @@
             if (e.flame) this.updateFlame(e);
             if (e.meatRaw) this.updateHang(e);
             if (e.badge) this.updateStation(e);
+            if (e.caught) this.updateSnare(e);
             if (e.solid) this.updateSite(e);
             if (Farming.geoOf(e.b).imageFull && (e.filled === undefined || this._age % 15 === 0)) this.updateBucket(e);
         }
@@ -1055,6 +1068,38 @@
             entry.puffs.push(puff);
         }
     };
+    // a snare: the bait lying in its noose, and a caught rabbit sitting in it, now and then thrashing. Children of the snare's own sprite
+    // (so they sort and mirror with it); the noose is at SNARE_NOOSE px from the foot of the picture (the middle of its bottom edge)
+    const SNARE_NOOSE = { x: -4, y: -19 }, RABBIT = { sheet: "$Animal_Rabbit", row: 1 };   // (row 1: the rabbit side on, facing left)
+    BuildingSprites.prototype.buildSnareVisuals = function(entry) {
+        const bait = new Sprite(ImageManager.loadSystem("IconSet"));
+        bait.anchor.set(0.5, 0.5);
+        bait.scale.set(0.5, 0.5);
+        bait.x = SNARE_NOOSE.x;
+        bait.y = SNARE_NOOSE.y;
+        bait.visible = false;
+        const rabbit = new Sprite(ImageManager.loadCharacter(RABBIT.sheet));
+        rabbit.anchor.set(0.5, 1);
+        rabbit.scale.set(0.8, 0.8);
+        rabbit.x = SNARE_NOOSE.x;
+        rabbit.y = SNARE_NOOSE.y + 9;
+        rabbit.visible = false;
+        entry.sprite.addChild(bait);
+        entry.sprite.addChild(rabbit);
+        entry.bait = bait;
+        entry.caught = rabbit;
+    };
+    BuildingSprites.prototype.updateSnare = function(e) {
+        const b = e.b, caught = (b.caught || 0) > 0, bait = !caught && b.bait && $dataItems[b.bait.item];
+        e.bait.visible = !!bait;
+        if (bait) e.bait.setFrame((bait.iconIndex % 16) * 32, Math.floor(bait.iconIndex / 16) * 32, 32, 32);
+        e.caught.visible = caught;
+        if (!caught || !e.caught.bitmap.isReady()) return;
+        const t = this._age + b.id * 29, thrash = t % 110 < 16;   // mostly it crouches still; now and then it kicks against the noose
+        const pw = e.caught.bitmap.width / 3, ph = e.caught.bitmap.height / 4, pattern = thrash ? 1 + (Math.floor(t / 4) % 2) : 0;
+        e.caught.setFrame(pattern * pw, RABBIT.row * ph, pw, ph);
+        e.caught.x = SNARE_NOOSE.x + (thrash ? (t % 4 < 2 ? -1 : 1) : 0);
+    };
     // the finished-product icon over a station, waiting to be collected (frame set in updateStation)
     BuildingSprites.prototype.buildReadyBadge = function(entry, b, def) {
         const icon = new Sprite(ImageManager.loadSystem("IconSet"));
@@ -1079,7 +1124,7 @@
             sprite.anchor.y = 1;
             sprite.z = Z.withCharacters;
             if (def.flipped) sprite.scale.x = -1;   // put down mirrored
-            const entry = { b, sprite, shadow: null, solid: null, foot: null, glow: null, puffs: null, badge: null, height: 64, fences: null, flame: null, meatRaw: null, meatDone: null, rope: null };
+            const entry = { b, sprite, shadow: null, solid: null, foot: null, glow: null, puffs: null, badge: null, height: 64, fences: null, flame: null, meatRaw: null, meatDone: null, rope: null, bait: null, caught: null };
             if (b.site) {
                 sprite.opacity = 85;   // the blueprint of the whole building
                 this.buildSiteScaffold(entry, b, def, bitmap);
@@ -1093,6 +1138,7 @@
             if (!b.site && def.hang) this.buildHangVisuals(entry, b, def);
             if (!b.site && def.recipes && (def.smokes || (def.fire && def.fire.smoke))) this.buildStationVisuals(entry, b, def);
             if (!b.site && def.recipes) this.buildReadyBadge(entry, b, def);
+            if (!b.site && def.lure) this.buildSnareVisuals(entry);
             this._sprites.push(entry);
         }
     };

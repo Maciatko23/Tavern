@@ -110,7 +110,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await press("ok");
         await frames(40);
         const dark = await ev("$gameScreen.brightness()");
-        check("the screen never dims while you go to sleep (fades were removed everywhere)", dark === 255, dark);
+        check("the screen goes dark for a moment while you fall asleep", dark < 60, dark);
         await frames(90);
         const woke = await ev(`({ day: $gameSystem.dayNightDay(), hour: $gameSystem.dayNightHour(), stamina: $gameSystem.stamina(), max: $gameSystem.maxStamina(), hp: $gameParty.members()[0].hp, mhp: $gameParty.members()[0].mhp, nights: $gameSystem._farm.tentNights, autosave: !!$gameTemp._atmoAutosave, summary: !!$gameTemp._pendingSummary })`);
         console.log("after the night:", JSON.stringify(woke));
@@ -119,9 +119,9 @@ fs.mkdirSync(OUT, { recursive: true });
         check("the night is counted (goal 'tentnight') and the day summary is queued", woke.nights === 1 && woke.summary === true, woke);
         check("the game saves itself (autosave flag set by the night)", woke.autosave === true || (await ev("DataManager.savefileExists(0)")) === true, woke.autosave);
         await frames(20);
-        const msg = await ev("$gameMessage.hasText() ? $gameMessage.allText() : ''");
-        check("a message greets the new day: 'Dzień N. ...' and 'Czujesz się wypoczęty.'", /Dzień \d+/.test(msg) && /Czujesz się wypoczęty/.test(msg), msg);
-        await b.shot(OUT + "morning_message.png");
+        const msg = await ev("$gameTemp._lastDayBanner || ''");
+        check("the new day is greeted with 'Dzień N · ...' and 'Czujesz się wypoczęty.' - not in a message window", /Dzień \d+/.test(msg) && /Czujesz się wypoczęty/.test(msg) && !(await ev("$gameMessage.isBusy()")), msg);
+        check("the screen is bright again", (await ev("$gameScreen.brightness()")) === 255);
         // dismiss the message, then the day summary scene
         for (let i = 0; i < 14; i++) {
             const scene = await ev("SceneManager._scene.constructor.name");
@@ -131,6 +131,10 @@ fs.mkdirSync(OUT, { recursive: true });
         }
         await settle();
         check("back on the map with the player free to move", (await ev("SceneManager._scene.constructor.name")) === "Scene_Map" && (await ev("$gamePlayer.canMove()")) === true, await ev("SceneManager._scene.constructor.name"));
+        await frames(30);
+        const banner = await ev(`(function(){ const s = SceneManager._scene._dayBanner; return s ? { vis: s.visible, x: Math.round(s.x), y: Math.round(s.y), w: s.bitmap && s.bitmap.width, h: s.bitmap && s.bitmap.height, gw: Graphics.width } : null; })()`);
+        check("after the day summary, a small plate at the top centre of the screen greets the day", !!banner && banner.vis && banner.y <= 12 && Math.abs(banner.x - banner.gw / 2) <= 1 && banner.h <= 60 && banner.w < 500, banner);
+        await b.shot(OUT + "morning_banner.png");
         const goal = await ev(`(function(){ Journal.evaluateGoals(); return !!$gameSystem._journal.done.tentnight; })()`);
         check("the journal goal 'Prześpij noc w namiocie' is done", goal === true);
         check("the tent is still standing after the night", (await ev(`!!Farming.buildingAt(${bx + 5}, ${by + 3})`)) === true);

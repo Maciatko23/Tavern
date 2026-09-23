@@ -62,7 +62,7 @@ const { launch, sleep } = require("./cdp.js");
         st = await state();
         check("reopening works", st.open && st.tip.vis && st.pointer && st.index === 0);
 
-        // ---------------------------------------------------------------- a station's menu: two tabs, "Akcja" and "Przepis"
+        // ---------------------------------------------------------------- a station's menu: two tabs, "Przepis" first, then "Akcja"
         await press("cancel"); await frames(10);
         await ev(`(function(){ const f = $gameSystem._farm; (f.buildings[3] = f.buildings[3] || []).push({ id: f.nextId++, type: "campfire", x: 24, y: 16, last: 1, v: 3 }); f.rev++; })(); 0`);
         await frames(10);
@@ -70,29 +70,29 @@ const { launch, sleep } = require("./cdp.js");
         const RECIPES = ["Upiecz mięso", "Upiecz rybę", "Upiecz ziemniaki"];
         await press("ok"); await frames(20);
         let ts = await tabState();
-        check("the campfire's menu has the tabs 'Akcja' and 'Przepis' and opens on 'Akcja'", ts.open && JSON.stringify(ts.tabs) === '["Akcja","Przepis"]' && ts.tab === 0 && ts.index === 0, ts);
-        check("'Akcja': warming up, the tripod, demolishing - no recipes, no 'Zostaw'", ["Ogrzej się przy ogniu", "Dobuduj trójnóg", "Rozbierz"].every(n => ts.names.includes(n)) && !ts.names.includes("Zostaw") && !RECIPES.some(n => ts.names.includes(n)), ts.names);
+        check("the campfire's menu has the tabs 'Przepis' and 'Akcja' (in that order) and opens on 'Przepis'", ts.open && JSON.stringify(ts.tabs) === '["Przepis","Akcja"]' && ts.tab === 0 && ts.index === 0, ts);
+        check("'Przepis': the recipes, nothing else, first row selected", RECIPES.every(n => ts.names.includes(n)) && !ts.names.includes("Rozbierz") && !ts.names.includes("Zostaw"), ts.names);
+        check("the title plate has a second line for the tabs", ts.plateH === ts.twoLines, { plateH: ts.plateH, twoLines: ts.twoLines });
+        const size0 = { w: ts.w, h: ts.h };
+        await press("right"); await frames(10);
+        ts = await tabState();
+        check("→ switches to 'Akcja': warming up, the tripod, demolishing - no recipes, no 'Zostaw'", ts.tab === 1 && ts.index === 0 && ["Ogrzej się przy ogniu", "Dobuduj trójnóg", "Rozbierz"].every(n => ts.names.includes(n)) && !ts.names.includes("Zostaw") && !RECIPES.some(n => ts.names.includes(n)), ts.names);
+        check("the window keeps its size when switching tabs", ts.w === size0.w && ts.h === size0.h, { size0, now: { w: ts.w, h: ts.h } });
+        check("the popup follows the row", ts.tip);
         // "Dobuduj trójnóg" shows what it needs like a building does: costs with what is in the bag, dimmed with "Brakuje: ..." without them
         const up0 = await ev(`(function(){ const e = SceneManager._scene._farmMenu._entries.find(e => e.name === "Dobuduj trójnóg"); return { enabled: e.enabled !== false, help: e.help, costs: e.costs }; })()`);
         check("'Dobuduj trójnóg' without branches and rope: dimmed, 'Brakuje: ... (0/3)', cost rows icon|need|have|name", up0.enabled === false && /^Brakuje: .*\(0\/3\)/.test(up0.help) && up0.costs.length === 2 && up0.costs.every(c => c.length === 4) && up0.costs[0][1] === 3 && up0.costs[0][2] === 0, up0);
         await press("cancel"); await frames(10);
         await ev("$gameParty.gainItem($dataItems[Farming.BUILDINGS.campfire.upgrade.cost[0][0]], 2); 0");
         await press("ok"); await frames(20);
+        await press("right"); await frames(10);
         const up1 = await ev(`(function(){ const e = SceneManager._scene._farmMenu._entries.find(e => e.name === "Dobuduj trójnóg"); return { enabled: e.enabled !== false, help: e.help, have: e.costs.map(c => c[2]) }; })()`);
         check("with 2 of 3 branches: still dimmed, says 2/3 and the popup counts 2 in the bag", up1.enabled === false && /\(2\/3\)/.test(up1.help) && up1.have[0] === 2, up1);
         await ev("$gameParty.loseItem($dataItems[Farming.BUILDINGS.campfire.upgrade.cost[0][0]], 2); 0");
-        ts = await tabState();
-        check("the title plate has a second line for the tabs", ts.plateH === ts.twoLines, { plateH: ts.plateH, twoLines: ts.twoLines });
-        const size0 = { w: ts.w, h: ts.h };
-        await press("right"); await frames(10);
-        ts = await tabState();
-        check("→ switches to 'Przepis': the recipes, nothing else, first row selected", ts.tab === 1 && ts.index === 0 && RECIPES.every(n => ts.names.includes(n)) && !ts.names.includes("Rozbierz") && !ts.names.includes("Zostaw"), ts.names);
-        check("the window keeps its size when switching tabs", ts.w === size0.w && ts.h === size0.h, { size0, now: { w: ts.w, h: ts.h } });
-        check("the popup follows the recipe row", ts.tip);
         await press("right"); await frames(10);
         check("→ on the last tab stays there", (await tabState()).tab === 1);
         await press("left"); await frames(10);
-        check("← goes back to 'Akcja'", (await tabState()).tab === 0);
+        check("← goes back to 'Przepis'", (await tabState()).tab === 0);
         await press("pagedown"); await frames(10);
         check("E (page down) also switches to the next tab", (await tabState()).tab === 1);
         await press("pageup"); await frames(10);
@@ -101,15 +101,15 @@ const { launch, sleep } = require("./cdp.js");
         check("up / down still move along the list", (await tabState()).index === 1);
         await press("cancel"); await frames(10);
         check("cancel closes the tabbed menu", !(await tabState()).open);
-        // while something roasts: its state is on "Akcja", the recipes stay on "Przepis", greyed out with the reason
+        // while something roasts: the recipes stay on "Przepis", greyed out with the reason, and its state is on "Akcja"
         await ev(`(function(){ const b = Farming.buildingAt(24, 16); b.fuel = 10; b.fuelSince = Farming.clockHours(); b.job = { recipe: "roast_meat", start: Farming.clockHours(), hours: 3, out: [Farming.ITEM.roastMeat, 1], sit: false }; })(); 0`);
         await frames(6);
         await press("ok"); await frames(20);
         ts = await tabState();
-        check("roasting: 'Akcja' shows 'Coś się piecze...'", ts.tab === 0 && ts.names.includes("Coś się piecze..."), ts.names);
+        check("roasting: 'Przepis' still lists the recipes, all greyed out, saying why", ts.tab === 0 && RECIPES.every(n => ts.names.includes(n)) && ts.enabled.every(e => e === false) && ts.help.every(h => /piecze/.test(h)), { names: ts.names, enabled: ts.enabled, help: ts.help[0] });
         await press("right"); await frames(10);
         ts = await tabState();
-        check("roasting: 'Przepis' still lists the recipes, all greyed out, saying why", ts.tab === 1 && RECIPES.every(n => ts.names.includes(n)) && ts.enabled.every(e => e === false) && ts.help.every(h => /piecze/.test(h)), { names: ts.names, enabled: ts.enabled, help: ts.help[0] });
+        check("roasting: 'Akcja' shows 'Coś się piecze...'", ts.tab === 1 && ts.names.includes("Coś się piecze..."), ts.names);
         await press("cancel"); await frames(10);
     } catch (e) { console.log("ERR", e.message); }
     console.log("console errors:", b.logs.filter(l => /EXC|rror/.test(l)).slice(-4));

@@ -55,6 +55,15 @@
  *     warm  (Rozgrzany)  - zimno ci niestraszne
  *   Nie zjesz nic, gdy masz pełne siły i posiłek nie daje premii.
  *
+ * ZDROWIE I RANY
+ *   Zdrowie to HP bohatera (czerwony pasek z serduszkiem nad wytrzymałością).
+ *   Szarżujący dzik (Hunting.js) zabiera 35% zdrowia, część sił i rani: przez 24
+ *   godziny gry wytrzymałość nie podniesie się powyżej 60% (na pasku widać
+ *   "Ranny" z liczbą godzin), a zdrowie nie odrasta. Bez rany zdrowie wraca samo,
+ *   3% na godzinę gry, a noc snu przywraca je całe. Przedmiot z notatką <Bandage>
+ *   (opatrunek z krwawnika, "Wytwórz...") użyty z menu Przedmioty od razu leczy
+ *   ranę i 20% zdrowia; bez rany nie da się go użyć. Zdrowie 0 = koniec gry.
+ *
  * OPRAWIANIE
  *   Przedmiot z notatką <Butcher> (upolowana zwierzyna) użyty z menu daje mięso
  *   i skórę. Notatka <Need:90,91> wymaga któregoś z tych przedmiotów w plecaku
@@ -99,9 +108,13 @@
     const WEIGHT_CAP_BACKPACK = num(params.weightCapBackpack, 80);
 
     const ITEM = { knifeStone: 90, knifeIron: 91, rawMeat: 94, rawHide: 96, cloak: 112, boots: 113, backpack: 114 };
+    // a wound (a boar's tusks, Hunting.js): the strength cannot rise above WOUND_CAP of the maximum until it heals (WOUND_HOURS of
+    // game time) or is dressed with a bandage (<Bandage> item, made of yarrow)
+    const WOUND_CAP = 0.6, WOUND_HOURS = 24;
     const BUFFS = {
         sated: { name: "Najedzony", icon: 351, desc: "prace kosztują " + Math.round((1 - SATED_FACTOR) * 100) + "% mniej sił" },   // the icon of the roast meat
-        warm: { name: "Rozgrzany", icon: 366, desc: "zimą i w śniegu nie marzniesz" }                                                // the icon of the herbal brew
+        warm: { name: "Rozgrzany", icon: 366, desc: "zimą i w śniegu nie marzniesz" },                                               // the icon of the herbal brew
+        wound: { name: "Ranny", icon: 414, bad: true, desc: "wytrzymałość najwyżej " + Math.round(WOUND_CAP * 100) + "%, dopóki rana się nie zagoi (opatrunek leczy od razu)" }
     };
 
     const hasItem = id => !!$dataItems[id] && $gameParty.hasItem($dataItems[id], false);
@@ -139,6 +152,58 @@
     };
 
     // ------------------------------------------------------------------
+    // Wounds: a hit costs strength at once and leaves a wound that keeps the strength down until it heals or is dressed
+    // ------------------------------------------------------------------
+    Game_System.prototype.injure = function(loss, hours) {
+        if (loss > 0) this.changeStamina(-loss);
+        this.addBuff("wound", hours || WOUND_HOURS);
+    };
+    Game_System.prototype.isWounded = function() {
+        return this.hasBuff("wound");
+    };
+    Game_System.prototype.healWound = function() {
+        delete this.buffs().wound;
+    };
+    const _Game_System_stamina = Game_System.prototype.stamina;
+    Game_System.prototype.stamina = function() {
+        const s = _Game_System_stamina.call(this);
+        return this._buffs && this.isWounded() ? Math.min(s, Math.round(this.maxStamina() * WOUND_CAP)) : s;
+    };
+
+    // ------------------------------------------------------------------
+    // Health: the hero's own HP (the leader of the party). A boar's charge takes a part of it (Hunting.js: hurt); it comes back
+    // slowly by itself - HEAL_PER_HOUR of the maximum an hour, not while wounded - and fully in a night's sleep (the beds call
+    // recoverAll); a bandage heals BANDAGE_HEAL of it. At 0 the engine's own check ends the game (Scene_Map.checkGameover).
+    // ------------------------------------------------------------------
+    const HEAL_PER_HOUR = 0.03, BANDAGE_HEAL = 0.2;
+    const hero = () => ($gameParty ? $gameParty.leader() : null);
+    Game_System.prototype.healthRatio = function() {
+        const a = hero();
+        return a && a.mhp > 0 ? a.hp / a.mhp : 1;
+    };
+    // takes `fraction` of the maximum HP (at least 1); true when that was the end
+    Game_System.prototype.hurt = function(fraction) {
+        const a = hero();
+        if (!a || a.isDead()) return false;
+        a.gainHp(-Math.max(1, Math.round(a.mhp * fraction)));
+        return a.hp <= 0;
+    };
+    Game_System.prototype.heal = function(fraction) {
+        const a = hero();
+        if (a && !a.isDead()) a.gainHp(Math.max(1, Math.round(a.mhp * fraction)));
+    };
+    // the slow healing, with the clock (whole HP only: the fractions wait in _healAcc)
+    const _advanceDayNight = Game_System.prototype.advanceDayNight;
+    Game_System.prototype.advanceDayNight = function(hours) {
+        _advanceDayNight.call(this, hours);
+        const a = hero();
+        if (!a || a.isDead() || !(hours > 0) || a.hp >= a.mhp || this.isWounded()) { this._healAcc = 0; return; }
+        this._healAcc = (this._healAcc || 0) + a.mhp * HEAL_PER_HOUR * hours;
+        const whole = Math.floor(this._healAcc);
+        if (whole > 0) { a.gainHp(whole); this._healAcc -= whole; }
+    };
+
+    // ------------------------------------------------------------------
     // Food and butchering: items used from the menu
     // ------------------------------------------------------------------
     function foodInfo(item) {
@@ -152,10 +217,12 @@
         return info;
     }
     const isButcher = item => !!(item && item.meta && item.meta.Butcher);
+    const isBandage = item => !!(item && item.meta && item.meta.Bandage);
     const needs = item => (item && item.meta && typeof item.meta.Need === "string" ? item.meta.Need.split(",").map(Number) : []);
-    const isSurvivalItem = item => !!item && DataManager.isItem(item) && (!!foodInfo(item) || isButcher(item));
+    const isSurvivalItem = item => !!item && DataManager.isItem(item) && (!!foodInfo(item) || isButcher(item) || isBandage(item));
 
     function survivalCanUse(item) {
+        if (isBandage(item)) return $gameSystem.isWounded();   // a bandage is for a wound
         const need = needs(item);
         if (need.length > 0 && !need.some(id => hasItem(id))) return false;
         const food = foodInfo(item);
@@ -175,6 +242,7 @@
     // Why survivalCanUse just refused this item - shown only when the player actually tries to pick a
     // disabled item (see the playBuzzerSound hook below), never during list drawing.
     function whyCanNotUse(item) {
+        if (isBandage(item)) return "Nie jesteś ranny";
         const need = needs(item);
         if (need.length > 0 && !need.some(id => hasItem(id))) {
             const req = $dataItems[need[0]];
@@ -231,9 +299,16 @@
         feedback(item.iconIndex, "Zjadłeś: " + item.name + (parts.length ? ". " + parts.join(", ") + "." : "."));
     }
 
+    const FEATHERS = 146;
     function butcher(item) {
         const iron = hasItem(ITEM.knifeIron), meat = 2 + (iron ? 1 : 0);
         if (window.Durability) Durability.use(iron ? ITEM.knifeIron : ITEM.knifeStone);
+        if (item.meta.Butcher === "bird") {   // <Butcher:bird> (Birds.js): plucked and dressed - a little meat and the feathers
+            $gameParty.gainItem($dataItems[ITEM.rawMeat], 1);
+            $gameParty.gainItem($dataItems[FEATHERS], 3);
+            feedback(item.iconIndex, "Oskubano: mięso ×1, pióra ×3.");
+            return;
+        }
         $gameParty.gainItem($dataItems[ITEM.rawMeat], meat);
         $gameParty.gainItem($dataItems[ITEM.rawHide], 1);
         feedback(item.iconIndex, "Oprawiono: mięso ×" + meat + ", skóra ×1.");
@@ -246,6 +321,12 @@
         const food = foodInfo(item);
         if (food) eat(item, food);
         if (isButcher(item)) butcher(item);
+        if (isBandage(item)) {
+            $gameSystem.healWound();
+            $gameSystem.changeStamina(10);
+            $gameSystem.heal(BANDAGE_HEAL);
+            feedback(item.iconIndex, "Opatrzono ranę: krew przestała płynąć, zdrowie i siły wracają.");
+        }
     };
 
     // ------------------------------------------------------------------
@@ -418,22 +499,40 @@
     Sprite_BuffIcons.prototype.constructor = Sprite_BuffIcons;
 
     Sprite_BuffIcons.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this, new Bitmap(200, 30));
+        Sprite.prototype.initialize.call(this, new Bitmap(230, HUD().row));
         this._iconSet = ImageManager.loadSystem("IconSet");
         this._key = null;
         this._coldWas = false;
     };
 
-    // one bar: how much of the carry-weight budget is used up (the backpack icon, then a single gauge)
+    // The rows under the stamina one (SurvivalHUD.js): sizes from UITheme.js's UIStyle.HUD, symbols on its small plates
+    const HUD = () => (window.UIStyle && UIStyle.HUD) || { row: 20, step: 23, gap: 6, barW: 112, barH: 8 };
+    function hudRowY(hud, i) {
+        return hud.rowY ? hud.rowY(i) : hud._gauge.y + i * HUD().step;
+    }
+    function hudSymbol(bmp, sheet, kind, idx, x, fill) {   // (without UITheme.js: the IconSet icon instead)
+        const s = HUD().row;
+        if (window.UIStyle) UIStyle.chip(bmp.context, kind, x, 0, s, fill);
+        else if (idx) bmp.blt(sheet, (idx % 16) * 32, Math.floor(idx / 16) * 32, 32, 32, x, 0, s, s);
+    }
+    function hudText(bmp, text, x, w, colour) {
+        bmp.fontSize = 15;
+        bmp.textColor = colour;
+        bmp.outlineColor = "rgba(0,0,0,0.9)";
+        bmp.outlineWidth = 3;
+        bmp.drawText(text, x, 0, w, HUD().row, "left");
+    }
+
+    // one row: the load as a number next to the kettlebell, "carried / what you can carry" - no bar; amber when heavy, red when full
     function Sprite_WeightBar() {
         this.initialize(...arguments);
     }
     Sprite_WeightBar.prototype = Object.create(Sprite.prototype);
     Sprite_WeightBar.prototype.constructor = Sprite_WeightBar;
-    Sprite_WeightBar.HEIGHT = 22;
+    Sprite_WeightBar.HEIGHT = HUD().step;
     const WEIGHT_ICON = 370;   // the backpack's own icon
     Sprite_WeightBar.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this, new Bitmap(150, Sprite_WeightBar.HEIGHT));
+        Sprite.prototype.initialize.call(this, new Bitmap(150, HUD().row));
         this._iconSet = ImageManager.loadSystem("IconSet");
         this._key = "";
     };
@@ -442,34 +541,19 @@
         const hud = this.parent;
         if (hud && hud._gauge) {
             this.x = hud._gauge.x;
-            this.y = hud._gauge.y + 36 + (window.Needs && Needs.enabled() ? Needs.HEIGHT : 0);
+            this.y = hudRowY(hud, 1 + (window.Needs && Needs.enabled() ? 2 : 0));   // under the hunger and thirst rows
             this.visible = hud._gauge.visible;
         }
-        if (!this._iconSet.isReady()) return;
+        if (!window.UIStyle && !this._iconSet.isReady()) return;
         const carried = Math.round(carriedWeight()), cap = weightCap();
         const key = carried + "/" + cap;
         if (key === this._key) return;
         this._key = key;
-        const bmp = this.bitmap, ctx = bmp.context;
+        const bmp = this.bitmap;
         bmp.clear();
-        bmp.blt(this._iconSet, (WEIGHT_ICON % 16) * 32, Math.floor(WEIGHT_ICON / 16) * 32, 32, 32, 6, 0, 20, 20);
-        const bx = 32, bw = 78, bh = 9, by = 6;
-        ctx.fillStyle = "#1a100a"; ctx.fillRect(bx - 1, by - 1, bw + 2, bh + 2);
-        ctx.fillStyle = "#a67c3a"; ctx.fillRect(bx - 1, by - 1, bw + 2, 1); ctx.fillRect(bx - 1, by + bh, bw + 2, 1);
-        ctx.fillStyle = "#3a2616"; ctx.fillRect(bx, by, bw, bh);
-        const full = Math.min(1, carried / Math.max(1, cap)), w = Math.round(bw * full);
-        if (w > 0) {
-            const g = ctx.createLinearGradient(0, by, 0, by + bh);
-            const c = full >= 0.95 ? "#c2372b" : full >= 0.75 ? "#c98a2c" : "#8fae4a";
-            g.addColorStop(0, c); g.addColorStop(1, "rgba(0,0,0,0.35)");
-            ctx.fillStyle = c; ctx.fillRect(bx, by, w, bh);
-            ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.fillRect(bx, by, w, 2);
-        }
-        bmp.fontSize = 13;
-        bmp.textColor = "#f6e7c4";
-        bmp.outlineColor = "rgba(20,10,4,0.9)";
-        bmp.outlineWidth = 3;
-        bmp.drawText(carried + "/" + cap, bx + bw + 6, -3, 60, 20, "left");
+        hudSymbol(bmp, this._iconSet, "weight", WEIGHT_ICON, 0);
+        const full = carried / Math.max(1, cap);
+        hudText(bmp, carried + " / " + cap, HUD().row + 6, 120, full >= 0.95 ? "#ff5a4f" : full >= 0.75 ? "#ffb347" : "#eceef0");
         bmp._baseTexture.update();
     };
     const _Scene_Map_createSurvivalHud2 = Scene_Map.prototype.createSurvivalHud;
@@ -486,7 +570,7 @@
         const hud = this.parent;
         if (hud && hud._gauge) {
             this.x = hud._gauge.x;
-            this.y = hud._gauge.y + 36 + (window.Needs && Needs.enabled() ? Needs.HEIGHT : 0) + Sprite_WeightBar.HEIGHT;   // under the hunger/thirst bars and the weight bar
+            this.y = hudRowY(hud, 2 + (window.Needs && Needs.enabled() ? 2 : 0));   // under the hunger/thirst rows and the load
             this.visible = hud._gauge.visible;
         }
         const list = $gameSystem.activeBuffs(), cold = $gameSystem.isCold();
@@ -495,28 +579,23 @@
             $gameTemp.pushLootPopup(0, "Zimno! Płaszcz, ognisko albo ciepły posiłek pomoże", "#bcd8ff");
         }
         this._coldWas = cold;
-        if (key === this._key || !this._iconSet.isReady()) return;
+        if (key === this._key || (!window.UIStyle && !this._iconSet.isReady())) return;
         this._key = key;
+        // one row of symbols in the style of the ones above: each premium with the hours it has left, then the cold
         const bmp = this.bitmap;
         bmp.clear();
         let x = 0;
         for (const b of list) {
-            const idx = BUFFS[b.name].icon;
-            bmp.blt(this._iconSet, (idx % 16) * 32, Math.floor(idx / 16) * 32, 32, 32, x, 2, 26, 26);
-            bmp.fontSize = 13;
-            bmp.textColor = "#fff8e6";
-            bmp.outlineColor = "rgba(20,10,4,0.95)";
-            bmp.outlineWidth = 4;
-            bmp.drawText(Math.ceil(b.left) + "h", x + 20, 12, 30, 20, "left");
-            x += 56;
+            const bad = !!BUFFS[b.name].bad;   // a wound: red
+            hudSymbol(bmp, this._iconSet, b.name, BUFFS[b.name].icon, x, bad ? "#ff6a52" : undefined);
+            hudText(bmp, Math.ceil(b.left) + " h", x + HUD().row + 5, 40, bad ? "#ff9f8f" : "#eceef0");
+            x += 64;
         }
         if (cold) {
-            bmp.fontSize = 15;
-            bmp.textColor = "#bfe0ff";
-            bmp.outlineColor = "rgba(10,20,40,0.95)";
-            bmp.outlineWidth = 4;
-            bmp.drawText("Zimno!", x, 2, 80, 26, "left");
+            hudSymbol(bmp, this._iconSet, "cold", 0, x, "#bfe0ff");
+            hudText(bmp, "Zimno!", x + (window.UIStyle ? HUD().row + 5 : 0), 70, "#bfe0ff");
         }
+        bmp._baseTexture.update();
     };
 
     const _Scene_Map_createSurvivalHud = Scene_Map.prototype.createSurvivalHud;
@@ -528,5 +607,6 @@
         }
     };
 
-    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight() };
+    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight(),
+        WOUND_CAP, WOUND_HOURS, HEAL_PER_HOUR, BANDAGE_HEAL };
 })();

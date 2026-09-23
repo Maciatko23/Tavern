@@ -29,7 +29,7 @@ const OUT = __dirname + "/";
         const sawmill = await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)");
         check("the sawmill only saws: planks, and planks with the real saw (tools moved to the workbench)", sawmill.join() === "planks,planks_saw", sawmill);
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
-        check("the hand recipes: hammer, forest bed, waterskin and rope (the other tools are made at the workbench)", hand.join() === "hammer,bough_bed,waterskin,rope", hand);
+        check("the hand recipes: hammer, forest bed, waterskin, rope, pine seeds, bandage, nettle fibre (the other tools are made at the workbench)", hand.join() === "hammer,bough_bed,waterskin,rope,pine_seeds,bandage,nettle_fiber", hand);
 
         // ---- the plot menu has ONE short entry, the list opens through the real UI
         let list = await names("24, 16");
@@ -42,10 +42,12 @@ const OUT = __dirname + "/";
         await press("ok"); await frames(20);
         check("OK opens the hand menu with its own title", (await ev("SceneManager._scene._farmMenu._title")) === "Wytwarzanie ręczne");
         list = await menuNames();
-        check("it lists everything makeable by hand, all dimmed without materials, plus 'Wróć'", list.length === 5 && list.slice(0, 4).every(n => n.endsWith("(x)")) && list[4] === "Wróć", list);
+        const HAND = await ev("Farming.HAND_RECIPES.length");
+        check("it lists everything makeable by hand, all dimmed without materials, plus 'Wróć'", list.length === HAND + 1 && list.slice(0, HAND).every(n => n.endsWith("(x)")) && list[HAND] === "Wróć", list);
         await b.shot(OUT + "hm_hand.png");
         // Wróć goes back to the plot menu
-        await press("down"); await press("down"); await press("down"); await press("down"); await frames(14);
+        for (let i = 0; i < HAND; i++) await press("down");
+        await frames(14);
         await press("ok"); await frames(20);
         check("'Wróć' returns to the plot menu", (await ev("SceneManager._scene._farmMenu._title")) !== "Wytwarzanie ręczne" && (await menuNames()).includes("Wytwórz..."));
         await press("cancel"); await frames(10);
@@ -118,7 +120,7 @@ const OUT = __dirname + "/";
         await frames(40);
         check("journal: the hammer goal is done", await ev("Journal.goalDone(Journal.GOALS.find(g => g.id === 'hammer'))"));
         const rec = await ev("Journal.allRecipes().filter(e => e.type === 'hand').map(e => e.r.name)");
-        check("journal: the recipes tab lists the four hand recipes under 'Bez budynku'", rec.length === 4, rec);
+        check("journal: the recipes tab lists every hand recipe under 'Bez budynku'", rec.length === (await ev("Farming.HAND_RECIPES.length")), rec);
         const src = await ev("Journal.sourceLines(93)");
         check("journal: the rope's source mentions hand crafting", src.some(t => /Wytwórz/.test(t)), src);
     } catch (e) { console.log("ERR", e.message); }

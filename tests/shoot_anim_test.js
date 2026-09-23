@@ -50,7 +50,7 @@ const { launch, sleep } = require("./cdp.js");
         await frames(1);
         check("F starts a swing, not an instant shot: the player is busy, no stone has left yet",
             (await swinging()) && (await ev("Hunting.projectiles.length")) === 0 && (await ev("$gamePlayer.canMove()")) === false && (await ev("$gamePlayer._swingEvent._swingKind")) === 9);
-        check("the stone and the stamina are spent at once", (await count(64)) === stones0 - 1 && (await ev("$gameSystem.stamina()")) === st0 - 2);
+        check("aiming costs nothing yet: the stone and the stamina are spent when the stone leaves", (await count(64)) === stones0 && (await ev("$gameSystem.stamina()")) === st0);
         // time the release
         let leftAt = -1, started = await ev("Graphics.frameCount");
         let sawBody = false;
@@ -62,6 +62,7 @@ const { launch, sleep } = require("./cdp.js");
         }
         const endedAt = (await ev("Graphics.frameCount")) - started;
         check("the sling whirls and the stone leaves on the release frame (~40 game frames into the swing)", leftAt >= 34 && leftAt <= 48, { leftAt });
+        check("...and then one stone and 2 stamina are spent", (await count(64)) === stones0 - 1 && (await ev("$gameSystem.stamina()")) === st0 - 2, { stones: await count(64), stones0 });
         check("the whole swing lasts ~60 frames, then the player can move again", endedAt >= 54 && endedAt <= 72 && (await ev("$gamePlayer.canMove()")) === true, { endedAt });
         check("the swing sheet (not the walking sprite) was drawn", sawBody);
         await frames(60);
@@ -107,7 +108,7 @@ const { launch, sleep } = require("./cdp.js");
         const a0 = await count(127);
         await press("shoot");
         await frames(1);
-        check("bow: kind 10, an arrow is used, nothing has left yet", (await ev("$gamePlayer._swingEvent._swingKind")) === 10 && (await count(127)) === a0 - 1 && (await ev("Hunting.projectiles.length")) === 0);
+        check("bow: kind 10, nothing has left yet (the arrow is used when it flies)", (await ev("$gamePlayer._swingEvent._swingKind")) === 10 && (await count(127)) === a0 && (await ev("Hunting.projectiles.length")) === 0);
         await frames(14);
         await b.shot("shoot_bow_draw.png");
         let bowLeft = -1;
@@ -116,7 +117,7 @@ const { launch, sleep } = require("./cdp.js");
             if (bowLeft < 0 && (await ev("Hunting.projectiles.length")) > 0) bowLeft = await ev("$gamePlayer._swingEvent ? $gamePlayer._swingEvent._swingT : -1");
             if (!(await swinging())) break;
         }
-        check("the arrow leaves when the string is let go (~36 game frames into the swing)", bowLeft >= 30 && bowLeft <= 46, { bowLeft });
+        check("the arrow leaves when the string is let go (~36 game frames into the swing)", bowLeft >= 30 && bowLeft <= 46 && (await count(127)) === a0 - 1, { bowLeft, arrows: await count(127) });
         while (await swinging()) await frames(2);
         await frames(50);   // the cooldown of the last shot
         for (const d of [2, 4, 6, 8]) {

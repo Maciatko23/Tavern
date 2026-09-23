@@ -37,7 +37,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const st0 = await ev("Needs.state()");
         check("a new game starts at about 90 / 90", near(st0.food, 90, 1) && near(st0.water, 90, 1), st0);
         const hud = await ev("(function(){ const s = SceneManager._scene; const bars = s._needsBars; const buffs = s._buffIcons; return { bars: !!bars && !!bars.parent, dy: bars && buffs ? Math.round(buffs.y - bars.y) : null, visible: !!bars && bars.visible }; })()");
-        check("two bars sit under the stamina gauge, the weight bar under those, and the buff icons moved below all three", hud.bars && hud.visible && hud.dy === 64, hud);
+        check("two bars sit under the stamina gauge, the load under those, and the buff icons one row below that", hud.bars && hud.visible && hud.dy === 3 * 23, hud);   // (UIStyle.HUD.step)
 
         // ================= 2. the meters run down =================
         await set(100, 100);

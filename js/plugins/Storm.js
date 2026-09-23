@@ -36,8 +36,10 @@
  *   Bliski piorun w czasie ulewy może (30%) trafić w stojące drzewo na ekranie - najwyżej dwa drzewa
  *   jednego dnia burzy, nigdy owocowe ani tuż obok gracza. Zygzak kończy się na koronie, sypią się
  *   iskry i spalone liście, dymek "Piorun trafił w drzewo!". Drzewo zostaje zwęglone (ChoppableTree.js:
- *   czarne, kruche, daje węgiel drzewny zamiast drewna) i przez godzinę gry się tli: z korony idzie
- *   dym, w nocy żarzy się.
+ *   czarne, kruche, daje węgiel drzewny zamiast drewna). Najpierw pas ognia schodzi od czubka do
+ *   ziemi (ok. 0,2 godziny gry) i bucha z niego gęsty, ciemny dym. Potem drzewo przez 30 minut gry
+ *   mieni się żarem, a z żarzących się miejsc snuje się jaśniejszy dym: z początku dużo, pod koniec
+ *   cienka smużka. Dym unosi się, rozlewa i odpływa z wiatrem; w nocy żar lekko rozjaśnia mrok.
  *
  * DLA INNYCH WTYCZEK (window.Storm)
  *   level()  siła burzy teraz (0..1, niebo - także pod dachem)
@@ -105,7 +107,10 @@
     }
     // ---- lightning hitting a tree (ChoppableTree.js chars it: charcoal instead of wood). Only a close strike while the
     // storm rages, only a tree on the screen (not right next to the player), at most TREES_PER_STORM a day.
-    const TREE_CHANCE = 0.3, TREES_PER_STORM = 2, SMOULDER_HOURS = 1;
+    const TREE_CHANCE = 0.3, TREES_PER_STORM = 2;
+    // how long a struck tree burns down (the band of embers from the tip to the foot) and smoulders in all: ChoppableTree.js's numbers
+    const burnHours = () => (window.ChoppableTree && ChoppableTree.EMBER_FRONT) || 0.2;
+    const smoulderHours = () => (window.ChoppableTree && ChoppableTree.EMBER_LIFE) || 0.7;
     const hoursNow = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
     function treesHitToday() {
         const s = $gameSystem._stormTrees;
@@ -319,22 +324,37 @@
         });
     };
 
-    // ---- a struck tree smoulders for SMOULDER_HOURS: smoke from its crown, blown with the wind (under the night layer). The embers
-    // glowing in the tree pixel by pixel are ChoppableTree.js's (they read the same store). $gameSystem._smoulder = { "mapId:eventId": hour it was hit }
-    let smokeBmp = null;
-    function smokeBitmap() {
-        if (smokeBmp) return smokeBmp;
-        smokeBmp = new Bitmap(24, 24);
-        const ctx = smokeBmp.context, g = ctx.createRadialGradient(12, 12, 0, 12, 12, 12);
-        g.addColorStop(0, "rgba(96,92,88,0.75)");
-        g.addColorStop(0.6, "rgba(84,80,76,0.35)");
-        g.addColorStop(1, "rgba(80,76,72,0)");
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 24, 24);
-        smokeBmp._baseTexture.update();
-        return smokeBmp;
+    // ---- a struck tree smokes while it burns and smoulders. Pixel-art puffs (2 px cells, like the chimneys' smoke) rise from where
+    // its embers glow at the moment (ChoppableTree.emberSpots): while the band of fire creeps down the tree, thick dark smoke streams
+    // up from it; then, for the half hour the embers left in it smoulder, paler smoke rises in a few thin columns from glowing
+    // spots (each column goes out after a while and another starts elsewhere) - five at first, a single wisp as the last embers die.
+    // A puff is small and faint where it leaves the tree and grows denser and wider as it climbs. Every puff keeps its place on the
+    // map (it scrolls with it), slows and spreads as it climbs, sways more the higher it gets, and the wind carries it off. Under the
+    // night layer, so the dark covers it too. $gameSystem._smoulder = { "mapId:eventId": hour it was hit }
+    const SMOKE_TONES = { dark: ["#8a8480", "#6a6561", "#4e4a47"], pale: ["#cfd1d4", "#adb0b5", "#8b8f95"] };
+    const SMOKE_KINDS = 4, MAX_PUFFS = 120;
+    const smokeCache = {};
+    function smokeBitmap(tone, v) {
+        const key = tone + v;
+        if (smokeCache[key]) return smokeCache[key];
+        const S = 24, bmp = new Bitmap(S, S), ctx = bmp.context;
+        let seed = v * 7919 + (tone === "dark" ? 131 : 17);
+        const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+        // a few overlapping round lumps, cut into 2 px cells: light towards the upper left, darker underneath, a dithered rim
+        const lumps = [[12, 13, 6]];
+        for (let i = 0; i < 4; i++) lumps.push([12 + (r() - 0.5) * 9, 12 + (r() - 0.5) * 7, 2.5 + r() * 3]);
+        const [light, mid, dark] = SMOKE_TONES[tone];
+        for (let py = 0; py < S; py += 2) {
+            for (let px = 0; px < S; px += 2) {
+                const cx = px + 1, cy = py + 1, d = Math.min(...lumps.map(([x, y, rr]) => Math.hypot(cx - x, cy - y) - rr));
+                if (d > 0 || (d > -1.6 && (px + py) % 4 === 0)) continue;
+                ctx.fillStyle = cx + cy < 21 ? light : cx + cy > 27 ? dark : mid;
+                ctx.fillRect(px, py, 2, 2);
+            }
+        }
+        bmp._baseTexture.update();
+        return (smokeCache[key] = bmp);
     }
-    const PUFFS = 6, PUFF_FRAMES = 150;
     function Sprite_Smoulder() {
         this.initialize(...arguments);
     }
@@ -344,16 +364,9 @@
         Sprite.prototype.initialize.call(this);
         this._entries = {};
     };
+    // one struck tree: its puffs (parts: the particles, puffs: their sprites), how much is due to come out (acc), fade when it stops
     Sprite_Smoulder.prototype.entry = function(key) {
-        if (this._entries[key]) return this._entries[key];
-        const puffs = [];
-        for (let i = 0; i < PUFFS; i++) {
-            const p = new Sprite(smokeBitmap());
-            p.anchor.set(0.5, 0.5);
-            this.addChild(p);
-            puffs.push(p);
-        }
-        return (this._entries[key] = { puffs });
+        return this._entries[key] || (this._entries[key] = { parts: [], puffs: [], vents: [], acc: 0, fade: 1, event: null });
     };
     Sprite_Smoulder.prototype.drop = function(key) {
         const e = this._entries[key];
@@ -361,26 +374,83 @@
         for (const p of e.puffs) this.removeChild(p);
         delete this._entries[key];
     };
+    // a glowing pixel of the tree now (or, before the embers are drawn, a place in its crown), relative to the foot of the tree
+    function emberSpot(event) {
+        const spots = window.ChoppableTree && ChoppableTree.emberSpots ? ChoppableTree.emberSpots(spriteOf(event)) : [];
+        if (spots.length) {
+            const s = spots[Math.floor(Math.random() * spots.length)];
+            return { dx: s.x - event.screenX(), dy: s.y - event.screenY() };
+        }
+        const c = crownOf(event);
+        return { dx: c.x - event.screenX() + rand(-10, 10), dy: c.y - event.screenY() + rand(-6, 30) };
+    }
+    // a new puff: while it burns, from the band of fire (a glowing pixel, anywhere along it); while it smoulders, from one of its columns
+    Sprite_Smoulder.prototype.spawn = function(e, burning, strength) {
+        const from = burning || !e.vents.length ? emberSpot(e.event) : e.vents[Math.floor(Math.random() * e.vents.length)];
+        let q = e.parts.find(p => !p.alive);
+        if (!q) {
+            if (e.parts.length >= MAX_PUFFS) return;
+            const spr = new Sprite();
+            spr.anchor.set(0.5, 0.5);
+            this.addChild(spr);
+            q = { spr };
+            e.parts.push(q);
+            e.puffs.push(spr);
+        }
+        const tone = (Math.random() < 0.8) === burning ? "dark" : "pale";   // mostly dark while it burns, mostly pale while it smoulders
+        q.spr.bitmap = smokeBitmap(tone, Math.floor(Math.random() * SMOKE_KINDS));
+        q.spr.visible = true;
+        Object.assign(q, { alive: true, t: 0, life: burning ? rand(110, 170) : rand(220, 320), dx: from.dx + rand(-2, 2), dy: from.dy - (burning ? 6 : 2),
+            vy: burning ? -rand(1.3, 1.8) : -rand(0.8, 1.1), vx: rand(-0.08, 0.08), s0: burning ? rand(0.45, 0.7) : rand(0.3, 0.45), s1: burning ? rand(2.6, 3.4) : rand(2.2, 3),
+            a: burning ? 0.95 : 0.9 * (0.45 + 0.55 * strength), ph: Math.random() * 6.28, sw: rand(0.12, 0.3), ramp: burning ? 0.22 : 0.28 });
+    };
+    // the puffs in the air: up, slower as they spread, swaying, carried off by the wind, fading
+    Sprite_Smoulder.prototype.drift = function(e) {
+        if (!e.event) return;
+        const fx = e.event.screenX(), fy = e.event.screenY(), W = state.wind;
+        for (const q of e.parts) {
+            if (!q.alive) continue;
+            const k = ++q.t / q.life;
+            if (k >= 1) { q.alive = false; q.spr.visible = false; q.spr.alpha = 0; continue; }
+            q.dx += q.vx + Math.sin(q.ph + q.t * 0.05) * q.sw * Math.min(1, k * 3) * (1 - 0.5 * W) + (0.1 + 1.3 * W) * Math.min(1, k * 2);
+            q.dy += q.vy * (1 - 0.55 * k) * (1 - 0.45 * W);
+            q.spr.x = Math.round(fx + q.dx);
+            q.spr.y = Math.round(fy + q.dy);
+            const sc = q.s0 + (q.s1 - q.s0) * Math.sqrt(k);
+            q.spr.scale.set(sc, sc);
+            q.spr.alpha = q.a * Math.min(1, k / q.ramp) * Math.pow(1 - k, 1.3) * e.fade;   // faint where it leaves the tree
+        }
+    };
     Sprite_Smoulder.prototype.update = function() {
         Sprite.prototype.update.call(this);
         const store = ($gameSystem && $gameSystem._smoulder) || {}, now = hoursNow(), mapId = $gameMap.mapId();
-        const live = {};
+        const front = burnHours(), life = smoulderHours(), live = {};
         for (const key of Object.keys(store)) {
             const age = now - store[key];
-            if (age > SMOULDER_HOURS || age < 0) { delete store[key]; continue; }
+            if (age > life || age < 0) { delete store[key]; continue; }
             const [m, id] = key.split(":").map(Number), event = m === mapId ? $gameMap.event(id) : null;
             if (!event || !window.ChoppableTree || !ChoppableTree.isCharred(event) || $gameSelfSwitches.value([m, id, "A"])) continue;   // felled: it stops
             live[key] = true;
-            const e = this.entry(key), c = crownOf(event), strength = 1 - age / SMOULDER_HOURS, W = state.wind;
-            e.puffs.forEach((p, i) => {
-                const t = ((state.t + i * (PUFF_FRAMES / PUFFS) + id * 17) % PUFF_FRAMES) / PUFF_FRAMES;
-                p.x = c.x + Math.sin(t * 5 + i * 1.9) * 4 * (1 - 0.5 * W) + t * (12 + 70 * W);
-                p.y = c.y + 14 - t * 60 * (1 - 0.5 * W);
-                p.alpha = Math.min(1, t / 0.15) * (1 - t) * 0.7 * (0.3 + 0.7 * strength);
-                p.scale.set(0.7 + t * 1.4, 0.7 + t * 1.4);
-            });
+            const e = this.entry(key), burning = age < front;
+            e.event = event;
+            e.fade = 1;
+            // (strength: 1 when the band reaches the foot, 0 when the last ember dies; the smoke thins faster than linearly at first)
+            const strength = burning ? 1 : clamp01(1 - (age - front) / (life - front));
+            if (burning) e.vents.length = 0;
+            else {   // the columns: 5 when the band has passed, 1 at the end; each goes out after a while and another starts elsewhere
+                const want = 1 + Math.round(4 * strength);
+                e.vents = e.vents.filter(v => v.until > state.t).slice(0, want);
+                while (e.vents.length < want) e.vents.push(Object.assign(emberSpot(event), { until: state.t + rand(180, 480) }));
+            }
+            e.acc += burning ? 0.5 : 0.08 + 0.3 * Math.pow(strength, 1.4);   // puffs a frame
+            while (e.acc >= 1) { e.acc--; this.spawn(e, burning, strength); }
         }
-        for (const key of Object.keys(this._entries)) if (!live[key]) this.drop(key);
+        for (const key of Object.keys(this._entries)) {
+            const e = this._entries[key];
+            if (!live[key]) e.fade = Math.max(0, e.fade - 1 / 30);   // felled, or burnt out: what is still in the air fades away
+            this.drift(e);
+            if (!live[key] && (e.fade === 0 || !e.parts.some(q => q.alive))) this.drop(key);
+        }
     };
 
     // ---- the flash over everything (a cold white light added to the picture) and the bolt

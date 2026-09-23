@@ -13,6 +13,8 @@
  * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran:
  *   - "+1 godzina" / "+1 dzień": przesuwa zegar gry (tak jak w Farming.js).
  *   - "Burza teraz", "Piorun tuż obok", "Piorun w drzewo", "Koniec pogody na dziś": pogoda (Survival.js / Storm.js).
+ *   - "Stadko ptaków na ziemi", "Nalot ptaków na pole": ptaki (Birds.js) - nalot tylko, gdy na mapie coś rośnie
+ *     poza zasięgiem stracha na wróble.
  *   - lista wszystkich przedmiotów: strzałki w lewo/prawo zmieniają ilość
  *     przy podświetlonej pozycji, OK dodaje ją do plecaka.
  * Esc zamyka. Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
@@ -56,6 +58,11 @@
                 { kind: "treestrike", label: "Piorun w drzewo (na ekranie)", icon: 66 },
                 { kind: "calm", label: "Koniec pogody na dziś", icon: 70 });
         }
+        if (window.Birds) {   // the birds (Birds.js): a flock landing near the player, a raid on the sown fields
+            this._rows.push({ kind: "birds", label: "Stadko ptaków na ziemi", icon: 407 },
+                { kind: "raid", label: "Nalot ptaków na pole", icon: 408 });
+        }
+        if (window.Hunting && Hunting.SPECIES.boar) this._rows.push({ kind: "boar", label: "Dzik w pobliżu", icon: 416 });   // Hunting.js: one boar a few tiles away
         for (const item of $dataItems) {
             if (item && item.name) this._rows.push({ kind: "item", item, qty: 1 });
         }
@@ -134,6 +141,12 @@
             if (row.kind === "storm") Survival.forceStorm(2);
             else Survival.calmWeather();
             this.popScene();   // back to the map to watch it
+        } else if (row.kind === "birds" || row.kind === "raid") {
+            this.popScene();   // started once the map is back (Birds.js needs its sprites)
+            Birds.pending = row.kind;
+        } else if (row.kind === "boar") {
+            this.popScene();   // spawned once the map is back
+            Hunting.pending = "boar";
         } else if (row.kind === "strike" || row.kind === "treestrike") {
             // struck once the map runs again (Storm.js)
             if (window.Storm) Storm.pending.push(row.kind === "treestrike" ? { tree: true } : {});

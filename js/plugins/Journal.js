@@ -203,9 +203,9 @@
         { id: "rope", ch: 4, title: "Skręć linę", item: 93, recipe: ["hand", "rope"], after: ["flax"], done: () => has(93),
             text: "Cztery sztuki lnu dają jedną linę (menu ziemi, „Wytwórz...”). Lina potrzebna jest do pułapki, wędki, garbarni i studni." },
         { id: "snare", ch: 4, title: "Postaw pułapkę", item: 101, build: "snare", after: ["rope", "branches"], done: () => isBuilt("snare"),
-            text: "Zwierzyna wpada w pułapkę co kilka dni. Odbierasz ją przyciskiem akcji." },
+            text: "Sama pułapka nic nie złapie: załóż w niej przynętę (marchew, kapusta, dzikie jabłka, gruszki, jagody). Zając, który ją zwęszy, podejdzie i może wpaść. Odbierasz go przyciskiem akcji." },
         { id: "meat", ch: 4, title: "Zdobądź mięso", item: 94, after: ["snare", "knife"], done: () => has(94),
-            text: "Odbierz zwierzynę z pułapki, a potem użyj jej w menu Przedmioty (potrzebny nóż): dostaniesz mięso i skórę." },
+            text: "Odbierz zwierzynę z pułapki z przynętą (albo upoluj zająca), a potem użyj jej w menu Przedmioty (potrzebny nóż): dostaniesz mięso i skórę." },
         { id: "roast", ch: 4, title: "Upiecz posiłek na ognisku", item: 95, after: ["meat", "campfire"], done: () => hasAny([95, 99, 107, 108]),
             text: "Menu ogniska ma przepisy: mięso, ryba, ziemniaki i jajecznica. Siadasz z jedzeniem na patyku i czekasz, aż się upiecze (mięso i ryba pół godziny gry). Jeśli wstaniesz wcześniej (Esc albo ruch), nic się nie upiecze." },
         { id: "tripod", ch: 4, title: "Dobuduj trójnóg do ogniska", item: 77, after: ["roast", "rope"], done: () => isBuilt("tripod") || isBuilt("cauldron"),
@@ -236,6 +236,12 @@
             text: "Proca (albo łuk ze strzałami) pozwala polować na zające i jelenie. Strzelasz klawiszem F, a amunicją do procy są kamienie." },
         { id: "hunt", ch: 4, title: "Upoluj zwierzynę", item: 101, after: ["sling", "knife"], done: () => { const k = (($gameSystem._hunt || {}).kills) || {}; return (k.rabbit || 0) + (k.deer || 0) > 0; },
             text: "Zające pasą się na łące w ciągu dnia i uciekają, gdy podejdziesz. Strzel do nich z daleka klawiszem F: proca kręci się nad głową i wyrzuca kamień, łuk naciąga cięciwę i puszcza strzałę. Zwierzynę oprawisz nożem w menu Przedmioty: mięso i skóra." },
+        { id: "spear", ch: 4, title: "Zrób oszczep", item: 154, recipe: ["workbench", "spear"], after: ["sling"], done: () => has(154),
+            text: "Oszczep to broń z bliska: gdy zwierzę stoi najwyżej 2 pola przed tobą, F pchnie je grotem. Przyda się na dzika, który rano i wieczorem ryje w lesie i szarżuje, zamiast uciekać." },
+        { id: "boar", ch: 4, title: "Upoluj dzika", item: 101, after: ["spear"], done: () => ((($gameSystem._hunt || {}).kills) || {}).boar > 0,
+            text: "Dzik najpierw ostrzega (staje, prycha, \"!\"), potem szarżuje. Pchnij go oszczepem, gdy jest blisko: odskoczy, a drugie pchnięcie go powali. Jeśli cię dopadnie, zrani cię - opatrunek z krwawnika (\"Wytwórz...\") zatamuje krew." },
+        { id: "plant", ch: 4, title: "Posadź sosnę", item: 148, after: ["axe"], done: () => Object.values((($gameSystem._forest || {}).maps) || {}).some(list => list.length > 0),
+            text: "Pod sosnami leżą szyszki. W \"Wytwórz...\" wyłuskasz z nich nasiona, a w menu wolnej ziemi posadzisz sosnę. Przez 8 dni rośnie w pełne drzewo - tak odnowisz wycięty las." },
         { id: "pantry", ch: 4, title: "Zbuduj spiżarnię", item: 99, build: "pantry", after: ["planks", "meat"], done: () => isBuilt("pantry"),
             text: "Surowe mięso i ryby psują się w ciągu kilku dni (widać to w opisie). W spiżarni jedzenie starzeje się pięć razy wolniej. Zepsute jedzenie wrzucisz do kompostownika." },
         { id: "cowshed", ch: 4, title: "Zbuduj oborę", item: 123, build: "cowshed", after: ["nails"], done: () => isBuilt("cowshed"),
@@ -367,7 +373,7 @@
         122: "Psujące się jedzenie zamienia się w to. Kompostownik zamieni je w ziemię.",
         123: "Obora daje mleko co dzień. Mleko szybko kwaśnieje.",
         127: "Robisz je w warsztacie: gałązki, kamień na grot i len.",
-        101: "Wpada w pułapki. Oprawiasz nożem z menu Przedmioty.",
+        101: "Wpada w pułapkę z przynętą albo ją upolujesz. Oprawiasz nożem z menu Przedmioty.",
         94: "Oprawiona zwierzyna (nóż, menu Przedmioty).",
         96: "Oprawiona zwierzyna (nóż, menu Przedmioty).",
         102: "Dziko rosną na łące latem i jesienią.",
@@ -388,7 +394,7 @@
         for (const r of F.HAND_RECIPES || []) if (r.output[0] === id) lines.push("Wytwórz... (bez budynku): " + r.name);
         for (const def of Object.values(F.BUILDINGS)) {
             for (const r of def.recipes || []) if (r.output[0] === id) lines.push(def.name + ": " + r.name + (r.manual ? " (ręcznie)" : ""));
-            if (def.produce && def.produce.item === id) lines.push(def.name + ": co " + def.produce.period + " dn. (najwyżej " + def.produce.cap + ")");
+            if (def.produce && def.produce.item === id) lines.push(def.name + (def.lure ? ": z przynętą, gdy zając się skusi" : ": co " + def.produce.period + " dn. (najwyżej " + def.produce.cap + ")"));
         }
         for (const c of Object.values(F.CROPS)) {
             if (c.produce === id) lines.push("Uprawa: " + c.name + " (siew: " + c.seasons.map(s => F.SEASON_NAMES[s]).join(", ").toLowerCase() + "; wzrost " + c.days + " dn.)");
@@ -584,29 +590,23 @@
     }
 
     // ------------------------------------------------------------------
-    // Colors for the hand-drawn bits (checkbox marks, the goal tracker card)
-    // that don't go through Window_Base/ColorManager. UITheme.js (loaded
-    // before this file, dark-wood + brass theme) doesn't export a shared
-    // palette or color constants of its own - it just hand-paints a few
-    // literals in place (Scene_Title's gold title, the Needs.js gauge
-    // colors in drawSurvivalCard). So these are Journal's own constants,
-    // kept visually consistent with that palette: "outline" below is the
-    // exact literal UITheme.js uses for the same purpose (its title's
-    // text outline), the rest are Journal's existing wood/brass shades.
+    // Colors for the hand-drawn bits (checkbox marks, the goal tracker card) that don't go through
+    // Window_Base/ColorManager: the black-and-yellow look of the whole interface (UITheme.js's window.UIStyle,
+    // loaded before this file; the literals are only a fallback without it)
     // ------------------------------------------------------------------
+    const UI = window.UIStyle || {};
     const COLORS = {
-        outline: "rgba(14,8,4,0.95)",      // UITheme.js Scene_Title.drawGameTitle: bitmap.outlineColor
-        panelFill: "rgba(22,15,10,0.86)",
-        panelBorder: "rgba(166,124,58,0.9)",
-        trackerLabel: "#dcb460",
-        trackerTitle: "#f0e4c8",
-        trackerBody: "#b8ab94",
-        markDone: "#8fd06a",
-        markReady: "#e8c458",
-        markPin: "#e0b458",
-        markBorderLocked: "#5c4d38",
-        markBorderNormal: "#a67c3a",
-        markBoxFill: "rgba(20,14,10,0.9)"
+        outline: UI.outline || "rgba(0,0,0,0.9)",
+        panelFill: UI.fill || "rgba(11,12,15,0.9)",
+        trackerLabel: UI.accent || "#ffd23f",
+        trackerTitle: UI.text || "#eceef0",
+        trackerBody: "#a9afb8",
+        markDone: "#7ddc6a",
+        markReady: UI.accent || "#ffd23f",
+        markPin: "#ffe27a",
+        markBorderLocked: "#3a3e46",
+        markBorderNormal: "#6b717a",
+        markBoxFill: "rgba(11,12,15,0.9)"
     };
 
     // check boxes and markers drawn straight on the contents of a list row
@@ -772,7 +772,8 @@
         if (def.rest) facts.push("Odpoczynek: +" + def.rest + " wytrzymałości");
         if (def.water) facts.push("Napełnisz tu konewkę i napijesz się");
         if (def.slots) facts.push("Zmieści " + def.slots + " rodzajów przedmiotów");
-        if (def.produce) facts.push("Produkuje: " + dataItem(def.produce.item).name + " co " + def.produce.period + " dn. (najwyżej " + def.produce.cap + ")");
+        if (def.produce) facts.push(def.lure ? "Łapie: " + dataItem(def.produce.item).name + " - tylko z przynętą, gdy zając się skusi"
+            : "Produkuje: " + dataItem(def.produce.item).name + " co " + def.produce.period + " dn. (najwyżej " + def.produce.cap + ")");
         for (const f of facts) ops.push({ k: "muted", text: f, narrow: true });
         ops.push({ k: "gap", n: 6 }, { k: "h", text: "Koszt budowy" }, ...costRows(def.cost));
         if (def.recipes && def.recipes.length) {
@@ -930,19 +931,25 @@
     Scene_Journal.prototype.prepare = function(tab) {
         this._startTab = tab || 0;
     };
+    // where its windows go: the tabs, the list, the detail, the legend line (MenuPanel.js puts them in its panel)
+    Scene_Journal.prototype.journalRects = function() {
+        const top = this.mainAreaTop(), tabsH = this.calcWindowHeight(1, true), legendH = this.calcWindowHeight(1, false);
+        const bodyY = top + tabsH, bodyH = this.mainAreaHeight() - tabsH - legendH, listW = 470;
+        return { tabs: new Rectangle(0, top, Graphics.boxWidth, tabsH), list: new Rectangle(0, bodyY, listW, bodyH),
+            detail: new Rectangle(listW, bodyY, Graphics.boxWidth - listW, bodyH), legend: new Rectangle(0, bodyY + bodyH, Graphics.boxWidth, legendH) };
+    };
     Scene_Journal.prototype.create = function() {
         Scene_MenuBase.prototype.create.call(this);
         evaluateGoals();
-        const top = this.mainAreaTop(), tabsH = this.calcWindowHeight(1, true), legendH = this.calcWindowHeight(1, false);
-        const bodyY = top + tabsH, bodyH = this.mainAreaHeight() - tabsH - legendH, listW = 470;
-        this._tabs = new Window_Command(new Rectangle(0, top, Graphics.boxWidth, tabsH));
+        const R = this.journalRects();
+        this._tabs = new Window_Command(R.tabs);
         this._tabs.maxCols = () => TABS.length;
         this._tabs.makeCommandList = function() { TABS.forEach(t => this.addCommand(t, "tab")); };
         this._tabs.itemTextAlign = () => "center";
         this._tabs.refresh();
         this._tabs.deactivate();
         this.addWindow(this._tabs);
-        this._list = new Window_JournalList(new Rectangle(0, bodyY, listW, bodyH));
+        this._list = new Window_JournalList(R.list);
         this._list._onSelect = item => this._detail.setDetail(detailFor(this._tab, item));
         this._list._onTab = dir => this.changeTab(dir);
         this._list.setHandler("ok", this.onListOk.bind(this));
@@ -950,9 +957,9 @@
         this._list.setHandler("pagedown", () => { this.changeTab(1); });
         this._list.setHandler("pageup", () => { this.changeTab(-1); });
         this.addWindow(this._list);
-        this._detail = new Window_JournalDetail(new Rectangle(listW, bodyY, Graphics.boxWidth - listW, bodyH));
+        this._detail = new Window_JournalDetail(R.detail);
         this.addWindow(this._detail);
-        this._legend = new Window_Base(new Rectangle(0, bodyY + bodyH, Graphics.boxWidth, legendH));
+        this._legend = new Window_Base(R.legend);
         this.addWindow(this._legend);
         this._tab = Math.max(0, Math.min(TABS.length - 1, this._startTab || 0));
         this.showTab();
@@ -1002,7 +1009,8 @@
         if (!S || !S.weatherPlan) return null;
         const p = S.weatherPlan(day);
         if (!p) return "bezdeszczowo";
-        return (p.type === "snow" ? "śnieg" : "deszcz") + " od " + p.start + ":00 do " + p.end + ":00";
+        const hm = h => { const hh = Math.floor(h), mm = Math.round((h - hh) * 60); return hh + ":" + String(mm).padStart(2, "0"); };   // 21.75 -> "21:45"
+        return (p.storm ? "burza" : p.type === "snow" ? "śnieg" : "deszcz") + " od " + hm(p.start) + " do " + hm(p.end);
     }
     function fieldsReport() {
         const F = Farm();
@@ -1039,40 +1047,175 @@
         for (let k = 1; k <= 12; k++) if (F.seasonIndex(day + k) === 3) return cloak ? null : "Do zimy zostało " + k + " dn. Uszyj płaszcz (garbarnia).";
         return null;
     }
-    function summaryOps(s) {
-        const F = Farm(), next = s.day + 1, ops = [];
-        ops.push({ k: "title", text: "Dzień " + s.day + " zakończony", icon: 82 });
-        ops.push({ k: "sub", text: (F ? F.seasonOf(s.day) : "") + "  ·  zaczyna się dzień " + next });
-        ops.push({ k: "rule" });
-        let any = false;
-        if (s.goals.length) {
-            any = true;
-            ops.push({ k: "h", text: "Wykonane cele" });
-            for (const id of s.goals) { const g = goalById(id); if (g) ops.push({ k: "row", icon: goalIcon(g), text: g.title, color: 3 }); }
-        }
-        if (s.gained.length) {
-            any = true;
-            ops.push({ k: "h", text: "Zdobyte" }, { k: "icons", list: s.gained.map(([id, n]) => [iconOfItem(id), n]) });
-        }
-        if (s.built.length) { any = true; ops.push({ k: "h", text: "Zbudowano" }, { k: "p", text: s.built.join(", ") }); }
-        const misc = [];
-        if (s.eaten) misc.push("Posiłki: " + s.eaten);
-        if (s.gold) misc.push("Złoto: " + (s.gold > 0 ? "+" : "") + s.gold);
-        if (misc.length) { any = true; ops.push({ k: "muted", text: misc.join("   ·   ") }); }
-        if (!any) ops.push({ k: "muted", text: "Spokojny dzień. Nic szczególnego się nie wydarzyło." });
-        ops.push({ k: "gap", n: 6 }, { k: "rule" }, { k: "h", text: "Co czeka rano" });
+    // The summary: a heading across the top, a row of small plates with the day in numbers, then two columns - what the day
+    // brought (left) and what waits in the morning (right). Long lists are cut to what fits (fit: how many finished goals and how
+    // many rows of item icons; Window_DaySummary tries smaller ones until the whole summary fits on the screen), the rest is "+N".
+    const plural = (n, [one, few, many]) => n === 1 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? few : many;
+    function summaryOps(s, fit) {
+        fit = fit || { goals: 8, itemRows: 4 };
+        const F = Farm(), next = s.day + 1, left = [], right = [];
+        const head = { title: "Dzień " + s.day + " zakończony", sub: (F ? F.seasonOf(s.day) + "  ·  " : "") + "rano zaczyna się dzień " + next };
+        const total = s.gained.reduce((a, [, n]) => a + n, 0);
+        const stats = [
+            [s.goals.length, ["cel wykonany", "cele wykonane", "celów wykonanych"]],
+            [total, ["rzecz zdobyta", "rzeczy zdobyte", "rzeczy zdobytych"]],
+            [s.built.length, ["nowa budowla", "nowe budowle", "nowych budowli"]],
+            [s.eaten || 0, ["posiłek", "posiłki", "posiłków"]]
+        ].filter(([n]) => n > 0).map(([n, forms]) => ({ n: String(n), text: plural(n, forms) }));
+        if (s.gold) stats.push({ n: (s.gold > 0 ? "+" : "") + s.gold, text: "złota" });
+
+        left.push({ k: "col", text: "Dzisiaj" });
+        if (s.gained.length) left.push({ k: "h", text: "Zdobyte" }, { k: "icons", list: s.gained.map(([id, n]) => [iconOfItem(id), n]), maxRows: fit.itemRows });
+        if (s.built.length) left.push({ k: "h", text: "Zbudowano" }, { k: "row", text: s.built.join(", ") });
+        const goals = s.goals.map(id => goalById(id)).filter(Boolean).map(g => g.title);
+        if (goals.length) left.push({ k: "h", text: "Wykonane cele" }, { k: "goals", list: goals, max: fit.goals });
+        if (!stats.length) left.push({ k: "muted", text: "Spokojny dzień. Nic szczególnego się nie wydarzyło." });
+
+        right.push({ k: "col", text: "Co czeka rano" });
         const weather = forecastText(next);
-        if (weather) ops.push({ k: "row", icon: 0, text: "Pogoda: " + weather });
-        if (F && F.seasonIndex(next) !== F.seasonIndex(s.day)) ops.push({ k: "row", text: "Nowa pora roku: " + F.seasonOf(next), color: 6 });
+        if (weather) right.push({ k: "row", text: "Pogoda: " + weather });
+        if (F && F.seasonIndex(next) !== F.seasonIndex(s.day)) right.push({ k: "row", text: "Nowa pora roku: " + F.seasonOf(next), color: 6 });
         const fields = fieldsReport();
-        if (fields) ops.push({ k: "row", text: "Na polach: " + fields.ripe + " gotowych do zbioru, " + fields.growing + " rośnie", color: fields.ripe > 0 ? 3 : 0 });
-        for (const line of readyReport().slice(0, 5)) ops.push({ k: "row", text: "Do odebrania: " + line, color: 3 });
+        if (fields) right.push({ k: "row", text: "Na polach: " + fields.ripe + " gotowych do zbioru, " + fields.growing + " rośnie", color: fields.ripe > 0 ? 3 : 0 });
+        const ready = readyReport(), readyMax = Math.min(6, fit.goals);
+        if (ready.length) {
+            right.push({ k: "h", text: "Do odebrania" });
+            for (const line of ready.slice(0, readyMax)) right.push({ k: "row", text: line, color: 3 });
+            if (ready.length > readyMax) right.push({ k: "muted", text: "i jeszcze " + (ready.length - readyMax) });
+        }
         const warn = winterWarning(next);
-        if (warn) ops.push({ k: "row", text: warn, color: 10 });
+        if (warn) right.push({ k: "row", text: warn, color: 10 });
+        // how you are: strength, hunger and thirst (Needs.js), a wound (Survival.js)
+        const state = [];
+        if (typeof $gameSystem.stamina === "function") state.push("Siły: " + Math.round($gameSystem.stamina()) + "/" + $gameSystem.maxStamina());
+        if (window.Needs && Needs.enabled()) { const f = Needs.foodText(), w = Needs.waterText(); if (f) state.push(f); if (w) state.push(w); }
+        const wound = typeof $gameSystem.isWounded === "function" && $gameSystem.isWounded() ? $gameSystem.activeBuffs().find(b => b.name === "wound") : null;
+        right.push({ k: "h", text: "Ty" }, { k: "row", text: state.join("   ·   ") });
+        if (wound) right.push({ k: "row", text: "Rana: goi się jeszcze " + Math.ceil(wound.left) + " godz. (opatrunek leczy od razu)", color: 10 });
         const goal = currentGoal();
-        if (goal) ops.push({ k: "row", icon: goalIcon(goal), text: "Cel: " + goal.title, color: 16 });
-        ops.push({ k: "gap", n: 8 }, { k: "muted", text: "OK: zacznij nowy dzień" });
-        return ops;
+        if (goal) right.push({ k: "h", text: "Następny cel" }, { k: "row", icon: goalIcon(goal), text: goal.title, color: 16 });
+        return { head, stats, left, right };
+    }
+
+    // the summary's own compact drawing: small type, 24 px icons
+    const SUM = { title: 26, sub: 17, col: 19, head: 16, text: 18, muted: 16, line: 22, icon: 24, cell: 86, goal: 21 };
+    function smallIcon(win, icon, x, y) {
+        if (!icon) return;
+        const bmp = ImageManager.loadSystem("IconSet"), pw = ImageManager.iconWidth, ph = ImageManager.iconHeight;
+        win.contents.blt(bmp, (icon % 16) * pw, Math.floor(icon / 16) * ph, pw, ph, x, y, SUM.icon, SUM.icon);
+    }
+    function summaryLayout(win, ops, w) {
+        let y = 0;
+        for (const op of ops) {
+            op.y = y;
+            win.resetFontSettings();
+            if (op.k === "col") op.h = 32;
+            else if (op.k === "h") op.h = y === 32 ? 26 : 34;   // (a heading right under the column title needs less air)
+            else if (op.k === "row") { win.contents.fontSize = SUM.text; op.lines = wrapText(win, op.text, w - (op.icon ? SUM.icon + 8 : 0)); op.h = Math.max(SUM.icon + 2, op.lines.length * SUM.line + 4); }
+            else if (op.k === "muted") { win.contents.fontSize = SUM.muted; op.lines = wrapText(win, op.text, w); op.h = op.lines.length * 20 + 4; }
+            else if (op.k === "icons") {
+                op.per = Math.max(1, Math.floor(w / SUM.cell));
+                const cap = op.per * op.maxRows;
+                op.shown = op.list.length > cap ? op.list.slice(0, cap - 1) : op.list;   // (the last cell says how many more)
+                op.more = op.list.length - op.shown.length;
+                op.h = Math.ceil((op.shown.length + (op.more ? 1 : 0)) / op.per) * 28 + 2;
+            } else if (op.k === "goals") {   // names only, two to a row, with a green tick
+                op.shown = op.list.length > op.max ? op.list.slice(0, op.max) : op.list;
+                op.more = op.list.length - op.shown.length;
+                op.h = Math.ceil(op.shown.length / 2) * SUM.goal + (op.more ? 22 : 0) + 4;
+            } else if (op.k === "gap") op.h = op.n;
+            else op.h = 0;
+            y += op.h;
+        }
+        return y;
+    }
+    function drawTick(win, x, y) {
+        const ctx = win.contents.context;
+        ctx.save();
+        ctx.strokeStyle = "#7ddc6a";
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(x + 1, y + 7); ctx.lineTo(x + 5, y + 11); ctx.lineTo(x + 12, y + 2); ctx.stroke();
+        ctx.restore();
+        win.contents._baseTexture.update();
+    }
+    function summaryPaint(win, ops, x0, y0, w) {
+        const c = win.contents, accent = ColorManager.textColor(16);
+        for (const op of ops) {
+            win.resetFontSettings();
+            const y = y0 + op.y;
+            if (op.k === "col") {
+                c.fontSize = SUM.col;
+                win.changeTextColor(ColorManager.normalColor());
+                win.drawText(op.text.toUpperCase(), x0, y, w);
+                c.fillRect(x0, y + 28, 36, 2, accent);
+            } else if (op.k === "h") {
+                c.fontSize = SUM.head;
+                win.changeTextColor(accent);
+                win.drawText(op.text, x0, y + op.h - 30, w);
+            } else if (op.k === "row") {
+                let x = x0;
+                if (op.icon) { smallIcon(win, op.icon, x0, y + 1); x += SUM.icon + 8; }
+                c.fontSize = SUM.text;
+                win.changeTextColor(op.color !== undefined ? ColorManager.textColor(op.color) : ColorManager.normalColor());
+                op.lines.forEach((l, i) => win.drawText(l, x, y + i * SUM.line - 5, x0 + w - x));
+            } else if (op.k === "muted") {
+                c.fontSize = SUM.muted;
+                win.changeTextColor(ColorManager.textColor(7));
+                op.lines.forEach((l, i) => win.drawText(l, x0, y + i * 20 - 6, w));
+            } else if (op.k === "icons") {
+                const cells = op.shown.concat(op.more ? [["more", op.more]] : []);
+                cells.forEach(([icon, n], i) => {
+                    const x = x0 + (i % op.per) * SUM.cell, yy = y + Math.floor(i / op.per) * 28;
+                    c.fontSize = SUM.muted + 1;
+                    if (icon === "more") {
+                        win.changeTextColor(ColorManager.textColor(7));
+                        win.drawText("+" + n + " innych", x, yy - 5, SUM.cell + 20);
+                        return;
+                    }
+                    smallIcon(win, icon, x, yy + 1);
+                    win.changeTextColor(ColorManager.normalColor());
+                    win.drawText("×" + n, x + SUM.icon + 4, yy - 5, SUM.cell - SUM.icon - 6);
+                });
+            } else if (op.k === "goals") {
+                const half = Math.floor(w / 2);
+                op.shown.forEach((name, i) => {
+                    const x = x0 + (i % 2) * half, yy = y + Math.floor(i / 2) * SUM.goal;
+                    drawTick(win, x, yy + 4);
+                    c.fontSize = SUM.muted;
+                    win.changeTextColor(ColorManager.normalColor());
+                    win.drawText(name, x + 18, yy - 6, half - 24);
+                });
+                if (op.more) {
+                    c.fontSize = SUM.muted - 1;
+                    win.changeTextColor(ColorManager.textColor(7));
+                    win.drawText("i jeszcze " + op.more + " - wszystkie w dzienniku (J)", x0, y + Math.ceil(op.shown.length / 2) * SUM.goal - 3, w);
+                }
+            }
+        }
+    }
+    // the day in numbers: small plates in a row under the heading ("17 celów wykonanych", "140 rzeczy zdobytych" ...)
+    function paintStats(win, stats, y) {
+        const c = win.contents, ctx = c.context;
+        let x = 0;
+        for (const st of stats) {
+            win.resetFontSettings();
+            c.fontSize = 19;
+            const nw = win.textWidth(st.n);
+            c.fontSize = 15;
+            const tw = win.textWidth(st.text), w = 14 + nw + 6 + tw + 14;
+            if (x + w > win.innerWidth) break;
+            if (window.UIStyle) UIStyle.panel(ctx, x, y, w, 30, { cut: 3, fill: "rgba(255,255,255,0.05)", accent: false });
+            else c.fillRect(x, y, w, 30, "rgba(255,255,255,0.06)");
+            c.fontSize = 19;
+            win.changeTextColor(ColorManager.textColor(16));
+            win.drawText(st.n, x + 14, y - 2, nw + 4);
+            c.fontSize = 15;
+            win.changeTextColor(ColorManager.textColor(7));
+            win.drawText(st.text, x + 14 + nw + 6, y - 1, tw + 4);
+            x += w + 10;
+        }
+        c._baseTexture.update();
     }
 
     function Window_DaySummary() {
@@ -1080,16 +1223,48 @@
     }
     Window_DaySummary.prototype = Object.create(Window_Base.prototype);
     Window_DaySummary.prototype.constructor = Window_DaySummary;
+    const SUMMARY_FITS = [{ goals: 10, itemRows: 4 }, { goals: 6, itemRows: 3 }, { goals: 4, itemRows: 2 }, { goals: 2, itemRows: 1 }];
     Window_DaySummary.prototype.setup = function(summary) {
-        const width = 760, ops = summaryOps(summary);
+        const width = Math.min(1040, Graphics.boxWidth - 40);
         this.width = width;
-        this.resetFontSettings();
-        const contentH = layoutOps(this, ops, width - this.padding * 2, 0);
-        this.height = Math.min(Graphics.boxHeight - 24, contentH + this.padding * 2);
+        const inner = width - this.padding * 2, gap = 36, colW = Math.floor((inner - gap) / 2);
+        const HEAD = 50, FOOT = 40, room = Graphics.boxHeight - 24 - this.padding * 2;
+        // the longest lists that still let the whole summary fit on the screen
+        let S = null, STATS = 0, bodyH = 0;
+        for (const fit of SUMMARY_FITS) {
+            S = summaryOps(summary, fit);
+            STATS = S.stats.length ? 42 : 0;
+            bodyH = Math.max(summaryLayout(this, S.left, colW), summaryLayout(this, S.right, colW));
+            if (HEAD + STATS + bodyH + FOOT <= room) break;
+        }
+        this._fit = S;
+        this.height = Math.min(Graphics.boxHeight - 24, HEAD + STATS + bodyH + FOOT + this.padding * 2);
         this.x = Math.floor((Graphics.boxWidth - width) / 2);
         this.y = Math.floor((Graphics.boxHeight - this.height) / 2);
         this.createContents();
-        paintOps(this, ops, this.innerWidth, 0);
+        const c = this.contents, accent = ColorManager.textColor(16), line = (window.UIStyle && UIStyle.line) || "#3a3e46";
+        // the heading: the day in the accent colour, the season and the next day on the right
+        this.resetFontSettings();
+        c.fontSize = SUM.title;
+        this.changeTextColor(accent);
+        this.drawText(S.head.title, 0, 0, inner);
+        c.fontSize = SUM.sub;
+        this.changeTextColor(ColorManager.textColor(7));
+        this.drawText(S.head.sub, 0, 2, inner, "right");
+        c.fillRect(0, HEAD - 12, inner, 2, line);
+        if (STATS) paintStats(this, S.stats, HEAD - 2);
+        // the two columns and a thin line between them
+        const top = HEAD + STATS;
+        summaryPaint(this, S.left, 0, top, colW);
+        summaryPaint(this, S.right, colW + gap, top, colW);
+        c.fillRect(colW + Math.floor(gap / 2), top, 1, bodyH, line);
+        // the foot: how to go on
+        const fy = top + bodyH + 8;
+        c.fillRect(0, fy, inner, 1, line);
+        this.resetFontSettings();
+        c.fontSize = SUM.muted;
+        this.changeTextColor(ColorManager.textColor(7));
+        this.drawText("OK: zacznij nowy dzień", 0, fy + 4, inner, "center");
         this._ready = true;
     };
 
@@ -1104,7 +1279,7 @@
     Scene_DaySummary.prototype.create = function() {
         Scene_MenuBase.prototype.create.call(this);
         evaluateGoals();
-        this._window = new Window_DaySummary(new Rectangle(0, 0, 760, 200));
+        this._window = new Window_DaySummary(new Rectangle(0, 0, Math.min(1040, Graphics.boxWidth - 40), 200));
         this.addWindow(this._window);
         this._window.setup(this._summary);
         this._wait = 12;
@@ -1181,7 +1356,7 @@
             if (this.bitmap.width !== r.w) { this.bitmap = new Bitmap(r.w, 132); this._key = ""; }
         } else if (hud && hud._gauge) {
             this.x = hud.x + hud._gauge.x;
-            this.y = hud.y + hud._gauge.y + 76;
+            this.y = hud.y + (hud.rowY ? hud.rowY(5) : hud._gauge.y + 105) + 6;   // under the five HUD rows
         }
         const g = SHOW_TRACKER && $gameSystem ? currentGoal() : null;
         this.visible = !!g && !!hud && !!hud._gauge && hud._gauge.visible && !$gameMessage.isBusy();
@@ -1215,18 +1390,8 @@
         bmp.fontSize = 14;
         const lines = wrapBitmapText(bmp, line, inner, 3);
         const h = 8 + 15 + titleLines.length * 21 + 3 + lines.length * 17 + 6;
-        ctx.fillStyle = COLORS.panelFill;
-        ctx.beginPath();
-        const r = 8;
-        ctx.moveTo(r, 0); ctx.lineTo(w - r, 0); ctx.quadraticCurveTo(w, 0, w, r);
-        ctx.lineTo(w, h - r); ctx.quadraticCurveTo(w, h, w - r, h);
-        ctx.lineTo(r, h); ctx.quadraticCurveTo(0, h, 0, h - r);
-        ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
-        ctx.closePath();
-        ctx.fill();
-        ctx.strokeStyle = COLORS.panelBorder;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+        if (window.UIStyle) UIStyle.panel(ctx, 0, 0, w, h, { cut: 5 });   // the panel of the windows (UITheme.js)
+        else { ctx.fillStyle = COLORS.panelFill; ctx.fillRect(0, 0, w, h); }
         bmp.outlineWidth = 3;
         bmp.outlineColor = COLORS.outline;
         let y = 6;
@@ -1278,7 +1443,7 @@
     function addNote(title, text) {
         const d = data();
         d.notes.push({ title: String(title || "Notatka"), text: String(text || ""), day: dayNow() });
-        $gameTemp.pushLootPopup(iconOfItem(59), "Nowa notatka: " + title, "#f0e4c8");
+        $gameTemp.pushLootPopup(iconOfItem(59), "Nowa notatka: " + title, "#eceef0");
         AudioManager.playSe({ name: "Bell1", volume: 70, pitch: 100, pan: 0 });
     }
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));

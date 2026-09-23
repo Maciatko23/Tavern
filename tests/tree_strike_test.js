@@ -70,9 +70,22 @@ const OUT = __dirname + "/";
         await frames(12);
         const e2 = await embers();
         check("...the band has passed: all of it is burnt, only a few pixels still smoulder", !!e2 && e2.covered > e2.pixels * 0.95 && e2.glow > 0 && e2.glow < e2.pixels * 0.06, e2);
-        await ev(`$gameSystem._smoulder["3:${id}"] -= 0.8; 0`);   // past the hour (0.1 + 0.13 + 0.8 h)
-        await frames(12);
-        check("...and after an hour it is out", (await embers()) === null);
+        // then half an hour of smouldering: smoke rising in columns from the embers, well above the crown, thinning as they die
+        const smokeNow = () => J(`(function(){ const e = SceneManager._scene._spriteset._smoulder._entries["3:${id}"], live = e ? e.parts.filter(q => q.alive && q.spr.alpha > 0.05) : [];
+            return { puffs: live.length, columns: e ? e.vents.length : 0, top: live.length ? Math.round(Math.min(...live.map(q => q.spr.y))) : null }; })()`);
+        await frames(330);   // (the columns start where the embers are, the smoke needs a few seconds to climb past the crown)
+        const sm1 = await smokeNow();
+        await b.shot(OUT + "tree_smoulder.png");
+        check("...then it smokes: columns of smoke from the embers, rising above the crown", sm1.puffs >= 25 && sm1.columns >= 3 && sm1.top < hit.treeTop, { smoke: sm1, crownTop: hit.treeTop });
+        await ev(`$gameSystem._smoulder["3:${id}"] -= 0.2; 0`);   // near the end of the half hour
+        await frames(200);
+        const sm2 = await smokeNow();
+        check("...less and less as the embers die (fewer columns, fewer puffs), but it still smokes", sm2.puffs >= 3 && sm2.puffs < sm1.puffs * 0.8 && sm2.columns < sm1.columns, { start: sm1, late: sm2 });
+        check("...the tree still glows with embers then", (await embers()) !== null);
+        await ev(`$gameSystem._smoulder["3:${id}"] -= 0.4; 0`);   // past the half hour after the band (0.1 + 0.13 + 0.2 + 0.4 h and the frames between)
+        await frames(40);
+        check("...and half an hour after the band reached the foot it is out", (await embers()) === null);
+        check("...the smoke is gone as well", await ev(`!SceneManager._scene._spriteset._smoulder._entries["3:${id}"]`));
         const done = await J(`(function(){ const e = $gameMap.event(${id}), sp = SceneManager._scene._spriteset._characterSprites.find(c => c._character === e), st = sp._treeStrips[0]; return { own: st.bitmap === sp.bitmap, charredPic: !!st.bitmap._charred, spriteTone: sp._colorTone.slice() }; })()`);
         check("...then it is drawn from its soot-black picture", !done.own && done.charredPic && done.spriteTone[3] === 0, done);
         await ev(`$gameSystem._smoulder["3:${id}"] = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() - 0.1; 0`);
@@ -116,7 +129,7 @@ const OUT = __dirname + "/";
         }
         const felled = { blows, wood: (await count(61)) - wood0, coal: (await count(79)) - coal0, A: await ev(`$gameSelfSwitches.value([3, ${id}, "A"])`) };
         check("it falls after half the blows (" + Math.ceil(T.hits / 2) + " instead of " + T.hits + ")", felled.A && felled.blows === Math.ceil(T.hits / 2), felled);
-        check("it gives 2-4 charcoal and no wood", felled.coal >= 2 && felled.coal <= 4 && felled.wood === 0, felled);
+        check("it gives 6-10 charcoal and no wood", felled.coal >= 6 && felled.coal <= 10 && felled.wood === 0, felled);
         await frames(20);
         // burnt to the roots: no stump, the empty page straight away, the ground free
         const gone = await J(`(function(){ const e = $gameMap.event(${id}); return { B: $gameSelfSwitches.value([3, ${id}, "B"]), tile: e.tileId(), picture: e.characterName(), passable: $gameMap.isPassable(${x}, ${y}, 2) || $gameMap.isPassable(${x}, ${y}, 8), plot: Farming.plotAt(${x}, ${y}) }; })()`);
@@ -147,7 +160,7 @@ const OUT = __dirname + "/";
         // at night the embers light the dark a little, around where they glow (not a blurry orange blob over everything)
         const glow = await J(`(function(){ const ss = SceneManager._scene._spriteset, L = ChoppableTree.emberLights(ss); if (!L.length) return null; const l = L[0], ctx = ss._nightLight.bitmap.context;
             const a = (x, y) => ctx.getImageData(Math.max(0, Math.round(x / 2)), Math.max(0, Math.round(y / 2)), 1, 1).data[3];
-            return { light: { x: Math.round(l.x), y: Math.round(l.y), r: Math.round(l.r) }, atEmbers: a(l.x, l.y), away: a(l.x + 300, l.y), glowSprites: !!ss._smoulder.glowLayer }; })()`);
+            return { light: { x: Math.round(l.x), y: Math.round(l.y), r: Math.round(l.r) }, atEmbers: a(l.x, l.y), away: a(l.x > Graphics.width / 2 ? l.x - 300 : l.x + 300, l.y), glowSprites: !!ss._smoulder.glowLayer }; })()`);
         check("at night: the dark lifts a little around the embers, nowhere else, and no glow sprite any more", !!glow && glow.atEmbers < glow.away - 40 && !glow.glowSprites, glow);
         await ev("$gameSystem._smoulder && Object.keys($gameSystem._smoulder).forEach(k => $gameSystem._smoulder[k] -= 0.25); 0");   // the glow further down the tree
         await frames(40);

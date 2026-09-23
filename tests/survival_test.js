@@ -70,15 +70,14 @@ const { launch, sleep } = require("./cdp.js");
         check("fishing rod: 2 wood + 2 rope + 1 branch", (await doManual("22, 5", "workbench", "rod")) === true && (await count(100)) === 1, { rod: await count(100), rope: await count(93) });
 
         // ------------------------------------------------------------ the snare and butchering
-        await ev("$gameSystem.advanceDayNight(24 * 2); 0");
-        const ready1 = await ev("Farming.readyProduce(Farming.buildingAt(26, 11))");
-        await ev("$gameSystem.advanceDayNight(24 * 6); 0");
+        await ev("$gameSystem.advanceDayNight(24 * 8); 0");
+        await frames(10);   // (Spoilage ages the bag by the jump on its next tick: the carcasses must come after it, or they rot at once)
         const ready = await ev("Farming.readyProduce(Farming.buildingAt(26, 11))");
-        check("the snare catches 1 after 2 days and stops at the cap of 2", ready1 === 1 && ready === 2, { ready1, ready });
+        check("a snare without bait catches nothing by itself, however long it stands", ready === 0, { ready });
         const menuSnare = await ev("JSON.stringify(Farming.menuFor(26, 11).entries.map(e => e.name))");
-        check("its menu offers to collect", /Zbierz: Zwierzyna/.test(menuSnare), menuSnare);
-        await ev("Farming.collect(Farming.buildingAt(26, 11)); 0"); await frames(80);
-        check("collected: 2 carcasses", (await count(101)) === 2, { carcass: await count(101) });
+        check("its menu has the collect row and 'Załóż przynętę' (the catching: tests/snare_lure_test.js)", /Zbierz: Zwierzyna/.test(menuSnare) && /Załóż przynętę/.test(menuSnare), menuSnare);
+        await give(101, 2);
+        check("two carcasses to butcher", (await count(101)) === 2, { carcass: await count(101) });
         check("butchering needs a knife: usable with the stone knife", (await ev("$gameParty.canUse($dataItems[101])")) === true);
         await ev("$gameParty.leader().useItem($dataItems[101]); 0");
         check("stone knife: carcass -> 2 meat + 1 hide", (await count(94)) === 2 && (await count(96)) === 1 && (await count(101)) === 1, { meat: await count(94), hide: await count(96) });

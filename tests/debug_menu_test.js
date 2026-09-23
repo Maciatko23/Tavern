@@ -30,8 +30,8 @@ const { launch, sleep } = require("./cdp.js");
         await frames(10);
         check("F9 opens Scene_Debug", (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
         const rows = await J(`SceneManager._scene._list._rows.slice(0, 6).map(r => ({ kind: r.kind, label: r.label, name: r.item && r.item.name, qty: r.qty }))`);
-        const rows7 = await J(`SceneManager._scene._list._rows.slice(0, 7).map(r => r.kind)`);
-        check("the list starts with the two time rows, the four weather rows (storm, a strike, a strike on a tree, calm), then items", rows7.join() === "hour,day,storm,strike,treestrike,calm,item" && rows[0].label === "+1 godzina", rows7);
+        const rows7 = await J(`SceneManager._scene._list._rows.slice(0, 10).map(r => r.kind)`);
+        check("the list starts with the two time rows, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the boar, then items", rows7.join() === "hour,day,storm,strike,treestrike,calm,birds,raid,boar,item" && rows[0].label === "+1 godzina", rows7);
 
         // ---------------------------------------------------------------- +1 hour / +1 day (set to noon, day 1: no hour rollover to worry about)
         await ev("$gameSystem.setDayNightHour(12); $gameSystem._dayNightDay = 1; 0");
@@ -48,7 +48,7 @@ const { launch, sleep } = require("./cdp.js");
         check("'+1 dzień' advances the clock by 24 hours (a whole day later)", afterDay.d === afterHour.d + 1 && Math.abs(afterDay.h - afterHour.h) < 0.1, { afterHour, afterDay });
 
         // ---------------------------------------------------------------- pick an item, raise the quantity, grant it
-        for (let i = 0; i < 5; i++) await key(DOWN);   // past the weather rows to row 6: the first real item
+        for (let i = 0; i < 8; i++) await key(DOWN);   // past the weather, bird and boar rows to row 9: the first real item
         const firstItemId = await ev("SceneManager._scene._list.rowData().item.id");
         const before139 = await ev(`$gameParty.numItems($dataItems[${firstItemId}])`);
         for (let i = 0; i < 4; i++) await key(RIGHT);
@@ -63,7 +63,7 @@ const { launch, sleep } = require("./cdp.js");
         check("OK grants exactly that many of the highlighted item", after139 === before139 + 4, { before139, after139 });
 
         // ---------------------------------------------------------------- "Burza teraz": back to the map, the storm gathering
-        for (let i = 0; i < 4; i++) await key(UP);   // row 2
+        for (let i = 0; i < 7; i++) await key(UP);   // row 2
         check("row 2 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
         await key(OK);
         await frames(20);

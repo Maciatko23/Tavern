@@ -75,9 +75,9 @@ const OUT = __dirname + "/";
 
         // ---------------------------------------------------------------- a strike right next to you
         await ev("window.__se = []; Storm.state.nextStrike = Storm.state.t + 100000; 0");   // no strikes of its own during the checks
-        await ev("Storm.strike(0.05); 0");
-        await frames(2);
-        const near = await J(`(function(){ const sky = SceneManager._scene._spriteset._stormSky; return { flash: Storm.flash(), light: sky._light.alpha, bolt: sky._bolt.alpha, shake: $gameScreen._shakeDuration }; })()`);
+        // strike and measure 2 frames later in one go (separate calls can land several frames late while the flash fades)
+        const near = JSON.parse(await ev(`new Promise(res => { Storm.strike(0.05); const t = Graphics.frameCount + 2; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv);
+            const sky = SceneManager._scene._spriteset._stormSky; res(JSON.stringify({ flash: Storm.flash(), light: sky._light.alpha, bolt: sky._bolt.alpha, shake: $gameScreen._shakeDuration })); } }, 1); })`));
         await b.shot(OUT + "storm_bolt.png");
         check("close: a bright flash, the bolt drawn, the screen shakes", near.flash > 0.7 && near.light > 0.2 && near.bolt > 0.5 && near.shake > 0, near);
         await frames(40);

@@ -110,7 +110,7 @@ const OUT = __dirname + "/";
         await ev("SceneManager.push(Scene_Menu); 0");
         await sleep(900);
         const cmds = await ev("SceneManager._scene._commandWindow._list.map(c => c.symbol + ':' + c.name)");
-        check("the main menu has the Dziennik command in one row", cmds.includes("journal:Dziennik") && (await ev("SceneManager._scene._commandWindow.maxCols()")) === 5, cmds);
+        check("the main menu has the Dziennik command (in its column of commands, MenuPanel.js)", cmds.includes("journal:Dziennik") && (await ev("SceneManager._scene._commandWindow.maxCols()")) === 1, cmds);
         await shot("menu");
         await ev("SceneManager.pop(); 0"); await sleep(600);
 

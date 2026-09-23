@@ -22,9 +22,9 @@
  *
  * @param top
  * @text Odstęp od góry ekranu (px)
- * @desc Domyślnie tuż pod przyciskiem menu.
+ * @desc Domyślnie w samym rogu, jak odstęp z boku (przycisku menu na mapie nie ma - MenuPanel.js).
  * @type number
- * @default 60
+ * @default 12
  *
  * @param margin
  * @text Odstęp od prawej krawędzi (px)
@@ -65,7 +65,7 @@
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
     const MAX_W = num(params.maxWidth, 208);
     const MAX_H = num(params.maxHeight, 150);
-    const TOP = num(params.top, 60);
+    const TOP = num(params.top, 12);
     const MARGIN = num(params.margin, 12);
     const HIDE_IF_FITS = params.hideIfMapFits !== "false";
     const PANEL_W = MAX_W + 8;   // the frame around the map
@@ -144,7 +144,9 @@
     const eventKinds = {};
     const hasTransfer = data => data.pages.some(p => p.list.some(c => c.code === 201));
     function kindOf(ev) {
-        const d = ev.event(), note = d.note || "", name = ev.characterName(), tile = ev.tileId();
+        const d = ev.event();
+        if (!d) return null;   // (an event without data: nothing to draw)
+        const note = d.note || "", name = ev.characterName(), tile = ev.tileId();
         if (!name && !tile) return null;
         const graphic = name || "";
         if (tile) return /<(Tree|Stump)/i.test(note) ? "stump" : null;
@@ -167,27 +169,19 @@
     // ------------------------------------------------------------------
     // The sprite
     // ------------------------------------------------------------------
+    // the frame: the panel of the windows (UITheme.js's window.UIStyle), a plain dark plate without it
     function roundedPanel(w, h) {
-        const bmp = new Bitmap(w, h), ctx = bmp.context, r = 8;
-        ctx.fillStyle = "rgba(22,15,10,0.86)";
-        ctx.beginPath();
-        ctx.moveTo(r, 0); ctx.lineTo(w - r, 0); ctx.quadraticCurveTo(w, 0, w, r);
-        ctx.lineTo(w, h - r); ctx.quadraticCurveTo(w, h, w - r, h);
-        ctx.lineTo(r, h); ctx.quadraticCurveTo(0, h, 0, h - r);
-        ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
-        ctx.closePath();
-        ctx.fill();
-        ctx.strokeStyle = "rgba(166,124,58,0.9)";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+        const bmp = new Bitmap(w, h), ctx = bmp.context;
+        if (window.UIStyle) UIStyle.panel(ctx, 0, 0, w, h, { cut: 6 });
+        else { ctx.fillStyle = "rgba(11,12,15,0.9)"; ctx.fillRect(0, 0, w, h); }
         bmp._baseTexture.update();
         return bmp;
     }
     function markerBitmap() {
         const bmp = new Bitmap(11, 11), ctx = bmp.context;
-        ctx.fillStyle = "#1a100a";
+        ctx.fillStyle = "#0b0c0f";
         ctx.beginPath(); ctx.moveTo(5.5, 0); ctx.lineTo(11, 5.5); ctx.lineTo(5.5, 11); ctx.lineTo(0, 5.5); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#fff3b0";
+        ctx.fillStyle = "#ffd23f";
         ctx.beginPath(); ctx.moveTo(5.5, 2); ctx.lineTo(9, 5.5); ctx.lineTo(5.5, 9); ctx.lineTo(2, 5.5); ctx.closePath(); ctx.fill();
         bmp._baseTexture.update();
         return bmp;
