@@ -132,6 +132,60 @@
     }
 
     // ------------------------------------------------------------------
+    // RoamingActor: what a wild animal here and a farm animal in Livestock.js have in common - attaching and
+    // detaching a Sprite_Character as the map scene comes and goes, and the flee-direction scan a startled
+    // animal uses to pick which way to run. Livestock.js reuses this (it loads after Hunting.js in plugins.js).
+    // ------------------------------------------------------------------
+    function roamingSpriteset() {
+        const scene = SceneManager._scene;
+        return scene instanceof Scene_Map ? scene._spriteset : null;
+    }
+    // set: the spriteset to draw in. When the map scene is rebuilt (after the menu, the journal, the day summary...) the new
+    // spriteset is not yet SceneManager._scene._spriteset while it is being built, so it has to be passed in.
+    function roamingAddSprite(actor, set) {
+        set = set || roamingSpriteset();
+        if (!set || !set._tilemap) return;
+        if (actor._sprite && actor._sprite.parent === set._tilemap) return;
+        const sprite = new Sprite_Character(actor);
+        actor._sprite = sprite;
+        set._tilemap.addChild(sprite);
+    }
+    function roamingDropSprite(actor) {
+        if (!actor._sprite) return;
+        try {
+            if (actor._sprite.parent) actor._sprite.parent.removeChild(actor._sprite);
+            actor._sprite.destroy();
+        } catch (e) { /* already gone with the old scene */ }
+        actor._sprite = null;
+    }
+    // the passable direction (2/4/6/8) that leads farthest away from (dx, dy) - a cardinal-direction scan shared
+    // by the wild animals here (Game_Animal) and the farm animals of Livestock.js (Game_Livestock), tuned through
+    // opts since the two want different temperaments:
+    //   opts.startAtDistance: only move when a direction beats the current distance (Livestock's calm step-aside);
+    //     left out, any passable direction is picked (Hunting's animals always bolt once alarmed)
+    //   opts.margin: how much a direction must beat the running best score to replace it (Livestock: 0.05)
+    //   opts.jitter: random wobble added to each score, 0-1 (Hunting: 0.6, so animals don't all dodge identically)
+    //   opts.lookahead: bonus for a direction with room to keep running one more step (Hunting: 0.8)
+    //   opts.deadEnd: penalty when a direction runs straight into a corner (Hunting: 2)
+    function roamingFleeDirection(actor, dx, dy, opts) {
+        opts = opts || {};
+        let best = 0, bestScore = opts.startAtDistance ? Math.hypot(dx, dy) : -Infinity;
+        for (const d of [2, 4, 6, 8]) {
+            if (!actor.canPass(actor._x, actor._y, d)) continue;
+            const sx = (d === 6 ? 1 : d === 4 ? -1 : 0), sy = (d === 2 ? 1 : d === 8 ? -1 : 0);
+            let score = Math.hypot(dx + sx, dy + sy) + (opts.jitter ? Math.random() * opts.jitter : 0);
+            if (opts.lookahead || opts.deadEnd) {
+                const nx = $gameMap.roundXWithDirection(actor._x, d), ny = $gameMap.roundYWithDirection(actor._y, d);
+                if (actor.canPass(nx, ny, d)) score += opts.lookahead || 0;   // room to keep running
+                else if (opts.deadEnd && ![2, 4, 6, 8].some(e => actor.canPass(nx, ny, e))) score -= opts.deadEnd;
+            }
+            if (score > bestScore + (opts.margin || 0)) { bestScore = score; best = d; }
+        }
+        return best;
+    }
+    window.RoamingActor = { spriteset: roamingSpriteset, addSprite: roamingAddSprite, dropSprite: roamingDropSprite, fleeDirection: roamingFleeDirection };
+
+    // ------------------------------------------------------------------
     // The animal: a plain character that thinks for itself
     // ------------------------------------------------------------------
     function Game_Animal() {
@@ -197,47 +251,20 @@
         if (dirs.length > 0 && Math.random() < 0.7) this.moveStraight(dirs[Math.floor(Math.random() * dirs.length)]);
         this._wait = 50 + Math.floor(Math.random() * 150);
     };
-    // the passable direction that ends farthest from the player, looking two steps ahead
+    // the passable direction that ends farthest from the player, looking two steps ahead (the shared scan, tuned
+    // for a wild animal's full bolt: no floor on the score, a bit of jitter, and a look at the next step)
     Game_Animal.prototype.bestEscape = function(dx, dy) {
-        let best = 0, bestScore = -Infinity;
-        for (const d of [2, 4, 6, 8]) {
-            if (!this.canPass(this._x, this._y, d)) continue;
-            const sx = (d === 6 ? 1 : d === 4 ? -1 : 0), sy = (d === 2 ? 1 : d === 8 ? -1 : 0);
-            let score = Math.hypot(dx + sx, dy + sy) + Math.random() * 0.6;
-            const nx = $gameMap.roundXWithDirection(this._x, d), ny = $gameMap.roundYWithDirection(this._y, d);
-            if (this.canPass(nx, ny, d)) score += 0.8;   // room to keep running
-            else if (![2, 4, 6, 8].some(e => this.canPass(nx, ny, e))) score -= 2;
-            if (score > bestScore) { bestScore = score; best = d; }
-        }
-        return best;
+        return roamingFleeDirection(this, dx, dy, { jitter: 0.6, lookahead: 0.8, deadEnd: 2 });
     };
 
     // ------------------------------------------------------------------
     // Spawning
     // ------------------------------------------------------------------
-    function spriteset() {
-        const scene = SceneManager._scene;
-        return scene instanceof Scene_Map ? scene._spriteset : null;
-    }
-    // set: the spriteset to draw in. When the map scene is rebuilt (after the menu, the journal, the day summary...) the new
-    // spriteset is not yet SceneManager._scene._spriteset while it is being built, so it has to be passed in.
-    function addSprite(animal, set) {
-        set = set || spriteset();
-        if (!set || !set._tilemap) return;
-        if (animal._sprite && animal._sprite.parent === set._tilemap) return;
-        const sprite = new Sprite_Character(animal);
-        animal._sprite = sprite;
-        set._tilemap.addChild(sprite);
-    }
+    const spriteset = roamingSpriteset;
+    const addSprite = roamingAddSprite;
     function removeAnimal(animal) {
         animal._dead = true;
-        if (animal._sprite) {
-            try {
-                if (animal._sprite.parent) animal._sprite.parent.removeChild(animal._sprite);
-                animal._sprite.destroy();
-            } catch (e) { /* already gone with the old scene */ }
-            animal._sprite = null;
-        }
+        roamingDropSprite(animal);
         animals = animals.filter(a => a !== animal);
     }
     function spawn(kind, x, y) {
@@ -278,7 +305,8 @@
     // Shooting
     // ------------------------------------------------------------------
     function popup(icon, text, color) {
-        $gameTemp.pushLootPopup(icon, text, color);
+        if (window.Survival && Survival.feedback) Survival.feedback(icon, text, color);
+        else $gameTemp.pushLootPopup(icon, text, color);
     }
     const countItem = id => $gameParty.numItems($dataItems[id]);
     // the bow when there are arrows, else the sling when there are stones; null with the reason (a popup) otherwise

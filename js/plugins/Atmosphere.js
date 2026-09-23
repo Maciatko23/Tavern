@@ -1,6 +1,7 @@
 //=============================================================================
 // Atmosphere.js
 //=============================================================================
+// Load order: audio-only, not part of the visual z-stack; must load after DayNightCycle.js (canonical time periods) and Minimap.js (groundColourAt for footsteps).
 
 /*:
  * @target MZ
@@ -153,7 +154,32 @@
     function hourNow() {
         return $gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12;
     }
+    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
+    // `fallback` when neither is present. Duplicated identically in
+    // RoomLighting.js/DayNightCycle.js/CloudShadows.js/DustMotes.js/Minimap.js
+    // (no shared module between these plugin files today).
+    function mapNoteFlag(tag, fallback) {
+        const note = ($dataMap && $dataMap.note) || "";
+        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
+        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
+        return fallback;
+    }
+    // Atmosphere's own 4-bucket view of the day (dawn/day/dusk/night, used only
+    // for picking ambience beds/birds/music) derived from DayNightCycle.js's 6
+    // canonical periods - the ones exposed to event scripters via
+    // $gameSystem.dayNightPeriod().name - instead of re-deriving separate hour
+    // boundaries that could silently drift out of sync with them. Grouping choice
+    // (morning+noon+afternoon -> day, evening -> dusk) keeps the day/dusk switch
+    // at 18:00, only 1h off from this plugin's old 17:00 boundary - the closest
+    // possible match against DayNightCycle's fixed 5/8/11/15/18/21 cut points.
+    const DNC_PERIOD_TO_ATMO = { dawn: "dawn", morning: "day", noon: "day", afternoon: "day", evening: "dusk", night: "night" };
     function periodAt(h) {
+        const DNC = window.DayNightCycle;
+        if (DNC && typeof DNC.periodAt === "function") {
+            const p = DNC.periodAt(h);
+            return (p && DNC_PERIOD_TO_ATMO[p.id]) || "day";
+        }
+        // Fallback if DayNightCycle.js isn't loaded, so this plugin stays usable standalone.
         if (h >= 5 && h < 8.5) return "dawn";
         if (h >= 8.5 && h < 17) return "day";
         if (h >= 17 && h < 20) return "dusk";
@@ -423,9 +449,12 @@
         const hour = hourNow(), period = periodAt(hour), precip = precipitation(profile);
         const day = $gameSystem.dayNightDay();
         if (profile === "outdoor") {
+            const storm = window.Storm ? Storm.level() : 0;   // Storm.js: 0 = no storm, up to 0.55 while it gathers, 1 at its worst
             if (precip && precip.type === "rain") {
+                if (storm >= 0.5) return { name: "Rain4", volume: Math.round(70 + 20 * storm) };   // a downpour (the thunder and the gusts are Storm.js's own sounds)
                 return precip.power >= 5 ? { name: "Rain4", volume: 70 } : precip.power >= 4 ? { name: "Rain3", volume: 62 } : { name: "Rain2", volume: 55 };
             }
+            if (storm > 0.08) return { name: "Wind3", volume: Math.round(30 + 60 * storm) };   // the deep howl of the wind rising before the storm breaks
             if (precip && precip.type === "snow") return { name: "Wind5", volume: 45 };
             if (period === "night") return { name: "Night", volume: 55 };
             if (nearWater(4) >= 4) return { name: "River", volume: 42 };
@@ -468,6 +497,7 @@
         const profile = profileOf();
         if (profile !== "outdoor") return;
         const hour = hourNow(), period = periodAt(hour), precip = precipitation(profile), now = Graphics.frameCount;
+        if (window.Storm && Storm.level() > 0.05) return;   // the hush before a storm: no birds, no frogs
         const c = audioContext(), dest = bus(c, "bgs");
         dest.gain.value = (ConfigManager.bgsVolume / 100) * AMBIENCE_VOL * 0.5;
         if (!precip && (period === "day" || period === "dawn" || period === "dusk")) {
@@ -495,9 +525,7 @@
     function wantsTimeMusic() {
         if (!TIME_MUSIC || !$dataMap) return false;
         const note = $dataMap.note || "";
-        if (/<TimeMusic:\s*off\s*>/i.test(note)) return false;
-        if (/<TimeMusic:\s*on\s*>/i.test(note)) return true;
-        return /<(Clouds|Weather):\s*on\s*>/i.test(note) && !$dataMap.autoplayBgm;
+        return mapNoteFlag("TimeMusic", /<(Clouds|Weather):\s*on\s*>/i.test(note) && !$dataMap.autoplayBgm);
     }
     function musicTick() {
         if (!wantsTimeMusic()) { state.music = null; return; }

@@ -121,7 +121,7 @@
         return /<Weather:\s*on\s*>/i.test(note) || /<Clouds:\s*on\s*>/i.test(note);
     }
     const seasonNow = () => (window.Farming && Farming.seasonIndex ? Farming.seasonIndex($gameSystem.dayNightDay()) : 0);
-    const raining = () => outdoors() && $gameScreen.weatherType() === "rain" && $gameScreen._weatherPowerTarget > 0;
+    const raining = () => outdoors() && ["rain", "storm"].includes($gameScreen.weatherType()) && $gameScreen._weatherPowerTarget > 0;
 
     // hours of game time have passed (k: 1 awake, less asleep)
     function decay(hours, k) {
@@ -228,6 +228,18 @@
         if (ok || !enabled() || !window.Survival || !item || !DataManager.isItem(item)) return ok;
         const food = Survival.foodInfo(item);
         return !!food && usefulFood(item, food) && !(item.meta && item.meta.Need);
+    };
+
+    // Same reasons drinkFromSkin() already pops up when used from the G-key shortcut, shown here too when
+    // the flask is picked (and rejected) from the item menu - it was silent there before.
+    const _Window_ItemList_playBuzzerSound = Window_ItemList.prototype.playBuzzerSound;
+    Window_ItemList.prototype.playBuzzerSound = function() {
+        _Window_ItemList_playBuzzerSound.call(this);
+        const item = this.item();
+        if (enabled() && isSkin(item)) {
+            if (skinCharges() <= 0) feedback(item.iconIndex, "Bukłak jest pusty");
+            else if (needs().water >= 95) feedback(item.iconIndex, "Nie chce ci się pić");
+        }
     };
     const _useItem = Game_Battler.prototype.useItem;
     Game_Battler.prototype.useItem = function(item) {

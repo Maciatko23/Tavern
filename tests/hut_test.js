@@ -110,7 +110,7 @@ const { launch, sleep } = require("./cdp.js");
         check("a second hut is refused: 'Masz już chatkę.'", (await ev(`Farming.whyNotBuild("hut", ${bx + 1}, ${by + 6})`)) === "Masz już chatkę.");
         // the build menu (captured) lists it disabled
         await ev(`(function(){ const sc = SceneManager._scene; sc.__open = sc.openFarmMenu; sc.openFarmMenu = (title, entries) => { window.__menu = { title, entries: entries.map(e => ({ name: e.name, enabled: e.enabled !== false, help: e.help || "" })) }; }; })(); 0`);
-        await ev(`(function(){ const m = Farming.menuFor(${bx}, ${by}); const e = m.entries.find(e => e.name === "Zbuduj..."); e.run(); })(); 0`);
+        await ev(`Farming.openBuildKeyMenu(); 0`);
         const bm = await J("window.__menu");
         const hutEntry = bm.entries.find(e => e.name === "Chatka");
         check("the build menu shows 'Chatka' greyed out (already built) and does not list the bed or the larder outdoors",
@@ -156,7 +156,7 @@ const { launch, sleep } = require("./cdp.js");
         const fm = await J(`(function(){ const m = Farming.menuFor(2, 3); return { title: m.title, names: m.entries.map(e => e.name) }; })()`);
         check("the empty floor offers what to put there (title 'Wyposaż chatkę'): bed, larder, workbench, chests, bench, bedroll - and nothing else",
             fm.title === "Wyposaż chatkę" && ["Łóżko", "Kredens", "Warsztat", "Mała skrzynia", "Duża skrzynia", "Ławka", "Leśne legowisko"].every(n => fm.names.includes(n)) &&
-            !fm.names.some(n => ["Spiżarnia", "Piec ziemny", "Chatka", "Płot", "Kociołek", "Tartak", "Wiadro"].includes(n)) && fm.names[fm.names.length - 1] === "Zostaw", fm.names);
+            !fm.names.some(n => ["Spiżarnia", "Piec ziemny", "Chatka", "Płot", "Kociołek", "Tartak", "Wiadro", "Zostaw"].includes(n)), fm.names);
         check("the door and the tile in front of it give no menu", (await ev("Farming.menuFor(3, 5)")) === null && (await ev("Farming.menuFor(3, 4)")) === null);
 
         // ---------------------------------------------------------------- furnishing (a real site: hammer blows) and nothing stored in the soil

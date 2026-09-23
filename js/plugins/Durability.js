@@ -101,7 +101,8 @@
     const leftText = id => left(id) + " " + unitWord(id, left(id));
 
     function popup(icon, text, color) {
-        $gameTemp.pushLootPopup(icon, text, color);
+        if (window.Survival && Survival.feedback) Survival.feedback(icon, text, color);
+        else $gameTemp.pushLootPopup(icon, text, color);
     }
     function broke(id) {
         const item = dataItem(id), g = TOOLS[id].g;

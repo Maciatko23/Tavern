@@ -70,8 +70,8 @@ const path = require("path");
         // ---------------------------------------------------------------- Q: the build menu
         await key(K.Q);
         let st = await state();
-        const expectBuild = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && !Farming.BUILDINGS[t].indoorOnly).map(t => Farming.BUILDINGS[t].name)`);
-        check("Q opens the build menu ('Budowa') with every outdoor building and no 'Wróć' line", st.open && st.kind === "build" && st.title === "Budowa" && JSON.stringify(st.names) === JSON.stringify(expectBuild) && !st.names.includes("Wróć"), { open: st.open, kind: st.kind, title: st.title, n: st.names.length, want: expectBuild.length });
+        const expectBuild = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && !Farming.BUILDINGS[t].indoorOnly && !Farming.BUILDINGS[t].instant).map(t => Farming.BUILDINGS[t].name)`);
+        check("Q opens the build menu ('Budowa') with every real outdoor building (not the instant ones: tent/bucket/bedroll) and no 'Wróć' line", st.open && st.kind === "build" && st.title === "Budowa" && JSON.stringify(st.names) === JSON.stringify(expectBuild) && !st.names.includes("Wróć"), { open: st.open, kind: st.kind, title: st.title, n: st.names.length, want: expectBuild.length });
         check("the popup with the description shows for the highlighted building", st.tip);
         const indoorOnly = await J(`Object.keys(Farming.BUILDINGS).filter(t => Farming.BUILDINGS[t].indoorOnly).map(t => Farming.BUILDINGS[t].name)`);
         check("the indoor-only furniture is not on the outdoor list", indoorOnly.length > 0 && indoorOnly.every(n => !st.names.includes(n)), { indoorOnly });

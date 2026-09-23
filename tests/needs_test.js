@@ -149,7 +149,7 @@ fs.mkdirSync(OUT, { recursive: true });
         // ================= 6. water: the pond, the well, the waterskin =================
         await set(100, 40);
         const menu = await ev("Farming.waterMenu().entries.map(e => e.name + (e.enabled === false ? '(x)' : ''))");
-        check("the pond menu: fishing, drink, fill the flask, fill the can", menu.join() === "Zarzuć wędkę(x),Napij się,Napełnij bukłak(x),Napełnij konewkę(x),Zostaw", menu);
+        check("the pond menu: fishing, drink, fill the flask, fill the can, fill the bucket", menu.join() === "Zarzuć wędkę(x),Napij się,Napełnij bukłak(x),Napełnij konewkę(x),Napełnij wiadro(x)", menu);
         await clearPopups();
         const dr = await ev("Farming.drink()");
         await settle();

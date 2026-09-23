@@ -89,24 +89,35 @@ const { launch, sleep } = require("./cdp.js");
             return started;
         };
         const dishes = [
-            ["stew", cx, cy, "stew", 4.2, [[94, 2], [72, 1], [73, 1]], 130, 2, [94, 72, 73]],
-            ["cabbage soup", cx, cy, "cabbage_soup", 3.2, [[73, 2], [71, 1], [105, 1]], 131, 2, [73, 71, 105]],
-            ["mushroom soup", cx, cy, "mushroom_soup", 3.2, [[103, 3], [71, 1], [123, 1]], 132, 2, [103, 71, 123]],
-            ["porridge", cx, cy, "porridge", 2.2, [[74, 3], [123, 1], [76, 1]], 133, 2, [74, 123, 76]],
-            ["berry pie (bakery)", kx, ky, "berry_pie", 3.2, [[82, 2], [102, 3], [76, 1]], 136, 2, [82, 102, 76]],
-            ["mead (brewery)", rx, ry, "mead", 8.2, [[76, 3]], 137, 2, [76]]
+            ["stew", cx, cy, "stew", 4.2, [[94, 2], [72, 1], [73, 1]], 2, 130, 2, [94, 72, 73]],
+            ["cabbage soup", cx, cy, "cabbage_soup", 3.2, [[73, 2], [71, 1], [105, 1]], 3, 131, 2, [73, 71, 105]],
+            ["mushroom soup", cx, cy, "mushroom_soup", 3.2, [[103, 3], [71, 1], [123, 1]], 3, 132, 2, [103, 71, 123]],
+            ["porridge", cx, cy, "porridge", 2.2, [[74, 3], [123, 1], [76, 1]], 1, 133, 2, [74, 123, 76]],
+            ["berry pie (bakery)", kx, ky, "berry_pie", 3.2, [[82, 2], [102, 3], [76, 1]], 0, 136, 2, [82, 102, 76]],
+            ["mead (brewery)", rx, ry, "mead", 8.2, [[76, 3]], 0, 137, 2, [76]]
         ];
-        for (const [name, x, y, id, hours, ins, out, n, watch] of dishes) {
+        await give(138, 1);   // a bucket in the bag: the cauldron's soups also need water from it
+        for (const [name, x, y, id, hours, ins, water, out, n, watch] of dishes) {
             await clear(ALL_IN.concat(NEW_IDS));
             // ingredients for exactly one batch, and a hair less of the first one to see that it is refused
             for (const [it, k] of ins) await give(it, k);
+            if (water) await ev(`Farming.setBagWater(${water}); 0`);
             const started = await cook(x, y, id, hours);
             const left = await Promise.all(watch.map(count));
-            check(name + ": the job started, the ingredients were spent, and " + n + " x " + $name(out) + " came out", started === true && left.every(v => v === 0) && (await count(out)) === n, { started, left, got: await count(out) });
+            const waterLeft = water ? await ev("Farming.bagWater()") : 0;
+            check(name + ": the job started, the ingredients" + (water ? " and water" : "") + " were spent, and " + n + " x " + $name(out) + " came out",
+                started === true && left.every(v => v === 0) && waterLeft === 0 && (await count(out)) === n, { started, left, got: await count(out), waterLeft });
         }
 
-        // not enough of an ingredient: nothing starts
+        // not enough water: refused even with all the ingredients ready
+        await clear(ALL_IN.concat(NEW_IDS)); for (const [it, k] of [[94, 2], [72, 1], [73, 1]]) await give(it, k);
+        await ev("Farming.setBagWater(1); 0");   // gulasz needs 2
+        const noWater = await ev(`(function(){ const b = ${at(cx, cy)}; Farming.startJob(b, "stew"); return !!b.job; })()`);
+        check("gulasz with only 1/2 water: nothing starts, the ingredients stay in the bag, the water is untouched", noWater === false && (await count(94)) === 2 && (await ev("Farming.bagWater()")) === 1);
+
+        // not enough of an ingredient: nothing starts (plenty of water this time, so only the ingredient shortage is being tested)
         await clear(ALL_IN.concat(NEW_IDS)); await give(94, 1); await give(72, 1); await give(73, 1);
+        await ev("Farming.setBagWater(2); 0");
         const refused = await ev(`(function(){ const b = ${at(cx, cy)}; Farming.startJob(b, "stew"); return !!b.job; })()`);
         check("gulasz with only 1 meat: nothing starts, the ingredients stay in the bag", refused === false && (await count(94)) === 1 && (await count(72)) === 1 && (await count(73)) === 1);
 
@@ -140,8 +151,10 @@ const { launch, sleep } = require("./cdp.js");
         const wMenu = await J(`Farming.menuFor(${rx + 1}, ${ry}).entries.map(e => e.name)`);
         check("the bakery offers 'Upiecz placek jagodowy', the brewery 'Nastaw miód pitny'", bMenu.includes("Upiecz placek jagodowy") && wMenu.includes("Nastaw miód pitny"), { bMenu, wMenu });
         // the recipe line names what comes out, lists the ingredients and has a clean description
-        const hasTexts = await J(`(function(){ const m = Farming.menuFor(${cx + 1}, ${cy}).entries.find(e => e.name === "Ugotuj gulasz"); return m ? { help: m.help || "", costs: (m.costs || []).length } : null; })()`);
-        check("'Ugotuj gulasz': the help says what comes out (Gulasz ×2, 4 godz.), lists 3 ingredients, no doubled full stop", !!hasTexts && /^Wynik: Gulasz ×2, 4 godz\.\n/.test(hasTexts.help) && hasTexts.costs === 3, hasTexts);
+        const hasTexts = await J(`(function(){ const m = Farming.menuFor(${cx + 1}, ${cy}).entries.find(e => e.name === "Ugotuj gulasz"); return m ? { help: m.help || "", costs: m.costs || [] } : null; })()`);
+        check("'Ugotuj gulasz': the help says what comes out (Gulasz ×2, 4 godz.), lists 3 ingredients + water, no doubled full stop",
+            !!hasTexts && /^Wynik: Gulasz ×2, 4 godz\.\n/.test(hasTexts.help) && hasTexts.costs.length === 4, hasTexts);
+        check("the 4th cost row is the water: bucket icon (400), needs 2", hasTexts.costs[3] && hasTexts.costs[3][0] === 400 && hasTexts.costs[3][1] === 2, hasTexts.costs[3]);
         // an upgrade to the cauldron says it takes the fire
         const upHelp = await ev(`Farming.BUILDINGS.tripod.upgrade.help + " || " + Farming.BUILDINGS.cauldron.desc`);
         check("the texts of the tripod's upgrade and of the cauldron say it does not roast any more", /zajmuje cały ogień/.test(upHelp) && /osobnym ognisku/.test(upHelp) && !/nadal upieczesz/.test(upHelp), upHelp);

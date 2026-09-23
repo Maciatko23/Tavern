@@ -198,6 +198,9 @@
     const POPUP_FONT = num(params.popupFontSize, 22);
     const GOLD_ICON = 313;
 
+    // Shared "dark wood + brass rim" palette, so a color change only needs one edit.
+    const PALETTE = { dark: "#1a100a", brass: "#a67c3a", brassLight: "#d6aa50", cream: "#f6e7c4" };
+
     // ------------------------------------------------------------------
     // Stamina model
     // ------------------------------------------------------------------
@@ -305,7 +308,7 @@
         const ctx = bitmap.context;
         ctx.fillStyle = "#46301a";
         ctx.beginPath(); ctx.arc(size / 2, size / 2, 4.3, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "#d6aa50";
+        ctx.fillStyle = PALETTE.brassLight;
         ctx.beginPath(); ctx.arc(size / 2, size / 2, 2.9, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = "#f4dc9a";
         ctx.beginPath(); ctx.arc(size / 2 - 0.8, size / 2 - 0.8, 1, 0, Math.PI * 2); ctx.fill();
@@ -329,10 +332,10 @@
         const ctx = bmp.context;
         ctx.save();
         roundRect(ctx, x + 0.5, y + 0.5, w - 1, h - 1, radius);
-        ctx.fillStyle = "#1a100a";
+        ctx.fillStyle = PALETTE.dark;
         ctx.fill();
         roundRect(ctx, x + 1.5, y + 1.5, w - 3, h - 3, Math.max(1, radius - 1));
-        ctx.fillStyle = "#a67c3a";
+        ctx.fillStyle = PALETTE.brass;
         ctx.fill();
         const wood = ctx.createLinearGradient(0, y + 2, 0, y + h - 2);
         wood.addColorStop(0, "#4b3321");
@@ -349,6 +352,20 @@
         const n = parseInt(hex.slice(1), 16);
         const c = shift => Math.max(0, Math.min(255, Math.round(((n >> shift) & 255) + amount)));
         return "rgb(" + c(16) + "," + c(8) + "," + c(0) + ")";
+    }
+
+    // Same hex palette, expressed as an rgba() string at a given opacity.
+    function withAlpha(hex, alpha) {
+        const n = parseInt(hex.slice(1), 16);
+        return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + alpha + ")";
+    }
+
+    // Blits one icon cell from IconSet onto a destination bitmap; a no-op until the sheet is ready.
+    function blitIcon(destBitmap, iconIndex, size, dx, dy) {
+        const iconBitmap = ImageManager.loadSystem("IconSet");
+        if (!iconBitmap.isReady()) return;
+        const cols = Math.floor(iconBitmap.width / size);
+        destBitmap.blt(iconBitmap, (iconIndex % cols) * size, Math.floor(iconIndex / cols) * size, size, size, dx, dy);
     }
 
     function Sprite_SurvivalHud() {
@@ -372,6 +389,9 @@
         this._labelKey = "";
         this._staminaKey = "";
         this._pulse = 0;
+        this._noteMapId = null;
+        this._showClock = true;
+        this._showStamina = true;
         this.createClock();
         this.createLabel();
         this.createStaminaGauge();
@@ -393,10 +413,10 @@
 
         const minute = makeHandBitmap(
             [[-1.7, 9], [1.7, 9], [1.5, -(MINUTE_LENGTH - 7)], [0.6, -MINUTE_LENGTH], [-0.6, -MINUTE_LENGTH], [-1.5, -(MINUTE_LENGTH - 7)]],
-            "#1a100a", null);
+            PALETTE.dark, null);
         const hour = makeHandBitmap(
             [[-2.4, 7], [2.4, 7], [3.2, -3], [1.8, -(HOUR_LENGTH - 6)], [0, -HOUR_LENGTH], [-1.8, -(HOUR_LENGTH - 6)], [-3.2, -3]],
-            "#1a100a", "rgba(120,86,50,0.9)");
+            PALETTE.dark, "rgba(120,86,50,0.9)");
         this._hourHand = this.makeHandSprite(hour);
         this._minuteHand = this.makeHandSprite(minute);
         this._cap = new Sprite(makeCapBitmap());
@@ -455,9 +475,9 @@
 
     Sprite_SurvivalHud.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        const note = ($dataMap && $dataMap.note) || "";
-        const showClock = !/<Clock:\s*off\s*>/i.test(note);
-        const showStamina = !/<Stamina:\s*off\s*>/i.test(note);
+        this.updateMapNoteFlags();
+        const showClock = this._showClock;
+        const showStamina = this._showStamina;
         this._clock.visible = showClock;
         this._label.visible = showClock;
         this._gauge.visible = showStamina;
@@ -465,6 +485,17 @@
         if (showStamina) this.updateStamina();
         // With the clock hidden the gauge moves up into its place.
         this._gauge.y = (showClock ? this._label.y + Sprite_SurvivalHud.LABEL_HEIGHT + 6 : 0);
+    };
+
+    // The <Clock:off>/<Stamina:off> map-note check only needs to run once per
+    // map load, not every frame - cache it and re-check only when the map changes.
+    Sprite_SurvivalHud.prototype.updateMapNoteFlags = function() {
+        const mapId = $gameMap.mapId();
+        if (mapId === this._noteMapId) return;
+        this._noteMapId = mapId;
+        const note = ($dataMap && $dataMap.note) || "";
+        this._showClock = !/<Clock:\s*off\s*>/i.test(note);
+        this._showStamina = !/<Stamina:\s*off\s*>/i.test(note);
     };
 
     Sprite_SurvivalHud.prototype.updateClock = function() {
@@ -487,7 +518,7 @@
         bmp.clear();
         paintPlaque(bmp, 0, 0, bmp.width, bmp.height, 5);
         bmp.fontSize = 15;
-        bmp.textColor = "#f6e7c4";
+        bmp.textColor = PALETTE.cream;
         bmp.outlineColor = "rgba(20,10,4,0.9)";
         bmp.outlineWidth = 3;
         bmp.drawText(text, 0, 0, bmp.width, bmp.height, "center");
@@ -510,19 +541,16 @@
         const icon = Sprite_SurvivalHud.ICON_SIZE;
         bmp.clear();
         paintPlaque(bmp, 0, 0, icon, icon, 6);
-        if (this._iconBitmap.isReady()) {
-            const cols = Math.floor(this._iconBitmap.width / icon);
-            bmp.blt(this._iconBitmap, (STAMINA_ICON % cols) * icon, Math.floor(STAMINA_ICON / cols) * icon, icon, icon, 0, 0);
-        }
+        blitIcon(bmp, STAMINA_ICON, icon, 0, 0);
         const barX = icon + Sprite_SurvivalHud.GAP;
         const barH = Sprite_SurvivalHud.BAR_HEIGHT;
         const barW = Sprite_SurvivalHud.BAR_WIDTH;
         const barY = Math.round((icon - barH) / 2);
         const ratio = $gameSystem.staminaRatio();
         // frame: dark rim, brass rim, dark trough
-        ctx.fillStyle = "#1a100a";
+        ctx.fillStyle = PALETTE.dark;
         ctx.fillRect(barX, barY, barW, barH);
-        ctx.fillStyle = "#a67c3a";
+        ctx.fillStyle = PALETTE.brass;
         ctx.fillRect(barX + 1, barY + 1, barW - 2, barH - 2);
         ctx.fillStyle = "#21150b";
         ctx.fillRect(barX + 2, barY + 2, barW - 4, barH - 4);
@@ -623,16 +651,10 @@
         const width = pad * 2 + icon + gap + textWidth;
         const bmp = new Bitmap(width, height);
         const ctx = bmp.context;
+        roundRect(ctx, 0, 0, width, height, 10);
         ctx.fillStyle = "rgba(22,15,10,0.82)";
-        ctx.beginPath();
-        const r = 10;
-        ctx.moveTo(r, 0); ctx.lineTo(width - r, 0); ctx.quadraticCurveTo(width, 0, width, r);
-        ctx.lineTo(width, height - r); ctx.quadraticCurveTo(width, height, width - r, height);
-        ctx.lineTo(r, height); ctx.quadraticCurveTo(0, height, 0, height - r);
-        ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
-        ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = "rgba(166,124,58,0.85)";   // the brass rim of the windows
+        ctx.strokeStyle = withAlpha(PALETTE.brass, 0.85);   // the brass rim of the windows
         ctx.lineWidth = 1.5;
         ctx.stroke();
         bmp.fontSize = POPUP_FONT;
@@ -642,9 +664,7 @@
         bmp.drawText(this._data.text, pad + icon + gap, 0, textWidth + 4, height, "left");
         const iconSheet = ImageManager.loadSystem("IconSet");
         iconSheet.addLoadListener(() => {
-            const cols = Math.floor(iconSheet.width / icon);
-            const i = this._data.iconIndex;
-            bmp.blt(iconSheet, (i % cols) * icon, Math.floor(i / cols) * icon, icon, icon, pad, Math.round((height - icon) / 2));
+            blitIcon(bmp, this._data.iconIndex, icon, pad, Math.round((height - icon) / 2));
         });
         bmp._baseTexture.update();
         this.bitmap = bmp;

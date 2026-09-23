@@ -28,9 +28,11 @@ const { launch, sleep } = require("./cdp.js");
         check("the icon (400) is drawn and the icon sheet grew to 832 px", pix.n > 250 && pix.h === 832, pix);
         const imgs = await ev(`Promise.all(["Farm_Bucket", "Farm_Bucket_Full"].map(n => new Promise(res => { const bm = ImageManager.loadSystem(n); bm.addLoadListener(() => res(bm.width + "x" + bm.height)); })))`);
         check("the two pictures load (empty, full of water): 27 x 32", JSON.stringify(imgs) === JSON.stringify(["27x32", "27x32"]), imgs);
-        const def = await J(`(function(){ const B = Farming.BUILDINGS, k = B.bucket, w = B.well; return { cost: k.cost, carry: k.carry, pack: k.pack, instant: k.instant, w: k.w, rain: k.rain, wellCost: w.cost, wellRefund: w.refund, oldWell: Farming.geoOf({ type: "well", x: 0, y: 0 }).cost, v2Well: Farming.geoOf({ type: "well", x: 0, y: 0, v: 2 }).cost, v2Refund: Farming.geoOf({ type: "well", x: 0, y: 0, v: 2 }).refund || null }; })()`);
-        check("Wiadro: 3 planks + 1 iron, no hammer, can be packed into item 138, holds 6 portions of rain",
-            JSON.stringify(def.cost) === JSON.stringify([[IT.planks, 3], [IT.iron, 1]]) && def.carry === 138 && def.pack === 138 && def.instant === true && def.w === 1 && def.rain.max === 6, def);
+        const def = await J(`(function(){ const B = Farming.BUILDINGS, k = B.bucket, w = B.well, f = B.forge.recipes.find(r => r.id === "bucket_item"); return { cost: k.cost, pack: k.pack, instant: k.instant, w: k.w, rain: k.rain, forge: f && { in: f.inputs, out: f.output, manual: !!f.manual, unique: !!f.unique }, wellCost: w.cost, wellRefund: w.refund, oldWell: Farming.geoOf({ type: "well", x: 0, y: 0 }).cost, v2Well: Farming.geoOf({ type: "well", x: 0, y: 0, v: 2 }).cost, v2Refund: Farming.geoOf({ type: "well", x: 0, y: 0, v: 2 }).refund || null }; })()`);
+        check("the forge makes it: 'Wykuj wiadro' = 3 planks + 1 iron -> 1 bucket, hand work, as many as you like",
+            !!def.forge && JSON.stringify(def.forge.in) === JSON.stringify([[IT.planks, 3], [IT.iron, 1]]) && JSON.stringify(def.forge.out) === "[138,1]" && def.forge.manual && !def.forge.unique, def.forge);
+        check("Wiadro is put down ready: it costs only the bucket item, no hammer, packs back into item 138, holds 6 portions of rain",
+            JSON.stringify(def.cost) === "[[138,1]]" && def.pack === 138 && def.instant === true && def.w === 1 && def.rain.max === 6, def);
         check("the well now needs a bucket (and gives it back when pulled down); wells built before need none", JSON.stringify(def.wellCost) === JSON.stringify([[64, 12], [80, 3], [93, 2], [138, 1]]) && JSON.stringify(def.wellRefund).includes("138") && JSON.stringify(def.oldWell) === JSON.stringify([[64, 12], [80, 3], [93, 2]]) && JSON.stringify(def.v2Well) === JSON.stringify([[64, 12], [80, 3], [93, 2]]) && def.v2Refund === null, def);
 
         // ---------------------------------------------------------------- an open place
@@ -60,14 +62,16 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- building it
         for (const id of [IT.planks, IT.iron, IT.bucket, IT.hammer]) await setN(id, 0);
-        check("without materials the placer says so", (await ev(`Farming.placementProblem("bucket", ${kx}, ${ky})`)) === "Brakuje materiałów.");
+        check("without a bucket in the bag the placer says so", (await ev(`Farming.placementProblem("bucket", ${kx}, ${ky})`)) === "Brakuje materiałów.");
         await setN(IT.planks, 3); await setN(IT.iron, 1);
-        check("3 planks + 1 iron are enough (no hammer needed)", (await ev(`Farming.placementProblem("bucket", ${kx}, ${ky})`)) === null && (await ev(`Farming.effectiveCost("bucket").map(c => c[0]).join()`)) === "80,86");
+        check("planks and iron alone no longer make a bucket on the ground", (await ev(`Farming.placementProblem("bucket", ${kx}, ${ky})`)) === "Brakuje materiałów.");
+        await setN(IT.planks, 0); await setN(IT.iron, 0); await setN(IT.bucket, 1);
+        check("a forged bucket in the bag is enough (no hammer needed)", (await ev(`Farming.placementProblem("bucket", ${kx}, ${ky})`)) === null);
         await ev(`Farming.pitchInstant("bucket", ${kx}, ${ky}); 0`);
         await waitSwing();
         const built = await J(`(function(){ const b = Farming.buildingAt(${kx}, ${ky}); return b ? { type: b.type, v: b.v, site: !!b.site, water: b.water, wt: typeof b.wt } : null; })()`);
         check("the bucket stands there at once (no site), empty, with a clock for the rain", !!built && built.type === "bucket" && built.v === 3 && !built.site && built.water < 0.5 && built.wt === "number", built);
-        check("the materials are spent and the popup says 'Rozstawiono: Wiadro'", (await count(IT.planks)) === 0 && (await count(IT.iron)) === 0 && (await pops()).some(t => /Rozstawiono: Wiadro/.test(t)));
+        check("the bucket item is spent and the popup says 'Rozstawiono: Wiadro'", (await count(IT.bucket)) === 0 && (await pops()).some(t => /Rozstawiono: Wiadro/.test(t)));
         check("the bucket is a solid 1 x 1 object (nobody walks through it)", (await ev(`Farming.solidAt(${kx}, ${ky}) ? 1 : 0`)) === 1 && (await ev(`$gameMap.isPassable(${kx}, ${ky}, 8)`)) === false);
         const m0 = await menuAt(kx, ky);
         check("its menu: title 'Wiadro (0/6)', 'Wiadro jest puste', drinking and filling greyed out, 'Zabierz wiadro' available, no 'Rozbierz'",
@@ -173,28 +177,44 @@ const { launch, sleep } = require("./cdp.js");
         await waitSwing();
         check("without any can at all, the bucket still waters the plot next to it", (await ev(`$gameSystem._farm.plots[3]["${px},${py}"].watered !== undefined`)) && (await units()) === 0);
 
-        // ---------------------------------------------------------------- taking it into the bag and putting it down again
+        // ---------------------------------------------------------------- pouring it out still works on its own
         await ev(`Farming.buildingAt(${kx}, ${ky}).water = 5; 0`);
         await ev(`$gamePlayer.locate(${kx}, ${ky + 1}); $gamePlayer.setDirection(8); 0`);
         const wet = await menuAt(kx, ky);
-        const packWet = wet.entries.find(e => e.name === "Zabierz wiadro");
-        check("a bucket with water in it cannot be picked up: 'Zabierz wiadro' is greyed out and says to pour the water out or use it first", packWet.enabled === false && /Wylej/.test(packWet.help), packWet);
-        await pops();
-        await ev(`Farming.packUp(Farming.buildingAt(${kx}, ${ky})); 0`);
-        await frames(10);
-        check("a direct attempt is refused too: popup 'Najpierw wylej lub zużyj wodę', the bucket stays", (await pops()).some(t => /Najpierw wylej lub zużyj wodę/.test(t)) && !!(await ev(`Farming.buildingAt(${kx}, ${ky})`)) && (await count(IT.bucket)) === 0);
         check("'Wylej wodę' is offered", wet.entries.find(e => e.name === "Wylej wodę").enabled === true);
         await runAt(kx, ky, "Wylej wodę");
         await waitSwing();
         check("pouring it out empties the bucket (popup 'Wylano wodę') and 'Wylej wodę' is greyed out", (await units()) === 0 && (await pops()).some(t => /Wylano wodę/.test(t)) && (await menuAt(kx, ky)).entries.find(e => e.name === "Wylej wodę").enabled === false);
+
+        // ---------------------------------------------------------------- taking it into the bag WITH its water, and putting it down again
+        await ev(`Farming.buildingAt(${kx}, ${ky}).water = 4; 0`);
+        const weight0 = await ev("Survival.carriedWeight()");
+        const packWet = (await menuAt(kx, ky)).entries.find(e => e.name === "Zabierz wiadro");
+        check("a bucket with water in it CAN now be picked up: 'Zabierz wiadro' is enabled and no longer warns about pouring the water out first", packWet.enabled === true && !/Wylej/.test(packWet.help), packWet);
+        await pops();
         await runAt(kx, ky, "Zabierz wiadro");
         await waitSwing();
-        check("'Zabierz wiadro' (empty now): the bucket goes into the bag (item 138 x1), the object is gone, popup 'Zabrano: Wiadro'", (await count(IT.bucket)) === 1 && !(await ev(`Farming.buildingAt(${kx}, ${ky})`)) && (await pops()).some(t => /Zabrano: Wiadro/.test(t)));
-        check("with the item in the bag the bucket costs the item, not planks and iron", (await ev(`Farming.effectiveCost("bucket").map(c => c.join("x")).join()`)) === "138x1" && (await ev(`Farming.placementProblem("bucket", ${kx + 3}, ${ky})`)) === null);
+        check("picking it up: item in the bag, the ground object is gone, popup names the carried water level (4/6)", (await count(IT.bucket)) === 1 && !(await ev(`Farming.buildingAt(${kx}, ${ky})`)) && (await pops()).some(t => /Zabrano: Wiadro \(4\/6\)/.test(t)));
+        check("the carried (bag) water level is now 4/6", (await ev("Farming.bagWater()")) === 4);
+        const weight1 = await ev("Survival.carriedWeight()");
+        check("carrying the bucket with 4 portions of water weighs 7 more than before it was picked up (3 base + 4 water)", Math.round(weight1 - weight0) === 7, { weight0, weight1 });
+        check("with the item in the bag it can be put down again", (await ev(`Farming.placementProblem("bucket", ${kx + 3}, ${ky})`)) === null);
         await ev(`Farming.pitchInstant("bucket", ${kx + 3}, ${ky}); 0`);
         await waitSwing();
-        check("put down again: the item is used up, no planks or iron were needed, the new bucket is empty", (await count(IT.bucket)) === 0 && (await ev(`(Farming.buildingAt(${kx + 3}, ${ky}) || {}).type`)) === "bucket" && (await ev(`Farming.buildingAt(${kx + 3}, ${ky}).water`)) === 0);
+        check("put down again: the item is used up, the new bucket on the ground keeps the 4 portions, the bag is empty again",
+            (await count(IT.bucket)) === 0 && (await ev(`(Farming.buildingAt(${kx + 3}, ${ky}) || {}).type`)) === "bucket" && (await ev(`Farming.buildingAt(${kx + 3}, ${ky}).water`)) === 4 && (await ev("Farming.bagWater()")) === 0);
         await ev(`(function(){ const L = $gameSystem._farm.buildings[3]; L.splice(L.indexOf(Farming.buildingAt(${kx + 3}, ${ky})), 1); $gameSystem._farm.rev++; })(); 0`);
+
+        // ---------------------------------------------------------------- filling the bag bucket: from another bucket on the ground, and from the well
+        // (the ground bucket at kx,ky was picked up and consumed above - place a fresh one directly, like the save/load check further down does)
+        await setN(IT.bucket, 1);
+        await ev(`(function(){ const f = $gameSystem._farm; f.buildings[3].push({ id: f.nextId++, type: "bucket", x: ${kx}, y: ${ky}, last: 1, v: 3, water: 3, wt: Farming.clockHours() }); f.rev++; })(); 0`);
+        const fillEntry = (await menuAt(kx, ky)).entries.find(e => e.name === "Napełnij wiadro");
+        check("standing at a wet ground bucket: 'Napełnij wiadro' is offered", !!fillEntry && fillEntry.enabled === true, fillEntry);
+        await runAt(kx, ky, "Napełnij wiadro");
+        await waitSwing();
+        check("filling the bag bucket from the ground one (0/6 <- 3): bag is 3/6, the ground bucket is drained", (await ev("Farming.bagWater()")) === 3 && (await units()) === 0, { bag: await ev("Farming.bagWater()"), ground: await units() });
+        await ev(`(function(){ const L = $gameSystem._farm.buildings[3]; L.splice(L.indexOf(Farming.buildingAt(${kx}, ${ky})), 1); $gameSystem._farm.rev++; })(); Farming.setBagWater(0); 0`);   // clean up: only the well test's own bucket item/count matters from here
 
         // ---------------------------------------------------------------- the well needs the bucket (and, since the pit mechanic, a dug-out 2x2 under it - dug first here so this stays a test of the bucket, not of the pit)
         const wx = bx + 3, wy = by + 6;   // a 2 x 2 well

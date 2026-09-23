@@ -137,6 +137,7 @@
         const outdoors = /<(Clouds|Weather):\s*on\s*>/i.test(($dataMap && $dataMap.note) || "");
         if (!outdoors) return "pod dachem";
         const type = $gameScreen.weatherType(), active = ($gameScreen._weatherPowerTarget || 0) > 0;
+        if (active && type === "storm") return "burza";
         if (active && type === "rain") return "deszcz";
         if (active && type === "snow") return "śnieg";
         return "bezdeszczowo";

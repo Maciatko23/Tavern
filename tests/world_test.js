@@ -40,7 +40,7 @@ const { launch, sleep } = require("./cdp.js");
         await frames(20);
 
         // ---------------------------------------------------------------- the ground after a bucket is taken away
-        await setN(IT.planks, 3); await setN(IT.iron, 1);
+        await setN(IT.bucket, 1);   // the bucket is forged at the forge and put down ready from the bag
         const kx = bx + 2, ky = by + 2;
         await ev(`Farming.pitchInstant("bucket", ${kx}, ${ky}); 0`);
         await waitSwing();

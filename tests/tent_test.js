@@ -47,12 +47,16 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev(`(function(){ const f = $gameSystem._farm; const P = f.plots[3] = f.plots[3] || {}; const L = f.buildings[3] = f.buildings[3] || [];
             L.push({ id: f.nextId++, type: "tannery", x: ${bx + 1}, y: ${by + 1}, last: 1 }); P["${bx + 1},${by + 1}"] = { s: "cleared" }; P["${bx + 2},${by + 1}"] = { s: "cleared" }; f.rev++; })()`);
         await frames(6);
-        // the build list: the tent is there, dimmed, without a hammer
+        // the "Postaw..." list (instant items: no hammer, no site): the tent is there, dimmed, points at the tannery
         await standAt(bx + 5, by + 4, 8);
         const list0 = await ev(`Farming.menuFor(${bx + 5}, ${by + 3}) && 0`).catch(() => 0);
-        const buildList = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => ({ name: x.name, enabled: x.enabled !== false, help: x.help })); }; const e = Farming.menuFor(${bx + 5}, ${by + 3}).entries.find(e => e.name === "Zbuduj..."); e.run(); scene.openFarmMenu = _o; return got; })()`);
-        const tentRow = buildList && buildList.find(e => e.name === "Namiot");
-        check("the build list has the tent, dimmed while there is none, and points at the tannery", !!tentRow && tentRow.enabled === false && /garbarni/.test(tentRow.help), tentRow);
+        const placeList = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => ({ name: x.name, enabled: x.enabled !== false, help: x.help })); }; const e = Farming.menuFor(${bx + 5}, ${by + 3}).entries.find(e => e.name === "Postaw..."); e.run(); scene.openFarmMenu = _o; return got; })()`);
+        const tentRow = placeList && placeList.find(e => e.name === "Namiot");
+        check("'Postaw...' has the tent, dimmed while there is none, and points at the tannery", !!tentRow && tentRow.enabled === false && /garbarni/.test(tentRow.help), tentRow);
+        const buildListNoTent = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return got; })()`);
+        check("the Q build list (real buildings) does NOT list the tent", !buildListNoTent.includes("Namiot"), buildListNoTent);
+        const groundNames = await ev(`Farming.menuFor(${bx + 5}, ${by + 3}).entries.map(e => e.name)`);
+        check("the ground menu has no 'Zbuduj...' (building is on Q) and ends with 'Postaw...'", !groundNames.includes("Zbuduj...") && groundNames[groundNames.length - 1] === "Postaw...", groundNames);
         check("no hammer in the bag (the tent must not need one)", (await count(89)) === 0);
         // sewing
         await standAt(bx + 1, by + 2, 8);
@@ -95,7 +99,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await standAt(bx + 5, by + 4, 8);
         await frames(8);
         const m = JSON.parse(await ev(`JSON.stringify(Farming.menuFor(${bx + 5}, ${by + 3}).entries.map(e => e.name))`));
-        check("the tent menu: 'Prześpij noc', 'Złóż namiot', 'Zostaw' - and no 'Rozbierz'", m.join() === "Prześpij noc,Złóż namiot,Zostaw", m);
+        check("the tent menu: 'Prześpij noc', 'Złóż namiot' - no 'Rozbierz', no 'Zostaw'", m.join() === "Prześpij noc,Złóż namiot", m);
         await ev("Journal.evaluateGoals(); 0");
         await press("ok"); await frames(24);
         check("the real action button facing the tent opens its menu", (await ev("$gameTemp._farmMenuOpen ? SceneManager._scene._farmMenu._title : ''")) === "Namiot");

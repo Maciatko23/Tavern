@@ -33,7 +33,8 @@ const { launch, sleep } = require("./cdp.js");
 
         // the build menu no longer builds by itself: it starts the placer
         const menu = await ev("JSON.stringify(Farming.menuFor(" + (bx + 3) + ", " + (by + 3) + ").entries.map(e => e.name))");
-        check("the farm menu on empty ground still offers building", /Zbuduj/.test(menu), menu);
+        const qList = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return JSON.stringify(got); })()`);
+        check("building is on Q (the ground menu has no 'Zbuduj...'): the Q list offers the bench", !/Zbuduj/.test(menu) && JSON.parse(qList).includes("Ławka"), { menu, qList });
         await ev(`Farming.startPlacement("bench", ${bx + 3}, ${by + 3}); Input._currentState.ok = true; 0`);   // the same press that would have chosen it
         await frames(2);
         await ev("Input._currentState.ok = false; 0");

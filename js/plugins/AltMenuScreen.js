@@ -61,6 +61,10 @@
         return rect;
     };
 
+    // maxCols=4 here must keep matching however many top-row commands UITheme.js's HIDE_RPG
+    // leaves visible (it hides skill/equip/status/formation, i.e. 4 of the 8 stock commands) -
+    // see the numVisibleRows() override in UITheme.js (Window_MenuCommand section) which relies
+    // on this same count to lay out a single row instead of two.
     Window_MenuCommand.prototype.maxCols = function() {
         return 4;
     };
@@ -75,31 +79,5 @@
 
     Window_MenuStatus.prototype.numVisibleRows = function() {
         return 1;
-    };
-
-    Window_MenuStatus.prototype.drawItemImage = function(index) {
-        const actor = this.actor(index);
-        const rect = this.itemRectWithPadding(index);
-        const w = Math.min(rect.width, 144);
-        const h = Math.min(rect.height, 144);
-        const lineHeight = this.lineHeight();
-        this.changePaintOpacity(actor.isBattleMember());
-        this.drawActorFace(actor, rect.x, rect.y + lineHeight * 2, w, h);
-        this.changePaintOpacity(true);
-    };
-
-    Window_MenuStatus.prototype.drawItemStatus = function(index) {
-        const actor = this.actor(index);
-        const rect = this.itemRectWithPadding(index);
-        const x = rect.x;
-        const y = rect.y;
-        const width = rect.width;
-        const bottom = y + rect.height;
-        const lineHeight = this.lineHeight();
-        this.drawActorName(actor, x, y + lineHeight * 0, width);
-        this.drawActorLevel(actor, x, y + lineHeight * 1, width);
-        this.drawActorClass(actor, x, bottom - lineHeight * 4, width);
-        this.placeBasicGauges(actor, x, bottom - lineHeight * 3, width);
-        this.drawActorIcons(actor, x, bottom - lineHeight * 1, width);
     };
 })();

@@ -69,6 +69,12 @@
  *   (zima), w ustalonych godzinach. Dotyczy map zewnętrznych (z tagiem <Clouds:on>
  *   albo <Weather:on>; <Weather:off> wyłącza). Deszcz podlewa wszystkie zaorane
  *   pola, a przy okazji ryby lepiej biorą.
+ *   BURZA: część deszczowych dni to burze (wiosna 30%, lato 60%, jesień 20% dni
+ *   z deszczem, zimą nigdy), po południu albo wieczorem, na 1,5-3 godziny. Godzinę
+ *   wcześniej "Zbiera się na burzę" (wiatr, ciemne niebo, dalekie grzmoty), potem
+ *   ulewa (pogoda MZ "storm"), a po burzy zwykły deszcz. Siłę burzy (0..1) liczy
+ *   stormLevel; pokazuje ją i daje jej dźwięk wtyczka Storm.js. Menu F9: "Burza
+ *   teraz" i "Koniec pogody na dziś".
  *   Zimą i podczas śniegu, na zewnątrz, gracz marznie: koszty wytrzymałości rosną
  *   o 25%, dopóki nie założy płaszcza, nie stanie przy płonącym ognisku (w
  *   promieniu 4 kratek) albo nie zje czegoś rozgrzewającego (premia warm).
@@ -166,16 +172,40 @@
         return isSurvivalItem(item) ? survivalCanUse(item) : _Game_Party_canUse.call(this, item);
     };
 
+    // Why survivalCanUse just refused this item - shown only when the player actually tries to pick a
+    // disabled item (see the playBuzzerSound hook below), never during list drawing.
+    function whyCanNotUse(item) {
+        const need = needs(item);
+        if (need.length > 0 && !need.some(id => hasItem(id))) {
+            const req = $dataItems[need[0]];
+            return "Potrzebujesz: " + (req ? req.name : "?");
+        }
+        if (foodInfo(item) && $gameSystem.staminaRatio() >= 0.995) return "Masz pełną wytrzymałość";
+        return "";
+    }
+
+    // The engine already plays a buzzer when OK is pressed on a disabled item (once per press, not per
+    // frame) - piggyback on that moment to say why, matching the "always a popup" rule for other gates.
+    const _Window_ItemList_playBuzzerSound = Window_ItemList.prototype.playBuzzerSound;
+    Window_ItemList.prototype.playBuzzerSound = function() {
+        _Window_ItemList_playBuzzerSound.call(this);
+        const item = this.item();
+        if (item && isSurvivalItem(item) && !survivalCanUse(item)) {
+            const why = whyCanNotUse(item);
+            if (why) feedback(item.iconIndex, why);
+        }
+    };
+
     // In the item menu the message goes to the help window; the menu re-selects the item right after using it
     // and that puts the item's own description back, so Scene_Item puts the message back once more.
     let lastFeedback = "";
-    function feedback(icon, text) {
+    function feedback(icon, text, color) {
         const scene = SceneManager._scene;
         if (scene && scene._helpWindow && scene.constructor.name !== "Scene_Map") {
             lastFeedback = text;
             scene._helpWindow.setText(text);
         } else {
-            $gameTemp.pushLootPopup(icon, text, "#9ff0a8");
+            $gameTemp.pushLootPopup(icon, text, color || "#9ff0a8");
         }
     }
     const _Scene_Item_determineItem = Scene_Item.prototype.determineItem;
@@ -284,15 +314,32 @@
             if (exclude && it.id === exclude.id) continue;
             total += itemWeight(it) * $gameParty.numItems(it);
         }
+        // the bucket's carried water is one shared level (see Farming.js), not per-copy weight, so it is added once
+        if (window.Farming && Farming.bagWaterWeight) total += Farming.bagWaterWeight();
         return total;
     }
 
     // ------------------------------------------------------------------
     // Weather: a fixed plan for every day of the year (rain, snow in winter)
     // ------------------------------------------------------------------
+    // Some rainy days are storm days (summer most often, never in winter): plan.storm = { start, end } in hours. A storm comes in the
+    // afternoon or the evening (so it can also be seen at night), the rain starts with it and goes on as ordinary rain after it passes.
+    // The storm itself is drawn and heard by Storm.js; this file only plans it and says how strong it is at any moment (stormLevel).
+    const STORM_CHANCE = [0.3, 0.6, 0.2, 0];   // of the rainy days, per season
+    const STORM_GATHER = 1;                    // hours of wind and darkening sky before the first drop
+    const STORM_FADE = 1;                      // hours over which it dies away (the last quarter of them after its end)
     function weatherPlan(day) {
+        const forced = $gameSystem && $gameSystem._stormForce;
+        if (forced && forced.day === day) {   // the debug menu (F9): a storm right now, or no weather at all today
+            return forced.off ? null : { type: "rain", start: forced.start, end: Math.min(24, forced.end + 1), power: 4, storm: { start: forced.start, end: forced.end } };
+        }
         const s = seasonIndex(day), chance = [0.35, 0.2, 0.4, 0.45][s];
         if (hash(day, 1) >= chance) return null;
+        if (hash(day, 6) < STORM_CHANCE[s]) {
+            const start = 14 + Math.floor(hash(day, 7) * 8), len = 1.5 + Math.round(hash(day, 8) * 6) / 4;
+            const end = Math.min(24, start + len);
+            return { type: "rain", start, end: Math.min(24, end + 1 + Math.floor(hash(day, 3) * 3)), power: 3 + Math.floor(hash(day, 4) * 3), storm: { start, end } };
+        }
         const start = 5 + Math.floor(hash(day, 2) * 9), len = 4 + Math.floor(hash(day, 3) * 6);
         return { type: s === 3 ? "snow" : "rain", start, end: Math.min(24, start + len), power: 3 + Math.floor(hash(day, 4) * 3) };
     }
@@ -300,19 +347,57 @@
         const day = $gameSystem.dayNightDay(), hour = $gameSystem.dayNightHour(), plan = weatherPlan(day);
         return plan && hour >= plan.start && hour < plan.end ? plan : null;
     }
+    const smooth = t => { const k = Math.max(0, Math.min(1, t)); return k * k * (3 - 2 * k); };
+    // 0..1: how strong the storm is at this hour of that day (0 = no storm). It gathers for STORM_GATHER hours before the rain (up to
+    // 0.55: wind, a dark sky, far thunder), breaks with the rain, rages with small surges, then dies away.
+    function stormLevel(day, hour) {
+        const plan = weatherPlan(day), s = plan && plan.storm;
+        if (!s) return 0;
+        const a = s.start, z = s.end;
+        if (hour < a - STORM_GATHER || hour >= z + STORM_FADE / 4) return 0;
+        if (hour < a) return 0.55 * smooth((hour - (a - STORM_GATHER)) / STORM_GATHER);
+        if (hour < a + 0.4) return 0.55 + 0.45 * smooth((hour - a) / 0.4);
+        const surge = 0.9 + 0.1 * Math.sin(hour * 11);
+        if (hour < z - STORM_FADE * 0.75) return surge;
+        return surge * (1 - smooth((hour - (z - STORM_FADE * 0.75)) / STORM_FADE));
+    }
+    // "gather" (before the rain), "rage", "pass" (dying away) or null
+    function stormPhase(day, hour) {
+        const plan = weatherPlan(day), s = plan && plan.storm;
+        if (!s || stormLevel(day, hour) <= 0) return null;
+        return hour < s.start ? "gather" : hour < s.end - STORM_FADE * 0.75 ? "rage" : "pass";
+    }
+    // F9: a storm starting in a moment and lasting `hours`; calm = no weather at all for the rest of today
+    function forceStorm(hours) {
+        const day = $gameSystem.dayNightDay(), start = Math.min(23, $gameSystem.dayNightHour() + 0.35);   // already gathering (no waiting a whole hour)
+        $gameSystem._stormForce = { day, start, end: Math.min(24, start + (hours || 2)) };
+    }
+    function calmWeather() {
+        $gameSystem._stormForce = { day: $gameSystem.dayNightDay(), off: true };
+    }
+    const stormNow = () => stormLevel($gameSystem.dayNightDay(), $gameSystem.dayNightHour());
 
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
         if (!WEATHER_ON || Graphics.frameCount % 30 !== 0 || !$gameSystem.dayNightDay) return;
         const plan = isOutdoors() ? currentWeather() : null;
+        const day = $gameSystem.dayNightDay(), hour = $gameSystem.dayNightHour(), storm = stormLevel(day, hour);
+        // the sky warns you: wind and far thunder an hour before the storm breaks (outdoors, once per storm)
+        if (isOutdoors() && storm > 0 && stormPhase(day, hour) === "gather" && $gameSystem._stormWarned !== day) {
+            $gameSystem._stormWarned = day;
+            $gameTemp.pushLootPopup(0, "Zbiera się na burzę", "#bcd8ff");
+        }
+        // while the storm rages the rain is MZ's "storm" (heavier, slanted, see Storm.js), as hard as the storm is strong
+        const raging = !!plan && !!plan.storm && hour >= plan.storm.start && storm > 0.35;
+        const type = plan ? (raging ? "storm" : plan.type) : "none", power = plan ? (raging ? Math.round(4 + 5 * storm) : plan.power) : 0;
         // MZ keeps the old weather type after a fade out (power 0), so compare the power target, not the type.
         // Weather set by an event is left alone: only weather this plugin started is ever ended by it.
         const target = $gameScreen._weatherPowerTarget || 0;
-        if (plan && (target !== plan.power || $gameScreen.weatherType() !== plan.type)) {
-            $gameScreen.changeWeather(plan.type, plan.power, 90);
+        if (plan && (target !== power || $gameScreen.weatherType() !== type)) {
+            $gameScreen.changeWeather(type, power, 90);
             $gameSystem._weatherOwn = true;
-            if (target === 0) $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", "#bcd8ff");
+            if (target === 0) $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : raging ? "Burza!" : "Zaczyna padać deszcz", "#bcd8ff");
         } else if (!plan && $gameSystem._weatherOwn) {
             $gameScreen.changeWeather("none", 0, 90);
             $gameSystem._weatherOwn = false;
@@ -443,5 +528,5 @@
         }
     };
 
-    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight() };
+    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight() };
 })();

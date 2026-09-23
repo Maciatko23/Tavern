@@ -1,6 +1,7 @@
 //=============================================================================
 // DustMotes.js
 //=============================================================================
+// Z-order: renders below RoomLighting.js, DayNightCycle.js, CloudShadows.js and SwayingFoliage.js - must stay first of the five in plugins.js.
 
 /*:
  * @target MZ
@@ -66,27 +67,85 @@
 
     const pluginName = "DustMotes";
     const params = PluginManager.parameters(pluginName);
-    const COUNT = Number(params.count || 35);
-    const COLOR = String(params.color || "255,241,204")
-        .split(",")
-        .map(s => Number(s.trim()));
-    const MIN_SIZE = Number(params.minSize || 2);
-    const MAX_SIZE = Number(params.maxSize || 4);
-    const SPEED = Number(params.speed || 0.15);
+    const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
+    // Parses a "R,G,B" plugin-parameter string (e.g. "255,241,204") into [r,g,b] numbers.
+    const parseRGB = str => String(str).split(",").map(s => Number(s.trim()));
+    const COUNT = num(params.count, 35);
+    const COLOR = parseRGB(params.color || "255,241,204");
+    const MIN_SIZE = num(params.minSize, 2);
+    const MAX_SIZE = num(params.maxSize, 4);
+    const SPEED = num(params.speed, 0.15);
     const DEFAULT_ENABLED = params.defaultEnabled === "true";
 
-    function isDustEnabled() {
-        const note = $dataMap && $dataMap.note ? $dataMap.note : "";
-        if (/<Dust:\s*on\s*>/i.test(note)) return true;
-        if (/<Dust:\s*off\s*>/i.test(note)) return false;
-        return DEFAULT_ENABLED;
+    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
+    // `fallback` when neither is present. Duplicated identically in
+    // Atmosphere.js/RoomLighting.js/DayNightCycle.js/CloudShadows.js/Minimap.js
+    // (no shared module between these plugin files today).
+    function mapNoteFlag(tag, fallback) {
+        const note = ($dataMap && $dataMap.note) || "";
+        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
+        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
+        return fallback;
     }
+
+    function isDustEnabled() {
+        return mapNoteFlag("Dust", DEFAULT_ENABLED);
+    }
+
+    // Builds a square bitmap `size` px wide filled with a radial gradient from
+    // its center to its edge, painted from `colorStops` ([offset, r, g, b, a]
+    // tuples fed straight to CanvasGradient.addColorStop). The same small
+    // factory is duplicated in RoomLighting.js (used for the room lights, the
+    // player torch and its own dust motes) - no shared module between these
+    // plugin files today, see the top-of-file z-order note.
+    function makeRadialGlowBitmap(size, colorStops) {
+        const d = Math.max(2, Math.round(size));
+        const bitmap = new Bitmap(d, d);
+        const context = bitmap.context;
+        const r = d / 2;
+        const gradient = context.createRadialGradient(r, r, 0, r, r, r);
+        for (const stop of colorStops) {
+            gradient.addColorStop(stop[0], `rgba(${stop[1]},${stop[2]},${stop[3]},${stop[4]})`);
+        }
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, d, d);
+        bitmap._baseTexture.update();
+        return bitmap;
+    }
+
+    // A tiny shared shape for the map-anchored particle sprites in this plugin
+    // (currently just Sprite_DustMote): centers themselves like a glow, and
+    // convert their position via $gameMap.adjustX/adjustY (the same conversion
+    // the tile renderer itself uses, so wrapping/looping maps scroll
+    // correctly) instead of a manual `value - displayX()` subtraction. The
+    // same shape is duplicated in CloudShadows.js (Sprite_CloudShadow) and
+    // RoomLighting.js (Sprite_LightDustMote) - no shared module between these
+    // plugin files today, see the top-of-file z-order note.
+    function Sprite_ParticleBase() {
+        this.initialize(...arguments);
+    }
+    Sprite_ParticleBase.prototype = Object.create(Sprite.prototype);
+    Sprite_ParticleBase.prototype.constructor = Sprite_ParticleBase;
+    Sprite_ParticleBase.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
+    };
+    // mapPixelX/Y are in MAP-PIXEL space (not tile space).
+    Sprite_ParticleBase.prototype.mapPixelToScreenX = function(mapPixelX) {
+        const tw = $gameMap.tileWidth();
+        return $gameMap.adjustX(mapPixelX / tw) * tw;
+    };
+    Sprite_ParticleBase.prototype.mapPixelToScreenY = function(mapPixelY) {
+        const th = $gameMap.tileHeight();
+        return $gameMap.adjustY(mapPixelY / th) * th;
+    };
 
     function Sprite_DustMote() {
         this.initialize(...arguments);
     }
 
-    Sprite_DustMote.prototype = Object.create(Sprite.prototype);
+    Sprite_DustMote.prototype = Object.create(Sprite_ParticleBase.prototype);
     Sprite_DustMote.prototype.constructor = Sprite_DustMote;
 
     Sprite_DustMote._cache = {};
@@ -95,17 +154,10 @@
         const key = Math.round(size * 10);
         if (!this._cache[key]) {
             const d = Math.ceil(size * 2) + 2;
-            const bitmap = new Bitmap(d, d);
-            const context = bitmap.context;
-            const cx = d / 2;
-            const cy = d / 2;
-            const gradient = context.createRadialGradient(cx, cy, 0, cx, cy, size);
-            gradient.addColorStop(0, `rgba(${COLOR[0]},${COLOR[1]},${COLOR[2]},0.9)`);
-            gradient.addColorStop(1, `rgba(${COLOR[0]},${COLOR[1]},${COLOR[2]},0)`);
-            context.fillStyle = gradient;
-            context.fillRect(0, 0, d, d);
-            bitmap._baseTexture.update();
-            this._cache[key] = bitmap;
+            this._cache[key] = makeRadialGlowBitmap(d, [
+                [0, COLOR[0], COLOR[1], COLOR[2], 0.9],
+                [1, COLOR[0], COLOR[1], COLOR[2], 0]
+            ]);
         }
         return this._cache[key];
     };
@@ -114,9 +166,7 @@
     // the map's own width/height, so the motes stay inside the room instead of
     // drifting across the whole viewport regardless of room size.
     Sprite_DustMote.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this);
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
+        Sprite_ParticleBase.prototype.initialize.call(this);
         this._size = MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE);
         this.bitmap = Sprite_DustMote.sharedBitmap(this._size);
         this.reset(true);
@@ -143,7 +193,7 @@
     };
 
     Sprite_DustMote.prototype.update = function() {
-        Sprite.prototype.update.call(this);
+        Sprite_ParticleBase.prototype.update.call(this);
         const roomW = this.roomWidth();
         const roomH = this.roomHeight();
         this._swayPhase += this._swaySpeed;
@@ -157,10 +207,8 @@
         if (this.opacity < this._targetOpacity) {
             this.opacity = Math.min(this._targetOpacity, this.opacity + this._fadeSpeed);
         }
-        const tw = $gameMap.tileWidth();
-        const th = $gameMap.tileHeight();
-        this.x = Math.round(this._mapX - $gameMap.displayX() * tw);
-        this.y = Math.round(this._mapY - $gameMap.displayY() * th);
+        this.x = Math.round(this.mapPixelToScreenX(this._mapX));
+        this.y = Math.round(this.mapPixelToScreenY(this._mapY));
     };
 
     const _Spriteset_Map_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;

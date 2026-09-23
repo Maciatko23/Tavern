@@ -1,6 +1,7 @@
 //=============================================================================
 // DayNightCycle.js
 //=============================================================================
+// Z-order: must load after DustMotes.js/RoomLighting.js and before CloudShadows.js/SwayingFoliage.js; also must load before Atmosphere.js, which now reads its canonical periods.
 
 /*:
  * @target MZ
@@ -157,11 +158,19 @@
         return KEYFRAMES[0].tone.slice();
     }
 
+    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
+    // `fallback` when neither is present. Duplicated identically in
+    // Atmosphere.js/RoomLighting.js/CloudShadows.js/DustMotes.js/Minimap.js
+    // (no shared module between these plugin files today).
+    function mapNoteFlag(tag, fallback) {
+        const note = ($dataMap && $dataMap.note) || "";
+        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
+        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
+        return fallback;
+    }
+
     function isToneEnabled() {
-        const note = $dataMap && $dataMap.note ? $dataMap.note : "";
-        if (/<DayNight:\s*off\s*>/i.test(note)) return false;
-        if (/<DayNight:\s*on\s*>/i.test(note)) return true;
-        return DEFAULT_ENABLED;
+        return mapNoteFlag("DayNight", DEFAULT_ENABLED);
     }
 
     const _Game_System_initialize = Game_System.prototype.initialize;
@@ -230,7 +239,8 @@
         }
         syncVariables();
         if (isToneEnabled()) {
-            $gameScreen.startTint(computeTone($gameSystem.dayNightHour()), 0);
+            const tone = computeTone($gameSystem.dayNightHour());
+            $gameScreen.startTint(window.Storm && Storm.adjustTone ? Storm.adjustTone(tone) : tone, 0);   // a storm darkens the sky (Storm.js)
             $gameSystem._dayNightTinting = true;
         } else if ($gameSystem._dayNightTinting) {
             // Leaving a tinted map for one with the tint off: drop our tone once.
@@ -244,4 +254,9 @@
         _Spriteset_Map_update.call(this);
         this.updateDayNight();
     };
+
+    // Exposes the canonical hour->period mapping so other plugins (Atmosphere.js)
+    // can derive their own coarser views of "what time is it" from the same
+    // source instead of re-deriving separate, possibly-conflicting boundaries.
+    window.DayNightCycle = { periodAt, PERIODS, computeTone };
 })();

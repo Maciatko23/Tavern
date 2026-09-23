@@ -1,6 +1,7 @@
 //=============================================================================
 // CloudShadows.js
 //=============================================================================
+// Z-order: must load after DustMotes.js, RoomLighting.js and DayNightCycle.js, and before SwayingFoliage.js.
 
 /*:
  * @target MZ
@@ -85,26 +86,35 @@
 
     const pluginName = "CloudShadows";
     const params = PluginManager.parameters(pluginName);
-    const CLOUD_COUNT = Number(params.cloudCount || 4);
-    const CLOUD_COLOR = String(params.cloudColor || "40,40,55")
-        .split(",")
-        .map(s => Number(s.trim()));
-    const CLOUD_OPACITY = Number(params.cloudOpacity || 90);
-    const MIN_SIZE = Number(params.minSize || 120);
-    const MAX_SIZE = Number(params.maxSize || 220);
-    const SPEED = Number(params.speed || 0.25);
-    const WIND_ANGLE = Number(params.windAngle || 10);
+    const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
+    // Parses a "R,G,B" plugin-parameter string (e.g. "40,40,55") into [r,g,b] numbers.
+    const parseRGB = str => String(str).split(",").map(s => Number(s.trim()));
+    const CLOUD_COUNT = num(params.cloudCount, 4);
+    const CLOUD_COLOR = parseRGB(params.cloudColor || "40,40,55");
+    const CLOUD_OPACITY = num(params.cloudOpacity, 90);
+    const MIN_SIZE = num(params.minSize, 120);
+    const MAX_SIZE = num(params.maxSize, 220);
+    const SPEED = num(params.speed, 0.25);
+    const WIND_ANGLE = num(params.windAngle, 10);
     const DEFAULT_ENABLED = params.defaultEnabled === "true";
 
     const SHAPES = 8;          // different silhouettes, shared by all the clouds of a map
     const DETAIL = 0.5;        // shapes are drawn at half size and stretched back: they are soft anyway
     const MAX_CLOUDS = 80;
 
+    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
+    // `fallback` when neither is present. Duplicated identically in
+    // Atmosphere.js/RoomLighting.js/DayNightCycle.js/DustMotes.js/Minimap.js
+    // (no shared module between these plugin files today).
+    function mapNoteFlag(tag, fallback) {
+        const note = ($dataMap && $dataMap.note) || "";
+        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
+        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
+        return fallback;
+    }
+
     function isCloudsEnabled() {
-        const note = $dataMap && $dataMap.note ? $dataMap.note : "";
-        if (/<Clouds:\s*on\s*>/i.test(note)) return true;
-        if (/<Clouds:\s*off\s*>/i.test(note)) return false;
-        return DEFAULT_ENABLED;
+        return mapNoteFlag("Clouds", DEFAULT_ENABLED);
     }
 
     // Builds one irregular, fluffy cloud silhouette by stamping several
@@ -135,6 +145,34 @@
         return bitmap;
     }
 
+    // A tiny shared shape for the map-anchored particle sprites in this plugin
+    // (currently just Sprite_CloudShadow): centers themselves like a glow, and
+    // convert their position via $gameMap.adjustX/adjustY (the same conversion
+    // the tile renderer itself uses, so wrapping/looping maps scroll
+    // correctly) instead of a manual `value - displayX()` subtraction. The
+    // same shape is duplicated in DustMotes.js (Sprite_DustMote) and
+    // RoomLighting.js (Sprite_LightDustMote) - no shared module between these
+    // plugin files today, see the top-of-file z-order note.
+    function Sprite_ParticleBase() {
+        this.initialize(...arguments);
+    }
+    Sprite_ParticleBase.prototype = Object.create(Sprite.prototype);
+    Sprite_ParticleBase.prototype.constructor = Sprite_ParticleBase;
+    Sprite_ParticleBase.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
+    };
+    // mapPixelX/Y are in MAP-PIXEL space (not tile space).
+    Sprite_ParticleBase.prototype.mapPixelToScreenX = function(mapPixelX) {
+        const tw = $gameMap.tileWidth();
+        return $gameMap.adjustX(mapPixelX / tw) * tw;
+    };
+    Sprite_ParticleBase.prototype.mapPixelToScreenY = function(mapPixelY) {
+        const th = $gameMap.tileHeight();
+        return $gameMap.adjustY(mapPixelY / th) * th;
+    };
+
     // ------------------------------------------------------------------
     // A cloud has a position in the world (map pixels), so it scrolls with the
     // map like every other thing on it, and only drifts with the wind.
@@ -143,13 +181,11 @@
         this.initialize(...arguments);
     }
 
-    Sprite_CloudShadow.prototype = Object.create(Sprite.prototype);
+    Sprite_CloudShadow.prototype = Object.create(Sprite_ParticleBase.prototype);
     Sprite_CloudShadow.prototype.constructor = Sprite_CloudShadow;
 
     Sprite_CloudShadow.prototype.initialize = function(bitmap, size) {
-        Sprite.prototype.initialize.call(this);
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
+        Sprite_ParticleBase.prototype.initialize.call(this);
         this.blendMode = PIXI.BLEND_MODES.MULTIPLY;
         this.bitmap = bitmap;
         const stretch = (1 / DETAIL) * (0.85 + Math.random() * 0.3);
@@ -189,20 +225,24 @@
                 this._wx = Math.random() * (w + r * 2) - r;
             }
         }
-        this.opacity = Math.round(CLOUD_OPACITY * (0.6 + Math.random() * 0.4));
+        this._baseOpacity = Math.round(CLOUD_OPACITY * (0.6 + Math.random() * 0.4));
+        this.opacity = this._baseOpacity;
     };
 
     Sprite_CloudShadow.prototype.update = function() {
-        Sprite.prototype.update.call(this);
-        this._wx += this._vx;
-        this._wy += this._vy;
+        Sprite_ParticleBase.prototype.update.call(this);
+        // a storm (Storm.js): the clouds race with the wind, and under the one dark sky of the storm their separate shadows fade away
+        const storm = window.Storm, W = storm ? storm.wind() : 0, L = storm ? storm.level() : 0;
+        this._wx += this._vx * (1 + 6 * W);
+        this._wy += this._vy * (1 + 6 * W);
+        this.opacity = Math.round(this._baseOpacity * (1 - 0.85 * L));
         const w = this.mapWidth(), h = this.mapHeight(), r = this._radius;
         if (this._wx < -r * 2 || this._wx > w + r * 2 || this._wy < -r * 2 || this._wy > h + r * 2) {
             this.reset(false);
         }
         // world -> screen, the same way the tilemap does it (also right for maps smaller than the screen)
-        this.x = ($gameMap.adjustX(this._wx / $gameMap.tileWidth())) * $gameMap.tileWidth();
-        this.y = ($gameMap.adjustY(this._wy / $gameMap.tileHeight())) * $gameMap.tileHeight();
+        this.x = this.mapPixelToScreenX(this._wx);
+        this.y = this.mapPixelToScreenY(this._wy);
         this.visible = this.x > -r && this.x < Graphics.width + r && this.y > -r && this.y < Graphics.height + r;
     };
 

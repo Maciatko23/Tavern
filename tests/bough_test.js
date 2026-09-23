@@ -97,7 +97,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 9, true)); 0");
         await b.shot(OUT + "bed_pitched.png");
         const names = await ev(`Farming.menuFor(${bx + 2}, ${by + 3}).entries.map(e => e.name)`);
-        check("its menu: 'Prześpij noc', 'Rozbierz', 'Zostaw' (no nap)", names.join() === "Prześpij noc,Rozbierz,Zostaw", names);
+        check("its menu: 'Prześpij noc', 'Rozbierz' (no nap, no 'Zostaw')", names.join() === "Prześpij noc,Rozbierz", names);
         const helpLine = await ev(`Farming.menuFor(${bx + 2}, ${by + 3}).entries[0]`);
         check("the sleep line says it restores about 60% (40% in rain, snow and winter)", /60%/.test(helpLine.help) && /40%/.test(helpLine.help) && /60%/.test(helpLine.right), helpLine);
         await press("ok"); await frames(20);

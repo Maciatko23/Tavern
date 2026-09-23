@@ -25,6 +25,10 @@
 (() => {
     "use strict";
 
+    // the sprite-lifecycle helpers and the flee-direction scan: shared with Hunting.js's wild animals, which
+    // define RoamingActor and load first (see plugins.js).
+    const RA = window.RoamingActor;
+
     // hours: the hours of the day the animals are out in the yard. speed: RPG Maker move speed (4 = a walking man).
     const SPECIES = {
         cow: { name: "Krowa", sheet: "$Animal_Cow", speed: 2.4, hours: [6, 20], pause: [80, 260], run: [1, 3] },
@@ -128,44 +132,21 @@
         this._steps = between(sp.run) - 1;
         this.moveStraight(this._heading);
     };
-    // the passable direction that ends farthest from the player
+    // the passable direction that ends farthest from the player (the shared scan, tuned for a calm step-aside:
+    // it only moves when a direction genuinely beats standing still, no jitter, no lookahead)
     Game_Livestock.prototype.awayFrom = function(dx, dy) {
-        let best = 0, bestScore = Math.hypot(dx, dy);
-        for (const d of [2, 4, 6, 8]) {
-            if (!this.canPass(this._x, this._y, d)) continue;
-            const sx = d === 6 ? 1 : d === 4 ? -1 : 0, sy = d === 2 ? 1 : d === 8 ? -1 : 0;
-            const score = Math.hypot(dx + sx, dy + sy);
-            if (score > bestScore + 0.05) { bestScore = score; best = d; }
-        }
-        return best;
+        return RA.fleeDirection(this, dx, dy, { startAtDistance: true, margin: 0.05 });
     };
 
     // ------------------------------------------------------------------
-    // Sprites: the map scene may be rebuilt at any time (menu, journal, day summary...); Hunting.js has the same lesson: the new
-    // spriteset is not yet SceneManager._scene._spriteset while it is being built, so it has to be passed in.
+    // Sprites: the map scene may be rebuilt at any time (menu, journal, day summary...); Hunting.js's RoamingActor
+    // has the lesson written up: the new spriteset is not yet SceneManager._scene._spriteset while it is being
+    // built, so it has to be passed in.
     // ------------------------------------------------------------------
-    function spriteset() {
-        const scene = SceneManager._scene;
-        return scene instanceof Scene_Map ? scene._spriteset : null;
-    }
-    function addSprite(animal, set) {
-        set = set || spriteset();
-        if (!set || !set._tilemap) return;
-        if (animal._sprite && animal._sprite.parent === set._tilemap) return;
-        const sprite = new Sprite_Character(animal);
-        animal._sprite = sprite;
-        set._tilemap.addChild(sprite);
-    }
-    function dropSprite(animal) {
-        if (!animal._sprite) return;
-        try {
-            if (animal._sprite.parent) animal._sprite.parent.removeChild(animal._sprite);
-            animal._sprite.destroy();
-        } catch (e) { /* already gone with the old scene */ }
-        animal._sprite = null;
-    }
+    const spriteset = RA.spriteset;
+    const addSprite = RA.addSprite;
     function remove(animal) {
-        dropSprite(animal);
+        RA.dropSprite(animal);
         herd = herd.filter(a => a !== animal);
     }
     function spawn(kind, yard, x, y) {

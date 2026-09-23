@@ -1,6 +1,7 @@
 //=============================================================================
 // RoomLighting.js
 //=============================================================================
+// Z-order: must load after DustMotes.js and before DayNightCycle.js, CloudShadows.js and SwayingFoliage.js.
 
 /*:
  * @target MZ
@@ -155,29 +156,34 @@
 
     const pluginName = "RoomLighting";
     const params = PluginManager.parameters(pluginName);
-    const DARKNESS = Number(params.darkness || 120);
-    const DARK_COLOR = String(params.darkColor || "20,20,35")
-        .split(",")
-        .map(s => Number(s.trim()));
-    const DEFAULT_RADIUS = Number(params.lightRadius || 150);
-    const DEFAULT_COLOR = String(params.lightColor || "255,244,214")
-        .split(",")
-        .map(s => Number(s.trim()));
+    const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
+    // Parses a "R,G,B" plugin-parameter string (e.g. "20,20,35") into [r,g,b] numbers.
+    const parseRGB = str => String(str).split(",").map(s => Number(s.trim()));
+    const DARKNESS = num(params.darkness, 120);
+    const DARK_COLOR = parseRGB(params.darkColor || "20,20,35");
+    const DEFAULT_RADIUS = num(params.lightRadius, 150);
+    const DEFAULT_COLOR = parseRGB(params.lightColor || "255,244,214");
     const DEFAULT_ENABLED = params.defaultEnabled === "true";
-    const TORCH_SWITCH_ID = Number(params.torchSwitch || 0);
-    const TORCH_RADIUS = Number(params.torchRadius || 140);
-    const TORCH_COLOR = String(params.torchColor || "255,170,80")
-        .split(",")
-        .map(s => Number(s.trim()));
+    const TORCH_SWITCH_ID = num(params.torchSwitch, 0);
+    const TORCH_RADIUS = num(params.torchRadius, 140);
+    const TORCH_COLOR = parseRGB(params.torchColor || "255,170,80");
     const TORCH_FLICKER = params.torchFlicker === "true";
-    const TORCH_EXPIRE_COMMON_EVENT = Number(params.torchExpireCommonEvent || 0);
-    const TORCH_ICON_INDEX = Number(params.torchIconIndex || 80);
+    const TORCH_EXPIRE_COMMON_EVENT = num(params.torchExpireCommonEvent, 0);
+    const TORCH_ICON_INDEX = num(params.torchIconIndex, 80);
+
+    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
+    // `fallback` when neither is present. Duplicated identically in
+    // Atmosphere.js/DayNightCycle.js/CloudShadows.js/DustMotes.js/Minimap.js
+    // (no shared module between these plugin files today).
+    function mapNoteFlag(tag, fallback) {
+        const note = ($dataMap && $dataMap.note) || "";
+        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
+        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
+        return fallback;
+    }
 
     function isDarkEnabled() {
-        const note = $dataMap && $dataMap.note ? $dataMap.note : "";
-        if (/<Dark:\s*on\s*>/i.test(note)) return true;
-        if (/<Dark:\s*off\s*>/i.test(note)) return false;
-        return DEFAULT_ENABLED;
+        return mapNoteFlag("Dark", DEFAULT_ENABLED);
     }
 
     function parseKeyValues(str) {
@@ -246,18 +252,33 @@
         return markers;
     }
 
-    function makeCircleGlowBitmap(radius, color) {
-        const d = Math.max(2, Math.round(radius * 2));
+    // Builds a square bitmap `size` px wide filled with a radial gradient from
+    // its center to its edge, painted from `colorStops` ([offset, r, g, b, a]
+    // tuples fed straight to CanvasGradient.addColorStop). Duplicated
+    // identically in CloudShadows.js/DustMotes.js is NOT possible for the
+    // multi-puff cloud shape in CloudShadows.js, but DustMotes.js's own glow
+    // dot uses the same shape as this one - see the top-of-file note there.
+    function makeRadialGlowBitmap(size, colorStops) {
+        const d = Math.max(2, Math.round(size));
         const bitmap = new Bitmap(d, d);
         const context = bitmap.context;
         const r = d / 2;
         const gradient = context.createRadialGradient(r, r, 0, r, r, r);
-        gradient.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},0.9)`);
-        gradient.addColorStop(0.6, `rgba(${color[0]},${color[1]},${color[2]},0.35)`);
-        gradient.addColorStop(1, `rgba(${color[0]},${color[1]},${color[2]},0)`);
+        for (const stop of colorStops) {
+            gradient.addColorStop(stop[0], `rgba(${stop[1]},${stop[2]},${stop[3]},${stop[4]})`);
+        }
         context.fillStyle = gradient;
         context.fillRect(0, 0, d, d);
         bitmap._baseTexture.update();
+        return bitmap;
+    }
+
+    function makeCircleGlowBitmap(radius, color) {
+        const bitmap = makeRadialGlowBitmap(radius * 2, [
+            [0, color[0], color[1], color[2], 0.9],
+            [0.6, color[0], color[1], color[2], 0.35],
+            [1, color[0], color[1], color[2], 0]
+        ]);
         return { bitmap, anchorX: 0.5, anchorY: 0.5 };
     }
 
@@ -342,6 +363,32 @@
         return { bitmap, anchorX: originX / width, anchorY: originY / height, geom };
     }
 
+    // A tiny shared shape for the map-anchored particle sprites in this plugin
+    // (currently just Sprite_LightDustMote): centers themselves like a glow,
+    // and convert their position via $gameMap.adjustX/adjustY (the same
+    // conversion the tile renderer itself uses, so wrapping/looping maps
+    // scroll correctly) instead of a manual `value - displayX()` subtraction.
+    // The same shape is duplicated in CloudShadows.js (Sprite_CloudShadow) and
+    // DustMotes.js (Sprite_DustMote) - no shared module between these plugin
+    // files today, see the top-of-file z-order note.
+    function Sprite_ParticleBase() {
+        this.initialize(...arguments);
+    }
+    Sprite_ParticleBase.prototype = Object.create(Sprite.prototype);
+    Sprite_ParticleBase.prototype.constructor = Sprite_ParticleBase;
+    Sprite_ParticleBase.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
+    };
+    // tileX/tileY are in TILE units (e.g. an event's x/y on the map).
+    Sprite_ParticleBase.prototype.tileToScreenX = function(tileX) {
+        return $gameMap.adjustX(tileX) * $gameMap.tileWidth();
+    };
+    Sprite_ParticleBase.prototype.tileToScreenY = function(tileY) {
+        return $gameMap.adjustY(tileY) * $gameMap.tileHeight();
+    };
+
     // A single tiny, drifting speck of dust visible inside a light beam - like
     // the motes you see floating in a real sunbeam through a window. Lives for
     // a few seconds, fading in and out, then respawns at a new random spot
@@ -350,31 +397,23 @@
         this.initialize(...arguments);
     }
 
-    Sprite_LightDustMote.prototype = Object.create(Sprite.prototype);
+    Sprite_LightDustMote.prototype = Object.create(Sprite_ParticleBase.prototype);
     Sprite_LightDustMote.prototype.constructor = Sprite_LightDustMote;
 
     Sprite_LightDustMote._bitmapCache = {};
     Sprite_LightDustMote.sharedBitmap = function(size) {
         const d = Math.max(1, Math.round(size));
         if (!this._bitmapCache[d]) {
-            const bitmap = new Bitmap(d, d);
-            const context = bitmap.context;
-            const r = d / 2;
-            const gradient = context.createRadialGradient(r, r, 0, r, r, r);
-            gradient.addColorStop(0, "rgba(255,255,255,0.95)");
-            gradient.addColorStop(1, "rgba(255,255,255,0)");
-            context.fillStyle = gradient;
-            context.fillRect(0, 0, d, d);
-            bitmap._baseTexture.update();
-            this._bitmapCache[d] = bitmap;
+            this._bitmapCache[d] = makeRadialGlowBitmap(d, [
+                [0, 255, 255, 255, 0.95],
+                [1, 255, 255, 255, 0]
+            ]);
         }
         return this._bitmapCache[d];
     };
 
     Sprite_LightDustMote.prototype.initialize = function(geom, tileX, tileY, offsetX, offsetY, size) {
-        Sprite.prototype.initialize.call(this);
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
+        Sprite_ParticleBase.prototype.initialize.call(this);
         this.blendMode = 1; // additive - reads as a bright fleck even on a dark room
         this.bitmap = Sprite_LightDustMote.sharedBitmap(size);
         this._geom = geom;
@@ -396,7 +435,7 @@
     };
 
     Sprite_LightDustMote.prototype.update = function() {
-        Sprite.prototype.update.call(this);
+        Sprite_ParticleBase.prototype.update.call(this);
         this._age++;
         this._localX += this._vx;
         this._localY += this._vy;
@@ -405,10 +444,8 @@
         const fadeIn = Math.min(1, this._age / fadeFrames);
         const fadeOut = Math.min(1, (this._life - this._age) / fadeFrames);
         this.opacity = Math.round(220 * Math.max(0, Math.min(fadeIn, fadeOut)));
-        const tw = $gameMap.tileWidth();
-        const th = $gameMap.tileHeight();
-        this.x = Math.round((this._tileX - $gameMap.displayX()) * tw + this._offsetX + this._localX);
-        this.y = Math.round((this._tileY - $gameMap.displayY()) * th + this._offsetY + this._localY);
+        this.x = Math.round(this.tileToScreenX(this._tileX) + this._offsetX + this._localX);
+        this.y = Math.round(this.tileToScreenY(this._tileY) + this._offsetY + this._localY);
     };
 
     function Sprite_RoomLight() {
@@ -442,10 +479,10 @@
 
     Sprite_RoomLight.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        const tw = $gameMap.tileWidth();
-        const th = $gameMap.tileHeight();
-        this.x = Math.round((this._tileX - $gameMap.displayX()) * tw + this._offsetX);
-        this.y = Math.round((this._tileY - $gameMap.displayY()) * th + this._offsetY);
+        // Same conversion as Sprite_ParticleBase above (adjustX/Y, not a manual
+        // displayX() subtraction) so this also scrolls correctly on looping maps.
+        this.x = Math.round($gameMap.adjustX(this._tileX) * $gameMap.tileWidth() + this._offsetX);
+        this.y = Math.round($gameMap.adjustY(this._tileY) * $gameMap.tileHeight() + this._offsetY);
     };
 
     const _Spriteset_Map_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;

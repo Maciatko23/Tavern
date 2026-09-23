@@ -23,6 +23,33 @@
 (() => {
     "use strict";
 
+    // draw order (Sprite.z, used by the tilemap/spriteset to sort everything that shares a parent).
+    // Kept as one small table instead of scattered numbers so a glance here shows the whole stack,
+    // ground to sky. ChoppableTree.js keeps its own copy (see the note there) with the same numbers.
+    const Z = {
+        ground: 1,        // farm layer: soil patches and crops, above the ground tiles, below the characters
+        litter: 1.5,       // gathered stones/plants lying on the ground, over the soil, under the characters
+        footprint: 2,      // building site markers and the ground shadow under a building, under the characters
+        tileGrid: 2.35,    // the "?" alignment grid, over the ground, under the characters and the build placer
+        buildGhost: 2.4,   // build-mode grid + coloured tile overlay, over the ground, under the characters
+        withCharacters: 3, // sorted with the characters: buildings, fences, flames, hanging food, the placement ghost
+        smoke: 4,          // rising smoke puffs, above the buildings
+        readyBadge: 5      // the finished-product icon over a station, above everything else on the ground
+    };
+
+    // build (once) and cache a bitmap - or an array of bitmaps, e.g. flame animation frames - under
+    // `key` in `cache` (a Map). buildFn does the actual drawing and returns the result; sites that draw
+    // with raw context calls (ctx.fillRect/putImageData) instead of Bitmap's own methods (fillRect,
+    // blt, ...), which sync the GPU texture themselves, still need this to pick up their pixels.
+    function cachedBitmap(cache, key, buildFn) {
+        const cached = cache.get(key);
+        if (cached !== undefined) return cached;
+        const result = buildFn();
+        if (result && result._baseTexture && result._baseTexture.update) result._baseTexture.update();
+        cache.set(key, result);
+        return result;
+    }
+
     // smooth value noise, so the edges of a patch wave instead of jittering pixel by pixel
     function vnoise(x, salt) {
         const i = Math.floor(x), f = x - i, t = f * f * (3 - 2 * f);
@@ -161,29 +188,28 @@
     const soilCache = new Map();
     function soilTexture(state, tx, ty, n) {
         const k = state + ":" + tx + "," + ty + ":" + n;
-        if (soilCache.has(k)) return soilCache.get(k);
-        const bitmap = new Bitmap(Farming.TILE, Farming.TILE);
-        const ctx = bitmap.context, image = ctx.createImageData(Farming.TILE, Farming.TILE), data = image.data;
-        const rim = SOIL[state].rim, clamp = v => Math.max(0, Math.min(255, Math.round(v)));
-        for (let py = 0; py < Farming.TILE; py++) {
-            for (let px = 0; px < Farming.TILE; px++) {
-                const wx = tx * Farming.TILE + px, wy = ty * Farming.TILE + py, depth = soilDepth(px, py, n, wx, wy);
-                const i = (py * Farming.TILE + px) * 4;
-                if (depth < -2.4) continue;
-                if (depth < 0) {   // soft fringe just outside the edge
-                    data[i] = rim[0]; data[i + 1] = rim[1]; data[i + 2] = rim[2];
-                    data[i + 3] = Math.round(70 * (depth + 2.4) / 2.4);
-                    continue;
+        return cachedBitmap(soilCache, k, () => {
+            const bitmap = new Bitmap(Farming.TILE, Farming.TILE);
+            const ctx = bitmap.context, image = ctx.createImageData(Farming.TILE, Farming.TILE), data = image.data;
+            const rim = SOIL[state].rim, clamp = v => Math.max(0, Math.min(255, Math.round(v)));
+            for (let py = 0; py < Farming.TILE; py++) {
+                for (let px = 0; px < Farming.TILE; px++) {
+                    const wx = tx * Farming.TILE + px, wy = ty * Farming.TILE + py, depth = soilDepth(px, py, n, wx, wy);
+                    const i = (py * Farming.TILE + px) * 4;
+                    if (depth < -2.4) continue;
+                    if (depth < 0) {   // soft fringe just outside the edge
+                        data[i] = rim[0]; data[i + 1] = rim[1]; data[i + 2] = rim[2];
+                        data[i + 3] = Math.round(70 * (depth + 2.4) / 2.4);
+                        continue;
+                    }
+                    const base = soilColour(state, px, py, wx, wy);
+                    const c = depth < 3.2 ? (edgeColour(state, depth, wx, wy, base) || base) : base;
+                    data[i] = clamp(c[0]); data[i + 1] = clamp(c[1]); data[i + 2] = clamp(c[2]); data[i + 3] = 255;
                 }
-                const base = soilColour(state, px, py, wx, wy);
-                const c = depth < 3.2 ? (edgeColour(state, depth, wx, wy, base) || base) : base;
-                data[i] = clamp(c[0]); data[i + 1] = clamp(c[1]); data[i + 2] = clamp(c[2]); data[i + 3] = 255;
             }
-        }
-        ctx.putImageData(image, 0, 0);
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        soilCache.set(k, bitmap);
-        return bitmap;
+            ctx.putImageData(image, 0, 0);
+            return bitmap;
+        });
     }
 
     // a pit left by the shovel (depth 1-3): a dark hole with the earth piled up around it, hard-edged like the rest of the ground.
@@ -192,37 +218,37 @@
     const pitCache = new Map();
     function pitTexture(depth, quad) {
         const cacheKey = depth + (quad || "");
-        if (pitCache.has(cacheKey)) return pitCache.get(cacheKey);
-        const T = Farming.TILE, scale = quad ? 2 : 1, size = T * scale;
-        const bitmap = new Bitmap(size, size), ctx = bitmap.context, image = ctx.createImageData(size, size), data = image.data;
-        const rx = scale * (8 + 3 * depth), ry = scale * (5 + 2 * depth), cx = scale * 24, cy = scale * 25;
-        for (let py = 0; py < size; py++) {
-            for (let px = 0; px < size; px++) {
-                const e = Math.pow((px - cx) / rx, 2) + Math.pow((py - cy) / ry, 2);
-                const ring = Math.pow((px - cx + 1.5 * scale) / (rx + 4 * scale), 2) + Math.pow((py - cy + 1.5 * scale) / (ry + 3 * scale), 2);   // the heap is a little up and to the left
-                const i = (py * size + px) * 4;
-                let c = null;
-                if (e <= 1) {
-                    const shade = Math.max(0, Math.min(1, (py - (cy - ry)) / (2 * ry)));   // dark under the upper rim, lighter at the bottom of the hole
-                    const inner = e < 0.5 ? 0 : 1;
-                    c = [46 + 34 * shade + 14 * inner, 29 + 22 * shade + 9 * inner, 16 + 12 * shade + 5 * inner];
-                } else if (ring <= 1) {
-                    const crumb = ((px * 7 + py * 13) % 5 === 0) ? -22 : ((px * 3 + py * 5) % 4 === 0 ? 12 : 0);
-                    const lit = (px < cx ? 10 : -6) + (py < cy ? 8 : -4);
-                    c = [148 + crumb + lit, 104 + crumb + lit * 0.8, 64 + crumb * 0.7 + lit * 0.5];
+        return cachedBitmap(pitCache, cacheKey, () => {
+            const T = Farming.TILE, scale = quad ? 2 : 1, size = T * scale;
+            const bitmap = new Bitmap(size, size), ctx = bitmap.context, image = ctx.createImageData(size, size), data = image.data;
+            const rx = scale * (8 + 3 * depth), ry = scale * (5 + 2 * depth), cx = scale * 24, cy = scale * 25;
+            for (let py = 0; py < size; py++) {
+                for (let px = 0; px < size; px++) {
+                    const e = Math.pow((px - cx) / rx, 2) + Math.pow((py - cy) / ry, 2);
+                    const ring = Math.pow((px - cx + 1.5 * scale) / (rx + 4 * scale), 2) + Math.pow((py - cy + 1.5 * scale) / (ry + 3 * scale), 2);   // the heap is a little up and to the left
+                    const i = (py * size + px) * 4;
+                    let c = null;
+                    if (e <= 1) {
+                        const shade = Math.max(0, Math.min(1, (py - (cy - ry)) / (2 * ry)));   // dark under the upper rim, lighter at the bottom of the hole
+                        const inner = e < 0.5 ? 0 : 1;
+                        c = [46 + 34 * shade + 14 * inner, 29 + 22 * shade + 9 * inner, 16 + 12 * shade + 5 * inner];
+                    } else if (ring <= 1) {
+                        const crumb = ((px * 7 + py * 13) % 5 === 0) ? -22 : ((px * 3 + py * 5) % 4 === 0 ? 12 : 0);
+                        const lit = (px < cx ? 10 : -6) + (py < cy ? 8 : -4);
+                        c = [148 + crumb + lit, 104 + crumb + lit * 0.8, 64 + crumb * 0.7 + lit * 0.5];
+                    }
+                    if (!c) continue;
+                    data[i] = Math.max(0, Math.min(255, Math.round(c[0]))); data[i + 1] = Math.max(0, Math.min(255, Math.round(c[1]))); data[i + 2] = Math.max(0, Math.min(255, Math.round(c[2]))); data[i + 3] = 255;
                 }
-                if (!c) continue;
-                data[i] = Math.max(0, Math.min(255, Math.round(c[0]))); data[i + 1] = Math.max(0, Math.min(255, Math.round(c[1]))); data[i + 2] = Math.max(0, Math.min(255, Math.round(c[2]))); data[i + 3] = 255;
             }
-        }
-        ctx.putImageData(image, 0, 0);
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        if (!quad) { pitCache.set(cacheKey, bitmap); return bitmap; }
-        const qx = (quad === "tr" || quad === "br") ? T : 0, qy = (quad === "bl" || quad === "br") ? T : 0;
-        const cropped = new Bitmap(T, T);
-        cropped.blt(bitmap, qx, qy, T, T, 0, 0);
-        pitCache.set(cacheKey, cropped);
-        return cropped;
+            ctx.putImageData(image, 0, 0);
+            if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
+            if (!quad) return bitmap;
+            const qx = (quad === "tr" || quad === "br") ? T : 0, qy = (quad === "bl" || quad === "br") ? T : 0;
+            const cropped = new Bitmap(T, T);
+            cropped.blt(bitmap, qx, qy, T, T, 0, 0);
+            return cropped;
+        });
     }
     // greedily pairs up 2x2 blocks of depth-3 pits (top-left anchored, in reading order) into merged big-pit quadrants: key -> "tl"/"tr"/"bl"/"br"
     function mergedPitQuads(plots, covered) {
@@ -244,23 +270,38 @@
     // fence: a post with rails toward the neighbouring fences (N 1, E 2, S 4, W 8)
     const fenceCache = new Map();
     function fenceTexture(mask) {
-        if (fenceCache.has(mask)) return fenceCache.get(mask);
-        const bitmap = new Bitmap(Farming.TILE, Farming.TILE), ctx = bitmap.context;
-        const rect = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); };
-        const OUT = "#2a1a10", LIGHT = "#b98a55", MID = "#8f6539", DARK = "#5f3f24";
-        rect(14, 33, 20, 5, "rgba(0,0,0,0.22)");   // shadow
-        if (mask & 8) { rect(0, 18, 24, 4, OUT); rect(0, 19, 24, 2, LIGHT); rect(0, 27, 24, 4, OUT); rect(0, 28, 24, 2, MID); }
-        if (mask & 2) { rect(24, 18, 24, 4, OUT); rect(24, 19, 24, 2, LIGHT); rect(24, 27, 24, 4, OUT); rect(24, 28, 24, 2, MID); }
-        if (mask & 1) { rect(21, 0, 6, 20, OUT); rect(22, 0, 4, 20, MID); rect(22, 0, 1, 20, LIGHT); }
-        if (mask & 4) { rect(21, 28, 6, 20, OUT); rect(22, 28, 4, 20, MID); rect(22, 28, 1, 20, LIGHT); }
-        rect(19, 12, 10, 26, OUT);                    // post
-        rect(20, 13, 8, 24, MID);
-        rect(20, 13, 3, 24, LIGHT);
-        rect(26, 13, 2, 24, DARK);
-        rect(20, 13, 8, 2, "#d4a870");                // cap
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        fenceCache.set(mask, bitmap);
-        return bitmap;
+        return cachedBitmap(fenceCache, mask, () => {
+            const bitmap = new Bitmap(Farming.TILE, Farming.TILE), ctx = bitmap.context;
+            const rect = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); };
+            const OUT = "#2a1a10", LIGHT = "#b98a55", MID = "#8f6539", DARK = "#5f3f24";
+            rect(14, 33, 20, 5, "rgba(0,0,0,0.22)");   // shadow
+            if (mask & 8) { rect(0, 18, 24, 4, OUT); rect(0, 19, 24, 2, LIGHT); rect(0, 27, 24, 4, OUT); rect(0, 28, 24, 2, MID); }
+            if (mask & 2) { rect(24, 18, 24, 4, OUT); rect(24, 19, 24, 2, LIGHT); rect(24, 27, 24, 4, OUT); rect(24, 28, 24, 2, MID); }
+            if (mask & 1) { rect(21, 0, 6, 20, OUT); rect(22, 0, 4, 20, MID); rect(22, 0, 1, 20, LIGHT); }
+            if (mask & 4) { rect(21, 28, 6, 20, OUT); rect(22, 28, 4, 20, MID); rect(22, 28, 1, 20, LIGHT); }
+            rect(19, 12, 10, 26, OUT);                    // post
+            rect(20, 13, 8, 24, MID);
+            rect(20, 13, 3, 24, LIGHT);
+            rect(26, 13, 2, 24, DARK);
+            rect(20, 13, 8, 2, "#d4a870");                // cap
+            return bitmap;
+        });
+    }
+    // which of a fence building's four neighbours (N 1, E 2, S 4, W 8) are also fences, so its texture
+    // knows which rails to draw. Cached per (mapId, farm revision) so a rebuild pass that touches many
+    // fence tiles scans the building list once, not once per tile.
+    let fenceSetCache = null;
+    function fenceNeighbours(mapId) {
+        const key = mapId + ":" + Farming.farm().rev;
+        if (!fenceSetCache || fenceSetCache.key !== key) {
+            fenceSetCache = { key, set: new Set((Farming.farm().buildings[mapId] || []).filter(b => b.type === "fence").map(b => Farming.key(b.x, b.y))) };
+        }
+        return fenceSetCache.set;
+    }
+    function fenceMask(mapId, x, y) {
+        const fences = fenceNeighbours(mapId);
+        return (fences.has(Farming.key(x, y - 1)) ? 1 : 0) | (fences.has(Farming.key(x + 1, y)) ? 2 : 0) |
+            (fences.has(Farming.key(x, y + 1)) ? 4 : 0) | (fences.has(Farming.key(x - 1, y)) ? 8 : 0);
     }
 
     // ---- the ground layer: soil patches and crops (below the characters)
@@ -272,7 +313,7 @@
 
     Sprite_FarmLayer.prototype.initialize = function() {
         Sprite.prototype.initialize.call(this);
-        this.z = 1;   // above the ground tiles, below the characters
+        this.z = Z.ground;   // above the ground tiles, below the characters
         this._entries = [];
         this._stamp = null;
         this._scrollKey = null;
@@ -357,24 +398,25 @@
         herb: { colours: { g: "#3f8a44", G: "#6ec062", y: "#f0cc4e", Y: "#ffe98a", s: "rgba(10,8,4,0.30)" }, shapes: [
             ["....y.y...", "...yYy.y..", "....g.....", ".g..g..g..", "gG.gg.gGg.", ".gGgGgGg..", "..gGgg....", "...gg.....", "..sssss..."]] }
     };
-    const gatherBitmaps = {};
+    const gatherBitmaps = new Map();
     function gatherBitmap(kind, variant) {
         if (GATHER_ART[kind].images) return ImageManager.loadSystem(GATHER_ART[kind].images[variant]);   // a picture from img/system
         const k = kind + variant;
-        if (gatherBitmaps[k] && gatherBitmaps[k]._baseTexture) return gatherBitmaps[k];
-        // plants are drawn twice as big as the pebbles: they have to be spotted at a glance
-        const art = GATHER_ART[kind], rows = art.shapes[variant], sc = kind === "stone" ? 1 : 2, w = Math.max(...rows.map(r => r.length)), bitmap = new Bitmap(w * sc, rows.length * sc), ctx = bitmap.context;
-        rows.forEach((row, y) => {
-            for (let x = 0; x < row.length; x++) {
-                if (row[x] === "." || !art.colours[row[x]]) continue;
-                ctx.fillStyle = art.colours[row[x]];
-                ctx.fillRect(x * sc, y * sc, sc, sc);
-            }
+        const cached = gatherBitmaps.get(k);
+        if (cached && !cached._baseTexture) gatherBitmaps.delete(k);   // rebuild if the texture was disposed
+        return cachedBitmap(gatherBitmaps, k, () => {
+            // plants are drawn twice as big as the pebbles: they have to be spotted at a glance
+            const art = GATHER_ART[kind], rows = art.shapes[variant], sc = kind === "stone" ? 1 : 2, w = Math.max(...rows.map(r => r.length)), bitmap = new Bitmap(w * sc, rows.length * sc), ctx = bitmap.context;
+            rows.forEach((row, y) => {
+                for (let x = 0; x < row.length; x++) {
+                    if (row[x] === "." || !art.colours[row[x]]) continue;
+                    ctx.fillStyle = art.colours[row[x]];
+                    ctx.fillRect(x * sc, y * sc, sc, sc);
+                }
+            });
+            bitmap.smooth = false;
+            return bitmap;
         });
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        bitmap.smooth = false;
-        gatherBitmaps[k] = bitmap;
-        return bitmap;
     }
 
     function Sprite_StoneLayer() {
@@ -385,7 +427,7 @@
 
     Sprite_StoneLayer.prototype.initialize = function() {
         Sprite.prototype.initialize.call(this);
-        this.z = 1.5;   // over the ground and the soil, under the characters
+        this.z = Z.litter;   // over the ground and the soil, under the characters
         this._entries = [];
         this._stamp = null;
         this._scrollKey = null;
@@ -458,14 +500,14 @@
 
     Sprite_BuildPlacer.prototype.initialize = function(tilemap) {
         Sprite.prototype.initialize.call(this, new Bitmap(Graphics.width, Graphics.height));
-        this.z = 2.4;   // over the ground, under the characters
+        this.z = Z.buildGhost;   // over the ground, under the characters
         this.visible = false;
         this._age = 0;
         this._key = null;
         this._ghost = new Sprite();
         this._ghost.anchor.x = 0.5;
         this._ghost.anchor.y = 1;
-        this._ghost.z = 3;   // sorted with the characters, like a real building
+        this._ghost.z = Z.withCharacters;   // sorted with the characters, like a real building
         this._ghost.visible = false;
         tilemap.addChild(this._ghost);
     };
@@ -511,10 +553,7 @@
         // the picture of the building, in place like a real one
         let texture;
         if (mode.type === "fence") {
-            const fences = new Set((Farming.farm().buildings[$gameMap.mapId()] || []).filter(b => b.type === "fence").map(b => Farming.key(b.x, b.y)));
-            const mask = (fences.has(Farming.key(mode.x, mode.y - 1)) ? 1 : 0) | (fences.has(Farming.key(mode.x + 1, mode.y)) ? 2 : 0) |
-                (fences.has(Farming.key(mode.x, mode.y + 1)) ? 4 : 0) | (fences.has(Farming.key(mode.x - 1, mode.y)) ? 8 : 0);
-            texture = fenceTexture(mask);
+            texture = fenceTexture(fenceMask($gameMap.mapId(), mode.x, mode.y));
         } else {
             texture = ImageManager.loadSystem(def.image);
         }
@@ -537,7 +576,7 @@
 
     Sprite_TileGrid.prototype.initialize = function() {
         Sprite.prototype.initialize.call(this, new Bitmap(Graphics.width, Graphics.height));
-        this.z = 2.35;   // over the ground, under the characters and the build-mode placer
+        this.z = Z.tileGrid;   // over the ground, under the characters and the build-mode placer
         this.visible = false;
         this._scrollKey = null;
     };
@@ -591,38 +630,36 @@
         const flicker = 0.78 + 0.14 * Math.sin(frame * 0.13) + 0.08 * Math.sin(frame * 0.37 + 1.3);
         return (0.1 + 0.68 * nightAmount()) * flicker;
     }
-    let glowBitmap = null;
+    const glowCache = new Map();
     function fireGlowBitmap() {
-        if (glowBitmap) return glowBitmap;
-        const size = 192, bitmap = new Bitmap(size, size), ctx = bitmap.context;
-        const gradient = ctx.createRadialGradient(size / 2, size / 2, 4, size / 2, size / 2, size / 2);
-        gradient.addColorStop(0, "rgba(255,172,72,0.75)");
-        gradient.addColorStop(0.35, "rgba(255,122,40,0.32)");
-        gradient.addColorStop(1, "rgba(255,90,20,0)");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, size, size);
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        glowBitmap = bitmap;
-        return bitmap;
+        return cachedBitmap(glowCache, "glow", () => {
+            const size = 192, bitmap = new Bitmap(size, size), ctx = bitmap.context;
+            const gradient = ctx.createRadialGradient(size / 2, size / 2, 4, size / 2, size / 2, size / 2);
+            gradient.addColorStop(0, "rgba(255,172,72,0.75)");
+            gradient.addColorStop(0.35, "rgba(255,122,40,0.32)");
+            gradient.addColorStop(1, "rgba(255,90,20,0)");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            return bitmap;
+        });
     }
 
     // a pixel-art puff of smoke (2 px cells, light towards the upper left); faded and scaled by the sprite
-    let puffBitmap = null;
+    const puffCache = new Map();
     function puffTexture() {
-        if (puffBitmap) return puffBitmap;
-        const S = 20, bitmap = new Bitmap(S, S), ctx = bitmap.context;
-        const discs = [[10, 11, 6.5], [6, 9, 4], [14, 9, 4.5], [10, 6, 4]];
-        for (let py = 0; py < S; py += 2) {
-            for (let px = 0; px < S; px += 2) {
-                const cx = px + 1, cy = py + 1;
-                if (!discs.some(([x, y, r]) => Math.hypot(cx - x, cy - y) <= r)) continue;
-                ctx.fillStyle = cx + cy > 24 ? "#a4a9b0" : "#d3d7dc";
-                ctx.fillRect(px, py, 2, 2);
+        return cachedBitmap(puffCache, "puff", () => {
+            const S = 20, bitmap = new Bitmap(S, S), ctx = bitmap.context;
+            const discs = [[10, 11, 6.5], [6, 9, 4], [14, 9, 4.5], [10, 6, 4]];
+            for (let py = 0; py < S; py += 2) {
+                for (let px = 0; px < S; px += 2) {
+                    const cx = px + 1, cy = py + 1;
+                    if (!discs.some(([x, y, r]) => Math.hypot(cx - x, cy - y) <= r)) continue;
+                    ctx.fillStyle = cx + cy > 24 ? "#a4a9b0" : "#d3d7dc";
+                    ctx.fillRect(px, py, 2, 2);
+                }
             }
-        }
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        puffBitmap = bitmap;
-        return bitmap;
+            return bitmap;
+        });
     }
     const PUFFS = 4;
     const PUFF_PERIOD = 150;   // frames for a puff to rise and fade
@@ -641,68 +678,67 @@
     const HANG_SCALE = 0.75;   // the icon of the hanging food
     const ROPE_LENGTH = 12;
     // the short rope the food hangs on (2 px wide, 6 x 12 bitmap, its lower end shifted sideways by o px to follow the swaying food)
-    const ropeCache = {};
+    const ropeCache = new Map();
     function ropeBitmap(o) {
-        if (ropeCache[o]) return ropeCache[o];
-        const bitmap = new Bitmap(6, ROPE_LENGTH), ctx = bitmap.context;
-        for (let y = 0; y < ROPE_LENGTH; y++) {
-            const cx = 3 + Math.round(o * (y / (ROPE_LENGTH - 1)));
-            if (y < 2) { ctx.fillStyle = "#d2b078"; ctx.fillRect(cx - 1, y, 2, 1); }   // the loop over the hook
-            else if (y >= ROPE_LENGTH - 2) { ctx.fillStyle = "#5a3f22"; ctx.fillRect(cx - 2, y, 4, 1); }   // the knot
-            else { ctx.fillStyle = "#8a6a3c"; ctx.fillRect(cx - 1, y, 1, 1); ctx.fillStyle = "#6a4c28"; ctx.fillRect(cx, y, 1, 1); }
-        }
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        ropeCache[o] = bitmap;
-        return bitmap;
+        return cachedBitmap(ropeCache, o, () => {
+            const bitmap = new Bitmap(6, ROPE_LENGTH), ctx = bitmap.context;
+            for (let y = 0; y < ROPE_LENGTH; y++) {
+                const cx = 3 + Math.round(o * (y / (ROPE_LENGTH - 1)));
+                if (y < 2) { ctx.fillStyle = "#d2b078"; ctx.fillRect(cx - 1, y, 2, 1); }   // the loop over the hook
+                else if (y >= ROPE_LENGTH - 2) { ctx.fillStyle = "#5a3f22"; ctx.fillRect(cx - 2, y, 4, 1); }   // the knot
+                else { ctx.fillStyle = "#8a6a3c"; ctx.fillRect(cx - 1, y, 1, 1); ctx.fillStyle = "#6a4c28"; ctx.fillRect(cx, y, 1, 1); }
+            }
+            return bitmap;
+        });
     }
-    const flameCache = {};
+    const flameCache = new Map();
     const flameHeight = k => Math.round(52 * k);
     const flameBase = k => Math.round(flameHeight(k) - 15 * k);   // row of the bitmap where the middle of the fire's foot is
     function flameFrames(k) {
-        if (flameCache[k]) return flameCache[k];
-        const W = Math.round(60 * k) + (Math.round(60 * k) % 2), H = flameHeight(k), y0 = flameBase(k), frames = [];
-        const foot = p => p < 0.16 ? 0.5 + 0.5 * (p / 0.16) : Math.pow(1 - (p - 0.16) / 0.84, 1.25);
-        for (let f = 0; f < FLAME_FRAMES; f++) {
-            const bitmap = new Bitmap(W, H), ctx = bitmap.context, phase = (f / FLAME_FRAMES) * Math.PI * 2;
-            // the bed of embers: an ellipse of 2 px cells that fades out into the ring with a shimmering, dithered edge
-            const rx = 19 * k, ry = 7.5 * k;
-            for (let cy = Math.floor(-ry - 2); cy <= ry + 2; cy += 2) {
-                for (let cx = Math.floor(-rx - 2); cx <= rx + 2; cx += 2) {
-                    const d = Math.hypot(cx / rx, cy / ry);
-                    if (d > 1) continue;
-                    const noise = (((cx + 40) * 7 + (cy + 40) * 13 + f * 5) % 11) / 11;
-                    if (noise < Math.pow(d, 2.2) - 0.05) continue;
-                    ctx.fillStyle = d < 0.42 ? "#ffb43a" : d < 0.72 ? "#ee6a1a" : "#b8321a";
-                    ctx.fillRect(Math.round(W / 2 + cx - 1), Math.round(y0 + cy * 0.8), 2, 2);
-                }
-            }
-            for (const [color, hk, inset] of FLAME_LAYERS) {
-                ctx.fillStyle = color;
-                for (const [tx, ty, th, hw, cycles, ph] of FLAME_TONGUES) {
-                    if (hk < 0.5 && th < 16) continue;   // only the tall tongues get the pale core
-                    const flick = 0.8 + 0.2 * Math.sin(phase * cycles + ph);
-                    const height = Math.max(2, Math.round(th * k * hk * flick / 2) * 2);
-                    const half = Math.max(1, hw * k * (0.55 + 0.45 * hk) - inset * 0.6 * k);
-                    const baseY = Math.round(y0 + ty * k * 0.8);
-                    for (let y = 0; y < height; y += 2) {
-                        const p = y / height;
-                        const w = Math.max(2, Math.round(half * foot(p)) * 2);
-                        const sway = Math.round(Math.sin(phase * cycles + ph + y * 0.22) * (0.6 + p * 2.2) / 2) * 2;
-                        ctx.fillRect(Math.round(W / 2 + tx * k + sway - w / 2), baseY - y - 2, w, 2);
+        return cachedBitmap(flameCache, k, () => {
+            const W = Math.round(60 * k) + (Math.round(60 * k) % 2), H = flameHeight(k), y0 = flameBase(k), frames = [];
+            const foot = p => p < 0.16 ? 0.5 + 0.5 * (p / 0.16) : Math.pow(1 - (p - 0.16) / 0.84, 1.25);
+            for (let f = 0; f < FLAME_FRAMES; f++) {
+                const bitmap = new Bitmap(W, H), ctx = bitmap.context, phase = (f / FLAME_FRAMES) * Math.PI * 2;
+                // the bed of embers: an ellipse of 2 px cells that fades out into the ring with a shimmering, dithered edge
+                const rx = 19 * k, ry = 7.5 * k;
+                for (let cy = Math.floor(-ry - 2); cy <= ry + 2; cy += 2) {
+                    for (let cx = Math.floor(-rx - 2); cx <= rx + 2; cx += 2) {
+                        const d = Math.hypot(cx / rx, cy / ry);
+                        if (d > 1) continue;
+                        const noise = (((cx + 40) * 7 + (cy + 40) * 13 + f * 5) % 11) / 11;
+                        if (noise < Math.pow(d, 2.2) - 0.05) continue;
+                        ctx.fillStyle = d < 0.42 ? "#ffb43a" : d < 0.72 ? "#ee6a1a" : "#b8321a";
+                        ctx.fillRect(Math.round(W / 2 + cx - 1), Math.round(y0 + cy * 0.8), 2, 2);
                     }
                 }
+                for (const [color, hk, inset] of FLAME_LAYERS) {
+                    ctx.fillStyle = color;
+                    for (const [tx, ty, th, hw, cycles, ph] of FLAME_TONGUES) {
+                        if (hk < 0.5 && th < 16) continue;   // only the tall tongues get the pale core
+                        const flick = 0.8 + 0.2 * Math.sin(phase * cycles + ph);
+                        const height = Math.max(2, Math.round(th * k * hk * flick / 2) * 2);
+                        const half = Math.max(1, hw * k * (0.55 + 0.45 * hk) - inset * 0.6 * k);
+                        const baseY = Math.round(y0 + ty * k * 0.8);
+                        for (let y = 0; y < height; y += 2) {
+                            const p = y / height;
+                            const w = Math.max(2, Math.round(half * foot(p)) * 2);
+                            const sway = Math.round(Math.sin(phase * cycles + ph + y * 0.22) * (0.6 + p * 2.2) / 2) * 2;
+                            ctx.fillRect(Math.round(W / 2 + tx * k + sway - w / 2), baseY - y - 2, w, 2);
+                        }
+                    }
+                }
+                // a few sparks drifting up
+                ctx.fillStyle = "#ffd35a";
+                for (let n = 0; n < 4; n++) {
+                    const rise = (f * 3 + n * 7) % 24;
+                    ctx.fillRect(Math.round(W / 2 + (((n * 11 + f * 3) % 26) - 13) * k), Math.round(y0 - 22 * k - rise * k), 2, 2);
+                }
+                if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
+                frames.push(bitmap);
             }
-            // a few sparks drifting up
-            ctx.fillStyle = "#ffd35a";
-            for (let n = 0; n < 4; n++) {
-                const rise = (f * 3 + n * 7) % 24;
-                ctx.fillRect(Math.round(W / 2 + (((n * 11 + f * 3) % 26) - 13) * k), Math.round(y0 - 22 * k - rise * k), 2, 2);
-            }
-            if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-            frames.push(bitmap);
-        }
-        flameCache[k] = frames;
-        return frames;
+            return frames;
+        });
     }
 
     // ---- the night: its own layer (a dark picture with holes), so that a fire really lights up the ground around it, in the
@@ -731,12 +767,15 @@
             if (def.fire && Farming.fireLit(e.b)) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id });
             else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) out.push({ x: e.sprite.x + (def.ventX || 0), y: e.sprite.y - Math.max(20, (def.vent || 40) - 30), r: def.light || 190, i: 0.85, id: e.b.id });
         }
+        // the embers of a tree struck by lightning (ChoppableTree.js) glow in the dark a little too
+        if (window.ChoppableTree && ChoppableTree.emberLights) out.push(...ChoppableTree.emberLights(this._spriteset));
         return out;
     };
     Sprite_NightLight.prototype.update = function() {
         Sprite.prototype.update.call(this);
         this._age++;
-        const dark = $gameSystem && $gameSystem._dayNightTinting && typeof $gameSystem.dayNightHour === "function" ? nightAmount() : 0;
+        // a lightning flash (Storm.js, 0..1) lifts the night for a moment: the whole map in its real colours, then dark again
+        const dark = ($gameSystem && $gameSystem._dayNightTinting && typeof $gameSystem.dayNightHour === "function" ? nightAmount() : 0) * (window.Storm ? 1 - 0.85 * Storm.flash() : 1);
         this.visible = dark > 0.01;
         if (!this.visible) return;
         const bmp = this.bitmap, ctx = bmp.context, w = bmp.width, h = bmp.height;
@@ -763,25 +802,24 @@
     };
 
     // a soft ground shadow, stretched under each building so that it sits on the ground instead of floating
-    let shadowBitmap = null;
+    const shadowCache = new Map();
     function shadowTexture() {
-        if (shadowBitmap) return shadowBitmap;
-        const w = 96, h = 32, bitmap = new Bitmap(w, h), ctx = bitmap.context;
-        ctx.save();
-        ctx.translate(w / 2, h / 2);
-        ctx.scale(1, h / w);
-        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, w / 2);
-        g.addColorStop(0, "rgba(10,8,4,0.46)");
-        g.addColorStop(0.6, "rgba(10,8,4,0.30)");
-        g.addColorStop(1, "rgba(10,8,4,0)");
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(0, 0, w / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        shadowBitmap = bitmap;
-        return bitmap;
+        return cachedBitmap(shadowCache, "shadow", () => {
+            const w = 96, h = 32, bitmap = new Bitmap(w, h), ctx = bitmap.context;
+            ctx.save();
+            ctx.translate(w / 2, h / 2);
+            ctx.scale(1, h / w);
+            const g = ctx.createRadialGradient(0, 0, 0, 0, 0, w / 2);
+            g.addColorStop(0, "rgba(10,8,4,0.46)");
+            g.addColorStop(0.6, "rgba(10,8,4,0.30)");
+            g.addColorStop(1, "rgba(10,8,4,0)");
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(0, 0, w / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+            return bitmap;
+        });
     }
 
     // the marked ground of a building site: scuffed earth, a dashed border and a stake in every corner
@@ -789,23 +827,22 @@
     function siteFootTexture(w, h) {
         h = h || 1;
         const ck = w + "x" + h;
-        if (siteFootCache.has(ck)) return siteFootCache.get(ck);
-        const W = w * Farming.TILE, H = h * Farming.TILE, bitmap = new Bitmap(W, H), ctx = bitmap.context;
-        ctx.fillStyle = "rgba(96,66,40,0.30)";
-        ctx.fillRect(3, 3, W - 6, H - 6);
-        ctx.fillStyle = "rgba(240,214,150,0.95)";   // dashes along all four sides
-        for (let x = 8; x < W - 8; x += 10) { ctx.fillRect(x, 3, 5, 2); ctx.fillRect(x, H - 5, 5, 2); }
-        for (let y = 8; y < H - 8; y += 10) { ctx.fillRect(3, y, 2, 5); ctx.fillRect(W - 5, y, 2, 5); }
-        const stake = (sx, sy) => {   // a little wooden post with a lighter top
-            ctx.fillStyle = "#2a1a10"; ctx.fillRect(sx - 1, sy - 1, 7, 15);
-            ctx.fillStyle = "#8f6539"; ctx.fillRect(sx, sy, 5, 13);
-            ctx.fillStyle = "#c79b62"; ctx.fillRect(sx, sy, 2, 13);
-            ctx.fillStyle = "#e6c48a"; ctx.fillRect(sx, sy, 5, 2);
-        };
-        stake(1, 1); stake(W - 6, 1); stake(1, H - 14); stake(W - 6, H - 14);
-        if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
-        siteFootCache.set(ck, bitmap);
-        return bitmap;
+        return cachedBitmap(siteFootCache, ck, () => {
+            const W = w * Farming.TILE, H = h * Farming.TILE, bitmap = new Bitmap(W, H), ctx = bitmap.context;
+            ctx.fillStyle = "rgba(96,66,40,0.30)";
+            ctx.fillRect(3, 3, W - 6, H - 6);
+            ctx.fillStyle = "rgba(240,214,150,0.95)";   // dashes along all four sides
+            for (let x = 8; x < W - 8; x += 10) { ctx.fillRect(x, 3, 5, 2); ctx.fillRect(x, H - 5, 5, 2); }
+            for (let y = 8; y < H - 8; y += 10) { ctx.fillRect(3, y, 2, 5); ctx.fillRect(W - 5, y, 2, 5); }
+            const stake = (sx, sy) => {   // a little wooden post with a lighter top
+                ctx.fillStyle = "#2a1a10"; ctx.fillRect(sx - 1, sy - 1, 7, 15);
+                ctx.fillStyle = "#8f6539"; ctx.fillRect(sx, sy, 5, 13);
+                ctx.fillStyle = "#c79b62"; ctx.fillRect(sx, sy, 2, 13);
+                ctx.fillStyle = "#e6c48a"; ctx.fillRect(sx, sy, 5, 2);
+            };
+            stake(1, 1); stake(W - 6, 1); stake(1, H - 14); stake(W - 6, H - 14);
+            return bitmap;
+        });
     }
 
     // ---- buildings: sprites placed straight in the tilemap so that they sort with the characters
@@ -902,9 +939,9 @@
                 p.visible = burning;
                 if (!burning) return;
                 const t = ((this._age + i * (PUFF_PERIOD / PUFFS) + b.id * 13) % PUFF_PERIOD) / PUFF_PERIOD;
-                const g = Farming.geoOf(b);
-                p.x = e.sprite.x + (g.ventX || 0) + Math.sin(t * 5 + i * 1.7) * 5 + t * 9;
-                p.y = e.sprite.y - (g.vent || 40) - t * 44;
+                const g = Farming.geoOf(b), W = window.Storm ? Storm.wind() : 0;   // in a storm the wind lays the smoke down flat
+                p.x = e.sprite.x + (g.ventX || 0) + Math.sin(t * 5 + i * 1.7) * 5 * (1 - 0.6 * W) + t * (9 + 80 * W);
+                p.y = e.sprite.y - (g.vent || 40) - t * 44 * (1 - 0.6 * W);
                 p.alpha = Math.min(1, t / 0.15) * (1 - t) * 0.6;
                 p.scale.x = p.scale.y = 0.55 + t * 0.9;
             });
@@ -917,125 +954,145 @@
             e.badge.y = e.sprite.y - height - 4 + Math.round(Math.sin(this._age * 0.08) * 3);
         }
     };
+    // -- per-feature builders for rebuild(), always called in the same order as the old single method
+    // did, so insertion order into the tilemap (and so the sort among sprites that share a z) is unchanged.
+
+    // the yard's fence: a post with rails toward the neighbouring posts, all around, but the gate
+    BuildingSprites.prototype.buildFence = function(entry, b, def) {
+        entry.fences = [];
+        for (const c of Farming.cellsOfGeo(def, b.x, b.y)) {
+            if (!Farming.onRing(def, c.i, c.j) || (c.j === 0 && c.i === def.yard.gate)) continue;
+            const mask = (Farming.onRing(def, c.i, c.j + 1) ? 1 : 0) | (Farming.onRing(def, c.i + 1, c.j) ? 2 : 0) | (Farming.onRing(def, c.i, c.j - 1) ? 4 : 0) | (Farming.onRing(def, c.i - 1, c.j) ? 8 : 0);
+            const post = new Sprite(fenceTexture(mask));
+            post.anchor.x = 0.5;
+            post.anchor.y = 1;
+            post.z = Z.withCharacters;
+            this._tilemap.addChild(post);
+            entry.fences.push({ sprite: post, x: c.x, y: c.y });
+        }
+    };
+    // a building site: the solid silhouette that grows with the work (frame set in updateSite), standing
+    // on the scuffed, staked-out ground it will occupy
+    BuildingSprites.prototype.buildSiteScaffold = function(entry, b, def, bitmap) {
+        const solid = new Sprite(bitmap);   // what has been built so far
+        solid.anchor.x = 0.5;
+        solid.anchor.y = 1;
+        solid.z = Z.withCharacters;
+        if (def.flipped) solid.scale.x = -1;
+        solid.visible = false;
+        this._tilemap.addChild(solid);
+        entry.solid = solid;
+        const foot = new Sprite(siteFootTexture(def.w, def.h));
+        foot.z = Z.footprint;
+        this._tilemap.addChild(foot);
+        entry.foot = foot;
+    };
+    // a soft ground shadow under a finished building (the fence texture already has its own)
+    BuildingSprites.prototype.buildShadow = function(entry, b, def) {
+        const shadow = new Sprite(shadowTexture());
+        shadow.anchor.x = 0.5;
+        shadow.anchor.y = 0.5;
+        shadow.z = Z.footprint;
+        const hutW = def.yard ? def.yard.hut.w : def.w;
+        shadow.scale.x = (hutW * Farming.TILE * 1.02) / 96;
+        shadow.scale.y = (def.yard ? def.yard.hut.h : (def.h || 1)) * (hutW > 1 ? 1.1 : 0.8);
+        this._tilemap.addChild(shadow);
+        entry.shadow = shadow;
+    };
+    // the warm additive light spilling from a campfire, a smoking fire, or a lit crafting station
+    BuildingSprites.prototype.buildGlow = function(entry, b, def) {
+        const glow = new Sprite(fireGlowBitmap());
+        glow.anchor.x = 0.5;
+        glow.anchor.y = 0.5;
+        glow.blendMode = ADD_BLEND;
+        glow.alpha = def.fire && def.fire.smoke ? fireGlowAlpha(this._age) : 0;
+        glow.scale.x = glow.scale.y = def.fire && def.fire.glow ? def.fire.glow : def.ember && def.ember.scale ? def.ember.scale : def.recipes ? 0.6 : 1;
+        this._glowLayer.addChild(glow);
+        entry.glow = glow;
+    };
+    // animated flames over the embers of the picture, sorted right after the building itself
+    BuildingSprites.prototype.buildFireVisuals = function(entry, b, def) {
+        const flame = new Sprite(flameFrames(def.fire.size || 1)[0]);
+        flame.anchor.x = 0.5;
+        flame.anchor.y = (flameBase(def.fire.size || 1) + def.fire.y) / flameHeight(def.fire.size || 1);   // the middle of the foot is fire.y above the picture's foot
+        flame.z = Z.withCharacters;
+        this._tilemap.addChild(flame);
+        entry.flame = flame;
+    };
+    // the food hanging from the rope while it roasts: the icon of the raw food, and over it the roasted one fading in
+    BuildingSprites.prototype.buildHangVisuals = function(entry, b, def) {
+        const icon = () => {
+            const s = new Sprite(ImageManager.loadSystem("IconSet"));
+            s.setFrame(0, 0, 32, 32);
+            s.anchor.x = 0.5;
+            s.anchor.y = def.hang.y / (32 * HANG_SCALE);   // the top of the icon is def.hang.y above the foot of the picture
+            s.scale.set(HANG_SCALE);
+            s.z = Z.withCharacters;
+            s.visible = false;
+            this._tilemap.addChild(s);
+            return s;
+        };
+        const rope = new Sprite(ropeBitmap(0));
+        rope.anchor.x = 0.5;
+        rope.anchor.y = def.hang.rope / ROPE_LENGTH;   // the top of the rope is def.hang.rope above the foot of the picture
+        rope.z = Z.withCharacters;
+        rope.visible = false;
+        this._tilemap.addChild(rope);
+        entry.rope = rope;
+        entry.meatRaw = icon();   // after the rope: the food is drawn over its lower end
+        entry.meatDone = icon();
+    };
+    // smoke puffs rising from a burning station
+    BuildingSprites.prototype.buildStationVisuals = function(entry, b, def) {
+        entry.puffs = [];
+        for (let i = 0; i < PUFFS; i++) {
+            const puff = new Sprite(puffTexture());
+            puff.anchor.x = 0.5;
+            puff.anchor.y = 0.5;
+            puff.z = Z.smoke;
+            puff.visible = false;
+            this._tilemap.addChild(puff);
+            entry.puffs.push(puff);
+        }
+    };
+    // the finished-product icon over a station, waiting to be collected (frame set in updateStation)
+    BuildingSprites.prototype.buildReadyBadge = function(entry, b, def) {
+        const icon = new Sprite(ImageManager.loadSystem("IconSet"));
+        icon.setFrame(0, 0, 32, 32);
+        icon.anchor.x = 0.5;
+        icon.anchor.y = 1;
+        icon.z = Z.readyBadge;
+        icon.visible = false;
+        this._tilemap.addChild(icon);
+        entry.badge = icon;
+    };
+
     BuildingSprites.prototype.rebuild = function(mapId) {
         this.destroy();
         const list = Farming.farm().buildings[mapId] || [];
-        const fences = new Set(list.filter(b => b.type === "fence").map(b => Farming.key(b.x, b.y)));
         for (const b of list) {
             const def = Farming.geoOf(b);
             if (!Farming.BUILDINGS[b.type]) continue;
-            let bitmap;
-            if (b.type === "fence") {
-                const mask = (fences.has(Farming.key(b.x, b.y - 1)) ? 1 : 0) | (fences.has(Farming.key(b.x + 1, b.y)) ? 2 : 0) |
-                    (fences.has(Farming.key(b.x, b.y + 1)) ? 4 : 0) | (fences.has(Farming.key(b.x - 1, b.y)) ? 8 : 0);
-                bitmap = fenceTexture(mask);
-            } else {
-                bitmap = ImageManager.loadSystem(def.image);
-            }
+            const bitmap = b.type === "fence" ? fenceTexture(fenceMask(mapId, b.x, b.y)) : ImageManager.loadSystem(def.image);
             const sprite = new Sprite(bitmap);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 1;
-            sprite.z = 3;
+            sprite.z = Z.withCharacters;
             if (def.flipped) sprite.scale.x = -1;   // put down mirrored
-            let shadow = null, solid = null, foot = null;
+            const entry = { b, sprite, shadow: null, solid: null, foot: null, glow: null, puffs: null, badge: null, height: 64, fences: null, flame: null, meatRaw: null, meatDone: null, rope: null };
             if (b.site) {
                 sprite.opacity = 85;   // the blueprint of the whole building
-                solid = new Sprite(bitmap);   // what has been built so far (frame set in updateSite)
-                solid.anchor.x = 0.5;
-                solid.anchor.y = 1;
-                solid.z = 3;
-                if (def.flipped) solid.scale.x = -1;
-                solid.visible = false;
-                this._tilemap.addChild(solid);
-                foot = new Sprite(siteFootTexture(def.w, def.h));
-                foot.z = 2;
-                this._tilemap.addChild(foot);
+                this.buildSiteScaffold(entry, b, def, bitmap);
             } else if (b.type !== "fence") {   // the fence texture has its own
-                shadow = new Sprite(shadowTexture());
-                shadow.anchor.x = 0.5;
-                shadow.anchor.y = 0.5;
-                shadow.z = 2;
-                const hutW = def.yard ? def.yard.hut.w : def.w;
-                shadow.scale.x = (hutW * Farming.TILE * 1.02) / 96;
-                shadow.scale.y = (def.yard ? def.yard.hut.h : (def.h || 1)) * (hutW > 1 ? 1.1 : 0.8);
-                this._tilemap.addChild(shadow);
+                this.buildShadow(entry, b, def);
             }
             this._tilemap.addChild(sprite);
-            const entry = { b, sprite, shadow, solid, foot, glow: null, puffs: null, badge: null, height: 64, fences: null, flame: null, meatRaw: null, meatDone: null, rope: null };
-            if (def.yard && !b.site) {   // the fence: a post with rails toward the neighbouring posts, all around, but the gate
-                entry.fences = [];
-                for (const c of Farming.cellsOfGeo(def, b.x, b.y)) {
-                    if (!Farming.onRing(def, c.i, c.j) || (c.j === 0 && c.i === def.yard.gate)) continue;
-                    const mask = (Farming.onRing(def, c.i, c.j + 1) ? 1 : 0) | (Farming.onRing(def, c.i + 1, c.j) ? 2 : 0) | (Farming.onRing(def, c.i, c.j - 1) ? 4 : 0) | (Farming.onRing(def, c.i - 1, c.j) ? 8 : 0);
-                    const post = new Sprite(fenceTexture(mask));
-                    post.anchor.x = 0.5;
-                    post.anchor.y = 1;
-                    post.z = 3;
-                    this._tilemap.addChild(post);
-                    entry.fences.push({ sprite: post, x: c.x, y: c.y });
-                }
-            }
-            if (!b.site && (b.type === "campfire" || (def.fire && def.fire.smoke) || (def.recipes && def.smokes))) {
-                entry.glow = new Sprite(fireGlowBitmap());
-                entry.glow.anchor.x = 0.5;
-                entry.glow.anchor.y = 0.5;
-                entry.glow.blendMode = ADD_BLEND;
-                entry.glow.alpha = def.fire && def.fire.smoke ? fireGlowAlpha(this._age) : 0;
-                entry.glow.scale.x = entry.glow.scale.y = def.fire && def.fire.glow ? def.fire.glow : def.ember && def.ember.scale ? def.ember.scale : def.recipes ? 0.6 : 1;
-                this._glowLayer.addChild(entry.glow);
-            }
-            if (!b.site && def.fire) {   // animated flames over the embers of the picture, sorted right after the building itself
-                const flame = new Sprite(flameFrames(def.fire.size || 1)[0]);
-                flame.anchor.x = 0.5;
-                flame.anchor.y = (flameBase(def.fire.size || 1) + def.fire.y) / flameHeight(def.fire.size || 1);   // the middle of the foot is fire.y above the picture's foot
-                flame.z = 3;
-                this._tilemap.addChild(flame);
-                entry.flame = flame;
-            }
-            if (!b.site && def.hang) {   // the food hanging from the rope while it roasts: the icon of the raw food, and over it the roasted one fading in
-                const icon = () => {
-                    const s = new Sprite(ImageManager.loadSystem("IconSet"));
-                    s.setFrame(0, 0, 32, 32);
-                    s.anchor.x = 0.5;
-                    s.anchor.y = def.hang.y / (32 * HANG_SCALE);   // the top of the icon is def.hang.y above the foot of the picture
-                    s.scale.set(HANG_SCALE);
-                    s.z = 3;
-                    s.visible = false;
-                    this._tilemap.addChild(s);
-                    return s;
-                };
-                const rope = new Sprite(ropeBitmap(0));
-                rope.anchor.x = 0.5;
-                rope.anchor.y = def.hang.rope / ROPE_LENGTH;   // the top of the rope is def.hang.rope above the foot of the picture
-                rope.z = 3;
-                rope.visible = false;
-                this._tilemap.addChild(rope);
-                entry.rope = rope;
-                entry.meatRaw = icon();   // after the rope: the food is drawn over its lower end
-                entry.meatDone = icon();
-            }
-            if (!b.site && def.recipes && (def.smokes || (def.fire && def.fire.smoke))) {
-                entry.puffs = [];
-                for (let i = 0; i < PUFFS; i++) {
-                    const puff = new Sprite(puffTexture());
-                    puff.anchor.x = 0.5;
-                    puff.anchor.y = 0.5;
-                    puff.z = 4;
-                    puff.visible = false;
-                    this._tilemap.addChild(puff);
-                    entry.puffs.push(puff);
-                }
-            }
-            if (!b.site && def.recipes) {
-                const icon = new Sprite(ImageManager.loadSystem("IconSet"));   // the product waiting to be collected (frame set in updateStation)
-                icon.setFrame(0, 0, 32, 32);
-                icon.anchor.x = 0.5;
-                icon.anchor.y = 1;
-                icon.z = 5;
-                icon.visible = false;
-                this._tilemap.addChild(icon);
-                entry.badge = icon;
-            }
+            if (def.yard && !b.site) this.buildFence(entry, b, def);
+            if (!b.site && (b.type === "campfire" || (def.fire && def.fire.smoke) || (def.recipes && def.smokes))) this.buildGlow(entry, b, def);
+            if (!b.site && def.fire) this.buildFireVisuals(entry, b, def);
+            if (!b.site && def.hang) this.buildHangVisuals(entry, b, def);
+            if (!b.site && def.recipes && (def.smokes || (def.fire && def.fire.smoke))) this.buildStationVisuals(entry, b, def);
+            if (!b.site && def.recipes) this.buildReadyBadge(entry, b, def);
             this._sprites.push(entry);
         }
     };

@@ -52,8 +52,8 @@ const OUT = __dirname + "/";
 
         // ---- the build list still offers the hammer straight away
         await ev("$gameParty.gainItem($dataItems[80], 9); 0");
-        const buildFirst = await ev(`(function(){ const e = Farming.menuFor(24, 16).entries.find(e => e.name === "Zbuduj..."); let opened = null; const scene = SceneManager._scene; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { opened = en.map(x => x.name); }; e.run(); scene.openFarmMenu = _o; return opened; })()`);
-        check("the build list starts with 'Zrób młotek' while there is no hammer", buildFirst && buildFirst[0] === "Zrób młotek", buildFirst && buildFirst.slice(0, 3));
+        const buildFirst = await ev(`(function(){ let opened = null; const scene = SceneManager._scene; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { opened = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return opened; })()`);
+        check("the build list (Q) starts with 'Zrób młotek' while there is no hammer", buildFirst && buildFirst[0] === "Zrób młotek", buildFirst && buildFirst.slice(0, 3));
 
         // ---- a site without the hammer: the same entry
         await ev("$gamePlayer.locate(24, 17); Farming.placeSite('bench', 24, 16); 0");

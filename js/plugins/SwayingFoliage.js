@@ -1,6 +1,7 @@
 //=============================================================================
 // SwayingFoliage.js
 //=============================================================================
+// Z-order: renders on top of DustMotes.js, RoomLighting.js, DayNightCycle.js and CloudShadows.js - must stay last of the five in plugins.js.
 
 /*:
  * @target MZ
@@ -70,9 +71,10 @@
 
     const pluginName = "SwayingFoliage";
     const params = PluginManager.parameters(pluginName);
-    const SWAY_REGION = Number(params.region || 5);
-    const MAX_ANGLE = (Number(params.angle || 4) * Math.PI) / 180;
-    const CYCLE_SECONDS = Number(params.speed || 4);
+    const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
+    const SWAY_REGION = num(params.region, 5);
+    const MAX_ANGLE = (num(params.angle, 4) * Math.PI) / 180;
+    const CYCLE_SECONDS = num(params.speed, 4);
     // Radians per frame for a full sine cycle in CYCLE_SECONDS at 60fps.
     const BASE_SPEED = (2 * Math.PI) / (CYCLE_SECONDS * 60);
 
@@ -108,25 +110,29 @@
         destX = destX || 0;
         destY = destY || 0;
         if (!tileId) return;
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
         if (tileId < 1536) {
             const sheetIndex = Math.floor(tileId / 256); // 0..3 -> B,C,D,E
             const img = bitmaps[5 + sheetIndex];
             if (!img) return;
             const local = tileId % 256;
-            const sx = ((Math.floor(local / 128) % 2) * 8 + (local % 8)) * 48;
-            const sy = (Math.floor((local % 256) / 8) % 16) * 48;
-            destBitmap.blt(img, sx, sy, 48, 48, destX, destY);
+            const sx = ((Math.floor(local / 128) % 2) * 8 + (local % 8)) * tw;
+            const sy = (Math.floor((local % 256) / 8) % 16) * th;
+            destBitmap.blt(img, sx, sy, tw, th, destX, destY);
             return;
         }
         if (isTileA5(tileId)) {
             const img = bitmaps[4];
             if (!img) return;
             const local = tileId - TILE_ID_A5;
-            const cols = Math.max(1, Math.floor(img.width / 48));
+            const cols = Math.max(1, Math.floor(img.width / tw));
             const col = local % cols, row = Math.floor(local / cols);
-            destBitmap.blt(img, col * 48, row * 48, 48, 48, destX, destY);
+            destBitmap.blt(img, col * tw, row * th, tw, th, destX, destY);
             return;
         }
+        // The autotile format always packs 48 shape variants per "kind" block,
+        // independent of the tileset's own pixel tile size - not a tile-size
+        // constant, so this 48 (unlike the ones above) stays as a literal.
         const kind = Math.floor((tileId - TILE_ID_A1) / 48);
         const shape = (tileId - TILE_ID_A1) % 48;
         const tx = kind % 8, ty = Math.floor(kind / 8);
@@ -144,7 +150,7 @@
         }
         if (!img) return;
         const t = table[shape];
-        const w1 = 24, h1 = 24;
+        const w1 = tw / 2, h1 = th / 2;
         for (let i = 0; i < 4; i++) {
             const sx1 = (bx * 2 + t[i][0]) * w1, sy1 = (by * 2 + t[i][1]) * h1;
             const ddx = destX + (i % 2) * w1, ddy = destY + Math.floor(i / 2) * h1;
@@ -164,7 +170,7 @@
     // tiles: [{ dx, dy, tileId }] - dx/dy are pixel offsets within the group.
     Sprite_SwayingFoliage.prototype.initialize = function(originX, originY, tileCols, tileRows, tiles, bitmaps, isUpper) {
         Sprite.prototype.initialize.call(this);
-        this.bitmap = new Bitmap(tileCols * 48, tileRows * 48);
+        this.bitmap = new Bitmap(tileCols * $gameMap.tileWidth(), tileRows * $gameMap.tileHeight());
         // Bitmaps are smoothed by default; a smoothed skewed picture blurs by a different amount on every row,
         // and those soft and sharp bands run up the plant as the sway changes. Sharp pixels move as whole pixels.
         this.bitmap.smooth = false;
@@ -197,8 +203,10 @@
 
     Sprite_SwayingFoliage.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        this._phase += this._speed;
-        this.skew.x = Math.sin(this._phase) * MAX_ANGLE;
+        // a storm (Storm.js, wind 0..1): faster, wider, and bent downwind (the wind blows to the right: a negative skew leans the top right)
+        const W = window.Storm ? Storm.wind() : 0;
+        this._phase += this._speed * (1 + 1.5 * W);
+        this.skew.x = Math.sin(this._phase) * MAX_ANGLE * (1 + 4 * W) - W * MAX_ANGLE * 3;
         // This sprite is a direct child of the Tilemap, same as character
         // sprites - so it must convert map coords to screen coords the same
         // way they do (via adjustX/Y), not just multiply by the tile size.
@@ -275,7 +283,7 @@
             }
             if (!tileId) continue;
             if (flags[tileId] & 0x10) isUpper = true;
-            tiles.push({ dx: (cx - minX) * 48, dy: (cy - minY) * 48, tileId });
+            tiles.push({ dx: (cx - minX) * $gameMap.tileWidth(), dy: (cy - minY) * $gameMap.tileHeight(), tileId });
         }
         if (tiles.length === 0) return;
         const tileCols = maxX - minX + 1;

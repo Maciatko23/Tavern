@@ -1,17 +1,27 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9): dodaje graczowi wybrany przedmiot w wybranej ilości, albo przesuwa czas o 1 godzinę / 1 dzień. v1.0.0
+ * @plugindesc Menu deweloperskie (F9): dodaje graczowi wybrany przedmiot w wybranej ilości, albo przesuwa czas o 1 godzinę / 1 dzień. v1.1.0
  * @author Tawerna
+ *
+ * @param enabled
+ * @text Włączone
+ * @type boolean
+ * @default true
+ * @desc Wyłącz (false) przed wydaniem gry, żeby F9 nie działało u gracza. Włączone domyślnie na czas developmentu/testów.
  *
  * @help
  * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran:
  *   - "+1 godzina" / "+1 dzień": przesuwa zegar gry (tak jak w Farming.js).
+ *   - "Burza teraz", "Piorun tuż obok", "Piorun w drzewo", "Koniec pogody na dziś": pogoda (Survival.js / Storm.js).
  *   - lista wszystkich przedmiotów: strzałki w lewo/prawo zmieniają ilość
  *     przy podświetlonej pozycji, OK dodaje ją do plecaka.
- * Esc zamyka. Tylko do testowania - nie ma go w żadnym menu gry.
+ * Esc zamyka. Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
  */
 (() => {
     "use strict";
+
+    const enabled = PluginManager.parameters("Debug").enabled !== "false";
+    if (!enabled) return;
 
     Input.keyMapper[120] = "debugmenu";   // F9
 
@@ -40,6 +50,12 @@
             { kind: "hour", label: "+1 godzina", icon: 240 },
             { kind: "day", label: "+1 dzień", icon: 241 }
         ];
+        if (window.Survival && Survival.forceStorm) {   // the weather (Survival.js plans it, Storm.js shows it)
+            this._rows.push({ kind: "storm", label: "Burza teraz (2 godziny)", icon: 66 },
+                { kind: "strike", label: "Piorun tuż obok", icon: 66 },
+                { kind: "treestrike", label: "Piorun w drzewo (na ekranie)", icon: 66 },
+                { kind: "calm", label: "Koniec pogody na dziś", icon: 70 });
+        }
         for (const item of $dataItems) {
             if (item && item.name) this._rows.push({ kind: "item", item, qty: 1 });
         }
@@ -114,6 +130,14 @@
         if (row.kind === "hour" || row.kind === "day") {
             $gameSystem.advanceDayNight(row.kind === "day" ? 24 : 1);
             $gameTemp.pushLootPopup(row.icon, row.label, "#9ff0a8");
+        } else if (row.kind === "storm" || row.kind === "calm") {
+            if (row.kind === "storm") Survival.forceStorm(2);
+            else Survival.calmWeather();
+            this.popScene();   // back to the map to watch it
+        } else if (row.kind === "strike" || row.kind === "treestrike") {
+            // struck once the map runs again (Storm.js)
+            if (window.Storm) Storm.pending.push(row.kind === "treestrike" ? { tree: true } : {});
+            this.popScene();
         } else {
             $gameParty.gainItem(row.item, row.qty);
             $gameTemp.pushLootPopup(row.item.iconIndex, row.item.name + " ×" + row.qty, "#f3e0a0");

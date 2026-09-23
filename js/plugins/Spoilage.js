@@ -154,7 +154,8 @@
         }
     }
     function popup(icon, text, color) {
-        $gameTemp.pushLootPopup(icon, text, color);
+        if (window.Survival && Survival.feedback) Survival.feedback(icon, text, color);
+        else $gameTemp.pushLootPopup(icon, text, color);
     }
     function spoilBag(dt) {
         const rotItem = $dataItems[ROT];

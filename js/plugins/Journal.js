@@ -133,13 +133,13 @@
         { id: "hammer", ch: 0, title: "Zrób młotek", item: 89, recipe: ["hand", "hammer"], after: ["stone", "branches", "flax"], done: () => has(89),
             text: "Bez młotka nie postawisz żadnego budynku. Stań przed trawą lub oczyszczoną ziemią, wybierz „Wytwórz...”, a potem „Zrób młotek”." },
         { id: "workbench", ch: 0, title: "Zbuduj warsztat", item: 89, build: "workbench", after: ["hammer"], done: () => isBuilt("workbench"),
-            text: "Na warsztacie powstają wszystkie narzędzia. Wybierz „Zbuduj...”, potem miejsce, a na koniec uderzaj młotkiem w plac budowy. Wystarczą gałęzie, kamienie i len." },
+            text: "Na warsztacie powstają wszystkie narzędzia. Naciśnij Q (menu budowy), wybierz warsztat, potem miejsce, a na koniec uderzaj młotkiem w plac budowy. Wystarczą gałęzie, kamienie i len." },
         { id: "axe", ch: 0, title: "Zrób kamienną siekierę", item: 60, recipe: ["workbench", "axe_stone"], after: ["workbench"], done: () => hasAny([60, 115]),
             text: "Ostry kamień, gałąź i len. Siekierą ścinasz drzewa, rozrąbujesz kłody i ścinasz krzaki." },
         { id: "wood", ch: 0, title: "Zdobądź drewno", item: 61, after: ["axe"], done: () => has(61),
             text: "Podejdź do drzewa i uderzaj przyciskiem akcji, aż padnie. Zetnij też leżące kłody." },
         { id: "bough", ch: 0, title: "Zrób leśne legowisko", item: 128, recipe: ["hand", "bough_bed"], after: ["branches", "flax"], done: () => hasAny([128]) || isBuilt("bedroll"),
-            text: "Gałęzie związane lnem i wyścielone trawą. Stań przed trawą, wybierz „Wytwórz...”, a potem „Zrób leśne legowisko”. Rozłożysz je w „Zbuduj...”." },
+            text: "Gałęzie związane lnem i wyścielone trawą. Stań przed trawą, wybierz „Wytwórz...”, a potem „Zrób leśne legowisko”. Rozłożysz je w menu ziemi, w „Postaw...”." },
         { id: "bednight", ch: 0, title: "Prześpij noc na legowisku", item: 128, after: ["bough"], done: () => ((farmData().bedNights) || 0) > 0,
             text: "Rozłóż legowisko, stań przed nim i wybierz „Prześpij noc”. Rano wstaniesz z około 60% sił (w deszczu i zimą z mniejszą ilością). Namiot wypoczywa lepiej." },
         { id: "campfire", ch: 0, title: "Rozpal ognisko", item: 61, build: "campfire", after: ["wood", "stone", "hammer"], done: () => isBuilt("campfire"),
@@ -218,8 +218,8 @@
             text: "Wędkę zrobisz w warsztacie z drewna, liny i gałęzi." },
         { id: "fish", ch: 4, title: "Złów rybę", item: 98, after: ["rod"], done: () => has(98),
             text: "Stań przy stawie, naciśnij przycisk akcji i wybierz „Zarzuć wędkę”. Ryby biorą najlepiej o świcie i o zmierzchu, a także w deszcz." },
-        { id: "bucket", ch: 4, title: "Zbuduj wiadro", item: 138, build: "bucket", after: ["planks", "iron"], done: () => isBuilt("bucket") || has(138),
-            text: "Wiadro robisz z desek i żelaza w menu „Zbuduj…” (staje od razu, bez młotka). Postawione na dworze zbiera deszczówkę: napijesz się z niego, podlejesz nią rośliny albo napełnisz konewkę i bukłak. Możesz je zabrać do plecaka." },
+        { id: "bucket", ch: 4, title: "Wykuj wiadro", item: 138, recipe: ["forge", "bucket_item"], after: ["planks", "iron"], done: () => isBuilt("bucket") || has(138),
+            text: "Wiadro wykuwasz w kuźni z desek i żelaza, a stawiasz je gotowe w menu pola „Postaw…” (bez młotka). Postawione na dworze zbiera deszczówkę: napijesz się z niego, podlejesz nią rośliny albo napełnisz konewkę i bukłak. Zabierzesz je do plecaka razem z wodą, a zupy w kociołku bez tej wody się nie ugotują." },
         { id: "well", ch: 4, title: "Zbuduj studnię", item: 87, build: "well", after: ["rope", "stone", "bucket"], done: () => isBuilt("well"),
             text: "Do budowy studni potrzebujesz wiadra (zabierz je z ziemi do plecaka) i wykopanego na pełną głębokość dołu 2 × 2 pod studnią (łopatą, trzy uderzenia w każdej z czterech kratek). W studni napełnisz konewkę i napijesz się." },
         { id: "tannery", ch: 4, title: "Zbuduj garbarnię", item: 97, build: "tannery", after: ["meat"], done: () => isBuilt("tannery"),
@@ -229,7 +229,7 @@
         { id: "tent", ch: 4, title: "Uszyj namiot", item: 121, recipe: ["tannery", "tent"], after: ["tannery", "rope", "wood"], done: () => has(121),
             text: "Namiot zszywasz w garbarni ze skór, liny i żerdzi. To twój dom w drodze: rozstawiasz go, gdzie chcesz, śpisz w nim do rana i składasz z powrotem." },
         { id: "tentnight", ch: 4, title: "Prześpij noc w namiocie", item: 121, after: ["tent"], done: () => (farmData().tentNights || 0) > 0,
-            text: "Rozstaw namiot (menu ziemi, „Zbuduj...”), stań przed nim i wybierz „Prześpij noc”. Rano dostaniesz podsumowanie dnia, a gra zapisze się sama. Namiot złożysz i zabierzesz ze sobą." },
+            text: "Rozstaw namiot (menu ziemi, „Postaw...”), stań przed nim i wybierz „Prześpij noc”. Rano dostaniesz podsumowanie dnia, a gra zapisze się sama. Namiot złożysz i zabierzesz ze sobą." },
         { id: "smokehouse", ch: 4, title: "Zbuduj wędzarnię", item: 105, build: "smokehouse", after: ["nails", "meat"], done: () => isBuilt("smokehouse"),
             text: "Wędzone mięso i ryba to najbardziej sycące jedzenie w grze." },
         { id: "sling", ch: 4, title: "Zrób procę", item: 125, recipe: ["workbench", "sling"], after: ["rope", "wood"], done: () => hasAny([125, 126]),
@@ -463,116 +463,167 @@
         }
         return lines;
     }
+    // One table of { measure(win,op,w,innerW), paint(win,op,w,innerW) } per op kind, instead of two
+    // parallel switch statements over the same kinds kept in sync by hand. "w" is the narrow-adjusted
+    // width (innerW - imageW for ops flagged narrow, else innerW); a few kinds (rule, icons) always
+    // work off the raw innerW regardless of narrow, same as before.
+    const OPS = {
+        title: {
+            measure: (win, op) => { op.h = 46; },
+            paint: (win, op, w) => {
+                let x = 0;
+                if (op.icon) { win.drawIcon(op.icon, 0, op.y + 7); x = ImageManager.iconWidth + 10; }
+                win.contents.fontSize = 32;
+                win.changeTextColor(ColorManager.textColor(16));
+                win.drawText(op.text, x, op.y, w - x);
+            }
+        },
+        sub: {
+            measure: (win, op, w) => { win.contents.fontSize = 22; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 28; },
+            paint: (win, op, w) => {
+                win.contents.fontSize = 22;
+                win.changeTextColor(ColorManager.textColor(7));
+                op.lines.forEach((line, i) => win.drawText(line, 0, op.y + i * 28 - 4, w));
+            }
+        },
+        rule: {
+            measure: (win, op) => { op.h = 14; },
+            paint: (win, op, w, innerW) => { win.contents.fillRect(0, op.y + 3, innerW, 2, ColorManager.textColor(26)); }
+        },
+        p: {
+            measure: (win, op, w) => { win.contents.fontSize = 24; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 30; },
+            paint: (win, op, w) => {
+                win.contents.fontSize = 24;
+                op.lines.forEach((line, i) => win.drawText(line, 0, op.y + i * 30 - 3, w));
+            }
+        },
+        muted: {
+            measure: (win, op, w) => { win.contents.fontSize = 22; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 28; },
+            paint: (win, op, w) => {
+                win.contents.fontSize = 22;
+                win.changeTextColor(ColorManager.textColor(7));
+                op.lines.forEach((line, i) => win.drawText(line, 0, op.y + i * 28 - 4, w));
+            }
+        },
+        h: {
+            measure: (win, op) => { op.h = 40; },
+            paint: (win, op, w) => {
+                win.contents.fontSize = 24;
+                win.changeTextColor(ColorManager.textColor(16));
+                win.drawText(op.text, 0, op.y + 4, w);
+            }
+        },
+        cost: {
+            measure: (win, op, w) => {
+                op.h = 34;
+                if (op.note) { win.contents.fontSize = 20; op.noteLines = wrapText(win, op.note, w - 52); op.h += op.noteLines.length * 24; }
+            },
+            paint: (win, op, w) => {
+                const c = win.contents;
+                win.drawIcon(op.icon, 0, op.y + 1);
+                c.fontSize = 24;
+                win.drawText(op.name, ImageManager.iconWidth + 8, op.y - 1, w - 44 - 120);
+                win.changeTextColor(ColorManager.textColor(op.have >= op.need ? 3 : 10));
+                win.drawText(op.have + " / " + op.need, w - 120, op.y - 1, 120, "right");
+                if (op.noteLines) {
+                    c.fontSize = 20;
+                    win.changeTextColor(ColorManager.textColor(7));
+                    op.noteLines.forEach((line, i) => win.drawText(line, ImageManager.iconWidth + 8, op.y + 30 + i * 24 - 4, w - 52));
+                }
+            }
+        },
+        row: {
+            measure: (win, op) => { op.h = 34; },
+            paint: (win, op, w) => {
+                let x = 0;
+                if (op.icon) { win.drawIcon(op.icon, 0, op.y + 1); x = ImageManager.iconWidth + 8; }
+                win.contents.fontSize = 24;
+                if (op.color !== undefined) win.changeTextColor(ColorManager.textColor(op.color));
+                win.drawText(op.text, x, op.y - 1, w - x);
+            }
+        },
+        icons: {
+            measure: (win, op, w, innerW) => {
+                const per = Math.max(1, Math.floor(innerW / 110));
+                op.per = per;
+                op.h = Math.ceil(op.list.length / per) * 38 + 4;
+            },
+            paint: (win, op) => {
+                op.list.forEach(([icon, n], i) => {
+                    const x = (i % op.per) * 110, y = op.y + Math.floor(i / op.per) * 38;
+                    win.drawIcon(icon, x, y + 2);
+                    win.contents.fontSize = 24;
+                    win.drawText("×" + n, x + ImageManager.iconWidth + 6, y - 1, 70);
+                });
+            }
+        },
+        gap: {
+            measure: (win, op) => { op.h = op.n; }
+            // no paint: a gap is blank space
+        }
+    };
     function layoutOps(win, ops, innerW, imageW) {
         let y = 0;
         for (const op of ops) {
             op.y = y;
             const w = op.narrow ? innerW - imageW : innerW;
             win.resetFontSettings();
-            switch (op.k) {
-                case "title": op.h = 46; break;
-                case "sub": win.contents.fontSize = 22; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 28; break;
-                case "rule": op.h = 14; break;
-                case "p": win.contents.fontSize = 24; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 30; break;
-                case "muted": win.contents.fontSize = 22; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 28; break;
-                case "h": op.h = 40; break;
-                case "cost": op.h = 34; if (op.note) { win.contents.fontSize = 20; op.noteLines = wrapText(win, op.note, w - 52); op.h += op.noteLines.length * 24; } break;
-                case "row": op.h = 34; break;
-                case "icons": {
-                    const per = Math.max(1, Math.floor(innerW / 110));
-                    op.per = per;
-                    op.h = Math.ceil(op.list.length / per) * 38 + 4;
-                    break;
-                }
-                case "gap": op.h = op.n; break;
-                default: op.h = 0;
-            }
+            const def = OPS[op.k];
+            if (def) def.measure(win, op, w, innerW); else op.h = 0;
             y += op.h;
         }
         return y;
     }
     function paintOps(win, ops, innerW, imageW) {
-        const c = win.contents;
         for (const op of ops) {
             win.resetFontSettings();
             const w = op.narrow ? innerW - imageW : innerW;
-            switch (op.k) {
-                case "title": {
-                    let x = 0;
-                    if (op.icon) { win.drawIcon(op.icon, 0, op.y + 7); x = ImageManager.iconWidth + 10; }
-                    c.fontSize = 32;
-                    win.changeTextColor(ColorManager.textColor(16));
-                    win.drawText(op.text, x, op.y, w - x);
-                    break;
-                }
-                case "sub":
-                    c.fontSize = 22;
-                    win.changeTextColor(ColorManager.textColor(7));
-                    op.lines.forEach((line, i) => win.drawText(line, 0, op.y + i * 28 - 4, w));
-                    break;
-                case "rule": c.fillRect(0, op.y + 3, innerW, 2, ColorManager.textColor(26)); break;
-                case "p":
-                    c.fontSize = 24;
-                    op.lines.forEach((line, i) => win.drawText(line, 0, op.y + i * 30 - 3, w));
-                    break;
-                case "muted":
-                    c.fontSize = 22;
-                    win.changeTextColor(ColorManager.textColor(7));
-                    op.lines.forEach((line, i) => win.drawText(line, 0, op.y + i * 28 - 4, w));
-                    break;
-                case "h":
-                    c.fontSize = 24;
-                    win.changeTextColor(ColorManager.textColor(16));
-                    win.drawText(op.text, 0, op.y + 4, w);
-                    break;
-                case "cost": {
-                    win.drawIcon(op.icon, 0, op.y + 1);
-                    c.fontSize = 24;
-                    win.drawText(op.name, ImageManager.iconWidth + 8, op.y - 1, w - 44 - 120);
-                    win.changeTextColor(ColorManager.textColor(op.have >= op.need ? 3 : 10));
-                    win.drawText(op.have + " / " + op.need, w - 120, op.y - 1, 120, "right");
-                    if (op.noteLines) {
-                        c.fontSize = 20;
-                        win.changeTextColor(ColorManager.textColor(7));
-                        op.noteLines.forEach((line, i) => win.drawText(line, ImageManager.iconWidth + 8, op.y + 30 + i * 24 - 4, w - 52));
-                    }
-                    break;
-                }
-                case "row": {
-                    let x = 0;
-                    if (op.icon) { win.drawIcon(op.icon, 0, op.y + 1); x = ImageManager.iconWidth + 8; }
-                    c.fontSize = 24;
-                    if (op.color !== undefined) win.changeTextColor(ColorManager.textColor(op.color));
-                    win.drawText(op.text, x, op.y - 1, w - x);
-                    break;
-                }
-                case "icons":
-                    op.list.forEach(([icon, n], i) => {
-                        const x = (i % op.per) * 110, y = op.y + Math.floor(i / op.per) * 38;
-                        win.drawIcon(icon, x, y + 2);
-                        c.fontSize = 24;
-                        win.drawText("×" + n, x + ImageManager.iconWidth + 6, y - 1, 70);
-                    });
-                    break;
-            }
+            const def = OPS[op.k];
+            if (def && def.paint) def.paint(win, op, w, innerW);
         }
     }
+
+    // ------------------------------------------------------------------
+    // Colors for the hand-drawn bits (checkbox marks, the goal tracker card)
+    // that don't go through Window_Base/ColorManager. UITheme.js (loaded
+    // before this file, dark-wood + brass theme) doesn't export a shared
+    // palette or color constants of its own - it just hand-paints a few
+    // literals in place (Scene_Title's gold title, the Needs.js gauge
+    // colors in drawSurvivalCard). So these are Journal's own constants,
+    // kept visually consistent with that palette: "outline" below is the
+    // exact literal UITheme.js uses for the same purpose (its title's
+    // text outline), the rest are Journal's existing wood/brass shades.
+    // ------------------------------------------------------------------
+    const COLORS = {
+        outline: "rgba(14,8,4,0.95)",      // UITheme.js Scene_Title.drawGameTitle: bitmap.outlineColor
+        panelFill: "rgba(22,15,10,0.86)",
+        panelBorder: "rgba(166,124,58,0.9)",
+        trackerLabel: "#dcb460",
+        trackerTitle: "#f0e4c8",
+        trackerBody: "#b8ab94",
+        markDone: "#8fd06a",
+        markReady: "#e8c458",
+        markPin: "#e0b458",
+        markBorderLocked: "#5c4d38",
+        markBorderNormal: "#a67c3a",
+        markBoxFill: "rgba(20,14,10,0.9)"
+    };
 
     // check boxes and markers drawn straight on the contents of a list row
     function drawMark(win, x, y, state) {
         const ctx = win.contents.context, s = 20, ty = y + Math.floor((win.lineHeight() - s) / 2);
         ctx.save();
         ctx.lineWidth = 2;
-        ctx.strokeStyle = state === "locked" ? "#5c4d38" : "#a67c3a";
-        ctx.fillStyle = "rgba(20,14,10,0.9)";
+        ctx.strokeStyle = state === "locked" ? COLORS.markBorderLocked : COLORS.markBorderNormal;
+        ctx.fillStyle = COLORS.markBoxFill;
         ctx.fillRect(x, ty, s, s);
         ctx.strokeRect(x + 1, ty + 1, s - 2, s - 2);
         if (state === "done") {
-            ctx.strokeStyle = "#8fd06a";
+            ctx.strokeStyle = COLORS.markDone;
             ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(x + 4, ty + 10); ctx.lineTo(x + 8.5, ty + 15); ctx.lineTo(x + 16.5, ty + 5); ctx.stroke();
         } else if (state === "ready" || state === "pin") {
-            ctx.fillStyle = state === "pin" ? "#e0b458" : "#e8c458";
+            ctx.fillStyle = state === "pin" ? COLORS.markPin : COLORS.markReady;
             ctx.beginPath(); ctx.moveTo(x + 10, ty + 4); ctx.lineTo(x + 16, ty + 10); ctx.lineTo(x + 10, ty + 16); ctx.lineTo(x + 4, ty + 10); ctx.closePath(); ctx.fill();
         }
         ctx.restore();
@@ -580,9 +631,35 @@
     }
 
     // ------------------------------------------------------------------
-    // The five tabs: what the list shows and what the details say
+    // The six tabs: what the list shows, what the details say, the legend
+    // line and the help text at the bottom. One table instead of four
+    // parallel positional lists kept in sync by hand; the item/ops helpers
+    // below are function declarations (hoisted), so it's fine that this
+    // table is defined before their source text.
     // ------------------------------------------------------------------
-    const TABS = ["Cele", "Surowce", "Budynki", "Receptury", "Notatki", "Zapasy"];
+    const TAB_DEFS = [
+        { name: "Cele", items: () => goalItems(), detail: item => ({ ops: goalOps(item.goal) }),
+            legend: () => "Wykonano " + GOALS.filter(goalDone).length + " z " + GOALS.length + " celów",
+            help: "←/→ lub Q/E: zakładka   OK: przypnij cel   Anuluj: wróć" },
+        { name: "Surowce", items: () => materialItems(), detail: item => ({ ops: materialOps(item.itemId) }),
+            legend: () => { const ids = materialIds(); return "Poznano " + ids.filter(has).length + " z " + ids.length + " surowców"; },
+            help: "Ptaszek: poznane   ←/→ lub Q/E: zakładka   Anuluj: wróć" },
+        { name: "Budynki", items: () => buildingItems(), detail: item => ({ ops: buildingOps(item.type, item.def), image: item.def.image }),
+            legend: () => { const F = Farm(), types = F ? Object.keys(F.BUILDINGS) : []; return "Zbudowano " + types.filter(isBuilt).length + " z " + types.length + " rodzajów budynków"; },
+            help: "Ptaszek: zbudowane   Romb: możesz zbudować teraz   ←/→: zakładka" },
+        { name: "Receptury", items: () => recipeItems(), detail: item => ({ ops: recipeOps(item.entry) }),
+            legend: () => { const rs = allRecipes(); return "Wykonano " + rs.filter(e => has(e.r.output[0])).length + " z " + rs.length + " receptur"; },
+            help: "Ptaszek: zrobione   Romb: możesz zrobić teraz   ←/→: zakładka" },
+        { name: "Notatki", items: () => noteItems(),
+            detail: item => item.empty ? { ops: [{ k: "title", text: "Notatki" }, { k: "rule" },
+                { k: "p", text: "Tu trafią poszlaki, plotki i ważne rozmowy. Zapisują się same, gdy dowiesz się czegoś istotnego." }] } : { ops: noteOps(item.note) },
+            legend: () => "Notatek: " + data().notes.length,
+            help: "←/→ lub Q/E: zakładka   Anuluj: wróć" },
+        { name: "Zapasy", items: () => supplyItems(), detail: item => ({ ops: supplyOps(item) }),
+            legend: () => { const n = wornTools().length, f = spoilingFood().length; return n + f === 0 ? "Wszystko w porządku" : "Do ogarnięcia: " + n + " narzędzi, " + f + " potraw"; },
+            help: "Ptaszek: w porządku   Romb: masz na naprawę / zaraz się zepsuje   ←/→ lub Q/E: zakładka" }
+    ];
+    const TABS = TAB_DEFS.map(t => t.name);
 
     function goalItems() {
         const d = data();
@@ -644,12 +721,21 @@
         return items;
     }
     function itemsForTab(tab) {
-        return [goalItems, materialItems, buildingItems, recipeItems, noteItems, supplyItems][tab]().map(it => Object.assign(it, { tab }));
+        return TAB_DEFS[tab].items().map(it => Object.assign(it, { tab }));
     }
 
+    // The leading {title,icon} / {sub} / {rule} triple shared by every detail pane below. subtext ==
+    // null skips the sub line entirely (supplyOps's empty-state pane has no subtitle); narrow mirrors
+    // the op flag buildingOps uses so its text wraps beside the building's image.
+    function opsHeader(title, icon, subtext, narrow) {
+        const ops = [{ k: "title", text: title, icon, ...(narrow ? { narrow: true } : {}) }];
+        if (subtext !== null && subtext !== undefined) ops.push({ k: "sub", text: subtext, ...(narrow ? { narrow: true } : {}) });
+        ops.push({ k: "rule" });
+        return ops;
+    }
     function goalOps(g) {
         const d = data(), done = d.done[g.id], F = Farm();
-        const ops = [{ k: "title", text: g.title, icon: goalIcon(g) }, { k: "sub", text: CHAPTERS[g.ch] + (done !== undefined ? "  ·  wykonano w dniu " + done : "") }, { k: "rule" }, { k: "p", text: g.text }];
+        const ops = [...opsHeader(g.title, goalIcon(g), CHAPTERS[g.ch] + (done !== undefined ? "  ·  wykonano w dniu " + done : "")), { k: "p", text: g.text }];
         if (g.build && F) {
             const def = F.BUILDINGS[g.build];
             ops.push({ k: "gap", n: 8 }, { k: "h", text: "Budowa: " + def.name }, ...costRows(def.cost));
@@ -666,7 +752,8 @@
         return ops;
     }
     function materialOps(id) {
-        const it = dataItem(id), ops = [{ k: "title", text: it.name, icon: it.iconIndex }, { k: "sub", text: has(id) ? "Już miałeś to w rękach  ·  masz teraz: " + countOf(id) : "Jeszcze tego nie miałeś" }, { k: "rule" }];
+        const it = dataItem(id);
+        const ops = opsHeader(it.name, it.iconIndex, has(id) ? "Już miałeś to w rękach  ·  masz teraz: " + countOf(id) : "Jeszcze tego nie miałeś");
         if (it.description) ops.push({ k: "p", text: it.description });
         const src = sourceLines(id);
         ops.push({ k: "gap", n: 8 }, { k: "h", text: "Skąd wziąć" });
@@ -678,7 +765,7 @@
     }
     function buildingOps(type, def) {
         const n = builtCount(type);
-        const ops = [{ k: "title", text: def.name, icon: 0, narrow: true }, { k: "sub", text: n > 0 ? "Zbudowane: " + n : "Jeszcze nie zbudowane", narrow: true }, { k: "rule" }, { k: "p", text: def.desc || "", narrow: true }];
+        const ops = [...opsHeader(def.name, 0, n > 0 ? "Zbudowane: " + n : "Jeszcze nie zbudowane", true), { k: "p", text: def.desc || "", narrow: true }];
         const facts = [];
         const rows = def.h || 1;
         facts.push(def.yard ? "Ogrodzony wybieg " + def.w + " × " + rows + " pól, w środku żyją zwierzęta" : rows > 1 ? "Zajmuje " + def.w + " × " + rows + " pola" : "Zajmuje " + def.w + (def.w === 1 ? " pole" : " pola") + " obok siebie");
@@ -695,7 +782,7 @@
     }
     function recipeOps(e) {
         const r = e.r, out = dataItem(r.output[0]);
-        const ops = [{ k: "title", text: r.name, icon: out.iconIndex }, { k: "sub", text: e.type === "hand" ? "Bez budynku (na kolanie)" : e.def.name + (isBuilt(e.type) ? "  ·  budynek stoi" : "  ·  jeszcze go nie zbudowałeś") }, { k: "rule" }];
+        const ops = opsHeader(r.name, out.iconIndex, e.type === "hand" ? "Bez budynku (na kolanie)" : e.def.name + (isBuilt(e.type) ? "  ·  budynek stoi" : "  ·  jeszcze go nie zbudowałeś"));
         ops.push({ k: "p", text: "Wynik: " + out.name + " ×" + r.output[1] + (has(r.output[0]) ? "  (już to robiłeś)" : "") + "." });
         if (r.desc) ops.push({ k: "muted", text: r.desc });
         ops.push({ k: "gap", n: 8 }, { k: "h", text: "Składniki" }, ...costRows(r.inputs));
@@ -705,11 +792,11 @@
         return ops;
     }
     function noteOps(n) {
-        return [{ k: "title", text: n.title }, { k: "sub", text: "Dzień " + n.day }, { k: "rule" }, { k: "p", text: n.text }];
+        return [...opsHeader(n.title, undefined, "Dzień " + n.day), { k: "p", text: n.text }];
     }
     function toolOps(id) {
         const it = dataItem(id), left = Durability.left(id), life = Durability.lifeOf(id);
-        const ops = [{ k: "title", text: it.name, icon: it.iconIndex }, { k: "sub", text: "Wytrzymałość: " + left + " z " + life + " (" + Durability.unitWord(id, left) + ")" }, { k: "rule" }];
+        const ops = opsHeader(it.name, it.iconIndex, "Wytrzymałość: " + left + " z " + life + " (" + Durability.unitWord(id, left) + ")");
         if (it.description) ops.push({ k: "p", text: it.description });
         ops.push({ k: "gap", n: 8 }, { k: "h", text: "Naprawa" }, ...costRows(Durability.TOOLS[id].fix));
         ops.push({ k: "gap", n: 6 }, { k: "muted", text: "Naprawiasz to przy warsztacie: wytrzymałość wraca do pełna." });
@@ -717,35 +804,23 @@
     }
     function foodOps(itemId) {
         const it = dataItem(itemId);
-        const ops = [{ k: "title", text: it.name, icon: it.iconIndex }, { k: "sub", text: Spoilage.freshnessText(itemId) || "Jeszcze świeże." }, { k: "rule" }];
+        const ops = opsHeader(it.name, it.iconIndex, Spoilage.freshnessText(itemId) || "Jeszcze świeże.");
         if (it.description) ops.push({ k: "p", text: it.description });
         ops.push({ k: "gap", n: 8 }, { k: "muted", text: "W spiżarni psuje się pięć razy wolniej niż w plecaku." });
         return ops;
     }
     function supplyOps(item) {
-        if (!item || item.empty) return [{ k: "title", text: "Zapasy" }, { k: "rule" },
+        if (!item || item.empty) return [...opsHeader("Zapasy", undefined, null),
             { k: "p", text: "Tu widać zużyte narzędzia (i czego trzeba, żeby je naprawić) oraz jedzenie w plecaku, które zaraz się zepsuje." }];
         return item.supplyTool !== undefined ? toolOps(item.supplyTool) : foodOps(item.supplyFood);
     }
     function detailFor(tab, item) {
         if (!item) return { ops: [] };
         if (item.tab !== undefined) tab = item.tab;   // a row always explains itself, whatever tab is shown
-        if (tab === 0) return { ops: goalOps(item.goal) };
-        if (tab === 1) return { ops: materialOps(item.itemId) };
-        if (tab === 2) return { ops: buildingOps(item.type, item.def), image: item.def.image };
-        if (tab === 3) return { ops: recipeOps(item.entry) };
-        if (tab === 5) return { ops: supplyOps(item) };
-        if (item.empty) return { ops: [{ k: "title", text: "Notatki" }, { k: "rule" }, { k: "p", text: "Tu trafią poszlaki, plotki i ważne rozmowy. Zapisują się same, gdy dowiesz się czegoś istotnego." }] };
-        return { ops: noteOps(item.note) };
+        return TAB_DEFS[tab].detail(item);
     }
     function legendFor(tab) {
-        const d = data();
-        if (tab === 0) return "Wykonano " + GOALS.filter(goalDone).length + " z " + GOALS.length + " celów";
-        if (tab === 1) { const ids = materialIds(); return "Poznano " + ids.filter(has).length + " z " + ids.length + " surowców"; }
-        if (tab === 2) { const F = Farm(), types = F ? Object.keys(F.BUILDINGS) : []; return "Zbudowano " + types.filter(isBuilt).length + " z " + types.length + " rodzajów budynków"; }
-        if (tab === 3) { const rs = allRecipes(); return "Wykonano " + rs.filter(e => has(e.r.output[0])).length + " z " + rs.length + " receptur"; }
-        if (tab === 5) { const n = wornTools().length, f = spoilingFood().length; return n + f === 0 ? "Wszystko w porządku" : "Do ogarnięcia: " + n + " narzędzi, " + f + " potraw"; }
-        return "Notatek: " + d.notes.length;
+        return TAB_DEFS[tab].legend();
     }
 
     // ------------------------------------------------------------------
@@ -899,13 +974,7 @@
         w.resetFontSettings();
         w.contents.fontSize = 22;
         w.changeTextColor(ColorManager.textColor(7));
-        const keys = ["←/→ lub Q/E: zakładka   OK: przypnij cel   Anuluj: wróć",
-            "Ptaszek: poznane   ←/→ lub Q/E: zakładka   Anuluj: wróć",
-            "Ptaszek: zbudowane   Romb: możesz zbudować teraz   ←/→: zakładka",
-            "Ptaszek: zrobione   Romb: możesz zrobić teraz   ←/→: zakładka",
-            "←/→ lub Q/E: zakładka   Anuluj: wróć",
-            "Ptaszek: w porządku   Romb: masz na naprawę / zaraz się zepsuje   ←/→ lub Q/E: zakładka"][this._tab];
-        w.drawText(keys, 0, 0, w.innerWidth - 300);
+        w.drawText(TAB_DEFS[this._tab].help, 0, 0, w.innerWidth - 300);
         w.changeTextColor(ColorManager.textColor(16));
         w.drawText(legendFor(this._tab), w.innerWidth - 400, 0, 400, "right");
     };
@@ -1146,7 +1215,7 @@
         bmp.fontSize = 14;
         const lines = wrapBitmapText(bmp, line, inner, 3);
         const h = 8 + 15 + titleLines.length * 21 + 3 + lines.length * 17 + 6;
-        ctx.fillStyle = "rgba(22,15,10,0.86)";
+        ctx.fillStyle = COLORS.panelFill;
         ctx.beginPath();
         const r = 8;
         ctx.moveTo(r, 0); ctx.lineTo(w - r, 0); ctx.quadraticCurveTo(w, 0, w, r);
@@ -1155,22 +1224,22 @@
         ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = "rgba(166,124,58,0.9)";
+        ctx.strokeStyle = COLORS.panelBorder;
         ctx.lineWidth = 1.5;
         ctx.stroke();
         bmp.outlineWidth = 3;
-        bmp.outlineColor = "rgba(14,8,4,0.9)";
+        bmp.outlineColor = COLORS.outline;
         let y = 6;
         bmp.fontSize = 13;
-        bmp.textColor = "#dcb460";
+        bmp.textColor = COLORS.trackerLabel;
         bmp.drawText("CEL", 10, y, 60, 16, "left");
         y += 15;
         bmp.fontSize = 18;
-        bmp.textColor = "#f0e4c8";
+        bmp.textColor = COLORS.trackerTitle;
         for (const t of titleLines) { bmp.drawText(t, 10, y, inner, 21, "left"); y += 21; }
         y += 3;
         bmp.fontSize = 14;
-        bmp.textColor = "#b8ab94";
+        bmp.textColor = COLORS.trackerBody;
         for (const t of lines) { bmp.drawText(t, 10, y, inner, 17, "left"); y += 17; }
         bmp._baseTexture.update();
     };
