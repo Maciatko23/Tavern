@@ -11,7 +11,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
         await sleep(600);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
@@ -44,7 +44,7 @@ const { launch, sleep } = require("./cdp.js");
         const tdef = await J(`(function(){ const t = Farming.BUILDINGS.tripod, c = Farming.BUILDINGS.campfire; return { img: t.image, noBuild: t.noBuild, hang: t.hang, fire: !!t.fire, campCost: c.upgrade.cost, tripCost: t.upgrade.cost, tripTo: t.upgrade.to, tool: t.upgrade.tool, recipes: t.recipes.map(r => r.id) }; })()`);
         const IT = async n => ev(`Farming.ITEM.${n}`);
         check("the tripod costs 3 branches and a rope (no hammer); it is not in the build menu", JSON.stringify(tdef.campCost) === JSON.stringify([[await IT("branch"), 3], [await IT("rope"), 1]]) && tdef.noBuild === true && tdef.img === "Farm_Tripod_L" && !!tdef.hang && tdef.fire, tdef);
-        check("the cauldron is hung on the tripod: it costs the Kociołek item (forged at the forge from 3 iron), no hammer needed", JSON.stringify(tdef.tripCost) === JSON.stringify([[await IT("cauldronItem"), 1]]) && tdef.tripTo === "cauldron" && !tdef.tool, tdef);
+        check("the cauldron is hung on the tripod: it costs the Kociołek item (forged at the forge from 8 iron), no hammer needed", JSON.stringify(tdef.tripCost) === JSON.stringify([[await IT("cauldronItem"), 1]]) && tdef.tripTo === "cauldron" && !tdef.tool, tdef);
         check("the tripod roasts what the campfire roasts", ["roast_meat", "roast_fish", "potatoes", "eggs"].every(id => tdef.recipes.includes(id)), tdef.recipes);
         check("the tripod is marked noBuild (only ever made by upgrading a campfire)", (await ev("Farming.BUILDINGS.tripod.noBuild")) === true);
         check("the cauldron has only its own dishes (soup, stew, cabbage soup, mushroom soup, porridge, brew) and no roasting on a stick", ["soup", "stew", "cabbage_soup", "mushroom_soup", "porridge", "brew"].every(id => def.kRecipes.includes(id)) && !["roast_meat", "roast_fish", "potatoes", "eggs", "mushrooms", "cheese_baked"].some(id => def.kRecipes.includes(id)), def.kRecipes);
@@ -95,17 +95,17 @@ const { launch, sleep } = require("./cdp.js");
         check("the tripod has the fire, smoke and glow of the campfire, its own picture, and no hanging food while nothing roasts", te && te.flame && te.puffs === 4 && te.glow >= 1.5 && te.meat && !te.meatShown && te.image === "Farm_Tripod_L.png", te);
         await b.shot("fire_tripod_day.png");
         const menu2 = await J(`Farming.menuFor(${fx}, ${fy}).entries.map(e => e.name)`);
-        check("the tripod's menu: the roasting recipes, and 'Zawieś kociołek'", menu2.includes("Upiecz mięso") && menu2.includes("Zawieś kociołek") && !menu2.includes("Dobuduj trójnóg"), menu2);
-        // 2. the cauldron: hung from a Kociołek item, forged at a forge from 3 iron (not paid for in raw materials on the spot)
+        check("the tripod's menu: the roasting recipes, and 'Zawieś kociołek'", menu2.includes("Upiecz mięso zająca") && menu2.includes("Upiecz mięso dzika") && menu2.includes("Zawieś kociołek") && !menu2.includes("Dobuduj trójnóg"), menu2);
+        // 2. the cauldron: hung from a Kociołek item, forged at a forge from 8 iron (not paid for in raw materials on the spot)
         const cauldronItem = await id("cauldronItem");
         await ev(`Farming.upgradeBuilding(Farming.buildingAt(${fx}, ${fy}))`);
         check("no materials: a popup says what is missing, nothing changes", (await pops()).some(t => /Potrzebujesz: /.test(t)) && (await typeHere()) === "tripod");
         const gx = bx + 2, gy = by + 7;   // a temporary forge, well clear of everything else in this small patch
         await add("forge", gx, gy, 3);
-        await setN(iron, 3);
+        await setN(iron, 8);
         const forged = await ev(`Farming.craftManual(Farming.buildingAt(${gx}, ${gy}), Farming.BUILDINGS.forge.recipes.find(r => r.id === "cauldron_item"))`);
         await frames(130);
-        check("(setup) forged a Kociołek at the forge: 3 iron -> the carryable item", forged === true && (await ev(`$gameParty.numItems($dataItems[${cauldronItem}])`)) === 1);
+        check("(setup) forged a Kociołek at the forge: 8 iron -> the carryable item", forged === true && (await ev(`$gameParty.numItems($dataItems[${cauldronItem}])`)) === 1);
         await add("bench", fx - 1, fy);   // something in the way where the cauldron's left tile would be
         await ev(`Farming.upgradeBuilding(Farming.buildingAt(${fx}, ${fy}))`);
         check("no room: 'Za mało miejsca wokół ogniska'", (await pops()).some(t => /Za mało miejsca/.test(t)) && (await typeHere()) === "tripod");

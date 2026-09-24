@@ -21,7 +21,7 @@ const { launch, sleep } = require("./cdp.js");
             await stand(eid, px, py, d); await frames(6);
             const series = [], stam = [];
             let refused = "";
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 40; i++) {
                 await idle(eid);
                 await ev("$gameSystem.setStamina(100); 0");
                 const before = await ev(`$gameMap.event(${eid})._treeHits || 0`);
@@ -51,7 +51,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameParty.gainItem($dataItems[116], 1); 0");
         const veinIron = await work(50, 30, 16, 2);
         console.log("vein blows/stamina  stone:", veinStone.presses, veinStone.stamPerBlow, " iron:", veinIron.presses, veinIron.stamPerBlow);
-        check("ore vein: 4 blows with the stone pickaxe, 3 with the iron one", veinStone.presses === 4 && veinIron.presses === 3, { stone: veinStone.presses, iron: veinIron.presses });
+        check("ore vein: 26 blows with the stone pickaxe, 17 with the iron one (x0.65)", veinStone.presses === 26 && veinIron.presses === 17, { stone: veinStone.presses, iron: veinIron.presses });
         check("and each blow costs less stamina", veinIron.stamPerBlow < veinStone.stamPerBlow, { stone: veinStone.stamPerBlow, iron: veinIron.stamPerBlow });
         const rockStone = await work(83, 31, 22, 2);   // a huge rock (8 blows)
         console.log("huge rock stone pickaxe:", JSON.stringify(rockStone));

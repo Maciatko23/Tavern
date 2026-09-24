@@ -16,7 +16,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
         await sleep(500);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
@@ -72,13 +72,13 @@ const { launch, sleep } = require("./cdp.js");
             L.push({ id: f.nextId++, type: "forge", x: ${fx}, y: ${fy}, last: 1, v: 3 });
             L.push({ id: f.nextId++, type: "tripod", x: ${tx}, y: ${ty}, last: 1, v: 3 }); f.rev++; })()`);
         await frames(6);
-        await ev("$gameParty.gainItem($dataItems[Farming.ITEM.iron], 3); $gameSystem.setStamina(200); 0");
+        await ev("$gameParty.gainItem($dataItems[Farming.ITEM.iron], 8); $gameSystem.setStamina(200); 0");
         const forgeMenu = await J(`Farming.menuFor(${fx}, ${fy}).entries.find(e => e.name === "Wykuj kociołek")`);
         check("the forge offers 'Wykuj kociołek'", !!forgeMenu, forgeMenu);
         const madeCauldron = await ev(`Farming.craftManual(Farming.buildingAt(${fx}, ${fy}), Farming.BUILDINGS.forge.recipes.find(r => r.id === "cauldron_item"))`);
         await frames(130);
         const afterForge = await J(`({ cauldronItems: $gameParty.numItems($dataItems[Farming.ITEM.cauldronItem]), iron: $gameParty.numItems($dataItems[Farming.ITEM.iron]) })`);
-        check("forged: 3 iron -> a carryable Kociołek", madeCauldron === true && afterForge.cauldronItems === 1 && afterForge.iron === 0, afterForge);
+        check("forged: 8 iron -> a carryable Kociołek", madeCauldron === true && afterForge.cauldronItems === 1 && afterForge.iron === 0, afterForge);
         const secondAttempt = await ev(`Farming.craftManual(Farming.buildingAt(${fx}, ${fy}), Farming.BUILDINGS.forge.recipes.find(r => r.id === "cauldron_item"))`);
         check("a second one is refused while you already have one", secondAttempt === false, secondAttempt);
 
@@ -89,7 +89,7 @@ const { launch, sleep } = require("./cdp.js");
         check("upgrading is refused without the item", upFailed === false && (await ev(`Farming.buildingAt(${tx}, ${ty}).type`)) === "tripod");
 
         // forge a fresh one now that the bag is empty again, then attach it
-        await ev("$gameParty.gainItem($dataItems[Farming.ITEM.iron], 3); 0");
+        await ev("$gameParty.gainItem($dataItems[Farming.ITEM.iron], 8); 0");
         const remade = await ev(`Farming.craftManual(Farming.buildingAt(${fx}, ${fy}), Farming.BUILDINGS.forge.recipes.find(r => r.id === "cauldron_item"))`);
         await frames(130);
         check("(setup) forged a Kociołek again, now that neither the bag nor a tripod holds one", remade === true && (await ev("$gameParty.numItems($dataItems[Farming.ITEM.cauldronItem])")) === 1);

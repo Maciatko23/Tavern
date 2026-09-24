@@ -33,7 +33,7 @@ const { launch, sleep } = require("./cdp.js");
             await ev(`$gameSystem.setStamina(100); $gamePlayer.locate(${spot.nx}, ${spot.ny}); $gamePlayer.setDirection(${spot.d}); $gameMap.setDisplayPos(${spot.nx} - 13, ${spot.ny} - 7); 0`);
             await frames(6);
             let presses = 0; const series = [];
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 40; i++) {
                 // wait until the player can act again, then start the event exactly like the action button does
                 await ev(`new Promise(res => { const iv = setInterval(() => { const e = $gameMap.event(${eid}); if (!$gameMap.isEventRunning() && !e.isTreeAnimating() && !$gamePlayer.isToolSwinging() && $gamePlayer.canMove()) { clearInterval(iv); res(); } }, 8); })`);
                 await ev("$gameSystem.setStamina(100); 0");
@@ -64,8 +64,8 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameParty.gainItem($dataItems[116], 1); 0");
         const iron2 = mounds.length > 1 ? await mine(mounds[1]) : { presses: 0 };
         console.log("mound:      stone pickaxe", JSON.stringify(stone2), "| + iron pickaxe", JSON.stringify(iron2));
-        check("ore veins: the iron pickaxe needs one blow less", stone.broke && iron.broke && iron.presses === stone.presses - 1, { stone: stone.presses, iron: iron.presses });
-        check("mounds: the iron pickaxe needs one blow less", stone2.broke && iron2.broke && iron2.presses === stone2.presses - 1, { stone: stone2.presses, iron: iron2.presses });
+        check("ore veins: the iron pickaxe needs a third fewer blows (x0.65)", stone.broke && iron.broke && iron.presses === Math.max(1, Math.round(stone.presses * 0.65)), { stone: stone.presses, iron: iron.presses });
+        check("mounds: the iron pickaxe needs a third fewer blows (x0.65)", stone2.broke && iron2.broke && iron2.presses === Math.max(1, Math.round(stone2.presses * 0.65)), { stone: stone2.presses, iron: iron2.presses });
     } catch (e) { console.log("ERR", e.message); }
     console.log("console errors:", b.logs.filter(l => /EXC|rror/.test(l)).slice(-4));
     console.log(results.filter(Boolean).length + "/" + results.length + " passed");

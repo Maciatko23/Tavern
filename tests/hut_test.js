@@ -42,13 +42,13 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- data
         const def = await J(`(function(){ const h = Farming.BUILDINGS.hut, B = Farming.BUILDINGS; return { w: h.w, h: h.h, door: h.door, single: h.single, cost: h.cost, image: h.image, hutMap: Farming.HUT_MAP,
             indoor: Object.keys(B).filter(k => B[k].indoor).sort(), indoorOnly: Object.keys(B).filter(k => B[k].indoorOnly).sort(), bed: { sleep: B.bed.sleep, w: B.bed.w, cost: B.bed.cost }, larder: { keeps: B.larder.keeps, slots: B.larder.slots, food: B.larder.foodOnly, w: B.larder.w } }; })()`);
-        check("Chatka: 5 x 3 field, the doorway in column 3, only one, costs 30 planks + 40 nails + 20 stones + 6 iron",
-            def.w === 5 && def.h === 3 && def.door.dx === 3 && def.single === true && JSON.stringify(def.cost) === JSON.stringify([[IT.planks, 30], [IT.nails, 40], [IT.stone, 20], [IT.iron, 6]]), def);
+        check("Chatka: 5 x 3 field, the doorway in column 1, only one, costs 50 planks + 60 nails + 40 stones + 10 iron",
+            def.w === 5 && def.h === 3 && def.door.dx === 1 && def.single === true && JSON.stringify(def.cost) === JSON.stringify([[IT.planks, 50], [IT.nails, 60], [IT.stone, 40], [IT.iron, 10]]), def);
         check("furniture that may stand inside: bench, both chests, workbench, bedroll + the bed and the larder (only inside); the pantry stays outdoors",
             JSON.stringify(def.indoor) === JSON.stringify(["bed", "bedroll", "bench", "chest_l", "chest_s", "larder", "workbench"]) && JSON.stringify(def.indoorOnly) === JSON.stringify(["bed", "larder"]), { indoor: def.indoor, only: def.indoorOnly });
         check("bed: 2 wide, sleeps; larder: 1 tile, keeps food 5 x longer (0.2), 24 kinds, food only", def.bed.sleep === true && def.bed.w === 2 && def.larder.keeps === 0.2 && def.larder.slots === 24 && def.larder.food === true && def.larder.w === 1, def);
         const imgs = await ev(`Promise.all(["Farm_Hut_L", "Farm_Bed", "Farm_Larder"].map(n => new Promise(res => { const bm = ImageManager.loadSystem(n); bm.addLoadListener(() => res(bm.width + "x" + bm.height)); })))`);
-        check("the pictures load: hut 266 x 137, bed 96 x 64, larder 61 x 101", JSON.stringify(imgs) === JSON.stringify(["266x137", "96x64", "61x101"]), imgs);
+        check("the pictures load: hut 238 x 203, bed 96 x 64, larder 61 x 101", JSON.stringify(imgs) === JSON.stringify(["238x203", "96x64", "61x101"]), imgs);
         const map = await ev(`fetch("data/Map100.json").then(r => r.json()).then(m => ({ w: m.width, h: m.height, ts: m.tilesetId, note: m.note, ev: m.events.filter(Boolean).length, name: m.displayName }))`);
         check("Map100: 7 x 6 tiles (a 5 x 2 floor), the cottage tileset, a dark interior with two windows and a lamp", map.w === 7 && map.h === 6 && map.ts === 8 && /<Dark:on>/.test(map.note) && map.ev === 3, map);
 
@@ -68,7 +68,7 @@ const { launch, sleep } = require("./cdp.js");
             return null; })()`);
         check("found an open ground", !!B, B);
         const { bx, by } = B;
-        const hx = bx + 1, hy = by + 4, dX = hx + 3, fY = hy + 1;   // the hut: cells hx..hx+4, hy-2..hy; the doorway (dX, hy); the tile in front of it (dX, fY)
+        const hx = bx + 1, hy = by + 4, dX = hx + 1, fY = hy + 1;   // the hut: cells hx..hx+4, hy-2..hy; the doorway (dX, hy); the tile in front of it (dX, fY)
         const stand = (x, y, dir) => ev(`$gamePlayer.locate(${x}, ${y}); $gamePlayer.setDirection(${dir}); $gameMap.setDisplayPos(${bx} - 6, ${by} - 2); $gameSystem.setStamina(100); 0`);
         await stand(dX, fY + 1, 8);
         await frames(20);
@@ -76,7 +76,7 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- placing and building
         for (const id of [IT.planks, IT.nails, IT.stone, IT.iron, IT.hammer]) await setN(id, 0);
         check("without materials the placer says so (and the spot itself is fine)", (await ev(`Farming.placementProblem("hut", ${hx}, ${hy})`)) === "Brakuje materiałów." && (await ev(`Farming.whyNotBuild("hut", ${hx}, ${hy})`)) === null);
-        await setN(IT.planks, 30); await setN(IT.nails, 40); await setN(IT.stone, 20); await setN(IT.iron, 6); await setN(IT.hammer, 1);
+        await setN(IT.planks, 50); await setN(IT.nails, 60); await setN(IT.stone, 40); await setN(IT.iron, 10); await setN(IT.hammer, 1);
         check("with the materials it can be placed", (await ev(`Farming.placementProblem("hut", ${hx}, ${hy})`)) === null);
         // something in front of the door: refused
         await ev(`(function(){ const f = $gameSystem._farm; (f.buildings[3] = f.buildings[3] || []).push({ id: 9001, type: "chest_s", x: ${dX}, y: ${fY}, last: 1, v: 3 }); f.rev++; })(); 0`);
@@ -85,11 +85,11 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`Farming.placeSite("hut", ${hx}, ${hy}); $gameTemp._buildMode = null; 0`);
         await frames(20);
         const site = await J(`(function(){ const b = Farming.buildingAt(${hx}, ${hy}); return b ? { type: b.type, v: b.v, need: b.site && b.site.need, done: b.site && b.site.done } : null; })()`);
-        check("a building site appears (20 hammer blows of 2 stamina)", !!site && site.type === "hut" && site.v === 3 && site.need === 20 && site.done === 0, site);
+        check("a building site appears (80 hammer blows of 2 stamina)", !!site && site.type === "hut" && site.v === 3 && site.need === 80 && site.done === 0, site);
         check("the materials are spent", (await count(IT.planks)) === 0 && (await count(IT.nails)) === 0 && (await count(stone)) === 0 && (await count(IT.iron)) === 0);
         check("a hut that is only a site cannot be entered yet", (await ev(`Farming.hutDoorAt(${dX}, ${hy})`)) === null);
         let blows = 0;
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 120; i++) {
             if (!(await ev(`!!Farming.buildingAt(${hx}, ${hy}).site`))) break;
             await ev(`$gameSystem.setStamina(100); (function(){ const b = Farming.buildingAt(${hx}, ${hy}); Farming.strikeSite(b, ${hx}, ${hy - 1}); })(); 0`);
             blows++;
@@ -224,7 +224,7 @@ const { launch, sleep } = require("./cdp.js");
         check("empty, it may be pulled down", (await ev(`Farming.demolishBlock(Farming.buildingAt(${hx}, ${hy}))`)) === null);
         await ev(`Farming.demolish(Farming.buildingAt(${hx}, ${hy})); 0`);
         await frames(10);
-        check("it gives back half: 15 planks, 20 nails, 10 stones, 3 iron", (await count(IT.planks)) === 15 && (await count(IT.nails)) === 20 && (await count(IT.stone)) === 10 && (await count(IT.iron)) === 3, { planks: await count(IT.planks), nails: await count(IT.nails), stone: await count(IT.stone), iron: await count(IT.iron) });
+        check("it gives back half: 25 planks, 30 nails, 20 stones, 5 iron", (await count(IT.planks)) === 25 && (await count(IT.nails)) === 30 && (await count(IT.stone)) === 20 && (await count(IT.iron)) === 5, { planks: await count(IT.planks), nails: await count(IT.nails), stone: await count(IT.stone), iron: await count(IT.iron) });
         check("and a new one may be built again", (await ev(`Farming.whyNotBuild("hut", ${hx}, ${hy})`)) === null && (await ev("Farming.hutOf()")) === null);
         // the door of an orphaned room still leads somewhere: back to the farm
         await ev(`$gamePlayer.reserveTransfer(100, 3, 4, 2, 0); 0`);

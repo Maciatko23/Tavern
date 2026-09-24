@@ -63,7 +63,8 @@
         cast: ["rzut", "rzuty", "rzutów"],
         cut: ["cięcie", "cięcia", "cięć"],
         shot: ["strzał", "strzały", "strzałów"],
-        jab: ["pchnięcie", "pchnięcia", "pchnięć"]
+        jab: ["pchnięcie", "pchnięcia", "pchnięć"],
+        block: ["cios", "ciosy", "ciosów"]
     };
     const TOOLS = {
         60: { life: 70, unit: "blow", g: "f", fix: [[77, 1], [92, 1]] },              // kamienna siekiera: gałąź + len
@@ -80,7 +81,9 @@
         118: { life: 90, unit: "cut", g: "f", fix: [[86, 1]] },                        // piła
         125: { life: 60, unit: "shot", g: "f", fix: [[93, 1], [92, 1]] },             // proca: lina + len
         126: { life: 80, unit: "shot", g: "m", fix: [[93, 1], [77, 1]] },             // łuk: lina + gałąź
-        154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] }               // oszczep: kamień (grot) + lina
+        154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] },              // oszczep: kamień (grot) + lina
+        155: { life: 40, unit: "block", g: "f", fix: [[61, 1], [93, 1]] },            // drewniana tarcza: drewno + lina (zużywa ją każdy przyjęty cios)
+        156: { life: 80, unit: "blow", g: "f", fix: [[92, 1]] }                        // pałka: len na uchwyt
     };
     const WARN_FRACTION = 0.15;
 
@@ -93,7 +96,12 @@
         return $gameSystem._wear;
     }
     const used = id => (state().used[id] || 0);
-    const left = id => (TOOLS[id] ? Math.max(0, lifeOf(id) - used(id)) : 0);
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
+    const left = id => (TOOLS[id] ? Math.max(0, Math.ceil(lifeOf(id) - used(id) - 1e-9)) : 0);   // (Dbały: a use can wear it by less than one)
     const owns = id => !!dataItem(id) && $gameParty.hasItem(dataItem(id));
 
     function unitWord(id, n) {
@@ -118,8 +126,8 @@
     // One use of the tool. Returns true when it broke on this use.
     function use(id, n) {
         if (!ENABLED || !TOOLS[id] || !owns(id)) return false;
-        state().used[id] = used(id) + (n || 1);
-        const remaining = lifeOf(id) - used(id);
+        state().used[id] = used(id) + (n || 1) * (1 - Math.min(0.8, perk("tool.wear")));   // (Rzemiosło: Dbały)
+        const remaining = left(id);
         if (remaining <= 0) { broke(id); return true; }
         if (remaining <= Math.max(3, Math.ceil(lifeOf(id) * WARN_FRACTION)) && !state().warned[id]) {
             state().warned[id] = true;
@@ -139,7 +147,8 @@
     function repairRecipes() {
         if (!ENABLED) return [];
         return Object.keys(TOOLS).map(Number).filter(id => owns(id) && used(id) > 0).map(id => ({
-            id: "repair_" + id, name: "Napraw: " + dataItem(id).name, inputs: TOOLS[id].fix, output: [id, 1], repair: id, manual: true,
+            id: "repair_" + id, name: "Napraw: " + dataItem(id).name, output: [id, 1], repair: id, manual: true,
+            inputs: knowsSkill("c_repair") ? TOOLS[id].fix.map(([i, n]) => [i, Math.max(1, Math.ceil(n / 2))]) : TOOLS[id].fix,   // (Naprawiacz)
             hours: 1, stamina: 2, startSe: "Hammer",
             desc: "Wzmacniasz i sklejasz to, co się poluzowało. Wytrzymałość wraca do pełna (teraz " + left(id) + " z " + lifeOf(id) + ")."
         }));

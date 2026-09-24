@@ -590,11 +590,16 @@
         if (AUTOSAVE) $gameTemp._atmoAutosave = true;
         return result;
     };
+    // said at the top centre of the screen (SurvivalHUD's notice), not over the player
+    function saveNotice(text, color) {
+        if (typeof $gameTemp.pushTopNotice === "function") $gameTemp.pushTopNotice(text, color);
+        else $gameTemp.pushLootPopup(0, text, color);
+    }
     Scene_Map.prototype.onAutosaveSuccess = function() {
-        $gameTemp.pushLootPopup(0, "Gra zapisana (autozapis)", "#9fd4ff");
+        saveNotice("Gra zapisana (autozapis)", "#9fd4ff");
     };
     Scene_Map.prototype.onAutosaveFailure = function() {
-        $gameTemp.pushLootPopup(0, "Autozapis nie powiódł się", "#ff9f8f");
+        saveNotice("Autozapis nie powiódł się", "#ff9f8f");
     };
 
     // ------------------------------------------------------------------

@@ -11,7 +11,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
         await sleep(600);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
@@ -33,16 +33,16 @@ const { launch, sleep } = require("./cdp.js");
         check("their icons are drawn (well filled cells) on a sheet at least 800 px tall", pix.out.every(n => n > 200) && pix.h >= 800, pix);
 
         // ---------------------------------------------------------------- recipes at the right stations
-        const rec = await J(`(function(){ const R = (t, id) => { const r = Farming.BUILDINGS[t].recipes.find(r => r.id === id); return r ? { in: r.inputs.map(x => x[0] + "x" + x[1]).join("+"), out: r.output[0] + "x" + r.output[1], h: r.hours, roast: !!r.roast } : null; };
+        const rec = await J(`(function(){ const R = (t, id) => { const r = Farming.BUILDINGS[t].recipes.find(r => r.id === id); return r ? { in: r.inputs.map(x => x[0] + "x" + x[1]).join("+"), meat: r.meat || 0, out: r.output[0] + "x" + r.output[1], h: r.hours, roast: !!r.roast } : null; };
             return { stew: R("cauldron", "stew"), cabbage: R("cauldron", "cabbage_soup"), mushSoup: R("cauldron", "mushroom_soup"), porridge: R("cauldron", "porridge"), soup: R("cauldron", "soup"), brew: R("cauldron", "brew"),
                 pie: R("bakery", "berry_pie"), bread: R("bakery", "bread"), mead: R("brewery", "mead"), beer: R("brewery", "beer"),
                 grill: R("campfire", "mushrooms"), cheese: R("campfire", "cheese_baked"), tGrill: R("tripod", "mushrooms"), tCheese: R("tripod", "cheese_baked"), meat: R("campfire", "roast_meat"),
                 kAll: Farming.BUILDINGS.cauldron.recipes.map(r => r.id), kRoast: Farming.BUILDINGS.cauldron.recipes.some(r => r.roast) }; })()`);
-        check("cauldron: gulasz = 2 meat + carrot + cabbage -> 2 (4 h)", rec.stew && rec.stew.in === "94x2+72x1+73x1" && rec.stew.out === "130x2" && rec.stew.h === 4, rec.stew);
+        check("cauldron: gulasz = 2 raw meat (any) + carrot + cabbage -> 2 (4 h)", rec.stew && rec.stew.in === "72x1+73x1" && rec.stew.meat === 2 && rec.stew.out === "130x2" && rec.stew.h === 4, rec.stew);
         check("cauldron: kapuśniak = 2 cabbage + potato + smoked meat -> 2 (3 h)", rec.cabbage && rec.cabbage.in === "73x2+71x1+105x1" && rec.cabbage.out === "131x2" && rec.cabbage.h === 3, rec.cabbage);
         check("cauldron: zupa grzybowa = 3 mushrooms + potato + milk -> 2 (3 h)", rec.mushSoup && rec.mushSoup.in === "103x3+71x1+123x1" && rec.mushSoup.out === "132x2" && rec.mushSoup.h === 3, rec.mushSoup);
         check("cauldron: owsianka = 3 barley + milk + honey -> 2 (2 h)", rec.porridge && rec.porridge.in === "74x3+123x1+76x1" && rec.porridge.out === "133x2" && rec.porridge.h === 2, rec.porridge);
-        check("the old cauldron dishes are unchanged (soup, brew)", rec.soup && rec.soup.in === "71x2+72x1+94x1" && rec.soup.out === "109x2" && rec.brew && rec.brew.in === "104x3" && rec.brew.out === "110x2");
+        check("the old cauldron dishes: soup (potatoes, carrot, 1 raw meat of any animal), brew", rec.soup && rec.soup.in === "71x2+72x1" && rec.soup.meat === 1 && rec.soup.out === "109x2" && rec.brew && rec.brew.in === "104x3" && rec.brew.out === "110x2");
         check("bakery: placek jagodowy = 2 flour + 3 berries + honey -> 2 (3 h), bread stays", rec.pie && rec.pie.in === "82x2+102x3+76x1" && rec.pie.out === "136x2" && rec.pie.h === 3 && !!rec.bread, rec.pie);
         check("brewery: miód pitny = 3 honey -> 2 (8 h), beer stays", rec.mead && rec.mead.in === "76x3" && rec.mead.out === "137x2" && rec.mead.h === 8 && !!rec.beer, rec.mead);
         check("campfire AND tripod: grilled mushrooms (2 -> 2, 15 min) and baked cheese (1 -> 1, 15 min), both roasted on a stick / hook",

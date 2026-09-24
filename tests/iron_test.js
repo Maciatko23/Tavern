@@ -1,4 +1,4 @@
-// An iron axe saves one blow on the same kind of tree (ChoppableTree.toolBonus).
+// An iron axe needs about a third fewer blows on the same kind of tree (ChoppableTree IRON_HIT_FACTOR 0.65).
 const { launch, sleep } = require("./cdp.js");
 (async () => {
     const b = await launch({ width: 2560, height: 1440, dpr: 0.5 });
@@ -22,10 +22,11 @@ const { launch, sleep } = require("./cdp.js");
             const e = await ev(`(function(){ const e = $gameMap.event(${eid}); return { x: e.x, y: e.y, name: e.event().name }; })()`);
             const d = { 2: [0, -1], 8: [0, 1], 4: [1, 0], 6: [-1, 0] }[dir];   // the player stands on the side opposite to the facing direction
             const px = e.x + d[0], py = e.y + d[1];
+            for (let i = 0; i < 60 && (await ev("$gameMap.isEventRunning()")); i++) await frames(10);   // (the last tree still falling)
             await ev(`$gameSystem.setStamina(100); $gamePlayer.locate(${px}, ${py}); $gamePlayer.setDirection(${dir}); $gameMap.setDisplayPos(${px} - 13, ${py} - 7); 0`);
             await frames(6);
             let swings = 0, peak = 0;
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 40; i++) {
                 await press("ok");
                 await frames(75);
                 await ev("$gameSystem.setStamina(100); 0");
@@ -40,8 +41,8 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameParty.gainItem($dataItems[115], 1); 0");
         const withIron = await chop(36, 2);
         console.log("without:", JSON.stringify(noIron), "with iron axe:", JSON.stringify(withIron));
-        check("both trees of the same kind fall", noIron.swings < 14 && withIron.swings < 14 && noIron.name === withIron.name);
-        check("the iron axe needs exactly one blow less", withIron.swings === noIron.swings - 1);
+        check("both trees of the same kind fall", noIron.swings < 40 && withIron.swings < 40 && noIron.name === withIron.name);
+        check("the iron axe needs a third fewer blows (x0.65)", withIron.swings === Math.max(1, Math.round(noIron.swings * 0.65)), { noIron, withIron });
     } catch (e) { console.log("ERR", e.message); }
     console.log("console errors:", b.logs.filter(l => /EXC|rror/.test(l)).slice(-4));
     console.log(results.filter(Boolean).length + "/" + results.length + " passed");

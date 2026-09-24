@@ -145,11 +145,18 @@ const { launch, sleep } = require("./cdp.js");
         const before = await ev("DataManager.savefileInfo(0) ? DataManager.savefileInfo(0).timestamp : 0");
         await ev("$gameSystem.setDayNightHour(22); $gameSystem.sleepUntilHour(7); 0");
         check("sleeping in a bed asks for an autosave", (await ev("!!$gameTemp._atmoAutosave")) === true);
-        await frames(120);
+        const noticeNow = () => ev(`(function(){ const s = SceneManager._scene, n = s._topNotice; return { said: $gameTemp._lastTopNotice, visible: !!(n && n.visible), x: n && Math.round(n.x), y: n && Math.round(n.y), w: Graphics.width, day: !!(s._dayBanner && s._dayBanner.visible), dayBottom: s._dayBanner && s._dayBanner.bitmap ? Math.round(s._dayBanner.y + s._dayBanner.bitmap.height) : 0 }; })()`);
+        let notice = null;
+        for (let i = 0; i < 40; i++) { await frames(6); notice = await noticeNow(); if (notice.visible) break; }
+        await frames(20);
+        notice = await noticeNow();
+        await b.shot("save_notice.png");
+        await frames(100);
         check("the request is done (cleared)", (await ev("!!$gameTemp._atmoAutosave")) === false);
         await frames(60);
         const after = await ev("DataManager.savefileExists(0)");
         check("slot 0 (Autozapis) exists after it", after === true, after);
+        check("'Gra zapisana (autozapis)' is said at the top centre of the screen (under the day's greeting when that is shown), not over the player", notice.said === "Gra zapisana (autozapis)" && notice.visible && notice.x === Math.round(notice.w / 2) && notice.y < 120 && (!notice.day || notice.y >= notice.dayBottom), notice);
         // resting on a bench (1 hour) does not save, a bedroll (5 hours) does
         await ev("Atmosphere.afterRest({ restHours: 1 }); 0");
         check("a one hour rest does not", !(await ev("!!$gameTemp._atmoAutosave")));

@@ -45,7 +45,7 @@ const { launch, sleep } = require("./cdp.js");
         await put(bx + 1, by + 1);
         let p0 = await pos(); const nf = await hold(["right"], 40); let p1 = await pos();
         const straight = (p1.x - p0.x) * 48 / nf;
-        check("walks right smoothly (px/frame ~3)", straight > 2.7 && straight < 3.3, { pxPerFrame: +straight.toFixed(2), frames: nf, x: p1.x });
+        check("walks right smoothly (px/frame ~2.5: the walk is a little slower than the engine's 3 - FreeMovement walkSlowdown 0.25)", straight > 2.3 && straight < 2.75, { pxPerFrame: +straight.toFixed(2), frames: nf, x: p1.x });
         check("facing right, idle afterwards", (await pos()).d === 6 && (await pos()).moving === false);
         await put(bx + 1, by + 1);
         p0 = await pos(); const nf2 = await hold(["right", "down"], 40); p1 = await pos();

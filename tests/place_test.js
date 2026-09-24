@@ -35,6 +35,10 @@ const { launch, sleep } = require("./cdp.js");
         const menu = await ev("JSON.stringify(Farming.menuFor(" + (bx + 3) + ", " + (by + 3) + ").entries.map(e => e.name))");
         const qList = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return JSON.stringify(got); })()`);
         check("building is on Q (the ground menu has no 'Zbuduj...'): the Q list offers the bench", !/Zbuduj/.test(menu) && JSON.parse(qList).includes("Ławka"), { menu, qList });
+        const qFlags = JSON.parse(await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => ({ name: x.name, ok: x.enabled !== false })); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return JSON.stringify(got); })()`));
+        const qBuild = qFlags.filter(e => e.name !== "Zrób młotek");   // (no hammer yet: making one stays on top, whatever it needs)
+        const firstOff = qBuild.findIndex(e => !e.ok);
+        check("the Q list puts what can be built now (materials in the bag) first, the rest after it", firstOff > 0 && qBuild.slice(firstOff).every(e => !e.ok) && qBuild.slice(0, firstOff).some(e => e.name === "Ławka"), qFlags.map(e => (e.ok ? "+" : "-") + e.name).join(" "));
         await ev(`Farming.startPlacement("bench", ${bx + 3}, ${by + 3}); Input._currentState.ok = true; 0`);   // the same press that would have chosen it
         await frames(2);
         await ev("Input._currentState.ok = false; 0");
@@ -64,11 +68,26 @@ const { launch, sleep } = require("./cdp.js");
         const shot1 = "placer_valid.png";
         await b.shot(shot1);
         await press("ok");
+        const walking = await ev(`({ walk: !!($gameTemp._buildMode && $gameTemp._buildMode.walk), built: !!Farming.buildingAt(${bx + 5}, ${by + 4}), planks: $gameParty.numItems($dataItems[80]), move: $gamePlayer.canMove() })`);
+        check("OK far from the spot: he first walks up to it (nothing built yet, nothing taken, he may walk)", walking.walk && !walking.built && walking.planks === 12 && walking.move, walking);
         await frames(90);
         const placed = await ev(`!!Farming.buildingAt(${bx + 5}, ${by + 4})`);
         check("OK builds the bench exactly at the cursor", placed === true);
+        const at = await ev(`({ x: $gamePlayer.x, y: $gamePlayer.y, dir: $gamePlayer.direction() })`);
+        check("...once he stands right beside it (not at a corner), facing it", Math.abs(at.x - (bx + 5)) + Math.abs(at.y - (by + 4)) === 1 && at.dir === (at.x < bx + 5 ? 6 : at.x > bx + 5 ? 4 : at.y < by + 4 ? 2 : 8), at);
         check("the materials were taken (2 planks) and the mode ended", (await count(80)) === 10 && (await mode()) === null, { planks: await count(80) });
         check("the player can move again", (await ev("$gamePlayer.canMove()")) === true);
+
+        // on the way a direction key stops him: back to choosing the spot, nothing built
+        await ev(`$gameParty.gainItem($dataItems[80], 2); $gamePlayer.locate(${bx + 2}, ${by + 3}); Farming.startPlacement("bench", ${bx + 7}, ${by + 3}); 0`);
+        await frames(8);
+        await press("ok"); await frames(6);
+        const from = await ev("$gamePlayer._realX");
+        await press("left"); await frames(20);
+        const stopped = await ev(`({ walk: !!($gameTemp._buildMode && $gameTemp._buildMode.walk), mode: !!$gameTemp._buildMode, built: !!Farming.buildingAt(${bx + 7}, ${by + 3}), move: $gamePlayer.canMove(), x: $gamePlayer._realX })`);
+        check("an arrow on the way stops the walk; the placer stays, nothing built", !stopped.walk && stopped.mode && !stopped.built && !stopped.move && stopped.x <= from + 0.01, { from, stopped });
+        await press("cancel"); await frames(4);
+        await ev(`$gameParty.loseItem($dataItems[80], 2); 0`);
 
         // invalid: on top of the bench
         await ev(`Farming.startPlacement("bench", ${bx + 5}, ${by + 4}); 0`);

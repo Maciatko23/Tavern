@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Polowanie: zające i jelenie płoszą się przed graczem, dzik szarżuje. Proca (kamienie), łuk (strzały) albo oszczep z bliska - klawisz F. v1.1.0
+ * @plugindesc Polowanie i dzikie zwierzęta: zające i jelenie płoszą się, dzik szarżuje, nocą polują watahy wilków. Proca, łuk, broń wręcz (Combat.js) - tryb walki (Tab), klawisz O. v1.2.0
  * @author Tawerna
  *
  * @param enabled
@@ -14,9 +14,9 @@
  *
  * @param maps
  * @text Mapy i liczba zwierząt (JSON)
- * @desc Numer mapy -> ile zajęcy (rabbit), jeleni (deer) i dzików (boar) najwyżej naraz. Notatka mapy <Hunt:rabbit=3,deer=1> albo <Hunt:off> ma pierwszeństwo.
+ * @desc Numer mapy -> ile zajęcy (rabbit), jeleni (deer), dzików (boar) i wilków (wolf) najwyżej naraz. Notatka mapy <Hunt:rabbit=3,deer=1> albo <Hunt:off> ma pierwszeństwo.
  * @type string
- * @default {"3":{"rabbit":3,"boar":1},"4":{"rabbit":4,"deer":1},"5":{"rabbit":3,"deer":2,"boar":1},"6":{"rabbit":2,"deer":1,"boar":1},"7":{"rabbit":2},"8":{"rabbit":2},"12":{"deer":2,"boar":2},"15":{"rabbit":3,"deer":1}}
+ * @default {"3":{"rabbit":3,"boar":1,"wolf":2},"4":{"rabbit":4,"deer":1,"wolf":3},"5":{"rabbit":3,"deer":2,"boar":1,"wolf":3},"6":{"rabbit":2,"deer":1,"boar":1,"wolf":3},"7":{"rabbit":2},"8":{"rabbit":2},"12":{"deer":2,"boar":2,"wolf":4},"15":{"rabbit":3,"deer":1}}
  *
  * @help
  * ============================================================================
@@ -32,8 +32,8 @@
  * budynek, o świcie i zmierzchu, w deszczu - i przede wszystkim gdy się skradasz.
  * SKRADANIE: klawisz C włącza i wyłącza. Postać idzie pochylona, dwa razy
  * wolniej, nie biega, kroki są ciche (Atmosphere), na dole ekranu plakietka.
- * CELOWANIE: przytrzymaj F. Postać kręci procą (napina łuk), a na najbliższym
- * zwierzęciu przed nią pojawia się żółty krąg, który maleje, gdy stoisz. Puść F:
+ * CELOWANIE (tryb walki, Tab): przytrzymaj O. Postać kręci procą (napina łuk), a na najbliższym
+ * zwierzęciu przed nią pojawia się żółty krąg, który maleje, gdy stoisz. Puść O:
  * strzał leci w losowy punkt kręgu - mały ptak wymaga małego kręgu, zając
  * wybacza więcej. Zmęczony nie wycelujesz dokładnie; napięty łuk po chwili
  * zaczyna drżeć. Strzałki kierunku w czasie celowania obracają na inny cel,
@@ -43,9 +43,22 @@
  *     siła 1. Zając pada od jednego trafienia, jeleń ma 3 życia.
  *   Łuk + strzały (warsztat): zasięg 9 kratek, siła 2. Jeleń pada od dwóch strzałów.
  *   Oszczep (warsztat): bez amunicji i celowania. Gdy zwierzę stoi najwyżej
- *     2 pola przed tobą, F pchnie je oszczepem (siła 3); gdy nic nie ma tak
- *     blisko, F celuje z łuku albo procy jak wcześniej (a bez nich pcha w
+ *     2 pola przed tobą, O pchnie je oszczepem (siła 3); gdy nic nie ma tak
+ *     blisko, O celuje z łuku albo procy jak wcześniej (a bez nich pcha w
  *     powietrze).
+ *
+ * WALKA (Combat.js, jeśli jest): zwierzęta mają poziom (zależny od mapy), życie
+ * i równowagę; ciosy zbijają równowagę, a pusta = zwierzę się zatacza (odsłonięte).
+ * Dzik i wilki atakują przez obronę gracza z Combat.js: przewrót (Spacja) unika
+ * ciosu, blok (P w trybie walki) go osłabia, parowanie (P tuż przed trafieniem) ogłusza napastnika.
+ * Dzik z bliska (5 pól) szarżuje w prostej linii; gdy chybi, przebiega jeszcze
+ * ok. 3,5 pola, staje zziajany (ok. 1,7 s - czas na atak), potem ostrzega i wraca.
+ * Opis poniżej (siła broni, życie) dotyczy gry bez Combat.js.
+ *
+ * WILKI (nocą 20-5): watahy po 2-4. Gdy cię zauważą (albo podejdziesz na 6 pól),
+ * wyją i otaczają cię w kręgu; po jednym naraz: przysiada i szczeka ("!"), skacze
+ * i gryzie, a po skoku stoi chwilę - wtedy bij. Mocno poranione, albo gdy padnie
+ * przewodnik, uciekają.
  *
  * DZIK (rano 5-9 i wieczorem 17-21): 5 żyć, nie ucieka. Gdy cię zauważy albo
  * oberwie, staje, prycha i pokazuje "!", a potem szarżuje - szybciej, niż
@@ -56,13 +69,16 @@
  * odskakuje, a drugie pchnięcie go kładzie. Z jednym życiem ucieka. Łup: 3 sztuki
  * zwierzyny.
  *
- * STRZAŁ: klawisz F. Lecisz w stronę, w którą patrzysz; gdy trzymasz dwa
+ * STRZAŁ: klawisz O w trybie walki (Tab). Lecisz w stronę, w którą patrzysz; gdy trzymasz dwa
  * klawisze kierunku naraz (skos), strzał leci na skos. Strzał kosztuje trochę
  * wytrzymałości i jedno użycie broni (wtyczka Durability), a huk płoszy zwierzynę
  * w promieniu 7 kratek. Trafiony jeleń, który jeszcze żyje, ucieka ranny.
  *
- * ŁUP: zając daje 1 sztukę zwierzyny, jeleń 2. Zwierzynę oprawisz nożem (menu
- * Przedmioty): mięso i skóra, jak z pułapki.
+ * ŁUP: zabite zwierzę leży na ziemi (zwłoki). Podejdź z nożem i naciśnij przycisk
+ * akcji: bohater kuca i oprawia je - mięso tego zwierzęcia, surowa skóra i ścięgna
+ * (zając 1/1/1, jeleń 3/2/2, dzik 4/2/2, wilk 2/1/2). Bez noża nic nie weźmiesz,
+ * a zwłoki czekają - po dobie gniją. Zając z pułapki: z nożem oprawiasz go od
+ * razu przy odbiorze, bez noża zostaje przy pułapce jako zwłoki.
  *
  * PUŁAPKI (Farming.js): sama pułapka nic nie łapie - trzeba założyć w niej
  * przynętę (menu pułapki: "Załóż przynętę" - marchew, kapusta, dzikie jabłka,
@@ -90,38 +106,48 @@
     let MAPS = {};
     try { MAPS = JSON.parse(params.maps || "{}"); } catch (e) { MAPS = {}; }
 
-    Input.keyMapper[70] = "shoot";   // F
+    // (the "shoot" action - the attack, the shot - is on O in Combat.js's combat mode; no key of its own here)
     Input.keyMapper[67] = "sneak";   // C
 
-    const ITEM = { carcass: 101, stone: 64, sling: 125, bow: 126, arrows: 127, bandage: 152, spear: 154 };
+    const ITEM = { carcass: 101, stone: 64, sling: 125, bow: 126, arrows: 127, bandage: 152, spear: 154, rawHide: 96, sinew: 163, knifeStone: 90, knifeIron: 91 };
     // speed / flee: MZ move speeds (4 = the player); sight: tiles at which it starts to notice the player (see noticeRate);
     // hours: when it is about. aggressive (the boar): it does not run from the player but charges him - see Game_Animal.thinkBoar;
     // charge: its speed then, hurt: the strength it takes on a hit (plus a wound, Survival.js), run: its sheet while charging
+    // hp: its life at level 1 (combat scale: an arrow takes 30); atk: what its attack takes from the hero (Combat.js, +12% a level);
+    // poise: its balance (hits take it away; at 0 it reels for `stun` frames). pack: wolves come in packs of pack[0]-pack[1]
     const SPECIES = {
-        rabbit: { name: "Zając", sheet: "$Animal_Rabbit", hp: 1, speed: 3, flee: 5, sight: 6, radius: 0.5, drop: 1, hours: [[5, 21]] },
-        deer: { name: "Jeleń", sheet: "$Animal_Deer", hp: 3, speed: 3, flee: 5, sight: 9, radius: 0.75, drop: 2, hours: [[5, 10], [16, 21]] },
-        boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 5, speed: 3, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
-            hours: [[5, 9], [17, 21]], aggressive: true, hurt: 22, harm: 0.35, markY: -54 }   // harm: the part of the hero's health a hit takes; markY: the "?"/"!" just over its back
+        rabbit: { name: "Zając", sheet: "$Animal_Rabbit", hp: 12, poise: 10, stun: 30, speed: 3, flee: 5, sight: 6, radius: 0.5, drop: 1, hours: [[5, 21]] },
+        deer: { name: "Jeleń", sheet: "$Animal_Deer", hp: 40, poise: 25, stun: 40, speed: 3, flee: 5, sight: 9, radius: 0.75, drop: 2, hours: [[5, 10], [16, 21]] },
+        boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 110, atk: 30, poise: 60, stun: 70, speed: 3, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
+            hours: [[5, 9], [17, 21]], aggressive: true, hurt: 22, harm: 0.35, markY: -54 },   // harm: the part of the hero's health a hit takes (without Combat.js); markY: the "?"/"!" just over its back
+        wolf: { name: "Wilk", sheet: "$Animal_Wolf", run: "$Animal_Wolf_Run", stalk: "$Animal_Wolf_Stalk", bark: "$Animal_Wolf_Bark", hp: 50, atk: 12, poise: 30, stun: 50,
+            speed: 4, flee: 5, sight: 9, radius: 0.55, drop: 1, hours: [[20, 24], [0, 5]], aggressive: true, pack: [2, 4], markY: -46 }
     };
+    const atkOf = a => Math.round((SPECIES[a.kind()].atk || 10) * (1 + 0.12 * ((a._level || 1) - 1)));
     // the boar's temper, in frames: the warning before a charge (it stands, snorts and shows "!"), the longest charge, the run
     // back after a hit, the stagger after taking a spear
-    const BOAR = { warn: 50, charge: 240, retreat: [90, 150], stagger: 36, contact: 1.05 };
+    // commit: tiles from the hero at which the charge locks its line and goes straight on; overshoot: how far past him it runs when
+    // it misses; recover: the frames it then stands panting (the hero's moment to hit it) before it warns again
+    // rush: how much faster it runs once its line is locked (move speed, +0.4 = a quarter faster)
+    const BOAR = { warn: 50, charge: 240, retreat: [90, 150], stagger: 36, contact: 1.05, commit: 5, overshoot: 3.5, recover: 100, rush: 0.4 };
     // range in tiles, speed in tiles per frame, damage, stamina per shot, cooldown in frames;
-    // aiming (hold F): the circle shrinks from spread to focus (tiles of radius) in `steady` frames; holdAt: the frame of the
+    // aiming (hold the shoot key): the circle shrinks from spread to focus (tiles of radius) in `steady` frames; holdAt: the frame of the
     // shooting animation that is held while aiming (the sling whirls over the head, the bow is drawn)
     const WEAPONS = {
-        sling: { item: ITEM.sling, ammo: ITEM.stone, range: 6, speed: 0.34, damage: 1, stamina: 2, cooldown: 24, se: "Bow1", pitch: 130, spread: 1.3, focus: 0.12, steady: 70, holdAt: 30, release: 40, wobble: 5 },
-        bow: { item: ITEM.bow, ammo: ITEM.arrows, range: 9, speed: 0.55, damage: 2, stamina: 3, cooldown: 30, se: "Bow3", pitch: 100, spread: 1.1, focus: 0.08, steady: 55, holdAt: 30, release: 36, wobble: 0, tremble: 240 }
+        sling: { item: ITEM.sling, ammo: ITEM.stone, range: 6, speed: 0.34, damage: 14, stamina: 2, cooldown: 24, se: "Bow1", pitch: 130, spread: 1.3, focus: 0.12, steady: 70, holdAt: 30, release: 40, wobble: 5 },
+        bow: { item: ITEM.bow, ammo: ITEM.arrows, range: 9, speed: 0.55, damage: 30, stamina: 3, cooldown: 30, se: "Bow3", pitch: 100, spread: 1.1, focus: 0.08, steady: 55, holdAt: 30, release: 36, wobble: 0, tremble: 240 }
     };
     // the spear: no ammunition, no aiming - a jab at what stands within reach (tiles from the player's centre) in front of him
-    const SPEAR = { item: ITEM.spear, reach: 1.9, damage: 3, stamina: 3, cooldown: 36, noise: 4 };
+    const SPEAR = { item: ITEM.spear, reach: 1.9, damage: 45, stamina: 3, cooldown: 36, noise: 4 };   // (without Combat.js; with it the spear is a melee weapon there)
     const NOISE_RADIUS = 7;
 
     // swing kinds of ChoppableTree.js: the body whirls the sling / draws the bow, and the shot leaves on the release frame; the spear's jab
     const SHOT_SWING = { sling: 9, bow: 10, spear: 15 };
     let animate = true;   // tests switch the shooting animation off (the shot then leaves at once)
     let animals = [];
+    let packs = [];
     let projectiles = [];
+    const killListeners = [];
     let cooldown = 0;
     let spotCache = { mapId: 0, spots: null };
     const hours = () => ($gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12);
@@ -263,7 +289,7 @@
     }
     const _Game_Player_realMoveSpeed = Game_Player.prototype.realMoveSpeed;
     Game_Player.prototype.realMoveSpeed = function() {
-        return sneaking() ? this._moveSpeed - 1 : _Game_Player_realMoveSpeed.call(this);   // half the speed of walking
+        return sneaking() ? _Game_Player_realMoveSpeed.call(this) - 1 : _Game_Player_realMoveSpeed.call(this);   // half the speed of walking (not running: see isDashing)
     };
     const _Game_Player_isDashing = Game_Player.prototype.isDashing;
     Game_Player.prototype.isDashing = function() {
@@ -297,6 +323,11 @@
         return false;
     }
     // per frame, for something at (x, y) (tiles, centre) that watches `sight` tiles around it; 0 = does not notice him
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
     function noticeRate(x, y, sight) {
         const px = $gamePlayer._realX + 0.5, py = $gamePlayer._realY + 0.5, dist = Math.hypot(px - x, py - y);
         const moving = playerStep > 0.005, running = moving && playerStep > 0.09, sneak = sneaking();
@@ -311,7 +342,7 @@
         // 0 at the edge of its sight .. 1 right beside it. Walking straight at a rabbit (sight 6) it bolts about 4-4.5 tiles
         // away; sneaking (a smaller range, half the speed, a slower meter) you get to about 1.5-2 tiles
         const k = 1 - dist / range;
-        return (0.02 + 0.12 * k) * (running ? 1.8 : moving ? 1 : 0.5) * (sneak ? 0.6 : 1);
+        return (0.02 + 0.12 * k) * (running ? 1.8 : moving ? 1 : 0.5) * (sneak ? 0.6 : 1) * (1 - Math.min(0.8, perk("sneak")));   // (Ciche kroki, Tropiciel)
     }
     // the meter of one creature (an object with _aware), one frame; returns it
     function updateAwareness(who, x, y, sight) {
@@ -362,7 +393,17 @@
         Game_Character.prototype.initialize.call(this);
         const sp = SPECIES[kind];
         this._kind = kind;
-        this._hp = sp.hp;
+        const lv = Math.max(1, (window.Combat ? Combat.placeLevel() : 1) + (Math.random() < 0.3 ? 1 : 0));
+        this._level = lv;
+        this._maxHp = Math.round(sp.hp * (1 + 0.15 * (lv - 1)));
+        this._hp = this._maxHp;
+        this._maxPoise = Math.round((sp.poise || 20) * (1 + 0.1 * (lv - 1)));
+        this._poise = this._maxPoise;
+        this._poiseT = 0;        // frames since the last hit: the balance comes back after a while
+        this._stun = 0;          // frames it reels (balance broken, an attack parried): it does nothing
+        this._flashT = 0;        // frames of the white flash of a hit (Combat.js draws it)
+        this._engaged = false;   // it fights the hero (Combat.js shows its bars)
+        this._pack = null;       // wolves: the pack (see makePack)
         this._wounded = false;
         this._alarm = 0;         // frames it keeps running after a shot nearby
         this._aware = 0;         // 0..1: how sure it is that someone is there (noticeRate); 1 = it runs
@@ -400,12 +441,16 @@
         Game_Character.prototype.update.call(this);
         if (this._alarm > 0) this._alarm--;
         if (this._lureCd > 0) this._lureCd--;
+        if (this._flashT > 0) this._flashT--;
+        if (++this._poiseT > 120 && this._poise < this._maxPoise) this._poise = Math.min(this._maxPoise, this._poise + this._maxPoise / 90);
         if (!this._dead) updateAwareness(this, this.centerX(), this.centerY(), SPECIES[this._kind].sight);
         const sprite = this._sprite;   // (its height only once the sheet has loaded)
-        const calm = this._mode === "roam" || this._mode === "warn";   // (no mark while a boar charges, backs off or reels)
-        const markY = SPECIES[this._kind].markY;
-        if (sprite && sprite.bitmap && sprite.bitmap.isReady()) updateMark(this, sprite, markY !== undefined ? markY : -sprite.patternHeight() - 2, this._fleeing || !calm ? 0 : this._aware);
+        const calm = this._mode === "roam" || this._mode === "warn" || this._mode === "windup";   // (no mark while a boar charges, backs off or reels)
+        const markY = SPECIES[this._kind].markY, windup = this._mode === "windup";
+        if (sprite && sprite.bitmap && sprite.bitmap.isReady()) updateMark(this, sprite, markY !== undefined ? markY : -sprite.patternHeight() - 2, this._fleeing || !calm || this._stun > 0 ? 0 : windup ? 1 : this._aware);
         if (this._frozen || this._dead) return;
+        if (this._stun > 0) { if (--this._stun === 0) this.afterStun(); return; }
+        if (SPECIES[this._kind].pack) { this.updateWolf(); return; }
         if (SPECIES[this._kind].aggressive) { this.updateBoar(); return; }
         if (this.isMoving()) return;
         this.think();
@@ -442,7 +487,7 @@
             const lure = Farming.BUILDINGS[b.type].lure;
             for (const c of Farming.cellsOfGeo(Farming.geoOf(b), b.x, b.y)) {
                 const dist = Math.hypot(c.x - animal._x, c.y - animal._y);
-                if (dist <= lure.radius && (!best || dist < best.dist)) best = { b, cell: c, dist, lure };
+                if (dist <= lure.radius * (1 + perk("snare.lure")) && (!best || dist < best.dist)) best = { b, cell: c, dist, lure };   // (Sidlarz)
             }
         }
         return best;
@@ -483,7 +528,7 @@
         this._lureSnare = null;
         if (!b || this._dead || !window.Farming || Farming.snareSprung(b) || !Farming.snareBait(b) || !Farming.snares().includes(b)) { this._lureCd = LURE.cooldown; return; }
         const lure = Farming.BUILDINGS[b.type].lure;
-        if (Math.random() < lure.chance) { trapped(this, b); return; }
+        if (Math.random() < Math.min(0.95, lure.chance * (1 + perk("snare.lure")))) { trapped(this, b); return; }
         if (Math.random() < LURE.eatBait) Farming.snareEatBait(b);   // it got away with the bait
         this._alarm = 90;   // off it runs
         this._lureCd = LURE.cooldown;
@@ -517,7 +562,7 @@
             const bait = b.bait, lure = Farming.BUILDINGS[b.type].lure;
             if (now - from < 0.25 || !bait || !rabbits || Farming.snareSprung(b)) continue;
             const hours = rabbitHours(Math.max(from, bait.at !== undefined ? bait.at : bait.until - lure.baitHours), Math.min(now, bait.until));
-            if (hours > 0 && Math.random() < 1 - Math.pow(1 - lure.awayChance, hours)) {
+            if (hours > 0 && Math.random() < 1 - Math.pow(1 - Math.min(0.9, lure.awayChance * (1 + perk("snare.lure"))), hours)) {
                 Farming.snareCatch(b);
                 hunt().kills.rabbit = (hunt().kills.rabbit || 0) + 1;
             } else Farming.snareBait(b);   // (gone off meanwhile: it is cleared)
@@ -546,17 +591,45 @@
 
     // ------------------------------------------------------------------
     // The boar: it does not run from the player. Once it has noticed him (or a shot flies near it) it stands, snorts and shows
-    // "!" (warn), then charges straight at him, faster than he runs; when it reaches him it knocks him about (gore: strength
-    // lost, a wound) and backs off for a while (retreat), then it may come again. A spear jab stops a charge: it reels back
-    // (stagger) and comes again after a moment. With 1 life left it runs away for good (flee).
+    // "!" (warn), then charges at him, faster than he runs; BOAR.commit tiles away it locks its line and runs straight on. When
+    // it reaches him it knocks him about (gore) and backs off for a while (retreat), then it may come again. When it misses (a
+    // roll, a step aside) it runs BOAR.overshoot tiles past him (overshoot), stops and stands panting (recover), then turns and
+    // warns again. A spear jab stops a charge: it reels back (stagger). Badly hurt it runs away for good (flee).
     // ------------------------------------------------------------------
     Game_Animal.prototype.setMode = function(mode, frames) {
-        const sp = SPECIES[this._kind], running = mode === "charge" || mode === "retreat" || mode === "flee";
+        const sp = SPECIES[this._kind], running = mode === "charge" || mode === "retreat" || mode === "flee" || mode === "overshoot" || mode === "lunge";
         this._mode = mode;
         this._modeT = frames || 0;
         this._fleeing = mode === "flee";
-        this.setImage(running && sp.run ? sp.run : sp.sheet, 0);
-        this.setMoveSpeed(mode === "charge" ? sp.charge : running ? sp.flee : sp.speed);
+        this._commit = null;
+        const sheet = mode === "stalk" && sp.stalk ? sp.stalk : mode === "windup" && sp.bark ? sp.bark : running && sp.run ? sp.run : sp.sheet;
+        if (this.characterName() !== sheet) this.setImage(sheet, 0);
+        this.setStepAnime(mode === "windup");   // (the bark plays standing still)
+        this.setMoveSpeed(mode === "charge" || mode === "overshoot" ? sp.charge : running ? sp.flee : sp.speed);
+    };
+    // its balance is back after reeling: a boar snorts and comes again, a wolf goes back to the ring
+    Game_Animal.prototype.afterStun = function() {
+        this._poise = this._maxPoise;
+        if (SPECIES[this._kind].pack) this.setMode("stalk");
+        else if (SPECIES[this._kind].aggressive && this._mode !== "flee") this.setMode("warn", 20);
+    };
+    // the hero parried its attack (Combat.js): it reels a long moment and is thrown back
+    Game_Animal.prototype.onParried = function() {
+        this._stun = Math.max(this._stun, (SPECIES[this._kind].stun || 50) + 40);
+        this._poise = 0;
+        knockBack(this);
+        if (this._pack && this._pack.attacker === this) { this._pack.attacker = null; this._pack.nextAttack = 90; }
+        if (this._mode === "charge" || this._mode === "lunge" || this._mode === "windup") this.setMode(SPECIES[this._kind].pack ? "stalk" : "warn", 0);
+    };
+    // a hurt deer or rabbit limps: slower, the more of its life is gone (user) - a bit at first (0.25 of a speed step, ~20%),
+    // about a third slower near the end; the boar and the wolves fight on at full speed
+    const LIMP = { base: 0.25, more: 0.5 };
+    Game_Animal.prototype.limp = function() {
+        if (SPECIES[this._kind].aggressive || !(this._maxHp > 0) || !(this._hp < this._maxHp) || this._hp <= 0) return 0;
+        return LIMP.base + LIMP.more * (1 - this._hp / this._maxHp);
+    };
+    Game_Animal.prototype.realMoveSpeed = function() {
+        return Game_Character.prototype.realMoveSpeed.call(this) - this.limp();   // (the legs move slower too: the animation follows the speed)
     };
     Game_Animal.prototype.playerDistance = function() {
         return Math.hypot(this.centerX() - ($gamePlayer._realX + 0.5), this.centerY() - ($gamePlayer._realY + 0.5));
@@ -570,7 +643,20 @@
     };
     Game_Animal.prototype.thinkBoar = function(dist) {
         const sp = SPECIES[this._kind], dx = this._realX - $gamePlayer._realX, dy = this._realY - $gamePlayer._realY;
-        if (this._hp <= 1 && this._mode !== "flee") this.setMode("flee");
+        if (this._hp <= this._maxHp * 0.15 && this._mode !== "flee") this.setMode("flee");
+        if (this._mode === "overshoot") {   // it missed him: it runs on along its line, well past him, then stops
+            const [cx, cy] = this._line || DIR_VEC[this.direction()], len = Math.hypot(cx, cy) || 1;
+            const past = -(($gamePlayer._realX - this._realX) * cx + ($gamePlayer._realY - this._realY) * cy) / len;
+            const d = VEC_DIR[cx + "," + cy];
+            if (this._modeT <= 0 || past >= BOAR.overshoot || !d || !roamingCanStep(this, this._x, this._y, d)) { this.startRecover(); return; }
+            roamingStep(this, d);
+            return;
+        }
+        if (this._mode === "recover") {   // it stands panting: the moment to hit it; halfway it turns to look for him
+            if (this._modeT === Math.floor(BOAR.recover / 2)) this.turnTowardCharacter($gamePlayer);
+            if (this._modeT <= 0) { this.setMode("warn", BOAR.warn); this.turnTowardCharacter($gamePlayer); snort(this, 95); }
+            return;
+        }
         if (this._mode === "flee" || this._mode === "retreat") {
             if (this._mode === "retreat" && this._modeT <= 0) { this.setMode("roam"); this._aware = 0.55; return; }   // still wary: it notices him again soon
             const d = this.bestEscape(dx, dy);
@@ -590,6 +676,23 @@
         }
         if (this._mode === "charge") {
             if (this._modeT <= 0 || dist > sp.sight * 2) { this.setMode("retreat", BOAR.retreat[0] + Math.floor(Math.random() * (BOAR.retreat[1] - BOAR.retreat[0]))); return; }
+            // the last BOAR.commit tiles it runs straight on, no more turning after him (a roll to the side lets it go past)
+            if (!this._commit && dist < BOAR.commit) {
+                const dx = $gamePlayer._realX - this._x, dy = $gamePlayer._realY - this._y, k = Math.round(Math.atan2(dy, dx) / (Math.PI / 4));
+                const vx = Math.round(Math.cos(k * Math.PI / 4)), vy = Math.round(Math.sin(k * Math.PI / 4));
+                if (Math.abs(dx * vy - dy * vx) / Math.hypot(vx, vy) < 0.6 || dist < 2.6) {   // (he is on one of its eight lines)
+                    this._commit = [vx, vy];
+                    this.setMoveSpeed(sp.charge + BOAR.rush);   // the last stretch: flat out
+                }
+            }
+            if (this._commit) {
+                const [cx, cy] = this._commit, ahead = ($gamePlayer._realX - this._realX) * cx + ($gamePlayer._realY - this._realY) * cy;
+                const d = VEC_DIR[cx + "," + cy];
+                if (!d || !roamingCanStep(this, this._x, this._y, d)) { this.startRecover(); return; }   // it ran into something
+                if (ahead < -0.6) { this.startOvershoot(); return; }   // gone past him
+                roamingStep(this, d);
+                return;
+            }
             this.stepToward($gamePlayer);
             if (!this.isMovementSucceeded()) this.turnTowardCharacter($gamePlayer);
             return;
@@ -604,6 +707,25 @@
         if (this._aware >= 0.3) { this.turnTowardCharacter($gamePlayer); return; }   // it stops and looks
         this.wander();
     };
+    const VEC_DIR = { "0,1": 2, "-1,0": 4, "1,0": 6, "0,-1": 8, "-1,1": 1, "1,1": 3, "-1,-1": 7, "1,-1": 9 };
+    const DIR_VEC = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
+    // missed: it keeps its line (the committed one, else the way it faces) and runs on past him
+    Game_Animal.prototype.startOvershoot = function() {
+        const line = this._commit || DIR_VEC[this.direction()];
+        this.setMode("overshoot", 90);
+        this._line = line;
+        this.setMoveSpeed(SPECIES[this._kind].charge + BOAR.rush);   // (it cannot stop at once)
+    };
+    // flat out (Combat.js draws the blur of it): a boar on its line or running past him, a wolf in its leap
+    Game_Animal.prototype.isRushing = function() {
+        return (this._mode === "charge" && !!this._commit) || this._mode === "overshoot" || (this._mode === "lunge" && this.isJumping());
+    };
+    // it stops (a skid of dust) and stands panting
+    Game_Animal.prototype.startRecover = function() {
+        this.setMode("recover", BOAR.recover);
+        if (window.Combat && Combat.sparksAt) Combat.sparksAt(this.centerX(), this.centerY() + 0.3, "#b79a6a", 10);
+        snort(this, 60);
+    };
     function snort(animal, pitch) {
         const pan = Math.max(-80, Math.min(80, Math.round((animal.centerX() - ($gamePlayer._realX + 0.5)) * 12)));
         AudioManager.playSe({ name: "Monster3", volume: 75, pitch, pan });
@@ -611,6 +733,13 @@
     // the boar reaches the player: strength lost and a wound (Survival.js), the screen shakes and flashes red, then it backs off
     function gore(animal) {
         const sp = SPECIES[animal.kind()];
+        if (window.Combat && Combat.hitPlayer) {   // the hero's defence decides (a roll, a guard, a parry)
+            const res = Combat.hitPlayer({ damage: atkOf(animal), poise: 75, from: { x: animal.centerX(), y: animal.centerY() }, attacker: animal, name: "dzik", wound: 0.7, knock: 0.9 });
+            if (res === "dodged") { animal.startOvershoot(); return; }
+            if (res === "parried") return;   // (it reels: onParried)
+            animal.setMode("retreat", BOAR.retreat[0] + Math.floor(Math.random() * (BOAR.retreat[1] - BOAR.retreat[0])));
+            return;
+        }
         if (typeof $gameSystem.injure === "function") $gameSystem.injure(sp.hurt);
         else $gameSystem.changeStamina(-sp.hurt);
         if (typeof $gameSystem.hurt === "function") $gameSystem.hurt(sp.harm);   // health (Survival.js); at 0 the game is over
@@ -624,7 +753,12 @@
     }
     // a hit that did not kill it: a spear jab throws it back (it comes again after a moment), anything else makes it charge at once
     function enrage(animal, how) {
-        if (animal._hp <= 1) { animal.setMode("flee"); return; }
+        if (SPECIES[animal.kind()].pack) { wolfEngage(animal); return; }
+        if (animal._hp <= animal._maxHp * 0.15) { animal.setMode("flee"); return; }
+        if (how === "melee") {   // (Combat.js: its balance decides whether it reels; otherwise it turns on the hero quickly)
+            if (animal._stun <= 0 && (animal._mode === "roam" || animal._mode === "warn")) { animal.setMode("warn", 16); animal.turnTowardCharacter($gamePlayer); snort(animal, 80); }
+            return;
+        }
         if (how === "spear") {
             const ax = animal._x - $gamePlayer.x, ay = animal._y - $gamePlayer.y;
             const bx = Math.abs(ax) >= Math.abs(ay) ? Math.sign(ax) : 0, by = Math.abs(ax) >= Math.abs(ay) ? 0 : Math.sign(ay);
@@ -637,6 +771,158 @@
             snort(animal, 70);
         }
     }
+
+    // a hit throws it one tile away from the hero (a jump), when there is room
+    function knockBack(animal) {
+        const ax = animal._x - $gamePlayer.x, ay = animal._y - $gamePlayer.y;
+        const bx = Math.abs(ax) >= Math.abs(ay) ? Math.sign(ax) : 0, by = Math.abs(ax) >= Math.abs(ay) ? 0 : Math.sign(ay);
+        const d = bx > 0 ? 6 : bx < 0 ? 4 : by > 0 ? 2 : 8;
+        if (animal.isJumping()) return;
+        if ((bx || by) && animal.canPass(animal._x, animal._y, d)) animal.jump(bx, by); else animal.jump(0, 0);
+    }
+    // its balance is gone: it reels (does nothing) for a while; an attack it was about to make is off
+    function stagger(animal, knock) {
+        animal._stun = SPECIES[animal.kind()].stun || 50;
+        animal._poise = 0;
+        if (animal._pack && animal._pack.attacker === animal) { animal._pack.attacker = null; animal._pack.nextAttack = 60; }
+        if (animal._mode === "windup" || animal._mode === "lunge" || animal._mode === "charge") animal.setMode(SPECIES[animal.kind()].pack ? "stalk" : "warn", 0);
+        if (knock) knockBack(animal);
+    }
+
+    // ------------------------------------------------------------------
+    // Wolves: a pack hunts at night. Once it has noticed the hero (or he comes within WOLF.engage tiles) it howls and spreads round
+    // him on a ring (stalk); one at a time comes in: it crouches and barks (windup, a "!"), leaps at him (lunge: a bite if he is
+    // still there) and stands a moment after the leap (recover) - the moment to hit it. Hurt badly, or with the leader dead, they run.
+    // ------------------------------------------------------------------
+    const WOLF = { ring: 3.2, windup: 38, recover: 44, gap: [60, 140], bite: 0.95, biteFrom: 6, lunge: 3, near: 1.6, engage: 6, lose: 16, flee: 0.25 };   // biteFrom: no bite before that frame of the leap; near: too close to start one
+    function makePack(members) {
+        const pack = { members, leader: members[0], attacker: null, nextAttack: 90, engaged: false, angle: Math.random() * Math.PI * 2, howled: false, broken: false };
+        for (const w of members) { w._pack = pack; w.setMode("roam"); }
+        members[0]._leader = true;
+        members[0]._maxHp = Math.round(members[0]._maxHp * 1.2);
+        members[0]._hp = members[0]._maxHp;
+        packs.push(pack);
+        return pack;
+    }
+    const liveMembers = pack => pack.members.filter(m => !m._dead);
+    function wolfEngage(wolf) {
+        const pack = wolf._pack, members = pack ? liveMembers(pack) : [wolf];
+        if (pack) {
+            if (!pack.engaged) pack.nextAttack = 70;
+            pack.engaged = true;
+            if (!pack.howled) { pack.howled = true; AudioManager.playSe({ name: "Wolf", volume: 80, pitch: 95 + Math.floor(Math.random() * 15), pan: 0 }); }
+        }
+        for (const m of members) {
+            m._engaged = true;
+            if (m._mode === "roam") m.setMode("stalk");
+        }
+    }
+    function disengage(pack) {
+        pack.engaged = false;
+        pack.attacker = null;
+        for (const m of liveMembers(pack)) { m._engaged = false; m.setMode("roam"); m._aware = 0.4; }
+    }
+    function growl(wolf) {
+        const pan = Math.max(-80, Math.min(80, Math.round((wolf.centerX() - ($gamePlayer._realX + 0.5)) * 12)));
+        AudioManager.playSe({ name: "Growl", volume: 80, pitch: 100 + Math.floor(Math.random() * 20), pan });
+    }
+    function bite(wolf) {
+        AudioManager.playSe({ name: "Bite", volume: 90, pitch: 100, pan: 0 });
+        if (window.Combat && Combat.hitPlayer) {
+            Combat.hitPlayer({ damage: atkOf(wolf), poise: 30, from: { x: wolf.centerX(), y: wolf.centerY() }, attacker: wolf, name: "wilk", wound: 0.3, knock: 0.6 });
+            return;
+        }
+        if (typeof $gameSystem.hurt === "function") $gameSystem.hurt(0.12);
+        $gameScreen.startFlash([255, 40, 30, 110], 12);
+    }
+    Game_Animal.prototype.updateWolf = function() {
+        const pack = this._pack;
+        // the pack's clock (the pause between two attacks, the turning ring) runs on its first live member
+        if (pack && liveMembers(pack)[0] === this) { if (pack.nextAttack > 0) pack.nextAttack--; pack.angle += 0.004; }
+        if (this._modeT > 0) this._modeT--;
+        const dist = this.playerDistance();
+        if (this._mode === "lunge") {
+            if (this.isJumping()) {
+                this._lungeT = (this._lungeT || 0) + 1;
+                if (!this._bitten && this._lungeT >= WOLF.biteFrom && dist < WOLF.bite) { this._bitten = true; bite(this); }
+                return;
+            }
+            this.setMode("recover", WOLF.recover);
+            if (pack && pack.attacker === this) { pack.attacker = null; pack.nextAttack = WOLF.gap[0] + Math.floor(Math.random() * (WOLF.gap[1] - WOLF.gap[0])); }
+            return;
+        }
+        if (this.isMoving() || this.isJumping()) return;
+        this.thinkWolf(dist);
+    };
+    Game_Animal.prototype.thinkWolf = function(dist) {
+        const pack = this._pack, dx = this._realX - $gamePlayer._realX, dy = this._realY - $gamePlayer._realY;
+        if (this._mode === "flee") {
+            if (dist > WOLF.lose + 2) { removeAnimal(this); return; }   // gone into the dark
+            const d = this.bestEscape(dx, dy);
+            if (d) roamingStep(this, d);
+            return;
+        }
+        if (this._hp <= this._maxHp * WOLF.flee || (pack && pack.broken)) {
+            if (pack && pack.attacker === this) pack.attacker = null;
+            this.setMode("flee");
+            return;
+        }
+        if (this._mode === "windup") {
+            this.turnTowardCharacter($gamePlayer);
+            if (this._modeT <= 0) this.leap();
+            return;
+        }
+        if (this._mode === "recover") {
+            if (this._modeT <= 0) this.setMode("stalk");
+            return;
+        }
+        const engaged = pack ? pack.engaged : this._engaged;
+        if (!engaged) {
+            if (this._aware >= 1 || this._alarm > 0 || this._wounded || dist < WOLF.engage) { wolfEngage(this); return; }
+            if (pack && pack.leader !== this && !pack.leader._dead) {   // it keeps near the leader
+                const L = pack.leader;
+                if (Math.hypot(L._x - this._x, L._y - this._y) > 2.2) { this.setMoveSpeed(SPECIES.wolf.speed); this.stepToward(L); return; }
+            }
+            this.wander();
+            return;
+        }
+        if (dist > WOLF.lose) { if (pack) disengage(pack); else { this._engaged = false; this.setMode("roam"); } return; }
+        if (this._mode !== "stalk") this.setMode("stalk");
+        // its turn: the stalking wolf nearest to the hero goes, when the pack's pause is over
+        if (pack && !pack.attacker && pack.nextAttack <= 0 && dist < WOLF.ring + 1.8 && dist > WOLF.near) {
+            const next = liveMembers(pack).filter(m => m._mode === "stalk" && m._stun <= 0 && m.playerDistance() > WOLF.near).sort((a, b) => a.playerDistance() - b.playerDistance())[0];
+            if (next === this) {
+                pack.attacker = this;
+                this.setMode("windup", WOLF.windup);
+                this.turnTowardCharacter($gamePlayer);
+                growl(this);
+                return;
+            }
+        }
+        // its place on the ring round the hero (the ring turns slowly)
+        const live = pack ? liveMembers(pack) : [this], idx = Math.max(0, live.indexOf(this));
+        const ang = (pack ? pack.angle : 0) + idx * Math.PI * 2 / live.length;
+        const tx = $gamePlayer._realX + Math.cos(ang) * WOLF.ring, ty = $gamePlayer._realY + Math.sin(ang) * WOLF.ring * 0.8;
+        if (Math.hypot(tx - this._realX, ty - this._realY) > 0.9) this.stepToward({ x: Math.round(tx), y: Math.round(ty) });
+        else this.turnTowardCharacter($gamePlayer);
+    };
+    // the leap: at the hero's tile (at most WOLF.lunge tiles), shorter when it could not land there
+    Game_Animal.prototype.leap = function() {
+        let dx = Math.round($gamePlayer._realX - this._x), dy = Math.round($gamePlayer._realY - this._y);
+        const len = Math.max(Math.abs(dx), Math.abs(dy));
+        if (len > WOLF.lunge) { dx = Math.round(dx * WOLF.lunge / len); dy = Math.round(dy * WOLF.lunge / len); }
+        let lx = 0, ly = 0;
+        for (const k of [1, 0.75, 0.5, 0.25]) {
+            const x = this._x + Math.round(dx * k), y = this._y + Math.round(dy * k);
+            if ($gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !(window.Farming && Farming.buildingAt(x, y))) { lx = Math.round(dx * k); ly = Math.round(dy * k); break; }
+        }
+        this.turnTowardCharacter($gamePlayer);
+        this.setMode("lunge");
+        this._bitten = false;
+        this._lungeT = 0;
+        this.jump(lx, ly);
+        AudioManager.playSe({ name: "Wind1", volume: 55, pitch: 140, pan: 0 });
+    };
 
     // ------------------------------------------------------------------
     // Spawning
@@ -655,16 +941,32 @@
         addSprite(a);
         return a;
     }
+    // a pack of `n` wolves round (x, y) (where there is room); returns the pack
+    function spawnPack(x, y, n) {
+        const members = [];
+        const spots = [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1], [2, 0], [-2, 0], [0, 2]];
+        for (const [ox, oy] of spots) {
+            if (members.length >= n) break;
+            const sx = x + ox, sy = y + oy;
+            if (!$gameMap.isValid(sx, sy) || !$gameMap.checkPassage(sx, sy, 0x0f) || animals.some(a => a._x === sx && a._y === sy)) continue;
+            if (window.Farming && (Farming.buildingAt(sx, sy) || Farming.hasObjectTile(sx, sy))) continue;
+            members.push(spawn("wolf", sx, sy));
+        }
+        return members.length ? makePack(members) : null;
+    }
     function countOf(kind) {
         return animals.filter(a => a.kind() === kind).length;
     }
+    // out of its hours an animal goes home - but not one called up with F9 (Debug.js), nor a boar or a wolf still in a fight
+    // (it goes once it has calmed down), so nothing vanishes in front of the hero
+    const staysOut = a => a._summoned || a._engaged || (SPECIES[a.kind()].aggressive && a._mode !== "roam" && a._mode !== "flee");
     // fills the map up to its targets (minus what was shot today) and sends the animals that are not about home
     function populate() {
         if (!ENABLED || !$gameMap || !$dataMap || !spriteset() || !window.Farming) return;
         const mapId = $gameMap.mapId(), targets = mapTargets();
         for (const kind of Object.keys(SPECIES)) {
             if (!activeNow(kind)) {
-                for (const a of animals.filter(a => a.kind() === kind)) removeAnimal(a);   // asleep somewhere
+                for (const a of animals.filter(a => a.kind() === kind && !staysOut(a))) removeAnimal(a);   // asleep somewhere
                 continue;
             }
             const want = Math.max(0, (targets[kind] || 0) - killedToday(mapId, kind));
@@ -674,8 +976,14 @@
             if (!spots || spots.length === 0) return;
             for (let tries = 0; tries < 80 && have < want; tries++) {
                 const s = spots[Math.floor(Math.random() * spots.length)];
-                if (Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y) < 8) continue;
+                if (Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y) < (SPECIES[kind].pack ? 12 : 8)) continue;
                 if (animals.some(a => a._x === s.x && a._y === s.y)) continue;
+                if (SPECIES[kind].pack) {   // a whole pack at once
+                    const [lo, hi] = SPECIES[kind].pack, n = Math.min(want - have, lo + Math.floor(Math.random() * (hi - lo + 1)));
+                    const pack = spawnPack(s.x, s.y, Math.max(1, n));
+                    have += pack ? pack.members.length : 0;
+                    continue;
+                }
                 spawn(kind, s.x, s.y);
                 have++;
             }
@@ -718,7 +1026,7 @@
     // ------------------------------------------------------------------
     const targetSources = [], noiseListeners = [];
     function allTargets() {
-        const out = animals.filter(a => !a._dead).map(a => ({ x: a.centerX(), y: a.centerY(), radius: SPECIES[a.kind()].radius, ref: a, hit: (d, how) => hit(a, d, how) }));
+        const out = animals.filter(a => !a._dead).map(a => ({ x: a.centerX(), y: a.centerY(), radius: SPECIES[a.kind()].radius, ref: a, hit: (d, how, extra) => hit(a, d, how, extra) }));
         for (const src of targetSources) out.push(...src());
         return out;
     }
@@ -730,9 +1038,9 @@
     // stamina, the ammunition and the wear of the weapon, paid when the shot leaves; false (with a popup) when too tired
     function payShot(def) {
         if (!$gameSystem.trySpendStamina(def.stamina)) { popup(82, "Jesteś zbyt zmęczony", "#ff9f8f"); return false; }
-        $gameParty.loseItem($dataItems[def.ammo], 1, false);
+        if (!perkRoll("ammo.save")) $gameParty.loseItem($dataItems[def.ammo], 1, false);   // (Zbieracz pocisków)
         if (window.Durability) Durability.use(def.item);
-        cooldown = def.cooldown;
+        cooldown = Math.round(def.cooldown * (1 - Math.min(0.6, perk("shot.cooldown"))));   // (Szybki strzał)
         $gameTemp._farmLock = Math.max($gameTemp._farmLock || 0, 10);
         return true;
     }
@@ -745,7 +1053,7 @@
         AudioManager.playSe({ name: def.se, volume: 85, pitch: def.pitch, pan: 0 });
         const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3;
         projectiles.push(makeProjectile(w, sx, sy, dx, dy));
-        makeNoise(sx, sy, NOISE_RADIUS);
+        makeNoise(sx, sy, NOISE_RADIUS * (knowsSkill("r_silent") ? 0.5 : 1));   // (Cichy strzał)
     }
     // A straight shot, no aiming (tests, events). Returns true when a projectile left. dir: [dx, dy] (defaults to the facing),
     // which: "sling" | "bow" (defaults to the best weapon in the bag)
@@ -765,8 +1073,8 @@
     }
 
     // ------------------------------------------------------------------
-    // Aiming: F held down. The sling whirls (the bow is drawn) and a circle sits on the nearest target in front of the player;
-    // it shrinks while he holds still - a small bird needs a small circle. Let F go: the shot flies at a random point of the
+    // Aiming: the shoot key held down. The sling whirls (the bow is drawn) and a circle sits on the nearest target in front of the player;
+    // it shrinks while he holds still - a small bird needs a small circle. Let the key go: the shot flies at a random point of the
     // circle. Tired, it never gets small; sneaking, it shrinks faster; a drawn bow starts to tremble after a while. The
     // direction keys turn him to another target; cancel lowers the weapon without a shot.
     // ------------------------------------------------------------------
@@ -794,7 +1102,7 @@
             holdAt: def.holdAt, holdWhile: () => Input.isPressed("shoot"), keepOnMove: true, wobble: def.wobble, still: !def.wobble,
             onHoldEnd: cancelled => { if (cancelled) endAim(); }
         })) return true;
-        aim.manual = true;   // no shooting animation (tests): the map scene aims until F is let go and the whirl would be over
+        aim.manual = true;   // no shooting animation (tests): the map scene aims until the key is let go and the whirl would be over
         return true;
     }
     function updateAim() {
@@ -810,7 +1118,8 @@
         }
         const px = $gamePlayer._realX + 0.5, py = $gamePlayer._realY + 0.5, [fx, fy] = facingVector();
         aim.point = best ? { x: best.x, y: best.y } : { x: px + fx * def.range * 0.7, y: py + fy * def.range * 0.7 };
-        const k = Math.min(1, aim.t / (def.steady * (sneaking() ? 0.8 : 1))), ease = 1 - (1 - k) * (1 - k);
+        const dex = window.Combat && Combat.aimSteady ? Combat.aimSteady() : 1;   // (Zręczność: the circle closes sooner)
+        const k = Math.min(1, aim.t / (def.steady * (sneaking() ? 0.8 : 1) * dex)), ease = 1 - (1 - k) * (1 - k);
         let r = def.spread - (def.spread - def.focus) * ease;
         if ($gameSystem.staminaRatio() < 0.3) r = Math.max(r, def.focus * 2.2);   // tired hands
         if (def.tremble && aim.t > def.tremble) r += (aim.t - def.tremble) * 0.004;   // the drawn bow starts to shake
@@ -819,7 +1128,7 @@
     function endAim() {
         aim = null;
     }
-    // F let go: the shot flies at a random point of the circle
+    // the shoot key let go: the shot flies at a random point of the circle
     function fireAimed() {
         if (!aim) return;
         const w = aim.weapon, a = aim.point, ang = Math.random() * Math.PI * 2, rr = aim.radius * Math.sqrt(Math.random());
@@ -833,8 +1142,8 @@
         launch(w, dx, dy);
     }
     // ------------------------------------------------------------------
-    // The spear: F with a spear in the bag jabs at what stands within reach in front of the player (the nearest one); with nothing
-    // that close, F aims the bow or the sling as before (and with neither, it jabs at the air). The hit lands on the jab's strike frame.
+    // The spear: the shoot key with a spear in the bag jabs at what stands within reach in front of the player (the nearest one); with nothing
+    // that close, it aims the bow or the sling as before (and with neither, it jabs at the air). The hit lands on the jab's strike frame.
     // ------------------------------------------------------------------
     function spearTarget() {
         const px = $gamePlayer._realX + 0.5, py = $gamePlayer._realY + 0.5, [fx, fy] = facingVector();
@@ -862,8 +1171,9 @@
         strike();
         return true;
     }
-    // F pressed: the spear for what is within reach (or when there is nothing to shoot with), else aim the bow / the sling
+    // the shoot key pressed: the spear for what is within reach (or when there is nothing to shoot with), else aim the bow / the sling
     function pressShoot() {
+        if (window.Combat && Combat.pressAttack) return Combat.pressAttack();   // (the weapon in hand: a blow, or aiming the bow / the sling)
         if (countItem(ITEM.spear) > 0 && (spearTarget() || !hasRanged())) return thrust();
         return startAim();
     }
@@ -979,7 +1289,7 @@
             for (let i = 0; i < steps && !p.done; i++) {
                 p.x += p.dx * step; p.y += p.dy * step; p.travelled += step;
                 const target = targets.find(t => Math.hypot(t.x - p.x, t.y - p.y) <= t.radius);
-                if (target) { target.hit(def.damage); endProjectile(p); break; }
+                if (target) { shotHit(target, def); endProjectile(p); break; }
                 if (p.travelled >= def.range || blockedAt(p.x, p.y)) endProjectile(p);
             }
             if (p.sprite && !p.sprite.parent) p.sprite = null;   // the scene was rebuilt: the flight goes on without the picture
@@ -995,13 +1305,32 @@
     // A hit
     // ------------------------------------------------------------------
     // how: "spear" for a jab (a boar reels back from it), anything else for a shot
-    function hit(animal, damage, how) {
+    // extra (Combat.js): { poise, knock, crit, heavy, tag } - how much of its balance the blow takes, whether it is thrown back
+    // a stone / an arrow hits: Zręczność and the Strzelectwo skills make it stronger; a lucky shot (Słaby punkt) doubles it, a shot at
+    // an animal that has not noticed the hero yet (Strzał w serce) triples it
+    function shotHit(target, def) {
+        let dmg = def.damage * (window.Combat ? 1 + 0.02 * (Combat.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")), tag = "";
+        const a = target.ref && target.ref.isAnimal ? target.ref : null;
+        if (a && knowsSkill("r_heart") && (a._aware || 0) < 0.3 && !a._engaged) { dmg *= 3; tag = "heart"; }
+        else if (perkRoll("ranged.crit")) { dmg *= 2; tag = "crit"; }
+        target.hit(Math.round(dmg), "shot", { poise: Math.round(def.damage * 0.6), crit: !!tag, tag });
+    }
+    function hit(animal, damage, how, extra) {
         const sp = SPECIES[animal.kind()];
+        if (animal._dead) return;
+        damage = Math.round(damage * (1 + perk("hunt.dmg")));   // (Łowca, Tropiciel, Pogromca zwierząt: any weapon)
+        extra = extra || {};
         animal._hp -= damage;
-        AudioManager.playSe({ name: "Damage1", volume: 80, pitch: sp.aggressive ? 90 : 120, pan: 0 });
+        animal._poiseT = 0;
+        animal._engaged = true;
+        AudioManager.playSe({ name: "Damage1", volume: window.Combat ? 55 : 80, pitch: sp.aggressive ? 90 : 120, pan: 0 });
+        if (window.Combat && Combat.enemyHurtFx) Combat.enemyHurtFx(animal, damage, how, extra);
         if (animal._hp > 0) {
             animal._wounded = true;
-            popup($dataItems[ITEM.carcass].iconIndex, sp.name + " ranny", "#ffd98f");
+            if (!window.Combat) popup($dataItems[ITEM.carcass].iconIndex, sp.name + " ranny", "#ffd98f");
+            animal._poise -= extra.poise !== undefined ? extra.poise : Math.round(damage * 0.8);
+            if (animal._poise <= 0 && how !== "spear") stagger(animal, extra.knock);
+            else if (extra.knock && animal._mode !== "charge") knockBack(animal);
             if (sp.aggressive) enrage(animal, how);
             makeNoise(animal.centerX(), animal.centerY(), NOISE_RADIUS);
             return;
@@ -1018,8 +1347,144 @@
         const sp = SPECIES[animal.kind()];
         tally(animal);
         removeAnimal(animal);
+        if (animal._pack && animal._pack.leader === animal) animal._pack.broken = true;   // the leader down: the pack loses heart
+        for (const fn of killListeners) fn(animal);
         AudioManager.playSe({ name: "Collapse1", volume: 70, pitch: 130, pan: 0 });
-        $gameParty.gainItem($dataItems[ITEM.carcass], sp.drop);   // the popup "+N Zwierzyna" comes from SurvivalHUD
+        dropCarcass(animal.kind(), animal.centerX(), animal.centerY(), animal.direction());   // it lies where it fell
+        void sp;
+    }
+
+    // ------------------------------------------------------------------
+    // Carcasses (user, 2026-09-24): a killed animal lies where it fell. Only with a knife is it dressed - the action button in
+    // front of it: the meat of that animal, raw hide and sinews (YIELD); without one it waits, and after CARCASS.rot hours it
+    // has rotted away. Kept per map in $gameSystem._carcasses (saved); drawn in the tilemap on its back, darker, with blood.
+    // ------------------------------------------------------------------
+    const YIELD = {
+        rabbit: { meat: 94, n: 1, skin: 1, sinew: 1 },
+        deer: { meat: 157, n: 3, skin: 2, sinew: 2 },
+        boar: { meat: 159, n: 4, skin: 2, sinew: 2 },
+        wolf: { meat: 161, n: 2, skin: 1, sinew: 2 }
+    };
+    const CARCASS = { rot: 24, reach: 1.3, max: 16 };   // rot: game hours; reach: tiles from the hero's centre; max: a map's
+    const clockNow = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
+    function carcassList(mapId) {
+        const s = $gameSystem._carcasses || ($gameSystem._carcasses = {}), id = mapId || $gameMap.mapId();
+        return s[id] || (s[id] = []);
+    }
+    let carcassSeq = 0;
+    function dropCarcass(kind, x, y, dir) {
+        if (!YIELD[kind]) return null;
+        const list = carcassList();
+        const c = { kind, x, y, dir: dir || 6, until: clockNow() + CARCASS.rot, id: Date.now() + "-" + (carcassSeq++) };
+        list.push(c);
+        while (list.length > CARCASS.max) list.shift();
+        return c;
+    }
+    function removeCarcass(c) {
+        const list = carcassList(), i = list.indexOf(c);
+        if (i >= 0) list.splice(i, 1);
+    }
+    function rotCarcasses() {
+        const now = clockNow();
+        for (const c of carcassList().slice()) if (c.until <= now) removeCarcass(c);
+    }
+    // the carcass in front of the hero (or under him), the nearest one
+    function carcassAhead() {
+        const px = $gamePlayer._realX + 0.5, py = $gamePlayer._realY + 0.5, d = $gamePlayer.direction();
+        const fx = d === 4 ? -1 : d === 6 ? 1 : 0, fy = d === 8 ? -1 : d === 2 ? 1 : 0;
+        let best = null, bestD = 99;
+        for (const c of carcassList()) {
+            const dx = c.x - px, dy = c.y - py, dist = Math.hypot(dx, dy);
+            if (dist > CARCASS.reach || (dist > 0.6 && (dx * fx + dy * fy) / dist < 0.3)) continue;
+            if (dist < bestD) { bestD = dist; best = c; }
+        }
+        return best;
+    }
+    const knifeOwned = () => [ITEM.knifeIron, ITEM.knifeStone].find(id => $gameParty.numItems($dataItems[id]) > 0) || 0;
+    function giveYield(kind, knife) {
+        const y = YIELD[kind];
+        const more = k => (perkRoll(k) ? 1 : 0);   // (Rzeźnik, Skórnik, Ścięgna, Król puszczy)
+        $gameParty.gainItem($dataItems[y.meat], y.n + more("carcass.meat"));   // (the popups "+N ..." come from SurvivalHUD)
+        $gameParty.gainItem($dataItems[ITEM.rawHide], y.skin + more("carcass.hide"));
+        $gameParty.gainItem($dataItems[ITEM.sinew], y.sinew + more("carcass.sinew"));
+        if (window.Durability) Durability.use(knife);
+        AudioManager.playSe({ name: "Slash1", volume: 55, pitch: 85, pan: 0 });
+    }
+    // the action button at a carcass: with a knife the hero crouches and dresses it, without one nothing (a popup)
+    function dressCarcass(c) {
+        const knife = knifeOwned();
+        if (!knife) { popup($dataItems[ITEM.knifeStone].iconIndex, "Potrzebujesz noża, żeby oprawić: " + SPECIES[c.kind].name, "#ff9f8f"); return true; }
+        if ($gamePlayer.isToolSwinging && $gamePlayer.isToolSwinging()) return true;
+        const dx = c.x - ($gamePlayer._realX + 0.5), dy = c.y - ($gamePlayer._realY + 0.5);
+        if (Math.hypot(dx, dy) > 0.3) $gamePlayer.setDirection(Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 4 : 6) : (dy < 0 ? 8 : 2));
+        const finish = () => { if (!carcassList().includes(c)) return; removeCarcass(c); giveYield(c.kind, knife); };
+        const crouch = window.ChoppableTree && ChoppableTree.swingKindOf ? ChoppableTree.swingKindOf("Swing_Crouch") : -1;
+        if (crouch < 0 || !$gamePlayer.startToolSwing(crouch, finish, null)) finish();
+        return true;
+    }
+    // the snare's rabbit (Farming.js): dressed at once with a knife, else its carcass lies at the snare
+    function takeFromSnare(x, y) {
+        const knife = knifeOwned();
+        if (knife) { giveYield("rabbit", knife); return; }
+        dropCarcass("rabbit", x + 0.5, y + 0.6, 2);
+        popup($dataItems[ITEM.knifeStone].iconIndex, "Zając leży przy pułapce: oprawisz go nożem", "#ffd98f");
+    }
+    const _Game_Player_triggerButtonAction = Game_Player.prototype.triggerButtonAction;
+    Game_Player.prototype.triggerButtonAction = function() {
+        if (Input.isTriggered("ok")) {
+            const c = carcassAhead();
+            if (c) return dressCarcass(c);
+        }
+        return _Game_Player_triggerButtonAction.call(this);
+    };
+    // the sprites: made with the map scene, one per carcass of this map
+    let carcassSprites = [], bloodBmp = null;
+    function bloodBitmap() {
+        if (bloodBmp) return bloodBmp;
+        bloodBmp = new Bitmap(34, 12);
+        const ctx = bloodBmp.context;
+        ctx.fillStyle = "rgba(92,12,10,0.75)";
+        ctx.beginPath(); ctx.ellipse(17, 6, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(120,20,16,0.6)";
+        ctx.beginPath(); ctx.ellipse(12, 5, 7, 3, 0, 0, Math.PI * 2); ctx.fill();
+        bloodBmp._baseTexture.update();
+        return bloodBmp;
+    }
+    function makeCarcassSprite(c, tm) {
+        const root = new Sprite();
+        root.z = 2.2;   // (on the ground over the herbs, stones and site markers lying there - Farming_Render's litter 1.5, footprint 2 - under the characters)
+        const blood = new Sprite(bloodBitmap());
+        blood.anchor.set(0.5, 0.5);
+        blood.y = 4;
+        root.addChild(blood);
+        const body = new Sprite(ImageManager.loadCharacter(SPECIES[c.kind].sheet));
+        body.anchor.set(0.5, 0.5);
+        body.scale.y = -1;   // on its back, the legs up
+        body.setBlendColor([30, 8, 8, 110]);   // (the life gone out of it)
+        body.bitmap.addLoadListener(bmp => {
+            const pw = bmp.width / 3, ph = bmp.height / 4, row = c.dir === 4 ? 1 : 2;
+            body.setFrame(pw, row * ph, pw, ph);
+            body.y = Math.round(ph * 0.2);   // (the animal fills the lower part of its cell: turned over it goes up, so back down onto the blood)
+        });
+        root.addChild(body);
+        tm.addChild(root);
+        return root;
+    }
+    function updateCarcassSprites() {
+        const set = spriteset(), tm = set && set._tilemap;
+        if (!tm) return;
+        const list = carcassList();
+        carcassSprites = carcassSprites.filter(e => {
+            const keep = e.sprite.parent === tm && list.includes(e.c);
+            if (!keep && e.sprite.parent) e.sprite.parent.removeChild(e.sprite);
+            return keep;
+        });
+        for (const c of list) if (!carcassSprites.some(e => e.c === c)) carcassSprites.push({ c, sprite: makeCarcassSprite(c, tm) });
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        for (const e of carcassSprites) {
+            e.sprite.x = Math.round($gameMap.adjustX(e.c.x) * tw);
+            e.sprite.y = Math.round($gameMap.adjustY(e.c.y) * th);
+        }
     }
 
     // ------------------------------------------------------------------
@@ -1030,6 +1495,7 @@
     DataManager.extractSaveContents = function(contents) {
         _extractSaveContents.call(this, contents);
         animals = [];
+        packs = [];
         projectiles = [];
         spotCache = { mapId: 0, spots: null };
     };
@@ -1037,8 +1503,11 @@
     Game_Map.prototype.setup = function(mapId) {
         _Game_Map_setup.call(this, mapId);
         animals = [];
+        packs = [];
         projectiles = [];
         spotCache = { mapId: 0, spots: null };
+        carcassSprites = [];
+        if ($gameSystem) rotCarcasses();
     };
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
@@ -1064,7 +1533,7 @@
         this._sneakBadge = new Sprite_SneakBadge();
         this.addChild(this._sneakBadge);
     };
-    let populateWait = 0, snareWait = 0;
+    let populateWait = 0, snareWait = 0, rotWait = 0;
     let auto = true;   // tests switch the automatic refilling off
     const _Scene_Map_update = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
@@ -1074,11 +1543,27 @@
         if (cooldown > 0) cooldown--;
         if (auto && --populateWait <= 0) { populateWait = 90; populate(); }
         if (--snareWait <= 0) { snareWait = 60; snareUnseen(); }
+        if (--rotWait <= 0) { rotWait = 120; rotCarcasses(); }
+        updateCarcassSprites();
         if (window.Hunting.pending === "boar") {   // the F9 menu (Debug.js): a boar 5-8 tiles away
             window.Hunting.pending = null;
             const spots = (spotsOfMap() || []).filter(s => { const d = Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y); return d >= 5 && d <= 8; });
-            if (spots.length) { const s = spots[Math.floor(Math.random() * spots.length)]; spawn("boar", s.x, s.y); popup(ITEM.spear && $dataItems[ITEM.spear] ? $dataItems[ITEM.spear].iconIndex : 0, "Gdzieś blisko chrząka dzik...", "#ffd98f"); }
+            if (spots.length) { const s = spots[Math.floor(Math.random() * spots.length)]; spawn("boar", s.x, s.y)._summoned = true; popup(ITEM.spear && $dataItems[ITEM.spear] ? $dataItems[ITEM.spear].iconIndex : 0, "Gdzieś blisko chrząka dzik...", "#ffd98f"); }
             else popup(0, "Nie ma tu miejsca dla dzika", "#bcd8ff");
+        }
+        if (window.Hunting.pending === "deer") {   // the F9 menu: a deer 6-9 tiles away, whatever the hour (it stays: _summoned)
+            window.Hunting.pending = null;
+            const spots = (spotsOfMap() || []).filter(s => { const d = Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y); return d >= 6 && d <= 9; });
+            if (spots.length) { const s = spots[Math.floor(Math.random() * spots.length)]; spawn("deer", s.x, s.y)._summoned = true; popup($dataItems[157] ? $dataItems[157].iconIndex : 0, "Niedaleko pasie się jeleń...", "#ffd98f"); }
+            else popup(0, "Nie ma tu miejsca dla jelenia", "#bcd8ff");
+        }
+        if (window.Hunting.pending === "wolves") {   // the F9 menu: a pack of 3 wolves 7-10 tiles away
+            window.Hunting.pending = null;
+            const spots = (spotsOfMap() || []).filter(s => { const d = Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y); return d >= 7 && d <= 10; });
+            const s = spots.length ? spots[Math.floor(Math.random() * spots.length)] : null;
+            const pack = s ? spawnPack(s.x, s.y, 3) : null;
+            if (pack) { for (const w of pack.members) w._summoned = true; popup(0, "W ciemności błyszczą oczy... wilki!", "#ffd98f"); }
+            else popup(0, "Nie ma tu miejsca dla watahy", "#bcd8ff");
         }
         for (const a of animals) if (!a._sprite || !a._sprite.parent) addSprite(a);   // never leave an animal without a picture
         updateProjectiles();
@@ -1102,5 +1587,8 @@
         // the spear and the boar
         SPEAR, BOAR, thrust, spearTarget, pressShoot, gore, enrage, get cooldown() { return cooldown; }, resetCooldown: () => { cooldown = 0; },
         allTargets, addTargets: fn => { targetSources.push(fn); }, onNoise: fn => { noiseListeners.push(fn); }, makeNoise, snareUnseen, rabbitHours,
-        get playerStep() { return playerStep; } };
+        get playerStep() { return playerStep; },
+        // combat (Combat.js): the animal class, the wolves, the hooks
+        YIELD, CARCASS, dropCarcass, removeCarcass, carcasses: () => carcassList(), carcassAhead, dressCarcass, takeFromSnare,
+        Game_Animal, WOLF, get packs() { return packs; }, spawnPack, makePack, wolfEngage, stagger, knockBack, atkOf, onKill: fn => { killListeners.push(fn); } };
 })();

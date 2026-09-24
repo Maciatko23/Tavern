@@ -1,5 +1,5 @@
 // Lightning hitting a tree (Storm.js + ChoppableTree.js): the tree is charred (self-switch D), drawn soot-black, sparks and
-// smoke, a popup; at most two a storm day, only close strikes while it rages; chopped it falls after half the blows and gives
+// smoke, a popup; at most two a storm day, only close strikes while it rages; chopped it falls after two blows and gives
 // charcoal instead of wood, and so does its stump.
 const { launch, sleep } = require("./cdp.js");
 const OUT = __dirname + "/";
@@ -128,7 +128,7 @@ const OUT = __dirname + "/";
             await frames(70);
         }
         const felled = { blows, wood: (await count(61)) - wood0, coal: (await count(79)) - coal0, A: await ev(`$gameSelfSwitches.value([3, ${id}, "A"])`) };
-        check("it falls after half the blows (" + Math.ceil(T.hits / 2) + " instead of " + T.hits + ")", felled.A && felled.blows === Math.ceil(T.hits / 2), felled);
+        check("it falls after 2 blows (brittle; instead of " + T.hits + ")", felled.A && felled.blows === 2, felled);
         check("it gives 6-10 charcoal and no wood", felled.coal >= 6 && felled.coal <= 10 && felled.wood === 0, felled);
         await frames(20);
         // burnt to the roots: no stump, the empty page straight away, the ground free

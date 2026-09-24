@@ -41,7 +41,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameSystem.setStamina(100); $gamePlayer.locate(33, 18); $gamePlayer.setDirection(2); $gameMap.setDisplayPos(33 - 13, 18 - 7); 0");
         await frames(6);
         const series = [];
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 40; i++) {
             await idle(45);
             await ev("$gameSystem.setStamina(100); 0");
             const before = await ev("$gameMap.event(45)._treeHits || 0");
@@ -53,8 +53,8 @@ const { launch, sleep } = require("./cdp.js");
         }
         const popups = await ev("window.__popups.filter(t => /kilof/i.test(t))");
         console.log("blows:", JSON.stringify(series), "popups:", JSON.stringify(popups));
-        check("3 blows break a vein (4 without the iron pickaxe)", series.length === 3 && series[2] === 0, series);
-        check("the first blow announces it, once", popups.length === 1 && /Żelazny kilof: 3 uderzenia zamiast 4/.test(popups[0]), popups);
+        check("17 blows break a vein (26 without the iron pickaxe)", series.length === 17 && series[16] === 0, series.length);
+        check("the first blow announces it, once", popups.length === 1 && /Żelazny kilof: 17 uderzeń zamiast 26/.test(popups[0]), popups);
         const gained = await ev("$gameParty.numItems($dataItems[85])");
         await frames(90);
         check("the ore drops as usual", (await ev("$gameParty.numItems($dataItems[85])")) >= 1, { ore: await ev("$gameParty.numItems($dataItems[85])") });

@@ -46,7 +46,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
         check("the hand menu makes: hammer, forest bed, waterskin, rope, and from the forest floor pine seeds, a bandage, nettle fibre", hand.join() === "hammer,bough_bed,waterskin,rope,pine_seeds,bandage,nettle_fiber", hand);
         const inputs = await ev("Farming.HAND_RECIPES.find(r => r.id === 'bough_bed').inputs");
-        check("the bed is made of branches (6) and flax (3) only", JSON.stringify(inputs) === "[[77,6],[92,3]]", inputs);
+        check("the bed is made of branches (10) and flax (10) only", JSON.stringify(inputs) === "[[77,10],[92,10]]", inputs);
         check("its picture loads (96x64)", await ev(`new Promise(res => { const bm = ImageManager.loadSystem("Farm_Bedroll"); bm.addLoadListener(() => res(bm.width === 96 && bm.height === 64)); })`));
         const hint = await ev("Farming.menuFor(0, 0) === null ? '' : ''").catch(() => "");
 
@@ -74,13 +74,13 @@ fs.mkdirSync(OUT, { recursive: true });
         check("the hand menu lists 'Zrób leśne legowisko' (dimmed without branches and flax)", handList.includes("Zrób leśne legowisko(x)"), handList);
         await b.shot(OUT + "hand_menu.png");
         await press("cancel"); await frames(10); await press("cancel"); await frames(10);
-        await give(77, 6); await give(92, 3);
+        await give(77, 10); await give(92, 10);
         const made = await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'bough_bed'))");
         await settle();
-        check("made: the bed is in the bag, 6 branches and 3 flax are gone", made === true && (await count(128)) === 1 && (await count(77)) === 0 && (await count(92)) === 0);
-        await give(77, 6); await give(92, 3);
+        check("made: the bed is in the bag, 10 branches and 10 flax are gone", made === true && (await count(128)) === 1 && (await count(77)) === 0 && (await count(92)) === 0);
+        await give(77, 10); await give(92, 10);
         check("a second one is refused while you have one", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'bough_bed'))")) === false && (await count(128)) === 1);
-        await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 9, true)); 0");
+        await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 20, true)); 0");
 
         // ================= 3. laid out at once, no hammer =================
         check("no hammer in the bag", (await count(89)) === 0);
@@ -92,9 +92,9 @@ fs.mkdirSync(OUT, { recursive: true });
         await press("ok"); await settle();
         const bed = await ev(`(function(){ const q = Farming.buildingAt(${bx + 2}, ${by + 3}); return q ? { type: q.type, site: !!q.site } : null; })()`);
         check("the bed stands at once (no building site), the item went into it", !!bed && bed.type === "bedroll" && bed.site === false && (await count(128)) === 0, bed);
-        await give(77, 6); await give(92, 3);
+        await give(77, 10); await give(92, 10);
         check("with the bed standing you cannot make another", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'bough_bed'))")) === false);
-        await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 9, true)); 0");
+        await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 20, true)); 0");
         await b.shot(OUT + "bed_pitched.png");
         const names = await ev(`Farming.menuFor(${bx + 2}, ${by + 3}).entries.map(e => e.name)`);
         check("its menu: 'Prześpij noc', 'Rozbierz' (no nap, no 'Zostaw')", names.join() === "Prześpij noc,Rozbierz", names);

@@ -54,14 +54,14 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- geometry of mirrored buildings
         const geo = await J(`(function(){ const g = (type, flip) => Farming.geoOf({ type, x: 0, y: 0, v: 3, flip }); return { hut: g("hut", false).door.dx + "/" + g("hut", true).door.dx, coop: g("coop", false).yard.gate + "/" + g("coop", true).yard.gate, cow: g("cowshed", false).yard.gate + "/" + g("cowshed", true).yard.gate, kiln: g("kiln", false).ventX + "/" + g("kiln", true).ventX, tripod: (g("tripod", false).hang.x || 0) + "/" + (g("tripod", true).hang.x || 0), flipped: g("hut", true).flipped === true, plain: g("hut", false).flipped === undefined, w: g("hut", true).w }; })()`);
-        check("mirrored: the hut's door 3 -> 1, the coop's gate 2 -> 3, the cowshed's gate 3 -> 4, the kiln's chimney -7 -> 7, the size stays",
-            geo.hut === "3/1" && geo.coop === "2/3" && geo.cow === "3/4" && geo.kiln === "-7/7" && geo.flipped && geo.plain && geo.w === 5, geo);
+        check("mirrored: the hut's door 1 -> 3, the coop's gate 2 -> 3, the cowshed's gate 3 -> 4, the kiln's chimney -32 -> 32, the size stays",
+            geo.hut === "1/3" && geo.coop === "2/3" && geo.cow === "3/4" && geo.kiln === "-32/32" && geo.flipped && geo.plain && geo.w === 5, geo);
         // the hut put down mirrored: the doorway is on the other side
         const hx = bx + 1, hy = by + 4;
-        await ev(`(function(){ $gamePlayer.locate(${hx + 1}, ${hy + 2}); })(); 0`);
+        await ev(`(function(){ $gamePlayer.locate(${hx + 3}, ${hy + 2}); })(); 0`);
         check("the placer's check knows the mirrored door: something in front of the mirrored doorway blocks it, in front of the plain one does not",
             (await (async () => {
-                await ev(`(function(){ const f = $gameSystem._farm; (f.buildings[3] = f.buildings[3] || []).push({ id: 9001, type: "chest_s", x: ${hx + 1}, y: ${hy + 1}, last: 1, v: 3 }); f.rev++; })(); 0`);
+                await ev(`(function(){ const f = $gameSystem._farm; (f.buildings[3] = f.buildings[3] || []).push({ id: 9001, type: "chest_s", x: ${hx + 3}, y: ${hy + 1}, last: 1, v: 3 }); f.rev++; })(); 0`);
                 const flipped = await ev(`Farming.whyNotBuild("hut", ${hx}, ${hy}, true)`), plain = await ev(`Farming.whyNotBuild("hut", ${hx}, ${hy}, false)`);
                 await ev(`(function(){ const L = $gameSystem._farm.buildings[3]; L.splice(L.findIndex(b => b.id === 9001), 1); $gameSystem._farm.rev++; })(); 0`);
                 return flipped === "Przed drzwiami musi być wolne miejsce." && plain === null;
@@ -69,12 +69,13 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`Farming.placeSite("hut", ${hx}, ${hy}, true); $gameTemp._buildMode = null; 0`);
         await frames(20);
         check("the site remembers it is mirrored", (await ev(`Farming.buildingAt(${hx}, ${hy}).flip`)) === true);
+        await ev(`(function(){ const st = Farming.buildingAt(${hx}, ${hy}).site; st.done = Math.max(0, st.need - 3); })(); 0`);   // (80 blows: only the last ones struck here)
         for (let i = 0; i < 40 && (await ev(`!!Farming.buildingAt(${hx}, ${hy}).site`)); i++) { await ev(`$gameSystem.setStamina(300); Farming.strikeSite(Farming.buildingAt(${hx}, ${hy}), ${hx}, ${hy - 1}); 0`); await frames(38); }
         check("the finished hut is mirrored: its picture is turned over", (await ev(`SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === "hut").sprite.scale.x`)) === -1);
-        const solid = await J(`(function(){ const at = (x, y) => Farming.solidAt(x, y) ? 1 : 0; return { newDoor: at(${hx + 1}, ${hy}), oldDoor: at(${hx + 3}, ${hy}), front: at(${hx + 1}, ${hy + 1}) }; })()`);
-        check("the doorway is now the second cell (open), the old doorway cell is wall", solid.newDoor === 0 && solid.oldDoor === 1 && solid.front === 0, solid);
-        check("the tile in front of the mirrored door is kept free", (await ev(`Farming.tileWhyNot(${hx + 1}, ${hy + 1})`)) === "Zostaw wejście do chatki." && (await ev(`Farming.hutDoorAt(${hx + 1}, ${hy}) ? 1 : 0`)) === 1 && (await ev(`Farming.hutDoorAt(${hx + 3}, ${hy}) ? 1 : 0`)) === 0);
-        await ev(`$gamePlayer.locate(${hx + 1}, ${hy + 1}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${bx} - 5, ${by} - 2); 0`);
+        const solid = await J(`(function(){ const at = (x, y) => Farming.solidAt(x, y) ? 1 : 0; return { newDoor: at(${hx + 3}, ${hy}), oldDoor: at(${hx + 1}, ${hy}), front: at(${hx + 3}, ${hy + 1}) }; })()`);
+        check("the doorway is now the fourth cell (open), the old doorway cell is wall", solid.newDoor === 0 && solid.oldDoor === 1 && solid.front === 0, solid);
+        check("the tile in front of the mirrored door is kept free", (await ev(`Farming.tileWhyNot(${hx + 3}, ${hy + 1})`)) === "Zostaw wejście do chatki." && (await ev(`Farming.hutDoorAt(${hx + 3}, ${hy}) ? 1 : 0`)) === 1 && (await ev(`Farming.hutDoorAt(${hx + 1}, ${hy}) ? 1 : 0`)) === 0);
+        await ev(`$gamePlayer.locate(${hx + 3}, ${hy + 1}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${bx} - 5, ${by} - 2); 0`);
         await frames(10);
         await ev("Input._currentState.up = true; 0");
         for (let i = 0; i < 60 && (await mapNow()) === 3; i++) await frames(3);
@@ -85,7 +86,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev("Input._currentState.down = false; 0");
         await waitMap(3);
         const out = await J("({ x: $gamePlayer.x, y: $gamePlayer.y })");
-        check("...and the door of the room leads out in front of the mirrored doorway", out.x === hx + 1 && out.y === hy + 1, out);
+        check("...and the door of the room leads out in front of the mirrored doorway", out.x === hx + 3 && out.y === hy + 1, out);
 
         // ---------------------------------------------------------------- a yard mirrored: the gate on the other side
         const yx = bx, yy = by + 6;
@@ -101,7 +102,7 @@ const { launch, sleep } = require("./cdp.js");
         check("a mirrored campfire that grows into a tripod stays mirrored", (await ev(`(Farming.buildingAt(${bx + 8}, ${by + 1}) || {}).flip`)) === true);
         // save and load keep it
         const saved = await J(`(function(){ const json = JsonEx.stringify(DataManager.makeSaveContents()); DataManager.extractSaveContents(JsonEx.parse(json)); const h = Farming.hutOf().b; return { flip: h.flip, door: Farming.geoOf(h).door.dx }; })()`);
-        check("after save + load the hut is still mirrored (doorway in column 1)", saved.flip === true && saved.door === 1, saved);
+        check("after save + load the hut is still mirrored (doorway in column 3)", saved.flip === true && saved.door === 3, saved);
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-5) : "none");

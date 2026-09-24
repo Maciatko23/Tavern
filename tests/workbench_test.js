@@ -45,7 +45,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const wbCost = await ev("Farming.BUILDINGS.workbench.cost.map(([id, n]) => id + 'x' + n)");
         check("the workbench costs only branches, stones and flax", wbCost.map(s => s.split("x")[0]).sort().join() === "64,77,92", wbCost);
         const wbRecipes = await ev("Farming.BUILDINGS.workbench.recipes.map(r => r.id)");
-        check("the workbench makes every tool: axe, pickaxe, shovel, rake, hoe, knife, rod, saw, the two iron tools - and the hunting weapons (arrows also with feathers, the spear)", wbRecipes.join() === "axe_stone,pick_stone,shovel,rake,hoe,knife,rod,saw,axe_iron,pick_iron,sling,bow,arrows,arrows_feather,spear", wbRecipes);
+        check("the workbench makes every tool: axe, pickaxe, shovel, rake, hoe, knife, rod, saw, the two iron tools - and the hunting weapons (arrows also with feathers, the spear), the club and the wooden shield", wbRecipes.join() === "axe_stone,pick_stone,shovel,rake,hoe,knife,rod,saw,axe_iron,pick_iron,sling,bow,arrows,arrows_feather,spear,club,shield", wbRecipes);
         check("the sawmill only saws: planks and planks with the saw", (await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)")).join() === "planks,planks_saw");
         const forgeRecipes = await ev("Farming.BUILDINGS.forge.recipes.map(r => r.id)");
         check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, the bucket, nails, the cauldron, shears, tongs", forgeRecipes.join() === "iron,knife_iron,head_axe,head_pick,blade_saw,can,bucket_item,nails,cauldron_item,shears,tongs", forgeRecipes);
@@ -80,8 +80,8 @@ fs.mkdirSync(OUT, { recursive: true });
         // ================= 4. hammer by hand =================
         const hand0 = await ev("Farming.craftManual(null, Farming.HAND_RECIPES[0])");
         check("no materials: no hammer", hand0 === false && (await count(89)) === 0);
-        await give(77, 2); await give(64, 2); await give(92, 1);
-        check("branches 2, stones 2, flax 1 make the hammer (no wood, no axe)", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES[0])")) === true);
+        await give(77, 5); await give(64, 2); await give(92, 3);
+        check("branches 5, stones 2, flax 3 make the hammer (no wood, no axe)", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES[0])")) === true);
         await settle();
         check("the hammer is in the bag and the materials are used up", (await count(89)) === 1 && (await count(77)) === 0 && (await count(64)) === 0 && (await count(92)) === 0);
 
@@ -102,6 +102,7 @@ fs.mkdirSync(OUT, { recursive: true });
             await standAt(x + 1, y + 2, 8);
             const placed = await ev(`Farming.placeSite("${type}", ${x}, ${y})`);
             if (!placed) return false;
+            await ev(`(function(){ const st = Farming.buildingAt(${x}, ${y}).site; st.done = Math.max(0, st.need - 3); })(); 0`);   // (30-50 blows: only the last ones struck here)
             for (let i = 0; i < 12; i++) {
                 const bld = await ev(`Farming.buildingAt(${x}, ${y})`);
                 if (!bld || !bld.site) break;
@@ -122,6 +123,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const wbBuilt = await (async () => {
             const placed = await ev(`Farming.placeSite("workbench", ${bx + 1}, ${by + 1})`);
             if (!placed) return false;
+            await ev(`(function(){ const st = Farming.buildingAt(${bx + 1}, ${by + 1}).site; st.done = Math.max(0, st.need - 3); })(); 0`);   // (30 blows: only the last ones struck here)
             for (let i = 0; i < 12; i++) {
                 const q = await ev(`Farming.buildingAt(${bx + 1}, ${by + 1})`);
                 if (!q || !q.site) break;
@@ -141,7 +143,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const menu0 = await ev(`JSON.stringify(Farming.menuFor(${bx + 1}, ${by + 1}).entries.map(e => e.name + (e.enabled === false ? "(x)" : "")))`);
         console.log("workbench menu:", menu0);
         const m0 = JSON.parse(menu0);
-        check("the workbench menu lists the ten tools, four weapons and the feathered arrows, all dimmed without materials, then Rozbierz (no 'Zostaw')", m0.filter(n => !/^Napraw/.test(n)).length === 16 && m0.slice(0, 15).every(n => n.endsWith("(x)")) && m0[m0.length - 1] === "Rozbierz" && !m0.includes("Zostaw"), m0);
+        check("the workbench menu lists the ten tools, four weapons, the feathered arrows, the club and the shield, all dimmed without materials, then Rozbierz (no 'Zostaw')", m0.filter(n => !/^Napraw/.test(n)).length === 18 && m0.slice(0, 17).every(n => n.endsWith("(x)")) && m0[m0.length - 1] === "Rozbierz" && !m0.includes("Zostaw"), m0);
         await press("ok"); await frames(24);
         await b.shot(OUT + "workbench_menu.png");
         const realTitle = await ev("$gameTemp._farmMenuOpen ? SceneManager._scene._farmMenu._title : ''");
@@ -195,7 +197,7 @@ fs.mkdirSync(OUT, { recursive: true });
             await standAt(px, py, d); await frames(6);
             await ev("window.__popups.length = 0; 0");
             const series = []; let refused = "";
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 40; i++) {
                 await idle(eid);
                 await ev("$gameSystem.setStamina(100); 0");
                 const before = await ev(`$gameMap.event(${eid})._treeHits || 0`);

@@ -11,7 +11,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gameSystem.setDayNightHour(12); $gameSystem._weatherOwn = false; $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gameSystem.setDayNightHour(12); $gameSystem._weatherOwn = false; $gameScreen.clearWeather(); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 2); })`);
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
         await ev("window.__pop = []; const o = $gameTemp.pushLootPopup.bind($gameTemp); $gameTemp.pushLootPopup = (i, t, c) => { window.__pop.push(t); return o(i, t, c); }; 0");
@@ -68,7 +68,7 @@ const { launch, sleep } = require("./cdp.js");
         await stand(0, 1, 8); await frames(20);
         let m0 = await meat(), r0 = await roast();
         const t0 = await ev("$gameSystem.dayNightHour()"), f0 = await ev("Graphics.frameCount");
-        check("'Upiecz mięso' starts the roasting swing (kind 12)", (await runMenu("Upiecz mięso")) && (await (async () => { await frames(2); return ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind"); })()) === 12);
+        check("'Upiecz mięso' starts the roasting swing (kind 12)", (await runMenu("Upiecz mięso zająca")) && (await (async () => { await frames(2); return ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind"); })()) === 12);
         let at = null;
         for (let i = 0; i < 90; i++) { await frames(1); if (await waiting()) { at = await cell(); break; } }
         check("the player sits with the stick over the fire (column 12 or 11, row 3) and waits", !!at && (at.col === 12 || at.col === 11) && at.row === 3 && (await job()), at);
@@ -90,7 +90,7 @@ const { launch, sleep } = require("./cdp.js");
         // getting up early: nothing is roasted, nothing stays on the fire, the raw meat goes back to the bag
         await stand(-1, 0, 6); await frames(20);
         m0 = await meat(); r0 = await roast(); await pops();
-        await runMenu("Upiecz mięso");
+        await runMenu("Upiecz mięso zająca");
         for (let i = 0; i < 90 && !(await waiting()); i++) await frames(1);
         await frames(30);
         check("while sitting the meat is on the fire (one piece less in the bag)", (await job()) && (await meat()) === m0 - 1);
@@ -104,7 +104,7 @@ const { launch, sleep } = require("./cdp.js");
         // the other facings (time is skipped to keep the test short)
         for (const [dx, dy, dir, row] of [[1, 0, 4, 1], [0, -1, 2, 0], [-1, 0, 6, 2]]) {
             await stand(dx, dy, dir); await frames(20);
-            await runMenu("Upiecz mięso");
+            await runMenu("Upiecz mięso zająca");
             let a = null;
             for (let i = 0; i < 90; i++) { await frames(1); if (await waiting()) { a = await cell(); break; } }
             check("facing " + dir + ": seated with the stick in row " + row + ", meat over the fire", !!a && (a.col === 12 || a.col === 11) && a.row === row && (await job()), a);
@@ -115,7 +115,7 @@ const { launch, sleep } = require("./cdp.js");
         }
 
         // pictures
-        for (const [name, dx, dy, dir, menuName] of [["rest", 0, 1, 8, "Ogrzej się przy ogniu"], ["rest", -1, 0, 6, "Ogrzej się przy ogniu"], ["rest", 0, -1, 2, "Ogrzej się przy ogniu"], ["roast", 0, 1, 8, "Upiecz mięso"], ["roast", -1, 0, 6, "Upiecz mięso"], ["roast", 0, -1, 2, "Upiecz mięso"]]) {
+        for (const [name, dx, dy, dir, menuName] of [["rest", 0, 1, 8, "Ogrzej się przy ogniu"], ["rest", -1, 0, 6, "Ogrzej się przy ogniu"], ["rest", 0, -1, 2, "Ogrzej się przy ogniu"], ["roast", 0, 1, 8, "Upiecz mięso zająca"], ["roast", -1, 0, 6, "Upiecz mięso zająca"], ["roast", 0, -1, 2, "Upiecz mięso zająca"]]) {
             await stand(dx, dy, dir); await frames(70);
             await runMenu(menuName);
             if (name === "rest") { for (let i = 0; i < 200 && (await swingT()) < 38; i++) await frames(1); }
@@ -137,7 +137,7 @@ const { launch, sleep } = require("./cdp.js");
         await stand(0, 1, 8); await frames(20);
         m0 = await meat(); r0 = await roast();
         check("the tripod shows no hanging food while nothing roasts", (await hang()).raw === false);
-        check("'Upiecz mięso' at the tripod hangs the meat on the hook (a short crouch, not a long sit)", (await runMenu("Upiecz mięso")) && (await (async () => { await frames(2); return ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind"); })()) === 6);
+        check("'Upiecz mięso' at the tripod hangs the meat on the hook (a short crouch, not a long sit)", (await runMenu("Upiecz mięso zająca")) && (await (async () => { await frames(2); return ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind"); })()) === 6);
         for (let i = 0; i < 120 && (await swingT()) >= 0; i++) await frames(2);
         const ji = await jobInfo();
         check("the meat is on the tripod (one piece less in the bag) as an ordinary background job, and the player is free to go",
@@ -163,7 +163,7 @@ const { launch, sleep } = require("./cdp.js");
         // waiting beside it (optional): getting up early leaves it roasting, staying gets the food at the end
         await stand(0, 1, 8); await frames(20);
         m0 = await meat(); r0 = await roast();
-        await runMenu("Upiecz mięso");
+        await runMenu("Upiecz mięso zająca");
         for (let i = 0; i < 120 && (await swingT()) >= 0; i++) await frames(2);
         const menu4 = await J(`Farming.menuFor(${fx}, ${fy}).entries.map(e => e.name)`);
         check("while food roasts the menu offers 'Poczekaj przy ogniu'", menu4.includes("Poczekaj przy ogniu"), menu4);

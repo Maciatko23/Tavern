@@ -411,6 +411,7 @@
     const CONE = num(params.coneItem, 147);
     const isPine = event => { const data = event.event(), page = data && data.pages && data.pages[0]; return !!page && /Pine/.test(page.image.characterName || ""); };
     const CHARRED_DROP = [6, 10], CHARRED_STUMP_DROP = [1, 2];
+    const CHARRED_HITS = 2;   // a charred tree is brittle: two blows fell it (the user's number)
     const CHARRED_TONE = [-62, -72, -84, 255];   // grey, then darker and a little warm: soot-black wood
     const ROCK_DEFAULTS = {
         hits: num(params.rockHits, 3),
@@ -451,59 +452,59 @@
     // hit. Bushes that are not listed use BUSH_DEFAULTS.
     const TUFT = { hits: 1, dropmin: 1, dropmax: 1, cost: 2 };
     const BUSH_PROFILES = {
-        "!$Bush_Big": { hits: 4, dropmin: 3, dropmax: 5, cost: 5 },
-        "!$Bush_Medium": { hits: 3, dropmin: 2, dropmax: 4, cost: 4 },
-        "!$Bush_Wide": { hits: 3, dropmin: 2, dropmax: 3, cost: 4 },
+        "!$Bush_Big": { hits: 2, dropmin: 3, dropmax: 5, cost: 5 },
+        "!$Bush_Medium": { hits: 2, dropmin: 2, dropmax: 4, cost: 4 },
+        "!$Bush_Wide": { hits: 2, dropmin: 2, dropmax: 3, cost: 4 },
         "!$Bush_Small": TUFT, "!$Bush_Grass": TUFT, "!$Bush_Fern_A": TUFT, "!$Bush_Fern_B": TUFT,
         "!$Bush_Snow_Tuft_A": TUFT, "!$Bush_Snow_Tuft_B": TUFT, "!$Bush_Bud_B": TUFT,
         // leafless thickets: dense woody tangles, more hits and more branches than leafy bushes
         "!$Bush_Bare_A": { hits: 2, dropmin: 2, dropmax: 3, cost: 4, bare: 1 },
         "!$Bush_Bare_B": { hits: 2, dropmin: 2, dropmax: 3, cost: 4, bare: 1 },
-        "!$Bush_Bare_Tall": { hits: 3, dropmin: 3, dropmax: 4, cost: 5, bare: 1 },
-        "!$Bush_Bare_Wide": { hits: 3, dropmin: 3, dropmax: 5, cost: 5, bare: 1 },
+        "!$Bush_Bare_Tall": { hits: 2, dropmin: 3, dropmax: 4, cost: 5, bare: 1 },
+        "!$Bush_Bare_Wide": { hits: 2, dropmin: 3, dropmax: 5, cost: 5, bare: 1 },
         "!$Bush_Bare_Hedge": { hits: 5, dropmin: 4, dropmax: 6, cost: 5, bare: 1 },
         "!$Bush_Bare_Thicket": { hits: 5, dropmin: 4, dropmax: 6, cost: 6, bare: 1 },
         "!$Bush_Bare_Vines": { hits: 5, dropmin: 4, dropmax: 6, cost: 6, bare: 1 },
-        "!$Bush_Bare_Big": { hits: 7, dropmin: 5, dropmax: 8, cost: 7, bare: 1 }
+        "!$Bush_Bare_Big": { hits: 6, dropmin: 5, dropmax: 8, cost: 7, bare: 1 }
     };
     // Every picture named "!$Rock_..." (and the boulder) is a rock: no note, no
     // commands needed. hits, stones dropped and stamina per hit by size. An event
     // with a <Rock> note keeps using the plugin parameters plus its note.
     const ROCK_GRAPHIC = /^!\$(Rock_|Boulder_)/;
-    const SMALL_ROCK = { hits: 2, dropmin: 1, dropmax: 2, cost: 5 };
+    const SMALL_ROCK = { hits: 6, dropmin: 1, dropmax: 2, cost: 5 };   // (the numbers of blows: the user's, 2026-09-24)
     const ROCK_PROFILES = {
-        "!$Boulder_A": { hits: 5, dropmin: 2, dropmax: 4, cost: 7 },
-        "!$Rock_Tall": { hits: 3, dropmin: 2, dropmax: 3, cost: 6 },
+        "!$Boulder_A": { hits: 20, dropmin: 2, dropmax: 4, cost: 7 },
+        "!$Rock_Tall": { hits: 16, dropmin: 2, dropmax: 3, cost: 6 },
         "!$Rock_Slab": { hits: 4, dropmin: 2, dropmax: 4, cost: 6 },
-        "!$Rock_Mound": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Pile": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Grey": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Tan": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Snow_Grey": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Snow_Tan": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Mound": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Pile": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Grey": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Tan": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Snow_Grey": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Snow_Tan": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
         "!$Rock_Flat": SMALL_ROCK, "!$Rock_Round": SMALL_ROCK, "!$Rock_Steps": SMALL_ROCK,
         // loose pebbles and rubble lie on the ground: tool 0 = picked up by hand (no pickaxe, no swing)
         "!$Rock_Pebbles": { tool: 0, hits: 1, dropmin: 1, dropmax: 1, cost: 1, title: "Podniesiono kamień!" },
-        "!$Rock_Boulder_Crack": { hits: 5, dropmin: 2, dropmax: 4, cost: 7 },
-        "!$Rock_Jagged": { hits: 5, dropmin: 2, dropmax: 4, cost: 7 },
+        "!$Rock_Boulder_Crack": { hits: 20, dropmin: 2, dropmax: 4, cost: 7 },
+        "!$Rock_Jagged": { hits: 20, dropmin: 2, dropmax: 4, cost: 7 },
         "!$Rock_Twin": { hits: 4, dropmin: 2, dropmax: 3, cost: 6 },
-        "!$Rock_Wide": { hits: 6, dropmin: 3, dropmax: 5, cost: 7 },
-        "!$Rock_Huge": { hits: 8, dropmin: 4, dropmax: 7, cost: 8 },
-        "!$Rock_Spire": { hits: 3, dropmin: 2, dropmax: 3, cost: 6 },
+        "!$Rock_Wide": { hits: 14, dropmin: 3, dropmax: 5, cost: 7 },
+        "!$Rock_Huge": { hits: 18, dropmin: 4, dropmax: 7, cost: 8 },
+        "!$Rock_Spire": { hits: 16, dropmin: 2, dropmax: 3, cost: 6 },
         "!$Rock_Column": { hits: 4, dropmin: 2, dropmax: 4, cost: 6 },
-        "!$Rock_Cluster": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Cluster": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
         "!$Rock_Long": { hits: 4, dropmin: 2, dropmax: 4, cost: 6 },
         "!$Rock_Rubble": { tool: 0, hits: 1, dropmin: 1, dropmax: 2, cost: 1, title: "Podniesiono kamienie!" },
-        "!$Rock_Cracked": { hits: 3, dropmin: 1, dropmax: 3, cost: 6 },
+        "!$Rock_Cracked": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
         "!$Rock_Cairn": SMALL_ROCK, "!$Rock_Chunk": SMALL_ROCK, "!$Rock_Mossy": SMALL_ROCK,
         // an ore vein: tougher than a plain rock, gives iron ore instead of stone (Farming/kuźnia)
-        "!$Rock_Ore_Iron": { hits: 4, dropmin: 1, dropmax: 2, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
+        "!$Rock_Ore_Iron": { hits: 26, dropmin: 1, dropmax: 2, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
         // more shapes of the same vein (the bigger, the more ore and the more blows)
-        "!$Rock_Ore_Iron_Chunk": { hits: 3, dropmin: 1, dropmax: 2, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Spire": { hits: 4, dropmin: 2, dropmax: 3, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Cluster": { hits: 4, dropmin: 2, dropmax: 3, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Twin": { hits: 6, dropmin: 3, dropmax: 4, cost: 8, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Jagged": { hits: 6, dropmin: 3, dropmax: 5, cost: 8, drop: 85, title: "Wydobyto rudę żelaza!" }
+        "!$Rock_Ore_Iron_Chunk": { hits: 22, dropmin: 1, dropmax: 2, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
+        "!$Rock_Ore_Iron_Spire": { hits: 26, dropmin: 2, dropmax: 3, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
+        "!$Rock_Ore_Iron_Cluster": { hits: 26, dropmin: 2, dropmax: 3, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
+        "!$Rock_Ore_Iron_Twin": { hits: 30, dropmin: 3, dropmax: 4, cost: 8, drop: 85, title: "Wydobyto rudę żelaza!" },
+        "!$Rock_Ore_Iron_Jagged": { hits: 30, dropmin: 3, dropmax: 5, cost: 8, drop: 85, title: "Wydobyto rudę żelaza!" }
     };
     // Big objects block the tiles at their base (in tiles, counted from the
     // event's own tile: right = extra tiles to the right, up = extra rows above),
@@ -597,7 +598,16 @@
         // side, stays lying (the rest happens on the impact frame), then stands back up
         { sheet: "Swing_LieDown", tool: -1, frames: 125, impact: 40, hold: 50, reach: 0, hit: [10, 10, 10, 10] },
         // 15: a spear jab (Hunting.js): the spear is drawn back and driven forward with a lunge; the hit lands on the impact frame
-        { sheet: "Swing_Spear", tool: -1, frames: 32, impact: 14, hold: 4, reach: 8, hit: [5, 5, 5, 5] }
+        { sheet: "Swing_Spear", tool: -1, frames: 32, impact: 14, hold: 4, reach: 8, hit: [5, 5, 5, 5] },
+        // 16: the dodge roll (Combat.js, Space): squat, tuck, roll over, land, stand - as long as Combat's roll (22 frames); the
+        // hero moves along by himself (no reach). Built from Swing_Crouch: its squat turned over in 90-degree steps
+        { sheet: "Swing_Roll", tool: -1, frames: 22, impact: 1, hold: 0, reach: 0, hit: [0, 0, 0, 0] },
+        // 17: knocked down (Combat.js: a blow too strong to stand): the lying-down sheet played fast - falls, lies, gets up (50 frames)
+        { sheet: "Swing_LieDown", name: "knockdown", tool: -1, frames: 50, impact: 9, hold: 22, reach: 0, hit: [10, 10, 10, 10] },
+        // 18: the club (Combat.js): a quick one-handed blow - raised over the shoulder, brought down in front, back on the shoulder
+        { sheet: "Swing_Club", tool: -1, frames: 22, impact: 11, hold: 2, reach: 3, hit: [4, 5, 5, 4] },
+        // 19: a punch (Combat.js, no weapon): fists up, a step, a straight punch, back
+        { sheet: "Swing_Punch", tool: -1, frames: 18, impact: 8, hold: 2, reach: 2, hit: [3, 4, 4, 4] }
     ];
     const SWING_KIND = { log: 0, rock: 1, stump: 2, fall: 3, bush: 3 };   // bushes: axe from the side
     const SHAKE_FRAMES = 6;
@@ -846,6 +856,20 @@
         return !(occupy && isSoftTile(this, occupy, x, y));
     };
 
+    // One press, one thing: where a wide bush reaches over a rock (or two such things overlap) the button started both, and every
+    // press - and held O - struck one and then the other (the user). Now only the one standing on that tile is struck, else the nearest.
+    const _Game_Player_startMapEvent = Game_Player.prototype.startMapEvent;
+    Game_Player.prototype.startMapEvent = function(x, y, triggers, normal) {
+        const fits = e => e.isTriggerIn(triggers) && e.isNormalPriority() === normal;
+        const things = $gameMap.isEventRunning() ? [] : $gameMap.eventsXy(x, y).filter(e => fits(e) && anyHarvestConfig(e));
+        if (things.length < 2) return _Game_Player_startMapEvent.call(this, x, y, triggers, normal);
+        const far = e => Math.abs(e.x - x) + Math.abs(e.y - y);
+        const pick = things.reduce((a, b) => (far(b) < far(a) ? b : a));
+        for (const event of $gameMap.eventsXy(x, y)) {
+            if (fits(event) && (event === pick || !anyHarvestConfig(event))) event.start();
+        }
+    };
+
     // A bush or rock event made of nothing but a picture needs no commands: the
     // action button chops / mines it. (An event with its own commands keeps them.)
     const BUSH_COMMANDS = [
@@ -894,13 +918,16 @@
         }
         if (this._swingT >= 0) {
             const swing = swingKind(this._swingKind);
-            this._swingT++;
-            if (this._swingT === swing.impact && this._pendingAction) {
+            this._swingT += this._swingRate || 1;   // (Zręczność: a quicker swing, workSpeed)
+            if (!this._hitLanded && this._swingT >= swing.impact && this._pendingAction) {
+                this._hitLanded = true;
                 applyPendingAction(this);
             }
             if (this._swingT >= swing.frames) {
                 this._swingT = -1;
                 if ($gamePlayer._swingEvent === this) $gamePlayer._swingEvent = null;
+                const h = $gamePlayer._holdStrike;
+                if (h && h.id === this._eventId && h.map === this._mapId) h.t = Math.max(2, Math.round(HOLD_PAUSE / (this._swingRate || 1)));   // held O: the next blow soon
             }
         }
         if (this._treeGone && ++this._treeGoneFrames > 3) {
@@ -931,11 +958,12 @@
     // started) when there is no such kind of swing or the player is busy, so the
     // caller can simply do the action right away.
     // ------------------------------------------------------------------
-    // opts (optional): { holdWhile, onWait, onHoldEnd, still, holdAt, keepOnMove, wobble } - after the impact frame the figure stays in that
+    // opts (optional): { holdWhile, onWait, onHoldEnd, still, holdAt, keepOnMove, wobble, rate } - after the impact frame the figure stays in that
     // pose for as long as holdWhile() returns true (sitting by the fire until the food is ready); onWait(n) runs every frame of the wait;
     // pressing cancel or a direction key ends the wait early; onHoldEnd(cancelled) runs when it ends. still: no shifting between two poses
     // during the wait. holdAt: wait at this frame instead, BEFORE the impact (aiming the sling: it whirls until F is let go, then the
-    // stone leaves); keepOnMove: the direction keys do not end the wait (they turn to another target); wobble: frames per pose shift (22).
+    // stone leaves); keepOnMove: the direction keys do not end the wait (they turn to another target); wobble: frames per pose shift (22);
+    // rate: animation frames a game frame advances (1; more = a quicker swing - the hammer with Zręczność, Farming.js).
     Game_Player.prototype.startToolSwing = function(kind, onImpact, onDone, opts) {
         if (!SWING_KINDS[kind] || this._toolSwing || this._swingEvent) return false;
         this._toolSwing = { _swingT: 0, _swingKind: kind, onImpact, onDone, opts: opts || null, _waiting: false, _wait: 0 };
@@ -950,15 +978,25 @@
     const _Game_Player_update = Game_Player.prototype.update;
     Game_Player.prototype.update = function(sceneActive) {
         _Game_Player_update.call(this, sceneActive);
+        if (sceneActive) updateHoldStrike(this);
         const swing = this._toolSwing;
         if (!swing) return;
+        const rate = swing.opts && swing.opts.rate > 0 ? swing.opts.rate : 1;
+        swing._acc = (swing._acc || 0) + rate;
+        while (swing._acc >= 1 && this._toolSwing === swing) {   // (rate 1: exactly one step a frame, as always)
+            swing._acc -= 1;
+            if (this.stepToolSwing(swing) === "hold") { swing._acc = 0; break; }
+        }
+    };
+    // one frame of the swing's animation; "hold" while the pose is held
+    Game_Player.prototype.stepToolSwing = function(swing) {
         const def = swingKind(swing._swingKind), opts = swing.opts;
         if (swing._waiting) {   // holding the pose until the action is over
             const cancelled = Input.isTriggered("cancel") || (!opts.keepOnMove && Input.dir4 !== 0);
             if (!cancelled && opts.holdWhile()) {
                 swing._wait++;
                 if (opts.onWait) opts.onWait(swing._wait);
-                return;
+                return "hold";
             }
             swing._waiting = false;
             swing._cancelled = cancelled;
@@ -1021,9 +1059,11 @@
     const rollCount = (min, max) => min + Math.floor(Math.random() * (Math.max(max, min) - min + 1));
 
     // fixed: the number was already decided (the stones that flew out of the rock)
-    function giveReward(title, itemId, min, max, fixed) {
+    // bonusKey: a skill's chance of one piece more (Zbieractwo: "chop.yield", "mine.yield", "forage.yield")
+    function giveReward(title, itemId, min, max, fixed, bonusKey) {
         const item = $dataItems[itemId];
-        const count = fixed !== undefined ? fixed : rollCount(min, max);
+        let count = fixed !== undefined ? fixed : rollCount(min, max);
+        if (bonusKey && count > 0 && perkRoll(bonusKey)) count++;
         // With SurvivalHUD loaded, gainItem shows a floating "+N item" over the
         // player; without it fall back to plain messages.
         const hasPopups = typeof $gameTemp.pushLootPopup === "function";
@@ -1067,7 +1107,7 @@
             clearLandUnder(this);
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
         } else {
-            giveReward("Ścięto drzewo!", cfg.drop, cfg.dropmin, cfg.dropmax);
+            giveReward("Ścięto drzewo!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, "chop.yield");
             // a grown pine sheds its cones as it falls (a young planted one has none yet)
             if (isPine(this) && (cfg.scale || 1) >= 0.9 && $dataItems[CONE]) $gameParty.gainItem($dataItems[CONE], 1 + Math.floor(Math.random() * 3));
             if (cfg.nostump) {   // (a seedling: nothing to dig out afterwards)
@@ -1085,23 +1125,24 @@
         this.holdInvisibleUntilPageChange();
         if (kind === "rock") {
             const cfg = rockConfig(this) || ROCK_DEFAULTS;
-            giveReward(cfg.title || "Rozbito kamień!", cfg.drop, cfg.dropmin, cfg.dropmax, this._dropCount);
+            giveReward(cfg.title || "Rozbito kamień!", cfg.drop, cfg.dropmin, cfg.dropmax, this._dropCount, cfg.tool > 0 ? "mine.yield" : "forage.yield");
+            if (cfg.tool > 0 && cfg.drop !== IRON_ORE && $dataItems[IRON_ORE] && perkRoll("ore")) $gameParty.gainItem($dataItems[IRON_ORE], 1);   // (Oko na kruszec)
             this._dropCount = undefined;
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
         } else if (kind === "bush") {
             const cfg = bushConfig(this) || BUSH_DEFAULTS;
-            giveReward("Ścięto krzak!", cfg.drop, cfg.dropmin, cfg.dropmax);
+            giveReward("Ścięto krzak!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, "chop.yield");
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
         } else if (kind === "log") {
             const cfg = logConfig(this) || LOG_DEFAULTS;
-            giveReward(cfg.tool > 0 ? "Rozrąbano kłodę!" : "Zebrano drewno!", cfg.drop, cfg.dropmin, cfg.dropmax);
+            giveReward(cfg.tool > 0 ? "Rozrąbano kłodę!" : "Zebrano drewno!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, cfg.tool > 0 ? "chop.yield" : "forage.yield");
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
         } else if (isCharred(this)) {   // (only a stump left by a charred tree felled before they stopped leaving one)
             giveReward("Wykopano zwęglony pieniek!", CHARCOAL, CHARRED_STUMP_DROP[0], CHARRED_STUMP_DROP[1]);
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
         } else {
             const cfg = treeConfig(this) || stumpConfig(this) || STUMP_DEFAULTS;
-            giveReward("Wykopano pieniek!", cfg.digdrop, cfg.digmin, cfg.digmax);
+            giveReward("Wykopano pieniek!", cfg.digdrop, cfg.digmin, cfg.digmax, undefined, "chop.yield");
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
         }
     };
@@ -1123,7 +1164,7 @@
             }
             const cfg = tree || TREE_DEFAULTS;
             const charred = isCharred(event);   // brittle: half the blows, black chips and ash instead of wood and leaves
-            return { tool: cfg.axe, needed: charred ? Math.max(1, Math.ceil(cfg.hits / 2)) : cfg.hits, cost: cfg.cost, se: CHOP_SE, finish: "fall",
+            return { tool: cfg.axe, needed: charred ? CHARRED_HITS : cfg.hits, cost: cfg.cost, se: CHOP_SE, finish: "fall",
                 fx: charred ? ["char"] : null, fallFx: charred ? "ash" : "leaf", missing: "Potrzebujesz siekiery" };
         }
         if (kind === "dig") {
@@ -1159,6 +1200,37 @@
         action.ironItem = item;
         action.ironFrom = before;
     }
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
+    const IRON_ORE = 85;
+    // Zbieractwo: fewer blows and less strength for chopping, digging out stumps and mining; picking up by hand is free ("Szybkie ręce")
+    function applySkills(action) {
+        if (action.tool > 0) {
+            // Siła a little (Combat.gatherBonus: 0.5% a point over 5), the Zbieractwo skills a lot
+            const str = window.Combat && Combat.gatherBonus ? Combat.gatherBonus() : 0;
+            const fewer = Math.min(0.75, perk(action.finish === "rock" ? "mine.hits" : "chop.hits") + str);
+            if (fewer > 0) action.needed = Math.max(1, Math.round(action.needed * (1 - fewer)));
+            if (action.cost > 0) action.cost = Math.max(0.5, action.cost * (1 - Math.min(0.75, perk("gather.cost"))));
+        } else if (knowsSkill("g_quick")) action.cost = 0;
+    }
+    // Held O at a tree, a bush, a log, a stump or a rock: a moment after each blow (sooner with Zręczność) the next one - for as long as
+    // it is held and he stands where he stood; it stops when the thing falls or breaks, or he is too tired (the popup says so).
+    const HOLD_PAUSE = 12;   // frames between two blows at the usual speed
+    const SLOW_SWING = { fall: 0.5, rock: 0.5 };   // chopping a standing tree (axe) and mining a rock or ore (pickaxe) go at half the speed (the swing and the pause; the user's)
+    const workSpeed = () => (window.Combat && Combat.workSpeed ? Combat.workSpeed() : 1);
+    function updateHoldStrike(p) {
+        const h = p._holdStrike;
+        if (!h || !(h.t > 0) || --h.t > 0) return;
+        const e = h.map === $gameMap.mapId() ? $gameMap.event(h.id) : null;
+        if (!e || !Input.isPressed("ok") || p.x !== h.x || p.y !== h.y || p.direction() !== h.d ||
+            e._treeFallT >= 0 || e._breakT >= 0 || e._treeGone || $gameMessage.isBusy() || $gameTemp._farmMenuOpen) { p._holdStrike = null; return; }
+        if (e.isTreeAnimating() || $gameMap.isEventRunning() || p.isMoving() || p._toolSwing || p._swingEvent) { h.t = 1; return; }   // (the shake, the event: a frame more)
+        p._holdStrike = null;
+        e.start();
+    }
     function blowsText(n) {
         return n + (n === 1 ? " uderzenie" : n < 5 ? " uderzenia" : " uderzeń");
     }
@@ -1175,6 +1247,7 @@
         if (!event || event.isTreeAnimating()) return;
         const action = strikeSetup(event, kind);
         applyIronTool(action);
+        applySkills(action);
         if (action.tool > 0 && !ownsTool(action.tool)) {
             needPopup($dataItems[action.tool] ? $dataItems[action.tool].iconIndex : 0, action.missing);
             return;
@@ -1189,7 +1262,10 @@
             // Swing the tool; the hit itself lands on the strike frame.
             event._swingKind = SWING_KIND[action.finish];
             event._swingT = 0;
+            event._swingRate = workSpeed() * (SLOW_SWING[action.finish] || 1);   // (a standing tree, a rock: slower, the user's)
+            event._hitLanded = false;
             $gamePlayer._swingEvent = event;
+            $gamePlayer._holdStrike = { id: event.eventId(), map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction(), t: 0 };   // (ids: nothing big in a save)
         } else {
             applyPendingAction(event);   // picking something up by hand: no swing
         }
@@ -2093,5 +2169,9 @@
     // for Storm.js (lightning hitting a tree) and the tests
     // treeConfig: the parsed (and cached) <Tree:...> numbers of an event - Forestry.js changes scale / hits / drops of a planted tree
     // in place as it grows
-    window.ChoppableTree = { isTree: event => !!treeConfig(event), treeConfig, isPine, isCharred, charTree, strikeableTrees, emberLights, emberSpots, EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE };
+    // swingKind(kind): the timing of a kind of swing; swingKindOf(key): the kind with that name, else the first that plays that
+    // sheet (-1: none) - Combat.js
+    const swingKindOf = key => { const i = SWING_KINDS.findIndex(k => k.name === key); return i >= 0 ? i : SWING_KINDS.findIndex(k => k.sheet === key); };
+    window.ChoppableTree = { isTree: event => !!treeConfig(event), treeConfig, isPine, isCharred, charTree, strikeableTrees, emberLights, emberSpots, EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE,
+        swingKind, swingKindOf };
 })();

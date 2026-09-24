@@ -1,5 +1,6 @@
-// The boar (Hunting.js): it warns, charges and knocks the player about (a wound, Survival.js), backs off; the spear (F within reach)
-// throws it back and kills it in two jabs; a bandage (yarrow) heals the wound, which otherwise heals by itself after a day.
+// The boar (Hunting.js, in the combat of Combat.js): it warns, charges and knocks the player down, backs off; the spear in hand
+// jabs it (the attack key "["), it turns on him and flees when badly hurt; a bandage (yarrow) heals a wound, which otherwise heals
+// by itself after a day.
 const { launch, sleep } = require("./cdp.js");
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
@@ -63,71 +64,87 @@ const { launch, sleep } = require("./cdp.js");
         let charged = null;
         for (let i = 0; i < 40 && !charged; i++) { await frames(4); const m = await ev("Hunting.animals[0]._mode"); if (m === "charge") charged = await J("({ sheet: Hunting.animals[0].characterName(), speed: Hunting.animals[0].moveSpeed() })"); }
         check("after the warning it charges: the running sheet, faster than the player walks", !!charged && charged.sheet === "$Animal_Boar_Run" && charged.speed > 4, charged);
+        const full = await ev("$gameParty.leader().mhp");
         let gored = null;
-        for (let i = 0; i < 60 && !gored; i++) { await frames(4); if (await ev("$gameSystem.isWounded()")) gored = await J("({ st: $gameSystem.stamina(), mode: Hunting.animals[0]._mode, pops: window.__popups.slice() })"); }
-        check("it reaches the player: -22 strength, wounded, a popup about the bandage, and it backs off", !!gored && gored.st === 60 && gored.mode === "retreat" && gored.pops.some(t => /Dzik cię poturbował/.test(t)), gored);
+        for (let i = 0; i < 60 && !gored; i++) { await frames(4); if ((await ev("$gameParty.leader().hp")) < full) gored = await J("({ hp: $gameParty.leader().hp, atk: Hunting.atkOf(Hunting.animals[0]), mode: Hunting.animals[0]._mode, stun: Combat.act.stunKind })"); }
+        check("it reaches the player: its attack off his health (30+), he is knocked down, and it backs off", !!gored && full - gored.hp === gored.atk && gored.atk >= 30 && gored.stun === "down" && gored.mode === "retreat", { full, ...gored });
 
         // ================= 4. the spear =================
         await give(154, 1);
         await standAt(lx, ly, 6);
+        await ev("$gameParty.leader().recoverAll(); Combat.resetAct(); 0");
         await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 2}, ${ly}); a._frozen = true; })()`);
         await frames(4);
         const inReach = await ev("!!Hunting.spearTarget()");
         check("a boar 2 tiles in front is within the spear's reach", inReach);
         const dur0 = await ev("window.Durability ? Durability.left(154) : 0").catch(() => null);
         await clearPopups();
-        check("F with the spear jabs (no aiming)", await ev("Hunting.pressShoot()") && !(await ev("!!Hunting.aim")));
+        const boarMax = await ev("Hunting.animals[0]._maxHp");
+        check("the attack key with the spear in hand jabs (no aiming)", (await ev("Combat.hand()")) === "m154" && await ev("Hunting.pressShoot()") && !(await ev("!!Hunting.aim")));
         await frames(30);
-        const jab1 = await J("({ hp: Hunting.animals[0]._hp, mode: Hunting.animals[0]._mode, x: Hunting.animals[0]._x, st: $gameSystem.stamina(), pops: window.__popups.slice() })");
-        check("the jab: 3 damage (5 -> 2), the boar reels back a tile (stagger), 3 strength spent", jab1.hp === 2 && jab1.mode === "stagger" && jab1.x === lx + 3 && jab1.st === 97 && jab1.pops.some(t => /Dzik ranny/.test(t)), jab1);
+        const jab1 = await J("({ hp: Hunting.animals[0]._hp, mode: Hunting.animals[0]._mode, st: $gameSystem.stamina(), breath: Combat.breath, maxBreath: Combat.maxBreath() })");
+        check("the jab: the spear's 20 (32 when critical) off its life (110+); breath spent, not the day's strength", (jab1.hp === boarMax - 20 || jab1.hp === boarMax - 32) && jab1.st === 100 && jab1.breath < jab1.maxBreath, { boarMax, ...jab1 });
         // it recovers and comes again (stagger -> warn -> charge); caught in reach, the second jab
         await ev("Hunting.animals[0]._frozen = false; 0");
         let again = false;
         for (let i = 0; i < 40 && !again; i++) { await frames(3); again = (await ev("Hunting.animals[0]._mode")) === "charge"; }
         check("after reeling back it gathers itself and charges again", again);
-        await ev(`(function(){ const a = Hunting.animals[0]; a._frozen = true; a.locate(${lx + 2}, ${ly}); })()`);
-        const car0 = await count(101);
-        await ev("Hunting.resetCooldown(); 0");
+        await ev(`(function(){ const a = Hunting.animals[0]; a._frozen = true; a.locate(${lx + 2}, ${ly}); a._hp = 12; a._stun = 0; a.setMode("warn", 999); })()`);
+        const car0 = await ev("Hunting.carcasses().length");
+        await ev("Hunting.resetCooldown(); Combat.resetAct(); 0");
         await ev("Hunting.pressShoot()");
-        await frames(10);
-        check("a second jab kills it: +3 Zwierzyna, the boar counted", (await ev("Hunting.animals.length")) === 0 && (await count(101)) === car0 + 3 && (await ev("Hunting.hunt().kills.boar")) === 1, { carcass: await count(101), kills: await J("Hunting.hunt().kills") });
+        await frames(30);
+        check("a jab finishes it off (12 life left): its carcass lies there, the boar counted", (await ev("Hunting.animals.length")) === 0 && (await ev("Hunting.carcasses().length")) === car0 + 1 && (await ev("Hunting.carcasses().slice(-1)[0].kind")) === "boar" && (await ev("Hunting.hunt().kills.boar")) === 1, { carcasses: await ev("Hunting.carcasses().length"), kills: await J("Hunting.hunt().kills") });
         if (dur0 !== null) check("the spear wears (Durability: jabs)", (await ev("window.Durability ? Durability.left(154) : 0")) < dur0 || dur0 === 0, { dur0, now: await ev("window.Durability ? Durability.left(154) : 0") });
 
-        // nothing within reach: F aims the bow when there is one; with only the spear it jabs at the air
+        // the weapon in hand decides: the spear jabs even with a bow in the bag; the switch key puts the bow in hand, then the key aims it
         await standAt(lx, ly, 6);
         await ev(`(function(){ const a = Hunting.spawn("rabbit", ${lx + 6}, ${ly}); a._frozen = true; })()`);
         await give(126, 1); await give(127, 3);
+        await ev("Combat.resetAct(); 0");
+        const b0 = await ev("Combat.maxBreath()");
+        const jabAir = await ev("Hunting.pressShoot()");
+        await frames(40);
+        check("the spear in hand, nothing in reach: it jabs at the air (breath spent, not strength, nothing hit), no aiming", jabAir && !(await ev("!!Hunting.aim")) && (await ev("Combat.breath")) < b0 && (await ev("$gameSystem.stamina()")) === 100 && (await ev("Hunting.animals.length")) === 1);
+        await ev("Combat.resetAct(); Hunting.resetCooldown(); for (let i = 0; i < 6 && Combat.hand() !== 'ranged'; i++) Combat.switchHand(); 0");
         await ev("Hunting.pressShoot()");
-        check("a target 6 tiles away with a bow in the bag: F aims the bow instead", (await ev("Hunting.aim && Hunting.aim.weapon")) === "bow");
-        await ev("Hunting.endAim(); $gameParty.loseItem($dataItems[126], 1, true); Hunting.resetCooldown(); 0");
-        await ev("$gameSystem.setStamina(100); 0");
-        check("with only the spear, F jabs at the air (strength spent, nothing hit)", await ev("Hunting.pressShoot()") && (await ev("$gameSystem.stamina()")) === 97 && (await ev("Hunting.animals.length")) === 1);
+        check("switched to the bow: the key aims it at the rabbit 6 tiles away", (await ev("Combat.hand()")) === "ranged" && (await ev("Hunting.aim && Hunting.aim.weapon")) === "bow");
+        await ev("Hunting.endAim(); $gameParty.loseItem($dataItems[126], 1, true); Hunting.resetCooldown(); Combat.resetAct(); 0");
 
-        // a shot makes it charge; with 1 life left it runs away
+        // a shot makes it charge; badly hurt (15% of its life or less) it runs away
         await standAt(lx, ly, 6);
         await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 6}, ${ly}); a._wait = 9999; })()`);
-        await ev("Hunting.hit(Hunting.animals[0], 2)");
+        await ev("Hunting.hit(Hunting.animals[0], 2, 'shot')");
         check("hit by an arrow it does not flee - it charges at once", (await ev("Hunting.animals[0]._mode")) === "charge");
-        await ev("Hunting.hit(Hunting.animals[0], 2)");
-        await frames(4);
-        check("with 1 life left it runs away for good", (await ev("Hunting.animals[0]._mode")) === "flee");
+        await ev("(function(){ const a = Hunting.animals[0]; a._hp = Math.round(a._maxHp * 0.2); Hunting.hit(a, Math.round(a._maxHp * 0.1), 'shot'); })()");
+        await frames(8);
+        check("badly hurt (under 15% of its life) it runs away for good", (await ev("Hunting.animals[0]._mode")) === "flee", await ev("Hunting.animals[0]._mode"));
 
         // ================= 5. the jab with its animation, and the F9 row =================
         await standAt(lx, ly, 6);
         await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 2}, ${ly}); a._frozen = true; })()`);
-        await ev("Hunting.animate(true); 0");
+        await ev("Hunting.animate(true); Combat.resetAct(); 0");
+        const max5 = await ev("Hunting.animals[0]._maxHp");
         await ev("Hunting.pressShoot()");
         await frames(4);
         const mid = await J("({ swinging: $gamePlayer.isToolSwinging(), kind: $gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind, hp: Hunting.animals[0]._hp })");
         await frames(40);
         const after = await ev("Hunting.animals[0]._hp");
-        check("with the animation the body plays the jab (swing kind 15) and the hit lands on its strike frame", mid.swinging && mid.kind === 15 && mid.hp === 5 && after === 2, { mid, after });
+        check("with the animation the body plays the jab (swing kind 15) and the hit lands on its strike frame", mid.swinging && mid.kind === 15 && mid.hp === max5 && (after === max5 - 20 || after === max5 - 32), { max5, mid, after });
         await ev("Hunting.animate(false); 0");
         await standAt(lx, ly, 6);
         await ev("Hunting.pending = 'boar'; 0");
         await frames(10);
         const f9 = await J("Hunting.animals.map(a => ({ kind: a.kind(), d: Math.round(Math.hypot(a._x - $gamePlayer.x, a._y - $gamePlayer.y)) }))");
         check("the F9 row puts a boar 5-8 tiles away", f9.length === 1 && f9[0].kind === "boar" && f9[0].d >= 5 && f9[0].d <= 8, f9);
+        // out of its hours (noon) the F9 boar and an F9 pack stay; an ordinary calm boar goes home
+        await ev("$gameSystem.setDayNightHour(12); Hunting.pending = 'wolves'; 0");
+        await frames(10);
+        await ev(`Hunting.spawn("boar", ${lx + 3}, ${ly + 2}); Hunting.populate(); 0`);
+        await frames(4);
+        const noon = await J("Hunting.animals.map(a => a.kind() + (a._summoned ? '*' : ''))");
+        check("at noon (not their hours) the F9 boar and the F9 wolves stay, an ordinary boar goes home", noon.filter(k => k === "boar*").length === 1 && noon.filter(k => k === "wolf*").length === 3 && !noon.includes("boar"), noon);
+        await ev("$gameSystem.setDayNightHour(10); 0");
 
         // ================= 6. eight directions =================
         await standAt(lx, ly, 6);
@@ -143,10 +160,10 @@ const { launch, sleep } = require("./cdp.js");
         await standAt(lx, ly, 6);
         const hud = await J("(function(){ const g = SceneManager._scene._survivalHud._gauge; return { h: g.bitmap.height, want: UIStyle.HUD.step + UIStyle.HUD.row }; })()");
         check("the HUD gauge holds two rows now: health (heart) over stamina (bolt)", hud.h === hud.want, hud);
-        const hp0 = await J("(function(){ $gameParty.leader().recoverAll(); return { hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp }; })()");   // (full again: the charge above hurt him)
-        await ev(`Hunting.gore(Hunting.spawn("boar", ${lx + 1}, ${ly})); 0`);
+        const hp0 = await J("(function(){ $gameParty.leader().recoverAll(); Combat.resetAct(); return { hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp }; })()");   // (full again: the charge above hurt him)
+        const goreAtk = await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 1}, ${ly}); Hunting.gore(a); $gameSystem.injure(0); return Hunting.atkOf(a); })()`);   // (the wound comes by chance: here for sure)
         const hp1 = await ev("$gameParty.leader().hp");
-        check("a boar's hit takes 35% of the health", hp0.hp === hp0.mhp && hp1 === hp0.mhp - Math.round(hp0.mhp * 0.35), { hp0, hp1 });
+        check("a boar's hit takes its attack (30 at level 1, +12% a level) off the health", hp0.hp === hp0.mhp && hp1 === hp0.mhp - goreAtk, { hp0, goreAtk, hp1 });
         await ev("$gameSystem.advanceDayNight(5); 0");
         check("while wounded the health does not come back", (await ev("$gameParty.leader().hp")) === hp1);
         await ev("$gameSystem.healWound(); $gameSystem.advanceDayNight(5); 0");
@@ -156,7 +173,7 @@ const { launch, sleep } = require("./cdp.js");
         const hp3 = await ev("$gameParty.leader().hp");
         check("a bandage heals 20% of the health (and the wound)", Math.abs(hp3 - Math.min(hp0.mhp, hp2 + Math.round(hp0.mhp * 0.2))) <= 1 && !(await ev("$gameSystem.isWounded()")), { hp2, hp3 });
         // the end: at 0 the engine's own check sends the game to the game-over screen
-        await ev(`$gameParty.leader().setHp(1); Hunting.gore(Hunting.animals.find(a => a.kind() === "boar") || Hunting.spawn("boar", ${lx + 1}, ${ly})); 0`);
+        await ev(`$gameParty.leader().setHp(1); Combat.resetAct(); Hunting.gore(Hunting.animals.find(a => a.kind() === "boar") || Hunting.spawn("boar", ${lx + 1}, ${ly})); 0`);
         let over = false;
         for (let i = 0; i < 40 && !over; i++) { await sleep(100); over = (await ev("SceneManager._scene.constructor.name")) === "Scene_Gameover"; }
         check("health 0: game over (Scene_Gameover)", over && (await ev("$gameParty.isAllDead()")));

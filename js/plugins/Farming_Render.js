@@ -777,7 +777,7 @@
             if (e.b.site) continue;
             const def = Farming.geoOf(e.b);
             if (def.fire && Farming.fireLit(e.b)) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id });
-            else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) out.push({ x: e.sprite.x + (def.ventX || 0), y: e.sprite.y - Math.max(20, (def.vent || 40) - 30), r: def.light || 190, i: 0.85, id: e.b.id });
+            else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) out.push({ x: e.sprite.x + (def.ember ? def.ember.x || 0 : def.ventX || 0), y: e.sprite.y - (def.ember ? def.ember.y : Math.max(20, (def.vent || 40) - 30)), r: def.light || 190, i: 0.85, id: e.b.id });   // from the fire opening, if it has one
         }
         // the embers of a tree struck by lightning (ChoppableTree.js) glow in the dark a little too
         if (window.ChoppableTree && ChoppableTree.emberLights) out.push(...ChoppableTree.emberLights(this._spriteset));
@@ -934,7 +934,7 @@
             e.rope.bitmap = ropeBitmap(sway);
         }
     };
-    // the flames flicker through their frames; the smoke of a campfire never stops
+    // the flames flicker through their frames; the smoke of a campfire stops only half an hour after the fire has gone out
     BuildingSprites.prototype.updateFlame = function(e) {
         e.flame.visible = Farming.fireLit(e.b);
         if (!e.flame.visible) return;
@@ -945,14 +945,23 @@
         }
     };
     BuildingSprites.prototype.updateStation = function(e) {
-        const b = e.b, def0 = Farming.geoOf(b), ready = Farming.jobReady(b), cooking = !!b.job && !ready, fireOut = !!def0.fire && !Farming.fireLit(b);
+        const b = e.b, def0 = Farming.geoOf(b), ready = Farming.jobReady(b), cooking = !!b.job && !ready && !Farming.jobPaused(b), fireOut = !!def0.fire && !Farming.fireLit(b);
         const burning = cooking || !!(def0.fire && def0.fire.smoke && !fireOut);
+        // gone out: for half an hour thin smoke still rises from the embers - fewer, fainter, smaller puffs as it cools
+        const smoulder = !burning && fireOut ? Farming.smoulderOf(b) : 0, shown = burning ? PUFFS : smoulder > 0 ? Math.max(1, Math.ceil((PUFFS - 1) * smoulder)) : 0;
         if (e.puffs) {
             e.puffs.forEach((p, i) => {
-                p.visible = burning;
-                if (!burning) return;
+                p.visible = i < shown;
+                if (!p.visible) return;
                 const t = ((this._age + i * (PUFF_PERIOD / PUFFS) + b.id * 13) % PUFF_PERIOD) / PUFF_PERIOD;
                 const g = Farming.geoOf(b), W = window.Storm ? Storm.wind() : 0;   // in a storm the wind lays the smoke down flat
+                if (!burning) {
+                    p.x = e.sprite.x + (g.fire.x || 0) + Math.sin(t * 4 + i * 1.7) * 3 * (1 - 0.6 * W) + t * (6 + 80 * W);
+                    p.y = e.sprite.y - g.fire.y - 4 - t * 46 * (1 - 0.6 * W);
+                    p.alpha = Math.min(1, t / 0.2) * (1 - t) * (0.3 + 0.45 * smoulder);
+                    p.scale.x = p.scale.y = 0.5 + t * 0.8;
+                    return;
+                }
                 p.x = e.sprite.x + (g.ventX || 0) + Math.sin(t * 5 + i * 1.7) * 5 * (1 - 0.6 * W) + t * (9 + 80 * W);
                 p.y = e.sprite.y - (g.vent || 40) - t * 44 * (1 - 0.6 * W);
                 p.alpha = Math.min(1, t / 0.15) * (1 - t) * 0.6;

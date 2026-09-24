@@ -96,11 +96,13 @@
     const levels = () => ({ food: level(needs().food, FOOD), water: level(needs().water, WATER) });
     function factor() {
         const l = levels();
-        return FOOD.factor[l.food] * WATER.factor[l.water];
+        const p = Math.min(1, perk("needs.penalty")), soft = f => 1 + (f - 1) * (1 - p);   // (Żelazny organizm)
+        return soft(FOOD.factor[l.food]) * soft(WATER.factor[l.water]);
     }
     function capRatio() {
         const l = levels();
-        return Math.min(FOOD.cap[l.food], WATER.cap[l.water]);
+        const p = Math.min(1, perk("needs.penalty")), soft = c => 1 - (1 - c) * (1 - p);
+        return Math.min(soft(FOOD.cap[l.food]), soft(WATER.cap[l.water]));
     }
     function popup(icon, text, color) {
         $gameTemp.pushLootPopup(icon, text, color);
@@ -123,12 +125,17 @@
     const seasonNow = () => (window.Farming && Farming.seasonIndex ? Farming.seasonIndex($gameSystem.dayNightDay()) : 0);
     const raining = () => outdoors() && ["rain", "storm"].includes($gameScreen.weatherType()) && $gameScreen._weatherPowerTarget > 0;
 
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
     // hours of game time have passed (k: 1 awake, less asleep)
     function decay(hours, k) {
         if (!enabled() || !(hours > 0)) return;
         const n = needs(), season = seasonNow();
-        const foodLoss = FOOD_RATE * (season === 3 ? 1.25 : 1) * k * hours;
-        let waterLoss = WATER_RATE * (season === 1 ? 1.25 : 1) * k * hours;
+        const foodLoss = FOOD_RATE * (season === 3 ? 1.25 : 1) * k * hours * (1 - Math.min(0.8, perk("hunger")));   // (Mały żołądek, Wielbłąd)
+        let waterLoss = WATER_RATE * (season === 1 ? 1.25 : 1) * k * hours * (1 - Math.min(0.8, perk("thirst")));
         if (raining() && k >= 1) waterLoss = -RAIN_GAIN * hours;
         n.food = clamp(n.food - foodLoss);
         n.water = clamp(n.water - waterLoss);
@@ -157,8 +164,8 @@
         const ok = _trySpendStamina.call(this, cost * factor());
         if (ok) {
             const n = needs();
-            n.food = clamp(n.food - cost * WORK_FOOD);   // effort makes you hungry and thirsty
-            n.water = clamp(n.water - cost * WORK_WATER);
+            n.food = clamp(n.food - cost * WORK_FOOD * (1 - Math.min(0.8, perk("hunger"))));   // effort makes you hungry and thirsty
+            n.water = clamp(n.water - cost * WORK_WATER * (1 - Math.min(0.8, perk("thirst"))));
             warn();
         }
         return ok;
@@ -172,7 +179,8 @@
     // ---- eating and drinking
     function foodValues(item, food) {
         const t = FEED[item.id] || [Math.round((food.stamina || 0) * 0.8), 0];
-        return [food.fed !== undefined ? food.fed : t[0], food.water !== undefined ? food.water : t[1]];
+        const k = 1 + perk("food.value");   // (Kuchnia: Kucharz)
+        return [(food.fed !== undefined ? food.fed : t[0]) * k, (food.water !== undefined ? food.water : t[1]) * k];
     }
     function eat(item, food) {
         if (!enabled()) return "";

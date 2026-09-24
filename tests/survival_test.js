@@ -11,7 +11,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(10); $gameSystem.changeStamina(100); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(10); $gameSystem.changeStamina(100); 0");
         await sleep(600);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const press = async k => { await ev(`Input._currentState.${k} = true; 0`); await frames(2); await ev(`Input._currentState.${k} = false; 0`); await frames(2); };
@@ -123,8 +123,8 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameSystem.advanceDayNight(4); 0"); await ev("Farming.collectJob(Farming.buildingAt(34, 8)); 0"); await frames(100);
         check("cauldron: potatoes + carrot + meat -> 2 soup", (await count(109)) === 2, { soup: await count(109) });
         await ev(`Farming.startJob(Farming.buildingAt(30, 8), "tan"); 0`); await frames(100);
-        const tanMenu = await ev("JSON.stringify(Farming.menuFor(30, 8).entries.map(e => e.name))");
-        check("tannery: a hide is tanning, hand recipes (boots, backpack, cloak) are offered at the same time", /Skóra się garbuje/.test(tanMenu) && /Zszyj buty/.test(tanMenu) && /Zszyj plecak/.test(tanMenu) && /Uszyj płaszcz/.test(tanMenu), tanMenu);
+        const tanMenu = await ev("(function(){ const m = Farming.menuFor(30, 8); return JSON.stringify([m.status && m.status.text].concat(m.entries.map(e => e.name))); })()");
+        check("tannery: a hide is tanning, hand recipes (boots, backpack, cloak) are offered at the same time", /Trwa wyprawianie/.test(tanMenu) && /Zszyj buty/.test(tanMenu) && /Zszyj plecak/.test(tanMenu) && /Uszyj płaszcz/.test(tanMenu), tanMenu);
         await ev("$gameSystem.advanceDayNight(13); 0"); await ev("Farming.collectJob(Farming.buildingAt(30, 8)); 0"); await frames(100);
         check("tanned hide: 1 raw hide + 3 branches -> 1 hide", (await count(97)) === 1, { hide: await count(97) });
 

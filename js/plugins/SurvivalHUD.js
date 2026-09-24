@@ -747,6 +747,65 @@
         if (t >= end) { this._age = -1; this.visible = false; }
     };
 
+    // ------------------------------------------------------------------
+    // A short notice at the top centre of the screen ("Gra zapisana"): a small plate that fades in, stays a moment and fades out,
+    // one at a time. It sits under the day's greeting or the "Tryb walki" badge (Combat.js) when one of those is shown.
+    // ------------------------------------------------------------------
+    const NOTICE = { fadeIn: 14, stay: 150, fadeOut: 30, top: 10, gap: 6 };
+    Game_Temp.prototype.pushTopNotice = function(text, color) {
+        if (!this._topNotices) this._topNotices = [];
+        this._topNotices.push({ text, color: color || null });
+        this._lastTopNotice = text;   // (tests read what was said)
+    };
+    function Sprite_TopNotice() {
+        this.initialize(...arguments);
+    }
+    Sprite_TopNotice.prototype = Object.create(Sprite.prototype);
+    Sprite_TopNotice.prototype.constructor = Sprite_TopNotice;
+    Sprite_TopNotice.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this.anchor.x = 0.5;
+        this._age = -1;
+        this.visible = false;
+    };
+    Sprite_TopNotice.prototype.show = function(data) {
+        const probe = new Bitmap(8, 8);
+        probe.fontSize = 19;
+        const w = Math.ceil(probe.measureTextWidth(data.text)) + 48, h = 36;
+        const bmp = new Bitmap(w, h);
+        paintPlaque(bmp, 0, 0, w, h, { cut: 5, fill: "rgba(11,12,15,0.9)" });
+        bmp.fontSize = 19;
+        bmp.textColor = data.color || PALETTE.text;
+        bmp.outlineColor = "rgba(0,0,0,0.9)";
+        bmp.outlineWidth = 3;
+        bmp.drawText(data.text, 0, 4, w, 28, "center");
+        this.bitmap = bmp;
+        this._age = 0;
+        this.visible = true;
+    };
+    // the first free place under what is already shown at the top centre
+    Sprite_TopNotice.prototype.baseY = function() {
+        const scene = SceneManager._scene, day = scene && scene._dayBanner, badge = scene && scene._modeBadge;
+        let y = NOTICE.top;
+        if (day && day.visible && day.bitmap && day.opacity > 0) y = Math.max(y, day.y + day.bitmap.height + NOTICE.gap);
+        if (badge && badge.visible && badge.bitmap) y = Math.max(y, badge.y + badge.bitmap.height + NOTICE.gap);
+        return y;
+    };
+    Sprite_TopNotice.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        this.x = Graphics.width / 2;
+        if (this._age < 0) {
+            const q = $gameTemp._topNotices;
+            if (q && q.length > 0 && !SceneManager.isSceneChanging()) this.show(q.shift());
+            return;
+        }
+        const t = ++this._age, end = NOTICE.fadeIn + NOTICE.stay + NOTICE.fadeOut;
+        const k = t < NOTICE.fadeIn ? t / NOTICE.fadeIn : t < NOTICE.fadeIn + NOTICE.stay ? 1 : Math.max(0, (end - t) / NOTICE.fadeOut);
+        this.opacity = Math.round(255 * k);
+        this.y = this.baseY() - Math.round(8 * (1 - Math.min(1, t / NOTICE.fadeIn)));   // it slides down a little as it appears
+        if (t >= end) { this._age = -1; this.visible = false; }
+    };
+
     // A layer between the map and the windows that is NOT part of the zoomed
     // spriteset, so the HUD keeps its size and place when MapZoom is active.
     const _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
@@ -764,6 +823,8 @@
         this._hudLayer.addChild(this._lootLayer);
         this._dayBanner = new Sprite_DayBanner();
         this._hudLayer.addChild(this._dayBanner);
+        this._topNotice = new Sprite_TopNotice();
+        this._hudLayer.addChild(this._topNotice);
     };
 
     Scene_Map.prototype.hudLayer = function() {

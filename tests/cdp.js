@@ -3,8 +3,8 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const http = require("http");
+const os = require("os");
 
-const SP = __dirname;
 const EDGE = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const PORT = 9333;
 
@@ -21,7 +21,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function launch(opts = {}) {
     const w = opts.width || 1280, h = opts.height || 720;
-    const profile = path.join(SP, "edge_profile_" + Date.now());
+    // the browser profile lives in the system temp folder (not in the synced project) and is removed on close()
+    const profile = path.join(os.tmpdir(), "tawerna_edge_" + Date.now());
     const proc = spawn(EDGE, [
         "--headless=new", "--remote-debugging-port=" + PORT, "--user-data-dir=" + profile,
         `--window-size=${w},${h}`, "--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader",
@@ -57,7 +58,13 @@ async function launch(opts = {}) {
         const r = await send("Page.captureScreenshot", { format: "png" });
         fs.writeFileSync(file, Buffer.from(r.data, "base64"));
     };
-    const close = async () => { try { await send("Browser.close"); } catch (e) {} try { proc.kill(); } catch (e) {} };
+    const exited = new Promise(r => proc.once("exit", r));
+    const close = async () => {
+        try { await send("Browser.close"); } catch (e) {}
+        await Promise.race([exited, sleep(3000)]);
+        try { proc.kill(); } catch (e) {}
+        for (let i = 0; i < 5; i++) { try { fs.rmSync(profile, { recursive: true, force: true }); break; } catch (e) { await sleep(300); } }
+    };
     return { send, evaluate, shot, close, logs, sleep };
 }
 module.exports = { launch, sleep };

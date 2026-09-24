@@ -66,7 +66,7 @@ const OUT = __dirname + "/";
         await frames(6);
 
         // ---- make the hammer through the UI
-        await ev("$gameParty.gainItem($dataItems[61], 12); $gameParty.gainItem($dataItems[77], 12); $gameParty.gainItem($dataItems[64], 12); $gameParty.gainItem($dataItems[92], 8); 0");
+        await ev("$gameParty.gainItem($dataItems[61], 12); $gameParty.gainItem($dataItems[77], 12); $gameParty.gainItem($dataItems[64], 12); $gameParty.gainItem($dataItems[92], 12); 0");
         await frames(10);
         await ev(`$gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); 0`);
         await frames(10);
@@ -75,11 +75,11 @@ const OUT = __dirname + "/";
         for (let i = 0; i < idx; i++) await press("down");
         await press("ok"); await frames(20);
         list = await menuNames();
-        check("with materials the recipes are enabled (the waterskin needs a raw hide, so it stays dimmed)", list.filter(n => !/bukłak/.test(n)).slice(0, 3).every(n => !n.endsWith("(x)")) && list[2] === "Zrób bukłak(x)", list);
+        check("with materials the recipes are enabled (the waterskin needs a tanned hide, so it stays dimmed)", list.filter(n => !/bukłak/.test(n)).slice(0, 3).every(n => !n.endsWith("(x)")) && list[2] === "Zrób bukłak(x)", list);
         await press("ok"); await frames(200);   // the first entry: the hammer
         check("the hammer is made through the menu", (await count(89)) === 1);
         const spent = { wood: await count(61), branch: await count(77), stone: await count(64) };
-        check("2 branches, 2 stones and 1 flax were used (no wood)", spent.wood === 12 && spent.branch === 10 && spent.stone === 10 && (await count(92)) === 7, spent);
+        check("5 branches, 2 stones and 3 flax were used (no wood)", spent.wood === 12 && spent.branch === 7 && spent.stone === 10 && (await count(92)) === 9, spent);
 
         // ---- the other five, and the ones you already own stay on the list but dimmed
         for (const id of ["rope"]) {
@@ -89,7 +89,7 @@ const OUT = __dirname + "/";
             check("hand recipe " + id + " works", ok === true);
         }
         const tools = { shovel: await count(62), rake: await count(65), hoe: await count(66), knife: await count(90), rope: await count(93), fibre: await count(92) };
-        check("the rope is in the bag (4 flax became 1 rope), and no other tool came out of the hand menu", tools.shovel === 0 && tools.rake === 0 && tools.hoe === 0 && tools.knife === 0 && tools.rope === 1 && tools.fibre === 3, tools);
+        check("the rope is in the bag (4 flax became 1 rope), and no other tool came out of the hand menu", tools.shovel === 0 && tools.rake === 0 && tools.hoe === 0 && tools.knife === 0 && tools.rope === 1 && tools.fibre === 5, tools);
         const again = await ev(`Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === "hammer"))`);
         check("a second hammer is refused (unique)", again === false && (await count(89)) === 1);
         await ev("$gameParty.gainItem($dataItems[92], 4); $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); 0");

@@ -21,7 +21,7 @@
  * a dookoła widać przyciemnioną mapę. Każda zakładka wygląda tak samo:
  * nagłówek z tytułem, treść, a na dole podpowiedzi klawiszy.
  *
- *  - Postać (P): po lewej lista (Plecak, Dziennik, Opcje, Zapisz grę,
+ *  - Menu (P): po lewej lista (Plecak, Dziennik, Postać, Opcje, Zapisz grę,
  *    Zakończ grę), po prawej karta: portret, miejsce i pogoda, zdrowie,
  *    wytrzymałość, sytość, nawodnienie, samopoczucie, narzędzia (z paskiem
  *    zużycia), obciążenie i monety. W nagłówku imię, dzień, pora roku, godzina.
@@ -30,6 +30,8 @@
  *    od razu - bohater jest jeden, więc bez wybierania postaci; wynik (np.
  *    "Zjadłeś...") pojawia się pod opisem.
  *  - Dziennik (także J): zakładki, lista i opis w tym samym panelu.
+ *  - Postać (Combat.js): poziom, atrybuty i umiejętności; przy komendzie
+ *    żółta liczba, gdy są punkty do rozdania.
  *  - Opcje, Zapisz / Wczytaj grę, Zakończ grę: ten sam wygląd.
  *
  * Wtyczka zmienia tylko wygląd i układ okien, nie zasady gry. Musi być
@@ -198,6 +200,10 @@
             path(() => { ctx.moveTo(3.5, 3.5); ctx.lineTo(12, 3.5); ctx.lineTo(12, 17); ctx.lineTo(3.5, 17); ctx.closePath(); });
             path(() => { ctx.moveTo(5.8, 7.5); ctx.lineTo(9.5, 7.5); ctx.moveTo(5.8, 10.5); ctx.lineTo(9.5, 10.5); });
             path(() => { ctx.moveTo(17.5, 2.5); ctx.quadraticCurveTo(12, 6, 9.5, 14.5); ctx.moveTo(17.5, 2.5); ctx.quadraticCurveTo(17, 8, 11.5, 11.5); });
+        } else if (kind === "hero") {     // a figure with a small star: the hero growing
+            path(() => { ctx.arc(8.5, 5.5, 2.8, 0, Math.PI * 2); });
+            path(() => { ctx.moveTo(3, 17.5); ctx.lineTo(3, 14); ctx.quadraticCurveTo(3, 10, 8.5, 10); ctx.quadraticCurveTo(14, 10, 14, 14); ctx.lineTo(14, 17.5); });
+            path(() => { ctx.moveTo(16.5, 2.5); ctx.lineTo(16.5, 7.5); ctx.moveTo(14, 5); ctx.lineTo(19, 5); });
         } else if (kind === "gameEnd") {  // a door, the way out
             path(() => { ctx.moveTo(11, 3); ctx.lineTo(4, 3); ctx.lineTo(4, 17); ctx.lineTo(11, 17); });
             path(() => { ctx.moveTo(8, 10); ctx.lineTo(17, 10); ctx.moveTo(14, 7); ctx.lineTo(17, 10); ctx.lineTo(14, 13); });
@@ -208,7 +214,7 @@
     // ==================================================================
     // P: the character and the commands
     // ==================================================================
-    const COMMAND_LABELS = { item: "Plecak", journal: "Dziennik", options: "Opcje", save: "Zapisz grę", gameEnd: "Zakończ grę" };
+    const COMMAND_LABELS = { item: "Plecak", journal: "Dziennik", hero: "Postać", options: "Opcje", save: "Zapisz grę", gameEnd: "Zakończ grę" };
     const MENU_SPLIT = 262;   // px from the panel's left: the commands | the card
     Window_MenuCommand.prototype.maxCols = function() { return 1; };
     Window_MenuCommand.prototype.numVisibleRows = function() { return Math.max(1, this.maxItems()); };
@@ -219,6 +225,15 @@
         this.resetTextColor();
         this.changePaintOpacity(on);
         this.drawText(COMMAND_LABELS[sym] || this.commandName(index), r.x + 40, r.y, r.width - 40, "left");
+        const points = sym === "hero" && window.Combat && Combat.unspent ? Combat.unspent() : 0;
+        if (points > 0) {   // points to give out: a small yellow count on the right
+            this.contents.fontSize = 16;
+            const bw = Math.max(24, Math.ceil(this.textWidth(String(points))) + 12), bx = r.x + r.width - bw - 4, by = r.y + Math.round((r.height - 22) / 2);
+            U.panel(this.contents.context, bx, by, bw, 22, { cut: 3, fill: U.accent, accent: false });
+            this.changeTextColor("#101216");
+            this.drawText(String(points), bx, by - 7, bw, "center");
+            this.resetFontSettings();
+        }
         this.changePaintOpacity(true);
     };
     Scene_Menu.prototype.commandWindowRect = function() {

@@ -161,10 +161,10 @@ fs.mkdirSync(OUT, { recursive: true });
         await clearPopups();
         await ev("Input._currentState.drink = true; 0"); await frames(3); await ev("Input._currentState.drink = false; 0"); await frames(3);
         check("G without a flask: popup 'Potrzebujesz bukłaka'", (await popups()).includes("Potrzebujesz bukłaka"), await popups());
-        // make it by hand: raw hide + 2 flax
+        // make it by hand: a tanned hide + 3 flax
         const rec = await ev("Farming.HAND_RECIPES.find(r => r.id === 'waterskin').inputs.map(([i, n]) => i + 'x' + n).join()");
-        check("the hand menu makes a flask from a raw hide and 2 flax", rec === "96x1,92x2", rec);
-        await give(96, 1); await give(92, 2);
+        check("the hand menu makes a flask from a tanned hide and 3 flax", rec === "97x1,92x3", rec);
+        await give(97, 1); await give(92, 3);
         await ev("$gameSystem.setStamina(100); 0");
         const made = await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'waterskin'))");
         await settle();

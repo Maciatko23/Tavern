@@ -353,8 +353,9 @@
  *
  * CRAFTING (warsztat, piec ziemny, tartak, kompostownik, browar, piekarnia, cegielnia, kuźnia)
  *   Menu każdego budynku z przepisami (też ogniska, trójnogu i kociołka) ma dwie zakładki: najpierw
- *   "Przepis" (same przepisy; póki coś jest w środku, są wyszarzone z powodem), potem "Akcja" (to, co
- *   się pali lub piecze i "Zbierz", ogrzanie się, dokładanie drewna, rozbudowa, rozbiórka). Otwiera się na "Przepis";
+ *   "Przepis" (na górze "Zbierz", gdy coś jest gotowe, pod nim przepisy; póki coś jest w środku, są wyszarzone
+ *   z powodem), potem "Akcja" (ogrzanie się, dokładanie drewna, rozbudowa, rozbiórka). Co się teraz robi i ile
+ *   jeszcze potrwa, widać pod nazwą budynku. Otwiera się na "Przepis";
  *   strzałki lewo / prawo (albo Q / E) przełączają zakładki, góra / dół wybierają.
  *   Każde stanowisko ma własne receptury. Są dwa rodzaje:
  *   - "w tle" (ogień, fermentacja, rozkład): oddajesz surowce, a po ustalonej
@@ -398,7 +399,7 @@
  *   co 3 minuty gry +1 wytrzymałości. Wstaje, gdy się ruszysz albo wypocznie do pełna.
  *
  * LEŚNE LEGOWISKO (pierwsze spanie w terenie)
- *   W menu ziemi "Wytwórz..." robisz je z 6 gałęzi i 3 lnu (jedno naraz), a potem rozkładasz w
+ *   W menu ziemi "Wytwórz..." robisz je z 10 gałęzi i 10 lnu (jedno naraz), a potem rozkładasz w
  *   "Postaw..." od razu, bez młotka. "Prześpij noc" działa jak w namiocie (czas do rana,
  *   podsumowanie dnia, autozapis), ale siły wracają tylko do 60% (w deszczu, śniegu i zimą
  *   do 40%; w tablicy BUILDINGS: sleepRestore, sleepBad). Rozbierz zwraca 3 gałęzie i len.
@@ -485,7 +486,7 @@
         pickaxe: num(params.pickaxeItem, 63),
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
         honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144, bird: 145, feathers: 146,
-        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, wildApple: 139, wildPear: 140   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -500,7 +501,8 @@
         buildHit: num(params.staminaBuildHit, 2),
         fish: num(params.staminaFish, 2)
     };
-    const CAN_MAX = Math.max(1, num(params.waterCanCharges, 6));
+    const CAN_BASE = Math.max(1, num(params.waterCanCharges, 6));
+    const canMax = () => CAN_BASE + Math.round(perk("can.charges"));   // (Rolnictwo: Duża konewka)
     const STONE_DENSITY = Math.max(0, Math.min(30, num(params.stoneDensity, 5))) / 100;
     const STONE_RESPAWN_DAYS = Math.max(1, num(params.stoneRespawnDays, 4));
     const SEED_CHANCE = num(params.seedChance, 12) / 100;
@@ -805,7 +807,7 @@
     // Buildings put up before the sizes grew (no b.v) keep the size they had: BUILDINGS[type].legacy; v:2 ones (first round of
     // bigger buildings) keep BUILDINGS[type].v2 where a later round changed the type again; new ones are v:3.
     // A building may be put down mirrored (b.flip): the picture is turned over and everything that sits at a place of the picture moves
-    // with it: the door, the gate and the hut of a yard, the chimney, the hook of a tripod.
+    // with it: the door, the gate and the hut of a yard, the chimney, the fire opening, the hook of a tripod.
     const mirrorCache = new WeakMap();
     function mirrorGeo(g) {
         let m = mirrorCache.get(g);
@@ -814,6 +816,7 @@
         if (g.door) m.door = Object.assign({}, g.door, { dx: g.w - 1 - g.door.dx });
         if (g.yard) m.yard = Object.assign({}, g.yard, { gate: g.w - 1 - g.yard.gate, hut: Object.assign({}, g.yard.hut, { dx: g.w - g.yard.hut.dx - g.yard.hut.w }) });
         if (g.ventX) m.ventX = -g.ventX;
+        if (g.ember && g.ember.x) m.ember = Object.assign({}, g.ember, { x: -g.ember.x });
         if (g.hang && g.hang.x) m.hang = Object.assign({}, g.hang, { x: -g.hang.x });
         mirrorCache.set(g, m);
         return m;
@@ -821,7 +824,7 @@
     const geoOf = b => {
         const def = BUILDINGS[b.type] || { w: 1 };
         let g = def;
-        if (!b.v && def.legacy) g = Object.assign({}, def, { ventX: 0 }, def.legacy, { yard: undefined });
+        if (!b.v && def.legacy) g = Object.assign({}, def, { ventX: 0, ember: undefined }, def.legacy, { yard: undefined });   // (the old pictures have no measured fire opening)
         else if (b.v === 2 && def.v2) g = Object.assign({}, def, def.v2);   // put up in the first round of bigger buildings
         return b.flip ? mirrorGeo(g) : g;
     };
@@ -1017,10 +1020,10 @@
         const kind = gatherAt(x, y);
         if (!kind) return false;
         if (kind === "bush") return pickBush(x, y);
-        const g = GATHER[kind], item = itemOf(g.item), n = rand(g.count);
+        const g = GATHER[kind], item = itemOf(g.item), n = rand(g.count) + (perkRoll("forage.yield") ? 1 : 0);
         if (!spaceFor(item, n)) { complainNoSpace(item); return false; }
         const sting = kind === "nettle";   // nettles sting bare hands: a little more strength, and a word about it once a day
-        if (!spendStamina(STAMINA.pickup + (sting ? 1 : 0))) return false;
+        if (!spendStamina((knowsSkill("g_quick") ? 0 : STAMINA.pickup) + (sting ? 1 : 0))) return false;
         swingThen(CROUCH_KIND, () => {
             stonesOf($gameMap.mapId())[key(x, y)] = today();
             stoneRev++;
@@ -1036,7 +1039,7 @@
     const pickStone = pickGather;
     // a bush with berries gives berries and stays bare; a bare bush gives fibre and is gone for a while
     function pickBush(x, y) {
-        const full = bushState(x, y) === "full", item = itemOf(full ? ITEM.berries : ITEM.fiber), n = full ? rand(GATHER.bush.count) : rand([1, 2]);
+        const full = bushState(x, y) === "full", item = itemOf(full ? ITEM.berries : ITEM.fiber), n = (full ? rand(GATHER.bush.count) : rand([1, 2])) + (perkRoll("forage.yield") ? 1 : 0);
         if (!spaceFor(item, n)) { complainNoSpace(item); return false; }
         if (!spendStamina(STAMINA.pickup)) return false;
         swingThen(CROUCH_KIND, () => {
@@ -1050,8 +1053,8 @@
     }
 
     // ---- water: the can, a drink, fishing
-    const canCharges = () => (farm().can ? farm().can.charges : CAN_MAX);   // a new can is full
-    const setCanCharges = n => { farm().can = { charges: Math.max(0, Math.min(CAN_MAX, n)) }; };
+    const canCharges = () => (farm().can ? farm().can.charges : canMax());   // a new can is full
+    const setCanCharges = n => { farm().can = { charges: Math.max(0, Math.min(canMax(), n)) }; };
     function isWaterTile(x, y) {
         if (!$gameMap.isValid(x, y)) return false;
         for (let z = 0; z < 2; z++) {
@@ -1065,18 +1068,18 @@
     function fillCan(src) {
         const can = itemOf(ITEM.wateringCan);
         if (!$gameParty.hasItem(can)) { complain(can.iconIndex, "Nie masz konewki"); return false; }
-        if (canCharges() >= CAN_MAX) { complain(can.iconIndex, "Konewka jest pełna"); return false; }
+        if (canCharges() >= canMax()) { complain(can.iconIndex, "Konewka jest pełna"); return false; }
         if (src && bucketUnits(src) < 1) { bucketEmpty(); return false; }
         swingThen(CROUCH_KIND, () => {
-            let now = CAN_MAX;
+            let now = canMax();
             if (src) {
-                const take = Math.min(CAN_MAX - canCharges(), bucketUnits(src));
+                const take = Math.min(canMax() - canCharges(), bucketUnits(src));
                 takeBucketWater(src, take);
                 now = canCharges() + take;
             }
             setCanCharges(now);
             playSe(SE.water, 100);
-            popup(can.iconIndex, (now >= CAN_MAX ? "Konewka pełna (" : "Konewka (") + now + "/" + CAN_MAX + ")", "#9fd4ff");
+            popup(can.iconIndex, (now >= canMax() ? "Konewka pełna (" : "Konewka (") + now + "/" + canMax() + ")", "#9fd4ff");
         });
         return true;
     }
@@ -1147,7 +1150,7 @@
             popup(rod.iconIndex, "Zarzucasz wędkę...", "#cfe6ff");
             later(96, () => {
                 const hour = $gameSystem.dayNightHour();
-                let chance = 0.5 + ((hour >= 5 && hour < 8) || (hour >= 17 && hour < 20) ? 0.25 : 0) + (["rain", "storm"].includes($gameScreen.weatherType()) ? 0.1 : 0) - (seasonIndex(today()) === 3 ? 0.2 : 0);
+                let chance = 0.5 + ((hour >= 5 && hour < 8) || (hour >= 17 && hour < 20) ? 0.25 : 0) + (["rain", "storm"].includes($gameScreen.weatherType()) ? 0.1 : 0) - (seasonIndex(today()) === 3 ? 0.2 : 0) + perk("fish");
                 if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(1);
                 const roll = Math.random();
                 if (roll < chance) {
@@ -1167,8 +1170,8 @@
     const portions = src => (src ? "\nWiadro: " + bucketUnits(src) + "/" + BUILDINGS[src.type].rain.max + " porcji deszczówki." : "");
     function canEntry(src) {
         const can = itemOf(ITEM.wateringCan), have = $gameParty.hasItem(can);
-        return { name: "Napełnij konewkę", icon: can.iconIndex, right: have ? canCharges() + "/" + CAN_MAX : "", enabled: have && canCharges() < CAN_MAX && hasWater(src),
-            help: (have ? "Konewka mieści " + CAN_MAX + " podlań." : "Nie masz konewki. Wykuje się ją w kuźni.") + portions(src), run: () => fillCan(src) };
+        return { name: "Napełnij konewkę", icon: can.iconIndex, right: have ? canCharges() + "/" + canMax() : "", enabled: have && canCharges() < canMax() && hasWater(src),
+            help: (have ? "Konewka mieści " + canMax() + " podlań." : "Nie masz konewki. Wykuje się ją w kuźni.") + portions(src), run: () => fillCan(src) };
     }
     function drinkEntry(src) {
         return { name: "Napij się", icon: 391, right: needsOn() ? "+" + Needs.TAP_DRINK : "+8", enabled: (thirsty() || (!needsOn() && $gameSystem.staminaRatio() < 0.98)) && hasWater(src),
@@ -1177,7 +1180,7 @@
     function skinEntry(src) {
         const have = needsOn() && Needs.ownsSkin(), max = needsOn() ? Needs.SKIN.max : 4;
         return { name: "Napełnij bukłak", icon: itemOf(ITEM.skin).iconIndex, right: have ? Needs.skinCharges() + "/" + max : "", enabled: have && Needs.skinCharges() < max && hasWater(src),
-            help: (have ? "Bukłak mieści " + max + " łyki po " + Needs.SKIN.sip + ". Pijesz z niego klawiszem G albo z menu Przedmioty." : "Nie masz bukłaka. Zrobisz go z surowej skóry w menu „Wytwórz...”.") + portions(src), run: () => fillSkin(src) };
+            help: (have ? "Bukłak mieści " + max + " łyki po " + Needs.SKIN.sip + ". Pijesz z niego klawiszem G albo z menu Przedmioty." : "Nie masz bukłaka. Zrobisz go z wyprawionej skóry (garbarnia) w menu „Wytwórz...”.") + portions(src), run: () => fillSkin(src) };
     }
     function bucketEntry(src) {
         const max = BUILDINGS.bucket.rain.max, have = ownsBucket();
@@ -1280,12 +1283,12 @@
     // watered today or on the day before still gets the bonus - a day's grace so
     // missing one watering does not immediately undo it
     function wateredRecently(plot) {
-        return !!plot && plot.watered !== undefined && today() - plot.watered <= WATER_GRACE_DAYS;
+        return !!plot && plot.watered !== undefined && today() - plot.watered <= WATER_GRACE_DAYS + Math.round(perk("water.days"));
     }
     // plot is optional: callers that only care about the location (e.g. deciding
     // whether to build a scarecrow) can leave it out and get no watering bonus.
     function growthRate(x, y, plot) {
-        return GROWTH * (scarecrowNear(x, y) ? SCARECROW_BONUS : 1) * (wateredRecently(plot) ? WATER_BONUS : 1);
+        return GROWTH * (scarecrowNear(x, y) ? SCARECROW_BONUS : 1) * (wateredRecently(plot) ? WATER_BONUS : 1) * (1 + perk("crop.growth"));
     }
     function grownDays(x, y, plot) {
         return Math.floor(Math.max(0, today() - plot.day) * growthRate(x, y, plot));
@@ -1327,6 +1330,12 @@
         complain(ICON.stamina, "Jesteś zbyt zmęczony");
         return false;
     }
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
+    const farmCost = n => n * (1 - Math.min(0.8, perk("farm.cost")));   // (Rolnictwo: Ogrodnik)
     // one use of a tool (Durability.js wears it out, breaks it in the end)
     function useTool(id) {
         if (window.Durability) Durability.use(id);
@@ -1366,7 +1375,7 @@
     // ------------------------------------------------------------------
     function rake(x, y) {
         const plot = plotAt(x, y);
-        if (!plot || plot.s !== "cleared" || !requireItem(ITEM.rake) || !spendStamina(STAMINA.rake)) return false;
+        if (!plot || plot.s !== "cleared" || !requireItem(ITEM.rake) || !spendStamina(farmCost(STAMINA.rake))) return false;
         swingThen(RAKE_KIND, () => {
             useTool(ITEM.rake);
             const raked = ensurePlot(x, y);
@@ -1385,7 +1394,7 @@
 
     function till(x, y) {
         const plot = plotAt(x, y);
-        if (!plot || plot.s !== "raked" || !requireItem(ITEM.hoe) || !spendStamina(STAMINA.hoe)) return false;
+        if (!plot || plot.s !== "raked" || !requireItem(ITEM.hoe) || !spendStamina(farmCost(STAMINA.hoe))) return false;
         swingThen(HOE_KIND, () => {
             useTool(ITEM.hoe);
             const stored = ensurePlot(x, y);
@@ -1406,7 +1415,7 @@
             return false;
         }
         if (countOf(def.seed) < 1) { complain(itemOf(def.seed).iconIndex, "Brak nasion: " + itemOf(def.seed).name); return false; }
-        if (!spendStamina(STAMINA.plant)) return false;
+        if (!spendStamina(farmCost(STAMINA.plant))) return false;
         $gameParty.loseItem(itemOf(def.seed), 1, false);
         swingThen(CROUCH_KIND, () => {
             const stored = ensurePlot(x, y);
@@ -1420,7 +1429,7 @@
 
     function harvest(x, y) {
         const plot = plotAt(x, y);
-        if (!plot || !plot.crop || !isRipe(x, y, plot) || !spendStamina(STAMINA.harvest)) return false;
+        if (!plot || !plot.crop || !isRipe(x, y, plot) || !spendStamina(farmCost(STAMINA.harvest))) return false;
         const def = CROPS[plot.crop];
         swingThen(CROUCH_KIND, () => {
             plot.crop = null;
@@ -1428,8 +1437,11 @@
             changed();
             playSe(SE.harvest, 100);
             fx(x, y, "leaf", false);
-            $gameParty.gainItem(itemOf(def.produce), rand(def.yield));
-            const seeds = rand(def.seeds);
+            let n = rand(def.yield);
+            if (perkRoll("crop.yield")) n++;   // (Rolnictwo: Obfite zbiory, Złoty plon, Nasiennik)
+            if (perkRoll("crop.double")) n *= 2;
+            $gameParty.gainItem(itemOf(def.produce), n);
+            const seeds = rand(def.seeds) + (perkRoll("seed.chance") ? 1 : 0);
             if (seeds > 0) $gameParty.gainItem(itemOf(def.seed), seeds);
         });
         return true;
@@ -1459,7 +1471,7 @@
             if (!requireItem(ITEM.wateringCan)) return false;
             if (canCharges() <= 0) { complain(itemOf(ITEM.wateringCan).iconIndex, "Konewka jest pusta. Napełnij ją w studni albo w stawie."); return false; }
         }
-        if (!spendStamina(STAMINA.water)) return false;
+        if (!spendStamina(farmCost(STAMINA.water))) return false;
         swingThen(CROUCH_KIND, () => {
             if (bucket) takeBucketWater(bucket, 1); else setCanCharges(canCharges() - 1);
             ensurePlot(x, y).watered = today();
@@ -1477,7 +1489,7 @@
         if (!requireItem(ITEM.shovel)) return false;
         const soil = itemOf(ITEM.soil);
         if ($gameParty.maxItems(soil) - countOf(ITEM.soil) < 1) { complain(soil.iconIndex, "Masz już dość ziemi"); return false; }
-        if (!spendStamina(STAMINA.dig)) return false;
+        if (!spendStamina(farmCost(STAMINA.dig))) return false;
         swingThen(SHOVEL_KIND, () => {
             useTool(ITEM.shovel);
             const stored = ensurePlot(x, y);
@@ -1500,7 +1512,8 @@
             !($gamePlayer.x === x && $gamePlayer.y === y);
     }
     // null when it can be built there, otherwise the reason. type: the building being placed (a dug-out pit is fine under a well, which needs one)
-    function tileWhyNot(x, y, type) {
+    // free: the F9 placer (Debug.js) - no cleared ground needed, only somewhere a building can stand (walkable, no tree or rock tile)
+    function tileWhyNot(x, y, type, free) {
         if (!$gameMap.isValid(x, y)) return "Tu się nie zmieści.";
         if (isHutInterior() && !hutFloor(x, y)) return x === HUT_ROOM.doorX && (y === HUT_ROOM.y1 || y === HUT_ROOM.doorY) ? "Zostaw przejście do drzwi." : "Tu się nie zmieści.";
         const h = hutOf();
@@ -1509,9 +1522,10 @@
             if (x === d.x && y === d.y + 1) return "Zostaw wejście do chatki.";
         }
         const plot = plotAt(x, y);
-        if (!plot) return "Trzeba oczyszczonej ziemi.";
-        if (plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
-        if (plot.dug && type !== "well") return "Najpierw zagrab dół.";
+        if (!plot && !free) return "Trzeba oczyszczonej ziemi.";
+        if (!plot && (!$gameMap.checkPassage(x, y, 0x0f) || hasObjectTile(x, y))) return "Tu nic nie stanie.";
+        if (plot && plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
+        if (plot && plot.dug && type !== "well" && !free) return "Najpierw zagrab dół.";
         if (buildingAt(x, y)) return "Tu już coś stoi.";
         if (!tileIsFree(x, y)) return "Coś tu stoi.";
         return null;
@@ -1526,7 +1540,7 @@
         }
         return false;
     }
-    function whyNotBuild(type, x, y, flip) {
+    function whyNotBuild(type, x, y, flip, free) {
         const def = flip ? mirrorGeo(BUILDINGS[type]) : BUILDINGS[type];
         if (def.single && hutOf()) return "Masz już chatkę.";
         if (isHutInterior() && !def.indoor) return "Tego nie postawisz w chatce.";
@@ -1537,10 +1551,10 @@
             if (!$gameMap.isValid(fx, fy) || !$gameMap.checkPassage(fx, fy, 0x0f) || buildingAt(fx, fy) || hasObjectTile(fx, fy)) return "Przed drzwiami musi być wolne miejsce.";
         }
         for (const t of tilesOfBuilding(type, x, y)) {
-            const why = tileWhyNot(t.x, t.y, type);
+            const why = tileWhyNot(t.x, t.y, type, free);
             if (why) return why;
         }
-        if (type === "well" && !has2x2Pit(tilesOfBuilding(type, x, y))) return "Potrzebny dół 2×2 wykopany do dna (poziom 3) w miejscu studni.";
+        if (type === "well" && !free && !has2x2Pit(tilesOfBuilding(type, x, y))) return "Potrzebny dół 2×2 wykopany do dna (poziom 3) w miejscu studni.";
         return null;
     }
     // shared by missingMaterials/missingInputs: which [id, n] pairs of a cost/inputs list are not fully in the bag
@@ -1576,7 +1590,10 @@
     // ---- building sites. Choosing a place only marks it: the materials are delivered right away, but
     // nothing stands there yet. The player has to come with a hammer and strike (the action button, one
     // swing each, costing stamina) until the building is done; the blueprint fills up from the bottom.
-    const hitsNeeded = def => Math.max(2, Math.ceil(def.stamina / Math.max(1, STAMINA.buildHit)));
+    const hitsNeeded = def => def.hits || Math.max(2, Math.ceil(def.stamina / Math.max(1, STAMINA.buildHit)));
+    // with the Budownictwo skills: fewer blows, and less strength for each
+    const siteHits = def => Math.max(1, Math.round(hitsNeeded(def) * (1 - Math.min(0.75, perk("build.hits")))));
+    const hitCost = () => Math.round(STAMINA.buildHit * (1 - Math.min(0.8, perk("build.cost"))) * 10) / 10;
     // A building without a site (the tent): the item goes in, it stands at once and no hammer is needed.
     function pitchInstant(type, x, y, flip) {
         const def = BUILDINGS[type];
@@ -1631,7 +1648,8 @@
             if (at < 0) return;
             list.splice(at, 1);
             const fresh = (b.claimed || []).concat(claimGround(tilesOfBuilding(up.to, ax, ay)));
-            const fuel = b.fuel !== undefined ? { fuel: fuelLeft(b), fuelSince: clockHours() } : {};   // the same fire, still burning down
+            const fuel = {};   // the same fire, still burning down (or put out)
+            if (b.fuel !== undefined) { fuelLeft(b); for (const k of ["fuel", "fuelSince", "outAt", "soaked", "rainOut", "rainSeen"]) if (b[k] !== undefined) fuel[k] = b[k]; }
             list.push(Object.assign({ id: farm().nextId++, type: up.to, x: ax, y: ay, last: today(), v: 3, claimed: fresh }, b.flip ? { flip: true } : {}, fuel));
             changed();
             playSe(SE.build, 100);
@@ -1682,7 +1700,7 @@
         if (typeof $gameSystem.sleepUntilHour !== "function") { complain(ICON.stamina, "Tu się nie da spać"); return false; }
         const def = BUILDINGS[b.type];
         const bad = def.sleepBad !== undefined && !isHutInterior() && harshNight();   // under the roof of the hut the weather does not matter
-        const restore = bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1;
+        const restore = Math.min(1, (bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1) * (1 + perk("sleep.rest")));
         const morning = restore >= 1 ? "Czujesz się wypoczęty." : bad ? "Spałeś w zimnie i wilgoci. Sił odzyskałeś niewiele." : "Spałeś twardo. Sił odzyskałeś tylko część.";
         // the screen goes dark for a moment while the night passes, then the new day comes up; the greeting is a small plate at the
         // top of the screen (SurvivalHUD.js), shown after the day summary (Journal.js)
@@ -1713,18 +1731,47 @@
         if (missing.length > 0) { const m = itemOf(missing[0][0]); complain(m.iconIndex, "Brakuje: " + m.name); return false; }
         for (const [id, n] of def.cost) $gameParty.loseItem(itemOf(id), n, false);
         const fresh = claimGround(tilesOfBuilding(type, x, y));
-        buildingsOf($gameMap.mapId()).push({ id: farm().nextId++, type, x, y, last: today(), v: 3, claimed: fresh, site: { need: hitsNeeded(def), done: 0 }, ...(flip ? { flip: true } : {}) });
+        buildingsOf($gameMap.mapId()).push({ id: farm().nextId++, type, x, y, last: today(), v: 3, claimed: fresh, site: { need: siteHits(def), done: 0 }, ...(flip ? { flip: true } : {}) });
         changed();
         playSe(SE.plant, 95);
         popup(itemOf(ITEM.hammer).iconIndex, "Plac budowy: " + def.name, "#f3e0a0");
         if (!$gameParty.hasItem(itemOf(ITEM.hammer))) complain(itemOf(ITEM.hammer).iconIndex, "Potrzebujesz młotka");
         return true;
     }
+    // the F9 placer (Debug.js): the building stands at once, finished - no materials, no strength, no site, no hammer
+    function placeFree(type, x, y, flip) {
+        const def = BUILDINGS[type];
+        if (!def) return false;
+        const why = whyNotBuild(type, x, y, flip, true);
+        if (why) { complain(itemOf(ITEM.wood).iconIndex, why); return false; }
+        const fresh = claimGround(tilesOfBuilding(type, x, y));
+        buildingsOf($gameMap.mapId()).push(Object.assign({ id: farm().nextId++, type, x, y, last: today(), v: 3, claimed: fresh },
+            def.rain ? { water: 0, wt: clockHours() } : {}, flip ? { flip: true } : {}));
+        changed();
+        playSe(SE.build, 100);
+        popup(itemOf(def.pack || def.cost[0][0]).iconIndex, "Postawiono (F9): " + def.name, "#9ff0a8");
+        return true;
+    }
     // one blow at the site in front of the player (x, y = the tile that is hit)
+    // Held O (the action button) goes on striking: after each blow, a moment later the next one - for as long as it is held, he faces
+    // the site and has the strength. Zręczność makes the hammer quicker (the swing and the pause, Combat.workSpeed).
+    const AUTO_PAUSE = 12;   // frames between two blows at the usual speed
+    const workSpeed = () => (window.Combat && Combat.workSpeed ? Combat.workSpeed() : 1);
+    function holdingOn(b) {
+        if (!Input.isPressed("ok") || !b.site || buildingsOf($gameMap.mapId()).indexOf(b) < 0) return false;
+        if ($gameTemp._farmMenuOpen || $gameTemp._buildMode || $gameMap.isEventRunning() || $gameMessage.isBusy() || $gamePlayer.isToolSwinging()) return false;
+        const t = targetTile();
+        return buildingAt(t.x, t.y) === b;
+    }
     function strikeSite(b, x, y) {
         const site = b.site, def = BUILDINGS[b.type];
-        if (!site || !requireItem(ITEM.hammer) || !spendStamina(STAMINA.buildHit)) return false;
-        swingThen(HAMMER_KIND, () => {
+        if (!site || !requireItem(ITEM.hammer) || !spendStamina(hitCost())) return false;
+        const rate = workSpeed();
+        const again = () => { if (b.site) later(Math.max(2, Math.round(AUTO_PAUSE / rate)), () => { if (holdingOn(b)) strikeSite(b, x, y); }); };
+        const started = $gamePlayer.startToolSwing && $gamePlayer.startToolSwing(HAMMER_KIND, () => blow(), again, { rate });
+        if (!started) blow();
+        return true;
+        function blow() {
             useTool(ITEM.hammer);
             site.done++;
             const last = site.done >= site.need;
@@ -1735,11 +1782,11 @@
                 delete b.site;
                 b.last = today();
                 popup(itemOf(ITEM.hammer).iconIndex, "Gotowe: " + def.name, "#9ff0a8");
+                for (const [id] of def.cost) if (perkRoll("build.spare")) $gameParty.gainItem(itemOf(id), 1);   // (Budownictwo: Resztki)
             }
             fx(x, y, "wood", last);
             changed();
-        });
-        return true;
+        }
     }
     // giving up is only possible before the first blow, and returns everything
     function cancelSite(b) {
@@ -1760,8 +1807,8 @@
         }
         return { title: "Plac budowy: " + def.name + " (0/" + b.site.need + ")", entries: [
             ...(hammerMissing() ? [handMenuEntry(x, y)] : []),
-            { name: "Zacznij budować", icon: itemOf(ITEM.hammer).iconIndex, right: "-" + STAMINA.buildHit, run: () => strikeSite(b, x, y),
-                help: "Potrzebny młotek. Każde uderzenie (przycisk akcji) kosztuje " + STAMINA.buildHit + " wytrzymałości, a potrzeba ich " + left + ". Po pierwszym uderzeniu budowę trzeba dokończyć." },
+            { name: "Zacznij budować", icon: itemOf(ITEM.hammer).iconIndex, right: "-" + hitCost(), run: () => strikeSite(b, x, y),
+                help: "Potrzebny młotek. Każde uderzenie (przycisk akcji) kosztuje " + hitCost() + " wytrzymałości, a potrzeba ich " + left + ". Przytrzymaj O, a będziesz uderzać bez przerwy. Po pierwszym uderzeniu budowę trzeba dokończyć." },
             { name: "Zrezygnuj", help: "Zwraca wszystkie materiały.", run: () => cancelSite(b) }] };
     }
 
@@ -1782,7 +1829,9 @@
         changed();
         playSe(SE.demolish, 100);
         fx(b.x, b.y, "wood", true);
-        for (const [id, n] of def.refund || def.cost.map(([id, n]) => [id, Math.floor(n / 2)])) {
+        const more = Math.min(0.5, perk("build.refund"));   // (Budownictwo: Rozbiórka - half of the cost back, and more)
+        const back = def.refund ? def.refund.map(([id, n]) => [id, Math.floor(n * (1 + 2 * more))]) : def.cost.map(([id, n]) => [id, Math.floor(n * (0.5 + more))]);
+        for (const [id, n] of back) {
             if (n > 0) $gameParty.gainItem(itemOf(id), n);
         }
         return true;
@@ -1803,10 +1852,12 @@
         if (tool && !requireItem(tool)) return false;
         swingThen(CROUCH_KIND, () => {
             b.last = today();
+            const snare = (b.caught || 0) > 0 && window.Hunting && Hunting.takeFromSnare;
             b.caught = 0;   // (a snare: the rabbit taken out, it is set again)
             changed();
             playSe(SE.collect, 100);
-            $gameParty.gainItem(itemOf(BUILDINGS[b.type].produce.item), n);
+            if (snare) Hunting.takeFromSnare(b.x, b.y);   // (with a knife dressed at once; without, its carcass lies there)
+            else $gameParty.gainItem(itemOf(BUILDINGS[b.type].produce.item), n + (perkRoll("produce.more") ? 1 : 0));   // (Rolnictwo: Hodowca)
         });
         return true;
     }
@@ -1867,7 +1918,15 @@
         return hasClock() ? today() * 24 + $gameSystem.dayNightHour() : 0;
     }
     function jobHoursLeft(b) {
-        return b.job ? Math.max(0, b.job.start + b.job.hours - clockHours()) : 0;
+        if (!b.job) return 0;
+        if (b.job.pausedAt === undefined && geoOf(b).fire) fuelLeft(b);   // (the rain may have just stopped the fire under it)
+        const now = b.job && b.job.pausedAt !== undefined ? b.job.pausedAt : clockHours();
+        return b.job ? Math.max(0, b.job.start + b.job.hours - now) : 0;
+    }
+    // food on a fire that the rain put out: it stands until the fire is lit again
+    function jobPaused(b) {
+        if (b.job && geoOf(b).fire) fuelLeft(b);
+        return !!b.job && b.job.pausedAt !== undefined;
     }
     function jobReady(b) {
         return !!b.job && (!hasClock() || jobHoursLeft(b) <= 0);
@@ -1878,20 +1937,87 @@
     const FUEL_START = 4;         // hours it starts with when the site is finished
     const FUEL_PER_WOOD = 3;      // hours added per piece of firewood
     const FUEL_PER_BRANCH = 1;    // hours added per branch (worse fuel, but it is often what is on hand)
+    const SMOULDER_HOURS = 0.5;   // a fire that has gone out still smokes this long (30 game minutes), thinner and thinner
     function fuelLeft(b) {
         const def = geoOf(b);
         if (!def.fire) return Infinity;   // no animated fire on this building (older cauldrons built before the flame) - never fuel-gated
         if (b.fuel === undefined) { b.fuel = FUEL_START; b.fuelSince = clockHours(); }
+        douse(b);
         return Math.max(0, b.fuel - Math.max(0, clockHours() - b.fuelSince));
     }
+    // ---- rain puts a fire out (user): the moment rain starts on a burning fire its flames die and it only smokes, for as long as it
+    // rains and half an hour after (outAt = the end of the rain). Nothing burns meanwhile: the wood still in it stays there, soaked
+    // (b.soaked), and food on it stops roasting (job.pausedAt). After the rain it has to be lit again (kindling + fuel, as any dead
+    // fire); then the soaked wood burns too and the food roasts on. No fire can be lit while it rains. Worked out lazily from the
+    // weather plan (Survival.weatherPlan), so it also happens while the player is away; the map is the current one (a fire is only
+    // ever looked at on its own map), and a map without weather (Survival.isOutdoors) never rains on its fires.
+    function firstRain(h0, h1) {
+        if (!(window.Survival && Survival.weatherPlan) || !(h1 > h0)) return null;
+        const d0 = Math.floor(h0 / 24), d1 = Math.min(Math.floor(h1 / 24), d0 + 60);
+        for (let day = d0; day <= d1; day++) {
+            const plan = Survival.weatherPlan(day);
+            if (!plan || plan.type !== "rain") continue;
+            const a = day * 24 + plan.start, z = day * 24 + plan.end;
+            if (z > h0 && a < h1) return { start: Math.max(a, h0), end: z };
+        }
+        return null;
+    }
+    const weatherHere = () => !(window.Survival && typeof Survival.isOutdoors === "function") || Survival.isOutdoors();
+    function rainingHere() {
+        if (!(window.Survival && typeof Survival.currentWeather === "function") || !weatherHere()) return false;
+        const w = Survival.currentWeather();
+        return !!w && w.type === "rain";
+    }
+    function douse(b) {
+        if (b.rainOut || !hasClock()) return;   // already put out (until it is lit again)
+        if (!weatherHere()) return;   // (looked at from a map without weather: left for when it is seen from its own map)
+        const now = clockHours(), from = Math.max(b.fuelSince, b.rainSeen || 0);
+        b.rainSeen = now;
+        const rain = firstRain(from, b.job ? now : Math.min(now, b.fuelSince + b.fuel));   // while it burned (food on it keeps it going)
+        if (!rain) return;
+        b.soaked = Math.min(FUEL_MAX, (b.soaked || 0) + Math.max(0, b.fuel - Math.max(0, rain.start - b.fuelSince)));
+        b.fuel = 0;
+        b.fuelSince = rain.start;
+        b.rainOut = { start: rain.start, end: rain.end };
+        b.outAt = rain.end;
+        if (b.job && b.job.start + b.job.hours > rain.start) b.job.pausedAt = Math.max(rain.start, b.job.start);
+    }
     function addFuel(b, hours) {
-        b.fuel = Math.min(FUEL_MAX, fuelLeft(b) + hours);
-        b.fuelSince = clockHours();
+        const left = fuelLeft(b), now = clockHours();
+        b.fuel = Math.min(FUEL_MAX, left + hours + (b.soaked || 0));   // (lit again after rain: the soaked wood left in it burns too)
+        b.fuelSince = b.rainSeen = now;
+        if (b.job && b.job.pausedAt !== undefined) {   // the food on it roasts on
+            b.job.start += now - b.job.pausedAt;
+            delete b.job.pausedAt;
+        }
+        delete b.outAt;
+        delete b.soaked;
+        delete b.rainOut;
     }
     // lit for display/warming purposes: real fuel, or a job already burning in it (started while it still had fuel -
-    // it does not go dark under food that is mid-roast just because the background clock ran on while you were away)
+    // it does not go dark under food that is mid-roast just because the background clock ran on while you were away); never
+    // after rain has put it out
     function fireLit(b) {
-        return fuelLeft(b) > 0 || !!b.job;
+        const left = fuelLeft(b);   // (first: it also works out whether rain has put it out)
+        if (b.rainOut) return false;
+        return left > 0 || !!b.job;
+    }
+    // why a fire is dark, for menus and popups
+    function fireOutText(b) {
+        if (!b.rainOut) return "Ogień wygasł.";
+        return rainingHere() ? "Deszcz zgasił ogień. W deszczu go nie rozpalisz." : "Deszcz zgasił ogień. Rozpal go od nowa.";
+    }
+    // a gone-out fire smoulders: 1 the moment it went out, down to 0 after SMOULDER_HOURS (0 while it burns). It went out when
+    // the fuel ran out, or later, when the food that kept it going came off (outAt)
+    function smoulderOf(b) {
+        if (!geoOf(b).fire || fireLit(b)) return 0;
+        const since = clockHours() - Math.max(b.fuelSince + b.fuel, b.outAt || 0);
+        return since >= SMOULDER_HOURS ? 0 : 1 - Math.max(0, since) / SMOULDER_HOURS;
+    }
+    // the food comes off the fire: with no fuel left it goes out now
+    function endJob(b) {
+        delete b.job;
+        if (geoOf(b).fire && fuelLeft(b) <= 0 && !b.rainOut) b.outAt = clockHours();
     }
     // A fire that has gone out is lit again with kindling: a pine cone (the best), else one more branch
     function kindlingFor(fuelId) {
@@ -1901,17 +2027,18 @@
     function feedFireEntries(b) {
         const def = geoOf(b);
         if (!def.fire) return [];
-        const left = fuelLeft(b), out = left <= 0 && !b.job;
-        const status = left > 0 ? "Starczy jeszcze na " + hoursText(left) + "." : b.job ? "Bez drewna zgaśnie, gdy skończy się to, co się teraz piecze." : "Ogień wygasł.";
+        const out = !fireLit(b), wet = rainingHere();
+        const status = out ? fireOutText(b) : "";   // (how long it still burns is said under the name: fireNote)
         const relight = " Rozpalisz go od nowa: na rozpałkę pójdzie szyszka (bez szyszek - jeszcze jedna gałąź).";
         const feed = (fuelId, hours, name, done) => {
             const kindling = out ? kindlingFor(fuelId) : null, fuel = itemOf(fuelId);
+            if (wet) return { name, icon: fuel.iconIndex, right: "×1", enabled: false, help: "Pada deszcz: nie rozpalisz ognia ani nie dołożysz do niego, póki leje.", run: () => false };
             return { name, icon: fuel.iconIndex, right: "×1", enabled: countOf(fuelId) > 0 && (!out || !!kindling),
-                help: status + (out ? relight + (kindling ? "" : " Nie masz ani szyszki, ani gałęzi.") : "") + " " + done,
+                help: (out ? status + relight + (kindling ? "" : " Nie masz ani szyszki, ani gałęzi.") + " " : "") + done + (out && b.soaked > 0 ? " Mokre drewno, które w nim zostało, też się rozpali." : ""),
                 run: () => {
                     $gameParty.loseItem(fuel, 1, false);
                     if (kindling) $gameParty.loseItem(itemOf(kindling), 1, false);
-                    addFuel(b, hours);
+                    addFuel(b, hours * (1 + perk("fire.fuel")));
                     changed();
                     playSe(SE.build, 95);
                     popup(fuel.iconIndex, kindling ? "Rozpalono ogień (rozpałka: " + itemOf(kindling).name.toLowerCase() + ")" : name === "Dorzuć drewna" ? "Dorzucono drewna" : "Dorzucono gałąź", "#f3e0a0");
@@ -1927,8 +2054,24 @@
         return ((BUILDINGS[b.type] || {}).recipes || []).find(r => r.id === id) || null;
     }
     function missingInputs(r) {
-        return missingOf(r.inputs);
+        const missing = missingOf(r.inputs);
+        if (r.meat && meatCount() < r.meat) missing.push([ITEM.rawMeat, r.meat, "meat"]);   // (the third field: "any raw meat")
+        return missing;
     }
+    // "any raw meat" (r.meat pieces): the soups, the stew and the smokehouse take the meat of whatever animal; the kinds there is
+    // most of go first
+    const RAW_MEATS = () => [ITEM.rawMeat, ITEM.rawDeer, ITEM.rawBoar, ITEM.rawWolf];
+    const MEAT_LABEL = "surowe mięso (dowolne)";
+    const meatCount = () => RAW_MEATS().reduce((t, id) => t + countOf(id), 0);
+    function spendMeat(n) {
+        for (const id of RAW_MEATS().sort((a, b) => countOf(b) - countOf(a))) {
+            const take = Math.min(n, countOf(id));
+            if (take > 0) { $gameParty.loseItem(itemOf(id), take, false); n -= take; }
+            if (n <= 0) break;
+        }
+    }
+    const missingName = pair => pair[2] === "meat" ? MEAT_LABEL : itemOf(pair[0]).name;
+    const missingHave = pair => pair[2] === "meat" ? meatCount() : countOf(pair[0]);
     // recipes that need water (the cauldron's soups): null when fine, else the reason for a popup/help line
     function waterProblem(r) {
         if (!r.water) return null;
@@ -1938,23 +2081,46 @@
     }
     function costRowsWithWater(r) {
         const rows = costRows(r.inputs);
+        if (r.meat) rows.push([itemOf(ITEM.rawMeat).iconIndex, r.meat, meatCount(), MEAT_LABEL]);
         if (r.water) rows.push([itemOf(ITEM.bucket).iconIndex, r.water, bagWater(), "woda"]);
         return rows;
+    }
+    // Rzemiosło / Kuchnia: the stations work faster; the cooking ones and the smelting ones have skills of their own
+    const COOK_STATIONS = ["campfire", "tripod", "cauldron", "smokehouse", "bakery", "brewery"], SMELT_STATIONS = ["kiln", "brickworks", "forge", "huta"];
+    function jobHours(b, r) {
+        let k = 1 - perk("craft.speed");
+        if (b && COOK_STATIONS.includes(b.type)) k -= perk("cook.speed");
+        if (b && SMELT_STATIONS.includes(b.type)) k -= perk("smelt.speed");
+        return r.hours * Math.max(0.3, k);
+    }
+    // Oszczędny: now and then one of the materials comes back
+    function giveBackOne(r) {
+        if (!r.inputs.length || !perkRoll("craft.save")) return;
+        const [id] = r.inputs[Math.floor(Math.random() * r.inputs.length)];
+        $gameParty.gainItem(itemOf(id), 1);
+    }
+    // Podwójna robota / Większe porcje: a double batch - never of a tool or of something one has once (key items)
+    function doubles(id, cooking) {
+        const item = itemOf(id);
+        if (!item || item.itypeId === 2 || (window.Durability && Durability.TOOLS && Durability.TOOLS[id])) return false;
+        return perkRoll(cooking ? "cook.double" : "craft.double");
     }
     function startJob(b, recipeId) {
         const r = recipeOf(b, recipeId);
         if (!r || b.job) return false;
-        if (geoOf(b).fire && fuelLeft(b) <= 0) { complain(itemOf(ITEM.wood).iconIndex, "Ogień wygasł. Dorzuć drewna."); return false; }
+        if (geoOf(b).fire && !fireLit(b)) { complain(itemOf(ITEM.wood).iconIndex, b.rainOut ? fireOutText(b) : "Ogień wygasł. Dorzuć drewna."); return false; }
         if (r.tool && !requireItem(r.tool)) return false;
         const waterBad = waterProblem(r);
         if (waterBad) { complain(itemOf(ITEM.bucket).iconIndex, waterBad); return false; }
         const missing = missingInputs(r);
-        if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Brakuje: " + itemOf(missing[0][0]).name); return false; }
+        if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Brakuje: " + missingName(missing[0])); return false; }
         if (!spendStamina(r.stamina || 0)) return false;
         for (const [id, n] of r.inputs) $gameParty.loseItem(itemOf(id), n, false);
+        if (r.meat) spendMeat(r.meat);
         if (r.water) setBagWater(bagWater() - r.water);
+        giveBackOne(r);
         const begin = () => {
-            b.job = { recipe: r.id, start: clockHours(), hours: r.hours, out: r.output.slice(), sit: !!r.roast && !geoOf(b).hang && $gamePlayer.isToolSwinging() };   // sit: the player is at the fire for it (on a stick, not on a tripod)
+            b.job = { recipe: r.id, start: clockHours(), hours: jobHours(b, r), out: r.output.slice(), sit: !!r.roast && !geoOf(b).hang && $gamePlayer.isToolSwinging() };   // sit: the player is at the fire for it (on a stick, not on a tripod)
             playSe(r.startSe || BUILDINGS[b.type].startSe || SE.kindle, 90);
             fx(b.x, b.y, "dirt", false);
         };
@@ -1972,24 +2138,28 @@
         // long), then stands up with it. Cancel / a direction key gets up early: then nothing is roasted and nothing stays on the fire -
         // the raw food goes back to the bag.
         const sph = num(PluginManager.parameters("DayNightCycle").secondsPerHour, 60) || 60;
-        const extra = Math.max(0, (r.hours * sph / SIT_MAX_SECONDS - 1) / 60 / sph);   // extra game hours per frame while waiting
+        const extra = Math.max(0, (jobHours(b, r) * sph / SIT_MAX_SECONDS - 1) / 60 / sph);   // extra game hours per frame while waiting
         swingThen(ROAST_KIND, begin, {
-            holdWhile: () => !!b.job && !jobReady(b) && buildingsOf($gameMap.mapId()).indexOf(b) >= 0,
+            holdWhile: () => !!b.job && !jobPaused(b) && !jobReady(b) && buildingsOf($gameMap.mapId()).indexOf(b) >= 0,
             onWait: () => { if (extra > 0 && typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(extra); },
             onHoldEnd: cancelled => {
                 if (!cancelled && b.job && jobReady(b)) collectJob(b);
-                else if (b.job && b.job.sit) giveUpRoast(b);
+                else if (b.job && b.job.sit) {
+                    const rained = jobPaused(b);
+                    giveUpRoast(b, rained);
+                    if (rained) popup(itemOf(r.inputs[0][0]).iconIndex, "Deszcz zgasił ogień: nie upiekło się", "#ffb4a0");
+                }
             }
         });
         return true;
     }
     // Sitting beside the tripod while the food on it roasts (optional). Getting up early does not spoil anything: it keeps roasting.
     function waitAtFire(b) {
-        if (!b.job || jobReady(b)) return false;
+        if (!b.job || jobReady(b) || jobPaused(b)) return false;
         const sph = num(PluginManager.parameters("DayNightCycle").secondsPerHour, 60) || 60;
         const extra = Math.max(0, (jobHoursLeft(b) * sph / SIT_MAX_SECONDS - 1) / 60 / sph);
         swingThen(ROAST_WAIT_KIND, () => {}, {
-            holdWhile: () => !!b.job && !jobReady(b) && buildingsOf($gameMap.mapId()).indexOf(b) >= 0,
+            holdWhile: () => !!b.job && !jobPaused(b) && !jobReady(b) && buildingsOf($gameMap.mapId()).indexOf(b) >= 0,
             onWait: () => { if (extra > 0 && typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(extra); },
             onHoldEnd: cancelled => { if (!cancelled && b.job && jobReady(b)) collectJob(b); }
         });
@@ -1998,7 +2168,7 @@
     // the player got up before the food was done: nothing is roasted and nothing stays on the fire, the raw food goes back to the bag
     function giveUpRoast(b, silent) {
         const r = b.job ? recipeOf(b, b.job.recipe) : null;
-        delete b.job;
+        endJob(b);
         if (r) for (const [id, n] of r.inputs) $gameParty.gainItem(itemOf(id), n);
         changed();
         if (r && !silent) popup(itemOf(r.inputs[0][0]).iconIndex, "Nie upiekło się", "#ffb4a0");
@@ -2008,11 +2178,16 @@
         const [id, n] = b.job.out, item = itemOf(id);
         if (!spaceFor(item, n)) { complainNoSpace(item); return false; }
         swingThen(CROUCH_KIND, () => {
-            delete b.job;
+            endJob(b);
             playSe(SE.collect, 100);
-            $gameParty.gainItem(item, n);
+            $gameParty.gainItem(item, n * (doubles(id, COOK_STATIONS.includes(b.type)) ? 2 : 1));
         });
         return true;
+    }
+    // "2 godz. 15 min", "40 min" (rounded up to 5 minutes)
+    function clockText(hours) {
+        const m = Math.max(5, Math.ceil(hours * 12 - 1e-6) * 5), h = Math.floor(m / 60), r = m % 60;
+        return h ? h + " godz." + (r ? " " + r + " min" : "") : r + " min";
     }
     function hoursText(hours) {
         if (hours < 1) return Math.max(5, Math.ceil(hours * 12) * 5) + " min";
@@ -2113,10 +2288,11 @@
         if (own) { complain(itemOf(own).iconIndex, "Masz już: " + itemOf(own).name); return false; }
         if (toolMissing(r)) { complain(itemOf(r.tool).iconIndex, "Potrzebujesz: " + toolMissing(r)); return false; }
         const missing = missingInputs(r);
-        if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Brakuje: " + itemOf(missing[0][0]).name); return false; }
+        if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Brakuje: " + missingName(missing[0])); return false; }
         if (!r.repair && !spaceFor(out, r.output[1])) { complainNoSpace(out); return false; }
         if (!spendStamina(r.stamina || 0)) return false;
         for (const [id, n] of r.inputs) $gameParty.loseItem(itemOf(id), n, false);
+        if (!r.repair) giveBackOne(r);
         const se = r.startSe || (b && BUILDINGS[b.type] && BUILDINGS[b.type].startSe) || SE.build;
         swingThen(craftSwing(r), () => {
             lockPlayer(62);   // about a second, matching the sounds and the pause below
@@ -2124,12 +2300,12 @@
             later(9, () => playSe(se, 80));
             later(18, () => playSe(se, 95));
             later(32, () => {
-                if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(r.hours);
+                if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(jobHours(b, r));
                 if (r.repair) {
                     if (window.Durability) Durability.repair(r.repair);
                     popup(out.iconIndex, out.name + ": naprawione", "#9ff0a8");
                 } else {
-                    $gameParty.gainItem(out, r.output[1]);
+                    $gameParty.gainItem(out, r.output[1] * (doubles(r.output[0], false) ? 2 : 1));
                     if (r.tool) useTool(r.tool);
                 }
             });
@@ -2142,14 +2318,15 @@
             complain(ICON.stamina, "Nie jesteś zmęczony");
             return false;
         }
-        if (def.fire && !fireLit(b)) { complain(itemOf(ITEM.wood).iconIndex, "Ogień wygasł. Dorzuć drewna."); return false; }
+        if (def.fire && !fireLit(b)) { complain(itemOf(ITEM.wood).iconIndex, b.rainOut ? fireOutText(b) : "Ogień wygasł. Dorzuć drewna."); return false; }
         const restore = () => {
             if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(def.restHours || 1);
             if (window.Journal) Journal.afterRest();   // a night on the bedroll ends the day: the summary of it
             if (window.Atmosphere) Atmosphere.afterRest(def);   // a long rest saves the game (autosave)
-            if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(def.rest);
+            const amount = Math.round(def.rest * (1 + perk("sleep.rest")));
+            if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(amount);
             playSe(SE.rest, 100);
-            popup(ICON.stamina, "+" + def.rest + " wytrzymałości", "#9ff0a8");
+            popup(ICON.stamina, "+" + amount + " wytrzymałości", "#9ff0a8");
         };
         if (def.fire) {   // by a fire the player sits down on the ground, stays seated a moment, then stands back up
             swingThen(SIT_KIND, () => {
@@ -2257,7 +2434,7 @@
             let help = def.desc + "\nKoszt: " + costText(type) + ". " + how;
             if (missing.length > 0) help = "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + ".\n" + def.desc;
             if (built) help = "Masz już chatkę: drugiej nie potrzeba.\n" + def.desc;
-            const facts = [def.instant ? "Rozstawiasz od razu (-" + def.stamina + " wytrzymałości), bez młotka" : "Uderzeń młotkiem: " + hitsNeeded(def) + " (po " + STAMINA.buildHit + " wytrzymałości)"];
+            const facts = [def.instant ? "Rozstawiasz od razu (-" + def.stamina + " wytrzymałości), bez młotka" : "Uderzeń młotkiem: " + siteHits(def) + " (po " + hitCost() + " wytrzymałości)"];
             if (def.w > 1 || (def.h || 1) > 1) facts.push("Zajmuje " + def.w + " × " + (def.h || 1) + " pól" + (def.yard ? " (ogrodzony wybieg)" : ""));
             return { name: def.name, costs: costsOf(type), help, enabled: missing.length === 0 && !built, run: () => startPlacement(type, x, y),
                 tip: def.desc + "\n" + (def.instant ? "Wybierasz miejsce, a namiot stoi od razu." : "Najpierw wybierasz miejsce, potem młotkiem uderzasz w plac budowy."), facts };
@@ -2267,8 +2444,10 @@
     // (equipping the hut) this still lists every piece of furniture regardless of instant/site, since "Wyposaż chatkę" is its own single, already-unified list.
     function buildEntries(x, y) {
         const indoors = isHutInterior();
-        const entries = buildingEntryList(x, y, def => indoors || !def.instant);
-        if (hammerMissing()) entries.unshift(handRecipeEntry(HAND_RECIPES.find(r => r.id === "hammer")));   // no hammer yet: the way to make one comes first
+        const list = buildingEntryList(x, y, def => indoors || !def.instant);
+        // what can be built right now (the materials are in the bag) comes first, the rest after it; each part in the usual order (user)
+        const entries = list.filter(e => e.enabled !== false).concat(list.filter(e => e.enabled === false));
+        if (hammerMissing()) entries.unshift(handRecipeEntry(HAND_RECIPES.find(r => r.id === "hammer")));   // no hammer yet: the way to make one comes first, always
         return entries;
     }
     // things pitched straight from the bag: no hammer, no construction site (tent, bucket, forest bedroll)
@@ -2287,14 +2466,14 @@
     function waterEntry(x, y) {
         const plot = plotAt(x, y), active = wateredRecently(plot);
         return { name: "Podlej", icon: itemOf(ITEM.wateringCan).iconIndex, right: "-" + STAMINA.water,
-            help: "Konewka (woda: " + canCharges() + "/" + CAN_MAX + "). Rośliny rosną o 20% szybciej w dniu podlania i dzień później." + (active ? " Ta ziemia jest już podlana." : "") + (bucketFor(x, y) ? " Bez konewki podlejesz wodą z wiadra obok." : ""),
+            help: "Konewka (woda: " + canCharges() + "/" + canMax() + "). Rośliny rosną o 20% szybciej w dniu podlania i dzień później." + (active ? " Ta ziemia jest już podlana." : "") + (bucketFor(x, y) ? " Bez konewki podlejesz wodą z wiadra obok." : ""),
             run: () => water(x, y) };
     }
 
     // menu lines of a crafting station: the running job, its result, or the recipes
     // a station's menu has two tabs (left/right switch them), in this order: "Przepis" - the recipes (entries marked
-    // tab: "recipe"), the one it opens on - and "Akcja", everything else (the running job and its result, warming up,
-    // fuel, upgrades, demolishing)
+    // tab: "recipe") with "Zbierz" on top when something is ready, the one it opens on - and "Akcja", everything else
+    // (warming up, fuel, upgrades, demolishing). The running job itself is said under the building's name (buildingStatus).
     const TABS = [["recipe", "Przepis"], ["action", "Akcja"]];
     const splitTabs = entries => TABS.map(([id, name]) => ({ name, entries: entries.filter(e => (e.tab || "action") === id) }));
 
@@ -2307,13 +2486,12 @@
         if (b.job) {
             const [id, n] = b.job.out, item = itemOf(id);
             if (jobReady(b)) {
-                entries.push({ name: "Zbierz: " + item.name + " ×" + n, icon: item.iconIndex, help: "Wypał skończony. Wyjmujesz gotowy produkt.", run: () => collectJob(b) });
-                busy = "Najpierw zbierz to, co jest gotowe (zakładka Akcja).";
-            } else {
-                entries.push({ name: def.working || "Trwa wypał...", icon: item.iconIndex, right: "~" + hoursText(jobHoursLeft(b)), enabled: false,
-                    help: "Będzie gotowe za około " + hoursText(jobHoursLeft(b)) + " (czas gry płynie też, gdy jesteś daleko)." });
-                if (def.hang) entries.push({ name: "Poczekaj przy ogniu", icon: 82, help: "Siadasz przy ogniu, aż się upiecze. Możesz też wstać i odejść: piecze się dalej.", run: () => waitAtFire(b) });
-                busy = (def.working || "Trwa wypał...") + " Poczekaj, aż się skończy.";
+                entries.push({ name: "Zbierz: " + item.name + " ×" + n, icon: item.iconIndex, help: "Gotowe. Zabierasz " + item.name + " ×" + n + " do plecaka.", run: () => collectJob(b), tab: "recipe" });
+                busy = "Najpierw zbierz to, co jest gotowe (pierwszy wiersz).";
+            } else {   // (what is going on and how long it takes is said under the building's name: buildingStatus)
+                if (def.hang && !jobPaused(b)) entries.push({ name: "Poczekaj przy ogniu", icon: 82, help: "Siadasz przy ogniu, aż się upiecze. Możesz też wstać i odejść: piecze się dalej.", run: () => waitAtFire(b) });
+                const r = recipeOf(b, b.job.recipe);
+                busy = ((r && r.doing) || "Trwa praca") + ": " + item.name + ". Poczekaj, aż się skończy (jeszcze ~" + hoursText(jobHoursLeft(b)) + ").";
             }
         }
         for (const r of autoRecipes) {
@@ -2322,7 +2500,7 @@
             const toolNote = r.tool ? " Potrzebne: " + itemOf(r.tool).name + "." : "";
             const waterNote = r.water ? " Potrzeba: " + r.water + " porcji wody z wiadra." : "";
             const help = busy ? busy
-                : missing.length > 0 ? "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + "." + toolNote + waterNote
+                : missing.length > 0 ? "Brakuje: " + missing.map(p => missingName(p) + " (" + missingHave(p) + "/" + p[1] + ")").join(", ") + "." + toolNote + waterNote
                 : waterBad ? waterBad + "." + waterNote
                 : "Wynik: " + out.name + " ×" + r.output[1] + ", " + hoursText(r.hours).replace(/\.$/, "") + ".\n" + r.desc + sit + toolNote;
             entries.push({ name: r.name, costs: costRowsWithWater(r), enabled: !busy && missing.length === 0 && !waterBad, help, run: () => startJob(b, r.id), tab: "recipe",
@@ -2334,6 +2512,36 @@
         return entries;
     }
 
+    // a fire's plain line right under its name: when it goes out
+    function fireNote(b, def) {
+        if (!def.fire || b.site) return null;
+        const left = fuelLeft(b);
+        if (b.rainOut) return rainingHere() ? "Deszcz przygasił ogień" : "Deszcz zgasił ogień";
+        return left > 0 ? "Zgaśnie za " + clockText(left) : b.job ? "Zgaśnie, gdy zdejmiesz jedzenie z ognia" : "Ogień wygasł";
+    }
+    // the line under a building's name in its menu (under the fire's note, if any): what it is making (the icon of the product, what is going on, how long it
+    // still takes) or that it is ready; for the animals and the hive what has gathered, for a snare its bait or catch. null: nothing.
+    function buildingStatus(b, def) {
+        if (b.site) return null;
+        if (b.job) {
+            const [id, n] = b.job.out, item = itemOf(id), r = recipeOf(b, b.job.recipe), what = item.name + (n > 1 ? " ×" + n : "");
+            if (jobReady(b)) return { icon: item.iconIndex, text: "Gotowe: " + what, right: "do zebrania", ready: true };
+            if (jobPaused(b)) return { icon: item.iconIndex, text: "Stoi bez ognia: " + what, right: "rozpal ogień" };
+            return { icon: item.iconIndex, text: ((r && r.doing) || "Trwa praca") + ": " + what, right: "jeszcze ~" + hoursText(jobHoursLeft(b)) };
+        }
+        const p = def.produce;
+        if (!p) return null;
+        const item = itemOf(p.item);
+        if (def.lure) {
+            const bait = snareBait(b);
+            return snareSprung(b) ? { icon: item.iconIndex, text: "Złapany zając!", right: "do zebrania", ready: true }
+                : bait ? { icon: itemOf(bait.item).iconIndex, text: "Przynęta: " + itemOf(bait.item).name, right: "czeka na zająca" }
+                : null;
+        }
+        const n = readyProduce(b);
+        return { icon: item.iconIndex, text: item.name + ": " + n + " / " + p.cap, right: n >= p.cap ? "pełne, zbierz" : "kolejne za " + daysToProduce(b) + " dn.", ready: n > 0 };
+    }
+
     // a real building (not a build site): rest/produce/chest/sleep/recipes/upgrade/pack/demolish entries
     function buildingMenuFor(b) {
         const def = geoOf(b);
@@ -2342,7 +2550,7 @@
         if (def.rest) {
             const fireOut = !!def.fire && !fireLit(b);
             entries.push({ name: b.type === "bench" ? "Usiądź i odpocznij" : b.type === "bedroll" ? "Zdrzemnij się" : "Ogrzej się przy ogniu", icon: 82, right: "+" + def.rest, enabled: !fireOut,
-                help: fireOut ? "Ogień wygasł. Dorzuć drewna, żeby się ogrzać." : "Odnawia wytrzymałość. Mija " + hoursText(def.restHours || 1), run: () => rest(b) });
+                help: fireOut ? (b.rainOut ? fireOutText(b) : "Ogień wygasł. Dorzuć drewna, żeby się ogrzać.") : "Odnawia wytrzymałość. Mija " + hoursText(def.restHours || 1), run: () => rest(b) });
         }
         entries.push(...feedFireEntries(b));
         if (def.water) entries.push(...wellEntries());
@@ -2374,7 +2582,8 @@
         const back = def.refund || def.cost.map(([id, n]) => [id, Math.floor(n / 2)]).filter(([, n]) => n > 0);
         const block = demolishBlock(b);
         if (!def.pack) entries.push({ name: "Rozbierz", enabled: !block, help: block || "Zwraca połowę materiałów" + (back.length ? ": " + back.map(([id, n]) => itemOf(id).name + " ×" + n).join(", ") : "") + ".", run: () => demolish(b) });
-        return def.recipes ? { title, entries, tabs: splitTabs(entries) } : { title, entries };
+        const status = buildingStatus(b, def), note = fireNote(b, def);
+        return def.recipes ? { title, entries, tabs: splitTabs(entries), status, note } : { title, entries, status, note };
     }
     // a growing or ripe crop: harvest on the spot, or water/uproot menu
     function cropMenuFor(x, y, plot) {
@@ -2440,13 +2649,15 @@
 
     // the menu is a window of the current map scene
     // tabs (optional): [{ name, entries }] - the window shows one tab at a time; entries is still the whole list
-    function showMenu(title, entries, kind, index, tabs) {
+    // status (optional): { icon, text, right, ready } - a line under the title (buildingStatus)
+    // note (optional): a plain line of text right under the title (fireNote)
+    function showMenu(title, entries, kind, index, tabs, status, note) {
         const scene = SceneManager._scene;
-        if (scene && typeof scene.openFarmMenu === "function") scene.openFarmMenu(title, entries, kind, index, tabs);
+        if (scene && typeof scene.openFarmMenu === "function") scene.openFarmMenu(title, entries, kind, index, tabs, status, note);
     }
     function openMenu(x, y) {
         const menu = menuFor(x, y);
-        if (menu && menu.entries) showMenu(menu.title, menu.entries, undefined, undefined, menu.tabs);
+        if (menu && menu.entries) showMenu(menu.title, menu.entries, undefined, undefined, menu.tabs, menu.status, menu.note);
     }
     function openPlaceMenu(x, y) {
         showMenu("Postaw", placeEntries(x, y));
@@ -2567,7 +2778,7 @@
         }
         const menu = menuFor(t.x, t.y);
         if (!menu) return false;
-        if (menu.entries) showMenu(menu.title, menu.entries, undefined, undefined, menu.tabs);
+        if (menu.entries) showMenu(menu.title, menu.entries, undefined, undefined, menu.tabs, menu.status, menu.note);
         return true;
     };
 
@@ -2588,8 +2799,14 @@
     };
     const _Game_Player_canMove = Game_Player.prototype.canMove;
     Game_Player.prototype.canMove = function() {
-        if ($gameTemp._farmMenuOpen || $gameTemp._buildMode || $gameTemp._farmLock > 0) return false;
+        if ($gameTemp._farmMenuOpen || ($gameTemp._buildMode && !$gameTemp._buildMode.walk) || $gameTemp._farmLock > 0) return false;
         return _Game_Player_canMove.call(this);
+    };
+    // ...but the action button waits until the building is down
+    const _Game_Player_triggerAction = Game_Player.prototype.triggerAction;
+    Game_Player.prototype.triggerAction = function() {
+        if ($gameTemp._buildMode) return false;
+        return _Game_Player_triggerAction.apply(this, arguments);
     };
 
     PluginManager.registerCommand(pluginName, "clearArea", args => {
@@ -2735,11 +2952,43 @@
     }
     Window_FarmTitle.prototype = Object.create(Window_Base.prototype);
     Window_FarmTitle.prototype.constructor = Window_FarmTitle;
-    // tabs (optional): their names, drawn on a second line under the title with the current one lit and underlined
-    Window_FarmTitle.prototype.setTitle = function(text, tabs) {
+    // tabs (optional): their names, drawn on a line under the title with the current one lit and underlined
+    // status (optional, buildingStatus): a line between the two - the icon of what is being made, what is going on, and on the
+    // right how long it still takes (green when it is ready)
+    const STATUS_FONT = 24 - MENU_SMALLER;
+    Window_FarmTitle.prototype.setTitle = function(text, tabs, status, note) {
         this._text = text || "";
         this._tabs = tabs || null;
+        this._status = status || null;
+        this._note = note || null;
         this.setTab(0);
+    };
+    Window_FarmTitle.prototype.noteWidth = function(note) {
+        if (!note) return 0;
+        this.resetFontSettings();
+        this.contents.fontSize = STATUS_FONT;
+        const w = this.textWidth(note);
+        this.resetFontSettings();
+        return w;
+    };
+    Window_FarmTitle.prototype.statusWidth = function(status) {
+        if (!status) return 0;
+        this.resetFontSettings();
+        this.contents.fontSize = STATUS_FONT;
+        const w = ImageManager.iconWidth + 6 + this.textWidth(status.text) + 24 + this.textWidth(status.right || "");
+        this.resetFontSettings();
+        return w;
+    };
+    Window_FarmTitle.prototype.drawStatus = function(status, y) {
+        const c = this.contents, rightW = status.right ? this.textWidth(status.right) : 0;
+        this.drawIcon(status.icon, 0, y + 2);
+        const x = ImageManager.iconWidth + 6;
+        this.changeTextColor(status.ready ? ColorManager.powerUpColor() : ColorManager.normalColor());
+        this.drawText(status.text, x, y, Math.max(0, this.innerWidth - x - rightW - 12), "left");
+        if (status.right) {
+            this.changeTextColor(status.ready ? ColorManager.powerUpColor() : ColorManager.textColor(7));
+            this.drawText(status.right, 0, y, this.innerWidth, "right");
+        }
     };
     Window_FarmTitle.prototype.setTab = function(tab) {
         const c = this.contents;
@@ -2748,8 +2997,20 @@
         c.fontSize = 28 - MENU_SMALLER;
         this.changeTextColor(ColorManager.textColor(16));
         this.drawText(this._text, 0, 0, this.innerWidth, "left");
+        let line = 1;
+        if (this._note) {
+            c.fontSize = STATUS_FONT;
+            this.changeTextColor(ColorManager.normalColor());
+            this.drawText(this._note, 0, this.lineHeight() * line, this.innerWidth, "left");
+            line++;
+        }
+        if (this._status) {
+            c.fontSize = STATUS_FONT;
+            this.drawStatus(this._status, this.lineHeight() * line);
+            line++;
+        }
         if (this._tabs) {
-            const y = this.lineHeight();
+            const y = this.lineHeight() * line;
             c.fontSize = 24 - MENU_SMALLER;
             let x = 0;
             this._tabs.forEach((name, i) => {
@@ -2972,20 +3233,24 @@
 
     // docked in the bottom left corner: the name of the menu, the list under it, the popup to the right of the list
     const MENU_MARGIN = 16;
-    Scene_Map.prototype.openFarmMenu = function(title, entries, kind, index, tabs) {
+    Scene_Map.prototype.openFarmMenu = function(title, entries, kind, index, tabs, status, note) {
         const menu = this._farmMenu, plate = this._farmTitle;
         // with tabs the window is sized for all of them, so it does not jump when switching
         const all = tabs ? [].concat(...tabs.map(t => t.entries)) : entries;
         const rows = tabs ? Math.max(...tabs.map(t => t.entries.length)) : entries.length;
-        const width = this.farmMenuWidth(all);
-        const listH = this.calcWindowHeight(Math.min(rows, 8), true);
-        const plateH = this.calcWindowHeight(tabs ? 2 : 1, false);
+        const width = Math.max(this.farmMenuWidth(all), Math.min(560, Math.max(plate.statusWidth(status), plate.noteWidth(note)) + plate.padding * 2 + 8));
+        const plateH = this.calcWindowHeight(1 + (tabs ? 1 : 0) + (status ? 1 : 0) + (note ? 1 : 0), false);
+        // every menu (the build list, the food, the campfire, the stations...) grows with its entries but, with the name above it, takes
+        // at most half the screen (user); the rest scrolls
+        const itemH = Window_Selectable.prototype.itemHeight.call(menu), pad = menu.padding * 2;
+        const cap = Math.max(3, Math.floor((Graphics.boxHeight / 2 - plateH - pad) / itemH));
+        const listH = this.calcWindowHeight(Math.max(1, Math.min(rows, cap)), true);
         const x = MENU_MARGIN, y = Graphics.boxHeight - MENU_MARGIN - listH;
         menu.move(x, y, width, listH);
         plate.move(x, y - plateH, width, plateH);
         menu.createContents();   // the contents bitmap has to match the new size
         plate.createContents();
-        plate.setTitle(title, tabs ? tabs.map(t => t.name) : null);
+        plate.setTitle(title, tabs ? tabs.map(t => t.name) : null, status, note);
         this._farmTip.reset();
         this._farmKind = kind || "";
         menu.setup(title, entries, index, tabs);
@@ -3266,16 +3531,45 @@
     // builds, cancel / a right click goes back. Green = it can stand there, red = it cannot (with the reason).
     // ------------------------------------------------------------------
     const BUILD_RANGE = 6;   // how far from the player (in tiles) a building may be placed
+    // walking up to the spot before putting a building down (user): WALK_STILL frames without reaching a new tile, or WALK_MAX in
+    // all, and he gives up ("Nie dojdziesz tam")
+    const WALK_STILL = 90, WALK_MAX = 900;
+    // the free tile beside the footprint nearest to the player (where he stands to build); a corner only when no side is
+    // free; null when there is none
+    function standTileFor(type, x, y) {
+        const cells = tilesOfBuilding(type, x, y), inside = new Set(cells.map(c => c.x + "," + c.y));
+        let best = null, bestD = Infinity;
+        for (const c of cells) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+            const tx = c.x + dx, ty = c.y + dy;
+            if (inside.has(tx + "," + ty) || !$gameMap.isValid(tx, ty) || !$gameMap.checkPassage(tx, ty, 0x0f) || buildingAt(tx, ty)) continue;
+            if ($gameMap.eventsXy(tx, ty).some(e => e.isNormalPriority())) continue;
+            const d = Math.hypot(tx - $gamePlayer.x, ty - $gamePlayer.y) + (dx && dy ? 100 : 0) + (dy > 0 && dx === 0 ? -0.3 : 0);   // (in front of it a little better)
+            if (d < bestD) { bestD = d; best = { x: tx, y: ty }; }
+        }
+        return best;
+    }
+    // he already stands right beside it (next to one of its tiles, not at a corner)
+    function besideFootprint(type, x, y) {
+        return tilesOfBuilding(type, x, y).some(c => Math.abs(c.x - $gamePlayer.x) + Math.abs(c.y - $gamePlayer.y) === 1);
+    }
 
-    function placementProblem(type, x, y, flip) {
+    function placementProblem(type, x, y, flip, free) {
         const def = BUILDINGS[type];
         const rows = def.h || 1;   // the nearest tile of the whole footprint counts
         const far = Math.max(0, x - $gamePlayer.x, $gamePlayer.x - (x + def.w - 1), (y - rows + 1) - $gamePlayer.y, $gamePlayer.y - y);
         if (far > BUILD_RANGE) return "Za daleko od ciebie.";
-        const why = whyNotBuild(type, x, y, flip);
+        const why = whyNotBuild(type, x, y, flip, free);
         if (why) return why;
-        if (missingMaterials(type).length > 0) return "Brakuje materiałów.";
+        if (!free && missingMaterials(type).length > 0) return "Brakuje materiałów.";
         return null;
+    }
+    // the F9 placer (Debug.js): the usual placing on the tile in front of the player, but free and finished at once
+    function startFreePlacement(type) {
+        const scene = SceneManager._scene;
+        if (!BUILDINGS[type] || !(scene instanceof Scene_Map) || typeof scene.startBuildMode !== "function") return false;
+        const t = targetTile();
+        scene.startBuildMode(type, t.x, t.y, true);
+        return true;
     }
 
     function startPlacement(type, x, y) {
@@ -3285,8 +3579,8 @@
         return true;
     }
 
-    Scene_Map.prototype.startBuildMode = function(type, x, y) {
-        $gameTemp._buildMode = { type, x, y, wait: 4, hover: null, flip: false };
+    Scene_Map.prototype.startBuildMode = function(type, x, y, free) {
+        $gameTemp._buildMode = { type, x, y, wait: 4, hover: null, flip: false, free: !!free };
         const help = this._farmHelp, width = Math.min(600, Graphics.boxWidth - 40), helpH = this.calcWindowHeight(4, false);
         help.move(MENU_MARGIN, Math.max(8, Graphics.boxHeight - helpH - MENU_MARGIN), width, helpH);
         help.createContents();
@@ -3303,21 +3597,27 @@
     Scene_Map.prototype.refreshBuildHelp = function() {
         const mode = $gameTemp._buildMode;
         if (!mode) return;
-        const def = BUILDINGS[mode.type], problem = placementProblem(mode.type, mode.x, mode.y, mode.flip);
+        const def = BUILDINGS[mode.type], problem = placementProblem(mode.type, mode.x, mode.y, mode.flip, mode.free);
         // text codes: \C[n] a colour of the window palette (16 brass, 3 green, 10 red, 7 muted), \I[n] an icon
         const help = this._farmHelp;
         const cost = BUILDINGS[mode.type].cost.map(([id, n]) => "\\I[" + itemOf(id).iconIndex + "]\\C[" + (countOf(id) >= n ? 3 : 10) + "]" + countOf(id) + "/" + n + "\\C[0]").join("   ");
-        help.setText("\\C[16]Stawianie: " + def.name + "\\C[0]\n" + "Koszt:  " + cost + "\n" + (problem ? "\\C[10]" + problem : "\\C[3]Można tu postawić.") + "\\C[0]\n\\C[7]Strzałki: ruch   OK: postaw   " + (mode.type === "fence" ? "" : "R / Q / E: odbij" + (mode.flip ? " (odbite)" : "") + "   ") + "Anuluj: wróć");
+        if (mode.walk) {
+            help.setText("\\C[16]Stawianie: " + def.name + "\\C[0]\n\\C[3]Idziesz na miejsce budowy...\\C[0]\n\n\\C[7]Strzałki albo Anuluj: przerwij");
+            return;
+        }
+        help.setText("\\C[16]Stawianie: " + def.name + "\\C[0]\n" + (mode.free ? "\\C[3]F9: za darmo, od razu gotowe\\C[0]" : "Koszt:  " + cost) + "\n" + (problem ? "\\C[10]" + problem : "\\C[3]Można tu postawić.") + "\\C[0]\n\\C[7]Strzałki: ruch   OK: " + (mode.free ? "postaw" : "podejdź i postaw") + "   " + (mode.type === "fence" ? "" : "R / Q / E: odbij" + (mode.flip ? " (odbite)" : "") + "   ") + "Anuluj: wróć");
     };
 
     Scene_Map.prototype.updateBuildMode = function() {
         const mode = $gameTemp._buildMode, def = mode && BUILDINGS[mode.type];
         if (!def) return;
         if ($gameMap.isEventRunning() || $gameMessage.isBusy() || $gamePlayer.isTransferring()) {
+            if (mode.walk) $gameTemp.clearDestination();
             $gameTemp._buildMode = null;
             this._farmHelp.hide();
             return;
         }
+        if (mode.walk) { this.updateBuildWalk(mode); return; }
         if (mode.wait > 0) { mode.wait--; return; }   // the press of "OK" that picked the building is still fresh
         let x = mode.x, y = mode.y;
         if (Input.isRepeated("left")) x--; else if (Input.isRepeated("right")) x++;
@@ -3357,15 +3657,64 @@
         }
         const confirm = Input.isTriggered("ok") || TouchInput.isTriggered();
         if (!confirm || $gameTemp._farmLock > 0) return;
-        const problem = placementProblem(mode.type, mode.x, mode.y, mode.flip);
+        const problem = placementProblem(mode.type, mode.x, mode.y, mode.flip, mode.free);
         if (problem) {
             SoundManager.playBuzzer();
             complain(itemOf(ITEM.wood).iconIndex, problem);
             return;
         }
-        const dx = mode.x - $gamePlayer.x, dy = mode.y - $gamePlayer.y;
-        $gamePlayer.setDirection(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 6 : 4) : (dy > 0 ? 2 : 8));
-        if (placeSite(mode.type, mode.x, mode.y, mode.flip) && mode.type !== "fence") this.endBuildMode();   // fences: keep going, one after another
+        // first he walks up to it (the F9 placer puts it down at once); already beside it, it goes down now
+        if (!mode.free && !besideFootprint(mode.type, mode.x, mode.y)) {
+            const stand = standTileFor(mode.type, mode.x, mode.y);
+            if (!stand) { SoundManager.playBuzzer(); complain(itemOf(ITEM.wood).iconIndex, "Nie dojdziesz tam"); return; }
+            mode.walk = { tx: stand.x, ty: stand.y, t: 0, still: 0, lx: $gamePlayer.x, ly: $gamePlayer.y };
+            $gameTemp.setDestination(stand.x, stand.y);
+            this.refreshBuildHelp();
+            return;
+        }
+        this.putDownBuilding(mode);
+    };
+    // he faces the spot and puts it down (a site, or a tent / bed / bucket at once)
+    Scene_Map.prototype.putDownBuilding = function(mode) {
+        const cells = tilesOfBuilding(mode.type, mode.x, mode.y);
+        const c = cells.reduce((a, b) => Math.hypot(b.x - $gamePlayer.x, b.y - $gamePlayer.y) < Math.hypot(a.x - $gamePlayer.x, a.y - $gamePlayer.y) ? b : a, cells[0]);
+        const dx = c.x - $gamePlayer.x, dy = c.y - $gamePlayer.y;
+        if (dx || dy) $gamePlayer.setDirection(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 6 : 4) : (dy > 0 ? 2 : 8));
+        if ((mode.free ? placeFree : placeSite)(mode.type, mode.x, mode.y, mode.flip) && mode.type !== "fence") this.endBuildMode();   // fences: keep going, one after another
+        else this.refreshBuildHelp();
+    };
+    // walking to the spot: there - it goes down; a direction key or cancel - back to choosing; stuck - he gives up
+    Scene_Map.prototype.updateBuildWalk = function(mode) {
+        const w = mode.walk, p = $gamePlayer;
+        if (Input.dir8 !== 0 || Input.isTriggered("cancel") || TouchInput.isCancelled()) {
+            $gameTemp.clearDestination();
+            mode.walk = null;
+            mode.wait = 4;
+            SoundManager.playCancel();
+            this.refreshBuildHelp();
+            return;
+        }
+        if ((p.x === w.tx && p.y === w.ty) || besideFootprint(mode.type, mode.x, mode.y)) {
+            $gameTemp.clearDestination();
+            if (p.isMoving()) return;   // (the last step settles)
+            mode.walk = null;
+            if (placementProblem(mode.type, mode.x, mode.y, mode.flip, mode.free)) { SoundManager.playBuzzer(); complain(itemOf(ITEM.wood).iconIndex, placementProblem(mode.type, mode.x, mode.y, mode.flip, mode.free)); this.refreshBuildHelp(); return; }
+            this.putDownBuilding(mode);
+            return;
+        }
+        w.t++;
+        if (p.x !== w.lx || p.y !== w.ly) { w.lx = p.x; w.ly = p.y; w.still = 0; }
+        else w.still++;
+        if (w.still > WALK_STILL || w.t > WALK_MAX) {
+            $gameTemp.clearDestination();
+            mode.walk = null;
+            SoundManager.playBuzzer();
+            complain(itemOf(ITEM.wood).iconIndex, "Nie dojdziesz tam");
+            this.refreshBuildHelp();
+            return;
+        }
+        // (a click on the map must not lead him elsewhere)
+        if (!$gameTemp.isDestinationValid() || $gameTemp.destinationX() !== w.tx || $gameTemp.destinationY() !== w.ty) $gameTemp.setDestination(w.tx, w.ty);
     };
 
     const _Scene_Map_update = Scene_Map.prototype.update;
@@ -3385,16 +3734,17 @@
 
     // for events, other plugins and tests
     window.Farming = {
-        openBuildKeyMenu, openFoodKeyMenu, foodFacts, whyNotEat,
+        RAW_MEATS, meatCount, MEAT_LABEL,
+        openBuildKeyMenu, openFoodKeyMenu, foodFacts, whyNotEat, startFreePlacement, placeFree,
         bushState, bushSolid, mushroomBirth, mushroomChance, gatherKindOf, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, claimGround, releaseGround, bucketUnits, bucketSync, takeBucketWater, bucketFor, rainHoursBetween, BUCKET_REACH, bagWater, setBagWater, bagWaterWeight,
         HUT_MAP, HUT_ROOM, hutOf, hutDoorAt, isHutInterior, hutShutsIn, hutSanitize, enterHut, leaveHut,
         upgradeBuilding, roomFor, fillSkin, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS, plotAt, buildingAt, menuFor, isSoilTile, groundIsSoil, naturalFarmland, rake, till, plant, harvest, uproot, build, demolish, collect, rest,
         groundInfoAt, hasObjectTile, cropStage, isRipe, daysLeft, readyProduce, snares, snareBait, snareSprung, snareCatch, snareEatBait, baitSnare, whyNotBuild, growthRate,   // soilTexture, fenceTexture, nightAmount, fireGlowAlpha: added by Farming_Render.js
-        dig, startJob, collectJob, jobReady, jobHoursLeft, clockHours, demolishBlock, pitchInstant, packUp, sleepInTent, wakeHour, putInChest, takeFromChest, isFood, ownedOutput,
+        dig, startJob, collectJob, jobReady, jobHoursLeft, jobHours, siteHits, hitCost, canMax, clockHours, demolishBlock, pitchInstant, packUp, sleepInTent, wakeHour, putInChest, takeFromChest, isFood, ownedOutput,
         chestStacks, chestKinds, chestHolds, packStacks, putInChest, takeFromChest, whyNotMove, openChest, Scene_Chest, Window_ChestList,
         water, wateredRecently, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2,
         stoneAt, stoneSpot, pickStone, gatherAt, gatherSpot, pickGather, isWaterTile, waterMenu, fillCan, drink, goFishing, rainWater, canCharges, craftManual, HAND_RECIPES, startPlacement, placementProblem, tileWhyNot, placeSite, strikeSite, cancelSite,
         // used only by Farming_Render.js (@orderAfter Farming), not meant for other plugins
-        BUILD_RANGE, CROP_LIFT, TILE, farm, itemOf, key, mirrorGeo, missingMaterials, onRing, recipeOf, tilesOfBuilding, today, gatherRev, fuelLeft, fireLit
+        BUILD_RANGE, CROP_LIFT, TILE, farm, itemOf, key, mirrorGeo, missingMaterials, onRing, recipeOf, tilesOfBuilding, today, gatherRev, fuelLeft, fireLit, smoulderOf, SMOULDER_HOURS, jobPaused, rainingHere
     };
 })();

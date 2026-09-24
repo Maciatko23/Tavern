@@ -86,12 +86,12 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- the shot really hits
         await standAt(6);
         await ev(`(function(){ const a = Hunting.spawn("rabbit", ${lx + 4}, ${ly}); a._frozen = true; })(); 0`);
-        const car0 = await count(101);
+        const car0 = await ev("Hunting.carcasses().length");
         await frames(20);
         await press("shoot");
         for (let i = 0; i < 150 && (await ev("Hunting.animals.length")) > 0; i++) await frames(2);
-        check("the animated sling shot kills a rabbit 4 tiles away", (await ev("Hunting.animals.length")) === 0 && (await count(101)) === car0 + 1,
-            { animals: await ev("Hunting.animals.length"), carcass: await count(101) - car0, projectiles: await ev("Hunting.projectiles.length"), stones: await count(64), cooldown: await ev("typeof Hunting.cooldown"), swinging: await swinging(), player: await J("[$gamePlayer.x, $gamePlayer.y, $gamePlayer._realX, $gamePlayer._realY, $gamePlayer.direction()]"), rabbit: await J("Hunting.animals.map(a => [a._x, a._y, a._realX, a._realY])") });
+        check("the animated sling shot kills a rabbit 4 tiles away", (await ev("Hunting.animals.length")) === 0 && (await ev("Hunting.carcasses().length")) === car0 + 1,
+            { animals: await ev("Hunting.animals.length"), carcass: (await ev("Hunting.carcasses().length")) - car0, projectiles: await ev("Hunting.projectiles.length"), stones: await count(64), cooldown: await ev("typeof Hunting.cooldown"), swinging: await swinging(), player: await J("[$gamePlayer.x, $gamePlayer.y, $gamePlayer._realX, $gamePlayer._realY, $gamePlayer.direction()]"), rabbit: await J("Hunting.animals.map(a => [a._x, a._y, a._realX, a._realY])") });
 
         // ---------------------------------------------------------------- pressing F again during the swing does nothing
         await standAt(6);

@@ -70,7 +70,7 @@ const OUT = __dirname + "/";
             await ev(`$gamePlayer.locate(${x} + 5, ${y} - 12 < 1 ? ${y} + 12 : ${y} - 12); 0`);
         };
         await layBait();
-        const baited = await J(`({ bait: ${snare}.bait, carrots: $gameParty.numItems($dataItems[72]), pop: window.__pop.slice(-2) })`);
+        const baited = await J(`({ bait: ${snare}.bait, carrots: $gameParty.numItems($dataItems[72]), pop: window.__pop.slice(-8) })`);   // (the carrots may finish journal goals: their popups and the XP come too)
         check("laid: one carrot used, the bait lies in the snare for a day", !!baited.bait && baited.bait.item === 72 && baited.carrots === 3 && baited.pop.some(p => /Przynęta w pułapce/.test(p)), baited);
         await frames(10);
         const shown = await J(`(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b === ${snare}); return { bait: !!(e && e.bait && e.bait.visible), rabbit: !!(e && e.caught && e.caught.visible) }; })()`);
@@ -115,11 +115,11 @@ const OUT = __dirname + "/";
         await ev(`Hunting.removeAnimal(window.__r); ${snare}.bait = null; 0`);
         const menu2 = await J(`(function(){ const m = Farming.menuFor(${x}, ${y}).entries; return { collect: m.find(e => /^Zbierz/.test(e.name)), bait: m.find(e => /przynęt/i.test(e.name)) }; })()`);
         check("its menu: 'Zbierz: Zwierzyna ×1' (the rabbit in it), bait not possible until it is emptied", menu2.collect && /×1/.test(menu2.collect.name) && menu2.collect.enabled !== false && /zając/.test(menu2.collect.help) && menu2.bait.enabled === false, menu2);
-        const carcass0 = await count(101);
+        const carcass0 = await ev("Hunting.carcasses().length"); await ev("$gameParty.loseItem($dataItems[90], 9, true); $gameParty.loseItem($dataItems[91], 9, true); 0");   // (no knife: the rabbit is left lying)
         await ev(`$gamePlayer.locate(${x}, ${y} + 1); Farming.menuFor(${x}, ${y}).entries.find(e => /^Zbierz/.test(e.name)).run(); 0`);
         await frames(90);
         const emptied = await J(`({ caught: ${snare}.caught || 0, ready: Farming.readyProduce(${snare}) })`);
-        check("collected: +1 Zwierzyna, the snare is empty and set again", (await count(101)) === carcass0 + 1 && emptied.caught === 0 && emptied.ready === 0, emptied);
+        check("collected without a knife: the rabbit lies at the snare (a carcass), the snare is empty and set again", (await ev("Hunting.carcasses().length")) === carcass0 + 1 && (await ev("Hunting.carcasses().slice(-1)[0].kind")) === "rabbit" && emptied.caught === 0 && emptied.ready === 0, emptied);
 
         // ---------------------------------------------------------------- the player beside a baited snare scares them off
         await ev(setBait);

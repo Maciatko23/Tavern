@@ -62,13 +62,13 @@ const OUT = __dirname + "/";
 
         // ================= 3. made by hand =================
         const hand = id => `Farming.HAND_RECIPES.find(r => r.id === "${id}")`;
-        await give(147, 2);
+        await give(147, 1);
         const s0 = await count(148);
-        check("two cones are shelled into pine seeds", await ev(`Farming.craftManual(null, ${hand("pine_seeds")})`));
+        check("one cone is shelled into pine seeds", await ev(`Farming.craftManual(null, ${hand("pine_seeds")})`));
         await frames(120);
         check("  +3 pine seeds, the cones used up", (await count(148)) === s0 + 3 && (await count(147)) === 0, { seeds: await count(148), cones: await count(147) });
-        await give(150, 2); await give(92, 1);
-        check("yarrow and flax make a bandage", await ev(`Farming.craftManual(null, ${hand("bandage")})`));
+        await give(150, 2); await give(104, 2); await give(92, 2);
+        check("yarrow, herbs and flax make a bandage", await ev(`Farming.craftManual(null, ${hand("bandage")})`));
         await frames(120);
         check("  +1 bandage", (await count(152)) === 1);
         const f0 = await count(92);
@@ -130,9 +130,9 @@ const OUT = __dirname + "/";
         check("days 0-9 after planting: ten pictures, each a little bigger (3 seedlings on the mound, then a pine 0.24 -> 0.87); day 10 a full pine",
             got.every((g, i) => (want[i][0] === "Pine" ? /Pine/.test(g[0]) : g[0] === want[i][0]) && g[1] === want[i][1]), got);
         check("the seedlings on the mound: one blow gives a branch, no stump", days.slice(0, 3).every(t => t.hits === 1 && t.drop === 77 && t.nostump === 1), days.slice(0, 3));
-        check("5 days after planting: a small pine, half grown (2 blows, wood, a stump)", days[5].hits === 2 && days[5].drop === 61 && days[5].nostump === 0, days[5]);
+        check("5 days after planting: a small pine, half grown (10 blows, wood, a stump)", days[5].hits === 10 && days[5].drop === 61 && days[5].nostump === 0, days[5]);
         const full = days[10];
-        check("10 days after planting: a full pine (scale 1, 4 blows, 2-4 wood)", full.scale === 1 && full.hits === 4 && full.dropmin === 2 && full.dropmax === 4 && full.growth === 1, full);
+        check("10 days after planting: a full pine (scale 1, 20 blows, 2-4 wood)", full.scale === 1 && full.hits === 20 && full.dropmin === 2 && full.dropmax === 4 && full.growth === 1, full);
         await b.shot(OUT + "forest_grown.png");
 
         // ================= 6. with the map: it comes back, and once dug out it is gone =================

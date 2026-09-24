@@ -27,7 +27,7 @@ fs.mkdirSync(OUT, { recursive: true });
         // ================= 1. assets and data =================
         const sheets = await ev(`new Promise(res => { const names = ["$Animal_Rabbit", "$Animal_Deer"], out = {}; let left = names.length; for (const n of names) { const bmp = ImageManager.loadCharacter(n); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height]; if (--left === 0) res(out); }); } })`);
         check("the animal sheets load (3 columns x 4 rows of frames)", sheets["$Animal_Rabbit"][0] % 3 === 0 && sheets["$Animal_Rabbit"][1] % 4 === 0 && sheets["$Animal_Deer"][0] % 3 === 0 && sheets["$Animal_Deer"][1] % 4 === 0, sheets);
-        check("F is the shoot key", (await ev("Input.keyMapper[70]")) === "shoot");
+        check("the shot is O in the combat mode (Combat.js: O has its own name, Tab switches the mode)", (await ev("Input.keyMapper[79]")) === "keyO" && (await ev("Input.keyMapper[9]")) === "tab");
         const targets = await ev("Hunting.mapTargets()");
         check("Map003 is a hunting ground with 3 rabbits", targets.rabbit === 3 && !targets.deer, targets);
 
@@ -40,7 +40,7 @@ fs.mkdirSync(OUT, { recursive: true });
         check("none spawned right next to the player", okPos === true);
         await ev("$gameSystem.setDayNightHour(23.5); 0");
         await frames(200);
-        check("at night they are gone (burrowed)", (await ev("Hunting.animals.length")) === 0);
+        check("at night the rabbits are gone (burrowed; only a wolf pack may be out)", (await ev("Hunting.animals.filter(a => a.kind() !== 'wolf').length")) === 0);
         await ev("$gameSystem.setDayNightHour(8); 0");
         await frames(200);
         check("and they are back in the morning (the 3 rabbits; at dawn the boar may be out too)", (await ev("Hunting.animals.filter(a => a.kind() === 'rabbit').length")) === 3);
@@ -89,14 +89,14 @@ fs.mkdirSync(OUT, { recursive: true });
         const spawnFrozen = (kind, dx) => ev(`(function(){ const a = Hunting.spawn("${kind}", ${lx} + ${dx}, ${ly}); a._frozen = true; return a._x; })()`);
         await spawnFrozen("rabbit", 4);
         const st0 = await ev("$gameSystem.stamina()");
-        const car0 = await count(101);
+        const car0 = await ev("Hunting.carcasses().length");
         await frames(30);
         await press("shoot");
         await frames(44);   // F starts aiming: the stone leaves after the whirl (Hunting.WEAPONS.sling.release)
         const flying = await ev("Hunting.projectiles.length");
-        check("F fires: a stone flew (or already hit), one stone and 2 stamina are spent", (flying === 1 || (await count(101)) === car0 + 1) && (await count(64)) === 4 && (await ev("$gameSystem.stamina()")) === st0 - 2, { flying });
+        check("F fires: a stone flew (or already hit), one stone and 2 stamina are spent", (flying === 1 || (await ev("Hunting.carcasses().length")) === car0 + 1) && (await count(64)) === 4 && (await ev("$gameSystem.stamina()")) === st0 - 2, { flying });
         await frames(40);
-        check("the stone kills the rabbit: gone from the map, +1 Zwierzyna, the hunt is counted", (await ev("Hunting.animals.length")) === 0 && (await count(101)) === car0 + 1 && (await ev("Hunting.hunt().kills.rabbit")) === 1, { animals: await ev("Hunting.animals.length"), carcass: await count(101) });
+        check("the stone kills the rabbit: gone from the map, its carcass lies there, the hunt is counted", (await ev("Hunting.animals.length")) === 0 && (await ev("Hunting.carcasses().length")) === car0 + 1 && (await ev("Hunting.hunt().kills.rabbit")) === 1, { animals: await ev("Hunting.animals.length"), carcasses: await ev("Hunting.carcasses().length") });
         check("the weapon wears by one shot", (await ev("Durability.used(125)")) === 1);
         // range: 6 tiles for the sling, the rabbit at 8 is out of reach
         await spawnFrozen("rabbit", 8);
@@ -120,9 +120,10 @@ fs.mkdirSync(OUT, { recursive: true });
         await give(64, 5);
         await spawnFrozen("deer", 5);
         await clearPopups();
-        const carD = await count(101);
+        const carD = await ev("Hunting.carcasses().length");
+        const deerMax = await ev("Hunting.animals[0]._maxHp");   // (combat life: 40 at level 1, more with the place's level)
         const hits = [];
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 8; i++) {
             const before = await ev("Hunting.animals.length");
             if (before === 0) break;
             await frames(30);
@@ -132,14 +133,16 @@ fs.mkdirSync(OUT, { recursive: true });
             if (hits[hits.length - 1] === 0) break;
             await ev("if (Hunting.animals[0]) { Hunting.animals[0]._frozen = true; Hunting.animals[0]._wounded = false; Hunting.animals[0]._alarm = 0; } 0");   // stand still for the next test shot
         }
-        check("the sling needs 3 hits for a deer (life 3 -> 2 -> 1 -> dead), the wounded one is announced", hits.join() === "2,1,0" && (await popups()).some(t => /Jeleń ranny/.test(t)), hits);
-        check("the deer gives 2 carcasses", (await count(101)) === carD + 2, { carD, now: await count(101) });
+        const slingHit = deerMax - hits[0];
+        check("the sling takes the same bite off a deer each hit until it is dead (40+ life: 3-4 stones), the wounded one is announced (a popup; with Combat.js its life bar instead)",
+            slingHit > 0 && hits[hits.length - 1] === 0 && hits.length === Math.ceil(deerMax / slingHit) && hits.length >= 3 && ((await ev("!!window.Combat")) || (await popups()).some(t => /Jeleń ranny/.test(t))), { deerMax, hits });
+        check("the deer lies there (its carcass)", (await ev("Hunting.carcasses().length")) === carD + 1 && (await ev("Hunting.carcasses().slice(-1)[0].kind")) === "deer", { carD, now: await ev("Hunting.carcasses().length") });
         // the bow: two arrows for a deer
         await give(126, 1);
         await spawnFrozen("deer", 6);
-        const car1 = await count(101);
+        const car1 = await ev("Hunting.carcasses().length");
         for (let i = 0; i < 2; i++) { await frames(35); await press("shoot"); await frames(100); if (await ev("Hunting.animals.length ? (Hunting.animals[0]._frozen = true, Hunting.animals[0]._wounded = false, Hunting.animals[0]._alarm = 0, 0) : 0")) { } }
-        check("the bow needs only 2 hits for a deer", (await ev("Hunting.animals.length")) === 0 && (await count(101)) === car1 + 2, { car1, now: await count(101) });
+        check("the bow needs only 2 hits for a deer", (await ev("Hunting.animals.length")) === 0 && (await ev("Hunting.carcasses().length")) === car1 + 1, { car1, now: await ev("Hunting.carcasses().length") });
         await ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");
 
         // ================= 7. walls stop a shot, the noise scares the others =================

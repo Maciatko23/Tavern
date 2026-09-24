@@ -61,7 +61,8 @@
         105: 480, 106: 360, 107: 30, 108: 96, 109: 72, 110: 120,
         71: 480, 72: 360, 73: 480, 75: 240, 83: 120, 123: 48, 124: 720,
         130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96,  // gulasz, kapuśniak, zupa grzybowa, owsianka, grzyby, pieczony ser, placek (the mead keeps)
-        149: 72, 150: 168, 151: 96, 153: 72   // pokrzywa, krwawnik (dries well, like the herbs), dziki czosnek, zupa pokrzywowa
+        149: 72, 150: 168, 151: 96, 153: 72,   // pokrzywa, krwawnik (dries well, like the herbs), dziki czosnek, zupa pokrzywowa
+        157: 60, 158: 120, 159: 60, 160: 120, 161: 60, 162: 120   // the meat of the deer, the boar, the wolf: raw / roasted like the hare's
     };
     const WARN_AT = 0.8;   // of the life: the popup "zaraz się zepsuje"
 
@@ -158,7 +159,13 @@
         if (window.Survival && Survival.feedback) Survival.feedback(icon, text, color);
         else $gameTemp.pushLootPopup(icon, text, color);
     }
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
     function spoilBag(dt) {
+        dt *= 1 - Math.min(0.8, perk("spoil"));   // (Kuchnia: Spiżarnik)
         const rotItem = $dataItems[ROT];
         for (const key of Object.keys(LIFE)) {
             const id = Number(key), item = $dataItems[id], list = batchesOf(id), life = LIFE[id];
@@ -180,6 +187,7 @@
         }
     }
     function ageChests(dt) {
+        dt *= (1 - Math.min(0.8, perk("spoil"))) * (1 - Math.min(0.8, perk("spoil.store")));   // (Spiżarnik, Solarz)
         const f = $gameSystem._farm, F = window.Farming;
         if (!f || !f.buildings) return;
         for (const list of Object.values(f.buildings)) {

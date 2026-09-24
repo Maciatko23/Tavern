@@ -15,8 +15,13 @@
  *   Wrona, wróbel, gołąb i kuropatwa (grafiki img/system/Bird_*.png: 4 klatki
  *   32x32 - stoi, dziobie, skrzydła w górze, skrzydła w dole; patrzą w prawo).
  *   - Przeloty: stadko przelatuje wysoko nad mapą, po ziemi suną cienie.
- *   - Stadko na ziemi: ląduje z dala od gracza, ptaki podskakują i dziobią, po
+ *   - Stadko na ziemi (co 20-45 s jakieś ptaki): ląduje niedaleko gracza, tuż
+ *     poza tym, co widzi przy stojącym graczu; ptaki podskakują i dziobią, po
  *     chwili odlatują. Kuropatwy chodzą po ziemi i latają nisko.
+ *   - Przepłoszone (podszedłeś, strzał, trafiony sąsiad): połowa razy stadko
+ *     odlatuje na dobre, połowa - przelatuje 3-6 kratek dalej od ciebie, siada
+ *     i dziobie dalej (najwyżej 4 razy; stadko z pola przesiada się na grządki
+ *     dalej od ciebie).
  *   - Naloty na pola: kilka razy dziennie (plan ustalony dla każdego dnia jak
  *     pogoda) stadko wron, wróbli albo gołębi siada na zasianych grządkach. Każdy
  *     ptak zjada całą roślinę (świeżo zasiane ziarno szybciej), potem następną.
@@ -27,9 +32,8 @@
  *   podrywa się całe stadko. Strzał i trafiony sąsiad płoszą je od razu.
  *   Skradanie (C) pozwala podejść dużo bliżej.
  * POLOWANIE: ptaki na ziemi można trafić z procy albo z łuku (mały cel:
- *   poczekaj, aż krąg celownika się zwęzi). Wrona i gołąb: 1 ptak, kuropatwa: 2,
- *   wróbel: 2 pióra. Ptaka oskubiesz nożem w menu Przedmioty: mięso i pióra
- *   (Survival.js). Z piór zrobisz w warsztacie strzały z lotkami (12 naraz).
+ *   poczekaj, aż krąg celownika się zwęzi). Trafiony ptak daje od razu 1-3
+ *   pióra (bez mięsa). Z piór zrobisz w warsztacie strzały z lotkami (12 naraz).
  */
 
 (() => {
@@ -51,6 +55,7 @@
         partridge: { name: "Kuropatwa", sheet: "Bird_Partridge", sight: 5, radius: 0.32, flock: [3, 6], fly: 0.07, hop: 0.035, eats: false, walker: true, drop: [[ITEM.bird, 2]] }
     };
     const EAT_FRAMES = 540, SEED_FRAMES = 300;   // pecking one plant away (about 9 / 5 s)
+    const SETTLE = 30;   // frames after landing in which a bird pays the player no heed: half a second of calm (user)
     const SCARECROW_RANGE = 3;
     const rand = (a, b) => a + Math.random() * (b - a);
     const pick = list => list[Math.floor(Math.random() * list.length)];
@@ -116,11 +121,17 @@
     // ------------------------------------------------------------------
     // The raids: planned for every map and day like the weather, so they happen also while the player is away
     // ------------------------------------------------------------------
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
     function visitsOf(mapId, day) {
         const seed = day * 131 + mapId * 7919, n = 2 + Math.floor(hash(seed, 1) * 3), out = [];
         for (let i = 0; i < n; i++) {
             const kind = pickWeighted([["crow", 40], ["sparrow", 35], ["pigeon", 25]].map(([k, w], j) => [k, w * (0.5 + hash(seed, 10 + i * 3 + j))]));
             const [a, b] = SPECIES[kind].flock;
+            if (hash(seed, 50 + i) < Math.min(0.9, perk("birds.raid"))) continue;   // (Rolnictwo: Strach na wróble - this flock does not come)
             out.push({ i, kind, start: 6.5 + hash(seed, 20 + i) * 11.5, hours: 0.75 + hash(seed, 30 + i) * 0.5, size: a + Math.floor(hash(seed, 40 + i) * (b - a + 1)) });
         }
         return out.sort((p, q) => p.start - q.start);
@@ -177,8 +188,13 @@
     // a patch of open ground: passable, no event, no building, not near a scarecrow. With `near` it lies within that many
     // tiles of the player and on the screen (where you can watch them peck), else anywhere on the map; never closer than
     // `away` tiles
+    function openGround(x, y) {
+        if (!$gameMap.isValid(x, y) || !$gameMap.isPassable(x, y, 2) || $gameMap.eventsXy(x, y).length > 0) return false;
+        if (window.Farming && (Farming.buildingAt(x, y) || (Farming.isWaterTile && Farming.isWaterTile(x, y)))) return false;
+        return !guarded($gameMap.mapId(), x, y);
+    }
     function groundSpot(away, near) {
-        const mapId = $gameMap.mapId(), px = $gamePlayer.x, py = $gamePlayer.y;
+        const px = $gamePlayer.x, py = $gamePlayer.y;
         const ox = $gameMap.displayX(), oy = $gameMap.displayY(), vw = Graphics.width / TILE(), vh = Graphics.height / TILE();
         for (let i = 0; i < 120; i++) {
             let x, y;
@@ -191,10 +207,7 @@
                 x = Math.floor(rand(1, $gameMap.width() - 1));
                 y = Math.floor(rand(1, $gameMap.height() - 1));
             }
-            if (!$gameMap.isValid(x, y) || Math.hypot(x - px, y - py) < away) continue;
-            if (!$gameMap.isPassable(x, y, 2) || $gameMap.eventsXy(x, y).length > 0) continue;
-            if (window.Farming && (Farming.buildingAt(x, y) || (Farming.isWaterTile && Farming.isWaterTile(x, y)))) continue;
-            if (guarded(mapId, x, y)) continue;
+            if (!$gameMap.isValid(x, y) || Math.hypot(x - px, y - py) < away || !openGround(x, y)) continue;
             return { x, y };
         }
         return near ? groundSpot(away) : null;   // nowhere free near the player: anywhere else on the map
@@ -219,10 +232,10 @@
     // a flock that lands somewhere near `spot` (or finds its own patch) and stays for a while
     function startGrounded(kind, spot) {
         kind = kind || pickWeighted([["partridge", 30], ["pigeon", 30], ["crow", 25], ["sparrow", 15]]);
-        // near the player, on the screen - but out of what it notices of a player standing still (Hunting's noticeRate: 60%
-        // of its sight) with room for the flock's spread and hopping (about 2.5 tiles): crow ~7.5-10.5, sparrow ~6-9 tiles
-        const away = SPECIES[kind].sight * 0.6 + 2.6;
-        spot = spot || groundSpot(away, away + 3);
+        // near the player, on the screen - just out of what it notices of a player standing still (Hunting's noticeRate: 60%
+        // of its sight) plus a tile: crow ~5.8-8.3, pigeon ~4.9-7.4, sparrow ~4.3-6.8, partridge ~4-6.5 tiles (user: nearer)
+        const away = SPECIES[kind].sight * 0.6 + 1;
+        spot = spot || groundSpot(away, away + 2.5);
         if (!spot) return null;
         const from = offscreenPoint(), [a, b] = SPECIES[kind].flock, n = a + Math.floor(Math.random() * (b - a + 1));
         const flock = { kind, mode: "ground", birds: [], t: 0, stay: Math.round(rand(1800, 4200)), spot };
@@ -274,6 +287,59 @@
             AudioManager.playSe({ name: "Wind7", volume: 45, pitch: 150, pan: 0 });   // the flutter of wings
             if (flock.kind === "crow") caw(flock.birds[0].x);
         }
+    }
+    // chased off by the player (he came too close, a shot, a hit neighbour): RELOCATE.chance of the time the flock only
+    // moves RELOCATE.dist tiles further from him and lands to peck again (at most RELOCATE.max times), else it leaves for good
+    const RELOCATE = { chance: 0.5, max: 4, dist: [3, 6] };
+    function flush(flock, fromX, fromY) {
+        if (flock.leaving || flock.mode === "flyover") return;
+        if ((flock.moves || 0) < RELOCATE.max && Math.random() < RELOCATE.chance && relocate(flock, fromX, fromY)) return;
+        scare(flock, fromX, fromY);
+    }
+    function takeOff(b) {
+        b.state = "air";
+        b.z = Math.max(b.z, 8);
+        b._aware = 0;
+        b.act = "idle";
+        b.pk = null;
+    }
+    function relocate(flock, fromX, fromY) {
+        const birds = flock.birds;
+        if (!birds.length) return false;
+        const cx = birds.reduce((t, b) => t + b.x, 0) / birds.length, cy = birds.reduce((t, b) => t + b.y, 0) / birds.length;
+        const keep = SPECIES[flock.kind].sight * 0.6 + 1;   // (out of what it notices of him standing still)
+        if (flock.mode === "raid") {   // on to plants further from him
+            const crops = openCrops($gameMap.mapId()).filter(c => Math.hypot(c.x + 0.5 - fromX, c.y + 0.5 - fromY) >= keep);
+            if (!crops.length) return false;
+            for (const b of birds) {
+                const c = pick(crops);
+                b.plot = { x: c.x, y: c.y };
+                b.eatT = 0;
+                b.tx = c.x + 0.5 + rand(-0.15, 0.15);
+                b.ty = c.y + 0.75;
+                takeOff(b);
+            }
+        } else {
+            const away = Math.atan2(cy - fromY, cx - fromX);
+            let spot = null;
+            for (let i = 0; i < 60 && !spot; i++) {
+                const a = away + rand(-0.8, 0.8), d = rand(RELOCATE.dist[0], RELOCATE.dist[1]);
+                const x = Math.round(cx - 0.5 + Math.cos(a) * d), y = Math.round(cy - 0.7 + Math.sin(a) * d);
+                if (openGround(x, y) && Math.hypot(x + 0.5 - fromX, y + 0.5 - fromY) >= keep) spot = { x, y };
+            }
+            if (!spot) return false;
+            flock.spot = spot;
+            for (const b of birds) {
+                b.tx = spot.x + 0.5 + rand(-1.4, 1.4);
+                b.ty = spot.y + 0.7 + rand(-1, 1);
+                if (Math.abs(b.tx - b.x) > 0.05) b.facing = b.tx > b.x ? 1 : -1;
+                takeOff(b);
+            }
+        }
+        flock.moves = (flock.moves || 0) + 1;
+        AudioManager.playSe({ name: "Wind7", volume: 40, pitch: 160, pan: 0 });   // the flutter of wings
+        if (flock.kind === "crow" && Math.random() < 0.5) caw(birds[0].x);
+        return true;
     }
     function caw(x) {
         const pan = Math.max(-80, Math.min(80, ((x - $gameMap.displayX()) / (Graphics.width / TILE()) - 0.5) * 140));
@@ -339,12 +405,14 @@
                 b.x = b.tx; b.y = b.ty; b.z = 0;
                 b.state = "ground";
                 b.act = "idle"; b.actT = Math.round(rand(10, 60));
+                b.settle = SETTLE;   // (just landed: it settles before it starts to watch the player)
             }
             return;
         }
         // on the ground: watch the player, peck, hop about; in a raid, eat the plant it sits on
-        const aware = window.Hunting && Hunting.updateAwareness ? Hunting.updateAwareness(b, b.x, b.y - 0.25, sp.sight) : 0;
-        if (aware >= 1) { scare(flock, $gamePlayer._realX + 0.5, $gamePlayer._realY + 0.5); return; }
+        if (b.settle > 0) b.settle--;
+        const aware = b.settle > 0 ? 0 : window.Hunting && Hunting.updateAwareness ? Hunting.updateAwareness(b, b.x, b.y - 0.25, sp.sight) : 0;
+        if (aware >= 1) { flush(flock, $gamePlayer._realX + 0.5, $gamePlayer._realY + 0.5); return; }
         if (aware >= 0.3) { b.act = "look"; b.pk = null; b.facing = $gamePlayer._realX + 0.5 > b.x ? 1 : -1; return; }   // it stops and watches
         if (flock.mode === "raid" && b.plot) {
             const f = farmOf(), plot = f && f.plots[$gameMap.mapId()] && f.plots[$gameMap.mapId()][b.plot.x + "," + b.plot.y];
@@ -396,7 +464,7 @@
     }
     function updateFlock(flock) {
         flock.t++;
-        if (flock.fright && --flock.fright.t <= 0) { scare(flock, flock.fright.x, flock.fright.y); flock.fright = null; }
+        if (flock.fright && --flock.fright.t <= 0) { flush(flock, flock.fright.x, flock.fright.y); flock.fright = null; }
         for (const b of flock.birds) updateBird(b);
         flock.birds = flock.birds.filter(b => { if (b.gone) dropSprite(b); return !b.gone; });
         if (flock.birds.length === 0) {
@@ -405,7 +473,7 @@
             return;
         }
         if (!flock.leaving && flock.stay && flock.t > flock.stay) scare(flock);
-        if (!flock.leaving && flock.mode !== "flyover" && !birdTime()) scare(flock);   // rain, dusk: the ones on the ground go (a flyover just flies on)
+        if (!flock.leaving && flock.mode !== "flyover" && !flock.summoned && !birdTime()) scare(flock);   // rain, dusk: the ones on the ground go (a flyover flies on; the F9 ones stay)
     }
     function report(eaten) {
         const counts = {};
@@ -423,8 +491,9 @@
         AudioManager.playSe({ name: "Damage1", volume: 70, pitch: 140, pan: 0 });
         const s = store();
         s.kills[b.kind] = (s.kills[b.kind] || 0) + 1;
-        for (const [id, n] of sp.drop) $gameParty.gainItem($dataItems[id], n);
-        scare(flock, b.x, b.y);
+        $gameParty.gainItem($dataItems[ITEM.feathers], 1 + Math.floor(Math.random() * 3) + Math.round(perk("feathers")));   // a bird gives only feathers: 1-3 (user); Ptasznik: more
+        void sp;
+        flush(flock, $gamePlayer._realX + 0.5, $gamePlayer._realY + 0.5);
     }
     if (window.Hunting && Hunting.addTargets) {
         Hunting.addTargets(() => aliveBirds().filter(b => b.z < 14 && !b.gone).map(b => ({ x: b.x, y: b.y - 0.25, radius: SPECIES[b.kind].radius, ref: b, hit: () => killBird(b) })));
@@ -556,13 +625,15 @@
         if (window.Birds.pending) {   // asked for from the F9 menu (Debug.js)
             const what = window.Birds.pending;
             window.Birds.pending = null;
-            if (what === "raid") {
-                if (!startRaid({ kind: "crow", size: SPECIES.crow.flock[1], hours: 1 })) $gameTemp.pushLootPopup(0, "Nie ma tu nic zasianego (albo pilnuje strach na wróble)", "#bcd8ff");
-            } else if (!startGrounded(pick(Object.keys(SPECIES)))) $gameTemp.pushLootPopup(0, "Nie ma tu miejsca dla ptaków", "#bcd8ff");
+            // (called up on purpose: they come whatever the weather or the hour - the rain and dusk rule is for the ones that
+            // come by themselves)
+            const f = what === "raid" ? startRaid({ kind: "crow", size: SPECIES.crow.flock[1], hours: 1 }) : startGrounded(pick(Object.keys(SPECIES)));
+            if (f) f.summoned = true;
+            else $gameTemp.pushLootPopup(0, what === "raid" ? "Nie ma tu nic zasianego (albo pilnuje strach na wróble)" : "Nie ma tu miejsca dla ptaków", "#bcd8ff");
         }
         if (auto && birdTime() && --nextAmbient <= 0) {
-            nextAmbient = Math.round(rand(3000, 7200));   // 50 s to 2 minutes; two times in three a flock that lands and pecks
-            if (!grounded && Math.random() < 0.67) startGrounded();
+            nextAmbient = Math.round(rand(1200, 2700));   // 20 to 45 s (user: more often); four times in five a flock that lands and pecks
+            if (!grounded && Math.random() < 0.8) startGrounded();
             else if (!flyover) startFlyover();
         }
         for (const f of flocks.slice()) updateFlock(f);
@@ -572,7 +643,7 @@
 
     window.Birds = {
         SPECIES, ITEM, auto: v => { auto = !!v; }, reset, visitsOf, openCrops, guarded, checkVisits, resolveAway, eatPlant,
-        startFlyover, startGrounded, startRaid, scare, killBird,
+        startFlyover, startGrounded, startRaid, scare, flush, relocate, RELOCATE, killBird,
         get flocks() { return flocks; }, get birds() { return aliveBirds(); }, get raid() { return raid; }, store,
         pending: null   // "birds" | "raid": asked for from the F9 menu, started when the map runs again
     };

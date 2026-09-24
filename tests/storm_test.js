@@ -51,16 +51,17 @@ const OUT = __dirname + "/";
         const calmBend = await bend();
         await ev("Survival.forceStorm(2); 0");
         await frames(70);
-        const g = await J(`({ level: Storm.level(), phase: Storm.phase(), wind: Storm.wind(), weather: $gameScreen.weatherType(), target: $gameScreen._weatherPowerTarget || 0, pops: window.__pop.slice() })`);
-        check("forced: it gathers - the level rises, wind picks up, no rain yet, 'Zbiera się na burzę'", g.phase === "gather" && g.level > 0.2 && g.wind > 0.2 && g.target === 0 && g.pops.includes("Zbiera się na burzę"), g);
+        const g = await J(`({ level: Storm.level(), phase: Storm.phase(), wind: Storm.wind(), weather: $gameScreen.weatherType(), target: $gameScreen._weatherPowerTarget || 0, pops: window.__pop.slice(), said: SpeechBubbles.log.slice() })`);
+        check("forced: it gathers - the level rises, wind picks up, no rain yet, the hero says 'Idzie burza...' (a speech bubble)", g.phase === "gather" && g.level > 0.2 && g.wind > 0.2 && g.target === 0 && g.said.includes("Idzie burza...") && !g.pops.includes("Zbiera się na burzę"), g);
+        await b.shot(OUT + "storm_bubble.png");
         // jump into the raging part
         await ev("$gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.7); 0");
         await frames(130);
         const r = await J(`(function(){ const ss = SceneManager._scene._spriteset, w = ss._weather; const drop = w._sprites.find(s => s.bitmap === w._stormBitmap);
             return { level: Storm.level(), phase: Storm.phase(), wind: Storm.wind(), weather: $gameScreen.weatherType(), target: $gameScreen._weatherPowerTarget, rot: drop ? drop.rotation : null,
                 leaves: ss._stormLeaves._leaves.filter(l => l.visible).length, clouds: ss._cloudSprites.map(c => c.opacity), tone: $gameScreen.tone().slice(), base: DayNightCycle.computeTone($gameSystem.dayNightHour()),
-                pops: window.__pop.slice(), bgs: AudioManager._currentBgs && AudioManager._currentBgs.name }; })()`);
-        check("raging: MZ 'storm' rain, hard (power 8-9), 'Burza!'", r.phase === "rage" && r.weather === "storm" && r.target >= 8 && r.pops.includes("Burza!"), { weather: r.weather, target: r.target, pops: r.pops });
+                pops: window.__pop.slice(), said: SpeechBubbles.log.slice(), bgs: AudioManager._currentBgs && AudioManager._currentBgs.name }; })()`);
+        check("raging: MZ 'storm' rain, hard (power 8-9), the hero says 'Burza!' (a speech bubble)", r.phase === "rage" && r.weather === "storm" && r.target >= 8 && r.said.includes("Burza!"), { weather: r.weather, target: r.target, said: r.said });
         check("the rain slants with the wind, to the right (negative rotation)", r.rot !== null && r.rot < -0.2, r.rot);
         check("the wind is up (> 0.8) and leaves and twigs fly across the screen", r.wind > 0.8 && r.leaves >= 25, { wind: r.wind, leaves: r.leaves });
         check("the cloud shadows fade under the storm's one dark sky", r.clouds.length > 0 && r.clouds.every((o, i) => o < calmClouds[i] * 0.4), { calm: calmClouds.slice(0, 4), now: r.clouds.slice(0, 4) });

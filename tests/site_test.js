@@ -17,6 +17,8 @@ const { launch, sleep } = require("./cdp.js");
         const press = async k => { await ev(`Input._currentState.${k} = true; 0`); await frames(2); await ev(`Input._currentState.${k} = false; 0`); await frames(2); };
         const count = id => ev(`$gameParty.numItems($dataItems[${id}])`);
         const stamina = () => ev("$gameSystem.stamina()");
+        // after OK in the placer he walks up to the spot first (Farming: walk-to-place); this waits until he is there
+        const arrive = async () => { for (let i = 0; i < 80; i++) { if (await ev("!($gameTemp._buildMode && $gameTemp._buildMode.walk)")) break; await frames(5); } await frames(3); };
         const B = await ev(`(function(){
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
                 let ok = true;
@@ -38,11 +40,11 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`$gameTemp._buildMode.x = ${bx + 5}; $gameTemp._buildMode.y = ${by + 3}; 0`);
         await frames(2);
         await press("ok");
-        await frames(3);
+        await arrive();
         const swing = await ev("({ swinging: $gamePlayer.isToolSwinging(), kind: $gamePlayer._toolSwing && $gamePlayer._toolSwing._swingKind, mode: !!$gameTemp._buildMode, can: $gamePlayer.canMove() })");
         check("placing the site does not crouch or swing anything", swing.swinging === false && swing.mode === false && swing.can === true, swing);
         const site = await ev(`(function(){ const b = Farming.buildingAt(${bx + 5}, ${by + 3}); return b ? { type: b.type, site: b.site } : null; })()`);
-        check("a site is marked at the chosen tile with the hits it needs", !!site && site.type === "bench" && site.site.done === 0 && site.site.need === 3, site);
+        check("a site is marked at the chosen tile with the hits it needs", !!site && site.type === "bench" && site.site.done === 0 && site.site.need === 5, site);   // (the bench: 5 blows, the user's number)
         check("the materials were delivered at once (2 planks)", (await count(80)) === 10);
         check("the site blocks the way like a building", (await ev(`$gameMap.isPassable(${bx + 5}, ${by + 3}, 4)`)) === false);
         const spr = await ev("(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === 'bench'); return e ? { blueprint: e.sprite.opacity, hasSolid: !!e.solid, hasFoot: !!e.foot, solidVisible: e.solid.visible } : null; })()");
@@ -81,24 +83,26 @@ const { launch, sleep } = require("./cdp.js");
         check("the hammer swing (kind 7) plays, not the crouch (kind 6)", during.swinging === true && during.kind === 7, during);
         await b.shot("site_hammer_swing.png");
         await frames(40);
-        check("one blow was struck: 1/3 done, -2 stamina", (await ev(`Farming.buildingAt(${bx + 5}, ${by + 3}).site.done`)) === 1 && Math.round(s1 - (await stamina())) === 2, { done: 1, stamina: await stamina() });
+        check("one blow was struck: 1/5 done, -2 stamina", (await ev(`Farming.buildingAt(${bx + 5}, ${by + 3}).site.done`)) === 1 && Math.round(s1 - (await stamina())) === 2, { done: 1, stamina: await stamina() });
         await b.shot("site_1of3.png");
         const grow = await ev("(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === 'bench'); return { visible: e.solid.visible, shown: e.shown }; })()");
-        check("a third of the bench stands now (grows from the ground up)", grow.visible === true && grow.shown > 0, grow);
+        check("a fifth of the bench stands now (grows from the ground up)", grow.visible === true && grow.shown > 0, grow);
         check("giving up is no longer possible after the first blow", (await ev(`Farming.cancelSite(Farming.buildingAt(${bx + 5}, ${by + 3}))`)) === false);
 
         // ---- every following press is one blow, until it is finished
         await press("ok"); await frames(40);
         check("second press = second blow, no menu in between", (await ev(`Farming.buildingAt(${bx + 5}, ${by + 3}).site.done`)) === 2 && (await ev("!!$gameTemp._farmMenuOpen")) === false);
+        await press("ok"); await frames(40);
+        await press("ok"); await frames(40);
         await press("ok"); await frames(60);
         const fin = await ev(`(function(){ const b = Farming.buildingAt(${bx + 5}, ${by + 3}); return { there: !!b, stillSite: !!(b && b.site) }; })()`);
-        check("the third blow finishes the bench: it is a real building now", fin.there && !fin.stillSite, fin);
-        check("the whole job cost 3 blows x 2 stamina", Math.round(s1 - (await stamina())) === 6, { spent: s1 - (await stamina()) });
+        check("the fifth blow finishes the bench: it is a real building now", fin.there && !fin.stillSite, fin);
+        check("the whole job cost 5 blows x 2 stamina", Math.round(s1 - (await stamina())) === 10, { spent: s1 - (await stamina()) });
         await b.shot("site_done.png");
 
         // ---- giving up before any blow returns the materials
         await ev(`Farming.startPlacement("bench", ${bx + 3}, ${by + 5}); 0`);
-        await frames(8); await press("ok"); await frames(3);
+        await frames(8); await press("ok"); await arrive();
         check("a second site was marked (materials taken again)", (await count(80)) === 8 && !!(await ev(`Farming.buildingAt(${bx + 3}, ${by + 5})`)));
         await ev(`$gamePlayer.locate(${bx + 2}, ${by + 5}); $gamePlayer.setDirection(6); 0`);
         await frames(2);
@@ -109,9 +113,9 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---- the sites are saved
         await ev(`Farming.startPlacement("hive", ${bx + 6}, ${by + 4}); 0`);
-        await frames(8); await press("ok"); await frames(3);
+        await frames(8); await press("ok"); await arrive();
         const saved = await ev(`JSON.stringify(JsonEx.parse(JsonEx.stringify($gameSystem._farm)).buildings[3].filter(x => x.site))`);
-        check("an unfinished site is part of the saved data", /"need":3/.test(saved), saved);
+        check("an unfinished site is part of the saved data", /"need":5/.test(saved), saved);
     } catch (e) { console.log("ERR", e.message); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-5) : "none");

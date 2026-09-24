@@ -80,7 +80,7 @@
  *   pola, a przy okazji ryby lepiej biorą.
  *   BURZA: część deszczowych dni to burze (wiosna 30%, lato 60%, jesień 20% dni
  *   z deszczem, zimą nigdy), po południu albo wieczorem, na 1,5-3 godziny. Godzinę
- *   wcześniej "Zbiera się na burzę" (wiatr, ciemne niebo, dalekie grzmoty), potem
+ *   wcześniej postać mówi w dymku "Idzie burza..." (wiatr, ciemne niebo, dalekie grzmoty), potem
  *   ulewa (pogoda MZ "storm"), a po burzy zwykły deszcz. Siłę burzy (0..1) liczy
  *   stormLevel; pokazuje ją i daje jej dźwięk wtyczka Storm.js. Menu F9: "Burza
  *   teraz" i "Koniec pogody na dziś".
@@ -198,7 +198,7 @@
         _advanceDayNight.call(this, hours);
         const a = hero();
         if (!a || a.isDead() || !(hours > 0) || a.hp >= a.mhp || this.isWounded()) { this._healAcc = 0; return; }
-        this._healAcc = (this._healAcc || 0) + a.mhp * HEAL_PER_HOUR * hours;
+        this._healAcc = (this._healAcc || 0) + a.mhp * HEAL_PER_HOUR * (1 + perk("wound.heal")) * hours;
         const whole = Math.floor(this._healAcc);
         if (whole > 0) { a.gainHp(whole); this._healAcc -= whole; }
     };
@@ -285,33 +285,35 @@
 
     function eat(item, food) {
         const before = $gameSystem.stamina();
-        if (food.stamina) $gameSystem.changeStamina(food.stamina);
+        if (food.stamina) $gameSystem.changeStamina(food.stamina * (1 + perk("food.value")));   // (Kuchnia: Kucharz)
         const parts = [];
         const gained = Math.round($gameSystem.stamina() - before);
         if (gained > 0) parts.push("+" + gained + " wytrzymałości");
         for (const [b, h] of [[food.buff, food.hours], [food.buff2, food.hours2]]) {
             if (b && BUFFS[b] && h > 0) {
-                $gameSystem.addBuff(b, h);
-                parts.push(BUFFS[b].name + " (" + h + " godz.)");
+                const hh = Math.round(h * (1 + perk("food.buff")) * 10) / 10;   // (Kuchnia: Smakosz)
+                $gameSystem.addBuff(b, hh);
+                parts.push(BUFFS[b].name + " (" + String(hh).replace(".", ",") + " godz.)");
             }
         }
         if (window.Needs) { const extra = Needs.eat(item, food); if (extra) parts.push(extra); }   // hunger / thirst (Needs.js)
         feedback(item.iconIndex, "Zjadłeś: " + item.name + (parts.length ? ". " + parts.join(", ") + "." : "."));
     }
 
-    const FEATHERS = 146;
+    const FEATHERS = 146, SINEW = 163;
     function butcher(item) {
         const iron = hasItem(ITEM.knifeIron), meat = 2 + (iron ? 1 : 0);
         if (window.Durability) Durability.use(iron ? ITEM.knifeIron : ITEM.knifeStone);
-        if (item.meta.Butcher === "bird") {   // <Butcher:bird> (Birds.js): plucked and dressed - a little meat and the feathers
-            $gameParty.gainItem($dataItems[ITEM.rawMeat], 1);
-            $gameParty.gainItem($dataItems[FEATHERS], 3);
-            feedback(item.iconIndex, "Oskubano: mięso ×1, pióra ×3.");
+        // (old saves only: animals lie on the ground as carcasses now - Hunting.js - and birds give feathers when hit)
+        if (item.meta.Butcher === "bird") {   // <Butcher:bird>: plucked - feathers, no meat
+            $gameParty.gainItem($dataItems[FEATHERS], 2);
+            feedback(item.iconIndex, "Oskubano: pióra ×2.");
             return;
         }
         $gameParty.gainItem($dataItems[ITEM.rawMeat], meat);
         $gameParty.gainItem($dataItems[ITEM.rawHide], 1);
-        feedback(item.iconIndex, "Oprawiono: mięso ×" + meat + ", skóra ×1.");
+        $gameParty.gainItem($dataItems[SINEW], 1);
+        feedback(item.iconIndex, "Oprawiono: mięso zająca ×" + meat + ", skóra ×1, ścięgna ×1.");
     }
 
     const _Game_Battler_useItem = Game_Battler.prototype.useItem;
@@ -324,7 +326,7 @@
         if (isBandage(item)) {
             $gameSystem.healWound();
             $gameSystem.changeStamina(10);
-            $gameSystem.heal(BANDAGE_HEAL);
+            $gameSystem.heal(BANDAGE_HEAL * (1 + perk("bandage.heal")));
             feedback(item.iconIndex, "Opatrzono ranę: krew przestała płynąć, zdrowie i siły wracają.");
         }
     };
@@ -340,7 +342,7 @@
     }
     function nearFire() {
         const list = ($gameSystem._farm && $gameSystem._farm.buildings && $gameSystem._farm.buildings[$gameMap.mapId()]) || [];
-        return list.some(b => (b.type === "campfire" || b.type === "tripod" || b.type === "cauldron") && !b.site && (window.Farming && Farming.geoOf ?
+        return list.some(b => (b.type === "campfire" || b.type === "tripod" || b.type === "cauldron") && !b.site && (!(window.Farming && Farming.fireLit) || Farming.fireLit(b)) && (window.Farming && Farming.geoOf ?
             Farming.cellsOfGeo(Farming.geoOf(b), b.x, b.y).some(c => Math.abs(c.x - $gamePlayer.x) <= 4 && Math.abs(c.y - $gamePlayer.y) <= 4) :
             Math.abs(b.x - $gamePlayer.x) <= 4 && Math.abs(b.y - $gamePlayer.y) <= 4));
     }
@@ -353,11 +355,16 @@
         if (!winter && !snowing) return false;
         return !(hasItem(ITEM.cloak) || this.hasBuff("warm") || nearFire());
     };
+    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
+    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
+    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
+    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
     function costFactor() {
         let f = 1;
         if ($gameSystem.hasBuff("sated")) f *= SATED_FACTOR;
-        if ($gameSystem.isCold()) f *= COLD_FACTOR;
-        return f;
+        if ($gameSystem.isCold()) f *= 1 + (COLD_FACTOR - 1) * (1 - Math.min(1, perk("cold")));   // (Przetrwanie: Zahartowany)
+        return f * (1 - Math.min(0.6, perk("stamina.cost")));   // (Wytrwały, Syn puszczy)
     }
     const _trySpendStamina = Game_System.prototype.trySpendStamina;
     Game_System.prototype.trySpendStamina = function(cost) {
@@ -386,7 +393,7 @@
         return w !== undefined ? Number(w) || 0 : 0;
     }
     function weightCap() {
-        return WEIGHT_CAP_BASE + (hasItem(ITEM.backpack) ? WEIGHT_CAP_BACKPACK : 0);
+        return WEIGHT_CAP_BASE + (hasItem(ITEM.backpack) ? WEIGHT_CAP_BACKPACK : 0) + (window.Combat && Combat.carryBonus ? Combat.carryBonus() : 0);   // (Siła, Combat.js)
     }
     // total weight carried, optionally excluding one item type (to work out how much room is left for it)
     function carriedWeight(exclude) {
@@ -457,6 +464,11 @@
         $gameSystem._stormForce = { day: $gameSystem.dayNightDay(), off: true };
     }
     const stormNow = () => stormLevel($gameSystem.dayNightDay(), $gameSystem.dayNightHour());
+    // the hero says it (a speech bubble over him, SpeechBubbles.js; without it the old popup)
+    function shout(text) {
+        if (window.SpeechBubbles) SpeechBubbles.say($gamePlayer, text);
+        else $gameTemp.pushLootPopup(0, text, "#bcd8ff");
+    }
 
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
@@ -467,7 +479,7 @@
         // the sky warns you: wind and far thunder an hour before the storm breaks (outdoors, once per storm)
         if (isOutdoors() && storm > 0 && stormPhase(day, hour) === "gather" && $gameSystem._stormWarned !== day) {
             $gameSystem._stormWarned = day;
-            $gameTemp.pushLootPopup(0, "Zbiera się na burzę", "#bcd8ff");
+            shout("Idzie burza...");
         }
         // while the storm rages the rain is MZ's "storm" (heavier, slanted, see Storm.js), as hard as the storm is strong
         const raging = !!plan && !!plan.storm && hour >= plan.storm.start && storm > 0.35;
@@ -478,7 +490,8 @@
         if (plan && (target !== power || $gameScreen.weatherType() !== type)) {
             $gameScreen.changeWeather(type, power, 90);
             $gameSystem._weatherOwn = true;
-            if (target === 0) $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : raging ? "Burza!" : "Zaczyna padać deszcz", "#bcd8ff");
+            if (target === 0 && raging) shout("Burza!");
+            else if (target === 0) $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", "#bcd8ff");
         } else if (!plan && $gameSystem._weatherOwn) {
             $gameScreen.changeWeather("none", 0, 90);
             $gameSystem._weatherOwn = false;

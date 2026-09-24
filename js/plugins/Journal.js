@@ -151,8 +151,8 @@
             text: "Otwórz menu tartaku (przycisk akcji przy nim) i wybierz „Piłuj deski”. To ciężka praca: kosztuje wytrzymałość i kilka godzin." },
         { id: "pickaxe", ch: 1, title: "Zrób kamienny kilof", item: 63, recipe: ["workbench", "pick_stone"], after: ["wood"], done: () => has(63),
             text: "Kilof robisz w warsztacie z drewna, gałęzi i kamieni. Rozbija skały i żyły rudy." },
-        { id: "skin", ch: 1, title: "Zrób bukłak", item: 129, recipe: ["hand", "waterskin"], after: ["drink", "flax"], done: () => has(129),
-            text: "Bukłak z surowej skóry (zdobędziesz ją z pułapki albo polowania) mieści 4 łyki. Napełniasz go przy wodzie, a pijesz klawiszem G. Bez niego daleko od stawu szybko zaschnie ci w gardle." },
+        { id: "skin", ch: 4, title: "Zrób bukłak", item: 129, recipe: ["hand", "waterskin"], after: ["tannery"], done: () => has(129),
+            text: "Bukłak z wyprawionej skóry (surową skórę z pułapki albo polowania wyprawisz w garbarni) mieści 4 łyki. Napełniasz go przy wodzie, a pijesz klawiszem G. Bez niego daleko od stawu szybko zaschnie ci w gardle." },
         { id: "repair", ch: 1, title: "Napraw narzędzie", item: 89, after: ["axe"], done: () => ((($gameSystem._wear || {}).repaired) || 0) > 0,
             text: "Narzędzia się zużywają: stan widać przy nich w plecaku, a gdy zostaje mało, nad postacią pojawia się dymek. W warsztacie jest „Napraw: ...” dla każdego nadwerężonego narzędzia. Złamane trzeba zrobić od nowa." },
         { id: "chest", ch: 1, title: "Postaw skrzynię", item: 80, build: "chest_s", after: ["planks"], done: () => isBuilt("chest_s") || isBuilt("chest_l"),
@@ -204,10 +204,10 @@
             text: "Cztery sztuki lnu dają jedną linę (menu ziemi, „Wytwórz...”). Lina potrzebna jest do pułapki, wędki, garbarni i studni." },
         { id: "snare", ch: 4, title: "Postaw pułapkę", item: 101, build: "snare", after: ["rope", "branches"], done: () => isBuilt("snare"),
             text: "Sama pułapka nic nie złapie: załóż w niej przynętę (marchew, kapusta, dzikie jabłka, gruszki, jagody). Zając, który ją zwęszy, podejdzie i może wpaść. Odbierasz go przyciskiem akcji." },
-        { id: "meat", ch: 4, title: "Zdobądź mięso", item: 94, after: ["snare", "knife"], done: () => has(94),
-            text: "Odbierz zwierzynę z pułapki z przynętą (albo upoluj zająca), a potem użyj jej w menu Przedmioty (potrzebny nóż): dostaniesz mięso i skórę." },
-        { id: "roast", ch: 4, title: "Upiecz posiłek na ognisku", item: 95, after: ["meat", "campfire"], done: () => hasAny([95, 99, 107, 108]),
-            text: "Menu ogniska ma przepisy: mięso, ryba, ziemniaki i jajecznica. Siadasz z jedzeniem na patyku i czekasz, aż się upiecze (mięso i ryba pół godziny gry). Jeśli wstaniesz wcześniej (Esc albo ruch), nic się nie upiecze." },
+        { id: "meat", ch: 4, title: "Zdobądź mięso", item: 94, after: ["snare", "knife"], done: () => hasAny([94, 157, 159, 161]),
+            text: "Odbierz zająca z pułapki z przynętą albo upoluj zwierzę. Zabite leży na ziemi: podejdź z nożem i naciśnij przycisk akcji - dostaniesz mięso tego zwierzęcia, skórę i ścięgna. Bez noża nic nie weźmiesz (zwłoki czekają dobę)." },
+        { id: "roast", ch: 4, title: "Upiecz posiłek na ognisku", item: 95, after: ["meat", "campfire"], done: () => hasAny([95, 158, 160, 162, 99, 107, 108]),
+            text: "Menu ogniska ma przepisy: mięso (zająca, jelenia, dzika, wilka), ryba, ziemniaki i jajecznica. Siadasz z jedzeniem na patyku i czekasz, aż się upiecze (mięso i ryba pół godziny gry). Jeśli wstaniesz wcześniej (Esc albo ruch), nic się nie upiecze." },
         { id: "tripod", ch: 4, title: "Dobuduj trójnóg do ogniska", item: 77, after: ["roast", "rope"], done: () => isBuilt("tripod") || isBuilt("cauldron"),
             text: "W menu ogniska wybierz „Dobuduj trójnóg”: 3 gałęzie i lina staną nad ogniem. Mięso zawiesisz na haczyku i możesz odejść, bo piecze się samo (gotowe odbierzesz z ognia). Na patyku, bez trójnogu, trzeba siedzieć przy ogniu aż do końca." },
         { id: "cauldron", ch: 4, title: "Zawieś kociołek nad ogniem", item: 141, after: ["tripod", "iron"], done: () => isBuilt("cauldron"),
@@ -233,13 +233,17 @@
         { id: "smokehouse", ch: 4, title: "Zbuduj wędzarnię", item: 105, build: "smokehouse", after: ["nails", "meat"], done: () => isBuilt("smokehouse"),
             text: "Wędzone mięso i ryba to najbardziej sycące jedzenie w grze." },
         { id: "sling", ch: 4, title: "Zrób procę", item: 125, recipe: ["workbench", "sling"], after: ["rope", "wood"], done: () => hasAny([125, 126]),
-            text: "Proca (albo łuk ze strzałami) pozwala polować na zające i jelenie. Strzelasz klawiszem F, a amunicją do procy są kamienie." },
+            text: "Proca (albo łuk ze strzałami) pozwala polować na zające i jelenie. Strzelasz w trybie walki (Tab) klawiszem O, a amunicją do procy są kamienie." },
         { id: "hunt", ch: 4, title: "Upoluj zwierzynę", item: 101, after: ["sling", "knife"], done: () => { const k = (($gameSystem._hunt || {}).kills) || {}; return (k.rabbit || 0) + (k.deer || 0) > 0; },
-            text: "Zające pasą się na łące w ciągu dnia i uciekają, gdy podejdziesz. Strzel do nich z daleka klawiszem F: proca kręci się nad głową i wyrzuca kamień, łuk naciąga cięciwę i puszcza strzałę. Zwierzynę oprawisz nożem w menu Przedmioty: mięso i skóra." },
+            text: "Zające pasą się na łące w ciągu dnia i uciekają, gdy podejdziesz. Włącz tryb walki (Tab) i strzel do nich z daleka klawiszem O: proca kręci się nad głową i wyrzuca kamień, łuk naciąga cięciwę i puszcza strzałę. Zabite zwierzę leży na ziemi: podejdź z nożem i naciśnij przycisk akcji - mięso, skóra i ścięgna." },
         { id: "spear", ch: 4, title: "Zrób oszczep", item: 154, recipe: ["workbench", "spear"], after: ["sling"], done: () => has(154),
-            text: "Oszczep to broń z bliska: gdy zwierzę stoi najwyżej 2 pola przed tobą, F pchnie je grotem. Przyda się na dzika, który rano i wieczorem ryje w lesie i szarżuje, zamiast uciekać." },
+            text: "Oszczep to broń do walki wręcz z najdłuższym zasięgiem: w trybie walki (Tab) klawisz O pchnie grotem zwierzę ponad 2 pola przed tobą, kolejne O to szybka seria, a przytrzymany O - mocne pchnięcie. Przyda się na dzika, który rano i wieczorem ryje w lesie i szarżuje, zamiast uciekać." },
+        { id: "shield", ch: 4, title: "Zrób drewnianą tarczę", item: 155, recipe: ["workbench", "shield"], after: ["spear"], done: () => has(155),
+            text: "Z tarczą w torbie w trybie walki (Tab) klawisz P zasłania cię przed ciosem: przyjmuje trzy czwarte obrażeń. Uniesiona tuż przed ciosem odbija atak, a wróg się zatacza - wtedy uderz. Każdy przyjęty cios ją zużywa; naprawisz ją w warsztacie." },
         { id: "boar", ch: 4, title: "Upoluj dzika", item: 101, after: ["spear"], done: () => ((($gameSystem._hunt || {}).kills) || {}).boar > 0,
-            text: "Dzik najpierw ostrzega (staje, prycha, \"!\"), potem szarżuje. Pchnij go oszczepem, gdy jest blisko: odskoczy, a drugie pchnięcie go powali. Jeśli cię dopadnie, zrani cię - opatrunek z krwawnika (\"Wytwórz...\") zatamuje krew." },
+            text: "Dzik najpierw ostrzega (staje, prycha, \"!\"), potem szarżuje, a z bliska biegnie w długiej prostej linii. Przetocz się Spacją w bok (albo zejdź mu z drogi): przebiegnie dalej, stanie zziajany - wtedy bij. Klawisz P (tryb walki) tuż przed zderzeniem odbija szarżę, a dzik się zatacza. Jeśli cię dopadnie, zrani cię - opatrunek z krwawnika (\"Wytwórz...\") zatamuje krew." },
+        { id: "wolves", ch: 4, title: "Odeprzyj wilki", item: 101, after: ["shield"], done: () => ((($gameSystem._hunt || {}).kills) || {}).wolf > 0,
+            text: "Nocą (od 20 do 5) na łąkach i w lesie krążą watahy wilków. Otaczają cię i atakują po jednym: wilk kuca i szczeka (\"!\"), a potem skacze. Przetocz się Spacją albo odbij go klawiszem P (tryb walki), a gdy stoi po skoku - uderz. Zabij przewodnika (największy), a reszta ucieknie." },
         { id: "plant", ch: 4, title: "Posadź sosnę", item: 148, after: ["axe"], done: () => Object.values((($gameSystem._forest || {}).maps) || {}).some(list => list.length > 0),
             text: "Pod sosnami leżą szyszki. W \"Wytwórz...\" wyłuskasz z nich nasiona, a w menu wolnej ziemi posadzisz sosnę. Przez 8 dni rośnie w pełne drzewo - tak odnowisz wycięty las." },
         { id: "pantry", ch: 4, title: "Zbuduj spiżarnię", item: 99, build: "pantry", after: ["planks", "meat"], done: () => isBuilt("pantry"),
@@ -252,7 +256,7 @@
             text: "Wypał trwa kilka godzin i toczy się w tle." },
 
         { id: "hut", ch: 4, title: "Zbuduj chatkę", item: 80, build: "hut", after: ["nails", "planks", "iron"], done: () => isBuilt("hut"),
-            text: "Twój pierwszy własny dach: mała chatka z bali (30 desek, 40 gwoździ, 20 kamieni i 6 żelaza). Wejdziesz do niej przez drzwi. Jest tylko jedna na całą grę." },
+            text: "Twój pierwszy własny dach: mała chatka z bali (50 desek, 60 gwoździ, 40 kamieni i 10 żelaza). Wejdziesz do niej przez drzwi. Jest tylko jedna na całą grę." },
         { id: "furnish", ch: 4, title: "Urządź wnętrze chatki", item: 80, after: ["hut", "chest"], done: () => ((farmData().buildings || {})[100] || []).some(b => !b.site),
             text: "W środku masz podłogę 5 × 2 pola (pole przed drzwiami zostaje wolne, a meble nie mogą cię zamknąć w środku). Stań przed wolnym polem podłogi i naciśnij przycisk akcji: wybierzesz, co postawić (łóżko, kredens, warsztat, skrzynię, ławkę albo legowisko). Pod dachem śpi się dobrze także w deszczu i zimą." },
 
@@ -273,6 +277,7 @@
         return GOALS.find(g => !goalDone(g) && goalAvailable(g)) || null;
     }
 
+    const goalListeners = [];
     function announce(goal) {
         $gameTemp.pushLootPopup(goalIcon(goal), "Cel wykonany: " + goal.title, "#9ff0a8");
         AudioManager.playSe({ name: "Item3", volume: 80, pitch: 105, pan: 0 });
@@ -290,6 +295,7 @@
             if (!ok) continue;
             d.done[g.id] = dayNow();
             d.day.goals.push(g.id);
+            if (!d.fresh) for (const fn of goalListeners) fn(g);   // (Combat.js: experience for a goal)
             if (d.pinned === g.id) d.pinned = null;
             if (!d.fresh && announced < 2) { announce(g); announced++; }
         }
@@ -369,13 +375,18 @@
         85: "Żyły rudy (skały z rdzawymi żyłkami) rozbijasz kilofem.",
         92: "Len rośnie na łące (niebieskie kwiatki). Zbierasz go przyciskiem akcji.",
         98: "Łów wędką w stawie (najlepiej o świcie i o zmierzchu).",
-        129: "Robisz go w menu Wytwórz... z surowej skóry i lnu.",
+        129: "Robisz go w menu Wytwórz... z wyprawionej skóry (garbarnia) i lnu.",
         122: "Psujące się jedzenie zamienia się w to. Kompostownik zamieni je w ziemię.",
         123: "Obora daje mleko co dzień. Mleko szybko kwaśnieje.",
         127: "Robisz je w warsztacie: gałązki, kamień na grot i len.",
-        101: "Wpada w pułapkę z przynętą albo ją upolujesz. Oprawiasz nożem z menu Przedmioty.",
-        94: "Oprawiona zwierzyna (nóż, menu Przedmioty).",
-        96: "Oprawiona zwierzyna (nóż, menu Przedmioty).",
+        101: "Zając z dawnego zapisu gry. Oprawiasz go nożem z menu Przedmioty.",
+        94: "Oprawiony zając: nóż i przycisk akcji przy zwłokach (albo odbiór z pułapki z nożem).",
+        157: "Oprawiony jeleń: nóż i przycisk akcji przy zwłokach.",
+        159: "Oprawiony dzik: nóż i przycisk akcji przy zwłokach.",
+        161: "Oprawiony wilk: nóż i przycisk akcji przy zwłokach.",
+        96: "Każde oprawione zwierzę (nóż i przycisk akcji przy zwłokach).",
+        163: "Każde oprawione zwierzę (nóż i przycisk akcji przy zwłokach). Potrzebne do łuku.",
+        146: "Trafiony ptak (proca, łuk) daje od razu 1-3 pióra.",
         102: "Dziko rosną na łące latem i jesienią.",
         103: "Dziko rosną na łące jesienią.",
         139: "Rosną na dzikich jabłoniach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
@@ -405,10 +416,10 @@
         const F = Farm(), lines = [];
         if (!F) return lines;
         const bs = [], rs = [];
-        for (const r of F.HAND_RECIPES || []) if (r.inputs.some(([i]) => i === id)) rs.push(r.name);
+        for (const r of F.HAND_RECIPES || []) if (usesItem(r, id)) rs.push(r.name);
         for (const def of Object.values(F.BUILDINGS)) {
             if (def.cost.some(([i]) => i === id)) bs.push(def.name);
-            for (const r of def.recipes || []) if (r.inputs.some(([i]) => i === id)) rs.push(r.name);
+            for (const r of def.recipes || []) if (usesItem(r, id)) rs.push(r.name);
         }
         if (bs.length) lines.push("Budowa: " + bs.join(", "));
         if (rs.length) lines.push("Receptury: " + rs.join(", "));
@@ -419,6 +430,11 @@
         return lines.length ? lines[0] : "";
     };
     const costRows = pairs => pairs.map(([id, n]) => ({ k: "cost", icon: iconOfItem(id), name: dataItem(id).name, have: countOf(id), need: n, note: countOf(id) < n ? shortSource(id) : "" }));
+    // "any raw meat" (a recipe's r.meat, Farming.js): all the raw meats count
+    const rawMeats = () => { const F = Farm(); return F && F.RAW_MEATS ? F.RAW_MEATS() : [94]; };
+    const meatHave = () => rawMeats().reduce((t, id) => t + countOf(id), 0);
+    const recipeRows = r => costRows(r.inputs).concat(r.meat ? [{ k: "cost", icon: iconOfItem(94), name: "Surowe mięso (dowolne)", have: meatHave(), need: r.meat, note: meatHave() < r.meat ? shortSource(94) : "" }] : []);
+    const usesItem = (r, id) => r.inputs.some(([i]) => i === id) || (!!r.meat && rawMeats().includes(id));
 
     function materialIds() {
         const F = Farm(), ids = new Set();
@@ -426,7 +442,7 @@
             for (const r of F.HAND_RECIPES || []) { for (const [i] of r.inputs) ids.add(i); ids.add(r.output[0]); }
             for (const def of Object.values(F.BUILDINGS)) {
                 for (const [i] of def.cost) ids.add(i);
-                for (const r of def.recipes || []) { for (const [i] of r.inputs) ids.add(i); ids.add(r.output[0]); }
+                for (const r of def.recipes || []) { for (const [i] of r.inputs) ids.add(i); if (r.meat) for (const m of rawMeats()) ids.add(m); ids.add(r.output[0]); }
                 if (def.produce) ids.add(def.produce.item);
             }
             for (const c of Object.values(F.CROPS)) { ids.add(c.seed); ids.add(c.produce); }
@@ -684,7 +700,7 @@
     }
     function recipeItems() {
         return allRecipes().map(e => {
-            const out = e.r.output[0], made = has(out), ready = stationBuilt(e.type) && e.r.inputs.every(([id, n]) => countOf(id) >= n);
+            const out = e.r.output[0], made = has(out), ready = stationBuilt(e.type) && e.r.inputs.every(([id, n]) => countOf(id) >= n) && (!e.r.meat || meatHave() >= e.r.meat);
             return { label: e.r.name, icon: iconOfItem(out), mark: made ? "done" : ready ? "ready" : "todo", right: e.def.name, dim: !made && !ready, entry: e };
         });
     }
@@ -741,7 +757,7 @@
             ops.push({ k: "gap", n: 8 }, { k: "h", text: "Budowa: " + def.name }, ...costRows(def.cost));
         } else if (g.recipe && F) {
             const e = recipeRef(g.recipe);
-            ops.push({ k: "gap", n: 8 }, { k: "h", text: e.type === "hand" ? e.r.name : e.def.name + ": " + e.r.name }, ...costRows(e.r.inputs));
+            ops.push({ k: "gap", n: 8 }, { k: "h", text: e.type === "hand" ? e.r.name : e.def.name + ": " + e.r.name }, ...recipeRows(e.r));
             ops.push({ k: "muted", text: e.type === "hand" ? "Robisz to bez żadnego budynku: menu oczyszczonej ziemi > Wytwórz... > " + e.r.name + "."
                 : isBuilt(e.type) ? "Potrzebny budynek: " + e.def.name + " (masz)." : "Potrzebny budynek: " + e.def.name + " (jeszcze go nie zbudowałeś)." });
         } else if (g.item) {
@@ -786,7 +802,7 @@
         const ops = opsHeader(r.name, out.iconIndex, e.type === "hand" ? "Bez budynku (na kolanie)" : e.def.name + (isBuilt(e.type) ? "  ·  budynek stoi" : "  ·  jeszcze go nie zbudowałeś"));
         ops.push({ k: "p", text: "Wynik: " + out.name + " ×" + r.output[1] + (has(r.output[0]) ? "  (już to robiłeś)" : "") + "." });
         if (r.desc) ops.push({ k: "muted", text: r.desc });
-        ops.push({ k: "gap", n: 8 }, { k: "h", text: "Składniki" }, ...costRows(r.inputs));
+        ops.push({ k: "gap", n: 8 }, { k: "h", text: "Składniki" }, ...recipeRows(r));
         ops.push({ k: "gap", n: 8 }, { k: "muted", text: "Czas: " + Math.max(1, Math.ceil(r.hours)) + " godz.  ·  " + (r.manual ? "praca ręczna (od razu)" : "praca w tle") + "  ·  -" + (r.stamina || 0) + " wytrzymałości" });
         if (r.tool) ops.push({ k: "muted", text: "Potrzebujesz w plecaku: " + dataItem(r.tool).name + (countOf(r.tool) > 0 ? " (masz)" : " (nie masz)") + ". Nie zużywa się." });
         if (r.unique) ops.push({ k: "muted", text: "Tego przedmiotu potrzebujesz tylko jednego." });
@@ -1449,5 +1465,5 @@
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));
     PluginManager.registerCommand(pluginName, "openJournal", () => { SceneManager.push(Scene_Journal); });
 
-    window.Journal = { recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary };
+    window.Journal = { onGoalDone: fn => { goalListeners.push(fn); }, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary };
 })();

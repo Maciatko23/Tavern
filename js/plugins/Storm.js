@@ -20,10 +20,13 @@
  *   Ta wtyczka ją pokazuje i daje jej dźwięk. Siła burzy to liczba 0..1 (Survival.stormLevel):
  *
  *   Zbiera się (godzinę przed deszczem): niebo ciemnieje, zrywa się wiatr, drzewa i trawa gną się coraz
- *     mocniej, ptaki milkną, z daleka słychać pomruki i widać słabe łuny. Dymek "Zbiera się na burzę".
+ *     mocniej, ptaki milkną, z daleka słychać pomruki i widać słabe łuny. Postać mówi w dymku "Idzie burza...", a gdy uderzy - "Burza!".
  *   Szaleje: ukośna ulewa (pogoda MZ "storm", z wiatrem w prawo), pioruny, wicher, lecące liście i gałązki,
  *     dym z ogniska kładzie się poziomo, cienie chmur znikają pod jednym ciemnym niebem.
  *   Odchodzi: grzmoty coraz dalsze i cichsze, wiatr słabnie, zostaje zwykły deszcz.
+ *   Przejaśnia się: gdy burza słabnie, przez chmury przebijają się promienie słońca - kilka ciepłych,
+ *     ukośnych smug światła z góry, lekko się przesuwają i przygasają; najjaśniejsze tuż po burzy, gasną
+ *     po ok. 1,5 godziny gry. Tylko za dnia i pod gołym niebem.
  *
  * PIORUN
  *   Błysk: cały ekran na chwilę jaśnieje (czasem mignie dwa-trzy razy). W nocy błysk na moment zdejmuje
@@ -46,6 +49,7 @@
  *   wind()   wiatr na tej mapie (0..1, 0 pod dachem; wygładzony) - ChoppableTree, SwayingFoliage, CloudShadows, dym
  *   clock()  zegar wiatru w sekundach: biegnie szybciej, gdy wieje (drzewa liczą z niego swoje kołysanie)
  *   flash()  jasność błysku teraz (0..1) - warstwa nocy
+ *   rays()   siła promieni słońca po burzy (0..1)
  *   adjustTone(tone)  ton ekranu przyciemniony burzą - DayNightCycle
  *   strike(d, opts)  piorun teraz, d = odległość 0 (tuż obok) .. 1 (daleko); opts.tree = drzewo (zdarzenie)
  *            albo true (dowolne na ekranie) - testy i menu F9
@@ -82,7 +86,8 @@
         nextGust: 0,
         thunders: [],     // { at, se }
         strikes: 0,       // how many so far (tests)
-        last: null        // the last strike { d, bolt, at }
+        last: null,       // the last strike { d, bolt, at }
+        rays: 0           // the sun breaking through after a storm, 0..1 (raysAt)
     };
 
     const survival = () => window.Survival;
@@ -93,6 +98,19 @@
         state.level = S.stormLevel(day, hour);
         state.phase = state.level > 0 ? S.stormPhase(day, hour) : null;
         state.outdoors = !!(S.isOutdoors && S.isOutdoors());
+        state.rays = state.outdoors ? raysAt(day, hour) : 0;
+    }
+    // ---- the sun breaks through as the storm passes (user): from RAYS.from hours before the storm's end (it is dying away) until
+    // RAYS.until hours after it, rising over RAYS.rise and fading over the last RAYS.fall; only by day (dimmer at dawn and dusk)
+    const RAYS = { from: -0.25, rise: 0.35, until: 1.5, fall: 0.75, dawn: 6, dusk: 19.5 };
+    function raysAt(day, hour) {
+        const S = survival(), plan = S && S.weatherPlan ? S.weatherPlan(day) : null, st = plan && plan.storm;
+        if (!st) return 0;
+        const t = hour - st.end;
+        if (t < RAYS.from || t > RAYS.until) return 0;
+        const up = clamp01((t - RAYS.from) / RAYS.rise), down = clamp01((RAYS.until - t) / RAYS.fall);
+        const light = clamp01(Math.min(hour - RAYS.dawn, RAYS.dusk - hour));
+        return Math.min(up, down) * light;
     }
 
     // ---- lightning
@@ -515,6 +533,78 @@
         else { this._bolt.alpha = 0; if (bolt) state.bolt = null; }
     };
 
+    // ---- the sun rays: soft shafts of warm light slanting down from the upper left (screen space, over the rain, under the flash);
+    // each drifts and breathes on its own, so the light seems to come through moving gaps in the clouds
+    function rayBitmap() {   // bright near the top, fading down; soft on both sides
+        const W = 64, H = 256, bmp = new Bitmap(W, H), ctx = bmp.context, img = ctx.createImageData(W, H), edge = Math.exp(-3.2);
+        for (let y = 0; y < H; y++) {
+            const v = y / H, fy = Math.min(1, v / 0.12) * Math.pow(1 - v, 1.5);
+            for (let x = 0; x < W; x++) {
+                const u = ((x + 0.5) / W) * 2 - 1, fx = Math.max(0, (Math.exp(-u * u * 3.2) - edge) / (1 - edge));
+                const i = (y * W + x) * 4;
+                img.data[i] = 255; img.data[i + 1] = 236; img.data[i + 2] = 188; img.data[i + 3] = Math.round(255 * fx * fy);
+            }
+        }
+        ctx.putImageData(img, 0, 0);
+        bmp._baseTexture.update();
+        return bmp;
+    }
+    // the shafts fall on spots of the MAP (RAY_SPACING tiles apart, a little scattered) and scroll with it like the cloud shadows;
+    // each shaft stands on its spot and reaches up-left out of the screen (the sun is up to the left)
+    const RAY_TILT = -0.38, RAY_SPACING = { x: 4.5, y: 14 };
+    function Sprite_SunRays() {
+        this.initialize(...arguments);
+    }
+    Sprite_SunRays.prototype = Object.create(PIXI.Container.prototype);
+    Sprite_SunRays.prototype.constructor = Sprite_SunRays;
+    Sprite_SunRays.prototype.initialize = function() {
+        PIXI.Container.call(this);
+        this._bmp = rayBitmap();
+        this._shafts = [];
+        this._mapId = 0;
+        this._shown = 0;
+        this.visible = false;
+    };
+    // the shafts of this map: a scattered grid of spots over all of it
+    Sprite_SunRays.prototype.build = function() {
+        for (const sh of this._shafts) this.removeChild(sh);
+        this._shafts = [];
+        this._mapId = $gameMap.mapId();
+        const cols = Math.ceil($gameMap.width() / RAY_SPACING.x) + 1, rows = Math.ceil($gameMap.height() / RAY_SPACING.y) + 1;
+        for (let ry = 0; ry < rows; ry++) {
+            for (let rx = 0; rx < cols; rx++) {
+                const sh = new Sprite(this._bmp);
+                sh.anchor.set(0.5, 1);   // (standing on its spot)
+                sh.rotation = RAY_TILT + rand(-0.04, 0.04);
+                sh.blendMode = PIXI.BLEND_MODES.ADD;
+                sh._ray = { tx: (rx + rand(0.1, 0.9)) * RAY_SPACING.x, ty: (ry + rand(0.3, 0.95)) * RAY_SPACING.y, w: rand(1.5, 3.4), len: rand(0.95, 1.25),
+                    ph: rand(0, Math.PI * 2), sp: rand(0.006, 0.013), drift: rand(18, 46), top: rand(0.34, 0.5), on: Math.random() < 0.8 };
+                this.addChild(sh);
+                this._shafts.push(sh);
+            }
+        }
+    };
+    Sprite_SunRays.prototype.update = function() {
+        this._shown += Math.max(-0.01, Math.min(0.01, state.rays - this._shown));   // (no sudden jumps: a map change, F9)
+        this.visible = this._shown > 0.002;
+        if (!this.visible || !$gameMap) return;
+        if (this._mapId !== $gameMap.mapId()) this.build();
+        const W = Graphics.width, H = Graphics.height, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const k = this._shown * (1 - nightNow()), lean = Math.sin(-RAY_TILT);
+        for (const sh of this._shafts) {
+            const r = sh._ray, t = state.t, len = H * r.len;
+            const x = $gameMap.adjustX(r.tx) * tw + Math.sin(t * r.sp * 0.35 + r.ph) * r.drift, y = $gameMap.adjustY(r.ty) * th;
+            // (only what reaches the screen: the shaft runs from its spot up-left for len px)
+            sh.visible = r.on && y > -40 && y - len * 0.95 < H + 40 && x > -120 && x - len * lean < W + 120;
+            if (!sh.visible) continue;
+            sh.x = Math.round(x);
+            sh.y = Math.round(y);
+            sh.scale.x = r.w * (0.85 + 0.15 * Math.sin(t * r.sp + r.ph * 1.7));
+            sh.scale.y = len / 256;
+            sh.opacity = Math.round(255 * k * (r.top * 0.45 + r.top * 0.55 * (0.5 + 0.5 * Math.sin(t * r.sp * 0.8 + r.ph))));
+        }
+    };
+
     const _Spriteset_Map_createWeather = Spriteset_Map.prototype.createWeather;
     Spriteset_Map.prototype.createWeather = function() {
         _Spriteset_Map_createWeather.call(this);
@@ -523,6 +613,8 @@
         const under = this._nightLight ? this.children.indexOf(this._nightLight) : -1;   // under the night, so the leaves and the smoke darken with it
         if (under >= 0) { this.addChildAt(this._stormLeaves, under); this.addChildAt(this._smoulder, under); }
         else { this.addChild(this._smoulder); this.addChild(this._stormLeaves); }
+        this._sunRays = new Sprite_SunRays();
+        this.addChild(this._sunRays);   // over the rain, under the flash
         this._stormSky = new Sprite_StormSky();
         this.addChild(this._stormSky);   // over the rain
     };
@@ -542,6 +634,8 @@
         wind: () => state.wind,
         clock: () => state.clock,
         flash: () => state.flash,
+        rays: () => state.rays,
+        raysAt,
         adjustTone,
         strike,
         pending: [],   // strikes asked for while the map was not running (the F9 menu): their opts

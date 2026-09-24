@@ -48,6 +48,15 @@
  * @type boolean
  * @default true
  *
+ * @param walkSlowdown
+ * @text Wolniejszy chód
+ * @desc O ile wolniej od zwykłej prędkości RPG Makera chodzi postać (bieg bez zmian). 0 = zwykła prędkość, 0.25 = ok. 16% wolniej, 1 = o połowę.
+ * @type number
+ * @decimals 2
+ * @min 0
+ * @max 1
+ * @default 0.25
+ *
  * @param disableSwitch
  * @text Przełącznik wyłączający ruch swobodny
  * @desc Gdy przełącznik o tym numerze jest włączony, postać chodzi po kafelkach jak w zwykłym RPG Makerze. 0 = brak.
@@ -125,6 +134,7 @@
     const HIT_H = Math.max(0.2, Math.min(1, num(params.hitboxHeight, 0.5)));
     const OFF_SWITCH = Math.max(0, Math.floor(num(params.disableSwitch, 0)));
     const MARKER = params.targetMarker !== "false";
+    const WALK_SLOWDOWN = Math.max(0, Math.min(1, num(params.walkSlowdown, 0.25)));   // (speed is a power of two: -0.25 = 84% of it)
 
     // numpad direction -> [dx, dy]
     const DIR_VECTOR = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
@@ -246,10 +256,17 @@
         }
         // in tile mode dashing only changes between two steps; free movement has no steps
         if (this.canMove() && !this.isInVehicle() && !$gameMap.isDashDisabled()) {
-            this._dashing = this.isDashButtonPressed() || $gameTemp.isDestinationValid();
+            this._dashing = this.isDashButtonPressed();   // (walking to a clicked tile or a building spot is walking: running costs breath and strength, Combat.js)
         } else {
             this._dashing = false;
         }
+    };
+
+    // The walk is a little slower than the engine's normal speed (user); running keeps its speed.
+    const _realMoveSpeed = Game_Player.prototype.realMoveSpeed;
+    Game_Player.prototype.realMoveSpeed = function() {
+        const s = _realMoveSpeed.call(this);
+        return this.isDashing() ? s : s - WALK_SLOWDOWN;
     };
 
     // The wanted direction: keys and pad first, then the clicked destination.
