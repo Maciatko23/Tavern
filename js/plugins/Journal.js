@@ -278,8 +278,13 @@
     }
 
     const goalListeners = [];
-    function announce(goal) {
-        $gameTemp.pushLootPopup(goalIcon(goal), "Cel wykonany: " + goal.title, "#9ff0a8");
+    // at the top centre of the screen (SurvivalHUD's notice), not over the player; `lines`: what the listeners gave for it
+    // ({ text, color }, e.g. Combat.js's "+50 dośw."), said under the goal on the same plate
+    function announce(goal, lines) {
+        const sub = (lines || []).filter(l => l && l.text);
+        if (typeof $gameTemp.pushTopNotice === "function") {
+            $gameTemp.pushTopNotice("Cel wykonany: " + goal.title, "#9ff0a8", sub.length ? { sub: sub.map(l => l.text).join("   "), subColor: sub[0].color } : null);
+        } else $gameTemp.pushLootPopup(goalIcon(goal), "Cel wykonany: " + goal.title + sub.map(l => "  " + l.text).join(""), "#9ff0a8");
         AudioManager.playSe({ name: "Item3", volume: 80, pitch: 105, pan: 0 });
     }
 
@@ -295,9 +300,10 @@
             if (!ok) continue;
             d.done[g.id] = dayNow();
             d.day.goals.push(g.id);
-            if (!d.fresh) for (const fn of goalListeners) fn(g);   // (Combat.js: experience for a goal)
+            const lines = [];   // (Combat.js: experience for a goal - it gives back the line said with the goal)
+            if (!d.fresh) for (const fn of goalListeners) { const line = fn(g); if (line && line.text) lines.push(line); }
             if (d.pinned === g.id) d.pinned = null;
-            if (!d.fresh && announced < 2) { announce(g); announced++; }
+            if (!d.fresh && announced < 2) { announce(g, lines); announced++; }
         }
         d.fresh = false;
     }
@@ -392,8 +398,10 @@
         139: "Rosną na dzikich jabłoniach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
         140: "Rosną na dzikich gruszach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
         104: "Dziko rosną na łące.",
-        67: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",
-        68: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",
+        67: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne; czasem są też przy dzikim ziemniaku, wykopanym ręką.",
+        68: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne; czasem są też przy dzikiej marchwi, wykopanej ręką.",
+        71: "Rzadko rośnie dziko (liście z białymi kwiatkami): wykop go ręką - czasem z nasionami.",
+        72: "Rzadko rośnie dziko (pierzasta nać, pomarańczowy korzeń): wykop ją ręką - czasem z nasionami.",
         69: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",
         70: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne."
     };

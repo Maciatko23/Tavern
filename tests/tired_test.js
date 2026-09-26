@@ -32,10 +32,21 @@ const { launch, sleep } = require("./cdp.js");
             return (await ev("$gamePlayer._realX")) - x0;
         };
 
+        // a roll (Space) to the right, facing right: how long it takes and how far it goes
+        const roll = async () => {
+            await ev(`$gamePlayer.locate(${R.x + 1}, ${R.y}); $gamePlayer.setDirection(6); Combat.resetAct(); 0`); await frames(40);
+            const x0 = await ev("$gamePlayer._realX");
+            await ev("Input._onKeyDown({ keyCode: 32, preventDefault() {} }); 0"); await frames(2); await ev("Input._onKeyUp({ keyCode: 32 }); 0");
+            const len = await ev("Combat.act.rollLen"), f0 = await ev("Graphics.frameCount");
+            for (let i = 0; i < 100 && (await ev("Combat.act.mode")) === "roll"; i++) await frames(1);
+            return { len, frames: (await ev("Graphics.frameCount")) - f0, dist: Math.round(((await ev("$gamePlayer._realX")) - x0) * 100) / 100 };
+        };
+
         await frames(60);
         const s0 = await S();
         check("rested (100%): not tired, the usual speeds, nothing said", !s0.tired && s0.walk === 3.75 && s0.work === 1 && s0.said === 0, s0);
         const d0 = await walk();
+        const r0 = await roll();
 
         await ev("$gameSystem.setStamina(15); 0");
         await frames(30);
@@ -45,6 +56,9 @@ const { launch, sleep } = require("./cdp.js");
         check("...he walks at half the speed (3.75 -> 2.75) and works at half the speed", s1.walk === 2.75 && s1.work === 0.5, s1);
         const d1 = await walk();
         check("...really: 60 frames of walking take him half as far", Math.abs(d1 - d0 / 2) < 0.2, { rested: d0, tired: d1 });
+        await ev("$gameSystem.setStamina(15); 0");
+        const r1 = await roll();
+        check("...and the roll (Space) is twice as slow: twice as long, as far", r0.len === 22 && r1.len === 44 && r1.frames >= r0.frames * 1.7 && Math.abs(r1.dist - r0.dist) < 0.4 && r0.dist > 1.5, { rested: r0, tired: r1 });
         await frames(60);
         check("it is said once, not again while he stays tired", (await S()).said === 1);
 

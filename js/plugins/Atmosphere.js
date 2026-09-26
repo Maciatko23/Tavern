@@ -408,6 +408,7 @@
             const id = $gameMap.tileId(x, y, z);
             if (id > 0 && Tilemap.isWaterTile(id) && $gameMap.isPassable(x, y, 2)) return "water";
         }
+        if (!indoors && window.Puddles && Puddles.wetAt(x, y)) return "water";   // a puddle after rain (Puddles.js)
         if (!indoors && window.Farming && Farming.plotAt) {
             const plot = Farming.plotAt(x, y);
             if (plot && (plot.s === "tilled" || plot.s === "raked" || plot.crop)) return "soil";

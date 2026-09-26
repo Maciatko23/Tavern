@@ -50,8 +50,8 @@ const { launch, sleep } = require("./cdp.js");
         for (let i = 0; i < 40; i++) {
             const still = await ev(`!!Farming.buildingAt(${cx}, ${cy}).site`);
             if (!still) break;
-            // the first blow comes from the site menu ("Zacznij budować"), every next press of the action button is one blow
-            await ev(`$gameSystem.changeStamina(100); (function(){ const b = Farming.buildingAt(${cx}, ${cy}); if (b.site.done === 0) Farming.strikeSite(b, ${cx}, ${cy - 2}); else Farming.menuFor(${cx}, ${cy - 2}); })(); 0`);
+            // every blow straight through strikeSite (the site menu - "Zacznij budować"), every next press of the action button is one blow
+            await ev(`$gameSystem.changeStamina(100); (function(){ const b = Farming.buildingAt(${cx}, ${cy}); Farming.strikeSite(b, ${cx}, ${cy - 2}); })(); 0`);
             blows++;
             await frames(40);
         }

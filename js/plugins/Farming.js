@@ -268,7 +268,7 @@
  *   (domyślnie 7) wyklucza pojedyncze kratki, np. podwórko przy drzwiach.
  *
  * JAK SIĘ Z TYM PRACUJE (przycisk akcji, twarzą do kratki)
- *   Oczyszczona ziemia: po kolei "Odpocznij na ziemi" (tylko na trawie), "Wytwórz...", "Wykop ziemię",
+ *   Oczyszczona ziemia: po kolei "Odpocznij" (tylko na trawie), "Wytwórz...", "Wykop ziemię",
  *                       "Zagrab ziemię" (grabie) i na końcu "Postaw...".
  *                       "Wytwórz..." to młotek i lina bez budynku (wszystkie inne narzędzia powstają w warsztacie);
  *                       "Postaw..." to namiot, wiadro i leśne legowisko - stają od razu, bez młotka.
@@ -312,8 +312,10 @@
  *   placu i mieć MŁOTEK. Każde naciśnięcie przycisku akcji to jedno uderzenie
  *   młotkiem (kosztuje wytrzymałość, parametr), a budowla rośnie od dołu, aż po
  *   ostatnim uderzeniu jest gotowa. Liczba uderzeń zależy od wielkości budowli.
- *   Pierwsze naciśnięcie otwiera menu (zacznij / zrezygnuj ze zwrotem materiałów);
- *   po pierwszym uderzeniu budowę trzeba dokończyć. Nie ma tu kucania. Budowle blokują przejście. Ognisko migocze i nocą
+ *   Naciśnięcie otwiera menu placu (zacznij / buduj dalej, zrezygnuj / rozbierz
+ *   plac - zwraca materiały: wszystkie przed pierwszym uderzeniem, potem coraz
+ *   mniej, do połowy); przytrzymanie przycisku wybiera budowanie samo i uderza
+ *   bez przerwy. Nie ma tu kucania. Budowle blokują przejście. Ognisko migocze i nocą
  *   rzuca ciepły blask (godzina z wtyczki DayNightCycle).
  *
  * ZIEMIA
@@ -393,10 +395,16 @@
  *   Wytwórz...: surowa skóra i len) mieści 4 łyki; "Napełnij bukłak" przy wodzie, a pije się z niego
  *   klawiszem G lub z menu Przedmioty.
  *
- * ODPOCZYNEK NA ZIEMI (bez żadnego budynku)
- *   Na zwykłej, nietkniętej trawie (nie na zaoranej ani zagrabionej ziemi) pierwszą pozycją menu jest
- *   "Odpocznij na ziemi": gracz siada na trawie i siedzi bez ruchu, z rękami złożonymi na kolanach;
- *   co 3 minuty gry +1 wytrzymałości. Wstaje, gdy się ruszysz albo wypocznie do pełna.
+ * ODPOCZYNEK (siedzi, a co sekundę mija godzina; drabinka: wytrzymałości na godzinę)
+ *   Trawa (bez budynku, na zwykłej, nietkniętej trawie): "Odpocznij" - +20 na godzinę, w deszczu +10. Gracz siada
+ *     z rękami złożonymi na kolanach. Ławka ("Usiądź i odpocznij"): +30. Ognisko, trójnóg, kociołek ("Odpocznij
+ *     przy ogniu", gdy się pali): +40. Wiata ("Usiądź i odpocznij", także w deszczu): +50.
+ *   Siedzi, aż wypocznie (wstaje sam), aż gracz wstanie (strzałki, O, Esc, kliknięcie), aż ogień zgaśnie albo
+ *     coś go zaatakuje / dzik czy wilki się zbliżą. Głód i pragnienie rosną jak zwykle z mijającymi godzinami.
+ *   Sen (legowisko 60%, namiot i łóżko 100%) przewija czas do rana.
+ * POTRZEBA SNU
+ *   Kto nie spał 16 godzin, temu odpoczynek (trawa, ognisko, ławka, wiata) przywraca najwyżej 50% sił - menu
+ *   mówi, od ilu godzin nie spał. Każdy sen (legowisko, namiot, łóżko) liczy czas od nowa.
  *
  * LEŚNE LEGOWISKO (pierwsze spanie w terenie)
  *   W menu ziemi "Wytwórz..." robisz je z 10 gałęzi i 10 lnu (jedno naraz), a potem rozkładasz w
@@ -486,7 +494,7 @@
         pickaxe: num(params.pickaxeItem, 63),
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
         honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144, bird: 145, feathers: 146,
-        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140, clay: 164, rawPot: 165, dryPot: 166, firedPot: 167   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -537,15 +545,20 @@
     // sheet is kept in ChoppableTree.js in case a lying-down rest is wanted again somewhere else later.
 
     const DIG_YIELD = [2, 3];   // soil per dig
+    const CLAY_YIELD = [1, 2];   // wet clay per dig in a puddle (Puddles.js)
 
     const SE = {
         rake: "Earth2", hoe: "Earth3", plant: "Earth4", harvest: "Item3",
         build: "Hammer", demolish: "Break", rest: "Heal2", collect: "Item2", uproot: "Earth1",
         dig: "Earth5", kindle: "Fire2", chest: "Chest1", move: "Item1", water: "Liquid"
     };
-    // sitting on the ground: no building needed, stays seated for as long as you like (moving away ends it),
-    // +1 stamina every REST_TICK_MINUTES of game time - about REST_TICK_MINUTES real seconds at the usual clock speed
-    const REST_TICK_MINUTES = 3;
+    // resting (the user's, 2026-09-26): seated, REST_HOURS_A_SECOND hours of the day go by every second of real time and the
+    // strength comes back by the place's rate an hour - the grass GROUND_REST (GROUND_REST_WET in the rain), the places built for it
+    // more (BUILDINGS[..].rest: bench 30, campfire 40, shelter 50) - until full, until he gets up, or until danger comes
+    const GROUND_REST = 20, GROUND_REST_WET = 10, REST_HOURS_A_SECOND = 1;
+    // the need of sleep: GROUND/building rests bring the strength back only to SLEEP_CAP of the maximum once he has been awake
+    // SLEEP_DEBT_HOURS (a night's sleep - any bed, the tent - resets it; $gameSystem._lastSleep = the clock hour he woke)
+    const SLEEP_DEBT_HOURS = 16, SLEEP_CAP = 0.5;   // (the user's, 2026-09-26: was 20 h / 70%)
 
     // ------------------------------------------------------------------
     // Content tables (crops, buildings, hand-made recipes): Farming_Data.js (loads before this file). Add your own crops / buildings there.
@@ -909,7 +922,11 @@
         nettle: { item: ITEM.nettle, share: 0.025, respawn: 4, count: [2, 3], seasons: [0, 1, 2] },   // stings bare hands (pickGather)
         yarrow: { item: ITEM.yarrow, share: 0.018, respawn: 5, count: [1, 2], seasons: [1, 2] },
         garlic: { item: ITEM.garlic, share: 0.018, respawn: 5, count: [1, 3], seasons: [0, 1] },
-        cone: { item: ITEM.cone, share: 0, respawn: 5, count: [1, 3] }   // no share: only under a standing pine (coneTiles)
+        cone: { item: ITEM.cone, share: 0, respawn: 5, count: [1, 3] },   // no share: only under a standing pine (coneTiles)
+        // wild potatoes and carrots (the user's, 2026-09-25): seldom, there from the start; dug out by hand they give the vegetable and,
+        // half the time, its seeds (seed: [item, chance, count]) - a way to the first seeds. Last on the hash line: the older kinds keep their tiles
+        wildPotato: { item: ITEM.potato, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1, 2], seed: [67, 0.5, [1, 2]] },
+        wildCarrot: { item: ITEM.carrot, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1, 2], seed: [68, 0.5, [1, 2]] }
     };
     const GATHER_KINDS = Object.keys(GATHER);
     const BUSH_SHARE = 0.02;        // the part of the tiles that hold a berry bush
@@ -1029,6 +1046,7 @@
             stoneRev++;
             playSe(SE.collect, 105);
             $gameParty.gainItem(item, n);
+            if (g.seed && Math.random() < g.seed[1]) $gameParty.gainItem(itemOf(g.seed[0]), rand(g.seed[2]));   // (a wild vegetable: its seeds too, sometimes)
             if (sting && farm().stungDay !== today()) {
                 farm().stungDay = today();
                 popup(item.iconIndex, "Pokrzywa parzy! (-1 wytrzymałości)", "#ffb070");
@@ -1064,12 +1082,12 @@
         return false;
     }
     // src: a bucket to take the water from (its portions run out); without it the water is unlimited (a pond, a well)
-    const bucketEmpty = () => complain(itemOf(ITEM.bucket).iconIndex, "Wiadro jest puste");
+    const bucketEmpty = src => complain(itemOf((src && BUILDINGS[src.type].pack) || ITEM.bucket).iconIndex, (src && BUILDINGS[src.type].rain.empty) || "Wiadro jest puste");
     function fillCan(src) {
         const can = itemOf(ITEM.wateringCan);
         if (!$gameParty.hasItem(can)) { complain(can.iconIndex, "Nie masz konewki"); return false; }
         if (canCharges() >= canMax()) { complain(can.iconIndex, "Konewka jest pełna"); return false; }
-        if (src && bucketUnits(src) < 1) { bucketEmpty(); return false; }
+        if (src && bucketUnits(src) < 1) { bucketEmpty(src); return false; }
         swingThen(CROUCH_KIND, () => {
             let now = canMax();
             if (src) {
@@ -1088,11 +1106,11 @@
     function drink(src) {
         const tired = typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() < 0.98;
         if (!thirsty() && !(tired && !needsOn())) { complain(ICON.thirst, "Nie chce ci się pić"); return false; }
-        if (src && bucketUnits(src) < 1) { bucketEmpty(); return false; }
+        if (src && bucketUnits(src) < 1) { bucketEmpty(src); return false; }
         swingThen(CROUCH_KIND, () => {
             if (src) takeBucketWater(src, 1);
             if (needsOn()) {
-                const got = Needs.drink(Needs.TAP_DRINK);
+                const got = Needs.drink(drinkAmount(src));
                 $gameSystem.changeStamina(3);
                 playSe(SE.water, 105);
                 popup(ICON.thirst, "Nawodnienie +" + got, "#9fd4ff");
@@ -1108,7 +1126,7 @@
         const skin = itemOf(ITEM.skin);
         if (!needsOn() || !Needs.ownsSkin()) { complain(skin.iconIndex, "Potrzebujesz bukłaka"); return false; }
         if (Needs.skinCharges() >= Needs.SKIN.max) { complain(skin.iconIndex, "Bukłak jest pełny"); return false; }
-        if (src && bucketUnits(src) < 1) { bucketEmpty(); return false; }
+        if (src && bucketUnits(src) < 1) { bucketEmpty(src); return false; }
         swingThen(CROUCH_KIND, () => {
             if (src) {
                 const take = Math.min(Needs.SKIN.max - Needs.skinCharges(), bucketUnits(src));
@@ -1126,7 +1144,7 @@
         const bucket = itemOf(ITEM.bucket), max = BUILDINGS.bucket.rain.max;
         if (!ownsBucket()) { complain(bucket.iconIndex, "Potrzebujesz wiadra"); return false; }
         if (bagWater() >= max) { complain(bucket.iconIndex, "Wiadro jest pełne"); return false; }
-        if (src && bucketUnits(src) < 1) { bucketEmpty(); return false; }
+        if (src && bucketUnits(src) < 1) { bucketEmpty(src); return false; }
         swingThen(CROUCH_KIND, () => {
             let now = max;
             if (src) {
@@ -1167,15 +1185,17 @@
     }
     // src: the bucket the water comes from (its portions), none for a well or a pond
     const hasWater = src => !src || bucketUnits(src) >= 1;
-    const portions = src => (src ? "\nWiadro: " + bucketUnits(src) + "/" + BUILDINGS[src.type].rain.max + " porcji deszczówki." : "");
+    const drinkAmount = src => (src && BUILDINGS[src.type].rain.drink) || (needsOn() ? Needs.TAP_DRINK : 8);
+    const portions = src => (src ? "\n" + (src.type === "bucket" ? "Wiadro" : BUILDINGS[src.type].name) + ": " + bucketUnits(src) + "/" + BUILDINGS[src.type].rain.max + " porcji deszczówki." : "")
+        + (src && BUILDINGS[src.type].rain.wear ? " Zużycie: " + (src.uses || 0) + "/" + BUILDINGS[src.type].rain.wear + "." : "");
     function canEntry(src) {
         const can = itemOf(ITEM.wateringCan), have = $gameParty.hasItem(can);
         return { name: "Napełnij konewkę", icon: can.iconIndex, right: have ? canCharges() + "/" + canMax() : "", enabled: have && canCharges() < canMax() && hasWater(src),
             help: (have ? "Konewka mieści " + canMax() + " podlań." : "Nie masz konewki. Wykuje się ją w kuźni.") + portions(src), run: () => fillCan(src) };
     }
     function drinkEntry(src) {
-        return { name: "Napij się", icon: 391, right: needsOn() ? "+" + Needs.TAP_DRINK : "+8", enabled: (thirsty() || (!needsOn() && $gameSystem.staminaRatio() < 0.98)) && hasWater(src),
-            help: (needsOn() ? "Chłodna woda gasi pragnienie (+" + Needs.TAP_DRINK + ") i trochę odświeża." : "Chłodna woda odświeża.") + portions(src), run: () => drink(src) };
+        return { name: "Napij się", icon: 391, right: needsOn() ? "+" + drinkAmount(src) : "+8", enabled: (thirsty() || (!needsOn() && $gameSystem.staminaRatio() < 0.98)) && hasWater(src),
+            help: (needsOn() ? "Chłodna woda gasi pragnienie (+" + drinkAmount(src) + ") i trochę odświeża." : "Chłodna woda odświeża.") + portions(src), run: () => drink(src) };
     }
     function skinEntry(src) {
         const have = needsOn() && Needs.ownsSkin(), max = needsOn() ? Needs.SKIN.max : 4;
@@ -1209,15 +1229,45 @@
         const now = clockHours();
         if (b.wt === undefined || now < b.wt) b.wt = now;
         if (now > b.wt) {
-            b.water = Math.min(def.rain.max, (b.water || 0) + rainHoursBetween(b.wt, now) * def.rain.rate);
+            // (clay seeps - taken off first, so a pot in the rain still shows full)
+            const left = Math.max(0, (b.water || 0) - (def.rain.leak ? (now - b.wt) / 24 * def.rain.leak : 0));
+            b.water = Math.min(def.rain.max, left + rainHoursBetween(b.wt, now) * def.rain.rate);
             b.wt = now;
         }
         return b.water || 0;
     }
-    const bucketUnits = b => Math.floor(bucketSync(b) + 1e-6);
+    // (a seeping clay pot loses water all the time: a hair under a whole portion - minutes of seeping - still counts as the portion)
+    const bucketUnits = b => Math.floor(bucketSync(b) + (BUILDINGS[b.type].rain.leak ? 0.02 : 1e-6));
     function takeBucketWater(b, n) {
         b.water = Math.max(0, bucketSync(b) - n);
+        const def = BUILDINGS[b.type];
+        if (def.rain.wear) {
+            b.uses = (b.uses || 0) + 1;
+            if (b.uses >= def.rain.wear) later(20, () => crackVessel(b));
+        }
         changed();
+    }
+    function crackVessel(b) {
+        const list = buildingsOf($gameMap.mapId()), i = list.indexOf(b);
+        if (i < 0) return;
+        list.splice(i, 1);
+        releaseGround(b, $gameMap.mapId());
+        changed();
+        playSe("Crash", 80);
+        popup(itemOf(BUILDINGS[b.type].pack || ITEM.firedPot).iconIndex, BUILDINGS[b.type].name + " pękł", "#ffb070");
+    }
+    // a vessel with rain.own taken into the bag keeps its water and wear ($gameSystem._vesselBag[type] = [{ water, uses }]); set down again, it has them back
+    function stowVessel(b) {
+        const bag = $gameSystem._vesselBag || ($gameSystem._vesselBag = {});
+        (bag[b.type] || (bag[b.type] = [])).push({ water: bucketSync(b), uses: b.uses || 0 });
+    }
+    function unstowVessel(b) {
+        const list = ($gameSystem._vesselBag || {})[b.type];
+        const rec = list && list.pop();
+        if (!rec) return;
+        b.water = rec.water;
+        b.uses = rec.uses;
+        b.wt = clockHours();
     }
     // The bucket you carry in the bag: one shared water level (like the waterskin/watering can), not tracked per
     // item copy - RPG Maker items only count how many you have, not per-instance state, and the game already
@@ -1251,11 +1301,13 @@
         return true;
     }
     function bucketEntries(b) {
-        const max = BUILDINGS[b.type].rain.max, n = bucketUnits(b);
-        return [{ name: n >= 1 ? "Woda w wiadrze: " + n + "/" + max : "Wiadro jest puste", icon: itemOf(ITEM.bucket).iconIndex, right: n + "/" + max, enabled: false,
-                help: n >= 1 ? "Deszczówka zebrana w wiadrze. Pijesz ją, napełniasz nią konewkę i bukłak albo podlewasz rośliny w pobliżu." : "Wiadro zbiera deszcz: każda godzina deszczu to jedna porcja (do " + max + ")." },
+        const rain = BUILDINGS[b.type].rain, max = rain.max, n = bucketUnits(b);
+        const icon = itemOf(BUILDINGS[b.type].pack || ITEM.bucket).iconIndex, word = rain.in || "w wiadrze";
+        return [{ name: n >= 1 ? "Woda " + word + ": " + n + "/" + max : (rain.empty || "Wiadro jest puste"), icon, right: n + "/" + max, enabled: false,
+                help: (n >= 1 ? "Deszczówka zebrana " + word + ". Pijesz ją, napełniasz nią konewkę i bukłak albo podlewasz rośliny w pobliżu." : "Zbiera deszcz: każda godzina deszczu to jedna porcja (do " + max + ").")
+                    + (rain.leak ? " Glina powoli ją przesącza: porcja na dobę." : "") + (rain.wear ? " Zużycie: " + (b.uses || 0) + "/" + rain.wear + " - potem pęknie." : "") },
             drinkEntry(b), skinEntry(b), canEntry(b), bucketEntry(b),
-            { name: "Wylej wodę", icon: itemOf(ITEM.bucket).iconIndex, enabled: n >= 1, help: "Wylewasz wodę na ziemię.", run: () => pourOut(b) }];
+            { name: "Wylej wodę", icon, enabled: n >= 1, help: "Wylewasz wodę na ziemię.", run: () => pourOut(b) }];
     }
     function waterMenu() {
         const rod = itemOf(ITEM.rod), have = $gameParty.hasItem(rod);
@@ -1503,6 +1555,125 @@
         return true;
     }
 
+    // ---- wet clay: dug with the shovel out of a puddle after rain (Puddles.js keeps the water and how much clay a puddle has left)
+    function digClay(x, y) {
+        const puddle = window.Puddles && Puddles.at(x, y);
+        const clay = itemOf(ITEM.clay);
+        if (!puddle) return false;
+        if (Puddles.clayLeft(puddle.hollow) <= 0) { complain(clay.iconIndex, "Gliny tu już nie ma"); return false; }
+        if (!requireItem(ITEM.shovel)) return false;
+        if ($gameParty.maxItems(clay) - countOf(ITEM.clay) < 1) { complain(clay.iconIndex, "Masz już dość gliny"); return false; }
+        if (!spendStamina(farmCost(STAMINA.dig))) return false;
+        swingThen(SHOVEL_KIND, () => {
+            useTool(ITEM.shovel);
+            Puddles.takeClay(puddle.hollow);
+            playSe(SE.dig, 80 + Math.floor(Math.random() * 10));
+            fx(x, y, "dirt", false);
+            $gameParty.gainItem(clay, rand(CLAY_YIELD));
+        });
+        return true;
+    }
+    // ---- a clay pot drying where it was set down: how far dry (0..1) - the hours since it was put there, less the hours of rain on it
+    function potDryness(b) {
+        const def = geoOf(b);
+        if (!def || !def.dry || !hasClock()) return 0;
+        const now = clockHours();
+        if (b.dryFrom === undefined || now < b.dryFrom) { b.dryFrom = now; changed(); }
+        const rain = weatherHere() ? rainHoursBetween(b.dryFrom, now) : 0;   // (under a roof - the hut - no rain on it)
+        return Math.max(0, Math.min(1, (now - b.dryFrom - rain) / def.dry.hours));
+    }
+    const potHoursLeft = b => Math.max(1, Math.ceil((1 - potDryness(b)) * geoOf(b).dry.hours));
+    // ---- the shelter's table: raw pots dry there under the roof, the rain does not reach them. b.pots = [{ from: clock hour }]
+    const tablePots = b => b.pots || (b.pots = []);
+    const tablePotDry = (b, p) => hasClock() && clockHours() - p.from >= geoOf(b).table.hours;
+    const tablePotHoursLeft = (b, p) => Math.max(1, Math.ceil(geoOf(b).table.hours - (clockHours() - p.from)));
+    function putPotOnTable(b) {
+        const def = geoOf(b), raw = itemOf(ITEM.rawPot);
+        if (!def.table) return false;
+        if (tablePots(b).length >= def.table.slots) { complain(raw.iconIndex, "Na stole nie ma już miejsca"); return false; }
+        if (countOf(ITEM.rawPot) < 1) { complain(raw.iconIndex, "Nie masz surowego garnka"); return false; }
+        let crouched = false;
+        crouched = swingThen(CROUCH_KIND, () => {
+            if (countOf(ITEM.rawPot) < 1 || tablePots(b).length >= def.table.slots) return;
+            $gameParty.loseItem(raw, 1);
+            tablePots(b).push({ from: clockHours() });
+            changed();
+            playSe("Equip1", 90);
+            popup(raw.iconIndex, "Garnek na stole: schnie pod dachem", "#cfe6a8");
+            if (!crouched) lockPlayer(30);
+        });
+        return true;
+    }
+    // one pot off the table: dry = a dried one (for the kiln), otherwise one still drying (it comes back raw)
+    function takeTablePot(b, dry) {
+        const p = tablePots(b).find(p => tablePotDry(b, p) === !!dry);
+        if (!p) return false;
+        const item = itemOf(dry ? ITEM.dryPot : ITEM.rawPot);
+        if (!spaceFor(item, 1)) { complainNoSpace(item); return false; }
+        let crouched = false;
+        crouched = swingThen(CROUCH_KIND, () => {
+            const i = tablePots(b).indexOf(p);
+            if (i < 0) return;
+            tablePots(b).splice(i, 1);
+            $gameParty.gainItem(item, 1);
+            changed();
+            playSe("Equip1", 100);
+            popup(item.iconIndex, "Zabrano: " + item.name, "#f3e0a0");
+            if (!crouched) lockPlayer(30);
+        });
+        return true;
+    }
+    function tableEntries(b) {
+        const def = geoOf(b), pots = tablePots(b), dryN = pots.filter(p => tablePotDry(b, p)).length, wetN = pots.length - dryN;
+        const raw = itemOf(ITEM.rawPot), dried = itemOf(ITEM.dryPot), have = countOf(ITEM.rawPot);
+        const out = [{ name: "Postaw garnek na stole", icon: raw.iconIndex, right: pots.length + "/" + def.table.slots, enabled: pots.length < def.table.slots && have > 0,
+            help: pots.length >= def.table.slots ? "Stół jest pełny (" + def.table.slots + " garnki). Zabierz te, które wyschły."
+                : have > 0 ? "Stawiasz surowy garnek na stole (masz " + have + "). Pod dachem schnie " + def.table.hours + " godz. - także w deszczu."
+                : "Nie masz surowego garnka. Ulepisz go na Warsztacie z mokrej gliny.",
+            run: () => putPotOnTable(b) }];
+        if (dryN) out.push({ name: "Zabierz wysuszony garnek", icon: dried.iconIndex, right: "×" + dryN,
+            help: "Zabierasz jeden wysuszony garnek (na stole suchych: " + dryN + "). Teraz trzeba go wypalić w piecu.", run: () => takeTablePot(b, true) });
+        if (wetN) {
+            const soonest = Math.min(...pots.filter(p => !tablePotDry(b, p)).map(p => tablePotHoursLeft(b, p)));
+            out.push({ name: "Zabierz mokry garnek", icon: raw.iconIndex, right: "×" + wetN,
+                help: "Zabierasz jeden garnek, który jeszcze schnie (mokrych: " + wetN + ", najbliższy wyschnie za ~" + soonest + " godz.). Zabrany teraz zostanie surowym garnkiem.", run: () => takeTablePot(b, false) });
+        }
+        return out;
+    }
+    function takePot(b) {
+        if (!b || !geoOf(b).dry) return false;
+        const dry = potDryness(b) >= 1, item = itemOf(dry ? ITEM.dryPot : ITEM.rawPot);
+        if (!spaceFor(item, 1)) { complainNoSpace(item); return false; }
+        let crouched = false;
+        crouched = swingThen(CROUCH_KIND, () => {
+            const list = buildingsOf($gameMap.mapId());
+            if (list.indexOf(b) < 0) return;
+            list.splice(list.indexOf(b), 1);
+            releaseGround(b, $gameMap.mapId());
+            changed();
+            $gameParty.gainItem(item, 1);
+            playSe("Equip1", 100);
+            popup(item.iconIndex, "Zabrano: " + item.name, "#f3e0a0");
+            if (!crouched) lockPlayer(30);
+        });
+        return true;
+    }
+    function potEntries(b) {
+        const dry = potDryness(b) >= 1, item = itemOf(dry ? ITEM.dryPot : ITEM.rawPot);
+        return [{ name: dry ? "Zabierz wysuszony garnek" : "Zabierz garnek", icon: item.iconIndex,
+            help: dry ? "Garnek wysechł na kość. Zabierasz go: teraz trzeba go wypalić w piecu, żeby trzymał wodę."
+                : "Garnek jest jeszcze miękki: schnie jeszcze około " + potHoursLeft(b) + " godz. suchej pogody (kiedy pada, nie schnie). Zabrany teraz zostanie surowym garnkiem i zacznie schnąć od nowa, gdy go znów postawisz.",
+            run: () => takePot(b) }];
+    }
+    function clayEntry(x, y, puddle) {
+        const left = Puddles.clayLeft(puddle.hollow), clay = itemOf(ITEM.clay);
+        return { name: "Wykop glinę", icon: clay.iconIndex, right: "-" + STAMINA.dig, enabled: left > 0,
+            help: left > 0 ? "Łopata. Spod wody wybierasz mokrą, lepką glinę (" + CLAY_YIELD[0] + "-" + CLAY_YIELD[1] + "). Z tej kałuży wykopiesz ją jeszcze " + left + (left === 1 ? " raz." : " razy.") + " Masz teraz: " + countOf(ITEM.clay) + "."
+                : "Gliny tu już nie ma - wybrałeś ją całą. Po następnym deszczu kałuże zbiorą się w innych miejscach.",
+            tip: "Glina leży tam, gdzie po deszczu stoi woda: nie przepuszcza jej, więc tworzą się na niej kałuże.",
+            run: () => digClay(x, y) };
+    }
+
     // ---- building
     function tilesOfBuilding(type, x, y) {
         return cellsOfGeo(BUILDINGS[type], x, y);
@@ -1577,6 +1748,7 @@
         crouched = swingThen(CROUCH_KIND, () => {
             const fresh = claimGround(tilesOfBuilding(type, x, y));
             const b = Object.assign({ id: farm().nextId++, type, x, y, last: today(), v: 3, claimed: fresh }, flip ? { flip: true } : {});
+            if (def.rain && def.rain.own) unstowVessel(b);
             buildingsOf($gameMap.mapId()).push(b);
             changed();
             playSe(SE.build, 100);
@@ -1673,7 +1845,8 @@
     function packUp(b) {
         const def = BUILDINGS[b.type], item = itemOf(def.pack);
         if (!spaceFor(item, 1)) { complainNoSpace(item); return false; }
-        const carryWater = def.rain ? bucketUnits(b) : 0;   // the bucket keeps its water: it joins the shared carried level
+        const carryWater = def.rain && !def.rain.own ? bucketUnits(b) : 0;   // the bucket keeps its water: it joins the shared carried level
+        if (def.rain && def.rain.own) stowVessel(b);   // (a clay pot: its own water and wear, kept for it)
         let crouched = false;
         crouched = swingThen(CROUCH_KIND, () => {
             const list = buildingsOf($gameMap.mapId());
@@ -1788,34 +1961,43 @@
             changed();
         }
     }
-    // giving up is only possible before the first blow, and returns everything
+    // what taking a site down gives back: everything before the first blow, then less the further it got - down to half (as
+    // for a finished building) just before the last blow (the user's, 2026-09-25: a half-built site can be taken down too)
+    function siteRefund(b) {
+        const f = b.site ? Math.min(1, b.site.done / Math.max(1, b.site.need)) : 1;
+        return BUILDINGS[b.type].cost.map(([id, n]) => [id, Math.round(n * (1 - 0.5 * f))]);
+    }
     function cancelSite(b) {
-        if (!b.site || b.site.done > 0) return false;
+        if (!b.site) return false;
+        const back = siteRefund(b), begun = b.site.done > 0;
         const list = buildingsOf($gameMap.mapId());
         list.splice(list.indexOf(b), 1);
         releaseGround(b, $gameMap.mapId());
-        for (const [id, n] of BUILDINGS[b.type].cost) $gameParty.gainItem(itemOf(id), n);
+        for (const [id, n] of back) if (n > 0) $gameParty.gainItem(itemOf(id), n);
         changed();
         playSe(SE.demolish, 100);
+        if (begun) fx(b.x, b.y, "wood", true);
         return true;
     }
+    // O on a site: its menu - "Zacznij budować" / "Buduj dalej" first, then taking it down. Holding O on (SITE_HOLD frames) chooses
+    // the first by itself and goes on striking (Scene_Map: _farmHold), so building still takes one long press.
     function siteMenu(b, x, y) {
-        const def = BUILDINGS[b.type], left = b.site.need - b.site.done;
-        if (b.site.done > 0) {   // work in progress: every press of the action button is one blow
-            strikeSite(b, x, y);
-            return { done: true };
-        }
-        return { title: "Plac budowy: " + def.name + " (0/" + b.site.need + ")", entries: [
+        const def = BUILDINGS[b.type], left = b.site.need - b.site.done, begun = b.site.done > 0;
+        const back = siteRefund(b).filter(([, n]) => n > 0).map(([id, n]) => itemOf(id).name + " ×" + n).join(", ");
+        const build = { name: begun ? "Buduj dalej" : "Zacznij budować", icon: itemOf(ITEM.hammer).iconIndex, right: "-" + hitCost(), run: () => strikeSite(b, x, y),
+            help: "Potrzebny młotek. Każde uderzenie kosztuje " + hitCost() + " wytrzymałości, " + (begun ? "zostało ich " : "a potrzeba ich ") + left + ". Przytrzymaj O, a będziesz uderzać bez przerwy." };
+        return { title: "Plac budowy: " + def.name + " (" + b.site.done + "/" + b.site.need + ")", hold: build.run, entries: [
             ...(hammerMissing() ? [handMenuEntry(x, y)] : []),
-            { name: "Zacznij budować", icon: itemOf(ITEM.hammer).iconIndex, right: "-" + hitCost(), run: () => strikeSite(b, x, y),
-                help: "Potrzebny młotek. Każde uderzenie (przycisk akcji) kosztuje " + hitCost() + " wytrzymałości, a potrzeba ich " + left + ". Przytrzymaj O, a będziesz uderzać bez przerwy. Po pierwszym uderzeniu budowę trzeba dokończyć." },
-            { name: "Zrezygnuj", help: "Zwraca wszystkie materiały.", run: () => cancelSite(b) }] };
+            build,
+            { name: begun ? "Rozbierz plac budowy" : "Zrezygnuj", run: () => cancelSite(b),
+                help: begun ? "Budowa przepada. Zwraca część materiałów: " + (back || "nic") + "." : "Zwraca wszystkie materiały." }] };
     }
 
     // null when the building may be taken down, otherwise the reason
     function demolishBlock(b) {
         if (b.job) return "W piecu jest wypał. Najpierw go zbierz.";
         if (chestKinds(b) > 0) return "Najpierw opróżnij skrzynię.";
+        if ((b.pots || []).length > 0) return "Najpierw zabierz garnki ze stołu.";
         if (b.type === "hut" && (farm().buildings[HUT_MAP] || []).length > 0) return "Najpierw wynieś z chatki wszystkie meble.";
         return null;
     }
@@ -2314,58 +2496,121 @@
     }
     function rest(b) {
         const def = BUILDINGS[b.type];
-        if (typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() >= 0.98) {
-            complain(ICON.stamina, "Nie jesteś zmęczony");
-            return false;
-        }
+        const no = whyNoRest();
+        if (no) { complain(ICON.stamina, no); return false; }
         if (def.fire && !fireLit(b)) { complain(itemOf(ITEM.wood).iconIndex, b.rainOut ? fireOutText(b) : "Ogień wygasł. Dorzuć drewna."); return false; }
-        const restore = () => {
-            if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(def.restHours || 1);
-            if (window.Journal) Journal.afterRest();   // a night on the bedroll ends the day: the summary of it
-            if (window.Atmosphere) Atmosphere.afterRest(def);   // a long rest saves the game (autosave)
-            const amount = Math.round(def.rest * (1 + perk("sleep.rest")));
-            if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(amount);
-            playSe(SE.rest, 100);
-            popup(ICON.stamina, "+" + amount + " wytrzymałości", "#9ff0a8");
-        };
-        if (def.fire) {   // by a fire the player sits down on the ground, stays seated a moment, then stands back up
-            swingThen(SIT_KIND, () => {
-                lockPlayer(60);
-                later(26, restore);
-            });
+        if (!$gamePlayer.startToolSwing) return false;
+        const rate = () => (def.fire && !fireLit(b) ? 0 : def.rest);   // (a fire that goes out gives nothing more: he gets up)
+        const why = { place: def.fire ? "Ogień wygasł" : "" };
+        if (def.seats) {   // on a bench (the shelter's: the front or the back one, whichever side he came from)
+            const p = $gamePlayer, back = p.y < b.y, seat = back ? def.seats.back : def.seats.front;
+            const from = { rx: p._realX, ry: p._realY, x: p._x, y: p._y, d: p.direction() };
+            const mid = b.x + def.w / 2 - 0.5, span = def.seats.span / $gameMap.tileWidth();
+            const put = (rx, ry) => { p._realX = rx; p._realY = ry; p._x = Math.round(rx); p._y = Math.round(ry); };
+            put(Math.max(mid - span, Math.min(mid + span, p._realX)), b.y + seat.dy);
+            p.setDirection(seat.dir || (back ? 2 : 8));
+            const opts = restingOpts(rate, true, why);
+            opts.lift = seat.lift;
+            const ok = p.startToolSwing(SIT_KIND, () => {}, () => { put(from.rx, from.ry); p._x = from.x; p._y = from.y; p.setDirection(from.d); }, opts);
+            if (!ok) { put(from.rx, from.ry); p._x = from.x; p._y = from.y; p.setDirection(from.d); return false; }
             return true;
         }
-        lockPlayer(95);
-        later(35, restore);
-        return true;
+        // by a fire he sits down on the ground (shifting a little now and then)
+        return $gamePlayer.startToolSwing(SIT_KIND, () => {}, undefined, restingOpts(rate, !def.fire, why));
     }
-    // no building needed: the player sits down right where they stand (the same sitting swing as a bench or a
-    // campfire) and stays seated for as long as they like - +1 stamina every REST_TICK_MINUTES of game time,
-    // shown floating over them. Moving away (or reaching full strength) stands them back up on their own.
-    function lieDown(x, y) {
-        if (typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() >= 0.98) {
-            complain(ICON.stamina, "Nie jesteś zmęczony");
-            return false;
-        }
-        const gameMinutes = () => $gameSystem.dayNightDay() * 1440 + $gameSystem.dayNightHour() * 60;
-        let startMin = 0, given = 0;
-        swingThen(SIT_KIND, () => {
-            startMin = gameMinutes();
-            given = 0;
-        }, {
-            holdWhile: () => typeof $gameSystem.staminaRatio !== "function" || $gameSystem.staminaRatio() < 1,
-            onWait: () => {
-                const due = Math.floor((gameMinutes() - startMin) / REST_TICK_MINUTES);
-                if (due > given) {
-                    given = due;
-                    if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(1);
-                    popup(ICON.stamina, "+1", "#9ff0a8");
-                }
+    // The rest, frame by frame while he sits (the sitting swing waits on its impact frame): rate() = stamina an hour here now (0: the
+    // place gives nothing any more - the fire went out). Each frame 1/60 of REST_HOURS_A_SECOND hours go by (so all that runs with
+    // the clock - hunger, thirst, healing, the fire's fuel, the weather - goes on as usual) and the strength comes back by that much.
+    // It ends by itself at full strength (restCeiling: the sleep and the hunger caps), on a hit, when a boar or a wolf comes at him,
+    // or when the place stops giving; the player ends it with a direction key or Esc (ChoppableTree), O or a click (here).
+    function restingOpts(rate, still, why) {
+        const r = { hours: 0, gained: 0, hp: heroHpNow(), end: "" };
+        const step = REST_HOURS_A_SECOND / 60;
+        return {
+            still,
+            holdWhile: () => {
+                if (r.end) return false;
+                if (Input.isTriggered("ok") || TouchInput.isTriggered()) { r.end = "up"; return false; }
+                if ($gameSystem.stamina() >= restCeiling() - 0.05) { r.end = "full"; return false; }
+                return true;
             },
-            onHoldEnd: () => playSe(SE.rest, 100),
-            still: true   // sits quite still with the hands folded in the lap (no shifting between two poses like by the fire)
-        });
-        return true;
+            onWait: () => {
+                const perHour = rate();
+                if (!(perHour > 0)) { r.end = "place"; return; }
+                if (heroHpNow() < r.hp) { r.end = "hit"; return; }
+                const danger = restDanger();
+                if (danger) { r.end = "danger"; r.danger = danger; return; }
+                if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(step);
+                r.hours += step;
+                const before = $gameSystem.stamina();
+                $gameSystem.changeStamina(restGain(perHour * step * (1 + perk("sleep.rest"))));
+                r.gained += $gameSystem.stamina() - before;
+                if ($gameSystem.stamina() >= restCeiling() - 0.05) r.end = "full";
+            },
+            onHoldEnd: () => {
+                if (r.hours > 0) {
+                    if (window.Journal) Journal.afterRest();   // (a rest through midnight: the day's summary)
+                    if (window.Atmosphere) Atmosphere.afterRest({ restHours: r.hours });   // a long rest saves the game (autosave)
+                    playSe(SE.rest, 100);
+                    popup(ICON.stamina, "+" + Math.round(r.gained) + " wytrzymałości (" + hoursText(r.hours) + ")", "#9ff0a8");
+                }
+                if (r.end === "danger") later(20, () => complain(ICON.stamina, r.danger + "! Wstajesz."));
+                else if (r.end === "place" && why && why.place) later(20, () => complain(itemOf(ITEM.wood).iconIndex, why.place));
+                else if (r.end === "full" && sleepy() && $gameSystem.stamina() >= restCap() - 0.5) later(40, () => complain(ICON.stamina, "Bez snu lepiej nie wypoczniesz"));
+                else if (r.end === "full" && needsCeiling() < restCap()) later(40, () => complain(ICON.stamina, "Głodny i spragniony więcej sił nie odzyskasz"));
+            }
+        };
+    }
+    const heroHpNow = () => { const a = $gameParty.leader(); return a ? a.hp : 0; };
+    // a boar or wolves coming at him (not roaming about, not running away) within 8 tiles: the name of the first, else ""
+    function restDanger() {
+        if (!window.Hunting || !Hunting.animals || !Hunting.SPECIES) return "";
+        for (const a of Hunting.animals) {
+            const sp = a && Hunting.SPECIES[a.kind()];
+            if (!sp || !sp.aggressive || a._dead || !(a._hp > 0) || a._mode === "roam" || a._mode === "flee") continue;
+            if (a.playerDistance() < 8) return sp.name;
+        }
+        return "";
+    }
+    // ---- the need of sleep
+    function awakeHours() {
+        if (!hasClock()) return 0;
+        const now = clockHours();
+        if ($gameSystem._lastSleep === undefined || $gameSystem._lastSleep > now) $gameSystem._lastSleep = now;
+        return now - $gameSystem._lastSleep;
+    }
+    const sleepy = () => awakeHours() >= SLEEP_DEBT_HOURS;
+    // as far as a rest (not a sleep) can bring the strength now
+    const restCap = () => Math.round($gameSystem.maxStamina() * (sleepy() ? SLEEP_CAP : 1));
+    const restGain = amount => Math.max(0, Math.min(amount, restCap() - $gameSystem.stamina()));
+    // hungry or thirsty, the strength stops lower still (Needs.js); a rest ends there too
+    const needsCeiling = () => (window.Needs && Needs.capRatio && (!Needs.enabled || Needs.enabled()) ? Math.round($gameSystem.maxStamina() * Needs.capRatio()) : Infinity);
+    const restCeiling = () => Math.min(restCap(), needsCeiling());
+    const sleepyNote = () => "Nie spałeś od " + Math.floor(awakeHours()) + " godz.: bez snu odpoczynek przywróci najwyżej " + Math.round(SLEEP_CAP * 100) + "% sił. Prześpij się.";
+    // why a rest now gives nothing (null: it gives)
+    function whyNoRest() {
+        if ($gameSystem.stamina() < restCeiling() - 0.5) return null;
+        if (needsCeiling() < restCap() - 0.5) return "Głodny i spragniony więcej sił nie odzyskasz - zjedz i napij się";
+        return sleepy() ? "Bez snu lepiej nie wypoczniesz - prześpij się" : "Nie jesteś zmęczony";
+    }
+    // the menu's help when no rest is possible
+    const noRestHelp = no => (sleepy() && !(needsCeiling() < restCap() - 0.5) ? sleepyNote() : no + ".");
+    // every night's sleep (a bed, the tent, the bedroll, an inn) wakes him rested: the count of hours awake starts again
+    const _sleepUntilHour = Game_System.prototype.sleepUntilHour;
+    if (_sleepUntilHour) {
+        Game_System.prototype.sleepUntilHour = function() {
+            const r = _sleepUntilHour.apply(this, arguments);
+            this._lastSleep = clockHours();
+            return r;
+        };
+    }
+    // no building needed: he sits down on the grass right where he stands (the sitting swing, hands folded - quite still, no shifting
+    // between two poses like by the fire) and rests (restingOpts): GROUND_REST an hour, GROUND_REST_WET in the rain
+    const groundRate = () => (rainingHere() ? GROUND_REST_WET : GROUND_REST);
+    function lieDown(x, y) {
+        const no = whyNoRest();
+        if (no) { complain(ICON.stamina, no); return false; }
+        return !!($gamePlayer.startToolSwing && $gamePlayer.startToolSwing(SIT_KIND, () => {}, undefined, restingOpts(groundRate, true)));
     }
 
     // ------------------------------------------------------------------
@@ -2523,6 +2768,17 @@
     // still takes) or that it is ready; for the animals and the hive what has gathered, for a snare its bait or catch. null: nothing.
     function buildingStatus(b, def) {
         if (b.site) return null;
+        if (def.table && tablePots(b).length) {
+            const pots = tablePots(b), dryN = pots.filter(p => tablePotDry(b, p)).length, wet = pots.filter(p => !tablePotDry(b, p));
+            const item = itemOf(wet.length ? ITEM.rawPot : ITEM.dryPot);
+            if (!wet.length) return { icon: item.iconIndex, text: "Garnki na stole: " + pots.length + "/" + def.table.slots, right: "wyschły", ready: true };
+            return { icon: item.iconIndex, text: "Garnki na stole: " + pots.length + "/" + def.table.slots + (dryN ? " (suche: " + dryN + ")" : ""), right: "schną jeszcze ~" + Math.max(...wet.map(p => tablePotHoursLeft(b, p))) + " godz.", ready: dryN > 0 };
+        }
+        if (def.dry) {
+            const dry = potDryness(b) >= 1, item = itemOf(dry ? ITEM.dryPot : ITEM.rawPot);
+            if (dry) return { icon: item.iconIndex, text: "Wysechł", right: "gotowy do wypalenia", ready: true };
+            return { icon: item.iconIndex, text: rainingHere() ? "Moknie w deszczu: nie schnie" : "Schnie", right: "jeszcze ~" + potHoursLeft(b) + " godz." };
+        }
         if (b.job) {
             const [id, n] = b.job.out, item = itemOf(id), r = recipeOf(b, b.job.recipe), what = item.name + (n > 1 ? " ×" + n : "");
             if (jobReady(b)) return { icon: item.iconIndex, text: "Gotowe: " + what, right: "do zebrania", ready: true };
@@ -2549,8 +2805,12 @@
         if (def.door && !b.site) entries.push({ name: "Wejdź do środka", icon: 82, help: "Wchodzisz do chatki. Drzwi otwierasz też, po prostu w nie wchodząc.", run: () => enterHut(b) });
         if (def.rest) {
             const fireOut = !!def.fire && !fireLit(b);
-            entries.push({ name: b.type === "bench" ? "Usiądź i odpocznij" : b.type === "bedroll" ? "Zdrzemnij się" : "Ogrzej się przy ogniu", icon: 82, right: "+" + def.rest, enabled: !fireOut,
-                help: fireOut ? (b.rainOut ? fireOutText(b) : "Ogień wygasł. Dorzuć drewna, żeby się ogrzać.") : "Odnawia wytrzymałość. Mija " + hoursText(def.restHours || 1), run: () => rest(b) });
+            const no = whyNoRest();
+            entries.push({ name: def.fire ? "Odpocznij przy ogniu" : "Usiądź i odpocznij", icon: 82, right: "+" + def.rest + "/godz.", enabled: !fireOut && !no,
+                help: fireOut ? (b.rainOut ? fireOutText(b) : "Ogień wygasł. Dorzuć drewna, żeby odpocząć przy ogniu.")
+                    : no ? noRestHelp(no)
+                    : (def.fire ? "Siadasz przy ogniu" : "Siadasz") + " i odpoczywasz: co sekundę mija godzina i wraca " + def.rest + " wytrzymałości. Wstajesz sam, gdy wypoczniesz" +
+                        (def.fire ? " albo ogień zgaśnie" : "") + ", albo kiedy chcesz (strzałki, O, Esc)." + (sleepy() ? "\n" + sleepyNote() : ""), run: () => rest(b) });
         }
         entries.push(...feedFireEntries(b));
         if (def.water) entries.push(...wellEntries());
@@ -2572,6 +2832,8 @@
         }
         if (def.sleep) entries.push({ name: "Prześpij noc", icon: itemOf(def.pack || def.cost[0][0]).iconIndex, right: def.sleepRestore < 1 ? "~" + Math.round(def.sleepRestore * 100) + "% sił" : "do rana",
             help: "Kładziesz się spać do " + wakeHour() + ":00. " + (def.sleepRestore < 1 ? "Odnawia około " + Math.round(def.sleepRestore * 100) + "% sił (" + (isHutInterior() ? "pod dachem chatki bez kary za deszcz i zimno" : "w deszczu, śniegu i zimą " + Math.round(def.sleepBad * 100) + "%") + "), " : "Odnawia wszystkie siły i zdrowie, ") + "dostajesz podsumowanie dnia, a gra zapisuje się sama.", run: () => sleepInTent(b) });
+        if (def.dry && !b.site) entries.push(...potEntries(b));
+        if (def.table && !b.site) entries.push(...tableEntries(b));
         if (def.recipes) entries.push(...stationEntries(b, def));
         if (def.upgrade && !b.job) entries.push(upgradeEntry(b, def));
         if (def.pack) {
@@ -2581,7 +2843,7 @@
         }
         const back = def.refund || def.cost.map(([id, n]) => [id, Math.floor(n / 2)]).filter(([, n]) => n > 0);
         const block = demolishBlock(b);
-        if (!def.pack) entries.push({ name: "Rozbierz", enabled: !block, help: block || "Zwraca połowę materiałów" + (back.length ? ": " + back.map(([id, n]) => itemOf(id).name + " ×" + n).join(", ") : "") + ".", run: () => demolish(b) });
+        if (!def.pack && !def.dry) entries.push({ name: "Rozbierz", enabled: !block, help: block || "Zwraca połowę materiałów" + (back.length ? ": " + back.map(([id, n]) => itemOf(id).name + " ×" + n).join(", ") : "") + ".", run: () => demolish(b) });
         const status = buildingStatus(b, def), note = fireNote(b, def);
         return def.recipes ? { title, entries, tabs: splitTabs(entries), status, note } : { title, entries, status, note };
     }
@@ -2599,19 +2861,23 @@
     function groundMenuFor(x, y, plot) {
         if (plot.s === "cleared") {
             const entries = [];
-            if (plot.natural) {   // resting comes first: sit down on the grass
-                const full = typeof $gameSystem.staminaRatio === "function" && $gameSystem.staminaRatio() >= 0.98;
-                entries.push({ name: "Odpocznij na ziemi", icon: 82, right: "+1/" + REST_TICK_MINUTES + "min", enabled: !full,
-                    help: full ? "Nie jesteś zmęczony." : "Siadasz na trawie. Dopóki się nie ruszysz, co " + REST_TICK_MINUTES + " minuty gry odzyskujesz 1 wytrzymałości. Wstajesz, gdy się ruszysz albo wypoczniesz do pełna.",
+            const puddle = window.Puddles && Puddles.at ? Puddles.at(x, y) : null;   // (rain water standing on clay: Puddles.js)
+            if (puddle) entries.push(clayEntry(x, y, puddle));
+            if (plot.natural && !puddle) {   // resting comes first: sit down on the grass
+                const no = whyNoRest(), rate = groundRate(), wet = rate < GROUND_REST;
+                entries.push({ name: "Odpocznij", icon: 82, right: "+" + rate + "/godz.", enabled: !no,
+                    help: no ? noRestHelp(no) : "Siadasz na trawie i odpoczywasz: co sekundę mija godzina i wraca " + rate + " wytrzymałości" +
+                        (wet ? " (w deszczu na mokrej trawie tylko połowa)" : "") + ". Wstajesz sam, gdy wypoczniesz, albo kiedy chcesz (strzałki, O, Esc). W tym czasie głodniejesz i chce ci się pić." +
+                        (sleepy() ? "\n" + sleepyNote() : ""),
                     run: () => lieDown(x, y) });
             }
-            entries.push(handMenuEntry(x, y),
-                digEntry(x, y),
-                { name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) });
+            entries.push(handMenuEntry(x, y));
+            if (!puddle) entries.push(digEntry(x, y));
+            entries.push({ name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) });
             // with pine seeds in the bag: plant a tree here (Forestry.js)
             if (window.Forestry && countOf(ITEM.pineSeed) > 0) entries.push(Forestry.plantEntry(x, y));
             entries.push(placeMenuEntry(x, y));
-            return { title: plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries };
+            return { title: puddle ? "Kałuża" : plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries };
         }
         if (plot.s === "raked") {
             return { title: "Zagrabiona ziemia", entries: [
@@ -2779,6 +3045,7 @@
         const menu = menuFor(t.x, t.y);
         if (!menu) return false;
         if (menu.entries) showMenu(menu.title, menu.entries, undefined, undefined, menu.tabs, menu.status, menu.note);
+        if (menu.hold && SceneManager._scene) SceneManager._scene._farmHold = { run: menu.hold, t: 0 };   // (a site: O held on = its first entry)
         return true;
     };
 
@@ -3264,6 +3531,7 @@
 
     Scene_Map.prototype.closeFarmMenu = function() {
         this._farmKind = "";
+        this._farmHold = null;
         this._farmMenu.deactivate();
         this._farmMenu.hide();
         this._farmTitle.hide();
@@ -3299,9 +3567,17 @@
         return this === SceneManager._scene && !SceneManager.isSceneChanging() && !$gameMessage.isBusy() && !$gameMap.isEventRunning() &&
             !$gameTemp._farmMenuOpen && !$gameTemp._buildMode && $gamePlayer.canMove();
     };
+    // a menu opened by the press that is still held (a building site): held on long enough, its first entry is chosen by itself;
+    // let go before that and the menu simply stays
+    const SITE_HOLD = 14;
     const _Scene_Map_update_keyMenus = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         _Scene_Map_update_keyMenus.call(this);
+        const hold = this._farmHold;
+        if (hold && $gameTemp._farmMenuOpen) {
+            if (!Input.isPressed("ok")) this._farmHold = null;
+            else if (++hold.t >= SITE_HOLD) { this.closeFarmMenu(); hold.run(); }
+        }
         const kind = Input.isTriggered("pageup") ? "build" : Input.isTriggered("pagedown") ? "food" : "";
         if (kind && this._farmMenu && this.canUseKeyMenu() && openKeyMenu(kind)) SoundManager.playOk();
     };
@@ -3344,10 +3620,20 @@
         this.refresh();
         this.select(stacks.length > 0 ? Math.max(0, Math.min(this.index(), stacks.length - 1)) : -1);
     };
+    // the chest's own list (_chest set): food shows how long it stays good in there - longer in a pantry (Spoilage.js; the user's, 2026-09-25)
+    Window_ChestList.prototype.freshness = function(item) {
+        return this._chest && window.Spoilage && Spoilage.chestFreshness ? Spoilage.chestFreshness(this._chest, item.id) : null;
+    };
     Window_ChestList.prototype.drawItem = function(index) {
         const stack = this._stacks[index], rect = this.itemLineRect(index);
-        const label = "×" + stack.n, w = this.textWidth("×99") + 4;
-        this.drawItemName(stack.item, rect.x, rect.y, rect.width - w);
+        const label = "×" + stack.n, w = this.textWidth("×99") + 4, fresh = this.freshness(stack.item);
+        const fw = fresh ? this.textWidth(fresh.text) + 16 : 0;
+        this.drawItemName(stack.item, rect.x, rect.y, rect.width - w - fw);
+        if (fresh) {   // (the colours of the bag's numbers: yellow past half its life, red near the end)
+            this.changeTextColor(ColorManager.textColor(fresh.ratio <= 1 - Spoilage.WARN_AT ? 18 : fresh.ratio <= 0.5 ? 17 : 8));
+            this.drawText(fresh.text, rect.x, rect.y, rect.width - w - 8, "right");
+            this.resetTextColor();
+        }
         this.drawText(label, rect.x, rect.y, rect.width, "right");
     };
     Window_ChestList.prototype.drawAllItems = function() {
@@ -3359,7 +3645,13 @@
         }
     };
     Window_ChestList.prototype.updateHelp = function() {
-        this.setHelpWindowItem(this.item());
+        const item = this.item(), fresh = item && this.freshness(item);
+        if (fresh && this._helpWindow) {
+            const where = BUILDINGS[this._chest.type].keeps < 1 ? "Tu jedzenie psuje się wolniej: n" : "N";
+            this._helpWindow.setText(item.description + "\n" + where + "ajstarsza sztuka zepsuje się tu za " + fresh.text + ".");
+            return;
+        }
+        this.setHelpWindowItem(item);
     };
     // the screen stays on the same list after a move: OK / page keys do not deactivate the window
     Window_ChestList.prototype.processOk = function() {
@@ -3462,6 +3754,7 @@
     };
     Scene_Chest.prototype.refreshAll = function() {
         const b = this.chest();
+        this._chestList._chest = b;   // (its food: how long it keeps in there)
         this._packList.setStacks(packStacks());
         this._chestList.setStacks(b ? chestStacks(b) : []);
         this.refreshTitles();
@@ -3740,7 +4033,7 @@
         HUT_MAP, HUT_ROOM, hutOf, hutDoorAt, isHutInterior, hutShutsIn, hutSanitize, enterHut, leaveHut,
         upgradeBuilding, roomFor, fillSkin, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS, plotAt, buildingAt, menuFor, isSoilTile, groundIsSoil, naturalFarmland, rake, till, plant, harvest, uproot, build, demolish, collect, rest,
         groundInfoAt, hasObjectTile, cropStage, isRipe, daysLeft, readyProduce, snares, snareBait, snareSprung, snareCatch, snareEatBait, baitSnare, whyNotBuild, growthRate,   // soilTexture, fenceTexture, nightAmount, fireGlowAlpha: added by Farming_Render.js
-        dig, startJob, collectJob, jobReady, jobHoursLeft, jobHours, siteHits, hitCost, canMax, clockHours, demolishBlock, pitchInstant, packUp, sleepInTent, wakeHour, putInChest, takeFromChest, isFood, ownedOutput,
+        dig, digClay, awakeHours, restCap, potDryness, takePot, putPotOnTable, takeTablePot, tablePotDry, startJob, collectJob, jobReady, jobHoursLeft, jobHours, siteHits, hitCost, canMax, clockHours, demolishBlock, pitchInstant, packUp, sleepInTent, wakeHour, putInChest, takeFromChest, isFood, ownedOutput,
         chestStacks, chestKinds, chestHolds, packStacks, putInChest, takeFromChest, whyNotMove, openChest, Scene_Chest, Window_ChestList,
         water, wateredRecently, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2,
         stoneAt, stoneSpot, pickStone, gatherAt, gatherSpot, pickGather, isWaterTile, waterMenu, fillCan, drink, goFishing, rainWater, canCharges, craftManual, HAND_RECIPES, startPlacement, placementProblem, tileWhyNot, placeSite, strikeSite, cancelSite,

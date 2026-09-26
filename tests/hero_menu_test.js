@@ -37,7 +37,7 @@ const OUT = process.argv[2] || "";
         await waitScene("Scene_Menu");
         await frames(20);
         const menu = await J("(function(){ const w = SceneManager._scene._commandWindow; return { list: w._list.map(c => c.symbol), i: w._list.findIndex(c => c.symbol === 'hero') }; })()");
-        check("the P menu has 'Postać' (after the journal, before the options)", menu.i > menu.list.indexOf("journal") && menu.i < menu.list.indexOf("options"), menu);
+        check("the P menu has 'Postać' first (then Plecak, Dziennik - MenuPanel)", menu.i === 0 && menu.list[1] === "item" && menu.list[2] === "journal", menu);
         await ev(`SceneManager._scene._commandWindow.select(${menu.i}); 0`);
         await key(ENTER);
         check("Enter on it opens the Postać scene", (await waitScene("Scene_Hero")) === "Scene_Hero");
@@ -51,6 +51,16 @@ const OUT = process.argv[2] || "";
         check("→ twice on Siła: two points planned, nothing given out yet", p1.plan.str === 2 && p1.str === 5 && p1.points === 3, p1);
         await key(RIGHT); await key(RIGHT);
         check("no more than the free points (3)", (await J("SceneManager._scene._plan.str")) === 3);
+        // the table "co daje teraz -> po rozdaniu": no two texts on one line run over each other (the user's screenshot, 2026-09-25)
+        const overlap = await J(`(function(){ const s = SceneManager._scene, w = s._detail, t = [];
+            const d = w.drawText; w.drawText = function(text, x, y, width, align) { const tw = this.textWidth(String(text)), l = align === "right" ? x + width - tw : align === "center" ? x + (width - tw) / 2 : x;
+                t.push({ text: String(text), y, l, r: l + tw }); return d.apply(this, arguments); };
+            s.refreshDetail(); w.drawText = d;
+            const bad = [];
+            for (const a of t) for (const b of t) if (a !== b && a.y === b.y && a.l < b.l && a.r > b.l - 4) bad.push(a.text + " / " + b.text);
+            return { bad, rows: t.filter(x => /^zwykłe$|^→ o .* mniej uderzeń$/.test(x.text)).map(x => x.text + " @" + Math.round(x.l) + "-" + Math.round(x.r) + "," + x.y) }; })()`);
+        check("Siła with 3 planned: its table has no texts running over each other ('zwykłe' → 'o 1,5% mniej uderzeń')", overlap.bad.length === 0 && overlap.rows.length === 2, overlap);
+        await b.shot(OUT + "hero_attr_table.png");
         await key(LEFT);
         await key(DOWNK); await key(DOWNK);   // Kondycja
         await key(RIGHT);
@@ -175,7 +185,7 @@ const OUT = process.argv[2] || "";
         check("after saving and loading the points and the skills are still there", b2.str === b1.str && b2.con === b1.con && b2.mhp === b1.mhp && (await ev("Combat.skillRank('m_power')")) === 3 && Math.abs((await ev("Combat.perk('melee.dmg')")) - 0.15) < 1e-9, { b1, b2 });
 
         // ================= level 100 =================
-        await ev("Combat.gainXp(5000000, 'test'); 0");
+        await ev("(function(){ let t = 0; for (let L = 1; L < 100; L++) t += Combat.xpToNext(L); Combat.gainXp(t, 'test'); })(); 0");   // (all of it to 100)
         await frames(10);
         const top = await J("({ lv: Combat.hero().level, xp: Combat.hero().xp, more: Combat.gainXp(100, 'x') })");
         check("level 100 is the top: no more experience after it", top.lv === 100 && top.xp === 0 && top.more === 0, top);

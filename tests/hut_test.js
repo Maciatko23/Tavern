@@ -44,8 +44,8 @@ const { launch, sleep } = require("./cdp.js");
             indoor: Object.keys(B).filter(k => B[k].indoor).sort(), indoorOnly: Object.keys(B).filter(k => B[k].indoorOnly).sort(), bed: { sleep: B.bed.sleep, w: B.bed.w, cost: B.bed.cost }, larder: { keeps: B.larder.keeps, slots: B.larder.slots, food: B.larder.foodOnly, w: B.larder.w } }; })()`);
         check("Chatka: 5 x 3 field, the doorway in column 1, only one, costs 50 planks + 60 nails + 40 stones + 10 iron",
             def.w === 5 && def.h === 3 && def.door.dx === 1 && def.single === true && JSON.stringify(def.cost) === JSON.stringify([[IT.planks, 50], [IT.nails, 60], [IT.stone, 40], [IT.iron, 10]]), def);
-        check("furniture that may stand inside: bench, both chests, workbench, bedroll + the bed and the larder (only inside); the pantry stays outdoors",
-            JSON.stringify(def.indoor) === JSON.stringify(["bed", "bedroll", "bench", "chest_l", "chest_s", "larder", "workbench"]) && JSON.stringify(def.indoorOnly) === JSON.stringify(["bed", "larder"]), { indoor: def.indoor, only: def.indoorOnly });
+        check("furniture that may stand inside: bench, both chests, workbench, bedroll, a clay pot drying + the bed and the larder (only inside); the pantry stays outdoors",
+            JSON.stringify(def.indoor) === JSON.stringify(["bed", "bedroll", "bench", "chest_l", "chest_s", "larder", "pot", "workbench"]) && JSON.stringify(def.indoorOnly) === JSON.stringify(["bed", "larder"]), { indoor: def.indoor, only: def.indoorOnly });
         check("bed: 2 wide, sleeps; larder: 1 tile, keeps food 5 x longer (0.2), 24 kinds, food only", def.bed.sleep === true && def.bed.w === 2 && def.larder.keeps === 0.2 && def.larder.slots === 24 && def.larder.food === true && def.larder.w === 1, def);
         const imgs = await ev(`Promise.all(["Farm_Hut_L", "Farm_Bed", "Farm_Larder"].map(n => new Promise(res => { const bm = ImageManager.loadSystem(n); bm.addLoadListener(() => res(bm.width + "x" + bm.height)); })))`);
         check("the pictures load: hut 238 x 203, bed 96 x 64, larder 61 x 101", JSON.stringify(imgs) === JSON.stringify(["238x203", "96x64", "61x101"]), imgs);

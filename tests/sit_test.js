@@ -41,23 +41,22 @@ const { launch, sleep } = require("./cdp.js");
         await stand(0, 1, 8);
         await frames(20);
         const st0 = await ev("$gameSystem.stamina()"), h0 = await ev("$gameSystem.dayNightHour()");
-        check("'Ogrzej się przy ogniu' is in the campfire's menu", await runMenu("Ogrzej się przy ogniu"));
+        check("'Odpocznij przy ogniu' is in the campfire's menu", await runMenu("Odpocznij przy ogniu"));
         await frames(2);
         check("the player starts sitting down (swing kind 11), and cannot move", (await ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind")) === 11 && (await ev("$gamePlayer.canMove()")) === false);
         let seated = null;
         for (let i = 0; i < 80; i++) { await frames(1); const t = await swingT(); if (t >= 37 && t <= 39) { seated = await cell(); break; } }
-        check("at the impact frame the player is seated (column 12, row of the facing)", !!seated && seated.col === 12 && seated.row === 3, seated);
-        check("nothing was restored yet while sitting down", (await ev("$gameSystem.stamina()")) === st0);
-        while ((await swingT()) >= 0 && (await swingT()) < 100) await frames(2);
-        const st1 = await ev("$gameSystem.stamina()"), h1 = await ev("$gameSystem.dayNightHour()");
-        check("the rest happened: +15 stamina, one hour passed", st1 === st0 + 15 && Math.abs(h1 - h0 - 1) < 0.2, { st0, st1, h0, h1 });
-        check("a popup '+15 wytrzymałości'", (await pops()).some(t => /\+15 wytrzymałości/.test(t)));
+        const sitHit = (await J("ChoppableTree.swingKind(11).hit"))[3], roastHit = (await J("ChoppableTree.swingKind(12).hit"))[3];   // (the sheet in use: the new hero's or the old)
+        check("at the impact frame the player is seated (column " + sitHit + ", row of the facing)", !!seated && seated.col === sitHit && seated.row === 3, seated);
         let standing = false;
-        for (let i = 0; i < 120; i++) { if ((await swingT()) < 0) { standing = true; break; } await frames(2); }
-        check("then the player stands up and can move again", standing && (await ev("$gamePlayer.canMove()")) === true);
+        for (let i = 0; i < 150; i++) { if ((await swingT()) < 0) { standing = true; break; } await frames(2); }
+        const st1 = await ev("$gameSystem.stamina()"), h1 = await ev("$gameSystem.dayNightHour()");
+        check("the rest went on by itself till full: +40 an hour (an hour a second), 40 -> 100 in about 1.5 hours", Math.round(st1) === 100 && Math.abs(h1 - h0 - 1.5) < 0.3, { st0, st1, h0, h1 });
+        check("a popup '+60 wytrzymałości'", (await pops()).some(t => /\+60 wytrzymałości/.test(t)));
+        check("then the player stands up by himself and can move again", standing && (await ev("$gamePlayer.canMove()")) === true);
         await frames(40);
         await ev("$gameSystem.setStamina($gameSystem.maxStamina()); 0");
-        await runMenu("Ogrzej się przy ogniu"); await frames(2);
+        await runMenu("Odpocznij przy ogniu"); await frames(2);
         check("not tired: 'Nie jesteś zmęczony', no sitting", (await pops()).some(t => /Nie jesteś zmęczony/.test(t)) && (await swingT()) === -1);
 
         // ---------------------------------------------------------------- roasting: the player sits with the meat on a stick until it is done
@@ -71,7 +70,7 @@ const { launch, sleep } = require("./cdp.js");
         check("'Upiecz mięso' starts the roasting swing (kind 12)", (await runMenu("Upiecz mięso zająca")) && (await (async () => { await frames(2); return ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind"); })()) === 12);
         let at = null;
         for (let i = 0; i < 90; i++) { await frames(1); if (await waiting()) { at = await cell(); break; } }
-        check("the player sits with the stick over the fire (column 12 or 11, row 3) and waits", !!at && (at.col === 12 || at.col === 11) && at.row === 3 && (await job()), at);
+        check("the player sits with the stick over the fire (column " + roastHit + " or one before, row 3) and waits", !!at && (at.col === roastHit || at.col === roastHit - 1) && at.row === 3 && (await job()), at);
         check("a piece of meat was used, the roast is not there yet", (await meat()) === m0 - 1 && (await roast()) === r0);
         await frames(60);
         check("still sitting a second later, and the game clock is running", (await waiting()) && (await ev("$gameSystem.dayNightHour()")) > t0 + 0.05);
@@ -107,7 +106,7 @@ const { launch, sleep } = require("./cdp.js");
             await runMenu("Upiecz mięso zająca");
             let a = null;
             for (let i = 0; i < 90; i++) { await frames(1); if (await waiting()) { a = await cell(); break; } }
-            check("facing " + dir + ": seated with the stick in row " + row + ", meat over the fire", !!a && (a.col === 12 || a.col === 11) && a.row === row && (await job()), a);
+            check("facing " + dir + ": seated with the stick in row " + row + ", meat over the fire", !!a && (a.col === roastHit || a.col === roastHit - 1) && a.row === row && (await job()), a);
             await ev("$gameSystem.advanceDayNight(0.6); 0");
             for (let i = 0; i < 200 && (await swingT()) >= 0; i++) await frames(2);
             check("  done: the player stands up with the roast, can move", !(await job()) && (await ev("$gamePlayer.canMove()")) === true);
@@ -115,7 +114,7 @@ const { launch, sleep } = require("./cdp.js");
         }
 
         // pictures
-        for (const [name, dx, dy, dir, menuName] of [["rest", 0, 1, 8, "Ogrzej się przy ogniu"], ["rest", -1, 0, 6, "Ogrzej się przy ogniu"], ["rest", 0, -1, 2, "Ogrzej się przy ogniu"], ["roast", 0, 1, 8, "Upiecz mięso zająca"], ["roast", -1, 0, 6, "Upiecz mięso zająca"], ["roast", 0, -1, 2, "Upiecz mięso zająca"]]) {
+        for (const [name, dx, dy, dir, menuName] of [["rest", 0, 1, 8, "Odpocznij przy ogniu"], ["rest", -1, 0, 6, "Odpocznij przy ogniu"], ["rest", 0, -1, 2, "Odpocznij przy ogniu"], ["roast", 0, 1, 8, "Upiecz mięso zająca"], ["roast", -1, 0, 6, "Upiecz mięso zająca"], ["roast", 0, -1, 2, "Upiecz mięso zająca"]]) {
             await stand(dx, dy, dir); await frames(70);
             await runMenu(menuName);
             if (name === "rest") { for (let i = 0; i < 200 && (await swingT()) < 38; i++) await frames(1); }
@@ -170,7 +169,7 @@ const { launch, sleep } = require("./cdp.js");
         check("'Poczekaj przy ogniu' sits the player down beside the tripod (kind 13, hands free)", (await runMenu("Poczekaj przy ogniu")) && (await (async () => { await frames(2); return ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind"); })()) === 13);
         let seat = null;
         for (let i = 0; i < 90; i++) { await frames(1); if (await waiting()) { seat = await cell(); break; } }
-        check("seated beside the fire, waiting", !!seat && (seat.col === 12 || seat.col === 11) && seat.row === 3, seat);
+        check("seated beside the fire, waiting", !!seat && (seat.col === sitHit || seat.col === sitHit - 1) && seat.row === 3, seat);
         await frames(40);
         await ev("Input._currentState.cancel = true; 0"); await frames(3); await ev("Input._currentState.cancel = false; 0");
         for (let i = 0; i < 120 && (await swingT()) >= 0; i++) await frames(2);

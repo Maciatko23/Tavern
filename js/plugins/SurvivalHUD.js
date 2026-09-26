@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Zegar analogowy, pora dnia i pasek wytrzymałości na mapie. Spanie w łóżku odnawia siły. Łupy pokazują się jako unosząca się ikona. v1.1.0
+ * @plugindesc Zegar analogowy, pora dnia i pasek wytrzymałości na mapie. Spanie w łóżku odnawia siły. Zdobyte rzeczy wjeżdżają na listę w prawym dolnym rogu. v1.2.0
  * @author Claude
  *
  * @param clockImage
@@ -156,9 +156,13 @@
  *      ekran, Polecenie wtyczki "Komunikat po przebudzeniu".
  *
  * ŁUPY: gdy gracz zdobywa przedmiot lub złoto (komenda "Zmień przedmioty",
- * nagrody z drzew i kamieni itd.), nad nim unosi się ikona z napisem, np.
- * "+3 Drewno", zamiast okna wiadomości. Działa automatycznie. Polecenie
- * wtyczki "Pokaż łup nad graczem" pozwala pokazać własny napis.
+ * nagrody z drzew i kamieni itd.), z prawej krawędzi ekranu wjeżdża tabliczka
+ * z ikoną i napisem, np. "+3 Drewno", w prawym dolnym rogu nad paskiem
+ * doświadczenia; nowsze pojawiają się pod starszymi, które przesuwają się w
+ * górę, a ta sama rzecz zdobyta znowu dolicza się do swojej tabliczki.
+ * Doświadczenie i wykonane cele z dziennika pokazują się na górze na środku.
+ * Komunikaty o brakach (narzędzie, materiały, siły) unoszą się nad graczem,
+ * tak jak napis z polecenia wtyczki "Pokaż łup nad graczem".
  *
  * TAGI W NOTATCE MAPY:
  *   <Clock:off>    - ukrywa zegar na tej mapie
@@ -553,9 +557,17 @@
     const POPUP_ROW = 30;    // vertical spacing between popups shown together
     const easeOutQuad = x => 1 - (1 - x) * (1 - x);
 
-    // Popups only exist on the map (a shop or menu purchase must not queue one).
-    Game_Temp.prototype.pushLootPopup = function(iconIndex, text, color) {
+    // Popups only exist on the map (a shop or menu purchase must not queue one). What is gained (opts.gain: items, coins,
+    // experience) does not float over the player: it goes to the list at the bottom right (Sprite_GainFeed); opts.gain.key and
+    // .amount / .name let the same thing gained again add up on its plate ("+3 Drewno").
+    Game_Temp.prototype.pushLootPopup = function(iconIndex, text, color, opts) {
         if (!(SceneManager._scene instanceof Scene_Map)) return;
+        if (opts && opts.gain) {
+            if (!this._gainNotices) this._gainNotices = [];
+            this._gainNotices.push({ iconIndex, text, color: color || "#ffffff", gain: opts.gain === true ? {} : Object.assign({}, opts.gain) });
+            this._lastGainNotice = text;   // (tests read what was said)
+            return;
+        }
         if (!this._lootPopups) this._lootPopups = [];
         this._lootPopups.push({
             iconIndex, text, color: color || "#ffffff",
@@ -571,7 +583,8 @@
             const gained = this.numItems(item) - before;   // 0 when the stack was already full
             if (gained > 0) {
                 const key = item.itypeId === 2;
-                $gameTemp.pushLootPopup(item.iconIndex, "+" + gained + " " + item.name, key ? "#ffd866" : "#ffffff");
+                $gameTemp.pushLootPopup(item.iconIndex, "+" + gained + " " + item.name, key ? "#ffd866" : "#ffffff",
+                    { gain: { key: "item:" + item.id, amount: gained, name: item.name } });
             }
         }
     };
@@ -582,7 +595,8 @@
         _Game_Party_gainGold.call(this, amount);
         const gained = this.gold() - before;
         if (gained > 0) {
-            $gameTemp.pushLootPopup(GOLD_ICON, "+" + gained + " " + TextManager.currencyUnit, "#ffe27a");
+            $gameTemp.pushLootPopup(GOLD_ICON, "+" + gained + " " + TextManager.currencyUnit, "#ffe27a",
+                { gain: { key: "gold", amount: gained, name: TextManager.currencyUnit } });
         }
     };
 
@@ -684,6 +698,118 @@
     };
 
     // ------------------------------------------------------------------
+    // What the hero gains (items, coins, experience): a plate slides in from the right edge at the bottom right, just over the
+    // XP bar (Combat.js). A newer one comes in under the older ones, which move up to make room; the same thing gained again
+    // while its plate is shown adds up on it ("+3 Drewno") and starts its time again. Each stays a while and fades out, the
+    // oldest at once when there are too many (the user's, 2026-09-25).
+    // ------------------------------------------------------------------
+    const FEED = { slideIn: 16, stay: 240, fadeOut: 30, height: 36, gap: 6, right: 14, max: 7, slide: 0.25 };
+    const easeOutCubic = x => 1 - Math.pow(1 - x, 3);
+
+    function Sprite_GainPlate() {
+        this.initialize(...arguments);
+    }
+    Sprite_GainPlate.prototype = Object.create(Sprite.prototype);
+    Sprite_GainPlate.prototype.constructor = Sprite_GainPlate;
+
+    Sprite_GainPlate.prototype.initialize = function(data) {
+        Sprite.prototype.initialize.call(this);
+        this._data = data;
+        this._age = 0;
+        this._placed = false;
+        this.anchor.set(1, 1);
+        this.draw();
+    };
+    Sprite_GainPlate.prototype.text = function() {
+        const g = this._data.gain;
+        return g && g.amount > 0 && g.name ? "+" + g.amount + " " + g.name : this._data.text;
+    };
+    Sprite_GainPlate.prototype.draw = function() {
+        const icon = Sprite_SurvivalHud.ICON_SIZE, gap = 6, pad = 9, height = FEED.height, text = this.text(), withIcon = this._data.iconIndex > 0;
+        const probe = new Bitmap(8, 8);
+        probe.fontSize = POPUP_FONT;
+        const textWidth = Math.ceil(probe.measureTextWidth(text));
+        const width = pad * 2 + (withIcon ? icon + gap : 0) + textWidth;
+        const bmp = new Bitmap(width, height);
+        paintPlaque(bmp, 0, 0, width, height, { cut: 5, fill: "rgba(11,12,15,0.86)" });
+        bmp.fontSize = POPUP_FONT;
+        bmp.textColor = this._data.color;
+        bmp.outlineColor = "rgba(0,0,0,0.9)";
+        bmp.outlineWidth = 4;
+        bmp.drawText(text, pad + (withIcon ? icon + gap : 0), 0, textWidth + 4, height, "left");
+        if (withIcon) {
+            const iconSheet = ImageManager.loadSystem("IconSet");
+            iconSheet.addLoadListener(() => blitIcon(bmp, this._data.iconIndex, icon, pad, Math.round((height - icon) / 2)));
+        }
+        bmp._baseTexture.update();
+        this.bitmap = bmp;
+    };
+    // the same thing (gain.key) gained again while this plate is still up: counted here
+    Sprite_GainPlate.prototype.takes = function(data) {
+        const a = this._data.gain, b = data.gain;
+        return !!(a && b && a.key && a.key === b.key && this._age < FEED.slideIn + FEED.stay);
+    };
+    Sprite_GainPlate.prototype.add = function(data) {
+        this._data.gain.amount += data.gain.amount || 0;
+        this._data.text = data.text;
+        this.draw();
+        this._age = Math.min(this._age, FEED.slideIn);   // (its time starts again; no second slide)
+        this._flash = 10;
+    };
+    Sprite_GainPlate.prototype.fadeNow = function() {
+        this._age = Math.max(this._age, FEED.slideIn + FEED.stay);
+    };
+    Sprite_GainPlate.prototype.isFading = function() {
+        return this._age >= FEED.slideIn + FEED.stay;
+    };
+    Sprite_GainPlate.prototype.isFinished = function() {
+        return this._age >= FEED.slideIn + FEED.stay + FEED.fadeOut;
+    };
+    Sprite_GainPlate.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        const t = ++this._age, w = this.bitmap ? this.bitmap.width : 0;
+        const come = easeOutCubic(Math.min(1, t / FEED.slideIn));
+        this._slideX = Math.round((1 - come) * (w + FEED.right + 8));   // in from beyond the right edge
+        this.opacity = Math.round(255 * Math.min(come * 1.5, 1, (FEED.slideIn + FEED.stay + FEED.fadeOut - t) / FEED.fadeOut));
+        if (this._flash > 0) this._flash--;
+        this.setBlendColor([255, 255, 255, this._flash > 0 ? Math.round(this._flash * 9) : 0]);
+    };
+
+    function Sprite_GainFeed() {
+        this.initialize(...arguments);
+    }
+    Sprite_GainFeed.prototype = Object.create(Sprite.prototype);
+    Sprite_GainFeed.prototype.constructor = Sprite_GainFeed;
+
+    // the bottom of the list: just over the XP bar (Combat.js), else over the bottom edge of the screen
+    Sprite_GainFeed.prototype.bottom = function() {
+        const bar = SceneManager._scene && SceneManager._scene._xpBar;
+        if (bar && bar.bitmap) return bar.y - bar.bitmap.height - FEED.gap;
+        return Graphics.height - FEED.right;
+    };
+    Sprite_GainFeed.prototype.update = function() {
+        const queue = $gameTemp._gainNotices;
+        while (queue && queue.length > 0) {
+            const data = queue.shift(), same = this.children.find(p => p.takes(data));
+            if (same) same.add(data);
+            else this.addChild(new Sprite_GainPlate(data));
+        }
+        const shown = this.children.filter(p => !p.isFading());
+        for (const p of shown.slice(0, Math.max(0, shown.length - FEED.max))) p.fadeNow();   // too many: the oldest go
+        Sprite.prototype.update.call(this);
+        for (const p of this.children.slice()) if (p.isFinished()) this.removeChild(p);
+        // the newest at the bottom, the older ones above it; each glides to its place
+        let y = this.bottom();
+        for (let i = this.children.length - 1; i >= 0; i--) {
+            const p = this.children[i];
+            p.y = p._placed && Math.abs(p.y - y) > 0.5 ? p.y + (y - p.y) * FEED.slide : y;
+            p._placed = true;
+            p.x = Graphics.width - FEED.right + (p._slideX || 0);
+            y -= FEED.height + FEED.gap;
+        }
+    };
+
+    // ------------------------------------------------------------------
     // The greeting of a new day: a small plate at the top centre of the screen - "Dzień 2 · Świt" and how the night went - instead
     // of a message window. It waits until the day summary (Journal.js) has been read and the screen is bright again, fades in,
     // stays a few seconds and fades out; nothing to click away.
@@ -752,10 +878,31 @@
     // one at a time. It sits under the day's greeting or the "Tryb walki" badge (Combat.js) when one of those is shown.
     // ------------------------------------------------------------------
     const NOTICE = { fadeIn: 14, stay: 150, fadeOut: 30, top: 10, gap: 6 };
-    Game_Temp.prototype.pushTopNotice = function(text, color) {
+    // opts.sub / opts.subColor: a second, smaller line under it (a journal goal: the experience it gave).
+    // opts.sum = { key, amount, unit, reason }: a count that adds up - more of the same key while its notice is on screen or still
+    // waiting goes onto it ("+15 dośw.") and keeps it up longer; the reason is said only while it is a single gain (Combat.js: XP)
+    const sumText = s => "+" + s.amount + " " + s.unit + (s.n === 1 && s.reason ? "  (" + s.reason + ")" : "");
+    Game_Temp.prototype.pushTopNotice = function(text, color, opts) {
         if (!this._topNotices) this._topNotices = [];
-        this._topNotices.push({ text, color: color || null });
-        this._lastTopNotice = text;   // (tests read what was said)
+        const sum = opts && opts.sum;
+        if (sum) {
+            const shown = SceneManager._scene && SceneManager._scene._topNotice;
+            const onto = (shown && shown.takes && shown.takes(sum) && shown._data) || this._topNotices.find(n => n.sum && n.sum.key === sum.key);
+            if (onto) {
+                onto.sum.amount += sum.amount;
+                onto.sum.n += sum.n || 1;
+                onto.text = sumText(onto.sum);
+                if (shown && onto === shown._data) shown.redraw();
+                this._lastTopNotice = onto.text;
+                return;
+            }
+        }
+        const data = { text, color: color || null, sub: (opts && opts.sub) || "", subColor: (opts && opts.subColor) || null,
+            sum: sum ? Object.assign({ n: 1 }, sum) : null };
+        if (data.sum) data.text = sumText(data.sum);
+        this._topNotices.push(data);
+        this._lastTopNotice = data.text;   // (tests read what was said)
+        this._lastTopNoticeSub = data.sub;
     };
     function Sprite_TopNotice() {
         this.initialize(...arguments);
@@ -769,9 +916,25 @@
         this.visible = false;
     };
     Sprite_TopNotice.prototype.show = function(data) {
+        this._data = data;
+        this.redraw();
+        this._age = 0;
+        this.visible = true;
+    };
+    // more of the same count (opts.sum) while this one is up and not yet fading: it takes it
+    Sprite_TopNotice.prototype.takes = function(sum) {
+        const d = this._data;
+        return this._age >= 0 && !!(d && d.sum && d.sum.key === sum.key) && this._age < NOTICE.fadeIn + NOTICE.stay;
+    };
+    Sprite_TopNotice.prototype.redraw = function() {
+        const data = this._data;
+        if (this._age > NOTICE.fadeIn) this._age = NOTICE.fadeIn;   // (a count that grows: it stays up for its whole time again)
         const probe = new Bitmap(8, 8);
         probe.fontSize = 19;
-        const w = Math.ceil(probe.measureTextWidth(data.text)) + 48, h = 36;
+        const tw = probe.measureTextWidth(data.text);
+        probe.fontSize = 17;
+        const sw = data.sub ? probe.measureTextWidth(data.sub) : 0;
+        const w = Math.ceil(Math.max(tw, sw)) + 48, h = data.sub ? 58 : 36;
         const bmp = new Bitmap(w, h);
         paintPlaque(bmp, 0, 0, w, h, { cut: 5, fill: "rgba(11,12,15,0.9)" });
         bmp.fontSize = 19;
@@ -779,9 +942,12 @@
         bmp.outlineColor = "rgba(0,0,0,0.9)";
         bmp.outlineWidth = 3;
         bmp.drawText(data.text, 0, 4, w, 28, "center");
+        if (data.sub) {
+            bmp.fontSize = 17;
+            bmp.textColor = data.subColor || PALETTE.text;
+            bmp.drawText(data.sub, 0, 29, w, 24, "center");
+        }
         this.bitmap = bmp;
-        this._age = 0;
-        this.visible = true;
     };
     // the first free place under what is already shown at the top centre
     Sprite_TopNotice.prototype.baseY = function() {
@@ -821,6 +987,8 @@
         this._hudLayer.addChild(this._survivalHud);
         this._lootLayer = new Sprite_LootLayer();
         this._hudLayer.addChild(this._lootLayer);
+        this._gainFeed = new Sprite_GainFeed();
+        this._hudLayer.addChild(this._gainFeed);
         this._dayBanner = new Sprite_DayBanner();
         this._hudLayer.addChild(this._dayBanner);
         this._topNotice = new Sprite_TopNotice();

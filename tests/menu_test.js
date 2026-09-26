@@ -76,7 +76,7 @@ const { launch, sleep } = require("./cdp.js");
         const size0 = { w: ts.w, h: ts.h };
         await press("right"); await frames(10);
         ts = await tabState();
-        check("→ switches to 'Akcja': warming up, the tripod, demolishing - no recipes, no 'Zostaw'", ts.tab === 1 && ts.index === 0 && ["Ogrzej się przy ogniu", "Dobuduj trójnóg", "Rozbierz"].every(n => ts.names.includes(n)) && !ts.names.includes("Zostaw") && !RECIPES.some(n => ts.names.includes(n)), ts.names);
+        check("→ switches to 'Akcja': warming up, the tripod, demolishing - no recipes, no 'Zostaw'", ts.tab === 1 && ts.index === 0 && ["Odpocznij przy ogniu", "Dobuduj trójnóg", "Rozbierz"].every(n => ts.names.includes(n)) && !ts.names.includes("Zostaw") && !RECIPES.some(n => ts.names.includes(n)), ts.names);
         check("the window keeps its size when switching tabs", ts.w === size0.w && ts.h === size0.h, { size0, now: { w: ts.w, h: ts.h } });
         check("the popup follows the row", ts.tip);
         // "Dobuduj trójnóg" shows what it needs like a building does: costs with what is in the bag, dimmed with "Brakuje: ..." without them

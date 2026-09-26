@@ -68,6 +68,8 @@
                     hours: 1, stamina: 3, startSe: "Item1", desc: "Kilka gałęzi na drewnianym trzonku. Do grabienia ziemi przed orką." },
                 { id: "hoe", name: "Zrób motykę", inputs: [[ITEM.wood, 1], [ITEM.branch, 1], [ITEM.stone, 3]], output: [ITEM.hoe, 1], manual: true, unique: true,
                     hours: 1, stamina: 4, startSe: "Hammer", desc: "Kamienne ostrze na krótkim trzonku. Do orania zagrabionej ziemi." },
+                { id: "pot", name: "Ulep garnek", inputs: [[ITEM.clay, 3]], output: [ITEM.rawPot, 1], manual: true,
+                    hours: 1, stamina: 2, startSe: "Item1", desc: "Z mokrej gliny lepisz wałeczki, układasz je jeden na drugim i wygładzasz ścianki. Świeży garnek jest miękki: postaw go gdzieś, żeby wysechł." },
                 { id: "knife", name: "Zrób nóż kamienny", inputs: [[ITEM.wood, 1], [ITEM.stone, 2], [ITEM.branch, 1]], output: [ITEM.knifeStone, 1], manual: true, unique: true, also: [ITEM.knifeIron],
                     hours: 1, stamina: 3, startSe: "Hammer", desc: "Łupany kamień na drewnianej rękojeści. Do oprawiania zwierzyny." },
                 { id: "rod", name: "Zrób wędkę", inputs: [[ITEM.wood, 2], [ITEM.rope, 2], [ITEM.branch, 1]], output: [ITEM.rod, 1], manual: true, unique: true,
@@ -97,9 +99,17 @@
             desc: "Stół, na którym powstają, są montowane i naprawiane wszystkie narzędzia: kamienne od razu, a żelazne z części wykutych w kuźni." },
         fence: { name: "Płot", cost: [[ITEM.planks, 1]], w: 1, stamina: 3, hits: 3, image: null,
             desc: "Blokuje przejście. Łączy się z sąsiednimi płotami." },
-        bench: { name: "Ławka", cost: [[ITEM.planks, 2]], w: 1, stamina: 5, hits: 5, image: "Farm_Bench", rest: 25, indoor: true,
-            desc: "Można na niej odpocząć: odnawia wytrzymałość (mija godzina)." },
-        campfire: { name: "Ognisko", cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 15, vent: 48,
+        bench: { name: "Ławka", cost: [[ITEM.planks, 2]], w: 1, stamina: 5, hits: 5, image: "Farm_Bench", rest: 30, indoor: true,
+            seats: { front: { dy: 0.2, lift: 16, dir: 2 }, back: { dy: 0.2, lift: 16, dir: 2 }, span: 0 },   // (one seat, facing out)
+            desc: "Siadasz na niej i odpoczywasz: co sekundę mija godzina i wraca 30 wytrzymałości, aż wypoczniesz albo wstaniesz." },
+        // an open wooden shelter (user, 2026-09-25): a roof on four posts over a table and two benches. The benches: rest like the bench.
+        // The table: up to table.slots raw clay pots dry there under the roof, rain or not (Farming.js: tablePots); spots: where they
+        // stand on the table, px from the foot-middle of the picture
+        shelter: { name: "Wiata", cost: [[ITEM.wood, 6], [ITEM.planks, 6], [ITEM.branch, 8], [ITEM.rope, 4]], w: 4, h: 2, stamina: 8, hits: 30, image: "Farm_Shelter_XL", rest: 50,
+            table: { slots: 4, hours: 24, spots: [[-40, -35], [-14, -35], [12, -35], [38, -35]] },
+            seats: { front: { dy: 0.2, lift: 14 }, back: { dy: -0.45, lift: 22 }, span: 38 },
+            desc: "Daszek na czterech słupach, pod nim stół i dwie ławki, z przodu i z tyłu. Usiądziesz tu i odpoczniesz (lepiej niż na ławce, także w deszczu), a na stole postawisz do czterech garnków: pod dachem schną także w deszczu." },
+        campfire: { name: "Ognisko", cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 40, vent: 48,
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true },   // animated flames (y: px above the foot of the picture), steady smoke, a big glow
             upgrade: { to: "tripod", dx: 0, name: "Dobuduj trójnóg", cost: [[ITEM.branch, 3], [ITEM.rope, 1]], stamina: 3, done: "Dobudowano trójnóg",
                 help: "Trzy kijki związane liną staną nad ogniem. Zawiesisz na haczyku jedzenie i możesz odejść: piecze się samo. Nie trzeba młotka." },
@@ -114,9 +124,9 @@
                 { id: "mushrooms", name: "Upiecz grzyby", doing: "Trwa pieczenie", inputs: [[ITEM.mushroom, 2]], output: [ITEM.grilledMushrooms, 2], hours: 0.25, stamina: 1, startSe: "Fire2", desc: "Kapelusze nadziane na patyk i przypieczone nad żarem, kwadrans." },
                 { id: "cheese_baked", name: "Przypiecz ser", doing: "Trwa przypiekanie", inputs: [[ITEM.cheese, 1]], output: [ITEM.bakedCheese, 1], hours: 0.25, stamina: 1, startSe: "Fire2", desc: "Kawałek sera nad żarem, aż zacznie się rozpływać. Kwadrans." }
             ],
-            desc: "Ogrzej się przy ogniu (odnawia wytrzymałość, mija godzina) i upiecz coś na patyku, siedząc przy nim (odejdziesz, to nic się nie upiecze). Dobudowany trójnóg piecze bez ciebie, a na nim zawiesisz kociołek." },
+            desc: "Odpocznij przy ogniu (co sekundę mija godzina i wraca 40 wytrzymałości) i upiecz coś na patyku, siedząc przy nim (odejdziesz, to nic się nie upiecze). Dobudowany trójnóg piecze bez ciebie, a na nim zawiesisz kociołek." },
         // the middle step between the campfire and the cauldron: it is only ever built by upgrading a campfire (noBuild)
-        tripod: { name: "Ognisko z trójnogiem", cost: [[ITEM.wood, 6], [ITEM.stone, 6], [ITEM.branch, 3], [ITEM.rope, 1]], w: 1, stamina: 5, image: "Farm_Tripod_L", rest: 15,
+        tripod: { name: "Ognisko z trójnogiem", cost: [[ITEM.wood, 6], [ITEM.stone, 6], [ITEM.branch, 3], [ITEM.rope, 1]], w: 1, stamina: 5, image: "Farm_Tripod_L", rest: 40,
             vent: 66, noBuild: true, refund: [[ITEM.wood, 1], [ITEM.stone, 1], [ITEM.branch, 2]],
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true }, hang: { y: 51, x: 0, rope: 59 },   // the food hangs on a short rope from the hook (px above the foot of the picture: the top of the icon, the top of the rope)
             upgrade: { to: "cauldron", dx: 1, name: "Zawieś kociołek", cost: [[ITEM.cauldronItem, 1]], stamina: 3, done: "Zawieszono kociołek",
@@ -140,6 +150,13 @@
             recipes: [{
                 id: "charcoal", name: "Wypal węgiel drzewny", doing: "Trwa wypalanie", inputs: [[ITEM.wood, 6], [ITEM.soil, 2]], output: [ITEM.charcoal, 3],
                 hours: 6, stamina: 3, desc: "Drewno pod warstwą ziemi tli się bez płomienia i zamienia w węgiel."
+            }, {
+                // the dried clay pot (Wiata / the ground) fired: the clay turns into pottery that holds water
+                id: "fire_pot", name: "Wypal garnek", doing: "Trwa wypalanie", inputs: [[ITEM.dryPot, 1], [ITEM.wood, 2]], output: [ITEM.firedPot, 1],
+                hours: 6, stamina: 2, desc: "Wysuszony garnek w żarze pieca twardnieje na zawsze: glina zmienia się w ceramikę, która trzyma wodę."
+            }, {
+                id: "fire_pots", name: "Wypal 4 garnki", doing: "Trwa wypalanie", inputs: [[ITEM.dryPot, 4], [ITEM.wood, 5]], output: [ITEM.firedPot, 4],
+                hours: 8, stamina: 3, desc: "Cztery wysuszone garnki w jednym wypale - mniej drewna na garnek."
             }],
             desc: "Wypala z drewna węgiel drzewny. Potrzebuje ziemi do przykrycia stosu." },
         compost: { name: "Kompostownik", cost: [[ITEM.planks, 3]], w: 1, stamina: 5, hits: 5, image: "Farm_Compost", startSe: "Earth4",
@@ -257,7 +274,7 @@
             desc: "Czysta woda: napełnisz konewkę albo się napijesz. Do budowy potrzebne jest wiadro." },
         // the last step of the campfire: only ever made by hanging a forged cauldron on a tripod (noBuild: not on the Q build list)
         cauldron: { name: "Kociołek", cost: [[ITEM.iron, 2], [ITEM.planks, 2], [ITEM.stone, 4]], w: 3, h: 2, stamina: 10, image: "Farm_Cauldron_XL", v2: { image: "Farm_Cauldron_L", ventX: -17, fire: null }, legacy: { w: 2, h: 1, image: "Farm_Cauldron", vent: 46, fire: null },
-            vent: 59, ventX: -1, smokes: true, rest: 15, fire: { y: 15, size: 0.9, glow: 1.1, light: 290 }, noBuild: true,
+            vent: 59, ventX: -1, smokes: true, rest: 40, fire: { y: 15, size: 0.9, glow: 1.1, light: 290 }, noBuild: true,
             recipes: [
                 { id: "soup", name: "Ugotuj zupę", doing: "Trwa gotowanie", inputs: [[ITEM.potato, 2], [ITEM.carrot, 1]], meat: 1, output: [ITEM.soup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Warzywa z mięsem: syci i rozgrzewa." },
                 { id: "stew", name: "Ugotuj gulasz", doing: "Trwa gotowanie", inputs: [[ITEM.carrot, 1], [ITEM.cabbage, 1]], meat: 2, water: 2, output: [ITEM.stew, 2], hours: 4, stamina: 2, startSe: "Liquid", desc: "Mięso, marchew i kapusta dusone długo w kociołku. Bardzo syci i rozgrzewa na wiele godzin." },
@@ -275,6 +292,18 @@
             desc: "Ogrodzony wygon z szopą: w środku pasą się owce i dają wełnę, 1 sztukę co 3 dni (maksymalnie 3), ale do strzyżenia potrzebne są nożyce (wykuwa się je w kuźni). Z wełny szyje się płaszcz." },
         // The forest bed (type key kept from the old hide bedroll): made in "Wytwórz..." (an item), laid out like the tent, but a night on it
         // restores only part of the strength: sleepRestore of the maximum, sleepBad in rain, snow and winter. refund: what Rozbierz gives back.
+        // a freshly shaped clay pot (Warsztat: "Ulep garnek") set down to dry: dry.hours of dry weather (the hours of rain do not count - a
+        // wet pot does not dry); then it is taken as a dried pot, ready for the kiln. Taken earlier it is still the soft raw pot (Farming.js)
+        pot: { name: "Garnek", cost: [[ITEM.rawPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Wet", imageDry: "Farm_Pot_Dry", instant: true, indoor: true,
+            dry: { hours: 24 },
+            desc: "Świeżo ulepiony garnek z gliny. Postaw go, żeby wysechł: potrzebuje doby suchej pogody (kiedy pada, nie schnie). Wysuszony zabierzesz do wypalenia w piecu." },
+        // the fired clay pot (the kiln) set down outdoors: collects rain like the bucket (rain.rate portions an hour of rain, up to max), but
+        // it seeps (rain.leak portions a day), a portion drunk gives rain.drink, and it lasts rain.wear uses (a drink or a filling) before it
+        // cracks. rain.own: its water and wear go with it into the bag and come back when it is set down again (Farming.js)
+        clay_pot: { name: "Gliniany garnek", cost: [[ITEM.firedPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Fired", imageFull: "Farm_Pot_Fired_Full", instant: true, pack: ITEM.firedPot,
+            packName: "Zabierz garnek", packHelp: "Zabierasz garnek do plecaka razem z wodą, która w nim jest: zostanie w nim, gdy go znów postawisz.", packedText: "Zabrano: Gliniany garnek",
+            rain: { max: 3, rate: 1, leak: 1, drink: 25, wear: 30, own: true, in: "w garnku", empty: "Garnek jest pusty" },
+            desc: "Wypalony gliniany garnek. Postawiony na dworze zbiera deszczówkę (porcja za godzinę deszczu, do 3), ale powoli ją przesącza (porcja na dobę). Napijesz się z niego (+25) albo napełnisz bukłak i konewkę. Po około 30 użyciach pęka." },
         bedroll: { name: "Leśne legowisko", cost: [[ITEM.boughBed, 1]], w: 2, stamina: 2, image: "Farm_Bedroll", instant: true, sleep: true, indoor: true, sleepRestore: 0.6, sleepBad: 0.4,
             refund: [[ITEM.branch, 3], [ITEM.fiber, 1]],
             desc: "Sterta gałęzi wyścielona suchą trawą i związana lnem. Prześpisz na niej noc, ale wstaniesz z około 60% sił, a w deszczu, śniegu i zimą z 40%. Namiot wypoczywa lepiej. Zrobisz ją w menu „Wytwórz...”." },

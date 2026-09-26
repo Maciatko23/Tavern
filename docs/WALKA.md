@@ -72,7 +72,8 @@ Kondycja +5 życia), więc szczyt jest mocny, ale nie absurdalny.
   narzędzie / broń / przedmiot kluczowy 5; pierwszy budynek danego rodzaju 5. Ptaki nie dają doświadczenia.
 - **Poziom najwyżej 100** (ustalone 2026-09-24): zwykłe przejście gry kończy się ok. 60–70, setka to wyzwanie
   końcowe (ok. 3 razy więcej doświadczenia). Na poziom **3 punkty atrybutów + 1 punkt umiejętności**.
-  Doświadczenie do następnego poziomu: 60 + 9 × poziom^1,5 (1→2: 69, 30→31: 1539, 99→100: 8926).
+  Doświadczenie do następnego poziomu (od 2026-09-25): na poziom 2 — 500, każdy kolejny o 20% więcej,
+  zaokrąglone do pełnej setki (500, 600, 700, 900, 1000, 1200 … 9→10: 2100, 19→20: 13 300, 29→30: 82 400).
   Nie da się mieć wszystkiego — 99 punktów na 187 stopni umiejętności: wybiera się styl postaci.
 - Awans: komunikat i dźwięk; w HUD cienki pasek doświadczenia.
 

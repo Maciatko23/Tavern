@@ -143,7 +143,7 @@ const { launch, sleep } = require("./cdp.js");
         const kMenu = await J(`Farming.menuFor(${cx + 1}, ${cy}).entries.map(e => e.name)`);
         check("the cauldron's menu offers the new dishes and the old ones", ["Ugotuj gulasz", "Ugotuj kapuśniak", "Ugotuj zupę grzybową", "Ugotuj owsiankę", "Ugotuj zupę", "Zaparz wywar"].every(n => kMenu.includes(n)), kMenu);
         check("the cauldron's menu has no 'Upiecz mięso', no fish, no potatoes, no eggs, no mushrooms, no cheese roasting", !kMenu.some(n => /^Upiecz|^Usmaż|^Przypiecz/.test(n)), kMenu);
-        check("the cauldron still lets the player warm up by its fire (rest)", kMenu.includes("Ogrzej się przy ogniu"), kMenu);
+        check("the cauldron still lets the player warm up by its fire (rest)", kMenu.includes("Odpocznij przy ogniu"), kMenu);
         const fMenu = await J(`Farming.menuFor(${fx}, ${fy}).entries.map(e => e.name)`);
         check("the plain campfire's menu offers 'Upiecz grzyby' and 'Przypiecz ser' next to meat, fish, potatoes and eggs",
             ["Upiecz mięso", "Upiecz rybę", "Upiecz ziemniaki", "Usmaż jajecznicę", "Upiecz grzyby", "Przypiecz ser"].every(n => fMenu.includes(n)), fMenu);

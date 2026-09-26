@@ -116,7 +116,7 @@
     // hp: its life at level 1 (combat scale: an arrow takes 30); atk: what its attack takes from the hero (Combat.js, +12% a level);
     // poise: its balance (hits take it away; at 0 it reels for `stun` frames). pack: wolves come in packs of pack[0]-pack[1]
     const SPECIES = {
-        rabbit: { name: "Zając", sheet: "$Animal_Rabbit", hp: 12, poise: 10, stun: 30, speed: 3, flee: 5, sight: 6, radius: 0.5, drop: 1, hours: [[5, 21]] },
+        rabbit: { name: "Zając", sheet: "$Animal_Rabbit", hp: 12, poise: 10, stun: 30, speed: 3, flee: 5, sight: 6, radius: 0.5, drop: 1, hours: [[5, 21]], hops: true },   // hops: over a stump, a log, a bush
         deer: { name: "Jeleń", sheet: "$Animal_Deer", hp: 40, poise: 25, stun: 40, speed: 3, flee: 5, sight: 9, radius: 0.75, drop: 2, hours: [[5, 10], [16, 21]] },
         boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 110, atk: 30, poise: 60, stun: 70, speed: 3, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
             hours: [[5, 9], [17, 21]], aggressive: true, hurt: 22, harm: 0.35, markY: -54 },   // harm: the part of the hero's health a hit takes (without Combat.js); markY: the "?"/"!" just over its back
@@ -249,7 +249,7 @@
     const STEP = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
     function roamingCanStep(actor, x, y, d) {
         const diag = DIAGONAL[d];
-        return diag ? actor.canPassDiagonally(x, y, diag[0], diag[1]) : actor.canPass(x, y, d);
+        return diag ? actor.canPassDiagonally(x, y, diag[0], diag[1]) : actor.canPass(x, y, d) || !!(actor.hopOver && actor.hopOver(x, y, d));
     }
     // one step in any of the 8 directions; on a diagonal it faces the side it goes to (the animals' sheets show them best sideways)
     function roamingStep(actor, d) {
@@ -430,6 +430,29 @@
     Game_Animal.prototype.isMapPassable = function(x, y, d) {
         if (window.Farming && Farming.buildingAt($gameMap.roundXWithDirection(x, d), $gameMap.roundYWithDirection(y, d))) return false;
         return Game_Character.prototype.isMapPassable.call(this, x, y, d);
+    };
+    // A rabbit hops over what lies low in its way - a stump, a log, a bush, a berry bush (the user's, 2026-09-25): where the next tile
+    // holds only such a thing and the one behind it is free, a two-tile jump instead of the step.
+    function lowObstacleAt(x, y) {
+        if (window.Farming && Farming.bushSolid && Farming.bushSolid(x, y, $gameMap.mapId())) return true;   // (a berry bush: not an event)
+        const blocking = $gameMap.eventsXy(x, y).filter(e => e.isNormalPriority() && !e.isThrough());
+        return blocking.length > 0 && !!(window.ChoppableTree && ChoppableTree.isLow) && blocking.every(e => ChoppableTree.isLow(e));
+    }
+    // the tile it lands on when it hops from (x, y) in direction d, or null
+    Game_Animal.prototype.hopOver = function(x, y, d) {
+        if (!SPECIES[this._kind].hops) return null;
+        const x1 = $gameMap.roundXWithDirection(x, d), y1 = $gameMap.roundYWithDirection(y, d);
+        const x2 = $gameMap.roundXWithDirection(x1, d), y2 = $gameMap.roundYWithDirection(y1, d);
+        if (!$gameMap.isValid(x2, y2) || !$gameMap.checkPassage(x1, y1, 0x0f) || !lowObstacleAt(x1, y1)) return null;
+        if (!$gameMap.isPassable(x2, y2, this.reverseDir(d)) || this.isCollidedWithCharacters(x2, y2) || (window.Farming && Farming.buildingAt(x2, y2))) return null;
+        return { x: x2, y: y2 };
+    };
+    Game_Animal.prototype.moveStraight = function(d) {
+        const hop = !Game_Character.prototype.canPass.call(this, this._x, this._y, d) && this.hopOver(this._x, this._y, d);
+        if (!hop) return Game_Character.prototype.moveStraight.call(this, d);
+        this.setDirection(d);
+        this.jump(hop.x - this._x, hop.y - this._y);
+        this.setMovementSuccess(true);
     };
     Game_Animal.prototype.kind = function() { return this._kind; };
     Game_Animal.prototype.centerX = function() { return this._realX + 0.5; };
@@ -659,6 +682,10 @@
         }
         if (this._mode === "flee" || this._mode === "retreat") {
             if (this._mode === "retreat" && this._modeT <= 0) { this.setMode("roam"); this._aware = 0.55; return; }   // still wary: it notices him again soon
+            // beaten and far enough from him: it limps off into the forest (limpAway); out of sight it is gone (and does not come
+            // back before dawn). Running on from him step by step it only dithered left and right against a wall or a building.
+            if (this._mode === "flee" && dist > sp.sight) { this.limpAway(); return; }
+            this._fleeTo = null;
             const d = this.bestEscape(dx, dy);
             if (d) roamingStep(this, d);
             return;
@@ -706,6 +733,32 @@
         }
         if (this._aware >= 0.3) { this.turnTowardCharacter($gamePlayer); return; }   // it stops and looks
         this.wander();
+    };
+    // a beaten animal leaving: to one far spot away from the hero (a point by the map's edge), a step slower, round what is in the
+    // way (Game_Character's path search); a new spot when stuck; gone when out of sight or at the edge
+    const EDGE = 2;
+    // really on the screen (the engine's isNearTheScreen allows a whole screen more on every side)
+    const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < Graphics.width + m && y > -m && y < Graphics.height + 2 * m; };
+    Game_Animal.prototype.limpAway = function() {
+        if (!onScreen(this)) { tallyGone(this); removeAnimal(this); return; }
+        const w = $gameMap.width(), h = $gameMap.height();
+        if (this._x <= EDGE || this._y <= EDGE || this._x >= w - 1 - EDGE || this._y >= h - 1 - EDGE) { tallyGone(this); removeAnimal(this); return; }
+        if (!this._fleeTo || (this._fleeStuck || 0) > 6 || (this._x === this._fleeTo.x && this._y === this._fleeTo.y)) {
+            const px = $gamePlayer.x, py = $gamePlayer.y, tried = this._fleeTo;
+            const spots = [];
+            for (const fx of [0, 0.5, 1]) for (const fy of [0, 0.5, 1]) {
+                if (fx === 0.5 && fy === 0.5) continue;
+                spots.push({ x: Math.round(EDGE + fx * (w - 1 - 2 * EDGE)), y: Math.round(EDGE + fy * (h - 1 - 2 * EDGE)) });
+            }
+            const score = q => Math.hypot(q.x - px, q.y - py) - 0.6 * Math.hypot(q.x - this._x, q.y - this._y)   // far from him, not far for it
+                + (((q.x - this._x) * (this._x - px) + (q.y - this._y) * (this._y - py)) > 0 ? 6 : 0);          // on the side away from him
+            this._fleeTo = spots.filter(q => !tried || q.x !== tried.x || q.y !== tried.y).sort((a, b) => score(b) - score(a))[0];
+            this._fleeStuck = 0;
+        }
+        this.setMoveSpeed(SPECIES[this._kind].speed);   // (walking, not running: slower than its flight; slower still looked frozen)
+        const d = this.findDirectionTo(this._fleeTo.x, this._fleeTo.y);
+        if (d > 0 && roamingCanStep(this, this._x, this._y, d)) { roamingStep(this, d); this._fleeStuck = 0; }
+        else this._fleeStuck = (this._fleeStuck || 0) + 1;
     };
     const VEC_DIR = { "0,1": 2, "-1,0": 4, "1,0": 6, "0,-1": 8, "-1,1": 1, "1,1": 3, "-1,-1": 7, "1,-1": 9 };
     const DIR_VEC = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
@@ -1336,6 +1389,11 @@
             return;
         }
         kill(animal);
+    }
+    // a beaten one that ran off into the forest: it counts for today on this map (no fresh one takes its place before dawn), not as a kill
+    function tallyGone(animal) {
+        const mapId = $gameMap.mapId(), h = hunt(), rec = h.killed[mapId] && h.killed[mapId].day === day() ? h.killed[mapId] : (h.killed[mapId] = { day: day() });
+        rec[animal.kind()] = (rec[animal.kind()] || 0) + 1;
     }
     // one more of this kind taken today on this map (it does not come back before dawn) and in all
     function tally(animal) {

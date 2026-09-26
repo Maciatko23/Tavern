@@ -87,16 +87,21 @@ const { launch, sleep } = require("./cdp.js");
         await b.shot("site_1of3.png");
         const grow = await ev("(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === 'bench'); return { visible: e.solid.visible, shown: e.shown }; })()");
         check("a fifth of the bench stands now (grows from the ground up)", grow.visible === true && grow.shown > 0, grow);
-        check("giving up is no longer possible after the first blow", (await ev(`Farming.cancelSite(Farming.buildingAt(${bx + 5}, ${by + 3}))`)) === false);
+        // ---- begun: a tap of O opens the site's menu - go on, or take it down (the user's, 2026-09-25)
+        await press("ok"); await frames(6);
+        const again = await ev("JSON.stringify({ open: !!$gameTemp._farmMenuOpen, names: (SceneManager._scene._farmMenu._entries || []).map(e => e.name), sel: SceneManager._scene._farmMenu.index() })");
+        const ag = JSON.parse(again);
+        check("begun (1/5): a tap of O opens its menu - 'Buduj dalej' chosen, 'Rozbierz plac budowy' under it", ag.open && ag.names[ag.sel] === "Buduj dalej" && ag.names.includes("Rozbierz plac budowy"), ag);
+        await press("ok"); await frames(40);   // "Buduj dalej"
+        check("'Buduj dalej': the second blow", (await ev(`Farming.buildingAt(${bx + 5}, ${by + 3}).site.done`)) === 2 && (await ev("!!$gameTemp._farmMenuOpen")) === false);
 
-        // ---- every following press is one blow, until it is finished
-        await press("ok"); await frames(40);
-        check("second press = second blow, no menu in between", (await ev(`Farming.buildingAt(${bx + 5}, ${by + 3}).site.done`)) === 2 && (await ev("!!$gameTemp._farmMenuOpen")) === false);
-        await press("ok"); await frames(40);
-        await press("ok"); await frames(40);
-        await press("ok"); await frames(60);
+        // ---- O held on: the menu chooses 'Buduj dalej' by itself and the blows go on until it is finished
+        await ev("Input._currentState.ok = true; 0");
+        for (let i = 0; i < 80 && (await ev(`!!(Farming.buildingAt(${bx + 5}, ${by + 3}) || {}).site`)); i++) await frames(10);
+        await ev("Input._currentState.ok = false; 0");
+        await frames(60);
         const fin = await ev(`(function(){ const b = Farming.buildingAt(${bx + 5}, ${by + 3}); return { there: !!b, stillSite: !!(b && b.site) }; })()`);
-        check("the fifth blow finishes the bench: it is a real building now", fin.there && !fin.stillSite, fin);
+        check("O held on the site: it builds on by itself, the fifth blow finishes the bench - a real building now", fin.there && !fin.stillSite, fin);
         check("the whole job cost 5 blows x 2 stamina", Math.round(s1 - (await stamina())) === 10, { spent: s1 - (await stamina()) });
         await b.shot("site_done.png");
 
@@ -110,6 +115,20 @@ const { launch, sleep } = require("./cdp.js");
         // choose the second entry, "Zrezygnuj"
         await press("down"); await press("ok"); await frames(6);
         check("giving up returns everything and clears the ground", (await count(80)) === 10 && !(await ev(`Farming.buildingAt(${bx + 3}, ${by + 5})`)));
+
+        // ---- a half-built site taken down: part of the materials back (the further it got, the less - half just before the end)
+        await ev(`Farming.startPlacement("bench", ${bx + 3}, ${by + 5}); 0`);
+        await frames(8); await press("ok"); await arrive();
+        const planks0 = await count(80);
+        await ev(`Farming.buildingAt(${bx + 3}, ${by + 5}).site.done = 3; 0`);   // (3 of 5 blows)
+        await ev(`$gamePlayer.locate(${bx + 2}, ${by + 5}); $gamePlayer.setDirection(6); 0`);
+        await frames(2);
+        await press("ok"); await frames(6);
+        const tm = JSON.parse(await ev("JSON.stringify((SceneManager._scene._farmMenu._entries || []).map(e => e.name + ': ' + (e.help || '')))"));
+        await press("down"); await press("ok"); await frames(10);   // "Rozbierz plac budowy"
+        const cost = await ev(`Farming.BUILDINGS.bench.cost.find(c => c[0] === 80)[1]`);
+        const got = (await count(80)) - planks0, want = Math.round(cost * (1 - 0.5 * 3 / 5));
+        check("a site 3/5 built taken down ('Rozbierz plac budowy'): gone, " + want + " of " + cost + " planks back (70%)", !(await ev(`Farming.buildingAt(${bx + 3}, ${by + 5})`)) && got === want, { got, want, menu: tm });
 
         // ---- the sites are saved
         await ev(`Farming.startPlacement("hive", ${bx + 6}, ${by + 4}); 0`);

@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w trzech zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo) i przedmioty (dowolna ilość). v1.3.0
+ * @plugindesc Menu deweloperskie (F9) w trzech zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo) i przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie). v1.4.0
  * @author Tawerna
  *
  * @param enabled
@@ -22,9 +22,11 @@
  *      R / Q / E odbija, OK stawia, Anuluj wraca), ale za darmo: bez materiałów, bez sił, bez placu budowy
  *      i młotka - budynek od razu stoi gotowy (zagroda od razu ze zwierzętami). Nie trzeba oczyszczać
  *      ziemi, ale nie stanie na wodzie, drzewie, skale ani na innym budynku. Płoty stawia się jeden po drugim.
- *   3. Przedmioty: lista wszystkich przedmiotów; strzałki w lewo/prawo zmieniają ilość
- *      przy podświetlonej pozycji, OK dodaje ją do plecaka.
- * F9 otwiera się na tej zakładce i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
+ *   3. Przedmioty: wszystkie przedmioty w trzech podzakładkach - "Narzędzia i broń", "Surowce",
+ *      "Jedzenie" (Tab albo [ / ] je przełączają, można też kliknąć); strzałki w lewo/prawo zmieniają
+ *      ilość przy podświetlonej pozycji, OK dodaje ją do plecaka.
+ * F9 otwiera się na tej zakładce (i podzakładce) i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
+ * Zakładki i podzakładki można też klikać myszą.
  * Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
  */
 (() => {
@@ -56,11 +58,27 @@
     const TABS = [
         { name: "Zdarzenia", help: "↑↓ wybierz   OK wykonaj   Q / E zakładka   Esc zamknij" },
         { name: "Budowanie", help: "↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij" },
-        { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Q / E zakładka   Esc zamknij" }
+        { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij" }
     ];
-    // where the menu was last time (the tab and the row in each tab): F9 opens there again
-    const last = { tab: 0, index: [0, 0, 0] };
+    const ITEMS_TAB = 2;
+    // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
+    const KINDS = ["Narzędzia i broń", "Surowce", "Jedzenie"];
+    const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
+    const RAW_FOOD = [94, 98, 157, 159, 161];   // raw hare, fish, deer, boar, wolf: food still to be cooked
+    function kindOf(item) {
+        if (item.itypeId === 2 || TOOL_EXTRA.includes(item.id)) return 0;   // (the database's key items: tools, weapons, the shield, clothes, the tent)
+        const m = item.meta || {};
+        if (m.Food || m.Butcher || m.Bandage || RAW_FOOD.includes(item.id) || (window.Spoilage && item.id === Spoilage.ROT) ||
+            isStock(item)) return 2;   // (also the bandage and the database's potions: used up like food)
+        return 1;
+    }
+    // the database's own potions and boosters (not the game's food): at the end of the food list
+    const isStock = item => !(item.meta && item.meta.Food) && item.consumable && item.effects.length > 0 && !TOOL_EXTRA.includes(item.id);
+    // where the menu was last time (the tab, the kind of item, the row in each of them): F9 opens there again
+    const last = { tab: 0, kind: 0, index: {} };
+    const spot = (tab, kind) => (tab === ITEMS_TAB ? tab + ":" + kind : String(tab));
 
+    const heroLookLabel = () => "Nowa postać: " + (window.HeroLook && HeroLook.active() ? "włączona" : "wyłączona (stary Reid)");
     // every row of the menu, each with its tab: 0 the events, 1 the buildings, 2 the items
     function allRows() {
         const rows = [
@@ -81,15 +99,15 @@
         if (window.Hunting && Hunting.SPECIES.wolf) rows.push({ tab: 0, kind: "wolves", label: "Wataha wilków (3)", icon: 416 });   // Hunting.js: a pack a few tiles away
         if (window.Hunting && Hunting.SPECIES.deer) rows.push({ tab: 0, kind: "deer", label: "Jeleń w pobliżu", icon: 420 });   // Hunting.js: a deer a few tiles away (any hour)
         if (window.Combat) rows.push({ tab: 0, kind: "xp", label: "+200 doświadczenia", icon: 87 });   // Combat.js: to try the levels
+        if (window.HeroLook) rows.push({ tab: 0, kind: "herolook", label: heroLookLabel(), icon: 84 });   // HeroLook.js: the new hero, on trial
         if (window.Farming && Farming.startFreePlacement) {   // every building of Farming.js, put down free and finished
             for (const [type, def] of Object.entries(Farming.BUILDINGS)) {
                 const iconItem = Farming.itemOf(def.pack || def.cost[0][0]);
                 rows.push({ tab: 1, kind: "build", type, label: "Postaw: " + def.name, icon: iconItem ? iconItem.iconIndex : 0 });
             }
         }
-        for (const item of $dataItems) {
-            if (item && item.name) rows.push({ tab: 2, kind: "item", item, qty: 1 });
-        }
+        const items = $dataItems.filter(item => item && item.name && !/^-{3,}/.test(item.name));   // (not the database's "-----" dividers)
+        for (const item of items.sort((a, b) => isStock(a) - isStock(b))) rows.push({ tab: ITEMS_TAB, kind: "item", group: kindOf(item), item, qty: 1 });
         return rows;
     }
 
@@ -112,10 +130,10 @@
         this.activate();
     };
 
-    // show the rows of tab `tab`, the cursor on row `index`
-    Window_DebugList.prototype.setTab = function(tab, index) {
+    // show the rows of tab `tab` (on the item tab: of kind `kind`), the cursor on row `index`
+    Window_DebugList.prototype.setTab = function(tab, index, kind) {
         this._tab = tab;
-        this._rows = this._all.filter(r => r.tab === tab);
+        this._rows = this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
         this.refresh();
         this.select(Math.max(0, Math.min(index || 0, this._rows.length - 1)));
         this.ensureCursorVisible(true);
@@ -157,26 +175,37 @@
         this.redrawItem(this.index());
     };
 
-    // ---- the scene: the key help, the tab band, the list; Q / E switch the tabs, F9/Esc close it
+    // ---- the scene: the key help, the tab band (on the item tab a second band of the kinds), the list; Q / E switch the tabs,
+    // Tab or [ / ] the kinds, a click on either band too; F9/Esc close it
     function Scene_Debug() {
         this.initialize(...arguments);
     }
     Scene_Debug.prototype = Object.create(Scene_MenuBase.prototype);
     Scene_Debug.prototype.constructor = Scene_Debug;
 
+    // a band of names, one of them marked (not active itself: the list keeps the keys)
+    function band(rect, names) {
+        const w = new Window_Command(rect);
+        w.maxCols = () => names.length;
+        w.makeCommandList = function() { names.forEach(n => this.addCommand(n, "tab")); };
+        w.itemTextAlign = () => "center";
+        w.refresh();
+        w.deactivate();
+        return w;
+    }
+
     Scene_Debug.prototype.create = function() {
         Scene_MenuBase.prototype.create.call(this);
         const top = this.mainAreaTop(), helpH = this.calcWindowHeight(1, false), tabsH = this.calcWindowHeight(1, true);
         this._help = new Window_Base(new Rectangle(0, top, Graphics.boxWidth, helpH));
         this.addWindow(this._help);
-        this._tabs = new Window_Command(new Rectangle(0, top + helpH, Graphics.boxWidth, tabsH));
-        this._tabs.maxCols = () => TABS.length;
-        this._tabs.makeCommandList = function() { TABS.forEach(t => this.addCommand(t.name, "tab")); };
-        this._tabs.itemTextAlign = () => "center";
-        this._tabs.refresh();
-        this._tabs.deactivate();
+        this._tabs = band(new Rectangle(0, top + helpH, Graphics.boxWidth, tabsH), TABS.map(t => t.name));
         this.addWindow(this._tabs);
-        this._list = new Window_DebugList(new Rectangle(0, top + helpH + tabsH, Graphics.boxWidth, this.mainAreaHeight() - helpH - tabsH));
+        this._kinds = band(new Rectangle(0, top + helpH + tabsH, Graphics.boxWidth, tabsH), KINDS);
+        this.addWindow(this._kinds);
+        this._listTop = top + helpH + tabsH;   // (the list starts lower on the item tab, under the kinds)
+        this._bandH = tabsH;
+        this._list = new Window_DebugList(new Rectangle(0, this._listTop, Graphics.boxWidth, this.mainAreaHeight() - helpH - tabsH));
         this._list.setHandler("ok", this.onOk.bind(this));
         this._list.setHandler("cancel", this.popScene.bind(this));
         this._list.setHandler("pagedown", () => this.changeTab(1));
@@ -189,24 +218,48 @@
         this._tab = tab;
         last.tab = tab;
         this._tabs.select(tab);
-        this._list.setTab(tab, last.index[tab]);
+        const items = tab === ITEMS_TAB, y = this._listTop + (items ? this._bandH : 0);
+        this._kinds.visible = items;
+        this._kinds.select(last.kind);
+        if (this._list.y !== y) {
+            this._list.move(0, y, Graphics.boxWidth, this._list.y + this._list.height - y);
+            this._list.createContents();
+        }
+        this._list.setTab(tab, last.index[spot(tab, last.kind)], last.kind);
         this._list.activate();
         this._help.contents.clear();
         this._help.drawText(TABS[tab].help, 0, 0, this._help.innerWidth, "center");
     };
+    Scene_Debug.prototype.remember = function() {
+        last.index[spot(this._tab, last.kind)] = this._list.index();
+    };
     Scene_Debug.prototype.changeTab = function(dir) {
-        last.index[this._tab] = this._list.index();
+        this.goTo((this._tab + dir + TABS.length) % TABS.length, last.kind);
+    };
+    Scene_Debug.prototype.changeKind = function(dir) {
+        this.goTo(ITEMS_TAB, (last.kind + dir + KINDS.length) % KINDS.length);
+    };
+    Scene_Debug.prototype.goTo = function(tab, kind) {
+        this.remember();
         SoundManager.playCursor();
-        this.showTab((this._tab + dir + TABS.length) % TABS.length);
+        last.kind = kind;
+        this.showTab(tab);
     };
 
     Scene_Debug.prototype.update = function() {
         Scene_MenuBase.prototype.update.call(this);
-        if (Input.isTriggered("debugmenu")) this.popScene();   // F9 closes it too
+        if (Input.isTriggered("debugmenu")) return this.popScene();   // F9 closes it too
+        if (this._tab === ITEMS_TAB && (Input.isTriggered("tab") || Input.isTriggered("keyRB"))) this.changeKind(1);
+        else if (this._tab === ITEMS_TAB && Input.isTriggered("keyLB")) this.changeKind(-1);
+        else if (TouchInput.isClicked()) {   // a click on a tab or on a kind
+            const t = this._tabs.hitIndex(), k = this._kinds.visible ? this._kinds.hitIndex() : -1;
+            if (t >= 0 && t !== this._tab) this.goTo(t, last.kind);
+            else if (k >= 0 && k !== last.kind) this.goTo(ITEMS_TAB, k);
+        }
     };
     Scene_Debug.prototype.terminate = function() {
         Scene_MenuBase.prototype.terminate.call(this);
-        last.index[this._tab] = this._list.index();   // open here again next time
+        this.remember();   // open here again next time
     };
 
     Scene_Debug.prototype.onOk = function() {
@@ -226,6 +279,10 @@
             Hunting.pending = row.kind;
         } else if (row.kind === "xp") {
             Combat.gainXp(200, "F9");
+        } else if (row.kind === "herolook") {   // the new hero on and off (the menu stays: the row says which)
+            HeroLook.setActive(!HeroLook.active());
+            row.label = heroLookLabel();
+            this._list.redrawItem(this._list.index());
         } else if (row.kind === "build") {
             $gameTemp._debugBuild = row.type;   // the placer starts once the map is back
             this.popScene();

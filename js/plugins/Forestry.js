@@ -88,7 +88,7 @@
         const look = lookOf(k);
         if (look.pic) return { scale: 1, hits: 1, drop: BRANCH, dropmin: 1, dropmax: 1, nostump: 1 };
         return { scale: look.scale, hits: Math.max(1, Math.round(20 * k)), drop: WOOD,
-            dropmin: Math.max(1, Math.round(2 * k)), dropmax: Math.max(1, Math.round(4 * k)), nostump: 0 };
+            dropmin: Math.max(1, Math.round(6 * k)), dropmax: Math.max(1, Math.round(8 * k)), nostump: 0 };   // (like the big pine: ~0.35 wood a blow)
     }
 
     // ------------------------------------------------------------------

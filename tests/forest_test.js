@@ -132,7 +132,7 @@ const OUT = __dirname + "/";
         check("the seedlings on the mound: one blow gives a branch, no stump", days.slice(0, 3).every(t => t.hits === 1 && t.drop === 77 && t.nostump === 1), days.slice(0, 3));
         check("5 days after planting: a small pine, half grown (10 blows, wood, a stump)", days[5].hits === 10 && days[5].drop === 61 && days[5].nostump === 0, days[5]);
         const full = days[10];
-        check("10 days after planting: a full pine (scale 1, 20 blows, 2-4 wood)", full.scale === 1 && full.hits === 20 && full.dropmin === 2 && full.dropmax === 4 && full.growth === 1, full);
+        check("10 days after planting: a full pine (scale 1, 20 blows, 6-8 wood like the big pine)", full.scale === 1 && full.hits === 20 && full.dropmin === 6 && full.dropmax === 8 && full.growth === 1, full);
         await b.shot(OUT + "forest_grown.png");
 
         // ================= 6. with the map: it comes back, and once dug out it is gone =================

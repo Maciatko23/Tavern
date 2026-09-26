@@ -34,7 +34,9 @@ const OUT = __dirname + "/";
         const m = await layout();
         check("one panel in the middle, smaller than the screen, every window inside it and without a frame of its own", !!m && m.rect[2] < 1280 - 200 && m.rect[3] < 720 - 120 && m.outside.length === 0 && m.framed.length === 0, m);
         const cmds = await J("SceneManager._scene._commandWindow._list.map(c => c.symbol)");
-        check("the commands in one column: the bag, the journal, options, saving, the end", JSON.stringify(cmds) === '["item","options","save","gameEnd","journal"]' || ["item", "journal", "options", "save", "gameEnd"].every(c => cmds.includes(c)), cmds);
+        check("the commands in one column, from the top: Postać, Plecak, Dziennik, then options, saving, the end", cmds.slice(0, 3).join() === "hero,item,journal" && ["options", "save", "gameEnd"].every(c => cmds.includes(c)), cmds);
+        const head = await J("(function(){ const w = SceneManager._scene._statusWindow, t = []; const d = w.drawText; w.drawText = function(s) { t.push(String(s)); return d.apply(this, arguments); }; w.refresh(); w.drawText = d; return t.slice(0, 3); })()");
+        check("the card's head: the hero's name and 'Poziom N' (not the map's name)", head[0] === (await ev("$gameParty.leader().name()")) && head[1] === "Poziom " + (await ev("Combat.hero().level")), head);
         check("the coins window is gone (the coins are on the card), the title is the hero's name", !(await ev("SceneManager._scene._goldWindow.visible")) && m.title === (await ev("$gameParty.leader().name()")), m.title);
         await b.shot(OUT + "menu_panel_card.png");
 

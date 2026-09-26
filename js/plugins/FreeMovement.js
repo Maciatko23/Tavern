@@ -353,6 +353,9 @@
         this._freeAccX = (this._freeAccX || 0) + nx * speed * tw;
         this._freeAccY = (this._freeAccY || 0) + ny * speed * th;
         const sx = Math.trunc(this._freeAccX), sy = Math.trunc(this._freeAccY);
+        // less than a pixel on both axes so far (slow on the slant: tired, sneaking): it adds up - clearing it here (as a bump
+        // does) kept him standing still, or stepping unevenly (the user's, 2026-09-25)
+        if (!sx && !sy) return;
         this._freeAccX -= sx;
         this._freeAccY -= sy;
         const s = { fx: Math.round(this._realX * tw), fy: Math.round(this._realY * th), moved: false, bump: null };

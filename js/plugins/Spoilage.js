@@ -268,5 +268,19 @@
         _Window_Help_setItem.call(this, item);
     };
 
-    window.Spoilage = { LIFE, ROT, tick, chestPut, chestPreload, freshnessText, hoursLeft, enabled, state, isPerishable };
+    // food kept in a chest (b.fresh): how long its oldest piece stays good there, at that chest's pace - a pantry keeps it longer
+    // (keeps), and the skills (the user's, 2026-09-25: the pantry shows it). { hours, text, ratio: the part of its life left } or null
+    function chestFreshness(b, id) {
+        if (!enabled() || !LIFE[id] || !b || !b.fresh || !b.fresh[id]) return null;
+        const list = b.fresh[id].filter(c => c.n > 0);
+        if (!list.length) return null;
+        const F = window.Farming, def = F && F.BUILDINGS[b.type];
+        const keeps = def && def.keeps !== undefined ? def.keeps : 1;
+        const pace = SPEED * keeps * (1 - Math.min(0.8, perk("spoil"))) * (1 - Math.min(0.8, perk("spoil.store")));   // (as ageChests)
+        const left = Math.max(0, LIFE[id] - Math.max(...list.map(c => c.age)));
+        const hours = left / Math.max(0.0001, pace);
+        return { hours, text: timeText(hours), ratio: left / LIFE[id] };
+    }
+
+    window.Spoilage = { LIFE, ROT, tick, chestPut, chestPreload, freshnessText, chestFreshness, hoursLeft, enabled, state, isPerishable, WARN_AT };
 })();

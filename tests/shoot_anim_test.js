@@ -68,7 +68,7 @@ const { launch, sleep } = require("./cdp.js");
         await frames(60);
 
         // ---------------------------------------------------------------- the frame shown at the release, per facing
-        const rows = { 2: 0, 4: 1, 6: 2, 8: 3 }, hits = { 2: 11, 4: 10, 6: 10, 8: 10 };
+        const rows = { 2: 0, 4: 1, 6: 2, 8: 3 }, slingHit = await J("ChoppableTree.swingKind(9).hit"), hits = { 2: slingHit[0], 4: slingHit[1], 6: slingHit[2], 8: slingHit[3] };   // (the sheet in use: the new hero's or the old)
         for (const d of [2, 4, 6, 8]) {
             await standAt(d);
             await press("shoot");
@@ -120,6 +120,7 @@ const { launch, sleep } = require("./cdp.js");
         check("the arrow leaves when the string is let go (~36 game frames into the swing)", bowLeft >= 30 && bowLeft <= 46 && (await count(127)) === a0 - 1, { bowLeft, arrows: await count(127) });
         while (await swinging()) await frames(2);
         await frames(50);   // the cooldown of the last shot
+        const bowHit = await J("ChoppableTree.swingKind(10).hit");
         for (const d of [2, 4, 6, 8]) {
             await standAt(d);
             await press("shoot");
@@ -129,11 +130,11 @@ const { launch, sleep } = require("./cdp.js");
                 const t = await ev("$gamePlayer._swingEvent ? $gamePlayer._swingEvent._swingT : -1");
                 if (t >= 37 && t <= 39) {
                     at = await cell();
-                    for (let k = 0; k < 3 && (!at || at.col !== 11); k++) { await frames(1); at = await cell(); }   // the picture may trail the counter by a frame or two
+                    for (let k = 0; k < 3 && (!at || at.col !== bowHit[rows[d]]); k++) { await frames(1); at = await cell(); }   // the picture may trail the counter by a frame or two
                     break;
                 }
             }
-            check("bow, facing " + d + ": the release frame is column 11 of row " + rows[d], !!at && at.col === 11 && at.row === rows[d], at);
+            check("bow, facing " + d + ": the release frame is column " + bowHit[rows[d]] + " of row " + rows[d], !!at && at.col === bowHit[rows[d]] && at.row === rows[d], at);
             if (d === 6) await b.shot("shoot_bow_release.png");
             while (await swinging()) await frames(2);
             await frames(40);

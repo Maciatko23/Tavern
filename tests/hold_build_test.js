@@ -30,9 +30,11 @@ const { launch, sleep } = require("./cdp.js");
         await frames(10);
         const done = () => ev(`Farming.buildingAt(${sx}, ${sy}).site ? Farming.buildingAt(${sx}, ${sy}).site.done : -1`);
 
-        // ---- held O: blow after blow
-        const d0 = await done();
+        // ---- held O: the site's menu opens and, held on, chooses 'Buduj dalej' by itself; then blow after blow
+        const dStart = await done();
         await ev("Input._currentState.ok = true; 0");
+        for (let i = 0; i < 60 && (await done()) === dStart; i++) await frames(2);   // (timed from the first blow)
+        const d0 = await done();
         const f0 = await ev("Graphics.frameCount");
         await frames(200);
         const d1 = await done(), f1 = await ev("Graphics.frameCount");
@@ -48,8 +50,10 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---- Zręczność 45: quicker
         await ev("Combat.hero().attr.dex = 45; $gameSystem.setStamina(100); 0");
-        const e0 = await done();
+        const eStart = await done();
         await ev("Input._currentState.ok = true; 0");
+        for (let i = 0; i < 60 && (await done()) === eStart; i++) await frames(2);
+        const e0 = await done();
         const g0 = await ev("Graphics.frameCount");
         await frames(200);
         const e1 = await done(), g1 = await ev("Graphics.frameCount");

@@ -408,7 +408,15 @@
         // pine cones under the pines: two lying together, or one
         cone: { colours: { o: "#2e1c10", b: "#6e4220", B: "#9a6030", l: "#c89050", s: "rgba(10,8,4,0.30)" }, shapes: [
             ["..oo........", ".oBBoo......", ".oblBBo.oo..", "..oBlbBooBo.", "...oobBolbBo", ".....oo.oBlo", "........ooo.", ".sssssssss.."],
-            [".oo.....", "oBBoo...", "oblBBo..", ".oBlbBo.", "..oobBo.", "....oo..", ".ssssss."]] }
+            [".oo.....", "oBBoo...", "oblBBo..", ".oBlbBo.", "..oobBo.", "....oo..", ".ssssss."]] },
+        // wild potatoes (a leafy clump with white flowers) and wild carrots (feathery tops, the orange shoulder of the root showing),
+        // both on a little heap of earth
+        wildPotato: { colours: { d: "#2f6a2a", g: "#4f9a3c", G: "#7cc25a", w: "#f4f2e8", y: "#f0d060", b: "#6e4a2c", B: "#8a6038", s: "rgba(10,8,4,0.30)" }, shapes: [
+            ["...w.......", "..wyw..w...", "...wgGwyw..", ".gGgGgGw...", "gGdGGgGGg..", ".gGdgGGdGg.", "..gGgdGgG..", ".bbgGgGgbb.", "bBbbBbbBbbB", ".sssssssss."],
+            [".....w.....", "..w.wyw....", ".wyw.g.gG..", "..wgGgGgGg.", ".gGdGgGdGg.", "gGgGdgGGdg.", ".gdGgGgGg..", ".bbgGdGbb..", "bBbBbbbBbB.", ".ssssssss.."]] },
+        wildCarrot: { colours: { g: "#4f9a3c", G: "#86c85e", o: "#c05a1c", O: "#f09030", b: "#6e4a2c", B: "#8a6038", s: "rgba(10,8,4,0.30)" }, shapes: [
+            ["..G...g.G..", ".gGg.gG.gG.", "..gGgGggG..", ".G.gGgGg.g.", ".gG.gGGg.G.", "...g.gg.gG.", ".....gg....", "....oOOo...", "..bboOOobb.", ".bBbbbbBbbB", ".sssssssss."],
+            [".g.G..G....", "gGg.gGg.G..", ".gGgGgGgG..", "..gGgGg....", "...gGg.....", "....gg.....", "...oOOo....", ".bboOOobb..", "bBbbbbBbbB.", ".sssssssss."]] }
     };
     const gatherBitmaps = new Map();
     function gatherBitmap(kind, variant) {
@@ -888,6 +896,8 @@
             if (e.caught) this.updateSnare(e);
             if (e.solid) this.updateSite(e);
             if (Farming.geoOf(e.b).imageFull && (e.filled === undefined || this._age % 15 === 0)) this.updateBucket(e);
+            if (Farming.geoOf(e.b).imageDry && (e.dried === undefined || this._age % 30 === 0)) this.updatePot(e);
+            if (Farming.geoOf(e.b).table && !e.b.site && (e.tablePots === undefined || this._age % 20 === 0)) this.updateTable(e);
         }
     };
     // the bucket shows water in it once a portion has been collected
@@ -896,6 +906,37 @@
         if (e.filled === full) return;
         e.filled = full;
         e.sprite.bitmap = ImageManager.loadSystem(full ? def.imageFull : def.image);
+    };
+    // a clay pot drying on the ground: dark and wet, then pale once it is dry
+    BuildingSprites.prototype.updatePot = function(e) {
+        const def = Farming.geoOf(e.b), dry = !e.b.site && Farming.potDryness(e.b) >= 1;
+        if (e.dried === dry) return;
+        e.dried = dry;
+        e.sprite.bitmap = ImageManager.loadSystem(dry ? def.imageDry : def.image);
+    };
+    // the pots drying on the shelter's table: one sprite a pot, at the table's spots. They sort right after the building (y one px
+    // lower) and are drawn up on the table by the anchor, so whoever walks in front of the shelter still covers them
+    const TABLE_POT_SCALE = 1;   // (the same size as a pot on the ground - the user's)
+    BuildingSprites.prototype.updateTable = function(e) {
+        const def = Farming.geoOf(e.b), pots = e.b.pots || [];
+        e.tablePots = e.tablePots || [];
+        while (e.tablePots.length < pots.length) {
+            const s = new Sprite();
+            s.scale.x = s.scale.y = TABLE_POT_SCALE;
+            s.anchor.x = 0.5;
+            s.z = Z.withCharacters;
+            this._tilemap.addChild(s);
+            e.tablePots.push(s);
+        }
+        while (e.tablePots.length > pots.length) this._tilemap.removeChild(e.tablePots.pop());
+        pots.forEach((p, i) => {
+            const img = Farming.tablePotDry(e.b, p) ? def.potDry || "Farm_Pot_Dry" : def.potWet || "Farm_Pot_Wet", s = e.tablePots[i];
+            if (s._img !== img) { s.bitmap = ImageManager.loadSystem(img); s._img = img; }
+            const spot = def.table.spots[i] || [0, -40], drawnH = 28 * TABLE_POT_SCALE;   // (Farm_Pot_* is 28 px high)
+            s.x = e.sprite.x + spot[0];
+            s.y = e.sprite.y + 1;
+            s.anchor.y = 1 + (1 - spot[1]) / drawnH;   // (the anchor is in picture units: this puts the pot's foot on the table)
+        });
     };
     // the built part of a site grows from the ground up, one step for every blow
     BuildingSprites.prototype.updateSite = function(e) {
@@ -1184,6 +1225,7 @@
             for (const meat of [meatRaw, meatDone, rope]) if (meat) meat.y = sprite.y;
             if (badge) badge.x = sprite.x;
         }
+        for (const e of this._sprites) if (e.tablePots && e.tablePots.length) this.updateTable(e);   // (they follow the scrolling too)
     };
     BuildingSprites.prototype.destroy = function() {
         for (const s of this._sprites) {
@@ -1198,6 +1240,7 @@
             if (s.meatDone) this._tilemap.removeChild(s.meatDone);
             if (s.badge) this._tilemap.removeChild(s.badge);
             for (const p of s.puffs || []) this._tilemap.removeChild(p);
+            for (const p of s.tablePots || []) this._tilemap.removeChild(p);
             for (const f of s.fences || []) this._tilemap.removeChild(f.sprite);
         }
         this._sprites = [];

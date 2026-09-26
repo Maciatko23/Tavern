@@ -157,9 +157,10 @@
     }
     // a roll against a perk that is a chance (e.g. "crop.yield" 0.4): true that often
     const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
-    // experience to go from `level` to the next: 60 + 9 * level^1.5 (1 -> 2: 69, 10 -> 11: 345, 30: 1539, 65: 4777, 99: 8926);
-    // all of it to 65 is about 124 000, to 100 about 361 000
-    const xpToNext = level => Math.round(60 + 9 * Math.pow(level, 1.5));
+    // experience to go from `level` to the next: 500 for the second level, then 20% more each level, to the full hundred (the user's
+    // rule, 2026-09-25): 500, 600, 700, 900, 1000, 1200 ... (9 -> 10: 2100, 19 -> 20: 13 300, 29 -> 30: 82 400)
+    const XP_FIRST = 500, XP_GROWTH = 1.2;
+    const xpToNext = level => Math.max(100, Math.round(XP_FIRST * Math.pow(XP_GROWTH, level - 1) / 100) * 100);
 
     // why a skill (its next rank) cannot be learnt now (null: it can)
     function skillBlock(id) {
@@ -196,16 +197,20 @@
     }
 
     // ---- experience
-    let xpBatch = { amount: 0, reason: "", t: 0 };
-    function gainXp(amount, reason) {
+    let xpBatch = { amount: 0, reason: "", t: 0, n: 0 };
+    // quiet: no plate in the list of gains (the caller says it itself - a journal goal at the top centre)
+    function gainXp(amount, reason, quiet) {
         amount = Math.round(amount);
         if (!(amount > 0) || !$gameSystem) return 0;
         const h = hero();
         if (h.level >= MAX_LEVEL) return 0;
         h.xp += amount;
-        xpBatch.amount += amount;
-        xpBatch.reason = reason || xpBatch.reason;
-        xpBatch.t = 24;   // shown together with what comes within the next moment
+        if (!quiet) {
+            xpBatch.amount += amount;
+            xpBatch.n++;
+            xpBatch.reason = reason || xpBatch.reason;
+            xpBatch.t = 24;   // shown together with what comes within the next moment
+        }
         while (h.level < MAX_LEVEL && h.xp >= xpToNext(h.level)) {
             const actor = $gameParty.leader(), m0 = actor ? actor.mhp : 0;
             h.xp -= xpToNext(h.level);
@@ -220,9 +225,11 @@
     }
     function flushXpPopup() {
         if (xpBatch.t > 0 && --xpBatch.t > 0) return;
-        if (xpBatch.amount > 0) {
-            popup(0, "+" + xpBatch.amount + " dośw." + (xpBatch.reason ? "  (" + xpBatch.reason + ")" : ""), "#c9a6ff");
-            xpBatch = { amount: 0, reason: "", t: 0 };
+        if (xpBatch.amount > 0) {   // at the top centre (SurvivalHUD's notice), adding up while it is shown (the user's, 2026-09-25)
+            const text = "+" + xpBatch.amount + " dośw." + (xpBatch.n === 1 && xpBatch.reason ? "  (" + xpBatch.reason + ")" : "");
+            if ($gameTemp.pushTopNotice) $gameTemp.pushTopNotice(text, "#c9a6ff", { sum: { key: "xp", amount: xpBatch.amount, n: xpBatch.n, unit: "dośw.", reason: xpBatch.reason } });
+            else popup(0, text, "#c9a6ff");
+            xpBatch = { amount: 0, reason: "", t: 0, n: 0 };
         }
     }
     let levelBanner = null;   // { level, t }
@@ -554,7 +561,7 @@
     // Space pressed: a roll toward the held arrows (or where he faces); during a blow once it has landed, it cuts the recovery short
     function pressDodge() {
         if (act.stun > 0 || act.mode === "roll") {
-            if (act.mode === "roll" && hasSkill("acrobat") && act.rolls === 1 && act.rollT < ROLL.frames * 0.55) { act.queuedRoll = true; }
+            if (act.mode === "roll" && hasSkill("acrobat") && act.rolls === 1 && act.rollT < act.rollLen * 0.55) { act.queuedRoll = true; }
             return false;
         }
         if (act.mode === "attack" && !swingPastImpact()) return false;
@@ -570,15 +577,16 @@
         const len = Math.hypot(v[0], v[1]);
         act.rollDir = [v[0] / len, v[1] / len];
         if (d8) $gamePlayer.setDirection(Math.abs(v[0]) >= Math.abs(v[1]) ? (v[0] < 0 ? 4 : 6) : (v[1] < 0 ? 8 : 2));
+        const slow = tired() ? 2 : 1;   // tired out (below TIRED_AT): the roll takes twice as long, as far (the user's, 2026-09-25)
         act.mode = "roll";
         act.rollT = 0;
-        act.rollLen = ROLL.frames;
+        act.rollLen = ROLL.frames * slow;
         act.rollDist = 0;
         act.iframes = rollIFrames();
         act.rolls = second ? 2 : 1;
         act.queuedRoll = false;
         act.combatT = Math.max(act.combatT, 300);
-        if (ROLL_KIND >= 0) $gamePlayer.startToolSwing(ROLL_KIND, null, null);
+        if (ROLL_KIND >= 0) $gamePlayer.startToolSwing(ROLL_KIND, null, null, slow > 1 ? { rate: 1 / slow } : undefined);
         AudioManager.playSe({ name: "Evasion1", volume: 70, pitch: 110, pan: 0 });
         return true;
     }
@@ -1391,7 +1399,11 @@
         h.seen["m" + mapId] = true;
         gainXp(XP.map, "odkrycie: " + ($gameMap.displayName() || name));
     };
-    if (window.Journal && Journal.onGoalDone) Journal.onGoalDone(goal => gainXp(XP.goal, "cel: " + goal.title));
+    // a goal's experience is said with the goal at the top centre (Journal.js), not in the list at the bottom right
+    if (window.Journal && Journal.onGoalDone) Journal.onGoalDone(goal => {
+        const got = gainXp(XP.goal, "cel: " + goal.title, true);
+        return got > 0 ? { text: "+" + got + " dośw.", color: "#c9a6ff" } : null;
+    });
     if (window.Hunting && Hunting.onKill) Hunting.onKill(animal => gainXp(killXp(animal.kind(), animal._level), (Hunting.SPECIES[animal.kind()] || {}).name));
 
     // ==================================================================
@@ -1992,16 +2004,22 @@
             let y = para(a.desc, 56) + 10;
             y = label("Co daje teraz" + (Object.keys(this._plan).length ? "  →  po rozdaniu" : ""), y);
             const now = ATTR_EFFECTS[a.id](), next = withAttrs(this._plan, ATTR_EFFECTS[a.id]);
-            now.forEach(([name, v], k) => {
-                w.contents.fontSize = 20;
+            // two columns sized by what is in them: the values now (right-aligned) and, with points planned, what they become (the
+            // arrows one under another); a name too long for its line puts the values under it (the user's, 2026-09-25: "o 1,5% mniej
+            // uderzeń" ran over "zwykłe")
+            w.contents.fontSize = 20;
+            const rows = now.map(([name, v], k) => ({ name, v, after: next[k][1] !== v ? "→ " + next[k][1] : "" }));
+            const nw = Math.max(0, ...rows.map(r => (r.after ? Math.ceil(w.textWidth(r.after)) : 0))), gap = nw ? 18 : 0;
+            for (const r of rows) {
+                const under = Math.ceil(w.textWidth(r.name)) + 24 + Math.ceil(w.textWidth(r.v)) + gap + nw > W;
                 w.changeTextColor(U.muted);
-                w.drawText(name, 0, y, W - 190);
-                const changed = next[k][1] !== v;
+                w.drawText(r.name, 0, y, W);
+                if (under) y += 28;
                 w.changeTextColor(U.text);
-                w.drawText(v, 0, y, W - (changed ? 118 : 0), "right");
-                if (changed) { w.changeTextColor(U.accent); w.drawText("→ " + next[k][1], 0, y, W, "right"); }
+                w.drawText(r.v, 0, y, W - nw - gap, "right");
+                if (r.after) { w.changeTextColor(U.accent); w.drawText(r.after, W - nw, y, nw + 4); }
                 y += 32;
-            });
+            }
             y += 10;
             if (h.points === 0) para("Punkty atrybutów przychodzą z poziomem: " + POINTS_PER_LEVEL + " na każdy. Doświadczenie dają walka, cele z dziennika i odkrycia.", y, U.muted, 18);
             else para("Najwyżej " + ATTR_MAX + " w jednym atrybucie. ←/→ rozdziela punkty, Enter zatwierdza, Esc je cofa.", y, U.muted, 18);

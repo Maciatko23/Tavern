@@ -35,10 +35,12 @@ const { launch, sleep } = require("./cdp.js");
 
         // ================= 2. the hero =================
         const h0 = await J("(function(){ const h = Combat.hero(); return { level: h.level, xp: h.xp, attr: h.attr, points: h.points, sp: h.skillPoints, mhp: $gameParty.leader().mhp, hp: $gameParty.leader().hp, next: Combat.xpToNext(1), ready: h.ready }; })()");
-        check("a new hero: level 1, 0 XP, every attribute 5, no points; 100 of 100 health; 69 XP to level 2 (level 100 at most)", h0.level === 1 && h0.xp === 0 && Object.values(h0.attr).every(v => v === 5) && Object.keys(h0.attr).length === 5 && h0.points === 0 && h0.sp === 0 && h0.mhp === 100 && h0.hp === 100 && h0.next === 69, h0);
+        check("a new hero: level 1, 0 XP, every attribute 5, no points; 100 of 100 health; 500 XP to level 2 (level 100 at most)", h0.level === 1 && h0.xp === 0 && Object.values(h0.attr).every(v => v === 5) && Object.keys(h0.attr).length === 5 && h0.points === 0 && h0.sp === 0 && h0.mhp === 100 && h0.hp === 100 && h0.next === 500, h0);
+        const curve = await J("[1, 2, 3, 4, 5, 9].map(L => Combat.xpToNext(L))");
+        check("each level asks 20% more than the one before, to the full hundred: 500, 600, 700, 900, 1000 ... 2100 (9 -> 10)", JSON.stringify(curve) === "[500,600,700,900,1000,2100]", curve);
         check("the start inventory counts as known (no XP for it)", h0.ready === true);
-        const lv = await J("(function(){ Combat.gainXp(69, 'test'); const h = Combat.hero(); return { level: h.level, xp: h.xp, points: h.points, sp: h.skillPoints, mhp: $gameParty.leader().mhp }; })()");
-        check("69 XP: level 2, +3 attribute points, +1 skill point, +3 health", lv.level === 2 && lv.xp === 0 && lv.points === 3 && lv.sp === 1 && lv.mhp === 103, lv);
+        const lv = await J("(function(){ Combat.gainXp(500, 'test'); const h = Combat.hero(); return { level: h.level, xp: h.xp, points: h.points, sp: h.skillPoints, mhp: $gameParty.leader().mhp }; })()");
+        check("500 XP: level 2, +3 attribute points, +1 skill point, +3 health", lv.level === 2 && lv.xp === 0 && lv.points === 3 && lv.sp === 1 && lv.mhp === 103, lv);
         await frames(30);
         check("the level banner shows", await ev("!!SceneManager._scene._levelBanner && SceneManager._scene._levelBanner.opacity > 0"));
         const sp1 = await J("(function(){ const ok = Combat.spendPoints({ con: 2, str: 1 }); const h = Combat.hero(); return { ok, con: h.attr.con, str: h.attr.str, points: h.points, mhp: $gameParty.leader().mhp, hp: $gameParty.leader().hp, cap: Survival.weightCap() }; })()");
@@ -79,7 +81,9 @@ const { launch, sleep } = require("./cdp.js");
         const { x: lx, y: ly } = room;
         const standAt = (x, y, d) => ev(`for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gamePlayer.locate(${x}, ${y}); $gamePlayer.setDirection(${d}); $gameMap.setDisplayPos(${x} - 6, ${y} - 7); $gameSystem.setStamina(100); $gameParty.leader().recoverAll(); Combat.resetAct(); 0`);
         await standAt(lx, ly, 6);
-        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 1}, ${ly}); a._frozen = true; window.__boar = a; })()`);
+        // (a level-1 boar: a spawned one is a level higher 30% of the time, and then the heavy blow does not break its balance)
+        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 1}, ${ly}); a._frozen = true; const sp = Hunting.SPECIES.boar;
+            a._level = 1; a._maxHp = a._hp = sp.hp; a._maxPoise = a._poise = sp.poise || 20; window.__boar = a; })()`);
         await frames(4);
         const boar0 = await J("({ lv: __boar._level, hp: __boar._hp, max: __boar._maxHp, poise: __boar._poise })");
         check("a boar on Map003 (level 1 or 2): 110 life at level 1 (+15% a level), its balance 60", boar0.max === Math.round(110 * (1 + 0.15 * (boar0.lv - 1))) && boar0.hp === boar0.max && (boar0.lv === 1 || boar0.lv === 2), boar0);
@@ -179,17 +183,17 @@ const { launch, sleep } = require("./cdp.js");
         const clubSwing = await J("({ kind: $gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind, sheet: $gamePlayer._swingEvent ? ChoppableTree.swingKind($gamePlayer._swingEvent._swingKind).sheet : null, frames: $gamePlayer._swingEvent ? ChoppableTree.swingKind($gamePlayer._swingEvent._swingKind).frames : 0 })");
         for (let i = 0; i < 30 && (await ev("__boar._hp")) === clubHp; i++) await frames(2);
         const clubHit = await J(`({ dmg: ${clubHp} - __boar._hp, want: Math.round(13 * Combat.strMult() * (1 + Combat.perk("melee.dmg"))), crit: Math.round(13 * Combat.strMult() * (1 + Combat.perk("melee.dmg")) * 1.6), spent: ${clubBreath} - Combat.breath })`);
-        check("the club (\\ to it): its own quick swing (Swing_Club, 22 frames), 13 x Siła (or a critical), 10 breath", clubSwing.sheet === "Swing_Club" && clubSwing.frames === 22 && (clubHit.dmg === clubHit.want || clubHit.dmg === clubHit.crit) && Math.round(clubHit.spent) === 10, { clubSwing, clubHit });
+        check("the club (\\ to it): its own quick swing (Swing_Club, 22 frames), 13 x Siła (or a critical), 10 breath", /^(Swing|Hero)_Club$/.test(clubSwing.sheet) && clubSwing.frames === 22 && (clubHit.dmg === clubHit.want || clubHit.dmg === clubHit.crit) && Math.round(clubHit.spent) === 10, { clubSwing, clubHit });
         // the fists: the last choice of \\ (with nothing else, the only one)
         await frames(30);
-        await ev("Combat.resetAct(); 0");
+        await ev("Combat.resetAct(); __boar._stun = 0; __boar._poise = __boar._maxPoise; 0");   // (a boar still reeling from the club takes more)
         for (let i = 0; i < 8 && (await ev("Combat.hand()")) !== "m0"; i++) await key(X);
         const fistHp = await ev("__boar._hp"), fistBreath = await ev("Combat.breath");
         await key(F);
         const fistSwing = await J("({ sheet: $gamePlayer._swingEvent ? ChoppableTree.swingKind($gamePlayer._swingEvent._swingKind).sheet : null })");
         for (let i = 0; i < 30 && (await ev("__boar._hp")) === fistHp; i++) await frames(2);
         const fistHit = await J(`({ hand: Combat.hand(), dmg: ${fistHp} - __boar._hp, want: Math.round(5 * Combat.strMult()), crit: Math.round(5 * Combat.strMult() * 1.6), spent: ${fistBreath} - Combat.breath })`);
-        check("\\ to the fists: a punch (Swing_Punch), 5 x Siła (or a critical), 7 breath", fistHit.hand === "m0" && fistSwing.sheet === "Swing_Punch" && (fistHit.dmg === fistHit.want || fistHit.dmg === fistHit.crit) && Math.round(fistHit.spent) === 7, { fistSwing, fistHit });
+        check("\\ to the fists: a punch (Swing_Punch), 5 x Siła (or a critical), 7 breath", fistHit.hand === "m0" && /^(Swing|Hero)_Punch$/.test(fistSwing.sheet) && (fistHit.dmg === fistHit.want || fistHit.dmg === fistHit.crit) && Math.round(fistHit.spent) === 7, { fistSwing, fistHit });
         const xpBar = await J("(function(){ const s = SceneManager._scene, x = s._xpBar, w = s._weaponPlate; return { vis: x.visible, above: x.y <= w.y - w.height - 4, right: x.x === w.x }; })()");
         check("the level and experience bar sits over the weapon plate in the corner", xpBar.vis && xpBar.above && xpBar.right, xpBar);
         await frames(40);

@@ -21,8 +21,8 @@
  * a dookoła widać przyciemnioną mapę. Każda zakładka wygląda tak samo:
  * nagłówek z tytułem, treść, a na dole podpowiedzi klawiszy.
  *
- *  - Menu (P): po lewej lista (Plecak, Dziennik, Postać, Opcje, Zapisz grę,
- *    Zakończ grę), po prawej karta: portret, miejsce i pogoda, zdrowie,
+ *  - Menu (P): po lewej lista (Postać, Plecak, Dziennik, Opcje, Zapisz grę,
+ *    Zakończ grę), po prawej karta: portret, imię i poziom, pogoda, zdrowie,
  *    wytrzymałość, sytość, nawodnienie, samopoczucie, narzędzia (z paskiem
  *    zużycia), obciążenie i monety. W nagłówku imię, dzień, pora roku, godzina.
  *  - Plecak: zakładki Przedmioty / Narzędzia (←/→), lista po lewej, po prawej
@@ -216,6 +216,14 @@
     // ==================================================================
     const COMMAND_LABELS = { item: "Plecak", journal: "Dziennik", hero: "Postać", options: "Opcje", save: "Zapisz grę", gameEnd: "Zakończ grę" };
     const MENU_SPLIT = 262;   // px from the panel's left: the commands | the card
+    // the order from the top (the user's, 2026-09-25): Postać, Plecak, Dziennik, then the rest as the plugins add them
+    const COMMAND_ORDER = ["hero", "item", "journal"];
+    const _Window_MenuCommand_makeCommandList = Window_MenuCommand.prototype.makeCommandList;
+    Window_MenuCommand.prototype.makeCommandList = function() {
+        _Window_MenuCommand_makeCommandList.call(this);
+        const rank = c => { const i = COMMAND_ORDER.indexOf(c.symbol); return i < 0 ? COMMAND_ORDER.length : i; };
+        this._list = this._list.map((c, i) => ({ c, i })).sort((a, b) => rank(a.c) - rank(b.c) || a.i - b.i).map(o => o.c);
+    };
     Window_MenuCommand.prototype.maxCols = function() { return 1; };
     Window_MenuCommand.prototype.numVisibleRows = function() { return Math.max(1, this.maxItems()); };
     Window_MenuCommand.prototype.itemHeight = function() { return 50; };
@@ -311,10 +319,13 @@
         const U = UI(), W = win.innerWidth, ctx = win.contents.context;
         drawPortrait(win, actor, 0, 0);
         const x = PORTRAIT.w + 24, w = W - x;
-        // where and how
+        // who (the name and the level - Combat.js - where the map's name was, the user's, 2026-09-25) and the weather
         win.contents.fontSize = 22;
         win.changeTextColor(U.text);
-        win.drawText($gameMap.displayName() || ($dataMapInfos[$gameMap.mapId()] || {}).name || "", x, 0, w - 150);
+        const name = actor.name(), level = window.Combat && Combat.hero ? Combat.hero().level : actor.level;
+        win.drawText(name, x, 0, w - 150);
+        win.changeTextColor(U.accent);
+        win.drawText("Poziom " + level, x + Math.ceil(win.textWidth(name)) + 14, 0, w - 150);
         win.changeTextColor(U.muted);
         win.drawText(weatherText(), x, 0, w, "right");
         win.resetFontSettings();

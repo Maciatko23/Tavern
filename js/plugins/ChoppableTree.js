@@ -621,8 +621,10 @@
     const FLASH_ALPHA = 170;
     const FALL_FRAMES = 55;
 
+    // (the new hero - HeroLook.js - may play its own sheet for a kind)
     function swingKind(kind) {
-        return SWING_KINDS[kind] || SWING_KINDS[0];
+        const def = SWING_KINDS[kind] || SWING_KINDS[0];
+        return window.HeroLook && HeroLook.swingDef ? HeroLook.swingDef(kind, def) : def;
     }
 
     const easeOut = x => 1 - (1 - x) * (1 - x);
@@ -836,6 +838,12 @@
         };
     }
     const anyHarvestConfig = event => treeConfig(event) || rockConfig(event) || stumpConfig(event) || logConfig(event) || bushConfig(event);
+    // what lies low - a log, a stump (a <Stump>, or a felled tree not yet dug out), a bush: a rabbit hops over it (Hunting.js)
+    function isLow(event) {
+        if (logConfig(event) || stumpConfig(event) || bushConfig(event)) return true;
+        const sw = s => $gameSelfSwitches.value([event._mapId, event._eventId, s]);
+        return !!treeConfig(event) && sw("A") && !sw("B");
+    }
 
     function playSe(name, pitch) {
         AudioManager.playSe({ name, volume: 90, pitch, pan: 0 });
@@ -1819,7 +1827,7 @@
 
     // "ready", "loading", or "none" when the swing has no sheet (or it failed to load).
     function swingSheetState(kind) {
-        const def = SWING_KINDS[kind];
+        const def = SWING_KINDS[kind] ? swingKind(kind) : null;
         if (!def || !def.sheet) return "none";
         const bitmap = ImageManager.loadSystem(def.sheet);
         if (bitmap.isError && bitmap.isError()) return "none";
@@ -1863,7 +1871,7 @@
         if (event._waiting && !(event.opts && event.opts.still)) col -= Math.floor(event._wait / ((event.opts && event.opts.wobble) || 22)) % 2;
         body.setFrame(col * SHEET_CELL, row * SHEET_CELL, SHEET_CELL, SHEET_CELL);
         body.x = reach.x * lunge;
-        body.y = reach.y * lunge;
+        body.y = reach.y * lunge - ((event.opts && event.opts.lift) || 0);
         body.visible = true;
         return true;
     };
@@ -2172,6 +2180,6 @@
     // swingKind(kind): the timing of a kind of swing; swingKindOf(key): the kind with that name, else the first that plays that
     // sheet (-1: none) - Combat.js
     const swingKindOf = key => { const i = SWING_KINDS.findIndex(k => k.name === key); return i >= 0 ? i : SWING_KINDS.findIndex(k => k.sheet === key); };
-    window.ChoppableTree = { isTree: event => !!treeConfig(event), treeConfig, isPine, isCharred, charTree, strikeableTrees, emberLights, emberSpots, EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE,
+    window.ChoppableTree = { isTree: event => !!treeConfig(event), treeConfig, isLow, isPine, isCharred, charTree, strikeableTrees, emberLights, emberSpots, EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE,
         swingKind, swingKindOf };
 })();
