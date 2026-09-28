@@ -2,7 +2,8 @@
 
 ## Przesłanka
 
-Tawerna, w której zaczyna się gra, stoi na fundamentach dawnej twierdzy —
+Tawerna, wokół której toczy się gra (sama gra zaczyna się w domu dziadka
+bohatera — patrz „Rozdział 1: Dług dziadka”), stoi na fundamentach dawnej twierdzy —
 **Twierdzy Kruczych Skał**. Nikt we wsi nie traktuje tego poważnie: to dla nich
 stara ciekawostka, temat na piosenkę biesiadną, nie fakt historyczny.
 W piwnicach tawerny wciąż stoją oryginalne kamienne mury zamku, a gdzieś pod
@@ -65,6 +66,34 @@ warstwami — im głębiej (dosłownie, pod ziemię), tym mniej to już zabawne.
    - **Zapieczętować na nowo, ale z realnymi zasadami użycia** — rozwiązanie
      "szare", uczciwe wobec tego, co się stało zakonowi.
 
+## Rozdział 1: Dług dziadka (nowy początek gry, w grze: Story.js)
+
+Nowa gra zaczyna się w domu dziadka bohatera. Stare zapisy grają po staremu.
+
+- **Dziadek Stach** — dziadek bohatera (inna postać niż Dziadek Ozzy
+  z tawerny). Jest winien pieniądze Lordowi i pozwala wnukowi budować na
+  swoim polu za lasem („Pole dziadka”, Map003) — tylko tam wolno budować.
+- **Lord Leopold Zaleski** — mieszka w pięknym dworze obok tawerny
+  (Posiadłość Lorda, Map024). Za dnia (8–20) stoi przed drzwiami dworu
+  i przyjmuje spłatę, nocą przez drzwi odzywa się jego kamerdyner
+  **Feliks**, który też przyjmuje pieniądze.
+- **Dług:** 2500 G do dnia 60. Pieniądze liczą się jeszcze w nocy po
+  terminie, do świtu (6:00) dnia 61. O świcie ludzie Lorda przychodzą
+  zmierzyć pole — jeśli dług nie jest spłacony, pole przepada i gra się
+  kończy (można wczytać zapis). Przypomnienia: listy od Lorda w dniach 20,
+  40, 55, 59 i 60.
+- **Praca:** Borgar zatrudnia bohatera; zmiana w tawernie (od 16 do 21, raz
+  dziennie, 4 godziny) to cztery mini-gry, płaca od wyniku + napiwki.
+  Borgar skupuje też towar.
+- **Koniec rozdziału:** spłata całości — pole zostaje przy rodzinie,
+  dziadek dziękuje (pokwitowanie przynosi Feliks).
+- **Haczyk (propozycja, do potwierdzenia):** przy ostatniej spłacie Lord
+  (albo Feliks) wspomina rodzinną bajkę: dwór postawiono z kamieni dawnej
+  Twierdzy Kruczych Skał, najstarsze leżą pod tawerną, a „pod Kruczymi
+  Skałami są drzwi, których nikt nie powinien otwierać”. Lord traktuje to
+  jak bajkę dla dzieci — nie wiadomo jeszcze, czy dwór ma związek z
+  frakcją, która wynajęła Gruma (patrz „Otwarte wątki”).
+
 ## Postacie (przepisane pod fabułę)
 
 Istniejący NPC-e z tawerny nie są przypadkowi — każdy dostaje rolę w fabule:
@@ -109,7 +138,8 @@ Istniejący NPC-e z tawerny nie są przypadkowi — każdy dostaje rolę w fabul
 ## Otwarte wątki / do ustalenia później
 
 - Nazwa i konkretny charakter frakcji, która wynajęła Gruma (dwór? wojsko?
-  szpiedzy?).
+  szpiedzy?). Czy to dwór Lorda Zaleskiego — nie przesądzone; w grze Lord
+  zna tylko rodzinną bajkę o twierdzy (rozdział 1).
 - Czy zakon strażników ma jakichś żyjących potomków/resztki poza Borgarem.
 - Konkretna forma i wygląd Serca Twierdzy (klejnot? zwierciadło? studnia?
   coś żywego?) — coś, na co da się fizycznie "spojrzeć", skoro to ono pokazuje

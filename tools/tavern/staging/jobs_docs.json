@@ -1,0 +1,223 @@
+[
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/f25_0.png",
+  "region": [
+   0,
+   0,
+   49,
+   36
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/f25_1.png",
+  "region": [
+   48,
+   0,
+   49,
+   36
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/f25_2.png",
+  "region": [
+   0,
+   35,
+   49,
+   36
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/f25_3.png",
+  "region": [
+   48,
+   35,
+   49,
+   36
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/f26_0.png",
+  "region": [
+   0,
+   0,
+   41,
+   29
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/f26_1.png",
+  "region": [
+   40,
+   0,
+   41,
+   29
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/f26_2.png",
+  "region": [
+   0,
+   28,
+   41,
+   29
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/f26_3.png",
+  "region": [
+   40,
+   28,
+   41,
+   29
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_hall.png",
+  "mode": "screen",
+  "hour": 20,
+  "player": [
+   48,
+   60,
+   8
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_krata.png",
+  "mode": "screen",
+  "hour": 20,
+  "player": [
+   86,
+   18,
+   6
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_pokoj3.png",
+  "mode": "screen",
+  "hour": 21,
+  "player": [
+   27,
+   41,
+   8
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_salonik.png",
+  "mode": "screen",
+  "hour": 19,
+  "player": [
+   47,
+   12,
+   8
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/pietro2_ekran_galeria.png",
+  "mode": "screen",
+  "hour": 20,
+  "player": [
+   40,
+   23,
+   8
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/pietro2_ekran_jadalnia.png",
+  "mode": "screen",
+  "hour": 20,
+  "player": [
+   47,
+   41,
+   6
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/pietro2_ekran_zloty.png",
+  "mode": "screen",
+  "hour": 21,
+  "player": [
+   72,
+   39,
+   8
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map026.json",
+  "id": 26,
+  "out": "tools/tavern/staging/renders/pietro2_ekran_salon.png",
+  "mode": "screen",
+  "hour": 12,
+  "player": [
+   30,
+   40,
+   8
+  ],
+  "wait": 90
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_dzien.png",
+  "mode": "screen",
+  "hour": 12,
+  "player": [
+   13,
+   9,
+   8
+  ],
+  "wait": 90
+ }
+]

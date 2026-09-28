@@ -1,0 +1,4 @@
+[
+ {"map": "tools/tavern/staging/Showroom.json", "id": 98, "out": "tools/tavern/staging/renders/showroom_18.png", "mode": "full", "hour": 18, "player": [6, 5, 8]},
+ {"map": "tools/tavern/staging/Showroom.json", "id": 98, "out": "tools/tavern/staging/renders/showroom_plain.png", "mode": "full", "hour": 18, "nodark": true, "player": [6, 5, 8]}
+]

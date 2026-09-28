@@ -1,0 +1,5 @@
+[
+ {"label": "Map019 dom dziadka (baseline)", "map": null, "id": 19, "spots": [[5, 5, 2]], "hour": 20, "frames": 240},
+ {"label": "Map001 nowy parter", "map": "tools/tavern/staging/Map001.json", "id": 1,
+  "spots": [[50, 69, 8], [73, 40, 8], [27, 58, 8], [92, 40, 8], [50, 81, 8], [44, 52, 8], [27, 40, 8], [8, 37, 8], [50, 24, 8]], "hour": 20, "frames": 240}
+]

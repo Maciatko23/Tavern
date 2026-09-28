@@ -5,7 +5,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna). v1.0.0
+ * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna). v1.1.1
  * @author Claude
  *
  * @param darkness
@@ -126,6 +126,25 @@
  *     <LightCone:length=96,angle=60,dir=90,width=48,anchor=bottom,blur=14,dust=12>
  *
  *   Można postawić dowolnie wiele takich eventów - każdy to osobne światło.
+ *   Światła i dziury poza ekranem nie są rysowane (duże mapy z wieloma
+ *   światłami), a ciemność jest przeliczana tylko, gdy coś się zmieniło.
+ *
+ * PORA DNIA (v1.1.0, tylko na mapach z tagiem <DarkDay>):
+ *   W notatce mapy:
+ *     <DarkDay:80>    - przyciemnienie za dnia (0-255); w nocy jest to z
+ *                       parametru "Siła przyciemnienia" albo z <DarkNight:N>.
+ *     <DarkNight:190> - (opcjonalnie) przyciemnienie w nocy na tej mapie.
+ *   Między dniem i nocą przyciemnienie przechodzi płynnie: wieczór 16-19
+ *   (zapalają się lampy), świt 6-8.
+ *   W notatce eventu ze światłem (obok <Light> / <LightCone>):
+ *     <LightWhen:night> - świeci wieczorem i w nocy (świece, lampy,
+ *                         żyrandole), za dnia gaśnie
+ *     <LightWhen:day>   - świeci za dnia (smugi słońca z okien), w nocy gaśnie
+ *   Bez <LightWhen> światło świeci zawsze (kominek, piec).
+ *     <LightSoft>       - (v1.1.1) miękkie, równe wygaszanie aż do krawędzi -
+ *                         dla dużych świateł wypełniających, żeby między nimi
+ *                         nie zostawały ciemniejsze pasy
+ *   Mapy bez <DarkDay> działają jak dotąd (stałe przyciemnienie).
  *
  * POCHODNIA GRACZA:
  *   To osobna, niezależna funkcja - światło podąża za graczem po całej mapie
@@ -170,6 +189,7 @@
     const TORCH_FLICKER = params.torchFlicker === "true";
     const TORCH_EXPIRE_COMMON_EVENT = num(params.torchExpireCommonEvent, 0);
     const TORCH_ICON_INDEX = num(params.torchIconIndex, 80);
+    const DARK_SCALE = 2;          // the darkness layer is painted at half resolution
 
     // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
     // `fallback` when neither is present. Duplicated identically in
@@ -184,6 +204,37 @@
 
     function isDarkEnabled() {
         return mapNoteFlag("Dark", DEFAULT_ENABLED);
+    }
+
+    // ---- time of day (only on maps with <DarkDay:N>): 0 by day .. 1 in the evening and at night
+    function noteNumber(tag) {
+        const m = (($dataMap && $dataMap.note) || "").match(new RegExp("<" + tag + ":\\s*(\\d+)\\s*>", "i"));
+        return m ? Number(m[1]) : null;
+    }
+    const smooth = t => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
+    function nightCurve(h) {
+        if (h >= 19 || h < 6) return 1;
+        if (h >= 16) return smooth((h - 16) / 3);   // the tavern lights its lamps from 16:00, full evening at 19:00
+        if (h < 8) return 1 - smooth((h - 6) / 2);  // dawn
+        return 0;
+    }
+    // the darkness (0..1 alpha) and how much of "night" there is, for this map and hour
+    function timeOfDay() {
+        const day = noteNumber("DarkDay");
+        if (day === null || typeof $gameSystem.dayNightHour !== "function") return { alpha: DARKNESS / 255, night: 1, timed: false };
+        const nightDark = noteNumber("DarkNight");
+        const n = nightCurve($gameSystem.dayNightHour());
+        const a = day + ((nightDark !== null ? nightDark : DARKNESS) - day) * n;
+        return { alpha: a / 255, night: n, timed: true };
+    }
+    function lightWeight(when, tod) {
+        if (!tod.timed || !when) return 1;
+        return when === "night" ? tod.night : when === "day" ? 1 - tod.night : 1;
+    }
+    function lightWhen(note, kv) {
+        const m = note.match(/<LightWhen:\s*(day|night)\s*>/i);
+        const w = (m ? m[1] : (kv && kv.when) || "").toLowerCase();
+        return w === "day" || w === "night" ? w : null;
     }
 
     function parseKeyValues(str) {
@@ -233,7 +284,8 @@
                         : DEFAULT_COLOR;
                 markers.push({
                     x: event.x, y: event.y, shape: "cone",
-                    length, angle, direction, startWidth, anchor, blur, dust, dustSize, offsetX, offsetY, color
+                    length, angle, direction, startWidth, anchor, blur, dust, dustSize, offsetX, offsetY, color,
+                    when: lightWhen(event.note, kv)
                 });
                 continue;
             }
@@ -246,7 +298,7 @@
                     if (parts.length >= 1 && !isNaN(parts[0])) radius = parts[0];
                     if (parts.length >= 4) color = [parts[1], parts[2], parts[3]];
                 }
-                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color });
+                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when: lightWhen(event.note, null), soft: /<LightSoft>/i.test(event.note) });
             }
         }
         return markers;
@@ -443,7 +495,9 @@
         const fadeFrames = 25;
         const fadeIn = Math.min(1, this._age / fadeFrames);
         const fadeOut = Math.min(1, (this._life - this._age) / fadeFrames);
-        this.opacity = Math.round(220 * Math.max(0, Math.min(fadeIn, fadeOut)));
+        const weight = this._light ? this._light._weight : 1;      // the mote fades with its beam (time of day)
+        this.opacity = Math.round(220 * weight * Math.max(0, Math.min(fadeIn, fadeOut)));
+        if (this._light) this.visible = this._light.visible;
         this.x = Math.round(this.tileToScreenX(this._tileX) + this._offsetX + this._localX);
         this.y = Math.round(this.tileToScreenY(this._tileY) + this._offsetY + this._localY);
     };
@@ -475,6 +529,12 @@
         this._tileY = marker.y;
         this._offsetX = offset.x + (marker.offsetX || 0);
         this._offsetY = offset.y + (marker.offsetY || 0);
+        this._when = marker.when || null;
+        this._weight = 1;
+        // how far the light reaches from its point (for leaving out lights that are off the screen)
+        this._reach = marker.shape === "cone"
+            ? marker.length + marker.startWidth / 2 + (marker.blur || 0) * 2 + 8
+            : marker.radius;
     };
 
     Sprite_RoomLight.prototype.update = function() {
@@ -483,6 +543,16 @@
         // displayX() subtraction) so this also scrolls correctly on looping maps.
         this.x = Math.round($gameMap.adjustX(this._tileX) * $gameMap.tileWidth() + this._offsetX);
         this.y = Math.round($gameMap.adjustY(this._tileY) * $gameMap.tileHeight() + this._offsetY);
+    };
+
+    // visible = inside the part of the map on screen (view: {x0, y0, x1, y1} in the spriteset's own coordinates) and
+    // lit at this hour; the glow's strength follows the hour too
+    Sprite_RoomLight.prototype.updateShown = function(view, tod) {
+        this._weight = lightWeight(this._when, tod);
+        const r = this._reach;
+        const inView = this.x + r > view.x0 && this.x - r < view.x1 && this.y + r > view.y0 && this.y - r < view.y1;
+        this.visible = inView && this._weight > 0.004;
+        this.opacity = Math.round(255 * this._weight);
     };
 
     const _Spriteset_Map_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;
@@ -495,15 +565,26 @@
         this._roomLightSprites = [];
         this._roomHoles = []; // {shape, sprite, radius} | {shape:'cone', sprite, geom} - punched into the darkness each frame
         this._roomLightingContainer = new Sprite();
+        this._darkKey = "";
         if (isDarkEnabled()) {
-            const darkBitmap = new Bitmap(Graphics.width, Graphics.height);
+            // the darkness at half resolution, drawn twice as large: a quarter of the pixels to paint and to upload
+            // each time it changes (the edges of the light are soft gradients, so nothing is lost)
+            const darkBitmap = new Bitmap(Math.ceil(Graphics.width / DARK_SCALE) + 2, Math.ceil(Graphics.height / DARK_SCALE) + 2);
             this._darknessSprite = new Sprite(darkBitmap);
+            this._darknessSprite.scale.set(DARK_SCALE, DARK_SCALE);
             this._roomLightingContainer.addChild(this._darknessSprite);
+            // all the warm glows painted into ONE half-resolution layer (added to the picture like each glow was):
+            // one screen of pixels to blend instead of a big sprite per light
+            this._glowSprite = new Sprite(new Bitmap(darkBitmap.width, darkBitmap.height));
+            this._glowSprite.scale.set(DARK_SCALE, DARK_SCALE);
+            this._glowSprite.blendMode = 1;
+            this._roomLightingContainer.addChild(this._glowSprite);
 
             const tw = $gameMap.tileWidth();
             const th = $gameMap.tileHeight();
             for (const marker of findLightMarkers()) {
                 const light = new Sprite_RoomLight(marker);
+                light.renderable = false;          // its glow is painted into the shared glow layer
                 this._roomLightSprites.push(light);
                 this._roomLightingContainer.addChild(light);
 
@@ -516,12 +597,13 @@
                         const oy = offset.y + (marker.offsetY || 0);
                         for (let i = 0; i < marker.dust; i++) {
                             const mote = new Sprite_LightDustMote(geom, marker.x, marker.y, ox, oy, marker.dustSize);
+                            mote._light = light;
                             this._roomLightSprites.push(mote);
                             this._roomLightingContainer.addChild(mote);
                         }
                     }
                 } else {
-                    this._roomHoles.push({ shape: "circle", sprite: light, radius: marker.radius });
+                    this._roomHoles.push({ shape: "circle", sprite: light, radius: marker.radius, soft: !!marker.soft });
                 }
             }
         }
@@ -532,18 +614,20 @@
     // scene shows through underneath - not just a warm tint added on top of
     // the dimmed colors. Must run with context.globalCompositeOperation
     // already set to "destination-out" by the caller.
-    function punchCircleHole(context, cx, cy, radius) {
+    function punchCircleHole(context, cx, cy, radius, weight = 1, soft = false) {
         const gradient = context.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        gradient.addColorStop(0, "rgba(0,0,0,1)");
-        gradient.addColorStop(0.6, "rgba(0,0,0,0.85)");
-        gradient.addColorStop(1, "rgba(0,0,0,0)");
+        const stops = soft ? SOFT_STOPS : HARD_STOPS;   // (<LightSoft>: a long even fall-off - big fill lights leave no bands between them)
+        for (const [at, k] of stops) gradient.addColorStop(at, `rgba(0,0,0,${k * weight})`);
         context.fillStyle = gradient;
-        context.beginPath();
-        context.arc(cx, cy, radius, 0, Math.PI * 2);
-        context.fill();
+        // (a square filled with the radial gradient, not an arc path: the software renderer triangulates a big arc
+        // and leaves a thin diagonal seam in the hole under destination-out; outside the radius the gradient is clear)
+        context.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
     }
 
-    function punchConeHole(context, cx, cy, geom) {
+    const HARD_STOPS = [[0, 1], [0.6, 0.85], [1, 0]];
+    const SOFT_STOPS = [[0, 1], [0.25, 0.9], [0.5, 0.62], [0.75, 0.27], [1, 0]];
+
+    function punchConeHole(context, cx, cy, geom, weight = 1) {
         const { nearLeft, nearRight, leftDir, rightDir, mainDir, length } = geom;
         const farLeft = { x: nearLeft.x + leftDir.x * length, y: nearLeft.y + leftDir.y * length };
         const farRight = { x: nearRight.x + rightDir.x * length, y: nearRight.y + rightDir.y * length };
@@ -556,33 +640,72 @@
         context.lineTo(farLeft.x, farLeft.y);
         context.closePath();
         const gradient = context.createLinearGradient(0, 0, mainDir.x * length, mainDir.y * length);
-        gradient.addColorStop(0, "rgba(0,0,0,1)");
-        gradient.addColorStop(0.75, "rgba(0,0,0,0.7)");
+        gradient.addColorStop(0, `rgba(0,0,0,${weight})`);
+        gradient.addColorStop(0.75, `rgba(0,0,0,${0.7 * weight})`);
         gradient.addColorStop(1, "rgba(0,0,0,0)");
         context.fillStyle = gradient;
         context.fill();
         context.restore();
     }
 
+    // the part of the map on screen, in the spriteset's own coordinates (MapZoom scales and moves the spriteset)
+    Spriteset_Map.prototype.roomLightView = function() {
+        const s = this.scale.x || 1;
+        const x0 = -this.x / s, y0 = -this.y / s;
+        return { x0, y0, x1: x0 + Graphics.width / s, y1: y0 + Graphics.height / s };
+    };
+
     Spriteset_Map.prototype.redrawDarkness = function() {
         if (!this._darknessSprite) return;
+        const tod = this._roomTimeOfDay || timeOfDay();
+        const view = this._roomView || this.roomLightView();
+        const visible = this._roomHoles.filter(h => h.sprite.visible);
+        // nothing moved and the hour's light is the same: the last picture is still right (skip the paint and upload)
+        const key = this._playerTorch ? "" : [tod.alpha.toFixed(3), tod.night.toFixed(3), Math.round(view.x0), Math.round(view.y0),
+            view.x1 - view.x0, visible.map(h => h.sprite.x + "," + h.sprite.y).join(";")].join("|");
+        if (key && key === this._darkKey) return;
+        this._darkKey = key;
         const bitmap = this._darknessSprite.bitmap;
         const context = bitmap.context;
+        const k = 1 / DARK_SCALE;
         context.save();
         context.globalCompositeOperation = "source-over";
         context.clearRect(0, 0, bitmap.width, bitmap.height);
-        context.fillStyle = `rgba(${DARK_COLOR[0]},${DARK_COLOR[1]},${DARK_COLOR[2]},${DARKNESS / 255})`;
+        context.fillStyle = `rgba(${DARK_COLOR[0]},${DARK_COLOR[1]},${DARK_COLOR[2]},${tod.alpha})`;
         context.fillRect(0, 0, bitmap.width, bitmap.height);
         context.globalCompositeOperation = "destination-out";
-        for (const hole of this._roomHoles) {
+        context.scale(k, k);
+        for (const hole of visible) {
+            const w = hole.sprite._weight;
             if (hole.shape === "circle") {
-                punchCircleHole(context, hole.sprite.x, hole.sprite.y, hole.radius);
+                punchCircleHole(context, hole.sprite.x, hole.sprite.y, hole.radius, w, hole.soft);
             } else {
-                punchConeHole(context, hole.sprite.x, hole.sprite.y, hole.geom);
+                punchConeHole(context, hole.sprite.x, hole.sprite.y, hole.geom, w);
             }
         }
         if (this._playerTorch) {
             punchCircleHole(context, this._playerTorch.x, this._playerTorch.y, TORCH_RADIUS);
+        }
+        context.restore();
+        bitmap._baseTexture.update();
+        this.redrawGlows(visible);
+    };
+
+    // the glows of the visible lights, added together ("lighter") at half resolution, each as strong as the hour says
+    Spriteset_Map.prototype.redrawGlows = function(visible) {
+        if (!this._glowSprite) return;
+        const bitmap = this._glowSprite.bitmap;
+        const context = bitmap.context;
+        const k = 1 / DARK_SCALE;
+        context.save();
+        context.clearRect(0, 0, bitmap.width, bitmap.height);
+        context.globalCompositeOperation = "lighter";
+        for (const hole of visible) {
+            const s = hole.sprite, src = s.bitmap;
+            if (!src || !src._canvas) continue;
+            const w = src.width, h = src.height;
+            context.globalAlpha = Math.max(0, Math.min(1, s._weight));
+            context.drawImage(src._canvas, (s.x - s.anchor.x * w) * k, (s.y - s.anchor.y * h) * k, w * k, h * k);
         }
         context.restore();
         bitmap._baseTexture.update();
@@ -592,8 +715,12 @@
     Spriteset_Map.prototype.update = function() {
         _Spriteset_Map_update.call(this);
         if (this._roomLightSprites) {
+            // lights off the screen are not drawn; with <DarkDay> the hour sets the darkness and which lights shine
+            this._roomTimeOfDay = timeOfDay();
+            this._roomView = this.roomLightView();
             for (const light of this._roomLightSprites) {
                 light.update();
+                if (light.updateShown) light.updateShown(this._roomView, this._roomTimeOfDay);
             }
         }
         this.updatePlayerTorch();

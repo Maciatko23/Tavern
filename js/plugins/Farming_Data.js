@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Dane: uprawy (CROPS), budowle z recepturami (BUILDINGS) i receptury robione gołymi rękami bez budynku (HAND_RECIPES) dla Farming.js. Sam nic nie robi - wczytaj go PRZED Farming. v1.0.0
+ * @plugindesc Dane: uprawy (CROPS), budowle z recepturami (BUILDINGS), receptury robione gołymi rękami bez budynku (HAND_RECIPES), mapy, na których wolno budować (BUILD_MAPS), i tabela jedzenia (FoodTable) dla Farming.js i reszty. Sam nic nie robi - wczytaj go PRZED Farming. v1.1.0
  * @author Claude
  *
  * @help
@@ -16,10 +16,23 @@
  * robione gołymi rękami, bez żadnego budynku). Nową roślinę albo budowlę
  * dopisuje się TUTAJ, nie w Farming.js.
  *
+ * BUILD_MAPS: mapy, na których gracz może budować (pole dziadka - mapa 3 - i
+ * wnętrze chatki - mapa 100). Notatka mapy <Build:on> / <Build:off> nadpisuje
+ * listę. Pułapki (budowle z "lure" albo "anywhere") stawia się na każdej mapie.
+ *
+ * FoodTable (window.FoodTable): JEDNA tabela jedzenia. Dla każdego przedmiotu:
+ * wytrzymałość i premie po zjedzeniu (Survival.js), sytość i nawodnienie
+ * (Needs.js), czas psucia (Spoilage.js), czy jest surowy, ile daje psu (Dog.js).
+ * Jedzenie zmienia się TUTAJ. Notatka <Food:...> przedmiotu w bazie danych może
+ * zostać, ale dla przedmiotu z tej tabeli liczy się tabela (przy starcie gry
+ * konsola pokazuje, gdzie notatka się z nią nie zgadza). Nowe jedzenie dodane
+ * tylko w edytorze (notatka, bez wiersza tutaj) działa według notatki, jak dawniej.
+ *
  * Farming.js wywołuje Farming_Data.build(ITEM) (ITEM to tabela id przedmiotów
  * zbudowana z parametrów wtyczki Farming) i dostaje z powrotem obiekt
- * { CROPS, BUILDINGS, HAND_RECIPES }. Dlatego ten plik musi się wczytać
- * PRZED Farming (w plugins.js jest wpisany tuż nad nim).
+ * { CROPS, BUILDINGS, HAND_RECIPES, BUILD_MAPS }. Dlatego ten plik musi się
+ * wczytać PRZED Farming (w plugins.js jest wpisany tuż nad nim) - i przed
+ * Survival, Spoilage, Needs i Dog, które czytają FoodTable.
  * ============================================================================
  */
 
@@ -134,13 +147,21 @@
             desc: "Trzy kijki i lina nad ogniem. Zawieszasz jedzenie na haczyku i możesz odejść: piecze się samo, a gotowe odbierasz z ognia (albo czekasz obok, siedząc). Później zawiesisz na nim żelazny kociołek." },
         scarecrow: { name: "Strach na wróble", cost: [[ITEM.wood, 3]], w: 1, stamina: 4, hits: 3, image: "Farm_Scarecrow",
             desc: "Rośliny w promieniu 2 kratek rosną o 25% szybciej." },
-        coop: { name: "Kurnik", cost: [[ITEM.planks, 10], [ITEM.stone, 2]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Coop_L", legacy: { w: 2, h: 1, image: "Farm_Coop", cost: [[ITEM.planks, 6], [ITEM.stone, 2]] },
+        coop: { name: "Kurnik", cost: [[ITEM.planks, 10], [ITEM.stone, 2], [ITEM.nails, 4]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Coop_L", legacy: { w: 2, h: 1, image: "Farm_Coop", cost: [[ITEM.planks, 6], [ITEM.stone, 2]] },
             yard: { gate: 2, hut: { dx: 2, dy: 3, w: 2, h: 1 }, animal: "hen", count: 3 },
             produce: { item: 75, amount: 2, period: 1, cap: 6 },
             desc: "Ogrodzony wybieg z kurnikiem: w środku biegają kury i niosą jajka, 2 dziennie (maksymalnie 6). Furtką wchodzisz do środka." },
         hive: { name: "Ul", cost: [[ITEM.planks, 4]], w: 1, stamina: 6, hits: 5, image: "Farm_Hive",
             produce: { item: 76, amount: 1, period: 2, cap: 3 },
             desc: "Pszczoły zbierają miód: 1 słoik co 2 dni (maksymalnie 3)." },
+        // the dog (Dog.js, the user's, 2026-09-26): its kennel - it sleeps there at night and lies there hurt or tired - and the
+        // stockpile it carries what it finds to (a chest: the player takes from it; its contents are shown at the top of the screen)
+        doghouse: { name: "Buda", cost: [[ITEM.planks, 3], [ITEM.branch, 4], [ITEM.fiber, 3]], w: 1, h: 1, stamina: 4, hits: 8, image: "Farm_Doghouse",
+            slots: 3, foodOnly: true, bowl: 6,   // the bowl: food (a small food-only chest, it spoils as in a chest) and up to 6 portions of water
+            openName: "Miska: jedzenie", openHelp: "Zostawiasz psu jedzenie (3 rodzaje). Pies je z miski, kiedy sam nic nie znajdzie na mapie, i kiedy leży ranny w budzie. Jedzenie psuje się tu jak w skrzyni.",
+            desc: "Buda dla psa wyścielona słomą. Oswojony pies śpi w niej nocą, a ranny albo zmęczony odpoczywa w środku. Przy budzie jest miska: zostaw psu jedzenie i wodę na gorsze dni. Dzikiego psa oswoisz, dając mu kilka razy mięso." },
+        stockpile: { name: "Składowisko", cost: [[ITEM.wood, 4], [ITEM.branch, 6], [ITEM.stone, 4]], w: 3, h: 2, stamina: 6, hits: 12, image: "Farm_Stockpile", slots: 20,
+            desc: "Ogrodzony plac na zapasy: 20 rodzajów, po 99 sztuk. Pies znosi tu gałęzie, kamienie, włókno i upolowaną zwierzynę. Co leży na składowisku, widać u góry ekranu." },
         chest_s: { name: "Mała skrzynia", cost: [[ITEM.planks, 4]], w: 1, stamina: 5, hits: 5, image: "Farm_ChestS", slots: 12, indoor: true,
             desc: "Schowek: 12 rodzajów przedmiotów, po 99 sztuk każdego." },
         chest_l: { name: "Duża skrzynia", cost: [[ITEM.planks, 8], [ITEM.stone, 2], [ITEM.nails, 6]], w: 2, stamina: 8, hits: 8, image: "Farm_ChestL", slots: 30, indoor: true,
@@ -259,15 +280,25 @@
                 { id: "backpack", name: "Zszyj plecak", inputs: [[ITEM.hide, 3], [ITEM.rope, 2]], output: [ITEM.backpack, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1", desc: "Skórzany plecak: zmieścisz w nim więcej." },
                 { id: "cloak", name: "Uszyj płaszcz", inputs: [[ITEM.hide, 2], [ITEM.wool, 4], [ITEM.rope, 1]], output: [ITEM.cloak, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1", desc: "Ciepły płaszcz. Zimą nie marzniesz." },
                 { id: "tent", name: "Zszyj namiot", inputs: [[ITEM.hide, 4], [ITEM.rope, 3], [ITEM.wood, 4]], output: [ITEM.tent, 1], manual: true, unique: true, alsoBuilt: "tent", hours: 4, stamina: 8, startSe: "Item1",
-                    desc: "Skóry napięte na czterech żerdziach i zszyte liną. Rozstawisz go tam, gdzie chcesz spać, a rano złożysz i zabierzesz ze sobą." }
+                    desc: "Skóry napięte na czterech żerdziach i zszyte liną. Rozstawisz go tam, gdzie chcesz spać, a rano złożysz i zabierzesz ze sobą." },
+                // improve: makes something better instead of a new item (Farming.js IMPROVE) - the waterskin holds 8 sips instead of 4 (Needs.js);
+                // the waterskin itself is needed (tool) and stays the same item. result: what the menu says it gives
+                { id: "skin_big", name: "Powiększ bukłak", inputs: [[ITEM.hide, 1], [ITEM.sinew, 2]], output: [ITEM.skin, 1], manual: true, tool: ITEM.skin, improve: "skin", result: "większy bukłak (8 łyków)",
+                    hours: 2, stamina: 3, startSe: "Item1", swing: "crouch", desc: "Doszywasz do bukłaka drugą wyprawioną skórę, a szwy zaciągasz ścięgnami: zmieści 8 łyków wody zamiast 4. Zostaje tym samym bukłakiem." }
             ],
-            desc: "Wyprawia skóry, a ze skór szyje buty, plecak, płaszcz i namiot." },
+            desc: "Wyprawia skóry, a ze skór szyje buty, plecak, płaszcz i namiot, i powiększa bukłak." },
         // The bucket: forged at the forge (recipe bucket_item) and put down ready from the bag, like the tent; it collects rain
         // (rain.rate portions per hour of rain, up to rain.max) and goes back into the bag (pack) with its water. The well needs one.
-        bucket: { name: "Wiadro", cost: [[ITEM.bucket, 1]], w: 1, stamina: 2, image: "Farm_Bucket", imageFull: "Farm_Bucket_Full", instant: true, pack: ITEM.bucket,
+        bucket: { name: "Wiadro", anywhere: true, cost: [[ITEM.bucket, 1]], w: 1, stamina: 2, image: "Farm_Bucket", imageFull: "Farm_Bucket_Full", instant: true, pack: ITEM.bucket,
             packName: "Zabierz wiadro", packHelp: "Zabierasz wiadro do plecaka razem z wodą, jeśli jakąś zebrało. Postawisz je, gdzie zechcesz - z wodą w środku waży więcej. Wiadro jest też potrzebne do budowy studni.", packedText: "Zabrano: Wiadro",
             rain: { max: 6, rate: 1 },
             desc: "Drewniane wiadro z żelaznymi obręczami, wykute w kuźni. Postawione na dworze zbiera deszczówkę (porcja za każdą godzinę deszczu, do 6): napijesz się z niego, podlejesz rośliny w pobliżu albo napełnisz konewkę i bukłak. Możesz je podnieść do plecaka. Jest potrzebne do budowy studni." },
+        // the rain barrel (the user's stage 1, 2026-09-27: no new water - the rain kept better): a big barrel of planks and nailed hoops, put
+        // up with the hammer where it stays. Its wide mouth catches more than the bucket (rain.rate portions an hour of rain), it holds
+        // rain.max; drunk from, the waterskin / can / bucket filled at it as at the bucket. Wood does not seep and does not crack.
+        barrel: { name: "Beczka na deszczówkę", cost: [[ITEM.planks, 8], [ITEM.nails, 6]], w: 1, stamina: 6, hits: 12, image: "Farm_Barrel", imageFull: "Farm_Barrel_Full",
+            rain: { max: 12, rate: 1.5, in: "w beczce", empty: "Beczka jest pusta" },
+            desc: "Duża beczka z desek spiętych obręczami na gwoździach. Stoi na dworze i zbiera deszczówkę: szeroki otwór łapie więcej niż wiadro (półtorej porcji za godzinę deszczu), a mieści 12 porcji. Napijesz się z niej, napełnisz bukłak, konewkę i wiadro albo podlejesz rośliny w pobliżu. Drewno nie przecieka i nie pęka." },
         well: { name: "Studnia", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2], [ITEM.bucket, 1]], w: 2, h: 2, stamina: 12, hits: 50, image: "Farm_Well_L", refund: [[ITEM.stone, 6], [ITEM.planks, 1], [ITEM.rope, 1], [ITEM.bucket, 1]],
             v2: { cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2]], refund: undefined },   // wells put up before the bucket was needed
             legacy: { w: 2, h: 1, image: "Farm_Well", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2]], refund: undefined }, water: true,
@@ -286,7 +317,7 @@
                     desc: "Młode pokrzywy z dzikim czosnkiem i ziemniakiem: zielona zupa z leśnego zbieractwa. Syci i gasi pragnienie." }
             ],
             desc: "Wisi nad ogniem i zastępuje pieczenie na patyku: gotuje zupy, gulasz, owsiankę i wywary, a przy jego ogniu można się ogrzać. Powstaje z rozbudowy trójnogu. Mięso, ryby i ziemniaki upieczesz na osobnym ognisku." },
-        pen: { name: "Owczarnia", cost: [[ITEM.planks, 12], [ITEM.rope, 2], [ITEM.stone, 2]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Pen_L", legacy: { w: 2, h: 1, image: "Farm_Pen", cost: [[ITEM.planks, 6], [ITEM.rope, 2], [ITEM.stone, 2]] },
+        pen: { name: "Owczarnia", cost: [[ITEM.planks, 12], [ITEM.rope, 2], [ITEM.stone, 2], [ITEM.nails, 6]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Pen_L", legacy: { w: 2, h: 1, image: "Farm_Pen", cost: [[ITEM.planks, 6], [ITEM.rope, 2], [ITEM.stone, 2]] },
             yard: { gate: 2, hut: { dx: 2, dy: 3, w: 2, h: 1 }, animal: "sheep", count: 3 },
             produce: { item: ITEM.wool, amount: 1, period: 3, cap: 3, tool: ITEM.shears },
             desc: "Ogrodzony wygon z szopą: w środku pasą się owce i dają wełnę, 1 sztukę co 3 dni (maksymalnie 3), ale do strzyżenia potrzebne są nożyce (wykuwa się je w kuźni). Z wełny szyje się płaszcz." },
@@ -300,16 +331,16 @@
         // the fired clay pot (the kiln) set down outdoors: collects rain like the bucket (rain.rate portions an hour of rain, up to max), but
         // it seeps (rain.leak portions a day), a portion drunk gives rain.drink, and it lasts rain.wear uses (a drink or a filling) before it
         // cracks. rain.own: its water and wear go with it into the bag and come back when it is set down again (Farming.js)
-        clay_pot: { name: "Gliniany garnek", cost: [[ITEM.firedPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Fired", imageFull: "Farm_Pot_Fired_Full", instant: true, pack: ITEM.firedPot,
+        clay_pot: { name: "Gliniany garnek", anywhere: true, cost: [[ITEM.firedPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Fired", imageFull: "Farm_Pot_Fired_Full", instant: true, pack: ITEM.firedPot,
             packName: "Zabierz garnek", packHelp: "Zabierasz garnek do plecaka razem z wodą, która w nim jest: zostanie w nim, gdy go znów postawisz.", packedText: "Zabrano: Gliniany garnek",
             rain: { max: 3, rate: 1, leak: 1, drink: 25, wear: 30, own: true, in: "w garnku", empty: "Garnek jest pusty" },
             desc: "Wypalony gliniany garnek. Postawiony na dworze zbiera deszczówkę (porcja za godzinę deszczu, do 3), ale powoli ją przesącza (porcja na dobę). Napijesz się z niego (+25) albo napełnisz bukłak i konewkę. Po około 30 użyciach pęka." },
-        bedroll: { name: "Leśne legowisko", cost: [[ITEM.boughBed, 1]], w: 2, stamina: 2, image: "Farm_Bedroll", instant: true, sleep: true, indoor: true, sleepRestore: 0.6, sleepBad: 0.4,
+        bedroll: { name: "Leśne legowisko", anywhere: true, cost: [[ITEM.boughBed, 1]], w: 2, stamina: 2, image: "Farm_Bedroll", instant: true, sleep: true, indoor: true, sleepRestore: 0.6, sleepBad: 0.4,
             refund: [[ITEM.branch, 3], [ITEM.fiber, 1]],
             desc: "Sterta gałęzi wyścielona suchą trawą i związana lnem. Prześpisz na niej noc, ale wstaniesz z około 60% sił, a w deszczu, śniegu i zimą z 40%. Namiot wypoczywa lepiej. Zrobisz ją w menu „Wytwórz...”." },
         // A portable building: sewn in the tannery into an item, pitched at once (instant: no site, no hammer) and packed up again
         // into the item (pack). Sleeping in it (sleep) works like the bed of the house did: until the morning, everything restored.
-        tent: { name: "Namiot", cost: [[ITEM.tent, 1]], w: 3, h: 2, stamina: 3, image: "Farm_Tent_L", legacy: { w: 2, h: 1, image: "Farm_Tent" }, instant: true, pack: ITEM.tent, sleep: true,
+        tent: { name: "Namiot", anywhere: true, cost: [[ITEM.tent, 1]], w: 3, h: 2, stamina: 3, image: "Farm_Tent_L", legacy: { w: 2, h: 1, image: "Farm_Tent" }, instant: true, pack: ITEM.tent, sleep: true,
             desc: "Rozstawiasz go od razu, bez młotka. Prześpisz w nim całą noc i wstaniesz z pełnią sił, także w deszczu. Rano złożysz go i zabierzesz ze sobą. Zszyjesz go w garbarni." },
         // dairy: the cowshed gives milk, the dairy turns milk into cheese, the pantry keeps food fresh (Spoilage.js: keeps = how fast it ages)
         cowshed: { name: "Obora", cost: [[ITEM.planks, 16], [ITEM.rope, 3], [ITEM.nails, 6]], w: 8, h: 5, stamina: 18, hits: 40, image: "Farm_Cowshed_XL",
@@ -360,8 +391,169 @@
             hours: 0.5, stamina: 1, startSe: "Item1", desc: "Łodygi pokrzywy wymoczone i rozdarte na długie włókna. Równie dobre jak len." }
     ];
 
-        return { CROPS, BUILDINGS, HAND_RECIPES };
+    // The maps the player may build on (the user's, 2026-09-27: "Gracz może budować tylko na polu dziadka, ale zbierać rzeczy może z
+    // każdej mapy - pułapki jako jedyne można na każdej mapie"): the grandfather's field and the inside of the hut. A map's note <Build:on>
+    // / <Build:off> overrides this list; a building marked anywhere (or with lure: the snare) goes up on any map (Farming.js)
+    const BUILD_MAPS = [3, 100];
+
+        return { CROPS, BUILDINGS, HAND_RECIPES, BUILD_MAPS };
     }
 
+    // ------------------------------------------------------------------
+    // FoodTable: everything about a food in one row (the user's stage 1, 2026-09-27: its numbers used to lie in five places - the item's
+    // <Food:> note, Needs' FEED, Spoilage's LIFE, Dog.js's lists - and the autopilot guessed wrong). A coder changes a food HERE.
+    //   stamina, buff, hours, buff2, hours2: what eating it gives (Survival.js); a row without stamina is not eaten as it is
+    //   fed, water: the hunger and the thirst it takes away (Needs.js)
+    //   spoil: game hours it stays good (Spoilage.js); no spoil = it keeps
+    //   raw: to be cooked first (raw meat, raw fish, the old carcass)
+    //   dog: what one piece of it in the kennel's bowl gives the dog (Dog.js; DOG_DEFAULT when not said)
+    //   dogPick: found on the map, the dog eats it there: food + dogPick * pieces / 2 + 6 (dogPickBush: the berries of a full bush)
+    //   tame: a meat thrown to the wild dog - the order it is taken from the bag
+    // The item's <Food:...> note may stay, but for an item with a row the row counts (check() lists where they differ, also in the
+    // console at the start). An item with a note and no row (a new food from the editor) is still eaten by its note: fed = 80% of the
+    // stamina, water 0, the dog 10 - as before.
+    // ------------------------------------------------------------------
+    const FoodTable = (() => {
+        const ROWS = {
+            71: { stamina: 6, fed: 6, water: 0, spoil: 480, dog: 9, dogPick: 20 },                                          // Ziemniak (the dog: a wild potato)
+            72: { stamina: 8, fed: 8, water: 0, spoil: 360, dog: 12, dogPick: 16 },                                         // Marchew
+            73: { stamina: 10, fed: 10, water: 0, spoil: 480, dog: 15 },                                                    // Kapusta
+            75: { stamina: 5, fed: 6, water: 0, spoil: 240, dog: 9 },                                                       // Jajko
+            76: { stamina: 14, fed: 8, water: 0, dog: 12 },                                                                 // Miód (keeps)
+            81: { stamina: 12, buff: "warm", hours: 2, fed: 5, water: 10, dog: 8 },                                         // Piwo (keeps)
+            83: { stamina: 35, buff: "sated", hours: 3, fed: 30, water: 0, spoil: 120, dog: 40 },                           // Chleb
+            94: { raw: true, spoil: 60, dog: 40, tame: 1 },                                                                 // Surowe mięso zająca
+            95: { stamina: 40, buff: "sated", hours: 3, fed: 45, water: 0, spoil: 120, dog: 45, tame: 2 },                  // Pieczone mięso zająca
+            98: { raw: true, spoil: 40, dog: 45, tame: 10 },                                                                // Ryba
+            99: { stamina: 30, buff: "sated", hours: 2, fed: 38, water: 0, spoil: 96, dog: 45, tame: 11 },                  // Pieczona ryba
+            101: { raw: true, spoil: 48 },                                                                                  // Zwierzyna (old saves)
+            102: { stamina: 8, fed: 8, water: 10, spoil: 72, dog: 12, dogPick: 14, dogPickBush: 18 },                       // Jagody
+            103: { stamina: 6, fed: 8, water: 0, spoil: 72, dog: 12, dogPick: 12 },                                         // Grzyby
+            104: { spoil: 168 },                                                                                            // Zioła (not eaten as they are)
+            105: { stamina: 55, buff: "sated", hours: 5, fed: 55, water: 0, spoil: 480, dog: 45, tame: 9 },                 // Wędzone mięso
+            106: { stamina: 45, buff: "sated", hours: 4, fed: 48, water: 0, spoil: 360, dog: 45, tame: 12 },                // Wędzona ryba
+            107: { stamina: 25, fed: 30, water: 0, spoil: 30, dog: 40 },                                                    // Jajecznica
+            108: { stamina: 22, fed: 35, water: 0, spoil: 96, dog: 40 },                                                    // Pieczone ziemniaki
+            109: { stamina: 60, buff: "sated", hours: 6, buff2: "warm", hours2: 4, fed: 55, water: 20, spoil: 72, dog: 40 }, // Zupa
+            110: { stamina: 20, buff: "warm", hours: 6, fed: 6, water: 25, spoil: 120, dog: 9 },                            // Wywar ziołowy
+            123: { stamina: 12, fed: 8, water: 30, spoil: 48, dog: 12 },                                                    // Mleko
+            124: { stamina: 35, buff: "sated", hours: 4, fed: 32, water: 0, spoil: 720, dog: 40 },                          // Ser
+            130: { stamina: 65, buff: "sated", hours: 7, buff2: "warm", hours2: 4, fed: 62, water: 14, spoil: 96 },         // Gulasz
+            131: { stamina: 50, buff: "sated", hours: 5, buff2: "warm", hours2: 3, fed: 48, water: 26, spoil: 96 },         // Kapuśniak
+            132: { stamina: 45, buff: "sated", hours: 4, fed: 42, water: 24, spoil: 60 },                                   // Zupa grzybowa
+            133: { stamina: 45, buff: "sated", hours: 4, fed: 45, water: 14, spoil: 72 },                                   // Owsianka jęczmienna
+            134: { stamina: 22, fed: 22, water: 0, spoil: 48 },                                                             // Grzyby z ogniska
+            135: { stamina: 42, buff: "sated", hours: 3, fed: 38, water: 0, spoil: 240 },                                   // Pieczony ser
+            136: { stamina: 40, buff: "sated", hours: 3, fed: 30, water: 6, spoil: 96 },                                    // Placek jagodowy
+            137: { stamina: 16, buff: "warm", hours: 4, fed: 6, water: 18 },                                                // Miód pitny (keeps)
+            139: { stamina: 6, fed: 8, water: 18 },                                                                         // Dzikie jabłka (keep)
+            140: { stamina: 6, fed: 6, water: 20 },                                                                         // Dzikie gruszki (keep)
+            149: { spoil: 72 },                                                                                             // Pokrzywa (for the soup)
+            150: { spoil: 168 },                                                                                            // Krwawnik (for the bandage)
+            151: { stamina: 4, fed: 4, water: 1, spoil: 96 },                                                               // Dziki czosnek
+            153: { stamina: 35, buff: "sated", hours: 3, fed: 34, water: 28, spoil: 72 },                                   // Zupa pokrzywowa
+            157: { raw: true, spoil: 60, dog: 40, tame: 3 },                                                                // Surowe mięso jelenia
+            158: { stamina: 50, buff: "sated", hours: 4, fed: 55, water: 0, spoil: 120, dog: 45, tame: 4 },                 // Pieczone mięso jelenia
+            159: { raw: true, spoil: 60, dog: 40, tame: 5 },                                                                // Surowe mięso dzika
+            160: { stamina: 55, buff: "sated", hours: 4, fed: 60, water: 0, spoil: 120, dog: 45, tame: 6 },                 // Pieczone mięso dzika
+            161: { raw: true, spoil: 60, dog: 40, tame: 7 },                                                                // Surowe mięso wilka
+            162: { stamina: 35, buff: "sated", hours: 3, fed: 40, water: 0, spoil: 120, dog: 45, tame: 8 }                  // Pieczone mięso wilka
+        };
+        const DOG_DEFAULT = 10, FED_FROM_STAMINA = 0.8;
+        const EAT_KEYS = ["stamina", "buff", "hours", "buff2", "hours2", "fed", "water"];
+        const isObj = v => !!v && typeof v === "object";
+        const idOf = v => (isObj(v) ? v.id : Number(v));
+        const notItem = v => isObj(v) && typeof DataManager !== "undefined" && !DataManager.isItem(v);   // (weapons and armours share the ids)
+        const itemAt = id => (typeof $dataItems !== "undefined" && $dataItems ? $dataItems[id] : null);
+        // the old reading of an item's <Food:k=v,...> note (for a food without a row)
+        function noteOf(item) {
+            const raw = item && item.meta && item.meta.Food;
+            if (typeof raw !== "string") return null;
+            const info = {};
+            for (const pair of raw.split(",")) {
+                const [k, v] = pair.split("=").map(s => s.trim());
+                info[k] = isNaN(Number(v)) ? v : Number(v);
+            }
+            return info;
+        }
+        // the whole row of an item (its id or the item itself): { id, eat (can be eaten as it is), stamina, buff.., fed, water, spoil,
+        // raw, dog, dogPick, tame }, or null when it is no food at all
+        function get(v) {
+            if (v === null || v === undefined || notItem(v)) return null;
+            const id = idOf(v), row = ROWS[id];
+            if (row) return Object.assign({ id, dog: DOG_DEFAULT }, row, { eat: row.stamina !== undefined });
+            const note = noteOf(isObj(v) ? v : itemAt(id));
+            if (!note) return null;
+            return Object.assign({ id, dog: DOG_DEFAULT }, note, { fed: note.fed !== undefined ? note.fed : Math.round((note.stamina || 0) * FED_FROM_STAMINA),
+                water: note.water !== undefined ? note.water : 0, eat: true });
+        }
+        const has = v => !!get(v);
+        const edible = v => { const r = get(v); return !!r && r.eat; };
+        // what eating it gives, as Survival.js reads it: { stamina, buff, hours, buff2, hours2, fed, water } (only what is set), or null
+        function eatInfo(v) {
+            const r = get(v);
+            if (!r || !r.eat) return null;
+            const info = {};
+            for (const k of EAT_KEYS) if (r[k] !== undefined) info[k] = r[k];
+            return info;
+        }
+        // [fed, water] of an item (before the skills); `food` (an eatInfo) may say otherwise
+        function fedWater(v, food) {
+            const f = food || {}, row = v !== null && v !== undefined && !notItem(v) ? ROWS[idOf(v)] : null;
+            const stamina = f.stamina !== undefined ? f.stamina : row && row.stamina !== undefined ? row.stamina : 0;
+            const fed = f.fed !== undefined ? f.fed : row && row.fed !== undefined ? row.fed : Math.round(stamina * FED_FROM_STAMINA);
+            const water = f.water !== undefined ? f.water : row && row.water !== undefined ? row.water : 0;
+            return [fed, water];
+        }
+        // item id -> game hours it stays good (Spoilage.LIFE), and item id -> [fed, water] of what is eaten (Needs.FEED, for old readers)
+        const LIFE = {}, FEED = {};
+        for (const key of Object.keys(ROWS)) {
+            if (ROWS[key].spoil) LIFE[key] = ROWS[key].spoil;
+            if (ROWS[key].stamina !== undefined) FEED[key] = [ROWS[key].fed, ROWS[key].water];
+        }
+        const spoilHours = v => { const r = get(v); return (r && r.spoil) || 0; };
+        const dogValue = v => { const r = get(v); return r && r.dog !== undefined ? r.dog : DOG_DEFAULT; };
+        // what the dog gets from eating what it finds on the map, by the kind of find (Farming's GATHER: kind -> { item }): { kind: dogPick }
+        function dogForage(gather) {
+            const out = {};
+            for (const kind of Object.keys(gather || {})) {
+                const row = ROWS[gather[kind].item];
+                if (!row || !row.dogPick) continue;
+                out[kind] = kind === "bush" && row.dogPickBush !== undefined ? row.dogPickBush : row.dogPick;
+            }
+            return out;
+        }
+        // the meats the wild dog is tamed with, in the order they are taken from the bag
+        const tameMeats = () => Object.keys(ROWS).map(Number).filter(id => ROWS[id].tame).sort((a, b) => ROWS[a].tame - ROWS[b].tame);
+        // where an item's <Food:> note and its row differ (the row counts): a list of lines, empty when they agree
+        function check() {
+            const out = [];
+            if (typeof $dataItems === "undefined" || !$dataItems) return out;
+            for (const item of $dataItems) {
+                if (!item) continue;
+                const note = noteOf(item), row = ROWS[item.id];
+                if (!row) { if (note) out.push(item.id + " " + item.name + ": a <Food> note but no row (the note counts)"); continue; }
+                if (!note) { if (row.stamina !== undefined) out.push(item.id + " " + item.name + ": no <Food> note (the row counts)"); continue; }
+                if (row.stamina === undefined) { out.push(item.id + " " + item.name + ": the note makes it food, the row does not (the row counts)"); continue; }
+                for (const k of EAT_KEYS) {
+                    if (note[k] === undefined && (k === "fed" || k === "water")) continue;
+                    if (note[k] !== row[k]) out.push(item.id + " " + item.name + ": " + k + " " + note[k] + " in the note, " + row[k] + " in the row (the row counts)");
+                }
+            }
+            return out;
+        }
+        return { ROWS, DOG_DEFAULT, get, valueOf: get, has, edible, eatInfo, fedWater, LIFE, FEED, spoilHours, dogValue, dogForage, tameMeats, check, noteOf };
+    })();
+    // at the start: say in the console where a note and the table do not agree (someone changed the note in the editor)
+    const _DataManager_onLoad = DataManager.onLoad;
+    DataManager.onLoad = function(object) {
+        _DataManager_onLoad.call(this, object);
+        if (object && object === window.$dataItems) {
+            const diffs = FoodTable.check();
+            if (diffs.length) console.warn("FoodTable: " + diffs.join(" | "));
+        }
+    };
+
+    window.FoodTable = FoodTable;
     window.Farming_Data = { build };
 })();

@@ -1,0 +1,22 @@
+{
+ "tool": "mcp__pixellab__create_image_pro_flash",
+ "params": {
+  "description": "Seamless top-down ground texture that fills the whole square canvas edge to edge: dry yellowed grass, straw-coloured withered grass blades lying in all directions, a few faded green tufts. Soft painterly RPG tileset style with smooth gradients and many close colours, no outlines, no border, no vignette, no objects standing up, low contrast, even lighting, seen straight from above.",
+  "width": 192,
+  "height": 192,
+  "no_background": false,
+  "seed": 23,
+  "style_image": {
+   "base64": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYBAMAAAASWSDLAAAAMFBMVEVMpFdHoFVLnF5EnVRImV1Gl11FllxDlVxEkVs+kVpGi1lCillDh1c/hlc/g1Y9gFWucIMPAAABQ0lEQVR42gE4Acf+AMB32qz0BqscZ+urdQTl8AZwKED/N4dD2pMC//AxYUb8IO7wpPk8Am7WBPrg40M2wRJAUgQqO+8KCOcQAvr2DuoCBU4RkEH/BG/PYiNAAiPqHIAQRAbk6f+MTAIA22YM1P9vXk8MVnYENQlLSbuXQ1wx3vn9AngAdx0cAaotRt9e0gDzHyTsCgKqCgVRjLwC5oDN1CAIFxBFsv1DAg69KOBA9+AA3gK+UgCVdwASfJlCKgIiqgcDkQ4XvhPiOdVcgAz+AtYAIiDgMhIw4zcAAwAXt/pBuyHjP6vHwM8Ad8fTuxzjOzPRasM9AtD4RQUQEDNkAjQ2TgItDT82AoYB4gQBgAADQB+72Rn18+oKQOr7BKMM4xF4DNQKS9QD9AIiUWRTZvKG5g/a5vcAnz/z/UbDd9mMCZP+8FaDHth2rVoAAAAASUVORK5CYII=",
+   "usage_description": "copy its soft painted technique: low contrast, smooth blended colour transitions, no outlines"
+  },
+  "style_options": {
+   "color_palette": false,
+   "outline": true,
+   "detail": true,
+   "shading": true
+  }
+ },
+ "cost": "about 5 generations (192x192)",
+ "then": "download the result into tools/tiles/soft/src/sucha_trawa/ (make_ground.py --fetch URL src/sucha_trawa/pl_<what>_s23_192.png) and add it to the recipe: \"sources\": {\"pl\": {\"pixellab\": \"sucha_trawa/pl_<what>_s23_192.png\"}}"
+}

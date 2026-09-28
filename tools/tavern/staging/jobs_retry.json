@@ -1,0 +1,28 @@
+[
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/f25_3.png",
+  "region": [
+   48,
+   35,
+   49,
+   36
+  ],
+  "hour": 18,
+  "wait": 40
+ },
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_salonik.png",
+  "mode": "screen",
+  "hour": 19,
+  "player": [
+   47,
+   12,
+   8
+  ],
+  "wait": 90
+ }
+]

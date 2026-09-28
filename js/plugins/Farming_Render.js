@@ -1010,8 +1010,9 @@
             });
         }
         if (e.glow && b.type !== "campfire" && !(def0.fire && def0.fire.smoke)) e.glow.alpha = fireOut ? 0 : fireGlowAlpha(this._age + b.id * 17) * (def0.fire ? (cooking ? 0.75 : 0.45) : burning ? 0.55 : 0);
-        e.badge.visible = ready;
-        if (ready) {
+        const some = ready || (!!b.job && !!Farming.jobCollectable && Farming.jobCollectable(b) > 0);   // (a queue: the first ones are done)
+        e.badge.visible = some;
+        if (some) {
             const idx = Farming.itemOf(b.job.out[0]).iconIndex, height = (e.sprite.bitmap && e.sprite.bitmap.height) || e.height;
             e.badge.setFrame((idx % 16) * 32, Math.floor(idx / 16) * 32, 32, 32);
             e.badge.y = e.sprite.y - height - 4 + Math.round(Math.sin(this._age * 0.08) * 3);

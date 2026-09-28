@@ -982,6 +982,13 @@
     Game_Player.prototype.isToolSwinging = function() {
         return !!this._toolSwing;
     };
+    // a swing is never taken over from a save file: its callbacks (onImpact, holdWhile...) do not survive it, and a game saved while
+    // the hero sat or worked threw "opts.holdWhile is not a function" on loading (2026-09-26)
+    const _DataManager_extractSaveContents_swing = DataManager.extractSaveContents;
+    DataManager.extractSaveContents = function(contents) {
+        _DataManager_extractSaveContents_swing.call(this, contents);
+        if ($gamePlayer) { $gamePlayer._toolSwing = null; $gamePlayer._swingEvent = null; }
+    };
 
     const _Game_Player_update = Game_Player.prototype.update;
     Game_Player.prototype.update = function(sceneActive) {
@@ -1001,7 +1008,7 @@
         const def = swingKind(swing._swingKind), opts = swing.opts;
         if (swing._waiting) {   // holding the pose until the action is over
             const cancelled = Input.isTriggered("cancel") || (!opts.keepOnMove && Input.dir4 !== 0);
-            if (!cancelled && opts.holdWhile()) {
+            if (!cancelled && typeof opts.holdWhile === "function" && opts.holdWhile()) {
                 swing._wait++;
                 if (opts.onWait) opts.onWait(swing._wait);
                 return "hold";
@@ -1011,11 +1018,11 @@
             if (opts.onHoldEnd) opts.onHoldEnd(cancelled);
         }
         swing._swingT++;
-        if (opts && opts.holdAt && swing._swingT === opts.holdAt && opts.holdWhile && opts.holdWhile()) swing._waiting = true;   // waits before the impact
+        if (opts && opts.holdAt && swing._swingT === opts.holdAt && typeof opts.holdWhile === "function" && opts.holdWhile()) swing._waiting = true;   // waits before the impact
         if (swing._swingT === def.impact) {
             if (swing._cancelled) { this._toolSwing = null; if (this._swingEvent === swing) this._swingEvent = null; return; }   // aiming cancelled: no shot
             if (swing.onImpact) swing.onImpact();
-            if (opts && !opts.holdAt && opts.holdWhile && opts.holdWhile()) swing._waiting = true;
+            if (opts && !opts.holdAt && typeof opts.holdWhile === "function" && opts.holdWhile()) swing._waiting = true;
         }
         if (swing._swingT >= def.frames) {
             this._toolSwing = null;

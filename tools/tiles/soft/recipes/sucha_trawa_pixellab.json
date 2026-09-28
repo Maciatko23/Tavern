@@ -1,0 +1,57 @@
+{
+ "name": "sucha_trawa_pixellab",
+ "title": "Sucha trawa (PixelLab)",
+ "describe": "sucha trawa: dry yellowed grass, straw-coloured withered blades",
+ "texture": {
+  "sources": {
+   "pl": {
+    "pixellab": "sucha_trawa/pl_dry_grass_s23_192.png",
+    "hsv": [0.0, 0.75, 1.0],
+    "flatten": [2.0, 0.35],
+    "despeckle": 20
+   },
+   "dry": {
+    "winlu": [16, 27],
+    "hsv": [-0.2, 0.62, 1.0],
+    "mean": [138, 142, 86]
+   }
+  },
+  "base": [
+   ["pl", 0.65],
+   ["dry", 0.35]
+  ],
+  "finish": {
+   "ref": "k16",
+   "boost": [1.0, 1.0, 0.95, 0.85, 0.6, 0.4],
+   "grain": "k16",
+   "grain_w": [0.8, 0.5],
+   "chroma_blur": 0.5,
+   "chroma_spread": 0.9,
+   "mean": [134, 146, 86],
+   "chroma_flatten": [2.0, 0.1]
+  }
+ },
+ "edge": {
+  "mask": 46,
+  "border_fade": 4,
+  "depth": 6,
+  "wobble": 0.45,
+  "alpha_blur": 1.6,
+  "body_alpha": 0.95,
+  "rim_k": 0.04,
+  "rim_rgb": [96, 112, 62]
+ },
+ "slots": {
+  "k38": "overlay"
+ },
+ "soil": "earth",
+ "preview_remap": {
+  "k46": "k38"
+ },
+ "preview": [
+  [21, 2, 9, 16, 10],
+  [4, 18, 0, 16, 10],
+  [3, 2, 20, 16, 9]
+ ],
+ "note": "the same dry grass with a PixelLab source (create_image_pro_flash 192x192, seed 23, 6 generations; request in src/sucha_trawa/pixellab_request_s23.json), 65/35 with Winlu's own grass turned to straw. The raw image's green tufts made a 48 px dot grid (colour repeat 3-4.8, pops 1-2.6 %); saturation 0.75 + flatten + despeckle 20 tame them, pops still 0.69 % (limit 0.5 %). Looks about the same as the 0-generation sucha_trawa.json, which is the one to use - kept as a worked example of the PixelLab route (made by the verifier from README.md)"
+}

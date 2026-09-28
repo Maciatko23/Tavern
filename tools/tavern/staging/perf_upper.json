@@ -1,0 +1,7 @@
+[
+ {"label": "Map025 21:00", "map": "tools/tavern/staging/Map025.json", "id": 25, "hour": 21, "frames": 180, "spots": [[48, 60, 8], [20, 18, 6], [48, 30, 8], [86, 18, 6]]},
+ {"label": "Map025 12:00", "map": "tools/tavern/staging/Map025.json", "id": 25, "hour": 12, "frames": 180, "spots": [[48, 60, 8], [20, 18, 6]]},
+ {"label": "Map026 21:00", "map": "tools/tavern/staging/Map026.json", "id": 26, "hour": 21, "frames": 180, "spots": [[40, 23, 8], [50, 45, 8], [74, 43, 8]]},
+ {"label": "Map026 12:00", "map": "tools/tavern/staging/Map026.json", "id": 26, "hour": 12, "frames": 180, "spots": [[40, 23, 8]]},
+ {"label": "Map019 (odniesienie)", "map": null, "id": 19, "hour": 21, "frames": 180, "spots": [[5, 5, 8]]}
+]

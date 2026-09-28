@@ -1,0 +1,4 @@
+[
+ {"label": "Map019 walk", "map": null, "id": 19, "spots": [[5, 5, 2]], "hour": 20, "frames": 180, "walk": true},
+ {"label": "Map001 walk", "map": "tools/tavern/staging/Map001.json", "id": 1, "spots": [[50, 69, 8], [27, 58, 8]], "hour": 20, "frames": 180, "walk": true}
+]

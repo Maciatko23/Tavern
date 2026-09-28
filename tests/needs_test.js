@@ -15,7 +15,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); $gameSystem.setDayNightHour(10); $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; $gameSystem.setDayNightHour(10); $gameScreen.clearWeather(); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const settle = async () => { await frames(6); const r = await ev(`new Promise(res => { let n = 0; const iv = setInterval(() => { n++; if (!$gamePlayer.isToolSwinging() && !($gameTemp._farmLock > 0) && !($gameTemp._farmTimers && $gameTemp._farmTimers.length) && $gameScreen.brightness() >= 250) { clearInterval(iv); res("ok"); } else if (n > 300) { clearInterval(iv); res(JSON.stringify({ sw: $gamePlayer.isToolSwinging(), lock: $gameTemp._farmLock, timers: ($gameTemp._farmTimers || []).length, bright: $gameScreen.brightness(), scene: SceneManager._scene.constructor.name, msg: $gameMessage.isBusy() })); } }, 20); })`); if (r !== "ok") console.log("SETTLE TIMEOUT", r); await frames(4); };
         const press = async k => { await ev(`Input._currentState.${k} = true; 0`); await frames(3); await ev(`Input._currentState.${k} = false; 0`); await frames(3); };
@@ -220,6 +220,20 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev("SceneManager.push(Scene_Menu); 0");
         await frames(40);
         await b.shot(OUT + "menu_card.png");
+        // ---- the signals (2026-09-26): below 20 the hero says it (a bubble; not again within 2 game hours); below 10 he walks slower
+        await ev("SceneManager.pop(); 0");
+        await frames(40);
+        const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
+        const bubble = await J(`(function(){ Needs.setEnabled(true); const n = Needs.state(); n.food = 80; n.water = 15; n.nagAt = null; SpeechBubbles.barks.length = 0; Needs.nag();
+            const first = SpeechBubbles.barks.map(b => b.text); Needs.nag(); const again = SpeechBubbles.barks.length;
+            $gameSystem.advanceDayNight(2.2); Needs.state().water = 15; Needs.nag(); return { first, again, later: SpeechBubbles.barks.length }; })()`);
+        check("thirsty below 20: he says so in a bubble ('Muszę się czegoś napić...'), not again at once, again after 2 hours",
+            bubble.first.length === 1 && /napić/.test(bubble.first[0]) && bubble.again === 1 && bubble.later >= 2, bubble);
+        const slow = await J(`(function(){ const n = Needs.state(); n.food = 80; n.water = 50; const d0 = $gamePlayer.distancePerFrame(); n.water = 5; const d1 = $gamePlayer.distancePerFrame(); n.nagAt = null; SpeechBubbles.barks.length = 0; Needs.nag(); return { ratio: +(d1 / d0).toFixed(3), text: SpeechBubbles.barks.map(b => b.text)[0] }; })()`);
+        check("below 10: he walks slower (x0.85) and says his head is spinning", Math.abs(slow.ratio - 0.85) < 0.01 && /Kręci mi się w głowie/.test(slow.text || ""), slow);
+        await frames(20);
+        await b.shot(OUT + "needs_bubble.png");
+        await set(63, 41);
         console.log("console errors:", JSON.stringify(b.logs.filter(l => /EXC|rror/.test(l)).slice(-4)));
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     console.log(results.filter(Boolean).length + "/" + results.length + " passed");

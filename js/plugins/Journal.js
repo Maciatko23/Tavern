@@ -684,6 +684,14 @@
             help: "Ptaszek: w porządku   Romb: masz na naprawę / zaraz się zepsuje   ←/→ lub Q/E: zakładka" }
     ];
     const TABS = TAB_DEFS.map(t => t.name);
+    // a tab of another plugin ({ name, items(), detail(item), legend(), help, ok(item) }), after the journal's own (QuestBoard.js:
+    // "Zlecenia"); ok: what OK on one of its rows does
+    function addTab(def) {
+        if (!def || !def.name || TABS.includes(def.name)) return false;
+        TAB_DEFS.push(def);
+        TABS.push(def.name);
+        return true;
+    }
 
     function goalItems() {
         const d = data();
@@ -1010,13 +1018,21 @@
         w.drawText(legendFor(this._tab), w.innerWidth - 400, 0, 400, "right");
     };
     Scene_Journal.prototype.onListOk = function() {
-        const it = this._list.currentItem();
+        const it = this._list.currentItem(), def = TAB_DEFS[this._tab];
         if (this._tab === 0 && it && it.goal && !goalDone(it.goal)) {
             const d = data();
             d.pinned = d.pinned === it.goal.id ? null : it.goal.id;
             const index = this._list.index();
             this._list.setItems(itemsForTab(0));
             this._list.select(Math.min(index, this._list.maxItems() - 1));
+            this._list.updateHelp();
+        } else if (it && def && def.ok) {   // (another plugin's tab)
+            const index = this._list.index();
+            def.ok(it);
+            this._list.setItems(itemsForTab(this._tab));
+            this._list.select(Math.min(index, this._list.maxItems() - 1));
+            this._list.updateHelp();
+            this.refreshLegend();
         }
         this._list.activate();
     };
@@ -1358,6 +1374,18 @@
         return first.length > 58 ? first.slice(0, 56) + "…" : first;
     }
 
+    // other plugins may put their own line in the goal window instead of the goal (QuestBoard.js: a contract being followed):
+    // fn() -> null or { label, title, line, key }; the first that gives one wins
+    const trackerSources = [];
+    function trackedExtra() {
+        for (const fn of trackerSources) {
+            let r = null;
+            try { r = fn(); } catch (e) { r = null; }
+            if (r) return r;
+        }
+        return null;
+    }
+
     // The goal window: right under the minimap in the top right corner (Minimap.js), in the map's place on maps
     // without one; without the plugin, under the stamina gauge as before.
     function Sprite_GoalTracker() {
@@ -1382,8 +1410,14 @@
             this.x = hud.x + hud._gauge.x;
             this.y = hud.y + (hud.rowY ? hud.rowY(5) : hud._gauge.y + 105) + 6;   // under the five HUD rows
         }
-        const g = SHOW_TRACKER && $gameSystem ? currentGoal() : null;
-        this.visible = !!g && !!hud && !!hud._gauge && hud._gauge.visible && !$gameMessage.isBusy();
+        const extra = SHOW_TRACKER && $gameSystem ? trackedExtra() : null;
+        const g = extra ? null : SHOW_TRACKER && $gameSystem ? currentGoal() : null;
+        this.visible = !!(g || extra) && !!hud && !!hud._gauge && hud._gauge.visible && !$gameMessage.isBusy();
+        if (extra) {
+            const key = "x|" + extra.key + "|" + this.bitmap.width;
+            if (key !== this._key) { this._key = key; this.paintLines(extra.label, extra.title, extra.line); }
+            return;
+        }
         if (!g) return;
         const line = goalProgress(g), key = g.id + "|" + line + "|" + this.bitmap.width;
         if (key !== this._key) {
@@ -1406,11 +1440,14 @@
         return lines;
     }
     Sprite_GoalTracker.prototype.paint = function(g, line) {
+        this.paintLines("CEL", g.title, line);
+    };
+    Sprite_GoalTracker.prototype.paintLines = function(label, title, line) {
         const bmp = this.bitmap, w = bmp.width, ctx = bmp.context, inner = w - 20;
         bmp.clear();
         bmp.fontFace = $gameSystem.mainFontFace();
         bmp.fontSize = 18;
-        const titleLines = wrapBitmapText(bmp, g.title, inner, 2);
+        const titleLines = wrapBitmapText(bmp, title, inner, 2);
         bmp.fontSize = 14;
         const lines = wrapBitmapText(bmp, line, inner, 3);
         const h = 8 + 15 + titleLines.length * 21 + 3 + lines.length * 17 + 6;
@@ -1421,7 +1458,7 @@
         let y = 6;
         bmp.fontSize = 13;
         bmp.textColor = COLORS.trackerLabel;
-        bmp.drawText("CEL", 10, y, 60, 16, "left");
+        bmp.drawText(label, 10, y, 90, 16, "left");
         y += 15;
         bmp.fontSize = 18;
         bmp.textColor = COLORS.trackerTitle;
@@ -1473,5 +1510,5 @@
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));
     PluginManager.registerCommand(pluginName, "openJournal", () => { SceneManager.push(Scene_Journal); });
 
-    window.Journal = { onGoalDone: fn => { goalListeners.push(fn); }, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary };
+    window.Journal = { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource: fn => { trackerSources.push(fn); }, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary };
 })();

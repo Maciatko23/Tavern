@@ -1,0 +1,1 @@
+[{"map": "tools/tavern/staging/Map001.json", "id": 1, "out": "tools/tavern/staging/renders/r_center_18.png", "mode": "region", "region": [30, 55, 40, 29], "hour": 18, "wait": 80, "flags8": "tools/tavern/staging/tileset8_flags.json"}]

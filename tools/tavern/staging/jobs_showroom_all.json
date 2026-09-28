@@ -1,0 +1,1 @@
+[{"map": "tools/tavern/staging/Showroom_all.json", "id": 98, "out": "tools/tavern/staging/renders/showroom_all.png", "mode": "full", "hour": 18}, {"map": "tools/tavern/staging/Showroom_all.json", "id": 98, "out": "tools/tavern/staging/renders/showroom_all_plain.png", "mode": "full", "hour": 18, "nodark": true}]

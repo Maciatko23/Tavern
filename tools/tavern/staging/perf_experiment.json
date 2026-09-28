@@ -1,0 +1,15 @@
+[
+ {"label": "B as is", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 180, "spots": [[19, 19, 8]]},
+ {"label": "B no light sprites", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 180, "spots": [[19, 19, 8]],
+  "tweak": "for (const s of SceneManager._scene._spriteset._roomLightSprites) s.visible = false"},
+ {"label": "B no dark holes", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 180, "spots": [[19, 19, 8]],
+  "tweak": "SceneManager._scene._spriteset._roomHoles = []"},
+ {"label": "B no darkness at all", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 180, "spots": [[19, 19, 8]],
+  "tweak": "const s = SceneManager._scene._spriteset; s._roomHoles = []; s._darknessSprite.visible = false; s.redrawDarkness = function(){}"},
+ {"label": "B no lights no dark", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 180, "spots": [[19, 19, 8]],
+  "tweak": "const s = SceneManager._scene._spriteset; s._roomLightingContainer.visible = false; s.redrawDarkness = function(){}"},
+ {"label": "B no events sprites", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 180, "spots": [[19, 19, 8]],
+  "tweak": "for (const s of SceneManager._scene._spriteset._characterSprites) if (s._character !== $gamePlayer) s.visible = false"},
+ {"label": "Map019 no lights", "map": null, "id": 19, "hour": 18, "frames": 180, "spots": [[5, 5, 8]],
+  "tweak": "const s = SceneManager._scene._spriteset; s._roomLightingContainer.visible = false; s.redrawDarkness = function(){}"}
+]

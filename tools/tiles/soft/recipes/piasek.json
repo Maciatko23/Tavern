@@ -1,0 +1,81 @@
+{
+ "name": "piasek",
+ "title": "Piaszczysta ścieżka",
+ "describe": "sandy path: pale warm sand with small pebbles",
+ "texture": {
+  "sources": {
+   "dirt": {
+    "winlu": 24,
+    "hsv": [0.0, 1.05, 1.25]
+   },
+   "dirt2": {
+    "winlu": 17,
+    "sheet": "dungeon",
+    "rot": 1,
+    "hsv": [0.0, 1.1, 1.25]
+   }
+  },
+  "base": [
+   ["dirt", 0.6],
+   ["dirt2", 0.4]
+  ],
+  "finish": {
+   "ref": "k24",
+   "boost": [0.95, 0.85, 0.75, 0.6, 0.45, 0.35],
+   "grain": "k24",
+   "grain_w": [1.0, 0.8, 0.3],
+   "chroma_blur": 0.6,
+   "chroma_spread": 1.0,
+   "mean": [156, 140, 104]
+  },
+  "strokes": [
+   {
+    "type": "pebbles",
+    "stage": "after",
+    "n": 7,
+    "seed": 8,
+    "alpha": 200,
+    "shadow": 60,
+    "soft": 0.2,
+    "size": [0.7, 1.2],
+    "colours": [
+     [168, 160, 146],
+     [146, 138, 124],
+     [128, 120, 108],
+     [180, 170, 150]
+    ]
+   }
+  ]
+ },
+ "edge": {
+  "mask": 39,
+  "border_fade": 4,
+  "depth": 6,
+  "wobble": 0.3,
+  "straighten": 0.35,
+  "alpha_blur": 1.0,
+  "rim_k": 0.1,
+  "rim_rgb": [112, 106, 78]
+ },
+ "decor": {
+  "kind": "pebbles",
+  "n_edge": [0, 1],
+  "seed": 5,
+  "colour": [136, 128, 112],
+  "size": [1.0, 1.5],
+  "strength": 0.6,
+  "min_alpha": 0.7
+ },
+ "slots": {
+  "k23": "overlay"
+ },
+ "soil": "earth",
+ "preview_remap": {
+  "k39": "k23"
+ },
+ "preview": [
+  [21, 10, 14, 16, 10],
+  [4, 8, 7, 16, 10],
+  [3, 4, 16, 16, 11]
+ ]
+}

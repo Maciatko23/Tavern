@@ -53,12 +53,19 @@
  * ciosu, blok (P w trybie walki) go osłabia, parowanie (P tuż przed trafieniem) ogłusza napastnika.
  * Dzik z bliska (5 pól) szarżuje w prostej linii; gdy chybi, przebiega jeszcze
  * ok. 3,5 pola, staje zziajany (ok. 1,7 s - czas na atak), potem ostrzega i wraca.
+ * Gdy między wami stoi drzewo, krzak, kamień albo budynek, dzik nie stoi i nie
+ * wbiega w przeszkodę: obiega ją i szarżuje z miejsca 3-5 pól od ciebie, skąd ma
+ * czystą drogę. Rozpędzony dzik, który wpadnie na drzewo, kamień albo ścianę
+ * (bo w ostatniej chwili uskoczysz), jest ogłuszony przez ok. 1,5 s - zwab go na sosnę!
+ * Zwierzęta i pies chodzą w 8 kierunkach i obchodzą przeszkody (nie utykają w lesie).
  * Opis poniżej (siła broni, życie) dotyczy gry bez Combat.js.
  *
  * WILKI (nocą 20-5): watahy po 2-4. Gdy cię zauważą (albo podejdziesz na 6 pól),
  * wyją i otaczają cię w kręgu; po jednym naraz: przysiada i szczeka ("!"), skacze
  * i gryzie, a po skoku stoi chwilę - wtedy bij. Mocno poranione, albo gdy padnie
- * przewodnik, uciekają.
+ * przewodnik, uciekają. Każdy wilk ma w kręgu swoje miejsce (podchodzą z różnych
+ * stron), obchodzi drzewa i krzaki, a skacze tylko wtedy, gdy nic nie stoi między
+ * nim a tobą - inaczej najpierw obiega przeszkodę.
  *
  * DZIK (rano 5-9 i wieczorem 17-21): 5 żyć, nie ucieka. Gdy cię zauważy albo
  * oberwie, staje, prycha i pokazuje "!", a potem szarżuje - szybciej, niż
@@ -105,6 +112,10 @@
     const ENABLED = params.enabled !== "false";
     let MAPS = {};
     try { MAPS = JSON.parse(params.maps || "{}"); } catch (e) { MAPS = {}; }
+    // the maps of the new start (2026-09-27: grandpa's yard and the three roads to his field) - their animals when the plugin's
+    // parameter does not list them (a list in the Plugin Manager wins)
+    const NEW_START_MAPS = { 20: { rabbit: 2 }, 21: { rabbit: 3, deer: 1, boar: 1, wolf: 2 }, 22: { rabbit: 4, deer: 1, wolf: 2 }, 23: { rabbit: 3, deer: 2, boar: 1, wolf: 3 } };
+    for (const id of Object.keys(NEW_START_MAPS)) if (!MAPS[id]) MAPS[id] = NEW_START_MAPS[id];
 
     // (the "shoot" action - the attack, the shot - is on O in Combat.js's combat mode; no key of its own here)
     Input.keyMapper[67] = "sneak";   // C
@@ -118,7 +129,7 @@
     const SPECIES = {
         rabbit: { name: "Zając", sheet: "$Animal_Rabbit", hp: 12, poise: 10, stun: 30, speed: 3, flee: 5, sight: 6, radius: 0.5, drop: 1, hours: [[5, 21]], hops: true },   // hops: over a stump, a log, a bush
         deer: { name: "Jeleń", sheet: "$Animal_Deer", hp: 40, poise: 25, stun: 40, speed: 3, flee: 5, sight: 9, radius: 0.75, drop: 2, hours: [[5, 10], [16, 21]] },
-        boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 110, atk: 30, poise: 60, stun: 70, speed: 3, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
+        boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 110, atk: 30, poise: 60, stun: 70, speed: 3, trot: 4, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
             hours: [[5, 9], [17, 21]], aggressive: true, hurt: 22, harm: 0.35, markY: -54 },   // harm: the part of the hero's health a hit takes (without Combat.js); markY: the "?"/"!" just over its back
         wolf: { name: "Wilk", sheet: "$Animal_Wolf", run: "$Animal_Wolf_Run", stalk: "$Animal_Wolf_Stalk", bark: "$Animal_Wolf_Bark", hp: 50, atk: 12, poise: 30, stun: 50,
             speed: 4, flee: 5, sight: 9, radius: 0.55, drop: 1, hours: [[20, 24], [0, 5]], aggressive: true, pack: [2, 4], markY: -46 }
@@ -129,7 +140,9 @@
     // commit: tiles from the hero at which the charge locks its line and goes straight on; overshoot: how far past him it runs when
     // it misses; recover: the frames it then stands panting (the hero's moment to hit it) before it warns again
     // rush: how much faster it runs once its line is locked (move speed, +0.4 = a quarter faster)
-    const BOAR = { warn: 50, charge: 240, retreat: [90, 150], stagger: 36, contact: 1.05, commit: 5, overshoot: 3.5, recover: 100, rush: 0.4 };
+    // lane: tiles from the hero of the place it goes round to when something stands between them (then laneWarn: its shorter
+    // warning there); bash: the frames it stands stunned after running flat out into a tree, a rock, a building or a wall
+    const BOAR = { warn: 50, charge: 240, retreat: [90, 150], stagger: 36, contact: 1.05, commit: 5, overshoot: 3.5, recover: 100, rush: 0.4, lane: [3, 5], laneWarn: 30, bash: 90 };
     // range in tiles, speed in tiles per frame, damage, stamina per shot, cooldown in frames;
     // aiming (hold the shoot key): the circle shrinks from spread to focus (tiles of radius) in `steady` frames; holdAt: the frame of the
     // shooting animation that is held while aiming (the sling whirls over the head, the bow is drawn)
@@ -187,7 +200,9 @@
         return SPECIES[kind].hours.some(([a, b]) => h >= a && h < b);
     }
 
-    // grass tiles a wild animal may stand on: passable, no event, no building (Farming.js knows the ground)
+    // grass tiles a wild animal may stand on: passable, no event, no building (Farming.js knows the ground), and one it can step off
+    // (a berry bush is no event but Farming's passage: an animal born in one stood there all night - the 6-day marathon)
+    const canLeave = (x, y) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d));
     function spotsOfMap() {
         const mapId = $gameMap.mapId();
         if (spotCache.mapId === mapId && spotCache.spots) return spotCache.spots;
@@ -199,7 +214,7 @@
                 const info = F.groundInfoAt(x, y);
                 if (info === undefined) return null;   // the ground pictures are still loading: try again later
                 if (!info || !info.kind) continue;
-                if (!$gameMap.checkPassage(x, y, 0x0f) || $gameMap.eventsXy(x, y).length > 0 || F.hasObjectTile(x, y) || F.buildingAt(x, y)) continue;
+                if (!$gameMap.checkPassage(x, y, 0x0f) || !canLeave(x, y) || $gameMap.eventsXy(x, y).length > 0 || F.hasObjectTile(x, y) || F.buildingAt(x, y)) continue;
                 spots.push({ x, y });
             }
         }
@@ -276,6 +291,327 @@
         return best;
     }
     window.RoamingActor = { spriteset: roamingSpriteset, addSprite: roamingAddSprite, dropSprite: roamingDropSprite, fleeDirection: roamingFleeDirection, step: roamingStep, canStep: roamingCanStep };
+
+    // ------------------------------------------------------------------
+    // Path8: the way round what is in the way, in 8 directions, for the wild animals and the dog (Dog.js). The engine's
+    // findDirectionTo walks only the four ways, looks 12 steps ahead and asks every event of the map about every tile it tries (in a
+    // wood that stalled the game once). Here: A* over a grid of the map kept for some frames (the tiles' passage, the events in the
+    // way, the buildings); a slant only where both straight ways round its corner are open too (no cutting past a tree); a cap on the
+    // nodes of a search and on the searches in a frame; a path found is followed for a while.
+    // ------------------------------------------------------------------
+    // nodes: a search's cap; perFrame: the searches in one frame (past it an actor follows its old path or steps greedily); keep: the
+    // frames a path is followed before it is searched again; tiles / events: the frames the grid's parts are kept
+    const PATH = { nodes: 1600, perFrame: 4, keep: 24, tiles: 600, events: 20 };
+    const DIRS8 = [2, 4, 6, 8, 1, 3, 7, 9];
+    const PBIT = { 2: 1, 4: 2, 6: 4, 8: 8 };
+    const DX8 = [0, -1, 1, 0, -1, 1, -1, 1], DY8 = [1, 0, 0, -1, 1, 1, -1, -1], SB8 = [1, 2, 4, 8];   // (DIRS8 as steps; the bits of the straight ones)
+    // per tile: pass - the map's passage of its four sides; ev - an event in the way stands there; bld - a building; s4a / s4d - the
+    // straight steps (bits of PBIT) that go from it, for a wild animal (all of a building keeps it out: Game_Animal.isMapPassable)
+    // and for the dog (only a building's solid cells, the map's passage of Farming.js)
+    const pgrid = { mapId: -1, w: 0, h: 0, pass: null, ev: null, bld: null, s4a: null, s4d: null, tilesAt: -1e9, eventsAt: -1e9, rev: -1 };
+    function pathGrid() {
+        const now = Graphics.frameCount, w = $gameMap.width(), h = $gameMap.height(), mapId = $gameMap.mapId(), G = pgrid, n = w * h;
+        if (G.mapId !== mapId || G.w !== w || G.h !== h) {
+            Object.assign(G, { mapId, w, h, pass: new Uint8Array(n), ev: new Uint8Array(n), bld: new Uint8Array(n), s4a: new Uint8Array(n), s4d: new Uint8Array(n), tilesAt: -1e9, eventsAt: -1e9, rev: -1 });
+        }
+        const F = window.Farming, rev = F && F.farm ? F.farm().rev : 0;
+        let changed = false;
+        if (now - G.tilesAt > PATH.tiles || now < G.tilesAt || (rev !== G.rev && now - G.tilesAt > 30)) {   // (the farm changed - a building put up or taken down: soon)
+            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+                const i = y * w + x;
+                G.pass[i] = ($gameMap.isPassable(x, y, 2) ? 1 : 0) | ($gameMap.isPassable(x, y, 4) ? 2 : 0) | ($gameMap.isPassable(x, y, 6) ? 4 : 0) | ($gameMap.isPassable(x, y, 8) ? 8 : 0);
+                G.bld[i] = F && F.buildingAt(x, y) ? 1 : 0;
+            }
+            G.tilesAt = now;
+            G.rev = rev;
+            changed = true;
+        }
+        if (now - G.eventsAt > PATH.events || now < G.eventsAt) {   // (the events that keep a character out: Game_Map.eventsXyNt)
+            G.ev.fill(0);
+            for (const e of $gameMap.events()) if (e.isNormalPriority() && !e.isThrough() && $gameMap.isValid(e._x, e._y)) G.ev[e._y * w + e._x] = 1;
+            G.eventsAt = now;
+            changed = true;
+        }
+        if (changed) {
+            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+                const i = y * w + x, p = G.pass[i];
+                let a = 0, dg = 0;
+                if (p) for (let k = 0; k < 4; k++) {
+                    const x2 = x + DX8[k], y2 = y + DY8[k], j = y2 * w + x2;
+                    if (!(p & SB8[k]) || x2 < 0 || y2 < 0 || x2 >= w || y2 >= h || !(G.pass[j] & SB8[3 - k]) || G.ev[j]) continue;   // (3 - k: the side it comes in by)
+                    dg |= SB8[k];
+                    if (!G.bld[j]) a |= SB8[k];
+                }
+                G.s4a[i] = a;
+                G.s4d[i] = dg;
+            }
+        }
+        return G;
+    }
+    // one step from (x, y) the straight way d, as the grid sees it (Game_Character.canPass); animal: see pgrid
+    function gridStep(G, x, y, d, animal) {
+        return x >= 0 && y >= 0 && x < G.w && y < G.h && ((animal ? G.s4a : G.s4d)[y * G.w + x] & PBIT[d]) !== 0;
+    }
+    // any of the 8 ways: a slant only when both straight ways round its corner go as well (no cutting past a tree's corner)
+    function gridStep8(G, x, y, d, animal) {
+        const diag = DIAGONAL[d];
+        if (!diag) return gridStep(G, x, y, d, animal);
+        const [hd, vd] = diag, [sx, sy] = STEP[d];
+        return gridStep(G, x, y, hd, animal) && gridStep(G, x, y, vd, animal) && gridStep(G, x + sx, y, vd, animal) && gridStep(G, x, y + sy, hd, animal);
+    }
+    // a tile it may stand on
+    const gridOpen = (G, x, y, animal) => x >= 0 && y >= 0 && x < G.w && y < G.h && G.pass[y * G.w + x] !== 0 && !G.ev[y * G.w + x] && !(animal && G.bld[y * G.w + x]);
+    // the 8-way steps of the straight line from tile (x0, y0) to (x1, y1) (Bresenham): does every one of them go? The last one (into
+    // the hero's tile: he stands there) is not asked unless toEnd
+    function clearLine(G, x0, y0, x1, y1, animal, toEnd) {
+        const dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0), sx = Math.sign(x1 - x0), sy = Math.sign(y1 - y0);
+        let x = x0, y = y0, err = dx - dy;
+        while (x !== x1 || y !== y1) {
+            const e2 = 2 * err;
+            let mx = 0, my = 0;
+            if (e2 > -dy) { err -= dy; mx = sx; }
+            if (e2 < dx) { err += dx; my = sy; }
+            const last = x + mx === x1 && y + my === y1;
+            if ((!last || toEnd) && !gridStep8(G, x, y, VEC_DIR[mx + "," + my], animal)) return false;
+            x += mx;
+            y += my;
+        }
+        return true;
+    }
+    // the first step of that line (numpad; 0 when it is there)
+    function lineDir(x0, y0, x1, y1) {
+        const dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0), e2 = 2 * (dx - dy);
+        return VEC_DIR[(e2 > -dy ? Math.sign(x1 - x0) : 0) + "," + (e2 < dx ? Math.sign(y1 - y0) : 0)] || 0;
+    }
+    // the straight 8-way line (vx, vy) from (x, y): its next n steps all go
+    function rayClear(G, x, y, vx, vy, n, animal) {
+        const d = VEC_DIR[vx + "," + vy];
+        for (let k = 0; k < n; k++) {
+            if (!d || !gridStep8(G, x, y, d, animal)) return false;
+            x += vx;
+            y += vy;
+        }
+        return true;
+    }
+    // the search's buffers, kept from one search to the next (a stamp tells this search's marks from the old ones)
+    let pCost = null, pFrom = null, pSeen = null, pClosed = null, pHeapI = null, pHeapF = null, pStamp = 0, pHeapN = 0;
+    function pathBuffers(n) {
+        if (pCost && pCost.length >= n) return;
+        pCost = new Float32Array(n); pFrom = new Int32Array(n); pSeen = new Int32Array(n); pClosed = new Int32Array(n);
+        pHeapI = new Int32Array(n * 8 + 8); pHeapF = new Float32Array(n * 8 + 8); pStamp = 0;
+    }
+    function heapPush(i, f) {
+        let k = pHeapN++;
+        while (k > 0) {
+            const p = (k - 1) >> 1;
+            if (pHeapF[p] <= f) break;
+            pHeapI[k] = pHeapI[p]; pHeapF[k] = pHeapF[p]; k = p;
+        }
+        pHeapI[k] = i; pHeapF[k] = f;
+    }
+    function heapPop() {
+        const top = pHeapI[0], n = --pHeapN, li = pHeapI[n], lf = pHeapF[n];
+        let k = 0;
+        for (;;) {
+            let c = 2 * k + 1;
+            if (c >= n) break;
+            if (c + 1 < n && pHeapF[c + 1] < pHeapF[c]) c++;
+            if (pHeapF[c] >= lf) break;
+            pHeapI[k] = pHeapI[c]; pHeapF[k] = pHeapF[c]; k = c;
+        }
+        pHeapI[k] = li; pHeapF[k] = lf;
+        return top;
+    }
+    // A* from tile (sx, sy) towards (tx, ty). opts: animal (see gridStep), near (tiles: that close to (tx, ty) will do - "beside"),
+    // goal(x, y) (any tile it likes will do, the nearest one: then (tx, ty) is not aimed at), avoid (tile indices to keep off),
+    // nodes (the cap). Returns { path: tile indices, the first step first, reached } - when the goal cannot be reached (or not within
+    // the cap), the way to the tile nearest to (tx, ty) it found
+    function search8(G, sx, sy, tx, ty, opts) {
+        const w = G.w, animal = !!opts.animal, near = opts.near || 0, goal = opts.goal || null, avoid = opts.avoid || null, cap = opts.nodes || PATH.nodes;
+        pathBuffers(w * G.h);
+        if (++pStamp > 2e9) { pSeen.fill(0); pClosed.fill(0); pStamp = 1; }
+        const oct = (x, y) => { const ax = Math.abs(x - tx), ay = Math.abs(y - ty); return Math.max(ax, ay) + 0.4142 * Math.min(ax, ay); };
+        const hOf = goal ? () => 0 : (x, y) => Math.max(0, oct(x, y) - near);
+        const isGoal = goal || ((x, y) => (near > 0 ? Math.hypot(x - tx, y - ty) <= near + 1e-6 : x === tx && y === ty));
+        const start = sy * w + sx;
+        pHeapN = 0;
+        pCost[start] = 0; pFrom[start] = -1; pSeen[start] = pStamp;
+        heapPush(start, hOf(sx, sy));
+        const S4 = animal ? G.s4a : G.s4d;   // (gridStep8 by the bits: the straight steps of the tile, and of the two beside a slant)
+        let best = start, bestD = oct(sx, sy), found = -1, count = 0;
+        while (pHeapN > 0 && count < cap) {
+            const i = heapPop();
+            if (pClosed[i] === pStamp) continue;
+            pClosed[i] = pStamp;
+            count++;
+            const x = i % w, y = (i - x) / w, m = S4[i];
+            if (isGoal(x, y)) { found = i; break; }
+            const dd = oct(x, y);
+            if (dd < bestD) { bestD = dd; best = i; }
+            for (let k = 0; k < 8; k++) {
+                const ox = DX8[k], oy = DY8[k];
+                if (k < 4) { if (!(m & SB8[k])) continue; }
+                else {
+                    const hb = ox < 0 ? 2 : 4, vb = oy < 0 ? 8 : 1;
+                    if (!(m & hb) || !(m & vb) || !(S4[i + ox] & vb) || !(S4[i + oy * w] & hb)) continue;
+                }
+                const j = i + oy * w + ox;
+                if (pClosed[j] === pStamp || (avoid && avoid.includes(j))) continue;
+                const g = pCost[i] + (k < 4 ? 1 : 1.4142);
+                if (pSeen[j] === pStamp && g >= pCost[j]) continue;
+                pSeen[j] = pStamp; pCost[j] = g; pFrom[j] = i;
+                heapPush(j, g + hOf(x + ox, y + oy));
+            }
+        }
+        const end = found >= 0 ? found : best, path = [];
+        for (let i = end; i !== start; i = pFrom[i]) path.push(i);
+        path.reverse();
+        return { path, reached: found >= 0 };
+    }
+    // the searches of this frame (PATH.perFrame at most): true when one more may run
+    let pFrame = -1, pSearches = 0;
+    function searchBudget() {
+        if (pFrame !== Graphics.frameCount) { pFrame = Graphics.frameCount; pSearches = 0; }
+        if (pSearches >= PATH.perFrame) return false;
+        pSearches++;
+        return true;
+    }
+    // no search this frame: the open way (of 8) that ends nearest to the target, when nearer than here
+    function greedyDir(G, x, y, tx, ty, animal) {
+        let best = 0, bestD = Math.hypot(tx - x, ty - y) - 0.01;
+        for (const d of DIRS8) {
+            if (!gridStep8(G, x, y, d, animal)) continue;
+            const [ox, oy] = STEP[d], nd = Math.hypot(tx - x - ox, ty - y - oy);
+            if (nd < bestD) { bestD = nd; best = d; }
+        }
+        return best;
+    }
+    // tiles an actor keeps off a while (a step that did not go, a way it got nowhere on): actor._avoid = [{ i, until }]
+    function avoidTile(actor, x, y, frames) {
+        const G = pathGrid();
+        if (x < 0 || y < 0 || x >= G.w || y >= G.h) return;
+        const now = Graphics.frameCount, i = y * G.w + x;
+        actor._avoid = (actor._avoid || []).filter(a => a.until > now && a.i !== i).concat([{ i, until: now + (frames || 90) }]).slice(-6);
+        actor._p8 = null;
+    }
+    function avoidList(actor) {
+        const now = Graphics.frameCount, list = (actor._avoid || []).filter(a => a.until > now).map(a => a.i);
+        return list.length ? list : null;
+    }
+    // The next of the 8 ways (numpad; 0: nowhere nearer to go) from the actor's tile towards (tx, ty), along a path it keeps for
+    // PATH.keep frames while it stands on it and the next step still goes. opts: as search8, plus key (what the walk is for).
+    // Returns { dir, reached, to: the tile the path ends at, steps: how many steps it still is, greedy: no search this frame (the greedy
+    // step) }
+    function path8(actor, tx, ty, opts) {
+        opts = opts || {};
+        const G = pathGrid(), w = G.w, now = Graphics.frameCount, here = actor._y * w + actor._x, animal = !!opts.animal;
+        const key = (opts.key || "") + ":" + tx + "," + ty + ":" + (opts.near || 0), P = actor._p8;
+        const dirTo = i => { const nx = i % w, ny = (i - nx) / w; return VEC_DIR[(nx - actor._x) + "," + (ny - actor._y)] || 0; };
+        if (P && P.key === key && P.map === G.mapId && now - P.t <= (opts.keep || PATH.keep)) {
+            const at = P.start === here ? 0 : P.path.indexOf(here) + 1;
+            if (at > 0 || P.start === here) {
+                if (at >= P.path.length) return { dir: 0, reached: P.reached, to: P.to, steps: 0 };
+                const d = dirTo(P.path[at]);
+                if (d && gridStep8(G, actor._x, actor._y, d, animal)) return { dir: d, reached: P.reached, to: P.to, steps: P.path.length - at };
+            }
+        }
+        if (!searchBudget()) return { dir: greedyDir(G, actor._x, actor._y, tx, ty, animal), reached: false, greedy: true, to: { x: tx, y: ty } };
+        const res = search8(G, actor._x, actor._y, tx, ty, Object.assign({}, opts, { avoid: avoidList(actor) }));
+        const last = res.path.length ? res.path[res.path.length - 1] : here, to = { x: last % w, y: Math.floor(last / w) };
+        actor._p8 = { key, map: G.mapId, t: now, start: here, path: res.path, reached: res.reached, to };
+        return { dir: res.path.length ? dirTo(res.path[0]) : 0, reached: res.reached, to, steps: res.path.length };
+    }
+    // the actor takes that step (numpad) when it still goes (the grid may be some frames old); when not, that tile is kept off a
+    // moment and false
+    function takeStep(actor, d) {
+        if (!d) return false;
+        if (roamingCanStep(actor, actor._x, actor._y, d)) { roamingStep(actor, d); return true; }
+        const [ox, oy] = STEP[d];
+        avoidTile(actor, actor._x + ox, actor._y + oy, 60);
+        return false;
+    }
+    // A purposeful walk (a chase, a way round, a place on the ring, a flight, a walk to a place): stalled() is true once it has gone
+    // STUCK.frames (longer for a slow walker) with its score (lower = better: the distance to its goal, or minus the distance from
+    // what it runs from) not getting STUCK.gain better and without setting foot on a tile new to this walk - to and fro between two
+    // tiles is no progress. key: what the walk is for; (gx, gy): its goal - a new key, or the goal moved off by more than
+    // STUCK.drift tiles, starts a new watch; arrived: a score that means it is there (no progress wanted); unstick: the frames between
+    // two looks whether it stands where it cannot take a step at all (Game_Animal.unstick)
+    const STUCK = { frames: 45, gain: 0.5, seen: 24, gap: 60, drift: 3, unstick: 20 };
+    function stalled(actor, key, score, arrived, gx, gy) {
+        const now = Graphics.frameCount, tile = actor._y * 100000 + actor._x, perTile = 1 / Math.max(0.005, actor.distancePerFrame());
+        gx = gx || 0;
+        gy = gy || 0;
+        let w = actor._stall;
+        if (!w || w.key !== key || now - w.last > Math.max(STUCK.gap, perTile * 1.5) || Math.abs(w.gx - gx) + Math.abs(w.gy - gy) > STUCK.drift) {
+            w = actor._stall = { key, gx, gy, best: score, t: now, seen: [tile], last: now };
+        }
+        w.last = now;
+        if (score < w.best - STUCK.gain || (arrived !== undefined && score <= arrived)) { w.best = Math.min(w.best, score); w.t = now; }
+        if (!w.seen.includes(tile)) { w.seen.push(tile); if (w.seen.length > STUCK.seen) w.seen.shift(); w.t = now; }
+        if (now - w.t <= Math.max(STUCK.frames, perTile * 1.6)) return false;
+        w.t = now;   // (said once: the walker does something about it, and the watch goes on)
+        return true;
+    }
+    // the way to a place near him that goes a long way round (round a whole wall, out along the map's edge and back): not worth it
+    const detour = (steps, x0, y0, x1, y1) => steps > 2 * Math.hypot(x1 - x0, y1 - y0) + 6;
+    // How far each tile near the hero is from him on foot (for a wild animal; tiles further than `reach` steps are Infinity): a search
+    // out from the tiles round him (his own may be no floor - he can stand half on a wall), kept while he stays on his tile, for some
+    // frames. A place "round him" across a wall, out on the map's edge behind it, is far from him on foot.
+    const heroFieldCache = { key: "", t: -1e9, dist: null };
+    function heroField(reach) {
+        const G = pathGrid(), hx = $gamePlayer.x, hy = $gamePlayer.y, now = Graphics.frameCount, key = G.mapId + ":" + hx + "," + hy + ":" + reach;
+        const F = heroFieldCache;
+        if (F.key === key && now - F.t < 30 && now >= F.t && F.dist && F.dist.length === G.w * G.h) return F.dist;
+        const n = G.w * G.h, dist = F.dist && F.dist.length === n ? F.dist : new Float32Array(n), S4 = G.s4a, open = [];
+        dist.fill(Infinity);
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+            const x = hx + dx, y = hy + dy;
+            if (!gridOpen(G, x, y, true)) continue;
+            dist[y * G.w + x] = Math.hypot(dx, dy);
+            open.push(y * G.w + x);
+        }
+        while (open.length) {   // (a small field: a plain list, the nearest taken each time)
+            let k = 0;
+            for (let j = 1; j < open.length; j++) if (dist[open[j]] < dist[open[k]]) k = j;
+            const i = open[k], x = i % G.w, y = (i - x) / G.w, m = S4[i];
+            open[k] = open[open.length - 1];
+            open.pop();
+            for (let s = 0; s < 8; s++) {
+                const ox = DX8[s], oy = DY8[s];
+                if (s < 4) { if (!(m & SB8[s])) continue; }
+                else { const hb = ox < 0 ? 2 : 4, vb = oy < 0 ? 8 : 1; if (!(m & hb) || !(m & vb) || !(S4[i + ox] & vb) || !(S4[i + oy * G.w] & hb)) continue; }
+                const j = i + oy * G.w + ox, c = dist[i] + (s < 4 ? 1 : 1.4142);
+                if (c >= dist[j] || c > reach) continue;
+                if (dist[j] === Infinity) open.push(j);
+                dist[j] = c;
+            }
+        }
+        F.key = key;
+        F.t = now;
+        F.dist = dist;
+        return dist;
+    }
+    // stalled: the next tile of its path is kept off a while, and the way is searched again
+    function unstall(actor, frames) {
+        const P = actor._p8, G = pathGrid();
+        if (P && P.map === G.mapId && P.path.length) {
+            const here = actor._y * G.w + actor._x, at = Math.min(P.path.length - 1, P.start === here ? 0 : P.path.indexOf(here) + 1), next = P.path[at];
+            avoidTile(actor, next % G.w, Math.floor(next / G.w), frames || 90);
+        }
+        actor._p8 = null;
+    }
+    // a far spot to run to, away from (fx, fy): one of the points by the map's edge (the corners, the middles of the sides) - far from
+    // it and not far for the runner, on the side away from it; not `tried`
+    function escapeSpot(actor, fx, fy, tried) {
+        const w = $gameMap.width(), h = $gameMap.height(), spots = [];
+        for (const kx of [0, 0.5, 1]) for (const ky of [0, 0.5, 1]) {
+            if (kx === 0.5 && ky === 0.5) continue;
+            spots.push({ x: Math.round(EDGE + kx * (w - 1 - 2 * EDGE)), y: Math.round(EDGE + ky * (h - 1 - 2 * EDGE)) });
+        }
+        const score = q => Math.hypot(q.x - fx, q.y - fy) - 0.6 * Math.hypot(q.x - actor._x, q.y - actor._y)   // far from it, not far for the runner
+            + (((q.x - actor._x) * (actor._x - fx) + (q.y - actor._y) * (actor._y - fy)) > 0 ? 6 : 0);          // on the side away from it
+        return spots.filter(q => !tried || q.x !== tried.x || q.y !== tried.y).sort((a, b) => score(b) - score(a))[0];
+    }
 
     // ------------------------------------------------------------------
     // Sneaking (C switches it on and off): slower, never running, a crouched walk (its own sheet), quieter steps
@@ -416,6 +752,7 @@
         this._sniff = 0;         // frames it still sniffs at a snare before it steps in (or not) - see lure()
         this._lureSnare = null;
         this._lureCd = 0;        // frames it keeps away from snares after a fright at one
+        this._unstickT = Math.floor(Math.random() * STUCK.unstick);   // (see unstick; not all on the same frame)
         this.setImage(sp.sheet, 0);
         this.setPosition(x, y);
         this.setDirection([2, 4, 6, 8][Math.floor(Math.random() * 4)]);
@@ -455,6 +792,20 @@
         this.setMovementSuccess(true);
     };
     Game_Animal.prototype.kind = function() { return this._kind; };
+    // on a tile it cannot step off at all (born in a berry bush, a bush grown or a building put up round it, a wall): out onto the
+    // nearest open tile it can walk on from (the dog does the same, Dog.js)
+    Game_Animal.prototype.unstick = function() {
+        if ([2, 4, 6, 8].some(d => roamingCanStep(this, this._x, this._y, d))) return false;
+        const G = pathGrid();
+        for (let r = 1; r <= 4; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+            const x = this._x + dx, y = this._y + dy;
+            if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || !gridOpen(G, x, y, true) || !G.s4a[y * G.w + x]) continue;
+            this.locate(x, y);
+            this._p8 = null;
+            return true;
+        }
+        return false;
+    };
     Game_Animal.prototype.centerX = function() { return this._realX + 0.5; };
     Game_Animal.prototype.centerY = function() { return this._realY + 0.5; };
     // it does not count as an "event" for Farming.js etc.
@@ -465,14 +816,16 @@
         if (this._alarm > 0) this._alarm--;
         if (this._lureCd > 0) this._lureCd--;
         if (this._flashT > 0) this._flashT--;
+        if (this._scare && --this._scare.t <= 0) this._scare = null;
         if (++this._poiseT > 120 && this._poise < this._maxPoise) this._poise = Math.min(this._maxPoise, this._poise + this._maxPoise / 90);
         if (!this._dead) updateAwareness(this, this.centerX(), this.centerY(), SPECIES[this._kind].sight);
         const sprite = this._sprite;   // (its height only once the sheet has loaded)
-        const calm = this._mode === "roam" || this._mode === "warn" || this._mode === "windup";   // (no mark while a boar charges, backs off or reels)
+        const calm = this._mode === "roam" || this._mode === "warn" || this._mode === "windup" || this._mode === "approach";   // (no mark while a boar charges, backs off or reels)
         const markY = SPECIES[this._kind].markY, windup = this._mode === "windup";
         if (sprite && sprite.bitmap && sprite.bitmap.isReady()) updateMark(this, sprite, markY !== undefined ? markY : -sprite.patternHeight() - 2, this._fleeing || !calm || this._stun > 0 ? 0 : windup ? 1 : this._aware);
         if (this._frozen || this._dead) return;
         if (this._stun > 0) { if (--this._stun === 0) this.afterStun(); return; }
+        if (++this._unstickT >= STUCK.unstick && !this.isMoving() && !this.isJumping()) { this._unstickT = 0; this.unstick(); }
         if (SPECIES[this._kind].pack) { this.updateWolf(); return; }
         if (SPECIES[this._kind].aggressive) { this.updateBoar(); return; }
         if (this.isMoving()) return;
@@ -481,20 +834,39 @@
 
     Game_Animal.prototype.think = function() {
         const sp = SPECIES[this._kind];
-        const dx = this._realX - $gamePlayer._realX, dy = this._realY - $gamePlayer._realY;
+        const from = this._scare || null;   // (a dog after it, Dog.js: it runs from the dog, not from the hero)
+        const dx = this._realX - (from ? from.x : $gamePlayer._realX), dy = this._realY - (from ? from.y : $gamePlayer._realY);
         const dist = Math.hypot(dx, dy);
-        if (this._aware >= 1 || this._wounded || this._alarm > 0) this._fleeing = true;
+        if (from) this._fleeing = true;
+        else if (this._aware >= 1 || this._wounded || this._alarm > 0) this._fleeing = true;
         else if (this._aware < 0.3 && dist > sp.sight * 1.2) this._fleeing = false;
         if ((this._aware >= 0.3 || this._fleeing) && this._sniff > 0) { this._sniff = 0; this._lureSnare = null; }   // disturbed at the snare
         if (this._aware >= 0.3 && !this._fleeing) { this.turnTowardCharacter($gamePlayer); return; }   // it stops and looks
         if (this._fleeing) {
             this.setMoveSpeed(sp.flee);
+            if (this.fleeRoute(dx, dy, dist)) return;
             const d = this.bestEscape(dx, dy);
             if (d) roamingStep(this, d);
             return;
         }
         if (this.lure()) return;
         this.wander();
+    };
+    // running from something and getting nowhere (a wall, a building, a thicket in the way: no ground won for a while, or to and fro):
+    // it takes the way round (path8) to a far spot away from it, until it is well away or has run a while. (dx, dy): from the threat
+    // to it; true while it runs that way
+    Game_Animal.prototype.fleeRoute = function(dx, dy, dist) {
+        const now = Graphics.frameCount, fx = Math.round(this._realX - dx), fy = Math.round(this._realY - dy);
+        let R = this._route;
+        if (R && (now > R.until || dist > SPECIES[this._kind].sight * 1.4 || (this._x === R.x && this._y === R.y))) R = this._route = null;
+        if (!R) {
+            if (!stalled(this, "flee", -dist)) return false;
+            R = this._route = Object.assign({}, escapeSpot(this, fx, fy, null), { until: now + 240 });
+        }
+        const r = path8(this, R.x, R.y, { animal: true, key: "route" });
+        if (!takeStep(this, r.dir) && !r.dir) { this._route = null; return false; }   // (nowhere to go from here that way: the plain flight)
+        if (stalled(this, "route", Math.hypot(this._x - R.x, this._y - R.y), 1, R.x, R.y)) this._route = Object.assign({}, escapeSpot(this, fx, fy, R), { until: now + 240 });
+        return true;
     };
 
     // Snares (Farming.js, buildings with `lure`): only bait draws a rabbit - a calm one smells it from lure.radius tiles and hops up
@@ -538,7 +910,8 @@
             const [sx, sy] = STEP[d], nd = Math.hypot(s.cell.x - (this._x + sx), s.cell.y - (this._y + sy));
             if (nd < bestDist) { bestDist = nd; best = d; }
         }
-        if (!best) return false;   // nothing gets it nearer: it just wanders
+        if (!best) best = path8(this, s.cell.x, s.cell.y, { animal: true, key: "lure", near: 1.5 }).dir;   // (nothing nearer straight on: the way round)
+        if (!best || !roamingCanStep(this, this._x, this._y, best)) return false;   // no way to it: it just wanders
         roamingStep(this, best);
         this._wait = LURE.hop[0] + Math.floor(Math.random() * (LURE.hop[1] - LURE.hop[0]));
         return true;
@@ -604,12 +977,39 @@
         if (dirs.length > 0 && Math.random() < 0.7) roamingStep(this, dirs[Math.floor(Math.random() * dirs.length)]);
         this._wait = 50 + Math.floor(Math.random() * 150);
     };
-    // one step straight at the player, on a slant when he is off to the side (the boar's charge)
-    Game_Animal.prototype.stepToward = function(target) {
-        const sx = Math.sign(target.x - this._x), sy = Math.sign(target.y - this._y);
-        const d = { "-1,1": 1, "1,1": 3, "-1,-1": 7, "1,-1": 9 }[sx + "," + sy];
-        if (d && roamingCanStep(this, this._x, this._y, d)) { roamingStep(this, d); return; }
-        this.moveTowardCharacter(target);
+    // a clear straight run at the hero's tile: nothing in between (a tree, a bush, a rock, a building, a wall) - the boar's charge,
+    // a wolf's leap
+    Game_Animal.prototype.clearRun = function() {
+        return clearLine(pathGrid(), this._x, this._y, $gamePlayer.x, $gamePlayer.y, true);
+    };
+    // a tile lo-hi tiles from the hero with a clear run at him, the nearest one to walk to (one search from the animal to any of
+    // them); kept while he stays about where he was; null when there is none it can get to, undefined when no search may run this
+    // frame. near: only places it gets to without a long way round (detour)
+    Game_Animal.prototype.runSpot = function(lo, hi, near) {
+        const G = pathGrid(), px = $gamePlayer.x, py = $gamePlayer.y, now = Graphics.frameCount, S = this._spot;
+        const bad = (this._badSpots || []).filter(b => b.until > now).map(b => b.i);
+        const same = q => q && q.lo === lo && Math.abs(q.px - px) + Math.abs(q.py - py) <= 1;
+        if (same(S) && now - S.t < 120 && !bad.includes(S.y * G.w + S.x) && clearLine(G, S.x, S.y, px, py, true)) return S;
+        if (same(this._noSpot) && now - this._noSpot.t < 30) return null;   // (none a moment ago: not every frame again)
+        if (!searchBudget()) return same(S) ? S : undefined;
+        this._spot = null;
+        const ok = new Set(), R = Math.ceil(hi);
+        for (let y = py - R; y <= py + R; y++) for (let x = px - R; x <= px + R; x++) {
+            const r = Math.hypot(x - px, y - py);
+            if (r < lo || r > hi || !gridOpen(G, x, y, true) || bad.includes(y * G.w + x)) continue;
+            if (clearLine(G, x, y, px, py, true)) ok.add(y * G.w + x);
+        }
+        const sx = this._x, sy = this._y, goal = near ? (x, y) => ok.has(y * G.w + x) && !detour(pCost[y * G.w + x], sx, sy, x, y) : (x, y) => ok.has(y * G.w + x);
+        const res = ok.size ? search8(G, sx, sy, px, py, { animal: true, goal, avoid: avoidList(this) }) : null;
+        if (!res || !res.reached) { this._noSpot = { lo, px, py, t: now }; return null; }
+        const end = res.path.length ? res.path[res.path.length - 1] : this._y * G.w + this._x;
+        return (this._spot = { x: end % G.w, y: Math.floor(end / G.w), px, py, lo, t: now });
+    };
+    // that place was no good (it got nowhere on the way): not again for a while
+    Game_Animal.prototype.badSpot = function(s) {
+        const now = Graphics.frameCount, G = pathGrid();
+        this._badSpots = (this._badSpots || []).filter(b => b.until > now).concat([{ i: s.y * G.w + s.x, until: now + 300 }]).slice(-8);
+        this._spot = null;
     };
 
     // ------------------------------------------------------------------
@@ -618,6 +1018,10 @@
     // it reaches him it knocks him about (gore) and backs off for a while (retreat), then it may come again. When it misses (a
     // roll, a step aside) it runs BOAR.overshoot tiles past him (overshoot), stops and stands panting (recover), then turns and
     // warns again. A spear jab stops a charge: it reels back (stagger). Badly hurt it runs away for good (flee).
+    // With something between them (a tree, a bush, a rock, a building) it does not stand and does not run into it: it trots round
+    // (approach, path8) to a place BOAR.lane tiles from him with a clear run, and warns and charges from there; on its way it goes
+    // round what stands in it. Running flat out (the locked line, the run past him) into a tree, a rock, a building or a wall, it
+    // hits it and stands stunned (bash) - luring it into a pine is a way to fight it.
     // ------------------------------------------------------------------
     Game_Animal.prototype.setMode = function(mode, frames) {
         const sp = SPECIES[this._kind], running = mode === "charge" || mode === "retreat" || mode === "flee" || mode === "overshoot" || mode === "lunge";
@@ -625,10 +1029,10 @@
         this._modeT = frames || 0;
         this._fleeing = mode === "flee";
         this._commit = null;
-        const sheet = mode === "stalk" && sp.stalk ? sp.stalk : mode === "windup" && sp.bark ? sp.bark : running && sp.run ? sp.run : sp.sheet;
+        const sheet = (mode === "stalk" || mode === "close") && sp.stalk ? sp.stalk : mode === "windup" && sp.bark ? sp.bark : running && sp.run ? sp.run : sp.sheet;
         if (this.characterName() !== sheet) this.setImage(sheet, 0);
         this.setStepAnime(mode === "windup");   // (the bark plays standing still)
-        this.setMoveSpeed(mode === "charge" || mode === "overshoot" ? sp.charge : running ? sp.flee : sp.speed);
+        this.setMoveSpeed(mode === "charge" || mode === "overshoot" ? sp.charge : running ? sp.flee : mode === "approach" && sp.trot ? sp.trot : sp.speed);
     };
     // its balance is back after reeling: a boar snorts and comes again, a wolf goes back to the ring
     Game_Animal.prototype.afterStun = function() {
@@ -642,7 +1046,7 @@
         this._poise = 0;
         knockBack(this);
         if (this._pack && this._pack.attacker === this) { this._pack.attacker = null; this._pack.nextAttack = 90; }
-        if (this._mode === "charge" || this._mode === "lunge" || this._mode === "windup") this.setMode(SPECIES[this._kind].pack ? "stalk" : "warn", 0);
+        if (ATTACKING[this._mode]) this.setMode(SPECIES[this._kind].pack ? "stalk" : "warn", 0);
     };
     // a hurt deer or rabbit limps: slower, the more of its life is gone (user) - a bit at first (0.25 of a speed step, ~20%),
     // about a third slower near the end; the boar and the wolves fight on at full speed
@@ -667,11 +1071,12 @@
     Game_Animal.prototype.thinkBoar = function(dist) {
         const sp = SPECIES[this._kind], dx = this._realX - $gamePlayer._realX, dy = this._realY - $gamePlayer._realY;
         if (this._hp <= this._maxHp * 0.15 && this._mode !== "flee") this.setMode("flee");
-        if (this._mode === "overshoot") {   // it missed him: it runs on along its line, well past him, then stops
+        if (this._mode === "overshoot") {   // it missed him: it runs on along its line, well past him, then stops - or into what stands there
             const [cx, cy] = this._line || DIR_VEC[this.direction()], len = Math.hypot(cx, cy) || 1;
             const past = -(($gamePlayer._realX - this._realX) * cx + ($gamePlayer._realY - this._realY) * cy) / len;
             const d = VEC_DIR[cx + "," + cy];
-            if (this._modeT <= 0 || past >= BOAR.overshoot || !d || !roamingCanStep(this, this._x, this._y, d)) { this.startRecover(); return; }
+            if (this._modeT <= 0 || past >= BOAR.overshoot || !d) { this.startRecover(); return; }
+            if (!roamingCanStep(this, this._x, this._y, d)) { this.bash(d); return; }   // flat out into a tree, a rock, a building, a wall
             roamingStep(this, d);
             return;
         }
@@ -686,6 +1091,7 @@
             // back before dawn). Running on from him step by step it only dithered left and right against a wall or a building.
             if (this._mode === "flee" && dist > sp.sight) { this.limpAway(); return; }
             this._fleeTo = null;
+            if (this.fleeRoute(dx, dy, dist)) return;
             const d = this.bestEscape(dx, dy);
             if (d) roamingStep(this, d);
             return;
@@ -698,16 +1104,30 @@
             this.turnTowardCharacter($gamePlayer);
             this._aware = 1;
             if (dist > sp.sight * 1.6) { this.setMode("roam"); this._aware = 0.5; return; }   // he got away: it calms down
+            if (dist > 1.6 && !this.clearRun()) { this.setMode("approach"); return; }   // something in between: round it first (not into it)
             if (this._modeT <= 0) { this.setMode("charge", BOAR.charge); snort(this, 70); }
+            return;
+        }
+        if (this._mode === "approach") {   // trotting round what stands between them, to a place with a clear run at him
+            this._aware = 1;
+            if (dist > sp.sight * 1.6) { this.setMode("roam"); this._aware = 0.5; return; }
+            if (dist <= BOAR.lane[1] + 0.6 && this.clearRun()) { this.setMode("warn", BOAR.laneWarn); this.turnTowardCharacter($gamePlayer); snort(this, 90); return; }
+            const spot = this.runSpot(BOAR.lane[0], BOAR.lane[1]), g = spot || { x: $gamePlayer.x, y: $gamePlayer.y };
+            if (spot === undefined) return;   // (no search this frame: the next one)
+            const r = path8(this, g.x, g.y, { animal: true, key: "lane", near: spot ? 0 : 1 });
+            if (!takeStep(this, r.dir)) this.turnTowardCharacter($gamePlayer);
+            if (stalled(this, "lane", Math.hypot(this._x - g.x, this._y - g.y), 0.5, g.x, g.y)) { if (spot) this.badSpot(spot); unstall(this); }   // (to and fro, or no nearer: another place)
             return;
         }
         if (this._mode === "charge") {
             if (this._modeT <= 0 || dist > sp.sight * 2) { this.setMode("retreat", BOAR.retreat[0] + Math.floor(Math.random() * (BOAR.retreat[1] - BOAR.retreat[0]))); return; }
-            // the last BOAR.commit tiles it runs straight on, no more turning after him (a roll to the side lets it go past)
+            const G = pathGrid(), px = $gamePlayer.x, py = $gamePlayer.y;
+            // the last BOAR.commit tiles it runs straight on, no more turning after him (a roll to the side lets it go past) - only on a
+            // clear line: it does not lock itself onto a tree
             if (!this._commit && dist < BOAR.commit) {
                 const dx = $gamePlayer._realX - this._x, dy = $gamePlayer._realY - this._y, k = Math.round(Math.atan2(dy, dx) / (Math.PI / 4));
                 const vx = Math.round(Math.cos(k * Math.PI / 4)), vy = Math.round(Math.sin(k * Math.PI / 4));
-                if (Math.abs(dx * vy - dy * vx) / Math.hypot(vx, vy) < 0.6 || dist < 2.6) {   // (he is on one of its eight lines)
+                if ((Math.abs(dx * vy - dy * vx) / Math.hypot(vx, vy) < 0.6 || dist < 2.6) && rayClear(G, this._x, this._y, vx, vy, Math.max(0, Math.round(dist) - 1), true)) {   // (he is on one of its eight lines)
                     this._commit = [vx, vy];
                     this.setMoveSpeed(sp.charge + BOAR.rush);   // the last stretch: flat out
                 }
@@ -715,13 +1135,17 @@
             if (this._commit) {
                 const [cx, cy] = this._commit, ahead = ($gamePlayer._realX - this._realX) * cx + ($gamePlayer._realY - this._realY) * cy;
                 const d = VEC_DIR[cx + "," + cy];
-                if (!d || !roamingCanStep(this, this._x, this._y, d)) { this.startRecover(); return; }   // it ran into something
+                if (!d) { this.startRecover(); return; }
+                if (!roamingCanStep(this, this._x, this._y, d)) { this.bash(d); return; }   // flat out into something: it hits it
                 if (ahead < -0.6) { this.startOvershoot(); return; }   // gone past him
                 roamingStep(this, d);
                 return;
             }
-            this.stepToward($gamePlayer);
-            if (!this.isMovementSucceeded()) this.turnTowardCharacter($gamePlayer);
+            // on the way: straight at him while the line is clear, round what is in the way when not (path8) - never into it
+            let d = lineDir(this._x, this._y, px, py);
+            if (!d || !clearLine(G, this._x, this._y, px, py, true)) d = path8(this, px, py, { animal: true, key: "charge", near: 1 }).dir;
+            if (!takeStep(this, d)) this.turnTowardCharacter($gamePlayer);
+            if (stalled(this, "charge", dist, 1.2)) { unstall(this); this.setMode("approach"); }   // it gets no nearer: round to a clear run
             return;
         }
         // roaming
@@ -734,8 +1158,8 @@
         if (this._aware >= 0.3) { this.turnTowardCharacter($gamePlayer); return; }   // it stops and looks
         this.wander();
     };
-    // a beaten animal leaving: to one far spot away from the hero (a point by the map's edge), a step slower, round what is in the
-    // way (Game_Character's path search); a new spot when stuck; gone when out of sight or at the edge
+    // a beaten animal leaving: to one far spot away from the hero (a point by the map's edge, escapeSpot), a step slower, round what
+    // is in the way (path8); a new spot when stuck (or going to and fro); gone when out of sight or at the edge
     const EDGE = 2;
     // really on the screen (the engine's isNearTheScreen allows a whole screen more on every side)
     const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < Graphics.width + m && y > -m && y < Graphics.height + 2 * m; };
@@ -744,24 +1168,17 @@
         const w = $gameMap.width(), h = $gameMap.height();
         if (this._x <= EDGE || this._y <= EDGE || this._x >= w - 1 - EDGE || this._y >= h - 1 - EDGE) { tallyGone(this); removeAnimal(this); return; }
         if (!this._fleeTo || (this._fleeStuck || 0) > 6 || (this._x === this._fleeTo.x && this._y === this._fleeTo.y)) {
-            const px = $gamePlayer.x, py = $gamePlayer.y, tried = this._fleeTo;
-            const spots = [];
-            for (const fx of [0, 0.5, 1]) for (const fy of [0, 0.5, 1]) {
-                if (fx === 0.5 && fy === 0.5) continue;
-                spots.push({ x: Math.round(EDGE + fx * (w - 1 - 2 * EDGE)), y: Math.round(EDGE + fy * (h - 1 - 2 * EDGE)) });
-            }
-            const score = q => Math.hypot(q.x - px, q.y - py) - 0.6 * Math.hypot(q.x - this._x, q.y - this._y)   // far from him, not far for it
-                + (((q.x - this._x) * (this._x - px) + (q.y - this._y) * (this._y - py)) > 0 ? 6 : 0);          // on the side away from him
-            this._fleeTo = spots.filter(q => !tried || q.x !== tried.x || q.y !== tried.y).sort((a, b) => score(b) - score(a))[0];
+            this._fleeTo = escapeSpot(this, $gamePlayer.x, $gamePlayer.y, this._fleeTo);
             this._fleeStuck = 0;
         }
         this.setMoveSpeed(SPECIES[this._kind].speed);   // (walking, not running: slower than its flight; slower still looked frozen)
-        const d = this.findDirectionTo(this._fleeTo.x, this._fleeTo.y);
-        if (d > 0 && roamingCanStep(this, this._x, this._y, d)) { roamingStep(this, d); this._fleeStuck = 0; }
+        const to = this._fleeTo, r = path8(this, to.x, to.y, { animal: true, key: "limp" });
+        if (takeStep(this, r.dir)) this._fleeStuck = 0;
         else this._fleeStuck = (this._fleeStuck || 0) + 1;
+        if (stalled(this, "limp", Math.hypot(this._x - to.x, this._y - to.y), 1, to.x, to.y)) this._fleeStuck = 99;   // (no nearer, or to and fro: another spot)
     };
     const VEC_DIR = { "0,1": 2, "-1,0": 4, "1,0": 6, "0,-1": 8, "-1,1": 1, "1,1": 3, "-1,-1": 7, "1,-1": 9 };
-    const DIR_VEC = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
+    const DIR_VEC = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };   // (the slants: the hero's 8-way facing)
     // missed: it keeps its line (the committed one, else the way it faces) and runs on past him
     Game_Animal.prototype.startOvershoot = function() {
         const line = this._commit || DIR_VEC[this.direction()];
@@ -778,6 +1195,25 @@
         this.setMode("recover", BOAR.recover);
         if (window.Combat && Combat.sparksAt) Combat.sparksAt(this.centerX(), this.centerY() + 0.3, "#b79a6a", 10);
         snort(this, 60);
+    };
+    // flat out into a tree, a rock, a building or a wall (its locked charge, its run past him): a thud, dust, what it hit sways, a
+    // jolt, and it stands stunned BOAR.bash frames (the swaying and the stars of Combat.js) - the moment to hit it
+    Game_Animal.prototype.bash = function(d) {
+        const [vx, vy] = DIR_VEC[d] || [0, 0];
+        for (const [ox, oy] of vx && vy ? [[vx, vy], [vx, 0], [0, vy]] : [[vx, vy]]) {   // (on a slant: the tile ahead, else one of the two beside it)
+            const hit = $gameMap.eventsXy(this._x + ox, this._y + oy).filter(e => e.isNormalPriority() && !e.isThrough());
+            if (!hit.length) continue;
+            for (const e of hit) { e._treeKickAt = Graphics.frameCount; e._treeKickDir = vx < 0 ? -1 : 1; }   // (ChoppableTree.js: the tree / the rock shakes)
+            break;
+        }
+        const pan = Math.max(-80, Math.min(80, Math.round((this.centerX() - ($gamePlayer._realX + 0.5)) * 12)));
+        AudioManager.playSe({ name: "Blow1", volume: 90, pitch: 55, pan });
+        AudioManager.playSe({ name: "Damage3", volume: 45, pitch: 50, pan });
+        if (window.Combat && Combat.sparksAt) Combat.sparksAt(this.centerX() + vx * 0.45, this.centerY() + vy * 0.45 - 0.2, "#b79a6a", 16);
+        this.setMode("recover", 0);
+        this._stun = Math.max(this._stun, BOAR.bash);
+        this._bashed = (this._bashed || 0) + 1;
+        if (!this.isJumping()) this.jump(0, 0);
     };
     function snort(animal, pitch) {
         const pan = Math.max(-80, Math.min(80, Math.round((animal.centerX() - ($gamePlayer._realX + 0.5)) * 12)));
@@ -833,12 +1269,14 @@
         if (animal.isJumping()) return;
         if ((bx || by) && animal.canPass(animal._x, animal._y, d)) animal.jump(bx, by); else animal.jump(0, 0);
     }
+    // the modes of an attack under way: a boar's charge, a wolf going round to a clear leap, its bark, its leap
+    const ATTACKING = { charge: true, close: true, windup: true, lunge: true };
     // its balance is gone: it reels (does nothing) for a while; an attack it was about to make is off
     function stagger(animal, knock) {
         animal._stun = SPECIES[animal.kind()].stun || 50;
         animal._poise = 0;
         if (animal._pack && animal._pack.attacker === animal) { animal._pack.attacker = null; animal._pack.nextAttack = 60; }
-        if (animal._mode === "windup" || animal._mode === "lunge" || animal._mode === "charge") animal.setMode(SPECIES[animal.kind()].pack ? "stalk" : "warn", 0);
+        if (ATTACKING[animal._mode]) animal.setMode(SPECIES[animal.kind()].pack ? "stalk" : "warn", 0);
         if (knock) knockBack(animal);
     }
 
@@ -847,7 +1285,9 @@
     // him on a ring (stalk); one at a time comes in: it crouches and barks (windup, a "!"), leaps at him (lunge: a bite if he is
     // still there) and stands a moment after the leap (recover) - the moment to hit it. Hurt badly, or with the leader dead, they run.
     // ------------------------------------------------------------------
-    const WOLF = { ring: 3.2, windup: 38, recover: 44, gap: [60, 140], bite: 0.95, biteFrom: 6, lunge: 3, near: 1.6, engage: 6, lose: 16, flee: 0.25 };   // biteFrom: no bite before that frame of the leap; near: too close to start one
+    // biteFrom: no bite before that frame of the leap; near: too close to start one; pace: frames it stands at its place on the ring
+    // before it paces a little along it; close: the frames the pack's attacker may take to go round to a clear leap
+    const WOLF = { ring: 3.2, windup: 38, recover: 44, gap: [60, 140], bite: 0.95, biteFrom: 6, lunge: 3, near: 1.6, engage: 6, lose: 16, flee: 0.25, pace: 50, close: 240 };
     function makePack(members) {
         const pack = { members, leader: members[0], attacker: null, nextAttack: 90, engaged: false, angle: Math.random() * Math.PI * 2, howled: false, broken: false };
         for (const w of members) { w._pack = pack; w.setMode("roam"); }
@@ -904,6 +1344,16 @@
             if (pack && pack.attacker === this) { pack.attacker = null; pack.nextAttack = WOLF.gap[0] + Math.floor(Math.random() * (WOLF.gap[1] - WOLF.gap[0])); }
             return;
         }
+        // day breaks: the pack stops the hunt and runs off into the forest (gone once out of sight) - the user saw wolves that came
+        // in the night still bite him in the morning (2026-09-26)
+        if (!this._summoned && !activeNow("wolf") && this._mode !== "flee") {
+            if (pack && pack.engaged) disengage(pack);
+            this._engaged = false;
+            this._dawn = true;
+            this.setMode("flee");
+            if (!dawnSaid) { dawnSaid = true; popup(0, "Świta - wilki odchodzą do lasu", "#cfe6a8"); }
+        }
+        if (activeNow("wolf")) dawnSaid = false;
         if (this.isMoving() || this.isJumping()) return;
         this.thinkWolf(dist);
     };
@@ -911,6 +1361,7 @@
         const pack = this._pack, dx = this._realX - $gamePlayer._realX, dy = this._realY - $gamePlayer._realY;
         if (this._mode === "flee") {
             if (dist > WOLF.lose + 2) { removeAnimal(this); return; }   // gone into the dark
+            if (this.fleeRoute(dx, dy, dist)) return;
             const d = this.bestEscape(dx, dy);
             if (d) roamingStep(this, d);
             return;
@@ -920,8 +1371,10 @@
             this.setMode("flee");
             return;
         }
+        if ((this._mode === "windup" || this._mode === "close") && pack && pack.attacker !== this) { this.setMode("stalk"); return; }   // (not its turn any more: one at a time)
         if (this._mode === "windup") {
             this.turnTowardCharacter($gamePlayer);
+            if (!this.clearRun()) { this.callOff(20); return; }   // he stepped behind a tree: no leap into it
             if (this._modeT <= 0) this.leap();
             return;
         }
@@ -934,40 +1387,151 @@
             if (this._aware >= 1 || this._alarm > 0 || this._wounded || dist < WOLF.engage) { wolfEngage(this); return; }
             if (pack && pack.leader !== this && !pack.leader._dead) {   // it keeps near the leader
                 const L = pack.leader;
-                if (Math.hypot(L._x - this._x, L._y - this._y) > 2.2) { this.setMoveSpeed(SPECIES.wolf.speed); this.stepToward(L); return; }
+                if (Math.hypot(L._x - this._x, L._y - this._y) > 2.2) {
+                    this.setMoveSpeed(SPECIES.wolf.speed);
+                    if (takeStep(this, path8(this, L._x, L._y, { animal: true, key: "pack", near: 1.5 }).dir)) return;
+                }
             }
             this.wander();
             return;
         }
-        if (dist > WOLF.lose) { if (pack) disengage(pack); else { this._engaged = false; this.setMode("roam"); } return; }
+        // lost him: only when none of the pack is near him (one left far behind comes back). A straggler past WOLF.lose that called the
+        // hunt off while one beside him called it on again, every frame, froze the whole pack (the 6-day marathon, the map's edge)
+        if (dist > WOLF.lose && (!pack || liveMembers(pack).every(m => m.playerDistance() > WOLF.lose))) { if (pack) disengage(pack); else { this._engaged = false; this.setMode("roam"); } return; }
+        if (this._mode === "close") { this.thinkClose(dist); return; }
         if (this._mode !== "stalk") this.setMode("stalk");
-        // its turn: the stalking wolf nearest to the hero goes, when the pack's pause is over
-        if (pack && !pack.attacker && pack.nextAttack <= 0 && dist < WOLF.ring + 1.8 && dist > WOLF.near) {
-            const next = liveMembers(pack).filter(m => m._mode === "stalk" && m._stun <= 0 && m.playerDistance() > WOLF.near).sort((a, b) => a.playerDistance() - b.playerDistance())[0];
-            if (next === this) {
-                pack.attacker = this;
-                this.setMode("windup", WOLF.windup);
-                this.turnTowardCharacter($gamePlayer);
-                growl(this);
-                return;
+        // its turn, when the pack's pause is over: the stalking wolf nearest to the hero with a clear leap at him (not the one that
+        // went last, if another can: they come from all sides); without a clear leap it first goes round to one (close)
+        if (pack && !pack.attacker && pack.nextAttack <= 0 && pickAttacker(pack) === this) {
+            pack.attacker = this;
+            pack.last = this;
+            if (dist > WOLF.near && dist < WOLF.ring + 1.8 && this.clearRun()) { this.setMode("windup", WOLF.windup); this.turnTowardCharacter($gamePlayer); growl(this); }
+            else this.setMode("close", WOLF.close);
+            return;
+        }
+        // its own place on the ring round the hero (ringSlot), the way round what is in the way (path8). With no place on the ring
+        // it can get to (the map's edge, a wall, a thicket round him): a place near him with a clear run (runSpot), else up to him
+        let slot = this.ringSlot(pack ? liveMembers(pack) : [this], pack ? pack.angle : 0), kind = "ring";
+        if (!slot) {
+            const s = this.runSpot(WOLF.near + 0.4, WOLF.ring + 0.8, true);
+            if (s === undefined) return;   // (no search this frame: the next one)
+            slot = s || { x: $gamePlayer.x, y: $gamePlayer.y };
+            kind = s ? "spot" : "him";
+        }
+        const off = Math.hypot(slot.x - this._realX, slot.y - this._realY), there = kind === "him" ? 1.6 : 0.9;
+        if (off > there) {
+            const r = path8(this, slot.x, slot.y, { animal: true, key: "ring", near: kind === "him" ? 1.5 : 0 });
+            // it cannot get any nearer, or only the long way round: another place
+            if (!r.greedy && ((!r.reached && r.to.x === this._x && r.to.y === this._y) || (r.reached && detour(r.steps, this._x, this._y, slot.x, slot.y)))) this.dropPlace(slot, kind);
+            if (takeStep(this, r.dir)) this._still = 0;
+            else this.turnTowardCharacter($gamePlayer);
+        } else {
+            this.turnTowardCharacter($gamePlayer);
+            // standing there a while it paces a little along the ring (the ring turns slowly: again till it is off); nowhere to pace
+            // to - another place (beside him: a step round him)
+            this._still = (this._still || 0) + 1;
+            if (this._still > WOLF.pace && (kind !== "ring" || !this.paceOn(pack ? pack.angle : 0))) { this._still = 0; this.dropPlace(slot, kind); }
+        }
+        if (stalled(this, "ring", off, there, slot.x, slot.y)) { this.dropPlace(slot, kind); unstall(this); }
+    };
+    // a place it gives up (it cannot get there, only the long way round, or it paces on): not again for a while
+    Game_Animal.prototype.dropPlace = function(slot, kind) {
+        if (kind === "spot") { this.badSpot(slot); return; }
+        if (kind === "him") { this.shuffle(); return; }
+        const G = pathGrid(), now = Graphics.frameCount;
+        this._badSlots = (this._badSlots || []).filter(b => b.until > now).concat([{ i: slot.y * G.w + slot.x, until: now + 300 }]).slice(-12);
+        this._slotBad = true;
+    };
+    // a step to an open tile round the hero, near him (pacing where there is no room for the ring)
+    Game_Animal.prototype.shuffle = function() {
+        const px = $gamePlayer._realX, py = $gamePlayer._realY, G = pathGrid();
+        const dirs = DIRS8.filter(d => { const [ox, oy] = STEP[d], r = Math.hypot(this._x + ox - px, this._y + oy - py); return r >= 0.9 && r <= 3.5 && gridStep8(G, this._x, this._y, d, true); });
+        if (dirs.length) takeStep(this, dirs[Math.floor(Math.random() * dirs.length)]);
+    };
+    // Its own place on the ring round the hero: an angle of its own (they spread round him, not one behind the other) on the ring
+    // that turns slowly. A place off the map, in a tree, a rock or a building, or one it could not get to, is given up for the nearest
+    // free one round the ring, away from the others' places (null: none - at the map's edge, by a wall, in a thicket). Standing there a
+    // while it paces a little to and fro along the ring.
+    const angGap = (a, b) => { const d = Math.abs(a - b) % (Math.PI * 2); return d > Math.PI ? Math.PI * 2 - d : d; };
+    Game_Animal.prototype.ringSlot = function(live, turn) {
+        const G = pathGrid(), n = live.length;
+        if (this._slot === undefined || this._slotN !== n) { this._slot = Math.max(0, live.indexOf(this)) * Math.PI * 2 / n; this._slotN = n; }
+        const ok = this.slotOk();
+        const s = ringTile(turn + this._slot + (this._paceOff || 0));
+        if (!this._slotBad && ok(s)) return s;
+        this._slotBad = false;
+        this._paceOff = 0;
+        const others = live.filter(m => m !== this && m._slot !== undefined).map(m => m._slot);
+        for (const apart of [Math.PI / (n + 1), 0]) {   // (away from the others' places; in a thicket, anywhere open)
+            for (let k = 1; k <= 8; k++) for (const sg of [1, -1]) {   // (round the ring both ways, the nearest first)
+                const a = this._slot + sg * k * Math.PI / 8, q = ringTile(turn + a);
+                if (!ok(q) || (q.x === this._x && q.y === this._y) || others.some(o => angGap(o, a) < apart)) continue;
+                this._slot = a;
+                return q;
             }
         }
-        // its place on the ring round the hero (the ring turns slowly)
-        const live = pack ? liveMembers(pack) : [this], idx = Math.max(0, live.indexOf(this));
-        const ang = (pack ? pack.angle : 0) + idx * Math.PI * 2 / live.length;
-        const tx = $gamePlayer._realX + Math.cos(ang) * WOLF.ring, ty = $gamePlayer._realY + Math.sin(ang) * WOLF.ring * 0.8;
-        if (Math.hypot(tx - this._realX, ty - this._realY) > 0.9) this.stepToward({ x: Math.round(tx), y: Math.round(ty) });
-        else this.turnTowardCharacter($gamePlayer);
+        return null;
     };
-    // the leap: at the hero's tile (at most WOLF.lunge tiles), shorter when it could not land there
+    // a ring tile it may take: on the map, open, near him on foot too (not across a wall from him - heroField), not one it gave up a
+    // moment ago (dropPlace)
+    Game_Animal.prototype.slotOk = function() {
+        const G = pathGrid(), now = Graphics.frameCount, bad = (this._badSlots || []).filter(b => b.until > now).map(b => b.i);
+        const near = heroField(WOLF.ring * 2 + 3);
+        return q => gridOpen(G, q.x, q.y, true) && near[q.y * G.w + q.x] !== Infinity && !bad.includes(q.y * G.w + q.x);
+    };
+    // the tile of the ring round the hero at that angle
+    const ringTile = a => ({ x: Math.round($gamePlayer._realX + Math.cos(a) * WOLF.ring), y: Math.round($gamePlayer._realY + Math.sin(a) * WOLF.ring * 0.8) });
+    // pacing: a step or two along the ring, to one side and then the other - to an open tile other than the one it stands on (false:
+    // there is none)
+    Game_Animal.prototype.paceOn = function(turn) {
+        const ok = this.slotOk(), side = this._paceSide = -(this._paceSide || 1);
+        for (const off of [0.35 * side, 0.6 * side, -0.35 * side, -0.6 * side, 0]) {
+            const q = ringTile(turn + this._slot + off);
+            if ((q.x !== this._x || q.y !== this._y) && ok(q)) { this._paceOff = off; return true; }
+        }
+        return false;
+    };
+    // whose turn it is: the stalking wolf nearest to him, one with a clear leap before one without, not the last one if another can
+    function pickAttacker(pack) {
+        let best = null, bestS = Infinity;
+        for (const m of liveMembers(pack)) {
+            if (m._mode !== "stalk" || m._stun > 0) continue;
+            const d = m.playerDistance(), s = d + (m.clearRun() ? 0 : 2.5) + (pack.last === m ? 1.5 : 0) + (d <= WOLF.near ? 2 : 0);
+            if (s < bestS) { bestS = s; best = m; }
+        }
+        return best;
+    }
+    // the pack's attacker without a clear leap at him (a tree, a bush in between): it goes round to a place near him with one
+    // (runSpot), then barks and leaps; given up when it takes too long or gets nowhere (the pack waits a moment)
+    Game_Animal.prototype.thinkClose = function(dist) {
+        const clear = dist < WOLF.lunge + 0.9 && this.clearRun(), windup = () => { this.setMode("windup", WOLF.windup); this.turnTowardCharacter($gamePlayer); growl(this); };
+        if (clear && (dist > WOLF.near || WOLF.close - this._modeT > 60)) { windup(); return; }   // (right beside him: a moment to back off, then a snap from there)
+        const spot = this.runSpot(WOLF.near + 0.4, WOLF.lunge, true);
+        if (spot === null && clear) { windup(); return; }
+        if (this._modeT <= 0 || spot === null) { this.callOff(30); return; }
+        if (!spot) return;   // (no search this frame: the next one)
+        const r = path8(this, spot.x, spot.y, { animal: true, key: "close" });
+        if (!takeStep(this, r.dir)) this.turnTowardCharacter($gamePlayer);
+        if (stalled(this, "close", Math.hypot(this._x - spot.x, this._y - spot.y), 0.5, spot.x, spot.y)) { this.badSpot(spot); unstall(this); }
+    };
+    // an attack called off before the leap (he is behind a tree, no way round to him): back to the ring, the pack waits a moment
+    Game_Animal.prototype.callOff = function(wait) {
+        const pack = this._pack;
+        if (pack && pack.attacker === this) { pack.attacker = null; pack.nextAttack = Math.max(pack.nextAttack, wait || 30); }
+        this.setMode("stalk");
+    };
+    // the leap: of the tiles within WOLF.lunge it can leap to along a clear line (never over a tree or into one; his own tile is fine),
+    // the one nearest to him - his tile, else the one beside it (at the map's edge, by a wall, his tile may be no landing)
     Game_Animal.prototype.leap = function() {
-        let dx = Math.round($gamePlayer._realX - this._x), dy = Math.round($gamePlayer._realY - this._y);
-        const len = Math.max(Math.abs(dx), Math.abs(dy));
-        if (len > WOLF.lunge) { dx = Math.round(dx * WOLF.lunge / len); dy = Math.round(dy * WOLF.lunge / len); }
-        let lx = 0, ly = 0;
-        for (const k of [1, 0.75, 0.5, 0.25]) {
-            const x = this._x + Math.round(dx * k), y = this._y + Math.round(dy * k);
-            if ($gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !(window.Farming && Farming.buildingAt(x, y))) { lx = Math.round(dx * k); ly = Math.round(dy * k); break; }
+        const G = pathGrid(), px = $gamePlayer._realX, py = $gamePlayer._realY, R = WOLF.lunge;
+        let lx = 0, ly = 0, best = Math.hypot(this._x - px, this._y - py) - 0.01;
+        for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+            const x = this._x + dx, y = this._y + dy, him = x === $gamePlayer.x && y === $gamePlayer.y, d = Math.hypot(x - px, y - py);
+            if (d >= best || !$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f) || (window.Farming && Farming.buildingAt(x, y))) continue;
+            if (!(him || gridOpen(G, x, y, true)) || !clearLine(G, this._x, this._y, x, y, true, !him)) continue;
+            best = d;
+            lx = dx;
+            ly = dy;
         }
         this.turnTowardCharacter($gamePlayer);
         this.setMode("lunge");
@@ -984,6 +1548,8 @@
     const addSprite = roamingAddSprite;
     function removeAnimal(animal) {
         animal._dead = true;
+        const pack = animal._pack;   // (the attacker killed in its leap: its turn was never given back - the pack waited for good)
+        if (pack && pack.attacker === animal) { pack.attacker = null; pack.nextAttack = Math.max(pack.nextAttack, WOLF.gap[0]); }
         roamingDropSprite(animal);
         animals = animals.filter(a => a !== animal);
     }
@@ -1001,18 +1567,55 @@
         for (const [ox, oy] of spots) {
             if (members.length >= n) break;
             const sx = x + ox, sy = y + oy;
-            if (!$gameMap.isValid(sx, sy) || !$gameMap.checkPassage(sx, sy, 0x0f) || animals.some(a => a._x === sx && a._y === sy)) continue;
+            if (!$gameMap.isValid(sx, sy) || !$gameMap.checkPassage(sx, sy, 0x0f) || !canLeave(sx, sy) || animals.some(a => a._x === sx && a._y === sy)) continue;
             if (window.Farming && (Farming.buildingAt(sx, sy) || Farming.hasObjectTile(sx, sy))) continue;
+            if ($gameMap.eventsXyNt(sx, sy).some(e => e.isNormalPriority())) continue;
             members.push(spawn("wolf", sx, sy));
         }
         return members.length ? makePack(members) : null;
+    }
+    // ---- a night outdoors: in the wolves' hours a pack of this map may find the sleeper (Farming's sleepInTent asks; never in the hut)
+    const RAID = { perHour: 0.06, fire: 0.5, near: 9, dogNear: 13,   // near: tiles off when it wakes him (dogNear: the dog heard them first)
+        calm: 0.1, calmDays: 3, fullDay: 10 };   // the first days are calm: x0.1 till day 3, then up evenly to the full chance on day 10
+    // the chance a pack comes in one hour of sleep on `day` (fire: a lit fire by the bed halves it)
+    function raidChance(day, fire) {
+        const k = day <= RAID.calmDays ? RAID.calm : day >= RAID.fullDay ? 1 : RAID.calm + (1 - RAID.calm) * (day - RAID.calmDays) / (RAID.fullDay - RAID.calmDays);
+        return RAID.perHour * k * (fire ? RAID.fire : 1);
+    }
+    let dawnSaid = false;
+    // the clock hour (day * 24 + hour) a pack comes while he sleeps from `from` to `to` (clock hours), or null
+    function nightRaid(from, to, opts) {
+        if (!ENABLED || !((mapTargets().wolf || 0) > 0)) return null;
+        for (let t = Math.floor(from) + 1; t < to; t++) {   // (the whole hours after lying down; from/to = day * 24 + hour)
+            const h = ((t % 24) + 24) % 24;
+            if (!SPECIES.wolf.hours.some(([a, b]) => h >= a && h < b)) continue;
+            if (Math.random() < raidChance(Math.floor(t / 24), opts && opts.fire)) return t;
+        }
+        return null;
+    }
+    // the pack that woke him: 2-4 wolves some tiles off, already after him
+    function raidPack(dogWarned) {
+        const spots = spotsOfMap() || [], px = $gamePlayer.x, py = $gamePlayer.y, want = dogWarned ? RAID.dogNear : RAID.near;
+        let best = null;
+        for (const s of spots) {
+            const d = Math.hypot(s.x - px, s.y - py);
+            if (d < want - 1.5) continue;
+            const score = Math.abs(d - want);
+            if (!best || score < best.score) best = { s, score };
+        }
+        if (!best) return null;
+        const [lo, hi] = SPECIES.wolf.pack, n = lo + Math.floor(Math.random() * (hi - lo + 1));
+        const pack = spawnPack(best.s.x, best.s.y, n);
+        if (pack && pack.members.length) wolfEngage(pack.members[0]);
+        return pack;
     }
     function countOf(kind) {
         return animals.filter(a => a.kind() === kind).length;
     }
     // out of its hours an animal goes home - but not one called up with F9 (Debug.js), nor a boar or a wolf still in a fight
     // (it goes once it has calmed down), so nothing vanishes in front of the hero
-    const staysOut = a => a._summoned || a._engaged || (SPECIES[a.kind()].aggressive && a._mode !== "roam" && a._mode !== "flee");
+    const staysOut = a => a._summoned || a._engaged || (SPECIES[a.kind()].aggressive && a._mode !== "roam" && a._mode !== "flee") ||
+        (a._dawn && a._mode === "flee" && onScreen(a));   // (the wolves leaving at dawn: they run out of sight first)
     // fills the map up to its targets (minus what was shot today) and sends the animals that are not about home
     function populate() {
         if (!ENABLED || !$gameMap || !$dataMap || !spriteset() || !window.Farming) return;
@@ -1132,7 +1735,20 @@
     // direction keys turn him to another target; cancel lowers the weapon without a shot.
     // ------------------------------------------------------------------
     let aim = null;   // { weapon, t, ref, point: {x, y}, radius, manual }
-    const facingVector = () => ({ 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] }[$gamePlayer.direction()] || [0, 1]);
+    // where he faces, a unit vector - on the slant too: HeroLook.js keeps the 8-way facing (_heroDir8) that goes with the 4-way one
+    // (with only the four ways, a spear jab never reached a boar standing on the slant - the user's, 2026-09-26)
+    const FITS8 = { 2: [2, 1, 3], 4: [4, 1, 7], 6: [6, 3, 9], 8: [8, 7, 9] };
+    function facingVector() {
+        const d4 = $gamePlayer.direction(), d8 = $gamePlayer._heroDir8;
+        const v = DIR_VEC[d8 && FITS8[d4] && FITS8[d4].includes(d8) ? d8 : d4] || [0, 1], len = Math.hypot(v[0], v[1]);
+        return [v[0] / len, v[1] / len];
+    }
+    // turns him to (dx, dy): the 4-way direction and, on the slant, the 8-way facing too
+    function faceSlant(dx, dy) {
+        faceVector(dx, dy);
+        const d8 = [6, 3, 2, 1, 4, 7, 8, 9][((Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) % 8) + 8) % 8];
+        if (FITS8[$gamePlayer.direction()].includes(d8)) $gamePlayer._heroDir8 = d8;
+    }
     // targets in range within 60 degrees of where he faces, the best first (straight ahead, then near)
     function aimCandidates(def) {
         const px = $gamePlayer._realX + 0.5, py = $gamePlayer._realY + 0.5, [fx, fy] = facingVector();
@@ -1542,6 +2158,11 @@
         for (const e of carcassSprites) {
             e.sprite.x = Math.round($gameMap.adjustX(e.c.x) * tw);
             e.sprite.y = Math.round($gameMap.adjustY(e.c.y) * th);
+            const held = e.c.held, blood = e.sprite.children[0], body = e.sprite.children[1];   // (held: in the dog's mouth, Dog.js)
+            e.sprite.z = held ? (held.dir === 8 ? 2.9 : 3.6) : 2.2;
+            e.sprite.scale.set(held ? held.scale || 0.8 : 1, held ? held.scale || 0.8 : 1);
+            if (blood) blood.visible = !held;
+            if (body) { body.rotation = held ? (held.dir === 4 ? 0.8 : held.dir === 6 ? -0.8 : 0) : 0; body.scale.y = held ? 1 : -1; }
         }
     }
 
@@ -1556,6 +2177,7 @@
         packs = [];
         projectiles = [];
         spotCache = { mapId: 0, spots: null };
+        pgrid.mapId = -1;
     };
     const _Game_Map_setup = Game_Map.prototype.setup;
     Game_Map.prototype.setup = function(mapId) {
@@ -1564,6 +2186,7 @@
         packs = [];
         projectiles = [];
         spotCache = { mapId: 0, spots: null };
+        pgrid.mapId = -1;
         carcassSprites = [];
         if ($gameSystem) rotCarcasses();
     };
@@ -1638,15 +2261,101 @@
         }
     };
 
-    window.Hunting = { auto: v => { auto = !!v; }, animate: v => { animate = !!v; }, SPECIES, WEAPONS, spawn, shoot, populate, hit, kill, removeAnimal, mapTargets,
+    // ------------------------------------------------------------------
+    // The 8-way looks (the user's, 2026-09-26: "swobodny ruch w 8 kierunkach i animacje też"): img/characters/anim8/<Kind>_<Motion>8.png
+    // are 8 rows (S, SW, W, NW, N, NE, E, SE) x 9 cells - column 0 standing, 1-8 the cycle, the feet on the old sheets' line. They stand
+    // in for the old 4-way sheets while an animal walks, runs or stalks (the dog lying, barking and the like keep the old ones); the
+    // facing comes from the way it really moves, the frame from the way it has come (like HeroLook.js does for the hero). Not the
+    // animals in the yards (Livestock.js) - their sheets are not in the list.
+    // ------------------------------------------------------------------
+    const LOOK8 = {   // old sheet -> the 8-way one; cell: its square cell; stride: tiles for one cycle of the legs
+        "$Animal_Dog": { sheet: "anim8/Dog_Walk8", cell: 68, stride: 1.5 },
+        "$Animal_Dog_Run": { sheet: "anim8/Dog_Run8", cell: 68, stride: 2.6 },
+        "$Animal_Dog_Stalk": { sheet: "anim8/Dog_Stalk8", cell: 68, stride: 1.2 },
+        "$Animal_Wolf": { sheet: "anim8/Wolf_Walk8", cell: 68, stride: 1.5 },
+        "$Animal_Wolf_Run": { sheet: "anim8/Wolf_Run8", cell: 68, stride: 2.6 },
+        "$Animal_Wolf_Stalk": { sheet: "anim8/Wolf_Stalk8", cell: 68, stride: 1.2 },
+        "$Animal_Boar": { sheet: "anim8/Boar_Walk8", cell: 76, stride: 1.4 },
+        "$Animal_Boar_Run": { sheet: "anim8/Boar_Run8", cell: 76, stride: 2.4 },
+        "$Animal_Deer": { sheet: "anim8/Deer_Walk8", cell: 75, stride: 1.8, run: { sheet: "anim8/Deer_Run8", cell: 75, stride: 3.2 } },
+        "$Animal_Rabbit": { sheet: "anim8/Rabbit_Hop8", cell: 56, stride: 1.1 }
+    };
+    const LOOK8_ROW = { 2: 0, 1: 1, 4: 2, 7: 3, 8: 4, 9: 5, 6: 6, 3: 7 };
+    const LOOK8_OCT = { 0: 6, 1: 3, 2: 2, 3: 1, 4: 4, "-4": 4, "-3": 7, "-2": 8, "-1": 9 };   // octant of the move (y down) -> numpad
+    const LOOK8_FITS = { 2: [2, 1, 3], 4: [4, 1, 7], 6: [6, 3, 9], 8: [8, 7, 9] };
+    let look8On = true;   // (tests may switch them off: the old sheets)
+    function look8For(ch) {
+        if (!look8On || !ch || ch._pose || ch === $gamePlayer) return null;   // (the dog lying / asleep: its old sheet)
+        const look = LOOK8[ch.characterName()];
+        if (!look) return null;
+        return look.run && (ch.realMoveSpeed() >= 4.5 || ch._fleeing) ? look.run : look;
+    }
+    const _look8UpdateBitmap = Sprite_Character.prototype.updateBitmap;
+    Sprite_Character.prototype.updateBitmap = function() {
+        const look = look8For(this._character);
+        if (look) {
+            if (this._look8Sheet !== look.sheet) {
+                this._look8Sheet = look.sheet;
+                this.bitmap = ImageManager.loadCharacter(look.sheet);
+            }
+            // (not an empty name: that hides the sprite - isEmptyCharacter; the dog coming out of its kennel stayed invisible)
+            this._characterName = look.sheet;
+            this._tileId = 0;
+            this._look8 = look;
+            return;
+        }
+        if (this._look8Sheet) { this._look8Sheet = null; this._look8 = null; this._characterName = null; }   // (the old sheet is loaded again)
+        _look8UpdateBitmap.call(this);
+    };
+    const _look8PatternWidth = Sprite_Character.prototype.patternWidth;
+    Sprite_Character.prototype.patternWidth = function() { return this._look8 && this.bitmap ? this._look8.cell : _look8PatternWidth.call(this); };
+    const _look8PatternHeight = Sprite_Character.prototype.patternHeight;
+    Sprite_Character.prototype.patternHeight = function() { return this._look8 && this.bitmap ? this._look8.cell : _look8PatternHeight.call(this); };
+    const _look8UpdateFrame = Sprite_Character.prototype.updateFrame;
+    Sprite_Character.prototype.updateFrame = function() {
+        const look = this._look8, ch = this._character;
+        if (!look || !ch) return _look8UpdateFrame.call(this);
+        // how it moved since the last frame: the facing (smoothed, a turn held a few frames so it does not flicker) and the legs
+        const x = ch._realX, y = ch._realY, dx = this._l8x === undefined ? 0 : x - this._l8x, dy = this._l8y === undefined ? 0 : y - this._l8y;
+        this._l8x = x; this._l8y = y;
+        const d = Math.hypot(dx, dy);
+        if (d > 0.0005 && d < 1.5) {
+            this._l8vx = (this._l8vx || 0) * 0.6 + dx;
+            this._l8vy = (this._l8vy || 0) * 0.6 + dy;
+            const want = LOOK8_OCT[Math.round(Math.atan2(this._l8vy, this._l8vx) / (Math.PI / 4))];
+            if (!this._l8dir || want === this._l8dir) { this._l8dir = want; this._l8turn = 0; }
+            else if (++this._l8turn >= 4) { this._l8dir = want; this._l8turn = 0; }
+            this._l8step = (this._l8step || 0) + d;
+            this._l8still = 0;
+        } else {
+            this._l8still = (this._l8still || 0) + 1;
+            // turned where it stands (towards the hero, a growl): the 8-way facing follows the 4-way one
+            const d4 = ch.direction();
+            if (!this._l8dir || !(LOOK8_FITS[d4] || []).includes(this._l8dir)) this._l8dir = d4;
+        }
+        const cell = look.cell, n = Math.max(1, Math.round(this.bitmap.width / cell) - 1);
+        const moving = this._l8still < 6 || ch.isJumping();
+        const col = moving ? 1 + Math.min(n - 1, Math.floor((((this._l8step || 0) / look.stride) % 1) * n)) : 0;
+        this.setFrame(col * cell, (LOOK8_ROW[this._l8dir] || 0) * cell, cell, cell);
+    };
+    // the sheets come with the map, so the first step does not wait for them
+    const _look8MapCreate = Scene_Map.prototype.create;
+    Scene_Map.prototype.create = function() {
+        _look8MapCreate.call(this);
+        if (look8On) for (const k of Object.keys(LOOK8)) { ImageManager.loadCharacter(LOOK8[k].sheet); if (LOOK8[k].run) ImageManager.loadCharacter(LOOK8[k].run.sheet); }
+    };
+
+    window.Hunting = { auto: v => { auto = !!v; }, LOOK8, look8: v => { look8On = !!v; }, animate: v => { animate = !!v; }, SPECIES, WEAPONS, spawn, shoot, populate, hit, kill, removeAnimal, mapTargets,
         get animals() { return animals; }, get projectiles() { return projectiles; }, hunt, killedToday, pickWeapon, updateProjectiles,
         // sneaking, awareness, aiming, and the hooks for other hunters' targets (Birds.js)
-        sneaking, setSneak, noticeRate, updateAwareness, updateMark, coverBetween, startAim, updateAim, fireAimed, endAim, get aim() { return aim; },
+        sneaking, setSneak, noticeRate, facingVector, faceSlant, DIR_VEC, updateAwareness, updateMark, coverBetween, startAim, updateAim, fireAimed, endAim, get aim() { return aim; },
         // the spear and the boar
         SPEAR, BOAR, thrust, spearTarget, pressShoot, gore, enrage, get cooldown() { return cooldown; }, resetCooldown: () => { cooldown = 0; },
         allTargets, addTargets: fn => { targetSources.push(fn); }, onNoise: fn => { noiseListeners.push(fn); }, makeNoise, snareUnseen, rabbitHours,
         get playerStep() { return playerStep; },
         // combat (Combat.js): the animal class, the wolves, the hooks
         YIELD, CARCASS, dropCarcass, removeCarcass, carcasses: () => carcassList(), carcassAhead, dressCarcass, takeFromSnare,
-        Game_Animal, WOLF, get packs() { return packs; }, spawnPack, makePack, wolfEngage, stagger, knockBack, atkOf, onKill: fn => { killListeners.push(fn); } };
+        Game_Animal, WOLF, RAID, raidChance, nightRaid, raidPack, get packs() { return packs; }, spawnPack, makePack, wolfEngage, stagger, knockBack, atkOf, onKill: fn => { killListeners.push(fn); },
+        // the way round what is in the way (8 directions) and the stuck watch: the animals here and the dog (Dog.js)
+        PATH, STUCK, path8, pathGrid, clearLine, stalled, unstall, avoidTile, takeStep };
 })();

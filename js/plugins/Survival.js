@@ -47,13 +47,18 @@
  * Survival.js
  * ============================================================================
  * JEDZENIE
- *   Jedzenie to zwykłe przedmioty z notatką <Food:stamina=40,buff=sated,hours=3>.
+ *   Co daje jedzenie, stoi w jednej tabeli: FoodTable w Farming_Data.js (tam
+ *   się je zmienia). Przedmiot, którego tabela nie zna, może być jedzeniem przez
+ *   notatkę <Food:stamina=40,buff=sated,hours=3>, jak dawniej.
  *   Klucze: stamina (ile wytrzymałości odnawia), buff i hours (premia i na ile
  *   godzin gry), buff2 i hours2 (druga premia). Zjadasz z menu (Przedmioty).
  *   Premie:
  *     sated (Najedzony)  - koszt wytrzymałości niższy o 15%
  *     warm  (Rozgrzany)  - zimno ci niestraszne
  *   Nie zjesz nic, gdy masz pełne siły i posiłek nie daje premii.
+ *   Inne wtyczki dodają własne premie: Survival.defineBuff(klucz, { name, icon,
+ *   desc, cost }) - cost to mnożnik kosztu wytrzymałości, gdy premia działa
+ *   (np. 0.9 = prace o 10% tańsze; TavernLife.js: Czysty po kąpieli).
  *
  * ZDROWIE I RANY
  *   Zdrowie to HP bohatera (czerwony pasek z serduszkiem nad wytrzymałością).
@@ -116,6 +121,13 @@
         warm: { name: "Rozgrzany", icon: 366, desc: "zimą i w śniegu nie marzniesz" },                                               // the icon of the herbal brew
         wound: { name: "Ranny", icon: 414, bad: true, desc: "wytrzymałość najwyżej " + Math.round(WOUND_CAP * 100) + "%, dopóki rana się nie zagoi (opatrunek leczy od razu)" }
     };
+    // premia of other plugins (TavernLife.js: Czysty, Natchniony, Ugoszczony, Wypoczęty): { name, icon, desc, bad, cost } - cost: a factor on the
+    // stamina work costs while the premium is on (costFactor); what else a premium does is up to the plugin that defines it
+    function defineBuff(key, def) {
+        if (!key || !def) return null;
+        BUFFS[key] = Object.assign({ name: key, icon: 0, desc: "" }, BUFFS[key] || {}, def);
+        return BUFFS[key];
+    }
 
     const hasItem = id => !!$dataItems[id] && $gameParty.hasItem($dataItems[id], false);
     const nowHours = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
@@ -206,15 +218,10 @@
     // ------------------------------------------------------------------
     // Food and butchering: items used from the menu
     // ------------------------------------------------------------------
+    // what eating an item gives: its row of the one food table (FoodTable, Farming_Data.js); an item the table does not know is read
+    // from its <Food:...> note as before. { stamina, buff, hours, buff2, hours2, fed, water } or null (not eaten as it is)
     function foodInfo(item) {
-        const raw = item && item.meta && item.meta.Food;
-        if (typeof raw !== "string") return null;
-        const info = {};
-        for (const pair of raw.split(",")) {
-            const [k, v] = pair.split("=").map(s => s.trim());
-            info[k] = isNaN(Number(v)) ? v : Number(v);
-        }
-        return info;
+        return window.FoodTable ? FoodTable.eatInfo(item) : null;
     }
     const isButcher = item => !!(item && item.meta && item.meta.Butcher);
     const isBandage = item => !!(item && item.meta && item.meta.Bandage);
@@ -363,6 +370,7 @@
     function costFactor() {
         let f = 1;
         if ($gameSystem.hasBuff("sated")) f *= SATED_FACTOR;
+        for (const key of Object.keys(BUFFS)) if (BUFFS[key].cost > 0 && $gameSystem.hasBuff(key)) f *= BUFFS[key].cost;   // (defineBuff's premia)
         if ($gameSystem.isCold()) f *= 1 + (COLD_FACTOR - 1) * (1 - Math.min(1, perk("cold")));   // (Przetrwanie: Zahartowany)
         return f * (1 - Math.min(0.6, perk("stamina.cost")));   // (Wytrwały, Syn puszczy)
     }
@@ -512,7 +520,7 @@
     Sprite_BuffIcons.prototype.constructor = Sprite_BuffIcons;
 
     Sprite_BuffIcons.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this, new Bitmap(230, HUD().row));
+        Sprite.prototype.initialize.call(this, new Bitmap(460, HUD().row));   // (seven premia side by side)
         this._iconSet = ImageManager.loadSystem("IconSet");
         this._key = null;
         this._coldWas = false;
@@ -620,6 +628,6 @@
         }
     };
 
-    window.Survival = { foodInfo, feedback, butcher, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight(),
+    window.Survival = { foodInfo, feedback, butcher, defineBuff, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight(),
         WOUND_CAP, WOUND_HOURS, HEAL_PER_HOUR, BANDAGE_HEAL };
 })();

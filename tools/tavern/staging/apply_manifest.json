@@ -1,0 +1,11 @@
+{
+ "base_sha256": {
+  "Map001.json": "6a24a118bd9768b3acd80e9252e45394493c5fcae498b81ca1e25df21d4beae9",
+  "Map008.json": "cbdfa0c657c106c1a37060d600e4d7f098d00256f022dae695fde83d0997dfb3",
+  "Map009.json": "74207d832d8567b18e6a9c14dcb25a8428f0974eee1aa4ae21ff91206ee1aeef",
+  "MapInfos.json": "097ce5f19bf9f1c7ff65c745bdff686fad9beb881e37d751566fed1518ffaa58",
+  "Tilesets.json": "76303b401bdf48de774ef341b72f9225520c54e2b24d30da5d0f6f939711b039"
+ },
+ "staged_at": "2026-09-28T13:01:39",
+ "note": "the data files as they were when the tavern interior was staged; the install refuses to overwrite a file that changed since"
+}

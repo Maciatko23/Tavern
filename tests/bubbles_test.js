@@ -1,5 +1,7 @@
 // Speech bubbles (SpeechBubbles.js): messages on the map come in a bubble over whoever speaks, with a tail to them; choices beside
 // it; \SPK[n] picks the speaker; short cries (the storm) float over the hero and go by themselves.
+// (Characters with a bust - Borgar, Grum - talk out of their busts in the corners: tests/talk_busts_test.js; here Borgar's page gets
+// <Bust:none> for the bubble over the head.)
 const { launch, sleep } = require("./cdp.js");
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
@@ -9,7 +11,7 @@ const { launch, sleep } = require("./cdp.js");
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(1, 4, 4, 8, 0); SceneManager.goto(Scene_Map); })()`);
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(1, 50, 64, 4, 0);   /* (the new tavern: in front of the bar, Borgar across the counter) */ SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===1").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(12); 0");
@@ -30,15 +32,28 @@ const { launch, sleep } = require("./cdp.js");
         await frames(40);
         let w = await win();
         check("talking to Borgar: the message is a bubble over him (event 1), the window itself invisible", w.open && w.who === "event 1" && w.bubble && w.opacity === 0, w);
-        const beside = w => w.head && ({ bottom: w.y + w.h <= w.head.top, left: w.x >= w.head.x, right: w.x + w.w <= w.head.x, top: w.y >= w.head.foot })[w.edge];
-        check("...the bubble is by his head (above it; with no room there beside him, the tail sideways - not over the hero below), on the screen", beside(w) && (w.edge === "bottom" || w.edge === "left" || w.edge === "right") && w.x >= 0 && w.x + w.w <= 1280 && w.w < 1000, w);
-        await b.shot("bubble_borgar.png");
+        // (Borgar has a bust - People3_5 - so his words come out of it at the bottom right: tests/talk_busts_test.js checks the talk)
+        check("...he has a bust: the bubble at the bottom right, beside it (a talk)", w.edge === "talk-right" && w.x + w.w <= 1272 - 250 && w.y > 400, w);
         for (let i = 0; i < 12 && !(await win()).choice; i++) { await press("ok"); await frames(20); }
         w = await win();
         check("his question with choices: the choice list beside the bubble", !!w.choice && (w.choice.x >= w.x + w.w || w.choice.x + w.choice.w <= w.x), w);
+        await press("escape"); await frames(10);
+        await finish();
+        // ---- the same without his bust (<Bust:none> on his page): the bubble over his head
+        await ev(`$gameMap.event(1).page().list.unshift({ code: 108, indent: 0, parameters: ["<Bust:none>"] }); 0`);
+        await ev("$gamePlayer.setDirection(8); $gameMap.event(1).start(); 0");
+        await frames(40);
+        w = await win();
+        const beside = w => w.head && ({ bottom: w.y + w.h <= w.head.top, left: w.x >= w.head.x, right: w.x + w.w <= w.head.x, top: w.y >= w.head.foot })[w.edge];
+        check("without a bust: the bubble is by his head (above it; with no room there beside him, the tail sideways - not over the hero below), on the screen", w.who === "event 1" && beside(w) && (w.edge === "bottom" || w.edge === "left" || w.edge === "right") && w.x >= 0 && w.x + w.w <= 1280 && w.w < 1000, w);
+        await b.shot("bubble_borgar.png");
+        for (let i = 0; i < 12 && !(await win()).choice; i++) { await press("ok"); await frames(20); }
+        w = await win();
+        check("...his question with choices: the choice list beside the bubble", !!w.choice && (w.choice.x >= w.x + w.w || w.choice.x + w.choice.w <= w.x) && Math.abs(w.choice.y - w.y) <= 2, w);
         await b.shot("bubble_choices.png");
         await press("escape"); await frames(10);
         await finish();
+        await ev("$gameMap.event(1).page().list.shift(); 0");
 
         // ---- no face (a thought, a description): the hero's bubble
         await run(T(null, ["Hmm... trzeba się napić."]));

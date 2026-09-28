@@ -16,7 +16,7 @@ const OUT = __dirname + "/";
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev(`SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Birds) Birds.auto(false); Hunting.auto(false); Survival.calmWeather();
+        await ev(`SceneManager._scene.startFadeIn(1,false); if (window.Dog) { Dog.auto(false); Dog.removeDog(); } if (window.Needs) Needs.setEnabled(false); if (window.Birds) Birds.auto(false); Hunting.auto(false); Survival.calmWeather();
             $gameSystem.setDayNightHour(11); $gameSystem.setStamina(100); window.__pop = []; const _q = Game_Temp.prototype.pushLootPopup;
             Game_Temp.prototype.pushLootPopup = function(icon, text) { window.__pop.push(text); return _q.apply(this, arguments); };
             for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0`);

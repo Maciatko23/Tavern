@@ -1,0 +1,118 @@
+{
+ "tex": {
+  "mud": {
+   "src": [
+    [
+     "gen/mud_a.png",
+     0.6,
+     0
+    ],
+    [
+     "gen/mud_b.png",
+     0.4,
+     1
+    ]
+   ],
+   "target": [
+    [
+     37.0,
+     2.2,
+     12.5
+    ],
+    [
+     3.0,
+     1.0,
+     2.0
+    ]
+   ],
+   "flatten": [
+    6.0,
+    0.3
+   ],
+   "even": [
+    14,
+    0.8
+   ],
+   "sheen": {
+    "amount": 16,
+    "share": 0.03,
+    "sigma": 0.8,
+    "follow": 0.6
+   }
+  },
+  "forest": {
+   "src": [
+    [
+     "gen/forest_a.png",
+     0.6,
+     0
+    ],
+    [
+     "gen/forest_b.png",
+     0.4,
+     1
+    ]
+   ],
+   "target": [
+    [
+     40.0,
+     -10.0,
+     19.0
+    ],
+    [
+     3.4,
+     4.2,
+     3.2
+    ]
+   ],
+   "flatten": [
+    6.0,
+    0.3
+   ],
+   "even": [
+    14,
+    0.8
+   ]
+  }
+ },
+ "field": {
+  "mud": {
+   "amp": 1.0,
+   "sigma": 7,
+   "warp": 4,
+   "lo": -1.02,
+   "hi": 0.3,
+   "detail": 0.1,
+   "corner_p": 0.6,
+   "bulge": -0.4,
+   "seed": 7,
+   "n_clip": 0.7,
+   "corner_k": 1.0
+  },
+  "forest": {
+   "amp": 1.0,
+   "sigma": 7,
+   "warp": 4,
+   "lo": -1.04,
+   "hi": 0.45,
+   "detail": 0.1,
+   "corner_p": 0.8,
+   "bulge": -0.3,
+   "seed": 9,
+   "n_clip": 0.7,
+   "corner_k": 0.6
+  }
+ },
+ "draw": {
+  "mud": {
+   "rim": 0.22,
+   "rim_at": -0.8,
+   "rim_w": 0.25
+  },
+  "forest": {
+   "rim": 0.12,
+   "rim_at": -0.7,
+   "rim_w": 0.35
+  }
+ }
+}

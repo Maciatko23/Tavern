@@ -14,7 +14,7 @@
  *
  * @param speed
  * @text Szybkość psucia (%)
- * @desc 100 = czasy z tabeli w kodzie (LIFE). 50 = jedzenie trzyma się dwa razy dłużej, 200 = psuje się dwa razy szybciej.
+ * @desc 100 = czasy z tabeli jedzenia (FoodTable w Farming_Data.js, kolumna spoil). 50 = jedzenie trzyma się dwa razy dłużej, 200 = psuje się dwa razy szybciej.
  * @type number
  * @min 10
  * @max 1000
@@ -25,7 +25,8 @@
  * PSUCIE SIĘ JEDZENIA
  * ============================================================================
  * Każda partia jedzenia (kupka zdobyta w jednym momencie) ma swój wiek. Gdy wiek
- * dojdzie do czasu życia z tabeli LIFE (godziny gry), partia zamienia się w
+ * dojdzie do czasu życia z tabeli jedzenia (FoodTable w Farming_Data.js, kolumna
+ * spoil, godziny gry), partia zamienia się w
  * "Zepsute jedzenie" (przedmiot 122), a nad postacią pojawia się dymek. Kilka
  * godzin wcześniej dymek ostrzega, że coś zaraz się zepsuje.
  *
@@ -55,15 +56,8 @@
     const ENABLED = params.enabled !== "false";
     const SPEED = Math.max(0.1, Number(params.speed || 100) / 100);
     const ROT = 122;
-    // item id -> hours of game time it stays good
-    const LIFE = {
-        94: 60, 95: 120, 98: 40, 99: 96, 101: 48, 102: 72, 103: 72, 104: 168,
-        105: 480, 106: 360, 107: 30, 108: 96, 109: 72, 110: 120,
-        71: 480, 72: 360, 73: 480, 75: 240, 83: 120, 123: 48, 124: 720,
-        130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96,  // gulasz, kapuśniak, zupa grzybowa, owsianka, grzyby, pieczony ser, placek (the mead keeps)
-        149: 72, 150: 168, 151: 96, 153: 72,   // pokrzywa, krwawnik (dries well, like the herbs), dziki czosnek, zupa pokrzywowa
-        157: 60, 158: 120, 159: 60, 160: 120, 161: 60, 162: 120   // the meat of the deer, the boar, the wolf: raw / roasted like the hare's
-    };
+    // item id -> hours of game time it stays good: the "spoil" column of the one food table (FoodTable in Farming_Data.js - changed there)
+    const LIFE = (window.FoodTable && FoodTable.LIFE) || {};
     const WARN_AT = 0.8;   // of the life: the popup "zaraz się zepsuje"
 
     const enabled = () => ENABLED && !!$gameSystem && typeof $gameSystem.dayNightDay === "function";

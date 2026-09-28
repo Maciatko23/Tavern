@@ -15,7 +15,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(2000);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) { Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); } if (window.Livestock) Livestock.auto(false); Survival.calmWeather(); $gameSystem.setDayNightHour(8); $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; if (window.Needs) Needs.setEnabled(false); if (window.Hunting) { Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); } if (window.Livestock) Livestock.auto(false); Survival.calmWeather(); $gameSystem.setDayNightHour(8); $gameScreen.clearWeather(); 0");
         await sleep(500);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
@@ -136,6 +136,19 @@ const { launch, sleep } = require("./cdp.js");
         await frames(120);
         const raked = await J(`(function(){ const m = Farming.menuFor(${bx + 5}, ${by + 4}); return { title: m.title, names: m.entries.map(e => e.name) }; })()`);
         check("raked (no longer natural) ground offers no rest", raked.title === "Zagrabiona ziemia" && !raked.names.some(n => /Odpocznij/.test(n)), raked);
+
+        // saved while sitting, then loaded: the rest is not taken over from the file (its callbacks do not survive it - loading
+        // such a save threw "opts.holdWhile is not a function" every frame and the game stood still)
+        await ev(`$gameSystem.setStamina(30); 0`);
+        await runRest();
+        await frames(20);
+        const sat = await ev("!!$gamePlayer._toolSwing");
+        await ev("DataManager.saveGame(1).then(() => DataManager.loadGame(1)).then(() => { $gamePlayer.reserveTransfer($gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, 2, 0); $gamePlayer.requestMapReload(); SceneManager.goto(Scene_Map); }); 0");
+        for (let i = 0; i < 60; i++) { await sleep(250); if (await ev("SceneManager._scene.constructor.name === 'Scene_Map' && !SceneManager.isSceneChanging() && !$gamePlayer.isTransferring()")) break; }
+        const f0 = await ev("Graphics.frameCount");
+        await sleep(1000);
+        const loaded = await J("({ swing: !!$gamePlayer._toolSwing, frames: Graphics.frameCount, canMove: $gamePlayer.canMove(), err: (document.getElementById('errorPrinter') || {}).innerText || '' })");
+        check("saved while sitting and loaded: the game runs on, he is no longer sitting and can walk", sat && !loaded.swing && loaded.frames > f0 + 20 && loaded.canMove && !loaded.err, Object.assign({ sat, f0 }, loaded));
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-6) : "none");

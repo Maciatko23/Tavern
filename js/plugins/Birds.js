@@ -483,7 +483,8 @@
     }
 
     // ---- shots (Hunting.js): the birds on the ground are targets; a shot scares every flock that hears it
-    function killBird(b) {
+    // opts.forDog (Dog.js): the dog caught it - the feathers are its to carry, not the bag's; returns how many
+    function killBird(b, opts) {
         const sp = SPECIES[b.kind], flock = b.flock;
         flock.birds = flock.birds.filter(x => x !== b);
         dropSprite(b);
@@ -491,9 +492,11 @@
         AudioManager.playSe({ name: "Damage1", volume: 70, pitch: 140, pan: 0 });
         const s = store();
         s.kills[b.kind] = (s.kills[b.kind] || 0) + 1;
-        $gameParty.gainItem($dataItems[ITEM.feathers], 1 + Math.floor(Math.random() * 3) + Math.round(perk("feathers")));   // a bird gives only feathers: 1-3 (user); Ptasznik: more
+        const n = 1 + Math.floor(Math.random() * 3) + Math.round(perk("feathers"));   // a bird gives only feathers: 1-3 (user); Ptasznik: more
+        if (!(opts && opts.forDog)) $gameParty.gainItem($dataItems[ITEM.feathers], n);
         void sp;
         flush(flock, $gamePlayer._realX + 0.5, $gamePlayer._realY + 0.5);
+        return n;
     }
     if (window.Hunting && Hunting.addTargets) {
         Hunting.addTargets(() => aliveBirds().filter(b => b.z < 14 && !b.gone).map(b => ({ x: b.x, y: b.y - 0.25, radius: SPECIES[b.kind].radius, ref: b, hit: () => killBird(b) })));

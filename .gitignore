@@ -15,3 +15,16 @@ desktop.ini
 /tests/edge_profile_*/
 /tests/*.png
 /tests/*/*.png
+
+# the marathon's report and log (regenerated every run) and the phone notification settings (a private ntfy topic)
+/tests/marathon/raport.md
+/tests/marathon/run.log
+/tests/marathon/notify.json
+/tests/autopilot/*.log
+/tests/autopilot/*.jpg
+
+# Python caches of the tool scripts, and the tavern generator's regenerated renders / install preview (a copy of data/)
+__pycache__/
+*.pyc
+/tools/tavern/staging/renders/
+/tools/tavern/staging/install_preview/

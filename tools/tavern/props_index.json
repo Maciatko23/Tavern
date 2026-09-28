@@ -1,0 +1,762 @@
+{
+ "tablica_zlecen": {
+  "sheet": "!$Tavern_Board",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "w": 144,
+  "h": 144,
+  "place": "floor3",
+  "name": "tablica zleceń"
+ },
+ "swieca": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 0,
+  "art": [
+   16,
+   24,
+   32,
+   56
+  ],
+  "place": "table",
+  "name": "gruba świeca z zaciekami (animowana)",
+  "anim": true
+ },
+ "swieca_lada": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 3,
+  "art": [
+   16,
+   12,
+   32,
+   44
+  ],
+  "place": "counter",
+  "name": "gruba świeca z zaciekami (animowana)",
+  "anim": true
+ },
+ "kot_spiacy": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 6,
+  "art": [
+   9,
+   63,
+   39,
+   90
+  ],
+  "place": "floor",
+  "name": "śpiący kot"
+ },
+ "kapelusz_monety": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 7,
+  "art": [
+   12,
+   71,
+   36,
+   90
+  ],
+  "place": "floor",
+  "name": "kapelusz z monetami (napiwki)"
+ },
+ "bebenek": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 2,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 8,
+  "art": [
+   13,
+   69,
+   35,
+   90
+  ],
+  "place": "floor",
+  "name": "bębenek"
+ },
+ "szkatula": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 2,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 9,
+  "art": [
+   11,
+   69,
+   37,
+   91
+  ],
+  "place": "floor",
+  "name": "okuta szkatuła / sejf"
+ },
+ "glowa_dzika": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 2,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 10,
+  "art": [
+   6,
+   12,
+   42,
+   56
+  ],
+  "place": "wall",
+  "name": "głowa dzika na tarczy"
+ },
+ "cebrzyk": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 2,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 11,
+  "art": [
+   12,
+   57,
+   36,
+   91
+  ],
+  "place": "floor",
+  "name": "cebrzyk ze szczotką i mydłem"
+ },
+ "stolek_reczniki": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 12,
+  "art": [
+   12,
+   64,
+   36,
+   91
+  ],
+  "place": "floor",
+  "name": "stołek z ręcznikami"
+ },
+ "lutnia_stojak": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 13,
+  "art": [
+   12,
+   40,
+   36,
+   92
+  ],
+  "place": "floor",
+  "name": "lutnia na stojaku"
+ },
+ "wieszak": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 14,
+  "art": [
+   8,
+   7,
+   39,
+   93
+  ],
+  "place": "floor",
+  "name": "wieszak z płaszczami"
+ },
+ "stojak_laski": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 4,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 15,
+  "art": [
+   10,
+   50,
+   37,
+   92
+  ],
+  "place": "floor",
+  "name": "stojak na laski i parasol"
+ },
+ "gobelin_polowanie": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 4,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 16,
+  "art": [
+   1,
+   5,
+   47,
+   93
+  ],
+  "place": "wall_hi",
+  "name": "gobelin z polowaniem"
+ },
+ "gobelin_kufel": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 4,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 17,
+  "art": [
+   2,
+   5,
+   47,
+   93
+  ],
+  "place": "wall_hi",
+  "name": "gobelin ze złotym kuflem"
+ },
+ "pulpit_nuty": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 4,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 18,
+  "art": [
+   10,
+   40,
+   39,
+   94
+  ],
+  "place": "floor",
+  "name": "pulpit z nutami"
+ },
+ "kubek_kosci": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 4,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 19,
+  "art": [
+   9,
+   37,
+   37,
+   54
+  ],
+  "place": "table",
+  "name": "kubek i kości"
+ },
+ "karty": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 4,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 20,
+  "art": [
+   9,
+   38,
+   40,
+   54
+  ],
+  "place": "table",
+  "name": "rozłożone karty"
+ },
+ "monety": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 4,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 21,
+  "art": [
+   14,
+   41,
+   32,
+   53
+  ],
+  "place": "table",
+  "name": "stosiki monet"
+ },
+ "warcaby": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 4,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 22,
+  "art": [
+   11,
+   35,
+   36,
+   57
+  ],
+  "place": "table",
+  "name": "warcaby"
+ },
+ "flet": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 4,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 23,
+  "art": [
+   14,
+   42,
+   34,
+   50
+  ],
+  "place": "table",
+  "name": "flet"
+ },
+ "butelki": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 6,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 24,
+  "art": [
+   8,
+   30,
+   41,
+   63
+  ],
+  "place": "table",
+  "name": "butelki w kolorach"
+ },
+ "ksiega_rachunkowa": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 6,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 25,
+  "art": [
+   5,
+   30,
+   47,
+   57
+  ],
+  "place": "table",
+  "name": "księga rachunkowa, pióro i kałamarz"
+ },
+ "dzwonek": {
+  "sheet": "!Tavern_Props",
+  "index": 0,
+  "direction": 6,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 26,
+  "art": [
+   17,
+   27,
+   31,
+   40
+  ],
+  "place": "counter",
+  "name": "mosiężny dzwonek"
+ },
+ "kasetka": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 6,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 27,
+  "art": [
+   15,
+   27,
+   33,
+   41
+  ],
+  "place": "counter",
+  "name": "kasetka z monetami"
+ },
+ "butelki_lada": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 6,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 28,
+  "art": [
+   8,
+   18,
+   41,
+   51
+  ],
+  "place": "counter",
+  "name": "butelki w kolorach (na ladzie)"
+ },
+ "tarcza_rzutki": {
+  "sheet": "!Tavern_Props",
+  "index": 1,
+  "direction": 6,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 29,
+  "art": [
+   10,
+   22,
+   39,
+   51
+  ],
+  "place": "wall",
+  "name": "tarcza do rzutek"
+ },
+ "klucze": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 6,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 30,
+  "art": [
+   11,
+   26,
+   38,
+   43
+  ],
+  "place": "wall",
+  "name": "tablica z kluczami"
+ },
+ "nie_pluc": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 6,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 31,
+  "art": [
+   4,
+   34,
+   48,
+   52
+  ],
+  "place": "wall",
+  "name": "tabliczka NIE PLUĆ NA PODŁOGĘ"
+ },
+ "mysia_dziura": {
+  "sheet": "!Tavern_Props",
+  "index": 2,
+  "direction": 6,
+  "pattern": 2,
+  "w": 48,
+  "h": 96,
+  "slot": 32,
+  "art": [
+   17,
+   85,
+   32,
+   96
+  ],
+  "place": "wall",
+  "name": "mysia dziura (na dolnym rzędzie ściany)"
+ },
+ "chochla": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 6,
+  "pattern": 0,
+  "w": 48,
+  "h": 96,
+  "slot": 33,
+  "art": [
+   15,
+   19,
+   32,
+   39
+  ],
+  "place": "table",
+  "name": "chochla (na beczce z wodą, zdarzenie na dolnym kafelku beczki)"
+ },
+ "polka_przyprawy": {
+  "sheet": "!Tavern_Props",
+  "index": 3,
+  "direction": 6,
+  "pattern": 1,
+  "w": 48,
+  "h": 96,
+  "slot": 34,
+  "art": [
+   5,
+   34,
+   43,
+   60
+  ],
+  "place": "wall",
+  "name": "półka z przyprawami"
+ },
+ "kociol_miedziany": {
+  "sheet": "!Tavern_Props2",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 0,
+  "art": [
+   4,
+   0,
+   92,
+   94
+  ],
+  "place": "floor2",
+  "name": "miedziany kocioł warzelny"
+ },
+ "kadz": {
+  "sheet": "!Tavern_Props2",
+  "index": 0,
+  "direction": 2,
+  "pattern": 1,
+  "w": 96,
+  "h": 96,
+  "slot": 1,
+  "art": [
+   8,
+   0,
+   88,
+   93
+  ],
+  "place": "floor2",
+  "name": "kadź fermentacyjna"
+ },
+ "balia": {
+  "sheet": "!Tavern_Props2",
+  "index": 0,
+  "direction": 2,
+  "pattern": 2,
+  "w": 96,
+  "h": 96,
+  "slot": 2,
+  "art": [
+   3,
+   30,
+   93,
+   93
+  ],
+  "place": "floor2",
+  "name": "balia kąpielowa"
+ },
+ "pies_spiacy": {
+  "sheet": "!Tavern_Props2",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 3,
+  "art": [
+   27,
+   58,
+   69,
+   90
+  ],
+  "place": "floor2",
+  "name": "śpiący pies"
+ },
+ "szyld_kufel": {
+  "sheet": "!Tavern_Props2",
+  "index": 1,
+  "direction": 2,
+  "pattern": 1,
+  "w": 96,
+  "h": 96,
+  "slot": 4,
+  "art": [
+   8,
+   4,
+   88,
+   95
+  ],
+  "place": "wall",
+  "name": "szyld ze złotym kuflem"
+ },
+ "tablica_kreda": {
+  "sheet": "!Tavern_Props2",
+  "index": 1,
+  "direction": 2,
+  "pattern": 2,
+  "w": 96,
+  "h": 96,
+  "slot": 5,
+  "art": [
+   9,
+   38,
+   87,
+   76
+  ],
+  "place": "wall",
+  "name": "tablica kredowa z wynikami"
+ },
+ "cennik": {
+  "sheet": "!Tavern_Props2",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 6,
+  "art": [
+   13,
+   20,
+   83,
+   84
+  ],
+  "place": "wall",
+  "name": "CENNIK"
+ },
+ "kufle_wieszak": {
+  "sheet": "!Tavern_Props2",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "w": 96,
+  "h": 96,
+  "slot": 7,
+  "art": [
+   7,
+   33,
+   90,
+   52
+  ],
+  "place": "wall",
+  "name": "wieszak z kuflami"
+ },
+ "krany": {
+  "sheet": "!Tavern_Props2",
+  "index": 2,
+  "direction": 2,
+  "pattern": 2,
+  "w": 96,
+  "h": 96,
+  "slot": 8,
+  "art": [
+   17,
+   24,
+   80,
+   53
+  ],
+  "place": "counter",
+  "name": "krany do piwa (na ladzie)"
+ },
+ "mapa": {
+  "sheet": "!Tavern_Props2",
+  "index": 3,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 9,
+  "art": [
+   16,
+   26,
+   80,
+   70
+  ],
+  "place": "wall",
+  "name": "mapa krainy na ścianie"
+ },
+ "wlocznie": {
+  "sheet": "!Tavern_Props2",
+  "index": 3,
+  "direction": 2,
+  "pattern": 1,
+  "w": 96,
+  "h": 96,
+  "slot": 10,
+  "art": [
+   12,
+   12,
+   84,
+   77
+  ],
+  "place": "wall",
+  "name": "skrzyżowane włócznie z tarczą"
+ },
+ "worki_chmiel": {
+  "sheet": "!Tavern_Props2",
+  "index": 3,
+  "direction": 2,
+  "pattern": 2,
+  "w": 96,
+  "h": 96,
+  "slot": 11,
+  "art": [
+   0,
+   47,
+   96,
+   89
+  ],
+  "place": "floor2",
+  "name": "worki chmielu"
+ },
+ "worki_slod": {
+  "sheet": "!Tavern_Props2",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 12,
+  "art": [
+   0,
+   47,
+   96,
+   88
+  ],
+  "place": "floor2",
+  "name": "worki słodu"
+ }
+}

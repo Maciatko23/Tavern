@@ -1,0 +1,7 @@
+[
+ {"map": "tools/tavern/staging/Map025.json", "id": 25, "out": "tools/tavern/staging/renders/diag_nodark.png", "mode": "screen", "hour": 20, "player": [48, 61, 8], "wait": 60, "nodark": true},
+ {"map": "tools/tavern/staging/Map025.json", "id": 25, "out": "tools/tavern/staging/renders/diag_nofill.png", "mode": "screen", "hour": 20, "player": [48, 61, 8], "wait": 60,
+  "script": "(function(){ const s = SceneManager._scene._spriteset; s._roomHoles = s._roomHoles.filter(h => h.radius !== 420); s._darkKey = null; return 0; })()"},
+ {"map": "tools/tavern/staging/Map025.json", "id": 25, "out": "tools/tavern/staging/renders/diag_noglow.png", "mode": "screen", "hour": 20, "player": [48, 61, 8], "wait": 60,
+  "script": "(function(){ const s = SceneManager._scene._spriteset; if (s._glowSprite) s._glowSprite.visible = false; return 0; })()"}
+]

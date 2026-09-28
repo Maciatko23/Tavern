@@ -49,12 +49,16 @@
  * najpierw trzeba się napić albo najeść. Koszty głodu i pragnienia mnożą się ze sobą
  * i z premiami z Survival.js (Najedzony, zimno).
  *
- * JEDZENIE: potrawy z menu Przedmioty syci (tablica FEED w kodzie albo klucze fed=
- * i water= w notatce <Food:...> przedmiotu). Zjeść można też przy pełnych siłach,
+ * JEDZENIE: potrawy z menu Przedmioty syci (kolumny fed i water tabeli jedzenia
+ * FoodTable w Farming_Data.js). Zjeść można też przy pełnych siłach,
  * jeśli jesteś głodny albo spragniony.
+ * OSTATNIE SIŁY: kto ma sytość albo nawodnienie poniżej 25, ten zbiera jedzenie
+ * (jagody, grzyby, dzikie warzywa, plony) bez kosztu wytrzymałości - nawet przy
+ * zerowych siłach da się coś zjeść. Jedzenie i picie nigdy nie kosztują sił.
  * PICIE: przy stawie i studni "Napij się" (+40). BUKŁAK (Zrób bukłak w menu
- * Wytwórz...) mieści 4 łyki po 35, napełniasz go przy wodzie, a pijesz z niego
- * klawiszem G albo z menu Przedmioty.
+ * Wytwórz...) mieści 4 łyki po 35, a powiększony w garbarni ("Powiększ bukłak")
+ * 8 łyków; napełniasz go przy wodzie, a pijesz z niego klawiszem G albo z menu
+ * Przedmioty.
  *
  * Dla innych wtyczek: Needs.state(), Needs.eat(przedmiot), Needs.drink(ile),
  * Needs.drinkFromSkin(), Needs.fillSkin(), Needs.setEnabled(bool).
@@ -70,19 +74,23 @@
     const WATER_RATE = Number(params.waterRate || 2.5);
     const SLEEP_FACTOR = 0.5;
     const WORK_FOOD = 0.04, WORK_WATER = 0.07;      // extra loss per point of stamina spent
+    // the signals: below URGENT the hero says it (a bubble, every NAG_HOURS game hours) and the bar blinks; below FAINT he walks slower
+    const URGENT = 20, FAINT = 10, NAG_HOURS = 2, FAINT_SPEED = 0.85;
     const RAIN_GAIN = 1.5;                          // nawodnienie per hour outdoors in the rain
-    const SKIN = { item: 129, max: 4, sip: 35 };
+    // the waterskin: base sips, big once the tannery has enlarged it ("Powiększ bukłak", the user's stage 1: n.skinBig) - max follows
+    const SKIN = { item: 129, base: 4, big: 8, sip: 35, get max() { return skinBig() ? this.big : this.base; } };
     const TAP_DRINK = 40;
+    // the last bit of strength (the user's stage 1, 2026-09-27): below RESCUE fullness or water, gathering food costs no strength
+    // (Farming.js asks inNeed) - a hero starved down to 0 strength can always pick something to eat. Eating and drinking never cost any.
+    const RESCUE = 25;
     Input.keyMapper[71] = "drink";   // G
 
     // level 0..3 for each meter: thresholds, the cost factor, the ceiling of stamina (share of the maximum), the name
     const FOOD = { steps: [50, 25, 0.5], factor: [1, 1.15, 1.35, 1.6], cap: [1, 1, 0.85, 0.55], name: ["", "Głodny", "Bardzo głodny", "Głodujesz"], drain: [0, 0, 0, 1] };
     const WATER = { steps: [50, 25, 0.5], factor: [1, 1.2, 1.5, 2], cap: [1, 1, 0.7, 0.4], name: ["", "Spragniony", "Odwodniony", "Wysuszony"], drain: [0, 0, 0, 2] };
-    // fullness and water an eaten item gives: [fed, water]
-    const FEED = {
-        71: [6, 0], 72: [8, 0], 73: [10, 0], 75: [6, 0], 76: [8, 0], 81: [5, 10], 83: [30, 0], 95: [45, 0], 99: [38, 0], 102: [8, 10], 103: [8, 0],
-        105: [55, 0], 106: [48, 0], 107: [30, 0], 108: [35, 0], 109: [55, 20], 110: [6, 25], 123: [8, 30], 124: [32, 0]
-    };
+    // fullness and water an eaten item gives, [fed, water]: the fed / water columns of the one food table (FoodTable in Farming_Data.js -
+    // changed there); FEED is kept for old readers
+    const FEED = (window.FoodTable && FoodTable.FEED) || {};
 
     const enabled = () => ON && !!$gameSystem && typeof $gameSystem.dayNightDay === "function";
     const clamp = v => Math.max(0, Math.min(100, v));
@@ -93,6 +101,15 @@
         if (!$gameSystem._needs) $gameSystem._needs = { food: 90, water: 90, skin: 0, lf: 0, lw: 0, drinks: 0, meals: 0 };
         return $gameSystem._needs;
     }
+    // the waterskin enlarged at the tannery (skinBig: it stays so, the same item)
+    function skinBig() {
+        return typeof $gameSystem !== "undefined" && !!$gameSystem && !!$gameSystem._needs && !!$gameSystem._needs.skinBig;
+    }
+    function enlargeSkin() {
+        needs().skinBig = true;
+        return true;
+    }
+    const inNeed = () => enabled() && (needs().food < RESCUE || needs().water < RESCUE);
     const levels = () => ({ food: level(needs().food, FOOD), water: level(needs().water, WATER) });
     function factor() {
         const l = levels();
@@ -178,9 +195,9 @@
 
     // ---- eating and drinking
     function foodValues(item, food) {
-        const t = FEED[item.id] || [Math.round((food.stamina || 0) * 0.8), 0];
+        const [fed, water] = window.FoodTable ? FoodTable.fedWater(item, food) : [Math.round(((food || {}).stamina || 0) * 0.8), 0];
         const k = 1 + perk("food.value");   // (Kuchnia: Kucharz)
-        return [(food.fed !== undefined ? food.fed : t[0]) * k, (food.water !== undefined ? food.water : t[1]) * k];
+        return [fed * k, water * k];
     }
     function eat(item, food) {
         if (!enabled()) return "";
@@ -277,7 +294,8 @@
     const _Window_Help_setItem = Window_Help.prototype.setItem;
     Window_Help.prototype.setItem = function(item) {
         if (enabled() && isSkin(item)) {
-            this.setText(item.description + "\nWoda: " + skinCharges() + " z " + SKIN.max + " łyków.");
+            const text = skinBig() ? item.description.replace(/na cztery łyki/, "na osiem łyków (powiększony)") : item.description;   // (the database says four)
+            this.setText(text + "\nWoda: " + skinCharges() + " z " + SKIN.max + " łyków.");
             return;
         }
         _Window_Help_setItem.call(this, item);
@@ -308,20 +326,22 @@
         if (!enabled()) return;
         const n = needs(), l = levels();
         this._pulse = (this._pulse + 1) % 40;
-        const blink = (l.food === 3 || l.water === 3) && this._pulse < 20;
-        const key = Math.round(n.food) + "/" + Math.round(n.water) + (blink ? "b" : "");
+        // (below URGENT the bar blinks; below FAINT twice as fast)
+        const blinkOf = v => v < FAINT ? this._pulse % 20 < 10 : v < URGENT && this._pulse < 20;
+        const bf = blinkOf(n.food), bw = blinkOf(n.water);
+        const key = Math.round(n.food) + "/" + Math.round(n.water) + (bf ? "f" : "") + (bw ? "w" : "");
         if (key === this._key || !(window.UIStyle || this._iconSet.isReady())) return;
         this._key = key;
         const bmp = this.bitmap, ctx = bmp.context;
         bmp.clear();
-        [["food", FOOD_ICON, n.food, l.food, ["#e0b24a", "#c98a2c", "#d9622c", "#c2372b"]], ["water", WATER_ICON, n.water, l.water, ["#62b6ee", "#4a94d6", "#5a78c4", "#3e58b0"]]].forEach(([kind, icon, value, lv, colors], i) => {
+        [["food", FOOD_ICON, n.food, l.food, ["#e0b24a", "#c98a2c", "#d9622c", "#c2372b"], bf], ["water", WATER_ICON, n.water, l.water, ["#62b6ee", "#4a94d6", "#5a78c4", "#3e58b0"], bw]].forEach(([kind, icon, value, lv, colors, blink], i) => {
             const H = HUD(), y = i * H.step, bx = H.row + H.gap, by = y + (H.row - H.barH) / 2;
             if (window.UIStyle) UIStyle.hudRow(ctx, kind, 0, y, value / 100, colors[lv]);
             else {   // (without UITheme.js: the old icons and a plain bar)
                 bmp.blt(this._iconSet, (icon % 16) * 32, Math.floor(icon / 16) * 32, 32, 32, 0, y, H.row, H.row);
                 ctx.fillStyle = "#16181c"; ctx.fillRect(bx, by, H.barW, H.barH); ctx.fillStyle = colors[lv]; ctx.fillRect(bx, by, Math.round(H.barW * value / 100), H.barH);
             }
-            if (lv === 3 && blink) { ctx.fillStyle = "rgba(255,80,60,0.5)"; ctx.fillRect(bx, by, H.barW, H.barH); }   // the last level flashes red
+            if (blink) { ctx.fillStyle = value < FAINT ? "rgba(255,70,50,0.65)" : "rgba(255,120,80,0.45)"; ctx.fillRect(bx, by, H.barW, H.barH); }   // (low: it flashes)
         });
         bmp._baseTexture.update();
     };
@@ -334,16 +354,39 @@
         }
     };
 
+    // the hero says it when it gets bad (a bubble over him), again every NAG_HOURS while it lasts
+    function nag() {
+        if (!enabled() || !window.SpeechBubbles || $gameMessage.isBusy() || $gameMap.isEventRunning() || $gameTemp._farmMenuOpen) return;
+        const n = needs(), hungry = n.food < URGENT, thirsty = n.water < URGENT;
+        if (!hungry && !thirsty) { n.nagAt = null; return; }
+        const now = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
+        if (n.nagAt !== null && n.nagAt !== undefined && now - n.nagAt < NAG_HOURS && now >= n.nagAt) return;
+        n.nagAt = now;
+        const faint = n.food < FAINT || n.water < FAINT;
+        const text = faint ? (thirsty && hungry ? "Kręci mi się w głowie... muszę coś zjeść i się napić!" : thirsty ? "Kręci mi się w głowie... muszę się napić!" : "Kręci mi się w głowie... muszę coś zjeść!")
+            : thirsty && hungry ? "Jestem głodny i spragniony..." : thirsty ? "Muszę się czegoś napić..." : "Muszę coś zjeść...";
+        SpeechBubbles.say($gamePlayer, text);
+    }
+    // faint with hunger or thirst: he walks slower
+    const faintNow = () => enabled() && (needs().food < FAINT || needs().water < FAINT);
+    const _distancePerFrame = Game_CharacterBase.prototype.distancePerFrame;
+    Game_CharacterBase.prototype.distancePerFrame = function() {
+        const d = _distancePerFrame.call(this);
+        return this === $gamePlayer && faintNow() ? d * FAINT_SPEED : d;
+    };
+
     // G: a sip from the flask
     const _Scene_Map_update = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         _Scene_Map_update.call(this);
+        if (Graphics.frameCount % 30 === 0) nag();
         if (!enabled() || !Input.isTriggered("drink")) return;
         if ($gamePlayer.canMove() && !$gameMessage.isBusy() && !$gameMap.isEventRunning() && !$gameTemp._farmMenuOpen && !$gameTemp._buildMode) drinkFromSkin();
     };
 
     window.Needs = {
-        state: needs, levels, factor, capRatio, eat, usefulFood, foodValues, drink, drinkFromSkin, fillSkin, skinCharges, ownsSkin, decay, warn,
+        state: needs, levels, factor, capRatio, nag, URGENT, FAINT, FAINT_SPEED, eat, usefulFood, foodValues, drink, drinkFromSkin, fillSkin, skinCharges, ownsSkin, decay, warn,
+        skinBig, enlargeSkin, RESCUE, inNeed,
         enabled: () => enabled(), setEnabled: v => { ON = !!v; }, FOOD, WATER, FEED, SKIN, TAP_DRINK, HEIGHT: Sprite_NeedsBars.HEIGHT,
         foodText: () => FOOD.name[levels().food], waterText: () => WATER.name[levels().water]
     };

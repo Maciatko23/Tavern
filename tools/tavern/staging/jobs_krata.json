@@ -1,0 +1,15 @@
+[
+ {
+  "map": "tools/tavern/staging/Map025.json",
+  "id": 25,
+  "out": "tools/tavern/staging/renders/pietro1_ekran_krata.png",
+  "mode": "screen",
+  "hour": 20,
+  "player": [
+   86,
+   18,
+   6
+  ],
+  "wait": 90
+ }
+]

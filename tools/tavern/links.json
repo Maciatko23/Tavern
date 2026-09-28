@@ -1,0 +1,724 @@
+{
+ "lighting": {
+  "map001_note": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>\n<Zoom:1.5>",
+  "plugin": "RoomLighting.js v1.1.1: <DarkDay:N> map note = darkness by day, <DarkNight:N> = at night (default the plugin's 200); evening 16-19 (lamps come up), dawn 6-8; <LightWhen:night|day> on a light event (no tag = always); <LightSoft> = an even fall-off to the edge (big fill lights); lights off the screen are skipped; all glows are painted into one half-resolution layer; light holes are filled squares (no seam on the software renderer).",
+  "tags": {
+   "candle": "<Light:110,120,80,30><LightWhen:night>",
+   "candles3": "<Light:150,130,90,34><LightWhen:night>",
+   "candelabra": "<Light:150,130,90,34><LightWhen:night>",
+   "sconce": "<Light:170,90,60,22><LightWhen:night>",
+   "lantern": "<Light:210,90,62,24><LightWhen:night>",
+   "lantern_small": "<Light:150,90,62,24><LightWhen:night>",
+   "chandelier": "<Light:330,40,28,10><LightWhen:night>",
+   "fill": "<Light:300,14,10,4><LightWhen:night><LightSoft>",
+   "fireplace": "<Light:330,120,60,16>",
+   "stove": "<Light:230,120,64,20>",
+   "oven": "<Light:130,120,50,14>",
+   "window_day": "<LightCone:length=150,angle=30,dir=90,width=24,anchor=top,offsety=-10,blur=5,dust=8,dustsize=1,r=255,g=228,b=190,when=day>"
+  },
+  "rules": [
+   "the <Light> note goes on the lamp's own picture event when there is one (one event per lamp), else on an empty event",
+   "candles, lanterns, sconces, candelabras, chandeliers and fill lights: <LightWhen:night>",
+   "fireplaces, stoves and ovens: always (no LightWhen)",
+   "windows: night panes (B 0,2 / 0,3 dark blue) on the wall; by day a LightCone with when=day from the window's top",
+   "fill lights only where the evening would leave a dark hole between lamps; none in storerooms (dim on purpose)"
+  ]
+ },
+ "map001_stairs_up": {
+  "map": 1,
+  "west": [
+   [
+    37,
+    76
+   ],
+   [
+    38,
+    76
+   ],
+   [
+    39,
+    76
+   ]
+  ],
+  "east": [
+   [
+    61,
+    76
+   ],
+   [
+    62,
+    76
+   ],
+   [
+    63,
+    76
+   ]
+  ],
+  "note": "touch events on the top steps of both staircases -> Map025 (map025_stairs_down.landing)"
+ },
+ "map001_from_above": {
+  "map": 1,
+  "landing": [
+   [
+    61,
+    82,
+    2
+   ],
+   [
+    62,
+    82,
+    2
+   ],
+   [
+    63,
+    82,
+    2
+   ]
+  ],
+  "note": "coming down from Map025: the floor row under the east staircase, facing down"
+ },
+ "map025_stairs_down": {
+  "map": 25,
+  "event_ids": [
+   288,
+   289,
+   290,
+   291,
+   292
+  ],
+  "cells": [
+   [
+    46,
+    65
+   ],
+   [
+    47,
+    65
+   ],
+   [
+    48,
+    65
+   ],
+   [
+    49,
+    65
+   ],
+   [
+    50,
+    65
+   ]
+  ],
+  "landing": [
+   48,
+   62,
+   8
+  ],
+  "landing_from_map001": [
+   48,
+   62,
+   8
+  ],
+  "goes_to_map001": {
+   "cells": [
+    [
+     61,
+     82
+    ],
+    [
+     62,
+     82
+    ],
+    [
+     63,
+     82
+    ]
+   ],
+   "dir": 2,
+   "provisional": false,
+   "note": "the transfer targets come from links.json map001_from_above when it exists, else from parter_layout.FROM_ABOVE; rebuild with build_upper.py to refresh"
+  }
+ },
+ "map025_stairs_up": {
+  "map": 25,
+  "event_ids": [
+   293,
+   294,
+   295,
+   296,
+   297
+  ],
+  "cells": [
+   [
+    90,
+    6
+   ],
+   [
+    91,
+    6
+   ],
+   [
+    92,
+    6
+   ],
+   [
+    93,
+    6
+   ],
+   [
+    94,
+    6
+   ]
+  ],
+  "landing": [
+   92,
+   17,
+   2
+  ],
+  "landing_from_map026": [
+   92,
+   17,
+   2
+  ]
+ },
+ "tags": {
+  "map025": [
+   {
+    "kind": "door",
+    "room": "komnata",
+    "event": 9,
+    "x": 67,
+    "y": 16,
+    "label": "Komnata",
+    "inside": [
+     67,
+     12
+    ],
+    "outside": [
+     67,
+     17
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "3",
+    "event": 33,
+    "x": 28,
+    "y": 48,
+    "label": "Pokój 3",
+    "inside": [
+     28,
+     44
+    ],
+    "outside": [
+     28,
+     49
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "1",
+    "event": 35,
+    "x": 38,
+    "y": 48,
+    "label": "Pokój 1",
+    "inside": [
+     38,
+     44
+    ],
+    "outside": [
+     38,
+     49
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "2",
+    "event": 37,
+    "x": 58,
+    "y": 48,
+    "label": "Pokój 2",
+    "inside": [
+     58,
+     44
+    ],
+    "outside": [
+     58,
+     49
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "candle",
+    "room": "3",
+    "event": 124,
+    "x": 26,
+    "y": 36
+   },
+   {
+    "kind": "bed",
+    "room": "3",
+    "price": 20,
+    "name": "Pokój nr 3",
+    "event": 131,
+    "x": 27,
+    "y": 37,
+    "occupy": "<Occupy:right=1,down=1>"
+   },
+   {
+    "kind": "candle",
+    "room": "1",
+    "event": 132,
+    "x": 37,
+    "y": 36
+   },
+   {
+    "kind": "bed",
+    "room": "1",
+    "price": 8,
+    "name": "Pokój nr 1",
+    "event": 136,
+    "x": 38,
+    "y": 37,
+    "occupy": "<Occupy:down=1>"
+   },
+   {
+    "kind": "candle",
+    "room": "2",
+    "event": 137,
+    "x": 58,
+    "y": 36
+   },
+   {
+    "kind": "bed",
+    "room": "2",
+    "price": 15,
+    "name": "Pokój nr 2",
+    "event": 143,
+    "x": 57,
+    "y": 37,
+    "occupy": "<Occupy:right=2,down=1>"
+   },
+   {
+    "kind": "bed",
+    "room": "komnata",
+    "price": 30,
+    "minrep": 60,
+    "name": "Komnata z kominkiem",
+    "event": 264,
+    "x": 67,
+    "y": 4,
+    "occupy": "<Occupy:right=1,down=1>"
+   },
+   {
+    "kind": "candle",
+    "room": "komnata",
+    "event": 265,
+    "x": 66,
+    "y": 3
+   },
+   {
+    "kind": "gate",
+    "minrep": 80,
+    "event": 298,
+    "x": 92,
+    "y": 16,
+    "cells": [
+     [
+      90,
+      16
+     ],
+     [
+      91,
+      16
+     ],
+     [
+      92,
+      16
+     ],
+     [
+      93,
+      16
+     ],
+     [
+      94,
+      16
+     ]
+    ],
+    "unlock": "self switch A",
+    "bell_event": 299,
+    "bell": [
+     89,
+     16
+    ]
+   }
+  ],
+  "map026": [
+   {
+    "kind": "door",
+    "room": "suite1",
+    "event": 1,
+    "x": 16,
+    "y": 19,
+    "label": "Apartament Różany — salonik",
+    "inside": [
+     16,
+     15
+    ],
+    "outside": [
+     16,
+     20
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "lordsuite",
+    "event": 3,
+    "x": 24,
+    "y": 19,
+    "label": "Apartament Lorda — sypialnia",
+    "inside": [
+     24,
+     15
+    ],
+    "outside": [
+     24,
+     20
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "lordsuite",
+    "event": 5,
+    "x": 40,
+    "y": 19,
+    "label": "Apartament Lorda — salon",
+    "inside": [
+     40,
+     15
+    ],
+    "outside": [
+     40,
+     20
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "suite2",
+    "event": 9,
+    "x": 64,
+    "y": 19,
+    "label": "Apartament Błękitny — salonik",
+    "inside": [
+     64,
+     15
+    ],
+    "outside": [
+     64,
+     20
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "suite3",
+    "event": 11,
+    "x": 13,
+    "y": 31,
+    "label": "Apartament Zielony — salonik",
+    "inside": [
+     13,
+     35
+    ],
+    "outside": [
+     13,
+     30
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "door",
+    "room": "zloty",
+    "event": 21,
+    "x": 67,
+    "y": 31,
+    "label": "Apartament Złoty — salonik",
+    "inside": [
+     67,
+     35
+    ],
+    "outside": [
+     67,
+     30
+    ],
+    "unlock": "self switch A"
+   },
+   {
+    "kind": "guard",
+    "event": 48,
+    "x": 36,
+    "y": 23,
+    "message": "Tylko dla gości."
+   },
+   {
+    "kind": "candle",
+    "room": "zloty",
+    "event": 94,
+    "x": 73,
+    "y": 34
+   },
+   {
+    "kind": "bed",
+    "room": "zloty",
+    "price": 50,
+    "minrep": 80,
+    "name": "Apartament Złoty",
+    "event": 103,
+    "x": 74,
+    "y": 35,
+    "occupy": "<Occupy:right=1,down=1>"
+   }
+  ],
+  "map001": [
+   {
+    "kind": "arm",
+    "event": 148,
+    "x": 92,
+    "y": 37,
+    "tag": "<Tavern:arm>",
+    "name": "Tavern:arm (siłowanie na rękę)"
+   },
+   {
+    "kind": "attendant",
+    "event": 172,
+    "x": 8,
+    "y": 55,
+    "tag": "<Tavern:attendant>",
+    "name": "Łaziebna Wanda"
+   },
+   {
+    "kind": "bath",
+    "event": 159,
+    "x": 4,
+    "y": 57,
+    "tag": "<Tavern:bath>",
+    "name": "Tavern:bath (kąpiel)"
+   },
+   {
+    "kind": "bath",
+    "event": 161,
+    "x": 12,
+    "y": 57,
+    "tag": "<Tavern:bath>",
+    "name": "Tavern:bath (kąpiel)"
+   },
+   {
+    "kind": "bath",
+    "event": 163,
+    "x": 4,
+    "y": 65,
+    "tag": "<Tavern:bath>",
+    "name": "Tavern:bath (kąpiel)"
+   },
+   {
+    "kind": "bath",
+    "event": 165,
+    "x": 12,
+    "y": 65,
+    "tag": "<Tavern:bath>",
+    "name": "Tavern:bath (kąpiel)"
+   },
+   {
+    "kind": "board",
+    "event": 21,
+    "x": 43,
+    "y": 78,
+    "tag": "<Tavern:board>",
+    "name": "Tablica zleceń"
+   },
+   {
+    "kind": "darts",
+    "event": 174,
+    "x": 89,
+    "y": 57,
+    "tag": "<Tavern:darts>",
+    "name": "Tavern:darts (linia rzutu)"
+   },
+   {
+    "kind": "darts",
+    "event": 176,
+    "x": 95,
+    "y": 57,
+    "tag": "<Tavern:darts>",
+    "name": "Tavern:darts (linia rzutu)"
+   },
+   {
+    "kind": "dice",
+    "event": 140,
+    "x": 87,
+    "y": 35,
+    "tag": "<Tavern:dice>",
+    "name": "Tavern:dice (miejsce gracza)"
+   },
+   {
+    "kind": "dice",
+    "event": 143,
+    "x": 97,
+    "y": 35,
+    "tag": "<Tavern:dice:grum>",
+    "name": "Tavern:dice (miejsce gracza)"
+   },
+   {
+    "kind": "meal",
+    "event": 38,
+    "x": 49,
+    "y": 65,
+    "tag": "<Tavern:meal>",
+    "name": "Tavern:meal (zamówienie posiłku)"
+   },
+   {
+    "kind": "mealtable",
+    "event": 60,
+    "x": 21,
+    "y": 61,
+    "tag": "<Tavern:mealtable dir=4>",
+    "name": "Tavern:mealtable (miejsce przy stole)"
+   },
+   {
+    "kind": "mealtable",
+    "event": 61,
+    "x": 21,
+    "y": 63,
+    "tag": "<Tavern:mealtable dir=4>",
+    "name": "Tavern:mealtable (miejsce przy stole)"
+   },
+   {
+    "kind": "mealtable",
+    "event": 77,
+    "x": 79,
+    "y": 61,
+    "tag": "<Tavern:mealtable dir=6>",
+    "name": "Tavern:mealtable (miejsce przy stole)"
+   },
+   {
+    "kind": "mealtable",
+    "event": 78,
+    "x": 79,
+    "y": 63,
+    "tag": "<Tavern:mealtable dir=6>",
+    "name": "Tavern:mealtable (miejsce przy stole)"
+   },
+   {
+    "kind": "mealtable",
+    "event": 188,
+    "x": 24,
+    "y": 80,
+    "tag": "<Tavern:mealtable dir=8 plate=0,-2>",
+    "name": "Tavern:mealtable (miejsce przy stole)"
+   },
+   {
+    "kind": "mealtable",
+    "event": 189,
+    "x": 30,
+    "y": 80,
+    "tag": "<Tavern:mealtable dir=8 plate=0,-2>",
+    "name": "Tavern:mealtable (miejsce przy stole)"
+   },
+   {
+    "kind": "stage",
+    "event": 110,
+    "x": 72,
+    "y": 34,
+    "tag": "<Tavern:stage>",
+    "name": "Tavern:stage (miejsce słuchacza)"
+   }
+  ]
+ },
+ "map026_stairs_down": {
+  "map": 26,
+  "event_ids": [
+   159,
+   160,
+   161,
+   162,
+   163
+  ],
+  "cells": [
+   [
+    38,
+    26
+   ],
+   [
+    39,
+    26
+   ],
+   [
+    40,
+    26
+   ],
+   [
+    41,
+    26
+   ],
+   [
+    42,
+    26
+   ]
+  ],
+  "landing": [
+   40,
+   23,
+   8
+  ],
+  "landing_from_map025": [
+   40,
+   23,
+   8
+  ]
+ },
+ "upper_maps": {
+  "25": {
+   "name": "Pokoje gości",
+   "file": "tools/tavern/staging/Map025.json",
+   "parent": 1,
+   "size": [
+    97,
+    71
+   ]
+  },
+  "26": {
+   "name": "Apartamenty",
+   "file": "tools/tavern/staging/Map026.json",
+   "parent": 1,
+   "size": [
+    81,
+    57
+   ]
+  },
+  "own_character_sheets": [
+   "img/characters/!Tavern_Props_Upper.png",
+   "img/characters/!$Tavern_Props_Upper_Big.png",
+   "img/characters/!Tavern_Props_Upper_Doors.png"
+  ],
+  "winlu_character_sheets_used": [
+   "!$Chandelier",
+   "!$Fireplace1",
+   "!$Fireplace2",
+   "!$Fireplace4",
+   "!Decoration",
+   "!Decoration2",
+   "!Decoration_static",
+   "!Fantasy_chest",
+   "!Fantasy_door1",
+   "!Fantasy_door3",
+   "!Fantasy_wandpillar",
+   "!Statue",
+   "!clock"
+  ]
+ }
+}

@@ -1,0 +1,88 @@
+{
+ "name": "sucha_trawa",
+ "title": "Sucha trawa",
+ "describe": "sucha trawa: dry yellowed grass, straw-coloured withered blades",
+ "texture": {
+  "sources": {
+   "dry": {
+    "winlu": [16, 27],
+    "hsv": [-0.2, 0.62, 1.0],
+    "mean": [138, 142, 86]
+   },
+   "green": {
+    "winlu": [16, 27],
+    "hsv": [-0.06, 0.7, 0.95],
+    "mean": [112, 134, 78],
+    "smooth": 0.4,
+    "detail": 0.6
+   }
+  },
+  "base": "dry",
+  "blend": [
+   {
+    "source": "green",
+    "mask": {
+     "sigma": 1.2,
+     "warp": 1.2,
+     "seed": 9,
+     "lo": 0.58,
+     "hi": 0.85
+    },
+    "lit": 0.0,
+    "shade": 0.06
+   }
+  ],
+  "finish": {
+   "ref": "k16",
+   "boost": [1.0, 1.0, 0.95, 0.85, 0.6, 0.4],
+   "grain": "k16",
+   "grain_w": [0.8, 0.5],
+   "chroma_blur": 0.5,
+   "chroma_spread": 1.0,
+   "mean": [134, 146, 86],
+   "chroma_flatten": [1.5, 0.2]
+  },
+  "strokes": [
+   {
+    "type": "needles",
+    "stage": "after",
+    "n": 16,
+    "seed": 12,
+    "alpha": 120,
+    "shadow": 14,
+    "soft": 0.3,
+    "len": [3.0, 5.0],
+    "width": [0.55, 0.75],
+    "colours": [
+     [176, 164, 104],
+     [166, 152, 96],
+     [184, 172, 112],
+     [156, 146, 90]
+    ]
+   }
+  ]
+ },
+ "edge": {
+  "mask": 46,
+  "border_fade": 4,
+  "depth": 6,
+  "wobble": 0.45,
+  "alpha_blur": 1.6,
+  "body_alpha": 0.95,
+  "rim_k": 0.04,
+  "rim_rgb": [96, 112, 62]
+ },
+ "slots": {
+  "k37": "overlay"
+ },
+ "soil": "earth",
+ "preview_remap": {
+  "k46": "k37"
+ },
+ "preview": [
+  [21, 2, 9, 16, 10],
+  [4, 18, 0, 16, 10],
+  [3, 2, 20, 16, 9]
+ ],
+ "note": "made by the verifier from README.md alone (2026-09-27), 0 generations: Winlu's own grass (k16 + k27) turned to straw, a few greener tufts through a noise mask, faint straw blades; the fluffy k46 edge. Mean colour kept inside Farming.js's 'earth' window (a yellow grass cannot be 'grass' there: that needs hue 110-150) and at hue > 70 so Atmosphere.js still plays grass footsteps."
+}

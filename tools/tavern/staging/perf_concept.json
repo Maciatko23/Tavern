@@ -1,0 +1,5 @@
+[
+ {"label": "Map019 (dom dziadka)", "map": null, "id": 19, "hour": 18, "frames": 240, "spots": [[5, 5, 8], [3, 4, 2], [8, 6, 4]]},
+ {"label": "Koncepcja B 34x28", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 240,
+  "spots": [[19, 19, 8], [29, 8, 2], [5, 19, 8], [29, 15, 8], [16, 25, 8]]}
+]

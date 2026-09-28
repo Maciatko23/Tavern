@@ -1,0 +1,42 @@
+[
+  {
+    "key": "Dziadek",
+    "name": "Dziadek Stach",
+    "pixellab_id": "ea649747-b884-4de3-91e1-15e159a12870",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "6211bb85-58ba-41bd-a40c-f255e73f5b92",
+    "animation": "walk",
+    "description": "old village grandfather, about 70 years old, kind wrinkled face, long grey-white beard and moustache, bushy grey eyebrows, worn brown felt cap with grey hair at the sides, patched brown wool peasant coat (sukmana) over an off-white linen shirt, rope belt, baggy grey trousers, simple woven bast shoes, slightly stooped, poor but tidy medieval peasant, empty hands, no weapon, no staff, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": "made by the earlier agent (pro, 64 px: 20-40), not measured",
+      "walk_template": 8,
+      "walk_jobs_failed_and_rerun": 2,
+      "walk_total": "8-10 (the 2 failed jobs may or may not have been charged)"
+    },
+    "sheet": "$Npc_Dziadek",
+    "walk8": "Npc_Dziadek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": "Dziadek bohatera; nowa gra zaczyna się w jego chacie (Map019, zdarzenie 901 w Story.js). Chód: walking-8-frames, 1 gen/kierunek. Zachód (rotacja + chód) to lustro wschodu: własny chód zachodni PixelLaba zmieniał kolory (kremowe spodnie, pomarańczowy pas). Stopy już na wierszach bohatera (dy 0 we wszystkich kierunkach)."
+  }
+]

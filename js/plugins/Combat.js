@@ -424,9 +424,20 @@
         stun: 0, stunKind: "", flinchT: 0, flinchLen: 1, hitFrom: [0, 1], comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, secondWind: false, combatT: 0, hurtT: 0, weapon: 0 };
     const ROLL = { frames: 22, dist: 2.4, cd: 10, chain: 26 };
     const px = () => $gamePlayer._realX + 0.5, py = () => $gamePlayer._realY + 0.5;
-    const facingVec = () => ({ 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] }[$gamePlayer.direction()] || [0, 1]);
+    // where he faces - on the slant too (Hunting.js reads HeroLook's 8-way facing): the blow, the block and the roll go that way
+    const DIR8_VEC = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
+    // the way the arrows point: Input.dir8 is read at the start of the frame, so an arrow pressed together with Space (or the attack)
+    // in the same frame is not in it yet - the roll went the way he faced, sometimes right into the wolf (2026-09-26); then the arrows
+    // held right now count
+    function arrowsDir8() {
+        if (Input.dir8) return Input.dir8;
+        const s = Input._currentState || {}, x = (s.right ? 1 : 0) - (s.left ? 1 : 0), y = (s.down ? 1 : 0) - (s.up ? 1 : 0);
+        return { "-1,-1": 7, "0,-1": 8, "1,-1": 9, "-1,0": 4, "1,0": 6, "-1,1": 1, "0,1": 2, "1,1": 3 }[x + "," + y] || 0;
+    }
+    const facingVec = () => window.Hunting && Hunting.facingVector ? Hunting.facingVector() : ({ 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] }[$gamePlayer.direction()] || [0, 1]);
     function faceToward(x, y) {
         const dx = x - px(), dy = y - py();
+        if (window.Hunting && Hunting.faceSlant) { Hunting.faceSlant(dx, dy); return; }
         if (Math.abs(dx) >= Math.abs(dy)) $gamePlayer.setDirection(dx < 0 ? 4 : 6); else $gamePlayer.setDirection(dy < 0 ? 8 : 2);
     }
     function canAct() {
@@ -448,8 +459,9 @@
     // the nearest hostile thing in front (tiles), to turn to when the blow starts: up to 1.5 tiles past the reach, within 100 degrees
     function autoFace(w) {
         if (!window.Hunting) return;
-        const d8 = Input.dir8, v = d8 ? ({ 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] }[d8]) : facingVec();
+        const d8 = arrowsDir8(), v = d8 ? DIR8_VEC[d8] : facingVec();
         let best = null, bestScore = Infinity;
+        act.aim = null;
         for (const t of Hunting.allTargets()) {
             const dx = t.x - px(), dy = t.y - py(), d = Math.hypot(dx, dy);
             if (d < 0.05 || d > w.reach + 1.5) continue;
@@ -458,8 +470,17 @@
             const score = d + (1 - cos) * 2;
             if (score < bestScore) { bestScore = score; best = t; }
         }
-        if (best) faceToward(best.x, best.y);
-        else if (d8) $gamePlayer.setDirection(Math.abs(v[0]) >= Math.abs(v[1]) ? (v[0] < 0 ? 4 : 6) : (v[1] < 0 ? 8 : 2));
+        if (best) { faceToward(best.x, best.y); act.aim = { ref: best.ref || null, x: best.x, y: best.y }; }   // (the blow goes at it - on the slant too)
+        else if (d8) faceToward(px() + v[0], py() + v[1]);
+    }
+    // the way the blow goes: at the one it was aimed at (where it is now, while it is still roughly in front), else where he faces
+    function blowVec() {
+        const [fx, fy] = facingVec();
+        const a = act.aim;
+        if (!a) return [fx, fy];
+        const now = a.ref && window.Hunting ? Hunting.allTargets().find(t => t.ref === a.ref) : null;
+        const tx = now ? now.x : a.x, ty = now ? now.y : a.y, dx = tx - px(), dy = ty - py(), d = Math.hypot(dx, dy);
+        return d > 0.05 && (dx * fx + dy * fy) / d > 0.3 ? [dx / d, dy / d] : [fx, fy];
     }
 
     // the attack key pressed
@@ -521,7 +542,7 @@
         let mult = heavy ? (full ? HEAVY.full : HEAVY.mult) : COMBO_MULT[Math.min(i, COMBO_MULT.length - 1)];
         const last = i + 1 >= maxCombo(w);
         const poise = w.poise * poiseMult() * (1 + perk("melee.poise")) * (heavy ? HEAVY.poise : last ? 1.5 : 1);
-        const [fx, fy] = facingVec(), reachBonus = heavy ? 0.3 : 0;
+        const [fx, fy] = blowVec(), reachBonus = heavy ? 0.3 : 0;
         const hits = [];
         for (const t of (window.Hunting ? Hunting.allTargets() : [])) {
             const dx = t.x - px(), dy = t.y - py(), d = Math.hypot(dx, dy);
@@ -573,7 +594,7 @@
         const cost = rollCost() * (second ? 0.6 : 1);
         if (!spendBreath(cost)) return false;
         endSwing();
-        const d8 = Input.dir8, v = d8 ? ({ 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] }[d8]) : facingVec();
+        const d8 = arrowsDir8(), v = d8 ? DIR8_VEC[d8] : facingVec();
         const len = Math.hypot(v[0], v[1]);
         act.rollDir = [v[0] / len, v[1] / len];
         if (d8) $gamePlayer.setDirection(Math.abs(v[0]) >= Math.abs(v[1]) ? (v[0] < 0 ? 4 : 6) : (v[1] < 0 ? 8 : 2));

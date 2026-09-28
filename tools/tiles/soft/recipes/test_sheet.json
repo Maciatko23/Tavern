@@ -1,0 +1,26 @@
+{
+ "out": "img/tilesets/Soft_Test_A2.png",
+ "base": "green",
+ "note": "the test sheet: every dirt path (k39) turns into mud, the k24 ground too, the dark-grass patches (k46) into forest floor; the sandy path goes into the unused overlay slot k23 (0 cells on the maps)",
+ "grounds": [
+  {
+   "recipe": "bloto",
+   "slots": {
+    "k39": "overlay",
+    "k24": "full"
+   }
+  },
+  {
+   "recipe": "sciolka",
+   "slots": {
+    "k46": "overlay"
+   }
+  },
+  {
+   "recipe": "piasek",
+   "slots": {
+    "k23": "overlay"
+   }
+  }
+ ]
+}

@@ -14,7 +14,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(19); $gameSystem.setStamina(100); $gameScreen.clearWeather(); 0");
+        await ev("SceneManager._scene.startFadeIn(1,false); if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(19); $gameSystem.setStamina(100); $gameScreen.clearWeather(); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const settle = async () => { await frames(6); await ev(`new Promise(res => { const iv = setInterval(() => { if (!$gamePlayer.isToolSwinging() && !($gameTemp._farmLock > 0) && !($gameTemp._farmTimers && $gameTemp._farmTimers.length) && $gameScreen.brightness() >= 250) { clearInterval(iv); res(1); } }, 20); })`); await frames(4); };
         const press = async k => { await ev(`Input._currentState.${k} = true; 0`); await frames(3); await ev(`Input._currentState.${k} = false; 0`); await frames(3); };
@@ -62,6 +62,8 @@ fs.mkdirSync(OUT, { recursive: true });
         const { bx, by } = B;
         const standAt = (x, y, d) => ev(`$gamePlayer.locate(${x}, ${y}); $gamePlayer.setDirection(${d}); $gameMap.setDisplayPos(${x} - 13, ${y} - 7); $gameSystem.setStamina(100); 0`);
         await standAt(bx + 2, by + 4, 8);
+        // (a branch or a stone lying on the tile: the first press would only pick it up, the menu would not open)
+        await ev(`(function(){ for (let i = 0; i < 3 && (Farming.gatherAt(${bx + 2}, ${by + 3}) || (Farming.stoneAt && Farming.stoneAt(${bx + 2}, ${by + 3}))); i++) Farming.takeGatherFor(${bx + 2}, ${by + 3}); return 0; })()`);
         await frames(8);
         // the real menu: the plot menu > Wytwórz... > Zrób leśne legowisko
         const list0 = await ev(`Farming.menuFor(${bx + 2}, ${by + 3}).entries.map(e => e.name)`);

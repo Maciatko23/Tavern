@@ -64,16 +64,25 @@ const OUT = __dirname + "/";
         st = await info();
         check("M shows it again", st.mini.visible && st.goal.y === st.mini.y + st.mini.panelH + 6);
 
-        // a map that fits the screen has no minimap: the tavern (Map001, 17x13)
-        await ev("$gamePlayer.reserveTransfer(1, 8, 8, 2, 0); 0");
+        // the big tavern (Map001, 101x84 since 2026-09-28) has a minimap like any big map
+        await ev("$gamePlayer.reserveTransfer(1, 50, 82, 8, 0); 0");
         for (let i = 0; i < 40; i++) { if (await ev("$gameMap.mapId() === 1 && !SceneManager.isSceneChanging()")) break; await sleep(300); }
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); 0");
         await frames(60);
         st = await info();
-        check("the small tavern map has no minimap", !st.mini.visible, st.mini);
-        check("and the goal window takes the top right place", st.goal.visible && st.goal.y === st.rect.y, st.goal);
+        check("the big tavern (Map001) has its minimap", st.mini.visible, st.mini);
         await b.shot(OUT + "mm_tavern.png");
+        // a map that fits the screen has no minimap: the hut (Map100, 7x6)
+        await ev("$gamePlayer.reserveTransfer(100, 3, 3, 2, 0); 0");
+        for (let i = 0; i < 40; i++) { if (await ev("$gameMap.mapId() === 100 && !SceneManager.isSceneChanging()")) break; await sleep(300); }
+        await sleep(1500);
+        await ev("SceneManager._scene.startFadeIn(1,false); 0");
+        await frames(60);
+        st = await info();
+        check("the small hut map has no minimap", !st.mini.visible, st.mini);
+        check("and the goal window takes the top right place", st.goal.visible && st.goal.y === st.rect.y, st.goal);
+        await b.shot(OUT + "mm_hut.png");
     } catch (e) { console.log("ERR", e.message); }
     console.log("console errors:", b.logs.filter(l => /EXC|rror/.test(l)).slice(-4));
     console.log(results.filter(Boolean).length + "/" + results.length + " passed");

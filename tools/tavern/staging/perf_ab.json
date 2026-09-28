@@ -1,0 +1,10 @@
+[
+ {"label": "Map019 old RL", "map": null, "id": 19, "hour": 18, "frames": 300, "spots": [[5, 5, 8]], "plugins": {"RoomLighting.js": "backup_art_2026-09-26/RoomLighting_before_tavern_interior.js"}, "shot": "tools/tavern/staging/renders/ab_019_old.png"},
+ {"label": "Map019 new RL", "map": null, "id": 19, "hour": 18, "frames": 300, "spots": [[5, 5, 8]], "shot": "tools/tavern/staging/renders/ab_019_new.png"},
+ {"label": "B old RL", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 300, "spots": [[19, 19, 8], [29, 8, 2]], "plugins": {"RoomLighting.js": "backup_art_2026-09-26/RoomLighting_before_tavern_interior.js"}, "shot": "tools/tavern/staging/renders/ab_B_old.png"},
+ {"label": "B new RL", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 300, "spots": [[19, 19, 8], [29, 8, 2]], "shot": "tools/tavern/staging/renders/ab_B_new.png"},
+ {"label": "Map019 old RL", "map": null, "id": 19, "hour": 18, "frames": 300, "spots": [[5, 5, 8]], "plugins": {"RoomLighting.js": "backup_art_2026-09-26/RoomLighting_before_tavern_interior.js"}},
+ {"label": "Map019 new RL", "map": null, "id": 19, "hour": 18, "frames": 300, "spots": [[5, 5, 8]]},
+ {"label": "B old RL", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 300, "spots": [[19, 19, 8], [29, 8, 2]], "plugins": {"RoomLighting.js": "backup_art_2026-09-26/RoomLighting_before_tavern_interior.js"}},
+ {"label": "B new RL", "map": "tools/tavern/staging/Map001_B.json", "id": 1, "hour": 18, "frames": 300, "spots": [[19, 19, 8], [29, 8, 2]]}
+]

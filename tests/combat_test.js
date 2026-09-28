@@ -214,6 +214,20 @@ const { launch, sleep } = require("./cdp.js");
         check("a journal goal done: +50 XP", goalXp.gained === 50 || goalXp.gained > 900, goalXp);
         await frames(40);
 
+        // ================= 6b. the spear on the slant =================
+        // (the user's, 2026-09-26: a jab at a boar standing on the slant never landed - the blow only knew the four ways, and the
+        // spear's narrow cone (cos 0.75, +-41 degrees) missed a target at 45 degrees; the hero stands on the slant to it often)
+        await standAt(lx, ly, 6);
+        await ev(`$gameSystem._combatHand = "m154"; $gamePlayer._heroDir8 = 6; (function(){ const a = Hunting.spawn("boar", ${lx + 1}, ${ly + 1}); a._frozen = true; a._level = 1; a._maxHp = a._hp = 110; window.__boar = a; })(); Combat.resetAct(); 0`);
+        await frames(4);
+        const slant0 = await ev("__boar._hp");
+        await key(F);
+        for (let i = 0; i < 40 && (await ev("__boar._hp")) === slant0; i++) await frames(2);
+        const slant = await J("({ hp: __boar._hp, dir: $gamePlayer.direction(), dir8: $gamePlayer._heroDir8, hand: Combat.hand() })");
+        check("the spear at a boar on the slant (down-right, 45 degrees): he turns to it (8-way facing 3) and the jab lands", slant.hand === "m154" && slant.hp < slant0 && slant.dir8 === 3, Object.assign({ hp0: slant0 }, slant));
+        await frames(40);
+        await ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");
+
         // ================= 7. saved with the game =================
         const saved = await J("(function(){ const json = JsonEx.stringify(DataManager.makeSaveContents()); const before = JSON.stringify(Combat.hero()); DataManager.extractSaveContents(JsonEx.parse(json)); return { same: JSON.stringify(Combat.hero()) === before, mode: Combat.act.mode }; })()");
         check("the hero (level, attributes, skills, known things) is saved and loaded; the fight state is reset", saved.same && saved.mode === "idle", saved);

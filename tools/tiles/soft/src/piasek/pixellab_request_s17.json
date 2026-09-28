@@ -1,0 +1,22 @@
+{
+ "tool": "mcp__pixellab__create_image_pro_flash",
+ "params": {
+  "description": "Seamless top-down ground texture that fills the whole square canvas edge to edge: pale warm sandy path, fine sand grain, a few small rounded pebbles, soft wind ripples. Soft painterly RPG tileset style with smooth gradients and many close colours, no outlines, no border, no vignette, no objects standing up, low contrast, even lighting, seen straight from above.",
+  "width": 192,
+  "height": 192,
+  "no_background": false,
+  "seed": 17,
+  "style_image": {
+   "base64": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYBAMAAAASWSDLAAAAMFBMVEWHgWODfGKDemKBeWGBeGB/eF9/d19+dV18dF17c1x6clp4cVp1cVl2blZza1NvaE9xP/qHAAABQ0lEQVR42gE4Acf+AzAq/idcDstS8rAsOQIEMs/+P01guA/EejQB//+zUTsKLdThtTRoAd77snoSf8MkGeEBLATIsjEeNMPQG0gP8PgCzFwC2DOFDqkCIymWBDwfp/ASDU84IAEAAgRSpwYOIAL5MBhM6n4EAP+Qi+sWB8rXD+3IBLkoBuUTLBChAy7ycQQlBX9BA1ktBMJCtMMBmcoN5aQdFcMQpBZBApDTVfzfAFERdQZz4gT85ST8VTCcKwPle2IC7uR41TxB5w3q7d8HAEVEE3b+pi8Bu+lBVQMxR1IMH9BVBQHtO1QCRJXlAuM7A8EA8NMVAwBAxjj7YNzOidbaLgGNLgA+F5h9IUzE4yQCTbvglE9ZcPwDEA7dAYbVENanGf9y495B4wA0Z97+H3kwDJJGQtkB9fkQ2+XH8m0cflrH+iGBjjjx3x0AAAAASUVORK5CYII=",
+   "usage_description": "copy its soft painted technique: low contrast, smooth blended colour transitions, no outlines"
+  },
+  "style_options": {
+   "color_palette": false,
+   "outline": true,
+   "detail": true,
+   "shading": true
+  }
+ },
+ "cost": "about 5 generations (192x192)",
+ "then": "download the result into tools/tiles/soft/src/piasek/ (make_ground.py --fetch URL src/piasek/pl_<what>_s17_192.png) and add it to the recipe: \"sources\": {\"pl\": {\"pixellab\": \"piasek/pl_<what>_s17_192.png\"}}"
+}

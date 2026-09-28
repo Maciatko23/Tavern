@@ -1,0 +1,13 @@
+PixelLab Pro Flash generations for the upper floors' props (2026-09-28), style = Winlu Interior crops (props_upper/ref):
+spinet_a.png      job c35993fe-ecbe-481a-8790-ab582547a697  192x192  6 gen
+harp_a.png        job ded59165-5155-40a9-91c6-8201cb7a0492   96x192  6 gen
+tub_a.png         job 3c9c8c65-2f58-45e7-8df0-2ef1daba569d  192x144  6 gen
+canopy_a.png      job 48289cdd-07f7-454a-a31c-4e736a6b3c01  192x256  9 gen
+luggage_a.png     job df86fa7d-3f11-4d79-8734-d9e7763e221b  192x96   6 gen
+cart_a.png        job a128602f-9a62-4526-8163-6acb3399908b   96x128  6 gen
+candelabrum_a.png job 00eff721-0c26-4e96-af90-d002fbe6c43e   96x96   5 gen
+washstand_a.png   job 0ed082da-0be8-403b-9d09-b5f14da55934   96x128  6 gen
+tapestry_a.png    job 06c87fac-fbbe-4205-b676-f6ba3825415f  192x192  6 gen
+(total 56 generations)
+gate_a.png        job 660650d4-dc97-4559-9571-d286a6585666  256x152  9 gen
+(total 65 generations)

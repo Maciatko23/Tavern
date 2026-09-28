@@ -1,0 +1,2479 @@
+{
+ "zestaw": "Winlu Fantasy Tileset - Interior (Remaster)",
+ "tileset": "8 (Wilu Fantasy Interior): A2, A3, A4, A5, B, C, D, E = Fantasy_Inside_Shops",
+ "uwaga": "C_white i E_Cathedral nie są w tilesecie 8 (żeby ich użyć, trzeba nowego tilesetu). Obrazki ze znakiem ! z folderu Winlu/characters trzeba przy budowie skopiować do img/characters (w_grze=false: jeszcze ich tam nie ma).",
+ "identyfikatory": "B = 0+, C = 256+, D = 512+, E = 768+ (kolumny 8..15: +128), A5 = 1536 + wiersz*8 + kolumna, autokafle 2048 + rodzaj*48 + kształt",
+ "elementy": [
+  {
+   "nazwa": "Kamień z ryglem (szary mur, belki)",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 50,
+   "tileId_bazowy": 4448,
+   "warstwa": 0,
+   "jak": "ściana A3, 3 rzędy wysokości; autokafel ściany (łączy się w poziomie)",
+   "uzyte": "A: sala"
+  },
+  {
+   "nazwa": "Tynk jasny z ryglem",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 51,
+   "tileId_bazowy": 4496,
+   "warstwa": 0,
+   "jak": "jak wyżej; kuchnie",
+   "uzyte": "A B: kuchnia, P: bielizna"
+  },
+  {
+   "nazwa": "Tynk kremowy z boazerią",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 52,
+   "tileId_bazowy": 4544,
+   "warstwa": 0,
+   "jak": "jak wyżej; jasna, elegancka sala",
+   "uzyte": "B: sala"
+  },
+  {
+   "nazwa": "Boazeria drewniana (panele)",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 54,
+   "tileId_bazowy": 4640,
+   "warstwa": 0,
+   "jak": "jak wyżej",
+   "uzyte": "P: korytarz"
+  },
+  {
+   "nazwa": "Tapeta beżowa z czerwonym cokołem",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 56,
+   "tileId_bazowy": 4736,
+   "warstwa": 0,
+   "jak": "jak wyżej",
+   "uzyte": "P: pokoje"
+  },
+  {
+   "nazwa": "Bale (ściana z bali)",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 59,
+   "tileId_bazowy": 4880,
+   "warstwa": 0,
+   "jak": "jak wyżej; karczma z bali",
+   "uzyte": "C, P: pokój 3"
+  },
+  {
+   "nazwa": "Tapeta niebieska (adamaszek)",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 62,
+   "tileId_bazowy": 5024,
+   "warstwa": 0,
+   "jak": "jak wyżej",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Tapeta ciemna (adamaszek)",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 63,
+   "tileId_bazowy": 5072,
+   "warstwa": 0,
+   "jak": "jak wyżej; komnata",
+   "uzyte": "P: komnata"
+  },
+  {
+   "nazwa": "Surowy kamień (stary mur twierdzy)",
+   "kategoria": "Ściany",
+   "typ": "autokafel",
+   "arkusz": "A3",
+   "plik": "Fantasy_Inside_A3.png",
+   "rodzaj": 71,
+   "tileId_bazowy": 5456,
+   "warstwa": 0,
+   "jak": "jak wyżej; skład ze starych kamieni, ściana kominka",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Deski jasne",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 81,
+   "tileId_bazowy": 5936,
+   "warstwa": 0,
+   "jak": "podłoga A4 (górna część autokafla), warstwa 0",
+   "uzyte": "A: sala, P"
+  },
+  {
+   "nazwa": "Deski ciemne",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 83,
+   "tileId_bazowy": 6032,
+   "warstwa": 0,
+   "jak": "jw.",
+   "uzyte": "P: pokój 3"
+  },
+  {
+   "nazwa": "Deski rudobrązowe",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 84,
+   "tileId_bazowy": 6080,
+   "warstwa": 0,
+   "jak": "jw.",
+   "uzyte": "B: sala, C: izba szynkowa, P: korytarz"
+  },
+  {
+   "nazwa": "Deski pionowe (scena)",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 82,
+   "tileId_bazowy": 5984,
+   "warstwa": 0,
+   "jak": "jw.; podest sceny",
+   "uzyte": "A B C: scena"
+  },
+  {
+   "nazwa": "Parkiet w jodełkę",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 80,
+   "tileId_bazowy": 5888,
+   "warstwa": 0,
+   "jak": "jw.",
+   "uzyte": "C: izba kominkowa, P: komnata"
+  },
+  {
+   "nazwa": "Bruk szary (kocie łby)",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 96,
+   "tileId_bazowy": 6656,
+   "warstwa": 0,
+   "jak": "jw.; skład, piwnica",
+   "uzyte": "A B C: skład"
+  },
+  {
+   "nazwa": "Płyty kamienne zielonoszare",
+   "kategoria": "Podłogi",
+   "typ": "autokafel",
+   "arkusz": "A4",
+   "plik": "Fantasy_Inside_A4.png",
+   "rodzaj": 97,
+   "tileId_bazowy": 6704,
+   "warstwa": 0,
+   "jak": "jw.; kuchnia",
+   "uzyte": "A B C: kuchnia"
+  },
+  {
+   "nazwa": "Obramowanie ciemne drewno",
+   "kategoria": "Obramowania",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 25,
+   "tileId_bazowy": 3248,
+   "warstwa": 0,
+   "jak": "A2 na warstwie 0 wokół pomieszczeń; w tilesecie 8 nieprzechodnie",
+   "uzyte": "A, P"
+  },
+  {
+   "nazwa": "Obramowanie ciemne drewno 2",
+   "kategoria": "Obramowania",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 24,
+   "tileId_bazowy": 3200,
+   "warstwa": 0,
+   "jak": "jw.; nieprzechodnie",
+   "uzyte": "B"
+  },
+  {
+   "nazwa": "Obramowanie z końców bali",
+   "kategoria": "Obramowania",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 33,
+   "tileId_bazowy": 3632,
+   "warstwa": 0,
+   "jak": "jw.; UWAGA: w tilesecie 8 przechodnie - zamknięte blokadami",
+   "uzyte": "C"
+  },
+  {
+   "nazwa": "Chodnik czerwony",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 36,
+   "tileId_bazowy": 3776,
+   "warstwa": 1,
+   "jak": "A2 na warstwie 1 (na podłodze), dowolny prostokąt",
+   "uzyte": "A B: chodnik od drzwi, P: korytarz"
+  },
+  {
+   "nazwa": "Wycieraczka beżowa",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 37,
+   "tileId_bazowy": 3824,
+   "warstwa": 1,
+   "jak": "jw.",
+   "uzyte": "sień, drzwi pokoi"
+  },
+  {
+   "nazwa": "Dywan ozdobny czerwono-złoty",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 38,
+   "tileId_bazowy": 3872,
+   "warstwa": 1,
+   "jak": "jw.",
+   "uzyte": "A C: scena"
+  },
+  {
+   "nazwa": "Dywan ciemnobrązowy",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 21,
+   "tileId_bazowy": 3056,
+   "warstwa": 1,
+   "jak": "jw.",
+   "uzyte": "A: kącik do kości"
+  },
+  {
+   "nazwa": "Dywan fioletowy ze złotem",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 22,
+   "tileId_bazowy": 3104,
+   "warstwa": 1,
+   "jak": "jw.",
+   "uzyte": "P: komnata"
+  },
+  {
+   "nazwa": "Dywan niebieski / zielony / pomarańczowy",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 28,
+   "tileId_bazowy": 3392,
+   "warstwa": 1,
+   "jak": "jw. (także rodzaje 29, 30)",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Kurz / cień na podłodze",
+   "kategoria": "Dywany",
+   "typ": "autokafel",
+   "arkusz": "A2",
+   "plik": "Fantasy_Inside_A2.png",
+   "rodzaj": 23,
+   "tileId_bazowy": 3152,
+   "warstwa": 1,
+   "jak": "półprzezroczysty, na warstwie 1",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Dywan okrągły czerwony",
+   "kategoria": "Dywany",
+   "typ": "kafelki",
+   "arkusz": "B",
+   "plik": "Fantasy_Inside_B.png",
+   "kolumna": 14,
+   "wiersz": 12,
+   "szer": 2,
+   "wys": 2,
+   "tileId": [
+    [
+     230,
+     231
+    ],
+    [
+     238,
+     239
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x2 na warstwie 2",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Dywan okrągły brązowy / ozdobny",
+   "kategoria": "Dywany",
+   "typ": "kafelki",
+   "arkusz": "B",
+   "plik": "Fantasy_Inside_B.png",
+   "kolumna": 12,
+   "wiersz": 14,
+   "szer": 4,
+   "wys": 2,
+   "tileId": [
+    [
+     244,
+     245,
+     246,
+     247
+    ],
+    [
+     252,
+     253,
+     254,
+     255
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "dwa dywany 2x2",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Skóra niedźwiedzia",
+   "kategoria": "Dywany",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 11,
+   "wiersz": 13,
+   "szer": 2,
+   "wys": 3,
+   "tileId": [
+    [
+     747,
+     748
+    ],
+    [
+     755,
+     756
+    ],
+    [
+     763,
+     764
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x3 przed kominkiem",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Lada pozioma (lewy koniec, środek, prawy koniec)",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 0,
+   "wiersz": 0,
+   "szer": 3,
+   "wys": 2,
+   "tileId": [
+    [
+     768,
+     769,
+     770
+    ],
+    [
+     776,
+     777,
+     778
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "blat w rzędzie y, front w y+1; środek (1,0..1) powtarzany w poziomie",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Lada - ramię pionowe (lewe)",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 3,
+   "wiersz": 0,
+   "szer": 1,
+   "wys": 4,
+   "tileId": [
+    [
+     771
+    ],
+    [
+     779
+    ],
+    [
+     787
+    ],
+    [
+     795
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "(3,0) góra, (3,1) powtarzany środek, (3,2) koniec, (3,3) front; ramię L",
+   "uzyte": "A C"
+  },
+  {
+   "nazwa": "Lada - łącznik narożny",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 4,
+   "wiersz": 0,
+   "szer": 1,
+   "wys": 2,
+   "tileId": [
+    [
+     772
+    ],
+    [
+     780
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "narożnik L od strony prawej",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Lada - ramię pionowe (prawe)",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 5,
+   "wiersz": 0,
+   "szer": 1,
+   "wys": 4,
+   "tileId": [
+    [
+     773
+    ],
+    [
+     781
+    ],
+    [
+     789
+    ],
+    [
+     797
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "jak lewe, cień po drugiej stronie",
+   "uzyte": "B"
+  },
+  {
+   "nazwa": "Stojak z 4 beczkami z kranami",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 0,
+   "wiersz": 7,
+   "szer": 4,
+   "wys": 2,
+   "tileId": [
+    [
+     824,
+     825,
+     826,
+     827
+    ],
+    [
+     832,
+     833,
+     834,
+     835
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "4x2, stoi na rzędzie y+1 przy ścianie",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Beczki z kranem / ze skrzynką butelek / z workami / z dzbanami",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 4,
+   "wiersz": 7,
+   "szer": 4,
+   "wys": 2,
+   "tileId": [
+    [
+     828,
+     829,
+     830,
+     831
+    ],
+    [
+     836,
+     837,
+     838,
+     839
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "cztery warianty 1x2",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Półka: butelki, kufle, talerze",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 6,
+   "wiersz": 3,
+   "szer": 2,
+   "wys": 3,
+   "tileId": [
+    [
+     798,
+     799
+    ],
+    [
+     806,
+     807
+    ],
+    [
+     814,
+     815
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x3 przy ścianie; dół (rząd 5) stoi na podłodze",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Półka z winem i szufladami",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 1,
+   "wiersz": 13,
+   "szer": 2,
+   "wys": 3,
+   "tileId": [
+    [
+     873,
+     874
+    ],
+    [
+     881,
+     882
+    ],
+    [
+     889,
+     890
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x3 przy ścianie",
+   "uzyte": "A C"
+  },
+  {
+   "nazwa": "Okrągłe stoliki z jedzeniem i piwem (16 wariantów)",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 0,
+   "wiersz": 9,
+   "szer": 8,
+   "wys": 4,
+   "tileId": [
+    [
+     840,
+     841,
+     842,
+     843,
+     844,
+     845,
+     846,
+     847
+    ],
+    [
+     848,
+     849,
+     850,
+     851,
+     852,
+     853,
+     854,
+     855
+    ],
+    [
+     856,
+     857,
+     858,
+     859,
+     860,
+     861,
+     862,
+     863
+    ],
+    [
+     864,
+     865,
+     866,
+     867,
+     868,
+     869,
+     870,
+     871
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "każdy 1x2: blat na y, nogi na y+1 (blokuj y+1)",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Stolik okrągły duży",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 0,
+   "wiersz": 13,
+   "szer": 1,
+   "wys": 2,
+   "tileId": [
+    [
+     872
+    ],
+    [
+     880
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Tablica z desek (2 warianty)",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 8,
+   "wiersz": 8,
+   "szer": 5,
+   "wys": 2,
+   "tileId": [
+    [
+     960,
+     961,
+     962,
+     963,
+     964
+    ],
+    [
+     968,
+     969,
+     970,
+     971,
+     972
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2; z karteczkami D(13..14,9) na warstwie 3 = tablica ogłoszeń",
+   "uzyte": "sień"
+  },
+  {
+   "nazwa": "Regał sklepowy ze skrzynkami",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 9,
+   "wiersz": 14,
+   "szer": 6,
+   "wys": 2,
+   "tileId": [
+    [
+     1009,
+     1010,
+     1011,
+     1012,
+     1013,
+     1014
+    ],
+    [
+     1017,
+     1018,
+     1019,
+     1020,
+     1021,
+     1022
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "3x2 i 3x2",
+   "uzyte": "B: skład"
+  },
+  {
+   "nazwa": "Stojaki na broń",
+   "kategoria": "Bar",
+   "typ": "kafelki",
+   "arkusz": "E",
+   "plik": "Fantasy_Inside_Shops.png",
+   "kolumna": 8,
+   "wiersz": 5,
+   "szer": 8,
+   "wys": 3,
+   "tileId": [
+    [
+     936,
+     937,
+     938,
+     939,
+     940,
+     941,
+     942,
+     943
+    ],
+    [
+     944,
+     945,
+     946,
+     947,
+     948,
+     949,
+     950,
+     951
+    ],
+    [
+     952,
+     953,
+     954,
+     955,
+     956,
+     957,
+     958,
+     959
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "półki z mieczami, sztyletami",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Stół długi (poziomy)",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 9,
+   "wiersz": 4,
+   "szer": 3,
+   "wys": 2,
+   "tileId": [
+    [
+     417,
+     418,
+     419
+    ],
+    [
+     425,
+     426,
+     427
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "lewy (9), środek (10) powtarzany, prawy (11); 2 rzędy",
+   "uzyte": "A B"
+  },
+  {
+   "nazwa": "Stół długi na kozłach",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 9,
+   "wiersz": 6,
+   "szer": 3,
+   "wys": 2,
+   "tileId": [
+    [
+     433,
+     434,
+     435
+    ],
+    [
+     441,
+     442,
+     443
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "jw.",
+   "uzyte": "A C"
+  },
+  {
+   "nazwa": "Stół długi pionowy",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 8,
+   "wiersz": 4,
+   "szer": 1,
+   "wys": 3,
+   "tileId": [
+    [
+     416
+    ],
+    [
+     424
+    ],
+    [
+     432
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "góra (8,4), środek (8,5) powtarzany, dół (8,6)",
+   "uzyte": "B C"
+  },
+  {
+   "nazwa": "Stół kwadratowy 2x2",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 12,
+   "wiersz": 4,
+   "szer": 2,
+   "wys": 2,
+   "tileId": [
+    [
+     420,
+     421
+    ],
+    [
+     428,
+     429
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "także na kozłach (12,6)",
+   "uzyte": "A: kuchnia"
+  },
+  {
+   "nazwa": "Ława pozioma 2-kafelkowa",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 14,
+   "wiersz": 1,
+   "szer": 2,
+   "wys": 1,
+   "tileId": [
+    [
+     398,
+     399
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "przy stołach, rząd nad i pod",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Ława pionowa",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 14,
+   "wiersz": 2,
+   "szer": 1,
+   "wys": 3,
+   "tileId": [
+    [
+     406
+    ],
+    [
+     414
+    ],
+    [
+     422
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "góra, środek powtarzany, dół",
+   "uzyte": "B C"
+  },
+  {
+   "nazwa": "Krzesła (przód, tył, bok L/P)",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 8,
+   "wiersz": 0,
+   "szer": 6,
+   "wys": 2,
+   "tileId": [
+    [
+     384,
+     385,
+     386,
+     387,
+     388,
+     389
+    ],
+    [
+     392,
+     393,
+     394,
+     395,
+     396,
+     397
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "oparcie w rzędzie nad krzesłem (warstwa 3)",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Fotele z czerwonym siedziskiem",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 8,
+   "wiersz": 2,
+   "szer": 6,
+   "wys": 2,
+   "tileId": [
+    [
+     400,
+     401,
+     402,
+     403,
+     404,
+     405
+    ],
+    [
+     408,
+     409,
+     410,
+     411,
+     412,
+     413
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "jw.",
+   "uzyte": "A B C, P: komnata"
+  },
+  {
+   "nazwa": "Stołki i ławy",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 14,
+   "wiersz": 0,
+   "szer": 2,
+   "wys": 4,
+   "tileId": [
+    [
+     390,
+     391
+    ],
+    [
+     398,
+     399
+    ],
+    [
+     406,
+     407
+    ],
+    [
+     414,
+     415
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "(14,0) stołek duży, (15,3) mały",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Stolik okrągły / biurko / stolik nocny",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 4,
+   "wiersz": 0,
+   "szer": 3,
+   "wys": 2,
+   "tileId": [
+    [
+     260,
+     261,
+     262
+    ],
+    [
+     268,
+     269,
+     270
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2; blat na y (przy ścianie), front na y+1",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Ława tapicerowana, krzesła z wysokim oparciem",
+   "kategoria": "Stoły i siedziska",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 0,
+   "wiersz": 14,
+   "szer": 4,
+   "wys": 2,
+   "tileId": [
+    [
+     368,
+     369,
+     370,
+     371
+    ],
+    [
+     376,
+     377,
+     378,
+     379
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Palenisko w ścianie (łuk)",
+   "kategoria": "Kominki i ogień",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 4,
+   "wiersz": 11,
+   "szer": 2,
+   "wys": 3,
+   "tileId": [
+    [
+     1628,
+     1629
+    ],
+    [
+     1636,
+     1637
+    ],
+    [
+     1644,
+     1645
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x3 na warstwie 0 w ścianie",
+   "uzyte": "A B C: piec chlebowy"
+  },
+  {
+   "nazwa": "Palenisko z kratą",
+   "kategoria": "Kominki i ogień",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 2,
+   "wiersz": 11,
+   "szer": 2,
+   "wys": 3,
+   "tileId": [
+    [
+     1626,
+     1627
+    ],
+    [
+     1634,
+     1635
+    ],
+    [
+     1642,
+     1643
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x3 na warstwie 0",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Kamienne pilastry kominka",
+   "kategoria": "Kominki i ogień",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 0,
+   "wiersz": 12,
+   "szer": 2,
+   "wys": 2,
+   "tileId": [
+    [
+     1632,
+     1633
+    ],
+    [
+     1640,
+     1641
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "boki dużego kominka (lewy 0, prawy 1)",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Łuk kominka (środek)",
+   "kategoria": "Kominki i ogień",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 4,
+   "wiersz": 12,
+   "szer": 2,
+   "wys": 2,
+   "tileId": [
+    [
+     1636,
+     1637
+    ],
+    [
+     1644,
+     1645
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "duży kominek: pilastry + łuk + półka D(6..7,2..3)",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Ognisko / kocioł nad ogniem (animowane)",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration",
+   "indeks": 2,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": true,
+   "jak": "kierunek 4 ognisko, 6 kocioł na trójnogu; step anime",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Kominek kamienny z ogniem",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Fireplace2",
+   "indeks": 0,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "animowany (step anime)",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Kominek z łukiem",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Fireplace1",
+   "indeks": 0,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "animowany",
+   "uzyte": "P: komnata"
+  },
+  {
+   "nazwa": "Kominek ozdobny",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Fireplace4",
+   "indeks": 0,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "animowany",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Piec kuchenny z garnkiem",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Fireplace_kitchen",
+   "indeks": 0,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": true,
+   "jak": "animowany; już w img/characters",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Okap kamienny (komin)",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$chimney",
+   "indeks": 0,
+   "kierunek": 6,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "nad piecem; wiersz 3 z zawieszonym czosnkiem/garnkami",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Drewno na opał",
+   "kategoria": "Kominki i ogień",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration_static",
+   "indeks": 3,
+   "kierunek": 8,
+   "wzor": 2,
+   "w_grze": false,
+   "jak": "stos polan przy kominku (3 polana do minigry)",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Spiżarka: chleb, sery, warzywa",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 4,
+   "wiersz": 4,
+   "szer": 4,
+   "wys": 5,
+   "tileId": [
+    [
+     292,
+     293,
+     294,
+     295
+    ],
+    [
+     300,
+     301,
+     302,
+     303
+    ],
+    [
+     308,
+     309,
+     310,
+     311
+    ],
+    [
+     316,
+     317,
+     318,
+     319
+    ],
+    [
+     324,
+     325,
+     326,
+     327
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "półki 1x3 i 2x2 przy ścianie",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Garnki i patelnie na ścianie",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 0,
+   "wiersz": 6,
+   "szer": 3,
+   "wys": 2,
+   "tileId": [
+    [
+     560,
+     561,
+     562
+    ],
+    [
+     568,
+     569,
+     570
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2 na ścianie",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Deski do krojenia (mięso, ryba, tasak)",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 0,
+   "wiersz": 8,
+   "szer": 2,
+   "wys": 2,
+   "tileId": [
+    [
+     576,
+     577
+    ],
+    [
+     584,
+     585
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "na stół (warstwa 3)",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Beczki (stos 3, pojedyncze, z wodą, z jabłkami)",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 8,
+   "wiersz": 0,
+   "szer": 8,
+   "wys": 3,
+   "tileId": [
+    [
+     640,
+     641,
+     642,
+     643,
+     644,
+     645,
+     646,
+     647
+    ],
+    [
+     648,
+     649,
+     650,
+     651,
+     652,
+     653,
+     654,
+     655
+    ],
+    [
+     656,
+     657,
+     658,
+     659,
+     660,
+     661,
+     662,
+     663
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "stos 3x2 = D(10..12,0..1); pojedyncze 1x2",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Worki",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 8,
+   "wiersz": 2,
+   "szer": 3,
+   "wys": 3,
+   "tileId": [
+    [
+     656,
+     657,
+     658
+    ],
+    [
+     664,
+     665,
+     666
+    ],
+    [
+     672,
+     673,
+     674
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x2 i 1x1",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Skrzynie, połamane skrzynie",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 11,
+   "wiersz": 3,
+   "szer": 5,
+   "wys": 4,
+   "tileId": [
+    [
+     667,
+     668,
+     669,
+     670,
+     671
+    ],
+    [
+     675,
+     676,
+     677,
+     678,
+     679
+    ],
+    [
+     683,
+     684,
+     685,
+     686,
+     687
+    ],
+    [
+     691,
+     692,
+     693,
+     694,
+     695
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2 i 2x2",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Pajęczyny",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 13,
+   "wiersz": 7,
+   "szer": 3,
+   "wys": 2,
+   "tileId": [
+    [
+     701,
+     702,
+     703
+    ],
+    [
+     709,
+     710,
+     711
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "w rogach ścian (warstwa 3)",
+   "uzyte": "skład"
+  },
+  {
+   "nazwa": "Gruz i kamienie",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 11,
+   "wiersz": 5,
+   "szer": 2,
+   "wys": 2,
+   "tileId": [
+    [
+     683,
+     684
+    ],
+    [
+     691,
+     692
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "pod luźną cegłą",
+   "uzyte": "skład"
+  },
+  {
+   "nazwa": "Wiszące szynki, ryby, zioła, czosnek",
+   "kategoria": "Kuchnia i zapasy",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration_static",
+   "indeks": 2,
+   "kierunek": 8,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "znak 2 wzory 0..2, znak 3 wzory 0..1 (kierunek 8)",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Żyrandol z świecami",
+   "kategoria": "Światło",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Chandelier",
+   "indeks": 0,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "nad stołem, priorytet nad postaciami, animowany",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Kinkiet ze świecą",
+   "kategoria": "Światło",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration2",
+   "indeks": 0,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "na ścianie",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Świece (1 / 3)",
+   "kategoria": "Światło",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration2",
+   "indeks": 1,
+   "kierunek": 6,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "kierunek 2 jedna, 6 trzy; na stołach i szafkach",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Kandelabr stojący",
+   "kategoria": "Światło",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration2",
+   "indeks": 4,
+   "kierunek": 6,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "kierunek 2/4 czarny, 6/8 brązowy",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Latarnie ścienne",
+   "kategoria": "Światło",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration",
+   "indeks": 7,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": true,
+   "jak": "kierunki 2/4/6 = 3 style; zdarzenie o 1 kratkę niżej niż latarnia",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Okna nocne / oświetlone / łukowe",
+   "kategoria": "Światło",
+   "typ": "kafelki",
+   "arkusz": "B",
+   "plik": "Fantasy_Inside_B.png",
+   "kolumna": 0,
+   "wiersz": 2,
+   "szer": 8,
+   "wys": 4,
+   "tileId": [
+    [
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23
+    ],
+    [
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ],
+    [
+     32,
+     33,
+     34,
+     35,
+     36,
+     37,
+     38,
+     39
+    ],
+    [
+     40,
+     41,
+     42,
+     43,
+     44,
+     45,
+     46,
+     47
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2 na ścianie (rzędy 1-2 ściany)",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Zasłony (czerwone, pomarańczowe, zielone...)",
+   "kategoria": "Światło",
+   "typ": "kafelki",
+   "arkusz": "B",
+   "plik": "Fantasy_Inside_B.png",
+   "kolumna": 0,
+   "wiersz": 12,
+   "szer": 6,
+   "wys": 4,
+   "tileId": [
+    [
+     96,
+     97,
+     98,
+     99,
+     100,
+     101
+    ],
+    [
+     104,
+     105,
+     106,
+     107,
+     108,
+     109
+    ],
+    [
+     112,
+     113,
+     114,
+     115,
+     116,
+     117
+    ],
+    [
+     120,
+     121,
+     122,
+     123,
+     124,
+     125
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2 na oknie (warstwa 3); rząd 14-15 długie",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Głowa jelenia",
+   "kategoria": "Dekoracje ścian",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Wall_decoration",
+   "indeks": 0,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "zdarzenie 1 kratkę niżej niż głowa",
+   "uzyte": "A B"
+  },
+  {
+   "nazwa": "Tarcza z toporami",
+   "kategoria": "Dekoracje ścian",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!$Wall_decoration",
+   "indeks": 0,
+   "kierunek": 4,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "jw.",
+   "uzyte": "A, P"
+  },
+  {
+   "nazwa": "Chorągwie (koń, feniks, wilk, pięść...)",
+   "kategoria": "Dekoracje ścian",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Flags_banner_Inside",
+   "indeks": 0,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "48x96; na ścianie",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Obrazy i portrety",
+   "kategoria": "Dekoracje ścian",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Decoration_static",
+   "indeks": 6,
+   "kierunek": 6,
+   "wzor": 2,
+   "w_grze": false,
+   "jak": "znaki 6/7, kierunki 4/6/8",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Szyld tawerny z kuflem",
+   "kategoria": "Dekoracje ścian",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Signs",
+   "indeks": 2,
+   "kierunek": 2,
+   "wzor": 1,
+   "w_grze": true,
+   "jak": "RTP/zewnętrzny zestaw, już w img/characters",
+   "uzyte": "A B C"
+  },
+  {
+   "nazwa": "Zegar stojący",
+   "kategoria": "Dekoracje ścian",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!clock",
+   "indeks": 0,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "animowany wahadłem",
+   "uzyte": "A C"
+  },
+  {
+   "nazwa": "Półeczki ścienne (butelki, książki, talerze, dzbany)",
+   "kategoria": "Dekoracje ścian",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 6,
+   "wiersz": 0,
+   "szer": 2,
+   "wys": 6,
+   "tileId": [
+    [
+     518,
+     519
+    ],
+    [
+     526,
+     527
+    ],
+    [
+     534,
+     535
+    ],
+    [
+     542,
+     543
+    ],
+    [
+     550,
+     551
+    ],
+    [
+     558,
+     559
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2: rzecz na y, półka na y+1",
+   "uzyte": "A: półka nad kominkiem"
+  },
+  {
+   "nazwa": "Regał z książkami",
+   "kategoria": "Dekoracje ścian",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 0,
+   "wiersz": 6,
+   "szer": 5,
+   "wys": 3,
+   "tileId": [
+    [
+     304,
+     305,
+     306,
+     307,
+     308
+    ],
+    [
+     312,
+     313,
+     314,
+     315,
+     316
+    ],
+    [
+     320,
+     321,
+     322,
+     323,
+     324
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x3 i 2x3",
+   "uzyte": "C"
+  },
+  {
+   "nazwa": "Schody drewniane",
+   "kategoria": "Schody",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 0,
+   "wiersz": 2,
+   "szer": 4,
+   "wys": 1,
+   "tileId": [
+    [
+     1552,
+     1553,
+     1554,
+     1555
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "stopień powtarzany w pionie (warstwa 0)",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Schody kamienne",
+   "kategoria": "Schody",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 0,
+   "wiersz": 3,
+   "szer": 4,
+   "wys": 2,
+   "tileId": [
+    [
+     1560,
+     1561,
+     1562,
+     1563
+    ],
+    [
+     1568,
+     1569,
+     1570,
+     1571
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "ciemne i jasne",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Schody w murze (drewniane / kamienne)",
+   "kategoria": "Schody",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 4,
+   "wiersz": 0,
+   "szer": 4,
+   "wys": 4,
+   "tileId": [
+    [
+     1540,
+     1541,
+     1542,
+     1543
+    ],
+    [
+     1548,
+     1549,
+     1550,
+     1551
+    ],
+    [
+     1556,
+     1557,
+     1558,
+     1559
+    ],
+    [
+     1564,
+     1565,
+     1566,
+     1567
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "4x2: mur, 2 stopnie, mur",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Klapa w podłodze",
+   "kategoria": "Schody",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 1,
+   "wiersz": 0,
+   "szer": 1,
+   "wys": 1,
+   "tileId": [
+    [
+     1537
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "zejście do piwnicy (drugi wariant sekretu)",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Czarna pustka",
+   "kategoria": "Schody",
+   "typ": "kafelki",
+   "arkusz": "A5",
+   "plik": "Fantasy_Inside_A5.png",
+   "kolumna": 0,
+   "wiersz": 0,
+   "szer": 1,
+   "wys": 1,
+   "tileId": [
+    [
+     1536
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "nad/pod schodami",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Poręcze i słupy",
+   "kategoria": "Schody",
+   "typ": "kafelki",
+   "arkusz": "B",
+   "plik": "Fantasy_Inside_B.png",
+   "kolumna": 12,
+   "wiersz": 0,
+   "szer": 4,
+   "wys": 8,
+   "tileId": [
+    [
+     132,
+     133,
+     134,
+     135
+    ],
+    [
+     140,
+     141,
+     142,
+     143
+    ],
+    [
+     148,
+     149,
+     150,
+     151
+    ],
+    [
+     156,
+     157,
+     158,
+     159
+    ],
+    [
+     164,
+     165,
+     166,
+     167
+    ],
+    [
+     172,
+     173,
+     174,
+     175
+    ],
+    [
+     180,
+     181,
+     182,
+     183
+    ],
+    [
+     188,
+     189,
+     190,
+     191
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "ramka balustrady (12..14, 4..7), słupy (12..13, 0..3)",
+   "uzyte": "P: klatka schodowa"
+  },
+  {
+   "nazwa": "Łóżka pojedyncze (zielone, patchwork)",
+   "kategoria": "Pokoje gości",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 12,
+   "wiersz": 10,
+   "szer": 4,
+   "wys": 3,
+   "tileId": [
+    [
+     468,
+     469,
+     470,
+     471
+    ],
+    [
+     476,
+     477,
+     478,
+     479
+    ],
+    [
+     484,
+     485,
+     486,
+     487
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x3 i 2x3; zagłówek na dolnym rzędzie ściany",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Łóżka poziome",
+   "kategoria": "Pokoje gości",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 8,
+   "wiersz": 11,
+   "szer": 4,
+   "wys": 2,
+   "tileId": [
+    [
+     472,
+     473,
+     474,
+     475
+    ],
+    [
+     480,
+     481,
+     482,
+     483
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "2x2",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Łoże królewskie, łóżka czerwone, siennik",
+   "kategoria": "Pokoje gości",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 9,
+   "wiersz": 13,
+   "szer": 7,
+   "wys": 3,
+   "tileId": [
+    [
+     489,
+     490,
+     491,
+     492,
+     493,
+     494,
+     495
+    ],
+    [
+     497,
+     498,
+     499,
+     500,
+     501,
+     502,
+     503
+    ],
+    [
+     505,
+     506,
+     507,
+     508,
+     509,
+     510,
+     511
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x3 / 2x3",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Szafy i komody",
+   "kategoria": "Pokoje gości",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 2,
+   "wiersz": 9,
+   "szer": 6,
+   "wys": 4,
+   "tileId": [
+    [
+     330,
+     331,
+     332,
+     333,
+     334,
+     335
+    ],
+    [
+     338,
+     339,
+     340,
+     341,
+     342,
+     343
+    ],
+    [
+     346,
+     347,
+     348,
+     349,
+     350,
+     351
+    ],
+    [
+     354,
+     355,
+     356,
+     357,
+     358,
+     359
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "1x2 .. 2x3",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Toaletka z lustrem",
+   "kategoria": "Pokoje gości",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 8,
+   "wiersz": 14,
+   "szer": 1,
+   "wys": 2,
+   "tileId": [
+    [
+     496
+    ],
+    [
+     504
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "",
+   "uzyte": "P: komnata"
+  },
+  {
+   "nazwa": "Parawany",
+   "kategoria": "Pokoje gości",
+   "typ": "kafelki",
+   "arkusz": "C",
+   "plik": "Fantasy_Inside_C.png",
+   "kolumna": 4,
+   "wiersz": 13,
+   "szer": 4,
+   "wys": 3,
+   "tileId": [
+    [
+     364,
+     365,
+     366,
+     367
+    ],
+    [
+     372,
+     373,
+     374,
+     375
+    ],
+    [
+     380,
+     381,
+     382,
+     383
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Kufry i skrzynie",
+   "kategoria": "Pokoje gości",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Fantasy_chest",
+   "indeks": 6,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "znak 0 okuty, 1 złoty, 3 ozdobny, 6 prosty drewniany",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Drzwi drewniane (ciemne, jasne, łukowe okute)",
+   "kategoria": "Drzwi",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Fantasy_door1",
+   "indeks": 0,
+   "kierunek": 2,
+   "wzor": 0,
+   "w_grze": true,
+   "jak": "48x96; kierunek 2 zamknięte .. 8 otwarte; już w img/characters",
+   "uzyte": "P"
+  },
+  {
+   "nazwa": "Dziura w murze (po odsunięciu cegły)",
+   "kategoria": "Drzwi",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Fantasy_door1",
+   "indeks": 7,
+   "kierunek": 6,
+   "wzor": 0,
+   "w_grze": false,
+   "jak": "strona 2 zdarzenia Luźna cegła - otwarte przejście",
+   "uzyte": "propozycja"
+  },
+  {
+   "nazwa": "Kamienny łuk / ciemne przejście",
+   "kategoria": "Drzwi",
+   "typ": "obrazek (zdarzenie)",
+   "arkusz": "!Fantasy_door1",
+   "indeks": 7,
+   "kierunek": 4,
+   "wzor": 1,
+   "w_grze": false,
+   "jak": "",
+   "uzyte": ""
+  },
+  {
+   "nazwa": "Drobiazgi na stoły: talerze, kufle, butelki, kielichy, monety, księgi, zwoje",
+   "kategoria": "Drobiazgi",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 0,
+   "wiersz": 8,
+   "szer": 8,
+   "wys": 8,
+   "tileId": [
+    [
+     576,
+     577,
+     578,
+     579,
+     580,
+     581,
+     582,
+     583
+    ],
+    [
+     584,
+     585,
+     586,
+     587,
+     588,
+     589,
+     590,
+     591
+    ],
+    [
+     592,
+     593,
+     594,
+     595,
+     596,
+     597,
+     598,
+     599
+    ],
+    [
+     600,
+     601,
+     602,
+     603,
+     604,
+     605,
+     606,
+     607
+    ],
+    [
+     608,
+     609,
+     610,
+     611,
+     612,
+     613,
+     614,
+     615
+    ],
+    [
+     616,
+     617,
+     618,
+     619,
+     620,
+     621,
+     622,
+     623
+    ],
+    [
+     624,
+     625,
+     626,
+     627,
+     628,
+     629,
+     630,
+     631
+    ],
+    [
+     632,
+     633,
+     634,
+     635,
+     636,
+     637,
+     638,
+     639
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "na warstwie 3 na blatach; monety D(3..6,15) na stole do kości",
+   "uzyte": "A B C P"
+  },
+  {
+   "nazwa": "Jedzenie na talerzach, ciasta",
+   "kategoria": "Drobiazgi",
+   "typ": "kafelki",
+   "arkusz": "D",
+   "plik": "Fantasy_Inside_D.png",
+   "kolumna": 0,
+   "wiersz": 13,
+   "szer": 4,
+   "wys": 3,
+   "tileId": [
+    [
+     616,
+     617,
+     618,
+     619
+    ],
+    [
+     624,
+     625,
+     626,
+     627
+    ],
+    [
+     632,
+     633,
+     634,
+     635
+    ]
+   ],
+   "warstwa": 2,
+   "jak": "jw.",
+   "uzyte": "A B C P"
+  }
+ ],
+ "brakuje": [
+  {
+   "nazwa": "Kości do gry i kubek",
+   "uwaga": "brak w Winlu - na stole leżą monety i kufle; do domalowania 1 kafelek (kubek + kości)"
+  },
+  {
+   "nazwa": "Wieszak / kołki na płaszcze",
+   "uwaga": "brak - zastępczo wiszące płótna B(1,14..15) i B(5,14..15)"
+  },
+  {
+   "nazwa": "Tablica kredowa z kreskami",
+   "uwaga": "brak - zastępczo tablica na słupkach z !Tavern_Yard (znak 2)"
+  },
+  {
+   "nazwa": "Lutnia / stojak na lutnię",
+   "uwaga": "brak - zastępczo krzesło barda na scenie"
+  },
+  {
+   "nazwa": "Tarcza do rzutek, kufle na haku",
+   "uwaga": "brak (niekonieczne)"
+  }
+ ]
+}
