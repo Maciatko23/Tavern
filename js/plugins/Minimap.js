@@ -7,6 +7,8 @@
  * @target MZ
  * @plugindesc Minimapa w prawym górnym rogu (teren, drzewa, skały, budynki, gracz, wyjścia). Pod nią okienko z celem z dziennika. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param maxWidth
  * @text Największa szerokość mapki (px)
@@ -60,6 +62,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("Minimap.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "Minimap";
     const params = PluginManager.parameters(pluginName);
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
@@ -75,17 +80,6 @@
     Input.keyMapper[77] = "minimap";   // M
 
     const TILE = 48;
-
-    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
-    // `fallback` when neither is present. Duplicated identically in
-    // Atmosphere.js/RoomLighting.js/DayNightCycle.js/CloudShadows.js/DustMotes.js
-    // (no shared module between these plugin files today).
-    function mapNoteFlag(tag, fallback) {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
-        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
-        return fallback;
-    }
 
     // ------------------------------------------------------------------
     // The colour of a tile: the average of its picture (the plain fill piece of an autotile)
@@ -213,7 +207,7 @@
 
     // does this map get a minimap at all?
     Sprite_Minimap.prototype.wantedOnMap = function() {
-        const forced = mapNoteFlag("Minimap", null);
+        const forced = T.mapFlag("Minimap", null);   // <Minimap:on> / <Minimap:off> in the map's note
         if (forced !== null) return forced;
         if (!HIDE_IF_FITS) return true;
         return $gameMap.width() > $gameMap.screenTileX() + 0.01 || $gameMap.height() > $gameMap.screenTileY() + 0.01;

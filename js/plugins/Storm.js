@@ -2,6 +2,8 @@
  * @target MZ
  * @plugindesc Burza: ciemniejące niebo, błyskawice, grzmoty z opóźnieniem, wicher gnący drzewa, ukośna ulewa i lecące liście. v1.0.0
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  * @base Survival
  * @orderAfter Survival
  *
@@ -53,11 +55,22 @@
  *   adjustTone(tone)  ton ekranu przyciemniony burzą - DayNightCycle
  *   strike(d, opts)  piorun teraz, d = odległość 0 (tuż obok) .. 1 (daleko); opts.tree = drzewo (zdarzenie)
  *            albo true (dowolne na ekranie) - testy i menu F9
+ *
+ * ZDARZENIA (szyna Tawerna.on)
+ *   stormStart { day, hour, phase, level }  burza pojawia się na niebie (zbiera się)
+ *   stormEnd   { day, hour, phase, level }  burza minęła (phase null, level 0)
+ *              - obie widziane z mapy: też zaraz po wczytaniu gry, gdy niebo tam jest inne
+ *   lightning  { d, strength, x, y, bolt, outdoors, hitTree, tree, mapId }  każdy piorun, także pod
+ *              dachem (tam bez błysku, tylko grzmot): d 0 blisko .. 1 daleko, strength 1 .. 0,2,
+ *              x, y w pikselach ekranu (y: koniec zygzaka albo null), hitTree + tree = trafione drzewo
  */
 (() => {
     "use strict";
 
-    const params = PluginManager.parameters("Storm");
+    const T = window.Tawerna;
+    if (!T) throw new Error("Storm.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+    const PLUGIN = "Storm";
+    const params = PluginManager.parameters(PLUGIN);
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
     const VOLUME = num(params.thunderVolume, 100) / 100;
 
@@ -89,12 +102,20 @@
         last: null,       // the last strike { d, bolt, at }
         rays: 0           // the sun breaking through after a storm, 0..1 (raysAt)
     };
+    const pending = [];   // strikes asked for while the map was not running (the F9 menu): their opts
 
-    const survival = () => window.Survival;
+    // the trees hit on a storm day, kept in the save (Tawerna.state "stormTrees"; once $gameSystem._stormTrees, still there as an alias)
+    const trees = T.state.define("stormTrees", () => ({ day: 0, n: 0 }), { version: 1, adopt: "_stormTrees", owner: PLUGIN });
+
+    const survival = () => T.api("Survival");
+    const chopper = () => T.api("ChoppableTree");
+    // the hour each struck tree was hit: ChoppableTree.js's saved state "smoulder" (its embers read it too; an older save's
+    // $gameSystem._smoulder is taken over there). Without ChoppableTree.js: nothing smoulders (a throwaway {}, nothing defined here)
+    const smoulders = () => (T.state.spec("smoulder") ? T.state("smoulder") : {});
     function readSky() {
         const S = survival();
         if (!S || !S.stormLevel || !$gameSystem || !$gameSystem.dayNightDay) return;
-        const day = $gameSystem.dayNightDay(), hour = $gameSystem.dayNightHour();
+        const day = T.time.day(), hour = T.time.hour();
         state.level = S.stormLevel(day, hour);
         state.phase = state.level > 0 ? S.stormPhase(day, hour) : null;
         state.outdoors = !!(S.isOutdoors && S.isOutdoors());
@@ -119,20 +140,21 @@
         for (const p of state.pulses) if (t >= p.at) v = Math.max(v, p.amp * (t - p.at < 3 ? 1 : Math.exp(-(t - p.at - 3) / 4.5)));   // full for 3 frames, then fading
         return v;
     }
+    // (through the core's pool: a file that does not load stays silent instead of stopping the game)
     function playSe(name, volume, pitch, pan) {
         const muffled = !state.outdoors;   // under a roof: quieter and duller
-        AudioManager.playSe({ name, volume: Math.round(volume * VOLUME * (muffled ? 0.5 : 1)), pitch: Math.round(pitch - (muffled ? 12 : 0)), pan: Math.round(pan || 0) });
+        T.audio.se(name, { volume: Math.round(volume * VOLUME * (muffled ? 0.5 : 1)), pitch: Math.round(pitch - (muffled ? 12 : 0)), pan: Math.round(pan || 0) });
     }
     // ---- lightning hitting a tree (ChoppableTree.js chars it: charcoal instead of wood). Only a close strike while the
     // storm rages, only a tree on the screen (not right next to the player), at most TREES_PER_STORM a day.
     const TREE_CHANCE = 0.3, TREES_PER_STORM = 2;
     // how long a struck tree burns down (the band of embers from the tip to the foot) and smoulders in all: ChoppableTree.js's numbers
-    const burnHours = () => (window.ChoppableTree && ChoppableTree.EMBER_FRONT) || 0.2;
-    const smoulderHours = () => (window.ChoppableTree && ChoppableTree.EMBER_LIFE) || 0.7;
-    const hoursNow = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
+    const burnHours = () => (chopper() && chopper().EMBER_FRONT) || 0.2;
+    const smoulderHours = () => (chopper() && chopper().EMBER_LIFE) || 0.7;
+    const hoursNow = () => T.time.day() * 24 + T.time.hour();
     function treesHitToday() {
-        const s = $gameSystem._stormTrees;
-        return s && s.day === $gameSystem.dayNightDay() ? s.n : 0;
+        const s = trees();
+        return s.day === T.time.day() ? s.n : 0;
     }
     function spriteOf(event) {
         const set = SceneManager._scene && SceneManager._scene._spriteset;
@@ -145,7 +167,7 @@
         return { x: event.screenX(), y: event.screenY() - h * 0.72 };
     }
     function treeInView() {
-        const C = window.ChoppableTree;
+        const C = chopper();
         if (!C || !C.strikeableTrees) return null;
         const W = Graphics.width, H = Graphics.height;
         const list = C.strikeableTrees().filter(e => {
@@ -155,13 +177,15 @@
         return list.length ? pick(list) : null;
     }
     function hitTree(tree, pan) {
-        if (!window.ChoppableTree.charTree(tree)) return false;
-        const day = $gameSystem.dayNightDay(), s = $gameSystem._stormTrees;
-        $gameSystem._stormTrees = { day, n: (s && s.day === day ? s.n : 0) + 1 };
-        ($gameSystem._smoulder = $gameSystem._smoulder || {})[$gameMap.mapId() + ":" + tree.eventId()] = hoursNow();
+        const C = chopper();
+        if (!C.charTree(tree)) return false;
+        const day = T.time.day(), s = trees();
+        if (s.day !== day) { s.day = day; s.n = 0; }
+        s.n++;
+        smoulders()[$gameMap.mapId() + ":" + tree.eventId()] = hoursNow();
         state.thunders.push({ at: state.t + 8, se: ["Fire2", 70, 90, pan] });   // the crown catches fire for a moment
-        const coal = $dataItems[window.ChoppableTree.CHARCOAL];
-        if ($gameTemp.pushLootPopup) $gameTemp.pushLootPopup(coal ? coal.iconIndex : 0, "Piorun trafił w drzewo!", "#ffc27a");
+        const coal = $dataItems[C.CHARCOAL];
+        T.popup("Piorun trafił w drzewo!", { icon: coal ? coal.iconIndex : 0, color: "#ffc27a" });
         return true;
     }
 
@@ -173,7 +197,7 @@
         if (state.outdoors && ((opts && opts.tree) || (state.phase === "rage" && d < 0.3 && treesHitToday() < TREES_PER_STORM && Math.random() < TREE_CHANCE))) {
             tree = opts && opts.tree instanceof Game_Event ? opts.tree : treeInView();
             if (tree) d = Math.min(d, 0.1);
-            else if (opts && opts.tree && $gameTemp.pushLootPopup) $gameTemp.pushLootPopup(0, "Nie ma tu drzewa, w które mógłby trafić", "#bcd8ff");   // F9
+            else if (opts && opts.tree) T.popup("Nie ma tu drzewa, w które mógłby trafić", { color: "#bcd8ff" });   // F9
         }
         const t = state.t, crown = tree ? crownOf(tree) : null;
         const x = crown ? clamp01(crown.x / Graphics.width) : rand(0.12, 0.88), pan = (x - 0.5) * 120;
@@ -199,6 +223,9 @@
         }
         state.strikes++;
         state.last = { d, bolt, at: t, tree: struck ? tree.eventId() : 0 };
+        // the bus: every strike (under a roof too: no flash there, only the thunder); x, y in screen pixels (y: the bolt's end, or null)
+        T.emit("lightning", { d, strength: 1 - 0.8 * d, x: Math.round(x * Graphics.width), y: bolt ? Math.round(state.bolt.ground * Graphics.height) : null,
+            bolt, outdoors: state.outdoors, hitTree: struck, tree: state.last.tree, mapId: $gameMap.mapId() });
     }
     // when the next strike comes, and how far: gathering and passing, only far ones; raging, one in three close
     function scheduleStrikes() {
@@ -225,14 +252,24 @@
         state.nextGust = state.t + Math.round((rand(4, 10) / (0.5 + state.wind)) * 60);
     }
 
+    // the bus: "stormStart" as a storm shows in the sky, "stormEnd" when it is gone (seen from the map: also right after a load)
+    let stormOn = false;
+    function stormEdge() {
+        const on = state.level > 0;
+        if (on === stormOn) return;
+        stormOn = on;
+        T.emit(on ? "stormStart" : "stormEnd", { day: T.time.day(), hour: T.time.hour(), phase: state.phase, level: state.level });
+    }
+
     // settled: frames the map scene has been running (the F9 strike waits until the map is back on the screen)
     function update(settled) {
         state.t++;
         readSky();
+        stormEdge();
         const target = state.outdoors ? state.level : 0;
         state.wind += Math.max(-0.02, Math.min(0.02, target - state.wind));   // no sudden jumps (map change, F9)
         state.clock += (1 + 0.9 * state.wind) / 60;
-        if (window.Storm.pending.length && settled > 20) strike(0.08, window.Storm.pending.shift());   // asked for from the F9 menu
+        if (pending.length && settled > 20) strike(0.08, pending.shift());   // asked for from the F9 menu
         scheduleStrikes();
         playThunders();
         playGusts();
@@ -348,7 +385,7 @@
     // spots (each column goes out after a while and another starts elsewhere) - five at first, a single wisp as the last embers die.
     // A puff is small and faint where it leaves the tree and grows denser and wider as it climbs. Every puff keeps its place on the
     // map (it scrolls with it), slows and spreads as it climbs, sways more the higher it gets, and the wind carries it off. Under the
-    // night layer, so the dark covers it too. $gameSystem._smoulder = { "mapId:eventId": hour it was hit }
+    // night layer, so the dark covers it too. smoulders() = { "mapId:eventId": hour it was hit } (_tw.smoulder)
     const SMOKE_TONES = { dark: ["#8a8480", "#6a6561", "#4e4a47"], pale: ["#cfd1d4", "#adb0b5", "#8b8f95"] };
     const SMOKE_KINDS = 4, MAX_PUFFS = 120;
     const smokeCache = {};
@@ -394,7 +431,7 @@
     };
     // a glowing pixel of the tree now (or, before the embers are drawn, a place in its crown), relative to the foot of the tree
     function emberSpot(event) {
-        const spots = window.ChoppableTree && ChoppableTree.emberSpots ? ChoppableTree.emberSpots(spriteOf(event)) : [];
+        const C = chopper(), spots = C && C.emberSpots ? C.emberSpots(spriteOf(event)) : [];
         if (spots.length) {
             const s = spots[Math.floor(Math.random() * spots.length)];
             return { dx: s.x - event.screenX(), dy: s.y - event.screenY() };
@@ -441,13 +478,13 @@
     };
     Sprite_Smoulder.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        const store = ($gameSystem && $gameSystem._smoulder) || {}, now = hoursNow(), mapId = $gameMap.mapId();
-        const front = burnHours(), life = smoulderHours(), live = {};
+        const store = $gameSystem ? smoulders() : {}, now = hoursNow(), mapId = $gameMap.mapId();
+        const front = burnHours(), life = smoulderHours(), live = {}, C = chopper();
         for (const key of Object.keys(store)) {
             const age = now - store[key];
             if (age > life || age < 0) { delete store[key]; continue; }
             const [m, id] = key.split(":").map(Number), event = m === mapId ? $gameMap.event(id) : null;
-            if (!event || !window.ChoppableTree || !ChoppableTree.isCharred(event) || $gameSelfSwitches.value([m, id, "A"])) continue;   // felled: it stops
+            if (!event || !C || !C.isCharred(event) || $gameSelfSwitches.value([m, id, "A"])) continue;   // felled: it stops
             live[key] = true;
             const e = this.entry(key), burning = age < front;
             e.event = event;
@@ -523,7 +560,7 @@
             for (const b of branches) stroke(b, Math.max(1, w / 2), c, a * 0.8);
         }
     };
-    const nightNow = () => (window.Farming && Farming.nightAmount && $gameSystem._dayNightTinting ? Farming.nightAmount() : 0);
+    const nightNow = () => ($gameSystem._dayNightTinting && T.call("Farming", "nightAmount")) || 0;
     Sprite_StormSky.prototype.update = function() {
         const night = nightNow();
         this._light.alpha = state.flash * (0.5 - 0.22 * night);   // at night the lifted darkness does most of the work
@@ -608,6 +645,10 @@
     const _Spriteset_Map_createWeather = Spriteset_Map.prototype.createWeather;
     Spriteset_Map.prototype.createWeather = function() {
         _Spriteset_Map_createWeather.call(this);
+        // a new map's sprites (a transfer, a load) start with its own sky: the scene updates the spriteset once as it makes it, before
+        // the map's first frame - with the last map's sky the leaves of a storm outside would fly through a house
+        readSky();
+        state.flash = state.outdoors ? Math.min(1, flashAt(state.t)) : 0;
         this._stormLeaves = new Sprite_StormLeaves();
         this._smoulder = new Sprite_Smoulder();
         const under = this._nightLight ? this.children.indexOf(this._nightLight) : -1;   // under the night, so the leaves and the smoke darken with it
@@ -618,17 +659,17 @@
         this._stormSky = new Sprite_StormSky();
         this.addChild(this._stormSky);   // over the rain
     };
+    // the sky, the wind, the strikes and the thunder: once a map frame, on the core's runner (settled: the frames this map scene has run)
+    T.onMapUpdate(scene => update(scene._twFrames || 0), { owner: PLUGIN, name: "sky" });
     const _Spriteset_Map_update = Spriteset_Map.prototype.update;
     Spriteset_Map.prototype.update = function() {
-        this._stormFrames = (this._stormFrames || 0) + 1;
-        update(this._stormFrames);
         _Spriteset_Map_update.call(this);
         if (this._stormSky) this._stormSky.update();
         // the rain is drawn over the night layer: in the dark it is only a faint sheen, until a flash lights every drop
         if (this._weather) this._weather.alpha = 1 - 0.7 * nightNow() * (1 - state.flash);
     };
 
-    window.Storm = {
+    window.Storm = T.register(PLUGIN, {
         level: () => state.level,
         phase: () => state.phase,
         wind: () => state.wind,
@@ -638,7 +679,7 @@
         raysAt,
         adjustTone,
         strike,
-        pending: [],   // strikes asked for while the map was not running (the F9 menu): their opts
+        pending,   // strikes asked for while the map was not running (the F9 menu): their opts
         state
-    };
+    });
 })();

@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Zegar analogowy, pora dnia i pasek wytrzymałości na mapie. Spanie w łóżku odnawia siły. Zdobyte rzeczy wjeżdżają na listę w prawym dolnym rogu. v1.2.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param clockImage
  * @text Grafika tarczy zegara
@@ -180,6 +182,9 @@
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("SurvivalHUD.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
 
     const pluginName = "SurvivalHUD";
     const params = PluginManager.parameters(pluginName);
@@ -477,9 +482,8 @@
         const mapId = $gameMap.mapId();
         if (mapId === this._noteMapId) return;
         this._noteMapId = mapId;
-        const note = ($dataMap && $dataMap.note) || "";
-        this._showClock = !/<Clock:\s*off\s*>/i.test(note);
-        this._showStamina = !/<Stamina:\s*off\s*>/i.test(note);
+        this._showClock = T.mapFlag("Clock", true, "off");
+        this._showStamina = T.mapFlag("Stamina", true, "off");
     };
 
     Sprite_SurvivalHud.prototype.updateClock = function() {

@@ -1,0 +1,90 @@
+[
+ {
+  "map": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\tools\\house\\staging\\Map019_A.json",
+  "id": 19,
+  "wait": 150,
+  "mode": "full",
+  "hour": 20.5,
+  "out": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\dom_dziadka\\koncepcja_A.png",
+  "grandpa": [
+   8,
+   5,
+   4
+  ]
+ },
+ {
+  "map": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\tools\\house\\staging\\Map019_A.json",
+  "id": 19,
+  "wait": 150,
+  "mode": "full",
+  "hour": 11,
+  "out": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\dom_dziadka\\koncepcja_A_dzien.png",
+  "grandpa": [
+   8,
+   5,
+   4
+  ]
+ },
+ {
+  "map": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\tools\\house\\staging\\Map019_A.json",
+  "id": 19,
+  "wait": 150,
+  "mode": "screen",
+  "hour": 17.5,
+  "player": [
+   7,
+   5,
+   6
+  ],
+  "out": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\dom_dziadka\\koncepcja_A_ekran.png",
+  "grandpa": [
+   8,
+   5,
+   4
+  ]
+ },
+ {
+  "map": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\tools\\house\\staging\\Map019_B.json",
+  "id": 19,
+  "wait": 150,
+  "mode": "full",
+  "hour": 20.5,
+  "out": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\dom_dziadka\\koncepcja_B.png",
+  "grandpa": [
+   10,
+   6,
+   4
+  ]
+ },
+ {
+  "map": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\tools\\house\\staging\\Map019_B.json",
+  "id": 19,
+  "wait": 150,
+  "mode": "full",
+  "hour": 11,
+  "out": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\dom_dziadka\\koncepcja_B_dzien.png",
+  "grandpa": [
+   10,
+   6,
+   4
+  ]
+ },
+ {
+  "map": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\tools\\house\\staging\\Map019_B.json",
+  "id": 19,
+  "wait": 150,
+  "mode": "screen",
+  "hour": 17.5,
+  "player": [
+   9,
+   6,
+   6
+  ],
+  "out": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\dom_dziadka\\koncepcja_B_ekran.png",
+  "grandpa": [
+   10,
+   6,
+   4
+  ]
+ }
+]

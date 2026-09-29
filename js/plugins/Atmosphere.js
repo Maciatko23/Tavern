@@ -1,12 +1,15 @@
 //=============================================================================
 // Atmosphere.js
 //=============================================================================
-// Load order: audio-only, not part of the visual z-stack; must load after DayNightCycle.js (canonical time periods) and Minimap.js (groundColourAt for footsteps).
+// Load order: audio-only, not part of the visual z-stack. DayNightCycle.js (canonical time periods), Minimap.js (groundColourAt for
+// footsteps), Farming, Survival, Storm, Puddles and Hunting are read at run time through the core (Tawerna.api / call / time).
 
 /*:
  * @target MZ
  * @plugindesc Klimat: dźwięki otoczenia (wiatr, deszcz, świerszcze, ptaki, żaby), kroki zależne od podłoża, muzyka zmieniająca się z porą dnia, autozapis po spaniu. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param ambience
  * @text Dźwięki otoczenia
@@ -129,6 +132,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("Atmosphere.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "Atmosphere";
     const params = PluginManager.parameters(pluginName);
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
@@ -151,19 +157,7 @@
     // ------------------------------------------------------------------
     // Time and place
     // ------------------------------------------------------------------
-    function hourNow() {
-        return $gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12;
-    }
-    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
-    // `fallback` when neither is present. Duplicated identically in
-    // RoomLighting.js/DayNightCycle.js/CloudShadows.js/DustMotes.js/Minimap.js
-    // (no shared module between these plugin files today).
-    function mapNoteFlag(tag, fallback) {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
-        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
-        return fallback;
-    }
+    const hourNow = () => T.time.hour();   // (12 without DayNightCycle.js)
     // Atmosphere's own 4-bucket view of the day (dawn/day/dusk/night, used only
     // for picking ambience beds/birds/music) derived from DayNightCycle.js's 6
     // canonical periods - the ones exposed to event scripters via
@@ -174,7 +168,7 @@
     // possible match against DayNightCycle's fixed 5/8/11/15/18/21 cut points.
     const DNC_PERIOD_TO_ATMO = { dawn: "dawn", morning: "day", noon: "day", afternoon: "day", evening: "dusk", night: "night" };
     function periodAt(h) {
-        const DNC = window.DayNightCycle;
+        const DNC = T.api("DayNightCycle");
         if (DNC && typeof DNC.periodAt === "function") {
             const p = DNC.periodAt(h);
             return (p && DNC_PERIOD_TO_ATMO[p.id]) || "day";
@@ -185,11 +179,12 @@
         if (h >= 17 && h < 20) return "dusk";
         return "night";
     }
+    // a map under the sky: <Clouds:on> or <Weather:on> in its note
+    const outdoorNote = () => T.mapFlag("Clouds", false) || T.mapFlag("Weather", false);
     function profileOf() {
-        const note = ($dataMap && $dataMap.note) || "";
-        const m = note.match(/<Ambience:\s*(\w+)\s*>/i);
-        if (m) return m[1].toLowerCase();
-        if (/<(Clouds|Weather):\s*on\s*>/i.test(note)) return "outdoor";
+        const m = T.mapTag("Ambience");   // <Ambience:outdoor|tavern|interior|cave|off>
+        if (m && /^\w+$/.test(m.raw)) return m.raw.toLowerCase();
+        if (outdoorNote()) return "outdoor";
         const ts = $gameMap.tileset(), name = (ts && ts.name) || "";
         if (/Loch|Dungeon/i.test(name)) return "cave";
         if (/Wewn|Inside|Interior/i.test(name)) return TAVERN_MAPS.includes($gameMap.mapId()) ? "tavern" : "interior";
@@ -205,11 +200,10 @@
             if (power > 0 && type === "snow") return { type: "snow", power };
             return null;
         }
-        const S = window.Survival;
-        const plan = S && S.currentWeather ? S.currentWeather() : null;
+        const plan = T.call("Survival", "currentWeather");
         return plan ? { type: plan.type, power: plan.power } : null;
     }
-    const isWater = (x, y) => !!(window.Farming && Farming.isWaterTile && Farming.isWaterTile(x, y));
+    const isWater = (x, y) => !!T.call("Farming", "isWaterTile", x, y);
     function nearWater(radius) {
         let n = 0;
         for (let dy = -radius; dy <= radius; dy++) for (let dx = -radius; dx <= radius; dx++) {
@@ -408,15 +402,15 @@
             const id = $gameMap.tileId(x, y, z);
             if (id > 0 && Tilemap.isWaterTile(id) && $gameMap.isPassable(x, y, 2)) return "water";
         }
-        if (!indoors && window.Puddles && Puddles.wetAt(x, y)) return "water";   // a puddle after rain (Puddles.js)
-        if (!indoors && window.Farming && Farming.plotAt) {
-            const plot = Farming.plotAt(x, y);
+        if (!indoors && T.call("Puddles", "wetAt", x, y)) return "water";   // a puddle after rain (Puddles.js)
+        if (!indoors) {
+            const plot = T.call("Farming", "plotAt", x, y);
             if (plot && (plot.s === "tilled" || plot.s === "raked" || plot.crop)) return "soil";
         }
-        const c = window.Minimap && Minimap.groundColourAt ? Minimap.groundColourAt(x, y) : null;
+        const c = T.call("Minimap", "groundColourAt", x, y) || null;
         let kind = kindFromColour(c, indoors);
         // winter outdoors: the ground is under snow
-        if (!indoors && (kind === "grass" || kind === "earth") && window.Farming && Farming.seasonIndex && Farming.seasonIndex($gameSystem.dayNightDay()) === 3) kind = "snow";
+        if (!indoors && (kind === "grass" || kind === "earth") && T.time.season() === 3) kind = "snow";
         return kind;
     }
 
@@ -444,13 +438,14 @@
         stepSide: 1
     };
 
+    const stormLevel = () => T.call("Storm", "level") || 0;
     function desiredBed() {
         if (!AMBIENCE) return null;
         const profile = profileOf();
         const hour = hourNow(), period = periodAt(hour), precip = precipitation(profile);
-        const day = $gameSystem.dayNightDay();
+        const day = T.time.day();
         if (profile === "outdoor") {
-            const storm = window.Storm ? Storm.level() : 0;   // Storm.js: 0 = no storm, up to 0.55 while it gathers, 1 at its worst
+            const storm = stormLevel();   // Storm.js: 0 = no storm, up to 0.55 while it gathers, 1 at its worst
             if (precip && precip.type === "rain") {
                 if (storm >= 0.5) return { name: "Rain4", volume: Math.round(70 + 20 * storm) };   // a downpour (the thunder and the gusts are Storm.js's own sounds)
                 return precip.power >= 5 ? { name: "Rain4", volume: 70 } : precip.power >= 4 ? { name: "Rain3", volume: 62 } : { name: "Rain2", volume: 55 };
@@ -498,7 +493,7 @@
         const profile = profileOf();
         if (profile !== "outdoor") return;
         const hour = hourNow(), period = periodAt(hour), precip = precipitation(profile), now = Graphics.frameCount;
-        if (window.Storm && Storm.level() > 0.05) return;   // the hush before a storm: no birds, no frogs
+        if (stormLevel() > 0.05) return;   // the hush before a storm: no birds, no frogs
         const c = audioContext(), dest = bus(c, "bgs");
         dest.gain.value = (ConfigManager.bgsVolume / 100) * AMBIENCE_VOL * 0.5;
         if (!precip && (period === "day" || period === "dawn" || period === "dusk")) {
@@ -507,7 +502,7 @@
                 state.nextBird = now + Math.round(rand(period === "dawn" ? 4 : 9, period === "dawn" ? 10 : 22) * 60);
             }
             if (now >= state.nextCrow) {
-                if (state.nextCrow > 0 && period !== "dusk") AudioManager.playSe({ name: "Crow", volume: 22, pitch: 108, pan: Math.round(rand(-60, 60)) });
+                if (state.nextCrow > 0 && period !== "dusk") T.audio.se("Crow", { volume: 22, pitch: 108, pan: Math.round(rand(-60, 60)) });
                 state.nextCrow = now + Math.round(rand(50, 130) * 60);
             }
         } else if (period === "night" && !precip) {
@@ -516,7 +511,7 @@
                 state.nextOwl = now + Math.round(rand(25, 70) * 60);
             }
             if (now >= state.nextFrog) {
-                if (state.nextFrog > 0 && nearWater(9) >= 4) AudioManager.playSe({ name: "Frog", volume: 30, pitch: Math.round(rand(92, 112)), pan: Math.round(rand(-50, 50)) });
+                if (state.nextFrog > 0 && nearWater(9) >= 4) T.audio.se("Frog", { volume: 30, pitch: Math.round(rand(92, 112)), pan: Math.round(rand(-50, 50)) });
                 state.nextFrog = now + Math.round(rand(9, 22) * 60);
             }
         }
@@ -525,8 +520,7 @@
     // ---- music that follows the hour
     function wantsTimeMusic() {
         if (!TIME_MUSIC || !$dataMap) return false;
-        const note = $dataMap.note || "";
-        return mapNoteFlag("TimeMusic", /<(Clouds|Weather):\s*on\s*>/i.test(note) && !$dataMap.autoplayBgm);
+        return T.mapFlag("TimeMusic", outdoorNote() && !$dataMap.autoplayBgm);
     }
     function musicTick() {
         if (!wantsTimeMusic()) { state.music = null; return; }
@@ -571,7 +565,7 @@
         dest.gain.value = (ConfigManager.seVolume / 100) * FOOT_VOL;
         const kind = groundKindAt(x, y), profile = profileOf();
         const precip = precipitation(profile);
-        const sneak = window.Hunting && Hunting.sneaking && Hunting.sneaking();   // sneaking (C, Hunting.js): barely a sound
+        const sneak = T.call("Hunting", "sneaking");   // sneaking (C, Hunting.js): barely a sound
         footstep(c, dest, c.currentTime + 0.005, kind, (dash ? 1.2 : sneak ? 0.35 : 1) * rand(0.85, 1.12), !!precip && precip.type === "rain" && profile === "outdoor");
         state.stepSide = -state.stepSide;
         state.steps = (state.steps || 0) + 1;
@@ -585,17 +579,10 @@
         if (def && (def.restHours || 1) < 4) return;
         $gameTemp._atmoAutosave = true;
     }
-    const _sleepUntilHour = Game_System.prototype.sleepUntilHour;
-    Game_System.prototype.sleepUntilHour = function(hour) {
-        const result = _sleepUntilHour.call(this, hour);
-        if (AUTOSAVE) $gameTemp._atmoAutosave = true;
-        return result;
-    };
+    // a night's sleep: the core's "wake" (sleepUntilHour is over - a bed, the tent, an inn, wolves waking him)
+    T.on("wake", () => { if (AUTOSAVE) $gameTemp._atmoAutosave = true; }, { owner: pluginName });
     // said at the top centre of the screen (SurvivalHUD's notice), not over the player
-    function saveNotice(text, color) {
-        if (typeof $gameTemp.pushTopNotice === "function") $gameTemp.pushTopNotice(text, color);
-        else $gameTemp.pushLootPopup(0, text, color);
-    }
+    const saveNotice = (text, color) => T.popup(text, { top: true, color });
     Scene_Map.prototype.onAutosaveSuccess = function() {
         saveNotice("Gra zapisana (autozapis)", "#9fd4ff");
     };
@@ -604,13 +591,11 @@
     };
 
     // ------------------------------------------------------------------
-    // The map scene drives everything
+    // The map scene drives everything: every map frame, on the core's runner - after the map's own update, so after Journal.js has
+    // taken the day's summary: the autosave after a night still comes in the very frame the summary is taken
     // ------------------------------------------------------------------
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
-        this.updateAtmosphere();
-    };
+    T.onMapUpdate(scene => scene.updateAtmosphere(), { owner: pluginName, name: "sound" });
+    const AUTOSAVE_CALM = { only: ["message", "event", "summary"] };   // (and the screen fully visible)
     Scene_Map.prototype.updateAtmosphere = function() {
         if (!$gameSystem || !$dataMap || !$gamePlayer) return;
         if ($gameMap.mapId() !== state.mapId) {
@@ -646,15 +631,15 @@
             musicTick();
         }
         playBirds();
-        // the autosave waits for a calm moment: no message or event, screen visible
-        if ($gameTemp._atmoAutosave && !$gameMessage.isBusy() && !$gameMap.isEventRunning() && $gameScreen.brightness() >= 250 && !$gameTemp._pendingSummary) {
+        // the autosave waits for a calm moment: no message or event, screen visible, no day summary waiting
+        if ($gameTemp._atmoAutosave && T.isCalm(this, AUTOSAVE_CALM) && $gameScreen.brightness() >= 250) {
             $gameTemp._atmoAutosave = false;
             this.requestAutosave();
         }
     };
 
-    window.Atmosphere = {
+    window.Atmosphere = T.register(pluginName, {
         periodAt, profileOf, desiredBed, groundKindAt, kindFromColour, footstep, birdCall, STEP, BIRD, playStep, afterRest, audioContext, bus,
         state, TRACKS, wantsTimeMusic, musicTick, applyBed
-    };
+    });
 })();

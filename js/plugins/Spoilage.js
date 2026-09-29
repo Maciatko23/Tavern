@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Psucie się jedzenia: świeże mięso, ryby i potrawy z czasem się psują. Spiżarnia (Farming.js) spowalnia psucie. Zepsute jedzenie idzie do kompostownika. v1.0.0
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param enabled
  * @text Jedzenie się psuje
@@ -51,6 +53,9 @@
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("Spoilage.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
 
     const params = PluginManager.parameters("Spoilage");
     const ENABLED = params.enabled !== "false";
@@ -149,9 +154,10 @@
             else if (have < sum) takeOldest(id, sum - have);
         }
     }
+    // over the player, or in the item menu's help line (Survival.feedback puts it back after the menu re-selects the item)
     function popup(icon, text, color) {
         if (window.Survival && Survival.feedback) Survival.feedback(icon, text, color);
-        else $gameTemp.pushLootPopup(icon, text, color);
+        else T.popup(text, { icon, color, menu: true });
     }
     // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
     // roll against it (a chance), knowsSkill(id) = that one skill is learnt

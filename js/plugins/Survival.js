@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Przetrwanie: jedzenie z premiami, oprawianie zwierzyny, buty / plecak / płaszcz, deszcz i śnieg oraz zimno. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param weather
  * @text Pogoda (deszcz i śnieg)
@@ -97,6 +99,9 @@
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("Survival.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
 
     const pluginName = "Survival";
     const params = PluginManager.parameters(pluginName);
@@ -276,12 +281,8 @@
     let lastFeedback = "";
     function feedback(icon, text, color) {
         const scene = SceneManager._scene;
-        if (scene && scene._helpWindow && scene.constructor.name !== "Scene_Map") {
-            lastFeedback = text;
-            scene._helpWindow.setText(text);
-        } else {
-            $gameTemp.pushLootPopup(icon, text, color || "#9ff0a8");
-        }
+        if (scene && scene._helpWindow && !(scene instanceof Scene_Map)) lastFeedback = text;
+        T.popup(text, { icon, color, kind: "good", menu: true });   // (over the player; in a menu scene its help line)
     }
     const _Scene_Item_determineItem = Scene_Item.prototype.determineItem;
     Scene_Item.prototype.determineItem = function() {
@@ -341,11 +342,10 @@
     // ------------------------------------------------------------------
     // Cost of stamina: fed is cheaper, cold is dearer
     // ------------------------------------------------------------------
+    // under the sky: <Weather:on> or <Clouds:on> in the map's note; <Weather:off> wins over both
     function isOutdoors() {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (/<Weather:\s*off\s*>/i.test(note)) return false;
-        if (/<Weather:\s*on\s*>/i.test(note) || /<Clouds:\s*on\s*>/i.test(note)) return true;
-        return false;
+        const weather = T.mapFlag("Weather", null, "off");
+        return weather !== null ? weather : T.mapFlag("Clouds", false);
     }
     function nearFire() {
         const list = ($gameSystem._farm && $gameSystem._farm.buildings && $gameSystem._farm.buildings[$gameMap.mapId()]) || [];
@@ -475,7 +475,7 @@
     // the hero says it (a speech bubble over him, SpeechBubbles.js; without it the old popup)
     function shout(text) {
         if (window.SpeechBubbles) SpeechBubbles.say($gamePlayer, text);
-        else $gameTemp.pushLootPopup(0, text, "#bcd8ff");
+        else T.popup(text, { color: "#bcd8ff" });
     }
 
     const _Game_Map_update = Game_Map.prototype.update;
@@ -499,7 +499,7 @@
             $gameScreen.changeWeather(type, power, 90);
             $gameSystem._weatherOwn = true;
             if (target === 0 && raging) shout("Burza!");
-            else if (target === 0) $gameTemp.pushLootPopup(0, plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", "#bcd8ff");
+            else if (target === 0) T.popup(plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", { color: "#bcd8ff" });
         } else if (!plan && $gameSystem._weatherOwn) {
             $gameScreen.changeWeather("none", 0, 90);
             $gameSystem._weatherOwn = false;
@@ -597,7 +597,7 @@
         const list = $gameSystem.activeBuffs(), cold = $gameSystem.isCold();
         const key = list.map(b => b.name + Math.ceil(b.left)).join(",") + (cold ? "|cold" : "");
         if (cold && !this._coldWas) {
-            $gameTemp.pushLootPopup(0, "Zimno! Płaszcz, ognisko albo ciepły posiłek pomoże", "#bcd8ff");
+            T.popup("Zimno! Płaszcz, ognisko albo ciepły posiłek pomoże", { color: "#bcd8ff" });
         }
         this._coldWas = cold;
         if (key === this._key || (!window.UIStyle && !this._iconSet.isReady())) return;

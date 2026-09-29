@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Szlif grafiki: drobne kępki trawy, kamyki i kwiatki na łąkach. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param grassDetail
  * @text Szczegóły na trawie
@@ -42,15 +44,17 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("GroundDetail.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "GroundDetail";
     const params = PluginManager.parameters(pluginName);
     const GRASS_DETAIL = params.grassDetail !== "false";
     const GRASS_DENSITY = Math.max(0, Math.min(100, Number(params.grassDensity === undefined ? 22 : params.grassDensity))) / 100;
 
-    // duplicated in CharacterPolish.js (kept self-contained so either file can load alone)
+    // no <Polish:off> in the map's note (it wins over a <Polish:on> beside it; CharacterPolish.js reads the same)
     function polishOn() {
-        const note = ($dataMap && $dataMap.note) || "";
-        return !/<Polish:\s*off\s*>/i.test(note);
+        return T.mapFlag("Polish", true, "off");
     }
 
     // the same deterministic tile hash as Farming.js (Sprite_GrassDetail.build already requires

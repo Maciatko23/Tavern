@@ -1,0 +1,555 @@
+{
+ "rogi": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "cell": [
+   1,
+   2
+  ],
+  "box": [
+   56,
+   64,
+   88,
+   109
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "kiel": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 2,
+  "pattern": 1,
+  "cell": [
+   1,
+   2
+  ],
+  "box": [
+   67,
+   69,
+   77,
+   91
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "kiel_rog": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 2,
+  "pattern": 2,
+  "cell": [
+   1,
+   2
+  ],
+  "box": [
+   54,
+   80,
+   64,
+   100
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "list": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "cell": [
+   1,
+   3
+  ],
+  "box": [
+   65,
+   89,
+   80,
+   109
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "polka_kufel": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 2,
+  "pattern": 1,
+  "cell": [
+   3,
+   2
+  ],
+  "box": [
+   53,
+   72,
+   91,
+   101
+  ],
+  "kind": "wall",
+  "parts": [
+   [
+    "kufel",
+    65,
+    72,
+    81,
+    89
+   ]
+  ]
+ },
+ "polka_kosci": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 2,
+  "pattern": 2,
+  "cell": [
+   3,
+   2
+  ],
+  "box": [
+   53,
+   79,
+   91,
+   101
+  ],
+  "kind": "wall",
+  "parts": [
+   [
+    "kosci",
+    66,
+    80,
+    81,
+    89
+   ]
+  ]
+ },
+ "polka_oba": {
+  "sheet": "!House_Decor",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "cell": [
+   3,
+   2
+  ],
+  "box": [
+   53,
+   72,
+   91,
+   101
+  ],
+  "kind": "wall",
+  "parts": [
+   [
+    "kufel",
+    56,
+    72,
+    72,
+    89
+   ],
+   [
+    "kosci",
+    75,
+    80,
+    90,
+    89
+   ]
+  ]
+ },
+ "skora": {
+  "sheet": "!House_Decor",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "cell": [
+   3,
+   6
+  ],
+  "box": [
+   6,
+   64,
+   90,
+   113
+  ],
+  "kind": "flat",
+  "parts": []
+ },
+ "gwozdz": {
+  "sheet": "!House_Decor",
+  "index": 2,
+  "direction": 2,
+  "pattern": 2,
+  "cell": [
+   17,
+   2
+  ],
+  "box": [
+   72,
+   73,
+   74,
+   75
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "pokwitowanie": {
+  "sheet": "!House_Decor",
+  "index": 3,
+  "direction": 2,
+  "pattern": 0,
+  "cell": [
+   17,
+   2
+  ],
+  "box": [
+   55,
+   71,
+   89,
+   102
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "pokwitowanie_zima": {
+  "sheet": "!House_Decor",
+  "index": 3,
+  "direction": 2,
+  "pattern": 1,
+  "cell": [
+   17,
+   2
+  ],
+  "box": [
+   52,
+   59,
+   92,
+   102
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "recznik": {
+  "sheet": "!House_Decor",
+  "index": 3,
+  "direction": 2,
+  "pattern": 2,
+  "cell": [
+   15,
+   2
+  ],
+  "box": [
+   49,
+   68,
+   95,
+   114
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "recznik_zima": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "cell": [
+   15,
+   2
+  ],
+  "box": [
+   49,
+   59,
+   95,
+   114
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "chodnik": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 4,
+  "pattern": 1,
+  "cell": [
+   16,
+   6
+  ],
+  "box": [
+   17,
+   107,
+   127,
+   133
+  ],
+  "kind": "flat",
+  "parts": []
+ },
+ "wyc_2": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 4,
+  "pattern": 2,
+  "cell": [
+   2,
+   3
+  ],
+  "box": [
+   63,
+   86,
+   82,
+   112
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "wyc_16": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 4,
+  "pattern": 0,
+  "cell": [
+   16,
+   3
+  ],
+  "box": [
+   63,
+   86,
+   82,
+   112
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "wyc_7": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 4,
+  "pattern": 1,
+  "cell": [
+   7,
+   3
+  ],
+  "box": [
+   60,
+   87,
+   85,
+   112
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "wyc_11": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 4,
+  "pattern": 2,
+  "cell": [
+   11,
+   3
+  ],
+  "box": [
+   60,
+   87,
+   85,
+   112
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "ziola": {
+  "sheet": "!House_Decor",
+  "index": 2,
+  "direction": 4,
+  "pattern": 0,
+  "cell": [
+   9,
+   2
+  ],
+  "box": [
+   55,
+   96,
+   90,
+   126
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "wieniec": {
+  "sheet": "!House_Decor",
+  "index": 2,
+  "direction": 4,
+  "pattern": 1,
+  "cell": [
+   9,
+   2
+  ],
+  "box": [
+   52,
+   54,
+   92,
+   112
+  ],
+  "kind": "wall",
+  "parts": []
+ },
+ "bazie": {
+  "sheet": "!House_Decor",
+  "index": 2,
+  "direction": 4,
+  "pattern": 2,
+  "cell": [
+   5,
+   10
+  ],
+  "box": [
+   49,
+   71,
+   70,
+   102
+  ],
+  "kind": "table",
+  "parts": []
+ },
+ "kwiaty": {
+  "sheet": "!House_Decor",
+  "index": 3,
+  "direction": 4,
+  "pattern": 0,
+  "cell": [
+   5,
+   10
+  ],
+  "box": [
+   47,
+   69,
+   71,
+   102
+  ],
+  "kind": "table",
+  "parts": []
+ },
+ "pisanki": {
+  "sheet": "!House_Decor",
+  "index": 3,
+  "direction": 4,
+  "pattern": 1,
+  "cell": [
+   2,
+   10
+  ],
+  "box": [
+   68,
+   74,
+   96,
+   102
+  ],
+  "kind": "table",
+  "parts": []
+ },
+ "jablka": {
+  "sheet": "!House_Decor",
+  "index": 3,
+  "direction": 4,
+  "pattern": 2,
+  "cell": [
+   2,
+   10
+  ],
+  "box": [
+   69,
+   78,
+   96,
+   102
+  ],
+  "kind": "table",
+  "parts": []
+ },
+ "wigilia": {
+  "sheet": "!$House_Decor_Big",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "cell": [
+   4,
+   10
+  ],
+  "box": [
+   21,
+   120,
+   219,
+   183
+  ],
+  "kind": "flat",
+  "parts": []
+ },
+ "dynie_l": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 6,
+  "pattern": 0,
+  "cell": [
+   8,
+   11
+  ],
+  "box": [
+   51,
+   100,
+   93,
+   139
+  ],
+  "kind": "floor",
+  "parts": []
+ },
+ "dynie_r": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 6,
+  "pattern": 1,
+  "cell": [
+   10,
+   11
+  ],
+  "box": [
+   51,
+   100,
+   93,
+   139
+  ],
+  "kind": "floor",
+  "parts": []
+ },
+ "snop": {
+  "sheet": "!House_Decor",
+  "index": 0,
+  "direction": 6,
+  "pattern": 2,
+  "cell": [
+   17,
+   7
+  ],
+  "box": [
+   54,
+   86,
+   91,
+   140
+  ],
+  "kind": "floor",
+  "parts": []
+ },
+ "skrzynia": {
+  "sheet": "!House_Decor",
+  "index": 1,
+  "direction": 6,
+  "pattern": 0,
+  "cell": [
+   17,
+   8
+  ],
+  "box": [
+   48,
+   85,
+   95,
+   121
+  ],
+  "kind": "floor",
+  "parts": []
+ }
+}

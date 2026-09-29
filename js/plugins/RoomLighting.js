@@ -5,8 +5,10 @@
 
 /*:
  * @target MZ
- * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna). v1.1.1
+ * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna). v1.2.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param darkness
  * @text Siła przyciemnienia (0-255)
@@ -146,6 +148,26 @@
  *                         nie zostawały ciemniejsze pasy
  *   Mapy bez <DarkDay> działają jak dotąd (stałe przyciemnienie).
  *
+ * ŻYWY PŁOMIEŃ (v1.2.0):
+ *   W notatce eventu ze światłem <Light> (obok niego):
+ *     <LightFlicker:0.15>             - światło migocze: jasność i zasięg
+ *                                       falują jak prawdziwy ogień (kilka
+ *                                       nałożonych szumów, czasem krótkie
+ *                                       przygaśnięcie - nigdy równy rytm);
+ *                                       liczba to siła (0.05 świeca, 0.15
+ *                                       palenisko)
+ *     <LightFlicker:0.15,130,82,20>   - do tego kolor powoli przechodzi
+ *                                       w podany R,G,B i z powrotem (np.
+ *                                       pomarańcz <-> bursztyn)
+ *   Każde światło ma własny rytm - świece obok siebie nie migoczą razem.
+ *   Przy <LightCone> migocze tylko jasność.
+ *
+ * DLA INNYCH WTYCZEK:
+ *   SceneManager._scene._spriteset.roomLightHoles() - lista świateł mapy
+ *   ({ shape, sprite, radius | geom }); sprite._eventId to numer eventu,
+ *   sprite._gain (0..1, domyślnie 1) przygasza światło (np. słońce w oknie,
+ *   gdy pada deszcz), sprite._weight to jego siła w tej chwili.
+ *
  * POCHODNIA GRACZA:
  *   To osobna, niezależna funkcja - światło podąża za graczem po całej mapie
  *   (nie jest przypięte do eventu). Sterowana jednym przełącznikiem (parametr
@@ -173,6 +195,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("RoomLighting.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "RoomLighting";
     const params = PluginManager.parameters(pluginName);
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
@@ -191,25 +216,15 @@
     const TORCH_ICON_INDEX = num(params.torchIconIndex, 80);
     const DARK_SCALE = 2;          // the darkness layer is painted at half resolution
 
-    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
-    // `fallback` when neither is present. Duplicated identically in
-    // Atmosphere.js/DayNightCycle.js/CloudShadows.js/DustMotes.js/Minimap.js
-    // (no shared module between these plugin files today).
-    function mapNoteFlag(tag, fallback) {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
-        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
-        return fallback;
-    }
-
+    // <Dark:on> / <Dark:off> in the map's note, else the parameter ("on" wins when both are there)
     function isDarkEnabled() {
-        return mapNoteFlag("Dark", DEFAULT_ENABLED);
+        return T.mapFlag("Dark", DEFAULT_ENABLED);
     }
 
     // ---- time of day (only on maps with <DarkDay:N>): 0 by day .. 1 in the evening and at night
     function noteNumber(tag) {
-        const m = (($dataMap && $dataMap.note) || "").match(new RegExp("<" + tag + ":\\s*(\\d+)\\s*>", "i"));
-        return m ? Number(m[1]) : null;
+        const t = T.mapTag(tag);
+        return t && /^\d+$/.test(t.raw) ? Number(t.raw) : null;
     }
     const smooth = t => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
     function nightCurve(h) {
@@ -260,11 +275,34 @@
         }
     }
 
+    // ---- <LightFlicker:amount[,r,g,b]> (v1.2.0): a living flame. Strength and reach wobble with layered value noise (three octaves
+    // and now and then a quick dip, never a regular sine); with r,g,b the colour drifts between its own and that one. Each light has
+    // its own seed. The flicker is read every FLICKER_STEP frames, so the darkness is repainted at most that often for it.
+    const FLICKER_STEP = 2;
+    function parseFlicker(note) {
+        const m = note.match(/<LightFlicker(?::([^>]*))?>/i);
+        if (!m) return null;
+        const p = (m[1] || "").split(",").map(s => Number(s.trim()));
+        const amount = p[0] > 0 ? Math.min(0.5, p[0]) : 0.12;
+        const alt = p.length >= 4 && p.slice(1, 4).every(v => isFinite(v)) ? p.slice(1, 4) : null;
+        return { amount, alt };
+    }
+    // smooth value noise 0..1 along a line (a seeded lattice, smoothstep between its points); nothing allocated
+    function lattice(i, seed) {
+        const v = Math.sin(i * 127.1 + seed * 311.7) * 43758.5453;
+        return v - Math.floor(v);
+    }
+    function noise1(x, seed) {
+        const i = Math.floor(x), f = x - i, a = lattice(i, seed);
+        return a + (lattice(i + 1, seed) - a) * f * f * (3 - 2 * f);
+    }
+
     function findLightMarkers() {
         const markers = [];
         if (!$dataMap || !$dataMap.events) return markers;
         for (const event of $dataMap.events) {
             if (!event || !event.note) continue;
+            const flicker = parseFlicker(event.note);
             const coneMatch = event.note.match(/<LightCone:([^>]*)>/i);
             if (coneMatch) {
                 const kv = parseKeyValues(coneMatch[1]);
@@ -285,7 +323,7 @@
                 markers.push({
                     x: event.x, y: event.y, shape: "cone",
                     length, angle, direction, startWidth, anchor, blur, dust, dustSize, offsetX, offsetY, color,
-                    when: lightWhen(event.note, kv)
+                    when: lightWhen(event.note, kv), flicker, eventId: event.id
                 });
                 continue;
             }
@@ -298,7 +336,7 @@
                     if (parts.length >= 1 && !isNaN(parts[0])) radius = parts[0];
                     if (parts.length >= 4) color = [parts[1], parts[2], parts[3]];
                 }
-                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when: lightWhen(event.note, null), soft: /<LightSoft>/i.test(event.note) });
+                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when: lightWhen(event.note, null), soft: /<LightSoft>/i.test(event.note), flicker, eventId: event.id });
             }
         }
         return markers;
@@ -531,10 +569,32 @@
         this._offsetY = offset.y + (marker.offsetY || 0);
         this._when = marker.when || null;
         this._weight = 1;
+        this._gain = 1;                        // (other plugins may dim it: 0..1)
+        this._eventId = marker.eventId || 0;
+        // a flickering flame: k strength, s reach (scale), c how far the colour has drifted to the other one (alt)
+        const fl = marker.flicker;
+        this._flicker = fl ? { amount: fl.amount, alt: marker.shape === "circle" ? fl.alt : null, seed: (marker.eventId || 0) * 7.31 + marker.x * 0.37 + marker.y * 1.91,
+            k: 1, s: 1, c: 0, dip: 0 } : null;
+        if (this._flicker && this._flicker.alt) this._altBitmap = makeCircleGlowBitmap(marker.radius, this._flicker.alt).bitmap;
         // how far the light reaches from its point (for leaving out lights that are off the screen)
         this._reach = marker.shape === "cone"
             ? marker.length + marker.startWidth / 2 + (marker.blur || 0) * 2 + 8
-            : marker.radius;
+            : marker.radius * (fl ? 1 + fl.amount : 1);
+    };
+
+    // the flame's next moment: three octaves of noise (the slow breathing of the fire, its licking, a quick shiver) and now and
+    // then a short dip, as when a draught ducks the flame
+    Sprite_RoomLight.prototype.updateFlicker = function(frame) {
+        const f = this._flicker;
+        if (!f || frame % FLICKER_STEP !== 0) return;
+        const t = frame / 60, sd = f.seed;
+        const n = 0.55 * noise1(t * 1.1, sd) + 0.3 * noise1(t * 3.3, sd + 7) + 0.15 * noise1(t * 8.7, sd + 13);   // 0..1
+        if (f.dip > 0) f.dip -= FLICKER_STEP;
+        else if (Math.random() < 0.003 * FLICKER_STEP) f.dip = 6 + Math.random() * 12;
+        const w = (n - 0.5) * 2.2 - (f.dip > 0 ? 0.45 : 0);
+        f.k = Math.max(0.2, 1 + f.amount * (w - 0.2));        // strength: mostly just under full
+        f.s = Math.max(0.5, 1 + f.amount * 0.45 * w);           // reach
+        if (f.alt) f.c = Math.max(0, Math.min(1, 1.4 * noise1(t * 0.55, sd + 29) - 0.2));
     };
 
     Sprite_RoomLight.prototype.update = function() {
@@ -548,7 +608,8 @@
     // visible = inside the part of the map on screen (view: {x0, y0, x1, y1} in the spriteset's own coordinates) and
     // lit at this hour; the glow's strength follows the hour too
     Sprite_RoomLight.prototype.updateShown = function(view, tod) {
-        this._weight = lightWeight(this._when, tod);
+        if (this._flicker) this.updateFlicker(Graphics.frameCount);
+        this._weight = lightWeight(this._when, tod) * this._gain * (this._flicker ? this._flicker.k : 1);
         const r = this._reach;
         const inView = this.x + r > view.x0 && this.x - r < view.x1 && this.y + r > view.y0 && this.y - r < view.y1;
         this.visible = inView && this._weight > 0.004;
@@ -655,14 +716,18 @@
         return { x0, y0, x1: x0 + Graphics.width / s, y1: y0 + Graphics.height / s };
     };
 
+    // a light's strength now; a hole another plugin put in (e.g. TavernLife's room candle) has none of its own: full
+    const weightOf = sp => (typeof sp._weight === "number" && isFinite(sp._weight) ? sp._weight : 1);
     Spriteset_Map.prototype.redrawDarkness = function() {
         if (!this._darknessSprite) return;
         const tod = this._roomTimeOfDay || timeOfDay();
         const view = this._roomView || this.roomLightView();
         const visible = this._roomHoles.filter(h => h.sprite.visible);
         // nothing moved and the hour's light is the same: the last picture is still right (skip the paint and upload)
+        // (a light's own strength is in the key too: a flickering flame or one another plugin dims)
         const key = this._playerTorch ? "" : [tod.alpha.toFixed(3), tod.night.toFixed(3), Math.round(view.x0), Math.round(view.y0),
-            view.x1 - view.x0, visible.map(h => h.sprite.x + "," + h.sprite.y).join(";")].join("|");
+            view.x1 - view.x0, visible.map(h => h.sprite.x + "," + h.sprite.y + "," + weightOf(h.sprite).toFixed(3) +
+                (h.sprite._flicker ? "," + h.sprite._flicker.s.toFixed(3) + "," + h.sprite._flicker.c.toFixed(2) : "")).join(";")].join("|");
         if (key && key === this._darkKey) return;
         this._darkKey = key;
         const bitmap = this._darknessSprite.bitmap;
@@ -676,9 +741,10 @@
         context.globalCompositeOperation = "destination-out";
         context.scale(k, k);
         for (const hole of visible) {
-            const w = hole.sprite._weight;
+            const w = weightOf(hole.sprite);
             if (hole.shape === "circle") {
-                punchCircleHole(context, hole.sprite.x, hole.sprite.y, hole.radius, w, hole.soft);
+                const reach = hole.sprite._flicker ? hole.radius * hole.sprite._flicker.s : hole.radius;
+                punchCircleHole(context, hole.sprite.x, hole.sprite.y, reach, w, hole.soft);
             } else {
                 punchConeHole(context, hole.sprite.x, hole.sprite.y, hole.geom, w);
             }
@@ -703,12 +769,26 @@
         for (const hole of visible) {
             const s = hole.sprite, src = s.bitmap;
             if (!src || !src._canvas) continue;
-            const w = src.width, h = src.height;
-            context.globalAlpha = Math.max(0, Math.min(1, s._weight));
-            context.drawImage(src._canvas, (s.x - s.anchor.x * w) * k, (s.y - s.anchor.y * h) * k, w * k, h * k);
+            const f = s._flicker, sc = f && hole.shape === "circle" ? f.s : 1;   // (a flame's glow grows and shrinks with its reach)
+            const w = src.width * sc, h = src.height * sc, x = (s.x - s.anchor.x * w) * k, y = (s.y - s.anchor.y * h) * k;
+            const a = Math.max(0, Math.min(1, weightOf(s)));
+            if (f && f.alt && s._altBitmap && s._altBitmap._canvas) {   // its colour drifting to the other one
+                context.globalAlpha = a * (1 - f.c);
+                context.drawImage(src._canvas, x, y, w * k, h * k);
+                context.globalAlpha = a * f.c;
+                context.drawImage(s._altBitmap._canvas, x, y, w * k, h * k);
+            } else {
+                context.globalAlpha = a;
+                context.drawImage(src._canvas, x, y, w * k, h * k);
+            }
         }
         context.restore();
         bitmap._baseTexture.update();
+    };
+
+    // the map's lights for other plugins: [{ shape, sprite, radius | geom, soft }] (read them, and sprite._gain to dim one)
+    Spriteset_Map.prototype.roomLightHoles = function() {
+        return this._roomHoles || [];
     };
 
     const _Spriteset_Map_update = Spriteset_Map.prototype.update;

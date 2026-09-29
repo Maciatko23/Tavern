@@ -1,5 +1,6 @@
-// "Plan karczmy" (TavernLife.js): the easels with the tavern's plan on Map001 (the vestibule), Map025 and Map026 (at the stairs),
-// put into the maps' data by the plugin (event 950) - on free cells, reachable, cutting nobody off; O in front of one opens the plan
+// "Plan karczmy" (TavernLife_Plan.js, a part of TavernLife.js - put into the page until it is registered): the tavern's plan on Map001 (the vestibule - placed in the editor, found by its <Tavern:plan> tag),
+// Map025 and Map026 (at the stairs, put into the maps' data by the plugin: event 950) - on free cells, reachable, cutting nobody off,
+// O from every cell in front of one opens the plan
 // scene on the floor he is on, "Tu jesteś" where he stands (his map cell through the plan's scale), the tabs (Q / E and the tab
 // row), the cursor over the rooms and the side panel's words, the services lit by the hour (Melia's stage at 12:00 and 19:00, the
 // dice), the way (O), no secret on the plan, P back to the map, "Plan karczmy" in the P menu inside the tavern only, a game saved
@@ -55,10 +56,14 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
         }
         check("the game boots", booted);
         b.logs.splice(0);
-        const load = name => ev(`new Promise(res => { if (window.${name}) return res(true); const s = document.createElement("script"); s.src = "js/plugins/${name}.js?" + Date.now(); s.onload = () => res(!!window.${name}); s.onerror = () => res(false); document.body.appendChild(s); })`);
-        check("TavernLife.js (with the plan) and QuestBoard.js are in the game", (await load("TavernLife")) && (await load("QuestBoard")) && (await ev("!!(TavernLife.plan && window.Scene_TavernPlan)")));
+        // a plugin not in js/plugins.js yet goes into the page (TavernLife's parts - TavernLife_*.js - until they are registered)
+        const load = name => ev(`new Promise(res => { if ($plugins.some(p => p.name === "${name}" && p.status) || window.${name} || (window.TavernLife && TavernLife.modules && TavernLife.modules["${name}"])) return res(true);
+            const s = document.createElement("script"); s.src = "js/plugins/${name}.js?" + Date.now(); s.onload = () => res(true); s.onerror = () => res(false); document.body.appendChild(s); })`);
+        const PARTS = ["TavernLife_Render", "TavernLife_ArmWrestle", "TavernLife_Darts", "TavernLife_Plan"];
+        const loadAll = async names => { let ok = true; for (const n of names) ok = (await load(n)) && ok; return ok; };
+        check("TavernLife.js (with the plan: TavernLife_Plan.js) and QuestBoard.js are in the game", (await loadAll(["TavernLife", "QuestBoard"].concat(PARTS))) && (await ev("!!(TavernLife.plan && window.Scene_TavernPlan)")));
         await ev("window.__retries = []; setInterval(() => { const r = document.getElementById('retryButton'); if (r) { window.__retries.push(1); r.click(); } }, 400); 0");
-        await ev("DataManager.setupNewGame(); SceneManager.goto(Scene_Map); 0");
+        await ev("Object.assign($dataSystem, { startMapId: 19, startX: 2, startY: 5 }); /* (a story game in grandpa's cottage, whatever data/System.json says) */ DataManager.setupNewGame(); SceneManager.goto(Scene_Map); 0");
         await until(onMap(19), 40);
         await ev("Story.skipIntro(); Story.setDeadlineOn(false); $gameSystem._story.flags.hired = true; QuestBoard.state().rep = 0; 0");
         const BOARDS = await J("TavernLife.plan.BOARDS");
@@ -70,15 +75,29 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
             const [lx, ly, ld] = landing[map], bd = BOARDS[map];
             await go(map, lx, ly, ld);
             await setClock(3, 12);
+            // the plan is the event with <Tavern:plan> (its note or a comment): on Map001 the one placed in the editor (event 349 today),
+            // on Map025 / Map026 the plugin's easel (event 950); its cells = its own cell + its <Occupy:...> cells
             const info = await J(`(function(){
-                const e = $gameMap.event(950), d = $dataMap.events[950], cells = ${JSON.stringify(bd.cells)};
-                const others = cells.map(c => $gameMap.eventsXy(c[0], c[1]).filter(q => q.eventId() !== 950).map(q => q.eventId()));
-                const floor = cells.every(c => $gameMap.checkPassage(c[0], c[1], 0x0f));
-                const wallAbove = !$gameMap.checkPassage(${bd.x}, ${bd.y - 1}, 0x0f);
-                // the cells he can reach from the landing, the easel standing and taken away (Game_Map's own passability, the events)
+                const tagged = q => { const d = q.event(); return /<Tavern:plan>/i.test(d.note || "") || d.pages.some(pg => pg.list.some(c => (c.code === 108 || c.code === 408) && /<Tavern:plan>/i.test(String(c.parameters[0] || "")))); };
+                const occ = q => { const cells = [[q.x, q.y]], m = /<Occupy:([^>]*)>/i.exec(q.event().note || "");
+                    if (m) { const kv = {}; for (const p of m[1].split(",")) { const [k, v] = p.split("="); kv[k.trim()] = Number(v); }
+                        for (let dy = -(kv.up || 0); dy <= (kv.down || 0); dy++) for (let dx = -(kv.left || 0); dx <= (kv.right || 0); dx++) if (dx || dy) cells.push([q.x + dx, q.y + dy]); }
+                    return cells; };
+                const plans = $gameMap.events().filter(tagged), e = plans[0] || null;
+                const cells = e ? occ(e) : [];
+                const others = cells.map(c => $gameMap.eventsXy(c[0], c[1]).filter(q => q !== e).map(q => q.eventId()));
+                const floor = cells.length > 0 && cells.every(c => $gameMap.checkPassage(c[0], c[1], 0x0f));
+                const wallAbove = cells.length > 0 && cells.every(c => !$gameMap.checkPassage(c[0], c[1] - 1, 0x0f));
+                // what blocks: every event 'same as characters', not walk-through, on all of its <Occupy> cells (no transfers)
+                const solidCells = new Map();
+                for (const q of $gameMap.events()) {
+                    if (!q.isNormalPriority() || q.isThrough() || q.event().pages.some(p => p.list.some(c => c.code === 201))) continue;
+                    for (const c of occ(q)) solidCells.set(c[0] + ',' + c[1], q);
+                }
+                // the cells he can reach from the landing, the plan standing and taken away (Game_Map's own passability, the events)
                 function reach(skip) {
-                    const W = $gameMap.width(), H = $gameMap.height(), seen = new Set([${lx} + ',' + ${ly}]), todo = [[${lx}, ${ly}]];
-                    const solid = (x, y) => $gameMap.eventsXyNt(x, y).some(q => q.isNormalPriority() && !(skip && q.eventId() === 950) && !q.event().pages.some(p => p.list.some(c => c.code === 201)));
+                    const seen = new Set([${lx} + ',' + ${ly}]), todo = [[${lx}, ${ly}]];
+                    const solid = (x, y) => { const q = solidCells.get(x + ',' + y); return !!q && !(skip && q === e); };
                     while (todo.length) {
                         const [x, y] = todo.pop();
                         for (const [dx, dy, dd] of [[0, 1, 2], [0, -1, 8], [1, 0, 6], [-1, 0, 4]]) {
@@ -90,19 +109,22 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
                     return seen;
                 }
                 const withIt = reach(false), without = reach(true);
-                const front = [${bd.x}, ${bd.y + 1}];
+                const fronts = cells.filter(c => !cells.some(o => o[0] === c[0] && o[1] === c[1] + 1)).map(c => [c[0], c[1] + 1]);
                 const lost = [...without].filter(k => !withIt.has(k));
-                return { id: e ? e.eventId() : 0, at: e ? [e.x, e.y] : null, sheet: e ? e.characterName() : '', prio: e ? e._priorityType : -1, trigger: e ? e._trigger : -1,
-                    tag: d ? JSON.stringify(d.pages[0].list[0].parameters) : '', others, floor, wallAbove, reachFront: withIt.has(front.join(',')), lost };
+                return { n: plans.length, id: e ? e.eventId() : 0, at: e ? [e.x, e.y] : null, cells, fronts, sheet: e ? e.characterName() : '', prio: e ? e._priorityType : -1,
+                    trigger: e ? e._trigger : -1, others, floor, wallAbove, reachFront: fronts.length > 0 && fronts.every(f => withIt.has(f.join(','))), lost };
             })()`);
-            const boardCells = bd.cells.map(c => c.join(","));
-            check(`Map${String(map).padStart(3, "0")}: the easel (event 950, ${bd.sheet}) stands at (${bd.x},${bd.y}), 'same as characters', action button, <Tavern:plan>`,
-                info.id === 950 && info.at && info.at[0] === bd.x && info.at[1] === bd.y && info.sheet === bd.sheet && info.prio === 1 && info.trigger === 0 && /Tavern:plan/.test(info.tag), info);
-            check(`Map${String(map).padStart(3, "0")}: its cells are free floor (no other event), in front of it reachable from the landing` + (map === 1 ? ", a wall behind it" : ""),
+            const planCells = info.cells.map(c => c.join(","));
+            const where = map === 1 ? "the plan placed in the editor (event " + info.id + ")" : `the easel (event 950) at (${bd.x},${bd.y})`;
+            check(`Map${String(map).padStart(3, "0")}: one plan with <Tavern:plan> - ${where}, ${bd.sheet}, 'same as characters', action button`,
+                info.n === 1 && info.sheet === bd.sheet && info.prio === 1 && info.trigger === 0 &&
+                (map === 1 ? info.id > 0 && info.cells.length >= 2 : info.id === 950 && info.at && info.at[0] === bd.x && info.at[1] === bd.y), info);
+            check(`Map${String(map).padStart(3, "0")}: its cells ${JSON.stringify(info.cells)} are free floor (no other event), in front of it reachable from the landing` + (map === 1 ? ", a wall behind it" : ""),
                 info.floor && info.others.every(o => o.length === 0) && info.reachFront && (map !== 1 || info.wallAbove), info);
-            check(`Map${String(map).padStart(3, "0")}: it blocks nothing - with it standing only its own cells are out of reach`, info.lost.every(k => boardCells.includes(k)), info.lost);
+            check(`Map${String(map).padStart(3, "0")}: it blocks nothing - with it standing only its own cells are out of reach`, info.lost.every(k => planCells.includes(k)), info.lost);
+            const [fx, fy] = info.fronts[0] || [bd.x, bd.y + 1];
             if (map === 1) {
-                await ev(`$gamePlayer.locate(${bd.x}, ${bd.y + 2}); $gamePlayer.setDirection(8); 0`);
+                await ev(`$gamePlayer.locate(${fx}, ${fy + 1}); $gamePlayer.setDirection(8); 0`);
                 await frames(30);
                 await b.shot(path.join(SHOTS, "plan_karczmy_tablica.png"));
             } else {
@@ -110,23 +132,28 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
                 await frames(30);
                 await b.shot(path.join(SHOTS, "plan_karczmy_tablica_" + (map === 25 ? "pietro1" : "pietro2") + ".png"));
             }
-            // O in front of it opens the plan on this floor
-            await ev(`$gamePlayer.locate(${bd.x}, ${bd.y + 1}); $gamePlayer.setDirection(8); 0`);
-            await frames(8);
-            const at = await J("[$gamePlayer._realX, $gamePlayer._realY]");
-            await press("O");
-            const opened = await until(inPlan, 15);
-            const st = opened ? await state() : null;
-            const want = opened ? await J(`TavernLife.plan.point(${floorOf[map]}, ${at[0]}, ${at[1]})`) : null;
-            check(`Map${String(map).padStart(3, "0")}: O in front of the easel opens the plan on its floor (${["Parter", "Pokoje gości", "Apartamenty"][floorOf[map]]}), the tab of his floor marked`, opened && st.floor === floorOf[map] && st.here === floorOf[map], st && { floor: st.floor, here: st.here });
-            check(`Map${String(map).padStart(3, "0")}: "Tu jesteś" stands where he stands: map cell (${at.join(",")}) -> plan pixel`, st && st.marker && Math.abs(st.marker.x - Math.round(want.x)) <= 1 && Math.abs(st.marker.y - Math.round(want.y)) <= 1, { marker: st && st.marker, want });
-            const roomHere = await ev(`TavernLife.plan.roomAt(${floorOf[map]}, ${at[0]}, ${at[1]})`);
-            check(`Map${String(map).padStart(3, "0")}: the cursor starts on the room he is in (${roomHere})`, st && st.sel === roomHere, st && st.sel);
-            if (map === 1) await b.shot(path.join(SHOTS, "plan_karczmy_parter.png"));
-            await press("P");
-            const back = await until(onMap(map), 15);
-            const pos = await J("[$gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
-            check(`Map${String(map).padStart(3, "0")}: P closes the plan - back on the map where he stood`, back && pos[0] === bd.x && pos[1] === bd.y + 1, pos);
+            // O in front of it (from every cell in front of it) opens the plan on this floor; P goes back where he stood
+            for (let k = 0; k < info.fronts.length; k++) {
+                const [ox, oy] = info.fronts[k];
+                await ev(`$gamePlayer.locate(${ox}, ${oy}); $gamePlayer.setDirection(8); 0`);
+                await frames(8);
+                const at = await J("[$gamePlayer._realX, $gamePlayer._realY]");
+                await press("O");
+                const opened = await until(inPlan, 15);
+                const st = opened ? await state() : null;
+                check(`Map${String(map).padStart(3, "0")}: O from (${ox},${oy}) in front of the plan opens it on its floor (${["Parter", "Pokoje gości", "Apartamenty"][floorOf[map]]}), the tab of his floor marked`, opened && st.floor === floorOf[map] && st.here === floorOf[map], st && { floor: st.floor, here: st.here });
+                if (k === 0) {
+                    const want = opened ? await J(`TavernLife.plan.point(${floorOf[map]}, ${at[0]}, ${at[1]})`) : null;
+                    check(`Map${String(map).padStart(3, "0")}: "Tu jesteś" stands where he stands: map cell (${at.join(",")}) -> plan pixel`, st && st.marker && Math.abs(st.marker.x - Math.round(want.x)) <= 1 && Math.abs(st.marker.y - Math.round(want.y)) <= 1, { marker: st && st.marker, want });
+                    const roomHere = await ev(`TavernLife.plan.roomAt(${floorOf[map]}, ${at[0]}, ${at[1]})`);
+                    check(`Map${String(map).padStart(3, "0")}: the cursor starts on the room he is in (${roomHere})`, st && st.sel === roomHere, st && st.sel);
+                    if (map === 1) await b.shot(path.join(SHOTS, "plan_karczmy_parter.png"));
+                }
+                await press("P");
+                const back = await until(onMap(map), 15);
+                const pos = await J("[$gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
+                check(`Map${String(map).padStart(3, "0")}: P closes the plan - back on the map where he stood (${ox},${oy})`, back && pos[0] === ox && pos[1] === oy, pos);
+            }
         }
 
         // ================= tabs, cursor, panel (Map001)
@@ -291,20 +318,20 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
         // ================= without the story and without QuestBoard: nothing breaks, no word of fame
         const bare = await J(`(function(){
             const qb = window.QuestBoard, story = $gameSystem._story;
-            window.QuestBoard = undefined; $gameSystem._story = null;
+            window.QuestBoard = undefined; Tawerna.register("QuestBoard", null); $gameSystem._story = null;
             try {
                 const hall = TavernLife.plan.info(0, 'sala'), ch = TavernLife.plan.info(1, 'chamber'), gate = TavernLife.plan.info(1, 'schody_gora'), sien = TavernLife.plan.info(0, 'sien');
                 const lit = TavernLife.plan.icons(1).filter(i => i.kind === 'room' && i.room === 'chamber').map(i => i.lit);
                 return { shift: JSON.stringify(hall).includes('Zmiany'), fame: /sław/i.test(JSON.stringify([ch, gate, sien])), chamber: ch.status, gate: gate.status, lit };
-            } finally { window.QuestBoard = qb; $gameSystem._story = story; }
+            } finally { window.QuestBoard = qb; Tawerna.register("QuestBoard", qb); $gameSystem._story = story; }
         })()`);
         check("no story (an old game) and no QuestBoard: the plan still tells the rooms; no shifts, no word of fame, the chamber and the gate shut", !bare.shift && !bare.fame && bare.chamber.tone === "closed" && bare.gate.tone === "closed" && bare.lit.every(l => !l), bare);
         // the scene itself without QuestBoard: it opens on the guest floor and draws the chamber's card
-        const qbScene = await J(`(function(){ window.__qb = window.QuestBoard; window.QuestBoard = undefined; return TavernLife.plan.open({ floor: 1 }); })()`);
+        const qbScene = await J(`(function(){ window.__qb = window.QuestBoard; window.QuestBoard = undefined; Tawerna.register("QuestBoard", null); return TavernLife.plan.open({ floor: 1 }); })()`);
         await until(inPlan, 15);
         await ev("TavernLife.plan.select('chamber'); 0");
         const qbState = await state();
-        await ev("window.QuestBoard = window.__qb; 0");
+        await ev("window.QuestBoard = window.__qb; Tawerna.register('QuestBoard', window.__qb); 0");
         check("...and the plan scene opens without QuestBoard too (the chamber's card: shut, no fame)", qbScene && qbState && qbState.sel === "chamber" && !/sław/i.test(JSON.stringify(qbState.panel)), qbState && qbState.panel && qbState.panel.status);
         await press("P");
         await until(onMap(25), 15);

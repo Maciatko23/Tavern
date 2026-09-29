@@ -21,7 +21,7 @@ def merge(**keys):
     return data
 
 # the ground floor's lighting (RoomLighting.js v1.1.0): the map note and the light tag of every kind of lamp
-MAP_NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>\n<Zoom:1.5>"
+MAP_NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>"
 LIGHTS = {
     "candle":      "<Light:110,120,80,30><LightWhen:night>",
     "candles3":    "<Light:150,130,90,34><LightWhen:night>",

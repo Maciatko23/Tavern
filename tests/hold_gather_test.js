@@ -1,6 +1,19 @@
 // Held O at a tree (ChoppableTree: updateHoldStrike): blow after blow until it falls; letting go stops; Zręczność makes the blows come
 // sooner (Combat.workSpeed: the swing's rate and the pause).
+// Stage 3 (batch E2, ChoppableTree on the core and split in four): the files in the page; the felled tree on the bus ("chop").
 const { launch, sleep } = require("./cdp.js");
+// REGISTERED=1: ChoppableTree_Objects, ChoppableTree_Swing and ChoppableTree_Render put into the page's plugin list right under
+// ChoppableTree, as the plugin manager will list them (js/plugins.js itself is not touched); without it ChoppableTree.js puts them in itself
+const PARTS = ["ChoppableTree_Objects", "ChoppableTree_Swing", "ChoppableTree_Render"];
+const REGISTERED = process.env.REGISTERED ? `(function(){
+    let real;
+    const mk = name => ({ name, status: true, description: "", parameters: {} });
+    Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) {
+        const list = v.filter(p => !${JSON.stringify(PARTS)}.includes(p.name)), at = list.findIndex(p => p.name === "ChoppableTree");
+        list.splice(at + 1, 0, ...${JSON.stringify(PARTS)}.map(mk));
+        real = list;
+    } });
+})();` : null;
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
     const ev = e => b.evaluate(e);
@@ -8,6 +21,7 @@ const { launch, sleep } = require("./cdp.js");
     const check = (name, ok, info) => { results.push(ok); console.log((ok ? "PASS " : "FAIL ") + name + (info !== undefined ? "  " + JSON.stringify(info) : "")); };
     const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
     try {
+        if (REGISTERED) await b.send("Page.addScriptToEvaluateOnNewDocument", { source: REGISTERED });
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
@@ -15,6 +29,12 @@ const { launch, sleep } = require("./cdp.js");
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); $gameSystem.setDayNightHour(12); $gameParty.gainItem($dataItems[60], 1); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
+        // ChoppableTree in four files (stage 3, batch E2); what is finished goes on the bus ("chop")
+        const fam = await J(`({ parts: Object.keys(Tawerna.api("ChoppableTree_parts") || {}), scripts: ["ChoppableTree", "ChoppableTree_Objects", "ChoppableTree_Swing", "ChoppableTree_Render"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
+            order: $plugins.map(p => p.name).filter(n => /^(MapZoom|ChoppableTree|ChoppableTree_Objects|ChoppableTree_Swing|ChoppableTree_Render|SurvivalHUD)$/.test(n)), api: Tawerna.api("ChoppableTree") === ChoppableTree })`);
+        check("ChoppableTree in four files (the tags and the hooks, the things, the swings, the look), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by ChoppableTree.js"),
+            fam.api && fam.parts.join() === "core,objects,swing,render" && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "MapZoom,ChoppableTree,ChoppableTree_Objects,ChoppableTree_Swing,ChoppableTree_Render,SurvivalHUD"), fam);
+        await ev("window.__chops = []; Tawerna.on('chop', e => window.__chops.push({ kind: e.kind, id: e.id, mapId: e.mapId, x: e.x, y: e.y, done: e.done, drops: e.drops, charred: e.charred, hand: e.hand, same: e.event === $gameMap.event(e.id) }), { owner: 'test' }); 0");
         // standing trees of the same kind (a free tile below each: stand there, face up)
         const trees = await J(`$gameMap.events().filter(e => ChoppableTree.isTree(e) && !$gameSelfSwitches.value([3, e.eventId(), "A"]) && e.event().pages[0].image.characterName === "!$Pine_B" && $gameMap.isPassable(e.x, e.y + 1, 8)).map(e => ({ id: e.eventId(), x: e.x, y: e.y, hits: ChoppableTree.treeConfig(e).hits }))`);
         check("found standing pines (Sosna średnia, 16 blows) to chop", trees.length >= 3 && trees[0].hits === 16, trees.slice(0, 3));
@@ -45,6 +65,10 @@ const { launch, sleep } = require("./cdp.js");
         await ev("Input._currentState.ok = false; 0");
         check("held on, the tree comes down (then it stops by itself)", await fallen(T1.id));
         await frames(120);
+        const chop = await J(`window.__chops.filter(c => c.id === ${T1.id})`);
+        check("the felled pine on the bus: chop { kind tree, its id and tile, done false (its stump is left), the wood it gave }",
+            chop.length === 1 && chop[0].kind === "tree" && chop[0].mapId === 3 && chop[0].x === T1.x && chop[0].y === T1.y && chop[0].done === false && chop[0].same &&
+            chop[0].drops.some(d => d.item === 61 && d.amount > 0) && !chop[0].charred && !chop[0].hand, chop);
 
         // ---- Zręczność 45: quicker
         const T2 = trees[1];

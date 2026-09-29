@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc [v1.0.0] Zwierzęta na wybiegach: krowy w oborze, owce w owczarni i kury w kurniku chodzą za płotem.
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @help
  * Obora, owczarnia i kurnik (Farming.js) to ogrodzone wybiegi: płot dookoła, furtka
@@ -20,10 +22,15 @@
  *
  * Grafiki: img/characters/$Animal_Cow.png, $Animal_Sheep.png, $Animal_Hen.png
  * (arkusz RPG Makera: 3 kolumny x 4 rzędy, dół / lewo / prawo / góra).
+ * Korzysta z TawernaCore.js (musi stać wyżej na liście).
  */
 
 (() => {
     "use strict";
+
+    const PLUGIN = "Livestock";
+    const T = window.Tawerna;
+    if (!T) throw new Error("Livestock.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
 
     // the sprite-lifecycle helpers and the flee-direction scan: shared with Hunting.js's wild animals, which
     // define RoamingActor and load first (see plugins.js).
@@ -44,7 +51,7 @@
     const key = (x, y) => x + "," + y;
     const F = () => window.Farming;
     const farmOf = () => ($gameSystem && $gameSystem._farm) || null;
-    const hour = () => ($gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12);
+    const hour = () => T.time.hour();   // (12 without the day/night clock)
     const outNow = kind => alwaysOut || (hour() >= SPECIES[kind].hours[0] && hour() < SPECIES[kind].hours[1]);
     const between = ([a, b]) => a + Math.floor(Math.random() * (b - a + 1));
 
@@ -191,20 +198,12 @@
     }
 
     // ------------------------------------------------------------------
-    // The map scene drives it
+    // The map scene drives it (the core's map clock and events). No day logic: out by day and in the shed at night is looked at
+    // with the yards every 30 frames
     // ------------------------------------------------------------------
     // loading a save must not keep the animals of the game that was running (their sprites are gone with the old scene)
-    const _extractSaveContents = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
-        _extractSaveContents.call(this, contents);
-        herd = [];
-    };
-    const _Game_Map_setup = Game_Map.prototype.setup;
-    Game_Map.prototype.setup = function(mapId) {
-        _Game_Map_setup.call(this, mapId);
-        herd = [];
-        syncWait = 0;
-    };
+    T.on("load", () => { herd = []; }, { owner: PLUGIN });
+    T.on("mapEnter", () => { herd = []; syncWait = 0; }, { owner: PLUGIN });
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
@@ -215,16 +214,15 @@
         _Spriteset_Map_createCharacters.call(this);
         for (const a of herd) { a._sprite = null; addSprite(a, this); }
     };
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
+    // (its own counter, not the updater's `every`: a new map syncs on its first frame)
+    T.onMapUpdate(() => {
         if (!$gamePlayer) return;
         if (--syncWait <= 0) { syncWait = 30; sync(); }
         for (const a of herd) if (!a._sprite || !a._sprite.parent) addSprite(a);   // never leave an animal without a picture
-    };
+    }, { owner: PLUGIN, name: "yards" });
 
-    window.Livestock = { SPECIES, spawn, sync, remove, yards,
+    window.Livestock = T.register(PLUGIN, { SPECIES, spawn, sync, remove, yards,
         auto: v => { auto = !!v; },
         alwaysOut: v => { alwaysOut = !!v; },
-        get animals() { return herd; } };
+        get animals() { return herd; } });
 })();

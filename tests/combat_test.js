@@ -1,6 +1,18 @@
 // Combat.js, stage 1: keys (Space dodge / still OK in menus, V guard, X weapon), the hero's attributes, level, experience and skills,
 // the breath, blows (combo, charged), the roll with its moment of safety, guarding and parrying the boar's charge, the XP sources.
+// Stage 3 (batch C3, Combat on the core and split in three): what Combat tells the bus - levelUp, attack, heroHit, heroDown (6c).
 const { launch, sleep } = require("./cdp.js");
+// REGISTERED=1: Combat_Fight and Combat_UI put into the page's plugin list right under Combat (js/plugins.js itself is not touched);
+// js/plugins.js lists them there too now, so both runs have the same order - with it the test also checks that order
+const REGISTERED = process.env.REGISTERED ? `(function(){
+    let real;
+    const mk = name => ({ name, status: true, description: "", parameters: {} });
+    Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) {
+        const list = v.filter(p => !["Combat_Fight", "Combat_UI"].includes(p.name)), at = list.findIndex(p => p.name === "Combat");
+        list.splice(at + 1, 0, mk("Combat_Fight"), mk("Combat_UI"));
+        real = list;
+    } });
+})();` : null;
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
     const ev = e => Promise.race([b.evaluate(e), new Promise((_, rej) => setTimeout(() => rej(new Error("evaluate timeout: " + String(e).slice(0, 100))), 25000))]);
@@ -8,6 +20,7 @@ const { launch, sleep } = require("./cdp.js");
     const check = (name, ok, info) => { results.push(ok); console.log((ok ? "PASS " : "FAIL ") + name + (info !== undefined ? "  " + JSON.stringify(info) : "")); };
     const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
     try {
+        if (REGISTERED) await b.send("Page.addScriptToEvaluateOnNewDocument", { source: REGISTERED });
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
@@ -26,8 +39,14 @@ const { launch, sleep } = require("./cdp.js");
         const up = code => ev(`Input._onKeyUp({ keyCode: ${code} }); 0`);
         const F = 79, SPACE = 32, V = 80, X = 221, RIGHT = 39, ENTER = 13;   // (in the combat mode - Tab - F: the attack O, V: the guard P, X: the next weapon "]")
         await frames(10);
+        // (the bus: what Combat tells while the test runs - checked in 6c)
+        await ev("window.__bus = []; for (const n of ['levelUp', 'heroHit', 'heroDown', 'attack']) Tawerna.on(n, e => __bus.push(Object.assign({ n }, e)), { owner: 'CombatTest' }); 0");
 
         // ================= 1. keys =================
+        const fam = await J(`({ parts: Object.keys(Tawerna.api("Combat_parts") || {}), scripts: ["Combat", "Combat_Fight", "Combat_UI"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
+            order: $plugins.map(p => p.name).filter(n => /^(Skills_Data|Combat|Combat_Fight|Combat_UI|SpeechBubbles)$/.test(n)), api: Tawerna.api("Combat") === Combat })`);
+        check("Combat in three files (the hero, the fight, the look), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by Combat.js"),
+            fam.api && fam.parts.join() === "core,fight,ui" && fam.scripts.join() === "1,1,1" && (!REGISTERED || fam.order.join() === "Skills_Data,Combat,Combat_Fight,Combat_UI,SpeechBubbles"), fam);
         check("keys: Space = dodge; O, P, [ and ] have their own names (what they do depends on the mode), Tab = the mode; the backslash, X, F and V are free", (await J("[Input.keyMapper[32], Input.keyMapper[79], Input.keyMapper[80], Input.keyMapper[219], Input.keyMapper[221], Input.keyMapper[9], Input.keyMapper[220] || null, Input.keyMapper[88] || null, Input.keyMapper[70] || null, Input.keyMapper[86] || null]")).join() === "dodge,keyO,keyP,keyLB,keyRB,tab,,,,");
         check("on the map Space is not OK", !(await ev("(function(){ Input._currentState.dodge = true; Input._latestButton = 'dodge'; Input._pressedTime = 0; const r = Input.isTriggered('ok'); Input._currentState.dodge = false; Input._latestButton = null; return r; })()")));
         const inMenu = await ev("(function(){ $gameTemp._farmMenuOpen = true; Input._currentState.dodge = true; Input._latestButton = 'dodge'; Input._pressedTime = 0; const r = Input.isTriggered('ok'); Input._currentState.dodge = false; Input._latestButton = null; $gameTemp._farmMenuOpen = false; return r; })()");
@@ -93,6 +112,7 @@ const { launch, sleep } = require("./cdp.js");
         const hit1 = await J("({ hp: __boar._hp, breath: Combat.breath, mode: Combat.act.mode, swinging: $gamePlayer.isToolSwinging() })");
         const dmg1 = boar0.hp - hit1.hp;
         check("F: the stone axe swings and hits: 17 x Siła 6 (x1.035) x Mocna ręka (x1.05) = 18 (or a critical 30), 16 breath spent", (dmg1 === 18 || dmg1 === 30) && hit1.breath <= 104 - 16 + 1, { dmg1, ...hit1 });
+        await frames(3);   // (the combat layer shows the bar on its next update)
         check("the bar over the boar shows (hurt)", await ev("(function(){ const l = SceneManager._scene._spriteset._combatLayer; return l._bars.has(__boar); })()"));
         await frames(60);
         // a combo: three quick presses
@@ -192,7 +212,8 @@ const { launch, sleep } = require("./cdp.js");
         await key(F);
         const fistSwing = await J("({ sheet: $gamePlayer._swingEvent ? ChoppableTree.swingKind($gamePlayer._swingEvent._swingKind).sheet : null })");
         for (let i = 0; i < 30 && (await ev("__boar._hp")) === fistHp; i++) await frames(2);
-        const fistHit = await J(`({ hand: Combat.hand(), dmg: ${fistHp} - __boar._hp, want: Math.round(5 * Combat.strMult()), crit: Math.round(5 * Combat.strMult() * 1.6), spent: ${fistBreath} - Combat.breath })`);
+        // (Mocna ręka, learnt in 2, counts as for the club: a critical punch is 5 x 1.035 x 1.05 x 1.6 = 9, not 8 - it failed ~3% of runs)
+        const fistHit = await J(`({ hand: Combat.hand(), dmg: ${fistHp} - __boar._hp, want: Math.round(5 * Combat.strMult() * (1 + Combat.perk("melee.dmg"))), crit: Math.round(5 * Combat.strMult() * (1 + Combat.perk("melee.dmg")) * 1.6), spent: ${fistBreath} - Combat.breath })`);
         check("\\ to the fists: a punch (Swing_Punch), 5 x Siła (or a critical), 7 breath", fistHit.hand === "m0" && /^(Swing|Hero)_Punch$/.test(fistSwing.sheet) && (fistHit.dmg === fistHit.want || fistHit.dmg === fistHit.crit) && Math.round(fistHit.spent) === 7, { fistSwing, fistHit });
         const xpBar = await J("(function(){ const s = SceneManager._scene, x = s._xpBar, w = s._weaponPlate; return { vis: x.visible, above: x.y <= w.y - w.height - 4, right: x.x === w.x }; })()");
         check("the level and experience bar sits over the weapon plate in the corner", xpBar.vis && xpBar.above && xpBar.right, xpBar);
@@ -227,6 +248,13 @@ const { launch, sleep } = require("./cdp.js");
         check("the spear at a boar on the slant (down-right, 45 degrees): he turns to it (8-way facing 3) and the jab lands", slant.hand === "m154" && slant.hp < slant0 && slant.dir8 === 3, Object.assign({ hp0: slant0 }, slant));
         await frames(40);
         await ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");
+
+        // ================= 6c. the bus =================
+        const bus = await J("window.__bus"), hitsBus = bus.filter(e => e.n === "heroHit"), results = [...new Set(hitsBus.map(e => e.result))];
+        check("the bus: levelUp { level: 2 } at 500 XP; attack for each blow (the stone axe's landed); heroHit for the boar's blows (hit, blocked, parried, the tusks' bump) with the health taken; heroDown when it knocked him over",
+            bus.some(e => e.n === "levelUp" && e.level === 2) && bus.some(e => e.n === "attack" && e.weapon === 60 && e.hits >= 1) &&
+            ["hit", "blocked", "parried", "bump"].every(r => results.includes(r)) && hitsBus.some(e => e.result === "hit" && e.by === "boar" && e.damage >= 30) &&
+            bus.some(e => e.n === "heroDown" && e.by === "boar" && !e.dead), { results, n: bus.length, down: bus.filter(e => e.n === "heroDown") });
 
         // ================= 7. saved with the game =================
         const saved = await J("(function(){ const json = JsonEx.stringify(DataManager.makeSaveContents()); const before = JSON.stringify(Combat.hero()); DataManager.extractSaveContents(JsonEx.parse(json)); return { same: JSON.stringify(Combat.hero()) === before, mode: Combat.act.mode }; })()");

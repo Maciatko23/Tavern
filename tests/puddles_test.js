@@ -99,7 +99,9 @@ const OUT = process.argv[2] || "";
         check("in the rain, rings spread on the puddles", rings > 0, rings);
         await frames(40);
         check("...the rain over: the rings die away", (await layer()).ripples === 0);
-        check("a step in the water splashes (Atmosphere asks Puddles.wetAt)", /Puddles\.wetAt/.test(await ev("fetch('js/plugins/Atmosphere.js').then(r => r.text())")));
+        // (Atmosphere.js asks Puddles.wetAt - through the core since 2026-09-29, so its ground under the feet is looked at, not its source)
+        const step = await J(`({ wet: Puddles.wetAt(${mid.x}, ${mid.y}), kind: Atmosphere.groundKindAt(${mid.x}, ${mid.y}), far: Atmosphere.groundKindAt(${mid.x} + 9, ${mid.y} + 9) })`);
+        check("a step in the water splashes (Atmosphere asks Puddles.wetAt: the ground under the feet is 'water')", step.wet && step.kind === "water" && step.far !== "water", step);
 
         // ---- clay
         const menu = await J(`(function(){ const m = Farming.menuFor(${mid.x}, ${mid.y}); return { title: m && m.title, names: m ? m.entries.map(e => e.name) : [] }; })()`);

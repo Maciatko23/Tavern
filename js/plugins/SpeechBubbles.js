@@ -4,8 +4,20 @@
 
 /*:
  * @target MZ
- * @plugindesc Rozmowy w dymkach: tekst wiadomości w dymku nad postacią, która mówi, a w rozmowie z postacią z popiersiem - popiersia w rogach ekranu i dymek z popiersia mówiącego. Krótkie okrzyki postaci. v1.1.1
+ * @plugindesc Rozmowy w dymkach: tekst wiadomości w dymku nad postacią, która mówi, a w rozmowie z postacią z popiersiem - popiersia w rogach ekranu i dymek z popiersia mówiącego. Krótkie okrzyki postaci. v1.2.0
  * @author Claude
+ * @base TawernaCore
+ * @base TawernaUI
+ * @orderAfter TawernaCore
+ * @orderAfter TawernaUI
+ *
+ * @param heroSide
+ * @text Strona bohatera w rozmowie
+ * @type select
+ * @option right
+ * @option left
+ * @desc W którym dolnym rogu stoi popiersie bohatera; rozmówca po drugiej stronie.
+ * @default right
  *
  * @help
  * Na mapie każda wiadomość (polecenie "Pokaż tekst") pojawia się w dymku nad
@@ -20,15 +32,17 @@
  *
  * Rozmowa z popiersiami: gdy mówi postać, która ma popiersie (duży obrazek
  * z img/pictures), albo bohater w rozmowie z taką postacią, w dolnych
- * rogach ekranu wysuwają się popiersia: bohater po lewej, rozmówca po
- * prawej. Mówiący jest jasny i ma tabliczkę z imieniem, słuchający jest
- * przyciemniony. Dymek wychodzi z popiersia mówiącego (ogonek do ust),
- * a nad mówiącym na mapie miga żółta strzałka (nad dymkiem, gdy ten go
- * zasłania). Wiersze tekstu zostają takie, jak je napisano, jeśli mieszczą
+ * rogach ekranu wysuwają się popiersia: bohater po jednej stronie,
+ * rozmówca po drugiej. Mówiący jest jasny i ma tabliczkę z imieniem,
+ * słuchający jest przyciemniony. Dymek wychodzi z popiersia mówiącego
+ * (ogonek do ust), a nad mówiącym na mapie miga żółta strzałka (nad
+ * dymkiem, gdy ten go zasłania). Wiersze tekstu zostają takie, jak je napisano, jeśli mieszczą
  * się między popiersiami; dłuższe łamią się tak, by tekst zmieścił się
  * w jednym dymku. Wybory odpowiedzi stają w dymku bohatera, przy jego
  * popiersiu. Na czas rozmowy znika pasek doświadczenia z prawego dolnego
  * rogu. Po rozmowie popiersia się chowają.
+ *
+ * Strony: bohater po prawej, rozmówca po lewej (parametr heroSide).
  *
  * Kto ma popiersie:
  *  - postać z arkusza RTP Actor1-3 / People1-4 (także nasze kopie _Tall)
@@ -57,10 +71,20 @@
  * krótki dymek nad postacią ($gamePlayer albo zdarzenie), który po chwili
  * sam znika i nie zatrzymuje gry (np. "Idzie burza..." z Survival.js).
  * Klatki można pominąć: czas zależy wtedy od długości tekstu.
+ *   SpeechBubbles.bustOf(postać), heroBust(), hasBust(nazwa), bustBitmap(nazwa)
+ * popiersie postaci i jego obrazek (ten sam, co w mini-grach: Tawerna.ui).
+ *
+ * KOLEJNOŚĆ: pod TawernaCore.js i TawernaUI.js.
  */
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("SpeechBubbles.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+    const ui = T.ui;
+    if (!ui || !ui.loadBust) throw new Error("SpeechBubbles.js: brak TawernaUI.js - musi być wyżej na liście wtyczek (the UI kit is missing)");
+    const PLUGIN = "SpeechBubbles";
 
     const MAX_W = 760;                              // the widest a bubble's text gets (px)
     const TAIL = { w: 18, h: 14, inset: 20 };       // the tail: base width, length, how near the corners its base may go
@@ -70,6 +94,10 @@
     const BARK = { font: 20, line: 28, padX: 14, padY: 7, fadeIn: 10, fadeOut: 18 };
     const FILL = "rgba(11,12,15,0.72)";            // the panel: a little see-through (user, 2026-09-27: "trochę przezroczyste")
     // talks with busts (user, 2026-09-27: mock-ups docs/postacie/makieta2_*.png)
+    // which bottom corner the hero's bust takes in a talk (user, 2026-09-29: the hero right, the other left)
+    const HERO_SIDE = String((PluginManager.parameters(PLUGIN) || {}).heroSide || "right").trim().toLowerCase() === "left" ? "left" : "right";
+    const NPC_SIDE = HERO_SIDE === "left" ? "right" : "left";
+    const sideName = side => (side === HERO_SIDE ? talk.hero : talk.npc);   // (the bust shown on a side now)
     const TALK = {
         height: 273,                 // the busts on the screen: 330 x 350 files at 0.78 (any file is scaled to this height)
         top: 250,                    // a bubble's top at most this far above the screen's bottom (a taller one goes higher)
@@ -91,8 +119,9 @@
     const FACES_RIGHT = new Set();                              // busts drawn facing right (the RTP ones face left)
     const HERO_NAME = "Ty";
 
-    const style = () => window.UIStyle || { fill: "rgba(11,12,15,0.9)", solid: "#0b0c0f", line: "#3a3e46", accent: "#ffd23f", text: "#eceef0" };
-    const easeOut = x => 1 - Math.pow(1 - x, 3);
+    const style = () => ui.style();   // (UITheme.js's UIStyle; without it the kit's plain one - the same colours)
+    const easeOut = ui.ease.out;
+    const ON_MAP = { only: ["onMap"] };   // (the core's "calm" check: the scene is the map)
 
     // ------------------------------------------------------------------
     // The picture: a panel like the windows (cut corners, a thin grey line, yellow brackets on two corners) with a tail on one
@@ -229,7 +258,7 @@
     };
     // the character the message comes from (wherever it stands), or null (\SPK[-1], off the map)
     function speakerFor(sp) {
-        if (!(SceneManager._scene instanceof Scene_Map) || !$gameMap || !$gamePlayer) return null;
+        if (!T.isCalm(null, ON_MAP) || !$gameMap || !$gamePlayer) return null;
         if (sp.forced !== undefined) return sp.forced < 0 ? null : sp.forced === 0 ? $gamePlayer : $gameMap.event(sp.forced) || null;
         const face = $gameMessage.faceName(), lead = $gameParty.leader();
         if (!face || (lead && lead.faceName() === face && lead.faceIndex() === $gameMessage.faceIndex())) return $gamePlayer;
@@ -271,30 +300,26 @@
     }
     const hasBust = name => !!name && found.get(name) !== false && (RTP_BUST.test(name) || found.get(name) === true);
     const usable = name => (hasBust(name) ? name : (probe(name), null));
-    // the pictures, loaded outside ImageManager's cache (a file gone after all must not stop the game with a load error)
-    const bitmaps = new Map();
+    // the picture of a bust that is there, else null. Loaded by the kit (Tawerna.ui.loadBust: outside ImageManager's cache - a file
+    // gone after all must not stop the game with a load error), so the talks and the mini-games' busts share one picture
     function bustBitmap(name) {
         if (!hasBust(name)) return null;
-        let bmp = bitmaps.get(name);
-        if (!bmp) {
-            bmp = Bitmap.load("img/pictures/" + Utils.encodeURI(name) + ".png");
-            bitmaps.set(name, bmp);
-        }
+        const bmp = ui.loadBust(name);
         if (bmp.isError()) { found.set(name, false); return null; }
         return bmp;
     }
-    // a tag of an event: in a comment of its page, else in its note (<Bust:Name>, <Bust:none>, <BustName:...>)
+    // a tag of an event, read by the core: in a comment of its page, else in its note (<Bust:Name>, <Bust:none>, <BustName:...>);
+    // an empty one does not count. (The page's comments go to the core as a new object each time: its tag cache is per object and
+    // would not see a comment put into the page later - the tests do that.)
     function tagOf(ev, key) {
-        const re = new RegExp("<" + key + ":\\s*([^>]*?)\\s*>", "i"), page = ev.page && ev.page();
-        for (const c of (page && page.list) || []) {
-            const m = (c.code === 108 || c.code === 408) && re.exec(String(c.parameters[0]));
-            if (m) return m[1];
-        }
-        const data = ev.event && ev.event(), m = data && data.note ? re.exec(data.note) : null;
-        return m ? m[1] : null;
+        const page = ev.page && ev.page(), data = ev.event && ev.event();
+        const inPage = page ? T.tag({ list: page.list }, key) : null;
+        if (inPage && inPage.raw) return inPage.raw;
+        const inNote = data && data.note ? T.tag(data.note, key) : null;
+        return inNote && inNote.raw ? inNote.raw : null;
     }
     function heroBust() {
-        if (window.HeroLook && HeroLook.active()) return usable(HERO_BUST);
+        if (T.call("HeroLook", "active")) return usable(HERO_BUST);
         const a = $gameParty && $gameParty.leader();
         return usable(a && a.pictureName ? a.pictureName() : "");
     }
@@ -347,15 +372,16 @@
         }
         return bustOf(ch) ? { side: "npc", partner: ch } : null;
     }
-    // every map frame: the talk ends once no message has come for a while
-    function talkTick() {
+    // every map frame (the core's map clock): the talk ends once no message has come for a while, or as the screen goes dark (a fade
+    // in counts as light - not the core's "fade" check)
+    T.onMapUpdate(function talkTick() {
         if (!talk.on) return;
         if ($gameMessage.isBusy()) { talk.idle = 0; return; }
         talk.idle++;
         const running = $gameMap.isEventRunning() && $gameMap._interpreter.eventId() === talk.owner;
         const dark = $gameScreen.brightness() < 255 && !($gameScreen._fadeInDuration > 0);
         if ((talk.idle > 4 && !running) || talk.idle > TALK.hold || dark) endTalk();
-    }
+    }, { owner: PLUGIN, name: "talk" });
     // where a side's bust stands (screen px) and where its tail points: { x, w, top, inner, tipX, tipY, has }
     function bustBox(side, name) {
         const bmp = name ? bustBitmap(name) : null, ready = !!bmp && bmp.isReady() && bmp.height > 0;
@@ -384,7 +410,8 @@
         const P = TALK.plate, S = style(), ctx = bmp.context, r = plateRect(w, left, name), px = ox + r.x, py = oy + r.y;
         bmp.fontFace = $gameSystem.mainFontFace();
         bmp.fontSize = P.font;
-        if (window.UIStyle) UIStyle.panel(ctx, px, py, r.w, r.h, { cut: 3, fill: S.solid, accent: false });
+        const theme = T.api("UITheme");   // (UIStyle)
+        if (theme) theme.panel(ctx, px, py, r.w, r.h, { cut: 3, fill: S.solid, accent: false });
         else { ctx.fillStyle = S.solid || "#0b0c0f"; ctx.fillRect(px, py, r.w, r.h); }
         bmp.textColor = S.accent;
         bmp.outlineWidth = 0;
@@ -405,14 +432,15 @@
     }
     // the hero's bubble for choices after someone else's words: at his bust (screen px)
     function heroChoiceSlot(c) {
-        const box = bustBox("left", talk.on ? talk.hero : null);
-        return { x: box.inner + TALK.gap, y: talkY(c.h, box.tipY), w: c.w, h: c.h, own: true, box };
+        const box = bustBox(HERO_SIDE, talk.on ? talk.hero : null);
+        const x = HERO_SIDE === "left" ? box.inner + TALK.gap : box.inner - TALK.gap - c.w;
+        return { x, y: talkY(c.h, box.tipY), w: c.w, h: c.h, own: true, box };
     }
     // in a talk, the busts' places (window-layer px) - bubbles over heads and the choices beside them keep clear of them; else null
     function bustKeepOut() {
         if (!talk.on) return null;
         const off = layerOffset(), out = [];
-        for (const [side, name] of [["left", talk.hero], ["right", talk.npc]]) {
+        for (const [side, name] of [[HERO_SIDE, talk.hero], [NPC_SIDE, talk.npc]]) {
             const b = bustBox(side, name);
             if (b.has) out.push({ x: b.x - off.x, y: b.top - off.y, w: b.w, h: TALK.height });
         }
@@ -502,9 +530,12 @@
     // the widest a talk's text may be: the room between the busts (with the hero's choices at his bust - someone else's question -
     // what they leave of it)
     Window_Message.prototype.talkTextWidth = function() {
-        const right = bustBox("right", talk.npc).inner - TALK.gap;
-        let left = bustBox("left", talk.hero).inner + TALK.gap;
-        if (this._talkSide === "npc" && $gameMessage.isChoice()) { const c = heroChoiceSlot(this.choiceBox()); left = c.x + c.w + 16; }
+        let right = bustBox("right", sideName("right")).inner - TALK.gap;
+        let left = bustBox("left", sideName("left")).inner + TALK.gap;
+        if (this._talkSide === "npc" && $gameMessage.isChoice()) {   // (the hero's choices at his bust take their room)
+            const c = heroChoiceSlot(this.choiceBox());
+            if (HERO_SIDE === "left") left = c.x + c.w + 16; else right = c.x - 16;
+        }
         return Math.max(220, right - left - this.padding * 2 - 12);
     };
     // the choice list's size for this message's choices
@@ -571,28 +602,29 @@
         this._bubbleEdge = at.tail.edge;
         return true;
     };
-    // in a talk: beside the speaker's bust (the hero's on the left, the other's on the right), the tail to its mouth, the name on a
+    // in a talk: beside the speaker's bust (the hero's on HERO_SIDE, the other's across), the tail to its mouth, the name on a
     // plate; the hero's choices under his words in the same bubble - or, after someone else's words, in a bubble of their own at
     // his bust (this._choiceSlot, screen px). text: what is left to show (a later page), else the whole message
     Window_Message.prototype.placeTalk = function(text) {
         const hero = this._talkSide === "hero", pad = this.padding, off = layerOffset();
-        const box = bustBox(hero ? "left" : "right", hero ? talk.hero : talk.npc);
+        const side = hero ? HERO_SIDE : NPC_SIDE, onLeft = side === "left";
+        const box = bustBox(side, hero ? talk.hero : talk.npc);
         const size = measure(text === undefined ? $gameMessage.allText() : text), name = nameOf(this._bubbleOf);
         const c = $gameMessage.isChoice() ? this.choiceBox() : null;
         let w = Math.min(this.talkTextWidth(), Math.ceil(size.width)) + 12 + pad * 2;
         if (c && hero) w = Math.max(w, c.w);
         if (name) w = Math.max(w, plateWidth(name) + TALK.plate.inset * 2);   // (the name on its plate in full, however short the words)
         const h = Math.min(Math.ceil(size.height), this.lineHeight() * TALK.lines) + pad * 2, total = h + (c && hero ? c.h - pad : 0);
-        const x = hero ? box.inner + TALK.gap : box.inner - TALK.gap - w, y = talkY(total, box.tipY);
+        const x = onLeft ? box.inner + TALK.gap : box.inner - TALK.gap - w, y = talkY(total, box.tipY);
         this.placeAt(x - off.x, y - off.y, w, h);
-        const paint = [w, total, x, y, hero, box.has ? { x: box.tipX, y: box.tipY } : null, name];
+        const paint = [w, total, x, y, onLeft, box.has ? { x: box.tipX, y: box.tipY } : null, name];
         const p = talkBubble(...paint), bs = this._bubbleSprite;
         swapBitmap(bs, p.bmp);
         bs.x = -p.ox;
         bs.y = -p.oy;
         bs.visible = true;
-        this._talkPlate = name ? plateRect(w, hero, name) : null;
-        this._bubbleEdge = hero ? "talk-left" : "talk-right";
+        this._talkPlate = name ? plateRect(w, onLeft, name) : null;
+        this._bubbleEdge = "talk-" + side;
         this._choiceSlot = c ? (hero ? { x, y: y + h - pad, w, h: c.h, own: false, paint, part: h - pad } : heroChoiceSlot(c)) : null;
         return true;
     };
@@ -618,7 +650,7 @@
     Window_ChoiceList.prototype.updatePlacement = function() {
         _choicePlacement.call(this);
         const mw = this._messageWindow, open = !!(mw && mw.isOpen()), bubble = open && !!mw._bubbleOf;
-        const slot = open && mw._talkSide ? mw._choiceSlot : !open && talk.on && SceneManager._scene instanceof Scene_Map
+        const slot = open && mw._talkSide ? mw._choiceSlot : !open && talk.on && T.isCalm(null, ON_MAP)
             ? heroChoiceSlot({ w: Math.max(160, Math.ceil(this.windowWidth())), h: this.windowHeight() }) : null;
         this._talkChoice = !!slot;
         // ...as see-through as the bubble (the options' window opacity scaled like FILL against the old 0.94; the rows' bands too)
@@ -654,11 +686,11 @@
             b.x = b.y = 0;
             return;
         }
-        const box = slot.box, p = talkBubble(slot.w, slot.h, slot.x, slot.y, true, box.has ? { x: box.tipX, y: box.tipY } : null, HERO_NAME);
+        const box = slot.box, p = talkBubble(slot.w, slot.h, slot.x, slot.y, HERO_SIDE === "left", box.has ? { x: box.tipX, y: box.tipY } : null, HERO_NAME);
         swapBitmap(b, p.bmp);
         b.x = -p.ox;
         b.y = -p.oy;
-        this._talkPlate = plateRect(slot.w, true, HERO_NAME);
+        this._talkPlate = plateRect(slot.w, HERO_SIDE === "left", HERO_NAME);   // (by his bust, as talkBubble draws it)
     };
     const _choiceBackground = Window_ChoiceList.prototype.updateBackground;
     Window_ChoiceList.prototype.updateBackground = function() {
@@ -675,7 +707,7 @@
     };
 
     // ------------------------------------------------------------------
-    // The busts on the screen: in the bottom corners (the hero's mirrored to look right), sliding in and out, the listener dimmed;
+    // The busts on the screen: in the bottom corners (the one on the left mirrored to look right), sliding in and out, the listener dimmed;
     // a small yellow marker over the speaker on the map; the HUD under the busts hidden meanwhile
     // ------------------------------------------------------------------
     let markerBmp = null;
@@ -720,10 +752,9 @@
     };
     Sprite_TalkBusts.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        talkTick();
         const sc = SceneManager._scene, cl = sc && sc._choiceListWindow, choosing = !!(talk.on && cl && cl.active && cl.openness > 0);
-        this.updateSide(this._sides.left, talk.on ? talk.hero : "", talk.lit === "hero" || choosing);
-        this.updateSide(this._sides.right, talk.on ? talk.npc : "", talk.lit === "npc");
+        this.updateSide(this._sides[HERO_SIDE], talk.on ? talk.hero : "", talk.lit === "hero" || choosing);
+        this.updateSide(this._sides[NPC_SIDE], talk.on ? talk.npc : "", talk.lit === "npc");
         this.updateMarker();
     };
     // a side: its bust slides in when wanted, out when not; another one in its place comes by a short cross-fade where it stands
@@ -844,11 +875,9 @@
             }
         }
     };
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
-        if (this._talkBusts) this._talkBusts.coverHud(this);
-    };
+    T.onMapUpdate(scene => {   // (after the map's frame: the HUD sprites have set their own visibility)
+        if (scene._talkBusts) scene._talkBusts.coverHud(scene);
+    }, { owner: PLUGIN, name: "coverHud" });
 
     // ------------------------------------------------------------------
     // Short cries: a small bubble over a character for a few seconds while the game goes on
@@ -927,21 +956,17 @@
         this.addChildAt(this._talkBusts._marker, this.getChildIndex(this._windowLayer) + 1);
         [heroBust()].concat($gameMap.events().map(bustOf)).forEach(n => n && bustBitmap(n));   // (loaded before the first talk)
     };
-    // a new map: the cries of the old one are gone, and any talk
-    const _Game_Map_setup = Game_Map.prototype.setup;
-    Game_Map.prototype.setup = function(mapId) {
-        _Game_Map_setup.call(this, mapId);
+    // a new map: the cries of the old one are gone, and any talk (before the other listeners: a cry on arrival stays)
+    T.on("mapEnter", () => {
         barks.length = 0;
         endTalk();
-    };
+    }, { owner: PLUGIN, priority: -1 });
     // a new or loaded game: no talk of the one before
-    const _DataManager_createGameObjects = DataManager.createGameObjects;
-    DataManager.createGameObjects = function() {
-        _DataManager_createGameObjects.call(this);
-        endTalk();
-    };
+    T.on("newGame", endTalk, { owner: PLUGIN });
+    T.on("load", endTalk, { owner: PLUGIN });
 
-    window.SpeechBubbles = {
-        say, get barks() { return barks; }, log, speakerOf, headOf, bustOf, heroBust, hasBust, talk: () => talk, BUSTS, FACES_RIGHT, TALK
-    };
+    window.SpeechBubbles = T.register(PLUGIN, {
+        say, get barks() { return barks; }, log, speakerOf, headOf, bustOf, heroBust, hasBust, bustBitmap, talk: () => talk, BUSTS, FACES_RIGHT, TALK,
+        HERO_SIDE, NPC_SIDE
+    });
 })();

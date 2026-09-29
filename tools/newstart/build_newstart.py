@@ -362,7 +362,11 @@ def design_24():
 DESIGNS = {19: design_19, 20: design_20, 21: design_21, 22: design_22, 23: design_23, 24: design_24}
 
 if __name__ == "__main__":
-    todo = [int(a) for a in sys.argv[1:]] or sorted(DESIGNS)
+    # Map019 (grandpa's cottage inside) is no longer made here: since 2026-09-28 it is tools/house/build_house.py's concept B
+    # (design_19 stays only as the record of the first cottage and must not overwrite the installed one)
+    todo = [int(a) for a in sys.argv[1:]] or [n for n in sorted(DESIGNS) if n != 19]
+    if 19 in todo:
+        print("Map019 is built by tools/house/build_house.py now - skipped"); todo.remove(19)
     for n in todo:
         mp = DESIGNS[n]()
         count = mp.write()

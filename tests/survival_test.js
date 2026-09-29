@@ -150,8 +150,24 @@ const { launch, sleep } = require("./cdp.js");
         check("boots make the player faster by the plugin's bootsSpeed (" + bootsParam + ")", Math.abs(dpf.ratio - bootsParam) < 0.001, dpf);
 
         // ------------------------------------------------------------ water: the can, the well, the pond
-        const pond = await ev(`(function(){ for (let y = 1; y < $gameMap.height() - 1; y++) for (let x = 1; x < $gameMap.width() - 1; x++) { if (Farming.isWaterTile(x, y) && Farming.naturalFarmland(x - 1, y)) return { x, y }; } return null; })()`);
-        check("found a pond tile with grass beside it", !!pond, pond);
+        // No map has water now (no water before the well - the drought is by design, 2026-09; the maps stay as they are). Then a
+        // pretend pond, 3 x 3 tiles of free ground with grass on its left, for Farming_Plots' isWaterTile (the part's function, so
+        // the action button - Farming.js asks the part - and Farming.isWaterTile both see it); put back after the fishing below
+        let pond = await ev(`(function(){ for (let y = 1; y < $gameMap.height() - 1; y++) for (let x = 1; x < $gameMap.width() - 1; x++) { if (Farming.isWaterTile(x, y) && Farming.naturalFarmland(x - 1, y)) return { x, y }; } return null; })()`);
+        const pretendPond = !pond;
+        if (pretendPond) pond = await ev(`(function(){
+            const PL = Tawerna.api("Farming_parts").plots;
+            const clear = (x, y) => $gameMap.isValid(x, y) && $gameMap.eventsXy(x, y).length === 0 && !Farming.buildingAt(x, y) && !Farming.gatherAt(x, y) && !PL.isWaterTile(x, y);
+            for (let y = 3; y < $gameMap.height() - 3; y++) for (let x = 3; x < $gameMap.width() - 4; x++) {
+                let ok = Farming.naturalFarmland(x - 1, y) && !Farming.buildingAt(x - 1, y);
+                for (let j = -1; j <= 1 && ok; j++) for (let i = 0; i < 3; i++) if (!clear(x + i, y + j)) { ok = false; break; }
+                if (!ok) continue;
+                window.__isWater = PL.isWaterTile;
+                PL.isWaterTile = (tx, ty) => (tx >= x && tx <= x + 2 && Math.abs(ty - y) <= 1) || window.__isWater(tx, ty);
+                return { x, y };
+            }
+            return null; })()`);
+        check("found a pond tile with grass beside it" + (pretendPond ? " (a pretend pond: no map has water now)" : ""), !!pond && (await ev(`Farming.isWaterTile(${pond.x}, ${pond.y})`)) === true, pond);
         await give(86, 3); await give(80, 6);
         check("the watering can is forged: 1 iron + 2 planks", (await doManual("30, 5", "forge", "can")) === true && (await count(87)) === 1);
         check("a new can is full (6/6)", (await ev("Farming.canCharges()")) === 6);
@@ -183,31 +199,37 @@ const { launch, sleep } = require("./cdp.js");
         check("fishing at dawn with a good roll: fish caught (2), an hour passed, stamina spent", (await count(98)) >= 2 && (await ev("$gameSystem.stamina()")) < 100, { fish: await count(98) });
         const h1 = await ev("$gameSystem.dayNightHour()");
         check("fishing took about an hour of game time", h1 - h0 > 0.9 && h1 - h0 < 1.9, { h0, h1 });
+        if (pretendPond) await ev(`Tawerna.api("Farming_parts").plots.isWaterTile = window.__isWater; 0`);
 
         // ------------------------------------------------------------ legowisko
-        await ev("$gameSystem.setStamina(30); 0");
+        // (no wolves in the night here: a pack may wake a sleeper outdoors - Hunting.nightRaid, a dice roll per night hour that grows with
+        // the days, and the test sleeps on day 11 - then he wakes at night with part of the rest. That has its own test, sleep_danger_test)
+        await ev("if (window.Hunting) { window.__nightRaid = Hunting.nightRaid; Hunting.nightRaid = () => null; } $gameSystem.setStamina(30); 0");
         const dayHour0 = await ev("$gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour()");
         const harsh = await ev(`["rain", "storm", "snow"].includes($gameScreen.weatherType()) || Farming.seasonIndex($gameSystem.dayNightDay()) === 3`);
         await ev("Farming.menuFor(26, 14).entries[0].run(); 0"); await frames(200);
         const dayHour1 = await ev("$gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour()");
         check("the forest bed: a night's sleep to the morning, but only " + (harsh ? "40" : "60") + "% of the strength comes back", Math.round(await ev("$gameSystem.stamina()")) === (harsh ? 40 : 60) && dayHour1 > dayHour0 && (dayHour1 % 24) > 6.5 && (dayHour1 % 24) < 8.5, { dayHour0, dayHour1, harsh });
+        await ev("if (window.__nightRaid) Hunting.nightRaid = window.__nightRaid; 0");
         for (let k = 0; k < 10 && (await ev("$gameMessage.isBusy()")); k++) { await press("ok"); await frames(15); }
         // a night that runs through midnight ends the day: the summary of the day (Journal.js) opens; close it
         for (let k = 0; k < 40 && (await ev("SceneManager._scene.constructor.name")) !== "Scene_DaySummary"; k++) await frames(6);
         if ((await ev("SceneManager._scene.constructor.name")) === "Scene_DaySummary") { await press("ok"); await frames(20); await press("ok"); await frames(30); }
 
         // ------------------------------------------------------------ weather and cold
-        const days = await ev(`(function(){ const rain = [], snow = []; for (let d = 1; d <= 112; d++) { const p = Survival.weatherPlan(d); if (p && p.type === "rain") rain.push(d); if (p && p.type === "snow") snow.push(d); } return { rain: rain.length, snow: snow.length, firstRain: rain[0], firstSnow: snow[0] }; })()`);
+        // (firstPlainRain: the first rainy day without a storm - on a storm day, Storm.js / Survival's plan.storm, the rain's first hours
+        // are MZ's "storm", not "rain"; days 2 and 5 of the year are such days now. The storm has its own test, tests/storm_test.js)
+        const days = await ev(`(function(){ const rain = [], snow = [], plain = []; for (let d = 1; d <= 112; d++) { const p = Survival.weatherPlan(d); if (p && p.type === "rain") rain.push(d); if (p && p.type === "rain" && !p.storm) plain.push(d); if (p && p.type === "snow") snow.push(d); } return { rain: rain.length, snow: snow.length, firstRain: rain[0], firstPlainRain: plain[0], firstSnow: snow[0] }; })()`);
         check("the year has rainy days (spring to autumn) and snowy winter days", days.rain > 10 && days.snow > 4 && days.firstSnow >= 85, days);
-        const plan = await ev(`Survival.weatherPlan(${days.firstRain})`);
-        await ev(`$gameSystem._farm.plots[3]["20,3"].watered = -5; $gameSystem._rainDay = 0; $gameSystem._dayNightDay = ${days.firstRain}; $gameSystem.setDayNightHour(${plan.start} + 0.5); 0`);
+        const plan = await ev(`Survival.weatherPlan(${days.firstPlainRain})`);
+        await ev(`$gameSystem._farm.plots[3]["20,3"].watered = -5; $gameSystem._rainDay = 0; $gameSystem._dayNightDay = ${days.firstPlainRain}; $gameSystem.setDayNightHour(${plan.start} + 0.5); 0`);
         await frames(80);
         const rainNow = await ev("({ type: $gameScreen.weatherType(), watered: $gameSystem._farm.plots[3]['20,3'].watered, today: $gameSystem.dayNightDay() })");
         check("rain falls in the planned hours and waters the tilled plots", rainNow.type === "rain" && rainNow.watered === rainNow.today, rainNow);
         await ev(`$gameSystem.setDayNightHour(${plan.end} + 0.5); 0`);
         await frames(130);   // the rain fades out over 90 frames
         check("and stops afterwards (the power target falls to 0)", (await ev("$gameScreen._weatherPowerTarget")) === 0, await ev("({ w: $gameScreen.weatherType(), h: $gameSystem.dayNightHour(), d: $gameSystem.dayNightDay(), plan: Survival.weatherPlan($gameSystem.dayNightDay()), cur: Survival.currentWeather(), f: Graphics.frameCount })"));
-        const rain2 = await ev(`(function(){ for (let d = ${days.firstRain} + 1; d <= 84; d++) { const p = Survival.weatherPlan(d); if (p && p.type === "rain") return { d, p }; } return null; })()`);
+        const rain2 = await ev(`(function(){ for (let d = ${days.firstPlainRain} + 1; d <= 84; d++) { const p = Survival.weatherPlan(d); if (p && p.type === "rain" && !p.storm) return { d, p }; } return null; })()`);
         await ev(`$gameSystem._dayNightDay = ${rain2.d}; $gameSystem.setDayNightHour(${rain2.p.start} + 0.5); 0`);
         await frames(70);
         check("and it rains again on the next rainy day (the type is stale after a fade)", (await ev("$gameScreen._weatherPowerTarget")) === rain2.p.power && (await ev("$gameScreen.weatherType()")) === "rain", rain2);

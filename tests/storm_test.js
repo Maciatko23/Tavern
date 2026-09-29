@@ -20,6 +20,10 @@ const OUT = __dirname + "/";
         // record sounds and popups
         await ev(`(function(){ window.__se = []; const _p = AudioManager.playSe; AudioManager.playSe = function(se) { window.__se.push({ name: se.name, volume: se.volume, pitch: se.pitch, f: Graphics.frameCount }); return _p.call(this, se); };
             window.__pop = []; const _q = Game_Temp.prototype.pushLootPopup; Game_Temp.prototype.pushLootPopup = function(icon, text) { window.__pop.push(text); return _q.apply(this, arguments); }; })(); 0`);
+        // (and the sounds through the core's safe pool - Storm.js's thunder and gusts since 2026-09-29); the storm's events on the bus
+        await ev(`(function(){ if (window.Tawerna && Tawerna.audio && !Tawerna.audio.__rec) { const _se = Tawerna.audio.se; Tawerna.audio.__rec = true;
+                Tawerna.audio.se = function(name, o) { o = typeof o === "number" ? { volume: o } : o || {}; window.__se.push({ name, volume: o.volume, pitch: o.pitch, f: Graphics.frameCount }); return _se.apply(this, arguments); }; }
+            window.__bus = []; if (window.Tawerna) for (const n of ["stormStart", "stormEnd", "lightning"]) Tawerna.on(n, e => window.__bus.push(Object.assign({ ev: n }, e)), { owner: "storm_test" }); })(); 0`);
 
         // ---------------------------------------------------------------- the plan
         const plan = await J(`(function(){ const n = [0, 0, 0, 0], rainy = [0, 0, 0, 0], bad = []; let example = null;
@@ -53,6 +57,8 @@ const OUT = __dirname + "/";
         await frames(70);
         const g = await J(`({ level: Storm.level(), phase: Storm.phase(), wind: Storm.wind(), weather: $gameScreen.weatherType(), target: $gameScreen._weatherPowerTarget || 0, pops: window.__pop.slice(), said: SpeechBubbles.log.slice() })`);
         check("forced: it gathers - the level rises, wind picks up, no rain yet, the hero says 'Idzie burza...' (a speech bubble)", g.phase === "gather" && g.level > 0.2 && g.wind > 0.2 && g.target === 0 && g.said.includes("Idzie burza...") && !g.pops.includes("Zbiera się na burzę"), g);
+        const busStart = await J("window.__bus.filter(e => e.ev === 'stormStart')");
+        check("the bus: 'stormStart' once, as it gathers ({ day, hour, phase, level })", busStart.length === 1 && busStart[0].phase === "gather" && busStart[0].level > 0 && busStart[0].day > 0, busStart);
         await b.shot(OUT + "storm_bubble.png");
         // jump into the raging part
         await ev("$gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.7); 0");
@@ -81,6 +87,9 @@ const OUT = __dirname + "/";
             const sky = SceneManager._scene._spriteset._stormSky; res(JSON.stringify({ flash: Storm.flash(), light: sky._light.alpha, bolt: sky._bolt.alpha, shake: $gameScreen._shakeDuration })); } }, 1); })`));
         await b.shot(OUT + "storm_bolt.png");
         check("close: a bright flash, the bolt drawn, the screen shakes", near.flash > 0.7 && near.light > 0.2 && near.bolt > 0.5 && near.shake > 0, near);
+        const busBolt = await J("window.__bus.filter(e => e.ev === 'lightning' && e.d === 0.05)");
+        check("the bus: 'lightning' { d, strength, x, y (the bolt's end, px), bolt, outdoors, hitTree, tree, mapId }", busBolt.length === 1 && busBolt[0].bolt === true && busBolt[0].outdoors === true &&
+            Math.abs(busBolt[0].strength - 0.96) < 1e-9 && busBolt[0].x > 0 && busBolt[0].x < 1280 && typeof busBolt[0].y === "number" && busBolt[0].y < 720 && busBolt[0].mapId === 3 && typeof busBolt[0].hitTree === "boolean", busBolt);
         await frames(40);
         const nearSe = await J("window.__se.filter(s => /^Thunder/.test(s.name))");   // (a close strike may also hit a tree: Fire2 between them)
         check("close: the crack comes at once (a short, bright thunder), then a rumble", nearSe.length >= 2 && ["Thunder10", "Thunder8", "Thunder6"].includes(nearSe[0].name) && nearSe[0].volume >= 85 && ["Thunder9", "Thunder7", "Thunder11", "Thunder1", "Thunder4", "Thunder5"].includes(nearSe[1].name), nearSe);
@@ -140,6 +149,8 @@ const OUT = __dirname + "/";
         const calm = await J("({ level: Storm.level(), wind: Storm.wind(), target: $gameScreen._weatherPowerTarget || 0 })");
         check("calm: no storm, the wind has died down, the rain is fading out", calm.level === 0 && calm.wind < 0.05 && calm.target === 0, calm);
         check("the forced weather is in the save ($gameSystem)", await ev("!!$gameSystem._stormForce && $gameSystem._stormForce.off === true"));
+        const busEnd = await J("window.__bus.filter(e => e.ev === 'stormStart' || e.ev === 'stormEnd').map(e => e.ev + ':' + e.phase + ':' + (e.level > 0))");
+        check("the bus: every 'stormStart' has its 'stormEnd' (phase null, level 0) - two storms, calmed twice", busEnd.join() === "stormStart:gather:true,stormEnd:null:false,stormStart:rage:true,stormEnd:null:false", busEnd);
         // a day-time screenshot of a raging storm
         await ev("delete $gameSystem._stormForce; $gameSystem.setDayNightHour(15); Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.7); Storm.state.nextStrike = Storm.state.t + 100000; 0");
         await frames(160);
@@ -147,6 +158,14 @@ const OUT = __dirname + "/";
         await ev("Storm.strike(0.1); 0");
         await frames(2);
         await b.shot(OUT + "storm_day_bolt.png");
+        // into a house in the middle of the storm: its first frame is drawn with the house's sky - no leaves flying through the room
+        await frames(60);
+        await ev(`(function(){ window.__first = null; const _ml = Scene_Map.prototype.onMapLoaded; Scene_Map.prototype.onMapLoaded = function() { _ml.call(this); Scene_Map.prototype.onMapLoaded = _ml;
+                const ss = this._spriteset, _u = ss.update; ss.update = function() { _u.call(this); if (!window.__first) window.__first = { map: $gameMap.mapId(), leaves: this._stormLeaves._leaves.filter(l => l.visible).length, outdoors: Survival.isOutdoors() }; }; };
+            window.__out0 = { wind: Storm.wind(), leaves: SceneManager._scene._spriteset._stormLeaves._leaves.filter(l => l.visible).length }; $gamePlayer.reserveTransfer(2, 5, 8, 8, 0); })(); 0`);
+        for (let i = 0; i < 80 && !(await ev("!!window.__first")); i++) await sleep(250);
+        const first = await J("({ first: window.__first, before: window.__out0 })");
+        check("into a house mid-storm: its first frame has the house's sky, no storm leaves flying through the room", first.before.leaves >= 20 && !!first.first && first.first.map === 2 && !first.first.outdoors && first.first.leaves === 0, first);
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-6) : "none");

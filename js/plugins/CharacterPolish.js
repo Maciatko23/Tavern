@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Szlif grafiki: cień i kontur postaci. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param characterShadow
  * @text Cień pod postaciami
@@ -40,15 +42,17 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("CharacterPolish.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "CharacterPolish";
     const params = PluginManager.parameters(pluginName);
     const CHAR_SHADOW = params.characterShadow !== "false";
     const CHAR_OUTLINE = params.characterOutline !== "false";
 
-    // duplicated in GroundDetail.js (kept self-contained so either file can load alone)
+    // no <Polish:off> in the map's note (it wins over a <Polish:on> beside it; GroundDetail.js reads the same)
     function polishOn() {
-        const note = ($dataMap && $dataMap.note) || "";
-        return !/<Polish:\s*off\s*>/i.test(note);
+        return T.mapFlag("Polish", true, "off");
     }
 
     // ------------------------------------------------------------------

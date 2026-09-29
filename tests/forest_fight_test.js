@@ -23,6 +23,7 @@ const { launch, sleep } = require("./cdp.js");
         const clear = () => ev("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gameParty.leader().recoverAll(); if (window.Combat) Combat.resetAct(); 0");
         // the sounds played (the boar's thud), and a per-frame recorder in the game loop (the hero kept on his tile and whole)
         await ev(`window.__se = []; const _ps = AudioManager.playSe; AudioManager.playSe = function(se) { window.__se.push(se.name); return _ps.apply(this, arguments); };
+            const _as = Tawerna.audio.se; Tawerna.audio.se = function(name) { window.__se.push(name); return _as.apply(this, arguments); };   // (Hunting's sounds: the core's pool)
             window.__rec = null; const _up = Scene_Map.prototype.update; Scene_Map.prototype.update = function() { _up.call(this); const R = window.__rec; if (R && R.on) R.tick(); }; 0`);
         // helpers in the page: the tiles of the map as the path search sees them
         await ev(`window.__T = {

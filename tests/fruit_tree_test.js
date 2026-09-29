@@ -23,8 +23,24 @@ const path = require("path");
         const setDay = day => ev(`(function(){ $gameSystem._dayNightDay = ${day}; $gameSystem.setDayNightHour(12); $gameMap.events().forEach(e => e.refresh()); return $gameSystem.dayNightDay(); })()`);
         const seasonOf = day => ev(`Farming.seasonOf(${day})`);
         const press = async () => { await ev(`Input._currentState.ok = true; Input._latestButton = 'ok'; Input._pressedTime = 0; 0`); await frames(4); await ev(`Input._currentState.ok = false; 0`); await frames(6); };
+        // the real O key through the browser (normal mode: O is the action key - Combat.js maps it to "ok")
+        const keyO = async () => {
+            const k = { windowsVirtualKeyCode: 79, nativeVirtualKeyCode: 79, code: "KeyO", key: "o" };
+            await b.send("Input.dispatchKeyEvent", Object.assign({ type: "rawKeyDown" }, k)); await frames(4);
+            await b.send("Input.dispatchKeyEvent", Object.assign({ type: "keyUp" }, k)); await frames(6);
+        };
         const treeState = id => J(`(function(){ const e = $gameMap.event(${id}); const page = e._pageIndex; const on = ch => $gameSelfSwitches.value([3, ${id}, ch]);
             return { page, name: e.characterName ? e.characterName() : "", C: on("C"), A: on("A"), B: on("B") }; })()`);
+        // the hero on a free tile beside the tree, facing it (below it first). The trees were moved on Map003 (by 2026-09-23: apple
+        // 8,13 -> 20,15, pear 9,13 -> 19,16) and the old fixed spot (8,14) faced nothing, so the press started no event.
+        const standBy = id => J(`(function(){ const e = $gameMap.event(${id});
+            for (const [dx, dy, d] of [[0, 1, 8], [-1, 0, 6], [1, 0, 4], [0, -1, 2]]) {
+                const x = e.x + dx, y = e.y + dy;
+                if (!$gameMap.isValid(x, y) || ![2, 4, 6, 8].some(k => $gameMap.isPassable(x, y, k))) continue;
+                if ($gameMap.eventsXy(x, y).some(o => o !== e && o.isNormalPriority() && !o.isThrough())) continue;
+                $gamePlayer.locate(x, y); $gamePlayer.setDirection(d); $gameMap.setDisplayPos(x - 10, y - 7); return [x, y, d];
+            }
+            return null; })()`);
 
         // ---------------------------------------------------------------- 1. the items and their art
         const items = await J("[139, 140].map(id => { const it = $dataItems[id]; return [it.name, it.iconIndex, it.note]; })");
@@ -38,11 +54,12 @@ const path = require("path");
         await setDay(40);
         const seasonNow = await seasonOf(40);
         check("day 40 falls in the fruiting season (Lato or Jesień)", seasonNow === "Lato" || seasonNow === "Jesień", seasonNow);
-        await ev(`$gamePlayer.locate(8, 14); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(3, 8); $gameSystem.setStamina(300); 0`);
+        await ev(`$gameSystem.setStamina(300); 0`);
         let st = await treeState(143);
         check("apple tree (in season, never picked): starts on the fruiting page", st.page === 0 && !st.C, st);
         const before139 = await count(139);
-        await ev(`$gamePlayer.locate(8, 14); $gamePlayer.setDirection(8); 0`); await frames(6);
+        const appleSpot = await standBy(143); await frames(6);
+        if (!appleSpot) console.log("NOTE no free tile beside the apple tree");
         await press();
         await frames(10);
         const after139 = await count(139);
@@ -68,8 +85,9 @@ const path = require("path");
         st = await treeState(144);
         check("back in season, the never-picked pear is fruiting again", st.page === 0 && !st.C, st);
         const beforePear = await count(140);
-        await ev(`$gamePlayer.locate(9, 14); $gamePlayer.setDirection(8); 0`); await frames(6);
-        await press(); await frames(10);
+        const pearSpot = await standBy(144); await frames(6);
+        if (!pearSpot) console.log("NOTE no free tile beside the pear tree");
+        await keyO(); await frames(10);   // (this one with the real O key)
         check("picked the pear (bare now)", (await count(140)) > beforePear && (await treeState(144)).C === true);
         await setDay(43);   // only 2 days later: too soon (regrow is 5 days)
         st = await treeState(144);

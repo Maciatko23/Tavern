@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Zużywanie się narzędzi: każde uderzenie, rzut i cięcie zużywa narzędzie, na końcu się łamie. Naprawa w warsztacie. Stan widać na liście przedmiotów. v1.0.0
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param enabled
  * @text Narzędzia się zużywają
@@ -51,6 +53,9 @@
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("Durability.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
 
     const params = PluginManager.parameters("Durability");
     const ENABLED = params.enabled !== "false";
@@ -110,9 +115,10 @@
     }
     const leftText = id => left(id) + " " + unitWord(id, left(id));
 
+    // over the player, or in the item menu's help line (Survival.feedback puts it back after the menu re-selects the item)
     function popup(icon, text, color) {
         if (window.Survival && Survival.feedback) Survival.feedback(icon, text, color);
-        else $gameTemp.pushLootPopup(icon, text, color);
+        else T.popup(text, { icon, color, menu: true });
     }
     function broke(id) {
         const item = dataItem(id), g = TOOLS[id].g;

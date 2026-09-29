@@ -44,10 +44,19 @@ const { launch, sleep } = require("./cdp.js");
         check("'Odpocznij przy ogniu' is in the campfire's menu", await runMenu("Odpocznij przy ogniu"));
         await frames(2);
         check("the player starts sitting down (swing kind 11), and cannot move", (await ev("$gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind")) === 11 && (await ev("$gamePlayer.canMove()")) === false);
-        let seated = null;
-        for (let i = 0; i < 80; i++) { await frames(1); const t = await swingT(); if (t >= 37 && t <= 39) { seated = await cell(); break; } }
+        // (the seated frame caught in the game loop itself: polling from outside can miss the 3 frames when the game runs at full speed)
+        await ev(`(function(){ window.__sitRec = null; const um = window.__sitUm = SceneManager.updateMain;
+            SceneManager.updateMain = function() { um.apply(this, arguments); const se = $gamePlayer._swingEvent, t = se ? se._swingT : -1;
+                if (window.__sitRec || t < 36 || t > 39) return;   // (36 = the impact: seated, the rest holds the pose there)
+                const s = SceneManager._scene._spriteset && SceneManager._scene._spriteset._characterSprites.find(s => s._character === $gamePlayer);
+                const f = s && s._swingBody && s._swingBody.visible ? s._swingBody._frame : null;
+                window.__sitRec = f ? { col: Math.round(f.x / 96), row: Math.round(f.y / 96) } : { none: t }; }; return 0; })()`);
+        for (let i = 0; i < 80 && !(await ev("!!window.__sitRec")); i++) await frames(1);
+        const rec = await J("window.__sitRec");
+        await ev("(function(){ if (window.__sitUm) SceneManager.updateMain = window.__sitUm; return 0; })()");
+        const seated = rec && !("none" in rec) ? rec : null;
         const sitHit = (await J("ChoppableTree.swingKind(11).hit"))[3], roastHit = (await J("ChoppableTree.swingKind(12).hit"))[3];   // (the sheet in use: the new hero's or the old)
-        check("at the impact frame the player is seated (column " + sitHit + ", row of the facing)", !!seated && seated.col === sitHit && seated.row === 3, seated);
+        check("at the impact frame the player is seated (column " + sitHit + ", row of the facing)", !!seated && (seated.col === sitHit || seated.col === sitHit - 1) && seated.row === 3, seated);   // (the two seated poses, as below)
         let standing = false;
         for (let i = 0; i < 150; i++) { if ((await swingT()) < 0) { standing = true; break; } await frames(2); }
         const st1 = await ev("$gameSystem.stamina()"), h1 = await ev("$gameSystem.dayNightHour()");

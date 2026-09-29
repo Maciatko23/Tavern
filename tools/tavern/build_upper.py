@@ -17,7 +17,7 @@ def _floor_note():
         if "<Dark:on>" in n: return n
     except Exception:
         pass
-    return "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>\n<Zoom:1.5>"
+    return "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>"
 NOTE25 = NOTE26 = _floor_note()
 
 def load_links():

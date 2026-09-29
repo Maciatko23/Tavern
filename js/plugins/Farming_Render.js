@@ -22,10 +22,11 @@
 
 (() => {
     "use strict";
+    const T = window.Tawerna;   // (always there: Farming.js above needs it)
 
     // draw order (Sprite.z, used by the tilemap/spriteset to sort everything that shares a parent).
     // Kept as one small table instead of scattered numbers so a glance here shows the whole stack,
-    // ground to sky. ChoppableTree.js keeps its own copy (see the note there) with the same numbers.
+    // ground to sky. ChoppableTree_Render.js keeps its own small table (only its hit effects, z 7 - see the note there).
     const Z = {
         ground: 1,        // farm layer: soil patches and crops, above the ground tiles, below the characters
         litter: 1.5,       // gathered stones/plants lying on the ground, over the soil, under the characters
@@ -219,7 +220,7 @@
     function pitTexture(depth, quad) {
         const cacheKey = depth + (quad || "");
         return cachedBitmap(pitCache, cacheKey, () => {
-            const T = Farming.TILE, scale = quad ? 2 : 1, size = T * scale;
+            const TILE = Farming.TILE, scale = quad ? 2 : 1, size = TILE * scale;
             const bitmap = new Bitmap(size, size), ctx = bitmap.context, image = ctx.createImageData(size, size), data = image.data;
             const rx = scale * (8 + 3 * depth), ry = scale * (5 + 2 * depth), cx = scale * 24, cy = scale * 25;
             for (let py = 0; py < size; py++) {
@@ -244,9 +245,9 @@
             ctx.putImageData(image, 0, 0);
             if (bitmap._baseTexture && bitmap._baseTexture.update) bitmap._baseTexture.update();
             if (!quad) return bitmap;
-            const qx = (quad === "tr" || quad === "br") ? T : 0, qy = (quad === "bl" || quad === "br") ? T : 0;
-            const cropped = new Bitmap(T, T);
-            cropped.blt(bitmap, qx, qy, T, T, 0, 0);
+            const qx = (quad === "tr" || quad === "br") ? TILE : 0, qy = (quad === "bl" || quad === "br") ? TILE : 0;
+            const cropped = new Bitmap(TILE, TILE);
+            cropped.blt(bitmap, qx, qy, TILE, TILE, 0, 0);
             return cropped;
         });
     }
@@ -787,8 +788,9 @@
             if (def.fire && Farming.fireLit(e.b)) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id });
             else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) out.push({ x: e.sprite.x + (def.ember ? def.ember.x || 0 : def.ventX || 0), y: e.sprite.y - (def.ember ? def.ember.y : Math.max(20, (def.vent || 40) - 30)), r: def.light || 190, i: 0.85, id: e.b.id });   // from the fire opening, if it has one
         }
-        // the embers of a tree struck by lightning (ChoppableTree.js) glow in the dark a little too
-        if (window.ChoppableTree && ChoppableTree.emberLights) out.push(...ChoppableTree.emberLights(this._spriteset));
+        // the embers of a tree struck by lightning (ChoppableTree_Render.js) glow in the dark a little too
+        const embers = T.call("ChoppableTree", "emberLights", this._spriteset);   // (undefined without ChoppableTree)
+        if (embers) out.push(...embers);
         return out;
     };
     Sprite_NightLight.prototype.update = function() {

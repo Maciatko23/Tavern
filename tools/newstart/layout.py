@@ -9,7 +9,7 @@
 # lands one tile inside the other map, next to the matching exit, facing into that map.
 
 MAPS = {
-    19: {"name": "Dom dziadka - Wnętrze", "display": "Dom dziadka", "size": (11, 10), "tileset": 8},
+    19: {"name": "Dom dziadka - Wnętrze", "display": "Dom dziadka", "size": (19, 13), "tileset": 8},   # (tools/house, concept B)
     20: {"name": "Dom dziadka - Podwórze", "display": "Dom dziadka", "size": (30, 22), "tileset": 9},
     21: {"name": "Leśna droga", "display": "Leśna droga", "size": (40, 30), "tileset": 9},
     22: {"name": "Polna droga", "display": "Polna droga", "size": (40, 30), "tileset": 9},
@@ -17,13 +17,14 @@ MAPS = {
     24: {"name": "Posiadłość Lorda", "display": "Posiadłość Lorda", "size": (40, 30), "tileset": 9},
 }
 
-# the new game starts in grandpa's cottage, beside the hero's straw bed
-START = (19, 8, 6)
+# the new game starts in grandpa's cottage, beside the hero's straw bed in his alcove (the whitewashed cottage of
+# tools/house/build_house.py concept B, installed 2026-09-28)
+START = (19, 2, 5)
 
 # doors: (map, x, y) of the door tile -> (map, x, y, direction) where the player lands
 DOORS = [
-    ((19, 5, 8), (20, 15, 8, 2)),      # out of the cottage: in front of its door
-    ((20, 15, 7), (19, 5, 7, 8)),      # into the cottage: just inside, above the door mat
+    ((19, 9, 12), (20, 15, 8, 2)),     # out of the cottage: the doorway in its bottom wall -> in front of its door outside
+    ((20, 15, 7), (19, 9, 11, 8)),     # into the cottage: just inside the doorway, on the runner
 ]
 
 # edge exits: a list of tiles on one map's edge <-> the same number of tiles on the other map's edge

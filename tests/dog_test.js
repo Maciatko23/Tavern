@@ -126,13 +126,15 @@ const { launch, sleep } = require("./cdp.js");
         await ev("Dog.DOG.luck = 0.5; if (!__meal._dead) Hunting.removeAnimal(__meal); for (const c of Hunting.carcasses().slice()) Hunting.removeCarcass(c); Dog.state().food = 90; Dog.setMode('work'); Dog.dog._task = null; 0");
 
         // hunting: a rabbit near it - bitten, carried to the stockpile (luck forced: a real hunt succeeds half the time)
-        await ev("Dog.DOG.luck = 1; 0");
+        await ev("Dog.DOG.luck = 1; window.__dogKills = []; Tawerna.on('kill', e => window.__dogKills.push([e.kind, e.by, e.how]), { owner: 'DogTest' }); 0");
         await ev(`(function(){ const s = Dog.state(); s.st = Dog.maxSt(); s.food = 90; s.water = 90; s.carry = []; const d = Dog.dog; d._task = null; d._huntT = 0;
             const ok = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.buildingAt(x, y) && $gameMap.isPassable(x, y, 2);
             let at = null; for (let r = 3; r <= 6 && !at; r++) for (const [dx, dy] of [[r, 0], [-r, 0], [0, r], [0, -r], [r, 1], [-r, 1]]) if (!at && ok(d.x + dx, d.y + dy)) at = [d.x + dx, d.y + dy];
             const r = Hunting.spawn('rabbit', at[0], at[1]); r._frozen = true; window.__rab = r; return 0; })()`);
         const killed = await until("window.__rab._dead || !(window.__rab._hp > 0)", 40);
         const dragged = await until("(function(){ const s = Dog.stockpile(), sp = { x: s.x + 1.5, y: s.y + 1.75 }; return Hunting.carcasses().some(c => c.kind === 'rabbit' && Math.hypot(c.x - sp.x, c.y - sp.y) < 1.6) && !Dog.dog._drag; })()", 60);
+        const dogKills = await J("window.__dogKills.slice()");
+        check("...its kill is told on the Tawerna bus as the dog's: 'kill' { kind: rabbit, by: dog }", dogKills.length >= 1 && dogKills[0].join() === "rabbit,dog,dog", dogKills);
         check("it hunts a rabbit and carries the carcass in its mouth to the stockpile (for the knife)", killed && dragged, { killed, dragged, carcasses: await J("Hunting.carcasses().map(c => [c.kind, +c.x.toFixed(1), +c.y.toFixed(1)])"), stock: await J("[Dog.stockpile().x, Dog.stockpile().y]") });
 
         // "Poluj": prey far off (beyond the work's 10 tiles) is found and brought, in its mouth (held by its head), laid down at the stockpile

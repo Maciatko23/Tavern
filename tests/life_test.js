@@ -88,8 +88,10 @@ fs.mkdirSync(OUT, { recursive: true });
         await take(60, await count(60));
 
         // ================= 3. wear at the other places tools are used =================
+        // 13 x 8 free tiles; the search runs to the map's last inner row (it stopped 10 rows short of the bottom edge - Map003 as the
+        // user remade it, 2026-09, has room for it only near its bottom fence)
         const B = await ev(`(function(){
-            for (let by = 2; by < $gameMap.height() - 10; by++) for (let bx = 2; bx < $gameMap.width() - 14; bx++) {
+            for (let by = 2; by + 8 < $gameMap.height(); by++) for (let bx = 2; bx + 13 < $gameMap.width(); bx++) {
                 let ok = true;
                 for (let y = by; y < by + 8 && ok; y++) for (let x = bx; x < bx + 13; x++) { if (!$gameMap.checkPassage(x, y, 0x0f) || $gameMap.eventsXy(x, y).length > 0 || Farming.hasObjectTile(x, y)) { ok = false; break; } }
                 if (ok) return { bx, by };
@@ -119,6 +121,9 @@ fs.mkdirSync(OUT, { recursive: true });
 
         // ================= 4. repairs at the workbench =================
         await take(60, await count(60)); await give(60, 1);
+        // no branches or fibre in the bag before the repair (the fishing cast above may have pulled out waterweed - a fibre, a random
+        // roll - then one fibre was left over after the repair and the check failed now and then)
+        await take(77, await count(77)); await take(92, await count(92));
         await ev("$gameSystem._wear.used[60] = 40; $gameSystem._wear.warned = {}; 0");
         await standAt(bx + 1, by + 2, 8);
         const names0 = JSON.parse(await ev(`JSON.stringify(Farming.menuFor(${bx + 1}, ${by + 1}).entries.map(e => e.name + (e.enabled === false ? "(x)" : "")))`));
@@ -162,11 +167,13 @@ fs.mkdirSync(OUT, { recursive: true });
         check("a second batch keeps its own age", (await ev("Spoilage.state().bag[94].length")) === 2);
         await clearPopups();
         await hourPass(20);   // batch 1: 50 h (warn at 48), batch 2: 20 h
-        check("a popup warns before it spoils ('zaraz się zepsuje')", (await popups()).some(t => /Surowe mięso: zaraz się zepsuje/.test(t)), await popups());
+        // (the popups name the food by its item name: item 94 is "Surowe mięso zająca" since the carcasses brought each animal its own meat)
+        const meatName = await ev("$dataItems[94].name");
+        check("a popup warns before it spoils ('zaraz się zepsuje')", (await popups()).some(t => t.includes(meatName + ": zaraz się zepsuje")), await popups());
         await clearPopups();
         await hourPass(12);   // batch 1: 62 h > 60 -> rotten; batch 2: 32 h
         check("the older batch rots after 60 h: 3 meat -> 3 rotten food, the fresh 2 stay", (await count(94)) === 2 && (await count(122)) === 3 && (await ev("Spoilage.state().bag[94].length")) === 1, { meat: await count(94), rot: await count(122) });
-        check("a popup 'Zepsuło się: Surowe mięso ×3' appears", (await popups()).some(t => /Zepsuło się: Surowe mięso ×3/.test(t)), await popups());
+        check("a popup 'Zepsuło się: Surowe mięso ×3' appears", (await popups()).some(t => t.includes("Zepsuło się: " + meatName + " ×3")), await popups());
         // FIFO: eating / using takes the oldest first
         await give(94, 2); await hourPass(2);
         await take(94, 2);
@@ -210,6 +217,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev(`${cow}.last = $gameSystem.dayNightDay(); 0`);
         await hourPass(48);
         check("the cowshed gives 2 milk a day (4 after two days)", (await ev(`Farming.readyProduce(${cow})`)) === 4);
+        await give(138, 1);   // milking needs a bucket in the bag (the cowshed's produce.tool, since the bucket came in)
         await ev(`Farming.collect(${cow}); 0`); await frames(20);
         check("collected milk is in the bag (and is perishable)", (await count(123)) === 4 && (await ev("Spoilage.isPerishable($dataItems[123])")) === true);
         await ev(`$gameSystem.setStamina(20); 0`);

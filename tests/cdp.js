@@ -21,26 +21,54 @@ function getJson(url) {
     });
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+// an HTTP call to the browser's endpoints (PUT /json/new: newer Edge refuses GET there)
+function request(method, url) {
+    return new Promise((res, rej) => {
+        const rq = http.request(url, { method }, r => {
+            let d = "";
+            r.on("data", c => d += c);
+            r.on("end", () => { try { res(d ? JSON.parse(d) : null); } catch (e) { res(d); } });
+        });
+        rq.on("error", rej);
+        rq.end();
+    });
+}
 
-async function launch(opts = {}) {
-    const w = opts.width || 1280, h = opts.height || 720;
-    // the browser profile lives in the system temp folder (not in the synced project) and is removed on close(); opts.profile: an
-    // existing profile (its saves - e.g. the watched game's) that is kept
-    const profile = opts.profile || path.join(os.tmpdir(), "tawerna_edge_" + Date.now());
-    const proc = spawn(EDGE, [
-        "--headless=new", "--remote-debugging-port=" + PORT, "--user-data-dir=" + profile,
-        `--window-size=${w},${h}`, "--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader",
+// the renderer: the graphics card (ANGLE d3d11) - 3-4x faster start, full speed; CDP_GPU=0 the CPU (SwiftShader, the old way)
+const GL_FLAGS = process.env.CDP_GPU !== "0" ? ["--use-angle=d3d11", "--enable-gpu"] : ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
+// a headless Edge with the test flags on a CDP port (a test's own browser, or tests/run.js's shared one)
+function spawnBrowser(port, profile, w, h) {
+    return spawn(EDGE, [
+        "--headless=new", "--remote-debugging-port=" + port, "--user-data-dir=" + profile,
+        `--window-size=${w || 1280},${h || 720}`, "--use-gl=angle", ...GL_FLAGS,
         "--ignore-gpu-blocklist", "--autoplay-policy=no-user-gesture-required", "--mute-audio",
         "--disable-background-timer-throttling", "--disable-renderer-backgrounding",
         "--disable-backgrounding-occluded-windows", "--no-first-run", "--hide-scrollbars",
         "about:blank"
     ], { stdio: "ignore" });
-    let targets;
-    for (let i = 0; i < 50; i++) {
-        try { targets = await getJson(`http://127.0.0.1:${PORT}/json`); if (targets.length) break; } catch (e) {}
-        await sleep(200);
+}
+// CDP_ATTACH=1 (tests/run.js --reuse): the browser on the port is already there - a new tab of it, not a new browser
+const GAME_ORIGIN = "http://127.0.0.1:8765";
+async function launch(opts = {}) {
+    const w = opts.width || 1280, h = opts.height || 720;
+    // opts.port / opts.overlay: the same as CDP_PORT / GAME_OVERLAY, for one launch (tests/lib/kit.js)
+    const PORT = Number(opts.port) || module.exports.PORT;
+    const OVERLAY = opts.overlay ? path.resolve(__dirname, "..", opts.overlay) : module.exports.OVERLAY;
+    // the browser profile lives in the system temp folder (not in the synced project) and is removed on close(); opts.profile: an
+    // existing profile (its saves - e.g. the watched game's) that is kept
+    const attach = process.env.CDP_ATTACH === "1" && !opts.profile && PORT === (Number(process.env.CDP_PORT) || PORT);
+    const profile = attach ? null : opts.profile || path.join(os.tmpdir(), "tawerna_edge_" + Date.now());
+    let proc = null, page = null;
+    if (attach) page = await request("PUT", `http://127.0.0.1:${PORT}/json/new?about:blank`);
+    else {
+        proc = spawnBrowser(PORT, profile, w, h);
+        let targets;
+        for (let i = 0; i < 50; i++) {
+            try { targets = await getJson(`http://127.0.0.1:${PORT}/json`); if (targets.length) break; } catch (e) {}
+            await sleep(200);
+        }
+        page = targets.find(t => t.type === "page");
     }
-    const page = targets.find(t => t.type === "page");
     const ws = new WebSocket(page.webSocketDebuggerUrl);
     await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
     let id = 0; const pending = new Map(); const logs = [];
@@ -61,6 +89,8 @@ async function launch(opts = {}) {
     }
     const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, { res, rej }); ws.send(JSON.stringify({ id: i, method, params })); });
     await send("Runtime.enable"); await send("Page.enable"); await send("Emulation.setFocusEmulationEnabled", { enabled: true });
+    // (a tab of a shared browser: the game's saves and options of the tests before are gone, as in a fresh profile)
+    if (attach) await send("Storage.clearDataForOrigin", { origin: GAME_ORIGIN, storageTypes: "all" }).catch(() => {});
     if (OVERLAY) await send("Fetch.enable", { patterns: [{ urlPattern: "*/data/*", requestStage: "Request" }, { urlPattern: "*/img/characters/*", requestStage: "Request" }] });
     // never the browser's cache: a kept profile (the watched game's) served old plugin files - the day 100-110 run played an old Dog.js
     await send("Network.enable"); await send("Network.setCacheDisabled", { cacheDisabled: true });
@@ -74,8 +104,13 @@ async function launch(opts = {}) {
         const r = await send("Page.captureScreenshot", { format: "png" });
         fs.writeFileSync(file, Buffer.from(r.data, "base64"));
     };
-    const exited = new Promise(r => proc.once("exit", r));
+    const exited = proc ? new Promise(r => proc.once("exit", r)) : Promise.resolve();
     const close = async () => {
+        if (attach) {   // (only this tab: the browser is the run's)
+            try { await request("GET", `http://127.0.0.1:${PORT}/json/close/${page.id}`); } catch (e) {}
+            try { ws.close(); } catch (e) {}
+            return;
+        }
         try { await send("Browser.close"); } catch (e) {}
         await Promise.race([exited, sleep(3000)]);
         try { proc.kill(); } catch (e) {}
@@ -83,4 +118,4 @@ async function launch(opts = {}) {
     };
     return { send, evaluate, shot, close, logs, sleep };
 }
-module.exports = { launch, sleep };
+module.exports = { launch, sleep, PORT, OVERLAY, spawnBrowser, request, getJson };

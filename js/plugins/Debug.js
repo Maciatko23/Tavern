@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w trzech zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo) i przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie). v1.4.0
+ * @plugindesc Menu deweloperskie (F9) w czterech zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie) i rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js). v1.5.0
  * @author Tawerna
  *
  * @param enabled
@@ -10,7 +10,7 @@
  * @desc Wyłącz (false) przed wydaniem gry, żeby F9 nie działało u gracza. Włączone domyślnie na czas developmentu/testów.
  *
  * @help
- * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran z trzema zakładkami;
+ * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran z czterema zakładkami;
  * Q / E przełączają zakładki (jak w dzienniku), góra / dół wybierają:
  *   1. Zdarzenia:
  *      - "+1 godzina" / "+1 dzień": przesuwa zegar gry (tak jak w Farming.js).
@@ -25,6 +25,10 @@
  *   3. Przedmioty: wszystkie przedmioty w trzech podzakładkach - "Narzędzia i broń", "Surowce",
  *      "Jedzenie" (Tab albo [ / ] je przełączają, można też kliknąć); strzałki w lewo/prawo zmieniają
  *      ilość przy podświetlonej pozycji, OK dodaje ją do plecaka.
+ *   4. Rdzeń: to, co trzyma TawernaCore.js (Tawerna.debug.lines()): czas zegarów mapy na klatkę,
+ *      zapisane stany z wersjami, każdy zegar mapy z jego czasem (ms), numery wstawianych zdarzeń
+ *      (czyj jest który zakres), co wstawiono na tej mapie, kto słucha szyny zdarzeń.
+ *      Tylko do czytania: strzałki przewijają, OK czyta wszystko jeszcze raz.
  * F9 otwiera się na tej zakładce (i podzakładce) i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
  * Zakładki i podzakładki można też klikać myszą.
  * Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
@@ -58,9 +62,10 @@
     const TABS = [
         { name: "Zdarzenia", help: "↑↓ wybierz   OK wykonaj   Q / E zakładka   Esc zamknij" },
         { name: "Budowanie", help: "↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij" },
-        { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij" }
+        { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij" },
+        { name: "Rdzeń", help: "↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij" }
     ];
-    const ITEMS_TAB = 2;
+    const ITEMS_TAB = 2, CORE_TAB = 3;
     // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
     const KINDS = ["Narzędzia i broń", "Surowce", "Jedzenie"];
     const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
@@ -133,10 +138,27 @@
     // show the rows of tab `tab` (on the item tab: of kind `kind`), the cursor on row `index`
     Window_DebugList.prototype.setTab = function(tab, index, kind) {
         this._tab = tab;
-        this._rows = this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
+        this._rows = tab === CORE_TAB ? this.coreRows() : this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
         this.refresh();
         this.select(Math.max(0, Math.min(index || 0, this._rows.length - 1)));
         this.ensureCursorVisible(true);
+    };
+
+    // the core tab: Tawerna.debug.lines() (TawernaCore.js), read as the tab opens; a line too wide for the list is cut at ", "
+    // (the rest indented under it); the section lines ("Stany:", "Zegary mapy:"...) are the ones not indented
+    Window_DebugList.prototype.coreRows = function() {
+        const T = window.Tawerna, rows = [], width = this.innerWidth - this.itemPadding() * 2;
+        const lines = T && T.debug ? T.debug.lines() : ["Brak TawernaCore.js - rdzeń nie jest wczytany"];
+        for (const text of lines) {
+            const indent = /^\s*/.exec(text)[0] + "    ";
+            let row = "";
+            for (const part of String(text).split(/(?<=, )/)) {
+                if (row.trim() && this.textWidth(row + part) > width) { rows.push(row.replace(/\s+$/, "")); row = indent + part; }
+                else row += part;
+            }
+            rows.push(row);
+        }
+        return rows.map(label => ({ tab: CORE_TAB, kind: "info", label, head: !/^\s/.test(label) }));
     };
 
     Window_DebugList.prototype.maxItems = function() {
@@ -151,6 +173,12 @@
 
     Window_DebugList.prototype.drawItem = function(index) {
         const row = this._rows[index], rect = this.itemLineRect(index);
+        if (row.kind === "info") {   // (the core tab: text only)
+            this.changeTextColor(row.head ? ColorManager.systemColor() : ColorManager.normalColor());
+            this.drawText(row.label, rect.x, rect.y, rect.width, "left");
+            this.resetTextColor();
+            return;
+        }
         this.drawIcon(row.icon || (row.item && row.item.iconIndex) || 0, rect.x, rect.y + 2);
         const textX = rect.x + ImageManager.iconWidth + 4;
         this.drawText(row.label || row.item.name, textX, rect.y, rect.width - ImageManager.iconWidth - 4, "left");
@@ -290,6 +318,8 @@
             // struck once the map runs again (Storm.js)
             if (window.Storm) Storm.pending.push(row.kind === "treestrike" ? { tree: true } : {});
             this.popScene();
+        } else if (row.kind === "info") {   // the core tab: read again
+            this._list.setTab(CORE_TAB, this._list.index());
         } else {
             $gameParty.gainItem(row.item, row.qty);
             $gameTemp.pushLootPopup(row.item.iconIndex, row.item.name + " ×" + row.qty, "#f3e0a0");

@@ -1,0 +1,20 @@
+PixelLab Pro Flash generations for grandpa's house decorations (HomeDecor.js, 2026-09-28). Style reference: Winlu Interior crops at 2x
+(../ref/ref_decor_q.png: a vase shelf, a bread crate, a fruit bowl and a patch of a pelt, 20 colours; ../ref/ref_small_q.png for the
+128 canvas: the vase and the bowl). Every prop is cut out of its grid, reduced (premultiplied Lanczos, 0.27-0.58) and finished in
+make_decor.py.
+
+grid_pelt_antlers_wreath_sheaf_s2801.png   job 86c818d8-19d5-4877-a68d-9ebe003fc4c8  256x256  9 gen  seed 2801
+   (a grey wolf pelt rug, a young stag's antlers on an oak plaque, a Polish harvest wreath, a standing wheat sheaf)
+grid_pumpkins_easter_apples_willow_s2802.png  job fa481ca7-6ade-4162-bc3f-7d37a067a0f9  256x256  9 gen  seed 2802
+   (pumpkins and a squash, an Easter basket with pisanki, a basket of apples, a clay jug with pussy willow)
+grid_flowers_herbs_spruce_chest_s2803.png  job d21d8f6d-3296-485f-8f16-c20e5b389e4d  256x256  9 gen  seed 2803
+   (a jug of field flowers, herbs drying on a stick, a spruce garland with a red bow, a folk-painted dowry chest)
+grid_tankard_tusk_dice_oplatek_s2804.png   job f6da4fcb-43eb-4b64-a24a-ca0f9916b33a  128x128  6 gen  seed 2804
+   (a pewter tankard, a boar tusk on a leather cord, two dice, a Christmas wafer - the dice and the plate are not used: drawn by hand)
+(not used) job 333ae06a-6c64-4857-aee6-b2b6ee5115c3  256x256  9 gen  seed 2805 - wycinanki: came back as a copy of the reference;
+   the wycinanki are drawn by hand in decor_paint.py instead
+(total 42 generations)
+
+Winlu pieces: the Holy Mother's frame (Decoration_static 6/8/2) -> the Lord's receipt, a wall shelf (D 6,2..3) -> the hero's shelf,
+a plate (D 1,11) -> the Christmas Eve plate. Drawn by hand: the wycinanki (gwiazda, leluja), the towel, the rag rug, the tablecloth
+with straw, the notice (the tavern board's parchment), the dice, the nail.

@@ -2,6 +2,8 @@
  * @target MZ
  * @plugindesc Ptaki: wrony, wróble, gołębie i kuropatwy przelatują, siadają na ziemi i dziobią, a w dzień naloty wyjadają zasiane pola. Można je upolować z procy. v1.0.0
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  * @base Hunting
  * @orderAfter Hunting
  *
@@ -34,12 +36,17 @@
  * POLOWANIE: ptaki na ziemi można trafić z procy albo z łuku (mały cel:
  *   poczekaj, aż krąg celownika się zwęzi). Trafiony ptak daje od razu 1-3
  *   pióra (bez mięsa). Z piór zrobisz w warsztacie strzały z lotkami (12 naraz).
+ * Zapis: Tawerna.state("birds") (dawny $gameSystem._birds przechodzi sam przy
+ * wczytaniu). Korzysta z TawernaCore.js (musi stać wyżej na liście).
  */
 
 (() => {
     "use strict";
 
-    const params = PluginManager.parameters("Birds");
+    const PLUGIN = "Birds";
+    const T = window.Tawerna;
+    if (!T) throw new Error("Birds.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+    const params = PluginManager.parameters(PLUGIN);
     const ENABLED = params.enabled !== "false";
 
     const ITEM = { bird: 145, feathers: 146 };
@@ -61,12 +68,10 @@
     const pick = list => list[Math.floor(Math.random() * list.length)];
     const pickWeighted = table => { let r = Math.random() * table.reduce((s, [, w]) => s + w, 0); for (const [v, w] of table) { if ((r -= w) <= 0) return v; } return table[0][0]; };
     const TILE = () => $gameMap.tileWidth();
-    const hoursNow = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
+    const hoursNow = () => T.time.day() * 24 + T.time.hour();
 
-    function store() {
-        if (!$gameSystem._birds) $gameSystem._birds = { maps: {}, kills: {}, eaten: 0 };
-        return $gameSystem._birds;
-    }
+    // the saved state: Tawerna.state("birds") = $gameSystem._tw.birds (an older save's $gameSystem._birds is taken over)
+    const store = T.state.define("birds", () => ({ maps: {}, kills: {}, eaten: 0 }), { version: 1, adopt: "_birds", owner: PLUGIN });
     function hash(n, salt) {
         let h = Math.imul(n | 0, 374761393) ^ Math.imul(salt | 0, 668265263);
         h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -79,8 +84,8 @@
     }
     const daylight = h => h >= 6 && h < 19;
     function birdTime() {
-        const h = $gameSystem.dayNightHour();
-        return outdoors() && daylight(h) && !rainingAt($gameSystem.dayNightDay(), h);
+        const h = T.time.hour();
+        return outdoors() && daylight(h) && !rainingAt(T.time.day(), h);
     }
 
     // ------------------------------------------------------------------
@@ -420,7 +425,7 @@
             b.act = "peck";
             stepPeck(b);
             b.eatT++;
-            const need = plot.day !== undefined && plot.day >= $gameSystem.dayNightDay() ? SEED_FRAMES : EAT_FRAMES;
+            const need = plot.day !== undefined && plot.day >= T.time.day() ? SEED_FRAMES : EAT_FRAMES;
             if (b.eatT >= need) {
                 const name = eatPlant($gameMap.mapId(), b.plot.x, b.plot.y);
                 if (name) flock.eaten.push(name);
@@ -479,8 +484,9 @@
         const counts = {};
         for (const n of eaten) counts[n] = (counts[n] || 0) + 1;
         const text = Object.keys(counts).map(n => n + (counts[n] > 1 ? " ×" + counts[n] : "")).join(", ");
-        if ($gameTemp.pushLootPopup) $gameTemp.pushLootPopup($dataItems[ITEM.feathers] ? $dataItems[ITEM.feathers].iconIndex : 0, "Ptaki zjadły: " + text, "#ffb4a0");
+        T.popup("Ptaki zjadły: " + text, { icon: featherIcon(), color: "#ffb4a0" });
     }
+    const featherIcon = () => ($dataItems[ITEM.feathers] ? $dataItems[ITEM.feathers].iconIndex : 0);
 
     // ---- shots (Hunting.js): the birds on the ground are targets; a shot scares every flock that hears it
     // opts.forDog (Dog.js): the dog caught it - the feathers are its to carry, not the bag's; returns how many
@@ -592,7 +598,7 @@
     }
 
     // ------------------------------------------------------------------
-    // The map scene drives it
+    // The map scene drives it (the core's map clock); a new map or a loaded game starts with no birds
     // ------------------------------------------------------------------
     function reset() {
         for (const f of flocks) for (const b of f.birds) dropSprite(b);
@@ -602,26 +608,19 @@
         for (const f of feathers) if (f.s.parent) f.s.parent.removeChild(f.s);
         feathers.length = 0;
     }
-    const _Game_Map_setup = Game_Map.prototype.setup;
-    Game_Map.prototype.setup = function(mapId) {
-        _Game_Map_setup.call(this, mapId);
-        reset();
-    };
-    const _extractSaveContents = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
-        _extractSaveContents.call(this, contents);
-        reset();
-    };
+    T.on("mapEnter", () => reset(), { owner: PLUGIN });
+    T.on("load", () => reset(), { owner: PLUGIN });
+    // the raids' plan is looked at every 60 frames (not on the core's hourChange: a raid starts at any minute - 6.5 + ... hours - and
+    // one seen an hour late would be counted as one while away); the first look on the first map frame
     let auto = true, checkWait = 0;
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
+    const CALM_REPORT = { only: ["message"] };   // (the report of the raids while away waits for a message to close)
+    T.onMapUpdate(scene => {
         if (!ENABLED || !$gameMap || !$gamePlayer || !window.Farming) return;
         if (--checkWait <= 0) {
             checkWait = 60;
             checkVisits();
-            if (awayReport > 0 && !$gameMessage.isBusy()) {
-                $gameTemp.pushLootPopup($dataItems[ITEM.feathers] ? $dataItems[ITEM.feathers].iconIndex : 0, "Pod twoją nieobecność ptaki wyjadły " + awayReport + (awayReport === 1 ? " roślinę" : awayReport < 5 ? " rośliny" : " roślin"), "#ffb4a0");
+            if (awayReport > 0 && T.isCalm(scene, CALM_REPORT)) {
+                T.popup("Pod twoją nieobecność ptaki wyjadły " + awayReport + (awayReport === 1 ? " roślinę" : awayReport < 5 ? " rośliny" : " roślin"), { icon: featherIcon(), color: "#ffb4a0" });
                 awayReport = 0;
             }
         }
@@ -632,7 +631,7 @@
             // come by themselves)
             const f = what === "raid" ? startRaid({ kind: "crow", size: SPECIES.crow.flock[1], hours: 1 }) : startGrounded(pick(Object.keys(SPECIES)));
             if (f) f.summoned = true;
-            else $gameTemp.pushLootPopup(0, what === "raid" ? "Nie ma tu nic zasianego (albo pilnuje strach na wróble)" : "Nie ma tu miejsca dla ptaków", "#bcd8ff");
+            else T.popup(what === "raid" ? "Nie ma tu nic zasianego (albo pilnuje strach na wróble)" : "Nie ma tu miejsca dla ptaków", { icon: 0, color: "#bcd8ff" });
         }
         if (auto && birdTime() && --nextAmbient <= 0) {
             nextAmbient = Math.round(rand(1200, 2700));   // 20 to 45 s (user: more often); four times in five a flock that lands and pecks
@@ -642,12 +641,12 @@
         for (const f of flocks.slice()) updateFlock(f);
         for (const b of aliveBirds()) drawBird(b);
         updateFeathers();
-    };
+    }, { owner: PLUGIN, name: "birds" });
 
-    window.Birds = {
+    window.Birds = T.register(PLUGIN, {
         SPECIES, ITEM, auto: v => { auto = !!v; }, reset, visitsOf, openCrops, guarded, checkVisits, resolveAway, eatPlant,
         startFlyover, startGrounded, startRaid, scare, flush, relocate, RELOCATE, killBird,
         get flocks() { return flocks; }, get birds() { return aliveBirds(); }, get raid() { return raid; }, store,
         pending: null   // "birds" | "raid": asked for from the F9 menu, started when the map runs again
-    };
+    });
 })();

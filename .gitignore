@@ -11,6 +11,7 @@ desktop.ini
 # themselves or in their own subfolder; all regenerated every run, none of it is the test itself)
 /tests/out_*.txt
 /tests/results.txt
+/tests/results_p*.txt
 /tests/*.log
 /tests/edge_profile_*/
 /tests/*.png
@@ -28,3 +29,6 @@ __pycache__/
 *.pyc
 /tools/tavern/staging/renders/
 /tools/tavern/staging/install_preview/
+
+# every test's last result (tests/run.js, the 'before' column) - per machine, rewritten by every run
+/tests/last_results.json

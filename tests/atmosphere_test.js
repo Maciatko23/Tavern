@@ -47,11 +47,15 @@ const { launch, sleep } = require("./cdp.js");
         d = await bed(12);
         check("snow: Wind5", d && d.name === "Wind5", d);
         await ev("$gameScreen.changeWeather('none', 0, 0); 0");
-        // beside the pond
-        const pond = await ev(`(function(){ for (let y = 2; y < $gameMap.height() - 2; y++) for (let x = 2; x < $gameMap.width() - 2; x++) if (Farming.isWaterTile(x, y) && Farming.isWaterTile(x + 1, y) && Farming.isWaterTile(x, y + 1) && Farming.isWaterTile(x - 1, y) && Farming.isWaterTile(x, y - 1)) return { x, y }; return null; })()`);
+        // beside the pond. No map has water now (no water before the well - the drought is by design, 2026-09): then a pretend
+        // pond, 5 x 5 tiles, for the plugin's Farming.isWaterTile, while the bed is asked for
+        let pond = await ev(`(function(){ for (let y = 2; y < $gameMap.height() - 2; y++) for (let x = 2; x < $gameMap.width() - 2; x++) if (Farming.isWaterTile(x, y) && Farming.isWaterTile(x + 1, y) && Farming.isWaterTile(x, y + 1) && Farming.isWaterTile(x - 1, y) && Farming.isWaterTile(x, y - 1)) return { x, y }; return null; })()`);
+        const pretend = !pond;
+        if (pretend) pond = await ev(`(function(){ const x = 10, y = 6; window.__isWater = Farming.isWaterTile; Farming.isWaterTile = (tx, ty) => Math.abs(tx - x) <= 2 && Math.abs(ty - y) <= 2; return { x, y }; })()`);
         await ev(`$gamePlayer.locate(${pond.x - 3}, ${pond.y}); 0`);
         d = await bed(12);
-        check("next to water by day: the river bed", d && d.name === "River", d);
+        check("next to water by day: the river bed" + (pretend ? " (a pretend pond: no map has water now)" : ""), d && d.name === "River", d);
+        if (pretend) await ev("Farming.isWaterTile = window.__isWater; 0");
         await ev("$gamePlayer.locate(10, 13); 0");
 
         // ------------------------------------------------ the live bed: BGS really plays and changes with a fade
@@ -143,8 +147,18 @@ const { launch, sleep } = require("./cdp.js");
 
         // ------------------------------------------------ autosave after sleeping
         const before = await ev("DataManager.savefileInfo(0) ? DataManager.savefileInfo(0).timestamp : 0");
+        // (the frames the day's summary opens in - Journal.js, after a night - and the autosave is asked for)
+        await ev(`(function(){ window.__saveAt = -1; window.__sumAt = -1; window.__saveAfterSum = false;
+            const _r = Scene_Map.prototype.requestAutosave; Scene_Map.prototype.requestAutosave = function() { window.__saveAt = Graphics.frameCount;
+                window.__saveAfterSum = !!(SceneManager._nextScene && SceneManager._nextScene.constructor.name === "Scene_DaySummary"); return _r.apply(this, arguments); };
+            const _p = SceneManager.push; SceneManager.push = function(c) { if (c && c.name === "Scene_DaySummary") window.__sumAt = Graphics.frameCount; return _p.apply(this, arguments); }; })(); 0`);
         await ev("$gameSystem.setDayNightHour(22); $gameSystem.sleepUntilHour(7); 0");
         check("sleeping in a bed asks for an autosave", (await ev("!!$gameTemp._atmoAutosave")) === true);
+        // the night ends a day: its summary opens first (Journal.js) and the autosave comes in that very frame, after it; OK closes it
+        for (let i = 0; i < 40 && (await ev("window.__saveAt")) < 0; i++) await frames(6);
+        const order = await ev("({ save: window.__saveAt, summary: window.__sumAt, afterSummary: window.__saveAfterSum, scene: SceneManager._scene.constructor.name })");
+        check("the day's summary opens and the autosave is asked for in the same frame, after it", order.save > 0 && order.summary === order.save && order.afterSummary, order);
+        for (let i = 0; i < 30 && (await ev("SceneManager._scene.constructor.name")) !== "Scene_Map"; i++) { await ev("Input._currentState.ok = true; 0"); await frames(4); await ev("Input._currentState.ok = false; 0"); await frames(8); }
         const noticeNow = () => ev(`(function(){ const s = SceneManager._scene, n = s._topNotice; return { said: $gameTemp._lastTopNotice, visible: !!(n && n.visible), x: n && Math.round(n.x), y: n && Math.round(n.y), w: Graphics.width, day: !!(s._dayBanner && s._dayBanner.visible), dayBottom: s._dayBanner && s._dayBanner.bitmap ? Math.round(s._dayBanner.y + s._dayBanner.bitmap.height) : 0 }; })()`);
         let notice = null;
         for (let i = 0; i < 40; i++) { await frames(6); notice = await noticeNow(); if (notice.visible) break; }

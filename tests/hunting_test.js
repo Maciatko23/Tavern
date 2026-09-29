@@ -1,5 +1,18 @@
 // Hunting: animals live on the map by day, flee, and die to a sling / bow shot (key F).
+// Stage 3 (batch D2, Hunting on the core and split in four): the files in the page; what a shot tells the bus ("shot").
 const { launch, sleep } = require("./cdp.js");
+// REGISTERED=1: Hunting_Path, Hunting_AI and Hunting_Weapons put into the page's plugin list right under Hunting (js/plugins.js itself
+// is not touched); js/plugins.js lists them there too now, so both runs have the same order - with it the test also checks that order
+const PARTS = ["Hunting_Path", "Hunting_AI", "Hunting_Weapons"];
+const REGISTERED = process.env.REGISTERED ? `(function(){
+    let real;
+    const mk = name => ({ name, status: true, description: "", parameters: {} });
+    Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) {
+        const list = v.filter(p => !${JSON.stringify(PARTS)}.includes(p.name)), at = list.findIndex(p => p.name === "Hunting");
+        list.splice(at + 1, 0, ...${JSON.stringify(PARTS)}.map(mk));
+        real = list;
+    } });
+})();` : null;
 const fs = require("fs");
 const OUT = __dirname + "/hunt/";
 fs.mkdirSync(OUT, { recursive: true });
@@ -9,6 +22,7 @@ fs.mkdirSync(OUT, { recursive: true });
     const results = [];
     const check = (name, ok, info) => { results.push(ok); console.log((ok ? "PASS " : "FAIL ") + name + (info !== undefined ? "  " + JSON.stringify(info) : "")); };
     try {
+        if (REGISTERED) await b.send("Page.addScriptToEvaluateOnNewDocument", { source: REGISTERED });
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
@@ -28,6 +42,10 @@ fs.mkdirSync(OUT, { recursive: true });
         const sheets = await ev(`new Promise(res => { const names = ["$Animal_Rabbit", "$Animal_Deer"], out = {}; let left = names.length; for (const n of names) { const bmp = ImageManager.loadCharacter(n); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height]; if (--left === 0) res(out); }); } })`);
         check("the animal sheets load (3 columns x 4 rows of frames)", sheets["$Animal_Rabbit"][0] % 3 === 0 && sheets["$Animal_Rabbit"][1] % 4 === 0 && sheets["$Animal_Deer"][0] % 3 === 0 && sheets["$Animal_Deer"][1] % 4 === 0, sheets);
         check("the shot is O in the combat mode (Combat.js: O has its own name, Tab switches the mode)", (await ev("Input.keyMapper[79]")) === "keyO" && (await ev("Input.keyMapper[9]")) === "tab");
+        const fam = JSON.parse(await ev(`JSON.stringify({ parts: Object.keys(Tawerna.api("Hunting_parts") || {}), scripts: ["Hunting", "Hunting_Path", "Hunting_AI", "Hunting_Weapons"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
+            order: $plugins.map(p => p.name).filter(n => /^(Spoilage|Hunting|Hunting_Path|Hunting_AI|Hunting_Weapons|Birds)$/.test(n)), api: Tawerna.api("Hunting") === Hunting })`));
+        check("Hunting in four files (the data and the hooks, the way, the animals, the weapons and the prey), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by Hunting.js"),
+            fam.api && fam.parts.join() === "core,path,ai,weapons" && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "Spoilage,Hunting,Hunting_Path,Hunting_AI,Hunting_Weapons,Birds"), fam);
         const targets = await ev("Hunting.mapTargets()");
         check("Map003 is a hunting ground with 3 rabbits", targets.rabbit === 3 && !targets.deer, targets);
 
@@ -85,6 +103,8 @@ fs.mkdirSync(OUT, { recursive: true });
         check("a bow but no arrows and no stones: 'Potrzebujesz strzał'", (await popups()).includes("Potrzebujesz strzał"), await popups());
 
         // ================= 5. the sling kills a rabbit =================
+        await ev("window.__shots = []; Tawerna.on('shot', e => window.__shots.push({ weapon: e.weapon, hit: e.hit, kind: e.kind }), { owner: 'HuntingTest' }); 0");
+        await ev("window.__kills = []; Tawerna.on('kill', e => window.__kills.push({ kind: e.kind, by: e.by, how: e.how, mapId: e.mapId, x: +e.x.toFixed(1), y: +e.y.toFixed(1), animal: !!e.animal }), { owner: 'HuntingTest' }); 0");
         await give(64, 5);
         const spawnFrozen = (kind, dx) => ev(`(function(){ const a = Hunting.spawn("${kind}", ${lx} + ${dx}, ${ly}); a._frozen = true; return a._x; })()`);
         await spawnFrozen("rabbit", 4);
@@ -97,6 +117,8 @@ fs.mkdirSync(OUT, { recursive: true });
         check("F fires: a stone flew (or already hit), one stone and 2 stamina are spent", (flying === 1 || (await ev("Hunting.carcasses().length")) === car0 + 1) && (await count(64)) === 4 && (await ev("$gameSystem.stamina()")) === st0 - 2, { flying });
         await frames(40);
         check("the stone kills the rabbit: gone from the map, its carcass lies there, the hunt is counted", (await ev("Hunting.animals.length")) === 0 && (await ev("Hunting.carcasses().length")) === car0 + 1 && (await ev("Hunting.hunt().kills.rabbit")) === 1, { animals: await ev("Hunting.animals.length"), carcasses: await ev("Hunting.carcasses().length") });
+        const kills = JSON.parse(await ev("JSON.stringify(window.__kills)"));
+        check("...and Hunting tells it on the Tawerna bus: 'kill' { kind: rabbit, by: hero, how: shot, mapId: 3, x, y, animal }", kills.length === 1 && kills[0].kind === "rabbit" && kills[0].by === "hero" && kills[0].how === "shot" && kills[0].mapId === 3 && kills[0].x > 0 && kills[0].animal, kills);
         check("the weapon wears by one shot", (await ev("Durability.used(125)")) === 1);
         // range: 6 tiles for the sling, the rabbit at 8 is out of reach
         await spawnFrozen("rabbit", 8);
@@ -104,6 +126,9 @@ fs.mkdirSync(OUT, { recursive: true });
         await press("shoot");
         await frames(100);
         check("the sling does not reach 8 tiles (the rabbit stays, a stone is lost)", (await ev("Hunting.animals.length")) === 1 && (await count(64)) === 3, { n: await ev("Hunting.animals.length"), stones: await count(64) });
+        const shots = JSON.parse(await ev("JSON.stringify(window.__shots)"));
+        check("...and each stone's flight tells the bus 'shot' { weapon, hit, kind }: the rabbit hit, then a miss", shots.length === 2 && shots[0].weapon === "sling" && shots[0].hit === true && shots[0].kind === "rabbit" &&
+            shots[1].weapon === "sling" && shots[1].hit === false && shots[1].kind === "", shots);
         // the bow has range 9 and the arrows are used first
         await give(127, 3);
         await frames(30);

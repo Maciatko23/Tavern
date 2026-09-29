@@ -3,13 +3,26 @@
 // agree), the stakes and the gold, refusing without money, the special dice's weights (seeded statistics), the <Tavern:dice> event
 // opening the table (and the empty table at night), a turn played with the real keys and the mouse, leaving mid-game (the stake is
 // lost), the rewards back on the map (experience, a journal note, a notice, a gift die), the tavern's fame from the quest board
-// (QuestBoard.js: the merchant from 40, the stranger's high-stakes game from 80, his die or gold), and no console errors. The plugins
-// are not in js/plugins.js yet, so the test loads them into the page. Screenshots: docs/tawerna_zycie/kosci_*.png
+// (QuestBoard.js: the merchant from 40, the stranger's high-stakes game from 80, his die or gold), and no console errors. TavernDice in
+// its four files (TavernDice_Data, TavernDice, TavernDice_Art, TavernDice_Scene; the parts js/plugins.js does not have yet the plugin
+// puts into the page itself), its scene on TawernaUI's Scene_MiniGame. REGISTERED=1: the parts put into the page's plugin list as they
+// will be registered. Screenshots: docs/tawerna_zycie/kosci_*.png
 //   CDP_PORT=9380 node tests/tavern_dice_test.js
 const { launch, sleep } = require("./cdp.js");
 const fs = require("fs");
 const path = require("path");
 const SHOTS = path.join(__dirname, "..", "docs", "tawerna_zycie");
+// (REGISTERED=1: the parts in $plugins round TavernDice, as the plugin manager will list them - js/plugins.js itself is not touched)
+const REGISTERED = process.env.REGISTERED ? `(function(){
+    let real;
+    const mk = name => ({ name, status: true, description: "", parameters: {} });
+    Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) {
+        const list = v.filter(p => !["TavernDice_Data", "TavernDice_Art", "TavernDice_Scene"].includes(p.name)), at = list.findIndex(p => p.name === "TavernDice");
+        list.splice(at + 1, 0, mk("TavernDice_Art"), mk("TavernDice_Scene"));
+        list.splice(at, 0, mk("TavernDice_Data"));
+        real = list;
+    } });
+})();` : null;
 
 // ---- in the page: freezing the scene for a screenshot, and a bot that plays the hero's turn with the keys
 const DRIVER = String.raw`
@@ -113,6 +126,7 @@ window.__ref = function(faces) {
     fs.mkdirSync(SHOTS, { recursive: true });
     try {
         // ================= boot: a new game in the tavern (Map001) at 19:00
+        if (REGISTERED) await b.send("Page.addScriptToEvaluateOnNewDocument", { source: REGISTERED });
         let booted = false;
         for (let a = 0; a < 4 && !booted; a++) {
             await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
@@ -125,6 +139,12 @@ window.__ref = function(faces) {
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); if (window.Dog && Dog.auto) Dog.auto(false); $gameScreen.clearWeather(); $gameSystem._minimapHidden = true; $gameSystem.setDayNightHour(19); 0");
         const loaded = await ev(`new Promise(res => { if (window.TavernDice) return res(true); const s = document.createElement("script"); s.src = "js/plugins/TavernDice.js?" + Date.now(); s.onload = () => res(!!window.TavernDice); s.onerror = () => res(false); document.body.appendChild(s); })`);
         check("TavernDice.js loads into the page", loaded);
+        const fam = await J(`(function(){ const P = Tawerna.api("TavernDice_parts") || {};
+            return { data: !!P.data, core: !!P.core, art: !!P.art, scene: !!(P.Scene && window.Scene_TavernDice === P.Scene && Scene_TavernDice.prototype instanceof Tawerna.ui.Scene_MiniGame),
+                order: $plugins.map(p => p.name).filter(n => /^TavernDice/.test(n)) }; })()`);
+        check("...in its four files (the rivals, the pictures, the scene), its scene on TawernaUI's Scene_MiniGame" + (REGISTERED ? " (registered: " + fam.order.join(", ") + ")" : ""),
+            fam.data && fam.core && fam.art && fam.scene && (!REGISTERED || fam.order.join() === "TavernDice_Data,TavernDice,TavernDice_Art,TavernDice_Scene"), fam);
+        await ev("window.__diceBus = []; for (const n of ['diceWin', 'diceLose']) Tawerna.on(n, e => window.__diceBus.push([n, e.rival, e.stake, e.pot]), { owner: 'DiceTest' }); 0");
         await ev(DRIVER + REFERENCE + "; 0");
         // (the first sections are about the table without the quest board; it comes back for the fame at the end)
         await ev("if (window.QuestBoard) { window.__QB = window.QuestBoard; window.QuestBoard = undefined; } 0");
@@ -326,6 +346,9 @@ window.__ref = function(faces) {
         const st1 = games.bartek2.after.stats;
         check("the statistics in $gameSystem._dice: games, wins, losses, the biggest pot, the best throw, per rival", st1.games === 5 && st1.wins === 4 && st1.losses === 1 && st1.biggestPot === 50 && st1.bestThrow && st1.bestThrow.points > 0 && st1.vs.bartek.wins === 2 && st1.vs.ozzy.losses === 1,
             { games: st1.games, wins: st1.wins, losses: st1.losses, biggestPot: st1.biggestPot, best: st1.bestThrow, net: st1.net });
+        const diceBus = await J("window.__diceBus.slice(0, 5)");
+        check("each game is told on the Tawerna bus: 'diceWin' / 'diceLose' { rival, stake, pot } (Grum won, Ozzy lost, the merchant and Bartek twice won)",
+            diceBus.map(e => e[0] + ":" + e[1]).join() === "diceWin:grum,diceLose:ozzy,diceWin:kupiec,diceWin:bartek,diceWin:bartek" && diceBus[0][2] === 15 && diceBus[0][3] === 30 && diceBus[2][3] === 50, diceBus);
         const xp = games.grum.after.xp;
         check("a win gives a little experience via Combat.gainXp (Grum 15 G: 13, 'wygrana w kości'); a loss gives none", xp.length === 1 && xp[0][0] === 13 && xp[0][1] === "wygrana w kości" && games.ozzy.after.xp.length === 1, xp);
         check("the first win leaves a note in the journal ('Pierwsza wygrana w kości')", games.grum.after.notes.includes("Pierwsza wygrana w kości"), games.grum.after.notes.slice(-3));

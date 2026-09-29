@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Spójny ciemny wygląd interfejsu (czerń i jasna żółć, styl HUD): czcionka, wspólne panele i paski, porządek w menu, listach i ekranie tytułowym. v2.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param fontFile
  * @text Czcionka (plik w fonts/)
@@ -96,6 +98,9 @@
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("UITheme.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
 
     const pluginName = "UITheme";
     const params = PluginManager.parameters(pluginName);
@@ -347,7 +352,7 @@
     }
 
     function weatherText() {
-        const outdoors = /<(Clouds|Weather):\s*on\s*>/i.test(($dataMap && $dataMap.note) || "");
+        const outdoors = T.mapFlag("Clouds", false) || T.mapFlag("Weather", false);
         if (!outdoors) return "pod dachem";
         const type = $gameScreen.weatherType(), active = ($gameScreen._weatherPowerTarget || 0) > 0;
         if (active && type === "storm") return "burza";

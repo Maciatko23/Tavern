@@ -1,6 +1,6 @@
 {
  "lighting": {
-  "map001_note": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>\n<Zoom:1.5>",
+  "map001_note": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<DarkDay:30>\n<DarkNight:185>\n",
   "plugin": "RoomLighting.js v1.1.1: <DarkDay:N> map note = darkness by day, <DarkNight:N> = at night (default the plugin's 200); evening 16-19 (lamps come up), dawn 6-8; <LightWhen:night|day> on a light event (no tag = always); <LightSoft> = an even fall-off to the edge (big fill lights); lights off the screen are skipped; all glows are painted into one half-resolution layer; light holes are filled squares (no seam on the software renderer).",
   "tags": {
    "candle": "<Light:110,120,80,30><LightWhen:night>",

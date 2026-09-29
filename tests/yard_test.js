@@ -71,12 +71,16 @@ const { launch, sleep } = require("./cdp.js");
         check("the kiln stands on all six tiles", all.every(k => k && k.type === "kiln" && k.v === 3), all.map(k => k && k.type));
         check("nothing stands beside or above it", !(await bldg(kx + 3, ky)) && !(await bldg(kx, ky - 2)) && !(await bldg(kx - 1, ky)));
         const pass = c => ev(`$gameMap.isPassable(${c[0]}, ${c[1]}, 2)`);
-        check("the player cannot walk through any of its tiles, but around it", !(await pass([kx + 1, ky - 1])) && !(await pass([kx + 2, ky])) && (await pass([kx + 3, ky])) && (await pass([kx, ky - 2])));
+        // only the front row blocks: since the straight redraw (2026-09-24) the rows behind a building's front row are open ground on
+        // purpose (Farming.js isSolidCell - the picture rises above them, like a tree's canopy) - it used to block all six tiles
+        check("the player cannot walk through its front row (the back row is open ground now), but around it", !(await pass([kx, ky])) && !(await pass([kx + 1, ky])) && !(await pass([kx + 2, ky])) && (await pass([kx + 1, ky - 1])) && (await pass([kx + 3, ky])) && (await pass([kx, ky - 2])));
         check("the farm menu of every tile of the kiln is the kiln's", (await ev(`[[${kx},${ky}],[${kx + 2},${ky - 1}],[${kx + 1},${ky - 1}]].every(c => Farming.menuFor(c[0], c[1]).title === "Piec ziemny")`)) === true);
         check("a second kiln overlapping the first is refused", (await ev(`Farming.placementProblem("kiln", ${kx + 2}, ${ky - 1})`)) === "Tu już coś stoi.");
         const spr = await J(`(function(){ const e = SceneManager._scene._spriteset._buildingSprites._sprites.find(e => e.b.type === "kiln"); const tw = 48; return { image: e.sprite.bitmap._url || "", x: e.sprite.x, y: e.sprite.y, ex: Math.round(($gameMap.adjustX(${kx}) + 1.5) * tw), ey: Math.round(($gameMap.adjustY(${ky}) + 1) * tw) - 1, vent: Farming.geoOf(e.b).vent, ventX: Farming.geoOf(e.b).ventX }; })()`);
         check("the picture stands in the middle of the three tiles on the bottom row", spr.x === spr.ex && spr.y === spr.ey && /Farm_Kiln_L/.test(spr.image), spr);
-        check("smoke rises from the chimney of the new picture", spr.vent === 91 && spr.ventX === -7, spr);
+        // the chimney of the stone kiln of the straight redraw (2026-09-24, Farming_Data.js): 95 px up, 32 px left of the middle (was 91 / -7) -
+        // the top of the chimney in the 97 px tall Farm_Kiln_L.png, whose chimney spans 41..25 px left of the middle
+        check("smoke rises from the chimney of the new picture", spr.vent === 95 && spr.ventX === -32, spr);
         // a building of the old game
         await ev(`(function(){ $gameSystem._farm.buildings[$gameMap.mapId()].push({ id: 900, type: "kiln", x: ${bx + 5}, y: ${by + 5}, last: 1 }); $gameSystem._farm.rev++; })(); 0`);
         await frames(4);

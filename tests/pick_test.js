@@ -60,9 +60,18 @@ const { launch, sleep } = require("./cdp.js");
         const iron = await mine(ores[1]);
         console.log("ore vein:   stone pickaxe", JSON.stringify(stone), "| + iron pickaxe", JSON.stringify(iron));
         await ev("$gameParty.loseItem($dataItems[116], 1); 0");
-        const stone2 = mounds.length > 1 ? await mine(mounds[0]) : { presses: 0 };
+        // (more rocks were placed around the mounds on Map003: only one of the three still has a free side. Then the same
+        // mound is put back after the first run - self-switch A off, its picture again - and mined once more with the iron pickaxe)
+        const restore = async eid => {
+            await ev(`(function(){ const e = $gameMap.event(${eid}); e._treeHits = 0; e._breakT = -1; $gameSelfSwitches.setValue([3, ${eid}, "A"], false); return 0; })()`);
+            await frames(8);
+            return ev(`(function(){ const e = $gameMap.event(${eid}); return e._pageIndex === 0 && !!e.characterName() && e.opacity() === 255; })()`);
+        };
+        const stone2 = mounds.length ? await mine(mounds[0]) : { presses: 0 };
         await ev("$gameParty.gainItem($dataItems[116], 1); 0");
-        const iron2 = mounds.length > 1 ? await mine(mounds[1]) : { presses: 0 };
+        const second = mounds.length > 1 ? mounds[1] : mounds.length && (await restore(mounds[0])) ? mounds[0] : 0;
+        if (mounds.length < 2) console.log("one free mound: mined again after putting it back", JSON.stringify({ id: second }));
+        const iron2 = second ? await mine(second) : { presses: 0 };
         console.log("mound:      stone pickaxe", JSON.stringify(stone2), "| + iron pickaxe", JSON.stringify(iron2));
         check("ore veins: the iron pickaxe needs a third fewer blows (x0.65)", stone.broke && iron.broke && iron.presses === Math.max(1, Math.round(stone.presses * 0.65)), { stone: stone.presses, iron: iron.presses });
         check("mounds: the iron pickaxe needs a third fewer blows (x0.65)", stone2.broke && iron2.broke && iron2.presses === Math.max(1, Math.round(stone2.presses * 0.65)), { stone: stone2.presses, iron: iron2.presses });

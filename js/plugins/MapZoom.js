@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Automatyczny zoom ekranu po wejściu na wybraną mapę (przez tag w notatce mapy). v1.2.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param duration
  * @text Domyślny czas przejścia (klatki)
@@ -60,6 +62,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("MapZoom.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "MapZoom";
     const params = PluginManager.parameters(pluginName);
     const DEFAULT_DURATION = Number(params.duration || 60);
@@ -76,10 +81,11 @@
         }
     }
 
-    function parseZoomTag(note) {
-        const m = /<Zoom:\s*([^>]+)>/i.exec(note || "");
+    // <Zoom:scale[,frames[,x,y]]> in the map's note (its text as written: an empty place keeps its default)
+    function parseZoomTag() {
+        const m = T.mapTag("Zoom");
         if (!m) return null;
-        const parts = m[1].split(",").map(s => s.trim());
+        const parts = m.raw.split(",").map(s => s.trim());
         const scale = Number(parts[0]);
         if (!isFinite(scale) || scale <= 0) return null;
         const duration = parts[1] !== undefined && parts[1] !== "" ? Number(parts[1]) : DEFAULT_DURATION;
@@ -98,7 +104,7 @@
     const _Game_Map_setup = Game_Map.prototype.setup;
     Game_Map.prototype.setup = function(mapId) {
         _Game_Map_setup.call(this, mapId);
-        const zoom = parseZoomTag($dataMap.note);
+        const zoom = parseZoomTag();
         this._zoomFollowsPlayer = !!zoom && zoom.followsPlayer;
         if (zoom) {
             $gameScreen.startZoom(zoom.x, zoom.y, zoom.scale, zoom.duration);
@@ -113,7 +119,7 @@
     const _Scene_Map_start = Scene_Map.prototype.start;
     Scene_Map.prototype.start = function() {
         _Scene_Map_start.call(this);
-        const zoom = parseZoomTag($dataMap.note);
+        const zoom = parseZoomTag();
         // No tag, or the entry animation is already running: nothing to restore.
         if (!zoom || $gameScreen._zoomDuration > 0) return;
         if (Math.abs($gameScreen.zoomScale() - zoom.scale) < 0.001) return;

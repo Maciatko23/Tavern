@@ -1,0 +1,4 @@
+PixelLab Pro Flash generations for grandpa's cottage props (2026-09-28), style = Winlu Interior crops at 2x
+(ref/ref_small.png: Winlu chair C 8,0..1 + barrel D 14,0..1, 24 colours):
+grid_wheel_churn_rocker_pegs_s1919.png  job bb3f10d0-d343-409d-ac64-e2372e8c13b2  256x256  9 gen  seed 1919
+   (spinning wheel, butter churn, rocking chair with a blanket, peg rail with a linen shirt / cap / bag)

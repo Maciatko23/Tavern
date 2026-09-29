@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Leśnictwo: sosny sadzone z nasion (z szyszek) rosną przez kilka dni w prawdziwe drzewa, które ścinasz jak każde inne. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  * @orderAfter ChoppableTree
  * @orderAfter Farming
  *
@@ -38,17 +40,23 @@
  * mniej drewna; szyszki sypią się dopiero z dorosłej. Po wykopaniu pnia miejsce
  * jest znowu wolne.
  *
- * Posadzone drzewa są zapisywane w grze ($gameSystem._forest) i przy każdym
- * wczytaniu mapy dopisywane do jej zdarzeń (numery od 1000 w górę, daleko od
- * tych, które nadaje edytor). Strony i pniak kopiują zwykłą sosnę z tej samej
- * mapy (albo, gdy jej nie ma, wbudowany wzór z pniakiem 516).
+ * Posadzone drzewa są zapisywane w grze (Tawerna.state "forest", w starszych
+ * zapisach $gameSystem._forest) i przy każdym wczytaniu mapy dopisywane do jej
+ * zdarzeń przez rdzeń (Tawerna.inject, numery od 1000 w górę, daleko od tych,
+ * które nadaje edytor). Strony i pniak kopiują zwykłą sosnę z tej samej mapy
+ * (albo, gdy jej nie ma, wbudowany wzór z pniakiem 516).
+ *
+ * Wymaga TawernaCore.js (pierwsza na liście wtyczek).
  * ============================================================================
  */
 
 (() => {
     "use strict";
 
-    const params = PluginManager.parameters("Forestry");
+    const PLUGIN = "Forestry";
+    const T = window.Tawerna;
+    if (!T) throw new Error("Forestry.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+    const params = PluginManager.parameters(PLUGIN);
     const GROW_DAYS = Math.max(1, Number(params.growDays) || 10);
     const SEED = 148;               // Nasiona sosny
     const PLANT_STAMINA = 2;
@@ -57,17 +65,16 @@
     const GRAPHICS = ["!$Pine_A", "!$Pine_B", "!$Pine_C"];
     const DEFAULT_STUMP_TILE = 516;
 
-    const day = () => ($gameSystem && typeof $gameSystem.dayNightDay === "function" ? $gameSystem.dayNightDay() : 1);
+    const day = () => T.time.day();
     const seedItem = () => $dataItems[SEED];
-    function popup(icon, text, color) { $gameTemp.pushLootPopup(icon, text, color || "#cfe6a8"); }
+    const popup = (icon, text) => T.popup(text, { icon, color: "#cfe6a8" });
+    const refuse = (icon, text) => T.popup.need(icon, text);   // (red: what is missing, why not here)
 
     // ------------------------------------------------------------------
-    // Saved: $gameSystem._forest = { maps: { mapId: [{ id, x, y, day, graphic }] } }
+    // Saved: Tawerna.state("forest") = $gameSystem._tw.forest = { maps: { mapId: [{ id, x, y, day, graphic }] } } (plain data; an
+    // older save's $gameSystem._forest is taken over, and that name stays a way to it - Journal's "plant" goal reads it)
     // ------------------------------------------------------------------
-    function store() {
-        if (!$gameSystem._forest) $gameSystem._forest = { maps: {} };
-        return $gameSystem._forest;
-    }
+    const store = T.state.define("forest", () => ({ maps: {} }), { version: 1, adopt: "_forest", owner: PLUGIN });
     function treesOf(mapId) {
         const maps = store().maps;
         return maps[mapId] || (maps[mapId] = []);
@@ -125,27 +132,17 @@
     }
     const switchesOf = (mapId, id) => ["A", "B", "C", "D"].map(ch => [mapId, id, ch]);
 
-    // loading a map: its planted trees go into $dataMap.events before the map sets its events up. Every one of them, always: the map
-    // data is loaded again after each menu while the map's events stay as they were, so an event must never lose its data.
+    // loading a map: its planted trees go into $dataMap.events before the map sets its events up (the core's Tawerna.inject, ids
+    // 1000 and up on every map). Every one of them, always: the map data is loaded again after each menu while the map's events stay
+    // as they were, so an event must never lose its data.
+    T.inject("*", { ids: [FIRST_ID, Infinity], owner: PLUGIN, build(data, mapId) {
+        const list = window.$gameSystem && window.$gameSelfSwitches ? store().maps[mapId] : null;
+        if (!list || list.length === 0) return null;
+        const pages = templatePages(data);
+        return list.map(rec => eventData(rec, pages));
+    } });
     // A tree whose stump was dug out (self-switch B; a felled seedling has no stump) is only dropped when the map is really set up
     // again (Game_Map.setup: entering it, a reload) - its record, its switches and its data, and the place is free again.
-    let loadingMapId = 0;
-    const _DataManager_loadMapData = DataManager.loadMapData;
-    DataManager.loadMapData = function(mapId) {
-        loadingMapId = mapId;
-        _DataManager_loadMapData.call(this, mapId);
-    };
-    const _DataManager_onLoad = DataManager.onLoad;
-    DataManager.onLoad = function(object) {
-        _DataManager_onLoad.call(this, object);
-        if (object === $dataMap && loadingMapId > 0 && $gameSystem && $gameSelfSwitches) inject(object, loadingMapId);
-    };
-    function inject(data, mapId) {
-        const list = store().maps[mapId];
-        if (!list || list.length === 0 || !data.events) return;
-        const pages = templatePages(data);
-        for (const rec of list) putData(data, rec, pages);
-    }
     const _Game_Map_setup = Game_Map.prototype.setup;
     Game_Map.prototype.setup = function(mapId) {
         const maps = store().maps, list = maps[mapId];
@@ -166,9 +163,9 @@
         return (store().maps[mapId] || []).find(r => r.id === eventId) || null;
     }
     function applyGrowth(event) {
-        const rec = recFor(event._mapId, event._eventId);
-        if (!rec || !window.ChoppableTree || !ChoppableTree.treeConfig) return;
-        const k = growthOf(rec), cfg = ChoppableTree.treeConfig(event);
+        const rec = recFor(event._mapId, event._eventId), CT = T.api("ChoppableTree");
+        if (!rec || !CT || !CT.treeConfig) return;
+        const k = growthOf(rec), cfg = CT.treeConfig(event);
         event._plantedGrowth = k;
         if (cfg) Object.assign(cfg, statsOf(k));
         // the picture of the day, in the map's data (the next page set-up) and on the event itself. Both separately: the map's data
@@ -179,35 +176,31 @@
         page.image.characterName = pic;
         if (event._pageIndex === 0 && event.characterName() !== pic) event.setImage(pic, page.image.characterIndex || 0);
     }
+    function growAll(map) {
+        for (const e of map.events()) if (e.eventId() >= FIRST_ID) applyGrowth(e);
+    }
     const _Game_Map_setupEvents = Game_Map.prototype.setupEvents;
     Game_Map.prototype.setupEvents = function() {
         _Game_Map_setupEvents.call(this);
-        for (const e of this.events()) if (e.eventId() >= FIRST_ID) applyGrowth(e);
+        growAll(this);
     };
-    // once a second: when a day has gone by, every planted tree on the map is a little bigger
-    let lastDay = -1, checkWait = 0;
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
-        if (--checkWait > 0) return;
-        checkWait = 60;
-        const d = day();
-        if (d === lastDay) return;
-        lastDay = d;
-        for (const e of $gameMap.events()) if (e.eventId() >= FIRST_ID) applyGrowth(e);
-    };
+    // a day gone by (on the map or in a night's sleep): every planted tree on the map is a little bigger; and each time the map is
+    // up (a saved game loaded, back from a menu or the day's summary) its trees are brought to today
+    T.on("dayStart", () => { if (window.$gameMap) growAll($gameMap); }, { owner: PLUGIN });
+    T.on("mapReady", () => growAll($gameMap), { owner: PLUGIN });
 
     // ------------------------------------------------------------------
     // Planting
     // ------------------------------------------------------------------
-    const outdoors = () => (window.Survival && Survival.isOutdoors ? Survival.isOutdoors() : true);
+    const outdoors = () => { const o = T.call("Survival", "isOutdoors"); return o === undefined ? true : o; };
     function standingTreeNear(x, y) {
-        return $gameMap.events().some(e => Math.abs(e.x - x) <= 1 && Math.abs(e.y - y) <= 1 && window.ChoppableTree && ChoppableTree.isTree(e) &&
+        const CT = T.api("ChoppableTree");
+        return $gameMap.events().some(e => Math.abs(e.x - x) <= 1 && Math.abs(e.y - y) <= 1 && CT && CT.isTree(e) &&
             !$gameSelfSwitches.value([e._mapId, e._eventId, "B"]));
     }
     // null when a pine can be planted here, else why not
     function whyNot(x, y) {
-        const F = window.Farming;
+        const F = T.api("Farming");
         if (!F || !outdoors() || (F.isHutInterior && F.isHutInterior())) return "Drzewo posadzisz tylko pod gołym niebem.";
         const plot = F.plotAt(x, y);
         if (!plot || plot.s !== "cleared") return "Sadzonkę wsadzisz w zwykłą albo oczyszczoną ziemię.";
@@ -240,17 +233,17 @@
     }
     function plant(x, y) {
         const seed = seedItem(), why = whyNot(x, y);
-        if (!seed || $gameParty.numItems(seed) < 1) { popup(seed ? seed.iconIndex : 0, "Nie masz nasion sosny", "#ff9f8f"); return false; }
-        if (why) { popup(seed.iconIndex, why, "#ff9f8f"); return false; }
-        if (typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(PLANT_STAMINA)) { popup(82, "Jesteś zbyt zmęczony", "#ff9f8f"); return false; }
+        if (!seed || $gameParty.numItems(seed) < 1) { refuse(seed ? seed.iconIndex : 0, "Nie masz nasion sosny"); return false; }
+        if (why) { refuse(seed.iconIndex, why); return false; }
+        if (typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(PLANT_STAMINA)) { refuse(82, "Jesteś zbyt zmęczony"); return false; }
         const done = () => {
             if (whyNot(x, y)) return;   // (something got there during the crouch)
             $gameParty.loseItem(seed, 1);
-            const mapId = $gameMap.mapId();
-            const rec = { id: nextId(mapId), x, y, day: day(), graphic: GRAPHICS[Math.floor(window.Farming ? Farming.hash2(x, y, 521) * GRAPHICS.length : 0)] };
+            const mapId = $gameMap.mapId(), F = T.api("Farming");
+            const rec = { id: nextId(mapId), x, y, day: day(), graphic: GRAPHICS[Math.floor(F ? F.hash2(x, y, 521) * GRAPHICS.length : 0)] };
             treesOf(mapId).push(rec);
             spawn(rec);
-            AudioManager.playSe({ name: "Earth1", volume: 80, pitch: 110, pan: 0 });
+            T.audio.se("Earth1", { volume: 80, pitch: 110 });
             popup(seed.iconIndex, "Posadzono sosnę. Za " + GROW_DAYS + " dni będzie drzewem.");
         };
         if (!($gamePlayer.startToolSwing && $gamePlayer.startToolSwing(CROUCH_KIND, done))) done();
@@ -266,5 +259,6 @@
             run: () => plant(x, y) };
     }
 
-    window.Forestry = { GROW_DAYS, FIRST_ID, SEED, LOOKS, plant, plantEntry, whyNot, stageOf, growthOf, graphicOf, statsOf, treesOf, spawn, applyGrowth };
+    window.Forestry = T.register(PLUGIN, { GROW_DAYS, FIRST_ID, SEED, LOOKS, plant, plantEntry, whyNot, stageOf, growthOf, graphicOf, statsOf, treesOf, spawn, applyGrowth,
+        state: store });
 })();

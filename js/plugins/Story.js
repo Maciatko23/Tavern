@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Fabuła nowej gry: dom dziadka, dług u Lorda (spłata do terminu), praca u Borgara, rozdział 1 w dzienniku. v1.1.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  * @orderAfter TavernShift
  * @orderAfter Journal
  * @orderAfter MenuPanel
@@ -95,6 +97,12 @@
  * (spłata poza rozmową; całość od razu kończy rozdział 1),
  * Story.left(), Story.daysLeft(), Story.skipIntro() (rozmowa z dziadkiem
  * jak wysłuchana - dla botów), Story.setDeadlineOn(false) (bez końca gry).
+ * Szyna rdzenia (Tawerna.on): debtPayment, debtPaid i storyStep { step }
+ * przy każdym kroku rozdziału 1 (talk, field, tavern, manor, lordMet,
+ * hired, firstShift, chapterDone, thanked, cellar).
+ *
+ * Wymaga TawernaCore.js (pierwsza na liście wtyczek). Stan fabuły:
+ * Tawerna.state "story" (w starszych zapisach $gameSystem._story).
  * ============================================================================
  */
 
@@ -102,6 +110,8 @@
     "use strict";
 
     const PLUGIN = "Story";
+    const T = window.Tawerna;
+    if (!T) throw new Error("Story.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const params = PluginManager.parameters(PLUGIN);
     const num = (v, d) => (v === undefined || v === null || v === "" || isNaN(Number(v)) ? d : Number(v));
     const DEBT = num(params.debt, 2500);
@@ -122,7 +132,7 @@
     const SHELTERS = ["shelter", "tent", "bedroll", "hut"];
     // the characters the story adds to maps (event ids far above what the editor gives out; Forestry's planted trees start at 1000)
     const NPCS = {
-        grandpa: { id: 901, map: MAP.house, name: "Dziadek Stach", sheet: "$Npc_Dziadek", index: 0, face: ["People1", 6], at: [7, 5], dir: 2 },
+        grandpa: { id: 901, map: MAP.house, name: "Dziadek Stach", sheet: "$Npc_Dziadek", index: 0, face: ["People1", 6], at: [10, 6], dir: 2 },   // (on the rug by the hearth, beside his rocking chair - the whitewashed cottage, 2026-09-28)
         lord: { id: 902, map: MAP.manor, name: "Lord Leopold Zaleski", sheet: "People2_Tall", index: 4, face: ["People2", 4], at: null, dir: 2 }
     };
     // map names in a story game (the map files stay as they are: an old save keeps the old names)
@@ -131,28 +141,55 @@
     const CHAPTER = "Rozdział 1: Dług dziadka";
 
     // ------------------------------------------------------------------
-    // State: $gameSystem._story (plain data only, saved with the game)
+    // State: Tawerna.state("story") = $gameSystem._tw.story (plain data only, saved with the game; an older save's
+    // $gameSystem._story is taken over). A game without the story (an old save, an old-style start elsewhere) keeps an empty object
+    // there: Story.state() is null then.
     // ------------------------------------------------------------------
     function newState() {
         return { v: 1, pending: true, debt: DEBT, deadline: DEADLINE, paid: 0, payments: [], intro: 0, hint: 0,
             flags: {}, letters: {}, shiftDay: -1, lastShift: null, done: 0, ended: 0, off: !END_ON_DEADLINE };
     }
-    const state = () => (window.$gameSystem && $gameSystem._story) || null;
+    const KEY = "story";
+    const store = T.state.define(KEY, () => ({}), { version: 1, adopt: "_story", owner: PLUGIN });
+    const isStory = s => !!s && typeof s === "object" && s.debt !== undefined;
+    const state = () => { if (!window.$gameSystem) return null; const s = store(); return isStory(s) ? s : null; };
+    // a new story, or none (null): the saved object itself is replaced
+    function setState(data) {
+        store();
+        $gameSystem._tw[KEY] = data && typeof data === "object" ? data : {};
+    }
+    // The old name $gameSystem._story stays a way to the state (the core's alias) and, as before, is nothing (undefined) in a game
+    // without the story - old code and the tests ask !!$gameSystem._story. Put over the core's alias once a game is made or loaded.
+    function keepOldName() {
+        const sys = window.$gameSystem;
+        if (!sys) return;
+        Object.defineProperty(sys, "_story", { configurable: true, enumerable: false,
+            get() { const r = this._tw, s = r && r[KEY]; return isStory(s) ? s : undefined; },
+            set(v) { const r = this._tw || (this._tw = {}); r[KEY] = v && typeof v === "object" ? v : {}; } });
+    }
     const active = () => { const s = state(); return !!s && !s.pending; };
-    const day = () => ($gameSystem && $gameSystem.dayNightDay ? $gameSystem.dayNightDay() : 1);
-    const hour = () => ($gameSystem && $gameSystem.dayNightHour ? $gameSystem.dayNightHour() : 12);
+    const day = () => T.time.day();
+    const hour = () => T.time.hour();
     const left = () => { const s = state(); return s ? Math.max(0, s.debt - s.paid) : 0; };
     const daysLeft = () => { const s = state(); return s ? s.deadline - day() + 1 : 0; };   // (today counts: on the deadline day 1 is left)
     const isOpen = () => { const s = state(); return !!s && !s.pending && !s.done && s.paid < s.debt; };
     // past the deadline, before dawn: the last night (the butler still takes the money)
     const lastNight = () => { const s = state(); return !!s && day() === s.deadline + 1 && hour() < DAWN; };
-    function doomed(sys) {
-        const s = sys && sys._story;
-        if (!s || s.pending || s.off || s.done || s.paid >= s.debt || !sys.dayNightDay) return false;
-        const d = sys.dayNightDay(), h = sys.dayNightHour ? sys.dayNightHour() : 12;
+    function doomed() {
+        const s = state();
+        if (!s || s.pending || s.off || s.done || s.paid >= s.debt) return false;
+        const d = day(), h = hour();
         return d > s.deadline + 1 || (d === s.deadline + 1 && h >= DAWN);
     }
-    const U = () => window.UIStyle || { fill: "rgba(11,12,15,0.9)", line: "#3a3e46", accent: "#ffd23f", text: "#eceef0", muted: "#8a9099", panel: null, bar: null };
+    // a step of chapter 1 done: its flag in the state set (once) and told on the bus as storyStep { step }
+    const mark = name => { const s = state(); if (!s || s.flags[name]) return false; s.flags[name] = true; return true; };
+    const tell = name => T.emit("storyStep", { step: name });
+    function step(name) {
+        if (!mark(name)) return false;
+        tell(name);
+        return true;
+    }
+    const U = () => T.api("UITheme") || { fill: "rgba(11,12,15,0.9)", line: "#3a3e46", accent: "#ffd23f", text: "#eceef0", muted: "#8a9099", panel: null, bar: null };
 
     // Polish words for counts
     const dni = n => (n === 1 ? "1 dzień" : n + " dni");
@@ -226,8 +263,8 @@
     const STUBS = { borgar: stub("borgar"), door: stub("door"), grandpa: stub("grandpa"), lord: stub("lord") };
 
     // ------------------------------------------------------------------
-    // The characters: event data put into the map's data when it loads (before the map sets its events up; again after every
-    // menu, because the map data is loaded anew while the events stay)
+    // The characters: event data put into the map's data when it loads (the core's Tawerna.inject, ids 901-902: before the map sets
+    // its events up; again after every menu, because the map data is loaded anew while the events stay)
     // ------------------------------------------------------------------
     const BLANK = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
         switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
@@ -245,40 +282,22 @@
         }
         return { id: n.id, name: n.name, note: "<Story:" + role + ">", x, y, pages };
     }
-    function inject(data, mapId) {
-        if (!state() || !data || !data.events) return;   // (a new game's story is still pending here: Game_Map.setup drops them if it goes)
-        for (const role of Object.keys(NPCS)) {
-            const n = NPCS[role];
-            if (n.map !== mapId) continue;
-            let at = n.at;
-            if (!at) { const door = findDoorData(data); at = door ? [door.x + 1, door.y + 1] : [Math.floor(data.width / 2), Math.floor(data.height / 2)]; }
-            for (let i = data.events.length; i < n.id; i++) data.events[i] = null;   // (no holes: other code checks for null)
-            data.events[n.id] = npcData(role, at[0], at[1]);
-        }
-    }
     const findDoorData = data => (data.events || []).find(e => e && /^Drzwi dworu/i.test(e.name || "")) || null;
-    let loadingMapId = 0;
-    const _DataManager_loadMapData = DataManager.loadMapData;
-    DataManager.loadMapData = function(mapId) {
-        loadingMapId = mapId;
-        _DataManager_loadMapData.call(this, mapId);
-    };
-    const _DataManager_onLoad = DataManager.onLoad;
-    DataManager.onLoad = function(object) {
-        _DataManager_onLoad.call(this, object);
-        if (object === $dataMap && loadingMapId > 0) inject(object, loadingMapId);
-    };
-    // a map set up without the story (an old-style game that began elsewhere): its data keeps no story characters
-    const _Game_Map_setup = Game_Map.prototype.setup;
-    Game_Map.prototype.setup = function(mapId) {
-        if (!active() && $dataMap && $dataMap.events) {
-            for (const n of Object.values(NPCS)) {
-                const e = $dataMap.events[n.id];
-                if (n.map === mapId && e && /<Story:/.test(e.note || "")) $dataMap.events[n.id] = null;
+    // when: a story there (a new game's story is still pending as its first map loads). A map set up without it (an old-style game
+    // that began elsewhere: performTransfer drops the pending story first) has its story characters taken out of the data again by
+    // the core. fixSaved off: a saved game keeps the characters it was saved with.
+    T.inject([MAP.house, MAP.manor], { ids: [NPCS.grandpa.id, NPCS.lord.id], owner: PLUGIN, fixSaved: false, when: () => !!state(),
+        build(data, mapId) {
+            const out = [];
+            for (const role of Object.keys(NPCS)) {
+                const n = NPCS[role];
+                if (n.map !== mapId) continue;
+                let at = n.at;
+                if (!at) { const door = findDoorData(data); at = door ? [door.x + 1, door.y + 1] : [Math.floor(data.width / 2), Math.floor(data.height / 2)]; }
+                out.push(npcData(role, at[0], at[1]));
             }
-        }
-        _Game_Map_setup.call(this, mapId);
-    };
+            return out;
+        } });
     // where they stand: grandpa by his armchair, the Lord beside the manor's door (found by its name: the door may be moved)
     function freeFor(ev, x, y) {
         if (!$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f)) return false;
@@ -440,7 +459,7 @@
             hSay(o, "Jestem wnukiem Stacha. Przyszedłem w sprawie długu.");
             lSay(o, "Ach, Stach! Lord Leopold Zaleski, do usług... to znaczy raczej ty do moich. " + s.debt + " złotych monet, płatne do dnia " + s.deadline + ".");
             lSay(o, "Przynoś, ile masz. Feliks, mój kamerdyner, zapisze każdy grosz. Feliks zapisuje nawet to, co mówię przez sen.");
-            script(o, "Story.state().flags.lordMet = true");
+            script(o, "Story.step(\"lordMet\")");
         } else if (daysLeft() <= 5) lSay(o, "Termin tuż-tuż, młodzieńcze. Feliks już ostrzy pióro.");
         return o.concat(payList("lord", L(), NPCS.lord.face, first));
     }
@@ -473,14 +492,14 @@
             bSay(o, ev, "Stach! Ten stary zrzęda jeszcze żyje? Ha! Winien mi za trzy kufle od zeszłej zimy... Nieważne.");
             bSay(o, ev, "Po południu i wieczorem mam urwanie głowy. Przychodź między " + SHIFT_FROM + " a " + SHIFT_TO + ": sprzątanie, beczka, kuchnia, sala. Płacę od roboty, a goście dorzucą napiwki.");
             bSay(o, ev, "Jedna zmiana dziennie - więcej nie wytrzymasz, uwierz mi. No, witaj w „Złotym Kuflu”!");
-            script(o, "Story.state().flags.hired = true");
+            script(o, "Story.step(\"hired\")");
             script(o, "Story.pick(this, \"borgar\", \"menu\")");
             return o;
         }
         return borgarMenu(ev, true);
     }
     function borgarMenu(ev, greet) {
-        const s = state(), o = [], TS = window.TavernShift, opts = [];
+        const s = state(), o = [], TS = T.api("TavernShift"), opts = [];
         const why = TS && TS.canStart ? TS.canStart() : null, today = s.shiftDay === day();
         let line;
         if (!TS) line = "Dziś nie ma roboty. Zajrzyj innym razem.";
@@ -498,7 +517,7 @@
         }
         if (TS && !opts.length) line += deadlineWarn();
         if (shopCommands(ev)) opts.push({ label: "Sprzedaj towar", js: "Story.pick(this, \"borgar\", \"shop\")" });
-        if (window.TavernLife && TavernLife.borgarOptions) opts.push(...TavernLife.borgarOptions(ev));   // "Zjedz coś", "Wynajmij pokój" (TavernLife.js)
+        opts.push(...(T.call("TavernLife", "borgarOptions", ev) || []));   // "Zjedz coś", "Wynajmij pokój" (TavernLife.js)
         opts.push({ label: "Pogadaj", js: "Story.pick(this, \"borgar\", \"chat\")" });
         opts.push({ label: "Nie teraz", js: [] });
         bSay(o, ev, line);
@@ -594,7 +613,7 @@
         if (what === "chat") return run(interp, chatList(ev));
         if (what === "shop") return run(interp, shopCommands(ev));
         if (what === "shift") {
-            const TS = window.TavernShift;
+            const TS = T.api("TavernShift");
             if (!TS) return;
             s.lastShift = null;
             if (TS.start({ intro: shiftIntro(), onEnd: onShiftEnd })) s.shiftDay = day();
@@ -644,7 +663,9 @@
         $gameParty.loseGold(n);
         s.paid += n;
         s.payments.push({ day: day(), n });
-        AudioManager.playSe({ name: "Coin", volume: 80, pitch: 100, pan: 0 });
+        T.audio.se("Coin", { volume: 80, pitch: 100 });
+        T.emit("debtPayment", { amount: n, paid: s.paid, debt: s.debt, day: day() });
+        if (s.paid >= s.debt) T.emit("debtPaid", { total: s.paid, debt: s.debt, day: day() });   // (a payment never goes over what is left)
         return n;
     }
     // for other plugins and bots: a payment outside the talks - the whole debt ends chapter 1 at once (in a talk the Lord's last
@@ -658,74 +679,69 @@
         const s = state();
         if (!s) return;
         s.intro = 2;
-        s.flags.talk = true;
+        const first = mark("talk");
         if ($dataItems[SOUP]) $gameParty.gainItem($dataItems[SOUP], 1);
-        if (window.Journal && Journal.addNote) {
-            Journal.addNote("Dług dziadka Stacha", "Dziadek jest winien Lordowi Leopoldowi Zaleskiemu " + s.debt + " G. Termin: dzień " + s.deadline +
-                " (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego pole za lasem.\nNa tym polu mogę budować (i tylko tam).\n" +
-                "Borgar z tawerny „Pod Złotym Kuflem” daje pracę po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ".\n" +
-                "Spłatę zanoszę do dworu Lorda, obok tawerny: za dnia (" + LORD_HOURS[0] + "-" + LORD_HOURS[1] + ") Lordowi, nocą kamerdynerowi.\n" +
-                "Droga na pole: podwórze - Leśna droga - Polna droga - Skraj lasu - pole.\n" +
-                "Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ. Dwór Lorda stoi na wschód od tawerny.");
-        }
+        T.call("Journal", "addNote", "Dług dziadka Stacha", "Dziadek jest winien Lordowi Leopoldowi Zaleskiemu " + s.debt + " G. Termin: dzień " + s.deadline +
+            " (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego pole za lasem.\nNa tym polu mogę budować (i tylko tam).\n" +
+            "Borgar z tawerny „Pod Złotym Kuflem” daje pracę po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ".\n" +
+            "Spłatę zanoszę do dworu Lorda, obok tawerny: za dnia (" + LORD_HOURS[0] + "-" + LORD_HOURS[1] + ") Lordowi, nocą kamerdynerowi.\n" +
+            "Droga na pole: podwórze - Leśna droga - Polna droga - Skraj lasu - pole.\n" +
+            "Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ. Dwór Lorda stoi na wschód od tawerny.");
+        if (first) tell("talk");
     }
     function thanks() {
         const s = state();
         if (!s) return;
-        s.flags.thanked = true;
+        const first = mark("thanked");
         if ($dataItems[SOUP]) $gameParty.gainItem($dataItems[SOUP], 2);
+        if (first) tell("thanked");
     }
     function chapterDone() {
         const s = state();
         if (!s || s.done) return;
         s.done = day();
-        if (window.Combat && Combat.gainXp && REWARD_XP > 0) Combat.gainXp(REWARD_XP, "rozdział 1");
-        if ($gameTemp.pushTopNotice) $gameTemp.pushTopNotice("Rozdział 1 zakończony: dług dziadka spłacony!", U().accent, { sub: "Pole zostaje przy was." });
+        if (REWARD_XP > 0) T.call("Combat", "gainXp", REWARD_XP, "rozdział 1");
+        T.popup("Rozdział 1 zakończony: dług dziadka spłacony!", { top: true, color: U().accent, sub: "Pole zostaje przy was." });
         AudioManager.playMe({ name: "Victory1", volume: 70, pitch: 100, pan: 0 });
-        if (window.Journal && Journal.addNote) {
-            Journal.addNote("Pokwitowanie od Lorda", "Dług dziadka spłacony w dniu " + s.done + ": " + s.debt + " G. Pole zostaje przy nas.\nW dworze wspomnieli, że zbudowano go z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze z nich leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać.\nLord nie żartował. Chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...");
-        }
-        if (window.Journal && Journal.evaluateGoals) Journal.evaluateGoals();
+        T.call("Journal", "addNote", "Pokwitowanie od Lorda", "Dług dziadka spłacony w dniu " + s.done + ": " + s.debt + " G. Pole zostaje przy nas.\nW dworze wspomnieli, że zbudowano go z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze z nich leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać.\nLord nie żartował. Chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...");
+        T.call("Journal", "evaluateGoals");
+        tell("chapterDone");
     }
 
     // ------------------------------------------------------------------
     // New game, loading, the first map
     // ------------------------------------------------------------------
-    const _setupNewGame = DataManager.setupNewGame;
-    DataManager.setupNewGame = function() {
-        _setupNewGame.call(this);
-        $gameSystem._story = newState();   // (kept only when the game really begins in grandpa's house - see performTransfer)
+    T.on("newGame", () => {
+        keepOldName();
+        setState(newState());   // (kept only when the game really begins in grandpa's house - see performTransfer)
         syncGoals();
-    };
-    const _extractSaveContents = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
-        _extractSaveContents.call(this, contents);
+    }, { owner: PLUGIN });
+    T.on("load", () => {
+        keepOldName();
         const s = state();
         if (s && s.intro === 1) s.intro = 0;   // (a talk cut off by a reload is told again)
         if (s) s.lastShift = null;
         syncGoals();
-    };
+    }, { owner: PLUGIN });
     const _performTransfer = Game_Player.prototype.performTransfer;
     Game_Player.prototype.performTransfer = function() {
         const s = state();
         if (s && s.pending && this.isTransferring()) {
             if (this._newMapId === MAP.house) delete s.pending;
-            else delete $gameSystem._story;   // an old-style start somewhere else: no story at all
+            else setState(null);   // an old-style start somewhere else: no story at all
             syncGoals();
         }
         _performTransfer.call(this);
         if (active()) onArrive($gameMap.mapId());
     };
     function onArrive(mapId) {
-        const s = state();
-        if (mapId === MAP.field && !s.flags.field) {
-            s.flags.field = true;
-            if (window.SpeechBubbles) SpeechBubbles.say($gamePlayer, "Więc to jest pole dziadka...", 200);
-        }
-        if (mapId === MAP.tavern) s.flags.tavern = true;
-        if (mapId === MAP.cellar) s.flags.cellar = true;
-        if (mapId === MAP.manor) s.flags.manor = true;
+        if (mapId === MAP.field && step("field")) T.call("SpeechBubbles", "say", $gamePlayer, "Więc to jest pole dziadka...", 200);
+        if (mapId === MAP.tavern) step("tavern");
+        if (mapId === MAP.cellar) step("cellar");
+        if (mapId === MAP.manor) step("manor");
     }
+    // the first shift at Borgar's (TavernShift's own count; nothing more of it is kept here)
+    T.on("shiftDone", e => { if (active() && e.done === 1) tell("firstShift"); }, { owner: PLUGIN });
     // the names the story gives (the map plate, Combat's "odkrycie: ..." notice)
     const _Game_Map_displayName = Game_Map.prototype.displayName;
     Game_Map.prototype.displayName = function() {
@@ -740,7 +756,7 @@
         return list.some(b => !b.site && types.includes(b.type));
     }
     function chapterIndex() {
-        const J = window.Journal;
+        const J = T.api("Journal");
         if (!J || !J.CHAPTERS) return 0;
         let i = J.CHAPTERS.indexOf(CHAPTER);
         if (i < 0) i = J.CHAPTERS.push(CHAPTER) - 1;
@@ -756,7 +772,7 @@
             work: { id: "story_work", story: true, ch, title: "Znajdź pracę w tawernie", item: 81, after: ["story_field"], done: () => !!(state() && state().flags.hired),
                 text: "Borgar, karczmarz z tawerny „Pod Złotym Kuflem”, szuka rąk do pracy. Tawerna stoi przy ścieżce na północ od Polnej drogi. Porozmawiaj z nim." },
             shift: { id: "story_shift", story: true, ch, title: "Przepracuj zmianę u Borgara", item: 81, after: ["story_work"],
-                done: () => !!(window.TavernShift && TavernShift.stats().done > 0),
+                done: () => { const st = T.call("TavernShift", "stats"); return !!st && st.done > 0; },
                 text: "Zmiany są po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ", jedna dziennie. Sprzątanie, beczka, kuchnia i sala - płaci od roboty, a goście dają napiwki." },
             shelter: { id: "story_shelter", story: true, ch, title: "Zbuduj schronienie na polu", item: 121, after: ["story_field"],
                 done: () => farmBuilt(MAP.field, SHELTERS) || farmBuilt(100, ["bed"]),
@@ -780,7 +796,7 @@
     // the tracker (the first open goal in the list) leads: grandpa -> the field -> the job -> the first shift -> the first steps (the
     // survival goals of Journal's chapter 1, with the shelter after the workbench) -> the debt, which stays up till it is paid
     function syncGoals() {
-        const J = window.Journal;
+        const J = T.api("Journal");
         if (!J || !J.GOALS) return;
         const GOALS = J.GOALS, want = active(), has = GOALS.some(g => g.story);
         if (want === has) return;
@@ -799,11 +815,6 @@
     // ------------------------------------------------------------------
     // On the map: the intro, the Lord's hours, the letters, the deadline
     // ------------------------------------------------------------------
-    function calm(scene) {
-        return !SceneManager.isSceneChanging() && !$gameMessage.isBusy() && !$gameMap.isEventRunning() && !$gamePlayer.isTransferring() &&
-            !$gameTemp._pendingSummary && !(scene.isFading && scene.isFading()) && !$gameTemp._farmMenuOpen && !$gameTemp._buildMode &&
-            !(window.TavernShift && TavernShift.isRunning()) && !($gamePlayer.isToolSwinging && $gamePlayer.isToolSwinging());   // (a rest or a blow: when he is up)
-    }
     function startIntro() {
         const s = state(), g = npc("grandpa");
         if (!s || !g) return false;
@@ -827,40 +838,33 @@
         if (!due.length) return;
         for (const d of due) s.letters[d] = true;
         const d = Math.max(...due);
-        if ($gameTemp.pushTopNotice) $gameTemp.pushTopNotice("List od Lorda Zaleskiego", U().accent, { sub: "Do spłaty " + left() + " G - " + daysPhrase(daysLeft()) + ". (Dziennik: Notatki)" });
-        if (window.Journal && Journal.addNote) Journal.addNote("List od Lorda (dzień " + today + ")", letterText(d));
+        T.popup("List od Lorda Zaleskiego", { top: true, color: U().accent, sub: "Do spłaty " + left() + " G - " + daysPhrase(daysLeft()) + ". (Dziennik: Notatki)" });
+        T.call("Journal", "addNote", "List od Lorda (dzień " + today + ")", letterText(d));
         s.lastLetter = today;
     }
     function checkDeadline() {
         const s = state();
-        if (!doomed($gameSystem) || s.ended) return false;
+        if (!doomed() || s.ended) return false;
         s.ended = day();
         $gameTemp._atmoAutosave = false;
         $gameMap._interpreter.setup(end(endingList()), 0);
         return true;
     }
-    const _Scene_Map_start = Scene_Map.prototype.start;
-    Scene_Map.prototype.start = function() {
-        _Scene_Map_start.call(this);
-        this._storyT = 0;
-        syncGoals();
-    };
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
+    T.on("mapReady", () => syncGoals(), { owner: PLUGIN });
+    // calm: Tawerna.isCalm's "strict" (no talk, menu, build, mini-game, transfer, fade, day summary, rest or blow - when he is up)
+    T.onMapUpdate(scene => {
         if (!active() || !$gameMap) return;
-        this._storyT = (this._storyT || 0) + 1;
-        const s = state();
-        if (this._storyT % 30 === 0 && $gameMap.mapId() === MAP.manor) syncLord();
-        if (!calm(this)) return;
-        if (s.intro !== 2 && $gameMap.mapId() === MAP.house && this._storyT > 40 && npc("grandpa")) { startIntro(); return; }
+        const s = state(), n = scene._twFrames;   // (the frames this map scene has run)
+        if (n % 30 === 0 && $gameMap.mapId() === MAP.manor) syncLord();
+        if (!T.isCalm(scene, "strict")) return;
+        if (s.intro !== 2 && $gameMap.mapId() === MAP.house && n > 40 && npc("grandpa")) { startIntro(); return; }
         if (checkDeadline()) return;
-        if (this._storyT % 20 === 0) updateLetters();
-    };
+        if (n % 20 === 0) updateLetters();
+    }, { owner: PLUGIN, name: "chapter" });
     // after the deadline, unpaid: nothing more is saved (an autosave would keep a lost game)
     const _isSaveEnabled = Game_System.prototype.isSaveEnabled;
     Game_System.prototype.isSaveEnabled = function() {
-        return _isSaveEnabled.call(this) && !doomed(this);
+        return _isSaveEnabled.call(this) && !(this === window.$gameSystem && doomed());
     };
 
     // ------------------------------------------------------------------
@@ -943,20 +947,10 @@
         if (s.done || s.paid >= s.debt) return "spłacony · pole zostaje przy was";
         return s.paid + " / " + s.debt + " G  ·  " + (short ? "" : "do dnia " + s.deadline + "  ·  ") + daysPhrase(daysLeft());
     }
-    // how far in from the panel's left the key hints reach, with the gap after the last one (measured as MenuPanel draws them)
-    function hintsWidth(b, hints) {
-        let w = 24;
-        for (const [key, what] of hints || []) {
-            b.fontSize = 16;
-            w += Math.max(26, Math.ceil(b.measureTextWidth(key)) + 14) + 8;
-            b.fontSize = 18;
-            w += Math.ceil(b.measureTextWidth(what)) + 24;
-        }
-        return w;
-    }
-    function drawDebtFoot(b, r, foot, hints) {
+    // area (MenuPanel.addFoot): y - the keys' line, right - the edge to keep to, room - the px between the last key and that edge
+    function drawDebtFoot(b, area) {
         const s = state(), S = U(), ctx = b.context, paidAll = s.done || s.paid >= s.debt;
-        const y = r.y + r.height - foot + 9, right = r.x + r.width - 26, room = r.width - 26 - hintsWidth(b, hints);
+        const y = area.y, right = area.right, room = area.room;
         const colour = paidAll ? "#9ff0a8" : daysLeft() <= 5 ? "#ff9f8f" : S.text;
         b.fontSize = 15;
         const label = "DŁUG DZIADKA", lw = Math.ceil(b.measureTextWidth(label)), bw = 80;
@@ -974,19 +968,9 @@
         lastMenuLine = text;
         lastMenuLabel = withLabel;
     }
-    const MP = window.MenuPanel;
-    if (MP && MP.Sprite_MenuPanel) {
-        const _redraw = MP.Sprite_MenuPanel.prototype.redraw;
-        MP.Sprite_MenuPanel.prototype.redraw = function() {
-            _redraw.call(this);
-            if (this._spec && this._spec.storyDebt && active()) drawDebtFoot(this.bitmap, this._spec.rect, MP.FOOT || 42, this._spec.hints);
-        };
-        const _Scene_Menu_create = Scene_Menu.prototype.create;
-        Scene_Menu.prototype.create = function() {
-            _Scene_Menu_create.call(this);
-            if (active() && this._menuPanel && this._menuPanel._spec && this._menuPanel._spec.hints) this._menuPanel.set({ storyDebt: true });
-        };
-    } else {   // (without MenuPanel.js: a line under the status card)
+    const MP = T.api("MenuPanel");
+    if (MP && MP.addFoot) MP.addFoot({ owner: "Story", when: active, draw: drawDebtFoot });
+    else {   // (without MenuPanel.js: a line under the status card)
         const _drawItem = Window_MenuStatus.prototype.drawItem;
         Window_MenuStatus.prototype.drawItem = function(index) {
             _drawItem.call(this, index);
@@ -1010,9 +994,9 @@
     }
 
     chapterIndex();
-    window.Story = {
+    window.Story = T.register(PLUGIN, {
         NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
-        introDone, thanks, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed($gameSystem),
+        introDone, thanks, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
         lists: { intro: introList, grandpa: grandpaList, lord: lordList, borgar: ev => borgarList(ev), chat: ev => chatList(ev), ending: endingList },
         setDeadlineOn(on) { const s = state(); if (s) s.off = !on; },
         // bots and tests: grandpa's talk as if heard (a running one is cut short)
@@ -1024,5 +1008,5 @@
             return true;
         },
         get lastMenuLine() { return lastMenuLine; }, get lastMenuLabel() { return lastMenuLabel; }, Scene_StoryEnding
-    };
+    });
 })();

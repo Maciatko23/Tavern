@@ -1,13 +1,25 @@
 // The tavern shift (TavernShift.js): a mini-game scene of four parts (cleaning + wood, pouring beer, the kitchen in rhythm,
 // serving the hall). A bot plays it through the keys only (Input._currentState, the same way the keyboard and a pad do): a good
 // shift must pay more than a bad one, the result comes back to onEnd, gold is added, 4 hours pass, stamina goes down, the map
-// comes back with the hero where he was, and nothing throws. The plugin is not in js/plugins.js yet, so the test loads it into
-// the page itself. Screenshots of every part go to docs/tawerna_zmiana/.
+// comes back with the hero where he was, and nothing throws. TavernShift in its three files (TavernShift, TavernShift_Hall,
+// TavernShift_Parts; the ones js/plugins.js does not have yet the plugin puts into the page itself), its scene on TawernaUI's
+// Scene_MiniGame. REGISTERED=1: the parts put into the page's plugin list as they will be registered. Screenshots of every part go
+// to docs/tawerna_zmiana/.
 //   CDP_PORT=9350 node tests/tavern_shift_test.js
 const { launch, sleep } = require("./cdp.js");
 const fs = require("fs");
 const path = require("path");
 const SHOTS = path.join(__dirname, "..", "docs", "tawerna_zmiana");
+// (REGISTERED=1: the parts in $plugins under TavernShift, as the plugin manager will list them - js/plugins.js itself is not touched)
+const REGISTERED = process.env.REGISTERED ? `(function(){
+    let real;
+    const mk = name => ({ name, status: true, description: "", parameters: {} });
+    Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) {
+        const list = v.filter(p => !["TavernShift_Hall", "TavernShift_Parts"].includes(p.name)), at = list.findIndex(p => p.name === "TavernShift");
+        list.splice(at + 1, 0, mk("TavernShift_Hall"), mk("TavernShift_Parts"));
+        real = list;
+    } });
+})();` : null;
 
 // ---- the bot: runs inside the page before every logic tick of the scene (TavernShift.onTick) and presses keys
 const BOT = String.raw`
@@ -144,6 +156,7 @@ window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0,
     const check = (name, ok, info) => { results.push(!!ok); console.log((ok ? "PASS " : "FAIL ") + name + (info !== undefined ? "  " + JSON.stringify(info) : "")); };
     fs.mkdirSync(SHOTS, { recursive: true });
     try {
+        if (REGISTERED) await b.send("Page.addScriptToEvaluateOnNewDocument", { source: REGISTERED });
         // boot (a busy server sometimes leaves the page half-loaded: go again)
         let booted = false;
         for (let a = 0; a < 4 && !booted; a++) {
@@ -163,7 +176,13 @@ window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0,
         // the plugin is not in plugins.js yet: load it as if it were
         const loaded = await ev(`new Promise(res => { if (window.TavernShift) return res(true);   /* (in js/plugins.js since 2026-09-27: already loaded) */ const s = document.createElement("script"); s.src = "js/plugins/TavernShift.js?" + Date.now(); s.onload = () => res(!!window.TavernShift); s.onerror = () => res(false); document.body.appendChild(s); })`);
         check("TavernShift.js loads into the page", loaded);
+        const fam = await J(`(function(){ const P = Tawerna.api("TavernShift_parts") || {};
+            return { kit: !!P.kit, hall: !!P.hall, parts: !!(P.parts && P.parts.PART_CLASSES), scene: !!(window.Scene_TavernShift && Scene_TavernShift.prototype instanceof Tawerna.ui.Scene_MiniGame),
+                order: $plugins.map(p => p.name).filter(n => /^TavernShift/.test(n)) }; })()`);
+        check("...in its three files (the hall, the four parts), its scene on TawernaUI's Scene_MiniGame" + (REGISTERED ? " (registered: " + fam.order.join(", ") + ")" : ""),
+            fam.kit && fam.hall && fam.parts && fam.scene && (!REGISTERED || fam.order.join() === "TavernShift,TavernShift_Hall,TavernShift_Parts"), fam);
         await ev(BOT + "; 0");
+        await ev("window.__shifts = []; Tawerna.on('shiftDone', e => window.__shifts.push({ grade: e.grade, pay: e.pay, level: e.level }), { owner: 'ShiftTest' }); 0");
 
         // one whole shift: bot mode, options -> { result from onEnd, gold/time/stamina before and after, the map afterwards }
         const runShift = async (mode, opts, freeze) => {
@@ -261,6 +280,9 @@ window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0,
         const abRes = await J("window.__res");
         check("P pauses the part; 'Przerwij zmianę' ends the shift without pay and returns to the map", paused && paused.paused && ab && ab.phase === "summary" && abRes && abRes.aborted && abRes.pay === 0 && (await ev("$gameParty.gold()")) === gold4 + abRes.total && await onMap(),
             { paused: paused && paused.paused, phase: ab && ab.phase, res: abRes && { aborted: abRes.aborted, pay: abRes.pay, total: abRes.total, hours: abRes.hours } });
+        const shifts = await J("window.__shifts");
+        check("each finished shift is told on the Tawerna bus: 'shiftDone' { grade, pay, level } (four; the aborted one is not)", shifts.length === 4 && shifts.length === (await ev("TavernShift.stats().done")) &&
+            shifts.every(s => s.grade > 0 && s.pay > 0 && s.level >= 0) && shifts[3].grade === 5, shifts);
 
         // ---- 5. screenshots of every part (the good bot again, 2 logic ticks a frame, stopping at the moments to shoot)
         await ev(BOT + "; 0");

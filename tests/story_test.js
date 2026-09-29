@@ -4,7 +4,8 @@
 // counts till dawn after the deadline (a late shift on the last day, the butler at night), an unpaid debt at dawn ends the game (not
 // while the hero still sits resting), an old-style game (begun elsewhere) has no story at all, and a game saved in the middle of a talk
 // loads fine. The talks run as ordinary event commands in speech bubbles; a driver in the page presses O and picks the choices the
-// test names. (Loads Story.js into the page when js/plugins.js does not have it.) Screenshots: docs/nowy_start/fabula_*.png
+// test names. The payments and the steps of chapter 1 are told on the Tawerna bus (debtPayment, debtPaid, storyStep).
+// (Loads Story.js into the page when js/plugins.js does not have it.) Screenshots: docs/nowy_start/fabula_*.png
 //   CDP_PORT=9350 node tests/story_test.js
 const { launch, sleep } = require("./cdp.js");
 const fs = require("fs");
@@ -117,9 +118,12 @@ const DRIVER = String.raw`
         await ev("(function(){ window.__drv.on = false; if (!(SceneManager._scene instanceof Scene_Title)) SceneManager.goto(Scene_Title); return 0; })()");
         return until("SceneManager._scene instanceof Scene_Title && SceneManager._scene._started && !SceneManager.isSceneChanging()", 30);
     };
+    // (the story's start - grandpa's cottage beside the hero's straw bed - set in the page: data/System.json may point elsewhere
+    // while the user tests something, e.g. the tavern)
+    const START = [19, 2, 5];
     const newStoryGame = async () => {
         await toTitle();
-        await ev("(function(){ window.__drv.on = false; DataManager.setupNewGame(); SceneManager.goto(Scene_Map); return 0; })()");
+        await ev(`(function(){ window.__drv.on = false; Object.assign($dataSystem, { startMapId: ${START[0]}, startX: ${START[1]}, startY: ${START[2]} }); DataManager.setupNewGame(); SceneManager.goto(Scene_Map); return 0; })()`);
         const ok = await until(onMap(19), 40);
         await ev(quiet);
         return ok;
@@ -139,14 +143,16 @@ const DRIVER = String.raw`
         const loaded = await ev(`new Promise(res => { if (window.Story) return res(true); const s = document.createElement("script"); s.src = "js/plugins/Story.js?" + Date.now(); s.onload = () => res(!!window.Story); s.onerror = () => res(false); document.body.appendChild(s); })`);
         check("Story.js loads into the page", loaded);
         await ev(DRIVER + "; 0");
+        // the steps of chapter 1 on the Tawerna bus (storyStep { step }), noted from here on
+        await ev("window.__steps = []; Tawerna.on('storyStep', e => window.__steps.push(e.step), { owner: 'StoryTest' }); 0");
 
         // ================= 1. a new game: grandpa's house and the intro
         const started = await newStoryGame();
         const st0 = await J("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, s: $gameSystem._story })");
-        check("a new game starts in grandpa's house (Map019, 8,6)", started && st0.map === 19 && st0.x === 8 && st0.y === 6, { map: st0.map, x: st0.x, y: st0.y });
+        check("a new game starts in grandpa's house (Map019, 2,5 - beside the hero's straw bed)", started && st0.map === 19 && st0.x === 2 && st0.y === 5, { map: st0.map, x: st0.x, y: st0.y });
         check("the story state: debt 2500, nothing paid, deadline day 60, not pending", st0.s && st0.s.debt === 2500 && st0.s.paid === 0 && st0.s.deadline === 60 && !st0.s.pending && Array.isArray(st0.s.payments), st0.s);
         const gp = await J("(function(){ const e = $gameMap.event(901); return e && { name: e.event().name, sheet: e.characterName(), index: e.characterIndex(), x: e.x, y: e.y, list: e.list().length }; })()");
-        check("grandpa Stach is in his house ($Npc_Dziadek - the hero's style, by his armchair)", gp && gp.name === "Dziadek Stach" && gp.sheet === "$Npc_Dziadek" && gp.index === 0 && Math.abs(gp.x - 7) <= 1 && Math.abs(gp.y - 5) <= 1, gp);
+        check("grandpa Stach is in his house ($Npc_Dziadek - the hero's style, by his armchair)", gp && gp.name === "Dziadek Stach" && gp.sheet === "$Npc_Dziadek" && gp.index === 0 && gp.x === 10 && gp.y === 6, gp);   // (Story NPCS.grandpa.at: on the rug beside his rocking chair)
         // the intro starts by itself after the fade-in; the driver holds at the 3rd message for a screenshot
         await ev("window.__drv.on = true; window.__drv.picks = []; window.__drv.mark = window.__drv.log.length; window.__drv.holdAt = window.__drv.log.length + 3; 0");
         const introOn = await until("$gameMap.isEventRunning() && $gameSystem._story.intro === 1", 20);
@@ -269,7 +275,7 @@ const DRIVER = String.raw`
         await ev("(function(){ const e = $gameMap.event(902); $gamePlayer.locate(e.x - 1, e.y + 3); $gamePlayer.setDirection(8); return 0; })()");
         await frames(30);
         await b.shot(path.join(SHOTS, "fabula_3_hrabia.png"));
-        await ev("$gameParty.loseGold($gameParty.gold()); $gameParty.gainGold(700); 0");
+        await ev("$gameParty.loseGold($gameParty.gold()); $gameParty.gainGold(700); window.__debt = []; for (const n of ['debtPayment', 'debtPaid']) Tawerna.on(n, e => window.__debt.push([n, n === 'debtPaid' ? e.total : e.amount]), { owner: 'StoryTest' }); 0");
         const pay1 = await talkTo("$gameMap.event(902)", ["Oddaj 500 G"], 40, "fabula_6_hrabia_splata.png");
         const p1 = await J("({ gold: $gameParty.gold(), s: $gameSystem._story })");
         check("the first meeting: he introduces himself, names the sum and the day, then only asks (no account read out)", pay1.done && /Lord Leopold Zaleski/.test(pay1.text) && /2500 złotych monet, płatne do dnia 60/.test(pay1.text) &&
@@ -298,6 +304,9 @@ const DRIVER = String.raw`
         const p3 = await J("({ gold: $gameParty.gold(), s: $gameSystem._story, xp: { level: Combat.hero().level, xp: Combat.hero().xp }, notice: $gameTemp._lastTopNotice, notes: $gameSystem._journal.notes.map(n => n.title), day: $gameSystem.dayNightDay() })");
         await ev("Journal.evaluateGoals(); 0");
         const debtDone = await ev("Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_debt'))");
+        const debtBus = await J("window.__debt");
+        check("the payments are told on the Tawerna bus: 'debtPayment' { amount } each time (500, 100, 1900), then 'debtPaid' { total: 2500 } once",
+            JSON.stringify(debtBus) === JSON.stringify([["debtPayment", 500], ["debtPayment", 100], ["debtPayment", 1900], ["debtPaid", 2500]]), debtBus);
         check("paying the rest (1900 of 5000): gold 3100, paid 2500, chapter 1 done", p3.gold === 3100 && p3.s.paid === 2500 && p3.s.done === p3.day && pay3.choices[0] && pay3.choices[0].includes("Spłać cały dług (1900 G)"), { gold: p3.gold, paid: p3.s.paid, done: p3.s.done, choices: pay3.choices });
         check("the Lord's last words: the old fortress under the tavern as a real clue (Krucze Skały; he means it; he knows the hero works for Borgar)", /Kruczych Skał/.test(pay3.text) && /pod jego tawerną/.test(pay3.text) &&
             /Pracujesz u Borgara, prawda\?/.test(pay3.text) && /ja też nie\s+żartuję/.test(pay3.text) && /przyjdź najpierw\s+do mnie/.test(pay3.text) && !/Hrabi/.test(pay3.text), pay3.log.slice(-2).map(l => l.t));
@@ -315,6 +324,9 @@ const DRIVER = String.raw`
         const soup0 = await ev("$gameParty.numItems($dataItems[131])");
         const thx = await talkTo("$gameMap.event(901)");
         check("grandpa thanks him when they meet next (and gives two soups)", thx.done && /Spłaciłeś wszystko/.test(thx.text) && (await ev("$gameParty.numItems($dataItems[131])")) === soup0 + 2 && (await ev("$gameSystem._story.flags.thanked")), thx.text.slice(0, 160));
+        const steps = await J("window.__steps");
+        check("the steps of chapter 1 are told on the Tawerna bus (storyStep), each once, in the order they happened",
+            JSON.stringify(steps) === JSON.stringify(["talk", "field", "tavern", "hired", "firstShift", "manor", "lordMet", "chapterDone", "cellar", "thanked"]), steps);
 
         // ================= 4. a second new game: letters, the banner, a save in the middle of a talk, the deadline
         const again2 = await newStoryGame();

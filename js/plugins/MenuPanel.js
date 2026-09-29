@@ -6,7 +6,11 @@
  * @target MZ
  * @plugindesc Menu gry (P / Esc) i wszystkie jego zakładki w jednym zgrabnym panelu pośrodku ekranu, w stylu HUD (czerń i żółć). v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @base TawernaUI
+ * @orderAfter TawernaCore
  * @orderAfter UITheme
+ * @orderAfter TawernaUI
  * @orderAfter Journal
  * @orderAfter AltMenuScreen
  * @orderAfter AltSaveScreen
@@ -35,14 +39,30 @@
  *  - Opcje, Zapisz / Wczytaj grę, Zakończ grę: ten sam wygląd.
  *
  * Wtyczka zmienia tylko wygląd i układ okien, nie zasady gry. Musi być
- * wczytana po UITheme, Journal, AltMenuScreen, AltSaveScreen i OptionEx.
+ * wczytana po TawernaCore, UITheme, TawernaUI, Journal, AltMenuScreen,
+ * AltSaveScreen i OptionEx.
+ *
+ * DLA INNYCH WTYCZEK (niżej na liście; wołają przy wczytaniu):
+ *  MenuPanel.addCommand({ symbol, label, owner, when, enabled, glyph,
+ *      badge, ok }) - komenda w menu P (za Postacią, Plecakiem i Dziennikiem,
+ *      przed Opcjami). when() - czy jest w menu tym razem; glyph(ctx, x, y,
+ *      rozmiar, kolor) - mały rysunek; badge() - żółta liczba z prawej;
+ *      ok(scena) - Enter. Tak dochodzi „Plan karczmy” (TavernLife_Plan).
+ *  MenuPanel.addFoot({ owner, when, draw(bitmapa, miejsce) }) - napis
+ *      z prawej na dole menu P, obok klawiszy; miejsce: { x, y, right, room,
+ *      rect }. Tak dochodzi dług dziadka (Story).
  * ============================================================================
  */
 
 (() => {
     "use strict";
 
-    const UI = () => window.UIStyle;
+    const T = window.Tawerna;
+    if (!T) throw new Error("MenuPanel.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+    const ui = T.ui;
+    if (!ui || !ui.panel) throw new Error("MenuPanel.js: brak TawernaUI.js - musi być wyżej na liście wtyczek (the UI kit is missing)");
+
+    const UI = () => ui.style();   // (UITheme.js's UIStyle: black + bright yellow)
     const HEAD = 58, FOOT = 42, TABS = 60;   // px: the head band (title), the tab band under it, the foot band (keys)
     const SIZES = { menu: [900, 504], wide: [1000, 604], options: [720, 572], dialog: [480, 282] };
     function panelRect(kind) {
@@ -53,19 +73,65 @@
     function flat(...wins) {
         for (const w of wins) if (w) { w.opacity = 0; w.frameVisible = false; }
     }
-    const SEASONS = ["Wiosna", "Lato", "Jesień", "Zima"];
     function dayLine() {
         if (!$gameSystem || typeof $gameSystem.dayNightDay !== "function") return "";
-        const day = $gameSystem.dayNightDay(), h = $gameSystem.dayNightHour(), hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
-        const season = window.Farming && Farming.seasonIndex ? SEASONS[Farming.seasonIndex(day)] : "";
+        const day = T.time.day(), h = T.time.hour(), hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
+        const season = T.has("Farming") ? T.time.seasonName(day) : "";   // (Farming.js's seasons)
         return "Dzień " + day + (season ? "  ·  " + season : "") + "  ·  " + String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
     }
     const fmt = n => (Math.round(n * 10) / 10).toString().replace(".", ",");
 
     // ------------------------------------------------------------------
+    // The other plugins' entries in the P menu (given at load time; the same symbol / owner again - the plugin put into the page
+    // twice - replaces the old one; one that throws is told in the console and the menu goes on):
+    //   addCommand({ symbol, label, owner, when(), enabled(), glyph(ctx, x, y, size, colour), badge(), ok(scene) })
+    //     a command after the ones added the old way (Journal's, Combat's), before Opcje - then sorted: Postać, Plecak, Dziennik
+    //     first; when() false: not in the list this time
+    //   addFoot({ owner, when(), draw(bitmap, area) }) - on the right of the P menu's foot band, beside the keys;
+    //     area: { x (where the keys end), y (their line), right (the edge to keep to), room (right - x), rect (the panel) }
+    // ------------------------------------------------------------------
+    const commands = [], feet = [];
+    function safe(entry, what, fn, ...args) {
+        try { return fn(...args); }
+        catch (e) { console.error("[MenuPanel] " + (entry.owner || entry.symbol || "?") + " " + what + ":", e); return undefined; }
+    }
+    function addCommand(spec) {
+        if (!spec || !spec.symbol) throw new Error("MenuPanel.addCommand: a symbol is needed");
+        if (typeof spec.ok !== "function") throw new Error("MenuPanel.addCommand('" + spec.symbol + "'): ok(scene) is needed");
+        const i = commands.findIndex(c => c.symbol === spec.symbol);
+        if (i >= 0) commands.splice(i, 1, spec); else commands.push(spec);
+        return spec;
+    }
+    function addFoot(spec) {
+        if (!spec || typeof spec.draw !== "function") throw new Error("MenuPanel.addFoot: draw(bitmap, area) is needed");
+        const i = spec.owner ? feet.findIndex(f => f.owner === spec.owner) : -1;
+        if (i >= 0) feet.splice(i, 1, spec); else feet.push(spec);
+        return spec;
+    }
+    const commandOf = sym => commands.find(c => c.symbol === sym) || null;
+    const isOn = c => (typeof c.enabled === "function" ? !!safe(c, "enabled", c.enabled) : c.enabled !== false);
+    const _Window_MenuCommand_addOriginalCommands = Window_MenuCommand.prototype.addOriginalCommands;
+    Window_MenuCommand.prototype.addOriginalCommands = function() {
+        _Window_MenuCommand_addOriginalCommands.call(this);
+        for (const c of commands) if (!c.when || safe(c, "when", c.when)) this.addCommand(c.label || c.symbol, c.symbol, isOn(c));
+    };
+    const _Scene_Menu_createCommandWindow = Scene_Menu.prototype.createCommandWindow;
+    Scene_Menu.prototype.createCommandWindow = function() {
+        _Scene_Menu_createCommandWindow.call(this);
+        for (const c of commands) {
+            this._commandWindow.setHandler(c.symbol, () => {
+                try { c.ok(this); }
+                catch (e) { console.error("[MenuPanel] " + (c.owner || c.symbol) + " ok:", e); this._commandWindow.activate(); }
+            });
+        }
+    };
+
+    // ------------------------------------------------------------------
     // The panel: drawn once behind the windows of a menu scene. spec: { rect, title, subtitle, tabs (a band for tabs under the
     // head), splits (x of vertical lines, from the panel's left), body (lines of text under the head), hints ([[key, what]...]),
-    // foot (a foot band without hints: a window fills it) }
+    // foot (a foot band without hints: a window fills it), feet (the other plugins' lines beside the hints: addFoot - the P menu) }
+    // (the head and the key hints stay the menu's own: TawernaUI's TitleBar / KeyHints are the mini-games' look - bold yellow caps,
+    // drawn arrows, a bar of their own - and the menu's look was agreed as it is; the panels and bars are the kit's ui.panel / ui.bar)
     // ------------------------------------------------------------------
     function Sprite_MenuPanel() {
         this.initialize(...arguments);
@@ -93,7 +159,7 @@
             ctx.fillRect(r.x - i + 3, r.y - i + 7, r.width + i * 2, r.height + i * 2);
         }
         ctx.restore();
-        U.panel(ctx, r.x, r.y, r.width, r.height, { cut: 8, fill: "rgba(12,13,17,0.97)" });
+        ui.panel(b, r.x, r.y, r.width, r.height, { cut: 8, fill: "rgba(12,13,17,0.97)" });
         // the head: the title with a short yellow line under it, the subtitle on the right
         b.fontSize = 28;
         b.textColor = U.accent;
@@ -127,16 +193,23 @@
             ctx.fillRect(r.x + sx, top + 12, 1, bottom - top - 24);
         }
         if (s.hints || s.foot) hline(r.x + 14, r.x + r.width - 14, bottom);
-        if (s.hints) drawHints(b, r.x + 24, bottom + 9, s.hints);
+        if (s.hints) {
+            const end = drawHints(b, r.x + 24, bottom + 9, s.hints), right = r.x + r.width - 26;
+            if (s.feet) {
+                for (const f of feet) {
+                    if (!f.when || safe(f, "when", f.when)) safe(f, "draw", f.draw, b, { x: end, y: bottom + 9, right, room: right - end, rect: r });
+                }
+            }
+        }
         b.fontSize = 22;
     };
-    // the keys in the foot: a small key cap, then what it does
+    // the keys in the foot: a small key cap, then what it does; returns the x where they end (with the gap after the last one)
     function drawHints(b, x, y, hints) {
-        const U = UI(), ctx = b.context;
+        const U = UI();
         for (const [key, what] of hints) {
             b.fontSize = 16;
             const kw = Math.max(26, Math.ceil(b.measureTextWidth(key)) + 14);
-            U.panel(ctx, x, y + 1, kw, 22, { cut: 3, fill: "#1b1d23", accent: false });
+            ui.panel(b, x, y + 1, kw, 22, { cut: 3, fill: "#1b1d23", accent: false });
             b.textColor = U.text;
             b.drawText(key, x, y, kw, 24, "center");
             x += kw + 8;
@@ -145,6 +218,7 @@
             b.drawText(what, x, y - 1, 300, 26, "left");
             x += Math.ceil(b.measureTextWidth(what)) + 24;
         }
+        return x;
     }
     // No touch buttons in the top right corner of any menu screen: neither the back arrow nor the page arrows (Esc / P and the
     // arrow keys do all of it). (Scene_Options: OptionEx.js asks for page buttons; Skill / Equip / Status: the engine does.)
@@ -218,6 +292,12 @@
     const MENU_SPLIT = 262;   // px from the panel's left: the commands | the card
     // the order from the top (the user's, 2026-09-25): Postać, Plecak, Dziennik, then the rest as the plugins add them
     const COMMAND_ORDER = ["hero", "item", "journal"];
+    // the yellow count on the right: Postać's points to give out (Combat.js), an added command's badge()
+    const BADGES = { hero: () => T.call("Combat", "unspent") || 0 };
+    function badgeOf(sym) {
+        const c = commandOf(sym), f = (c && c.badge) || BADGES[sym];
+        return f ? Number(safe(c || { symbol: sym }, "badge", f)) || 0 : 0;
+    }
     const _Window_MenuCommand_makeCommandList = Window_MenuCommand.prototype.makeCommandList;
     Window_MenuCommand.prototype.makeCommandList = function() {
         _Window_MenuCommand_makeCommandList.call(this);
@@ -229,15 +309,17 @@
     Window_MenuCommand.prototype.itemHeight = function() { return 50; };
     Window_MenuCommand.prototype.drawItem = function(index) {
         const r = this.itemLineRect(index), sym = this.commandSymbol(index), on = this.isCommandEnabled(index), U = UI();
-        commandGlyph(this.contents.context, sym, r.x + 4, r.y + Math.round((r.height - 22) / 2), 22, on ? U.accent : U.muted);
+        const added = commandOf(sym), gx = r.x + 4, gy = r.y + Math.round((r.height - 22) / 2), colour = on ? U.accent : U.muted;
+        if (added && added.glyph) safe(added, "glyph", added.glyph, this.contents.context, gx, gy, 22, colour);
+        else commandGlyph(this.contents.context, sym, gx, gy, 22, colour);
         this.resetTextColor();
         this.changePaintOpacity(on);
         this.drawText(COMMAND_LABELS[sym] || this.commandName(index), r.x + 40, r.y, r.width - 40, "left");
-        const points = sym === "hero" && window.Combat && Combat.unspent ? Combat.unspent() : 0;
+        const points = badgeOf(sym);
         if (points > 0) {   // points to give out: a small yellow count on the right
             this.contents.fontSize = 16;
             const bw = Math.max(24, Math.ceil(this.textWidth(String(points))) + 12), bx = r.x + r.width - bw - 4, by = r.y + Math.round((r.height - 22) / 2);
-            U.panel(this.contents.context, bx, by, bw, 22, { cut: 3, fill: U.accent, accent: false });
+            ui.panel(this.contents, bx, by, bw, 22, { cut: 3, fill: U.accent, accent: false });
             this.changeTextColor("#101216");
             this.drawText(String(points), bx, by - 7, bw, "center");
             this.resetFontSettings();
@@ -263,7 +345,7 @@
         flat(this._commandWindow, this._statusWindow);
         const actor = $gameParty.leader();
         addPanel(this, { rect: panelRect("menu"), title: actor ? actor.name() : "Postać", subtitle: dayLine(), splits: [MENU_SPLIT],
-            hints: [["↑↓", "wybierz"], ["Enter", "otwórz"], ["Esc", "zamknij"]] });
+            hints: [["↑↓", "wybierz"], ["Enter", "otwórz"], ["Esc", "zamknij"]], feet: true });
     };
 
     // the card: the portrait, where and how, the four needs, the mood, the tools, the load and the coins
@@ -278,8 +360,7 @@
     Window_MenuStatus.prototype.drawItemBackground = function() {};
     const PORTRAIT = { w: 184, h: 238 };
     function drawPortrait(win, actor, x, y) {
-        const U = UI(), ctx = win.contents.context;
-        U.panel(ctx, x, y, PORTRAIT.w, PORTRAIT.h, { cut: 6, fill: "#101216", accent: false });
+        ui.panel(win.contents, x, y, PORTRAIT.w, PORTRAIT.h, { cut: 6, fill: "#101216", accent: false });
         const name = actor.pictureName ? actor.pictureName() : "";
         if (!name) { win.drawActorFace(actor, x + (PORTRAIT.w - 144) / 2, y + 40); return; }
         const bmp = ImageManager.loadPicture(name);
@@ -296,7 +377,7 @@
         win.contents.fontSize = 20;
         win.changeTextColor(U.text);
         win.drawText(label, x + 32, y, 136);
-        U.bar(ctx, bx, y + 13, bw, 10, ratio, colour);
+        ui.bar(win.contents, bx, y + 13, bw, 10, ratio, colour);
         win.changeTextColor(warn ? "#ff9f8f" : U.text);
         win.drawText(value, bx + bw + 6, y, 86, "right");
         win.resetFontSettings();
@@ -308,7 +389,7 @@
         win.resetFontSettings();
     }
     function weatherText() {
-        const outdoors = window.Survival && Survival.isOutdoors ? Survival.isOutdoors() : /<(Clouds|Weather):\s*on\s*>/i.test(($dataMap && $dataMap.note) || "");
+        const S = T.api("Survival"), outdoors = S && S.isOutdoors ? S.isOutdoors() : T.mapFlag("Clouds", false) || T.mapFlag("Weather", false);
         if (!outdoors) return "pod dachem";
         const type = $gameScreen.weatherType(), active = ($gameScreen._weatherPowerTarget || 0) > 0;
         return active && type === "storm" ? "burza" : active && type === "rain" ? "deszcz" : active && type === "snow" ? "śnieg" : "bezdeszczowo";
@@ -322,7 +403,7 @@
         // who (the name and the level - Combat.js - where the map's name was, the user's, 2026-09-25) and the weather
         win.contents.fontSize = 22;
         win.changeTextColor(U.text);
-        const name = actor.name(), level = window.Combat && Combat.hero ? Combat.hero().level : actor.level;
+        const hero = T.call("Combat", "hero"), name = actor.name(), level = hero ? hero.level : actor.level;
         win.drawText(name, x, 0, w - 150);
         win.changeTextColor(U.accent);
         win.drawText("Poziom " + level, x + Math.ceil(win.textWidth(name)) + 14, 0, w - 150);
@@ -340,8 +421,9 @@
         const cur = Math.round($gameSystem.stamina ? $gameSystem.stamina() : 100), max = Math.round($gameSystem.maxStamina ? $gameSystem.maxStamina() : 100);
         statRow(win, x, y, w, "stamina", "Wytrzymałość", st, st > 0.25 ? "#62c66a" : "#e0a040", cur + " / " + max, st <= 0.25);
         y += 36;
-        if (window.Needs && Needs.enabled()) {
-            const n = Needs.state(), ft = Needs.foodText(), wt = Needs.waterText();
+        const N = T.api("Needs");
+        if (N && N.enabled()) {
+            const n = N.state(), ft = N.foodText(), wt = N.waterText();
             statRow(win, x, y, w, "food", "Sytość", n.food / 100, "#e0b24a", ft || Math.round(n.food) + " / 100", !!ft);
             y += 36;
             statRow(win, x, y, w, "water", "Nawodnienie", n.water / 100, "#62b6ee", wt || Math.round(n.water) + " / 100", !!wt);
@@ -351,14 +433,14 @@
         y += 4;
         sectionLabel(win, "Samopoczucie", x, y, w);
         y += 28;
-        const buffs = typeof $gameSystem.activeBuffs === "function" && window.Survival ? $gameSystem.activeBuffs() : [];
+        const S = T.api("Survival"), buffs = typeof $gameSystem.activeBuffs === "function" && S ? $gameSystem.activeBuffs() : [];
         const cold = typeof $gameSystem.isCold === "function" && $gameSystem.isCold();
         let bx = x;
         const chip = (icon, text, colour) => {
             win.contents.fontSize = 18;
             const tw = Math.ceil(win.textWidth(text)), cw = (icon ? 30 : 12) + tw + 12;
             if (bx + cw > x + w) return;
-            U.panel(ctx, bx, y, cw, 28, { cut: 4, fill: "#171a1f", accent: false });
+            ui.panel(win.contents, bx, y, cw, 28, { cut: 4, fill: "#171a1f", accent: false });
             if (icon) win.drawIcon(icon, bx + 1, y - 2);
             win.changeTextColor(colour || U.text);
             win.contents.drawText(text, bx + (icon ? 32 : 8), y, tw + 4, 28);
@@ -367,7 +449,7 @@
         };
         if (buffs.length === 0 && !cold) chip(0, "w normie", U.muted);
         for (const b of buffs) {
-            const def = Survival.BUFFS[b.name];
+            const def = S.BUFFS[b.name];
             if (def) chip(def.icon, def.name + " · " + Math.max(1, Math.ceil(b.left)) + " godz.", def.bad ? "#ff9f8f" : U.text);
         }
         if (cold) chip(0, "Zimno: praca męczy bardziej", "#9fd0ff");
@@ -389,16 +471,15 @@
         }
         tools.slice(0, room).forEach((item, i) => {
             const sx = i * (slot + 6);
-            U.panel(ctx, sx, y, slot, slot, { cut: 4, fill: "#15171c", accent: false });
+            ui.panel(win.contents, sx, y, slot, slot, { cut: 4, fill: "#15171c", accent: false });
             win.drawIcon(item.iconIndex, sx + 4, y + 4);
-            const D = window.Durability;
+            const D = T.api("Durability");
             if (D && D.TOOLS && D.TOOLS[item.id] && D.lifeOf) {
                 const ratio = Math.max(0, Math.min(1, D.left(item.id) / D.lifeOf(item.id)));
-                U.bar(ctx, sx + 4, y + slot - 5, slot - 8, 2, ratio, ratio <= 0.2 ? "#e5484d" : ratio <= 0.4 ? "#e0a040" : "#62c66a");
+                ui.bar(win.contents, sx + 4, y + slot - 5, slot - 8, 2, ratio, ratio <= 0.2 ? "#e5484d" : ratio <= 0.4 ? "#e0a040" : "#62c66a");
             }
         });
         win.contents.fontSize = 22;
-        const S = window.Survival;
         if (S && S.carriedWeight && S.weightCap) {
             const load = S.carriedWeight(), cap = S.weightCap();
             win.changeTextColor(load > cap ? "#ff9f8f" : U.text);
@@ -442,7 +523,7 @@
         this.addWindow(this._helpWindow);
     };
     function loadLine() {
-        const S = window.Survival;
+        const S = T.api("Survival");
         return S && S.carriedWeight && S.weightCap ? "Obciążenie  " + fmt(S.carriedWeight()) + " / " + fmt(S.weightCap()) : "";
     }
     const _Scene_Item_create = Scene_Item.prototype.create;
@@ -563,7 +644,7 @@
         const item = this._item, U = UI(), W = this.innerWidth, ctx = this.contents.context;
         if (!item) { if (this._note) this.drawNote(0); return; }
         const S = 64;
-        U.panel(ctx, 0, 0, S + 12, S + 12, { cut: 5, fill: "#15171c", accent: false });
+        ui.panel(this.contents, 0, 0, S + 12, S + 12, { cut: 5, fill: "#15171c", accent: false });
         const set = ImageManager.loadSystem("IconSet"), pw = ImageManager.iconWidth, ph = ImageManager.iconHeight;
         this.contents.blt(set, (item.iconIndex % 16) * pw, Math.floor(item.iconIndex / 16) * ph, pw, ph, 6, 6, S, S);
         this.contents.fontSize = 26;
@@ -573,9 +654,10 @@
         this.changeTextColor(U.muted);
         const facts = [], n = $gameParty.numItems(item);
         if (n > 0) facts.push("Masz: " + n);
-        if (window.Survival && Survival.itemWeight) { const w = Survival.itemWeight(item); if (w) facts.push("Waga: " + fmt(w)); }
+        const w = T.call("Survival", "itemWeight", item);
+        if (w) facts.push("Waga: " + fmt(w));
         this.drawText(facts.join("     "), S + 26, 32, W - S - 26);
-        const fresh = window.Spoilage && Spoilage.freshnessText ? Spoilage.freshnessText(item.id) : "";
+        const fresh = T.call("Spoilage", "freshnessText", item.id) || "";
         if (fresh) {
             this.changeTextColor("#cfe6a8");
             this.drawText(fresh, S + 26, 54, W - S - 26);
@@ -597,7 +679,7 @@
         const U = UI(), W = this.innerWidth;
         this.contents.fontSize = 20;
         const lines = wrapLines(this, this._note, W - 24), h = lines.length * 28 + 18, top = Math.max(0, Math.min(y, this.innerHeight - h));
-        U.panel(this.contents.context, 0, top, W, h, { cut: 4, fill: "rgba(60,96,52,0.35)", line: "#4c6b45", accent: false });
+        ui.panel(this.contents, 0, top, W, h, { cut: 4, fill: "rgba(60,96,52,0.35)", line: "#4c6b45", accent: false });
         this.changeTextColor("#b9f0b0");
         lines.forEach((l, i) => this.drawText(l, 12, top + 7 + i * 28, W - 24));
         this.resetFontSettings();
@@ -607,8 +689,9 @@
     // Dziennik (Journal.js, also J): its tabs, list, detail and legend in the panel
     // ==================================================================
     const JOURNAL_SPLIT = 420;
-    if (window.Journal && Journal.Scene_Journal) {
-        const SJ = Journal.Scene_Journal;
+    const JN = T.api("Journal");
+    if (JN && JN.Scene_Journal) {
+        const SJ = JN.Scene_Journal;
         SJ.prototype.journalRects = function() {
             const r = panelRect("wide"), top = bodyTop(r, true), h = bodyHeight(r, true);
             return { tabs: new Rectangle(r.x + 14, r.y + HEAD - 4, r.width - 28, 68), list: new Rectangle(r.x + 10, top + 6, JOURNAL_SPLIT - 18, h - 12),
@@ -678,7 +761,7 @@
             return;
         }
         const F = 144;
-        U.panel(ctx, 0, 58, F + 12, F + 12, { cut: 6, fill: "#101216", accent: false });
+        ui.panel(win.contents, 0, 58, F + 12, F + 12, { cut: 6, fill: "#101216", accent: false });
         const face = info.faces && info.faces[0];
         if (face) {
             const bmp = ImageManager.loadFace(face[0]);
@@ -743,5 +826,6 @@
             hints: [["↑↓", "wybierz"], ["Enter", "potwierdź"], ["Esc", "wróć"]] });
     };
 
-    window.MenuPanel = { panelRect, SIZES, HEAD, FOOT, TABS, Sprite_MenuPanel, Window_ItemDetail };
+    window.MenuPanel = T.register("MenuPanel", { panelRect, SIZES, HEAD, FOOT, TABS, Sprite_MenuPanel, Window_ItemDetail, addCommand, addFoot,
+        commands: () => commands.map(c => c.symbol) });
 })();

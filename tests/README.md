@@ -5,31 +5,33 @@ zachowanie wtyczek — bez żadnych mocków silnika RPG Makera.
 
 ## Uruchomienie
 
-1. Serwer gry z korzenia projektu (jeden na cały czas pracy, w tle):
-   ```
-   python -m http.server 8765 --bind 127.0.0.1
-   ```
-2. Cała paczka testów albo wybrane:
-   ```
-   tests/run.sh
-   tests/run.sh keys_test hut_test bucket_test
-   ```
-   Wynik: `tests/results.txt` (skrót) + `tests/out_<test>.txt` (pełny log każdego testu).
+Pełny opis: [docs/TESTY.md](../docs/TESTY.md). W skrócie - serwer gry z korzenia projektu (jeden, w tle):
+```
+node tools/serve.js      (tests/run.js starts it by itself when nothing answers on 8765)
+```
+i dalej:
+```
+node tests/run.js smoke          szybki zestaw (~6 min)
+node tests/run.js full           wszystkie *_test.js
+node tests/run.js unit           logika bez przeglądarki (tests/unit/)
+node tests/run.js keys_test hut  wybrane
+```
+Wynik: `tests/results.txt` (skrót + tabela) + `tests/out_<test>.txt` (pełny log każdego testu).
+Stary `tests/run.sh` też działa.
 
-`cdp.js` oczekuje Edge pod `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe` —
+`cdp.js` oczekuje Edge pod `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe` -
 zmień stałą `EDGE` na górze pliku, jeśli u kogoś jest gdzie indziej.
 
 ## Pisanie nowego testu
 
-Każdy plik `*_nazwa_test.js` jest samodzielny: startuje przeglądarkę, ładuje `index.html`,
-wchodzi w nową grę, robi serię `check(opis, warunek, dodatkoweInfo)` i na końcu wypisuje
-`N/M passed`. `tests/run.sh` bez argumentów łapie każdy plik pasujący do `*_test.js`
-automatycznie — nowy test nie wymaga dopisywania go nigdzie indziej.
+Nowe testy piszemy na kicie `tests/lib/kit.js` (start gry, nowa gra, pomocnicy, podsumowanie
+`N/M passed`) - przykład i lista funkcji w [docs/TESTY.md](../docs/TESTY.md); gotowe wzory:
+[bubbles_test.js](bubbles_test.js), [needs_test.js](needs_test.js), [quest_board_test.js](quest_board_test.js).
+Każdy plik `*_test.js` łapie `node tests/run.js full` automatycznie. Starsze testy mają jeszcze własny,
+skopiowany nagłówek - działają jak dawniej.
 
-Najprostszy sposób na nowy test: skopiuj nagłówek (boot gry, `frames`, `J`, `waitMap`, `setN`,
-`key`/`press`) z istniejącego testu, np. [keys_test.js](keys_test.js) albo
-[hut_test.js](hut_test.js) — ten sam szablon powtarza się we wszystkich, celowo nie jest
-wydzielony do wspólnego pliku (każdy test ma inaczej dobrany zestaw pomocników).
+Zapisane gry do wczytania w testach: `tests/fixtures/` (`t.loadFixture("day40_farm")`).
+Czysta logika bez przeglądarki: `tests/unit/*.test.js` (`tests/lib/unit.js`, `tests/lib/sandbox.js`).
 
 ## Co NIE jest tu trzymane
 

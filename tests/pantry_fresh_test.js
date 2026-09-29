@@ -15,6 +15,7 @@ const { launch, sleep } = require("./cdp.js");
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); $gameSystem.setDayNightHour(12); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
+        await frames(10);   // (the clock's jump to 12:00 is aged in first - food put in before that would age by those 3 hours too)
         // a pantry and a plain chest put down on free ground near the player
         const spots = await J(`(function(){ const out = {};
             for (const type of ["pantry", "chest_s"]) {

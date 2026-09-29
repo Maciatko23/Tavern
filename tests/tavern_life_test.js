@@ -5,7 +5,8 @@
 // Melia's song on the stage at 19:00 (once an evening), arm-wrestling with Grum and darts (seeded, won and lost, the stakes moved),
 // Story's Borgar menu with "Zjedz coś" / "Wynajmij pokój", the premia (Survival.defineBuff), the tavern's reputation (QuestBoard.js:
 // the discounts, the big chamber, the gilded gate, the Apartament Złoty on Map026) and no console errors.
-// Loads TavernLife.js / QuestBoard.js into the page when js/plugins.js does not have them. Screenshots: docs/tawerna_zycie/uslugi_*.png
+// Loads TavernLife.js, its parts (TavernLife_Render / _ArmWrestle / _Darts / _Plan) and QuestBoard.js into the page when js/plugins.js
+// does not have them. The mini-games run on Tawerna.ui.Scene_MiniGame (TawernaUI.js). Screenshots: docs/tawerna_zycie/uslugi_*.png
 //   CDP_PORT=9384 node tests/tavern_life_test.js
 process.env.CDP_PORT = process.env.CDP_PORT || "9384";
 const { launch, sleep } = require("./cdp.js");
@@ -153,13 +154,18 @@ const DRIVER = String.raw`
         check("the game boots", booted);
         const bootLogs = b.logs.splice(0);   // (a boot the busy server broke halfway is not an error of the game: only what comes after counts)
         if (bootLogs.some(l => /^EXC/.test(l))) console.log("(a first boot broke off and was retried)");
-        const load = name => ev(`new Promise(res => { if (window.${name}) return res(true); const s = document.createElement("script"); s.src = "js/plugins/${name}.js?" + Date.now(); s.onload = () => res(!!window.${name}); s.onerror = () => res(false); document.body.appendChild(s); })`);
-        check("TavernLife.js and QuestBoard.js are in the game", (await load("TavernLife")) && (await load("QuestBoard")));
+        // a plugin not in js/plugins.js yet goes into the page (TavernLife's parts - TavernLife_*.js - until they are registered)
+        const load = name => ev(`new Promise(res => { if ($plugins.some(p => p.name === "${name}" && p.status) || window.${name} || (window.TavernLife && TavernLife.modules && TavernLife.modules["${name}"])) return res(true);
+            const s = document.createElement("script"); s.src = "js/plugins/${name}.js?" + Date.now(); s.onload = () => res(true); s.onerror = () => res(false); document.body.appendChild(s); })`);
+        const PARTS = ["TavernLife_Render", "TavernLife_ArmWrestle", "TavernLife_Darts", "TavernLife_Plan"];
+        const loadAll = async names => { let ok = true; for (const n of names) ok = (await load(n)) && ok; return ok; };
+        check("TavernLife.js (with its parts) and QuestBoard.js are in the game", (await loadAll(["TavernLife", "QuestBoard"].concat(PARTS))) && (await ev(`${JSON.stringify(PARTS)}.every(k => TavernLife.modules[k])`)));
         await ev(DRIVER + "; 0");
+        await ev("window.__served = []; Tawerna.on('served', e => window.__served.push(e), { owner: 'TavernLifeTest' }); 0");
         // (the local server sometimes drops a file under load - MZ then shows "Failed to load ... Retry": pressed, as a player would)
         await ev("window.__retries = []; setInterval(() => { const r = document.getElementById('retryButton'); if (r) { const t = (document.getElementById('errorPrinter') || {}).innerText || ''; window.__retries.push(t.replace(/\\s+/g, ' ').trim()); r.click(); } }, 400); 0");
         await ev("window.__pops = []; (function(){ const _p = Game_Temp.prototype.pushLootPopup; Game_Temp.prototype.pushLootPopup = function(i, t, c, o) { window.__pops.push(String(t)); return _p.apply(this, arguments); }; const _n = Game_Temp.prototype.pushTopNotice; window.__notices = []; Game_Temp.prototype.pushTopNotice = function(t) { window.__notices.push(String(t)); return _n.apply(this, arguments); }; })(); 0");
-        await ev("DataManager.setupNewGame(); SceneManager.goto(Scene_Map); 0");
+        await ev("Object.assign($dataSystem, { startMapId: 19, startX: 2, startY: 5 }); /* (a story game in grandpa's cottage, whatever data/System.json says) */ DataManager.setupNewGame(); SceneManager.goto(Scene_Map); 0");
         await until(onMap(19), 40);
         await ev("Story.skipIntro(); Story.setDeadlineOn(false); $gameSystem._story.flags.hired = true; $gameSystem._story.flags.field = true; QuestBoard.state().rep = 0; 0");
         const inTavern = await go(MAP.hall, 49, 70, 8);
@@ -204,6 +210,8 @@ const DRIVER = String.raw`
         const gPrice = await ev("TavernLife.priceOf(TavernLife.DISHES[0])");
         check("the card opens with the 7 dishes and drinks, prices, the day's dish marked", cardInfo.open && cardInfo.card && cardInfo.card.entries.map(e => e.name).join() === "Gulasz,Kapuśniak,Pieczeń z kaszą,Placek z serem,Chleb ze smalcem,Kufel piwa,Miód pitny", cardInfo.card && cardInfo.card.entries.map(e => e.name + " " + e.right));
         check("Gulasz ordered: its price taken", meal.done && before.gold - after.gold === gPrice, { before: before.gold, after: after.gold, price: gPrice });
+        const served = await J("window.__served");
+        check("...and told on the Tawerna bus: 'served' { service: meal, price, dish: gulasz }", served.length === 1 && served[0].service === "meal" && served[0].price === gPrice && served[0].dish === "gulasz", served);
         check("he sat at the nearest free table (a real <Tavern:mealtable>) facing its way, the plate on the table where the tag says", seated && expectSeat && seated.x === expectSeat.x && seated.y === expectSeat.y && seated.d === expectSeat.dir &&
             seated.plate.some(p => p[0] === expectSeat.px && p[1] === expectSeat.py && p[2] === "gulasz"), { seated, expectSeat });
         check("about 30 minutes passed", Math.abs(after.h - before.h - 0.5) < 0.12, after.h - before.h);
@@ -542,10 +550,10 @@ const DRIVER = String.raw`
 
         // ================= the numbers, the saved game, the console
         const stats = await J("TavernLife.stats()");
-        check("the numbers in $gameSystem._tavernLife (meals, rooms, nights, baths, songs, games, firsts)", stats.meals === 1 && stats.rooms === 4 && stats.nights === 3 && stats.baths === 1 && stats.songs === 3 && stats.arm.played === 3 && stats.darts.played === 2 &&
+        check("the numbers in TavernLife's state (meals, rooms, nights, baths, songs, games, firsts)", stats.meals === 1 && stats.rooms === 4 && stats.nights === 3 && stats.baths === 1 && stats.songs === 3 && stats.arm.played === 3 && stats.darts.played === 2 &&
             ["meal", "room", "bath", "arm", "darts"].every(k => stats.firsts[k] > 0), stats);
-        const round = await J("(function(){ const c = JsonEx.parse(JsonEx.stringify($gameSystem)); return !!c._tavernLife && c._tavernLife.meals === 1; })()");
-        check("it goes into the saved game (JsonEx round trip)", round);
+        const round = await J("(function(){ const c = JsonEx.parse(JsonEx.stringify($gameSystem)), s = c._tw && c._tw.tavernLife; return !!s && s.meals === 1 && !Object.keys(c).includes('_tavernLife'); })()");
+        check("it goes into the saved game (JsonEx round trip: Tawerna.state's _tw.tavernLife, no old _tavernLife key)", round);
         check("the API: TavernLife.buffs lists the premia", (await J("Object.keys(TavernLife.buffs)")).join() === "clean,inspired,hosted,rested");
         const errs = b.logs.filter(l => /^EXC|TypeError|ReferenceError|is not a function|Cannot read/.test(l));
         check("no console errors", errs.length === 0, errs.slice(0, 5));

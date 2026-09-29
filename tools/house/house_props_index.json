@@ -1,0 +1,164 @@
+{
+ "swieca_szafka": {
+  "sheet": "!House_Props",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 0,
+  "art": [
+   40,
+   48,
+   56,
+   80
+  ],
+  "place": "table",
+  "name": "świeca na szafce nocnej (animowana)",
+  "anim": true
+ },
+ "swieca_stolek": {
+  "sheet": "!House_Props",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 3,
+  "art": [
+   40,
+   39,
+   56,
+   71
+  ],
+  "place": "table",
+  "name": "świeca na stołku (animowana)",
+  "anim": true
+ },
+ "kolowrotek": {
+  "sheet": "!House_Props",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 6,
+  "art": [
+   20,
+   35,
+   75,
+   95
+  ],
+  "place": "floor",
+  "name": "kołowrotek z lnem",
+  "anim": false
+ },
+ "maselnica": {
+  "sheet": "!House_Props",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "w": 96,
+  "h": 96,
+  "slot": 7,
+  "art": [
+   35,
+   41,
+   61,
+   95
+  ],
+  "place": "floor",
+  "name": "maselnica",
+  "anim": false
+ },
+ "fotel_bujany": {
+  "sheet": "!House_Props",
+  "index": 2,
+  "direction": 2,
+  "pattern": 2,
+  "w": 96,
+  "h": 96,
+  "slot": 8,
+  "art": [
+   28,
+   34,
+   68,
+   95
+  ],
+  "place": "floor",
+  "name": "fotel bujany dziadka z kocem",
+  "anim": false
+ },
+ "kolki_ubrania": {
+  "sheet": "!House_Props",
+  "index": 3,
+  "direction": 2,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 9,
+  "art": [
+   24,
+   20,
+   72,
+   69
+  ],
+  "place": "wall",
+  "name": "kołki z koszulą, czapką i torbą",
+  "anim": false
+ },
+ "fajka": {
+  "sheet": "!House_Props",
+  "index": 3,
+  "direction": 2,
+  "pattern": 1,
+  "w": 96,
+  "h": 96,
+  "slot": 10,
+  "art": [
+   37,
+   34,
+   58,
+   43
+  ],
+  "place": "table",
+  "name": "fajka dziadka",
+  "anim": false
+ },
+ "doniczka_1": {
+  "sheet": "!House_Props",
+  "index": 3,
+  "direction": 2,
+  "pattern": 2,
+  "w": 96,
+  "h": 96,
+  "slot": 11,
+  "art": [
+   41,
+   43,
+   56,
+   68
+  ],
+  "place": "sill",
+  "name": "doniczka z kwiatami na parapecie",
+  "anim": false
+ },
+ "doniczka_2": {
+  "sheet": "!House_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "w": 96,
+  "h": 96,
+  "slot": 12,
+  "art": [
+   40,
+   37,
+   57,
+   68
+  ],
+  "place": "sill",
+  "name": "doniczka z kwiatami na parapecie",
+  "anim": false
+ }
+}

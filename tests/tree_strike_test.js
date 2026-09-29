@@ -1,7 +1,21 @@
 // Lightning hitting a tree (Storm.js + ChoppableTree.js): the tree is charred (self-switch D), drawn soot-black, sparks and
 // smoke, a popup; at most two a storm day, only close strikes while it rages; chopped it falls after two blows and gives
 // charcoal instead of wood, and so does its stump.
+// Stage 3 (batch E2, ChoppableTree on the core and split in four): the files in the page; the felled charred tree on the bus ("chop");
+// an old save's _smoulder / _treeFruit adopted into _tw.
 const { launch, sleep } = require("./cdp.js");
+// REGISTERED=1: ChoppableTree_Objects, ChoppableTree_Swing and ChoppableTree_Render put into the page's plugin list right under
+// ChoppableTree, as the plugin manager will list them (js/plugins.js itself is not touched); without it ChoppableTree.js puts them in itself
+const PARTS = ["ChoppableTree_Objects", "ChoppableTree_Swing", "ChoppableTree_Render"];
+const REGISTERED = process.env.REGISTERED ? `(function(){
+    let real;
+    const mk = name => ({ name, status: true, description: "", parameters: {} });
+    Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) {
+        const list = v.filter(p => !${JSON.stringify(PARTS)}.includes(p.name)), at = list.findIndex(p => p.name === "ChoppableTree");
+        list.splice(at + 1, 0, ...${JSON.stringify(PARTS)}.map(mk));
+        real = list;
+    } });
+})();` : null;
 const OUT = __dirname + "/";
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
@@ -10,6 +24,7 @@ const OUT = __dirname + "/";
     const results = [];
     const check = (name, ok, info) => { results.push(ok); console.log((ok ? "PASS " : "FAIL ") + name + (info !== undefined ? "  " + JSON.stringify(info) : "")); };
     try {
+        if (REGISTERED) await b.send("Page.addScriptToEvaluateOnNewDocument", { source: REGISTERED });
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
@@ -20,6 +35,15 @@ const OUT = __dirname + "/";
         const count = id => ev(`$gameParty.numItems($dataItems[${id}])`);
         await ev(`(function(){ window.__pop = []; const _q = Game_Temp.prototype.pushLootPopup; Game_Temp.prototype.pushLootPopup = function(icon, text) { window.__pop.push(text); return _q.apply(this, arguments); };
             window.__se = []; const _p = AudioManager.playSe; AudioManager.playSe = function(se) { window.__se.push(se.name); return _p.call(this, se); }; })(); 0`);
+        // (and the sounds through the core's safe pool - Storm.js since 2026-09-29); the strikes on the bus
+        await ev(`(function(){ if (window.Tawerna && Tawerna.audio && !Tawerna.audio.__rec) { const _se = Tawerna.audio.se; Tawerna.audio.__rec = true; Tawerna.audio.se = function(name) { window.__se.push(name); return _se.apply(this, arguments); }; }
+            window.__bolts = []; if (window.Tawerna) Tawerna.on("lightning", e => window.__bolts.push(e), { owner: "tree_strike_test" }); })(); 0`);
+        // ChoppableTree in four files (stage 3, batch E2); what is finished goes on the bus ("chop")
+        const fam = await J(`({ parts: Object.keys(Tawerna.api("ChoppableTree_parts") || {}), scripts: ["ChoppableTree", "ChoppableTree_Objects", "ChoppableTree_Swing", "ChoppableTree_Render"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
+            order: $plugins.map(p => p.name).filter(n => /^(MapZoom|ChoppableTree|ChoppableTree_Objects|ChoppableTree_Swing|ChoppableTree_Render|SurvivalHUD)$/.test(n)), api: Tawerna.api("ChoppableTree") === ChoppableTree })`);
+        check("ChoppableTree in four files (the tags and the hooks, the things, the swings, the look), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by ChoppableTree.js"),
+            fam.api && fam.parts.join() === "core,objects,swing,render" && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "MapZoom,ChoppableTree,ChoppableTree_Objects,ChoppableTree_Swing,ChoppableTree_Render,SurvivalHUD"), fam);
+        await ev("window.__chops = []; Tawerna.on('chop', e => window.__chops.push({ kind: e.kind, id: e.id, mapId: e.mapId, x: e.x, y: e.y, done: e.done, drops: e.drops, charred: e.charred, hand: e.hand, same: e.event === $gameMap.event(e.id) }), { owner: 'test' }); 0");
         // a storm raging right now; no strikes of its own while we look
         await ev("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.7); 0");
         await frames(120);
@@ -46,6 +70,8 @@ const OUT = __dirname + "/";
         check("the bolt comes down on its crown", hit.bolt && hit.bolt.tree && Math.abs(hit.bolt.x - hit.treeX) <= 2 && hit.bolt.y > hit.treeTop && hit.bolt.y < hit.treeFoot, { bolt: hit.bolt, treeX: hit.treeX, top: hit.treeTop, foot: hit.treeFoot });
         check("sparks and burnt leaves fly out of it", hit.fx >= 20, hit.fx);
         check("'Piorun trafił w drzewo!', counted for today", hit.pops.includes("Piorun trafił w drzewo!") && hit.today && hit.today.n === 1 && hit.last.tree === id, { pops: hit.pops, today: hit.today });
+        const busHit = await J("window.__bolts.slice(-1)[0] || null");
+        check("the bus: 'lightning' says the tree was hit (hitTree, tree = its id), the bolt ends on its crown", !!busHit && busHit.hitTree === true && busHit.tree === id && busHit.bolt === true && Math.abs(busHit.x - hit.treeX) <= 2 && busHit.y === hit.bolt.y, { busHit, bolt: hit.bolt });
         const look = await J(`(function(){ const e = $gameMap.event(${id}), sp = SceneManager._scene._spriteset._characterSprites.find(c => c._character === e), st = sp._treeStrips[0];
             return { own: st.bitmap === sp.bitmap, charredPic: !!st.bitmap._charred, spriteTone: sp._colorTone.slice() }; })()`);
         check("while it burns it keeps its own picture (the burn covers it pixel by pixel), no tone on the sprite", look.own && !look.charredPic && look.spriteTone[3] === 0, look);
@@ -130,6 +156,11 @@ const OUT = __dirname + "/";
         const felled = { blows, wood: (await count(61)) - wood0, coal: (await count(79)) - coal0, A: await ev(`$gameSelfSwitches.value([3, ${id}, "A"])`) };
         check("it falls after 2 blows (brittle; instead of " + T.hits + ")", felled.A && felled.blows === 2, felled);
         check("it gives 6-10 charcoal and no wood", felled.coal >= 6 && felled.coal <= 10 && felled.wood === 0, felled);
+        await frames(10);
+        const chop = await J(`window.__chops.filter(c => c.id === ${id})`);
+        check("the felled charred tree on the bus: chop { kind tree, charred, done true (no stump), the charcoal it gave }",
+            chop.length === 1 && chop[0].kind === "tree" && chop[0].charred === true && chop[0].done === true && chop[0].same && chop[0].drops.length === 1 &&
+            chop[0].drops[0].item === 79 && chop[0].drops[0].amount === felled.coal, chop);
         await frames(20);
         // burnt to the roots: no stump, the empty page straight away, the ground free
         const gone = await J(`(function(){ const e = $gameMap.event(${id}); return { B: $gameSelfSwitches.value([3, ${id}, "B"]), tile: e.tileId(), picture: e.characterName(), passable: $gameMap.isPassable(${x}, ${y}, 2) || $gameMap.isPassable(${x}, ${y}, 8), plot: Farming.plotAt(${x}, ${y}) }; })()`);
@@ -165,6 +196,36 @@ const OUT = __dirname + "/";
         await ev("$gameSystem._smoulder && Object.keys($gameSystem._smoulder).forEach(k => $gameSystem._smoulder[k] -= 0.25); 0");   // the glow further down the tree
         await frames(40);
         await b.shot(OUT + "tree_strike_night2.png");
+
+        // ---------------------------------------------------------------- an old save (before the core): its $gameSystem._stormTrees is taken over
+        // (Tawerna.state "stormTrees"), the old key stays a hidden alias and a new save has it only in the new place
+        await ev(`(function(){ $gameSystem.onBeforeSave(); const c = JsonEx.parse(JsonEx.stringify(DataManager.makeSaveContents())), tw = c.system._tw;
+            c.system._stormTrees = JSON.parse(JSON.stringify(tw.stormTrees)); delete tw.stormTrees; if (tw._v) delete tw._v.stormTrees;
+            // (and ChoppableTree's: a tree smouldering for 6 minutes, a fruit tree picked on day 12 - as the old plugin kept them)
+            c.system._smoulder = { "3:998": $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() - 0.1 }; c.system._treeFruit = { "3:999": 12 };
+            delete tw.smoulder; delete tw.treeFruit; if (tw._v) { delete tw._v.smoulder; delete tw._v.treeFruit; }
+            window.__oldSave = c; })(); 0`);
+        const oldTrees = await J("window.__oldSave.system._stormTrees");
+        await ev("SceneManager.goto(Scene_Title); 0");
+        for (let i = 0; i < 80 && !(await ev("SceneManager._scene instanceof Scene_Title && SceneManager._scene._started && !SceneManager.isSceneChanging()").catch(() => false)); i++) await sleep(250);
+        await ev(`(async function(){ await StorageManager.saveObject(DataManager.makeSavename(9), window.__oldSave); await DataManager.loadGame(9); $gameSystem.onAfterLoad();
+            $gamePlayer.reserveTransfer($gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction(), 0); $gamePlayer.requestMapReload(); SceneManager.goto(Scene_Map); return 0; })()`);
+        for (let i = 0; i < 120 && !(await ev("SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && !$gamePlayer.isTransferring()").catch(() => false)); i++) await sleep(250);
+        await frames(20);
+        const adopted = await J(`(function(){ const s = $gameSystem, again = JsonEx.parse(JsonEx.stringify(DataManager.makeSaveContents())).system;
+            return { tw: s._tw.stormTrees, v: Tawerna.state.version("stormTrees"), alias: s._stormTrees === s._tw.stormTrees, hidden: !Object.keys(s).includes("_stormTrees"),
+                again: Object.keys(again).includes("_stormTrees"), againTw: again._tw.stormTrees }; })()`);
+        const oldCT = await J("({ smoulder: window.__oldSave.system._smoulder, fruit: window.__oldSave.system._treeFruit })");
+        const adoptedCT = await J(`(function(){ const s = $gameSystem, again = JsonEx.parse(JsonEx.stringify(DataManager.makeSaveContents())).system;
+            return { smoulder: s._tw.smoulder, fruit: s._tw.treeFruit, v: [Tawerna.state.version("smoulder"), Tawerna.state.version("treeFruit")],
+                alias: s._smoulder === s._tw.smoulder && s._treeFruit === s._tw.treeFruit, hidden: !Object.keys(s).includes("_smoulder") && !Object.keys(s).includes("_treeFruit"),
+                again: ["_smoulder", "_treeFruit"].filter(k => Object.keys(again).includes(k)), againTw: [again._tw.smoulder, again._tw.treeFruit] }; })()`);
+        await ev("StorageManager.remove(DataManager.makeSavename(9)); 0");
+        check("an old save's $gameSystem._stormTrees is taken over (Tawerna.state 'stormTrees'), the old key a hidden alias, a new save only in _tw", oldTrees.n >= 1 &&
+            adopted.tw && adopted.tw.day === oldTrees.day && adopted.tw.n === oldTrees.n && adopted.v === 1 && adopted.alias && adopted.hidden && !adopted.again && adopted.againTw.n === oldTrees.n, { oldTrees, adopted });
+        check("...and its $gameSystem._smoulder / _treeFruit (ChoppableTree: Tawerna.state 'smoulder', 'treeFruit'), the old keys hidden aliases, a new save only in _tw",
+            adoptedCT.smoulder && adoptedCT.smoulder["3:998"] === oldCT.smoulder["3:998"] && adoptedCT.fruit && adoptedCT.fruit["3:999"] === 12 && adoptedCT.v.join() === "1,1" &&
+            adoptedCT.alias && adoptedCT.hidden && adoptedCT.again.length === 0 && adoptedCT.againTw[0]["3:998"] === oldCT.smoulder["3:998"] && adoptedCT.againTw[1]["3:999"] === 12, { oldCT, adoptedCT });
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-6) : "none");

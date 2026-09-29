@@ -124,10 +124,10 @@ const { launch, sleep } = require("./cdp.js");
         await walkUntilMap("up", 3);
         check("walking up into the doorway leaves the farm", (await mapNow()) === 100 || (await waitMap(100)));
         await waitMap(100);
-        for (let i = 0; i < 40 && (await ev("$gameScreen.zoomScale()")) < 2.39; i++) await frames(10);
+        for (let i = 0; i < 40 && (await ev("$gameScreen.zoomScale()")) < 1.49; i++) await frames(10);
         const inside = await J("({ map: $gameMap.mapId(), w: $gameMap.width(), h: $gameMap.height(), px: $gamePlayer.x, py: $gamePlayer.y, dir: $gamePlayer.direction(), zoom: $gameScreen.zoomScale(), free: Farming.isHutInterior(), room: Farming.HUT_ROOM })");
-        check("inside: Map100 (7 x 6), the player stands in front of the door facing the back wall, the view is zoomed in 2.4 x",
-            inside.map === 100 && inside.w === 7 && inside.h === 6 && inside.px === 3 && inside.py === 4 && inside.dir === 8 && inside.zoom >= 2.39 && inside.free &&
+        check("inside: Map100 (7 x 6), the player stands in front of the door facing the back wall, the view is zoomed in 1.5 x",
+            inside.map === 100 && inside.w === 7 && inside.h === 6 && inside.px === 3 && inside.py === 4 && inside.dir === 8 && inside.zoom >= 1.49 && inside.zoom <= 1.51 && inside.free &&
             JSON.stringify(inside.room) === JSON.stringify({ x0: 1, x1: 5, y0: 3, y1: 4, doorX: 3, doorY: 5 }), inside);
         const pass = await J(`[[1,3],[2,3],[3,3],[4,3],[5,3],[1,4],[2,4],[3,4],[4,4],[5,4],[3,5]].map(c => $gameMap.isPassable(c[0], c[1], 2) || $gameMap.isPassable(c[0], c[1], 8))`);
         const walls = await J(`[[0,3],[6,3],[3,1],[3,2],[1,2],[5,2],[0,0],[6,5],[1,5],[2,5],[4,5]].map(c => $gameMap.isPassable(c[0], c[1], 2) || $gameMap.isPassable(c[0], c[1], 8))`);

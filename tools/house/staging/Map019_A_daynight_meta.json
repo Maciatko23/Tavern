@@ -1,0 +1,1781 @@
+{
+ "concept": "A",
+ "width": 21,
+ "height": 13,
+ "zones": [
+  [
+   "Izba",
+   1,
+   4,
+   11,
+   11,
+   [
+    230,
+    170,
+    90
+   ]
+  ],
+  [
+   "Komora",
+   13,
+   4,
+   19,
+   11,
+   [
+    150,
+    190,
+    230
+   ]
+  ]
+ ],
+ "spots": {
+  "exit": [
+   6,
+   12
+  ],
+  "landing": [
+   6,
+   11,
+   8
+  ],
+  "hero_bed": [
+   [
+    18,
+    4
+   ],
+   [
+    18,
+    5
+   ]
+  ],
+  "grandpa": [
+   8,
+   5,
+   4
+  ],
+  "start": [
+   17,
+   5,
+   6
+  ],
+  "render_hero": [
+   7,
+   5,
+   6
+  ]
+ },
+ "things": [
+  {
+   "kind": "kredens z talerzami",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 3,
+   "w": 2,
+   "h": 2,
+   "sheet": "C",
+   "sc": 3,
+   "sr": 9
+  },
+  {
+   "kind": "półka z talerzami",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba półki",
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 2
+  },
+  {
+   "kind": "półka z dzbankiem",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba półki",
+   "x": 2,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 7,
+   "sr": 2
+  },
+  {
+   "kind": "doniczka_1",
+   "cat": "sillitem",
+   "cells": [
+    [
+     3,
+     2
+    ]
+   ],
+   "group": "Izba doniczki",
+   "x": 3,
+   "y": 2,
+   "event": true,
+   "art": [
+    41,
+    43,
+    56,
+    68
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "hearth",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 6,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     5,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 5,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 7,
+   "y": 4
+  },
+  {
+   "kind": "doniczka_2",
+   "cat": "sillitem",
+   "cells": [
+    [
+     9,
+     2
+    ]
+   ],
+   "group": "Izba doniczki",
+   "x": 9,
+   "y": 2,
+   "event": true,
+   "art": [
+    40,
+    37,
+    57,
+    68
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "półka ze spiżarką",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     4
+    ],
+    [
+     11,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 3,
+   "w": 2,
+   "h": 2,
+   "sheet": "C",
+   "sc": 4,
+   "sr": 4
+  },
+  {
+   "kind": "półka ze słojami",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba półki",
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 4
+  },
+  {
+   "kind": "półka z garnkami",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba półki",
+   "x": 11,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 4
+  },
+  {
+   "kind": "fotel_bujany",
+   "cat": "floorprop",
+   "cells": [
+    [
+     8,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 8,
+   "y": 4,
+   "event": true,
+   "art": [
+    28,
+    34,
+    68,
+    95
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "stolik",
+   "cat": "furniture",
+   "cells": [
+    [
+     9,
+     4
+    ],
+    [
+     9,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 4,
+   "sr": 0
+  },
+  {
+   "kind": "fajka",
+   "cat": "tableitem",
+   "cells": [
+    [
+     9,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 5,
+   "event": true,
+   "art": [
+    37,
+    34,
+    58,
+    43
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "kolowrotek",
+   "cat": "floorprop",
+   "cells": [
+    [
+     2,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 2,
+   "y": 6,
+   "event": true,
+   "art": [
+    20,
+    35,
+    75,
+    95
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "table_h",
+   "cat": "table",
+   "cells": [
+    [
+     2,
+     9
+    ],
+    [
+     2,
+     10
+    ],
+    [
+     3,
+     9
+    ],
+    [
+     3,
+     10
+    ],
+    [
+     4,
+     9
+    ],
+    [
+     4,
+     10
+    ],
+    [
+     5,
+     9
+    ],
+    [
+     5,
+     10
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 2,
+   "y": 9,
+   "length": 4,
+   "style": 4
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     8
+    ],
+    [
+     3,
+     8
+    ]
+   ],
+   "group": "Izba ławy",
+   "x": 2,
+   "y": 8
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     4,
+     8
+    ],
+    [
+     5,
+     8
+    ]
+   ],
+   "group": "Izba ławy",
+   "x": 4,
+   "y": 8
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     11
+    ],
+    [
+     3,
+     11
+    ]
+   ],
+   "group": "Izba ławy",
+   "x": 2,
+   "y": 11
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     4,
+     11
+    ],
+    [
+     5,
+     11
+    ]
+   ],
+   "group": "Izba ławy",
+   "x": 4,
+   "y": 11
+  },
+  {
+   "kind": "swieca",
+   "cat": "tableitem",
+   "cells": [
+    [
+     3,
+     10
+    ]
+   ],
+   "group": "Izba świece",
+   "x": 3,
+   "y": 10,
+   "event": true,
+   "art": [
+    16,
+    24,
+    32,
+    56
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "D(0,13)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     4,
+     9
+    ]
+   ],
+   "group": null,
+   "x": 4,
+   "y": 9,
+   "sheet": "D",
+   "sc": 0,
+   "sr": 13
+  },
+  {
+   "kind": "miotła",
+   "cat": "furniture",
+   "cells": [
+    [
+     9,
+     11
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 10,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 7,
+   "sr": 6
+  },
+  {
+   "kind": "maselnica",
+   "cat": "floorprop",
+   "cells": [
+    [
+     10,
+     11
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 11,
+   "event": true,
+   "art": [
+    35,
+    41,
+    61,
+    95
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "beczka z wodą",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     11
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 10,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 0
+  },
+  {
+   "kind": "chochla",
+   "cat": "tableitem",
+   "cells": [
+    [
+     11,
+     11
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 11,
+   "event": true,
+   "art": [
+    15,
+    19,
+    32,
+    39
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     11,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 7,
+   "event": true
+  },
+  {
+   "kind": "łóżko dziadka",
+   "cat": "furniture",
+   "cells": [
+    [
+     13,
+     4
+    ],
+    [
+     13,
+     5
+    ],
+    [
+     14,
+     4
+    ],
+    [
+     14,
+     5
+    ]
+   ],
+   "group": "Komora",
+   "x": 13,
+   "y": 4,
+   "w": 2,
+   "h": 2,
+   "sheet": "C",
+   "sc": 13,
+   "sr": 10
+  },
+  {
+   "kind": "kołdra z łatek",
+   "cat": "decal",
+   "cells": [
+    [
+     13,
+     4
+    ],
+    [
+     13,
+     5
+    ],
+    [
+     14,
+     4
+    ],
+    [
+     14,
+     5
+    ]
+   ],
+   "group": "Komora",
+   "x": 13,
+   "y": 4
+  },
+  {
+   "kind": "szafka nocna",
+   "cat": "furniture",
+   "cells": [
+    [
+     15,
+     4
+    ]
+   ],
+   "group": "Komora",
+   "x": 15,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 5,
+   "sr": 0
+  },
+  {
+   "kind": "swieca_szafka",
+   "cat": "tableitem",
+   "cells": [
+    [
+     15,
+     3
+    ]
+   ],
+   "group": "Komora świece",
+   "x": 15,
+   "y": 3,
+   "event": true,
+   "art": [
+    40,
+    48,
+    56,
+    80
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "obrazek",
+   "cat": "wallitem",
+   "cells": [
+    [
+     16,
+     4
+    ]
+   ],
+   "group": "Komora",
+   "x": 16,
+   "y": 4,
+   "event": true
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     17,
+     4
+    ]
+   ],
+   "group": "Komora",
+   "x": 17,
+   "y": 4
+  },
+  {
+   "kind": "swieca_stolek",
+   "cat": "tableitem",
+   "cells": [
+    [
+     17,
+     4
+    ]
+   ],
+   "group": "Komora świece",
+   "x": 17,
+   "y": 4,
+   "event": true,
+   "art": [
+    40,
+    39,
+    56,
+    71
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     18,
+     4
+    ],
+    [
+     18,
+     5
+    ]
+   ],
+   "group": "Komora",
+   "x": 18,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "kolki_ubrania",
+   "cat": "wallitem",
+   "cells": [
+    [
+     19,
+     3
+    ]
+   ],
+   "group": "Komora",
+   "x": 19,
+   "y": 3,
+   "event": true,
+   "art": [
+    24,
+    20,
+    72,
+    69
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     19,
+     4
+    ]
+   ],
+   "group": "Komora",
+   "x": 19,
+   "y": 4,
+   "event": true
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     13,
+     6
+    ]
+   ],
+   "group": "Komora",
+   "x": 13,
+   "y": 6,
+   "event": true
+  },
+  {
+   "kind": "beczki",
+   "cat": "furniture",
+   "cells": [
+    [
+     17,
+     11
+    ],
+    [
+     18,
+     11
+    ],
+    [
+     19,
+     11
+    ]
+   ],
+   "group": "Komora zapasy",
+   "x": 17,
+   "y": 10,
+   "w": 3,
+   "h": 2,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 0
+  },
+  {
+   "kind": "worki",
+   "cat": "furniture",
+   "cells": [
+    [
+     13,
+     11
+    ],
+    [
+     14,
+     11
+    ]
+   ],
+   "group": "Komora zapasy",
+   "x": 13,
+   "y": 11,
+   "w": 2,
+   "h": 1,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 3
+  },
+  {
+   "kind": "cebrzyk",
+   "cat": "floorprop",
+   "cells": [
+    [
+     13,
+     10
+    ]
+   ],
+   "group": "Komora",
+   "x": 13,
+   "y": 10,
+   "event": true,
+   "art": [
+    12,
+    57,
+    36,
+    91
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "umywalka",
+   "cat": "floorprop",
+   "cells": [
+    [
+     19,
+     7
+    ]
+   ],
+   "group": "Komora",
+   "x": 19,
+   "y": 7,
+   "event": true
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   6,
+   12
+  ],
+  [
+   "sleep",
+   18,
+   4
+  ],
+  [
+   "sleep",
+   18,
+   5
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba okna",
+   "window",
+   3,
+   1
+  ],
+  [
+   "Izba zioła",
+   "hanging",
+   4,
+   2
+  ],
+  [
+   "Izba zioła",
+   "hanging",
+   8,
+   2
+  ],
+  [
+   "Izba okna",
+   "window",
+   9,
+   1
+  ],
+  [
+   "Komora okna",
+   "window",
+   15,
+   1
+  ],
+  [
+   "Komora",
+   "obrazek",
+   16,
+   4
+  ],
+  [
+   "Komora okna",
+   "window",
+   17,
+   1
+  ],
+  [
+   "Komora",
+   "kolki_ubrania",
+   19,
+   3
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    12,
+    8,
+    12,
+    9
+   ]
+  ],
+  [
+   "Izba",
+   [
+    6,
+    12,
+    6,
+    12
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   1,
+   9,
+   "Izba"
+  ],
+  [
+   1,
+   10,
+   "Izba"
+  ],
+  [
+   1,
+   11,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   9,
+   "Izba"
+  ],
+  [
+   2,
+   10,
+   "Izba"
+  ],
+  [
+   2,
+   11,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   9,
+   "Izba"
+  ],
+  [
+   3,
+   10,
+   "Izba"
+  ],
+  [
+   3,
+   11,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   9,
+   "Izba"
+  ],
+  [
+   4,
+   10,
+   "Izba"
+  ],
+  [
+   4,
+   11,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   9,
+   "Izba"
+  ],
+  [
+   5,
+   10,
+   "Izba"
+  ],
+  [
+   5,
+   11,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   6,
+   10,
+   "Izba"
+  ],
+  [
+   6,
+   11,
+   "Izba"
+  ],
+  [
+   6,
+   12,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   7,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   10,
+   "Izba"
+  ],
+  [
+   7,
+   11,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   9,
+   "Izba"
+  ],
+  [
+   8,
+   10,
+   "Izba"
+  ],
+  [
+   8,
+   11,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   9,
+   "Izba"
+  ],
+  [
+   9,
+   10,
+   "Izba"
+  ],
+  [
+   9,
+   11,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   9,
+   "Izba"
+  ],
+  [
+   10,
+   10,
+   "Izba"
+  ],
+  [
+   10,
+   11,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   9,
+   "Izba"
+  ],
+  [
+   11,
+   10,
+   "Izba"
+  ],
+  [
+   11,
+   11,
+   "Izba"
+  ],
+  [
+   12,
+   8,
+   "Izba"
+  ],
+  [
+   12,
+   9,
+   "Izba"
+  ],
+  [
+   13,
+   4,
+   "Komora"
+  ],
+  [
+   13,
+   5,
+   "Komora"
+  ],
+  [
+   13,
+   6,
+   "Komora"
+  ],
+  [
+   13,
+   7,
+   "Komora"
+  ],
+  [
+   13,
+   8,
+   "Komora"
+  ],
+  [
+   13,
+   9,
+   "Komora"
+  ],
+  [
+   13,
+   10,
+   "Komora"
+  ],
+  [
+   13,
+   11,
+   "Komora"
+  ],
+  [
+   14,
+   4,
+   "Komora"
+  ],
+  [
+   14,
+   5,
+   "Komora"
+  ],
+  [
+   14,
+   6,
+   "Komora"
+  ],
+  [
+   14,
+   7,
+   "Komora"
+  ],
+  [
+   14,
+   8,
+   "Komora"
+  ],
+  [
+   14,
+   9,
+   "Komora"
+  ],
+  [
+   14,
+   10,
+   "Komora"
+  ],
+  [
+   14,
+   11,
+   "Komora"
+  ],
+  [
+   15,
+   4,
+   "Komora"
+  ],
+  [
+   15,
+   5,
+   "Komora"
+  ],
+  [
+   15,
+   6,
+   "Komora"
+  ],
+  [
+   15,
+   7,
+   "Komora"
+  ],
+  [
+   15,
+   8,
+   "Komora"
+  ],
+  [
+   15,
+   9,
+   "Komora"
+  ],
+  [
+   15,
+   10,
+   "Komora"
+  ],
+  [
+   15,
+   11,
+   "Komora"
+  ],
+  [
+   16,
+   6,
+   "Komora"
+  ],
+  [
+   16,
+   7,
+   "Komora"
+  ],
+  [
+   16,
+   8,
+   "Komora"
+  ],
+  [
+   16,
+   9,
+   "Komora"
+  ],
+  [
+   16,
+   10,
+   "Komora"
+  ],
+  [
+   16,
+   11,
+   "Komora"
+  ],
+  [
+   17,
+   4,
+   "Komora"
+  ],
+  [
+   17,
+   5,
+   "Komora"
+  ],
+  [
+   17,
+   6,
+   "Komora"
+  ],
+  [
+   17,
+   7,
+   "Komora"
+  ],
+  [
+   17,
+   8,
+   "Komora"
+  ],
+  [
+   17,
+   9,
+   "Komora"
+  ],
+  [
+   17,
+   10,
+   "Komora"
+  ],
+  [
+   17,
+   11,
+   "Komora"
+  ],
+  [
+   18,
+   4,
+   "Komora"
+  ],
+  [
+   18,
+   5,
+   "Komora"
+  ],
+  [
+   18,
+   6,
+   "Komora"
+  ],
+  [
+   18,
+   7,
+   "Komora"
+  ],
+  [
+   18,
+   8,
+   "Komora"
+  ],
+  [
+   18,
+   9,
+   "Komora"
+  ],
+  [
+   18,
+   10,
+   "Komora"
+  ],
+  [
+   18,
+   11,
+   "Komora"
+  ],
+  [
+   19,
+   4,
+   "Komora"
+  ],
+  [
+   19,
+   5,
+   "Komora"
+  ],
+  [
+   19,
+   6,
+   "Komora"
+  ],
+  [
+   19,
+   7,
+   "Komora"
+  ],
+  [
+   19,
+   8,
+   "Komora"
+  ],
+  [
+   19,
+   9,
+   "Komora"
+  ],
+  [
+   19,
+   10,
+   "Komora"
+  ],
+  [
+   19,
+   11,
+   "Komora"
+  ]
+ ],
+ "notes": [],
+ "axes": [
+  [
+   "Izba",
+   13
+  ],
+  [
+   "Komora",
+   33
+  ]
+ ],
+ "pins": [
+  [
+   "Drzwi na podwórze",
+   6,
+   12
+  ],
+  [
+   "Palenisko z kotłem",
+   6,
+   4
+  ],
+  [
+   "Fotel bujany dziadka i fajka",
+   8,
+   4
+  ],
+  [
+   "Kredens z talerzami",
+   1.5,
+   4
+  ],
+  [
+   "Półka ze spiżarką",
+   10.5,
+   4
+  ],
+  [
+   "Kołowrotek",
+   2,
+   6
+  ],
+  [
+   "Stół z ławami",
+   3.5,
+   9.5
+  ],
+  [
+   "Maselnica, beczka z wodą, miotła",
+   10,
+   11
+  ],
+  [
+   "Przejście do komory",
+   12,
+   8.5
+  ],
+  [
+   "Łóżko dziadka (kołdra z łatek)",
+   13.5,
+   4.5
+  ],
+  [
+   "Ścianka z obrazkiem",
+   16,
+   4
+  ],
+  [
+   "Siennik bohatera - sen",
+   18,
+   4.5
+  ],
+  [
+   "Kołki z ubraniem",
+   19,
+   3
+  ],
+  [
+   "Zapasy: beczki i worki",
+   18,
+   10.5
+  ],
+  [
+   "Umywalka",
+   19,
+   7
+  ]
+ ]
+}

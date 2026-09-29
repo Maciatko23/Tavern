@@ -1,11 +1,20 @@
 //=============================================================================
 // ChoppableTree.js
 //=============================================================================
+// Trees, bushes, rocks, ore veins, stumps and logs to gather, and the hero's tool swings. Split in four (2026-09-29): this file holds
+// the parameters and the defaults they make, the table of the swings (Combat.js reads it while it loads), the tiles big objects take,
+// the tags read from the events' notes (<Tree>, <Rock>, <Stump>, <Log>, <Bush>, <Occupy>), the saved state, the plugin commands, the
+// API (window.ChoppableTree) and EVERY engine hook. ChoppableTree_Objects.js (what each thing is, the blow, the drops, fruit, the
+// lightning's char, the fall and the break, the bus's "chop"), ChoppableTree_Swing.js (the hero's swings: the sheets, the tool drawn
+// without one, held O) and ChoppableTree_Render.js (the tree drawn in strips - the sway, the kick, the fall, the embers -, the hit
+// flash, the flying chips and stones) are functions and classes only.
 
 /*:
  * @target MZ
- * @plugindesc Zbieractwo: ścinanie drzew siekierą, kopanie pieńków łopatą, rozbijanie kamieni kilofem, rąbanie kłód, prawdziwa animacja postaci przy machaniu narzędziem, odłamki przy uderzeniu, duże obiekty blokują swoją podstawę, zwalnia ziemię pod uprawy i budowę, animacje grabienia i orki, kucania przy siewie i zbiorze, ścinanie krzaków (dają gałęzie), kamienie w wielu rodzajach (lecą do gracza po rozbiciu), duże krzewy z przechodnim brzegiem, 26 kamieni od małych po ogromne plus żyła rudy żelaza, bezlistne zarośla z gałęzi blokujące drogę, zużywa wytrzymałość, dzikie drzewa owocowe (jabłoń, grusza) z sezonowym owocem do zerwania przed ścięciem. v1.16.0
+ * @plugindesc Zbieractwo: ścinanie drzew siekierą, kopanie pieńków łopatą, rozbijanie kamieni kilofem, rąbanie kłód, prawdziwa animacja postaci przy machaniu narzędziem, odłamki przy uderzeniu, duże obiekty blokują swoją podstawę, zwalnia ziemię pod uprawy i budowę, animacje grabienia i orki, kucania przy siewie i zbiorze, ścinanie krzaków (dają gałęzie), kamienie w wielu rodzajach (lecą do gracza po rozbiciu), duże krzewy z przechodnim brzegiem, 26 kamieni od małych po ogromne plus żyła rudy żelaza, bezlistne zarośla z gałęzi blokujące drogę, zużywa wytrzymałość, dzikie drzewa owocowe (jabłoń, grusza) z sezonowym owocem do zerwania przed ścięciem. v1.17.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param axeItem
  * @text Przedmiot: siekiera
@@ -227,6 +236,10 @@
  * @text Uderz w kamień (kilof)
  * @desc Użyj w zdarzeniu-kamieniu (notatka <Rock>). Sprawdza kilof, liczy uderzenia i rozbija kamień.
  *
+ * @command pickFruit
+ * @text Zerwij owoce z drzewa
+ * @desc Użyj na pierwszej stronie zdarzenia-drzewa owocowego (jabłoń, grusza; wyzwalacz: Przycisk akcji). Zrywa owoce, gdy są w sezonie; potem drzewo można ściąć.
+ *
  * @help
  * ============================================================================
  * ChoppableTree.js
@@ -369,11 +382,48 @@
  *
  * Wszystkie klucze w notatkach są opcjonalne; brakujące biorą się z
  * parametrów wtyczki.
+ *
+ * STAN W ZAPISIE (rdzeń TawernaCore): $gameSystem._tw.treeFruit (dzień, w
+ * którym zerwano owoce z każdego drzewa owocowego) i $gameSystem._tw.smoulder
+ * (godzina, w której piorun trafił w drzewo - zapisuje ją wtyczka Storm).
+ * Stare zapisy z $gameSystem._treeFruit i _smoulder są przejmowane; stare
+ * nazwy dalej prowadzą do nowego miejsca.
+ *
+ * SZYNA ZDARZEŃ (Tawerna.on): chop { kind, id, mapId, x, y, done, drops,
+ * charred, hand, event } - rzecz skończona: ścięte drzewo (kind "tree"),
+ * wykopany pieniek ("stump"), rozbity kamień ("rock") albo żyła rudy ("ore"),
+ * ścięty krzak ("bush"), rozrąbana albo zebrana kłoda ("log"). done: nic z
+ * niej nie zostało, ziemia jest wolna (ścięte drzewo zostawia pieniek: false);
+ * drops: co wpadło do torby, [{ item, amount }]; charred: zwęglone drzewo albo
+ * jego pieniek; hand: zebrane ręką, bez narzędzia (kamyki, gruz).
+ *
+ * PLIKI (2026-09-29 podzielone): ChoppableTree.js (parametry, tabela zamachów,
+ * duże obiekty, tagi, stan, polecenia, API, WSZYSTKIE haki silnika - ten),
+ * ChoppableTree_Objects.js (rodzaje rzeczy, uderzenie, łup, owoce, piorun,
+ * upadek i rozbicie), ChoppableTree_Swing.js (zamachy bohatera: arkusze,
+ * narzędzie bez arkusza, trzymane O), ChoppableTree_Render.js (drzewo w
+ * paskach: kołysanie, odrzut, upadek, żar; błysk trafienia, odłamki i kamienie
+ * lecące do postaci). Kolejność na liście wtyczek: ChoppableTree,
+ * ChoppableTree_Objects, ChoppableTree_Swing, ChoppableTree_Render (zaraz pod
+ * ChoppableTree). Dopóki części nie są wpisane, ten plik wczytuje je sam.
  * ============================================================================
  */
 
 (() => {
     "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("ChoppableTree.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+    // the family's shared bag: this file (P.core), ChoppableTree_Objects.js (P.objects), ChoppableTree_Swing.js (P.swing),
+    // ChoppableTree_Render.js (P.render). The parts are read when needed: in the game every one of them is in the page by then
+    const P = T.api("ChoppableTree_parts") || T.register("ChoppableTree_parts", {});
+    const missing = file => { throw new Error("ChoppableTree.js: brak " + file + " (a part of ChoppableTree.js)"); };
+    const O = () => P.objects || missing("ChoppableTree_Objects.js");
+    const S = () => P.swing || missing("ChoppableTree_Swing.js");
+    const R = () => P.render || missing("ChoppableTree_Render.js");
+    // an engine method whose body is in a part: the part's function with the object as `this` (the method stays on the prototype
+    // here, so other plugins call - or wrap - it where they always did)
+    const via = (part, name) => function() { return part()[name].apply(this, arguments); };
 
     const pluginName = "ChoppableTree";
     const params = PluginManager.parameters(pluginName);
@@ -409,7 +459,6 @@
     const CHARCOAL = num(params.charcoalItem, 79);
     // pine cones (Farming.js lays them under the pines, Forestry.js turns their seeds into trees)
     const CONE = num(params.coneItem, 147);
-    const isPine = event => { const data = event.event(), page = data && data.pages && data.pages[0]; return !!page && /Pine/.test(page.image.characterName || ""); };
     const CHARRED_DROP = [6, 10], CHARRED_STUMP_DROP = [1, 2];
     const CHARRED_HITS = 2;   // a charred tree is brittle: two blows fell it (the user's number)
     const CHARRED_TONE = [-62, -72, -84, 255];   // grey, then darker and a little warm: soot-black wood
@@ -445,66 +494,6 @@
         dropmax: 2,
         cost: num(params.staminaBush, 3),
         bare: 0   // 1: leafless (dry twigs fly off instead of leaves)
-    };
-    // Every picture named "!$Bush_..." is a bush: no note, no commands needed.
-    const BUSH_GRAPHIC = /^!\$Bush_/;
-    // What the ready-made bushes give: hits to cut, branches dropped, stamina per
-    // hit. Bushes that are not listed use BUSH_DEFAULTS.
-    const TUFT = { hits: 1, dropmin: 1, dropmax: 1, cost: 2 };
-    const BUSH_PROFILES = {
-        "!$Bush_Big": { hits: 2, dropmin: 3, dropmax: 5, cost: 5 },
-        "!$Bush_Medium": { hits: 2, dropmin: 2, dropmax: 4, cost: 4 },
-        "!$Bush_Wide": { hits: 2, dropmin: 2, dropmax: 3, cost: 4 },
-        "!$Bush_Small": TUFT, "!$Bush_Grass": TUFT, "!$Bush_Fern_A": TUFT, "!$Bush_Fern_B": TUFT,
-        "!$Bush_Snow_Tuft_A": TUFT, "!$Bush_Snow_Tuft_B": TUFT, "!$Bush_Bud_B": TUFT,
-        // leafless thickets: dense woody tangles, more hits and more branches than leafy bushes
-        "!$Bush_Bare_A": { hits: 2, dropmin: 2, dropmax: 3, cost: 4, bare: 1 },
-        "!$Bush_Bare_B": { hits: 2, dropmin: 2, dropmax: 3, cost: 4, bare: 1 },
-        "!$Bush_Bare_Tall": { hits: 2, dropmin: 3, dropmax: 4, cost: 5, bare: 1 },
-        "!$Bush_Bare_Wide": { hits: 2, dropmin: 3, dropmax: 5, cost: 5, bare: 1 },
-        "!$Bush_Bare_Hedge": { hits: 5, dropmin: 4, dropmax: 6, cost: 5, bare: 1 },
-        "!$Bush_Bare_Thicket": { hits: 5, dropmin: 4, dropmax: 6, cost: 6, bare: 1 },
-        "!$Bush_Bare_Vines": { hits: 5, dropmin: 4, dropmax: 6, cost: 6, bare: 1 },
-        "!$Bush_Bare_Big": { hits: 6, dropmin: 5, dropmax: 8, cost: 7, bare: 1 }
-    };
-    // Every picture named "!$Rock_..." (and the boulder) is a rock: no note, no
-    // commands needed. hits, stones dropped and stamina per hit by size. An event
-    // with a <Rock> note keeps using the plugin parameters plus its note.
-    const ROCK_GRAPHIC = /^!\$(Rock_|Boulder_)/;
-    const SMALL_ROCK = { hits: 6, dropmin: 1, dropmax: 2, cost: 5 };   // (the numbers of blows: the user's, 2026-09-24)
-    const ROCK_PROFILES = {
-        "!$Boulder_A": { hits: 20, dropmin: 2, dropmax: 4, cost: 7 },
-        "!$Rock_Tall": { hits: 16, dropmin: 2, dropmax: 3, cost: 6 },
-        "!$Rock_Slab": { hits: 4, dropmin: 2, dropmax: 4, cost: 6 },
-        "!$Rock_Mound": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Pile": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Grey": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Tan": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Snow_Grey": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Snow_Tan": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Flat": SMALL_ROCK, "!$Rock_Round": SMALL_ROCK, "!$Rock_Steps": SMALL_ROCK,
-        // loose pebbles and rubble lie on the ground: tool 0 = picked up by hand (no pickaxe, no swing)
-        "!$Rock_Pebbles": { tool: 0, hits: 1, dropmin: 1, dropmax: 1, cost: 1, title: "Podniesiono kamień!" },
-        "!$Rock_Boulder_Crack": { hits: 20, dropmin: 2, dropmax: 4, cost: 7 },
-        "!$Rock_Jagged": { hits: 20, dropmin: 2, dropmax: 4, cost: 7 },
-        "!$Rock_Twin": { hits: 4, dropmin: 2, dropmax: 3, cost: 6 },
-        "!$Rock_Wide": { hits: 14, dropmin: 3, dropmax: 5, cost: 7 },
-        "!$Rock_Huge": { hits: 18, dropmin: 4, dropmax: 7, cost: 8 },
-        "!$Rock_Spire": { hits: 16, dropmin: 2, dropmax: 3, cost: 6 },
-        "!$Rock_Column": { hits: 4, dropmin: 2, dropmax: 4, cost: 6 },
-        "!$Rock_Cluster": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Long": { hits: 4, dropmin: 2, dropmax: 4, cost: 6 },
-        "!$Rock_Rubble": { tool: 0, hits: 1, dropmin: 1, dropmax: 2, cost: 1, title: "Podniesiono kamienie!" },
-        "!$Rock_Cracked": { hits: 16, dropmin: 1, dropmax: 3, cost: 6 },
-        "!$Rock_Cairn": SMALL_ROCK, "!$Rock_Chunk": SMALL_ROCK, "!$Rock_Mossy": SMALL_ROCK,
-        // an ore vein: tougher than a plain rock, gives iron ore instead of stone (Farming/kuźnia)
-        "!$Rock_Ore_Iron": { hits: 26, dropmin: 1, dropmax: 2, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        // more shapes of the same vein (the bigger, the more ore and the more blows)
-        "!$Rock_Ore_Iron_Chunk": { hits: 22, dropmin: 1, dropmax: 2, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Spire": { hits: 26, dropmin: 2, dropmax: 3, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Cluster": { hits: 26, dropmin: 2, dropmax: 3, cost: 7, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Twin": { hits: 30, dropmin: 3, dropmax: 4, cost: 8, drop: 85, title: "Wydobyto rudę żelaza!" },
-        "!$Rock_Ore_Iron_Jagged": { hits: 30, dropmin: 3, dropmax: 5, cost: 8, drop: 85, title: "Wydobyto rudę żelaza!" }
     };
     // Big objects block the tiles at their base (in tiles, counted from the
     // event's own tile: right = extra tiles to the right, up = extra rows above),
@@ -610,52 +599,36 @@
         { sheet: "Swing_Punch", tool: -1, frames: 18, impact: 8, hold: 2, reach: 2, hit: [3, 4, 4, 4] }
     ];
     const SWING_KIND = { log: 0, rock: 1, stump: 2, fall: 3, bush: 3 };   // bushes: axe from the side
-    const SHAKE_FRAMES = 6;
-    const TOOL_SIZE = 32;
-    const TOOL_PIVOT = { x: 16, y: 27 };
-    // [wind-up angle, strike angle] in degrees for each tool (0 = held upright)
-    const SWING_ANGLES = [[-70, 80], [-80, 85], [-30, 65], [-85, 70], [-75, 30]];
-    const STRIP_HEIGHT = 6;
-    const KICK_PIXELS = 7;
-    const FLASH_FRAMES = 14;
-    const FLASH_ALPHA = 170;
-    const FALL_FRAMES = 55;
+    const FALL_FRAMES = 55;   // (a felled tree: frames from the first tilt to the ground)
+    const BREAK_FRAMES = { stump: 28, rock: 30, log: 24, bush: 22 };   // (a stump, a rock, a log, a bush: the frames it squashes and fades)
+    // The burn of a tree struck by lightning (ChoppableTree_Render.js draws it, Storm.js smokes over it): from the tip to the foot, then
+    // the embers dying out
+    const EMBER_FRONT = 0.2;   // h: about 12 s at the usual clock speed from the tip to the foot
+    const EMBER_SMOULDER = 0.5, EMBER_LIFE = EMBER_FRONT + EMBER_SMOULDER;   // then 30 game minutes of embers and smoke
 
     // (the new hero - HeroLook.js - may play its own sheet for a kind)
     function swingKind(kind) {
-        const def = SWING_KINDS[kind] || SWING_KINDS[0];
-        return window.HeroLook && HeroLook.swingDef ? HeroLook.swingDef(kind, def) : def;
+        const def = SWING_KINDS[kind] || SWING_KINDS[0], look = T.api("HeroLook");
+        return look && look.swingDef ? look.swingDef(kind, def) : def;
     }
+    // the kind with that name, else the first that plays that sheet (-1: none) - Combat.js (while it loads)
+    const swingKindOf = key => { const i = SWING_KINDS.findIndex(k => k.name === key); return i >= 0 ? i : SWING_KINDS.findIndex(k => k.sheet === key); };
 
-    const easeOut = x => 1 - (1 - x) * (1 - x);
-    const easeIn = x => x * x;
-    const easeInOut = x => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
-    const clamp01 = x => Math.max(0, Math.min(1, x));
+    // ------------------------------------------------------------------
+    // Saved data (TawernaCore): _tw.treeFruit = { "mapId:eventId": the day its fruit was picked } (fruit trees) and _tw.smoulder =
+    // { "mapId:eventId": the clock hour (day * 24 + hour) lightning struck the tree } (Storm.js writes it, the embers read it). An older
+    // save's $gameSystem._treeFruit / _smoulder is taken over; the old names stay hidden ways there (Storm.js writes $gameSystem._smoulder)
+    // ------------------------------------------------------------------
+    const fruitState = T.state.define("treeFruit", () => ({}), { version: 1, adopt: "_treeFruit", owner: pluginName });
+    const smoulderState = T.state.define("smoulder", () => ({}), { version: 1, adopt: "_smoulder", owner: pluginName });
 
-    // Pose of the tool at swing time f (0..1): its angle in radians (positive =
-    // clockwise, before mirroring for the facing) and how far the body lunges
-    // forward (0..1, peaking on the strike).
-    function swingPose(f, tool) {
-        const [windup, strike] = SWING_ANGLES[tool] || SWING_ANGLES[0];
-        let deg;
-        if (f < 0.42) deg = windup * easeOut(f / 0.42);
-        else if (f < 0.5) deg = windup;
-        else if (f < 0.6) deg = windup + (strike - windup) * easeIn((f - 0.5) / 0.1);
-        else deg = strike * (1 - easeInOut(clamp01((f - 0.6) / 0.4)));
-        return { angle: (deg * Math.PI) / 180, lunge: Math.sin(Math.PI * clamp01((f - 0.42) / 0.4)) };
-    }
-
-    // How far a falling tree has tipped over, 0 (upright) to 1 (flat on the
-    // ground). It accelerates like a real fall. The same value drives the tilt
-    // and the transparency, so the lower the tree gets the more it fades and
-    // it is gone exactly when it reaches the ground.
-    function fallTilt(frames) {
-        const p = Math.min(1, frames / FALL_FRAMES);
-        return p * p;
-    }
-    const BREAK_FRAMES = { stump: 28, rock: 30, log: 24, bush: 22 };
-
+    // ------------------------------------------------------------------
+    // The tags on an event's note. Only the note, as always (Tawerna.tag on its text), and only the keys the defaults know, as numbers
+    // ------------------------------------------------------------------
     const configCaches = { Tree: new WeakMap(), Rock: new WeakMap(), Stump: new WeakMap(), Log: new WeakMap(), Bush: new WeakMap() };
+
+    // a value written as a number (the core gives 5 for "5"; true / false never were numbers here)
+    const isNumberArg = value => typeof value !== "boolean" && isFinite(Number(value));
 
     // Reads <Tag:key=value,...> from the event note. Returns null when the
     // event has no such tag (and whenNoTag is not set); otherwise the defaults
@@ -665,134 +638,33 @@
         const cache = configCaches[tag];
         if (cache.has(event)) return cache.get(event);
         const data = event.event();
-        const m = data ? new RegExp("<" + tag + "(?::\\s*([^>]*))?>", "i").exec(data.note || "") : null;
+        const args = data ? T.tag(data.note || "", tag) : null;
         let cfg = null;
-        if (m || whenNoTag) {
-            cfg = Object.assign({}, m ? defaults : whenNoTag);
-            for (const pair of m ? (m[1] || "").split(",") : []) {
-                const [key, value] = pair.split("=").map(s => s.trim().toLowerCase());
-                if (key in cfg && value !== undefined && isFinite(Number(value))) {
-                    cfg[key] = Number(value);
+        if (args || whenNoTag) {
+            cfg = Object.assign({}, args ? defaults : whenNoTag);
+            if (args) {
+                for (const key of Object.keys(args.kv)) {
+                    if (key in cfg && isNumberArg(args.kv[key])) cfg[key] = Number(args.kv[key]);
                 }
             }
         }
         cache.set(event, cfg);
         return cfg;
     }
-    const treeConfig = event => readConfig(event, "Tree", TREE_DEFAULTS);
-
-    // ---- fruit trees: a Tree that also carries fruit while standing (wild apple / pear). Picking
-    // the fruit (self-switch C on) is the only way to make it choppable; it grows back after some
-    // days, only in season. $gameSystem._treeFruit = { "mapId:eventId": dayItWasPicked }
-    function treeFruitStore() {
-        if (!$gameSystem._treeFruit) $gameSystem._treeFruit = {};
-        return $gameSystem._treeFruit;
-    }
-    const fruitKey = event => event._mapId + ":" + event._eventId;
-    function fruitSeasonNow() {
-        if (!(window.Farming && Farming.seasonIndex)) return true;   // no Farming.js loaded: no season gate
-        const s = Farming.seasonIndex($gameSystem.dayNightDay());
-        return s >= FRUIT_SEASON_FROM && s <= FRUIT_SEASON_TO;
-    }
-    // should self-switch C be OFF (fruiting) right now?
-    function shouldFruit(event, cfg) {
-        if (!cfg || !cfg.fruit || !fruitSeasonNow()) return false;
-        const picked = treeFruitStore()[fruitKey(event)];
-        return picked === undefined || $gameSystem.dayNightDay() - picked >= FRUIT_REGROW_DAYS;
-    }
-    // keeps self-switch C in sync with shouldFruit() before the event's page is (re)picked
-    function syncFruitSwitch(event) {
-        const cfg = treeConfig(event);
-        if (!cfg || !cfg.fruit) return;
-        const want = !shouldFruit(event, cfg);   // C on = bare
-        if ($gameSelfSwitches.value([event._mapId, event._eventId, "C"]) !== want) {
-            $gameSelfSwitches.setValue([event._mapId, event._eventId, "C"], want);
-        }
-    }
-    const _Game_Event_refresh = Game_Event.prototype.refresh;
-    Game_Event.prototype.refresh = function() {
-        syncFruitSwitch(this);
-        _Game_Event_refresh.call(this);
-    };
-    // catches regrowth while the player just stands around on the map (refresh() otherwise only
-    // runs on map load and self-switch/variable changes, not every time an hour passes)
-    let lastFruitHour = -1;
-    const _Scene_Map_update_fruit = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update_fruit.call(this);
-        if (!$gameSystem || typeof $gameSystem.dayNightHour !== "function") return;
-        const h = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
-        if (h === lastFruitHour) return;
-        lastFruitHour = h;
-        for (const event of $gameMap.events()) if (treeConfig(event) && treeConfig(event).fruit) event.refresh();
-    };
-    // ---- a tree struck by lightning (Storm.js) is charred: self-switch D (saved with the game). It stays where it
-    // is, black; it falls after half the blows and gives charcoal instead of wood, and so does its stump.
-    const isCharred = event => !!event && !!treeConfig(event) && $gameSelfSwitches.value([event._mapId, event._eventId, "D"]);
-    // a standing tree lightning can hit: an ordinary one (not a fruit tree), not felled, showing its picture
-    function isStandingTree(event) {
-        const cfg = treeConfig(event);
-        if (!cfg || cfg.fruit) return false;
-        const on = ch => $gameSelfSwitches.value([event._mapId, event._eventId, ch]);
-        return !on("A") && !on("B") && event.tileId() === 0 && !!event.characterName();
-    }
-    const strikeableTrees = () => $gameMap.events().filter(e => isStandingTree(e) && !isCharred(e) && !e.isTreeAnimating());
-    function charTree(event) {
-        if (!isStandingTree(event) || isCharred(event)) return false;
-        $gameSelfSwitches.setValue([event._mapId, event._eventId, "D"], true);
-        queueFxAt(event, "ember", true);   // sparks out of the crown and burnt leaves drifting down
-        queueFxAt(event, "ash", true);
-        return true;
-    }
-
-    // A "!$Rock_..." / "!$Boulder_..." picture on one of the event's pages, if any.
-    function rockGraphic(event) {
-        const data = event.event();
-        const page = data && data.pages ? data.pages.find(pg => pg.image && ROCK_GRAPHIC.test(pg.image.characterName || "")) : null;
-        return page ? page.image.characterName : "";
-    }
-    const rockConfig = event => {
-        const graphic = rockGraphic(event);
-        return readConfig(event, "Rock", ROCK_DEFAULTS, graphic ? Object.assign({}, ROCK_DEFAULTS, ROCK_PROFILES[graphic] || SMALL_ROCK) : null);
-    };
-    const stumpConfig = event => readConfig(event, "Stump", STUMP_DEFAULTS);
-    const logConfig = event => readConfig(event, "Log", LOG_DEFAULTS);
-
-    // The "!$Bush_..." picture an event shows (or showed before it was chopped:
-    // the first page that has one).
-    function bushGraphic(event) {
-        const data = event.event();
-        const page = data && data.pages ? data.pages.find(pg => pg.image && BUSH_GRAPHIC.test(pg.image.characterName || "")) : null;
-        return page ? page.image.characterName : "";
-    }
-    // <Bush> note, or a bush picture (then the numbers come from BUSH_PROFILES).
-    // Not for events that are already a tree, rock, stump or log.
-    function bushConfig(event) {
-        if (configCaches.Bush.has(event)) return configCaches.Bush.get(event);
-        if (treeConfig(event) || rockConfig(event) || stumpConfig(event) || logConfig(event)) {
-            configCaches.Bush.set(event, null);
-            return null;
-        }
-        const graphic = bushGraphic(event);
-        const defaults = Object.assign({}, BUSH_DEFAULTS, BUSH_PROFILES[graphic]);
-        return readConfig(event, "Bush", defaults, graphic ? defaults : null);
-    }
 
     // <Occupy:left=,right=,up=,down=,soft=> from the event note: only the keys that are
     // written there (null when the event has no such tag).
+    const OCCUPY_KEYS = ["left", "right", "up", "down", "soft"];
     const occupyTags = new WeakMap();
     function occupyTag(event) {
         if (occupyTags.has(event)) return occupyTags.get(event);
         const data = event.event();
-        const m = data ? /<Occupy(?::\s*([^>]*))?>/i.exec(data.note || "") : null;
+        const args = data ? T.tag(data.note || "", "Occupy") : null;
         let tag = null;
-        if (m) {
+        if (args) {
             tag = {};
-            for (const pair of (m[1] || "").split(",")) {
-                const [key, value] = pair.split("=").map(s => s.trim().toLowerCase());
-                if (["left", "right", "up", "down", "soft"].includes(key) && value !== undefined && isFinite(Number(value))) {
-                    tag[key] = Number(value);
-                }
+            for (const key of Object.keys(args.kv)) {
+                if (OCCUPY_KEYS.includes(key) && isNumberArg(args.kv[key])) tag[key] = Number(args.kv[key]);
             }
         }
         occupyTags.set(event, tag);
@@ -822,32 +694,33 @@
         return x < left + s || x > right - s || y < top + s || y > bottom - s;
     }
 
-    // The tile of the event nearest to the player: where the tool actually hits.
-    function targetTile(event) {
-        const o = occupyConfig(event);
-        if (!o) return { x: event.x, y: event.y };
-        if (isInsideArea(event, o, $gamePlayer.x, $gamePlayer.y)) {
-            // standing on a soft edge tile: the tool hits the tile he is facing
-            const d = $gamePlayer.direction();
-            const fx = $gamePlayer.x + (d === 6 ? 1 : d === 4 ? -1 : 0), fy = $gamePlayer.y + (d === 2 ? 1 : d === 8 ? -1 : 0);
-            if (isInsideArea(event, o, fx, fy)) return { x: fx, y: fy };
-        }
-        return {
-            x: Math.max(event.x - o.left, Math.min(event.x + o.right, $gamePlayer.x)),
-            y: Math.max(event.y - o.up, Math.min(event.y + o.down, $gamePlayer.y))
-        };
-    }
-    const anyHarvestConfig = event => treeConfig(event) || rockConfig(event) || stumpConfig(event) || logConfig(event) || bushConfig(event);
-    // what lies low - a log, a stump (a <Stump>, or a felled tree not yet dug out), a bush: a rabbit hops over it (Hunting.js)
-    function isLow(event) {
-        if (logConfig(event) || stumpConfig(event) || bushConfig(event)) return true;
-        const sw = s => $gameSelfSwitches.value([event._mapId, event._eventId, s]);
-        return !!treeConfig(event) && sw("A") && !sw("B");
-    }
+    // the numbers of a thing to gather (ChoppableTree_Objects.js: the kinds)
+    const treeConfig = event => O().treeConfig(event);
+    const rockConfig = event => O().rockConfig(event);
+    const bushConfig = event => O().bushConfig(event);
+    const anyHarvestConfig = event => O().anyHarvestConfig(event);
 
-    function playSe(name, pitch) {
-        AudioManager.playSe({ name, volume: 90, pitch, pan: 0 });
-    }
+    // ------------------------------------------------------------------
+    // Engine hooks. Every one ChoppableTree has is in this file, so they keep its place in the plugin list whether its parts are
+    // listed or put into the page by this file at the end (the parts are functions and classes only); the longer bodies are in the
+    // parts, called through the methods here (via)
+    // ------------------------------------------------------------------
+    // fruit trees (ChoppableTree_Objects.js): self-switch C follows the fruit before the event's page is (re)picked
+    const _Game_Event_refresh = Game_Event.prototype.refresh;
+    Game_Event.prototype.refresh = function() {
+        O().syncFruitSwitch(this);
+        _Game_Event_refresh.call(this);
+    };
+    // catches regrowth while the player just stands around on the map (refresh() otherwise only
+    // runs on map load and self-switch/variable changes, not every time an hour passes) - the map's clock (TawernaCore)
+    let lastFruitHour = -1;
+    T.onMapUpdate(() => {
+        if (!$gameSystem || typeof $gameSystem.dayNightHour !== "function") return;
+        const h = T.time.day() * 24 + T.time.hour();
+        if (h === lastFruitHour) return;
+        lastFruitHour = h;
+        for (const event of $gameMap.events()) if (treeConfig(event) && treeConfig(event).fruit) event.refresh();
+    }, { owner: pluginName, name: "fruit" });
 
     const _Game_Event_pos = Game_Event.prototype.pos;
     Game_Event.prototype.pos = function(x, y) {
@@ -919,175 +792,7 @@
         _Game_Event_update.call(this);
         this.updateTreeAnimation();
     };
-
-    Game_Event.prototype.updateTreeAnimation = function() {
-        if (this._treeShake > 0) {
-            this._treeShake--;
-        }
-        if (this._swingT >= 0) {
-            const swing = swingKind(this._swingKind);
-            this._swingT += this._swingRate || 1;   // (Zręczność: a quicker swing, workSpeed)
-            if (!this._hitLanded && this._swingT >= swing.impact && this._pendingAction) {
-                this._hitLanded = true;
-                applyPendingAction(this);
-            }
-            if (this._swingT >= swing.frames) {
-                this._swingT = -1;
-                if ($gamePlayer._swingEvent === this) $gamePlayer._swingEvent = null;
-                const h = $gamePlayer._holdStrike;
-                if (h && h.id === this._eventId && h.map === this._mapId) h.t = Math.max(2, Math.round(HOLD_PAUSE / (this._swingRate || 1)));   // held O: the next blow soon
-            }
-        }
-        if (this._treeGone && ++this._treeGoneFrames > 3) {
-            this.releaseInvisibleHold();
-        }
-        if (this._treeFallT >= 0) {
-            this._treeFallT++;
-            if (this._treeFallT >= FALL_FRAMES) {
-                playSe(FALL_SE, 100);
-                this.finishTreeFall();
-            }
-        }
-        if (this._breakT >= 0) {
-            this._breakT++;
-            const total = BREAK_FRAMES[this._breakKind] || 30;
-            const p = Math.min(1, this._breakT / total);
-            this.setOpacity(Math.round(255 * (1 - p * p)));
-            if (this._breakT >= total) {
-                this.finishBreak();
-            }
-        }
-    };
-
-    // ------------------------------------------------------------------
-    // Swings for actions that have no event to wait on (Farming.js: raking,
-    // hoeing ...). The player cannot move while it plays. onImpact runs on the
-    // strike frame, onDone when the swing is over. Returns false (nothing was
-    // started) when there is no such kind of swing or the player is busy, so the
-    // caller can simply do the action right away.
-    // ------------------------------------------------------------------
-    // opts (optional): { holdWhile, onWait, onHoldEnd, still, holdAt, keepOnMove, wobble, rate } - after the impact frame the figure stays in that
-    // pose for as long as holdWhile() returns true (sitting by the fire until the food is ready); onWait(n) runs every frame of the wait;
-    // pressing cancel or a direction key ends the wait early; onHoldEnd(cancelled) runs when it ends. still: no shifting between two poses
-    // during the wait. holdAt: wait at this frame instead, BEFORE the impact (aiming the sling: it whirls until F is let go, then the
-    // stone leaves); keepOnMove: the direction keys do not end the wait (they turn to another target); wobble: frames per pose shift (22);
-    // rate: animation frames a game frame advances (1; more = a quicker swing - the hammer with Zręczność, Farming.js).
-    Game_Player.prototype.startToolSwing = function(kind, onImpact, onDone, opts) {
-        if (!SWING_KINDS[kind] || this._toolSwing || this._swingEvent) return false;
-        this._toolSwing = { _swingT: 0, _swingKind: kind, onImpact, onDone, opts: opts || null, _waiting: false, _wait: 0 };
-        this._swingEvent = this._toolSwing;
-        return true;
-    };
-
-    Game_Player.prototype.isToolSwinging = function() {
-        return !!this._toolSwing;
-    };
-    // a swing is never taken over from a save file: its callbacks (onImpact, holdWhile...) do not survive it, and a game saved while
-    // the hero sat or worked threw "opts.holdWhile is not a function" on loading (2026-09-26)
-    const _DataManager_extractSaveContents_swing = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
-        _DataManager_extractSaveContents_swing.call(this, contents);
-        if ($gamePlayer) { $gamePlayer._toolSwing = null; $gamePlayer._swingEvent = null; }
-    };
-
-    const _Game_Player_update = Game_Player.prototype.update;
-    Game_Player.prototype.update = function(sceneActive) {
-        _Game_Player_update.call(this, sceneActive);
-        if (sceneActive) updateHoldStrike(this);
-        const swing = this._toolSwing;
-        if (!swing) return;
-        const rate = swing.opts && swing.opts.rate > 0 ? swing.opts.rate : 1;
-        swing._acc = (swing._acc || 0) + rate;
-        while (swing._acc >= 1 && this._toolSwing === swing) {   // (rate 1: exactly one step a frame, as always)
-            swing._acc -= 1;
-            if (this.stepToolSwing(swing) === "hold") { swing._acc = 0; break; }
-        }
-    };
-    // one frame of the swing's animation; "hold" while the pose is held
-    Game_Player.prototype.stepToolSwing = function(swing) {
-        const def = swingKind(swing._swingKind), opts = swing.opts;
-        if (swing._waiting) {   // holding the pose until the action is over
-            const cancelled = Input.isTriggered("cancel") || (!opts.keepOnMove && Input.dir4 !== 0);
-            if (!cancelled && typeof opts.holdWhile === "function" && opts.holdWhile()) {
-                swing._wait++;
-                if (opts.onWait) opts.onWait(swing._wait);
-                return "hold";
-            }
-            swing._waiting = false;
-            swing._cancelled = cancelled;
-            if (opts.onHoldEnd) opts.onHoldEnd(cancelled);
-        }
-        swing._swingT++;
-        if (opts && opts.holdAt && swing._swingT === opts.holdAt && typeof opts.holdWhile === "function" && opts.holdWhile()) swing._waiting = true;   // waits before the impact
-        if (swing._swingT === def.impact) {
-            if (swing._cancelled) { this._toolSwing = null; if (this._swingEvent === swing) this._swingEvent = null; return; }   // aiming cancelled: no shot
-            if (swing.onImpact) swing.onImpact();
-            if (opts && !opts.holdAt && typeof opts.holdWhile === "function" && opts.holdWhile()) swing._waiting = true;
-        }
-        if (swing._swingT >= def.frames) {
-            this._toolSwing = null;
-            if (this._swingEvent === swing) this._swingEvent = null;
-            if (swing.onDone) swing.onDone();
-        }
-    };
-
-    const _Game_Player_canMove = Game_Player.prototype.canMove;
-    Game_Player.prototype.canMove = function() {
-        return !this._toolSwing && _Game_Player_canMove.call(this);
-    };
-
-    // The ground a destroyed object stood on (its base tiles) becomes cleared land
-    // that can be raked, ploughed, sown or built on (Farming.js keeps track of it).
-    // original: use the picture of the event's first page (what it showed before it
-    // was destroyed) to work out how much ground it covered.
-    function clearLandUnder(event, original) {
-        if (typeof $gameSystem.clearLand !== "function") return;
-        const pages = event.event() && event.event().pages;
-        const name = original && pages && pages[0] ? pages[0].image.characterName : undefined;
-        const o = occupyConfig(event, name) || { left: 0, right: 0, up: 0, down: 0 };
-        const tiles = [];
-        for (let y = event.y; y <= event.y + o.down; y++) {
-            for (let x = event.x - o.left; x <= event.x + o.right; x++) tiles.push({ x, y });
-        }
-        $gameSystem.clearLand(event._mapId, tiles);
-    }
-
-    // Objects that were destroyed before the farming system existed (or in an
-    // older save) free their ground too, as soon as the map is set up.
-    function isDestroyedHarvest(event) {
-        if (!(event instanceof Game_Event)) return false;
-        const on = ch => $gameSelfSwitches.value([event._mapId, event._eventId, ch]);
-        if (rockConfig(event) || logConfig(event) || bushConfig(event)) return on("A");
-        if (stumpConfig(event) || treeConfig(event)) return on("B");   // a felled tree only leaves a stump
-        return false;
-    }
-
-    const _Game_Map_setupEvents = Game_Map.prototype.setupEvents;
-    Game_Map.prototype.setupEvents = function() {
-        _Game_Map_setupEvents.call(this);
-        if (typeof $gameSystem.clearLand !== "function") return;
-        for (const event of this.events()) {
-            if (isDestroyedHarvest(event)) clearLandUnder(event, true);
-        }
-    };
-
-    const rollCount = (min, max) => min + Math.floor(Math.random() * (Math.max(max, min) - min + 1));
-
-    // fixed: the number was already decided (the stones that flew out of the rock)
-    // bonusKey: a skill's chance of one piece more (Zbieractwo: "chop.yield", "mine.yield", "forage.yield")
-    function giveReward(title, itemId, min, max, fixed, bonusKey) {
-        const item = $dataItems[itemId];
-        let count = fixed !== undefined ? fixed : rollCount(min, max);
-        if (bonusKey && count > 0 && perkRoll(bonusKey)) count++;
-        // With SurvivalHUD loaded, gainItem shows a floating "+N item" over the
-        // player; without it fall back to plain messages.
-        const hasPopups = typeof $gameTemp.pushLootPopup === "function";
-        if (!hasPopups) $gameMessage.add(title);
-        if (item && count > 0) {
-            $gameParty.gainItem(item, count);
-            if (!hasPopups) $gameMessage.add("Zdobyto: \\I[" + item.iconIndex + "]" + item.name + " x" + count);
-        }
-    }
+    Game_Event.prototype.updateTreeAnimation = via(O, "updateTreeAnimation");   // (the event's clocks: the swing, the fall, the break)
 
     // The switch that swaps in the next page (stump / empty) is only applied at
     // the start of the NEXT frame. Until then keep the finished object fully
@@ -1109,292 +814,78 @@
         if (this._treeGone) this.releaseInvisibleHold();
     };
 
-    Game_Event.prototype.finishTreeFall = function() {
-        this._treeFallT = -1;
-        // The sprite keeps the tree gone and the stump preview fully shown until
-        // the next frame swaps in the real stump page.
-        this._treeGone = true;
-        this._treeGoneFrames = 0;
-        const cfg = treeConfig(this) || TREE_DEFAULTS;
-        if (isCharred(this)) {
-            // burnt to the roots: no stump is left (straight to the empty page), the ground under it is free at once
-            giveReward("Ścięto zwęglone drzewo!", CHARCOAL, CHARRED_DROP[0], CHARRED_DROP[1]);
-            clearLandUnder(this);
-            $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
-        } else {
-            giveReward("Ścięto drzewo!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, "chop.yield");
-            // a grown pine sheds its cones as it falls (a young planted one has none yet)
-            if (isPine(this) && (cfg.scale || 1) >= 0.9 && $dataItems[CONE]) $gameParty.gainItem($dataItems[CONE], 1 + Math.floor(Math.random() * 3));
-            if (cfg.nostump) {   // (a seedling: nothing to dig out afterwards)
-                clearLandUnder(this);
-                $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
-            }
-        }
-        $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
-    };
+    Game_Event.prototype.finishTreeFall = via(O, "finishTreeFall");   // (the felled tree: its wood, the stump page)
+    Game_Event.prototype.finishBreak = via(O, "finishBreak");         // (a rock, a bush, a log, a stump: what it gives, its page)
 
-    Game_Event.prototype.finishBreak = function() {
-        const kind = this._breakKind;
-        this._breakT = -1;
-        clearLandUnder(this);
-        this.holdInvisibleUntilPageChange();
-        if (kind === "rock") {
-            const cfg = rockConfig(this) || ROCK_DEFAULTS;
-            giveReward(cfg.title || "Rozbito kamień!", cfg.drop, cfg.dropmin, cfg.dropmax, this._dropCount, cfg.tool > 0 ? "mine.yield" : "forage.yield");
-            if (cfg.tool > 0 && cfg.drop !== IRON_ORE && $dataItems[IRON_ORE] && perkRoll("ore")) $gameParty.gainItem($dataItems[IRON_ORE], 1);   // (Oko na kruszec)
-            this._dropCount = undefined;
-            $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
-        } else if (kind === "bush") {
-            const cfg = bushConfig(this) || BUSH_DEFAULTS;
-            giveReward("Ścięto krzak!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, "chop.yield");
-            $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
-        } else if (kind === "log") {
-            const cfg = logConfig(this) || LOG_DEFAULTS;
-            giveReward(cfg.tool > 0 ? "Rozrąbano kłodę!" : "Zebrano drewno!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, cfg.tool > 0 ? "chop.yield" : "forage.yield");
-            $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
-        } else if (isCharred(this)) {   // (only a stump left by a charred tree felled before they stopped leaving one)
-            giveReward("Wykopano zwęglony pieniek!", CHARCOAL, CHARRED_STUMP_DROP[0], CHARRED_STUMP_DROP[1]);
-            $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
-        } else {
-            const cfg = treeConfig(this) || stumpConfig(this) || STUMP_DEFAULTS;
-            giveReward("Wykopano pieniek!", cfg.digdrop, cfg.digmin, cfg.digmax, undefined, "chop.yield");
-            $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
+    // Objects that were destroyed before the farming system existed (or in an
+    // older save) free their ground too, as soon as the map is set up.
+    const _Game_Map_setupEvents = Game_Map.prototype.setupEvents;
+    Game_Map.prototype.setupEvents = function() {
+        _Game_Map_setupEvents.call(this);
+        if (typeof $gameSystem.clearLand !== "function") return;
+        const objects = O();
+        for (const event of this.events()) {
+            if (objects.isDestroyedHarvest(event)) objects.clearLandUnder(event, true);
         }
     };
-
-    // What a command does depends on the event's tag: <Log> / <Tree> for chop,
-    // <Tree> / <Stump> for dig, <Rock> for mine.
-    function strikeSetup(event, kind) {
-        if (kind === "chop") {
-            const log = logConfig(event);
-            if (log) {
-                return { tool: log.tool, needed: log.hits, cost: log.tool > 0 ? log.cost : 0, se: log.tool > 0 ? CHOP_SE : PICKUP_SE, finish: "log",
-                    missing: "Potrzebujesz siekiery" };
-            }
-            const tree = treeConfig(event);
-            const bush = !tree && bushConfig(event);
-            if (bush) {
-                return { tool: bush.tool, needed: bush.hits, cost: bush.cost, se: BUSH_SE, finish: "bush", bare: !!bush.bare,
-                    missing: "Potrzebujesz siekiery" };
-            }
-            const cfg = tree || TREE_DEFAULTS;
-            const charred = isCharred(event);   // brittle: half the blows, black chips and ash instead of wood and leaves
-            return { tool: cfg.axe, needed: charred ? CHARRED_HITS : cfg.hits, cost: cfg.cost, se: CHOP_SE, finish: "fall",
-                fx: charred ? ["char"] : null, fallFx: charred ? "ash" : "leaf", missing: "Potrzebujesz siekiery" };
-        }
-        if (kind === "dig") {
-            const treeCfg = treeConfig(event);
-            const cfg = treeCfg || stumpConfig(event) || STUMP_DEFAULTS;
-            return { tool: cfg.shovel, needed: cfg.digs, cost: treeCfg ? treeCfg.digcost : cfg.cost, se: DIG_SE, finish: "stump",
-                missing: "Potrzebujesz łopaty" };
-        }
-        const cfg = rockConfig(event) || ROCK_DEFAULTS;
-        return { tool: cfg.tool, needed: cfg.hits, cost: cfg.cost, se: cfg.tool > 0 ? MINE_SE : PICKUP_SE, finish: "rock",
-            missing: "Potrzebujesz kilofa" };
-    }
-
-    // A forged iron axe (115) / pickaxe (116), made in the forge (Farming.js), REPLACES the plain tool: it works
-    // on its own (the old axe / pickaxe may be gone) and is clearly better - about a third fewer blows and a
-    // little less stamina per blow. The first blow on every object says how much it saved.
-    const IRON_HIT_FACTOR = 0.65;
-    const IRON_ITEM = { axe: 115, pick: 116 };
-    function ironTool(tool) {
-        const id = tool > 0 && tool === TREE_DEFAULTS.axe ? IRON_ITEM.axe : tool > 0 && tool === ROCK_DEFAULTS.tool ? IRON_ITEM.pick : 0;
-        const item = id ? $dataItems[id] : null;
-        return item && $gameParty.hasItem(item) ? item : null;
-    }
-    function ownsTool(tool) {
-        return $gameParty.hasItem($dataItems[tool]) || !!ironTool(tool);
-    }
-    function applyIronTool(action) {
-        const item = ironTool(action.tool);
-        if (!item) return;
-        const before = action.needed;
-        action.needed = Math.max(1, Math.round(before * IRON_HIT_FACTOR));
-        if (action.cost > 1) action.cost = Math.max(1, Math.round(action.cost * 0.75));
-        action.ironItem = item;
-        action.ironFrom = before;
-    }
-    // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
-    // roll against it (a chance), knowsSkill(id) = that one skill is learnt
-    const perk = key => (window.Combat && Combat.perk ? Combat.perk(key) : 0);
-    const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
-    const knowsSkill = id => !!(window.Combat && Combat.hasSkill && Combat.hasSkill(id));
-    const IRON_ORE = 85;
-    // Zbieractwo: fewer blows and less strength for chopping, digging out stumps and mining; picking up by hand is free ("Szybkie ręce")
-    function applySkills(action) {
-        if (action.tool > 0) {
-            // Siła a little (Combat.gatherBonus: 0.5% a point over 5), the Zbieractwo skills a lot
-            const str = window.Combat && Combat.gatherBonus ? Combat.gatherBonus() : 0;
-            const fewer = Math.min(0.75, perk(action.finish === "rock" ? "mine.hits" : "chop.hits") + str);
-            if (fewer > 0) action.needed = Math.max(1, Math.round(action.needed * (1 - fewer)));
-            if (action.cost > 0) action.cost = Math.max(0.5, action.cost * (1 - Math.min(0.75, perk("gather.cost"))));
-        } else if (knowsSkill("g_quick")) action.cost = 0;
-    }
-    // Held O at a tree, a bush, a log, a stump or a rock: a moment after each blow (sooner with Zręczność) the next one - for as long as
-    // it is held and he stands where he stood; it stops when the thing falls or breaks, or he is too tired (the popup says so).
-    const HOLD_PAUSE = 12;   // frames between two blows at the usual speed
-    const SLOW_SWING = { fall: 0.5, rock: 0.5 };   // chopping a standing tree (axe) and mining a rock or ore (pickaxe) go at half the speed (the swing and the pause; the user's)
-    const workSpeed = () => (window.Combat && Combat.workSpeed ? Combat.workSpeed() : 1);
-    function updateHoldStrike(p) {
-        const h = p._holdStrike;
-        if (!h || !(h.t > 0) || --h.t > 0) return;
-        const e = h.map === $gameMap.mapId() ? $gameMap.event(h.id) : null;
-        if (!e || !Input.isPressed("ok") || p.x !== h.x || p.y !== h.y || p.direction() !== h.d ||
-            e._treeFallT >= 0 || e._breakT >= 0 || e._treeGone || $gameMessage.isBusy() || $gameTemp._farmMenuOpen) { p._holdStrike = null; return; }
-        if (e.isTreeAnimating() || $gameMap.isEventRunning() || p.isMoving() || p._toolSwing || p._swingEvent) { h.t = 1; return; }   // (the shake, the event: a frame more)
-        p._holdStrike = null;
-        e.start();
-    }
-    function blowsText(n) {
-        return n + (n === 1 ? " uderzenie" : n < 5 ? " uderzenia" : " uderzeń");
-    }
-
-    // What is missing (a tool, strength) is always said by a popup over the player - the same as the messages of
-    // Farming.js - and never by the message window. (Only without the popup layer does it fall back to the window.)
-    function needPopup(icon, text) {
-        if ($gameTemp && typeof $gameTemp.pushLootPopup === "function") $gameTemp.pushLootPopup(icon, text, "#ff9f8f");
-        else $gameMessage.add(text);
-    }
-
-    function strike(interpreter, kind) {
-        const event = $gameMap.event(interpreter._eventId);
-        if (!event || event.isTreeAnimating()) return;
-        const action = strikeSetup(event, kind);
-        applyIronTool(action);
-        applySkills(action);
-        if (action.tool > 0 && !ownsTool(action.tool)) {
-            needPopup($dataItems[action.tool] ? $dataItems[action.tool].iconIndex : 0, action.missing);
-            return;
-        }
-        if (action.cost > 0 && typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(action.cost)) {
-            needPopup(82, "Jesteś zbyt zmęczony");
-            return;
-        }
-        if (action.tool > 0 && window.Durability) Durability.use(action.ironItem ? action.ironItem.id : action.tool);   // one blow wears the tool
-        event._pendingAction = action;
-        if (action.tool > 0) {
-            // Swing the tool; the hit itself lands on the strike frame.
-            event._swingKind = SWING_KIND[action.finish];
-            event._swingT = 0;
-            event._swingRate = workSpeed() * (SLOW_SWING[action.finish] || 1);   // (a standing tree, a rock: slower, the user's)
-            event._hitLanded = false;
-            $gamePlayer._swingEvent = event;
-            $gamePlayer._holdStrike = { id: event.eventId(), map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction(), t: 0 };   // (ids: nothing big in a save)
-        } else {
-            applyPendingAction(event);   // picking something up by hand: no swing
-        }
-        interpreter.setWaitMode("treeAnimation");
-    }
 
     // ------------------------------------------------------------------
-    // Hit effects: chips, sparks, dirt and leaves flying off the target when a
-    // tool connects. The game side only queues them in $gameTemp._hitFx; the
-    // layer at the end of this file turns them into little falling squares.
+    // Swings for actions that have no event to wait on (Farming.js: raking,
+    // hoeing ...). The player cannot move while it plays. onImpact runs on the
+    // strike frame, onDone when the swing is over. Returns false (nothing was
+    // started) when there is no such kind of swing or the player is busy, so the
+    // caller can simply do the action right away.
     // ------------------------------------------------------------------
-    const BARE_BUSH_FX = ["drytwig", "twig"];   // leafless: dry twigs, no green leaves
-    const FX_BY_FINISH = { fall: ["wood"], log: ["wood"], rock: ["rock", "spark"], stump: ["dirt"], bush: ["bushleaf", "twig"] };
-    // count / final: particles per hit / on the last hit. speed, lift: sideways
-    // and upward speed (px per frame), gravity, life (frames), size (px).
-    const FX_TYPES = {
-        wood: { colors: ["#e2bd7f", "#c99a5b", "#9a6a35", "#f3dfae"], count: 7, final: 13, speed: [0.6, 2.2], lift: [1.4, 3.4], gravity: 0.22, life: [26, 40], size: [2, 3], oy: -26 },
-        rock: { colors: ["#b8bdc2", "#8f959b", "#d6d9dc", "#6b7075"], count: 6, final: 12, speed: [0.5, 2.0], lift: [1.2, 3.0], gravity: 0.24, life: [24, 36], size: [2, 3], oy: -18 },
-        spark: { colors: ["#fff3b0", "#ffd45c", "#ffffff"], count: 5, final: 9, speed: [1.5, 3.6], lift: [0.5, 2.6], gravity: 0.12, life: [8, 14], size: [1, 2], oy: -18 },
-        dirt: { colors: ["#5b3e27", "#79532f", "#3e2a1b", "#8a6a45"], count: 6, final: 12, speed: [0.4, 1.7], lift: [1.0, 2.6], gravity: 0.25, life: [24, 34], size: [2, 3], oy: -6 },
-        leaf: { colors: ["#3f6b34", "#557f3c", "#2f5229", "#7f9a4a"], count: 12, final: 12, speed: [0.1, 0.9], lift: [-0.3, 0.6], gravity: 0.04, life: [46, 70], size: [2, 2], oy: -78, spread: 22 },
-        bushleaf: { colors: ["#3f6b34", "#557f3c", "#2f5229", "#7f9a4a", "#93b653"], count: 7, final: 15, speed: [0.4, 2.2], lift: [0.5, 2.4], gravity: 0.09, life: [34, 56], size: [2, 3], oy: -20, spread: 14 },
-        // dry twigs of the leafless thickets
-        drytwig: { colors: ["#5f4e42", "#70614f", "#483b39", "#9d8371", "#7e674f"], count: 9, final: 18, speed: [0.6, 2.6], lift: [1.2, 3.2], gravity: 0.24, life: [28, 44], size: [2, 3], oy: -18, spread: 16 },
-        twig: { colors: ["#7a5a34", "#9a7443", "#5e4326", "#b08a52"], count: 3, final: 8, speed: [0.6, 2.0], lift: [1.2, 2.8], gravity: 0.22, life: [24, 38], size: [2, 3], oy: -14, spread: 8 },
-        // a tree struck by lightning (Storm.js): sparks out of the crown, burnt leaves and ash drifting down; chopping it, black chips (a spark now and then)
-        ember: { colors: ["#ffd45c", "#ff9a2e", "#fff3b0", "#ff6a1a"], count: 10, final: 24, speed: [0.3, 2.2], lift: [0.8, 2.8], gravity: 0.06, life: [30, 60], size: [1, 2], oy: -92, spread: 24 },
-        ash: { colors: ["#2a2622", "#3b3530", "#1c1a18", "#55504a"], count: 10, final: 16, speed: [0.1, 0.9], lift: [-0.3, 0.6], gravity: 0.04, life: [46, 70], size: [2, 2], oy: -78, spread: 22 },
-        char: { colors: ["#1f1b18", "#2e2925", "#4a423b", "#141210", "#ff8a2a"], count: 7, final: 13, speed: [0.6, 2.2], lift: [1.4, 3.4], gravity: 0.22, life: [26, 40], size: [2, 3], oy: -26 },
-        // whole little stones (the ones you get): they fly out, bounce, lie there for a
-        // moment (settle frames, staggered) and then fly to the player
-        stone: { pebble: true, count: 2, final: 4, speed: [0.9, 2.4], lift: [2.0, 3.0], gravity: 0.5, life: [0, 0], size: [6, 6], oy: -26, spread: 10, bounce: 0.42, settle: 30 }
+    // opts (optional): { holdWhile, onWait, onHoldEnd, still, holdAt, keepOnMove, wobble, rate } - after the impact frame the figure stays in that
+    // pose for as long as holdWhile() returns true (sitting by the fire until the food is ready); onWait(n) runs every frame of the wait;
+    // pressing cancel or a direction key ends the wait early; onHoldEnd(cancelled) runs when it ends. still: no shifting between two poses
+    // during the wait. holdAt: wait at this frame instead, BEFORE the impact (aiming the sling: it whirls until F is let go, then the
+    // stone leaves); keepOnMove: the direction keys do not end the wait (they turn to another target); wobble: frames per pose shift (22);
+    // rate: animation frames a game frame advances (1; more = a quicker swing - the hammer with Zręczność, Farming.js).
+    // (ChoppableTree_Swing.js: the swing itself)
+    Game_Player.prototype.startToolSwing = via(S, "startToolSwing");
+
+    Game_Player.prototype.isToolSwinging = function() {
+        return !!this._toolSwing;
     };
-    const FX_MAX_PARTICLES = 140;
-    const FX_MAX_PEBBLES = 12;
+    // a swing is never taken over from a save file: its callbacks (onImpact, holdWhile...) do not survive it, and a game saved while
+    // the hero sat or worked threw "opts.holdWhile is not a function" on loading (2026-09-26)
+    // (the core's "load": after the whole save is read)
+    T.on("load", () => {
+        if ($gamePlayer) { $gamePlayer._toolSwing = null; $gamePlayer._swingEvent = null; }
+    }, { owner: pluginName });
 
-    // count: how many particles (otherwise the type's own number)
-    function queueHitFx(event, type, final, count) {
-        if (typeof $gameTemp === "undefined" || !$gameTemp) return;
-        if (!$gameTemp._hitFx) $gameTemp._hitFx = [];
-        // The effect starts on the side of the target that faces the player
-        // (of the tile of a big object that is nearest to the player).
-        const tile = targetTile(event);
-        $gameTemp._hitFx.push({
-            type, final: !!final, count,
-            bx: tile.x + 0.5, by: tile.y + 1,
-            dx: Math.sign(tile.x - $gamePlayer.x), dy: Math.sign(tile.y - $gamePlayer.y)
-        });
-    }
-
-    // the same, from the object itself rather than from the side the player hits it (lightning)
-    function queueFxAt(event, type, final, count) {
-        if (typeof $gameTemp === "undefined" || !$gameTemp) return;
-        if (!$gameTemp._hitFx) $gameTemp._hitFx = [];
-        $gameTemp._hitFx.push({ type, final: !!final, count, bx: event.x + 0.5, by: event.y + 1, dx: 0, dy: 0 });
-    }
-
-    function shakeScreen(power, duration) {
-        if (typeof $gameScreen !== "undefined" && $gameScreen && $gameScreen.startShake) {
-            $gameScreen.startShake(power, 9, duration);
+    const _Game_Player_update = Game_Player.prototype.update;
+    Game_Player.prototype.update = function(sceneActive) {
+        _Game_Player_update.call(this, sceneActive);
+        if (sceneActive) S().updateHoldStrike(this);   // (held O: the next blow)
+        const swing = this._toolSwing;
+        if (!swing) return;
+        const rate = swing.opts && swing.opts.rate > 0 ? swing.opts.rate : 1;
+        swing._acc = (swing._acc || 0) + rate;
+        while (swing._acc >= 1 && this._toolSwing === swing) {   // (rate 1: exactly one step a frame, as always)
+            swing._acc -= 1;
+            if (this.stepToolSwing(swing) === "hold") { swing._acc = 0; break; }
         }
-    }
+    };
+    // one frame of the swing's animation; "hold" while the pose is held
+    Game_Player.prototype.stepToolSwing = via(S, "stepToolSwing");
 
-    // The moment the tool connects: sound, knock-back / flash, hit counting and
-    // the start of the felling / breaking animation.
-    function applyPendingAction(event) {
-        const action = event._pendingAction;
-        event._pendingAction = null;
-        if (!action) return;
-        event._treeHits = (event._treeHits || 0) + 1;
-        playSe(action.se, 90 + Math.floor(Math.random() * 20));
-        event._treeShake = SHAKE_FRAMES;
-        event._treeKickAt = Graphics.frameCount;
-        // The hit pushes the target away from the player.
-        event._treeKickDir = $gamePlayer.x <= event.x ? 1 : -1;
-        const last = event._treeHits >= action.needed;
-        if (event._treeHits === 1 && action.ironItem && action.ironFrom > action.needed && typeof $gameTemp.pushLootPopup === "function") {
-            $gameTemp.pushLootPopup(action.ironItem.iconIndex, action.ironItem.name + ": " + blowsText(action.needed) + " zamiast " + action.ironFrom, "#ffd866");
-        }
-        for (const type of (action.bare ? BARE_BUSH_FX : action.fx || FX_BY_FINISH[action.finish]) || []) queueHitFx(event, type, last);
-        if (action.finish === "rock") shakeScreen(last ? 3 : 2, last ? 14 : 7);
-        if (last) {
-            event._treeHits = 0;
-            if (action.finish === "fall") {
-                event._treeFallDir = event._treeKickDir;
-                event._treeFallT = 0;
-                queueHitFx(event, action.fallFx || "leaf", true);
-            } else {
-                event._breakKind = action.finish;
-                event._breakT = 0;
-                if (action.finish !== "bush") playSe(BREAK_SE, 100);
-                if (action.finish === "rock") {
-                    // the stones you get are decided now and fly out of the rock
-                    const cfg = rockConfig(event) || ROCK_DEFAULTS;
-                    event._dropCount = rollCount(cfg.dropmin, cfg.dropmax);
-                    queueHitFx(event, "stone", true, event._dropCount);
-                }
-            }
-        }
-    }
+    const _Game_Player_canMove = Game_Player.prototype.canMove;
+    Game_Player.prototype.canMove = function() {
+        return !this._toolSwing && _Game_Player_canMove.call(this);
+    };
+
+    // ------------------------------------------------------------------
+    // The plugin commands (ChoppableTree_Objects.js: the blow, the fruit picked) and the interpreter waiting for the animation
+    // ------------------------------------------------------------------
     for (const kind of ["chop", "dig", "mine"]) {
         PluginManager.registerCommand(pluginName, kind, function() {
-            strike(this, kind);
+            O().strike(this, kind);
         });
     }
     PluginManager.registerCommand(pluginName, "pickFruit", function() {
-        const event = $gameMap.event(this._eventId);
-        if (!event || event.isTreeAnimating()) return;
-        const cfg = treeConfig(event);
-        if (!cfg || !cfg.fruit) return;
-        giveReward("Zerwano owoce!", cfg.fruit, cfg.fruitmin, cfg.fruitmax);
-        playSe(FRUIT_SE, 105);
-        treeFruitStore()[fruitKey(event)] = $gameSystem.dayNightDay();
-        $gameSelfSwitches.setValue([event._mapId, event._eventId, "C"], true);
+        O().pickFruit(this);
     });
 
     const _Game_Interpreter_updateWaitMode = Game_Interpreter.prototype.updateWaitMode;
@@ -1411,384 +902,27 @@
     };
 
     // ------------------------------------------------------------------
-    // Rendering: the standing tree is drawn as thin horizontal strips, each shifted sideways by a
-    // WHOLE number of pixels taken from a bending curve (trunk pinned at the ground, crown moving most).
-    // Whole pixels on purpose. A fractional shift of a smoothed texture blurs the strip, and since the
-    // blur depends on the fraction, bands of soft and sharp strips used to run up and down the crown
-    // like glowing waves (worst in the evening, when the dark leaf edges blur into light ones). A shift
-    // of a whole pixel keeps every strip exactly as sharp as the picture, so the sway only ever moves
-    // the crown, it never changes how it looks.
+    // The sprites: the standing tree drawn in strips, its fall, the embers of a burnt one, the stump fading in, the hit flash, a bush
+    // seen through (ChoppableTree_Render.js); the hero's swing (ChoppableTree_Swing.js)
     // ------------------------------------------------------------------
+    Sprite_Character.prototype.isTreeSprite = via(R, "isTreeSprite");
+    Sprite_Character.prototype.setTreeBodyVisible = via(R, "setTreeBodyVisible");
+    Sprite_Character.prototype.ensureTreeStrips = via(R, "ensureTreeStrips");
+    Sprite_Character.prototype.updateTreeFrame = via(R, "updateTreeFrame");
+    Sprite_Character.prototype.buildEmbers = via(R, "buildEmbers");
+    Sprite_Character.prototype.drawEmbers = via(R, "drawEmbers");
+    Sprite_Character.prototype.updateEmbers = via(R, "updateEmbers");
+    Sprite_Character.prototype.updateStumpPreviewFrame = via(R, "updateStumpPreviewFrame");
+    Sprite_Character.prototype.updateCharredTone = via(R, "updateCharredTone");
+    Sprite_Character.prototype.updateHitFlash = via(R, "updateHitFlash");
+    Sprite_Character.prototype.updateTreeEffects = via(R, "updateTreeEffects");
+    Sprite_Character.prototype.updateSimpleHitEffects = via(R, "updateSimpleHitEffects");
+    Sprite_Character.prototype.updateBushSeeThrough = via(R, "updateBushSeeThrough");
+    Sprite_Character.prototype.updateSwingSheet = via(S, "updateSwingSheet");   // (HeroLook.js asks it too)
+    Sprite_Character.prototype.updateToolSwing = via(S, "updateToolSwing");
 
-    // How far a strip at relative height h (0 = ground, 1 = top) follows the sway of the crown.
-    function bendProfile(h) {
-        return Math.pow(h, 1.7);
-    }
-
-    // The second, quicker bend of a springy trunk: the middle leans one way while the very top whips the other.
-    function whipProfile(h) {
-        return 1.6 * h * h * (1 - 1.6 * h);
-    }
-
-    // The wind on one tree right now. Gusts sweep across the map (their strength depends on the tree's x, so
-    // neighbouring trees lean together), the crown lags the trunk only a little and no ripple runs up the tree.
-    // In a storm (Storm.js: wind 0..1) the trees bend up to three times as far, lean hard downwind and shake faster; its clock
-    // runs faster with the wind (a clock, not frameCount times a factor, so a rising wind never makes the trees jump).
-    function treeWind(event, cfg, treeHeight) {
-        if (!(cfg.sway > 0)) return null;
-        const storm = window.Storm, W = storm ? storm.wind() : 0;
-        const t = storm ? storm.clock() : Graphics.frameCount / 60;
-        const w = (2 * Math.PI) / SWAY_CYCLE;
-        const phase = event.eventId() * 1.7 + event.x * 0.35;
-        const gust = 0.5 + 0.5 * Math.sin((w * t) / 2.7 - event.x * 0.12);   // 0..1
-        return {
-            amp: treeHeight * Math.tan((cfg.sway * Math.PI) / 180) * (1 + 2 * W),
-            lean: 0.6 * gust * (1 + W),        // a gust pushes the whole tree downwind
-            swing: 0.3 + 0.6 * gust,           // and the main swing grows with it
-            whip: 0.2 * (0.4 + 0.6 * gust) * (1 + 1.5 * W),   // the quick shiver of the crown
-            swingPhase: w * t + phase,
-            whipPhase: 2.7 * w * t + 1.7 * phase
-        };
-    }
-
-    // Horizontal offset (px, not yet rounded) of a strip at relative height h.
-    function treeOffset(event, wind, h) {
-        let d = 0;
-        if (wind) {
-            const swing = Math.sin(wind.swingPhase - 0.35 * h);
-            const whip = Math.sin(wind.whipPhase - 0.6 * h);
-            d += wind.amp * (bendProfile(h) * (wind.lean + wind.swing * swing) + whipProfile(h) * wind.whip * whip);
-        }
-        if (event._treeKickAt !== undefined) {
-            // The crown reacts a moment after the trunk, then rings out.
-            const elapsed = (Graphics.frameCount - event._treeKickAt) / 60 - 0.07 * h;
-            if (elapsed > 0 && elapsed < 2) {
-                d += (event._treeKickDir || 1) * KICK_PIXELS * Math.exp(-3.2 * elapsed) *
-                    Math.sin(2 * Math.PI * 2.3 * elapsed) * bendProfile(h);
-            }
-        }
-        return d;
-    }
-
-    function hitFlashAlpha(event) {
-        if (event._treeKickAt === undefined) return 0;
-        const p = (Graphics.frameCount - event._treeKickAt) / FLASH_FRAMES;
-        if (p < 0 || p >= 1) return 0;
-        return Math.round(FLASH_ALPHA * (1 - p) * (1 - p));
-    }
-
-    Sprite_Character.prototype.isTreeSprite = function() {
-        const event = this._character;
-        return event instanceof Game_Event && !!treeConfig(event) &&
-            this._tileId === 0 && !!this._characterName &&
-            !!this.bitmap && this.bitmap.isReady();
-    };
-
-    // The standing tree lives in _treeBody (a container: it is what tilts and
-    // fades while falling). Under it sits _stumpPreview, which fades in while
-    // the tree fades out, so the stump is already there when the tree is gone.
-    Sprite_Character.prototype.setTreeBodyVisible = function(visible) {
-        if (this._treeBody) {
-            this._treeBody.visible = visible;
-            this._stumpPreview.visible = visible && this._stumpPreview.alpha > 0;
-        }
-    };
-
-    Sprite_Character.prototype.ensureTreeStrips = function(frameHeight) {
-        if (!this._treeBody) {
-            this._stumpPreview = new Sprite();
-            this._stumpPreview.anchor.x = 0.5;
-            this._stumpPreview.anchor.y = 1;
-            this._stumpPreview.alpha = 0;
-            this._stumpPreview.visible = false;
-            this._treeBody = new Sprite();
-            this.addChild(this._stumpPreview);
-            this.addChild(this._treeBody);
-        }
-        if (this._treeStrips && this._treeStripsFor === frameHeight) return;
-        if (this._treeStrips) {
-            for (const strip of this._treeStrips) {
-                this._treeBody.removeChild(strip);
-            }
-        }
-        this._treeStrips = [];
-        this._treeStripsFor = frameHeight;
-        this._treeFrameKey = null;   // the new strips have no picture frame yet
-        for (let row = 0; row < frameHeight; row += STRIP_HEIGHT) {
-            const strip = new Sprite();
-            strip.anchor.x = 0;
-            strip.anchor.y = 0;
-            strip._rowStart = row;
-            strip._rowHeight = Math.min(STRIP_HEIGHT, frameHeight - row);
-            this._treeStrips.push(strip);
-            this._treeBody.addChild(strip);
-        }
-    };
-
-    // The core (pre-ChoppableTree.js) updateFrame, kept so the tree/swing override below can fall
-    // through to it. The override itself lives after updateSwingSheet(), further down this file,
-    // once both things it chooses between (the tree frame and the swing sheet) are defined - see the
-    // comment there for why this used to be two separate overrides.
+    // The core (pre-ChoppableTree.js) updateFrame, kept so the tree/swing override below can fall through to it.
     const _Sprite_Character_updateFrame = Sprite_Character.prototype.updateFrame;
-
-    Sprite_Character.prototype.updateTreeFrame = function() {
-        const event = this._character;
-        const cfg = treeConfig(event);
-        const scale = (cfg && cfg.scale) || 1;
-        const pw = this.patternWidth();
-        const ph = this.patternHeight();
-        const sx = (this.characterBlockX() + this.characterPatternX()) * pw;
-        const sy = (this.characterBlockY() + this.characterPatternY()) * ph;
-        // Own texture stays empty; the strips draw the tree. Smoothing is
-        // only for the tilt while it falls; the sway itself moves whole pixels.
-        this.setFrame(sx, sy, 0, ph);
-        this.bitmap.smooth = true;
-        this.ensureTreeStrips(ph);
-        this._treeBody.visible = true;
-        this.updateStumpPreviewFrame(event);
-        const wind = treeWind(event, cfg, ph);
-        const half = Math.floor(pw / 2);
-        // a charred tree draws its strips from a soot-black copy of its picture (a colour tone on the sprite would dull its embers
-        // too) - but while it still smoulders it keeps its own picture: the burn creeping down it covers it pixel by pixel
-        const charred = isCharred(event), age = charred ? smoulderAge(event) : -1, burning = age >= 0 && age < EMBER_LIFE;
-        const sooty = charred && !burning, pic = sooty ? charredBitmap(this.bitmap) : this.bitmap;
-        // a new picture resets the strips' frames: set them again. The picture itself is part of the key: a fruit tree swapping its bare
-        // sheet for the fruiting one (the same size, so the same sx/sy/pw) would otherwise keep the old frames - and a strip given a
-        // bitmap that is still loading gets the WHOLE sheet as its frame once it loads (every row of it: the tree drawn over and over)
-        const frameKey = (pic._url || "") + "," + sx + "," + sy + "," + pw + (sooty ? ",c" : "");
-        const reframe = this._treeFrameKey !== frameKey;
-        this._treeFrameKey = frameKey;
-        // scale shrinks (or grows) the whole picture around the foot of the tree (local 0,0): both the
-        // strip size and its position get the same factor, so a smaller tree still stands on its own tile.
-        // Each strip reaches exactly to the whole pixel where the next one starts: a strip of 6 rows at 0.74 is 4.44 px high, and
-        // with its top rounded a gap of up to a pixel was left under it (a line of grass across a young planted pine)
-        for (const strip of this._treeStrips) {
-            strip.bitmap = pic;
-            strip.visible = true;
-            if (reframe) strip.setFrame(sx, sy + strip._rowStart, pw, strip._rowHeight);
-            const top = Math.round((strip._rowStart - ph) * scale), bottom = Math.round((strip._rowStart + strip._rowHeight - ph) * scale);
-            strip.scale.x = scale;
-            strip.scale.y = (bottom - top) / strip._rowHeight;
-            const h = 1 - (strip._rowStart + strip._rowHeight / 2) / ph;
-            strip.x = Math.round((treeOffset(event, wind, h) - half) * scale);
-            strip.y = top;
-        }
-        this.updateEmbers(burning ? age : -1, sx, sy, pw, ph, scale);
-    };
-
-    // ---- a charred tree: its picture turned to soot (made once per picture), and the embers smouldering in it
-    const charredCache = new Map();
-    function charredBitmap(src) {
-        const key = src._url || src;
-        let out = charredCache.get(key);
-        if (out) return out;
-        const w = src.width, h = src.height;
-        out = new Bitmap(w, h);
-        out.blt(src, 0, 0, w, h, 0, 0);
-        const ctx = out.context, img = ctx.getImageData(0, 0, w, h), d = img.data;
-        for (let i = 0; i < d.length; i += 4) {
-            if (!d[i + 3]) continue;
-            const l = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];   // the same as CHARRED_TONE: grey, then darker and a little warm
-            d[i] = Math.max(0, l + CHARRED_TONE[0]);
-            d[i + 1] = Math.max(0, l + CHARRED_TONE[1]);
-            d[i + 2] = Math.max(0, l + CHARRED_TONE[2]);
-        }
-        ctx.putImageData(img, 0, 0);
-        out._baseTexture.update();
-        out.smooth = true;   // like the tree picture itself (only the tilt of a falling tree is smoothed)
-        out._charred = true;
-        charredCache.set(key, out);
-        return out;
-    }
-    // The burn: after the strike the tree does not turn black at once. From the tip, where the bolt hit, a band of embers creeps
-    // down it pixel by pixel (a ragged edge, over EMBER_FRONT hours): each pixel of the tree's own shape flares up yellow, cools
-    // through orange and red and is left soot-black. Behind the band a few pixels keep smouldering, pulsing slowly, for half an
-    // hour after the band has reached the foot (EMBER_LIFE hours after the strike; Storm.js smokes for as long and reads both numbers);
-    // then the tree is simply drawn from its charred picture. $gameSystem._smoulder has the hour each tree was struck ("mapId:eventId").
-    const EMBER_FRONT = 0.2;   // h: about 12 s at the usual clock speed from the tip to the foot
-    const EMBER_SMOULDER = 0.5, EMBER_LIFE = EMBER_FRONT + EMBER_SMOULDER;   // then 30 game minutes of embers and smoke
-    const EMBER_SPOTS = 16;   // glowing pixels handed to Storm.js each time the embers are drawn: the smoke rises from them
-    const EMBER_COLOURS = [[128, 34, 16], [214, 72, 24], [255, 128, 32], [255, 184, 64], [255, 236, 170]];
-    function smoulderAge(event) {
-        const store = $gameSystem._smoulder, at = store && store[event._mapId + ":" + event._eventId];
-        return at === undefined ? -1 : $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() - at;
-    }
-    function emberNoise(j, t) {   // 0..1, the same for the same pixel and moment
-        let h = Math.imul(j ^ 0x9e3779b9, 0x85ebca6b) ^ Math.imul(t + 1, 0xc2b2ae35);
-        h ^= h >>> 15;
-        h = Math.imul(h, 0x27d4eb2f);
-        h ^= h >>> 13;
-        return (h >>> 0) / 4294967296;
-    }
-    // every drawn pixel of this frame of the tree: when the burn reaches it, how fast it cools, its charred colour
-    Sprite_Character.prototype.buildEmbers = function(key, sx, sy, pw, ph) {
-        this._emberKey = key;
-        const tmp = new Bitmap(pw, ph);
-        tmp.blt(this.bitmap, sx, sy, pw, ph, 0, 0);
-        const src = tmp.context.getImageData(0, 0, pw, ph).data;
-        tmp.destroy();
-        const rowShows = y => { for (let x = 0; x < pw; x++) if (src[(y * pw + x) * 4 + 3] > 128) return true; return false; };
-        let top = 0;   // the tip: the first row with something drawn on it
-        while (top < ph && !rowShows(top)) top++;
-        const idx = [], ign = [], cool = [], slow = [], soot = [];
-        for (let y = top; y < ph; y++) {
-            const k = (y - top) / Math.max(1, ph - top);   // 0 at the tip .. 1 at the foot
-            for (let x = 0; x < pw; x++) {
-                const i = y * pw + x, a = src[i * 4 + 3];
-                if (a < 128) continue;
-                idx.push(i);
-                // (the jitter and the cooling scale with EMBER_FRONT, so the band keeps its thickness whatever its speed)
-                ign.push(Math.max(0, k - 0.04) * EMBER_FRONT + Math.random() * 0.045 * EMBER_FRONT);   // a ragged edge: pixel by pixel
-                const smoulders = Math.random() < 0.04;   // a few keep glowing long after the band has passed, dying out over the half hour
-                slow.push(smoulders ? 1 : 0);
-                cool.push(smoulders ? (0.35 + Math.random() * 0.55) * EMBER_SMOULDER : (0.015 + Math.random() * 0.035) * EMBER_FRONT);
-                const l = 0.299 * src[i * 4] + 0.587 * src[i * 4 + 1] + 0.114 * src[i * 4 + 2];
-                soot.push([Math.max(0, l + CHARRED_TONE[0]), Math.max(0, l + CHARRED_TONE[1]), Math.max(0, l + CHARRED_TONE[2]), a]);
-            }
-        }
-        this._emberSites = { idx, ign, cool, slow, soot, n: idx.length, top };
-        if (!this._emberBitmap || this._emberBitmap.width !== pw || this._emberBitmap.height !== ph) {
-            this._emberBitmap = new Bitmap(pw, ph);
-            this._emberBitmap.smooth = false;
-        }
-        this._emberImg = this._emberBitmap.context.createImageData(pw, ph);
-        if (this._emberStrips) for (const e of this._emberStrips) this._treeBody.removeChild(e);
-        this._emberStrips = this._treeStrips.map(strip => {
-            const e = new Sprite(this._emberBitmap);
-            e.setFrame(0, strip._rowStart, pw, strip._rowHeight);
-            this._treeBody.addChild(e);   // over the tree's own strips, moving with them
-            return e;
-        });
-        this._emberTick = -1;
-    };
-    // the burn at this moment: untouched pixels stay clear (the tree's own picture shows), burning ones glow, burnt ones are soot
-    Sprite_Character.prototype.drawEmbers = function(age, tick, ph) {
-        const s = this._emberSites, d = this._emberImg.data;
-        d.fill(0);
-        const fadeFrom = EMBER_FRONT + EMBER_SMOULDER * 0.7;   // the last embers dim out over the end of the smouldering
-        const fade = age > fadeFrom ? Math.max(0, 1 - (age - fadeFrom) / (EMBER_SMOULDER * 0.3)) : 1;
-        const pw = this._emberBitmap.width, spots = [];
-        let lit = 0, sumY = 0;
-        for (let j = 0; j < s.n; j++) {
-            const dt = age - s.ign[j];
-            if (dt < 0) continue;
-            const k = s.idx[j] * 4;
-            let b = 0;
-            if (dt < s.cool[j] * 6) {
-                const flare = 0.02 * EMBER_FRONT, heat = dt < flare ? 1 : Math.exp(-(dt - flare) / s.cool[j]);
-                // the band shimmers pixel by pixel; the ones left smouldering pulse slowly instead
-                b = s.slow[j] ? heat * fade * (0.55 + 0.45 * Math.sin(j * 1.7 + tick * (0.12 + (j % 5) * 0.03)))
-                    : heat * (0.72 + 0.28 * emberNoise(j, Math.floor((tick + (j % 3)) / 2)));   // mostly by heat: yellow at the front, then orange, red, black
-            }
-            if (b >= 0.12) {
-                const c = EMBER_COLOURS[b > 0.82 ? 4 : b > 0.62 ? 3 : b > 0.42 ? 2 : b > 0.26 ? 1 : 0];
-                d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2]; d[k + 3] = 255;
-                if (b > 0.26) {
-                    lit++;
-                    sumY += Math.floor(s.idx[j] / pw);
-                    // a fair handful of the glowing pixels (reservoir sampling) for the smoke
-                    const r = lit <= EMBER_SPOTS ? lit - 1 : Math.floor(Math.random() * lit);
-                    if (r < EMBER_SPOTS) spots[r] = { x: s.idx[j] % pw, y: Math.floor(s.idx[j] / pw), b };
-                }
-            } else {
-                const c = s.soot[j];
-                d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2]; d[k + 3] = c[3];
-            }
-        }
-        this._emberBitmap.context.putImageData(this._emberImg, 0, 0);
-        this._emberBitmap._baseTexture.update();
-        // for the night layer: how much glows and where (from the foot of the picture, px)
-        this._emberGlow = lit > 0 ? { heat: Math.min(1, lit / 80), up: ph - sumY / lit } : null;
-        this._emberSpots = spots;
-    };
-    // age: hours since the strike while it smoulders, -1 otherwise
-    Sprite_Character.prototype.updateEmbers = function(age, sx, sy, pw, ph, scale) {
-        if (age < 0) {
-            if (this._emberStrips) for (const e of this._emberStrips) e.visible = false;
-            this._emberGlow = null;
-            this._emberSpots = null;
-            return;
-        }
-        const key = sx + "," + sy + "," + pw + "," + ph + "," + this._treeStrips.length;
-        if (this._emberKey !== key) this.buildEmbers(key, sx, sy, pw, ph);
-        const tick = Math.floor(Graphics.frameCount / 3);
-        if (tick !== this._emberTick) {
-            this._emberTick = tick;
-            this.drawEmbers(age, tick, ph);
-        }
-        this._emberScale = scale;
-        this._treeStrips.forEach((strip, i) => {
-            const e = this._emberStrips[i];
-            e.visible = true;
-            e.x = strip.x;
-            e.y = strip.y;
-            e.scale.x = strip.scale.x;
-            e.scale.y = strip.scale.y;
-        });
-    };
-    // the embers light the dark around them a little (Farming_Render's night layer cuts these holes): where most of them glow now
-    function emberLights(spriteset) {
-        const out = [];
-        for (const s of (spriteset && spriteset._characterSprites) || []) {
-            const g = s._emberGlow;
-            if (!g || !s._treeBody || !s._treeBody.visible) continue;
-            out.push({ x: s.x, y: s.y - g.up * (s._emberScale || 1), r: 40 + 40 * g.heat, i: 0.3 + 0.5 * g.heat, id: 5000 + s._character._eventId });
-        }
-        return out;
-    }
-    // where the embers of a smouldering tree glow now, on the screen: [{ x, y, b }] (b: 0.26..1, how hot), [] when nothing glows
-    function emberSpots(sprite) {
-        const spots = sprite && sprite._emberSpots, bmp = sprite && sprite._emberBitmap;
-        if (!spots || !bmp || !sprite._treeBody || !sprite._treeBody.visible) return [];
-        const k = sprite._emberScale || 1, half = bmp.width / 2, ph = bmp.height;
-        return spots.filter(Boolean).map(p => ({ x: sprite.x + (p.x - half) * k, y: sprite.y - (ph - p.y) * k, b: p.b }));
-    }
-
-    // The tile the event turns into after it is felled (its next page's graphic).
-    const stumpTileCache = new WeakMap();
-    function stumpTileId(event) {
-        if (stumpTileCache.has(event)) return stumpTileCache.get(event);
-        const data = event.event();
-        const page = data ? data.pages.slice(1).find(p => p.image && p.image.tileId > 0) : null;
-        const id = page ? page.image.tileId : 0;
-        stumpTileCache.set(event, id);
-        return id;
-    }
-
-    // 0 until the tree has tipped a quarter of the way, fully shown by ~85%.
-    function stumpPreviewAlpha(tilt) {
-        return Math.max(0, Math.min(1, (tilt - 0.25) / 0.6));
-    }
-
-    Sprite_Character.prototype.updateStumpPreviewFrame = function(event) {
-        const tileId = stumpTileId(event);
-        if (tileId === this._stumpPreviewTile) return;
-        this._stumpPreviewTile = tileId;
-        const preview = this._stumpPreview;
-        if (tileId > 0) {
-            const pw = $gameMap.tileWidth();
-            const ph = $gameMap.tileHeight();
-            preview.bitmap = this.tilesetBitmap(tileId);
-            preview.setFrame(((Math.floor(tileId / 128) % 2) * 8 + (tileId % 8)) * pw,
-                (Math.floor((tileId % 256) / 8) % 16) * ph, pw, ph);
-        } else {
-            preview.bitmap = null;
-        }
-    };
-
-    // the stump of a charred tree is drawn soot-black with a colour tone (the standing tree has its own soot-black picture instead,
-    // so that the tone does not dull its embers); the stump that fades in under a falling tree too
-    Sprite_Character.prototype.updateCharredTone = function(event) {
-        const charred = isCharred(event), toned = charred && !this.isTreeSprite();
-        if (toned !== !!this._charredOn) {
-            this._charredOn = toned;
-            this.setColorTone(toned ? CHARRED_TONE : [0, 0, 0, 0]);
-        }
-        if (this._stumpPreview && charred !== !!this._charredPreview) {
-            this._charredPreview = charred;
-            this._stumpPreview.setColorTone(charred ? CHARRED_TONE : [0, 0, 0, 0]);
-        }
-    };
 
     const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
     Sprite_Character.prototype.updatePosition = function() {
@@ -1801,86 +935,11 @@
         }
     };
 
-    // Real swing animation. Every kind of swing has a sheet in img/system (see
-    // SWING_KINDS): 4 rows (down, left, right, up), one 96x96 cell per frame,
-    // drawn from the same character. While it plays it replaces the walking
-    // sprite, so the whole body swings the tool. Without a sheet the tool is
-    // drawn over the normal sprite instead (below).
-    const SHEET_CELL = 96;
-    const SHEET_FEET = { x: 48, y: 80 };   // the point of a cell that stands on the tile
-    const SHEET_ROW = { 2: 0, 4: 1, 6: 2, 8: 3 };
-    // Which way the body steps toward the target (shorter up / down: the view is low top-down).
-    const REACH_VECTOR = { 2: { x: 0, y: 0.7 }, 4: { x: -1, y: 0 }, 6: { x: 1, y: 0 }, 8: { x: 0, y: -0.7 } };
-
-    // Frame to show t game frames into the swing: the wind-up is stretched so the
-    // impact frame lands on the strike frame of the swing, then it is held
-    // briefly and the recovery frames share the rest of the swing.
-    function swingSheetFrame(kind, frames, row, t) {
-        const def = swingKind(kind);
-        const impact = Math.min(frames - 1, def.hit[row]);
-        if (t < def.impact) return Math.floor(t / def.impact * impact);
-        if (t < def.impact + def.hold) return impact;
-        const after = frames - 1 - impact;
-        const k = (t - def.impact - def.hold) / (def.frames - def.impact - def.hold);
-        return Math.min(frames - 1, impact + 1 + Math.floor(k * after));
-    }
-
-    // 0..1: how far the body has stepped toward the target; full on the strike frame.
-    function swingLunge(kind, t) {
-        const def = swingKind(kind);
-        if (t < def.impact) return easeInOut(clamp01(t / def.impact));
-        return 1 - easeInOut(clamp01((t - def.impact - def.hold) / Math.max(1, def.frames - def.impact - def.hold)));
-    }
-
-    // "ready", "loading", or "none" when the swing has no sheet (or it failed to load).
-    function swingSheetState(kind) {
-        const def = SWING_KINDS[kind] ? swingKind(kind) : null;
-        if (!def || !def.sheet) return "none";
-        const bitmap = ImageManager.loadSystem(def.sheet);
-        if (bitmap.isError && bitmap.isError()) return "none";
-        return bitmap.isReady() ? "ready" : "loading";
-    }
-
     // Load the sheets with the map so the first swing does not have to wait for them.
     const _Scene_Map_create = Scene_Map.prototype.create;
     Scene_Map.prototype.create = function() {
         _Scene_Map_create.call(this);
         for (const def of SWING_KINDS) if (def.sheet) ImageManager.loadSystem(def.sheet);
-    };
-
-    // Draws the current swing frame in a child sprite anchored on the feet.
-    // Returns true while a sheet is on screen (the walking sprite is hidden then).
-    Sprite_Character.prototype.updateSwingSheet = function() {
-        const event = $gamePlayer._swingEvent;
-        const kind = event && event._swingT >= 0 ? event._swingKind : undefined;
-        if (kind === undefined || swingSheetState(kind) !== "ready") {
-            if (this._swingBody) this._swingBody.visible = false;
-            return false;
-        }
-        const def = swingKind(kind);
-        const bitmap = ImageManager.loadSystem(def.sheet);
-        if (bitmap.smooth) bitmap.smooth = false;
-        if (!this._swingBody) {
-            this._swingBody = new Sprite();
-            this._swingBody.anchor.x = SHEET_FEET.x / SHEET_CELL;
-            this._swingBody.anchor.y = SHEET_FEET.y / SHEET_CELL;
-            this.addChild(this._swingBody);
-        }
-        const frames = Math.max(1, Math.floor(bitmap.width / SHEET_CELL));
-        const dir = $gamePlayer.direction();
-        const row = SHEET_ROW[dir] || 0;
-        const reach = REACH_VECTOR[dir] || REACH_VECTOR[2];
-        const lunge = def.reach * swingLunge(kind, event._swingT);
-        const body = this._swingBody;
-        body.bitmap = bitmap;
-        let col = swingSheetFrame(kind, frames, row, event._swingT);
-        // while it waits the figure shifts a little between two poses - unless opts.still (resting on the ground: sits quite still, hands folded)
-        if (event._waiting && !(event.opts && event.opts.still)) col -= Math.floor(event._wait / ((event.opts && event.opts.wobble) || 22)) % 2;
-        body.setFrame(col * SHEET_CELL, row * SHEET_CELL, SHEET_CELL, SHEET_CELL);
-        body.x = reach.x * lunge;
-        body.y = reach.y * lunge - ((event.opts && event.opts.lift) || 0);
-        body.visible = true;
-        return true;
     };
 
     // Single override chain for updateFrame: the swing sheet (player only) takes priority, then a tree
@@ -1899,294 +958,35 @@
         }
     };
 
-    // Fallback without a sheet. Where the tool is held for each facing (relative
-    // to the feet), which way it is mirrored, and the direction the body leans
-    // into the blow.
-    const HAND = {
-        2: { x: 9, y: -25, sign: 1, ax: 0, ay: 1 },
-        4: { x: -6, y: -26, sign: -1, ax: -1, ay: 0 },
-        6: { x: 6, y: -26, sign: 1, ax: 1, ay: 0 },
-        8: { x: -9, y: -27, sign: -1, ax: 0, ay: -1 }
-    };
-    const LUNGE_PIXELS = 3;
-    const VERTICAL_FORESHORTEN = 0.65;   // swings toward / away from the camera look shorter
-
-    // The tool the player is swinging: a child sprite that rotates about the
-    // grip, while the whole figure leans a few pixels into the strike.
-    Sprite_Character.prototype.updateToolSwing = function() {
-        const event = $gamePlayer._swingEvent;
-        const def = swingKind(event && event._swingKind);
-        const active = !!event && event._swingT >= 0 && event._swingKind !== undefined && def.tool >= 0 &&
-            swingSheetState(event._swingKind) === "none";
-        if (!active) {
-            if (this._toolSprite) this._toolSprite.visible = false;
-            return;
-        }
-        if (!this._toolSprite) {
-            this._toolSprite = new Sprite(ImageManager.loadSystem("Tools"));
-            this._toolSprite.anchor.x = TOOL_PIVOT.x / TOOL_SIZE;
-            this._toolSprite.anchor.y = TOOL_PIVOT.y / TOOL_SIZE;
-            this.addChild(this._toolSprite);
-        }
-        const tool = this._toolSprite;
-        const pose = swingPose(Math.min(1, event._swingT / def.frames), def.tool);
-        const hand = HAND[$gamePlayer.direction()] || HAND[2];
-        const vertical = hand.ax === 0;
-        tool.visible = true;
-        tool.setFrame(def.tool * TOOL_SIZE, 0, TOOL_SIZE, TOOL_SIZE);
-        tool.x = hand.x;
-        tool.y = hand.y;
-        tool.scale.x = hand.sign;
-        tool.rotation = hand.sign * pose.angle * (vertical ? VERTICAL_FORESHORTEN : 1);
-        this.x += hand.ax * LUNGE_PIXELS * pose.lunge;
-        this.y += hand.ay * LUNGE_PIXELS * 0.7 * pose.lunge;
-    };
-
-    Sprite_Character.prototype.updateHitFlash = function(event) {
-        const alpha = hitFlashAlpha(event);
-        if (alpha > 0 || this._treeFlashOn) {
-            this.setBlendColor([255, 244, 210, alpha]);
-            this._treeFlashOn = alpha > 0;
-        }
-    };
-
-    Sprite_Character.prototype.updateTreeEffects = function(event) {
-        if (!this.isTreeSprite()) {
-            // Stump / rock (tile or plain graphic): small jitter and highlight
-            // on every hit, squash and fade while it breaks.
-            this.updateSimpleHitEffects(event);
-            return;
-        }
-        this.scale.x = 1;
-        this.scale.y = 1;
-        this.rotation = 0;
-        // 0 = upright, 1 = on the ground (or already felled and waiting for the
-        // stump page). The same value tips the tree, fades it out and fades the
-        // stump in, so all three stay in step.
-        let tilt = 0;
-        if (event._treeFallT >= 0) {
-            tilt = fallTilt(event._treeFallT);
-        } else if (event._treeGone) {
-            tilt = 1;
-        }
-        const body = this._treeBody;
-        const preview = this._stumpPreview;
-        body.rotation = (event._treeFallDir || 1) * (Math.PI / 2) * tilt;
-        body.alpha = 1 - tilt;
-        const noStump = isCharred(event) || !!(treeConfig(event) || {}).nostump;
-        preview.alpha = noStump ? 0 : stumpPreviewAlpha(tilt);   // a charred tree (and a seedling) leaves no stump
-        preview.visible = preview.alpha > 0 && !!preview.bitmap;
-        this.updateHitFlash(event);
-    };
-
-    Sprite_Character.prototype.updateSimpleHitEffects = function(event) {
-        this.rotation = 0;
-        if (event._treeKickAt !== undefined) {
-            const tau = (Graphics.frameCount - event._treeKickAt) / 60;
-            if (tau >= 0 && tau < 1) {
-                this.x += (event._treeKickDir || 1) * 3 * Math.exp(-6 * tau) * Math.sin(2 * Math.PI * 4 * tau);
-            }
-        }
-        let scaleX = 1, scaleY = 1, sink = 0;
-        if (event._breakT >= 0) {
-            const p = Math.min(1, event._breakT / (BREAK_FRAMES[event._breakKind] || 30));
-            if (event._breakKind !== "stump") {
-                scaleX = 1 + 0.15 * p;
-                scaleY = 1 - 0.5 * p;
-            } else {
-                scaleY = 1 - 0.35 * p;
-                sink = 14 * p;
-            }
-        }
-        this.scale.x = scaleX;
-        this.scale.y = scaleY;
-        this.y += sink;
-        this.updateHitFlash(event);
-        this.updateBushSeeThrough(event);
-    };
-
-    // A bush with a walkable edge fades a little while the player stands in it, so
-    // you can see him (and the swing) among the leaves.
-    const BUSH_SEE_THROUGH = 0.6;
-    Sprite_Character.prototype.updateBushSeeThrough = function(event) {
-        if (!bushConfig(event)) return;   // only bushes: other events keep their own alpha
-        const o = occupyConfig(event);
-        const inside = !!o && o.soft > 0 && isInsideArea(event, o, $gamePlayer.x, $gamePlayer.y);
-        const target = inside ? BUSH_SEE_THROUGH : 1;
-        if (this.alpha === target) return;
-        this.alpha += (target - this.alpha) * 0.25;
-        if (Math.abs(target - this.alpha) < 0.02) this.alpha = target;
-    };
-    // ------------------------------------------------------------------
-    // Hit effect particles. A layer in the tilemap (so it scrolls and zooms
-    // with the map) that turns the entries queued in $gameTemp._hitFx into
-    // small squares that fly off, fall to the ground and fade.
-    // ------------------------------------------------------------------
-
-    // draw order (Sprite.z). Only one value lives here, but it is named for the same reason
-    // Farming_Render.js keeps its own small Z table: a number alone (was "this.z = 7") does not say why.
-    // Not shared across the two files - ChoppableTree.js currently loads before Farming_Render.js in
-    // plugins.js, so it keeps its own copy rather than depend on a table the other file may not have
-    // finished defining yet.
-    const Z = {
-        hitFx: 7   // hit-effect particles (flying stones, chips), above the characters
-    };
-
-    // build (once) and cache a bitmap under `key` in `cache` (a plain object). buildFn does the actual
-    // drawing and returns the bitmap; mirrors the helper of the same shape in Farming_Render.js (kept
-    // local here for the same load-order reason as the Z table above).
-    function cachedBitmap(cache, key, buildFn) {
-        if (!cache[key]) cache[key] = buildFn();
-        return cache[key];
-    }
-
-    const fxBitmaps = {};
-    function fxBitmap(color, size) {
-        const key = color + size;
-        return cachedBitmap(fxBitmaps, key, () => {
-            const bitmap = new Bitmap(size, size);
-            bitmap.fillRect(0, 0, size, size, color);
-            return bitmap;
-        });
-    }
-    // little pixel-art stones: [light, mid, dark, outline]
-    const STONE_SHADES = [
-        ["#c9cfd4", "#9aa1a7", "#6f757b", "#3a3f44"],
-        ["#d2c29b", "#a8956a", "#7a6a48", "#3f3423"],
-        ["#b7c4b0", "#8a9a84", "#5f6e5a", "#2f3a2d"]
-    ];
-    const stoneBitmaps = {};
-    function stoneBitmap(shade) {
-        return cachedBitmap(stoneBitmaps, shade, () => {
-            const [light, mid, dark, line] = STONE_SHADES[shade];
-            const bitmap = new Bitmap(7, 6);
-            bitmap.fillRect(2, 0, 3, 1, line);
-            bitmap.fillRect(1, 1, 5, 1, line);
-            bitmap.fillRect(0, 2, 7, 2, line);
-            bitmap.fillRect(1, 4, 5, 1, line);
-            bitmap.fillRect(2, 5, 3, 1, line);
-            bitmap.fillRect(2, 1, 3, 1, mid);
-            bitmap.fillRect(1, 2, 5, 2, mid);
-            bitmap.fillRect(2, 4, 3, 1, dark);
-            bitmap.fillRect(2, 1, 2, 1, light);
-            bitmap.fillRect(1, 2, 2, 1, light);
-            bitmap.fillRect(4, 3, 2, 1, dark);
-            return bitmap;
-        });
-    }
-    // where the flying stones go: the player's chest
-    function playerScreenPoint() {
-        if (typeof $gamePlayer.screenX === "function") return { x: $gamePlayer.screenX(), y: $gamePlayer.screenY() - 24 };
-        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
-        return { x: $gameMap.adjustX($gamePlayer.x) * tw + tw / 2, y: $gameMap.adjustY($gamePlayer.y) * th + th / 2 };
-    }
-    const fxRandom = (a, b) => a + Math.random() * (b - a);
-    const fxInt = range => Math.round(fxRandom(range[0], range[1]));
-
-    function Sprite_HitFxLayer() {
-        this.initialize(...arguments);
-    }
-
-    Sprite_HitFxLayer.prototype = Object.create(Sprite.prototype);
-    Sprite_HitFxLayer.prototype.constructor = Sprite_HitFxLayer;
-
-    Sprite_HitFxLayer.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this);
-        this.z = Z.hitFx;   // above the characters
-        this._particles = [];
-    };
-
-    Sprite_HitFxLayer.prototype.spawn = function(fx) {
-        const type = FX_TYPES[fx.type];
-        if (!type) return;
-        const away = fx.dx !== 0 ? fx.dx : (Math.random() < 0.5 ? -1 : 1);
-        const count = fx.count !== undefined ? Math.min(fx.count, FX_MAX_PEBBLES) : (fx.final ? type.final : type.count);
-        for (let i = 0; i < count && this._particles.length < FX_MAX_PARTICLES; i++) {
-            const size = fxInt(type.size);
-            const sprite = new Sprite(type.pebble
-                ? stoneBitmap(Math.floor(Math.random() * STONE_SHADES.length))
-                : fxBitmap(type.colors[Math.floor(Math.random() * type.colors.length)], size));
-            sprite.anchor.x = 0.5;
-            sprite.anchor.y = 0.5;
-            const spread = type.spread || 3;
-            const homeAt = type.pebble ? type.settle + i * 2 : -1;   // frame the stone starts flying to the player
-            this._particles.push({
-                sprite, bx: fx.bx, by: fx.by, bounce: type.bounce || 0, homeAt,
-                // starts on the side of the target facing the player
-                ox: -fx.dx * 9 + fxRandom(-spread, spread),
-                oy: type.oy - fx.dy * 5 + fxRandom(-3, 3),
-                vx: away * fxRandom(type.speed[0], type.speed[1]) + fxRandom(-0.9, 0.9),
-                vy: -fxRandom(type.lift[0], type.lift[1]),
-                gravity: type.gravity, age: 0, life: type.pebble ? homeAt + 45 : fxInt(type.life), floor: fxRandom(-2, 5)
-            });
-            this.addChild(sprite);
-        }
-    };
-
-    // A stone flying to the player (in screen coordinates, so it follows the scrolling
-    // map and a moving player). Returns true when it has arrived.
-    Sprite_HitFxLayer.prototype.flyHome = function(p) {
-        const target = playerScreenPoint();
-        if (!p.homing) {
-            p.homing = true;
-            p.hx = p.sprite.x;
-            p.hy = p.sprite.y;
-        }
-        const dx = target.x - p.hx, dy = target.y - p.hy, dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 10) return true;
-        const step = Math.max(3, dist * 0.22);
-        p.hx += dx / dist * step;
-        p.hy += dy / dist * step;
-        p.sprite.x = Math.round(p.hx);
-        p.sprite.y = Math.round(p.hy);
-        p.sprite.alpha = 1;
-        return false;
-    };
-
-    Sprite_HitFxLayer.prototype.update = function() {
-        Sprite.prototype.update.call(this);
-        const queue = typeof $gameTemp !== "undefined" && $gameTemp ? $gameTemp._hitFx : null;
-        while (queue && queue.length > 0) this.spawn(queue.shift());
-        const tw = $gameMap.tileWidth();
-        const th = $gameMap.tileHeight();
-        for (const p of this._particles.slice()) {
-            p.age++;
-            let done = p.age >= p.life;
-            if (p.homeAt >= 0 && p.age >= p.homeAt) {
-                done = this.flyHome(p) || done;
-            } else {
-                p.vy += p.gravity;
-                p.ox += p.vx;
-                p.oy += p.vy;
-                if (p.oy > p.floor) {   // landed: it stays there and slides a little (stones bounce first)
-                    p.oy = p.floor;
-                    p.vy = p.bounce && p.vy > 1.4 ? -p.vy * p.bounce : 0;
-                    p.vx *= p.bounce ? 0.75 : 0.6;
-                }
-                p.sprite.x = Math.round($gameMap.adjustX(p.bx) * tw + p.ox);
-                p.sprite.y = Math.round($gameMap.adjustY(p.by) * th + p.oy);
-                p.sprite.alpha = Math.min(1, (p.life - p.age) / 10);
-            }
-            if (done) {
-                this.removeChild(p.sprite);
-                this._particles.splice(this._particles.indexOf(p), 1);
-            }
-        }
-    };
-
     const _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
     Spriteset_Map.prototype.createCharacters = function() {
         _Spriteset_Map_createCharacters.call(this);
-        this._hitFxLayer = new Sprite_HitFxLayer();
+        this._hitFxLayer = new (R().Sprite_HitFxLayer)();   // (the flying chips and stones)
         this._tilemap.addChild(this._hitFxLayer);
     };
 
+    // ------------------------------------------------------------------
+    // For the parts, and window.ChoppableTree (the same names as before the split)
+    // ------------------------------------------------------------------
+    P.core = { pluginName, TREE_DEFAULTS, ROCK_DEFAULTS, STUMP_DEFAULTS, LOG_DEFAULTS, BUSH_DEFAULTS, FRUIT_SEASON_FROM, FRUIT_SEASON_TO,
+        FRUIT_REGROW_DAYS, FRUIT_SE, CHARCOAL, CONE, CHARRED_DROP, CHARRED_STUMP_DROP, CHARRED_HITS, CHARRED_TONE, SWAY_CYCLE, CHOP_SE, FALL_SE,
+        DIG_SE, MINE_SE, BREAK_SE, PICKUP_SE, BUSH_SE, SWING_KINDS, SWING_KIND, FALL_FRAMES, BREAK_FRAMES, EMBER_FRONT, EMBER_SMOULDER, EMBER_LIFE,
+        SOLID_GRAPHICS, swingKind, swingKindOf, configCaches, readConfig, isNumberArg, occupyTag, occupyConfig, isInsideArea, isSoftTile,
+        fruitState, smoulderState };
+    const objects = name => function() { const o = O(); return o[name].apply(o, arguments); };
+    const render = name => function() { const r = R(); return r[name].apply(r, arguments); };
     // for Storm.js (lightning hitting a tree) and the tests
     // treeConfig: the parsed (and cached) <Tree:...> numbers of an event - Forestry.js changes scale / hits / drops of a planted tree
     // in place as it grows
     // swingKind(kind): the timing of a kind of swing; swingKindOf(key): the kind with that name, else the first that plays that
     // sheet (-1: none) - Combat.js
-    const swingKindOf = key => { const i = SWING_KINDS.findIndex(k => k.name === key); return i >= 0 ? i : SWING_KINDS.findIndex(k => k.sheet === key); };
-    window.ChoppableTree = { isTree: event => !!treeConfig(event), treeConfig, isLow, isPine, isCharred, charTree, strikeableTrees, emberLights, emberSpots, EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE,
-        swingKind, swingKindOf };
+    window.ChoppableTree = T.register(pluginName, { isTree: event => !!treeConfig(event), treeConfig, isLow: objects("isLow"), isPine: objects("isPine"),
+        isCharred: objects("isCharred"), charTree: objects("charTree"), strikeableTrees: objects("strikeableTrees"), emberLights: render("emberLights"),
+        emberSpots: render("emberSpots"), EMBER_FRONT, EMBER_LIFE, CHARCOAL, CONE, swingKind, swingKindOf });
+
+    // the parts not in js/plugins.js yet: put into the page here (after every plugin - functions and classes only, every engine hook
+    // is above, so nothing moves in the chain)
+    for (const part of ["ChoppableTree_Objects", "ChoppableTree_Swing", "ChoppableTree_Render"]) {
+        if (!(window.$plugins || []).some(p => p && p.name === part && p.status)) PluginManager.loadScript(part);
+    }
 })();

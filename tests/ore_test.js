@@ -31,7 +31,8 @@ const { launch, sleep } = require("./cdp.js");
         }
         // ---------------------------------------------------------------- the table of the plugin: profiles (ore, not stone) and blocking
         const fs = require("fs");
-        const src = fs.readFileSync("C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/js/plugins/ChoppableTree.js", "utf8");
+        // (since 2026-09-29 the kinds are in ChoppableTree_Objects.js and the tiles in ChoppableTree.js: read in that order, as they stood in the one file)
+        const src = ["ChoppableTree_Objects", "ChoppableTree"].map(n => fs.readFileSync("C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/js/plugins/" + n + ".js", "utf8")).join("\n");
         const entry = (table, name) => {   // the text of `"name": { ... }` inside the given table
             const t = src.indexOf(table), k = src.indexOf('"' + name + '": {', t);
             return k < 0 ? null : src.slice(k, src.indexOf("}", k) + 1);

@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Swobodny ruch gracza co do piksela, w 8 kierunkach (także po skosie), zgodny z uprawami, narzędziami, drzwiami i dużymi obiektami. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param defaultEnabled
  * @text Domyślnie włączony na mapach
@@ -111,6 +113,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("FreeMovement.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "FreeMovement";
     const params = PluginManager.parameters(pluginName);
     const num = (v, d) => {
@@ -147,10 +152,7 @@
     function freeMoveOn() {
         if (OFF_SWITCH > 0 && $gameSwitches && $gameSwitches.value(OFF_SWITCH)) return false;
         if ($gameSystem && typeof $gameSystem._freeMove === "boolean") return $gameSystem._freeMove;
-        const note = ($dataMap && $dataMap.note) || "";
-        if (/<FreeMove:\s*off\s*>/i.test(note)) return false;
-        if (/<FreeMove:\s*on\s*>/i.test(note)) return true;
-        return DEFAULT_ON;
+        return T.mapFlag("FreeMove", DEFAULT_ON, "off");   // (<FreeMove:off> wins over a <FreeMove:on> beside it)
     }
 
     // ------------------------------------------------------------------

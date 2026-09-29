@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Głód i pragnienie: dwa paski pod wytrzymałością. Kto jest głodny albo spragniony, traci więcej sił przy pracy, a jego wytrzymałość ma niższy sufit. Woda ze stawu, studni, deszczu i bukłaka. v1.0.0
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  * @orderAfter Survival
  *
  * @param enabled
@@ -68,6 +70,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("Needs.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const params = PluginManager.parameters("Needs");
     let ON = params.enabled !== "false";
     const FOOD_RATE = Number(params.foodRate || 1.6);
@@ -122,7 +127,7 @@
         return Math.min(soft(FOOD.cap[l.food]), soft(WATER.cap[l.water]));
     }
     function popup(icon, text, color) {
-        $gameTemp.pushLootPopup(icon, text, color);
+        T.popup(text, { icon, color });
     }
     const FOOD_ICON = 390, WATER_ICON = 391;
     function warn() {
@@ -135,9 +140,8 @@
 
     // ---- outdoors (the same rule as Survival.js) and the season
     function outdoors() {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (/<Weather:\s*off\s*>/i.test(note)) return false;
-        return /<Weather:\s*on\s*>/i.test(note) || /<Clouds:\s*on\s*>/i.test(note);
+        const weather = T.mapFlag("Weather", null, "off");
+        return weather !== null ? weather : T.mapFlag("Clouds", false);
     }
     const seasonNow = () => (window.Farming && Farming.seasonIndex ? Farming.seasonIndex($gameSystem.dayNightDay()) : 0);
     const raining = () => outdoors() && ["rain", "storm"].includes($gameScreen.weatherType()) && $gameScreen._weatherPowerTarget > 0;
@@ -234,9 +238,9 @@
     }
     function drinkFromSkin() {
         const icon = ($dataItems[SKIN.item] || {}).iconIndex || WATER_ICON;
-        if (!ownsSkin()) { popup(icon, "Potrzebujesz bukłaka", "#ff9f8f"); return false; }
-        if (skinCharges() <= 0) { popup(icon, "Bukłak jest pusty", "#ff9f8f"); return false; }
-        if (needs().water >= 95) { popup(WATER_ICON, "Nie chce ci się pić", "#ff9f8f"); return false; }
+        if (!ownsSkin()) { T.popup.need(icon, "Potrzebujesz bukłaka"); return false; }
+        if (skinCharges() <= 0) { T.popup.need(icon, "Bukłak jest pusty"); return false; }
+        if (needs().water >= 95) { T.popup.need(WATER_ICON, "Nie chce ci się pić"); return false; }
         needs().skin = skinCharges() - 1;
         const got = drink(SKIN.sip);
         AudioManager.playSe({ name: "Liquid", volume: 90, pitch: 105, pan: 0 });

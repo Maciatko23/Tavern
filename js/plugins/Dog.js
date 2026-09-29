@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc [v1.0.0] Pies: dziki pies z lasu, oswojony mięsem, zbiera, poluje i znosi wszystko na składowisko.
  * @author Tawerna
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @help
  * DZIKI PIES
@@ -27,12 +29,16 @@
  *     "Chodź za mną" - pies chodzi za tobą, także na inne mapy.
  *
  * Grafiki: img/characters/$Animal_Dog.png (+ _Run, _Stalk), img/system/Farm_Doghouse.png, Farm_Stockpile.png.
- * Zapis: $gameSystem._dog.
+ * Zapis: Tawerna.state("dog") (dawny $gameSystem._dog przechodzi sam przy
+ * wczytaniu). Korzysta z TawernaCore.js (musi stać wyżej na liście).
  */
 
 (() => {
     "use strict";
 
+    const PLUGIN = "Dog";
+    const T = window.Tawerna;
+    if (!T) throw new Error("Dog.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const RA = window.RoamingActor;
     const F = () => window.Farming;
     const HOME_MAP = 3;
@@ -65,20 +71,17 @@
     const FEATHERS = 146;
 
     // ------------------------------------------------------------------
-    // Saved state
+    // Saved state: Tawerna.state("dog") = $gameSystem._tw.dog (an older save's $gameSystem._dog is taken over); null with no game
     // ------------------------------------------------------------------
-    function state() {
-        if (!$gameSystem) return null;
-        if (!$gameSystem._dog) $gameSystem._dog = { tame: false, trust: 0, fedAt: -99, map: HOME_MAP, x: -1, y: -1, food: 70, water: 70, hp: -1, st: -1,
-            mode: "follow", hurtUntil: 0, clock: null, carry: [] };
-        return $gameSystem._dog;
-    }
-    const clock = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
-    const hour = () => $gameSystem.dayNightHour();
+    const S = T.state.define("dog", () => ({ tame: false, trust: 0, fedAt: -99, map: HOME_MAP, x: -1, y: -1, food: 70, water: 70, hp: -1, st: -1,
+        mode: "follow", hurtUntil: 0, clock: null, carry: [] }), { version: 1, adopt: "_dog", owner: PLUGIN });
+    const state = () => (window.$gameSystem ? S() : null);
+    const clock = () => T.time.day() * 24 + T.time.hour();
+    const hour = () => T.time.hour();
     const night = () => hour() >= DOG.nightFrom || hour() < DOG.nightTo;
     const maxHp = () => { const a = $gameParty.leader(); return Math.max(10, Math.round((a ? a.mhp : 100) / 2)); };
     const maxSt = () => Math.max(10, Math.round(($gameSystem.maxStamina ? $gameSystem.maxStamina() : 100) / 2));
-    const popup = (icon, text, color) => { if ($gameTemp.pushLootPopup) $gameTemp.pushLootPopup(icon, text, color || "#f3e0a0"); };
+    const popup = (icon, text, color) => T.popup(text, { icon, color: color || "#f3e0a0" });
     const DOG_ICON = () => 431;   // (IconSet: the dog's head)
 
     // the kennel and the stockpile of a map
@@ -795,9 +798,10 @@
         }
         if (scene && scene.openFarmMenu) scene.openFarmMenu(d.tame ? "Pies" : "Dziki pies", entries, undefined, undefined, undefined, undefined, statusNote());
     }
+    const CALM_MENU = { only: ["onMap", "event", "farmMenu"] };   // (on the map, no event running, no farm menu open)
     const _triggerButtonAction = Game_Player.prototype.triggerButtonAction;
     Game_Player.prototype.triggerButtonAction = function() {
-        if (Input.isTriggered("ok") && dogAhead() && SceneManager._scene instanceof Scene_Map && !$gameMap.isEventRunning() && !$gameTemp._farmMenuOpen) {
+        if (Input.isTriggered("ok") && dogAhead() && T.isCalm(SceneManager._scene, CALM_MENU)) {
             openDogMenu();
             return true;
         }
@@ -936,18 +940,10 @@
     };
 
     // ------------------------------------------------------------------
-    // The map scene drives it
+    // The map scene drives it (the core's map clock and events; the dog's own step stays in Game_Map.update, among the characters)
     // ------------------------------------------------------------------
-    const _extractSaveContents = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
-        _extractSaveContents.call(this, contents);
-        dog = null;
-    };
-    const _Game_Map_setup = Game_Map.prototype.setup;
-    Game_Map.prototype.setup = function(mapId) {
-        _Game_Map_setup.call(this, mapId);
-        dog = null;
-    };
+    T.on("load", () => { dog = null; }, { owner: PLUGIN });
+    T.on("mapEnter", () => { dog = null; }, { owner: PLUGIN });
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
@@ -958,24 +954,23 @@
         _Spriteset_Map_createCharacters.call(this);
         if (dog) { dog._sprite = null; RA.addSprite(dog, this); }
     };
+    // (its own counter, not the updater's "every": the needs and the sprite every frame, the sync on the first frame and every 30)
     let syncWait = 0;
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
+    T.onMapUpdate(scene => {
         if (!$gamePlayer || !$gameSystem) return;
         tickNeeds();
         // the stockpile strip is the first thing at the top centre: the rest shown there (the combat mode badge, the day's greeting,
         // the notices, the level banner - each placed by its own plugin this frame) moves down under it (the user saw "Tryb walki" on it)
-        const strip = this._dogStock;
+        const strip = scene._dogStock;
         if (strip && strip.visible && strip._h) {
             const dy = strip.y + strip._h + 6 - 10;
-            for (const k of ["_modeBadge", "_dayBanner", "_topNotice", "_levelBanner"]) { const sp = this[k]; if (sp && sp.visible) sp.y += dy; }
+            for (const k of ["_modeBadge", "_dayBanner", "_topNotice", "_levelBanner"]) { const sp = scene[k]; if (sp && sp.visible) sp.y += dy; }
         }
         if (--syncWait <= 0) { syncWait = 30; sync(); }
         if (dog && (!dog._sprite || !dog._sprite.parent)) { dog._sprite = null; RA.addSprite(dog); }
         updateDogSprite();
-    };
+    }, { owner: PLUGIN, name: "dog" });
 
-    window.Dog = { DOG, state, sync, storeAdd, kennel, stockpile, openDogMenu, feedWild, setMode, findTile, findWater, findPrey, statusNote, tickNeeds, hurtDog, dogFoodValue, meatInBag,
-        maxHp, maxSt, auto: v => { auto = !!v; }, get dog() { return dog; }, spawnDog, removeDog, Game_Dog };
+    window.Dog = T.register(PLUGIN, { DOG, state, sync, storeAdd, kennel, stockpile, openDogMenu, feedWild, setMode, findTile, findWater, findPrey, statusNote, tickNeeds, hurtDog, dogFoodValue, meatInBag,
+        maxHp, maxSt, auto: v => { auto = !!v; }, get dog() { return dog; }, spawnDog, removeDog, Game_Dog });
 })();

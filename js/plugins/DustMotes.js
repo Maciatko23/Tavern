@@ -7,6 +7,8 @@
  * @target MZ
  * @plugindesc Unoszące się w powietrzu drobinki kurzu dla klimatu wnętrz. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param count
  * @text Liczba drobinek
@@ -65,6 +67,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("DustMotes.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "DustMotes";
     const params = PluginManager.parameters(pluginName);
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
@@ -77,19 +82,9 @@
     const SPEED = num(params.speed, 0.15);
     const DEFAULT_ENABLED = params.defaultEnabled === "true";
 
-    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
-    // `fallback` when neither is present. Duplicated identically in
-    // Atmosphere.js/RoomLighting.js/DayNightCycle.js/CloudShadows.js/Minimap.js
-    // (no shared module between these plugin files today).
-    function mapNoteFlag(tag, fallback) {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
-        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
-        return fallback;
-    }
-
+    // <Dust:on> / <Dust:off> in the map's note, else the parameter ("on" wins when both are there)
     function isDustEnabled() {
-        return mapNoteFlag("Dust", DEFAULT_ENABLED);
+        return T.mapFlag("Dust", DEFAULT_ENABLED);
     }
 
     // Builds a square bitmap `size` px wide filled with a radial gradient from

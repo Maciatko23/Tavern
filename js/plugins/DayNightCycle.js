@@ -7,6 +7,8 @@
  * @target MZ
  * @plugindesc Cykl dnia i nocy: upływ czasu, numer dnia, pory dnia i zabarwienie ekranu. v2.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param secondsPerHour
  * @text Sekundy realne na 1 godzinę w grze
@@ -98,6 +100,9 @@
 (() => {
     "use strict";
 
+    const T = window.Tawerna;
+    if (!T) throw new Error("DayNightCycle.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
+
     const pluginName = "DayNightCycle";
     const params = PluginManager.parameters(pluginName);
     const num = (value, fallback) =>
@@ -158,19 +163,9 @@
         return KEYFRAMES[0].tone.slice();
     }
 
-    // Reads <Tag:on>/<Tag:off> from the current map's note, falling back to
-    // `fallback` when neither is present. Duplicated identically in
-    // Atmosphere.js/RoomLighting.js/CloudShadows.js/DustMotes.js/Minimap.js
-    // (no shared module between these plugin files today).
-    function mapNoteFlag(tag, fallback) {
-        const note = ($dataMap && $dataMap.note) || "";
-        if (new RegExp("<" + tag + ":\\s*on\\s*>", "i").test(note)) return true;
-        if (new RegExp("<" + tag + ":\\s*off\\s*>", "i").test(note)) return false;
-        return fallback;
-    }
-
+    // <DayNight:on> / <DayNight:off> in the map's note, else the parameter ("on" wins when both are there)
     function isToneEnabled() {
-        return mapNoteFlag("DayNight", DEFAULT_ENABLED);
+        return T.mapFlag("DayNight", DEFAULT_ENABLED);
     }
 
     const _Game_System_initialize = Game_System.prototype.initialize;

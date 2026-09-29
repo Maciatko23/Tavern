@@ -55,14 +55,17 @@ const { launch, sleep } = require("./cdp.js");
         check("Spoilage: the 7 cooked dishes go off (96/96/60/72/48/240/96 h), the mead keeps", JSON.stringify(life) === JSON.stringify({ 130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96, 137: 0 }), life);
 
         // ---------------------------------------------------------------- the stations, cooking and collecting
+        // open ground 12 x 8: the stations and the player's spots use its rows by+1..by+7 (row by is the margin above). It used to ask
+        // for 12 x 9 (a spare row below) up to 10 rows from the bottom edge - Map003 as the user remade it (2026-09) has no such
+        // meadow any more, only 12 x 8 near its bottom fence, so the search now runs to the map's last inner row
         const B = await ev(`(function(){
             const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y);
-            for (let by = 2; by < $gameMap.height() - 10; by++) for (let bx = 2; bx < $gameMap.width() - 13; bx++) {
+            for (let by = 2; by + 8 < $gameMap.height(); by++) for (let bx = 2; bx + 12 < $gameMap.width(); bx++) {
                 let ok = true;
-                for (let y = by; y < by + 9 && ok; y++) for (let x = bx; x < bx + 12; x++) { if (!free(x, y)) { ok = false; break; } }
+                for (let y = by; y < by + 8 && ok; y++) for (let x = bx; x < bx + 12; x++) { if (!free(x, y)) { ok = false; break; } }
                 if (ok) {
                     const plots = ($gameSystem._farm.plots[$gameMap.mapId()] = $gameSystem._farm.plots[$gameMap.mapId()] || {});
-                    for (let y = by; y < by + 9; y++) for (let x = bx; x < bx + 12; x++) if (!plots[x + "," + y]) plots[x + "," + y] = { s: "cleared" };
+                    for (let y = by; y < by + 8; y++) for (let x = bx; x < bx + 12; x++) if (!plots[x + "," + y]) plots[x + "," + y] = { s: "cleared" };
                     $gameSystem._farm.rev++;
                     return { bx, by };
                 }
@@ -76,9 +79,13 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`$gamePlayer.locate(${cx + 1}, ${cy + 2}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${bx} - 3, ${by} - 2); $gameSystem.setStamina(100); 0`);
         await frames(30);
         const at = (x, y) => `Farming.buildingAt(${x}, ${y})`;
+        // a fire (the cauldron's, the campfire's) burns down with the game clock (fire fuel: 4 h when put up) and a gone-out fire refuses
+        // to cook: fed up to the full 10 hours before each job, as the player would (the fuel itself: tests/fire_fuel_test.js)
+        const feed = (x, y) => ev(`(function(){ const b = ${at(x, y)}; if (Farming.fuelLeft(b) !== Infinity) { b.fuel = 10; b.fuelSince = Farming.clockHours(); delete b.outAt; } })(); 0`);
         // start a background job, let the game clock run `hours`, collect it
         const cook = async (x, y, id, hours) => {
             await ev(`$gameSystem.setStamina(100); 0`);
+            await feed(x, y);
             await ev(`Farming.startJob(${at(x, y)}, ${JSON.stringify(id)}); 0`);
             await frames(90);
             const started = await ev(`!!${at(x, y)}.job`);   // the job starts after a short crouch
@@ -112,6 +119,7 @@ const { launch, sleep } = require("./cdp.js");
         // not enough water: refused even with all the ingredients ready
         await clear(ALL_IN.concat(NEW_IDS)); for (const [it, k] of [[94, 2], [72, 1], [73, 1]]) await give(it, k);
         await ev("Farming.setBagWater(1); 0");   // gulasz needs 2
+        await feed(cx, cy);   // (a lit fire: only the water is short)
         const noWater = await ev(`(function(){ const b = ${at(cx, cy)}; Farming.startJob(b, "stew"); return !!b.job; })()`);
         check("gulasz with only 1/2 water: nothing starts, the ingredients stay in the bag, the water is untouched", noWater === false && (await count(94)) === 2 && (await ev("Farming.bagWater()")) === 1);
 
@@ -126,6 +134,7 @@ const { launch, sleep } = require("./cdp.js");
             await clear(ALL_IN.concat(NEW_IDS));
             for (const [it, k] of ins) await give(it, k);
             await ev(`$gamePlayer.locate(${fx}, ${fy + 1}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${fx} - 13.5, ${fy} - 7.5); $gameSystem.setStamina(100); 0`);
+            await feed(fx, fy);
             await frames(10);
             await ev(`Farming.startJob(${at(fx, fy)}, ${JSON.stringify(id)}); 0`);
             await frames(120);
@@ -146,7 +155,7 @@ const { launch, sleep } = require("./cdp.js");
         check("the cauldron still lets the player warm up by its fire (rest)", kMenu.includes("Odpocznij przy ogniu"), kMenu);
         const fMenu = await J(`Farming.menuFor(${fx}, ${fy}).entries.map(e => e.name)`);
         check("the plain campfire's menu offers 'Upiecz grzyby' and 'Przypiecz ser' next to meat, fish, potatoes and eggs",
-            ["Upiecz mięso", "Upiecz rybę", "Upiecz ziemniaki", "Usmaż jajecznicę", "Upiecz grzyby", "Przypiecz ser"].every(n => fMenu.includes(n)), fMenu);
+            fMenu.some(n => /^Upiecz mięso/.test(n)) && ["Upiecz rybę", "Upiecz ziemniaki", "Usmaż jajecznicę", "Upiecz grzyby", "Przypiecz ser"].every(n => fMenu.includes(n)), fMenu);   // (meat: one row per animal's meat now - "Upiecz mięso zająca", "... jelenia"...)
         const bMenu = await J(`Farming.menuFor(${kx + 1}, ${ky}).entries.map(e => e.name)`);
         const wMenu = await J(`Farming.menuFor(${rx + 1}, ${ry}).entries.map(e => e.name)`);
         check("the bakery offers 'Upiecz placek jagodowy', the brewery 'Nastaw miód pitny'", bMenu.includes("Upiecz placek jagodowy") && wMenu.includes("Nastaw miód pitny"), { bMenu, wMenu });

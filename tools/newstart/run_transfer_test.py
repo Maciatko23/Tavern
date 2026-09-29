@@ -4,7 +4,7 @@ from layout import transfers, MAPS
 HERE = os.path.dirname(os.path.abspath(__file__))
 SIZE = {k: v["size"] for k, v in MAPS.items()}
 SIZE.update({3: (40, 30), 8: (30, 24)})
-DOOR_WALK = {(19, 5, 8): 2, (20, 15, 7): 8}     # out through the door mat (down), in through the cottage door (up)
+DOOR_WALK = {(19, 9, 12): 2, (20, 15, 7): 8}    # out through the doorway (down), in through the cottage door (up)
 rows = []
 for fm, x, y, tm, tx, ty, d, kind in transfers():
     w, h = SIZE[fm]

@@ -6,6 +6,8 @@
  * @target MZ
  * @plugindesc Dziennik: cele, księga rzemiosła (surowce, budynki, receptury), notatki i podsumowanie dnia. v1.0.0
  * @author Claude
+ * @base TawernaCore
+ * @orderAfter TawernaCore
  *
  * @param showTracker
  * @text Pokazuj bieżący cel na ekranie
@@ -64,6 +66,9 @@
  *
  * Cele fabularne (Tajemnice tawerny) odczytują zmienną 1 (postęp rozmowy z
  * Borgarem) oraz przełącznik A zdarzenia 1 na mapie 9 (wejście do piwnicy).
+ *
+ * Zapis: Tawerna.state("journal") (dawny $gameSystem._journal przechodzi sam
+ * przy wczytaniu). Korzysta z TawernaCore.js (musi stać wyżej na liście).
  * ============================================================================
  */
 
@@ -71,6 +76,8 @@
     "use strict";
 
     const pluginName = "Journal";
+    const T = window.Tawerna;
+    if (!T) throw new Error("Journal.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const params = PluginManager.parameters(pluginName);
     const flag = (v, d) => (v === undefined || v === "" ? d : v === "true");
     const SHOW_TRACKER = flag(params.showTracker, true);
@@ -86,8 +93,13 @@
     const dayNow = () => ($gameSystem ? $gameSystem.dayNightDay() : 1);
 
     // ------------------------------------------------------------------
-    // Saved data ($gameSystem._journal): items ever owned, finished goals (day), notes, the pinned goal, the record of the day
+    // Saved data (Tawerna.state("journal") = $gameSystem._tw.journal; an older save's $gameSystem._journal is taken over): items ever
+    // owned, finished goals (day), notes, the pinned goal, the record of the day. The core keeps an empty object from the start; the
+    // journal itself is written the first time it is needed (as before: what the bag holds then counts as known, the day's record
+    // starts then) - made() says whether that has happened
     // ------------------------------------------------------------------
+    const store = T.state.define("journal", () => ({}), { version: 1, adopt: "_journal", owner: pluginName });
+    const made = () => !!window.$gameSystem && store().seen !== undefined;
     function completedBuildings() {
         const out = [];
         for (const list of Object.values(farmData().buildings || {})) for (const b of list || []) if (!b.site) out.push(b);
@@ -104,13 +116,13 @@
         return { n, gained: {}, goals: [], eaten: 0, gold0: $gameParty ? $gameParty.gold() : 0, built0: completedBuildings().map(b => b.id) };
     }
     function data() {
-        const sys = $gameSystem;
-        if (!sys._journal) {
+        const j = store();
+        if (j.seen === undefined) {
             const seen = {};
             for (const it of $gameParty.items()) seen[it.id] = true;   // what the bag already holds counts as known
-            sys._journal = { seen, done: {}, pinned: null, notes: [], day: newDayRecord(sys.dayNightDay()), last: null, eaten: 0, fresh: true };
+            Object.assign(j, { seen, done: {}, pinned: null, notes: [], day: newDayRecord($gameSystem.dayNightDay()), last: null, eaten: 0, fresh: true });
         }
-        return sys._journal;
+        return j;
     }
     const has = id => !!data().seen[id];
     const hasAny = ids => ids.some(has);
@@ -282,9 +294,8 @@
     // ({ text, color }, e.g. Combat.js's "+50 dośw."), said under the goal on the same plate
     function announce(goal, lines) {
         const sub = (lines || []).filter(l => l && l.text);
-        if (typeof $gameTemp.pushTopNotice === "function") {
-            $gameTemp.pushTopNotice("Cel wykonany: " + goal.title, "#9ff0a8", sub.length ? { sub: sub.map(l => l.text).join("   "), subColor: sub[0].color } : null);
-        } else $gameTemp.pushLootPopup(goalIcon(goal), "Cel wykonany: " + goal.title + sub.map(l => "  " + l.text).join(""), "#9ff0a8");
+        const top = T.popup("Cel wykonany: " + goal.title, { top: true, color: "#9ff0a8", sub: sub.length ? sub.map(l => l.text).join("   ") : "", subColor: sub.length ? sub[0].color : undefined });
+        if (!top) T.popup("Cel wykonany: " + goal.title + sub.map(l => "  " + l.text).join(""), { icon: goalIcon(goal), color: "#9ff0a8" });   // (no notice at the top)
         AudioManager.playSe({ name: "Item3", volume: 80, pitch: 105, pan: 0 });
     }
 
@@ -323,7 +334,7 @@
     const _Game_Battler_useItem = Game_Battler.prototype.useItem;
     Game_Battler.prototype.useItem = function(item) {
         _Game_Battler_useItem.call(this, item);
-        if (item && DataManager.isItem(item) && item.meta && item.meta.Food && $gameSystem) {
+        if (item && DataManager.isItem(item) && T.hasTag(item, "Food") && $gameSystem) {
             data().eaten++;
             data().day.eaten++;
         }
@@ -347,25 +358,25 @@
             $gameTemp._pendingSummary = d.last;
         }
     }
+    // The day's record turns over the moment the clock passes midnight - here, not on the core's dayStart: that one is looked at
+    // at the end of the map's frame, and Farming's rest (an hour a second) calls afterRest() in the same frame as its last step, so
+    // the summary of a rest through midnight needs the record turned already (and a day that ends in a mini-game scene counts there)
     const _advanceDayNight = Game_System.prototype.advanceDayNight;
     Game_System.prototype.advanceDayNight = function(hours) {
         const before = this.dayNightDay();
         _advanceDayNight.call(this, hours);
-        if (this._journal && this.dayNightDay() !== before) onDayChanged(before);
+        if (this.dayNightDay() !== before && made()) onDayChanged(before);
     };
-    const _sleepUntilHour = Game_System.prototype.sleepUntilHour;
-    Game_System.prototype.sleepUntilHour = function(hour) {
-        const before = this.dayNightDay();
-        const result = _sleepUntilHour.call(this, hour);
-        if (this._journal && this.dayNightDay() !== before) {
-            onDayChanged(before);
+    // a night's sleep (the core's wake: sleepUntilHour is over, the new day is there): the record turns and the summary waits
+    T.on("wake", e => {
+        if (made() && e.day !== e.from.day) {
+            onDayChanged(e.from.day);
             queueSummary();
         }
-        return result;
-    };
+    }, { owner: pluginName });
     // resting on a bedroll or bench (Farming.js) can run through midnight as well
     function afterRest() {
-        if (!$gameSystem._journal) return;
+        if (!made()) return;
         const d = data();
         if (d.last && d.last.day === dayNow() - 1 && !d.last.shown) queueSummary();
     }
@@ -1321,11 +1332,13 @@
         evaluateGoals();
         this._window = new Window_DaySummary(new Rectangle(0, 0, Math.min(1040, Graphics.boxWidth - 40), 200));
         this.addWindow(this._window);
-        this._window.setup(this._summary);
+        // (made again without its summary - a scene was put over it and closed: nothing to show, straight back)
+        if (this._summary) this._window.setup(this._summary); else this._empty = true;
         this._wait = 12;
     };
     Scene_DaySummary.prototype.update = function() {
         Scene_MenuBase.prototype.update.call(this);
+        if (this._empty) { if (!SceneManager.isSceneChanging()) this.popScene(); return; }
         if (this._wait > 0) { this._wait--; return; }
         if (Input.isTriggered("ok") || Input.isTriggered("cancel") || TouchInput.isTriggered() || TouchInput.isCancelled()) {
             SoundManager.playOk();
@@ -1336,17 +1349,37 @@
     // ------------------------------------------------------------------
     // On the map: goal check, the J key, the summary after sleeping, the tracker
     // ------------------------------------------------------------------
+    // The goals: looked at right away when something on the bus can finish one (a kill, a shift, a contract, a payment of the debt,
+    // a step of the story) - after the other listeners (Combat's XP for the kill first); one told in a mini-game's scene waits for
+    // the first map frame (the notice and its sound on the map, as before). Every 30 frames as well, for all that has no event yet:
+    // things in the bag, buildings, fields, drinks, repairs - and a snare's catch while away, which counts a kill without one
+    const GOAL_EVENTS = ["kill", "shiftDone", "questDone", "debtPayment", "debtPaid", "storyStep"];
+    let goalsDue = false;
+    function goalEvent() {
+        if (window.$gameSystem && SceneManager._scene instanceof Scene_Map) evaluateGoals();
+        else goalsDue = true;
+    }
+    for (const name of GOAL_EVENTS) T.on(name, goalEvent, { owner: pluginName, priority: 10 });
+    T.onMapUpdate(() => {
+        if (!$gameSystem) return;
+        if (goalsDue || Graphics.frameCount % 30 === 0) {
+            goalsDue = false;
+            evaluateGoals();
+        }
+    }, { owner: pluginName, name: "goals" });
+    // the J key and the summary stay in the map's own update, where they were: Atmosphere (later in the chain) autosaves after a
+    // night in the very frame the summary is taken - at the end of the frame the autosave would come only after the summary
     const _Scene_Map_update = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         _Scene_Map_update.call(this);
         this.updateJournal();
     };
+    const CALM_JOURNAL = { only: ["sceneChange", "message", "event", "farmMenu", "build", "canMove"] };
     Scene_Map.prototype.canUseJournal = function() {
-        return !SceneManager.isSceneChanging() && !$gameMessage.isBusy() && !$gameMap.isEventRunning() && !$gameTemp._farmMenuOpen && !$gameTemp._buildMode && $gamePlayer.canMove();
+        return T.isCalm(this, CALM_JOURNAL);
     };
     Scene_Map.prototype.updateJournal = function() {
         if (!$gameSystem) return;
-        if (Graphics.frameCount % 30 === 0) evaluateGoals();
         if (Input.isTriggered("journal") && this.canUseJournal()) {
             SoundManager.playOk();
             SceneManager.push(Scene_Journal);
@@ -1504,11 +1537,11 @@
     function addNote(title, text) {
         const d = data();
         d.notes.push({ title: String(title || "Notatka"), text: String(text || ""), day: dayNow() });
-        $gameTemp.pushLootPopup(iconOfItem(59), "Nowa notatka: " + title, "#eceef0");
+        T.popup("Nowa notatka: " + title, { icon: iconOfItem(59), color: "#eceef0" });
         AudioManager.playSe({ name: "Bell1", volume: 70, pitch: 100, pan: 0 });
     }
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));
     PluginManager.registerCommand(pluginName, "openJournal", () => { SceneManager.push(Scene_Journal); });
 
-    window.Journal = { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource: fn => { trackerSources.push(fn); }, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary };
+    window.Journal = T.register(pluginName, { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource: fn => { trackerSources.push(fn); }, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary, GOAL_EVENTS });
 })();
