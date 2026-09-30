@@ -37,8 +37,8 @@ EDGES = [
     ((21, cells(0, 19, 0, 21), 6), (22, cells(39, 19, 39, 21), 4)),     # forest road W <-> field road E
     ((22, cells(23, 29, 25, 29), 8), (23, cells(23, 0, 25, 0), 2)),     # field road S <-> forest edge N
     ((23, cells(0, 12, 0, 14), 6), (3, cells(39, 12, 39, 14), 4)),      # forest edge W <-> grandpa's field (Map003) E
-    ((22, cells(11, 0, 13, 0), 2), (8, cells(13, 23, 15, 23), 8)),      # field road's lane N <-> tavern surroundings S
-    ((8, cells(29, 10, 29, 12), 4), (24, cells(0, 14, 0, 16), 6)),      # tavern surroundings E <-> Lord's estate W
+    ((22, cells(11, 0, 13, 0), 2), (8, cells(24, 68, 26, 68), 8)),      # field road's lane N <-> the town's south edge (town C + 10 rows, 2026-09-30)
+    ((8, cells(51, 30, 51, 32), 4), (24, cells(0, 14, 0, 16), 6)),      # the town's east gate <-> Lord's estate W
 ]
 
 STEP = {2: (0, 1), 4: (-1, 0), 6: (1, 0), 8: (0, -1)}

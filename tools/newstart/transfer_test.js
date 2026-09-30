@@ -38,6 +38,9 @@ if (dir) for (const f of ["Map003.json", "Map008.json", "System.json"]) if (fs.e
         await ev(`(function(){ if (window.Birds) Birds.auto(false); if (window.Hunting) Hunting.auto(false); if (window.Needs && Needs.setEnabled) Needs.setEnabled(false); return 0; })()`);
         const start = await J(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, name: $gameMap.displayName() })`);
         console.log("new game starts at", JSON.stringify(start));
+        // (a story game opens with grandpa's talk - no transfer happens while it runs: skipped, as tests/lib/kit.js does)
+        await ev(`(function(){ if (window.Story && Story.skipIntro) Story.skipIntro(); $gameMap._interpreter.clear(); $gameMessage.clear(); return 0; })()`);
+        await frames(30);
         const KEY = { 2: "down", 4: "left", 6: "right", 8: "up" }, STEP = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
         for (const t of list) {
             const [fm, x, y, tm, tx, ty, d, kind, walk] = t;

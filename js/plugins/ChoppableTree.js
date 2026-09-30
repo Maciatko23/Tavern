@@ -918,6 +918,7 @@
     Sprite_Character.prototype.updateTreeEffects = via(R, "updateTreeEffects");
     Sprite_Character.prototype.updateSimpleHitEffects = via(R, "updateSimpleHitEffects");
     Sprite_Character.prototype.updateBushSeeThrough = via(R, "updateBushSeeThrough");
+    Sprite_Character.prototype.updateDecorTreeSeeThrough = via(R, "updateDecorTreeSeeThrough");
     Sprite_Character.prototype.updateSwingSheet = via(S, "updateSwingSheet");   // (HeroLook.js asks it too)
     Sprite_Character.prototype.updateToolSwing = via(S, "updateToolSwing");
 
@@ -932,7 +933,18 @@
             this.updateCharredTone(this._character);
         } else if (this._character === $gamePlayer) {
             this.updateToolSwing();
+        } else if (this._character instanceof Game_Event && DECOR_TREE.test(this._characterName || "")) {
+            this.updateDecorTreeSeeThrough(this._character);   // (a decorative tree picture: fades while the player is behind it)
         }
+    };
+    const DECOR_TREE = /^!.*tree/i;
+    // the see-through factors of bushes and decorative trees, applied after the engine's updateOther (which sets the opacity from
+    // the character every frame, after updatePosition)
+    const _Sprite_Character_updateOther = Sprite_Character.prototype.updateOther;
+    Sprite_Character.prototype.updateOther = function() {
+        _Sprite_Character_updateOther.call(this);
+        const k = (this._bushSeeK === undefined ? 1 : this._bushSeeK) * (this._decorSeeK === undefined ? 1 : this._decorSeeK);
+        if (k < 1) this.opacity = Math.round(this.opacity * k);
     };
 
     // Load the sheets with the map so the first swing does not have to wait for them.

@@ -3,7 +3,7 @@ import json, os, subprocess, sys, tempfile
 from layout import transfers, MAPS
 HERE = os.path.dirname(os.path.abspath(__file__))
 SIZE = {k: v["size"] for k, v in MAPS.items()}
-SIZE.update({3: (40, 30), 8: (30, 24)})
+SIZE.update({3: (40, 30), 8: (52, 69)})   # (Map008 = town C since 2026-09-29)
 DOOR_WALK = {(19, 9, 12): 2, (20, 15, 7): 8}    # out through the doorway (down), in through the cottage door (up)
 rows = []
 for fm, x, y, tm, tx, ty, d, kind in transfers():

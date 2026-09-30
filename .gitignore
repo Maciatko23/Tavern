@@ -32,3 +32,9 @@ __pycache__/
 
 # every test's last result (tests/run.js, the 'before' column) - per machine, rewritten by every run
 /tests/last_results.json
+
+# the Winlu tileset author's sample maps (the pack's free demo from itch.io) - reference only, not ours to publish
+/tools/town/winlu_samples/
+# the town generator's regenerated overlay renders, and the reference pictures of the Winlu author's sample maps (not ours to publish)
+/tools/town/staging/overlay_*/
+/tools/town/refs/

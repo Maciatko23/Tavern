@@ -1,0 +1,63 @@
+{
+ "6": {
+  "map": "Map010",
+  "offset_px": [
+   76,
+   48
+  ],
+  "offset_tiles": [
+   1.5833333333333333,
+   1.0
+  ],
+  "match": 112.92723519698042,
+  "mean_abs_diff": 2.34,
+  "close_24": 0.9542,
+  "size_1x": [
+   1256,
+   720
+  ]
+ },
+ "7": {
+  "map": null,
+  "closest_sample": "Map012",
+  "match": 1994.9236647173489
+ },
+ "8": {
+  "map": null,
+  "closest_sample": "Map008",
+  "match": 2652.699869777133
+ },
+ "9": {
+  "map": null,
+  "closest_sample": "Map012",
+  "match": 1172.9219261337073
+ },
+ "10": {
+  "map": null,
+  "closest_sample": "Map015",
+  "match": 1907.7232579643664
+ },
+ "11": {
+  "map": "Map010",
+  "offset_px": [
+   481,
+   1307
+  ],
+  "offset_tiles": [
+   10.020833333333334,
+   27.229166666666668
+  ],
+  "match": 903.6592292089249,
+  "mean_abs_diff": 16.65,
+  "close_24": 0.6342,
+  "size_1x": [
+   577,
+   493
+  ]
+ },
+ "13": {
+  "map": null,
+  "closest_sample": "Map016",
+  "match": 1693.510959923189
+ }
+}

@@ -219,15 +219,15 @@ const DRIVER = String.raw`
         await go(22, 12, 1, 8);
         const to8 = await walkTo("up", 8);
         const at8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, door: ($gameMap.events().find(e => /^Drzwi tawerny/.test(e.event().name)) || { x: -1 }).x })");
-        await ev("(function(){ $gamePlayer.locate(14, 10); $gamePlayer.setDirection(8); return 0; })()");
+        await ev("(function(){ $gamePlayer.locate(19, 14); $gamePlayer.setDirection(8); return 0; })()");   // (in front of the tavern door on town C)
         const to1 = await walkTo("up", 1);
         const at1 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, borgar: !!Story.borgarEvent() })");
         const back8 = await walkTo("down", 8);
         const out8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y })");
-        await ev("(function(){ $gamePlayer.locate(14, 10); $gamePlayer.setDirection(8); return 0; })()");
+        await ev("(function(){ $gamePlayer.locate(19, 14); $gamePlayer.setDirection(8); return 0; })()");
         const in1 = await walkTo("up", 1);
-        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 14 && to1 && at1.borgar &&
-            back8 && out8.x === 14 && out8.y === 10 && in1, { to8, at8, to1, at1, back8, out8, in1 });
+        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 19 && to1 && at1.borgar &&
+            back8 && out8.x === 19 && out8.y === 14 && in1, { to8, at8, to1, at1, back8, out8, in1 });
         await ev("$gameSystem.setDayNightHour(10); $gameSystem.setStamina(100); 0");
         const bor = await J("(function(){ const e = Story.borgarEvent(); return e && { id: e.eventId(), name: e.event().name, stub: e.list().length === 2 && e.list()[0].code === 355, atmo: $gameMap.events().filter(x => /Atmosfera - Borgar/.test(x.event().name)).map(x => Story.roleOf(x)) }; })()");
         check("Borgar's event is found by its name; the story speaks through it (his 'Atmosfera' parallel event is left alone)", bor && bor.name === "Borgar Kowal" && bor.stub && bor.atmo.every(r => r === null), bor);

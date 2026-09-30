@@ -188,6 +188,9 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   w tawernie pod fałszywym imieniem.
 - **Garnizon** (przy przystani) - wojsko jednej ze stron: pobór, rekwizycje zboża, spięcia z miasteczkiem. Gracz może sprzedawać plony
   wojsku albo mu podpadać.
+- **Posterunek straży Lorda w miasteczku** (decyzja 2026-09-29) - garnizon w miasteczku nosi barwy Lorda Zaleskiego: to jego ludzie.
+  Wiąże to dwór z wojną (otwarty wątek: czy to Lord stoi za frakcją, która wynajęła Gruma). Sprzedawca wody na rynku tylko rozmawia -
+  wody nie sprzedaje (susza zostaje).
 - **Stara cysterna zakonu** (pod wzgórzem) - zapas wody zakonu. Susza przed studnią zostaje: cysterna to nagroda za zejście w głąb, nie
   wczesne źródło wody.
 - **Osada Milczących** (ukryta dolina w górach) - ludzie, którzy kiedyś „wiedzieli za dużo” (dotknęli prawdy) i odeszli od ludzi. Ciężkie

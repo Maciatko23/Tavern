@@ -116,7 +116,8 @@ const OUT = process.argv[2] || "";
         const xp1 = await J(`({ lv: Combat.hero().level, xp: Combat.hero().xp, want: Combat.killXp("wolf", __pack.members[${other}]._level), goal: Journal.GOALS.some(g => g.id === "wolves" && Journal.goalDone(g)) ? Combat.XP.goal : 0 })`);
         check("a wolf killed: its XP (30 at level 1, +20% a level), plus the goal 'Odeprzyj wilki' the first time", xp1.lv > xp0.lv || xp1.xp - xp0.xp === xp1.want + xp1.goal, { xp0, xp1 });
         await ev("Hunting.hit(__pack.leader, 999, 'melee', {}); 0");
-        for (let i = 0; i < 20; i++) await frames(3);
+        // (a wolf in the middle of a leap or a stun turns to run when it is over: up to 3 s for all of them)
+        for (let i = 0; i < 60 && !(await ev("__pack.members.filter(w => !w._dead).every(w => w._mode === 'flee')")); i++) await frames(3);
         const fled = await J("({ broken: __pack.broken, modes: __pack.members.filter(w => !w._dead).map(w => w._mode) })");
         check("the leader killed: the pack is broken, the last one runs", fled.broken && fled.modes.every(m => m === "flee"), fled);
     } catch (e) { console.log("ERR", e.message); results.push(false); }

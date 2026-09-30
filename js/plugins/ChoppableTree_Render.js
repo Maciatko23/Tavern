@@ -465,7 +465,7 @@
         const body = this._treeBody;
         const preview = this._stumpPreview;
         body.rotation = (event._treeFallDir || 1) * (Math.PI / 2) * tilt;
-        body.alpha = 1 - tilt;
+        body.alpha = (1 - tilt) * stepSeeThrough(this, seeThroughTarget(this, event));   // (fades while the player is behind it)
         const noStump = isCharred(event) || !!(treeConfig(event) || {}).nostump;
         preview.alpha = noStump ? 0 : stumpPreviewAlpha(tilt);   // a charred tree (and a seedling) leaves no stump
         preview.visible = preview.alpha > 0 && !!preview.bitmap;
@@ -506,9 +506,35 @@
         const o = occupyConfig(event);
         const inside = !!o && o.soft > 0 && isInsideArea(event, o, $gamePlayer.x, $gamePlayer.y);
         const target = inside ? BUSH_SEE_THROUGH : 1;
-        if (this.alpha === target) return;
-        this.alpha += (target - this.alpha) * 0.25;
-        if (Math.abs(target - this.alpha) < 0.02) this.alpha = target;
+        let k = this._bushSeeK === undefined ? 1 : this._bushSeeK;
+        if (k !== target) {
+            k += (target - k) * 0.25;
+            if (Math.abs(target - k) < 0.02) k = target;
+        }
+        this._bushSeeK = k;   // (applied after the engine's updateOther, which resets the opacity every frame - ChoppableTree.js)
+    }
+    // A tree the player walks behind fades a little, so he stays in sight behind its crown - a choppable tree (its body) and a
+    // decorative tree picture on an event (the whole sprite). Behind: his feet above the tree's base, inside its picture's width
+    // and height; in front of it (or beside the trunk) he is drawn over it anyway.
+    const TREE_SEE_THROUGH = 0.5;
+    function seeThroughTarget(sprite, event) {
+        if (event._treeGone || !sprite.bitmap || !sprite.bitmap.isReady()) return 1;
+        const p = $gamePlayer, w = sprite.patternWidth(), h = sprite.patternHeight();
+        const px = p.screenX(), py = p.screenY(), tx = sprite.x, ty = sprite.y;
+        const behind = py < ty - 8 && py > ty - h + 16 && Math.abs(px - tx) < w / 2 - 6;
+        return behind ? TREE_SEE_THROUGH : 1;
+    }
+    function stepSeeThrough(sprite, target) {
+        let k = sprite._seeThroughK === undefined ? 1 : sprite._seeThroughK;
+        if (k !== target) {
+            k += (target - k) * 0.2;
+            if (Math.abs(target - k) < 0.02) k = target;
+        }
+        sprite._seeThroughK = k;
+        return k;
+    }
+    function updateDecorTreeSeeThrough(event) {
+        this._decorSeeK = stepSeeThrough(this, seeThroughTarget(this, event));   // (applied after the engine's updateOther)
     }
     // ------------------------------------------------------------------
     // Hit effect particles. A layer in the tilemap (so it scrolls and zooms
@@ -691,5 +717,6 @@
 
     P.render = { STRIP_HEIGHT, FX_TYPES, fallTilt, treeWind, treeOffset, hitFlashAlpha, charredBitmap, smoulderAge, stumpTileId, emberLights, emberSpots,
         isTreeSprite, setTreeBodyVisible, ensureTreeStrips, updateTreeFrame, buildEmbers, drawEmbers, updateEmbers, updateStumpPreviewFrame,
-        updateCharredTone, updateHitFlash, updateTreeEffects, updateSimpleHitEffects, updateBushSeeThrough, Sprite_HitFxLayer };
+        updateCharredTone, updateHitFlash, updateTreeEffects, updateSimpleHitEffects, updateBushSeeThrough, updateDecorTreeSeeThrough,
+        TREE_SEE_THROUGH, Sprite_HitFxLayer };
 })();
