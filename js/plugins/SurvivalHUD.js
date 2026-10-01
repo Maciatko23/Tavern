@@ -166,6 +166,11 @@
  * Komunikaty o brakach (narzędzie, materiały, siły) unoszą się nad graczem,
  * tak jak napis z polecenia wtyczki "Pokaż łup nad graczem".
  *
+ * PRZEZROCZYSTY HUD: gdy postać wejdzie pod zegar, cel z dziennika, minimapę,
+ * pasek doświadczenia, listę zdobyczy, znaczki walki albo nazwę mapy (np. w
+ * rogu mapy), ten element płynnie robi się prawie przezroczysty, żeby było ją
+ * widać; gdy z niego zejdzie, wraca.
+ *
  * TAGI W NOTATCE MAPY:
  *   <Clock:off>    - ukrywa zegar na tej mapie
  *   <Stamina:off>  - ukrywa pasek wytrzymałości na tej mapie
@@ -1001,5 +1006,56 @@
 
     Scene_Map.prototype.hudLayer = function() {
         return this._hudLayer || null;
+    };
+
+    // ---- the HUD fades while the hero is under it (user 2026-09-30: in a corner of the map he walks under the clock and the rest):
+    // each element whose box on the screen meets the hero's (his sprite - the swing too - with HUD_FADE_ROOM px round it) goes
+    // HUD_FADE_ALPHA see-through, smoothly, and comes back when he leaves. The elements set their own alpha (opacity) at times -
+    // the gains sliding in, the map's name fading - so the fade is laid over theirs: the alpha they set last is kept and multiplied.
+    // hudFadeElements: the HUD of every plugin that has one on the map (a plugin with a new one adds it there).
+    const HUD_FADE_ALPHA = 0.25, HUD_FADE_ROOM = 8, HUD_FADE_STEP = 0.15;
+    Scene_Map.prototype.hudFadeElements = function() {
+        return [this._survivalHud, this._goalTracker, this._minimap, this._xpBar, this._gainFeed, this._weaponPlate, this._modeBadge, this._mapNameWindow];
+    };
+    // an element's box on the screen: its own hudRect, its picture, or - a container with no picture of its own (the list of gains, the
+    // clock panel) - just what shows inside it: its own empty spot at 0,0 made the list's box the whole screen, so it faded at every
+    // pick-up wherever the hero stood (user: "komunikaty co podniosłem na dole po prawo są przezroczyste")
+    function hudBox(el) {
+        if (el.hudRect) return el.hudRect();
+        if (el.bitmap || !el.children || !el.children.length) return el.getBounds();
+        let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+        for (const c of el.children) {
+            if (!c.visible || c.alpha <= 0) continue;
+            const b = c.getBounds();
+            if (!(b.width > 0 && b.height > 0)) continue;
+            x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y); x1 = Math.max(x1, b.x + b.width); y1 = Math.max(y1, b.y + b.height);
+        }
+        return x1 > x0 ? new PIXI.Rectangle(x0, y0, x1 - x0, y1 - y0) : new PIXI.Rectangle(0, 0, 0, 0);
+    }
+    Scene_Map.prototype.updateHudFade = function() {
+        const set = this._spriteset, hero = set && set._characterSprites && set._characterSprites.find(s => s._character === $gamePlayer);
+        const p = hero && hero.visible && !$gamePlayer.isTransparent() ? hero.getBounds() : null;
+        for (const el of this.hudFadeElements()) {
+            if (!el) continue;
+            let target = 1;
+            if (p && p.width > 0 && el.visible) {
+                const r = hudBox(el);
+                if (r.width > 0 && r.height > 0 && p.x < r.x + r.width + HUD_FADE_ROOM && p.x + p.width > r.x - HUD_FADE_ROOM &&
+                    p.y < r.y + r.height + HUD_FADE_ROOM && p.y + p.height > r.y - HUD_FADE_ROOM) target = HUD_FADE_ALPHA;
+            }
+            let k = el._hudFadeK === undefined ? 1 : el._hudFadeK;
+            if (k === 1 && target === 1) continue;   // (never faded: its own alpha is left alone)
+            k += (target - k) * HUD_FADE_STEP;
+            if (Math.abs(target - k) < 0.01) k = target;
+            if (el._hudFadeSet === undefined || Math.abs(el.alpha - el._hudFadeSet) > 1e-6) el._hudFadeBase = el.alpha;   // (it set its own)
+            el._hudFadeK = k;
+            el.alpha = el._hudFadeBase * k;
+            el._hudFadeSet = el.alpha;
+        }
+    };
+    const _Scene_Map_update = Scene_Map.prototype.update;
+    Scene_Map.prototype.update = function() {
+        _Scene_Map_update.call(this);
+        this.updateHudFade();
     };
 })();

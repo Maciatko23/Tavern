@@ -378,66 +378,55 @@
         }
     };
 
-    // ---- the things on the ground: pixel-art pebbles, flax, berries, mushrooms and herbs, above the soil, below the characters
+    // ---- the things on the ground: pebbles, branches, cones, herbs, wild plants, mushrooms and berry bushes - pictures made with
+    // PixelLab in the Winlu look of the maps and its ~45 degree top-down view (img/system/Gather_*; tools/art/ground_pixellab.py,
+    // tools/art/mushrooms_pixellab.py), above the soil, below the characters; a kind's picture is picked per tile (hash)
+    const gatherImages = (name, n) => Array.from({ length: n }, (_, i) => "Gather_" + name + "_" + i);
     const GATHER_ART = {
-        // o outline, l light, m mid, d dark, s shadow (stones); plants use their own letters below
-        stone: { colours: { o: "#2e2c30", l: "#c4c4b8", m: "#8c8e8a", d: "#5e6060", s: "rgba(10,8,4,0.32)" }, shapes: [
-            ["...oooooo...", "..ollllmmo..", ".ollllmmmmo.", ".olllmmmmddo", ".ommmmmmdddo", "..ommmmddoo.", "...oooooooo.", ".sssssssss.."],
-            ["..ooooooooo..", ".ollllmmmmmo.", "olllmmmmmmddo", "ommmmmmmdddoo", ".oommmddooo..", "..sssoooss.s."],
-            ["..ooo.......", ".ollmo.oo...", "olllmmoolmo.", "ommmddolmmdo", ".oooddommdo.", "..sssoosooo."]] },
-        fiber: { colours: { g: "#4f9a4a", G: "#78c064", b: "#7ea6ff", w: "#f4f4ff", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["..b...b....", ".bwb.bwb....", "..g...g..b..", ".gG..gG.bwb.", ".g...g...g..", ".g..gG...g..", "gG.gG.g.gG..", "gGggGgggGg..", ".ssssssssss."],
-            [".b....b...", "bwb..bwb..", ".g....g.b.", ".gG..gG.wb", ".g....g..g", "gG.gGg.gGg", "gGgggGgGg.", ".sssssss.."]] },
-        berries: { colours: { o: "#1f3a22", g: "#3f7a3a", G: "#5fa050", r: "#d24a52", p: "#7a3f8a", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["...oooooo...", "..oggGGggo..", ".ogGrgGgpGo.", ".oGgGgrGgGo.", ".ogprgGgGgo.", "..oGgGpgGo..", "...oooooo...", "..ssssssss.."]] },
-        // mushrooms and berry bushes are pictures made with PixelLab (img/system): five mushrooms; the bush: 0 blue berries, 1 red berries, 2 picked bare, 3 winter bare
-        mushroom: { images: ["Gather_Mushroom_0", "Gather_Mushroom_1", "Gather_Mushroom_2", "Gather_Mushroom_3", "Gather_Mushroom_4"] },
-        bush: { images: ["Gather_Bush_0", "Gather_Bush_1", "Gather_Bush_2", "Gather_Bush_3"] },
-        branch: { colours: { o: "#33241a", b: "#8a6238", l: "#bd8e58", d: "#5e3f24", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["........oo..", "...oo..ollo.", "..olloolbbo.", "..obbllbddo.", ".oolbbblloo.", "ollbdddbbllo", "obbdoooddbbo", "oddo...ooddo", ".oo......oo.", ".sssssssss.."],
-            ["..o........o", ".olo.....ool", ".oblooooollb", "oodblllllbbd", "llllbbbbbbbo", "bbbbblbbdddo", "dddddbdbloo.", "ooooododbo..", ".....o.odo..", ".sssssssss.."]] },
-        herb: { colours: { g: "#3f8a44", G: "#6ec062", y: "#f0cc4e", Y: "#ffe98a", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["....y.y...", "...yYy.y..", "....g.....", ".g..g..g..", "gG.gg.gGg.", ".gGgGgGg..", "..gGgg....", "...gg.....", "..sssss..."]] },
-        // the wild herbs: nettle (tall, dark serrated leaves), yarrow (white flat flower heads), wild garlic (broad leaves, white stars)
-        nettle: { colours: { d: "#2c5a2a", g: "#3f7a38", G: "#5e9e48", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["....G.......", "...gGg...G..", "..gdGdg.gGg.", "...gGg.gdGdg", ".G..g...gGg.", "gGg.g.G..g..", "dGdgg.gGgg..", ".gGg.gdGdg..", "..g..g.gg...", "..g..g..g...", ".sssssssss.."],
-            ["...G....", "..gGg...", ".gdGdg..", "..gGg.G.", "G..g.gGg", "Gg.gdGdg", "dGggGg..", ".gGg.g..", "..g..g..", ".ssssss."]] },
-        yarrow: { colours: { w: "#f4f2e8", W: "#cfcab8", y: "#e8d890", g: "#4f8a44", G: "#6ea85a", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["..wWw....wWw", ".wwywW..wwyw", "..wWw....wW.", "...g..ww..g.", "...g.wywW.g.", "..Gg..wW..g.", "..g...g..Gg.", ".gG.g.gG.g..", "..gGg..gGg..", ".sssssssss.."]] },
-        garlic: { colours: { G: "#7cc25a", g: "#4f9a3c", d: "#2f6a2a", w: "#ffffff", y: "#eeeebb", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["....w.w.....", "...wywyw....", "....www.....", "..G..g..G...", ".GGg.g.gGG..", ".GGg.g.gGG..", "..GGg.gGG...", "..dGGgGGd...", "...dGgGd....", ".sssssssss.."]] },
-        // pine cones under the pines: two lying together, or one
-        cone: { colours: { o: "#2e1c10", b: "#6e4220", B: "#9a6030", l: "#c89050", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["..oo........", ".oBBoo......", ".oblBBo.oo..", "..oBlbBooBo.", "...oobBolbBo", ".....oo.oBlo", "........ooo.", ".sssssssss.."],
-            [".oo.....", "oBBoo...", "oblBBo..", ".oBlbBo.", "..oobBo.", "....oo..", ".ssssss."]] },
-        // wild potatoes (a leafy clump with white flowers) and wild carrots (feathery tops, the orange shoulder of the root showing),
-        // both on a little heap of earth
-        wildPotato: { colours: { d: "#2f6a2a", g: "#4f9a3c", G: "#7cc25a", w: "#f4f2e8", y: "#f0d060", b: "#6e4a2c", B: "#8a6038", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["...w.......", "..wyw..w...", "...wgGwyw..", ".gGgGgGw...", "gGdGGgGGg..", ".gGdgGGdGg.", "..gGgdGgG..", ".bbgGgGgbb.", "bBbbBbbBbbB", ".sssssssss."],
-            [".....w.....", "..w.wyw....", ".wyw.g.gG..", "..wgGgGgGg.", ".gGdGgGdGg.", "gGgGdgGGdg.", ".gdGgGgGg..", ".bbgGdGbb..", "bBbBbbbBbB.", ".ssssssss.."]] },
-        wildCarrot: { colours: { g: "#4f9a3c", G: "#86c85e", o: "#c05a1c", O: "#f09030", b: "#6e4a2c", B: "#8a6038", s: "rgba(10,8,4,0.30)" }, shapes: [
-            ["..G...g.G..", ".gGg.gG.gG.", "..gGgGggG..", ".G.gGgGg.g.", ".gG.gGGg.G.", "...g.gg.gG.", ".....gg....", "....oOOo...", "..bboOOobb.", ".bBbbbbBbbB", ".sssssssss."],
-            [".g.G..G....", "gGg.gGg.G..", ".gGgGgGgG..", "..gGgGg....", "...gGg.....", "....gg.....", "...oOOo....", ".bboOOobb..", "bBbbbbBbbB.", ".sssssssss."]] }
+        stone: { images: gatherImages("Stone", 3) },
+        fiber: { images: gatherImages("Flax", 2) },          // wild flax: blue flowers
+        berries: { images: gatherImages("Berries", 1) },     // a low berry plant
+        // mushrooms: borowik, muchomor, kurki, pieczarki, czubajka; the bush: 0 blue berries, 1 red berries, 2 picked bare, 3 winter bare
+        mushroom: { images: gatherImages("Mushroom", 5) },
+        bush: { images: gatherImages("Bush", 4) },
+        branch: { images: gatherImages("Branch", 2) },
+        herb: { images: gatherImages("Herb", 1) },           // yellow flowers
+        nettle: { images: gatherImages("Nettle", 2) },
+        yarrow: { images: gatherImages("Yarrow", 1) },
+        garlic: { images: gatherImages("Garlic", 1) },       // wild garlic: broad leaves, a ball of white stars
+        cone: { images: gatherImages("Cone", 2) },           // pine cones under the pines: two lying together, or one
+        wildPotato: { images: gatherImages("WildPotato", 2) },   // on a little heap of earth
+        wildCarrot: { images: gatherImages("WildCarrot", 2) }
     };
-    const gatherBitmaps = new Map();
     function gatherBitmap(kind, variant) {
-        if (GATHER_ART[kind].images) return ImageManager.loadSystem(GATHER_ART[kind].images[variant]);   // a picture from img/system
-        const k = kind + variant;
-        const cached = gatherBitmaps.get(k);
-        if (cached && !cached._baseTexture) gatherBitmaps.delete(k);   // rebuild if the texture was disposed
-        return cachedBitmap(gatherBitmaps, k, () => {
-            // plants are drawn twice as big as the pebbles: they have to be spotted at a glance
-            const art = GATHER_ART[kind], rows = art.shapes[variant], sc = kind === "stone" ? 1 : 2, w = Math.max(...rows.map(r => r.length)), bitmap = new Bitmap(w * sc, rows.length * sc), ctx = bitmap.context;
-            rows.forEach((row, y) => {
-                for (let x = 0; x < row.length; x++) {
-                    if (row[x] === "." || !art.colours[row[x]]) continue;
-                    ctx.fillStyle = art.colours[row[x]];
-                    ctx.fillRect(x * sc, y * sc, sc, sc);
-                }
-            });
-            bitmap.smooth = false;
-            return bitmap;
-        });
+        return ImageManager.loadSystem(GATHER_ART[kind].images[variant]);
+    }
+    // ---- the plants move in the wind like real ones (user 2026-09-30: "bardzo realistyczne"):
+    //  - the stem bends in a curve - the foot stays, the tip goes furthest and dips a little (a mesh, not a rigid tilt);
+    //  - the wind comes in gusts that roll over the meadow as waves, downwind (to the right, as in a storm): neighbours bend
+    //    together, one after another; a light breeze on calm days rises and falls over a minute or two;
+    //  - each plant is a damped spring with its own swing (tall thin stems slower and further, low clumps quicker and stiffer):
+    //    it leans into a gust, overshoots a little and swings back; the tip trembles in a gust;
+    //  - a storm (Storm.wind 0..1, 0 under a roof) blows harder and faster and keeps the plants leaning downwind;
+    //  - the hero and walking animals push the plants aside as they go through, and the plants spring back behind them.
+    // Pebbles, branches, cones and mushrooms lie still (plain sprites).
+    const SWAY = {   // deg: how far the tip leans in the strongest wind; hz: the plant's own swing
+        fiber: { deg: 14, hz: 0.9 }, yarrow: { deg: 12, hz: 0.9 }, herb: { deg: 11, hz: 1.0 }, wildCarrot: { deg: 10, hz: 1.0 },
+        nettle: { deg: 8, hz: 1.1 }, garlic: { deg: 7, hz: 1.2 }, wildPotato: { deg: 5, hz: 1.4 }, berries: { deg: 4, hz: 1.5 },
+        bush: { deg: 2, hz: 0.8 }
+    };
+    const SWAY_ROWS = 6;         // mesh rows up the stem
+    const SWAY_DAMP = 0.2;       // the spring's damping ratio: a little overshoot, then it settles
+    const GUST_SCALE = 180;      // px of ground per radian of the gust wave
+    const PUSH_X = 16, PUSH_Y = 16;   // how near (px, from a plant's foot) a walker pushes it aside
+    function gustNoise(s) {      // a smooth, irregular wave -1..1
+        return 0.5 * Math.sin(s) + 0.3 * Math.sin(2.13 * s + 1.7) + 0.2 * Math.sin(4.37 * s + 0.4);
+    }
+    function swayPlane(bitmap) {
+        bitmap.smooth = false;   // nearest pixels: a smoothed bent picture blurs in bands (see SwayingFoliage)
+        const plane = new PIXI.SimplePlane(new PIXI.Texture(bitmap.baseTexture), 2, SWAY_ROWS + 1);
+        plane.bitmap = bitmap;   // (as a Sprite has it: the picture's name for tests and tools)
+        return plane;
     }
 
     function Sprite_StoneLayer() {
@@ -450,6 +439,8 @@
         Sprite.prototype.initialize.call(this);
         this.z = Z.litter;   // over the ground and the soil, under the characters
         this._entries = [];
+        this._swaying = [];
+        this._swayT = 0;   // the wind's clock in seconds
         this._stamp = null;
         this._scrollKey = null;
     };
@@ -467,6 +458,49 @@
             this._scrollKey = scrollKey;
             this.reposition();
         }
+        if (this._swaying.length) this.updateSway();
+    };
+
+    Sprite_StoneLayer.prototype.updateSway = function() {
+        const W = window.Storm ? Storm.wind() : 0, t = (this._swayT += 1 / 60);
+        const breeze = 0.18 + 0.12 * (0.5 + 0.5 * Math.sin(t * 0.07 + 1));
+        const strength = breeze + 0.75 * W, drift = t * (0.35 + 0.9 * W);   // the gusts roll faster in a storm
+        const ox = $gameMap.displayX() * $gameMap.tileWidth(), oy = $gameMap.displayY() * $gameMap.tileHeight();
+        const walkers = this.swayWalkers();
+        for (const e of this._swaying) {
+            const fx = e.gx - ox, fy = e.gy - oy;   // the foot on the screen
+            if (fx < -64 || fx > Graphics.width + 64 || fy < -32 || fy > Graphics.height + 96) continue;
+            const gust = Math.pow(Math.max(0, gustNoise((e.gx + 0.4 * e.gy) / GUST_SCALE - drift)), 1.3);
+            const force = strength * (0.3 + 0.7 * gust) + 0.25 * W;
+            let target = force * e.maxBend;
+            for (const p of walkers) {
+                const dx = fx - p.x, dy = p.y - fy;
+                if (Math.abs(dx) >= PUSH_X || Math.abs(dy) >= PUSH_Y) continue;
+                target += (dx >= 0 ? 1 : -1) * (1 - Math.abs(dx) / PUSH_X) * (1 - Math.abs(dy) / PUSH_Y) * Math.max(4, e.maxBend * 1.5);
+            }
+            e.vel += e.k * (target - e.bend) - e.c * e.vel;
+            e.bend += e.vel;
+            this.bendPlant(e, gust * force * 0.15 * e.maxBend * Math.sin(t * 22 + e.phase));
+        }
+    };
+
+    // who pushes the plants aside: the hero and the walking animals/people (their feet on the screen)
+    Sprite_StoneLayer.prototype.swayWalkers = function() {
+        const list = [{ x: $gamePlayer.screenX(), y: $gamePlayer.screenY() }];
+        for (const ev of $gameMap.events()) if (ev.isMoving()) list.push({ x: ev.screenX(), y: ev.screenY() });
+        return list;
+    };
+
+    // the stem bent by e.bend px at the tip: the rows of the mesh move along a curve (the foot row stays), the tip dips a little
+    Sprite_StoneLayer.prototype.bendPlant = function(e, flutter) {
+        const buffer = e.sprite.geometry.getBuffer("aVertexPosition"), v = buffer.data, n = SWAY_ROWS;
+        for (let i = 0; i <= n; i++) {
+            const u = 1 - i / n;   // 0 at the foot .. 1 at the tip
+            const dx = e.bend * Math.pow(u, 1.7) + flutter * u * u * u;
+            const y = (e.h * i) / n + ((e.bend * e.bend) / (2 * e.h)) * u * u;
+            v[i * 4] = dx; v[i * 4 + 1] = y; v[i * 4 + 2] = e.w + dx; v[i * 4 + 3] = y;
+        }
+        buffer.update();
     };
 
     Sprite_StoneLayer.prototype.rebuild = function() {
@@ -477,20 +511,24 @@
                 const spot = Farming.gatherSpot(x, y);
                 if (spot === undefined) return false;
                 const kind = spot && Farming.gatherAt(x, y);
-                if (kind) found.push({ x, y, kind });
+                if (!kind) continue;
+                const looks = GATHER_ART[kind].images.length;
+                let variant = Math.floor(Farming.hash2(x, y, 302) * looks);
+                if (kind === "mushroom") variant = Math.floor(Farming.hash2(x + 3 * (Farming.mushroomBirth(x, y) || 0), y, 302) * looks);   // a new mushroom on the same tile may look different
+                if (kind === "bush") variant = Farming.bushState(x, y) === "full" ? (Farming.hash2(x, y, 302) < 0.5 ? 0 : 1) : (Farming.seasonIndex(Farming.today()) === 3 ? 3 : 2);
+                const bitmap = gatherBitmap(kind, variant);
+                if (!bitmap.isReady()) return false;   // the picture is still loading: try again next frame (nothing torn down yet)
+                found.push({ x, y, kind, bitmap });
             }
         }
+        const before = new Map(this._swaying.map(e => [e.key, e]));   // (a plant keeps its motion when the layer is rebuilt)
         for (const e of this._entries) this.removeChild(e.sprite);
+        for (const e of this._swaying) e.sprite.destroy();   // the old meshes (not their pictures: those stay cached)
         this._entries = [];
-        for (const { x, y, kind } of found) {
-            const shapes = GATHER_ART[kind].shapes || GATHER_ART[kind].images;
-            let variant = Math.floor(Farming.hash2(x, y, 302) * shapes.length);
-            if (kind === "mushroom") variant = Math.floor(Farming.hash2(x + 3 * (Farming.mushroomBirth(x, y) || 0), y, 302) * shapes.length);   // a new mushroom on the same tile may look different
-            if (kind === "bush") variant = Farming.bushState(x, y) === "full" ? (Farming.hash2(x, y, 302) < 0.5 ? 0 : 1) : (Farming.seasonIndex(Farming.today()) === 3 ? 3 : 2);
-            const bitmap = gatherBitmap(kind, variant);
-            if (!bitmap.isReady()) return false;   // the picture is still loading: try again next frame
-            const sprite = new Sprite(bitmap);
-            this._entries.push(kind === "bush" ? {
+        for (const { x, y, kind, bitmap } of found) {
+            const sway = SWAY[kind];
+            const sprite = sway ? swayPlane(bitmap) : new Sprite(bitmap);
+            const e = kind === "bush" ? {
                 sprite,
                 px: x * Farming.TILE + Math.floor((Farming.TILE - bitmap.width) / 2),
                 py: y * Farming.TILE + Farming.TILE - bitmap.height - 1
@@ -498,9 +536,21 @@
                 sprite,
                 px: x * Farming.TILE + 8 + Math.floor(Farming.hash2(x, y, 303) * Math.max(1, Farming.TILE - 16 - bitmap.width)),
                 py: y * Farming.TILE + 14 + Math.floor(Farming.hash2(x, y, 304) * Math.max(1, Farming.TILE - 22 - bitmap.height))
-            });
+            };
+            if (sway) {
+                const w = bitmap.width, h = bitmap.height, omega = (2 * Math.PI * sway.hz * (0.9 + 0.2 * Farming.hash2(x, y, 306))) / 60;
+                const old = before.get(x + "," + y);
+                Object.assign(e, {
+                    key: x + "," + y, sway, w, h, gx: e.px + Math.floor(w / 2), gy: e.py + h,   // gx, gy: the foot on the map (px)
+                    maxBend: Math.max(1.5, h * Math.tan((sway.deg * Math.PI) / 180)), k: omega * omega, c: 2 * SWAY_DAMP * omega,
+                    bend: old ? old.bend : 0, vel: old ? old.vel : 0, phase: Farming.hash2(x, y, 305) * Math.PI * 2
+                });
+                this.bendPlant(e, 0);
+            }
+            this._entries.push(e);
             this.addChild(sprite);
         }
+        this._swaying = this._entries.filter(e => e.sway);
         return true;
     };
 
@@ -641,6 +691,8 @@
     // 0 by day .. 1 at night (dusk 17-20, dawn 5-8)
     function nightAmount() {
         if (typeof $gameSystem.dayNightHour !== "function") return 0;
+        const Sun = T.api("Sun");
+        if (Sun && Sun.sky) return Sun.sky($gameSystem.dayNightHour()).dark;   // (the sun's height: dark from 2 deg up to 12 deg down)
         const h = $gameSystem.dayNightHour();
         if (h >= 20 || h < 5) return 1;
         if (h >= 17) return (h - 17) / 3;
@@ -779,14 +831,29 @@
         this._spriteset = spriteset;
         this._age = 0;
     };
-    // what gives light on this map: every fire, and the stations that have a job burning
+    // what gives light on this map: every fire, and the stations that have a job burning. gx, gy: the ground under the flame (the
+    // things around throw their shadows from it - a flame that has no ground of its own, a smouldering tree's embers, throws none);
+    // hf: how tall the flame is (px)
     Sprite_NightLight.prototype.lights = function() {
         const out = [], set = this._spriteset._buildingSprites;
         for (const e of set ? set._sprites : []) {
             if (e.b.site) continue;
             const def = Farming.geoOf(e.b);
-            if (def.fire && Farming.fireLit(e.b)) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id });
-            else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) out.push({ x: e.sprite.x + (def.ember ? def.ember.x || 0 : def.ventX || 0), y: e.sprite.y - (def.ember ? def.ember.y : Math.max(20, (def.vent || 40) - 30)), r: def.light || 190, i: 0.85, id: e.b.id });   // from the fire opening, if it has one
+            if (def.fire && Farming.fireLit(e.b)) out.push({ x: e.sprite.x, y: e.sprite.y - def.fire.y - 6, r: def.fire.light || 300, i: 1, id: e.b.id, gx: e.sprite.x, gy: e.sprite.y - def.fire.y, hf: 18 * (def.fire.size || 1) });
+            else if (def.smokes && e.b.job && !Farming.jobReady(e.b)) {   // from the fire opening, if it has one
+                const x = e.sprite.x + (def.ember ? def.ember.x || 0 : def.ventX || 0), y = e.sprite.y - (def.ember ? def.ember.y : Math.max(20, (def.vent || 40) - 30));
+                out.push({ x, y, r: def.light || 190, i: 0.85, id: e.b.id, gx: x, gy: e.sprite.y - 2, hf: 14 });
+            }
+        }
+        // a lamp or a fire put on the map as an event with RoomLighting's <Light> tag (e.g. the cauldron over a fire in the town): its
+        // light at night outdoors too (RoomLighting darkens only rooms - <Dark:on>), and the people round it throw shadows
+        if (!this._spriteset._darknessSprite) {
+            const th = $gameMap.tileHeight();
+            for (const m of eventLights()) {
+                const ev = $gameMap.event(m.id);
+                if (!ev || m.when === "day") continue;
+                out.push({ x: ev.screenX(), y: ev.screenY() - th / 2, r: m.r, i: 1, id: 6000 + m.id, gx: ev.screenX(), gy: ev.screenY(), hf: m.hf });
+            }
         }
         // the embers of a tree struck by lightning (ChoppableTree_Render.js) glow in the dark a little too
         const embers = T.call("ChoppableTree", "emberLights", this._spriteset);   // (undefined without ChoppableTree)
@@ -806,21 +873,58 @@
         ctx.fillStyle = "rgba(3,7,24," + (NIGHT_ALPHA * dark).toFixed(3) + ")";
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = "destination-out";
+        const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows ? Sun.occluders(this._spriteset) : [];
         for (const l of this.lights()) {
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
             const x = l.x / 2, y = l.y / 2, r = (l.r / 2) * (0.97 + 0.03 * flick);
             if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
-            const a = l.i * flick, g = ctx.createRadialGradient(x, y, 0, x, y, r);
+            const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : [];
+            // the light straight into the dark - or, with things standing in it, first on its own canvas with their shadows cut out
+            // of it: in a shadow the night stays as dark as around (user 2026-09-30: fires make the things around throw shadows)
+            let c = ctx, ox = 0, oy = 0;
+            if (blockers.length) {
+                const size = Math.ceil(r * 2) + 2;
+                c = Sun.scratchCanvas(size, size);
+                ox = x - r - 1;
+                oy = y - r - 1;
+            }
+            const a = l.i * flick, g = c.createRadialGradient(x - ox, y - oy, 0, x - ox, y - oy, r);
             g.addColorStop(0, "rgba(0,0,0," + a.toFixed(3) + ")");
             g.addColorStop(0.2, "rgba(0,0,0," + (a * 0.93).toFixed(3) + ")");
             g.addColorStop(0.45, "rgba(0,0,0," + (a * 0.62).toFixed(3) + ")");
             g.addColorStop(0.72, "rgba(0,0,0," + (a * 0.25).toFixed(3) + ")");
             g.addColorStop(1, "rgba(0,0,0,0)");
-            ctx.fillStyle = g;
-            ctx.fillRect(x - r, y - r, r * 2, r * 2);
+            c.fillStyle = g;
+            c.fillRect(x - r - ox, y - r - oy, r * 2, r * 2);
+            if (!blockers.length) continue;
+            Sun.cutLightShadows(c, blockers, 0.5, ox, oy);   // (the night layer is half the screen's size)
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.drawImage(c.canvas, ox, oy);
         }
         ctx.globalCompositeOperation = "source-over";
         if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
+    };
+
+    // the <Light> events of this map (RoomLighting's tag - read the same way: <Light:radius,...>, <LightWhen:night|day>, <LightHeight:N>;
+    // not a window's <LightCone> nor a soft fill light): [{ id, r, when, hf }], read once per map
+    let eventLightsOf = null, eventLightsList = [];
+    function eventLights() {
+        if (eventLightsOf === $dataMap) return eventLightsList;
+        eventLightsOf = $dataMap;
+        eventLightsList = [];
+        for (const e of ($dataMap && $dataMap.events) || []) {
+            const m = e && e.note && e.note.match(/<Light(?::([^>]*))?>/i);
+            if (!m || /<LightSoft>/i.test(e.note)) continue;
+            const r = m[1] ? Number(m[1].split(",")[0]) || 150 : 150;
+            const w = e.note.match(/<LightWhen:\s*(night|day)>/i), when = w ? w[1].toLowerCase() : null, h = e.note.match(/<LightHeight:\s*(\d+)>/i);
+            eventLightsList.push({ id: e.id, r, when, hf: h ? Number(h[1]) : when !== "night" ? 22 : r <= 130 ? 30 : 56 });
+        }
+        return eventLightsList;
+    }
+
+    // the things in a light's way and their shadows (tests read them): the shared part, ChoppableTree_Render.js (T.api("Sun"))
+    Sprite_NightLight.prototype.blockers = function(l, things, Sun, flick) {
+        return Sun.lightBlockers(l, things, this._age, flick);
     };
 
     // a soft ground shadow, stretched under each building so that it sits on the ground instead of floating

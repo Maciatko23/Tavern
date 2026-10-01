@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w czterech zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie) i rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js). v1.5.0
+ * @plugindesc Menu deweloperskie (F9) w pięciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js) i kot Mruczek (co robi, każ mu). v1.6.0
  * @author Tawerna
  *
  * @param enabled
@@ -10,7 +10,7 @@
  * @desc Wyłącz (false) przed wydaniem gry, żeby F9 nie działało u gracza. Włączone domyślnie na czas developmentu/testów.
  *
  * @help
- * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran z czterema zakładkami;
+ * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran z pięcioma zakładkami;
  * Q / E przełączają zakładki (jak w dzienniku), góra / dół wybierają:
  *   1. Zdarzenia:
  *      - "+1 godzina" / "+1 dzień": przesuwa zegar gry (tak jak w Farming.js).
@@ -29,6 +29,12 @@
  *      zapisane stany z wersjami, każdy zegar mapy z jego czasem (ms), numery wstawianych zdarzeń
  *      (czyj jest który zakres), co wstawiono na tej mapie, kto słucha szyny zdarzeń.
  *      Tylko do czytania: strzałki przewijają, OK czyta wszystko jeszcze raz.
+ *   5. Kot: kot Mruczek z domu dziadka (HomeLife.js) - co robi teraz (śpi, idzie, siedzi, mruczy),
+ *      gdzie jest, jak długo jeszcze i co ma dalej w planie; polecenia: idź spać przy palenisku,
+ *      na dywan, wskocz na parapet, pospaceruj po izbie, usiądź u stóp dziadka (gdy dziadek siedzi
+ *      w fotelu), idź spać na posłanie, niech sam wybierze, pogłaszcz (mruczy) - po wyborze menu
+ *      wraca na mapę, żeby popatrzeć. Poza domem dziadka: "Zabierz mnie do domu dziadka".
+ *      Na dole: jego dzień (co robi o jakiej porze). OK na opisie czyta wszystko jeszcze raz.
  * F9 otwiera się na tej zakładce (i podzakładce) i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
  * Zakładki i podzakładki można też klikać myszą.
  * Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
@@ -63,9 +69,46 @@
         { name: "Zdarzenia", help: "↑↓ wybierz   OK wykonaj   Q / E zakładka   Esc zamknij" },
         { name: "Budowanie", help: "↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij" },
         { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij" },
-        { name: "Rdzeń", help: "↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij" }
+        { name: "Rdzeń", help: "↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij" },
+        { name: "Kot", help: "↑↓ wybierz   OK każ mu (wraca na mapę)   na opisie OK odśwież   Q / E zakładka   Esc zamknij" }
     ];
-    const ITEMS_TAB = 2, CORE_TAB = 3;
+    const ITEMS_TAB = 2, CORE_TAB = 3, CAT_TAB = 4;
+    // ---- the cat tab (HomeLife.js's Mruczek): what it does now, where, for how long, what is next; its doings to send it to
+    const CAT_SPOTS = [
+        ["hearth", "Idź spać przy palenisku", "przy palenisku"],
+        ["rug", "Idź na dywan", "na dywanie"],
+        ["sill", "Wskocz na parapet okna", "na parapecie okna"],
+        ["stroll", "Pospaceruj po izbie", "na spacerze po izbie"],
+        ["feet", "Usiądź u stóp dziadka", "u stóp dziadka"],
+        ["heroBed", "Idź spać na posłanie bohatera", "na posłaniu bohatera"]
+    ];
+    const CAT_STEP = { go: "idzie", face: "odwraca się", look: "rozgląda się", stay: "odpoczywa", stayFeet: "siedzi u stóp dziadka", curl: "zwija się do snu",
+        uncurl: "przeciąga się i wstaje", hop: "skacze" };
+    const CAT_DAY = [
+        "W dzień (6-22) sam wybiera, co robić (bez powtarzania miejsca, poza paleniskiem):",
+        "  - najczęściej śpi zwinięty przy palenisku (1-3 min),",
+        "  - dywan: chwilę siedzi albo śpi (1-2 min),",
+        "  - parapet okna we wnęce bohatera (8-19): podskok i 25-60 s na górze,",
+        "  - spacer po izbie: idzie gdzieś i się rozgląda,",
+        "  - u stóp dziadka, gdy ten buja się albo pali fajkę (często tam zasypia).",
+        "W nocy (22-6): śpi na posłaniu bohatera (czasem przy palenisku), 2-5 min.",
+        "Chodzi w 8 kierunkach, omija bohatera i dziadka (czeka, potem obchodzi),",
+        "czasem przystaje i się rozgląda; nie wychodzi z domu, nie siada w drzwiach.",
+        "Pogłaskany mruczy (~4 s, serduszko); raz dziennie +5 wytrzymałości."
+    ];
+    function catDoing(st) {
+        if (st.purr > 0) return "mruczy (pogłaskany)";
+        const spot = (CAT_SPOTS.find(r => r[0] === st.spot) || [])[2] || "";
+        if (st.cur === "go" || st.moving) return "idzie" + (spot ? " - " + spot.replace(/^na spacerze po izbie$/, "spacer po izbie") : "");
+        if (st.pose === "sleep") return "śpi zwinięty " + spot;
+        if (st.pose === "curl") return "zwija się do snu " + spot;
+        if (st.pose === "uncurl") return "przeciąga się i wstaje";
+        if (st.cur === "stayFeet") return "siedzi u stóp dziadka";
+        if (!st.perch && st.steps.includes("hop") && (st.spot === "sill" || st.spot === "heroBed"))   // (on the floor under it, before the jump)
+            return st.spot === "sill" ? "siedzi pod oknem, zaraz wskoczy na parapet" : "siedzi przy posłaniu, zaraz na nie wskoczy";
+        if (st.pose === "sit") return "siedzi " + spot;
+        return (CAT_STEP[st.cur] || "stoi") + (spot ? " " + spot : "");
+    }
     // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
     const KINDS = ["Narzędzia i broń", "Surowce", "Jedzenie"];
     const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
@@ -138,7 +181,7 @@
     // show the rows of tab `tab` (on the item tab: of kind `kind`), the cursor on row `index`
     Window_DebugList.prototype.setTab = function(tab, index, kind) {
         this._tab = tab;
-        this._rows = tab === CORE_TAB ? this.coreRows() : this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
+        this._rows = tab === CORE_TAB ? this.coreRows() : tab === CAT_TAB ? this.catRows() : this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
         this.refresh();
         this.select(Math.max(0, Math.min(index || 0, this._rows.length - 1)));
         this.ensureCursorVisible(true);
@@ -159,6 +202,34 @@
             rows.push(row);
         }
         return rows.map(label => ({ tab: CORE_TAB, kind: "info", label, head: !/^\s/.test(label) }));
+    };
+
+    // the cat tab: read as the tab opens (and again with OK on a line of text)
+    Window_DebugList.prototype.catRows = function() {
+        const H = window.HomeLife, rows = [], info = (label, head) => rows.push({ tab: CAT_TAB, kind: "info", label, head: !!head });
+        if (!H || !H.catState) { info("Brak HomeLife.js - kota nie ma", true); return rows; }
+        const st = H.catState(), icon = 0;   // (no icon of its own in the icon set)
+        info("Kot Mruczek - teraz:", true);
+        if (!st) {
+            info("  Kot jest tylko w domu dziadka (mapa " + H.MAP + ") - tu go nie ma.");
+            rows.push({ tab: CAT_TAB, kind: "catHouse", label: "Zabierz mnie do domu dziadka", icon });
+        } else {
+            info("  Robi: " + catDoing(st));
+            info("  Gdzie: kratka " + st.x + ", " + st.y + (st.target && (st.target[0] !== st.x || st.target[1] !== st.y) ? " (idzie na " + st.target[0] + ", " + st.target[1] + ")" : ""));
+            if (st.left > 0) info("  Jeszcze: ok. " + st.left + " s" + (!st.cur && !st.steps.length ? ", potem sam wybierze, co robić" : ""));
+            if (st.steps.length) info("  Dalej: " + st.steps.map(t => CAT_STEP[t] || t).join(", "));
+            info("Każ mu (menu wraca na mapę, żeby popatrzeć):", true);
+            const can = H.catSpots();
+            for (const [spot, label] of CAT_SPOTS) {
+                if (can.includes(spot)) rows.push({ tab: CAT_TAB, kind: "cat", spot, label, icon });
+                else if (spot === "feet") info("  (u stóp dziadka - tylko gdy dziadek siedzi w fotelu)");
+            }
+            rows.push({ tab: CAT_TAB, kind: "catChoose", label: "Niech sam wybierze, co robić", icon },
+                { tab: CAT_TAB, kind: "catPet", label: "Pogłaszcz (mruczy)", icon: 82 });
+        }
+        info("Jego dzień:", true);
+        for (const line of CAT_DAY) info("  " + line);
+        return rows;
     };
 
     Window_DebugList.prototype.maxItems = function() {
@@ -318,8 +389,16 @@
             // struck once the map runs again (Storm.js)
             if (window.Storm) Storm.pending.push(row.kind === "treestrike" ? { tree: true } : {});
             this.popScene();
-        } else if (row.kind === "info") {   // the core tab: read again
-            this._list.setTab(CORE_TAB, this._list.index());
+        } else if (row.kind === "cat" || row.kind === "catChoose" || row.kind === "catPet") {   // the cat (HomeLife.js): back to the map to watch it
+            if (row.kind === "cat") HomeLife.catGo(row.spot);
+            else if (row.kind === "catChoose") HomeLife.catChoose();
+            else HomeLife.pet();
+            this.popScene();
+        } else if (row.kind === "catHouse") {   // to grandpa's house, by the hearth
+            $gamePlayer.reserveTransfer(HomeLife.MAP, 9, 7, 2, 0);
+            this.popScene();
+        } else if (row.kind === "info") {   // the core tab and the cat tab: read again
+            this._list.setTab(this._tab, this._list.index());
         } else {
             $gameParty.gainItem(row.item, row.qty);
             $gameTemp.pushLootPopup(row.item.iconIndex, row.item.name + " ×" + row.qty, "#f3e0a0");

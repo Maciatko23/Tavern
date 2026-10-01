@@ -29,6 +29,11 @@
  *  1. Miękki cień pod każdą postacią (gracz, NPC, towarzysze), żeby stała na
  *     ziemi, a nie unosiła się nad nią. Obiekty (grafiki z "!" w nazwie:
  *     drzewa, skały, krzaki, skrzynie) mają własne cienie i są pomijane.
+ *     Na dworze, w dzień, postać rzuca też cień od słońca: własną sylwetkę
+ *     położoną na ziemi od stóp - rano długą w lewo, w południe krótką pod
+ *     sobą, wieczorem długą w prawo; rusza się z każdym krokiem i zamachem,
+ *     blednie w deszczu i pod chmurą, w nocy i pod dachem go nie ma
+ *     (słońce: ChoppableTree_Render.js, jak cienie drzew).
  *  2. Ciemny kontur postaci (jeden piksel), żeby brązowy ubiór nie zlewał się
  *     z brązową ziemią.
  *
@@ -112,7 +117,9 @@
     // a person, not an object: the "!" prefix marks trees, rocks, chests and the like
     Sprite_Character.prototype.isPerson = function() {
         const c = this._character;
-        return !!c && !!this._characterName && !this._tileId && !this.isObjectCharacter() &&
+        // (by the picture's name: a character whose picture was changed without setImage - grandpa's cat lying down to sleep,
+        // "!$Animal_Cat_Sleep" - keeps its old object flag)
+        return !!c && !!this._characterName && !this._tileId && !ImageManager.isObjectCharacter(this._characterName) &&
             !(typeof Game_Vehicle !== "undefined" && c instanceof Game_Vehicle);
     };
 
@@ -125,6 +132,7 @@
     Sprite_Character.prototype.updatePolish = function() {
         const show = polishOn() && this.isPerson();
         if (CHAR_SHADOW) this.updateGroundShadow(show);
+        if (CHAR_SHADOW) this.updateSunShadow(show);
         if (CHAR_OUTLINE) this.updateOutline(show);
     };
 
@@ -151,13 +159,63 @@
         shadow.scale.y = shadow.scale.x;
     };
 
-    // the shadow is a sibling of the sprite (in the tilemap, so it sorts under every character): it has to go with it - a rabbit shot
-    // or caught in a snare (Hunting.js drops its sprite) once left its shadow lying on the grass until the map was built again
+    // ---- the sun's shadow of a person (user 2026-09-30): the figure's own shape, soft and dark, laid on the ground from its feet
+    // the way the sun throws it (T.api("Sun") - the sun, the shared shadow layer and the laying of a silhouette are in
+    // ChoppableTree_Render.js, with the trees' shadows): long to the left in the morning, short under it at noon, long to the right
+    // in the evening. It is the frame on screen right now, so it walks with every step and swings with every blow (a swing is drawn
+    // by _swingBody, a child sprite, while the walking frame is hidden). Under a roof, at night and in a storm there is none; the
+    // soft spot under the feet stays anyway (it is the ground's own shade).
+    const SUN_SHADOW_INSET = 2;   // px up inside the feet, where the figure hides the soft start of the blur
+    Sprite_Character.prototype.updateSunShadow = function(show) {
+        const Sun = T.api("Sun");
+        let shadow = this._sunShadow;
+        // only people: a tree keeps the occluder its own code gave it (ChoppableTree_Render.js) - this ran for every sprite and wiped
+        // the trees' ones each frame, so no tree threw a shadow from a fire at night (user: "drzewa nie rzucają cienia od ogniska")
+        if (!this.isPerson()) {
+            if (shadow) shadow.visible = false;
+            // (only the shape this plugin gave it: a cat that lay down to sleep - "!" - keeps none; a tree's or a rock's is their own)
+            if (this._occluderByPolish) { this._occluder = null; this._occluderByPolish = false; }
+            return;
+        }
+        const body = this._swingBody && this._swingBody.visible && this._swingBody.bitmap ? this._swingBody : null;
+        const src = body || this, frame = src._frame, c = this._character;
+        // (the shape in a light's way is kept on a map without polish too - <Polish:off>: a lamp there still makes people throw shadows)
+        const on = Sun && Sun.occluder && this.parent && this.visible && this.opacity > 0 && !c.isTransparent() &&
+            src.bitmap && src.bitmap.isReady() && frame && frame.width > 0 && frame.height > 0;
+        const bmp = on ? Sun.silhouette(src.bitmap, frame.x, frame.y, frame.width, frame.height, false) : null;
+        if (bmp) {
+            // the feet on the screen: the frame's lowest solid row under its anchor, on the ground (a jump lifts the figure, not its shadow)
+            const sx = this.scale.x * (body ? body.scale.x : 1), sy = this.scale.y * (body ? body.scale.y : 1);
+            const ox = this.x + (body ? body.x * this.scale.x : 0), oy = this.y + (body ? body.y * this.scale.y : 0) + (c.jumpHeight ? c.jumpHeight() : 0);
+            const fw = frame.width, fh = frame.height;
+            const fx = ox + (fw / 2 - src.anchor.x * fw) * sx, fy = oy + (bmp._footRow + 1 - src.anchor.y * fh - SUN_SHADOW_INSET) * sy;
+            this._occluder = Sun.occluder(bmp, fx, fy, fw / 2, sx, sy, 0, this.opacity / 255);   // (a fire's light at night uses it too)
+            this._occluderByPolish = true;
+        } else {
+            this._occluder = null;
+            this._occluderByPolish = false;
+        }
+        if (!show || !bmp || !Sun.shadows || Sun.now().light <= 0.01) {
+            if (shadow) shadow.visible = false;
+            return;
+        }
+        const layer = Sun.layer(this.parent);
+        if (!shadow) shadow = this._sunShadow = new Sprite();
+        if (shadow.parent !== layer) layer.addChild(shadow);
+        Sun.lay(shadow, this._occluder);
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const cloud = Sun.now().flash ? 0 : Sun.cloudCover((c._realX + 0.5) * tw, (c._realY + 1) * th);
+        shadow.alpha = Sun.layerAlpha(layer) * (this.opacity / 255) * (1 - 0.85 * cloud);
+        shadow.visible = shadow.alpha > 0.005;
+    };
+
+    // the shadows are siblings of the sprite (in the tilemap, so they sort under every character): they have to go with it - a rabbit
+    // shot or caught in a snare (Hunting.js drops its sprite) once left its shadow lying on the grass until the map was built again
     const _Sprite_Character_destroy = Sprite_Character.prototype.destroy;
     Sprite_Character.prototype.destroy = function(options) {
-        const shadow = this._groundShadow;
-        if (shadow && shadow.parent) shadow.parent.removeChild(shadow);
+        for (const shadow of [this._groundShadow, this._sunShadow]) if (shadow && shadow.parent) shadow.parent.removeChild(shadow);
         this._groundShadow = null;
+        this._sunShadow = null;
         _Sprite_Character_destroy.call(this, options);
     };
 

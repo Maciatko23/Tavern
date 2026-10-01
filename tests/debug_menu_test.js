@@ -1,6 +1,7 @@
-// The F9 developer menu in four tabs (Q / E switch them): Zdarzenia (clock, weather, birds, boar), Budowanie (any building
+// The F9 developer menu in five tabs (Q / E switch them): Zdarzenia (clock, weather, birds, boar), Budowanie (any building
 // put down free and finished), Przedmioty (any item in a chosen quantity, in three kinds: Narzędzia i broń / Surowce / Jedzenie,
-// switched by Tab or [ / ] or a click), Rdzeń (TawernaCore's own lines); it opens again on the tab, the kind and the row it was left on.
+// switched by Tab or [ / ] or a click), Rdzeń (TawernaCore's own lines), Kot (grandpa's cat: what it does, send it somewhere);
+// it opens again on the tab, the kind and the row it was left on.
 const { launch, sleep } = require("./cdp.js");
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
@@ -39,7 +40,7 @@ const { launch, sleep } = require("./cdp.js");
         await key(F9);
         await frames(10);
         check("F9 opens Scene_Debug", (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
-        check("four tabs: Zdarzenia, Budowanie, Przedmioty, Rdzeń", JSON.stringify(await J("SceneManager._scene._tabs._list.map(c => c.name)")) === '["Zdarzenia","Budowanie","Przedmioty","Rdzeń"]');
+        check("five tabs: Zdarzenia, Budowanie, Przedmioty, Rdzeń, Kot", JSON.stringify(await J("SceneManager._scene._tabs._list.map(c => c.name)")) === '["Zdarzenia","Budowanie","Przedmioty","Rdzeń","Kot"]');
         const rows = await J(`SceneManager._scene._list._rows.map(r => ({ kind: r.kind, label: r.label }))`);
         let t = await tabNow();
         check("it opens on 'Zdarzenia': the two time rows, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the boar, a wolf pack, a deer, +200 XP, the new hero on trial - nothing else", t.tab === 0 && t.sel === 0 && rows.map(r => r.kind).join() === "hour,day,storm,strike,treestrike,calm,birds,raid,boar,wolves,deer,xp,herolook" && rows[0].label === "+1 godzina", rows.map(r => r.kind));
@@ -97,6 +98,11 @@ const { launch, sleep } = require("./cdp.js");
         const bag0 = await bagNow();
         await key(DOWN); await key(OK); await frames(6);
         check("...only to read: OK there reads the lines again (nothing given, the menu stays on 'Rdzeń')", (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug" && (await ev("SceneManager._scene._tab")) === 3 && (await bagNow()) === bag0);
+        // ---------------------------------------------------------------- 'Kot': grandpa's cat (HomeLife.js) - away from the house only the way there
+        await key(E); await frames(6);
+        const away = await J("(function(){ const l = SceneManager._scene._list; return { tab: SceneManager._scene._tab, rows: l._rows.map(r => r.kind + ':' + r.label) }; })()");
+        check("E: 'Kot' - away from grandpa's house: it is not here, 'Zabierz mnie do domu dziadka', and its day described",
+            away.tab === 4 && away.rows.some(r => r === "catHouse:Zabierz mnie do domu dziadka") && away.rows.some(r => /^info:Jego dzień/.test(r)) && away.rows.some(r => /W nocy \(22-6\)/.test(r)), away);
         await key(E); await frames(6);
         const tz = await tabNow();
         check("E on the last tab wraps round to 'Zdarzenia' (the band of kinds hidden, the list back up)", tz.tab === 0 && !tz.band && tz.listY < t0.listY, { tab: tz.tab, band: tz.band, listY: tz.listY });
@@ -106,9 +112,9 @@ const { launch, sleep } = require("./cdp.js");
         check("a click on a tab opens it ('Budowanie')", (await tabNow()).tab === 1);
         await click("_tabs", 0); await frames(4);
         await key(Q); await frames(6);
-        check("Q goes back (wrapping to 'Rdzeń')", (await tabNow()).tab === 3);
-        await key(Q); await key(Q); await key(Q); await frames(6);
-        check("Q, Q, Q: back on 'Zdarzenia'", (await tabNow()).tab === 0);
+        check("Q goes back (wrapping to 'Kot')", (await tabNow()).tab === 4);
+        await key(Q); await key(Q); await key(Q); await key(Q); await frames(6);
+        check("Q, Q, Q, Q: back on 'Zdarzenia'", (await tabNow()).tab === 0);
 
         // ---------------------------------------------------------------- +1 hour / +1 day (set to noon, day 1: no hour rollover to worry about)
         await ev("$gameSystem.setDayNightHour(12); $gameSystem._dayNightDay = 1; 0");
@@ -125,7 +131,7 @@ const { launch, sleep } = require("./cdp.js");
         check("'+1 dzień' advances the clock by 24 hours (a whole day later)", afterDay.d === afterHour.d + 1 && Math.abs(afterDay.h - afterHour.h) < 0.1, { afterHour, afterDay });
 
         // ---------------------------------------------------------------- pick an item, raise the quantity, grant it
-        await key(Q); await key(Q); await frames(6);   // 'Przedmioty' (past 'Rdzeń'), on its first item
+        await key(Q); await key(Q); await key(Q); await frames(6);   // 'Przedmioty' (past 'Kot' and 'Rdzeń'), on its first item
         const firstItemId = await ev("SceneManager._scene._list.rowData().item.id");
         const before139 = await ev(`$gameParty.numItems($dataItems[${firstItemId}])`);
         for (let i = 0; i < 4; i++) await key(RIGHT);
@@ -140,7 +146,7 @@ const { launch, sleep } = require("./cdp.js");
         check("OK grants exactly that many of the highlighted item", after139 === before139 + 4, { before139, after139 });
 
         // ---------------------------------------------------------------- "Burza teraz": back to the map, the storm gathering
-        await key(E); await key(E); await frames(6);   // back to 'Zdarzenia' (past 'Rdzeń'): its cursor is where it was left (row 1, '+1 dzień')
+        await key(E); await key(E); await key(E); await frames(6);   // back to 'Zdarzenia' (past 'Rdzeń' and 'Kot'): its cursor is where it was left (row 1, '+1 dzień')
         check("each tab remembers its row: 'Zdarzenia' is back on '+1 dzień'", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().kind")) === "day");
         await key(DOWN);   // row 2
         check("row 2 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");

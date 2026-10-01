@@ -103,11 +103,17 @@
     const ROCK = { rock: 0.042, smoke: 0.018, period: 170 };   // radians of the chair's swing; frames there and back
     const SMOKE = { cycle: 360, draw: 60, rest: 100, out: 170 };  // the pipe: draws on it, rests, breathes out, rests
     const CAT_SLEEP = "!$Animal_Cat_Sleep", CC = 68;
+    const SILL_DY = -15;            // ...on the sill: its paws on the ledge under the glass (at -3 it hung on the wall below it - user 2026-10-01)
+    const HERO_BED_DY = -24;        // the cat on the straw bed: this many px up from its foot-end cell (the middle of the blanket)
     const WHEEL = "!$House_Wheel", CHURN = "!$House_Churn", PC = 96;
     const SLEEPER = "Home_Sleeper", QC = 144;
     const HEAD = [-48, -108];       // grandpa's head on the pillow, from the quilt's feet (its sprite's anchor)
     const BAD = "#ff9f8f", GOOD = "#9ff0a8", MUTED = "#c9ccd2";
-    const LOOK8_CAT = { sheet: "anim8/Cat_Walk8", cell: 68, stride: 1.0 };
+    // the cat's 8-way sheet has no good back views: walking up (N, NE, NW) it shows its face, as if it went backwards, and its
+    // walking-down row goes sideways - so going up it is drawn from the side, the way it goes (NE, NW: E, W; N: the last side it
+    // went), going down three-quarters from the front (SE / SW by the side); standing still, N and S keep their own (back, front)
+    const LOOK8_CAT = { sheet: "anim8/Cat_Walk8", cell: 68, stride: 1.0,
+        rows: (d, moving, side) => d === 9 ? 6 : d === 7 ? 4 : !moving ? d : d === 8 ? side : d === 2 ? (side === 4 ? 1 : 3) : d };
     const LOOK8_GRANDPA = { sheet: "Npc_Dziadek_Walk8", cell: 64, stride: 1.4 };
 
     // the 8-way walks (Hunting.js draws them: the facing from the way it goes, the legs from the way it has come)
@@ -264,11 +270,12 @@
         if (!L.cat.hearth) L.cat.hearth = { x: $gameMap.event(CAT) ? $gameMap.event(CAT).x : 9, y: $gameMap.event(CAT) ? $gameMap.event(CAT).y : 6 };
         if (ev.heroBed) {
             const b = ev.heroBed, from = [[b.x + 1, b.y], [b.x - 1, b.y], [b.x, b.y + 1]].find(([x, y]) => free(x, y));
-            if (from) L.cat.heroBed = { x: b.x, y: b.y, from };
+            // (the foot end's cell, the cat drawn HERO_BED_DY px higher: in the middle of the blanket, not on its edge - user 2026-10-01)
+            if (from) L.cat.heroBed = { x: b.x, y: b.y, from, dy: HERO_BED_DY };
             // the window over the straw bed: its sill (the cat jumps up from the floor below it)
             const w = propsOf(/^okno/i).find(o => Math.abs(o.x - b.x) <= 2 && o.y < b.y);
             if (w) {
-                for (let y = w.y + 1; y < H; y++) if (free(w.x, y)) { L.cat.sill = { x: w.x, y: w.y + 1, from: [w.x, y], dy: -3 }; break; }
+                for (let y = w.y + 1; y < H; y++) if (free(w.x, y)) { L.cat.sill = { x: w.x, y: w.y + 1, from: [w.x, y], dy: SILL_DY }; break; }
             }
         }
         L.cat.room = [];
@@ -572,7 +579,7 @@
         ev.locate(p.x, p.y);
         ev.setMoveSpeed(CAT_SPEED);
         ev.setDirection(2);
-        ev._homeDy = 0;
+        ev._homeDy = p.dy || 0;
         setCatPose(ev, "sleep");
         c.until = frame() + 60 * (40 + rand(80));
     }
@@ -617,7 +624,7 @@
                 if (Math.random() < 0.6) st.push({ t: "curl" }, { t: "stayFeet", n: secs(40, 110) }); else st.push({ t: "stayFeet", n: secs(20, 50) });
                 break;
             }
-            case "heroBed": p = L.cat.heroBed; st.push({ t: "go", x: p.from[0], y: p.from[1] }, { t: "face", dir: 4 }, { t: "stay", n: 30 }, { t: "hop", x: p.x, y: p.y, perch: p.from }, { t: "face", dir: 2 }, { t: "curl" }, { t: "stay", n: secs(120, 300) }); break;
+            case "heroBed": p = L.cat.heroBed; st.push({ t: "go", x: p.from[0], y: p.from[1] }, { t: "face", dir: 4 }, { t: "stay", n: 30 }, { t: "hop", x: p.x, y: p.y, dy: p.dy, perch: p.from }, { t: "face", dir: 2 }, { t: "curl" }, { t: "stay", n: secs(120, 300) }); break;
         }
         c.spot = k; c.last = k; c.steps = st; c.cur = null; c.path = null; c.until = 0;
     }
@@ -649,8 +656,13 @@
             case "curl": if (age === 0) setCatPose(ev, "curl"); if (age < 60) return false; setCatPose(ev, "sleep"); return true;
             case "uncurl": if (poseOf(ev) !== "sleep" && poseOf(ev) !== "curl") return true; if (age === 0) setCatPose(ev, "uncurl"); if (age < 30) return false; setCatPose(ev, "sit"); return true;
             case "hop":
-                if (age === 0) { setCatPose(ev, null); ev._homeDy = 0; ev.jump(s.x - ev.x, s.y - ev.y); }
-                if (ev.isJumping()) return false;
+                // (in the air it goes from the height it jumps off - the blanket, the sill - to the one it lands on, smoothly)
+                if (age === 0) { s.fromDy = ev._homeDy || 0; setCatPose(ev, "hop"); ev.jump(s.x - ev.x, s.y - ev.y); }
+                if (ev.isJumping()) {
+                    const k = 1 - ev._jumpCount / Math.max(1, ev._jumpPeak * 2);
+                    ev._homeDy = Math.round(s.fromDy + ((s.dy || 0) - s.fromDy) * k);
+                    return false;
+                }
                 ev._homeDy = s.dy || 0;
                 c.perch = s.perch || null;
                 setCatPose(ev, "sit");
@@ -1138,9 +1150,22 @@
             const k = cat();
             if (!k) return null;
             const c = K(k);
-            return { x: k.x, y: k.y, spot: c.spot, pose: poseOf(k), cur: c.cur ? c.cur.t : null, steps: c.steps.map(s => s.t), purr: c.purr, moving: k.isMoving() || k.isJumping() };
+            // left: seconds until the current rest is over (or, idle, until it picks its next doing); target: where it is going
+            const s = c.cur, rest = s && (s.t === "stay" || s.t === "stayFeet") ? Math.max(0, s.n - (frame() - s.at)) : !s && !c.steps.length ? Math.max(0, c.until - frame()) : 0;
+            const go = s && s.t === "go" ? s : c.steps.find(q => q.t === "go");
+            return { x: k.x, y: k.y, spot: c.spot, pose: poseOf(k), cur: s ? s.t : null, steps: c.steps.map(q => q.t), purr: c.purr, moving: k.isMoving() || k.isJumping(),
+                left: Math.round(rest / 60), target: go ? [go.x, go.y] : null, night: catNight(), perch: !!c.perch };
         },
-        catGo(spot) { const k = cat(); if (!k || !layout().cat[spot] && spot !== "stroll" && spot !== "feet") return false; catPlan(k, K(k), spot); return true; },
+        // what it may be sent to now (the F9 menu): hearth, rug, sill, heroBed - where the house has them; stroll; feet - while grandpa sits
+        catSpots() {
+            const L = layout(), out = ["hearth", "rug", "sill", "heroBed"].filter(k => !!L.cat[k]);
+            if (L.cat.room.length) out.push("stroll");
+            if (feetCells(L).length && seated(grandpa())) out.push("feet");
+            return out;
+        },
+        catGo(spot) { const k = cat(); if (!k || !window.HomeLife.catSpots().includes(spot)) return false; catPlan(k, K(k), spot); return true; },
+        // let it pick its next doing itself, now (as when a rest is over)
+        catChoose() { const k = cat(); if (!k) return false; const c = K(k); c.purr = 0; catChoose(k, c); return true; },
         get fx() { return fx.map(f => ({ kind: f.kind, x: Math.round(f.x), y: Math.round(f.y), t: f.t })); },
         get props() { return Object.assign({}, props); },
         rockAngle

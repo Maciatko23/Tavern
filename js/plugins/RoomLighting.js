@@ -5,7 +5,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna). v1.2.0
+ * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna); ludzie i zwierzęta rzucają cienie od lamp i ognia. v1.3.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -161,6 +161,17 @@
  *                                       pomarańcz <-> bursztyn)
  *   Każde światło ma własny rytm - świece obok siebie nie migoczą razem.
  *   Przy <LightCone> migocze tylko jasność.
+ *
+ * CIENIE (v1.3.0, razem z ChoppableTree_Render.js):
+ *   Ludzie i zwierzęta stojący w świetle lampy, kominka, pieca, świecy czy
+ *   żyrandola rzucają cień w stronę od światła - wycięty z jego blasku (w
+ *   cieniu jest tak ciemno jak w pokoju dookoła). Blisko światła krótki, dalej
+ *   dłuższy, przy stopach wyraźny, dalej blednie i się rozmywa; migocze razem
+ *   z płomieniem. Okna (smugi <LightCone>) i miękkie światła wypełniające
+ *   (<LightSoft>) cieni nie dają.
+ *   Wysokość płomienia (od niej długość cieni) gra zgaduje: ogień, piec,
+ *   kocioł (świecą zawsze) 22 px, świece 30 px, lampy i żyrandole 56 px. Inną
+ *   można wpisać w notatce eventu: <LightHeight:40>.
  *
  * DLA INNYCH WTYCZEK:
  *   SceneManager._scene._spriteset.roomLightHoles() - lista świateł mapy
@@ -336,7 +347,9 @@
                     if (parts.length >= 1 && !isNaN(parts[0])) radius = parts[0];
                     if (parts.length >= 4) color = [parts[1], parts[2], parts[3]];
                 }
-                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when: lightWhen(event.note, null), soft: /<LightSoft>/i.test(event.note), flicker, eventId: event.id });
+                const height = event.note.match(/<LightHeight:\s*(\d+)>/i);
+                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when: lightWhen(event.note, null), soft: /<LightSoft>/i.test(event.note), flicker, eventId: event.id,
+                    height: height ? Number(height[1]) : 0 });
             }
         }
         return markers;
@@ -571,6 +584,9 @@
         this._weight = 1;
         this._gain = 1;                        // (other plugins may dim it: 0..1)
         this._eventId = marker.eventId || 0;
+        // how high the flame is (px), for the shadows it makes things throw: <LightHeight:N>, else a fire, a stove, a cauldron (always
+        // lit) low, a candle a little higher, a lamp or a chandelier high up
+        this._lightHeight = marker.height || (marker.when !== "night" ? 22 : marker.radius <= 130 ? 30 : 56);
         // a flickering flame: k strength, s reach (scale), c how far the colour has drifted to the other one (alt)
         const fl = marker.flicker;
         this._flicker = fl ? { amount: fl.amount, alt: marker.shape === "circle" ? fl.alt : null, seed: (marker.eventId || 0) * 7.31 + marker.x * 0.37 + marker.y * 1.91,
@@ -723,11 +739,14 @@
         const tod = this._roomTimeOfDay || timeOfDay();
         const view = this._roomView || this.roomLightView();
         const visible = this._roomHoles.filter(h => h.sprite.visible);
+        this.updateLightBlockers(visible);
         // nothing moved and the hour's light is the same: the last picture is still right (skip the paint and upload)
-        // (a light's own strength is in the key too: a flickering flame or one another plugin dims)
+        // (a light's own strength is in the key too: a flickering flame or one another plugin dims; and who stands in it)
+        const Sun = T.api("Sun");
         const key = this._playerTorch ? "" : [tod.alpha.toFixed(3), tod.night.toFixed(3), Math.round(view.x0), Math.round(view.y0),
             view.x1 - view.x0, visible.map(h => h.sprite.x + "," + h.sprite.y + "," + weightOf(h.sprite).toFixed(3) +
-                (h.sprite._flicker ? "," + h.sprite._flicker.s.toFixed(3) + "," + h.sprite._flicker.c.toFixed(2) : "")).join(";")].join("|");
+                (h.sprite._flicker ? "," + h.sprite._flicker.s.toFixed(3) + "," + h.sprite._flicker.c.toFixed(2) : "") +
+                (h._blockers && h._blockers.length ? "," + Sun.blockersKey(h._blockers) : "")).join(";")].join("|");
         if (key && key === this._darkKey) return;
         this._darkKey = key;
         const bitmap = this._darknessSprite.bitmap;
@@ -744,6 +763,19 @@
             const w = weightOf(hole.sprite);
             if (hole.shape === "circle") {
                 const reach = hole.sprite._flicker ? hole.radius * hole.sprite._flicker.s : hole.radius;
+                if (hole._blockers && hole._blockers.length) {
+                    // with people in its light: the hole on its own canvas first, their shadows cut out of it, then out of the darkness
+                    const cx = hole.sprite.x * k, cy = hole.sprite.y * k, rad = reach * k, size = Math.ceil(rad * 2) + 2;
+                    const ox = cx - rad - 1, oy = cy - rad - 1, c = Sun.scratchCanvas(size, size);
+                    punchCircleHole(c, cx - ox, cy - oy, rad, w, hole.soft);
+                    Sun.cutLightShadows(c, hole._blockers, k, ox, oy);
+                    context.save();
+                    context.setTransform(1, 0, 0, 1, 0, 0);
+                    context.globalCompositeOperation = "destination-out";
+                    context.drawImage(c.canvas, ox, oy);
+                    context.restore();
+                    continue;
+                }
                 punchCircleHole(context, hole.sprite.x, hole.sprite.y, reach, w, hole.soft);
             } else {
                 punchConeHole(context, hole.sprite.x, hole.sprite.y, hole.geom, w);
@@ -755,6 +787,21 @@
         context.restore();
         bitmap._baseTexture.update();
         this.redrawGlows(visible);
+    };
+
+    // the people and animals in each visible light's way (hole._blockers; T.api("Sun") - ChoppableTree_Render.js): a lamp, a hearth, a
+    // stove, a candle, a chandelier; not a window's beam nor a soft fill light
+    Spriteset_Map.prototype.updateLightBlockers = function(visible) {
+        const Sun = T.api("Sun"), things = Sun && Sun.lightBlockers && Sun.shadows ? Sun.occluders(this) : [];
+        const th = $gameMap.tileHeight();
+        for (const hole of visible) {
+            hole._blockers = null;
+            if (!things.length || hole.shape !== "circle" || hole.soft || weightOf(hole.sprite) < 0.05) continue;
+            const s = hole.sprite, f = s._flicker, reach = f ? hole.radius * f.s : hole.radius;
+            const light = { x: s.x, y: s.y, r: reach, gx: s.x, gy: s.y + th / 2, hf: s._lightHeight || 30, id: s._eventId };
+            const list = Sun.lightBlockers(light, things, Graphics.frameCount, f ? f.k : 1);
+            if (list.length) hole._blockers = list;
+        }
     };
 
     // the glows of the visible lights, added together ("lighter") at half resolution, each as strong as the hour says
@@ -772,14 +819,22 @@
             const f = s._flicker, sc = f && hole.shape === "circle" ? f.s : 1;   // (a flame's glow grows and shrinks with its reach)
             const w = src.width * sc, h = src.height * sc, x = (s.x - s.anchor.x * w) * k, y = (s.y - s.anchor.y * h) * k;
             const a = Math.max(0, Math.min(1, weightOf(s)));
+            // with people in its light the glow goes on its own canvas first, their shadows cut out of it (no warm glow in a shadow)
+            const shaded = hole._blockers && hole._blockers.length, Sun = shaded ? T.api("Sun") : null;
+            const c = shaded ? Sun.scratchCanvas(Math.ceil(w * k) + 1, Math.ceil(h * k) + 1) : context, dx = shaded ? 0 : x, dy = shaded ? 0 : y;
             if (f && f.alt && s._altBitmap && s._altBitmap._canvas) {   // its colour drifting to the other one
-                context.globalAlpha = a * (1 - f.c);
-                context.drawImage(src._canvas, x, y, w * k, h * k);
-                context.globalAlpha = a * f.c;
-                context.drawImage(s._altBitmap._canvas, x, y, w * k, h * k);
+                c.globalAlpha = a * (1 - f.c);
+                c.drawImage(src._canvas, dx, dy, w * k, h * k);
+                c.globalAlpha = a * f.c;
+                c.drawImage(s._altBitmap._canvas, dx, dy, w * k, h * k);
             } else {
-                context.globalAlpha = a;
-                context.drawImage(src._canvas, x, y, w * k, h * k);
+                c.globalAlpha = a;
+                c.drawImage(src._canvas, dx, dy, w * k, h * k);
+            }
+            if (shaded) {
+                Sun.cutLightShadows(c, hole._blockers, k, x, y);
+                context.globalAlpha = 1;
+                context.drawImage(c.canvas, x, y);
             }
         }
         context.restore();

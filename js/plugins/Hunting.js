@@ -759,6 +759,7 @@
         // how it moved since the last frame: the facing (smoothed, a turn held a few frames so it does not flicker) and the legs
         const x = ch._realX, y = ch._realY, dx = this._l8x === undefined ? 0 : x - this._l8x, dy = this._l8y === undefined ? 0 : y - this._l8y;
         this._l8x = x; this._l8y = y;
+        if (Math.abs(dx) > 0.0005) this._l8side = dx > 0 ? 6 : 4;   // (the last way it went sideways: for a look whose up and down rows are wanting)
         const d = Math.hypot(dx, dy);
         if (d > 0.0005 && d < 1.5) {
             this._l8vx = (this._l8vx || 0) * 0.6 + dx;
@@ -777,7 +778,10 @@
         const cell = look.cell, n = Math.max(1, Math.round(this.bitmap.width / cell) - 1);
         const moving = this._l8still < 6 || ch.isJumping();
         const col = moving ? 1 + Math.min(n - 1, Math.floor((((this._l8step || 0) / look.stride) % 1) * n)) : 0;
-        this.setFrame(col * cell, (LOOK8_ROW[this._l8dir] || 0) * cell, cell, cell);
+        // a sheet may say which of its rows to use for a facing (look.rows(dir, moving, side) -> a numpad dir): some have no good
+        // back views - the cat's walking up rows show its face, as if it went backwards (user 2026-10-01)
+        const dir = look.rows ? look.rows(this._l8dir, moving, this._l8side || 6) : this._l8dir;
+        this.setFrame(col * cell, (LOOK8_ROW[dir] || 0) * cell, cell, cell);
     };
     // the sheets come with the map, so the first step does not wait for them
     const _look8MapCreate = Scene_Map.prototype.create;

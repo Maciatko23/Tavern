@@ -230,11 +230,12 @@
         const storm = window.Storm, W = storm ? storm.wind() : 0, L = storm ? storm.level() : 0;
         this._wx += this._vx * (1 + 6 * W);
         this._wy += this._vy * (1 + 6 * W);
-        this.opacity = Math.round(this._baseOpacity * (1 - 0.85 * L));
         const w = this.mapWidth(), h = this.mapHeight(), r = this._radius;
         if (this._wx < -r * 2 || this._wx > w + r * 2 || this._wy < -r * 2 || this._wy > h + r * 2) {
             this.reset(false);
         }
+        // (after a reset too: a cloud coming back in a storm was drawn at its full strength for a frame)
+        this.opacity = Math.round(this._baseOpacity * (1 - 0.85 * L));
         // world -> screen, the same way the tilemap does it (also right for maps smaller than the screen)
         this.x = this.mapPixelToScreenX(this._wx);
         this.y = this.mapPixelToScreenY(this._wy);

@@ -1472,6 +1472,12 @@
         }
         return lines;
     }
+    // its box on the screen: the panel only (SurvivalHUD.js fades the HUD while the hero is under it)
+    Sprite_GoalTracker.prototype.hudRect = function() {
+        const r = this.getBounds();
+        if (this._panelH) r.height = Math.min(r.height, this._panelH * Math.abs(this.worldTransform.d || 1));
+        return r;
+    };
     Sprite_GoalTracker.prototype.paint = function(g, line) {
         this.paintLines("CEL", g.title, line);
     };
@@ -1484,6 +1490,7 @@
         bmp.fontSize = 14;
         const lines = wrapBitmapText(bmp, line, inner, 3);
         const h = 8 + 15 + titleLines.length * 21 + 3 + lines.length * 17 + 6;
+        this._panelH = h;   // (the rest of the picture under it is empty: hudRect)
         if (window.UIStyle) UIStyle.panel(ctx, 0, 0, w, h, { cut: 5 });   // the panel of the windows (UITheme.js)
         else { ctx.fillStyle = COLORS.panelFill; ctx.fillRect(0, 0, w, h); }
         bmp.outlineWidth = 3;

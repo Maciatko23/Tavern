@@ -105,6 +105,24 @@ const { launch, sleep } = require("./cdp.js");
         await setDay(rainy.wet.d); await frames(30);
         const looks = await J(`(function(){ const layer = SceneManager._scene._spriteset._stoneLayer; const urls = new Set(); for (const e of layer._entries) { const u = e.sprite.bitmap._url || ""; if (/Gather_Mushroom_/.test(u)) urls.add(u); } return urls.size; })()`);
         check("the mushrooms come in several looks (at least 3 different pictures on the map at once)", looks >= 3, looks);
+        // the plants bend in the wind (a mesh bent at the foot, a spring towards the gusts' push), pebbles, branches and cones lie
+        // still; someone standing right beside a plant pushes it aside, away from them
+        await ev(`(function(){ const l = SceneManager._scene._spriteset._stoneLayer, ox = $gameMap.displayX() * 48, oy = $gameMap.displayY() * 48;
+            window.__plant = l._swaying.find(e => e.gx - ox > 60 && e.gx - ox < Graphics.width - 60 && e.gy - oy > 60 && e.gy - oy < Graphics.height - 60); return 0; })()`);
+        const swayOf = `(function(){ const l = SceneManager._scene._spriteset._stoneLayer, p = window.__plant;
+            const still = l._entries.filter(e => /Gather_(Stone|Branch|Cone)_/.test(e.sprite.bitmap._url || ""));
+            return { n: l._swaying.length, mesh: !!(p && p.sprite.geometry), bend: p ? p.bend : null, max: p ? p.maxBend : 0,
+                tip: p ? p.sprite.geometry.getBuffer("aVertexPosition").data[0] : null, foot: p ? p.sprite.geometry.getBuffer("aVertexPosition").data[24] : null,
+                still: still.length, stillBent: still.filter(e => e.sprite.geometry || e.sprite.skew.x !== 0).length }; })()`;
+        const sw1 = await J(swayOf); await frames(40); const sw2 = await J(swayOf);
+        check("plants bend in the wind (the tip moves, the foot stays, within their limit); pebbles, branches and cones lie still",
+            sw1.n > 0 && sw1.mesh && sw2.bend !== sw1.bend && sw2.tip !== sw1.tip && sw2.foot === 0 && Math.abs(sw2.bend) <= sw2.max * 1.6 && sw2.still > 0 && sw2.stillBent === 0, { sw1, sw2 });
+        const pushed = async side => { await ev(`(function(){ const l = SceneManager._scene._spriteset._stoneLayer, p = window.__plant; l.__walk = l.swayWalkers;
+            const ox = $gameMap.displayX() * 48, oy = $gameMap.displayY() * 48; l.swayWalkers = () => [{ x: p.gx - ox - ${side} * 5, y: p.gy - oy }]; return 0; })()`);
+            await frames(60); const b = await ev("window.__plant.bend");
+            await ev("(function(){ const l = SceneManager._scene._spriteset._stoneLayer; l.swayWalkers = l.__walk; return 0; })()"); await frames(60); return b; };
+        const fromLeft = await pushed(1), fromRight = await pushed(-1);
+        check("a walker beside a plant pushes it aside, away from them (from the left it leans right, from the right it leans left)", fromLeft > 2 && fromRight < fromLeft - 4, { fromLeft, fromRight });
         // picking one: it is gone; a mushroom born later may grow there again
         const spot = await J(`(function(){ for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) { if (Farming.gatherAt(x, y) !== "mushroom") continue; for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) if ($gameMap.isPassable(x + dx, y + dy, 2) && !Farming.gatherAt(x + dx, y + dy)) return { x, y, sx: x + dx, sy: y + dy }; } return null; })()`);
         await ev(`$gamePlayer.locate(${spot.sx}, ${spot.sy}); $gameSystem.setStamina(100); 0`);
