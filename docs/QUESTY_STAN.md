@@ -98,6 +98,13 @@ zrobione = grywalne od początku do końca; częściowo = grywalne, ale bez czę
 | K37 | Sakiewka Lorda | czeka | na: uciekający złodziejaszek (postać), Lord na rynku |
 | K38 | Nocna warta | zrobione | przerobione: posterunek przy bramie twierdzy (Kuba idzie nocą do stawu, Wit nocą siedzi w wieży); poszlaka W1 |
 | K39 | Kości z targu | czeka | na: wędrowny gracz w kości (TavernDice) |
+| K40 | Woda na pranie (Marta, Podgrodzie) | zrobione | 2 porcje własnej deszczówki (zabiera wodę, nie daje); 5–17, od dnia 2 |
+| K41 | Zioła dla babki Jadwigi (Podgrodzie) | zrobione | 3× Krwawnik + 2× Pokrzywa → 2× Opatrunek |
+| K42 | Kram Józka (Podgrodzie) | zrobione | 2× Deski + 4× Gwoździe, młotek → 2× Lina, 10 G |
+| K43 | Drewno na ognisko (Darin, Podgrodzie) | zrobione | 6× Drewno, 17–22 → notatka „Opowieść Darina” (Serce pod twierdzą na wyspie) |
+| K44 | Lina dla Zbycha (Podgrodzie) | zrobione | 2× Lina → 3× Węgiel drzewny |
+| K45 | Włókno na pętle (Rysiek, Podgrodzie) | zrobione | 6× Włókno → 2× surowe mięso zająca, rada: sidła tylko z przynętą |
+| K46 | Suchar dla Franka (Podgrodzie) | zrobione | 1× Chleb → notatka „Tajemnica Franka” (Kuba nocą z beczkami) |
 
 ### Długie
 
@@ -128,7 +135,7 @@ zrobione = grywalne od początku do końca; częściowo = grywalne, ale bez czę
 | # | Nazwa | Stan | Uwagi / na co czeka |
 |---|---|---|---|
 | W1 | Woda spod Kruczych Skał | częściowo | rozdz. 1 (poszlaki: K8, K10, K12, K38 — wystarczą 3) i rozdz. 2 (nocą za Kubą do stawu, po cichu; złapany = Opinia −3, próba następnej nocy). Zatrzymany przed odkryciem, kto stoi za wodą: „Ciąg dalszy wkrótce” — **czeka na decyzję autora** (Lord wie / Feliks winny) |
-| W2 | Kod dzwonu | częściowo | rozdz. 1 (dzwon o 3:00 w nocy), rozmowa z Ambrożym, rozdz. 2 (D16), rozdz. 3 (tabela sygnałów: 3, 1-1-1-1 o 23:00, 4+2 po suszy, 2+2+2 w burzy — trzy różne), rozdz. 4 (Ambroży, klucz do ogrodu). Rozdz. 5+ czeka na: wejście do ogrodu rycerzy na mapie, Archiwum |
+| W2 | Kod dzwonu | częściowo | rozdz. 1 (dzwon o 3:00 w nocy), rozmowa z Ambrożym, rozdz. 2 (D16), rozdz. 3 (tabela sygnałów: 3, 1-1-1-1 o 23:00, 4+2 po suszy, 2+2+2 w burzy — trzy różne), rozdz. 4 (Ambroży, klucz do ogrodu). Ogród rycerzy (2026-10-05): furtka (Map008 zdarzenie 39) otwiera się kluczem Ambrożego, krok „wejdź do ogrodu” (notatka, +40 dośw.), potem przerwa; test `tests/knights_garden_test.js`. Rozdz. 5 dalej (posągi, płyta w południe, Archiwum) czeka na: mapę Archiwum i siedem posągów |
 | W3 | Pieśń o Kruczych Skałach | czeka | na: zwrotki (teksty), Melia jako rozmówczyni, Noc Kupały |
 | W4 | Krew kasztelana | czeka | na: połówki klucza, Borgar, kopanie przy kamieniu |
 | W5 | Towary z kontynentu | czeka | flagi już są (K15, K16, D11); na: wnętrze kantoru z piwnicą nocą, obóz przemytników |
@@ -137,7 +144,7 @@ zrobione = grywalne od początku do końca; częściowo = grywalne, ale bez czę
 | W8 | Żelazna Pięść | czeka | na: Grum jako rozmówca, mapy gór i jaskini |
 | W9 | Serce Twierdzy | czeka | na: podziemia (Akt II) |
 
-Razem: 38 zadań w grze - 32 grywalne w całości (22 krótkie, 10 długich), 4 krótkie częściowo (K4, K9, K11, K15) i 2 wątki częściowo (W1, W2); reszta katalogu czeka. Test `tests/town_quests_test.js` (59 sprawdzeń, ok. 4 min) przechodzi od początku do końca K1, K2, K4, K5, K8, K10, K12, K13, K14, K16, K17, K19, K27, K28, K29, K31, K32, D1, D4, D5, D10, D16, W1 (rozdz. 1-2) i W2 (rozdz. 1-4).
+Razem: 45 zadań w grze - 39 grywalnych w całości (29 krótkich, w tym 7 z Podgrodzia - test `tests/podgrodzie_quests_test.js`; 10 długich), 4 krótkie częściowo (K4, K9, K11, K15) i 2 wątki częściowo (W1, W2); reszta katalogu czeka. Test `tests/town_quests_test.js` (59 sprawdzeń, ok. 4 min) przechodzi od początku do końca K1, K2, K4, K5, K8, K10, K12, K13, K14, K16, K17, K19, K27, K28, K29, K31, K32, D1, D4, D5, D10, D16, W1 (rozdz. 1-2) i W2 (rozdz. 1-4).
 
 ## Jak dopisać zadanie (TownQuests_Data.js)
 

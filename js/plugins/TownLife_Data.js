@@ -419,6 +419,26 @@
                 night: ["Śpij spokojnie, wyspiarzu. Dopóki morze jest między nami a nimi."],
                 rain: ["Ten deszcz pachnie jak u nas, przed wojną. Usiądź. Pomilczmy."]
             }
+        },
+        {
+            key: "zebrak", name: "Stary Gaweł", title: "żebrak", sheet: "$Npc_Zebrak", map: 111, speed: 2,
+            plan: [[0, "inside", "zebrak_noc"], [6.5, "stand", "zebrak"], [12, "wander", "plac"], [13.5, "stand", "zebrak"], [19, "wander", "namioty"],
+                   [21.5, "inside", "zebrak_noc"]],
+            barks: {
+                stand: ["Grosik dla starego... Bóg zapłać.", "Pamiętam ten mur, kiedy jeszcze był murem zamku.", "Dobry człowiek, dobry... daj co łaska."],
+                wander: ["Kości bolą. Będzie deszcz. Albo i nie będzie.", "Stary Gaweł wszystko widzi. Nikt nie pyta."],
+                rain: ["Deszcz! Jak za dawnych lat!", "Niech leje, niech leje..."],
+                night: ["Idź spać, młody. Noc nie dla ciebie."]
+            },
+            talk: {
+                morning: ["Gaweł. Stary Gaweł spod bramy. Byłem chłopcem w zamku, nosiłem wodę strażnikom - kiedy zamek był jeszcze zamkiem, a nie tawerną.",
+                    "Daj grosik, a powiem ci coś, czego nikt już nie pamięta."],
+                day: ["Kiedyś dzwon mówił. Strażnicy znali każde bicie. Trzy i jeden - obcy w murach. Pięć - brama otwarta nocą. Reszty nie pamiętam... albo nie chcę pamiętać.",
+                    "W ogrodzie za tawerną stały posągi rycerzy. Na ich tarczach są znaki. Strażnicy mówili, że kto zna dzwon, ten zna drogę."],
+                evening: ["Wieczorem siadam przy ognisku uchodźców. Darin to dobry człowiek. Opowiada o wojnie jak stary żołnierz - bo nim jest."],
+                night: ["Śpię pod daszkiem przy murze. Jak dzwon bije nocą, budzę się i liczę. Stary nawyk."],
+                rain: ["Deszcz... Za moich lat studnia na rynku była pełna po brzegi. Woda szła spod wzgórza, ze starej cysterny zakonu."]
+            }
         }
     ];
 

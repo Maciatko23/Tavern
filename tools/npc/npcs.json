@@ -1068,5 +1068,49 @@
     "scale": null,
     "height_px": 60,
     "notes": "Podgrodzie. Chód N z trybu skeleton-v3 (szablonowy gubił zrolowany koc na plecach). E = lustro W (chód E doklejał wielki koc na wysokości bioder, znikający w 2 klatkach). W chodzie S bandaż widać na obu ramionach. Chód W miał jaskrawoturkusowy pas (w rotacjach przygaszony ciemny turkus): w zipie przed budową nasycone turkusy przygaszone (s 0.30)."
+  },
+  {
+    "key": "Zebrak",
+    "name": "Gaweł (żebrak, Podgrodzie)",
+    "pixellab_id": "2609b157-ce67-4135-a359-4a2429bcdefb",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "24b61402-dfd2-47ae-9070-60b792596873",
+    "animation": "walk",
+    "description": "Gawel the old beggar, a very old frail man about 70, thin and bony, hunched bent back with a stoop, wrinkled hollow-cheeked face, long dirty tangled grey beard down to his chest, thin unkempt grey hair, a tattered moth-eaten dull brown wool blanket wrapped over his shoulders like a shawl over layered ragged torn grey-beige linen rags, a frayed rope belt, bare thin shins, barefoot with dirty feet, holding a small round wooden begging bowl in one hand in front of his belly, poor medieval beggar, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_north_reroll": 1
+    },
+    "sheet": "$Npc_Zebrak",
+    "walk8": "Npc_Zebrak_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "east": "west",
+        "south-east": "south-west",
+        "north-west": "north-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Podgrodzie. Stojąca postać W i E = klatka 4 własnego chodu W (nogi razem) (rotacja W była mocniej pochylona, z miską wysuniętą i szerszym kocem - w arkuszu MZ, gdzie stanie przeplata się z krokami, migałaby; zip podmieniony przed budową). Drewniana miska żebracza w ręce zostaje w chodzie S, SW i W. E = lustro W (szablonowy chód E dał jaskrawoniebieskie portki), SE = lustro SW (chód SE zgubił miskę, szare spodnie zamiast łachmanów), NW = lustro NE (chód NW robił z łachmanów jasne spodnie). Chód N wygenerowany drugi raz (w pierwszym na plecach migała czerwona sakiewka w 4 klatkach z 8). Po lustrze miska jest w drugiej ręce (E, SE) - jak u innych mieszkańców."
   }
 ]

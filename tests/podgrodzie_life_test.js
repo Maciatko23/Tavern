@@ -1,12 +1,12 @@
 // Podgrodzie lives by the clock too (TownLife.js v1.1.0, user 2026-10-05: "mapa z domkami drewnianymi i wnętrzami i
-// mieszkańcami, biedniejsza dzielnica"): the 7 residents with "map: 111" in TownLife_Data.js are put on Map111, not on the town
+// mieszkańcami, biedniejsza dzielnica"): the 8 residents (the beggar Gaweł since the evening) with "map: 111" in TownLife_Data.js are put on Map111, not on the town
 // (Map008 keeps its own 14); at 10:00 each is where its plan says (Marta at the laundry, Józek at his stall, Zbych gone to the
 // forest, Rysiek asleep at home...), all are indoors at 23:48 except the poacher (out in the forest - also hidden), Marta and her
 // son are seen inside their cabin at night, Józek calls out and answers when spoken to. Shot: docs/podgrodzie/mieszkancy.png.
 const path = require("path");
 const kit = require("./lib/kit.js");
 const SHOTS = path.join(__dirname, "..", "docs", "podgrodzie");
-const KEYS = ["praczka", "franek", "drwal", "klusownik", "znachorka", "szmaciarz", "uchodzca"];
+const KEYS = ["praczka", "franek", "drwal", "klusownik", "znachorka", "szmaciarz", "uchodzca", "zebrak"];
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
@@ -19,14 +19,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(30);
     const at10 = await t.json(`(function(){ const out = {}; for (const k of ${JSON.stringify(KEYS)}) { const e = TownLife.eventOf(k);
         out[k] = e ? [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName(), e.eventId()] : null; } return out; })()`);
-    t.check("the 7 residents of Podgrodzie are on Map111, each with its own sheet", KEYS.every(k => at10[k] && /^\$Npc_/.test(at10[k][3])), at10);
-    const spots = await t.json(`(function(){ const o = {}; for (const k of ["pranie", "kram", "kapliczka", "brama_zach", "zabawa"]) o[k] = TownLife.spot(k); return o; })()`);
+    t.check("the 8 residents of Podgrodzie (with the beggar Gaweł) are on Map111, each with its own sheet", KEYS.every(k => at10[k] && /^\$Npc_/.test(at10[k][3])), at10);
+    const spots = await t.json(`(function(){ const o = {}; for (const k of ["pranie", "kram", "kapliczka", "brama_zach", "zabawa", "zebrak"]) o[k] = TownLife.spot(k); return o; })()`);
     const near = (a, s, r) => !!a && !!s && Math.abs(a[0] - s[0]) <= r && Math.abs(a[1] - s[1]) <= r;
     t.check("at 10:00: Marta works at the laundry, Józek stands at his stall (on their spots)",
         at10.praczka[0] === spots.pranie[0] && at10.praczka[1] === spots.pranie[1] && at10.szmaciarz[0] === spots.kram[0] && at10.szmaciarz[1] === spots.kram[1]
         && at10.praczka[2] === "shown" && at10.szmaciarz[2] === "shown", { at10, spots });
     t.check("...Franek runs round the stall, babka Jadwiga strolls by the shrine, Darin looks for work by the gate (within a stroll)",
         near(at10.franek, spots.kram, 4) && near(at10.znachorka, spots.kapliczka, 4) && near(at10.uchodzca, spots.brama_zach, 4), { at10, spots });
+    t.check("...old Gaweł begs on his spot by the gate", at10.zebrak[0] === spots.zebrak[0] && at10.zebrak[1] === spots.zebrak[1] && at10.zebrak[2] === "shown", { zebrak: at10.zebrak, spot: spots.zebrak });
     t.check("...Zbych is away in the forest and Rysiek sleeps at home (both hidden)", at10.drwal[2] === "hidden" && at10.klusownik[2] === "hidden", at10);
     await t.shot(path.join(SHOTS, "mieszkancy.png"));
 

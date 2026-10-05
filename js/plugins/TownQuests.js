@@ -1625,6 +1625,17 @@
                 return kinds.size >= 3;
             }
         },
+        // in through the knights' garden's gate (Map008, the gate event 39 opens with the key): anywhere in the garden
+        w2Garden: {
+            tick(q) {
+                const p = $gamePlayer;
+                if (!onTown() || p.x < 2 || p.x > 10 || p.y < 4 || p.y > 13) return;
+                const L = q.lines || {};
+                if (L.garden) think(L.garden);
+                if (L.note) addNote(L.note);
+                completeStep(q, { reward: { xp: 40, opinion: 1 } });
+            }
+        },
         w2Key: { hand: () => { setFlag("gardenKey"); addNote(["Klucz do ogrodu rycerzy", "Ambroży jest ostatnim uczniem straży zakonu - dzwoni, „bo nikt nie odwołał warty”. Dał mi klucz do furtki ogrodu rycerzy."]); } }
     };
     // the tool Tadek sharpens: the most worn one in the bag

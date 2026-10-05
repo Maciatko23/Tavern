@@ -821,6 +821,137 @@
             },
             reward: { xp: 100 }
         },
+        // =========================================================== Podgrodzie (Map111), the poor suburb outside the west wall
+        // (2026-10-05): one short errand from each of its residents. Givers live there (TownLife "map: 111"); in the evening and at
+        // night they are at home - a bring step is handed over wherever the resident is (also in its cabin).
+        // =========================================================== K40
+        {
+            id: "K40", kind: "K", title: "Woda na pranie", giver: "praczka", icon: 138, where: "Podgrodzie, sznury z praniem", when: "5–17, od dnia 2",
+            desc: "Marta nosi wodę z miasta, z przydziału przy studni - dwa wiadra na dzień to za mało na prześcieradła z dworu. Prosi o dwie porcje twojej deszczówki.",
+            offer: {
+                cond: { hours: [5, 17], day: 2 },
+                say: ["Prześcieradła z dworu... Feliks chce je na jutro, a ja z przydziału mam ledwie na namoczenie.",
+                    "Masz może deszczówkę? Dwie porcje starczyłyby mi na płukanie. Zapłacę, ile mogę."],
+                yes: "Przyniosę deszczówkę.", no: "Sam mam mało.",
+                accept: ["Niech ci Bóg wynagrodzi. Będę przy sznurach."], decline: ["Rozumiem. Każdy liczy każdą kroplę."]
+            },
+            steps: [
+                { type: "bring", to: "praczka", water: 2, hours: [5, 22], text: "Daj Marcie 2 porcje swojej deszczówki (wiadro albo bukłak; Podgrodzie, przy praniu).",
+                    remind: ["Dwie porcje, kochaneczku. Choćby z bukłaka."], hero: ["> Masz. Dwie porcje deszczówki."],
+                    done: ["Czysta jak łza... Dworskie prześcieradła będą białe. Masz, weź te grosze. I przynieś mi kiedyś tę podartą koszulę - zaceruję."] }
+            ],
+            reward: { gold: 8, xp: 40, opinion: 2 }
+        },
+        // =========================================================== K41
+        {
+            id: "K41", kind: "K", title: "Zioła dla babki Jadwigi", giver: "znachorka", icon: 150, where: "Podgrodzie, ogródek ziół", when: "6–18",
+            desc: "Babka Jadwiga robi opatrunki dla całego Podgrodzia, a krwawnik w jej ogródku zżółkł od suszy.",
+            offer: {
+                cond: { hours: [6, 18] },
+                say: ["Krwawnik mi uschnął, dziecko. A ludzie się ranią - przy drewnie, przy sidłach, przy murze.",
+                    "Przynieś mi trzy krwawniki i dwie pokrzywy z łąki. Zrobię opatrunki - i tobie dam."],
+                yes: "Nazbieram.", no: "Nie teraz, babciu.",
+                accept: ["Krwawnik ma białe baldachy, pokrzywa parzy. Nie pomylisz."], decline: ["Idź z Bogiem."]
+            },
+            steps: [
+                { type: "bring", to: "znachorka", need: [[150, 3], [149, 2]], hours: [6, 22], text: "Przynieś babce Jadwidze 3× Krwawnik i 2× Pokrzywa (Podgrodzie).",
+                    remind: ["Trzy krwawniki, dwie pokrzywy. Stara Jadwiga nie zapomina."], hero: ["> Zioła, babciu. Jak prosiłaś."],
+                    done: ["Piękne, świeże! Masz - dwa opatrunki. Przyłóż na ranę, zawiąż mocno. I nie dziękuj, tylko uważaj na siebie."] }
+            ],
+            reward: { xp: 50, opinion: 2, items: [[152, 2]] }
+        },
+        // =========================================================== K42
+        {
+            id: "K42", kind: "K", title: "Kram Józka", giver: "szmaciarz", icon: 80, where: "Podgrodzie, kram starzyzny", when: "7–20",
+            desc: "Daszek nad kramem Józka się zapada. Potrzeba desek, gwoździ i młotka.",
+            offer: {
+                cond: { hours: [7, 20], day: 3 },
+                say: ["Widzisz ten daszek? Jeszcze jeden wiatr i cała starzyzna wyląduje w błocie. A starzyzna w błocie to już nie starzyzna, tylko błoto.",
+                    "Dwie deski, cztery gwoździe i młotek. Zbijesz? Zapłacę - i dam ci coś z kramu. Coś dobrego!"],
+                yes: "Zbiję.", no: "Nie teraz.",
+                accept: ["Wiedziałem, że masz dobre ręce! Dobre ręce poznaję od razu."], decline: ["Szkoda. Daszek też szkoda."]
+            },
+            steps: [
+                { type: "bring", to: "szmaciarz", need: [[80, 2], [88, 4]], tools: [[89, 1]], hours: [7, 22], se: "Hammer",
+                    text: "Przynieś Józkowi 2× Deski i 4× Gwoździe i zbij daszek młotkiem (kram starzyzny).",
+                    remind: ["Deski, gwoździe, młotek. Daszek czeka. Ja też."], hero: ["> Deski, gwoździe. I młotek. Przytrzymaj."],
+                    done: ["Stoi! Jak nowy! No, prawie jak nowy. Masz, dwie liny - mocne, z portu. Prawie nieużywane."] }
+            ],
+            reward: { gold: 10, xp: 50, opinion: 2, items: [[93, 2]] }
+        },
+        // =========================================================== K43
+        {
+            id: "K43", kind: "K", title: "Drewno na ognisko", giver: "uchodzca", icon: 61, where: "Podgrodzie, obóz uchodźców", when: "17–22",
+            desc: "Ognisko w obozie uchodźców przygasa, a w nocy przy murze zimno. Darin prosi o drewno.",
+            offer: {
+                cond: { hours: [17, 22] },
+                say: ["Ogień nam przygasa. W nocy przy murze jest zimno, a dzieci śpią pod gołym niebem.",
+                    "Sześć polan wystarczy do świtu. Nie mam czym zapłacić... ale mogę ci coś opowiedzieć. O kontynencie."],
+                yes: "Przyniosę drewno.", no: "Nie dziś.",
+                accept: ["Dziękuję, wyspiarzu."], decline: ["Rozumiem. Każdy ma swoje ognisko."]
+            },
+            steps: [
+                { type: "bring", to: "uchodzca", need: [[61, 6]], hours: [6, 23], text: "Przynieś Darinowi 6× Drewno na ognisko (obóz uchodźców w Podgrodziu).",
+                    remind: ["Sześć polan, dobrze? Ogień czeka."], hero: ["> Drewno. Sześć polan."],
+                    done: ["Ogień do świtu! Siadaj.",
+                        "W Varnhel na kontynencie każdy król chce Serca. Mówią, że jest pod jakąś twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Nikt nie wie, pod którą.",
+                        "> Pod twierdzą na wyspie...?", "Tak mówili oficerowie. Dlatego tu przypływają statki z ludźmi, którzy nie wyglądają na uchodźców."] }
+            ],
+            reward: { xp: 40, opinion: 3, note: ["Opowieść Darina", "Darin słyszał od oficerów na kontynencie, że Serce, o które walczą królowie, leży pod twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Tawerna stoi na dawnym zamku..."] }
+        },
+        // =========================================================== K44
+        {
+            id: "K44", kind: "K", title: "Lina dla Zbycha", giver: "drwal", icon: 93, where: "Podgrodzie, drewutnia", when: "15–21",
+            desc: "Zbychowi pękła lina do wiązania drewna, a nowej nie ma za co kupić.",
+            offer: {
+                cond: { hours: [15, 21.5] },
+                say: ["Pękła mi lina. Drewno wiążę teraz łykiem i rozłazi się po drodze.",
+                    "Dwie liny, chłopcze. Za to dostaniesz węgiel z mielerza - kowal płaci za taki uczciwie."],
+                yes: "Przyniosę liny.", no: "Nie teraz.",
+                accept: ["Dobrze. Rąbię do zmroku."], decline: ["Ech. To jeszcze trochę łyka."]
+            },
+            steps: [
+                { type: "bring", to: "drwal", need: [[93, 2]], hours: [5, 22], text: "Przynieś Zbychowi 2× Lina (drewutnia w Podgrodziu).",
+                    remind: ["Dwie liny. Łyko już się kończy."], hero: ["> Liny. Dwie."],
+                    done: ["Mocne! Masz, trzy worki węgla. Z mojego mielerza, najlepszy w okolicy."] }
+            ],
+            reward: { xp: 40, opinion: 2, items: [[79, 3]] }
+        },
+        // =========================================================== K45
+        {
+            id: "K45", kind: "K", title: "Włókno na pętle", giver: "klusownik", icon: 92, where: "Podgrodzie", when: "13–20",
+            desc: "Rysiek robi pętle na zające z włókna lnu, bo drutu nikt mu nie sprzeda.",
+            offer: {
+                cond: { hours: [13, 20], day: 2 },
+                say: ["Psst. Potrzebuję włókna. Sześć garści. Na pętle.",
+                    "Nie pytaj, na co pętle. Przyniesiesz - podzielę się tym, co w nie wpadnie."],
+                yes: "Przyniosę włókno.", no: "Nie chcę mieć z tym nic wspólnego.",
+                accept: ["Mądry chłopak. I cichy, mam nadzieję."], decline: ["Jak chcesz. Ale głodny będziesz ty, nie ja."]
+            },
+            steps: [
+                { type: "bring", to: "klusownik", need: [[92, 6]], hours: [5, 22], text: "Przynieś Ryśkowi 6× Włókno na pętle (Podgrodzie).",
+                    remind: ["Sześć garści włókna. Ciszej mów."], hero: ["> Włókno. Sześć garści."],
+                    done: ["Dobre włókno. Masz, dwa zające z wczorajszej nocy. I rada za darmo: pusta pętla nic nie złapie. Zawsze daj przynętę."] }
+            ],
+            reward: { xp: 40, opinion: 1, items: [[94, 2]], note: ["Rada Ryśka", "Rysiek: „Pusta pętla nic nie złapie. Zawsze daj przynętę.” Sidła łapią tylko z przynętą."] }
+        },
+        // =========================================================== K46
+        {
+            id: "K46", kind: "K", title: "Suchar dla Franka", giver: "franek", icon: 83, where: "Podgrodzie", when: "7–19",
+            desc: "Franek od rana nic nie jadł, a mama pierze do wieczora.",
+            offer: {
+                cond: { hours: [7, 19] },
+                say: ["Masz coś do jedzenia? Mama pierze, a ja od rana nic... Choćby kawałek chleba."],
+                yes: "Przyniosę ci chleb.", no: "Nie mam nic.",
+                accept: ["Naprawdę? Będę tu! Albo tam. Gdzieś będę!"], decline: ["Aha..."]
+            },
+            steps: [
+                { type: "bring", to: "franek", need: [[83, 1]], hours: [6, 22], text: "Przynieś Frankowi 1× Chleb (Podgrodzie).",
+                    remind: ["Chleb? Masz już?"], hero: ["> Masz. Cały bochenek."],
+                    done: ["Cały?! ...Dziękuję!", "Wiesz co? Powiem ci tajemnicę. Kuba woziwoda wyjeżdża po pierwszej w nocy z pustymi beczkami, a przed świtem wraca z pełnymi. Widziałem z dachu!"] }
+            ],
+            reward: { xp: 20, opinion: 2, note: ["Tajemnica Franka", "Franek widział z dachu: Kuba woziwoda wyjeżdża po pierwszej w nocy z pustymi beczkami, a przed świtem wraca z pełnymi."] }
+        },
         // =========================================================== D1
         {
             id: "D1", kind: "D", title: "Buty od szewca", giver: "garbarz", icon: 113, where: "garbarnia + łąki i las + kuźnia", when: "od dnia 5, 4–6 dni",
@@ -1053,6 +1184,11 @@
         {
             id: "W2", kind: "W", title: "Kod dzwonu", giver: null, icon: 0, where: "dzwonnica, rynek", when: "od pierwszego nocnego dzwonu",
             desc: "Ambroży dzwoni o dziwnych godzinach. Liczba uderzeń ma znaczenie - to sygnały, których miasto już nie rozumie.",
+            lines: {
+                garden: ["> (Za furtką cicho, jakby miasto zostało za murem. Dwa kamienne posągi rycerzy pilnują kopca, między nimi miecz wbity w kamień.)",
+                    "> (Na tarczach posągów są nacięcia - krótkie i długie, jak uderzenia dzwonu.)", "> Ambroży mówił: „Tam jest reszta”. Reszta czego?"],
+                note: ["Ogród rycerzy", "Furtka za tawerną otwiera się kluczem Ambrożego. W ogrodzie stoją posągi strażników zakonu, między nimi miecz wbity w kamień. Na ich tarczach są nacięcia jak uderzenia dzwonu. Ciąg dalszy wkrótce."]
+            },
             steps: [
                 { type: "custom", check: "w2Heard", text: "Usłysz dzwon o dziwnej porze (bądź w miasteczku nocą)." },
                 { type: "talk", to: "dzwonnik", hours: [6.3, 17.7], text: "Zapytaj Ambrożego o nocne dzwonienie (rynek albo ogród zakonu, za dnia).",
@@ -1064,7 +1200,8 @@
                     say: ["> Spisałem twoje dzwonienia. Każde przychodzi, kiedy coś się dzieje: warta, deszcz po suszy, piorun. To nie godziny. To słowa.",
                         "(Ambroży długo milczy. Ma mokre oczy.)", "Nikt... od czterdziestu lat nikt nie zapytał. Jestem ostatnim uczniem straży zakonu. Dzwonię, bo nikt nie odwołał warty.",
                         "Masz. Klucz do furtki ogrodu rycerzy. Tam jest reszta. Kiedyś."], fx: "w2Key" },
-                { type: "pause", text: "Ciąg dalszy wkrótce: ogród rycerzy (czeka na wejście do ogrodu na mapie)." }
+                { type: "custom", tick: "w2Garden", text: "Otwórz kluczem Ambrożego furtkę ogrodu rycerzy (na lewo od tawerny) i wejdź do środka." },
+                { type: "pause", text: "Ciąg dalszy wkrótce: tajemnica posągów i Archiwum zakonu." }
             ]
         }
     ];

@@ -3,6 +3,7 @@
 > Propozycja do wyboru (2026-10-04). Co już jest w grze (TownQuests.js), a co czeka - `docs/QUESTY_STAN.md`. Postacie, miejsca i systemy są takie, jak w
 > `docs/STORY.md`, `docs/WALKA.md`, `docs/ARCHITEKTURA.md` i na mapie „Okolice Tawerny” (Map008). Numery: **K** = krótki,
 > **D** = długi, **W** = wątek (bardzo długi). Typ questu jest w nawiasie przy nazwie.
+> **W1 (użytkownik, 2026-10-05): winny jest Feliks, Lord nic nie wie** - szczegóły w W1.
 > **Woda (użytkownik, 2026-10-05):** studnia na rynku daje wodę, ale mało - sołtys ją przydziela (w grze: 2 nabrania dziennie,
 > zdarzenia „Studnia miejska” `<Studnia:2>`); woda jest w wodospadzie i rzece; strumień przy młynie opadł, nie wysechł. Wątek W1 bez zmian.
 
@@ -146,11 +147,12 @@ fabułą. Po tabeli każdy wątek ma swoją listę rozdziałów.
 
 ### W1. Woda spod Kruczych Skał
 
-Prawda (propozycja): pod wzgórzem jest stara cysterna zakonu. Zakon prowadził z niej wodę kanałem pod rynek (do studni) i do
-młynówki. Kiedy z kamieni twierdzy budowano dwór, dziadek Lorda przekopał się do kanału i doprowadził wodę pod dwór. W suszę
-dopływ zmalał tak bardzo, że woda płynie już tylko do dworu — stąd zielony ogród, a w mieście studnia daje ledwie parę wiader na dzień i młyn stoi.
-Wodospad za halą to przelew cysterny i z tygodnia na tydzień robi się cieńszy. Feliks nocą sprzedaje wodę Kubie, a Kapral
-Wit przepuszcza wóz w zamian za działkę.
+**Prawda (decyzja użytkownika, 2026-10-05): winny jest Feliks, Lord nic nie wie.** Pod wzgórzem jest stara cysterna zakonu.
+Zakon prowadził z niej wodę kanałem pod rynek (do studni) i do młynówki. Kiedy z kamieni twierdzy budowano dwór, dziadek
+Lorda postawił go na kanale - ale Lord Zaleski o tym nie wie: myśli, że ogród poi głęboka studnia dworu. Kamerdyner Feliks
+znalazł w piwnicy oranżerii śluzę zakonu i w suszę przymknął gałąź miejską: woda płynie pod dwór, a nadwyżkę Feliks nocą
+sprzedaje Kubie. Stąd zielony ogród Lorda, a w mieście studnia daje ledwie parę wiader na dzień i młyn stoi. Wodospad za
+halą to przelew cysterny i z tygodnia na tydzień robi się cieńszy. Kapral Wit przepuszcza wóz w zamian za działkę.
 
 1. **Poszlaki** (dni 3–15). K8 (Kuba: „nie pytaj”), K10 (woda pachnie różą i żelazem), K26 (zamurowany kanał w studni, kruk),
    K38 (Wit wypuszcza Kubę o 2:00), D8 (soczyste kapusty z dworu), D7 (róża z mokrą ziemią). Trzy poszlaki z sześciu
@@ -169,13 +171,14 @@ Wit przepuszcza wóz w zamian za działkę.
    kanale zakonu. W szufladzie ogrodnika leży rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte”.
    Zabrany rysunek jest dowodem.
 6. **Wielki wybór** (ratusz, drzwi dworu albo rynek w dzień targowy):
-   - a) **Ujawnić to na targu** razem z sołtysem. Tłum idzie pod bramę wschodnią; Lord wypiera się albo zrzuca winę na
-     Feliksa (zależnie od W7). Śluzę otwierają „do połowy”: w młynówce znów płynie woda i młyn rusza (D2 bez kieratu), ale
-     studnia na rynku dalej daje mało. Opinia +15; dwór jest chłodny (żadnych ulg, list z dnia 55 jest ostrzejszy);
-     Wita degradują albo staje się ci wdzięczny (W5).
-   - b) **Pójść po cichu do Lorda.** Lord prosi o milczenie, Feliks przestaje handlować z Kubą, a „za dyskrecję” dostajesz
-     200 G odpisu z długu. Miasto nic nie wie; Kuba zostaje bez towaru, a woda w Kantorze drożeje. Jeśli prawda wyjdzie na
-     jaw później (W5, W7), Opinia spada o 20.
+   - a) **Ujawnić to na targu** razem z sołtysem. Tłum idzie pod bramę wschodnią. Lord nic nie wiedział - jest wstrząśnięty
+     i upokorzony przed całym miastem. Każe aresztować Feliksa i otworzyć śluzę „do połowy” (więcej susza nie da): w młynówce
+     znów płynie woda i młyn rusza (D2 bez kieratu), ale studnia na rynku dalej daje mało. Opinia +15; Lord jest ci
+     wdzięczny, ale chłodny za publiczny wstyd (żadnych ulg); Wita degradują albo staje się ci wdzięczny (W5).
+   - b) **Pójść po cichu do Lorda** z rysunkiem śluzy. Lord nic nie wiedział: blednie, dziękuje i sam schodzi z tobą do
+     oranżerii. Feliks znika z dworu bez hałasu, śluzę otwierają „do połowy”, a „za lojalność” dostajesz 200 G odpisu z długu;
+     Lord odtąd ci ufa (sojusznik w W7). Miasto widzi tylko, że woda wraca (Opinia +5); Kuba zostaje bez towaru i ma do
+     ciebie żal.
    - c) **Szantażować Feliksa**: 20 G co tydzień. Po 2 tygodniach ludzie Feliksa napadają cię na Polnej drodze (walka z
      ludźmi).
    - d) **Milczeć.** Nic się nie zmienia, ale rozdział 7 i tak wraca w Akcie II.
