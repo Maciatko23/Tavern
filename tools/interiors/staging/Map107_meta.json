@@ -1,0 +1,656 @@
+{
+ "concept": "woziwoda",
+ "width": 14,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "landing": [
+   7,
+   8,
+   8
+  ],
+  "res_woziwoda": [
+   7,
+   5,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "sterta beczek",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 3,
+   "w": 3,
+   "h": 2,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 0
+  },
+  {
+   "kind": "beczka z wodą",
+   "cat": "furniture",
+   "cells": [
+    [
+     4,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 4,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 0
+  },
+  {
+   "kind": "beczka_woda_otwarta",
+   "cat": "floorprop",
+   "cells": [
+    [
+     5,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 5,
+   "y": 4,
+   "event": true,
+   "art": [
+    51,
+    89,
+    92,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "woz_beczki",
+   "cat": "floorprop",
+   "cells": [
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 2,
+   "y": 7,
+   "event": true,
+   "art": [
+    48,
+    61,
+    144,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "wiadro_woda",
+   "cat": "floorprop",
+   "cells": [
+    [
+     4,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 4,
+   "y": 7,
+   "event": true,
+   "art": [
+    54,
+    104,
+    90,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "cebrzyk_woda",
+   "cat": "floorprop",
+   "cells": [
+    [
+     1,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 5,
+   "event": true,
+   "art": [
+    51,
+    98,
+    92,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "nosidla",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 6,
+   "y": 4,
+   "event": true,
+   "art": [
+    48,
+    104,
+    96,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     12,
+     4
+    ],
+    [
+     12,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 12,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "szkatula",
+   "cat": "floorprop",
+   "cells": [
+    [
+     12,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 12,
+   "y": 6,
+   "event": true,
+   "art": [
+    11,
+    69,
+    37,
+    91
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     10,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 4
+  },
+  {
+   "kind": "swieca_stolek",
+   "cat": "tableitem",
+   "cells": [
+    [
+     10,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 4,
+   "event": true,
+   "art": [
+    40,
+    39,
+    56,
+    71
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "worki",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     8
+    ],
+    [
+     11,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 7,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 2
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   7,
+   9
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba okno",
+   "window",
+   9,
+   1
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    7,
+    9,
+    7,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   7,
+   9,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ],
+  [
+   12,
+   4,
+   "Izba"
+  ],
+  [
+   12,
+   5,
+   "Izba"
+  ],
+  [
+   12,
+   6,
+   "Izba"
+  ],
+  [
+   12,
+   7,
+   "Izba"
+  ],
+  [
+   12,
+   8,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 107,
+ "key": "woziwoda",
+ "display": "Dom woziwody",
+ "exits": [
+  {
+   "x": 7,
+   "y": 9,
+   "door": 137,
+   "town": [
+    29,
+    47
+   ],
+   "landing": [
+    7,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (taras rzemieślników)"
+  }
+ ],
+ "residents": [
+  {
+   "key": "woziwoda",
+   "x": 7,
+   "y": 5,
+   "dir": 8
+  }
+ ]
+}

@@ -38,3 +38,7 @@ __pycache__/
 # the town generator's regenerated overlay renders, and the reference pictures of the Winlu author's sample maps (not ours to publish)
 /tools/town/staging/overlay_*/
 /tools/town/refs/
+.claude/settings.local.json
+# the tavern v2 generator's regenerated renders and the test overlay (copies of data/ and img/ for GAME_OVERLAY)
+/tools/tavern/v2/out/
+/tools/tavern/v2/overlay/

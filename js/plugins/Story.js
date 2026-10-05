@@ -66,7 +66,7 @@
  *
  * Postacie dochodzą w trakcie gry - pliki map zostają nietknięte:
  *  - dziadek Stach ($Npc_Dziadek, w stylu bohatera) w domu dziadka,
- *  - Lord Zaleski (People2_Tall, 4) przed drzwiami dworu za dnia
+ *  - Lord Zaleski ($Npc_Lord, w stylu bohatera) przed drzwiami dworu za dnia
  *    (8-20); nocą przez drzwi odzywa się kamerdyner Feliks. Wtyczka szuka
  *    zdarzenia o nazwie „Drzwi dworu” i staje obok niego,
  *  - Borgar (istniejące zdarzenie na mapie 1): zatrudnia bohatera, daje
@@ -133,7 +133,7 @@
     // the characters the story adds to maps (event ids far above what the editor gives out; Forestry's planted trees start at 1000)
     const NPCS = {
         grandpa: { id: 901, map: MAP.house, name: "Dziadek Stach", sheet: "$Npc_Dziadek", index: 0, face: ["People1", 6], at: [10, 6], dir: 2 },   // (on the rug by the hearth, beside his rocking chair - the whitewashed cottage, 2026-09-28)
-        lord: { id: 902, map: MAP.manor, name: "Lord Leopold Zaleski", sheet: "People2_Tall", index: 4, face: ["People2", 4], at: null, dir: 2 }
+        lord: { id: 902, map: MAP.manor, name: "Lord Leopold Zaleski", sheet: "$Npc_Lord", index: 0, face: ["People2", 4], at: null, dir: 2 }   // (hero-style sheet 2026-10-04; the face is still the old one)
     };
     // map names in a story game (the map files stay as they are: an old save keeps the old names)
     const MAP_NAMES = { [MAP.field]: "Pole dziadka" };

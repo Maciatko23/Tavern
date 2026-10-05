@@ -14,6 +14,8 @@
  * Q / E przełączają zakładki (jak w dzienniku), góra / dół wybierają:
  *   1. Zdarzenia:
  *      - "+1 godzina" / "+1 dzień": przesuwa zegar gry (tak jak w Farming.js).
+ *      - "Godzina: świt", "Godzina: zachód słońca": zegar na chwilę przed wschodem / godzinę przed zachodem
+ *        (wraca na mapę); "Gęsta mgła o świcie": dzisiejszy (albo jutrzejszy) ranek mglisty (Sky.js).
  *      - "Burza teraz", "Piorun tuż obok", "Piorun w drzewo", "Koniec pogody na dziś": pogoda (Survival.js / Storm.js).
  *      - "Stadko ptaków na ziemi", "Nalot ptaków na pole": ptaki (Birds.js) - nalot tylko, gdy na mapie coś rośnie
  *        poza zasięgiem stracha na wróble.
@@ -127,12 +129,18 @@
     const spot = (tab, kind) => (tab === ITEMS_TAB ? tab + ":" + kind : String(tab));
 
     const heroLookLabel = () => "Nowa postać: " + (window.HeroLook && HeroLook.active() ? "włączona" : "wyłączona (stary Reid)");
+    const layersLabel = () => "Warstwy z regionów: " + (window.RegionLayers && RegionLayers.overlay ? "ukryj kolory" : "pokaż kolory (1 zielony, 2 czerwony, 3 niebieski)");
     // every row of the menu, each with its tab: 0 the events, 1 the buildings, 2 the items
     function allRows() {
         const rows = [
             { tab: 0, kind: "hour", label: "+1 godzina", icon: 240 },
             { tab: 0, kind: "day", label: "+1 dzień", icon: 241 }
         ];
+        if (window.Sky && Sky.sunTimes) {   // the sky (Sky.js): jump to the dawn or the sunset, a misty morning
+            rows.push({ tab: 0, kind: "dawn", label: "Godzina: świt (przed wschodem słońca)", icon: 240 },
+                { tab: 0, kind: "dusk", label: "Godzina: zachód słońca", icon: 240 },
+                { tab: 0, kind: "mist", label: "Gęsta mgła o świcie", icon: 70 });
+        }
         if (window.Survival && Survival.forceStorm) {   // the weather (Survival.js plans it, Storm.js shows it)
             rows.push({ tab: 0, kind: "storm", label: "Burza teraz (2 godziny)", icon: 66 },
                 { tab: 0, kind: "strike", label: "Piorun tuż obok", icon: 66 },
@@ -148,6 +156,7 @@
         if (window.Hunting && Hunting.SPECIES.deer) rows.push({ tab: 0, kind: "deer", label: "Jeleń w pobliżu", icon: 420 });   // Hunting.js: a deer a few tiles away (any hour)
         if (window.Combat) rows.push({ tab: 0, kind: "xp", label: "+200 doświadczenia", icon: 87 });   // Combat.js: to try the levels
         if (window.HeroLook) rows.push({ tab: 0, kind: "herolook", label: heroLookLabel(), icon: 84 });   // HeroLook.js: the new hero, on trial
+        if (window.RegionLayers) rows.push({ tab: 0, kind: "layers", label: layersLabel(), icon: 190 });   // RegionLayers.js: the painted regions 1-3 in colour over the map
         if (window.Farming && Farming.startFreePlacement) {   // every building of Farming.js, put down free and finished
             for (const [type, def] of Object.entries(Farming.BUILDINGS)) {
                 const iconItem = Farming.itemOf(def.pack || def.cost[0][0]);
@@ -366,6 +375,14 @@
         if (row.kind === "hour" || row.kind === "day") {
             $gameSystem.advanceDayNight(row.kind === "day" ? 24 : 1);
             $gameTemp.pushLootPopup(row.icon, row.label, "#9ff0a8");
+        } else if (row.kind === "dawn" || row.kind === "dusk") {   // today's sunrise / sunset (the sun's height): back to the map to watch it
+            const t = Sky.sunTimes($gameSystem.dayNightDay());
+            $gameSystem.setDayNightHour(row.kind === "dawn" ? t.rise - 0.6 : t.set - 1);
+            this.popScene();
+        } else if (row.kind === "mist") {   // this morning's mist thick (past the morning: tomorrow's)
+            const day = $gameSystem.dayNightDay(), t = Sky.sunTimes(day);
+            Sky.forceMist(1, $gameSystem.dayNightHour() < t.rise + 2 ? day : day + 1);
+            $gameTemp.pushLootPopup(row.icon, $gameSystem.dayNightHour() < t.rise + 2 ? "Mgła o świcie: dziś" : "Mgła o świcie: jutro", "#9ff0a8");
         } else if (row.kind === "storm" || row.kind === "calm") {
             if (row.kind === "storm") Survival.forceStorm(2);
             else Survival.calmWeather();
@@ -381,6 +398,10 @@
         } else if (row.kind === "herolook") {   // the new hero on and off (the menu stays: the row says which)
             HeroLook.setActive(!HeroLook.active());
             row.label = heroLookLabel();
+            this._list.redrawItem(this._list.index());
+        } else if (row.kind === "layers") {   // the regions' colours on and off (the menu stays: the row says which)
+            RegionLayers.overlay = !RegionLayers.overlay;
+            row.label = layersLabel();
             this._list.redrawItem(this._list.index());
         } else if (row.kind === "build") {
             $gameTemp._debugBuild = row.type;   // the placer starts once the map is back

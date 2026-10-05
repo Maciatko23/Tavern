@@ -251,58 +251,6 @@
     Spriteset_Map.prototype.update = function() {
         _Spriteset_Map_update.call(this);
         this.updateDayNight();
-        this.updateSideLight();
-    };
-
-    // ---- the light from the side at sunrise and sunset (user 2026-10-01): the side of the screen the sun is on (the right - the east -
-    // in the morning, the left in the evening) is warmer and brighter, the other side cooler and bluish, strongest at the golden hour
-    // (T.api("Sun").sky). Two screen-wide gradients over the map, under the dark of the night and the interface: a warm one added
-    // (ADD), a cool one laid over (MULTIPLY). Only outdoors on a tinted map.
-    const SIDE_WARM = [255, 142, 60], SIDE_COOL = [170, 182, 236], SIDE_WARM_ALPHA = 0.22, SIDE_COOL_ALPHA = 0.6;
-    function gradientBitmap(stops) {
-        const b = new Bitmap(256, 4), ctx = b.context, g = ctx.createLinearGradient(0, 0, 256, 0);
-        for (const [at, c] of stops) g.addColorStop(at, c);
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 256, 4);
-        b._baseTexture.update();
-        return b;
-    }
-    Spriteset_Map.prototype.createSideLight = function() {
-        const warm = new Sprite(gradientBitmap([[0, "rgba(" + SIDE_WARM + ",1)"], [0.55, "rgba(" + SIDE_WARM + ",0.15)"], [1, "rgba(" + SIDE_WARM + ",0)"]]));
-        warm.blendMode = PIXI.BLEND_MODES.ADD;
-        const cool = new Sprite(gradientBitmap([[0, "rgb(255,255,255)"], [0.45, "rgb(236,238,248)"], [1, "rgb(" + SIDE_COOL + ")"]]));
-        cool.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-        const layer = new Sprite();
-        for (const s of [cool, warm]) {
-            s.anchor.set(0.5, 0.5);
-            s.x = Graphics.width / 2;
-            s.y = Graphics.height / 2;
-            layer.addChild(s);
-        }
-        layer._warm = warm;
-        layer._cool = cool;
-        layer.visible = false;
-        this._sideLight = layer;
-        const night = this._nightLight;   // (under the dark of the night - Farming_Render.js -, over the map)
-        if (night && night.parent === this) this.addChildAt(layer, this.getChildIndex(night));
-        else this.addChild(layer);
-    };
-    Spriteset_Map.prototype.updateSideLight = function() {
-        const Sun = T.api("Sun");
-        if (!this._sideLight) {
-            if (!Sun || !Sun.sky) return;
-            this.createSideLight();
-        }
-        const layer = this._sideLight, sun = Sun.now(), sky = sun.sky;
-        const g = isToneEnabled() && sun.outdoors && !sun.flash ? sky.golden * (1 - 0.8 * (window.Storm ? Storm.level() : 0)) : 0;
-        layer.visible = g > 0.01;
-        if (!layer.visible) return;
-        // (a scale that covers the screen; mirrored: the warm side where the sun is)
-        const sx = (Graphics.width / 256) * 1.02, sy = (Graphics.height / 4) * 1.02;
-        for (const s of [layer._warm, layer._cool]) s.scale.set(sky.side > 0 ? -sx : sx, sy);
-        layer._warm.alpha = SIDE_WARM_ALPHA * g;
-        layer._cool.alpha = SIDE_COOL_ALPHA * g;
-        layer._golden = g;
     };
 
     // Exposes the canonical hour->period mapping so other plugins (Atmosphere.js)

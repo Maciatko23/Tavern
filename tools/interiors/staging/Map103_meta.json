@@ -1,0 +1,1251 @@
+{
+ "concept": "kantor",
+ "width": 19,
+ "height": 12,
+ "zones": [],
+ "spots": {
+  "landing": [
+   12,
+   10,
+   8
+  ],
+  "res_kupiec": [
+   12,
+   5,
+   2
+  ]
+ },
+ "things": [
+  {
+   "kind": "regał ze skrzynkami towaru",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     4
+    ],
+    [
+     11,
+     4
+    ],
+    [
+     12,
+     4
+    ],
+    [
+     13,
+     4
+    ],
+    [
+     14,
+     4
+    ],
+    [
+     15,
+     4
+    ]
+   ],
+   "group": "Kantor",
+   "x": 10,
+   "y": 3,
+   "w": 6,
+   "h": 2,
+   "sheet": "E",
+   "sc": 9,
+   "sr": 14
+  },
+  {
+   "kind": "mapa",
+   "cat": "wallitem",
+   "cells": [
+    [
+     12,
+     2
+    ]
+   ],
+   "group": "Kantor ściana",
+   "x": 12,
+   "y": 2,
+   "event": true,
+   "art": [
+    16,
+    26,
+    80,
+    70
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "beczka z suknem",
+   "cat": "furniture",
+   "cells": [
+    [
+     9,
+     4
+    ]
+   ],
+   "group": "Kantor",
+   "x": 9,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 0
+  },
+  {
+   "kind": "skrzynia okuta",
+   "cat": "floorprop",
+   "cells": [
+    [
+     16,
+     4
+    ]
+   ],
+   "group": "Kantor",
+   "x": 16,
+   "y": 4,
+   "event": true
+  },
+  {
+   "kind": "counter_h",
+   "cat": "counter",
+   "cells": [
+    [
+     10,
+     6
+    ],
+    [
+     10,
+     7
+    ],
+    [
+     11,
+     6
+    ],
+    [
+     11,
+     7
+    ],
+    [
+     12,
+     6
+    ],
+    [
+     12,
+     7
+    ],
+    [
+     13,
+     6
+    ],
+    [
+     13,
+     7
+    ],
+    [
+     14,
+     6
+    ],
+    [
+     14,
+     7
+    ],
+    [
+     15,
+     6
+    ],
+    [
+     15,
+     7
+    ]
+   ],
+   "group": "Kantor lada",
+   "x": 10,
+   "y": 6,
+   "x1": 15
+  },
+  {
+   "kind": "D(4,14)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     11,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 11,
+   "y": 6,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 14
+  },
+  {
+   "kind": "D(4,15)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     12,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 12,
+   "y": 6,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 15
+  },
+  {
+   "kind": "D(5,12)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     15,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 15,
+   "y": 6,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 12
+  },
+  {
+   "kind": "kasetka",
+   "cat": "counteritem",
+   "cells": [
+    [
+     14,
+     7
+    ]
+   ],
+   "group": "Kantor lada",
+   "x": 14,
+   "y": 7,
+   "event": true,
+   "art": [
+    15,
+    27,
+    33,
+    41
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "swieca_lada",
+   "cat": "counteritem",
+   "cells": [
+    [
+     10,
+     7
+    ]
+   ],
+   "group": "Kantor lada",
+   "x": 10,
+   "y": 7,
+   "event": true,
+   "art": [
+    16,
+    12,
+    32,
+    44
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "beczki z towarem",
+   "cat": "furniture",
+   "cells": [
+    [
+     14,
+     10
+    ]
+   ],
+   "group": "Kantor towar",
+   "x": 14,
+   "y": 9,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 4,
+   "sr": 7
+  },
+  {
+   "kind": "beczki z towarem",
+   "cat": "furniture",
+   "cells": [
+    [
+     15,
+     10
+    ]
+   ],
+   "group": "Kantor towar",
+   "x": 15,
+   "y": 9,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 5,
+   "sr": 7
+  },
+  {
+   "kind": "beczki z towarem",
+   "cat": "furniture",
+   "cells": [
+    [
+     16,
+     10
+    ]
+   ],
+   "group": "Kantor towar",
+   "x": 16,
+   "y": 9,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 6,
+   "sr": 7
+  },
+  {
+   "kind": "beczki z towarem",
+   "cat": "furniture",
+   "cells": [
+    [
+     17,
+     10
+    ]
+   ],
+   "group": "Kantor towar",
+   "x": 17,
+   "y": 9,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 7,
+   "sr": 7
+  },
+  {
+   "kind": "beczka z jabłkami",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     10
+    ]
+   ],
+   "group": "Kantor towar",
+   "x": 10,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 14,
+   "sr": 2
+  },
+  {
+   "kind": "sterta beczek z winem",
+   "cat": "furniture",
+   "cells": [
+    [
+     4,
+     4
+    ],
+    [
+     5,
+     4
+    ],
+    [
+     6,
+     4
+    ]
+   ],
+   "group": "Zaplecze",
+   "x": 4,
+   "y": 3,
+   "w": 3,
+   "h": 2,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 0
+  },
+  {
+   "kind": "beczki",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     10
+    ],
+    [
+     2,
+     10
+    ]
+   ],
+   "group": "Zaplecze",
+   "x": 1,
+   "y": 9,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 0
+  },
+  {
+   "kind": "table_sq",
+   "cat": "table",
+   "cells": [
+    [
+     2,
+     6
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     3,
+     7
+    ]
+   ],
+   "group": "Zaplecze stół",
+   "x": 2,
+   "y": 6
+  },
+  {
+   "kind": "chair",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     5
+    ]
+   ],
+   "group": "Zaplecze krzesła",
+   "x": 2,
+   "y": 5,
+   "facing": 2
+  },
+  {
+   "kind": "chair",
+   "cat": "seat",
+   "cells": [
+    [
+     4,
+     6
+    ]
+   ],
+   "group": "Zaplecze krzesła",
+   "x": 4,
+   "y": 6,
+   "facing": 4
+  },
+  {
+   "kind": "chair",
+   "cat": "seat",
+   "cells": [
+    [
+     3,
+     8
+    ]
+   ],
+   "group": "Zaplecze krzesła",
+   "x": 3,
+   "y": 8,
+   "facing": 8
+  },
+  {
+   "kind": "ksiega_rachunkowa",
+   "cat": "tableitem",
+   "cells": [
+    [
+     2,
+     7
+    ]
+   ],
+   "group": "Zaplecze stół",
+   "x": 2,
+   "y": 7,
+   "event": true,
+   "art": [
+    5,
+    30,
+    47,
+    57
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "swieca",
+   "cat": "tableitem",
+   "cells": [
+    [
+     3,
+     7
+    ]
+   ],
+   "group": "Zaplecze stół",
+   "x": 3,
+   "y": 7,
+   "event": true,
+   "art": [
+    16,
+    24,
+    32,
+    56
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "D(4,15)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     3,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 3,
+   "y": 6,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 15
+  },
+  {
+   "kind": "klapa do piwnicy",
+   "cat": "floortile",
+   "cells": [
+    [
+     5,
+     9
+    ]
+   ],
+   "group": "Zaplecze",
+   "x": 5,
+   "y": 9
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "furniture",
+   "cells": [
+    [
+     6,
+     8
+    ]
+   ],
+   "group": "Zaplecze",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 3
+  },
+  {
+   "kind": "lantern",
+   "cat": "wallitem",
+   "cells": [
+    [
+     5,
+     2
+    ]
+   ],
+   "group": "Zaplecze lampa",
+   "x": 5,
+   "y": 2
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   12,
+   11
+  ],
+  [
+   "exit",
+   3,
+   11
+  ]
+ ],
+ "wall_items": [
+  [
+   "Kantor okna",
+   "window",
+   9,
+   1
+  ],
+  [
+   "Kantor okna",
+   "window",
+   16,
+   1
+  ],
+  [
+   "Zaplecze okna",
+   "window",
+   2,
+   1
+  ]
+ ],
+ "openings": [
+  [
+   "Kantor",
+   [
+    12,
+    11,
+    12,
+    11
+   ]
+  ],
+  [
+   "Zaplecze",
+   [
+    3,
+    11,
+    3,
+    11
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Zaplecze"
+  ],
+  [
+   1,
+   5,
+   "Zaplecze"
+  ],
+  [
+   1,
+   6,
+   "Zaplecze"
+  ],
+  [
+   1,
+   7,
+   "Zaplecze"
+  ],
+  [
+   1,
+   8,
+   "Zaplecze"
+  ],
+  [
+   1,
+   9,
+   "Zaplecze"
+  ],
+  [
+   1,
+   10,
+   "Zaplecze"
+  ],
+  [
+   2,
+   4,
+   "Zaplecze"
+  ],
+  [
+   2,
+   5,
+   "Zaplecze"
+  ],
+  [
+   2,
+   6,
+   "Zaplecze"
+  ],
+  [
+   2,
+   7,
+   "Zaplecze"
+  ],
+  [
+   2,
+   8,
+   "Zaplecze"
+  ],
+  [
+   2,
+   9,
+   "Zaplecze"
+  ],
+  [
+   2,
+   10,
+   "Zaplecze"
+  ],
+  [
+   3,
+   4,
+   "Zaplecze"
+  ],
+  [
+   3,
+   5,
+   "Zaplecze"
+  ],
+  [
+   3,
+   6,
+   "Zaplecze"
+  ],
+  [
+   3,
+   7,
+   "Zaplecze"
+  ],
+  [
+   3,
+   8,
+   "Zaplecze"
+  ],
+  [
+   3,
+   9,
+   "Zaplecze"
+  ],
+  [
+   3,
+   10,
+   "Zaplecze"
+  ],
+  [
+   3,
+   11,
+   "Zaplecze"
+  ],
+  [
+   4,
+   4,
+   "Zaplecze"
+  ],
+  [
+   4,
+   5,
+   "Zaplecze"
+  ],
+  [
+   4,
+   6,
+   "Zaplecze"
+  ],
+  [
+   4,
+   7,
+   "Zaplecze"
+  ],
+  [
+   4,
+   8,
+   "Zaplecze"
+  ],
+  [
+   4,
+   9,
+   "Zaplecze"
+  ],
+  [
+   4,
+   10,
+   "Zaplecze"
+  ],
+  [
+   5,
+   4,
+   "Zaplecze"
+  ],
+  [
+   5,
+   5,
+   "Zaplecze"
+  ],
+  [
+   5,
+   6,
+   "Zaplecze"
+  ],
+  [
+   5,
+   7,
+   "Zaplecze"
+  ],
+  [
+   5,
+   8,
+   "Zaplecze"
+  ],
+  [
+   5,
+   9,
+   "Zaplecze"
+  ],
+  [
+   5,
+   10,
+   "Zaplecze"
+  ],
+  [
+   6,
+   4,
+   "Zaplecze"
+  ],
+  [
+   6,
+   5,
+   "Zaplecze"
+  ],
+  [
+   6,
+   6,
+   "Zaplecze"
+  ],
+  [
+   6,
+   7,
+   "Zaplecze"
+  ],
+  [
+   6,
+   8,
+   "Zaplecze"
+  ],
+  [
+   6,
+   9,
+   "Zaplecze"
+  ],
+  [
+   6,
+   10,
+   "Zaplecze"
+  ],
+  [
+   7,
+   9,
+   "Kantor"
+  ],
+  [
+   7,
+   10,
+   "Kantor"
+  ],
+  [
+   8,
+   4,
+   "Kantor"
+  ],
+  [
+   8,
+   5,
+   "Kantor"
+  ],
+  [
+   8,
+   6,
+   "Kantor"
+  ],
+  [
+   8,
+   7,
+   "Kantor"
+  ],
+  [
+   8,
+   8,
+   "Kantor"
+  ],
+  [
+   8,
+   9,
+   "Kantor"
+  ],
+  [
+   8,
+   10,
+   "Kantor"
+  ],
+  [
+   9,
+   4,
+   "Kantor"
+  ],
+  [
+   9,
+   5,
+   "Kantor"
+  ],
+  [
+   9,
+   6,
+   "Kantor"
+  ],
+  [
+   9,
+   7,
+   "Kantor"
+  ],
+  [
+   9,
+   8,
+   "Kantor"
+  ],
+  [
+   9,
+   9,
+   "Kantor"
+  ],
+  [
+   9,
+   10,
+   "Kantor"
+  ],
+  [
+   10,
+   4,
+   "Kantor"
+  ],
+  [
+   10,
+   5,
+   "Kantor"
+  ],
+  [
+   10,
+   6,
+   "Kantor"
+  ],
+  [
+   10,
+   7,
+   "Kantor"
+  ],
+  [
+   10,
+   8,
+   "Kantor"
+  ],
+  [
+   10,
+   9,
+   "Kantor"
+  ],
+  [
+   10,
+   10,
+   "Kantor"
+  ],
+  [
+   11,
+   4,
+   "Kantor"
+  ],
+  [
+   11,
+   5,
+   "Kantor"
+  ],
+  [
+   11,
+   6,
+   "Kantor"
+  ],
+  [
+   11,
+   7,
+   "Kantor"
+  ],
+  [
+   11,
+   8,
+   "Kantor"
+  ],
+  [
+   11,
+   9,
+   "Kantor"
+  ],
+  [
+   11,
+   10,
+   "Kantor"
+  ],
+  [
+   12,
+   4,
+   "Kantor"
+  ],
+  [
+   12,
+   5,
+   "Kantor"
+  ],
+  [
+   12,
+   6,
+   "Kantor"
+  ],
+  [
+   12,
+   7,
+   "Kantor"
+  ],
+  [
+   12,
+   8,
+   "Kantor"
+  ],
+  [
+   12,
+   9,
+   "Kantor"
+  ],
+  [
+   12,
+   10,
+   "Kantor"
+  ],
+  [
+   12,
+   11,
+   "Kantor"
+  ],
+  [
+   13,
+   4,
+   "Kantor"
+  ],
+  [
+   13,
+   5,
+   "Kantor"
+  ],
+  [
+   13,
+   6,
+   "Kantor"
+  ],
+  [
+   13,
+   7,
+   "Kantor"
+  ],
+  [
+   13,
+   8,
+   "Kantor"
+  ],
+  [
+   13,
+   9,
+   "Kantor"
+  ],
+  [
+   13,
+   10,
+   "Kantor"
+  ],
+  [
+   14,
+   4,
+   "Kantor"
+  ],
+  [
+   14,
+   5,
+   "Kantor"
+  ],
+  [
+   14,
+   6,
+   "Kantor"
+  ],
+  [
+   14,
+   7,
+   "Kantor"
+  ],
+  [
+   14,
+   8,
+   "Kantor"
+  ],
+  [
+   14,
+   9,
+   "Kantor"
+  ],
+  [
+   14,
+   10,
+   "Kantor"
+  ],
+  [
+   15,
+   4,
+   "Kantor"
+  ],
+  [
+   15,
+   5,
+   "Kantor"
+  ],
+  [
+   15,
+   6,
+   "Kantor"
+  ],
+  [
+   15,
+   7,
+   "Kantor"
+  ],
+  [
+   15,
+   8,
+   "Kantor"
+  ],
+  [
+   15,
+   9,
+   "Kantor"
+  ],
+  [
+   15,
+   10,
+   "Kantor"
+  ],
+  [
+   16,
+   4,
+   "Kantor"
+  ],
+  [
+   16,
+   5,
+   "Kantor"
+  ],
+  [
+   16,
+   6,
+   "Kantor"
+  ],
+  [
+   16,
+   7,
+   "Kantor"
+  ],
+  [
+   16,
+   8,
+   "Kantor"
+  ],
+  [
+   16,
+   9,
+   "Kantor"
+  ],
+  [
+   16,
+   10,
+   "Kantor"
+  ],
+  [
+   17,
+   4,
+   "Kantor"
+  ],
+  [
+   17,
+   5,
+   "Kantor"
+  ],
+  [
+   17,
+   6,
+   "Kantor"
+  ],
+  [
+   17,
+   7,
+   "Kantor"
+  ],
+  [
+   17,
+   8,
+   "Kantor"
+  ],
+  [
+   17,
+   9,
+   "Kantor"
+  ],
+  [
+   17,
+   10,
+   "Kantor"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 103,
+ "key": "kantor",
+ "display": "Kantor",
+ "exits": [
+  {
+   "x": 12,
+   "y": 11,
+   "door": 95,
+   "town": [
+    14,
+    39
+   ],
+   "landing": [
+    12,
+    10,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (kantor)"
+  },
+  {
+   "x": 3,
+   "y": 11,
+   "door": 94,
+   "town": [
+    10,
+    40
+   ],
+   "landing": [
+    3,
+    10,
+    8
+   ],
+   "name": "Tylne drzwi -> Okolice Tawerny"
+  }
+ ],
+ "residents": [
+  {
+   "key": "kupiec",
+   "x": 12,
+   "y": 5,
+   "dir": 2
+  }
+ ]
+}

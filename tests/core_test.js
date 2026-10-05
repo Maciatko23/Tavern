@@ -170,43 +170,43 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
             priorityType: 0, stepAnime: false, through: true, trigger: 0, walkAnime: false });
         const evd = (id, x, y) => ({ id, name: "CoreTest " + id, note: "<CoreTest:x=" + id + "><Flag>", x, y, pages: [
             page([{ code: 108, indent: 0, parameters: ["<CorePage:first>"] }]), page([{ code: 108, indent: 0, parameters: ["<CorePage:second n=2>"] }], { selfSwitchValid: true, selfSwitchCh: "A" })] });
-        window.__ctBuild = [930, 931];
-        const build = (data, mapId) => window.__ctBuild.map((id, i) => evd(id, 5 + i, 5)).concat([evd(945, 7, 5)]);   // (945: outside the range)
-        T.inject(3, { ids: [930, 939], owner: "CoreTest", build });
+        window.__ctBuild = [830, 831];
+        const build = (data, mapId) => window.__ctBuild.map((id, i) => evd(id, 5 + i, 5)).concat([evd(845, 7, 5)]);   // (845: outside the range)
+        T.inject(3, { ids: [830, 839], owner: "CoreTest", build });
         const tryIt = spec => { try { T.inject(3, spec); return "ok"; } catch (e) { return e.message; } };
-        out.overlap = tryIt({ ids: [935, 940], owner: "Other", build: () => [] });
+        out.overlap = tryIt({ ids: [835, 840], owner: "Other", build: () => [] });
         out.reserved = tryIt({ ids: [900, 901], owner: "Other", build: () => [] });
         out.forestry = tryIt({ ids: [5000, 5001], owner: "Other", build: () => [] });
-        out.same = tryIt({ ids: [930, 939], owner: "CoreTest", build });
-        out.free = tryIt({ ids: [940, 941], owner: "Other", build: () => [] });
+        out.same = tryIt({ ids: [830, 839], owner: "CoreTest", build });
+        out.free = tryIt({ ids: [840, 841], owner: "Other", build: () => [] });
         // an editor's own event on an id of the range: left alone
         const own = $dataMap.events.filter(e => e && e.id > 100).map(e => e.id)[0];
         out.own = own;
         T.inject(3, { ids: [own, own], owner: "CoreTestEditor", build: () => [{ id: own, name: "not mine", note: "<Mine>", x: 1, y: 1, pages: [] }] });
         // when(): false - nothing put in
-        T.inject(3, { ids: [950 + 3, 953], owner: "CoreTestWhen", when: () => !!window.__ctWhen, build: () => [evd(953, 9, 5)] });
+        T.inject(3, { ids: [850 + 3, 853], owner: "CoreTestWhen", when: () => !!window.__ctWhen, build: () => [evd(853, 9, 5)] });
         return out; })()`);
     t.check("id ranges: an overlap with another owner is refused (also a reserved range: Story 901-902, Forestry 1000+), the same owner again and a free range are fine",
         /overlap/.test(inj.overlap) && /Story/.test(inj.reserved) && /Forestry/.test(inj.forestry) && inj.same === "ok" && inj.free === "ok", inj);
     t.check("a transfer onto Map003 again", await t.go(4, 10, 10) && await t.go(3, 22, 14));
     const put = await J(`(function(){ const e = id => $gameMap.event(id); const own = ${inj.own};
-        return { a: !!e(930) && !!e(931), out: !!e(945) || !!$dataMap.events[945], note: e(930) && e(930).event().note, meta: e(930) && e(930).event().meta,
-            own: $dataMap.events[own] && $dataMap.events[own].name, when: !!$dataMap.events[953], injected: Tawerna.injected(3) }; })()`);
-    t.check("the events come into the map's data as it loads (930, 931), with their meta; one outside its range (945) is left out",
-        put.a && !put.out && /<CoreTest:x=930>/.test(put.note) && put.meta && put.meta.Flag === true && JSON.stringify(put.injected.CoreTest) === "[930,931]", put);
+        return { a: !!e(830) && !!e(831), out: !!e(845) || !!$dataMap.events[845], note: e(830) && e(830).event().note, meta: e(830) && e(830).event().meta,
+            own: $dataMap.events[own] && $dataMap.events[own].name, when: !!$dataMap.events[853], injected: Tawerna.injected(3) }; })()`);
+    t.check("the events come into the map's data as it loads (830, 831), with their meta; one outside its range (845) is left out",
+        put.a && !put.out && /<CoreTest:x=830>/.test(put.note) && put.meta && put.meta.Flag === true && JSON.stringify(put.injected.CoreTest) === "[830,831]", put);
     t.check("... an editor's own event on an id is left alone; when() false puts nothing in", put.own !== "not mine" && !put.when && !put.injected.CoreTestEditor, put);
-    // an older save: made before 931 existed (it is not among the saved events) and with 932 that the data no longer has
+    // an older save: made before 831 existed (it is not among the saved events) and with 832 that the data no longer has
     const old = await J(`(function(){
         const c = JsonEx.parse(JsonEx.stringify(DataManager.makeSaveContents()));
-        c.map._events[931] = null;
-        const o = JsonEx.parse(JsonEx.stringify(c.map._events[930])); o._eventId = 932; c.map._events[932] = o;
+        c.map._events[831] = null;
+        const o = JsonEx.parse(JsonEx.stringify(c.map._events[830])); o._eventId = 832; c.map._events[832] = o;
         DataManager.extractSaveContents(c);
         SceneManager.goto(Scene_Map);
-        return { had931: !!$gameMap._events[931], had932: !!$gameMap._events[932] }; })()`);
+        return { had931: !!$gameMap._events[831], had932: !!$gameMap._events[832] }; })()`);
     await t.until(t.onMap(3), 30);
     await t.frames(10);
-    const fixd = await J("({ e931: !!$gameMap.event(931), e932: !!$gameMap.event(932), e930: !!$gameMap.event(930), sprites: SceneManager._scene._spriteset._characterSprites.filter(s => s._character && [930, 931].includes(s._character._eventId)).length })");
-    t.check("an older save on the map: the missing event (931) is added, the orphaned one (932, no data) taken away - before the sprites are made",
+    const fixd = await J("({ e931: !!$gameMap.event(831), e932: !!$gameMap.event(832), e930: !!$gameMap.event(830), sprites: SceneManager._scene._spriteset._characterSprites.filter(s => s._character && [830, 831].includes(s._character._eventId)).length })");
+    t.check("an older save on the map: the missing event (831) is added, the orphaned one (832, no data) taken away - before the sprites are made",
         !old.had931 && old.had932 && fixd.e931 && !fixd.e932 && fixd.e930 && fixd.sprites === 2, { old, fixd });
 
     // ================= tags
@@ -219,15 +219,15 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
         tags.tavern.pos[0] === "bed" && tags.tavern.kv.room === "komnata" && tags.tavern.kv.price === 30 && tags.tavern.kv.name === "Komnata z kominkiem" && tags.tavern.kv.plate === "0,-1" &&
         tags.dice.pos.join(",") === "dice,grum" && tags.flick.pos[0] === 0.16 && tags.free.raw === "Stary Bartek" && tags.neg.pos[0] === -1 && tags.neg.pos[1] === true &&
         tags.neg.pos[3] === "#ffcc88" && tags.empty.pos.length === 0, tags);
-    const evTags = await J(`(function(){ const T = Tawerna, e = $gameMap.event(930);
+    const evTags = await J(`(function(){ const T = Tawerna, e = $gameMap.event(830);
         const first = Object.keys(T.tags(e)).sort().join(","), ct = T.tag(e, "coretest"), up = T.tag(e, "CORETEST");
         const page1 = T.tag(e, "CorePage").pos[0];
-        $gameSelfSwitches.setValue([3, 930, "A"], true); e.refresh();
+        $gameSelfSwitches.setValue([3, 830, "A"], true); e.refresh();
         const page2 = T.tag(e, "CorePage"), data = Object.keys(T.tags(e.event())).sort().join(",");
-        $gameSelfSwitches.setValue([3, 930, "A"], false); e.refresh();
+        $gameSelfSwitches.setValue([3, 830, "A"], false); e.refresh();
         return { first, x: ct && ct.kv.x, same: ct === up, page1, page2: page2 && [page2.pos[0], page2.kv.n], data, back: T.tag(e, "CorePage").pos[0] }; })()`);
     t.check("an event's tags: its note and the comments of the page it is on now (the page changes: its tags too), names case-blind; its data: every page",
-        evTags.first === "corepage,coretest,flag" && evTags.x === 930 && evTags.same && evTags.page1 === "first" && evTags.page2 && evTags.page2[0] === "second" &&
+        evTags.first === "corepage,coretest,flag" && evTags.x === 830 && evTags.same && evTags.page1 === "first" && evTags.page2 && evTags.page2[0] === "second" &&
         evTags.page2[1] === 2 && evTags.data === "corepage,coretest,flag" && evTags.back === "first", evTags);
     const real = await J(`(function(){ const T = Tawerna;
         const tree = $gameMap.events().find(e => e.event() && /<Tree:[^>]*hits=\\d+/i.test(e.event().note || "")) || $gameMap.events().find(e => e.event() && /<Tree/i.test(e.event().note || ""));

@@ -64,24 +64,25 @@ class Room:
         return c
 
 def rooms001():
-    import parter_layout as P
+    # the second build of the ground floor (2026-10-04/05): tools/tavern/v2/v2layout.py ROOMS_MAP (key, name, floor rect...);
+    # the vestibule was kept as it was: its floor between the stairwells
+    sys.path.insert(0, os.path.join(TAV, "v2"))
+    import v2layout as P
     KIND = {"Pokój służby": "private", "Gabinet Borgara": "private", "Korytarz": "hall", "Sień": "hall"}
     SERVICE = {"Stare mury", "Skład", "Browar", "Magazyn", "Wędzarnia", "Spiżarnia", "Kuchnia", "Piekarnia"}
-    KEYS = {"Stare mury": "komorka", "Skład": "sklad", "Browar": "browar", "Pokój służby": "sluzba", "Gabinet Borgara": "gabinet",
-            "Magazyn": "magazyn", "Wędzarnia": "wedzarnia", "Korytarz": "korytarz", "Spiżarnia": "spizarnia", "Kuchnia": "kuchnia",
-            "Piekarnia": "piekarnia", "Pokój myśliwski": "mysliwski", "Sala biesiadna": "biesiadna", "Sala ze sceną": "scena",
-            "Pokój gier": "gry", "Łaźnia": "laznia", "Sala rzutek": "rzutki", "Wielka sala": "sala", "Jadalnia prywatna": "jadalnia",
-            "Palarnia i czytelnia": "palarnia", "Sień": "sien"}
     # the old stones behind the storeroom are shown as what anyone sees there: a plain lumber room (no word of the old walls)
     NAMES = {"Stare mury": "Komórka"}
-    LABELS = {"Pokój myśliwski": "Pokój\nmyśliwski", "Sala biesiadna": "Sala\nbiesiadna", "Sala ze sceną": "Sala\nze sceną",
-              "Pokój służby": "Pokój\nsłużby", "Gabinet Borgara": "Gabinet\nBorgara", "Palarnia i czytelnia": "Palarnia\ni czytelnia",
-              "Jadalnia prywatna": "Jadalnia\nprywatna", "Pokój gier": "Pokój\ngier", "Sala rzutek": "Sala\nrzutek"}
+    NL = chr(10)
+    LABELS = {n: NL.join(parts) for n, parts in (("Pokój myśliwski", ("Pokój", "myśliwski")), ("Sala biesiadna", ("Sala", "biesiadna")),
+              ("Sala ze sceną", ("Sala", "ze sceną")), ("Pokój służby", ("Pokój", "służby")), ("Gabinet Borgara", ("Gabinet", "Borgara")),
+              ("Palarnia i czytelnia", ("Palarnia", "i czytelnia")), ("Jadalnia prywatna", ("Jadalnia", "prywatna")),
+              ("Pokój gier", ("Pokój", "gier")), ("Sala rzutek", ("Sala", "rzutek")))}
     out = []
-    for (n, r, fk, wk, col, grp) in P.ROOMS:
+    for (key, n, r, fk, wk, wh, kind) in P.ROOMS_MAP:
         kind = KIND.get(n, "service" if n in SERVICE else "guest")
-        rects = [r] + list(P.ROOM_EXTRA.get(n, []))
-        out.append(Room(KEYS[n], NAMES.get(n, n), kind, rects, P.ROOM_CUT.get(n, []), label=LABELS.get(n, NAMES.get(n, n))))
+        out.append(Room(key, NAMES.get(n, n), kind, [r], [], label=LABELS.get(n, NAMES.get(n, n))))
+    dy = P.DY          # (the map's rows: the old frame's top DY rows were cut off)
+    out.append(Room("sien", "Sień", "hall", [(37, 78 - dy, 63, 82 - dy)], [(40, 78 - dy, 40, 81 - dy), (60, 78 - dy, 60, 81 - dy)], label="Sień"))
     return out
 
 def rooms025():

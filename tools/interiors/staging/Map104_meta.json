@@ -1,0 +1,1365 @@
+{
+ "concept": "ratusz",
+ "width": 21,
+ "height": 13,
+ "zones": [],
+ "spots": {
+  "res_soltys": [
+   7,
+   4,
+   2
+  ],
+  "landing": [
+   7,
+   11,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "mapa",
+   "cat": "wallitem",
+   "cells": [
+    [
+     2,
+     2
+    ]
+   ],
+   "group": "Sala mapy",
+   "x": 2,
+   "y": 2,
+   "event": true,
+   "art": [
+    16,
+    26,
+    80,
+    70
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "mapa_wyspy",
+   "cat": "wallitem",
+   "cells": [
+    [
+     11,
+     2
+    ]
+   ],
+   "group": "Sala mapy",
+   "x": 11,
+   "y": 2,
+   "event": true,
+   "art": [
+    61,
+    82,
+    131,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "tablica_kartki",
+   "cat": "floorprop",
+   "cells": [
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Sala tablice",
+   "x": 2,
+   "y": 4,
+   "event": true,
+   "art": [
+    49,
+    49,
+    95,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "tablica_kartki",
+   "cat": "floorprop",
+   "cells": [
+    [
+     12,
+     4
+    ]
+   ],
+   "group": "Sala tablice",
+   "x": 12,
+   "y": 4,
+   "event": true,
+   "art": [
+    49,
+    49,
+    95,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "clock",
+   "cat": "floorprop",
+   "cells": [
+    [
+     13,
+     4
+    ]
+   ],
+   "group": "Sala",
+   "x": 13,
+   "y": 4
+  },
+  {
+   "kind": "regał z księgami",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ]
+   ],
+   "group": "Sala",
+   "x": 1,
+   "y": 2,
+   "w": 1,
+   "h": 3,
+   "sheet": "C",
+   "sc": 0,
+   "sr": 0
+  },
+  {
+   "kind": "table_h",
+   "cat": "table",
+   "cells": [
+    [
+     6,
+     5
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     5
+    ],
+    [
+     7,
+     6
+    ],
+    [
+     8,
+     5
+    ],
+    [
+     8,
+     6
+    ]
+   ],
+   "group": "Sala biurko",
+   "x": 6,
+   "y": 5,
+   "length": 3,
+   "style": 4
+  },
+  {
+   "kind": "ksiega_rachunkowa",
+   "cat": "tableitem",
+   "cells": [
+    [
+     7,
+     6
+    ]
+   ],
+   "group": "Sala biurko",
+   "x": 7,
+   "y": 6,
+   "event": true,
+   "art": [
+    5,
+    30,
+    47,
+    57
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "swieca",
+   "cat": "tableitem",
+   "cells": [
+    [
+     6,
+     6
+    ]
+   ],
+   "group": "Sala biurko",
+   "x": 6,
+   "y": 6,
+   "event": true,
+   "art": [
+    16,
+    24,
+    32,
+    56
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "D(6,13)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     8,
+     5
+    ]
+   ],
+   "group": null,
+   "x": 8,
+   "y": 5,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 13
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     8
+    ],
+    [
+     3,
+     8
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 2,
+   "y": 8
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     4,
+     8
+    ],
+    [
+     5,
+     8
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 4,
+   "y": 8
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     9,
+     8
+    ],
+    [
+     10,
+     8
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 9,
+   "y": 8
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     11,
+     8
+    ],
+    [
+     12,
+     8
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 11,
+   "y": 8
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     10
+    ],
+    [
+     3,
+     10
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 2,
+   "y": 10
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     4,
+     10
+    ],
+    [
+     5,
+     10
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 4,
+   "y": 10
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     10
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 9,
+   "y": 10
+  },
+  {
+   "kind": "bench_h",
+   "cat": "seat",
+   "cells": [
+    [
+     11,
+     10
+    ],
+    [
+     12,
+     10
+    ]
+   ],
+   "group": "Sala ławy",
+   "x": 11,
+   "y": 10
+  },
+  {
+   "kind": "pulpit do pisania",
+   "cat": "furniture",
+   "cells": [
+    [
+     15,
+     4
+    ]
+   ],
+   "group": "Kancelaria",
+   "x": 15,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 3,
+   "sr": 2
+  },
+  {
+   "kind": "chair",
+   "cat": "seat",
+   "cells": [
+    [
+     15,
+     5
+    ]
+   ],
+   "group": "Kancelaria",
+   "x": 15,
+   "y": 5,
+   "facing": 8
+  },
+  {
+   "kind": "regał z rejestrami",
+   "cat": "furniture",
+   "cells": [
+    [
+     18,
+     4
+    ],
+    [
+     19,
+     4
+    ]
+   ],
+   "group": "Kancelaria",
+   "x": 18,
+   "y": 2,
+   "w": 2,
+   "h": 3,
+   "sheet": "C",
+   "sc": 3,
+   "sr": 6
+  },
+  {
+   "kind": "table_sq",
+   "cat": "table",
+   "cells": [
+    [
+     17,
+     7
+    ],
+    [
+     17,
+     8
+    ],
+    [
+     18,
+     7
+    ],
+    [
+     18,
+     8
+    ]
+   ],
+   "group": "Kancelaria stół",
+   "x": 17,
+   "y": 7
+  },
+  {
+   "kind": "D(6,13)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     17,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 17,
+   "y": 7,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 13
+  },
+  {
+   "kind": "D(5,12)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     18,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 18,
+   "y": 7,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 12
+  },
+  {
+   "kind": "beczka z wodą (zapas miasta)",
+   "cat": "furniture",
+   "cells": [
+    [
+     19,
+     11
+    ]
+   ],
+   "group": "Kancelaria",
+   "x": 19,
+   "y": 10,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 0
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     15,
+     11
+    ]
+   ],
+   "group": "Kancelaria",
+   "x": 15,
+   "y": 11,
+   "event": true
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   7,
+   12
+  ],
+  [
+   "exit",
+   17,
+   12
+  ]
+ ],
+ "wall_items": [
+  [
+   "Sala chorągiew",
+   "banner",
+   7,
+   2
+  ],
+  [
+   "Sala okna",
+   "window",
+   5,
+   1
+  ],
+  [
+   "Sala okna",
+   "window",
+   9,
+   1
+  ],
+  [
+   "Sala mapy",
+   "mapa_wyspy",
+   11,
+   2
+  ],
+  [
+   "Kancelaria okno",
+   "window",
+   17,
+   1
+  ]
+ ],
+ "openings": [
+  [
+   "Sala",
+   [
+    7,
+    12,
+    7,
+    12
+   ]
+  ],
+  [
+   "Kancelaria",
+   [
+    17,
+    12,
+    17,
+    12
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Sala"
+  ],
+  [
+   1,
+   5,
+   "Sala"
+  ],
+  [
+   1,
+   6,
+   "Sala"
+  ],
+  [
+   1,
+   7,
+   "Sala"
+  ],
+  [
+   1,
+   8,
+   "Sala"
+  ],
+  [
+   1,
+   9,
+   "Sala"
+  ],
+  [
+   1,
+   10,
+   "Sala"
+  ],
+  [
+   1,
+   11,
+   "Sala"
+  ],
+  [
+   2,
+   4,
+   "Sala"
+  ],
+  [
+   2,
+   5,
+   "Sala"
+  ],
+  [
+   2,
+   6,
+   "Sala"
+  ],
+  [
+   2,
+   7,
+   "Sala"
+  ],
+  [
+   2,
+   8,
+   "Sala"
+  ],
+  [
+   2,
+   9,
+   "Sala"
+  ],
+  [
+   2,
+   10,
+   "Sala"
+  ],
+  [
+   2,
+   11,
+   "Sala"
+  ],
+  [
+   3,
+   4,
+   "Sala"
+  ],
+  [
+   3,
+   5,
+   "Sala"
+  ],
+  [
+   3,
+   6,
+   "Sala"
+  ],
+  [
+   3,
+   7,
+   "Sala"
+  ],
+  [
+   3,
+   8,
+   "Sala"
+  ],
+  [
+   3,
+   9,
+   "Sala"
+  ],
+  [
+   3,
+   10,
+   "Sala"
+  ],
+  [
+   3,
+   11,
+   "Sala"
+  ],
+  [
+   4,
+   4,
+   "Sala"
+  ],
+  [
+   4,
+   5,
+   "Sala"
+  ],
+  [
+   4,
+   6,
+   "Sala"
+  ],
+  [
+   4,
+   7,
+   "Sala"
+  ],
+  [
+   4,
+   8,
+   "Sala"
+  ],
+  [
+   4,
+   9,
+   "Sala"
+  ],
+  [
+   4,
+   10,
+   "Sala"
+  ],
+  [
+   4,
+   11,
+   "Sala"
+  ],
+  [
+   5,
+   4,
+   "Sala"
+  ],
+  [
+   5,
+   5,
+   "Sala"
+  ],
+  [
+   5,
+   6,
+   "Sala"
+  ],
+  [
+   5,
+   7,
+   "Sala"
+  ],
+  [
+   5,
+   8,
+   "Sala"
+  ],
+  [
+   5,
+   9,
+   "Sala"
+  ],
+  [
+   5,
+   10,
+   "Sala"
+  ],
+  [
+   5,
+   11,
+   "Sala"
+  ],
+  [
+   6,
+   4,
+   "Sala"
+  ],
+  [
+   6,
+   5,
+   "Sala"
+  ],
+  [
+   6,
+   6,
+   "Sala"
+  ],
+  [
+   6,
+   7,
+   "Sala"
+  ],
+  [
+   6,
+   8,
+   "Sala"
+  ],
+  [
+   6,
+   9,
+   "Sala"
+  ],
+  [
+   6,
+   10,
+   "Sala"
+  ],
+  [
+   6,
+   11,
+   "Sala"
+  ],
+  [
+   7,
+   4,
+   "Sala"
+  ],
+  [
+   7,
+   5,
+   "Sala"
+  ],
+  [
+   7,
+   6,
+   "Sala"
+  ],
+  [
+   7,
+   7,
+   "Sala"
+  ],
+  [
+   7,
+   8,
+   "Sala"
+  ],
+  [
+   7,
+   9,
+   "Sala"
+  ],
+  [
+   7,
+   10,
+   "Sala"
+  ],
+  [
+   7,
+   11,
+   "Sala"
+  ],
+  [
+   7,
+   12,
+   "Sala"
+  ],
+  [
+   8,
+   4,
+   "Sala"
+  ],
+  [
+   8,
+   5,
+   "Sala"
+  ],
+  [
+   8,
+   6,
+   "Sala"
+  ],
+  [
+   8,
+   7,
+   "Sala"
+  ],
+  [
+   8,
+   8,
+   "Sala"
+  ],
+  [
+   8,
+   9,
+   "Sala"
+  ],
+  [
+   8,
+   10,
+   "Sala"
+  ],
+  [
+   8,
+   11,
+   "Sala"
+  ],
+  [
+   9,
+   4,
+   "Sala"
+  ],
+  [
+   9,
+   5,
+   "Sala"
+  ],
+  [
+   9,
+   6,
+   "Sala"
+  ],
+  [
+   9,
+   7,
+   "Sala"
+  ],
+  [
+   9,
+   8,
+   "Sala"
+  ],
+  [
+   9,
+   9,
+   "Sala"
+  ],
+  [
+   9,
+   10,
+   "Sala"
+  ],
+  [
+   9,
+   11,
+   "Sala"
+  ],
+  [
+   10,
+   4,
+   "Sala"
+  ],
+  [
+   10,
+   5,
+   "Sala"
+  ],
+  [
+   10,
+   6,
+   "Sala"
+  ],
+  [
+   10,
+   7,
+   "Sala"
+  ],
+  [
+   10,
+   8,
+   "Sala"
+  ],
+  [
+   10,
+   9,
+   "Sala"
+  ],
+  [
+   10,
+   10,
+   "Sala"
+  ],
+  [
+   10,
+   11,
+   "Sala"
+  ],
+  [
+   11,
+   4,
+   "Sala"
+  ],
+  [
+   11,
+   5,
+   "Sala"
+  ],
+  [
+   11,
+   6,
+   "Sala"
+  ],
+  [
+   11,
+   7,
+   "Sala"
+  ],
+  [
+   11,
+   8,
+   "Sala"
+  ],
+  [
+   11,
+   9,
+   "Sala"
+  ],
+  [
+   11,
+   10,
+   "Sala"
+  ],
+  [
+   11,
+   11,
+   "Sala"
+  ],
+  [
+   12,
+   4,
+   "Sala"
+  ],
+  [
+   12,
+   5,
+   "Sala"
+  ],
+  [
+   12,
+   6,
+   "Sala"
+  ],
+  [
+   12,
+   7,
+   "Sala"
+  ],
+  [
+   12,
+   8,
+   "Sala"
+  ],
+  [
+   12,
+   9,
+   "Sala"
+  ],
+  [
+   12,
+   10,
+   "Sala"
+  ],
+  [
+   12,
+   11,
+   "Sala"
+  ],
+  [
+   13,
+   4,
+   "Sala"
+  ],
+  [
+   13,
+   5,
+   "Sala"
+  ],
+  [
+   13,
+   6,
+   "Sala"
+  ],
+  [
+   13,
+   7,
+   "Sala"
+  ],
+  [
+   13,
+   8,
+   "Sala"
+  ],
+  [
+   13,
+   9,
+   "Sala"
+  ],
+  [
+   13,
+   10,
+   "Sala"
+  ],
+  [
+   13,
+   11,
+   "Sala"
+  ],
+  [
+   14,
+   10,
+   "Kancelaria"
+  ],
+  [
+   14,
+   11,
+   "Kancelaria"
+  ],
+  [
+   15,
+   4,
+   "Kancelaria"
+  ],
+  [
+   15,
+   5,
+   "Kancelaria"
+  ],
+  [
+   15,
+   6,
+   "Kancelaria"
+  ],
+  [
+   15,
+   7,
+   "Kancelaria"
+  ],
+  [
+   15,
+   8,
+   "Kancelaria"
+  ],
+  [
+   15,
+   9,
+   "Kancelaria"
+  ],
+  [
+   15,
+   10,
+   "Kancelaria"
+  ],
+  [
+   15,
+   11,
+   "Kancelaria"
+  ],
+  [
+   16,
+   4,
+   "Kancelaria"
+  ],
+  [
+   16,
+   5,
+   "Kancelaria"
+  ],
+  [
+   16,
+   6,
+   "Kancelaria"
+  ],
+  [
+   16,
+   7,
+   "Kancelaria"
+  ],
+  [
+   16,
+   8,
+   "Kancelaria"
+  ],
+  [
+   16,
+   9,
+   "Kancelaria"
+  ],
+  [
+   16,
+   10,
+   "Kancelaria"
+  ],
+  [
+   16,
+   11,
+   "Kancelaria"
+  ],
+  [
+   17,
+   4,
+   "Kancelaria"
+  ],
+  [
+   17,
+   5,
+   "Kancelaria"
+  ],
+  [
+   17,
+   6,
+   "Kancelaria"
+  ],
+  [
+   17,
+   7,
+   "Kancelaria"
+  ],
+  [
+   17,
+   8,
+   "Kancelaria"
+  ],
+  [
+   17,
+   9,
+   "Kancelaria"
+  ],
+  [
+   17,
+   10,
+   "Kancelaria"
+  ],
+  [
+   17,
+   11,
+   "Kancelaria"
+  ],
+  [
+   17,
+   12,
+   "Kancelaria"
+  ],
+  [
+   18,
+   4,
+   "Kancelaria"
+  ],
+  [
+   18,
+   5,
+   "Kancelaria"
+  ],
+  [
+   18,
+   6,
+   "Kancelaria"
+  ],
+  [
+   18,
+   7,
+   "Kancelaria"
+  ],
+  [
+   18,
+   8,
+   "Kancelaria"
+  ],
+  [
+   18,
+   9,
+   "Kancelaria"
+  ],
+  [
+   18,
+   10,
+   "Kancelaria"
+  ],
+  [
+   18,
+   11,
+   "Kancelaria"
+  ],
+  [
+   19,
+   4,
+   "Kancelaria"
+  ],
+  [
+   19,
+   5,
+   "Kancelaria"
+  ],
+  [
+   19,
+   6,
+   "Kancelaria"
+  ],
+  [
+   19,
+   7,
+   "Kancelaria"
+  ],
+  [
+   19,
+   8,
+   "Kancelaria"
+  ],
+  [
+   19,
+   9,
+   "Kancelaria"
+  ],
+  [
+   19,
+   10,
+   "Kancelaria"
+  ],
+  [
+   19,
+   11,
+   "Kancelaria"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 104,
+ "key": "ratusz",
+ "display": "Ratusz",
+ "exits": [
+  {
+   "x": 7,
+   "y": 12,
+   "door": 114,
+   "town": [
+    41,
+    40
+   ],
+   "landing": [
+    7,
+    11,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (ratusz)"
+  },
+  {
+   "x": 17,
+   "y": 12,
+   "door": 4,
+   "town": [
+    47,
+    40
+   ],
+   "landing": [
+    17,
+    11,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (kancelaria)"
+  }
+ ],
+ "residents": [
+  {
+   "key": "soltys",
+   "x": 7,
+   "y": 4,
+   "dir": 2
+  }
+ ]
+}

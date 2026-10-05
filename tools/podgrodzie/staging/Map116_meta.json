@@ -1,0 +1,740 @@
+{
+ "concept": "szmaciarz",
+ "width": 14,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "res_szmaciarz": [
+   5,
+   4,
+   2
+  ],
+  "landing": [
+   7,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "stara tarcza",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Kram tarcze",
+   "x": 2,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 0,
+   "sr": 0
+  },
+  {
+   "kind": "stara tarcza",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Kram tarcze",
+   "x": 4,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 2,
+   "sr": 0
+  },
+  {
+   "kind": "stara tarcza",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Kram tarcze",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 3,
+   "sr": 0
+  },
+  {
+   "kind": "półka z butelkami",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Kram półki",
+   "x": 9,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 0
+  },
+  {
+   "kind": "counter_h",
+   "cat": "counter",
+   "cells": [
+    [
+     3,
+     5
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     5
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     5
+    ],
+    [
+     7,
+     6
+    ],
+    [
+     8,
+     5
+    ],
+    [
+     8,
+     6
+    ]
+   ],
+   "group": "Kram lada",
+   "x": 3,
+   "y": 5,
+   "x1": 8
+  },
+  {
+   "kind": "D(4,14)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     3,
+     5
+    ]
+   ],
+   "group": null,
+   "x": 3,
+   "y": 5,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 14
+  },
+  {
+   "kind": "D(0,12)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     5,
+     5
+    ]
+   ],
+   "group": null,
+   "x": 5,
+   "y": 5,
+   "sheet": "D",
+   "sc": 0,
+   "sr": 12
+  },
+  {
+   "kind": "D(5,12)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     6,
+     5
+    ]
+   ],
+   "group": null,
+   "x": 6,
+   "y": 5,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 12
+  },
+  {
+   "kind": "D(7,14)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     8,
+     5
+    ]
+   ],
+   "group": null,
+   "x": 8,
+   "y": 5,
+   "sheet": "D",
+   "sc": 7,
+   "sr": 14
+  },
+  {
+   "kind": "połamana skrzynia",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ]
+   ],
+   "group": "Kram",
+   "x": 1,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 5
+  },
+  {
+   "kind": "połamane skrzynie i kamienie",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     4
+    ],
+    [
+     11,
+     4
+    ]
+   ],
+   "group": "Kram",
+   "x": 10,
+   "y": 3,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 14,
+   "sr": 5
+  },
+  {
+   "kind": "stare miecze",
+   "cat": "furniture",
+   "cells": [
+    [
+     12,
+     4
+    ]
+   ],
+   "group": "Kram",
+   "x": 12,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 13,
+   "sr": 8
+  },
+  {
+   "kind": "drabina",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     8
+    ]
+   ],
+   "group": "Kram",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 3,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 13
+  },
+  {
+   "kind": "skrzynie",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     8
+    ],
+    [
+     12,
+     8
+    ]
+   ],
+   "group": "Kram",
+   "x": 11,
+   "y": 7,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 14,
+   "sr": 11
+  },
+  {
+   "kind": "łańcuchy",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Kram",
+   "x": 12,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 9,
+   "sr": 6
+  },
+  {
+   "kind": "beczki",
+   "cat": "furniture",
+   "cells": [
+    [
+     2,
+     8
+    ],
+    [
+     3,
+     8
+    ]
+   ],
+   "group": "Kram",
+   "x": 2,
+   "y": 7,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 0
+  },
+  {
+   "kind": "worki",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     6
+    ]
+   ],
+   "group": "Kram",
+   "x": 10,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 9,
+   "sr": 4
+  },
+  {
+   "kind": "kamienie",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Kram",
+   "x": 9,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 11,
+   "sr": 6
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   7,
+   9
+  ]
+ ],
+ "wall_items": [
+  [
+   "Kram okno",
+   "window",
+   11,
+   1
+  ],
+  [
+   "Kram tarcze",
+   "stara tarcza",
+   2,
+   2
+  ],
+  [
+   "Kram tarcze",
+   "stara tarcza",
+   4,
+   2
+  ],
+  [
+   "Kram tarcze",
+   "stara tarcza",
+   6,
+   2
+  ]
+ ],
+ "openings": [
+  [
+   "Kram",
+   [
+    7,
+    9,
+    7,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Kram"
+  ],
+  [
+   1,
+   5,
+   "Kram"
+  ],
+  [
+   1,
+   6,
+   "Kram"
+  ],
+  [
+   1,
+   7,
+   "Kram"
+  ],
+  [
+   1,
+   8,
+   "Kram"
+  ],
+  [
+   2,
+   4,
+   "Kram"
+  ],
+  [
+   2,
+   5,
+   "Kram"
+  ],
+  [
+   2,
+   6,
+   "Kram"
+  ],
+  [
+   2,
+   7,
+   "Kram"
+  ],
+  [
+   2,
+   8,
+   "Kram"
+  ],
+  [
+   3,
+   4,
+   "Kram"
+  ],
+  [
+   3,
+   5,
+   "Kram"
+  ],
+  [
+   3,
+   6,
+   "Kram"
+  ],
+  [
+   3,
+   7,
+   "Kram"
+  ],
+  [
+   3,
+   8,
+   "Kram"
+  ],
+  [
+   4,
+   4,
+   "Kram"
+  ],
+  [
+   4,
+   5,
+   "Kram"
+  ],
+  [
+   4,
+   6,
+   "Kram"
+  ],
+  [
+   4,
+   7,
+   "Kram"
+  ],
+  [
+   4,
+   8,
+   "Kram"
+  ],
+  [
+   5,
+   4,
+   "Kram"
+  ],
+  [
+   5,
+   5,
+   "Kram"
+  ],
+  [
+   5,
+   6,
+   "Kram"
+  ],
+  [
+   5,
+   7,
+   "Kram"
+  ],
+  [
+   5,
+   8,
+   "Kram"
+  ],
+  [
+   6,
+   4,
+   "Kram"
+  ],
+  [
+   6,
+   5,
+   "Kram"
+  ],
+  [
+   6,
+   6,
+   "Kram"
+  ],
+  [
+   6,
+   7,
+   "Kram"
+  ],
+  [
+   6,
+   8,
+   "Kram"
+  ],
+  [
+   7,
+   4,
+   "Kram"
+  ],
+  [
+   7,
+   5,
+   "Kram"
+  ],
+  [
+   7,
+   6,
+   "Kram"
+  ],
+  [
+   7,
+   7,
+   "Kram"
+  ],
+  [
+   7,
+   8,
+   "Kram"
+  ],
+  [
+   7,
+   9,
+   "Kram"
+  ],
+  [
+   8,
+   4,
+   "Kram"
+  ],
+  [
+   8,
+   5,
+   "Kram"
+  ],
+  [
+   8,
+   6,
+   "Kram"
+  ],
+  [
+   8,
+   7,
+   "Kram"
+  ],
+  [
+   8,
+   8,
+   "Kram"
+  ],
+  [
+   9,
+   4,
+   "Kram"
+  ],
+  [
+   9,
+   5,
+   "Kram"
+  ],
+  [
+   9,
+   6,
+   "Kram"
+  ],
+  [
+   9,
+   7,
+   "Kram"
+  ],
+  [
+   9,
+   8,
+   "Kram"
+  ],
+  [
+   10,
+   4,
+   "Kram"
+  ],
+  [
+   10,
+   5,
+   "Kram"
+  ],
+  [
+   10,
+   6,
+   "Kram"
+  ],
+  [
+   10,
+   7,
+   "Kram"
+  ],
+  [
+   10,
+   8,
+   "Kram"
+  ],
+  [
+   11,
+   4,
+   "Kram"
+  ],
+  [
+   11,
+   5,
+   "Kram"
+  ],
+  [
+   11,
+   6,
+   "Kram"
+  ],
+  [
+   11,
+   7,
+   "Kram"
+  ],
+  [
+   11,
+   8,
+   "Kram"
+  ],
+  [
+   12,
+   4,
+   "Kram"
+  ],
+  [
+   12,
+   5,
+   "Kram"
+  ],
+  [
+   12,
+   6,
+   "Kram"
+  ],
+  [
+   12,
+   7,
+   "Kram"
+  ],
+  [
+   12,
+   8,
+   "Kram"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 116,
+ "key": "szmaciarz",
+ "display": "Kram starzyzny",
+ "exits": [
+  {
+   "x": 7,
+   "y": 9,
+   "door": 6,
+   "town": [
+    21,
+    14
+   ],
+   "landing": [
+    7,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Podgrodzie"
+  }
+ ],
+ "residents": [
+  {
+   "key": "szmaciarz",
+   "x": 5,
+   "y": 4,
+   "dir": 2
+  }
+ ]
+}

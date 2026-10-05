@@ -29,29 +29,29 @@
   "west": [
    [
     37,
-    76
+    47
    ],
    [
     38,
-    76
+    47
    ],
    [
     39,
-    76
+    47
    ]
   ],
   "east": [
    [
     61,
-    76
+    47
    ],
    [
     62,
-    76
+    47
    ],
    [
     63,
-    76
+    47
    ]
   ],
   "note": "touch events on the top steps of both staircases -> Map025 (map025_stairs_down.landing)"
@@ -61,17 +61,17 @@
   "landing": [
    [
     61,
-    82,
+    53,
     2
    ],
    [
     62,
-    82,
+    53,
     2
    ],
    [
     63,
-    82,
+    53,
     2
    ]
   ],
@@ -122,15 +122,15 @@
    "cells": [
     [
      61,
-     82
+     53
     ],
     [
      62,
-     82
+     53
     ],
     [
      63,
-     82
+     53
     ]
    ],
    "dir": 2,
@@ -488,48 +488,48 @@
    {
     "kind": "arm",
     "event": 148,
-    "x": 92,
-    "y": 37,
+    "x": 94,
+    "y": 32,
     "tag": "<Tavern:arm>",
     "name": "Tavern:arm (siłowanie na rękę)"
    },
    {
     "kind": "attendant",
     "event": 172,
-    "x": 8,
-    "y": 55,
+    "x": 13,
+    "y": 45,
     "tag": "<Tavern:attendant>",
     "name": "Łaziebna Wanda"
    },
    {
     "kind": "bath",
     "event": 159,
-    "x": 4,
-    "y": 57,
+    "x": 5,
+    "y": 47,
     "tag": "<Tavern:bath>",
     "name": "Tavern:bath (kąpiel)"
    },
    {
     "kind": "bath",
     "event": 161,
-    "x": 12,
-    "y": 57,
+    "x": 11,
+    "y": 47,
     "tag": "<Tavern:bath>",
     "name": "Tavern:bath (kąpiel)"
    },
    {
     "kind": "bath",
     "event": 163,
-    "x": 4,
-    "y": 65,
+    "x": 5,
+    "y": 52,
     "tag": "<Tavern:bath>",
     "name": "Tavern:bath (kąpiel)"
    },
    {
     "kind": "bath",
     "event": 165,
-    "x": 12,
-    "y": 65,
+    "x": 11,
+    "y": 52,
     "tag": "<Tavern:bath>",
     "name": "Tavern:bath (kąpiel)"
    },
@@ -537,103 +537,111 @@
     "kind": "board",
     "event": 21,
     "x": 43,
-    "y": 78,
+    "y": 49,
     "tag": "<Tavern:board>",
     "name": "Tablica zleceń"
    },
    {
     "kind": "darts",
     "event": 174,
-    "x": 89,
-    "y": 57,
+    "x": 84,
+    "y": 48,
     "tag": "<Tavern:darts>",
     "name": "Tavern:darts (linia rzutu)"
    },
    {
     "kind": "darts",
     "event": 176,
-    "x": 95,
-    "y": 57,
+    "x": 90,
+    "y": 48,
     "tag": "<Tavern:darts>",
     "name": "Tavern:darts (linia rzutu)"
    },
    {
     "kind": "dice",
     "event": 140,
-    "x": 87,
-    "y": 35,
+    "x": 86,
+    "y": 31,
     "tag": "<Tavern:dice>",
     "name": "Tavern:dice (miejsce gracza)"
    },
    {
     "kind": "dice",
     "event": 143,
-    "x": 97,
-    "y": 35,
+    "x": 92,
+    "y": 31,
     "tag": "<Tavern:dice:grum>",
     "name": "Tavern:dice (miejsce gracza)"
    },
    {
     "kind": "meal",
     "event": 38,
-    "x": 49,
-    "y": 65,
+    "x": 48,
+    "y": 29,
     "tag": "<Tavern:meal>",
     "name": "Tavern:meal (zamówienie posiłku)"
    },
    {
     "kind": "mealtable",
     "event": 60,
-    "x": 21,
-    "y": 61,
-    "tag": "<Tavern:mealtable dir=4>",
+    "x": 38,
+    "y": 41,
+    "tag": "<Tavern:mealtable dir=6 plate=1,-1>",
     "name": "Tavern:mealtable (miejsce przy stole)"
    },
    {
     "kind": "mealtable",
     "event": 61,
-    "x": 21,
-    "y": 63,
-    "tag": "<Tavern:mealtable dir=4>",
+    "x": 41,
+    "y": 41,
+    "tag": "<Tavern:mealtable dir=4 plate=-1,-1>",
     "name": "Tavern:mealtable (miejsce przy stole)"
    },
    {
     "kind": "mealtable",
     "event": 77,
-    "x": 79,
-    "y": 61,
-    "tag": "<Tavern:mealtable dir=6>",
+    "x": 59,
+    "y": 41,
+    "tag": "<Tavern:mealtable dir=6 plate=1,-1>",
     "name": "Tavern:mealtable (miejsce przy stole)"
    },
    {
     "kind": "mealtable",
     "event": 78,
-    "x": 79,
-    "y": 63,
-    "tag": "<Tavern:mealtable dir=6>",
+    "x": 62,
+    "y": 41,
+    "tag": "<Tavern:mealtable dir=4 plate=-1,-1>",
     "name": "Tavern:mealtable (miejsce przy stole)"
    },
    {
     "kind": "mealtable",
     "event": 188,
-    "x": 24,
-    "y": 80,
+    "x": 28,
+    "y": 49,
     "tag": "<Tavern:mealtable dir=8 plate=0,-2>",
     "name": "Tavern:mealtable (miejsce przy stole)"
    },
    {
     "kind": "mealtable",
     "event": 189,
-    "x": 30,
-    "y": 80,
+    "x": 32,
+    "y": 49,
     "tag": "<Tavern:mealtable dir=8 plate=0,-2>",
     "name": "Tavern:mealtable (miejsce przy stole)"
    },
    {
+    "kind": "plan",
+    "event": 349,
+    "x": 45,
+    "y": 49,
+    "tag": "<Tavern:plan>",
+    "name": "Plan karczmy"
+   },
+   {
     "kind": "stage",
     "event": 110,
-    "x": 72,
-    "y": 34,
+    "x": 74,
+    "y": 33,
     "tag": "<Tavern:stage>",
     "name": "Tavern:stage (miejsce słuchacza)"
    }
@@ -719,6 +727,127 @@
    "!Fantasy_wandpillar",
    "!Statue",
    "!clock"
+  ]
+ },
+ "map001_frame": {
+  "width": 101,
+  "height": 55,
+  "cut_top": 29,
+  "note": "2026-10-05: the second build of the ground floor; the old 101x84 frame's empty top rows cut off - map y = design y - cut_top (tools/tavern/v2)",
+  "landing_from_map008": [
+   50,
+   53,
+   8
+  ],
+  "exits_to_map008": [
+   [
+    49,
+    54
+   ],
+   [
+    50,
+    54
+   ],
+   [
+    51,
+    54
+   ]
+  ]
+ },
+ "map001_guest_spots": [
+  {
+   "name": "Miejsce: gosc_1",
+   "event": 53,
+   "x": 46,
+   "y": 31,
+   "dir": 8
+  },
+  {
+   "name": "Miejsce: gosc_2",
+   "event": 54,
+   "x": 54,
+   "y": 31,
+   "dir": 8
+  },
+  {
+   "name": "Miejsce: gosc_3",
+   "event": 55,
+   "x": 38,
+   "y": 35,
+   "dir": 6
+  },
+  {
+   "name": "Miejsce: gosc_4",
+   "event": 56,
+   "x": 41,
+   "y": 35,
+   "dir": 4
+  },
+  {
+   "name": "Miejsce: gosc_5",
+   "event": 57,
+   "x": 43,
+   "y": 35,
+   "dir": 6
+  },
+  {
+   "name": "Miejsce: gosc_6",
+   "event": 58,
+   "x": 57,
+   "y": 35,
+   "dir": 4
+  },
+  {
+   "name": "Miejsce: gosc_7",
+   "event": 59,
+   "x": 59,
+   "y": 35,
+   "dir": 6
+  },
+  {
+   "name": "Miejsce: gosc_8",
+   "event": 62,
+   "x": 62,
+   "y": 35,
+   "dir": 4
+  }
+ ],
+ "map001_people": {
+  "1": [
+   52,
+   28
+  ],
+  "2": [
+   74,
+   29
+  ],
+  "3": [
+   95,
+   31
+  ],
+  "4": [
+   46,
+   39
+  ],
+  "172": [
+   13,
+   45
+  ]
+ },
+ "map001_loose_brick": {
+  "event": 9,
+  "at": [
+   9,
+   4
+  ],
+  "stand": [
+   9,
+   5
+  ],
+  "map009_return": [
+   9,
+   5,
+   2
   ]
  }
 }

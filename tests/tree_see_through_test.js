@@ -24,7 +24,7 @@ kit.test({ port: 9422, bootCheck: "the game boots", errorCheck: "no errors in th
     t.check("behind the choppable tree it fades to about half, in front of it it is whole again", Math.abs(behind - 0.5) < 0.05 && front === 1, { behind, front });
 
     // ---- a decorative tree in the town
-    await t.go(8, 19, 14, 2);
+    await t.go(8, 24, 18, 2);
     const deco = await t.json(`(function(){ const e = $gameMap.events().find(e => /^!.*tree/i.test(e.characterName()) && e.y > 3);
         return e ? { id: e.eventId(), x: e.x, y: e.y, pic: e.characterName() } : null; })()`);
     if (!deco) { t.check("(no decorative tree picture on Map008 - nothing to check)", true); return; }

@@ -99,8 +99,11 @@ const OUT = __dirname + "/";
         // then half an hour of smouldering: smoke rising in columns from the embers, well above the crown, thinning as they die
         const smokeNow = () => J(`(function(){ const e = SceneManager._scene._spriteset._smoulder._entries["3:${id}"], live = e ? e.parts.filter(q => q.alive && q.spr.alpha > 0.05) : [];
             return { puffs: live.length, columns: e ? e.vents.length : 0, top: live.length ? Math.round(Math.min(...live.map(q => q.spr.y))) : null }; })()`);
-        await frames(330);   // (the columns start where the embers are, the smoke needs a few seconds to climb past the crown)
-        const sm1 = await smokeNow();
+        // (the columns start where the embers are, the smoke needs a few seconds to climb past the crown - how many, the puffs' own
+        // random speeds and the wind decide: from 330 frames on, up to 600, until the highest puff is over the crown)
+        await frames(330);
+        let sm1 = await smokeNow();
+        for (let i = 0; i < 9 && !(sm1.top !== null && sm1.top < hit.treeTop); i++) { await frames(30); sm1 = await smokeNow(); }
         await b.shot(OUT + "tree_smoulder.png");
         check("...then it smokes: columns of smoke from the embers, rising above the crown", sm1.puffs >= 25 && sm1.columns >= 3 && sm1.top < hit.treeTop, { smoke: sm1, crownTop: hit.treeTop });
         await ev(`$gameSystem._smoulder["3:${id}"] -= 0.2; 0`);   // near the end of the half hour

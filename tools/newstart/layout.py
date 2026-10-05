@@ -4,6 +4,7 @@
 #   Dom dziadka - Wnętrze (19) --door--> Dom dziadka - Podwórze (20) --S--> Leśna droga (21) --W--> Polna droga (22)
 #   Polna droga (22) --S--> Skraj lasu (23) --W--> Domek - Zewnętrze (3, grandpa's field, new gap in its east wall)
 #   Polna droga (22) --N (side lane)--> Okolice Tawerny (8) --E--> Posiadłość Lorda (24)
+#   Okolice Tawerny (8) --W (the west gate)--> Podgrodzie (111)
 #
 # Directions (RPG Maker): 2 down, 4 left, 6 right, 8 up. Every exit is a row of touch transfers on the edge tiles; the player
 # lands one tile inside the other map, next to the matching exit, facing into that map.
@@ -24,6 +25,7 @@ START = (19, 2, 5)
 # doors: (map, x, y) of the door tile -> (map, x, y, direction) where the player lands
 DOORS = [
     ((19, 9, 12), (20, 15, 8, 2)),     # out of the cottage: the doorway in its bottom wall -> in front of its door outside
+    ((24, 0, 16), (8, 50, 51, 4)),     # the manor road's third row (west edge) -> the town's east gate, which has two (2026-10-04)
     ((20, 15, 7), (19, 9, 11, 8)),     # into the cottage: just inside the doorway, on the runner
 ]
 
@@ -38,7 +40,8 @@ EDGES = [
     ((22, cells(23, 29, 25, 29), 8), (23, cells(23, 0, 25, 0), 2)),     # field road S <-> forest edge N
     ((23, cells(0, 12, 0, 14), 6), (3, cells(39, 12, 39, 14), 4)),      # forest edge W <-> grandpa's field (Map003) E
     ((22, cells(11, 0, 13, 0), 2), (8, cells(24, 68, 26, 68), 8)),      # field road's lane N <-> the town's south edge (town C + 10 rows, 2026-09-30)
-    ((8, cells(51, 30, 51, 32), 4), (24, cells(0, 14, 0, 16), 6)),      # the town's east gate <-> Lord's estate W
+    ((8, cells(51, 50, 51, 51), 4), (24, cells(0, 14, 0, 15), 6)),      # the town's east gate (crafts terrace, between two towers, tools/town/east_gate.py 2026-10-04) <-> Lord's estate W
+    ((8, cells(0, 50, 0, 51), 6), (111, cells(45, 17, 45, 18), 4)),     # the town's west gate (by the smithy, tools/town/west_gate.py 2026-10-05) <-> Podgrodzie's east edge (tools/podgrodzie)
 ]
 
 STEP = {2: (0, 1), 4: (-1, 0), 6: (1, 0), 8: (0, -1)}

@@ -1,0 +1,487 @@
+{
+ "concept": "izba_pod_skala",
+ "width": 12,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "landing": [
+   6,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "cauldron",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 6,
+   "y": 5
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     1,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     4
+    ],
+    [
+     10,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "worki",
+   "cat": "furniture",
+   "cells": [
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 3,
+   "y": 3,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 2
+  },
+  {
+   "kind": "połamana skrzynia",
+   "cat": "furniture",
+   "cells": [
+    [
+     8,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 8,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 5
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "furniture",
+   "cells": [
+    [
+     9,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 7,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 12,
+   "sr": 3
+  },
+  {
+   "kind": "wiadro",
+   "cat": "furniture",
+   "cells": [
+    [
+     2,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 2,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 4
+  },
+  {
+   "kind": "lantern",
+   "cat": "wallitem",
+   "cells": [
+    [
+     6,
+     2
+    ]
+   ],
+   "group": "Izba",
+   "x": 6,
+   "y": 2
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 7
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   6,
+   9
+  ]
+ ],
+ "wall_items": [],
+ "openings": [
+  [
+   "Izba",
+   [
+    6,
+    9,
+    6,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 110,
+ "key": "izba_pod_skala",
+ "display": "Izba pod skałą",
+ "exits": [
+  {
+   "x": 6,
+   "y": 9,
+   "door": 124,
+   "town": [
+    12,
+    30
+   ],
+   "landing": [
+    6,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny"
+  }
+ ],
+ "residents": []
+}

@@ -1,4 +1,4 @@
-// Tavern life (TavernLife.js) on the installed tavern: Map001 "Pod Złotym Kuflem" (101 x 84), Map025 "Pokoje gości", Map026
+// Tavern life (TavernLife.js) on the installed tavern: Map001 "Pod Złotym Kuflem" (101 x 55 since 2026-10-05), Map025 "Pokoje gości", Map026
 // "Apartamenty", with the builders' <Tavern:...> events (tools/tavern/links.json "tags"). Borgar's card of dishes and a meal at a
 // real table, a room for the night (rented at Borgar, up the stairs to Map025, its door opened by self switch A, in through the door,
 // the candle, a full and safe sleep, breakfast, out again, the door shut after 10:00 - never with him inside), the bath with Wanda,
@@ -172,7 +172,7 @@ const DRIVER = String.raw`
         await setClock(3, 10);
         await ev("TavernLife.TL.waitScale = 0.35; $gameSystem._combatMode = false; 0");
         const map1 = await J("({ w: $gameMap.width(), h: $gameMap.height(), tags: ['meal','mealtable','bath','stage','arm','darts','attendant'].map(k => k + ':' + TavernLife.spots(k).length) })");
-        check("the installed tavern (Map001, 101 x 84) with the builders' tagged places", inTavern && map1.w === 101 && map1.h === 84 && map1.tags.join() === "meal:1,mealtable:6,bath:4,stage:1,arm:1,darts:2,attendant:1", map1);
+        check("the installed tavern (Map001, 101 x 55) with the builders' tagged places", inTavern && map1.w === 101 && map1.h === 55 && map1.tags.join() === "meal:1,mealtable:6,bath:4,stage:1,arm:1,darts:2,attendant:1", map1);
         const npcs = await J("['borgar','melia','grum','ozzy'].map(r => { const e = TavernLife.npc(r); return e ? e.eventId() : 0; })");
         check("Borgar, Melia, Grum and Ozzy are found by name (events 1-4), their parallel 'Atmosfera' events are not", npcs.join() === "1,2,3,4", npcs);
 
@@ -256,7 +256,7 @@ const DRIVER = String.raw`
             rented.d1 === true && rented.d2 === false, rented);
         check("Borgar's word after renting", /Pokój nr 1 twój do rana/.test(rent.flat), rent.flat.slice(-120));
         // up the west staircase (its top steps are touch events -> Map025)
-        await ev("$gamePlayer.locate(38, 79); $gamePlayer.setDirection(8); 0");
+        await ev("$gamePlayer.locate(38, 50); $gamePlayer.setDirection(8); 0");
         await frames(6);
         const upstairs = await walk("up", onMap(MAP.rooms), 20);
         await ev(quiet);

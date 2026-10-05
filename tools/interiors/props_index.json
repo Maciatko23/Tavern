@@ -1,0 +1,425 @@
+{
+ "zar_piec": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   88,
+   96,
+   144
+  ],
+  "name": "żar w piecu chlebowym (animowany)",
+  "anim": true
+ },
+ "woz_beczki": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   61,
+   144,
+   144
+  ],
+  "name": "wóz z beczkami i dzbanami",
+  "occupy": "right=1"
+ },
+ "taczka": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   62,
+   144,
+   144
+  ],
+  "name": "wózek ręczny",
+  "occupy": "right=1"
+ },
+ "woz_siano": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 4,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   58,
+   144,
+   144
+  ],
+  "name": "wózek z sianem",
+  "occupy": "right=1"
+ },
+ "skora_rama": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 6,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   89,
+   95,
+   144
+  ],
+  "name": "skóra rozpięta na ramie"
+ },
+ "skora_rama2": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 6,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   66,
+   94,
+   144
+  ],
+  "name": "skóra na pochyłej ramie"
+ },
+ "kowadlo": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 6,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   50,
+   87,
+   93,
+   144
+  ],
+  "name": "kowadło"
+ },
+ "balia_tarka": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 8,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   51,
+   96,
+   93,
+   144
+  ],
+  "name": "balia z tarą"
+ },
+ "cebrzyk_woda": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 8,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   51,
+   98,
+   92,
+   144
+  ],
+  "name": "cebrzyk z wodą"
+ },
+ "wiadro_woda": {
+  "sheet": "!House_Town",
+  "index": 0,
+  "direction": 8,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   54,
+   104,
+   90,
+   144
+  ],
+  "name": "wiadro z wodą"
+ },
+ "beczka_woda_otwarta": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   51,
+   89,
+   92,
+   144
+  ],
+  "name": "beczka z wodą (otwarta)"
+ },
+ "beczka_dzban": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   58,
+   95,
+   144
+  ],
+  "name": "beczka z dzbanem"
+ },
+ "tablica_kartki": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   49,
+   95,
+   144
+  ],
+  "name": "tablica z kartkami (deski)"
+ },
+ "drabina": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 4,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   46,
+   91,
+   144
+  ],
+  "name": "drabina oparta o ścianę"
+ },
+ "szlifierka": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   88,
+   95,
+   144
+  ],
+  "name": "toczydło (kamień szlifierski)"
+ },
+ "sterta_beczek": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 4,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   0,
+   64,
+   143,
+   144
+  ],
+  "name": "sterta beczek",
+  "occupy": "left=1,right=1"
+ },
+ "kreda_kreski": {
+  "sheet": "!House_Town",
+  "index": 1,
+  "direction": 6,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   96,
+   68,
+   134
+  ],
+  "name": "kreski kredą na ścianie (rytm dzwonu)"
+ },
+ "schody_luk": {
+  "sheet": "!House_Town",
+  "index": 3,
+  "direction": 2,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   64,
+   96,
+   144
+  ],
+  "name": "kamienne schody w łuku (na wieżę)"
+ },
+ "kruk_plaskorzezba": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   52,
+   102,
+   91,
+   144
+  ],
+  "name": "kamienna płaskorzeźba z krukiem (znak zakonu)"
+ },
+ "kruk_choragiew": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   50,
+   95,
+   143
+  ],
+  "name": "stara czarna chorągiew z krukiem"
+ },
+ "lawa_szewska": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 4,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   58,
+   86,
+   133,
+   144
+  ],
+  "name": "ława szewska z kopytami i butem",
+  "occupy": "right=1"
+ },
+ "polka_buty": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   54,
+   54,
+   90,
+   144
+  ],
+  "name": "regał z butami i kopytami szewskimi"
+ },
+ "lopata_chleb": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 4,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   55,
+   48,
+   89,
+   144
+  ],
+  "name": "drewniana łopata do chleba"
+ },
+ "dzwon": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 6,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   62,
+   76,
+   130,
+   144
+  ],
+  "name": "stary dzwon zakonu na belce",
+  "occupy": "right=1"
+ },
+ "mapa_wyspy": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 6,
+  "pattern": 1,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   61,
+   82,
+   131,
+   144
+  ],
+  "name": "mapa Kruczej Wyspy"
+ },
+ "nosidla": {
+  "sheet": "!House_Town",
+  "index": 2,
+  "direction": 8,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   104,
+   96,
+   144
+  ],
+  "name": "nosidła z dwoma wiadrami"
+ }
+}

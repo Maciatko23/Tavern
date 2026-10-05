@@ -830,6 +830,13 @@
         this.visible = false;
         this._spriteset = spriteset;
         this._age = 0;
+        // the fire's warm glow of the lights put on the map as events (a brazier, a lamp...), added over the dark: the same glow and
+        // flicker as a campfire's - every light in the game is a flame (user 2026-10-05: "nie ma elektryczności w grze")
+        this._glow = new Sprite(new Bitmap(w, h));
+        this._glow.bitmap.smooth = true;
+        this._glow.blendMode = 1;   // additive
+        this._glow.visible = false;
+        this.addChild(this._glow);
     };
     // what gives light on this map: every fire, and the stations that have a job burning. gx, gy: the ground under the flame (the
     // things around throw their shadows from it - a flame that has no ground of its own, a smouldering tree's embers, throws none);
@@ -852,7 +859,7 @@
             for (const m of eventLights()) {
                 const ev = $gameMap.event(m.id);
                 if (!ev || m.when === "day") continue;
-                out.push({ x: ev.screenX(), y: ev.screenY() - th / 2, r: m.r, i: 1, id: 6000 + m.id, gx: ev.screenX(), gy: ev.screenY(), hf: m.hf });
+                out.push({ x: ev.screenX(), y: ev.screenY() - th / 2, r: m.r, i: m.i, id: 6000 + m.id, gx: ev.screenX(), gy: ev.screenY(), hf: m.hf, glow: m.glow });
             }
         }
         // the embers of a tree struck by lightning (ChoppableTree_Render.js) glow in the dark a little too
@@ -874,10 +881,12 @@
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = "destination-out";
         const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows ? Sun.occluders(this._spriteset) : [];
+        const glows = [];
         for (const l of this.lights()) {
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
             const x = l.x / 2, y = l.y / 2, r = (l.r / 2) * (0.97 + 0.03 * flick);
             if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
+            if (l.glow) glows.push({ x, y, r, a: l.i * fireGlowAlpha(this._age + l.id * 17) });
             const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : [];
             // the light straight into the dark - or, with things standing in it, first on its own canvas with their shadows cut out
             // of it: in a shadow the night stays as dark as around (user 2026-09-30: fires make the things around throw shadows)
@@ -903,10 +912,38 @@
         }
         ctx.globalCompositeOperation = "source-over";
         if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
+        this.updateGlow(glows);
+    };
+    // the campfire's glow (fireGlowBitmap: its colours, FIRE_GLOW_REACH of the light's reach - a campfire's 2.2 x 96 px over its 340)
+    // and flicker (fireGlowAlpha), for each light put on the map as an event; a smaller flame (i < 1, a lamp) glows a little less
+    const FIRE_GLOW_REACH = 0.62;
+    Sprite_NightLight.prototype.updateGlow = function(glows) {
+        const sprite = this._glow, had = sprite.visible;
+        sprite.visible = glows.length > 0;
+        if (!sprite.visible && !had) return;
+        const bmp = sprite.bitmap, ctx = bmp.context;
+        ctx.clearRect(0, 0, bmp.width, bmp.height);
+        ctx.globalCompositeOperation = "lighter";
+        for (const gl of glows) {
+            const r = gl.r * FIRE_GLOW_REACH, g = ctx.createRadialGradient(gl.x, gl.y, Math.min(2, r), gl.x, gl.y, r);
+            g.addColorStop(0, "rgba(255,172,72," + (0.75 * gl.a).toFixed(3) + ")");
+            g.addColorStop(0.35, "rgba(255,122,40," + (0.32 * gl.a).toFixed(3) + ")");
+            g.addColorStop(1, "rgba(255,90,20,0)");
+            ctx.fillStyle = g;
+            ctx.fillRect(gl.x - r, gl.y - r, r * 2, r * 2);
+        }
+        ctx.globalCompositeOperation = "source-over";
+        if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
     };
 
-    // the <Light> events of this map (RoomLighting's tag - read the same way: <Light:radius,...>, <LightWhen:night|day>, <LightHeight:N>;
-    // not a window's <LightCone> nor a soft fill light): [{ id, r, when, hf }], read once per map
+    // the <Light> events of this map (RoomLighting's tag - read the same way: <Light:radius,R,G,B>, <LightWhen:night|day>,
+    // <LightHeight:N>; not a window's <LightCone> nor a soft fill light): [{ id, r, i, when, hf, glow }], read once per map.
+    // Every one is a flame (no electricity in the game): it lights like a campfire - its hole in the dark, the campfire's warm glow
+    // and flicker (glow: true). A fire (a brazier, a cauldron's fire): the whole radius at full strength. A lamp (<LightWhen:night>
+    // with a colour - a small flame behind glass): a little weaker (LAMP_I + its colour's brightness) and reaching LAMP_REACH of its
+    // radius - at full strength and reach the four lamps by the manor (4 tiles apart, r 170) ran together into one patch in the day's
+    // colours whose edges were the grass, the path and the tower (2026-10-05).
+    const LAMP_I = 0.5, LAMP_I_COLOUR = 0.65, LAMP_I_MAX = 0.85, LAMP_REACH = 0.7;
     let eventLightsOf = null, eventLightsList = [];
     function eventLights() {
         if (eventLightsOf === $dataMap) return eventLightsList;
@@ -915,9 +952,12 @@
         for (const e of ($dataMap && $dataMap.events) || []) {
             const m = e && e.note && e.note.match(/<Light(?::([^>]*))?>/i);
             if (!m || /<LightSoft>/i.test(e.note)) continue;
-            const r = m[1] ? Number(m[1].split(",")[0]) || 150 : 150;
+            const parts = m[1] ? m[1].split(",").map(s => Number(s.trim())) : [];
+            const r = parts[0] || 150, rgb = parts.length >= 4 && parts.slice(1, 4).every(v => !isNaN(v)) ? parts.slice(1, 4) : null;
             const w = e.note.match(/<LightWhen:\s*(night|day)>/i), when = w ? w[1].toLowerCase() : null, h = e.note.match(/<LightHeight:\s*(\d+)>/i);
-            eventLightsList.push({ id: e.id, r, when, hf: h ? Number(h[1]) : when !== "night" ? 22 : r <= 130 ? 30 : 56 });
+            const hf = h ? Number(h[1]) : when !== "night" ? 22 : r <= 130 ? 30 : 56;
+            if (when === "night" && rgb) eventLightsList.push({ id: e.id, r: r * LAMP_REACH, i: Math.min(LAMP_I_MAX, LAMP_I + (LAMP_I_COLOUR * Math.max(...rgb)) / 255), when, hf, glow: true });
+            else eventLightsList.push({ id: e.id, r, i: 1, when, hf, glow: true });
         }
         return eventLightsList;
     }

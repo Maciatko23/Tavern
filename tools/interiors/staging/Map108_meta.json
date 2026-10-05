@@ -1,0 +1,782 @@
+{
+ "concept": "dzwonnica",
+ "width": 11,
+ "height": 13,
+ "zones": [],
+ "spots": {
+  "landing": [
+   5,
+   11,
+   8
+  ],
+  "res_dzwonnik": [
+   5,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "kruk_choragiew",
+   "cat": "wallitem",
+   "cells": [
+    [
+     3,
+     2
+    ]
+   ],
+   "group": "Wieża chorągwie",
+   "x": 3,
+   "y": 2,
+   "event": true,
+   "art": [
+    49,
+    50,
+    95,
+    143
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "kruk_choragiew",
+   "cat": "wallitem",
+   "cells": [
+    [
+     7,
+     2
+    ]
+   ],
+   "group": "Wieża chorągwie",
+   "x": 7,
+   "y": 2,
+   "event": true,
+   "art": [
+    49,
+    50,
+    95,
+    143
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "schody_luk",
+   "cat": "wallitem",
+   "cells": [
+    [
+     5,
+     3
+    ]
+   ],
+   "group": "Wieża",
+   "x": 5,
+   "y": 3,
+   "event": true,
+   "art": [
+    48,
+    64,
+    96,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "kruk_plaskorzezba",
+   "cat": "wallitem",
+   "cells": [
+    [
+     5,
+     1
+    ]
+   ],
+   "group": "Wieża",
+   "x": 5,
+   "y": 1,
+   "event": true,
+   "art": [
+    52,
+    102,
+    91,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "prycza",
+   "cat": "furniture",
+   "cells": [
+    [
+     9,
+     5
+    ],
+    [
+     9,
+     6
+    ]
+   ],
+   "group": "Wieża",
+   "x": 9,
+   "y": 5,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "kreda_kreski",
+   "cat": "wallitem",
+   "cells": [
+    [
+     8,
+     3
+    ]
+   ],
+   "group": "Wieża",
+   "x": 8,
+   "y": 3,
+   "event": true,
+   "art": [
+    53,
+    96,
+    68,
+    134
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     9,
+     8
+    ]
+   ],
+   "group": "Wieża",
+   "x": 9,
+   "y": 8,
+   "event": true
+  },
+  {
+   "kind": "stolik",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     6
+    ],
+    [
+     1,
+     7
+    ]
+   ],
+   "group": "Wieża stół",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 6,
+   "sr": 0
+  },
+  {
+   "kind": "D(6,11)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     1,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 1,
+   "y": 6,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 11
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     7
+    ]
+   ],
+   "group": "Wieża",
+   "x": 2,
+   "y": 7
+  },
+  {
+   "kind": "swieca_stolek",
+   "cat": "tableitem",
+   "cells": [
+    [
+     2,
+     7
+    ]
+   ],
+   "group": "Wieża świece",
+   "x": 2,
+   "y": 7,
+   "event": true,
+   "art": [
+    40,
+    39,
+    56,
+    71
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "wiadro",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     10
+    ]
+   ],
+   "group": "Wieża",
+   "x": 1,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 4
+  },
+  {
+   "kind": "statue",
+   "cat": "floorprop",
+   "cells": [
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Wieża",
+   "x": 2,
+   "y": 4
+  },
+  {
+   "kind": "dzwon",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     10
+    ],
+    [
+     8,
+     10
+    ]
+   ],
+   "group": "Wieża",
+   "x": 7,
+   "y": 10,
+   "event": true,
+   "art": [
+    62,
+    76,
+    130,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Wieża",
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 7
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Wieża",
+   "x": 9,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   5,
+   12
+  ]
+ ],
+ "wall_items": [
+  [
+   "Wieża okna",
+   "window",
+   1,
+   1
+  ],
+  [
+   "Wieża okna",
+   "window",
+   9,
+   1
+  ],
+  [
+   "Wieża chorągwie",
+   "kruk_choragiew",
+   3,
+   2
+  ],
+  [
+   "Wieża chorągwie",
+   "kruk_choragiew",
+   7,
+   2
+  ],
+  [
+   "Wieża",
+   "schody_luk",
+   5,
+   3
+  ],
+  [
+   "Wieża",
+   "kruk_plaskorzezba",
+   5,
+   1
+  ],
+  [
+   "Wieża",
+   "kreda_kreski",
+   8,
+   3
+  ]
+ ],
+ "openings": [
+  [
+   "Wieża",
+   [
+    5,
+    12,
+    5,
+    12
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Wieża"
+  ],
+  [
+   1,
+   5,
+   "Wieża"
+  ],
+  [
+   1,
+   6,
+   "Wieża"
+  ],
+  [
+   1,
+   7,
+   "Wieża"
+  ],
+  [
+   1,
+   8,
+   "Wieża"
+  ],
+  [
+   1,
+   9,
+   "Wieża"
+  ],
+  [
+   1,
+   10,
+   "Wieża"
+  ],
+  [
+   1,
+   11,
+   "Wieża"
+  ],
+  [
+   2,
+   4,
+   "Wieża"
+  ],
+  [
+   2,
+   5,
+   "Wieża"
+  ],
+  [
+   2,
+   6,
+   "Wieża"
+  ],
+  [
+   2,
+   7,
+   "Wieża"
+  ],
+  [
+   2,
+   8,
+   "Wieża"
+  ],
+  [
+   2,
+   9,
+   "Wieża"
+  ],
+  [
+   2,
+   10,
+   "Wieża"
+  ],
+  [
+   2,
+   11,
+   "Wieża"
+  ],
+  [
+   3,
+   4,
+   "Wieża"
+  ],
+  [
+   3,
+   5,
+   "Wieża"
+  ],
+  [
+   3,
+   6,
+   "Wieża"
+  ],
+  [
+   3,
+   7,
+   "Wieża"
+  ],
+  [
+   3,
+   8,
+   "Wieża"
+  ],
+  [
+   3,
+   9,
+   "Wieża"
+  ],
+  [
+   3,
+   10,
+   "Wieża"
+  ],
+  [
+   3,
+   11,
+   "Wieża"
+  ],
+  [
+   4,
+   4,
+   "Wieża"
+  ],
+  [
+   4,
+   5,
+   "Wieża"
+  ],
+  [
+   4,
+   6,
+   "Wieża"
+  ],
+  [
+   4,
+   7,
+   "Wieża"
+  ],
+  [
+   4,
+   8,
+   "Wieża"
+  ],
+  [
+   4,
+   9,
+   "Wieża"
+  ],
+  [
+   4,
+   10,
+   "Wieża"
+  ],
+  [
+   4,
+   11,
+   "Wieża"
+  ],
+  [
+   5,
+   4,
+   "Wieża"
+  ],
+  [
+   5,
+   5,
+   "Wieża"
+  ],
+  [
+   5,
+   6,
+   "Wieża"
+  ],
+  [
+   5,
+   7,
+   "Wieża"
+  ],
+  [
+   5,
+   8,
+   "Wieża"
+  ],
+  [
+   5,
+   9,
+   "Wieża"
+  ],
+  [
+   5,
+   10,
+   "Wieża"
+  ],
+  [
+   5,
+   11,
+   "Wieża"
+  ],
+  [
+   5,
+   12,
+   "Wieża"
+  ],
+  [
+   6,
+   4,
+   "Wieża"
+  ],
+  [
+   6,
+   5,
+   "Wieża"
+  ],
+  [
+   6,
+   6,
+   "Wieża"
+  ],
+  [
+   6,
+   7,
+   "Wieża"
+  ],
+  [
+   6,
+   8,
+   "Wieża"
+  ],
+  [
+   6,
+   9,
+   "Wieża"
+  ],
+  [
+   6,
+   10,
+   "Wieża"
+  ],
+  [
+   6,
+   11,
+   "Wieża"
+  ],
+  [
+   7,
+   4,
+   "Wieża"
+  ],
+  [
+   7,
+   5,
+   "Wieża"
+  ],
+  [
+   7,
+   6,
+   "Wieża"
+  ],
+  [
+   7,
+   7,
+   "Wieża"
+  ],
+  [
+   7,
+   8,
+   "Wieża"
+  ],
+  [
+   7,
+   9,
+   "Wieża"
+  ],
+  [
+   7,
+   10,
+   "Wieża"
+  ],
+  [
+   7,
+   11,
+   "Wieża"
+  ],
+  [
+   8,
+   4,
+   "Wieża"
+  ],
+  [
+   8,
+   5,
+   "Wieża"
+  ],
+  [
+   8,
+   6,
+   "Wieża"
+  ],
+  [
+   8,
+   7,
+   "Wieża"
+  ],
+  [
+   8,
+   8,
+   "Wieża"
+  ],
+  [
+   8,
+   9,
+   "Wieża"
+  ],
+  [
+   8,
+   10,
+   "Wieża"
+  ],
+  [
+   8,
+   11,
+   "Wieża"
+  ],
+  [
+   9,
+   4,
+   "Wieża"
+  ],
+  [
+   9,
+   5,
+   "Wieża"
+  ],
+  [
+   9,
+   6,
+   "Wieża"
+  ],
+  [
+   9,
+   7,
+   "Wieża"
+  ],
+  [
+   9,
+   8,
+   "Wieża"
+  ],
+  [
+   9,
+   9,
+   "Wieża"
+  ],
+  [
+   9,
+   10,
+   "Wieża"
+  ],
+  [
+   9,
+   11,
+   "Wieża"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 108,
+ "key": "dzwonnica",
+ "display": "Dzwonnica",
+ "exits": [
+  {
+   "x": 5,
+   "y": 12,
+   "door": 236,
+   "town": [
+    48,
+    31
+   ],
+   "landing": [
+    5,
+    11,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (dzwonnica)"
+  }
+ ],
+ "residents": [
+  {
+   "key": "dzwonnik",
+   "x": 5,
+   "y": 8,
+   "dir": 8
+  }
+ ]
+}

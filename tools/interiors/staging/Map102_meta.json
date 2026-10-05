@@ -1,0 +1,1162 @@
+{
+ "concept": "piekarnia",
+ "width": 17,
+ "height": 12,
+ "zones": [],
+ "spots": {
+  "landing": [
+   8,
+   10,
+   8
+  ],
+  "res_piekarka": [
+   13,
+   5,
+   2
+  ]
+ },
+ "things": [
+  {
+   "kind": "zar_piec",
+   "cat": "fire",
+   "cells": [
+    [
+     2,
+     2
+    ]
+   ],
+   "group": null,
+   "x": 2,
+   "y": 2,
+   "event": true,
+   "art": [
+    48,
+    88,
+    96,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "zar_piec",
+   "cat": "fire",
+   "cells": [
+    [
+     3,
+     2
+    ]
+   ],
+   "group": null,
+   "x": 3,
+   "y": 2,
+   "event": true,
+   "art": [
+    48,
+    88,
+    96,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     1,
+     4
+    ]
+   ],
+   "group": "Piekarnia drewno",
+   "x": 1,
+   "y": 4
+  },
+  {
+   "kind": "lopata_chleb",
+   "cat": "floorprop",
+   "cells": [
+    [
+     4,
+     4
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 4,
+   "y": 4,
+   "event": true,
+   "art": [
+    55,
+    48,
+    89,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "półka z chlebem",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Piekarnia półki",
+   "x": 7,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 2
+  },
+  {
+   "kind": "półka z dzbanem",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Piekarnia półki",
+   "x": 9,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 7,
+   "sr": 2
+  },
+  {
+   "kind": "regał z chlebem",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     4
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 11,
+   "y": 2,
+   "w": 1,
+   "h": 3,
+   "sheet": "C",
+   "sc": 5,
+   "sr": 6
+  },
+  {
+   "kind": "regał z chlebem",
+   "cat": "furniture",
+   "cells": [
+    [
+     12,
+     4
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 12,
+   "y": 2,
+   "w": 1,
+   "h": 3,
+   "sheet": "C",
+   "sc": 7,
+   "sr": 6
+  },
+  {
+   "kind": "regał z serami",
+   "cat": "furniture",
+   "cells": [
+    [
+     13,
+     4
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 3,
+   "sheet": "C",
+   "sc": 6,
+   "sr": 6
+  },
+  {
+   "kind": "table_h",
+   "cat": "table",
+   "cells": [
+    [
+     2,
+     6
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     4,
+     7
+    ]
+   ],
+   "group": "Piekarnia stół",
+   "x": 2,
+   "y": 6,
+   "length": 3,
+   "style": 6
+  },
+  {
+   "kind": "D(4,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     2,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 2,
+   "y": 6,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 10
+  },
+  {
+   "kind": "D(0,9)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     4,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 4,
+   "y": 6,
+   "sheet": "D",
+   "sc": 0,
+   "sr": 9
+  },
+  {
+   "kind": "worki z mąką",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     9
+    ],
+    [
+     2,
+     9
+    ]
+   ],
+   "group": "Piekarnia worki",
+   "x": 1,
+   "y": 8,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 2
+  },
+  {
+   "kind": "rozsypana mąka",
+   "cat": "furniture",
+   "cells": [
+    [
+     3,
+     9
+    ]
+   ],
+   "group": "Piekarnia worki",
+   "x": 3,
+   "y": 9,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 4
+  },
+  {
+   "kind": "beczka ze zbożem",
+   "cat": "furniture",
+   "cells": [
+    [
+     4,
+     9
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 4,
+   "y": 9,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 2
+  },
+  {
+   "kind": "beczka z wodą (ukryta)",
+   "cat": "furniture",
+   "cells": [
+    [
+     5,
+     4
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 5,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 0
+  },
+  {
+   "kind": "counter_h",
+   "cat": "counter",
+   "cells": [
+    [
+     10,
+     6
+    ],
+    [
+     10,
+     7
+    ],
+    [
+     11,
+     6
+    ],
+    [
+     11,
+     7
+    ],
+    [
+     12,
+     6
+    ],
+    [
+     12,
+     7
+    ],
+    [
+     13,
+     6
+    ],
+    [
+     13,
+     7
+    ],
+    [
+     14,
+     6
+    ],
+    [
+     14,
+     7
+    ]
+   ],
+   "group": "Piekarnia lada",
+   "x": 10,
+   "y": 6,
+   "x1": 14
+  },
+  {
+   "kind": "D(4,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     10,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 10,
+   "y": 6,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 10
+  },
+  {
+   "kind": "D(5,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     11,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 11,
+   "y": 6,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 10
+  },
+  {
+   "kind": "D(3,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     14,
+     6
+    ]
+   ],
+   "group": null,
+   "x": 14,
+   "y": 6,
+   "sheet": "D",
+   "sc": 3,
+   "sr": 10
+  },
+  {
+   "kind": "kasetka",
+   "cat": "counteritem",
+   "cells": [
+    [
+     13,
+     7
+    ]
+   ],
+   "group": "Piekarnia lada",
+   "x": 13,
+   "y": 7,
+   "event": true,
+   "art": [
+    15,
+    27,
+    33,
+    41
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "swieca_lada",
+   "cat": "counteritem",
+   "cells": [
+    [
+     12,
+     7
+    ]
+   ],
+   "group": "Piekarnia lada",
+   "x": 12,
+   "y": 7,
+   "event": true,
+   "art": [
+    16,
+    12,
+    32,
+    44
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "bench_v",
+   "cat": "seat",
+   "cells": [
+    [
+     15,
+     9
+    ],
+    [
+     15,
+     10
+    ]
+   ],
+   "group": "Piekarnia ława",
+   "x": 15,
+   "y": 9,
+   "length": 2
+  },
+  {
+   "kind": "worki",
+   "cat": "furniture",
+   "cells": [
+    [
+     14,
+     10
+    ]
+   ],
+   "group": "Piekarnia worki",
+   "x": 14,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 9,
+   "sr": 4
+  },
+  {
+   "kind": "round_table",
+   "cat": "table",
+   "cells": [
+    [
+     11,
+     9
+    ],
+    [
+     11,
+     10
+    ]
+   ],
+   "group": "Piekarnia stolik",
+   "x": 11,
+   "y": 9,
+   "variant": [
+    7,
+    11
+   ]
+  },
+  {
+   "kind": "D(5,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     11,
+     9
+    ]
+   ],
+   "group": null,
+   "x": 11,
+   "y": 9,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 10
+  },
+  {
+   "kind": "wiadro",
+   "cat": "furniture",
+   "cells": [
+    [
+     6,
+     10
+    ]
+   ],
+   "group": "Piekarnia",
+   "x": 6,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 4
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   8,
+   11
+  ]
+ ],
+ "wall_items": [
+  [
+   "Piekarnia okna",
+   "window",
+   6,
+   1
+  ],
+  [
+   "Piekarnia okna",
+   "window",
+   8,
+   1
+  ],
+  [
+   "Piekarnia okno lada",
+   "window",
+   15,
+   1
+  ],
+  [
+   "Piekarnia zioła",
+   "hanging",
+   14,
+   2
+  ]
+ ],
+ "openings": [
+  [
+   "Piekarnia",
+   [
+    8,
+    11,
+    8,
+    11
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Piekarnia"
+  ],
+  [
+   1,
+   5,
+   "Piekarnia"
+  ],
+  [
+   1,
+   6,
+   "Piekarnia"
+  ],
+  [
+   1,
+   7,
+   "Piekarnia"
+  ],
+  [
+   1,
+   8,
+   "Piekarnia"
+  ],
+  [
+   1,
+   9,
+   "Piekarnia"
+  ],
+  [
+   1,
+   10,
+   "Piekarnia"
+  ],
+  [
+   2,
+   4,
+   "Piekarnia"
+  ],
+  [
+   2,
+   5,
+   "Piekarnia"
+  ],
+  [
+   2,
+   6,
+   "Piekarnia"
+  ],
+  [
+   2,
+   7,
+   "Piekarnia"
+  ],
+  [
+   2,
+   8,
+   "Piekarnia"
+  ],
+  [
+   2,
+   9,
+   "Piekarnia"
+  ],
+  [
+   2,
+   10,
+   "Piekarnia"
+  ],
+  [
+   3,
+   4,
+   "Piekarnia"
+  ],
+  [
+   3,
+   5,
+   "Piekarnia"
+  ],
+  [
+   3,
+   6,
+   "Piekarnia"
+  ],
+  [
+   3,
+   7,
+   "Piekarnia"
+  ],
+  [
+   3,
+   8,
+   "Piekarnia"
+  ],
+  [
+   3,
+   9,
+   "Piekarnia"
+  ],
+  [
+   3,
+   10,
+   "Piekarnia"
+  ],
+  [
+   4,
+   4,
+   "Piekarnia"
+  ],
+  [
+   4,
+   5,
+   "Piekarnia"
+  ],
+  [
+   4,
+   6,
+   "Piekarnia"
+  ],
+  [
+   4,
+   7,
+   "Piekarnia"
+  ],
+  [
+   4,
+   8,
+   "Piekarnia"
+  ],
+  [
+   4,
+   9,
+   "Piekarnia"
+  ],
+  [
+   4,
+   10,
+   "Piekarnia"
+  ],
+  [
+   5,
+   4,
+   "Piekarnia"
+  ],
+  [
+   5,
+   5,
+   "Piekarnia"
+  ],
+  [
+   5,
+   6,
+   "Piekarnia"
+  ],
+  [
+   5,
+   7,
+   "Piekarnia"
+  ],
+  [
+   5,
+   8,
+   "Piekarnia"
+  ],
+  [
+   5,
+   9,
+   "Piekarnia"
+  ],
+  [
+   5,
+   10,
+   "Piekarnia"
+  ],
+  [
+   6,
+   4,
+   "Piekarnia"
+  ],
+  [
+   6,
+   5,
+   "Piekarnia"
+  ],
+  [
+   6,
+   6,
+   "Piekarnia"
+  ],
+  [
+   6,
+   7,
+   "Piekarnia"
+  ],
+  [
+   6,
+   8,
+   "Piekarnia"
+  ],
+  [
+   6,
+   9,
+   "Piekarnia"
+  ],
+  [
+   6,
+   10,
+   "Piekarnia"
+  ],
+  [
+   7,
+   4,
+   "Piekarnia"
+  ],
+  [
+   7,
+   5,
+   "Piekarnia"
+  ],
+  [
+   7,
+   6,
+   "Piekarnia"
+  ],
+  [
+   7,
+   7,
+   "Piekarnia"
+  ],
+  [
+   7,
+   8,
+   "Piekarnia"
+  ],
+  [
+   7,
+   9,
+   "Piekarnia"
+  ],
+  [
+   7,
+   10,
+   "Piekarnia"
+  ],
+  [
+   8,
+   4,
+   "Piekarnia"
+  ],
+  [
+   8,
+   5,
+   "Piekarnia"
+  ],
+  [
+   8,
+   6,
+   "Piekarnia"
+  ],
+  [
+   8,
+   7,
+   "Piekarnia"
+  ],
+  [
+   8,
+   8,
+   "Piekarnia"
+  ],
+  [
+   8,
+   9,
+   "Piekarnia"
+  ],
+  [
+   8,
+   10,
+   "Piekarnia"
+  ],
+  [
+   8,
+   11,
+   "Piekarnia"
+  ],
+  [
+   9,
+   4,
+   "Piekarnia"
+  ],
+  [
+   9,
+   5,
+   "Piekarnia"
+  ],
+  [
+   9,
+   6,
+   "Piekarnia"
+  ],
+  [
+   9,
+   7,
+   "Piekarnia"
+  ],
+  [
+   9,
+   8,
+   "Piekarnia"
+  ],
+  [
+   9,
+   9,
+   "Piekarnia"
+  ],
+  [
+   9,
+   10,
+   "Piekarnia"
+  ],
+  [
+   10,
+   4,
+   "Piekarnia"
+  ],
+  [
+   10,
+   5,
+   "Piekarnia"
+  ],
+  [
+   10,
+   6,
+   "Piekarnia"
+  ],
+  [
+   10,
+   7,
+   "Piekarnia"
+  ],
+  [
+   10,
+   8,
+   "Piekarnia"
+  ],
+  [
+   10,
+   9,
+   "Piekarnia"
+  ],
+  [
+   10,
+   10,
+   "Piekarnia"
+  ],
+  [
+   11,
+   4,
+   "Piekarnia"
+  ],
+  [
+   11,
+   5,
+   "Piekarnia"
+  ],
+  [
+   11,
+   6,
+   "Piekarnia"
+  ],
+  [
+   11,
+   7,
+   "Piekarnia"
+  ],
+  [
+   11,
+   8,
+   "Piekarnia"
+  ],
+  [
+   11,
+   9,
+   "Piekarnia"
+  ],
+  [
+   11,
+   10,
+   "Piekarnia"
+  ],
+  [
+   12,
+   4,
+   "Piekarnia"
+  ],
+  [
+   12,
+   5,
+   "Piekarnia"
+  ],
+  [
+   12,
+   6,
+   "Piekarnia"
+  ],
+  [
+   12,
+   7,
+   "Piekarnia"
+  ],
+  [
+   12,
+   8,
+   "Piekarnia"
+  ],
+  [
+   12,
+   9,
+   "Piekarnia"
+  ],
+  [
+   12,
+   10,
+   "Piekarnia"
+  ],
+  [
+   13,
+   4,
+   "Piekarnia"
+  ],
+  [
+   13,
+   5,
+   "Piekarnia"
+  ],
+  [
+   13,
+   6,
+   "Piekarnia"
+  ],
+  [
+   13,
+   7,
+   "Piekarnia"
+  ],
+  [
+   13,
+   8,
+   "Piekarnia"
+  ],
+  [
+   13,
+   9,
+   "Piekarnia"
+  ],
+  [
+   13,
+   10,
+   "Piekarnia"
+  ],
+  [
+   14,
+   4,
+   "Piekarnia"
+  ],
+  [
+   14,
+   5,
+   "Piekarnia"
+  ],
+  [
+   14,
+   6,
+   "Piekarnia"
+  ],
+  [
+   14,
+   7,
+   "Piekarnia"
+  ],
+  [
+   14,
+   8,
+   "Piekarnia"
+  ],
+  [
+   14,
+   9,
+   "Piekarnia"
+  ],
+  [
+   14,
+   10,
+   "Piekarnia"
+  ],
+  [
+   15,
+   4,
+   "Piekarnia"
+  ],
+  [
+   15,
+   5,
+   "Piekarnia"
+  ],
+  [
+   15,
+   6,
+   "Piekarnia"
+  ],
+  [
+   15,
+   7,
+   "Piekarnia"
+  ],
+  [
+   15,
+   8,
+   "Piekarnia"
+  ],
+  [
+   15,
+   9,
+   "Piekarnia"
+  ],
+  [
+   15,
+   10,
+   "Piekarnia"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 102,
+ "key": "piekarnia",
+ "display": "Piekarnia",
+ "exits": [
+  {
+   "x": 8,
+   "y": 11,
+   "door": 88,
+   "town": [
+    6,
+    39
+   ],
+   "landing": [
+    8,
+    10,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (rynek)"
+  }
+ ],
+ "residents": [
+  {
+   "key": "piekarka",
+   "x": 13,
+   "y": 5,
+   "dir": 2
+  }
+ ]
+}

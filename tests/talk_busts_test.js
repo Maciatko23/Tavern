@@ -63,7 +63,7 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     t.check("our own busts (Hero_Bust, Stach_Bust) are asked for only once the database is loaded (whether the images are encrypted is known then)",
         probes.some(p => /Hero_Bust\.png/.test(p.u)) && probes.every(p => p.db), probes);
     // (the new tavern: in front of the bar, Borgar across the counter)
-    await t.newGame({ map: 1, x: 50, y: 64, dir: 4, hour: 12, minimap: false });
+    await t.newGame({ map: 1, x: 52, y: 31, dir: 8, hour: 12, minimap: false });   // (across the counter from Borgar)
     await t.frames(240);   // (the popups of the start fade away)
     // the hero's bust: Hero_Bust (HeroLook's look) - while that file is not made yet, the actor's picture (HeroLook off) stands in
     const heroFile = await t.eval("fetch('img/pictures/Hero_Bust.png', { method: 'HEAD', cache: 'no-store' }).then(r => r.ok).catch(() => false)");
@@ -255,7 +255,7 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     t.check("...her words in a bubble over her head (not a talk; no busts)", !s.on && !s.side && s.who === 2 && s.bubble && ["bottom", "left", "right", "top"].includes(s.edge) && !s.L && !s.R, s);
     await shot("rozmowa_4_bez_popiersia.png");
     await finish();
-    await t.eval(`(function(){ $gameMap.event(2).page().list.shift(); $gameMap.event(4).setImage("$Reid_Poor", 0); return 0; })()`);
+    await t.eval(`(function(){ $gameMap.event(2).page().list.shift(); $gameMap.event(4).setImage("$Reid_Poor", 0); $gameMap.event(4).event().note = String($gameMap.event(4).event().note || "").replace(/<Bust:[^>]*>/g, ""); return 0; })()`);   // (Ozzy's own sheet keeps his old bust by a <Bust:...> note since 2026-10-04: off for this case)
     await t.run(T(null, ["\\SPK[4]Ja tu tylko sprzątam."]).concat(END()), 4);
     await t.frames(40);
     s = await S();

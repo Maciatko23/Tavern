@@ -219,15 +219,15 @@ const DRIVER = String.raw`
         await go(22, 12, 1, 8);
         const to8 = await walkTo("up", 8);
         const at8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, door: ($gameMap.events().find(e => /^Drzwi tawerny/.test(e.event().name)) || { x: -1 }).x })");
-        await ev("(function(){ $gamePlayer.locate(19, 14); $gamePlayer.setDirection(8); return 0; })()");   // (in front of the tavern door on town C)
+        await ev("(function(){ $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); return 0; })()");   // (in front of the tavern's gate, the hall since 2026-10-04)
         const to1 = await walkTo("up", 1);
         const at1 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, borgar: !!Story.borgarEvent() })");
         const back8 = await walkTo("down", 8);
         const out8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y })");
-        await ev("(function(){ $gamePlayer.locate(19, 14); $gamePlayer.setDirection(8); return 0; })()");
+        await ev("(function(){ $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); return 0; })()");
         const in1 = await walkTo("up", 1);
-        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 19 && to1 && at1.borgar &&
-            back8 && out8.x === 19 && out8.y === 14 && in1, { to8, at8, to1, at1, back8, out8, in1 });
+        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 24 && to1 && at1.borgar &&
+            back8 && out8.x === 24 && out8.y === 17 && in1, { to8, at8, to1, at1, back8, out8, in1 });
         await ev("$gameSystem.setDayNightHour(10); $gameSystem.setStamina(100); 0");
         const bor = await J("(function(){ const e = Story.borgarEvent(); return e && { id: e.eventId(), name: e.event().name, stub: e.list().length === 2 && e.list()[0].code === 355, atmo: $gameMap.events().filter(x => /Atmosfera - Borgar/.test(x.event().name)).map(x => Story.roleOf(x)) }; })()");
         check("Borgar's event is found by its name; the story speaks through it (his 'Atmosfera' parallel event is left alone)", bor && bor.name === "Borgar Kowal" && bor.stub && bor.atmo.every(r => r === null), bor);
@@ -271,7 +271,7 @@ const DRIVER = String.raw`
         await ev("$gameSystem.setDayNightHour(10); 0");
         await frames(40);
         const lord = await J(`(function(){ const e = $gameMap.event(902), d = Story.doorEvent(); return e && d && { name: e.event().name, sheet: e.characterName(), index: e.characterIndex(), x: e.x, y: e.y, dx: e.x - d.x, dy: e.y - d.y, page: e._pageIndex, door: [d.x, d.y], doorStub: d.list()[0].code === 355 }; })()`);
-        check("by day Lord Zaleski stands beside the manor's door (found by its name 'Drzwi dworu'), People2_Tall 4", lord && lord.name === "Lord Leopold Zaleski" && lord.sheet === "People2_Tall" && lord.index === 4 && Math.abs(lord.dx) <= 2 && lord.dy >= 1 && lord.dy <= 2 && lord.page === 0, lord);
+        check("by day Lord Zaleski stands beside the manor's door (found by its name 'Drzwi dworu'), in his hero-style sheet $Npc_Lord", lord && lord.name === "Lord Leopold Zaleski" && lord.sheet === "$Npc_Lord" && lord.index === 0 && Math.abs(lord.dx) <= 2 && lord.dy >= 1 && lord.dy <= 2 && lord.page === 0, lord);
         await ev("(function(){ const e = $gameMap.event(902); $gamePlayer.locate(e.x - 1, e.y + 3); $gamePlayer.setDirection(8); return 0; })()");
         await frames(30);
         await b.shot(path.join(SHOTS, "fabula_3_hrabia.png"));
@@ -333,7 +333,8 @@ const DRIVER = String.raw`
         await ev("window.__drv.on = true; window.__drv.picks = []; 0");
         await until(`$gameSystem._story.intro === 2 && ${calmMap}`, 60);
         check("a second new game: a fresh story (nothing paid) and its intro again", again2 && (await J("({ p: $gameSystem._story.paid, i: $gameSystem._story.intro, d: $gameSystem._story.done })")).p === 0 && (await ev("$gameSystem._story.done")) === 0);
-        // a letter on day 20
+        // a letter on day 20 (after the intro's "+5 dośw." notice - Combat sums it 24 frames - so the letter is the last notice)
+        await frames(40);
         await ev("$gameSystem._dayNightDay = 20; $gameSystem.setDayNightHour(8); $gameTemp._lastTopNotice = ''; 0");
         await until("$gameSystem._story.letters[20] === true", 10);
         const let20 = await J("({ n: $gameTemp._lastTopNotice, sub: $gameTemp._lastTopNoticeSub, notes: $gameSystem._journal.notes.map(n => n.title + ': ' + n.text) })");
@@ -381,7 +382,7 @@ const DRIVER = String.raw`
         check("awake past midnight (day 61, 0:xx): no ending yet, saving works, 'Termin: dzień 60 - mija o świcie'", mid.day === 61 && mid.hour < 1 && mid.scene === "Scene_Map" && !mid.running && !mid.ended && mid.save &&
             !mid.doomed && mid.night && /Termin: dzień 60 - mija o świcie\./.test(mid.status) && /termin mija o świcie/.test(mid.goal), mid);
         // ---- the deadline day at 20:30: a shift that ends after midnight - Borgar warns, the butler takes the pay before dawn
-        await go(1, 50, 82);
+        await go(1, 50, 53);
         await ev("$gameSystem._dayNightDay = 60; $gameSystem.setDayNightHour(20.5); $gameSystem.setStamina(100); $gameParty.loseGold($gameParty.gold()); 0");
         await driveShift();
         const late = await talkTo("Story.borgarEvent()", ["Weź zmianę"], 150);
@@ -468,7 +469,7 @@ const DRIVER = String.raw`
         await ev("Journal.evaluateGoals(); 0");
         const old = await J("({ story: $gameSystem._story === undefined, active: Story.active(), goals: Journal.GOALS.some(g => g.story), cur: Journal.currentGoal() && Journal.currentGoal().id, name: $gameMap.displayName() })");
         check("an old-style game (begun on Map003): no story state, no story goals, the journal's first goal is 'stone', the map keeps its own name", old.story && !old.active && !old.goals && old.cur === "stone" && old.name === "Domek - Zewnętrze", old);
-        await go(1, 50, 82);
+        await go(1, 50, 53);
         const oldB = await J("(function(){ const e = $gameMap.events().find(x => x.event().name === 'Borgar Kowal'); return { first: e.list()[0].code, text: e.list()[1].parameters[0] }; })()");
         check("...Borgar keeps his own commands", oldB.first === 101 && /Witaj, podróżniku/.test(oldB.text), oldB);
         await go(24, 1, 15, 6);

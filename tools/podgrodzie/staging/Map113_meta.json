@@ -1,0 +1,637 @@
+{
+ "concept": "drwal",
+ "width": 13,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "res_drwal": [
+   4,
+   6,
+   6
+  ],
+  "landing": [
+   6,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "fireplace",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 6,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     5,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 5,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 7,
+   "y": 4
+  },
+  {
+   "kind": "siekiera na ścianie",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Izba siekiery",
+   "x": 3,
+   "y": 2,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 15,
+   "sr": 8
+  },
+  {
+   "kind": "siekiera na ścianie",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Izba siekiery",
+   "x": 9,
+   "y": 2,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 15,
+   "sr": 8
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     4
+    ],
+    [
+     11,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "worki z węglem drzewnym",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Izba worki",
+   "x": 1,
+   "y": 3,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 8,
+   "sr": 2
+  },
+  {
+   "kind": "kupa węgla drzewnego",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     8
+    ],
+    [
+     2,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "sheet": "D",
+   "sc": 11,
+   "sr": 8
+  },
+  {
+   "kind": "wiązka polan",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 5
+  },
+  {
+   "kind": "bryłki węgla",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 9,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 11,
+   "sr": 5
+  },
+  {
+   "kind": "table_h",
+   "cat": "table",
+   "cells": [
+    [
+     8,
+     7
+    ],
+    [
+     8,
+     8
+    ],
+    [
+     9,
+     7
+    ],
+    [
+     9,
+     8
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 8,
+   "y": 7,
+   "length": 2,
+   "style": 6
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     10,
+     8
+    ]
+   ],
+   "group": "Izba stołki",
+   "x": 10,
+   "y": 8
+  },
+  {
+   "kind": "D(5,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     8,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 8,
+   "y": 7,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 10
+  },
+  {
+   "kind": "D(1,15)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     9,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 9,
+   "y": 7,
+   "sheet": "D",
+   "sc": 1,
+   "sr": 15
+  },
+  {
+   "kind": "skóra przed ogniem",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 5,
+   "y": 6,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 9,
+   "sr": 14
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": null,
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   6,
+   9
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba okna",
+   "window",
+   2,
+   1
+  ],
+  [
+   "Izba okna",
+   "window",
+   10,
+   1
+  ],
+  [
+   "Izba siekiery",
+   "siekiera na ścianie",
+   3,
+   2
+  ],
+  [
+   "Izba siekiery",
+   "siekiera na ścianie",
+   9,
+   2
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    6,
+    9,
+    6,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 113,
+ "key": "drwal",
+ "display": "Chata drwala",
+ "exits": [
+  {
+   "x": 6,
+   "y": 9,
+   "door": 3,
+   "town": [
+    7,
+    9
+   ],
+   "landing": [
+    6,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Podgrodzie"
+  }
+ ],
+ "residents": [
+  {
+   "key": "drwal",
+   "x": 4,
+   "y": 6,
+   "dir": 6
+  }
+ ]
+}

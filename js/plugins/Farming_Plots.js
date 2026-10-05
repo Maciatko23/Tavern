@@ -510,6 +510,42 @@
     function wellEntries() {
         return [drinkEntry(), skinEntry(), canEntry(), bucketEntry()];
     }
+    // ---- a well that gives little (the town's market well - user 2026-10-05: "studnia daje, ale mało", the sołtys rations it): an
+    // event with <Studnia:N> in its note lets the hero draw N times a day - a drink, the waterskin, the can, the bucket: one draw each.
+    // Its page runs Farming.rationWell(this). The day's draws in the farm state (per map and event name - a well of two events counts once).
+    function rationOf(ev) {
+        const m = ev && ev.event().note && /<Studnia:\s*(\d+)\s*>/i.exec(ev.event().note);
+        return m ? { key: $gameMap.mapId() + ":" + ev.event().name, max: Number(m[1]), name: ev.event().name } : null;
+    }
+    function rationLeft(r) {
+        const rec = (farm().rations || {})[r.key];
+        return rec && rec.day === today() ? Math.max(0, r.max - rec.n) : r.max;
+    }
+    function rationUse(r) {
+        const all = farm().rations || (farm().rations = {}), rec = all[r.key];
+        all[r.key] = rec && rec.day === today() ? { day: rec.day, n: rec.n + 1 } : { day: today(), n: 1 };
+        changed();
+    }
+    function rationMenu(r) {
+        const left = rationLeft(r), note = "\nStudnia daje mało - sołtys przydziela wodę: " + r.max + (r.max === 1 ? " nabranie" : " nabrania") + " na dzień. Zostało dziś: " + left + ".";
+        const wrap = e => Object.assign({}, e, { enabled: e.enabled && left > 0, help: e.help + note,
+            run: () => {
+                if (rationLeft(r) < 1) { complain(ICON.thirst, "Na dziś koniec przydziału"); return false; }
+                const ok = e.run();
+                if (ok) rationUse(r);
+                return ok;
+            } });
+        return { title: (r.name || "Studnia") + " (" + left + "/" + r.max + " na dziś)", entries: wellEntries().map(wrap) };
+    }
+    function rationWell(interpOrEvent) {
+        const ev = interpOrEvent && typeof interpOrEvent.eventId === "function" ? $gameMap.event(interpOrEvent.eventId()) : interpOrEvent;
+        const r = rationOf(ev);
+        if (!r) return false;
+        if (rationLeft(r) < 1) { complain(ICON.thirst, "Na dziś koniec przydziału wody"); return false; }
+        const menu = rationMenu(r), scene = SceneManager._scene;
+        if (scene && typeof scene.openFarmMenu === "function") scene.openFarmMenu(menu.title, menu.entries);
+        return true;
+    }
     // ---- the bucket: it collects rain by itself, hour by hour of the weather plan (Survival.weatherPlan), also while the player is away
     function rainHoursBetween(h0, h1) {
         const sv = T.api("Survival");
@@ -926,6 +962,7 @@
     P.plots = { isSoilTile, groundInfoAt, groundIsSoil, hasObjectTile, naturalFarmland, plotAt, claimGround, releaseGround,
         gatherRev, gatherKindOf, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, stoneSpot, stoneAt,
         pickGather, pickStone, takeGatherFor, canCharges, isWaterTile, fillCan, needsOn, drink, fillSkin, goFishing, wellEntries,
+        rationWell, rationLeft, rationOf,
         rainHoursBetween, bucketSync, bucketUnits, takeBucketWater, stowVessel, unstowVessel, ownsBucket, bagWater, setBagWater,
         bagWaterWeight, bucketFor, bucketEntries, waterMenu, rainWater, wateredRecently, growthRate, isRipe, cropStage, daysLeft,
         rake, till, plant, harvest, uproot, water, dig, digClay, potDryness, potHoursLeft, tablePots, tablePotDry,

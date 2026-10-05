@@ -1,0 +1,435 @@
+{
+ "id": 111,
+ "size": [
+  46,
+  36
+ ],
+ "gate_rows": [
+  17,
+  18
+ ],
+ "buildings": [
+  {
+   "key": "drwal",
+   "name": "Chata drwala",
+   "rect": [
+    4,
+    3,
+    9,
+    8
+   ],
+   "door": [
+    7,
+    8
+   ],
+   "front": [
+    7,
+    9
+   ],
+   "interior": "drwal",
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 71,
+   "wall": 74,
+   "lean": [
+    10,
+    5,
+    10,
+    8
+   ],
+   "event_id": 3
+  },
+  {
+   "key": "strzecha",
+   "name": "Chata pod strzechą",
+   "rect": [
+    13,
+    4,
+    18,
+    9
+   ],
+   "door": [
+    15,
+    9
+   ],
+   "front": [
+    15,
+    10
+   ],
+   "interior": null,
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 67,
+   "wall": 73,
+   "lean": null,
+   "event_id": 4
+  },
+  {
+   "key": "szmaciarz",
+   "name": "Kram starzyzny",
+   "rect": [
+    20,
+    8,
+    24,
+    13
+   ],
+   "door": [
+    21,
+    13
+   ],
+   "front": [
+    21,
+    14
+   ],
+   "interior": "szmaciarz",
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 66,
+   "wall": 73,
+   "lean": null,
+   "event_id": 6
+  },
+  {
+   "key": "uchodzcy",
+   "name": "Dom uchodźców",
+   "rect": [
+    29,
+    3,
+    35,
+    8
+   ],
+   "door": [
+    32,
+    8
+   ],
+   "front": [
+    32,
+    9
+   ],
+   "interior": "uchodzcy",
+   "hours": null,
+   "roof": 68,
+   "wall": 75,
+   "lean": [
+    28,
+    5,
+    28,
+    8
+   ],
+   "event_id": 8
+  },
+  {
+   "key": "deski",
+   "name": "Chałupa z desek",
+   "rect": [
+    11,
+    13,
+    15,
+    17
+   ],
+   "door": [
+    13,
+    17
+   ],
+   "front": [
+    13,
+    18
+   ],
+   "interior": null,
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 59,
+   "wall": 75,
+   "lean": null,
+   "event_id": 9
+  },
+  {
+   "key": "klusownik",
+   "name": "Chata kłusownika",
+   "rect": [
+    2,
+    22,
+    6,
+    27
+   ],
+   "door": [
+    4,
+    27
+   ],
+   "front": [
+    4,
+    28
+   ],
+   "interior": "klusownik",
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 66,
+   "wall": 74,
+   "lean": null,
+   "event_id": 11
+  },
+  {
+   "key": "szopa",
+   "name": "Szopa",
+   "rect": [
+    8,
+    23,
+    10,
+    27
+   ],
+   "door": [
+    9,
+    27
+   ],
+   "front": [
+    9,
+    28
+   ],
+   "interior": null,
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 59,
+   "wall": 75,
+   "lean": [
+    11,
+    24,
+    11,
+    27
+   ],
+   "event_id": 12
+  },
+  {
+   "key": "znachorka",
+   "name": "Izba znachorki",
+   "rect": [
+    13,
+    21,
+    17,
+    26
+   ],
+   "door": [
+    15,
+    26
+   ],
+   "front": [
+    15,
+    27
+   ],
+   "interior": "znachorka",
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 67,
+   "wall": 72,
+   "lean": null,
+   "event_id": 14
+  },
+  {
+   "key": "praczka",
+   "name": "Chata praczki",
+   "rect": [
+    31,
+    21,
+    35,
+    26
+   ],
+   "door": [
+    33,
+    26
+   ],
+   "front": [
+    33,
+    27
+   ],
+   "interior": "praczka",
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 59,
+   "wall": 72,
+   "lean": null,
+   "event_id": 16
+  },
+  {
+   "key": "komorka",
+   "name": "Komórka",
+   "rect": [
+    38,
+    21,
+    41,
+    25
+   ],
+   "door": [
+    39,
+    25
+   ],
+   "front": [
+    39,
+    26
+   ],
+   "interior": null,
+   "hours": [
+    6,
+    21
+   ],
+   "roof": 68,
+   "wall": 84,
+   "lean": null,
+   "event_id": 17
+  }
+ ],
+ "spots": {
+  "brama_zach": [
+   41,
+   18,
+   6
+  ],
+  "zebrak": [
+   43,
+   16,
+   2
+  ],
+  "zebrak_noc": [
+   43,
+   14,
+   2
+  ],
+  "namioty": [
+   38,
+   9,
+   6
+  ],
+  "uchodzcy_drzwi": [
+   32,
+   9,
+   8
+  ],
+  "kram": [
+   26,
+   15,
+   2
+  ],
+  "szmaciarz_drzwi": [
+   21,
+   14,
+   8
+  ],
+  "plac": [
+   26,
+   18,
+   4
+  ],
+  "studnia_sucha": [
+   23,
+   18,
+   8
+  ],
+  "zabawa": [
+   20,
+   18,
+   2
+  ],
+  "drwal_drzwi": [
+   7,
+   9,
+   8
+  ],
+  "drewutnia": [
+   10,
+   11,
+   6
+  ],
+  "skraj_lasu": [
+   0,
+   19,
+   4
+  ],
+  "klusownik_drzwi": [
+   4,
+   28,
+   8
+  ],
+  "znachorka_drzwi": [
+   15,
+   27,
+   8
+  ],
+  "ziola": [
+   20,
+   27,
+   8
+  ],
+  "kapliczka": [
+   26,
+   24,
+   8
+  ],
+  "praczka_drzwi": [
+   33,
+   27,
+   8
+  ],
+  "pranie": [
+   32,
+   30,
+   8
+  ]
+ },
+ "lights": [
+  {
+   "name": "Latarnia przy bramie",
+   "x": 42,
+   "y": 19,
+   "note": "<Light:150,90,62,24><LightWhen:night>"
+  },
+  {
+   "name": "Pochodnia na baszcie",
+   "x": 44,
+   "y": 15,
+   "note": "<Light:140,110,60,20><LightWhen:night><LightFlicker:0.15>"
+  },
+  {
+   "name": "Ognisko uchodźców",
+   "x": 39,
+   "y": 9,
+   "note": "<Light:200,120,60,16><LightFlicker:0.15>"
+  }
+ ],
+ "exits": [
+  {
+   "x": 45,
+   "y": 17,
+   "to": [
+    8,
+    1,
+    50,
+    6
+   ]
+  },
+  {
+   "x": 45,
+   "y": 18,
+   "to": [
+    8,
+    1,
+    51,
+    6
+   ]
+  }
+ ],
+ "notes": []
+}

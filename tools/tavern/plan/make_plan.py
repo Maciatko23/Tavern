@@ -17,7 +17,10 @@ from planlib import *   # noqa: F401,F403
 
 ROOT = G.ROOT
 PICS = os.path.join(ROOT, "img", "pictures")
-PLUGIN = os.path.join(ROOT, "js", "plugins", "TavernLife.js")
+# the data block lives in TavernLife_Plan.js since the plugin was split (2026-09-28 refactor); an older TavernLife.js with the
+# markers still works
+PLUGIN = os.path.join(ROOT, "js", "plugins", "TavernLife_Plan.js")
+if not os.path.exists(PLUGIN): PLUGIN = os.path.join(ROOT, "js", "plugins", "TavernLife.js")
 
 # the scene's layout at 1280 x 720 (TavernLife.js reads the same numbers from the data block)
 SHEET = (16, 46, 836, 636)            # x, y, w, h of the plan sheet on the screen
@@ -413,7 +416,7 @@ def dash(L, x0, y0, x1, y1, on=2.6, off=2.0):
 
 # ------------------------------------------------------------------------------------------------ labels
 LABEL_AT = {   # hand-placed label centres (cells) where the room's middle is taken by its furniture's icon
-    (1, "sala"): (50.0, 71.9), (1, "korytarz"): (50.0, 24.0), (1, "sien"): (50.0, 80.5),
+    (1, "sala"): (50.0, 40.2), (1, "korytarz"): (50.0, 21.0), (1, "sien"): (50.0, 51.5),   # (the second build, 101 x 55)
     (25, "gal"): (48.0, 23.6), (25, "nc"): (22.0, 18.9), (25, "sc"): (22.0, 50.9), (25, "hall"): (48.0, 58.6),
     (26, "hall"): (57.0, 25.6), (26, "terrace"): (40.0, 50.9),
 }
@@ -642,7 +645,7 @@ def write_block(data):
         src = f.read()
     a, b = src.find(b"// <plan-data>"), src.find(b"// </plan-data>")
     if a < 0 or b < 0:
-        print("  (no plan-data markers in TavernLife.js: the block is only in plan_data.json)")
+        print("  (no plan-data markers in %s: the block is only in plan_data.json)" % os.path.basename(PLUGIN))
         return False
     line_start = src.rfind(b"\n", 0, a) + 1
     indent = src[line_start:a]
@@ -678,7 +681,7 @@ def main():
     data = {"sheet": list(SHEET), "panel": list(PANEL), "floors": datas}
     with open(os.path.join(HERE, "plan_data.json"), "wb") as f:
         f.write(json.dumps(data, ensure_ascii=False, indent=1).encode("utf-8"))
-    if write_block(data): print("  -> js/plugins/TavernLife.js (plan data block, %d bytes)" % len(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8")))
+    if write_block(data): print("  -> js/plugins/%s (plan data block, %d bytes)" % (os.path.basename(PLUGIN), len(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))))
 
 if __name__ == "__main__":
     main()

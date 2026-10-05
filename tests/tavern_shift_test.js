@@ -168,7 +168,7 @@ window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0,
         }
         check("the game boots", booted);
         // a new game in the tavern (Map001)
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(1, 50, 82, 8, 0);   /* (the new tavern's vestibule) */ SceneManager.goto(Scene_Map); })()`);
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(1, 50, 53, 8, 0);   /* (the tavern's vestibule) */ SceneManager.goto(Scene_Map); })()`);
         const onMap = () => ev("SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && $gameMap.mapId()===1").catch(() => false);
         for (let i = 0; i < 120; i++) { if (await onMap()) break; await sleep(500); }
         await sleep(1200);

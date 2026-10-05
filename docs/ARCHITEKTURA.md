@@ -1,7 +1,7 @@
 # Architektura gry „Tawerna” (wtyczki RPG Maker MZ)
 
 Stan: 2026-09-29, etap 3 porządków („żeby to było ładne, czytelne, proste do rozszerzenia”).
-Kod: 75 wtyczek w `js/plugins.js` (70 naszych), ok. 52 800 linii (48 400 naszych). Rdzeń: **TawernaCore.js** i **TawernaUI.js**
+Kod: 76 wtyczek w `js/plugins.js` (71 naszych), ok. 52 800 linii (48 400 naszych). Rdzeń: **TawernaCore.js** i **TawernaUI.js**
 (zestaw interfejsu). Przeniesione na rdzeń jako wzorce w etapie 2: **HomeDecor.js**, **HomeAmbience.js**, **HomeLife.js**.
 Etap 3, partia A (2026-09-29): zakładka F9 „Rdzeń”, znaczniki notatki mapy przez `Tawerna.mapFlag/mapTag` (18 wtyczek), dymki
 braków przez `Tawerna.popup`, zdarzenia szyny z Hunting, TavernShift, TavernDice, QuestBoard, Story i TavernLife (sekcja 14.1).
@@ -38,8 +38,8 @@ krok po kroku (sekcja 14).
  │                        Hunting (+ _Path, _AI, _Weapons), Livestock, Dog,     │
  │                        Combat, Combat_Fight, Durability, Spoilage, Story,    │
  │                        HomeLife, HomeDecor, FreeMovement, HeroLook, MapZoom, │
- │                        Fullscreen                                            │
- │               świat na ekranie: RoomLighting, DustMotes, CloudShadows,       │
+ │                        Fullscreen, RegionLayers                              │
+ │               świat na ekranie: Sky, RoomLighting, DustMotes, CloudShadows,  │
  │                        SwayingFoliage, CharacterPolish, GroundDetail,        │
  │                        Farming_Render, ChoppableTree_Render, Storm, Puddles, │
  │                        Atmosphere (dźwięk), HomeAmbience, SpeechBubbles      │
@@ -77,31 +77,33 @@ klucze `_needs`, `_wear` (a `_hunt` i `_forest` przez alias).
 
 ## 2. Kolejność wtyczek
 
-Lista w `js/plugins.js` (75 wtyczek, wszystkie włączone; numer = miejsce na liście):
+Lista w `js/plugins.js` (82 wtyczek, wszystkie włączone; numer = miejsce na liście):
 
 ```
  0  TawernaCore                ← pierwsza, nad wszystkim
  1  ActorPictures, AltMenuScreen, AltSaveScreen, OptionEx, HDLayout                     (obce)
- 6  DustMotes, RoomLighting, DayNightCycle, CloudShadows, SwayingFoliage, MapZoom
-12  ChoppableTree, ChoppableTree_Objects, ChoppableTree_Swing, ChoppableTree_Render  ← części zaraz pod główną (przed SurvivalHUD)
-16  SurvivalHUD, Farming_Data
-18  Farming, Farming_Plots, Farming_Build, Farming_Stations, Farming_UI  ← części zaraz pod główną (za nimi Farming_Render)
-23  Farming_Render, CharacterPolish, GroundDetail, FreeMovement, Fullscreen, Survival
-29  UITheme
-30  TawernaUI                  ← zaraz pod UITheme
-31  Journal, Minimap, Atmosphere, Storm, Puddles, Durability, Spoilage
-38  Hunting, Hunting_Path, Hunting_AI, Hunting_Weapons  ← części zaraz pod główną (przed Birds)
-42  Birds, Forestry, Needs, Livestock, Dog, Skills_Data
-48  Combat, Combat_Fight, Combat_UI                     ← części zaraz pod główną
-51  SpeechBubbles, Debug
-53  MenuPanel                  ← pod Journal (układa jego scenę), nad wtyczkami, które dokładają wpisy do menu P
-54  HeroLook
-55  TavernShift, TavernShift_Hall, TavernShift_Parts
-58  Story                      ← pod MenuPanel (linia długu: MenuPanel.addFoot)
-59  QuestBoard_Data, QuestBoard, QuestBoard_Art, QuestBoard_Scene
-63  TavernDice_Data, TavernDice, TavernDice_Art, TavernDice_Scene
-67  TavernLife, TavernLife_Render, TavernLife_ArmWrestle, TavernLife_Darts, TavernLife_Plan
-72  HomeAmbience, HomeDecor, HomeLife
+ 6  DustMotes, RoomLighting, DayNightCycle, CloudShadows, SwayingFoliage, Sky, MapZoom   ← Sky: słońce, niebo, cienie
+13  ChoppableTree, ChoppableTree_Objects, ChoppableTree_Swing, ChoppableTree_Render  ← części zaraz pod główną (przed SurvivalHUD)
+17  SurvivalHUD, Farming_Data
+19  Farming, Farming_Plots, Farming_Build, Farming_Stations, Farming_UI  ← części zaraz pod główną (za nimi Farming_Render)
+24  Farming_Render, CharacterPolish, GroundDetail, FreeMovement, RegionLayers, WaterFx, Fullscreen, Survival   ← RegionLayers: regiony 1/2/3 = pod / na równi / nad graczem; WaterFx: płynny wodospad, plusk, fale, nurt (<Fall>, <Splash>, <Flow>)
+32  UITheme
+33  TawernaUI                  ← zaraz pod UITheme
+34  Journal, Minimap, Atmosphere, Storm, Puddles, Durability, Spoilage
+41  Hunting, Hunting_Path, Hunting_AI, Hunting_Weapons  ← części zaraz pod główną (przed Birds)
+45  Birds, Forestry, Needs, Livestock, Dog, Skills_Data
+51  Combat, Combat_Fight, Combat_UI                     ← części zaraz pod główną
+54  SpeechBubbles, Debug
+56  MenuPanel                  ← pod Journal (układa jego scenę), nad wtyczkami, które dokładają wpisy do menu P
+57  HeroLook
+58  TavernShift, TavernShift_Hall, TavernShift_Parts
+61  Story                      ← pod MenuPanel (linia długu: MenuPanel.addFoot)
+62  QuestBoard_Data, QuestBoard, QuestBoard_Art, QuestBoard_Scene
+66  TavernDice_Data, TavernDice, TavernDice_Art, TavernDice_Scene
+70  TavernLife, TavernLife_Render, TavernLife_ArmWrestle, TavernLife_Darts, TavernLife_Plan
+75  HomeAmbience, HomeDecor, HomeLife
+78  TownLife_Data, TownLife     ← miasteczko według zegara: mieszkańcy 910-949 na mapie 8 (plany dnia, okrzyki, rozmowy, dzwon)
+80  TownQuests_Data, TownQuests ← questy miasteczka (docs/QUESTY.md, stan: docs/QUESTY_STAN.md): zadania w rozmowach mieszkańców (TownLife.addTalkHook), Opinia w miasteczku 0-100, zakładka dziennika „Miasteczko”, dzień targowy, sygnały dzwonu; stan Tawerna.state("townQuests"); szyna: townQuestAccepted / townQuestDone / townQuestFailed / townOpinion; zdarzenia 951-959
 ```
 
 ButtonPicture.js i TextPicture.js (obce) leżą w `js/plugins`, ale nie są na liście. Części Combat i Hunting (partie C3, D2) wpisane

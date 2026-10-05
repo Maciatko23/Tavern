@@ -1,0 +1,793 @@
+{
+ "concept": "kowal",
+ "width": 15,
+ "height": 11,
+ "zones": [],
+ "spots": {
+  "landing": [
+   7,
+   9,
+   8
+  ],
+  "res_kowal": [
+   9,
+   6,
+   4
+  ]
+ },
+ "things": [
+  {
+   "kind": "fireplace",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 7,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 6,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     8,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 8,
+   "y": 4
+  },
+  {
+   "kind": "miecz na tarczy",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba broń",
+   "x": 4,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 0
+  },
+  {
+   "kind": "miecz na tarczy",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba broń",
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 0
+  },
+  {
+   "kind": "tarcza",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba tarcze",
+   "x": 3,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 0,
+   "sr": 0
+  },
+  {
+   "kind": "tarcza",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba tarcze",
+   "x": 11,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 2,
+   "sr": 0
+  },
+  {
+   "kind": "łóżko kowala",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     1,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 12,
+   "sr": 10
+  },
+  {
+   "kind": "szafka nocna",
+   "cat": "furniture",
+   "cells": [
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 2,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 5,
+   "sr": 0
+  },
+  {
+   "kind": "swieca_szafka",
+   "cat": "tableitem",
+   "cells": [
+    [
+     2,
+     3
+    ]
+   ],
+   "group": "Izba świece",
+   "x": 2,
+   "y": 3,
+   "event": true,
+   "art": [
+    40,
+    48,
+    56,
+    80
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "stojak z bronią",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     4
+    ],
+    [
+     12,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 3,
+   "w": 2,
+   "h": 2,
+   "sheet": "E",
+   "sc": 8,
+   "sr": 10
+  },
+  {
+   "kind": "kowadlo",
+   "cat": "floorprop",
+   "cells": [
+    [
+     13,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 13,
+   "y": 6,
+   "event": true,
+   "art": [
+    50,
+    87,
+    93,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "szlifierka",
+   "cat": "floorprop",
+   "cells": [
+    [
+     13,
+     9
+    ]
+   ],
+   "group": "Izba",
+   "x": 13,
+   "y": 9,
+   "event": true,
+   "art": [
+    49,
+    88,
+    95,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "table_h",
+   "cat": "table",
+   "cells": [
+    [
+     3,
+     7
+    ],
+    [
+     3,
+     8
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     4,
+     8
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     8
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 3,
+   "y": 7,
+   "length": 3,
+   "style": 6
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     2,
+     8
+    ]
+   ],
+   "group": "Izba stołki",
+   "x": 2,
+   "y": 8
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     6,
+     8
+    ]
+   ],
+   "group": "Izba stołki",
+   "x": 6,
+   "y": 8
+  },
+  {
+   "kind": "D(1,15)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     4,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 4,
+   "y": 7,
+   "sheet": "D",
+   "sc": 1,
+   "sr": 15
+  },
+  {
+   "kind": "D(5,10)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     3,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 3,
+   "y": 7,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 10
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     10,
+     9
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 9,
+   "event": true
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   7,
+   10
+  ]
+ ],
+ "wall_items": [],
+ "openings": [
+  [
+   "Izba",
+   [
+    7,
+    10,
+    7,
+    10
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   1,
+   9,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   9,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   9,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   9,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   9,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   7,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   10,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   9,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   9,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   9,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   9,
+   "Izba"
+  ],
+  [
+   12,
+   4,
+   "Izba"
+  ],
+  [
+   12,
+   5,
+   "Izba"
+  ],
+  [
+   12,
+   6,
+   "Izba"
+  ],
+  [
+   12,
+   7,
+   "Izba"
+  ],
+  [
+   12,
+   8,
+   "Izba"
+  ],
+  [
+   12,
+   9,
+   "Izba"
+  ],
+  [
+   13,
+   4,
+   "Izba"
+  ],
+  [
+   13,
+   5,
+   "Izba"
+  ],
+  [
+   13,
+   6,
+   "Izba"
+  ],
+  [
+   13,
+   7,
+   "Izba"
+  ],
+  [
+   13,
+   8,
+   "Izba"
+  ],
+  [
+   13,
+   9,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 105,
+ "key": "kowal",
+ "display": "Dom kowala",
+ "exits": [
+  {
+   "x": 7,
+   "y": 10,
+   "door": 134,
+   "town": [
+    12,
+    47
+   ],
+   "landing": [
+    7,
+    9,
+    8
+   ],
+   "name": "Drzwi -> Okolice Tawerny (kuźnia)"
+  }
+ ],
+ "residents": [
+  {
+   "key": "kowal",
+   "x": 9,
+   "y": 6,
+   "dir": 4
+  }
+ ]
+}

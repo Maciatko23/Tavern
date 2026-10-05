@@ -43,7 +43,7 @@ const { launch, sleep } = require("./cdp.js");
         check("five tabs: Zdarzenia, Budowanie, Przedmioty, Rdzeń, Kot", JSON.stringify(await J("SceneManager._scene._tabs._list.map(c => c.name)")) === '["Zdarzenia","Budowanie","Przedmioty","Rdzeń","Kot"]');
         const rows = await J(`SceneManager._scene._list._rows.map(r => ({ kind: r.kind, label: r.label }))`);
         let t = await tabNow();
-        check("it opens on 'Zdarzenia': the two time rows, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the boar, a wolf pack, a deer, +200 XP, the new hero on trial - nothing else", t.tab === 0 && t.sel === 0 && rows.map(r => r.kind).join() === "hour,day,storm,strike,treestrike,calm,birds,raid,boar,wolves,deer,xp,herolook" && rows[0].label === "+1 godzina", rows.map(r => r.kind));
+        check("it opens on 'Zdarzenia': the two time rows, dawn / sunset / a misty morning, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the boar, a wolf pack, a deer, +200 XP, the new hero on trial, the regions' colours (RegionLayers) - nothing else", t.tab === 0 && t.sel === 0 && rows.map(r => r.kind).join() === "hour,day,dawn,dusk,mist,storm,strike,treestrike,calm,birds,raid,boar,wolves,deer,xp,herolook,layers" && rows[0].label === "+1 godzina", rows.map(r => r.kind));
         await key(E); await frames(6);
         t = await tabNow();
         const builds = await J(`SceneManager._scene._list._rows.map(r => ({ kind: r.kind, type: r.type, label: r.label, icon: r.icon }))`);
@@ -148,14 +148,14 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- "Burza teraz": back to the map, the storm gathering
         await key(E); await key(E); await key(E); await frames(6);   // back to 'Zdarzenia' (past 'Rdzeń' and 'Kot'): its cursor is where it was left (row 1, '+1 dzień')
         check("each tab remembers its row: 'Zdarzenia' is back on '+1 dzień'", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().kind")) === "day");
-        await key(DOWN);   // row 2
-        check("row 2 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
+        for (let i = 0; i < 4; i++) await key(DOWN);   // row 5 (past the dawn, the sunset and the misty morning)
+        check("row 5 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
         await key(OK);
         await frames(20);
         check("'Burza teraz' goes back to the map and a storm gathers", (await ev("SceneManager._scene.constructor.name")) === "Scene_Map" && (await ev("Storm.level()")) > 0 && (await ev("Storm.phase()")) === "gather");
         await key(F9); await frames(10);
         check("F9 opens again on the tab and row it was left on ('Zdarzenia', 'Burza teraz')", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
-        for (let i = 0; i < 3; i++) await key(DOWN);   // row 5: calm
+        for (let i = 0; i < 3; i++) await key(DOWN);   // row 8: calm
         await key(OK);
         await frames(20);
         check("'Koniec pogody na dziś' ends it", (await ev("Storm.level()")) === 0);

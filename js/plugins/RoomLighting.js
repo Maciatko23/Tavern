@@ -5,7 +5,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna); ludzie i zwierzęta rzucają cienie od lamp i ognia. v1.3.0
+ * @plugindesc Przyciemnia pokój i dodaje ciepłą poświatę światła (np. z okna); ludzie i zwierzęta rzucają cienie od lamp i ognia; każde światło migocze jak płomień. v1.4.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -36,6 +36,12 @@
  * @text Domyślnie włączone
  * @type boolean
  * @default false
+ *
+ * @param flameFlicker
+ * @text Każde światło to płomień
+ * @type boolean
+ * @default true
+ * @desc Światła <Light> bez własnego <LightFlicker> migoczą delikatnie jak płomień (w grze nie ma elektryczności). Nie dotyczy smug z okien, świateł dziennych i miękkiego wypełnienia.
  *
  * @param torchSwitch
  * @text Przełącznik "pochodnia zapalona"
@@ -160,6 +166,11 @@
  *                                       w podany R,G,B i z powrotem (np.
  *                                       pomarańcz <-> bursztyn)
  *   Każde światło ma własny rytm - świece obok siebie nie migoczą razem.
+ *   (v1.4.0) Bez tego tagu każde <Light> i tak migocze delikatnie jak
+ *   płomień (parametr "Każde światło to płomień"): mała lampka/świeca 0.05,
+ *   lampa 0.07, palenisko/kominek 0.1. <LightFlicker:0> - równe światło.
+ *   Nie migoczą: <LightCone> (smugi z okien), <LightWhen:day>, <LightSoft>
+ *   i światła wypełniające o prawie czarnym kolorze (każda składowa < 25).
  *   Przy <LightCone> migocze tylko jasność.
  *
  * CIENIE (v1.3.0, razem z ChoppableTree_Render.js):
@@ -223,6 +234,7 @@
     const TORCH_RADIUS = num(params.torchRadius, 140);
     const TORCH_COLOR = parseRGB(params.torchColor || "255,170,80");
     const TORCH_FLICKER = params.torchFlicker === "true";
+    const FLAME_FLICKER = params.flameFlicker !== "false";
     const TORCH_EXPIRE_COMMON_EVENT = num(params.torchExpireCommonEvent, 0);
     const TORCH_ICON_INDEX = num(params.torchIconIndex, 80);
     const DARK_SCALE = 2;          // the darkness layer is painted at half resolution
@@ -290,13 +302,23 @@
     // and now and then a quick dip, never a regular sine); with r,g,b the colour drifts between its own and that one. Each light has
     // its own seed. The flicker is read every FLICKER_STEP frames, so the darkness is repainted at most that often for it.
     const FLICKER_STEP = 2;
+    // null: no tag (the default flame may apply), false: <LightFlicker:0> - a steady light
     function parseFlicker(note) {
         const m = note.match(/<LightFlicker(?::([^>]*))?>/i);
         if (!m) return null;
+        if (m[1] !== undefined && m[1].trim() !== "" && Number(m[1].split(",")[0].trim()) === 0) return false;
         const p = (m[1] || "").split(",").map(s => Number(s.trim()));
         const amount = p[0] > 0 ? Math.min(0.5, p[0]) : 0.12;
         const alt = p.length >= 4 && p.slice(1, 4).every(v => isFinite(v)) ? p.slice(1, 4) : null;
         return { amount, alt };
+    }
+    // (v1.4.0) every light in the game is a flame (user 2026-10-05: "nie ma elektryczności w grze"): a <Light> with no <LightFlicker>
+    // of its own (after HomeAmbience.js has added its own to the hearths and candles of the home maps) flickers gently - by its size:
+    // a small lamp or a candle, a lamp, a hearth. Not the day's light: a window's beam (<LightCone>), <LightWhen:day>, a <LightSoft> fill,
+    // nor a fill light with no colour of its own to speak of (near black, under FILL_COLOUR: the upper floors' 'wypelnienie' 14,10,4).
+    const FILL_COLOUR = 25;
+    function flameFlicker(radius) {
+        return { amount: radius <= 80 ? 0.05 : radius <= 170 ? 0.07 : 0.1, alt: null };
     }
     // smooth value noise 0..1 along a line (a seeded lattice, smoothstep between its points); nothing allocated
     function lattice(i, seed) {
@@ -334,7 +356,7 @@
                 markers.push({
                     x: event.x, y: event.y, shape: "cone",
                     length, angle, direction, startWidth, anchor, blur, dust, dustSize, offsetX, offsetY, color,
-                    when: lightWhen(event.note, kv), flicker, eventId: event.id
+                    when: lightWhen(event.note, kv), flicker: flicker || null, eventId: event.id
                 });
                 continue;
             }
@@ -348,7 +370,10 @@
                     if (parts.length >= 4) color = [parts[1], parts[2], parts[3]];
                 }
                 const height = event.note.match(/<LightHeight:\s*(\d+)>/i);
-                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when: lightWhen(event.note, null), soft: /<LightSoft>/i.test(event.note), flicker, eventId: event.id,
+                const when = lightWhen(event.note, null), soft = /<LightSoft>/i.test(event.note);
+                const fill = soft || Math.max(color[0], color[1], color[2]) < FILL_COLOUR;
+                const flame = flicker === null && FLAME_FLICKER && !fill && when !== "day" ? flameFlicker(radius) : flicker || null;
+                markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when, soft, flicker: flame, eventId: event.id,
                     height: height ? Number(height[1]) : 0 });
             }
         }

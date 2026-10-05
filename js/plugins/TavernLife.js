@@ -1716,4 +1716,25 @@
         xpWatch
     };
     window.TavernLife = T.register(PLUGIN, TavernLife);
+
+    // ------------------------------------------------------------------
+    // The rebuilt ground floor (2026-10-05, tools/tavern/v2: 101x84 -> 101x55, every room rebuilt): a game saved inside the tavern
+    // before it lands at the entrance (the old coordinates are other rooms now, or past the map's bottom); the map is set up anew
+    // ------------------------------------------------------------------
+    const TAVERN_LAYOUT = 2, ENTRANCE = [50, 53, 8];
+    const _DataManager_setupNewGame = DataManager.setupNewGame;
+    DataManager.setupNewGame = function() {
+        _DataManager_setupNewGame.call(this);
+        $gameSystem._tavernLayout = TAVERN_LAYOUT;
+    };
+    const _Game_System_onAfterLoad = Game_System.prototype.onAfterLoad;
+    Game_System.prototype.onAfterLoad = function() {
+        _Game_System_onAfterLoad.call(this);
+        if (this._tavernLayout === TAVERN_LAYOUT) return;
+        this._tavernLayout = TAVERN_LAYOUT;
+        if ($gameMap.mapId() !== 1 || $gamePlayer.isTransferring()) return;
+        $gamePlayer.setPosition(ENTRANCE[0], ENTRANCE[1]);   // (no map maths yet: the saved map is set up again by the transfer)
+        $gamePlayer.reserveTransfer(1, ENTRANCE[0], ENTRANCE[1], ENTRANCE[2], 0);
+        $gamePlayer.requestMapReload();
+    };
 })();

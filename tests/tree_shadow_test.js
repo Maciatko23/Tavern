@@ -39,7 +39,7 @@ kit.test({ port: 9434, bootCheck: "the game boots", errorCheck: "no errors in th
     t.check("in heavy rain the sun leaves only a pale trace (a fifth of its light)", rainNoon.wet > 0 && rainNoon.wet <= rainNoon.clear * 0.25, rainNoon);
 
     // a passing cloud: its middle covers the spot
-    const cloud = await t.json(`(function(){ const R = Tawerna.api("ChoppableTree_parts").render, set = SceneManager._scene._spriteset, all = set._cloudSprites || [], c = all[0];
+    const cloud = await t.json(`(function(){ const R = Tawerna.api("Sun"), set = SceneManager._scene._spriteset, all = set._cloudSprites || [], c = all[0];
         if (!c) return null; set._cloudSprites = [c];   // (just this one cloud: the others drift anywhere)
         const out = { mid: +R.cloudCover(c._wx, c._wy).toFixed(2), far: +R.cloudCover(c._wx + c._radius * 3, c._wy).toFixed(2) }; set._cloudSprites = all; return out; })()`);
     t.check("a cloud's shadow covers the ground under its middle (the tree's shadow fades there), not far from it", !cloud || (cloud.mid > 0.5 && cloud.far === 0), cloud);

@@ -72,8 +72,8 @@ kit.test({ port: 9398, plugins: ["TawernaCore", "TawernaUI", "HomeAmbience", "Ho
     c = await t.json(CORE);
     // (the easel: TavernLife's 950, or - since the map has one of its own - the editor's event with <Tavern:plan>)
     const tav = await t.json("({ easel: $gameMap.events().some(e => { const a = Tawerna.tag(e, 'Tavern'); return !!a && a.pos[0] === 'plan'; }), decor: HomeDecor.SLOTS.some(s => !!$gameMap.event(s.id)), injected: Tawerna.injected(1), rep: QuestBoard.reputation(), gold: $gameParty.gold() })");
-    t.check("... the core's state made, a plan easel there (by its <Tavern:plan> tag), no house decoration here, the reputation and the purse as saved",
-        c.tw && c.keys.includes("homeDecor") && c.map === 1 && tav.easel && !tav.decor && Object.keys(tav.injected).length === 0 && tav.rep === fx0("tavern_evening").summary.reputation &&
+    t.check("... the core's state made, a plan easel there (by its <Tavern:plan> tag), no house decoration here (only the town's evening guests injected), the reputation and the purse as saved",
+        c.tw && c.keys.includes("homeDecor") && c.map === 1 && tav.easel && !tav.decor && Object.keys(tav.injected).filter(k => k !== "TownLife").length === 0 && tav.rep === fx0("tavern_evening").summary.reputation &&
         tav.gold === fx0("tavern_evening").summary.gold && (await plays()), { c, tav });
     st = await t.json(STORY);
     t.check("... the story as saved: hired at Borgar's, 300 G paid", st.story && st.forest && st.flags.hired && st.flags.tavern && st.paid === 300 && st.active, st);

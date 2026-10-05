@@ -133,7 +133,7 @@ window.__ref = function(faces) {
             booted = await until("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title' && DataManager._globalInfo)", 60);
         }
         check("the game boots", booted);
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(1, 8, 6, 2, 0); SceneManager.goto(Scene_Map); })()`);
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(1, 96, 33, 2, 0);   /* (the games room, second build) */ SceneManager.goto(Scene_Map); })()`);
         await until(onMap, 60);
         await sleep(1200);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); if (window.Dog && Dog.auto) Dog.auto(false); $gameScreen.clearWeather(); $gameSystem._minimapHidden = true; $gameSystem.setDayNightHour(19); 0");
@@ -244,18 +244,20 @@ window.__ref = function(faces) {
 
         // ================= 6. the <Tavern:dice> table on the map (added at run time): the lobby, then the empty table at night
         await ev(`(function(){
-            const id = $dataMap.events.length;
+            // (an id no injector owns: the tavern has TownLife's guests since 2026-10-05, and its range 910-949 follows the map's own events -
+            // the old "events.length" fell into it and the residents' bookkeeping took the table away)
+            const id = 899;
             const page = { conditions: { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false, switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 },
                 directionFix: false, image: { characterIndex: 0, characterName: "", direction: 2, pattern: 0, tileId: 0 },
                 list: [{ code: 108, indent: 0, parameters: ["Stół do gry w kości"] }, { code: 408, indent: 0, parameters: ["<Tavern:dice>"] }, { code: 0, indent: 0, parameters: [] }],
                 moveFrequency: 3, moveRoute: { list: [{ code: 0, parameters: [] }], repeat: true, skippable: false, wait: false }, moveSpeed: 3, moveType: 0, priorityType: 1, stepAnime: false, through: false, trigger: 0, walkAnime: true };
-            $dataMap.events[id] = window.__tableData = { id, name: "Stół do kości", note: "", x: 8, y: 8, pages: [page] };
+            $dataMap.events[id] = window.__tableData = { id, name: "Stół do kości", note: "", x: 96, y: 34, pages: [page] };
             $gameMap._events[id] = new Game_Event($gameMap.mapId(), id);
             window.__tableId = id;
             // (coming back from a scene the map's data is read from the file again: the table added here is put back into it)
             const _onLoad = DataManager.onLoad;
             DataManager.onLoad = function(object) { _onLoad.call(this, object); if (object === $dataMap && window.__tableData && $gameMap && $gameMap.mapId() === 1) $dataMap.events[window.__tableData.id] = window.__tableData; };
-            $gamePlayer.locate(8, 7); $gamePlayer.setDirection(2);
+            $gamePlayer.locate(96, 33); $gamePlayer.setDirection(2);
             return 0;
         })()`);
         await sleep(400);
@@ -275,7 +277,7 @@ window.__ref = function(faces) {
         await tap("escape");
         await until(onMap, 15);
         await sleep(1000);
-        await ev("$gameSystem.setDayNightHour(3); window.__td.freeze = null; TavernDice.lastRefusal = ''; $gamePlayer.locate(8, 7); $gamePlayer.setDirection(2); 0");
+        await ev("$gameSystem.setDayNightHour(3); window.__td.freeze = null; TavernDice.lastRefusal = ''; $gamePlayer.locate(96, 33); $gamePlayer.setDirection(2); 0");
         for (let i = 0; i < 3 && !(await ev("TavernDice.lastRefusal")); i++) { await tap("ok", 150); await sleep(700); }
         const night = await J(`({ running: TavernDice.isRunning(), why: TavernDice.lastRefusal, map: SceneManager._scene instanceof Scene_Map })`);
         check("at night the table is empty: 'Stoły puste. Wróć wieczorem.' and no scene", !night.running && night.map && night.why === "Stoły puste. Wróć wieczorem.", night);

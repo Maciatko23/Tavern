@@ -64,8 +64,8 @@ const OUT = __dirname + "/";
         st = await info();
         check("M shows it again", st.mini.visible && st.goal.y === st.mini.y + st.mini.panelH + 6);
 
-        // the big tavern (Map001, 101x84 since 2026-09-28) has a minimap like any big map
-        await ev("$gamePlayer.reserveTransfer(1, 50, 82, 8, 0); 0");
+        // the big tavern (Map001, 101x55 since 2026-10-05) has a minimap like any big map
+        await ev("$gamePlayer.reserveTransfer(1, 50, 53, 8, 0); 0");
         for (let i = 0; i < 40; i++) { if (await ev("$gameMap.mapId() === 1 && !SceneManager.isSceneChanging()")) break; await sleep(300); }
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); 0");

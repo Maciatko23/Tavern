@@ -1,0 +1,550 @@
+{
+ "concept": "klusownik",
+ "width": 12,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "res_klusownik": [
+   2,
+   5,
+   4
+  ],
+  "landing": [
+   6,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "cauldron",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 6,
+   "y": 5
+  },
+  {
+   "kind": "łuki na ścianie",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Izba łuk",
+   "x": 10,
+   "y": 2,
+   "w": 1,
+   "h": 2,
+   "sheet": "E",
+   "sc": 15,
+   "sr": 11
+  },
+  {
+   "kind": "wnyki na ścianie",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 1,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 6
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     1,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "skora_rama",
+   "cat": "floorprop",
+   "cells": [
+    [
+     9,
+     4
+    ]
+   ],
+   "group": "Izba skóry",
+   "x": 9,
+   "y": 4,
+   "event": true,
+   "art": [
+    48,
+    89,
+    95,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "skora_rama2",
+   "cat": "floorprop",
+   "cells": [
+    [
+     10,
+     4
+    ]
+   ],
+   "group": "Izba skóry",
+   "x": 10,
+   "y": 4,
+   "event": true,
+   "art": [
+    49,
+    66,
+    94,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "skóra wilka",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Izba",
+   "x": 3,
+   "y": 6,
+   "w": 2,
+   "h": 2,
+   "sheet": "D",
+   "sc": 9,
+   "sr": 12
+  },
+  {
+   "kind": "beczka z solonym mięsem",
+   "cat": "furniture",
+   "cells": [
+    [
+     10,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 10,
+   "y": 7,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 14,
+   "sr": 0
+  },
+  {
+   "kind": "skrzynia z sidłami",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 7,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 12,
+   "sr": 3
+  },
+  {
+   "kind": "worki",
+   "cat": "furniture",
+   "cells": [
+    [
+     9,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 9,
+   "sr": 4
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     7,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 7,
+   "y": 6
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": null,
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   6,
+   9
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba okno",
+   "window",
+   8,
+   1
+  ],
+  [
+   "Izba zapasy",
+   "hanging",
+   3,
+   2
+  ],
+  [
+   "Izba zapasy",
+   "hanging",
+   5,
+   2
+  ],
+  [
+   "Izba łuk",
+   "łuki na ścianie",
+   10,
+   2
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    6,
+    9,
+    6,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 114,
+ "key": "klusownik",
+ "display": "Chata kłusownika",
+ "exits": [
+  {
+   "x": 6,
+   "y": 9,
+   "door": 11,
+   "town": [
+    4,
+    28
+   ],
+   "landing": [
+    6,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Podgrodzie"
+  }
+ ],
+ "residents": [
+  {
+   "key": "klusownik",
+   "x": 2,
+   "y": 5,
+   "dir": 4
+  }
+ ]
+}

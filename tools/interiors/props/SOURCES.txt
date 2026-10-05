@@ -1,0 +1,10 @@
+PixelLab Pro Flash (2026-10-04), at 2x on Winlu crops (props/ref):
+raven_relief.png  job 3d6109f5-7b6b-4e45-a4c1-333c64e21284  96x96   ~5 gen  ref ref_shield_96
+raven_banner.png  job cf947427-f067-434b-befe-d5ac1af154b6  96x192  ~6 gen  ref ref_banner_96x192
+cobbler_bench.png job 1cd0a0f5-626e-4e4c-a489-bb66e0cb4b35  192x128 ~6 gen  style: raven_relief
+shoe_shelf.png    job ee64e26b-81fd-49ad-aaec-37df440afb72  96x192  ~6 gen  style: raven_banner
+bread_peel.png    job 52df88bc-7d1a-432c-ae1f-3fc142d0ea28  96x192  ~6 gen  style: raven_banner
+island_map.png    job c6b73e9c-5c29-49d1-abff-455a82ea5263  192x144 ~6 gen  style: raven_relief
+bell.png          job d3390077-60b8-4ba7-83d8-a7ee62f57583  192x192 ~6 gen  style: raven_relief
+yoke.png          job 72eca72a-f69f-426d-b2e7-1f498af9ce0e  96x96   ~5 gen  style: raven_relief
+(total about 46 generations)

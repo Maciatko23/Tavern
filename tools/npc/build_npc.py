@@ -15,7 +15,8 @@
 #
 # Feet: every direction row is moved up/down as a whole (the walk keeps its own bob) so that the NPC's standing rotation
 # stands on the same pixel row as the hero's standing frame of that direction in Hero_Walk.png (S 61, SW 62, W 62, NW 61,
-# N 60, NE 61, E 62, SE 62 - measured, not assumed). No resizing: PixelLab's 64 canvas is the hero's scale.
+# N 60, NE 61, E 62, SE 62 - measured, not assumed). No resizing: PixelLab's 64 canvas is the hero's scale (only children
+# are made smaller, with --scale).
 #
 # Options
 #   --zip PATH            use a downloaded PixelLab zip instead of downloading https://api.pixellab.ai/mcp/characters/<id>/download
@@ -24,9 +25,28 @@
 #   --from DIR=ANIM       take direction DIR's walk from another animation of the zip (a re-rolled direction in its own group)
 #   --mirror DIR=SRC      DIR (rotation + walk) = horizontal flip of SRC, e.g. --mirror west=east  (repeatable)
 #   --mirror-walk DIR=SRC only the walk of DIR is the flip of SRC's walk (keeps DIR's own rotation)
+#   --flip-frames DIR=F:G,F:G  single walk frames of DIR replaced by the horizontal flip of frame G of the same walk (a flip
+#                         swaps the legs = the opposite phase, so F = G+4 fits a symmetric back/front view), e.g. a bad
+#                         north walk frame 5-7: --flip-frames north=5:1,6:2,7:3   (repeatable)
 #   --steps A,B           walk frames (0-7) used as the two steps of the $ sheet (default: auto, the widest opposite strides)
 #   --name / --desc / --group / --gens   stored in npcs.json (Polish name, description used, animation group id, gens used)
 #   --dx N                move every cell N px sideways (default 0; PixelLab centres the figure like the hero's)
+#   --scale F             make the figure smaller (a CHILD: PixelLab pro draws every figure on the 64 canvas at the hero's ~60 px
+#                         height, children too), e.g. --scale 0.75 (9 years), 0.7 (7), 0.62 (5). Not a resample: whole rows and
+#                         columns are taken out (content-aware: those most like their neighbour, spread evenly - the count taken
+#                         stays within 2 of the even share at every row - and never two neighbours while anything else fits), so
+#                         the 1 px outline, a thin belt or an eye line and the fine pixels stay crisp. The same rows/columns go for
+#                         the rotation and all 8 walk frames of a direction (walk frames are first lined up on the standing figure
+#                         by their bob), so the details do not flicker. Feet keep their row, column 32 keeps its place; the usual
+#                         feet shift to the hero's rows follows. Done after --mirror.
+#   --head F              with --scale: the factor for the top third (the head) - a child's head is relatively big, e.g.
+#                         --scale 0.75 --head 0.88. Default: the head shrinks like the rest.
+#
+# Fixing a bad walk direction (seen 2026-10-04 on 12 characters: a south walk turning its back in 2 frames, a shirt or a cloak
+# vanishing, a braid flickering): delete just that direction from the group (delete_animation with animation_group_id +
+# direction) and queue it again into the same group - 1 generation. If the template keeps losing a detail (braids, towel),
+# animate that direction with mode "skeleton-v3" (same template, 2-4 gens): it moves the rotation's own pixels, so the look
+# stays; its frames come on a 96 canvas, which to_cell crops around the centre. Check every sheet: tools/npc/lineup.py.
 import argparse, io, json, os, sys, tempfile, time, urllib.error, urllib.request, zipfile
 from PIL import Image, ImageDraw
 
@@ -95,13 +115,18 @@ def bottom(im):
 
 
 def to_cell(im):
-    """Any PixelLab canvas -> a 64x64 cell. Bigger canvases are cropped around the centre keeping the bottom (feet) margin."""
+    """Any PixelLab canvas -> a 64x64 cell. Bigger canvases are cropped around the centre keeping the bottom (feet) margin;
+    when that would cut the figure's head off, around the canvas centre (skeleton-v3 walks come on a 96 canvas with the
+    figure in the middle - the same crop for every frame, so the bob stays)."""
     if im.size == (C, C):
         return im
     w, h = im.size
     cell = Image.new("RGBA", (C, C), (0, 0, 0, 0))
     ox = (C - w) // 2
     oy = C - h if h > C else (C - h) // 2
+    bb = im.getchannel("A").getbbox()
+    if h > C and bb and bb[1] < -oy and bb[1] >= (h - C) // 2 and bb[3] <= (h - C) // 2 + C:
+        oy = -((h - C) // 2)
     cell.alpha_composite(im, (max(ox, 0), max(oy, 0)), (max(-ox, 0), max(-oy, 0)))
     return cell
 
@@ -203,6 +228,130 @@ def kv(items):
     return out
 
 
+# --- --scale: shrink a figure by taking out whole rows and columns (see the header) ---
+
+def _diff(frames, i, rows):
+    """how much row (rows=True) / column i differs from the one before it, summed over the frames (0 = a duplicate)"""
+    t = 0
+    for im in frames:
+        px = im.load()
+        for j in range(C):
+            a, b = (px[j, i], px[j, i - 1]) if rows else (px[i, j], px[i - 1, j])
+            if a[3] != b[3]:
+                t += 1000
+            elif a[3]:
+                t += abs(a[0] - b[0]) + abs(a[1] - b[1]) + abs(a[2] - b[2])
+    return t
+
+
+def _pick(lo, hi, n, cost, tol=2):
+    """n indices in [lo, hi) with the least summed cost, spread evenly: after every index the number taken so far stays
+    within `tol` of the even share (so a thin belt or an eye line can dodge, the shrink stays uniform); two neighbours
+    only when nothing else fits (DP over (index, taken, last taken))."""
+    L = hi - lo
+    if n <= 0 or L <= 0:
+        return []
+    n = min(n, L)
+    c = [cost(lo + j) for j in range(L)]
+    INF = float("inf")
+    # dp[k][d]: least cost with k taken so far, d = the previous index was taken; back[j][k][d] for the path
+    dp = {(0, 0): (0.0, None)}
+    hist = []
+    for j in range(L):
+        ideal = (j + 1) * n / L
+        nd = {}
+        for (k, d), (v, _) in dp.items():
+            for take in (0, 1):
+                k2 = k + take
+                if k2 > n or abs(k2 - ideal) > tol:
+                    continue
+                v2 = v + (c[j] + (1e7 if d else 0) if take else 0) + 0.01 * abs(k2 - ideal)
+                if v2 < nd.get((k2, take), (INF,))[0]:
+                    nd[(k2, take)] = (v2, (k, d))
+        hist.append(nd)
+        dp = nd
+    end = min((key for key in dp if key[0] == n), key=lambda key: dp[key][0])
+    out, key = [], end
+    for j in range(L - 1, -1, -1):
+        v, prev = hist[j][key]
+        if key[1]:
+            out.append(lo + j)
+        key = prev
+    return sorted(out)
+
+
+def _bob(stand, frame):
+    """vertical offset (-2..2) of a walk frame against the standing figure, matched on the upper half of the body"""
+    x0, y0, x1, y1 = stand.getchannel("A").getbbox()
+    sp, fp = stand.load(), frame.load()
+    best = None
+    for d in (-2, -1, 0, 1, 2):
+        t = 0
+        for y in range(y0, y0 + (y1 - y0) // 2):
+            for x in range(x0, x1):
+                if not 0 <= y + d < C:
+                    t += 1000
+                    continue
+                a, b = sp[x, y], fp[x, y + d]
+                t += 300 if a[3] != b[3] else (abs(a[0] - b[0]) + abs(a[1] - b[1]) + abs(a[2] - b[2]) if a[3] else 0)
+        if best is None or t < best[0]:
+            best = (t, d)
+    return best[1]
+
+
+def _drop(im, rows, cols, dy=0, cx=C // 2):
+    """im without rows (+dy, the frame's bob) and cols; what is below a dropped row moves nothing (feet stay), column cx stays"""
+    src, out = im.load(), Image.new("RGBA", im.size, (0, 0, 0, 0))
+    o = out.load()
+    R, K = set(r + dy for r in rows), set(cols)
+    ymap, sh = {}, 0
+    for y in range(C - 1, -1, -1):
+        if y in R:
+            sh += 1
+        else:
+            ymap[y] = y + sh
+    xmap, sh = {}, 0
+    for x in range(cx, C):
+        if x in K:
+            sh += 1
+        else:
+            xmap[x] = x - sh
+    sh = 0
+    for x in range(cx - 1, -1, -1):
+        if x in K:
+            sh += 1
+        else:
+            xmap[x] = x + sh
+    for y, Y in ymap.items():
+        for x, X in xmap.items():
+            p = src[x, y]
+            if p[3] and 0 <= X < C and 0 <= Y < C:
+                o[X, Y] = p
+    return out
+
+
+def shrink(stand, frames, s, head=None):
+    """-> (stand, frames, info): the direction made smaller by the factor s (head: the factor of the top third)"""
+    bobs = [_bob(stand, f) for f in frames]
+    aligned = [shift(f, 0, -d) for f, d in zip(frames, bobs)]
+    allf = [stand] + aligned
+    x0, y0, x1, y1 = stand.getchannel("A").getbbox()
+    H = y1 - y0
+    n = round(H * (1 - s))
+    rcost = lambda r: _diff(allf, r, True)
+    if head is None:
+        rows = _pick(y0 + 1, y1, n, rcost)
+    else:
+        hh = H // 3
+        nh = min(n, round(hh * (1 - head)))
+        rows = sorted(_pick(y0 + 1, y0 + hh, nh, rcost) + _pick(y0 + hh, y1, n - nh, rcost))
+    boxes = [f.getchannel("A").getbbox() for f in allf]
+    X0, X1 = min(b[0] for b in boxes if b), max(b[2] for b in boxes if b)
+    cols = _pick(X0 + 1, X1, round((X1 - X0) * (1 - s)), lambda c: _diff(allf, c, False))
+    return _drop(stand, rows, cols), [_drop(f, rows, cols, d) for f, d in zip(frames, bobs)], \
+        {"rows": rows, "cols": cols, "bobs": bobs}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--key", required=True)
@@ -213,12 +362,15 @@ def main():
     ap.add_argument("--from", dest="from_", action="append")
     ap.add_argument("--mirror", action="append")
     ap.add_argument("--mirror-walk", dest="mirror_walk", action="append")
+    ap.add_argument("--flip-frames", dest="flip_frames", action="append")
     ap.add_argument("--steps")
     ap.add_argument("--name", default="")
     ap.add_argument("--desc", default="")
     ap.add_argument("--group", default="")
     ap.add_argument("--gens", default="")   # a number, or JSON such as {"character": 20, "walk": 8}
     ap.add_argument("--dx", type=int, default=0)
+    ap.add_argument("--scale", type=float, default=0)
+    ap.add_argument("--head", type=float, default=0)
     ap.add_argument("--notes", default="")
     ap.add_argument("--gif", default="")
     args = ap.parse_args()
@@ -254,6 +406,18 @@ def main():
     for d, s in kv(args.mirror_walk).items():
         walk[d] = [flip(f) for f in walk[s]]
         log("mirror walk", d, "<-", s)
+    for d, spec in kv(args.flip_frames).items():
+        src_frames = list(walk[d])
+        for pair in spec.split(","):
+            f, g = [int(x) for x in pair.split(":")]
+            walk[d][f] = flip(src_frames[g])
+        log("flip frames", d, spec)
+    if args.scale and args.scale < 1:
+        for d in DIRS:
+            h0 = bottom(rot[d]) - rot[d].getchannel("A").getbbox()[1] + 1
+            rot[d], walk[d], info = shrink(rot[d], walk[d], args.scale, args.head or None)
+            h1 = bottom(rot[d]) - rot[d].getchannel("A").getbbox()[1] + 1
+            log("scale %-10s height %d -> %d, %d rows + %d cols out, bobs %s" % (d, h0, h1, len(info["rows"]), len(info["cols"]), info["bobs"]))
 
     # feet: move each direction row as a whole so the standing figure stands on the hero's row for that direction
     report = {}
@@ -352,8 +516,11 @@ def main():
         "sheet": "$Npc_%s" % key,
         "walk8": "Npc_%s_Walk8" % key,
         "steps": [sa, sb],
-        "fixes": {"from": kv(args.from_), "mirror": kv(args.mirror), "mirror_walk": kv(args.mirror_walk)},
+        "fixes": {"from": kv(args.from_), "mirror": kv(args.mirror), "mirror_walk": kv(args.mirror_walk),
+                  "flip_frames": kv(args.flip_frames)},
         "feet_dy": {d: report[d]["dy"] for d in DIRS},
+        "scale": ({"body": args.scale, "head": args.head or args.scale} if args.scale and args.scale < 1 else None),
+        "height_px": report["south"]["height"],
         "notes": args.notes or old.get("notes", ""),
     }
     data = [e for e in data if e.get("key") != key] + [entry]

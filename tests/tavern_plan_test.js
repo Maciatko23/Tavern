@@ -69,7 +69,7 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
         const BOARDS = await J("TavernLife.plan.BOARDS");
 
         // ================= the easels on the three maps
-        const landing = { 1: [50, 82, 8], 25: [48, 62, 8], 26: [40, 23, 8] };
+        const landing = { 1: [50, 53, 8], 25: [48, 62, 8], 26: [40, 23, 8] };
         const floorOf = { 1: 0, 25: 1, 26: 2 };
         for (const map of [1, 25, 26]) {
             const [lx, ly, ld] = landing[map], bd = BOARDS[map];
@@ -157,7 +157,7 @@ const KEYS = { O: [79, "KeyO", "o"], P: [80, "KeyP", "p"], Q: [81, "KeyQ", "q"],
         }
 
         // ================= tabs, cursor, panel (Map001)
-        await go(1, 50, 80, 8);
+        await go(1, 50, 51, 8);
         await setClock(3, 19);
         await ev("TavernLife.plan.open(); 0");
         await until(inPlan, 15);

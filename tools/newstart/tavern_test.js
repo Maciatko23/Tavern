@@ -71,7 +71,8 @@ if (dir) for (const f of fs.readdirSync(dir)) if (/^(Map\d{3}|System)\.json$/.te
                 }
                 out.pockets = pockets;
                 return out; })()`);
-            const bad = r.starts.some(s => s.missing.length || s.startSolid) || r.water || (p.noPockets && r.pockets.length);
+            // (water and closed pockets fail only where the spec says so: the big town has the user's pond and walled-off corners)
+            const bad = r.starts.some(s => s.missing.length || s.startSolid) || (r.water && !p.allowWater) || (p.noPockets && r.pockets.length);
             if (bad) fails++;
             console.log(`${bad ? "FAIL" : "ok  "} walk Map${String(r.map).padStart(3, "0")} ${r.size} tileset ${r.tileset}, ${r.events} events, water ${r.water}; ` +
                 r.starts.map(s => `from ${s.from}: ${s.reachable} tiles` + (s.missing.length ? ` MISSING ${s.missing.join(" ")}` : "") + (s.startSolid ? " START SOLID" : "")).join("; ") +

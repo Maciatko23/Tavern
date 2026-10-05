@@ -7,7 +7,7 @@ const { text: T, end: END } = kit.cmd;
 
 kit.test({}, async t => {
     // (the new tavern: in front of the bar, Borgar across the counter)
-    await t.newGame({ map: 1, x: 50, y: 64, dir: 4, hour: 12 });
+    await t.newGame({ map: 1, x: 52, y: 31, dir: 8, hour: 12 });   // (across the counter from Borgar, the second build of the hall)
     const win = () => t.json(`(function(){ const s = SceneManager._scene, m = s._messageWindow, bs = m._bubbleSprite, who = m._bubbleOf, head = who ? SpeechBubbles.headOf(who) : null;
         return { open: m.isOpen(), who: who === $gamePlayer ? "player" : who ? "event " + who.eventId() : null, x: m.x, y: m.y, w: m.width, h: m.height, bubble: !!(bs && bs.visible), edge: m._bubbleEdge,
             head: head && { x: Math.round(head.x), top: Math.round(head.top), foot: Math.round(head.foot) }, opacity: m.opacity, text: m._textState ? m._textState.text.slice(0, 30) : "",

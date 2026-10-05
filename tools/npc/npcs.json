@@ -38,5 +38,1035 @@
       "south-east": 0
     },
     "notes": "Dziadek bohatera; nowa gra zaczyna się w jego chacie (Map019, zdarzenie 901 w Story.js). Chód: walking-8-frames, 1 gen/kierunek. Zachód (rotacja + chód) to lustro wschodu: własny chód zachodni PixelLaba zmieniał kolory (kremowe spodnie, pomarańczowy pas). Stopy już na wierszach bohatera (dy 0 we wszystkich kierunkach)."
+  },
+  {
+    "key": "Kowal",
+    "name": "Tadek Młot (kowal)",
+    "pixellab_id": "11d7a15a-d85a-4c5d-8b69-151c6eb3162f",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0ddfb35a-f1ae-41c5-ac8b-d80b7aaae45d",
+    "animation": "walk",
+    "description": "burly middle-aged village blacksmith, leather apron (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Kowal",
+    "walk8": "Npc_Kowal_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Piekarka",
+    "name": "Hanka Mączna (piekarka)",
+    "pixellab_id": "e75253cd-945f-4894-940f-86e6b1f47185",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "2a65232f-da0f-448c-9199-de00c31252ef",
+    "animation": "walk",
+    "description": "plump cheerful village baker woman, white headscarf, flour apron (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Piekarka",
+    "walk8": "Npc_Piekarka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Woziwoda",
+    "name": "Kuba Woziwoda",
+    "pixellab_id": "54550fe0-0c2a-41a4-8d15-06319eb2b22c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "e5eba4f6-4e10-423b-976f-deaa4627b573",
+    "animation": "walk",
+    "description": "lean young water carrier, straw hat, leather vest (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Woziwoda",
+    "walk8": "Npc_Woziwoda_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Kapral",
+    "name": "Kapral Wit Czerwień (straż Lorda)",
+    "pixellab_id": "e94d003e-cf91-456e-ad76-e839a6493fab",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "5a262513-7c8e-4216-82cc-92f13ce9e623",
+    "animation": "walk",
+    "description": "town guard corporal, kettle helmet, red tabard with black horse (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Kapral",
+    "walk8": "Npc_Kapral_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Dzwonnik",
+    "name": "Ambroży (dzwonnik)",
+    "pixellab_id": "64a21793-e5ec-4506-be92-e1da79cda5f1",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "412fecc7-3a60-4d83-872b-e54ce2d27f8b",
+    "animation": "walk",
+    "description": "very old hunched bell-ringer, grey robe, iron key (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Dzwonnik",
+    "walk8": "Npc_Dzwonnik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": -1,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Kupiec",
+    "name": "Baltazar Vey (kupiec z kontynentu)",
+    "pixellab_id": "c6280e53-7a13-4885-ad31-399e543a235c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "73966434-10f8-4bd4-9256-68026c1cdb4e",
+    "animation": "walk",
+    "description": "foreign merchant, green velvet coat, burgundy feathered hat (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Kupiec",
+    "walk8": "Npc_Kupiec_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Soltys",
+    "name": "Sołtys Bronisław",
+    "pixellab_id": "b2a80d02-8ed5-4f41-b99e-a46c92535935",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "979b0bff-a8a9-4e1b-abf1-2058896bd86f",
+    "animation": "walk",
+    "description": "portly village headman, brown waistcoat, brass chain of office (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Soltys",
+    "walk8": "Npc_Soltys_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Garbarz",
+    "name": "Ignac (garbarz i szewc)",
+    "pixellab_id": "0425350f-e6ce-493e-97ad-fa590ca376db",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "94f4e747-9080-4777-83bc-827993c63219",
+    "animation": "walk",
+    "description": "tall thin tanner and shoemaker, leather cap and apron (TownLife)",
+    "gens_used": 0,
+    "sheet": "$Npc_Garbarz",
+    "walk8": "Npc_Garbarz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "notes": ""
+  },
+  {
+    "key": "Melia",
+    "name": "Melia Srebrogłosa (bardka)",
+    "pixellab_id": "550266d9-f3ab-4aaa-b182-97c34616cd20",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "a264eac7-a9b9-4957-8e86-6fd214aab82f",
+    "animation": "walk",
+    "description": "Melia the young bard woman, about 22 years old, long wavy silver-blonde hair with a rose-pink ribbon, pretty gentle face, elegant but travel-worn deep blue dress with a laced bodice and a frayed hem, short dusty burgundy travelling cloak on the shoulders, brown leather belt with a small pouch, brown boots, medieval wandering minstrel, no instrument, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Melia",
+    "walk8": "Npc_Melia_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Bardka z tawerny (włosy srebrnoblond zamiast różowych z RTP - wg opisu). Chód S prawie bez ruchu nóg (długa suknia)."
+  },
+  {
+    "key": "Ozzy",
+    "name": "Dziadek Ozzy (stały bywalec)",
+    "pixellab_id": "7eb253b5-ea6b-46a4-b22a-f626feb05fc0",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "a03046c5-dec5-47b4-a20c-139af8c85f18",
+    "animation": "walk",
+    "description": "Ozzy the old tavern drunk, about 75 years old, a bit bent and hunched, white hair sticking out under a shabby battered brown felt hat, white stubble, big red bulbous nose and rosy cheeks, droopy tired eyes, patched faded dark navy coat with mismatched brown patches, off-white shirt, baggy grey trousers, worn shoes, poor medieval old man, empty hands, no bottle, no cane, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Ozzy",
+    "walk8": "Npc_Ozzy_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Stały bywalec tawerny, pijaczyna z czerwonym nosem."
+  },
+  {
+    "key": "Borgar",
+    "name": "Borgar Kowal (karczmarz)",
+    "pixellab_id": "13d77951-29b1-413e-9161-fb1fa1eee568",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "c2f7a29f-daeb-4f27-9e93-2721802c01d1",
+    "animation": "walk",
+    "description": "Borgar the innkeeper, strong broad-shouldered man in his 50s, short grey hair, short grey beard, green eyes, kind but stern face, off-white linen shirt with the sleeves rolled up to the elbows showing strong forearms, mustard-yellow waistcoat, purple neckerchief, long brown leather apron over it, dark navy trousers, brown leather boots, medieval tavern keeper, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 9
+    },
+    "sheet": "$Npc_Borgar",
+    "walk8": "Npc_Borgar_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Południowy chód wygenerowany ponownie (pierwszy w klatkach 6-7 odwracał się plecami)."
+  },
+  {
+    "key": "Grum",
+    "name": "Grum Żelazna Pięść (najemnik)",
+    "pixellab_id": "a372713f-6362-4c8e-b1a5-e4ec7c5fa644",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "f4b8d0a5-4be6-4cb9-b8f4-d1fb958a5f28",
+    "animation": "walk",
+    "description": "Grum the mercenary, big burly muscular man about 40, short cropped dark hair, black eye patch over the left eye, scarred face with a long scar across the cheek, stubble, worn scuffed brown leather armour with straps and buckles, red scarf around the neck, one iron plate gauntlet on the right hand, bare left hand, dark brown trousers, heavy boots, battle-hardened, no weapon, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_failed_and_rerun": 1
+    },
+    "sheet": "$Npc_Grum",
+    "walk8": "Npc_Grum_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Rękawica wyszła na lewej ręce (spójnie we wszystkich kierunkach)."
+  },
+  {
+    "key": "Lord",
+    "name": "Lord Leopold Zaleski",
+    "pixellab_id": "ad539d45-5f5a-481c-9173-c2be6503cac0",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "91e0e892-5fe0-422e-9885-074af57fdc41",
+    "animation": "walk",
+    "description": "Lord Leopold Zaleski, a noble lord about 55, greying brown hair swept back, neat short grey beard and moustache, proud stern face, rich crimson red doublet with black trim and gold buttons, small black horse emblem on the chest, heavy gold chain across the chest, black cloak with a brown fur collar over the shoulders, black trousers, tall black leather boots, medieval nobleman, no weapon, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Lord",
+    "walk8": "Npc_Lord_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "north-west": "north-east"
+      },
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Północny zachód (rotacja + chód) to lustro północnego wschodu: własny chód NW PixelLaba gubił czarny płaszcz."
+  },
+  {
+    "key": "Feliks",
+    "name": "Feliks (kamerdyner Lorda)",
+    "pixellab_id": "b9ac24d3-c499-4ea9-83b6-63aa9dc8c1f5",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "ca6cea38-d774-47ec-9af1-2e62ae214b5f",
+    "animation": "walk",
+    "description": "Feliks the butler of a noble manor, thin tall man about 60, very upright stiff posture, neatly combed grey hair, clean-shaven long narrow face, thin lips, black livery tailcoat with a row of silver buttons, white high-collared shirt with a black cravat, black trousers, polished black shoes, white gloves, arms straight at his sides, dignified servant, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 10
+    },
+    "sheet": "$Npc_Feliks",
+    "walk8": "Npc_Feliks_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": -1,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Chód S i SE wygenerowany ponownie (pierwszy S gubił białą koszulę i guziki, SE odwracał się w ostatniej klatce)."
+  },
+  {
+    "key": "Bronek",
+    "name": "Bronek (chłopiec, ok. 9 lat)",
+    "pixellab_id": "dc6b8c8b-c7e6-43fd-96eb-e07117d36513",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "a9db23ac-bddf-4107-9b22-5e7dd0ddce9c",
+    "animation": "walk",
+    "description": "Bronek, a small peasant boy about 9 years old, a small child much shorter than an adult, round face with freckles, messy short sandy-brown hair, patched oversized off-white linen shirt, rope belt, short brown trousers with patches, barefoot, poor medieval village child, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 10
+    },
+    "sheet": "$Npc_Bronek",
+    "walk8": "Npc_Bronek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.77,
+      "head": 0.88
+    },
+    "height_px": 46,
+    "notes": "Dziecko: PixelLab narysował go wzrostu dorosłego, zmniejszony --scale 0.77 --head 0.88 (głowa mniej, reszta bardziej). Chód E i N wygenerowany ponownie (E zmieniał włosy na rude i długie, N czernił spodnie)."
+  },
+  {
+    "key": "Ludmila",
+    "name": "Ludmiła (uchodźczyni z kontynentu)",
+    "pixellab_id": "8198d4c7-7f69-4014-aca6-783bcbcd1891",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "3b1c3993-eefa-4e6b-8d79-308472b15f35",
+    "animation": "walk",
+    "description": "Ludmila, a refugee woman about 30 who fled a war, tired thin face with dark circles under her eyes, dark brown hair tied back with loose strands, worn dusty grey-green travel dress with a frayed hem, a faded brown woollen shawl wrapped over her shoulders, muddy worn shoes, poor and weary, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Ludmila",
+    "walk8": "Npc_Ludmila_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Uchodźczyni z wojny na kontynencie, matka Eli."
+  },
+  {
+    "key": "Ela",
+    "name": "Ela (córeczka Ludmiły, ok. 5 lat)",
+    "pixellab_id": "463a6fce-5e91-4a84-bd3e-fd263e8452c4",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "ae78155c-38e5-4fac-93b7-4103efb7920a",
+    "animation": "walk",
+    "description": "Ela, a tiny little girl about 5 years old, a very small child about half the height of an adult, dark brown messy hair, big sad eyes, smudged cheeks, shabby oversized faded blue dress with patches, barefoot, poor refugee child, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Ela",
+    "walk8": "Npc_Ela_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.62,
+      "head": 0.8
+    },
+    "height_px": 36,
+    "notes": "Dziecko: PixelLab narysował ją wzrostu dorosłego, zmniejszona --scale 0.62 --head 0.80."
+  },
+  {
+    "key": "Rafal",
+    "name": "Rafał (dezerter)",
+    "pixellab_id": "15945f6b-7f0d-40ea-a469-f9d637e2bddf",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "c5f30aee-644d-4a3c-8b65-9baa2f9b6b2a",
+    "animation": "walk",
+    "description": "Rafal, a young army deserter about 25, unshaven with dark stubble, messy dark brown hair, gaunt nervous face, torn dirty padded gambeson in faded dull blue-grey with quilted lines (blue-grey on the back too), a torn bare patch on the chest where the army insignia was ripped off, right forearm wrapped in a dirty linen bandage, brown trousers, worn muddy brown boots, no weapon, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 40,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Rafal",
+    "walk8": "Npc_Rafal_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Postać zrobiona dwa razy: pierwsza (9fb4e750-2e79-4bc2-961a-05e6be557e83) miała w kierunku N plecy bohatera (szara koszula, boso) - odrzucona, nieużywana."
+  },
+  {
+    "key": "Zosia",
+    "name": "Zosia (dziewczynka, ok. 7 lat)",
+    "pixellab_id": "53a60ef2-ce9d-4658-adc0-b6f7cb69716f",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "335fc641-5e47-45bc-ae7f-25a99a429066",
+    "animation": "walk",
+    "description": "Zosia, a small peasant girl about 7 years old, a small child about half the height of an adult, round chubby face, two blonde braids, simple faded red linen dress with a patched off-white apron, barefoot, poor medieval village child, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_north_skeleton_v3": "2-4 (not measured)"
+    },
+    "sheet": "$Npc_Zosia",
+    "walk8": "Npc_Zosia_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {
+        "north": "5:1,6:2,7:3"
+      }
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.7,
+      "head": 0.84
+    },
+    "height_px": 42,
+    "notes": "Dziecko: PixelLab narysował ją wzrostu dorosłego, zmniejszona --scale 0.70 --head 0.84. Chód N z trybu skeleton-v3 (szablonowy gubił warkocze); jego klatki 5-7 miały fartuch na plecach, więc są lustrem klatek 1-3."
+  },
+  {
+    "key": "Wanda",
+    "name": "Łaziebna Wanda",
+    "pixellab_id": "5d0d0983-60a2-4fd0-8b63-c556aa8e2572",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0d41e5da-f067-4593-bb44-a997adc9e19e",
+    "animation": "walk",
+    "description": "Wanda the bath attendant, sturdy strong woman about 40, light brown hair in a long side braid, rosy cheeks, plain cream linen blouse with the sleeves rolled up to the elbows, brown laced bodice, long white apron over a brown skirt, a white towel draped over her left shoulder, brown shoes, medieval bathhouse keeper, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 9,
+      "walk_failed_and_rerun": 1,
+      "walk_north_skeleton_v3": "2-4 (not measured)"
+    },
+    "sheet": "$Npc_Wanda",
+    "walk8": "Npc_Wanda_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Łaziebna z tawerny. Chód N z trybu skeleton-v3 (dwa szablonowe gubiły warkocz i ręcznik: pierwszy co druga klatka, drugi całkiem)."
+  },
+  {
+    "key": "Drwal",
+    "name": "Zbych Smolarz (drwal i węglarz, Podgrodzie)",
+    "pixellab_id": "432bc8f0-e145-41b0-88c4-77e89012eb4d",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "c2a0019a-0b98-4a23-8396-ab65ef713cae",
+    "animation": "walk",
+    "description": "Zbych the woodcutter and charcoal burner, a broad stocky strong man about 45, thick bushy black beard flecked with grey, soot-smudged face and forearms, short dark hair, rough dark grey linen shirt with the sleeves rolled up, worn dark-brown leather jerkin laced at the front, a small wood axe tucked into his wide leather belt at the hip, dark brown trousers, scuffed worn brown boots, poor medieval forest worker, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Drwal",
+    "walk8": "Npc_Drwal_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podgrodzie. Siekierka przy pasie; w chodzie SE trzyma ją w ręce (kołysze się z ręką) - zostawione."
+  },
+  {
+    "key": "Klusownik",
+    "name": "Rysiek Sidło (kłusownik, Podgrodzie)",
+    "pixellab_id": "71f313be-ac5c-49c6-a968-528a2b0f5ed9",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "14e9050a-1b08-4a27-a3ea-3c57b9a82fac",
+    "animation": "walk",
+    "description": "Rysiek the poacher, a lean wiry man about 30, narrow sly face with a sharp nose and stubble, shifty eyes, a ragged dark moss-green hooded cloak with the hood up over his head, patched brown leather vest, a coil of thin snare wire and a small leather pouch hanging on his belt, a short hunting bow slung across his back, dark brown trousers, worn soft leather shoes, poor medieval poacher, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Klusownik",
+    "walk8": "Npc_Klusownik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "north-west": "north-east",
+        "south-east": "south-west",
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": -1,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podgrodzie. Stojąca postać W i E = klatka 0 własnego chodu (rotacje PixelLaba W/E były w 3/4, chód w czystym profilu - zip podmieniony przed budową). NW = lustro NE (chód NW zgubił płaszcz i łuk, zielone spodnie), SE = lustro SW (chód SE gubił łuk, czerwone plamki), W = lustro E (chód W nie miał łuku na plecach)."
+  },
+  {
+    "key": "Praczka",
+    "name": "Marta Ługowa (praczka, wdowa, Podgrodzie)",
+    "pixellab_id": "f2798835-bdaa-4eb1-b16a-6ea4100c0afa",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "463e9d17-64cb-4b35-bbb8-710d5f38ee8b",
+    "animation": "walk",
+    "description": "Marta the washerwoman, a thin worn widow about 40, tired gaunt face, faded grey-blue linen headscarf tied at the nape with a few brown hair strands showing, faded patched brown-grey wool dress with the sleeves rolled up to the elbows, red raw chapped hands and forearms, a damp stained off-white apron, barefoot, poor medieval peasant woman, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Praczka",
+    "walk8": "Npc_Praczka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "north-west": "north-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podgrodzie, matka Franka. Czerwone, spierzchnięte dłonie (od ługu): PixelLab dał je jaskrawoczerwone jak rękawice, więc przed budową czerwienie w zipie trochę przygaszone i ocieplone (s x0.78, odcień +0.012). NW = lustro NE (chód NW robił z sukni szerokie spodnie w klatkach 2-5)."
+  },
+  {
+    "key": "Franek",
+    "name": "Franek (syn praczki, ok. 8 lat, Podgrodzie)",
+    "pixellab_id": "419fd094-1c9f-4bbd-b0d6-75ac6b063477",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "26346d82-b963-4362-bcd6-1abfd86a2c94",
+    "animation": "walk",
+    "description": "Franek, a small skinny peasant boy about 8 years old, a small child much shorter than an adult, thin face with a smudge of dirt on the cheek, messy unruly chestnut-brown hair, a far too big hand-me-down faded mustard-yellow linen tunic shirt reaching down to his knees with rolled-up sleeves and a sewn-on brown patch, a rope belt, short dark-brown trousers ending at the knee, bare shins, barefoot, poor medieval village child, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "rejected_first_character": 20
+    },
+    "sheet": "$Npc_Franek",
+    "walk8": "Npc_Franek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.74,
+      "head": 0.86
+    },
+    "height_px": 44,
+    "notes": "Dziecko: PixelLab narysował go wzrostu dorosłego, zmniejszony --scale 0.74 --head 0.86 (między Bronkiem 9 l. a Zosią 7 l.). Postać zrobiona dwa razy: pierwsza (53333611-b212-4682-bae2-115aee9996ed) była kopią bohatera w szaroniebieskim (ten sam strój i sylwetka) - odrzucona, nieużywana."
+  },
+  {
+    "key": "Szmaciarz",
+    "name": "Józek Łata (handlarz starzyzną, Podgrodzie)",
+    "pixellab_id": "59686a71-46d7-49bf-9b90-38b95c85ab36",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "f2b0bfda-8287-4585-b528-136d40b1369b",
+    "animation": "walk",
+    "description": "Jozek the rag-and-bone man, a scrawny thin man about 55, gaunt stubbly face with a crooked grin showing bad yellow teeth, a battered odd floppy hat, a long mismatched patchwork coat sewn from many scraps in brown, faded red, green and grey with many pockets, a lumpy patched sack tied on his back with a rope over his shoulder, baggy grey trousers, worn mismatched shoes, poor medieval junk peddler, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_skeleton_v3_north_northeast": "4-8 (not measured exactly)"
+    },
+    "sheet": "$Npc_Szmaciarz",
+    "walk8": "Npc_Szmaciarz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "north-west": "north-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": -1,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Podgrodzie. Szablonowy chód N, NE i NW gubił worek na plecach (w N i NW zamiast worka plecy płaszcza, w NE zielono-czerwone pasy): N i NE z trybu skeleton-v3 (worek zostaje), NW = lustro NE."
+  },
+  {
+    "key": "Znachorka",
+    "name": "Babka Jadwiga (znachorka, Podgrodzie)",
+    "pixellab_id": "2f47a318-ac6e-4005-9bbf-a541e703775f",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "ced1e0d8-36bc-403b-99f7-dadbfad94fca",
+    "animation": "walk",
+    "description": "Jadwiga the old village herb-woman, a bent old woman about 70 with a hunched back, wrinkled sharp-eyed face, grey hair tied in a small bun, a dark charcoal-brown woollen shawl wrapped around her shoulders, long faded brown dress down to the ankles, bundles of dried green herbs and small flowers hanging from her rope belt, worn shoes, poor medieval village healer, no stick, no staff, empty hands hanging at her sides, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "rejected_first_character_with_stick": 20,
+      "rejected_first_walk": 6
+    },
+    "sheet": "$Npc_Znachorka",
+    "walk8": "Npc_Znachorka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podgrodzie. Bez laski: pierwsza postać (420a6e7d-f85b-46a1-85a6-6042c9339f54) miała laskę - w W i E trzymaną poziomo za plecami, a szablonowy chód gubił ją w S, N, NE, SE i w połowie klatek SW - odrzucona, nieużywana. Zioła przy pasie zostają w chodzie."
+  },
+  {
+    "key": "Uchodzca",
+    "name": "Darin z Kontynentu (uchodźca, Podgrodzie)",
+    "pixellab_id": "ad14fd60-d4dd-49f9-a07b-4a60a348afd4",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "719f757b-bd07-44d2-851d-f1fd3273dbe5",
+    "animation": "walk",
+    "description": "Darin the refugee from a foreign land, a tired weary man about 35, sun-tanned face with dark stubble and short dark hair, faded dusty olive-khaki quilted padded gambeson with a high collar (no armour), a faded patterned dark-teal sash around the waist, a dirty linen bandage wrapped around his left upper arm, a rolled grey blanket bedroll strapped diagonally across his back, dark brown trousers, dusty worn travel boots, foreign worn-out traveller, no weapon, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_skeleton_v3_north": "2-4 (not measured exactly)"
+    },
+    "sheet": "$Npc_Uchodzca",
+    "walk8": "Npc_Uchodzca_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "east": "west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podgrodzie. Chód N z trybu skeleton-v3 (szablonowy gubił zrolowany koc na plecach). E = lustro W (chód E doklejał wielki koc na wysokości bioder, znikający w 2 klatkach). W chodzie S bandaż widać na obu ramionach. Chód W miał jaskrawoturkusowy pas (w rotacjach przygaszony ciemny turkus): w zipie przed budową nasycone turkusy przygaszone (s 0.30)."
   }
 ]
