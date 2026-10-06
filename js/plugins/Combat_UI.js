@@ -42,8 +42,8 @@
     if (!P.core || !P.fight) throw new Error("Combat_UI.js: musi być pod Combat.js i Combat_Fight.js na liście wtyczek (one of them is missing or below)");
     const { hero, skillRank, skillBlock, skillById, skillText, secText, xpToNext, unspent, levelColor, learnSkill, spendPoints, ATTRS, ATTR_MAX, MAX_LEVEL,
         POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, TREES, SKILLS, ROW_LEVEL, strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt,
-        woundChance, carryBonus, gatherBonus, dexWork, comboWindow, aimSteady, baseBreath, heroMhp, combatMode, se } = P.core;
-    const { act, px, py, easeOut, floaters, sparks, sparksAt, maxBreath, breathNow, isWinded, shield, has, hand, handIcon, MELEE, ROLL_KIND, KNOCK_KIND } = P.fight;
+        woundChance, carryBonus, gatherBonus, dexWork, comboWindow, aimSteady, baseBreath, heroMhp, combatMode, se, foes, mindResist, mindTime } = P.core;
+    const { act, px, py, easeOut, floaters, sparks, sparksAt, maxBreath, breathNow, isWinded, shield, armor, sneakMult, has, hand, handIcon, MELEE, ROLL_KIND, KNOCK_KIND } = P.fight;
     const H = () => T.api("Hunting");
     const style = () => T.api("UITheme");   // (UITheme.js's window.UIStyle: the game's panels and bars)
 
@@ -133,7 +133,7 @@
         if (!this._trails) this._trails = new Map();
         const map = this.parent, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
         const ox = $gameMap.displayX() * tw, oy = $gameMap.displayY() * th;
-        const Hn = H(), animals = Hn ? Hn.animals : [];
+        const animals = foes();   // (the animals and the men - Humans.js)
         for (const a of animals) {
             const sp = a._sprite, rushing = typeof a.isRushing === "function" && a.isRushing() && sp && sp.parent === map;
             let tr = this._trails.get(a);
@@ -173,23 +173,53 @@
         for (const g of tr.ghosts) { if (g.parent) g.parent.removeChild(g); g.destroy(); }
         this._trails.delete(a);
     };
+    // the floating words and numbers: each rises from where it was said and fades; ones that would cover each other are stacked - the
+    // older keeps its place, a newer one goes up above it (a few frames' glide, never back down while it shows), so every line reads
+    // (a hero's "Opierasz się!" under its "Hart ducha", the boss's "Odpowiedź!" over a "Utknął!"); one pushed far up fades sooner
+    const FLOAT = { life: 50, rise: 26, gap: 3, far: 120 };
     Sprite_CombatLayer.prototype.updateFloaters = function() {
-        for (const f of floaters) {
+        const placed = [];
+        // (the plates SurvivalHUD floats over the hero - a missing tool, the weather - stay where they are: the words go above them too;
+        // same screen place only while the map is not zoomed)
+        const loot = SceneManager._scene && SceneManager._scene._lootLayer;
+        if (loot && floaters.length && $gameScreen.zoomScale() === 1) {
+            for (const p of loot.children) if (p.bitmap && p.visible && p.alpha > 0.05) placed.push({ x: p.x, y: p.y + 2, w: p.bitmap.width * Math.abs(p.scale.x) + 6, h: p.bitmap.height * Math.abs(p.scale.y) + 4 });
+        }
+        for (const f of floaters.slice().sort((a, b) => (a.seq || 0) - (b.seq || 0))) {
             if (!f.sprite) {
-                f.sprite = new Sprite(textBitmap(f.text, f.color, Math.round(20 * f.scale)));
+                const size = Math.round(20 * f.scale);
+                f.sprite = new Sprite(textBitmap(f.text, f.color, size));
                 f.sprite.anchor.set(0.5, 1);
                 this.addChild(f.sprite);
+                f.w = Math.ceil(f.sprite.bitmap.measureTextWidth(f.text)) + 10;   // (the letters and their outline, not the whole bitmap)
+                f.h = size + 4;
+                f.lift = -1;
             }
             f.t++;
-            const k = f.t / 50;
-            f.sprite.x = toScreenX(f.x);
-            f.sprite.y = toScreenY(f.y) - Math.round(26 * easeOut(Math.min(1, k * 1.6)));
-            f.sprite.opacity = k < 0.6 ? 255 : Math.round(255 * (1 - (k - 0.6) / 0.4));
+            const k = f.t / FLOAT.life, x = toScreenX(f.x), y0 = toScreenY(f.y) - 6 - Math.round(FLOAT.rise * easeOut(Math.min(1, k * 1.6)));
+            // up above every placed line it would touch (they are already sorted oldest first)
+            let y = y0;
+            for (let moved = true, n = 0; moved && n < 12; n++) {
+                moved = false;
+                for (const p of placed) {
+                    if (Math.abs(p.x - x) * 2 >= p.w + f.w || y - f.h >= p.y || y <= p.y - p.h) continue;
+                    y = p.y - p.h - FLOAT.gap;
+                    moved = true;
+                }
+            }
+            const want = y0 - y;
+            f.lift = f.lift < 0 ? want : Math.max(f.lift, f.lift + (want - f.lift) * 0.4);
+            if (f.lift > FLOAT.far) f.t++;   // (a tall stack: the top goes sooner)
+            const shown = y0 - Math.round(f.lift);
+            placed.push({ x, y: shown, w: f.w, h: f.h });
+            f.sprite.x = x;
+            f.sprite.y = shown + 6;   // (the bitmap's lower margin under the letters)
+            f.sprite.opacity = k < 0.6 ? 255 : Math.round(255 * Math.max(0, 1 - (k - 0.6) / 0.4));
             const pop = f.t < 6 ? 1 + (6 - f.t) * 0.08 : 1;
             f.sprite.scale.set(pop, pop);
         }
-        for (const f of floaters.filter(f => f.t >= 50)) { this.removeChild(f.sprite); f.sprite.destroy(); }
-        floaters.splice(0, floaters.length, ...floaters.filter(f => f.t < 50));
+        for (const f of floaters.filter(f => f.t >= FLOAT.life)) { this.removeChild(f.sprite); f.sprite.destroy(); }
+        floaters.splice(0, floaters.length, ...floaters.filter(f => f.t < FLOAT.life));
     };
     Sprite_CombatLayer.prototype.updateSparks = function() {
         for (const s of sparks) {
@@ -264,7 +294,7 @@
         s.opacity = act.blockT <= parryWindow() ? 255 : 215;
     };
     Sprite_CombatLayer.prototype.updateBars = function() {
-        const Hn = H(), animals = Hn ? Hn.animals : [];
+        const Hn = H(), animals = foes();   // (the animals and the men - Humans.js)
         const seen = new Set();
         for (const a of animals) {
             if (!showsBar(a)) continue;
@@ -279,8 +309,11 @@
             const key = Math.round(a._hp) + ":" + Math.round(a._poise || 0) + ":" + (a._stun > 0 ? 1 : 0) + ":" + a._level + ":" + hero().level;
             if (key !== e.key) { e.key = key; drawEnemyBar(e.sprite.bitmap, a); }
             const sprite = a._sprite, top = sprite && sprite.bitmap && sprite.bitmap.isReady() ? sprite.patternHeight() : 48;
+            // (a big one - the bear: over its "?" / "!", which goes higher while it is reared up; a creature of the ruins says its own: barTop)
+            const sp = (Hn && Hn.SPECIES[a.kind()]) || {}, my = sp.markYTall && ["warn", "pinWind", "swipeWind"].includes(a._mode) ? sp.markYTall : sp.markY;
+            const tall = my !== undefined && my < -70 ? -my + 30 : 0, own = typeof a.barTop === "function" ? a.barTop() : 0;
             e.sprite.x = toScreenX(a.centerX()) - 9;
-            e.sprite.y = toScreenY(a.centerY()) + Math.round($gameMap.tileHeight() / 2) - Math.min(top, 70) - 6 - (a.jumpHeight ? a.jumpHeight() : 0);
+            e.sprite.y = toScreenY(a.centerY()) + Math.round($gameMap.tileHeight() / 2) - (own || Math.max(Math.min(top, 70), tall)) - 6 - (a.jumpHeight ? a.jumpHeight() : 0);
         }
         for (const [a, e] of this._bars) {
             if (seen.has(a)) continue;
@@ -467,8 +500,11 @@
     function updateCharacter(sprite) {
         const ch = sprite._character;
         if (ch === $gamePlayer) {
-            const tint = act.hurtT > 0 ? [255, 60, 50, Math.round(act.hurtT * 9)] : act.stun > 0 && act.stunKind === "down" && KNOCK_KIND < 0 ? [40, 40, 60, 90] : null;
+            const fear = act.stun > 0 && act.stunKind === "fear";   // (stage 4: frozen by a wraith's truth - pale, trembling)
+            const tint = act.hurtT > 0 ? [255, 60, 50, Math.round(act.hurtT * 9)] : act.stun > 0 && act.stunKind === "down" && KNOCK_KIND < 0 ? [40, 40, 60, 90]
+                : fear ? [150, 170, 255, 70 + Math.round(30 * Math.sin(Graphics.frameCount / 4))] : act.stun > 0 && act.stunKind === "held" ? [90, 140, 130, 60] : null;
             if (tint) { sprite.setBlendColor(tint); sprite._combatTint = true; } else if (sprite._combatTint) { sprite.setBlendColor([0, 0, 0, 0]); sprite._combatTint = false; }
+            if (fear || (act.stun > 0 && act.stunKind === "held")) sprite.x += (Graphics.frameCount % 4 < 2 ? 1 : -1);
             if (act.flinchT > 0 && !$gamePlayer._toolSwing) {   // hit: he leans away from the blow on his feet, sinks a little, straightens up
                 const e = Math.sin((1 - act.flinchT / act.flinchLen) * Math.PI), [hx, hy] = act.hitFrom || [0, 1];
                 sprite.rotation = (Math.abs(hx) > 0.3 ? Math.sign(hx) : ($gamePlayer.direction() === 4 ? -1 : 1) * 0.5) * 0.3 * e;
@@ -543,11 +579,12 @@
             ["Rąbanie, kopanie, kucie", gatherBonus() > 0 ? "o " + (Math.round(gatherBonus() * 1000) / 10).toString().replace(".", ",") + "% mniej uderzeń" : "zwykłe"]],
         dex: () => [["Koszt przewrotu", rollCost() + " oddechu"], ["Nietykalność w przewrocie", secText(rollIFrames())],
             ["Czas na następny cios serii", secText(comboWindow())], ["Celowanie (łuk, proca)", aimSteady() > 0.999 ? "zwykłe" : "o " + Math.round((1 / aimSteady() - 1) * 100) + "% szybciej"],
-            ["Praca (budowa, rąbanie, kucie)", dexWork() > 1.001 ? "o " + Math.round((dexWork() - 1) * 100) + "% szybciej" : "zwykła"]],
+            ["Praca (budowa, rąbanie, kucie)", dexWork() > 1.001 ? "o " + Math.round((dexWork() - 1) * 100) + "% szybciej" : "zwykła"],
+            ["Strzał z ukrycia", "×" + num2(sneakMult(true))]],
         con: () => [["Życie", String(heroMhp())], ["Oddech (wypoczęty)", String(baseBreath())], ["Przewraca cię cios o sile", String(knockdownAt())],
             ["Szansa na ranę", Math.round(woundChance(1) * 100) + "% zwykłej"]],
-        per: () => [["Okno parowania", secText(parryWindow())], ["Trafienie krytyczne", Math.round(critChance() * 100) + "%"]],
-        wil: () => [["Na razie bez działania", "przyda się przeciw stworom z ruin"]]
+        per: () => [["Okno parowania", secText(parryWindow())], ["Trafienie krytyczne", Math.round(critChance() * 100) + "%"], ["Atak z ukrycia", "×" + num2(sneakMult(false))]],
+        wil: () => [["Opór przed „prawdą” i strachem", Math.round(mindResist(0) * 100) + "%"], ["Strach i zamęt trwają", Math.round(mindTime(1000) / 10) + "% zwykłego"]]
     };
     // runs fn with the planned points added to the attributes
     function withAttrs(add, fn) {
@@ -607,6 +644,39 @@
         const bw = R.width - 12, bx = R.x + 4, by = R.y + R.height - 14;
         U.bar(ctx, bx, by, bw, 5, (v + add) / ATTR_MAX, add > 0 ? U.accent : "#8fa4c8");
         if (add > 0) { ctx.fillStyle = "#8fa4c8"; ctx.fillRect(bx, by, Math.round(bw * v / ATTR_MAX), 5); }
+        this.resetFontSettings();
+    };
+    // under the attributes: what he wears (stage 2) - the shield and the jacket (it is enough to have them in the bag), what each does
+    // and how worn it is (Durability.js); a dash and where it is made when he has none
+    Window_HeroList.prototype.drawAllItems = function() {
+        Window_Selectable.prototype.drawAllItems.call(this);
+        this.drawGear(ATTRS.length * this.itemHeight() + 10 - this.scrollBaseY());
+    };
+    Window_HeroList.prototype.drawGear = function(y) {
+        const U = uic(), W = this.innerWidth, D = T.api("Durability"), sh = shield(), ar = armor(), c = this.contents;
+        this.resetFontSettings();
+        c.fillRect(4, y, W - 8, 1, U.line);
+        c.fontSize = 13;
+        this.changeTextColor(U.muted);
+        c.drawText("WYPOSAŻENIE", 4, y + 4, W - 8, 16, "left");
+        y += 24;
+        // one row each (34 px, it has to fit under the five attributes): the icon, the name, under it what it does and its wear
+        const row = (kind, owned, does, none) => {
+            const item = owned ? $dataItems[owned.id] : null;
+            if (item) this.drawIcon(item.iconIndex, 4, y);
+            c.fontSize = 16;
+            this.changeTextColor(item ? U.text : U.muted);
+            c.drawText(item ? item.name : kind + ": " + none, item ? 42 : 4, y, W - 46, 18, "left");
+            if (item) {
+                const wear = D && D.lifeOf && D.lifeOf(owned.id) ? "  ·  " + D.left(owned.id) + "/" + D.lifeOf(owned.id) : "";
+                c.fontSize = 13;
+                this.changeTextColor(U.accent);
+                c.drawText(does + wear, 42, y + 17, W - 46, 16, "left");
+            }
+            y += 34;
+        };
+        row("Tarcza", sh, sh ? "blok zatrzymuje " + Math.round(sh.reduce * 100) + "% ciosu" : "", "brak (warsztat)");
+        row("Kurtka", ar, ar ? "obrażenia o " + Math.round(ar.reduce * 100) + "% mniejsze" : "", "brak (garbarnia)");
         this.resetFontSettings();
     };
 

@@ -1,0 +1,27 @@
+{
+ "skill": 0.75,
+ "grow": null,
+ "rows": [
+  {
+   "name": "Pająk (piętro 5)",
+   "floor": 5,
+   "kind": "pajak",
+   "level": 6,
+   "hero": 4,
+   "attr": {
+    "str": 11,
+    "con": 7,
+    "dex": 6,
+    "per": 5,
+    "wil": 5
+   },
+   "weapon": 60,
+   "won": "1/1",
+   "s": 5.5,
+   "lostPct": 4,
+   "refills": 0,
+   "mhp": 119,
+   "foeHp": 92
+  }
+ ]
+}

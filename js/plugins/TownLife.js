@@ -13,10 +13,15 @@
 // (v1.1.0, 2026-10-05) A resident may live on another outdoor map ("map" in its data - Podgrodzie, Map111, the poor suburb outside
 // the west wall): it is put there and lives its day there; the spots of that map are TownLifeData.SPOTS_BY_MAP[map] and its
 // "Miejsce: <key>" events. Map008's residents work as before.
+// (v1.2.0, 2026-10-05) Residents who are not always there: "when" in a resident's data (a condition's name - "market": only on the
+// market days) keeps it away (hidden) on the other days; a plan entry may have a condition as its 4th field (the entry counts only
+// while the condition holds); a resident can be sent away for good or for some days (setGone(key, true | untilDay), kept in the
+// save: Tawerna.state("townLife")); another plugin can take a resident over for a while (hold(key, true, [x, y]): its plan stops
+// driving it, it walks to [x, y] and stands). The residents with none of these live exactly as before.
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.1.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.2.0
  * @author Claude
  *
  * @help
@@ -36,6 +41,12 @@
  * Czynności: inside (wchodzi do środka i znika), stand (stoi), work
  * (pracuje), wander (spaceruje w pobliżu), patrol (obchodzi listę miejsc),
  * bell (stoi przy dzwonie - o pełnej godzinie dzwon bije).
+ *
+ * Nie zawsze w mieście: "when: 'market'" w danych mieszkańca = jest tylko
+ * w dni targowe; czwarte pole wpisu planu (np. "market", "!market") = ten
+ * wpis liczy się tylko wtedy. W skryptach: TownLife.setGone("feliks", true)
+ * (zniknął na zawsze), TownLife.setGone("woziwoda", 20) (nie ma go do dnia
+ * 20), TownLife.setGone(klucz, false) (wraca).
  * ============================================================================
  */
 
@@ -64,6 +75,31 @@
     const raining = () => { const w = $gameScreen.weatherType(); return (w === "rain" || w === "storm") && $gameScreen.weatherPower() > 0; };
     const isNight = h => h >= 21 || h < 5;
     const pick = list => list[Math.floor(Math.random() * list.length)];
+    const dayNow = () => (T && T.time ? T.time.day() : 1);
+
+    // ------------------------------------------------------------------
+    // Not always there (v1.2.0): conditions ("when" of a resident, the 4th field of a plan entry), the residents gone (the save)
+    // ------------------------------------------------------------------
+    const store = T.state.define("townLife", () => ({ gone: {} }), { version: 1, owner: PLUGIN });
+    const COND = {
+        market: () => { const d = dayNow(), Q = T.api("TownQuests"); return Q && typeof Q.isMarket === "function" ? !!Q.isMarket(d) : d % 7 === 0; }
+    };
+    // a condition: a name (registered; "!name" the opposite; an unknown one holds) or a function
+    function condOk(c) {
+        if (!c) return true;
+        let v = true;
+        try {
+            if (typeof c === "function") v = !!c();
+            else { const neg = c[0] === "!", f = COND[neg ? c.slice(1) : c]; v = f ? !!f() !== neg : true; }
+        } catch (e) { v = true; }
+        return v;
+    }
+    function isGone(key) {
+        if (!window.$gameSystem) return false;
+        const g = store().gone[key];
+        return g === true || (typeof g === "number" && dayNow() < g);
+    }
+    const absent = res => isGone(res.key) || !condOk(res.when);
 
     // ------------------------------------------------------------------
     // Spots: the data's; an event "Miejsce: <key>" on the map moves one (its direction from its picture, if it has one)
@@ -89,9 +125,15 @@
     // ------------------------------------------------------------------
     // The plan: the entry for an hour (the last one starting at or before it; before the first: the day's last one)
     // ------------------------------------------------------------------
+    // (an entry with a condition counts only while it holds - v1.2.0)
     function entryAt(res, h) {
-        let i = res.plan.length - 1;
-        for (let k = 0; k < res.plan.length; k++) if (res.plan[k][0] <= h) i = k;
+        let i = -1, last = -1;
+        for (let k = 0; k < res.plan.length; k++) {
+            if (!condOk(res.plan[k][3])) continue;
+            last = k;
+            if (res.plan[k][0] <= h) i = k;
+        }
+        if (i < 0) i = last >= 0 ? last : res.plan.length - 1;
         const [hour, act, where] = res.plan[i];
         return { i, hour, act, where };
     }
@@ -170,18 +212,21 @@
     function place(ev) {
         const res = resOf(ev.eventId());
         if (!res) return;
-        const st = stateOf(ev), e = entryAt(res, hourNow()), first = firstSpot(e);
+        const st = stateOf(ev);
+        if (st.held) return;   // (another plugin has it for now)
+        const e = entryAt(res, hourNow()), first = firstSpot(e);
         st.i = e.i; st.patrol = 0; st.stuck = 0; st.wanderTo = null; st.wait = 0;
         const at = e.act === "wander" && first ? (st.wanderTo = wanderSpot(first)) : first;
         if (at) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); }
-        if (e.act === "inside") hide(ev, st); else show(ev, st);
+        st.absent = absent(res);
+        if (e.act === "inside" || st.absent) hide(ev, st); else show(ev, st);
     }
     // indoors: there while the plan has them inside this very place, hidden otherwise
     function placeIndoor(ev) {
         const res = resOf(ev.eventId());
         if (!res) return;
         const st = stateOf(ev), e = entryAt(res, hourNow());
-        const at = e.act === "inside" ? eventSpot($dataMap.events, indoorName(res, e)) : null;
+        const at = e.act === "inside" && !absent(res) ? eventSpot($dataMap.events, indoorName(res, e)) : null;
         if (at && st.hidden !== false) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); show(ev, st); }
         else if (at && (ev.x !== at[0] || ev.y !== at[1]) && !talking(ev)) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); }
         else if (!at && !st.hidden) hide(ev, st);
@@ -242,6 +287,12 @@
     function drive(ev, h) {
         const res = resOf(ev.eventId()), st = stateOf(ev);
         if (!res || talking(ev) || ev.isMoving()) return;
+        if (st.held) {   // (taken over: it walks where it was sent and stands there)
+            if (st.goTo && (ev.x !== st.goTo[0] || ev.y !== st.goTo[1])) walk(ev, st, st.goTo[0], st.goTo[1]);
+            return;
+        }
+        if (absent(res)) { if (!st.hidden) hide(ev, st); st.absent = true; return; }   // (away today: hidden all day)
+        if (st.absent) { st.absent = false; place(ev); return; }                       // (back: where the plan has it now)
         const e = entryAt(res, h);
         if (st.i !== e.i) {                              // a new part of the day: out of the door, off to the next spot
             st.i = e.i; st.patrol = 0; st.stuck = 0; st.wanderTo = null; st.wait = 0;
@@ -370,7 +421,33 @@
         lines: key => { const r = RES.find(x => x.key === key); return r ? r.talk : null; },
         eventOf: key => residents().find(e => (resOf(e.eventId()) || {}).key === key) || null,
         state: key => { const ev = api.eventOf(key); return ev ? Object.assign({ x: ev.x, y: ev.y, act: entryAt(resOf(ev.eventId()), hourNow()).act }, ev._town) : null; },
-        ringing: () => ringing.left
+        ringing: () => ringing.left,
+        // (v1.2.0) conditions, residents gone, residents taken over by another plugin
+        addCondition: (name, fn) => { if (name && typeof fn === "function") COND[name] = fn; },
+        condOk,
+        gone: key => isGone(key),
+        absent: key => { const r = RES.find(x => x.key === key); return !!r && absent(r); },
+        // v: true (gone for good), a day (gone until that day), false (back)
+        setGone(key, v) {
+            const g = store().gone;
+            if (v === true || (typeof v === "number" && v > 0)) g[key] = v; else delete g[key];
+            const ev = api.eventOf(key);
+            if (ev && isGone(key) && !stateOf(ev).held) { hide(ev, stateOf(ev)); stateOf(ev).absent = true; }
+            return isGone(key);
+        },
+        // on: the plan stops driving it; to: [x, y] - it walks there (path8) and stands. Off: back to its plan
+        hold(key, on, to) {
+            const ev = api.eventOf(key);
+            if (!ev) return false;
+            const st = stateOf(ev);
+            st.held = !!on;
+            st.goTo = on && to ? [to[0], to[1]] : null;
+            st.stuck = 0;
+            if (on && st.hidden) show(ev, st);
+            if (!on) { st.i = -1; st.wanderTo = null; }
+            return true;
+        },
+        held: key => { const ev = api.eventOf(key); return !!ev && !!stateOf(ev).held; }
     };
     window.TownLife = T.register(PLUGIN, api);
 })();

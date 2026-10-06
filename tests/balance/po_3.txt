@@ -1,0 +1,12 @@
+PASS a new game on the meadow (Map004), 12:00
+PASS an open field 15 x 7  {"x":20,"y":14}
+   Przeor w zbroi (boss 20) #1: {"won":true,"s":139.9,"lost":526,"mhp":159,"refills":4,"hits":25,"dodged":3,"left":"","by":{"przeor w zbroi":496,"boss_20":30},"foeHp":700,"scene":"Scene_Map"}
+   Przeor w zbroi (boss 20) #2: {"won":true,"s":188.7,"lost":864,"mhp":162,"refills":7,"hits":43,"dodged":13,"left":"","by":{"przeor w zbroi":748,"boss_20":116},"foeHp":700,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #1: {"won":true,"s":179.5,"lost":1155,"mhp":234,"refills":5,"hits":23,"dodged":12,"left":"","by":{"kamiennik":1155},"foeHp":876,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #2: {"won":true,"s":218.4,"lost":1484,"mhp":234,"refills":7,"hits":28,"dodged":12,"left":"","by":{"kamiennik":1484},"foeHp":876,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #1: {"won":false,"s":240.2,"lost":1580,"mhp":234,"refills":8,"hits":39,"dodged":14,"left":"boss_60:985/1484","by":{"kamienny odźwierny":820,"odłamki":684,"boss_60":76},"foeHp":1484,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #2: {"won":false,"s":240.1,"lost":2436,"mhp":234,"refills":13,"hits":65,"dodged":8,"left":"boss_60:275/1484","by":{"kamienny odźwierny":1538,"odłamki":854,"boss_60":44},"foeHp":1484,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #1: {"won":true,"s":235.2,"lost":1932,"mhp":250,"refills":9,"hits":46,"dodged":25,"left":"","by":{"zbroja bez herbu":1932},"foeHp":2228,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #2: {"won":true,"s":148,"lost":2044,"mhp":253,"refills":9,"hits":42,"dodged":12,"left":"","by":{"zbroja bez herbu":2044},"foeHp":2228,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #1: {"won":false,"s":240.1,"lost":1535,"mhp":261,"refills":7,"hits":4,"dodged":1,"left":"boss_80:868/2174","by":{"upiór pytającego":108},"foeHp":2174,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #2: {"won":true,"s":138,"lost":894,"mhp":264,"refills":4,"hits":1,"dodged":2,"left":"","by":{"upiór pytającego":27},"foeHp":2174,"scene":"Scene_Map"}

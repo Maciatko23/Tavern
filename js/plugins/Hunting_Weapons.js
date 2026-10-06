@@ -365,13 +365,23 @@
     // extra (Combat.js): { poise, knock, crit, heavy, tag } - how much of its balance the blow takes, whether it is thrown back
     // a stone / an arrow hits: Zręczność and the Strzelectwo skills make it stronger; a lucky shot (Słaby punkt) doubles it, a shot at
     // an animal that has not noticed the hero yet (Strzał w serce) triples it
+    // A shot from hiding (stage 2, 2026-10-05): at an animal that has not noticed him yet (no "!" over it, not fighting him), while he
+    // sneaks or from behind it (Combat.sneakAttack says) - Combat.sneakMult(true) (x2, more with Zręczność, Czujność and Zasadzka) and
+    // a heavy knock to its balance; Strzał w serce makes any shot at an unaware one a triple (a shot from hiding at least that)
     function shotHit(target, def) {
         const Cb = C();
-        let dmg = def.damage * (Cb ? 1 + 0.02 * (Cb.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")), tag = "";
+        let dmg = def.damage * (Cb ? 1 + 0.02 * (Cb.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")), tag = "", poise = Math.round(def.damage * 0.6);
         const a = target.ref && target.ref.isAnimal ? target.ref : null;
-        if (a && knowsSkill("r_heart") && (a._aware || 0) < 0.3 && !a._engaged) { dmg *= 3; tag = "heart"; }
+        const sneak = a && Cb && Cb.sneakAttack ? Cb.sneakAttack(a) : null;   // null | "unaware" | "hidden" (sneaking or from behind)
+        const heart = a && knowsSkill("r_heart") && !!sneak;
+        if (sneak === "hidden" || heart) {
+            const m = Math.max(sneak === "hidden" ? Cb.sneakMult(true) : 1, heart ? 3 : 1);
+            dmg *= m;
+            poise = Math.max(Math.round(poise * (Cb.SNEAK ? Cb.SNEAK.poise : 3)), (a._poise || 0) + 1);   // (its balance broken whole: it reels)
+            tag = heart && m === 3 ? "heart" : "sneak";
+        }
         else if (perkRoll("ranged.crit")) { dmg *= 2; tag = "crit"; }
-        target.hit(Math.round(dmg), "shot", { poise: Math.round(def.damage * 0.6), crit: !!tag, tag });
+        target.hit(Math.round(dmg), "shot", { poise, crit: !!tag, tag, heavy: tag === "sneak" || tag === "heart" });
     }
     function hit(animal, damage, how, extra) {
         const sp = SPECIES[animal.kind()];
@@ -387,9 +397,14 @@
         if (animal._hp > 0) {
             animal._wounded = true;
             if (!Cb) popup($dataItems[ITEM.carcass].iconIndex, sp.name + " ranny", "#ffd98f");
-            animal._poise -= extra.poise !== undefined ? extra.poise : Math.round(damage * 0.8);
-            if (animal._poise <= 0 && how !== "spear") stagger(animal, extra.knock);
-            else if (extra.knock && animal._mode !== "charge") knockBack(animal);
+            // a heavy one (the bear) shrugs off the light blows: only BEAR_AI.light of their balance, never thrown back by them; a
+            // heavy blow (a charged one, one from hiding) takes it whole and may throw it back
+            const heavyBlow = !!extra.heavy || extra.tag === "sneak" || extra.tag === "heart";
+            const poise = extra.poise !== undefined ? extra.poise : Math.round(damage * 0.8);
+            animal._poise -= sp.heavy && !heavyBlow ? Math.round(poise * P.ai.BEAR_AI.light) : poise;
+            const knock = !!extra.knock && (!sp.heavy || heavyBlow);
+            if (animal._poise <= 0 && how !== "spear") stagger(animal, knock);
+            else if (knock && animal._mode !== "charge" && !(sp.bear && animal.isJumping())) knockBack(animal);
             if (sp.aggressive) enrage(animal, how);
             makeNoise(animal.centerX(), animal.centerY(), NOISE_RADIUS);
             return;
@@ -400,6 +415,7 @@
     // "dog", how, mapId, x, y (tiles), level, bounty (a wanted one's contract), animal } (Combat.js: the experience, QuestBoard.js, Journal.js,
     // HomeDecor.js listen)
     function kill(animal, how) {
+        if (typeof animal.bearOver === "function" && SPECIES[animal.kind()].bear) animal.bearOver();   // (a bear fight lived through)
         tally(animal);
         removeAnimal(animal);
         if (animal._pack && animal._pack.leader === animal) animal._pack.broken = true;   // the leader down: the pack loses heart
@@ -420,7 +436,8 @@
         rabbit: { meat: 94, n: 1, skin: 1, sinew: 1 },
         deer: { meat: 157, n: 3, skin: 2, sinew: 2 },
         boar: { meat: 159, n: 4, skin: 2, sinew: 2 },
-        wolf: { meat: 161, n: 2, skin: 1, sinew: 2 }
+        wolf: { meat: 161, n: 2, skin: 1, sinew: 2 },
+        bear: { meat: ITEM.bearMeat, n: 5, skin: 1, hide: ITEM.bearHide, sinew: 3 }   // (hide: its own skin - the bear's fur - instead of the plain raw hide)
     };
     const CARCASS = { rot: 24, reach: 1.3, max: 16 };   // rot: game hours; reach: tiles from the hero's centre; max: a map's
     const clockNow = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
@@ -462,7 +479,7 @@
         const y = YIELD[kind];
         const more = k => (perkRoll(k) ? 1 : 0);   // (Rzeźnik, Skórnik, Ścięgna, Król puszczy)
         $gameParty.gainItem($dataItems[y.meat], y.n + more("carcass.meat"));   // (the popups "+N ..." come from SurvivalHUD)
-        $gameParty.gainItem($dataItems[ITEM.rawHide], y.skin + more("carcass.hide"));
+        $gameParty.gainItem($dataItems[y.hide || ITEM.rawHide], y.skin + more("carcass.hide"));
         $gameParty.gainItem($dataItems[ITEM.sinew], y.sinew + more("carcass.sinew"));
         T.call("Durability", "use", knife);
         se("Slash1", 55, 85);

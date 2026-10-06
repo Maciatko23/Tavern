@@ -36,7 +36,7 @@
     if (P.fight) return;   // (put into the page twice: kept as it was)
     if (!P.core) throw new Error("Combat_Fight.js: musi być pod Combat.js na liście wtyczek (Combat.js is missing or below)");
     const { modes, attr, perk, hasSkill, tired, strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, comboWindow,
-        combatMode, setCombatMode, mapFreePlay, se, popup } = P.core;
+        combatMode, setCombatMode, mapFreePlay, se, popup, foes } = P.core;
     const H = () => T.api("Hunting");
 
     // ==================================================================
@@ -69,6 +69,13 @@
         breathSpent = 0;
         if (breath <= 0) winded = true;
         return true;
+    }
+    // breath taken from outside, without a word (stage 4, Creatures.js: a drowned one's grip, a wraith's cold touch, fear); what is left
+    function drainBreath(amount) {
+        breath = Math.max(0, breathNow() - Math.max(0, amount || 0));
+        breathSpent = 0;
+        if (breath <= 0) winded = true;
+        return breath;
     }
     let noBreathT = 0;
     function noBreath() {
@@ -137,6 +144,9 @@
     const HEAVY = { min: 18, max: 60, mult: 2.2, full: 2.7, poise: 2.5, cost: 0.8 };
     const SHIELDS = { 155: { name: "Drewniana tarcza", reduce: 0.75, breath: 0.7 } };
     const NO_SHIELD = { reduce: 0.45, breath: 1 };
+    // Armour (stage 2, 2026-10-05): worn as the shield is - it is enough to have it in the bag. reduce: the part of every blow it takes
+    // off (after the guard; Niezłomny comes on top); each blow that still hurts wears it (Durability.js "block": its blows)
+    const ARMORS = { 171: { name: "Skórzana kurtka", reduce: 0.2 } };
     const has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
     const meleeOwned = () => MELEE_ORDER.filter(has);
     const hasRanged = () => (has(126) && has(127)) || (has(125) && has(64));
@@ -144,6 +154,32 @@
         for (const id of Object.keys(SHIELDS)) if (has(Number(id))) return Object.assign({ id: Number(id) }, SHIELDS[id]);
         return null;
     }
+    function armor() {
+        for (const id of Object.keys(ARMORS)) if (has(Number(id))) return Object.assign({ id: Number(id) }, ARMORS[id]);
+        return null;
+    }
+
+    // ==================================================================
+    // A blow from hiding (stage 2, 2026-10-05; docs/WALKA.md: "C + cios"). An animal that has not noticed the hero yet - no "!" over it
+    // (its awareness under SNEAK.aware), not fighting him, not attacking, not running - is "unaware"; when he also sneaks (C) or comes
+    // at it from behind (behind the way it faces), the blow is "hidden": SNEAK.melee times the damage (a shot SNEAK.ranged,
+    // Hunting_Weapons.js) and SNEAK.poise times the knock to its balance, at least all the balance it has: it counts as a heavy blow and
+    // the animal reels - even the bear (an opening the hunter makes for himself).
+    // Czujność adds SNEAK.per a point over 5 (both), Zręczność SNEAK.dex to a shot, the skill Zasadzka (Łowiectwo) its own part.
+    // ==================================================================
+    const SNEAK = { melee: 2.5, ranged: 2, poise: 3, aware: 0.7, behind: -0.2, per: 0.012, dex: 0.01 };
+    const BUSY = { charge: true, overshoot: true, windup: true, lunge: true, close: true, swipeWind: true, swipe: true, pinWind: true, warn: true, flee: true, retreat: true };
+    function sneakAttack(a) {
+        if (!a || !a.isAnimal || a._dead) return null;
+        if (a._engaged || (a._aware || 0) >= SNEAK.aware || a._fleeing || BUSY[a._mode] || a._stun > 0) return null;
+        const Hn = H();
+        if (Hn && Hn.sneaking && Hn.sneaking()) return "hidden";
+        // from behind: he stands behind the way it faces (its drawn 8-way facing when it has one, else the 4-way one)
+        const d8 = (a._sprite && a._sprite._l8dir) || a.direction(), v = DIR8_VEC[d8] || [0, 1], len = Math.hypot(v[0], v[1]);
+        const dx = px() - a.centerX(), dy = py() - a.centerY(), d = Math.hypot(dx, dy) || 1;
+        return (dx * v[0] + dy * v[1]) / (d * len) < SNEAK.behind ? "hidden" : "unaware";
+    }
+    const sneakMult = ranged => (ranged ? SNEAK.ranged : SNEAK.melee) * (1 + SNEAK.per * (attr("per") - 5) + (ranged ? SNEAK.dex * (attr("dex") - 5) : 0)) * (1 + perk("sneak.dmg"));
     // the weapon in hand: "m<itemId>" (melee) or "ranged" (the bow / the sling, as Hunting.js picks); the stored choice when still
     // owned, else the best melee weapon, else the ranged one
     function handChoices() {
@@ -316,16 +352,17 @@
         let stop = heavy ? 7 : 4;
         for (const { t } of targets) {
             const a = t.ref && t.ref.isAnimal ? t.ref : null;
-            let m = mult * strMult() * (1 + perk("melee.dmg")), tag = heavy ? "heavy" : "";
-            const unaware = a && a._aware < 0.3 && !a._engaged && Hn.sneaking();
-            if (unaware) { m *= 2; tag = "sneak"; }
+            let m = mult * strMult() * (1 + perk("melee.dmg")), tag = heavy ? "heavy" : "", pz = poise;
+            const hidden = sneakAttack(a) === "hidden";   // (a blow from hiding: see SNEAK)
+            if (hidden) { m *= sneakMult(false); tag = "sneak"; pz = Math.max(pz * SNEAK.poise, (a._poise || 0) + 1); }   // (it breaks its balance whole: it reels)
             if (a && a._stun > 0 && hasSkill("execute")) { m *= 2.5; tag = "execute"; }
             const crit = act.riposteT > 0 || Math.random() < critChance();
             if (crit) { m *= 1.6; act.riposteT = 0; tag = tag || "crit"; }
             const dmg = Math.max(1, Math.round(w.dmg * m));
-            t.hit(dmg, "melee", { poise: Math.round(poise), knock: heavy || last, crit, heavy, tag, weapon: id });
+            t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id });
             if (!a) numberAt(t.x, t.y - 0.6, String(dmg), crit ? "#ffe066" : "#ffffff");
             if (heavy || crit) stop = 8;
+            if (hidden) stop = 10;   // (the word "Atak z ukrycia!" and its thud: enemyHurtFx)
         }
         se(w.se, 85, heavy ? 80 : 100 + i * 6);
         if (heavy) $gameScreen.startShake(4, 8, 12);
@@ -376,13 +413,14 @@
         const dx = x - px(), dy = y - py(), d = Math.hypot(dx, dy) || 1;
         return (dx * act.rollDir[0] + dy * act.rollDir[1]) / d > ROLL_INTO;
     }
-    // the roll runs into an animal's body: it stops, he bounces off (and a boar's or a wolf's body hurts)
+    // the roll runs into a body (an animal's, a man's - Combat.foes()): it stops, he bounces off (and a boar's, a wolf's or a fighting man's
+    // body hurts: a.bumpAtk() says how much, for the ones that are not Hunting.js's animals)
     function rollBump() {
         const Hn = H();
         if (!Hn) return false;
-        for (const a of Hn.animals) {
+        for (const a of foes()) {
             if (a._dead || a.isJumping()) continue;
-            const sp = Hn.SPECIES[a.kind()] || {}, reach = (sp.radius || 0.5) + 0.35;
+            const sp = Hn.SPECIES[a.kind()] || {}, reach = (sp.radius || (a._def && a._def.radius) || 0.5) + 0.35;
             if (Math.hypot(a.centerX() - px(), a.centerY() - py()) > reach || !rollingInto(a.centerX(), a.centerY())) continue;
             if (a._mode === "charge" && Hn.gore) { Hn.gore(a); return true; }   // (into a charging boar: its whole charge, see hitPlayer)
             act.mode = "idle";
@@ -391,9 +429,9 @@
             shovePlayer(-act.rollDir[0] * BUMP.back, -act.rollDir[1] * BUMP.back);
             act.hitFrom = [-act.rollDir[0], -act.rollDir[1]];
             sparksAt((px() + a.centerX()) / 2, (py() + a.centerY()) / 2 - 0.3, "#e8e8e8", 6);
-            const actor = $gameParty.leader();
-            if (sp.aggressive && actor && Hn.atkOf) {
-                const lost = applyDamage(actor, Math.max(1, Math.round(Hn.atkOf(a) * BUMP.part)));
+            const actor = $gameParty.leader(), own = typeof a.bumpAtk === "function" ? a.bumpAtk() : 0;
+            if (actor && (own > 0 || (sp.aggressive && Hn.atkOf))) {
+                const lost = applyDamage(actor, Math.max(1, own > 0 ? own : Math.round(Hn.atkOf(a) * BUMP.part)), typeof a.mercy === "function" && a.mercy());
                 se("Damage3", 80, 110);
                 $gameScreen.startShake(3, 8, 10);
                 stunPlayer(BUMP.stun, "stagger");
@@ -470,6 +508,9 @@
     // ==================================================================
     // Taking a hit: what an enemy's attack does to the hero. opts: { damage, poise, from: { x, y } (tiles), attacker (the animal),
     // name, unblockable, unparryable, wound (0..1), knock (tiles) } -> "dodged" | "parried" | "blocked" | "guardbreak" | "hit"
+    // Stage 3 (Humans.js): projectile (an arrow: the roll's safety always lets it through, even rolling at the archer), guardBreak (a
+    // blow that breaks the guard when it is blocked - the mercenary's overhead blow), nonLethal + onBeaten (a man's blow never takes the
+    // last life: he is left at 1 and onBeaten() runs - they rob him)
     // ==================================================================
     function hitPlayer(opts) {
         const actor = $gameParty.leader();
@@ -479,7 +520,7 @@
         const from = opts.from || { x: px(), y: py() + 1 };
         let into = false;   // rolled straight at the attacker: no safety, the blow lands in full and throws him back harder
         if (act.iframes > 0) {
-            if (!rollingInto(from.x, from.y)) {
+            if (opts.projectile || !rollingInto(from.x, from.y)) {
                 numberAt(px(), py() - 1.1, "Unik", "#bfe3ff", 0.8);
                 se("Evasion2", 60, 120);
                 return tell("dodged", 0, src);
@@ -493,6 +534,8 @@
         const ax = from.x - px(), ay = from.y - py(), ad = Math.hypot(ax, ay) || 1, [fx, fy] = facingVec();
         const frontal = (ax * fx + ay * fy) / ad > 0.25;
         let damage = opts.damage || 0, poise = opts.poise || 0;
+        // (a blow no shield and no parry holds - the bear's paw and its pin: the guard is up for nothing, and he sees why)
+        if (act.mode === "block" && frontal && opts.unblockable && opts.unparryable) numberAt(px(), py() - 1.55, "Tego nie zatrzymasz!", "#ff9f8f", 0.8);
         if (act.mode === "block" && frontal) {
             if (!opts.unparryable && act.blockT <= parryWindow()) {
                 se("Parry", 90, 100);
@@ -508,6 +551,7 @@
                 damage = Math.round(damage * (1 - Math.min(0.9, sh.reduce + perk("block.reduce"))));
                 if (sh.id) T.call("Durability", "use", sh.id);   // (every blow taken on it wears the shield; a parry does not)
                 breath = Math.max(0, breathNow() - poise * sh.breath * (hasSkill("guard") ? 0.6 : 1));
+                if (opts.guardBreak) breath = 0;   // (a blow that breaks any guard)
                 breathSpent = 0;
                 se("Blow3", 80, 110);
                 sparksAt((px() + from.x) / 2, (py() + from.y) / 2 - 0.4, "#e8e8e8", 8);
@@ -516,9 +560,9 @@
                     winded = true;
                     numberAt(px(), py() - 1.2, "Garda przełamana!", "#ff9f8f", 0.85);
                     stunPlayer(40, "guard");
-                    return tell("guardbreak", applyDamage(actor, damage), src);
+                    return tell("guardbreak", beaten(actor, applyDamage(actor, damage, opts.nonLethal), opts), src);
                 }
-                const lost = damage > 0 ? applyDamage(actor, damage) : 0;
+                const lost = damage > 0 ? beaten(actor, applyDamage(actor, damage, opts.nonLethal), opts) : 0;
                 hitstop(4);
                 return tell("blocked", lost, src);
             }
@@ -526,7 +570,7 @@
         // a clean hit
         endSwing();
         if (act.mode === "attack" || act.mode === "block") act.mode = "idle";
-        const lost = applyDamage(actor, damage);
+        const lost = applyDamage(actor, damage, opts.nonLethal);
         se("Damage3", 90, 95);
         $gameScreen.startShake(Math.min(9, 3 + damage / 10), 8, 14);
         $gameScreen.startFlash([255, 40, 30, 110], 12);
@@ -534,7 +578,7 @@
         if (knock > 0) shovePlayer(-ax / ad * knock, -ay / ad * knock);
         act.hitFrom = [-ax / ad, -ay / ad];   // (the way the blow pushes him: his flinch leans that way)
         const down = poise >= knockdownAt();
-        if (down) stunPlayer(50, "down");
+        if (down) stunPlayer(Math.max(50, opts.down || 0), "down");   // (opts.down: frames he stays down - the bear's pin holds him longer)
         else if (poise > 10) stunPlayer(18, "stagger");
         else { act.flinchT = 10; act.flinchLen = 10; }   // (a light hit: only the flinch, he keeps control)
         if (opts.wound && Math.random() < woundChance(opts.wound) && typeof $gameSystem.injure === "function") {
@@ -550,12 +594,23 @@
             se("Heal2", 70, 110);
         }
         hitstop(6);
+        beaten(actor, lost, opts);
         return tell("hit", lost, src, down);
     }
-    // the health the blow takes (Niezłomny takes some of it off); what was lost
-    function applyDamage(actor, damage) {
+    // a blow that may not kill brought him down to his last life: the attacker's onBeaten (Humans.js: the robbery)
+    function beaten(actor, lost, opts) {
+        if (opts.nonLethal && actor.hp <= 1 && typeof opts.onBeaten === "function") opts.onBeaten();
+        return lost;
+    }
+    // the health the blow takes (the armour and Niezłomny take some of it off; the armour wears for it); what was lost. nonLethal: never the
+    // last life (a man's blow - Humans.js)
+    function applyDamage(actor, damage, nonLethal) {
         if (!(damage > 0)) return 0;
-        damage = Math.max(1, Math.round(damage * (1 - Math.min(0.6, perk("hurt")))));   // (Niezłomny)
+        const ar = armor();
+        if (ar) T.call("Durability", "use", ar.id);   // (every blow that gets through wears the jacket)
+        damage = Math.max(1, Math.round(damage * (1 - (ar ? ar.reduce : 0)) * (1 - Math.min(0.6, perk("hurt")))));   // (the jacket, Niezłomny)
+        if (nonLethal) damage = Math.max(0, Math.min(damage, actor.hp - 1));
+        if (!(damage > 0)) return 0;
         actor.gainHp(-damage);
         numberAt(px(), py() - 1.0, "-" + damage, "#ff6b5e");
         act.hurtT = 18;
@@ -568,6 +623,23 @@
         if (down || (damage > 0 && hp <= 0)) T.emit("heroDown", { by: src.kind, name: src.name, dead: hp <= 0 });
         return result;
     }
+    // the hero's blow bounced off a shield or a raised club (Humans.js): his arms jar - a short stagger, the swing cut
+    function recoil(frames) {
+        if (act.mode === "roll") return;
+        endSwing();
+        act.mode = "idle";
+        act.comboGrace = 0;
+        act.stun = Math.max(act.stun, frames || 12);
+        act.stunKind = "stagger";
+        act.flinchT = frames || 12;
+        act.flinchLen = frames || 12;
+        const [fx, fy] = facingVec();
+        act.hitFrom = [-fx, -fy];
+    }
+    // knocked down and kept down a while (Humans.js: beaten by men, he lies while they rob him)
+    function downPlayer(frames) { stunPlayer(frames || 120, "down"); }
+    // stunPlayer(frames, kind): held where he stands - "stagger", "down" (he falls), "guard"; stage 4 (Creatures.js): "fear" (frozen by a
+    // wraith's truth: he trembles), "held" (in a drowned one's grip)
     function stunPlayer(frames, kind) {
         endSwing();
         act.mode = "idle";
@@ -588,10 +660,20 @@
         stopFrames--;
         return true;
     }
-    // a floating number / word at a map point (tiles)
+    // a floating number / word at a map point (tiles). Combat_UI.js stacks the ones that would cover each other (the newer above the
+    // older); a word said again at the same place while it still shows ("Utknął!", "Kamień!") only pops again instead of a second copy;
+    // at most FLOAT_MAX at once (the oldest go first)
     const floaters = [];
+    const FLOAT_MAX = 12;
+    let floatSeq = 0;
     function numberAt(x, y, text, color, scale) {
-        floaters.push({ x, y, text: String(text), color: color || "#ffffff", t: 0, scale: scale || 1, sprite: null });
+        text = String(text);
+        if (!/^[-+]?\d/.test(text)) {   // (numbers are separate blows - each one shows)
+            const same = floaters.find(f => f.text === text && f.t < 30 && Math.abs(f.x - x) < 1.2 && Math.abs(f.y - y) < 1.0);
+            if (same) { same.t = Math.min(same.t, 2); same.x = x; same.y = y; return; }
+        }
+        floaters.push({ x, y, text, color: color || "#ffffff", t: 0, scale: scale || 1, sprite: null, seq: ++floatSeq });
+        while (floaters.length > FLOAT_MAX) { const f = floaters.shift(); if (f.sprite && f.sprite.parent) { f.sprite.parent.removeChild(f.sprite); f.sprite.destroy(); } }
     }
     const sparks = [];
     function sparksAt(x, y, color, n) {
@@ -604,11 +686,19 @@
     function enemyHurtFx(animal, damage, how, extra) {
         const x = animal.centerX(), y = animal.centerY();
         extra = extra || {};
-        const color = extra.tag === "sneak" ? "#9ff0a8" : extra.tag === "execute" ? "#ff9f40" : extra.crit ? "#ffe066" : extra.heavy ? "#ffc080" : "#ffffff";
-        const label = extra.tag === "sneak" ? " z ukrycia!" : extra.tag === "execute" ? " dobicie!" : extra.crit ? "!" : "";
+        const hidden = extra.tag === "sneak" || extra.tag === "heart";
+        const color = hidden ? "#9ff0a8" : extra.tag === "execute" ? "#ff9f40" : extra.crit ? "#ffe066" : extra.heavy ? "#ffc080" : "#ffffff";
+        const label = hidden ? "!" : extra.tag === "execute" ? " dobicie!" : extra.crit ? "!" : "";
         numberAt(x, y - 0.9, damage + label, color, extra.heavy || extra.crit ? 1.2 : 1);
         sparksAt(x, y - 0.3, "#b8322a", extra.heavy ? 12 : 7);
         animal._flashT = 8;
+        // a blow or a shot from hiding (SNEAK): its word over the animal, in the green of the number, and a dull thud
+        if (hidden) {
+            numberAt(x, y - 1.5, extra.tag === "heart" ? "Strzał w serce!" : "Atak z ukrycia!", "#9ff0a8", 0.85);
+            se("Blow4", 80, 75);
+            act.sneakT = 90;   // (for the tests and the look: a blow from hiding a moment ago)
+            act.sneaks = (act.sneaks || 0) + 1;
+        }
     }
 
     // ==================================================================
@@ -625,6 +715,7 @@
         if (act.riposteT > 0) act.riposteT--;
         if (act.hurtT > 0) act.hurtT--;
         if (act.flinchT > 0) act.flinchT--;
+        if (act.sneakT > 0) act.sneakT--;
         if (act.stun > 0 && --act.stun === 0) act.stunKind = "";
         if (act.mode === "roll") { updateRoll(); if (pressedNow("dodge")) pressDodge(); return; }
         if (act.mode === "attack" && !$gamePlayer._toolSwing) act.mode = "idle";   // (the swing was taken away: a scene change...)
@@ -641,7 +732,7 @@
     }
     // leaving the map / loading: nothing half done
     function resetAct() {
-        Object.assign(act, { mode: "idle", combo: 0, queued: false, charge: 0, rollT: 0, iframes: 0, blockT: 0, stun: 0, stunKind: "", comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, combatT: 0, hurtT: 0, flinchT: 0 });
+        Object.assign(act, { mode: "idle", combo: 0, queued: false, charge: 0, rollT: 0, iframes: 0, blockT: 0, stun: 0, stunKind: "", comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, combatT: 0, hurtT: 0, flinchT: 0, sneakT: 0 });
         breath = -1;
         winded = false;
         stopFrames = 0;
@@ -657,7 +748,8 @@
     const heldStill = () => act.mode === "roll" || act.stun > 0;
     const mayRun = player => act.mode !== "block" && (player !== $gamePlayer || canRun());
 
-    P.fight = { act, ROLL, MELEE, MELEE_ORDER, SHIELDS, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
-        shield, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
-        sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun };
+    P.fight = { act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
+        shield, armor, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
+        sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
+        stunPlayer, drainBreath };
 })();

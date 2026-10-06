@@ -1,0 +1,285 @@
+{
+ "concept": "dno_studni",
+ "width": 11,
+ "height": 9,
+ "zones": [],
+ "spots": {
+  "lina": [
+   7,
+   5,
+   2
+  ],
+  "pierscionek": [
+   5,
+   6,
+   2
+  ],
+  "krata_kruk": [
+   5,
+   4,
+   8
+  ],
+  "landing": [
+   7,
+   6,
+   2
+  ]
+ },
+ "things": [
+  {
+   "kind": "kanał",
+   "cat": "wallitem",
+   "cells": [
+    [
+     4,
+     3
+    ],
+    [
+     5,
+     3
+    ],
+    [
+     6,
+     3
+    ]
+   ],
+   "group": "Dno",
+   "x": 5,
+   "y": 3,
+   "event": true
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Dno",
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 7
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Dno",
+   "x": 9,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  },
+  {
+   "kind": "lina",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     5
+    ]
+   ],
+   "group": "Dno",
+   "x": 7,
+   "y": 5,
+   "event": true
+  }
+ ],
+ "hooks": [],
+ "wall_items": [],
+ "openings": [],
+ "floor": [
+  [
+   1,
+   4,
+   "Dno"
+  ],
+  [
+   1,
+   5,
+   "Dno"
+  ],
+  [
+   1,
+   6,
+   "Dno"
+  ],
+  [
+   1,
+   7,
+   "Dno"
+  ],
+  [
+   2,
+   4,
+   "Dno"
+  ],
+  [
+   2,
+   5,
+   "Dno"
+  ],
+  [
+   2,
+   6,
+   "Dno"
+  ],
+  [
+   2,
+   7,
+   "Dno"
+  ],
+  [
+   3,
+   4,
+   "Dno"
+  ],
+  [
+   3,
+   5,
+   "Dno"
+  ],
+  [
+   3,
+   6,
+   "Dno"
+  ],
+  [
+   3,
+   7,
+   "Dno"
+  ],
+  [
+   4,
+   4,
+   "Dno"
+  ],
+  [
+   4,
+   5,
+   "Dno"
+  ],
+  [
+   4,
+   6,
+   "Dno"
+  ],
+  [
+   4,
+   7,
+   "Dno"
+  ],
+  [
+   5,
+   4,
+   "Dno"
+  ],
+  [
+   5,
+   5,
+   "Dno"
+  ],
+  [
+   5,
+   6,
+   "Dno"
+  ],
+  [
+   5,
+   7,
+   "Dno"
+  ],
+  [
+   6,
+   4,
+   "Dno"
+  ],
+  [
+   6,
+   5,
+   "Dno"
+  ],
+  [
+   6,
+   6,
+   "Dno"
+  ],
+  [
+   6,
+   7,
+   "Dno"
+  ],
+  [
+   7,
+   4,
+   "Dno"
+  ],
+  [
+   7,
+   5,
+   "Dno"
+  ],
+  [
+   7,
+   6,
+   "Dno"
+  ],
+  [
+   7,
+   7,
+   "Dno"
+  ],
+  [
+   8,
+   4,
+   "Dno"
+  ],
+  [
+   8,
+   5,
+   "Dno"
+  ],
+  [
+   8,
+   6,
+   "Dno"
+  ],
+  [
+   8,
+   7,
+   "Dno"
+  ],
+  [
+   9,
+   4,
+   "Dno"
+  ],
+  [
+   9,
+   5,
+   "Dno"
+  ],
+  [
+   9,
+   6,
+   "Dno"
+  ],
+  [
+   9,
+   7,
+   "Dno"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 118,
+ "key": "dno_studni",
+ "display": "Dno studni",
+ "exits": [],
+ "residents": []
+}

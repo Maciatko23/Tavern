@@ -1,0 +1,27 @@
+{
+ "skill": 0.75,
+ "grow": null,
+ "rows": [
+  {
+   "name": "Przeor w zbroi (boss 20)",
+   "floor": 20,
+   "kind": "boss_20",
+   "level": 14,
+   "hero": 9,
+   "attr": {
+    "str": 15,
+    "con": 12,
+    "dex": 8,
+    "per": 7,
+    "wil": 7
+   },
+   "weapon": 115,
+   "won": "1/1",
+   "s": 154.1,
+   "lostPct": 1345,
+   "refills": 13,
+   "mhp": 159,
+   "foeHp": 982
+  }
+ ]
+}

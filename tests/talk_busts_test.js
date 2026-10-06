@@ -4,7 +4,8 @@
 // bust, a yellow marker over the speaker on the map, the hero's choices in his bubble by his bust, the XP bar hidden meanwhile; a
 // hero line lights his bust; a character without a bust (<Bust:none>, a sheet of our own), a cry and \SPK[-1] keep the old looks;
 // a fade-out mid-talk and the end of the talk take the busts away; nothing of it goes into a save; grandpa's talk (Story, Map019)
-// with his Stach_Bust when the file is there. After the review (2026-09-27): our own busts are asked for only once the database
+// with his Stach_Bust when the file is there; every speaking resident (TownLife, all maps) and the Lord with a bust of their own
+// (tools/busts/make_<key>.py, 2026-10-06), a real talk with Hanka the baker. After the review (2026-09-27): our own busts are asked for only once the database
 // (the encryption) is known; the hero's own choice bubble whole after choices under his words; a line in the usual window ends the
 // talk (its choices where RPG Maker puts them); long lines kept as written when they fit between the busts, else one bubble (the
 // stage direction on its own line), the last page's bubble as high as its lines; the name plate in full on a short line; the marker
@@ -300,6 +301,32 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     // ---- a save in the middle of a talk: nothing of the talk in it
     const save = await t.eval("JsonEx.stringify(DataManager.makeSaveContents())");
     t.check("a save made mid-talk holds nothing of the busts or the talk", !/People3_5|Hero_Bust|Stach_Bust|_talkSide|_bubbleOf|_choiceSlot/.test(save), save.length);
+    await finish();
+
+    // ---- the residents (2026-10-06): every speaking resident (TownLife, all maps) and the Lord have a bust of their own in the
+    // table, its file there (asked for at the start); in the town at 10:00 each one out on the map resolves to it; a real talk
+    // with Hanka the baker brings her Piekarka_Bust on the other's side
+    const table = await t.json(`(function(){ const R = TownLife.RESIDENTS, B = SpeechBubbles.BUSTS, out = [];
+        R.forEach(r => out.push({ key: r.key, sheet: r.sheet, bust: B[r.sheet + ":0"] || null, has: SpeechBubbles.hasBust(B[r.sheet + ":0"]) }));
+        out.push({ key: "lord", sheet: "$Npc_Lord", bust: B["$Npc_Lord:0"] || null, has: SpeechBubbles.hasBust(B["$Npc_Lord:0"]) });
+        return out; })()`);
+    const files = await t.json(`Promise.all(${JSON.stringify(table.map(r => r.bust))}.map(n => n ? fetch("img/pictures/" + n + ".png", { method: "HEAD", cache: "no-store" }).then(r => r.ok).catch(() => false) : false))`);
+    const noBust = table.filter((r, i) => !r.bust || !r.has || !files[i]);
+    t.check("every speaking resident (" + (table.length - 1) + ", all maps, Teodor too) and the Lord: a bust of their own in the table, the file there",
+        table.length >= 29 && !noBust.length && new Set(table.map(r => r.bust)).size === table.length, { count: table.length, noBust });
+    await t.newGame({ map: 8, x: 20, y: 30, hour: 10, minimap: false });
+    await t.eval("TownLife.placeAll(); 0");
+    await t.frames(30);
+    const onMap = await t.json(`(function(){ const out = {}; TownLife.RESIDENTS.forEach(r => { const e = TownLife.eventOf(r.key); if (e) out[r.key] = { bust: SpeechBubbles.bustOf(e), want: SpeechBubbles.BUSTS[r.sheet + ":0"] }; }); return out; })()`);
+    const wrong = Object.keys(onMap).filter(k => onMap[k].bust !== onMap[k].want);
+    t.check("in the town at 10:00 every resident there (" + Object.keys(onMap).length + ") resolves to their own bust", Object.keys(onMap).length >= 15 && !wrong.length, { wrong: wrong.map(k => [k, onMap[k]]) });
+    await t.eval(kit.DRIVER + "; (function(){ const e = TownLife.eventOf('piekarka'); __standBy(e.eventId()); e.start(); return 0; })()");
+    await t.until("SpeechBubbles.talk().on && $gameMessage.isBusy() && SceneManager._scene._messageWindow.isOpen()", 15);
+    await t.frames(45);
+    s = await S();
+    t.check("a real talk with Hanka the baker (TownLife.talk): her bust Piekarka_Bust on the " + NS + ", lit, the bubble out of it",
+        s.on && s.side === "npc" && !!s.N && s.N.name === "Piekarka_Bust" && inCorner(s.N, NS) && looksIn(s.N, NS) && s.N.light === 1 && byBust(s.m, s.N, NS), { N: s.N, m: s.m, side: s.side });
+    await shot("rozmowa_14_mieszkanka.png");
     await finish();
 
     // ---- a new story game: grandpa's talk in his house (Map019), his bust Stach_Bust when the file is there

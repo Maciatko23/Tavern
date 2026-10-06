@@ -1,0 +1,27 @@
+{
+ "skill": 0.75,
+ "grow": null,
+ "rows": [
+  {
+   "name": "Pusta zbroja (piętro 20)",
+   "floor": 20,
+   "kind": "zbroja",
+   "level": 13,
+   "hero": 9,
+   "attr": {
+    "str": 15,
+    "con": 12,
+    "dex": 8,
+    "per": 7,
+    "wil": 7
+   },
+   "weapon": 115,
+   "won": "1/1",
+   "s": 49.1,
+   "lostPct": 122,
+   "refills": 1,
+   "mhp": 159,
+   "foeHp": 377
+  }
+ ]
+}

@@ -572,7 +572,8 @@
         pickaxe: num(params.pickaxeItem, 63),
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
         honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144, bird: 145, feathers: 146,
-        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140, clay: 164, rawPot: 165, dryPot: 166, firedPot: 167   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140, clay: 164, rawPot: 165, dryPot: 166, firedPot: 167,
+        rawBear: 168, roastBear: 169, bearHide: 170, jacket: 171   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -924,7 +925,7 @@
         const w = sv.currentWeather();
         return !!w && w.type === "rain";
     }
-    const RAW_MEATS = () => [ITEM.rawMeat, ITEM.rawDeer, ITEM.rawBoar, ITEM.rawWolf];
+    const RAW_MEATS = () => [ITEM.rawMeat, ITEM.rawDeer, ITEM.rawBoar, ITEM.rawWolf, ITEM.rawBear];
     const MEAT_LABEL = "surowe mięso (dowolne)";
     const meatCount = () => RAW_MEATS().reduce((t, id) => t + countOf(id), 0);
     const QUEUE_MAX = 9;

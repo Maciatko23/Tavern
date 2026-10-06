@@ -176,7 +176,7 @@
         },
         bartek: {
             name: "Bartek Kmieć", short: "Bartek", role: "chłop spod Młynówki", style: "nowicjusz", styleColor: "#8ee08a",
-            bust: "People1_5", sheet: "People1_Tall", index: 4,
+            bust: "Bartek_Bust", sheet: "People1_Tall", index: 4,
             hours: [14, 21], stakes: [5], perDay: 2,
             ai: { bank: [0, 300, 350, 400, 450, 600, Infinity], keepAll: true, miss: 0.12, reckless: 0, chase: 1.3 },
             die: { key: "grusza", chance: 1, giveAfter: 2 },

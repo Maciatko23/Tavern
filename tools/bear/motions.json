@@ -1,0 +1,373 @@
+{
+ "walk": {
+  "dir": "walk",
+  "out": "Bear_Walk8",
+  "standing": true,
+  "old": "$Animal_Bear",
+  "old_cols": [
+   1,
+   0,
+   5
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-east": {
+    "from": "south-west",
+    "flip": true
+   }
+  }
+ },
+ "run": {
+  "dir": "gallop",
+  "out": "Bear_Run8",
+  "standing": true,
+  "palette": "walk",
+  "old": "$Animal_Bear_Run",
+  "old_cols": [
+   1,
+   0,
+   5
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  },
+  "pick": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "note": "2026-10-06: a real gallop (PixelLab v3 'bear_gallop', 8 frames + the reference left out) - before W/N/E were the walk; used while it chases (LOOK8 runAt 3.4)"
+ },
+ "pounce": {
+  "dir": "pin10",
+  "out": "Bear_Pounce8",
+  "keep": false,
+  "align": "frame",
+  "cell": 128,
+  "feet": 124,
+  "match": false,
+  "palette": "walk",
+  "old": "$Animal_Bear_Pounce",
+  "old_cols": [
+   2,
+   5,
+   8
+  ],
+  "note": "2026-10-06: the pin leap from the top of the rearing (PixelLab v3 'bear_pin10' started on rear_v3's last frame; north 'bear_pin10_back' on rear_v3 north frame 2, the back view): up on the hind legs, thrown forward through the air, crashing down on the front paws. align frame: the jump moves the sprite, the frames must not",
+  "rows": {
+   "north": {
+    "src": "pin10back"
+   },
+   "south-east": {
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     5,
+     6,
+     7,
+     8,
+     8
+    ]
+   },
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true,
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     5,
+     6,
+     7,
+     8,
+     8
+    ]
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  }
+ },
+ "rear": {
+  "dir": "rearv3",
+  "out": "Bear_Rear8",
+  "keep": false,
+  "align": "row",
+  "old": "$Animal_Bear_Rear",
+  "old_cols": [
+   3,
+   6,
+   8
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   },
+   "north": {
+    "pick": [
+     0,
+     1,
+     2
+    ]
+   }
+  },
+  "cell": 128,
+  "feet": 124,
+  "match": false,
+  "palette": "walk"
+ },
+ "swipe": {
+  "dir": "swipe12",
+  "out": "Bear_Swipe8",
+  "keep": false,
+  "align": "row",
+  "cell": 128,
+  "feet": 124,
+  "match": false,
+  "old": "$Animal_Bear_Swipe",
+  "old_cols": [
+   3,
+   8,
+   11
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  },
+  "note": "2026-10-06: a real paw strike on all fours (PixelLab v3 'bear_swipe12', 13 frames: 0-5 weight back, 6-9 the lunge and the paw, 10-12 back to the stance) - before it was the rearing frames",
+  "palette": "walk"
+ },
+ "roar": {
+  "dir": "roarv3",
+  "out": "Bear_Roar8",
+  "keep": false,
+  "align": "row",
+  "cell": 128,
+  "feet": 124,
+  "match": false,
+  "old": "$Animal_Bear_Roar",
+  "old_cols": [
+   2,
+   8,
+   10
+  ],
+  "parts": [
+   {
+    "src": "rearv3",
+    "pick": [
+     0,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   {
+    "src": "roarv3"
+   }
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true,
+    "dx": 5
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   },
+   "north": {
+    "parts": [
+     {
+      "src": "rearv3",
+      "pick": [
+       0,
+       1,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "src": "rearv3",
+      "pick": [
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2
+      ]
+     }
+    ]
+   },
+   "south-east": {
+    "dx": -5
+   }
+  },
+  "palette": "walk"
+ },
+ "idle": {
+  "dir": "breathe",
+  "out": "Bear_Idle8",
+  "standing": false,
+  "keep": false,
+  "align": "row",
+  "palette": "walk",
+  "old": "$Animal_Bear_Idle",
+  "old_cols": [
+   0,
+   2,
+   5
+  ],
+  "pick": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  },
+  "note": "2026-10-06: breathing while it stands (PixelLab v3 'bear_breathe', all 9 frames from the one 208 px canvas - the 148 px rotation in front shifted the rest out of the cell); LOOK8 idle plays cols 1-8, rate 9 (faster while it pants)"
+ },
+ "pounce_template": {
+  "dir": "pounce",
+  "out": "Bear_Pounce8",
+  "keep": false,
+  "align": "frame",
+  "old": "$Animal_Bear_Pounce",
+  "old_cols": [
+   2,
+   4,
+   5
+  ],
+  "rows": {
+   "east": {
+    "pick": [
+     0,
+     1,
+     3,
+     4,
+     5,
+     6,
+     7
+    ]
+   },
+   "west": {
+    "from": "east",
+    "flip": true,
+    "pick": [
+     0,
+     1,
+     3,
+     4,
+     5,
+     6,
+     7
+    ]
+   },
+   "north-east": {
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true,
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   }
+  }
+ }
+}

@@ -29,8 +29,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ the engine
     const base = await J(`({ api: !!window.TownQuests, n: TownQuests.QUESTS.length, op: TownQuests.opinion(), tier: TownQuests.tierName(),
-        listed: $plugins.slice(-2).map(p => p.name), state: Object.keys(Tawerna.state('townQuests')).length > 5, inject: Tawerna.inject.list().filter(r => r.owner === 'TownQuests').map(r => r.ids) })`);
-    t.check("TownQuests is registered last (after its data), its state is in the save, its places are ids 951-959", base.api && base.listed.join() === "TownQuests_Data,TownQuests" && base.state && base.inject.includes("951-959"), base);
+        listed: (function(){ const n = $plugins.filter(p => p.status).map(p => p.name), i = n.indexOf("TownQuests"); return i > 0 && i > n.indexOf("TownLife") ? n.slice(i - 1, i + 1) : []; })(), state: Object.keys(Tawerna.state('townQuests')).length > 5, inject: Tawerna.inject.list().filter(r => r.owner === 'TownQuests').map(r => r.ids) })`);
+    t.check("TownQuests is registered right after its data (and after TownLife), its state is in the save, its places are ids 951-959", base.api && base.listed.join() === "TownQuests_Data,TownQuests" && base.state && base.inject.includes("951-959"), base);
     t.check("the town starts with the opinion 10 - 'Obcy'", base.op === 10 && base.tier === "Obcy", base);
     t.check("over 30 quests in the data", base.n >= 30, base.n);
     const marks = await J("TownQuests.markers()");
@@ -127,8 +127,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(30);
     await t.shot(path.join(SHOTS, "questy_staw_noc.png"));
     const w1n = await J(`({ r: TownQuests.rec('W1'), kuba: TownLife.state('woziwoda'), notes: Journal.data().notes.map(n => n.title), log: SpeechBubbles.log.slice(-4) })`);
-    t.check("sneaking (C) by the pond while Kuba fills his barrels: chapter 2 done, the scene in the hero's bubbles, the note - and W1 waits: 'Ciąg dalszy wkrótce'",
-        seen && w1n.notes.includes("Woda Kuby - noc") && w1n.log.some(l => /rurę|rury/.test(l)) && /Ciąg dalszy wkrótce/.test((await J("TownQuests.Q.W1.steps[2].text"))), Object.assign({ atPond, hide }, w1n));
+    t.check("sneaking (C) by the pond while Kuba fills his barrels: chapter 2 done, the scene in the hero's bubbles, the note - next: talk to Kuba (ch. 3, w1_chapters_test)",
+        seen && w1n.notes.includes("Woda Kuby - noc") && w1n.log.some(l => /rurę|rury/.test(l)) && /Porozmawiaj z Kubą/.test((await J("TownQuests.Q.W1.steps[2].text"))), Object.assign({ atPond, hide }, w1n));
     await t.eval("Hunting.setSneak(false); 0");
 
     // ------------------------------------------------------------------ W2: the bell's signals
@@ -174,7 +174,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("W2 then waits at the talk by the bell (the apprentice step and the table of three signals passed by themselves)", (await step("W2")) === "active:4", await rec("W2"));
     await at(d16 + 4, 17.8);
     const w2b = await talk("dzwonnik", []);
-    t.check("W2: the table shown at the bell - Ambroży is the last of the Order's watch; the garden key; then 'Ciąg dalszy wkrótce'",
+    t.check("W2: the table shown at the bell - Ambroży is the last of the Order's watch; the garden key; next: the knights' garden",
         /ostatnim uczniem/.test(w2b.text) && !!(await J("TownQuests.state().flags.gardenKey")) && (await step("W2")) === "active:5", w2b.text.slice(0, 300));
 
     // ------------------------------------------------------------------ K13 missed: the noon bell is silent

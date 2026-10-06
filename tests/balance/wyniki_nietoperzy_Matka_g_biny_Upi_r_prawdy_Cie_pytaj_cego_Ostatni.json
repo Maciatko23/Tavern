@@ -1,0 +1,153 @@
+{
+ "skill": 0.75,
+ "grow": "{\"hp\":0.12,\"bossHp\":0.06,\"dmg\":0.1,\"str\":0.035}",
+ "rows": [
+  {
+   "name": "Rój nietoperzy (piętro 40)",
+   "floor": 40,
+   "kind": "nietoperz",
+   "level": 22,
+   "hero": 15,
+   "attr": {
+    "str": 21,
+    "con": 17,
+    "dex": 11,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 26.4,
+   "lostPct": 126,
+   "refills": 1,
+   "mhp": 202,
+   "foeHp": 176
+  },
+  {
+   "name": "Matka pająków (boss 40)",
+   "floor": 40,
+   "kind": "boss_40",
+   "level": 24,
+   "hero": 15,
+   "attr": {
+    "str": 21,
+    "con": 17,
+    "dex": 11,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 146.1,
+   "lostPct": 662,
+   "refills": 6,
+   "mhp": 202,
+   "foeHp": 1722
+  },
+  {
+   "name": "Topielec z głębiny (boss 50)",
+   "floor": 50,
+   "kind": "boss_50",
+   "level": 29,
+   "hero": 17,
+   "attr": {
+    "str": 24,
+    "con": 19,
+    "dex": 12,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 122.7,
+   "lostPct": 381,
+   "refills": 5,
+   "mhp": 221,
+   "foeHp": 2272
+  },
+  {
+   "name": "Upiór prawdy (piętro 85)",
+   "floor": 85,
+   "kind": "upior",
+   "level": 46,
+   "hero": 24,
+   "attr": {
+    "str": 31,
+    "con": 25,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 78.3,
+   "lostPct": 0,
+   "refills": 0,
+   "mhp": 269,
+   "foeHp": 556
+  },
+  {
+   "name": "Cień (piętro 85)",
+   "floor": 85,
+   "kind": "cien",
+   "level": 46,
+   "hero": 24,
+   "attr": {
+    "str": 31,
+    "con": 25,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 40,
+   "lostPct": 261,
+   "refills": 3,
+   "mhp": 269,
+   "foeHp": 518
+  },
+  {
+   "name": "Upiór pytającego (boss 80)",
+   "floor": 80,
+   "kind": "boss_80",
+   "level": 45,
+   "hero": 23,
+   "attr": {
+    "str": 31,
+    "con": 24,
+    "dex": 14,
+    "per": 8,
+    "wil": 14
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 212.6,
+   "lostPct": 1715,
+   "refills": 21,
+   "mhp": 261,
+   "foeHp": 3744
+  },
+  {
+   "name": "Ostatni Strażnik (boss 90)",
+   "floor": 90,
+   "kind": "boss_90",
+   "level": 50,
+   "hero": 25,
+   "attr": {
+    "str": 33,
+    "con": 26,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "0/2",
+   "s": 240.1,
+   "lostPct": 4774,
+   "refills": 46.5,
+   "mhp": 277,
+   "foeHp": 4844
+  }
+ ]
+}

@@ -26,11 +26,13 @@
  * ============================================================================
  * ZUŻYWANIE SIĘ NARZĘDZI
  * ============================================================================
- * Siekiera, kilof, łopata, motyka, grabie, młotek, wędka, noże, piła, proca i łuk
+ * Siekiera, kilof, łopata, motyka, grabie, młotek, wędka, noże, piła, proca, łuk,
+ * oszczep, pałka, tarcza i skórzana kurtka
  * mają określoną liczbę użyć (tablica TOOLS w kodzie). Każde uderzenie w drzewo
  * albo skałę, każdy kopnięty dół, zaorana grządka, uderzenie młotkiem w plac
  * budowy, rzut wędką, cięcie piłą, oprawienie zwierzyny czy strzał liczy się jako
- * jedno użycie.
+ * jedno użycie. Tarczę zużywa każdy cios przyjęty na blok, kurtkę - każdy cios, który
+ * do ciebie dojdzie.
  *
  *   - gdy zostaje mniej niż 15% wytrzymałości, nad postacią pojawia się dymek
  *     ("Kamienna siekiera: zostało 10 uderzeń");
@@ -88,7 +90,8 @@
         126: { life: 80, unit: "shot", g: "m", fix: [[93, 1], [77, 1]] },             // łuk: lina + gałąź
         154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] },              // oszczep: kamień (grot) + lina
         155: { life: 40, unit: "block", g: "f", fix: [[61, 1], [93, 1]] },            // drewniana tarcza: drewno + lina (zużywa ją każdy przyjęty cios)
-        156: { life: 80, unit: "blow", g: "f", fix: [[92, 1]] }                        // pałka: len na uchwyt
+        156: { life: 80, unit: "blow", g: "f", fix: [[92, 1]] },                       // pałka: len na uchwyt
+        171: { life: 60, unit: "block", g: "f", fix: [[97, 1], [163, 1]], broke: "się podarła" }           // skórzana kurtka: łata z wyprawionej skóry, ścięgna (zużywa ją każdy cios, który dojdzie)
     };
     const WARN_FRACTION = 0.15;
 
@@ -126,7 +129,7 @@
         delete state().used[id];
         delete state().warned[id];
         AudioManager.playSe({ name: "Crash", volume: 90, pitch: 105, pan: 0 });
-        popup(item.iconIndex, item.name + " się złamał" + (g === "f" ? "a" : g === "p" ? "y" : ""), "#ff9f8f");
+        popup(item.iconIndex, item.name + " " + (TOOLS[id].broke || "się złamał" + (g === "f" ? "a" : g === "p" ? "y" : "")), "#ff9f8f");   // (broke: its own word - the jacket tears)
     }
 
     // One use of the tool. Returns true when it broke on this use.

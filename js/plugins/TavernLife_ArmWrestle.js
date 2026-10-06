@@ -29,6 +29,8 @@
  * KOLEJNOŚĆ: pod TavernLife.js. Obraz rąk:
  * img/pictures/Tav_Arms.png.
  * Dla testów: TavernLife.armWrestle({ stake, seed, turbo, level, onEnd }).
+ * Inny przeciwnik (turniej na targu, TownQuests D6): opcja rival
+ * { key, name, sub, bust, lines, level, kicker, with }.
  * ============================================================================
  */
 
@@ -117,7 +119,14 @@
 
     class Scene_ArmWrestle extends lib.gameScene() {
         createGame() {
-            this.level = clamp(this.opts.level !== undefined ? Number(this.opts.level) : S().arm.level, 0, 6);
+            // (2026-10-06) another opponent than Grum (D6's tournament at the market): opts.rival { key, name, sub, bust, lines, level }
+            const rv = this.opts.rival || null;
+            this.rivalKey = rv ? rv.key || "rival" : "grum";
+            this.rivalName = rv ? rv.name : "Grum";
+            this.rivalSub = rv ? rv.sub || "" : "Żelazna Pięść, najemnik";
+            this.rivalBust = rv ? rv.bust || bustOf("grum") : bustOf("grum");
+            this.L = rv && rv.lines ? Object.assign({}, grumLines, rv.lines) : grumLines;
+            this.level = clamp(this.opts.level !== undefined ? Number(this.opts.level) : rv && rv.level !== undefined ? Number(rv.level) : S().arm.level, 0, 6);
             this.str = attr("str");
             this.con = attr("con");
             this.zoneW = clamp(0.17 + 0.0035 * (this.str - 5), 0.17, 0.34) * (1 - 0.03 * this.level);
@@ -127,7 +136,7 @@
             this.hero.anchor.set(0.5, 1);
             this.hero.scale.set(-1.16, 1.16);
             this.hero.x = 300; this.hero.y = 628;
-            this.grum = new Sprite(this.pic(bustOf("grum")));
+            this.grum = new Sprite(this.pic(this.rivalBust));
             this.grum.anchor.set(0.5, 1);
             this.grum.scale.set(1.16, 1.16);
             this.grum.x = 990; this.grum.y = 628;
@@ -151,11 +160,12 @@
             this.tilt = 0; this.inZone = false; this.ticks = 0; this.zoneTicks = 0;
         }
         begin() {
-            const hello = grumLines.hello[Math.min(this.level, grumLines.hello.length - 1)];
-            const card = { bust: bustOf("grum"), who: "Grum", whoSub: "Żelazna Pięść, najemnik", kicker: "SIŁOWANIE NA RĘKĘ" + (this.level ? " · GRUM PODKRĘCA: " + this.level : ""),
+            const hello = this.L.hello[Math.min(this.level, this.L.hello.length - 1)];
+            const rv = this.opts.rival, kick = rv && rv.kicker ? rv.kicker : "SIŁOWANIE NA RĘKĘ" + (this.level && !rv ? " · GRUM PODKRĘCA: " + this.level : "");
+            const card = { bust: this.rivalBust, who: this.rivalName, whoSub: this.rivalSub, kicker: kick,
                 title: this.stake ? "Stawka: " + this.stake + " G" : "Siłowanie na rękę", say: hello,
                 lines: this.first ? ["Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.",
-                    "W zielonym polu twoja ręka zyskuje, poza nim zyskuje Grum. Co chwila Grum szarpie - wtedy wskazówka leci w dół, a pole skacze.",
+                    "W zielonym polu twoja ręka zyskuje, poza nim zyskuje " + this.rivalName + ". Co chwila " + this.rivalName + " szarpie - wtedy wskazówka leci w dół, a pole skacze.",
                     "Trzy rundy: kto pierwszy wygra dwie, bierze stawkę. Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia."]
                     : ["Wskazówka w zielonym polu: przytrzymaj albo stukaj O.", "Dwie wygrane rundy biorą stawkę."],
                 keys: [["O", "siła (trzymaj / stukaj)"], ["P", "pauza"]], foot: "O - łokieć na stół" };
@@ -165,7 +175,7 @@
         tick() {
             switch (this.phase) {
                 case "ready":
-                    if (this.phaseT === 1) this.sayOver("bubbleR", pick(grumLines.round, this.rng), 110);
+                    if (this.phaseT === 1) this.sayOver("bubbleR", pick(this.L.round, this.rng), 110);
                     if ([20, 50, 80].includes(this.phaseT)) se("Cursor2", 60, 90 + this.phaseT / 4);
                     if (this.phaseT >= 110) { se("Blow1", 70, 80); this.setPhase("pull"); }
                     break;
@@ -183,7 +193,7 @@
         canPause() { return this.phase === "pull"; }
         helpLines() {
             return ["Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.",
-                "W polu twoja ręka zyskuje, poza nim - Grum. Kto pierwszy wygra dwie rundy, bierze stawkę."];
+                "W polu twoja ręka zyskuje, poza nim - " + this.rivalName + ". Kto pierwszy wygra dwie rundy, bierze stawkę."];
         }
         nextRound() {
             this.round++;
@@ -212,7 +222,7 @@
                 this.v -= (0.05 + 0.008 * this.level) * clamp(1 - 0.01 * (this.con - 5), 0.6, 1);
                 this.zt = clamp(this.zc + (this.rng() < 0.5 ? -1 : 1) * (0.12 + this.rng() * 0.08), this.zoneW / 2 + 0.04, 1 - this.zoneW / 2 - 0.04);
                 this.shake = 14;
-                this.sayOver("bubbleR", pick(grumLines.burst, this.rng), 60);
+                this.sayOver("bubbleR", pick(this.L.burst, this.rng), 60);
                 se("Blow1", 55, 70);
             }
             // who gains ground
@@ -221,21 +231,21 @@
             else { const dist = this.n < lo() ? lo() - this.n : this.n - hi(); this.b -= (AW.loss + 0.0005 * this.level) * (1 + dist * 4); }
             this.b = clamp(this.b, -1, 1);
             if (this.ticks % 150 === 75) {
-                if (this.b < -0.45) this.sayOver("bubbleR", pick(grumLines.winning, this.rng), 100);
-                else if (this.b > 0.45) this.sayOver("bubbleR", pick(grumLines.losing, this.rng), 100);
+                if (this.b < -0.45) this.sayOver("bubbleR", pick(this.L.winning, this.rng), 100);
+                else if (this.b > 0.45) this.sayOver("bubbleR", pick(this.L.losing, this.rng), 100);
                 else if (this.inZone && this.rng() < 0.4) this.sayOver("bubbleL", pick(["Nnngh!", "Jeszcze... trochę...", "Trzymaj się, ręko..."], this.rng), 80);
             }
             if (this.b >= 1 || this.b <= -1 || this.ticks >= AW.roundTicks) this.endRound(this.b > 0 || (this.b === 0 && this.zoneTicks > this.ticks / 2));
         }
         endRound(you) {
             if (you) this.youWon++; else this.heWon++;
-            this.rounds.push(you ? "you" : "grum");
+            this.rounds.push(you ? "you" : this.rivalKey);
             this.slamTo = you ? 1 : -1;
             se("Blow3", 85, you ? 100 : 80);
             se("Damage1", 45, 120);
             this.shake = 20;
             const last = this.youWon >= 2 || this.heWon >= 2 || this.round >= 3;
-            if (!last) this.sayOver("bubbleR", pick(you ? grumLines.roundYou : grumLines.roundHe, this.rng), 110);
+            if (!last) this.sayOver("bubbleR", pick(you ? this.L.roundYou : this.L.roundHe, this.rng), 110);
             this.setPhase("slam");
         }
         giveUp() {
@@ -245,13 +255,13 @@
         finish(gaveUp) {
             const won = !gaveUp && this.youWon > this.heWon;
             this.result = { game: "arm", won, stake: this.stake, rounds: this.rounds.slice(), you: this.youWon, grum: this.heWon, gaveUp: !!gaveUp,
-                level: this.level, minutes: ARM.minutes, stamina: ARM.stamina };
-            const line = pick(won ? grumLines.lost : grumLines.won, this.rng);
+                level: this.level, minutes: ARM.minutes, stamina: ARM.stamina, rival: this.opts.rival ? this.rivalKey : "" };
+            const line = pick(won ? this.L.lost : this.L.won, this.rng);
             this.result.line = line;
             if (won) se("Applause1", 55);
-            this.showCard({ wait: 30, bust: bustOf("grum"), who: "Grum", whoSub: "Żelazna Pięść, najemnik", kicker: "SIŁOWANIE NA RĘKĘ · KONIEC", title: won ? "Wygrana!" : gaveUp ? "Poddałeś się" : "Przegrana",
+            this.showCard({ wait: 30, bust: this.rivalBust, who: this.rivalName, whoSub: this.rivalSub, kicker: (this.opts.rival && this.opts.rival.kicker ? this.opts.rival.kicker : "SIŁOWANIE NA RĘKĘ") + " · KONIEC", title: won ? "Wygrana!" : gaveUp ? "Poddałeś się" : "Przegrana",
                 titleColor: won ? U().accent : BAD, sub: "Rundy: " + this.youWon + " : " + this.heWon + (this.stake ? "   ·   " + (won ? "+" : "−") + this.stake + " G" : ""), subColor: won ? GOOD : BAD,
-                say: line, lines: [["Czas: " + ARM.minutes + " minut gry   ·   wytrzymałość −" + ARM.stamina, U().muted], [won ? "Grum następnym razem przyłoży się mocniej." : "Grum się nie zmienia - ty możesz: Siła poszerza zielone pole.", U().muted]],
+                say: line, lines: [["Czas: " + ARM.minutes + " minut gry   ·   wytrzymałość −" + ARM.stamina, U().muted], [this.opts.rival ? "Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia." : won ? "Grum następnym razem przyłoży się mocniej." : "Grum się nie zmienia - ty możesz: Siła poszerza zielone pole.", U().muted]],
                 foot: "O - wracam do sali", h: 440 }, () => this.leave());
             this.setPhase("summary");
         }
@@ -338,7 +348,7 @@
             ctx.fillRect(Math.min(mid, to), by, Math.abs(to - mid), 10);
             ctx.fillStyle = "#eceef0"; ctx.fillRect(mid - 1, by - 3, 2, 16);
             ctx.restore();
-            const lead = this.b > 0.05 ? "przewaga: ty" : this.b < -0.05 ? "przewaga: Grum" : "remis";
+            const lead = this.b > 0.05 ? "przewaga: ty" : this.b < -0.05 ? "przewaga: " + this.rivalName : "remis";
             cardText(b, lead, cx - 150, by + 14, 300, 15, this.b > 0.05 ? S0.accent : this.b < -0.05 ? BAD : S0.muted, true, "center");
             if (this.phase === "ready") {
                 const n = 3 - Math.floor(this.phaseT / 30);
@@ -359,7 +369,7 @@
             if (!play) return;
             ui.panel(b, 20, 16, 380, 70, { cut: 6 });
             cardText(b, "SIŁOWANIE NA RĘKĘ", 36, 22, 340, 15, S0.muted, true);
-            cardText(b, "z Grumem" + (this.stake ? "  ·  stawka " + this.stake + " G" : ""), 36, 42, 340, 22, S0.accent, true);
+            cardText(b, (this.opts.rival ? this.opts.rival.with || "z: " + this.rivalName : "z Grumem") + (this.stake ? "  ·  stawka " + this.stake + " G" : ""), 36, 42, 340, 22, S0.accent, true);
             ui.panel(b, W1 - 300, 16, 280, 70, { cut: 6 });
             cardText(b, "RUNDA " + Math.max(1, this.round) + " Z 3", W1 - 284, 22, 250, 15, S0.muted, true);
             const pips = (x, y, n, colour, label) => {
@@ -367,7 +377,7 @@
                 for (let i = 0; i < 2; i++) { b.fillRect(x + 64 + i * 22, y + 4, 14, 14, i < n ? colour : "#2a2e35"); }
             };
             pips(W1 - 284, 46, this.youWon, S0.accent, "Ty");
-            pips(W1 - 150, 46, this.heWon, "#e5484d", "Grum");
+            pips(W1 - 150, 46, this.heWon, "#e5484d", this.rivalName.split(" ")[0]);
         }
         state() {
             return Object.assign(super.state(), { phase: this.phase, round: this.round, you: this.youWon, grum: this.heWon, n: this.n, lo: this.zc - this.zoneW / 2,
@@ -383,6 +393,8 @@
     function armTalk() {
         const o = [];
         if (!npc("grum")) { popup(0, "Nie ma z kim się siłować - Grum gdzieś wyszedł.", BAD); return null; }
+        const tq = T.call("TownQuests", "armTable");   // (2026-10-06: the tournament's evening - D6 - the table is the tournament's)
+        if (tq && tq.length) return tq;
         if (typeof $gameSystem.stamina === "function" && $gameSystem.stamina() < ARM.needStamina) {
             sayAs(o, "grum", "Ledwo stoisz na nogach. Najpierw odpocznij, bo mi się jeszcze rozsypiesz na stole.");
             return o;
@@ -403,6 +415,7 @@
     lib.defineGame("arm", {
         xpWin: ARM.xpWin, xpLose: ARM.xpLose, reason: "siłowanie z Grumem",
         apply(st, res) {
+            if (res.rival) return;   // (a bout of D6's tournament: Grum's own level and streak stay as they are)
             st.streak = res.won ? Math.max(1, st.streak + 1) : Math.min(-1, st.streak - 1);
             if (res.won) st.level = Math.min(6, st.level + 1);   // (Grum takes it harder after each loss of his)
         },
@@ -413,6 +426,6 @@
         }
     });
 
-    Object.assign(TL, { ARM, AW, armWrestle: opts => lib.startGame(Scene_ArmWrestle, opts) });
+    Object.assign(TL, { ARM, AW, grumLines, armWrestle: opts => lib.startGame(Scene_ArmWrestle, opts) });
     TL.modules.TavernLife_ArmWrestle = true;
 })();

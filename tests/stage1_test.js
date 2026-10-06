@@ -42,9 +42,10 @@ const { launch, sleep } = require("./cdp.js");
                 105: [55, 0], 106: [48, 0], 107: [30, 0], 108: [35, 0], 109: [55, 20], 110: [6, 25], 123: [8, 30], 124: [32, 0] };
             const OLD_LIFE = { 94: 60, 95: 120, 98: 40, 99: 96, 101: 48, 102: 72, 103: 72, 104: 168, 105: 480, 106: 360, 107: 30, 108: 96, 109: 72, 110: 120,
                 71: 480, 72: 360, 73: 480, 75: 240, 83: 120, 123: 48, 124: 720, 130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96,
-                149: 72, 150: 168, 151: 96, 153: 72, 157: 60, 158: 120, 159: 60, 160: 120, 161: 60, 162: 120 };
+                149: 72, 150: 168, 151: 96, 153: 72, 157: 60, 158: 120, 159: 60, 160: 120, 161: 60, 162: 120,
+                168: 60, 169: 120 };   // (+ the bear's meat, combat stage 2 - 2026-10-05: like the other meats)
             const OLD_DOG_EAT = { berries: 14, bush: 18, mushroom: 12, wildPotato: 20, wildCarrot: 16 };
-            const OLD_MEATS = [94, 95, 157, 158, 159, 160, 161, 162, 105, 98, 99, 106], OLD_RAW = [94, 157, 159, 161];
+            const OLD_MEATS = [94, 95, 157, 158, 159, 160, 161, 162, 105, 98, 99, 106, 168, 169], OLD_RAW = [94, 157, 159, 161, 168];   // (the bear's meat last: stage 2)
             const oldDog = id => OLD_RAW.includes(id) ? 40 : OLD_MEATS.includes(id) ? 45 : OLD_FEED[id] ? Math.max(8, Math.min(40, Math.round(OLD_FEED[id][0] * 1.5))) : 10;
             const oldNote = item => { const raw = item && item.meta && item.meta.Food; if (typeof raw !== "string") return null; const info = {};
                 for (const pair of raw.split(",")) { const [k, v] = pair.split("=").map(s => s.trim()); info[k] = isNaN(Number(v)) ? v : Number(v); } return info; };

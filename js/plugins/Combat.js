@@ -33,8 +33,15 @@
  *   Enter, Esc, R    nic nie robią - akcja i menu wracają po wyjściu z trybu walki (Tab).
  * W trybie normalnym: O = akcja, P = menu, [ i ] nic nie robią.
  * W obu trybach: Spacja = przewrót w kierunku strzałek (albo tam, gdzie patrzysz) z chwilą
- * nietykalności; C = skradanie (cios w nieświadomego wroga: podwójne obrażenia). W menu i rozmowach
- * O, P, Enter, Esc i Spacja działają zawsze jak OK / anuluj.
+ * nietykalności; C = skradanie. W menu i rozmowach O, P, Enter, Esc i Spacja działają zawsze jak OK / anuluj.
+ *
+ * Atak z ukrycia: cios w zwierzę, które cię jeszcze nie zauważyło (nie ma nad nim "!", nie walczy z tobą),
+ * gdy się skradasz (C) albo podchodzisz od tyłu: 2,5 raza większe obrażenia (strzał z łuku i procy 2 razy)
+ * i mocno zbita równowaga - liczy się jak ciężki cios, więc zatacza się nawet niedźwiedź. Więcej daje
+ * Czujność (i Zręczność przy strzale) oraz umiejętność Zasadzka (Łowiectwo). Nad zwierzęciem: "Atak z ukrycia!".
+ *
+ * Zbroja: skórzana kurtka (garbarnia) - wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest
+ * o 20% słabszy; kurtka się przy tym zużywa (naprawa w warsztacie). Widać ją w menu P -> Postać.
  *
  * Bronie wręcz (mają animacje): pięści (bez broni: słabe, ale szybkie; zawsze ostatnie na liście),
  * pałka (szybka i lekka), siekiery (kamienna, żelazna), oszczep, kilofy. Łuk i proca: celowanie i strzał.
@@ -53,7 +60,10 @@
  * - cios wroga doszedł do bohatera (result: dodged, parried, blocked, guardbreak, hit, bump); heroDown
  * { by, name, dead } - bohater leży (przewrócony ciosem albo bez życia); attack { weapon, combo, heavy,
  * hits } - cios bohatera spadł (trafił albo nie). Doświadczenie za zwierzę: zdarzenie kill (Hunting.js),
- * za pierwszy budynek danego rodzaju: zdarzenie build z done (Farming.js).
+ * za pierwszy budynek danego rodzaju: zdarzenie build z done (Farming.js). Ludzie (etap 3, Humans.js):
+ * doświadczenie przy poddaniu się albo śmierci (kill z noXp, gdy już było), wrogowie na mapie dla pasków
+ * i przewrotu: Combat.foes() (zwierzęta Hunting.js + to, co dodaje Combat.addFoes); ciosy ludzi: hitPlayer
+ * z projectile (strzała), guardBreak (łamie gardę), nonLethal + onBeaten (nie zabija - rabunek).
  *
  * PLIKI (2026-09-29 podzielone): Combat.js (bohater: atrybuty, poziomy, doświadczenie, umiejętności;
  * klawisze i tryb walki; stan; API; WSZYSTKIE haki silnika - ten), Combat_Fight.js (oddech, bieg, broń
@@ -104,7 +114,7 @@
         { id: "dex", name: "Zręczność", desc: "Tańszy przewrót z dłuższą nietykalnością, więcej czasu na następny cios serii, szybsze celowanie z łuku i procy, szybsza praca (budowa, rąbanie, kopanie, kucie skał)." },
         { id: "con", name: "Kondycja", desc: "Życie, długość oddechu, odporność na rany i przewrócenie." },
         { id: "per", name: "Czujność", desc: "Dłuższe okno parowania i częstsze trafienia krytyczne." },
-        { id: "wil", name: "Hart ducha", desc: "Odporność na strach i na „prawdy” z Serca (stwory z ruin, później)." }
+        { id: "wil", name: "Hart ducha", desc: "Odporność na strach i na „prawdy” z Serca: upiory i cienie z ruin biją w umysł - z Hartem ducha częściej się opierasz (a odparta prawda zatacza upiorem), a strach i zamęt trwają krócej." }
     ];
     // level 100 is the end-game challenge (a whole ordinary playthrough ends about 60-70); 3 attribute points and 1 skill point a
     // level, an attribute goes up to 60 (the effects per point are small, so the top is strong but not absurd)
@@ -305,7 +315,13 @@
         T.emit("levelUp", { level });
     }
     // the XP a beaten enemy gives: its kind and level; far weaker than the hero: little
-    const KILL_XP = { rabbit: 5, deer: 10, boar: 20, wolf: 15 };   // (the user's values, 2026-09-24)
+    // (the user's values, 2026-09-24; the bear, stage 2: three boars' worth; the men of stage 3 (Humans.js): a bandit and an archer a bit more
+    // than a boar - they think -, the mercenary three boars; the knife bandit as the one with the club)
+    // the creatures of the ruins (stage 4, Creatures.js): a rat or a bat of a swarm little, the armour two boars, the stone sentinel more
+    // than a bear; the bosses of the underground floors their own (the guardian of the tenth gate, then floors 20 ... 90)
+    const KILL_XP = { rabbit: 5, deer: 10, boar: 20, wolf: 15, bear: 60, bandit: 30, knifer: 30, archer: 30, mercenary: 60,
+        szczur: 4, nietoperz: 4, pajak: 25, topielec: 35, zbroja: 45, upior: 50, cien: 50, kamiennik: 70,
+        guardian: 250, boss_20: 300, boss_30: 600, boss_40: 900, boss_50: 1200, boss_60: 1500, boss_70: 1800, boss_80: 2000, boss_90: 2500 };
     function killXp(kind, level) {
         const base = KILL_XP[kind] || 10, lv = level || 1, diff = lv - hero().level;
         return Math.round(base * (1 + 0.2 * (lv - 1)) * (diff <= -5 ? 0.25 : diff <= -3 ? 0.6 : 1));
@@ -334,6 +350,15 @@
         return d <= -4 ? "#8b9097" : d <= 1 ? "#eceef0" : d <= 3 ? "#ffa64a" : "#ff4b3e";
     }
 
+    // ---- the foes on the map: Hunting.js's animals and what other plugins add (Humans.js: the men) - Combat.addFoes(fn -> [foe]); a foe
+    // is a character with centerX/centerY, kind(), _hp/_maxHp, _poise/_maxPoise, _stun, _level, _engaged, _sprite (the bars, the roll's bump)
+    const foeSources = [];
+    function foes() {
+        const Hn = T.api("Hunting"), out = Hn ? Hn.animals.slice() : [];
+        for (const fn of foeSources) { try { out.push(...(fn() || [])); } catch (e) { /* a source that failed this frame */ } }
+        return out;
+    }
+
     // ---- what the attributes do
     const strMult = () => 1 + 0.035 * (attr("str") - ATTR_START);
     const poiseMult = () => 1 + 0.045 * (attr("str") - ATTR_START);
@@ -355,6 +380,14 @@
     const comboWindow = () => Math.round(8 + 0.8 * (attr("dex") - ATTR_START));   // frames after a blow in which the attack key still goes on with the series
     const aimSteady = () => Math.max(0.3, (1 - 0.01 * (attr("dex") - ATTR_START)) * (1 - perk("aim.speed")));   // the bow's / sling's circle: part of the time it takes to close
     const baseBreath = () => Math.round(100 * (0.9 + 0.02 * attr("con")));   // (rested and fed)
+    // Hart ducha (stage 4, Creatures.js): the chance to resist what hits the mind - a wraith's "truth", a shadow's fright. power: the
+    // source's own strength (0..0.5); one of a higher level than the hero is harder to resist. 15% at 5, +3% a point, the skills on top
+    function mindResist(power, level) {
+        const over = level ? Math.max(-10, Math.min(10, level - hero().level)) : 0;
+        return Math.max(0.05, Math.min(0.95, 0.15 + 0.03 * (attr("wil") - ATTR_START) + perk("mind.resist") - (power || 0) - 0.02 * over));
+    }
+    // how long fear or confusion holds him (frames): shorter with Hart ducha (1.5% a point, at most 65% off) and Spokojna głowa
+    const mindTime = frames => Math.max(1, Math.round(frames * Math.max(0.35, 1 - 0.015 * (attr("wil") - ATTR_START)) * (1 - Math.min(0.5, perk("mind.short")))));
     // the hero's most health: 100, +5 per Kondycja over 5, +3 per level, and what the skills add
     const heroMhp = () => 100 + 5 * (attr("con") - ATTR_START) + 3 * (hero().level - 1) + perk("hp.max");
     const _Game_Actor_paramBase = Game_Actor.prototype.paramBase;
@@ -418,9 +451,11 @@
         return got > 0 ? { text: "+" + got + " dośw.", color: "#c9a6ff" } : null;
     });
     // a beaten animal (Hunting.js's "kill": the hero's blow or shot, the dog's bite)
+    // (noXp: a man already paid for when he gave up - Humans.js)
     T.on("kill", e => {
+        if (e.noXp) return;
         const H = T.api("Hunting");
-        gainXp(killXp(e.kind, e.level), ((H && H.SPECIES[e.kind]) || {}).name);
+        gainXp(killXp(e.kind, e.level), e.name || ((H && H.SPECIES[e.kind]) || {}).name);
     }, { owner: "Combat" });
 
     // ==================================================================
@@ -513,16 +548,18 @@
     P.core = { hero, modes, attr, skillRank, hasSkill, perk, skillById, skillBlock, learnSkill, spendPoints, skillText, secText, xpToNext, unspent,
         levelColor, ATTRS, ATTR_START, ATTR_MAX, MAX_LEVEL, POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, TREES, SKILLS, ROW_LEVEL, strMult, poiseMult,
         critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, carryBonus, gatherBonus, tired, dexWork, workSpeed, comboWindow,
-        aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup };
+        aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime };
     const fight = name => function() { const f = F(); return f[name].apply(f, arguments); };
     window.Combat = T.register("Combat", {
-        ATTRS, SKILLS, TREES, get MELEE() { return F().MELEE; }, get SHIELDS() { return F().SHIELDS; }, MAX_LEVEL, ATTR_MAX, POINTS_PER_LEVEL, XP, KILL_XP,
+        ATTRS, SKILLS, TREES, get MELEE() { return F().MELEE; }, get SHIELDS() { return F().SHIELDS; }, get ARMORS() { return F().ARMORS; }, armor: fight("armor"),
+        get SNEAK() { return F().SNEAK; }, sneakAttack: fight("sneakAttack"), sneakMult: fight("sneakMult"), MAX_LEVEL, ATTR_MAX, POINTS_PER_LEVEL, XP, KILL_XP,
         hero, attr, hasSkill, skillRank, perk, perkRoll, skillText, ROW_LEVEL, xpToNext, gainXp, killXp, skillBlock, learnSkill, spendPoints, discover, placeLevel, levelColor,
         combatMode, setCombatMode, maxBreath: fight("maxBreath"), breathNow: fight("breathNow"), spendBreath: fight("spendBreath"),
         get breath() { return F().breathNow(); }, get winded() { return F().isWinded(); }, get RUN() { return F().RUN; }, canRun: fight("canRun"),
         hand: fight("hand"), handMelee: fight("handMelee"), switchHand: fight("switchHand"), shield: fight("shield"), pressAttack: fight("pressAttack"),
         pressDodge: fight("pressDodge"), hitPlayer: fight("hitPlayer"), enemyHurtFx: fight("enemyHurtFx"), hitstop: fight("hitstop"), numberAt: fight("numberAt"),
-        sparksAt: fight("sparksAt"), shovePlayer: fight("shovePlayer"),
+        sparksAt: fight("sparksAt"), shovePlayer: fight("shovePlayer"), recoil: fight("recoil"), downPlayer: fight("downPlayer"), foes, addFoes: fn => { foeSources.push(fn); },
+        stunPlayer: fight("stunPlayer"), drainBreath: fight("drainBreath"), mindResist, mindTime,
         strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, carryBonus, gatherBonus, workSpeed, dexWork, tired, TIRED_AT, heroMhp, comboWindow, aimSteady, baseBreath, mapFreePlay,
         get act() { return F().act; }, get stopFrames() { return F().stopFrames(); }, get ROLL_KIND() { return F().ROLL_KIND; }, get KNOCK_KIND() { return F().KNOCK_KIND; },
         resetAct: fight("resetAct"), get Scene_Hero() { return UI().Scene_Hero; }, unspent

@@ -12,10 +12,33 @@
 // Data: TownQuests_Data.js (right above this plugin). The state: Tawerna.state("townQuests").
 // Bus: emits townQuestAccepted { id, title }, townQuestDone { id, kind, title, giver, gold, xp, opinion }, townQuestFailed { id }.
 // DROUGHT (the user's rule): nothing here ever gives the hero water.
+// (2026-10-05, v1.1.0) W1 to its chapter 6 (Kuba's talk, the raven grate at the well's bottom, the orangery at night past the manor's
+// guard, the big choice - the truth: Feliks is guilty, the Lord knows nothing), W2 to its chapter 6 (seven strikes at noon, the
+// statues' shadows, the slab, the Order's Archive), K26 (the ring in the well), K37 (the stolen purse: a chase), K39 (the dice
+// sharper: TavernDice + Czujność), K15 with the carter. Places on the new maps (the well's bottom 118, the Archive 119, the
+// orangery on the manor 24); quests that start by themselves (autoStart); residents' remarks after what happened (REMARKS).
+// (2026-10-06, v1.2.0) The tavern's regulars - Melia, Dziadek Ozzy, Grum (Map001's own events, TavernLife_Regulars.js asks
+// regularTalk first, then shows their own menu) - are givers too: K22 (the string), K33 (the cap on the statue, knocked off with the
+// sling through the garden gate's grate: Hunting's target and its "shot" bus; the view peeks over the wall), D13 (Ozzy's predictions
+// read from Survival's weather plan, Grum's bet), D6 (the arm-wrestling tournament at the market: TavernLife's mini-game with other
+// rivals, Baltazar's bribe, the strongman's belt - Combat.carryBonus), W3 (the seventh ballad: six verses from six sources, Melia's
+// origin, the Kupała bonfire with a real fight - Humans.js - or Borgar alone, or the words burnt), W8 rozdz. 1 (Grum asks about the
+// mountains), K27 Melia's way. Quest topics in a regular's menu (FX topic / topicList), reward.trust, a step's own words (r.t.v).
+// (later the same day) D6 moved into the tavern (the author: arm-wrestling only there) - the sign-up with Borgar, the bouts at the arm
+// table on the market day's evening (TavernLife_ArmWrestle asks armTable); Borgar's topics at the bar (FX borgarTopic / borgarList);
+// W4 compact: after the debt, the castellan's key (Borgar's half, the half under the raven cairn in grandpa's yard, Tadek's forge)
+// opens the order's grate in the cellar through Underground.open() - and Borgar says the floor-10 guardian's words.
+// (2026-10-06, v1.3.0, Act II's chapters) W1 6 c: Feliks's men on Polna droga are a real fight (Humans.ambush, tag "w1Feliks": won -
+// the choice of 6 back, a spared man a witness; lost - robbed and the drawing gone; fled - they wait again); W1 7: the cistern's main
+// sluice (Underground's bus "undergroundSluice") and the bell's four and two - the market well fills under the sołtys's lock, the
+// hero's two draws a day stay (the drought); W9 6: the Truth Layer's truths (Underground.truths(), bus "undergroundTruth") told or
+// kept, person by person; W8 2-6 on the mountain maps (Map013/014/120, places on their "Miejsce:" markers - SPOTS `marker`): the
+// guide's dawn, the quarry, the diggers' camp and Marek, the order "Świadków nie zostawiać" (drunk / the thin wall / the crate), the
+// Silent's gate (switch 16), Grum's choice - the honour bout, his side (switch 15), the faction, or the fight with him (Humans.js).
 
 /*:
  * @target MZ
- * @plugindesc Questy miasteczka: zadania od mieszkańców (oferta, kroki, nagrody), Opinia w miasteczku, dzień targowy, kalendarz, sygnały dzwonu, mini-gra dzwonu, zakładka „Miasteczko” w dzienniku. v1.0.0
+ * @plugindesc Questy miasteczka: zadania od mieszkańców i stałych bywalców tawerny (oferta, kroki, nagrody), Opinia w miasteczku, dzień targowy, kalendarz, sygnały dzwonu, mini-gra dzwonu, zakładka „Miasteczko” w dzienniku. v1.3.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -47,7 +70,7 @@
     const D = window.TownQuestsData;
     if (!D) throw new Error("TownQuests.js: TownQuests_Data.js must stand above it in the plugin list");
     const PLUGIN = "TownQuests";
-    const TOWN = 8;
+    const TOWN = 8, ROAD = 22, MANOR = 24;   // the town, Polna droga, the Lord's manor (its garden and the orangery)
     const QUESTS = D.QUESTS, Q = {};
     for (const q of QUESTS) Q[q.id] = q;
     const KIND = { K: "krótkie", D: "długie", W: "wątek" };
@@ -289,8 +312,9 @@
         return { ok: true, why: "" };
     }
     function varsOf(q, r) {
-        const t = r ? r.t : {};
-        return { n: t.n || 0, left: t.left || 0, gold: (q.reward && q.reward.gold) || 0 };
+        const t = r ? r.t : {}, st = r && q.steps ? q.steps[r.step] : null;
+        const own = st && st.vars && FX[st.vars] && FX[st.vars].vars ? FX[st.vars].vars(q, r) : null;   // (2026-10-06: a step's words counted when shown - W9's truths)
+        return Object.assign({ n: t.n || 0, left: t.left || 0, gold: (q.reward && q.reward.gold) || 0 }, t.v || {}, own || {});   // (t.v: a handler's own words - D6's market day, W3's verses)
     }
 
     // ------------------------------------------------------------------
@@ -302,21 +326,33 @@
         return ev && !(ev._town && ev._town.hidden) ? ev : null;
     }
     function storyEv(role) { const St = ST(); try { return St && St.npc ? St.npc(role) || null : null; } catch (e) { return null; } }
+    // (2026-10-06) the tavern's regulars - Map001's own events (TavernLife finds them by name): givers and speakers too
+    const TAVERN = 1;
+    const REGULAR = { melia: ["Melia", "pieśniarka w tawernie"], ozzy: ["Dziadek Ozzy", "stały bywalec tawerny"], grum: ["Grum", "najemnik w tawernie"], borgar: ["Borgar", "karczmarz"] };
+    const isRegular = key => key !== "borgar" && !!REGULAR[key];
+    function regularEv(key) {
+        if (!REGULAR[key] || !window.$gameMap || $gameMap.mapId() !== TAVERN) return null;
+        const ev = T.call("TavernLife", "npc", key);
+        return ev && $gameMap.event(ev.eventId()) === ev ? ev : null;
+    }
+    const whoEv = key => residentEv(key) || regularEv(key);
     function nameOf(key) {
         if (key === "lord") return "Lord Zaleski";
         if (key === "grandpa") return "Dziadek Stach";
+        if (REGULAR[key]) return REGULAR[key][0];
         const r = resident(key);
         return r ? r.name : String(key || "");
     }
     function titleOf(key) {
         if (key === "lord") return "dwór";
         if (key === "grandpa") return "dziadek";
+        if (REGULAR[key]) return REGULAR[key][1];
         const r = resident(key);
         return r ? r.title : "";
     }
     function speakerOf(key) {
         if (key === "hero") return HERO;
-        const ev = key === "lord" || key === "grandpa" ? storyEv(key) : residentEv(key);
+        const ev = key === "lord" || key === "grandpa" ? storyEv(key) : whoEv(key);
         return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: nameOf(key) };
     }
 
@@ -393,7 +429,7 @@
     }
     function updateThoughts() {
         if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map)) return;
-        const SB = T.api("SpeechBubbles"), t = thoughts.shift(), who = t.key ? residentEv(t.key) : $gamePlayer;
+        const SB = T.api("SpeechBubbles"), t = thoughts.shift(), who = t.key ? whoEv(t.key) : $gamePlayer;
         if (SB && SB.say && who) SB.say(who, t.text, 200); else T.popup(t.text, { color: "#eceef0" });
         thoughtAt = Graphics.frameCount + 210;
     }
@@ -406,6 +442,7 @@
         for (const [k, v] of Object.entries(b || {})) {
             if (k === "gold" || k === "xp" || k === "opinion" || k === "debtCredit") out[k] = (out[k] || 0) + v;
             else if (k === "items") out.items = (out.items || []).concat(v);
+            else if (k === "trust") out.trust = Object.assign({}, out.trust || {}, v);
             else out[k] = v;
         }
         return out;
@@ -441,6 +478,10 @@
         addClue(rw.clue);
         setFlag(rw.flag);
         addPerk(rw.perk);
+        for (const [role, n] of Object.entries(rw.trust || {})) {   // (2026-10-06: the tavern's regulars trust the hero more - TavernLife_Regulars)
+            const got = T.call("TavernLife", "addTrust", role, n, q.title) || 0;
+            if (got) parts.push(nameOf(role) + ": zaufanie " + (got > 0 ? "+" : "") + got);
+        }
         return parts;
     }
     function rewardText(rw) {
@@ -453,6 +494,7 @@
         if (rw.opinion) parts.push("Opinia " + (rw.opinion > 0 ? "+" : "") + rw.opinion);
         if (rw.opinionFirst) parts.push("Opinia +" + rw.opinionFirst + " (za pierwszym razem)");
         if (rw.clue) parts.push("poszlaka");
+        for (const [role, n] of Object.entries(rw.trust || {})) parts.push(nameOf(role) + ": zaufanie +" + n);
         return parts.join("  ·  ");
     }
     // the vitems a quest hands out (taken back when it ends)
@@ -576,10 +618,10 @@
     // the checks that move steps by themselves (W1's clues, W2's signals...) and the arcs that start by themselves
     function autoChecks() {
         if (!has()) return;
-        for (const q of QUESTS) {
-            if (q.kind !== "W" || rec(q.id)) continue;
-            const fx = FX["start" + q.id];
-            if (fx && fx()) start(q);
+        for (const q of QUESTS) {   // (the arcs, and the quests with autoStart: K37's theft)
+            if ((q.kind !== "W" && !q.autoStart) || rec(q.id)) continue;
+            const fx = FX[q.autoStart || "start" + q.id];
+            try { if (fx && fx()) start(q); } catch (e) { report("start " + q.id, e); }
         }
         for (let guard = 0; guard < 6; guard++) {
             let moved = false;
@@ -744,7 +786,72 @@
     function residentTalk(key, ev) {
         if (!has()) return null;
         const res = resident(key), spk = { id: ev.eventId(), name: res ? res.name : key };
-        try { return talkFor(key, spk, false) || greeting(key, ev, spk); } catch (e) { report("talk " + key, e); return null; }
+        // (a market day's money and a remark after what happened come first - each once; then the quests, then the greeting)
+        try { return sideTalk(key, spk) || remark(key, spk) || talkFor(key, spk, false) || greeting(key, ev, spk); } catch (e) { report("talk " + key, e); return null; }
+    }
+    // (2026-10-06) a tavern regular's talk (TavernLife_Regulars asks it first, its own greeting and menu come after): { list, kind,
+    // pop } - kind "ready" (a hand-in now), "offer", "remind" (his own quest, what is missing pops up), "remark" - or null
+    function regularTalk(key, ev) {
+        if (!has() || !isRegular(key) || !ev) return null;
+        const spk = { id: ev.eventId(), name: nameOf(key) };
+        try {
+            const rm = remark(key, spk), pre = rm || [];
+            let remind = null, own = null;
+            for (const q of activeQuests()) {
+                const r = rec(q.id), st = q.steps[r.step];
+                if (!st) continue;
+                const h = stepTalk(q, r, st, key, spk);
+                if (!h || !h.list || !h.list.length) continue;
+                if (h.ready) return { list: pre.concat(h.list), kind: "ready" };
+                if (!remind) remind = h;
+                if (!own && q.giver === key) own = h;
+            }
+            for (const q of QUESTS) if (q.giver === key && offerable(q)) { const list = offerList(q, spk); if (list && list.length) return { list: pre.concat(list), kind: "offer" }; }
+            const rem = own || remind;
+            if (rem) return { list: pre.concat(rem.list), kind: "remind", pop: rem.pop || null };
+            return rm ? { list: rm, kind: "remark" } : null;
+        } catch (e) { report("regular talk " + key, e); return null; }
+    }
+    // what a resident says once, the first talk after something happened (D.REMARKS)
+    const goneNow = k => !!T.call("TownLife", "gone", k);
+    function remarkFor(key) {
+        const s = S(), said = s.said || (s.said = {});
+        return (D.REMARKS || []).find(m => m.who === key && !said[m.id] && (!m.flag || s.flags[m.flag]) && (!m.gone || goneNow(m.gone)) && (!m.back || !goneNow(m.back))) || null;
+    }
+    function remark(key, spk) {
+        const m = remarkFor(key);
+        if (!m) return null;
+        S().said[m.id] = day();
+        S().greeted[key] = day();
+        return linesTo([], spk, m.lines);
+    }
+    // talks outside the quests' steps: Kuba's market-day money (W1 rozdz. 3 b), Baltazar's offer for the chronicles (W2 rozdz. 6)
+    function sideTalk(key, spk) {
+        const s = S(), f = s.flags, side = s.side || (s.side = {});
+        if (key === "woziwoda" && f.kubaPays && !f.sluiceHalf && isMarket(day()) && side.kubaPaid !== day()) {
+            side.kubaPaid = day();
+            $gameParty.gainGold(5);
+            T.popup("+5 G od Kuby", { icon: COIN_ICON, kind: "gold" });
+            return linesTo([], spk, Q.W1.lines.kubaTribute);
+        }
+        if (key === "kupiec" && f.chroniclesTaken && vcount("kroniki") > 0 && !f.w5ChroniclesSold && side.chronAsked !== day() && inHours(hour(), [8, 18])) {
+            side.chronAsked = day();
+            const L = Q.W2.lines, out = [], yes = [], no = [];
+            linesTo(out, spk, L.sell);
+            script(yes, ["W2", "fx", "w2Sell", 1]); linesTo(yes, spk, L.sellYes);
+            script(no, ["W2", "fx", "w2Sell", 0]); linesTo(no, spk, L.sellNo);
+            return choiceTo(out, ["Sprzedam (300 G).", "Nie sprzedam."], [yes, no], 1);
+        }
+        const d6 = rec("D6");   // (2026-10-06) D6: Baltazar's forty groszy for a lost first bout - once, after the training, before the tournament
+        if (key === "kupiec" && d6 && d6.s === "active" && d6.step >= 1 && !d6.t.round && !side.d6Asked && day() <= (d6.t.market || 0) && inHours(hour(), [8, 21.5])) {
+            side.d6Asked = day();
+            const L = Q.D6.lines, out = [], yes = [], no = [];
+            linesTo(out, spk, L.bribe);
+            script(yes, ["D6", "fx", "d6Bribe", 1]); linesTo(yes, spk, L.bribeYes);
+            script(no, ["D6", "fx", "d6Bribe", 0]); linesTo(no, spk, L.bribeNo);
+            return choiceTo(out, ["Biorę.", "Nie sprzedaję walk."], [yes, no], 1);
+        }
+        return null;
     }
     // the hook into Story.js's talks of the Lord and grandpa: the quest's lines first, then the story's own talk
     let storyTalkOrig = null;
@@ -794,7 +901,7 @@
                 const vars = varsOf(q, r), tm = timing(q, r, st);
                 if (!tm.ok) {
                     const text = fill((st.early || ["Jeszcze nie pora."])[0], vars).replace(/^> /, "");
-                    T.popup(tm.why === "weather" ? "Przy takiej pogodzie nic tu nie widać." : text, { color: "#ffe9a8" });
+                    T.popup(tm.why === "weather" ? st.wet || "Przy takiej pogodzie nic tu nie widać." : text, { color: "#ffe9a8" });
                     return;
                 }
                 const miss = missingRows(st);
@@ -825,17 +932,27 @@
     // ------------------------------------------------------------------
     const BLANK = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
         switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
+    // (img: [sheet, index, direction, pattern] - a picture on the page; solid: it blocks, like a person standing there)
     function spotEvent(s) {
+        const img = s.img || ["", 0, 2, 0];
         const page = { conditions: Object.assign({}, BLANK, { selfSwitchCh: "A", selfSwitchValid: true }), directionFix: true,
-            image: { tileId: 0, characterName: "", direction: 2, pattern: 0, characterIndex: 0 },
+            image: { tileId: 0, characterName: img[0], direction: img[2], pattern: img[3], characterIndex: img[1] },
             list: [C(355, ["TownQuests.spot(this)"]), C(0, [])],
             moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false }, moveSpeed: 3, moveType: 0,
-            priorityType: 1, stepAnime: false, through: true, trigger: 0, walkAnime: false };
-        return { id: s.id, name: "Zadanie: " + s.name, note: "<TownQuests:" + s.key + ">", pages: [page], x: s.x, y: s.y };
+            priorityType: 1, stepAnime: false, through: !s.solid, trigger: 0, walkAnime: false };
+        return { id: s.id, name: "Zadanie: " + s.name, note: "<TownQuests:" + s.key + ">" + (s.bust ? "<Bust:" + s.bust + ">" : ""), pages: [page], x: s.x, y: s.y };
     }
     const SPOT_MAPS = Array.from(new Set(SPOT_LIST.map(s => s.map)));
+    // (2026-10-06) a place with `marker`: it stands on the map's "Miejsce: <marker>" event (the maps agent's markers - docs/
+    // miasta_miejsca_zadan.md), shifted by dx/dy; x/y are only the fallback when the marker is missing
+    function spotAt(s, data) {
+        if (!s.marker) return s;
+        const m = (data.events || []).find(e => e && String(e.name || "").trim() === "Miejsce: " + s.marker);
+        if (!m) return s.x !== undefined ? s : null;
+        return Object.assign({}, s, { x: m.x + (s.dx || 0), y: m.y + (s.dy || 0) });
+    }
     T.inject(SPOT_MAPS, { ids: [951, 959], owner: PLUGIN,
-        build(data, mapId) { return SPOT_LIST.filter(s => s.map === mapId && s.x < data.width && s.y < data.height).map(spotEvent); } });
+        build(data, mapId) { return SPOT_LIST.filter(s => s.map === mapId).map(s => spotAt(s, data)).filter(s => s && s.x < data.width && s.y < data.height).map(spotEvent); } });
     function syncSpots() {
         if (!$gameMap || !$gameSelfSwitches) return;
         const mapId = $gameMap.mapId();
@@ -861,7 +978,7 @@
     const markers = {};   // key -> "new" | "ready" | ""
     function refreshMarkers() {
         if (!has()) return;
-        const keys = ((TL() && TL().RESIDENTS) || []).map(r => r.key).concat(["lord", "grandpa"]);
+        const keys = ((TL() && TL().RESIDENTS) || []).map(r => r.key).concat(["lord", "grandpa"], Object.keys(REGULAR));
         for (const key of keys) {
             let m = "";
             for (const q of activeQuests()) { const r = rec(q.id), st = q.steps[r.step]; if (st && stepReady(q, r, st, key)) { m = "ready"; break; } }
@@ -905,6 +1022,11 @@
                 ctx.beginPath(); ctx.ellipse(x, y, 3, 2.5, 0, 0, Math.PI * 2); ctx.fill();
                 for (const [dx, dy] of [[-3, -4], [0, -5], [3, -4]]) { ctx.beginPath(); ctx.arc(x + dx, y + dy, 1.2, 0, Math.PI * 2); ctx.fill(); }
             }
+        } else if (kind === "dig") {
+            ctx.fillStyle = "rgba(70,48,28,0.55)";
+            ctx.beginPath(); ctx.ellipse(24, 34, 13, 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "rgba(40,26,14,0.7)";
+            for (const [x, y] of [[17, 33], [27, 31], [31, 36], [21, 37]]) ctx.fillRect(x, y, 3, 2);
         } else if (kind === "doused") {
             ctx.fillStyle = "rgba(60,70,80,0.55)";
             ctx.beginPath(); ctx.ellipse(24, 40, 14, 4, 0, 0, Math.PI * 2); ctx.fill();
@@ -930,13 +1052,14 @@
         const s = spotOf($gameMap.mapId(), c.eventId());
         if (s) {
             const w = spotWanted(s.key);
-            if (w && w.ready) kind = "spot";
+            if (w && w.ready && !s.nomark) kind = "spot";
             if (s.deco === "paper") deco = S().flags["notice_" + s.key] && day() - S().flags["notice_" + s.key] < 7 ? "paper" : "";
             else if (s.deco === "glint") deco = w && w.ready && Math.sin(Graphics.frameCount / 9) > 0.2 ? "glint" : "";
             else if (s.deco === "tracks") deco = w && w.q.id === "D5" ? "tracks" : "";
             else if (s.deco === "doused") deco = w && w.q.id === "D11" && w.ready ? "doused" : "";
+            else if (s.deco === "dig") deco = w ? "dig" : "";
         } else {
-            const key = residentKeyOf(c) || (c.eventId() >= 900 && c.eventId() <= 902 ? storyRoleOf(c) : null);
+            const key = residentKeyOf(c) || (c.eventId() >= 900 && c.eventId() <= 902 ? storyRoleOf(c) : null) || ($gameMap.mapId() === TAVERN && c.eventId() < 100 ? T.call("TavernLife", "regularOf", c) || (c === regularEv("borgar") ? "borgar" : null) : null);
             if (key && !c.isTransparent() && c.opacity() > 0) kind = markers[key] || "";
         }
         if (kind && !spr._tqMark) { spr._tqMark = new Sprite(); spr._tqMark.anchor.set(0.5, 1); spr.addChild(spr._tqMark); }
@@ -960,7 +1083,7 @@
     Sprite_Character.prototype.update = function() {
         _Sprite_Character_update.call(this);
         const c = this._character;
-        if (c instanceof Game_Event && has() && $gameMap) { try { updateDeco(this, c); } catch (e) { /* (a sprite must never stop the map) */ } }
+        if (c instanceof Game_Event && has() && $gameMap) { try { updateDeco(this, c); updateCap(this, c); } catch (e) { /* (a sprite must never stop the map) */ } }
     };
 
     // ------------------------------------------------------------------
@@ -1196,6 +1319,339 @@
     // ------------------------------------------------------------------
     const visible = key => !!residentEv(key);
     const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const nightOf = () => (hour() < 12 ? day() - 1 : day());   // (a night counts from the evening before)
+    // a quest's place on this map, while it is shown (its page on)
+    function spotEv(key) {
+        const s = D.SPOTS[key];
+        if (!s || !window.$gameMap || $gameMap.mapId() !== s.map) return null;
+        const ev = $gameMap.event(s.id);
+        return ev && ev.page() ? ev : null;
+    }
+    // a watcher (the manor's guard) sees the hero: close by, in front of him, or not sneaking (sharp: a warned watch sees further)
+    function sees(w, p, sneak, sharp) {
+        const v = [[0, 0], [0, 1], [0, 0], [-1, 0], [0, 0], [1, 0], [0, 0], [0, -1]][w.direction() - 1] || [0, 1];
+        const d = dist(w, p), ahead = ((p.x - w.x) * v[0] + (p.y - w.y) * v[1]) / Math.max(0.01, d);
+        return d < 1.6 || (ahead > 0.5 && d < (sneak ? 3.5 : 6) + sharp) || (!sneak && d < 4 + sharp);
+    }
+    // a free cell next to a character (K37: the thief beside Feliks)
+    function freeBeside(c) {
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1]]) {
+            const x = c.x + dx, y = c.y + dy;
+            if ($gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !$gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough())
+                && !($gamePlayer.x === x && $gamePlayer.y === y)) return [x, y];
+        }
+        return null;
+    }
+    // the residents near the hero who would see what he does (K37: the purse kept)
+    function witnesses(but) {
+        const L = TL();
+        return ((L && L.RESIDENTS) || []).map(r => r.key).filter(k => k !== but && (() => { const e = residentEv(k); return !!e && dist(e, $gamePlayer) <= 7; })());
+    }
+    // the slab of the knights' garden (Map008 "Płyta w ścieżce"): found by name, else the id the places' builder gave it
+    function slabId() {
+        const e = window.$dataMap && $gameMap && $gameMap.mapId() === TOWN ? ($dataMap.events || []).find(x => x && /^Płyta w ścieżce/.test(x.name || "")) : null;
+        return e ? e.id : 246;
+    }
+    // the hero thrown out of the manor's garden (W1 rozdz. 5): after the bubble, out of its gate to the town's side
+    let pendingOut = null;
+    // ------------------------------------------------------------------
+    // (2026-10-06) Helpers of the regulars' quests: the seventh ballad's verses (W3), Natchniony, the hour said in words, D13's
+    // predictions and Ozzy's truth, D6's bouts, the cap on the statue (K33), the Kupała night
+    // ------------------------------------------------------------------
+    const ORD = ["dwunastej", "pierwszej", "drugiej", "trzeciej", "czwartej", "piątej", "szóstej", "siódmej", "ósmej", "dziewiątej", "dziesiątej", "jedenastej"];
+    function hourWords(h) {
+        const H = Math.floor(h) % 24, part = H < 5 ? " w nocy" : H < 11 ? " rano" : H < 13 ? " w południe" : H < 18 ? " po południu" : " wieczorem";
+        return "o " + ORD[H % 12] + (H === 12 ? "" : part);
+    }
+    // the offer's usual two answers after a handler's own lines (D13)
+    function offerChoice(out, q, spk) {
+        const opts = shownOptions(offerOptions(q));
+        const branches = opts.map(({ op, i }) => { const b = []; script(b, [q.id, "opt", i]); linesTo(b, spk, op.say, varsOf(q, rec(q.id))); return b; });
+        const cancel = opts.findIndex(x => x.op.then === "decline");
+        return choiceTo(out, opts.map(x => x.op.label), branches, cancel < 0 ? opts.length - 1 : cancel);
+    }
+    const verseOf = key => (Q.W3 && Q.W3.verses || []).find(v => v.key === key) || null;
+    const hasVerse = key => has() && !!S().flags["verse_" + key];
+    // a verse sung (or read) by `spk`: two couplets, each a bubble
+    function sing(out, spk, key) {
+        const v = verseOf(key);
+        if (!v) return out;
+        sayTo(out, spk, "♪ " + v.lines[0] + "\n" + v.lines[1]);
+        return sayTo(out, spk, "♪ " + v.lines[2] + "\n" + v.lines[3]);
+    }
+    // the note "Siódma ballada": the song as far as it is known, in its order
+    function verseNote() {
+        const J = T.api("Journal"), vs = Q.W3.verses, title = "Siódma ballada";
+        const text = "Melii śni się siódma ballada - „Pieśń o Kruczych Skałach”. Melodię zna, słów nie. Zbieram zwrotki dla niej (" + vs.filter(v => hasVerse(v.key)).length + "/" + vs.length + ").\n\n" +
+            vs.map((v, i) => (i + 1) + ". " + (hasVerse(v.key) ? v.lines.join("\n") + "\n(" + v.from + ")" : "...") ).join("\n\n");
+        const d = J && J.data ? J.data() : null, old = d && d.notes ? d.notes.find(n => n.title === title) : null;
+        if (old) old.text = text; else addNote([title, text]);
+    }
+    function w3Vars(q, r) {
+        if (!r) return;
+        const vs = q.verses, got = vs.filter(v => hasVerse(v.key)), miss = vs.filter(v => !hasVerse(v.key));
+        r.t.n = got.length;
+        r.t.v = Object.assign({}, r.t.v, { got: got.map(v => v.name).join(", ") || "nic", miss: miss.map(v => q.hints[v.key] || v.name).join("; ") || "nic - masz wszystkie" });
+    }
+    function gainVerse(key, quiet) {
+        if (!has() || hasVerse(key)) return;
+        setFlag("verse_" + key);
+        verseNote();
+        const q = Q.W3, r = rec("W3"), v = verseOf(key), n = q.verses.filter(x => hasVerse(x.key)).length;
+        if (r) w3Vars(q, r);
+        if (!quiet) T.popup("Siódma ballada: nowa zwrotka", { top: true, color: "#ffe27a", sub: (v ? v.from : key) + "  ·  " + n + "/" + q.verses.length });
+        if (r && r.s === "active") FX.w3Verse.maybeDone(q);
+    }
+    // Melia's gift: Natchniony for some hours (TavernLife's buff)
+    function inspire(hours) {
+        if (!$gameSystem.addBuff) return;
+        $gameSystem.addBuff("inspired", hours);
+        T.popup("Natchniony (" + hours + " godz.)", { icon: 80, kind: "good" });
+    }
+    const halfPaid = () => { const St = ST(); try { const s = St && St.active && St.active() ? St.state() : null; return !!s && s.paid >= s.debt / 2; } catch (e) { return false; } };
+    // the next Noc Kupały (summer, its 14th day - day 42 in the first year) from today on
+    function nextKupala() {
+        for (let d = day(); d < day() + 4 * T.time.seasonLength() + 2; d++) {
+            if (T.time.season(d) === 1 && T.time.dayOfSeason(d) === 14 && (d > day() || hour() < 22)) return d;
+        }
+        return day() + 1;
+    }
+    // D13: the predictions as made on the day the quest began; the journal's words for them
+    function d13Pred(r) { return r.t.pred || (r.t.pred = FX.d13Offer.pred(r.day) || { wDay: r.day + 1, wHour: 15, storm: true, oven: r.day + 2, shoe: r.day + 3 }); }
+    function d13Vars(q, r) {
+        const p = d13Pred(r), g = r.t.got || {};
+        const mark = k => (g[k] === true ? " ✓" : g[k] === false ? " (przegapione)" : "");
+        r.t.n = ["weather", "oven", "shoe"].filter(k => g[k]).length;
+        r.t.v = Object.assign({}, r.t.v, {
+            p1: "dzień " + p.wDay + " " + hourWords(p.wHour) + " " + (p.storm ? "burza" : "deszcz") + mark("weather"),
+            p2: "dzień " + p.oven + " pęknie piec Hanki (rynek, piekarnia)" + mark("oven"),
+            p3: "dzień " + p.shoe + " koń kaprala zgubi podkowę (brama wschodnia, 6–18)" + mark("shoe")
+        });
+    }
+    // what Ozzy says about the hero, sober for a moment: true things he could not know
+    function ozzyTruth() {
+        const out = [], items = $gameParty.items().filter(it => it && it.name && $gameParty.numItems(it) > 0);
+        out.push("Masz w sakiewce " + $gameParty.gold() + " groszy. Ani grosza więcej, ani mniej.");
+        const one = items.find(it => $gameParty.numItems(it) === 1) || items[0];
+        if (one) out.push("W torbie nosisz " + one.name.toLowerCase() + (($gameParty.numItems(one) === 1) ? " - jedną sztukę" : "") + ". Nie pytaj, skąd wiem. Wiem.");
+        const St = ST();
+        let story = null;
+        try { story = St && St.active && St.active() ? St : null; } catch (e) { story = null; }
+        if (story && !story.state().done) out.push("Twój dziadek nie śpi po nocach. Liczy dni do terminu - zostało ich " + Math.max(0, story.daysLeft()) + ". I modli się za ciebie, choć mówi, że nie umie.");
+        else out.push("Śni ci się woda. Ciemna, pod kamieniem. Ta sama, co mnie.");
+        out.push("Zejdziesz kiedyś tam, gdzie ja wpadłem. Nie bój się ciemności, synku. Bój się pytań. Jedno pytanie - nigdy więcej.");
+        return out;
+    }
+    // D6: a bout over (the arm-wrestling scene's end, back on the map)
+    function d6Bout(q, res) {
+        const r = rec(q.id), L = q.lines || {};
+        if (!r || r.s !== "active" || q.steps[r.step].talk !== "d6Tourney" || !res) return;
+        const i = r.t.round || 0;
+        if (res.won) {
+            if (i === 0 && S().flags.d6Bribe) setFlag("d6Crossed");
+            r.t.round = i + 1;
+            if (r.t.round >= q.rivals.length) {   // the champion: the belt (a bigger load) and the barrel
+                think(L.champion);
+                vgive("pas", 1);
+                addPerk({ carry: 8 });
+                finish(q, { gold: 50, opinion: 5, xp: 120, flag: "d6Won", trust: { grum: 10 }, note: L.noteWon }, { replace: true });
+                return;
+            }
+            think(L.won.concat([fill(L.next, { who: q.rivals[r.t.round].name })]));
+            return;
+        }
+        think(i === 0 ? L.lostQf : i === 1 ? L.lostSf : L.lostF);
+        finish(q, i === 0 ? { xp: 30, opinion: 1 } : i === 1 ? { gold: 5, xp: 50, opinion: 1 } : { gold: 15, xp: 80, opinion: 2, trust: { grum: 5 } }, { replace: true });
+    }
+    // K33: the cap on the left statue of the knights' garden (Map008 5,9 - its head at y 7.15), fallen just behind the gate's grate
+    const CAP = { statue: [5, 9], head: { x: 5.5, y: 7.15 }, ground: { x: 5.6, y: 16.3 }, r: 0.38, fall: 40 };
+    let capFall = null;   // { t } frames since it was knocked off (the fall is drawn; the step has moved on already)
+    const capStep = () => { const r = has() ? rec("K33") : null; return r && r.s === "active" ? r.step : -1; };
+    function gateEv() {
+        if (!window.$gameMap || $gameMap.mapId() !== TOWN) return null;
+        return $gameMap.events().find(e => e.event() && /^Furtka ogrodu rycerzy/.test(e.event().name || "")) || null;
+    }
+    const gateOpen = () => { const g = gateEv(); return !!g && !!$gameSelfSwitches.value([TOWN, g.eventId(), "A"]); };
+    function knockCap() {
+        if (capStep() !== 0 || !onTown()) return false;
+        capFall = { t: 0 };
+        T.audio.se("Blow1", { volume: 60, pitch: 140 });
+        think((Q.K33.lines || {}).hit);
+        completeStep(Q.K33);
+        return true;
+    }
+    // a stone or an arrow that flew towards the garden from in front of its gate (stopped by the grate, or out of range): does its
+    // line pass the cap? (the aim's circle decides where it flies - held still, it is narrow enough)
+    function shotAtCap(e) {
+        if (capStep() !== 0 || capFall || !onTown() || !e || e.hit) return false;
+        const p = $gamePlayer, sx = p._realX + 0.5, sy = p._realY + 0.3;
+        if (sy < 15.5 || !(e.y < sy - 0.3) || e.x < 1.5 || e.x > 10.5 || e.y < 6.5) return false;
+        const dx = e.x - sx, dy = e.y - sy, xAt = sx + dx * (CAP.head.y - sy) / dy;
+        return Math.abs(xAt - CAP.head.x) <= CAP.r + 0.04 ? knockCap() : false;
+    }
+    T.on("shot", e => { try { shotAtCap(e); } catch (err) { report("K33 shot", err); } }, { owner: PLUGIN });
+    const HU = T.api("Hunting");
+    if (HU && typeof HU.addTargets === "function") {   // (from close by - inside the garden - the cap is an ordinary target of the aim)
+        HU.addTargets(() => (capStep() === 0 && !capFall && onTown() ? [{ x: CAP.head.x, y: CAP.head.y, radius: CAP.r, ref: { kind: "czapka" }, hit: () => knockCap() }] : []));
+    }
+    // the cap drawn: on the statue's head (K33 step 0), falling, lying behind the grate (step 1) - a child of the statue's sprite
+    let capBmp = null;
+    function capBitmap() {
+        if (capBmp) return capBmp;
+        const b = new Bitmap(28, 16), ctx = b.context;
+        // a worn felt cap, a short brim to the right (1 px outline like the map's art)
+        const rows = [[9, 16], [7, 18], [6, 19], [5, 20], [4, 21], [4, 21], [4, 22], [4, 24], [4, 25], [5, 25]];
+        ctx.fillStyle = "#24170e";
+        rows.forEach(([a, z], y) => ctx.fillRect(a - 1, y + 2, z - a + 3, 1));
+        ctx.fillRect(rows[0][0], 1, rows[0][1] - rows[0][0] + 1, 1);
+        ctx.fillRect(rows[9][0], 12, rows[9][1] - rows[9][0] + 1, 1);
+        ctx.fillStyle = "#6e5537";
+        rows.forEach(([a, z], y) => ctx.fillRect(a, y + 2, z - a + 1, 1));
+        ctx.fillStyle = "#4f3b25"; ctx.fillRect(5, 9, 20, 2); ctx.fillRect(18, 10, 7, 1);   // the shade under the crown, the brim
+        ctx.fillStyle = "#8f7250"; ctx.fillRect(9, 3, 5, 1); ctx.fillRect(7, 4, 3, 1);       // a light on the felt
+        ctx.fillStyle = "#4a5a3c"; ctx.fillRect(14, 5, 4, 3);                                // a patch
+        ctx.fillStyle = "#2f3a26"; ctx.fillRect(14, 5, 4, 1); ctx.fillRect(15, 7, 1, 1);
+        ctx.fillStyle = "#c9b48a"; ctx.fillRect(13, 6, 1, 1); ctx.fillRect(18, 6, 1, 1);     // stitches
+        b._baseTexture.update();
+        return (capBmp = b);
+    }
+    let capStatue = { map: null, id: 0 };
+    function capStatueId() {
+        if (capStatue.map !== $gameMap) {
+            const e = (($dataMap && $dataMap.events) || []).find(x => x && x.x === CAP.statue[0] && x.y === CAP.statue[1] && x.pages && x.pages[0] && /^!Statue/.test(x.pages[0].image.characterName || ""));
+            capStatue = { map: $gameMap, id: e ? e.id : 0 };
+        }
+        return capStatue.id;
+    }
+    function updateCap(spr, c) {
+        const step = $gameMap.mapId() === TOWN && c.eventId() === capStatueId() ? capStep() : -1;
+        const show = step === 0 || step === 1;
+        if (!show && !spr._tqCap) return;
+        if (!spr._tqCap) { spr._tqCap = new Sprite(capBitmap()); spr._tqCap.anchor.set(0.5, 1); spr.addChild(spr._tqCap); }
+        const s = spr._tqCap, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        s.visible = show;
+        if (!show) return;
+        const head = { x: 1, y: -spr.patternHeight() + 9 }, ground = { x: (CAP.ground.x - CAP.statue[0] - 0.5) * tw, y: (CAP.ground.y - CAP.statue[1] - 1) * th };
+        if (step === 0) { s.x = head.x; s.y = head.y; s.rotation = 0; s.scale.set(1, 1); return; }
+        const k = capFall ? Math.min(1, capFall.t / CAP.fall) : 1;
+        if (capFall && ++capFall.t > CAP.fall + 2) capFall = null;
+        s.x = head.x + (ground.x - head.x) * k;
+        s.y = head.y + (ground.y - head.y) * k - Math.sin(Math.PI * k) * 70;
+        s.rotation = k < 1 ? k * 7 : 0.35;
+        s.scale.set(1, k < 1 ? 1 : 0.85);
+    }
+    // standing at the garden's gate and looking in (K33: the cap on the head is high above the screen's top from there), the view
+    // eases up over the wall; once he steps away or turns, it eases back to the hero and leaves the camera to the map again
+    const PEEK = { tiles: 4.6, speed: 0.14 };
+    let peeking = false;
+    function centeredY() {
+        const p = $gamePlayer, y = p._realY - p.centerY();
+        return $gameMap.isLoopVertical() ? y : Math.max(0, Math.min($gameMap.height() - $gameMap.screenTileY(), y));
+    }
+    function updatePeek() {
+        if (!window.$gameMap || !$gamePlayer) return;
+        if (!onTown() || $gamePlayer.isTransferring()) { peeking = false; return; }
+        const p = $gamePlayer, st = capStep();
+        const inZone = (st === 0 || st === 1) && p.x >= 4 && p.x <= 8 && p.y >= 16 && p.y <= 19 && p.direction() === 8;
+        if (!inZone && !peeking) return;
+        peeking = true;
+        const target = inZone ? Math.max(0, centeredY() - PEEK.tiles) : centeredY(), d = target - $gameMap._displayY;
+        if (Math.abs(d) < 0.01) { if (!inZone) peeking = false; return; }
+        const step = Math.max(-PEEK.speed, Math.min(PEEK.speed, d));
+        if (step < 0) $gameMap.scrollUp(-step); else $gameMap.scrollDown(step);
+    }
+    T.on("mapEnter", () => { peeking = false; }, { owner: PLUGIN });
+    // the gate (K33: the cap through the bars) and the statues' plinths (W3: the carved verse) answer the action button
+    const STUB_GATE = [C(355, ["TownQuests.place(this, 'gate')"]), C(0, [])], STUB_STATUE = [C(355, ["TownQuests.place(this, 'statue')"]), C(0, [])];
+    const plinthWanted = () => { const r = has() ? rec("W3") : null; return !!r && r.s === "active" && Q.W3.steps[r.step].talk === "w3Verse" && !hasVerse("cokoly"); };
+    const _Game_Event_list_tq = Game_Event.prototype.list;
+    Game_Event.prototype.list = function() {
+        if (window.$gameMap && $gameMap.mapId() === TOWN && has() && this._mapId === TOWN) {
+            const d = this.event(), p = this.page();
+            if (d && capStep() === 1 && /^Furtka ogrodu rycerzy/.test(d.name || "")) return STUB_GATE;
+            if (d && p && plinthWanted() && /^!Statue/.test(p.image.characterName || "") && this.y === CAP.statue[1]) return STUB_STATUE;
+        }
+        if (window.$gameMap && $gameMap.mapId() === CELLAR && this._mapId === CELLAR && has() && w4On()) {
+            const d = this.event();
+            if (d && /^Stara krata zakonu/.test(d.name || "") && !T.call("Underground", "isOpen")) return STUB_GRATE;
+        }
+        return _Game_Event_list_tq.call(this);
+    };
+    function placeTalk(interp, what) {
+        const ev = interp && $gameMap.event(interp.eventId());
+        if (!ev || !has()) return;
+        let out = null;
+        if (what === "gate" && capStep() === 1) {
+            out = linesTo([], HERO, (Q.K33.lines || {}).pick);
+            script(out, ["K33", "fx", "k33Pick"]);
+        } else if (what === "statue" && plinthWanted()) {
+            const L = Q.W3.lines || {};
+            if (!inHours(hour(), [6, 20])) { T.popup(L.plinthDark, { color: "#ffe9a8" }); return; }
+            out = linesTo([], HERO, L.plinth);
+            const v = verseOf("cokoly");
+            linesTo(out, HERO, ["> „" + v.lines[0] + "\n" + v.lines[1], "> " + v.lines[2] + "\n" + v.lines[3] + "”"]);
+            script(out, ["W3", "fx", "w3Verse", "cokoly"]);
+        } else if (what === "grate" && w4On() && !T.call("Underground", "isOpen")) out = grateTalk();
+        if (out) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
+    }
+    // (2026-10-06) Borgar: the quests' topics at the bar (TavernLife adds them to Borgar's menu and to the counter): [{ id, label }]
+    function borgarTopics() {
+        const out = [];
+        if (!has()) return out;
+        for (const q of activeQuests()) {
+            const r = rec(q.id), st = q.steps[r.step], f = st && st.talk && FX[st.talk];
+            if (!f || !f.borgarTopic) continue;
+            let label = null;
+            try { label = f.borgarTopic(q, r, st); } catch (e) { report("borgar topic " + q.id, e); }
+            if (label) out.push({ id: q.id, label });
+        }
+        return out;
+    }
+    function borgarTalk(interp, id) {
+        const q = Q[id], r = rec(id), st = q && r && r.s === "active" ? q.steps[r.step] : null, f = st && st.talk && FX[st.talk];
+        if (!interp || !f || !f.borgarList || !f.borgarTopic(q, r, st)) return;
+        const sp = speakerOf("borgar"), spk = { id: sp.id >= 0 ? sp.id : interp.eventId(), name: "Borgar" };
+        try { interp.setupChild(f.borgarList(q, r, st, spk).concat([C(0, [])]), interp.eventId()); } catch (e) { report("borgar talk " + id, e); }
+    }
+    // the arm-wrestling table on D6's evening: the tournament's bout instead of a game with Grum (TavernLife_ArmWrestle asks it)
+    function armTable() {
+        const r = has() ? rec("D6") : null;
+        if (!r || r.s !== "active" || Q.D6.steps[r.step].talk !== "d6Tourney") return null;
+        return FX.d6Tourney.table(Q.D6, r);
+    }
+    // W4: the old grate in the tavern's cellar (Map009, "Stara krata zakonu") - its locked text hints at the key once W4 began;
+    // with the castellan's key it opens (Underground.open: switch 11 - its page 2 leads down)
+    const CELLAR = 9;
+    const w4On = () => { const r = has() ? rec("W4") : null; return !!r && r.s === "active"; };
+    const STUB_GRATE = [C(355, ["TownQuests.place(this, 'grate')"]), C(0, [])];
+    function grateTalk() {
+        const r = rec("W4"), q = Q.W4, L = q.lines || {}, st = q.steps[r.step], out = [];
+        if (st.check === "w4Gate" && vcount("klucz_kasztelana") > 0) {
+            linesTo(out, HERO, L.grateOpen);
+            return script(out, ["W4", "fx", "w4Open"]);
+        }
+        linesTo(out, HERO, L.grate);
+        linesTo(out, HERO, vcount("klucz_borgar") > 0 || vcount("klucz_kopiec") > 0 ? L.grateHalf : L.grateAsk);
+        return out;
+    }
+    // the topics a quest adds to a regular's talk (K27: Melia under the wall, W3: Ozzy's mead): [{ id, label }]
+    function regularTopics(key) {
+        const out = [];
+        if (!has()) return out;
+        for (const q of activeQuests()) {
+            const r = rec(q.id), st = q.steps[r.step], f = st && st.talk && FX[st.talk];
+            if (!f || !f.topic) continue;
+            let label = null;
+            try { label = f.topic(q, r, st, key); } catch (e) { report("topic " + q.id, e); }
+            if (label) out.push({ id: q.id, label });
+        }
+        return out;
+    }
+    function regularTopicList(key, id, ev) {
+        const q = Q[id], r = rec(id), st = q && r && r.s === "active" ? q.steps[r.step] : null, f = st && st.talk && FX[st.talk];
+        if (!f || !f.topicList || !f.topic(q, r, st, key)) return null;
+        return f.topicList(q, r, st, key, { id: ev ? ev.eventId() : -1, name: nameOf(key) });
+    }
     const FX = {
         // ---- K1: before nine Tadek sharpens a worn tool
         k1Early: {
@@ -1636,8 +2092,1395 @@
                 completeStep(q, { reward: { xp: 40, opinion: 1 } });
             }
         },
-        w2Key: { hand: () => { setFlag("gardenKey"); addNote(["Klucz do ogrodu rycerzy", "Ambroży jest ostatnim uczniem straży zakonu - dzwoni, „bo nikt nie odwołał warty”. Dał mi klucz do furtki ogrodu rycerzy."]); } }
+        w2Key: { hand: () => { setFlag("gardenKey"); addNote(["Klucz do ogrodu rycerzy", "Ambroży jest ostatnim uczniem straży zakonu - dzwoni, „bo nikt nie odwołał warty”. Dał mi klucz do furtki ogrodu rycerzy."]); } },
+
+        // ================================================================ W1 rozdz. 3-6 (2026-10-05: Feliks is guilty, the Lord knows nothing)
+        // rozdz. 3: Kuba at the market - promise silence / make him pay / threaten him with the sołtys
+        w1Kuba: {
+            talk(q, r, st, key, spk) {
+                if (key !== "woziwoda" || !inHours(hour(), [7, 14])) return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.kubaAsk);
+                const opts = [["Będę milczał. Powiedz mi wszystko.", "tell", L.kubaTell], ["Płać mi, a będę milczał.", "pay", L.kubaPay],
+                    ["Powiem o wszystkim sołtysowi.", "flee", L.kubaFlee], ["Nic. Zapomnij.", "", L.kubaLater]];
+                const branches = opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w1Kuba", how]); return b; });
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), branches, 3) };
+            },
+            ready: (q, r, st, key) => key === "woziwoda" && inHours(hour(), [7, 14]),
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w1Kuba") return;
+                r.t.kuba = how;
+                if (how === "tell") { setFlag("kubaTold"); addNote(L.noteTell); }
+                else if (how === "pay") { setFlag("kubaPays"); setFlag("feliksWarned"); addNote(L.notePay); }   // (Kuba complains at the manor: its watch is sharper)
+                else if (how === "flee") {
+                    setFlag("kubaFled");
+                    T.call("TownLife", "setGone", "woziwoda", day() + 7);
+                    addNote(L.noteFlee);
+                    const got = addOpinion(-5, "Kuba uciekł z miasta");
+                    T.popup("Kuba uciekł z miasta", { top: true, color: "#ff9f8f", sub: "Na tydzień: piekarnia i kuźnia bez przydziału, Baltazar sprzedaje wodę dwa razy drożej" + (got ? "  ·  Opinia " + got : "") });
+                    for (const k of ["piekarka", "soltys", "kowal"]) if (visible(k)) { T.call("TownLife", "say", k, k === "soltys" ? "Kuba! Wracaj! A przydział?!" : "Kuba uciekł? A woda na jutro?!"); break; }
+                } else return;
+                completeStep(q, { reward: { xp: 60 } });
+            }
+        },
+        // rozdz. 5: the orangery at night - the guard's round, Feliks at the back gate with Kuba's cart (1:30-3:00), the pump, the drawer
+        w1Orangery: {
+            night: () => inHours(hour(), [21, 4.5]),
+            gateNight: () => inHours(hour(), [1.5, 3]) && !goneNow("woziwoda") && !goneNow("feliks"),
+            wanted(q, r, st, key) {
+                if (key === "w1_feliks" || key === "w1_kuba") return FX.w1Orangery.gateNight();
+                if (r.t.tried === nightOf() || !FX.w1Orangery.night()) return false;
+                return key === "w1_pump" ? !r.t.pump : key === "w1_drawer" ? !r.t.drawer : false;
+            },
+            spot(q, r, st, s) {
+                const L = q.lines || {}, out = [];
+                if (s.key !== "w1_pump" && s.key !== "w1_drawer") return out;   // (Feliks and Kuba: the clock watches them)
+                linesTo(out, HERO, s.key === "w1_pump" ? L.pump : L.drawer);
+                script(out, [q.id, "fx", "w1Orangery", s.key === "w1_pump" ? "pump" : "drawer"]);
+                return out;
+            },
+            act(q, what) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].tick !== "w1Orangery" || r.t[what]) return;
+                r.t[what] = day();
+                if (what === "pump") addClue("w1_hatch");
+                if (what === "drawer") { vgive("rysunek", 1); T.popup(vname("rysunek"), { icon: vicon("rysunek"), kind: "good" }); }
+                if (r.t.pump && r.t.drawer) { addNote(L.note5); completeStep(q, { reward: { xp: 100 } }); }
+            },
+            tick(q, r) {
+                if (!window.$gameMap || $gameMap.mapId() !== MANOR || pendingOut || $gameMap.isEventRunning()) return;
+                const self = FX.w1Orangery, p = $gamePlayer, L = q.lines || {};
+                if (r.t.tried === nightOf() || !(self.night() || self.gateNight())) return;
+                if (p.x > 21 || p.y < 17) return;   // (only the west garden, the orangery's terrace and the strip of forest behind the hedge)
+                const sneak = !!T.call("Hunting", "sneaking"), sharp = S().flags.feliksWarned ? 1.5 : 0;
+                const g = residentEv("straznik");
+                if (g && self.night() && sees(g, p, sneak, sharp)) { self.caught(q, r, g, L.caughtGuard); return; }
+                const f = self.gateNight() ? spotEv("w1_feliks") : null;
+                if (!f) return;
+                const d = dist(f, p);
+                if (d < (sneak ? 2.2 : 4) + sharp) { self.caught(q, r, f, L.caughtFeliks); return; }
+                if (!r.t.saw && d <= 8) {   // (watched unseen for a while: Feliks fills Kuba's barrels at the gate)
+                    r.t.watch = (r.t.watch || 0) + 10;
+                    if (r.t.watch >= 480) { r.t.saw = day(); setFlag("w1SawFeliks"); think(L.sawFeliks); addNote(L.noteFeliks); }
+                }
+            },
+            // seen: a word from the one who saw him, then out of the manor's gate to the town's side - try another night
+            caught(q, r, who, line) {
+                r.t.tried = nightOf();
+                const SB = T.api("SpeechBubbles");
+                if (SB && SB.say && who) SB.say(who, line, 160);
+                const got = addOpinion(-3, "nocą w ogrodzie dworu");
+                T.popup("Złapali cię w ogrodzie dworu", { top: true, color: "#ff9f8f", sub: "Wyrzucony za bramę dworu - spróbuj innej nocy" + (got ? "  ·  Opinia " + got : "") });
+                pendingOut = { at: Graphics.frameCount + 75, map: TOWN, x: 50, y: 51, dir: 4 };
+            }
+        },
+        // rozdz. 6: the big choice - the sołtys (a market day: reveal it to the town; any day: stay silent), the Lord (quietly), Feliks (pay me)
+        w1Choice: {
+            talk(q, r, st, key, spk) {
+                const L = q.lines || {}, out = [], has = vcount("rysunek") > 0, witness = S().flags.w1Confession ? L.withWitness : [];
+                let opts;
+                if (key === "soltys" && inHours(hour(), [8, 18])) {
+                    const market = isMarket(day()) && inHours(hour(), [8, 14]);
+                    linesTo(out, spk, market ? L.soltysMarket : L.soltysAsk);
+                    opts = [has && market ? ["Ujawnijmy to. Dziś, przy wszystkich.", "reveal", [].concat(L.reveal.slice(0, 1), witness, L.reveal.slice(1))] : ["Pokażę ci coś w dzień targowy.", "", L.soltysWait],
+                        ["Nic nie mam. (Zachowaj to dla siebie.)", "silent", L.silent], ["Jeszcze nie.", "", L.soltysLater]];
+                } else if (key === "lord" && has) {
+                    linesTo(out, spk, L.lordAsk);
+                    opts = [["Pokaż Lordowi rysunek śluzy.", "lord", [].concat(L.lordShow.slice(0, 1), witness, L.lordShow.slice(1))], ["Jeszcze nie.", "", L.lordLater]];
+                } else if (key === "feliks" && has && !S().flags.feliksBroke) {   // (2026-10-06: after his men's ambush - no second deal)
+                    linesTo(out, spk, L.feliksAsk);
+                    opts = [["Dwadzieścia groszy na tydzień - i milczę.", "deal", L.feliksDeal], ["Jeszcze się zobaczymy.", "", L.feliksLater]];
+                } else return null;
+                const branches = opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w1Choice", how]); return b; });
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), branches, opts.length - 1) };
+            },
+            ready: (q, r, st, key) => (key === "soltys" && inHours(hour(), [8, 18])) || ((key === "lord" || (key === "feliks" && !S().flags.feliksBroke)) && vcount("rysunek") > 0),
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {}, PAUSE = w1Ch7(q), witness = S().flags.w1Confession ? 3 : 0;   // (PAUSE: rozdz. 7 - Act II)
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w1Choice") return;
+                r.t.choice = how;
+                if (how === "reveal") {   // a) the town hears it; the Lord did not know - Feliks arrested, the sluice half open
+                    vtake("rysunek", 1);
+                    for (const f of ["w1Revealed", "sluiceHalf", "millRuns", "witDegraded", "lordCold"]) setFlag(f);
+                    T.call("TownLife", "setGone", "feliks", true);
+                    addNote(L.noteReveal);
+                    completeStep(q, { to: PAUSE, reward: { opinion: 15 + witness, xp: 150 } });
+                } else if (how === "lord") {   // b) quietly: Feliks gone, 200 G off the debt, the Lord an ally, Kuba resentful
+                    vtake("rysunek", 1);
+                    for (const f of ["lordAlly", "sluiceHalf", "millRuns", "kubaResent"]) setFlag(f);
+                    T.call("TownLife", "setGone", "feliks", true);
+                    addNote(L.noteLord);
+                    completeStep(q, { to: PAUSE, reward: { debtCredit: 200, opinion: 5, xp: 150 } });
+                } else if (how === "deal") {   // c) 20 G a week - and two weeks later Feliks's men on the road
+                    setFlag("feliksPays");
+                    r.t.deal = day(); r.t.paid = day(); r.t.got = 20;
+                    addNote(L.noteDeal);
+                    completeStep(q, { reward: { gold: 20, xp: 50 } });
+                } else if (how === "silent") {   // d) nothing changes (rozdz. 7 comes back in Act II anyway)
+                    setFlag("w1Silent");
+                    addNote(L.noteSilent);
+                    completeStep(q, { to: PAUSE, reward: { xp: 50 } });
+                }
+            }
+        },
+        // rozdz. 6 c: Feliks's money every 7 days at the market; 14 days after the deal his men wait on Polna droga
+        w1Feliks: {
+            talk(q, r, st, key, spk) {
+                if (key !== "feliks" || r.t.amb || day() < (r.t.paid || 0) + 7) return null;
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).feliksWeek);
+                script(out, [q.id, "fx", "w1Feliks"]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => key === "feliks" && !r.t.amb && day() >= (r.t.paid || 0) + 7,
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w1Feliks" || r.t.amb || day() < (r.t.paid || 0) + 7) return;
+                r.t.paid = day();
+                r.t.got = (r.t.got || 0) + 20;
+                $gameParty.gainGold(20);
+                T.popup("+20 G od Feliksa", { icon: COIN_ICON, kind: "gold" });
+            }
+        },
+        // (2026-10-06) two weeks after the deal Feliks's men wait on Polna droga: a real fight (Humans.ambush - combat stage 3). Two men
+        // (a club and - if Humans.js has it - a knife), three (an archer too) once Feliks has paid 40 G. Beaten: the hero keeps the drawing - the choice of rozdz. 6 comes back (no
+        // second deal; a spared man's word is a witness). Beaten by them: robbed as Humans.js robs (part of the gold and food, a wound,
+        // an hour) - and the drawing is gone: on to rozdz. 7. Off the road mid-fight: they wait for him again three days later.
+        // Without Humans.js: the old scripted robbery.
+        w1Ambush: {
+            TAG: "w1Feliks",
+            due: r => day() >= Math.max((r.t.deal || 0) + 14, r.t.ambAt || 0),
+            tick(q, r) {
+                if (!window.$gameMap) return;
+                const self = FX.w1Ambush, Hm = T.api("Humans");
+                if (r.t.amb) {   // (the fight is on - its end comes on the bus: humansDone / heroRobbed; off the road or the band gone = he got away)
+                    if (Hm && Hm.robbery) return;
+                    if ($gameMap.mapId() !== ROAD || !(Hm && Hm.band && Hm.band(self.TAG))) self.end(q, "fled");
+                    return;
+                }
+                if ($gameMap.mapId() !== ROAD || !self.due(r) || $gameMap.isEventRunning() || $gamePlayer.isTransferring()) return;
+                if (!Hm || typeof Hm.ambush !== "function") { self.scripted(q, r); return; }
+                if (Hm.robbery) return;
+                const L = q.lines || {}, kinds = ["bandit", Hm.KINDS && Hm.KINDS.knifer ? "knifer" : "bandit"].concat((r.t.got || 0) >= 40 ? ["archer"] : []);   // (a club, a knife - the bow, too, once paid 40 G)
+                const band = Hm.ambush(kinds, { tag: self.TAG, say: L.ambushShout, name: L.manName, gold: 8 });
+                if (!band) return;   // (no room for them here - a few steps further on)
+                r.t.amb = day();
+                r.t.men = band.members.length;
+                think(kinds.length > 2 ? [].concat(L.ambushStart, L.ambushArcher) : L.ambushStart);
+            },
+            end(q, how, e) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].tick !== "w1Ambush" || !r.t.amb) return;
+                r.t.amb = null;
+                setFlag("feliksBroke");   // (no more of Feliks's money)
+                if (how === "won") {
+                    setFlag("w1AmbushWon");
+                    think(L.ambushWon);
+                    addNote(L.noteAmbushWon);
+                    if (e && (e.spared || 0) + (e.robbed || 0) > 0) { setFlag("w1Confession"); think(L.confession); addNote(L.noteConfession); }
+                    completeStep(q, { to: q.steps.findIndex(s => s.talk === "w1Choice"), reward: { xp: 120 } });
+                } else if (how === "lost") {
+                    vtake("rysunek", 1);
+                    for (const f of ["w1Ambushed", "w1Robbed"]) setFlag(f);
+                    think(L.ambushLost);
+                    addNote(L.noteAmbush);
+                    completeStep(q, { to: w1Ch7(q), reward: { xp: 40 } });
+                } else {   // fled: they wait again, three days on
+                    r.t.ambAt = day() + 3;
+                    think(L.ambushFled);
+                    const hunted = q.steps.findIndex(s => s.tick === "w1Ambush" && !s.talk);
+                    if (r.step !== hunted) completeStep(q, { to: hunted });
+                    else T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) });
+                }
+            },
+            // (no Humans.js: told in bubbles, as before)
+            scripted(q, r) {
+                const L = q.lines || {}, g = $gameParty.gold(), loss = Math.min(g, Math.max(r.t.got || 0, Math.floor(g / 2)));
+                if (loss > 0) $gameParty.loseGold(loss);
+                if (typeof $gameSystem.injure === "function") $gameSystem.injure(30, 24);   // (Survival.js: a wound)
+                T.audio.se("Blow1", { volume: 85 });
+                think(L.ambush);
+                T.popup("Napad na Polnej drodze", { top: true, color: "#ff9f8f", sub: "Ludzie Feliksa: -" + loss + " G i rana" });
+                r.t.amb = day();
+                FX.w1Ambush.end(q, "lost");
+            }
+        },
+        // ---- W1 rozdz. 7 (2026-10-06, Act II): the main sluice of the Order's cistern (underground floor 30, the bus "undergroundSluice"),
+        // then the bell's "water" signal - four and two - rung by the hero (the bell mini-game, six strikes) or by Ambroży
+        w1Sluice: { check: () => !!S().flags.sluiceFound },
+        w1Bell: {
+            ok: () => inHours(hour(), [6, 21]),
+            talk(q, r, st, key, spk) {
+                if (key !== "dzwonnik" || !FX.w1Bell.ok()) return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.bellAsk);
+                const opts = [[L.optBellSelf, "self", L.bellSelf], [L.optBellHim, "him", L.bellHim], [L.optBellLater, "", L.bellLater]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w1Bell", how]); return b; }), 2) };
+            },
+            ready: (q, r, st, key) => key === "dzwonnik" && FX.w1Bell.ok(),
+            act(q, how) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w1Bell") return;
+                if (how === "self") openBell({ target: 6, title: "Cztery i dwa", sub: "dzwonnica - sygnał wody", who: "Cztery, przerwa, dwa: sześć uderzeń", period: 104, window: 0.88 }, res => ringW1(q, res));
+                else if (how === "him") { ringPattern([4, 2], 60); FX.w1Bell.open(q, false); }
+            },
+            // the water goes: the market well fills - under the sołtys's lock and ration (for the hero still its two draws a day), the mill
+            // runs, Kuba carries the ration honestly. The hero gets no water from it (the drought rule)
+            open(q, self) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w1Bell") return;
+                hearSignal("4+2");
+                for (const f of ["cisternOpen", "sluiceHalf", "millRuns", "kubaHonest"]) if (!S().flags[f]) setFlag(f);
+                think(L.waterComes);
+                if (visible("dzwonnik")) T.call("TownLife", "say", "dzwonnik", L.waterAmbrozy);
+                let n = 0;
+                for (const [k, line] of Object.entries(L.shout || {})) if (n < 2 && visible(k) && k !== "dzwonnik") { T.call("TownLife", "say", k, line); n++; }
+                addNote(L.noteCistern);
+                finish(q, { xp: self ? 350 : 300, opinion: 20 });
+            }
+        },
+
+        // ================================================================ W2 rozdz. 5-6 (2026-10-05)
+        // rozdz. 5: seven strikes ("pytanie") at noon from the tower - Ambroży lets the hero ring
+        w2Ring: {
+            ok: () => { const st = TL() && TL().state("dzwonnik"); return !!st && !st.hidden && st.act === "bell" && inHours(hour(), [11.5, 12.3]); },
+            talk(q, r, st, key, spk) {
+                if (key !== "dzwonnik" || !FX.w2Ring.ok() || r.t.rang === day() || r.t.wrong === day()) return null;
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).ringGo);
+                script(out, [q.id, "fx", "w2Ring"]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => key === "dzwonnik" && FX.w2Ring.ok() && r.t.rang !== day() && r.t.wrong !== day(),
+            act(q) { openBell({ target: 7, title: "Siedem w południe", who: "Ambroży patrzy w stronę ogrodu rycerzy", period: 104, window: 0.88 }, res => ringW2(q, res)); }
+        },
+        // ...then in the knights' garden between 12:00 and 12:30 the shadows meet on the slab - it opens (Map008 "Płyta w ścieżce", self switch A)
+        w2Shadow: {
+            tick(q, r) {
+                const h = hour(), L = q.lines || {};
+                if (day() !== r.t.rang || h >= 12.5) {   // the shadows moved on: ring again another day
+                    think(L.shadowLate);
+                    r.step = q.steps.findIndex(s => s.talk === "w2Ring");
+                    enterStep(q);
+                    T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) });
+                    return;
+                }
+                const p = $gamePlayer;
+                if (!onTown() || h < 12 || p.x < 2 || p.x > 10 || p.y < 4 || p.y > 13) return;
+                think(L.shadow);
+                $gameSelfSwitches.setValue([TOWN, slabId(), "A"], true);
+                T.audio.se("Earth2", { volume: 70, pitch: 80 });
+                addNote(L.noteSlab);
+                completeStep(q, { reward: { xp: 60 } });
+            }
+        },
+        // rozdz. 6: the Archive (Map119) - the Book of Signals (every signal known), the chronicles (take / leave / to Ambroży)
+        w2Archive: {
+            wanted: (q, r, st, key) => (key === "w2_book" ? !r.t.book : key === "w2_chron" ? !r.t.chron : false),
+            spot(q, r, st, s) {
+                const L = q.lines || {}, out = [];
+                if (s.key === "w2_book") { linesTo(out, HERO, L.book); script(out, [q.id, "fx", "w2Archive", "book"]); return out; }
+                linesTo(out, HERO, L.chronicles);
+                const opts = [["Zabierz kroniki.", "take", L.chronTake], ["Zostaw je tutaj.", "leave", L.chronLeave], ["Zanieś je Ambrożemu.", "give", L.chronGive]];
+                return choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, HERO, say); script(b, [q.id, "fx", "w2Archive", how]); return b; }), -1);
+            },
+            act(q, what) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w2Archive") return;
+                if (what === "book") {
+                    if (r.t.book) return;
+                    r.t.book = day();
+                    setFlag("signalBook");
+                    addNote(["Księga sygnałów", "W Archiwum zakonu przeczytałem Księgę sygnałów: " + Object.values(D.SIGNALS).map(sg => sg.pattern.join(" + ") + " - " + sg.meaning).join("; ") + "."]);
+                    T.popup("Księga sygnałów", { top: true, color: "#ffe27a", sub: "Znasz wszystkie sygnały dzwonu (dziennik: Miasteczko - Sygnały dzwonu)" });
+                } else {
+                    if (r.t.chron) return;
+                    r.t.chron = what;
+                    addNote(L.noteChron);
+                    if (what === "take") { vgive("kroniki", 1); setFlag("chroniclesTaken"); }
+                    else if (what === "give") { vgive("kroniki", 1); setFlag("chroniclesForAmbrozy"); }
+                    else setFlag("chroniclesLeft");
+                }
+                if (r.t.book && r.t.chron) {
+                    const give = q.steps.findIndex(s => s.type === "bring" && s.to === "dzwonnik");
+                    completeStep(q, { to: r.t.chron === "give" ? give : q.steps.length - 1, reward: { xp: 120 } });
+                }
+            }
+        },
+        // the chronicles taken: Baltazar buys them (300 G) - a hook for W5 (flags w5ChroniclesSold / w5ChroniclesKept)
+        w2Sell: {
+            act(q, yes) {
+                if (!vcount("kroniki")) return;
+                if (yes) { vtake("kroniki", 1); $gameParty.gainGold(300); setFlag("w5ChroniclesSold"); T.popup("+300 G od Baltazara", { icon: COIN_ICON, kind: "gold" }); }
+                else setFlag("w5ChroniclesKept");
+            }
+        },
+
+        // ================================================================ K37: the stolen purse - Szymek runs, the hero chases (2026-10-05)
+        k37Theft() {   // (autoStart) a market day from day 10, Feliks shopping at the stalls, the hero close by
+            if (!onTown() || !isMarket(day()) || day() < 10 || !inHours(hour(), [8.5, 10.4]) || $gameMap.isEventRunning() || pendingOut) return false;
+            const f = residentEv("feliks"), z = residentEv("zlodziej");
+            return !!f && !!z && !f.isMoving() && dist(f, $gamePlayer) <= 9;
+        },
+        k37Chase: {
+            ROUTE: ["schody_rzem", "woziwoda_dom", "pod_murem"],   // down the stairs, along the craftsmen's terrace, into the camp
+            enter(q, r) {
+                const z = TL() && TL().eventOf("zlodziej"), f = residentEv("feliks"), L = q.lines || {};
+                r.t.chase = { leg: 0, pause: 0 };
+                if (!z) return;
+                const c = f ? freeBeside(f) : null;
+                if (c) z.locate(c[0], c[1]);
+                z.setMoveSpeed(4.4);   // (faster than the hero walks, slower than he runs)
+                FX.k37Chase.go(r);
+                T.call("TownLife", "say", "feliks", L.shout);
+                T.call("TownLife", "say", "zlodziej", L.run);
+            },
+            go(r) {
+                const sp = T.call("TownLife", "spot", FX.k37Chase.ROUTE[r.t.chase.leg]);
+                T.call("TownLife", "hold", "zlodziej", true, sp || null);
+                return sp;
+            },
+            tick(q, r) {
+                const z = TL() && TL().eventOf("zlodziej"), L = q.lines || {}, c = r.t.chase || (r.t.chase = { leg: 0, pause: 0 });
+                if (!z || !onTown()) { FX.k37Chase.lost(q); return; }
+                const p = $gamePlayer, d = dist(z, p);
+                if (d <= 1.5) {   // caught: he stops, the talk decides
+                    T.call("TownLife", "hold", "zlodziej", true, null);
+                    z.setMoveSpeed(4);
+                    z.turnTowardCharacter(p);
+                    T.call("TownLife", "say", "zlodziej", L.caught);
+                    completeStep(q);
+                    return;
+                }
+                if (d > 14) { FX.k37Chase.lost(q); return; }
+                if (c.pause > 0) { if (--c.pause === 0) FX.k37Chase.go(r); return; }
+                if (!TL().held("zlodziej")) { FX.k37Chase.go(r); return; }   // (after a load: taken over again)
+                const sp = T.call("TownLife", "spot", FX.k37Chase.ROUTE[c.leg]);
+                if (!sp) { FX.k37Chase.lost(q); return; }
+                if (z.x === sp[0] && z.y === sp[1] && !z.isMoving()) {   // a corner: he looks back, then on
+                    if (c.leg + 1 >= FX.k37Chase.ROUTE.length) { FX.k37Chase.lost(q); return; }
+                    c.leg++;
+                    c.pause = 3;
+                    z.turnTowardCharacter(p);
+                    T.call("TownLife", "say", "zlodziej", pick(L.look));
+                    T.call("TownLife", "hold", "zlodziej", true, null);
+                }
+            },
+            lost(q) {
+                const z = TL() && TL().eventOf("zlodziej");
+                if (z) z.setMoveSpeed(4);
+                T.call("TownLife", "hold", "zlodziej", false);
+                fail(q);
+            }
+        },
+        k37Hold: {   // caught, he waits for the talk - unless the hero walks off
+            tick(q) {
+                const z = TL() && TL().eventOf("zlodziej");
+                if (z && onTown() && dist(z, $gamePlayer) <= 8) return;
+                if (z) T.call("TownLife", "hold", "zlodziej", false);
+                fail(q, (q.lines || {}).gone);
+            }
+        },
+        k37Caught: {
+            talk(q, r, st, key, spk) {
+                if (key !== "zlodziej") return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.talk);
+                const opts = [["Oddaj sakiewkę. Wróci do Feliksa.", "return", L.giveBack], ["Uciekaj. I więcej nie kradnij.", "free", L.free], ["Sakiewka zostaje u mnie.", "keep", L.keep]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); script(b, [q.id, "fx", "k37Caught", how]); return b; }), -1) };
+            },
+            ready: (q, r, st, key) => key === "zlodziej",
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "k37Caught") return;
+                T.call("TownLife", "hold", "zlodziej", false);
+                if (how === "return") { completeStep(q); return; }   // (the purse in the bag: back to Feliks, the Lord writes 50 G off the debt)
+                if (how === "free") { setFlag("campTrust"); finish(q, { xp: 60, flag: "szymekFree", note: L.noteFree }, { replace: true }); return; }
+                const rw = { gold: 80, xp: 20, note: L.noteKeep };   // keep: 80 G - and if someone saw it, the town knows and the guard watches
+                if (witnesses("zlodziej").length) { rw.opinion = -15; rw.flag = "k37Seen"; setFlag("guardSuspicious"); }
+                finish(q, rw, { replace: true });
+            }
+        },
+
+        // ================================================================ K39: the dice sharper at the market (TavernDice + Czujność 10)
+        k39Play: {
+            talk(q, r, st, key, spk) {
+                if (key !== "gracz" || !inHours(hour(), [9.7, 14])) return null;
+                const L = q.lines || {}, out = [], yes = [], no = [];
+                linesTo(out, spk, L.play);
+                script(yes, [q.id, "fx", "k39Play"]);
+                linesTo(no, spk, L.playNo);
+                return { ready: true, list: choiceTo(out, ["Zagram (5 G).", "Nie teraz."], [yes, no], 1) };
+            },
+            ready: (q, r, st, key) => key === "gracz" && inHours(hour(), [9.7, 14]),
+            act(q, a, interp, stop) {
+                const TD = T.api("TavernDice");
+                if (!TD || typeof TD.start !== "function") { k39After(q, { played: 1, none: true }); return; }
+                if (TD.OPPONENTS && !TD.OPPONENTS.lucjan) TD.OPPONENTS.lucjan = D.LUCJAN;   // (a rival of the market only - never at the tavern's table)
+                const ok = TD.start(Object.assign({ opponent: "lucjan", stake: 5 }, api.diceOpts || {}, { onEnd: res => k39After(q, res) }));
+                if (!ok) stop();
+            }
+        },
+        k39Choice: {
+            talk(q, r, st, key, spk) {
+                if (key !== "gracz") return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.face);
+                const opts = [["Zdemaskuję cię. Przy wszystkich.", "out", L.out], ["Podziel się zyskiem - dziesięć groszy i milczę.", "share", L.share], ["Jeszcze nie.", "", L.later]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "k39Choice", how]); return b; }), 2) };
+            },
+            ready: (q, r, st, key) => key === "gracz",
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "k39Choice") return;
+                if (how === "out") {   // he leaves the market for good; Bartek gets to hear it
+                    T.call("TownLife", "setGone", "gracz", true);
+                    setFlag("lucjanOut");
+                    addNote(L.noteOut);
+                    completeStep(q, { reward: { opinion: 4 } });
+                } else if (how === "share") {
+                    setFlag("lucjanShare");
+                    finish(q, { gold: 10, xp: 30, note: L.noteShare }, { replace: true });
+                }
+            }
+        },
+
+        // ================================================================ THE TAVERN'S REGULARS (2026-10-06): K22, K27 (Melia's way), K33, D13, D6, W3, W8
+        // ---- K22: Ignac twists the string in an hour; Melia sings a new verse if it comes before 18:00 of the day she asked
+        k22Twist: { hand: (q, r) => { r.t.twistAt = now() + 1; } },
+        k22String: {
+            talk(q, r, st, key, spk) {
+                if (key !== "garbarz") return null;
+                const L = q.lines || {};
+                if (now() < (r.t.twistAt || 0)) return { ready: false, list: linesTo([], spk, L.twisting) };
+                const out = [];
+                script(out, [q.id, "fx", "k22String"]);
+                return { ready: true, list: linesTo(out, spk, L.string) };
+            },
+            ready: (q, r, st, key) => key === "garbarz" && now() >= (r.t.twistAt || 0),
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "k22String") return;
+                vgive("struna", 1);
+                T.popup(vname("struna"), { icon: vicon("struna"), kind: "good" });
+                completeStep(q);
+            }
+        },
+        k22Melia: {
+            onTime: r => day() === r.day && hour() < 18,
+            talk(q, r, st, key, spk) {
+                if (key !== "melia" || vcount("struna") <= 0) return null;
+                const L = q.lines || {}, out = [], on = FX.k22Melia.onTime(r);
+                linesTo(out, spk, L.hero);
+                if (on) {
+                    linesTo(out, spk, L.onTime);
+                    sing(out, spk, "struna");
+                    script(out, [q.id, "fx", "k22Melia", 1]);
+                    linesTo(out, spk, L.after);
+                } else {
+                    script(out, [q.id, "fx", "k22Melia", 0]);
+                    linesTo(out, spk, L.late);
+                }
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => key === "melia" && vcount("struna") > 0,
+            act(q, on) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "k22Melia" || vcount("struna") <= 0) return;
+                vtake("struna", 1);
+                if (on) { setFlag("k22Verse"); gainVerse("struna"); inspire(4); finish(q, { gold: 15 }); }
+                else finish(q, { gold: 10 });
+            }
+        },
+        // ---- K27, Melia's way: she sings for Ela under the wall (a topic in her talk, 17-21:30); the next day Ludmiła or Ela tells it
+        k27Melia: {
+            topic: (q, r, st, key) => (key === "melia" && !S().flags.k27Melia && inHours(hour(), [17, 21.5]) ? "Zaśpiewasz Eli kołysankę pod murem?" : null),
+            topicList(q, r, st, key, spk) {
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.meliaAsk);
+                script(out, [q.id, "fx", "k27Melia", "melia"]);
+                return linesTo(out, HERO, L.meliaGone);
+            },
+            talk(q, r, st, key, spk) {
+                if (FX.k27Melia.ready(q, r, st, key) !== true) return null;
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).morning);
+                script(out, [q.id, "fx", "k27Melia", "done"]);
+                return { ready: true, list: out };
+            },
+            // (null when it is not Melia's way: the step's own hand-in to Ela decides the tick)
+            ready: (q, r, st, key) => { const f = S().flags.k27Melia; return (key === "ludmila" || key === "ela") && !!f && day() > f && inHours(hour(), [6.5, 20]) ? true : null; },
+            act(q, what) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active") return;
+                if (what === "melia") { setFlag("k27Melia"); return; }   // (the flag's value is the day: no song in the tavern that evening)
+                if (what === "done" && S().flags.k27Melia && day() > S().flags.k27Melia) finish(q, { trust: { melia: 5 } });
+            }
+        },
+        // ---- K33: the cap on the statue (the shot - Hunting's target and the "shot" bus, below), picked up through the bars
+        k33Shot: { tick() {} },
+        k33Pick: {
+            // the gate open (W2's key): walking up to the cap is enough
+            tick(q, r) {
+                if (!onTown() || !gateOpen()) return;
+                if (Math.hypot($gamePlayer.x + 0.5 - CAP.ground.x, $gamePlayer.y + 0.5 - CAP.ground.y) > 1.3) return;
+                think((q.lines || {}).pick);
+                FX.k33Pick.act(q);
+            },
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].tick !== "k33Pick") return;
+                vgive("czapka", 1);
+                T.popup(vname("czapka"), { icon: vicon("czapka"), kind: "good" });
+                completeStep(q);
+            }
+        },
+        // ---- D13: Ozzy's three predictions, read from the weather plan; Grum's bet; seeing each with one's own eyes
+        d13Offer: {
+            cond: () => !!FX.d13Offer.pred(day()),
+            // from day d0: the first rain or storm of the next two days (the plan), Hanka's oven in two days, the corporal's horse in three
+            pred(d0) {
+                const Sv = T.api("Survival");
+                if (!Sv || typeof Sv.weatherPlan !== "function") return null;
+                for (const d of [d0 + 1, d0 + 2]) {
+                    const p = Sv.weatherPlan(d);
+                    if (p && (p.type === "rain" || p.storm)) return { wDay: d, wHour: p.storm ? p.storm.start : p.start, storm: !!p.storm, oven: d0 + 2, shoe: d0 + 3 };
+                }
+                return null;
+            },
+            say(p, d0) {
+                if (!p) return [];
+                const w = (p.wDay === d0 + 1 ? "Jutro " : "Pojutrze ") + hourWords(p.wHour) + (p.storm ? " burza. Taka, że psy pod ławy wejdą!" : " deszcz. Wystawiajcie garnki, ludzie!");
+                return [w, "Pojutrze pęknie piec Hanki. Trzask - i na dwoje!", "A za trzy dni koń kaprala zgubi podkowę. Na równej drodze! *hep* Zapamiętajcie, co mówił stary Ozzy!"];
+            },
+            offer(q, spk) {
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).offer);
+                linesTo(out, spk, FX.d13Offer.say(FX.d13Offer.pred(day()), day()));
+                return offerChoice(out, q, spk);
+            }
+        },
+        d13Bet: {
+            talk(q, r, st, key, spk) {
+                if (key !== "grum") return null;
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).bet);
+                script(out, [q.id, "fx", "d13Bet"]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => key === "grum",
+            act(q) { const r = rec(q.id); if (r && r.s === "active" && q.steps[r.step].talk === "d13Bet") { d13Vars(q, r); completeStep(q); } }
+        },
+        d13Check: {
+            due(r, key) {
+                const p = d13Pred(r), g = r.t.got || {};
+                if (key === "piekarka") return day() === p.oven && g.oven === undefined;
+                if (key === "kapral") return day() === p.shoe && g.shoe === undefined && inHours(hour(), [6, 18]);
+                return false;
+            },
+            talk(q, r, st, key, spk) {
+                if (!FX.d13Check.due(r, key)) return null;
+                const L = q.lines || {}, out = [], what = key === "piekarka" ? "oven" : "shoe";
+                linesTo(out, spk, what === "oven" ? L.hankaOven : L.witShoe);
+                script(out, [q.id, "fx", "d13Check", what]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => FX.d13Check.due(r, key),
+            act(q, what) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "d13Check") return;
+                const g = r.t.got || (r.t.got = {});
+                if (g[what] !== undefined) return;
+                g[what] = true;
+                if (what === "oven") setFlag("d13Oven");
+                d13Vars(q, r);
+                FX.d13Check.done(q, r);
+            },
+            tick(q, r) {
+                const p = d13Pred(r), g = r.t.got || (r.t.got = {}), L = q.lines || {}, d = day(), h = hour();
+                if (g.weather === undefined && d === p.wDay && h >= p.wHour && h < p.wHour + 3) { g.weather = true; think([fill(p.storm ? L.storm : L.rain, { hour: hm(p.wHour) })]); }
+                for (const [k, when] of [["weather", p.wDay], ["oven", p.oven], ["shoe", p.shoe]]) {
+                    if (g[k] === undefined && (d > when || (k === "weather" && d === when && h >= p.wHour + 3))) { g[k] = false; think([L.missed]); }
+                }
+                // the town hears it: Hanka at her stall, the corporal at his gate (a word when the hero passes)
+                if (onTown() && !r.t.barked && d === p.oven && visible("piekarka") && dist(residentEv("piekarka"), $gamePlayer) < 8) { r.t.barked = 1; T.call("TownLife", "say", "piekarka", "Piec mi pękł! Mój piec!"); }
+                if (onTown() && r.t.barked !== 2 && d === p.shoe && visible("kapral") && dist(residentEv("kapral"), $gamePlayer) < 8) { r.t.barked = 2; T.call("TownLife", "say", "kapral", "Podkowa! Koń zgubił podkowę, psiakrew!"); }
+                d13Vars(q, r);
+                FX.d13Check.done(q, r);
+            },
+            done(q, r) { const g = r.t.got || {}; if (["weather", "oven", "shoe"].every(k => g[k] !== undefined)) completeStep(q); }
+        },
+        d13Pay: {
+            talk(q, r, st, key, spk) {
+                if (key !== "grum") return null;
+                const g = r.t.got || {}, n = ["weather", "oven", "shoe"].filter(k => g[k]).length, L = q.lines || {}, out = [];
+                linesTo(out, spk, n ? L.pay : L.payNone, { n, gold: n * 10 });
+                script(out, [q.id, "fx", "d13Pay"]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => key === "grum",
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "d13Pay") return;
+                const g = r.t.got || {}, n = ["weather", "oven", "shoe"].filter(k => g[k]).length;
+                completeStep(q, { reward: n ? { gold: n * 10 } : null });
+            }
+        },
+        d13Ozzy: {
+            talk(q, r, st, key, spk) {
+                if (key !== "ozzy") return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.ozzy);
+                linesTo(out, spk, ozzyTruth());
+                script(out, [q.id, "fx", "d13Ozzy"]);
+                return { ready: true, list: linesTo(out, spk, L.ozzyEnd) };
+            },
+            ready: (q, r, st, key) => key === "ozzy",
+            act(q) { const r = rec(q.id); if (r && r.s === "active" && q.steps[r.step].talk === "d13Ozzy") finish(q); }
+        },
+        // ---- D6: the tournament (the author, 2026-10-06: arm-wrestling only in the tavern) - three evenings' training with Grum, the
+        // sign-up with Borgar at the bar (2 G), Baltazar's 40 G, three bouts at the arm-wrestling table on the market day's evening
+        d6Late: {
+            enter(q, r) {
+                if (r.t.market) return;
+                r.t.market = nextOf(r.day + 3, isMarket);
+                r.t.train = [];
+                r.t.v = Object.assign({}, r.t.v, { market: r.t.market });
+            },
+            tick(q, r) {
+                const m = r.t.market, L = q.lines || {};
+                if (!m) return;
+                if (!r.t.round) { if (day() > m || (day() === m && hour() >= 22)) fail(q, L.late); return; }
+                if (day() > m && q.steps[r.step].talk === "d6Tourney") {   // (gone home in the middle of it: what was won so far)
+                    think(L.walkover);
+                    finish(q, r.t.round >= 2 ? { gold: 15, xp: 80, opinion: 2, trust: { grum: 5 } } : { gold: 5, xp: 50, opinion: 1 }, { replace: true });
+                }
+            }
+        },
+        d6Train: {
+            check(q, r) {
+                FX.d6Late.enter(q, r);
+                r.t.n = (r.t.train || []).length;
+                if (r.t.n >= 3 || day() >= r.t.market) { r.t.trained = r.t.n; return true; }
+                return false;
+            }
+        },
+        // the sign-up: a topic at the bar (Borgar's menu, the counter)
+        d6Sign: {
+            borgarTopic: (q, r) => (day() < r.t.market || (day() === r.t.market && hour() < 22) ? (q.lines || {}).signTopic : null),
+            borgarList(q, r, st, spk) {
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.sign);
+                script(out, [q.id, "fx", "d6Sign"]);
+                return linesTo(out, spk, L.signDone);
+            },
+            ready: (q, r, st, key) => (key === "borgar" ? !!FX.d6Sign.borgarTopic(q, r) : null),
+            act(q, a, interp, stop) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "d6Sign") return;
+                if ($gameParty.gold() < 2) { T.popup.need(COIN_ICON, "Potrzebujesz 2 G"); stop(); return; }
+                $gameParty.loseGold(2);
+                completeStep(q);
+            }
+        },
+        d6Bribe: {
+            act(q, yes) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || S().flags.d6Bribe || S().flags.d6Refused) return;
+                if (yes) { setFlag("d6Bribe"); $gameParty.gainGold(40); T.popup("+40 G od Baltazara", { icon: COIN_ICON, kind: "gold" }); }
+                else setFlag("d6Refused");
+            }
+        },
+        // the bouts: at the arm-wrestling table (<Tavern:arm>, or "Siłujmy się" with Grum) the market day's evening is the tournament's
+        d6Tourney: {
+            open: r => (day() === r.t.market && inHours(hour(), [18, 22])) || (!!r.t.round && day() === r.t.market && hour() >= 18),
+            table(q, r) {
+                if (!FX.d6Tourney.open(r)) return null;
+                const L = q.lines || {}, i = r.t.round || 0, out = [];
+                linesTo(out, HERO, [L.call[i]]);
+                const opts = i === 0 && S().flags.d6Bribe ? [[L.fair, "fight"], [L.throw, "throw"], [L.wait, ""]] : [[L.go, "fight"], [L.wait, ""]];
+                return choiceTo(out, opts.map(o => o[0]), opts.map(([, how]) => { const b = []; if (how) script(b, [q.id, "fx", "d6Tourney", how]); return b; }), opts.length - 1);
+            },
+            ready: (q, r, st, key) => key === "grum" && FX.d6Tourney.open(r),
+            act(q, how, interp, stop) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "d6Tourney" || !FX.d6Tourney.open(r)) return;
+                if (how === "throw") {
+                    setFlag("d6Sold");
+                    setFlag("balthazarTrust");
+                    think(L.sold);
+                    finish(q, { xp: 20, note: L.noteSold, trust: { grum: -5 } }, { replace: true });
+                    return;
+                }
+                const i = r.t.round || 0, rv = Object.assign({}, q.rivals[i]);
+                rv.level = (rv.level || 0) + ((r.t.trained || 0) >= 3 ? 0 : 1);   // (untrained: every rival a notch harder)
+                const ok = T.call("TavernLife", "armWrestle", Object.assign({ stake: 0, rival: rv }, api.armOpts || {}, { onEnd: res => d6Bout(q, res) }));
+                if (!ok) stop();
+            }
+        },
+        // ---- W4 (compact, 2026-10-06): the castellan's key - after the debt; it opens the order's grate in the cellar (Underground.js)
+        startW4: () => { const St = ST(); try { const s = St && St.active && St.active() ? St.state() : null; return !!s && !!s.done; } catch (e) { return false; } },
+        w4Borgar: {
+            borgarTopic: q => (q.lines || {}).askTopic,
+            borgarList(q, r, st, spk) {
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).ask);
+                return script(out, [q.id, "fx", "w4Borgar"]);
+            },
+            ready: (q, r, st, key) => (key === "borgar" ? true : null),
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w4Borgar") return;
+                vgive("klucz_borgar", 1);
+                T.popup(vname("klucz_borgar"), { icon: vicon("klucz_borgar"), kind: "good" });
+                completeStep(q, { reward: { xp: 40, note: (q.lines || {}).noteAsk } });
+            }
+        },
+        // the dig: an hour of hard work with the spade - the other half
+        w4Dig: {
+            hand() {
+                if ($gameSystem.setDayNightHour) $gameSystem.setDayNightHour(Math.min(23.5, hour() + 1));
+                if ($gameSystem.changeStamina) $gameSystem.changeStamina(-10);
+                T.audio.se("Earth2", { volume: 70, pitch: 110 });
+                vgive("klucz_kopiec", 1);
+                T.popup(vname("klucz_kopiec"), { icon: vicon("klucz_kopiec"), kind: "good" });
+            }
+        },
+        w4Forge: { hand: (q, r) => { r.t.forgeDay = day() + 1; } },
+        w4Key: {
+            talk(q, r, st, key, spk) {
+                if (key !== "kowal") return null;
+                const L = q.lines || {};
+                if (day() < (r.t.forgeDay || 0)) return { ready: false, list: linesTo([], spk, L.forgeWait) };
+                const out = [];
+                script(out, [q.id, "fx", "w4Key"]);
+                return { ready: true, list: linesTo(out, spk, L.key) };
+            },
+            ready: (q, r, st, key) => key === "kowal" && day() >= (r.t.forgeDay || 0),
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w4Key") return;
+                vgive("klucz_kasztelana", 1);
+                T.popup(vname("klucz_kasztelana"), { icon: vicon("klucz_kasztelana"), kind: "good" });
+                completeStep(q, { reward: { xp: 60, note: (q.lines || {}).noteKey } });
+            }
+        },
+        // the grate: the key opens it (TownQuests.place 'grate'); opened some other way (F9, an event), the chapter is done all the same
+        w4Gate: { check: () => !!T.call("Underground", "isOpen") },
+        w4Open: {
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].check !== "w4Gate" || vcount("klucz_kasztelana") <= 0) return;
+                T.call("Underground", "open");
+                T.audio.se("Open5", { volume: 80, pitch: 80 });
+                addNote((q.lines || {}).noteGate);
+                completeStep(q, { reward: { xp: 100 } });
+            }
+        },
+        w4Tell: {
+            borgarTopic: q => (q.lines || {}).tellTopic,
+            borgarList(q, r, st, spk) {
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).tell);
+                return script(out, [q.id, "fx", "w4Tell"]);
+            },
+            ready: (q, r, st, key) => (key === "borgar" ? true : null),
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w4Tell") return;
+                setFlag("borgarSaying");
+                completeStep(q, { reward: { xp: 150, opinion: 2, note: (q.lines || {}).noteTell } });
+            }
+        },
+        // ---- W3: the seventh ballad
+        startW3: () => { const st = T.call("TavernLife", "stats"); return !!st && (st.heard || []).length >= 6 && isDone("K22"); },
+        w3Dream: {
+            talk(q, r, st, key, spk) {
+                if (key !== "melia") return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.dream);
+                if (!hasVerse("struna")) { linesTo(out, spk, L.dreamVerse); sing(out, spk, "struna"); }
+                script(out, [q.id, "fx", "w3Dream"]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => key === "melia",
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w3Dream") return;
+                gainVerse("struna", true);
+                completeStep(q, { reward: { xp: 40 } });
+                w3Vars(q, rec(q.id));
+                FX.w3Verse.maybeDone(q);
+            }
+        },
+        w3Verse: {
+            // who can give a verse now (key: the one spoken to)
+            source(q, r, key) {
+                const h = hour(), f = S().flags;
+                if (key === "dzwonnik" && !hasVerse("dzwon") && isDone("D16") && inHours(h, [6.3, 18.3])) return "dzwon";
+                if (key === "ludmila" && !hasVerse("kolysanka") && (isDone("K27") || isDone("D10")) && inHours(h, [17, 20.5])) return "kolysanka";
+                if (key === "ozzy" && !hasVerse("belkot") && r.t.mead === nightOf() && inHours(h, [1.75, 2.6])) return "belkot";
+                if (key === "lord" && !hasVerse("kronika") && halfPaid()) return "kronika";
+                if ((key === "feliks" || key === "kamerdyner") && !hasVerse("kronika") && count(137) > 0 && !f.w3MeadFeliks) return "kronikaMead";
+                return null;
+            },
+            talk(q, r, st, key, spk) {
+                const v = FX.w3Verse.source(q, r, key), L = q.lines || {}, out = [];
+                if (!v) {
+                    if ((key === "feliks" || key === "kamerdyner") && !hasVerse("kronika") && !r.t.feliksAsked && inHours(hour(), [7, 10.5])) {
+                        r.t.feliksAsked = day();
+                        return { ready: false, list: linesTo(out, spk, L.feliksAsk) };
+                    }
+                    return null;
+                }
+                if (v === "dzwon") { linesTo(out, spk, L.ambrozy); sing(out, spk, "dzwon"); }
+                else if (v === "kolysanka") { linesTo(out, spk, L.ludmila); sing(out, spk, "kolysanka"); linesTo(out, spk, L.ludmilaAfter); }
+                else if (v === "belkot") {
+                    if (!T.call("TavernLife", "rentedRoom")) return { ready: true, list: linesTo(out, HERO, [L.meadNoRoom]) };
+                    linesTo(out, spk, L.ozzySleep); sing(out, spk, "belkot"); linesTo(out, spk, L.ozzyAfter);
+                } else if (v === "kronika") { linesTo(out, spk, L.lordAsk); sing(out, spk, "kronika"); linesTo(out, spk, L.lordAfter); }
+                else if (v === "kronikaMead") {
+                    linesTo(out, spk, L.feliksAsk);
+                    const yes = [];
+                    linesTo(yes, spk, L.feliksGive);
+                    sing(yes, HERO, "kronika");
+                    script(yes, [q.id, "fx", "w3Verse", "kronikaMead"]);
+                    return { ready: true, list: choiceTo(out, ["Dam ci dzban miodu pitnego.", "Nie teraz."], [yes, []], 1) };
+                }
+                script(out, [q.id, "fx", "w3Verse", v]);
+                return { ready: true, list: out };
+            },
+            ready: (q, r, st, key) => !!FX.w3Verse.source(q, r, key) && (key !== "ozzy" || !!T.call("TavernLife", "rentedRoom")),
+            // Ozzy's mead: a topic in his talk in the evening (he sings in his sleep at two that night)
+            topic: (q, r, st, key) => (key === "ozzy" && !hasVerse("belkot") && count(137) > 0 && r.t.mead !== nightOf() && inHours(hour(), [17, 23]) ? "Daj mu dzban miodu pitnego." : null),
+            topicList(q, r, st, key, spk) {
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).meadGive);
+                return script(out, [q.id, "fx", "w3Verse", "mead"]);
+            },
+            act(q, what) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w3Verse") return;
+                if (what === "mead") { if (count(137) > 0) { $gameParty.loseItem(item(137), 1); r.t.mead = nightOf(); } return; }
+                if (what === "kronikaMead") { if (count(137) <= 0) return; $gameParty.loseItem(item(137), 1); setFlag("w3MeadFeliks"); what = "kronika"; }
+                gainVerse(what);
+            },
+            maybeDone(q) {
+                const r = rec(q.id);
+                if (r && r.s === "active" && q.steps[r.step].talk === "w3Verse" && q.verses.every(v => hasVerse(v.key))) completeStep(q, { reward: { xp: 100, trust: { melia: 10 } } });
+            }
+        },
+        w3Origin: {
+            talk(q, r, st, key, spk) {
+                if (key !== "melia" || !inHours(hour(), [0, 4.5])) return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.origin);
+                const opts = [[L.optGentle, "gentle", L.gentle], [L.optJoke, "joke", L.joke], [L.optQuiet, "quiet", L.quiet]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); script(b, [q.id, "fx", "w3Origin", how]); return b; }), -1) };
+            },
+            ready: (q, r, st, key) => key === "melia" && inHours(hour(), [0, 4.5]),
+            act(q, how) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w3Origin") return;
+                S().flags.w3Told = how;
+                completeStep(q, { reward: { xp: 60, trust: { melia: how === "quiet" ? 2 : 5 } } });
+            }
+        },
+        w3Final: {
+            talk(q, r, st, key, spk) {
+                if (key !== "melia") return null;
+                const L = q.lines || {}, out = [], k = nextKupala();
+                linesTo(out, spk, L.finalAsk);
+                const opts = [[L.optKupala, "kupala", L.sayKupala], [L.optBorgar, "borgar", L.sayBorgar], [L.optBurn, "burn", L.sayBurn], [L.optLater, "", L.sayLater]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]),
+                    opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say, { kupala: k }); if (how) script(b, [q.id, "fx", "w3Final", how]); return b; }), 3) };
+            },
+            ready: (q, r, st, key) => key === "melia",
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w3Final") return;
+                if (how === "kupala") {
+                    r.t.kupala = nextKupala();
+                    r.t.v = Object.assign({}, r.t.v, { kupala: r.t.kupala });
+                    completeStep(q, { to: q.steps.findIndex(s => s.spotFx === "w3Kupala") });
+                } else if (how === "borgar") completeStep(q, { to: q.steps.findIndex(s => s.talk === "w3Borgar") });
+                else if (how === "burn") {
+                    for (const f of ["w3Burned", "w3Shortcut"]) setFlag(f);
+                    finish(q, { xp: 150, note: L.noteBurn, trust: { melia: -5 } }, { replace: true });
+                }
+            }
+        },
+        w3Kupala: {
+            on: r => day() === r.t.kupala && inHours(hour(), [20, 23.5]),
+            wanted: (q, r, st, key) => key === "w3_kupala" && FX.w3Kupala.on(r),
+            spot(q, r, st, s, spk) {
+                const L = q.lines || {}, out = [];
+                if (!FX.w3Kupala.on(r)) return out;
+                linesTo(out, spk, L.kupala);
+                for (const v of q.verses) sing(out, spk, v.key);
+                linesTo(out, spk, L.kupalaEnd);
+                return script(out, [q.id, "fx", "w3Kupala"]);
+            },
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w3Kupala") return;
+                for (const f of ["w3Sung", "w3Shortcut", "w3Attack", "w5Faster", "w8Faster"]) setFlag(f);
+                completeStep(q);   // (the kidnap: w3Defend)
+            },
+            tick(q, r) {
+                if (!r.t.kupala || day() < r.t.kupala || (day() === r.t.kupala && hour() < 23.5)) return;
+                think((q.lines || {}).kupalaMissed);
+                r.step = q.steps.findIndex(s => s.talk === "w3Final");
+                enterStep(q);
+                T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) });
+            }
+        },
+        // the kidnap after the song: a real fight with Humans.js (combat stage 3) - without it, as told: Grum drives them off
+        w3Defend: {
+            TAG: "w3Kupala",
+            enter(q, r) { r.t.defend = null; },
+            tick(q, r) {
+                const L = q.lines || {}, Hm = T.api("Humans");
+                if (!r.t.defend) {
+                    if (!Hm || typeof Hm.ambush !== "function" || !onTown()) { think(L.kupalaAfter); FX.w3Defend.end(q, "told"); return; }
+                    const band = Hm.ambush(["bandit", "bandit"], { tag: FX.w3Defend.TAG, far: [3, 6], say: L.attackShout, gold: 4 });
+                    if (!band) { think(L.kupalaAfter); FX.w3Defend.end(q, "told"); return; }
+                    r.t.defend = day();
+                    think(L.attack);
+                    const m = spotEv("w3_kupala");
+                    if (m) T.call("SpeechBubbles", "say", m, L.meliaHelp, 160);
+                    return;
+                }
+                if (!onTown()) { think(L.defendAway); FX.w3Defend.end(q, "away"); }   // (he walked off: Grum saved her)
+            },
+            end(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].tick !== "w3Defend") return;
+                if (how === "won") think(L.defendWon);
+                if (how === "lost") think(L.defendLost);
+                const rw = { opinion: 10, note: L.noteKupala, trust: how === "won" ? { melia: 15, grum: 10 } : { melia: 10, grum: 10 } };
+                if (how === "won") { rw.opinion += 3; setFlag("w3Defended"); }
+                finish(q, rw);
+            }
+        },
+        w3Borgar: {
+            talk(q, r, st, key, spk) {
+                if (key !== "melia" || !inHours(hour(), [23, 1])) return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.borgar);
+                for (const v of q.verses) sing(out, spk, v.key);
+                linesTo(out, spk, L.borgarEnd);
+                return { ready: true, list: script(out, [q.id, "fx", "w3Borgar"]) };
+            },
+            ready: (q, r, st, key) => key === "melia" && inHours(hour(), [23, 1]),
+            act(q) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w3Borgar") return;
+                for (const f of ["w3Borgar", "w3Shortcut", "w4Faster"]) setFlag(f);
+                finish(q, { note: L.noteBorgar, trust: { melia: 10 } });
+            }
+        },
+        // ---- W8 rozdz. 1: Grum asks about the mountains (after a win over him at arm-wrestling and at dice)
+        startW8: () => {
+            const tl = T.call("TavernLife", "stats"), td = T.call("TavernDice", "stats");
+            return !!tl && !!td && (tl.arm || {}).won >= 1 && ((td.vs || {}).grum || {}).wins >= 1;
+        },
+        w8Ask: {
+            talk(q, r, st, key, spk) {
+                if (key !== "grum") return null;
+                const L = q.lines || {}, s = S(), out = [];
+                linesTo(out, spk, L.ask);
+                const opts = [];
+                if (s.clues.lord_stones) opts.push([L.optStones, "stones"]);
+                if (s.clues.w6_heart) opts.push([L.optHeart, "heart"]);
+                if (s.flags.signalBook || s.flags.chroniclesTaken || s.flags.chroniclesLeft || s.flags.chroniclesForAmbrozy) opts.push([L.optArchive, "archive"]);
+                opts.push([L.optNothing, "nothing"], [L.optWhy, "why"]);
+                const branches = opts.map(([, k]) => {
+                    const b = [];
+                    linesTo(b, spk, L[k]);
+                    if (k !== "why") linesTo(b, spk, [L.why[1]]);
+                    linesTo(b, spk, L.end);
+                    return script(b, [q.id, "fx", "w8Ask", k]);
+                });
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), branches, -1) };
+            },
+            ready: (q, r, st, key) => key === "grum",
+            act(q, k) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w8Ask") return;
+                setFlag("w8Told_" + k);
+                completeStep(q, { reward: { xp: 80, trust: { grum: 10 }, note: (q.lines || {}).note } });
+            }
+        },
+        // ---- W8 rozdz. 2-6 (2026-10-06): the mountains (Map013), the diggers' cave (Map014), the Silent's valley (Map120) - on the maps
+        // agent's markers. Grum goes along as a picture at each place (no followers).
+        w8Vars: {
+            vars(q, r) {
+                const L = q.lines || {}, f = S().flags, chron = w8Chronicles();
+                return { trip: r.t.trip || day() + 1, letter: r.t.letter || day(), osada: r.t.gate ? L.osadaOpen : "",
+                    marek: f.marekSaved ? "jest" : "jeszcze nie", kroniki: chron ? "są" : "nie ma", honor: f.w8Honour ? "wygrane" : "jeszcze nie" };
+            }
+        },
+        // rozdz. 2: Grum hires the hero - tomorrow at dawn (after midnight: this dawn)
+        w8Hire: {
+            talk(q, r, st, key, spk) {
+                if (key !== "grum") return null;
+                const L = q.lines || {}, out = [];
+                linesTo(out, spk, L.hireAsk);
+                const opts = [[L.optHire, "go", L.hireYes], [L.optHireLater, "", L.hireNo]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w8Hire", how]); return b; }), 1) };
+            },
+            ready: (q, r, st, key) => key === "grum",
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w8Hire") return;
+                r.t.trip = hour() < 4 ? day() : day() + 1;
+                completeStep(q);
+            }
+        },
+        // ...at dawn by the way into the mountains (Map013 "grum_przewodnik_start", 4:30-9): food for the day, water in the skin, herbs
+        w8Trip: {
+            on: r => day() === r.t.trip && inHours(hour(), [4.5, 9]),
+            wanted: (q, r, st, key) => key === "w8_start" && FX.w8Trip.on(r),
+            spot(q, r, st, s, spk) {
+                const L = q.lines || {}, out = [];
+                if (!FX.w8Trip.on(r)) return out;
+                linesTo(out, spk, L.start);
+                if (w8Pack().length) { linesTo(out, spk, L.startMissing); return script(out, [q.id, "fx", "w8Trip", "missing"]); }
+                linesTo(out, spk, L.startOk);
+                return script(out, [q.id, "fx", "w8Trip", "go"]);
+            },
+            act(q, how) {
+                const r = rec(q.id);
+                if (how === "missing") { popupMissing(w8Pack()); return; }
+                if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w8Trip" || !FX.w8Trip.on(r)) return;
+                completeStep(q, { reward: { xp: 40 } });
+            },
+            tick(q, r) { if (day() > r.t.trip || (day() === r.t.trip && hour() >= 9)) w8Back(q, (q.lines || {}).tripMissed); }
+        },
+        // ...to the Order's old quarry (Map013 "kamieniolom_znak") the same day - Grum pays 50 G; the night falls first: start again
+        w8Quarry: {
+            wanted: (q, r, st, key) => key === "w8_quarry" && day() === r.t.trip,
+            spot(q, r, st, s, spk) {
+                const out = [];
+                if (day() !== r.t.trip) return out;
+                linesTo(out, spk, (q.lines || {}).quarry);
+                return script(out, [q.id, "fx", "w8Quarry"]);
+            },
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w8Quarry") return;
+                addClue("w8_raven");
+                completeStep(q, { reward: { gold: 50, xp: 150, trust: { grum: 10 }, note: (q.lines || {}).noteQuarry } });
+            },
+            tick(q, r) { if (day() > r.t.trip) w8Back(q, (q.lines || {}).quarryLost); }
+        },
+        // rozdz. 3: the diggers' camp in the cave (Map014) - Marek in his niche, Grum beside him (his picture by the "marek" marker)
+        w8Camp: {
+            wanted: (q, r, st, key) => key === "w8_cave",
+            spot(q, r, st, s, spk) { const out = []; linesTo(out, spk, (q.lines || {}).camp); return script(out, [q.id, "fx", "w8Camp"]); },
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w8Camp") return;
+                setFlag("w8Marek");
+                completeStep(q, { reward: { xp: 100, trust: { grum: 5 }, note: (q.lines || {}).noteCamp } });
+            }
+        },
+        // rozdz. 4: the order comes through Baltazar two days later - Grum drunk (a topic in his menu: a jug of mead or two beers), the
+        // thin wall of the guest rooms (Map025, a room rented tonight, 22-24), or the copy in the commander's crate (Map014, at night, sneaking)
+        w8Letter: {
+            topic: (q, r, st, key) => (key === "grum" && day() >= (r.t.letter || 0) && inHours(hour(), [17, 24]) ? (q.lines || {}).letterTopic : null),
+            topicList(q, r, st, key, spk) {
+                const L = q.lines || {}, out = [];
+                if (!w8Drink()) return linesTo(out, spk, L.letterNoDrink);
+                linesTo(out, spk, L.letterDrunk);
+                return script(out, [q.id, "fx", "w8Letter", "drunk"]);
+            },
+            ready: (q, r, st, key) => (key === "grum" ? day() >= (r.t.letter || 0) && inHours(hour(), [17, 24]) : null),
+            act(q, how) {
+                if (how === "drunk") { const d = w8Drink(); if (!d) return; $gameParty.loseItem(item(d[0]), d[1]); }
+                w8LetterDone(q, how);
+            }
+        },
+        w8Wall: {
+            enter(q, r) { r.t.letter = day() + 2; r.t.wallT = 0; },
+            tick(q, r) {
+                if (!window.$gameMap || $gameMap.mapId() !== ROOMS || day() < (r.t.letter || 0) || !inHours(hour(), [22, 24]) || $gameMap.isEventRunning()) return;
+                if (!T.call("TavernLife", "rentedRoom")) return;
+                r.t.wallT = (r.t.wallT || 0) + 10;
+                if (r.t.wallT < 300) return;   // (five seconds of listening)
+                think((q.lines || {}).wall);
+                w8LetterDone(q, "wall");
+            }
+        },
+        w8Crate: {
+            wanted: (q, r, st, key) => key === "w8_crate" && day() >= (r.t.letter || 0),
+            spot(q, r, st, s) {
+                const L = q.lines || {}, out = [];
+                if (!isNight(hour())) { T.popup(L.crateDay, { color: "#ffe9a8" }); return out; }
+                if (!T.call("Hunting", "sneaking")) { T.popup(L.crateLoud, { color: "#ffe9a8" }); return out; }
+                linesTo(out, HERO, L.crate);
+                return script(out, [q.id, "fx", "w8Letter", "crate"]);
+            }
+        },
+        // rozdz. 5: the Silent's valley (Act II: the debt paid) - the gate opens from inside (switch 16), Grum at their circle (Map120)
+        w8Osada: {
+            wanted: (q, r, st, key) => (key === "w8_gate" ? actTwo() && !r.t.gate : key === "w8_osada" ? !!r.t.gate : false),
+            spot(q, r, st, s, spk) {
+                const L = q.lines || {}, out = [];
+                if (s.key === "w8_gate") { linesTo(out, spk, L.gate); return script(out, [q.id, "fx", "w8Osada", "gate"]); }
+                linesTo(out, spk, L.osada);
+                return script(out, [q.id, "fx", "w8Osada", "osada"]);
+            },
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w8Osada") return;
+                if (how === "gate") {
+                    if (r.t.gate) return;
+                    r.t.gate = day();
+                    $gameSwitches.setValue(SW_OSADA, true);
+                    T.audio.se("Open5", { volume: 70, pitch: 70 });
+                    T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) });
+                } else if (how === "osada" && r.t.gate) completeStep(q, { reward: { xp: 150, trust: { grum: 5 }, note: L.noteOsada } });
+            }
+        },
+        // rozdz. 6: Grum's choice - two of three (Marek saved - W6, the Order's chronicles - W2, the arm-wrestling "na honor" - only in
+        // the tavern) and he is the hero's; else the fight at the tunnel's mouth, or the work for his paymasters
+        w8Choice: {
+            count: () => { const f = S().flags; return (f.marekSaved ? 1 : 0) + (w8Chronicles() ? 1 : 0) + (f.w8Honour ? 1 : 0); },
+            topic: (q, r, st, key) => (key === "grum" ? (q.lines || {}).choiceTopic : null),
+            topicList(q, r, st, key, spk) {
+                const L = q.lines || {}, out = [], f = S().flags;
+                linesTo(out, spk, L.choiceAsk);
+                if (FX.w8Choice.count() < 2) linesTo(out, spk, L.need);
+                const opts = [];
+                if (!f.w8Honour && r.t.honourDay !== day()) opts.push([L.optHonour, "honour", L.honourGo]);
+                if (FX.w8Choice.count() >= 2) opts.push([L.optAlly, "ally", L.ally]);
+                opts.push([L.optFaction, "faction", L.faction], [L.optFight, "fight", L.fight], [L.optLater, "", L.choiceLater]);
+                return choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w8Choice", how]); return b; }), opts.length - 1);
+            },
+            ready: (q, r, st, key) => (key === "grum" ? true : null),
+            act(q, how, interp, stop) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w8Choice") return;
+                if (how === "honour") {
+                    if (S().flags.w8Honour || r.t.honourDay === day()) return;
+                    const st = T.call("TavernLife", "stats") || {}, lv = clamp(((st.arm || {}).level || 0) + 1, 4, 6);   // (his best and then some: 4-6)
+                    const rv = { key: "grum", name: "Grum", sub: "Żelazna Pięść - na honor", bust: null, level: lv, kicker: "NA HONOR · BEZ STAWKI" };
+                    const ok = T.call("TavernLife", "armWrestle", Object.assign({ stake: 0, rival: rv }, api.armOpts || {}, { onEnd: res => w8Honour(q, res) }));
+                    if (!ok) stop();
+                } else if (how === "ally" && FX.w8Choice.count() >= 2) {
+                    $gameSwitches.setValue(SW_TUNNEL, true);
+                    finish(q, { xp: 300, trust: { grum: 20 }, flag: "grumAlly", note: L.noteAlly });
+                } else if (how === "faction") {
+                    $gameSwitches.setValue(SW_TUNNEL, true);
+                    finish(q, { gold: 100, xp: 150, flag: "w8Faction", note: L.noteFaction });
+                } else if (how === "fight") completeStep(q);
+            }
+        },
+        // ...the fight at the tunnel's mouth in the cave (Map014 "tunel_wejscie"): Grum as Humans.js's mercenary. Beaten: he may kneel -
+        // spared / robbed / fled = he leaves on the ferry, killed = he is dead (both gone from the tavern); the tunnel stays shut.
+        // Beating the hero: robbed (Humans.js's rule), the diggers break through (switch 15). Away from the cave: he waits again.
+        w8Duel: {
+            TAG: "w8Grum",
+            tick(q, r) {
+                if (!window.$gameMap) return;
+                const self = FX.w8Duel, Hm = T.api("Humans"), L = q.lines || {};
+                if (r.t.duel) {
+                    if (Hm && Hm.robbery) return;
+                    if ($gameMap.mapId() !== CAVE || !(Hm && Hm.band && Hm.band(self.TAG))) { r.t.duel = null; think(L.duelAway); }
+                    return;
+                }
+                if ($gameMap.mapId() !== CAVE || $gameMap.isEventRunning() || $gamePlayer.isTransferring()) return;
+                const m = markerAt("tunel_wejscie") || { x: 8, y: 13 };
+                if (Math.hypot($gamePlayer.x - m.x, $gamePlayer.y - m.y) > 7) return;
+                if (!Hm || typeof Hm.spawn !== "function") { think(L.duelWon); self.end(q, "won", { spared: 1 }, true); return; }
+                if (Hm.robbery) return;
+                const opts = { tag: self.TAG, name: "Grum", engaged: true, level: 6, gold: 30, say: L.duelShout };
+                const g = ($gamePlayer.x !== m.x || $gamePlayer.y !== m.y) && $gameMap.isPassable(m.x, m.y, 2) ? Hm.spawn("mercenary", m.x, m.y, opts) : Hm.spawnNear("mercenary", 3, 6, opts);
+                if (g) r.t.duel = day();
+            },
+            end(q, how, e, told) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].tick !== "w8Duel" || (!r.t.duel && !told)) return;
+                r.t.duel = null;
+                if (how === "won") {
+                    const dead = !!e && (e.killed || 0) > 0;
+                    setFlag(dead ? "grumDead" : "grumGone");
+                    if (!told) think(dead ? L.duelKilled : L.duelWon);
+                    finish(q, { xp: 250, flag: "w8Duel", note: dead ? L.noteDuelKilled : L.noteDuelWon });
+                } else {
+                    $gameSwitches.setValue(SW_TUNNEL, true);
+                    think(L.duelLost);
+                    finish(q, { xp: 80, flag: "w8Lost", note: L.noteDuelLost });
+                }
+            }
+        },
+        // ---- W9 rozdz. 6 (2026-10-06): the truths of the Truth Layer told or kept. A resident asks it before his own talk (once a day),
+        // the tavern's regulars have it as a topic in their menu, Borgar at the bar, the Lord and grandpa before their story talk
+        startW9: () => w9Known().length > 0,
+        w9Truth: {
+            talk(q, r, st, key, spk) {
+                if (isRegular(key) || key === "borgar") return null;   // (their own menus: a topic)
+                const x = w9Pending(r, key);
+                if (!x || (r.t.asked || {})[x.who] === day()) return null;
+                return { ready: true, list: w9List(q, r, x, spk) };
+            },
+            ready: (q, r, st, key) => { const x = w9Pending(r, key); return !!x && (isRegular(key) || key === "borgar" || (r.t.asked || {})[x.who] !== day()); },
+            topic: (q, r, st, key) => (isRegular(key) && w9Pending(r, key) ? (q.lines || {}).topic : null),
+            topicList(q, r, st, key, spk) { const x = w9Pending(r, key); return x ? w9List(q, r, x, spk) : []; },
+            borgarTopic: (q, r) => (w9Pending(r, "borgar") ? (q.lines || {}).borgarTopic : null),
+            borgarList(q, r, st, spk) { const x = w9Pending(r, "borgar"); return x ? w9List(q, r, x, spk) : []; },
+            vars: (q, r) => w9Vars(r),
+            act(q, arg) {
+                const r = rec(q.id), [how, who] = String(arg || "").split(":"), t = q.truths[who];
+                if (!r || r.s !== "active" || !t) return;
+                const res = r.t.res || (r.t.res = {}), asked = r.t.asked || (r.t.asked = {});
+                if (how === "ask") { asked[who] = day(); return; }
+                if ((how !== "tell" && how !== "keep") || res[who]) return;
+                res[who] = how;
+                setFlag((how === "tell" ? "truthTold_" : "truthKept_") + who);
+                const parts = applyReward(q, how === "tell" ? t.told : t.kept, false), U = window.Underground_Data;
+                const nm = (U && U.TRUTH_WHO && U.TRUTH_WHO[who]) || who;
+                T.popup((how === "tell" ? "Prawda powiedziana: " : "Prawda przemilczana: ") + nm, { top: true, color: how === "tell" ? "#9ff0a8" : "#bcd8ff", sub: parts.join("  ·  ") || stepLine(q) });
+                T.emit("townTruth", { who, how });
+                refreshMarkers();
+            }
+        }
     };
+    // W1 rozdz. 7: four and two rung by the hero - six strikes (the count matters; the pause after four is his to keep)
+    function ringW1(q, res) {
+        const L = q.lines || {}, say = lines => think(lines, "dzwonnik");
+        if (!res || res.aborted || (!res.strikes && !res.none)) { say(L.bellQuit); return; }
+        if (!res.right) { say(L.bellWrong); return; }
+        FX.w1Bell.open(q, true);
+    }
+    // W1's first step of rozdz. 7 (Act II) - where the choices of rozdz. 6 lead
+    function w1Ch7(q) { return q.steps.findIndex(s => s.ch === 7); }
+    // ---- W8 (2026-10-06): the mountains. The maps agent's switches: 15 "Gory_TunelKopaczy" (the diggers' tunnel to floor 50), 16
+    // "Osada_Milczacych" (the Silent's gate); the guest rooms over the tavern (Map025) for the thin wall
+    const ROOMS = 25, CAVE = 14, SW_TUNNEL = 15, SW_OSADA = 16;
+    // Act II: the debt paid (Story's chapter 1 done) - or no story game at all
+    function actTwo() {
+        const St = ST();
+        try { return !(St && St.active && St.active()) || !!(St.state() || {}).done; } catch (e) { return true; }
+    }
+    // a marker "Miejsce: <name>" on this map
+    function markerAt(name) {
+        const e = window.$dataMap ? ($dataMap.events || []).find(x => x && String(x.name || "").trim() === "Miejsce: " + name) : null;
+        return e ? { x: e.x, y: e.y } : null;
+    }
+    // what the hero lacks for a day in the mountains: food for the day (2 portions of anything to eat), water in the skin, herbs
+    // or a bandage (rows for popupMissing)
+    function w8Pack() {
+        const food = $gameParty.items().filter(it => /<Food:/.test(it.note || "")).reduce((n, it) => n + $gameParty.numItems(it), 0);
+        const skin = waterParts().skin, herbs = count(149) + count(150) + count(152), out = [];
+        if (food < 2) out.push({ kind: "item", name: "Jedzenie na cały dzień", icon: iconOfItem(83), have: food, n: 2 });
+        if (skin < 1) out.push({ kind: "item", name: "Woda w bukłaku", icon: iconOfItem(129), have: skin, n: 1 });
+        if (herbs < 1) out.push({ kind: "item", name: "Zioła albo opatrunek", icon: iconOfItem(150), have: 0, n: 1 });
+        return out;
+    }
+    // what the hero can stand Grum: a jug of mead (137) or two beers (81) - [id, n] or null
+    const w8Drink = () => (count(137) >= 1 ? [137, 1] : count(81) >= 2 ? [81, 2] : null);
+    // the Order's chronicles (W2): kept by the hero, or given to Ambroży (he can show them) - not left behind, not sold
+    const w8Chronicles = () => { const f = S().flags; return vcount("kroniki") > 0 || !!f.ambrozyChronicles || (!!f.chroniclesForAmbrozy && !f.w5ChroniclesSold); };
+    // back to Grum's hire (the dawn missed, Grum lost in the mountains)
+    function w8Back(q, lines) {
+        const r = rec(q.id);
+        think(lines);
+        r.t.trip = 0;
+        r.step = q.steps.findIndex(s => s.talk === "w8Hire");
+        enterStep(q);
+        T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) });
+    }
+    function w8LetterDone(q, how) {
+        const r = rec(q.id);
+        if (!r || r.s !== "active" || q.steps[r.step].talk !== "w8Letter") return;
+        setFlag("w8Letter_" + how);
+        completeStep(q, { reward: { xp: 100, note: (q.lines || {}).noteLetter } });
+    }
+    // the arm-wrestling "na honor" (TavernLife's mini-game against Grum, no stake; only in the tavern - the author's rule)
+    function w8Honour(q, res) {
+        const r = rec(q.id), L = q.lines || {};
+        if (!r || r.s !== "active" || q.steps[r.step].talk !== "w8Choice" || !res || res.aborted) return;
+        if (res.won) {
+            setFlag("w8Honour");
+            think(L.honourWon);
+            T.call("TavernLife", "addTrust", "grum", 10, q.title);
+        } else { r.t.honourDay = day(); think(L.honourLost); }
+        refreshMarkers();
+    }
+    // ---- W9 rozdz. 6 (2026-10-06): the truths of the Truth Layer (Underground.truths(): { floor: { who, floor } }) about the people up
+    // top - Q.W9.truths has the ones that can be told (not the hero's own, not the guardian's). One person at a time.
+    function w9Known() {
+        const U = T.api("Underground"), q = Q.W9;
+        let t = {};
+        try { t = U && U.truths ? U.truths() || {} : {}; } catch (e) { t = {}; }
+        return Object.keys(t).map(k => ({ key: k, who: t[k] && t[k].who })).filter(x => q && q.truths[x.who]);
+    }
+    const w9Speaker = who => (Q.W9.truths[who] || {}).talk || who;
+    const w9Away = who => !!T.call("TownLife", "gone", w9Speaker(who));   // (Feliks after W1 a/b; Kuba fled for a week)
+    // the truth `key` (a speaker: a resident, a regular, "borgar", "lord", "grandpa") still waits to be told or kept
+    function w9Pending(r, key) {
+        if (!r || !Q.W9) return null;
+        const res = r.t.res || {};
+        return w9Known().find(x => w9Speaker(x.who) === key && !res[x.who]) || null;
+    }
+    function w9Vars(r) {
+        const q = Q.W9, L = q.lines || {}, res = (r && r.t.res) || {}, U = window.Underground_Data, names = (U && U.TRUTH_WHO) || {}, open = [];
+        const known = w9Known();
+        let told = 0, kept = 0;
+        for (const x of known) {
+            if (res[x.who] === "tell") told++;
+            else if (res[x.who] === "keep") kept++;
+            else open.push((q.truths[x.who].openAs || names[x.who] || x.who) + (w9Away(x.who) ? L.gone : ""));
+        }
+        return { known: known.length, told, kept, open: open.length ? open.join(", ") : L.none };
+    }
+    // the talk: the kartka remembered, then tell / keep silent / not now (asked once a day)
+    function w9List(q, r, x, spk) {
+        const L = q.lines || {}, t = q.truths[x.who], U = window.Underground_Data, n = U && U.NOTES ? U.NOTES[x.key] : null, out = [];
+        script(out, [q.id, "fx", "w9Truth", "ask:" + x.who]);
+        linesTo(out, HERO, [fill(L.remember, { truth: n ? String(n.text).split("\n")[0] : t.name })]);
+        const tellLines = [].concat(t.tell || []);
+        for (const [f, lines] of t.tellIf || []) if (S().flags[f]) tellLines.push(...lines);
+        const tell = [], keep = [];
+        linesTo(tell, spk, tellLines);
+        script(tell, [q.id, "fx", "w9Truth", "tell:" + x.who]);
+        linesTo(keep, spk, t.keep);
+        script(keep, [q.id, "fx", "w9Truth", "keep:" + x.who]);
+        return choiceTo(out, [L.optTell, L.optKeep, L.optLater], [tell, keep, []], 2);
+    }
+    // W2 rozdz. 5: the bell rung - seven (the count matters, not the rhythm)
+    function ringW2(q, res) {
+        const r = rec(q.id), L = q.lines || {}, say = lines => think(lines, "dzwonnik");
+        if (!r || r.s !== "active" || q.steps[r.step].talk !== "w2Ring") return;
+        if (!res || res.aborted || (!res.strikes && !res.none)) { say(L.ringQuit); return; }
+        if (!res.right) { r.t.wrong = day(); say(L.ringWrong); return; }
+        mute(11.5, 12.45);   // (the usual noon bell keeps quiet today)
+        r.t.rang = day();
+        hearSignal("pytanie");
+        say(L.ringOk);
+        completeStep(q);
+    }
+    // K39: back from the dice - with Czujność 10 the hero saw the swap
+    function k39After(q, res) {
+        const r = rec(q.id), L = q.lines || {};
+        if (!r || r.s !== "active" || q.steps[r.step].talk !== "k39Play" || !res || !(res.played > 0)) return;
+        if ((Number(T.call("Combat", "attr", "per")) || 0) >= 10) { think(L.spotted); completeStep(q); }
+        else { r.t.games = (r.t.games || 0) + 1; think(L.notSpotted); }
+    }
+    // the manor's back gate (Map024 "Tylna furtka", self switch A): open while Feliks lets Kuba's cart in (W1 rozdz. 5)
+    function syncGate() {
+        if (!window.$gameMap || $gameMap.mapId() !== MANOR || !window.$dataMap) return;
+        const e = ($dataMap.events || []).find(x => x && /^Tylna furtka/.test(x.name || ""));
+        if (!e) return;
+        const r = rec("W1"), st = r && r.s === "active" ? Q.W1.steps[r.step] : null, want = !!st && st.tick === "w1Orangery" && FX.w1Orangery.gateNight();
+        const k = [MANOR, e.id, "A"], s = S();
+        if (want && !$gameSelfSwitches.value(k)) { $gameSelfSwitches.setValue(k, true); s.gateOpened = true; }
+        else if (!want && s.gateOpened) { $gameSelfSwitches.setValue(k, false); s.gateOpened = false; }   // (only shut what this opened)
+    }
     // the tool Tadek sharpens: the most worn one in the bag
     function wornTool() {
         const Du = T.api("Durability");
@@ -1769,23 +3612,63 @@
         if (!has()) return;
         updateBellQueue();
         updateThoughts();
+        updatePeek();
+        if (pendingOut && Graphics.frameCount >= pendingOut.at) {   // (W1 rozdz. 5: caught in the manor's garden)
+            const o = pendingOut;
+            pendingOut = null;
+            if ($gameMap.mapId() === MANOR && !$gamePlayer.isTransferring()) $gamePlayer.reserveTransfer(o.map, o.x, o.y, o.dir, 0);
+        }
         if (n % 10) return;
         for (const q of activeQuests()) {
             const r = rec(q.id), st = q.steps[r.step];
             if (st && st.tick && FX[st.tick] && FX[st.tick].tick) { try { FX[st.tick].tick(q, r, st); } catch (e) { report("tick " + q.id, e); } }
         }
-        if (n % 30 === 0) { syncSpots(); refreshMarkers(); hidesWatch(); marketLife(); tollBark(); }
+        if (n % 30 === 0) { syncSpots(); refreshMarkers(); hidesWatch(); marketLife(); tollBark(); syncGate(); }
         if (n % 60 === 0) { checkDeadlines(); autoChecks(); if (onTown()) rainSignal(); }
         if (n % 120 === 0) spawnFor();
     }, { owner: PLUGIN, name: "quests" });
     T.on("hourChange", onHour, { owner: PLUGIN });
     T.on("dayStart", () => checkDeadlines(), { owner: PLUGIN });
     T.on("wake", () => checkDeadlines(), { owner: PLUGIN });
-    T.on("mapReady", () => { if (!has()) return; syncSpots(); refreshMarkers(); spawnFor(); }, { owner: PLUGIN });
-    T.on("mapLeave", () => { bellQueue.length = 0; }, { owner: PLUGIN });
-    T.on("newGame", () => { bellQueue.length = 0; thoughts.length = 0; }, { owner: PLUGIN });
-    T.on("load", () => { bellQueue.length = 0; thoughts.length = 0; }, { owner: PLUGIN });
+    T.on("mapReady", () => { if (!has()) return; syncSpots(); refreshMarkers(); spawnFor(); syncGate(); }, { owner: PLUGIN });
+    T.on("mapLeave", () => { bellQueue.length = 0; pendingOut = null; }, { owner: PLUGIN });
+    // (2026-10-06: thoughtAt too - a save brings back its own Graphics.frameCount, an old later mark held the hero's thoughts back)
+    T.on("newGame", () => { bellQueue.length = 0; thoughts.length = 0; thoughtAt = 0; pendingOut = null; }, { owner: PLUGIN });
+    T.on("load", () => { bellQueue.length = 0; thoughts.length = 0; thoughtAt = 0; pendingOut = null; }, { owner: PLUGIN });
 
+    // (2026-10-06) W3's kidnap at the Kupała bonfire (Humans.js): the band beaten - or the hero beaten and robbed
+    T.on("humansDone", e => { if (has() && e && e.tag === FX.w3Defend.TAG) FX.w3Defend.end(Q.W3, "won"); }, { owner: PLUGIN });
+    T.on("heroRobbed", e => { if (has() && e && e.tag === FX.w3Defend.TAG) FX.w3Defend.end(Q.W3, "lost"); }, { owner: PLUGIN });
+    // (2026-10-06) W1 rozdz. 6 c: Feliks's men on Polna droga - beaten (a spared one talks) or the hero beaten and robbed (the drawing too)
+    T.on("humansDone", e => { if (has() && e && e.tag === FX.w1Ambush.TAG) FX.w1Ambush.end(Q.W1, "won", e); }, { owner: PLUGIN });
+    T.on("heroRobbed", e => { if (has() && e && e.tag === FX.w1Ambush.TAG) FX.w1Ambush.end(Q.W1, "lost", e); }, { owner: PLUGIN });
+    // (2026-10-06) W8 rozdz. 6: the fight with Grum at the tunnel's mouth
+    T.on("humansDone", e => { if (has() && e && e.tag === FX.w8Duel.TAG) FX.w8Duel.end(Q.W8, "won", e); }, { owner: PLUGIN });
+    T.on("heroRobbed", e => { if (has() && e && e.tag === FX.w8Duel.TAG) FX.w8Duel.end(Q.W8, "lost", e); }, { owner: PLUGIN });
+    // (2026-10-06) W1 rozdz. 7: the main sluice of the cistern found (Underground.js, floor 30: every look at it sends this)
+    T.on("undergroundSluice", () => {
+        if (!has()) return;
+        const s = S(), first = !s.flags.sluiceFound, r = rec("W1");
+        if (first) setFlag("sluiceFound");
+        if (first && r && r.s === "active" && Q.W1.steps[r.step].check === "w1Sluice") think((Q.W1.lines || {}).sluiceSeen);
+        autoChecks();
+    }, { owner: PLUGIN });
+    // (2026-10-06) W9 rozdz. 6: a truth of the Truth Layer read - the arc starts (or counts it), a thought: tell it up there, or not
+    T.on("undergroundTruth", e => {
+        if (!has() || !e) return;
+        autoChecks();
+        const q = Q.W9, t = q && q.truths[e.who];
+        if (t && t.name) think(fill((q.lines || {}).found, { name: t.name }));
+    }, { owner: PLUGIN });
+    // (2026-10-06) D6's training: an arm-wrestling game with Grum (TavernLife's bus) on a day before the tournament
+    T.on("tavernGame", e => {
+        if (!has() || !e || e.game !== "arm" || (e.rival && e.rival !== "grum")) return;
+        const r = rec("D6");
+        if (!r || r.s !== "active" || r.step !== 0) return;
+        const t = r.t.train || (r.t.train = []);
+        if (!t.includes(day()) && (!r.t.market || day() < r.t.market)) t.push(day());
+        autoChecks();
+    }, { owner: PLUGIN });
     // the boots of D1: their effect through the skills' perks (Combat.perk is asked by every system)
     const CB = T.api("Combat");
     if (CB && typeof CB.perk === "function" && !CB.perk._townQuests) {
@@ -1793,6 +3676,13 @@
         const wrapped = function(key) { const base = orig.apply(this, arguments); const p = has() ? S().perks[key] : 0; return p ? base + p : base; };
         wrapped._townQuests = true;
         CB.perk = wrapped;
+    }
+    // (2026-10-06) D6's belt: the quests' "carry" perk adds to the load the bag takes (Survival asks Combat.carryBonus)
+    if (CB && typeof CB.carryBonus === "function" && !CB.carryBonus._townQuests) {
+        const origCarry = CB.carryBonus;
+        const wrappedCarry = function() { return origCarry.apply(this, arguments) + (has() ? S().perks.carry || 0 : 0); };
+        wrappedCarry._townQuests = true;
+        CB.carryBonus = wrappedCarry;
     }
     // the crate of K15 is heavy: a slower walk while it is carried
     const _Game_Player_realMoveSpeed = Game_Player.prototype.realMoveSpeed;
@@ -1807,6 +3697,8 @@
     const L0 = TL();
     if (L0 && L0.addTalkHook) L0.addTalkHook((key, ev) => residentTalk(key, ev));
     else console.warn("[TownQuests] TownLife.js not found - the residents will not talk about quests");
+    // Kuba's night trips for water (TownLife_Data: his plan's entry "w1Water") end once the sluice is half open (W1 rozdz. 6 a/b)
+    if (L0 && L0.addCondition) L0.addCondition("w1Water", () => !(has() && S().flags.sluiceHalf));
 
     // ------------------------------------------------------------------
     // The journal: the tab "Miasteczko" and the goal window
@@ -1844,6 +3736,8 @@
         out.push({ label: "Opinia w miasteczku", icon: 0, mark: "locked", right: s.opinion + " · " + tier, info: "opinion" });
         out.push({ label: "Kalendarz miasteczka", icon: 0, mark: "locked", right: isMarket(day()) ? "dziś targ" : "targ za " + (dNext - day()) + " d.", info: "calendar" });
         if (s.bells.length) out.push({ label: "Sygnały dzwonu", icon: 0, mark: "locked", right: new Set(s.bells.map(b => b.sig)).size + " z " + Object.keys(D.SIGNALS).length, info: "bells" });
+        const regs = T.call("TavernLife", "regularsInfo");
+        if (regs && regs.length) out.push({ label: "Stali bywalcy tawerny", icon: 0, mark: "locked", right: regs.map(x => x.name.split(" ")[0] + " " + x.trust).join(" · "), info: "regulars" });
         const ended = QUESTS.filter(q => { const r = rec(q.id); return r && r.s !== "active"; }).sort((a, b) => rec(b.id).end - rec(a.id).end);
         for (const q of ended.slice(0, 30)) {
             const r = rec(q.id);
@@ -1859,13 +3753,16 @@
             { k: "rule" }, { k: "p", text: q.desc }];
         if (r && r.s === "active") {
             const st = q.steps[r.step];
-            ops.push({ k: "gap", n: 8 }, { k: "h", text: q.kind === "W" ? "Rozdział " + (r.step + 1) : "Teraz" }, { k: "p", text: fill(st.text, vars) });
+            ops.push({ k: "gap", n: 8 }, { k: "h", text: q.kind === "W" ? "Rozdział " + (st.ch || r.step + 1) : "Teraz" }, { k: "p", text: fill(st.text, vars) });
             for (const row of needRows(st)) ops.push({ k: "cost", icon: row.icon, name: row.name, have: Math.min(row.have, row.n), need: row.n, note: "" });
             const dl = deadlineText(r, st);
             if (dl) ops.push({ k: "muted", text: dl });
             if (r.step > 0) {
                 ops.push({ k: "gap", n: 6 }, { k: "h", text: "Zrobione" });
-                for (let i = 0; i < r.step; i++) ops.push({ k: "muted", text: "✓ " + fill(q.steps[i].text, vars).split(/(?<=[.!?])\s/)[0] });
+                for (let i = 0; i < r.step; i++) {
+                    if (r.t.done && r.t.done[i] === undefined && Object.keys(r.t.done).length) continue;   // (a step skipped by a choice)
+                    ops.push({ k: "muted", text: "✓ " + fill(q.steps[i].text, vars).split(/(?<=[.!?])\s/)[0] });
+                }
             }
         } else if (r) {
             ops.push({ k: "gap", n: 8 }, { k: "p", text: r.s === "done" ? "Wykonane w dniu " + r.end + (q.repeat === "daily" ? ". Można je wziąć znowu następnego dnia." : ".")
@@ -1914,15 +3811,30 @@
         return ops;
     }
     function bellsOps() {
-        const s = S(), known = !!s.flags.gardenKey;
+        const s = S(), known = !!s.flags.gardenKey || !!s.flags.signalBook;
         const ops = [{ k: "title", text: "Sygnały dzwonu" }, { k: "sub", text: "Co dzwon mówi i kiedy" }, { k: "rule" },
             { k: "p", text: "Ambroży dzwoni nie tylko o pełnych godzinach. Zapisuję, ile razy i co się wtedy działo." }];
+        const book = !!s.flags.signalBook;   // (W2 rozdz. 6: the Book of Signals read - every signal known)
+        if (book) ops.push({ k: "muted", text: "Z Księgi sygnałów w Archiwum zakonu znam już wszystkie." });
         for (const [sig, sg] of Object.entries(D.SIGNALS)) {
             const heard = s.bells.filter(b => b.sig === sig);
+            if (!heard.length && book) { ops.push({ k: "p", text: sg.name + " (" + sg.pattern.join(" + ") + ") - jeszcze nie słyszany." }, { k: "muted", text: sg.when + " Znaczy: " + sg.meaning + "." }); continue; }
             if (!heard.length) { ops.push({ k: "muted", text: "? ? ?" }); continue; }
             const last = heard[heard.length - 1];
             ops.push({ k: "p", text: sg.name + " (" + sg.pattern.join(" + ") + ") - ostatnio dz. " + last.day + ", " + hm(last.hour) + "." });
             ops.push({ k: "muted", text: sg.when + (known ? " Znaczy: " + sg.meaning + "." : "") });
+        }
+        return ops;
+    }
+    // (2026-10-06) the tavern's regulars: how far each trusts the hero, what trust opens next
+    function regularsOps() {
+        const regs = T.call("TavernLife", "regularsInfo") || [];
+        const ops = [{ k: "title", text: "Stali bywalcy tawerny" }, { k: "sub", text: "Melia, Dziadek Ozzy i Grum - zaufanie 0–100" }, { k: "rule" },
+            { k: "p", text: "Zaufanie rośnie od rozmów (pierwsza w danym dniu), piwa dla Ozzy'ego, pieśni Melii, gier z Grumem i Ozzym - do pewnej granicy. Resztę dają zadania. Z zaufaniem otwierają się głębsze tematy." }];
+        for (const x of regs) {
+            ops.push({ k: "gap", n: 6 }, { k: "h", text: x.name + " (" + x.title + ")" }, { k: "p", text: "Zaufanie " + x.trust + "/100 · " + x.tierName + (x.next ? " · następny próg: " + x.next : "") });
+            if (x.text) ops.push({ k: "muted", text: x.text });
+            if (x.opens) ops.push({ k: "muted", text: x.opens });
         }
         return ops;
     }
@@ -1931,6 +3843,7 @@
         if (it.info === "opinion") return opinionOps();
         if (it.info === "calendar") return calendarOps();
         if (it.info === "bells") return bellsOps();
+        if (it.info === "regulars") return regularsOps();
         return questOps(it);
     }
     const J = T.api("Journal");
@@ -1967,7 +3880,19 @@
         tierName: () => D.OPINION.tiers[tierOf(opinion())].name, offerable: id => offerable(Q[id]), dryDays, isMarket, isFerry, markers: () => Object.assign({}, markers),
         refreshMarkers, syncSpots, spotWanted, checkDeadlines, autoChecks, waterParts, hearSignal, ringPattern, bellQueue: () => bellQueue.slice(), muted,
         talkFor: (key, story) => talkFor(key, speakerOf(key), !!story), openBell, Scene_TownBell, journalItems, journalOps, calendarEvents, track: id => { S().track = id || null; return S().track; },
-        bellOpts: null, vcount, FX
+        bellOpts: null, vcount, FX,
+        // (2026-10-05) the market well's ration grows once the sluice is half open (Farming_Plots.rationOf asks it), the dice's options
+        // for the tests (K39: { auto, turbo, seed, rules }), the places' events, what a resident would remark now
+        wellBonus: mapId => (has() && mapId === TOWN && S().flags.sluiceHalf ? D.WELL_BONUS || 0 : 0),
+        diceOpts: null, spotEv, slabId, remarkFor: key => (has() ? remarkFor(key) : null), nightOf,
+        // (2026-10-06) the tavern's regulars (TavernLife_Regulars asks these), the places that answer (the gate, the plinths), the
+        // regulars' quest topics, the verses of W3, the cap of K33, D6's bouts (armOpts: the tests' bot settings for the arm-wrestling)
+        regularTalk, regularTopics, regularTopicList, place: placeTalk, hasVerse, gainVerse, verseOf, nextKupala, knockCap, shotAtCap,
+        capState: () => ({ step: capStep(), falling: !!capFall, statue: window.$gameMap ? capStatueId() : 0, gateOpen: gateOpen() }), CAP, d6Bout, hourWords,
+        d13Pred: () => { const r = rec("D13"); return r ? d13Pred(r) : FX.d13Offer.pred(day()); }, armOpts: null,
+        borgarTopics, borgarTalk, armTable,
+        // (2026-10-06) W8: Grum gone from the tavern for good (beaten at the tunnel: on the ferry - or dead); TavernLife / TavernDice ask
+        grumAway: () => { if (!has()) return false; const f = S().flags; return !!(f.grumGone || f.grumDead); }, actTwo, markerAt
     };
     window.TownQuests = T.register(PLUGIN, api);
 })();

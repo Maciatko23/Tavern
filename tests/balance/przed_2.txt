@@ -1,0 +1,29 @@
+PASS a new game on the meadow (Map004), 12:00
+PASS an open field 15 x 7  {"x":20,"y":14}
+   Rój nietoperzy (piętro 40) #1: {"won":true,"s":21.5,"lost":225,"mhp":202,"refills":1,"hits":15,"dodged":0,"left":"","foeHp":176,"scene":"Scene_Map"}
+   Rój nietoperzy (piętro 40) #2: {"won":true,"s":31.3,"lost":285,"mhp":202,"refills":1,"hits":19,"dodged":0,"left":"","foeHp":176,"scene":"Scene_Map"}
+   Matka pająków (boss 40) #1: {"won":true,"s":125.9,"lost":1253,"mhp":202,"refills":6,"hits":17,"dodged":36,"left":"","foeHp":1722,"scene":"Scene_Map"}
+   Matka pająków (boss 40) #2: {"won":true,"s":166.2,"lost":1441,"mhp":205,"refills":6,"hits":21,"dodged":39,"left":"","foeHp":1722,"scene":"Scene_Map"}
+   Topielec z głębiny (boss 50) #1: {"won":true,"s":94.2,"lost":714,"mhp":221,"refills":4,"hits":14,"dodged":2,"left":"","foeHp":2272,"scene":"Scene_Map"}
+   Topielec z głębiny (boss 50) #2: {"won":true,"s":151.2,"lost":969,"mhp":221,"refills":6,"hits":19,"dodged":6,"left":"","foeHp":2272,"scene":"Scene_Map"}
+   Upiór prawdy (piętro 85) #1: {"won":true,"s":21.7,"lost":0,"mhp":269,"refills":0,"hits":0,"dodged":0,"left":"","foeHp":556,"scene":"Scene_Map"}
+   Upiór prawdy (piętro 85) #2: {"won":true,"s":134.9,"lost":0,"mhp":269,"refills":0,"hits":0,"dodged":0,"left":"","foeHp":556,"scene":"Scene_Map"}
+   Cień (piętro 85) #1: {"won":true,"s":60.4,"lost":1188,"mhp":269,"refills":5,"hits":11,"dodged":0,"left":"","foeHp":518,"scene":"Scene_Map"}
+   Cień (piętro 85) #2: {"won":true,"s":19.5,"lost":216,"mhp":269,"refills":1,"hits":2,"dodged":2,"left":"","foeHp":518,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #1: {"won":true,"s":186.6,"lost":3451,"mhp":261,"refills":16,"hits":2,"dodged":1,"left":"","foeHp":3744,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #2: {"won":true,"s":238.5,"lost":5562,"mhp":264,"refills":26,"hits":0,"dodged":5,"left":"","foeHp":3744,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #1: {"won":false,"s":240.1,"lost":19056,"mhp":277,"refills":71,"hits":115,"dodged":23,"left":"boss_90:170/4844 cien:284/4844 cien:380/4844","foeHp":4844,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #2: {"won":false,"s":240.1,"lost":7392,"mhp":277,"refills":22,"hits":44,"dodged":7,"left":"boss_90:3603/4844","foeHp":4844,"scene":"Scene_Map"}
+
+| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |
+|---|---|---|---|---|---|---|
+| Rój nietoperzy (piętro 40) | 22 (176 życia) | 15 (21/17, 202 życia) | 2/2 | 26.4 | 126 | 1 |
+| Matka pająków (boss 40) | 24 (1722 życia) | 15 (21/17, 202 życia) | 2/2 | 146.1 | 662 | 6 |
+| Topielec z głębiny (boss 50) | 29 (2272 życia) | 17 (24/19, 221 życia) | 2/2 | 122.7 | 381 | 5 |
+| Upiór prawdy (piętro 85) | 46 (556 życia) | 24 (31/25, 269 życia) | 2/2 | 78.3 | 0 | 0 |
+| Cień (piętro 85) | 46 (518 życia) | 24 (31/25, 269 życia) | 2/2 | 40 | 261 | 3 |
+| Upiór pytającego (boss 80) | 45 (3744 życia) | 23 (31/24, 261 życia) | 2/2 | 212.6 | 1715 | 21 |
+| Ostatni Strażnik (boss 90) | 50 (4844 życia) | 25 (33/26, 277 życia) | 0/2 | 240.1 | 4774 | 46.5 |
+PASS the fights ran
+console errors: none
+3/3 passed

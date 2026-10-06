@@ -1,0 +1,71 @@
+PASS a new game on the meadow (Map004), 12:00
+PASS an open field 15 x 7  {"x":20,"y":14}
+   Rój szczurów (piętro 5) #1: {"won":true,"s":3.3,"lost":5,"mhp":119,"refills":0,"hits":1,"dodged":0,"left":"","by":{"szczur":5},"foeHp":84,"scene":"Scene_Map"}
+   Rój szczurów (piętro 5) #2: {"won":true,"s":12.7,"lost":10,"mhp":119,"refills":0,"hits":2,"dodged":1,"left":"","by":{"szczur":10},"foeHp":84,"scene":"Scene_Map"}
+   Pająk (piętro 5) #1: {"won":true,"s":11.2,"lost":21,"mhp":119,"refills":0,"hits":3,"dodged":0,"left":"","by":{"sieć":8,"pająk":13},"foeHp":87,"scene":"Scene_Map"}
+   Pająk (piętro 5) #2: {"won":true,"s":15.2,"lost":21,"mhp":119,"refills":0,"hits":3,"dodged":0,"left":"","by":{"sieć":8,"pająk":13},"foeHp":87,"scene":"Scene_Map"}
+   Strażnik bramy (piętro 10) #1: {"won":true,"s":76.5,"lost":220,"mhp":135,"refills":2,"hits":9,"dodged":3,"left":"","by":{"strażnik dziesiątej bramy":220},"foeHp":464,"scene":"Scene_Map"}
+   Strażnik bramy (piętro 10) #2: {"won":true,"s":68,"lost":160,"mhp":138,"refills":1,"hits":8,"dodged":4,"left":"","by":{"strażnik dziesiątej bramy":160},"foeHp":464,"scene":"Scene_Map"}
+   Pusta zbroja (piętro 20) #1: {"won":true,"s":46.1,"lost":80,"mhp":159,"refills":0,"hits":3,"dodged":0,"left":"","by":{"pusta zbroja":80},"foeHp":348,"scene":"Scene_Map"}
+   Pusta zbroja (piętro 20) #2: {"won":true,"s":44.5,"lost":160,"mhp":159,"refills":1,"hits":6,"dodged":0,"left":"","by":{"pusta zbroja":160},"foeHp":348,"scene":"Scene_Map"}
+   Pająk (piętro 20) #1: {"won":true,"s":13,"lost":36,"mhp":159,"refills":0,"hits":4,"dodged":0,"left":"","by":{"sieć":8,"pająk":28},"foeHp":138,"scene":"Scene_Map"}
+   Pająk (piętro 20) #2: {"won":true,"s":5.1,"lost":0,"mhp":159,"refills":0,"hits":0,"dodged":0,"left":"","by":{},"foeHp":138,"scene":"Scene_Map"}
+   Przeor w zbroi (boss 20) #1: {"won":true,"s":167,"lost":781,"mhp":159,"refills":6,"hits":31,"dodged":10,"left":"","by":{"przeor w zbroi":731,"boss_20":50},"foeHp":852,"scene":"Scene_Map"}
+   Przeor w zbroi (boss 20) #2: {"won":true,"s":177.3,"lost":852,"mhp":162,"refills":7,"hits":36,"dodged":8,"left":"","by":{"przeor w zbroi":802,"boss_20":50},"foeHp":852,"scene":"Scene_Map"}
+   Królowa szczurów (boss 30) #1: {"won":true,"s":46.7,"lost":244,"mhp":181,"refills":1,"hits":19,"dodged":2,"left":"","by":{"królowa szczurów":190,"szczur":54},"foeHp":1048,"scene":"Scene_Map"}
+   Królowa szczurów (boss 30) #2: {"won":true,"s":125.1,"lost":573,"mhp":178,"refills":4,"hits":40,"dodged":9,"left":"","by":{"królowa szczurów":474,"szczur":93,"boss_30":6},"foeHp":1048,"scene":"Scene_Map"}
+   Topielec (piętro 40) #1: {"won":true,"s":19.1,"lost":78,"mhp":202,"refills":0,"hits":6,"dodged":0,"left":"","by":{"topielec":78},"foeHp":392,"scene":"Scene_Map"}
+   Topielec (piętro 40) #2: {"won":true,"s":19.6,"lost":78,"mhp":202,"refills":0,"hits":6,"dodged":0,"left":"","by":{"topielec":78},"foeHp":392,"scene":"Scene_Map"}
+   Rój nietoperzy (piętro 40) #1: {"won":true,"s":16.9,"lost":18,"mhp":202,"refills":0,"hits":2,"dodged":1,"left":"","by":{"nietoperz":18},"foeHp":160,"scene":"Scene_Map"}
+   Rój nietoperzy (piętro 40) #2: {"won":true,"s":24.3,"lost":81,"mhp":202,"refills":0,"hits":9,"dodged":0,"left":"","by":{"nietoperz":81},"foeHp":160,"scene":"Scene_Map"}
+   Matka pająków (boss 40) #1: {"won":true,"s":122.9,"lost":485,"mhp":205,"refills":3,"hits":24,"dodged":30,"left":"","by":{"matka pająków":420,"sieć":60},"foeHp":1400,"scene":"Scene_Map"}
+   Matka pająków (boss 40) #2: {"won":true,"s":125.8,"lost":600,"mhp":205,"refills":3,"hits":25,"dodged":25,"left":"","by":{"matka pająków":524,"sieć":76},"foeHp":1400,"scene":"Scene_Map"}
+   Topielec z głębiny (boss 50) #1: {"won":true,"s":111.8,"lost":309,"mhp":218,"refills":2,"hits":13,"dodged":3,"left":"","by":{"topielec z głębiny":309},"foeHp":1824,"scene":"Scene_Map"}
+   Topielec z głębiny (boss 50) #2: {"won":true,"s":93.2,"lost":265,"mhp":221,"refills":1,"hits":11,"dodged":1,"left":"","by":{"topielec z głębiny":265},"foeHp":1824,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #1: {"won":false,"s":240.1,"lost":2898,"mhp":234,"refills":14,"hits":51,"dodged":21,"left":"kamiennik:624/876","by":{"kamiennik":2898},"foeHp":876,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #2: {"won":true,"s":193.9,"lost":1113,"mhp":234,"refills":5,"hits":21,"dodged":8,"left":"","by":{"kamiennik":1113},"foeHp":876,"scene":"Scene_Map"}
+   Pusta zbroja (piętro 60) #1: {"won":true,"s":59.3,"lost":318,"mhp":234,"refills":1,"hits":6,"dodged":6,"left":"","by":{"pusta zbroja":318},"foeHp":684,"scene":"Scene_Map"}
+   Pusta zbroja (piętro 60) #2: {"won":true,"s":74.3,"lost":316,"mhp":234,"refills":1,"hits":7,"dodged":3,"left":"","by":{"pusta zbroja":316},"foeHp":684,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #1: {"won":false,"s":240.1,"lost":3266,"mhp":234,"refills":16,"hits":69,"dodged":22,"left":"boss_60:1122/1832","by":{"boss_60":125,"kamienny odźwierny":1639,"odłamki":1502},"foeHp":1832,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #2: {"won":false,"s":240.1,"lost":2163,"mhp":234,"refills":12,"hits":51,"dodged":29,"left":"boss_60:1406/1832","by":{"kamienny odźwierny":903,"odłamki":1260},"foeHp":1832,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #1: {"won":true,"s":213.7,"lost":4174,"mhp":253,"refills":20,"hits":82,"dodged":56,"left":"","by":{"zbroja bez herbu":4174},"foeHp":2228,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #2: {"won":true,"s":192.3,"lost":3476,"mhp":253,"refills":16,"hits":78,"dodged":48,"left":"","by":{"zbroja bez herbu":3476},"foeHp":2228,"scene":"Scene_Map"}
+   Upiór prawdy (piętro 85) #1: {"won":true,"s":88.3,"lost":0,"mhp":269,"refills":0,"hits":0,"dodged":0,"left":"","by":{},"foeHp":493,"scene":"Scene_Map"}
+   Upiór prawdy (piętro 85) #2: {"won":true,"s":77.2,"lost":0,"mhp":269,"refills":0,"hits":0,"dodged":0,"left":"","by":{},"foeHp":493,"scene":"Scene_Map"}
+   Cień (piętro 85) #1: {"won":true,"s":27.5,"lost":210,"mhp":269,"refills":1,"hits":5,"dodged":3,"left":"","by":{"cień":210},"foeHp":460,"scene":"Scene_Map"}
+   Cień (piętro 85) #2: {"won":true,"s":38.7,"lost":210,"mhp":269,"refills":1,"hits":5,"dodged":5,"left":"","by":{"cień":210},"foeHp":460,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #1: {"won":true,"s":170.7,"lost":944,"mhp":261,"refills":4,"hits":2,"dodged":4,"left":"","by":{"upiór pytającego":54},"foeHp":2174,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #2: {"won":false,"s":240.1,"lost":1744,"mhp":261,"refills":7,"hits":8,"dodged":4,"left":"boss_80:552/2174","by":{"upiór pytającego":216},"foeHp":2174,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #1: {"won":false,"s":240.1,"lost":1426,"mhp":277,"refills":6,"hits":31,"dodged":11,"left":"boss_90:385/3076 cien:448/3076 cien:460/3076","by":{"ostatni strażnik":736,"cień":690},"foeHp":3076,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #2: {"won":false,"s":240.1,"lost":6000,"mhp":277,"refills":26,"hits":107,"dodged":72,"left":"boss_90:457/3076 cien:19/3076 cien:469/3076","by":{"ostatni strażnik":2523,"cień":3477},"foeHp":3076,"scene":"Scene_Map"}
+   Bandyta + nożownik (droga, poz. 2) #1: {"won":true,"s":11,"lost":0,"mhp":141,"refills":0,"hits":0,"dodged":2,"left":"","by":{},"foeHp":123,"scene":"Scene_Map"}
+   Bandyta + nożownik (droga, poz. 2) #2: {"won":true,"s":9.3,"lost":14,"mhp":120,"refills":0,"hits":1,"dodged":1,"left":"","by":{"bandyta":14},"foeHp":123,"scene":"Scene_Map"}
+   Najemnik (droga, poz. 4) #1: {"won":true,"s":25,"lost":164,"mhp":130,"refills":1,"hits":6,"dodged":2,"left":"","by":{"najemnik":164},"foeHp":205,"scene":"Scene_Map"}
+   Najemnik (droga, poz. 4) #2: {"won":true,"s":54.9,"lost":288,"mhp":127,"refills":3,"hits":11,"dodged":5,"left":"","by":{"najemnik":288},"foeHp":205,"scene":"Scene_Map"}
+
+| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |
+|---|---|---|---|---|---|---|
+| Rój szczurów (piętro 5) | 6 (84 życia) | 4 (11/7, 119 życia) | 2/2 | 8 | 6 | 0 |
+| Pająk (piętro 5) | 6 (87 życia) | 4 (11/7, 119 życia) | 2/2 | 13.2 | 18 | 0 |
+| Strażnik bramy (piętro 10) | 9 (464 życia) | 6 (12/9, 135 życia) | 2/2 | 72.3 | 139 | 1.5 |
+| Pusta zbroja (piętro 20) | 13 (348 życia) | 9 (15/12, 159 życia) | 2/2 | 45.3 | 75 | 0.5 |
+| Pająk (piętro 20) | 13 (138 życia) | 9 (15/12, 159 życia) | 2/2 | 9.1 | 11 | 0 |
+| Przeor w zbroi (boss 20) | 14 (852 życia) | 9 (15/12, 159 życia) | 2/2 | 172.2 | 509 | 6.5 |
+| Królowa szczurów (boss 30) | 19 (1048 życia) | 12 (19/14, 181 życia) | 2/2 | 85.9 | 228 | 2.5 |
+| Topielec (piętro 40) | 23 (392 życia) | 15 (21/17, 202 życia) | 2/2 | 19.4 | 39 | 0 |
+| Rój nietoperzy (piętro 40) | 22 (160 życia) | 15 (21/17, 202 życia) | 2/2 | 20.6 | 25 | 0 |
+| Matka pająków (boss 40) | 24 (1400 życia) | 15 (21/17, 205 życia) | 2/2 | 124.4 | 265 | 3 |
+| Topielec z głębiny (boss 50) | 29 (1824 życia) | 17 (24/19, 218 życia) | 2/2 | 102.5 | 131 | 1.5 |
+| Kamiennik (piętro 60) | 33 (876 życia) | 19 (25/21, 234 życia) | 1/2 | 217 | 857 | 9.5 |
+| Pusta zbroja (piętro 60) | 33 (684 życia) | 19 (25/21, 234 życia) | 2/2 | 66.8 | 135 | 1 |
+| Kamienny Odźwierny (boss 60) | 34 (1832 życia) | 19 (25/21, 234 życia) | 0/2 | 240.1 | 1160 | 14 |
+| Zbroja bez herbu (boss 70) | 39 (2228 życia) | 21 (26/23, 253 życia) | 2/2 | 203 | 1512 | 18 |
+| Upiór prawdy (piętro 85) | 46 (493 życia) | 24 (31/25, 269 życia) | 2/2 | 82.8 | 0 | 0 |
+| Cień (piętro 85) | 46 (460 życia) | 24 (31/25, 269 życia) | 2/2 | 33.1 | 78 | 1 |
+| Upiór pytającego (boss 80) | 45 (2174 życia) | 23 (31/24, 261 życia) | 1/2 | 205.4 | 515 | 5.5 |
+| Ostatni Strażnik (boss 90) | 50 (3076 życia) | 25 (33/26, 277 życia) | 0/2 | 240.1 | 1340 | 16 |
+| Bandyta + nożownik (droga, poz. 2) | 2 (123 życia) | 3 (10/6, 141 życia) | 2/2 | 10.2 | 6 | 0 |
+| Najemnik (droga, poz. 4) | 4 (205 życia) | 5 (11/8, 130 życia) | 2/2 | 40 | 176 | 2 |
+PASS the fights ran
+console errors: none
+3/3 passed

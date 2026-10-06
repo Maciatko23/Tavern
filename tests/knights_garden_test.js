@@ -42,8 +42,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const inside = await t.json("({ x: $gamePlayer.x, y: $gamePlayer.y, map: $gameMap.mapId() })");
     t.check("walking up through the gate leads into the garden", inside.map === 8 && inside.y <= 13 && inside.x >= 2 && inside.x <= 10, inside);
     await t.frames(20);
-    const after = await t.json(`(function(){ const r = TownQuests.rec("W2"), q = TownQuests.QUESTS.find(q => q.id === "W2"); return { step: r.step, type: q.steps[r.step].type }; })()`);
-    t.check("...which ticks W2's step: now its pause (the statues and the order's archive come later)", after.step === w2.i + 1 && after.type === "pause", after);
+    const after = await t.json(`(function(){ const r = TownQuests.rec("W2"), q = TownQuests.QUESTS.find(q => q.id === "W2"); return { step: r.step, type: q.steps[r.step].type, text: q.steps[r.step].text }; })()`);
+    t.check("...which ticks W2's step: next, ring the signal 'pytanie' at noon (W2 rozdz. 5 - w2_archive_test)", after.step === w2.i + 1 && after.type === "custom" && /pytanie/.test(after.text), after);
     await t.locate(6, 12, 8);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "ogrod_rycerzy.png"));

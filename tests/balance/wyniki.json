@@ -1,0 +1,447 @@
+{
+ "skill": 0.75,
+ "grow": null,
+ "rows": [
+  {
+   "name": "Rój szczurów (piętro 5)",
+   "floor": 5,
+   "kind": "szczur",
+   "level": 6,
+   "hero": 4,
+   "attr": {
+    "str": 11,
+    "con": 7,
+    "dex": 6,
+    "per": 5,
+    "wil": 5
+   },
+   "weapon": 60,
+   "won": "2/2",
+   "s": 8,
+   "lostPct": 6,
+   "refills": 0,
+   "mhp": 119,
+   "foeHp": 84
+  },
+  {
+   "name": "Pająk (piętro 5)",
+   "floor": 5,
+   "kind": "pajak",
+   "level": 6,
+   "hero": 4,
+   "attr": {
+    "str": 11,
+    "con": 7,
+    "dex": 6,
+    "per": 5,
+    "wil": 5
+   },
+   "weapon": 60,
+   "won": "2/2",
+   "s": 13.2,
+   "lostPct": 18,
+   "refills": 0,
+   "mhp": 119,
+   "foeHp": 87
+  },
+  {
+   "name": "Strażnik bramy (piętro 10)",
+   "floor": 10,
+   "kind": "guardian",
+   "level": 9,
+   "hero": 6,
+   "attr": {
+    "str": 12,
+    "con": 9,
+    "dex": 7,
+    "per": 6,
+    "wil": 6
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 72.3,
+   "lostPct": 139,
+   "refills": 1.5,
+   "mhp": 135,
+   "foeHp": 464
+  },
+  {
+   "name": "Pusta zbroja (piętro 20)",
+   "floor": 20,
+   "kind": "zbroja",
+   "level": 13,
+   "hero": 9,
+   "attr": {
+    "str": 15,
+    "con": 12,
+    "dex": 8,
+    "per": 7,
+    "wil": 7
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 45.3,
+   "lostPct": 75,
+   "refills": 0.5,
+   "mhp": 159,
+   "foeHp": 348
+  },
+  {
+   "name": "Pająk (piętro 20)",
+   "floor": 20,
+   "kind": "pajak",
+   "level": 13,
+   "hero": 9,
+   "attr": {
+    "str": 15,
+    "con": 12,
+    "dex": 8,
+    "per": 7,
+    "wil": 7
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 9.1,
+   "lostPct": 11,
+   "refills": 0,
+   "mhp": 159,
+   "foeHp": 138
+  },
+  {
+   "name": "Przeor w zbroi (boss 20)",
+   "floor": 20,
+   "kind": "boss_20",
+   "level": 14,
+   "hero": 9,
+   "attr": {
+    "str": 15,
+    "con": 12,
+    "dex": 8,
+    "per": 7,
+    "wil": 7
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 172.2,
+   "lostPct": 509,
+   "refills": 6.5,
+   "mhp": 159,
+   "foeHp": 852
+  },
+  {
+   "name": "Królowa szczurów (boss 30)",
+   "floor": 30,
+   "kind": "boss_30",
+   "level": 19,
+   "hero": 12,
+   "attr": {
+    "str": 19,
+    "con": 14,
+    "dex": 9,
+    "per": 8,
+    "wil": 8
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 85.9,
+   "lostPct": 228,
+   "refills": 2.5,
+   "mhp": 181,
+   "foeHp": 1048
+  },
+  {
+   "name": "Topielec (piętro 40)",
+   "floor": 40,
+   "kind": "topielec",
+   "level": 23,
+   "hero": 15,
+   "attr": {
+    "str": 21,
+    "con": 17,
+    "dex": 11,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 19.4,
+   "lostPct": 39,
+   "refills": 0,
+   "mhp": 202,
+   "foeHp": 392
+  },
+  {
+   "name": "Rój nietoperzy (piętro 40)",
+   "floor": 40,
+   "kind": "nietoperz",
+   "level": 22,
+   "hero": 15,
+   "attr": {
+    "str": 21,
+    "con": 17,
+    "dex": 11,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 20.6,
+   "lostPct": 25,
+   "refills": 0,
+   "mhp": 202,
+   "foeHp": 160
+  },
+  {
+   "name": "Matka pająków (boss 40)",
+   "floor": 40,
+   "kind": "boss_40",
+   "level": 24,
+   "hero": 15,
+   "attr": {
+    "str": 21,
+    "con": 17,
+    "dex": 11,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 124.4,
+   "lostPct": 265,
+   "refills": 3,
+   "mhp": 205,
+   "foeHp": 1400
+  },
+  {
+   "name": "Topielec z głębiny (boss 50)",
+   "floor": 50,
+   "kind": "boss_50",
+   "level": 29,
+   "hero": 17,
+   "attr": {
+    "str": 24,
+    "con": 19,
+    "dex": 12,
+    "per": 9,
+    "wil": 9
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 102.5,
+   "lostPct": 131,
+   "refills": 1.5,
+   "mhp": 218,
+   "foeHp": 1824
+  },
+  {
+   "name": "Kamiennik (piętro 60)",
+   "floor": 60,
+   "kind": "kamiennik",
+   "level": 33,
+   "hero": 19,
+   "attr": {
+    "str": 25,
+    "con": 21,
+    "dex": 13,
+    "per": 10,
+    "wil": 10
+   },
+   "weapon": 115,
+   "won": "1/2",
+   "s": 217,
+   "lostPct": 857,
+   "refills": 9.5,
+   "mhp": 234,
+   "foeHp": 876
+  },
+  {
+   "name": "Pusta zbroja (piętro 60)",
+   "floor": 60,
+   "kind": "zbroja",
+   "level": 33,
+   "hero": 19,
+   "attr": {
+    "str": 25,
+    "con": 21,
+    "dex": 13,
+    "per": 10,
+    "wil": 10
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 66.8,
+   "lostPct": 135,
+   "refills": 1,
+   "mhp": 234,
+   "foeHp": 684
+  },
+  {
+   "name": "Kamienny Odźwierny (boss 60)",
+   "floor": 60,
+   "kind": "boss_60",
+   "level": 34,
+   "hero": 19,
+   "attr": {
+    "str": 25,
+    "con": 21,
+    "dex": 13,
+    "per": 10,
+    "wil": 10
+   },
+   "weapon": 115,
+   "won": "0/2",
+   "s": 240.1,
+   "lostPct": 1160,
+   "refills": 14,
+   "mhp": 234,
+   "foeHp": 1832
+  },
+  {
+   "name": "Zbroja bez herbu (boss 70)",
+   "floor": 70,
+   "kind": "boss_70",
+   "level": 39,
+   "hero": 21,
+   "attr": {
+    "str": 26,
+    "con": 23,
+    "dex": 14,
+    "per": 11,
+    "wil": 11
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 203,
+   "lostPct": 1512,
+   "refills": 18,
+   "mhp": 253,
+   "foeHp": 2228
+  },
+  {
+   "name": "Upiór prawdy (piętro 85)",
+   "floor": 85,
+   "kind": "upior",
+   "level": 46,
+   "hero": 24,
+   "attr": {
+    "str": 31,
+    "con": 25,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 82.8,
+   "lostPct": 0,
+   "refills": 0,
+   "mhp": 269,
+   "foeHp": 493
+  },
+  {
+   "name": "Cień (piętro 85)",
+   "floor": 85,
+   "kind": "cien",
+   "level": 46,
+   "hero": 24,
+   "attr": {
+    "str": 31,
+    "con": 25,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 33.1,
+   "lostPct": 78,
+   "refills": 1,
+   "mhp": 269,
+   "foeHp": 460
+  },
+  {
+   "name": "Upiór pytającego (boss 80)",
+   "floor": 80,
+   "kind": "boss_80",
+   "level": 45,
+   "hero": 23,
+   "attr": {
+    "str": 31,
+    "con": 24,
+    "dex": 14,
+    "per": 8,
+    "wil": 14
+   },
+   "weapon": 115,
+   "won": "1/2",
+   "s": 205.4,
+   "lostPct": 515,
+   "refills": 5.5,
+   "mhp": 261,
+   "foeHp": 2174
+  },
+  {
+   "name": "Ostatni Strażnik (boss 90)",
+   "floor": 90,
+   "kind": "boss_90",
+   "level": 50,
+   "hero": 25,
+   "attr": {
+    "str": 33,
+    "con": 26,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "0/2",
+   "s": 240.1,
+   "lostPct": 1340,
+   "refills": 16,
+   "mhp": 277,
+   "foeHp": 3076
+  },
+  {
+   "name": "Bandyta + nożownik (droga, poz. 2)",
+   "floor": 0,
+   "kind": "h:bandit,knifer",
+   "level": 2,
+   "hero": 3,
+   "attr": {
+    "str": 10,
+    "con": 6,
+    "dex": 5,
+    "per": 5,
+    "wil": 5
+   },
+   "weapon": 60,
+   "won": "2/2",
+   "s": 10.2,
+   "lostPct": 6,
+   "refills": 0,
+   "mhp": 141,
+   "foeHp": 123
+  },
+  {
+   "name": "Najemnik (droga, poz. 4)",
+   "floor": 0,
+   "kind": "h:mercenary",
+   "level": 4,
+   "hero": 5,
+   "attr": {
+    "str": 11,
+    "con": 8,
+    "dex": 6,
+    "per": 6,
+    "wil": 6
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 40,
+   "lostPct": 176,
+   "refills": 2,
+   "mhp": 130,
+   "foeHp": 205
+  }
+ ]
+}

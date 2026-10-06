@@ -1,0 +1,27 @@
+PASS a new game on the meadow (Map004), 12:00
+PASS an open field 15 x 7  {"x":20,"y":14}
+   Przeor w zbroi (boss 20) #1: {"won":false,"s":240.3,"lost":3516,"mhp":159,"refills":26,"hits":130,"dodged":9,"left":"boss_20:16/852","by":{"boss_20":842,"przeor w zbroi":2674},"foeHp":852,"scene":"Scene_Map"}
+   Królowa szczurów (boss 30) #1: {"won":true,"s":142.1,"lost":1131,"mhp":178,"refills":8,"hits":117,"dodged":1,"left":"","by":{"królowa szczurów":653,"szczur":466,"boss_30":12},"foeHp":1048,"scene":"Scene_Map"}
+   Matka pająków (boss 40) #1: {"won":true,"s":125.1,"lost":843,"mhp":205,"refills":5,"hits":26,"dodged":24,"left":"","by":{"matka pająków":789,"sieć":54},"foeHp":1400,"scene":"Scene_Map"}
+   Topielec z głębiny (boss 50) #1: {"won":true,"s":113.5,"lost":176,"mhp":221,"refills":1,"hits":8,"dodged":2,"left":"","by":{"topielec z głębiny":176},"foeHp":1824,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #1: {"won":false,"s":240.4,"lost":8144,"mhp":234,"refills":44,"hits":98,"dodged":0,"left":"kamiennik:960/960","by":{"kamiennik":8144},"foeHp":960,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #1: {"won":false,"s":240.4,"lost":17162,"mhp":234,"refills":85,"hits":185,"dodged":0,"left":"boss_60:2296/2296","by":{"kamienny odźwierny":10098,"odłamki":7064},"foeHp":2296,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #1: {"won":false,"s":240.3,"lost":10560,"mhp":250,"refills":48,"hits":144,"dodged":0,"left":"boss_70:2687/2732","by":{"zbroja bez herbu":10560},"foeHp":2732,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #1: {"won":false,"s":240.1,"lost":3225,"mhp":261,"refills":13,"hits":0,"dodged":0,"left":"boss_80:2694/2864","by":{},"foeHp":2864,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #1: {"won":false,"s":240.3,"lost":192,"mhp":277,"refills":0,"hits":3,"dodged":0,"left":"boss_90:3668/3668","by":{"ostatni strażnik":192},"foeHp":3668,"scene":"Scene_Map"}
+
+| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |
+|---|---|---|---|---|---|---|
+| Przeor w zbroi (boss 20) | 14 (852 życia) | 9 (15/12, 159 życia) | 0/1 | 240.3 | 2211 | 26 |
+| Królowa szczurów (boss 30) | 19 (1048 życia) | 12 (19/14, 178 życia) | 1/1 | 142.1 | 635 | 8 |
+| Matka pająków (boss 40) | 24 (1400 życia) | 15 (21/17, 205 życia) | 1/1 | 125.1 | 411 | 5 |
+| Topielec z głębiny (boss 50) | 29 (1824 życia) | 17 (24/19, 221 życia) | 1/1 | 113.5 | 80 | 1 |
+| Kamiennik (piętro 60) | 33 (960 życia) | 19 (25/21, 234 życia) | 0/1 | 240.4 | 3480 | 44 |
+| Kamienny Odźwierny (boss 60) | 34 (2296 życia) | 19 (25/21, 234 życia) | 0/1 | 240.4 | 7334 | 85 |
+| Zbroja bez herbu (boss 70) | 39 (2732 życia) | 21 (26/23, 250 życia) | 0/1 | 240.3 | 4224 | 48 |
+| Upiór pytającego (boss 80) | 45 (2864 życia) | 23 (31/24, 261 życia) | 0/1 | 240.1 | 1236 | 13 |
+| Ostatni Strażnik (boss 90) | 50 (3668 życia) | 25 (33/26, 277 życia) | 0/1 | 240.3 | 69 | 0 |
+PASS the fights ran
+console errors: ["[Tawerna] map updater Combat.update (turned off): TypeError: Cannot read properties of undefined (reading 'atk')\n    at atkOf (http://127.0.0.1:8765/js/plugins/Hunting_AI.js:47:54)\n    at Object.gore (http://127.0.0.1:8765/js/plugins/Hunting_AI.js:553:48)\n    at Object.gore (http://127.0.0.1:8765/js/plugins/Hunting.js:936:68)\n    at rollBump (http://127.0.0.1:8765/js/plugins/Combat_Fight.js:425:55)\n    at updateRoll (http://127.0.0.1:8765/js/plugins/Combat_Fight.js:455:13)\n    at Object.update (http://127.0.0.1:8765/js/plugins/Combat_Fight.js:720:36)\n    at T.onMapUpdate.owner [as fn] (http://127.0.0.1:8765/js/plugins/Combat.js:469:13)\n    at runUpdaters (http://127.0.0.1:8765/js/plugins/TawernaCore.js:494:21)\n    at Scene_Map.update (http://127.0.0.1:8765/js/plugins/TawernaCore.js:905:13)\n    at Scene_Map.update (<anonymous>:168:83)"]
+FAIL no console errors  ["[Tawerna] map updater Combat.update (turned off): TypeError: Cannot read properties of undefined (reading 'atk')\n    at atkOf (http://127.0.0.1:8765/js/plugins/Hunting_AI.js:47:54)\n    at Object.gore (http://127.0.0.1:8765/js/plugins/Hunting_AI.js:553:48)\n    at Object.gore (http://127.0.0.1:8765/js/plugins/Hunting.js:936:68)\n    at rollBump (http://127.0.0.1:8765/js/plugins/Combat_Fight.js:425:55)\n    at updateRoll (http://127.0.0.1:8765/js/plugins/Combat_Fight.js:455:13)\n    at Object.update (http://127.0.0.1:8765/js/plugins/Combat_Fight.js:720:36)\n    at T.onMapUpdate.owner [as fn] (http://127.0.0.1:8765/js/plugins/Combat.js:469:13)\n    at runUpdaters (http://127.0.0.1:8765/js/plugins/TawernaCore.js:494:21)\n    at Scene_Map.update (http://127.0.0.1:8765/js/plugins/TawernaCore.js:905:13)\n    at Scene_Map.update (<anonymous>:168:83)"]
+3/4 passed

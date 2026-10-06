@@ -1,0 +1,14 @@
+2 test(s), CDP port 9465, one at a time, one shared browser
+
+creatures_test                       50/52  FAIL     123 s   before: 50/50 ok
+    FAIL every sheet loads: the 8-way ones (walking, blows, ends; the shadows' faces) and their 4-way $Cr_* sheets  ["$Cr_Queen_Run"]
+    FAIL Królowa szczurów: hurt by a third she squeals - rats pour out (hers); she rams in a straight line  {"rats":3,"rammed":true}
+humans_test                          51/52  FAIL      37 s   before: 44/44 ok
+    FAIL he sleeps outdoors where the camps are: woken at 23:00 by 2-3 of them coming at him ('Obudzili cię bandyci!', 'Bandyci!')  {"hour":23.02,"men":[{"kind":"knifer","engaged":true,"d":2},{"kind":"ban
+
+test                               result   status   time  tries  before
+------------------------------------------------------------------------------------
+creatures_test                       50/52  FAIL     123 s  1      50/50 ok
+humans_test                          51/52  FAIL      37 s  1      44/44 ok
+
+SUITES: 0 clean, 2 with a FAIL/ERR line  (time: 2 min 41 s)

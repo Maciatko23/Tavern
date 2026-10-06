@@ -1,0 +1,11 @@
+PASS a new game on the meadow (Map004), 12:00
+PASS an open field 15 x 7  {"x":20,"y":14}
+   Ostatni Strażnik (boss 90) #1: {"won":true,"s":137.3,"lost":882,"mhp":277,"refills":4,"hits":34,"dodged":25,"left":"","by":{"ostatni strażnik":450,"cień":414,"cien":18},"foeHp":2336,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #2: {"won":true,"s":223.3,"lost":3520,"mhp":280,"refills":16,"hits":112,"dodged":38,"left":"","by":{"ostatni strażnik":2085,"cień":1320,"cien":115},"foeHp":2336,"scene":"Scene_Map"}
+
+| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |
+|---|---|---|---|---|---|---|
+| Ostatni Strażnik (boss 90) | 50 (2336 życia) | 25 (33/26, 277 życia) | 2/2 | 180.3 | 788 | 10 |
+PASS the fights ran
+console errors: none
+3/3 passed

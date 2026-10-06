@@ -123,6 +123,8 @@
 
     const MAP = { house: 19, field: 3, tavern: 1, manor: 24, cellar: 9 };
     const LETTERS_BEFORE = [40, 20, 5, 1, 0];   // letters from the Lord: days before the deadline (60: days 20, 40, 55, 59, 60)
+    // the Lord's butler: Feliks - or, once W1 has sent him away (TownLife "gone"), the new butler Teodor (user 2026-10-05)
+    const butler = () => (window.TownLife && typeof TownLife.gone === "function" && TownLife.gone("feliks") ? "Teodor" : "Feliks");
     const LORD_HOURS = [8, 20];              // the Lord stands at his door by day (the butler's words say "od ósmej")
     const NIGHT = [22, 6];                   // grandpa dozes
     const DAWN = 6;                          // the debt counts till dawn of the day after the deadline (the Lord's men come at dawn)
@@ -387,17 +389,17 @@
         "Zające łatwiej złapać we wnyki z przynętą niż gołymi rękami. Ja w twoim wieku... no, ja też nie łapałem.",
         "Na polu stawiaj, co chcesz - to nasza ziemia. Gdzie indziej Lord by się wściekł."
     ];
-    const WHERE_TO_PAY = "Lord przyjmuje za dnia, od " + LORD_HOURS[0] + " do " + LORD_HOURS[1] + ", przed swoim dworem obok tawerny. Nocą zapukaj do drzwi - Feliks, jego kamerdyner, też weźmie pieniądze.";
+    const WHERE_TO_PAY = () => "Lord przyjmuje za dnia, od " + LORD_HOURS[0] + " do " + LORD_HOURS[1] + ", przed swoim dworem obok tawerny. Nocą zapukaj do drzwi - " + butler() + ", jego kamerdyner, też weźmie pieniądze.";
     function grandpaList() {
         const s = state(), o = [], h = hour(), n = daysLeft();
         if (s.done && !s.flags.thanked) {
-            gSay(o, "Wnuku! Feliks, kamerdyner Lorda, przyniósł pokwitowanie. Spłaciłeś wszystko, co do grosza!");
+            gSay(o, "Wnuku! " + butler() + ", kamerdyner Lorda, przyniósł pokwitowanie. Spłaciłeś wszystko, co do grosza!");
             gSay(o, "Pole zostaje przy nas. Nie wiem, jak ci dziękować... Masz, dwa kapuśniaki. Na więcej mnie nie stać - sam wiesz czemu.");
             script(o, "Story.thanks()");
             return o;
         }
         if (h >= NIGHT[0] || h < NIGHT[1]) {
-            if (isOpen() && n <= 1) gSay(o, "Chrrr... Hm? Wnuku, czemu nie jesteś u Lorda?! Brakuje jeszcze " + left() + " G, a o świcie mija termin. Feliks przyjmuje pieniądze i nocą - leć!");
+            if (isOpen() && n <= 1) gSay(o, "Chrrr... Hm? Wnuku, czemu nie jesteś u Lorda?! Brakuje jeszcze " + left() + " G, a o świcie mija termin. " + butler() + " przyjmuje pieniądze i nocą - leć!");
             else gSay(o, "Chrrr... Hm? A, to ty. Idź spać, jutro też jest dzień.");
             return o;
         }
@@ -418,7 +420,7 @@
         }
         gSay(o, status);
         let tip;
-        if (n <= 5) tip = WHERE_TO_PAY;   // (the last days: where the money goes comes first)
+        if (n <= 5) tip = WHERE_TO_PAY();   // (the last days: where the money goes comes first)
         else if (!s.flags.field) tip = "Pole jest za lasem: z podwórza na południe, leśną drogą do Polnej, potem na południe na skraj lasu i na zachód.";
         else if (!s.flags.hired) tip = "Borgar szuka ludzi do pracy. Od " + SHIFT_FROM + " do " + SHIFT_TO + " zajrzyj do „Złotego Kufla”: z Polnej drogi ścieżką na północ.";
         else tip = HINTS[s.hint++ % HINTS.length];
@@ -458,9 +460,9 @@
             lSay(o, "Hola, hola! Kim jesteś i czemu depczesz mój dziedziniec?");
             hSay(o, "Jestem wnukiem Stacha. Przyszedłem w sprawie długu.");
             lSay(o, "Ach, Stach! Lord Leopold Zaleski, do usług... to znaczy raczej ty do moich. " + s.debt + " złotych monet, płatne do dnia " + s.deadline + ".");
-            lSay(o, "Przynoś, ile masz. Feliks, mój kamerdyner, zapisze każdy grosz. Feliks zapisuje nawet to, co mówię przez sen.");
+            lSay(o, "Przynoś, ile masz. " + butler() + ", mój kamerdyner, zapisze każdy grosz. " + butler() + " zapisuje nawet to, co mówię przez sen.");
             script(o, "Story.step(\"lordMet\")");
-        } else if (daysLeft() <= 5) lSay(o, "Termin tuż-tuż, młodzieńcze. Feliks już ostrzy pióro.");
+        } else if (daysLeft() <= 5) lSay(o, "Termin tuż-tuż, młodzieńcze. " + butler() + " już ostrzy pióro.");
         return o.concat(payList("lord", L(), NPCS.lord.face, first));
     }
     function doorList(ev) {
@@ -562,7 +564,7 @@
             say(o, spk, "Kazał też przekazać: gdybyś kiedyś znalazł zejście pod tawerną, przyjdź z tym najpierw do niego. Dobranoc... to znaczy, do widzenia.", face);
         } else {
             say(o, spk, "Całe " + sum + " złotych monet, co do grosza. Przyznam, nie wierzyłem, że ktoś z rodu Stacha odda choćby połowę.", face);
-            say(o, spk, "Pole zostaje przy was. Feliks zaniesie dziadkowi pokwitowanie - niech je sobie oprawi w ramkę.", face);
+            say(o, spk, "Pole zostaje przy was. " + butler() + " zaniesie dziadkowi pokwitowanie - niech je sobie oprawi w ramkę.", face);
             say(o, spk, (hired ? "Jeszcze jedno, młodzieńcze. Pracujesz u Borgara, prawda? " : "Jeszcze jedno, młodzieńcze. Znasz tawernę Borgara? ") +
                 "Mój dwór postawiono z kamieni dawnej twierdzy - Kruczych Skał. Najstarsze z nich wciąż leżą pod jego tawerną.", face);
             say(o, spk, "Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Długo miałem to za bajdy dla dzieci.", face);
@@ -604,7 +606,7 @@
             if (n <= 0) return;
             pay(n);
             if (s.paid >= s.debt) return run(interp, finalList(spk, face, role !== "lord"));
-            say(o, spk, (role === "lord" ? "Feliks, zapisz: " : "Zapisuję: ") + n + " G od wnuka Stacha. Brakuje jeszcze " + left() + " G." +
+            say(o, spk, (role === "lord" ? butler() + ", zapisz: " : "Zapisuję: ") + n + " G od wnuka Stacha. Brakuje jeszcze " + left() + " G." +
                 (daysLeft() <= 0 ? " O świcie termin mija." : daysLeft() <= 5 ? " Pospiesz się - termin tuż-tuż." : ""), face);
             return run(interp, o);
         }
@@ -826,10 +828,10 @@
     }
     function letterText(d) {
         const s = state(), n = daysLeft(), sum = left() + " G";
-        if (d >= s.deadline) return "Uprzejmie przypominam, że dziś mija termin spłaty długu (" + sum + "). Feliks przyjmie pieniądze jeszcze tej nocy, do świtu. O świcie moi ludzie przyjdą zmierzyć pole.";
-        if (d >= s.deadline - 1) return "Pojutrze o świcie pole przechodzi na własność dworu, chyba że wcześniej zobaczę " + sum + ". Feliks już grzeje lak do pieczęci.";
-        if (d >= s.deadline - 5) return "Do terminu " + daysPhrase(n) + ". Brakuje " + sum + ". Feliks ostrzy pióro do aktu przejęcia pola - proszę go do tego nie zmuszać.";
-        return "Uprzejmie przypominam o długu Stacha: " + sum + " do dnia " + s.deadline + ". Do terminu " + daysPhrase(n) + ". Z wyrazami szacunku, Leopold Zaleski. PS. Feliks pozdrawia.";
+        if (d >= s.deadline) return "Uprzejmie przypominam, że dziś mija termin spłaty długu (" + sum + "). " + butler() + " przyjmie pieniądze jeszcze tej nocy, do świtu. O świcie moi ludzie przyjdą zmierzyć pole.";
+        if (d >= s.deadline - 1) return "Pojutrze o świcie pole przechodzi na własność dworu, chyba że wcześniej zobaczę " + sum + ". " + butler() + " już grzeje lak do pieczęci.";
+        if (d >= s.deadline - 5) return "Do terminu " + daysPhrase(n) + ". Brakuje " + sum + ". " + butler() + " ostrzy pióro do aktu przejęcia pola - proszę go do tego nie zmuszać.";
+        return "Uprzejmie przypominam o długu Stacha: " + sum + " do dnia " + s.deadline + ". Do terminu " + daysPhrase(n) + ". Z wyrazami szacunku, Leopold Zaleski. PS. " + butler() + " pozdrawia.";
     }
     function updateLetters() {
         const s = state(), today = day();

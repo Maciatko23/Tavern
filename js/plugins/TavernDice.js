@@ -418,7 +418,8 @@
         hour = hour === undefined ? hourNow() : hour;
         day = day === undefined ? dayNow() : day;
         const { OPPONENTS, OPP_ORDER } = D(), keys = only ? [only].filter(k => OPPONENTS[k]) : OPP_ORDER;
-        return keys.filter(k => atHour(k, hour, day) && fameOk(k)).map(k => ({ key: k, tired: vsOf(k).lostToday >= OPPONENTS[k].perDay }));
+        const TQ = TW.api("TownQuests"), away = k => k === "grum" && !!(TQ && TQ.grumAway && TQ.grumAway());   // (2026-10-06, W8: Grum gone for good)
+        return keys.filter(k => atHour(k, hour, day) && fameOk(k) && !away(k)).map(k => ({ key: k, tired: vsOf(k).lostToday >= OPPONENTS[k].perDay }));
     }
     // the rivals who are at the tables now but do not play with the hero yet (his fame is too low)
     function locked(hour, day) {

@@ -1112,5 +1112,338 @@
     "scale": null,
     "height_px": 59,
     "notes": "Podgrodzie. Stojąca postać W i E = klatka 4 własnego chodu W (nogi razem) (rotacja W była mocniej pochylona, z miską wysuniętą i szerszym kocem - w arkuszu MZ, gdzie stanie przeplata się z krokami, migałaby; zip podmieniony przed budową). Drewniana miska żebracza w ręce zostaje w chodzie S, SW i W. E = lustro W (szablonowy chód E dał jaskrawoniebieskie portki), SE = lustro SW (chód SE zgubił miskę, szare spodnie zamiast łachmanów), NW = lustro NE (chód NW robił z łachmanów jasne spodnie). Chód N wygenerowany drugi raz (w pierwszym na plecach migała czerwona sakiewka w 4 klatkach z 8). Po lustrze miska jest w drugiej ręce (E, SE) - jak u innych mieszkańców."
+  },
+  {
+    "key": "Bartek",
+    "name": "Bartek Kmieć (chłop, który przegrał wszystko w kości)",
+    "pixellab_id": "e3613d7c-c4c3-4c1e-bba5-347642ea2c44",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "73310842-30b6-4d2e-8b65-d7626d1f213e",
+    "animation": "walk",
+    "description": "Bartek Kmiec the ruined peasant, a stocky broad-shouldered man about 35 with a thick neck and a small belly, round unshaven face with brown stubble, sorry hangdog look with sad droopy eyes, short tousled sandy-brown hair, holding his battered straw hat in both hands in front of his belly, a plain stained off-white linen shirt, an open worn dark-brown wool vest, faded dull olive-green trousers rolled up to mid-calf, worn scuffed brown leather boots, poor medieval farmer who has gambled everything away, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Bartek",
+    "walk8": "Npc_Bartek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "south-east": "south-west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Zadania (targ, kości). Słomkowy kapelusz trzyma w obu rękach przed brzuchem (S, SW, W, E). SE = lustro SW (szablonowy chód SE zgubił kapelusz; po lustrze kapelusz jest w drugiej ręce). W chodzie NE i NW kapelusza nie widać (zasłonięty plecami, w stojącej postaci widać tylko brzeg) - zostawione. Chód W miał jasnoniebieskie oko (70b5eb): w zipie zamienione na ciemne (2f2017)."
+  },
+  {
+    "key": "Gracz",
+    "name": "Lucjan Kość (wędrowny gracz w kości)",
+    "pixellab_id": "f8c5dfa2-9692-4db4-89c3-b05576a6aa01",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "bad6c0cb-1014-47f1-a2aa-14e0bfb9af89",
+    "animation": "walk",
+    "description": "Lucjan Kosc the travelling dice sharper, a lean wiry man about 40, narrow sly face with a thin black pencil moustache and a sly crooked smile, slicked-back black hair, a battered black wide-brimmed felt hat with a long drooping off-white feather, a faded worn wine-red doublet with a row of tarnished brass buttons down the front and puffed slashed sleeves, a small brown leather dice pouch hanging on his belt, dark charcoal hose, worn tall brown leather boots with folded-down cuffs, flashy but shabby foreign gambler from the continent, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Gracz",
+    "walk8": "Npc_Gracz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Zadania (targ, kości). W = lustro E (szablonowy chód W miał czarne buty zamiast brązowych cholew i czarną plamę przy pasie w 2 klatkach). Chód E miał fioletowe oko (3f0b5b/852943/c17bb2): w zipie zamienione na ciemny brąz i skórę (wiersze 12-18). Pióro przy kapeluszu zostaje we wszystkich kierunkach."
+  },
+  {
+    "key": "Zlodziej",
+    "name": "Szymek (złodziejaszek, chłopak z obozu uchodźców)",
+    "pixellab_id": "bdc08041-00de-4210-9ea8-2d986992be29",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "6a440647-6516-481a-ac07-c69b19e36b4b",
+    "animation": "walk",
+    "description": "Szymek the young pickpocket, a hungry skinny teenage boy about 13 years old, thin and small for his age, sharp narrow face with hollow cheeks, quick shifty sly eyes and a smirk, messy dark-brown hair poking out from under the hood, a far too big oversized faded rust-brown wool tunic with a big hood pulled up over his head, the long sleeves rolled up, sewn-on grey and green patches, a frayed rope belt with a small knife in a leather sheath at his hip, torn ragged charcoal-grey trousers ending below the knee, bare thin shins, barefoot with dirty feet, poor medieval street urchin cutpurse, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_skeleton_v3_west": "2-4 (not measured exactly)"
+    },
+    "sheet": "$Npc_Zlodziej",
+    "walk8": "Npc_Zlodziej_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "east": "west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.82,
+      "head": 0.9
+    },
+    "height_px": 49,
+    "notes": "Zadania (targ: kieszonkowiec). Nastolatek ok. 13 lat: PixelLab narysował go wzrostu dorosłego, zmniejszony --scale 0.82 --head 0.9 (między Frankiem 0.74 a dorosłym). Nożyk w pochwie przy pasie zostaje w chodzie S, SW, W, E, NE. Chód W z trybu skeleton-v3 (szablonowy W miał czarną plamę na plecach tuniki w 3 klatkach, migający nóż i jaskrawozielone łaty); E = lustro W (szablonowy E gubił nóż w 5 klatkach z 8 i miał turkusowe łaty). Chód NE: nasycona zielona łata (445c3e) przygaszona w zipie do szarozielonej jak w rotacjach (5e6454)."
+  },
+  {
+    "key": "Straznik",
+    "name": "Strażnik dworu (straż Lorda Zaleskiego, nocne obchody)",
+    "pixellab_id": "8a12020c-013a-4ff5-93c1-34f53afc3113",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "f43ec3c6-edac-48e5-8301-244e43e256af",
+    "animation": "walk",
+    "description": "a manor guard soldier about 30, a young clean-shaven man with a square jaw and short brown hair, a simple steel kettle helmet with a wide brim, a grey chainmail shirt with long mail sleeves, over it a red sleeveless tabard with a black horse emblem on the chest, a brown leather belt, dark grey trousers, brown leather boots, holding a plain wooden spear upright in his right hand with the butt resting on the ground beside his foot and the small iron spearhead at the height of his helmet, medieval guard in the lord's red livery, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_skeleton_v3_north": "2-4 (not measured exactly)"
+    },
+    "sheet": "$Npc_Straznik",
+    "walk8": "Npc_Straznik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "east": "west",
+        "south-east": "south-west",
+        "north-west": "north-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Straż dworu Lorda Zaleskiego (nocne obchody), w barwach jak Kapral Wit: czerwony wapenrok z czarnym koniem na kolczudze, kapalin, włócznia w prawej ręce (mieści się w płótnie 64: grot na wysokości hełmu, postać pełnego wzrostu 60 px). Chód N z trybu skeleton-v3 (szablonowy N gubił włócznię we wszystkich klatkach); klatki 96x96 przycięte jednym oknem (16,16) przed budową (crop_dir.py), bo to_cell przycinał klatkę 2 od dołu - grot w tej klatce traci 1 px. E = lustro W (szablonowy E trzymał włócznię ukośnie, grotem do tyłu, i miał czarną nogę), SE = lustro SW i NW = lustro NE (szablonowe SE i NW gubiły włócznię w klatkach 0-3). Po lustrach włócznia jest w lewej ręce w E, SE i NW. W chodzie NE/NW na plecach wapenroku czarny znak (stojąca postać ma gładkie plecy) - jak u Kaprala, zostawione."
+  },
+  {
+    "key": "Woznica",
+    "name": "Wojciech (woźnica)",
+    "pixellab_id": "e328075b-b29c-4717-a9f3-66b051224080",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "b324af22-3dc6-4299-8ca7-046fc0a1ecff",
+    "animation": "walk",
+    "description": "Wojciech the carter, a burly heavy-set man about 50, broad weathered red-cheeked face with a bushy grey-brown moustache and grey stubble, a wide-brimmed battered dark-brown leather hat, a thick faded mustard-yellow wool scarf wound around his neck, a heavy long dark-brown wool coat reaching his knees, a wide leather belt with a coiled black leather whip hanging at his hip, tan leather work gloves, dark grey trousers, heavy dusty brown boots, medieval wagon driver, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_failed_and_rerun": 1
+    },
+    "sheet": "$Npc_Woznica",
+    "walk8": "Npc_Woznica_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Zadania (wóz, przewóz). PixelLab dał rumiane policzki jako jaskrawe różowo-czerwone plamy na wysokości oczu (wyglądały jak czerwone oczy): w zipie przed budową policzki w wierszach 8-24 zamienione na kolory skóry (fb9385/e39379/e2896d/dc9278 -> cd7f5e, b63930/b65d49/ad291c -> a05c42, 9b4d42 -> 9a5a40, 852d27 -> 7c4a37). W = lustro E (szablonowy chód W robił z długiego płaszcza spodnie, czarna stopa w 2 klatkach, bicz migał). Po lustrze bicza nie widać w kierunku W (w E jest po drugiej stronie); bicz zostaje w S, SW, NW."
+  },
+  {
+    "key": "Kamerdyner",
+    "name": "Teodor (nowy kamerdyner Lorda, po Feliksie)",
+    "pixellab_id": "a5fb2b1b-d49a-4a23-a1bb-692515fa706c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "bd7fc06f-1bbc-4eb8-ba92-f4c7c492132d",
+    "animation": "walk",
+    "description": "Teodor the new butler of a noble manor, a dignified older man about 60 with a medium sturdy build, very upright straight posture, neatly combed short grey hair with a side parting, thick neat grey side whiskers (mutton chops) down to the jaw, clean-shaven chin, kind honest warm face with gentle eyes and a faint friendly smile, a long black tailcoat-like livery coat reaching the knees with crimson red trim along the lapels, the front edges, the cuffs and the hem, a crimson red waistcoat with small gold buttons, a small round red badge with a black horse emblem pinned on the left chest, white shirt with a white cravat, white gloves, black trousers, polished black shoes, arms at his sides, dignified loyal servant in the lord's red and black livery, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8,
+      "walk_template_rerolls_w_sw_se": 3,
+      "walk_skeleton_v3_sw_se": 6,
+      "total": 37
+    },
+    "sheet": "$Npc_Kamerdyner",
+    "walk8": "Npc_Kamerdyner_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": -1,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Nowy kamerdyner dworu Lorda Zaleskiego - zajmuje miejsce Feliksa, gdy zadanie W1 go usunie (Feliks potajemnie sprzedawał wodę miasteczka). W barwach Lorda jak Strażnik i Kapral: czarny długi frak z czerwoną lamówką, czerwona kamizelka ze złotymi guzikami, mała czerwona odznaka z czarnym koniem na lewej piersi (w 64 px czyta się jako czerwona rozetka), białe rękawiczki, siwe bokobrody, życzliwa twarz (w odróżnieniu od chudego, ogolonego Feliksa). Chód: szablon walking-8-frames; W wygenerowany drugi raz (pierwszy miał niebieskie oko i skręcał tułów w klatkach 5-7); SW i SE z trybu skeleton-v3 (szablonowe SW/SE - także po ponownym losowaniu - obracały się w klatkach 4-7 przodem albo bokiem), klatki 96x96 przycięte jednym oknem (16,16) przed budową (crop_dir.py). Poprawki w zipie (fix_teodor.py): czarny guzek na czubku głowy (podwójny kontur w rotacjach S/SW/SE i w chodzie SE) usunięty, jaskrawe czerwone usta w chodzie S zamienione na stonowany kolor ust z rotacji (98454d), czerwona kreska przy uchu w chodzie NE też. Odznaka znika w chodzie W w klatkach, w których lewa ręka zasłania pierś (naturalne). W NW odznaka wypada na lewym ramieniu/brzegu piersi (tak narysował PixelLab rotację; stała we wszystkich klatkach) - zostawione."
+  },
+  {
+    "key": "Marek",
+    "name": "Marek (kopacz, mąż Ludmiły)",
+    "pixellab_id": "ce67f1ea-5d52-4612-aac5-fd1dd42e8b0e",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "d9aa8584-54ed-4f4f-a7fb-822d3594bc2e",
+    "animation": "walk",
+    "description": "Marek, a silent haunted miner about 33, gaunt hollow-cheeked face with a long untrimmed dark brown beard and messy shoulder-length dark brown hair, wide empty staring eyes, pale dusty skin, torn dirty off-white linen shirt with rolled sleeves under a worn scuffed dark brown leather miner's vest, a frayed rope belt, rock dust on his clothes, faded grey-brown trousers patched at the knees, worn cracked brown boots, poor medieval digger, no tools, empty hands hanging down, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Marek",
+    "walk8": "Npc_Marek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "W6/W8: obóz kopaczy w Jaskini (Map014), milczy i patrzy w ścianę."
+  },
+  {
+    "key": "Kopacz",
+    "name": "Kopacz (obóz frakcji w Jaskini)",
+    "pixellab_id": "89d89c2a-100e-4448-a432-5b4bdcead325",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "de774d1e-dd35-4eff-b3ab-41b0efa79c34",
+    "animation": "walk",
+    "description": "a medieval mine digger hired by a foreign faction, a stocky strong man about 40, short cropped greying black hair, thick black stubble, soot and rock dust on his face, a dirty brown linen headscarf tied over the head, rough dark grey wool tunic with the sleeves rolled up, a heavy brown leather apron, thick leather wrist guards, wide leather belt with a small pouch, dark brown trousers, sturdy worn brown boots, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 20,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Kopacz",
+    "walk8": "Npc_Kopacz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "W8: kopacze frakcji w Jaskini (Map014)."
   }
 ]

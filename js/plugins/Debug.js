@@ -19,7 +19,16 @@
  *      - "Burza teraz", "Piorun tuż obok", "Piorun w drzewo", "Koniec pogody na dziś": pogoda (Survival.js / Storm.js).
  *      - "Stadko ptaków na ziemi", "Nalot ptaków na pole": ptaki (Birds.js) - nalot tylko, gdy na mapie coś rośnie
  *        poza zasięgiem stracha na wróble.
- *      - "Dzik w pobliżu", "Wataha wilków (3)" (Hunting.js), "+200 doświadczenia" (Combat.js).
+ *      - "Dzik w pobliżu", "Wataha wilków (3)", "Jeleń w pobliżu", "Niedźwiedź w pobliżu" (Hunting.js), "+200 doświadczenia" (Combat.js).
+ *      - "Podziemia: piętro N" (Underground.js): ←→ wybiera piętro 0-100 (z Shiftem o 10; 0 Ruiny Zamku, co 10. piętro
+ *        zrobione ręcznie, 100 Komnata Serca), OK przenosi tam (przy schodach w górę, bez względu na kratę i bossów);
+ *        "Podziemia: zejście z piwnicy" otwiera / zamyka kratę (przełącznik 11); "Podziemia: zamki Serca na próbę" -
+ *        klucz, dzwon i pieśń znane bez questów W2-W4; "Podziemia: wszystkie przystanki windy" włącza windę na 10-90.
+ *      - "Bandyta w pobliżu", "Nożownik w pobliżu", "Łucznik w pobliżu", "Najemnik w pobliżu", "Zasadzka (2 bandytów i łucznik)",
+ *        "Obóz bandytów (noc)", "Napad na śpiącego (bandyci)" (Humans.js, etap 3 walki): ludzie-wrogowie kilka pól od bohatera;
+ *        obóz 9-16 pól dalej (w dzień zegar idzie na 22:00); napad - grupa, która przyszłaby po śpiącego, od razu w walce.
+ *      - "Stwór z ruin: ..." i "Boss podziemi: ..." (Creatures.js, etap 4 walki): ←→ wybiera rodzaj / bossa, OK przywołuje go
+ *        4-7 pól od bohatera (na piętrze 10 "Strażnik dziesiątej bramy" to walka ze strażnikiem przy bramie).
  *   2. Budowanie: "Postaw: ..." (każda budowla z Farming.js): wraca na mapę w zwykłym trybie stawiania (strzałki,
  *      R / Q / E odbija, OK stawia, Anuluj wraca), ale za darmo: bez materiałów, bez sił, bez placu budowy
  *      i młotka - budynek od razu stoi gotowy (zagroda od razu ze zwierzętami). Nie trzeba oczyszczać
@@ -114,7 +123,7 @@
     // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
     const KINDS = ["Narzędzia i broń", "Surowce", "Jedzenie"];
     const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
-    const RAW_FOOD = [94, 98, 157, 159, 161];   // raw hare, fish, deer, boar, wolf: food still to be cooked
+    const RAW_FOOD = [94, 98, 157, 159, 161, 168];   // raw hare, fish, deer, boar, wolf, bear: food still to be cooked
     function kindOf(item) {
         if (item.itypeId === 2 || TOOL_EXTRA.includes(item.id)) return 0;   // (the database's key items: tools, weapons, the shield, clothes, the tent)
         const m = item.meta || {};
@@ -130,6 +139,23 @@
 
     const heroLookLabel = () => "Nowa postać: " + (window.HeroLook && HeroLook.active() ? "włączona" : "wyłączona (stary Reid)");
     const layersLabel = () => "Warstwy z regionów: " + (window.RegionLayers && RegionLayers.overlay ? "ukryj kolory" : "pokaż kolory (1 zielony, 2 czerwony, 3 niebieski)");
+    // Underground.js: go to a floor (0 = Ruiny Zamku, every 10th made by hand, 100 = the Heart's chamber); ←→ change the floor
+    const ugFloorName = f => {
+        const d = window.Underground_Data, hm = d && d.FLOORS && d.FLOORS[f];
+        return f === 0 ? " (Ruiny Zamku)" : hm ? " (" + hm.name + ")" : "";
+    };
+    const ugFloorLabel = f => "Podziemia: piętro " + f + ugFloorName(f) + "   ←→ zmień (Shift: o 10), OK idź";
+    const ugGateLabel = () => "Podziemia: zejście z piwnicy " + (window.Underground && Underground.isOpen() ? "otwarte (zamknij)" : "zamknięte (otwórz)");
+    const ugLocksLabel = () => "Podziemia: zamki Serca na próbę " + (window.Underground && Underground.state().forceLocks.all ? "włączone (wyłącz)" : "wyłączone (włącz)");
+    const ugLiftsLabel = () => "Podziemia: wszystkie przystanki windy" + (window.Underground && Underground.liftStops().length >= 9 ? " (już działają)" : "");
+    // Creatures.js (combat stage 4): a creature of the ruins / a boss of the underground a few tiles away; ←→ choose which
+    const crKeys = kind => (window.Creatures ? Object.keys(kind === "cr_boss" ? Creatures.BOSSES : Creatures.KINDS) : []);
+    const crLabel = (kind, i) => {
+        const key = crKeys(kind)[i] || "";
+        if (kind === "cr_boss") { const b = Creatures.BOSSES[key] || {}; return "Boss podziemi: " + b.name + " (piętro " + b.floor + ")   ←→ zmień, OK przywołaj"; }
+        const k = Creatures.KINDS[key] || {};
+        return "Stwór z ruin: " + (k.plural ? k.plural + " (rój)" : k.name) + "   ←→ zmień, OK przywołaj";
+    };
     // every row of the menu, each with its tab: 0 the events, 1 the buildings, 2 the items
     function allRows() {
         const rows = [
@@ -154,9 +180,25 @@
         if (window.Hunting && Hunting.SPECIES.boar) rows.push({ tab: 0, kind: "boar", label: "Dzik w pobliżu", icon: 416 });   // Hunting.js: one boar a few tiles away
         if (window.Hunting && Hunting.SPECIES.wolf) rows.push({ tab: 0, kind: "wolves", label: "Wataha wilków (3)", icon: 416 });   // Hunting.js: a pack a few tiles away
         if (window.Hunting && Hunting.SPECIES.deer) rows.push({ tab: 0, kind: "deer", label: "Jeleń w pobliżu", icon: 420 });   // Hunting.js: a deer a few tiles away (any hour)
+        if (window.Hunting && Hunting.SPECIES.bear) rows.push({ tab: 0, kind: "bear", label: "Niedźwiedź w pobliżu", icon: $dataItems[170] ? $dataItems[170].iconIndex : 416 });   // Hunting.js: a bear 7-10 tiles away (any hour)
+        if (window.Humans) {   // Humans.js (combat stage 3): men a few tiles away, an ambush, a camp at night
+            rows.push({ tab: 0, kind: "h_bandit", label: "Bandyta w pobliżu", icon: $dataItems[156] ? $dataItems[156].iconIndex : 418 },
+                { tab: 0, kind: "h_knifer", label: "Nożownik w pobliżu", icon: $dataItems[91] ? $dataItems[91].iconIndex : 347 },
+                { tab: 0, kind: "h_archer", label: "Łucznik w pobliżu", icon: $dataItems[126] ? $dataItems[126].iconIndex : 386 },
+                { tab: 0, kind: "h_mercenary", label: "Najemnik w pobliżu", icon: $dataItems[155] ? $dataItems[155].iconIndex : 417 },
+                { tab: 0, kind: "h_ambush", label: "Zasadzka (2 bandytów i łucznik)", icon: 76 },
+                { tab: 0, kind: "h_camp", label: "Obóz bandytów (noc)", icon: 64 },
+                { tab: 0, kind: "h_raid", label: "Napad na śpiącego (bandyci)", icon: 64 });
+        }
+        if (window.Creatures) rows.push({ tab: 0, kind: "cr_kind", pick: 0, label: crLabel("cr_kind", 0), icon: 189 },   // Creatures.js: one of the 8 kinds
+            { tab: 0, kind: "cr_boss", pick: 0, label: crLabel("cr_boss", 0), icon: 189 });   // a boss (the guardian, floors 20-90)
         if (window.Combat) rows.push({ tab: 0, kind: "xp", label: "+200 doświadczenia", icon: 87 });   // Combat.js: to try the levels
         if (window.HeroLook) rows.push({ tab: 0, kind: "herolook", label: heroLookLabel(), icon: 84 });   // HeroLook.js: the new hero, on trial
         if (window.RegionLayers) rows.push({ tab: 0, kind: "layers", label: layersLabel(), icon: 190 });   // RegionLayers.js: the painted regions 1-3 in colour over the map
+        if (window.Underground) rows.push({ tab: 0, kind: "underground", floor: 1, label: ugFloorLabel(1), icon: 189 },   // Underground.js: any floor
+            { tab: 0, kind: "ugGate", label: ugGateLabel(), icon: 195 },   // the grate in the tavern's cellar (switch 11) on / off
+            { tab: 0, kind: "ugLocks", label: ugLocksLabel(), icon: 195 },   // the Heart's three locks known without the quests (W2-W4)
+            { tab: 0, kind: "ugLifts", label: ugLiftsLabel(), icon: 189 });  // every stop of the lift (floors 10-90) working
         if (window.Farming && Farming.startFreePlacement) {   // every building of Farming.js, put down free and finished
             for (const [type, def] of Object.entries(Farming.BUILDINGS)) {
                 const iconItem = Farming.itemOf(def.pack || def.cost[0][0]);
@@ -277,6 +319,21 @@
     };
     Window_DebugList.prototype.changeQty = function(delta) {
         const row = this.rowData();
+        if (row && row.kind === "underground") {   // (the floor to go to: 0-100; Shift: 10 at a time)
+            row.floor = (row.floor + delta * (Input.isPressed("shift") ? 10 : 1) + 101 * 10) % 101;
+            row.label = ugFloorLabel(row.floor);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && (row.kind === "cr_kind" || row.kind === "cr_boss")) {   // (which creature / boss)
+            const n = crKeys(row.kind).length || 1;
+            row.pick = (row.pick + delta + n) % n;
+            row.label = crLabel(row.kind, row.pick);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
         if (!row || row.kind !== "item") return;
         row.qty = Math.max(1, Math.min(999, row.qty + delta));
         SoundManager.playCursor();
@@ -390,14 +447,36 @@
         } else if (row.kind === "birds" || row.kind === "raid") {
             this.popScene();   // started once the map is back (Birds.js needs its sprites)
             Birds.pending = row.kind;
-        } else if (row.kind === "boar" || row.kind === "wolves" || row.kind === "deer") {
+        } else if (row.kind === "boar" || row.kind === "wolves" || row.kind === "deer" || row.kind === "bear") {
             this.popScene();   // spawned once the map is back
             Hunting.pending = row.kind;
+        } else if (/^h_/.test(row.kind)) {   // Humans.js: spawned once the map is back
+            this.popScene();
+            Humans.pending = row.kind.slice(2);
+        } else if (row.kind === "cr_kind" || row.kind === "cr_boss") {   // Creatures.js: spawned once the map is back
+            this.popScene();
+            Creatures.pending = crKeys(row.kind)[row.pick];
         } else if (row.kind === "xp") {
             Combat.gainXp(200, "F9");
         } else if (row.kind === "herolook") {   // the new hero on and off (the menu stays: the row says which)
             HeroLook.setActive(!HeroLook.active());
             row.label = heroLookLabel();
+            this._list.redrawItem(this._list.index());
+        } else if (row.kind === "underground") {   // Underground.js: to that floor's stairs (the gate does not matter here)
+            Underground.go(row.floor);
+            this.popScene();
+        } else if (row.kind === "ugGate") {
+            if (Underground.isOpen()) Underground.close(); else Underground.open();
+            row.label = ugGateLabel();
+            this._list.redrawItem(this._list.index());
+        } else if (row.kind === "ugLocks") {   // (the menu stays: the row says which)
+            Underground.forceLock("all", !Underground.state().forceLocks.all);
+            row.label = ugLocksLabel();
+            this._list.redrawItem(this._list.index());
+        } else if (row.kind === "ugLifts") {
+            for (const f of window.Underground_Data.LIFT.stops) Underground.state().lifts[f] = true;
+            Underground.lift(true);
+            row.label = ugLiftsLabel();
             this._list.redrawItem(this._list.index());
         } else if (row.kind === "layers") {   // the regions' colours on and off (the menu stays: the row says which)
             RegionLayers.overlay = !RegionLayers.overlay;

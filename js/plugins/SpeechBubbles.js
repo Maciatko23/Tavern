@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Rozmowy w dymkach: tekst wiadomości w dymku nad postacią, która mówi, a w rozmowie z postacią z popiersiem - popiersia w rogach ekranu i dymek z popiersia mówiącego. Krótkie okrzyki postaci. v1.2.0
+ * @plugindesc Rozmowy w dymkach: tekst wiadomości w dymku nad postacią, która mówi, a w rozmowie z postacią z popiersiem - popiersia w rogach ekranu i dymek z popiersia mówiącego. Krótkie okrzyki postaci. v1.3.0
  * @author Claude
  * @base TawernaCore
  * @base TawernaUI
@@ -48,7 +48,8 @@
  *  - postać z arkusza RTP Actor1-3 / People1-4 (także nasze kopie _Tall)
  *    o indeksie i ma obrazek <Arkusz>_<i+1>, np. People3_Tall 4 -> People3_5;
  *  - postacie z własnych arkuszy według tabeli w tej wtyczce (BUSTS),
- *    np. dziadek Stach ($Npc_Dziadek) -> Stach_Bust;
+ *    np. dziadek Stach ($Npc_Dziadek) -> Stach_Bust, mieszkańcy miasteczka
+ *    i Podgrodzia, Lord i jego ludzie ($Npc_Soltys -> Soltys_Bust itd.);
  *  - znacznik w notatce zdarzenia albo w komentarzu na jego stronie:
  *      <Bust:Nazwa>      popiersie img/pictures/Nazwa.png
  *      <Bust:none>       bez popiersia (zwykły dymek nad głową)
@@ -114,7 +115,12 @@
     };
     const RTP_BUST = /^(Actor[1-3]|People[1-4])_[1-8]$/;        // the RTP busts in img/pictures (all there)
     const RTP_SHEET = /^(Actor[1-3]|People[1-4])(?:_Tall)?$/;   // their map sheets (_Tall: our stretched copies)
-    const BUSTS = { "$Npc_Dziadek:0": "Stach_Bust" };          // "sheet:index" -> bust, for sheets of our own
+    // "sheet:index" -> bust, for sheets of our own: grandpa, then the residents (TownLife; RTP busts repainted by
+    // tools/busts/make_<key>.py, 2026-10-06 - a file not there means no bust, the bubble over the head as before)
+    const BUSTS = { "$Npc_Dziadek:0": "Stach_Bust" };
+    ["Kowal", "Piekarka", "Woziwoda", "Kapral", "Dzwonnik", "Kupiec", "Soltys", "Garbarz", "Feliks", "Lord", "Kamerdyner",
+        "Straznik", "Bronek", "Zosia", "Ludmila", "Ela", "Rafal", "Praczka", "Franek", "Drwal", "Klusownik", "Znachorka",
+        "Szmaciarz", "Uchodzca", "Zebrak", "Zlodziej", "Gracz", "Bartek", "Woznica"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
     const HERO_BUST = "Hero_Bust";                              // the hero while HeroLook's peasant look is on
     const FACES_RIGHT = new Set();                              // busts drawn facing right (the RTP ones face left)
     const HERO_NAME = "Ty";
@@ -221,6 +227,8 @@
     // ------------------------------------------------------------------
     function spriteOf(ch) {
         const set = SceneManager._scene && SceneManager._scene._spriteset;
+        // (a character with a sprite of its own in the tilemap - RoamingActor: the men of Humans.js, the creatures of Creatures.js)
+        if (ch && ch._sprite && ch._sprite._character === ch && ch._sprite.parent) return ch._sprite;
         return set && set._characterSprites ? set._characterSprites.find(s => s._character === ch) : null;
     }
     function layerOffset() {
@@ -888,7 +896,7 @@
         if (!ch || !text) return;
         text = String(text);
         for (const b of barks) if (b.ch === ch && b.t < b.life - BARK.fadeOut) b.t = b.life - BARK.fadeOut;   // the speaker's last cry goes
-        barks.push({ ch, text, t: 0, life: frames || Math.min(360, 150 + text.length * 5) });
+        barks.push({ ch, text, t: 0, life: frames || Math.min(360, 150 + text.length * 5), map: window.$gameMap ? $gameMap.mapId() : 0 });
         log.push(text);
         if (log.length > 20) log.shift();
     }
@@ -906,7 +914,9 @@
         Sprite.prototype.update.call(this);
         for (const b of barks.slice()) {
             b.t++;
-            const gone = b.t >= b.life || (b.ch !== $gamePlayer && !$gameMap.events().includes(b.ch));
+            // (a character that is not an event - a man of Humans.js, a creature of Creatures.js - speaks while it lives on this map)
+            const lost = b.ch instanceof Game_Event ? !$gameMap.events().includes(b.ch) : !!b.ch._dead || b.map !== $gameMap.mapId();
+            const gone = b.t >= b.life || (b.ch !== $gamePlayer && lost);
             let s = this._shown.get(b);
             if (gone) {
                 barks.splice(barks.indexOf(b), 1);

@@ -130,6 +130,7 @@
                 { id: "roast_deer", name: "Upiecz mięso jelenia", doing: "Trwa pieczenie", inputs: [[ITEM.rawDeer, 1]], output: [ITEM.roastDeer, 1], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Kawał dziczyzny nad żarem, trzy kwadranse przy ogniu. Syci dłużej niż zając." },
                 { id: "roast_boar", name: "Upiecz mięso dzika", doing: "Trwa pieczenie", inputs: [[ITEM.rawBoar, 1]], output: [ITEM.roastBoar, 1], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Tłusty kawał dzika nad żarem, trzy kwadranse przy ogniu. Syci najdłużej." },
                 { id: "roast_wolf", name: "Upiecz mięso wilka", doing: "Trwa pieczenie", inputs: [[ITEM.rawWolf, 1]], output: [ITEM.roastWolf, 1], hours: 0.5, stamina: 1, startSe: "Fire2", desc: "Żylaste mięso wilka nad żarem, pół godziny przy ogniu." },
+                { id: "roast_bear", name: "Upiecz mięso niedźwiedzia", doing: "Trwa pieczenie", inputs: [[ITEM.rawBear, 1]], output: [ITEM.roastBear, 1], hours: 1, stamina: 1, startSe: "Fire2", desc: "Ciemne, tłuste mięso niedźwiedzia piecze się długo - godzinę przy ogniu. Syci jak nic innego z ogniska." },
                 { id: "roast_meat", name: "Upiecz mięso zająca", doing: "Trwa pieczenie", inputs: [[ITEM.rawMeat, 1]], output: [ITEM.roastMeat, 1], hours: 0.5, stamina: 1, startSe: "Fire2", desc: "Kawał zająca nad żarem, pół godziny przy ogniu. Syci na kilka godzin." },
                 { id: "roast_fish", name: "Upiecz rybę", doing: "Trwa pieczenie", inputs: [[ITEM.fish, 1]], output: [ITEM.roastFish, 1], hours: 0.5, stamina: 1, startSe: "Fire2", desc: "Ryba nad ogniem, pół godziny przy ogniu." },
                 { id: "potatoes", name: "Upiecz ziemniaki", doing: "Trwa pieczenie", inputs: [[ITEM.potato, 2]], output: [ITEM.bakedPotato, 2], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Ziemniaki upieczone w żarze, trzy kwadranse przy ogniu." },
@@ -276,17 +277,23 @@
         tannery: { name: "Garbarnia", cost: [[ITEM.planks, 4], [ITEM.rope, 2], [ITEM.stone, 2]], w: 3, h: 2, stamina: 10, hits: 30, image: "Farm_Tannery_L", legacy: { w: 2, h: 1, image: "Farm_Tannery" },
             recipes: [
                 { id: "tan", name: "Wyprawiaj skórę", doing: "Trwa wyprawianie", inputs: [[ITEM.rawHide, 1], [ITEM.branch, 3]], output: [ITEM.hide, 1], hours: 12, stamina: 2, startSe: "Liquid", desc: "Skóra moczy się w garbniku z kory i gałęzi." },
+                // (stage 2 of the fight, 2026-10-05: the bear's fur - one big skin gives three tanned ones)
+                { id: "tan_bear", name: "Wyprawiaj skórę niedźwiedzia", doing: "Trwa wyprawianie", inputs: [[ITEM.bearHide, 1], [ITEM.branch, 5]], output: [ITEM.hide, 3], hours: 18, stamina: 4, startSe: "Liquid",
+                    desc: "Wielka, gruba skóra niedźwiedzia długo moczy się w garbniku. Wychodzą z niej trzy kawały wyprawionej skóry - albo sprzedaj ją w całości, jest cenna." },
                 { id: "boots", name: "Zszyj buty", inputs: [[ITEM.hide, 2], [ITEM.rope, 1]], output: [ITEM.boots, 1], manual: true, unique: true, hours: 2, stamina: 4, startSe: "Item1", desc: "Mocne buty: chodzisz w nich szybciej." },
                 { id: "backpack", name: "Zszyj plecak", inputs: [[ITEM.hide, 3], [ITEM.rope, 2]], output: [ITEM.backpack, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1", desc: "Skórzany plecak: zmieścisz w nim więcej." },
                 { id: "cloak", name: "Uszyj płaszcz", inputs: [[ITEM.hide, 2], [ITEM.wool, 4], [ITEM.rope, 1]], output: [ITEM.cloak, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1", desc: "Ciepły płaszcz. Zimą nie marzniesz." },
                 { id: "tent", name: "Zszyj namiot", inputs: [[ITEM.hide, 4], [ITEM.rope, 3], [ITEM.wood, 4]], output: [ITEM.tent, 1], manual: true, unique: true, alsoBuilt: "tent", hours: 4, stamina: 8, startSe: "Item1",
                     desc: "Skóry napięte na czterech żerdziach i zszyte liną. Rozstawisz go tam, gdzie chcesz spać, a rano złożysz i zabierzesz ze sobą." },
+                // the armour (stage 2 of the fight): worn as the shield is - in the bag (Combat_Fight.js ARMORS), worn out by the blows (Durability.js)
+                { id: "jacket", name: "Uszyj skórzaną kurtkę", inputs: [[ITEM.hide, 3], [ITEM.sinew, 2], [ITEM.rope, 1]], output: [ITEM.jacket, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1",
+                    desc: "Gruba kurtka z trzech wyprawionych skór, szwy zaciągnięte ścięgnami. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie." },
                 // improve: makes something better instead of a new item (Farming.js IMPROVE) - the waterskin holds 8 sips instead of 4 (Needs.js);
                 // the waterskin itself is needed (tool) and stays the same item. result: what the menu says it gives
                 { id: "skin_big", name: "Powiększ bukłak", inputs: [[ITEM.hide, 1], [ITEM.sinew, 2]], output: [ITEM.skin, 1], manual: true, tool: ITEM.skin, improve: "skin", result: "większy bukłak (8 łyków)",
                     hours: 2, stamina: 3, startSe: "Item1", swing: "crouch", desc: "Doszywasz do bukłaka drugą wyprawioną skórę, a szwy zaciągasz ścięgnami: zmieści 8 łyków wody zamiast 4. Zostaje tym samym bukłakiem." }
             ],
-            desc: "Wyprawia skóry, a ze skór szyje buty, plecak, płaszcz i namiot, i powiększa bukłak." },
+            desc: "Wyprawia skóry (także niedźwiedzią), a ze skór szyje buty, plecak, płaszcz, namiot i skórzaną kurtkę, i powiększa bukłak." },
         // The bucket: forged at the forge (recipe bucket_item) and put down ready from the bag, like the tent; it collects rain
         // (rain.rate portions per hour of rain, up to rain.max) and goes back into the bag (pack) with its water. The well needs one.
         bucket: { name: "Wiadro", anywhere: true, cost: [[ITEM.bucket, 1]], w: 1, stamina: 2, image: "Farm_Bucket", imageFull: "Farm_Bucket_Full", instant: true, pack: ITEM.bucket,
@@ -457,7 +464,9 @@
             159: { raw: true, spoil: 60, dog: 40, tame: 5 },                                                                // Surowe mięso dzika
             160: { stamina: 55, buff: "sated", hours: 4, fed: 60, water: 0, spoil: 120, dog: 45, tame: 6 },                 // Pieczone mięso dzika
             161: { raw: true, spoil: 60, dog: 40, tame: 7 },                                                                // Surowe mięso wilka
-            162: { stamina: 35, buff: "sated", hours: 3, fed: 40, water: 0, spoil: 120, dog: 45, tame: 8 }                  // Pieczone mięso wilka
+            162: { stamina: 35, buff: "sated", hours: 3, fed: 40, water: 0, spoil: 120, dog: 45, tame: 8 },                 // Pieczone mięso wilka
+            168: { raw: true, spoil: 60, dog: 40, tame: 13 },                                                               // Surowe mięso niedźwiedzia
+            169: { stamina: 60, buff: "sated", hours: 5, fed: 70, water: 0, spoil: 120, dog: 45, tame: 14 }                 // Pieczone mięso niedźwiedzia
         };
         const DOG_DEFAULT = 10, FED_FROM_STAMINA = 0.8;
         const EAT_KEYS = ["stamina", "buff", "hours", "buff2", "hours2", "fed", "water"];

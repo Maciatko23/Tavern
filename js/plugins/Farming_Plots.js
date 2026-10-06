@@ -513,9 +513,11 @@
     // ---- a well that gives little (the town's market well - user 2026-10-05: "studnia daje, ale mało", the sołtys rations it): an
     // event with <Studnia:N> in its note lets the hero draw N times a day - a drink, the waterskin, the can, the bucket: one draw each.
     // Its page runs Farming.rationWell(this). The day's draws in the farm state (per map and event name - a well of two events counts once).
+    // (+ TownQuests.wellBonus: the town's quests may give the well more - W1, the sluice half open: one draw a day more)
     function rationOf(ev) {
         const m = ev && ev.event().note && /<Studnia:\s*(\d+)\s*>/i.exec(ev.event().note);
-        return m ? { key: $gameMap.mapId() + ":" + ev.event().name, max: Number(m[1]), name: ev.event().name } : null;
+        const more = m ? Math.max(0, Math.floor(Number(T.call("TownQuests", "wellBonus", $gameMap.mapId(), ev.event().name)) || 0)) : 0;
+        return m ? { key: $gameMap.mapId() + ":" + ev.event().name, max: Number(m[1]) + more, name: ev.event().name } : null;
     }
     function rationLeft(r) {
         const rec = (farm().rations || {})[r.key];

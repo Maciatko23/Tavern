@@ -1,0 +1,52 @@
+22 test(s), CDP port 9465, one at a time, one shared browser
+
+creatures_test                       52/52  ok       123 s   before: 50/52 FAIL
+humans_test                          52/52  ok        37 s   before: 51/52 FAIL
+combat_test                          42/42  ok        20 s   before: 42/42 ok
+stage1_test                          50/50  ok        39 s   before: 50/50 ok
+bear_test                            25/25  ok        18 s   before: 25/25 ok
+sneak_attack_test                    11/11  ok         4 s   before: 11/11 ok
+skills_test                          13/13  ok         5 s   before: 13/13 ok
+hero_menu_test                       36/36  ok        16 s   before: 36/36 ok
+debug_menu_test                      48/48  ok        18 s   before: 48/48 ok
+sleep_danger_test                      7/7  ok        15 s   before: 7/7 ok
+underground_test                     59/59  ok       133 s   before: 59/59 ok
+smoke/fixtures                       13/13  ok        26 s   before: 13/13 ok
+smoke/story                            9/9  ok        12 s   before: 9/9 ok
+smoke/farm                           12/12  ok        14 s   before: 12/12 ok
+wolves_test                          11/11  ok        11 s   before: 11/11 ok
+needs_test                           55/56  FAIL      16 s   before: 56/56 ok
+    FAIL Głodujesz: ceiling 55
+journal_test                         28/28  ok        28 s   before: 28/28 ok
+menu_panel_test                      21/21  ok        15 s   before: 21/21 ok
+tavern_interior_test                 14/14  ok        13 s   before: 14/14 ok
+quest_board_test                     57/57  ok        24 s   before: 57/57 ok
+bubbles_test                         11/11  ok        24 s   before: 11/11 ok
+home_decor_test                      43/43  ok        25 s   before: 43/43 ok
+
+test                               result   status   time  tries  before
+------------------------------------------------------------------------------------
+creatures_test                       52/52  ok       123 s  1      50/52 FAIL
+humans_test                          52/52  ok        37 s  1      51/52 FAIL
+combat_test                          42/42  ok        20 s  1      42/42 ok
+stage1_test                          50/50  ok        39 s  1      50/50 ok
+bear_test                            25/25  ok        18 s  1      25/25 ok
+sneak_attack_test                    11/11  ok         4 s  1      11/11 ok
+skills_test                          13/13  ok         5 s  1      13/13 ok
+hero_menu_test                       36/36  ok        16 s  1      36/36 ok
+debug_menu_test                      48/48  ok        18 s  1      48/48 ok
+sleep_danger_test                      7/7  ok        15 s  1      7/7 ok
+underground_test                     59/59  ok       133 s  1      59/59 ok
+smoke/fixtures                       13/13  ok        26 s  1      13/13 ok
+smoke/story                            9/9  ok        12 s  1      9/9 ok
+smoke/farm                           12/12  ok        14 s  1      12/12 ok
+wolves_test                          11/11  ok        11 s  1      11/11 ok
+needs_test                           55/56  FAIL      16 s  1      56/56 ok
+journal_test                         28/28  ok        28 s  1      28/28 ok
+menu_panel_test                      21/21  ok        15 s  1      21/21 ok
+tavern_interior_test                 14/14  ok        13 s  1      14/14 ok
+quest_board_test                     57/57  ok        24 s  1      57/57 ok
+bubbles_test                         11/11  ok        24 s  1      11/11 ok
+home_decor_test                      43/43  ok        25 s  1      43/43 ok
+
+SUITES: 21 clean, 1 with a FAIL/ERR line  (time: 10 min 38 s)

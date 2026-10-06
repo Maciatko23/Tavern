@@ -40,7 +40,7 @@
     if (P.ai) return;   // (put into the page twice: kept as it was)
     if (!P.core || !P.path) throw new Error("Hunting_AI.js: musi być pod Hunting.js i Hunting_Path.js na liście wtyczek (one of them is missing or below)");
     const { ITEM, SPECIES, WOLF, EDGE, DIRS8, STEP, VEC_DIR, DIR_VEC, perk, se, popup, C, activeNow, updateAwareness, updateMark, onScreen, tally, tallyGone,
-        removeAnimal, packs, roamingCanStep, roamingStep, roamingFleeDirection } = P.core;
+        removeAnimal, packs, roamingCanStep, roamingStep, roamingFleeDirection, hunt } = P.core;
     const { STUCK, pathGrid, gridStep8, gridOpen, clearLine, lineDir, rayClear, search8, searchBudget, costAt, avoidList, path8, takeStep, stalled, detour,
         heroField, unstall, escapeSpot } = P.path;
 
@@ -91,6 +91,7 @@
         this._lureSnare = null;
         this._lureCd = 0;        // frames it keeps away from snares after a fright at one
         this._unstickT = Math.floor(Math.random() * STUCK.unstick);   // (see unstick; not all on the same frame)
+        this._home = { x, y };   // where it came out (the bear does not follow the hero far from it: BEAR_AI.leash)
         this.setImage(sp.sheet, 0);
         this.setPosition(x, y);
         this.setDirection([2, 4, 6, 8][Math.floor(Math.random() * 4)]);
@@ -161,13 +162,16 @@
         if (++this._poiseT > 120 && this._poise < this._maxPoise) this._poise = Math.min(this._maxPoise, this._poise + this._maxPoise / 90);
         if (!this._dead) updateAwareness(this, this.centerX(), this.centerY(), SPECIES[this._kind].sight);
         const sprite = this._sprite;   // (its height only once the sheet has loaded)
-        const calm = this._mode === "roam" || this._mode === "warn" || this._mode === "windup" || this._mode === "approach";   // (no mark while a boar charges, backs off or reels)
-        const markY = SPECIES[this._kind].markY, windup = this._mode === "windup";
+        // (no mark while a boar charges, backs off or reels; a bear drawing its paw back or rearing for the leap shows the "!" - the telegraph)
+        const windup = this._mode === "windup" || this._mode === "swipeWind" || this._mode === "pinWind";
+        const calm = this._mode === "roam" || this._mode === "warn" || this._mode === "approach" || windup;
+        const markY = SPECIES[this._kind].markYTall && (this._mode === "warn" || this._mode === "pinWind" || this._mode === "swipeWind") ? SPECIES[this._kind].markYTall : SPECIES[this._kind].markY;
         if (sprite && sprite.bitmap && sprite.bitmap.isReady()) updateMark(this, sprite, markY !== undefined ? markY : -sprite.patternHeight() - 2, this._fleeing || !calm || this._stun > 0 ? 0 : windup ? 1 : this._aware);
         if (this._frozen || this._dead) return;
         if (this._stun > 0) { if (--this._stun === 0) this.afterStun(); return; }
         if (++this._unstickT >= STUCK.unstick && !this.isMoving() && !this.isJumping()) { this._unstickT = 0; this.unstick(); }
         if (SPECIES[this._kind].pack) { this.updateWolf(); return; }
+        if (SPECIES[this._kind].bear) { this.updateBear(); return; }
         if (SPECIES[this._kind].aggressive) { this.updateBoar(); return; }
         if (this.isMoving()) return;
         this.think();
@@ -349,15 +353,22 @@
         this._modeT = frames || 0;
         this._fleeing = mode === "flee";
         this._commit = null;
-        const sheet = (mode === "stalk" || mode === "close") && sp.stalk ? sp.stalk : mode === "windup" && sp.bark ? sp.bark : running && sp.run ? sp.run : sp.sheet;
+        // (a pose of its own for the mode - the bear rearing up, striking, leaping: sp.poses)
+        const pose = sp.poses && sp.poses[mode];
+        const sheet = pose ? pose : (mode === "stalk" || mode === "close") && sp.stalk ? sp.stalk : mode === "windup" && sp.bark ? sp.bark : running && sp.run ? sp.run : sp.sheet;
         if (this.characterName() !== sheet) this.setImage(sheet, 0);
-        this.setStepAnime(mode === "windup");   // (the bark plays standing still)
-        this.setMoveSpeed(mode === "charge" || mode === "overshoot" ? sp.charge : running ? sp.flee : mode === "approach" && sp.trot ? sp.trot : sp.speed);
+        this.setStepAnime(mode === "windup" || !!pose);   // (the bark plays standing still; so does a pose on the old 4-way sheets)
+        this.setMoveSpeed(mode === "charge" || mode === "overshoot" ? sp.charge : running ? sp.flee : (mode === "approach" || mode === "chase") && sp.trot ? sp.trot : sp.speed);
+        // the bear plants its feet for a blow or a leap: the step it was in the middle of is finished at once (a quick step in), not
+        // glided a whole tile on under the still frames of the pose (2026-10-06; it ends where it would have, so the reach is the same)
+        if (sp.bear && (mode === "swipeWind" || mode === "pinWind")) this.setMoveSpeed(5);
+        this._modeLen = this._modeT;   // (the whole of a timed mode: a pose's frame goes by how much of it is gone - look8Col)
     };
-    // its balance is back after reeling: a boar snorts and comes again, a wolf goes back to the ring
+    // its balance is back after reeling: a boar snorts and comes again, a wolf goes back to the ring, a bear comes on
     Game_Animal.prototype.afterStun = function() {
         this._poise = this._maxPoise;
         if (SPECIES[this._kind].pack) this.setMode("stalk");
+        else if (SPECIES[this._kind].bear) { if (this._mode !== "flee") { this.setMode("chase"); this._gapT = 20; } }
         else if (SPECIES[this._kind].aggressive && this._mode !== "flee") this.setMode("warn", 20);
     };
     // the hero parried its attack (Combat.js): it reels a long moment and is thrown back
@@ -559,6 +570,7 @@
     // a hit that did not kill it: a spear jab throws it back (it comes again after a moment), anything else makes it charge at once
     function enrage(animal, how) {
         if (SPECIES[animal.kind()].pack) { wolfEngage(animal); return; }
+        if (SPECIES[animal.kind()].bear) { bearEnrage(animal); return; }
         if (animal._hp <= animal._maxHp * 0.15) { animal.setMode("flee"); return; }
         if (how === "melee") {   // (Combat.js: its balance decides whether it reels; otherwise it turns on the hero quickly)
             if (animal._stun <= 0 && (animal._mode === "roam" || animal._mode === "warn")) { animal.setMode("warn", 16); animal.turnTowardCharacter($gamePlayer); snort(animal, 80); }
@@ -585,14 +597,17 @@
         if (animal.isJumping()) return;
         if ((bx || by) && animal.canPass(animal._x, animal._y, d)) animal.jump(bx, by); else animal.jump(0, 0);
     }
-    // the modes of an attack under way: a boar's charge, a wolf going round to a clear leap, its bark, its leap
-    const ATTACKING = { charge: true, close: true, windup: true, lunge: true };
+    // the modes of an attack under way: a boar's charge, a wolf going round to a clear leap, its bark, its leap; a bear drawing back its
+    // paw, striking, rearing for the pin, leaping
+    const ATTACKING = { charge: true, close: true, windup: true, lunge: true, swipeWind: true, swipe: true, pinWind: true };
     // its balance is gone: it reels (does nothing) for a while; an attack it was about to make is off
     function stagger(animal, knock) {
-        animal._stun = SPECIES[animal.kind()].stun || 50;
+        const sp = SPECIES[animal.kind()];
+        animal._stun = sp.stun || 50;
         animal._poise = 0;
         if (animal._pack && animal._pack.attacker === animal) { animal._pack.attacker = null; animal._pack.nextAttack = 60; }
-        if (ATTACKING[animal._mode]) animal.setMode(SPECIES[animal.kind()].pack ? "stalk" : "warn", 0);
+        if (ATTACKING[animal._mode] && !(sp.bear && animal._mode === "lunge" && animal.isJumping())) animal.setMode(sp.pack ? "stalk" : sp.bear ? "chase" : "warn", 0);
+        if (sp.bear) { animal._f8 = 0; if (animal._mode === "warn" || animal._mode === "roam") animal.bearEngage(); }   // (reeling, it is the hero's enemy now)
         if (knock) knockBack(animal);
     }
 
@@ -856,5 +871,365 @@
         se("Wind1", 55, 140);
     };
 
-    P.ai = { BOAR, LURE, Game_Animal, atkOf, makePack, wolfEngage, disengage, gore, enrage, stagger, knockBack, snort, bite };
+    // ------------------------------------------------------------------
+    // The bear (stage 2 of the fight, 2026-10-05). Slow and heavy, it keeps to its corner of the forest (its home: where it came out).
+    // Once it is sure of the hero (the "!") it usually rears up on its hind legs and roars (warn) - his chance to back off: if he is more
+    // than BEAR_AI.calm tiles off when it drops back on all fours, it lets him be (it watches him; only coming within BEAR_AI.engage
+    // tiles starts it again); if he comes within BEAR_AI.engage tiles, or hits it, he is its enemy. Then it comes at him (chase), slower
+    // than he walks, and strikes one of two ways - both shown first (the "!", a pose), both past any shield and any parry: only a roll
+    // (Space) or a step out of the way saves him (Combat.hitPlayer: unblockable, unparryable).
+    //   the paw (swipeWind -> swipe): beside him it draws the paw back (BEAR_AI.swipe.windup frames), then sweeps a cone in front of it -
+    //     the way it faced as it drew back: a roll, or a step out of its reach or aside, and the paw goes through the air;
+    //   the pin (pinWind -> lunge): 2-4 tiles from him it rears up high (longer), then throws itself forward - a short leap at where he
+    //     stood as it left the ground; coming down on him it knocks him flat (BEAR_AI.pin.down frames on the ground) and hurts him badly.
+    // After either it stands a moment (recover) - the opening; after a missed pin a longer one. It reels only when its balance is
+    // broken: the heavy blows and the blows from hiding take it whole, the light ones only BEAR_AI.light of it (Hunting_Weapons.js hit).
+    // It does not follow far: BEAR_AI.leash tiles from its home, or with the hero BEAR_AI.lose tiles away, it turns back home (leave)
+    // and calms down. Once it fights it fights to the death (the user's, 2026-10-05: "walczy do końca" - BEAR_AI.flee 0; a part of its
+    // life there would send it limping off into the forest, like a beaten boar). A fight with it the hero lives through (it went home or
+    // died) counts in _tw.hunt.bears (the journal's goal "Przeżyj spotkanie z niedźwiedziem").
+    // ------------------------------------------------------------------
+    const BEAR_AI = { warnChance: 0.8, warn: 120, calm: 5.5, engage: 3.2, rearAgain: 900, leash: 12, lose: 11, gap: [40, 80], stand: 1.35, pinAfter: 150,
+        swipe: { at: 1.8, reach: 2.1, cone: 0.15, windup: 28, after: 16, recover: 52,   // (windup 28 + SWIPE_HIT 6: the blow lands 34 frames in, as before 2026-10-06)
+                 mult: 1, poise: 55, wound: 0.5, knock: 0.9 },
+        pin: { from: 2.2, to: 3.9, chance: 0.5, windup: 46, leap: 3, hitFrom: 6, hitDist: 1.1, recover: 70, miss: 110, mult: 1.35, down: 70, wound: 0.8 },
+        light: 0.3, flee: 0, roar: { up: 28, down: 22 } };   // roar: the frames it takes to rise for it and to drop back (the warning's sheet)
+    const OCT = { 0: 6, 1: 3, 2: 2, 3: 1, 4: 4, "-4": 4, "-3": 7, "-2": 8, "-1": 9 };   // octant of (dx, dy) (y down) -> numpad
+    const octOf = (dx, dy) => OCT[Math.round(Math.atan2(dy, dx) / (Math.PI / 4))] || 2;
+    const toHero = a => [$gamePlayer._realX + 0.5 - a.centerX(), $gamePlayer._realY + 0.5 - a.centerY()];
+    const bears = () => hunt().bears || (hunt().bears = { met: 0, survived: 0 });
+    function roar(bear, pitch) {
+        const pan = Math.max(-80, Math.min(80, Math.round((bear.centerX() - ($gamePlayer._realX + 0.5)) * 12)));
+        se("Monster5", 90, pitch || 60, pan);
+        se("Growl", 70, 55, pan);
+    }
+    const easeInOut = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+    const SETTLE = 18;          // frames the paw takes back to the stance after the blow (shown in "recover")
+    const SWIPE_HIT = 6;        // frames into the sweep when the paw lands (the blow is dealt then: the picture and the hurt agree)
+    const HIT_STOP = 2;         // frames the bear holds still when the paw lands on him, after the world's own hitstop (Combat: 6) - more felt stiff
+    // how hard it pants (Hunting.js: its breathing sheet plays this much faster) - after a blow it heaves
+    Game_Animal.prototype.breathRate = function() { return this._mode === "recover" ? 1.7 : 1; };
+    // the body thrown into the blow (Hunting.js adds it to the sprite): drawn back a little as it shifts its weight, forward with the
+    // paw, back again while it settles; px in the locked way (shorter up and down the screen)
+    Game_Animal.prototype.lungeOffset = function() {
+        if (!SPECIES[this._kind].bear || !this._lock) return null;
+        const len = Math.max(1, this._modeLen || 1), gone = 1 - Math.max(0, this._modeT) / len;
+        let k = 0;
+        if (this._mode === "swipeWind") k = -4 * easeInOut(Math.max(0, (gone - 0.5) * 2));
+        else if (this._mode === "swipe") k = gone < 0.35 ? -4 + 18 * easeInOut(gone / 0.35) : 14 * (1 - easeInOut((gone - 0.35) / 0.65)) ;
+        else if (this._mode === "recover" && this._settle > 0) k = 0;
+        else return null;
+        return [Math.round(this._lock[0] * k), Math.round(this._lock[1] * k * 0.7)];
+    };
+    // the 8-way facing a pose shows (Hunting.js LOOK8 asks it): towards the hero while it rears or strikes; 0 = from its steps
+    Game_Animal.prototype.face8 = function() { return this._f8 || 0; };
+    // the frame of a pose sheet (cells: how many it has): how far the rearing, the paw or the leap has got
+    Game_Animal.prototype.look8Col = function(cells, look) {
+        const len = Math.max(1, this._modeLen || 1), gone = 1 - Math.max(0, this._modeT) / len, last = cells - 1;
+        if (this._mode === "warn" && look && look.rise) {   // the roar's sheet: up on the hind legs (its first `rise` cells), the roar, down again
+            const up = BEAR_AI.roar.up, down = BEAR_AI.roar.down, t = len - this._modeT, rise = look.rise;
+            if (t < up) return Math.min(rise - 1, Math.floor(t / up * rise));
+            if (this._modeT < down) return Math.max(0, Math.min(rise - 1, Math.floor(this._modeT / down * rise)));
+            return Math.min(last, rise + Math.floor((t - up) / Math.max(1, len - up - down) * (cells - rise)));
+        }
+        if (this._mode === "warn") {   // up on the hind legs in the first third, the roar held, down again in the last 30 frames
+            const down = this._modeT < 30 ? this._modeT / 30 : 1;
+            return Math.round(Math.min(1, gone * 3, down) * last);
+        }
+        if (this._mode === "pinWind") return Math.round(Math.min(1, gone * 1.6) * last);   // rearing up high, held at the top
+        // the paw (2026-10-06, a real strike on all fours): the weight back slowly (eased), the lunge fast, the paw held a moment
+        // where it lands, then (in the first frames of "recover", _settle) back to the stance
+        const back = Math.round(last * 5 / 12), hit = Math.round(last * 9 / 12);
+        if (this._mode === "swipeWind") return Math.round(easeInOut(gone) * back);
+        if (this._mode === "swipe") return back + 1 + Math.round(Math.min(1, gone / 0.55) * (hit - back - 1));
+        if (this._mode === "recover" && this._settle > 0) return this._settleOf === "lunge" ? last : hit + 1 + Math.round((1 - this._settle / SETTLE) * (last - hit - 1));
+        if (this._mode === "lunge") {   // (the sheet starts where the rearing ends: it tips forward at once and is flat out by the top of the leap)
+            const n = this._jumpPeak * 2 || 1;
+            return this.isJumping() ? Math.round(Math.sqrt(Math.min(1, (n - this._jumpCount) / n)) * last) : last;
+        }
+        return undefined;
+    };
+    Game_Animal.prototype.updateBear = function() {
+        if (this._hitStop > 0) { this._hitStop--; return; }   // (the paw landed: everything holds a moment)
+        if (this._settle > 0 && --this._settle === 0 && this._mode === "recover") this.setImage(SPECIES[this._kind].sheet, 0);
+        if (this._modeT > 0) this._modeT--;
+        if (this._gapT > 0) this._gapT--;
+        const dist = this.playerDistance();
+        if (this._mode === "lunge") {   // in the air: it comes down on him, or beside him
+            if (this.isJumping()) {
+                this._lungeT = (this._lungeT || 0) + 1;
+                if (!this._bitten && this._lungeT >= BEAR_AI.pin.hitFrom && dist < BEAR_AI.pin.hitDist) { this._bitten = true; bearPin(this); }
+                return;
+            }
+            if (!this._bitten && dist < BEAR_AI.pin.hitDist) { this._bitten = true; bearPin(this); }
+            T.call("Combat", "sparksAt", this.centerX(), this.centerY() + 0.35, "#9c8260", 12);   // (the dust where it lands)
+            if (!this._pinHit) $gameScreen.startShake(2, 6, 8);
+            this.setMode("recover", this._pinHit ? BEAR_AI.pin.recover : BEAR_AI.pin.miss);
+            // it stays down where it landed a moment (the leap's last frame), then stands - not a frame of its walk first
+            const pose = SPECIES[this._kind].poses && SPECIES[this._kind].poses.lunge;
+            if (pose) { this.setImage(pose, 0); this._settle = SETTLE; this._settleOf = "lunge"; }
+            return;
+        }
+        if (this._mode === "swipeWind") {   // the paw drawn back, the way locked: then the sweep
+            if (this._modeT <= 0) { this.setMode("swipe", BEAR_AI.swipe.after); this._swiped = false; se("Wind7", 70, 80); }
+            return;
+        }
+        if (this._mode === "swipe") {
+            if (!this._swiped && this._modeLen - this._modeT >= SWIPE_HIT) {   // the paw lands now (its frame): the blow
+                this._swiped = true;
+                if (bearSwipe(this)) { this._hitStop = HIT_STOP; $gameScreen.startShake(4, 9, 10); }
+                slashFx(this);
+            }
+            if (this._modeT <= 0) {   // back to the stance on the paw's own frames, then its standing sheet (updateBear: _settle)
+                const pose = SPECIES[this._kind].poses && SPECIES[this._kind].poses.swipe;
+                this.setMode("recover", BEAR_AI.swipe.recover);
+                if (pose) { this.setImage(pose, 0); this._settle = SETTLE; this._settleOf = "swipe"; }
+            }
+            return;
+        }
+        if (this._mode === "pinWind") {   // reared up high, it follows him with its eyes - then the leap
+            const [hx, hy] = toHero(this);
+            this._f8 = octOf(hx, hy);
+            this.turnTowardCharacter($gamePlayer);
+            if (this._modeT <= 0) this.pinLeap();
+            return;
+        }
+        if (this.isMoving() || this.isJumping()) return;
+        this.thinkBear(dist);
+    };
+    Game_Animal.prototype.thinkBear = function(dist) {
+        const sp = SPECIES[this._kind], dx = this._realX - $gamePlayer._realX, dy = this._realY - $gamePlayer._realY;
+        if (BEAR_AI.flee > 0 && this._hp <= this._maxHp * BEAR_AI.flee && this._mode !== "flee") { this.bearOver(); this.setMode("flee"); }
+        if (this._mode === "flee") {   // (only with BEAR_AI.flee above 0) beaten: off into the forest, gone once out of sight (like a beaten boar)
+            this._f8 = 0;
+            if (dist > sp.sight) { this.limpAway(); return; }
+            this._fleeTo = null;
+            if (this.fleeRoute(dx, dy, dist)) return;
+            const d = this.bestEscape(dx, dy);
+            if (d) roamingStep(this, d);
+            return;
+        }
+        if (this._mode === "recover") {   // it stands after a blow (the opening), then comes on
+            if (this._modeT <= 0) { this._f8 = 0; this.setMode("chase"); this._gapT = BEAR_AI.gap[0] + Math.floor(Math.random() * (BEAR_AI.gap[1] - BEAR_AI.gap[0])); this._chaseT = 0; this._wantPin = undefined; }
+            return;
+        }
+        if (this._mode === "warn") {   // up on its hind legs, roaring: back off now, or it comes
+            const [hx, hy] = toHero(this);
+            this._aware = 1;
+            this._f8 = octOf(hx, hy);
+            this.turnTowardCharacter($gamePlayer);
+            if (dist < BEAR_AI.engage) { this.bearEngage(); return; }
+            if (this._modeT <= 0) {
+                if (dist > BEAR_AI.calm) { this._f8 = 0; this.setMode("roam"); this._aware = 0.6; return; }   // he kept away: it lets him be
+                this.bearEngage();
+            }
+            return;
+        }
+        if (this._mode === "leave") {   // back home, calming down (a blow on the way turns it again: bearEnrage)
+            const h = this._home || { x: this._x, y: this._y };
+            if (Math.hypot(this._x - h.x, this._y - h.y) <= 1.5 || (this._leaveT = (this._leaveT || 0) + 1) > 900) {
+                this.setMode("roam"); this._aware = 0.3; this._warnedAt = Graphics.frameCount; return;
+            }
+            const r = path8(this, h.x, h.y, { animal: true, key: "home", near: 1 });
+            if (!takeStep(this, r.dir)) this.wander();
+            if (stalled(this, "home", Math.hypot(this._x - h.x, this._y - h.y), 1, h.x, h.y)) unstall(this);
+            return;
+        }
+        if (this._mode === "chase") { this.chaseBear(dist); return; }
+        // roaming: it notices him - rears up and roars (mostly), or comes at once; warned a moment ago and he keeps away, it watches him
+        if (this._aware >= 1 || (this._alarm > 0 && dist < sp.sight)) {
+            const warned = this._warnedAt !== undefined && Graphics.frameCount - this._warnedAt < BEAR_AI.rearAgain;
+            if (!warned && Math.random() < BEAR_AI.warnChance) { this.bearRear(); return; }
+            if (!warned || dist < BEAR_AI.engage) { this.bearEngage(); return; }
+            this.turnTowardCharacter($gamePlayer);
+            return;
+        }
+        if (this._aware >= 0.3) { this.turnTowardCharacter($gamePlayer); return; }   // it stops and looks
+        if (this._home && Math.hypot(this._x - this._home.x, this._y - this._home.y) > BEAR_AI.leash * 0.6) {   // (a wander keeps near home)
+            const r = path8(this, this._home.x, this._home.y, { animal: true, key: "home", near: 2 });
+            this.setMoveSpeed(sp.speed);
+            if (this._wait > 0) { this._wait--; return; }
+            takeStep(this, r.dir);
+            this._wait = 30 + Math.floor(Math.random() * 60);
+            return;
+        }
+        this.wander();
+    };
+    // up on the hind legs with a roar: the warning
+    Game_Animal.prototype.bearRear = function() {
+        const [hx, hy] = toHero(this);
+        this._warnedAt = Graphics.frameCount;
+        this._f8 = octOf(hx, hy);
+        this.turnTowardCharacter($gamePlayer);
+        this.setMode("warn", BEAR_AI.warn);
+        roar(this, 62);
+        $gameScreen.startShake(1, 4, 20);
+    };
+    // the hero is its enemy now: it comes (a bear met - the journal counts the ones lived through)
+    Game_Animal.prototype.bearEngage = function() {
+        if (!this._met) { this._met = true; bears().met++; }
+        this._engaged = true;
+        this._f8 = 0;
+        this._aware = 1;
+        this.setMode("chase");
+        this._gapT = 24;
+        this._chaseT = 0;
+        this._wantPin = undefined;
+        if (!this._roared) { this._roared = true; roar(this, 70); }
+    };
+    // the fight is over and the hero lives (it went home, ran off, or he killed it): once per bear
+    Game_Animal.prototype.bearOver = function() {
+        const actor = $gameParty.leader();
+        if (!this._met || this._over || !actor || actor.hp <= 0) return;
+        this._over = true;
+        bears().survived++;
+        T.emit("bearSurvived", { animal: this, killed: this._hp <= 0 });
+    };
+    // too far from home, or he got away: back home
+    Game_Animal.prototype.bearLeave = function() {
+        this.bearOver();
+        this._engaged = false;
+        this._f8 = 0;
+        this._leaveT = 0;
+        this.setMode("leave");
+        this._warnedAt = Graphics.frameCount;
+        se("Monster5", 60, 50);
+    };
+    Game_Animal.prototype.chaseBear = function(dist) {
+        const h = this._home || { x: this._x, y: this._y };
+        if (Math.hypot(this._x - h.x, this._y - h.y) > BEAR_AI.leash || dist > BEAR_AI.lose) { this.bearLeave(); return; }
+        this._aware = 1;
+        this._chaseT = (this._chaseT || 0) + 1;
+        if (this._gapT <= 0) {
+            // (once per approach: the pin from a few tiles, or the paw close in - kept off a long while, it leaps all the same)
+            if (this._wantPin === undefined) this._wantPin = Math.random() < BEAR_AI.pin.chance;
+            if (dist <= BEAR_AI.swipe.at) { this.startSwipe(); return; }
+            if ((this._wantPin || this._chaseT > BEAR_AI.pinAfter) && dist >= BEAR_AI.pin.from && dist <= BEAR_AI.pin.to && this.clearRun()) { this.startPin(); return; }
+        }
+        if (dist <= BEAR_AI.stand) { this.turnTowardCharacter($gamePlayer); return; }   // (beside him it does not walk into him)
+        const G = pathGrid(), px = $gamePlayer.x, py = $gamePlayer.y;
+        let d = lineDir(this._x, this._y, px, py);
+        if (!d || !clearLine(G, this._x, this._y, px, py, true)) d = path8(this, px, py, { animal: true, key: "bear", near: 1 }).dir;
+        if (!takeStep(this, d)) this.turnTowardCharacter($gamePlayer);
+        if (stalled(this, "bear", dist, 1)) unstall(this);
+    };
+    // the paw: the way it faces now is locked (a cone that way), the "!" and the drawn-back paw, then the sweep (bearSwipe)
+    Game_Animal.prototype.startSwipe = function() {
+        const [hx, hy] = toHero(this), d = Math.hypot(hx, hy) || 1;
+        this._lock = [hx / d, hy / d];
+        this._f8 = octOf(hx, hy);
+        this.turnTowardCharacter($gamePlayer);
+        this.setMode("swipeWind", BEAR_AI.swipe.windup);
+        const pan = Math.max(-80, Math.min(80, Math.round(-hx * 12)));
+        se("Growl", 85, 60, pan);
+    };
+    // the pin: it rears up high (longer than the paw), then leaps (pinLeap)
+    Game_Animal.prototype.startPin = function() {
+        const [hx, hy] = toHero(this);
+        this._f8 = octOf(hx, hy);
+        this.turnTowardCharacter($gamePlayer);
+        this.setMode("pinWind", BEAR_AI.pin.windup);
+        roar(this, 75);
+    };
+    // the leap: of the tiles within BEAR_AI.pin.leap it can get to along a clear line, the one nearest to where he stands now (his own tile
+    // too) - he has the leap's flight to get out of the way
+    Game_Animal.prototype.pinLeap = function() {
+        const G = pathGrid(), px = $gamePlayer._realX, py = $gamePlayer._realY, R = BEAR_AI.pin.leap, F = T.api("Farming");
+        let lx = 0, ly = 0, best = Math.hypot(this._x - px, this._y - py) - 0.01;
+        for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+            const x = this._x + dx, y = this._y + dy, him = x === $gamePlayer.x && y === $gamePlayer.y, d = Math.hypot(x - px, y - py);
+            if (d >= best || Math.hypot(dx, dy) > R + 0.5 || !$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f) || (F && F.buildingAt(x, y))) continue;
+            if (!(him || gridOpen(G, x, y, true)) || !clearLine(G, this._x, this._y, x, y, true, !him)) continue;
+            best = d;
+            lx = dx;
+            ly = dy;
+        }
+        this._f8 = lx || ly ? octOf(lx, ly) : this._f8;
+        this.setMode("lunge");
+        this._bitten = false;
+        this._pinHit = false;
+        this._lungeT = 0;
+        this.jump(lx, ly);
+        se("Wind1", 70, 70);
+    };
+    // the sweep of the paw: whoever is within its reach and in the cone it locked takes it (no shield, no parry: a roll gets out)
+    function bearSwipe(bear) {
+        const S = BEAR_AI.swipe, [hx, hy] = toHero(bear), d = Math.hypot(hx, hy), [lx, ly] = bear._lock || [0, 1];
+        const pan = Math.max(-80, Math.min(80, Math.round(-hx * 12)));
+        T.call("Combat", "sparksAt", bear.centerX() + lx * 1.1, bear.centerY() + ly * 1.1 - 0.15, "#b49a74", 10);   // (the dust the paw throws up)
+        if (d > S.reach || (d > 0.3 && (hx * lx + hy * ly) / d < S.cone)) return false;   // (out of its reach or beside it: the paw goes through the air)
+        se("Blow2", 85, 70, pan);
+        const Cb = C();
+        if (Cb && Cb.hitPlayer) {
+            Cb.hitPlayer({ damage: Math.round(atkOf(bear) * S.mult), poise: S.poise, from: { x: bear.centerX(), y: bear.centerY() }, attacker: bear, name: "niedźwiedź",
+                wound: S.wound, knock: S.knock, unblockable: true, unparryable: true });
+            return true;
+        }
+        if (typeof $gameSystem.hurt === "function") $gameSystem.hurt(0.3);
+        $gameScreen.startFlash([255, 40, 30, 120], 12);
+        return true;
+    }
+    let slashBmp = null;
+    function slashBitmap() {
+        if (slashBmp) return slashBmp;
+        const b = new Bitmap(112, 112), c = b.context;
+        c.lineCap = "round";
+        for (let i = 0; i < 3; i++) {   // three claws, a dark edge under a pale stroke
+            const r = 30 + i * 9, y0 = 56 + (i - 1) * 3;
+            for (const [w, col] of [[6, "rgba(40,24,14,0.55)"], [3, "rgba(255,246,226,0.95)"]]) {
+                c.lineWidth = w; c.strokeStyle = col;
+                c.beginPath(); c.arc(30, y0, r, -0.95, 0.95); c.stroke();
+            }
+        }
+        b._baseTexture.update();
+        return (slashBmp = b);
+    }
+    function slashFx(bear) {
+        const scene = SceneManager._scene, set = scene && scene._spriteset;
+        if (!set || !set._tilemap || !bear._lock) return;
+        const [lx, ly] = bear._lock, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const s = new Sprite(slashBitmap());
+        s.anchor.set(0.27, 0.5);
+        s.rotation = Math.atan2(ly * 0.7, lx);
+        s.z = 6;
+        const mx = bear.centerX() + lx * 0.95, my = bear.centerY() + ly * 0.95 - 0.35;
+        let t = 0;
+        s.update = function() {
+            t++;
+            this.x = Math.round($gameMap.adjustX(mx) * tw);
+            this.y = Math.round($gameMap.adjustY(my) * th);
+            const k = t / 14;
+            this.opacity = Math.round(255 * (k < 0.25 ? 1 : 1 - (k - 0.25) / 0.75));
+            this.scale.set(0.75 + 0.35 * Math.min(1, k * 2), 0.75 + 0.35 * Math.min(1, k * 2));
+            if (t >= 14 && this.parent) { this.parent.removeChild(this); }
+        };
+        s.update();
+        set._tilemap.addChild(s);
+    }
+    // it came down on him: knocked flat, hurt badly, maybe wounded (a roll's moment of safety still saves him: "dodged")
+    function bearPin(bear) {
+        const P2 = BEAR_AI.pin, Cb = C();
+        se("Blow6", 95, 60);
+        if (Cb && Cb.hitPlayer) {
+            const res = Cb.hitPlayer({ damage: Math.round(atkOf(bear) * P2.mult), poise: 9999, down: P2.down, from: { x: bear.centerX(), y: bear.centerY() }, attacker: bear,
+                name: "niedźwiedź", wound: P2.wound, knock: 0.3, unblockable: true, unparryable: true });
+            bear._pinHit = res === "hit";
+            if (bear._pinHit) $gameScreen.startShake(7, 9, 18);
+            return res;
+        }
+        bear._pinHit = true;
+        if (typeof $gameSystem.injure === "function") $gameSystem.injure(25);
+        if (typeof $gameSystem.hurt === "function") $gameSystem.hurt(0.4);
+        $gameScreen.startFlash([255, 40, 30, 140], 16);
+        return "hit";
+    }
+    // a blow, a shot, a jab: it is the hero's enemy (no warning any more); one leaving for home turns on him again
+    function bearEnrage(bear) {
+        if (bear._mode === "flee") return;
+        if (BEAR_AI.flee > 0 && bear._hp <= bear._maxHp * BEAR_AI.flee) { bear.bearOver(); bear.setMode("flee"); return; }
+        if (bear._mode === "roam" || bear._mode === "warn" || bear._mode === "leave") bear.bearEngage();
+    }
+
+    P.ai = { BOAR, LURE, BEAR_AI, Game_Animal, atkOf, makePack, wolfEngage, disengage, gore, enrage, stagger, knockBack, snort, bite, bearSwipe, bearPin,
+        bearEngage: bear => bear.bearEngage() };
 })();

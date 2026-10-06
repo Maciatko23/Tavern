@@ -1,0 +1,786 @@
+{
+ "concept": "archiwum",
+ "width": 15,
+ "height": 11,
+ "zones": [],
+ "spots": {
+  "schody": [
+   2,
+   4,
+   8
+  ],
+  "landing": [
+   2,
+   4,
+   2
+  ],
+  "kroniki": [
+   10,
+   5,
+   8
+  ],
+  "ksiega_sygnalow": [
+   6,
+   6,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "schody_luk",
+   "cat": "wallitem",
+   "cells": [
+    [
+     2,
+     3
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 2,
+   "y": 3,
+   "event": true,
+   "art": [
+    48,
+    64,
+    96,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "kruk_plaskorzezba",
+   "cat": "wallitem",
+   "cells": [
+    [
+     2,
+     1
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 2,
+   "y": 1,
+   "event": true,
+   "art": [
+    52,
+    102,
+    91,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "kruk_choragiew",
+   "cat": "wallitem",
+   "cells": [
+    [
+     6,
+     2
+    ]
+   ],
+   "group": "Archiwum chorągiew",
+   "x": 6,
+   "y": 2,
+   "event": true,
+   "art": [
+    49,
+    50,
+    95,
+    143
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "regał z kronikami",
+   "cat": "furniture",
+   "cells": [
+    [
+     8,
+     4
+    ],
+    [
+     9,
+     4
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     11,
+     4
+    ],
+    [
+     12,
+     4
+    ]
+   ],
+   "group": "Archiwum kroniki",
+   "x": 8,
+   "y": 2,
+   "w": 5,
+   "h": 3,
+   "sheet": "C",
+   "sc": 0,
+   "sr": 6
+  },
+  {
+   "kind": "regał z księgami",
+   "cat": "furniture",
+   "cells": [
+    [
+     13,
+     4
+    ]
+   ],
+   "group": "Archiwum regały",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 3,
+   "sheet": "C",
+   "sc": 0,
+   "sr": 0
+  },
+  {
+   "kind": "drabina",
+   "cat": "floorprop",
+   "cells": [
+    [
+     12,
+     4
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 12,
+   "y": 4,
+   "event": true,
+   "art": [
+    53,
+    46,
+    91,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "pulpit",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     5
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 6,
+   "y": 5,
+   "event": true
+  },
+  {
+   "kind": "candelabra",
+   "cat": "floorprop",
+   "cells": [
+    [
+     4,
+     5
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 4,
+   "y": 5,
+   "event": true
+  },
+  {
+   "kind": "candelabra",
+   "cat": "floorprop",
+   "cells": [
+    [
+     8,
+     5
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 8,
+   "y": 5,
+   "event": true
+  },
+  {
+   "kind": "table_h",
+   "cat": "table",
+   "cells": [
+    [
+     10,
+     7
+    ],
+    [
+     10,
+     8
+    ],
+    [
+     11,
+     7
+    ],
+    [
+     11,
+     8
+    ],
+    [
+     12,
+     7
+    ],
+    [
+     12,
+     8
+    ]
+   ],
+   "group": "Archiwum stół",
+   "x": 10,
+   "y": 7,
+   "length": 3,
+   "style": 6
+  },
+  {
+   "kind": "D(6,13)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     10,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 10,
+   "y": 7,
+   "sheet": "D",
+   "sc": 6,
+   "sr": 13
+  },
+  {
+   "kind": "D(5,12)",
+   "cat": "tabletile",
+   "cells": [
+    [
+     12,
+     7
+    ]
+   ],
+   "group": null,
+   "x": 12,
+   "y": 7,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 12
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     11,
+     9
+    ]
+   ],
+   "group": "Archiwum stół",
+   "x": 11,
+   "y": 9
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     1,
+     9
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 1,
+   "y": 9,
+   "event": true
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     2,
+     9
+    ]
+   ],
+   "group": "Archiwum",
+   "x": 2,
+   "y": 9,
+   "event": true
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Archiwum",
+   "x": 1,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 13,
+   "sr": 7
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": "Archiwum",
+   "x": 13,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [],
+ "wall_items": [
+  [
+   "Archiwum",
+   "schody_luk",
+   2,
+   3
+  ],
+  [
+   "Archiwum",
+   "kruk_plaskorzezba",
+   2,
+   1
+  ],
+  [
+   "Archiwum nisze",
+   "niche",
+   4,
+   2
+  ],
+  [
+   "Archiwum nisze",
+   "niche",
+   5,
+   2
+  ],
+  [
+   "Archiwum nisze",
+   "niche",
+   7,
+   2
+  ],
+  [
+   "Archiwum chorągiew",
+   "kruk_choragiew",
+   6,
+   2
+  ]
+ ],
+ "openings": [],
+ "floor": [
+  [
+   1,
+   4,
+   "Archiwum"
+  ],
+  [
+   1,
+   5,
+   "Archiwum"
+  ],
+  [
+   1,
+   6,
+   "Archiwum"
+  ],
+  [
+   1,
+   7,
+   "Archiwum"
+  ],
+  [
+   1,
+   8,
+   "Archiwum"
+  ],
+  [
+   1,
+   9,
+   "Archiwum"
+  ],
+  [
+   2,
+   4,
+   "Archiwum"
+  ],
+  [
+   2,
+   5,
+   "Archiwum"
+  ],
+  [
+   2,
+   6,
+   "Archiwum"
+  ],
+  [
+   2,
+   7,
+   "Archiwum"
+  ],
+  [
+   2,
+   8,
+   "Archiwum"
+  ],
+  [
+   2,
+   9,
+   "Archiwum"
+  ],
+  [
+   3,
+   4,
+   "Archiwum"
+  ],
+  [
+   3,
+   5,
+   "Archiwum"
+  ],
+  [
+   3,
+   6,
+   "Archiwum"
+  ],
+  [
+   3,
+   7,
+   "Archiwum"
+  ],
+  [
+   3,
+   8,
+   "Archiwum"
+  ],
+  [
+   3,
+   9,
+   "Archiwum"
+  ],
+  [
+   4,
+   4,
+   "Archiwum"
+  ],
+  [
+   4,
+   5,
+   "Archiwum"
+  ],
+  [
+   4,
+   6,
+   "Archiwum"
+  ],
+  [
+   4,
+   7,
+   "Archiwum"
+  ],
+  [
+   4,
+   8,
+   "Archiwum"
+  ],
+  [
+   4,
+   9,
+   "Archiwum"
+  ],
+  [
+   5,
+   4,
+   "Archiwum"
+  ],
+  [
+   5,
+   5,
+   "Archiwum"
+  ],
+  [
+   5,
+   6,
+   "Archiwum"
+  ],
+  [
+   5,
+   7,
+   "Archiwum"
+  ],
+  [
+   5,
+   8,
+   "Archiwum"
+  ],
+  [
+   5,
+   9,
+   "Archiwum"
+  ],
+  [
+   6,
+   4,
+   "Archiwum"
+  ],
+  [
+   6,
+   5,
+   "Archiwum"
+  ],
+  [
+   6,
+   6,
+   "Archiwum"
+  ],
+  [
+   6,
+   7,
+   "Archiwum"
+  ],
+  [
+   6,
+   8,
+   "Archiwum"
+  ],
+  [
+   6,
+   9,
+   "Archiwum"
+  ],
+  [
+   7,
+   4,
+   "Archiwum"
+  ],
+  [
+   7,
+   5,
+   "Archiwum"
+  ],
+  [
+   7,
+   6,
+   "Archiwum"
+  ],
+  [
+   7,
+   7,
+   "Archiwum"
+  ],
+  [
+   7,
+   8,
+   "Archiwum"
+  ],
+  [
+   7,
+   9,
+   "Archiwum"
+  ],
+  [
+   8,
+   4,
+   "Archiwum"
+  ],
+  [
+   8,
+   5,
+   "Archiwum"
+  ],
+  [
+   8,
+   6,
+   "Archiwum"
+  ],
+  [
+   8,
+   7,
+   "Archiwum"
+  ],
+  [
+   8,
+   8,
+   "Archiwum"
+  ],
+  [
+   8,
+   9,
+   "Archiwum"
+  ],
+  [
+   9,
+   4,
+   "Archiwum"
+  ],
+  [
+   9,
+   5,
+   "Archiwum"
+  ],
+  [
+   9,
+   6,
+   "Archiwum"
+  ],
+  [
+   9,
+   7,
+   "Archiwum"
+  ],
+  [
+   9,
+   8,
+   "Archiwum"
+  ],
+  [
+   9,
+   9,
+   "Archiwum"
+  ],
+  [
+   10,
+   4,
+   "Archiwum"
+  ],
+  [
+   10,
+   5,
+   "Archiwum"
+  ],
+  [
+   10,
+   6,
+   "Archiwum"
+  ],
+  [
+   10,
+   7,
+   "Archiwum"
+  ],
+  [
+   10,
+   8,
+   "Archiwum"
+  ],
+  [
+   10,
+   9,
+   "Archiwum"
+  ],
+  [
+   11,
+   4,
+   "Archiwum"
+  ],
+  [
+   11,
+   5,
+   "Archiwum"
+  ],
+  [
+   11,
+   6,
+   "Archiwum"
+  ],
+  [
+   11,
+   7,
+   "Archiwum"
+  ],
+  [
+   11,
+   8,
+   "Archiwum"
+  ],
+  [
+   11,
+   9,
+   "Archiwum"
+  ],
+  [
+   12,
+   4,
+   "Archiwum"
+  ],
+  [
+   12,
+   5,
+   "Archiwum"
+  ],
+  [
+   12,
+   6,
+   "Archiwum"
+  ],
+  [
+   12,
+   7,
+   "Archiwum"
+  ],
+  [
+   12,
+   8,
+   "Archiwum"
+  ],
+  [
+   12,
+   9,
+   "Archiwum"
+  ],
+  [
+   13,
+   4,
+   "Archiwum"
+  ],
+  [
+   13,
+   5,
+   "Archiwum"
+  ],
+  [
+   13,
+   6,
+   "Archiwum"
+  ],
+  [
+   13,
+   7,
+   "Archiwum"
+  ],
+  [
+   13,
+   8,
+   "Archiwum"
+  ],
+  [
+   13,
+   9,
+   "Archiwum"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 119,
+ "key": "archiwum",
+ "display": "Archiwum zakonu",
+ "exits": [],
+ "residents": []
+}

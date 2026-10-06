@@ -9,7 +9,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Polowanie i dzikie zwierzęta: zające i jelenie płoszą się, dzik szarżuje, nocą polują watahy wilków. Proca, łuk, broń wręcz (Combat.js) - tryb walki (Tab), klawisz O. v1.3.0
+ * @plugindesc Polowanie i dzikie zwierzęta: zające i jelenie płoszą się, dzik szarżuje, nocą polują watahy wilków. Niedźwiedź rzadko wychodzi z lasu. Proca, łuk, broń wręcz (Combat.js) - tryb walki (Tab), klawisz O. v1.4.0
  * @author Tawerna
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -88,9 +88,33 @@
  * wytrzymałości i jedno użycie broni (wtyczka Durability), a huk płoszy zwierzynę
  * w promieniu 7 kratek. Trafiony jeleń, który jeszcze żyje, ucieka ranny.
  *
+ * NIEDŹWIEDŹ (2026-10-05, etap 2 walki): rzadko, jeden naraz, na mapach leśnych
+ * (pole dziadka, łąki, Las, Wzgórza, Mroczny Las, Leśna droga, Skraj lasu) - co
+ * pełną godzinę między 4 a 22 10% szans, że wyjdzie z lasu (notatka mapy
+ * <Bear:0.2> albo <Bear:off> zmienia szansę).
+ * Gdy cię zauważy, zwykle staje na tylnych łapach i ryczy: cofnij się (ponad 5,5
+ * pola), a da ci spokój. Podejdziesz bliżej albo go uderzysz - rusza, wolniej niż
+ * idziesz. Atakuje na dwa sposoby, oba widać wcześniej ("!") i obu nie zatrzyma
+ * tarcza ani parowanie, tylko przewrót (Spacja) albo krok w bok:
+ *   łapa - z bliska cofa łapę i zamiata przed sobą (stożek w tę stronę, w którą
+ *     patrzył, gdy się zamachnął);
+ *   przygniecenie - z 2-4 pól staje dęba (dłużej) i skacze tam, gdzie stałeś: jeśli
+ *     na ciebie spadnie, przewraca cię na chwilę i mocno rani.
+ * Po ataku stoi chwilę - wtedy bij; po chybionym skoku dłużej. Zatacza się tylko od
+ * ciężkiego ciosu albo ataku z ukrycia (lekkie ciosy ledwo ruszają jego równowagę).
+ * Daleko nie goni: ok. 12 pól od miejsca, z którego wyszedł (albo gdy jesteś 11 pól
+ * dalej), wraca do siebie. Gdy już walczy, walczy do końca. Łup: 5 kawałków mięsa
+ * niedźwiedzia, skóra niedźwiedzia (cenna, garbarnia), 3 ścięgna. F9: "Niedźwiedź
+ * w pobliżu".
+ *
+ * ATAK Z UKRYCIA (Combat.js): cios albo strzał w zwierzę, które cię jeszcze nie
+ * zauważyło (bez "!"), gdy się skradasz albo jesteś za nim: 2,5 raza (strzał 2 razy)
+ * większe obrażenia i mocno zbita równowaga.
+ *
  * ŁUP: zabite zwierzę leży na ziemi (zwłoki). Podejdź z nożem i naciśnij przycisk
  * akcji: bohater kuca i oprawia je - mięso tego zwierzęcia, surowa skóra i ścięgna
- * (zając 1/1/1, jeleń 3/2/2, dzik 4/2/2, wilk 2/1/2). Bez noża nic nie weźmiesz,
+ * (zając 1/1/1, jeleń 3/2/2, dzik 4/2/2, wilk 2/1/2, niedźwiedź 5/skóra niedźwiedzia/3).
+ * Bez noża nic nie weźmiesz,
  * a zwłoki czekają - po dobie gniją. Zając z pułapki: z nożem oprawiasz go od
  * razu przy odbiorze, bez noża zostaje przy pułapce jako zwłoki.
  *
@@ -157,7 +181,8 @@
     // (the "shoot" action - the attack, the shot - is on O in Combat.js's combat mode; no key of its own here)
     Input.keyMapper[67] = "sneak";   // C
 
-    const ITEM = { carcass: 101, stone: 64, sling: 125, bow: 126, arrows: 127, bandage: 152, spear: 154, rawHide: 96, sinew: 163, knifeStone: 90, knifeIron: 91 };
+    const ITEM = { carcass: 101, stone: 64, sling: 125, bow: 126, arrows: 127, bandage: 152, spear: 154, rawHide: 96, sinew: 163, knifeStone: 90, knifeIron: 91,
+        bearMeat: 168, bearHide: 170 };
     // speed / flee: MZ move speeds (4 = the player); sight: tiles at which it starts to notice the player (see noticeRate);
     // hours: when it is about. aggressive (the boar): it does not run from the player but charges him - see Game_Animal.thinkBoar;
     // charge: its speed then, hurt: the strength it takes on a hit (plus a wound, Survival.js), run: its sheet while charging
@@ -169,8 +194,21 @@
         boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 110, atk: 30, poise: 60, stun: 70, speed: 3, trot: 4, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
             hours: [[5, 9], [17, 21]], aggressive: true, hurt: 22, harm: 0.35, markY: -54 },   // harm: the part of the hero's health a hit takes (without Combat.js); markY: the "?"/"!" just over its back
         wolf: { name: "Wilk", sheet: "$Animal_Wolf", run: "$Animal_Wolf_Run", stalk: "$Animal_Wolf_Stalk", bark: "$Animal_Wolf_Bark", hp: 50, atk: 12, poise: 30, stun: 50,
-            speed: 4, flee: 5, sight: 9, radius: 0.55, drop: 1, hours: [[20, 24], [0, 5]], aggressive: true, pack: [2, 4], markY: -46 }
+            speed: 4, flee: 5, sight: 9, radius: 0.55, drop: 1, hours: [[20, 24], [0, 5]], aggressive: true, pack: [2, 4], markY: -46 },
+        // the bear (stage 2 of the fight, 2026-10-05; Hunting_AI.js thinkBear): slow (it walks slower than the hero), a great deal of life and
+        // balance, two attacks nobody parries or blocks - the paw (a cone in front of it) and the pin (a short leap that throws the hero
+        // down) - only a roll gets out of them; it reels from heavy blows only (a big break of its balance). poses: its sheet in a mode
+        // (rearing up and roaring, the paw, the leap - 8-way sheets of their own, LOOK8). Rare: BEAR_SPAWN below, not the maps' counts
+        bear: { name: "Niedźwiedź", sheet: "$Animal_Bear", run: "$Animal_Bear_Run", hp: 260, atk: 30, poise: 160, stun: 90, speed: 3, trot: 3.5, flee: 4, charge: 3.5, sight: 7,
+            radius: 0.95, drop: 5, hours: [[4, 22]], aggressive: true, bear: true, heavy: true, markY: -92, markYTall: -124,   // (markYTall: the "!" over it reared up)
+            poses: { warn: "$Animal_Bear_Roar", pinWind: "$Animal_Bear_Rear", swipeWind: "$Animal_Bear_Swipe", swipe: "$Animal_Bear_Swipe", lunge: "$Animal_Bear_Pounce" } }
     };
+    // Where a bear may come from (the user's forest maps: grandpa's field Map003, the meadows 4/17/18, Las 5, Wzgórza 6, Mroczny Las 12,
+    // Leśna droga 21, Skraj lasu 23): the chance, each whole hour of its hours the hero spends on the map (and once as he comes onto it),
+    // that one walks out of the forest - far off (`far` tiles at least): 10% an hour on each of them (the user's, 2026-10-05). twilight:
+    // [from, to, times] hours with a chance of their own (none now). One at a time, none the day one was killed on that map. The map
+    // note <Bear:0.2> (the chance) or <Bear:off> wins; <Hunt:off> keeps it off too.
+    const BEAR_SPAWN = { maps: { 3: 0.1, 4: 0.1, 5: 0.1, 6: 0.1, 12: 0.1, 17: 0.1, 18: 0.1, 21: 0.1, 23: 0.1 }, twilight: [], far: 13 };
     // biteFrom: no bite before that frame of the leap; near: too close to start one; pace: frames it stands at its place on the ring
     // before it paces a little along it; close: the frames the pack's attacker may take to go round to a clear leap
     const WOLF = { ring: 3.2, windup: 38, recover: 44, gap: [60, 140], bite: 0.95, biteFrom: 6, lunge: 3, near: 1.6, engage: 6, lose: 16, flee: 0.25, pace: 50, close: 240 };
@@ -565,7 +603,7 @@
             if (!spots || spots.length === 0) return;
             for (let tries = 0; tries < 80 && have < want; tries++) {
                 const s = spots[Math.floor(Math.random() * spots.length)];
-                if (Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y) < (SPECIES[kind].pack ? 12 : 8)) continue;
+                if (Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y) < (SPECIES[kind].pack ? 12 : SPECIES[kind].bear ? BEAR_SPAWN.far : 8)) continue;
                 if (animals.some(a => a._x === s.x && a._y === s.y)) continue;
                 if (SPECIES[kind].pack) {   // a whole pack at once
                     const [lo, hi] = SPECIES[kind].pack, n = Math.min(want - have, lo + Math.floor(Math.random() * (hi - lo + 1)));
@@ -577,6 +615,38 @@
                 have++;
             }
         }
+    }
+    // ---- the bear: rare, see BEAR_SPAWN. The chance of this map for this hour (the note wins over the table)
+    function bearChance(hour) {
+        const tag = T.mapTag("Bear"), hunt = T.mapTag("Hunt");
+        if (hunt && /^off$/i.test(hunt.raw)) return 0;
+        let p = tag ? (/^off$/i.test(tag.raw) ? 0 : Math.max(0, Number(tag.raw) || 0)) : BEAR_SPAWN.maps[$gameMap.mapId()] || 0;
+        const h = hour === undefined ? hours() : hour;
+        for (const [a, b, k] of BEAR_SPAWN.twilight) if (h >= a && h < b) p *= k;
+        return Math.min(1, p);
+    }
+    // a bear `lo`-`hi` tiles from the hero, on a spot with room round it (it is big); null when there is none. Its home is where it
+    // came out: it does not follow the hero far from there (Hunting_AI.js, BEAR_AI.leash)
+    function spawnBear(lo, hi) {
+        const spots = spotsOfMap();
+        if (!spots) return null;
+        const room = s => [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([ox, oy]) => $gameMap.checkPassage(s.x + ox, s.y + oy, 0x0f)).length >= 3;
+        const ok = spots.filter(s => { const d = Math.hypot(s.x - $gamePlayer.x, s.y - $gamePlayer.y); return d >= lo && d <= hi && room(s) && !animals.some(a => a._x === s.x && a._y === s.y); });
+        if (!ok.length) return null;
+        const s = ok[Math.floor(Math.random() * ok.length)];
+        const b = spawn("bear", s.x, s.y);
+        if (b) b._home = { x: s.x, y: s.y };
+        return b;
+    }
+    // once a whole hour (and once on coming onto the map): maybe a bear walks out of the forest
+    let bearHour = null;
+    function bearCheck() {
+        if (!ENABLED || !spotsOfMap()) return;   // (the ground pictures still loading: the hour is not spent yet)
+        const now = day() * 24 + Math.floor(hours());
+        if (bearHour === now) return;
+        bearHour = now;
+        if (!activeNow("bear") || countOf("bear") > 0 || killedToday($gameMap.mapId(), "bear") > 0) return;
+        if (Math.random() < bearChance()) spawnBear(BEAR_SPAWN.far, 99);
     }
 
     // While the player does not see it - on another map, or asleep (the clock jumps) - a baited snare may catch a rabbit all the same:
@@ -612,6 +682,7 @@
     function clearMap() {
         animals = [];
         packs = [];
+        bearHour = null;
         W().clearShots();
         spotCache = { mapId: 0, spots: null };
         PA().resetGrid();
@@ -622,7 +693,7 @@
         W().clearCarcassSprites();
         if ($gameSystem) W().rotCarcasses();
     }, { owner: "Hunting" });
-    // the F9 menu (Debug.js) asks for an animal near the hero: Hunting.pending = "boar" | "deer" | "wolves"
+    // the F9 menu (Debug.js) asks for an animal near the hero: Hunting.pending = "boar" | "deer" | "wolves" | "bear"
     function summoned() {
         if (API.pending === "boar") {   // the F9 menu (Debug.js): a boar 5-8 tiles away
             API.pending = null;
@@ -644,8 +715,14 @@
             if (pack) { for (const w of pack.members) w._summoned = true; popup(0, "W ciemności błyszczą oczy... wilki!", "#ffd98f"); }
             else popup(0, "Nie ma tu miejsca dla watahy", "#bcd8ff");
         }
+        if (API.pending === "bear") {   // the F9 menu: a bear 7-10 tiles away, whatever the hour (it stays: _summoned)
+            API.pending = null;
+            const b = spawnBear(7, 10);
+            if (b) { b._summoned = true; popup($dataItems[ITEM.bearHide] ? $dataItems[ITEM.bearHide].iconIndex : 0, "Między drzewami coś ciężko sapie... niedźwiedź!", "#ffd98f"); }
+            else popup(0, "Nie ma tu miejsca dla niedźwiedzia", "#bcd8ff");
+        }
     }
-    let populateWait = 0, snareWait = 0, rotWait = 0;
+    let populateWait = 0, snareWait = 0, rotWait = 0, bearWait = 0;
     let auto = true;   // tests switch the automatic refilling off
     T.onMapUpdate(() => {
         if (!ENABLED || !$gamePlayer) return;
@@ -653,6 +730,7 @@
         trackPlayer();
         Wp.countDown();
         if (auto && --populateWait <= 0) { populateWait = 90; populate(); }
+        if (auto && --bearWait <= 0) { bearWait = 60; bearCheck(); }
         if (--snareWait <= 0) { snareWait = 60; snareUnseen(); }
         if (--rotWait <= 0) { rotWait = 120; Wp.rotCarcasses(); }
         Wp.updateCarcassSprites();
@@ -710,16 +788,33 @@
     // animals in the yards (Livestock.js) - their sheets are not in the list.
     // ------------------------------------------------------------------
     const LOOK8 = {   // old sheet -> the 8-way one; cell: its square cell; stride: tiles for one cycle of the legs
-        "$Animal_Dog": { sheet: "anim8/Dog_Walk8", cell: 68, stride: 1.5 },
-        "$Animal_Dog_Run": { sheet: "anim8/Dog_Run8", cell: 68, stride: 2.6 },
-        "$Animal_Dog_Stalk": { sheet: "anim8/Dog_Stalk8", cell: 68, stride: 1.2 },
-        "$Animal_Wolf": { sheet: "anim8/Wolf_Walk8", cell: 68, stride: 1.5 },
-        "$Animal_Wolf_Run": { sheet: "anim8/Wolf_Run8", cell: 68, stride: 2.6 },
-        "$Animal_Wolf_Stalk": { sheet: "anim8/Wolf_Stalk8", cell: 68, stride: 1.2 },
-        "$Animal_Boar": { sheet: "anim8/Boar_Walk8", cell: 76, stride: 1.4 },
-        "$Animal_Boar_Run": { sheet: "anim8/Boar_Run8", cell: 76, stride: 2.4 },
-        "$Animal_Deer": { sheet: "anim8/Deer_Walk8", cell: 75, stride: 1.8, run: { sheet: "anim8/Deer_Run8", cell: 75, stride: 3.2 } },
-        "$Animal_Rabbit": { sheet: "anim8/Rabbit_Hop8", cell: 56, stride: 1.1 }
+        // (turn: every animal turns through the ways between - frames per eighth of a turn, quick ones 2 - and the wolf breathes when it
+        // stands, the boar too (their idle sheets, PixelLab v3 'wolf_breathe' / 'boar_breathe', tools/anim8/build_pose.py); 2026-10-06,
+        // "płynniej" for all of them)
+        "$Animal_Dog": { sheet: "anim8/Dog_Walk8", cell: 68, stride: 1.5, turn: 2 },
+        "$Animal_Dog_Run": { sheet: "anim8/Dog_Run8", cell: 68, stride: 2.6, turn: 2 },
+        "$Animal_Dog_Stalk": { sheet: "anim8/Dog_Stalk8", cell: 68, stride: 1.2, turn: 2 },
+        "$Animal_Wolf": { sheet: "anim8/Wolf_Walk8", cell: 68, stride: 1.5, turn: 2, idle: { sheet: "anim8/Wolf_Idle8", cell: 68, rate: 8, turn: 2 } },
+        "$Animal_Wolf_Run": { sheet: "anim8/Wolf_Run8", cell: 68, stride: 2.6, turn: 2 },
+        "$Animal_Wolf_Stalk": { sheet: "anim8/Wolf_Stalk8", cell: 68, stride: 1.2, turn: 2 },
+        "$Animal_Boar": { sheet: "anim8/Boar_Walk8", cell: 76, stride: 1.4, turn: 3, idle: { sheet: "anim8/Boar_Idle8", cell: 76, rate: 9, turn: 3 } },
+        "$Animal_Boar_Run": { sheet: "anim8/Boar_Run8", cell: 76, stride: 2.4, turn: 3 },
+        "$Animal_Deer": { sheet: "anim8/Deer_Walk8", cell: 75, stride: 1.8, turn: 2, run: { sheet: "anim8/Deer_Run8", cell: 75, stride: 3.2, turn: 2 } },
+        "$Animal_Rabbit": { sheet: "anim8/Rabbit_Hop8", cell: 56, stride: 1.1, turn: 2 },
+        // the bear: walking, running; and its poses, whose frame the bear itself says (Game_Animal.look8Col: how far the rearing, the
+        // paw or the leap has got) - pose: no column of standing, every cell is a frame of the move
+        // (2026-10-06, user: "płynniej, profesjonalnie": stands breathing (idle: the sheet plays by itself, `rate` frames a cell), turns
+        // through the ways between (turn: frames per eighth of a turn). The strides are measured on the sheets so the paw on the ground
+        // keeps still: the walk's paw goes back ~10 px a cell (1.7 tiles a cycle), the gallop's only ~4.5 - at its chase speed (3.5,
+        // slower than the hero walks, docs/WALKA.md) a gallop would pump its legs 3.7 times a second, so it comes on at a heavy walk
+        // and gallops only faster (runAt 3.8))
+        "$Animal_Bear": { sheet: "anim8/Bear_Walk8", cell: 104, stride: 1.7, turn: 3, runAt: 3.8,
+            run: { sheet: "anim8/Bear_Run8", cell: 104, stride: 1.2, turn: 3 }, idle: { sheet: "anim8/Bear_Idle8", cell: 104, rate: 9, turn: 3 } },
+        "$Animal_Bear_Run": { sheet: "anim8/Bear_Run8", cell: 104, stride: 1.2 },
+        "$Animal_Bear_Rear": { sheet: "anim8/Bear_Rear8", cell: 128, pose: true },   // (taller cells: up on its hind legs; the feet on the same line)
+        "$Animal_Bear_Roar": { sheet: "anim8/Bear_Roar8", cell: 128, pose: true, rise: 5 },   // the warning: rising (`rise` cells), then the roar
+        "$Animal_Bear_Swipe": { sheet: "anim8/Bear_Swipe8", cell: 128, pose: true },
+        "$Animal_Bear_Pounce": { sheet: "anim8/Bear_Pounce8", cell: 128, pose: true }   // (2026-10-06: from the top of the rearing, thrown forward)
     };
     const LOOK8_ROW = { 2: 0, 1: 1, 4: 2, 7: 3, 8: 4, 9: 5, 6: 6, 3: 7 };
     const LOOK8_OCT = { 0: 6, 1: 3, 2: 2, 3: 1, 4: 4, "-4": 4, "-3": 7, "-2": 8, "-1": 9 };   // octant of the move (y down) -> numpad
@@ -729,11 +824,21 @@
         if (!look8On || !ch || ch._pose || ch === $gamePlayer) return null;   // (the dog lying / asleep: its old sheet)
         const look = LOOK8[ch.characterName()];
         if (!look) return null;
-        return look.run && (ch.realMoveSpeed() >= 4.5 || ch._fleeing) ? look.run : look;
+        return look.run && (ch.realMoveSpeed() >= (look.runAt || 4.5) || ch._fleeing) ? look.run : look;
+    }
+    // one eighth of a turn from `cur` towards `want` (numpad ways, the shorter way round)
+    const RING8 = [2, 1, 4, 7, 8, 9, 6, 3];
+    function turnStep(cur, want) {
+        const a = RING8.indexOf(cur), b = RING8.indexOf(want);
+        if (a < 0 || b < 0 || a === b) return want;
+        const cw = (b - a + 8) % 8;
+        return RING8[(a + (cw <= 4 ? 1 : 7)) % 8];
     }
     const _look8UpdateBitmap = Sprite_Character.prototype.updateBitmap;
     Sprite_Character.prototype.updateBitmap = function() {
-        const look = look8For(this._character);
+        let look = look8For(this._character);
+        // standing (not a pose, a few frames without a step): the look's breathing sheet, if it has one
+        if (look && look.idle && !look.pose && (this._l8still || 0) >= 8 && !this._character.isJumping()) look = look.idle;
         if (look) {
             if (this._look8Sheet !== look.sheet) {
                 this._look8Sheet = look.sheet;
@@ -766,28 +871,57 @@
             this._l8vy = (this._l8vy || 0) * 0.6 + dy;
             const want = LOOK8_OCT[Math.round(Math.atan2(this._l8vy, this._l8vx) / (Math.PI / 4))];
             if (!this._l8dir || want === this._l8dir) { this._l8dir = want; this._l8turn = 0; }
-            else if (++this._l8turn >= 4) { this._l8dir = want; this._l8turn = 0; }
+            // (the count starts from nothing: ++ on an unset one gave NaN, and a NaN count never reached its turn - an animal that had
+            // turned where it stood ran on drawn the other way, "moonwalking", till it went exactly the way it faced; 2026-10-06)
+            else if (look.turn) { if ((this._l8turn = (this._l8turn || 0) + 1) >= look.turn) { this._l8dir = turnStep(this._l8dir, want); this._l8turn = 0; } }   // (through the ways between)
+            else if ((this._l8turn = (this._l8turn || 0) + 1) >= 4) { this._l8dir = want; this._l8turn = 0; }
             this._l8step = (this._l8step || 0) + d;
             this._l8still = 0;
         } else {
             this._l8still = (this._l8still || 0) + 1;
-            // turned where it stands (towards the hero, a growl): the 8-way facing follows the 4-way one
-            const d4 = ch.direction();
-            if (!this._l8dir || !(LOOK8_FITS[d4] || []).includes(this._l8dir)) this._l8dir = d4;
+            // turned where it stands (towards the hero, a growl): the 8-way facing follows the 4-way one - or the one it says itself
+            // (face8: the bear rearing up or striking faces the hero on the slant too)
+            const d4 = ch.direction(), f8 = typeof ch.face8 === "function" ? ch.face8() : 0;
+            if (f8 && look.pose) this._l8dir = f8;   // (a pose faces him at once: its frames are drawn that way)
+            else {
+                const want = f8 || (!this._l8dir || !(LOOK8_FITS[d4] || []).includes(this._l8dir) ? d4 : this._l8dir);
+                if (!look.turn || !this._l8dir) this._l8dir = want;
+                else if (want !== this._l8dir && (this._l8turn = (this._l8turn || 0) + 1) >= look.turn) { this._l8dir = turnStep(this._l8dir, want); this._l8turn = 0; }
+            }
         }
+        if (look.pose && typeof ch.face8 === "function" && ch.face8()) this._l8dir = ch.face8();   // (a leap: it faces where it leaps)
         const cell = look.cell, n = Math.max(1, Math.round(this.bitmap.width / cell) - 1);
         const moving = this._l8still < 6 || ch.isJumping();
-        const col = moving ? 1 + Math.min(n - 1, Math.floor((((this._l8step || 0) / look.stride) % 1) * n)) : 0;
+        // a pose sheet: the frame the character says (look8Col(cells) -> 0..cells-1)
+        const own = look.pose && typeof ch.look8Col === "function" ? ch.look8Col(n + 1, look) : undefined;
+        // a breathing sheet plays by itself (faster while it pants after a blow: ch.breathRate)
+        if (look.rate && own === undefined) this._l8breath = (this._l8breath || 0) + (typeof ch.breathRate === "function" ? ch.breathRate() : 1);
+        const col = own !== undefined ? Math.max(0, Math.min(n, own)) : look.rate ? 1 + Math.floor((this._l8breath || 0) / look.rate) % n
+            : moving ? 1 + Math.min(n - 1, Math.floor((((this._l8step || 0) / look.stride) % 1) * n)) : 0;
         // a sheet may say which of its rows to use for a facing (look.rows(dir, moving, side) -> a numpad dir): some have no good
         // back views - the cat's walking up rows show its face, as if it went backwards (user 2026-10-01)
         const dir = look.rows ? look.rows(this._l8dir, moving, this._l8side || 6) : this._l8dir;
         this.setFrame(col * cell, (LOOK8_ROW[dir] || 0) * cell, cell, cell);
     };
+    // a blow's weight: the sprite pushed the way it strikes (ch.lungeOffset() -> [px, py], the bear's paw), back again after
+    const _look8UpdatePosition = Sprite_Character.prototype.updatePosition;
+    Sprite_Character.prototype.updatePosition = function() {
+        _look8UpdatePosition.call(this);
+        const ch = this._character;
+        if (ch && typeof ch.lungeOffset === "function") {
+            const o = ch.lungeOffset();
+            if (o) { this.x += o[0]; this.y += o[1]; }
+        }
+    };
     // the sheets come with the map, so the first step does not wait for them
     const _look8MapCreate = Scene_Map.prototype.create;
     Scene_Map.prototype.create = function() {
         _look8MapCreate.call(this);
-        if (look8On) for (const k of Object.keys(LOOK8)) { ImageManager.loadCharacter(LOOK8[k].sheet); if (LOOK8[k].run) ImageManager.loadCharacter(LOOK8[k].run.sheet); }
+        if (look8On) for (const k of Object.keys(LOOK8)) {
+            ImageManager.loadCharacter(LOOK8[k].sheet);
+            if (LOOK8[k].run) ImageManager.loadCharacter(LOOK8[k].run.sheet);
+            if (LOOK8[k].idle) ImageManager.loadCharacter(LOOK8[k].idle.sheet);
+        }
     };
 
     // ------------------------------------------------------------------
@@ -820,6 +954,8 @@
         // the animal class (Hunting_AI.js), the wolves, the night raids (the kills: the bus's "kill" - Hunting.onKill had no users left)
         get Game_Animal() { return AI().Game_Animal; }, WOLF, RAID, raidChance, nightRaid, raidPack, get packs() { return packs; }, spawnPack,
         makePack: ai("makePack"), wolfEngage: ai("wolfEngage"), stagger: ai("stagger"), knockBack: ai("knockBack"), atkOf: ai("atkOf"),
+        // the bear (stage 2): where and how often it comes, one called up near the hero, its temper (Hunting_AI.js)
+        BEAR_SPAWN, bearChance, spawnBear, bearCheck, get BEAR_AI() { return AI().BEAR_AI; }, bearEngage: ai("bearEngage"),
         // the way round what is in the way (8 directions) and the stuck watch: the animals here and the dog (Dog.js) - Hunting_Path.js
         get PATH() { return PA().PATH; }, get STUCK() { return PA().STUCK; }, path8: path("path8"), pathGrid: path("pathGrid"), clearLine: path("clearLine"),
         stalled: path("stalled"), unstall: path("unstall"), avoidTile: path("avoidTile"), takeStep: path("takeStep")

@@ -13,7 +13,11 @@ const OLD_API = ["ATTRS", "SKILLS", "TREES", "MELEE", "SHIELDS", "MAX_LEVEL", "A
     "canRun", "hand", "handMelee", "switchHand", "shield", "pressAttack", "pressDodge", "hitPlayer", "enemyHurtFx", "hitstop", "numberAt", "sparksAt",
     "shovePlayer", "strMult", "poiseMult", "critChance", "rollCost", "rollIFrames", "parryWindow", "knockdownAt", "carryBonus", "gatherBonus", "workSpeed",
     "dexWork", "tired", "TIRED_AT", "heroMhp", "comboWindow", "aimSteady", "baseBreath", "mapFreePlay", "act", "stopFrames", "ROLL_KIND", "KNOCK_KIND",
-    "resetAct", "Scene_Hero", "unspent"];
+    "resetAct", "Scene_Hero", "unspent",
+    // (stage 2 of the fight, 2026-10-05: the armour, the blow from hiding)
+    "ARMORS", "armor", "SNEAK", "sneakAttack", "sneakMult",
+    // (stages 3 and 4, 2026-10-06: the foes of other plugins - Humans.js, Creatures.js -, the hero jarred / held down / frozen, the mind)
+    "addFoes", "foes", "recoil", "downPlayer", "stunPlayer", "drainBreath", "mindResist", "mindTime"];
 const FILES = ["TawernaCore", "Skills_Data", "Combat", "Combat_Fight", "Combat_UI"];
 
 // a save as the game stores it, read back: plain fields of a Game_System (what JsonEx gives)
@@ -35,7 +39,7 @@ unit.test(t => {
     const C = w.Combat, TW = w.Tawerna, parts = TW.api("Combat_parts");
 
     // ---- the API and the parts
-    t.eq("window.Combat has every name it had before the split (and no other)", Object.keys(C).sort(), OLD_API.slice().sort());
+    t.eq("window.Combat has every name it had before the split, plus stage 2's armour and blow from hiding, stages 3-4's foes and mind (and no other)", Object.keys(C).sort(), OLD_API.slice().sort());
     t.check("... it is the core's Combat (Tawerna.api) and the parts are in the bag: core, fight, ui",
         TW.api("Combat") === C && !!(parts && parts.core && parts.fight && parts.ui), parts && Object.keys(parts));
     const writable = ["perk", "gainXp", "hitPlayer", "hero"].every(k => Object.getOwnPropertyDescriptor(C, k).writable);

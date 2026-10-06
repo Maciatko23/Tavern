@@ -318,7 +318,10 @@
         const now = clockHours();
         let wakeAt = Math.floor(now / 24) * 24 + wakeHour();
         if (wakeAt <= now) wakeAt += 24;
-        const hunting = T.api("Hunting"), raid = !isHutInterior() && hunting && hunting.nightRaid ? hunting.nightRaid(now, wakeAt, { fire: fireNear(b) }) : null;
+        const hunting = T.api("Hunting"), wolves = !isHutInterior() && hunting && hunting.nightRaid ? hunting.nightRaid(now, wakeAt, { fire: fireNear(b) }) : null;
+        // (bandits may come for a sleeper too - Humans.js, combat stage 3; the earlier of the two wakes him)
+        const people = T.api("Humans"), men = !isHutInterior() && people && people.nightRaid ? people.nightRaid(now, wakeAt, { fire: fireNear(b) }) : null;
+        const byMen = men !== null && (wolves === null || men < wolves), raid = byMen ? men : wolves;
         const bad = def.sleepBad !== undefined && !isHutInterior() && harshNight();   // under the roof of the hut the weather does not matter
         const restore = Math.min(1, (bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1) * (1 + perk("sleep.rest")));
         const morning = restore >= 1 ? "Czujesz się wypoczęty." : bad ? "Spałeś w zimnie i wilgoci. Sił odzyskałeś niewiele." : "Spałeś twardo. Sił odzyskałeś tylko część.";
@@ -334,11 +337,11 @@
                 if (typeof $gameSystem.setStamina === "function") $gameSystem.setStamina(Math.max($gameSystem.stamina(), Math.round($gameSystem.maxStamina() * restore * part)));
                 for (const member of $gameParty.members()) member.setHp(Math.min(member.mhp, member.hp + Math.round((member.mhp - member.hp) * part)));
                 const dogApi = T.api("Dog"), ds = dogApi && dogApi.state && dogApi.state(), dog = ds && ds.tame && ds.map === $gameMap.mapId() && dogApi.dog;
-                hunting.raidPack(!!dog);
+                if (byMen) people.raidBand(!!dog); else hunting.raidPack(!!dog);
                 const bubbles = T.api("SpeechBubbles");
                 if (bubbles) {
                     if (dog) bubbles.say(dog, "Hau! Hau!");
-                    bubbles.say($gamePlayer, "Wilki!");
+                    bubbles.say($gamePlayer, byMen ? "Bandyci!" : "Wilki!");
                 }
                 b.last = today();
                 return;
@@ -351,8 +354,9 @@
         });
         later(75, () => $gameScreen.startFadeIn(40));
         later(115, () => {
-            if (raid !== null) {   // (not the new day's greeting: the wolves)
-                if (!T.popup("Obudziły cię wilki!", { top: true, color: "#ff9f8f" })) popup(ICON.stamina, "Obudziły cię wilki!", "#ff9f8f");   // (at the top; without that plate over him)
+            if (raid !== null) {   // (not the new day's greeting: the wolves - or the bandits)
+                const woke = byMen ? "Obudzili cię bandyci!" : "Obudziły cię wilki!";
+                if (!T.popup(woke, { top: true, color: "#ff9f8f" })) popup(ICON.stamina, woke, "#ff9f8f");   // (at the top; without that plate over him)
                 return;
             }
             if (typeof $gameTemp.queueDayBanner === "function") $gameTemp.queueDayBanner(morning);
@@ -643,6 +647,11 @@
             if (!sp || !sp.aggressive || a._dead || !(a._hp > 0) || a._mode === "roam" || a._mode === "flee") continue;
             // (a wolf of a pack that hunts him counts while it is anywhere near - it circles off and comes back)
             if (a.playerDistance() < (a._engaged ? 16 : 8)) return sp.name;
+        }
+        // people fighting him (Humans.js, combat stage 3: a bandit, an archer, a mercenary) - not one who gave up or ran
+        const people = T.api("Humans");
+        for (const h of (people && people.humans ? people.humans() : [])) {
+            if (h && h._engaged && !h._dead && !h._surrendered && h._mode !== "flee" && h._mode !== "leave" && h.playerDistance() < 16) return h.name();
         }
         return "";
     }

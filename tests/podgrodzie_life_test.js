@@ -25,8 +25,12 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("at 10:00: Marta works at the laundry, Józek stands at his stall (on their spots)",
         at10.praczka[0] === spots.pranie[0] && at10.praczka[1] === spots.pranie[1] && at10.szmaciarz[0] === spots.kram[0] && at10.szmaciarz[1] === spots.kram[1]
         && at10.praczka[2] === "shown" && at10.szmaciarz[2] === "shown", { at10, spots });
+    // (a stroller is judged by where its stroll goes - a walker going round the hero or a stall may be a few cells off on the way)
+    const strolls = await t.json(`(function(){ const o = {}, near = (a, s) => !!a && !!s && Math.abs(a[0] - s[0]) <= 3 && Math.abs(a[1] - s[1]) <= 3;
+        for (const [k, sp] of [["franek", "kram"], ["znachorka", "kapliczka"], ["uchodzca", "brama_zach"]]) { const st = TownLife.state(k);
+            o[k] = st.act === "wander" && !st.hidden && near(st.wanderTo || [st.x, st.y], TownLife.spot(sp)); } return o; })()`);
     t.check("...Franek runs round the stall, babka Jadwiga strolls by the shrine, Darin looks for work by the gate (within a stroll)",
-        near(at10.franek, spots.kram, 4) && near(at10.znachorka, spots.kapliczka, 4) && near(at10.uchodzca, spots.brama_zach, 4), { at10, spots });
+        strolls.franek && strolls.znachorka && strolls.uchodzca, { strolls, at10, spots });
     t.check("...old Gaweł begs on his spot by the gate", at10.zebrak[0] === spots.zebrak[0] && at10.zebrak[1] === spots.zebrak[1] && at10.zebrak[2] === "shown", { zebrak: at10.zebrak, spot: spots.zebrak });
     t.check("...Zbych is away in the forest and Rysiek sleeps at home (both hidden)", at10.drwal[2] === "hidden" && at10.klusownik[2] === "hidden", at10);
     await t.shot(path.join(SHOTS, "mieszkancy.png"));
@@ -43,7 +47,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.go(8, 24, 37, 8);
     const town = await t.json(`(function(){ const o = { podgrodzie: [], town: 0 }; for (const r of TownLife.RESIDENTS) { const e = TownLife.eventOf(r.key);
         if (TownLife.homeOf(r) === 111 && e) o.podgrodzie.push(r.key); if (TownLife.homeOf(r) === 8 && e) o.town++; } return o; })()`);
-    t.check("on Map008 the town's 14 residents and none of Podgrodzie's", town.town === 14 && !town.podgrodzie.length, town);
+    t.check("on Map008 the town's 19 residents (14 + the quests' four + Teodor, hidden till Feliks goes) and none of Podgrodzie's", town.town === 19 && !town.podgrodzie.length, town);
 
     // the night: back in Podgrodzie at 23:48 everyone is hidden (indoors, or the poacher in the forest)
     await t.go(111, 1, 1, 2);

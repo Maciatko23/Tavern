@@ -122,8 +122,10 @@ const { launch, sleep } = require("./cdp.js");
 
         // ================= 5. the jab with its animation, and the F9 row =================
         await standAt(lx, ly, 6);
-        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 2}, ${ly}); a._frozen = true; })()`);
+        // (it faces him: an open jab - an unaware boar struck from behind would take a blow from hiding, x2.5, Combat_Fight.js SNEAK)
+        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 2}, ${ly}); a._frozen = true; a.setDirection(4); })()`);
         await ev("Hunting.animate(true); Combat.resetAct(); 0");
+        await frames(2);
         const max5 = await ev("Hunting.animals[0]._maxHp");
         await ev("Hunting.pressShoot()");
         await frames(4);

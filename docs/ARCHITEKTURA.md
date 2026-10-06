@@ -104,6 +104,7 @@ Lista w `js/plugins.js` (82 wtyczek, wszystkie włączone; numer = miejsce na li
 75  HomeAmbience, HomeDecor, HomeLife
 78  TownLife_Data, TownLife     ← miasteczko według zegara: mieszkańcy 910-949 na mapie 8 (plany dnia, okrzyki, rozmowy, dzwon)
 80  TownQuests_Data, TownQuests ← questy miasteczka (docs/QUESTY.md, stan: docs/QUESTY_STAN.md): zadania w rozmowach mieszkańców (TownLife.addTalkHook), Opinia w miasteczku 0-100, zakładka dziennika „Miasteczko”, dzień targowy, sygnały dzwonu; stan Tawerna.state("townQuests"); szyna: townQuestAccepted / townQuestDone / townQuestFailed / townOpinion; zdarzenia 951-959
+86  Underground_Data, Underground ← podziemia pod tawerną (docs/PODZIEMIA.md): piętra 1-9 składane z kawałków mapy 130 (ziarno zapisu, Tawerna.onMapData na mapach 131-139), piętro 10 ręcznie (Map140), krata w piwnicy (przełącznik 11); stan Tawerna.state("underground"); szyna: undergroundFloor / undergroundDeeper / undergroundLoot / undergroundNote / undergroundGate / undergroundLift; zdarzenia stworów 860-899
 ```
 
 ButtonPicture.js i TextPicture.js (obce) leżą w `js/plugins`, ale nie są na liście. Części Combat i Hunting (partie C3, D2) wpisane
@@ -354,7 +355,8 @@ jeden numer = jeden właściciel na każdej mapie. Nakładanie się zakresów = 
 
 | numery | właściciel | mapy | co | sposób |
 |---|---|---|---|---|
-| 1–899 | edytor | wszystkie | zdarzenia z edytora (dziś najwyżej 354: Map025) | - |
+| 1–859 | edytor | wszystkie | zdarzenia z edytora (dziś najwyżej 354: Map025); na mapach 131-139 - zdarzenia pięter zrobione przez Underground.js | - |
+| 860–899 | Underground (zarezerwowane) | 131-139 | stwory podziemi (etap 4 walki): `Underground.registerCreature(rodzaj, build)` - Underground.js wstawia je przy budowie piętra na miejscach `<Stwor:...>` | `Tawerna.inject.reserve` (piętra są danymi Underground.js: jego własne zdarzenia 1..N, jak z edytora) |
 | 900 | *wolne* | | | |
 | 901–902 | Story | 19, 24 | dziadek Stach, Lord Zaleski | `Tawerna.inject` ✓ (`when`: jest fabuła - inaczej przy `Game_Map.setup` wychodzą z danych; `fixSaved: false` - zapis ma postacie, z którymi go zrobiono); miejsce przy fotelu / drzwiach dworu ustawia własny `Game_Map.setupEvents` |
 | 903–949 | *wolne* (bierz bloki po 10) | | | |

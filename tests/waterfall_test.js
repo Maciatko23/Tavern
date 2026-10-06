@@ -12,11 +12,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the town's tileset uses the recoloured water sheet", /A1_green_town$/.test(set.a1), set);
     t.check("four water effects on the map: the falling water, the splash and two currents", JSON.stringify(set.fx.slice().sort()) === '["Fall","Flow","Flow","Splash"]', set);
 
-    await t.frames(90);
+    await t.frames(30);
+    // (a glint comes and goes at random - one frame may show none on a current: the most seen over a second counts)
+    await t.eval(`(function(){ window.__gl = [0, 0]; const fl = WaterFx.effects().filter(f => f.constructor.name === "Flow");
+        let n = 0; const iv = setInterval(() => { fl.forEach((f, i) => { window.__gl[i] = Math.max(window.__gl[i], f.items.filter(p => p.glint).length); }); if (++n >= 60) clearInterval(iv); }, 16); return 0; })()`);
+    await t.frames(60);
     const live = await t.json(`(function(){ const fx = WaterFx.effects(); const s = fx.find(f => f.constructor.name === "Splash");
         const flows = fx.filter(f => f.constructor.name === "Flow");
         return { drops: s.items.filter(p => p.kind === "drop").length, mist: s.items.filter(p => p.kind === "mist").length, rings: s.rings.length, waves: s.waves.length,
-                 flecks: flows.map(f => f.items.filter(p => !p.glint).length), glints: flows.map(f => f.items.filter(p => p.glint).length),
+                 flecks: flows.map(f => f.items.filter(p => !p.glint).length), glints: flows.map((f, i) => Math.max(f.items.filter(p => p.glint).length, (window.__gl || [])[i] || 0)),
                  visible: fx.every(f => f.sprites().every(sp => sp.visible)),
                  foam: $gameMap.events().filter(e => /^Wodospad:/.test(e.event().name)).map(e => e.characterName() + ":" + e.characterIndex()) }; })()`);
     t.check("after a moment the splash throws drops, raises mist, churns little rings and sends out waves; both currents carry flecks of foam and glints (no streaks)",

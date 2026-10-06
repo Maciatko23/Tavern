@@ -1,0 +1,1073 @@
+{
+ "_note": "build_creatures.py: which PixelLab animation (tools/creatures/frames/<key>/<anim>) makes which sheet (img/characters/anim8/Cr_<look>_<sheet>.png); pick: frame indexes (or per direction, '*' the rest); fill: a direction with no frames takes another's; rot_map: the folder a direction really shows; steel: cyan blades to grey; old: the 4-way sheet's name. Characters: zbroja 073c62e0, topielec e52b017a, upior 6d413821, pajak 19c79afd, kamiennik 0734d421, nietoperz 6352f75f, szczur f0c52efa, przeor (boss of floor 20) 637fe9ef. The stone sentinel has no end sheet: it shatters in code (Creatures.js shatter) - its v3 collapses kept it standing. Bosses with their own art (2026-10-06 polish): krolowa 1042639b (Queen, floor 30), matka 5d5e16d5 (Mother, 40), glebinnik cdc21273 (Deep, 50), odzwierny 25e0e556 (Keeper, 60), bezherbu a4d8f973 (Blank, 70), straznik 182648f7 (Last, 90); cien 4139cf62 (Shadow: a shadow once its borrowed face drops); the bat's dive (nietoperz Atk8).",
+ "zbroja": {
+  "look": "Armor",
+  "cell": 96,
+  "sheets": {
+   "Walk8": {
+    "anim": "zbroja_walk2",
+    "cell": 96,
+    "standing": true,
+    "old": "$Cr_Armor",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": {
+     "south": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      4,
+      3,
+      2
+     ],
+     "*": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ]
+    }
+   },
+   "Atk8": {
+    "anim": "zbroja_atk",
+    "cell": 128,
+    "steel": true,
+    "old": "$Cr_Armor_Atk",
+    "old_cols": [
+     0,
+     5,
+     9
+    ]
+   },
+   "Die8": {
+    "anim": "zbroja_die",
+    "cell": 96,
+    "old": "$Cr_Armor_Die",
+    "old_cols": [
+     0,
+     5,
+     10
+    ],
+    "fill": {
+     "south-east": "south",
+     "north-east": "east",
+     "north": "south"
+    }
+   }
+  }
+ },
+ "topielec": {
+  "look": "Drowned",
+  "cell": 96,
+  "sheets": {
+   "Walk8": {
+    "anim": "topielec_walk",
+    "cell": 96,
+    "standing": true,
+    "old": "$Cr_Drowned",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "topielec_grab",
+    "cell": 128,
+    "old": "$Cr_Drowned_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 11
+   },
+   "Die8": {
+    "anim": "topielec_die",
+    "cell": 96,
+    "old": "$Cr_Drowned_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east",
+     "north": "south"
+    }
+   }
+  }
+ },
+ "upior": {
+  "look": "Wraith",
+  "cell": 96,
+  "rot_map": {
+   "south": "north",
+   "north": "south",
+   "south-east": "north-east",
+   "north-east": "south-east"
+  },
+  "sheets": {
+   "Walk8": {
+    "anim": "upior_float",
+    "cell": 96,
+    "standing": true,
+    "old": "$Cr_Wraith",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "upior_atk",
+    "cell": 96,
+    "old": "$Cr_Wraith_Atk",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 11,
+    "pick": {
+     "north": [
+      0,
+      1,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      0,
+      0,
+      0
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   }
+  }
+ },
+ "pajak": {
+  "look": "Spider",
+  "cell": 80,
+  "sheets": {
+   "Walk8": {
+    "anim": "pajak_walk",
+    "cell": 80,
+    "standing": true,
+    "old": "$Cr_Spider",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "pajak_atk",
+    "cell": 96,
+    "old": "$Cr_Spider_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 11,
+    "pick": {
+     "north": [
+      0,
+      1,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      0,
+      0,
+      0
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   },
+   "Die8": {
+    "anim": "pajak_die",
+    "cell": 80,
+    "old": "$Cr_Spider_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east",
+     "north": "south"
+    }
+   }
+  }
+ },
+ "kamiennik": {
+  "look": "Stone",
+  "cell": 128,
+  "sheets": {
+   "Walk8": {
+    "anim": "kamiennik_walk",
+    "cell": 128,
+    "standing": true,
+    "old": "$Cr_Stone",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "kamiennik_slam",
+    "cell": 128,
+    "old": "$Cr_Stone_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 11
+   }
+  }
+ },
+ "nietoperz": {
+  "look": "Bat",
+  "cell": 64,
+  "sheets": {
+   "Walk8": {
+    "anim": "nietoperz_fly",
+    "cell": 64,
+    "standing": true,
+    "old": "$Cr_Bat",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "nietoperz_dive",
+    "cell": 64,
+    "old": "$Cr_Bat_Atk",
+    "old_cols": [
+     0,
+     3,
+     6
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east"
+    }
+   }
+  }
+ },
+ "szczur": {
+  "look": "Rat",
+  "cell": 68,
+  "sheets": {
+   "Walk8": {
+    "anim": "szczur_walk",
+    "cell": 68,
+    "standing": true,
+    "old": "$Cr_Rat",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ]
+   },
+   "Atk8": {
+    "anim": "szczur_bite",
+    "cell": 68,
+    "old": "$Cr_Rat_Atk",
+    "old_cols": [
+     0,
+     3,
+     5
+    ],
+    "placeholder": 9
+   }
+  }
+ },
+ "przeor": {
+  "look": "Prior",
+  "cell": 96,
+  "sheets": {
+   "Walk8": {
+    "anim": "przeor_walk",
+    "cell": 96,
+    "standing": true,
+    "old": "$Cr_Prior",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "przeor_atk",
+    "cell": 128,
+    "old": "$Cr_Prior_Atk",
+    "old_cols": [
+     0,
+     5,
+     8
+    ],
+    "placeholder": 13
+   },
+   "Die8": {
+    "anim": "przeor_die",
+    "cell": 96,
+    "old": "$Cr_Prior_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "east": "south",
+     "north-east": "south",
+     "north": "south"
+    }
+   }
+  }
+ },
+ "krolowa": {
+  "look": "Queen",
+  "cell": 128,
+  "sheets": {
+   "Walk8": {
+    "anim": "krolowa_walk",
+    "cell": 128,
+    "standing": true,
+    "old": "$Cr_Queen",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ]
+   },
+   "Run8": {
+    "anim": "krolowa_walk",
+    "cell": 128,
+    "standing": true,
+    "placeholder": 8,
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "old": "$Cr_Queen_Run",
+    "old_cols": [
+     1,
+     0,
+     5
+    ]
+   },
+   "Atk8": {
+    "anim": "krolowa_bite",
+    "cell": 144,
+    "old": "$Cr_Queen_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13,
+    "pick": {
+     "south": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      9,
+      9,
+      11,
+      12,
+      12
+     ],
+     "north": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      5,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   }
+  },
+  "_why": "her death sheets barely moved: she rolls over onto her back in code, as the rats do (no Die8); the north bite turned to the viewer halfway - only its back-view frames; the south bite's 7-8 (a white muzzle, white specks) left out"
+ },
+ "matka": {
+  "look": "Mother",
+  "cell": 160,
+  "sheets": {
+   "Walk8": {
+    "anim": "matka_walk",
+    "cell": 160,
+    "standing": true,
+    "old": "$Cr_Mother",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "matka_spit",
+    "cell": 176,
+    "old": "$Cr_Mother_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13
+   },
+   "Die8": {
+    "anim": "matka_die",
+    "cell": 160,
+    "old": "$Cr_Mother_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "east": "south",
+     "north-east": "south",
+     "north": "south"
+    },
+    "fill_force": true,
+    "_why": "the east end barely moved: the front one (the legs giving way, the body sinking) for every way"
+   }
+  }
+ },
+ "glebinnik": {
+  "look": "Deep",
+  "cell": 128,
+  "sheets": {
+   "Walk8": {
+    "anim": "glebinnik_walk",
+    "cell": 128,
+    "standing": true,
+    "old": "$Cr_Deep",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "glebinnik_grab",
+    "cell": 160,
+    "old": "$Cr_Deep_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13,
+    "steel": true,
+    "pick": {
+     "east": [
+      0,
+      1,
+      2,
+      3,
+      3,
+      6,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   },
+   "Die8": {
+    "anim": "glebinnik_die",
+    "cell": 128,
+    "old": "$Cr_Deep_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east",
+     "north": "south"
+    },
+    "keep_water": true
+   }
+  },
+  "unpuddle": 14
+ },
+ "odzwierny": {
+  "look": "Keeper",
+  "cell": 176,
+  "sheets": {
+   "Walk8": {
+    "anim": "odzwierny_walk",
+    "cell": 176,
+    "standing": true,
+    "old": "$Cr_Keeper",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Atk8": {
+    "anim": "odzwierny_slam",
+    "cell": 192,
+    "old": "$Cr_Keeper_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13,
+    "pick": {
+     "east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      10,
+      11,
+      11,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "north": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      9,
+      10,
+      11,
+      12,
+      12
+     ]
+    },
+    "_why": "the side slam's 8-9 and the back slam's 7-8: sparks and dust bursts the model drew at the impact - left out (the code's own dust ring shows it)"
+   }
+  }
+ },
+ "bezherbu": {
+  "look": "Blank",
+  "cell": 112,
+  "sheets": {
+   "Walk8": {
+    "anim": "bezherbu_march",
+    "cell": 112,
+    "standing": true,
+    "old": "$Cr_Blank",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": {
+     "north": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      3,
+      4
+     ],
+     "*": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ]
+    }
+   },
+   "Atk8": {
+    "anim": "bezherbu_cut",
+    "cell": 144,
+    "old": "$Cr_Blank_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13
+   },
+   "Die8": {
+    "anim": "bezherbu_die",
+    "cell": 112,
+    "old": "$Cr_Blank_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east",
+     "north": "south"
+    }
+   }
+  }
+ },
+ "straznik": {
+  "look": "Last",
+  "cell": 112,
+  "sheets": {
+   "Walk8": {
+    "anim": "straznik_glide",
+    "cell": 112,
+    "standing": true,
+    "old": "$Cr_Last",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": {
+     "east": [
+      7,
+      8,
+      7,
+      0,
+      7,
+      8,
+      7,
+      0
+     ],
+     "*": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "_why": "white puffs of smoke v3 drew over the hood and at the hem: taken out (nowhite); the east glide only from its clean frames",
+    "nowhite": true
+   },
+   "Atk8": {
+    "anim": "straznik_claw",
+    "cell": 128,
+    "old": "$Cr_Last_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13,
+    "pick": {
+     "south-east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      6,
+      10,
+      10,
+      11,
+      12,
+      12
+     ],
+     "north-east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      10,
+      11,
+      12,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "_why": "south-east 7-9 and north-east 8-9: white impact bursts the model drew - left out"
+   },
+   "Die8": {
+    "anim": "straznik_die",
+    "cell": 112,
+    "old": "$Cr_Last_Die",
+    "old_cols": [
+     0,
+     4,
+     8
+    ],
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east",
+     "north": "south"
+    }
+   }
+  },
+  "keep": 40
+ },
+ "cien": {
+  "look": "Shadow",
+  "cell": 96,
+  "sheets": {
+   "Walk8": {
+    "anim": "cien_walk",
+    "cell": 96,
+    "standing": true,
+    "old": "$Cr_Shadow",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ]
+   },
+   "Atk8": {
+    "anim": "cien_claw",
+    "cell": 112,
+    "old": "$Cr_Shadow_Atk",
+    "old_cols": [
+     0,
+     4,
+     7
+    ],
+    "placeholder": 13,
+    "nowhite": true,
+    "pick": {
+     "south-east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      9,
+      11,
+      12,
+      12
+     ],
+     "north-east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      9,
+      11,
+      12,
+      12
+     ],
+     "north": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      9,
+      12,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   }
+  }
+ }
+}

@@ -10,11 +10,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.newGame({ map: 8, x: 24, y: 37, dir: 8, hour: 10, quiet: true, minimap: false });
     const at10 = await t.json(`(function(){ const out = {}; for (const r of TownLife.RESIDENTS.filter(r => TownLife.homeOf(r) === 8)) { const e = TownLife.eventOf(r.key);   // (Podgrodzie's live on Map111)
         out[r.key] = e ? [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName()] : null; } return out; })()`);
-    t.check("14 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 14 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
+    // (19 since 2026-10-05: + Szymek, Lucjan Kość - only on market days, hidden the rest -, Bartek Kmieć, the carter Wojciech,
+    // and Teodor the new butler - only once W1 has sent Feliks away, hidden till then)
+    t.check("19 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 19 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
     const want = { piekarka: [21, 31], woziwoda: [23, 34], kapral: [48, 51], kowal: [7, 49], soltys: [39, 40], kupiec: [12, 40], garbarz: [16, 45], feliks: [40, 40] };
     t.check("at 10:00 each stands at its place (the baker at her stall, the water seller by the dry well, the corporal at the east gate...)",
         Object.entries(want).every(([k, [x, y]]) => at10[k][0] === x && at10[k][1] === y && at10[k][2] === "shown"), { at10 });
-    t.check("...and Ambroży strolls round the bench on the market (3 tiles)", Math.abs(at10.dzwonnik[0] - 19) <= 3 && Math.abs(at10.dzwonnik[1] - 35) <= 3 && at10.dzwonnik[2] === "shown", at10.dzwonnik);
+    // (judged by where his stroll goes: walking round a stall on the way he may be a cell or two further)
+    const amb = await t.json("(function(){ const s = TownLife.state('dzwonnik'), w = s.wanderTo || [s.x, s.y]; return { act: s.act, hidden: s.hidden, to: w, at: [s.x, s.y] }; })()");
+    t.check("...and Ambroży strolls round the bench on the market (3 tiles)", amb.act === "wander" && !amb.hidden && Math.abs(amb.to[0] - 19) <= 3 && Math.abs(amb.to[1] - 35) <= 3, amb);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "mieszkancy_rynek.png"));
 

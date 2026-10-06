@@ -1,0 +1,132 @@
+{
+ "skill": 0.75,
+ "grow": null,
+ "rows": [
+  {
+   "name": "Przeor w zbroi (boss 20)",
+   "floor": 20,
+   "kind": "boss_20",
+   "level": 14,
+   "hero": 9,
+   "attr": {
+    "str": 15,
+    "con": 12,
+    "dex": 8,
+    "per": 7,
+    "wil": 7
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 103.2,
+   "lostPct": 191,
+   "refills": 2,
+   "mhp": 159,
+   "foeHp": 578
+  },
+  {
+   "name": "Kamiennik (piętro 60)",
+   "floor": 60,
+   "kind": "kamiennik",
+   "level": 33,
+   "hero": 19,
+   "attr": {
+    "str": 25,
+    "con": 21,
+    "dex": 13,
+    "per": 10,
+    "wil": 10
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 149.4,
+   "lostPct": 275,
+   "refills": 3,
+   "mhp": 234,
+   "foeHp": 750
+  },
+  {
+   "name": "Kamienny Odźwierny (boss 60)",
+   "floor": 60,
+   "kind": "boss_60",
+   "level": 34,
+   "hero": 19,
+   "attr": {
+    "str": 25,
+    "con": 21,
+    "dex": 13,
+    "per": 10,
+    "wil": 10
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 173.9,
+   "lostPct": 399,
+   "refills": 5,
+   "mhp": 234,
+   "foeHp": 1136
+  },
+  {
+   "name": "Zbroja bez herbu (boss 70)",
+   "floor": 70,
+   "kind": "boss_70",
+   "level": 39,
+   "hero": 21,
+   "attr": {
+    "str": 26,
+    "con": 23,
+    "dex": 14,
+    "per": 11,
+    "wil": 11
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 87.6,
+   "lostPct": 310,
+   "refills": 3.5,
+   "mhp": 253,
+   "foeHp": 1850
+  },
+  {
+   "name": "Upiór pytającego (boss 80)",
+   "floor": 80,
+   "kind": "boss_80",
+   "level": 45,
+   "hero": 23,
+   "attr": {
+    "str": 31,
+    "con": 24,
+    "dex": 14,
+    "per": 8,
+    "wil": 14
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 127.4,
+   "lostPct": 210,
+   "refills": 2.5,
+   "mhp": 261,
+   "foeHp": 1622
+  },
+  {
+   "name": "Ostatni Strażnik (boss 90)",
+   "floor": 90,
+   "kind": "boss_90",
+   "level": 50,
+   "hero": 25,
+   "attr": {
+    "str": 33,
+    "con": 26,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "1/2",
+   "s": 187.6,
+   "lostPct": 1792,
+   "refills": 23,
+   "mhp": 277,
+   "foeHp": 2336
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "_": "PixelLab sources of the mountain pictures (create_image_pro_flash, style image = a Winlu tile crop: the wooden cart of Fantasy_Outside_C for wood, the boulder D(9..10,3..4) of Fantasy_Outside_D_green for stone). tools/mountains/art.py cuts them into sheets.",
+ "crane.png": {"job": "0f1d7350-b22d-4c69-8dd3-e0f43ffc59f5", "size": [144, 192], "gens": 6, "what": "ruin of a wooden quarry crane (treadwheel, broken jib, rope and hook)"},
+ "blocks.png": {"job": "59972f07-18bf-45b6-9f0b-50c17ecaa945", "size": [96, 96], "gens": 5, "what": "two cut limestone blocks, a raven carved on the front one"},
+ "blocks3.png": {"job": "9908d9e0-8fcc-45f6-9c2e-78a2517ef118", "size": [144, 96], "gens": 6, "what": "a block split with iron wedges, a half-sunk block"},
+ "cave.png": {"job": "6e9b7677-3b51-4a6d-b894-099177dc1353", "size": [96, 96], "gens": 5, "what": "a mine cave mouth in a rock face, timber frame (also the dug-through passage)"},
+ "rubble.png": {"job": "561c2783-2b2e-4775-adba-2ca312660c5f", "size": [96, 96], "gens": 5, "what": "a mine tunnel blocked by a collapse, broken beams"},
+ "gate_closed.png": {"job": "c26444e5-adb0-426e-be66-9b37280dc734", "size": [144, 144], "gens": 6, "what": "the Silent's palisade gate, closed, white cloth strips"},
+ "gate_open.png": {"job": "b9514c4d-bc69-4339-8289-a6773f420a91", "size": [144, 144], "gens": 6, "what": "edit_image_pro_flash of gate_closed: the leaves swung open"},
+ "characters": {
+  "Marek": {"id": "ce67f1ea-5d52-4612-aac5-fd1dd42e8b0e", "gens": 28, "built_by": "tools/npc/build_npc.py"},
+  "Kopacz": {"id": "89d89c2a-100e-4448-a432-5b4bdcead325", "gens": 28, "built_by": "tools/npc/build_npc.py"},
+  "Milczacy1..4": {"see": "tools/mountains/silent.json", "gens": 80, "built_by": "tools/mountains/silent_npcs.py"}
+ }
+}

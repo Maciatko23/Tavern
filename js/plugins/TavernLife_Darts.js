@@ -63,12 +63,14 @@
         const deg = ((Math.atan2(dx, -dy) * 180 / Math.PI) + 360 + 9) % 360;
         return ORDER[Math.floor(deg / 18) % 20];
     }
+    // (2026-10-06) Wiesiek's bust: RTP People2_7 (a weathered carter with road goggles on his brow) - unused anywhere else since the
+    // arm-wrestling's carter got Woznica_Bust; People1_5 was the Sołtys bust's face
     const OPPONENTS = {
         ozzy: { name: "Dziadek Ozzy", short: "Ozzy", role: "ozzy", sway: 50, scatter: 15, lucky: 0.16, aim: "bull",
             hello: "*czkawka* Rzutki? Kiedyś trafiałem muchę w locie. Dziś trafiam tarczę. Zazwyczaj.",
             throwLines: ["Hop!", "*czkawka*", "Ups...", "Celuję w środkową z trzech tarcz..."], good: ["Byk! Widziałeś? Nikt nie widział...", "Hehe, stara ręka!"],
             won: "Hehe! Stary Ozzy jeszcze umie! Postawisz mi piwo z tej stawki? Nie? No trudno.", lost: "Trzy tarcze to jednak za dużo dla jednego oka... Wygrałeś, synu. Uczciwie." },
-        wiesiek: { name: "Furman Wiesiek", short: "Wiesiek", role: null, bust: "People1_5", face: ["People1", 4], sway: 38, scatter: 10, lucky: 0.05, aim: "twenty",
+        wiesiek: { name: "Furman Wiesiek", short: "Wiesiek", role: null, bust: "People2_7", face: ["People2", 6], sway: 38, scatter: 10, lucky: 0.05, aim: "twenty",
             hello: "Rzucamy? Ja furman: oko mam jak jastrząb - od patrzenia na drogę między końskimi uszami.",
             throwLines: ["Rzut furmański!", "Prosto jak droga do młyna.", "Wiooo!"], good: ["Dwadzieścia! Wiedziałem.", "I kto tu jest jastrząb?"],
             won: "Ha! Nie ma to jak oko furmana. Stawka moja - dziękuję uprzejmie.", lost: "Eee, wiatr zawiał od drzwi. Ale wygrałeś, nie ma co gadać." }
@@ -460,7 +462,7 @@
     function oppSay(out, key, text) {
         const o = OPPONENTS[key];
         if (o.role) return sayAs(out, o.role, text);
-        return say(out, -1, text, o.face || ["People1", 4], o.name);
+        return say(out, -1, text, o.face || ["People2", 6], o.name);
     }
     function dartsTalk() {
         const o = [], ozzy = !!npc("ozzy"), options = [];

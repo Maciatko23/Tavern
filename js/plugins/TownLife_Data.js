@@ -16,10 +16,12 @@
 // barks: what they call out when the hero passes - by act, plus "rain" (rain or a storm) and "night"; indoors "tavern" (in the
 // tavern, Map001 "Miejsce: gosc_N") and "home" (in their own interior, "Miejsce: <key>_wnetrze")
 // talk: what they say when spoken to - "morning" (5-11), "day" (11-17), "evening" (17-22), "night", "rain"
+// (v1.2.0) when: a condition ("market") - the resident is there only while it holds (hidden all the other days); a plan entry's 4th
+// field: a condition for that entry (TownLife.addCondition registers more - TownQuests adds "w1Water": Kuba's night trips for water)
 
 /*:
  * @target MZ
- * @plugindesc Dane mieszkańców miasteczka i Podgrodzia: plany dnia, okrzyki, rozmowy (dla TownLife.js). v1.1.0
+ * @plugindesc Dane mieszkańców miasteczka i Podgrodzia: plany dnia, okrzyki, rozmowy (dla TownLife.js). v1.2.0
  * @author Claude
  * @help Same dane - działa z TownLife.js (ma stać nad nim na liście).
  */
@@ -35,9 +37,13 @@
         schody_rzem: [24, 44, 2], ulica_rzem: [12, 50, 2], kowadlo: [7, 49, 8], kuznia_dom: [12, 47, 8], garbarnia: [16, 45, 8],
         garbarz_dom: [37, 50, 8], woziwoda_dom: [29, 47, 8], brama_wsch: [48, 51, 4], brama_pld: [25, 53, 2],
         dom_mieszczan: [9, 31, 8], pod_murem: [31, 51, 2], stodola: [21, 51, 2], rynek_rog: [30, 38, 2],
-        ratusz_obok: [40, 40, 4], stragan1_obok: [19, 31, 6]
+        ratusz_obok: [40, 40, 4], stragan1_obok: [19, 31, 6],
+        // (2026-10-05, the quests' new people) Lucjan's dice by the right stall; the carter's cart on the street before the south gate
+        stragan_kosci: [30, 31, 4], woz_pld: [27, 51, 2]
     };
     const PATROL = ["brama_wsch", "ulica_rzem", "schody_rzem", "rynek_srodek", "brama_twierdzy", "przed_tawerna", "brama_twierdzy", "rynek_srodek", "schody_rzem", "brama_pld"];
+    // the manor guard's night round in the west garden (Map024, its "Miejsce: straz_1..4" events - docs/miasta_miejsca_zadan.md)
+    const STRAZ = ["straz_1", "straz_2", "straz_3", "straz_4"];
 
     const RESIDENTS = [
         {
@@ -80,7 +86,7 @@
         },
         {
             key: "woziwoda", name: "Kuba Woziwoda", title: "woziwoda", sheet: "$Npc_Woziwoda",
-            plan: [[0, "inside", "woziwoda_dom"], [1.8, "work", "staw"], [3.2, "inside", "woziwoda_dom"], [7, "stand", "studnia_rynek"], [14, "wander", "rynek_srodek"],
+            plan: [[0, "inside", "woziwoda_dom"], [1.8, "work", "staw", "w1Water"], [3.2, "inside", "woziwoda_dom"], [7, "stand", "studnia_rynek"], [14, "wander", "rynek_srodek"],
                    [16, "inside", "tawerna"], [20.5, "inside", "woziwoda_dom"]],
             barks: {
                 stand: ["Woda tylko na przydział sołtysa!", "Piekarnia, kuźnia, tawerna - kolejka po wodę!", "Studnia ledwo kapie, ale Kuba ma wodę!"],
@@ -439,11 +445,118 @@
                 night: ["Śpię pod daszkiem przy murze. Jak dzwon bije nocą, budzę się i liczę. Stary nawyk."],
                 rain: ["Deszcz... Za moich lat studnia na rynku była pełna po brzegi. Woda szła spod wzgórza, ze starej cysterny zakonu."]
             }
+        },
+        // ---------------- the quests' people (2026-10-05, TownQuests: K37, K39, K15, W1). Sheets in the hero's style.
+        {
+            key: "zlodziej", name: "Szymek", title: "chłopak z obozu pod murem", sheet: "$Npc_Zlodziej", speed: 4,
+            plan: [[0, "inside", "pod_murem"], [6.5, "wander", "pod_murem"], [8.3, "wander", "rynek_rog"], [12, "wander", "stragan1_obok"], [14, "wander", "schody_rzem"],
+                   [17.5, "wander", "pod_murem"], [20.5, "inside", "pod_murem"]],
+            barks: {
+                wander: ["Pan ma może skórkę chleba?", "Nie gapię się. Tylko patrzę.", "Najszybszy w całym obozie - to ja!", "Z wozu coś spadło? Nie? Szkoda."],
+                rain: ["Deszcz! Otwórz gębę, to się napijesz!", "Jak pada, nikt nie goni."], night: []
+            },
+            talk: {
+                morning: ["Szymek jestem. Z obozu pod murem. Mama została na kontynencie, a tata... nie wiem. Ludmiła mówi, żebym się jej trzymał.",
+                    "Na targu zawsze coś spadnie z wozu. Trzeba tylko być szybszym od psów."],
+                day: ["Ty też chodzisz boso! To jesteś swój.", "Rafał mówi, że na kontynencie za kradzież obcinają rękę. Tu tylko kapral krzyczy. I goni. Wolno goni."],
+                evening: ["Wieczorem pod murem ciepło od kamieni. Ela już śpi, a ja pilnuję."],
+                night: ["Nie śpię. Pilnuję obozu."],
+                rain: ["Jak pada, to nikt nie goni. Wszyscy pod daszkami."]
+            }
+        },
+        {
+            key: "gracz", name: "Lucjan Kość", title: "wędrowny gracz w kości", sheet: "$Npc_Gracz", when: "market",   // (only on the market days)
+            plan: [[0, "inside", "brama_pld"], [9.7, "stand", "stragan_kosci"], [14, "inside", "brama_pld"]],
+            barks: {
+                stand: ["Kości, panowie! Pięć groszy, a może wygrasz dziesięć!", "Kto się nie boi szczęścia? Podejdź!", "Szóstka! Znowu szóstka! Ach, co za dzień!"],
+                rain: ["Deszcz, a kości suche. Dobry znak!"], night: []
+            },
+            talk: {
+                morning: ["Lucjan Kość, do usług. Gram tam, gdzie targ, a targ jest wszędzie, gdzie są ludzie z groszem.", "Ręce czyste, kości uczciwe. Sprawdź sam - no, tylko nie za długo."],
+                day: ["Szczęście to nie grzech, mój drogi. Grzech to nie spróbować.", "W zeszłym tygodniu jeden chłop przegrał tu cały jęczmień. Pech. Zdarza się najlepszym."],
+                evening: ["Po targu ruszam dalej. Wyspa duża, a jarmarków dużo."],
+                night: ["Dobranoc, dobranoc."],
+                rain: ["W deszcz ludzie siedzą pod daszkami i nudzą się. A nuda to najlepszy przyjaciel kości."]
+            }
+        },
+        {
+            key: "bartek", name: "Bartek Kmieć", title: "chłop spod Młynówki", sheet: "$Npc_Bartek",
+            plan: [[0, "inside", "brama_pld"], [9.5, "wander", "rynek_rog"], [14, "inside", "tawerna"], [21, "inside", "brama_pld"]],
+            barks: {
+                wander: ["Wszystko przegrałem... wszystko.", "Żona mnie zabije. Albo gorzej - nie odezwie się.", "Siedem szóstek z rzędu. Siedem!"],
+                rain: ["Deszcz... przynajmniej pole się napije. Moje pole. Jeszcze moje."],
+                tavern: ["Jeszcze jedna partyjka... nie, nie, już nie gram.", "Grosz do grosza, a potem kości...", "Borgar, na kredę. Ostatni raz."],
+                night: []
+            },
+            talk: {
+                morning: ["Bartek Kmieć, spod Młynówki. Młyn stoi, mąki nie ma, to przyszedłem sprzedać jęczmień w mieście. I sprzedałem. A potem przegrałem.",
+                    "Na targu siedzi taki jeden, z piórem przy kapeluszu. Mówi, że szczęście trzeba zaprosić. Ja zaprosiłem. Przyszło do niego."],
+                day: ["Wody w Młynówce po kostki. Kiedyś koło młyna szło tak, że gadać się nie dało."],
+                evening: ["Wieczorem u Borgara... kości. Nie, nie, tylko patrzę. Patrzeć wolno."],
+                night: ["Do domu daleko. Prześpię się pod murem."],
+                rain: ["Deszcz! Może Młynówka się podniesie. Choć na palec."]
+            }
+        },
+        {
+            key: "woznica", name: "Wojciech", title: "woźnica", sheet: "$Npc_Woznica",
+            plan: [[0, "inside", "brama_pld"], [8, "work", "kantor_rog"], [11.5, "inside", "tawerna"], [15, "inside", "brama_pld"], [21.3, "stand", "woz_pld"],
+                   [22.7, "inside", "brama_pld"]],
+            barks: {
+                work: ["Skrzynie do kantoru! Z drogi!", "Ostrożnie, to z kontynentu!", "Konie się płoszą, nie stój za wozem."],
+                stand: ["Czekam na towar. Nie twoja sprawa jaki.", "Konie zmarzną, zanim ten kupiec się ruszy..."],
+                tavern: ["Piwo dla woźnicy! Gardło suche jak droga.", "Na przystań i z powrotem, co dzień ta sama droga."],
+                rain: ["Błoto po osie. Wóz się zakopie."],
+                night: ["Idź, chłopcze. Nocą przy wozach nie ma czego szukać."]
+            },
+            talk: {
+                morning: ["Wojciech, woźnica. Wożę towar z przystani do kantoru i z powrotem. Co w skrzyniach? Nie pytam. Płacą od skrzyni, nie od pytania."],
+                day: ["Na przystani mówią, że wojna na kontynencie idzie w złą stronę. Dla kogo złą - zależy, kogo pytasz.", "Kupiec Vey płaci dobrze. Za dobrze, jak na suszone grzyby."],
+                evening: ["Wieczorem jadę jeszcze raz pod bramę południową. Kupiec zawsze ma coś na nocny kurs."],
+                night: ["Ciii. Konie śpią. Ja nie."],
+                rain: ["W deszcz na przystań nie jadę. Kupiec może sobie krzyczeć."]
+            }
+        },
+        {
+            key: "straznik", name: "Strażnik dworu", title: "straż Lorda", sheet: "$Npc_Straznik", map: 24, speed: 3,
+            plan: [[0, "patrol", STRAZ], [5, "stand", "straz_dzien"], [21, "patrol", STRAZ]],
+            barks: {
+                stand: ["Dwór jaśnie pana Zaleskiego. Bez sprawy - ani kroku dalej.", "Jaśnie pan przyjmuje od ósmej."],
+                patrol: ["Cisza... tylko świerszcze.", "Kto tam? ...Kot. Tylko kot."],
+                rain: ["Deszcz, a ja w ogrodzie. Kwiatki mają lepiej niż straż."],
+                night: ["Zimno... do świtu jeszcze daleko.", "Ciekawe, co ten Feliks robi po nocach w oranżerii..."]
+            },
+            talk: {
+                morning: ["Straż dworu. Pilnuję, żeby nikt obcy nie deptał jaśnie panu kwiatów.", "Ogród zielony jak na wiosnę, co? Feliks dba. Nie pytaj, czym podlewa."],
+                day: ["Jaśnie pan stoi przed drzwiami od ósmej. Ze sprawą - do niego. Bez sprawy - do domu."],
+                evening: ["Wieczorem obchodzę ogród. Do rana."],
+                night: ["Nocą do ogrodu nie wolno. Rozkaz Feliksa. Znaczy - jaśnie pana."],
+                rain: ["W deszcz nawet złodzieje siedzą w domach. A ja nie."]
+            }
+        },
+        {
+            // (last in the list: a resident's event id is FIRST + its place here - appended, the others keep their ids)
+            // the new butler (user 2026-10-05): once W1 has sent Feliks away (TownLife "gone"), Teodor does the manor's errands in his stead
+            key: "kamerdyner", name: "Teodor", title: "kamerdyner Lorda", sheet: "$Npc_Kamerdyner",
+            when: () => !!(window.TownLife && typeof TownLife.gone === "function" && TownLife.gone("feliks")),
+            plan: [[0, "inside", "brama_wsch"], [7, "wander", "stragan1"], [8.5, "stand", "stragan2"], [9.5, "stand", "ratusz_obok"], [10.5, "inside", "brama_wsch"]],
+            barks: {
+                wander: ["Dzień dobry, pani Hanko. Dwór płaci gotówką, jak należy.", "Świeże bułki dla jaśnie pana, jeśli łaska."],
+                stand: ["Rachunki dworu są otwarte dla każdego, panie sołtysie.", "Proszę mi mówić po imieniu. Teodor."],
+                rain: ["Deszcz! Jaśnie pan każe otworzyć rynny dla miasta."], night: []
+            },
+            talk: {
+                morning: ["Teodor, nowy kamerdyner jaśnie pana Zaleskiego. Służyłem jeszcze jego ojcu - wróciłem, kiedy Feliksa... zabrakło.", "Dług twojego dziadka? Zapisany co do grosza, uczciwie. Jaśnie pan przyjmuje od ósmej, a nocą zapukaj - otworzę."],
+                day: ["Śluza pod oranżerią jest teraz pod moim kluczem. Ani kropli więcej dla dworu, niż trzeba - tak kazał jaśnie pan."],
+                evening: ["Wieczorami pilnuję drzwi dworu. Jeśli niesiesz spłatę dla jaśnie pana, zapukaj śmiało."],
+                night: ["Późno już, młodzieńcze. Dobranoc."],
+                rain: ["Deszcz to błogosławieństwo dla całego miasta, nie tylko dla ogrodu dworu."]
+            }
         }
     ];
 
     // the spots of the other maps residents live on ("map" in their data): defaults only - the map's "Miejsce: <key>" events win
-    const SPOTS_BY_MAP = { 111: {} };
+    // (Map024: the guard's day post beside the left fire basket of the forecourt; his night round is the map's straz_1..4)
+    const SPOTS_BY_MAP = { 111: {}, 24: { straz_dzien: [15, 16, 2] } };
 
     window.TownLifeData = { MAP: 8, FIRST_ID: 910, SPOTS, SPOTS_BY_MAP, RESIDENTS };
 })();

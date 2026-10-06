@@ -87,7 +87,7 @@ const OUT = process.argv[2] || "";
         let t1 = await tree();
         check("E: Umiejętności - the ten fields on the left (Walka wręcz chosen), its tree beside them (not entered yet), the panel split in three",
             t1.tab === 1 && t1.tabIndex === 1 && t1.focus === "domains" && t1.domains && t1.domainsActive && t1.field === 0 && t1.treeVisible && !t1.treeActive && !t1.list &&
-            t1.treeId === "melee" && t1.nodes === 11 && t1.chosen === null && JSON.stringify(t1.splits) === "[235,795]", t1);
+            t1.treeId === "melee" && t1.nodes === 12 && t1.chosen === null && JSON.stringify(t1.splits) === "[235,795]", t1);
         await key(DOWNK);
         t1 = await tree();
         check("↓ on the list: Obrona, and its tree shows at once", t1.field === 1 && t1.treeId === "defense" && t1.focus === "domains", t1);

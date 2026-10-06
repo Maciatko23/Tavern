@@ -48,6 +48,8 @@ const HOOKS = `(function(){
 const QUIET = `if (window.Needs && Needs.setEnabled) Needs.setEnabled(false);
     if (window.Hunting) { Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); }
     if (window.Livestock && Livestock.auto) Livestock.auto(false); if (window.Dog && Dog.auto) Dog.auto(false); if (window.Birds && Birds.auto) Birds.auto(false);
+    if (window.Humans && Humans.auto) { Humans.auto(false); Humans.clear(); }
+    if (window.Creatures && Creatures.auto) { Creatures.auto(false); Creatures.clear(); }
     if (window.Survival && Survival.calmWeather) Survival.calmWeather(); $gameScreen.clearWeather();
     $gameSystem._minimapHidden = true; $gameSystem._combatMode = false;`;
 

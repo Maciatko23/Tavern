@@ -29,6 +29,9 @@
 //   then:   gives [[id, n]], vgives { key: n }, reward, choice { ask: [lines], options: [{ label, say, reward, flag, fx }] }
 // LINES: a string is said by the one spoken to; "> text" by the hero; "@key: text" by another resident (or "@lord", "@grandpa").
 //   {gold}, {n}, {left}... are filled from the quest's numbers.
+// (2026-10-05) autoStart: a quest with no offer that starts by itself when its handler (FX[autoStart]) says so (K37: the theft);
+//   a step's ch: the arc's chapter shown in the journal (W1, W2: some chapters have more than one step); wet: a spot step's popup in
+//   the rain. REMARKS: what a resident says once, the first talk after something happened (a flag) - before the greeting.
 //
 // DROUGHT (the user's rule): no quest, choice or resident gives the hero water - quests only ever TAKE the hero's own rain water.
 
@@ -73,7 +76,12 @@
         zosia: [["...Dzień dobry."], ["Cześć!"], ["Dzień dobry, sąsiedzie!"], ["To ty! Chodź, pokażę ci coś!"], ["Mój rycerz!"]],
         ludmila: [["Dzień dobry... panie."], ["Dzień dobry."], ["Dobrze, że jesteś."], ["Nasz dobry człowiek."], ["Dla nas jesteś jak rodzina."]],
         ela: [["..."], ["Cześć."], ["Hej!"], ["To ty! Mama mówi, że jesteś dobry."], ["Mój przyjaciel!"]],
-        rafal: [["Czego?"], ["Ty znowu."], ["A, to ty. W porządku."], ["Dobrze, że to ty."], ["Bracie."]]
+        rafal: [["Czego?"], ["Ty znowu."], ["A, to ty. W porządku."], ["Dobrze, że to ty."], ["Bracie."]],
+        zlodziej: [["Czego? Nic nie wziąłem!"], ["A, bosy. Cześć."], ["Hej, sąsiad!"], ["To ty! Chodź, pokażę ci skrót przez mur!"], ["Mój brat! No... prawie brat."]],
+        gracz: [["Kości, mój drogi?"], ["A, znajoma twarz!"], ["Witaj, przyjacielu!"], ["Mój ulubiony gracz!"], ["Ach, sława tego miasta!"]],
+        bartek: [["Hm? Ja nic nie mam. Wszystko przegrałem."], ["A, to ty."], ["Dzień dobry, sąsiedzie."], ["Dobry z ciebie człowiek."], ["Przyjacielu! Siadaj, choć nie mam czym poczęstować."]],
+        woznica: [["Z drogi, chłopcze."], ["A, to ty."], ["Dzień dobry."], ["O, dobry człowiek!"], ["Ty to masz u mnie miejsce na koźle."]],
+        straznik: [["Stój. Czego tu?"], ["Znam cię. Bez hałasu."], ["Dzień dobry, sąsiedzie."], ["Witaj. Spokojnie dziś w ogrodzie."], ["Ty to masz u mnie wolne przejście. Prawie."]]
     };
 
     // ------------------------------------------------------------------
@@ -90,7 +98,8 @@
             dzwonnik: ["Targ... jak za dawnych lat. Tylko ciszej.", "Dziś dzwon bije weselej."],
             kowal: ["Kto kupi podkowę na szczęście?", "Noże ostrzę od ręki!"],
             garbarz: ["Pasy, rzemienie, sakiewki!", "Buty na miarę - przyjmuję zamówienia!"],
-            kapral: ["Pilnować sakiewek! W tłoku są złodzieje.", "Spokojnie, ludzie, spokojnie."]
+            kapral: ["Pilnować sakiewek! W tłoku są złodzieje.", "Spokojnie, ludzie, spokojnie."],
+            gracz: ["Kości! Kto zagra o pięć groszy?", "Dziś szczęście hojne - podejdź, mój drogi!"]
         }
     };
 
@@ -105,7 +114,7 @@
             { day: 24, title: "Druga fala z promu", text: "Namiotów przybędzie, przy beczkach Kuby będą kłótnie. Dwór zacznie zbierać zboże na wojnę.", wait: "obóz uchodźców" },
             { day: 33, title: "Imieniny Lorda", text: "U drzwi dworu kolejka z prezentami. Lord lubi miód pitny i placek jagodowy." },
             { day: 38, title: "Trzecia fala z promu", text: "Znowu nowi ludzie z kontynentu. Ceny na tydzień w górę.", wait: "obóz uchodźców" },
-            { day: 42, title: "Noc Kupały", text: "Ogniska na łące za bramą południową, kwiat paproci w lesie - jedna noc w roku.", wait: "święto na łące (mapa, ogniska)" },
+            { day: 42, title: "Noc Kupały", text: "Ogniska przy bramie południowej, kwiat paproci w lesie - jedna noc w roku. Jeśli Melia ma całą siódmą balladę, może ją tu zaśpiewać.", wait: "łąka za bramą i ogniska na mapie (na razie tylko ognisko Melii w jej wątku)" },
             { day: 52, title: "Czwarta fala i noc promu", text: "Wielki ładunek na przystań. Ktoś będzie chciał coś wywieźć po cichu.", wait: "przystań i wóz" },
             { day: 56, title: "Dożynki", text: "Wieniec z jęczmienia, konkurs na największą kapustę, uczta Lorda dla miasta. Lord przypomni o długu dziadka.", wait: "święto na rynku" }
         ]
@@ -118,7 +127,11 @@
         "3": { name: "trzy o trzeciej", pattern: [3], when: "Głęboka noc, miasto śpi. Ambroży dzwoni co noc, choć nikt go o to nie prosi.", meaning: "nocna straż: wszystko spokojnie" },
         "1-1-1-1": { name: "cztery pojedyncze", pattern: [1, 1, 1, 1], when: "Jedenasta w nocy: kapral Wit kończy obchód murów i wraca do bramy.", meaning: "zmiana warty" },
         "4+2": { name: "cztery i dwa", pattern: [4, 2], when: "Pierwszy deszcz po kilku dniach suszy.", meaning: "woda idzie" },
-        "2+2+2": { name: "trzy razy po dwa", pattern: [2, 2, 2], when: "Burza - piorun uderzył niedaleko.", meaning: "ogień" }
+        "2+2+2": { name: "trzy razy po dwa", pattern: [2, 2, 2], when: "Burza - piorun uderzył niedaleko.", meaning: "ogień" },
+        // (2026-10-05, W2 rozdz. 5-6: the rest of the Book of Signals; "pytanie" the hero rings himself at noon)
+        "3+1": { name: "trzy i jeden", pattern: [3, 1], when: "Ktoś obcy kręci się nocą przy murach - puka do kantoru po północy.", meaning: "obcy w murach" },
+        "5": { name: "pięć", pattern: [5], when: "Nocą ktoś otwiera bramę - wóz wjeżdża albo wyjeżdża.", meaning: "brama otwarta nocą" },
+        "pytanie": { name: "siedem", pattern: [7], when: "Siedem uderzeń: w samo południe z wieży albo o północy w Noc Pytania.", meaning: "pytanie - wezwanie dla strażników zakonu" }
     };
 
     // things carried that are not items of the database (letters, a horseshoe, a crate...): the journal and the needs show them
@@ -133,7 +146,19 @@
         obwieszczenie: { name: "Obwieszczenie sołtysa", icon: 0 },
         koszyki: { name: "Koszyki dla dworu", icon: 0 },
         lek: { name: "Lek z kontynentu", icon: 0 },
-        plaszcze: { name: "Płaszcze od Ignaca", icon: 368 }
+        plaszcze: { name: "Płaszcze od Ignaca", icon: 368 },
+        rysunek: { name: "Rysunek śluzy (podpisany „F.”)", icon: 191 },
+        pierscionek: { name: "Pierścionek matki Zosi", icon: 145 },
+        sakiewka: { name: "Sakiewka dworu", icon: 208 },
+        kroniki: { name: "Kroniki zakonu", icon: 189 },
+        // (2026-10-06, the tavern's regulars)
+        struna: { name: "Struna ze ścięgien (dla Melii)", icon: 199 },
+        czapka: { name: "Czapka Ozzy'ego", icon: 130 },
+        pas: { name: "Pas siłacza (udźwig +8)", icon: 148 },
+        // (2026-10-06, W4) the castellan's key: two halves, then one
+        klucz_borgar: { name: "Połowa klucza (znad baru Borgara)", icon: 197 },
+        klucz_kopiec: { name: "Połowa klucza (spod kopca z krukiem)", icon: 198 },
+        klucz_kasztelana: { name: "Klucz kasztelana", icon: 195 }
     };
 
     // the quests' places: events put into the maps (Tawerna.inject, ids 951-959 - the same id may serve another map). Shown and
@@ -148,7 +173,105 @@
         south_gate: { map: 8, id: 956, x: 26, y: 54, name: "Pod bramą południową", deco: "tracks" },
         watch_post: { map: 8, id: 957, x: 26, y: 20, name: "Posterunek przy bramie twierdzy" },
         east_brazier: { map: 8, id: 958, x: 49, y: 49, name: "Kosz żarowy", wall: true, deco: "doused" },
-        horseshoe: { map: 22, id: 951, x: 20, y: 14, name: "Polna droga", deco: "glint" }
+        horseshoe: { map: 22, id: 951, x: 20, y: 14, name: "Polna droga", deco: "glint" },
+        // (2026-10-05) the places another agent built for these quests (docs/miasta_miejsca_zadan.md - on their "Miejsce:" markers):
+        // Map118 "Dno studni", Map024 the orangery of the manor's garden, Map119 "Archiwum zakonu". img: [sheet, index, direction,
+        // pattern] - a picture on the place's page (the ring's glint; Feliks and Kuba at the back gate at night); solid: it blocks (a
+        // person); nomark: no yellow diamond over it
+        k26_ring: { map: 118, id: 951, x: 5, y: 6, name: "Błysk w kałuży", img: ["!Quest_Places", 0, 2, 2] },
+        w1_grate: { map: 118, id: 952, x: 5, y: 4, name: "Krata z krukiem" },
+        w1_pump: { map: 24, id: 951, x: 7, y: 26, name: "Pompa na włazie" },
+        w1_drawer: { map: 24, id: 952, x: 8, y: 27, name: "Szuflada ogrodnika" },
+        w1_feliks: { map: 24, id: 953, x: 6, y: 25, name: "Feliks", img: ["$Npc_Feliks", 0, 4, 1], solid: true, nomark: true },
+        w1_kuba: { map: 24, id: 954, x: 3, y: 24, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 6, 1], solid: true, nomark: true },
+        w2_book: { map: 119, id: 951, x: 6, y: 6, name: "Księga sygnałów" },
+        w2_chron: { map: 119, id: 952, x: 10, y: 5, name: "Kroniki zakonu" },
+        // (2026-10-06) W3 a: Melia by the Kupała bonfire before the south gate (only that night; bust: her own)
+        // (2026-10-06) W4: where the other half of the key lies - at the foot of the stone cairn in grandpa's yard (Map020, the cairn 8,5)
+        w4_dig: { map: 20, id: 951, x: 8, y: 6, name: "Kopiec z krukiem", deco: "dig" },
+        w3_kupala: { map: 8, id: 959, x: 24, y: 51, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
+        // (2026-10-06) W8 in the mountains: on the maps agent's markers ("Miejsce: <marker>" - docs/miasta_miejsca_zadan.md "Góry"; dx/dy
+        // shift; x/y only a fallback) - Grum as a picture with his bust at each place, the commander's crate in the diggers' camp
+        w8_start: { map: 13, id: 951, marker: "grum_przewodnik_start", x: 4, y: 38, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
+        w8_quarry: { map: 13, id: 952, marker: "kamieniolom_znak", dx: 1, x: 41, y: 18, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_gate: { map: 13, id: 953, marker: "osada_brama", dx: 1, x: 7, y: 4, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_cave: { map: 14, id: 951, marker: "marek", dx: -2, dy: 1, x: 28, y: 6, name: "Grum", img: ["$Npc_Grum", 0, 6, 1], solid: true, bust: "Actor2_5" },
+        w8_crate: { map: 14, id: 952, marker: "list_kryjowka", x: 27, y: 11, name: "Skrzynia dowódcy" },
+        w8_osada: { map: 120, id: 951, marker: "osada_grum", x: 21, y: 25, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" }
+    };
+
+    // W1 rozdz. 6 a/b: the sluice half open - the market well's ration (<Studnia:2>) gives this many draws a day more
+    // (Farming_Plots.rationOf asks TownQuests.wellBonus). 0: the well stays as it is - the user 2026-10-05: "Dalej 2 dziennie" (the
+    // mill runs again, the market well still gives little)
+    const WELL_BONUS = 0;
+
+    // what a resident says once - the first talk after something happened (a flag of the quests); gone: only while that resident is
+    // away (TownLife.setGone), back: only once that resident is back
+    const REMARKS = [
+        { id: "kubaFledPiek", who: "piekarka", flag: "kubaFled", gone: "woziwoda", lines: ["Kuba uciekł, a przydziału nie ma. Na czym ja mam chleb piec, kochaneczku? Na ślinie?"] },
+        { id: "kubaFledKowal", who: "kowal", flag: "kubaFled", gone: "woziwoda", lines: ["Koryto suche. Baltazar chce sześć groszy za wiadro. Sześć! Kto Kubę spłoszył, ten niech teraz za mnie kuje."] },
+        { id: "kubaFledKupiec", who: "kupiec", flag: "kubaFled", gone: "woziwoda", lines: ["Woda? Dla miasta - sześć groszy za wiadro, przyjacielu. Dla ciebie... nie mam. Przykro mi. Naprawdę."] },
+        { id: "kubaBack", who: "woziwoda", flag: "kubaFled", back: "woziwoda", lines: ["Wróciłem. Nie dzięki tobie. Sołtys dał mi jeszcze jedną szansę... to ty mi jej nie psuj."] },
+        { id: "kubaResent", who: "woziwoda", flag: "lordAlly", lines: ["Przez ciebie nie mam towaru. Woda wróciła do studni, a ja zostałem z pustymi beczkami. Wielkie dzięki, chłopcze."] },
+        { id: "kubaReveal", who: "woziwoda", flag: "w1Revealed", lines: ["Woda wróciła do młynówki, a ja zostałem z pustymi beczkami. Sołtys mówi, że mogę nosić wodę do domów. Za grosz. Uczciwy grosz. Jakoś to będzie."] },
+        { id: "witDegraded", who: "kapral", flag: "witDegraded", lines: ["Kapral? Już nie kapral. Zwykły strażnik przy bramie. ...Może i dobrze. Przynajmniej śpię w nocy."] },
+        { id: "soltysReveal", who: "soltys", flag: "w1Revealed", lines: ["Słyszysz młyn? Ruszył! Hanka już nie mieli w żarnach. A studnia daje wiadro więcej na dzień. Niewiele, ale nasze."] },
+        { id: "hankaMill", who: "piekarka", flag: "millRuns", lines: ["Mąka z młyna! Prawdziwa mąka, nie z żaren! Kochaneczku, chodź tu, niech cię uściskam."] },
+        { id: "guardLord", who: "straznik", flag: "lordAlly", lines: ["Feliksa nie ma. Jaśnie pan mówi, że wyjechał. Ogród podlewamy teraz wiadrami. Jak wszyscy."] },
+        { id: "guardReveal", who: "straznik", flag: "w1Revealed", lines: ["Feliksa zabrali w kajdanach. Kto by pomyślał - kamerdyner. Ogród podlewamy teraz wiadrami."] },
+        { id: "kapralK37", who: "kapral", flag: "k37Seen", lines: ["Ktoś zgarnął sakiewkę dworu i nie oddał. Ludzie widzieli. Mam cię na oku, chłopcze."] },
+        { id: "szymekFree", who: "zlodziej", flag: "szymekFree", lines: ["Ty jesteś ten, co mnie puścił. Połowę dałem Ludmile, na chleb dla Eli. Drugą połowę... też na chleb."] },
+        { id: "bartekShare", who: "bartek", flag: "lucjanShare", lines: ["Lucjan dalej gra na targu i dalej wygrywa. A ty mówiłeś, że mu popatrzysz na ręce..."] },
+        // (2026-10-06) the tavern's regulars and what they hear
+        { id: "grumD6Won", who: "grum", flag: "d6Won", lines: ["Pobiłeś mnie przy wszystkich. W mojej własnej tawernie. ...Dobra robota. Następnym razem nie będzie tak łatwo. Następnym razem zjem śniadanie."] },
+        { id: "grumD6Sold", who: "grum", flag: "d6Sold", lines: ["Przegrałeś z woźnicą. Z woźnicą! A kantorowy stał z boku i się uśmiechał. Hm. Nie pytam. Na razie."] },
+        { id: "kupiecD6Crossed", who: "kupiec", flag: "d6Crossed", lines: ["Wziąłeś moje czterdzieści groszy i wygrałeś. Zapamiętam to sobie, przyjacielu. Ja wszystko pamiętam. Dosłownie wszystko."] },
+        { id: "kowalD6Won", who: "kowal", flag: "d6Won", lines: ["Pierwszy raz od dziesięciu lat ktoś położył Gruma przy ludziach! Ha! A beczkę piwa wypiliśmy we trzech. Głównie ja."] },
+        { id: "hankaOven", who: "piekarka", flag: "d13Oven", lines: ["Tadek załatał mi piec gliną i żelazną obręczą. Skąd ten stary pijak z tawerny wiedział, że pęknie?!"] },
+        { id: "grumD13", who: "grum", flag: "d13Done", lines: ["Ten stary pijak. Trzy na trzy. Już przy nim nie piję. Boję się, co powie o mnie."] },
+        { id: "meliaBurned", who: "melia", flag: "w3Burned", lines: ["Spaliłeś słowa... Może tak trzeba było. Tylko czemu w środku mam teraz tak cicho?"] },
+        { id: "meliaSung", who: "melia", flag: "w3Sung", lines: ["Całe miasto śpiewa teraz moją pieśń. Dzieci przy studni, Hanka przy piecu. Nie wiem, czy się cieszyć, czy bać."] },
+        { id: "ozzyCapGrum", who: "grum", flag: "k33Cap", lines: ["Ozzy ma znowu czapkę. Mówi, że leżała na posągu za murem. Ozzy od tygodnia nie wychodził z tawerny. Sprawdzałem."] },
+        // (2026-10-06) W1 rozdz. 6 c - the ambush on Polna droga as a fight - and rozdz. 7, the cistern's sluice opened by the bell
+        { id: "feliksAmbushWon", who: "feliks", flag: "w1AmbushWon", lines: ["(Feliks na twój widok o mało nie upuszcza koszyka.) Pan... zdrów? Jak miło. Doprawdy, jak miło."] },
+        { id: "feliksRobbed", who: "feliks", flag: "w1Robbed", lines: ["Słyszałem o napadzie na Polnej drodze. Straszne czasy, młodzieńcze. Mówiłem - drogi bywają niebezpieczne."] },
+        { id: "kapralAmbushWon", who: "kapral", flag: "w1AmbushWon", lines: ["Na Polnej drodze ktoś przetrzepał trzech zbirów w kapturach. Bosy, mówią. Nie pytam, kto. Ale dobra robota."] },
+        { id: "soltysCistern", who: "soltys", flag: "cisternOpen", lines: ["Studnia pełna! Pierwszy raz od trzech lat! Klucz noszę przy sobie - racje po równo, dla każdego domu.",
+            "Tobie dalej dwa wiadra na dzień, jak dotąd. Wiem, wiem... Ale ty masz swoją deszczówkę na polu Stacha. A miasto ma tylko tę studnię."] },
+        { id: "kubaCistern", who: "woziwoda", flag: "cisternOpen", lines: ["Rozwożę racje ze studni. Za grosz od domu, z kasy sołtysa. Uczciwy grosz. ...Lżej się nosi, wiesz? Beczka ta sama, a jakby lżejsza."] },
+        { id: "hankaCistern", who: "piekarka", flag: "cisternOpen", lines: ["Woda w studni i mąka z młyna! Kochaneczku, pierwszy chleb z tego ciasta jest twój. Nie dyskutuj."] },
+        { id: "tadekCistern", who: "kowal", flag: "cisternOpen", lines: ["Koryto pełne, młyn się kręci, a ja chłodzę żelazo w prawdziwej wodzie. Ojciec mówił, że zakon wiedział, co robi. Miał rację, stary."] },
+        { id: "ambrozyCistern", who: "dzwonnik", flag: "cisternOpen", lines: ["Cztery i dwa... Trzysta lat ten dzwon czekał, żeby ktoś go o to poprosił. Śpię teraz lepiej."] },
+        { id: "baltazarCistern", who: "kupiec", flag: "cisternOpen", lines: ["Woda w studni. Piękna sprawa, przyjacielu. Dla miasta. (Baltazar uśmiecha się samymi ustami.) Moje beczki w piwnicy straciły połowę ceny."] },
+        { id: "feliksCistern", who: "feliks", flag: "cisternOpen", lines: ["(Feliks patrzy na ciebie długo.) Woda pod rynkiem. Zakonnym kanałem, obok dworu. ...Moje gratulacje, młodzieńcze. Szczerze."] },
+        // (2026-10-06) W9 rozdz. 6: what follows a truth told
+        { id: "ludmilaLoaf", who: "ludmila", flag: "w9Loaf", lines: ["Pani Hanka przysyła nam co rano bochenek. Mówi, że i tak jej zostaje. ...Wiem, że to ty coś jej powiedziałeś. Dziękuję."] },
+        { id: "elaLullaby", who: "ela", flag: "w9Lullaby", lines: ["Mama śpiewała mi wczoraj piosenkę zza morza! O łódce i o gwiazdach. Mówi, że od babci. Znasz ją?"] },
+        { id: "zosiaBell", who: "zosia", flag: "w9Bell", lines: ["Pan Ambroży się dziś śmiał! Na wieży! Mama mówi, że od lat nie słyszała, żeby się śmiał."] }
+    ];
+
+    // K39: Lucjan Kość as a rival of TavernDice (put into TavernDice.OPPONENTS when the hero sits down with him - never at the
+    // tavern's table): he always plays his loaded die (the lucky one's weights: ones far more often)
+    const LUCJAN = {
+        name: "Lucjan Kość", short: "Lucjan", role: "wędrowny gracz", style: "szuler", styleColor: "#e0a85a",
+        bust: "Gracz_Bust", sheet: null, index: 0,
+        hours: [0, 24], stakes: [5], perDay: 3,
+        ai: { bank: [0, 350, 400, 500, 800, 1800, Infinity], reckless: 0.05, chase: 1.7 },
+        die: { key: "szczesciarz", chance: 1 },
+        quote: "Kości, mój drogi? Pięć groszy - a może wygrasz dziesięć.",
+        lines: {
+            greet: ["Kości, mój drogi? Pięć groszy - a może wygrasz dziesięć.", "Siadaj, siadaj. Szczęście lubi odważnych."],
+            meFirst: ["Pozwolisz, że zacznę? Kości mnie lubią."], heroFirst: ["Gość przodem. Proszę."],
+            myBig: ["Ach! Co za dzień!", "Widzisz? Szczęście to kwestia wychowania."], myBust: ["Ojej. Nawet szczęście czasem śpi.", "Pudło? Pierwsze w tym tygodniu."],
+            myHot: ["Wszystkie sześć! Kto by pomyślał!"], push: ["Jeszcze raz. Kości są ciepłe."], bank: ["Zapiszę. Skromnie."],
+            heroBust: ["Pech, mój drogi. Zdarza się najlepszym.", "Oj. Kości dziś kapryśne."], heroHot: ["Ho, ho! Ktoś tu ma rękę!"],
+            heroBig: ["Pięknie rzucone. Prawie jak ja."], heroSmall: ["Ostrożnie, ostrożnie..."],
+            win: ["Moje! Dziękuję za grę, mój drogi.", "Szczęście było dziś po mojej stronie. Jak zwykle."],
+            lose: ["Wygrałeś? No proszę... Gratuluję. Szczerze.", "Hm. Kości się pomyliły."],
+            lucky: ["Ta? Zwykła kość. Najzwyklejsza na świecie."],
+            chat: ["Na kontynencie grałem z generałem. Przegrał konia.", "Szczęście to nie grzech, mój drogi. Grzech to nie spróbować."],
+            tired: ["Na dziś dość, mój drogi. Szczęście też musi odpocząć."]
+        }
     };
 
     // K5: what each one says when the bread comes (one a day, in turn) - the first time it goes into the journal
@@ -452,8 +575,8 @@
         },
         // =========================================================== K15
         {
-            id: "K15", kind: "K", title: "Ostrożnie, kruche", giver: "kupiec", icon: 0, where: "kantor → brama południowa", when: "21:30–22:30",
-            desc: "Baltazar chce, żeby skrzynia stanęła na wozie pod bramą południową o dziesiątej wieczorem. „Nie otwierać - kruche.” Skrzynia jest ciężka.",
+            id: "K15", kind: "K", title: "Ostrożnie, kruche", giver: "kupiec", icon: 0, where: "kantor → woźnica przed bramą południową", when: "21:30–22:30",
+            desc: "Baltazar chce, żeby skrzynia stanęła na wozie woźnicy Wojciecha przed bramą południową o dziesiątej wieczorem. „Nie otwierać - kruche.” Skrzynia jest ciężka.",
             offer: {
                 cond: { hours: [21.5, 22.2], day: 3 },
                 say: ["Ach, przyjaciel. Mam drobną prośbę. Ta skrzynia ma stanąć na wozie pod bramą południową. O dziesiątej. Nie otwierać - kruche.",
@@ -462,15 +585,17 @@
                 accept: ["Wiedziałem, że się dogadamy. Ostrożnie na schodach."], decline: ["Szkoda. Znajdę kogoś mniej... wybrednego."]
             },
             steps: [
-                { type: "spot", spot: "south_gate", hours: [21.5, 22.5], need: [["v:skrzynia", 1]], deadline: { day: 0, hour: 22.5, late: "fail" },
+                // (2026-10-05: the carter Wojciech waits with his cart before the south gate, 21:20-22:40 - TownLife "woznica")
+                { type: "bring", to: "woznica", hours: [21.5, 22.5], need: [["v:skrzynia", 1]], deadline: { day: 0, hour: 22.5, late: "fail" },
                     talk: "k15Wit",
-                    text: "Zanieś skrzynię Baltazara pod bramę południową przed 22:30. Nie otwieraj (albo oddaj ją kapralowi Witowi).",
-                    say: ["> (Za bramą, w ciemności, stoi wóz. Ktoś czeka, nie widać twarzy.)"],
+                    text: "Zanieś skrzynię Baltazara woźnicy Wojciechowi - czeka z wozem przed bramą południową - przed 22:30. Nie otwieraj (albo oddaj ją kapralowi Witowi).",
+                    early: ["Skrzynia od Veya? Postawisz ją tu o dziesiątej. Nie wcześniej."], remind: ["Czekam na towar od Veya. Ty go masz?"],
+                    hero: ["> Skrzynia od Baltazara. Na wóz."], done: ["Od Veya? Postaw z tyłu, na słomie. Ja przytrzymam konie."],
                     choice: { ask: [], options: [
-                        { label: "Postaw skrzynię na wozie.", say: ["> (Z ciemności szept:) „Od Veya? Dobrze. Idź już.”"], flag: "k15Clean", next: 1 },
-                        { label: "Najpierw zajrzyj do środka.", say: ["> (Zamek pęka cicho. W słomie leżą stare kamienie z wyrytym krukiem.)",
-                            "> (Szybko zamykasz wieko i stawiasz skrzynię na wozie. Szept: „Od Veya? Dobrze.”)"], flag: "k15Opened", clue: "w5_stones",
-                            note: ["Skrzynia Baltazara", "W skrzyni, którą Baltazar kazał nocą postawić na wozie pod bramą południową, leżały w słomie stare kamienie z wyrytym krukiem."], next: 1 }
+                        { label: "Postaw skrzynię na wozie.", say: ["> (Stawiasz skrzynię na słomie.)", "Dobrze. Idź już, chłopcze. Nikt cię tu nie widział."], flag: "k15Clean" },
+                        { label: "Najpierw zajrzyj do środka.", say: ["> (Wojciech odwraca się do koni. Zamek pęka cicho. W słomie leżą stare kamienie z wyrytym krukiem.)",
+                            "> (Szybko zamykasz wieko i stawiasz skrzynię na wozie.)", "Co tak długo? ...Dobra. Idź już."], flag: "k15Opened", clue: "w5_stones",
+                            note: ["Skrzynia Baltazara", "W skrzyni, którą Baltazar kazał nocą postawić na wozie woźnicy Wojciecha przed bramą południową, leżały w słomie stare kamienie z wyrytym krukiem."] }
                     ] } },
                 { type: "custom", talk: "k15Pay", text: "Odbierz zapłatę u Baltazara (kantor, 8–18)." }
             ],
@@ -629,6 +754,86 @@
                 reportQuiet: ["> Lis, sowa. Poza tym spokój.", "Spokój to dobra wiadomość. Masz piętnaście groszy."]
             }
         },
+        // =========================================================== K26 (2026-10-05: the well's bottom, Map118)
+        {
+            id: "K26", kind: "K", title: "Pierścionek w studni", giver: "zosia", icon: 0, where: "studnia na rynku → dno studni (Map118)", when: "za dnia, nie w deszcz",
+            desc: "Zosia wrzuciła do studni na rynku pierścionek matki - „chciałam zobaczyć, czy plusknie”. Trzeba zejść na dno po dwóch linach (z boku studni, od wschodu).",
+            offer: {
+                cond: { hours: [[8.2, 12], [13.2, 18.5]], day: 3, clear: true },
+                say: ["(Zosia ma czerwone oczy.) Wrzuciłam do studni pierścionek mamy. Chciałam zobaczyć, czy plusknie... Nie pluskło.",
+                    "Mama jeszcze nie wie. Zejdziesz po niego? Tata mówi, że studnia głęboka na dwie liny."],
+                yes: "Zejdę po niego.", no: "Nie teraz.",
+                accept: ["Naprawdę? Z boku studni są kamienie, tam się wiąże linę. Tylko nie mów mamie!"], decline: ["...Dobrze. Może sam wypłynie."]
+            },
+            steps: [
+                { type: "spot", spot: "k26_ring", hours: [6, 20], clear: true, vgives: { pierscionek: 1 },
+                    text: "Zejdź na dno studni na rynku (2× Lina; z boku studni, stojąc na wschód od niej) i znajdź pierścionek - za dnia, nie w deszcz.",
+                    early: ["Na dnie ciemno choć oko wykol. Zejdę za dnia."], wet: "W deszcz z szybu leje się woda - nic nie widać.",
+                    say: ["> (W płytkiej kałuży coś błyska. Cienki srebrny pierścionek z niebieskim oczkiem.)",
+                        "> (Nad kałużą, w ścianie, zamurowany łuk kanału. W zworniku wyryty kruk, u stóp żelazna krata.)", "> Ktoś kiedyś odciął tę studnię od kanału."],
+                    reward: { clue: "w1_well", note: ["Studnia odcięta", "Na dnie studni na rynku jest zamurowany łuk kanału zakonu: w zworniku kruk, u stóp żelazna krata. Ktoś kiedyś odciął tę studnię od wody spod wzgórza."] } },
+                { type: "bring", to: "zosia", need: [["v:pierscionek", 1]], hours: [[8.2, 12], [13.2, 18.5]], text: "Oddaj pierścionek Zosi (rynek, za dnia).",
+                    remind: ["Znalazłeś? ...Jeszcze nie?"], hero: ["> Twój pierścionek. Leżał w kałuży na samym dnie."],
+                    done: ["Pierścionek mamy! Dziękuję, dziękuję! ...Nie mów jej, dobrze? To będzie nasza tajemnica.", "A co tam było, na dole? Smoki? Nie? Szkoda."] }
+            ],
+            reward: { xp: 50, opinion: 3 }
+        },
+        // =========================================================== K37 (2026-10-05: the victim is Feliks with the manor's purse - the
+        // Lord himself never comes to the market; Feliks does the manor's shopping there, so the purse is still the Lord's money)
+        {
+            id: "K37", kind: "K", title: "Sakiewka Lorda", giver: "feliks", icon: 0, autoStart: "k37Theft", where: "rynek → taras rzemieślników", when: "dzień targowy, 8:30–10:30",
+            desc: "W dzień targowy złodziejaszek odciął Feliksowi sakiewkę dworu - pieniądze jaśnie pana - i ucieka schodami w dół, na taras rzemieślników. Dogoń go (bieg: Shift).",
+            steps: [
+                { type: "custom", tick: "k37Chase", text: "Dogoń złodziejaszka! Ucieka schodami w dół, na taras rzemieślników (bieg: Shift)." },
+                { type: "custom", talk: "k37Caught", tick: "k37Hold", vgives: { sakiewka: 1 }, text: "Złapałeś złodziejaszka. Porozmawiaj z nim - co z nim zrobisz?" },
+                { type: "bring", to: "feliks", need: [["v:sakiewka", 1]], hours: [7, 10.5], text: "Oddaj sakiewkę Feliksowi (rynek, rano 7–10:30).",
+                    hero: ["> Sakiewka dworu. Złodziejaszek już jej nie ma."],
+                    done: ["Sakiewka! Cała? (liczy) Cała. Jaśnie pan się dowie, kto mu ją oddał.", "Pięćdziesiąt na poczet długu pana dziadka - z wdzięczności dworu. Zapiszę."],
+                    reward: { debtCredit: 50, opinion: 2 } }
+            ],
+            reward: { xp: 60 },
+            fail: { opinion: 0, text: "Złodziejaszek zniknął między namiotami pod murem." },
+            lines: {
+                shout: "Złodziej! Sakiewka jaśnie pana! Łapać go!", run: "Z drogi!", look: ["Nie dogonisz!", "Hehe!", "Bosy mnie goni?!"], caught: "Puść! Puść, nic nie zrobiłem!",
+                talk: ["> Mam cię. Oddawaj sakiewkę.", "(Chłopak ma może trzynaście lat. Chudy jak tyczka.) Puść... Ja nie dla siebie. W obozie nie ma co jeść. Ela płacze z głodu po nocach."],
+                giveBack: ["(Szymek oddaje sakiewkę i patrzy w ziemię.) Masz. I tak by mnie złapali."],
+                free: ["> Uciekaj. I więcej nie kradnij.", "(Szymek patrzy na ciebie, jakby nie wierzył.) ...Dziękuję. Nie zapomnę ci tego. Nigdy."],
+                keep: ["> Sakiewka zostaje u mnie. A ty zmykaj.", "(Szymek otwiera usta, zamyka je - i ucieka.)"],
+                gone: "Złodziejaszek wykorzystał chwilę i uciekł.",
+                noteFree: ["Szymek z obozu", "Złodziejaszek, który odciął sakiewkę dworu, to Szymek - głodny chłopak z obozu pod murem. Puściłem go. Ludzie z obozu tego nie zapomną."],
+                noteKeep: ["Sakiewka dworu", "Zatrzymałem sakiewkę dworu, którą odebrałem złodziejaszkowi. Osiemdziesiąt groszy."]
+            }
+        },
+        // =========================================================== K39 (2026-10-05: Bartek in the tavern, Lucjan at the market)
+        {
+            id: "K39", kind: "K", title: "Kości z targu", giver: "bartek", icon: 0, where: "tawerna (Bartek) → stragan na rynku (Lucjan)", when: "dzień targowy, 10–14",
+            desc: "Bartek Kmieć przegrał na targu wszystko z wędrownym graczem, Lucjanem Kością: „ma szczęście jak diabeł”. Zagraj z Lucjanem i wypatrz, kiedy podmienia kość (Czujność 10+).",
+            offer: {
+                cond: { hours: [14, 21], day: 7 },
+                say: ["Przegrałem wszystko. Wszystko! Jęczmień z całego pola, a potem jeszcze grosze na mąkę.",
+                    "Na targu siedzi taki jeden, Lucjan Kość. Ma szczęście jak diabeł - siedem szóstek z rzędu! Ty masz bystre oczy. Zagraj z nim i patrz mu na ręce."],
+                yes: "Zagram z nim i popatrzę.", no: "Hazard to nie dla mnie.",
+                accept: ["W dzień targowy, przed południem, przy straganie z prawej. Tylko nie przegraj wszystkiego jak ja."], decline: ["Mądry. Mądrzejszy ode mnie."]
+            },
+            steps: [
+                { type: "custom", talk: "k39Play", text: "Zagraj w kości z Lucjanem Kością (rynek, przy prawym straganie; w dzień targowy 10–14) i patrz mu na ręce. Bez Czujności 10 nic nie zobaczysz." },
+                { type: "custom", talk: "k39Choice", text: "Widziałeś, jak Lucjan podmienia kość. Powiedz mu, co o tym myślisz (rynek, w dzień targowy 10–14)." },
+                { type: "talk", to: "bartek", hours: [14, 21], text: "Wróć do Bartka (tawerna, 14–21).",
+                    say: ["> Lucjan grał oszukaną kością. Wyrzuciłem go z targu.", "Oszukaną?! Wiedziałem! ...To znaczy, nie wiedziałem, ale czułem.",
+                        "Masz. Pięć groszy. Ostatnie, jakie mam, ale są twoje. Uczciwie."], reward: { gold: 5 } }
+            ],
+            reward: { xp: 60 },
+            lines: {
+                play: ["Kości, mój drogi? Pięć groszy za partię. Gramy do tysiąca pięciuset."], playNo: ["Szczęście nie lubi czekać."],
+                spotted: ["> (Teraz! Sięgając po kubek, Lucjan zgarnął jedną kość rękawem - a na stół wróciła inna, cięższa.)", "> Podmienia kość. Szczęście jak diabeł... z rękawa."],
+                notSpotted: ["> (Szczęście jak diabeł... Patrzyłem mu na ręce, ale nic nie widać.)", "> (Ktoś bystrzejszy może by coś zauważył. Czujność 10.)"],
+                face: ["> Widziałem rękaw, Lucjanie. I cięższą kość.", "(Lucjan przestaje się uśmiechać.) Ciii! ...Mój drogi, po co od razu krzyczeć? Dogadajmy się."],
+                out: ["> Ludzie! Ten człowiek gra oszukaną kością! Zobaczcie jego rękaw!", "(Na targu robi się gwar. Lucjan zgarnia kości i znika za bramą południową, zanim ktoś zawoła straż.)"],
+                share: ["Rozsądny człowiek! Dziesięć groszy - proszę. Miło robić z panem interesy."], later: ["Pomyśl, mój drogi. Pomyśl."],
+                noteOut: ["Kości z targu", "Lucjan Kość, wędrowny gracz z targu, podmieniał kość - wyciągał z rękawa cięższą. Zdemaskowałem go przy ludziach i uciekł z miasta."],
+                noteShare: ["Kości z targu", "Lucjan Kość gra oszukaną kością. Wziąłem od niego dziesięć groszy i milczę."]
+            }
+        },
 
         // =========================================================== K19
         {
@@ -670,13 +875,20 @@
                 accept: ["Dziękuję... Ela kocha konie. Tata obiecał jej prawdziwego."], decline: ["Rozumiem. Każdy ma swoje kłopoty."]
             },
             steps: [
-                { type: "bring", to: "ela", need: [[61, 1]], toolsAny: [91, 90], hours: [6.6, 20],
-                    text: "Wystrugaj Eli konika: 1× Drewno i nóż (kamienny albo żelazny). Daj go Eli (obóz pod murem, rano i wieczorem).",
+                { type: "bring", to: "ela", need: [[61, 1]], toolsAny: [91, 90], hours: [6.6, 20], talk: "k27Melia",
+                    text: "Wystrugaj Eli konika: 1× Drewno i nóż (kamienny albo żelazny). Daj go Eli (obóz pod murem, rano i wieczorem). Albo poproś Melię, żeby zaśpiewała Eli kołysankę pod murem (tawerna, 17–21).",
                     remind: ["...?"], hero: ["> (Strugasz z polana konika. Krzywy, ale ma grzywę i cztery nogi.) Proszę. To dla ciebie."],
                     done: ["Konik! ...Ma na imię Wiatr. Tak jak tamten.", "@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają. Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział."] }
             ],
             reward: { xp: 50, opinion: 3, clue: "w6_heart",
-                note: ["Konik dla Eli", "Wystrugałem Eli konika. Ludmiła: „Tam, skąd uciekamy, wszyscy szukają serca skały. Ludzie giną za coś, czego nikt nie widział.”"] }
+                note: ["Konik dla Eli", "Wystrugałem Eli konika. Ludmiła: „Tam, skąd uciekamy, wszyscy szukają serca skały. Ludzie giną za coś, czego nikt nie widział.”"] },
+            // (2026-10-06) the other way: Melia sings for Ela under the wall - and that evening the tavern's stage stays empty
+            lines: {
+                meliaAsk: ["> Melio... Pod murem jest dziewczynka, Ela. Od przeprawy nie śpi. Zaśpiewałabyś jej?", "Dziecku, które nie śpi? (Melia już sięga po lutnię.) Pójdę.", "Ale dziś wieczorem scena w tawernie będzie pusta - Borgar mi tego nie daruje. Trudno."],
+                meliaGone: ["> (Melia owija lutnię chustą i wychodzi w stronę muru.)"],
+                morning: ["> Słyszałem, że Melia była tu wieczorem.", "Była. Śpiewała Eli, aż mała zasnęła. Pierwszy raz od przeprawy przespała całą noc.",
+                    "@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają.", "@ludmila: Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział."]
+            }
         },
         // =========================================================== K28
         {
@@ -1162,49 +1374,704 @@
                 note: ["Petycja do Lorda", "Lord obniżył podatek wojenny o połowę. I dodał: „Gdybyś coś znalazł pod Kruczymi Skałami... przyjdź najpierw do mnie.”"] }
         },
 
-        // =========================================================== W1 (the first chapters; it stops before the big reveal)
+        // =========================================================== W1 (chapters 1-7; the user, 2026-10-05: Feliks is guilty, the Lord knows
+        // nothing). 2026-10-06: 6 c's ambush is a real fight (Humans.js), 7 (the Order's cistern, Act II) opens the main sluice by the bell.
         {
-            id: "W1", kind: "W", title: "Woda spod Kruczych Skał", giver: null, icon: 138, where: "studnia na rynku, staw za halą, noc", when: "od dnia 3",
+            id: "W1", kind: "W", title: "Woda spod Kruczych Skał", giver: null, icon: 138, where: "studnia na rynku, staw za halą, dno studni, ogród dworu nocą, Wielka cysterna w podziemiach (piętro 30), dzwonnica", when: "od dnia 3",
             desc: "Skąd Kuba ma tyle wody, skoro studnia na rynku ledwo daje parę wiader na dzień? Czemu ogród Lorda jest zielony? Kto osłabił studnię i młyn?",
-            clues: ["w1_barrel", "w1_roses", "w1_night", "w1_watch"], cluesNeed: 3,
+            clues: ["w1_barrel", "w1_roses", "w1_night", "w1_watch", "w1_well"], cluesNeed: 3,
             lines: {
                 caught: "Ty?! Co tu robisz po nocy?! Idź spać, chłopcze. I nic nie widziałeś!",
                 seen: ["> (Kuba podstawia beczkę pod kamienną rurę wystającą ze skały pod wodospadem. Woda leje się gęstym strumieniem. Beczka za beczką.)",
                     "> (Na murze nad wodospadem mignęła latarnia. Ktoś tam stał i patrzył. Zgasła.)", "> Skąd ta rura w skale? I kto trzyma tę latarnię?"],
-                note: ["Woda Kuby - noc", "Kuba wychodzi z domu po pierwszej w nocy i idzie do stawu za tawerną. Nabiera wodę z kamiennej rury w skale pod wodospadem, beczka za beczką. Na murze nad wodospadem ktoś stał z latarnią - zgasła, zanim zobaczyłem twarz. Ciąg dalszy wkrótce."]
+                note: ["Woda Kuby - noc", "Kuba wychodzi z domu po pierwszej w nocy i idzie do stawu za tawerną. Nabiera wodę z kamiennej rury w skale pod wodospadem, beczka za beczką. Na murze nad wodospadem ktoś stał z latarnią - zgasła, zanim zobaczyłem twarz."],
+                // rozdz. 3: Kuba at the market
+                kubaAsk: ["> Kuba. Widziałem cię w nocy przy stawie. Kamienna rura w skale, beczka za beczką.", "(Kuba rozgląda się na boki.) Ciszej, chłopcze! ...Czego chcesz?"],
+                kubaTell: ["Dobra. Ale nikomu ani słowa. Woda jest z dworu.",
+                    "Feliks, kamerdyner Lorda. Po pierwszej w nocy odkręca coś w ogrodzie i z rury pod wodospadem leci woda. Płacę mu trzy grosze za beczkę. A jak trzeba więcej, jadę wozem pod tylną furtkę ogrodu i Feliks napełnia mi beczki z pompy w oranżerii.",
+                    "Sołtys płaci mi dziewięć groszy za przydział - piekarnia, kuźnia, tawerna. Kapral nie widzi wozu, bo dostaje swoją działkę. Wszyscy mają swoje. Tylko studnia nie ma nic.",
+                    "> A Lord?", "Lord? Lord myśli, że ogród poi głęboka studnia dworu. Feliks mu tak mówi. Ja tam nic nie wiem."],
+                kubaPay: ["Płacić? Tobie? ...Pięć groszy w każdy dzień targowy. I ani słowa.", "(Kuba zaciska zęby.) Woda jest z dworu, z ogrodu Lorda. Więcej nic nie powiem. Ty sępie."],
+                kubaFlee: ["Sołtysowi?! Nie... nie, chłopcze, proszę... To Feliks! Kamerdyner! To on otwiera mi furtkę ogrodu dworu i daje wodę z pompy w oranżerii! Ja tylko wożę!",
+                    "(Kuba rzuca beczki i biegnie w stronę bramy.)"],
+                kubaLater: ["To zapomnij. I idź stąd, ludzie patrzą."],
+                kubaTribute: ["(Kuba wciska ci monety, nie patrząc w oczy.) Pięć groszy. Dzień targowy. Udław się."],
+                noteTell: ["Kuba mówi wszystko", "Kuba płaci Feliksowi, kamerdynerowi Lorda, trzy grosze za beczkę. Po pierwszej w nocy Feliks odkręca coś w ogrodzie i z rury pod wodospadem leci woda; więcej Kuba bierze z pompy w oranżerii, przez tylną furtkę ogrodu. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord myśli, że ogród poi studnia dworu."],
+                notePay: ["Kuba płaci", "Kuba płaci mi pięć groszy w każdy dzień targowy za milczenie. Powiedział tylko tyle: woda jest z dworu, z ogrodu Lorda. Pewnie poskarży się komuś we dworze."],
+                noteFlee: ["Kuba uciekł", "Zagroziłem Kubie sołtysem. Wykrzyczał, że to Feliks, kamerdyner Lorda, daje mu wodę z pompy w oranżerii - i uciekł z miasta na tydzień. Piekarnia i kuźnia zostały bez przydziału, a Baltazar sprzedaje wodę dwa razy drożej."],
+                // rozdz. 5: the orangery at night
+                pump: ["> (Pompa stoi na okrągłym kamiennym włazie. W kamieniu wyryty kruk - taki sam jak na kracie w studni.)", "> (Pod włazem szumi woda. Głośno. Tu płynie.)", "> Dwór stoi na kanale zakonu."],
+                drawer: ["> (Szuflada stołu ogrodnika. Doniczki, rafia, kielnia... i zwinięty papier.)",
+                    "> (Rysunek: kanał spod wzgórza, rozwidlenie, zasuwa. Dopisek drobnym pismem: „zasuwa na dworze, studnia i młyn zamknięte. F.”)", "> F. jak Feliks. Biorę to."],
+                note5: ["Oranżeria nocą", "Pompa w oranżerii dworu stoi na kamiennym włazie z krukiem - dwór dobudowano na kanale zakonu. W szufladzie stołu ogrodnika leżał rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte. F.” Zabrałem go - to dowód."],
+                sawFeliks: ["> (Tylna furtka uchylona. Za żywopłotem stoi wóz Kuby z pustymi beczkami.)", "> (Feliks podaje mu przez furtkę wiadro za wiadrem, prosto z pompy.)",
+                    "> Kamerdyner Lorda. Nocą. Po trzy grosze od beczki."],
+                noteFeliks: ["Feliks przy furtce", "Po pierwszej w nocy Feliks otwiera tylną furtkę ogrodu dworu. Za żywopłotem czeka wóz Kuby, a Feliks napełnia jego beczki z pompy w oranżerii."],
+                caughtGuard: "Stój! Kto tu?! ...Won mi z ogrodu, obdartusie!", caughtFeliks: "Kto tam?! Straż! Straż!",
+                // rozdz. 6: the big choice
+                soltysAsk: ["Chłopcze, chodzisz jakiś zamyślony. Masz coś dla mnie?"],
+                soltysMarket: ["Dziś targ, cały rynek pełen ludzi. A ty chodzisz jakiś zamyślony, chłopcze. Masz coś dla mnie?"],
+                soltysWait: ["W dzień targowy? Hm. Coś, co wszyscy muszą usłyszeć naraz? ...Dobrze. Będę czekał."],
+                soltysLater: ["Jak będziesz gotów, wiesz, gdzie mnie szukać."],
+                silent: ["Nic? No to nic. Woda sama się nie znajdzie, wiem, wiem..."],
+                reveal: ["> Sołtysie. To rysunek śluzy zakonu, z szuflady w oranżerii dworu. Podpisany „F.” - jak Feliks.",
+                    "(Sołtys czyta. Raz. Drugi raz. Czerwienieje.)", "Ludzie! LUDZIE! Słuchajcie wszyscy! (Sołtys wchodzi na cembrowinę studni i czyta rysunek na głos.)",
+                    "> (Tłum rośnie. Ktoś krzyczy: „Do dworu!” Idziecie pod bramę wschodnią, a Lord Zaleski wychodzi do ludzi.)",
+                    "> (Lord czyta długo. Blednie. „Mój dziadek postawił dwór na kanale? Feliks...? Nie wiedziałem. Na Boga, nie wiedziałem.”)",
+                    "> (Lord każe aresztować Feliksa i otworzyć śluzę - do połowy, więcej susza nie da. Na kaprala Wita patrzy jak na obcego. Na ciebie - chłodno.)",
+                    "Słyszysz? Młynówka szumi! Młyn ruszy, a studnia... może da wiadro więcej na dzień. Dziękuję ci, chłopcze. Całe miasto ci dziękuje."],
+                lordAsk: ["> Panie. Muszę panu coś pokazać. Po cichu, bez świadków."],
+                lordShow: ["> (Podajesz mu rysunek.) Z szuflady w oranżerii. Pod pompą jest kanał zakonu, a ta zasuwa zamyka studnię i młyn.",
+                    "To... pismo Feliksa. (Lord długo milczy.) Mój dziadek postawił dwór na kanale zakonu? A ja przez trzy lata suszy myślałem, że ogród poi nasza głęboka studnia.",
+                    "Chodź ze mną. Zejdziemy do oranżerii razem.",
+                    "> (W oranżerii Lord sam kręci kołem zasuwy. Do połowy - więcej susza nie da. Spod ziemi dochodzi szum wody, która idzie do miasta.)",
+                    "Feliks zniknie z dworu jeszcze dziś. Bez hałasu - miasto nie musi wiedzieć, że mój kamerdyner sprzedawał wodę moich ludzi.",
+                    "A ty... za lojalność dwieście na poczet długu twojego dziadka. I pamiętaj: od dziś masz we dworze przyjaciela."],
+                lordLater: ["Po cichu? Hm. Wróć, kiedy się zdecydujesz."],
+                feliksAsk: ["> Feliksie. Pompa w oranżerii, właz z krukiem. I rysunek śluzy z twoim „F.”", "(Feliks uśmiecha się samymi ustami.) Ciszej, młodzieńcze. Ludzie słuchają. ...Czego pan chce?"],
+                feliksDeal: ["Dwadzieścia groszy co tydzień. Zgoda. Pierwsze dwadzieścia - proszę. Następne za tydzień, tu, przy straganach.",
+                    "(Feliks pochyla się bliżej.) Tylko niech pan uważa na drogach, młodzieńcze. Drogi bywają niebezpieczne."],
+                feliksLater: ["Z pewnością się zobaczymy. Miłego dnia, młodzieńcze."],
+                noteReveal: ["Woda wróciła", "Ujawniłem rysunek śluzy razem z sołtysem w dzień targowy. Lord o niczym nie wiedział - kazał aresztować Feliksa i otworzyć śluzę do połowy. Młyn rusza, studnia na rynku daje trochę więcej. Lord jest mi wdzięczny, ale chłodny. Kaprala Wita zdegradowali."],
+                noteLord: ["Śluza otwarta po cichu", "Zaniosłem rysunek śluzy Lordowi. Nic nie wiedział. Sam otworzył zasuwę do połowy, Feliks po cichu zniknął z dworu, a mnie Lord odpisał 200 G z długu dziadka - „za lojalność”. Miasto widzi tylko, że woda wraca. Kuba został bez towaru i ma do mnie żal."],
+                noteDeal: ["Milczenie Feliksa", "Feliks płaci mi dwadzieścia groszy co tydzień za milczenie o śluzie. Ostrzegł mnie, żebym uważał na drogach."],
+                noteSilent: ["Milczę", "Powiedziałem sołtysowi, że nic nie mam. Rysunek śluzy został u mnie. Woda dalej płynie pod dwór."],
+                feliksWeek: ["(Feliks wsuwa ci sakiewkę do ręki, nie patrząc.) Dwadzieścia. Jak co tydzień. Liczę, że pamięć ma pan krótką."],
+                ambush: ["> (Zza krzaków przy drodze wychodzi dwóch ludzi w kapturach. Jeden ma pałkę.)", "> („Pozdrowienia od kamerdynera” - słyszysz, zanim pałka spada ci na ramię.)",
+                    "> (Kiedy wstajesz, sakiewka jest lżejsza. Feliks już nie zapłaci.)"],
+                noteAmbush: ["Napad na Polnej drodze", "Dwa tygodnie po umowie z Feliksem napadli mnie na Polnej drodze jego ludzie w kapturach - „pozdrowienia od kamerdynera”. Pobili mnie, zabrali pieniądze i rysunek śluzy. Feliks więcej nie płaci, a dowodu już nie mam."],
+                // (2026-10-06) rozdz. 6 c as a real fight (Humans.js, combat stage 3): two of Feliks's men - three, once he has paid 40 G
+                manName: "Człowiek Feliksa", ambushShout: "Pozdrowienia od kamerdynera!",
+                ambushStart: ["> (Zza krzaków przy drodze wychodzą ludzie w kapturach. Pałki w rękach.)", "> Feliks. Dwa tygodnie - i przysłał swoich."],
+                ambushArcher: ["> (Na skraju drogi ktoś napina łuk. Za moje milczenie Feliks płaci już nie tylko mnie.)"],
+                ambushWon: ["> (Po wszystkim. Ludzie Feliksa leżą albo uciekli.)", "> Feliks więcej nie zapłaci. Ale rysunek śluzy wciąż mam - i wiem, co o mnie myśli."],
+                confession: ["> (Ten, którego puściłem, wybełkotał jeszcze przez ramię: „Kamerdyner płaci po dziesięć groszy... Kazał zabrać ci papier!”)"],
+                ambushLost: ["> (Budzę się w rowie przy drodze. Sakiewka lżejsza... i nie ma rysunku śluzy.)", "> Feliks dostał, czego chciał. Dowodu już nie mam."],
+                ambushFled: ["> (Uciekłem z drogi. Ale oni wiedzą, którędy chodzę - będą czekać znowu.)"],
+                noteAmbushWon: ["Napad na Polnej drodze", "Dwa tygodnie po umowie z Feliksem napadli mnie na Polnej drodze jego ludzie - „pozdrowienia od kamerdynera”. Pobiłem ich. Feliks więcej nie płaci, ale rysunek śluzy wciąż mam: mogę go jeszcze pokazać sołtysowi albo Lordowi."],
+                noteConfession: ["Człowiek Feliksa mówi", "Jeden z ludzi, którzy napadli mnie na Polnej drodze, błagał o litość - puściłem go, a on się wygadał: kamerdyner płaci im po dziesięć groszy i kazał zabrać mi „papier”. Mam świadka."],
+                withWitness: ["> I jeszcze jedno: ludzie Feliksa napadli mnie na Polnej drodze. Jeden z nich przyznał, kto im płaci."],
+                // rozdz. 7 (Act II): the Order's cistern - the main sluice on floor 30 (Underground.js sends "undergroundSluice"), opened by the bell's
+                // "water" signal four and two. The drought stays: the market well fills, but the sołtys keeps it under lock and rations it -
+                // for the hero it still gives its two draws a day (the author: the well stays as it is after W1)
+                sluiceSeen: ["> „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.”", "> Cztery i dwa - tak dzwoni Ambroży, kiedy po suszy pada pierwszy deszcz. „Woda idzie.”"],
+                bellAsk: ["Cztery i dwa? (Ambroży siada na stopniu.) Tak dzwoniono, kiedy trzeba było otworzyć cysterny. Woda idzie. Trzysta lat nikt tak nie dzwonił na wezwanie.",
+                    "Byłeś na dole. Przy zasuwie. ...Widzę po tobie.", "Chcesz zadzwonić sam? Cztery, przerwa, dwa - sześć uderzeń, ani jednego więcej. Albo zadzwonię ja."],
+                optBellSelf: "Zadzwonię sam.", optBellHim: "Zadzwoń ty, Ambroży.", optBellLater: "Jeszcze nie.",
+                bellSelf: ["To chodź na wieżę. I licz na głos."], bellHim: ["Dobrze. Słuchaj. I zapamiętaj, jak to brzmi."], bellLater: ["Dzwon poczeka. Czekał trzysta lat."],
+                bellWrong: ["Źle. Za dużo albo za mało - zasuwa nie usłyszy. Spróbuj jeszcze raz, kiedy będziesz gotów."], bellQuit: ["Puściłeś sznur? Nic się nie stało. Dzwon poczeka."],
+                waterComes: ["> (Ostatnie uderzenie gaśnie nad dachami. Przez chwilę nic.)", "> (Potem spod rynku dochodzi głuchy szum - jakby ktoś głęboko pod ziemią odetchnął.)",
+                    "> Zasuwa usłyszała. Woda idzie starym kanałem zakonu - pod rynek."],
+                waterAmbrozy: "Cztery i dwa... Słyszysz? Woda idzie.",
+                shout: { soltys: "Studnia! W studni stoi woda! Ludzie, nie pchać się - po kolei!", kowal: "Koryto młynówki mokre! Młyn ruszy!", piekarka: "Woda! Prawdziwa woda w studni!",
+                    woziwoda: "W studni... woda? Sama przyszła?!", garbarz: "Słyszycie? Pod rynkiem szumi!" },
+                noteCistern: ["Zasuwa główna otwarta", "Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu puściła wodę starym kanałem pod rynek. Studnia na rynku znów ma wodę - ale sołtys zamknął ją na klucz i wydziela racje domom; przybysz dalej dostaje swoje dwa nabrania na dzień. Młyn ruszył, Kuba rozwozi racje za uczciwy grosz od sołtysa. Mnie z tego nic nie kapnie: na polu dziadka liczy się tylko moja deszczówka."]
             },
             steps: [
-                { type: "custom", check: "w1Clues", text: "Zbieraj poszlaki o wodzie Kuby ({n}/3): „Pęknięta beczka”, „Smak wody”, „Łój do latarni”, „Nocna warta”." },
-                { type: "custom", tick: "w1Follow",
+                { ch: 1, type: "custom", check: "w1Clues", text: "Zbieraj poszlaki o wodzie Kuby ({n}/3): „Pęknięta beczka”, „Smak wody”, „Łój do latarni”, „Nocna warta”, „Pierścionek w studni”." },
+                { ch: 2, type: "custom", tick: "w1Follow",
                     text: "Kuba chodzi gdzieś nocą. Wyjdź za nim po cichu (C - skradanie), kiedy po pierwszej w nocy wyjdzie z domu na tarasie rzemieślników. Nie daj się zobaczyć." },
-                { type: "pause", text: "Ciąg dalszy wkrótce. (Kto stoi za wodą Kuby - to się dopiero okaże.)" }
+                { ch: 3, type: "custom", talk: "w1Kuba", text: "Porozmawiaj z Kubą o tym, co widziałeś nocą przy stawie (studnia na rynku, 7–14)." },
+                { ch: 4, type: "spot", spot: "w1_grate", text: "Zejdź na dno studni na rynku (2× Lina; zejście z boku studni, od wschodu) i posłuchaj przy kracie z krukiem.",
+                    say: ["> (Krata z krukiem. Za nią ciemność i chłód. Przykładasz ucho do żelaza.)", "> (Gdzieś w głębi szumi woda. Dużo wody. Płynie... ale nie tutaj.)",
+                        "> Kanał prowadzi pod rynek, a woda idzie inną drogą. Ktoś ją odciął od studni. I od młynówki."],
+                    reward: { xp: 60, clue: "w1_grate", note: ["Krata z krukiem", "Na dnie studni, za kratą z krukiem w zamurowanym kanale zakonu, szumi woda. Płynie, ale nie do studni. Ktoś odciął studnię - i młynówkę - od kanału."] } },
+                { ch: 4, type: "talk", to: "kowal", hours: H_KOWAL, text: "Zapytaj Tadka o kratę z krukiem (kuźnia, 6–17).",
+                    say: ["> Tadek, na dnie studni jest żelazna krata. Stara, z wykutym krukiem. Kto mógł taką zrobić?",
+                        "Krata z krukiem? Tej kraty nie kuł kowal, tylko zakon. Takiej roboty dziś nikt nie umie - żelazo bez rdzy po trzystu latach.",
+                        "Drugą taką widziałem raz w życiu. W ogrodzie dworu, w oranżerii - Feliks wołał mnie do pompy. Pompa stoi na kamiennym włazie, a na włazie... ten sam kruk.",
+                        "Feliks zapłacił mi wtedy podwójnie. Żebym zapomniał. No to zapomniałem. Do dziś."] },
+                { ch: 5, type: "custom", tick: "w1Orangery", spotFx: "w1Orangery", spots: ["w1_pump", "w1_drawer", "w1_feliks", "w1_kuba"],
+                    text: "Zakradnij się nocą (21:00–4:30) do oranżerii w ogrodzie dworu (za bramą wschodnią). Strażnik obchodzi ogród - skradaj się (C) i nie wchodź mu w oczy. Obejrzyj pompę na włazie i szufladę stołu ogrodnika." },
+                { ch: 6, type: "custom", talk: "w1Choice",
+                    text: "Rysunek śluzy to dowód. Co z nim zrobisz? Ujawnij go z sołtysem na rynku w dzień targowy (8–14), zanieś po cichu Lordowi (drzwi dworu, 8–20), postrasz nim Feliksa (rano przy straganach) - albo powiedz sołtysowi, że nic nie masz, i milcz." },
+                { ch: 6, type: "custom", talk: "w1Feliks", tick: "w1Ambush", text: "Feliks płaci ci 20 G co tydzień za milczenie (rano przy straganach). Uważaj na drogach." },
+                { ch: 6, type: "custom", tick: "w1Ambush", text: "Feliks przestał płacić. Jego ludzie czekali na ciebie na Polnej drodze - uciekłeś, ale będą czekać znowu. Pobij ich albo daj się złapać." },
+                // (2026-10-06) rozdz. 7 in Act II: find the main sluice of the Order's cistern (underground floor 30), then the bell's "water" signal
+                { ch: 7, type: "custom", check: "w1Sluice", text: "W Akcie II: kanał spod studni na rynku prowadzi do cysterny zakonu pod wzgórzem. Zejdź do podziemi i znajdź w Wielkiej cysternie (piętro 30) jej Zasuwę główną." },
+                { ch: 7, type: "custom", talk: "w1Bell", text: "Na Zasuwie głównej wykuto: „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.” Porozmawiaj z Ambrożym (za dnia, 6–21): cztery i dwa - zadzwonisz sam albo on." }
             ]
         },
-        // =========================================================== W2 (the first chapters)
+        // =========================================================== W2 (chapters 1-6; 7 "Jedno pytanie" waits)
         {
-            id: "W2", kind: "W", title: "Kod dzwonu", giver: null, icon: 0, where: "dzwonnica, rynek", when: "od pierwszego nocnego dzwonu",
+            id: "W2", kind: "W", title: "Kod dzwonu", giver: null, icon: 0, where: "dzwonnica, rynek, ogród rycerzy, Archiwum zakonu", when: "od pierwszego nocnego dzwonu",
             desc: "Ambroży dzwoni o dziwnych godzinach. Liczba uderzeń ma znaczenie - to sygnały, których miasto już nie rozumie.",
             lines: {
                 garden: ["> (Za furtką cicho, jakby miasto zostało za murem. Dwa kamienne posągi rycerzy pilnują kopca, między nimi miecz wbity w kamień.)",
-                    "> (Na tarczach posągów są nacięcia - krótkie i długie, jak uderzenia dzwonu.)", "> Ambroży mówił: „Tam jest reszta”. Reszta czego?"],
-                note: ["Ogród rycerzy", "Furtka za tawerną otwiera się kluczem Ambrożego. W ogrodzie stoją posągi strażników zakonu, między nimi miecz wbity w kamień. Na ich tarczach są nacięcia jak uderzenia dzwonu. Ciąg dalszy wkrótce."]
+                    "> (Na tarczach posągów są nacięcia - krótkie i długie, jak uderzenia dzwonu. Najdłuższy rząd ma siedem.)", "> Ambroży mówił: „Tam jest reszta”. Reszta czego?"],
+                note: ["Ogród rycerzy", "Furtka za tawerną otwiera się kluczem Ambrożego. W ogrodzie stoją posągi strażników zakonu, między nimi miecz wbity w kamień. Na ich tarczach są nacięcia jak uderzenia dzwonu - najdłuższy rząd ma siedem. Siedem to sygnał „pytanie”."],
+                // rozdz. 5: seven strikes at noon, the shadows, the slab
+                ringGo: ["Siedem? W południe? ...Tak stało w księdze, której już nie mam. Dzwoń, chłopcze. Ja popatrzę w stronę ogrodu."],
+                ringOk: ["...Siedem. Pierwszy raz od czterdziestu lat. Biegnij do ogrodu, póki słońce stoi wysoko!"],
+                ringWrong: ["Nie siedem. Dzwon nie odpowie na złe pytanie. Jutro w południe spróbujesz jeszcze raz."],
+                ringQuit: ["Nie zadzwoniłeś? Południe nie czeka, chłopcze."],
+                shadow: ["> (Słońce stoi w zenicie. Cienie posągów i miecza wbitego w kamień schodzą się w jednym miejscu: na płycie w ścieżce.)",
+                    "> (Pod ziemią coś zgrzyta. Płyta drży i odsuwa się sama - w dół prowadzą kamienne schody.)"],
+                shadowLate: ["> (Cienie już się rozeszły. Za późno. Trzeba zadzwonić jeszcze raz - jutro w południe.)"],
+                noteSlab: ["Płyta w ogrodzie rycerzy", "Zadzwoniłem z wieży siedem razy w samo południe - sygnał „pytanie”. Cienie posągów i miecza zbiegły się na płycie w ścieżce ogrodu rycerzy, a płyta odsunęła się: pod nią są schody w dół."],
+                // rozdz. 6: the Archive
+                book: ["> (Na pulpicie leży otwarta księga. Na pierwszej karcie kruk i słowa: „Dzwon mówi do tych, co pamiętają”.)",
+                    "> (Każdy sygnał zapisany starannie: ile uderzeń, kiedy i co znaczy. Teraz znam je wszystkie.)"],
+                chronicles: ["> (Na regale stoją kroniki zakonu. Zasada jednego pytania: „Strażnik dzwonu ma prawo zadać Sercu jedno pytanie na rok”.)",
+                    "> (Lista kasztelanów. Ostatni: „Bogumił z rodu Kowali”. Kowal... jak Borgar Kowal?)", "> (I wzmianka o cysternie pod wzgórzem: „Zasuwę główną otwiera sygnał wody”.)"],
+                chronTake: ["> (Pakujesz kroniki do torby. Ciężkie. Ktoś na kontynencie dałby za nie fortunę.)"],
+                chronLeave: ["> (Odstawiasz kroniki na regał. Leżały tu trzysta lat - poleżą jeszcze.)"],
+                chronGive: ["> (Pakujesz kroniki ostrożnie. Ambroży pilnował tej warty całe życie - powinien je zobaczyć.)"],
+                noteChron: ["Kroniki zakonu", "W Archiwum pod ogrodem rycerzy leżą kroniki zakonu: zasada jednego pytania na rok, lista kasztelanów (ostatni: „Bogumił z rodu Kowali”) i wzmianka o cysternie pod wzgórzem, której główną zasuwę otwiera sygnał wody."],
+                // the chronicles taken: Baltazar's offer (a hook for W5)
+                sell: ["Przyjacielu... słyszałem, że masz stare księgi. Z krukiem na grzbiecie.", "Trzysta groszy. Od ręki. Na kontynencie są ludzie, którzy zbierają takie... pamiątki."],
+                sellYes: ["Interes życia, przyjacielu. Twojego, nie mojego."], sellNo: ["Szkoda. Oferta nie wygasa. Ja też nie."]
             },
             steps: [
-                { type: "custom", check: "w2Heard", text: "Usłysz dzwon o dziwnej porze (bądź w miasteczku nocą)." },
-                { type: "talk", to: "dzwonnik", hours: [6.3, 17.7], text: "Zapytaj Ambrożego o nocne dzwonienie (rynek albo ogród zakonu, za dnia).",
+                { ch: 1, type: "custom", check: "w2Heard", text: "Usłysz dzwon o dziwnej porze (bądź w miasteczku nocą)." },
+                { ch: 1, type: "talk", to: "dzwonnik", hours: [6.3, 17.7], text: "Zapytaj Ambrożego o nocne dzwonienie (rynek albo ogród zakonu, za dnia).",
                     say: ["> Słyszałem w nocy dzwon. Trzy uderzenia o trzeciej.", "Nie słyszałeś. Ludzie śpią o trzeciej.", "> Słyszałem.",
                         "...Trzy to nie godzina. Trzy to... Nieważne. Ktoś musi pamiętać, to pamiętam. Zapisuj, jak chcesz. Każde uderzenie."] },
-                { type: "custom", check: "w2Apprentice", text: "Zdobądź zaufanie Ambrożego - zostań jego uczniem („Uczeń dzwonnika”, od Opinii 40)." },
-                { type: "custom", check: "w2Table", text: "Zapisz trzy różne sygnały dzwonu i to, co się wtedy działo (w dzienniku: Sygnały dzwonu). Sygnały: {n}/3." },
-                { type: "talk", to: "dzwonnik", hours: [17.7, 18.3], text: "Pokaż Ambrożemu tabelę sygnałów przy dzwonie (17:45–18:15).",
+                { ch: 2, type: "custom", check: "w2Apprentice", text: "Zdobądź zaufanie Ambrożego - zostań jego uczniem („Uczeń dzwonnika”, od Opinii 40)." },
+                { ch: 3, type: "custom", check: "w2Table", text: "Zapisz trzy różne sygnały dzwonu i to, co się wtedy działo (w dzienniku: Sygnały dzwonu). Sygnały: {n}/3." },
+                { ch: 4, type: "talk", to: "dzwonnik", hours: [17.7, 18.3], text: "Pokaż Ambrożemu tabelę sygnałów przy dzwonie (17:45–18:15).",
                     say: ["> Spisałem twoje dzwonienia. Każde przychodzi, kiedy coś się dzieje: warta, deszcz po suszy, piorun. To nie godziny. To słowa.",
                         "(Ambroży długo milczy. Ma mokre oczy.)", "Nikt... od czterdziestu lat nikt nie zapytał. Jestem ostatnim uczniem straży zakonu. Dzwonię, bo nikt nie odwołał warty.",
                         "Masz. Klucz do furtki ogrodu rycerzy. Tam jest reszta. Kiedyś."], fx: "w2Key" },
-                { type: "custom", tick: "w2Garden", text: "Otwórz kluczem Ambrożego furtkę ogrodu rycerzy (na lewo od tawerny) i wejdź do środka." },
-                { type: "pause", text: "Ciąg dalszy wkrótce: tajemnica posągów i Archiwum zakonu." }
+                { ch: 5, type: "custom", tick: "w2Garden", text: "Otwórz kluczem Ambrożego furtkę ogrodu rycerzy (na lewo od tawerny) i wejdź do środka." },
+                { ch: 5, type: "custom", talk: "w2Ring", text: "Zadzwoń z wieży sygnał „pytanie” - siedem uderzeń - w południe (Ambroży przy dzwonnicy, 11:40–12:15)." },
+                { ch: 5, type: "custom", tick: "w2Shadow", text: "Biegnij do ogrodu rycerzy: między 12:00 a 12:30 cienie posągów coś wskazują." },
+                { ch: 6, type: "custom", spotFx: "w2Archive", spots: ["w2_book", "w2_chron"],
+                    text: "Zejdź schodami pod płytą do Archiwum zakonu. Przeczytaj Księgę sygnałów na pulpicie i zajrzyj do kronik na regale." },
+                { ch: 6, type: "bring", to: "dzwonnik", need: [["v:kroniki", 1]], hours: [6, 18.3], text: "Zanieś kroniki zakonu Ambrożemu (rynek, ogród zakonu albo dzwonnica, za dnia).",
+                    remind: ["Coś przyniosłeś? Widzę, że coś niesiesz..."], hero: ["> Ambroży. To kroniki zakonu. Z Archiwum pod ogrodem."],
+                    done: ["(Ambroży bierze księgi drżącymi rękami. Długo gładzi okładkę.) Kroniki... Mój mistrz mówił, że spłonęły.",
+                        "Czterdzieści lat pilnowałem warty, której nikt nie pamiętał. A ty przyniosłeś mi pamięć. Dziękuję, chłopcze. Nie wiem, jak ci się odwdzięczę... Może kiedyś będę wiedział."],
+                    reward: { opinion: 3, xp: 50, flag: "ambrozyChronicles" } },
+                { ch: 7, type: "pause", text: "Ciąg dalszy wkrótce: „Jedno pytanie” - Ambroży ma prawo zadać Sercu jedno pytanie na rok." }
             ]
+        },
+
+        // ================================================================ THE TAVERN'S REGULARS (2026-10-06): Melia, Ozzy, Grum
+        // =========================================================== K22
+        {
+            id: "K22", kind: "K", title: "Struna dla Melii", giver: "melia", icon: 163, where: "tawerna (Melia) → garbarnia (Ignac) → tawerna", when: "10–17, oddać przed 18:00",
+            desc: "W lutni Melii pękła najcieńsza struna. Ignac skręci nową ze ścięgien. Jeśli zdążysz przed szóstą wieczorem, Melia zaśpiewa zwrotkę, której nikt jeszcze nie słyszał.",
+            offer: {
+                cond: { hours: [10, 17], day: 2 },
+                say: ["Słyszałeś to? Brzdęk - i cisza. Pękła mi struna, ta najcieńsza, co śpiewa najwyżej. Bez niej każda ballada kuleje jak koń bez podkowy.",
+                    "Dobrą strunę skręca się ze ścięgien. Garbarz Ignac to umie, tylko trzeba mu dać materiał.", "Zdążysz przed szóstą? O szóstej wychodzę na scenę."],
+                yes: "Zdobędę ścięgna dla Ignaca.", no: "Nie teraz.",
+                accept: ["Dwa ścięgna, czyste, bez tłuszczu. Ignac siedzi w garbarni na tarasie rzemieślników. Pospiesz się, złotko!"],
+                decline: ["Trudno. Zagram na pięciu. Ludzie i tak słuchają słów, nie strun."]
+            },
+            steps: [
+                { type: "bring", to: "garbarz", need: [[163, 2]], hours: [6.5, 17], fx: "k22Twist",
+                    text: "Zdobądź 2× Ścięgna (z oprawiania zwierzyny) i zanieś je Ignacowi (garbarnia, 6:30–17). Melia czeka do 18:00.",
+                    remind: ["Ścięgna na strunę? Dwa, chłopcze. Jedno to nie struna, tylko sznurowadło."],
+                    hero: ["> Melia z tawerny potrzebuje struny do lutni. Mam dwa ścięgna."],
+                    done: ["Dla Melii? Dla niej zrobię. Namoczyć, rozczesać, skręcić, wysuszyć... Daj mi godzinę."] },
+                { type: "custom", talk: "k22String", text: "Ignac skręca strunę. Odbierz ją od niego po godzinie (garbarnia, potem ulica rzemieślników albo tawerna)." },
+                { type: "custom", talk: "k22Melia", text: "Zanieś strunę Melii (tawerna). Przed 18:00 tego samego dnia zaśpiewa nową zwrotkę." }
+            ],
+            reward: { xp: 50, trust: { melia: 15 } },
+            lines: {
+                twisting: ["Jeszcze schnie. Struna to nie chleb - na szybko nie wyjdzie. Wróć za chwilę."],
+                string: ["Proszę. Struna jak się patrzy - śpiewa, aż ucho boli. Za robotę nic nie chcę. Niech Melia zaśpiewa kiedyś coś dla mnie. Coś wesołego."],
+                hero: ["> Twoja struna, Melio. Od Ignaca, ze ścięgien."],
+                onTime: ["Struna! I to jaka... (Melia nawleka ją, stroi, szarpie raz i drugi.) Słyszysz? Śpiewa wyżej niż ja.",
+                    "Coś mi przyszło do głowy. Właśnie teraz, przy tej strunie. Posłuchaj - tego nikt jeszcze nie słyszał. Ja też nie."],
+                after: ["Skąd ja to wzięłam? Nie wiem. Przyszło razem ze struną. Masz, piętnaście groszy - i natchnienie w prezencie. Zasłużyłeś."],
+                late: ["Struna! Na dzisiejszy wieczór za późno, złotko, ale nic to - jutro zagram na niej pierwszą balladę.", "Masz, dziesięć groszy. Ignacowi podziękuję piosenką."]
+            }
+        },
+        // =========================================================== K33
+        {
+            id: "K33", kind: "K", title: "Czapka Ozzy'ego", giver: "ozzy", icon: 0, where: "tawerna → furtka ogrodu rycerzy (na lewo od tawerny)", when: "wieczorem",
+            desc: "Ozzy zgubił czapkę i twierdzi, że leży na głowie rycerza - tego bez nosa - w zamkniętym ogrodzie za murem. Leży. Skąd on to wie?",
+            offer: {
+                cond: { hours: [17, 23], day: 3 },
+                say: ["Czapka! Moja czapka! Ktoś mi ją ukradł... albo sam zgubiłem. Jedno z dwojga. *hep*",
+                    "Wiem, gdzie jest. Leży na głowie rycerza. Tego bez nosa. Za murem, w ogrodzie, gdzie nikt nie chodzi. Skąd wiem? Wiem i już.",
+                    "Przyniesiesz? Stawiam piwo. Prawdziwe, nie to, co Borgar leje gościom."],
+                yes: "Przyniosę ci czapkę.", no: "Wyśpij się, dziadku.",
+                accept: ["Furtka zamknięta, krata gęsta... ale ty masz ręce. I procę, co? Rycerz nie obrazi się za jeden kamyk. *hep*"],
+                decline: ["Śpij, śpij... Czapka poczeka. Rycerzowi i tak w niej ciepło."]
+            },
+            steps: [
+                { type: "custom", tick: "k33Shot",
+                    text: "Strąć czapkę Ozzy'ego z głowy lewego posągu w ogrodzie rycerzy (furtka na lewo od tawerny). Furtka zamknięta - strzel przez kratę z procy albo łuku: stań przed furtką na wprost lewego posągu, przytrzymaj F, aż kółko się zwęży, i puść." },
+                { type: "custom", tick: "k33Pick", text: "Czapka spadła tuż za kratę furtki. Sięgnij po nią przez pręty (O przed furtką)." },
+                { type: "bring", to: "ozzy", need: [["v:czapka", 1]], text: "Oddaj czapkę Dziadkowi Ozzy'emu (tawerna).",
+                    hero: ["> Twoja czapka, dziadku. Leżała na głowie rycerza. Tego... bez nosa."],
+                    done: ["Moja czapeczka! (Ozzy wkłada ją tyłem na przód.) Mówiłem? Mówiłem!", "> Skąd wiedziałeś, że tam leży? Furtka jest zamknięta na klucz.",
+                        "(Ozzy przestaje się uśmiechać. Przez chwilę patrzy na ciebie całkiem trzeźwo.) Widziałem. Tak jak widzę, że ty...", "*hep* Eee tam. Piwo! Stawiam piwo, jak obiecałem!"] }
+            ],
+            reward: { xp: 50, items: [[81, 1]], trust: { ozzy: 10 }, flag: "k33Cap", clue: "w2_ozzy",
+                note: ["Czapka Ozzy'ego", "Czapka Ozzy'ego leżała na głowie posągu w zamkniętym ogrodzie rycerzy - dokładnie tam, gdzie mówił. Strąciłem ją przez kratę furtki. Ozzy od dawna nie wychodzi z tawerny. Skąd wiedział?"] },
+            lines: {
+                hit: ["> (Trafiony! Czapka spada z głowy rycerza, toczy się po ścieżce... i zatrzymuje tuż za kratą furtki.)"],
+                pick: ["> (Kucasz przy furtce i sięgasz ręką między pręty. Jeszcze kawałek... Jest!)", "> (Stara, filcowa, łatana. Pachnie piwem i dymem. Czapka Ozzy'ego.)"]
+            }
+        },
+        // =========================================================== D13
+        {
+            id: "D13", kind: "D", title: "Zakład Ozzy'ego", giver: "ozzy", icon: 0, where: "tawerna + cała okolica + piekarnia + brama wschodnia", when: "3 dni",
+            desc: "Ozzy po pijaku przepowiada trzy rzeczy na trzy dni. Grum zakłada się, że to bzdury. Sprawdź każdą przepowiednię na własne oczy.",
+            offer: {
+                custom: "d13Offer", cond: { hours: [18, 23.5], day: 5, fn: "d13Offer" },
+                yes: "Sprawdzę to.", no: "Dziadku, ty już nie pij.",
+                accept: ["(Z drugiego końca sali dobiega głos Gruma: „Bzdury! Dziesięć groszy za każdą, że nic się nie sprawdzi!”)", "Słyszałeś? Idź do niego, synku. Weź zakład. *hep*"],
+                decline: ["Nie wierzysz? Nikt nie wierzy. Dlatego ciągle mam rację. *hep*"]
+            },
+            steps: [
+                { type: "custom", talk: "d13Bet", text: "Grum słyszał przepowiednie Ozzy'ego i chce się założyć. Pogadaj z Grumem (tawerna)." },
+                { type: "custom", talk: "d13Check", tick: "d13Check", text: "Sprawdź przepowiednie Ozzy'ego na własne oczy: {p1}; {p2}; {p3}. Sprawdzone: {n}/3." },
+                { type: "custom", talk: "d13Pay", text: "Przepowiednie minęły. Odbierz zakład od Gruma (tawerna)." },
+                { type: "custom", talk: "d13Ozzy", text: "Wróć do Ozzy'ego (tawerna)." }
+            ],
+            reward: { xp: 100, trust: { ozzy: 15, grum: 5 }, flag: "d13Done", clue: "w9_ozzy" },
+            lines: {
+                offer: ["*hep* Słuchajcie wszyscy! Ozzy wie, co będzie!"],
+                bet: ["> Grum, słyszałeś Ozzy'ego?", "Cała sala słyszała. Bzdury.", "Zakład: dziesięć groszy za każdą przepowiednię, która się sprawdzi - płacę ja.", "Ale musisz to zobaczyć na własne oczy. Z gadania nie płacę.", "> Stoi."],
+                storm: "> (Burza. {hour}, co do kwadransa. Tak, jak mówił Ozzy.)", rain: "> (Pada. {hour}. Tak, jak mówił Ozzy.)",
+                hankaOven: ["Piec! Mój piec pękł! W nocy coś trzasnęło i sklepienie rozeszło się na dwoje - chleb na dziś mam z żaren i z płaczu!", "> (Piec Hanki. Pojutrze, mówił Ozzy. Pojutrze.)"],
+                witShoe: ["Koń zgubił podkowę. Na równej drodze, na rynku, w biały dzień. Kowal mówi, że gwoździe były nowe. Tfu.", "> (Koń kaprala. Za trzy dni, mówił Ozzy.)"],
+                missed: "> (Przepowiednia minęła, a mnie przy niej nie było. Grum za nią nie zapłaci.)",
+                pay: ["> Sprawdziło się, Grum. Widziałem na własne oczy.", "Hm. {n} na trzy. Masz. {gold} groszy. Zakład to zakład.", "Ten stary pijak mnie przeraża. Nie mów mu, że to powiedziałem."],
+                payNone: ["> Nic nie widziałem na własne oczy.", "To nic nie płacę. Zakład to zakład. Ale... słyszałem, że wszystko się sprawdziło. Hm."],
+                ozzy: ["> Dziadku. Wszystko się sprawdziło. Burza, piec, podkowa.", "(Ozzy odstawia kufel. Pierwszy raz widzisz go trzeźwego. Mówi cicho i ani razu nie czka.)"],
+                ozzyEnd: ["(Ozzy mruga - i znowu jest pijany.) *hep* Co ja gadałem? Nieważne. Postaw piwo, to ci powiem, co będzie jutro."]
+            }
+        },
+        // =========================================================== D6
+        {
+            id: "D6", kind: "D", title: "Siłacz z targu", giver: "kowal", icon: 0, where: "kuźnia → tawerna (Grum, Borgar, stół do siłowania)", when: "do najbliższego targu (3 dni i więcej), wieczorem",
+            desc: "W dzień targowy wieczorem w tawernie jest turniej siłowania na rękę o beczkę piwa od Borgara. Co roku wygrywa Grum. Tadek chce, żeby ktoś wreszcie utarł mu nosa.",
+            offer: {
+                cond: { hours: [5.5, 17], day: 4 },
+                say: ["Wiesz, że w dzień targowy wieczorem w tawernie jest turniej na rękę? Przy stole Gruma, o beczkę piwa od Borgara. Ja i Grum, co roku. I co roku Grum.",
+                    "Ty masz krzepę, widziałem, jak nosisz polana. Stań do turnieju.", "Potrenuj z Grumem trzy wieczory - niech się nauczy, że też można przegrać."],
+                yes: "Stanę do turnieju.", no: "Nie mam krzepy.",
+                accept: ["Ha! Trzy wieczory z Grumem przy stole, potem zapis u Borgara - dwa grosze. Turniej w targ wieczorem, od szóstej."],
+                decline: ["Szkoda. To Grum znowu wypije beczkę sam."]
+            },
+            steps: [
+                { type: "custom", check: "d6Train", tick: "d6Late", text: "Trenuj z Grumem: siłuj się z nim w trzech różnych dniach przed turniejem (dzień {market}). Treningi: {n}/3." },
+                { type: "custom", talk: "d6Sign", tick: "d6Late", text: "Zapisz się na turniej u Borgara przy barze (2 G) - najpóźniej wieczorem w dzień targowy (dzień {market})." },
+                { type: "custom", talk: "d6Tourney", tick: "d6Late", text: "Dzień {market}, wieczór 18–22: turniej przy stole do siłowania w tawernie. Podejdź do stołu - trzy walki." }
+            ],
+            reward: { xp: 80 },
+            lines: {
+                signTopic: "Zapisz mnie na turniej na rękę (2 G).",
+                sign: ["> Chcę stanąć do turnieju na rękę.", "Ty? No, no. Dwa grosze wpisowego - zbieram na beczkę dla zwycięzcy. W targ wieczorem, od szóstej, przy stole Gruma."],
+                signDone: ["A, i jeszcze jedno. Kantorowy Baltazar o ciebie pytał. Ten od zakładów. Uważaj na niego."],
+                bribe: ["Przyjacielu... słyszałem, że stajesz do turnieju. Postawiłem trochę na Gruma. Ot, drobny zakład.",
+                    "Czterdzieści groszy dla ciebie, jeśli przegrasz pierwszą walkę. Z woźnicą. Nikt się nie dowie, a ty nic nie tracisz."],
+                bribeYes: ["Rozsądny człowiek. Proszę - czterdzieści. Miło robić z tobą interesy."], bribeNo: ["Szkoda. Honor to piękna rzecz. I bardzo droga."],
+                late: "Turniej odbył się bez ciebie.", walkover: ["> (Turniej się skończył - nie stawiłem się do następnej walki.)"],
+                call: ["> (Borgar uderza kuflem w ladę: „Ludzie! Turniej na rękę! Pierwsza walka: wnuk Stacha przeciw Wojciechowi, woźnicy!”)",
+                    "> (Borgar woła: „Półfinał! Wnuk Stacha przeciw Tadkowi Młotowi, kowalowi!”)", "> (Borgar woła: „Finał! Wnuk Stacha przeciw Grumowi Żelaznej Pięści! O beczkę piwa!”)"],
+                go: "Do stołu!", wait: "Jeszcze chwilę.", throw: "Przegram. (Jak chciał Baltazar.)", fair: "Walczę uczciwie.",
+                won: ["> (Łokieć drży, ale ręka rywala ląduje na blacie. Sala wiwatuje.)"], next: "> (Następna walka przy tym samym stole. Teraz: {who}.)",
+                champion: ["> (Ręka Gruma uderza o blat. W sali cisza - a potem ryk całej tawerny.)", "> (Borgar woła: „Mamy nowego siłacza! Beczka piwa dla wnuka Stacha! I pas siłacza, jak co roku!”)"],
+                lostQf: ["> (Woźnica kładzie ci rękę na blat. Ludzie wzruszają ramionami.)"], lostSf: ["> (Tadek wygrywa i klepie cię po plecach: „Dobra robota, chłopcze. Za rok!”)"],
+                lostF: ["> (Grum kładzie ci rękę na blat. Powoli, prawie z szacunkiem.)", "> (Borgar woła: „Grum znowu! Ale co to była za walka, ludzie!”)"],
+                sold: ["> (Puszczasz rękę. Woźnica nie może uwierzyć, że wygrał. Baltazar przy stoliku pod ścianą kiwa ci głową.)"],
+                noteWon: ["Siłacz z targu", "Wygrałem turniej na rękę w tawernie, w wieczór dnia targowego - po kolei z woźnicą Wojciechem, kowalem Tadkiem i z Grumem. Mam pas siłacza (większy udźwig) i beczkę piwa, którą wypiliśmy razem."],
+                noteSold: ["Sprzedana walka", "Wziąłem od Baltazara czterdzieści groszy i przegrałem pierwszą walkę turnieju w tawernie. Grum coś podejrzewa."]
+            },
+            rivals: [
+                { key: "woznica", name: "Wojciech", sub: "woźnica", bust: "Woznica_Bust", level: 0, with: "z Wojciechem, woźnicą", kicker: "TURNIEJ W TAWERNIE · ĆWIERĆFINAŁ",
+                    lines: { hello: ["Na rękę? Ja całe życie lejce trzymam. Łapa jak imadło!"], round: ["No, chłopcze, łokieć na stół."], burst: ["Wio!", "Hej-ha!", "Prrr!"],
+                        winning: ["Lejce cięższe!", "Ha! Słabo, słabo!"], losing: ["Ej... ej, spokojnie!", "Co ty jesz, kamienie?"], roundHe: ["Raz dla mnie!"], roundYou: ["No dobra, raz dla ciebie."],
+                        won: ["Ha! Woźnica jeszcze umie!"], lost: ["Dobra, dobra. Idź, pokaż reszcie."] } },
+                { key: "kowal", name: "Tadek Młot", sub: "kowal", bust: "Kowal_Bust", level: 2, with: "z Tadkiem Młotem, kowalem", kicker: "TURNIEJ W TAWERNIE · PÓŁFINAŁ",
+                    lines: { hello: ["Sam cię namówiłem, to teraz nie płacz. Kowadło nie płacze."], round: ["Łokieć na stół. Jak przy kowadle."], burst: ["Hah!", "Młotem!", "Uch!"],
+                        winning: ["Żelazo giąłem grubsze od ciebie!", "To wszystko?"], losing: ["No, no... nieźle!", "Uch... mocny jesteś!"], roundHe: ["Kowal górą!"], roundYou: ["Dobrze! Tak trzymaj!"],
+                        won: ["Kowal wygrywa! Ale ty, chłopcze, nie wstydź się."], lost: ["Pokonałeś mnie! Ha! To teraz idź i pokonaj Gruma!"] } },
+                { key: "grum", name: "Grum", sub: "Żelazna Pięść, najemnik", bust: null, level: 4, with: "z Grumem - finał", kicker: "TURNIEJ W TAWERNIE · FINAŁ",
+                    lines: { hello: ["Finał. Tylko ty i ja. Nie oszczędzaj mnie. Ja ciebie nie będę."] } }
+            ]
+        },
+        // =========================================================== W3 (chapters 1-8; the kidnap at Kupała waits for human enemies)
+        {
+            id: "W3", kind: "W", title: "Pieśń o Kruczych Skałach", giver: null, icon: 0,
+            where: "tawerna, dzwonnica, obóz pod murem, ogród rycerzy, dwór, tawerna nocą", when: "po sześciu balladach Melii i „Strunie dla Melii”",
+            desc: "Melii śni się siódma ballada - melodię zna, słów nie. Zwrotki rozeszły się po mieście: u dzwonnika, u kobiety zza morza, na kamieniu, w kronice dworu i w głowie starego pijaka. Ostatnia opisuje drogę w dół.",
+            steps: [
+                { ch: 1, type: "custom", talk: "w3Dream", text: "Melia ma ci coś do powiedzenia o swoim śnie (tawerna)." },
+                { ch: "2–6", type: "custom", talk: "w3Verse", text: "Zbierz zwrotki siódmej ballady ({n}/6). Masz: {got}. Szukaj: {miss}." },
+                { ch: 7, type: "custom", talk: "w3Origin", text: "Masz wszystkie zwrotki. Wróć do Melii po północy (0:00–4:00), kiedy sala opustoszeje." },
+                { ch: 8, type: "custom", talk: "w3Final", text: "Gdzie Melia zaśpiewa całą pieśń? Zdecyduj razem z nią (tawerna)." },
+                { ch: 8, type: "custom", spotFx: "w3Kupala", spots: ["w3_kupala"], tick: "w3Kupala",
+                    text: "Noc Kupały (dzień {kupala}), 20:00–23:30: Melia zaśpiewa całą pieśń przy ognisku przed bramą południową. Bądź tam." },
+                { ch: 8, type: "custom", tick: "w3Defend", text: "Ludzie w kapturach chcą porwać Melię! Obroń ją przy ognisku." },
+                { ch: 8, type: "custom", talk: "w3Borgar", text: "Po zamknięciu (23:00–1:00) Melia zaśpiewa całą pieśń tylko dla Borgara. Przyjdź do niej do tawerny." }
+            ],
+            reward: { xp: 200 },
+            verses: [
+                { key: "struna", name: "struna", from: "Melia, na nowej strunie", lines: ["Na Kruczych Skałach, na wysokiej,", "stał gród z kamienia, mur szeroki.", "Kruki krążyły nad wieżami,", "a straż milczała pod gwiazdami."] },
+                { key: "dzwon", name: "dzwon", from: "Ambroży, w rytm dzwonu", lines: ["Raz dzwon uderzy - śpijcie, ludzie,", "trzy razy - straż czuwa w trudzie.", "Lecz gdy uderzy siedem razy,", "zejdź tam, gdzie milkną wszystkie głazy."] },
+                { key: "kolysanka", name: "kołysanka", from: "Ludmiła, kołysanka zza morza", lines: ["Lulaj, dziecię, za siódmą górą", "śpi Serce, co nie kłamie, pod kamienną skórą.", "Królowie ślą po nie wojsko i złoto,", "a ono patrzy w ciemność i nie wie, po co."] },
+                { key: "cokoly", name: "cokół", from: "cokół posągu w ogrodzie rycerzy", lines: ["Strażniku, stój na progu twardy,", "nie pytaj więcej, niż jest warty.", "Jedno pytanie raz do roku -", "reszta niech śpi w kamiennym mroku."] },
+                { key: "kronika", name: "kronika", from: "kronika rodu Zaleskich", lines: ["Dwór z kamieni - kamień pamięta,", "skąd go wzięła ręka przeklęta.", "Kruk na progu, kruk na ścianie -", "nikt nie pyta, co się stanie."] },
+                { key: "belkot", name: "bełkot Ozzy'ego", from: "Ozzy, przez sen o drugiej w nocy", lines: ["Za luźną cegłą - schody w dół,", "trzeci jest pusty, przeskocz pół.", "Lewą ręką trzymaj się ściany,", "nie odpowiadaj, gdy głos nieznany."] }
+            ],
+            hints: {
+                dzwon: "Ambroży (dzwonnik, za dnia) - kiedy zostaniesz jego uczniem", kolysanka: "Ludmiła (obóz pod murem, wieczorem 17–20) - kiedy obóz ci zaufa (konik dla Eli albo jej gorączka)",
+                cokoly: "cokół lewego posągu w ogrodzie rycerzy (za dnia; klucz do furtki ma Ambroży)", kronika: "kronika rodu we dworze: Lord, gdy spłacisz połowę długu (8–20), albo kamerdyner za dzban miodu pitnego (rano przy straganach)",
+                belkot: "Ozzy: wieczorem dzban miodu pitnego, a o drugiej w nocy przy nim w sali (z wynajętym pokojem)"
+            },
+            lines: {
+                dream: ["Śniło mi się coś. Znowu. Siódma ballada - o Kruczych Skałach.", "Melodię znam całą. Mogłabym ją zagrać teraz, o, tak... (Melia nuci półgłosem.) Ale słów nie ma. Jakby ktoś je rozsypał po mieście.",
+                    "Ty chodzisz wszędzie, słyszysz wszystko. Zbierzesz mi te słowa? Zwrotka po zwrotce. Jedną już mam - tę ze struny."],
+                dreamVerse: ["Na nowej strunie przyszła mi jedna zwrotka sama. Posłuchaj."],
+                noteDream: ["Siódma ballada", "Melii śni się siódma ballada - „Pieśń o Kruczych Skałach”. Melodię zna, słów nie. Zwrotki rozeszły się po mieście; zbieram je dla niej."],
+                ambrozy: ["> Ambroży, Melia z tawerny szuka słów do starej melodii. O Kruczych Skałach i o dzwonie.", "Do melodii? (Ambroży stuka palcem w ławę: raz, trzy razy, siedem.) Tak się kiedyś dzwoniło. Mój mistrz to nucił. Słowa szły tak:"],
+                ludmila: ["> Ludmiło, śpiewasz Eli coś do snu?", "Kołysankę. Od mojej matki, z kontynentu. U nas wszystkie dzieci ją znają. (Ludmiła nuci cicho, kołysząc się.)"],
+                ludmilaAfter: ["Tam, skąd jesteśmy, to tylko kołysanka. Tutaj... chyba nie tylko."],
+                meadGive: ["> Dziadku, miód pitny. Dla ciebie. Cały dzban.", "Miód! Pitny! Synku, ty wiesz, jak starca uszczęśliwić. *glug, glug* Aaach... Dziś będzie mi się dobrze spało. Oj, dobrze..."],
+                meadNoRoom: "> (Ozzy chrapie i mruczy przez sen. Gdybym tu nocował, mógłbym przy nim posiedzieć... Bez pokoju Borgar zaraz mnie wyprosi.)",
+                ozzySleep: ["(Ozzy śpi na ławie z głową na stole. Mruczy. Potem - nagle wyraźnie, prawie śpiewnie:)"],
+                ozzyAfter: ["(Ozzy chrapie dalej, jakby nic nie powiedział. Na stole stoi pusty dzban po miodzie.)"],
+                plinth: ["> (Na cokole posągu ktoś wyrył wersy. Litery płytkie, zatarte deszczem, ale da się czytać.)"],
+                plinthDark: "Za ciemno, żeby czytać wyryte litery. Trzeba przyjść za dnia.",
+                lordAsk: ["> Panie, czy w kronice rodu jest pieśń? O Kruczych Skałach.", "Kronika? (Lord uśmiecha się z wyższością.) To bajki, młodzieńcze. Ale ładne bajki. Spłaciłeś już połowę - zasłużyłeś, żeby je zobaczyć.",
+                    "(Lord przynosi gruby tom w skórze i czyta głośno, przesuwając palcem po wersach:)"],
+                lordAfter: ["Dziadek kazał to wpisać, kiedy stawiał dwór. Twierdził, że kamienie same mu to zaśpiewały. Ha! Mój dziadek lubił wino."],
+                feliksAsk: ["> Kronika rodu jaśnie pana. Jest tam pieśń o Kruczych Skałach?", "Pieśń? Jest. Jaśnie pan trzyma kronikę w bibliotece.", "Mógłbym przepisać jedną zwrotkę... za dzban miodu pitnego. Jaśnie pan nie musi o tym wiedzieć."],
+                feliksGive: ["> Masz. Dzban miodu pitnego.", "Dziękuję. Proszę - mam ją już tutaj. (Kamerdyner wyjmuje z kieszeni złożoną kartkę.) Przypadkiem."],
+                origin: ["Nie śpisz? Ja też. Siedzę i patrzę na te słowa. Wszystkie, co do jednej. Wiesz, co mnie przeraża? Że je znam. Znałam zawsze.",
+                    "> Melio... Zakon, który pilnował twierdzy, nie spisywał wszystkiego w księgach. Księgę można ukraść.", "> Może przechowywał pamięć w pieśniach. I w ludziach, którzy je śpiewali.", "To znaczy... że ja...?"],
+                gentle: ["> Myślę, że twoja babka, albo babka twojej babki, śpiewała w zakonie. A pieśni przyszły do ciebie same, jak wnuk przychodzi do domu.", "(Melia płacze. Cicho, długo. Potem ściska ci rękę.) Dziękuję. Nikt mi jeszcze nie powiedział, skąd jestem."],
+                joke: ["> Albo jesteś czarownicą i zjadłaś kronikarza!", "(Melia parska śmiechem - pierwszy raz tej nocy.) Ty łobuzie... Ale wiesz co? Lżej mi. Dużo lżej."],
+                quiet: ["> Nie wiem, Melio. Może to tylko sen.", "Może. (Melia długo patrzy w ciemne okno.) Ale sny nie mają zwrotek, które się rymują."],
+                optGentle: "Twoja babka śpiewała w zakonie.", optJoke: "Może jesteś czarownicą?", optQuiet: "Nie wiem. Może to tylko sen.",
+                finalAsk: ["Mam całą pieśń. Siódmą balladę - a jej ostatnia zwrotka mówi, jak zejść pod skałę.", "Nie wiem, czy wolno mi ją śpiewać. Ty zdecyduj, gdzie i komu."],
+                optKupala: "Przy wszystkich, w Noc Kupały.", optBorgar: "Tylko Borgarowi, po zamknięciu.", optBurn: "Spal słowa.", optLater: "Jeszcze pomyślę.",
+                sayKupala: ["Przy ognisku, w Noc Kupały... Przy wszystkich. Dobrze. Niech miasto pamięta to, co zapomniało.", "Dzień {kupala}, o zmroku, przed bramą południową. Przyjdź."],
+                sayBorgar: ["Tylko Borgarowi... Tak. To jego tawerna stoi na tych kamieniach. Przyjdź po zamknięciu - od jedenastej do pierwszej w nocy."],
+                sayBurn: ["(Melia długo patrzy na kartki. Potem podaje ci je i odwraca głowę.) Spal. Tylko nie przy mnie.",
+                    "> (Kartki zwijają się w płomieniu świecy. Drogę w dół znasz teraz tylko ty.)"],
+                sayLater: ["Pomyśl. Ta pieśń czekała trzysta lat - poczeka jeszcze trochę."],
+                kupalaMissed: ["> (Noc Kupały minęła - a mnie przy ognisku nie było. Trzeba pomówić z Melią jeszcze raz.)"],
+                kupala: ["(Przed bramą południową płonie ognisko. Dziewczęta plotą wianki, a pół miasta zeszło się posłuchać.)", "Ludzie! Ta pieśń jest stara jak kamienie pod waszymi domami. Posłuchajcie."],
+                kupalaEnd: ["(Cisza. Długa. Potem ktoś zaczyna klaskać - i całe miasto klaszcze.)", "Zaśpiewałam. Wszystko. Niech pamiętają."],
+                kupalaAfter: ["> (Kiedy ognisko przygasa, dwóch ludzi w kapturach chwyta Melię za ramiona i ciągnie w ciemność.)",
+                    "> (Zanim zdążysz krzyknąć, Grum wyrasta jak spod ziemi. Jeden z kapturów pada, drugi ucieka za mur.)", "> (Melia jest cała. Grum milczy. Długo patrzy na ciebie.)"],
+                // (Humans.js, combat stage 3: the kidnap is a real fight)
+                attack: ["> (Kiedy ognisko przygasa, z ciemności wychodzą ludzie w kapturach.)"], attackShout: "Bierz śpiewaczkę! Szybko!", meliaHelp: "Pomocy!",
+                defendWon: ["> (Ostatni z kapturów leży albo ucieka. Melia drży, ale jest cała.)", "> (Grum dobiega z pałką, kiedy już po wszystkim. Patrzy na ciebie długo - i kiwa głową.)"],
+                defendLost: ["> (Leżysz na bruku. Kaptury ciągną Melię w ciemność...)", "> (...i wtedy wyrasta Grum. Jeden z kapturów pada, drugi ucieka za mur. Melia jest cała.)"],
+                defendAway: ["> (Odszedłem od ogniska. Rano ludzie mówią, że Grum przegonił jakichś kapturów. Melia jest cała.)"],
+                borgar: ["Po zamknięciu? Dobrze. (Melia odkłada lutnię, idzie do baru i wraca z Borgarem. Karczmarz siada ciężko na ławie.)",
+                    "Borgarze, posłuchaj. Do końca. Nie przerywaj."],
+                borgarEnd: ["> (Borgar długo milczy. Kręci w palcach ścierkę. W końcu mówi cicho: „Babka śpiewała mi to do snu. Bez słów. Tylko melodię.”)",
+                    "> („Pół klucza nad barem... Ona też kazała mi go nie zdejmować.” Borgar wstaje i wychodzi bez słowa.)"],
+                noteKupala: ["Pieśń przy ognisku", "W Noc Kupały Melia zaśpiewała całą „Pieśń o Kruczych Skałach” przy ognisku przed bramą południową. Całe miasto słyszało. Potem ludzie w kapturach próbowali ją porwać."],
+                noteBorgar: ["Pieśń dla Borgara", "Melia zaśpiewała całą „Pieśń o Kruczych Skałach” tylko Borgarowi, po zamknięciu. Babka śpiewała mu tę melodię do snu i kazała nie zdejmować pół klucza znad baru."],
+                noteBurn: ["Spalone słowa", "Spaliłem kartki z „Pieśnią o Kruczych Skałach”. Drogę w dół znam tylko ja: za luźną cegłą schody, trzeci schodek pusty, lewa ręka na ścianie, nie odpowiadać."]
+            }
+        },
+        // =========================================================== W8 (chapters 1-6; 2026-10-06: the mountains are on the maps - Map013 "Góry i
+        // kamieniołom", Map014 "Jaskinia", Map120 "Osada Milczących", their "Miejsce: ..." markers). Grum goes with the hero only as a
+        // picture at each place (a quest's place with his sheet and bust) - there are no followers.
+        {
+            id: "W8", kind: "W", title: "Żelazna Pięść", giver: null, icon: 0,
+            where: "tawerna → Góry i kamieniołom (za Leśną drogą), Jaskinia z obozem kopaczy, pokoje gości nad tawerną, Osada Milczących (Akt II)",
+            when: "po wygranej z Grumem na rękę i w kości",
+            desc: "Grum nieprzypadkowo wypytuje o góry na wschodzie. Ktoś mu płaci. Rozmowa otwiera się, kiedy pokonasz go na rękę i w kości.",
+            steps: [
+                { ch: 1, type: "custom", talk: "w8Ask", text: "Pokonałeś Gruma na rękę i w kości. Grum chce pogadać - usiądź z nim (tawerna)." },
+                { ch: 2, type: "custom", talk: "w8Hire", text: "Grum zapłaci 50 G za wyprawę w góry. Powiedz mu w tawernie, że jesteś gotów - wyruszycie następnego dnia o świcie." },
+                { ch: 2, type: "custom", spotFx: "w8Trip", spots: ["w8_start"], tick: "w8Trip", vars: "w8Vars",
+                    text: "Dzień {trip}, o świcie (5–9): Grum czeka u wejścia w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień (2 porcje), wodę w bukłaku i zioła albo opatrunek." },
+                { ch: 2, type: "custom", spotFx: "w8Quarry", spots: ["w8_quarry"], tick: "w8Quarry", vars: "w8Vars",
+                    text: "Prowadź Gruma do starego kamieniołomu zakonu - na półce nad schodami, przy kruku wykutym w ścianie. Zdążcie przed nocą (dzień {trip})." },
+                { ch: 3, type: "custom", spotFx: "w8Camp", spots: ["w8_cave"],
+                    text: "Grum chce zobaczyć, kto drąży tunel w Jaskini nad kamieniołomem. W obozie kopaczy, w niszy przy ścianie, stoi milczący człowiek - Grum czeka obok." },
+                { ch: 4, type: "custom", talk: "w8Letter", tick: "w8Wall", spotFx: "w8Crate", spots: ["w8_crate"], vars: "w8Vars",
+                    text: "Do Gruma idzie przez Baltazara list od mocodawców (od dnia {letter}). Dowiedz się, co w nim jest: podsłuchaj Gruma z wynajętego pokoju nad tawerną (22–24), postaw mu dzban miodu pitnego albo dwa piwa (wieczorem) - albo poszukaj kopii rozkazu w skrzyni dowódcy kopaczy (nocą, po cichu)." },
+                { ch: 5, type: "custom", spotFx: "w8Osada", spots: ["w8_gate", "w8_osada"], vars: "w8Vars",
+                    text: "Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po spłacie długu dziadka). {osada}" },
+                { ch: 6, type: "custom", talk: "w8Choice", vars: "w8Vars",
+                    text: "Wybór Gruma (tawerna). Żeby przeszedł na twoją stronę, potrzeba dwóch rzeczy z trzech: uratowanego Marka ({marek}), kronik zakonu ({kroniki}) i wygranego siłowania „na honor” ({honor}). Inaczej - walka z nim przy wejściu do tunelu albo praca dla jego mocodawców." },
+                { ch: 6, type: "custom", tick: "w8Duel",
+                    text: "Grum czeka przy wejściu do tunelu kopaczy w Jaskini. Najemnik z tarczą: ciężki cios łamie mu gardę, od tyłu tarczy nie ma." }
+            ],
+            lines: {
+                ask: ["Siadaj. Pokonałeś mnie na rękę. I w kości. Dwa razy to nie przypadek.", "Pytanie. Byłeś na wschodzie? W górach? Słyszałeś coś o jaskiniach? O starym kamieniołomie?"],
+                optStones: "Lord pyta o kamienie z krukiem.", optHeart: "Na kontynencie szukają serca skały.",
+                optArchive: "Pod ogrodem rycerzy jest archiwum zakonu.", optNothing: "Nic nie wiem o górach.", optWhy: "A po co ci to?",
+                stones: ["> Lord pyta, czy na polu dziadka leżą kamienie z krukiem. Jego dziadek je zbierał.", "Kamienie z krukiem. (Grum marszczy brwi.) Takie same kupują ludzie z kontynentu. Hm. Kamieniołom jest w górach. Stamtąd je brano."],
+                heart: ["> Ludmiła z obozu mówi, że na kontynencie wszyscy szukają serca skały.", "Serce skały. (Grum milknie na dłużej.) To samo słyszałem w obozie, zanim tu przypłynąłem. Myślałem, że to bajka dla rekrutów."],
+                archive: ["> Pod ogrodem rycerzy jest archiwum zakonu. Byłem tam.", "Zakon. Archiwum. Pod ogrodem. (Grum patrzy na ciebie inaczej niż zwykle.) Nie mów o tym nikomu. Mnie też nie powinieneś."],
+                nothing: ["> Nic nie wiem o górach.", "Nic. Jak wszyscy. Hm."],
+                why: ["> A po co ci to?", "Po co? (Grum długo milczy.) Płacą mi. Ktoś z kontynentu. Mam znaleźć drogę w góry, do jaskiń, i kogoś, kto ją zna."],
+                end: ["Pięćdziesiąt groszy za wyprawę. Jak się nauczysz drogi w góry i przeżyjesz dzień bez karczmy - przyjdź. Zabiorę cię.", "I... nie mów nikomu, że pytałem. Nikomu."],
+                note: ["Grum pyta o góry", "Grum pyta o góry na wschodzie, jaskinie i stary kamieniołom. Ktoś z kontynentu płaci mu za znalezienie drogi i przewodnika. Za wyprawę w góry da 50 G - kiedy będę znał drogę."],
+                // ---- rozdz. 2 "Przewodnik" (2026-10-06)
+                hireAsk: ["Góry. Pamiętasz? Pięćdziesiąt groszy, jak mnie zaprowadzisz do starego kamieniołomu i obaj wrócimy.",
+                    "Wyjście o świcie, przy wejściu w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień, wodę w bukłaku i zioła. W górach nikt ci nie poda."],
+                optHire: "Jutro o świcie.", optHireLater: "Jeszcze nie.",
+                hireYes: ["Dobrze. O świcie. Spóźnisz się - pójdę sam. A sam zabłądzę, i to będzie twoja wina."], hireNo: ["Hm. Góry poczekają. Ja nie zawsze."],
+                start: ["Jesteś. Hm. Pokaż, co niesiesz."],
+                startOk: ["Jedzenie, woda, zioła. Dobrze. Na wojnie połowa ginie od głupoty, nie od strzał.", "Prowadź. Kamieniołom jest gdzieś na wschodzie, wysoko. Ja idę za tobą."],
+                startMissing: ["Z tym? (Grum kręci głową.) Bez jedzenia, wody i ziół w góry nie idę. Masz czas do dziewiątej. Potem idę sam."],
+                tripMissed: ["> (Świt minął, a Grum nie czekał. Trzeba z nim pogadać jeszcze raz w tawernie.)"],
+                quarry: ["(Grum długo patrzy na kruka wykutego w ścianie kamieniołomu.) Ten sam znak co na kamieniach, które skupują ludzie z kontynentu.",
+                    "Stąd brano kamień na twierdzę. I na dwór waszego Lorda - widzisz te bloki? Na każdym dziesiątym kruk.",
+                    "(Grum podnosi wzrok na półkę nad kamieniołomem. Wysoko w skale czernieje wejście do jaskini.) A tam? Tam ktoś pali ogień. W jaskini. Hm.",
+                    "Masz. Pięćdziesiąt. Zarobione. (Grum wciska ci sakiewkę.) Zajrzymy do tej jaskini. Ja tu zostaję - przyjdź, kiedy będziesz gotów."],
+                quarryLost: ["> (Noc. Zgubiłem Gruma w górach. Wróci do tawerny wściekły - trzeba będzie zacząć od nowa.)"],
+                noteQuarry: ["Stary kamieniołom", "Zaprowadziłem Gruma do starego kamieniołomu zakonu w górach. Stąd brano kamień na twierdzę i na dwór Lorda - na blokach kruk. Wysoko nad kamieniołomem, w jaskini, ktoś pali ogień. Grum zapłacił 50 G."],
+                // ---- rozdz. 3 "Obóz kopaczy"
+                camp: ["> (W niszy przy ścianie stoi człowiek. Twarzą do skały. Nie kopie, nie mówi, nie odwraca się. Tylko kiwa głową - nie wiadomo do kogo.)",
+                    "(Grum mówi cicho, prawie szeptem.) Tych od kilofów znam. Tacy sami jak ja - za żołd. Ale ten...",
+                    "> Kopacze mówią na niego Marek. „Dotknął czegoś w skale i przestał mówić.”",
+                    "(Grum blednie. Pierwszy raz widzisz, jak Grum blednie.) Marek. Kopał w drużynie, którą przysłali przede mną. Myślałem, że zdezerterował.",
+                    "Płacą mi, żebym znalazł drogę do tego, co mu to zrobiło. (Długo milczy.) Wracamy. Muszę się napić. I pomyśleć. W tej kolejności."],
+                noteCamp: ["Obóz kopaczy", "W jaskini nad kamieniołomem ludzie frakcji, która wynajęła Gruma, drążą tunel na zachód - w stronę Kruczych Skał; jego koniec się zawalił. W niszy stoi Marek z drużyny, którą przysłali przed Grumem: patrzy w ścianę i milczy. Grum zbladł."],
+                // ---- rozdz. 4 "List z rozkazem"
+                letterTopic: "Napij się ze mną. Ja stawiam.",
+                letterDrunk: ["Stawiasz? (Grum patrzy na dzban.) Hm. Siadaj.",
+                    "(Trzeci kubek. Grum mówi coraz wolniej.) Wiesz, co przyszło? List. Przez tego waszego kupca z kantoru. Pieczęć jak trzeba.",
+                    "> (Grum wyciąga z zanadrza złożoną kartkę i kładzie ją na stole. Czytasz do góry nogami: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)",
+                    "Świadków nie zostawiać. (Grum stuka palcem w kartkę.) Świadek to ty. Świadek to Marek. Świadek to ta śpiewaczka, co śpiewa o skale. ...Nalej."],
+                letterNoDrink: ["Stawiasz? Czym? Dzban miodu pitnego albo dwa piwa - inaczej to nie jest stawianie."],
+                letterEarly: ["Napić się? Nie dziś. Czekam na coś. Jak przyjdzie - pogadamy."],
+                wall: ["> (Zza ściany sąsiedniego pokoju głosy. Grum - i ktoś z miękkim, kupieckim głosem. Baltazar.)",
+                    "> („...list z pieczęcią, jak obiecałem. Moi mocodawcy - i pańscy - nie lubią czekać.”)",
+                    "> (Szelest papieru. Grum czyta na głos, powoli: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)",
+                    "> („Świadków?” - „Wszyscy jesteśmy świadkami, panie Grum. Pytanie, czyimi.” Kroki. Drzwi.)"],
+                crate: ["> (Skrzynia dowódcy pod płachtą namiotu. Wieko luźne. Mapy, rachunki za chleb... i kartka z pieczęcią.)",
+                    "> (Kopia rozkazu: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Pod spodem dopisek: „list do G. przez B.V.”)"],
+                crateDay: "Kopacze nie śpią - nocą (21–5) i po cichu (C).", crateLoud: "Za głośno - skradaj się (C).",
+                noteLetter: ["Rozkaz dla Gruma", "Mocodawcy Gruma przysłali mu przez Baltazara list z pieczęcią: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Świadkami są wszyscy, którzy wiedzą - ja też."],
+                // ---- rozdz. 5 "Co Serce robi z człowiekiem" (Osada Milczących, Act II)
+                gate: ["(Grum stoi przed bramą z pali.) Mówią, że za nią mieszkają ci, co wiedzieli za dużo. Kopacze się tu nie zapuszczają.",
+                    "> (Za palisadą cisza. Potem zgrzyt - ktoś po drugiej stronie odsuwa belkę. Brama uchyla się. Nikt się nie pokazuje.)", "Wpuszczają nas. Hm. Idę za tobą."],
+                osada: ["(Grum zatrzymuje się na skraju kręgu. Ludzie z białymi pasami na ustach siedzą przy płaskim kamieniu i patrzą w skałę. Nikt się nie odwraca.)",
+                    "Na wojnie widziałem ludzi bez rąk, bez nóg, bez twarzy. Ci mają wszystko. Tylko nic już dla nich nie waży.",
+                    "(Najstarszy z nich podnosi na Gruma oczy. Długo. Grum pierwszy spuszcza wzrok.)",
+                    "To jest ta pewność, za którą mi płacą? Absolutna pewność. Tak wygląda. ...Wracajmy. Muszę coś postanowić."],
+                noteOsada: ["Osada Milczących", "Za bramą w wąwozie mieszkają Milczący - ludzie, którzy „wiedzieli za dużo”. Siedzą w kręgu z białymi pasami na ustach i patrzą w skałę. Grum zobaczył, co Serce robi z człowiekiem. Musi coś postanowić."],
+                osadaOpen: "Brama otwarta - Grum czeka w Osadzie, przy kręgu.",
+                // ---- rozdz. 6 "Wybór Gruma"
+                choiceTopic: "Musimy pogadać. O tunelu.",
+                choiceAsk: ["Myślałem. Nad Markiem. Nad tymi z białymi pasami. Nad listem.", "Płacą dobrze. Ale nie wiem już, za co. Powiedz mi, po której stronie stoisz - a ja ci powiem, po której stanę ja."],
+                need: ["Żeby iść przeciw tym, co płacą, muszę mieć pewność. Nie tę z jaskini - zwykłą, ludzką.",
+                    "Pokaż mi, że ktoś wraca z dołu cały - Marek. Albo że zakon wiedział, co trzyma - ich kroniki. Albo pokonaj mnie na rękę, na honor, przy wszystkich. Dwie z trzech."],
+                optHonour: "Siłujmy się - na honor.", optAlly: "Stań po mojej stronie.", optFaction: "Pracuję dla twoich mocodawców.", optFight: "Nie pozwolę ci zejść do Serca.", optLater: "Jeszcze nie.",
+                honourGo: ["Na honor. (Grum wstaje i zdejmuje rękawicę.) Przy wszystkich. Bez stawki."],
+                honourWon: ["> („Na honor. Przegrałem uczciwie” - Grum długo patrzy na swoją rękę na blacie. - „Zapamiętam.”)"],
+                honourLost: ["> („Na honor wygrałem ja” - Grum kładzie twoją rękę na blat. - „Jutro spróbuj znowu, jak chcesz.”)"],
+                ally: ["(Grum długo milczy. Potem kładzie na stole list z pieczęcią - i drze go na pół.) Dobrze. Twoja strona.",
+                    "Ten zawał w tunelu przebijemy razem. My dwaj. Nikt więcej tędy nie zejdzie bez nas. A mocodawcom napiszę, że góry zjadły drogę."],
+                faction: ["(Grum przygląda ci się długo.) Pieniądze. Hm. Uczciwe przynajmniej. Masz. Sto groszy zadatku.",
+                    "Kopacze przebiją zawał. Ty zaprowadzisz ich dalej. Tylko pamiętaj: świadków nie zostawiać. Ty też jesteś świadkiem."],
+                fight: ["(Grum wstaje powoli.) Nie pozwolisz. Hm. Szanuję to.", "Będę przy wejściu do tunelu, w jaskini. Przyjdź. Tam pogadamy po mojemu."],
+                choiceLater: ["Myśl. Ja też myślę."],
+                noteAlly: ["Grum po mojej stronie", "Grum podarł list mocodawców. Przechodzi na moją stronę - zawał w tunelu kopaczy przebiliśmy razem, my dwaj. Za nim jest przekop na pięćdziesiątym piętrze podziemi."],
+                noteFaction: ["Pracuję dla frakcji", "Wziąłem od Gruma sto groszy zadatku: pracuję dla jego mocodawców. Kopacze przebili zawał w tunelu - do pięćdziesiątego piętra podziemi - a ja mam ich prowadzić w dół. „Świadków nie zostawiać.”"],
+                // ---- rozdz. 6: the fight at the tunnel (Humans.js: a mercenary named Grum)
+                duelShout: "Bez urazy, chłopcze. Robota to robota.",
+                duelWon: ["> (Grum klęczy przy wejściu do tunelu. Tarcza leży obok.)", "> („Dobra robota... Odpływam pierwszym promem. Mocodawcy znajdą sobie innego przewodnika - ale nie tak szybko.”)"],
+                duelKilled: ["> (Grum leży przy wejściu do tunelu i już nie wstanie. Kopacze patrzą z daleka. Nikt nic nie mówi.)"],
+                duelLost: ["> (Budzę się przy wejściu do jaskini. Grum stał nade mną: „Nie zabijam chłopców. Wracaj na swoje pole.”)", "> (Z głębi tunelu słychać kilofy. Kopacze przebijają zawał.)"],
+                duelAway: ["> (Odszedłem od tunelu. Grum czeka dalej - wie, że wrócę.)"],
+                noteDuelWon: ["Grum pokonany", "Pobiłem Gruma przy wejściu do tunelu kopaczy. Odpłynie pierwszym promem; mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma."],
+                noteDuelKilled: ["Grum nie żyje", "Grum zginął przy wejściu do tunelu kopaczy, z mojej ręki. Mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma."],
+                noteDuelLost: ["Grum wygrał", "Grum pobił mnie przy wejściu do tunelu - i nie zabił. Kopacze przebili zawał: frakcja idzie w dół, do pięćdziesiątego piętra."]
+            }
+        },
+        // =========================================================== W4 (compact, 2026-10-06): the castellan's key opens the old grate in the cellar
+        {
+            id: "W4", kind: "W", title: "Krew kasztelana", giver: null, icon: 0, where: "bar w tawernie, podwórze dziadka, kuźnia, piwnica tawerny",
+            when: "po spłacie długu dziadka",
+            desc: "Lord mówił, że najstarsze kamienie twierdzy leżą pod tawerną Borgara. W piwnicy jest stara krata zakonu z krukiem na zamku. Nad barem wisi pół klucza „na szczęście”.",
+            steps: [
+                { ch: 1, type: "custom", talk: "w4Borgar", text: "Zapytaj Borgara o stare kamienie pod tawerną (przy barze)." },
+                { ch: 2, type: "spot", spot: "w4_dig", toolsAny: [62], fx: "w4Dig",
+                    text: "Druga połowa klucza leży zakopana u stóp kamiennego kopca z krukiem na podwórzu dziadka. Weź łopatę.",
+                    say: ["> (U stóp kamiennego kopca, na najniższym kamieniu, ktoś wyrył kruka. Kopiesz łopatą w twardej ziemi.)"],
+                    done: ["> (Stuk! Żelazo. Zawiniątko z natłuszczonej skóry - a w nim druga połowa klucza. Na uchwycie ten sam kruk.)"],
+                    reward: { xp: 60, note: ["Druga połowa klucza", "U stóp kamiennego kopca na podwórzu dziadka, pod kamieniem z wyrytym krukiem, była zakopana druga połowa starego klucza - zawinięta w natłuszczoną skórę."] } },
+                { ch: 3, type: "bring", to: "kowal", need: [["v:klucz_borgar", 1], ["v:klucz_kopiec", 1], [86, 1], [79, 2]], hours: [5.5, 17], fx: "w4Forge",
+                    text: "Zanieś obie połówki Tadkowi (kuźnia, 6–17), do tego 1× Żelazo i 2× Węgiel drzewny. Niech je złączy.",
+                    remind: ["Połówki klucza? Dawaj obie. I żelazo z węglem - z powietrza nie skuję."],
+                    hero: ["> Tadek, połącz te dwie połówki. Potrzebuję całego klucza."],
+                    done: ["(Tadek obraca połówki w palcach.) Zakonna robota. Kowal to u Borgarów nie zawód, tylko tytuł - wiedziałeś? Kowale kuli zamki zakonu.",
+                        "Złączę je. Przyjdź jutro rano - takie żelazo musi stygnąć powoli."] },
+                { ch: 3, type: "custom", talk: "w4Key", text: "Tadek łączy połówki. Odbierz klucz w kuźni (od jutra rana)." },
+                { ch: 4, type: "custom", check: "w4Gate", text: "Klucz kasztelana. Zejdź do piwnicy tawerny (za luźną cegłą) i otwórz nim starą kratę zakonu." },
+                { ch: 5, type: "custom", talk: "w4Tell", text: "Krata otwarta. Powiedz o tym Borgarowi (przy barze)." },
+                { ch: 6, type: "pause", text: "Dalej - w Akcie III: klucz kasztelana otworzy ostatnie drzwi, do Komnaty Serca (W9). Lord chciał być pierwszy, jeśli coś znajdziesz..." }
+            ],
+            lines: {
+                askTopic: "Zapytaj o stare kamienie pod tawerną.",
+                ask: ["> Borgarze. Lord mówi, że najstarsze kamienie twierdzy leżą pod twoją tawerną. I że pod Kruczymi Skałami są drzwi.",
+                    "(Borgar przestaje wycierać kufel.) Lord dużo mówi. ...Dobra. Nie tutaj. (Ścisza głos.)",
+                    "W piwnicy, za moimi beczkami, jest stara krata. Zakonna. Zamek z krukiem. Odkąd pamiętam, nikt jej nie otworzył - i dobrze.",
+                    "Widzisz to nad barem? Pół klucza. Dziadek kazał: „nie zdejmuj, nie pytaj”. Na szczęście, mówił. (Borgar zdejmuje go z gwoździa.)",
+                    "Druga połowa... Dziadek mówił, że jego ojciec zakopał ją razem z ojcem Stacha. Przy kamiennym kopcu z krukiem, na podwórzu twojego dziadka.",
+                    "Masz. Ziemia tam twarda - weź łopatę. I o nic mnie więcej nie pytaj."],
+                noteAsk: ["Pół klucza „na szczęście”", "Borgar zdjął znad baru połowę starego klucza z krukiem - taki sam kruk jest na zamku kraty zakonu w piwnicy. Drugą połowę zakopał jego pradziadek razem z pradziadkiem Stacha, przy kamiennym kopcu z krukiem na podwórzu dziadka."],
+                forgeWait: ["Jutro rano, mówiłem. Żelazo nie lubi pośpiechu."],
+                key: ["Proszę. Klucz kasztelana. Ciężki, co? Jakby ważył więcej niż żelazo.", "Nie mów Borgarowi, że to ja. Albo... powiedz. Niech wie, że jego ród coś znaczył."],
+                noteKey: ["Klucz kasztelana", "Tadek złączył obie połówki w palenisku. Klucz kasztelana - z krukiem na uchwycie, cięższy, niż powinien być. Pasuje do kraty zakonu w piwnicy tawerny."],
+                grate: ["> (Stara krata zakonu. Zamek ma wyryty znak kruka - taki sam jak na kluczu znad baru Borgara.)"],
+                grateAsk: ["> (Krata ani drgnie. To piwnica Borgara - może on coś wie.)"],
+                grateHalf: ["> (Połówka klucza wchodzi w zamek tylko do połowy. Trzeba całego klucza.)"],
+                grateOpen: ["> (Klucz kasztelana wchodzi w zamek z krukiem jak w masło. Zgrzyt - i krata, która nie drgnęła od trzystu lat, ustępuje.)",
+                    "> (Za nią schody znikają w ciemności. Pachnie zimnym kamieniem.)"],
+                noteGate: ["Krata otwarta", "Klucz kasztelana otworzył starą kratę zakonu w piwnicy tawerny. Za nią schody w dół - do Ruin Zamku."],
+                tellTopic: "Krata w piwnicy jest otwarta.",
+                tell: ["> Borgarze. Krata w piwnicy. Otworzyłem ją kluczem twojego dziadka. Za nią są schody - w dół, głęboko.",
+                    "(Borgar odstawia kufel. Długo wyciera ręce w fartuch, choć są suche.)",
+                    "Babka powtarzała mi jedno zdanie. Kazała je mówić, zanim zrozumiem. Mówiła, że tak mówił jej dziadek, a jemu jego ojciec.",
+                    "Nie pytam o to, czego nie chcę wiedzieć.",
+                    "(Borgar patrzy na ciebie długo.) Teraz ty to wiesz. Nie wiem, czy to dobrze. Idź już. I wracaj na górę. Zawsze wracaj na górę."],
+                noteTell: ["Słowa Borgara", "Borgar powtórzył zdanie, którego nauczyła go babka - jego ród mówił je od pokoleń: „Nie pytam o to, czego nie chcę wiedzieć.” Mówi, że tak trzeba mówić, kiedy się schodzi w dół."]
+            }
+        },
+        // =========================================================== W9 rozdz. 6 (2026-10-06): the truths of the Truth Layer as talks in the town
+        // The kartki of floors 76-99 (Underground.truths(), the bus "undergroundTruth") - back up top, the hero may tell each one to the
+        // one it is about, or keep silent. One person at a time, asked once a day (a resident: before his talk; the tavern's regulars: a
+        // topic in their menu; Borgar: a topic at the bar; the Lord and grandpa: before their story talk - grandpa also hears Mruczek's).
+        // truths[who]: tell / keep (lines after the choice: the hero "> ...", the one spoken to), told / kept (a reward: opinion, trust,
+        // flag, note), tellIf: [[flag, lines]] (more lines when a quest's flag is set). The chapters 1-5 and 7-8 are other systems' (the
+        // tavern's cellar, the Underground's floors, its Heart and endings) - the arc stays open while there is a truth to tell.
+        {
+            id: "W9", kind: "W", title: "Serce Twierdzy", giver: null, icon: 0,
+            where: "podziemia pod tawerną (Warstwa Prawdy, piętra 76-99) - potem miasteczko, tawerna, dwór i dom dziadka", when: "Akt II - od pierwszej prawdy z Warstwy Prawdy",
+            desc: "Głęboko pod tawerną leżą kartki zapisane moim pismem, choć nic nie pisałem - małe prawdy o ludziach z góry. Po powrocie mogę każdemu powiedzieć, co o nim wiem. Albo przemilczeć. To zmienia, jak na mnie patrzą.",
+            steps: [
+                { ch: 6, type: "custom", talk: "w9Truth", vars: "w9Truth",
+                    text: "Prawdy z Warstwy Prawdy - poznane: {known}, powiedziane: {told}, przemilczane: {kept}. Kto jeszcze czeka: {open}. Powiedzieć czy przemilczeć - wybierasz w rozmowie z tą osobą (raz na dzień)." }
+            ],
+            lines: {
+                found: "> (Prawda o {name}. Kiedy wrócę na górę... powiedzieć? Czy przemilczeć?)",
+                remember: "> (Kartka z dołu, zapisana moim pismem: „{truth}” Powiedzieć?)",
+                optTell: "Powiedz prawdę.", optKeep: "Przemilcz.", optLater: "Nie teraz.",
+                topic: "Mam ci coś do powiedzenia... (kartka z dołu)", borgarTopic: "Borgarze... muszę ci coś powiedzieć. (kartka z dołu)",
+                none: "nikt", gone: " (nie ma go w mieście)"
+            },
+            // the ones a truth can be told to (Underground_Data.TRUTH_WHO keys); talk: who hears it (default: the same key)
+            truths: {
+                borgar: { name: "Borgarze", talk: "borgar",
+                    tell: ["> Borgarze. Co noc schodzisz do piwnicy i stajesz przed kratą. Rano tego nie pamiętasz.",
+                        "(Borgar przestaje wycierać kufel.) Przestawiam beczki. Dlatego tam schodzę. ...Prawda?",
+                        "(Długa cisza.) Ojciec też przestawiał beczki. I jego ojciec. Myślałem, że to u nas rodzinne - zamiłowanie do porządku.",
+                        "Nie pytam o to, czego nie chcę wiedzieć. A ty mi właśnie powiedziałeś. ...Zamykaj kratę na noc, chłopcze. Nie mnie przed nią. Ją przede mną."],
+                    keep: ["> (Borgar ziewa. Mówi, że źle spał - w nocy przestawiał beczki. Nic nie mówisz.)"],
+                    told: { flag: "borgarKnows", note: ["Prawda dla Borgara", "Powiedziałem Borgarowi, że co noc staje przed kratą w piwnicy. Jego ojciec i dziadek też „przestawiali beczki”. Prosił, żebym zamykał kratę na noc - nie jego przed nią, tylko ją przed nim."] } },
+                melia: { name: "Melii", talk: "melia",
+                    tell: ["> Melio. Znasz jeszcze jedną zwrotkę. Ósmą. I za każdym razem gubisz melodię.",
+                        "(Melia o mało nie upuszcza lutni.) Nikomu o tym nie mówiłam. Nikomu!",
+                        "Słowa pamiętam. Melodii nie. Zaczynam i... cisza. Jakby ktoś zabierał mi ją z ust.",
+                        "Może kiedyś ją złapię. Przy tobie. Obiecaj, że będziesz wtedy słuchał."],
+                    keep: ["> (Melia stroi lutnię i zaczyna coś nowego. Urywa po trzech nutach. Nic nie mówisz.)"],
+                    told: { trust: { melia: 5 }, flag: "w9Verse8" } },
+                ozzy: { name: "Ozzym", talk: "ozzy",
+                    tell: ["> Ozzy. Ty nie jesteś taki pijany, jak udajesz.",
+                        "(Ozzy przestaje się kiwać. Patrzy prosto i trzeźwo - przez całe trzy uderzenia serca.) No to wiesz.",
+                        "Kto pije, tego nikt nie pyta, skąd wie. A ja wiem za dużo, synu. ...*hep* Postawisz mi piwo? Bo zaczynam trzeźwieć, a tego nie lubię."],
+                    keep: ["> (Ozzy czka i puszcza do ciebie oko. Jakby wiedział, że wiesz. Nic nie mówisz.)"],
+                    told: { trust: { ozzy: 5 } } },
+                grum: { name: "Grumie", talk: "grum",
+                    tell: ["> Grum. Nosisz w sakwie list, którego nie otworzyłeś od roku.",
+                        "(Grum odstawia kufel. Powoli.) Kto grzebał w mojej sakwie?",
+                        "...Nikt. Wiem, że nikt. (Długo milczy.) Wiem, co w nim jest. Dlatego go nie otwieram. Jak otworzę, to będzie prawda. A tak - jeszcze nie jest.",
+                        "Siłować się z tobą będę dalej. Ale o liście - ani słowa. Nikomu."],
+                    keep: ["> (Grum klepie się po sakwie, jakby sprawdzał, czy coś tam jest. Nic nie mówisz.)"],
+                    told: { trust: { grum: 5 }, flag: "grumLetterKnown" } },
+                piekarka: { name: "Hance",
+                    tell: ["> Hanko... Wiem, że pieczesz codziennie o jeden bochenek za dużo.",
+                        "(Hanka odkłada łopatę. Długo patrzy w piec.) Skąd ty... Kto ci powiedział, kochaneczku?",
+                        "Ktoś przychodził po niego co rano. Już nie przychodzi. Tyle.",
+                        "...Wiesz co? Od jutra ten bochenek pójdzie do obozu pod murem. Niech ktoś znowu po niego przychodzi."],
+                    keep: ["> (Hanka podaje komuś chleb. Na półce zostaje jeden bochenek - jak co dzień. Nic nie mówisz.)"],
+                    told: { opinion: 2, flag: "w9Loaf" } },
+                woziwoda: { name: "Kubie",
+                    tell: ["> Kuba. Ty nie umiesz pływać, prawda? I boisz się głębokiej wody.",
+                        "(Kuba czerwienieje po uszy.) Ciszej! Woziwoda, co się boi wody... Całe miasto by się śmiało.",
+                        "W beczce woda jest grzeczna. W stawie - nie. ...Nikomu nie powiesz?", "> Nikomu."],
+                    keep: ["> (Kuba przelewa wodę z beczki do beczki. Ręce mu drżą, kiedy jest jej za dużo naraz. Nic nie mówisz.)"],
+                    told: { opinion: 1 } },
+                feliks: { name: "Feliksie",
+                    tell: ["> Feliksie. Ta druga kartka - na której liczy pan, ile sprzedane beczki kosztowały miasto. Jest dłuższa niż pierwsza.",
+                        "(Feliks blednie. Sięga do kieszeni, jakby sprawdzał, czy kartka wciąż tam jest.) Nikt tego nie widział. Nikt.",
+                        "Liczę, bo ktoś musi. Lord nie liczy. Sołtys liczy wiadra, nie ludzi. ...Proszę już iść, młodzieńcze. Proszę."],
+                    keep: ["> (Feliks przechodzi obok z koszykiem. W kieszeni szeleści mu papier. Nic nie mówisz.)"],
+                    told: { flag: "feliksShaken", note: ["Druga kartka Feliksa", "Powiedziałem Feliksowi, że wiem o jego drugiej kartce - tej, na której liczy, ile sprzedana woda kosztowała miasto. Zbladł. Mówi, że liczy, bo ktoś musi."] } },
+                dzwonnik: { name: "Ambrożym",
+                    tell: ["> Ambroży... Wiem, że raz zadzwoniłeś źle. I że nikt tego nie zauważył.",
+                        "(Ambroży siada na stopniu.) Dawno. Bardzo dawno. Cztery zamiast trzech, w środku nocy. Miasto spało. Rano nikt nic nie powiedział.",
+                        "A ja co noc liczę te cztery uderzenia, zanim zasnę. ...Dziwne. Powiedziałeś to na głos - i jakby mniej ciąży. (Ambroży się śmieje. Cicho, ale się śmieje.)"],
+                    keep: ["> (Ambroży liczy coś pod nosem, patrząc na dzwon. Nic nie mówisz.)"],
+                    told: { opinion: 1, flag: "w9Bell" } },
+                kowal: { name: "Tadku",
+                    tell: ["> Tadek. Kujesz lepiej niż ojciec. I dajesz mu poprawiać swoją robotę.",
+                        "(Tadek odkłada młot.) ...Ciszej. Stary ma słuch jak nietoperz, kiedy chce.",
+                        "A co mam robić? Zabrać mu kuźnię? On tu przychodzi, bo ma po co. Jak przestanie przychodzić... no. Nie mów mu. Nigdy."],
+                    keep: ["> (Tadek oddaje komuś podkowę: „Ojciec poprawiał”. Nic nie mówisz.)"],
+                    told: { opinion: 1 } },
+                kapral: { name: "Wicie",
+                    tell: ["> Wicie. Śpisz z mieczem pod poduszką. I nie boisz się wroga - tylko swoich.",
+                        "(Wit robi krok bliżej. Ręka na rękojeści.) Kto ci to powiedział?",
+                        "...Nikt? To jeszcze gorzej. (Puszcza miecz.) Swoi wiedzą, gdzie śpisz. Wróg nie. Zapamiętaj to, chłopcze. I zapomnij, co mi powiedziałeś."],
+                    keep: ["> (Wit stoi plecami do muru. Zawsze plecami do muru. Nic nie mówisz.)"],
+                    told: { opinion: -1, flag: "witWary" } },
+                ludmila: { name: "Ludmile",
+                    tell: ["> Ludmiło. Tę kołysankę zza morza śpiewasz dopiero wtedy, kiedy Ela już śpi. Sobie.",
+                        "(Ludmiła zakrywa usta dłonią.) Słyszałeś? ...Nie. Nie mogłeś słyszeć, śpiewam cicho.",
+                        "Mama mi ją śpiewała. Jak Ela ją usłyszy, zapyta o babcię. A ja nie wiem, co jej powiedzieć. ...Może dziś zaśpiewam, zanim zaśnie. Może."],
+                    keep: ["> (Ludmiła nuci coś i urywa, kiedy Ela podchodzi bliżej. Nic nie mówisz.)"],
+                    told: { opinion: 2, flag: "w9Lullaby" } },
+                lord: { name: "Lordzie", talk: "lord",
+                    tell: ["> Panie. Boi się pan ciszy we dworze. Dlatego zawsze ktoś tam mówi - choćby pan sam, do siebie.",
+                        "(Lord otwiera usta, żeby coś powiedzieć. I nic nie mówi. Przez chwilę jest zupełnie cicho.)",
+                        "...Słyszysz? Tak brzmi ten dom, kiedy nikt nie mówi. Stoi na kamieniach twierdzy - w ciszy słychać, że one pamiętają.",
+                        "Nikomu ani słowa. Nikomu."],
+                    tellIf: [["lordAlly", ["(Lord się uśmiecha, pierwszy raz bez dworskiej miny.) Przychodź czasem. Pogadać. O czymkolwiek."]]],
+                    keep: ["> (Lord mówi bez przerwy - o pogodzie, o podatku, o cenie wosku. Nic nie mówisz.)"],
+                    told: { flag: "lordTruth" } },
+                soltys: { name: "sołtysie",
+                    tell: ["> Sołtysie. Przed snem liczysz wiadra ze studni. Zamiast pacierza.",
+                        "(Sołtys parska śmiechem, potem poważnieje.) A ty byś nie liczył? Każde wiadro to czyjś chleb, czyjaś zupa, czyjeś pranie.",
+                        "Pacierz też mówię. Potem. Jak się doliczę. ...Rzadko się doliczam."],
+                    tellIf: [["cisternOpen", ["Teraz przynajmniej jest co liczyć. Zasypiam przy czterdziestym wiadrze. Pięknie."]]],
+                    keep: ["> (Sołtys mruczy liczby, patrząc na studnię. Nic nie mówisz.)"],
+                    told: { opinion: 1 } },
+                kupiec: { name: "Baltazarze",
+                    tell: ["> Baltazarze. Nie urodziłeś się kupcem. Liczyć nauczyłeś się tam, gdzie liczono ludzi.",
+                        "(Uśmiech Baltazara nie znika. Tylko oczy przestają się uśmiechać.) Ciekawe rzeczy opowiadają w tym mieście, przyjacielu.",
+                        "Rada, za darmo, raz: nie każda prawda jest towarem. Niektórych nikt nie kupi. Za niektóre się płaci."],
+                    keep: ["> (Baltazar liczy monety szybko i równo, nie patrząc na nie. Nic nie mówisz.)"],
+                    told: { flag: "balthazarWary", note: ["Baltazar ostrzega", "Powiedziałem Baltazarowi, że nie urodził się kupcem - że liczyć nauczył się tam, gdzie liczono ludzi. Uśmiechał się dalej, tylko oczy przestały. „Za niektóre prawdy się płaci.”"] } },
+                garbarz: { name: "Ignacu",
+                    tell: ["> Ignac. Ty nie znosisz zapachu skór.",
+                        "(Ignac odkłada skrobak.) ...Trzydzieści lat. Nikt mnie o to nie zapytał. Ja sam siebie też nie.",
+                        "Ojciec garbował, to i ja garbuję. A czy muszę? Hm. Pomyślę. Ale skóry przynoś dalej - z czegoś trzeba żyć."],
+                    keep: ["> (Ignac oddycha przez usta nad kadzią. Jak zawsze. Nic nie mówisz.)"],
+                    told: { opinion: 1 } },
+                rafal: { name: "Rafale",
+                    tell: ["> Rafał. Ty też to widziałeś, prawda? Przez chwilę. To, czego twój towarzysz dotknął w skale.",
+                        "(Rafał łapie cię za rękę.) Ciszej. ...Tak. Chwilę. Wystarczyło.",
+                        "Od tamtej pory nie śpię pod ścianą. Ściana pamięta. ...Ty też byłeś na dole? To wiesz, o czym mówię."],
+                    keep: ["> (Rafał rozkłada posłanie z dala od muru, na samym środku obozu. Nic nie mówisz.)"],
+                    told: { flag: "rafalTrust" } },
+                dziadek: { name: "dziadku", talk: "grandpa",
+                    tell: ["> Dziadku. Bałeś się nie tylko Lorda. Bałeś się, że jak dług zniknie, nikt już nie zapuka do twoich drzwi.",
+                        "(Dziadek Stach długo patrzy w ogień.) Głupi stary... Skąd ty to wiesz, wnuku?",
+                        "Dług to był przynajmniej ktoś, kto o mnie pamiętał. Punktualnie. ...Ty będziesz pukał? Choć raz na jakiś czas?", "> Będę, dziadku."],
+                    keep: ["> (Dziadek nasłuchuje kroków przed domem. Kiedy to tylko wiatr, wraca do ognia. Nic nie mówisz.)"],
+                    told: { flag: "grandpaTruth" } },
+                kot: { name: "Mruczku", talk: "grandpa", openAs: "Mruczek (powiedz dziadkowi)",
+                    tell: ["> Dziadku... Mruczek schodzi pod tawernę. Głęboko. Był tam przede mną. Wiele razy.",
+                        "(Dziadek drapie kota za uchem.) Kot chodzi, gdzie chce. Jak każdy w tej rodzinie.", "> (Mruczek mruży oczy. Jakby się uśmiechał.)"],
+                    keep: ["> (Mruczek przeciąga się przy piecu i patrzy na ciebie, jakby wiedział, że wiesz. Nic nie mówisz.)"],
+                    told: { flag: "catTruth" } }
+            }
         }
     ];
 
-    window.TownQuestsData = { OPINION, GREET, MARKET, CALENDAR, SIGNALS, VITEMS, SPOTS, GOSSIP, SIGN, QUESTS };
+    window.TownQuestsData = { OPINION, GREET, MARKET, CALENDAR, SIGNALS, VITEMS, SPOTS, GOSSIP, SIGN, QUESTS, WELL_BONUS, REMARKS, LUCJAN };
 })();

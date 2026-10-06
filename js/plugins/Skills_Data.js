@@ -42,7 +42,8 @@
         "build.hits": "%", "build.cost": "%", "build.refund": "%", "build.spare": "%",
         "craft.speed": "%", "cook.speed": "%", "smelt.speed": "%", "craft.save": "%", "craft.double": "%", "cook.double": "%", "tool.wear": "%", "fire.fuel": "%", "sell": "%",
         "aim.speed": "%", "ranged.dmg": "%", "ranged.crit": "%", "ammo.save": "%", "shot.cooldown": "%", "sneak": "%", "hunt.dmg": "%",
-        "carcass.meat": "%", "carcass.hide": "%", "carcass.sinew": "%", "snare.lure": "%", "fish": "%", "feathers": "n"
+        "carcass.meat": "%", "carcass.hide": "%", "carcass.sinew": "%", "snare.lure": "%", "fish": "%", "feathers": "n", "sneak.dmg": "%",
+        "disarm": "%", "surrender": "%", "surrender.at": "%", "mind.resist": "%", "mind.short": "%", "mind.back": "s", "mind.see": "n"
     };
 
     const TREES = [
@@ -68,6 +69,9 @@
         S("riposte", "melee", 2, 1, "Kontra", "Po udanym parowaniu następny cios w ciągu 2 sekund jest krytyczny.", { from: ["combo4"], attr: { per: 12 } }),
         S("m_breath", "melee", 2, 2, "Oszczędny cios", "Ciosy zużywają o {melee.breath} mniej oddechu.", { ranks: 2, from: ["combo4", "charge"], fx: { "melee.breath": 0.1 } }),
         S("m_poise", "melee", 2, 3, "Łamacz gardy", "Zbijanie równowagi wroga +{melee.poise}.", { ranks: 2, from: ["charge"], fx: { "melee.poise": 0.12 } }),
+        // (stage 3, 2026-10-06 - the men of Humans.js): men give up sooner before him
+        S("m_fear", "melee", 3, 2, "Postrach", "Ludzie poddają się chętniej: +{surrender} szans, że pobity błaga o litość, i już przy {surrender.at} więcej życia.",
+            { ranks: 2, from: ["m_breath"], attr: { wil: 10 }, fx: { "surrender": 0.15, "surrender.at": 0.05 } }),
         S("m_crit", "melee", 3, 1, "Oko rzeźnika", "Szansa na trafienie krytyczne +{melee.crit}.", { ranks: 2, from: ["riposte"], fx: { "melee.crit": 0.03 } }),
         S("sweep", "melee", 3, 3, "Szeroki zamach", "Siekiera i kilof trafiają wszystkich wrogów w zasięgu zamachu, nie tylko najbliższego.", { from: ["m_poise"], attr: { str: 20 } }),
         S("execute", "melee", 4, 1, "Dobicie", "Cios w zataczającego się wroga zadaje 2,5 raza więcej obrażeń.", { from: ["m_crit"] }),
@@ -80,6 +84,14 @@
         S("keen", "defense", 1, 3, "Czujne oko", "Okno parowania o połowę dłuższe.", { from: ["d_body"], attr: { per: 12 } }),
         S("d_block", "defense", 2, 0, "Mocny blok", "Blok zatrzymuje o {block.reduce} więcej obrażeń.", { ranks: 2, from: ["guard"], fx: { "block.reduce": 0.07 } }),
         S("d_breath", "defense", 2, 2, "Głęboki oddech", "Oddech wraca o {breath.regen} szybciej.", { ranks: 2, from: ["guard", "keen"], fx: { "breath.regen": 0.15 } }),
+        // (stage 3, 2026-10-06): a parried man may lose his weapon
+        S("d_disarm", "defense", 2, 3, "Rozbrojenie", "Udane parowanie ciosu człowieka: {disarm} szans, że wytrąci mu broń z ręki (bije wtedy słabiej, a broń leży na ziemi).",
+            { ranks: 2, from: ["keen"], attr: { per: 14 }, fx: { "disarm": 0.3 } }),
+        // (stage 4, 2026-10-06 - the creatures of the ruins, Creatures.js): Hart ducha against what hits the mind
+        S("d_will", "defense", 1, 2, "Spokojna głowa", "Opór przed „prawdą” upiorów i strachem +{mind.resist}; strach i zamęt trwają o {mind.short} krócej.",
+            { ranks: 3, from: ["d_body"], attr: { wil: 8 }, fx: { "mind.resist": 0.08, "mind.short": 0.1 } }),
+        S("d_truth", "defense", 3, 3, "Prawda nie boli", "Odparta „prawda” odbija się mocniej: upiór zatacza się o {mind.back} dłużej, a ukryte upiory widać jako mgiełkę.",
+            { from: ["d_will"], attr: { wil: 18 }, fx: { "mind.back": 45, "mind.see": 1 } }),
         S("acrobat", "defense", 2, 4, "Akrobata", "Drugi przewrót od razu po pierwszym, o 40% tańszy.", { from: ["keen"], attr: { dex: 14 } }),
         S("thickskin", "defense", 3, 1, "Gruba skóra", "Rany zdarzają się o połowę rzadziej.", { from: ["d_block", "d_breath"], attr: { con: 16 } }),
         S("d_knock", "defense", 3, 2, "Twarde nogi", "Trudniej cię przewrócić: +{knock.resist} odporności.", { ranks: 2, from: ["d_breath"], fx: { "knock.resist": 0.2 } }),
@@ -134,6 +146,8 @@
         S("h_snare", "hunting", 2, 1, "Sidlarz", "Przynęta w sidłach wabi zające o {snare.lure} skuteczniej.", { ranks: 2, from: ["h_meat"], fx: { "snare.lure": 0.25 } }),
         S("h_sinew", "hunting", 2, 3, "Ścięgna", "{carcass.sinew} szans na dodatkowe ścięgna przy oprawianiu.", { from: ["h_hide"], fx: { "carcass.sinew": 0.5 } }),
         S("h_birds", "hunting", 2, 4, "Ptasznik", "Z każdego ptaka +{feathers} pióro więcej.", { ranks: 2, from: ["h_hide"], fx: { "feathers": 1 } }),
+        // (stage 2 of the fight, 2026-10-05: the blow and the shot from hiding - Combat_Fight.js SNEAK)
+        S("h_ambush", "hunting", 3, 1, "Zasadzka", "Atak z ukrycia (cios i strzał w zwierzę albo człowieka, który cię nie zauważył) zadaje o {sneak.dmg} więcej obrażeń.", { ranks: 2, from: ["h_snare"], attr: { per: 12 }, fx: { "sneak.dmg": 0.25 } }),
         S("h_track", "hunting", 3, 2, "Tropiciel", "Zwierzęta zauważają cię o {sneak} wolniej, obrażenia zadawane im +{hunt.dmg}.", { ranks: 2, from: ["h_snare", "h_sinew"], attr: { per: 15 }, fx: { "sneak": 0.1, "hunt.dmg": 0.05 } }),
         S("h_beast", "hunting", 4, 2, "Pogromca zwierząt", "Obrażenia zadawane zwierzętom +{hunt.dmg}.", { ranks: 2, from: ["h_track"], attr: { str: 18 }, fx: { "hunt.dmg": 0.1 } }),
         S("h_master", "hunting", 5, 2, "Król puszczy", "+{carcass.meat} szans na mięso i skórę, zwierzęta zauważają cię o {sneak} wolniej.", { from: ["h_beast"], attr: { per: 30 }, fx: { "carcass.meat": 0.5, "carcass.hide": 0.5, "sneak": 0.1 } }),

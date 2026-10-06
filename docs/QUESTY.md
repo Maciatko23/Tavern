@@ -72,14 +72,14 @@ Trwają kilka minut, dzieją się w jednym albo dwóch miejscach i mieszczą si�
 | K12 | Łój do latarni *(dostawa nocą)* | Kapral Wit Czerwień | chodnik na murach | W latarni patrolu kończy się łój. Przynieś łój z oprawionego dzika albo jelenia (albo 2× Pochodnia). W zamian Wit rzuca: „Po północy to nie ja jestem tu najdziwniejszy”. | 21–4 | 2× Pochodnia od Wita, poszlaka do W1/W5 | oprawianie zwłok, pochodnie | przedmiot Łój (z oprawiania) |
 | K13 | Sznur dzwonu *(na czas)* | Ambroży Dzwonnik | dzwonnica (rynek) | Sznur się przetarł. Przynieś 2× Lina przed 12:00. Jeśli się spóźnisz, w mieście pierwszy raz w historii nie zadzwoni południe — wszyscy o tym gadają, a Ambroży jest blady jak ściana. | 6–11:59 | 10 G, Opinia +2 | lina (len, warsztat) | wnętrze dzwonnicy |
 | K14 | Dzwonnik ma chore kolana *(mini-gra)* | Ambroży Dzwonnik | szczyt dzwonnicy | O 18:00 Ambroży nie da rady wejść po schodach. Zadzwoń sam: 6 uderzeń w rytm (O, gdy serce dzwonu jest na górze). Jeśli wybijesz złą liczbę, Ambroży blednie: „Nie tak! Trzy i jeden to coś innego…” — to pierwsza poszlaka kodu (W2). | 17:30–18:10, od Opinii 20 | 8 G, Ambroży trochę bardziej ci ufa | gra rytmu na `Scene_MiniGame` (TawernaUI) | mini-gra dzwonu |
-| K15 | Ostrożnie, kruche *(nocny kurier, wybór)* | Baltazar Vey | Kantor → brama południowa | „Skrzynia na wóz pod bramą, o 22:00. Nie otwierać”. Wybór: zanieś ją / otwórz po drodze (w słomie leżą stare kamienie z wyrytym krukiem; zamek pęka i Baltazar to zauważy) / zanieś ją Kapralowi Witowi. | 20–22 | 25 G albo poszlaka do W5, albo lepsza opinia u straży; każdy wybór zmienia W5 | noc, skradanie (C), ciężar | ciężka skrzynia (wolniejszy chód) |
+| K15 | Ostrożnie, kruche *(nocny kurier, wybór)* | Baltazar Vey | Kantor → brama południowa (w grze: woźnica Wojciech z wozem przed bramą, 21:20–22:40) | „Skrzynia na wóz pod bramą, o 22:00. Nie otwierać”. Wybór: zanieś ją / otwórz po drodze (w słomie leżą stare kamienie z wyrytym krukiem; zamek pęka i Baltazar to zauważy) / zanieś ją Kapralowi Witowi. | 20–22 | 25 G albo poszlaka do W5, albo lepsza opinia u straży; każdy wybór zmienia W5 | noc, skradanie (C), ciężar | ciężka skrzynia (wolniejszy chód) |
 | K16 | Grzyby po dwakroć *(handel)* | Baltazar Vey | Kantor | Dzień po promie Baltazar skupuje grzyby, jagody i wędzone mięso po podwójnej cenie. Sprzedaj mu do 10 sztuk przed 18:00. Dziwne, że bierze tylko to, co długo wytrzyma (wędzone i suszone). | dzień po promie, 8–18 | podwójna cena; poszlaka: to zapasy na długą drogę (obóz kopaczy, W8) | zbieractwo, wędzarnia, psucie się (Spoilage) | sklep Kantoru |
 | K17 | Obwieszczenie o racjach *(roznoszenie, rozmowy)* | Sołtys Bronisław | ratusz → tawerna, piekarnia, kuźnia, obóz | Przybij 4 obwieszczenia: racje wody od Kuby i kara za kradzież deszczówki. Każdy reaguje inaczej: Hanka pyta, czym zarobi ciasto, Tadek klnie, a Ludmiła chce wiedzieć, czy obóz też dostanie racje. | 8–16 | 10 G, Opinia +1; wiesz już, kto jest przeciw sołtysowi | gwoździe, młotek | zdarzenia obwieszczeń |
 | K18 | Kto ruszył stóg? *(śledztwo)* | Sołtys Bronisław | stogi siana, taras rzemieślników | Dwóch sąsiadów kłóci się o stóg, który ktoś „przesunął na miedzę”. Wysłuchaj obu (każdy bywa w domu o innej porze) i obejrzyj ślady. Prawda: stóg przesunął podmuch burzy. | dzień po burzy, 8–18 | 15 G; za prawdę Opinia +2 u obu, za stronniczość +3 u jednego i −2 u drugiego | wiatr burzy (Storm), wybory | ślady (zdarzenia) |
 | K19 | Spis obozu *(wybór)* | Sołtys Bronisław | obóz uchodźców pod murem | Policz ludzi w obozie — porozmawiaj z każdym z 5 namiotów. Rafał prosi, żebyś go nie liczył. Wybór: podaj prawdziwą liczbę albo zaniżoną (racje będą mniejsze, ale Rafała nikt nie zauważy). | po pierwszej fali (dzień 10+), 9–17 | 10 G; zmienia W6 | rozmowy, wybory | namioty jako zdarzenia |
 | K20 | Pierwsza skóra *(nauka)* | Garbarz Ignac | garbarnia, taras rzemieślników | Sprzedaj Ignacowi pierwszą Surową skórę. Ignac ogląda cięcia i pokazuje, jak oprawiać czyściej. | 7–17, po pierwszym polowaniu | 8 G; przy 3 następnych oprawieniach +1 Ścięgna | oprawianie (Hunting) | mała premia przy oprawianiu |
 | K21 | Garbnik z lasu *(zbieranie)* | Garbarz Ignac | garbarnia | Skończył się garbnik. Przynieś 10× Szyszki i 4× Gałęzie (na korę) przed 17:00. | 7–17 | 12 G, rabat w garbarni na 1 dzień | zbieractwo | nic |
-| K22 | Struna dla Melii *(łańcuch, na czas)* | Melia Srebrogłosa | scena tawerny → garbarnia | W lutni pękła struna. 1) Zdobądź Ścięgna (z oprawiania). 2) Ignac skręca z nich strunę (1 h). 3) Oddaj ją Melii przed 18:00. Jeśli zdążysz, Melia zaśpiewa zwrotkę, której nikt jeszcze nie słyszał (W3). | 10–18 | Natchniony za darmo, 15 G, nowa zwrotka | oprawianie, pieśń Melii (TavernLife) | przedmiot Struna |
+| K22 | Struna dla Melii *(łańcuch, na czas)* | Melia Srebrogłosa | scena tawerny → garbarnia | W lutni pękła struna. 1) Zdobądź Ścięgna (z oprawiania). 2) Ignac skręca z nich strunę (1 h). 3) Oddaj ją Melii przed 18:00. Jeśli zdążysz, Melia zaśpiewa zwrotkę, której nikt jeszcze nie słyszał (W3). *(W grze, 2026-10-06: Melia daje zadanie 10–17; 2× Ścięgna, struna po godzinie; spóźniony dostajesz 10 G, a zwrotka przychodzi w W3 rozdz. 1.)* | 10–18 | Natchniony za darmo, 15 G, nowa zwrotka | oprawianie, pieśń Melii (TavernLife) | przedmiot Struna |
 | K23 | Chowany na rynku *(zabawa na czas)* | Bronek i Zosia | rynek | Masz 5 minut, żeby znaleźć oboje: za straganem, w pustej beczce Kuby, za studnią albo w stogu na tarasie niżej. Znalezieni dają ci swój „skarb” — kamyk z wyrytym krukiem. | 12–17, bez deszczu | Opinia +2, kamyk z krukiem (poszlaka do W2); później dzieci przynoszą plotki | zegar, szukanie | kryjówki (zdarzenia) |
 | K24 | Latawiec na dzwonnicy *(celowanie)* | Zosia | dzwonnica | Latawiec zaplątał się o zdobienia wieży. Przetnij sznurek strzałem z procy (przytrzymane F, kółko się zwęża) i złap latawiec, zanim wiatr porwie go za mur. | dzień z wiatrem albo przed burzą | 5 G od matki, Opinia +2 | proca i celowanie (Hunting_Weapons), wiatr (Storm) | latawiec jako cel |
 | K25 | Proca dla Bronka *(rzemiosło, nauka)* | Bronek | rynek → warsztat na polu | Zrób na warsztacie procę i pokaż Bronkowi 3 trafienia w puszkę na murze. Od następnego dnia Bronek przegania ptaki z dachu piekarni. | dowolnie | przez 3 dni bochen dziennie od Hanki, Opinia +2 | warsztat, proca, ptaki (Birds) | nic |
@@ -90,11 +90,11 @@ Trwają kilka minut, dzieją się w jednym albo dwóch miejscach i mieszczą si�
 | K30 | Koszyki dla dworu *(dźwiganie)* | Feliks | stragany (rynek) → drzwi dworu | Feliks robi zakupy między 6 a 9 i nie da rady wszystkiego unieść. Zanieś 3 koszyki do drzwi dworu przed 9:00 (są ciężkie, więc idziesz wolniej). | dni targowe, 6–9 | 5 G + 5 G „na dług”; Lord rzuca przy drzwiach kilka słów | udźwig, plany dnia | nic |
 | K31 | Imieniny Lorda *(zamówienie)* | Feliks | drzwi dworu | Na imieniny Lord chce 2× Miód pitny i Placek jagodowy. Dostarcz je do 20:00 w dniu imienin. | dzień 33 (propozycja) | 40 G (można „na dług”); list Lorda w dniu 40 łagodniejszy | miód pitny, pieczenie | data imienin |
 | K32 | List od dziadka *(posłaniec)* | Dziadek Stach | dom dziadka → drzwi dworu | Dziadek prosi w liście o zwłokę. Zanieś go Lordowi. Zwłoki nie będzie — ale Lord pyta, czy na polu dziadka „leżą jeszcze stare kamienie z krukiem”. | dni 5–20, 8–20 | +40 dośw., poszlaka do W4/W7 | dług (Story) | nic |
-| K33 | Czapka Ozzy'ego *(dziwne)* | Dziadek Ozzy | tawerna → zamknięty ogród | Ozzy zgubił czapkę: „Leży na głowie rycerza, tego bez nosa”. I rzeczywiście leży — na posągu za murem zamkniętego ogrodu. Strąć ją procą przez kratę furtki. Skąd Ozzy to wiedział? | wieczorem | piwo od Ozzy'ego, poszlaka do W2 | proca, celowanie | czapka na posągu |
+| K33 | Czapka Ozzy'ego *(dziwne)* | Dziadek Ozzy | tawerna → zamknięty ogród | Ozzy zgubił czapkę: „Leży na głowie rycerza, tego bez nosa”. I rzeczywiście leży — na posągu za murem zamkniętego ogrodu. Strąć ją procą przez kratę furtki. Skąd Ozzy to wiedział? *(W grze, 2026-10-06: lewy posąg; strzał z pola na wprost posągu przy zwężonym kółku, czapka spada tuż za kratę, sięgasz po nią przez pręty; przed furtką widok podjeżdża nad mur.)* | wieczorem | piwo od Ozzy'ego, poszlaka do W2 | proca, celowanie | czapka na posągu |
 | K34 | Ogień w stogu *(zdarzenie w burzy, wybór)* | zdarzenie (krzyk sołtysa na rynku) | taras rzemieślników | Piorun zapala stóg. Gasisz go: każde wiadro albo garnek wody gasi jeden płomień. Wodę bierzesz z własnych zapasów — ratujesz stóg czy swoje pragnienie? | w czasie burzy | Opinia +8 (najwięcej ze wszystkich krótkich); przez 2 tygodnie sołtys zwalnia cię z myta i opłaty za stragan | burza, wiadra, garnki, pragnienie | ogień na mapie |
 | K35 | Śnieg na dachu *(praca)* | Hanka Mączna | piekarnia | Po śnieżycy dach piekarni trzeszczy. Przed zmierzchem odgarnij łopatą śnieg w 3 miejscach. | zima, po śnieżycy | 10 G + gorący chleb (grzeje), Opinia +2 | łopata, zimno (Survival) | zaspy na dachu (zdarzenia) |
 | K36 | Kot na dachu piekarni *(zwabianie)* | Dziadek Stach | dom dziadka → piekarnia | Mruczek nie wrócił na noc. Siedzi na dachu piekarni, bo pachnie tam mlekiem. Zwab go Mlekiem albo Serem i zanieś do domu. | rano, po nocy, w którą kot zniknął | Owsianka od dziadka; dziadek trochę bardziej ci ufa | mleko (zagroda), Mruczek | noszenie kota (jak w K7) |
-| K37 | Sakiewka Lorda *(pościg, wybór)* | Lord Zaleski (krzyk) | rynek → taras rzemieślników | W dzień targowy złodziejaszek odcina Lordowi sakiewkę i ucieka schodami w dół. Dogoń go (bieg, oddech). Wybór: oddaj sakiewkę Lordowi / puść złodzieja (to głodny chłopak z obozu) / zatrzymaj sakiewkę (80 G; jeśli ktoś to zobaczy, Opinia −15, a straż zaczyna cię szukać). | dzień targowy, 10–12 | Lord odpisuje 50 G z długu albo Opinia u uchodźców +5, albo 80 G | bieg (Combat RUN), zmęczenie | uciekający NPC |
+| K37 | Sakiewka Lorda *(pościg, wybór)* | Lord Zaleski (krzyk) — **w grze: Feliks z sakiewką dworu** | rynek → taras rzemieślników | W dzień targowy złodziejaszek odcina Lordowi sakiewkę i ucieka schodami w dół. *(W grze, 2026-10-05: Lord nie chodzi na targ, więc sakiewkę dworu - pieniądze Lorda - nosi Feliks, który robi zakupy dla dworu, 8:30–10:30; złodziejaszek to Szymek z obozu; „oddaj” = Feliks zapisuje 50 G na poczet długu, „puść” = flagi zaufania obozu zamiast osobnej Opinii u uchodźców.)* Dogoń go (bieg, oddech). Wybór: oddaj sakiewkę Lordowi / puść złodzieja (to głodny chłopak z obozu) / zatrzymaj sakiewkę (80 G; jeśli ktoś to zobaczy, Opinia −15, a straż zaczyna cię szukać). | dzień targowy, 10–12 | Lord odpisuje 50 G z długu albo Opinia u uchodźców +5, albo 80 G | bieg (Combat RUN), zmęczenie | uciekający NPC |
 | K38 | Nocna warta *(obserwacja)* | Kapral Wit Czerwień | mury, baszta przy bramie wschodniej | Zastąp chorego strażnika od 1:00 do 3:00 i wypatruj ruchu: lis, sowa… a o 2:00 Kuba z pustym wozem. Wit bez słowa otwiera mu furtkę w bramie wschodniej. | 1–3 w nocy, od Opinii 20 | 15 G, poszlaka do W1 | noc, potrzeba snu, Czujność | widok z muru (zdarzenia) |
 | K39 | Kości z targu *(oszust)* | Bartek Kmieć | tawerna → stragan na rynku | Bartek przegrał wszystko z wędrownym graczem na targu: „ma szczęście jak diabeł”. Zagraj z graczem w kości i (przy Czujności 10+) wypatrz, kiedy podmienia kość. Wybór: zdemaskuj go (Opinia +4, oszust wylatuje z targu) albo weź udział w zysku (10 G i milczysz). | dzień targowy, 10–14 | Opinia +4 albo 10 G; Bartek oddaje ci 5 G | kości (TavernDice), Czujność | wędrowny gracz (nowy rywal w kościach) |
 
@@ -111,14 +111,14 @@ Kilka kroków, kilka dni, 2–4 miejsca i małe wybory.
 | D3 | Ręka kowala *(praca przy palenisku, 3 dni)* | Tadek Młot | kuźnia + brama wschodnia + ratusz + garbarnia | Tadek poparzył dłoń, więc przez trzy dni zastępujesz go przy jego palenisku. Dzień 1: 4 podkowy dla koni straży (Wit odbiera je o 17:00). Dzień 2: 20× Gwoździe dla sołtysa (na scenę na dożynki). Dzień 3: Nóż żelazny dla Ignaca. Spóźnisz się — klient się obraża. Na koniec wybór: weź 60 G albo zostaw je Tadkowi na leczenie. | 3 kolejne dni, 6–17 | 60 G albo: Tadek uczy cię przepisu na okutą tarczę i daje na zawsze 15% rabatu w kuźni | kuźnia (forge), ruda i żelazo, zużycie narzędzi | praca na cudzym stanowisku (kuźnia w mieście) |
 | D4 | Złodziej o świcie *(zasadzka, wybór moralny)* | Hanka Mączna | stragan na rynku + obóz uchodźców | Co rano znika jeden bochen. 1) O 5:30 zaczaj się przy straganie (skradanie — nie daj się zobaczyć). 2) Mała postać ucieka w stronę obozu. 3) Idź jej tropem sam albo z psem (wywęszy chleb). 4) To Ela, która nosi chleb chorej matce. Wybór: a) powiedz Hance (Ela zostaje ukarana, a obóz cię nie lubi), b) przez tydzień płać za chleb sam (5 G dziennie), c) namów Hankę, żeby wzięła Ludmiłę do pieca na 4:00 (wymaga Opinii ≥ 20). | od dnia 11 (po pierwszej fali), 2–3 dni | przy c) chleb tanieje, Opinia +6, a Ela daje ci rysunek: kruk nad tawerną i „schody w dół” (poszlaka do W9) | skradanie, pies (tropienie), plany dnia | trop zapachu dla psa |
 | D5 | Wataha pod bramą *(walka, 3 noce)* | Kapral Wit Czerwień | brama południowa + Polna droga + Skraj lasu | Wilki podchodzą pod mur, a straż „ma z dworu rozkaz nie wychodzić”. 1) O świcie obejrzyj tropy pod bramą. 2) Drugiej nocy zabij 2 wilki zwiadowców na Polnej drodze. 3) Trzeciej nocy — przewodnik watahy z kompanami na Skraju lasu. Wit daje ci 6× Strzały. Na koniec wybór: oddaj zasługę Witowi (będzie twoim dłużnikiem) albo ogłoś wszystko u sołtysa (Opinia). | 3 noce, 21–5 | 80 G; do tego Opinia +5 albo przysługa Wita (raz przepuści cię nocą bez pytań — przyda się w W1 i W5) | walka (wataha), łuk, oprawianie | nic (wilki już są) |
-| D6 | Siłacz z targu *(turniej, przekupstwo)* | Tadek Młot | tawerna (siłowanie) + rynek | W dzień targowy jest turniej siłowania: Tadek i Grum walczą o beczkę piwa. 1) Trening: 3 wieczory siłowania z Grumem. 2) Zapis u sołtysa (2 G). 3) Baltazar daje ci 40 G, żebyś przegrał w ćwierćfinale („mam zakład”). 4) Turniej: 3 pojedynki (mini-gra siłowania). Wybór: sprzedaj walkę / wygraj / przegraj uczciwie. | dzień targowy 14 albo 21, wieczory przed nim | za wygraną 50 G, Pas siłacza (większy udźwig) i Opinia +5; za sprzedaną walkę 40 G i zaufanie Baltazara (W5) | siłowanie (TavernLife_ArmWrestle), Siła | turniej na rynku, Pas siłacza |
+| D6 | Siłacz z targu *(turniej, przekupstwo)* | Tadek Młot | tawerna (siłowanie; decyzja autora 2026-10-06: tylko w tawernie) | W dzień targowy jest turniej siłowania: Tadek i Grum walczą o beczkę piwa. 1) Trening: 3 wieczory siłowania z Grumem. 2) Zapis u sołtysa (2 G). 3) Baltazar daje ci 40 G, żebyś przegrał w ćwierćfinale („mam zakład”). 4) Turniej: 3 pojedynki (mini-gra siłowania). Wybór: sprzedaj walkę / wygraj / przegraj uczciwie. *(W grze, 2026-10-06 - decyzja autora: siłowanie tylko w tawernie. Turniej w najbliższy targ co najmniej 3 dni po przyjęciu, wieczorem 18–22 przy stole do siłowania w tawernie; zapis u Borgara przy barze (2 G); rywale: woźnica Wojciech, Tadek, Grum; Pas siłacza = udźwig +8; wzięte pieniądze Baltazara i wygrana - Baltazar to pamięta.)* | dzień targowy 14 albo 21, wieczory przed nim | za wygraną 50 G, Pas siłacza (większy udźwig) i Opinia +5; za sprzedaną walkę 40 G i zaufanie Baltazara (W5) | siłowanie (TavernLife_ArmWrestle), Siła | turniej na rynku, Pas siłacza |
 | D7 | Serce kowala *(swaty, kradzież nocą)* | Tadek Młot (po cichu) | kuźnia + piekarnia + ogród dworu + scena tawerny | Tadek kocha Hankę i nie umie jej tego powiedzieć. 1) Wybadaj Hankę: kocha róże, „kiedyś rosły i u nas”. 2) Zdobądź różę: zerwij ją nocą w ogrodzie dworu (skradanie; na murach jest Kapral) albo niech Tadek wykuje żelazną (2× Żelazo). 3) Melia ułoży piosenkę (za Miód pitny). 4) Tadek wyznaje miłość przy scenie. Finał: wesele w tawernie. Zerwana róża ma mokrą ziemię na łodydze — w taką suszę! (poszlaka do W1). | 5–7 dni, wieczory | wesele = zmiana u Borgara z podwójnymi napiwkami, 30 G od młodych, Opinia +8 | skradanie, kuźnia, zmiana w tawernie, pieśń | scena wyznania, wesele (goście, stoły) |
 | D8 | Wielki targ *(handel, mini-gra)* | Sołtys Bronisław | rynek (drugi stragan) + pole dziadka | Od Opinii 20 możesz wynająć drugi stragan na dzień targowy (5 G). 1) Przez 3 dni szykujesz towar: warzywa, ser, jajka, placki. 2) W dzień targowy, między 6 a 14, sprzedajesz go z targowaniem — gdy podnosisz cenę, klient może odejść. 3) Konkurencja: Feliks wystawia wielkie, soczyste kapusty z dworu. W taką suszę? Wybór: wojna cenowa albo pytanie do Feliksa, skąd taka kapusta (poszlaka do W1). | co 7 dni, od dnia 14 | 30–120 G za dzień (w suszę warzywa są droższe), Opinia +2 | uprawy, psucie się, zwierzęta, Opinia | mini-gra targowania, stragan gracza |
 | D9 | Spis beczek *(śledztwo po domach, wybór)* | Sołtys Bronisław | ratusz + domy + piekarnia + Kantor | Sołtys chce policzyć wodę w mieście, żeby racje były sprawiedliwe. Odwiedzaj domy wtedy, gdy gospodarze są w środku (plany dnia). Znaleziska: Hanka chowa beczkę (do ciasta — bez niej nie upiecze chleba), a w piwnicy Kantoru stoi 20 beczek (Baltazar: „to wino”). Wybór: pełny raport (Hanka traci beczkę, chleb drożeje) / raport bez Hanki / przemilczenie Kantoru za 30 G od Baltazara. | od dnia 15, 2–3 dni, 8–18 | 40 G od sołtysa; poszlaka do W5 („wino” pachnie mułem i żelazem); Opinia w górę albo w dół | plany dnia, wybory | wnętrza domów albo rozmowy w drzwiach |
 | D10 | Gorączka Eli *(zioła, gotowanie, czuwanie)* | Ludmiła | obóz + łąki + łaźnia (Wanda) + Kantor | Ela ma gorączkę. 1) Wanda zna napar: 2× Krwawnik, 2× Pokrzywa, 1× Dziki czosnek i 1× Miód. 2) Ugotuj Wywar ziołowy na ognisku — na własnej deszczówce. 3) Czuwaj całą noc przy ognisku w obozie (odpoczynek przy ogniu). 4) Rano gorączka spada. Jest też skrót: Baltazar sprzedaje „lek z kontynentu” za 60 G. Działa, ale na flakonie jest pieczęć wojska (poszlaka do W5/W6). | wiosna–lato (zioła), 2 dni | Opinia +6, Ludmiła łata twoje łachmany (lepszy wygląd), Rafał zaczyna ci ufać (W6) | zbieractwo, gotowanie, pragnienie, odpoczynek przy ogniu | Wywar „dla dziecka” (odmiana), łaty na stroju (HeroLook) |
 | D11 | Ognie na murach *(dostawy + sabotaż)* | Kapral Wit Czerwień | brama wschodnia i mury + piec na polu | Kosze żarowe gasną, a dwór nie przysyła węgla. Przez 7 wieczorów przynoś przed 21:00 po 3× Węgiel drzewny. Czwartej nocy ktoś zalewa kosz wodą — marnuje wodę w taką suszę! Śledzisz go: to człowiek Baltazara, któremu przy bramie potrzebna jest ciemność do przemytu. Wybór: złap go (walka albo oddanie Witowi) / przymknij oko (Baltazar płaci 30 G). | 7 dni, 19–21 + czwarta noc | 70 G, Opinia +5; zmienia W5 | piec (węgiel), noc, skradanie, walka | gaszenie koszy (zdarzenie) |
 | D12 | Ślady kota *(śledzenie nocą)* | Dziadek Stach | dom dziadka + Polna droga + tawerna (piwnica) + Map009 | Mruczek znika nocami i wraca w pajęczynach, „jakby wyszedł z lochu”. 1) Idź za kotem nocą (biegnie, gubi się, czeka na ciebie). 2) Trop prowadzi do tawerny, przez okienko piwnicy. 3) Kot znika za luźną cegłą — a za nią jest przejście (Map009). Wybór: od razu powiedzieć Borgarowi („nie pytaj o to, czego nie chcesz wiedzieć”) albo zatrzymać to dla siebie. | Akt I, od dnia 20 | odkrycie fabularne (+40, i +50 za nową mapę), początek W9 | noc, skradanie, Mruczek | kot z nocną trasą |
-| D13 | Zakład Ozzy'ego *(przepowiednie)* | Dziadek Ozzy | tawerna + piekarnia + brama wschodnia + rynek | Ozzy po pijaku przepowiada: „Jutro o trzeciej burza. Pojutrze pęknie piec Hanki. Za trzy dni koń kaprala zgubi podkowę”. Grum zakłada się o 10 G, że to bzdury. Bądź na miejscu i sprawdź każdą przepowiednię — wszystkie się sprawdzają. Na koniec Ozzy na chwilę trzeźwieje i mówi o tobie coś, czego nie mógł wiedzieć. | 3 dni (burza z planu pogody) | 30 G z zakładu, +100 dośw., zaufanie Ozzy'ego (W9) | plan pogody (Survival/Storm), plany dnia | przepowiednie czytane z planu pogody |
+| D13 | Zakład Ozzy'ego *(przepowiednie)* | Dziadek Ozzy | tawerna + piekarnia + brama wschodnia + rynek | Ozzy po pijaku przepowiada: „Jutro o trzeciej burza. Pojutrze pęknie piec Hanki. Za trzy dni koń kaprala zgubi podkowę”. Grum zakłada się o 10 G, że to bzdury. Bądź na miejscu i sprawdź każdą przepowiednię — wszystkie się sprawdzają. Na koniec Ozzy na chwilę trzeźwieje i mówi o tobie coś, czego nie mógł wiedzieć. *(W grze, 2026-10-06: pierwsza przepowiednia to deszcz albo burza z planu pogody na jutro lub pojutrze - z godziną; Grum płaci 10 G za każdą przepowiednię widzianą na własne oczy.)* | 3 dni (burza z planu pogody) | 30 G z zakładu, +100 dośw., zaufanie Ozzy'ego (W9) | plan pogody (Survival/Storm), plany dnia | przepowiednie czytane z planu pogody |
 | D14 | Zboże na wojnę *(rekwizycja, wybór)* | Kapral Wit Czerwień (z rozkazu dworu) | ratusz + pole dziadka + dom dziadka | Po bitwie na kontynencie dwór zbiera „zboże na wojnę”: trzecią część jęczmienia z każdego pola. Wit przyjdzie na pole dziadka za 3 dni. Wybór: oddaj (Lord zalicza 50 G na dług) / ukryj zboże w skrzyni w chacie albo u Hanki (ryzyko przeszukania — Wit sprawdza skrzynie) / przekup Wita (20 G). | po drugiej fali (dzień 24+) | zależnie od wyboru; złapany na ukrywaniu płacisz 40 G kary i straż patrzy na ciebie krzywo | uprawy, skrzynie, dług (Story) | rekwizycja (Wit na polu) |
 | D15 | Dzieci nocą *(śledzenie, wybór)* | matka Bronka i Zosi (dom przy rynku) | rynek + dziura w murze + zamknięty ogród | Dzieci wymykają się nocą z domu. 1) O 23:00 czekaj pod ich domem. 2) Idź za nimi (C) przez dziurę w murze do zamkniętego ogrodu. 3) Dzieci bawią się w rycerzy przy posągach; jeden posąg ma w cokole pustą niszę. 4) Nadchodzi patrol Wita. Wybór: okłam Wita i wyprowadź dzieci po cichu / oddaj je Witowi (matka będzie wdzięczna, dzieci się obrażą). W zamian dzieci pokazują ci dziurę w murze — możesz wejść do ogrodu jeszcze przed W2. | od dnia 12, noc 23–1 | Opinia +3, wejście do ogrodu (W2) | skradanie, plany dnia, patrol | dziura w murze, nisza w posągu |
 | D16 | Uczeń dzwonnika *(nauka, 4 dni)* | Ambroży Dzwonnik | dzwonnica | Ambroży szuka następcy, „na wszelki wypadek”. Przez 4 dni dzwonisz z nim o 6, 12 i 18 (mini-gra dzwonu, rytmy coraz trudniejsze). Ostatniego dnia Ambroży mówi: „Zwykłe godziny już umiesz. Inne… może kiedyś”. | od Opinii 40, 4 dni | klucz do dzwonnicy, widok z wieży (cała mapa miasta odkryta na minimapie), zaufanie Ambrożego (W2) | mini-gra dzwonu, minimapa | mini-gra dzwonu (jak w K14) |
@@ -166,26 +166,40 @@ halą to przelew cysterny i z tygodnia na tydzień robi się cieńszy. Kapral Wi
    przydziału, Baltazar sprzedaje miastu wodę dwa razy drożej (bohaterowi nie sprzedaje nikt) i całe miasto na tym cierpi (Opinia spada).
 4. **Suche koryto** (stary młyn, taras rzemieślników). Koryto młynówki znika pod murem w stronę wzgórza. W środku jest
    kamienna krata z krukiem, taka sama jak w studni. Za kratą słychać wodę — płynie, ale nie tutaj. Tadek: „Tej kraty nie kuł
-   kowal, tylko zakon”.
+   kowal, tylko zakon”. *(W grze, 2026-10-05: starego młyna nie ma na mapie miasta - kratę z krukiem ogląda się na dnie studni na
+   rynku (Map118, zejście po 2× Lina); Tadek dodaje, że taki sam kruk jest na włazie pod pompą w oranżerii dworu.)*
 5. **Oranżeria nocą** (ogród dworu). Zakradasz się mimo patrolu. Pompa stoi na kamiennym włazie z krukiem: dwór dobudowano na
    kanale zakonu. W szufladzie ogrodnika leży rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte”.
-   Zabrany rysunek jest dowodem.
+   Zabrany rysunek jest dowodem. *(W grze: nocą 21:00–4:30; strażnik dworu obchodzi zachodnią część ogrodu (straz_1..4) - kto da się
+   zobaczyć, zostaje wyrzucony za bramę dworu (Opinia −3, następnej nocy od nowa); 1:30–3:00 Feliks stoi w tylnej furtce, a za
+   żywopłotem czeka Kuba z wozem - podglądany po cichu daje notatkę „Feliks przy furtce”.)*
 6. **Wielki wybór** (ratusz, drzwi dworu albo rynek w dzień targowy):
    - a) **Ujawnić to na targu** razem z sołtysem. Tłum idzie pod bramę wschodnią. Lord nic nie wiedział - jest wstrząśnięty
      i upokorzony przed całym miastem. Każe aresztować Feliksa i otworzyć śluzę „do połowy” (więcej susza nie da): w młynówce
-     znów płynie woda i młyn rusza (D2 bez kieratu), ale studnia na rynku dalej daje mało. Opinia +15; Lord jest ci
+     znów płynie woda i młyn rusza (D2 bez kieratu), ale studnia na rynku dalej daje mało. *(W grze, na prośbę koordynatora: studnia
+     daje jedno nabranie więcej - 3 zamiast 2 dziennie; `WELL_BONUS` w TownQuests_Data.js, 0 = jak w katalogu. Do decyzji.)* Opinia +15; Lord jest ci
      wdzięczny, ale chłodny za publiczny wstyd (żadnych ulg); Wita degradują albo staje się ci wdzięczny (W5).
    - b) **Pójść po cichu do Lorda** z rysunkiem śluzy. Lord nic nie wiedział: blednie, dziękuje i sam schodzi z tobą do
      oranżerii. Feliks znika z dworu bez hałasu, śluzę otwierają „do połowy”, a „za lojalność” dostajesz 200 G odpisu z długu;
      Lord odtąd ci ufa (sojusznik w W7). Miasto widzi tylko, że woda wraca (Opinia +5); Kuba zostaje bez towaru i ma do
      ciebie żal.
    - c) **Szantażować Feliksa**: 20 G co tydzień. Po 2 tygodniach ludzie Feliksa napadają cię na Polnej drodze (walka z
-     ludźmi).
+     ludźmi). *(W grze od 2026-10-06 to prawdziwa walka - Humans.js: dwóch ludzi Feliksa z pałką i nożem, a jeśli Feliks zapłacił już
+     40 G, także łucznik; okrzyk „Pozdrowienia od kamerdynera!”. **Wygrana**: Feliks więcej nie płaci, rysunek śluzy zostaje u bohatera
+     i wraca wybór z rozdziału 6 (sołtys / Lord / milczenie - drugiej umowy z Feliksem nie ma); kto puści wolno pokonanego, ma świadka -
+     „kamerdyner płaci po dziesięć groszy” (przy ujawnieniu dodatkowe zdanie i Opinia +3). **Przegrana**: obrabowany jak przez każdych
+     ludzi (40% złota, część jedzenia, godzina, rana) - i zabierają rysunek: dowodu nie ma, wątek czeka na rozdział 7. **Ucieczka** z
+     drogi w trakcie walki: Feliks też nie płaci, a jego ludzie czekają znowu na Polnej drodze od trzech dni później.)*
    - d) **Milczeć.** Nic się nie zmienia, ale rozdział 7 i tak wraca w Akcie II.
 7. **Cysterna zakonu** (Akt II, piętra 11–30). Kanał od studni prowadzi do cysterny pod wzgórzem. Główną zasuwę otwiera sygnał
    „woda” z kodu dzwonu (W2). Po jej otwarciu studnia na rynku się napełnia, ale sołtys zamyka ją na klucz i wydziela domom
    racje. Miasto świętuje: Opinia +20, chleb i woda tanieją, a Kuba wraca do uczciwej roboty (rozwozi racje). **Bohater nie
    dostaje z niej wody** — mieszka na polu dziadka i tam liczy się tylko jego własna studnia (zasada suszy).
+   *(W grze od 2026-10-06: rozdział 7 przychodzi po każdym zakończeniu rozdziału 6 (a, b, c - przegrana, d). Najpierw Zasuwa główna w
+   Wielkiej cysternie (podziemia, piętro 30 - szyna `undergroundSluice`; napis „CZTERY I DWA”), potem Ambroży (za dnia, 6-21): bohater
+   sam dzwoni cztery i dwa (mini-gra dzwonu, sześć uderzeń) albo prosi Ambrożego. Woda idzie starym kanałem pod rynek: studnia się
+   napełnia, ale sołtys trzyma ją pod kluczem i wydziela racje domom - **bohater dalej ma z niej 2 nabrania dziennie** (decyzja
+   autora: studnia po W1 zostaje taka, jak jest); rusza młyn, Kuba rozwozi racje, Opinia +20, uwagi mieszkańców. Wątek W1 kończy się.)*
 
 ### W2. Kod dzwonu
 
@@ -205,10 +219,13 @@ raz w roku).
    w murze z D15).
 5. **Ogród rycerzy** (zamknięty ogród). Stoi tu siedem posągów; każdy ma tarczę z nacięciami (od 1 do 7). Kiedy zadzwonisz z
    wieży sygnał „pytanie” (7), w samo południe cienie posągów (słońce ze Sky) wskazują płytę w ścieżce — tę samą wskazuje kość
-   z D19. Pod płytą są schody do **Archiwum zakonu**.
+   z D19. Pod płytą są schody do **Archiwum zakonu**. *(W grze, 2026-10-05: w ogrodzie stoją dwa posągi i miecz w kamieniu; po
+   siedmiu uderzeniach z wieży (Ambroży wpuszcza bohatera do dzwonu 11:40–12:15) między 12:00 a 12:30 ich cienie schodzą się na płycie,
+   a płyta się odsuwa; spóźnienie = dzwonić jeszcze raz następnego dnia.)*
 6. **Archiwum** (nowa mała mapa). Leżą tu kroniki zakonu: zasada jednego pytania, lista kasztelanów (ostatni był „z rodu
    Kowali” — W4), Księga sygnałów oraz wzmianka o cysternie i zasuwie otwieranej sygnałem (W1). Wybór: zabierz kroniki
-   (Baltazar zaoferuje za nie 300 G — W5) / zostaw je / oddaj Ambrożemu.
+   (Baltazar zaoferuje za nie 300 G — W5) / zostaw je / oddaj Ambrożemu. *(W grze: Księga = wszystkie sygnały w dzienniku; oferta
+   Baltazara jest już w jego rozmowie - 300 G, flagi `w5ChroniclesSold` / `w5ChroniclesKept` dla W5.)*
 7. **Jedno pytanie** (dzwonnica, raz w roku). Ambroży ma prawo zadać Sercu jedno pytanie na rok i nigdy go nie użył. Oddaje
    to prawo bohaterowi: w Noc Pytania (zima) możesz zapytać Ambrożego o jedną rzecz z listy (np. „kto zdradzi?”, „gdzie jest
    Marek?”, „co ukrywa dziadek?”), a on odpowiada prawdą z kronik. Jedno pytanie na rok gry — wybierz dobrze.
@@ -240,6 +257,21 @@ raz w roku).
      stałe słabszy). Najbezpieczniej i najsmutniej.
    W każdym wariancie dostajesz skrót przez piętra 1–10 (wers „trzeci schodek pusty”), a Natchniony daje +15% doświadczenia.
 
+*W grze (2026-10-06):* wątek zaczyna się sam po sześciu balladach i „Strunie dla Melii”. Zwrotki (rozdz. 2–6) zbiera się w dowolnej
+kolejności; zwrotka ze struny (K22) to pierwsza, a od Ozzy'ego ostatnia - ta o drodze w dół. Kronikę rodu (rozdz. 6) Lord wynosi przed
+dwór, gdy spłacisz połowę długu, albo kamerdyner przepisuje zwrotkę za dzban miodu pitnego (wnętrza dworu jeszcze nie ma). Noc Kupały
+(lato, dzień 14 - w pierwszym roku dzień 42): ognisko na ulicy przed bramą południową, od strony miasta; po pieśni porwanie to prawdziwa
+walka z dwoma bandytami (Humans.js). Natchniony po c) słabszy: +5% i 2 godziny krócej; skrót przez piętra to flaga na Akt II.
+
+Tekst pieśni (siódma ballada, „Pieśń o Kruczych Skałach”):
+
+1. *Na Kruczych Skałach, na wysokiej, / stał gród z kamienia, mur szeroki. / Kruki krążyły nad wieżami, / a straż milczała pod gwiazdami.* (Melia, na nowej strunie)
+2. *Raz dzwon uderzy - śpijcie, ludzie, / trzy razy - straż czuwa w trudzie. / Lecz gdy uderzy siedem razy, / zejdź tam, gdzie milkną wszystkie głazy.* (Ambroży)
+3. *Lulaj, dziecię, za siódmą górą / śpi Serce, co nie kłamie, pod kamienną skórą. / Królowie ślą po nie wojsko i złoto, / a ono patrzy w ciemność i nie wie, po co.* (Ludmiła)
+4. *Strażniku, stój na progu twardy, / nie pytaj więcej, niż jest warty. / Jedno pytanie raz do roku - / reszta niech śpi w kamiennym mroku.* (cokół w ogrodzie rycerzy)
+5. *Dwór z kamieni - kamień pamięta, / skąd go wzięła ręka przeklęta. / Kruk na progu, kruk na ścianie - / nikt nie pyta, co się stanie.* (kronika rodu)
+6. *Za luźną cegłą - schody w dół, / trzeci jest pusty, przeskocz pół. / Lewą ręką trzymaj się ściany, / nie odpowiadaj, gdy głos nieznany.* (Ozzy przez sen)
+
 ### W4. Krew kasztelana
 
 1. **Na szczęście** (bar). Nad barem wisi połowa starego klucza. Borgar: „Dziadek mówił: nie zdejmuj, nie pytaj”. Gdy po raz
@@ -263,6 +295,14 @@ raz w roku).
    Akcie II), albo stanie w piwnicy jako strażnik („zejdziesz — nie wracaj do pracy”).
 8. **Komnata Serca** (Akt III). Klucz otwiera ostatnie drzwi. Jeśli Borgar jest z tobą, w finale może zająć miejsce strażnika
    zamiast bohatera (zakończenie „strażnik”).
+
+*W grze (2026-10-06), wersja zwarta - tak otwiera się krata do podziemi:* wątek zaczyna się po spłacie długu (koniec rozdziału 1,
+notatka Lorda o kamieniach pod tawerną). 1) Borgar przy barze oddaje pół klucza znad baru i mówi, że drugą połowę jego pradziadek
+zakopał z pradziadkiem Stacha przy kamiennym kopcu z krukiem na podwórzu dziadka. 2) Kopanie łopatą u stóp kopca (Map020, 8,6).
+3) Tadek łączy połówki (żelazo i węgiel) - „Klucz kasztelana” nazajutrz rano. 4) Klucz otwiera starą kratę zakonu w piwnicy
+(Map009 15,2; przełącznik 11 Podziemia_Zejscie). 5) Borgar słyszy o tym i mówi zdanie swojego rodu: „Nie pytam o to, czego nie chcę
+wiedzieć.” - te same słowa, których żąda strażnik dziesiątej bramy (docs/PODZIEMIA.md). Rozdz. 5 i 7–8 z listy wyżej (Lord, konfrontacja,
+Komnata Serca) czekają.
 
 ### W5. Towary z kontynentu
 
@@ -341,7 +381,9 @@ Do wyboru autora (`STORY.md` zostawia to otwarte):
 
 ### W8. Żelazna Pięść
 
-1. **Pytania o góry** (tawerna). Grum wypytuje o jaskinie na wschodzie. Rozmowę otwierają wygrane w siłowaniu i w kości.
+1. **Pytania o góry** (tawerna). Grum wypytuje o jaskinie na wschodzie. Rozmowę otwierają wygrane w siłowaniu i w kości. *(W grze,
+   2026-10-06: po jednej wygranej z Grumem na rękę i jednej w kości; odpowiedzi zależą od tego, co bohater wie - kamienie z krukiem,
+   serce skały, Archiwum; Grum przyznaje, że płaci mu ktoś z kontynentu. Dalej - czeka na mapy Gór i Jaskini.)*
 2. **Przewodnik** (Góry i kamieniołom, o świcie). Grum płaci 50 G za wyprawę. Musisz znać drogę i przeżyć dzień z dala od
    domu: jedzenie, woda w bukłaku, zioła. Pierwsza wyprawa prowadzi do starego kamieniołomu, z którego brano kamień na
    twierdzę i na dwór.
@@ -353,6 +395,22 @@ Do wyboru autora (`STORY.md` zostawia to otwarte):
 6. **Wybór Gruma.** Żeby go przeciągnąć, potrzebujesz dwóch rzeczy z trzech: uratowanego Marka (W6), kronik zakonu (W2) i
    wygranego finałowego siłowania „na honor”. W przeciwnym razie walczysz z Grumem przy wejściu do tuneli (najemnik z tarczą:
    ciężki cios albo atak w plecy) albo pracujesz dla frakcji (pieniądze, ale frakcja idzie z tobą do Serca).
+   *(W grze od 2026-10-06, rozdz. 2-6 na mapach Gór (Map013), Jaskini (Map014) i Osady Milczących (Map120) - na znacznikach z
+   `docs/miasta_miejsca_zadan.md` „Góry”. Grum „idzie z tobą” jako postać stojąca w każdym miejscu zadania (nie ma towarzyszy, którzy
+   chodzą za bohaterem). Rozdz. 2: Grum w tawernie umawia wyprawę na następny świt; o świcie (5-9) czeka przy wejściu w góry
+   (`grum_przewodnik_start`) i sprawdza torbę: 2 porcje jedzenia, woda w bukłaku, zioła albo opatrunek (braki - dymek nad bohaterem);
+   tego samego dnia przy kruku w ścianie kamieniołomu (`kamieniolom_znak`) płaci 50 G. Spóźniony świt albo noc przed kamieniołomem =
+   umawiacie się od nowa. Rozdz. 3: Grum przy niszy Marka w obozie kopaczy - blednie. Rozdz. 4: dwa dni później list przez Baltazara -
+   trzy drogi: dzban miodu pitnego albo dwa piwa (temat w menu Gruma, wieczorem), cienka ściana wynajętego pokoju nad tawerną (22-24)
+   albo kopia rozkazu w skrzyni dowódcy kopaczy (`list_kryjowka`, nocą, skradając się). Rozdz. 5 (Akt II - po spłacie długu): Grum
+   przed Bramą Milczących - Milczący otwierają (przełącznik 16), Grum przy ich kręgu (`osada_grum`). Rozdz. 6 (temat w menu Gruma
+   „Musimy pogadać. O tunelu.”): siłowanie „na honor” bez stawki w tawernie (mini-gra TavernLife, Grum na swoim poziomie + 1,
+   4-6) - raz dziennie do wygranej; Marek uratowany = flaga `marekSaved` z W6 rozdz. 7 (jeszcze nie ma); kroniki = u bohatera albo
+   oddane Ambrożemu (nie zostawione, nie sprzedane). Dwie z trzech: Grum po twojej stronie (podziera list; razem przebijacie zawał -
+   przełącznik 15, przejście Jaskinia ⇄ piętro 50). Frakcja: 100 G zadatku, kopacze przebijają zawał. Walka: Grum jako najemnik
+   z Humans.js przy `tunel_wejscie` - pokonany może uklęknąć (puszczony / obrabowany / uciekł = odpływa promem; zabity = nie żyje),
+   w obu razach znika z tawerny na zawsze, a zawał zostaje; jeśli to on pobije bohatera - obrabowany jak przez każdych ludzi, a
+   kopacze przebijają zawał (przełącznik 15). Rozdz. 7 (Akt III) czeka.)*
 7. **Przy drzwiach tawerny** (Akt III). Kiedy frakcja uderza, Grum stoi z tobą, przeciw tobie albo odpływa promem —
    zależnie od twojego wyboru.
 
@@ -367,7 +425,13 @@ Do wyboru autora (`STORY.md` zostawia to otwarte):
 5. **Jaskinie i podziemna rzeka** (piętra 31–50). Połączenie z tunelem kopaczy (W8) i Marek (W6).
 6. **Warstwa Prawdy** (piętra 76–99). Bohater zaczyna „wiedzieć”: poznaje prawdy o Kubie, Feliksie, Hance, Borgarze i
    dziadku Stachu. Przy każdej wybierasz, czy po powrocie powiesz o niej tej osobie, czy przemilczysz — to zmienia waszą
-   relację.
+   relację. *(W grze od 2026-10-06: wątek W9 „Serce Twierdzy” zaczyna się od pierwszej przeczytanej prawdy (Underground.truths());
+   prawdy o 18 osobach (mieszkańcy, Melia, Ozzy, Grum, Borgar, Lord, dziadek i Mruczek - jego prawdę mówi się dziadkowi) wracają na
+   górze jako wybór: „Powiedz prawdę.” / „Przemilcz.” / „Nie teraz.” - mieszkaniec pyta raz dziennie przed swoją rozmową, stali bywalcy
+   mają temat w menu, Borgar przy barze, Lord i dziadek przed rozmową fabuły. Skutki są małe: Opinia (Hanka +2, Ludmiła +2, Ambroży,
+   Tadek, Ignac, sołtys, Kuba +1, Wit -1), zaufanie bywalców +5, flagi na później (Baltazar ostrzega, Rafał ufa, Borgar wie o swoich
+   nocach, Wit czujny), uwagi innych (Hanka posyła bochenek do obozu, Ludmiła śpiewa Eli kołysankę, Ambroży się śmieje). Feliksa po W1
+   a/b nie ma w mieście - jego prawdy nie da się powiedzieć. Przemilczenie to tylko myśl bohatera i zapis w dzienniku.)*
 7. **Komnata Serca** (piętro 100 / Map011). Trzy zamki: klucz kasztelana (W4), sygnał „pytanie” (W2) i pieśń (W3).
    Propozycja: wystarczą dowolne dwa, a trzeci daje lepsze zakończenie.
 8. **Wybór** (Akt III, jak w `STORY.md`): zniszczyć Serce / zostać strażnikiem (albo oddać to miejsce Borgarowi lub
@@ -424,7 +488,7 @@ Do wyboru autora (`STORY.md` zostawia to otwarte):
 | Kiedy | Co | Co się dzieje | Questy |
 |---|---|---|---|
 | wiosna, dni 13–16 (już w kalendarzu) | Wielkanoc | Hanka zbiera 12 jajek na pisanki; dzieci szukają pisanek na rynku (na czas); śmigus-dyngus bez wody — sołtys zakazał, więc dzieci obsypują się mąką | krótkie zadania świąteczne |
-| lato, dzień 14 (dzień 42) | Noc Kupały | ogniska na łące za bramą południową (w suszę — Wit pilnuje), wianki puszczane na stawie za halą, kwiat paproci w lesie (jedna noc w roku) | W3 a, D7 |
+| lato, dzień 14 (dzień 42) | Noc Kupały | ogniska na łące za bramą południową (w suszę — Wit pilnuje), wianki puszczane na stawie za halą, kwiat paproci w lesie (jedna noc w roku) | W3 a (w grze od 2026-10-06), D7 |
 | ostatni dzień lata (dzień 56, też targ) | Dożynki | wieniec z jęczmienia z pola dziadka; konkurs na największą kapustę (wygrywa zawsze dwór — W1); uczta Lorda dla miasta; Lord publicznie przypomina o długu dziadka (4 dni do terminu); śpiewa Melia | W1, W7, D3 |
 | zima, dni 12–16 (Wigilia już w kalendarzu) | Wigilia i Noc Pytania | o północy Ambroży bije 7 razy; „w Wigilię zwierzęta mówią ludzkim głosem” — Mruczek mówi jedno prawdziwe zdanie (zabawne echo Serca); Wigilia w obozie | W2 rozdz. 7, W6 rozdz. 6 |
 | dni 10, 24, 38, 52 (propozycja: co 14 dni w rozdziale 1) | prom po bitwie | nowi uchodźcy (obóz rośnie), 2 dni później rekwizycja, ceny przez tydzień wyższe o 10%, nowe twarze w tawernie | W6, D14, W5 rozdz. 6 |

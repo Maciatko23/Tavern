@@ -42,6 +42,7 @@ EDGES = [
     ((22, cells(11, 0, 13, 0), 2), (8, cells(24, 68, 26, 68), 8)),      # field road's lane N <-> the town's south edge (town C + 10 rows, 2026-09-30)
     ((8, cells(51, 50, 51, 51), 4), (24, cells(0, 14, 0, 15), 6)),      # the town's east gate (crafts terrace, between two towers, tools/town/east_gate.py 2026-10-04) <-> Lord's estate W
     ((8, cells(0, 50, 0, 51), 6), (111, cells(45, 17, 45, 18), 4)),     # the town's west gate (by the smithy, tools/town/west_gate.py 2026-10-05) <-> Podgrodzie's east edge (tools/podgrodzie)
+    ((21, cells(39, 8, 39, 10), 4), (13, cells(0, 38, 0, 40), 6)),     # the forest road's trail east (the user's) <-> the mountains' west edge (tools/mountains, 2026-10-06)
 ]
 
 STEP = {2: (0, 1), 4: (-1, 0), 6: (1, 0), 8: (0, -1)}

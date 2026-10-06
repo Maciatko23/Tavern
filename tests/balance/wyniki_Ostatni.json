@@ -1,0 +1,27 @@
+{
+ "skill": 0.75,
+ "grow": null,
+ "rows": [
+  {
+   "name": "Ostatni Strażnik (boss 90)",
+   "floor": 90,
+   "kind": "boss_90",
+   "level": 50,
+   "hero": 25,
+   "attr": {
+    "str": 33,
+    "con": 26,
+    "dex": 15,
+    "per": 8,
+    "wil": 15
+   },
+   "weapon": 115,
+   "won": "2/2",
+   "s": 180.3,
+   "lostPct": 788,
+   "refills": 10,
+   "mhp": 277,
+   "foeHp": 2336
+  }
+ ]
+}

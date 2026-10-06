@@ -1,0 +1,26 @@
+PASS a new game on the meadow (Map004), 12:00
+PASS an open field 15 x 7  {"x":20,"y":14}
+   Przeor w zbroi (boss 20) #1: {"won":true,"s":103.7,"lost":346,"mhp":159,"refills":2,"hits":17,"dodged":4,"left":"","by":{"przeor w zbroi":326,"boss_20":20},"foeHp":578,"scene":"Scene_Map"}
+   Przeor w zbroi (boss 20) #2: {"won":true,"s":102.7,"lost":267,"mhp":162,"refills":2,"hits":12,"dodged":2,"left":"","by":{"przeor w zbroi":267},"foeHp":578,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #1: {"won":true,"s":148.6,"lost":634,"mhp":234,"refills":3,"hits":15,"dodged":8,"left":"","by":{"kamiennik":634},"foeHp":750,"scene":"Scene_Map"}
+   Kamiennik (piętro 60) #2: {"won":true,"s":150.1,"lost":652,"mhp":234,"refills":3,"hits":16,"dodged":12,"left":"","by":{"kamiennik":652},"foeHp":750,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #1: {"won":true,"s":144.8,"lost":600,"mhp":234,"refills":3,"hits":24,"dodged":3,"left":"","by":{"kamienny odźwierny":378,"odłamki":222},"foeHp":1136,"scene":"Scene_Map"}
+   Kamienny Odźwierny (boss 60) #2: {"won":true,"s":203,"lost":1283,"mhp":237,"refills":7,"hits":48,"dodged":13,"left":"","by":{"kamienny odźwierny":717,"odłamki":566},"foeHp":1136,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #1: {"won":true,"s":86.1,"lost":928,"mhp":253,"refills":4,"hits":29,"dodged":7,"left":"","by":{"zbroja bez herbu":928},"foeHp":1850,"scene":"Scene_Map"}
+   Zbroja bez herbu (boss 70) #2: {"won":true,"s":89.1,"lost":640,"mhp":253,"refills":3,"hits":20,"dodged":9,"left":"","by":{"zbroja bez herbu":640},"foeHp":1850,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #1: {"won":true,"s":95.7,"lost":385,"mhp":261,"refills":2,"hits":3,"dodged":1,"left":"","by":{"upiór pytającego":81},"foeHp":1622,"scene":"Scene_Map"}
+   Upiór pytającego (boss 80) #2: {"won":true,"s":159.1,"lost":722,"mhp":264,"refills":3,"hits":0,"dodged":4,"left":"","by":{},"foeHp":1622,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #1: {"won":false,"s":240.1,"lost":6665,"mhp":277,"refills":31,"hits":131,"dodged":16,"left":"boss_90:122/2336 cien:3/2336 cien:312/2336","by":{"ostatni strażnik":3161,"cien":299,"cień":3021,"boss_90":184},"foeHp":2336,"scene":"Scene_Map"}
+   Ostatni Strażnik (boss 90) #2: {"won":true,"s":135,"lost":3298,"mhp":280,"refills":15,"hits":72,"dodged":5,"left":"","by":{"ostatni strażnik":1630,"boss_90":18,"cień":1573,"cien":77},"foeHp":2336,"scene":"Scene_Map"}
+
+| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |
+|---|---|---|---|---|---|---|
+| Przeor w zbroi (boss 20) | 14 (578 życia) | 9 (15/12, 159 życia) | 2/2 | 103.2 | 191 | 2 |
+| Kamiennik (piętro 60) | 33 (750 życia) | 19 (25/21, 234 życia) | 2/2 | 149.4 | 275 | 3 |
+| Kamienny Odźwierny (boss 60) | 34 (1136 życia) | 19 (25/21, 234 życia) | 2/2 | 173.9 | 399 | 5 |
+| Zbroja bez herbu (boss 70) | 39 (1850 życia) | 21 (26/23, 253 życia) | 2/2 | 87.6 | 310 | 3.5 |
+| Upiór pytającego (boss 80) | 45 (1622 życia) | 23 (31/24, 261 życia) | 2/2 | 127.4 | 210 | 2.5 |
+| Ostatni Strażnik (boss 90) | 50 (2336 życia) | 25 (33/26, 277 życia) | 1/2 | 187.6 | 1792 | 23 |
+PASS the fights ran
+console errors: none
+3/3 passed

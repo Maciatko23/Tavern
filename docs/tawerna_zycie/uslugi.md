@@ -225,6 +225,35 @@ Zrzuty: `docs/tawerna_nowa/plan_karczmy_tablica.png` (sztaluga w sieni, zoom 1.5
 `plan_karczmy_pokoj_gier.png`, `plan_karczmy_droga.png`, `plan_karczmy_scena_w_poludnie.png`, `plan_karczmy_menu.png`.
 Test: `CDP_PORT=9386 node tests/tavern_plan_test.js`.
 
+## 8. Stali bywalcy - rozmowy (2026-10-06, `TavernLife_Regulars.js`)
+
+Melia, Dziadek Ozzy i Grum rozmawiają jak ludzie, nie jednym zdaniem. **O przy nich**: najpierw sprawy zadań z miasteczka
+(oferta z „!”, oddanie z ptaszkiem, przypomnienie, uwaga po tym, co się stało), potem powitanie (inne rano, inne nocą,
+inne dla obcego i dla przyjaciela) i menu:
+
+| Kto | Tematy |
+|---|---|
+| Melia | Co słychać? · Jakieś plotki? · Opowiedz o swoich pieśniach (ile słyszałeś, czego brakuje) · Skąd znasz te ballady? (zaufanie 35; przy 60 opowie sen) · Zaśpiewasz dziś? (wieczorem, prowadzi do pieśni) · Bywaj |
+| Dziadek Ozzy | Co słychać, dziadku? · Jakieś plotki? · Postaw mu piwo (3 G) - raz dziennie „wizja”: pogoda na jutro wprost z planu pogody, czasem jeszcze jedna prawda · Opowiedz o piwnicy (35) · Bywaj. Nocą (23–6) śpi na ławie i tylko mruczy |
+| Grum | Co słychać? · Jakieś plotki? · Opowiedz o wojnie · Skąd jesteś? (15) · Zagrajmy w coś (siłowanie albo kości) · Bywaj |
+
+„Co słychać?” zależy od pory dnia, deszczu, burzy, śniegu, suszy (6+ dni) i długu dziadka; „Plotki” biorą się z tego, co się
+naprawdę dzieje (Kuba i jego woda, młyn, Feliks, targ jutro, prom, namioty pod murem, wilki pod bramą, sława z tablicy),
+każda raz - potem stare opowieści po kolei. Kiedy bohater przechodzi obok, rzucają słowo (Melia nuci, Ozzy czka, Grum mruczy).
+
+**Zaufanie** (0–100: Obcy, Znajomy 15, Kompan 35, Przyjaciel 60, Powiernik 85): pierwsza rozmowa w danym dniu, piwo dla
+Ozzy'ego, wysłuchana pieśń i napiwek dla Melii, gra z Grumem albo Ozzym - każde raz dziennie i tylko do pewnej granicy
+(30-50); resztę dają zadania. Dziennik: Miasteczko - „Stali bywalcy tawerny”.
+
+Zadania od nich (szczegóły: `docs/QUESTY_STAN.md`): **Struna dla Melii** (K22), **Czapka Ozzy'ego** (K33), **Zakład Ozzy'ego**
+(D13), wątek **Pieśń o Kruczych Skałach** (W3 - siódma ballada) i pierwszy rozdział **Żelaznej Pięści** (W8, po wygranej z
+Grumem na rękę i w kości). Melia może też zaśpiewać Eli pod murem (K27) - tego wieczoru scena jest pusta. Turniej siłowania (D6) jest wieczorem w dzień targowy przy tym samym stole (decyzja autora: siłowanie tylko w tawernie) - zapis
+u Borgara; ta sama mini-gra z innymi rywalami (`rival` w `armWrestle`). Przy barze Borgar ma tematy od zadań (zapis na turniej, stare
+kamienie pod tawerną - W4).
+
+Zrzuty: `docs/tawerna_zycie/k33_czapka_na_posagu.png`, `w3_noc_kupaly.png`. Testy: `tests/regulars_test.js`,
+`tests/regulars_quests_test.js` (port 9463).
+
 ---
 
 ## Znaczniki na mapach (dla budujących mapy)
@@ -252,10 +281,12 @@ Pokoje, drzwi i kratę czyta się z map z parametru „Mapy z pokojami gości”
 ## Dla wtyczek i testów
 
 `window.TavernLife`: `meal(id)`, `rentRoom(n)`, `bath()`, `song(napiwek)`, `sleep()`,
-`armWrestle({ stake, seed, turbo, onEnd, level })`, `darts({ stake, seed, turbo, onEnd, opponent })`,
+`armWrestle({ stake, seed, turbo, onEnd, level, rival })`, `darts({ stake, seed, turbo, onEnd, opponent })`,
 `stats()` (to samo, co `$gameSystem._tavernLife`), `dishOfDay()`, `priceOf(danie)`, `rooms()`, `isRented(n)`,
 `reputation()`, `repTier()`, `repDiscount()`, `roomPrice(pokój)`, `bathPrice()`, `gates()`,
 `BUFFS`, `DISHES`, `SONGS`, `onTick` (boty mini-gier), `gameState()`,
+stali bywalcy: `regular(interp)`, `regularOf(ev)`, `trust(rola)`, `addTrust(rola, n, powód)`, `trustTier(rola)`, `regularsInfo()`, `REGULARS`,
+szyna: `tavernGame { game, won, stake, rival }` (koniec mini-gry), `songHeard { id, tipped }`, `regularTrust`,
 `plan` = { `open({ floor })`, `state()`, `items(piętro)`, `info(piętro, pokój)`, `icons(piętro)`, `roomAt(piętro, x, y)`,
 `point(piętro, x, y)`, `way(...)`, `select(pokój)`, `floor(i)`, `DATA`, `BOARDS`, `EVENT` }.
 

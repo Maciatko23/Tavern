@@ -1,0 +1,483 @@
+{
+ "_note": "build_humans.py: which PixelLab animation (tools/humans/frames/<key>/<anim>) makes which sheet; pick: frame indexes (or per direction); from: a direction taken from another animation folder; old: the 4-way sheet's name; knife (Nożownik, 2026-10-06): PixelLab 7f9ef0a3, v3 walk/run/stab/kneel/crouch, the lying picture by edit_image_pro_flash (rotate 90 degrees)",
+ "bandit": {
+  "look": "Bandit",
+  "sheets": {
+   "Walk8": {
+    "anim": "bandit_walk",
+    "cell": 64,
+    "standing": true,
+    "old": "$Human_Bandit",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "from": {
+     "south": "bandit_walk_sk",
+     "south-east": "bandit_walk_v3"
+    },
+    "align_dirs": {
+     "south-east": "center"
+    }
+   },
+   "Run8": {
+    "anim": "bandit_run",
+    "cell": 64,
+    "standing": true,
+    "fallback": "bandit_walk",
+    "fallback_from": {
+     "south": "bandit_walk_sk",
+     "south-east": "bandit_walk_v3"
+    },
+    "align": "center",
+    "from": {
+     "south": "bandit_run_v3",
+     "south-east": "bandit_run_se2"
+    },
+    "align_dirs": {
+     "south-east": "ref"
+    },
+    "pick": {
+     "south-east": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    "_why": "2026-10-06: the template's south-east run lost the club behind the cape halfway (a flicker): a v3 run with the club held in front"
+   },
+   "Atk8": {
+    "anim": "bandit_swing",
+    "cell": 96,
+    "old": "$Human_Bandit_Atk",
+    "placeholder": 12,
+    "pick": {
+     "south": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      11,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "south-east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   },
+   "Kneel8": {
+    "anim": "bandit_kneel",
+    "cell": 96,
+    "old": "$Human_Bandit_Kneel",
+    "placeholder": 9
+   },
+   "Crouch8": {
+    "anim": "bandit_crouch",
+    "cell": 96,
+    "old": "$Human_Bandit_Crouch",
+    "placeholder": 9
+   },
+   "Lie8": {
+    "lie": true,
+    "cell": 64,
+    "image": "lie/<key>.png",
+    "old": "$Human_Bandit_Lie"
+   }
+  }
+ },
+ "archer": {
+  "look": "Archer",
+  "sheets": {
+   "Walk8": {
+    "anim": "archer_walk",
+    "cell": 64,
+    "standing": true,
+    "old": "$Human_Archer",
+    "old_cols": [
+     1,
+     0,
+     5
+    ]
+   },
+   "Run8": {
+    "anim": "archer_run",
+    "cell": 64,
+    "standing": true,
+    "fallback": "archer_walk",
+    "fallback_from": {},
+    "align": "center",
+    "from": {
+     "east": "archer_run_e2"
+    },
+    "align_dirs": {
+     "east": "ref"
+    },
+    "pick": {
+     "east": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    "_why": "2026-10-06: the template's side run moved the bow from one hand to the other halfway: a v3 run with the bow kept low in the left hand"
+   },
+   "Atk8": {
+    "anim": "archer_shoot",
+    "cell": 96,
+    "old": "$Human_Archer_Atk",
+    "placeholder": 12,
+    "pick": {
+     "east": [
+      0,
+      2,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   },
+   "Kneel8": {
+    "anim": "archer_kneel",
+    "cell": 96,
+    "old": "$Human_Archer_Kneel",
+    "placeholder": 9
+   },
+   "Crouch8": {
+    "anim": "archer_crouch",
+    "cell": 96,
+    "old": "$Human_Archer_Crouch",
+    "placeholder": 9
+   },
+   "Lie8": {
+    "lie": true,
+    "cell": 64,
+    "image": "lie/<key>.png",
+    "old": "$Human_Archer_Lie"
+   }
+  }
+ },
+ "merc": {
+  "look": "Merc",
+  "sheets": {
+   "Walk8": {
+    "anim": "merc_walk",
+    "cell": 64,
+    "standing": true,
+    "old": "$Human_Merc",
+    "old_cols": [
+     1,
+     0,
+     5
+    ]
+   },
+   "Atk8": {
+    "anim": "merc_slash",
+    "cell": 96,
+    "old": "$Human_Merc_Atk",
+    "placeholder": 12,
+    "steel": [
+     "north-east"
+    ],
+    "pick": {
+     "north-east": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      9,
+      10,
+      11,
+      12,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   },
+   "Guard8": {
+    "anim": "merc_guard",
+    "cell": 96,
+    "old": "$Human_Merc_Guard",
+    "placeholder": 6
+   },
+   "Kneel8": {
+    "anim": "merc_kneel",
+    "cell": 96,
+    "old": "$Human_Merc_Kneel",
+    "placeholder": 9
+   },
+   "Crouch8": {
+    "anim": "merc_crouch",
+    "cell": 96,
+    "old": "$Human_Merc_Crouch",
+    "placeholder": 9
+   },
+   "Lie8": {
+    "lie": true,
+    "cell": 64,
+    "image": "lie/<key>.png",
+    "old": "$Human_Merc_Lie"
+   }
+  }
+ },
+ "knife": {
+  "look": "Knife",
+  "sheets": {
+   "Walk8": {
+    "anim": "knife_walk",
+    "cell": 64,
+    "standing": true,
+    "old": "$Human_Knife",
+    "old_cols": [
+     1,
+     0,
+     5
+    ],
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "Run8": {
+    "anim": "knife_run",
+    "cell": 64,
+    "standing": true,
+    "fallback": "knife_walk",
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "fill": {
+     "south-east": "east"
+    },
+    "_why": "the south-east run swapped the knife to the other hand halfway (the bandit's old flicker): the side run stands in",
+    "fill_force": true
+   },
+   "Atk8": {
+    "anim": "knife_stab",
+    "cell": 96,
+    "old": "$Human_Knife_Atk",
+    "placeholder": 12,
+    "pick": {
+     "south": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "east": [
+      0,
+      2,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      10,
+      11,
+      12,
+      12,
+      12
+     ],
+     "south-east": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      9,
+      10,
+      11,
+      12,
+      12
+     ],
+     "north-east": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6,
+      7,
+      8,
+      8,
+      7,
+      5,
+      2,
+      0
+     ],
+     "north": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      7,
+      7,
+      6,
+      5,
+      3,
+      0
+     ]
+    }
+   },
+   "Kneel8": {
+    "anim": "knife_kneel",
+    "cell": 96,
+    "old": "$Human_Knife_Kneel",
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east"
+    }
+   },
+   "Crouch8": {
+    "anim": "knife_crouch",
+    "cell": 96,
+    "old": "$Human_Knife_Crouch",
+    "placeholder": 9,
+    "fill": {
+     "south-east": "south",
+     "north-east": "east"
+    }
+   },
+   "Lie8": {
+    "lie": true,
+    "cell": 64,
+    "image": "lie/<key>.png",
+    "old": "$Human_Knife_Lie"
+   }
+  }
+ }
+}

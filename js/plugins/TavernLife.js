@@ -220,6 +220,8 @@
  *   TavernLife_Plan        - plan karczmy (sztalugi i scena planu)
  * Bez nich usługi dalej działają (mniej widać), a mini-gier i planu nie ma.
  *
+ * Stali bywalcy jako rozmówcy (Melia, Ozzy, Grum): TavernLife_Regulars.js.
+ *
  * W grze z fabułą (Story.js) menu Borgara dostaje „Zjedz coś” i „Wynajmij
  * pokój”. Stare mapy bez znaczników: nic się nie psuje - posiłek zjesz przy
  * ladzie, a pokoi po prostu nie ma.
@@ -418,7 +420,7 @@
         xpSeen.level = h.level;
         xpSeen.xp = h.xp;
         if (!(d > 0) || !hasBuff("inspired")) return;
-        xpSeen.acc += d * INSPIRED_XP;
+        xpSeen.acc += d * inspiredXp();
         const whole = Math.floor(xpSeen.acc + 1e-6);
         if (whole < 1) return;
         xpSeen.acc -= whole;
@@ -483,9 +485,11 @@
         grum: { re: /^Grum\b/i, sheet: "Actor2_Tall", index: 4, face: ["Actor2", 4], name: "Grum", bust: "Actor2_5" },
         ozzy: { re: /Ozzy/i, sheet: "People2_Tall", index: 0, face: ["People2", 0], name: "Dziadek Ozzy", bust: "People2_1" }
     };
+    // (2026-10-06) W8: Grum beaten at the tunnel (on the ferry, or dead) is gone from the tavern for good - TownQuests says so
+    const grumAway = () => { const Q = T.api("TownQuests"); try { return !!(Q && Q.grumAway && Q.grumAway()); } catch (e) { return false; } };
     function npc(role) {
         const n = NPCS[role];
-        if (!n || !$gameMap) return null;
+        if (!n || !$gameMap || (role === "grum" && grumAway())) return null;
         for (const ev of $gameMap.events()) {
             const d = ev.event(), p = d && d.pages && d.pages[0];
             if (!p || p.trigger > 2 || /^Atmosfera/i.test(d.name || "")) continue;
@@ -1330,6 +1334,12 @@
     ];
     const songById = id => SONGS.find(s => s.id === id) || null;
     const inSongHours = () => hour() >= SONG_FROM && hour() < 24;
+    // (2026-10-06) what the quests changed: the whole seventh ballad sung (W3 a / b) - Natchniony brings 15%; its words burnt (W3 c) -
+    // a weaker Natchniony for good; Melia gone to sing for Ela under the wall (K27) - no song in the tavern that evening
+    const questFlags = () => { const Q = T.api("TownQuests"); try { return (Q && Q.state && $gameSystem && Q.state().flags) || {}; } catch (e) { return {}; } };
+    function inspiredXp() { const f = questFlags(); return f.w3Burned ? INSPIRED_XP / 2 : f.w3Sung || f.w3Borgar ? Math.max(INSPIRED_XP, 0.15) : INSPIRED_XP; }
+    const inspiredHours = tipped => Math.max(1, INSPIRED_HOURS + (tipped ? INSPIRED_TIP_HOURS : 0) - (questFlags().w3Burned ? 2 : 0));
+    const meliaAway = () => questFlags().k27Melia === day();
     // the next ballad: first the ones not heard yet, in order; then by the day
     function nextSong() {
         const heard = S().heard;
@@ -1340,6 +1350,7 @@
     function songTalk() {
         const o = [], s = S(), h = hour();
         if (!npc("melia")) { popup(80, "Scena pusta. Melia dziś nie śpiewa.", BAD); return null; }
+        if (meliaAway() && h >= 17) { popup(80, "Scena pusta - Melia poszła śpiewać kołysankę pod murem.", "#eceef0"); return null; }
         if (!inSongHours()) {
             sayAs(o, "melia", h >= 6 && h < SONG_FROM ? "Śpiewam wieczorami, od " + SONG_FROM + ":00. Teraz stroję lutnię... i nerwy." : "O tej porze? Gardło mi śpi, a lutnia chrapie. Przyjdź wieczorem, od " + SONG_FROM + ":00.");
             return o;
@@ -1379,9 +1390,9 @@
             singing = null;
         }
         se("Applause1", 55);
-        const hours = INSPIRED_HOURS + (tipped ? INSPIRED_TIP_HOURS : 0);
+        const hours = inspiredHours(tipped);
         addBuff("inspired", hours);
-        popup(BUFFS.inspired.icon, "Natchniony (" + hoursText(hours) + "): +" + Math.round(INSPIRED_XP * 100) + "% doświadczenia", GOOD);
+        popup(BUFFS.inspired.icon, "Natchniony (" + hoursText(hours) + "): +" + Math.round(inspiredXp() * 100) + "% doświadczenia", GOOD);
         s.songs++;
         s.songDay = day();
         if (tipped) s.tips += SONG_TIP;
@@ -1392,6 +1403,7 @@
         if (!old) note("Pieśni Melii", "Melia Srebrogłosa śpiewa wieczorami (od " + SONG_FROM + ":00), raz na wieczór. Po jej pieśni jestem Natchniony: więcej doświadczenia. Sama nie wie, skąd zna te ballady...\n\n" + lyric);
         else if (old.text.indexOf("„" + song.title + "”") < 0) { old.text += "\n" + lyric; popup(80, "Dziennik: nowa pieśń w notatce „Pieśni Melii”", "#eceef0"); }
         if (s.heard.length === SONGS.length && first("allSongs")) xp(40, "wszystkie ballady Melii");
+        emit("songHeard", { id: song.id, tipped: !!tipped, heard: s.heard.length });   // (2026-10-06: Melia's trust, W3)
     }
     function updateSinging() {
         if (musicBack && --musicBack.t <= 0) {
@@ -1508,6 +1520,8 @@
         if (def.apply) def.apply(st, res);
         xp(res.won ? def.xpWin : def.xpLose, def.reason);
         if (first(res.game) && def.note) note.apply(null, def.note());
+        // (2026-10-06) told on the bus: the regulars' trust, the quests (D6's training and tournament, W8) listen
+        emit("tavernGame", { game: res.game, won: !!res.won, stake: res.stake || 0, rival: res.rival || (res.game === "arm" ? "grum" : res.opponent || ""), day: day() });
     }
     // back from a game a talk started: the coins go the right way, a word from the other player
     let gameAfter = null;   // { game, stake, opponent } while it is played (the talk's next step reads it)
@@ -1526,8 +1540,15 @@
     function counterTalk() {
         const o = [], h = hour();
         sayAs(o, "borgar", h < 11 ? "Dzień dobry! Czym mogę służyć?" : h < 18 ? "Czym mogę służyć? Kuchnia grzeje, pokoje wietrzą się na górze." : "Dobry wieczór! Coś na ząb? Pokój na noc?");
-        choose(o, [{ label: "Zjedz coś", js: "TavernLife.talk(this, 'meal')" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, 'room')" }, { label: "Nic, dzięki", js: [] }]);
+        choose(o, [{ label: "Zjedz coś", js: "TavernLife.talk(this, 'meal')" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, 'room')" }].concat(questBar(), [{ label: "Nic, dzięki", js: [] }]));
         return o;
+    }
+    // (2026-10-06) what the town's quests want of Borgar at the bar (D6's sign-up, W4): TownQuests.borgarTopics
+    function questBar() {
+        const Q = T.api("TownQuests");
+        let list = [];
+        try { list = Q && Q.borgarTopics ? Q.borgarTopics() : []; } catch (e) { console.error(e); }
+        return list.map(t => ({ label: t.label, js: "TownQuests.borgarTalk(this, " + q(t.id) + ")" }));
     }
     function use(interp) {
         const ev = interp && $gameMap.event(interp.eventId()), t = ev ? pageTag(ev.page()) : null;
@@ -1615,7 +1636,7 @@
     }
     // Story.js's Borgar: two more lines in his menu
     function borgarOptions() {
-        return [{ label: "Zjedz coś", js: "TavernLife.talk(this, \"meal\")" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, \"room\")" }];
+        return [{ label: "Zjedz coś", js: "TavernLife.talk(this, \"meal\")" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, \"room\")" }].concat(questBar());
     }
 
     // ==================================================================
@@ -1630,7 +1651,10 @@
         xpWatch();
         if (Graphics.frameCount % 30 === 0) syncDoors();
     }, { owner: PLUGIN, name: "update" });
-    T.on("mapReady", () => prefetchRooms(), { owner: PLUGIN });
+    T.on("mapReady", () => {
+        prefetchRooms();
+        if (grumAway() && $gameMap) for (const ev of $gameMap.events()) if (/^(Atmosfera - )?Grum\b/.test((ev.event() || {}).name || "")) ev.erase();   // (W8: gone)
+    }, { owner: PLUGIN });
     T.on("mapEnter", () => {
         fx.length = 0;
         const r = R();
@@ -1660,11 +1684,12 @@
         tagOf, pageTag, dataTag, evTag, spots, npc, bustOf, NPCS, say, sayLines, sayAs, heroSay, script, choose, run, runOnMap, busy, hold, W, TL,
         fx, addFx, get bathing() { return bathing; }, blockedByEvent, DIRS, DISHES, dishOfDay, priceOf, foodOf, SV, BUFFS, hasBuff,
         reputation, repTier, repTierOf, tierName, repDiscount, repPrice, QB, rooms, roomOf, roomKey, roomPrice, canRent, onlyFor, rentedRoom, isRented,
-        isNumbered, namedAsRoom, giftName, RESTED, inSongHours, bathPrice, setPick,
+        isNumbered, namedAsRoom, giftName, RESTED, inSongHours, bathPrice, setPick, emit, questFlags, meliaAway, inspiredXp, songTalk,
         GAME, gameScene, startGame, applyGameResult,
         defineGame: (key, def) => { games[key] = def; },
         setGameAfter: g => { gameAfter = g; },
         addKind: (kind, fn) => { kinds[String(kind).toLowerCase()] = fn; },
+        kind: kind => kinds[String(kind).toLowerCase()] || null,   // (2026-10-06: the regulars' talk opens Grum's arm-wrestling)
         addStep: (name, fn) => { steps[name] = fn; },
         render: null
     };
@@ -1686,7 +1711,7 @@
             return runOnMap([C(355, ["TavernLife.go(this, 'bath', " + tub.ev.eventId() + ")"])]);
         },
         song(tip) {
-            if (!idle() || !inSongHours() || S().songDay === day()) return false;
+            if (!idle() || !inSongHours() || S().songDay === day() || meliaAway()) return false;
             const tipped = !!tip && pay(SONG_TIP, npc("melia"), "song");
             return runOnMap(songList(nextSong(), tipped));
         },
