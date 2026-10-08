@@ -11,7 +11,10 @@ from bustlib import *
 from ramps import RAMPS, DIRT, FRECKLE
 
 LINE = (34, 24, 22)         # the RTP line colour (dark warm brown)
-LIGHT = (-0.55, -0.83)       # towards the light: the RTP busts are lit from the upper left (the viewer's side)
+# cel()'s ldir points AWAY from the light, to the side its shade band goes (the band is cut where the shape, moved that way, no
+# longer covers it). The RTP busts are lit from the upper left (the viewer's side): the shade on the lower right. (2026-10-07: it
+# was (-0.55, -0.83) - the shade on the lit side; every bust painted with the default rebuilt.)
+LIGHT = (0.55, 0.83)
 
 
 def hsv_of(img):
@@ -139,7 +142,7 @@ def shift(m, dx, dy):
 def cel(shape, polys, tones, line=LINE, lw=2.0, shade=7.0, light=3.0, ldir=LIGHT, clip=None, ss=4, outline=True,
         shade2=None, holes=()):
     """A painted shape as an RGBA layer (1x): tones = (shadow, mid, light[, deep]) - the mid tone everywhere, a shade band
-    along the side away from the light (shade px), a thin light band on the lit side (light px), a dark line (lw px).
+    along the side away from the light (shade px, towards ldir), a thin light band on the lit side (light px), a dark line (lw px).
     clip: a 1x bool mask the shape is cut to (its line too). holes: polygons cut out of the shape (with a line round)."""
     H, W = shape[:2]
     cv = Canvas(W, H, ss)
@@ -538,6 +541,6 @@ def horse(shape, x, y, s=1.0, col=(16, 12, 12)):
     P = [(10, 50), (9, 40), (7, 34), (3, 30), (-4, 27), (-8, 25), (-10, 21), (-7, 16), (0, 10), (4, 4), (6, -2), (9, -9), (11, -2),
          (14, 0), (18, 2), (24, 8), (28, 16), (30, 26), (30, 38), (32, 50)]
     poly = [(x + px * s, y + py * s) for px, py in P]
-    lay = cel(shape, [poly], (col, col, (70, 60, 60)), line=col, lw=0.8, shade=0, light=1.2, ldir=(-0.9, -0.4))
+    lay = cel(shape, [poly], (col, col, (70, 60, 60)), line=col, lw=0.8, shade=0, light=1.2, ldir=(0.9, 0.4))
     eye = dots(shape, [(x + 5 * s, y + 13 * s, 1.1 * s)], (150, 40, 40), alpha=0.9)
     return over(lay, eye)

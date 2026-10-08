@@ -1,12 +1,12 @@
 # Questy miasteczka — stan wdrożenia
 
-Stan: 2026-10-06 (później: W1 rozdz. 6 c jako prawdziwa walka z ludźmi Feliksa i rozdz. 7 - cysterna zakonu i dzwon „cztery i dwa”,
+Stan: 2026-10-07 (W6 „Ludzie z promu” rozdz. 3–7 - obóz pod murem, list gończy, druga fala i głosowanie, Wigilia, Marek; wcześniej 2026-10-06: W1 rozdz. 6 c jako prawdziwa walka z ludźmi Feliksa i rozdz. 7 - cysterna zakonu i dzwon „cztery i dwa”,
 W9 rozdz. 6 - prawdy z Warstwy Prawdy w rozmowach, W8 rozdz. 2-6 w górach, w jaskini kopaczy i w Osadzie Milczących; wcześniej tego dnia: stali bywalcy tawerny - Melia, Ozzy i Grum - jako rozmówcy; K22, K33, D6 - turniej w tawernie, D13, W3 rozdz. 1–8,
 W4 rozdz. 1–5 - klucz kasztelana otwiera kratę do podziemi, W8 rozdz. 1, K27 z Melią;
 wcześniej, 2026-10-05: W1 rozdz. 3–6, W2 rozdz. 5–6, K26, K37, K39, K15 z woźnicą, pięciu nowych mieszkańców). Katalog:
 `docs/QUESTY.md`. Kod: `js/plugins/TownQuests.js` (silnik) i `js/plugins/TownQuests_Data.js` (zadania, teksty, nagrody), wpisane na
 końcu `js/plugins.js` za TownLife. Testy: `tests/town_quests_test.js`, `tests/w1_chapters_test.js`, `tests/w2_archive_test.js`,
-`tests/town_quests2_test.js`, `tests/regulars_test.js`, `tests/regulars_quests_test.js`, `tests/act2_quests_test.js`, `tests/w8_mountains_test.js`.
+`tests/town_quests2_test.js`, `tests/regulars_test.js`, `tests/regulars_quests_test.js`, `tests/act2_quests_test.js`, `tests/w8_mountains_test.js`, `tests/w6_test.js`.
 
 ## Co działa (silnik)
 
@@ -80,8 +80,8 @@ włóczenie się przy Kubie (−3), łapówki i nieuczciwe wyjścia.
 
 Targ co 7 dni (napis u góry, okrzyki mieszkańców przy straganach), prom co 3 dni (dzień nowych kartek na tablicy zleceń; dzień
 później Baltazar skupuje zapasy — K16), sygnały dzwonu (W2). Większe dni (prom z uchodźcami 10/24/38/52, imieniny Lorda 33,
-Noc Kupały 42, dożynki 56, Wielkanoc, Wigilia) są w danych i w zakładce „Kalendarz miasteczka”; w grze dzieje się tylko K31 w
-dniu 33 — reszta czeka na mapy i sceny (napisane przy dniu w dzienniku).
+Noc Kupały 42, dożynki 56, Wielkanoc, Wigilia) są w danych i w zakładce „Kalendarz miasteczka”; w grze dzieją się K31 w
+dniu 33, prom z pierwszą falą w dniu 10 (obóz pod murem), druga fala w dniu 24 i Wigilia zimą (W6), Noc Kupały (W3) — reszta czeka na mapy i sceny (napisane przy dniu w dzienniku).
 
 ## Każdy quest z katalogu
 
@@ -106,7 +106,7 @@ zrobione = grywalne od początku do końca; częściowo = grywalne, ale bez czę
 | K13 | Sznur dzwonu | zrobione | spóźnienie = w południe dzwon milczy |
 | K14 | Dzwonnik ma chore kolana | zrobione | mini-gra dzwonu (6 uderzeń), zła liczba = poszlaka W2; bez wnętrza dzwonnicy |
 | K15 | Ostrożnie, kruche | zrobione | skrzynia (wolniejszy chód) dla woźnicy Wojciecha, który 21:20–22:40 czeka z wozem przed bramą południową; postaw / zajrzyj / oddaj Witowi, zapłata nazajutrz |
-| K16 | Grzyby po dwakroć | zrobione | handel w dzień po promie, do 10 sztuk, podwójna cena; poszlaka W8 |
+| K16 | Grzyby po dwakroć | zrobione | handel w dzień po promie, do 10 sztuk, podwójna cena; poszlaka W8. Od 2026-10-07 (zgłoszenie użytkownika) „!” nad Baltazarem tylko wtedy, gdy handel jest możliwy: dzień po promie 8–18, w torbie coś, co kupuje, i dzisiejsze 10 sztuk nie wyczerpane |
 | K17 | Obwieszczenie o racjach | zrobione | 4 ściany: tawerna, piekarnia, kuźnia, kantor (zamiast obozu) |
 | K18 | Kto ruszył stóg? | czeka | na: sąsiedzi (postacie), ślady przy stogach |
 | K19 | Spis obozu | zrobione | trzy osoby (Ludmiła, Ela, Rafał) zamiast pięciu namiotów; Rafał prosi, żeby go nie liczyć |
@@ -171,12 +171,12 @@ zrobione = grywalne od początku do końca; częściowo = grywalne, ale bez czę
 | W3 | Pieśń o Kruczych Skałach | zrobione | zaczyna się po 6 balladach Melii i K22; rozdz. 1 sen Melii; rozdz. 2–6 sześć zwrotek w dowolnej kolejności (teksty w `TownQuests_Data.js`, notatka „Siódma ballada”): struna (K22), Ambroży (po D16, za dnia), Ludmiła (po K27 albo D10, 17–20:30), cokół lewego posągu (ogród rycerzy, za dnia), kronika rodu (Lord przy drzwiach po spłacie połowy długu albo kamerdyner - Feliks lub Teodor - za dzban miodu pitnego), Ozzy (wieczorem dzban miodu, o 2:00 przez sen, z wynajętym pokojem) - ta ostatnia opisuje drogę w dół; rozdz. 7 po północy „skąd Melia to zna” (3 sposoby); rozdz. 8: Noc Kupały (lato, dzień 14 - dzień 42) przy bramie południowej + walka o Melię / tylko dla Borgara 23–1 / spalić słowa. Skrót przez piętra 1–10 to na razie flaga `w3Shortcut` (czeka na podziemia) |
 | W4 | Krew kasztelana | częściowo | **wersja zwarta (2026-10-06) - tak otwiera się krata do podziemi.** Zaczyna się po spłacie długu (rozdział 1). Rozdz. 1: Borgar przy barze („Zapytaj o stare kamienie pod tawerną”) - krata zakonu za jego beczkami, pół klucza znad baru „na szczęście”; rozdz. 2: druga połowa zakopana u stóp kamiennego kopca z krukiem na podwórzu dziadka (Map020, 8,6; Kamienna łopata, godzina kopania); rozdz. 3: Tadek łączy połówki (1× Żelazo, 2× Węgiel drzewny) - klucz nazajutrz rano: „Klucz kasztelana” (rzecz spoza bazy); rozdz. 4: klucz otwiera kratę w piwnicy (Map009 15,2 - `Underground.open()`, przełącznik 11; póki W4 trwa, zamknięta krata podpowiada klucz); rozdz. 5: Borgar słyszy o kracie i mówi zdanie swojego rodu „Nie pytam o to, czego nie chcę wiedzieć.” (hasło strażnika z piętra 10; notatka „Słowa Borgara”). Dalej czeka: Lord chce być pierwszy, konfrontacja z Borgarem i Komnata Serca (Akt III, W9) |
 | W5 | Towary z kontynentu | czeka | flagi już są (K15, K16, D11); na: wnętrze kantoru z piwnicą nocą, obóz przemytników |
-| W6 | Ludzie z promu | czeka | K19, K27, K28, K29, D4, D10, D18 dają już flagi zaufania obozu; na: fale uchodźców, list gończy, głosowanie |
+| W6 | Ludzie z promu | zrobione | **2026-10-07, rozdz. 3–7** (rozdz. 1–2 to K19, K27, K28, K29, D4, D10, D18). Rozdz. 2: zaufanie obozu = 3 czyny (konik, kocioł, gorączka, chleb Eli opłacony / praca u Hanki, Rafał nieliczony, Szymek puszczony, płaszcze) + zaufanie Rafała; rozdz. 3: Rafał przy ognisku obozu 20:30–23:30 (TownLife `w6Fire`); rozdz. 4: list gończy na tablicy zleceń w tawernie (i na ścianie tawerny) - ukryj (izdebka 50 G / chata dziadka / dzwonnica; przeszukanie trzeciego dnia z ryzykiem miejsca; po 7 dniach `rafalAlly`; znaleziony `rafalTaken` + `guardSuspicious`), wydaj Witowi (120 G, `rafalGiven` + `rafalEnemy` + `w6LordFavour`; Ludmiła bez zadań i chłodna do rozdz. 7), przemyć przez Baltazara (50 G, `rafalSmuggled` + `balthazarKnows`), bez wyboru - zabrany z obozu (`rafalTaken`); rozdz. 5: dzień 24 druga fala (namiot, Bogdan i Halina), kłótnie przy beczkach, dzień później 13–16 głosowanie w ratuszu (55 : 45 + 3×czyny, głos = Opinia / 2): `campOutside` (obóz na Podgrodziu - TownLife `alt`, wilki nocą, D5 wilk więcej) albo `campInside` (tydzień pracy: Bogdan i Halina zbierają dojrzałe plony pola dziadka o 16:00 do skrzyń na polu); rozdz. 6–7 (jeden krok): Wigilia (dzień 96 w 1. roku; obóz 17–20 u Ludmiły albo tawerna 17–23 u Borgara, 4 gorące dania, Opinia +10; `w6Wigilia` + `w6WigiliaCamp` / `w6WigiliaTavern`, przegapiona `w6WigiliaMissed`) i Marek (Akt II: chusta od Ludmiły, Jaskinia Map014 - odwraca się, idzie za bohaterem; strażnik i kopacze patrzą: alarm = walka Humans.js, słowo ze strażnikiem: Grum / frakcja / 80 G; u wylotu jaskini `marekSaved`; Marek w TownLife; powrót do Ludmiły i Eli `w6Reunion`). Test `tests/w6_test.js` |
 | W7 | Dwór z kamieni twierdzy | czeka | na: decyzja autora (wariant A/B), wnętrze dworu |
 | W8 | Żelazna Pięść | częściowo | rozdz. 1: po wygranej z Grumem na rękę i w kości - pytania o góry (notatka, zaufanie +10). **Rozdz. 2-6 (2026-10-06, mapy Gór Map013, Jaskini Map014 i Osady Map120)**: 2 - wyprawa o świcie (jedzenie 2, woda w bukłaku, zioła; Grum przy `grum_przewodnik_start`), kamieniołom tego samego dnia (`kamieniolom_znak`, 50 G); 3 - obóz kopaczy, Grum przy niszy Marka; 4 - list „Świadków nie zostawiać” (Grum po miodzie / dwóch piwach, ściana wynajętego pokoju 22-24, skrzynia dowódcy nocą po cichu); 5 - Akt II: Brama Milczących (przełącznik 16), Grum przy kręgu; 6 - dwie z trzech (Marek `marekSaved` z W6 - czeka, kroniki W2, siłowanie „na honor” w tawernie) = Grum sojusznik (`grumAlly`, przełącznik 15), frakcja (100 G, `w8Faction`, przełącznik 15) albo walka przy `tunel_wejscie` (Humans.js: najemnik „Grum”; pokonany - `grumGone` / zabity - `grumDead`, znika z tawerny i ze stołów do kości; bohater pobity - `w8Lost`, przełącznik 15). Rozdz. 7 (Akt III, drzwi tawerny) czeka |
 | W9 | Serce Twierdzy | częściowo | **rozdz. 6 (2026-10-06)**: zaczyna się od pierwszej prawdy z Warstwy Prawdy (`Underground.truths()`, szyna `undergroundTruth`); prawdy o 18 osobach jako wybór „Powiedz prawdę.” / „Przemilcz.” / „Nie teraz.” - mieszkaniec raz dziennie przed swoją rozmową, Melia/Ozzy/Grum temat w menu, Borgar przy barze, Lord i dziadek (też prawda o Mruczku) przed rozmową fabuły; skutki: Opinia, zaufanie bywalców, flagi `truthTold_<kto>` / `truthKept_<kto>` i własne, uwagi (Ludmiła, Ela, Zosia); Feliks po W1 a/b nieobecny. Rozdz. 1-5 i 7-8 to podziemia i Komnata Serca (Underground.js); wątek zostaje otwarty, póki są prawdy do powiedzenia |
 
-Razem: 56 zadań w grze - 49 grywalnych w całości (35 krótkich, w tym 7 z Podgrodzia - test `tests/podgrodzie_quests_test.js`; 12 długich; wątki W1 i W3), 3 krótkie częściowo (K4, K9, K11) i 4 wątki częściowo (W2 rozdz. 1–6, W4 rozdz. 1–5, W8 rozdz. 1–6, W9 rozdz. 6); reszta katalogu czeka. Test `tests/town_quests_test.js` (59 sprawdzeń, ok. 4 min) przechodzi od początku do końca K1, K2, K4, K5, K8, K10, K12, K13, K14, K16, K17, K19, K27, K28, K29, K31, K32, D1, D4, D5, D10, D16, W1 (rozdz. 1-2) i W2 (rozdz. 1-4); `tests/w1_chapters_test.js` (29 sprawdzeń) - W1 rozdz. 3-6 ze wszystkimi wyborami; `tests/w2_archive_test.js` (13) - W2 rozdz. 5-6; `tests/town_quests2_test.js` (24) - nowi mieszkańcy, K26, K15, K37, K39; `tests/regulars_test.js` (30) - rozmowy stałych bywalców, zaufanie, K22, K33, K27 z Melią, W8 rozdz. 1; `tests/regulars_quests_test.js` (34) - D13 (z przegapionymi przepowiedniami), D6 (turniej w tawernie: mistrz i sprzedana walka), W3 (wszystkie zwrotki, trzy zakończenia, walka o Melię). `tests/w4_key_test.js` (16) - W4: Borgar, kopanie, kuźnia, krata otwarta kluczem, zejście do Ruin Zamku, słowa Borgara. `tests/w1_chapters_test.js` ma od 2026-10-06 35 sprawdzeń (napad w 6 c jako walka: wygrana ze świadkiem, przegrana, ucieczka); `tests/act2_quests_test.js` (29) - W1 rozdz. 7 (zasuwa, dzwon sam / Ambroży, studnia dalej 2 nabrania), W9 rozdz. 6 (prawdy: Hanka, Kuba, dziadek i Mruczek, Lord, Melia, Borgar, Feliks nieobecny), popiersie Wieśka; `tests/w8_mountains_test.js` (34) - W8 rozdz. 2-6 na mapach gór ze wszystkimi wyjściami.
+Razem: 57 zadań w grze - 50 grywalnych w całości (35 krótkich, w tym 7 z Podgrodzia - test `tests/podgrodzie_quests_test.js`; 12 długich; wątki W1, W3 i W6), 3 krótkie częściowo (K4, K9, K11) i 4 wątki częściowo (W2 rozdz. 1–6, W4 rozdz. 1–5, W8 rozdz. 1–6, W9 rozdz. 6); reszta katalogu czeka. Test `tests/town_quests_test.js` (59 sprawdzeń, ok. 4 min) przechodzi od początku do końca K1, K2, K4, K5, K8, K10, K12, K13, K14, K16, K17, K19, K27, K28, K29, K31, K32, D1, D4, D5, D10, D16, W1 (rozdz. 1-2) i W2 (rozdz. 1-4); `tests/w1_chapters_test.js` (29 sprawdzeń) - W1 rozdz. 3-6 ze wszystkimi wyborami; `tests/w2_archive_test.js` (13) - W2 rozdz. 5-6; `tests/town_quests2_test.js` (24) - nowi mieszkańcy, K26, K15, K37, K39; `tests/regulars_test.js` (30) - rozmowy stałych bywalców, zaufanie, K22, K33, K27 z Melią, W8 rozdz. 1; `tests/regulars_quests_test.js` (34) - D13 (z przegapionymi przepowiedniami), D6 (turniej w tawernie: mistrz i sprzedana walka), W3 (wszystkie zwrotki, trzy zakończenia, walka o Melię). `tests/w4_key_test.js` (16) - W4: Borgar, kopanie, kuźnia, krata otwarta kluczem, zejście do Ruin Zamku, słowa Borgara. `tests/w1_chapters_test.js` ma od 2026-10-06 35 sprawdzeń (napad w 6 c jako walka: wygrana ze świadkiem, przegrana, ucieczka); `tests/act2_quests_test.js` (29) - W1 rozdz. 7 (zasuwa, dzwon sam / Ambroży, studnia dalej 2 nabrania), W9 rozdz. 6 (prawdy: Hanka, Kuba, dziadek i Mruczek, Lord, Melia, Borgar, Feliks nieobecny), popiersie Wieśka; `tests/w8_mountains_test.js` (34) - W8 rozdz. 2-6 na mapach gór ze wszystkimi wyjściami.
 
 ## Nowi mieszkańcy (2026-10-05, TownLife_Data.js)
 
@@ -235,6 +235,46 @@ mieszkańcy żyją bez zmian. Mapy nie były zmieniane (miejsca `stragan_kosci`,
 - **Rzutki**: furman Wiesiek ma popiersie RTP **People2_7** (ogorzały woźnica z goglami na czole) - nieużywane nigdzie indziej, odkąd
   woźnica w siłowaniu ma Woznica_Bust; People1_5 było twarzą sołtysa.
 
+## W6 „Ludzie z promu” - wynik dla Aktu III i zakończeń (kontrakt, 2026-10-07)
+
+Czytać przez `TownQuests.w6()` albo flagi `TownQuests.state().flags[nazwa]` (wartość = dzień ustawienia, brak = `undefined`):
+
+| `TownQuests.w6()` | Flagi | Znaczy |
+|---|---|---|
+| `rafal: "ally"` | `rafalAlly` (+ `rafalTrust`) | ukryty i nieznaleziony - zostaje w obozie, staje z bohaterem w walce |
+| `rafal: "enemy"` | `rafalGiven` + `rafalEnemy` (+ `w6LordFavour`) | wydany Witowi za 120 G - wraca jako wróg (w rozdz. 7 już walczy po stronie kopaczy) |
+| `rafal: "gone"` | `rafalSmuggled` (+ `balthazarKnows`) | przemycony promem przez Baltazara - nie ma go, żywy i wdzięczny |
+| `rafal: "taken"` | `rafalTaken` | znaleziony przez straż (w kryjówce albo w obozie) - zabrany przez dwór, nie wrogi |
+| `camp: "inside"` / `"outside"` | `campInside` / `campOutside` | obóz w mieście (praca, pomocnicy) / za murem na Podgrodziu (Map111, przy ognisku Darina) |
+| `marekSaved: true` | `marekSaved` (+ `w6Reunion` po powrocie do rodziny) | Marek wyprowadzony z Jaskini - mieszka z Ludmiłą i Elą (TownLife `marek`), „Kiedy przyjdą - stanę z tobą” |
+| `wigilia: "camp"` / `"tavern"` / `"missed"` | `w6Wigilia` + `w6WigiliaCamp` / `w6WigiliaTavern`, `w6WigiliaMissed` | wspólna Wigilia |
+| `done`, `ch` | rekord `W6` | wątek skończony / bieżący rozdział (2–7) |
+
+Pozostałe flagi W6: `w6RafalStory` (rozdz. 3), `w6Voted<Close|Open|Abstain>` (głos bohatera), `w6Guard<Bribe|Grum|Faction>` /
+`w6GuardBeaten` (jak przeszedł obok strażnika), `ludmilaForgave` (Ludmiła wybacza wydanie Rafała po powrocie Marka). Szyna:
+`w6MarekSaved`. Agenci Aktu III i Serca dostali te nazwy 2026-10-07.
+
+## W6 - decyzje do potwierdzenia (2026-10-07)
+
+- **List gończy na tablicy zleceń** to kartka pokazywana przy tablicy przed jej otwarciem (nie zlecenie z QuestBoard.js - tamten
+  plugin nie był ruszany); druga kartka wisi na ścianie tawerny.
+- **Kryjówki**: „chata na polu dziadka” = dom dziadka (Map019, alkowa) - chatka bohatera (Map100) bywa niezbudowana; izdebka nad
+  tawerną = pokój nr 1 (Map025) za 50 G dla Borgara (nie zmienia wynajmu pokoju bohatera). Przeszukanie trzeciego dnia o 10:00, rzut
+  przeciw ryzyku miejsca (procenty wyżej).
+- **Wydany Rafał jako wróg**: w rozdz. 7 wpada do walki w obozie kopaczy jako nożownik Humans.js z imieniem „Rafał” (wygląd nożownika,
+  nie jego arkusz - Humans.js nie ma jego póz walki). Dalej - Akt III.
+- **Głosowanie**: miasto 55 : 45, +3 dla wpuszczenia za każdy czyn bohatera dla obozu, głos bohatera = Opinia / 2 (od Opinii ok. 20
+  z trzema czynami głos wygrywa); remis = zamknąć.
+- **Zamknięta brama** przenosi obóz na Podgrodzie (tam już stoją namioty uchodźców Darina) - zamiast „pod murem od zewnątrz” (za
+  bramą południową nie ma mapy). Wilki: raz na noc, 50% szans, gdy bohater jest przy namiotach po zmroku.
+- **Pomocnicy** (tydzień pracy): Bogdan i Halina stoją na polu dziadka 7–16 i o 16:00 zbierają tylko dojrzałe plony (bez sadzenia i
+  podlewania - susza), do skrzyń na polu dziadka (skrzynie, składowisko, spiżarnia); co się nie zmieści - bohater dostaje, kiedy przyjdzie
+  na pole. Kieratu (D2) nie ma.
+- **Wigilia** to pierwszy dzień Wigilii z kalendarza (zima, środek pory - w 1. roku dzień 96); 4 dania z kociołka (gulasz, kapuśniak,
+  zupa grzybowa, owsianka - z wodą z wiadra, więc drogo).
+- **Marek** jest w Jaskini (Map014) - nie na piętrach 31–50; rozdz. 6 i 7 to jeden krok wątku (Akt II zwykle przychodzi przed zimą).
+  Marek mówi pojedyncze słowa (nie milczy całkiem po powrocie).
+
 ## Decyzje autora (2026-10-05)
 
 - **Studnia po W1 a/b**: dalej 2 nabrania dziennie („Dalej 2 dziennie”) - rusza młyn, studnia daje mało (`WELL_BONUS = 0`).
@@ -290,5 +330,10 @@ Każde zadanie to jeden obiekt w tablicy `QUESTS`. Najprostsze — „przynieś 
   gdy znacznika nie ma; tak stoją miejsca W8 w górach); w kroku `vars: "nazwa"` - `FX[nazwa].vars(q, r)` liczy słowa `{...}` tekstu w chwili
   wyświetlenia (W8, W9); `TownQuests.grumAway()` - Grum zniknął po W8 (TavernLife i TavernDice go nie pokazują); szyna `townTruth { who, how }`
   (W9: prawda powiedziana / przemilczana).
+- Od 2026-10-07 (W6): w `SPOTS` id **903–909** (drugi zakres - na Map008 951–959 są zajęte), `show: "nazwa"` - rzecz stoi, kiedy
+  `FX[nazwa].show(klucz)` mówi „tak”, bez kroku zadania i bez rombu (namioty, ognisko, Bogdan i Halina), `talkFx` - co mówi
+  (`FX[talkFx].spot(s, spk)`), `at` - pole liczone przy wczytaniu mapy (`FX[at].at(s)`, pomocnicy przy grządkach), `note` - dodatkowe tagi
+  zdarzenia (`<Occupy:...>` namiotu), `light` - tag światła (tylko gdy rzecz stoi przy wczytaniu mapy; ognisko to płomień), `step` -
+  animowany obrazek; w kroku `chFx` - numer rozdziału liczony przez `FX[chFx].ch(q, r)` (W6: rozdz. 6 i 7 w jednym kroku).
 - **Nigdy** nie dawaj bohaterowi wody (zasada suszy) — test `town_quests_test` to sprawdza.
 - Po dopisaniu: `node tests/run.js town_quests_test` (z `CDP_PORT=9433` albo swoim portem).

@@ -7,7 +7,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Podziemia pod tawerną: 100 pięter - piętra składane z kawałków pokoi (stałe ziarno zapisu), co 10. piętro ręcznie, schody, winda, bossowie, łupy, pułapki, zapiski zakonu, Warstwa Prawdy, Komnata Serca i zakończenia. v2.0.0
+ * @plugindesc Podziemia pod tawerną: 100 pięter - piętra składane z kawałków pokoi (stałe ziarno zapisu), co 10. piętro ręcznie, schody, winda, bossowie, łupy, pułapki, zapiski zakonu, Warstwa Prawdy, Komnata Serca, Lord przy Sercu i zakończenia jako sceny. v2.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter Underground_Data
@@ -704,7 +704,7 @@
     const DATA_NAME = id => "$dataUndergroundChunks" + id;
 
     const store = T.state.define("underground", () => ({ seed: 0, deepest: 0, visited: {}, notes: {}, lib: {}, gold: 0, found: 0,
-        lifts: {}, bosses: {}, locks: {}, forceLocks: {}, truths: {}, ending: null }), { version: 1, owner: PLUGIN });
+        lifts: {}, bosses: {}, locks: {}, forceLocks: {}, truths: {}, ending: null, lord: null, forceWorld: null, forceLord: null }), { version: 1, owner: PLUGIN });
     const state = () => {
         const s = store();
         // (saves from band 1's days: the newer parts)
@@ -714,6 +714,7 @@
         if (!s.forceLocks) s.forceLocks = {};
         if (!s.truths) s.truths = {};
         if (s.ending === undefined) s.ending = null;
+        if (s.lord === undefined) s.lord = null;
         return s;
     };
     function seedOf() {
@@ -1367,7 +1368,7 @@
     // event commands built in code, run as a child of the event's own interpreter (like a common event)
     const C = {
         text: (lines, spk) => [{ code: 101, indent: 0, parameters: ["", 0, 0, 2, ""] }]
-            .concat([].concat(lines).map((l, i) => ({ code: 401, indent: 0, parameters: [(i === 0 && spk !== undefined ? "\\SPK[" + spk + "]" : "") + l] }))),
+            .concat([].concat(lines).map((l, i) => ({ code: 401, indent: 0, parameters: [(i === 0 && spk !== undefined ? "\\SPK[" + spk + "]" : "") + String(l).replace(/^> /, "")] }))),
         plain: line => [{ code: 101, indent: 0, parameters: ["", 0, 1, 1, ""] }, { code: 401, indent: 0, parameters: ["\\SPK[-1]" + line] }],
         script: code => [{ code: 355, indent: 0, parameters: [code] }],
         wait: n => [{ code: 230, indent: 0, parameters: [n] }],
@@ -1441,70 +1442,341 @@
     }
     const doorOpen = () => locks().door;
 
-    // the Heart: the look, then the choice of Act III (STORY.md) - or what is left of it after the ending
-    function guardians() {
-        const TQ = T.api("TownQuests"), fl = (TQ && TQ.state && TQ.state() && TQ.state().flags) || {}, s = state();
-        return { borgar: !!fl.borgarSaying || !!s.forceLocks.all, ambrozy: !!fl.ambrozyChronicles || !!s.forceLocks.all };
-    }
-    function heart(interp) {
-        const d = D(), t = d.TEXT, s = state();
-        if (s.ending) return runChild(interp, C.text(t.heartAfter[s.ending.kind] || t.heartLook.slice(0, 1), 0));
-        const kinds = ["zniszczyc", "straznik", "uwolnic", "zapieczetowac"];
-        const confirm = kind => C.choice(t.heartConfirm, [t.heartYes, t.heartNo], [C.script("Underground.ending(\"" + kind + "\", \"hero\", this)"), []], 1);
-        const g = guardians();
-        const who = [["hero", t.guardianHero]].concat(g.borgar ? [["borgar", t.guardianBorgar]] : [], g.ambrozy ? [["ambrozy", t.guardianAmbrozy]] : []);
-        const guardBranch = who.length > 1
-            ? C.choice(t.guardianWho, who.map(w => w[1]).concat([t.heartNo]),
-                who.map(w => C.choice(t.heartConfirm, [t.heartYes, t.heartNo], [C.script("Underground.ending(\"straznik\", \"" + w[0] + "\", this)"), []], 1)).concat([[]]))
-            : confirm("straznik");
-        const branches = kinds.map(k => (k === "straznik" ? guardBranch : confirm(k))).concat([[]]);
-        const list = C.se("Magic3", 60, 60).concat(C.flash([255, 240, 200, 120], 30), C.text(t.heartLook, 0),
-            C.choice(t.heartAsk, kinds.map(k => t.heartChoices[k]).concat([t.heartChoices.wait]), branches));
-        return runChild(interp, list);
-    }
-    // the epilogue of an ending (lines of ENDINGS + EPILOGUE by what the town did), then "KONIEC" and the choice: back to the
-    // game (the tavern, the hero wakes there) or the title screen
-    function epilogueLines(kind, who) {
-        const d = D(), e = d.ENDINGS[kind], ep = d.EPILOGUE, out = [];
-        if (!e) return out;
-        out.push(...(kind === "straznik" ? (e.guardian[who] || e.guardian.hero) : e.lines));
-        const l = locks();
-        if (l.open >= 3) out.push(ep.allLocks);
+    // ======================================================================================================================
+    // Floor 100 (v2.1): the world the endings read, the Lord at the Heart (W7 ch. 7), the endings as scenes - in the chamber and
+    // up above (the manor, the market, the camp, grandpa's house, the tavern) - then the epilogue; the game goes on in the tavern
+    // ======================================================================================================================
+    const H = () => D().HEART;
+    // the town's quest flags (TownQuests' state; {} without it)
+    function questFlags() {
         const TQ = T.api("TownQuests");
-        let op = null, fl = {};
-        try { op = TQ && TQ.opinion ? TQ.opinion() : null; fl = (TQ && TQ.state && TQ.state().flags) || {}; } catch (er) { op = null; }
-        if (op !== null && op >= 60) out.push(ep.opinionHigh);
-        else if (op !== null && op < 20) out.push(ep.opinionLow);
-        if (fl.sluiceHalf) out.push(ep.water);
-        if (kind === "zapieczetowac" && (fl.ambrozyChronicles || fl.signalBook)) out.push(ep.ambrozyBook);
+        try { return (TQ && TQ.state && TQ.state() && TQ.state().flags) || {}; } catch (e) { return {}; }
+    }
+    // "Borgar, Grum i Tadek" from the keys other plugins use
+    function namesOf(keys) {
+        const n = H().NAMES, list = [].concat(keys || []).filter(Boolean).map(k => n[k] || (String(k).charAt(0).toUpperCase() + String(k).slice(1)));
+        return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " i " + list[list.length - 1];
+    }
+    // what the endings read, every plugin asked defensively (each may be missing): Story (the debt), TownQuests (Opinia, the flags of
+    // W1-W9; W6's TownQuests.w6()), TownLife (who is gone), Act III (Act3.outcome() - null until the siege is over). F9 and the tests
+    // can lay a world over it (state().forceWorld) and choose the Lord's stance (state().forceLord).
+    function world() {
+        const s = state(), fl = questFlags(), TQ = T.api("TownQuests");
+        let op = null, w6 = null, siege = null, ss = null;
+        try { op = TQ && TQ.opinion ? TQ.opinion() : null; if (typeof op !== "number") op = null; } catch (e) { op = null; }
+        try { w6 = TQ && typeof TQ.w6 === "function" ? TQ.w6() : null; } catch (e) { w6 = null; }
+        try { const A = T.api("Act3"); siege = A && typeof A.outcome === "function" ? A.outcome() : null; } catch (e) { siege = null; }
+        try { const St = T.api("Story"); ss = St && St.state ? St.state() : null; } catch (e) { ss = null; }
+        if (typeof siege === "string") siege = { result: siege };
+        if (!siege || !siege.result) siege = fl.act3Held ? { result: "held" } : fl.act3Costly ? { result: "costly" } : fl.act3Fallen ? { result: "fallen" } : null;
+        const gone = k => { try { return !!(window.TownLife && TownLife.gone && TownLife.gone(k)); } catch (e) { return false; } };
+        const sg = siege && siege.grum;
+        const w = {
+            story: !!ss, debtPaid: !!ss && (ss.paid >= ss.debt || !!ss.done),
+            opinion: op, locks: locks().open,
+            borgar: !!fl.borgarSaying, ambrozy: !!fl.ambrozyChronicles, book: !!(fl.signalBook || fl.ambrozyChronicles),
+            melia: fl.w3Sung ? "public" : fl.w3Borgar ? "borgar" : fl.w3Burned ? "burned" : null,
+            grum: ["ally", "enemy", "ferry", "gone", "dead"].includes(sg) ? sg
+                : fl.grumDead ? "dead" : fl.grumGone ? "gone" : fl.grumAlly ? "ally" : (fl.w8Faction || fl.w8Lost) ? "faction" : null,
+            rafal: (siege && ["ally", "enemy", "gone", "taken", "dead"].includes(siege.rafal) && siege.rafal) || (w6 && w6.rafal) || (fl.rafalAlly ? "ally" : (fl.rafalGiven || fl.rafalEnemy) ? "enemy" : fl.rafalSmuggled ? "gone" : fl.rafalTaken ? "taken" : null),
+            marek: !!((w6 && w6.marekSaved) || fl.marekSaved),
+            camp: (w6 && w6.camp) || (fl.campInside ? "inside" : fl.campOutside ? "outside" : null),
+            water: !!fl.sluiceHalf,
+            feliks: fl.w1Revealed ? "arrested" : fl.lordAlly ? "sent" : fl.feliksPays ? "pays" : gone("feliks") ? "gone" : "here",
+            lordFlags: { ally: !!fl.lordAlly, cold: !!(fl.w1Revealed || fl.lordCold), truth: !!fl.lordTruth },
+            siege
+        };
+        const f = s.forceWorld;
+        if (f && typeof f === "object") for (const k of Object.keys(f)) w[k] = JSON.parse(JSON.stringify(f[k]));
+        if (w.siege) w.siege = Object.assign({}, w.siege, { names: { defenders: namesOf(w.siege.defenders), lost: namesOf(w.siege.lost) } });
+        w.butler = w.feliks === "here" || w.feliks === "pays" ? "feliks" : "teodor";
+        const L = s.lord || {};
+        w.lord = { stance: L.stance || lordStance(w), choice: L.choice || null, told: L.told || null, cold: !!(w.lordFlags && w.lordFlags.cold) };
+        return w;
+    }
+    // the Lord's stance at the Heart: ally (the quiet way of W1 - lordAlly - or his truth told, W9 ch. 6), rival (shamed at the market,
+    // W1 a: "Mówiłem: najpierw do mnie"), absent (he never learnt the hero went down - or no story, or the debt not paid)
+    function lordStance(w) {
+        const f = state().forceLord;
+        if (f === "ally" || f === "rival" || f === "absent") return f;
+        if (!w.story || !w.debtPaid) return "absent";
+        const lf = w.lordFlags || {};
+        if (lf.ally || lf.truth) return "ally";
+        if (lf.cold) return "rival";
+        return "absent";
+    }
+    const plainWorld = w => JSON.parse(JSON.stringify(w));
+
+    // ---- the cast: actor events on the chamber's map (always there, hidden till a scene needs them) and on the map of a scene up
+    // above while it plays (film.next) - ids 800-827
+    const COND = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
+        switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
+    function actorEvent(id, key, x, y, dir, opts) {
+        const o = opts || {}, a = H().ACTORS[key] || {}, name = a.name || key;
+        const bust = o.bust !== undefined ? o.bust : a.bust;
+        return { id, name, x, y, note: (bust ? "<Bust:" + bust + ">" : "") + "<BustName:" + name + "><Actor:" + key + ">",
+            pages: [{ conditions: Object.assign({}, COND), directionFix: false,
+                image: { tileId: 0, characterName: o.show ? (o.sheet || a.sheet || "") : "", characterIndex: 0, direction: dir || 2, pattern: 1 },
+                list: [{ code: 0, indent: 0, parameters: [] }], moveFrequency: 3, moveRoute: { list: [{ code: 0, parameters: [] }], repeat: true, skippable: false, wait: false },
+                moveSpeed: o.speed || 3, moveType: 0, priorityType: 1, stepAnime: false, through: true, trigger: 0, walkAnime: true }] };
+    }
+    const film = { next: null, pending: null, speed: 1, cinema: false, hidden: [], bars: null, log: [] };
+    function chamberCast() {
+        const c = H().IDS.chamber, sp = H().SPOTS, s = state(), out = [];
+        for (const key of Object.keys(c)) {
+            if (key === "asker") { const ev = actorEvent(c.asker, "lord", sp.door[0], sp.door[1], 8, { bust: "" }); ev.note = "<Actor:asker>"; out.push(ev); continue; }
+            const [x, y, dir] = sp[key] || [sp.door[0], sp.door[1], 2];
+            // after the "guardian" ending Borgar or Ambroży sits on the bench before the Heart (the order's watch: they come and go)
+            const sits = s.ending && s.ending.kind === "straznik" && s.ending.guardian === key;
+            const ev = sits ? actorEvent(c[key], key, sp.bench[0], sp.bench[1], sp.bench[2], { show: true }) : actorEvent(c[key], key, x, y, dir);
+            if (sits) ev.pages[0].list = [{ code: 355, indent: 0, parameters: ["Underground.heart(this)"] }, { code: 0, indent: 0, parameters: [] }];
+            out.push(ev);
+        }
         return out;
     }
+    if (inGame && D() && D().HEART) {
+        const [from, to] = [D().HEART.IDS.chamber.lord, D().HEART.IDS.shots[1]];
+        T.inject(mapId => mapId === D().MAPS.heart || !!(film.next && film.next.map === mapId), { ids: [from, to], owner: PLUGIN, fixSaved: true,
+            build(data, mapId) {
+                if (film.next && film.next.map === mapId) {
+                    return film.next.actors.map(a => actorEvent(a.id, a.key, a.x, a.y, a.dir, { show: true, bust: "none", sheet: a.sheet }));
+                }
+                return mapId === D().MAPS.heart ? chamberCast() : [];
+            } });
+    }
+
+    // ---- the event commands of a scene (HEART's steps -> commands); cast: actor key -> event id on the map the steps play on
+    const W = n => Math.max(1, Math.round(n * film.speed));
+    const clean = l => String(l).replace(/^> /, "");
+    const F = {
+        narr: (line, mid) => [{ code: 101, indent: 0, parameters: ["", 0, 1, mid ? 1 : 2, ""] }, { code: 401, indent: 0, parameters: ["\\SPK[-1]" + clean(line)] }],
+        wait: n => [{ code: 230, indent: 0, parameters: [W(n)] }],
+        tint: (tone, n) => [{ code: 223, indent: 0, parameters: [tone, W(n), false] }],
+        shake: (p, s, n) => [{ code: 225, indent: 0, parameters: [p, s, W(n), false] }],
+        transfer: (mapId, x, y, dir) => [{ code: 201, indent: 0, parameters: [0, mapId, x, y, dir || 2, 2] }],
+        bgsOut: secs => [{ code: 246, indent: 0, parameters: [secs] }],
+        bgmOut: secs => [{ code: 242, indent: 0, parameters: [secs] }],
+        call: (fn, args) => C.script("Underground.film." + fn + "(this" + (args && args.length ? ", " + args.map(a => JSON.stringify(a)).join(", ") : "") + ")")
+    };
+    // the Heart's light in a scene: the commands of each effect (the light itself: heartFx, drawn by the updater below)
+    function fxList(name) {
+        switch (name) {
+            case "pulse": return F.call("fx", ["pulse"]);
+            case "flare": return C.se("Magic3", 75, 70).concat(C.flash([255, 250, 230, 170], W(20)), F.call("fx", ["flare"]), F.wait(30));
+            case "overflow": return C.se("Darkness5", 70, 60).concat(F.call("fx", ["flare"]), F.shake(4, 8, 50), F.tint([50, 40, 90, 60], 20),
+                F.call("barks", [3]), F.wait(80));
+            case "calm": return F.tint([0, 0, 0, 0], 30).concat(F.call("fx", [null]), F.wait(20));
+            case "whispers": return F.call("fx", ["pulse"]).concat(F.call("barks", [3]), F.wait(110));
+            case "crack": return C.se("Blow3", 90, 70).concat(C.se("Crash", 90, 60), C.flash([255, 255, 255, 255], W(30)), F.shake(9, 9, 45),
+                F.call("fx", ["crack"]), F.wait(45));
+            case "montage": return F.tint([200, 200, 200, 0], 10).concat(C.se("Magic10", 70, 120), F.call("montage", []), F.wait(170));
+            case "dark": return C.se("Thunder9", 70, 50).concat(F.call("fx", ["shards"]), F.tint([-220, -220, -220, 0], 40), F.bgsOut(2), F.wait(70),
+                F.tint([-90, -90, -80, 40], 90), F.wait(60));
+            case "rise": return C.se("Magic10", 85, 70).concat(F.call("fx", ["rise"]), C.flash([255, 255, 240, 200], W(30)), F.wait(30),
+                C.flash([255, 255, 240, 220], W(30)), F.tint([180, 180, 170, 0], 90), F.wait(100));
+            case "seal": return F.call("fx", ["seal"]).concat(F.tint([-50, -50, -40, 30], 70), F.wait(80));
+            case "warm": return C.se("Saint3", 60, 80).concat(F.call("fx", ["warm"]), F.tint([30, 15, -10, 0], 60), F.wait(50));
+            case "light": return F.tint([0, 0, 0, 0], 40).concat(F.wait(30));
+            default: return [];
+        }
+    }
+    function idOf(who, cast) {
+        if (who === "hero") return -1;
+        return cast[who] || 0;
+    }
+    function stepsList(steps, cast, ctx) {
+        let out = [];
+        for (const st of [].concat(steps || [])) {
+            if (!st) continue;
+            if (Array.isArray(st)) {
+                const [who, raw] = st, text = clean(typeof raw === "function" ? raw(ctx.w, ctx.e, ctx.has) : raw);
+                if (!text) continue;
+                film.log.length < 400 && film.log.push(text);
+                if (who === null) out = out.concat(F.narr(text));
+                else if (who === "hero") out = out.concat(C.text([text], 0));
+                else if (cast[who]) out = out.concat(C.text([text], cast[who]));
+                else out = out.concat(F.narr(((H().ACTORS[who] || {}).name || who) + ": „" + text + "”"));
+                continue;
+            }
+            if (st.fx) out = out.concat(fxList(st.fx));
+            else if (st.walk) out = out.concat(F.call("walk", [idOf(st.walk[0], cast), st.walk[1], st.walk[2], st.walk[3] || 0]));
+            else if (st.appear) {
+                const [who, x, y, dir] = st.appear, id = idOf(who, cast);
+                if (id) out = out.concat(F.call("appear", [id, (H().ACTORS[who] || {}).sheet || "", x, y, dir || 2]));
+            } else if (st.leave) { const id = idOf(st.leave, cast); if (id) out = out.concat(F.call("leave", [id])); }
+            else if (st.face) out = out.concat(F.call("face", [idOf(st.face[0], cast), st.face[1]]));
+            else if (st.balloon) out = out.concat(F.call("balloon", [idOf(st.balloon[0], cast), st.balloon[1]]), F.wait(50));
+            else if (st.wait) out = out.concat(F.wait(st.wait));
+            else if (st.se) out = out.concat(C.se(st.se[0], st.se[1], st.se[2]));
+            else if (st.me) out = out.concat(C.me(st.me[0], st.me[1]));
+            else if (st.shake) out = out.concat(F.shake(st.shake[0], st.shake[1], st.shake[2]));
+            else if (st.notice) out = out.concat(F.call("notice", [st.notice]), F.wait(28));
+            else if (st.caption) out = out.concat(F.call("caption", [st.caption, st.frames || 46]), F.wait((st.frames || 46) - 6));
+            else if (st.card) {
+                out = out.concat(C.fadeOut(), F.wait(20));
+                for (const l of st.card) out = out.concat(F.narr(l, true));
+                out = out.concat(F.wait(10), C.fadeIn());
+            } else if (st.asker) {
+                const a = H().ASKERS.find(k => { try { return k.when(ctx.w, ctx.e); } catch (e) { return false; } }) || H().ASKERS[H().ASKERS.length - 1];
+                const id = H().IDS.chamber.asker, sp = H().SPOTS;
+                out = out.concat(F.call("appear", [id, (H().ACTORS[a.who] || {}).sheet || "", sp.door[0], sp.door[1], 8, (H().ACTORS[a.who] || {}).name || ""]),
+                    F.call("walk", [id, sp.asker[0], sp.asker[1], sp.asker[2]]),
+                    stepsList(a.lines, Object.assign({}, cast, { asker: id }), ctx));
+                film.asker = a.who;
+            } else if (st.heroIn) out = out.concat(F.call("heroIn", st.heroIn));
+        }
+        return out;
+    }
+    const chamberIds = () => Object.assign({}, H().IDS.chamber);
+
+    // ---- the Lord at the Heart: his arrival, the hero's choice (let him ask / refuse / ask for him - and what to tell him), he goes
+    function lordList(stance, w) {
+        const L = H().LORD, cast = chamberIds(), ctx = { w, e: null, has: {} };
+        const set = (choice, told) => F.call("lord", [stance, choice, told || null]);
+        const leave = stepsList(L.leave, cast, ctx);
+        const tell = C.choice(null, [L.tellOpts.truth, L.tellOpts.mercy, L.tellOpts.silent],
+            ["truth", "mercy", "silent"].map(k => set("askFor", k).concat(stepsList(L.told[k], cast, ctx))), 2);
+        const branches = [
+            set("allow").concat(stepsList(L.allow, cast, ctx), stepsList(L.allowAfter[stance], cast, ctx), leave),
+            set("refuse").concat(stepsList(L.refuse[stance], cast, ctx), leave),
+            set("askFor").concat(stepsList(L.askFor, cast, ctx), tell, stance === "rival" ? stepsList(L.askForRival, cast, ctx) : [], leave)
+        ];
+        return F.call("start", []).concat(F.call("place", []), stepsList(L.arrive[stance], cast, ctx),
+            C.choice(L.ask, [L.opts.allow, stance === "rival" ? L.opts.refuseRival : L.opts.refuseAlly, L.opts.askFor], branches, 1), F.call("end", []));
+    }
+    // the Heart's look and the choice of Act III (STORY.md); "Zostać strażnikiem" asks who when Borgar (W4) or Ambroży (W2) may stay
+    function guardians() {
+        const fl = questFlags(), s = state(), w = s.forceWorld || {};
+        return { borgar: !!fl.borgarSaying || !!w.borgar || !!s.forceLocks.all, ambrozy: !!fl.ambrozyChronicles || !!w.ambrozy || !!s.forceLocks.all };
+    }
+    function choiceList() {
+        const t = D().TEXT, kinds = ["zniszczyc", "straznik", "uwolnic", "zapieczetowac"];
+        const confirm = (kind, who) => C.choice(t.heartConfirm, [t.heartYes, t.heartNo], [C.script("Underground.ending(\"" + kind + "\", \"" + (who || "hero") + "\", this)"), []], 1);
+        const g = guardians();
+        const who = [["hero", t.guardianHero]].concat(g.borgar ? [["borgar", t.guardianBorgar]] : [], g.ambrozy ? [["ambrozy", t.guardianAmbrozy]] : []);
+        const guardBranch = who.length > 1 ? C.choice(t.guardianWho, who.map(x => x[1]).concat([t.heartNo]), who.map(x => confirm("straznik", x[0])).concat([[]]))
+            : confirm("straznik");
+        const branches = kinds.map(k => (k === "straznik" ? guardBranch : confirm(k))).concat([[]]);
+        return C.se("Magic3", 60, 60).concat(C.flash([255, 240, 200, 120], 30), C.text(t.heartLook, 0),
+            C.choice(t.heartAsk, kinds.map(k => t.heartChoices[k]).concat([t.heartChoices.wait]), branches));
+    }
+    // the Heart (its event: Underground.heart(this)): after an ending what is left of it; else the Lord first (once, when he comes
+    // down at all), then the look and the choice
+    function heart(interp) {
+        const t = D().TEXT, s = state();
+        if (s.ending) {
+            const g = s.ending.kind === "straznik" ? s.ending.guardian || "hero" : null, cast = chamberIds();
+            if (g && t.heartAfterGuardian && t.heartAfterGuardian[g]) return runChild(interp, C.text(t.heartAfterGuardian[g], g === "hero" ? 0 : cast[g]));
+            return runChild(interp, C.text(t.heartAfter[s.ending.kind] || t.heartLook.slice(0, 1), 0));
+        }
+        let list = [];
+        if (!s.lord) {
+            const w = world();
+            if (w.lord.stance !== "absent") list = lordList(w.lord.stance, w);
+        }
+        return runChild(interp, list.concat(choiceList()));
+    }
+
+    // ---- an ending: the chamber, the black card, the scenes up above, the epilogue, KONIEC and the choice (the game goes on)
+    function epilogueLines(kind, who) {
+        const d = D(), e = d.ENDINGS[kind];
+        if (!e) return [];
+        return (kind === "straznik" ? (e.guardian[who] || e.guardian.hero) : e.lines).concat(epilogueExtras(kind));
+    }
+    function epilogueExtras(kind, w0) {
+        const ep = D().EPILOGUE, out = [], w = w0 || world(), fl = questFlags();
+        if (locks().open >= 3 || w.locks >= 3) out.push(ep.allLocks);
+        if (w.opinion !== null && w.opinion >= 60) out.push(ep.opinionHigh);
+        else if (w.opinion !== null && w.opinion < 20) out.push(ep.opinionLow);
+        if (w.water) out.push(ep.water);
+        if (kind === "zapieczetowac" && (w.book || fl.ambrozyChronicles || fl.signalBook)) out.push(ep.ambrozyBook);
+        return out;
+    }
+    const valOf = (v, w) => (typeof v === "function" ? v(w) : v);
+    // the scenes up above that play (HEART.SHOTS, each when its `when` holds), with their cast
+    function shotsOf(w, e) {
+        const out = [];
+        let next = H().IDS.shots[0];
+        for (const sh of H().SHOTS) {
+            let ok = true;
+            try { ok = !sh.when || !!sh.when(w, e); } catch (er) { ok = false; }
+            if (!ok) continue;
+            const map = valOf(sh.map, w), cam = valOf(sh.cam, w), cast = {}, actors = [];
+            for (const a of sh.actors ? sh.actors(w, e) : []) {
+                let [key, x, y, dir] = a;
+                if (key === "butler") key = w.butler;
+                if (next > H().IDS.shots[1] || cast[key]) continue;
+                const id = next++;
+                cast[key] = id;
+                if (a[0] === "butler") cast.butler = id;
+                actors.push({ id, key, x, y, dir, sheet: (H().ACTORS[key] || {}).sheet });
+            }
+            next = H().IDS.shots[0];   // (each scene its own map: the same ids again)
+            out.push({ key: sh.key, map, cam, actors, cast, hero: sh.hero ? sh.hero(w, e) : null, last: !!sh.last, steps: sh.steps(w, e) });
+        }
+        return out;
+    }
+    function filmList(kind, who, w) {
+        const d = D(), e = { kind, guardian: kind === "straznik" ? who : null }, has = { borgar: !!w.borgar, ambrozy: !!w.ambrozy };
+        const ctx = { w, e, has }, cast = chamberIds(), sp = H().SPOTS;
+        film.log = [];
+        let list = F.call("start", []).concat(F.call("place", []));
+        // who came down with the hero (W4 Borgar, W2 Ambroży)
+        if (has.borgar || has.ambrozy) {
+            list = list.concat(stepsList([H().COMPANIONS.arrive,
+                has.borgar && { appear: ["borgar", sp.door[0], sp.door[1], 8] }, has.borgar && { walk: ["borgar"].concat(sp.borgar) },
+                has.ambrozy && { appear: ["ambrozy", sp.door[0], sp.door[1] + 1, 8] }, has.ambrozy && { walk: ["ambrozy"].concat(sp.ambrozy) },
+                has.borgar && H().COMPANIONS.borgar, has.ambrozy && H().COMPANIONS.ambrozy], cast, ctx));
+        }
+        list = list.concat(stepsList(H().CHAMBER[kind](w, e, has), cast, ctx));
+        // the black card: the ending's own words, then up (or not: the hero who stays below sees the town in the Heart's light)
+        const ends = d.ENDINGS[kind], words = kind === "straznik" ? (ends.guardian[who] || ends.guardian.hero) : ends.lines;
+        list = list.concat(C.fadeOut(), F.wait(30), F.bgmOut(3), F.bgsOut(3));
+        for (const l of words) list = list.concat(F.narr(l, true));
+        film.log.push(...words);
+        list = list.concat(F.narr(e.guardian === "hero" ? H().AFTER_GUARDIAN : H().AFTER, true), F.call("morning", []));
+        // the scenes up above
+        const shots = shotsOf(w, e);
+        for (const sh of shots) {
+            list = list.concat(F.call("prepare", [sh.key, sh.map, sh.actors]), F.transfer(sh.map, sh.cam[0], sh.cam[1], sh.hero ? sh.hero[2] : 2),
+                F.call("arrive", [sh.key, sh.hero || null]), F.wait(10), C.fadeIn(), F.wait(24),
+                stepsList(sh.steps, sh.cast, ctx), F.wait(40));
+            if (!sh.last) list = list.concat(C.fadeOut(), F.wait(10));
+        }
+        // the epilogue (what the town did with the hero), KONIEC and the choice: the game goes on in the tavern, or the title screen
+        const extras = epilogueExtras(kind, w);
+        list = list.concat(F.tint([-110, -110, -110, 60], 60), F.wait(40));
+        for (const l of extras) list = list.concat(F.narr(l, true));
+        film.log.push(...extras);
+        list = list.concat(C.me("Inn2", 60), F.narr(d.TEXT.endTitle + " - " + ends.title, true));
+        list = list.concat(C.choice(null, [d.TEXT.endContinue, d.TEXT.endTitleScreen],
+            [C.script("Underground.afterEnding()"), C.script("Underground.film.end(); SceneManager.goto(Scene_Title)")], 0));
+        film.shots = shots.map(s => s.key);
+        return list;
+    }
     function ending(kind, who, interp) {
-        const d = D(), t = d.TEXT, s = state();
+        const d = D(), s = state();
         if (!d.ENDINGS[kind] || s.ending) return false;
-        const g = who || "hero";
-        s.ending = { kind, guardian: kind === "straznik" ? g : null, locks: locks().open, day: T.call("Survival", "day") || 0 };
+        const g = kind === "straznik" ? (who || "hero") : null, w = world();
+        s.ending = { kind, guardian: g, locks: locks().open, day: T.call("Survival", "day") || T.time.day() || 0, lord: Object.assign({}, w.lord) };
         T.call("Combat", "discover", "ug_ending", "Serce Twierdzy: " + d.ENDINGS[kind].title, 500);
         T.emit("undergroundEnding", Object.assign({}, s.ending));
-        let list = C.se(kind === "zniszczyc" ? "Crash" : kind === "uwolnic" ? "Magic10" : "Magic3", 85, 70)
-            .concat(C.flash([255, 255, 255, 255], 60), C.wait(30), C.fadeOut(), C.wait(30));
-        for (const line of epilogueLines(kind, g)) list = list.concat(C.plain(line));
-        list = list.concat(C.plain(t.endTitle + " - " + d.ENDINGS[kind].title));
-        list = list.concat(C.choice(null, [t.endContinue, t.endTitleScreen],
-            [C.script("Underground.afterEnding()"), C.script("SceneManager.goto(Scene_Title)")], 0));
+        const list = filmList(kind, g || "hero", w);
+        s.ending.world = plainWorld(Object.assign({}, w, { shots: film.shots }));
         return runChild(interp, list);
     }
-    // back to the game after an ending: the hero wakes in the tavern (the Heart's chamber keeps what was done)
+    // back to the game after an ending: the scenes' cast goes, the hero stands at the bar of the tavern (the chamber keeps the ending)
     function afterEnding() {
-        $gamePlayer.reserveTransfer(1, 9, 5, 2, 0);
+        film.end();
+        $gamePlayer.setTransparent(false);
+        $gamePlayer.reserveTransfer(1, 52, 31, 8, 0);
+        $gamePlayer.requestMapReload();
+        $gameScreen.startTint([0, 0, 0, 0], 1);
         $gameScreen.startFadeIn(30);
-        if (state().ending && state().ending.kind === "straznik" && state().ending.guardian === "hero") {
-            T.call("SpeechBubbles", "say", $gamePlayer, "Strażnik może wyjść na górę raz w roku. Dziś jest ten dzień.", 300);
-        }
         return true;
     }
     // the chamber after an ending: the Heart's light changes (the event "Serce Twierdzy (blask)" on Map011): dark shards (destroyed),
-    // nothing (let out), a stone seal (sealed); it keeps shining over its new guardian
+    // nothing (let out), a stone seal (sealed); it keeps shining over its new guardian (Borgar / Ambroży sit on the bench - the cast)
     function heartData(events) {
         const s = state();
         if (!s || !s.ending || s.ending.kind === "straznik") return;
@@ -1517,6 +1789,372 @@
             e.pages[0].stepAnime = false;
             e.note = "";   // (no light any more)
         }
+    }
+
+    // ---- what the scenes' script calls do (Underground.film.*: `this` of the event's interpreter first)
+    const charOf = id => (id < 0 ? $gamePlayer : id > 0 ? $gameMap.event(id) : null);
+    const glowEvent = () => (window.$gameMap ? $gameMap.events().find(e => e.event() && e.event().name === "Serce Twierdzy (blask)") || null : null);
+    const heartEvent = () => (window.$gameMap ? $gameMap.events().find(e => e.event() && e.event().name === "Serce Twierdzy") || null : null);
+    // a path of 4-way steps on the map's passage (events left out: the cast walks through), [] when none
+    function pathTo(sx, sy, tx, ty) {
+        if (sx === tx && sy === ty) return [];
+        const key = (x, y) => x + "," + y, prev = new Map([[key(sx, sy), null]]), q = [[sx, sy]];
+        const DIRS = [[2, 0, 1], [4, -1, 0], [6, 1, 0], [8, 0, -1]];
+        while (q.length && prev.size < 2500) {
+            const [x, y] = q.shift();
+            for (const [d, dx, dy] of DIRS) {
+                const nx = x + dx, ny = y + dy, k = key(nx, ny);
+                if (prev.has(k) || !$gameMap.isValid(nx, ny)) continue;
+                if (!(nx === tx && ny === ty) && !$gameMap.isPassable(x, y, d)) continue;
+                prev.set(k, [x, y, d]);
+                if (nx === tx && ny === ty) {
+                    const out = [];
+                    for (let c = prev.get(k); c; c = prev.get(key(c[0], c[1]))) out.unshift(c[2]);
+                    return out;
+                }
+                q.push([nx, ny]);
+            }
+        }
+        // (no way round: straight there, the route skips what blocks)
+        const out = [];
+        for (let i = 0; i < Math.abs(tx - sx); i++) out.push(tx > sx ? 6 : 4);
+        for (let i = 0; i < Math.abs(ty - sy); i++) out.push(ty > sy ? 2 : 8);
+        return out;
+    }
+    const MOVE = { 2: 1, 4: 2, 6: 3, 8: 4 }, TURN = { 2: 16, 4: 17, 6: 18, 8: 19 };
+    // the Heart's light: an effect drawn by the map's updater (scale, light, shaking); shards / nothing / the seal when it ends
+    const hfx = { mode: null, t: 0 };
+    function heartFx(mode) {
+        hfx.mode = mode || null;
+        hfx.t = 0;
+        const ev = glowEvent();
+        if (!ev) return false;
+        if (mode === "shards") { ev.setTileImage(512 + 32); ev.setStepAnime(false); ev.setOpacity(255); ev.setBlendMode(0); hfx.mode = null; }
+        if (!mode) { ev.setOpacity(255); ev.setBlendMode(0); }
+        return true;
+    }
+    function updateHeartFx() {
+        if (!hfx.mode || !window.$gameMap || $gameMap.mapId() !== D().MAPS.heart) return;
+        const ev = glowEvent(), sc = SceneManager._scene, set = sc && sc._spriteset;
+        const sp = ev && set && set._characterSprites ? set._characterSprites.find(s => s._character === ev) : null;
+        if (!ev || !sp) return;
+        const t = ++hfx.t, m = hfx.mode;
+        let scale = 1;
+        if (m === "pulse") scale = 1 + 0.12 * Math.sin(t / 6);
+        else if (m === "flare") { scale = 1 + Math.min(1, t / 20) * 0.6 + 0.06 * Math.sin(t / 3); ev.setBlendMode(1); }
+        else if (m === "warm") { scale = 0.88 + 0.04 * Math.sin(t / 20); ev.setOpacity(Math.max(170, 255 - t * 2)); }
+        else if (m === "crack") {
+            scale = 1.2;
+            sp.x += (t % 4 < 2 ? 3 : -3);
+            ev.setOpacity(t % 6 < 3 ? 255 : 120);
+            if (t >= 44) heartFx("shards");
+        } else if (m === "rise") {
+            scale = 1 + Math.min(1.5, t / 40);
+            ev.setBlendMode(1);
+            ev.setOpacity(Math.max(0, 255 - t * 3));
+            sp.y -= Math.min(160, t * 2);
+            if (t >= 90) { ev.setImage("", 0); hfx.mode = null; }
+        } else if (m === "seal") {
+            ev.setOpacity(Math.max(0, 255 - t * 5));
+            scale = Math.max(0.3, 1 - t / 80);
+            if (t >= 52) { ev.setImage("!Dungeon_Secrets", 0); ev.setDirection(2); ev.setPattern(1); ev.setStepAnime(false); ev.setOpacity(255); ev.setBlendMode(0); hfx.mode = null; }
+        }
+        if (hfx.mode) sp.scale.set(scale, scale);
+        else sp.scale.set(1, 1);
+    }
+    // the cinema: black bars over the map and the HUD out of the way while an ending plays
+    function updateCinema() {
+        const sc = SceneManager._scene;
+        if (!(sc instanceof Scene_Map)) return;
+        if (film.cinema) {
+            if (!film.bars || film.bars.parent !== sc) {
+                const bars = new Sprite(), h = 54;
+                for (const y of [0, Graphics.height - h]) {
+                    const b = new Sprite(new Bitmap(Graphics.width, h));
+                    b.bitmap.fillAll("#000000");
+                    b.y = y;
+                    bars.addChild(b);
+                }
+                bars.alpha = 0;
+                const at = sc._spriteset ? sc.children.indexOf(sc._spriteset) + 1 : 0;
+                sc.addChildAt(bars, Math.max(0, at));
+                film.bars = bars;
+            }
+            film.bars.alpha = Math.min(1, film.bars.alpha + 0.06);
+            for (const el of (sc.hudFadeElements ? sc.hudFadeElements() : [])) {
+                if (!el) continue;
+                if (el.visible && !film.hidden.includes(el)) film.hidden.push(el);
+                el.visible = false;
+            }
+        }
+        // a caption: a big line in the middle, rising a little as it fades in and out
+        if (film.cap) {
+            if (!film.capSprite || film.capSprite.parent !== sc) {
+                const sp = new Sprite(new Bitmap(Graphics.width, 90));
+                sc.addChildAt(sp, Math.max(0, sc._spriteset ? sc.children.indexOf(sc._spriteset) + 1 : 0));
+                film.capSprite = sp;
+            }
+            const sp = film.capSprite, c = film.cap;
+            if (sp._capText !== c.text) {
+                const b = sp.bitmap;
+                b.clear();
+                b.fontFace = $gameSystem.mainFontFace();
+                b.fontSize = 44;
+                b.textColor = "#ffd866";
+                b.outlineColor = "rgba(0, 0, 0, 0.85)";
+                b.outlineWidth = 7;
+                b.drawText(c.text, 0, 10, Graphics.width, 70, "center");
+                sp._capText = c.text;
+            }
+            c.t++;
+            const k = Math.max(1, Math.round(c.life / 4));
+            sp.alpha = Math.max(0, Math.min(1, c.t / k, (c.life - c.t) / k));
+            sp.y = Math.round(Graphics.height / 2 - 45 - c.t * 0.6);
+            if (c.t >= c.life) { film.cap = null; sp.alpha = 0; }
+        } else if (film.capSprite && film.capSprite.alpha) film.capSprite.alpha = 0;
+        if (!film.cinema && film.bars) {
+            if (film.bars.parent) film.bars.parent.removeChild(film.bars);
+            film.bars = null;
+            for (const el of film.hidden) el.visible = true;
+            film.hidden = [];
+        }
+    }
+    if (inGame) {
+        T.onMapUpdate(() => {
+            updateHeartFx();
+            updateCinema();
+            if (film.fades.length) {
+                for (const f of film.fades) {
+                    const ev = charOf(f.id);
+                    if (!ev) { f.done = true; continue; }
+                    if (f.wait) { if (ev.isMoveRouteForcing()) continue; f.wait = false; }
+                    const o = Math.max(0, Math.min(255, ev.opacity() + f.step));
+                    ev.setOpacity(o);
+                    if ((f.step > 0 && o >= 255) || (f.step < 0 && o <= 0)) { f.done = true; if (f.step < 0) { ev.setImage("", 0); ev.setOpacity(255); } }
+                }
+                film.fades = film.fades.filter(f => !f.done);
+            }
+        }, { owner: PLUGIN, name: "heartFilm" });
+        // no autosave while an ending plays (the engine saves after every transfer - a save in the middle of a scene would load
+        // into half of it); the night's sleep before the town's scenes is saved once the game goes on (Atmosphere)
+        const _shouldAutosave = Scene_Map.prototype.shouldAutosave;
+        Scene_Map.prototype.shouldAutosave = function() {
+            return film.cinema ? false : _shouldAutosave.call(this);
+        };
+        // a new game / a loaded save: nothing of a scene is left over
+        for (const ev of ["newGame", "load"]) T.on(ev, () => { film.end(); film.pending = null; }, { owner: PLUGIN });
+        // F9's jump to an ending: on the chamber's map the scene starts by itself
+        T.on("mapReady", e => {
+            if (!film.pending || !D() || e.mapId !== D().MAPS.heart) return;
+            const p = film.pending;
+            film.pending = null;
+            const w = world(), h = heartEvent();
+            const list = (w.lord.stance !== "absent" && !state().lord ? lordList(w.lord.stance, w) : []).concat(F.call("place", []),
+                C.script("Underground.ending(" + JSON.stringify(p.kind) + ", " + JSON.stringify(p.who) + ", this)"));
+            $gameMap._interpreter.setup(list.concat([{ code: 0, indent: 0, parameters: [] }]), h ? h.eventId() : 0);
+        }, { owner: PLUGIN });
+    }
+    Object.assign(film, {
+        fades: [], shots: [], asker: null,
+        // the hero before the Heart, facing it (a scene starts from there)
+        place() {
+            if (!window.$gameMap || $gameMap.mapId() !== D().MAPS.heart) return false;
+            const [x, y, dir] = H().SPOTS.hero;
+            $gamePlayer.locate(x, y);
+            $gamePlayer.setDirection(dir);
+            return true;
+        },
+        start() { film.cinema = true; return true; },
+        end() {
+            film.cinema = false;
+            film.next = null;
+            hfx.mode = null;
+            if (window.$gameScreen) $gameScreen.startTint([0, 0, 0, 0], 1);
+            return true;
+        },
+        walk(interp, id, x, y, dir) {
+            const ch = charOf(id);
+            if (!ch) return false;
+            const list = pathTo(ch.x, ch.y, x, y).map(d => ({ code: MOVE[d], indent: null }));
+            if (id < 0) { list.unshift({ code: 37, indent: null }); list.push({ code: 38, indent: null }); }   // (the hero through the cast)
+            if (dir && TURN[dir]) list.push({ code: TURN[dir], indent: null });
+            list.push({ code: 0 });
+            ch.forceMoveRoute({ list, repeat: false, skippable: true, wait: false });
+            if (interp && interp.setWaitMode) { interp._characterId = id; interp.setWaitMode("route"); }
+            return true;
+        },
+        appear(interp, id, sheet, x, y, dir, name) {
+            const ev = charOf(id);
+            if (!ev) return false;
+            if (name && ev.event()) ev.event().name = name;   // (the asker: the plate in the talk shows who came)
+            ev.locate(x, y);
+            if (sheet) ev.setImage(sheet, 0);
+            ev.setDirection(dir || 2);
+            ev.setThrough(true);
+            ev.setOpacity(0);
+            film.fades.push({ id, step: 17 });
+            AudioManager.playSe({ name: "Move1", volume: 45, pitch: 80, pan: 0 });
+            return true;
+        },
+        leave(interp, id) {
+            const ev = charOf(id);
+            if (!ev || !ev.characterName()) return false;
+            const [x, y] = H().SPOTS.door, onHeart = $gameMap.mapId() === D().MAPS.heart;
+            const list = (onHeart ? pathTo(ev.x, ev.y, x, y) : []).map(d => ({ code: MOVE[d], indent: null }));
+            list.push({ code: 0 });
+            ev.forceMoveRoute({ list, repeat: false, skippable: true, wait: false });
+            if (interp && interp.setWaitMode) { interp._characterId = id; interp.setWaitMode("route"); }
+            film.fades = film.fades.filter(f => f.id !== id);
+            film.fades.push({ id, step: -12, wait: true });   // (the fade-out waits till the walk is over)
+            return true;
+        },
+        face(interp, id, dir) { const ch = charOf(id); if (ch) ch.setDirection(dir); return !!ch; },
+        balloon(interp, id, n) { const ch = charOf(id); if (ch) $gameTemp.requestBalloon(ch, n); return !!ch; },
+        notice(interp, text) { T.popup(text, { top: true }); return true; },
+        caption(interp, text, frames) { film.cap = { text: String(text), t: 0, life: W(frames || 46) }; return true; },
+        fx(interp, mode) { return heartFx(mode); },
+        // voices from the dark around the Heart (the Truth Layer's whispers), over the Heart or the hero
+        barks(interp, n) {
+            const d = D(), r = rng(hash(seedOf(), "heartBarks", Graphics.frameCount)), who = heartEvent() || $gamePlayer;
+            for (let i = 0; i < (n || 3); i++) {
+                const line = r.pick(d.WHISPERS);
+                setTimeout(() => T.call("SpeechBubbles", "say", i % 2 ? $gamePlayer : who, line, 70), Math.round(i * 450 * film.speed));
+            }
+            AudioManager.playSe({ name: "Darkness3", volume: 30, pitch: 140, pan: 0 });
+            return true;
+        },
+        // "for one moment you know everything": the truths of the Truth Layer, one after another, over the hero
+        montage() {
+            const d = D(), lines = Object.keys(d.NOTES).filter(k => d.NOTES[k].who && d.NOTES[k].who !== "hero").map(k => d.NOTES[k].text.split("\n")[0]);
+            const r = rng(hash(seedOf(), "montage"));
+            for (let i = 0; i < 7 && lines.length; i++) {
+                const l = lines.splice(Math.floor(r() * lines.length), 1)[0];
+                setTimeout(() => T.call("SpeechBubbles", "say", $gamePlayer, l, 40), Math.round(i * 360 * film.speed));
+            }
+            return true;
+        },
+        // the next morning (the hero climbed a hundred floors and slept): 11:00 - after the market's first hours
+        morning() {
+            if ($gameSystem.sleepUntilHour) $gameSystem.sleepUntilHour(11);
+            else if ($gameSystem.setDayNightHour) $gameSystem.setDayNightHour(11);
+            return true;
+        },
+        lord(interp, stance, choice, told) {
+            const s = state();
+            s.lord = { stance, choice, told: told || null, day: T.time.day() };
+            T.emit("undergroundLord", Object.assign({}, s.lord));
+            return true;
+        },
+        // a scene up above: its cast goes onto that map as it loads
+        prepare(interp, key, map, actors) {
+            film.next = { key, map, actors: actors || [] };
+            if (map === $gameMap.mapId()) $gamePlayer.requestMapReload();   // (the same map again: its data and events made anew)
+            return true;
+        },
+        // ...arrived: the interpreter belongs to this map now (commands about events work), who lives here steps aside for the scene,
+        // the hero is the camera (unseen) - or stands in the scene
+        arrive(interp, key, hero) {
+            const id = $gameMap.mapId();
+            if (interp) interp._mapId = id;
+            if ($gameMap._interpreter) $gameMap._interpreter._mapId = id;
+            const mine = new Set((film.next ? film.next.actors : []).map(a => a.id));
+            for (const ev of $gameMap.events()) {
+                const n = ev.eventId();
+                if (mine.has(n)) continue;
+                if ((id === 1 && n >= 1 && n <= 4) || (n >= 900 && n <= 949) || (n >= 951 && n <= 959)) ev.erase();
+            }
+            $gamePlayer.setTransparent(!hero);
+            if (hero) { $gamePlayer.locate(hero[0], hero[1]); $gamePlayer.setDirection(hero[2] || 8); }
+            $gamePlayer.refresh && $gamePlayer.refresh();
+            film.at = key;
+            return true;
+        },
+        heroIn(interp, x, y, dir) {
+            $gamePlayer.setTransparent(false);
+            $gamePlayer.locate(x, y);
+            $gamePlayer.setDirection(dir || 8);
+            AudioManager.playSe({ name: "Move1", volume: 50, pitch: 90, pan: 0 });
+            return true;
+        },
+        // tests: how fast the scenes' waits go (1 = as written)
+        setSpeed(v) { film.speed = Math.max(0.05, Number(v) || 1); return film.speed; }
+    });
+
+    // ---- F9: jump to an ending with a world chosen (Debug.js's menu; the rows are added here - Debug.js is not changed)
+    function debugEnding(kind, who, worldKey, lordKey) {
+        const d = D(), s = state(), dbg = H().DEBUG;
+        if (!d.ENDINGS[kind]) return false;
+        const wk = dbg.worlds.find(x => x.key === (worldKey || "")) || dbg.worlds[0];
+        s.ending = null;
+        s.lord = null;
+        s.forceWorld = wk.world ? JSON.parse(JSON.stringify(wk.world)) : null;
+        s.forceLord = lordKey || null;
+        s.forceLocks.all = true;
+        const n = wk.world && wk.world.locks ? wk.world.locks : 3;
+        s.locks = {};
+        for (const k of d.LOCKS.order.slice(0, Math.max(d.LOCKS.need, n))) s.locks[k] = true;
+        film.end();
+        film.pending = { kind, who: who || "hero" };
+        const [x, y, dir] = H().SPOTS.hero;
+        $gamePlayer.setTransparent(false);
+        return travel([d.MAPS.heart, x, y, dir]);
+    }
+    let debugHooked = false;
+    function hookDebug() {
+        if (debugHooked || !inGame || !window.Scene_Debug || !D() || !D().HEART) return;
+        debugHooked = true;
+        const dbg = () => H().DEBUG, pick = { end: 0, world: 0, lord: 0 };
+        const label = {
+            heartEnd: () => { const [k, w] = dbg().endings[pick.end]; return "Serce: zakończenie „" + dbg().endingName(k, w) + "”   ←→ zmień, OK zagraj (świat i Lord z rzędów niżej)"; },
+            heartWorld: () => "Serce: świat - " + dbg().worlds[pick.world].name + "   ←→",
+            heartLord: () => "Serce: Lord przy Sercu - " + dbg().lords[pick.lord].name + "   ←→"
+        };
+        const ROWS = { heartEnd: "end", heartWorld: "world", heartLord: "lord" };
+        const SIZE = { end: () => dbg().endings.length, world: () => dbg().worlds.length, lord: () => dbg().lords.length };
+        const _create = Scene_Debug.prototype.create;
+        Scene_Debug.prototype.create = function() {
+            _create.call(this);
+            const list = this._list;
+            if (!list || !list._all) return;
+            const at = list._all.findIndex(r => r.kind === "ugLifts");
+            const rows = Object.keys(ROWS).map(kind => ({ tab: 0, kind, label: label[kind](), icon: kind === "heartEnd" ? 189 : 195 }));
+            list._all.splice(at >= 0 ? at + 1 : list._all.length, 0, ...rows);
+            const _change = list.changeQty;
+            list.changeQty = function(delta) {
+                const row = this.rowData();
+                if (row && ROWS[row.kind]) {
+                    const k = ROWS[row.kind];
+                    pick[k] = (pick[k] + delta + SIZE[k]()) % SIZE[k]();
+                    row.label = label[row.kind]();
+                    SoundManager.playCursor();
+                    this.redrawItem(this.index());
+                    return;
+                }
+                return _change.call(this, delta);
+            };
+            if (this._tab === 0) list.setTab(0, list.index());
+        };
+        const _onOk = Scene_Debug.prototype.onOk;
+        Scene_Debug.prototype.onOk = function() {
+            const row = this._list.rowData();
+            if (row && row.kind === "heartEnd") {
+                const [k, w] = dbg().endings[pick.end];
+                this.popScene();
+                debugEnding(k, w, dbg().worlds[pick.world].key, dbg().lords[pick.lord].key);
+                SoundManager.playOk();
+                return;
+            }
+            if (row && (row.kind === "heartWorld" || row.kind === "heartLord")) { this._list.changeQty(1); this._list.activate(); return; }
+            return _onOk.call(this);
+        };
+        Scene_Debug.prototype.heartPick = pick;
+    }
+    if (inGame) {
+        const _Scene_Boot_start = Scene_Boot.prototype.start;
+        Scene_Boot.prototype.start = function() {
+            _Scene_Boot_start.apply(this, arguments);
+            hookDebug();
+        };
     }
 
     // ---- the debug / test helpers
@@ -1551,6 +2189,9 @@
         guardianHandled, guardianPose, guardianStrike, wake, gate10Opened, onGuardian: fn => { guardianHook = fn; return true; },
         bossCleared, bossDefeated, bosses: () => Object.assign({}, state().bosses),
         locks, lockKnown, lock, openLock, forceLock, door, doorOpen, syncDoor, heart, ending, afterEnding, epilogueLines,
+        world, lordStance, film, heartFx, debugEnding, shotsOf: (kind, who) => shotsOf(world(), { kind, guardian: kind === "straznik" ? (who || "hero") : null }),
+        filmLog: () => film.log.slice(), forceWorld: w => { state().forceWorld = w ? JSON.parse(JSON.stringify(w)) : null; return state().forceWorld; },
+        forceLord: v => { state().forceLord = v || null; return state().forceLord; },
         truths: () => Object.assign({}, state().truths), whisper, startMoment, showVision: (id, i) => { const ev = $gameMap.event(id); return ev ? showVision(ev, i !== undefined ? D().APPARITIONS[i] : null) : null; },
         waterAt, clearCache: () => cache.clear()
     };

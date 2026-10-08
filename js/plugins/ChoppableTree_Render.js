@@ -546,6 +546,10 @@
             const sway = treeOffset(event, treeWind(event, cfg, ph), 1) * scale;   // the crown's sway, laid on the ground with it
             this._occluder = makeOccluder(bmp, this.x + (bmp._footX - pw / 2) * scale, this.y - (ph - h + TREE_SHADOW_INSET) * scale, bmp._footX, scale, scale, sway,
                 TREE_CROWN_SOLID * (1 - tilt));   // (how much light a fire's shadow of it takes away: see Farming_Render.js)
+            // its foot is TREE_SHADOW_INSET px up inside the picture; a falling tree no longer stands (Sky.js keeps the night's shadows
+            // off what stands, by its upright silhouette)
+            this._occluder.lift = TREE_SHADOW_INSET;
+            this._occluder.stand = tilt < 0.02;
         } else {
             this._occluder = null;
         }
@@ -623,6 +627,7 @@
         const depth = Math.round(Math.min(rockWidth(bmp) * ROCK_DEPTH, h * ROCK_DEPTH_MAX));
         this._occluder = makeOccluder(bmp, this.x + (bmp._footX - f.width / 2) * sx, this.y - (f.height - h + ROCK_SHADOW_INSET + depth) * sy, bmp._footX, sx, sy, 0,
             kind.solid * this.opacity / 255);
+        this._occluder.lift = ROCK_SHADOW_INSET + depth;   // (its foot: up inside the picture, the middle of its footprint)
         if (!Sun().shadows || sunNow().light <= 0.01) {
             if (shadow) shadow.visible = false;
             return;

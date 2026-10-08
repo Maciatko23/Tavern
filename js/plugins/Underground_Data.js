@@ -7,7 +7,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Dane podziemi (Underground.js): mapy, przełączniki, pasma pięter 1-100, łupy, bossowie, zamki Serca, zakończenia i teksty (po polsku). Musi stać tuż nad Underground.js. v2.0.0
+ * @plugindesc Dane podziemi (Underground.js): mapy, przełączniki, pasma pięter 1-100, łupy, bossowie, zamki Serca, Lord przy Sercu, zakończenia jako sceny i teksty (po polsku). Musi stać tuż nad Underground.js. v2.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -330,6 +330,12 @@
             uwolnic: ["> (Cokół jest pusty. Światło poszło w górę i już nie wróci.)"],
             zapieczetowac: ["> (Serce śpi pod kamienną pieczęcią. Na pieczęci wyryto: JEDNO PYTANIE. RAZ W ROKU. PRZY ŚWIADKACH.)"]
         },
+        // after "Zostać strażnikiem": by who stayed (Borgar / Ambroży sit on the bench before the Heart - a word from them)
+        heartAfterGuardian: {
+            hero: ["> (Kamienna ława przed Sercem czeka na ciebie. Raz w roku wolno ci wyjść na górę - i zawsze wracasz.)"],
+            borgar: ["Nie pytaj. ...Dobra, jedno powiem: tu na dole przynajmniej nikt nie zamawia na krechę."],
+            ambrozy: ["Cztery i dwa... siedem... Ciii. Liczę. Nikt nie odwołał warty, więc liczę."]
+        },
         endTitle: "KONIEC",
         endAsk: "Co dalej?",
         endContinue: "Wrócić do gry (tawerna, następny dzień)",
@@ -352,10 +358,10 @@
                     "Uczysz się milczeć. Uczysz się nie pytać."],
                 borgar: ["Borgar siada na kamiennej ławie. „Ktoś z rodu musiał wrócić na wartę” - mówi. „Ja przynajmniej wiem, czego nie chcę wiedzieć.”",
                     "Raz w roku ktoś zejdzie i zada jedno pytanie. Borgar odpowie tyle, ile trzeba - ani słowa więcej.",
-                    "Tawerna zostaje na twojej głowie. Nad barem wisi pusty gwóźdź po połówce klucza."],
+                    "Warta idzie jak za zakonu: zmiana co trzy dni. Co trzecią noc Borgar zamyka wcześniej i schodzi na dół. Nad barem wisi pusty gwóźdź po połówce klucza."],
                 ambrozy: ["Ambroży schodzi, choć kolana bolą go przy każdym stopniu. „Nikt nie odwołał warty” - mówi i siada przed Sercem.",
-                    "Raz w roku dzwon na górze uderzy siedem razy. Teraz zrobi to ktoś inny - Ambroży nauczył cię rytmu.",
-                    "Dzwonnica stoi pusta. Miasto jeszcze nie wie, czego mu brakuje."]
+                    "Raz w roku dzwon na górze uderzy siedem razy. Ambroży nauczył cię rytmu - w dni jego warty dzwonisz ty.",
+                    "Warta idzie jak za zakonu: zmiana co trzy dni. Miasto jeszcze nie wie, czego mu brakuje, kiedy dzwonnica milczy."]
             } },
         uwolnic: { title: "Prawda dla wszystkich", lines: [
             "Otwierasz Serce jak okno. Światło idzie w górę - przez sto pięter, przez piwnicę, przez deski tawerny.",
@@ -376,6 +382,444 @@
         opinionLow: "W miasteczku mało kto pyta, gdzie byłeś.",
         water: "Woda znów płynie pod rynek - mniej, niż by chcieli, ale płynie.",
         ambrozyBook: "Ambroży trzyma Księgę sygnałów na kolanach. Siódme uderzenie znów coś znaczy."
+    };
+
+    // ------------------------------------------------------------------ the Lord at the Heart (W7 ch. 7) and the endings' scenes (v2.1)
+    // Underground.js plays these as event commands. A scene is a list of steps:
+    //   [who, text]      a line - who: an actor key (HEART.ACTORS), "hero", or null (the narration: a plain window over the scene);
+    //                    text may be a function (w, e) -> text. A line starting "(" by the hero is a thought.
+    //   { fx: name }     the Heart's light: pulse, flare, calm, dim, rise, crack, seal, whispers, montage, dark, light, warm
+    //   { walk: [who, x, y, dir] }  a walk there (a path round the walls), the scene waits; { appear: [who, x, y, dir] } shows one there
+    //   { leave: who }   walks out through the door and is gone; { face: [who, dir] }; { balloon: [who, n] } (1 ! 2 ? 6 ... 8 idea)
+    //   { wait: frames } { se: [name, volume, pitch] } { me: [name, volume] } { shake: [power, speed, frames] } { notice: text }
+    //   { caption: text } a big line in the middle of the screen, rising and fading (the scene waits for it)
+    //   { card: [lines] }  narration on a black screen (the scene fades out first, in again after)
+    // Falsy steps are left out (so a scene can say `w.marek && [...]`). Functions get (w, e, has): w = Underground.world() (the town's
+    // quests, Story, W6, Act III), e = the ending { kind, guardian }, has = who came down to the chamber { borgar, ambrozy }.
+    const HEART = {
+        // the cast: a sheet in the hero's style (no RTP sheets); bust: the talk's bust (empty = SpeechBubbles' own table; "none" =
+        // the bubble over the head, as in the scenes up in the town)
+        ACTORS: {
+            lord: { sheet: "$Npc_Lord", name: "Lord Zaleski" },
+            guard: { sheet: "$Npc_Straznik", name: "Strażnik dworu" },
+            borgar: { sheet: "$Npc_Borgar", bust: "People3_5", name: "Borgar" },
+            ambrozy: { sheet: "$Npc_Dzwonnik", name: "Ambroży" },
+            melia: { sheet: "$Npc_Melia", bust: "People2_8", name: "Melia" },
+            ozzy: { sheet: "$Npc_Ozzy", bust: "People2_1", name: "Ozzy" },
+            grum: { sheet: "$Npc_Grum", bust: "Actor2_5", name: "Grum" },
+            dziadek: { sheet: "$Npc_Dziadek", name: "Dziadek Stach" },
+            kuba: { sheet: "$Npc_Woziwoda", name: "Kuba" },
+            hanka: { sheet: "$Npc_Piekarka", name: "Hanka" },
+            soltys: { sheet: "$Npc_Soltys", name: "Sołtys" },
+            tadek: { sheet: "$Npc_Kowal", name: "Tadek" },
+            ludmila: { sheet: "$Npc_Ludmila", name: "Ludmiła" },
+            ela: { sheet: "$Npc_Ela", name: "Ela" },
+            marek: { sheet: "$Npc_Marek", name: "Marek" },
+            rafal: { sheet: "$Npc_Rafal", name: "Rafał" },
+            teodor: { sheet: "$Npc_Kamerdyner", name: "Teodor" },
+            feliks: { sheet: "$Npc_Feliks", name: "Feliks" }
+        },
+        // event ids (Tawerna.inject): the chamber's cast (always on Map011, hidden till a scene needs them) and the scenes up above
+        IDS: { chamber: { lord: 800, guard: 801, borgar: 802, ambrozy: 803, asker: 804 }, shots: [805, 827] },
+        // the chamber (Map011): the hero before the Heart, where the others stand; the door (they come in and go out there); the bench
+        SPOTS: { hero: [15, 8, 8], aside: [14, 8, 6], door: [15, 13], lord: [16, 8, 4], guard: [15, 10, 8], borgar: [14, 9, 9], ambrozy: [16, 9, 7],
+            bench: [12, 9, 6], asker: [15, 10, 8] },
+        SON: "Kazimierz",
+        // names for the keys other plugins use (Act III's defenders / lost, W6, TownLife)
+        NAMES: { borgar: "Borgar", grum: "Grum", tadek: "Tadek", kowal: "Tadek", melia: "Melia", ozzy: "Ozzy", ambrozy: "Ambroży", dzwonnik: "Ambroży",
+            rafal: "Rafał", marek: "Marek", kuba: "Kuba", woziwoda: "Kuba", ignac: "Ignac", garbarz: "Ignac", wit: "Wit", kapral: "Kapral Wit",
+            hanka: "Hanka", piekarka: "Hanka", ludmila: "Ludmiła", soltys: "sołtys", kupiec: "Baltazar", baltazar: "Baltazar", hero: "ty", dog: "pies",
+            uchodzcy: "uchodźcy z obozu", straz: "strażnicy dworu" },
+
+        // ---- the Lord at the Heart (W7 ch. 7): he comes down after the hero (ally / rival), or not at all (absent)
+        LORD: {
+            arrive: {
+                ally: [
+                    [null, "Za tobą kroki - ciche, ostrożne. Ktoś schodzi ostatnimi schodami."],
+                    { appear: ["lord", 15, 13, 8] }, { walk: ["lord", 16, 8, 4] }, { face: ["hero", 6] },
+                    ["lord", "Zaczekaj. To ja - Zaleski. Nie bój się."],
+                    ["lord", "Szedłem za tobą od dziewięćdziesiątego piętra. Moi ludzie trzymali linę, a ja trzymałem się ściany. Lewą ręką."],
+                    ["lord", "Nie przyszedłem po Serce. Dwór ma dość kamieni z tej twierdzy. Przyszedłem po jedno pytanie."],
+                    ["lord", "Mój syn, Kazimierz, popłynął na kontynent w pierwszym roku wojny. Wrócił tylko jego pierścień."],
+                    ["lord", "Chcę wiedzieć, czy zginął przeze mnie. Tylko to. Pozwolisz mi?"]
+                ],
+                rival: [
+                    [null, "Za tobą kroki - ciężkie, w butach z cholewami. I stuk drzewca o kamień."],
+                    { appear: ["lord", 15, 13, 8] }, { appear: ["guard", 15, 14, 8] }, { walk: ["lord", 16, 8, 4] }, { walk: ["guard", 15, 10, 8] },
+                    { face: ["hero", 6] },
+                    ["lord", "Mówiłem: najpierw do mnie."],
+                    ["lord", w => (w.lord.cold ? "Zrobiłeś ze mnie głupca na rynku, przed całym miastem. Tu, na dole, nikt nie patrzy."
+                        : "Moi ludzie szli twoimi śladami od kraty w piwnicy Borgara. Sto pięter, chłopcze. Sto.")],
+                    ["lord", "Dwór stoi na kamieniach tej twierdzy. To, co pod nimi, należy do mnie. Odsuń się od tego światła."],
+                    ["hero", "Po co ci ono?"],
+                    ["lord", "...Jedno pytanie. Mój syn, Kazimierz, zginął na kontynencie w pierwszym roku wojny."],
+                    ["lord", "Chcę wiedzieć, czy przeze mnie. Potem zdecyduję, co dalej z tym... światłem."]
+                ]
+            },
+            ask: "Co zrobisz?",
+            opts: { allow: "Pozwól mu zapytać.", refuseAlly: "Nie. To za dużo dla każdego.", refuseRival: "Nie. Stań mu na drodze.", askFor: "Zapytam za ciebie." },
+            allow: [
+                { walk: ["hero", 14, 8, 6] }, { walk: ["lord", 15, 8, 8] },
+                ["lord", "Czy mój syn zginął przeze mnie?"],
+                { fx: "flare" }, { wait: 50 },
+                [null, "Światło nie odpowiada słowami. Lord po prostu wie - widać to po jego twarzy."],
+                ["lord", "Tak. I nie."],
+                ["lord", "Raz, przy stole, nazwałem go tchórzem. Raz. Popłynął, żeby mi pokazać, że nim nie jest."],
+                ["lord", "Zginął, osłaniając odwrót innych. Nikt mu tego nie kazał. ...Był odważniejszy niż jego ojciec."],
+                { fx: "overflow" },
+                ["lord", "Czekaj... ono mówi dalej... o dworze, o żonie, o mnie... Nie! Nie pytałem o to!"],
+                [null, "Odciągasz Lorda od światła. Jest lekki jak dziecko."],
+                { walk: ["lord", 16, 9, 8] }, { fx: "calm" }, { walk: ["hero", 15, 8, 8] }, { face: ["lord", 4] }, { face: ["hero", 2] }
+            ],
+            allowAfter: {
+                ally: [["lord", "Dziękuję. Za to, że pozwoliłeś - i za to, że odciągnąłeś."],
+                    ["lord", "Jedno pytanie. Teraz rozumiem, czemu zakon dawał tylko jedno."]],
+                rival: [["lord", "Zabierz mnie stąd."], ["lord", "Rób z tym światłem, co chcesz. Ja już wiem. To mi wystarczy... aż nadto."]]
+            },
+            refuse: {
+                ally: [["lord", "...Masz rację. Gdybym usłyszał odpowiedź, musiałbym z nią żyć."],
+                    ["lord", "Wolę pamiętać go takim, jakim był. Bywaj."]],
+                rival: [
+                    ["lord", "Odsuń go."],
+                    { walk: ["guard", 15, 9, 8] }, { fx: "flare" }, { balloon: ["guard", 1] },
+                    ["guard", "Jaśnie panie... ja widzę swoją matkę. Nie żyje od dziesięciu lat."],
+                    ["guard", "Nie podejdę bliżej. Nie tutaj."],
+                    { walk: ["guard", 15, 11, 8] },
+                    { walk: ["lord", 16, 7, 4] }, { fx: "overflow" }, { walk: ["lord", 16, 9, 4] }, { fx: "calm" },
+                    ["lord", "Nie... Nie chcę wiedzieć."],
+                    ["lord", "Nie pytam o to, czego nie chcę wiedzieć."],
+                    ["hero", "(To powiedzenie Borgara. Lord nie wie, skąd je zna.)"],
+                    ["lord", "Zostaw to sobie. Zostaw to wszystko sobie."]
+                ]
+            },
+            askFor: [
+                { face: ["hero", 8] },
+                ["hero", "Czy syn Lorda zginął przez niego?"],
+                { fx: "flare" }, { wait: 40 },
+                [null, "Wiesz. Lord raz, przy stole, nazwał syna tchórzem. Kazimierz popłynął na wojnę, żeby pokazać ojcu, że nim nie jest."],
+                [null, "Zginął, osłaniając odwrót innych. Nikt mu tego nie kazał."],
+                { fx: "overflow" },
+                [null, "I wiesz jeszcze więcej - o Lordzie, o dworze, o sobie. Odsuwasz to, zanim ułoży się w zdania."],
+                { fx: "calm" }, { face: ["hero", 6] },
+                ["lord", "I? Co powiedziało?"]
+            ],
+            tellOpts: { truth: "Powiedz mu całą prawdę.", mercy: "Powiedz: „Nie przez ciebie.”", silent: "Nic nie mów." },
+            told: {
+                truth: [["hero", "Raz nazwałeś go tchórzem. Popłynął, żeby ci pokazać, że nim nie jest. Zginął, osłaniając innych."],
+                    { balloon: ["lord", 6] },
+                    ["lord", "Tak. Pamiętam ten wieczór. Myślałem, że on nie pamięta."],
+                    ["lord", "Dziękuję, że powiedziałeś mi wszystko. Ciężko to unieść - ale to moje."]],
+                mercy: [["hero", "Nie przez ciebie. Zginął, osłaniając innych. Był odważny."],
+                    ["lord", "Odważny... tak. Zawsze był."],
+                    [null, "Lord uśmiecha się - pierwszy raz, odkąd go znasz."],
+                    ["hero", "(Połowa prawdy. Serce wie, która połowa.)"]],
+                silent: [["hero", "..."],
+                    ["lord", "Rozumiem. Skoro milczysz, to wiem dość."],
+                    ["lord", "Może tak lepiej."]]
+            },
+            askForRival: [["lord", "Zostawię ci to światło. Dwór ma dość kamieni, które pamiętają."]],
+            leave: [{ leave: "lord" }, { leave: "guard" }, ["hero", "(Znowu jesteś z Sercem sam.)"]]
+        },
+
+        // ---- the endings in the chamber: who came down with the hero (W4 Borgar - his saying; W2 Ambroży - the chronicles given)
+        COMPANIONS: {
+            arrive: [null, "Za tobą kroki. Nie jesteś tu sam."],
+            borgar: ["borgar", "Nie puszczę cię samego na ostatnie piętro. Dziadek by mi nie darował."],
+            ambrozy: ["ambrozy", "Powoli, powoli... Kolana już nie te. Ale wartę zdaje się osobiście."]
+        },
+        CHAMBER: {
+            zniszczyc: (w, e, has) => [
+                ["hero", "Nikt nie powinien wiedzieć wszystkiego. Ani ja."],
+                has.borgar && ["borgar", "Dziadek mówił: nie pytaj. Nie mówił, co zrobić, kiedy już wiesz. ...Rób, co musisz."],
+                has.ambrozy && ["ambrozy", "Siedemset lat warty - i wszystko skończy się jednym uderzeniem. Niech tak będzie."],
+                { fx: "whispers" },
+                ["hero", "(Bierzesz zamach.)"],
+                { fx: "crack" }, { fx: "montage" }, { fx: "dark" },
+                [null, "Cisza. Pierwszy raz od stu pięter - cisza w głowie."],
+                has.borgar && ["borgar", "Słyszysz? ...Nic. Ja też nic. Chyba pierwszy raz w życiu."],
+                has.ambrozy && ["ambrozy", "Dzwon na górze nie będzie miał już po co bić siedem razy. Dobrze. Moje kolana się ucieszą."]
+            ],
+            straznik: (w, e, has) => e.guardian === "borgar" ? [
+                !has.borgar && { appear: ["borgar", 15, 13, 8] }, !has.borgar && { walk: ["borgar", 14, 9, 9] },
+                !has.borgar && ["borgar", "Wiedziałem, że tu dojdziesz. Szedłem za tobą od dziesiątej bramy."],
+                ["borgar", "Ktoś z rodu musiał wrócić na wartę. Kowale kuli zamki zakonu - i ich pilnowali."],
+                ["borgar", "Ja przynajmniej wiem, czego nie chcę wiedzieć. To połowa tej roboty."],
+                ["borgar", "Masz. Klucz od tawerny. Warta idzie jak za zakonu - zmiana co trzy dni. W moje noce tawerna jest twoja."],
+                { walk: ["borgar", 12, 9, 6] }, { fx: "warm" },
+                ["borgar", "Idź już. I nie oglądaj się. ...Nie pytaj."]
+            ] : e.guardian === "ambrozy" ? [
+                !has.ambrozy && { appear: ["ambrozy", 15, 13, 8] }, !has.ambrozy && { walk: ["ambrozy", 16, 9, 7] },
+                ["ambrozy", "Nikt nie odwołał warty. Więc przyszedłem ją objąć."],
+                ["ambrozy", "Siedemdziesiąt lat dzwoniłem dla miasta, które zapomniało, co znaczą dzwony. Tu przynajmniej ktoś wie."],
+                ["ambrozy", "Rytm znasz. Cztery i dwa - woda. Siedem - pytanie. W dni mojej warty dzwonisz ty."],
+                { walk: ["ambrozy", 12, 9, 6] }, { fx: "warm" },
+                ["ambrozy", "Idź, dziecko. Tylko nie przychodź tu za często."]
+            ] : [
+                has.borgar && ["borgar", "Ty? ...Dobrze. Ktoś musi. Będę stawiał na barze kufel. Dla ciebie."],
+                has.ambrozy && ["ambrozy", "Raz w roku zadzwonię siedem razy. Wtedy będziesz wiedział, że ktoś schodzi."],
+                { walk: ["hero", 12, 9, 6] }, { fx: "warm" },
+                ["hero", "(Siadasz na kamiennej ławie. Jest zimna, jakby czekała na ciebie od trzystu lat.)"],
+                has.borgar && { leave: "borgar" }, has.ambrozy && { leave: "ambrozy" },
+                { card: ["Mija rok."] },
+                { asker: true },
+                ["hero", "(Odpowiadasz. Tyle, ile trzeba - ani słowa więcej.)"],
+                { leave: "asker" }
+            ],
+            uwolnic: (w, e, has) => [
+                ["hero", "Niech wszyscy wiedzą. Koniec z kłamstwami."],
+                has.borgar && ["borgar", "Nie! Nie pytaj... nie za wszystkich naraz—"],
+                has.ambrozy && ["ambrozy", "Dziecko, zakon trzymał to w kamieniu, bo wiedział, co robi..."],
+                { fx: "rise" },
+                { caption: "Piętro 90" }, { caption: "Piętro 50" }, { caption: "Piętro 10" }, { caption: "Piwnica tawerny" }, { wait: 20 },
+                [null, "Światło idzie w górę - przez sto pięter, przez piwnicę, przez deski tawerny. Przez ciebie."],
+                has.borgar && ["borgar", "Wiem... wiem, co zrobił mój dziadek. I co ja zrobiłbym na jego miejscu. Nie chciałem tego wiedzieć."],
+                has.ambrozy && ["ambrozy", "Słyszę wszystkie dzwony naraz. Wszystkie, które kiedykolwiek biły."],
+                ["hero", "(Wiesz wszystko. Także to, czego nie chciałeś.)"]
+            ],
+            zapieczetowac: (w, e, has) => [
+                ["hero", "Nie zniszczę cię. I nikomu cię nie oddam. Ale nie będziesz już mówić, kiedy nikt nie pyta."],
+                has.ambrozy && ["ambrozy", w.book ? "Księga sygnałów. Zapiszemy zasady na nowo - i zostawimy je na górze, u ludzi."
+                    : "Zasady trzeba spisać. Na górze, u ludzi - nie tu, w kamieniu."],
+                has.borgar && ["borgar", "Klucz zostanie u mnie. Ale nie sam - z dwoma innymi zamkami."],
+                { se: ["Earth3", 90, 60] }, { fx: "seal" },
+                ["hero", "(Wycinasz w kamieniu pieczęci: JEDNO PYTANIE. RAZ W ROKU. PRZY ŚWIADKACH.)"],
+                w.locks >= 3 ? ["hero", "(Trzy zamki - trzech strażników zasad: klucz u Borgara, dzwon u Ambrożego, pieśń u Melii. Nikt sam nie otworzy.)"]
+                    : ["hero", "(Dwa zamki otwarte, trzeci milczy. Na razie musi wystarczyć.)"]
+            ]
+        },
+        // the first one to come down with a question, a year after the hero sat down (the hero's own watch): the first that fits
+        ASKERS: [
+            { who: "lord", when: w => w.lord.stance !== "absent" && w.lord.choice === "refuse",
+                lines: [["asker", "Rok minął. Teraz... teraz mogę zapytać?"]] },
+            { who: "ludmila", when: w => !w.marek,
+                lines: [["asker", "Jedno pytanie, tak? Czy Marek żyje?"]] },
+            { who: "melia", when: w => w.melia === "burned",
+                lines: [["asker", "Spaliłam słowa. Ale melodia została. Chcę wiedzieć, czyja to była pieśń."]] },
+            { who: "ozzy", when: () => true,
+                lines: [["asker", "Sześćdziesiąt lat temu wpadłem tu jako chłopak. Chcę wiedzieć, co wtedy zobaczyłem."]] }
+        ],
+        // the black card between the chamber and the town: ENDINGS[kind] (and the guardian's lines); then the scenes up above
+        AFTER: "Wracasz na górę. Sto pięter - i ani jednego głosu za plecami.",
+        AFTER_GUARDIAN: "Na górę już nie wracasz. Ale Serce pokazuje strażnikowi, co dzieje się w mieście. Tylko to, co trzeba.",
+
+        // ---- the scenes up above: in this order, each when its `when` holds. cam: where the camera stands (the hero, invisible,
+        // stands there); actors: [key, x, y, dir]; hero: [x, y, dir] - the hero seen in the scene (not when he stayed below);
+        // steps: as above. An actor key may be "butler" (Teodor or Feliks - whoever serves the Lord now).
+        SHOTS: [
+            {
+                key: "dwor", map: 24, cam: [20, 15], when: w => w.story,
+                actors: (w, e) => {
+                    const l = w.lord, gate = l.stance === "rival" && l.choice === "refuse";
+                    return gate ? [["guard", 20, 14, 2]] : [["lord", 20, 14, 2], ["butler", 22, 14, 2]].concat(l.stance === "rival" ? [["guard", 17, 15, 6]] : []);
+                },
+                steps: (w, e) => {
+                    const l = w.lord;
+                    if (e.kind === "uwolnic") return l.stance === "absent" ? [
+                        ["lord", "Wiem. Od tamtego ranka wiem wszystko - o wodzie, o Feliksie, o sobie."],
+                        ["lord", "Dwór pełen kamieni, które pamiętają. A ja myślałem, że to bajki dla dzieci."]
+                    ] : [
+                        ["lord", "Wszyscy wiedzą wszystko. Także to, co powiedziałem kiedyś synowi przy stole."],
+                        ["lord", "Nikt mi nie patrzy w oczy. Ja też nikomu."]
+                    ];
+                    if (l.stance === "absent") return [
+                        ["lord", "Ach, to ty. Mówią, że chodziłeś po piwnicach Borgara."],
+                        ["lord", "Drzwi pod Kruczymi Skałami... bajki dla dzieci. Prawda?"],
+                        [null, "Lord nigdy się nie dowie, jak blisko był odpowiedzi na swoje jedno pytanie."]
+                    ];
+                    if (l.stance === "rival" && l.choice === "refuse") return [
+                        ["guard", "Jaśnie pan nie przyjmuje. Od tamtej nocy siedzi w bibliotece i czyta bajki o Kruczych Skałach."],
+                        [null, "Na wrotach dworu ktoś wyrył kruka. Nikt się nie przyznaje."]
+                    ];
+                    if (l.choice === "allow") return l.stance === "ally" ? [
+                        ["lord", "Posadziłem w ogrodzie jabłoń. Dla Kazimierza."],
+                        ["lord", "Podlewam ją sam, wiadrem. Jak wszyscy w mieście."]
+                    ] : [
+                        ["lord", "Wiem już. Wystarczy mi na resztę życia."],
+                        ["guard", "Jaśnie pan od tamtej nocy nie wychodzi z biblioteki. Ale nie każe już nikogo szukać pod skałami."]
+                    ];
+                    if (l.choice === "refuse") return [
+                        ["lord", "Piszę do niego listy. Do Kazimierza. Nie wysyłam - nie ma dokąd."],
+                        ["lord", "Może tak jest lepiej. Pamiętam go takim, jakim był."]
+                    ];
+                    if (l.told === "truth") return [
+                        ["lord", "Cisza we dworze już mnie nie straszy. Teraz, kiedy wiem, mogę w niej siedzieć."],
+                        ["lord", "Dziękuję, że powiedziałeś mi wszystko. Mało kto ma odwagę."]
+                    ];
+                    if (l.told === "mercy") return [
+                        ["lord", "„Nie przez ciebie.” Powtarzam to sobie co rano."],
+                        [null, "Lord nosi pierścień syna na łańcuszku. Uśmiecha się częściej niż kiedyś."]
+                    ];
+                    return [["lord", "Nie powiedziałeś ani słowa. Czasem myślę, że to była najuczciwsza odpowiedź."]];
+                }
+            },
+            {
+                key: "rynek", map: 8, cam: [24, 37],
+                actors: (w, e) => [["soltys", 26, 36, 4], ["hanka", 21, 33, 6], ["kuba", 24, 36, 8], ["ambrozy", 20, 36, 6]],
+                steps: (w, e) => {
+                    const out = [];
+                    if (e.kind === "uwolnic") out.push(
+                        [null, "Stragany stoją puste. Nikt nie krzyczy. Ludzie po prostu przestali się do siebie odzywać."],
+                        ["hanka", "...Wiem, co o mnie myślisz. Teraz wszyscy wszystko wiemy."],
+                        ["soltys", "Kuba, wiem o twoich beczkach. Ty wiesz o moich wiadrach. Nie mamy sobie nic do powiedzenia."]);
+                    else if (e.kind === "zniszczyc") out.push(
+                        ["soltys", "Prom przywiózł wieści. Na kontynencie znowu walczą - po staremu, na ślepo."],
+                        ["hanka", "Niech walczą na ślepo. Byle daleko od nas."]);
+                    else if (e.kind === "straznik") out.push(
+                        [null, e.guardian === "hero" ? "W południe dzwon na wieży uderza siedem razy. Nikt w mieście nie wie, po co. Tylko strażnik na dole."
+                            : "W południe dzwon na wieży uderza siedem razy. Nikt w mieście nie wie, po co. Tylko ty."],
+                        ["soltys", "Siedem razy? Ambroży, znowu ci się pomyliło?"],
+                        ["ambrozy", "Nie pomyliło. Ktoś schodzi z pytaniem."]);
+                    else out.push(
+                        ["soltys", "Jedno pytanie, raz w roku, przy świadkach. Spisałem to w księdze ratusza - słowo w słowo."],
+                        w.book && ["ambrozy", "A Księga sygnałów wraca na wieżę. Siódme uderzenie znów coś znaczy."]);
+                    if (e.kind !== "uwolnic") {
+                        out.push(w.water ? ["kuba", "Racje z cysterny! Kolejka, ludzie - starczy dla każdego... prawie."]
+                            : ["kuba", "Woda tylko na przydział sołtysa! Jak zawsze."]);
+                        if (w.opinion !== null && w.opinion >= 60) out.push(["hanka", "To ten, co zszedł na sam dół! Masz, bochenek. Na koszt piekarni."]);
+                        else if (w.opinion !== null && w.opinion < 20) out.push([null, "Ktoś odwraca wzrok. Mało kto pyta, gdzie byłeś."]);
+                        if (w.siege && w.siege.result === "held") out.push(["soltys", "Od nocy oblężenia nikt nie zamyka bramy przed zmrokiem. Wiemy już, że się obronimy."]);
+                        else if (w.siege && w.siege.result === "fallen") out.push(["soltys", "Pół miasta pomaga odbudować tawernę. Reszta udaje, że nie widzi."]);
+                    }
+                    return out;
+                }
+            },
+            {
+                key: "oboz", map: w => (w.camp === "outside" ? 111 : 8), cam: w => (w.camp === "outside" ? [38, 11] : [30, 50]),
+                actors: (w, e) => {
+                    const at = w.camp === "outside" ? { ludmila: [37, 11, 6], ela: [38, 12, 8], marek: [39, 11, 4], rafal: [41, 12, 4] }
+                        : { ludmila: [30, 51, 6], ela: [31, 52, 8], marek: [32, 51, 4], rafal: [28, 51, 6] };
+                    const out = [["ludmila"].concat(at.ludmila), ["ela"].concat(at.ela)];
+                    if (w.marek) out.push(["marek"].concat(at.marek));
+                    if (w.rafal === "ally") out.push(["rafal"].concat(at.rafal));
+                    return out;
+                },
+                steps: (w, e) => {
+                    const out = [];
+                    if (w.camp === "outside") out.push([null, "Obóz został za murem, w Podgrodziu. Nocą przy ognisku słychać wilki."]);
+                    else if (w.camp === "inside") out.push([null, "Spod muru zniknęły namioty. Uchodźcy mieszkają w mieście i pracują przy kieracie."]);
+                    if (w.marek) {
+                        out.push([null, "Marek siedzi przy Ludmile. Długo milczał - jak ludzie z Osady Milczących."]);
+                        if (e.kind === "uwolnic") out.push(["marek", "Teraz wszyscy wiecie to, co ja wiedziałem. Rozumiecie już, czemu milczałem?"]);
+                        else if (e.kind === "zniszczyc") out.push(["marek", "Cisza. W głowie cisza. Pierwszy raz od tamtej skały."], ["ela", "Tato! Powiedziałeś coś!"]);
+                        else out.push(["ela", "Tato, powiedz coś!"], { balloon: ["marek", 8] }, ["marek", "...Ela."], ["ludmila", "Mówi. Znowu mówi."]);
+                    } else {
+                        out.push(["ludmila", "Lulaj, dziecię, za siódmą górą..."], ["ela", "Mamo, a tata wróci?"], ["ludmila", "...Śpij."]);
+                        if (e.kind === "straznik" && e.guardian === "hero") out.push([null, "Kiedyś Ludmiła zejdzie na dół z jednym pytaniem. Wiesz już, jakie zada."]);
+                    }
+                    if (w.rafal === "ally") out.push(["rafal", "Nikt już nie wiesza listów gończych. Zostaję - ktoś musi pilnować obozu nocą."]);
+                    else if (w.rafal === "enemy") out.push(["ludmila", "Rafała tu nie ma. Wydali go dworowi, a potem wrócił z najemnikami. Ela pyta o niego co dzień."]);
+                    else if (w.rafal === "gone") out.push(["ludmila", "Rafał przysłał list zza morza. Pisze, że żyje. I że pamięta."]);
+                    else if (w.rafal === "taken") out.push(["ludmila", "Rafała zabrali ludzie dworu. Nikt nie wie, dokąd."]);
+                    else if (w.rafal === "dead") out.push(["ludmila", "Rafał nie wrócił z tamtej nocy pod tawerną. Ela zostawia mu przy ognisku kromkę chleba."]);
+                    return out;
+                }
+            },
+            {
+                key: "dom", map: 19, cam: [10, 8], when: w => w.story,
+                actors: () => [["dziadek", 10, 6, 2]],
+                hero: (w, e) => (e.guardian === "hero" ? null : [10, 8, 8]),
+                steps: (w, e) => {
+                    if (e.kind === "straznik" && e.guardian === "hero") return [
+                        ["dziadek", "Stawiam drugi talerz. Na wszelki wypadek."],
+                        [null, "Raz w roku ktoś puka do drzwi. Dziadek zawsze otwiera pierwszy."]
+                    ];
+                    const out = [["dziadek", "Wnusiu? Wróciłeś."]];
+                    if (e.kind === "uwolnic") out.push(["dziadek", "Wiem, gdzie byłeś. Wszyscy wiemy wszystko... Siadaj. Zjedz."],
+                        ["dziadek", "Tego, że cię kocham, i tak nikt mi nie musiał mówić."]);
+                    else if (e.kind === "zniszczyc") out.push(["dziadek", "Coś się w nocy zmieniło. Spałem jak dziecko - pierwszy raz od lat."]);
+                    else if (e.kind === "zapieczetowac") out.push(["dziadek", "Nie mów mi, co tam było. Wystarczy, że wróciłeś."]);
+                    else out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Pole czeka." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, ty pilnuj pola."]);
+                    out.push(["dziadek", "Bałem się, że jak dług zniknie, to nikt już nie zapuka. A tu proszę - ktoś puka."]);
+                    return out;
+                }
+            },
+            {
+                key: "tawerna", map: 1, cam: [52, 31], last: true,
+                actors: (w, e) => {
+                    const out = [["borgar", 52, 28, 2], ["ozzy", 49, 30, 6], ["melia", 55, 30, 4]];
+                    if (!w.grum || w.grum === "ally") out.push(["grum", 58, 31, 4]);
+                    return out;
+                },
+                hero: (w, e) => (e.guardian === "hero" ? null : [52, 31, 8]),
+                steps: (w, e) => {
+                    const out = [], hero = e.guardian === "hero";
+                    if (e.kind === "zniszczyc") out.push(
+                        ["ozzy", "Pusto. Pierwszy raz od sześćdziesięciu lat pusto w głowie. ...Postawi ktoś piwo? Ot tak, bez przepowiedni?"],
+                        ["borgar", "Dziś w nocy nie zszedłem do piwnicy. Pierwszy raz, odkąd pamiętam."],
+                        ["melia", w.melia === "burned" ? "Słowa spaliłam, a teraz i melodia ucichła. Może to i lepiej."
+                            : "Ballady zostaną. Tylko nikt już nie będzie w nich szukał prawdy. Może to i lepiej."]);
+                    else if (e.kind === "uwolnic") out.push(
+                        [null, "W tawernie jest cicho. Borgar wyciera ladę. Nikt nie zamawia - wszyscy wiedzą, co by kto zamówił."],
+                        ["ozzy", "Mówiłem wam. Mówiłem wszystkim. Teraz wszyscy wiecie... i co? Lepiej wam?"],
+                        ["melia", "Nie mam już czego śpiewać. Wszyscy znają wszystkie słowa."]);
+                    else if (e.kind === "zapieczetowac") out.push(
+                        ["borgar", "Klucz wraca nad bar. Tym razem wiem, po co tu wisi."],
+                        ["melia", w.melia === "burned" ? "Słów już nie mam. Ale zanucę melodię - raz, ostatni. Niech śpi, jak Serce."
+                            : "Zaśpiewam pieśń jeszcze raz. Całą - i ostatni raz. Potem niech śpi, jak Serce."],
+                        ["ozzy", "Chrrr... jedno pytanie... raz w roku... chrrr..."]);
+                    else if (e.guardian === "borgar") out.push(
+                        ["borgar", "Co trzecią noc schodzę na wartę. Dziś mam wolne. Napijesz się?"],
+                        ["ozzy", "Kowal wrócił do zamków zakonu. Dziadek by się cieszył. Albo bał."],
+                        ["melia", "Ułożyłam nową zwrotkę. O karczmarzu, który zszedł na wartę i wrócił na zmianę."]);
+                    else if (e.guardian === "ambrozy") out.push(
+                        ["borgar", "Ambroży nauczył cię rytmu? To dzwoń. Miasto musi słyszeć, że ktoś pilnuje."],
+                        ["ozzy", "Stary dzwonnik siedzi na dole i liczy do siedmiu. Czuję go, jak się czuje burzę."],
+                        ["melia", "Ułożyłam nową zwrotkę. O dzwonniku, któremu nikt nie odwołał warty."]);
+                    else out.push(
+                        ["borgar", "Kufel dla kogoś, kto nie przychodzi... Zawsze stoi pełny."],
+                        ["melia", "Ułożyłam nową zwrotkę. O strażniku, który zszedł sam."],
+                        ["ozzy", "Siedzi tam na dole. Czuję go, jak się czuje burzę."]);
+                    // Grum (W8 / Act III)
+                    const g = w.grum;
+                    if (g === "ally") out.push(["grum", e.kind === "zniszczyc" ? "Na kontynencie nikt już nie dostanie pewności. Będą musieli wygrywać jak ludzie - albo przegrywać."
+                        : e.kind === "uwolnic" ? "Frakcja wie teraz wszystko. Ja też. Nie wracam tam."
+                        : e.kind === "zapieczetowac" ? "Raz w roku, przy świadkach? Mogę być świadkiem. Mam ciężką rękę na tych, co by chcieli dwa razy."
+                        : "Zostaję na wyspie. Ktoś musi pilnować tej tawerny, kiedy strażnik siedzi na dole."]);
+                    else if (g === "faction" || g === "enemy") out.push(["borgar", g === "enemy" ? "Grum stał tamtej nocy po drugiej stronie drzwi. Wolałbym go więcej nie oglądać."
+                        : "Gruma nie widziano od tamtej nocy. Podobno popłynął z kopaczami frakcji."]);
+                    else if (g === "gone" || g === "ferry") out.push(["ozzy", "Stół Gruma stoi pusty. Przy nim pije się za nieobecnych."]);
+                    else if (g === "dead") out.push([null, "Borgar stawia pełny kufel na pustym stole Gruma."], ["borgar", "Za Gruma."]);
+                    else if (!g) out.push(["grum", "Hm. Wróciłeś z dołu. Postawię ci piwo - i o nic nie zapytam."]);
+                    // the siege of the tavern (Act III)
+                    const s = w.siege;
+                    if (s && s.result === "held") {
+                        out.push(["borgar", "Drzwi po oblężeniu mają nowe okucia. Kto ich wtedy bronił, pije tu za pół ceny - do końca życia."]);
+                        if (s.names && s.names.defenders) out.push([null, "Na belce nad barem ktoś wyrył imiona obrońców: " + s.names.defenders + "."]);
+                    } else if (s && s.result === "costly") {
+                        out.push(["borgar", "Tamtej nocy straciliśmy pół ław i parę zębów. Ale tawerna stoi."]);
+                        if (s.names && s.names.lost) out.push(["borgar", "Wypijmy za tych, co wtedy oberwali: " + s.names.lost + ". Niech się prędko wylizują."]);
+                    } else if (s && s.result === "fallen") {
+                        out.push(["borgar", "Odbudowujemy. Kamienie twierdzy wytrzymały gorsze rzeczy niż najemników."],
+                            [null, "Okna zabite deskami, ale w kominku znów płonie ogień."]);
+                    }
+                    // the end: the hero at the bar (or, for the hero who stayed below, his one day a year)
+                    if (hero) out.push([null, "Strażnik może wyjść na górę raz w roku. Dziś jest ten dzień."], { heroIn: [52, 31, 8] },
+                        { balloon: ["borgar", 1] }, ["borgar", "...Wróciłeś. Na jeden dzień? To siadaj. Kufel czeka od roku."]);
+                    else out.push(["borgar", e.kind === "uwolnic" ? "Siadaj. Nic nie mów - i tak wiem. Pierwsze piwo na koszt firmy."
+                        : "Siadaj. Pierwsze piwo na koszt firmy."]);
+                    return out;
+                }
+            }
+        ],
+        // F9: the endings to jump to and the worlds to try them in (Underground.debugEnding)
+        DEBUG: {
+            endings: [["zniszczyc", "hero"], ["straznik", "hero"], ["straznik", "borgar"], ["straznik", "ambrozy"], ["uwolnic", "hero"], ["zapieczetowac", "hero"]],
+            worlds: [
+                { key: "", name: "jak w grze" },
+                { key: "dobry", name: "dobry (trzy zamki, Opinia 75, Grum i Rafał z tobą, Marek wrócił, tawerna obroniona)",
+                    world: { locks: 3, opinion: 75, grum: "ally", rafal: "ally", marek: true, camp: "inside", water: true, book: true, melia: "public",
+                        borgar: true, ambrozy: true, siege: { result: "held", defenders: ["borgar", "grum", "tadek", "rafal"], lost: [] } } },
+                { key: "zly", name: "zły (dwa zamki, Opinia 10, Grum zginął, Rafał wydany, obóz za murem, tawerna padła)",
+                    world: { locks: 2, opinion: 10, grum: "dead", rafal: "enemy", marek: false, camp: "outside", water: false, book: false, melia: "burned",
+                        borgar: false, ambrozy: false, siege: { result: "fallen", defenders: ["borgar"], lost: ["borgar"] } } },
+                { key: "mieszany", name: "mieszany (Opinia 45, Grum z frakcją, Rafał za morzem, oblężenie drogo okupione)",
+                    world: { locks: 2, opinion: 45, grum: "faction", rafal: "gone", marek: true, camp: null, water: true, book: true, melia: null,
+                        borgar: true, ambrozy: false, siege: { result: "costly", defenders: ["borgar", "tadek"], lost: ["tadek"] } } }
+            ],
+            lords: [{ key: "", name: "jak w grze" }, { key: "ally", name: "sojusznik" }, { key: "rival", name: "rywal (chce być pierwszy)" }, { key: "absent", name: "nieobecny" }],
+            endingName: (kind, who) => ({ zniszczyc: "Zniszczyć", straznik: "Strażnik", uwolnic: "Uwolnić", zapieczetowac: "Zapieczętować" }[kind] +
+                (kind === "straznik" ? ": " + ({ hero: "ja", borgar: "Borgar", ambrozy: "Ambroży" }[who]) : ""))
+        }
     };
 
     // ------------------------------------------------------------------ the Truth Layer (band 5): whispers and apparitions
@@ -651,6 +1095,6 @@
             text: "TRZY ZAMKI: KLUCZ, DZWON I PIEŚŃ.\nKTO MA DWA, TEN WEJDZIE.\nKTO MA TRZY, TEN WYJDZIE." }
     };
 
-    window.Underground_Data = { VERSION: "2.0.0", MAPS, SWITCHES, IDS, SPOTS, FLOORS, LIFT, BANDS, FLOOR_NOTE, ART, TORCH_LIGHT, BLUE_LIGHT,
-        SPIKE_STEPS, SPIKES, LOOT, LOOT_NAMES, GOLD_ICON, BOSSES, LOCKS, TEXT: T, ENDINGS, EPILOGUE, WHISPERS, APPARITIONS, TRUTH_WHO, NOTES };
+    window.Underground_Data = { VERSION: "2.1.0", MAPS, SWITCHES, IDS, SPOTS, FLOORS, LIFT, BANDS, FLOOR_NOTE, ART, TORCH_LIGHT, BLUE_LIGHT,
+        SPIKE_STEPS, SPIKES, LOOT, LOOT_NAMES, GOLD_ICON, BOSSES, LOCKS, TEXT: T, ENDINGS, EPILOGUE, HEART, WHISPERS, APPARITIONS, TRUTH_WHO, NOTES };
 })();

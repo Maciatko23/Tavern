@@ -68,7 +68,9 @@
         checkCycle();
         this.A = {
             back: ImageManager.loadSystem(ASSETS.back), paper: ImageManager.loadSystem(ASSETS.paper), parts: ImageManager.loadSystem(ASSETS.parts),
-            iconSet: ImageManager.loadSystem("IconSet"), bust: ImageManager.loadPicture(BORGAR_BUST)
+            iconSet: ImageManager.loadSystem("IconSet"),
+            // (his own Borgar_Bust when it is there - SpeechBubbles' bustFile; through ImageManager so the scene waits for it)
+            bust: ImageManager.loadPicture(ui.bustFile ? ui.bustFile(BORGAR_BUST) : BORGAR_BUST)
         };
         for (const k of Object.keys(BEASTS)) ImageManager.loadCharacter(BEASTS[k].sheet);
     };

@@ -1,5 +1,5 @@
 {
- "_note": "build_humans.py: which PixelLab animation (tools/humans/frames/<key>/<anim>) makes which sheet; pick: frame indexes (or per direction); from: a direction taken from another animation folder; old: the 4-way sheet's name; knife (Nożownik, 2026-10-06): PixelLab 7f9ef0a3, v3 walk/run/stab/kneel/crouch, the lying picture by edit_image_pro_flash (rotate 90 degrees)",
+ "_note": "build_humans.py: which PixelLab animation (tools/humans/frames/<key>/<anim>) makes which sheet; pick: frame indexes (or per direction); from: a direction taken from another animation folder; old: the 4-way sheet's name; knife (Nożownik, 2026-10-06): PixelLab 7f9ef0a3, v3 walk/run/stab/kneel/crouch, the lying picture by edit_image_pro_flash (rotate 90 degrees); captain (Dowódca kopaczy, Act3.js 2026-10-07): PixelLab a8bb43b1 (pro, style = hero), walk skeleton-v3, slash/guard/kneel v3, lying by edit_image_pro_flash (rotate 90 degrees, flipped head-right)",
  "bandit": {
   "look": "Bandit",
   "sheets": {
@@ -477,6 +477,78 @@
     "cell": 64,
     "image": "lie/<key>.png",
     "old": "$Human_Knife_Lie"
+   }
+  }
+ },
+ "captain": {
+  "look": "Captain",
+  "sheets": {
+   "Walk8": {
+    "anim": "captain_walk",
+    "cell": 64,
+    "standing": true,
+    "old": "$Human_Captain",
+    "old_cols": [
+     1,
+     0,
+     5
+    ]
+   },
+   "Atk8": {
+    "anim": "captain_slash",
+    "cell": 96,
+    "old": "$Human_Captain_Atk",
+    "placeholder": 12,
+    "pick": {
+     "north": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      10,
+      10,
+      11,
+      11,
+      12,
+      12
+     ],
+     "*": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   },
+   "Guard8": {
+    "anim": "captain_guard",
+    "cell": 96,
+    "old": "$Human_Captain_Guard",
+    "placeholder": 6
+   },
+   "Kneel8": {
+    "anim": "captain_kneel",
+    "cell": 96,
+    "old": "$Human_Captain_Kneel",
+    "placeholder": 8
+   },
+   "Lie8": {
+    "lie": true,
+    "cell": 64,
+    "image": "lie/<key>.png",
+    "old": "$Human_Captain_Lie"
    }
   }
  }

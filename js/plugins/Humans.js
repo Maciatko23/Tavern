@@ -96,6 +96,11 @@
  *     w walce, z okrzykiem; opts jak wyżej + { far: [od, do], shout }
  *   Humans.camp(opts) -> obóz tej nocy na tej mapie (opts: { size, kinds, near })
  *   Humans.list(), Humans.band(tag), Humans.clear(tag)
+ *   Humans.setFoe(człowiek, sojusznik | null) - walczy z sojusznikiem
+ *     bohatera (Act3.js: obrońcy tawerny) zamiast z bohaterem; łucznik nie
+ *   Humans.march(człowiek, x, y) - idzie na miejsce (jego "dom"), walczy
+ *     z tym, kogo spotka, i tam wraca; Humans.remove(człowiek) - znika
+ *     z mapy (przeszedł przez drzwi), bez ciała
  *   Humans.nightRaid(od, do, { fire }) -> godzina napadu (dzień*24+godzina)
  *     albo null; Humans.raidBand(piesSzczekał, opts) -> grupa napastników
  * SZYNA (Tawerna.on): humanSurrender { kind, tag, level, x, y },
@@ -137,6 +142,18 @@
     const panOf = x => Math.max(-80, Math.min(80, Math.round((x - heroX()) * 12)));
     const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < Graphics.width + m && y > -m && y < Graphics.height + 2 * m; };
     const toHero = h => [heroX() - h.centerX(), heroY() - h.centerY()];
+    // (2026-10-06, Act3.js) a man may fight someone other than the hero - h._foe, an ally of his (Act3's defenders of the tavern):
+    // { centerX(), centerY(), _x, _y, _realX, _realY, takeHit({ damage, poise, from, heavy, knock, wound, name }) -> "hit" | "block" |
+    // "miss", isDown() }. While he has one he goes for it, faces it and his blows land on it (Humans.setFoe); without one - the hero,
+    // as always. A kneeling, dead or fleeing man, or a foe that is down, has none
+    function foeOf(h) {
+        const f = h._foe;
+        if (!f) return null;
+        if (h._dead || h._surrendered || h._fleeing || (typeof f.isDown === "function" && f.isDown())) { h._foe = null; return null; }
+        return f;
+    }
+    const toTgt = h => { const f = foeOf(h); return f ? [f.centerX() - h.centerX(), f.centerY() - h.centerY()] : toHero(h); };
+    const tgtTile = h => { const f = foeOf(h); return f ? [f._x, f._y] : [$gamePlayer.x, $gamePlayer.y]; };
     // the hero faces him (within the cosine `cos` of his facing - HeroLook's 8-way one)
     function heroFaces(h, cos) {
         const Hn = H(), [fx, fy] = Hn && Hn.facingVector ? Hn.facingVector() : [0, 1], dx = h.centerX() - heroX(), dy = h.centerY() - heroY(), d = Math.hypot(dx, dy) || 1;
@@ -257,6 +274,8 @@
     Game_Human.prototype.centerX = function() { return this._realX + 0.5; };
     Game_Human.prototype.centerY = function() { return this._realY + 0.5; };
     Game_Human.prototype.playerDistance = function() { return Math.hypot(this.centerX() - heroX(), this.centerY() - heroY()); };
+    // the distance to the one he fights: his foe (Act3's defender) or the hero
+    Game_Human.prototype.tgtDistance = function() { const [x, y] = toTgt(this); return Math.hypot(x, y); };
     Game_Human.prototype.name = function() { return this._label || this._def.name; };
     // keeps out of buildings (as the animals do)
     Game_Human.prototype.isMapPassable = function(x, y, d) {
@@ -289,7 +308,7 @@
         this.updateSheet();
     };
     Game_Human.prototype.sheetPart = function() {
-        const m = this._mode, merc = this._look === "Merc";
+        const m = this._mode, merc = this._look === "Merc" || !!(LOOKS[this._look] && LOOKS[this._look].shield);   // (a look of its own with a shield sheet - Act3's captain)
         if (m === "windup" || m === "strike" || m === "feint") return merc && this._blow === "bash" ? "Guard" : "Atk";
         if (m === "recover" && this._settle > 0) return merc && this._blow === "bash" ? "Guard" : "Atk";
         if (m === "draw" || m === "loose") return "Atk";
@@ -364,13 +383,14 @@
         if (P.stalled(this, key, Math.hypot(this._x - tx, this._y - ty), (near || 0) + 0.5, tx, ty)) P.unstall(this);
         return went;
     };
-    Game_Human.prototype.faceHero = function() {
-        const [hx, hy] = toHero(this);
+    Game_Human.prototype.faceHero = function() {   // (his foe, when he has one - toTgt)
+        const [hx, hy] = toTgt(this);
         this.setDirection(DIR4(hx, hy));
     };
-    // a straight run at the hero (no tree, rock, building, wall between): for a blow, a shot
+    // a straight run at the hero (no tree, rock, building, wall between): for a blow, a shot (at his foe, when he has one)
     Game_Human.prototype.clearRun = function() {
-        return HP().clearLine(HP().pathGrid(), this._x, this._y, $gamePlayer.x, $gamePlayer.y, true);
+        const [tx, ty] = tgtTile(this);
+        return HP().clearLine(HP().pathGrid(), this._x, this._y, tx, ty, true);
     };
 
     // ==================================================================
@@ -406,7 +426,7 @@
     Game_Human.prototype.turnGuard = function() {
         if (!this._engaged && this._mode !== "alert" && this._mode !== "surrender" && this._mode !== "gloat") return;
         if (this._mode === "windup" || this._mode === "strike" || this._mode === "feint") return;
-        const [hx, hy] = toHero(this), want = Math.atan2(hy, hx);
+        const [hx, hy] = toTgt(this), want = Math.atan2(hy, hx);
         let d = want - this._faceAng;
         while (d > Math.PI) d -= Math.PI * 2;
         while (d < -Math.PI) d += Math.PI * 2;
@@ -417,6 +437,11 @@
     // the hero in front of his guard (the mercenary's shield, the bandit's raised club)
     Game_Human.prototype.heroInFront = function(cos) {
         const [hx, hy] = toHero(this), d = Math.hypot(hx, hy) || 1;
+        return (hx * Math.cos(this._faceAng) + hy * Math.sin(this._faceAng)) / d > (cos === undefined ? 0.3 : cos);
+    };
+    // the same for a blow from (x, y) - not the hero's (an ally's: Act3.js's defenders hit through Humans.hit with extra.from)
+    Game_Human.prototype.inFrontOf = function(x, y, cos) {
+        const hx = x - this.centerX(), hy = y - this.centerY(), d = Math.hypot(hx, hy) || 1;
         return (hx * Math.cos(this._faceAng) + hy * Math.sin(this._faceAng)) / d > (cos === undefined ? 0.3 : cos);
     };
     // his eyes and ears: the awareness meter of the animals (Hunting.noticeRate - cover, sneaking, the dark); asleep he only hears
@@ -508,7 +533,7 @@
             }
             for (const m of band.members) if (m !== this && !m._engaged && !m._dead && !m._surrendered) m.wakeUp(m._mode === "sleep" ? rnd(20, 70) : rnd(4, 20));
         }
-        const [hx, hy] = toHero(this);
+        const [hx, hy] = toTgt(this);
         this._faceAng = Math.atan2(hy, hx);
         this.setMode("chase");
         this._gapT = rnd(20, 50);
@@ -546,14 +571,15 @@
         return n === "bash" ? k.bash : n === "heavy" ? k.heavy : k.blow;
     };
     // the band's turn: one blow at a time (the archer shoots on his own)
-    const myTurn = h => !h._band || !h._band.attacker || h._band.attacker === h;
-    const takeTurn = h => { if (h._band) h._band.attacker = h; };
+    // (a man with his own foe - Act3's defender - fights it on his own: no turn of the band's taken or waited for)
+    const myTurn = h => !!foeOf(h) || !h._band || !h._band.attacker || h._band.attacker === h;
+    const takeTurn = h => { if (h._band && !foeOf(h)) h._band.attacker = h; };
     function endTurn(h) {
         const b = h._band;
         if (b && b.attacker === h) { b.attacker = null; b.gapT = rnd(BAND.gap[0], BAND.gap[1]); }
     }
     Game_Human.prototype.thinkFight = function() {
-        const dist = this.playerDistance(), band = this._band;
+        const dist = this.tgtDistance(), band = this._band;
         // lost him: too far, or too far from home - back
         if (dist > BAND.lose || Math.hypot(this._x - this._home.x, this._y - this._home.y) > BAND.leash) {
             if (!band || band.members.every(m => m._dead || m._surrendered || m.playerDistance() > BAND.lose * 0.8)) {
@@ -619,7 +645,7 @@
     };
     // a blow: the way to the hero is locked now (a step back, a roll - and it goes into the air), the "!" and the drawn-back weapon
     Game_Human.prototype.startBlow = function(name, quick) {
-        const b = this.blowDef(name), [hx, hy] = toHero(this), d = Math.hypot(hx, hy) || 1;
+        const b = this.blowDef(name), [hx, hy] = toTgt(this), d = Math.hypot(hx, hy) || 1;
         this._blow = name;
         this._combo = quick ? (this._combo || 0) + 1 : 0;
         this._lock = [hx / d, hy / d];
@@ -636,8 +662,14 @@
     };
     // the blow lands (its frame): the hero within its reach and in its cone (the locked way) takes it - his roll, guard or parry decide
     Game_Human.prototype.blowLand = function(b) {
-        const [hx, hy] = toHero(this), d = Math.hypot(hx, hy), [lx, ly] = this._lock || [0, 1], Cb = C();
+        const foe = foeOf(this), [hx, hy] = toTgt(this), d = Math.hypot(hx, hy), [lx, ly] = this._lock || [0, 1], Cb = C();
         if (d > b.reach || (d > 0.3 && (hx * lx + hy * ly) / d < b.cone)) return false;   // (out of reach, or beside it: through the air)
+        if (foe) {   // (his foe - Act3's defender - takes it: its own guard, its own life)
+            const res = foe.takeHit({ damage: Math.max(1, Math.round(b.dmg * this.strK() * (this._disarmed ? 0.45 : 1))), poise: Math.round(b.poise * (1 + 0.03 * (this._attr.str - 5))),
+                from: this, heavy: this._blow === "heavy", knock: b.knock, wound: b.wound, name: this._def.name.toLowerCase() });
+            if (res === "hit") { this._hitStop = 2; se(this._blow === "bash" ? "Blow3" : "Blow1", 70, 90, panOf(this.centerX())); }
+            return true;
+        }
         if (!Cb || !Cb.hitPlayer) return false;
         const res = Cb.hitPlayer({ damage: Math.max(1, Math.round(b.dmg * this.strK() * (this._disarmed ? 0.45 : 1))), poise: Math.round(b.poise * (1 + 0.03 * (this._attr.str - 5))),
             from: { x: this.centerX(), y: this.centerY() }, attacker: this, name: this._def.name.toLowerCase(), wound: b.wound, knock: b.knock,
@@ -671,13 +703,13 @@
         const b = this._def.blow, Cb = C(), act = Cb && Cb.act;
         // the hero swings at him: a guard now and then (not while he is about his own blow) - the knife bandit springs back instead
         const swinging = !!act && act.mode === "attack";
-        const dg = this._def.dodge;
-        if (dg && swinging && !this._sawSwing && dist < 2.2 && (this._guardCd || 0) <= 0 && Math.random() < dg.chance && this.springBack()) {
+        const dg = this._def.dodge, hd = foeOf(this) ? this.playerDistance() : dist;   // (the hero's swing: how far the hero is, whoever he fights)
+        if (dg && swinging && !this._sawSwing && hd < 2.2 && (this._guardCd || 0) <= 0 && Math.random() < dg.chance && this.springBack()) {
             this._guardCd = dg.cd;
             this._sawSwing = swinging;
             return;
         }
-        if (swinging && !this._sawSwing && dist < 2.4 && (this._guardCd || 0) <= 0 && this._def.guard && Math.random() < this._def.guard.chance) {
+        if (swinging && !this._sawSwing && hd < 2.4 && (this._guardCd || 0) <= 0 && this._def.guard && Math.random() < this._def.guard.chance) {
             this._guardCd = this._def.guard.cd;
             this.faceHero();
             this.setMode("guard", this._def.guard.frames);
@@ -705,13 +737,14 @@
     };
     // in to his blow's range when it is his turn (and the pause is over), else round the hero on the ring
     Game_Human.prototype.meleeApproach = function(dist, b, attack) {
-        const band = this._band, turn = myTurn(this) && (!band || band.gapT <= 0) && this._gapT <= 0;
+        const band = this._band, foe = foeOf(this), turn = foe ? this._gapT <= 0 : myTurn(this) && (!band || band.gapT <= 0) && this._gapT <= 0;
         if (turn && dist <= b.at && this.clearRun()) { attack(); return; }
         if (this.isMoving()) return;
-        if (turn) {
+        if (turn || foe) {   // (his foe - Act3's defender: in to it, or waits facing it; no ring round the hero)
             if (this._mode !== "chase") this.setMode("chase");
             if (dist <= 1.15) { this.faceHero(); return; }   // (right beside him: no closer)
-            if (!this.walkTo($gamePlayer.x, $gamePlayer.y, "in", 1)) this.faceHero();
+            const [tx, ty] = tgtTile(this);
+            if (!this.walkTo(tx, ty, "in", 1)) this.faceHero();
             return;
         }
         this.circle(dist);
@@ -763,8 +796,8 @@
         // the hero keeps his guard up, facing him: round to his side / back
         const guardUp = !!act && act.mode === "block";
         this._guardSeen = guardUp ? (this._guardSeen || 0) + 1 : 0;
-        if (this._mode === "flank") { this.thinkFlank(dist); return; }
-        if (this._guardSeen > k.flank.after && dist < 3.5 && heroFaces(this, 0.4) && turn) { this.setMode("flank", k.flank.frames); this._flankSide = Math.random() < 0.5 ? 1 : -1; return; }
+        if (this._mode === "flank") { if (foeOf(this)) this.setMode("chase"); else { this.thinkFlank(dist); return; } }
+        if (!foeOf(this) && this._guardSeen > k.flank.after && dist < 3.5 && heroFaces(this, 0.4) && turn) { this.setMode("flank", k.flank.frames); this._flankSide = Math.random() < 0.5 ? 1 : -1; return; }
         this.meleeApproach(dist, k.blow, () => this.startBlow(this.pickMercBlow(dist)));
     };
     Game_Human.prototype.pickMercBlow = function(dist) {
@@ -924,7 +957,10 @@
         extra = extra || {};
         const k = h._def, Cb = C(), F2 = (T.api("Combat_parts") || {}).fight;
         const heavy = !!extra.heavy, hidden = extra.tag === "sneak" || extra.tag === "heart";
-        if (!hidden && h.guarding() && h.heroInFront(k.shield ? k.shield.front : 0.3)) {
+        // (extra.from {x, y}: a blow not of the hero's - an ally's, Act3.js - its own side for the guard and the push)
+        const from = extra.from && typeof extra.from.x === "number" ? extra.from : null;
+        const inFront = cos => (from ? h.inFrontOf(from.x, from.y, cos) : h.heroInFront(cos));
+        if (!hidden && h.guarding() && inFront(k.shield ? k.shield.front : 0.3)) {
             if (heavy && how !== "shot") {   // a heavy blow breaks the guard: he reels, open
                 h._guardBroken = true;
                 h._stun = Math.max(h._stun, k.shield ? k.shield.breakStun : 50);
@@ -940,9 +976,9 @@
                 h._poise = Math.max(1, h._poise - Math.round((extra.poise || 10) * 0.3));
                 h._poiseT = 0;
                 h._blocks.push(Graphics.frameCount);
-                if (F2) { F2.numberAt(h.centerX(), h.centerY() - 1.3, damage > 0 ? "Blok -" + damage : "Zablokowane!", "#cfd6de", 0.8); F2.sparksAt(h.centerX() - (h.centerX() - heroX()) * 0.3, h.centerY() - 0.5, "#f0f0e0", 9); }
+                if (F2) { F2.numberAt(h.centerX(), h.centerY() - 1.3, damage > 0 ? "Blok -" + damage : "Zablokowane!", "#cfd6de", 0.8); F2.sparksAt(h.centerX() - (h.centerX() - (from ? from.x : heroX())) * 0.3, h.centerY() - 0.5, "#f0f0e0", 9); }
                 se(k.shield ? "Sword4" : "Blow3", 85, k.shield ? 110 : 120, panOf(h.centerX()));
-                if (how !== "shot" && Cb && Cb.recoil) Cb.recoil(k.shield ? 14 : 8);
+                if (how !== "shot" && !from && Cb && Cb.recoil) Cb.recoil(k.shield ? 14 : 8);
                 if (Math.random() < 0.35) say(h, pick(LINES.block), 90);
                 if (damage > 0) { h._hp -= damage; h._flashT = 4; }
                 if (!h._engaged) h.engage(false);
@@ -951,7 +987,7 @@
             }
         }
         // from behind the mercenary (his shield on the other side): it hurts more
-        if (k.shield && !hidden && h._engaged && !h.heroInFront(-0.35)) {
+        if (k.shield && !hidden && h._engaged && !inFront(-0.35)) {
             damage = Math.round(damage * k.shield.back);
             if (F2) F2.numberAt(h.centerX(), h.centerY() - 1.55, "Cios w plecy!", "#ffd27f", 0.8);
         }
@@ -965,24 +1001,24 @@
         const poise = extra.poise !== undefined ? extra.poise : Math.round(damage * 0.8);
         if (!h._engaged && !(hidden && poise >= h._poise)) h.engage(true);   // (a blow from hiding that breaks him: he reels first, then fights - afterStun)
         h._poise -= poise;
-        if (h._poise <= 0) stagger(h, !!extra.knock);
-        else if (extra.knock) knockBack(h);
+        if (h._poise <= 0) stagger(h, !!extra.knock, from);
+        else if (extra.knock) knockBack(h, from);
         if (Math.random() < 0.18) say(h, pick(LINES.hurt), 80);
         if (!maybeSurrender(h)) morale(h._band);
     }
-    function stagger(h, knock) {
+    function stagger(h, knock, from) {
         h._stun = h._def.stun;
         h._poise = 0;
         h._lockAng = null;
         h._aim = null;
         if (h._mode === "windup" || h._mode === "strike" || h._mode === "feint" || h._mode === "draw" || h._mode === "guard" || h._mode === "flank") h.setMode("chase");
         endTurn(h);
-        if (knock) knockBack(h);
+        if (knock) knockBack(h, from);
     }
     // thrown one tile away from the hero (a jump), when there is room
-    function knockBack(h) {
+    function knockBack(h, from) {   // (from {x, y}: away from an ally's blow - Act3.js; else from the hero)
         if (h.isJumping()) return;
-        const ax = h._x - $gamePlayer.x, ay = h._y - $gamePlayer.y;
+        const ax = h._x - (from ? Math.floor(from.x) : $gamePlayer.x), ay = h._y - (from ? Math.floor(from.y) : $gamePlayer.y);
         const bx = Math.abs(ax) >= Math.abs(ay) ? Math.sign(ax) : 0, by = Math.abs(ax) >= Math.abs(ay) ? 0 : Math.sign(ay);
         const d = bx > 0 ? 6 : bx < 0 ? 4 : by > 0 ? 2 : 8;
         if ((bx || by) && h.canPass(h._x, h._y, d) && !humans.some(o => o !== h && o._x === h._x + bx && o._y === h._y + by)) h.jump(bx, by); else h.jump(0, 0);
@@ -1171,7 +1207,7 @@
         const h = humans.find(o => o._surrendered && !o._dead && o._offerCd <= 0 && !o._offerAway && o.playerDistance() <= 1.7);
         if (!h) return;
         const Cb = C(), foes = Cb && Cb.foes ? Cb.foes() : humans;
-        if (foes.some(a => a !== h && !a._dead && a._engaged && !a._surrendered && Math.hypot(a.centerX() - heroX(), a.centerY() - heroY()) < 9)) return;
+        if (foes.some(a => a !== h && !a._dead && a._engaged && !a._surrendered && !(a.isHuman && foeOf(a)) && Math.hypot(a.centerX() - heroX(), a.centerY() - heroY()) < 9)) return;
         offerChoice(h);
     }
 
@@ -1989,6 +2025,24 @@
         band: tag => bands.find(b => b.tag === tag) || null,
         clear: tag => { for (const h of humans.slice()) if (!tag || h._tag === tag) removeHuman(h); },
         hit: hitHuman, kill, surrender, decide, offerChoice, drops: () => dropsOf(), dropAhead, searchDrop, removeDrop, beatenBy, campChance,
-        humans: () => humans
+        humans: () => humans,
+        // (2026-10-06, Act3.js - the tavern's defenders) a man's foe other than the hero (null: the hero again; never an archer - he
+        // shoots the hero), the march to a place (his home: he walks there, fights who he meets, comes back to it), a man taken off
+        // the map (gone through a door: no body, his band told)
+        setFoe(h, foe) {
+            if (!h || h._dead || (foe && (h._kind === "archer" || h._surrendered))) return false;
+            h._foe = foe || null;
+            if (foe && !h._engaged) h.engage(false);
+            return true;
+        },
+        foeOf: h => (h ? foeOf(h) : null),
+        march(h, x, y) {
+            if (!h || h._dead) return false;
+            h._home = { x, y };
+            h._seat = null;
+            if (!h._engaged && !h._surrendered && h._mode !== "flee" && h._mode !== "leave") { h._returnT = 0; h.setMode("return"); }
+            return true;
+        },
+        remove(h) { if (!h || h._dead) return false; endTurn(h); removeHuman(h); bandCheck(h._band); return true; }
     });
 })();

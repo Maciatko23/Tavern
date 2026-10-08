@@ -401,6 +401,24 @@
     function gatherBitmap(kind, variant) {
         return ImageManager.loadSystem(GATHER_ART[kind].images[variant]);
     }
+    // the pictures asked for while the map scene is being made (user 2026-10-07: "po wejściu na mapę już mają być wczytane" - the
+    // things on the ground came in a moment after the map): the scene does not start before every picture it asked for is loaded
+    // (Scene_Base.isReady -> ImageManager.isReady), so the ground's things, the crops and the buildings of the map it goes to are
+    // there in its first frame. img/system pictures stay cached for the whole game (ImageManager._system), so only the first time waits
+    const _farmRenderSceneCreate = Scene_Map.prototype.create;
+    Scene_Map.prototype.create = function() {
+        _farmRenderSceneCreate.call(this);
+        for (const k of Object.keys(GATHER_ART)) for (const name of GATHER_ART[k].images) ImageManager.loadSystem(name);
+        ImageManager.loadSystem("Farm_Crops");
+        try {
+            const mapId = $gamePlayer.isTransferring() ? $gamePlayer.newMapId() : $gameMap.mapId();
+            for (const b of (Farming.farm().buildings || {})[mapId] || []) {
+                const def = b.type === "fence" ? null : Farming.geoOf(b);
+                if (!def) continue;
+                for (const name of [def.image, def.imageFull, def.imageDry]) if (name) ImageManager.loadSystem(name);
+            }
+        } catch (e) { /* (no game yet - a test scene): the layers load their pictures as before */ }
+    };
     // ---- the plants move in the wind like real ones (user 2026-09-30: "bardzo realistyczne"):
     //  - the stem bends in a curve - the foot stays, the tip goes furthest and dips a little (a mesh, not a rigid tilt);
     //  - the wind comes in gusts that roll over the meadow as waves, downwind (to the right, as in a storm): neighbours bend
@@ -865,8 +883,23 @@
         // the embers of a tree struck by lightning (ChoppableTree_Render.js) glow in the dark a little too
         const embers = T.call("ChoppableTree", "emberLights", this._spriteset);   // (undefined without ChoppableTree)
         if (embers) out.push(...embers);
+        // the torch the hero carries (RoomLighting's switch): a flame like the campfire's - its reach, flicker, warm glow and the
+        // shadows of what stands round him (user 2026-10-08: "pochodnia niech daje światło normalne, takie jak ogień w ognisku");
+        // he himself throws none from it (he stands in the flame's own spot)
+        if (torchLit()) {
+            const px = $gamePlayer.screenX(), py = $gamePlayer.screenY();
+            const at = T.call("Torch", "lightSpot");   // (Torch.js: the flame in his hand, or the torch stuck in the ground while he works)
+            if (at) out.push({ x: at.x, y: at.y, r: TORCH_LIGHT, i: 1, id: 7000, gx: at.gx, gy: at.gy, hf: 20, glow: true });
+            else out.push({ x: px, y: py - Math.round($gameMap.tileHeight() * 0.6), r: TORCH_LIGHT, i: 1, id: 7000, gx: px, gy: py, hf: 20, glow: true });
+        }
+        // the torches he stuck in the ground (Torch.js): each a small fire of its own, with the same light
+        const stuck = T.call("Torch", "groundLights");
+        if (stuck && stuck.length) out.push(...stuck);
         return out;
     };
+    const TORCH_SWITCH = Number((PluginManager.parameters("RoomLighting") || {}).torchSwitch || 0);
+    const TORCH_LIGHT = 300;   // px: a campfire's reach
+    function torchLit() { return TORCH_SWITCH > 0 && !!$gameSwitches && $gameSwitches.value(TORCH_SWITCH); }
     Sprite_NightLight.prototype.update = function() {
         Sprite.prototype.update.call(this);
         this._age++;
@@ -882,6 +915,7 @@
         ctx.globalCompositeOperation = "destination-out";
         const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows ? Sun.occluders(this._spriteset) : [];
         const glows = [];
+        let stands = null;   // (what stands on the screen - made once a frame, when a light first has shadows to keep off it)
         for (const l of this.lights()) {
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
             const x = l.x / 2, y = l.y / 2, r = (l.r / 2) * (0.97 + 0.03 * flick);
@@ -906,13 +940,28 @@
             c.fillStyle = g;
             c.fillRect(x - r - ox, y - r - oy, r * 2, r * 2);
             if (!blockers.length) continue;
-            Sun.cutLightShadows(c, blockers, 0.5, ox, oy);   // (the night layer is half the screen's size)
+            // the shadows lie on the ground: what stands in the light (trees, people, rocks, the buildings...) is lit where it stands -
+            // a shadow passing behind it on the screen is hidden by it, one that reaches its foot climbs it (user 2026-10-08)
+            if (!stands) stands = Sun.standing ? Sun.standing(this._spriteset, this.standingSprites()) : undefined;
+            Sun.cutLightShadows(c, blockers, 0.5, ox, oy, stands);   // (the night layer is half the screen's size)
             ctx.globalCompositeOperation = "destination-out";
             ctx.drawImage(c.canvas, ox, oy);
         }
         ctx.globalCompositeOperation = "source-over";
         if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
         this.updateGlow(glows);
+    };
+    // the buildings that stand on this map (their pictures, the fences' posts, a site's built part, the pots on a shelter's table):
+    // shadows are kept off them at night as off the trees and the people (Sky.js, standing)
+    Sprite_NightLight.prototype.standingSprites = function() {
+        const out = [], set = this._spriteset._buildingSprites;
+        for (const e of set ? set._sprites : []) {
+            if (e.b.site) { if (e.solid && e.solid.visible) out.push(e.solid); }
+            else out.push(e.sprite);
+            for (const f of e.fences || []) out.push(f.sprite);
+            for (const p of e.tablePots || []) out.push(p);
+        }
+        return out;
     };
     // the campfire's glow (fireGlowBitmap: its colours, FIRE_GLOW_REACH of the light's reach - a campfire's 2.2 x 96 px over its 340)
     // and flicker (fireGlowAlpha), for each light put on the map as an event; a smaller flame (i < 1, a lamp) glows a little less

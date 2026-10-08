@@ -22,8 +22,9 @@
  * Praca i walka: każdy ruch ma nowy arkusz w img/system (Hero_Axe, Hero_AxeSide,
  * Hero_Pick, Hero_Shovel, Hero_Rake, Hero_Hoe, Hero_Hammer, Hero_Rod, Hero_Sling,
  * Hero_Bow, Hero_Spear, Hero_Club, Hero_Punch, Hero_Crouch, Hero_Sit, Hero_Roast,
- * Hero_LieDown, Hero_Roll): 4 wiersze (dół, lewo, prawo, góra), 17-33 klatek 96x96
+ * Hero_LieDown, Hero_Roll, Hero_Torch): 4 wiersze (dół, lewo, prawo, góra), 17-33 klatek 96x96
  * (ChoppableTree: swingKind pyta HeroLook.swingDef). Skradanie (C): Hero_Sneak.
+ * Z zapaloną pochodnią w ręku (Torch.js): Hero_TorchWalk, Hero_TorchRun, Hero_TorchSneak.
  *
  * Menu F9, zakładka Zdarzenia: "Nowa postać" przełącza na starego Reida i z powrotem.
  */
@@ -61,8 +62,13 @@
         16: { sheet: "Hero_Roll", hit: [0, 0, 0, 0] },         // the dodge roll
         17: { sheet: "Hero_LieDown", hit: [16, 16, 16, 16] },  // knocked down
         18: { sheet: "Hero_Club", hit: [9, 7, 7, 11] },        // the club
-        19: { sheet: "Hero_Punch", hit: [12, 13, 13, 6] }      // a punch (from behind: the fists up and down again, no turning)
+        19: { sheet: "Hero_Punch", hit: [12, 13, 13, 6] },     // a punch (from behind: the fists up and down again, no turning)
+        20: { sheet: "Hero_Torch", hit: [7, 7, 7, 9] }         // the burning torch (Torch.js): raised, swept in front of him, back up
     };
+    // the torch in his hand (Torch.js: lit and not stuck in the ground while he works): the same walk with the torch held - the hand
+    // nearer the camera, behind him from the back (tools/torch/build_torch_walk.py)
+    const TORCH_SHEETS = { walk: "Hero_TorchWalk", run: "Hero_TorchRun", sneak: "Hero_TorchSneak" };
+    const torchHeld = () => !!(window.Torch && Torch.held && Torch.held());
 
     const active = () => !!$gameSystem && ($gameSystem._heroLook === undefined ? START_ON : $gameSystem._heroLook === "new");
     function setActive(on) {
@@ -134,7 +140,8 @@
         const sneak = !run && !!(window.Hunting && Hunting.sneaking && Hunting.sneaking());   // (C: bent low, also standing)
         const kind = run ? "run" : sneak ? "sneak" : "walk";
         const phase = moving ? ((p._heroStep || 0) / STRIDE[kind]) % 1 : -1;   // how far into the cycle of the legs (-1: standing)
-        return { sheet: run ? RUN : sneak ? SNEAK : WALK, phase, row: ROWS[p._heroDir8 || p.direction()] || 0 };
+        const sheet = torchHeld() ? TORCH_SHEETS[kind] : run ? RUN : sneak ? SNEAK : WALK;
+        return { sheet, phase, row: ROWS[p._heroDir8 || p.direction()] || 0 };
     }
 
     // ---- the player's sprite: the new sheets instead of the actor's character graphic
@@ -194,8 +201,9 @@
         ImageManager.loadCharacter(WALK);
         ImageManager.loadCharacter(RUN);
         ImageManager.loadCharacter(SNEAK);
+        for (const s of Object.values(TORCH_SHEETS)) ImageManager.loadCharacter(s);
         for (const s of Object.values(SWINGS)) ImageManager.loadSystem(s.sheet);
     };
 
-    window.HeroLook = { active, setActive, swingDef, heroCell, SWINGS, ROWS, STRIDE };
+    window.HeroLook = { active, setActive, swingDef, heroCell, SWINGS, ROWS, STRIDE, TORCH_SHEETS };
 })();

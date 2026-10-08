@@ -14,8 +14,9 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'docs', 'postacie
 
 # (bust, name, sheet, base note)
 ENTRIES = [('Hero_Bust', 'Bohater', None, 'People1_3*'), ('Stach_Bust', 'Dziadek Stach', '$Npc_Dziadek', 'People1_7*'),
-           ('People3_5', 'Borgar', '$Npc_Borgar', 'RTP'), ('People2_8', 'Melia', '$Npc_Melia', 'RTP'), ('Actor2_5', 'Grum', '$Npc_Grum', 'RTP'),
-           ('People2_1', 'Dziadek Ozzy', '$Npc_Ozzy', 'RTP'), ('People1_6', 'Wanda', '$Npc_Wanda', 'RTP')]
+           ('Borgar_Bust', 'Borgar', '$Npc_Borgar', 'People3_5*'), ('Melia_Bust', 'Melia', '$Npc_Melia', 'People2_2*'),
+           ('Grum_Bust', 'Grum', '$Npc_Grum', 'Actor2_5*'), ('Ozzy_Bust', 'Dziadek Ozzy', '$Npc_Ozzy', 'SF_People1_7*'),
+           ('Wanda_Bust', 'Wanda', '$Npc_Wanda', 'People1_6*')]
 for key, who, base in RESIDENTS:
     ENTRIES.append((key[0].upper() + key[1:] + '_Bust', who, '$Npc_' + key[0].upper() + key[1:], base + '*'))
 

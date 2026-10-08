@@ -127,19 +127,25 @@
     const swingKindOf = key => (CT && CT.swingKindOf ? CT.swingKindOf(key) : -1);
     const CLUB = swingKindOf("Swing_Club") >= 0 ? swingKindOf("Swing_Club") : 3;   // (its own quick swing)
     const PUNCH = swingKindOf("Swing_Punch");   // (-1: no sheet, the blow lands at once)
+    const TORCH_SWING = swingKindOf("torch") >= 0 ? swingKindOf("torch") : CLUB;   // (Torch.js: the burning torch's own sweep)
     // the roll and the fall (ChoppableTree.js swing kinds): -1 when the picture is not in the game (Combat_UI.js turns the figure then)
     const ROLL_KIND = swingKindOf("Swing_Roll"), KNOCK_KIND = swingKindOf("knockdown");
     const FIST_ICON = 419;
     const MELEE = {
         0: { name: "Pięści", dmg: 5, poise: 12, reach: 1.15, cone: 0.5, cost: 7, combo: [PUNCH, PUNCH, PUNCH], heavy: PUNCH, hold: 5, se: "Blow1", sweep: false },   // (no weapon)
         156: { name: "Pałka", dmg: 13, poise: 26, reach: 1.45, cone: 0.45, cost: 10, combo: [CLUB, CLUB, CLUB], heavy: CLUB, hold: 7, se: "Blow1", sweep: false },
+        // the burning torch (Torch.js; a weapon only while it burns - in hand or stuck in the ground beside him): lighter than the club,
+        // a wider sweep; fire: an animal burns a moment (Torch.FIRE) and fears it (Torch.FEAR), a man or a creature takes fireBonus more
+        59: { name: "Pochodnia", dmg: 10, poise: 16, reach: 1.45, cone: 0.4, cost: 9, combo: [TORCH_SWING, TORCH_SWING, TORCH_SWING], heavy: TORCH_SWING, hold: 6, se: "Fire1", sweep: false, fire: true, fireBonus: 4 },
         115: { name: "Żelazna siekiera", dmg: 26, poise: 30, reach: 1.6, cone: 0.35, cost: 16, combo: [3, 3, 0], heavy: 0, hold: 10, se: "Slash2", sweep: true },
         60: { name: "Kamienna siekiera", dmg: 17, poise: 24, reach: 1.55, cone: 0.35, cost: 16, combo: [3, 3, 0], heavy: 0, hold: 10, se: "Blow2", sweep: true },
         154: { name: "Oszczep", dmg: 20, poise: 16, reach: 2.25, cone: 0.75, cost: 12, combo: [15, 15, 15], heavy: 15, hold: 9, se: "Slash4", sweep: false },
         116: { name: "Żelazny kilof", dmg: 30, poise: 42, reach: 1.45, cone: 0.45, cost: 22, combo: [1, 1], heavy: 1, hold: 14, se: "Blow6", sweep: true },
         63: { name: "Kamienny kilof", dmg: 22, poise: 36, reach: 1.45, cone: 0.45, cost: 22, combo: [1, 1], heavy: 1, hold: 14, se: "Blow6", sweep: true }
     };
-    const MELEE_ORDER = [115, 154, 60, 116, 63, 156];
+    const MELEE_ORDER = [115, 154, 60, 116, 63, 156, 59];
+    const TORCH_ITEM = 59;
+    const torchLit = () => !!T.call("Torch", "inHand");
     const COMBO_MULT = [1, 1.1, 1.45, 1.6];
     const HEAVY = { min: 18, max: 60, mult: 2.2, full: 2.7, poise: 2.5, cost: 0.8 };
     const SHIELDS = { 155: { name: "Drewniana tarcza", reduce: 0.75, breath: 0.7 } };
@@ -148,7 +154,7 @@
     // off (after the guard; Niezłomny comes on top); each blow that still hurts wears it (Durability.js "block": its blows)
     const ARMORS = { 171: { name: "Skórzana kurtka", reduce: 0.2 } };
     const has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
-    const meleeOwned = () => MELEE_ORDER.filter(has);
+    const meleeOwned = () => MELEE_ORDER.filter(id => (id === TORCH_ITEM ? torchLit() : has(id)));   // (the torch: while it burns)
     const hasRanged = () => (has(126) && has(127)) || (has(125) && has(64));
     function shield() {
         for (const id of Object.keys(SHIELDS)) if (has(Number(id))) return Object.assign({ id: Number(id) }, SHIELDS[id]);
@@ -358,13 +364,14 @@
             if (a && a._stun > 0 && hasSkill("execute")) { m *= 2.5; tag = "execute"; }
             const crit = act.riposteT > 0 || Math.random() < critChance();
             if (crit) { m *= 1.6; act.riposteT = 0; tag = tag || "crit"; }
-            const dmg = Math.max(1, Math.round(w.dmg * m));
-            t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id });
+            const dmg = Math.max(1, Math.round(w.dmg * m)) + (w.fire && !a ? w.fireBonus || 0 : 0);   // (fire: a man or a creature burns at once; an animal - Torch.struck)
+            t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id, fire: !!w.fire });
             if (!a) numberAt(t.x, t.y - 0.6, String(dmg), crit ? "#ffe066" : "#ffffff");
             if (heavy || crit) stop = 8;
             if (hidden) stop = 10;   // (the word "Atak z ukrycia!" and its thud: enemyHurtFx)
         }
         se(w.se, 85, heavy ? 80 : 100 + i * 6);
+        if (w.fire) T.call("Torch", "struck", targets.map(x => x.t), { heavy, last });   // (the fire: burning, fear, the torch burns down)
         if (heavy) $gameScreen.startShake(4, 8, 12);
         hitstop(stop);
         act.charge = 0;
@@ -691,6 +698,7 @@
         const label = hidden ? "!" : extra.tag === "execute" ? " dobicie!" : extra.crit ? "!" : "";
         numberAt(x, y - 0.9, damage + label, color, extra.heavy || extra.crit ? 1.2 : 1);
         sparksAt(x, y - 0.3, "#b8322a", extra.heavy ? 12 : 7);
+        if (extra.fire) sparksAt(x, y - 0.4, "#ffb43a", extra.heavy ? 12 : 8);   // (the torch: embers off the flame)
         animal._flashT = 8;
         // a blow or a shot from hiding (SNEAK): its word over the animal, in the green of the number, and a dull thud
         if (hidden) {

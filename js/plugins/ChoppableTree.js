@@ -596,7 +596,10 @@
         // 18: the club (Combat.js): a quick one-handed blow - raised over the shoulder, brought down in front, back on the shoulder
         { sheet: "Swing_Club", tool: -1, frames: 22, impact: 11, hold: 2, reach: 3, hit: [4, 5, 5, 4] },
         // 19: a punch (Combat.js, no weapon): fists up, a step, a straight punch, back
-        { sheet: "Swing_Punch", tool: -1, frames: 18, impact: 8, hold: 2, reach: 2, hit: [3, 4, 4, 4] }
+        { sheet: "Swing_Punch", tool: -1, frames: 18, impact: 8, hold: 2, reach: 2, hit: [3, 4, 4, 4] },
+        // 20: the burning torch (Torch.js, Combat.js): raised, swept in front of him, back up - the new hero's own sheet (HeroLook
+        // Hero_Torch); the old one (Reid) has none, so it swings his club sheet
+        { sheet: "Swing_Club", name: "torch", tool: -1, frames: 22, impact: 11, hold: 2, reach: 3, hit: [4, 5, 5, 4] }
     ];
     const SWING_KIND = { log: 0, rock: 1, stump: 2, fall: 3, bush: 3 };   // bushes: axe from the side
     const FALL_FRAMES = 55;   // (a felled tree: frames from the first tilt to the ground)

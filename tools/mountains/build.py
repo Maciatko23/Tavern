@@ -3,7 +3,9 @@
 #   Map013 "Góry i kamieniołom"   gory.py      the foothills, the shelf, the order's old quarry, the high shelf, the cave's mouth,
 #                                              the ravine with the Silent's gate (switch 16)
 #   Map014 "Jaskinia"             jaskinia.py  the diggers' camp, Marek, the tunnel to floor 50 (switch 15)
-#   Map120 "Osada Milczących"     osada.py     the hidden valley of the Silent (Act II)
+#   Map120 "Osada Milczących"     osada.py     the hidden valley of the Silent (Act II); its hut doors lead into Map121-124,
+#                                              which tools/osada/build.py builds and installs (with Map120 and their MapInfos
+#                                              entries) - after a Map120 install from here, run that one too if the huts are new
 #   Map021, Map149, MapInfos, System           patches.py (the way in from Leśna droga, the passage on floor 50, names)
 # The pictures first: python tools/mountains/art.py.
 # Without arguments: builds into tools/mountains/staging/ and patches in memory (a dry run: prints what it would do).

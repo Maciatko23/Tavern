@@ -18,10 +18,13 @@
 // talk: what they say when spoken to - "morning" (5-11), "day" (11-17), "evening" (17-22), "night", "rain"
 // (v1.2.0) when: a condition ("market") - the resident is there only while it holds (hidden all the other days); a plan entry's 4th
 // field: a condition for that entry (TownLife.addCondition registers more - TownQuests adds "w1Water": Kuba's night trips for water)
+// (v1.3.0, 2026-10-07) alt: { map, when, plan, talk, barks } - the resident moves to another outdoor map while `when` (a registered
+// condition) holds: W6 "campOutside" sends Ludmila, Ela, Rafal and Marek to Podgrodzie's tents; TownQuests also adds "w6Fire" (Rafal
+// by the camp's fire in W6 rozdz. 3). Marek (W6 rozdz. 7) is the last resident.
 
 /*:
  * @target MZ
- * @plugindesc Dane mieszkańców miasteczka i Podgrodzia: plany dnia, okrzyki, rozmowy (dla TownLife.js). v1.2.0
+ * @plugindesc Dane mieszkańców miasteczka i Podgrodzia: plany dnia, okrzyki, rozmowy (dla TownLife.js). v1.3.0
  * @author Claude
  * @help Same dane - działa z TownLife.js (ma stać nad nim na liście).
  */
@@ -39,7 +42,9 @@
         dom_mieszczan: [9, 31, 8], pod_murem: [31, 51, 2], stodola: [21, 51, 2], rynek_rog: [30, 38, 2],
         ratusz_obok: [40, 40, 4], stragan1_obok: [19, 31, 6],
         // (2026-10-05, the quests' new people) Lucjan's dice by the right stall; the carter's cart on the street before the south gate
-        stragan_kosci: [30, 31, 4], woz_pld: [27, 51, 2]
+        stragan_kosci: [30, 31, 4], woz_pld: [27, 51, 2],
+        // (2026-10-07, W6 "Ludzie z promu") Rafał's seat by the camp's fire under the wall (the fire: TownQuests' prop "w6_fire" 32,51)
+        w6_ognisko: [33, 51, 4]
     };
     const PATROL = ["brama_wsch", "ulica_rzem", "schody_rzem", "rynek_srodek", "brama_twierdzy", "przed_tawerna", "brama_twierdzy", "rynek_srodek", "schody_rzem", "brama_pld"];
     // the manor guard's night round in the west garden (Map024, its "Miejsce: straz_1..4" events - docs/miasta_miejsca_zadan.md)
@@ -257,6 +262,15 @@
                 wander: ["Ela, nie odchodź daleko.", "Marek... gdzie ty jesteś..."],
                 rain: ["Ela, pod plandekę!"], night: []
             },
+            // (2026-10-07, W6 rozdz. 5 a) the town shut its gate: the camp lives outside the wall, in Podgrodzie by the refugees' tents
+            alt: { map: 111, when: "campOutside",
+                plan: [[0, "inside", "namioty"], [6.5, "wander", "namioty"], [9, "wander", "plac"], [12, "wander", "kram"], [15, "wander", "namioty"], [20, "inside", "namioty"]],
+                barks: { wander: ["Ela, trzymaj się blisko namiotu.", "Za murem... jak psy za płotem.", "Marek... gdzie ty jesteś..."], rain: ["Ela, pod plandekę!"], night: ["Słyszysz? Wilki..."] },
+                talk: {
+                    morning: ["Brama zamknięta. Mieszkamy teraz tu, za murem. Darin dał nam miejsce przy swoim ognisku.", "Nocą wyją wilki. Ela śpi z nożem pod poduszką. Sześć lat."],
+                    day: ["Do miasta wpuszczają nas tylko za dnia. Po chleb. Jak żebraków.", "Gdybyś miał trochę jedzenia dla Eli... Ja wytrzymam."],
+                    evening: ["Wieczorem pilnujemy ognia. Wilki boją się ognia. Chyba."], night: ["Cicho... Ela śpi."], rain: ["Deszcz... przynajmniej Ela się napije."]
+                } },
             talk: {
                 morning: ["Ludmiła. Przypłynęłyśmy z córką promem, gdy spalili naszą wieś na kontynencie. Mąż... został w wojsku. Nie wiem, czy żyje.", "Śpimy pod murem przy stogach. Sołtys mówi, że miejsca nie ma."],
                 day: ["Wszyscy na kontynencie czegoś szukają. Żołnierze mówili o jakimś sercu... o pewności. Ludzie giną za coś, czego nikt nie widział.", "Gdybyś miał trochę jedzenia dla Eli... Ja wytrzymam."],
@@ -274,15 +288,29 @@
                 morning: ["...", "Tata obiecał, że przypłynie. Przypłynie, prawda?"],
                 day: ["Masz chleb? Mama mówi, że nie wolno prosić... ale ja bardzo głodna."],
                 evening: ["Mama mówi, że na wyspie nie ma wojny."], night: ["..."], rain: ["Deszcz smakuje jak w domu."]
-            }
+            },
+            alt: { map: 111, when: "campOutside",
+                plan: [[0, "inside", "namioty"], [6.6, "wander", "namioty"], [9.2, "wander", "zabawa"], [12.2, "wander", "plac"], [15.2, "wander", "namioty"], [20, "inside", "namioty"]],
+                barks: { wander: ["Mamo, patrz! Franek ma procę!", "Głodna jestem...", "Wilki tu przychodzą?"], rain: ["Kap, kap!"], night: [] },
+                talk: { morning: ["Tu też są dzieci. Franek mówi, że jego mama pierze dla Lorda."], day: ["Za murem jest ładniej. Tylko w nocy straszno."],
+                    evening: ["Darin opowiada o wojnie. Mama mówi, że nie wolno słuchać."], night: ["..."], rain: ["Deszcz smakuje jak w domu."] } }
         },
         {
             key: "rafal", name: "Rafał", title: "obcy w podartym kaftanie", sheet: "$Npc_Rafal", speed: 4,
-            plan: [[0, "inside", "stodola"], [4.5, "wander", "stodola"], [6.5, "inside", "stodola"], [21, "wander", "ulica_rzem"], [23.5, "inside", "stodola"]],
+            // (2026-10-07, W6 rozdz. 3: "w6Fire" - while the camp trusts the hero enough, Rafał sits by the camp's fire 20:30-23:30)
+            plan: [[0, "inside", "stodola"], [4.5, "wander", "stodola"], [6.5, "inside", "stodola"], [20.5, "stand", "w6_ognisko", "w6Fire"], [21, "wander", "ulica_rzem", "!w6Fire"],
+                   [23.5, "inside", "stodola"]],
             barks: {
                 wander: ["...nikt mnie nie widział...", "Kapral? Gdzie kapral?", "Cicho, cicho..."],
+                stand: ["Ogień grzeje. Tylko ognia tu nikt mi nie żałuje.", "Siadaj, jak chcesz. Ale nie za blisko."],
                 rain: ["Dobrze. W deszcz straż siedzi pod dachem."], night: ["Nie widziałeś mnie. Jasne?"]
             },
+            alt: { map: 111, when: "campOutside",
+                plan: [[0, "inside", "namioty"], [4.5, "wander", "namioty"], [8, "wander", "drewutnia"], [13, "wander", "skraj_lasu"], [18, "wander", "namioty"], [23.5, "inside", "namioty"]],
+                barks: { wander: ["Za murem przynajmniej kapral nie zagląda.", "Drwal daje mi rąbać za miskę zupy. Uczciwie."], night: ["Pilnuję ognia. Wilki."] },
+                talk: { morning: ["Za murem jest gorzej i lepiej. Gorzej - wilki. Lepiej - nikt nie pyta, kim byłem."],
+                    day: ["Rąbię u Zbycha. Za miskę. Ręce pamiętają kilof, ale siekiera też dobra."], evening: ["Wilki obchodzą obóz co noc. Liczę je. Siedem."],
+                    night: ["Nie śpię. Ktoś musi pilnować."], rain: ["Deszcz zmyje ślady. Dobrze."] } },
             talk: {
                 morning: ["Nie patrz tak. Jestem... pracuję przy sianie. Tak. Przy sianie."],
                 day: ["Czego chcesz?"],
@@ -551,6 +579,28 @@
                 night: ["Późno już, młodzieńcze. Dobranoc."],
                 rain: ["Deszcz to błogosławieństwo dla całego miasta, nie tylko dla ogrodu dworu."]
             }
+        },
+        {
+            // (2026-10-07, W6 rozdz. 7) Marek, Ludmiła's husband - brought out of the diggers' cave (TownQuests' flag marekSaved): he lives
+            // with his wife and daughter - under the wall, or in Podgrodzie when the town shut its gate (alt). Few words yet: the rock
+            // took his speech, the kerchief is giving it back. (appended: the others keep their ids)
+            key: "marek", name: "Marek", title: "mąż Ludmiły", sheet: "$Npc_Marek", speed: 3,
+            when: () => { const Q = window.TownQuests; return !!(Q && typeof Q.marekHome === "function" && Q.marekHome()); },
+            plan: [[0, "inside", "pod_murem"], [6.8, "wander", "pod_murem"], [10, "stand", "w6_ognisko"], [13, "wander", "pod_murem"], [17, "stand", "w6_ognisko"],
+                   [20, "inside", "pod_murem"]],
+            barks: {
+                wander: ["...Ela.", "Wiatr... konik... tak.", "(Marek dotyka chusty na szyi.)"],
+                stand: ["(Marek patrzy w ogień. Tym razem mruga.)", "...ciepło."],
+                rain: ["Deszcz... pamiętam deszcz."], night: []
+            },
+            talk: {
+                morning: ["(Marek długo szuka słów.) ...Dzień... dobry. Tak się mówi. Pamiętam.", "Ludmiła mówi... że byłem daleko. Byłem. W skale."],
+                day: ["(Marek pokazuje ci dłonie, pełne odcisków od kilofa.) ...Już nie kopię. Nigdy."],
+                evening: ["Ela śpiewa. Ja... słucham. Słuchanie jest dobre."],
+                night: ["...Cicho. Ela śpi."], rain: ["(Marek wystawia twarz do deszczu i się uśmiecha.)"]
+            },
+            alt: { map: 111, when: "campOutside",
+                plan: [[0, "inside", "namioty"], [6.8, "wander", "namioty"], [10, "wander", "drewutnia"], [14, "wander", "namioty"], [20, "inside", "namioty"]] }
         }
     ];
 

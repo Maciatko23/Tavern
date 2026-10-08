@@ -211,7 +211,9 @@
         if (!b) { b = Bitmap.load(url); b.smooth = true; safeCache.set(url, b); }
         return b;
     };
-    ui.loadBust = name => ui.safeBitmap("img/pictures/" + Utils.encodeURI(name) + ".png");
+    // (ui.bustFile, set by SpeechBubbles: the file drawn for a bust's name - the tavern regulars' old RTP names give their own
+    // busts, 2026-10-07; without it the name is the file)
+    ui.loadBust = name => ui.safeBitmap("img/pictures/" + Utils.encodeURI(ui.bustFile ? ui.bustFile(name) : name) + ".png");
     // the hero's bust (SpeechBubbles' choice: the new hero's Hero_Bust, else the leader's picture) and an event's
     ui.heroBust = function() {
         try { const n = T.call("SpeechBubbles", "heroBust"); if (n) return n; } catch (e) { /* (not known yet) */ }

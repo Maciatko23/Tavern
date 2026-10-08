@@ -838,11 +838,15 @@
             dir = 8;
             for (const d of [8, 4, 6, 2]) { const [dx, dy] = d === 8 ? [0, -1] : d === 2 ? [0, 1] : d === 4 ? [-1, 0] : [1, 0]; if (!$gameMap.isPassable(x + dx, y + dy, 10 - d)) { dir = d; break; } }
         }
-        let plate;
-        if (s.a.plate) { const [dx, dy] = String(s.a.plate).split(",").map(Number); plate = { x: x + (dx || 0), y: y + (dy || 0) }; }
-        else plate = { x: x + (dir === 6 ? 1 : dir === 4 ? -1 : 0), y: y + (dir === 2 ? 1 : dir === 8 ? -1 : 0) };
-        plate.py = dir === 8 ? 14 : dir === 2 ? -8 : 4;
-        return { x, y, dir, lift: num(s.a.lift, 12), plate };
+        return { x, y, dir, lift: num(s.a.lift, 12), plate: reachPlate(x, y, dir) };
+    }
+    // where the plate stands: within reach, on the tile he faces (user 2026-10-07: "talerz jest za wysoko, postać jakby je z góry" -
+    // the tags' plate=±1,-1 of the side seats put it on the next table up, the back seats' 0,-2 on his head; the tag is no longer read).
+    // Beside a table it stands on his own row at his hands; at a table in front of him (his back to us) on its near edge, just behind
+    // his head (the plate sorts under him: his head hides its lower rim, as a plate on a table seen past someone)
+    function reachPlate(x, y, dir) {
+        const [dx, dy] = dir === 6 ? [1, 0] : dir === 4 ? [-1, 0] : dir === 2 ? [0, 1] : [0, -1];
+        return { x: x + dx, y: y + dy, py: dir === 8 ? 2 : dir === 2 ? -8 : -4 };
     }
     function counterPlate() {
         const c = spots("meal")[0];

@@ -35,7 +35,15 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     await set(100, 100);
     await t.setHour(22);
     await ev("$gameSystem.sleepUntilHour(7); 0");
-    for (let k = 0; k < 12; k++) { if ((await t.scene()) === "Scene_Map" && !(await ev("!!$gameTemp._pendingSummary"))) break; await t.press("ok"); await t.frames(15); }   // the day summary of the night
+    await t.dismiss();   // the day summary of the night (2026-10-07: not OK presses - one pressed while the summary still waited for the
+    // fade-in reached the map; with fewer things on the ground it opened the ground menu there, which blocked G and the drinks after)
+    // (2026-10-08: under the full run's load the ground menu could still open a moment later - wait till the map is quiet: no summary,
+    // no message, no ground menu, 20 frames in a row)
+    await ev(`new Promise(res => { let calm = 0, n = 0; const iv = setInterval(() => { n++; const s = SceneManager._scene;
+        if ($gameTemp._farmMenuOpen && s && s.closeFarmMenu) { s.closeFarmMenu(); calm = 0; }
+        else if (!(s instanceof Scene_Map) || SceneManager.isSceneChanging() || $gameMessage.isBusy() || $gameTemp._pendingSummary) calm = 0;
+        else calm++;
+        if (calm >= 20 || n > 600) { clearInterval(iv); res(calm); } }, 16); })`);
     t.check("9 hours of sleep cost half: food -7.2, water -11.3", near(await food(), 92.8, 0.5) && near(await water(), 88.7, 0.5), { f: await food(), w: await water() });
     await set(100, 100);
     await ev("$gameSystem.trySpendStamina(10); 0");

@@ -199,7 +199,7 @@ const DRIVER = String.raw`
         const meal = await talkTo(EV.borgar, ["Zjedz coś"], 90, { card: "Gulasz", shot: "uslugi_1_karta_dan.png", during: async () => {
             // the free seat nearest to where he ordered (TavernLife picks it the same way)
             expectSeat = await J(`(function(){ const p = $gamePlayer, s = TavernLife.spots('mealtable').slice().sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0];
-                const d = Number(s.a.dir), pl = s.a.plate ? s.a.plate.split(',').map(Number) : [d === 6 ? 1 : d === 4 ? -1 : 0, d === 2 ? 1 : d === 8 ? -1 : 0]; return { id: s.id, x: s.x, y: s.y, dir: d, px: s.x + pl[0], py: s.y + pl[1] }; })()`);
+                const d = Number(s.a.dir), pl = [d === 6 ? 1 : d === 4 ? -1 : 0, d === 2 ? 1 : d === 8 ? -1 : 0];   /* (2026-10-07: the plate within reach, the tile he faces - the tag's plate= is no longer read) */ return { id: s.id, x: s.x, y: s.y, dir: d, px: s.x + pl[0], py: s.y + pl[1] }; })()`);
             await until("TavernLife.fx.some(f => f.kind === 'plate') && $gamePlayer._toolSwing && $gamePlayer._toolSwing._waiting", 40);
             await frames(20);
             seated = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction(), plate: TavernLife.fx.filter(f => f.kind === 'plate').map(f => [f.x, f.y, f.dish.id]) })");
@@ -212,7 +212,7 @@ const DRIVER = String.raw`
         check("Gulasz ordered: its price taken", meal.done && before.gold - after.gold === gPrice, { before: before.gold, after: after.gold, price: gPrice });
         const served = await J("window.__served");
         check("...and told on the Tawerna bus: 'served' { service: meal, price, dish: gulasz }", served.length === 1 && served[0].service === "meal" && served[0].price === gPrice && served[0].dish === "gulasz", served);
-        check("he sat at the nearest free table (a real <Tavern:mealtable>) facing its way, the plate on the table where the tag says", seated && expectSeat && seated.x === expectSeat.x && seated.y === expectSeat.y && seated.d === expectSeat.dir &&
+        check("he sat at the nearest free table (a real <Tavern:mealtable>) facing its way, the plate on the tile he faces (within reach)", seated && expectSeat && seated.x === expectSeat.x && seated.y === expectSeat.y && seated.d === expectSeat.dir &&
             seated.plate.some(p => p[0] === expectSeat.px && p[1] === expectSeat.py && p[2] === "gulasz"), { seated, expectSeat });
         check("about 30 minutes passed", Math.abs(after.h - before.h - 0.5) < 0.12, after.h - before.h);
         check("the food worked: +65 stamina, hunger and thirst down, Najedzony + Rozgrzany, and Ugoszczony on top", after.st >= Math.min(100, before.st + 60) && after.food > before.food + 40 && after.water > before.water + 10 && after.sated && after.warm && after.hosted, after);

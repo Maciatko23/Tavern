@@ -47,7 +47,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.go(8, 24, 37, 8);
     const town = await t.json(`(function(){ const o = { podgrodzie: [], town: 0 }; for (const r of TownLife.RESIDENTS) { const e = TownLife.eventOf(r.key);
         if (TownLife.homeOf(r) === 111 && e) o.podgrodzie.push(r.key); if (TownLife.homeOf(r) === 8 && e) o.town++; } return o; })()`);
-    t.check("on Map008 the town's 19 residents (14 + the quests' four + Teodor, hidden till Feliks goes) and none of Podgrodzie's", town.town === 19 && !town.podgrodzie.length, town);
+    t.check("on Map008 the town's 20 residents (14 + the quests' four + Teodor, hidden till Feliks goes, + Marek, hidden till W6 brings him home) and none of Podgrodzie's", town.town === 20 && !town.podgrodzie.length, town);
 
     // the night: back in Podgrodzie at 23:48 everyone is hidden (indoors, or the poacher in the forest)
     await t.go(111, 1, 1, 2);

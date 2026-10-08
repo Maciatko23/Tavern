@@ -5,12 +5,18 @@
 # sign of the Silent - a strip over the mouth), dry garden beds (the drought), the high smooth rock face in the north they
 # stand and look at. Residents: figures in the hero's style (PixelLab), silent - the action button gives a popup of what one
 # sees, not talk (the quests may give them more). Tileset 11; trees and rocks are Map003's own kinds.
+# (2026-10-07) The huts open: each front door leads into its interior Map121-124 (tools/osada: huts.py builds them, osada_data.py
+# says which door goes where); hut 3's side door stays shut. The Silent keep hours (tools/osada/osada_data.py RESIDENTS): outside
+# at theirs, else at home - page 2 of each resident (self switch A, set by the parallel event "Milczący: pora dnia") is
+# nobody. Rebuild order: this map (tools/mountains/build.py or tools/osada/build.py), then the huts (tools/osada/build.py).
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "town"))
+sys.path.insert(0, os.path.join(HERE, "..", "osada"))
 from mtlib import *   # noqa: F401,F403
 import props as PR
 import prefabs as PF
+import osada_data as OD      # tools/osada/osada_data.py
 
 MAP_ID, W, H = 120, 40, 34
 NOTE = "<Clouds:on>\n<Hunt:off>\n<Bear:off>\n<Camp:off>\n<Humans:off>\n<Farm:off>\n<Build:off>\n<Poziom:6>"
@@ -65,9 +71,15 @@ def build():
                 e["pages"][0]["image"]["characterName"] = ""          # (no shop sign here)
                 e["name"] = "(bez szyldu)"
             elif pic.startswith("!Fantasy_door"):
-                e["name"] = "Drzwi chaty %d" % n
-                e["pages"][0]["list"] = PR.popup("Drzwi zamknięte. Za nimi cisza.") + [{"code": 0, "indent": 0, "parameters": []}]
-                doors.setdefault(n, (x, y))
+                if n not in doors:          # the hut's front door: walk into it -> the hut (fade, facing up)
+                    e["name"] = "Drzwi chaty %d" % n
+                    mid = OD.HUT_OF_DOOR[e["name"]]
+                    e["pages"][0]["list"] = OD.door_list(mid, *OD.LANDINGS[mid])
+                    e["pages"][0]["trigger"] = 1
+                    doors[n] = (x, y)
+                else:                       # (hut 3's lean-to door)
+                    e["name"] = "Boczne drzwi chaty %d" % n
+                    e["pages"][0]["list"] = PR.popup(OD.SIDE_DOOR_TEXT) + [{"code": 0, "indent": 0, "parameters": []}]
     # ---- the circle of the Silent: four standing stones round a flat stone, cairns with white strips
     cx, cy = 19, 19
     # (plain pictures, not Map003's mineable rocks: nobody breaks the Silent's stones)
@@ -101,18 +113,26 @@ def build():
         mp.transfer(x, y, EXIT_TO[0], EXIT_TO[1] - 1 + i, EXIT_TO[2], EXIT_TO[3], name="Przejście -> Góry i kamieniołom")
         mp.region[(x, y)] = 7
 
-    # ---- the Silent (figures, silent: the action button shows what one sees)
+    # ---- the Silent (figures, silent: the action button shows what one sees); page 2 (self switch A: at home) - nobody
     for name, sheet, x, y, d, line in RESIDENTS:
         sheet = sheet if PR.have(sheet) else "$Npc_Zebrak"
         mp.add(x, y, {"name": name, "note": "<BustName:%s>" % name, "pages": [
             PR.page(image={"characterName": sheet, "characterIndex": 0, "direction": d, "pattern": 1}, priority=1, trigger=0,
-                    cmds=PR.popup(line), direction_fix=True)]})
+                    cmds=PR.popup(line), direction_fix=True),
+            PR.page(priority=0, through=True, cond={"selfSwitchValid": True, "selfSwitchCh": "A"})]})
         mp.solid.add((x, y))
 
     for key, x, y, d in MARKERS:
         mp.marker(x, y, key, d)
     for n, (x, y) in sorted(doors.items()):
         mp.marker(x, y + 1, "osada_dom_%d" % n, 8)
+    # ---- the hours of the Silent (last, so the ids above stay as they were)
+    sch = OD.schedule_event(blank_page)
+    sch["pages"][0]["list"] = OD.schedule_list(MAP_ID) + [{"code": 0, "indent": 0, "parameters": []}]
+    mp.add(0, 0, sch)
+    for n, (x, y) in doors.items():
+        mid = OD.HUT_OF_DOOR["Drzwi chaty %d" % n]
+        assert OD.HUTS[mid][3] == (x, y) and OD.HUTS[mid][4] == (x, y + 1), (n, x, y)
     return mp
 
 

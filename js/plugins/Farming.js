@@ -810,19 +810,22 @@
         return _Game_Map_isPassable.call(this, x, y, d);
     };
 
-    // share = the part of the tiles that hold this kind; the kinds follow one another on the hash line (stones first)
+    // share = the part of the tiles that hold this kind; the kinds follow one another on the hash line (stones first).
+    // keep = how much of its stretch of the line still holds it (2026-10-07, user: "za dużo rzeczy na ziemi" - half): the same tiles
+    // as before, only fewer of them, and the stretches do not move (no kind wanders onto another's tiles, saves stay as they were)
+    const GROUND_KEEP = 0.5;
     const GATHER = {
-        stone: { item: ITEM.stone, share: STONE_DENSITY, respawn: STONE_RESPAWN_DAYS, count: [1, 1] },
-        fiber: { item: ITEM.fiber, share: 0.06, respawn: 3, count: [1, 2], seasons: [0, 1, 2] },
-        berries: { item: ITEM.berries, share: 0.035, respawn: 4, count: [1, 3], seasons: [1, 2] },
+        stone: { item: ITEM.stone, share: STONE_DENSITY, keep: GROUND_KEEP, respawn: STONE_RESPAWN_DAYS, count: [1, 1] },
+        fiber: { item: ITEM.fiber, share: 0.06, keep: GROUND_KEEP, respawn: 3, count: [1, 2], seasons: [0, 1, 2] },
+        berries: { item: ITEM.berries, share: 0.035, keep: GROUND_KEEP, respawn: 4, count: [1, 3], seasons: [1, 2] },
         mushroom: { item: ITEM.mushroom, share: 0, respawn: 4, count: [1, 2], seasons: [0, 1, 2] },   // no fixed tiles: they grow and vanish (mushroomBirth)
         bush: { item: ITEM.berries, share: 0, respawn: 0, count: [2, 4] },   // berry bushes: berries, then the bare bush gives fibre (bushState)
-        herb: { item: ITEM.herb, share: 0.03, respawn: 4, count: [1, 2], seasons: [0, 1] },
-        branch: { item: ITEM.branch, share: 0.05, respawn: 3, count: [1, 2] },
+        herb: { item: ITEM.herb, share: 0.03, keep: GROUND_KEEP, respawn: 4, count: [1, 2], seasons: [0, 1] },
+        branch: { item: ITEM.branch, share: 0.05, keep: GROUND_KEEP, respawn: 3, count: [1, 2] },
         // the wild herbs came later: after the branches on the hash line, so the older kinds keep their tiles
-        nettle: { item: ITEM.nettle, share: 0.025, respawn: 4, count: [2, 3], seasons: [0, 1, 2] },   // stings bare hands (pickGather)
-        yarrow: { item: ITEM.yarrow, share: 0.018, respawn: 5, count: [1, 2], seasons: [1, 2] },
-        garlic: { item: ITEM.garlic, share: 0.018, respawn: 5, count: [1, 3], seasons: [0, 1] },
+        nettle: { item: ITEM.nettle, share: 0.025, keep: GROUND_KEEP, respawn: 4, count: [2, 3], seasons: [0, 1, 2] },   // stings bare hands (pickGather)
+        yarrow: { item: ITEM.yarrow, share: 0.018, keep: GROUND_KEEP, respawn: 5, count: [1, 2], seasons: [1, 2] },
+        garlic: { item: ITEM.garlic, share: 0.018, keep: GROUND_KEEP, respawn: 5, count: [1, 3], seasons: [0, 1] },
         cone: { item: ITEM.cone, share: 0, respawn: 5, count: [1, 3] },   // no share: only under a standing pine (coneTiles)
         // wild potatoes and carrots (the user's, 2026-09-25): seldom, there from the start; dug out by hand they give the vegetable and,
         // half the time, its seeds (seed: [item, chance, count]) - a way to the first seeds. Last on the hash line: the older kinds keep their tiles
@@ -831,9 +834,9 @@
     };
     const GATHER_KINDS = Object.keys(GATHER);
     const BUSH_SHARE = 0.02;        // the part of the tiles that hold a berry bush
-    const MUSHROOM_POOL = 0.14;     // the part of the tiles where a mushroom may grow
+    const MUSHROOM_POOL = 0.07;     // the part of the tiles where a mushroom may grow (0.14 till 2026-10-07: halved, a part of the same tiles)
     const MUSHROOM_LIFE = 3;        // days a mushroom stays before it is gone
-    const CONE_SHARE = 0.22;        // the part of the free tiles under a pine where cones lie
+    const CONE_SHARE = 0.11;        // the part of the free tiles under a pine where cones lie (0.22 till 2026-10-07: halved, the same tiles)
     const CROP_LIFT = -8;    // sown plants are drawn this many pixels higher: their pictures stand on the bottom edge of the tile, this puts them in the middle
     const BUCKET_REACH = 3;   // how far from a plot a bucket still waters it (tiles)
     // ---- helpers

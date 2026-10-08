@@ -502,5 +502,30 @@ je w torbie; obie widać w menu P → Postać (pod atrybutami: WYPOSAŻENIE, z t
        wyżej, „bot 75% = gracz średni”, boss kosztuje 2-5 odnowień (Ostatni Strażnik, koniec pasma, ~10); napady bandytów na śpiącego
        w liczbach z §11.3 (rzadkie na początku, częstsze od 15. dnia, nigdy w chacie ani w miasteczku - dach chroni).
 
+6. **Akt III — obrona tawerny** (2026-10-07; całość w `docs/AKT3.md`, kod `Act3.js` + `Act3_Data.js`, test `tests/act3_test.js`).
+   - **Sojusznicy w walce** (nowe): obrońcy tawerny (Borgar, Grum, Rafał, Marek, strażnicy dworu, mieszkańcy) to postacie wtyczki
+     (nie zdarzenia, jak ludzie i stwory): idą do człowieka frakcji przy swoim miejscu (Grum przy bohaterze), zamach - ciało rzucone do
+     przodu - łuk broni (Grum: prawdziwe ciosy najemnika i tarcza z przodu), cios przez `Humans.hit` z `from` (garda i odrzut liczone od
+     strony obrońcy). Trafiony człowiek bije się z obrońcą: `Humans.setFoe(człowiek, obrońca)` - jego podejście, obrót, zamach i cios idą
+     na obrońcę (`takeHit`), bez kolejki bandy; łucznik nigdy (strzela do bohatera). Obrońca: życie i równowaga rosną z poziomem napadu
+     jak u ludzi, zachwiany odskakuje, z zerem życia pada ranny (nie ginie). Zielony pasek i imię nad głową.
+   - **Ludzie frakcji idą do drzwi** (`Humans.march`): kto nie walczy, wyważa drzwi tawerny albo stare drzwi przy piwnicy; `Humans.remove`
+     - przeszedł przez wyważone drzwi.
+   - **Dowódca kopaczy**: najemnik z własnym wyglądem (PixelLab a8bb43b1 w stylu bohatera, `anim8/Captain_*8`, narzędzia
+     `tools/humans/` klucz `captain`), poziom napadu +2.
+   - Pobity w napadzie bohater: obrabowany jak zawsze, a resztę rozstrzyga siła obrońców, którzy jeszcze stoją.
+
+7. **Pochodnia jako broń** (2026-10-08, `Torch.js`; test `tests/torch_test.js`). Zapalona pochodnia (przedmiot 59) jest bronią trybu
+   walki, dopóki płonie (w ręku albo wbita obok w ziemię) - na liście `[ ]` między pałką a pięściami. Własny zamach `Hero_Torch` (PixelLab,
+   stan „Torch” bohatera, 17 klatek; rodzaj zamachu `torch` = 20, cios na klatkach [7, 7, 7, 9]).
+   - Liczby (do potwierdzenia): **10 obrażeń** (pałka 13), równowaga 16 (pałka 26), zasięg 1,45, stożek 0,4, oddech 9 (pałka 10).
+     Ogień: zwierzę **płonie 3 razy po 3** co 40 klatek (ciężki cios 5 razy), odnawiane, nie sumowane; człowiek i stwór dostają od razu
+     **+4**. Kombo pochodnią to ok. 35 + do 9 ognia - tyle co pałka (ok. 46), ale słabiej zbija równowagę.
+   - Strach zwierząt: trafiony **wilk odskakuje i przez 3 s trzyma 3,4 pola** (nie skacze; ciężki cios 4,2 s), **dzik ucieka** (odwrót
+     2,5 s), **niedźwiedź cofa się** na ponad 1 s i dłużej czeka z kolejnym atakiem. Dopóki pochodnia płonie, wataha krąży o 0,9 pola
+     dalej, a przerwa między skokami jest o ok. 1/3 dłuższa.
+   - Pochodnia się wypala: 3 godziny zegara gry, **celny cios zabiera 4 minuty**; deszcz x2, śnieg x1,5, ulewa gasi po 6 minutach.
+   - Bota balansu (`tests/combat_balance.js`) to nie zmienia: walczy siekierą (podziemia, ludzie), pochodnia jest słabsza od siekier.
+
 Grafika na każdy etap: animacje postaci (przewrót, ciosy każdej broni, zamach ciężkiego ciosu, blok) i nowe
 sprite'y wrogów — PixelLab, tak jak dotychczasowe arkusze zamachów (najbardziej pracochłonna część).

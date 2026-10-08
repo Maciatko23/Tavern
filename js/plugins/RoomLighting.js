@@ -211,6 +211,9 @@
  *      pochodni z paskiem czasu, który się zmniejsza w miarę upływu czasu
  *      i znika razem z pochodnią. Ikona to indeks z parametru "Ikona
  *      pochodni" (domyślnie 80 - płomień z domyślnego IconSet).
+ *   Z Torch.js (2026-10-08) pochodnia ma własny czas (godziny gry, w zapisie)
+ *   i sama się zapala i gasi - przełącznik dalej mówi, czy płonie; światło
+ *   bierze się z płomienia w ręku (albo z pochodni wbitej w ziemię).
  * ============================================================================
  */
 
@@ -768,7 +771,8 @@
         // nothing moved and the hour's light is the same: the last picture is still right (skip the paint and upload)
         // (a light's own strength is in the key too: a flickering flame or one another plugin dims; and who stands in it)
         const Sun = T.api("Sun");
-        const key = this._playerTorch ? "" : [tod.alpha.toFixed(3), tod.night.toFixed(3), Math.round(view.x0), Math.round(view.y0),
+        const stuck = T.call("Torch", "groundLights") || [];   // (torches stuck in the ground: Torch.js - they flicker, so no saved picture)
+        const key = this._playerTorch || stuck.length ? "" : [tod.alpha.toFixed(3), tod.night.toFixed(3), Math.round(view.x0), Math.round(view.y0),
             view.x1 - view.x0, visible.map(h => h.sprite.x + "," + h.sprite.y + "," + weightOf(h.sprite).toFixed(3) +
                 (h.sprite._flicker ? "," + h.sprite._flicker.s.toFixed(3) + "," + h.sprite._flicker.c.toFixed(2) : "") +
                 (h._blockers && h._blockers.length ? "," + Sun.blockersKey(h._blockers) : "")).join(";")].join("|");
@@ -809,6 +813,7 @@
         if (this._playerTorch) {
             punchCircleHole(context, this._playerTorch.x, this._playerTorch.y, TORCH_RADIUS);
         }
+        for (const l of stuck) punchCircleHole(context, l.x, l.y, TORCH_RADIUS * (0.97 + 0.03 * Math.sin(Graphics.frameCount * 0.21 + l.id)));
         context.restore();
         bitmap._baseTexture.update();
         this.redrawGlows(visible);
@@ -909,8 +914,10 @@
 
     Sprite_PlayerTorch.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        this.x = $gamePlayer.screenX();
-        this.y = $gamePlayer.screenY() - $gameMap.tileHeight() * 0.6;
+        // the flame itself (Torch.js: in his hand, or the torch stuck in the ground while he works), else round him
+        const spot = T.call("Torch", "lightSpot");
+        this.x = spot ? spot.x : $gamePlayer.screenX();
+        this.y = spot ? spot.y : $gamePlayer.screenY() - $gameMap.tileHeight() * 0.6;
         if (TORCH_FLICKER) {
             this._flickerPhase += 0.15 + Math.random() * 0.1;
             const flick = 1 + Math.sin(this._flickerPhase) * 0.05 + (Math.random() - 0.5) * 0.04;
@@ -937,9 +944,16 @@
             if (this._torchGauge.parent) this._torchGauge.parent.removeChild(this._torchGauge);
             this._torchGauge = null;
         }
-        if (this._playerTorch) this._playerTorch.update();
+        if (this._playerTorch) {
+            this._playerTorch.update();
+            // outdoors at night Farming_Render's night layer lights the torch as a campfire (its light, glow and flicker): this plain
+            // glow would only double it (2026-10-08); in a dark room (this plugin's darkness) it stays as it was
+            this._playerTorch.visible = !(this._nightLight && this._nightLight.visible);
+        }
         if (this._torchGauge) {
-            const ratio = this._torchMaxFrames > 0 ? $gameTimer.frames() / this._torchMaxFrames : 0;
+            // Torch.js keeps the torch's own time (game hours, in the save); without it the engine's timer as before
+            const own = T.call("Torch", "ratio");
+            const ratio = own !== undefined ? own : this._torchMaxFrames > 0 ? $gameTimer.frames() / this._torchMaxFrames : 0;
             this._torchGauge.setRatio(Math.max(0, Math.min(1, ratio)));
             this._torchGauge.update();
         }

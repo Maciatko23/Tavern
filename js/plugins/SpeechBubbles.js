@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Rozmowy w dymkach: tekst wiadomości w dymku nad postacią, która mówi, a w rozmowie z postacią z popiersiem - popiersia w rogach ekranu i dymek z popiersia mówiącego. Krótkie okrzyki postaci. v1.3.0
+ * @plugindesc Rozmowy w dymkach: tekst wiadomości w dymku nad postacią, która mówi, a w rozmowie z postacią z popiersiem - popiersia w rogach ekranu i dymek z popiersia mówiącego. Krótkie okrzyki postaci. v1.4.0
  * @author Claude
  * @base TawernaCore
  * @base TawernaUI
@@ -74,6 +74,8 @@
  * Klatki można pominąć: czas zależy wtedy od długości tekstu.
  *   SpeechBubbles.bustOf(postać), heroBust(), hasBust(nazwa), bustBitmap(nazwa)
  * popiersie postaci i jego obrazek (ten sam, co w mini-grach: Tawerna.ui).
+ * Bywalcy tawerny (Borgar, Melia, Grum, Ozzy, Wanda) mają własne popiersia
+ * (Borgar_Bust...) pod starymi nazwami RTP (People3_5...): bustFile(nazwa).
  *
  * KOLEJNOŚĆ: pod TawernaCore.js i TawernaUI.js.
  */
@@ -120,7 +122,11 @@
     const BUSTS = { "$Npc_Dziadek:0": "Stach_Bust" };
     ["Kowal", "Piekarka", "Woziwoda", "Kapral", "Dzwonnik", "Kupiec", "Soltys", "Garbarz", "Feliks", "Lord", "Kamerdyner",
         "Straznik", "Bronek", "Zosia", "Ludmila", "Ela", "Rafal", "Praczka", "Franek", "Drwal", "Klusownik", "Znachorka",
-        "Szmaciarz", "Uchodzca", "Zebrak", "Zlodziej", "Gracz", "Bartek", "Woznica"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
+        "Szmaciarz", "Uchodzca", "Zebrak", "Zlodziej", "Gracz", "Bartek", "Woznica", "Marek"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
+    // the tavern regulars' RTP busts did not look like their map sheets ($Npc_Borgar...): drawn anew (tools/busts/make_<key>.py,
+    // 2026-10-07). Their old names stay the keys (event tags, the plugins' data, the tests); the picture loaded for one is the new
+    // file once it is found there (Tawerna.ui.loadBust asks bustFile; a file not there - the RTP picture as before)
+    const RENAMED = { People3_5: "Borgar_Bust", People2_8: "Melia_Bust", Actor2_5: "Grum_Bust", People2_1: "Ozzy_Bust", People1_6: "Wanda_Bust" };
     const HERO_BUST = "Hero_Bust";                              // the hero while HeroLook's peasant look is on
     const FACES_RIGHT = new Set();                              // busts drawn facing right (the RTP ones face left)
     const HERO_NAME = "Ty";
@@ -308,6 +314,14 @@
     }
     const hasBust = name => !!name && found.get(name) !== false && (RTP_BUST.test(name) || found.get(name) === true);
     const usable = name => (hasBust(name) ? name : (probe(name), null));
+    // the file drawn for a bust's name (RENAMED: the regular's own bust when it is there)
+    function bustFile(name) {
+        const own = RENAMED[name];
+        if (!own) return name;
+        probe(own);
+        return found.get(own) === true ? own : name;
+    }
+    ui.bustFile = bustFile;
     // the picture of a bust that is there, else null. Loaded by the kit (Tawerna.ui.loadBust: outside ImageManager's cache - a file
     // gone after all must not stop the game with a load error), so the talks and the mini-games' busts share one picture
     function bustBitmap(name) {
@@ -358,7 +372,7 @@
     Scene_Boot.prototype.onDatabaseLoaded = function() {
         _Scene_Boot_onDatabaseLoaded.call(this);
         booted = true;
-        [HERO_BUST].concat(Object.values(BUSTS)).forEach(probe);
+        [HERO_BUST].concat(Object.values(BUSTS), Object.values(RENAMED)).forEach(probe);
     };
 
     // ------------------------------------------------------------------
@@ -976,7 +990,7 @@
     T.on("load", endTalk, { owner: PLUGIN });
 
     window.SpeechBubbles = T.register(PLUGIN, {
-        say, get barks() { return barks; }, log, speakerOf, headOf, bustOf, heroBust, hasBust, bustBitmap, talk: () => talk, BUSTS, FACES_RIGHT, TALK,
+        say, get barks() { return barks; }, log, speakerOf, headOf, bustOf, heroBust, hasBust, bustBitmap, bustFile, RENAMED, talk: () => talk, BUSTS, FACES_RIGHT, TALK,
         HERO_SIDE, NPC_SIDE
     });
 })();

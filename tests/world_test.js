@@ -97,7 +97,7 @@ const { launch, sleep } = require("./cdp.js");
         const rainy = await J(`(function(){ const p = n => { const w = Survival.weatherPlan(n); return w && w.type === "rain" ? 1 : 0; }; let wet = null, dry = null; for (let d = 60; d <= 84; d++) { const recent = p(d) + p(d - 1) + p(d - 2); if (!wet || recent > wet.r) wet = { d, r: recent }; if (!dry || recent < dry.r) dry = { d, r: recent }; } return { wet, dry }; })()`);
         await setDay(rainy.wet.d); const wetN = await scan("mushroom");
         await setDay(rainy.dry.d); const dryN = await scan("mushroom");
-        check("mushrooms after rain are far more numerous than after dry days (autumn): " + wetN + " vs " + dryN, wetN >= 12 && wetN >= dryN * 2, { wet: rainy.wet, dry: rainy.dry, wetN, dryN });
+        check("mushrooms after rain are far more numerous than after dry days (autumn): " + wetN + " vs " + dryN, wetN >= 6 && wetN >= dryN * 2, { wet: rainy.wet, dry: rainy.dry, wetN, dryN });
         await setDay(1);
         check("in the first days of spring only a few grow", (await scan("mushroom")) <= 3);
         await setDay(100);

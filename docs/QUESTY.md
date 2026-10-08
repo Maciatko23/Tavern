@@ -353,6 +353,36 @@ Komnata Serca) czekają.
    Osady Milczących. Wyprowadzenie go to walka i ucieczka. Jego powrót do Ludmiły i Eli to najcieplejsza scena gry. Potem
    Marek pomaga bronić tawerny.
 
+*(W grze od 2026-10-07, rozdz. 3–7 - `TownQuests.js` v1.4.0. Rozdz. 1–2 to zadania obozu: K19, K27, K28, K29, D4, D10 (D18 też się
+liczy) - **zaufanie obozu** = trzy z nich (konik dla Eli, kocioł zupy, gorączka Eli, chleb Eli opłacony albo praca u Hanki, Rafał
+nieliczony w spisie, Szymek puszczony, płaszcze dla obozu) i do tego zaufanie Rafała (spis bez niego, rana Rafała). Od dnia 10 pod murem
+stoi namiot obozu i ognisko (płomień).
+Rozdz. 3: wieczorem (20:30–23:30) Rafał siedzi przy ognisku obozu (TownLife, warunek `w6Fire`) i opowiada: kopacz wyprawy po Serce,
+„drzwi pod skałą” od strony gór, jeden dotknął czegoś w skale i przestał mówić, w drużynie był Marek.
+Rozdz. 4: następnego dnia na **tablicy zleceń w tawernie** (i na ścianie tawerny) list gończy - zdarzenie tablicy najpierw pokazuje
+kartkę, potem otwiera się tablica; albo mówi o nim kapral Wit. Straż przeszuka obóz za 3 dni (10:00). Rafał (o świcie albo późnym
+wieczorem): **a) ukryj** - izdebka nad tawerną (50 G dla Borgara), chata dziadka albo dzwonnica Ambrożego; w trzecim dniu Wit przeszukuje
+to miejsce - ryzyko w wyborze („małe / średnie / duże”: tawerna 40%, chata 30%, dzwonnica 20%; Borgar kryje sąsiada od Opinii 40, Ambroży
+przyjaciela dzwonu po D16, dziadek sojusznika Lorda, podejrzany bohater +20, dług Wita z D5 -40); nie znaleziony - po 7 dniach wraca:
+**sojusznik**; znaleziony - zabrany (straż patrzy krzywo); **b) wydaj** - Wit, 120 G i życzliwość dworu; Ludmiła cię nienawidzi (nie daje
+zadań, odpowiada chłodno), Ela płacze, Rafał **wróci jako wróg** (w rozdz. 7 walczy z nożem po stronie kopaczy); **c) przemyć** - Baltazar
+50 G, Rafał odpływa promem (W5: kantor wie). Nic nie zrobione do przeszukania - zabrany z obozu.
+Rozdz. 5: dzień 24 - druga fala (drugi namiot, Bogdan i Halina - postacie PixelLab w stylu bohatera), kłótnie przy beczkach Kuby; dzień
+później 13–16 zebranie w ratuszu: miasto 55 za zamknięciem, 45 za wpuszczeniem (+3 za każdy czyn bohatera dla obozu), głos bohatera = jego
+Opinia / 2. **a) zamknąć** - obóz (Ludmiła, Ela, Rafał, później Marek) przenosi się za mur, na Podgrodzie, do namiotów Darina; nocą
+podchodzą tam wilki; D5 ma wilka więcej; **b) wpuścić z pracą** - przez tydzień Bogdan i Halina stoją na polu dziadka i codziennie o 16:00
+sami zbierają dojrzałe plony (do skrzyń na polu - jak pies do składowiska; reszta czeka na bohatera na polu). Kierat (D2) - nie ma.
+Rozdz. 6 i 7 to jeden krok (Akt II może przyjść przed zimą): **Wigilia** (pierwszy dzień Wigilii zimą - w pierwszym roku dzień 96): od 12
+dni wcześniej Ludmiła pyta, gdzie - przy ognisku obozu albo w tawernie u Borgara; tego wieczoru 4 gorące dania z kociołka (gulasz,
+kapuśniak, zupa grzybowa, owsianka) - Ludmile w obozie 17–20 albo Borgarowi przy ladzie 17–23; Opinia +10. D18: z płaszczami obóz nie
+marznie, płaszcze dla straży = Bogdan i Halina odpływają. **Marek** (Akt II - po spłacie długu): Ludmiła daje chustę z koniem wyszytym
+przez Elę; Marek w niszy obozu kopaczy w Jaskini (Map014) odwraca się do chusty i idzie za bohaterem; obóz pilnuje: nocą strażnik przy
+ognisku twarzą do wyjścia (z Rafałem-sojusznikiem drzemie 1–3), za dnia też kopacze - zauważony bohater = alarm i walka (strażnik jako
+najemnik Humans.js, z Rafałem-wrogiem jeszcze nożownik „Rafał”); albo słowo ze strażnikiem: Grum-sojusznik, praca dla frakcji, 80 G; albo
+„odbiorę go siłą”. Pobity bohater - obrabowany, Marek wraca pod ścianę. Z Markiem u wylotu jaskini: **`marekSaved`** (W8 rozdz. 6 to liczy),
+Marek mieszka z rodziną (TownLife), powrót do Ludmiły i Eli; Marek: „Kiedy przyjdą - stanę z tobą.” Wątek kończy się, gdy Wigilia minie
+i Marek jest w domu.)*
+
 ### W7. Dwór z kamieni twierdzy
 
 Do wyboru autora (`STORY.md` zostawia to otwarte):

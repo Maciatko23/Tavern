@@ -221,8 +221,10 @@
         const r = hash2(x, y, 301);
         let acc = 0;
         for (const k of GATHER_KINDS) {
-            acc += GATHER[k].share;
-            if (r < acc) return k;
+            const g = GATHER[k];
+            // (only the first `keep` of the kind's stretch holds it: fewer, on the same tiles; the rest of the stretch lies bare)
+            if (r < acc + g.share) return r < acc + g.share * (g.keep === undefined ? 1 : g.keep) ? k : null;
+            acc += g.share;
         }
         if (coneTiles().has(key(x, y)) && hash2(x, y, 907) < CONE_SHARE) return "cone";
         return hash2(x, y, 733) < MUSHROOM_POOL ? "mushroom" : null;

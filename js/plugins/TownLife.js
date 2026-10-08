@@ -18,10 +18,14 @@
 // while the condition holds); a resident can be sent away for good or for some days (setGone(key, true | untilDay), kept in the
 // save: Tawerna.state("townLife")); another plugin can take a resident over for a while (hold(key, true, [x, y]): its plan stops
 // driving it, it walks to [x, y] and stands). The residents with none of these live exactly as before.
+// (v1.3.0, 2026-10-07, W6 "Ludzie z promu") A resident may move house: "alt" in its data - { map, when, plan, talk, barks } - while the
+// condition `when` holds (a condition registered with addCondition; an unknown one does NOT switch it) it lives on alt.map by alt.plan
+// (and says alt.talk / alt.barks): the camp of the ferry people moves out to Podgrodzie when the town shuts its gate. Coming onto its
+// old map it is away (hidden); the new map puts it in as it loads.
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.2.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.3.0
  * @author Claude
  *
  * @help
@@ -65,9 +69,14 @@
     const STUCK_SEEN = 900;             // ...and on the screen
     const BELL_SE = { name: "Bell3", volume: 70, pitch: 85, pan: 0 };
 
-    // the outdoor map each resident lives on (Map008 unless its data says "map"), and all such maps
-    const homeOf = r => r.map || MAP;
-    const HOMES = new Set(RES.map(homeOf));
+    // the outdoor map each resident lives on (Map008 unless its data says "map"; its "alt" map while alt.when holds - v1.3.0), and
+    // all such maps
+    const altOn = r => !!(r.alt && window.$gameSystem && COND[r.alt.when] && condOk(r.alt.when));
+    const homeOf = r => (altOn(r) ? r.alt.map : r.map || MAP);
+    const HOMES = new Set(RES.map(r => r.map || MAP).concat(RES.filter(r => r.alt).map(r => r.alt.map)));
+    const planOf = r => (altOn(r) && r.alt.plan ? r.alt.plan : r.plan);
+    const talkOf = r => (altOn(r) && r.alt.talk ? r.alt.talk : r.talk);
+    const barksOf = r => (altOn(r) && r.alt.barks ? r.alt.barks : r.barks);
     const isTown = () => !!($gameMap && HOMES.has($gameMap.mapId()));
     const baseSpots = mapId => (mapId === MAP ? D.SPOTS : (D.SPOTS_BY_MAP && D.SPOTS_BY_MAP[mapId]) || {});
     const resOf = id => (id >= FIRST && id < FIRST + RES.length ? RES[id - FIRST] : null);
@@ -99,7 +108,8 @@
         const g = store().gone[key];
         return g === true || (typeof g === "number" && dayNow() < g);
     }
-    const absent = res => isGone(res.key) || !condOk(res.when);
+    // (v1.3.0: on one of the outdoor maps, a resident who lives on another one now - moved out - is away here too)
+    const absent = res => isGone(res.key) || !condOk(res.when) || (!!res.alt && isTown() && homeOf(res) !== $gameMap.mapId());
 
     // ------------------------------------------------------------------
     // Spots: the data's; an event "Miejsce: <key>" on the map moves one (its direction from its picture, if it has one)
@@ -127,14 +137,15 @@
     // ------------------------------------------------------------------
     // (an entry with a condition counts only while it holds - v1.2.0)
     function entryAt(res, h) {
+        const plan = planOf(res);   // (v1.3.0: the alt plan while the resident lives on its alt map)
         let i = -1, last = -1;
-        for (let k = 0; k < res.plan.length; k++) {
-            if (!condOk(res.plan[k][3])) continue;
+        for (let k = 0; k < plan.length; k++) {
+            if (!condOk(plan[k][3])) continue;
             last = k;
-            if (res.plan[k][0] <= h) i = k;
+            if (plan[k][0] <= h) i = k;
         }
-        if (i < 0) i = last >= 0 ? last : res.plan.length - 1;
-        const [hour, act, where] = res.plan[i];
+        if (i < 0) i = last >= 0 ? last : plan.length - 1;
+        const [hour, act, where] = plan[i];
         return { i, hour, act, where };
     }
     // where an entry sends the resident now: [x, y, dir]
@@ -327,7 +338,7 @@
         const res = resOf(ev.eventId()), st = stateOf(ev), now = Graphics.frameCount, SB = T.api("SpeechBubbles");
         if (!SB || st.hidden || now < st.nextBark || now < nextBarkAny || $gameMap.isEventRunning()) return;
         if (Math.hypot(ev.x - $gamePlayer.x, ev.y - $gamePlayer.y) > BARK_NEAR) return;
-        const e = entryAt(res, h), b = res.barks || {};
+        const e = entryAt(res, h), b = barksOf(res) || {};
         const list = (!isTown() ? (e.where === "tawerna" ? b.tavern : b.home) :
             raining() && b.rain && b.rain.length ? b.rain : isNight(h) && b.night && b.night.length ? b.night : b[e.act]) || [];
         st.nextBark = now + BARK_GAP[0] + Math.floor(Math.random() * (BARK_GAP[1] - BARK_GAP[0]));
@@ -399,7 +410,7 @@
             try { list = fn(res.key, ev, interp); } catch (e) { console.error(e); }
             if (list && list.length) { interp.setupChild(list.concat([{ code: 0, indent: 0, parameters: [] }]), ev.eventId()); return; }
         }
-        const h = hourNow(), t = res.talk || {};
+        const h = hourNow(), t = talkOf(res) || {};
         const slot = raining() && t.rain ? "rain" : h >= 5 && h < 11 ? "morning" : h >= 11 && h < 17 ? "day" : h >= 17 && h < 22 ? "evening" : "night";
         const list = t[slot] || t.day || [];
         if (!list.length) return;
@@ -418,7 +429,7 @@
         addTalkHook: fn => { if (typeof fn === "function" && !talkHooks.includes(fn)) talkHooks.push(fn); },
         say: (key, text) => { const ev = api.eventOf(key), SB = T.api("SpeechBubbles"); if (ev && SB && !stateOf(ev).hidden) SB.say(ev, text); },
         // the lines a resident says (the plugin's own: for a hook that wants the usual talk after its part)
-        lines: key => { const r = RES.find(x => x.key === key); return r ? r.talk : null; },
+        lines: key => { const r = RES.find(x => x.key === key); return r ? talkOf(r) : null; },
         eventOf: key => residents().find(e => (resOf(e.eventId()) || {}).key === key) || null,
         state: key => { const ev = api.eventOf(key); return ev ? Object.assign({ x: ev.x, y: ev.y, act: entryAt(resOf(ev.eventId()), hourNow()).act }, ev._town) : null; },
         ringing: () => ringing.left,

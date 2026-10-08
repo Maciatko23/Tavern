@@ -1,6 +1,6 @@
 # Podziemia - sto pięter pod tawerną
 
-Stan: 2026-10-06. Wtyczki `js/plugins/Underground_Data.js` (dane i teksty) i `js/plugins/Underground.js` (generator i gra),
+Stan: 2026-10-07 (Lord przy Sercu i zakończenia jako sceny - Underground.js v2.1). Wtyczki `js/plugins/Underground_Data.js` (dane i teksty) i `js/plugins/Underground.js` (generator i gra),
 narzędzia `tools/underground/`, testy `tests/underground_test.js` i `tests/unit/underground.test.js`.
 Zgodnie z planem ze `STORY.md` („Podziemia - 100 pięter w dół”) i `QUESTY.md` (W9, W3, W4, W2): pasma pięter, co 10. piętro
 zrobione ręcznie (fabuła, boss, przystanek windy), piętra pomiędzy **składane automatycznie z kawałków pokoi narysowanych jako
@@ -70,8 +70,9 @@ przełącza kratę na próbę; w kodzie `Tawerna.call("Underground", "open")`.
 Stan wtyczki: `Tawerna.state("underground")`: `seed` (ziarno zapisu), `deepest` (najgłębsze piętro), `visited`, `notes`
 (przeczytane zapiski), `lib` (podpisy bibliotek kawałków), `gold` / `found`, **`lifts`** (przystanki windy: `{10: true, 20: true}`),
 **`bosses`** (pokonani bossowie pięter), **`locks`** (otwarte zamki Komnaty Serca), `forceLocks` (F9 / testy), **`truths`**
-(poznane prawdy Warstwy Prawdy: `{ "85": { who: "kowal", floor: 85 } }`), **`ending`** (`{ kind, guardian, locks, day }` po
-wyborze z Aktu III). Przeszukane skrzynie to samoprzełączniki A zdarzeń pięter (na piętrach 11-99 - na mapach 1000+N).
+(poznane prawdy Warstwy Prawdy: `{ "85": { who: "kowal", floor: 85 } }`), **`ending`** (`{ kind, guardian, locks, day, lord, world }` po
+wyborze z Aktu III - `world` to stan świata, z którego zrobiono sceny), **`lord`** (`{ stance, choice, told, day }` - Lord przy Sercu),
+`forceWorld` / `forceLord` (F9 i testy: świat i Lord „na próbę”). Przeszukane skrzynie to samoprzełączniki A zdarzeń pięter (na piętrach 11-99 - na mapach 1000+N).
 
 ## Jak powstaje piętro (Underground.js)
 
@@ -209,13 +210,84 @@ nie otwiera). **Jedyny wyjątek, celowo bardzo głęboko: Źródło pod skałą 
   wystarczy podmienić obrazek zdarzenia „Serce Twierdzy (blask)”.
 - **Wybór z Aktu III**: *Zniszczyć Serce* / *Zostać strażnikiem* (bohater, albo Borgar - po W4 „Słowa Borgara”, flaga
   `borgarSaying` - albo Ambroży - po oddaniu mu kronik, `ambrozyChronicles`) / *Uwolnić prawdę dla wszystkich* / *Zapieczętować
-  je - z zasadami* / *Jeszcze nie*. Potwierdzenie „Tego nie da się cofnąć.” → ekran gaśnie, **epilog** w zwykłym oknie (krótko -
-  `STORY.md` zostawia szczegóły zakończeń otwarte): 3-4 zdania zakończenia + dopiski: trzy zamki (zaufanie Borgara, Ambrożego,
-  Melii), Opinia miasta (≥ 60 / < 20), woda pod rynkiem (W1: `sluiceHalf`), Księga sygnałów u Ambrożego (pieczęć). Potem
-  „KONIEC - <tytuł>” i wybór: *Wrócić do gry* (bohater budzi się w tawernie; po zakończeniu „strażnik” - dymek „Strażnik może
-  wyjść na górę raz w roku. Dziś jest ten dzień.”) albo *Do ekranu tytułowego*.
+  je - z zasadami* / *Jeszcze nie*. Potwierdzenie „Tego nie da się cofnąć.” → **zakończenie jako sceny** (niżej), epilog, „KONIEC -
+  <tytuł>” i wybór: *Wrócić do gry* (bohater stoi przy barze w tawernie, następny dzień) albo *Do ekranu tytułowego*.
 - Po zakończeniu komnata pamięta wybór: odłamki (zniszczone), pusty cokół (uwolnione), kamienna pieczęć (zapieczętowane) albo
-  Serce wciąż świeci nad strażnikiem. Stan `ending`, szyna `undergroundEnding { kind, guardian, locks, day }`.
+  Serce wciąż świeci nad strażnikiem - Borgar albo Ambroży siedzi na kamiennej ławie (12,9) i ma dla bohatera jedno zdanie.
+  Szyna `undergroundEnding { kind, guardian, locks, day, lord }`.
+
+### Świat, który czytają zakończenia (`Underground.world()`)
+
+Każda wtyczka pytana ostrożnie (może jej nie być): **Story** (gra fabularna, dług spłacony), **TownQuests** (Opinia; flagi W1-W9),
+**TownLife** (kto odszedł: Feliks), **W6** (`TownQuests.w6()` albo flagi), **Akt III** (`Act3.outcome()`, a bez niego flagi).
+
+| Pole | Skąd | Wartości |
+|---|---|---|
+| `story`, `debtPaid` | `Story.state()` | gra fabularna; spłacone (`paid >= debt` albo `done`) |
+| `opinion` | `TownQuests.opinion()` | 0-100 albo `null` |
+| `locks` | `Underground.locks().open` | 2-3 |
+| `borgar` / `ambrozy` / `book` | flagi `borgarSaying` / `ambrozyChronicles` / `signalBook` | kto schodzi z bohaterem do komnaty; Księga sygnałów |
+| `melia` | `w3Sung` / `w3Borgar` / `w3Burned` | `public` / `borgar` / `burned` / `null` |
+| `grum` | `Act3.outcome().grum` (`neutral` = jak bez W8), inaczej `grumDead` / `grumGone` / `grumAlly` / `w8Faction`, `w8Lost` | `ally` `enemy` `gone` `dead` `faction` `null` |
+| `rafal` | `Act3.outcome().rafal`, `TownQuests.w6().rafal`, inaczej `rafalAlly` / `rafalGiven`, `rafalEnemy` / `rafalSmuggled` / `rafalTaken` | `ally` `enemy` `gone` `taken` `dead` `null` |
+| `marek` | `w6().marekSaved` albo flaga `marekSaved` | tak / nie |
+| `camp` | `w6().camp` albo `campInside` / `campOutside` | `inside` / `outside` (scena w Podgrodziu, Map111) / `null` |
+| `water` | `sluiceHalf` (W1) | woda pod rynkiem |
+| `feliks`, `butler` | `w1Revealed` / `lordAlly` / `feliksPays` / `TownLife.gone("feliks")` | kto stoi przy Lordzie: Feliks albo Teodor |
+| `siege` | `Act3.outcome()` → `{ result: held / costly / fallen, defenders, lost, grum, ... }`, inaczej flagi `act3Held` / `act3Costly` / `act3Fallen`; `null` = oblężenia jeszcze nie było | imiona obrońców i rannych po polsku („Borgar, Grum i Tadek”) |
+| `lord` | `state().lord` albo `lordStance(w)` | `{ stance, choice, told }` |
+
+### Lord przy Sercu (W7 rozdz. 7)
+
+**Postawa Lorda** (`Underground.lordStance`): bez fabuły albo przed spłatą długu - *nieobecny*; W1 b (po cichu do Lorda, `lordAlly`)
+albo powiedziana mu prawda z Warstwy Prawdy (`lordTruth`) - *sojusznik*; W1 a (wstyd na rynku, `w1Revealed` / `lordCold`) - *rywal*;
+w każdym innym razie *nieobecny* (Lord nic nie wie, zna tylko bajkę). Przy pierwszej rozmowie z Sercem, zanim padnie wybór z Aktu III:
+
+- **sojusznik** schodzi sam za bohaterem („Szedłem za tobą od dziewięćdziesiątego piętra”), **rywal** ze strażnikiem dworu („Mówiłem:
+  najpierw do mnie.”). Obaj chcą zadać jedno pytanie: *czy mój syn, Kazimierz, zginął na wojnie przeze mnie?* (Lord w swoim stylu
+  bohatera, `$Npc_Lord`, z popiersiem w rozmowie).
+- Wybór: **Pozwól mu zapytać** - „Tak. I nie.”: raz, przy stole, nazwał syna tchórzem; Kazimierz popłynął, żeby pokazać ojcu, że nim nie
+  jest, i zginął, osłaniając odwrót innych. Serce mówi dalej, niż pytał - bohater odciąga go od światła. / **Odmów** - sojusznik
+  przyjmuje to („Wolę pamiętać go takim, jakim był”); rywal każe strażnikowi odsunąć bohatera, ale strażnik widzi w świetle swoją
+  zmarłą matkę i nie podejdzie; Lord sam się cofa: „Nie pytam o to, czego nie chcę wiedzieć.” (powiedzenie Borgara). / **Zapytam za
+  ciebie** - bohater zna odpowiedź i decyduje: *powiedzieć całą prawdę* / *„Nie przez ciebie.”* (połowa prawdy) / *nic nie mówić*.
+- Lord odchodzi; stan `lord { stance, choice, told }`, szyna `undergroundLord`. Drugi raz już nie przychodzi. Wybór wraca w scenie
+  przed dworem (jabłoń dla Kazimierza, listy, których nie wysyła, zamknięte wrota, „Nie przez ciebie” powtarzane co rano...).
+
+### Zakończenia jako sceny
+
+Teksty i ustawienie scen są w `Underground_Data.js HEART` (aktorzy, miejsca, Lord, komnata, sceny na górze - kroki: kwestie, ruch,
+światło Serca, napisy, karty), `Underground.js` robi z nich polecenia zdarzeń. W czasie scen: czarne pasy u góry i u dołu, schowany
+HUD, **bez autozapisu** (silnik zapisuje po każdym przejściu - zapis w połowie sceny wczytałby się w jej środek).
+
+1. **Komnata**: kto zszedł z bohaterem (Borgar - `borgarSaying`, Ambroży - `ambrozyChronicles`) wchodzi drzwiami; potem samo
+   zakończenie: *zniszczyć* - szepty, zamach, pęknięcie, „przez jedną chwilę wiesz wszystko” (prawdy Warstwy Prawdy jedna po drugiej),
+   ciemność i cisza; *strażnik* - bohater siada na ławie, „Mija rok”, pierwszy pytający (Lord, jeśli mu odmówiono; Ludmiła, jeśli Marek
+   nie wrócił; Melia po spalonych słowach; inaczej Ozzy); Borgar („Masz. Klucz od tawerny. Zmiana co trzy dni”) albo Ambroży biorą
+   wartę; *uwolnić* - światło idzie w górę, napisy „Piętro 90... 50... 10... Piwnica tawerny”; *zapieczętować* - kamienna pieczęć,
+   zasady wycięte w kamieniu, trzy zamki = trzech strażników zasad.
+2. **Czarna karta**: słowa zakończenia (`ENDINGS`), potem „Wracasz na górę” (albo - strażnik - „Serce pokazuje strażnikowi miasto”).
+   Bohater śpi do 11:00 (następny ranek; dzień w dzienniku, autozapis po powrocie do gry).
+3. **Na górze** (prawdziwe mapy, mieszkańcy zastąpieni na czas sceny aktorami 805-827): **dwór** (Map024 - Lord według postawy i wyboru,
+   Feliks albo Teodor; tylko w grze fabularnej), **rynek** (Map008 - sołtys, Hanka, Kuba, Ambroży: woda, Opinia, oblężenie), **obóz**
+   (Map008 pod murem albo Podgrodzie Map111 - Ludmiła, Ela, Marek, Rafał), **dom dziadka** (Map019 - „ktoś puka”; gra fabularna),
+   **tawerna** (Map001 - Borgar, Ozzy, Melia, Grum według W8 / Aktu III, imiona obrońców na belce, odbudowa po upadku; na końcu bohater
+   przy barze).
+4. **Epilog**: trzy zamki, Opinia, woda, Księga sygnałów; „KONIEC - <tytuł>”.
+
+**Strażnik Borgar / Ambroży a dalsza gra** (decyzja, do potwierdzenia): warta jak za zakonu - zmiana co trzy dni (zapiski 90a), więc
+Borgar dalej stoi za barem, a Ambroży dzwoni; w komnacie siedzą na ławie przed Sercem.
+
+Mapy Map011 i inne **nie są zmieniane** - aktorzy (800-804 w komnacie, 805-827 w scenach) wchodzą przez `Tawerna.inject`, a podczas
+sceny na górze mieszkańcy tej mapy (TownLife 900-949, miejsca zadań 951-959, bywalcy 1-4 w tawernie) są na chwilę zdjęci (wracają po
+przejściu na następną mapę).
+
+## F9 (Podziemia + Serce)
+
+Zakładka „Zdarzenia” (wiersze dodaje sam Underground.js - Debug.js nie jest zmieniany): „Serce: zakończenie „...”” (←→ sześć: zniszczyć,
+strażnik ja / Borgar / Ambroży, uwolnić, zapieczętować; OK - na piętro 100 i scena od razu), „Serce: świat - ...” (jak w grze / dobry /
+zły / mieszany - gotowe zestawy w `HEART.DEBUG.worlds`) i „Serce: Lord przy Sercu - ...” (jak w grze / sojusznik / rywal / nieobecny).
+Skok zeruje zakończenie i Lorda, włącza zamki na próbę (2 albo 3 otwarte według świata).
 
 ## Hak dla W1 / W2: Zasuwa główna (piętro 30)
 
@@ -292,11 +364,13 @@ Krata / winda / skrót: `isOpen()`, `open()`, `close()`, `lift(b)`, `liftOn(pię
 `windlass(interp)`, `cage(interp)`, `shortcut(b)`.
 Stwory: `registerCreature`, `hasCreature`, `bossDefeated(NN)`, `bossCleared(NN)`, `bosses()`, `onGuardian(fn)`.
 Komnata Serca: `locks()`, `lockKnown(nazwa)`, `lock(nazwa, interp)`, `openLock(nazwa)`, `forceLock(nazwa|"all", b)` (F9/testy),
-`door(interp)`, `doorOpen()`, `heart(interp)`, `ending(rodzaj, strażnik, interp)`, `afterEnding()`, `epilogueLines(...)`.
+`door(interp)`, `doorOpen()`, `heart(interp)`, `ending(rodzaj, strażnik, interp)`, `afterEnding()`, `epilogueLines(...)`,
+`world()`, `lordStance(świat)`, `forceWorld(świat|null)`, `forceLord("ally"|"rival"|"absent"|null)`, `debugEnding(rodzaj, strażnik, świat, lord)`,
+`shotsOf(rodzaj, strażnik)`, `filmLog()`, `film` (`setSpeed(v)` - testy, `start()` / `end()`, `cinema`), `heartFx(tryb)`.
 Warstwa Prawdy: `truths()`, `whisper(tekst?)`, `startMoment(klatki)`, `showVision(idZdarzenia, nrZjawy?)`. Inne: `waterAt(x, y)`,
 `read(klucz)`, `search(id)`, `hurt(...)`.
 Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundNote`, `undergroundTruth`, `undergroundGate`,
-`undergroundLift`, `undergroundBoss`, `undergroundLock`, `undergroundEnding`, `undergroundWhisper`, `undergroundVision`,
+`undergroundLift`, `undergroundBoss`, `undergroundLock`, `undergroundEnding`, `undergroundLord`, `undergroundWhisper`, `undergroundVision`,
 `undergroundSluice`. Komendy wtyczki: Otwórz zejście, Zamknij zejście, Idź na piętro (0-100), Skrót z pieśni znany.
 
 ## F9 (Debug.js, zakładka Zdarzenia)
@@ -322,6 +396,7 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 | `check_chunks.js` | sprawdzenie kawałków biblioteki (to samo co w grze) |
 | `check_places.js` | sprawdzenie pięter ręcznych: droga od schodów w górę do schodów w dół, windy, zapisków; Serce tylko za drzwiami |
 | `preview.js` | piętra jednego ziarna z generatora gry (Node) do obrazków, dowolne pasmo |
+| `heart_gif.py` | GIF zniszczenia Serca (`docs/podziemia/serce_zniszczenie.gif`) z klatek, które zostawia `tests/heart_test.js` |
 | `dev_band.py`, `dev_floor.py` | podgląd przy rysowaniu: biblioteka pasma / piętro ręczne do `staging/` |
 
 ## Grafika
@@ -347,6 +422,11 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
   dzienniku), piętro 100 (zamki bez questów zamknięte; klucz W4 i Księga sygnałów W2 ze stanu TownQuests otwierają dwa zamki →
   drzwi; Serce i wybór; „Zapieczętować” → epilog → tawerna; potem pieczęć w komnacie), twórca stworów na piętrze ręcznym, F9.
 
+- `CDP_PORT=9466 node tests/run.js heart_test` - świat (flagi questów, Akt III i jego zapas z flag, postawa Lorda), Lord nieobecny /
+  sojusznik (pozwolić) / rywal (odmówić) / zapytać za niego (połowa prawdy), cztery zakończenia w różnych światach (zniszczyć - dobry,
+  strażnik Borgar - zły, uwolnić - mieszany, strażnik ja - z F9), co zostaje w komnacie, wiersze F9, brak autozapisu w scenie; zrzuty
+  `serce_*.png` i klatki GIF-a (`python tools/underground/heart_gif.py` → `serce_zniszczenie.gif`).
+
 ## Zrzuty (docs/podziemia/)
 
 - Biblioteki: `kawalki_pasmo1.png` (+ `_siatka`), `kawalki_pasmo2..5.png`.
@@ -356,6 +436,10 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - Z gry: `gra_piwnica_krata.png`, `gra_ruiny_zamku.png`, `gra_pietro1.png`, `gra_pietro10.png`, `gra_straznik.png`,
   `gra_ruiny_winda.png`, `gra_pietro11.png`, `gra_pietro20.png` ... `gra_pietro90.png`, `gra_pietro57.png`,
   `gra_pietro85_zjawa.png`, `gra_pietro100.png`, `gra_komnata_drzwi.png`, `gra_serce_wybor.png`, `gra_serce_zapieczetowane.png`.
+- Lord i zakończenia (tests/heart_test.js): `serce_lord_sojusznik.png`, `serce_lord_odpowiedz.png`, `serce_lord_rywal.png`,
+  `serce_lord_straznik.png`, `serce_zniszczone_cisza.png`, `serce_koniec_*.png` (dwór, obóz, dom, tawerna, rynek, Podgrodzie...),
+  `serce_straznik_borgar.png`, `serce_borgar_na_lawie.png`, `serce_uwolnione.png`, `serce_straznik_ja.png`, `serce_rok_pozniej.png`,
+  `serce_f9.png`, `serce_zniszczenie.gif`.
 
 ## Decyzje do potwierdzenia (2026-10-06)
 
@@ -365,6 +449,11 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - Jedyna woda pitna pod ziemią: źródło na piętrze 50 (3 czerpania dziennie); rzeka i cysterna nie do picia.
 - Strażnikiem w zakończeniu może zostać też Borgar (po „Słowach Borgara”) albo Ambroży (po oddaniu mu kronik). **Autor 2026-10-06: „obojętnie” - zostaje tak.**
 - Po zakończeniu gra toczy się dalej (tawerna), komnata pamięta wybór. **Decyzja autora 2026-10-06: gra toczy się dalej.**
+- (2026-10-07, do potwierdzenia) Lord przy Sercu: postawa z W1 (b - sojusznik, a - rywal) i z powiedzianej mu prawdy (W9 rozdz. 6);
+  jego pytanie o syna **Kazimierza** i odpowiedź Serca („Tak. I nie.” - nazwał go raz tchórzem) to nowy kanon (QUESTY.md W7 rozdz. 7 to
+  propozycja); W7 wariant A/B (czy Lord stoi za frakcją) dalej nierozstrzygnięty - sceny go nie dotykają.
+- (2026-10-07) Strażnik Borgar / Ambroży: warta co trzy dni (jak w zapiskach 90a), więc dalej są w tawernie / na dzwonnicy.
+- (2026-10-07) Po zakończeniu bohater śpi do 11:00 następnego dnia (sceny na górze w dzień; poza godzinami K37 na targu).
 - Pasmo 1: rodzaje stworów zgodne z kontraktem (szczur, pająk); winda na każdym ręcznym piętrze; bossowie blokują schody tylko,
   gdy wtyczka stworów ich zarejestrowała.
 
@@ -373,6 +462,7 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - prawdy jako wybór w rozmowach (W9 rozdz. 6: powiedzieć prawdę mieszkańcowi czy przemilczeć) - dane i szyna są, rozmowy nie;
 - otwarcie Zasuwy głównej sygnałem wody (W1 rozdz. 7 / W2) - jest miejsce i szyna `undergroundSluice`, skutek należy do questów;
 - połączenie z kopalnią / obozem kopaczy w górach (W8) i Marek (W6 rozdz. 7) - tunel na piętrze 50 jest zawalony;
-- rywal z zewnątrz w podziemiach (W9 rozdz. 3), Lord przy Sercu (W7 rozdz. 7), alarm dzwonu i obrona tawerny w finale (W2 rozdz. 8);
-- dłuższe sceny zakończeń (`STORY.md` zostawia ich szczegóły otwarte - epilogi są krótkie);
+- rywal z zewnątrz w podziemiach (W9 rozdz. 3); alarm dzwonu i obrona tawerny (W2 rozdz. 8 / Akt III - osobna wtyczka Act3, sceny
+  zakończeń czytają tylko jej wynik);
+- ilustracje zakończeń (obrazki) - sceny grają na prawdziwych mapach; strażnik-bohater w dalszej grze to dalej „raz w roku” (jak było);
 - mapa odkrywana w czasie chodzenia (minimapa z mgłą) - w podziemiach nie ma minimapy.

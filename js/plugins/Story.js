@@ -767,22 +767,22 @@
     function storyGoals() {
         const ch = chapterIndex();
         return {
-            talk: { id: "story_talk", story: true, ch, title: "Porozmawiaj z dziadkiem", item: SOUP, after: [], done: () => !!(state() && state().flags.talk),
+            talk: { id: "story_talk", story: true, ch, title: "Porozmawiaj z dziadkiem", item: SOUP, where: { person: "grandpa" }, after: [], done: () => !!(state() && state().flags.talk),
                 text: "Dziadek Stach czeka w swoim domu. Ma ci coś ważnego do powiedzenia." },
-            field: { id: "story_field", story: true, ch, title: "Dojdź na pole dziadka", item: 67, after: ["story_talk"], done: () => !!(state() && state().flags.field),
+            field: { id: "story_field", story: true, ch, title: "Dojdź na pole dziadka", item: 67, where: { map: MAP.field, name: "Pole dziadka" }, after: ["story_talk"], done: () => !!(state() && state().flags.field),
                 text: "Z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód. Tylko na tym polu wolno ci budować." },
-            work: { id: "story_work", story: true, ch, title: "Znajdź pracę w tawernie", item: 81, after: ["story_field"], done: () => !!(state() && state().flags.hired),
+            work: { id: "story_work", story: true, ch, title: "Znajdź pracę w tawernie", item: 81, where: { person: "borgar" }, after: ["story_field"], done: () => !!(state() && state().flags.hired),
                 text: "Borgar, karczmarz z tawerny „Pod Złotym Kuflem”, szuka rąk do pracy. Tawerna stoi przy ścieżce na północ od Polnej drogi. Porozmawiaj z nim." },
-            shift: { id: "story_shift", story: true, ch, title: "Przepracuj zmianę u Borgara", item: 81, after: ["story_work"],
+            shift: { id: "story_shift", story: true, ch, title: "Przepracuj zmianę u Borgara", item: 81, where: { person: "borgar" }, after: ["story_work"],
                 done: () => { const st = T.call("TavernShift", "stats"); return !!st && st.done > 0; },
                 text: "Zmiany są po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ", jedna dziennie. Sprzątanie, beczka, kuchnia i sala - płaci od roboty, a goście dają napiwki." },
-            shelter: { id: "story_shelter", story: true, ch, title: "Zbuduj schronienie na polu", item: 121, after: ["story_field"],
+            shelter: { id: "story_shelter", story: true, ch, title: "Zbuduj schronienie na polu", item: 121, where: { map: MAP.field, name: "Pole dziadka" }, after: ["story_field"],
                 done: () => farmBuilt(MAP.field, SHELTERS) || farmBuilt(100, ["bed"]),
                 text: "Na polu dziadka postaw legowisko, namiot, wiatę albo chatkę. Noc pod gołym niebem męczy i bywa niebezpieczna." },
-            cellar: { id: "story_cellar", story: true, ch, title: "Drzwi pod Kruczymi Skałami", item: TORCH, after: ["story_debt"],
+            cellar: { id: "story_cellar", story: true, ch, title: "Drzwi pod Kruczymi Skałami", item: TORCH, where: { map: MAP.tavern, name: "Tawerna" }, after: ["story_debt"],
                 done: () => !!(state() && state().flags.cellar),
                 text: "Lord mówił poważnie: najstarsze kamienie dawnej twierdzy leżą pod tawerną Borgara, a pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Rozejrzyj się w tawernie - może jest tam zejście do piwnic." },
-            debt: { id: "story_debt", story: true, ch, icon: GOLD_ICON, after: ["story_talk"], done: () => !!(state() && (state().done || state().paid >= state().debt)),
+            debt: { id: "story_debt", story: true, ch, icon: GOLD_ICON, where: { person: "lord" }, after: ["story_talk"], done: () => !!(state() && (state().done || state().paid >= state().debt)),
                 get title() { const s = state(); return s ? "Spłać dług dziadka (" + Math.min(s.paid, s.debt) + "/" + s.debt + " G)" : "Spłać dług dziadka"; },
                 get text() {
                     const s = state();

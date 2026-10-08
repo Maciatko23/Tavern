@@ -437,13 +437,18 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("behind the door the Heart: its look and the choice of Act III (destroy / guardian / free the truth / seal it with rules / not yet)",
         /Serce Twierdzy/.test(look.text) && look.choices.length && look.choices[0].length === 5 && /^Zniszczyć/.test(look.choices[0][0]) && /^Zapieczętować/.test(look.choices[0][3]), look.choices);
     await t.locate(15, 8, 8);
-    const end = await t.talkTo(heartId, ["Zapieczętować", "Tak", "Wrócić"], { place: false, secs: 90 });
-    const afterEnd = await t.until(t.onMap(1), 30);
+    // (the ending plays as scenes - the chamber, the town, the tavern: tests/heart_test.js; here a quick run of them)
+    await t.eval("Underground.film.setSpeed(0.25); 0");
+    const end = await t.talkTo(heartId, ["Zapieczętować", "Tak", "Wrócić"], { place: false, secs: 300 });
+    let afterEnd = false;   // (the hero slept till the next morning: the day's summary opens by itself on the map - closed first)
+    for (let i = 0; i < 8 && !afterEnd; i++) { await t.dismiss(); afterEnd = await t.until(t.onMap(1) + " && !$gameTemp._pendingSummary", 5); }
+    const whyNot = afterEnd ? null : await t.json("({ sc: SceneManager._scene && SceneManager._scene.constructor.name, started: SceneManager._scene && SceneManager._scene._started, ch: SceneManager.isSceneChanging(), tr: $gamePlayer.isTransferring(), map: $gameMap.mapId(), sum: !!$gameTemp._pendingSummary, busy: $gameMessage.isBusy(), run: $gameMap.isEventRunning() })");
+    await t.dismiss();
     await t.frames(30);
     const st = await t.json("({ ending: Underground.ending ? Underground.state().ending : null, map: $gameMap.mapId() })");
     t.check("'Zapieczętować' + 'Tak': the epilogue (the rules kept up there, 'To uczciwe.', KONIEC), then 'Wrócić do gry' - the hero wakes in the tavern; the ending is kept",
-        afterEnd && /To nie jest szczęśliwe zakończenie/.test(end.text) && /KONIEC/.test(end.text) && st.ending && st.ending.kind === "zapieczetowac" && st.ending.locks === 2,
-        { st, text: end.text.slice(0, 400) });
+        afterEnd && /To nie jest szczęśliwe zakończenie/.test(end.text.replace(/\s+/g, " ")) && /KONIEC/.test(end.text) && st.ending && st.ending.kind === "zapieczetowac" && st.ending.locks === 2,
+        { st: st.ending && { kind: st.ending.kind, locks: st.ending.locks, map: st.map }, afterEnd, whyNot, done: end.done, missing: end.missing, text: end.text.slice(-500) });
     await t.eval("Underground.go(100); 0");
     await t.until(t.onMap(11), 20);
     await t.frames(20);

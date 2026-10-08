@@ -31,6 +31,12 @@
  *     w nocy słabnie albo znika;
  *   - cienie od ognia i lamp: ogniska i piece w nocy (Farming_Render.js),
  *     kominki, świece, lampy w środku (RoomLighting.js), błysk pioruna;
+ *   - cień leży na ziemi: to, co stoi (drzewo, krzak, kamień, człowiek,
+ *     zwierzę, budynek), jest rysowane nad cieniami innych rzeczy - cień
+ *     przechodzący za nim chowa się za nim. Nocą przy ogniu rzecz jest
+ *     oświetlona tak jak ziemia u jej stóp: gdy stoi w cudzym cieniu, cień
+ *     wspina się na nią (człowiek za sosną jest ciemny, cień człowieka
+ *     sięga pnia drzewa albo dołu ściany chaty, nie dachu);
  *   - światło z boku w złotej godzinie: strona od słońca cieplejsza;
  *   - promienie słońca w złotej godzinie (ukośne smugi, rano od prawej,
  *     wieczorem od lewej) i poranna mgła (nie co dzień; gęstsza po deszczu).
@@ -39,7 +45,8 @@
  * Dla innych wtyczek: Tawerna.api("Sun") (też window.Sky) - now(), sky(godz,
  * dzień), sunTimes(dzień), mistOfDay(dzień), forceMist(m, dzień), raysAt,
  * mistAt, cloudCover, layer, silhouette, occluder, lightBlockers,
- * cutLightShadows; shadows = false wyłącza cienie (testy).
+ * cutLightShadows, standing (rzeczy stojące na ekranie); shadows = false
+ * wyłącza cienie (testy).
  * ============================================================================
  */
 
@@ -300,16 +307,37 @@
             // shadow far into the dark and leave only a thin line of trunk near it (user: "drzewa nie rzucają cienia od ogniska")
             const h = (o.bmp._footRow + 1) * Math.abs(o.sy), cap = Math.min(LIGHT_SHADOW_MAX * h, LIGHT_SHADOW_REACH * l.r);
             const len = (h >= hf - 2 ? cap : Math.min(cap, (d * h) / (hf - h))) / h;
-            out.push({ o, ux: vx / d, uy: vy / d, len, L: len * h, d, m: shadowMatrix(o, vx / d, vy / d, len, 1.1, {}) });
+            // (gx, gy, hf: the flame it was thrown from - how high this shadow climbs a thing standing in it, keepOffStanding)
+            out.push({ o, ux: vx / d, uy: vy / d, len, L: len * h, d, m: shadowMatrix(o, vx / d, vy / d, len, 1.1, {}), gx, gy, hf });
         }
         return out;
     }
     // cut the shadows (lightBlockers) out of a light drawn on canvas context c: k - the canvas's scale to the screen (a half-size
     // layer: 0.5), ox, oy - where the canvas's corner is (in its own px). Drawn in bands across each shadow: the further from the feet,
     // the wider (the light spreads), the fainter (the lit ground around throws light back into it) and the softer (the sharp
-    // silhouette at the feet cross-fades into its blurred copy) - no dark blob at the far end, no hard wall of dark
-    function cutLightShadows(c, blockers, k, ox, oy) {
+    // silhouette at the feet cross-fades into its blurred copy) - no dark blob at the far end, no hard wall of dark.
+    // A shadow lies on the GROUND (user 2026-10-08: "jeśli cień jednego drzewa wchodzi na inne drzewo, to powinien być za tym
+    // drzewem" - "i ogólnie wszystkie cienie tak"): the shadows go into a mask of their own first, the things that stand in the light
+    // (stands: standing(); without it the things that throw the shadows) are taken out of it - each keeps only the shadows that
+    // climb it from its foot (keepOffStanding) - and then the mask is cut out of the light
+    function cutLightShadows(c, blockers, k, ox, oy, stands) {
+        const W = c.canvas.width, H = c.canvas.height, m = maskCanvas(W, H);
+        drawLightShadows(m, blockers, k, ox, oy);
+        keepOffStanding(m, blockers, stands || blockers.map(b => standOfOccluder(b.o, spriteOf(b.o))), k, ox, oy);
+        c.setTransform(1, 0, 0, 1, 0, 0);
+        c.globalAlpha = 1;
         c.globalCompositeOperation = "destination-out";
+        c.drawImage(m.canvas, 0, 0);
+        c.globalCompositeOperation = "source-over";
+    }
+    // the character sprite of an occluder (its place in the drawing order)
+    function spriteOf(o) {
+        const set = SceneManager._scene && SceneManager._scene._spriteset;
+        return (set && set._characterSprites && set._characterSprites.find(s => s._occluder === o)) || null;
+    }
+    // the shadows themselves, dark (source-over) on a mask canvas c
+    function drawLightShadows(c, blockers, k, ox, oy) {
+        c.globalCompositeOperation = "source-over";
         for (const b of blockers) {
             const o = b.o, sharp = o.bmp.canvas, soft = softSilhouette(o.bmp), e = soft._pad, band = Math.ceil(o.cy / LIGHT_BANDS);
             for (const pass of [0, 1]) {
@@ -348,6 +376,242 @@
         c.clearRect(0, 0, w, h);
         return c;
     }
+    // the mask of one light's shadows (one per size, made once - apart from the scratch canvases: a caller draws its light on one of
+    // those while its shadows go into this)
+    const maskCanvases = new Map();
+    function maskCanvas(w, h) {
+        const key = w + "x" + h;
+        let c = maskCanvases.get(key);
+        if (!c) {
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            c = canvas.getContext("2d");
+            maskCanvases.set(key, c);
+        }
+        c.setTransform(1, 0, 0, 1, 0, 0);
+        c.globalCompositeOperation = "source-over";
+        c.globalAlpha = 1;
+        c.clearRect(0, 0, w, h);
+        return c;
+    }
+
+    // ---- the things that stand (user 2026-10-08: "jeśli cień jednego drzewa wchodzi na inne drzewo, to powinien być za tym
+    // drzewem" + "i ogólnie wszystkie cienie tak"). A shadow lies on the ground. A thing that stands - a tree, a bush, a rock, a
+    // person, an animal, a building, a statue - is drawn over the shadows of the others: the sun's shadows lie in a layer under the
+    // characters (z SUN_SHADOW_Z), but the night's dark lies over everything, so a fire's shadows are kept off what stands by hand
+    // (keepOffStanding): each thing is lit by the light where it stands. A shadow that reaches its foot climbs it - as high as the line
+    // from the flame over the top of the thing throwing it reaches there (a man's shadow darkens a tree's trunk, a tree's shadow
+    // darkens a man whole) - a wide thing, a building, only in the columns where it crosses its foot; a shadow that only passes behind
+    // it on the screen is hidden by it.
+    // A stand: { img, sx, sy, sw, sh: what is drawn (a canvas or a picture, its rectangle), lx, ly: where that rectangle starts in its
+    // own space, m: its own space -> the screen ({a, b, c, d, tx, ty}), x0, y0, x1, y1: its box on the screen, base: its foot line,
+    // fx: the middle of its foot, h: how tall it is, z, y, id: its place in the map's drawing order (the tilemap sorts its children by
+    // z, then y, then spriteId: standOrder), alpha: how solid it is drawn (a tree the hero is behind: half - what is behind shows
+    // through it, with its shadows), o: its occluder or null }
+    const STAND_STEP = 4;      // px: how finely a shadow is followed along a thing's foot
+    const CLIMB_FADE = 10;     // px: the soft upper edge of a shadow climbing a thing
+    const PERSON_LIFT = 2;     // px: a person's foot (CharacterPolish.js, SUN_SHADOW_INSET) is 2 px up inside the figure
+    function finishStand(st) {
+        const m = st.m, xs = [st.lx, st.lx + st.sw], ys = [st.ly, st.ly + st.sh];
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        for (const x of xs) for (const y of ys) {
+            const X = m.a * x + m.c * y + m.tx, Y = m.b * x + m.d * y + m.ty;
+            x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y);
+        }
+        return Object.assign(st, { x0, x1, y0, y1, h: Math.max(1, st.base - y0) });
+    }
+    // a tree, a rock, a person... by its occluder: its silhouette, standing up from its foot (o.lift: how far its foot is up inside
+    // the picture; o.top: how far the crown sways - the silhouette is leaned with it)
+    function standOfOccluder(o, sprite) {
+        const bmp = o.bmp, h = bmp._footRow + 1, lift = o.lift === undefined ? PERSON_LIFT : o.lift;
+        const m = { a: o.sx, b: 0, c: -(o.top || 0) / h, d: o.sy, tx: o.fx, ty: o.fy + o.sy * lift };
+        return finishStand({ img: bmp.canvas, sx: 0, sy: 0, sw: bmp.width, sh: bmp.height, lx: -o.cx, ly: -o.cy, m, o, base: o.fy, fx: o.fx,
+            z: sprite ? sprite.z || 0 : 3, y: sprite ? sprite.y : o.fy, id: sprite ? sprite.spriteId || 0 : 0 });
+    }
+    // the map's drawing order (Tilemap._compareChildOrder): the one drawn later is in front
+    function standOrder(p, q) {
+        return p.z !== q.z ? p.z - q.z : p.y !== q.y ? p.y - q.y : p.id - q.id;
+    }
+    // any other sprite that stands (a building, a fence, a statue, a lamp...): its own picture as it is drawn (a child of the tilemap
+    // or of the spriteset: screen px). frame: the picture's rectangle (default: the sprite's own frame)
+    function standOfSprite(s, frame) {
+        const bmp = s.bitmap, f = frame || s._frame, img = bmp && (bmp._canvas || bmp._image);
+        if (!img || !bmp.isReady() || !f || f.width <= 0 || f.height <= 0) return null;
+        const m = { a: s.scale.x, b: 0, c: 0, d: s.scale.y, tx: s.x, ty: s.y };
+        const base = s.y + (1 - s.anchor.y) * f.height * s.scale.y - 2;
+        return finishStand({ img, sx: f.x, sy: f.y, sw: f.width, sh: f.height, lx: -s.anchor.x * f.width, ly: -s.anchor.y * f.height, m, o: null,
+            base, fx: s.x, z: s.z || 0, y: s.y, id: s.spriteId || 0 });
+    }
+    // everything that stands on the screen now: the characters (by their occluders, or their pictures - an event that stands with or
+    // over the characters: not one under them, which lies on the ground) and extra sprites (Farming_Render.js: its buildings)
+    // how solid a character's sprite is drawn now: its opacity and the see-through of a tree, a decorative tree or a bush the hero is
+    // behind or in (ChoppableTree_Render.js)
+    const seen = k => (k === undefined ? 1 : k);
+    function solidOf(s) {
+        return Math.max(0, Math.min(1, (s.opacity / 255) * seen(s._seeThroughK) * seen(s._decorSeeK) * seen(s._bushSeeK)));
+    }
+    function standing(spriteset, extra) {
+        const out = [];
+        for (const s of (spriteset && spriteset._characterSprites) || []) {
+            if (!s.visible || !s.parent) continue;
+            const o = s._occluder, c = s._character;
+            if (o) {
+                if (o.stand !== false) out.push(Object.assign(standOfOccluder(o, s), { alpha: solidOf(s) }));
+                continue;
+            }
+            if ((s.z || 0) < 3 || s.opacity <= 0 || !c || (c.isTransparent && c.isTransparent()) || !s.bitmap) continue;
+            if (!s._frame || s._frame.width <= 0) continue;   // (drawn by its children, or nothing: a felled tree's sprite, its stump low)
+            let frame = null;
+            if (!s._tileId && s._characterName && s.patternWidth) {   // (the whole figure: a bush's depth cuts the sprite's own frame)
+                const pw = s.patternWidth(), ph = s.patternHeight();
+                if (!(pw > 0 && ph > 0)) continue;
+                frame = new Rectangle((s.characterBlockX() + s.characterPatternX()) * pw, (s.characterBlockY() + s.characterPatternY()) * ph, pw, ph);
+            }
+            const st = standOfSprite(s, frame);
+            if (st) out.push(Object.assign(st, { wide: st.x1 - st.x0 > WIDE * st.h, alpha: solidOf(s) }));
+        }
+        for (const s of extra || []) {
+            const st = s && s.visible && s.alpha > 0 ? standOfSprite(s) : null;
+            if (st) out.push(Object.assign(st, { wide: st.x1 - st.x0 > WIDE_PX }));   // (a building: its walls, column by column)
+        }
+        return out;
+    }
+    // draw a stand on canvas c (k, ox, oy as in cutLightShadows); X0..X1, Y0..Y1: only its part inside these screen px (its columns
+    // only when it is not leaned - a swaying tree is always drawn across)
+    function drawStand(c, st, k, ox, oy, X0, X1, Y0, Y1) {
+        const m = st.m;
+        let x0 = st.lx, x1 = st.lx + st.sw, y0 = st.ly, y1 = st.ly + st.sh;
+        if (X0 !== undefined && m.c === 0) {
+            const p = (X0 - m.tx) / m.a, q = (X1 - m.tx) / m.a;
+            x0 = Math.max(x0, Math.min(p, q));
+            x1 = Math.min(x1, Math.max(p, q));
+        }
+        if (Y0 !== undefined) {
+            const p = (Y0 - m.ty) / m.d, q = (Y1 - m.ty) / m.d;
+            y0 = Math.max(y0, Math.min(p, q));
+            y1 = Math.min(y1, Math.max(p, q));
+        }
+        if (x1 - x0 < 0.5 || y1 - y0 < 0.5) return;
+        c.setTransform(m.a * k, m.b * k, m.c * k, m.d * k, m.tx * k - ox, m.ty * k - oy);
+        c.drawImage(st.img, st.sx + x0 - st.lx, st.sy + y0 - st.ly, x1 - x0, y1 - y0, x0, y0, x1 - x0, y1 - y0);
+    }
+    // the alpha of a silhouette's pixels (read once per silhouette)
+    function alphaOf(bmp) {
+        if (bmp._alphaData) return bmp._alphaData;
+        const w = bmp.width, h = bmp.height, d = bmp.context.getImageData(0, 0, w, h).data, a = new Uint8Array(w * h);
+        for (let i = 0; i < a.length; i++) a[i] = d[i * 4 + 3];
+        return (bmp._alphaData = a);
+    }
+    function alphaAt(bmp, u, v) {
+        const x = Math.round(u), y = Math.round(v);
+        if (x < 0 || y < 0 || x >= bmp.width || y >= bmp.height) return 0;
+        return alphaOf(bmp)[y * bmp.width + x] / 255;
+    }
+    // a light's shadow ready to be asked "how dark are you here": the way back from the screen to the silhouette, and its box
+    function shadeOf(b) {
+        const o = b.o, h = o.bmp._footRow + 1, a1 = o.sx * b.uy, b1 = -SHADOW_FLAT * o.sx * b.ux;
+        const c = -(b.L * b.ux + (o.top || 0)) / h, d = (-SHADOW_FLAT * b.L * b.uy) / h, det = a1 * d - b1 * c;
+        const w = 1.15 + Math.min(0.8, b.L / (b.d + FLAME_WIDTH)), W = o.bmp.width, H = o.bmp.height;
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        for (const lx of [-o.cx - SOFT_PAD, W - o.cx + SOFT_PAD]) for (const ly of [-o.cy - SOFT_PAD, H - o.cy + SOFT_PAD]) {
+            const X = a1 * w * lx + c * ly + o.fx, Y = b1 * w * lx + d * ly + o.fy;
+            x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y);
+        }
+        return { b, a1, b1, c, d, det, x0, x1, y0, y1 };
+    }
+    // how much of the light a shadow takes away at a spot of the ground (screen px): as cutLightShadows draws it - the sharp silhouette
+    // near the feet, the soft one further off, wider and fainter along it
+    function shadeAt(sh, X, Y) {
+        if (Math.abs(sh.det) < 1e-6) return 0;
+        const b = sh.b, o = b.o, x = X - o.fx, y = Y - o.fy;
+        const U = (x * sh.d - sh.c * y) / sh.det, ly = (sh.a1 * y - sh.b1 * x) / sh.det;
+        if (ly > 1) return 0;   // (before its foot: the shadow starts there)
+        const mid = Math.max(0, Math.min(1, -ly / (o.cy - 1)));
+        const lx = U / (1.05 + Math.min(0.8, (b.L * mid) / (b.d + FLAME_WIDTH)));
+        const blur = Math.max(0, Math.min(1, (mid - 0.12) / 0.45));
+        let a = blur < 1 ? alphaAt(o.bmp, o.cx + lx, o.cy + ly) * (1 - blur) : 0;
+        if (blur > 0) a += alphaAt(softSilhouette(o.bmp), o.cx + lx + SOFT_PAD, o.cy + ly + SOFT_PAD) * blur;
+        return LIGHT_SHADOW * o.alpha * a * Math.pow(1 - 0.65 * mid, 1.3);
+    }
+    // take the things that stand out of a light's shadow mask c (back to front: the one in front covers the one behind), each with
+    // only the shadows that climb it from its foot
+    function keepOffStanding(c, blockers, stands, k, ox, oy) {
+        if (!stands || !stands.length) return;
+        // (only what stands in the light's round: the canvas's corners are dark anyway)
+        const W = c.canvas.width, H = c.canvas.height, cx = (ox + W / 2) / k, cy = (oy + H / 2) / k, R = Math.min(W, H) / (2 * k);
+        const inLight = st => {
+            const dx = Math.max(st.x0 - cx, 0, cx - st.x1), dy = Math.max(st.y0 - cy, 0, cy - st.y1);
+            return dx * dx + dy * dy < R * R;
+        };
+        const list = stands.filter(st => st && inLight(st)).sort(standOrder);
+        if (!list.length) return;
+        const shades = blockers.map(shadeOf), dirty = shades.slice();   // (dirty: where the mask has dark - the shadows, then the climbs)
+        const touches = (st, r) => st.x1 > r.x0 && st.x0 < r.x1 && st.y1 > r.y0 && st.y0 < r.y1;
+        for (const st of list) {
+            if (!dirty.some(r => touches(st, r))) continue;   // (no dark where it stands: nothing to take off it)
+            c.globalCompositeOperation = "destination-out";
+            c.globalAlpha = st.alpha === undefined ? 1 : st.alpha;
+            drawStand(c, st, k, ox, oy);
+            c.globalCompositeOperation = "source-over";
+            let climbed = false;
+            for (const sh of shades) {
+                if (sh.b.o === st.o || st.base < sh.y0 || st.base > sh.y1 || st.x1 < sh.x0 || st.x0 > sh.x1) continue;
+                climbed = climbStand(c, st, sh, k, ox, oy) || climbed;
+            }
+            if (climbed) dirty.push(st);
+        }
+        c.setTransform(1, 0, 0, 1, 0, 0);
+        c.globalAlpha = 1;
+        c.globalCompositeOperation = "source-over";
+    }
+    // a shadow climbing a thing that stands in it: as dark as on the ground at its foot; up to where the line from the flame over the
+    // top of the thing throwing it reaches there (d*: the ground distances from the flame), with a soft upper edge. A tree, a man, a
+    // rock, a statue is in it or not by its foot - all of it across (stripes up a crown looked like cut-outs); a wide thing (st.wide)
+    // - a building, an event wider than WIDE times its height - column by column along its foot (a man's shadow on part of a wall)
+    const WIDE = 1.3, WIDE_PX = 40;
+    function climbStand(c, st, sh, k, ox, oy) {
+        const b = sh.b, hO = (b.o.bmp._footRow + 1) * Math.abs(b.o.sy), hf = b.hf || 16;
+        const dT = Math.hypot(st.fx - b.gx, (st.base - b.gy) / SHADOW_FLAT);
+        if (dT <= b.d) return false;   // (nearer to the flame than what throws it: not behind it)
+        const climb = Math.min(st.h + CLIMB_FADE, Math.max(0, hf + ((hO - hf) * dT) / Math.max(1, b.d)));
+        if (climb < 2) return false;
+        if (!st.wide) {
+            const w = st.o ? 4 * Math.abs(st.o.sx) : Math.min(8, (st.x1 - st.x0) / 6);
+            if (st.fx + w < sh.x0 || st.fx - w > sh.x1) return false;
+            const s = (shadeAt(sh, st.fx - w, st.base) + shadeAt(sh, st.fx, st.base) + shadeAt(sh, st.fx + w, st.base)) / 3;
+            if (s <= 0.02) return false;
+            climbRun(c, st, st.x0 - 1, st.x1 + 1, s, climb, k, ox, oy);
+            return true;
+        }
+        const xs = Math.max(st.x0, sh.x0), xe = Math.min(st.x1, sh.x1);
+        let from = xs, run = 0, any = false;
+        for (let x = xs; ; x += STAND_STEP) {
+            const s = x < xe ? Math.round(shadeAt(sh, x + STAND_STEP / 2, st.base) * 12) / 12 : 0;
+            if (s !== run || x >= xe) {
+                if (run > 0.02) { climbRun(c, st, from, Math.min(x, xe), run, climb, k, ox, oy); any = true; }
+                from = x;
+                run = s;
+            }
+            if (x >= xe) break;
+        }
+        return any;
+    }
+    // the part of a thing between columns x0..x1 from its foot up to `climb` px, darkened by s (half of it over the soft edge)
+    function climbRun(c, st, x0, x1, s, climb, k, ox, oy) {
+        const top = st.base - climb;
+        s *= st.alpha === undefined ? 1 : st.alpha;
+        if (top - CLIMB_FADE / 2 <= st.y0) {   // (up to its top: the soft edge over it is in the air)
+            c.globalAlpha = s;
+            drawStand(c, st, k, ox, oy, x0, x1, st.y0 - 1, st.y1 + 1);
+            return;
+        }
+        c.globalAlpha = s;
+        drawStand(c, st, k, ox, oy, x0, x1, top + CLIMB_FADE / 2, st.y1 + 1);
+        c.globalAlpha = s / 2;
+        drawStand(c, st, k, ox, oy, x0, x1, top - CLIMB_FADE / 2, top + CLIMB_FADE / 2);
+    }
+
     // a signature of what throws shadows in a light now (a layer that keeps its last picture redraws when it changes)
     function blockersKey(blockers) {
         return blockers.map(b => Math.round(b.o.fx) + "," + Math.round(b.o.fy) + "," + (b.o.bmp._key || "") + "," + b.o.alpha.toFixed(2)).join(";");
@@ -355,7 +619,8 @@
     const SunApi = T.api("Sun") || T.register("Sun", { now: sunNow, shadows: true });
     Object.assign(SunApi, { now: sunNow, cloudCover, layer: sunShadowLayer, layerAlpha, silhouette: silhouetteBitmap, occluder: makeOccluder,
         matrix: shadowMatrix, lay: laySunShadow, occluders, soft: softSilhouette, FLAT: SHADOW_FLAT, sky: skyAt, elevation: sunElev, NIGHT_TONE,
-        lightBlockers, cutLightShadows, scratchCanvas, blockersKey });
+        lightBlockers, cutLightShadows, scratchCanvas, blockersKey, standing, standOfSprite, standOfOccluder, keepOffStanding, drawLightShadows,
+        shadeOf, shadeAt, maskCanvas, standOrder });
 
     // ---- the light from the side at sunrise and sunset (user 2026-10-01): the side of the screen the sun is on (the right - the east -
     // in the morning, the left in the evening) is warmer and brighter, the other side cooler and bluish, strongest at the golden hour

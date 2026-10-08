@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Menu gry (P / Esc) i wszystkie jego zakładki w jednym zgrabnym panelu pośrodku ekranu, w stylu HUD (czerń i żółć). v1.0.0
+ * @plugindesc Menu gry (P / Esc) i wszystkie jego zakładki w jednym zgrabnym panelu pośrodku ekranu, w stylu HUD (czerń i żółć). v1.0.1
  * @author Claude
  * @base TawernaCore
  * @base TawernaUI
@@ -361,6 +361,16 @@
     const PORTRAIT = { w: 184, h: 238 };
     function drawPortrait(win, actor, x, y) {
         ui.panel(win.contents, x, y, PORTRAIT.w, PORTRAIT.h, { cut: 6, fill: "#101216", accent: false });
+        // the hero's talk bust (SpeechBubbles / Tawerna.ui: Hero_Bust - the poor peasant of HeroLook.js) when he has one, so the
+        // menu shows the same face as the talks (2026-10-07: it showed the actor's RTP picture, Reid); else the actor's picture
+        const bust = ui.heroBust ? ui.heroBust() : "";
+        if (bust && /_Bust$/.test(bust)) {
+            const b = ui.loadBust(bust);
+            if (b.isError()) return;
+            if (!b.isReady()) { b.addLoadListener(() => win.refresh()); return; }
+            drawBust(win, b, x + 4, y + 4, PORTRAIT.w - 8, PORTRAIT.h - 8);
+            return;
+        }
         const name = actor.pictureName ? actor.pictureName() : "";
         if (!name) { win.drawActorFace(actor, x + (PORTRAIT.w - 144) / 2, y + 40); return; }
         const bmp = ImageManager.loadPicture(name);
@@ -370,6 +380,21 @@
         const cx = (ImageManager.centerX && ImageManager.centerX(name)) || bw / 2, oy = (ImageManager.offsetY && ImageManager.offsetY(name)) || 0;
         const sx = Math.max(0, Math.min(bw - sw, Math.round(cx - sw / 2)));
         win.contents.blt(bmp, sx, oy, sw, Math.min(sh, bmp.height - oy), x + 4, y + 4, PORTRAIT.w - 8, Math.round((PORTRAIT.w - 8) * Math.min(sh, bmp.height - oy) / sw));
+    }
+    // a talk bust (330 x 350, facing left) into the frame: its full height, a slice as wide as the frame round the face, mirrored
+    // to look into the card on its right
+    function drawBust(win, bmp, dx, dy, dw, dh) {
+        const src = bmp._canvas || bmp._image;
+        if (!src) return;
+        const bh = bmp.height, sw = Math.min(bmp.width, Math.round(bh * dw / dh)), sx = Math.max(0, Math.min(bmp.width - sw, Math.round(bmp.width * 0.47 - sw / 2)));
+        const ctx = win.contents.context;
+        ctx.save();
+        ctx.imageSmoothingEnabled = true;
+        ctx.translate(dx + dw, dy);
+        ctx.scale(-1, 1);
+        ctx.drawImage(src, sx, 0, sw, bh, 0, 0, dw, dh);
+        ctx.restore();
+        win.contents._baseTexture.update();
     }
     function statRow(win, x, y, w, kind, label, ratio, colour, value, warn) {
         const U = UI(), ctx = win.contents.context, bx = x + 168, bw = w - 168 - 92;

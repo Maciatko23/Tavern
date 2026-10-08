@@ -11,8 +11,9 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const at10 = await t.json(`(function(){ const out = {}; for (const r of TownLife.RESIDENTS.filter(r => TownLife.homeOf(r) === 8)) { const e = TownLife.eventOf(r.key);   // (Podgrodzie's live on Map111)
         out[r.key] = e ? [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName()] : null; } return out; })()`);
     // (19 since 2026-10-05: + Szymek, Lucjan Kość - only on market days, hidden the rest -, Bartek Kmieć, the carter Wojciech,
-    // and Teodor the new butler - only once W1 has sent Feliks away, hidden till then)
-    t.check("19 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 19 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
+    // and Teodor the new butler - only once W1 has sent Feliks away, hidden till then; 20 since 2026-10-07: + Marek, Ludmila's
+    // husband - only once W6 has brought him out of the diggers' cave, hidden till then)
+    t.check("20 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 20 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
     const want = { piekarka: [21, 31], woziwoda: [23, 34], kapral: [48, 51], kowal: [7, 49], soltys: [39, 40], kupiec: [12, 40], garbarz: [16, 45], feliks: [40, 40] };
     t.check("at 10:00 each stands at its place (the baker at her stall, the water seller by the dry well, the corporal at the east gate...)",
         Object.entries(want).every(([k, [x, y]]) => at10[k][0] === x && at10[k][1] === y && at10[k][2] === "shown"), { at10 });

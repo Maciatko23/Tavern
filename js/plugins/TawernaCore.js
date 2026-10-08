@@ -253,6 +253,19 @@
     T.state.version = key => { const s = window.$gameSystem, r = s && s._tw; return r && r._v ? num(r._v[key], 0) : 0; };
 
     // ------------------------------------------------------------------
+    // The map's drawing order: the tilemap sorts its sprites by z, then y. A sprite put into it without a z (a plugin's controller
+    // layer that draws nothing itself - Humans', Creatures') made the engine's sort inconsistent: undefined - 3 is NaN, which the
+    // sort takes as "equal" to everything, and a sprite added after such a layer stayed where it was - the bear was drawn over
+    // every tree, even the ones in front of it (user 2026-10-07: "niedźwiedź wchodzi na drzewa"). A missing z counts as 0 now.
+    // ------------------------------------------------------------------
+    Tilemap.prototype._compareChildOrder = function(a, b) {
+        const za = a.z === undefined ? 0 : a.z, zb = b.z === undefined ? 0 : b.z;
+        if (za !== zb) return za - zb;
+        if (a.y !== b.y) return a.y - b.y;
+        return a.spriteId - b.spriteId;
+    };
+
+    // ------------------------------------------------------------------
     // Map injection: events put into a map's data as it loads (the map files stay as they are)
     // ------------------------------------------------------------------
     // The id registry. Ids are game-wide (one id = one owner on every map). The old-style injectors are reserved here until they
@@ -326,8 +339,9 @@
         return fn;
     };
     const markOwner = (ev, owner) => Object.defineProperty(ev, "_twOwner", { value: owner, enumerable: false, configurable: true, writable: true });
+    const lastData = {};   // mapId -> { id: the event data put in last time }
     function processMap(data, mapId) {
-        const got = lastInjected[mapId] = {};
+        const got = lastInjected[mapId] = {}, before = lastData[mapId] || {}, now = lastData[mapId] = {};
         for (const inj of injectors) {
             if (!inj.maps(mapId)) continue;
             if (inj.when) {
@@ -352,7 +366,24 @@
                 if (typeof ev.note === "string" && DataManager.extractMetadata) DataManager.extractMetadata(ev);
                 markOwner(ev, inj.owner);
                 data.events[ev.id] = ev;
+                now[ev.id] = ev;
                 (got[inj.owner] = got[inj.owner] || []).push(ev.id);
+            }
+        }
+        // a transfer within the same map: the engine keeps the map's live events (no Game_Map.setup) but takes the new data - an
+        // injected event the new data no longer has (its when() went false, its build left it out) keeps its old data till the map is
+        // set up again; else it would be a live event without data, and whatever reads its note fails (WaterFx: Act3 found it 2026-10-07).
+        // Not with a reload asked for (requestMapReload: the map is set up again from the new data - the Heart's endings send the scenes'
+        // cast away so; keeping it would bring it back)
+        const P = window.$gamePlayer, M = window.$gameMap;
+        if (P && M && P.isTransferring() && !P._needsMapReload && P.newMapId() === mapId && M.mapId() === mapId && Array.isArray(M._events)) {
+            for (const key of Object.keys(before)) {
+                const id = Number(key), ev = before[key];
+                if (data.events[id] || !M._events[id]) continue;
+                for (let i = data.events.length; i < id; i++) data.events[i] = null;
+                data.events[id] = ev;
+                now[id] = ev;
+                (got[ev._twOwner] = got[ev._twOwner] || []).push(id);
             }
         }
         for (const h of dataHooks) {

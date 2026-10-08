@@ -15,7 +15,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const J = e => t.json(e);
     const flat = r => { r.text = r.text.replace(/\s+/g, " "); return r; };
     const talkTo = async (ev, picks, o) => { const r = await t.talkTo(ev, picks || [], Object.assign({ secs: 25 }, o || {})); if (!r.done) await t.finish(); return flat(r); };
-    const at = async (day, hour, frames) => { await t.setDay(day, hour); await t.calm(); await t.frames(frames || 12); };
+    // (the places synced after the clock's jump: a place wanted from a day on - the crate - must have its page before the talk)
+    const at = async (day, hour, frames) => { await t.setDay(day, hour); await t.calm(); await t.frames(frames || 12); await t.eval("TownQuests.syncSpots(); 0"); await t.frames(2); };
     const step = async () => { const r = await J("TownQuests.rec('W8')"); return r ? r.s + ":" + r.step : "none"; };
     const notes = () => J("Journal.data().notes.map(n => n.title)");
     const spot = id => J(`(function(){ const e = $gameMap.event(${id}); return e && e.page() ? { x: e.x, y: e.y, img: e.characterName(), mark: !!(TownQuests.spotWanted(e.event().note.replace(/.*<TownQuests:([^>]+)>.*/, "$1")) || {}).ready } : null; })()`);

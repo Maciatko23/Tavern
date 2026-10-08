@@ -773,7 +773,9 @@
             const n = find(d.track);
             if (!n || n.state !== "active") { d.track = null; return null; }
             const line = trackLine(n);
-            return { label: "ZLECENIE", title: n.title, line, key: n.id + "|" + line };
+            const q = n.req.find(r => !rowDone(r)) || n.req[0];   // (source / id / icon: for the clean look's goal line and compass - CleanHUD.js)
+            return { label: "ZLECENIE", title: n.title, line, key: n.id + "|" + line, source: "board", id: n.id,
+                icon: q ? (q.k === "item" ? iconOf(q.id) : iconOf(D().BEASTS[q.kind].icon)) : 0 };
         });
     }
 

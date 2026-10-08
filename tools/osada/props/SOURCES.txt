@@ -1,0 +1,10 @@
+PixelLab Pro Flash (2026-10-06), at 2x, style = the town props' own PixelLab pictures (tools/interiors/props/src:
+cobbler_bench -> source_image_id ec4338b1-..., raven_banner -> 0c8599e6-..., raven_relief -> 3aaded11-...):
+loom.png           job 6e739433-3ad4-4f5d-bfc2-6b5986e3ee17  192x192  ~6 gen  style cobbler_bench  (downscale 0.67)
+carver_bench.png   job e9940d90-88ac-4d97-a3ce-c68cf0ef128b  192x128  ~6 gen  style cobbler_bench
+raven_weave.png    job 9de8e63e-b062-4ef9-b3f3-b25322a8b898   96x192  ~6 gen  style raven_banner
+carved_planks.png  job 67fd902c-6b67-4d62-91fe-46a5744d1b96   96x192  ~6 gen  style raven_banner
+pebble_bowl.png    job 5b99efb4-f810-42a3-970f-4ad91ef09b6b   96x96   ~5 gen  style raven_relief
+strip_rack.png     job a7f58cb4-03c2-4ff1-9a25-f8f05e953424  192x144  ~6 gen  style cobbler_bench
+raven_shelf.png    job 8924dd72-a963-49f5-b338-a129fca90a15   96x96   ~5 gen  style raven_relief
+(total about 40 generations)

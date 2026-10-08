@@ -35,10 +35,20 @@
 // kept, person by person; W8 2-6 on the mountain maps (Map013/014/120, places on their "Miejsce:" markers - SPOTS `marker`): the
 // guide's dawn, the quarry, the diggers' camp and Marek, the order "Świadków nie zostawiać" (drunk / the thin wall / the crate), the
 // Silent's gate (switch 16), Grum's choice - the honour bout, his side (switch 15), the faction, or the fight with him (Humans.js).
+// (2026-10-07, v1.4.0) W6 "Ludzie z promu", chapters 3-7: Rafał's story by the camp's fire (TownLife's "w6Fire"), the wanted poster
+// on the tavern's quest board (its event answers first, then the board opens), the choice - hide him (the attic room, grandpa's house,
+// the bell tower; the corporal's search rolls the place's risk), turn him in to Wit, smuggle him through Baltazar; the second wave's
+// props (a second id range 903-909: tents, the camp's fire, Bogdan and Halina - SPOTS `show`, `at`, `note`, `light`, `step`), the vote
+// at the town hall (the hero's weight = his Opinia), the camp moved out to Podgrodzie (TownLife "alt"; wolves at night) or the week of
+// work (the helpers harvest grandpa's field into its chests); the Wigilia (Ludmiła's camp or Borgar's tavern); Marek: Ludmiła's
+// kerchief turns him from the wall in the diggers' cave (Map014's event "Marek"), he follows the hero (path8), the camp watches (the
+// guard, by day the diggers; seen - the alarm: Humans.js's mercenary, Rafał with a knife if the hero sold him), a word with the guard
+// clears the way - out of the cave's mouth: flag marekSaved (W8 rozdz. 6 counts it), Marek a TownLife resident, the reunion. The
+// outcome for Act III and the endings: TownQuests.w6() and the flags listed there.
 
 /*:
  * @target MZ
- * @plugindesc Questy miasteczka: zadania od mieszkańców i stałych bywalców tawerny (oferta, kroki, nagrody), Opinia w miasteczku, dzień targowy, kalendarz, sygnały dzwonu, mini-gra dzwonu, zakładka „Miasteczko” w dzienniku. v1.3.0
+ * @plugindesc Questy miasteczka: zadania od mieszkańców i stałych bywalców tawerny (oferta, kroki, nagrody), Opinia w miasteczku, dzień targowy, kalendarz, sygnały dzwonu, mini-gra dzwonu, zakładka „Miasteczko” w dzienniku. v1.4.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -55,7 +65,12 @@
  * Mieszkaniec z zadaniem ma nad głową żółty „!”, a z zadaniem do oddania -
  * zielony ptaszek. Miejsca zadań (okienko piekarni, ściany do obwieszczeń,
  * posterunek, błysk na drodze...) pojawiają się tylko wtedy, gdy zadanie
- * ich potrzebuje (żółty romb nad nimi). Zdarzenia 951-959.
+ * ich potrzebuje (żółty romb nad nimi). Zdarzenia 951-959 (i 903-909:
+ * obóz ludzi z promu - namioty, ognisko, Bogdan i Halina, W6).
+ *
+ * Wynik wątku W6 dla Aktu III i zakończeń: TownQuests.w6() ->
+ * { rafal: "ally"|"enemy"|"gone"|"taken"|null, camp: "inside"|"outside"|null,
+ *   marekSaved, wigilia: "camp"|"tavern"|"missed"|null, done, ch }.
  *
  * W skryptach: TownQuests.start("K1"), TownQuests.opinion(),
  * TownQuests.addOpinion(n, "powód"), TownQuests.state().
@@ -787,7 +802,7 @@
         if (!has()) return null;
         const res = resident(key), spk = { id: ev.eventId(), name: res ? res.name : key };
         // (a market day's money and a remark after what happened come first - each once; then the quests, then the greeting)
-        try { return sideTalk(key, spk) || remark(key, spk) || talkFor(key, spk, false) || greeting(key, ev, spk); } catch (e) { report("talk " + key, e); return null; }
+        try { return sideTalk(key, spk) || remark(key, spk) || talkFor(key, spk, false) || w6Cold(key, spk) || greeting(key, ev, spk); } catch (e) { report("talk " + key, e); return null; }
     }
     // (2026-10-06) a tavern regular's talk (TavernLife_Regulars asks it first, its own greeting and menu come after): { list, kind,
     // pop } - kind "ready" (a hand-in now), "offer", "remind" (his own quest, what is missing pops up), "remark" - or null
@@ -914,6 +929,11 @@
                 interp.setupChild(out.concat([C(0, [])]), ev.eventId());
                 return;
             }
+            // (2026-10-07) a prop shown by its own rule (SPOTS `show`, W6's camp): what it says (FX[talkFx].spot)
+            if (s.talkFx && FX[s.talkFx] && FX[s.talkFx].spot) {
+                const list = FX[s.talkFx].spot(s, spk);
+                if (list && list.length) interp.setupChild(list.concat([C(0, [])]), ev.eventId());
+            }
         } catch (e) { report("spot " + s.key, e); }
     }
     // is a place wanted now (its event shows): the step that needs it is the current one
@@ -924,6 +944,9 @@
             if (st.spotFx && FX[st.spotFx] && (st.spots || []).includes(key)) { if (FX[st.spotFx].wanted(q, r, st, key)) return { q, st, ready: true }; continue; }
             if (st.type === "spot" && st.spot === key) return { q, st, ready: timing(q, r, st).ok };
         }
+        // (2026-10-07) a prop with its own rule (SPOTS `show` - W6's camp): shown, but no quest step wants it (no diamond)
+        const s = D.SPOTS[key];
+        if (s && s.show && FX[s.show] && FX[s.show].show) { try { if (FX[s.show].show(key, s)) return { q: null, st: null, ready: false, shown: true }; } catch (e) { report("show " + key, e); } }
         return null;
     }
 
@@ -933,16 +956,18 @@
     const BLANK = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
         switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
     // (img: [sheet, index, direction, pattern] - a picture on the page; solid: it blocks, like a person standing there)
-    function spotEvent(s) {
+    // (2026-10-07: note - more tags on the event (a tent's <Occupy>); lit - the prop's light tag (a fire: RoomLighting reads it as the
+    // map loads); step - an animated picture (the fire))
+    function spotEvent(s, lit) {
         const img = s.img || ["", 0, 2, 0];
         const page = { conditions: Object.assign({}, BLANK, { selfSwitchCh: "A", selfSwitchValid: true }), directionFix: true,
             image: { tileId: 0, characterName: img[0], direction: img[2], pattern: img[3], characterIndex: img[1] },
             list: [C(355, ["TownQuests.spot(this)"]), C(0, [])],
             moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false }, moveSpeed: 3, moveType: 0,
-            priorityType: 1, stepAnime: false, through: !s.solid, trigger: 0, walkAnime: false };
-        return { id: s.id, name: "Zadanie: " + s.name, note: "<TownQuests:" + s.key + ">" + (s.bust ? "<Bust:" + s.bust + ">" : ""), pages: [page], x: s.x, y: s.y };
+            priorityType: 1, stepAnime: !!s.step, through: !s.solid, trigger: 0, walkAnime: false };
+        return { id: s.id, name: "Zadanie: " + s.name, note: "<TownQuests:" + s.key + ">" + (s.bust ? "<Bust:" + s.bust + ">" : "") + (s.note || "") + (lit && s.light ? s.light : ""),
+            pages: [page], x: s.x, y: s.y };
     }
-    const SPOT_MAPS = Array.from(new Set(SPOT_LIST.map(s => s.map)));
     // (2026-10-06) a place with `marker`: it stands on the map's "Miejsce: <marker>" event (the maps agent's markers - docs/
     // miasta_miejsca_zadan.md), shifted by dx/dy; x/y are only the fallback when the marker is missing
     function spotAt(s, data) {
@@ -951,8 +976,25 @@
         if (!m) return s.x !== undefined ? s : null;
         return Object.assign({}, s, { x: m.x + (s.dx || 0), y: m.y + (s.dy || 0) });
     }
-    T.inject(SPOT_MAPS, { ids: [951, 959], owner: PLUGIN,
-        build(data, mapId) { return SPOT_LIST.filter(s => s.map === mapId).map(s => spotAt(s, data)).filter(s => s && s.x < data.width && s.y < data.height).map(spotEvent); } });
+    // (2026-10-07) two ranges: 951-959 (the quests' places) and 903-909 (W6's camp props - Map008's 951-959 are all taken). A prop's
+    // `at` (FX[at].at(s) -> [x, y] | null) places it as the map loads (the helpers by the crops of grandpa's field)
+    const inRange = (s, a, b) => s.id >= a && s.id <= b;
+    function spotsBuild(data, mapId, a, b) {
+        return SPOT_LIST.filter(s => s.map === mapId && inRange(s, a, b)).map(s => spotAt(s, data)).filter(Boolean).map(s => {
+            if (!s.at || !FX[s.at] || !FX[s.at].at) return s;
+            let p = null;
+            try { p = FX[s.at].at(s, data); } catch (e) { report("at " + s.key, e); }
+            return p ? Object.assign({}, s, { x: p[0], y: p[1] }) : s;
+        }).filter(s => s.x < data.width && s.y < data.height).map(s => {
+            let lit = false;
+            try { lit = !!(s.light && has() && s.show && FX[s.show] && FX[s.show].show(s.key, s)); } catch (e) { lit = false; }
+            return spotEvent(s, lit);
+        });
+    }
+    const SPOT_MAPS = Array.from(new Set(SPOT_LIST.filter(s => inRange(s, 951, 959)).map(s => s.map)));
+    const PROP_MAPS = Array.from(new Set(SPOT_LIST.filter(s => inRange(s, 903, 909)).map(s => s.map)));
+    T.inject(SPOT_MAPS, { ids: [951, 959], owner: PLUGIN, build: (data, mapId) => spotsBuild(data, mapId, 951, 959) });
+    if (PROP_MAPS.length) T.inject(PROP_MAPS, { ids: [903, 909], owner: PLUGIN, build: (data, mapId) => spotsBuild(data, mapId, 903, 909) });
     function syncSpots() {
         if (!$gameMap || !$gameSelfSwitches) return;
         const mapId = $gameMap.mapId();
@@ -982,7 +1024,9 @@
         for (const key of keys) {
             let m = "";
             for (const q of activeQuests()) { const r = rec(q.id), st = q.steps[r.step]; if (st && stepReady(q, r, st, key)) { m = "ready"; break; } }
-            if (!m && QUESTS.some(q => q.giver === key && offerable(q) && !(q.repeat === "trade" && !FX.k16Trade.goods().length && isDone(q.id)))) m = "new";
+            // (2026-10-07, the user: Baltazar's "!" all the time) a trade (K16) shows its "!" only while it can happen: the day after a
+            // ferry, 8-18 (offerable), something in the bag he buys, and today's ten pieces not sold yet - also before the first sale
+            if (!m && QUESTS.some(q => q.giver === key && offerable(q) && !(q.repeat === "trade" && !(FX.k16Trade.goods().length > 0 && FX.k16Trade.left() > 0)))) m = "new";
             markers[key] = m;
         }
     }
@@ -1055,8 +1099,8 @@
             if (w && w.ready && !s.nomark) kind = "spot";
             if (s.deco === "paper") deco = S().flags["notice_" + s.key] && day() - S().flags["notice_" + s.key] < 7 ? "paper" : "";
             else if (s.deco === "glint") deco = w && w.ready && Math.sin(Graphics.frameCount / 9) > 0.2 ? "glint" : "";
-            else if (s.deco === "tracks") deco = w && w.q.id === "D5" ? "tracks" : "";
-            else if (s.deco === "doused") deco = w && w.q.id === "D11" && w.ready ? "doused" : "";
+            else if (s.deco === "tracks") deco = w && w.q && w.q.id === "D5" ? "tracks" : "";
+            else if (s.deco === "doused") deco = w && w.q && w.q.id === "D11" && w.ready ? "doused" : "";
             else if (s.deco === "dig") deco = w ? "dig" : "";
         } else {
             const key = residentKeyOf(c) || (c.eventId() >= 900 && c.eventId() <= 902 ? storyRoleOf(c) : null) || ($gameMap.mapId() === TAVERN && c.eventId() < 100 ? T.call("TavernLife", "regularOf", c) || (c === regularEv("borgar") ? "borgar" : null) : null);
@@ -1125,6 +1169,10 @@
     function onHour(e) {
         if (!has()) return;
         checkDeadlines();
+        // (2026-10-07) the places follow the clock at once (a place wanted from a day or an hour on - W8's crate from day 23 - had to
+        // wait for the next 30-frame sync: a test that jumped the clock could find it without its page)
+        syncSpots();
+        refreshMarkers();
         if (!onTown()) return;
         const L = TL();
         if (e.hour === 3 && L && L.RESIDENTS) {   // TownLife rings three at three when Ambroży stands at the bell
@@ -1575,6 +1623,7 @@
             const d = this.event();
             if (d && /^Stara krata zakonu/.test(d.name || "") && !T.call("Underground", "isOpen")) return STUB_GRATE;
         }
+        if (window.$gameMap && has() && this._mapId === $gameMap.mapId()) { const w6 = w6List(this); if (w6) return w6; }   // (2026-10-07: W6 - the board, Marek, the camp's guard)
         return _Game_Event_list_tq.call(this);
     };
     function placeTalk(interp, what) {
@@ -1592,6 +1641,7 @@
             linesTo(out, HERO, ["> „" + v.lines[0] + "\n" + v.lines[1], "> " + v.lines[2] + "\n" + v.lines[3] + "”"]);
             script(out, ["W3", "fx", "w3Verse", "cokoly"]);
         } else if (what === "grate" && w4On() && !T.call("Underground", "isOpen")) out = grateTalk();
+        else if (what === "w6board" || what === "marek" || what === "guard") out = w6Place(what, ev);
         if (out) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
     }
     // (2026-10-06) Borgar: the quests' topics at the bar (TavernLife adds them to Borgar's menu and to the counter): [{ id, label }]
@@ -3179,7 +3229,7 @@
         // rozdz. 3: the diggers' camp in the cave (Map014) - Marek in his niche, Grum beside him (his picture by the "marek" marker)
         w8Camp: {
             wanted: (q, r, st, key) => key === "w8_cave",
-            spot(q, r, st, s, spk) { const out = []; linesTo(out, spk, (q.lines || {}).camp); return script(out, [q.id, "fx", "w8Camp"]); },
+            spot(q, r, st, s, spk) { const out = [], L = q.lines || {}; linesTo(out, spk, S().flags.marekSaved && L.campNoMarek ? L.campNoMarek : L.camp); return script(out, [q.id, "fx", "w8Camp"]); },
             act(q) {
                 const r = rec(q.id);
                 if (!r || r.s !== "active" || q.steps[r.step].spotFx !== "w8Camp") return;
@@ -3347,8 +3397,692 @@
                 T.emit("townTruth", { who, how });
                 refreshMarkers();
             }
+        },
+
+        // ================================================================ W6 "Ludzie z promu" (2026-10-07): chapters 3-7
+        // (chapters 1-2 are the camp's quests - K19, K27, K28, K29, D4, D10, D18; their flags are the camp's trust)
+        startW6: () => day() >= 10 && ["K19", "K27", "K28", "K29", "D4", "D10"].some(id => !!rec(id)),
+        w6NotHated: { cond: () => !w6Hated() },   // (Ludmiła's offers: none while she hates the hero for Rafał)
+        w6Vars: { vars: (q, r) => w6Vars(q, r) },
+        // rozdz. 2 -> 3: the camp trusts the hero (three deeds) and Rafał does
+        w6Trust: { check: (q, r) => { r.t.n = w6TrustCount(); return r.t.n >= 3 && !!S().flags.rafalTrust; } },
+        // rozdz. 3 "Kim był Rafał": by the camp's fire at night (TownLife's "w6Fire" seats him there 20:30-23:30)
+        w6Story: {
+            talk(q, r, st, key, spk) {
+                if (key !== "rafal" || !inHours(hour(), [20.5, 23.5])) return null;
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).story);
+                return { ready: true, list: script(out, [q.id, "fx", "w6Story"]) };
+            },
+            ready: (q, r, st, key) => key === "rafal" && inHours(hour(), [20.5, 23.5]),
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w6Story") return;
+                setFlag("w6RafalStory");
+                completeStep(q, { reward: { xp: 100, note: (q.lines || {}).noteStory } });
+            }
+        },
+        // rozdz. 4: the wanted poster - from the next day on the tavern's quest board (TownQuests.place 'w6board', then the board opens)
+        // and on the tavern's outer wall (the place notice_tavern); or Wit tells it
+        w6Poster: {
+            enter(q, r) { r.t.poster = day() + 1; },
+            tick(q, r) { if (day() >= (r.t.poster || 0) && !r.t.paper) { r.t.paper = day(); S().flags.notice_notice_tavern = day(); } },
+            wanted: (q, r, st, key) => key === "notice_tavern" && day() >= (r.t.poster || 0),
+            spot(q, r, st, s) {
+                const out = [];
+                if (day() < (r.t.poster || 0)) return out;
+                linesTo(out, HERO, (q.lines || {}).poster);
+                return script(out, [q.id, "fx", "w6Poster", "wall"]);
+            },
+            talk(q, r, st, key, spk) {
+                if (key !== "kapral" || day() < (r.t.poster || 0) || !inHours(hour(), [6, 23])) return null;
+                const out = [];
+                linesTo(out, spk, (q.lines || {}).witPoster);
+                return { ready: true, list: script(out, [q.id, "fx", "w6Poster", "wit"]) };
+            },
+            ready: (q, r, st, key) => key === "kapral" && day() >= (r.t.poster || 0) && inHours(hour(), [6, 23]),
+            act(q) {
+                const r = rec(q.id);
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w6Poster" || day() < (r.t.poster || 0)) return;
+                r.t.search = day() + 3;
+                completeStep(q, { reward: { xp: 30 } });
+            }
+        },
+        // ...the choice: Rafał (at dawn or late in the evening: hide him / the ferry), Baltazar (the ferry: 50 G), Wit (turn him in);
+        // undecided on the search day (10:00) - the guard finds him in the camp
+        w6Choice: {
+            RISK: { tavern: 40, grandpa: 30, belfry: 20 },
+            // the chance (%) the corporal's search finds him there: Borgar covers a neighbour (Opinia 40), Ambroży a friend of the
+            // bell (K14, D16), the Lord's ally's family is not searched hard; a suspected hero is searched harder; Wit's debt (D5) - none
+            risk(where) {
+                const f = S().flags;
+                let p = FX.w6Choice.RISK[where] || 30;
+                if (where === "tavern" && opinion() >= 40) p -= 25;
+                if (where === "belfry") p += isDone("D16") || f.ambrozyTrust ? -15 : 10;
+                if (where === "grandpa" && f.lordAlly) p -= 10;
+                if (f.guardSuspicious) p += 20;
+                if (f.witOwes) p -= 40;
+                return clamp(p, 5, 90);
+            },
+            word: p => (p <= 15 ? "małe" : p <= 35 ? "średnie" : "duże"),
+            talk(q, r, st, key, spk) {
+                const L = q.lines || {}, out = [];
+                if (key === "kapral") return w6GiveTalk(q, r, spk);
+                if (key === "rafal" && r.t.agree !== "smuggle") {
+                    linesTo(out, spk, L.choiceAsk);
+                    const hideOut = [], places = [["tavern", L.optTavern, L.sayTavern], ["grandpa", L.optGrandpa, L.sayGrandpa], ["belfry", L.optBelfry, L.sayBelfry]];
+                    linesTo(hideOut, spk, L.hideAsk);
+                    choiceTo(hideOut, places.map(([w, label]) => fill(label, { r: FX.w6Choice.word(FX.w6Choice.risk(w)) })).concat([L.optHideLater]),
+                        places.map(([w, , say]) => { const b = []; linesTo(b, spk, say); return script(b, [q.id, "fx", "w6Choice", "hide:" + w]); }).concat([linesTo([], spk, L.sayChoiceLater)]), 3);
+                    const smug = linesTo([], spk, L.saySmuggle);
+                    script(smug, [q.id, "fx", "w6Choice", "smuggle"]);
+                    return { ready: true, list: choiceTo(out, [L.optHide, L.optSmuggle, L.optChoiceLater], [hideOut, smug, linesTo([], spk, L.sayChoiceLater)], 2) };
+                }
+                if (key === "kupiec" && r.t.agree === "smuggle" && inHours(hour(), [8, 18])) {
+                    linesTo(out, spk, L.balAsk);
+                    const pay = [];
+                    script(pay, [q.id, "fx", "w6Choice", "pay"]);
+                    linesTo(pay, spk, L.balDone);
+                    return { ready: true, list: choiceTo(out, [L.optPay, L.optPayLater], [pay, linesTo([], spk, L.balLater)], 1) };
+                }
+                return null;
+            },
+            ready: (q, r, st, key) => (key === "rafal" && r.t.agree !== "smuggle") || (key === "kupiec" && r.t.agree === "smuggle" && inHours(hour(), [8, 18])),
+            tick(q, r) { if (day() > (r.t.search || 0) || (day() === r.t.search && hour() >= 10)) w6Taken(q, r, "camp"); },
+            act(q, what, interp, stop) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active") return;
+                const talk = q.steps[r.step].talk;
+                if (what === "give" && (talk === "w6Choice" || talk === "w6Hidden")) { w6Given(q, r); return; }
+                if (talk !== "w6Choice") return;
+                if (what === "smuggle") { r.t.agree = "smuggle"; T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) }); return; }
+                if (what === "pay") {
+                    if ($gameParty.gold() < 50) { T.popup.need(COIN_ICON, "Potrzebujesz 50 G"); stop(); return; }
+                    $gameParty.loseGold(50);
+                    for (const f of ["rafalSmuggled", "balthazarKnows"]) setFlag(f);
+                    T.call("TownLife", "setGone", "rafal", true);
+                    think(L.smuggled);
+                    completeStep(q, { to: w6Idx(q, "w6Vote"), reward: { xp: 120, note: L.noteSmuggled } });
+                    return;
+                }
+                const m = /^hide:(\w+)$/.exec(String(what));
+                if (!m || !FX.w6Choice.RISK[m[1]]) return;
+                const where = m[1];
+                if (where === "tavern") {
+                    if ($gameParty.gold() < 50) { T.popup.need(COIN_ICON, "Potrzebujesz 50 G (dla Borgara)"); stop(); return; }
+                    $gameParty.loseGold(50);
+                }
+                r.t.hide = { where, day: day(), search: day() + 3, until: day() + 7, risk: FX.w6Choice.risk(where) };
+                T.call("TownLife", "setGone", "rafal", true);
+                completeStep(q, { to: w6Idx(q, "w6Hidden"), reward: { xp: 60 } });
+            }
+        },
+        // ...hidden for seven days (the place shows him): the corporal's search on the third day (the risk rolled), back on the seventh
+        w6Hidden: {
+            wanted: (q, r, st, key) => !!r.t.hide && key === "w6_hide_" + r.t.hide.where,
+            spot(q, r, st, s, spk) {
+                const L = q.lines || {}, w = r.t.hide && r.t.hide.where;
+                return linesTo([], spk, L["hid" + cap(w)] || []);
+            },
+            talk(q, r, st, key, spk) { return key === "kapral" ? w6GiveTalk(q, r, spk) : null; },
+            ready: (q, r, st, key) => (key === "kapral" ? false : null),
+            tick(q, r) {
+                const h = r.t.hide, L = q.lines || {};
+                if (!h) return;
+                if (!h.searched && (day() > h.search || (day() === h.search && hour() >= 10))) {
+                    const o = api.w6Opts || {}, roll = typeof o.roll === "number" ? o.roll : Math.random() * 100;
+                    h.roll = Math.round(roll);
+                    if (roll < h.risk) { w6Taken(q, r, h.where); return; }
+                    h.searched = day();
+                    think(L["searched" + cap(h.where)]);
+                    T.popup(q.title, { top: true, color: "#9ff0a8", sub: "Straż szukała - i nie znalazła" });
+                    return;
+                }
+                if (h.searched && (day() > h.until || (day() === h.until && hour() >= 8))) {
+                    T.call("TownLife", "setGone", "rafal", false);
+                    for (const f of ["rafalAlly", "rafalTrust"]) setFlag(f);
+                    think(L.hiddenBack);
+                    completeStep(q, { to: w6Idx(q, "w6Vote"), reward: { xp: 200, opinion: 3, note: L.noteAlly } });
+                }
+            }
+        },
+        // rozdz. 5 "Druga fala": the ferry of day 24 (tents, Bogdan and Halina, quarrels at Kuba's barrels), the vote the day after
+        w6Wave: {
+            enter(q, r) { r.t.waveDay = Math.max(24, day()); r.t.meet = r.t.waveDay + 1; },
+            tick(q, r) {
+                if (!r.t.waveDay) FX.w6Wave.enter(q, r);
+                if (!onTown() || day() < r.t.waveDay) return;
+                const L = q.lines || {};
+                if (!r.t.waveSeen) { r.t.waveSeen = day(); T.popup(L.waveNotice[0], { top: true, color: "#ffe27a", sub: L.waveNotice[1] }); }
+                if (day() > r.t.meet || !inHours(hour(), [7, 14]) || Graphics.frameCount < w6QuarrelAt || $gameMap.isEventRunning()) return;
+                const well = T.call("TownLife", "spot", "studnia_rynek");
+                if (!well || Math.hypot($gamePlayer.x - well[0], $gamePlayer.y - well[1]) > 9) return;
+                const pair = L.quarrel.find(p => visible(p[0][0]) && visible(p[1][0]));
+                w6QuarrelAt = Graphics.frameCount + 1500;
+                if (pair) for (const [k, line] of pair) think([line], k);
+            }
+        },
+        w6Vote: {
+            talk(q, r, st, key, spk) {
+                if (key !== "soltys" || !r.t.waveDay || day() < r.t.waveDay) return null;
+                const L = q.lines || {}, out = [];
+                if (day() < r.t.meet || !inHours(hour(), [13, 16])) return { ready: false, list: linesTo(out, spk, day() < r.t.meet ? L.meetEarly : L.meetToday) };
+                linesTo(out, spk, L.meet);
+                const opts = [[L.optClose, "close", L.sayClose], [L.optOpen, "open", L.sayOpen], [L.optAbstain, "abstain", L.sayAbstain]];
+                return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, HERO, say); return script(b, [q.id, "fx", "w6Vote", how]); }), -1) };
+            },
+            ready: (q, r, st, key) => key === "soltys" && !!r.t.meet && day() >= r.t.meet && inHours(hour(), [13, 16]),
+            // the town's voices (55 to close, 45 to let in), +3 to letting in for each deed the town saw the hero do for the camp; the
+            // hero's voice weighs his Opinia / 2
+            tally(how) {
+                const v = { close: 55, open: 45 + 3 * w6TrustCount() }, w = Math.round(opinion() / 2);
+                if (how === "close" || how === "open") v[how] += w;
+                return v;
+            },
+            act(q, how) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w6Vote" || !["close", "open", "abstain"].includes(how)) return;
+                const v = FX.w6Vote.tally(how), res = v.open > v.close ? "open" : "close";
+                r.t.vote = { how, close: v.close, open: v.open, res };
+                setFlag("w6Voted" + cap(how));
+                think([fill(L.tally, v)].concat(res === "open" ? L.resultOpen : L.resultClose), "soltys");
+                const rw = { xp: 100 };
+                if (res === "close") {
+                    setFlag("campOutside");
+                    if (how === "close") rw.opinion = 2;
+                    rw.note = L.noteClose;
+                } else {
+                    setFlag("campInside");
+                    if (how === "open") rw.opinion = 2;
+                    const w = S().w6 || (S().w6 = {});
+                    w.work = { from: day(), until: day() + 7, last: day() };
+                    rw.note = L.noteOpen;
+                }
+                completeStep(q, { reward: rw });
+            }
+        },
+        // rozdz. 6 "Zima" and 7 "Marek" - one step (Act II may well begin before the winter): the Wigilia (Ludmiła asks where, the hero
+        // brings 4 hot dishes on its evening - to Ludmiła in the camp or to Borgar at the bar) and Marek (Ludmiła's kerchief, the cave,
+        // out with him, the reunion). The arc ends when both are over (the Wigilia eaten or missed, Marek home)
+        w6Hub: {
+            enter(q, r) { r.t.wig = w6WigDay(day()); r.t.wg = 0; r.t.m = 0; r.t.mk = {}; },
+            ch: (q, r) => (actTwo() && (r.t.m || 0) < 4 && !(r.t.wg === 1 && day() >= r.t.wig - 1) ? 7 : 6),
+            talk(q, r, st, key, spk) {
+                if (key !== "ludmila") return null;
+                const L = q.lines || {}, out = [], hated = w6Hated(), day6 = inHours(hour(), [6.5, 20]);
+                if (r.t.m === 3 && day6) {
+                    linesTo(out, spk, L.reunion);
+                    if (hated) linesTo(out, spk, L.reunionCold);
+                    linesTo(out, spk, L.reunionEnd);
+                    return { ready: true, list: script(out, [q.id, "fx", "w6Hub", "reunion"]) };
+                }
+                if (r.t.m === 0 && actTwo() && day6) {
+                    const know = !!S().flags.w8Marek || !!r.t.sawMarek;
+                    if (hated) linesTo(out, spk, L.chustaCold);
+                    linesTo(out, spk, know ? L.chustaKnow : L.chustaRumour);
+                    return { ready: true, list: script(out, [q.id, "fx", "w6Hub", "chusta"]) };
+                }
+                if (r.t.wg === 0 && day() >= r.t.wig - 12 && day() <= r.t.wig && day6) {
+                    const f = S().flags;
+                    if (f.campCloaks) linesTo(out, spk, [L.cloaksCamp]);
+                    else if (f.cloaksToGuard) linesTo(out, spk, [L.cloaksGuard]);
+                    linesTo(out, spk, L.wigAsk);
+                    const opts = [[L.optWigCamp, "wig:camp", L.sayWigCamp], [L.optWigTavern, "wig:tavern", L.sayWigTavern], [L.optWigLater, "", L.sayWigLater]];
+                    return { ready: true, list: choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w6Hub", how]); return b; }), 2) };
+                }
+                if (r.t.wg === 1 && r.t.wgWhere === "camp" && day() === r.t.wig && inHours(hour(), [17, 20])) {
+                    const n = w6Dishes();
+                    if (n < 4) return { ready: false, list: linesTo(out, HERO, ["> (Cztery kociołki - tyle obiecałem. Mam za mało.)"]), pop: () => T.popup.need(iconOfItem(131), fill(L.wigNeed, { dishes: n })) };
+                    w6WigLines(out, spk, q, L.wigCamp, L.wigCampEnd);
+                    return { ready: true, list: script(out, [q.id, "fx", "w6Hub", "wigCamp"]) };
+                }
+                return null;
+            },
+            ready(q, r, st, key) {
+                if (key === "borgar") return !!FX.w6Hub.borgarTopic(q, r) && w6Dishes() >= 4;
+                if (key !== "ludmila") return false;
+                const day6 = inHours(hour(), [6.5, 20]);
+                return (r.t.m === 3 && day6) || (r.t.m === 0 && actTwo() && day6) || (r.t.wg === 0 && day() >= r.t.wig - 12 && day() <= r.t.wig && day6)
+                    || (r.t.wg === 1 && r.t.wgWhere === "camp" && day() === r.t.wig && inHours(hour(), [17, 20]) && w6Dishes() >= 4);
+            },
+            borgarTopic: (q, r) => (r.t.wg === 1 && r.t.wgWhere === "tavern" && day() === r.t.wig && inHours(hour(), [17, 23]) ? (q.lines || {}).wigTavernTopic : null),
+            borgarList(q, r, st, spk) {
+                const L = q.lines || {}, out = [], n = w6Dishes();
+                if (n < 4) { T.popup.need(iconOfItem(131), fill(L.wigNeed, { dishes: n })); return linesTo(out, HERO, ["> (Cztery kociołki - tyle obiecałem. Mam za mało.)"]); }
+                w6WigLines(out, spk, q, L.wigTavern, L.wigTavernEnd);
+                return script(out, [q.id, "fx", "w6Hub", "wigTavern"]);
+            },
+            tick(q, r) {
+                const L = q.lines || {};
+                if (r.t.wg < 2 && (day() > r.t.wig || (day() === r.t.wig && hour() >= 23))) {
+                    if (r.t.wg === 1) think(L.wigMissed);
+                    r.t.wg = 3;
+                    setFlag("w6WigiliaMissed");
+                    FX.w6Hub.maybeDone(q, r);
+                    return;
+                }
+                if (window.$gameMap && $gameMap.mapId() === CAVE && !S().flags.marekSaved) {
+                    const ev = marekEv();
+                    if (ev && !r.t.sawMarek && dist(ev, $gamePlayer) <= 7) r.t.sawMarek = day();
+                    if (r.t.m === 2) w6Escort(q, r);
+                }
+            },
+            act(q, what, interp, stop) {
+                const r = rec(q.id), L = q.lines || {};
+                if (!r || r.s !== "active" || q.steps[r.step].talk !== "w6Hub") return;
+                const mk = r.t.mk || (r.t.mk = {});
+                if (what === "chusta" && r.t.m === 0) {
+                    vgive("chusta", 1);
+                    r.t.m = 1;
+                    T.popup(vname("chusta"), { icon: vicon("chusta"), kind: "good" });
+                    w6Popup(q);
+                } else if (what === "turn" && r.t.m === 1 && vcount("chusta") > 0) {
+                    vtake("chusta", 1);
+                    r.t.m = 2;
+                    r.t.mk = { follow: true };
+                    w6Popup(q);
+                } else if (what === "follow" && r.t.m === 2) mk.follow = true;
+                else if (/^guard:/.test(what) && r.t.m === 2 && !mk.clear) {
+                    const how = what.slice(6);
+                    if (how === "bribe") {
+                        if ($gameParty.gold() < 80) { T.popup.need(COIN_ICON, "Potrzebujesz 80 G"); stop(); return; }
+                        $gameParty.loseGold(80);
+                    }
+                    if (how === "fight") { const g = guardEv(); w6Alarm(q, r, g); return; }
+                    if (how === "grum" && !S().flags.grumAlly) return;
+                    if (how === "faction" && !S().flags.w8Faction) return;
+                    mk.clear = how;
+                    mk.follow = true;
+                    setFlag("w6Guard" + cap(how));
+                } else if (what === "reunion" && r.t.m === 3) {
+                    r.t.m = 4;
+                    for (const f of ["w6Reunion", "ludmilaForgave"]) setFlag(f);
+                    w6Reward(q, { xp: 400, opinion: 8, note: L.noteReunion });
+                    FX.w6Hub.maybeDone(q, r);
+                } else if (what === "wig:camp" || what === "wig:tavern") {
+                    if (r.t.wg !== 0) return;
+                    r.t.wg = 1;
+                    r.t.wgWhere = what.slice(4);
+                    w6Popup(q);
+                } else if ((what === "wigCamp" || what === "wigTavern") && r.t.wg === 1 && day() === r.t.wig) {
+                    if (w6Dishes() < 4) { stop(); return; }
+                    w6TakeDishes(4);
+                    r.t.wg = 2;
+                    setFlag("w6Wigilia");
+                    setFlag(what === "wigCamp" ? "w6WigiliaCamp" : "w6WigiliaTavern");
+                    w6Reward(q, { xp: 150, opinion: 10, note: L.noteWig });
+                    FX.w6Hub.maybeDone(q, r);
+                }
+            },
+            maybeDone(q, r) { if (r && r.s === "active" && r.t.wg >= 2 && r.t.m >= 4) finish(q); }
+        },
+        // the camp's props: when they are there (show), where the helpers stand (at), what they say (spot)
+        w6Camp: { show: () => day() >= 10 && !S().flags.campOutside },
+        w6Second: {
+            show(key) {
+                const f = S().flags;
+                if (day() < 24 || f.cloaksToGuard) return false;   // (D18's cloaks sold to the guard: the two of them left on the ferry before the frost)
+                const out = /_o$/.test(key);
+                if (out !== !!f.campOutside) return false;
+                if (!out && (key === "w6_bogdan" || key === "w6_halina") && w6Working()) return false;   // (at work on grandpa's field)
+                return true;
+            }
+        },
+        w6Work: { show: () => w6Working() },
+        w6Helper: {
+            // next to the crops on grandpa's field (Map003): the tile below the first plots with something growing (sorted), else the default
+            at(s) {
+                const F = T.api("Farming"), plots = F && F.farm ? F.farm().plots[FIELD] || {} : {};
+                const crops = Object.keys(plots).filter(k => plots[k] && plots[k].crop).map(k => k.split(",").map(Number)).sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+                const i = s.key === "w6_help2" ? 1 : 0, c = crops[Math.min(i, crops.length - 1)];
+                if (!c) return null;
+                let x = c[0], y = c[1] + 1;
+                for (let k = 0; k < 4 && plots[x + "," + y]; k++) y++;
+                if (i === 1 && crops.length < 2) x += 2;
+                return [x, y];
+            }
+        },
+        w6Prop: {
+            spot(s, spk) {
+                const L = Q.W6.lines || {}, mapId = $gameMap.mapId();
+                if (/^w6_tent/.test(s.key)) { T.popup(L.propTent, { color: "#eceef0" }); return []; }
+                if (s.key === "w6_fire") { T.popup(L.propFire, { color: "#ffe9a8" }); return []; }
+                const who = /bogdan|help1/.test(s.key) ? "bogdan" : "halina", where = mapId === FIELD ? "Field" : mapId === PODGRODZIE ? "Out" : "Town";
+                return linesTo([], spk, L[who + where] || []);
+            }
         }
     };
+    // ---- W6 helpers (2026-10-07)
+    const FIELD = 3, PODGRODZIE = 111, W6_DISHES = [130, 131, 132, 133], W6_TAG = "w6Marek";
+    const cap = s => (s ? String(s)[0].toUpperCase() + String(s).slice(1) : "");
+    let w6QuarrelAt = 0;
+    const w6Idx = (q, talk) => q.steps.findIndex(s => s.talk === talk);
+    const w6Hub = () => { const r = has() ? rec("W6") : null; return r && r.s === "active" && Q.W6.steps[r.step].talk === "w6Hub" ? r : null; };
+    const w6Hated = () => { const f = has() ? S().flags : {}; return !!f.rafalGiven && !f.ludmilaForgave; };
+    // the camp's trust: the deeds the camp remembers (chapters 1-2)
+    function w6TrustCount() {
+        const f = S().flags, d4 = rec("D4"), p = d4 && d4.t && d4.t.pick ? d4.t.pick[1] : undefined;
+        return [isDone("K27"), !!f.campFed, !!f.elaHealed, isDone("D4") && (p === 1 || p === 2), !!f.rafalHidden, !!f.szymekFree, !!f.campCloaks].filter(Boolean).length;
+    }
+    // the first evening of the Wigilia (Tawerna time: winter, around its middle) from day d on
+    function w6WigDay(d) {
+        for (let k = Math.max(1, d); k < d + 4 * T.time.seasonLength() + 2; k++) if (T.time.isWigilia(k) && !T.time.isWigilia(k - 1)) return k;
+        return d;
+    }
+    const w6Dishes = () => W6_DISHES.reduce((n, id) => n + count(id), 0);
+    function w6TakeDishes(n) {
+        for (const id of W6_DISHES) { const k = Math.min(n, count(id)); if (k > 0) { $gameParty.loseItem(item(id), k); n -= k; } if (n <= 0) return; }
+    }
+    const w6Working = () => { const w = has() ? S().w6 : null; return !!(w && w.work && day() > w.work.from && day() <= w.work.until && inHours(hour(), [7, 16])); };
+    function w6Popup(q) { T.popup(q.title, { top: true, color: "#ffe27a", sub: stepLine(q) }); refreshMarkers(); }
+    function w6Reward(q, rw) {
+        const parts = applyReward(q, rw, false);
+        T.popup(q.title, { top: true, color: "#9ff0a8", sub: parts.concat([stepLine(q)]).filter(Boolean).join("  ·  ") });
+        refreshMarkers();
+    }
+    // the Wigilia's scene: the place's lines, Rafał's toast (if he is the camp's), Marek's two words (if he is home), the end
+    function w6WigLines(out, spk, q, lines, end) {
+        const L = q.lines || {}, f = S().flags;
+        linesTo(out, spk, lines);
+        if (f.rafalAlly) linesTo(out, spk, [L.wigRafal]);
+        if (f.marekSaved) linesTo(out, spk, [L.wigMarek]);
+        return linesTo(out, spk, end);
+    }
+    // the words of the steps ({trust}, {rafal}, {poster}, {search}, {agree}, {place}, {until}, {wave}, {hub})
+    function w6Vars(q, r) {
+        const L = q.lines || {}, t = r ? r.t : {}, f = S().flags, h = t.hide || {};
+        const v = { trust: w6TrustCount(), rafal: f.rafalTrust ? L.rafalYes : L.rafalNo, poster: t.poster || day() + 1, search: h.search || t.search || "?",
+            agree: t.agree === "smuggle" ? L.agreeSmuggle : L.agreeNone, place: L["place" + cap(h.where)] || "", until: h.until || "?", opinion: opinion() };
+        v.wave = t.waveDay && day() >= t.waveDay ? fill(L.waveNow, { meet: t.meet, opinion: opinion() }) : fill(L.waveBefore, { waveDay: t.waveDay || 24 });
+        if (r && t.wig) {
+            const w = { wig: t.wig, camp: f.campOutside ? L.campOut : L.campIn, dishes: w6Dishes() };
+            const wig = t.wg === 2 ? L.hubWigDone : t.wg === 3 ? L.hubWigMissed : t.wg === 1 ? (t.wgWhere === "tavern" ? L.hubWigTavern : L.hubWigCamp) : day() >= t.wig - 12 ? L.hubWigAsk : L.hubWig0;
+            const m = t.m || 0, mar = m >= 4 ? L.hubMarekDone : m === 3 ? L.hubMarek3 : m === 2 ? L.hubMarek2 : m === 1 ? L.hubMarek1 : actTwo() ? L.hubMarekAsk : L.hubMarek0;
+            v.hub = fill(wig, w) + " " + mar;
+        }
+        return v;
+    }
+    // Wit and the poster: "Wiem, gdzie jest." - not a tick over him (that would tell the player what to do)
+    function w6GiveTalk(q, r, spk) {
+        if (!inHours(hour(), [6, 23])) return null;
+        const L = q.lines || {}, out = [], where = r.t.hide ? r.t.hide.where : "camp";
+        linesTo(out, spk, L.witAsk);
+        const give = [];
+        linesTo(give, spk, L.give, { hideout: L["hideout" + cap(where)] || L.hideoutCamp });
+        script(give, [q.id, "fx", "w6Choice", "give"]);
+        // (ready in the talk - Wit hunts him these days and asks first; but no tick over Wit: FX ready says no)
+        return { ready: true, list: choiceTo(out, [L.optGive, L.optGiveNo], [give, linesTo([], spk, L.giveNo)], 1) };
+    }
+    function w6Given(q, r) {
+        const L = q.lines || {};
+        for (const f of ["rafalGiven", "rafalEnemy", "w6LordFavour"]) setFlag(f);
+        T.call("TownLife", "setGone", "rafal", true);
+        if (visible("ela")) T.call("TownLife", "say", "ela", L.elaCries);
+        completeStep(q, { to: w6Idx(q, "w6Vote"), reward: { gold: 120, xp: 50, opinion: -2, note: L.noteGiven } });
+    }
+    // the guard found him: in the camp (the hero did not choose in time) or in his hiding place (the risk)
+    function w6Taken(q, r, where) {
+        const L = q.lines || {};
+        setFlag("rafalTaken");
+        T.call("TownLife", "setGone", "rafal", true);
+        think(where === "camp" ? L.campSearch : L["found" + cap(where)]);
+        const rw = { xp: 30, note: L.noteTaken };
+        if (where !== "camp") { setFlag("guardSuspicious"); rw.opinion = -2; }
+        completeStep(q, { to: w6Idx(q, "w6Vote"), reward: rw });
+    }
+    // ---- rozdz. 7 in the diggers' cave (Map014): Marek (event "Marek" - his talk while W6 needs it), the camp's guard ("Strażnik obozu")
+    const caveEvs = name => (window.$gameMap && $gameMap.mapId() === CAVE ? $gameMap.events().filter(e => e.event() && e.event().name === name && !e._erased) : []);
+    const marekEv = () => caveEvs("Marek")[0] || null;
+    const guardEv = () => caveEvs("Strażnik obozu")[0] || null;
+    const W6_STUB = { marek: [C(355, ["TownQuests.place(this, 'marek')"]), C(0, [])], guard: [C(355, ["TownQuests.place(this, 'guard')"]), C(0, [])],
+        board: [C(355, ["TownQuests.place(this, 'w6board')"]), C(0, [])] };
+    function w6List(ev) {
+        const mapId = $gameMap.mapId();
+        if (mapId !== CAVE && mapId !== TAVERN) return null;
+        const r = rec("W6");
+        if (!r || r.s !== "active") return null;
+        const st = Q.W6.steps[r.step], d = ev.event();
+        if (!d) return null;
+        if (mapId === TAVERN) {
+            if (st.talk !== "w6Poster" || day() < (r.t.poster || 0)) return null;
+            const QB = T.api("QuestBoard"), p = ev.page();
+            return QB && QB.isBoardEvent && p && p.trigger <= 2 && QB.isBoardEvent(ev) ? W6_STUB.board : null;
+        }
+        if (st.talk !== "w6Hub" || S().flags.marekSaved) return null;
+        if (d.name === "Marek" && ((r.t.m || 0) >= 1 || actTwo())) return W6_STUB.marek;
+        if (d.name === "Strażnik obozu" && r.t.m === 2 && !(r.t.mk || {}).clear) return W6_STUB.guard;
+        return null;
+    }
+    function w6Place(what, ev) {
+        const q = Q.W6, L = q.lines || {}, r = rec("W6");
+        if (!r || r.s !== "active") return null;
+        if (what === "w6board") {
+            const out = linesTo([], HERO, L.poster);
+            script(out, ["W6", "fx", "w6Poster", "board"]);
+            out.push(C(355, ["QuestBoard.open()"]));
+            return out;
+        }
+        const spk = { id: ev.eventId(), name: what === "marek" ? "Marek" : "Strażnik obozu" }, m = r.t.m || 0, mk = r.t.mk || (r.t.mk = {});
+        if (what === "marek") {
+            if (m === 1 && vcount("chusta") > 0) return script(linesTo([], spk, L.marekTurn), ["W6", "fx", "w6Hub", "turn"]);
+            if (m === 2 && !mk.follow) return script(linesTo([], spk, L.marekCome), ["W6", "fx", "w6Hub", "follow"]);
+            if (m === 2) return linesTo([], spk, L.marekWaits);
+            return linesTo([], HERO, L.marekWall);
+        }
+        if (what === "guard" && m === 2 && !mk.clear) {
+            const f = S().flags, out = linesTo([], spk, L.guardAsk), opts = [];
+            if (f.grumAlly) opts.push([L.optGrum, "grum", L.sayGrum]);
+            if (f.w8Faction) opts.push([L.optFaction, "faction", L.sayFaction]);
+            opts.push([L.optBribe, "bribe", L.sayBribe], [L.optFight, "fight", L.sayFight], [L.optGuardNo, "", L.sayGuardNo]);
+            return choiceTo(out, opts.map(o => o[0]), opts.map(([, how, say]) => {
+                const b = [];
+                if (how && how !== "fight") script(b, ["W6", "fx", "w6Hub", "guard:" + how]);
+                linesTo(b, spk, say);
+                if (how === "fight") script(b, ["W6", "fx", "w6Hub", "guard:fight"]);
+                return b;
+            }), opts.length - 1);
+        }
+        return null;
+    }
+    // Marek walks after the hero (each frame on Map014 while he follows): Hunting's path8, RoamingActor's steps
+    function w6MarekUpdate() {
+        if (!window.$gameMap || $gameMap.mapId() !== CAVE) return;
+        const r = w6Hub();
+        if (!r || r.t.m !== 2) return;
+        const mk = r.t.mk || (r.t.mk = {}), ev = marekEv();
+        if (!ev || !mk.follow || mk.fight || ev.isMoving() || $gameMap.isEventRunning()) return;
+        if (!ev._w6walk) { ev._w6walk = true; ev.setDirectionFix(false); ev.setWalkAnime(true); ev.setMoveSpeed(4); ev.setThrough(false); }
+        const p = $gamePlayer;
+        if (Math.hypot(ev.x - p.x, ev.y - p.y) <= 1.5) return;
+        const H = window.Hunting, RA = window.RoamingActor;
+        const d = H && H.path8 ? H.path8(ev, p.x, p.y, { key: "w6marek" }).dir : ev.findDirectionTo(p.x, p.y);
+        if (d > 0 && RA && RA.canStep(ev, ev.x, ev.y, d)) RA.step(ev, d);
+        else if (d > 0) ev.moveStraight(d);
+    }
+    // the way out: the cave's mouth (rows 26-29, x 18-22) with Marek close - he is out. Unless the way is clear (a word with the
+    // guard, the guard beaten), the camp watches: at night the guard by the fire (the diggers sleep; with Rafał the hero's friend he
+    // dozes 1-3 - Rafał knows the camp's nights), by day the guard and the three diggers too. Seen: the alarm - a fight
+    function w6Escort(q, r) {
+        const mk = r.t.mk || (r.t.mk = {}), ev = marekEv(), p = $gamePlayer;
+        if (!ev) return;
+        if (mk.fight) {
+            const Hm = T.api("Humans");
+            if (Hm && Hm.robbery) return;
+            if (!(Hm && Hm.band && Hm.band(W6_TAG))) mk.fight = null;
+            return;
+        }
+        if (!mk.follow || $gameMap.isEventRunning()) return;
+        if (p.y >= 26 && Math.abs(p.x - 20) <= 2 && dist(ev, p) <= 5) { w6Out(q, r, ev); return; }
+        if (mk.clear) return;
+        const h = hour(), night = isNight(h), f = S().flags, sneak = !!T.call("Hunting", "sneaking");
+        const sharp = f.rafalAlly ? -1.5 : 0, doze = !!f.rafalAlly && night && inHours(h, [1, 3]);
+        const g = guardEv(), watchers = [];
+        if (g && !doze) watchers.push(g);
+        if (!night) watchers.push(...caveEvs("Kopacz"));
+        for (const w of watchers) if (sees(w, p, sneak, sharp)) { w6Alarm(q, r, w); return; }
+    }
+    // the alarm: the guard (Humans.js's mercenary where the guard stood) - and Rafał, if the hero sold him (the knife: he is back)
+    function w6Alarm(q, r, w) {
+        const L = q.lines || {}, mk = r.t.mk || (r.t.mk = {}), Hm = T.api("Humans"), g = guardEv();
+        if (w) T.call("SpeechBubbles", "say", w, L.alarm, 160);
+        if (!Hm || typeof Hm.spawn !== "function") {   // (no Humans.js: a scuffle in words - the way is clear)
+            mk.clear = "fight"; mk.follow = true; mk.guardDown = true;
+            if (g) g.erase();
+            think(L.fightWon);
+            return;
+        }
+        const x = g ? g.x : 9, y = g ? g.y : 13;
+        if (g) g.erase();
+        const band = Hm.makeBand ? Hm.makeBand([], { tag: W6_TAG }) : null, o = { tag: W6_TAG, engaged: true };
+        if (band) o.band = band;
+        const at = ($gamePlayer.x !== x || $gamePlayer.y !== y) && $gameMap.isPassable(x, y, 2);
+        const man = at ? Hm.spawn("mercenary", x, y, Object.assign({ name: "Strażnik obozu", level: 5, gold: 12, say: L.alarm }, o)) : Hm.spawnNear("mercenary", 3, 6, Object.assign({ name: "Strażnik obozu", level: 5, gold: 12 }, o));
+        if (S().flags.rafalEnemy && Hm.spawnNear) Hm.spawnNear(Hm.KINDS && Hm.KINDS.knifer ? "knifer" : "bandit", 3, 6, Object.assign({ name: "Rafał", say: L.rafalShout }, o));
+        if (!man) { mk.clear = "fight"; mk.follow = true; mk.guardDown = true; return; }
+        mk.fight = day();
+    }
+    function w6FightEnd(how) {
+        const r = w6Hub(), q = Q.W6, L = q.lines || {};
+        if (!r || r.t.m !== 2) return;
+        const mk = r.t.mk || (r.t.mk = {});
+        mk.fight = null;
+        if (how === "won") { mk.clear = "fight"; mk.guardDown = true; mk.follow = true; setFlag("w6GuardBeaten"); think(L.fightWon); return; }
+        mk.follow = false;
+        mk.lost = day();
+        w6Niche(marekEv());
+        think(L.fightLost);
+    }
+    // Marek back at his wall (the niche 30,5, facing the rock) - after a lost fight, or when the cave loads with him not following
+    function w6Niche(ev) {
+        if (!ev) return;
+        const m = markerAt("marek") || { x: 30, y: 5 };
+        ev.locate(m.x, m.y);
+        ev.setDirectionFix(false);
+        ev.setDirection(8);
+        ev.setDirectionFix(true);
+        ev._w6walk = false;
+    }
+    function w6Out(q, r, ev) {
+        const L = q.lines || {};
+        setFlag("marekSaved");
+        r.t.m = 3;
+        r.t.mk.follow = false;
+        if (ev) ev.erase();
+        think(L.out);
+        w6Reward(q, { xp: 250, note: L.noteOut });
+        T.emit("w6MarekSaved", {});
+    }
+    // the cave as it loads: Marek gone for good once saved; the guard (beaten) gone; at night, while Marek waits to be led out, the
+    // guard sits by the camp's fire ("oboz_kopaczy") facing the way out
+    function w6CaveReady() {
+        if (!has() || !$gameMap || $gameMap.mapId() !== CAVE) return;
+        const f = S().flags, ev = marekEv();
+        if (f.marekSaved) { if (ev) ev.erase(); return; }
+        const r = w6Hub();
+        if (!r || r.t.m !== 2) return;
+        const mk = r.t.mk || (r.t.mk = {}), g = guardEv();
+        mk.follow = false;   // (he waits in his niche again: talk to him - "Chodz")
+        mk.fight = null;
+        w6Niche(ev);   // (a loaded save keeps the event where it stood)
+        if (g && mk.guardDown) { g.erase(); return; }
+        if (g && !mk.clear && isNight(hour())) { const m = markerAt("oboz_kopaczy") || { x: 18, y: 18 }; g.locate(m.x, m.y); g.setDirection(2); }
+    }
+    // ---- the camp's world: the helpers' harvest on grandpa's field (the week of the work duty), the leftovers, the wolves outside the wall
+    const rnd2 = v => (Array.isArray(v) ? v[0] + Math.floor(Math.random() * (v[1] - v[0] + 1)) : Number(v) || 0);
+    function w6Harvest() {
+        const F = T.api("Farming");
+        if (!F || !F.farm || !F.CROPS) return null;
+        const farm = F.farm(), plots = farm.plots[FIELD] || {}, got = {};
+        let n = 0;
+        for (const k of Object.keys(plots)) {
+            const p = plots[k];
+            if (!p || !p.crop || !F.CROPS[p.crop]) continue;
+            const [x, y] = k.split(",").map(Number), def = F.CROPS[p.crop];
+            let ripe = false;
+            try { ripe = !!F.isRipe(x, y, p); } catch (e) { ripe = false; }
+            if (!ripe) continue;
+            p.crop = null;
+            delete p.day;
+            n++;
+            got[def.produce] = (got[def.produce] || 0) + Math.max(1, rnd2(def.yield));
+            const sd = rnd2(def.seeds || [0, 0]);
+            if (sd > 0) got[def.seed] = (got[def.seed] || 0) + sd;
+        }
+        if (!n) return { plots: 0, got, chest: {}, left: {} };
+        farm.rev++;
+        // into the chests on the field (as the dog's stockpile does: a kind per slot, 99 a kind), the rest kept for the hero
+        const chest = {}, left = {}, B = F.BUILDINGS || {}, stores = (farm.buildings[FIELD] || []).filter(b => b && !b.site && B[b.type] && B[b.type].slots && !B[b.type].hours && !B[b.type].bowl);
+        for (const [id, cnt] of Object.entries(got)) {
+            let rest = cnt;
+            for (const b of stores) {
+                if (rest <= 0) break;
+                const key = "i" + id, slots = B[b.type].slots;
+                b.store = b.store || {};
+                const kinds = Object.keys(b.store).filter(x => b.store[x] > 0).length;
+                if (!(b.store[key] > 0) && kinds >= slots) continue;
+                const put = Math.min(rest, 99 - (b.store[key] || 0));
+                if (put <= 0) continue;
+                b.store[key] = (b.store[key] || 0) + put;
+                rest -= put;
+                chest[id] = (chest[id] || 0) + put;
+            }
+            if (rest > 0) left[id] = rest;
+        }
+        const w = S().w6 || (S().w6 = {});
+        if (Object.keys(left).length) { w.pend = w.pend || {}; for (const [id, c] of Object.entries(left)) w.pend[id] = (w.pend[id] || 0) + c; }
+        const L = Q.W6.lines || {}, names = Object.entries(got).map(([id, c]) => (item(+id) ? item(+id).name : "?") + " ×" + c).join(", ");
+        if ($gameMap && $gameMap.mapId() === FIELD) { T.popup(L.helpersDone, { top: true, color: "#9ff0a8", sub: names }); w6Pending(); }
+        else addNote(["Pomocnicy na polu dziadka", "Dzień " + day() + ": Bogdan i Halina zebrali z pola dziadka: " + names + "."]);
+        return { plots: n, got, chest, left };
+    }
+    // what did not fit into the chests: handed over when the hero comes to the field
+    function w6Pending() {
+        const w = has() ? S().w6 : null;
+        if (!w || !w.pend || !window.$gameMap || $gameMap.mapId() !== FIELD) return;
+        const parts = [];
+        for (const [id, c] of Object.entries(w.pend)) if (item(+id) && c > 0) { $gameParty.gainItem(item(+id), c); parts.push(item(+id).name + " ×" + c); }
+        delete w.pend;
+        if (parts.length) T.popup((Q.W6.lines || {}).helpersBag, { color: "#9ff0a8", sub: parts.join(", ") });
+    }
+    function w6Wolves(at) {
+        const H = T.api("Hunting");
+        if (!H || typeof H.spawn !== "function") return 0;
+        const spots = [];
+        for (let k = 0; k < 300 && spots.length < 2; k++) {
+            const x = Math.floor(Math.random() * $gameMap.width()), y = Math.floor(Math.random() * $gameMap.height()), d = Math.hypot(x - $gamePlayer.x, y - $gamePlayer.y);
+            if (d < 7 || d > 12 || !$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f) || $gameMap.eventsXyNt(x, y).length) continue;
+            spots.push([x, y]);
+        }
+        const members = [];
+        for (const [x, y] of spots) { try { const a = H.spawn("wolf", x, y); if (a) members.push(a); } catch (e) { report("w6 wolves", e); } }
+        if (members.length > 1 && typeof H.makePack === "function") { try { H.makePack(members); } catch (e) { /* (alone, then) */ } }
+        if (members.length) { T.audio.se("Wolf", { volume: 70, pitch: 90 }); if (visible("ludmila")) T.call("TownLife", "say", "ludmila", (Q.W6.lines || {}).wolves); else think(["> " + (Q.W6.lines || {}).wolves]); }
+        return members.length;
+    }
+    function w6World() {
+        if (!has() || !window.$gameMap) return;
+        const s = S(), w = s.w6 || null, f = s.flags;
+        if (w && w.work) {
+            if (day() > w.work.from && day() <= w.work.until + 1 && day() > w.work.last && (hour() >= 16 || day() - w.work.last >= 2)) {
+                w.work.last = Math.min(day(), w.work.until);
+                if (day() - 1 <= w.work.until) w6Harvest();
+            }
+            if (day() > w.work.until && !w.work.ended) { w.work.ended = day(); if (onTown() || $gameMap.mapId() === FIELD) T.popup((Q.W6.lines || {}).helpersEnd, { color: "#eceef0" }); }
+        }
+        if (w && w.pend && $gameMap.mapId() === FIELD) w6Pending();
+        if (f.campOutside && $gameMap.mapId() === PODGRODZIE && isNight(hour()) && !$gameMap.isEventRunning() && (!w || w.wolf !== nightOf())) {
+            const sp = T.call("TownLife", "spot", "namioty");
+            if (sp && Math.hypot($gamePlayer.x - sp[0], $gamePlayer.y - sp[1]) <= 14) {
+                const ww = s.w6 || (s.w6 = {}), o = api.w6Opts || {};
+                ww.wolf = nightOf();
+                if (Math.random() < (typeof o.wolves === "number" ? o.wolves : 0.5)) w6Wolves(sp);
+            }
+        }
+    }
+    function w6Cold(key, spk) {
+        if (key !== "ludmila" || !w6Hated()) return null;
+        return linesTo([], spk, [pick((Q.W6.lines || {}).cold || ["..."])]);
+    }
     // W1 rozdz. 7: four and two rung by the hero - six strikes (the count matters; the pause after four is his to keep)
     function ringW1(q, res) {
         const L = q.lines || {}, say = lines => think(lines, "dzwonnik");
@@ -3559,8 +4293,9 @@
             r.t.spawned = night;
             const [x, y] = spots[0], members = [];
             const around = [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1]];
+            const more = S().flags.campOutside ? 1 : 0;   // (2026-10-07, W6 rozdz. 5 a: the camp outside the wall draws the pack - a wolf more)
             for (const [ox, oy] of around) {
-                if (members.length >= st.spawn) break;
+                if (members.length >= st.spawn + more) break;
                 const sx = x + ox, sy = y + oy;
                 if (!$gameMap.isValid(sx, sy) || !$gameMap.checkPassage(sx, sy, 0x0f)) continue;
                 try { const a = H.spawn("wolf", sx, sy); if (a) members.push(a); } catch (e) { report("spawn", e); }
@@ -3618,6 +4353,8 @@
             pendingOut = null;
             if ($gameMap.mapId() === MANOR && !$gamePlayer.isTransferring()) $gamePlayer.reserveTransfer(o.map, o.x, o.y, o.dir, 0);
         }
+        try { w6MarekUpdate(); } catch (e) { report("w6 marek", e); }   // (2026-10-07: W6 rozdz. 7 - Marek walks after the hero, every frame)
+        if (n % 60 === 30) { try { w6World(); } catch (e) { report("w6 world", e); } }
         if (n % 10) return;
         for (const q of activeQuests()) {
             const r = rec(q.id), st = q.steps[r.step];
@@ -3630,8 +4367,13 @@
     T.on("hourChange", onHour, { owner: PLUGIN });
     T.on("dayStart", () => checkDeadlines(), { owner: PLUGIN });
     T.on("wake", () => checkDeadlines(), { owner: PLUGIN });
-    T.on("mapReady", () => { if (!has()) return; syncSpots(); refreshMarkers(); spawnFor(); syncGate(); }, { owner: PLUGIN });
-    T.on("mapLeave", () => { bellQueue.length = 0; pendingOut = null; }, { owner: PLUGIN });
+    T.on("mapReady", () => { if (!has()) return; syncSpots(); refreshMarkers(); spawnFor(); syncGate(); try { w6CaveReady(); w6Pending(); } catch (e) { report("w6 map", e); } }, { owner: PLUGIN });
+    T.on("mapLeave", () => {
+        bellQueue.length = 0; pendingOut = null;
+        // (W6 rozdz. 7: off the cave in the middle of the fight - the guard's men are not left behind; Marek waits in his niche again)
+        const r = has() ? w6Hub() : null;
+        if (r && r.t.mk && r.t.mk.fight) { r.t.mk.fight = null; r.t.mk.follow = false; T.call("Humans", "clear", W6_TAG); think((Q.W6.lines || {}).fightAway); }
+    }, { owner: PLUGIN });
     // (2026-10-06: thoughtAt too - a save brings back its own Graphics.frameCount, an old later mark held the hero's thoughts back)
     T.on("newGame", () => { bellQueue.length = 0; thoughts.length = 0; thoughtAt = 0; pendingOut = null; }, { owner: PLUGIN });
     T.on("load", () => { bellQueue.length = 0; thoughts.length = 0; thoughtAt = 0; pendingOut = null; }, { owner: PLUGIN });
@@ -3645,6 +4387,9 @@
     // (2026-10-06) W8 rozdz. 6: the fight with Grum at the tunnel's mouth
     T.on("humansDone", e => { if (has() && e && e.tag === FX.w8Duel.TAG) FX.w8Duel.end(Q.W8, "won", e); }, { owner: PLUGIN });
     T.on("heroRobbed", e => { if (has() && e && e.tag === FX.w8Duel.TAG) FX.w8Duel.end(Q.W8, "lost", e); }, { owner: PLUGIN });
+    // (2026-10-07) W6 rozdz. 7: the fight in the diggers' camp (the guard, and Rafał if the hero sold him) - won: the way out is clear
+    T.on("humansDone", e => { if (has() && e && e.tag === W6_TAG) w6FightEnd("won"); }, { owner: PLUGIN });
+    T.on("heroRobbed", e => { if (has() && e && e.tag === W6_TAG) w6FightEnd("lost"); }, { owner: PLUGIN });
     // (2026-10-06) W1 rozdz. 7: the main sluice of the cistern found (Underground.js, floor 30: every look at it sends this)
     T.on("undergroundSluice", () => {
         if (!has()) return;
@@ -3699,11 +4444,22 @@
     else console.warn("[TownQuests] TownLife.js not found - the residents will not talk about quests");
     // Kuba's night trips for water (TownLife_Data: his plan's entry "w1Water") end once the sluice is half open (W1 rozdz. 6 a/b)
     if (L0 && L0.addCondition) L0.addCondition("w1Water", () => !(has() && S().flags.sluiceHalf));
+    // (2026-10-07) W6: the camp moved out to Podgrodzie (TownLife "alt" of Ludmiła, Ela, Rafał, Marek); Rafał by the camp's fire while
+    // rozdz. 3 waits for his story
+    if (L0 && L0.addCondition) {
+        L0.addCondition("campOutside", () => has() && !!S().flags.campOutside);
+        L0.addCondition("w6Fire", () => { const r = has() ? rec("W6") : null; return !!r && r.s === "active" && Q.W6.steps[r.step].talk === "w6Story"; });
+    }
 
     // ------------------------------------------------------------------
     // The journal: the tab "Miasteczko" and the goal window
     // ------------------------------------------------------------------
     const iconOf = q => (q.icon && item(q.icon) ? iconOfItem(q.icon) : NOTE_ICON);
+    // an arc's chapter in the journal: the step's ch - or its handler's (W6's last step holds chapters 6 and 7 at once)
+    function chOf(q, r, st) {
+        if (st.chFx && FX[st.chFx] && FX[st.chFx].ch) { try { return FX[st.chFx].ch(q, r); } catch (e) { report("ch " + q.id, e); } }
+        return st.ch || r.step + 1;
+    }
     function stepReadyAny(q, r, st) {
         if (!st) return false;
         if (st.type === "bring" || st.type === "talk") return timing(q, r, st).ok && missingRows(st).length === 0;
@@ -3753,7 +4509,7 @@
             { k: "rule" }, { k: "p", text: q.desc }];
         if (r && r.s === "active") {
             const st = q.steps[r.step];
-            ops.push({ k: "gap", n: 8 }, { k: "h", text: q.kind === "W" ? "Rozdział " + (st.ch || r.step + 1) : "Teraz" }, { k: "p", text: fill(st.text, vars) });
+            ops.push({ k: "gap", n: 8 }, { k: "h", text: q.kind === "W" ? "Rozdział " + chOf(q, r, st) : "Teraz" }, { k: "p", text: fill(st.text, vars) });
             for (const row of needRows(st)) ops.push({ k: "cost", icon: row.icon, name: row.name, have: Math.min(row.have, row.n), need: row.n, note: "" });
             const dl = deadlineText(r, st);
             if (dl) ops.push({ k: "muted", text: dl });
@@ -3867,7 +4623,7 @@
             const st = q.steps[r.step];
             if (!st) return null;
             const line = trackLine(q, r, st);
-            return { label: "MIASTECZKO", title: q.title, line, key: "tq|" + q.id + "|" + r.step + "|" + line };
+            return { label: "MIASTECZKO", title: q.title, line, key: "tq|" + q.id + "|" + r.step + "|" + line, source: "town", id: q.id, icon: iconOf(q) };
         });
     }
 
@@ -3892,7 +4648,20 @@
         d13Pred: () => { const r = rec("D13"); return r ? d13Pred(r) : FX.d13Offer.pred(day()); }, armOpts: null,
         borgarTopics, borgarTalk, armTable,
         // (2026-10-06) W8: Grum gone from the tavern for good (beaten at the tunnel: on the ferry - or dead); TavernLife / TavernDice ask
-        grumAway: () => { if (!has()) return false; const f = S().flags; return !!(f.grumGone || f.grumDead); }, actTwo, markerAt
+        grumAway: () => { if (!has()) return false; const f = S().flags; return !!(f.grumGone || f.grumDead); }, actTwo, markerAt,
+        // (2026-10-07) W6 "Ludzie z promu" - the outcome for Act III and the endings (the flags behind it: rafalAlly | rafalGiven +
+        // rafalEnemy | rafalSmuggled | rafalTaken, campInside | campOutside, marekSaved, w6WigiliaCamp | w6WigiliaTavern), and the
+        // tests' handles: w6Opts { roll: 0-100 (the hiding place's search), wolves: 0-1 (the wolves' chance a night outside the wall) }
+        w6: () => {
+            const f = has() ? S().flags : {}, r = has() ? rec("W6") : null, st = r && r.s === "active" ? Q.W6.steps[r.step] : null;
+            return { started: !!r, done: !!r && r.s === "done", ch: st ? chOf(Q.W6, r, st) : r && r.s === "done" ? 7 : 0,
+                rafal: f.rafalAlly ? "ally" : f.rafalGiven ? "enemy" : f.rafalSmuggled ? "gone" : f.rafalTaken ? "taken" : null,
+                camp: f.campOutside ? "outside" : f.campInside ? "inside" : null, marekSaved: !!f.marekSaved, marekHome: !!f.marekSaved,
+                wigilia: f.w6WigiliaCamp ? "camp" : f.w6WigiliaTavern ? "tavern" : f.w6WigiliaMissed ? "missed" : null };
+        },
+        marekHome: () => has() && !!S().flags.marekSaved,   // (TownLife's Marek: there once he is home - asked every frame, kept cheap)
+        w6Opts: null, w6Harvest: () => w6Harvest(), w6TrustCount: () => (has() ? w6TrustCount() : 0), w6Risk: where => FX.w6Choice.risk(where),
+        w6Tally: how => FX.w6Vote.tally(how), w6WigDay: d => w6WigDay(d === undefined ? day() : d)
     };
     window.TownQuests = T.register(PLUGIN, api);
 })();

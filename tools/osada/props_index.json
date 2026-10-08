@@ -1,0 +1,117 @@
+{
+ "krosno": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   58,
+   52,
+   133,
+   144
+  ],
+  "name": "krosno z białym lnem",
+  "occupy": "right=1"
+ },
+ "stojak_pasy": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   91,
+   138,
+   144
+  ],
+  "name": "stojak z białymi pasami płótna",
+  "occupy": "right=1"
+ },
+ "warsztat_rzezbiarza": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   86,
+   139,
+   144
+  ],
+  "name": "warsztat rzeźbiarza z niedokończonym krukiem",
+  "occupy": "right=1"
+ },
+ "tkanina_kruk": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   46,
+   95,
+   138
+  ],
+  "name": "tkanina z krukiem w kręgu"
+ },
+ "deski_znaki": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   51,
+   95,
+   144
+  ],
+  "name": "deski pocięte znakami"
+ },
+ "polka_kruki": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 4,
+  "pattern": 2,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   112,
+   95,
+   138
+  ],
+  "name": "półka z drewnianymi krukami"
+ },
+ "miska_kamykow": {
+  "sheet": "!Osada_Props",
+  "index": 0,
+  "direction": 6,
+  "pattern": 0,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   64,
+   86,
+   104,
+   114
+  ],
+  "name": "miska białych kamyków"
+ }
+}

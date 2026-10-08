@@ -278,9 +278,9 @@
         { id: "furnish", ch: 4, title: "Urządź wnętrze chatki", item: 80, after: ["hut", "chest"], done: () => ((farmData().buildings || {})[100] || []).some(b => !b.site),
             text: "W środku masz podłogę 5 × 2 pola (pole przed drzwiami zostaje wolne, a meble nie mogą cię zamknąć w środku). Stań przed wolnym polem podłogi i naciśnij przycisk akcji: wybierzesz, co postawić (łóżko, kredens, warsztat, skrzynię, ławkę albo legowisko). Pod dachem śpi się dobrze także w deszczu i zimą." },
 
-        { id: "borgar", ch: 5, title: "Zapytaj Borgara o zamek", item: 59, after: [], done: () => $gameVariables.value(1) >= 1,
+        { id: "borgar", ch: 5, title: "Zapytaj Borgara o zamek", item: 59, where: { person: "borgar" }, after: [], done: () => $gameVariables.value(1) >= 1,
             text: "Karczmarz zawsze coś przemilcza. Zapytaj go wprost, co wie o dawnym zamku." },
-        { id: "cellar", ch: 5, title: "Znajdź przejście do piwnic", item: 59, after: ["borgar"], done: () => $gameSelfSwitches.value([9, 1, "A"]),
+        { id: "cellar", ch: 5, title: "Znajdź przejście do piwnic", item: 59, where: { map: 1, name: "Tawerna" }, after: ["borgar"], done: () => $gameSelfSwitches.value([9, 1, "A"]),
             text: "Po rozmowie z Borgarem przyjrzyj się ścianom tawerny. Coś w nich wygląda inaczej niż powinno." }
     ];
     const goalById = id => GOALS.find(g => g.id === id);
@@ -966,12 +966,63 @@
         };
         bmp.addLoadListener(draw);
     };
+    // long details (user 2026-10-07: "jakby pół strony było ukryte - może powinno się przewijać"): Shift + up/down (held: it keeps
+    // going) or the mouse wheel scroll them; a thin bar on the right edge shows where you are, and "Shift + ↓ - czytaj dalej" at the
+    // bottom while more of it is hidden below
+    const DETAIL_SCROLL = 9;   // px a frame while Shift + an arrow is held
+    Window_JournalDetail.prototype.maxScroll = function() { return Math.max(0, (this._contentH || 0) - this.innerHeight); };
+    Window_JournalDetail.prototype.scrollTo = function(y) { this.origin.y = Math.max(0, Math.min(this.maxScroll(), Math.round(y))); };
     Window_JournalDetail.prototype.update = function() {
         Window_Base.prototype.update.call(this);
-        // long details scroll with the mouse wheel
-        if (this._contentH > this.innerHeight && TouchInput.wheelY !== 0 && this.isTouchedInsideFrame()) {
-            this.origin.y = Math.max(0, Math.min(this._contentH - this.innerHeight, this.origin.y + Math.sign(TouchInput.wheelY) * 60));
+        if (this.maxScroll() > 0) {
+            if (TouchInput.wheelY !== 0 && this.isTouchedInsideFrame()) this.scrollTo(this.origin.y + Math.sign(TouchInput.wheelY) * 60);
+            if (Input.isPressed("shift")) {
+                if (Input.isPressed("down")) this.scrollTo(this.origin.y + DETAIL_SCROLL);
+                else if (Input.isPressed("up")) this.scrollTo(this.origin.y - DETAIL_SCROLL);
+            }
         }
+        this.updateScrollMarks();
+    };
+    Window_JournalDetail.prototype.updateScrollMarks = function() {
+        const max = this.maxScroll(), key = max + ":" + this.origin.y + ":" + this.innerWidth + "x" + this.innerHeight;
+        if (key === this._marksKey) return;
+        this._marksKey = key;
+        if (!this._scrollBar) {
+            this._scrollBar = new Sprite(new Bitmap(4, this.innerHeight));
+            this._moreHint = new Sprite(new Bitmap(this.innerWidth, 34));
+            this.addInnerChild(this._scrollBar);
+            this.addInnerChild(this._moreHint);
+        }
+        const bar = this._scrollBar, hint = this._moreHint, ih = this.innerHeight, accent = (window.UIStyle && UIStyle.accent) || "#ffd23f";
+        bar.visible = max > 0;
+        hint.visible = max > 0 && this.origin.y < max - 2;
+        if (bar.visible) {
+            const b = bar.bitmap, thumb = Math.max(24, Math.round((ih * ih) / (this._contentH || ih))), y = Math.round((this.origin.y / max) * (ih - thumb));
+            b.clear();
+            b.fillRect(1, 0, 2, ih, "rgba(255,255,255,0.10)");
+            b.fillRect(0, y, 4, thumb, accent);
+            bar.x = this.innerWidth - 4;
+        }
+        if (hint.visible && !hint._drawn) {   // (drawn once: a fade from the page into the window's dark, the words on it)
+            const h = hint.bitmap, ctx = h.context, grad = ctx.createLinearGradient(0, 0, 0, h.height);
+            grad.addColorStop(0, "rgba(11,12,15,0)");
+            grad.addColorStop(0.55, "rgba(11,12,15,0.92)");
+            grad.addColorStop(1, "rgba(11,12,15,0.98)");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, h.width, h.height);
+            h._baseTexture.update();
+            h.fontSize = 18;
+            h.textColor = accent;
+            h.drawText("▼  Shift + ↓  -  czytaj dalej", 0, 10, h.width - 12, 24, "right");
+            hint._drawn = true;
+        }
+        hint.y = ih - hint.height;
+    };
+    // (Shift held: the arrows scroll the detail, the list's cursor stays where it is)
+    const _journalListCursorMove = Window_JournalList.prototype.processCursorMove;
+    Window_JournalList.prototype.processCursorMove = function() {
+        if (Input.isPressed("shift")) return;
+        _journalListCursorMove.call(this);
     };
 
     function Scene_Journal() {
@@ -1427,6 +1478,17 @@
         return null;
     }
 
+    // What the goal window follows now, for whoever shows it some other way (CleanHUD.js - the clean look's goal line and its compass):
+    // a source's line (a contract, a town quest: with its source, id and icon when the source gives them) or the journal's own goal
+    // (with the goal itself - its `where` is read by the compass); null when there is nothing (or the tracker is switched off)
+    function tracked() {
+        if (!SHOW_TRACKER || !$gameSystem) return null;
+        const extra = trackedExtra();
+        if (extra) return Object.assign({ source: "extra", icon: 0, id: null }, extra);
+        const g = currentGoal();
+        return g ? { source: "goal", label: "CEL", title: g.title, line: goalProgress(g), key: g.id, goal: g, icon: goalIcon(g), id: g.id } : null;
+    }
+
     // The goal window: right under the minimap in the top right corner (Minimap.js), in the map's place on maps
     // without one; without the plugin, under the stamina gauge as before.
     function Sprite_GoalTracker() {
@@ -1558,5 +1620,5 @@
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));
     PluginManager.registerCommand(pluginName, "openJournal", () => { SceneManager.push(Scene_Journal); });
 
-    window.Journal = T.register(pluginName, { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource: fn => { trackerSources.push(fn); }, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary, GOAL_EVENTS });
+    window.Journal = T.register(pluginName, { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource: fn => { trackerSources.push(fn); }, tracked, recipeRef, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary, GOAL_EVENTS });
 })();

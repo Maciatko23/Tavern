@@ -110,8 +110,8 @@
     const CALENDAR = {
         ferryEvery: 3,
         events: [
-            { day: 10, title: "Prom po bitwie", text: "Prom przywiezie ludzi z kontynentu - pierwsza fala uchodźców. Pod murem staną namioty.", wait: "obóz uchodźców i jego ludzie" },
-            { day: 24, title: "Druga fala z promu", text: "Namiotów przybędzie, przy beczkach Kuby będą kłótnie. Dwór zacznie zbierać zboże na wojnę.", wait: "obóz uchodźców" },
+            { day: 10, title: "Prom po bitwie", text: "Prom przywiezie ludzi z kontynentu - pierwsza fala uchodźców. Pod murem staną namioty." },
+            { day: 24, title: "Druga fala z promu", text: "Namiotów przybędzie, przy beczkach Kuby będą kłótnie, a w ratuszu zebranie: zamknąć bramę dla nowych? Dwór zacznie zbierać zboże na wojnę." },
             { day: 33, title: "Imieniny Lorda", text: "U drzwi dworu kolejka z prezentami. Lord lubi miód pitny i placek jagodowy." },
             { day: 38, title: "Trzecia fala z promu", text: "Znowu nowi ludzie z kontynentu. Ceny na tydzień w górę.", wait: "obóz uchodźców" },
             { day: 42, title: "Noc Kupały", text: "Ogniska przy bramie południowej, kwiat paproci w lesie - jedna noc w roku. Jeśli Melia ma całą siódmą balladę, może ją tu zaśpiewać.", wait: "łąka za bramą i ogniska na mapie (na razie tylko ognisko Melii w jej wątku)" },
@@ -158,7 +158,9 @@
         // (2026-10-06, W4) the castellan's key: two halves, then one
         klucz_borgar: { name: "Połowa klucza (znad baru Borgara)", icon: 197 },
         klucz_kopiec: { name: "Połowa klucza (spod kopca z krukiem)", icon: 198 },
-        klucz_kasztelana: { name: "Klucz kasztelana", icon: 195 }
+        klucz_kasztelana: { name: "Klucz kasztelana", icon: 195 },
+        // (2026-10-07, W6 rozdz. 7) Ludmiła's kerchief for Marek: the horse Ela stitched on it
+        chusta: { name: "Chusta Ludmiły (z koniem wyszytym przez Elę)", icon: 367 }
     };
 
     // the quests' places: events put into the maps (Tawerna.inject, ids 951-959 - the same id may serve another map). Shown and
@@ -197,7 +199,32 @@
         w8_gate: { map: 13, id: 953, marker: "osada_brama", dx: 1, x: 7, y: 4, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
         w8_cave: { map: 14, id: 951, marker: "marek", dx: -2, dy: 1, x: 28, y: 6, name: "Grum", img: ["$Npc_Grum", 0, 6, 1], solid: true, bust: "Actor2_5" },
         w8_crate: { map: 14, id: 952, marker: "list_kryjowka", x: 27, y: 11, name: "Skrzynia dowódcy" },
-        w8_osada: { map: 120, id: 951, marker: "osada_grum", x: 21, y: 25, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" }
+        w8_osada: { map: 120, id: 951, marker: "osada_grum", x: 21, y: 25, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        // (2026-10-07) W6 "Ludzie z promu". Ids 903-909 (TownQuests' second range - Map008's 951-959 are all taken): the props of the
+        // ferry people's camp - shown while FX[show].show() says so (no quest step needed, no diamond): the first wave's tent and fire
+        // under the wall (from day 10, while the camp is in the town), the second wave (day 24): a tent more and Bogdan and Halina
+        // (PixelLab, the hero's style, standing) - in the town, or in Podgrodzie (Map111) when the town shut its gate; on grandpa's
+        // field (Map003) the two of them work the week of the work duty (`at`: their cells next to the crops). note: added to the
+        // event's note (Occupy - the tent's footprint); light: added only while shown when the map loads (the camp's fire: a flame);
+        // step: an animated picture. talkFx: what the action button says (FX[talkFx].spot). The hiding places of Rafał (W6 rozdz. 4 a)
+        // are ordinary quest places (951) on the guest rooms (Map025), grandpa's house (Map019) and the bell tower (Map108).
+        w6_tent1: { map: 8, id: 903, x: 31, y: 53, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
+            note: "<Occupy:left=1,right=1,up=1>" },
+        w6_fire: { map: 8, id: 905, x: 32, y: 51, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
+            light: "<Light:190,255,150,70><LightFlicker:0.18,255,110,40><LightHeight:20>" },
+        w6_tent2: { map: 8, id: 904, x: 19, y: 51, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+            note: "<Occupy:left=1,right=1,up=1>" },
+        w6_bogdan: { map: 8, id: 906, x: 23, y: 51, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina: { map: 8, id: 907, x: 29, y: 52, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_tent2_o: { map: 111, id: 903, x: 41, y: 7, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+            note: "<Occupy:left=1,right=1,up=1>" },
+        w6_bogdan_o: { map: 111, id: 906, x: 37, y: 8, name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina_o: { map: 111, id: 907, x: 41, y: 10, name: "Halina", img: ["$Npc_Halina", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_help1: { map: 3, id: 906, x: 20, y: 26, at: "w6Helper", name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
+        w6_help2: { map: 3, id: 907, x: 22, y: 26, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
+        w6_hide_tavern: { map: 25, id: 951, x: 40, y: 38, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
+        w6_hide_grandpa: { map: 19, id: 951, x: 17, y: 6, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
+        w6_hide_belfry: { map: 108, id: 951, x: 8, y: 5, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true }
     };
 
     // W1 rozdz. 6 a/b: the sluice half open - the market well's ration (<Studnia:2>) gives this many draws a day more
@@ -247,7 +274,24 @@
         // (2026-10-06) W9 rozdz. 6: what follows a truth told
         { id: "ludmilaLoaf", who: "ludmila", flag: "w9Loaf", lines: ["Pani Hanka przysyła nam co rano bochenek. Mówi, że i tak jej zostaje. ...Wiem, że to ty coś jej powiedziałeś. Dziękuję."] },
         { id: "elaLullaby", who: "ela", flag: "w9Lullaby", lines: ["Mama śpiewała mi wczoraj piosenkę zza morza! O łódce i o gwiazdach. Mówi, że od babci. Znasz ją?"] },
-        { id: "zosiaBell", who: "zosia", flag: "w9Bell", lines: ["Pan Ambroży się dziś śmiał! Na wieży! Mama mówi, że od lat nie słyszała, żeby się śmiał."] }
+        { id: "zosiaBell", who: "zosia", flag: "w9Bell", lines: ["Pan Ambroży się dziś śmiał! Na wieży! Mama mówi, że od lat nie słyszała, żeby się śmiał."] },
+        // (2026-10-07) W6 "Ludzie z promu": what the town says after Rafał's fate, the vote, the Wigilia, Marek
+        { id: "ludmilaGiven", who: "ludmila", flag: "rafalGiven", lines: ["Wydałeś go. Za sto dwadzieścia groszy. ...Nie podchodź do Eli. Proszę."] },
+        { id: "elaGiven", who: "ela", flag: "rafalGiven", lines: ["(Ela odwraca się i płacze w rękaw.) Rafał robił mi łódki z kory... Gdzie go zabrali?"] },
+        { id: "kapralGiven", who: "kapral", flag: "rafalGiven", lines: ["Dezerter siedzi w lochu dworu. Dobra robota, chłopcze. Jaśnie pan pamięta takie rzeczy."] },
+        { id: "ludmilaAlly", who: "ludmila", flag: "rafalAlly", lines: ["Rafał wrócił do obozu. Mówi, że siedział tydzień jak mysz pod miotłą. Dziękuję ci - za niego i za nas."] },
+        { id: "rafalAlly", who: "rafal", flag: "rafalAlly", lines: ["Tydzień w ukryciu. Myślałem, że zwariuję. (Rafał ściska ci rękę.) Mam u ciebie dług. Kiedy przyjdzie co do czego - stanę obok ciebie. Z kilofem, z nożem, z czym trzeba."] },
+        { id: "ludmilaSmuggled", who: "ludmila", flag: "rafalSmuggled", lines: ["Rafał odpłynął. Zostawił Eli łódkę z kory. ...Mam nadzieję, że tam, dokąd płynie, nie wieszają."] },
+        { id: "kupiecSmuggled", who: "kupiec", flag: "rafalSmuggled", lines: ["Skrzynia dopłynęła cała, przyjacielu. Skrzynie zawsze dopływają, jeśli się o nie dba. Zapamiętam, że wiesz, jak się u mnie płaci."] },
+        { id: "ludmilaTaken", who: "ludmila", flag: "rafalTaken", lines: ["Zabrali Rafała. Związanego. Ela pytała, czy go powieszą. Co miałam jej powiedzieć?"] },
+        { id: "kapralTaken", who: "kapral", flag: "rafalTaken", lines: ["Dezertera mamy. Ktoś go chował - nie pytam kto. Tym razem."] },
+        { id: "soltysOutside", who: "soltys", flag: "campOutside", lines: ["Brama zamknięta dla nowych. Miasto zdecydowało. ...Dobrze mi z tym nie jest, ale wody nie wyczaruję."] },
+        { id: "soltysInside", who: "soltys", flag: "campInside", lines: ["Wpuściliśmy ich. Pracują - przy polu Stacha, przy studni, gdzie trzeba. Kłótni przy beczkach mniej. Zobaczymy."] },
+        { id: "kubaInside", who: "woziwoda", flag: "campInside", lines: ["Ci nowi noszą ze mną beczki. Za miskę zupy. Dziwne czasy - ale plecy mniej bolą."] },
+        { id: "kubaOutside", who: "woziwoda", flag: "campOutside", lines: ["Kolejka przy beczkach krótsza. A za murem, na Podgrodziu, nocą wyją wilki. Nie wiem, co gorsze."] },
+        { id: "hankaWigilia", who: "piekarka", flag: "w6Wigilia", lines: ["Wigilia przy jednym stole z obozem... Kochaneczku, dawno tak nie płakałam przy opłatku."] },
+        { id: "grumMarek", who: "grum", flag: "marekSaved", lines: ["Marek wrócił z jaskini? Żywy, z głową? ...Hm. To jednak można wrócić z dołu cały. Zapamiętam."] },
+        { id: "soltysMarek", who: "soltys", flag: "marekSaved", lines: ["Słyszałem, kogo przyprowadziłeś z gór. Męża Ludmiły. Zapisałem go do racji - z przyjemnością, pierwszy raz w tym roku."] }
     ];
 
     // K39: Lucjan Kość as a rival of TavernDice (put into TavernDice.OPPONENTS when the hero sits down with him - never at the
@@ -868,7 +912,7 @@
             id: "K27", kind: "K", title: "Konik dla Eli", giver: "ludmila", icon: 61, where: "obóz pod murem", when: "rano i wieczorem",
             desc: "Od przeprawy Ela nie śpi. Jej drewniany konik został w spalonej chacie na kontynencie. Kawałek drewna i nóż - może zaśnie.",
             offer: {
-                cond: { hours: [6.5, 20], day: 2 },
+                cond: { hours: [6.5, 20], day: 2, fn: "w6NotHated" },
                 say: ["Od przeprawy Ela nie śpi. Budzi się z krzykiem. W domu miała drewnianego konika... został w spalonej chacie.",
                     "Umiesz strugać? Kawałek drewna i nóż. Może by zasnęła."],
                 yes: "Wystrugam jej konika.", no: "Nie umiem strugać.",
@@ -895,7 +939,7 @@
             id: "K28", kind: "K", title: "Kocioł dla obozu", giver: "ludmila", icon: 131, where: "obóz pod murem", when: "rano i wieczorem; zimą liczy się podwójnie",
             desc: "W obozie jedzą raz na dwa dni. Ugotuj w kociołku coś gorącego - kapuśniak, gulasz albo zupę grzybową - dwie porcje.",
             offer: {
-                cond: { hours: [6.5, 20], day: 3 },
+                cond: { hours: [6.5, 20], day: 3, fn: "w6NotHated" },
                 say: ["Jemy raz na dwa dni. Rafał przynosi, co znajdzie, ale... Ela rośnie.",
                     "Gdybyś ugotował coś ciepłego - kapuśniak, gulasz, zupę - dwie porcje. Starczy nam na dwa dni."],
                 yes: "Ugotuję.", no: "Sam ledwo mam co jeść.",
@@ -988,7 +1032,7 @@
             id: "D10", kind: "D", title: "Gorączka Eli", giver: "ludmila", icon: 110, where: "obóz + łąki + kantor", when: "wiosna i lato, 2 dni",
             desc: "Ela ma gorączkę. Pomoże gorący wywar z ziół i trochę czystej wody do przemywania czoła - z twojej deszczówki. Baltazar ma też „lek z kontynentu”.",
             offer: {
-                cond: { hours: [6.5, 20], day: 11, season: [0, 1] },
+                cond: { hours: [6.5, 20], day: 11, season: [0, 1], fn: "w6NotHated" },
                 say: ["Ela ma gorączkę. Od wczoraj. Pali się cała.", "Wywar z ziół by pomógł. I trochę czystej wody do przemywania czoła. Ja nie mam ani ognia, ani wody."],
                 yes: "Zrobię wywar.", no: "Nie mam wody dla innych.",
                 accept: ["Dziękuję... Będę przy niej. Cały czas."], decline: ["...Rozumiem. Woda to woda."]
@@ -1822,6 +1866,12 @@
                 quarryLost: ["> (Noc. Zgubiłem Gruma w górach. Wróci do tawerny wściekły - trzeba będzie zacząć od nowa.)"],
                 noteQuarry: ["Stary kamieniołom", "Zaprowadziłem Gruma do starego kamieniołomu zakonu w górach. Stąd brano kamień na twierdzę i na dwór Lorda - na blokach kruk. Wysoko nad kamieniołomem, w jaskini, ktoś pali ogień. Grum zapłacił 50 G."],
                 // ---- rozdz. 3 "Obóz kopaczy"
+                // (2026-10-07) Marek already brought out by the hero (W6 rozdz. 7): his niche is empty
+                campNoMarek: ["> (Nisza przy ścianie jest pusta. Na kamieniu jaśniejszy ślad - tu stał Marek, zanim go stąd wyprowadziłem.)",
+                    "(Grum patrzy na pustą niszę.) Kopacze mówią, że stał tu jeden. Marek. „Dotknął czegoś w skale i przestał mówić.” A potem ktoś go wyprowadził. Ty?",
+                    "> Ja. Mówi już. Pojedyncze słowa - ale mówi.",
+                    "(Grum blednie. Pierwszy raz widzisz, jak Grum blednie.) Marek. Kopał w drużynie, którą przysłali przede mną. Myślałem, że zdezerterował.",
+                    "Płacą mi, żebym znalazł drogę do tego, co mu to zrobiło. (Długo milczy.) Wracamy. Muszę się napić. I pomyśleć. W tej kolejności."],
                 camp: ["> (W niszy przy ścianie stoi człowiek. Twarzą do skały. Nie kopie, nie mówi, nie odwraca się. Tylko kiwa głową - nie wiadomo do kogo.)",
                     "(Grum mówi cicho, prawie szeptem.) Tych od kilofów znam. Tacy sami jak ja - za żołd. Ale ten...",
                     "> Kopacze mówią na niego Marek. „Dotknął czegoś w skale i przestał mówić.”",
@@ -2069,6 +2119,215 @@
                         "(Dziadek drapie kota za uchem.) Kot chodzi, gdzie chce. Jak każdy w tej rodzinie.", "> (Mruczek mruży oczy. Jakby się uśmiechał.)"],
                     keep: ["> (Mruczek przeciąga się przy piecu i patrzy na ciebie, jakby wiedział, że wiesz. Nic nie mówisz.)"],
                     told: { flag: "catTruth" } }
+            }
+        },
+        // =========================================================== W6 "Ludzie z promu" (2026-10-07: chapters 3-7; 1-2 are K19, K27, K28, K29, D4,
+        // D10, D18 - their flags make the camp's trust). Rafał's story by the fire; the wanted poster (the tavern's quest board) and the
+        // choice - hide him (the tavern's attic room, grandpa's house, the bell tower: each can be searched), turn him in, smuggle him on
+        // the ferry through Baltazar; the second wave and the vote at the town hall (the weight of the hero's vote = his Opinia): the
+        // gate shut (the camp moves out to Podgrodzie, wolves at night) or the refugees in with a week of work (two helpers harvest
+        // grandpa's field by themselves); the winter's Wigilia (in the camp or in the tavern, the hero cooks for all); Marek (Act II):
+        // Ludmiła's kerchief turns him from the wall in the diggers' cave, the hero leads him out (at night sneaking past the camp's
+        // guard, by force, or a word with the guard) - flag marekSaved (W8 rozdz. 6 counts it) - and the reunion.
+        // The outcome for Act III and the endings (TownQuests.state().flags / TownQuests.w6()): rafalAlly | rafalGiven + rafalEnemy |
+        // rafalSmuggled | rafalTaken, campInside | campOutside, marekSaved, w6Wigilia (+ w6WigiliaCamp | w6WigiliaTavern).
+        {
+            id: "W6", kind: "W", title: "Ludzie z promu", giver: null, icon: 0,
+            where: "obóz pod murem (albo za murem, na Podgrodziu), tablica zleceń w tawernie, ratusz, pole dziadka, Jaskinia nad kamieniołomem (Akt II)",
+            when: "od pierwszej fali (dzień 10) do Aktu II",
+            desc: "Wojna przypływa falami. Pod murem śpią ludzie z promu: Ludmiła z małą Elą czeka na męża, Marka, a Rafał chowa się przed kapralem - to dezerter. Komu pomożesz, kogo wydasz i czy miasto zamknie przed nimi bramę?",
+            steps: [
+                { ch: 2, type: "custom", check: "w6Trust", vars: "w6Vars",
+                    text: "Obóz pod murem patrzy na ciebie nieufnie. Zaufanie obozu: {trust}/3 (pomóż im: konik dla Eli, kocioł zupy, gorączka Eli, chleb Eli, spis obozu, Szymek...). Rafał: {rafal}." },
+                { ch: 3, type: "custom", talk: "w6Story",
+                    text: "Obóz ci ufa. Rafał chce pogadać - wieczorem przy ognisku obozu pod murem (20:30–23:30)." },
+                { ch: 4, type: "custom", talk: "w6Poster", tick: "w6Poster", spotFx: "w6Poster", spots: ["notice_tavern"], vars: "w6Vars",
+                    text: "Od dnia {poster} na tablicy zleceń w tawernie (i na ścianie tawerny) wisi list gończy. Przeczytaj go - albo zapytaj kaprala Wita." },
+                { ch: 4, type: "custom", talk: "w6Choice", tick: "w6Choice", vars: "w6Vars",
+                    text: "POSZUKIWANY: Rafał, 120 G (kapral Wit, z rozkazu dworu). Straż przeszuka obóz w dniu {search} od 10:00. {agree}" },
+                { ch: 4, type: "custom", talk: "w6Hidden", tick: "w6Hidden", spotFx: "w6Hidden", spots: ["w6_hide_tavern", "w6_hide_grandpa", "w6_hide_belfry"], vars: "w6Vars",
+                    text: "Rafał ukrywa się {place} do dnia {until}. Kapral Wit przeszukuje miasto w dniu {search}." },
+                { ch: 5, type: "custom", talk: "w6Vote", tick: "w6Wave", vars: "w6Vars",
+                    text: "{wave}" },
+                { ch: 6, chFx: "w6Hub", type: "custom", talk: "w6Hub", tick: "w6Hub", vars: "w6Vars",
+                    text: "{hub}" }
+            ],
+            reward: { xp: 300, opinion: 2,
+                note: ["Ludzie z promu", "Obóz pod murem przestał być obcy. Rafał, Ludmiła, Ela - i Marek, który wrócił z gór. Wojna przypływa falami, ale tej zimy siedzieliśmy przy jednym ogniu."] },
+            lines: {
+                rafalYes: "ufa ci", rafalNo: "jeszcze ci nie ufa (Spis obozu, Rana Rafała)",
+                // ---- rozdz. 3 "Kim był Rafał"
+                story: ["> (Ognisko pod murem. Rafał grzebie patykiem w żarze. Długo milczy.)",
+                    "Ufacie nam. To i ja tobie zaufam. Powiem ci, kim byłem. Ale tylko raz.",
+                    "Nie byłem żołnierzem. Byłem kopaczem. Wzięli nas z kopalń na kontynencie - za żołd, za chleb, za obietnicę.",
+                    "Wyprawa po Serce. Szukali „drzwi pod skałą”. Od strony gór, przez stare kamieniołomy. Kopaliśmy w jaskini - tydzień, drugi.",
+                    "Aż jeden z nas dotknął czegoś w skale. Gładkiego jak szkło. Ciepłego. ...I przestał mówić. Ot tak. Patrzył w ścianę i kiwał głową - nie wiadomo do kogo.",
+                    "Uciekłem tej samej nocy. Dezerter. Na kontynencie wieszają za mniej.",
+                    "(Rafał patrzy w stronę namiotu Ludmiły.) Jest coś jeszcze. W mojej drużynie był Marek. Mąż Ludmiły.",
+                    "Nie wiem, co się z nim stało. Było ciemno, wszyscy krzyczeli. Nie mów jej. Jeszcze nie. Nie, dopóki nie będziesz wiedział na pewno.",
+                    "> Nie powiem. Jeszcze."],
+                noteStory: ["Kim był Rafał", "Rafał był kopaczem w wyprawie po Serce - szukali „drzwi pod skałą” od strony gór, przez stare kamieniołomy. Uciekł, kiedy jeden z kopaczy dotknął czegoś w skale i przestał mówić. W jego drużynie był Marek, mąż Ludmiły. Rafał prosi, żeby jej jeszcze nie mówić."],
+                // ---- rozdz. 4 "List gończy"
+                poster: ["> (Na tablicy, między zleceniami na skóry i drewno, ktoś przybił nową kartkę. Pieczęć dworu.)",
+                    "> („POSZUKIWANY. Rafał, dezerter z wojsk kontynentu. Lat około dwudziestu pięciu, ciemne włosy, rana na ramieniu. Kto wskaże - sto dwadzieścia groszy. Kapral Wit Czerwień, z rozkazu dworu.”)",
+                    "> (Rana na ramieniu. Ktoś mu się dobrze przyjrzał. Za trzy dni straż przetrząśnie obóz - tak się zawsze robi.)"],
+                witPoster: ["Widziałeś list na tablicy u Borgara? Dezerter. Rafał, na imię. Dwór chce go mieć - i to szybko.",
+                    "Za trzy dni przetrząśniemy obóz pod murem. A kto wskaże wcześniej - sto dwadzieścia groszy. Pomyśl o tym."],
+                choiceAsk: ["(Rafał już wie.) List na tablicy u Borgara. Szymek mi przeczytał - on umie, ja nie. Sto dwadzieścia groszy... Tyle jestem wart.",
+                    "Za trzy dni straż przetrząśnie obóz. Ja... nie mam dokąd iść. Morze z jednej strony, kapral z drugiej."],
+                optHide: "Ukryję cię.", hideAsk: ["Ukryjesz? Gdzie? Na tej wyspie każdy kamień ma oczy."],
+                optTavern: "W izdebce nad tawerną (50 G dla Borgara) - ryzyko: {r}", optGrandpa: "W chacie dziadka - ryzyko: {r}", optBelfry: "W dzwonnicy, u Ambrożego - ryzyko: {r}",
+                optHideLater: "Jeszcze pomyślę.",
+                sayTavern: ["Borgar? Ten karczmarz z kamienną twarzą? ...Dobrze. On nie pyta - to widać."],
+                sayGrandpa: ["U twojego dziadka? Stary się zgodzi? ...Zgodzi się. Widziałem jego oczy na targu. On też kiedyś przed kimś uciekał."],
+                sayBelfry: ["W dzwonnicy? Pod dzwonem? ...Ogłuchnę. Ale będę żywy."],
+                optSmuggle: "Przemycę cię promem - przez Baltazara.",
+                saySmuggle: ["Przez kupca? On przemyca wszystko... ludzi też? (Rafał długo milczy.) Na kontynent nie wrócę. Ale prom pływa też na południe. Dobrze. Zapłać mu - pięćdziesiąt groszy, tyle bierze za skrzynię."],
+                optChoiceLater: "Nie wiem jeszcze.", sayChoiceLater: ["Trzy dni. Potem nie będzie o czym myśleć."],
+                agreeNone: "Pogadaj z Rafałem (o świcie albo późnym wieczorem): ukryj go, przemyć promem przez Baltazara - albo wydaj go kapralowi Witowi.",
+                agreeSmuggle: "Rafał czeka na przemyt: zapłać Baltazarowi 50 G (kantor, 8–18) przed przeszukaniem.",
+                balAsk: ["Rafał? Ten z listu? (Baltazar uśmiecha się samymi ustami.) Prom pływa, kiedy trzeba. Ładunek żywy kosztuje drożej niż suszone grzyby.",
+                    "Pięćdziesiąt groszy. I nikt nie pyta. Ani ja, ani kapral - kapral też lubi grzyby."],
+                optPay: "Płacę (50 G).", optPayLater: "Jeszcze nie.",
+                balDone: ["Mądrze. Dziś w nocy pod bramą południową stanie wóz. Twój przyjaciel będzie skrzynią. Skrzynie nie mówią."],
+                balLater: ["Prom nie czeka, przyjacielu. Kapral też nie."],
+                smuggled: ["> (Rano w obozie jednego posłania mniej. Na kocu Eli leży łódka z kory.)"],
+                noteSmuggled: ["Rafał odpłynął", "Zapłaciłem Baltazarowi 50 G - Rafał odpłynął promem jako „skrzynia”. Kantor wie teraz, że i ja potrafię u niego płacić."],
+                witAsk: ["List gończy... Wiesz coś o tym Rafale? Sto dwadzieścia groszy to dużo pieniędzy dla bosego."],
+                optGive: "Wiem, gdzie jest.", optGiveNo: "Nic nie wiem.",
+                give: ["> Rafał. Ten z listu. {hideout}",
+                    "(Wit przez chwilę patrzy na ciebie bez słowa.) Dobrze. Sto dwadzieścia groszy, jak w liście. Jaśnie pan się dowie, kto pomógł dworowi.",
+                    "> (Godzinę później krzyk. Wit prowadzi Rafała ze związanymi rękami. Rafał nie patrzy w twoją stronę. Raz tylko - przy bramie.)"],
+                giveNo: ["Nic? Hm. Jak sobie przypomnisz - wiesz, gdzie stoję."],
+                hideoutCamp: "Śpi w stodole pod murem.", hideoutTavern: "Siedzi w izdebce nad tawerną.", hideoutGrandpa: "Siedzi w chacie mojego dziadka.", hideoutBelfry: "Siedzi w dzwonnicy, pod dzwonem.",
+                elaCries: "Rafał! RAFAŁ!",
+                noteGiven: ["Wydałem Rafała", "Powiedziałem kapralowi Witowi, gdzie jest Rafał - 120 G i życzliwość dworu. Ludmiła nie chce na mnie patrzeć, Ela płakała. Rafał przy bramie spojrzał na mnie raz."],
+                campSearch: ["> (Rano pod murem krzyki. Straż przetrząsa obóz. Wit wyprowadza Rafała ze stodoły - ze związanymi rękami.)"],
+                noteTaken: ["Zabrali Rafała", "Straż znalazła Rafała. Wit wyprowadził go ze związanymi rękami - do lochu dworu, a potem pewnie na prom. Nie zdążyłem."],
+                placeTavern: "w izdebce nad tawerną", placeGrandpa: "w chacie dziadka", placeBelfry: "w dzwonnicy u Ambrożego",
+                hidTavern: ["(Rafał siedzi na łóżku w izdebce i liczy deski w suficie.) Borgar przynosi mi zupę i nic nie mówi. Dobry człowiek. Dziwny, ale dobry."],
+                hidGrandpa: ["(Rafał siedzi w alkowie za kotarą.) Twój dziadek pyta mnie o wojnę. Ja mu nie mówię. On wie, że nie powiem - i dalej pyta. Dobry stary."],
+                hidBelfry: ["(Rafał siedzi pod dzwonem, z palcami w uszach.) Ambroży dzwoni o szóstej, w południe i o szóstej. I o trzeciej w nocy! Kto dzwoni o trzeciej w nocy?!"],
+                foundTavern: ["> (Zbiegowisko przed tawerną. Kapral Wit wyprowadza Rafała po schodach dla gości. Borgar stoi w drzwiach i wyciera kufel - mocniej niż trzeba.)"],
+                foundGrandpa: ["> (Straż u dziadka. Wit przewraca alkowę i wyciąga Rafała zza kotary. Dziadek Stach stoi przy piecu blady jak ściana.)"],
+                foundBelfry: ["> (Straż w dzwonnicy. Ambroży nie kłamie - nie umie. Wit sprowadza Rafała po schodach.)"],
+                searchedTavern: ["> (Straż przeszukała tawernę. Borgar wzruszył ramionami: „Pokoje dla gości. Gości nie ma. Szukajcie.” Nie znaleźli.)"],
+                searchedGrandpa: ["> (Straż zajrzała do dziadka. Wit przetrząsnął skrzynie - pod deski w alkowie nie zajrzał.)"],
+                searchedBelfry: ["> (Straż stanęła pod dzwonnicą. Ambroży zadzwonił - w samo południe, choć była dziesiąta. Wit uznał, że stary zwariował, i poszedł.)"],
+                hiddenBack: ["> (Tydzień minął. Rafał wraca pod mur - chudszy, ale wolny. Straż szuka już kogo innego.)"],
+                noteAlly: ["Rafał ocalony", "Rafał przesiedział tydzień w ukryciu i straż go nie znalazła. Wrócił do obozu. Mówi, że ma u mnie dług - i że kiedy przyjdzie co do czego, stanie obok mnie."],
+                // ---- rozdz. 5 "Druga fala"
+                waveBefore: "Prom z drugą falą ludzi z kontynentu przypłynie w dniu {waveDay}.",
+                waveNow: "Druga fala z promu: pod murem przybyło namiotów, przy beczkach Kuby kłótnie o wodę. W dniu {meet} (13–16) zebranie w ratuszu - sołtys pyta miasto, czy zamknąć bramę dla nowych. Twój głos waży tyle, ile twoja Opinia ({opinion}).",
+                waveNotice: ["Druga fala z promu", "Pod murem przybyło namiotów. W ratuszu będzie zebranie."],
+                quarrel: [[["woziwoda", "Po kolei! Najpierw piekarnia i kuźnia, potem reszta!"], ["ludmila", "Dziecko pić chce, nie piec!"]],
+                    [["piekarka", "Przydział to przydział, kochana."], ["ludmila", "Przydział dla swoich. A my czyi?"]],
+                    [["woziwoda", "Nowi z promu - do tyłu! Sołtys tak kazał!"], ["zlodziej", "A jak sołtys każe skakać do studni?"]],
+                    [["kowal", "Woda dla kuźni! Bez wody nie ma podków!"], ["woziwoda", "Dla wszystkich po równo, Tadek!"]]],
+                meetEarly: ["Zebranie w ratuszu jutro, o pierwszej. Przyjdź. Ty też masz głos."],
+                meetToday: ["Zebranie w ratuszu dziś, od pierwszej do czwartej. Przyjdź. Ty też masz głos."],
+                meet: ["(W ratuszu tłoczno. Tadek, Hanka, Kuba, Ignac, Baltazar pod ścianą. Ludmiła stoi w drzwiach - dalej nikt jej nie wpuścił.)",
+                    "Ludzie! Drugi prom, drugie tyle namiotów. Wody nie przybyło. Pytam miasto: zamykamy bramę dla nowych czy nie?",
+                    "Ty też masz głos, wnuku Stacha. Tyle wart, ile cię tu szanują."],
+                optClose: "Zamknąć bramę. Niech stoją za murem.", optOpen: "Wpuścić - ale niech pracują.", optAbstain: "Nie zabieram głosu.",
+                sayClose: ["> Zamknąć bramę. Wody nie starczy dla wszystkich."],
+                sayOpen: ["> Wpuścić. Ale niech pracują - przy polu, przy wodzie. Ręce się przydadzą."],
+                sayAbstain: ["> (Nic nie mówię. Niech miasto samo zdecyduje.)"],
+                tally: "Za zamknięciem: {close}. Za wpuszczeniem: {open}.",
+                resultClose: ["Brama zamknięta dla nowych. Obóz wyprowadzi się za mur, na Podgrodzie. Niech Bóg ma ich w opiece. I nas.", "> (Ludmiła w drzwiach spuszcza głowę.)"],
+                resultOpen: ["Wpuszczamy. Ale nie za darmo: tydzień pracy, kto ma ręce. Dwoje pójdzie na pole Stacha - zbierać, co dojrzeje.", "> (Ludmiła w drzwiach zakrywa usta ręką. Płacze.)"],
+                noteClose: ["Brama zamknięta", "Zebranie w ratuszu: miasto zamknęło bramę przed nowymi z promu. Obóz Ludmiły przeniósł się za mur, na Podgrodzie, do namiotów Darina. Nocą podchodzą tam wilki."],
+                noteOpen: ["Obóz w mieście", "Zebranie w ratuszu: miasto wpuściło ludzi z promu - z obowiązkiem pracy. Przez tydzień Bogdan i Halina z drugiej fali zbierają dojrzałe plony na polu dziadka i znoszą je do skrzyń."],
+                // ---- rozdz. 6 "Zima" and 7 "Marek" (one step: they can come in either order - Act II may begin before the winter)
+                hubWig0: "Zima (Wigilia w dniu {wig}): obóz chce zjeść Wigilię razem - pogadaj z Ludmiłą, kiedy przyjdą mrozy.",
+                hubWigAsk: "Wigilia w dniu {wig}: pogadaj z Ludmiłą, gdzie ją zjecie.",
+                hubWigCamp: "Wigilia w dniu {wig}, 17–20, przy ognisku obozu ({camp}): przynieś Ludmile 4 gorące dania z kociołka (gulasz, kapuśniak, zupa grzybowa, owsianka). Masz: {dishes}/4.",
+                hubWigTavern: "Wigilia w dniu {wig}, 17–23, w tawernie: przynieś Borgarowi (przy barze) 4 gorące dania z kociołka (gulasz, kapuśniak, zupa grzybowa, owsianka). Masz: {dishes}/4.",
+                hubWigDone: "Wigilia: zjedzona razem ✓.", hubWigMissed: "Wigilia minęła beze mnie.",
+                hubMarek0: "Marek (Akt II - po spłacie długu dziadka): mąż Ludmiły kopał w drużynie Rafała.",
+                hubMarekAsk: "Akt II. Powiedz Ludmile, czego się dowiedziałeś o Marku (obóz, za dnia).",
+                hubMarek1: "Marek stoi w niszy obozu kopaczy w Jaskini nad kamieniołomem (Góry, za Leśną drogą) - twarzą do ściany. Masz chustę Ludmiły.",
+                hubMarek2: "Marek idzie za tobą. Wyprowadź go z Jaskini (wyjście na dole): nocą po cichu (C), siłą albo dogadaj się ze strażnikiem obozu.",
+                hubMarek3: "Marek jest wolny. Ludmiła i Ela czekają w obozie (za dnia, 6:30–20).",
+                hubMarekDone: "Marek wrócił do rodziny ✓.",
+                campIn: "pod murem", campOut: "za murem, na Podgrodziu",
+                cloaksCamp: "Ela ma płaszcz od Ignaca. Pierwszą zimę nie marznie.",
+                cloaksGuard: "Płaszcze poszły dla straży... Połowa obozu odpłynęła promem na południe, bo bali się mrozów.",
+                wigAsk: ["Idzie Wigilia. U nas, na kontynencie, siadało się do stołu całą wsią. Nawet z wrogiem - tego jednego wieczoru.",
+                    "Tu nie mamy stołu. Ani wsi. ...Zjesz z nami? Albo - mówią, że Borgar w tawernie robi Wigilię dla samotnych."],
+                optWigCamp: "Zjedzmy w obozie, przy ognisku.", optWigTavern: "Chodźcie do tawerny, do Borgara.", optWigLater: "Jeszcze nie wiem.",
+                sayWigCamp: ["W obozie. Przy ogniu. Dobrze. Chleb jaki będzie - dam ja. Ty... gdybyś mógł ugotować coś ciepłego. Dla wszystkich. Cztery kociołki, nie mniej."],
+                sayWigTavern: ["Do tawerny? Nas? ...Jeśli Borgar się zgodzi. Gdybyś mógł ugotować coś ciepłego - dla wszystkich. Cztery kociołki, nie mniej."],
+                sayWigLater: ["Jeszcze jest czas. Niedużo."],
+                wigNeed: "Potrzebujesz: 4 gorące dania z kociołka (masz {dishes})",
+                wigCamp: ["> (Ognisko pod murem. Ludmiła rozkłada na desce chleb i opłatek - jeden, przełamany na wiele kawałków. Stawiam kociołki.)",
+                    "@ela: Pierwsza gwiazdka! Tam, nad murem!",
+                    "(Ludmiła łamie się z tobą opłatkiem.) Żebyś miał zawsze do kogo wracać. I żebyś zawsze wracał."],
+                wigCampEnd: ["> (Przychodzą inni - Hanka z plackiem, Tadek z beczułką, sołtys bez słowa siada na kamieniu. Obóz i miasto przy jednym ogniu.)"],
+                wigTavernTopic: "Wigilia dla obozu - przyniosłem jedzenie.",
+                wigTavern: ["(Borgar zsuwa dwa stoły pod kominkiem.) Wigilia w mojej tawernie. Dla wszystkich, co nie mają dokąd iść. Mój dziadek tak robił. I jego.",
+                    "> (Ludmiła i Ela siadają przy kominku. Melia stroi lutnię. Ozzy - o dziwo trzeźwy - łamie się opłatkiem z Grumem.)",
+                    "(Ludmiła łamie się z tobą opłatkiem.) Żebyś miał zawsze do kogo wracać. I żebyś zawsze wracał."],
+                wigTavernEnd: ["(Borgar stawia przed tobą kufel.) Ty gotowałeś. Ty siadasz pierwszy."],
+                wigRafal: "> (Rafał podnosi kubek: „Za tych, co zostali na kontynencie. I za tego, kto nas tu nie zostawił.”)",
+                wigMarek: "> (Marek mówi powoli, słowo po słowie: „Wesołych... Świąt.” Wszyscy milkną. Ludmiła płacze i się śmieje naraz.)",
+                wigMissed: ["> (Wigilia minęła. Obóz zjadł, co miał - beze mnie.)"],
+                noteWig: ["Wigilia z obozem", "Wigilię zjedliśmy razem - ludzie z promu i miasto. Ugotowałem cztery kociołki. Ludmiła życzyła mi, żebym zawsze miał do kogo wracać."],
+                chustaKnow: ["> Ludmiło. Widziałem Marka. W górach, w jaskini nad starym kamieniołomem. Żyje.",
+                    "(Ludmiła chwyta cię za ręce.) Żyje? Żyje! Gdzie? Dlaczego nie przyszedł? ...Dlaczego nie przyszedł?",
+                    "> Stoi twarzą do skały. Nie mówi. Kopacze mówią, że czegoś dotknął.",
+                    "(Ludmiła długo milczy. Potem zdejmuje z szyi chustę.) Ela wyszyła na niej konika. Krzywo, pierwszy raz w życiu. Marek się śmiał, że to krowa.",
+                    "Daj mu to. Jeśli jeszcze coś pamięta... to pozna. Przyprowadź mi go. Proszę."],
+                chustaRumour: ["> Ludmiło. Rafał mówił, że Marek kopał w jego drużynie. W górach, w jaskini nad starym kamieniołomem. Pójdę go szukać.",
+                    "(Ludmiła chwyta cię za ręce.) Marek? W górach? ...On żyje? Rafał wiedział i nic nie mówił?",
+                    "(Długo milczy. Potem zdejmuje z szyi chustę.) Ela wyszyła na niej konika. Krzywo, pierwszy raz w życiu. Marek się śmiał, że to krowa.",
+                    "Daj mu to. Jeśli jeszcze coś pamięta... to pozna. Przyprowadź mi go. Proszę."],
+                chustaCold: ["(Ludmiła patrzy na ciebie zimno.) Wydałeś Rafała. Pamiętam. ...Ale jeśli Marek żyje - weź to. Dla niego. Nie dla ciebie."],
+                marekWall: ["> (Marek stoi twarzą do ściany. Mówię do niego - nie odwraca się. Może Ludmiła wie, co by do niego trafiło.)"],
+                marekTurn: ["> (Marek stoi twarzą do ściany. Mówię jego imię - nic. Mówię „Ludmiła” - nic. „Ela” - drgają mu ramiona.)",
+                    "> (Wyjmuję chustę. Z koniem wyszytym krzywym, dziecięcym ściegiem.)",
+                    "(Marek odwraca się. Powoli, jakby każdy ruch bolał. Bierze chustę w obie dłonie i przykłada ją do twarzy.)",
+                    "...Wiatr. Konik. ...Ela.",
+                    "> Ela i Ludmiła są w miasteczku, pod twierdzą. Czekają. Idziemy do domu, Marku.",
+                    "(Marek patrzy na ciebie - pierwszy raz naprawdę. Kiwa głową. Tym razem do ciebie.)"],
+                marekCome: ["> Chodź. Idziemy do domu.", "(Marek kiwa głową i rusza za tobą.)"],
+                marekWaits: ["(Marek ściska chustę i idzie za tobą krok w krok.)"],
+                guardAsk: ["Ten? (Strażnik spluwa.) Ten nie kopie od miesiąca. Stoi i gapi się w ścianę. Ale dowódca mówi: nikt stąd nie wychodzi. Zwłaszcza ci, co coś widzieli."],
+                optGrum: "Grum kazał go puścić.", optFaction: "Pracuję dla waszych mocodawców. Biorę go.", optBribe: "Dam ci 80 groszy.", optFight: "To go odbiorę siłą.", optGuardNo: "Nic.",
+                sayGrum: ["Grum? (Strażnik się waha.) Grum to Grum. Jak on mówi, że swój... Zabieraj go."],
+                sayFaction: ["Dla nich? (Strażnik mruży oczy.) Na nic im taki, co tylko stoi. Bierz go. Ale ja nic nie widziałem."],
+                sayBribe: ["(Strażnik waży sakiewkę w dłoni.) Za tyle to ja nawet nie patrzę w tamtą stronę. Zabieraj go."],
+                sayFight: ["(Strażnik sięga po tarczę.) No to spróbuj."], sayGuardNo: ["To nie zawracaj głowy."],
+                alarm: "Hej! Gdzie z nim?! Stać!",
+                rafalShout: "Pamiętasz mnie? Za sto dwadzieścia groszy!",
+                fightWon: ["> (Strażnik klęczy. Kopacze odsuwają się pod ściany. Nikt już nie zagradza drogi.)"],
+                fightLost: ["> (Budzę się na zimnym kamieniu. Marka odprowadzili z powrotem pod ścianę. Spróbuję jeszcze raz - innej nocy, innym sposobem.)"],
+                fightAway: ["> (Odszedłem od obozu. Marek znowu stoi w niszy, twarzą do ściany - ale z chustą w ręku.)"],
+                out: ["> (Wychodzimy z jaskini. Marek mruży oczy przed światłem, jakby widział je pierwszy raz.)", "> (Marek długo patrzy w górę: „...Niebo. Pamiętam niebo.”)"],
+                noteOut: ["Marek wyprowadzony", "Wyprowadziłem Marka z obozu kopaczy w Jaskini. Odwrócił się od ściany, kiedy pokazałem mu chustę Ludmiły z koniem wyszytym przez Elę. Mówi mało - pojedyncze słowa. Idzie do rodziny."],
+                reunion: ["(Ludmiła widzi go pierwsza. Upuszcza wiadro. Nie krzyczy - tylko stoi, z ręką na ustach.)",
+                    "@marek: ...Ludmiła.",
+                    "Marek. Marek... (Ludmiła dotyka jego twarzy, jakby sprawdzała, czy jest prawdziwy.) Wróciłeś. Wróciłeś!",
+                    "@ela: TATO! (Ela biegnie przez cały obóz, z konikiem w ręce.) Tato, to jest Wiatr! Wystrugany! Patrz!",
+                    "@marek: (Marek klęka i bierze Elę na ręce. Długo nic nie mówi - ale tym razem to dobra cisza.) ...Wiatr. Piękny."],
+                reunionCold: ["(Ludmiła odwraca się do ciebie.) Wydałeś Rafała. Pamiętam. ...Ale przyprowadziłeś mi męża. Niech Bóg to policzy - ja nie umiem. Wybaczam ci."],
+                reunionEnd: ["(Ludmiła odwraca się do ciebie. Ma mokre oczy.) Nie umiem ci podziękować. Nikt by tam po niego nie poszedł. Nikt.",
+                    "@marek: (Marek kładzie ci rękę na ramieniu.) ...Dług. Mam u ciebie... dług. Kiedy przyjdą - stanę z tobą."],
+                noteReunion: ["Marek wrócił", "Marek wrócił do Ludmiły i Eli. Ela pokazała mu konika - Wiatr. Marek mówi mało, ale mówi. Powiedział, że ma u mnie dług - i że kiedy przyjdą, stanie ze mną."],
+                // ---- the camp's props, the helpers, the wolves outside the wall
+                propTent: "Namiot uchodźców. W środku koce, tobołki i dziecięcy but.",
+                propFire: "Ognisko obozu. Grzeje ręce - i trochę serca.",
+                bogdanTown: ["Bogdan jestem. Z drugiego promu. U pana na roli robiłem - pan nie żyje, rola spalona.", "Daj mi motykę, a pokażę, co umiem. Za miskę zupy."],
+                halinaTown: ["Halina. Kożuchy szyłam we wsi. Igłę mam, nici nie mam. Ani wsi.", "Ludmiła mówi, że jesteś dobry człowiek. Zobaczymy."],
+                bogdanOut: ["Za murem też da się żyć. Darin dał nam miejsce przy ogniu. Tylko wilki... wilki chodzą blisko."],
+                halinaOut: ["W nocy pilnujemy ognia na zmianę. Wilki boją się ognia. My też się boimy - ale ognia nie."],
+                bogdanField: ["Zbieramy, co dojrzało, i do skrzyni. Uczciwie, co do kłosa. Po tygodniu wracamy pod mur."],
+                halinaField: ["Dobra ziemia, choć sucha. U nas była czarna jak smoła. Plony do skrzyń, nasiona osobno."],
+                helpersDone: "Pomocnicy z obozu zebrali plony",
+                helpersBag: "Pomocnicy z obozu oddają ci plony (nie zmieściły się w skrzyniach)",
+                helpersEnd: "Tydzień pracy minął - Bogdan i Halina wracają do obozu.",
+                wolves: "Wilki! Wilki pod namiotami!",
+                cold: ["(Ludmiła odwraca wzrok.) Nie mam ci nic do powiedzenia.", "(Ludmiła zasłania Elę spódnicą.) Idź sobie. Proszę."]
             }
         }
     ];

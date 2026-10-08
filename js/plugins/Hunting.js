@@ -936,7 +936,7 @@
     const ai = name => function() { const a = AI(); return a[name].apply(a, arguments); };
     const weapon = name => function() { const w = W(); return w[name].apply(w, arguments); };
     const API = window.Hunting = T.register("Hunting", {
-        auto: v => { auto = !!v; }, LOOK8, look8: v => { look8On = !!v; }, animate: weapon("animate"), SPECIES, get WEAPONS() { return W().WEAPONS; },
+        auto: v => { auto = !!v; }, LOOK8, look8: v => { look8On = !!v; }, animate: weapon("animate"), SPECIES, BEAR_SPAWN, get WEAPONS() { return W().WEAPONS; },
         spawn, shoot: weapon("shoot"), populate, hit: weapon("hit"), kill: weapon("kill"), removeAnimal, mapTargets,
         get animals() { return animals; }, get projectiles() { return W().projectiles(); }, hunt, killedToday, pickWeapon: weapon("pickWeapon"),
         updateProjectiles: weapon("updateProjectiles"),
