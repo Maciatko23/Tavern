@@ -1,7 +1,7 @@
 // Zrzuty i klatki do GIF-ów pochodni (Torch.js): nocą chód w 8 kierunkach, bieg, skradanie, atak pochodnią (dół, prawo, góra),
 // praca z pochodnią wbitą w ziemię, deszcz. Klatki (wycinki wokół bohatera) idą do <katalog>, GIF-y składa make_gif.py.
 //   CDP_PORT=9487 node tools/torch/capture.js <katalog na klatki> [ujęcie...]
-// Ujęcia: chod, bieg, skradanie, atak, wbijanie, praca, deszcz, dzien (bez nazw: wszystkie). Pełne zrzuty: docs/pochodnia/*.png.
+// Ujęcia: chod, bieg, skradanie, atak, wbijanie, praca, schylanie, deszcz, dzien (bez nazw: wszystkie). Pełne zrzuty: docs/pochodnia/*.png.
 "use strict";
 const path = require("path");
 const fs = require("fs");
@@ -104,13 +104,29 @@ kit.test({ port: 9487, errorCheck: false }, async t => {
         await t.eval("$gamePlayer.updateScroll = $gamePlayer._torchCam; delete $gamePlayer._torchCam; 0");
         console.log("SHOT wbijanie", k);
     }
-    if (on("praca")) {
+    if (on("praca")) {   // chopping (the axe, both hands): the torch stuck in the ground beside him
         await home(2);
-        await t.eval(`$gamePlayer.startToolSwing(ChoppableTree.swingKindOf("Swing_Crouch"), null, null); 0`);
-        await t.frames(18);
+        await t.eval(`$gamePlayer.startToolSwing(ChoppableTree.swingKindOf("Swing_AxeSide"), null, null); 0`);
+        await t.frames(12);
         await t.shot(path.join(DOCS, "praca_pochodnia_wbita.png"));
-        await t.until("!$gamePlayer._swingEvent", 5, 50);
         for (let i = 0; i < 12; i++) { await clip("praca", i, 200, 160); await t.frames(3); }
+        await t.until("!$gamePlayer._swingEvent", 5, 50);
+    }
+    if (on("schylanie")) {   // stooping for something: the torch stays in his hand (down, left, right, up)
+        for (const d of [2, 4, 6, 8]) {
+            await home(d);
+            await t.frames(30);
+            await t.eval(`$gamePlayer.startToolSwing(ChoppableTree.swingKindOf("Swing_Crouch"), null, null); 0`);
+            for (let i = 0; i < 16; i++) { await clip("schylanie_" + d, i, 170, 150); await t.frames(3); }
+            await t.until("!$gamePlayer._swingEvent", 5, 50);
+            if (d === 2) {
+                await t.eval(`$gamePlayer.startToolSwing(ChoppableTree.swingKindOf("Swing_Crouch"), null, null); 0`);
+                await t.frames(22);
+                await t.shot(path.join(DOCS, "schylanie_noc.png"));
+                await t.until("!$gamePlayer._swingEvent", 5, 50);
+            }
+        }
+        console.log("SHOT schylanie");
     }
     if (on("deszcz")) {
         await home(2);

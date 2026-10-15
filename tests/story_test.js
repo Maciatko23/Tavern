@@ -115,7 +115,7 @@ const DRIVER = String.raw`
     };
     // (from the title, as the game does: a new game set up under a running map scene leaves that scene's sprites on a new, empty map)
     const toTitle = async () => {
-        await ev("(function(){ window.__drv.on = false; if (!(SceneManager._scene instanceof Scene_Title)) SceneManager.goto(Scene_Title); return 0; })()");
+        await ev("(function(){ window.__drv.on = false; ConfigManager.uiClean = false; if (!(SceneManager._scene instanceof Scene_Title)) SceneManager.goto(Scene_Title); return 0; })()");
         return until("SceneManager._scene instanceof Scene_Title && SceneManager._scene._started && !SceneManager.isSceneChanging()", 30);
     };
     // (the story's start - grandpa's cottage beside the hero's straw bed - set in the page: data/System.json may point elsewhere
@@ -123,7 +123,7 @@ const DRIVER = String.raw`
     const START = [19, 2, 5];
     const newStoryGame = async () => {
         await toTitle();
-        await ev(`(function(){ window.__drv.on = false; Object.assign($dataSystem, { startMapId: ${START[0]}, startX: ${START[1]}, startY: ${START[2]} }); DataManager.setupNewGame(); SceneManager.goto(Scene_Map); return 0; })()`);
+        await ev(`(function(){ window.__drv.on = false; ConfigManager.uiClean = false; Object.assign($dataSystem, { startMapId: ${START[0]}, startX: ${START[1]}, startY: ${START[2]} }); DataManager.setupNewGame(); SceneManager.goto(Scene_Map); return 0; })()`);
         const ok = await until(onMap(19), 40);
         await ev(quiet);
         return ok;
@@ -164,7 +164,7 @@ const DRIVER = String.raw`
         await until(`$gameSystem._story.intro === 2 && ${calmMap}`, 60);
         const intro = await J("({ log: window.__drv.log.slice(window.__drv.mark), s: $gameSystem._story, soup: $gameParty.numItems($dataItems[131]), notes: $gameSystem._journal.notes.map(n => n.title) })");
         const introText = intro.log.map(l => l.t).join(" / ");
-        check("the intro: grandpa and the hero talk in bubbles (grandpa over 901, the hero over 0), 10 messages", intro.log.length === 10 && intro.log[0].who === 901 && intro.log[1].who === 0 && intro.log.filter(l => l.who === 0).length === 3,
+        check("the intro (since the prologue, 2026-10-12: the fisherman, the mother's letter, then the debt): grandpa and the hero talk in bubbles (grandpa over 901, the hero over 0), 17 messages", intro.log.length === 17 && intro.log[0].who === 901 && intro.log[1].who === 0 && intro.log.filter(l => l.who === 0).length === 5,
             intro.log.map(l => l.who));
         check("it tells the debt (2500, Lord Zaleski, day 60), the field (build only there), the tavern job (Borgar, afternoons and evenings)",
             /2500/.test(introText) && /Lordowi Zaleskiemu/.test(introText) && /Termin: dzień 60/.test(introText) && /stawiaj na nim/.test(introText) && /Tylko tam/.test(introText) && /Borgar/.test(introText) &&
@@ -452,7 +452,7 @@ const DRIVER = String.raw`
         const resting = await J("({ hour: $gameSystem.dayNightHour(), sitting: $gamePlayer.isToolSwinging(), doomed: Story.doomed(), ended: $gameSystem._story.ended, running: $gameMap.isEventRunning(), save: $gameSystem.isSaveEnabled() })");
         check("day 61 before 6:00 (the field shown as 'Pole dziadka'): not over yet; resting past 6:00 the ending waits while he sits (doomed, saving off)", before6.night && !before6.doomed && before6.save &&
             before6.name === "Pole dziadka" && !!spot && resting.sitting && resting.hour >= 6.4 && resting.doomed && !resting.ended && !resting.running && resting.save === false, { before6, spot, resting });
-        await ev("window.__drv.on = false; Input._currentState.ok = true; 0");
+        await ev("window.__drv.on = false; ConfigManager.uiClean = false; Input._currentState.ok = true; 0");
         await frames(4);
         await ev("Input._currentState.ok = false; 0");
         await until("!$gamePlayer.isToolSwinging()", 10);
@@ -463,7 +463,7 @@ const DRIVER = String.raw`
 
         // ================= 5. an old-style game: begun elsewhere (Map003) - no story, nothing changes
         await toTitle();
-        await ev("(function(){ window.__drv.on = false; DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 26, 14, 2, 0); SceneManager.goto(Scene_Map); return 0; })()");
+        await ev("(function(){ window.__drv.on = false; ConfigManager.uiClean = false; DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 26, 14, 2, 0); SceneManager.goto(Scene_Map); return 0; })()");
         await until(onMap(3), 40);
         await ev(quiet);
         await ev("Journal.evaluateGoals(); 0");

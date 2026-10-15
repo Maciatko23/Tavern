@@ -1445,5 +1445,129 @@
     "scale": null,
     "height_px": 60,
     "notes": "W8: kopacze frakcji w Jaskini (Map014)."
+  },
+  {
+    "key": "Przemytnik",
+    "name": "Roch Szkwał (przemytnik, przystań)",
+    "pixellab_id": "3421829d-bc64-4012-8d09-5c1b90a2b5e2",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0ff33637-88ac-4cd2-90ab-cb8a355a55f6",
+    "animation": "walk",
+    "description": "Roch the old sea smuggler, a weathered tough old sailor about 60, deeply tanned wrinkled face, thick full grey-white beard and moustache, a hood of waxed brown canvas pulled up over his head, a gold hoop earring in his ear, a long brown sailor's coat reaching below the knees, open at the front, torn and ragged at the hem after a storm, a dark charcoal-grey waistcoat over a dark shirt under the coat, a leather belt, dark trousers, tall worn dark-brown leather boots, poor medieval smuggler, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_east": 3
+    },
+    "sheet": "$Npc_Przemytnik",
+    "walk8": "Npc_Przemytnik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Przystań; ten sam człowiek co na planszy prologu (Prolog_Port). Chód E z trybu skeleton-v3 (szablonowe W i E gubiły długi płaszcz w klatkach 2-7: krótka kurtka i niebieskie spodnie); W = lustro E. Kolczyk schowany pod kapturem (na mapie niewidoczny, jest w popiersiu)."
+  },
+  {
+    "key": "Janek",
+    "name": "Janek (rybak, przystań)",
+    "pixellab_id": "75a42e26-e683-4343-8b2b-a67f8ee22e98",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "aadd29d4-5912-4be5-a0e1-88988730499c",
+    "animation": "walk",
+    "description": "Janek the fisherman, a broad-shouldered sturdy man about 40, weather-beaten ruddy tanned face, short reddish-ginger stubble beard and moustache, a navy-blue thick knitted wool cap without a brim pulled down over his head with short reddish hair at the sides, a faded grey-blue linen shirt with the sleeves rolled up to the elbows, a brown leather fisherman's apron over it from chest to knees, a knife in a sheath on his belt, patched dark brown trousers reaching just below the knee, old brown leather boots with high shafts, a small wicker basket carried on his back with shoulder straps, its rim showing behind his shoulder, poor but tidy medieval fisherman, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Janek",
+    "walk8": "Npc_Janek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "north-east": "north-west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Przystań. Wiklinowy kosz na plecach (czytelniejszy niż sieć). W = lustro E (szablonowy chód W gubił fartuch, pomarańczowy pas), NE = lustro NW (szablonowy chód NE gubił kosz w klatkach 1-4). Po lustrach nóż u pasa po drugiej stronie w W i NE."
+  },
+  {
+    "key": "Celnik",
+    "name": "Celnik (straż Lorda Zaleskiego, przystań)",
+    "pixellab_id": "8a1a0732-8acc-44b1-99e6-bf06c070fdfd",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "48c0124b-a4a3-46ad-b6b0-f96c6c68da33",
+    "animation": "walk",
+    "description": "the harbour customs officer of the lord, a thin stiff older official about 55, very upright rigid posture, short grey hair, grey side whiskers down to the jaw, clean-shaven chin, narrow stern face with thin pressed lips, a small round black felt cap without a brim, a long red official's coat reaching the knees with black trim and a row of buttons down the front, a black rearing horse emblem on the chest, a black leather belt with a ring of iron keys hanging at the hip, black trousers, black leather boots, a thick brown leather-bound ledger book held under his left arm against his side, medieval official in the lord's red livery, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_w_nw_ne_se": 12
+    },
+    "sheet": "$Npc_Celnik",
+    "walk8": "Npc_Celnik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Przystań, komora celna; czerwień jak u Kaprala i Strażnika ((182, 32, 27) / (127, 22, 19)), czarny koń na piersi (na 64 px mały znak). Księga pod lewą pachą: szablonowy chód gubił ją w W, NW, SE (i migała w NE), więc te 4 kierunki z trybu skeleton-v3 (księga w każdej klatce; w NW i SE w klatkach 6-8 kołysze się z ręką). W E i N księgi nie widać (lewa ręka po drugiej stronie) - tak jak w rotacjach."
   }
 ]

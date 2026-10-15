@@ -591,6 +591,8 @@
     // ==================================================================
     // Moves: the wind-up (the "!", the pose; the way to the hero locked) -> the strike (lands on its frame) -> the opening
     // ==================================================================
+    // the wind-ups' length by the difficulty of the fight (Combat_Feel.js windupK: Łatwy 1.3, Normalny 1, Trudny 0.85)
+    const tk = () => { const Cb = C(), f = Cb && Cb.feel; return f && f.windupK ? f.windupK() : 1; };
     // the creatures' turns: at most two big ones wind up at once (the swarms have their own count)
     const attacking = () => creatures.filter(c => !c._dead && !c._def.swarm && (c._mode === "windup" || c._mode === "strike" || c._mode === "truth")).length;
     Game_Creature.prototype.mayAttack = function() {
@@ -610,7 +612,7 @@
         this._struck = false;
         this._breaks = 0;
         this.setDirection(DIR4(dx, dy));
-        this.setMode("windup", Math.max(8, Math.round((opts.windup || m.windup) * this.dexK())));
+        this.setMode("windup", Math.max(8, Math.round((opts.windup || m.windup) * this.dexK() * tk())));
         if (m.guardBreak || m.ring) { se("Equip1", 75, 60, panOf(this.centerX())); sparksAt(this.centerX() + this._lock[0] * 0.2, this.centerY() - 1.1 * this._scale, "#fff2b0", 6); }
         // (a blow on the floor: its ring shows where, all through the wind-up)
         if (m.ring) rings.push({ x: this.centerX() + this._lock[0] * (m.ahead || 0), y: this.centerY() + this._lock[1] * (m.ahead || 0), r: m.radius, t: 0, life: this._modeT + 2, kind: "warn", c: this });
@@ -684,6 +686,23 @@
         $gameScreen.startShake(5, 8, 14);
         se("Blow6", 85, 60, panOf(cx));
         rings.push({ x: cx, y: cy, r, t: 0, life: 20, kind: "wave" });
+    };
+    // What Combat_Feel.js reads (2026-10-14, the fight's feel): isThreat - it fights the hero (the automatic combat mode, the soft target,
+    // the arrows at the screen's edge); combatTell - a move of it on the way to the hero: { t: frames till it lands, heavy: no plain guard
+    // holds it - a blow that breaks the guard, a ring on the floor, a charge, a truth }; null: none now
+    Game_Creature.prototype.isThreat = function() {
+        return !this._dead && !this._dying && !this._gone && !!this._engaged && !this._hidden && !["return", "flee", "dormant"].includes(this._mode);
+    };
+    Game_Creature.prototype.combatTell = function() {
+        if (this._dead || this._dying || this._stun > 0 || this._hidden || !this._engaged) return null;
+        const m = this._mode, mv = this.moveDef(), at = mv ? mv.hitAt || 3 : 3, heavy = !!mv && (!!mv.guardBreak || !!mv.ring || !!this._heavy);
+        if (m === "windup" && mv) return { t: Math.max(0, this._modeT) + at, heavy };
+        if (m === "strike" && mv && !this._struck) return { t: Math.max(0, at - (this._modeLen - this._modeT)), heavy };
+        if (m === "spit") return { t: Math.max(0, this._modeT) + Math.round(this.playerDistance() / 0.17), heavy: false, shot: true };
+        if (m === "truth") return { t: Math.max(0, this._modeT), heavy: true, mind: true };
+        if (m === "dive" && this._modeT > 0) return { t: this._modeT + Math.round(this.playerDistance() / ((mv && mv.speed) || 0.2)), heavy: false };
+        if ((m === "charge" || m === "ram") && this._modeT > 0) return { t: this._modeT + Math.round(this.playerDistance() * 8), heavy: true };
+        return null;
     };
     // the hero parried the blow (Combat.js): it reels a long moment
     Game_Creature.prototype.onParried = function() {
@@ -948,7 +967,7 @@
             if (!c._cd.web && dist >= 2.4 && dist <= m.web.range && c.clearRun() && c.mayAttack() && !webbed()) {
                 const dx = heroX() - c.centerX(), dy = heroY() - c.centerY(), d = Math.hypot(dx, dy) || 1;
                 c._lock = [dx / d, dy / d]; c._lockAng = Math.atan2(dy, dx); c._faceAng = c._lockAng; c._move = "web";
-                c.setMode("spit", Math.round(m.web.windup * c.dexK()));
+                c.setMode("spit", Math.round(m.web.windup * c.dexK() * tk()));
                 se("Monster1", 40, 130, panOf(c.centerX()));
                 return;
             }
@@ -1016,7 +1035,7 @@
         c._lockAng = Math.atan2(dy, dx);
         c._diveTo = { x: heroX() + dx / d * m.past, y: heroY() + dy / d * m.past, len: d + m.past, gone: 0, hit: false };
         c._move = "dive";
-        c.setMode("dive", Math.round(m.windup * c.dexK()));
+        c.setMode("dive", Math.round(m.windup * c.dexK() * tk()));
         c._diveWind = c._modeT;
         se("Monster1", 35, 190, panOf(sx));
         lines.push({ c, t: 0 });
@@ -1082,7 +1101,7 @@
         c._chargeHit = false;
         c._running = false;
         c._move = "charge";
-        c.setMode("charge", Math.round(m.windup * c.dexK()));
+        c.setMode("charge", Math.round(m.windup * c.dexK() * tk()));
         se("Earth2", 70, 70, panOf(c.centerX()));
         c._cd.charge = m.cd;
         lines.push({ c, t: 0, charge: true });
@@ -1179,11 +1198,11 @@
         c._breaks = 0;
         c._faceAng = Math.atan2(heroY() - c.centerY(), heroX() - c.centerX());
         c._lockAng = c._faceAng;
-        c.setMode("truth", Math.round(m.windup * c.dexK()));
+        c.setMode("truth", Math.round(m.windup * c.dexK() * tk()));
         c._truthText = pick(D.TRUTHS);
         say(c, c._truthText, m.windup + 90);
         se("Darkness2", 60, 120, panOf(c.centerX()));
-        rings.push({ x: c.centerX(), y: c.centerY(), r: 0.7, t: 0, life: m.windup, kind: "truth", c });
+        rings.push({ x: c.centerX(), y: c.centerY(), r: 0.7, t: 0, life: c._modeT, kind: "truth", c });   // (its wind-up: the difficulty may lengthen it)
         c._cd.truth = 200;
     }
     function wraithTruth(c, m) {
@@ -1623,7 +1642,7 @@
             if (!c._cd.ram && dist >= B.ram.from && dist <= B.ram.to && (c._mode === "chase" || c._mode === "circle") && c.clearRun() && Math.random() < 0.2) {
                 startCharge(c, B.ram);
                 c._cd.ram = B.ram.cd;
-                c.setMode("ram", Math.round(B.ram.windup * c.dexK()));
+                c.setMode("ram", Math.round(B.ram.windup * c.dexK() * tk()));
             }
         }
     };
@@ -2594,6 +2613,13 @@
         });
         Hn.onNoise(heard);
         if (Cb && Cb.addFoes) Cb.addFoes(() => creatures.filter(c => !c._hidden && !(c._def.flying && c._alt > 16) && !c._dying));
+        // (Combat_Feel.js: no automatic combat mode while the tenth gate's guardian waits with his riddle - the riddle first, the fight
+        // only for the hero who comes armed by his own choice or strikes the armour)
+        let gCache = { events: null, ev: null };
+        if (Cb && Cb.feel && Cb.feel.holdAuto) Cb.feel.holdAuto(() => {
+            if (gCache.events !== $gameMap._events) gCache = { events: $gameMap._events, ev: guardianEvent() };   // (looked up once a map set-up)
+            return !!gCache.ev && !gCache.ev._erased && !S().guardian;
+        });
         registerWithUnderground();
     }
     function summon() {

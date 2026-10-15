@@ -133,6 +133,9 @@
                 { id: "roast_bear", name: "Upiecz mięso niedźwiedzia", doing: "Trwa pieczenie", inputs: [[ITEM.rawBear, 1]], output: [ITEM.roastBear, 1], hours: 1, stamina: 1, startSe: "Fire2", desc: "Ciemne, tłuste mięso niedźwiedzia piecze się długo - godzinę przy ogniu. Syci jak nic innego z ogniska." },
                 { id: "roast_meat", name: "Upiecz mięso zająca", doing: "Trwa pieczenie", inputs: [[ITEM.rawMeat, 1]], output: [ITEM.roastMeat, 1], hours: 0.5, stamina: 1, startSe: "Fire2", desc: "Kawał zająca nad żarem, pół godziny przy ogniu. Syci na kilka godzin." },
                 { id: "roast_fish", name: "Upiecz rybę", doing: "Trwa pieczenie", inputs: [[ITEM.fish, 1]], output: [ITEM.roastFish, 1], hours: 0.5, stamina: 1, startSe: "Fire2", desc: "Ryba nad ogniem, pół godziny przy ogniu." },
+                // (2026-10-14) the sea fish of the harbour (Przystan.js): a herring roasts like the pond's fish, a cod is big - two portions
+                { id: "roast_herring", name: "Upiecz śledzia", doing: "Trwa pieczenie", inputs: [[ITEM.herring, 1]], output: [ITEM.roastFish, 1], hours: 0.5, stamina: 1, startSe: "Fire2", desc: "Śledź z morza na patyku, pół godziny przy ogniu." },
+                { id: "roast_cod", name: "Upiecz dorsza", doing: "Trwa pieczenie", inputs: [[ITEM.cod, 1]], output: [ITEM.roastFish, 2], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Tłusty dorsz z morza: trzy kwadranse przy ogniu, starczy na dwa posiłki." },
                 { id: "potatoes", name: "Upiecz ziemniaki", doing: "Trwa pieczenie", inputs: [[ITEM.potato, 2]], output: [ITEM.bakedPotato, 2], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Ziemniaki upieczone w żarze, trzy kwadranse przy ogniu." },
                 { id: "eggs", name: "Usmaż jajecznicę", doing: "Trwa smażenie", inputs: [[ITEM.egg, 2]], output: [ITEM.scramble, 1], hours: 0.25, stamina: 1, startSe: "Fire2", desc: "Jajka na rozgrzanym kamieniu, kwadrans." },
                 { id: "mushrooms", name: "Upiecz grzyby", doing: "Trwa pieczenie", inputs: [[ITEM.mushroom, 2]], output: [ITEM.grilledMushrooms, 2], hours: 0.25, stamina: 1, startSe: "Fire2", desc: "Kapelusze nadziane na patyk i przypieczone nad żarem, kwadrans." },
@@ -148,6 +151,10 @@
             desc: "Trzy kijki i lina nad ogniem. Zawieszasz jedzenie na haczyku i możesz odejść: piecze się samo, a gotowe odbierasz z ognia (albo czekasz obok, siedząc). Później zawiesisz na nim żelazny kociołek." },
         scarecrow: { name: "Strach na wróble", cost: [[ITEM.wood, 3]], w: 1, stamina: 4, hits: 3, image: "Farm_Scarecrow",
             desc: "Rośliny w promieniu 2 kratek rosną o 25% szybciej." },
+        // the training dummy (2026-10-14, Combat_Feel.js): in the combat mode it "strikes" slowly, with the warning, so the parry and the
+        // roll can be learnt; it says "Idealne parowanie!" / "Za wcześnie" / "Za późno"; no real harm, a little experience the first times
+        dummy: { name: "Manekin treningowy", cost: [[ITEM.wood, 2], [ITEM.fiber, 3]], w: 1, stamina: 4, hits: 4, image: "Farm_Dummy",
+            desc: "Słup z workiem wypchanym słomą i drewnianymi ramionami. W trybie walki (Tab) stań obok: manekin powoli zamachuje się z zapowiedzią (błysk) - ćwicz parowanie (P tuż przed ciosem) i przewrót (Spacja). Mówi, czy było „Idealne parowanie!”, „Za wcześnie” czy „Za późno”. Nie rani. Pierwsze udane parowania dają trochę doświadczenia." },
         coop: { name: "Kurnik", cost: [[ITEM.planks, 10], [ITEM.stone, 2], [ITEM.nails, 4]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Coop_L", legacy: { w: 2, h: 1, image: "Farm_Coop", cost: [[ITEM.planks, 6], [ITEM.stone, 2]] },
             yard: { gate: 2, hut: { dx: 2, dy: 3, w: 2, h: 1 }, animal: "hen", count: 3 },
             produce: { item: 75, amount: 2, period: 1, cap: 6 },
@@ -271,7 +278,7 @@
         smokehouse: { name: "Wędzarnia", cost: [[ITEM.planks, 6], [ITEM.stone, 4], [ITEM.brick, 4], [ITEM.nails, 4]], w: 3, h: 2, stamina: 12, hits: 50, image: "Farm_Smokehouse_L", legacy: { w: 2, h: 1, image: "Farm_Smokehouse", vent: 80 }, vent: 118, ventX: 0, smokes: true,
             recipes: [
                 { id: "smoke_meat", name: "Wędź mięso", doing: "Trwa wędzenie", inputs: [[ITEM.wood, 2]], meat: 2, output: [ITEM.smokedMeat, 2], hours: 8, stamina: 2, startSe: "Fire2", desc: "Długo w dymie: mięso syci mocniej i dłużej." },
-                { id: "smoke_fish", name: "Wędź rybę", doing: "Trwa wędzenie", inputs: [[ITEM.fish, 2], [ITEM.wood, 2]], output: [ITEM.smokedFish, 2], hours: 6, stamina: 2, startSe: "Fire2", desc: "Ryba w dymie olchowym." }
+                { id: "smoke_fish", name: "Wędź rybę", doing: "Trwa wędzenie", inputs: [[ITEM.wood, 2]], fish: 2, output: [ITEM.smokedFish, 2], hours: 6, stamina: 2, startSe: "Fire2", desc: "Ryba w dymie olchowym: ze stawu albo z morza (śledź, dorsz)." }
             ],
             desc: "Wędzi mięso i ryby. Wędzonka daje najwięcej sił." },
         tannery: { name: "Garbarnia", cost: [[ITEM.planks, 4], [ITEM.rope, 2], [ITEM.stone, 2]], w: 3, h: 2, stamina: 10, hits: 30, image: "Farm_Tannery_L", legacy: { w: 2, h: 1, image: "Farm_Tannery" },
@@ -432,6 +439,8 @@
             94: { raw: true, spoil: 60, dog: 40, tame: 1 },                                                                 // Surowe mięso zająca
             95: { stamina: 40, buff: "sated", hours: 3, fed: 45, water: 0, spoil: 120, dog: 45, tame: 2 },                  // Pieczone mięso zająca
             98: { raw: true, spoil: 40, dog: 45, tame: 10 },                                                                // Ryba
+            173: { raw: true, spoil: 40, dog: 45, tame: 15 },                                                               // Śledź (the harbour, 2026-10-14)
+            174: { raw: true, spoil: 48, dog: 45, tame: 16 },                                                               // Dorsz
             99: { stamina: 30, buff: "sated", hours: 2, fed: 38, water: 0, spoil: 96, dog: 45, tame: 11 },                  // Pieczona ryba
             101: { raw: true, spoil: 48 },                                                                                  // Zwierzyna (old saves)
             102: { stamina: 8, fed: 8, water: 10, spoil: 72, dog: 12, dogPick: 14, dogPickBush: 18 },                       // Jagody

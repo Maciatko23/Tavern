@@ -36,7 +36,8 @@ const { launch, sleep } = require("./cdp.js");
         const roll = async () => {
             await ev(`$gamePlayer.locate(${R.x + 1}, ${R.y}); $gamePlayer.setDirection(6); Combat.resetAct(); 0`); await frames(40);
             const x0 = await ev("$gamePlayer._realX");
-            await ev("Input._onKeyDown({ keyCode: 32, preventDefault() {} }); 0"); await frames(2); await ev("Input._onKeyUp({ keyCode: 32 }); 0");
+            // (the right arrow held with Space: since 2026-10-14 Space alone springs back - Combat_Feel.js)
+            await ev("Input._currentState.right = true; Input._onKeyDown({ keyCode: 32, preventDefault() {} }); 0"); await frames(2); await ev("Input._onKeyUp({ keyCode: 32 }); Input._currentState.right = false; 0");
             const len = await ev("Combat.act.rollLen"), f0 = await ev("Graphics.frameCount");
             for (let i = 0; i < 100 && (await ev("Combat.act.mode")) === "roll"; i++) await frames(1);
             return { len, frames: (await ev("Graphics.frameCount")) - f0, dist: Math.round(((await ev("$gamePlayer._realX")) - x0) * 100) / 100 };

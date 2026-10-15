@@ -17,7 +17,11 @@ const OLD_API = ["ATTRS", "SKILLS", "TREES", "MELEE", "SHIELDS", "MAX_LEVEL", "A
     // (stage 2 of the fight, 2026-10-05: the armour, the blow from hiding)
     "ARMORS", "armor", "SNEAK", "sneakAttack", "sneakMult",
     // (stages 3 and 4, 2026-10-06: the foes of other plugins - Humans.js, Creatures.js -, the hero jarred / held down / frozen, the mind)
-    "addFoes", "foes", "recoil", "downPlayer", "stunPlayer", "drainBreath", "mindResist", "mindTime"];
+    "addFoes", "foes", "recoil", "downPlayer", "stunPlayer", "drainBreath", "mindResist", "mindTime",
+    // (2026-10-12, the Grafit Postać card - MenuRing.js / Equipment.js: what the attributes, the blows and the defence give in numbers, the hand)
+    "attrInfo", "fightInfo", "defenseInfo", "meleeInfo", "woundChance", "handChoices", "setHand",
+    // (2026-10-14, the fight's feel: Combat_Feel.js - the automatic combat mode, the soft target, the warnings, the quick heal, the dummy)
+    "feel"];
 const FILES = ["TawernaCore", "Skills_Data", "Combat", "Combat_Fight", "Combat_UI"];
 
 // a save as the game stores it, read back: plain fields of a Game_System (what JsonEx gives)

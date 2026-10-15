@@ -313,7 +313,8 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     const files = await t.json(`Promise.all(${JSON.stringify(table.map(r => r.bust))}.map(n => n ? fetch("img/pictures/" + n + ".png", { method: "HEAD", cache: "no-store" }).then(r => r.ok).catch(() => false) : false))`);
     const noBust = table.filter((r, i) => !r.bust || !r.has || !files[i]);
     t.check("every speaking resident (" + (table.length - 1) + ", all maps, Teodor too) and the Lord: a bust of their own in the table, the file there",
-        table.length >= 29 && !noBust.length && new Set(table.map(r => r.bust)).size === table.length, { count: table.length, noBust });
+        // (2026-10-14: one bust per sheet - the harbour's guard wears the manor guard's sheet, so his bust too)
+        table.length >= 29 && !noBust.length && new Set(table.map(r => r.bust)).size === new Set(table.map(r => r.sheet)).size, { count: table.length, noBust });
     await t.newGame({ map: 8, x: 20, y: 30, hour: 10, minimap: false });
     await t.eval("TownLife.placeAll(); 0");
     await t.frames(30);

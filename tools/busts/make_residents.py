@@ -19,6 +19,8 @@ RESIDENTS = [
     ('franek', 'Franek', 'SF_People1_1'), ('drwal', 'Zbych Smolarz', 'SF_Actor3_7'), ('klusownik', 'Rysiek Sidło', 'Actor1_3'),
     ('znachorka', 'Babka Jadwiga', 'People1_8'), ('szmaciarz', 'Józek Łata', 'Evil_1'), ('uchodzca', 'Darin z Kontynentu', 'SF_Actor1_5'),
     ('zebrak', 'Stary Gaweł', 'People4_5'), ('marek', 'Marek', 'SF_Actor3_3'),
+    # the harbour (2026-10-14): the fisherman, the smuggler from the prologue's boat, the Lord's customs officer
+    ('janek', 'Janek (rybak)', 'Actor3_1'), ('przemytnik', 'Roch Szkwał', 'People2_1'), ('celnik', 'Celnik', 'SF_People1_5'),
 ]
 # the tavern regulars (2026-10-07): their own busts <Name>_Bust (their old RTP busts did not look like their map sheets; the RTP
 # names stay their keys in the game - SpeechBubbles.RENAMED); and Ambrozy's kept Order bust (Ambrozy_Bust_Zakon)

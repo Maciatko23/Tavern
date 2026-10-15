@@ -95,6 +95,14 @@ def town_gate_ok():
 def main():
     if TD.editor_running():
         print("STOP: the RPG Maker MZ editor is running - close it first (it would overwrite data/ on save)."); sys.exit(2)
+    # (2026-10-12) the interiors were polished in place by tools/wnetrza/build.py (and the user edits them in the editor):
+    # a map in data/ that differs from this tool's staged one is not overwritten without --force
+    changed = [m for m in range(112, 118) if os.path.exists(os.path.join(DATA, "Map%03d.json" % m)) and
+               open(os.path.join(DATA, "Map%03d.json" % m), "rb").read() != open(os.path.join(STAGING, "Map%03d.json" % m), "rb").read()]
+    if changed and "--force" not in sys.argv:
+        print("STOP: data/Map%s changed since this tool staged them (tools/wnetrza polish / the editor) - --force replaces them"
+              % ", Map".join("%03d" % m for m in changed))
+        sys.exit(3)
     m111, doors = patched_map111()
     mi_path, mi_out = patch_mapinfos()
     gate = town_gate_ok()

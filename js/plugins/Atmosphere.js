@@ -204,6 +204,7 @@
         return plan ? { type: plan.type, power: plan.power } : null;
     }
     const isWater = (x, y) => !!T.call("Farming", "isWaterTile", x, y);
+    const seaHere = () => !!T.call("Farming", "seaHere");   // (2026-10-14: the harbour's salt sea - waves, no frogs)
     function nearWater(radius) {
         let n = 0;
         for (let dy = -radius; dy <= radius; dy++) for (let dx = -radius; dx <= radius; dx++) {
@@ -398,6 +399,8 @@
         const profile = profileOf();
         const indoors = profile === "tavern" || profile === "interior";
         if (profile === "cave") return "stone";
+        const top = $gameMap.tileId(x, y, 1);
+        if (top > 0 && Tilemap.isTileA1(top) && !Tilemap.isWaterTile(top)) return "wood";   // (2026-10-14: a plank pier / bridge over water)
         for (let z = 0; z < 2; z++) {
             const id = $gameMap.tileId(x, y, z);
             if (id > 0 && Tilemap.isWaterTile(id) && $gameMap.isPassable(x, y, 2)) return "water";
@@ -452,6 +455,7 @@
             }
             if (storm > 0.08) return { name: "Wind3", volume: Math.round(30 + 60 * storm) };   // the deep howl of the wind rising before the storm breaks
             if (precip && precip.type === "snow") return { name: "Wind5", volume: 45 };
+            if (seaHere() && nearWater(6) >= 6) return { name: "Sea", volume: period === "night" ? 50 : 45 };   // (the surf, by day and by night)
             if (period === "night") return { name: "Night", volume: 55 };
             if (nearWater(4) >= 4) return { name: "River", volume: 42 };
             return { name: day % 2 === 0 ? "Wind2" : "Wind4", volume: period === "day" ? 26 : 22 };
@@ -511,7 +515,7 @@
                 state.nextOwl = now + Math.round(rand(25, 70) * 60);
             }
             if (now >= state.nextFrog) {
-                if (state.nextFrog > 0 && nearWater(9) >= 4) T.audio.se("Frog", { volume: 30, pitch: Math.round(rand(92, 112)), pan: Math.round(rand(-50, 50)) });
+                if (state.nextFrog > 0 && !seaHere() && nearWater(9) >= 4) T.audio.se("Frog", { volume: 30, pitch: Math.round(rand(92, 112)), pan: Math.round(rand(-50, 50)) });
                 state.nextFrog = now + Math.round(rand(9, 22) * 60);
             }
         }

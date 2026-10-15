@@ -43,7 +43,7 @@
         BUILDINGS, farm, buildingsOf, changed, geoOf, itemOf, countOf, popup, complain, spaceFor, complainNoSpace, playSe,
         spendStamina, perk, perkRoll, useTool, requireItem, fx, later, lockPlayer, swingThen, missingOf, hasClock, clockHours,
         FUEL_MAX, FUEL_START, FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL,
-        meatCount, QUEUE_MAX, clockText, hoursText, IMPROVE, costRows } = P.core;
+        meatCount, QUEUE_MAX, clockText, hoursText, IMPROVE, costRows, RAW_FISH, FISH_LABEL, fishCount } = P.core;
     const [ownsBucket, bagWater, setBagWater] =
         link(PL, ["ownsBucket", "bagWater", "setBagWater"]);
     const [manualEntry] =
@@ -194,6 +194,7 @@
         n = n || 1;
         const missing = missingOf(r.inputs.map(([id, k]) => [id, k * n]));
         if (r.meat && meatCount() < r.meat * n) missing.push([ITEM.rawMeat, r.meat * n, "meat"]);   // (the third field: "any raw meat")
+        if (r.fish && fishCount() < r.fish * n) missing.push([ITEM.fish, r.fish * n, "fish"]);       // (2026-10-14: "any raw fish")
         return missing;
     }
     // "any raw meat" (r.meat pieces): the soups, the stew and the smokehouse take the meat of whatever animal; the kinds there is
@@ -205,8 +206,16 @@
             if (n <= 0) break;
         }
     }
-    const missingName = pair => pair[2] === "meat" ? MEAT_LABEL : itemOf(pair[0]).name;
-    const missingHave = pair => pair[2] === "meat" ? meatCount() : countOf(pair[0]);
+    // (2026-10-14) "any raw fish" (r.fish pieces): the pond's fish, the sea's herring and cod (the harbour) - the kind there is most of first
+    function spendFish(n) {
+        for (const id of RAW_FISH().sort((a, b) => countOf(b) - countOf(a))) {
+            const take = Math.min(n, countOf(id));
+            if (take > 0) { $gameParty.loseItem(itemOf(id), take, false); n -= take; }
+            if (n <= 0) break;
+        }
+    }
+    const missingName = pair => pair[2] === "meat" ? MEAT_LABEL : pair[2] === "fish" ? FISH_LABEL : itemOf(pair[0]).name;
+    const missingHave = pair => pair[2] === "meat" ? meatCount() : pair[2] === "fish" ? fishCount() : countOf(pair[0]);
     // recipes that need water (the cauldron's soups): null when fine, else the reason for a popup/help line
     function waterProblem(r, n) {
         if (!r.water) return null;
@@ -219,6 +228,7 @@
         n = n || 1;
         const rows = costRows(r.inputs.map(([id, k]) => [id, k * n]));
         if (r.meat) rows.push([itemOf(ITEM.rawMeat).iconIndex, r.meat * n, meatCount(), MEAT_LABEL]);
+        if (r.fish) rows.push([itemOf(ITEM.fish).iconIndex, r.fish * n, fishCount(), FISH_LABEL]);
         if (r.water) rows.push([itemOf(ITEM.bucket).iconIndex, r.water * n, bagWater(), "woda"]);
         return rows;
     }
@@ -236,6 +246,7 @@
         let n = QUEUE_MAX;
         for (const [id, need] of r.inputs) n = Math.min(n, Math.floor(countOf(id) / need));
         if (r.meat) n = Math.min(n, Math.floor(meatCount() / r.meat));
+        if (r.fish) n = Math.min(n, Math.floor(fishCount() / r.fish));
         if (r.water) n = Math.min(n, ownsBucket() ? Math.floor(bagWater() / r.water) : 0);
         return Math.max(0, n);
     }
@@ -276,6 +287,7 @@
         if (!spendStamina(r.stamina || 0)) return false;
         for (const [id, k] of r.inputs) $gameParty.loseItem(itemOf(id), k * n, false);
         if (r.meat) spendMeat(r.meat * n);
+        if (r.fish) spendFish(r.fish * n);
         if (r.water) setBagWater(bagWater() - r.water * n);
         for (let i = 0; i < n; i++) giveBackOne(r);
         const begin = () => {

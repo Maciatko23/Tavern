@@ -167,12 +167,17 @@ halą to przelew cysterny i z tygodnia na tydzień robi się cieńszy. Kapral Wi
 4. **Suche koryto** (stary młyn, taras rzemieślników). Koryto młynówki znika pod murem w stronę wzgórza. W środku jest
    kamienna krata z krukiem, taka sama jak w studni. Za kratą słychać wodę — płynie, ale nie tutaj. Tadek: „Tej kraty nie kuł
    kowal, tylko zakon”. *(W grze, 2026-10-05: starego młyna nie ma na mapie miasta - kratę z krukiem ogląda się na dnie studni na
-   rynku (Map118, zejście po 2× Lina); Tadek dodaje, że taki sam kruk jest na włazie pod pompą w oranżerii dworu.)*
+   rynku (Map118, zejście po 2× Lina); Tadek dodaje, że taki sam kruk jest na włazie przy oranżerii dworu.)*
 5. **Oranżeria nocą** (ogród dworu). Zakradasz się mimo patrolu. Pompa stoi na kamiennym włazie z krukiem: dwór dobudowano na
    kanale zakonu. W szufladzie ogrodnika leży rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte”.
    Zabrany rysunek jest dowodem. *(W grze: nocą 21:00–4:30; strażnik dworu obchodzi zachodnią część ogrodu (straz_1..4) - kto da się
    zobaczyć, zostaje wyrzucony za bramę dworu (Opinia −3, następnej nocy od nowa); 1:30–3:00 Feliks stoi w tylnej furtce, a za
-   żywopłotem czeka Kuba z wozem - podglądany po cichu daje notatkę „Feliks przy furtce”.)*
+   żywopłotem czeka Kuba z wozem - podglądany po cichu daje notatkę „Feliks przy furtce”. **Od 2026-10-12** (autor przebudował ogród
+   dworu - pompy, stołu ogrodnika i tylnej furtki już nie ma): zamiast pompy jest **drewniany właz z krukiem na zasuwie** w trawie za
+   oranżerią, pod sosną (zdarzenie autora na 3,20); rysunek śluzy leży pod luźną deską **skrzyni drzewka pomarańczy** przy drzwiach
+   oranżerii (8,24); Kuba wchodzi nocą główną bramą (Wit go przepuszcza), a Feliks 1:30–3:00 napełnia mu beczki spod włazu - notatka
+   „Feliks przy włazie”. Miejsca zadania stoją na własnych współrzędnych w `TownQuests_Data.js` (SPOTS w1_*), czwarty punkt obchodu
+   strażnika (straz_4, 10,28) to domyślne pole w `TownLife_Data.js`.)*
 6. **Wielki wybór** (ratusz, drzwi dworu albo rynek w dzień targowy):
    - a) **Ujawnić to na targu** razem z sołtysem. Tłum idzie pod bramę wschodnią. Lord nic nie wiedział - jest wstrząśnięty
      i upokorzony przed całym miastem. Każe aresztować Feliksa i otworzyć śluzę „do połowy” (więcej susza nie da): w młynówce

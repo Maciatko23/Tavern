@@ -58,6 +58,8 @@
  * i równowagę; ciosy zbijają równowagę, a pusta = zwierzę się zatacza (odsłonięte).
  * Dzik i wilki atakują przez obronę gracza z Combat.js: przewrót (Spacja) unika
  * ciosu, blok (P w trybie walki) go osłabia, parowanie (P tuż przed trafieniem) ogłusza napastnika.
+ * Szarży dzika (od 2026-10-14, jak łapy niedźwiedzia) nie zatrzyma ani tarcza, ani parowanie - tylko
+ * przewrót w bok albo krok z jego linii (zapowiedź: biało-złoty błysk).
  * Dzik z bliska (5 pól) szarżuje w prostej linii; gdy chybi, przebiega jeszcze
  * ok. 3,5 pola, staje zziajany (ok. 1,7 s - czas na atak), potem ostrzega i wraca.
  * Gdy między wami stoi drzewo, krzak, kamień albo budynek, dzik nie stoi i nie

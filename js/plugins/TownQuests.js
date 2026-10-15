@@ -2174,7 +2174,8 @@
                 completeStep(q, { reward: { xp: 60 } });
             }
         },
-        // rozdz. 5: the orangery at night - the guard's round, Feliks at the back gate with Kuba's cart (1:30-3:00), the pump, the drawer
+        // rozdz. 5: the orangery at night - the guard's round, Feliks at the hatch behind the orangery with Kuba (1:30-3:00), the hatch, the
+        // orange tree's planter (2026-10-12: the user's rebuilt garden - the pump, the table and the back gate are gone)
         w1Orangery: {
             night: () => inHours(hour(), [21, 4.5]),
             gateNight: () => inHours(hour(), [1.5, 3]) && !goneNow("woziwoda") && !goneNow("feliks"),
@@ -2202,7 +2203,7 @@
                 if (!window.$gameMap || $gameMap.mapId() !== MANOR || pendingOut || $gameMap.isEventRunning()) return;
                 const self = FX.w1Orangery, p = $gamePlayer, L = q.lines || {};
                 if (r.t.tried === nightOf() || !(self.night() || self.gateNight())) return;
-                if (p.x > 21 || p.y < 17) return;   // (only the west garden, the orangery's terrace and the strip of forest behind the hedge)
+                if (p.x > 21 || p.y < 17) return;   // (only the west garden: the orangery, its terrace and the grass strip behind it with the hatch)
                 const sneak = !!T.call("Hunting", "sneaking"), sharp = S().flags.feliksWarned ? 1.5 : 0;
                 const g = residentEv("straznik");
                 if (g && self.night() && sees(g, p, sneak, sharp)) { self.caught(q, r, g, L.caughtGuard); return; }
@@ -4205,7 +4206,9 @@
         if ((Number(T.call("Combat", "attr", "per")) || 0) >= 10) { think(L.spotted); completeStep(q); }
         else { r.t.games = (r.t.games || 0) + 1; think(L.notSpotted); }
     }
-    // the manor's back gate (Map024 "Tylna furtka", self switch A): open while Feliks lets Kuba's cart in (W1 rozdz. 5)
+    // the manor's back gate (Map024 "Tylna furtka", self switch A): open while Feliks lets Kuba's cart in (W1 rozdz. 5). (2026-10-12: the
+    // user's rebuilt garden has no back gate - Kuba comes in by the main gate, Feliks fills his barrels at the hatch; kept for a gate
+    // put back by that name)
     function syncGate() {
         if (!window.$gameMap || $gameMap.mapId() !== MANOR || !window.$dataMap) return;
         const e = ($dataMap.events || []).find(x => x && /^Tylna furtka/.test(x.name || ""));

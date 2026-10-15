@@ -45,6 +45,8 @@
         heroField, unstall, escapeSpot } = P.path;
 
     const atkOf = a => Math.round((SPECIES[a.kind()].atk || 10) * (1 + 0.12 * ((a._level || 1) - 1)));
+    // the wind-ups' length by the difficulty of the fight (Combat_Feel.js windupK: Łatwy 1.3, Normalny 1, Trudny 0.85)
+    const tk = () => { const Cb = C(), f = Cb && Cb.feel; return f && f.windupK ? f.windupK() : 1; };
     // the boar's temper, in frames: the warning before a charge (it stands, snorts and shows "!"), the longest charge, the run
     // back after a hit, the stagger after taking a spear
     // commit: tiles from the hero at which the charge locks its line and goes straight on; overshoot: how far past him it runs when
@@ -413,7 +415,7 @@
         }
         if (this._mode === "recover") {   // it stands panting: the moment to hit it; halfway it turns to look for him
             if (this._modeT === Math.floor(BOAR.recover / 2)) this.turnTowardCharacter($gamePlayer);
-            if (this._modeT <= 0) { this.setMode("warn", BOAR.warn); this.turnTowardCharacter($gamePlayer); snort(this, 95); }
+            if (this._modeT <= 0) { this.setMode("warn", Math.round(BOAR.warn * tk())); this.turnTowardCharacter($gamePlayer); snort(this, 95); }
             return;
         }
         if (this._mode === "flee" || this._mode === "retreat") {
@@ -442,7 +444,7 @@
         if (this._mode === "approach") {   // trotting round what stands between them, to a place with a clear run at him
             this._aware = 1;
             if (dist > sp.sight * 1.6) { this.setMode("roam"); this._aware = 0.5; return; }
-            if (dist <= BOAR.lane[1] + 0.6 && this.clearRun()) { this.setMode("warn", BOAR.laneWarn); this.turnTowardCharacter($gamePlayer); snort(this, 90); return; }
+            if (dist <= BOAR.lane[1] + 0.6 && this.clearRun()) { this.setMode("warn", Math.round(BOAR.laneWarn * tk())); this.turnTowardCharacter($gamePlayer); snort(this, 90); return; }
             const spot = this.runSpot(BOAR.lane[0], BOAR.lane[1]), g = spot || { x: $gamePlayer.x, y: $gamePlayer.y };
             if (spot === undefined) return;   // (no search this frame: the next one)
             const r = path8(this, g.x, g.y, { animal: true, key: "lane", near: spot ? 0 : 1 });
@@ -481,7 +483,7 @@
         }
         // roaming
         if (this._aware >= 1 || (this._alarm > 0 && dist < sp.sight * 1.3)) {
-            this.setMode("warn", BOAR.warn);
+            this.setMode("warn", Math.round(BOAR.warn * tk()));
             this.turnTowardCharacter($gamePlayer);
             snort(this, 95);
             return;
@@ -550,7 +552,10 @@
         const sp = SPECIES[animal.kind()];
         const Cb = C();
         if (Cb && Cb.hitPlayer) {   // the hero's defence decides (a roll, a guard, a parry)
-            const res = Cb.hitPlayer({ damage: atkOf(animal), poise: 75, from: { x: animal.centerX(), y: animal.centerY() }, attacker: animal, name: "dzik", wound: 0.7, knock: 0.9 });
+            // (2026-10-14, the user's: as first designed - "przewrotem w bok": no shield and no parry holds the charge, like the bear's blows;
+            // a guard raised for nothing says so - Combat.hitPlayer "Tego nie zatrzymasz!")
+            const res = Cb.hitPlayer({ damage: atkOf(animal), poise: 75, from: { x: animal.centerX(), y: animal.centerY() }, attacker: animal, name: "dzik", wound: 0.7, knock: 0.9,
+                unblockable: true, unparryable: true });
             if (res === "dodged") { animal.startOvershoot(); return; }
             if (res === "parried") return;   // (it reels: onParried)
             animal.setMode("retreat", BOAR.retreat[0] + Math.floor(Math.random() * (BOAR.retreat[1] - BOAR.retreat[0])));
@@ -600,6 +605,39 @@
     // the modes of an attack under way: a boar's charge, a wolf going round to a clear leap, its bark, its leap; a bear drawing back its
     // paw, striking, rearing for the pin, leaping
     const ATTACKING = { charge: true, close: true, windup: true, lunge: true, swipeWind: true, swipe: true, pinWind: true };
+    // What Combat_Feel.js reads (2026-10-14, the fight's feel): isThreat - an aggressive animal in a fight with the hero (the automatic
+    // combat mode, the soft target, the arrows at the screen's edge); combatTell - an attack of it under way: { t: frames till it lands,
+    // heavy: no guard holds it (the bear) } - the warm flash just before it, the attack's start for the combat mode; null: none now.
+    Game_Animal.prototype.isThreat = function() {
+        const sp = SPECIES[this._kind];
+        if (this._dead || !sp.aggressive || this._fleeing || this._mode === "flee" || this._mode === "leave") return false;
+        if (sp.pack || sp.bear) return !!this._engaged && this._mode !== "roam";
+        return !!this._engaged || ["warn", "charge", "approach", "overshoot", "recover", "stagger", "retreat"].includes(this._mode);   // (the boar)
+    };
+    Game_Animal.prototype.combatTell = function() {
+        const sp = SPECIES[this._kind], m = this._mode;
+        if (this._dead || this._stun > 0 || !sp.aggressive) return null;
+        if (sp.pack) {   // the bark, then the leap: the bite WOLF.biteFrom frames into it
+            if (m === "windup") return { t: Math.max(0, this._modeT) + WOLF.biteFrom, heavy: false };
+            if (m === "lunge" && this.isJumping() && !this._bitten) return { t: Math.max(0, WOLF.biteFrom - (this._lungeT || 0)), heavy: false };
+            return null;
+        }
+        if (sp.bear) {   // the paw and the pin: past any guard
+            if (m === "swipeWind") return { t: Math.max(0, this._modeT) + SWIPE_HIT, heavy: true };
+            if (m === "swipe" && !this._swiped) return { t: Math.max(0, SWIPE_HIT - (this._modeLen - this._modeT)), heavy: true };
+            if (m === "pinWind") return { t: Math.max(0, this._modeT) + BEAR_AI.pin.hitFrom, heavy: true };
+            if (m === "lunge" && this.isJumping() && !this._bitten) return { t: Math.max(0, BEAR_AI.pin.hitFrom - (this._lungeT || 0)), heavy: true };
+            return null;
+        }
+        // the boar: the snort and the "!" before the charge, then the charge - the time it needs to reach him at its speed (no guard holds
+        // it: a roll aside - white-gold)
+        if (m === "warn" && this._modeT > 0 && this.playerDistance() < sp.sight * 1.6) return { t: this._modeT + 40, heavy: true };
+        if (m === "charge") {
+            const d = Math.max(0, this.playerDistance() - BOAR.contact), v = Math.max(0.02, this.distancePerFrame());
+            return { t: Math.round(d / v), heavy: true };
+        }
+        return null;
+    };
     // its balance is gone: it reels (does nothing) for a while; an attack it was about to make is off
     function stagger(animal, knock) {
         const sp = SPECIES[animal.kind()];
@@ -735,7 +773,7 @@
         if (pack && !pack.attacker && pack.nextAttack <= 0 && pickAttacker(pack) === this) {
             pack.attacker = this;
             pack.last = this;
-            if (dist > WOLF.near && dist < WOLF.ring + 1.8 && this.clearRun()) { this.setMode("windup", WOLF.windup); this.turnTowardCharacter($gamePlayer); growl(this); }
+            if (dist > WOLF.near && dist < WOLF.ring + 1.8 && this.clearRun()) { this.setMode("windup", Math.round(WOLF.windup * tk())); this.turnTowardCharacter($gamePlayer); growl(this); }
             else this.setMode("close", WOLF.close);
             return;
         }
@@ -834,7 +872,7 @@
     // the pack's attacker without a clear leap at him (a tree, a bush in between): it goes round to a place near him with one
     // (runSpot), then barks and leaps; given up when it takes too long or gets nowhere (the pack waits a moment)
     Game_Animal.prototype.thinkClose = function(dist) {
-        const clear = dist < WOLF.lunge + 0.9 && this.clearRun(), windup = () => { this.setMode("windup", WOLF.windup); this.turnTowardCharacter($gamePlayer); growl(this); };
+        const clear = dist < WOLF.lunge + 0.9 && this.clearRun(), windup = () => { this.setMode("windup", Math.round(WOLF.windup * tk())); this.turnTowardCharacter($gamePlayer); growl(this); };
         if (clear && (dist > WOLF.near || WOLF.close - this._modeT > 60)) { windup(); return; }   // (right beside him: a moment to back off, then a snap from there)
         const spot = this.runSpot(WOLF.near + 0.4, WOLF.lunge, true);
         if (spot === null && clear) { windup(); return; }
@@ -1119,7 +1157,7 @@
         this._lock = [hx / d, hy / d];
         this._f8 = octOf(hx, hy);
         this.turnTowardCharacter($gamePlayer);
-        this.setMode("swipeWind", BEAR_AI.swipe.windup);
+        this.setMode("swipeWind", Math.round(BEAR_AI.swipe.windup * tk()));
         const pan = Math.max(-80, Math.min(80, Math.round(-hx * 12)));
         se("Growl", 85, 60, pan);
     };
@@ -1128,7 +1166,7 @@
         const [hx, hy] = toHero(this);
         this._f8 = octOf(hx, hy);
         this.turnTowardCharacter($gamePlayer);
-        this.setMode("pinWind", BEAR_AI.pin.windup);
+        this.setMode("pinWind", Math.round(BEAR_AI.pin.windup * tk()));
         roar(this, 75);
     };
     // the leap: of the tiles within BEAR_AI.pin.leap it can get to along a clear line, the one nearest to where he stands now (his own tile

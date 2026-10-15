@@ -42,10 +42,13 @@
  * pochyla się przy ruchu. Gdzie jest głownia na każdej klatce: TIPS (z
  * pomiaru dłoni, tools/torch/).
  *
- * PRZY PRACY (zamach narzędziem, kucanie, łowienie, siadanie, leżenie):
- * pochodnia jest wbita w ziemię obok niego i stamtąd świeci; podnosi ją,
- * gdy odejdzie albo po chwili bez pracy. W walce cudzą bronią i przy
- * przewrocie płomienia nie widać (pochodnia w drugiej ręce), światło zostaje.
+ * PRZY PRACY OBIEMA RĘKAMI (siekiera, kilof, łopata, grabie, motyka, młotek,
+ * wędka) oraz przy siadaniu i leżeniu pochodnia jest wbita w ziemię obok
+ * niego i stamtąd świeci; podnosi ją, gdy odejdzie albo po chwili bez pracy.
+ * Schylając się po coś (kucanie: podnoszenie, zbieranie, sianie, zbiór,
+ * nabieranie wody) trzyma ją dalej w ręce (arkusz img/system/Hero_TorchCrouch).
+ * W walce cudzą bronią i przy przewrocie płomienia nie widać (pochodnia
+ * w drugiej ręce), światło zostaje.
  *
  * BROŃ: w trybie walki (Tab) zapalona pochodnia jest na liście broni ([ ]),
  * między pałką a pięściami. Zamach: arkusz img/system/Hero_Torch (17 klatek).
@@ -82,9 +85,14 @@
     const FEAR = { wolf: 180, boar: 150, bear: 70, keep: 3.4, ringPlus: 0.9, gapSlow: 0.35, bearGap: 60 };
     // a torch stuck in the ground while he works: picked up when he moves `pick` tiles away or after `grace` frames without work
     const PLANT = { pick: 0.4, grace: 50 };
-    // the swing kinds that are a fight's (a blow, a shot, the roll, the fall): the torch is only out of sight (the other hand); every other
-    // swing - work, sitting, lying - sticks it in the ground. Filled once ChoppableTree is there (kind numbers by sheet / name).
-    const FIGHT_SHEETS = ["Swing_Sling", "Swing_Bow", "Swing_Spear", "Swing_Roll", "knockdown", "Swing_Club", "Swing_Punch", "torch"];
+    // The swings that stick it in the ground beside him (the user, 2026-10-08: "odkładanie pochodni na ziemię jest przy wydobywaniu,
+    // ścinaniu"): the work of both hands - the axe (trees, logs, bushes), the pick (rocks, ore), and by the same rule the shovel, the rake,
+    // the hoe, the hammer (building) and the fishing rod (cast with both hands) - and sitting / lying down (no one sits or lies down with a
+    // burning torch in his fist). Stooping for something (the crouch: picking up, gathering, sowing, harvesting, drawing water) he keeps it
+    // in his hand (Hero_TorchCrouch); the swings of a fight only hide it (the other hand). By sheet; the kinds are filled in once
+    // ChoppableTree is there ("knockdown" plays the lying-down sheet too, but it is a fall: not this).
+    const PLANT_SHEETS = ["Swing_Axe", "Swing_AxeSide", "Swing_Pick", "Swing_Shovel", "Swing_Rake", "Swing_Hoe", "Swing_Hammer", "Swing_Rod",
+        "Swing_Sit", "Swing_Roast", "Swing_LieDown"];
 
     // ------------------------------------------------------------------
     // Where the torch's head is on every cell of the walking sheets (64x64; x, y from the cell's top left) - measured by
@@ -100,6 +108,9 @@
     // the torch blow's sheet (Hero_Torch, 96x96 cells, the feet at (48, 80); rows down, left, right, up): where its painted fire is on each
     // cell (null: behind the body) - the sparks fly from there (tools/torch/build_torch_swing.py)
     const SWING_TIPS = [[[28,30],[30,29],[35,28],null,null,[36,28],[31,29],[72,47],[73,53],[72,57],[68,60],[46,70],[26,65],[16,47],[19,40],[23,34],[28,30]],[[58,20],[58,23],[56,20],null,[61,49],[58,42],[30,49],[24,45],[24,45],[27,60],[38,66],[55,65],[64,58],[70,44],[58,23],[58,23],[58,20]],[[37,20],[37,23],[39,20],null,[34,49],[37,42],[65,49],[71,45],[71,45],[68,60],[57,66],[40,65],[31,58],[25,44],[37,23],[37,23],[37,20]],[[67,31],[68,32],[62,31],null,[35,29],[29,33],[25,39],[24,56],[29,66],null,[61,68],[74,64],[71,65],[71,65],[73,63],[73,49],[69,37]]];
+    // stooping with it (Hero_TorchCrouch, the crouch's 96x96 cells; rows down, left, right, up; 33 cells - down 0-16, back up 17-32):
+    // where the torch's head is on each cell (tools/torch/build_torch_crouch.py) - always in his fist in front of him
+    const CROUCH_TIPS = [[[28,46],[26,46],[26,46],[24,48],[26,52],[28,52],[28,56],[28,62],[30,64],[30,64],[30,64],[29,66],[27,62],[27,62],[27,62],[29,64],[30,64],[29,64],[27,62],[27,62],[27,62],[29,66],[30,64],[30,64],[30,64],[28,62],[28,56],[28,52],[26,52],[24,48],[26,46],[26,46],[28,46]],[[36,49],[35,50],[34,50],[31,52],[30,58],[29,60],[28,62],[27,66],[30,66],[31,66],[30,66],[29,66],[27,64],[29,66],[26,64],[26,62],[26,62],[26,62],[26,64],[29,66],[27,64],[29,66],[30,66],[31,66],[30,66],[27,66],[28,62],[29,60],[30,58],[31,52],[34,50],[35,50],[36,49]],[[60,49],[61,50],[62,50],[65,52],[66,58],[67,60],[68,62],[69,66],[66,66],[65,66],[66,66],[67,66],[69,64],[67,66],[70,64],[70,62],[70,62],[70,62],[70,64],[67,66],[69,64],[67,66],[66,66],[65,66],[66,66],[69,66],[68,62],[67,60],[66,58],[65,52],[62,50],[61,50],[60,49]],[[70,46],[70,48],[70,48],[70,50],[70,52],[72,56],[72,60],[72,62],[72,62],[72,62],[72,60],[72,60],[72,60],[72,62],[72,62],[70,62],[72,60],[70,62],[72,62],[72,62],[72,60],[72,60],[72,60],[72,62],[72,62],[72,62],[72,60],[72,56],[70,52],[70,50],[70,48],[70,48],[70,46]]];
     const CELL = 64, SWING_CELL = 96, SWING_FEET = { x: 48, y: 80 };
     // the old hero (Reid, F9): no torch sheets - a torch drawn beside him (feet-relative px, per 4-way facing; up: behind him)
     const OLD_HAND = { 2: [-12, -22, 0], 4: [-9, -24, 0], 6: [9, -24, 0], 8: [11, -24, 1] };
@@ -229,13 +240,18 @@
     // Stuck in the ground while he works
     // ------------------------------------------------------------------
     let plant = null;   // { gx, gy (tiles: the ground under it), map, px, py (where he stood), idle }
-    let fightKinds = null;
-    function fightKind(kind) {
-        if (!fightKinds) {
-            const CT = T.api("ChoppableTree");
-            fightKinds = new Set(CT && CT.swingKindOf ? FIGHT_SHEETS.map(k => CT.swingKindOf(k)).filter(k => k >= 0) : []);
+    let plantKinds = null;
+    function plantKind(kind) {
+        if (!plantKinds) {
+            const CP = T.api("ChoppableTree_parts"), list = CP && CP.core && CP.core.SWING_KINDS ? CP.core.SWING_KINDS : [];
+            plantKinds = new Set();
+            list.forEach((k, i) => { if (k && PLANT_SHEETS.includes(k.sheet) && k.name !== "knockdown") plantKinds.add(i); });
         }
-        return fightKinds.has(kind);
+        return plantKinds.has(kind);
+    }
+    function crouchKind() {
+        const CT = T.api("ChoppableTree");
+        return CT && CT.swingKindOf ? CT.swingKindOf("Swing_Crouch") : -1;
     }
     function torchKind() {
         const CT = T.api("ChoppableTree");
@@ -251,7 +267,7 @@
     function updatePlant() {
         if (planting) { plant = null; return; }   // (crouching to stick it in the ground / to take one up: by hand, not this)
         const p = $gamePlayer, kind = swingNow();
-        const working = kind >= 0 && !fightKind(kind) && !inFight();
+        const working = kind >= 0 && plantKind(kind) && !inFight();   // (the work of both hands, sitting, lying)
         if (plant && (kind === torchKind() || plant.map !== $gameMap.mapId())) plant = null;   // (taken up to strike with it / another map)
         if (working && !plant) {
             const [ox, oy] = BESIDE[p.direction()] || BESIDE[2];
@@ -259,7 +275,7 @@
         }
         if (!plant) return;
         if (working) { plant.idle = 0; plant.px = p._realX; plant.py = p._realY; return; }
-        if (kind >= 0) return;   // (a roll, a blow of a fight while it stands there: it waits)
+        if (kind >= 0) return;   // (a crouch, a roll, a blow of a fight while it stands there: it waits)
         plant.idle++;
         if (Math.hypot(p._realX - plant.px, p._realY - plant.py) > PLANT.pick || plant.idle > PLANT.grace) plant = null;
     }
@@ -737,6 +753,13 @@
             this._flame.visible = false;
             this._glow.visible = tx !== null;
             this._swingSparks = true;
+        } else if (kind >= 0 && kind === crouchKind() && hero._swingBody && hero._swingBody.visible && hero._swingBody.bitmap &&
+            /Hero_TorchCrouch/.test(hero._swingBody.bitmap._url || "")) {   // stooping with it: in his fist, where the crouch sheet holds it
+            const body = hero._swingBody, f = body._frame, col = Math.round(f.x / SWING_CELL), row = Math.round(f.y / SWING_CELL), tip = (CROUCH_TIPS[row] || [])[col];
+            if (tip) { tx = tip[0] - SWING_FEET.x + body.x; ty = tip[1] - SWING_FEET.y + body.y; }
+            this._flame.visible = !!tip;
+            this._glow.visible = !!tip;
+            this._swingSparks = false;
         } else if (kind >= 0) {   // another swing of a fight (a blow of another weapon, the roll, the fall): out of sight, only its light
             this._flame.visible = false;
             this._glow.visible = false;
@@ -888,7 +911,7 @@
     // held(): in his hand right now (HeroLook draws the torch sheets); inHand(): his (lit - also while stuck in the ground) - a weapon then
     const held = () => isLit() && !(plant && plant.map === $gameMap.mapId());
     window.Torch = T.register("Torch", {
-        VERSION: "1.0.0", ITEM, TORCH, FIRE, FEAR, PLANT, TIPS, SWING_TIPS,
+        VERSION: "1.0.0", ITEM, TORCH, FIRE, FEAR, PLANT, TIPS, SWING_TIPS, CROUCH_TIPS, PLANT_SHEETS, plantKind,
         light, douse, isLit, inHand: isLit, held, ratio, lightSpot, struck, weatherHere, groundLights, canPlantAt, plantTorch, pickUp,
         stuck: () => plantedList().map(p => Object.assign({}, p)), stuckAt: (map, x, y) => plantedAt(map, x, y), frontTile,
         planted: () => (plant ? Object.assign({}, plant) : null), burning: () => burning.map(b => ({ a: b.a, left: b.left })),

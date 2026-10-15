@@ -37,6 +37,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
         fam.data && fam.art && fam.scene && PARTS.every(n => t.plugins[n] !== "failed") && (!REGISTERED || fam.order.join() === PARTS.join()), Object.assign(fam, { plugins: t.plugins }));
     // (a story game in grandpa's cottage, whatever data/System.json says)
     t.check("a new game starts", await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true }));
+    await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_grafit_test.js)
     await t.frames(30);
 
     // ---------------------------------------------------------------- the data: templates, givers, items

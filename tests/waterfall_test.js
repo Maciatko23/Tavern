@@ -6,10 +6,21 @@ const path = require("path"), os = require("os"), fs = require("fs");
 const kit = require("./lib/kit.js");
 const FRAMES = path.join(os.tmpdir(), "waterfall_frames");
 
+// (2026-10-12: the author took the waterfall off the town map - its events and its tiles; his redesign stays. Without a waterfall
+// on the map the test checks only what is left - the water sheet and drinking at the pond; with one back, everything as before)
+
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     await t.newGame({ map: 8, x: 39, y: 11, dir: 6, hour: 12, quiet: true, minimap: false });
     const set = await t.json(`({ a1: $gameMap.tileset().tilesetNames[0], fx: WaterFx.effects().map(f => f.constructor.name) })`);
     t.check("the town's tileset uses the recoloured water sheet", /A1_green_town$/.test(set.a1), set);
+    const drink0 = await t.json(`({ water: !!Tawerna.call("Farming", "isWaterTile", 40, 11), events: $gameMap.eventsXy(40, 11).length })`);
+    if (!set.fx.length) {   // (no waterfall on the map now)
+        t.check("no waterfall on the town map now (the author's redesign): no water effects left behind", set.fx.length === 0, set);
+        // (the author's redesign took the pond too - the town's water is now the market well alone, two draws a day)
+        const well = await t.json(`$gameMap.events().filter(e => e.event().name === "Studnia miejska").length`);
+        t.check("water in town: the pond if it is there, else the market well", (drink0.water && drink0.events === 0) || well > 0, { drink0, well });
+        return;
+    }
     t.check("four water effects on the map: the falling water, the splash and two currents", JSON.stringify(set.fx.slice().sort()) === '["Fall","Flow","Flow","Splash"]', set);
 
     await t.frames(30);

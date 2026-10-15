@@ -38,6 +38,7 @@
     const { modes, attr, perk, hasSkill, tired, strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, comboWindow,
         combatMode, setCombatMode, mapFreePlay, se, popup, foes } = P.core;
     const H = () => T.api("Hunting");
+    const FE = () => P.feel || null;   // (Combat_Feel.js, put in after this part: the soft target, the threats, the difficulty)
 
     // ==================================================================
     // Breath: the short combat bar (not saved: it fills in seconds)
@@ -150,18 +151,20 @@
     const HEAVY = { min: 18, max: 60, mult: 2.2, full: 2.7, poise: 2.5, cost: 0.8 };
     const SHIELDS = { 155: { name: "Drewniana tarcza", reduce: 0.75, breath: 0.7 } };
     const NO_SHIELD = { reduce: 0.45, breath: 1 };
-    // Armour (stage 2, 2026-10-05): worn as the shield is - it is enough to have it in the bag. reduce: the part of every blow it takes
-    // off (after the guard; Niezłomny comes on top); each blow that still hurts wears it (Durability.js "block": its blows)
+    // Armour (stage 2, 2026-10-05): reduce: the part of every blow it takes off (after the guard; Niezłomny comes on top); each blow that
+    // still hurts wears it (Durability.js "block": its blows). The shield and the armour work only worn (Equipment.js, 2026-10-08: the
+    // shield in the left hand - not while the burning torch is there -, the jacket on the torso); without Equipment.js: owned is worn.
     const ARMORS = { 171: { name: "Skórzana kurtka", reduce: 0.2 } };
     const has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
+    const wornNow = id => { const E = T.api("Equipment"); return E && E.worn ? E.worn(id) : has(id); };
     const meleeOwned = () => MELEE_ORDER.filter(id => (id === TORCH_ITEM ? torchLit() : has(id)));   // (the torch: while it burns)
     const hasRanged = () => (has(126) && has(127)) || (has(125) && has(64));
     function shield() {
-        for (const id of Object.keys(SHIELDS)) if (has(Number(id))) return Object.assign({ id: Number(id) }, SHIELDS[id]);
+        for (const id of Object.keys(SHIELDS)) if (wornNow(Number(id))) return Object.assign({ id: Number(id) }, SHIELDS[id]);
         return null;
     }
     function armor() {
-        for (const id of Object.keys(ARMORS)) if (has(Number(id))) return Object.assign({ id: Number(id) }, ARMORS[id]);
+        for (const id of Object.keys(ARMORS)) if (wornNow(Number(id))) return Object.assign({ id: Number(id) }, ARMORS[id]);
         return null;
     }
 
@@ -201,6 +204,12 @@
         return list[0] || null;
     }
     const handMelee = () => { const h = hand(); return h && h[0] === "m" ? Number(h.slice(1)) : 0; };
+    // the weapon put in hand by name (the card's right hand, Equipment.js): only one of handChoices()
+    function setHand(h) {
+        if (!handChoices().includes(h)) return false;
+        modes().hand = h;
+        return true;
+    }
     function switchHand(dir) {   // dir: 1 the next weapon (]), -1 the previous one ([)
         const list = handChoices();
         if (list.length < 2) { popup(FIST_ICON, "Nie masz broni - walczysz pięściami", "#ff9f8f"); return; }
@@ -215,7 +224,8 @@
     // The hero's actions
     // ==================================================================
     const act = { mode: "idle", combo: 0, queued: false, charge: 0, rollT: 0, rollLen: 0, rollDir: [0, 1], rollDist: 0, iframes: 0, blockT: 0,
-        stun: 0, stunKind: "", flinchT: 0, flinchLen: 1, hitFrom: [0, 1], comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, secondWind: false, combatT: 0, hurtT: 0, weapon: 0 };
+        stun: 0, stunKind: "", flinchT: 0, flinchLen: 1, hitFrom: [0, 1], comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, secondWind: false, combatT: 0, hurtT: 0, weapon: 0,
+        counterT: 0, counterMult: 1, blockTap: 0, pressFrame: -1, rollLook: null, rollBack: false };
     const ROLL = { frames: 22, dist: 2.4, cd: 10, chain: 26 };
     const px = () => $gamePlayer._realX + 0.5, py = () => $gamePlayer._realY + 0.5;
     // where he faces - on the slant too (Hunting.js reads HeroLook's 8-way facing): the blow, the block and the roll go that way
@@ -251,13 +261,25 @@
         const def = CT && CT.swingKind ? CT.swingKind(s._swingKind) : null;
         return !def || s._swingT >= def.impact;
     }
-    // the nearest hostile thing in front (tiles), to turn to when the blow starts: up to 1.5 tiles past the reach, within 100 degrees
+    // the soft target (Combat_Feel.js, 2026-10-14): { ref, x, y } of the foe under the copper ring, or null
+    const softTarget = () => { const f = FE(); return f && f.target ? f.target() : null; };
+    // what the guard turns to: the foe whose blow comes next (its warning - Combat_Feel.js), else the soft target
+    const guardTarget = () => { const f = FE(), a = f && f.nextBlow ? f.nextBlow(4) : null; return a || softTarget(); };
+    // the nearest hostile thing in front (tiles), to turn to when the blow starts: up to 1.5 tiles past the reach, within 100 degrees.
+    // With a soft target within its reach + TARGET_REACH he turns to it whichever way he faced (on the slant too) - unless the arrows
+    // he holds point away from it
+    const TARGET_REACH = 1.5;
     function autoFace(w) {
         const Hn = H();
         if (!Hn) return;
         const d8 = arrowsDir8(), v = d8 ? DIR8_VEC[d8] : facingVec();
         let best = null, bestScore = Infinity;
         act.aim = null;
+        const tg = softTarget();
+        if (tg) {
+            const dx = tg.x - px(), dy = tg.y - py(), d = Math.hypot(dx, dy), cos = d > 0.05 ? (dx * v[0] + dy * v[1]) / (d * Math.hypot(v[0], v[1])) : 1;
+            if (d <= w.reach + TARGET_REACH && (!d8 || cos > -0.2)) { faceToward(tg.x, tg.y); act.aim = { ref: tg.ref, x: tg.x, y: tg.y }; return; }
+        }
         for (const t of Hn.allTargets()) {
             const dx = t.x - px(), dy = t.y - py(), d = Math.hypot(dx, dy);
             if (d < 0.05 || d > w.reach + 1.5) continue;
@@ -279,18 +301,27 @@
         return d > 0.05 && (dx * fx + dy * fy) / d > 0.3 ? [dx / d, dy / d] : [fx, fy];
     }
 
-    // the attack key pressed
+    // the attack key pressed: true when it did something (a blow started, the next one of the series queued, the bow raised) - false
+    // when he is busy (the swing before its blow, a roll, a stagger...): the press then waits in the buffer (update)
     function pressAttack() {
+        const done = pressAttackNow();
+        if (done) act.pressFrame = Graphics.frameCount;   // (this frame's press is spent: the buffer does not take it again)
+        return done;
+    }
+    function pressAttackNow() {
         const h = hand(), Hn = H();
         if (h === "ranged" || (!h && Hn)) {
-            if (Hn) return Hn.startAim();   // (its own popup when there is nothing to shoot with)
-            return false;
+            if (!Hn || act.mode !== "idle" || act.stun > 0) return false;
+            const tg = softTarget();
+            if (tg && !arrowsDir8()) faceToward(tg.x, tg.y);   // (the circle goes on the soft target)
+            return Hn.startAim();   // (its own popup when there is nothing to shoot with)
         }
         const id = handMelee(), w = MELEE[id];
         if (!w) return false;
         if (act.mode === "attack") {   // the next blow of the combo, once this one has landed
-            if (swingPastImpact() && act.combo + 1 < maxCombo(w)) act.queued = true;
-            return true;
+            if (act.queued) return true;
+            if (swingPastImpact() && act.combo + 1 < maxCombo(w)) { act.queued = true; return true; }
+            return false;
         }
         if (act.mode !== "idle" || act.stun > 0 || act.comboCd > 0) return false;
         if (act.comboGrace > 0 && act.weapon === id && act.combo + 1 < maxCombo(w)) { act.comboGrace = 0; return startAttack(id, act.combo + 1); }   // (just after a blow: the series goes on)
@@ -329,6 +360,38 @@
         act.comboCd = last ? 16 : 0;
         act.comboGrace = last ? 0 : comboWindow();
     }
+    // The counter after a parry (2026-10-14, for everyone): the next blow within COUNTER.frames takes COUNTER.mult more ("Kontratak!").
+    // The skill Kontra (riposte) does more: a longer moment (riposteT 120) and a critical blow (x1.6).
+    const COUNTER = { frames: 60, mult: 1.3, riposte: 120 };
+    // The sound of a blow that landed (2026-10-14): what the weapon is (the fists, a club, the torch, an edge, a point, a pick) and what it
+    // struck - an animal's flesh, a man (the mercenary's mail), an empty armour's iron, a stone sentinel, a wraith's nothing, a shield or a
+    // raised club that threw the weapon back (Humans.js: Combat.recoil), the dummy's straw. The game's own sounds (audio/se).
+    const WEAPON_CLASS = { 0: "fist", 156: "blunt", 59: "fire", 60: "edge", 115: "edge", 154: "point", 63: "pick", 116: "pick" };
+    const SURFACE_KINDS = { armor: ["zbroja", "guardian", "boss_20", "boss_70"], stone: ["kamiennik", "boss_60"], spirit: ["upior", "cien", "boss_80", "boss_90"] };
+    const HIT_SE = {
+        fist:  { flesh: ["Blow1", 105], man: ["Blow1", 92], mail: ["Blow3", 125], armor: ["Blow3", 135], stone: ["Blow3", 120], spirit: ["Wind1", 150], shield: ["Blow3", 110], straw: ["Blow1", 130] },
+        blunt: { flesh: ["Blow2", 100], man: ["Blow4", 100], mail: ["Blow3", 100], armor: ["Blow3", 90], stone: ["Blow3", 80], spirit: ["Wind1", 130], shield: ["Blow3", 95], straw: ["Blow1", 115] },
+        fire:  { flesh: ["Blow1", 100], man: ["Blow4", 105], mail: ["Blow3", 105], armor: ["Blow3", 95], stone: ["Blow3", 85], spirit: ["Fire2", 120], shield: ["Blow3", 100], straw: ["Blow1", 115] },
+        edge:  { flesh: ["Slash2", 100], man: ["Slash3", 100], mail: ["Sword4", 110], armor: ["Sword4", 90], stone: ["Blow6", 110], spirit: ["Slash10", 130], shield: ["Blow3", 85], straw: ["Slash1", 115] },
+        point: { flesh: ["Slash4", 100], man: ["Slash4", 110], mail: ["Sword2", 115], armor: ["Sword2", 100], stone: ["Blow6", 130], spirit: ["Wind1", 140], shield: ["Blow3", 105], straw: ["Slash4", 125] },
+        pick:  { flesh: ["Blow6", 110], man: ["Blow6", 100], mail: ["Sword4", 95], armor: ["Sword4", 80], stone: ["Blow6", 80], spirit: ["Wind1", 120], shield: ["Blow3", 80], straw: ["Blow2", 120] }
+    };
+    function surfaceOf(ref) {
+        if (!ref) return "flesh";
+        if (ref._dummy) return "straw";
+        const kind = typeof ref.kind === "function" ? ref.kind() : "", base = ref._base || kind, cls = ref.constructor ? ref.constructor.name : "";
+        for (const s of Object.keys(SURFACE_KINDS)) if (SURFACE_KINDS[s].includes(kind) || SURFACE_KINDS[s].includes(base)) return s;
+        if (cls === "Game_Human") return kind === "mercenary" ? "mail" : "man";
+        return "flesh";
+    }
+    function hitSound(id, ref, heavy, i, recoiled) {
+        const own = surfaceOf(ref), cls = WEAPON_CLASS[id] || "blunt", w = MELEE[id];
+        const surf = recoiled && own !== "armor" && own !== "stone" ? "shield" : own;   // (thrown back by a shield or a club; by iron or stone: their clank)
+        const [name, pitch] = (HIT_SE[cls] || HIT_SE.blunt)[surf] || [w.se, 100];
+        se(name, 85, Math.round((heavy ? pitch - 18 : pitch + i * 5) * (0.97 + Math.random() * 0.06)));
+        if (cls === "fire" && surf !== "shield") se("Fire1", 55, 115);   // (the flame's hiss with it)
+        act.lastHitSe = name + ":" + surf;   // (the tests)
+    }
     // the blow lands: everything in reach and in front takes it (the nearest only, unless the weapon sweeps and the hero has the skill)
     function strike(id, i) {
         const w = MELEE[id], Hn = H();
@@ -355,7 +418,8 @@
             act.charge = 0;
             return;
         }
-        let stop = heavy ? 7 : 4;
+        let stop = heavy ? 7 : 4, counter = false;
+        const recoil0 = act.recoilN || 0;
         for (const { t } of targets) {
             const a = t.ref && t.ref.isAnimal ? t.ref : null;
             let m = mult * strMult() * (1 + perk("melee.dmg")), tag = heavy ? "heavy" : "", pz = poise;
@@ -363,14 +427,16 @@
             if (hidden) { m *= sneakMult(false); tag = "sneak"; pz = Math.max(pz * SNEAK.poise, (a._poise || 0) + 1); }   // (it breaks its balance whole: it reels)
             if (a && a._stun > 0 && hasSkill("execute")) { m *= 2.5; tag = "execute"; }
             const crit = act.riposteT > 0 || Math.random() < critChance();
-            if (crit) { m *= 1.6; act.riposteT = 0; tag = tag || "crit"; }
+            if (crit) { m *= 1.6; act.riposteT = 0; act.counterT = 0; tag = tag || "crit"; }
+            else if (act.counterT > 0) { m *= act.counterMult || COUNTER.mult; act.counterT = 0; counter = true; }   // (the counter after a parry: see COUNTER)
             const dmg = Math.max(1, Math.round(w.dmg * m)) + (w.fire && !a ? w.fireBonus || 0 : 0);   // (fire: a man or a creature burns at once; an animal - Torch.struck)
             t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id, fire: !!w.fire });
             if (!a) numberAt(t.x, t.y - 0.6, String(dmg), crit ? "#ffe066" : "#ffffff");
             if (heavy || crit) stop = 8;
             if (hidden) stop = 10;   // (the word "Atak z ukrycia!" and its thud: enemyHurtFx)
         }
-        se(w.se, 85, heavy ? 80 : 100 + i * 6);
+        if (counter) numberAt(px(), py() - 1.45, "Kontratak!", "#ffc96b", 0.85);
+        hitSound(id, targets[0].t.ref, heavy, i, (act.recoilN || 0) > recoil0);   // (what it hit, with what: the flesh, a man, the iron, the stone, a shield)
         if (w.fire) T.call("Torch", "struck", targets.map(x => x.t), { heavy, last });   // (the fire: burning, fear, the torch burns down)
         if (heavy) $gameScreen.startShake(4, 8, 12);
         hitstop(stop);
@@ -388,15 +454,38 @@
         if (act.rollCd > 0 && !(hasSkill("acrobat") && act.rolls === 1)) return false;
         return startRoll();
     }
+    // Space without the arrows (2026-10-14): a spring back - away from the soft target, else from the nearest foe near him, else simply
+    // backwards; he looks at it (or the way he looked) again once he is up. With the arrows: that way, as always.
+    const AWAY = { near: 5 };
+    function rollWay() {
+        const d8 = arrowsDir8();
+        if (d8) return { v: DIR8_VEC[d8], back: false };
+        const f = FE(), from = softTarget() || (f && f.nearestThreat ? f.nearestThreat(AWAY.near) : null), face = facingVec();
+        if (from) {
+            const dx = px() - from.x, dy = py() - from.y;
+            if (Math.hypot(dx, dy) > 0.05) return { v: [dx, dy], back: true, look: [-dx, -dy] };
+        }
+        return { v: [-face[0], -face[1]], back: true, look: face };
+    }
+    // he turns back to the soft target (or the way he looked before springing back) once the roll is over - the next blow and the guard
+    // are frontal again
+    function faceAfterRoll() {
+        if (arrowsDir8()) return;
+        const tg = softTarget();
+        if (tg) { faceToward(tg.x, tg.y); return; }
+        if (act.rollLook) faceToward(px() + act.rollLook[0], py() + act.rollLook[1]);
+    }
     function startRoll() {
         const second = hasSkill("acrobat") && act.rolls === 1 && act.rollCd > 0;
         const cost = rollCost() * (second ? 0.6 : 1);
         if (!spendBreath(cost)) return false;
         endSwing();
-        const d8 = arrowsDir8(), v = d8 ? DIR8_VEC[d8] : facingVec();
+        const way = rollWay(), v = way.v;
         const len = Math.hypot(v[0], v[1]);
         act.rollDir = [v[0] / len, v[1] / len];
-        if (d8) $gamePlayer.setDirection(Math.abs(v[0]) >= Math.abs(v[1]) ? (v[0] < 0 ? 4 : 6) : (v[1] < 0 ? 8 : 2));
+        act.rollLook = way.back ? way.look : null;
+        act.rollBack = way.back;
+        $gamePlayer.setDirection(Math.abs(v[0]) >= Math.abs(v[1]) ? (v[0] < 0 ? 4 : 6) : (v[1] < 0 ? 8 : 2));   // (the roll's picture goes the way he rolls)
         const slow = tired() ? 2 : 1;   // tired out (below TIRED_AT): the roll takes twice as long, as far (the user's, 2026-09-25)
         act.mode = "roll";
         act.rollT = 0;
@@ -466,7 +555,8 @@
             endSwing();
             act.mode = "idle";
             act.rollCd = ROLL.chain;
-            if (act.queuedRoll) { act.queuedRoll = false; startRoll(); }
+            if (act.queuedRoll) { act.queuedRoll = false; if (startRoll()) return; }
+            faceAfterRoll();
         }
     }
     // the hero pushed by (dx, dy) tiles through FreeMovement's collision (a roll, a knock back); tile mode: a jump
@@ -497,18 +587,33 @@
         keyWas[name] = now;
         return now && !was;
     }
-    // the block key held: guarding (slower walk); a hit taken within parryWindow() frames of raising the guard is parried
+    // The presses kept a moment (the input buffer, 2026-10-14): a blow, a roll or the guard pressed while he is still busy - the swing
+    // before its blow, the roll, a stagger, the pause after a series, the world's hitstop or slowed frame - waits BUF.life frames and is
+    // done the moment he is free (a roll the moment a blow has landed: it cuts the swing's end short). Pressed earlier than that, it is
+    // gone: no queue of presses, no spamming through a swing.
+    const BUF = { life: 10 };
+    const buf = { shoot: 0, dodge: 0, block: 0 };
+    // the block key held: guarding (slower walk); a hit taken within parryWindow() frames of raising the guard is parried. A press kept in
+    // the buffer raises it fresh (a parry) even when the key was let go meanwhile - for the parry window at least (blockTap)
     function updateBlock() {
-        const held = Input.isPressed("block"), fresh = pressedNow("block");
+        const held = Input.isPressed("block");
         if (act.mode === "block") {
-            if (!held || act.stun > 0) { act.mode = "idle"; return; }
+            if (act.blockTap > 0) act.blockTap--;
+            if ((!held && !(act.blockTap > 0)) || act.stun > 0) { act.mode = "idle"; act.blockTap = 0; return; }
             act.blockT++;
             act.combatT = Math.max(act.combatT, 120);
+            const tg = guardTarget();   // (the guard faces the foe whose blow comes - else the soft target - while no arrow is held)
+            if (tg && !arrowsDir8() && Math.hypot(tg.x - px(), tg.y - py()) < 4) faceToward(tg.x, tg.y);
             return;
         }
-        if (held && act.mode === "idle" && act.stun === 0 && canAct()) {
+        if ((held || buf.block > 0) && act.mode === "idle" && act.stun === 0 && canAct()) {
+            const fresh = buf.block > 0;
             act.mode = "block";
             act.blockT = fresh ? 0 : 99;   // (a guard kept up from before is no parry)
+            act.blockTap = fresh && !held ? parryWindow() + 2 : 0;
+            buf.block = 0;
+            const tg = guardTarget();
+            if (tg && !arrowsDir8() && Math.hypot(tg.x - px(), tg.y - py()) < 4) faceToward(tg.x, tg.y);
         }
     }
 
@@ -545,12 +650,20 @@
         if (act.mode === "block" && frontal && opts.unblockable && opts.unparryable) numberAt(px(), py() - 1.55, "Tego nie zatrzymasz!", "#ff9f8f", 0.8);
         if (act.mode === "block" && frontal) {
             if (!opts.unparryable && act.blockT <= parryWindow()) {
+                // the perfect parry (2026-10-14, for everyone): the ring of steel, a shower of sparks, the world slowed a quarter of a second,
+                // the foe off balance (onParried: it reels) and a moment for a counter (COUNTER; Kontra: longer and critical)
                 se("Parry", 90, 100);
-                sparksAt((px() + from.x) / 2, (py() + from.y) / 2 - 0.4, "#fff2b0", 14);
-                numberAt(px(), py() - 1.2, "Parowanie!", "#fff2b0", 0.9);
+                se("Sword4", 65, 130);
+                const mx = (px() + from.x) / 2, my = (py() + from.y) / 2 - 0.4;
+                sparksAt(mx, my, "#fff2b0", 16);
+                sparksAt(mx, my, "#ffc96b", 8);
+                numberAt(px(), py() - 1.2, "Idealne parowanie!", "#fff2b0", 0.9);
                 if (opts.attacker && typeof opts.attacker.onParried === "function") opts.attacker.onParried();
-                if (hasSkill("riposte")) act.riposteT = 120;
-                hitstop(9);
+                if (hasSkill("riposte")) act.riposteT = COUNTER.riposte;
+                else { act.counterT = COUNTER.frames; act.counterMult = COUNTER.mult; }
+                hitstop(6);
+                slowMotion(SLOW.parry, 2);
+                act.parries = (act.parries || 0) + 1;
                 return tell("parried", 0, src);
             }
             if (!opts.unblockable) {
@@ -576,7 +689,7 @@
         }
         // a clean hit
         endSwing();
-        if (act.mode === "attack" || act.mode === "block") act.mode = "idle";
+        if (act.mode === "attack" || act.mode === "block" || act.mode === "heal") act.mode = "idle";   // (a quick heal cut short: Combat_Feel.js)
         const lost = applyDamage(actor, damage, opts.nonLethal);
         se("Damage3", 90, 95);
         $gameScreen.startShake(Math.min(9, 3 + damage / 10), 8, 14);
@@ -615,7 +728,8 @@
         if (!(damage > 0)) return 0;
         const ar = armor();
         if (ar) T.call("Durability", "use", ar.id);   // (every blow that gets through wears the jacket)
-        damage = Math.max(1, Math.round(damage * (1 - (ar ? ar.reduce : 0)) * (1 - Math.min(0.6, perk("hurt")))));   // (the jacket, Niezłomny)
+        const dk = FE() && FE().diff ? FE().diff().dmg : 1;   // (the difficulty of the fight: Łatwy 0.7, Trudny 1.3 - Combat_Feel.js)
+        damage = Math.max(1, Math.round(damage * dk * (1 - (ar ? ar.reduce : 0)) * (1 - Math.min(0.6, perk("hurt")))));   // (the jacket, Niezłomny)
         if (nonLethal) damage = Math.max(0, Math.min(damage, actor.hp - 1));
         if (!(damage > 0)) return 0;
         actor.gainHp(-damage);
@@ -633,6 +747,7 @@
     // the hero's blow bounced off a shield or a raised club (Humans.js): his arms jar - a short stagger, the swing cut
     function recoil(frames) {
         if (act.mode === "roll") return;
+        act.recoilN = (act.recoilN || 0) + 1;   // (strike: the blow's sound is the shield's then)
         endSwing();
         act.mode = "idle";
         act.comboGrace = 0;
@@ -661,11 +776,17 @@
     // ==================================================================
     let stopFrames = 0;
     function hitstop(n) { stopFrames = Math.max(stopFrames, n); }
-    // (Scene_Map.updateMain asks it every frame: true while the world holds still)
+    // the slowed moment (2026-10-14: a perfect parry, the last blow of a fight): for `frames` frames the world moves only every
+    // `every`-th frame (2: at half speed) - the hero, the foes, the swings alike; the screen (its zoom, shake, flash) at full speed
+    let slowT = 0, slowEvery = 2, heldNow = false;
+    const SLOW = { parry: 15, finale: 24 };   // (frames of the slowed moment: a perfect parry ~0.25 s, the last blow of a fight ~0.4 s)
+    function slowMotion(frames, every) { if (frames > slowT) { slowT = frames; slowEvery = Math.max(2, every || 2); } }
+    // (Scene_Map.updateMain asks it every frame: true while the world holds still - a hitstop frame, or a skipped frame of a slowed moment)
     function holdFrame() {
-        if (stopFrames <= 0) return false;
-        stopFrames--;
-        return true;
+        heldNow = false;
+        if (stopFrames > 0) { stopFrames--; heldNow = true; return true; }
+        if (slowT > 0) { slowT--; if (slowT % slowEvery !== 0) { heldNow = true; return true; } }
+        return false;
     }
     // a floating number / word at a map point (tiles). Combat_UI.js stacks the ones that would cover each other (the newer above the
     // older); a word said again at the same place while it still shows ("Utknął!", "Kamień!") only pops again instead of a second copy;
@@ -700,6 +821,7 @@
         sparksAt(x, y - 0.3, "#b8322a", extra.heavy ? 12 : 7);
         if (extra.fire) sparksAt(x, y - 0.4, "#ffb43a", extra.heavy ? 12 : 8);   // (the torch: embers off the flame)
         animal._flashT = 8;
+        animal._flashAt = Graphics.frameCount;   // (Combat_UI.js: pure white for its first frames)
         // a blow or a shot from hiding (SNEAK): its word over the animal, in the green of the number, and a dull thud
         if (hidden) {
             numberAt(x, y - 1.5, extra.tag === "heart" ? "Strzał w serce!" : "Atak z ukrycia!", "#9ff0a8", 0.85);
@@ -713,7 +835,15 @@
     // A map frame (Combat.js's clock): the breath, the running, the timers, the roll, the guard, the combat keys
     // ==================================================================
     function update() {
-        if (stopFrames > 0) return;
+        // the keys are read every frame - the world held still too (a hitstop, a slowed frame): what is pressed then waits in the buffer
+        for (const k in buf) if (buf[k] > 0) buf[k]--;
+        const now = Graphics.frameCount, fresh = { dodge: pressedNow("dodge"), shoot: pressedNow("shoot"), block: pressedNow("block") };
+        const tab = pressedNow("tab"), weapon = pressedNow("weaponNext") ? 1 : pressedNow("weaponPrev") ? -1 : 0;
+        if (fresh.shoot && act.pressFrame !== now) buf.shoot = BUF.life;   // (not one Hunting.js already started a blow with this frame)
+        if (fresh.dodge) buf.dodge = BUF.life;
+        if (fresh.block) { buf.block = BUF.life; act.blockPressAt = now; }
+        if (tab && mapFreePlay()) setCombatMode(!combatMode());
+        if (heldNow) return;
         updateBreath();
         updateRun();
         if (act.combatT > 0) act.combatT--;
@@ -721,29 +851,39 @@
         if (act.comboGrace > 0) act.comboGrace--;
         if (act.rollCd > 0) act.rollCd--; else act.rolls = 0;
         if (act.riposteT > 0) act.riposteT--;
+        if (act.counterT > 0) act.counterT--;
         if (act.hurtT > 0) act.hurtT--;
         if (act.flinchT > 0) act.flinchT--;
         if (act.sneakT > 0) act.sneakT--;
         if (act.stun > 0 && --act.stun === 0) act.stunKind = "";
-        if (act.mode === "roll") { updateRoll(); if (pressedNow("dodge")) pressDodge(); return; }
+        if (act.mode === "roll") {
+            updateRoll();
+            if (act.mode === "roll") { if (fresh.dodge) pressDodge(); return; }   // (the acrobat's second roll; else the press waits for the roll's end)
+        }
         if (act.mode === "attack" && !$gamePlayer._toolSwing) act.mode = "idle";   // (the swing was taken away: a scene change...)
-        if (pressedNow("tab") && mapFreePlay()) setCombatMode(!combatMode());
-        const dodge = pressedNow("dodge"), blow = pressedNow("shoot"), weapon = pressedNow("weaponNext") ? 1 : pressedNow("weaponPrev") ? -1 : 0;
-        if (!canAct()) { if (act.mode === "block") act.mode = "idle"; keyWas.block = Input.isPressed("block"); return; }
+        if (!canAct()) { if (act.mode === "block") act.mode = "idle"; return; }
+        if (FE() && FE().busy && FE().busy()) return;   // (Combat_Feel.js: binding a wound, a bite of food - he is open, nothing else)
         updateBlock();
         const Hn = H();
         if (weapon && act.mode === "idle" && !(Hn && Hn.aim)) switchHand(weapon);
-        if (dodge) pressDodge();
-        if (act.mode === "attack" && blow) pressAttack();   // (the next blow of the combo: Hunting.js does not see the key while the hero swings)
+        // the presses in the buffer, the moment they can be done (a roll the moment a blow has landed - it cuts the swing's end short;
+        // the next blow of a series once this one has landed; anything once a roll, a stagger, the pause after a series is over)
+        if (buf.dodge > 0 && pressDodge()) buf.dodge = 0;
+        if (buf.shoot > 0 && (act.mode === "attack" || act.mode === "idle") && pressAttack()) buf.shoot = 0;
         if (!act.secondWind || act.combatT > 0) return;
         act.secondWind = false;   // (a new fight: "Drugi oddech" works again)
     }
     // leaving the map / loading: nothing half done
     function resetAct() {
-        Object.assign(act, { mode: "idle", combo: 0, queued: false, charge: 0, rollT: 0, iframes: 0, blockT: 0, stun: 0, stunKind: "", comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, combatT: 0, hurtT: 0, flinchT: 0, sneakT: 0 });
+        Object.assign(act, { mode: "idle", combo: 0, queued: false, charge: 0, rollT: 0, iframes: 0, blockT: 0, stun: 0, stunKind: "", comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, combatT: 0, hurtT: 0, flinchT: 0, sneakT: 0,
+            counterT: 0, counterMult: 1, blockTap: 0, pressFrame: -1, rollLook: null, rollBack: false });
+        for (const k in buf) buf[k] = 0;
+        slowT = 0;
+        heldNow = false;
         breath = -1;
         winded = false;
         stopFrames = 0;
+        for (const f of floaters.concat(sparks)) if (f.sprite && f.sprite.parent) { f.sprite.parent.removeChild(f.sprite); f.sprite.destroy(); }   // (not left on the map, stuck)
         floaters.length = 0;
         sparks.length = 0;
     }
@@ -756,8 +896,8 @@
     const heldStill = () => act.mode === "roll" || act.stun > 0;
     const mayRun = player => act.mode !== "block" && (player !== $gamePlayer || canRun());
 
-    P.fight = { act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
-        shield, armor, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
+    P.fight = { act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
+        setHand, handChoices, shield, armor, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
         sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
-        stunPlayer, drainBreath };
+        stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };
 })();

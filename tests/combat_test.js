@@ -43,11 +43,13 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         await ev("window.__bus = []; for (const n of ['levelUp', 'heroHit', 'heroDown', 'attack']) Tawerna.on(n, e => __bus.push(Object.assign({ n }, e)), { owner: 'CombatTest' }); 0");
 
         // ================= 1. keys =================
-        const fam = await J(`({ parts: Object.keys(Tawerna.api("Combat_parts") || {}), scripts: ["Combat", "Combat_Fight", "Combat_UI"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
+        const fam = await J(`({ parts: Object.keys(Tawerna.api("Combat_parts") || {}), scripts: ["Combat", "Combat_Fight", "Combat_UI", "Combat_Feel"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
             order: $plugins.map(p => p.name).filter(n => /^(Skills_Data|Combat|Combat_Fight|Combat_UI|SpeechBubbles)$/.test(n)), api: Tawerna.api("Combat") === Combat })`);
-        check("Combat in three files (the hero, the fight, the look), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by Combat.js"),
-            fam.api && fam.parts.join() === "core,fight,ui" && fam.scripts.join() === "1,1,1" && (!REGISTERED || fam.order.join() === "Skills_Data,Combat,Combat_Fight,Combat_UI,SpeechBubbles"), fam);
-        check("keys: Space = dodge; O, P, [ and ] have their own names (what they do depends on the mode), Tab = the mode; the backslash, X, F and V are free", (await J("[Input.keyMapper[32], Input.keyMapper[79], Input.keyMapper[80], Input.keyMapper[219], Input.keyMapper[221], Input.keyMapper[9], Input.keyMapper[220] || null, Input.keyMapper[88] || null, Input.keyMapper[70] || null, Input.keyMapper[86] || null]")).join() === "dodge,keyO,keyP,keyLB,keyRB,tab,,,,");
+        // (2026-10-14: a fourth part, Combat_Feel.js - the automatic combat mode, the soft target, the warnings...; put in by Combat.js while not listed)
+        check("Combat in four files (the hero, the fight, the look, the feel), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by Combat.js"),
+            fam.api && fam.parts.join() === "core,fight,ui,feel" && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "Skills_Data,Combat,Combat_Fight,Combat_UI,SpeechBubbles"), fam);
+        // (2026-10-14, Combat_Feel.js: F = the next soft target in the combat mode)
+        check("keys: Space = dodge; O, P, [ and ] have their own names (what they do depends on the mode), Tab = the mode, F = the next target; the backslash, X and V are free", (await J("[Input.keyMapper[32], Input.keyMapper[79], Input.keyMapper[80], Input.keyMapper[219], Input.keyMapper[221], Input.keyMapper[9], Input.keyMapper[220] || null, Input.keyMapper[88] || null, Input.keyMapper[70] || null, Input.keyMapper[86] || null]")).join() === "dodge,keyO,keyP,keyLB,keyRB,tab,,,target,");
         check("on the map Space is not OK", !(await ev("(function(){ Input._currentState.dodge = true; Input._latestButton = 'dodge'; Input._pressedTime = 0; const r = Input.isTriggered('ok'); Input._currentState.dodge = false; Input._latestButton = null; return r; })()")));
         const inMenu = await ev("(function(){ $gameTemp._farmMenuOpen = true; Input._currentState.dodge = true; Input._latestButton = 'dodge'; Input._pressedTime = 0; const r = Input.isTriggered('ok'); Input._currentState.dodge = false; Input._latestButton = null; $gameTemp._farmMenuOpen = false; return r; })()");
         check("...but in a menu (here the farm menu) Space still confirms", inMenu === true);
@@ -124,15 +126,20 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         check("F F F F (with 'Płynne kombo'): four blows in a row, more than 3 x 18 in all", hpB - combo.hp >= 3 * 18, { taken: hpB - combo.hp, ...combo });
         check("its balance broken by the combo: the boar reels (or already recovered from it)", combo.stun > 0 || combo.poise >= 0, combo);
         // a charged blow
-        await ev("__boar._hp = __boar._maxHp; __boar._poise = __boar._maxPoise; __boar._stun = 0; Combat.resetAct(); 0");
+        // (a fresh boar: with the input buffer - 2026-10-14 - all four blows of the series land and the first one may be dead by now)
+        await standAt(lx, ly, 6);
+        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 1}, ${ly}); a._frozen = true; const sp = Hunting.SPECIES.boar; a._level = 1; a._maxHp = a._hp = sp.hp; a._maxPoise = a._poise = sp.poise || 20; window.__boar = a; })()`);
+        await ev("Combat.resetAct(); 0");
         await frames(5);
         await down(F);
         await frames(50);
         const charging = await J("({ charge: Combat.act.charge, mode: Combat.act.mode })");
+        await ev(`window.__dbg = []; const _uu = Scene_Map.prototype.update; window.__undbg = () => { Scene_Map.prototype.update = _uu; }; Scene_Map.prototype.update = function(){ _uu.call(this); const s = $gamePlayer._toolSwing; __dbg.push([Graphics.frameCount, Combat.act.mode, s ? s._swingT : -1, s ? s._waiting : null, Combat.act.charge, __boar._hp, Input.isPressed('shoot'), (Combat.act.aim ? Combat.act.aim.x + "," + Combat.act.aim.y : "-"), $gamePlayer._heroDir8].join(" ")); }; 0`);
         await up(F);
         for (let i = 0; i < 40 && (await ev("__boar._hp")) === (await ev("__boar._maxHp")); i++) await frames(2);
         const heavy = await J("({ hp: __boar._hp, max: __boar._maxHp, stun: __boar._stun })");
         check("F held: it charges (half way after 50 frames), let go: a heavy blow, 2.2-2.7 x (about 40) damage, the boar reels", charging.charge >= 25 && heavy.max - heavy.hp >= 36 && heavy.stun > 0, { charging, heavy });
+        await ev("__undbg(); 0");
         await frames(40);
 
         // ================= 5. the boar charges: roll, guard, parry, hit =================
@@ -178,21 +185,28 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         await frames(30);
         const rab = await J(`({ hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp, x: $gamePlayer._realX, rx: __rab._realX })`);
         check("rolled into a rabbit: bounced off, no harm", rab.hp === rab.mhp && rab.x < rab.rx - 0.8, rab);
-        // guarding (V held early: no parry)
+        // guarding (V held early) and parrying (V just before the tusks): since 2026-10-14 (the user's, as first designed) neither holds the
+        // charge - like the bear's blows: "Tego nie zatrzymasz!" and the full blow; only a roll aside (above) saves him
         await charge();
         await down(V);
         for (let i = 0; i < 90 && (await ev("__boar._mode")) === "charge"; i++) await frames(2);
         await up(V);
-        const blk = await J("({ hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp, breath: Combat.breath })");
-        check("V held: the charge is blocked - 45% of it gets through without a shield, breath spent", blk.mhp - blk.hp > 0 && blk.mhp - blk.hp <= Math.ceil(30 * 1.12 * 0.56) && blk.breath < 110, blk);
-        // a parry: V just before the tusks
+        const blk = await J("({ hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp, atk: Hunting.atkOf(__boar), words: Tawerna.api('Combat_parts').fight.floaters.map(f => f.text) })");
+        check("V held: the charge is NOT blocked - 'Tego nie zatrzymasz!', its full attack", blk.mhp - blk.hp === blk.atk && blk.words.includes("Tego nie zatrzymasz!"), blk);
         await charge();
         for (let i = 0; i < 90 && (await ev("__boar.playerDistance()")) > 1.9; i++) await frames(1);
         await down(V);
         for (let i = 0; i < 40 && (await ev("__boar._mode")) === "charge" && (await ev("__boar._stun")) === 0; i++) await frames(1);
         await up(V);
-        const par = await J("({ hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp, stun: __boar._stun, poise: __boar._poise })");
-        check("V a moment before the hit: parried - no damage, the boar reels long", par.hp === par.mhp && par.stun > 60, par);
+        const par = await J("({ hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp, atk: Hunting.atkOf(__boar), stun: __boar._stun })");
+        check("V a moment before the hit: no parry either - the full attack, the boar does not reel", par.mhp - par.hp === par.atk && par.stun === 0, par);
+        // a block and a parry still work on a blow a guard holds - a wolf's bite (the bus below wants them)
+        await standAt(lx, ly, 6);
+        await ev(`(function(){ const w = Hunting.spawn("wolf", ${lx + 1}, ${ly}); w._frozen = true; window.__wolf = w; const a = Combat.act, hit = () => Combat.hitPlayer({ damage: 10, poise: 20, from: { x: w.centerX(), y: w.centerY() }, attacker: w, name: "wilk" });
+            a.mode = "block"; a.blockT = 99; window.__wb = hit(); a.mode = "block"; a.blockT = 0; window.__wp = hit(); a.mode = "idle"; return 0; })()`);
+        check("a wolf's bite: blocked with the guard up long, parried with it raised just before", (await ev("__wb")) === "blocked" && (await ev("__wp")) === "parried", await J("[__wb, __wp]"));
+        await frames(30);
+        for (let i = 0; i < 40 && (await ev("$gamePlayer.isToolSwinging()")); i++) await frames(5);   // (the full charge above knocked him down: up first)
 
         // ================= 5b. the club: its own quick swing, light blows =================
         await standAt(lx, ly, 6);

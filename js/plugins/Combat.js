@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Walka i rozwój postaci: tryb walki (Tab) - kombo i ciężki cios (O), blok i parowanie (P), zmiana broni ([ ]), przewrót (Spacja); oddech; atrybuty, poziomy, doświadczenie, umiejętności. v1.1.0
+ * @plugindesc Walka i rozwój postaci: tryb walki (Tab, sam się włącza) - kombo i ciężki cios (O), blok i parowanie (P), zmiana broni ([ ]), przewrót (Spacja), cel (F), leczenie (H); oddech; atrybuty, poziomy, doświadczenie, umiejętności. v1.2.0
  * @author Tawerna
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -30,10 +30,17 @@
  *                    Z łukiem lub procą w ręku: O przytrzymane = celowanie, puszczone = strzał.
  *   P (przytrzymanie) blok (z tarczą mniej obrażeń); P tuż przed trafieniem = parowanie: wróg się zatacza.
  *   [ / ]            poprzednia / następna broń w ręku (plakietka w prawym dolnym rogu).
+ *   F                następny cel miękkiego namierzania (miedziany krąg pod wrogiem; ciosy, garda i przewrót
+ *                    liczą się względem celu) - Combat_Feel.js.
+ *   H                szybkie leczenie: opatrunek (rana / mało życia) albo najlepsze jedzenie; ok. 0,6 s
+ *                    bez obrony, kosztuje oddech - Combat_Feel.js.
  *   Enter, Esc, R    nic nie robią - akcja i menu wracają po wyjściu z trybu walki (Tab).
+ * Tryb walki włącza się sam, gdy wróg zaczyna atak (i wyłącza po ok. 5 s spokoju) - Opcje: „Automatyczny
+ * tryb walki”. Opcje: „Trudność walki” (Łatwy / Normalny / Trudny). Klawisz wciśnięty chwilę za wcześnie
+ * (cios, przewrót, blok) czeka ok. 10 klatek i wykonuje się zaraz, gdy można.
  * W trybie normalnym: O = akcja, P = menu, [ i ] nic nie robią.
- * W obu trybach: Spacja = przewrót w kierunku strzałek (albo tam, gdzie patrzysz) z chwilą
- * nietykalności; C = skradanie. W menu i rozmowach O, P, Enter, Esc i Spacja działają zawsze jak OK / anuluj.
+ * W obu trybach: Spacja = przewrót w kierunku strzałek (bez strzałek: odskok od celu albo najbliższego
+ * wroga, a bez nich w tył) z chwilą nietykalności; po trafieniu ciosu przerywa jego końcówkę; C = skradanie. W menu i rozmowach O, P, Enter, Esc i Spacja działają zawsze jak OK / anuluj.
  *
  * Atak z ukrycia: cios w zwierzę, które cię jeszcze nie zauważyło (nie ma nad nim "!", nie walczy z tobą),
  * gdy się skradasz (C) albo podchodzisz od tyłu: 2,5 raza większe obrażenia (strzał z łuku i procy 2 razy)
@@ -165,6 +172,8 @@
     Input.keyMapper[9] = "tab";       // Tab: the mode (the engine's own name for it; nothing else here uses it)
     delete Input.keyMapper[220];      // (the backslash and X switched the weapon and the mode before: free again)
     delete Input.keyMapper[88];
+    Input.keyMapper[70] = "target";   // F: the next foe for the soft target (Combat_Feel.js, 2026-10-14) - only in the combat mode on the map
+    Input.keyMapper[72] = "heal";     // H: the quick heal - a bandage or the best food (Combat_Feel.js) - only in the combat mode on the map
     // free play on the map: no scene change, message, event, farm menu or building being placed (the core's calm check)
     const FREE_PLAY = { only: ["onMap", "sceneChange", "message", "farmMenu", "build", "event"] };
     const mapFreePlay = () => T.isCalm(null, FREE_PLAY);
@@ -185,10 +194,18 @@
             return false;
         };
     }
-    function setCombatMode(on) {
-        modes().mode = !!on;
-        se(on ? "Sword1" : "Equip2", 70, on ? 110 : 100);
-        popup(on ? 76 : 0, on ? "Tryb walki: O - atak, P - obrona, [ ] - broń (Tab - tryb normalny)" : "Tryb normalny: O - akcja, P - menu", on ? "#ffb07f" : "#eceef0");
+    // auto: switched by the game itself (Combat_Feel.js: a foe starts an attack - on; a calm moment after - off, only when it came on by
+    // itself); the hero's own Tab is not auto. The bus "combatMode" { on, auto } says it.
+    const COMBAT_KEYS = "Tryb walki: O atak, P obrona, Spacja przewrót, F cel, H leczenie, [ ] broń (Tab - wyjście)";
+    function setCombatMode(on, auto) {
+        const m = modes();
+        m.mode = !!on;
+        m.auto = !!on && !!auto;
+        if (on || !auto) {
+            se(on ? "Sword1" : "Equip2", 70, on ? 110 : 100);
+            popup(on ? 76 : 0, on ? COMBAT_KEYS : "Tryb normalny: O - akcja, P - menu", on ? "#ffb07f" : "#eceef0");
+        } else se("Equip2", 55, 90);   // (put away by itself: only the sound of the weapon going back)
+        T.emit("combatMode", { on: !!on, auto: !!auto });
     }
 
     // ==================================================================
@@ -199,7 +216,9 @@
     const TREES = SD.TREES, SKILLS = SD.SKILLS, ROW_LEVEL = SD.ROW_LEVEL;
     const skillById = id => SKILLS.find(s => s.id === id) || null;
 
-    const attr = id => ($gameSystem ? hero().attr[id] : ATTR_START);
+    // (attrInfo below works the effects out for a value the hero does not have yet - the next point: `attrOver` stands in for it)
+    let attrOver = null;
+    const attr = id => (attrOver && attrOver.id === id ? attrOver.v : $gameSystem ? hero().attr[id] : ATTR_START);
     // the rank of a skill (0: not learnt; a save from stage 1 keeps `true` = rank 1)
     const skillRank = id => { if (!$gameSystem) return 0; const v = hero().skills[id]; return v === true ? 1 : Number(v) || 0; };
     const hasSkill = id => skillRank(id) > 0;
@@ -365,7 +384,8 @@
     const critChance = () => 0.03 + 0.007 * (attr("per") - ATTR_START) + perk("melee.crit");
     const rollCost = () => Math.max(10, Math.round(24 - 0.25 * (attr("dex") - ATTR_START)));
     const rollIFrames = () => Math.min(24, 13 + Math.floor(0.2 * (attr("dex") - ATTR_START))) + perk("roll.iframes");
-    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1));
+    // (the difficulty of the fight - Combat_Feel.js, Opcje: Łatwy x1.5, Trudny x0.75)
+    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1));
     const knockdownAt = () => Math.round((60 + 1.8 * (attr("con") - ATTR_START)) * (1 + perk("knock.resist")));
     const woundChance = base => base * (hasSkill("thickskin") ? 0.5 : 1) * Math.max(0.25, 1 - 0.014 * (attr("con") - ATTR_START));
     const carryBonus = () => Math.round(0.9 * Math.max(0, attr("str") - ATTR_START)) + perk("carry");
@@ -396,6 +416,71 @@
         if (paramId === 0 && $gameSystem && lead === this.actorId()) return heroMhp();
         return _Game_Actor_paramBase.call(this, paramId);
     };
+    // What an attribute does, in numbers - now and with one point more (the card's bubble, MenuRing.js): the same functions as above
+    // (and Combat_Fight's breath and blow from hiding), worked out with the value put in for a moment.
+    // -> { id, name, desc, value, max, rows: [{ label, now, next }] } (next "" at the top)
+    const num = (v, d) => { let t = (Math.round(v * Math.pow(10, d || 0)) / Math.pow(10, d || 0)).toFixed(d || 0); if (t.includes(".")) t = t.replace(/0+$/, "").replace(/\.$/, ""); return t.replace(".", ","); };
+    const pct = (v, d) => num(v, d) + "%";
+    const sec = f => (f / 60).toFixed(2).replace(".", ",") + " s";
+    const signed = (v, d) => (v >= 0 ? "+" : "") + pct(v, d);
+    const mult = v => "×" + v.toFixed(2).replace(".", ",");
+    const ATTR_FX = {
+        str: [["Obrażenia wręcz", () => signed((strMult() - 1) * 100, 1)], ["Zbijanie równowagi wroga", () => signed((poiseMult() - 1) * 100, 1)],
+            ["Udźwig", () => "+" + carryBonus()], ["Mniej uderzeń przy zbieraniu", () => "-" + pct(gatherBonus() * 100, 1)]],
+        dex: [["Przewrót: koszt oddechu", () => String(rollCost())], ["Przewrót: nietykalność", () => sec(rollIFrames())],
+            ["Czas na kolejny cios serii", () => sec(comboWindow())], ["Czas celowania (łuk, proca)", () => pct(aimSteady() * 100)],
+            ["Szybkość pracy", () => signed((dexWork() - 1) * 100)]],
+        con: [["Życie (najwięcej)", () => String(heroMhp())], ["Oddech (wypoczęty, syty)", () => String(baseBreath())],
+            ["Próg przewrócenia", () => String(knockdownAt())], ["Szansa na ranę (od zwykłej)", () => pct(woundChance(1) * 100, 1)]],
+        per: [["Okno parowania", () => sec(parryWindow())], ["Trafienie krytyczne", () => pct(critChance() * 100, 1)],
+            ["Cios z ukrycia", () => { const f = F(); return f && f.sneakMult ? mult(f.sneakMult(false)) : "-"; }]],
+        wil: [["Opór: strach i „prawdy”", () => pct(mindResist(0, 0) * 100)], ["Strach i zamęt trwają", () => pct(mindTime(1000) / 10)]]
+    };
+    function withAttr(id, v, fn) {
+        const was = attrOver;
+        attrOver = { id, v };
+        try { return fn(); } finally { attrOver = was; }
+    }
+    function attrInfo(id) {
+        const a = ATTRS.find(x => x.id === id);
+        if (!a) return null;
+        const v = attr(id), top = v >= ATTR_MAX;
+        const rows = (ATTR_FX[id] || []).map(([label, fn]) => ({ label, now: withAttr(id, v, fn), next: top ? "" : withAttr(id, v + 1, fn) }));
+        return { id, name: a.name, desc: a.desc, value: v, max: ATTR_MAX, rows };
+    }
+
+    // What the hero's blows do, in numbers (the Postać tab's "Obrażenia", MenuRing.js): the weapon in his right hand (Combat_Fight's
+    // hand(): the one of the combat mode) - the same multipliers as a blow that lands (strike): the series, the charged blow, the crit,
+    // the knock to the balance, the breath; the bow / the sling (Hunting_Weapons.js): the shot. The fists beside it.
+    // -> { hand, ranged, weapon: { id, name, hit, series[], heavy, heavyFull, crit, poise, poiseLast, poiseHeavy, breath, reach, fire },
+    //      fists, critChance, critMul }
+    function meleeInfo(id) {
+        const f = F(), w = f.MELEE[id] || f.MELEE[0], s = strMult() * (1 + perk("melee.dmg")), pz = poiseMult() * (1 + perk("melee.poise")), cm = f.COMBO_MULT;
+        const n = f.maxCombo ? f.maxCombo(w) : w.combo.length, hit = m => Math.max(1, Math.round(w.dmg * m * s));
+        return { id, name: w.name, hit: hit(1), series: Array.from({ length: n }, (_, i) => hit(cm[Math.min(i, cm.length - 1)])), heavy: hit(f.HEAVY.mult),
+            heavyFull: hit(f.HEAVY.full), crit: hit(1.6), poise: Math.round(w.poise * pz), poiseLast: Math.round(w.poise * pz * 1.5), poiseHeavy: Math.round(w.poise * pz * f.HEAVY.poise),
+            breath: Math.round(w.cost * (1 - perk("melee.breath"))), reach: w.reach, fire: !!w.fire, fireBonus: w.fireBonus || 0, sweep: !!w.sweep && hasSkill("sweep") };
+    }
+    function fightInfo() {
+        const f = F(), h = f.hand ? f.hand() || "m0" : "m0", out = { hand: h, ranged: h === "ranged", critChance: critChance(), critMul: 1.6, fists: meleeInfo(0) };
+        if (h !== "ranged") { out.weapon = meleeInfo(Number(h.slice(1)) || 0); return out; }
+        const HW = (T.api("Hunting_parts") || {}).weapons, has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
+        const key = has(126) && has(127) ? "bow" : "sling", def = HW && HW.WEAPONS ? HW.WEAPONS[key] : null, item = key === "bow" ? 126 : 125;
+        const dmg = def ? Math.round(def.damage * (1 + 0.02 * (attr("dex") - ATTR_START)) * (1 + perk("ranged.dmg"))) : 0;
+        out.weapon = { id: item, name: $dataItems[item] ? $dataItems[item].name : key, shot: dmg, range: def ? def.range : 0, ammo: def ? def.ammo : 0,
+            ammoLeft: def && $dataItems[def.ammo] ? $gameParty.numItems($dataItems[def.ammo]) : 0, aim: aimSteady(), breath: def ? def.stamina : 0 };
+        return out;
+    }
+    // What keeps him whole (the Postać tab's "Odporności"): the most health, the breath, the armour and the shield worn (Equipment.js:
+    // only what is worn), the wound, the fall, the cold, the mind, the parry and the roll
+    function defenseInfo() {
+        const f = F(), ar = f.armor ? f.armor() : null, sh = f.shield ? f.shield() : null, E = T.api("Equipment");
+        const cloak = E && E.worn ? E.worn(112) : !!$dataItems[112] && $gameParty.numItems($dataItems[112]) > 0;
+        return { mhp: heroMhp(), breath: baseBreath(), armor: ar ? { id: ar.id, name: ar.name, reduce: ar.reduce } : null, shield: sh ? { id: sh.id, name: sh.name, reduce: sh.reduce, breath: sh.breath } : null,
+            bare: f.NO_SHIELD ? f.NO_SHIELD.reduce : 0.45, blockPerk: perk("block.reduce"), wound: woundChance(1), knock: knockdownAt(), cloak, cold: perk("cold"), mind: mindResist(0, 0),
+            parry: parryWindow(), rollCost: rollCost(), rollIFrames: rollIFrames(), hurt: Math.min(0.6, perk("hurt")) };
+    }
+
     // he says it when the strength drops below TIRED_AT (again only after it has been above it)
     let wasTired = false;
     function updateTired() {
@@ -467,6 +552,7 @@
         flushXpPopup();
         updateTired();
         F().update(scene);   // (the breath, the running, the roll, the guard, the combat keys - not while the world holds still)
+        if (P.feel) P.feel.update(scene);   // (the automatic combat mode, the soft target, the attacks' warnings - Combat_Feel.js)
     }, { owner: "Combat", name: "update" });
     T.on("newGame", () => {
         F().resetAct();
@@ -514,16 +600,118 @@
     Spriteset_Map.prototype.createCharacters = function() {
         _Spriteset_Map_createCharacters.call(this);
         UI().addCombatLayer(this);
+        if (P.feel) P.feel.addLayer(this);   // (the soft target's ring, the attacks' outlines - Combat_Feel.js)
     };
     const _Scene_Map_createSpriteset = Scene_Map.prototype.createSpriteset;
     Scene_Map.prototype.createSpriteset = function() {
         _Scene_Map_createSpriteset.call(this);
         UI().addHud(this);
+        if (P.feel) P.feel.addHud(this);   // (the arrows at the screen's edge - Combat_Feel.js)
     };
     const _Sprite_Character_update = Sprite_Character.prototype.update;
     Sprite_Character.prototype.update = function() {
         _Sprite_Character_update.call(this);
         UI().updateCharacter(this);
+    };
+    // ---- the fight's options (2026-10-14, Combat_Feel.js reads them), kept in the config file like the volumes: "Automatyczny tryb walki"
+    // (Wł / Wył, on by default) and "Trudność walki" (Łatwy / Normalny / Trudny, Normalny by default). Rows after the game's switches
+    // (OptionEx.js: always run, remember the command...), in both looks (Window_Options draws the Grafit one too - MenuRing.js)
+    const OPTS = { auto: "combatAuto", diff: "combatDifficulty" };
+    const OPT_DEFAULTS = { [OPTS.auto]: true, [OPTS.diff]: 1 };
+    const DIFF_NAMES = ["Łatwy", "Normalny", "Trudny"];
+    const OPT_ROWS = [["Automatyczny tryb walki", OPTS.auto], ["Trudność walki", OPTS.diff]];
+    for (const k in OPT_DEFAULTS) if (ConfigManager[k] === undefined) ConfigManager[k] = OPT_DEFAULTS[k];
+    const _Config_makeData = ConfigManager.makeData;
+    ConfigManager.makeData = function() {
+        const config = _Config_makeData.call(this);
+        for (const k in OPT_DEFAULTS) config[k] = this[k] === undefined ? OPT_DEFAULTS[k] : this[k];
+        return config;
+    };
+    const _Config_applyData = ConfigManager.applyData;
+    ConfigManager.applyData = function(config) {
+        _Config_applyData.call(this, config);
+        const v = config ? config[OPTS.auto] : undefined, d = config ? Number(config[OPTS.diff]) : NaN;
+        this[OPTS.auto] = v === undefined ? OPT_DEFAULTS[OPTS.auto] : !!v;
+        this[OPTS.diff] = d >= 0 && d <= 2 ? Math.round(d) : OPT_DEFAULTS[OPTS.diff];
+    };
+    const _Options_addGeneral = Window_Options.prototype.addGeneralOptions;
+    Window_Options.prototype.addGeneralOptions = function() {
+        _Options_addGeneral.call(this);
+        const SWITCHES = ["alwaysDash", "commandRemember", "touchUI", "switchABButtons", "fastMessage"];
+        let at = -1;
+        this._list.forEach((c, i) => { if (SWITCHES.includes(c.symbol)) at = i; });
+        const rows = OPT_ROWS.map(([name, symbol]) => ({ name, symbol, enabled: true, ext: null }));
+        this._list.splice(at >= 0 ? at + 1 : this._list.length, 0, ...rows);
+    };
+    const _Options_isBoolean = Window_Options.prototype.isBooleanSymbol;
+    Window_Options.prototype.isBooleanSymbol = function(symbol) {
+        return symbol === OPTS.auto || (!!_Options_isBoolean && _Options_isBoolean.call(this, symbol));
+    };
+    const _Options_isNumeric = Window_Options.prototype.isNumericSymbol;
+    Window_Options.prototype.isNumericSymbol = function(symbol) {
+        return symbol === OPTS.diff || (!!_Options_isNumeric && _Options_isNumeric.call(this, symbol));
+    };
+    const _Options_statusText = Window_Options.prototype.statusText;
+    Window_Options.prototype.statusText = function(index) {
+        const symbol = this.commandSymbol(index);
+        if (symbol === OPTS.auto) return this.getConfigValue(symbol) ? "Wł" : "Wył";
+        if (symbol === OPTS.diff) return DIFF_NAMES[this.getConfigValue(symbol)] || DIFF_NAMES[1];
+        return _Options_statusText.call(this, index);
+    };
+    // the difficulty: one step at a time, round (Łatwy -> Normalny -> Trudny -> Łatwy with O; A / D no further than the ends)
+    const _Options_changeNumber = Window_Options.prototype.changeNumberBySymbol;
+    Window_Options.prototype.changeNumberBySymbol = function(symbol, forward, skip, wrap, offsetValue) {
+        if (symbol !== OPTS.diff) return _Options_changeNumber.apply(this, arguments);
+        const v = Number(this.getConfigValue(symbol)) || 0, next = v + (forward ? 1 : -1);
+        this.changeValue(symbol, next > 2 ? (wrap ? 0 : 2) : next < 0 ? (wrap ? 2 : 0) : next);
+    };
+    if (!_Options_changeNumber) {   // (without OptionEx.js: the engine's own keys)
+        const _ok = Window_Options.prototype.processOk, _right = Window_Options.prototype.cursorRight, _left = Window_Options.prototype.cursorLeft;
+        const step = (w, f, wrap) => { const v = Number(w.getConfigValue(OPTS.diff)) || 0, n = v + (f ? 1 : -1); w.changeValue(OPTS.diff, n > 2 ? (wrap ? 0 : 2) : n < 0 ? (wrap ? 2 : 0) : n); };
+        Window_Options.prototype.processOk = function() { if (this.commandSymbol(this.index()) === OPTS.diff) step(this, true, true); else _ok.call(this); };
+        Window_Options.prototype.cursorRight = function() { if (this.commandSymbol(this.index()) === OPTS.diff) step(this, true, false); else _right.apply(this, arguments); };
+        Window_Options.prototype.cursorLeft = function() { if (this.commandSymbol(this.index()) === OPTS.diff) step(this, false, false); else _left.apply(this, arguments); };
+    }
+    const _Options_restore = Window_Options.prototype.restoreDefaultValues;
+    if (_Options_restore) {
+        Window_Options.prototype.restoreDefaultValues = function() {
+            _Options_restore.call(this);
+            for (const k in OPT_DEFAULTS) ConfigManager[k] = OPT_DEFAULTS[k];
+        };
+    }
+    // the graphite look (MenuRing.js) writes "Tak" / "Nie" for a switch: this one says "Wł" / "Wył" there too, in the same style (put round
+    // the row drawing once every plugin is in, so it is the outer one - as Mood.js does)
+    let optDrawWrapped = false;
+    function wrapOptionDraw() {
+        if (optDrawWrapped) return;
+        optDrawWrapped = true;
+        const _drawItem = Window_Options.prototype.drawItem;
+        Window_Options.prototype.drawItem = function(index) {
+            const symbol = this.commandSymbol(index), CH = T.api("CleanHUD");
+            if (symbol === OPTS.auto && T.api("MenuRing") && CH && CH.isClean && CH.isClean() && CH.textOut && this.itemLineRect) {
+                const r = this.itemLineRect(index, false), s = this.itemLineRect(index, true), c = this.contents, C = CH.C, on = !!this.getConfigValue(symbol);
+                CH.textOut(c, this.commandName(index), r.x, r.y, r.width, r.height, "left", { size: 18, color: C.text, plain: true });
+                CH.textOut(c, on ? "Wł" : "Wył", s.x, s.y, s.width - 4, s.height, "right", { size: 17, color: on ? C.accent : C.muted, plain: true });
+                return;
+            }
+            _drawItem.call(this, index);
+        };
+    }
+    if (window.SceneManager && SceneManager._scene && !(SceneManager._scene instanceof Scene_Boot)) wrapOptionDraw();
+    else {
+        const _bootStart = Scene_Boot.prototype.start;
+        Scene_Boot.prototype.start = function() {
+            wrapOptionDraw();
+            _bootStart.call(this);
+        };
+    }
+    const option = key => (ConfigManager[OPTS[key]] === undefined ? OPT_DEFAULTS[OPTS[key]] : ConfigManager[OPTS[key]]);
+
+    // a map event about to start: an automatic combat mode goes off before a talk or a riddle (Combat_Feel.js beforeEvent)
+    const _Game_Event_start = Game_Event.prototype.start;
+    Game_Event.prototype.start = function() {
+        if (P.feel && P.feel.beforeEvent) { try { P.feel.beforeEvent(this); } catch (e) { /* never stop the event */ } }
+        _Game_Event_start.call(this);
     };
     // Kupiecka żyłka: things sell dearer in any shop
     const _Scene_Shop_sellingPrice = Scene_Shop.prototype.sellingPrice;
@@ -548,7 +736,8 @@
     P.core = { hero, modes, attr, skillRank, hasSkill, perk, skillById, skillBlock, learnSkill, spendPoints, skillText, secText, xpToNext, unspent,
         levelColor, ATTRS, ATTR_START, ATTR_MAX, MAX_LEVEL, POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, TREES, SKILLS, ROW_LEVEL, strMult, poiseMult,
         critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, carryBonus, gatherBonus, tired, dexWork, workSpeed, comboWindow,
-        aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime };
+        aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime, attrInfo, fightInfo, defenseInfo,
+        option, OPTS, DIFF_NAMES, COMBAT_KEYS };
     const fight = name => function() { const f = F(); return f[name].apply(f, arguments); };
     window.Combat = T.register("Combat", {
         ATTRS, SKILLS, TREES, get MELEE() { return F().MELEE; }, get SHIELDS() { return F().SHIELDS; }, get ARMORS() { return F().ARMORS; }, armor: fight("armor"),
@@ -556,18 +745,20 @@
         hero, attr, hasSkill, skillRank, perk, perkRoll, skillText, ROW_LEVEL, xpToNext, gainXp, killXp, skillBlock, learnSkill, spendPoints, discover, placeLevel, levelColor,
         combatMode, setCombatMode, maxBreath: fight("maxBreath"), breathNow: fight("breathNow"), spendBreath: fight("spendBreath"),
         get breath() { return F().breathNow(); }, get winded() { return F().isWinded(); }, get RUN() { return F().RUN; }, canRun: fight("canRun"),
-        hand: fight("hand"), handMelee: fight("handMelee"), switchHand: fight("switchHand"), shield: fight("shield"), pressAttack: fight("pressAttack"),
+        hand: fight("hand"), handMelee: fight("handMelee"), switchHand: fight("switchHand"), setHand: fight("setHand"), handChoices: fight("handChoices"), attrInfo, fightInfo, defenseInfo, meleeInfo, woundChance,
+        shield: fight("shield"), pressAttack: fight("pressAttack"),
         pressDodge: fight("pressDodge"), hitPlayer: fight("hitPlayer"), enemyHurtFx: fight("enemyHurtFx"), hitstop: fight("hitstop"), numberAt: fight("numberAt"),
         sparksAt: fight("sparksAt"), shovePlayer: fight("shovePlayer"), recoil: fight("recoil"), downPlayer: fight("downPlayer"), foes, addFoes: fn => { foeSources.push(fn); },
         stunPlayer: fight("stunPlayer"), drainBreath: fight("drainBreath"), mindResist, mindTime,
         strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, carryBonus, gatherBonus, workSpeed, dexWork, tired, TIRED_AT, heroMhp, comboWindow, aimSteady, baseBreath, mapFreePlay,
         get act() { return F().act; }, get stopFrames() { return F().stopFrames(); }, get ROLL_KIND() { return F().ROLL_KIND; }, get KNOCK_KIND() { return F().KNOCK_KIND; },
-        resetAct: fight("resetAct"), get Scene_Hero() { return UI().Scene_Hero; }, unspent
+        resetAct: fight("resetAct"), get Scene_Hero() { return UI().Scene_Hero; }, unspent,
+        get feel() { return P.feel || null; }   // (Combat_Feel.js: the automatic combat mode, the soft target, the warnings, the quick heal, the dummy, the difficulty)
     });
 
     // the parts not in js/plugins.js yet: put into the page here (after every plugin - functions and classes only, every engine hook
     // is above, so nothing moves in the chain)
-    for (const part of ["Combat_Fight", "Combat_UI"]) {
+    for (const part of ["Combat_Fight", "Combat_UI", "Combat_Feel"]) {
         if (!(window.$plugins || []).some(p => p && p.name === part && p.status)) PluginManager.loadScript(part);
     }
 })();

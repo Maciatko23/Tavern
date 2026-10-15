@@ -527,8 +527,10 @@
                 sprite.anchor.y = 1;
             }
         } else if (ch && ch.isAnimal) {
-            const f = ch._flashT || 0;
-            if (f > 0) { sprite.setBlendColor([255, 255, 255, Math.round(f * 25)]); sprite._combatTint = true; }
+            // the hit (2026-10-14): the whole figure crisp white for HIT_WHITE frames of the screen (the hitstop does not lengthen it), then
+            // a fading white while its _flashT runs out
+            const f = ch._flashT || 0, white = ch._flashAt !== undefined && Graphics.frameCount - ch._flashAt <= HIT_WHITE;   // (the sprites go before the blow in a frame: 1..3)
+            if (white || f > 0) { sprite.setBlendColor([255, 255, 255, white ? 255 : Math.min(150, Math.round(f * 20))]); sprite._combatTint = true; }
             else if (sprite._combatTint) { sprite.setBlendColor([0, 0, 0, 0]); sprite._combatTint = false; }
             // flat out: a little longer along the run, a little lower
             const rush = typeof ch.isRushing === "function" && ch.isRushing();
@@ -549,6 +551,7 @@
             } else if (sprite._stunStars) sprite._stunStars.visible = false;
         }
     }
+    const HIT_WHITE = 3;   // (frames of the pure white flash of a hit)
     // three little yellow stars in a row (turned by scale.x: they seem to circle)
     let starsBmp = null;
     function stunStarsBitmap() {

@@ -65,20 +65,36 @@ kit.test({ port: 9442, bootCheck: "the game boots", errorCheck: "no errors in th
     // ---- the manor's lamps at night (<Light:170,90,60,22><LightWhen:night>, 4 tiles apart): each a warm pool of its own, dark
     // between them - not one patch in the day's colours (2026-10-05: at a fire's full strength and reach they ran together)
     await t.newGame({ map: 24, x: 1, y: 15, dir: 6, hour: 22, quiet: true, minimap: false });
-    await t.eval("$gameScreen.changeWeather('none', 0, 0); $gameMap.setDisplayPos(0, 6); 0");
+    await t.eval("$gameScreen.changeWeather('none', 0, 0); 0");
+    await t.frames(20);
+    // (2026-10-12: the author moved and took away manor lamps - the camera goes to the lamp the test looks at)
+    const lampA = await t.eval(`(function(){ const N = SceneManager._scene._spriteset._nightLight;
+        const ids = $gameMap.events().filter(e => /Latarnia/.test(e.event().name)).map(e => e.eventId()).filter(id => N.lights().some(l => l.id === 6000 + id && l.r < 200));
+        const A = ids.includes(91) ? 91 : ids[0], e = $gameMap.event(A); $gameMap.setDisplayPos(Math.max(0, e.x - 13), Math.max(0, e.y - 7)); return A; })()`);
     await t.frames(40);
     const lamps = await t.json(`(function(){ const N = SceneManager._scene._spriteset._nightLight, ctx = N.bitmap.context, full = 0.9 * 255;
         const lit = (x, y) => Math.round(100 * (1 - ctx.getImageData(x >> 1, y >> 1, 1, 1).data[3] / full));   // (% of the night lifted)
         const at = id => { const e = $gameMap.event(id); return [e.screenX(), e.screenY() - 30]; };
-        const l91 = N.lights().find(l => l.id === 6091), l88 = N.lights().find(l => l.id === 6088);
-        const [ax, ay] = at(91), [bx, by] = at(94), [cx, cy] = at(93);
+        // (2026-10-12: the author took two of the four lamps away - the test takes the lamps there are: the first, its nearest
+        // neighbour for "between", the diagonal one for "the middle of the four" only while there are four)
+        const lampIds = N.lights().filter(l => l.id > 6000 && l.id !== 6088 && l.r < 200).map(l => l.id - 6000).filter(id => $gameMap.event(id) && /Latarnia/.test($gameMap.event(id).event().name));
+        const A = ${lampA}, near = lampIds.filter(id => id !== A).sort((p, q) => { const d = id => Math.hypot($gameMap.event(id).x - $gameMap.event(A).x, $gameMap.event(id).y - $gameMap.event(A).y); return d(p) - d(q); });
+        const l91 = N.lights().find(l => l.id === 6000 + A), l88 = N.lights().find(l => l.id === 6088);
+        const [ax, ay] = at(A), [cx, cy] = near.length ? at(near[0]) : [ax + 192, ay], four = [91, 92, 93, 94].every(id => lampIds.includes(id)), [bx, by] = four ? at(94) : [ax, ay];   // (the old square of four)
         const gl = (x, y) => { const d = N._glow.bitmap.context.getImageData(x >> 1, y >> 1, 1, 1).data; return [d[0], d[1], d[2], d[3]]; };   // (rgb, and the alpha: how strong)
         const [fx, fy] = at(88), g = gl(ax, ay - 6), gf = gl(fx, fy - 6);
-        return { atLamp: lit(ax, ay), oneTile: lit(ax + 48, ay), twoTiles: lit(ax - 96, ay), between: lit((ax + cx) >> 1, ay), centre: lit((ax + bx) >> 1, (ay + by) >> 1),
+        return { lamps: lampIds, four, atLamp: lit(ax, ay), oneTile: lit(ax + 48, ay), twoTiles: lit(ax - 96, ay), between: near.length ? lit((ax + cx) >> 1, (ay + cy) >> 1) : 0, centre: four ? lit((ax + bx) >> 1, (ay + by) >> 1) : 0,
                  lamp: l91 && { r: Math.round(l91.r), i: +l91.i.toFixed(2) }, fire: l88 && { r: l88.r, i: l88.i }, glow: N._glow.visible ? g : null, fireGlow: N._glow.visible ? gf : null }; })()`);
+    // (the brazier, event 88, may be out of the lamp's picture now: the camera goes to it for its glow)
+    if (await t.eval("!!$gameMap.event(88)")) {
+        await t.eval("(function(){ const e = $gameMap.event(88); $gameMap.setDisplayPos(Math.max(0, e.x - 13), Math.max(0, e.y - 7)); return 0; })()");
+        await t.frames(30);
+        lamps.fireGlow = await t.json(`(function(){ const N = SceneManager._scene._spriteset._nightLight, e = $gameMap.event(88);
+            const d = N._glow.bitmap.context.getImageData(e.screenX() >> 1, (e.screenY() - 36) >> 1, 1, 1).data; return N._glow.visible ? [d[0], d[1], d[2], d[3]] : null; })()`);
+    }
     t.check("a manor lamp: a clear pool by it (55-85% of the night lifted), a tile off still lit, nearly dark two tiles off",
         lamps.atLamp >= 55 && lamps.atLamp <= 85 && lamps.oneTile >= 25 && lamps.twoTiles <= 20, lamps);
-    t.check("...dark between the lamps (no plateau): halfway between two under 40%, the middle of the four under 10%", lamps.between < 40 && lamps.centre < 10, lamps);
+    t.check("...dark between the lamps (no plateau): halfway between two under 40%, the middle of the four (if four) under 10%", lamps.lamps.length >= 1 && lamps.between < 40 && lamps.centre < 10, lamps);
     // every light is a flame (user 2026-10-05: no electricity in the game): a lamp and a brazier glow like a campfire, warm (red >
     // green > blue); the brazier's fire keeps its full strength and reach, the lamp's smaller flame glows less
     const warm = c => !!c && c[0] > c[1] && c[1] > c[2] && c[0] > 20;

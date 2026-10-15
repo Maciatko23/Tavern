@@ -66,9 +66,31 @@ warstwami — im głębiej (dosłownie, pod ziemię), tym mniej to już zabawne.
    - **Zapieczętować na nowo, ale z realnymi zasadami użycia** — rozwiązanie
      "szare", uczciwe wobec tego, co się stało zakonowi.
 
+## Prolog: Ostatni prom (w grze: Prologue.js, od 2026-10-12)
+
+Film przed pierwszym dniem, tylko przy „Nowej grze”. Gracz najpierw podaje imię bohatera (ekran „Jak masz na imię?”, polskie litery;
+puste = „Reid”), potem tylko ogląda. Można pominąć scenę (krótko P) albo cały prolog (przytrzymać P). Scenopis: docs/prolog/SCENOPIS.md.
+
+- **Wojna na lądzie.** Trzeci rok wojny: królestwa walczą o „pewność” (o Serce, choć nikt tak tego nie nazywa). Wieś bohatera,
+  **Brzozowa Wola**, płonie. Pali ją **Straż Pewności**, obca armia (nie ludzie Lorda Zaleskiego): czarne tabardy, na piersi i na
+  chorągwi **białe otwarte oko**. Ludzie mówią na nich **„Czarne Oczy”**. (To nie jest Zakon - Zakon to dawni strażnicy Serca.)
+- **Rodzina.** Bohater jest jedynakiem. **Ojciec** zaginął na wojnie. **Matka** zostaje na lądzie, żeby iść za wojskiem i szukać ojca.
+  Pakuje synowi tobołek, daje **list do swojego ojca, dziadka Stacha** na Kruczej Wyspie, i **wisiorek z krukiem**: rodzinną pamiątkę,
+  „był twojego ojca, a przedtem jego ojca”. Obiecuje przypłynąć **następnym promem**. Nie przypływa - wątek otwarty.
+- **Port.** Prom zajęło wojsko. **Przemytnik** (siwa broda, kaptur z woskowanego płótna, złoty kolczyk) zabiera chłopca kutrem za
+  ostatnie monety. Sztorm rozbija kuter; czy przemytnik przeżył - nie wiadomo. Pojawi się później na przystani wyspy.
+- **Sztorm.** Na maszcie kutra siada kruk i nie odlatuje (znak: kruki Zakonu, Urwisko Kruków). Wielka fala, ciemność.
+- **Plaża o świcie.** Bohater budzi się na Kruczej Wyspie bosy, w podartym ubraniu, bez tobołka - zostały mu tylko mokry list i wisiorek.
+  Idzie ścieżką w górę i pada. **Rybak Janek** znajduje go i zanosi do Stacha („to chyba jego wnuk, ma ten jego wisiorek”). Janek
+  pojawi się później na przystani.
+- **Dom dziadka.** Trzy dni gorączki. Dziadek czyta list córki i milknie, potem: „A ja ci tu mam tylko... dług” - i dalej Rozdział 1.
+  O wisiorku rzuca tylko: „Kruk w tej rodzinie... no, to długa historia. Opowiem ci kiedyś.” (haczyk pod Zakon i Kruczą Twierdzę).
+- W grze: przedmiot kluczowy **Wisiorek z krukiem** (id 172, w plecaku od startu, nie do sprzedania) i notatka w dzienniku
+  **„List od matki”**.
+
 ## Rozdział 1: Dług dziadka (nowy początek gry, w grze: Story.js)
 
-Nowa gra zaczyna się w domu dziadka bohatera. Stare zapisy grają po staremu.
+Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare zapisy grają po staremu.
 
 - **Dziadek Stach** — dziadek bohatera (inna postać niż Dziadek Ozzy
   z tawerny). Jest winien pieniądze Lordowi i pozwala wnukowi budować na
@@ -176,6 +198,10 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   targ co tydzień; napięcia z garnizonem i z dworem.
 - **Przystań i prom** - jedyne połączenie z kontynentem; stąd przychodzą goście tymczasowi i wieści z wojny. Celnik, przemyt, ukrywanie
   zbiega, rozkład promu. Łowienie ryb, handel.
+  **W grze od 2026-10-14 (Map125, za Podgrodziem):** rybak **Janek** (znalazł bohatera na plaży; oddaje Chustę matki), przemytnik
+  **Roch Szkwał** (przeżył sztorm, ukrywa się w szopie przy pochylni; jego kuter: wrak na plaży → zadanie D20), celnik Lorda
+  **Sambor Kwit** (księga, „kamienie z krukiem do zgłoszenia”), prom przy molo w dni promu (bez kursów dla bohatera), morze słone.
+  Na mieliźnie w zatoce wrak okrętu jednej ze stron (na razie tło). Koncepcja: docs/przystan/KONCEPCJA.md.
 - **Urwisko Kruków** - morska ściana wzgórza tawerny; kruki gnieżdżą się w resztkach murów. Zakon używał ich jako posłańców. Oswojony
   kruk (jak pies) przynosi listy, poszlaki, czasem cudze sekrety.
 - **Latarnia na przylądku** - stoi na dawnej strażnicy zakonu. Soczewka to może odłamek Serca: we mgle pokazuje latarnikowi rzeczy, których

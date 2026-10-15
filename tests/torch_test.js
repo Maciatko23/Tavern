@@ -108,14 +108,47 @@ kit.test({ port: 9487 }, async t => {
         t.check(mode + " with the torch in all 8 directions: " + sheet + ", the row of the way, the legs move, the flame on the measured head every frame, in front of him (in his hand)", all, res);
     }
 
-    // ================= 4. at work: stuck in the ground beside him =================
+    // ================= 4. stooping: in his hand; the work of both hands: stuck in the ground beside him =================
+    // which swings put it down (the user, 2026-10-08: the axe and the pick - and by the same rule the shovel, rake, hoe, hammer, rod;
+    // sitting and lying) and which keep it in his hand (the crouch) or only hide it (a fight's)
+    const kinds = await t.json(`(function(){ const k = n => ChoppableTree.swingKindOf(n), out = {};
+        for (const n of ["Swing_Axe", "Swing_AxeSide", "Swing_Pick", "Swing_Shovel", "Swing_Rake", "Swing_Hoe", "Swing_Hammer", "Swing_Rod", "Swing_Sit", "Swing_Roast", "Swing_LieDown",
+            "Swing_Crouch", "knockdown", "Swing_Roll", "Swing_Spear", "Swing_Club", "Swing_Punch", "Swing_Sling", "Swing_Bow", "torch"]) out[n] = Torch.plantKind(k(n));
+        return out; })()`);
+    const putDown = ["Swing_Axe", "Swing_AxeSide", "Swing_Pick", "Swing_Shovel", "Swing_Rake", "Swing_Hoe", "Swing_Hammer", "Swing_Rod", "Swing_Sit", "Swing_Roast", "Swing_LieDown"];
+    t.check("put down for the work of both hands (axe, pick, shovel, rake, hoe, hammer, rod) and sitting / lying; kept stooping (crouch); a fight's swings never",
+        Object.entries(kinds).every(([n, v]) => v === putDown.includes(n)), kinds);
     await home(2);
     const crouch = await t.eval("ChoppableTree.swingKindOf('Swing_Crouch')");
     await t.eval(`$gamePlayer.startToolSwing(${crouch}, null, null); 0`);
+    let crouchOk = true, crouchSheet = null, lowest = 0;
+    const seenC = [];
+    for (let i = 0; i < 14; i++) {
+        await t.frames(3);
+        const c = await t.json(`(function(){ const set = SceneManager._scene._spriteset, L = set._torchLayer, s = set._characterSprites.find(c => c._character === $gamePlayer), b = s._swingBody;
+            if (!b || !b.visible) return null; const f = b._frame, col = Math.round(f.x / 96), row = Math.round(f.y / 96), tip = Torch.CROUCH_TIPS[row][col];
+            return { sheet: b.bitmap._url.split("/").pop(), col, row, flame: L._flame.visible && L._hold.visible, fx: L._hold.x + L._flame.x, fy: L._hold.y + L._flame.y,
+                want: [s.x + tip[0] - 48 + b.x, s.y + tip[1] - 80 + b.y], front: L._hold.y > s.y, planted: !!Torch.planted(), spot: Torch.lightSpot() }; })()`);
+        if (!c) continue;
+        seenC.push(c.col);
+        crouchSheet = c.sheet;
+        lowest = Math.max(lowest, c.col);
+        if (!c.flame || c.planted || !c.front || Math.abs(c.fx - c.want[0]) > 1.5 || Math.abs(c.fy - 1 - c.want[1]) > 1.5 || !c.spot || Math.abs(c.spot.x - c.fx) > 2) { crouchOk = false; seenC.push(c); }
+        if (i === 5) await shot("schylanie.png");
+    }
+    t.check("stooping for something (the crouch) he keeps it in his hand: the sheet Hero_TorchCrouch, the flame in his fist on the measured spot every frame, in front, its light from there; nothing in the ground",
+        crouchOk && crouchSheet === "Hero_TorchCrouch.png" && lowest >= 10, { crouchSheet, lowest, seenC });
+    await t.until("!$gamePlayer._swingEvent", 5, 50);
+    await t.frames(4);
+    t.check("... and stands up with it (Hero_TorchWalk again)", (await look()).sheet === "Hero_TorchWalk" && !(await t.json("Torch.planted()")));
+    // chopping (the axe from the side): stuck in the ground beside him
+    await home(2);
+    const axe = await t.eval("ChoppableTree.swingKindOf('Swing_AxeSide')");
+    await t.eval(`$gamePlayer.startToolSwing(${axe}, null, null); 0`);
     await t.frames(10);
     L = await look();
     const pl = await t.json("Torch.planted()");
-    t.check("crouching (work): the torch stuck in the ground beside him (to his side), its own flame there, none in his hand", !!pl && L.ground && !L.hold && L.swing && Math.abs(pl.gx - (await t.eval("$gamePlayer._realX + 0.5"))) > 0.4, { pl, L });
+    t.check("chopping (the axe, both hands): the torch stuck in the ground beside him (to his side), its own flame there, none in his hand", !!pl && L.ground && !L.hold && L.swing && Math.abs(pl.gx - (await t.eval("$gamePlayer._realX + 0.5"))) > 0.4, { pl, L });
     t.check("its light comes from the stuck torch (the night layer reads Torch.lightSpot)", !!L.spot && Math.abs(L.spot.x - L.gx) < 1 && L.spot.gy === L.gy, L.spot);
     await shot("praca_wbita.png");
     await t.until("!$gamePlayer._swingEvent", 5, 50);
@@ -128,6 +161,12 @@ kit.test({ port: 9487 }, async t => {
     await t.frames(4);
     L = await look();
     t.check("he walks on: he takes it up again (torch sheet, the flame in hand, nothing in the ground)", !L.ground && L.sheet === "Hero_TorchWalk" && L.flame && !(await t.json("Torch.planted()")), L);
+    // the pick (rocks) too
+    await home(2);
+    await t.eval(`$gamePlayer.startToolSwing(ChoppableTree.swingKindOf("Swing_Pick"), null, null); 0`);
+    await t.frames(10);
+    t.check("mining (the pick): stuck in the ground too", !!(await t.json("Torch.planted()")) && (await look()).ground);
+    await t.until("!$gamePlayer._swingEvent", 6, 50);
     // sitting down: also stuck in the ground
     await home(2);
     await t.eval(`$gamePlayer.startToolSwing(ChoppableTree.swingKindOf("Swing_Sit"), null, null); 0`);

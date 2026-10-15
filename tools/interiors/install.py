@@ -161,6 +161,14 @@ def main():
     if editor_running():
         print("STOP: the RPG Maker MZ editor is running - close it first (it would overwrite data/ on save).")
         sys.exit(2)
+    # (2026-10-12) the interiors were polished in place by tools/wnetrza/build.py (and the user edits them in the editor):
+    # a map in data/ that differs from this tool's staged one is not overwritten without --force
+    changed = [m for m in sorted(NAMES) if os.path.exists(os.path.join(DATA, "Map%03d.json" % m)) and
+               open(os.path.join(DATA, "Map%03d.json" % m), "rb").read() != open(os.path.join(STAGING, "Map%03d.json" % m), "rb").read()]
+    if changed and "--force" not in sys.argv:
+        print("STOP: data/Map%s changed since this tool staged them (tools/wnetrza polish / the editor) - --force replaces them"
+              % ", Map".join("%03d" % m for m in changed))
+        sys.exit(3)
     st = staged()
     plan = doors_plan(st)
     m8_path, m8_out, doors = patch_map008(plan)

@@ -130,21 +130,60 @@
     // thirst and weight, the popups, the goal tracker, the minimap frame): black with a bright yellow accent,
     // the same as the windows (Window.png). One place to restyle them all.
     // ------------------------------------------------------------------
-    const UIStyle = {
-        fill: "rgba(11,12,15,0.9)",   // panel background
-        solid: "#0b0c0f",
-        line: "#3a3e46",              // thin grey frame line
-        accent: "#ffd23f",            // bright yellow
-        accentDim: "#c9a12a",
-        text: "#eceef0",
-        muted: "#8a9099",
-        trough: "#16181c",            // the empty part of a bar
-        outline: "rgba(0,0,0,0.9)"    // text outline on the map
+    // Two looks (Opcje -> "Wygląd", ConfigManager.uiClean - CleanHUD.js puts the option there; graphite unless it says otherwise):
+    //   "grafit"  "Grafit i miedź" (2026-10-08, docs/ui_pomysly2 idea 3): graphite see-through panels rounded 8-12 px, one thin line,
+    //             one copper accent, the skin img/system/Window_Grafit.png (tools/ui_grafit/make_skin.py)
+    //   "classic" black with the bright yellow corner brackets (2026-09-23), the skin Window.png
+    // Every colour below is read when something is drawn, so the look changes with the option.
+    const LOOKS = {
+        classic: {
+            fill: "rgba(11,12,15,0.9)",   // panel background
+            solid: "#0b0c0f",
+            line: "#3a3e46",              // thin grey frame line
+            accent: "#ffd23f",            // bright yellow
+            accentDim: "#c9a12a",
+            text: "#eceef0",
+            muted: "#8a9099",
+            trough: "#16181c",            // the empty part of a bar
+            outline: "rgba(0,0,0,0.9)"    // text outline on the map
+        },
+        grafit: {
+            fill: "rgba(22,23,26,0.9)", solid: "#16171a", line: "#40424a", accent: "#d08a5a", accentDim: "#8a5a3a",
+            text: "#ece6da", muted: "#9a958c", trough: "#2a2c31", outline: "rgba(0,0,0,0.9)"
+        }
+    };
+    const look = () => (window.ConfigManager && ConfigManager.uiClean === false ? "classic" : "grafit");
+    const grafit = () => look() === "grafit";
+    const UIStyle = { look, grafit, LOOKS };
+    for (const k of Object.keys(LOOKS.classic)) Object.defineProperty(UIStyle, k, { enumerable: true, get: () => LOOKS[look()][k] });
+    // a rounded rectangle's path (the graphite panels)
+    UIStyle.roundPath = function(ctx, x, y, w, h, r) {
+        r = Math.max(0, Math.min(r, w / 2, h / 2));
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
     };
     // a panel like the windows: corners cut off, a thin grey line, short yellow brackets on the top-left and
     // bottom-right corners. opts: { cut (px, 4), fill, line, accent: false }
     UIStyle.panel = function(ctx, x, y, w, h, opts) {
         const o = opts || {}, c = o.cut === undefined ? 4 : o.cut;
+        if (grafit()) {   // the graphite look: rounded (the cut x 2, at least 4 px), the see-through fill, one thin line, no brackets
+            const r = Math.max(4, Math.min(12, c * 2));
+            ctx.save();
+            UIStyle.roundPath(ctx, x, y, w, h, r);
+            ctx.fillStyle = o.fill || UIStyle.fill;
+            ctx.fill();
+            UIStyle.roundPath(ctx, x + 0.5, y + 0.5, w - 1, h - 1, r);
+            ctx.strokeStyle = o.line || UIStyle.line;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.restore();
+            return;
+        }
         const outline = k => {
             ctx.beginPath();
             ctx.moveTo(x + c + k, y + k); ctx.lineTo(x + w - c - k, y + k); ctx.lineTo(x + w - k, y + c + k);
@@ -174,6 +213,20 @@
     };
     // a bar: a dark trough in a thin grey line, filled `ratio` (0..1) with a flat colour and a light top edge
     UIStyle.bar = function(ctx, x, y, w, h, ratio, colour) {
+        if (grafit()) {   // the graphite look: a rounded track and the colour over it, no frame
+            const r = Math.min(h / 2, 3), fw = Math.round(w * Math.max(0, Math.min(1, ratio)));
+            ctx.save();
+            ctx.fillStyle = "rgba(52,54,60,1)";
+            UIStyle.roundPath(ctx, x, y, w, h, r);
+            ctx.fill();
+            if (fw > 0 && colour) {
+                ctx.fillStyle = colour;
+                UIStyle.roundPath(ctx, x, y, Math.max(fw, Math.min(w, h)), h, r);
+                ctx.fill();
+            }
+            ctx.restore();
+            return;
+        }
         ctx.fillStyle = UIStyle.line;
         ctx.fillRect(x - 1, y - 1, w + 2, h + 2);
         ctx.fillStyle = UIStyle.trough;
@@ -297,6 +350,45 @@
         UIStyle.bar(ctx, x + H.row + H.gap, y + Math.round((H.row - H.barH) / 2), H.barW, H.barH, ratio, colour);
     };
     window.UIStyle = UIStyle;
+
+    // ---- the windows' skin and the text colours follow the look: Window_Grafit.png in the graphite one (the cursor, the frame, the
+    // arrows, the palette of \C[n]); ColorManager reads the skin of the look (its own one is kept for the classic)
+    const SKIN_GRAFIT = "Window_Grafit";
+    const _loadWindowskin = Window_Base.prototype.loadWindowskin;
+    Window_Base.prototype.loadWindowskin = function() {
+        _loadWindowskin.call(this);
+        if (grafit()) this.windowskin = ImageManager.loadSystem(SKIN_GRAFIT);
+    };
+    let grafitSkin = null;
+    const classicSkin = Object.getOwnPropertyDescriptor(ColorManager, "_windowskin");
+    let ownSkin = classicSkin && "value" in classicSkin ? classicSkin.value : undefined;
+    Object.defineProperty(ColorManager, "_windowskin", {
+        configurable: true,
+        get() {
+            if (grafit() && ownSkin) {
+                if (!grafitSkin) grafitSkin = ImageManager.loadSystem(SKIN_GRAFIT);
+                if (grafitSkin.isReady()) return grafitSkin;
+            }
+            return ownSkin;
+        },
+        set(v) { ownSkin = v; }
+    });
+    // the graphite look's lists have no band behind each row (only the cursor marks the chosen one)
+    const _drawItemBackground = Window_Selectable.prototype.drawItemBackground;
+    Window_Selectable.prototype.drawItemBackground = function(index) {
+        if (grafit()) return;
+        _drawItemBackground.call(this, index);
+    };
+    // a window made before the look changed (Opcje -> Wygląd) takes the other skin the next time it is drawn
+    const _Window_Base_update = Window_Base.prototype.update;
+    Window_Base.prototype.update = function() {
+        _Window_Base_update.call(this);
+        if (this._lookWas !== look()) {
+            const first = this._lookWas === undefined;
+            this._lookWas = look();
+            if (!first && this.windowskin) this.loadWindowskin();
+        }
+    };
 
     // ------------------------------------------------------------------
     // One font everywhere: bitmaps drawn by plugins (HUD, popups, labels) used to fall back to the

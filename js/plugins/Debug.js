@@ -123,7 +123,7 @@
     // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
     const KINDS = ["Narzędzia i broń", "Surowce", "Jedzenie"];
     const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
-    const RAW_FOOD = [94, 98, 157, 159, 161, 168];   // raw hare, fish, deer, boar, wolf, bear: food still to be cooked
+    const RAW_FOOD = [94, 98, 157, 159, 161, 168, 173, 174];   // raw hare, fish, deer, boar, wolf, bear, herring, cod: food still to be cooked
     function kindOf(item) {
         if (item.itypeId === 2 || TOOL_EXTRA.includes(item.id)) return 0;   // (the database's key items: tools, weapons, the shield, clothes, the tent)
         const m = item.meta || {};

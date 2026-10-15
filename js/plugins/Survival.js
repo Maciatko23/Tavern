@@ -135,6 +135,8 @@
     }
 
     const hasItem = id => !!$dataItems[id] && $gameParty.hasItem($dataItems[id], false);
+    // the cloak, the boots and the backpack work only worn (Equipment.js, 2026-10-08); without it: owned is worn
+    const wears = id => { const E = window.Equipment; return E && E.worn ? E.worn(id) : hasItem(id); };
     const nowHours = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
 
     function hash(day, salt) {
@@ -360,7 +362,7 @@
         if (!isOutdoors()) return false;
         const winter = seasonIndex(this.dayNightDay()) === 3, snowing = $gameScreen.weatherType() === "snow" && $gameScreen._weatherPowerTarget > 0;   // not while it fades out
         if (!winter && !snowing) return false;
-        return !(hasItem(ITEM.cloak) || this.hasBuff("warm") || nearFire());
+        return !(wears(ITEM.cloak) || this.hasBuff("warm") || nearFire());
     };
     // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
     // roll against it (a chance), knowsSkill(id) = that one skill is learnt
@@ -379,16 +381,16 @@
         return _trySpendStamina.call(this, cost > 0 ? cost * costFactor() : cost);
     };
 
-    // boots and the backpack work by being owned
+    // boots and the backpack work worn
     const _distancePerFrame = Game_CharacterBase.prototype.distancePerFrame;
     Game_CharacterBase.prototype.distancePerFrame = function() {
         const d = _distancePerFrame.call(this);
-        return this === $gamePlayer && hasItem(ITEM.boots) ? d * BOOTS_SPEED : d;
+        return this === $gamePlayer && wears(ITEM.boots) ? d * BOOTS_SPEED : d;
     };
     const _maxItems = Game_Party.prototype.maxItems;
     Game_Party.prototype.maxItems = function(item) {
         const max = _maxItems.call(this, item);
-        const stackMax = item && item.itypeId !== 2 && hasItem(ITEM.backpack) ? max + BACKPACK_BONUS : max;
+        const stackMax = item && item.itypeId !== 2 && wears(ITEM.backpack) ? max + BACKPACK_BONUS : max;
         const w = itemWeight(item);
         if (!item || w <= 0) return stackMax;
         const budget = weightCap() - carriedWeight(item);
@@ -401,7 +403,7 @@
         return w !== undefined ? Number(w) || 0 : 0;
     }
     function weightCap() {
-        return WEIGHT_CAP_BASE + (hasItem(ITEM.backpack) ? WEIGHT_CAP_BACKPACK : 0) + (window.Combat && Combat.carryBonus ? Combat.carryBonus() : 0);   // (Siła, Combat.js)
+        return WEIGHT_CAP_BASE + (wears(ITEM.backpack) ? WEIGHT_CAP_BACKPACK : 0) + (window.Combat && Combat.carryBonus ? Combat.carryBonus() : 0);   // (Siła, Combat.js)
     }
     // total weight carried, optionally excluding one item type (to work out how much room is left for it)
     function carriedWeight(exclude) {
@@ -628,6 +630,6 @@
         }
     };
 
-    window.Survival = { foodInfo, feedback, butcher, defineBuff, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight(),
+    window.Survival = { BOOTS_SPEED, BACKPACK_BONUS, WEIGHT_CAP_BACKPACK, foodInfo, feedback, butcher, defineBuff, weatherPlan, currentWeather, stormLevel, stormPhase, stormNow, forceStorm, calmWeather, isOutdoors, costFactor, BUFFS, itemWeight, weightCap, carriedWeight: () => carriedWeight(),
         WOUND_CAP, WOUND_HOURS, HEAL_PER_HOUR, BANDAGE_HEAL };
 })();

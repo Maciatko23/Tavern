@@ -601,12 +601,110 @@
             },
             alt: { map: 111, when: "campOutside",
                 plan: [[0, "inside", "namioty"], [6.8, "wander", "namioty"], [10, "wander", "drewutnia"], [14, "wander", "namioty"], [20, "inside", "namioty"]] }
+        },
+        // ==================================================================== (2026-10-14) the harbour, Map125 (docs/przystan/KONCEPCJA.md)
+        // Their first meetings, Janek's fish trade, Roch's runs, the ferry: Przystan.js (it speaks first). The conditions are Przystan's
+        // (functions - the ferry today, the cutter away on a night run). away: "inside" there means away, not at home (TownLife).
+        {
+            // Janek, the fisherman who found the hero on the beach and carried him to Stach (the prologue). At sea at dawn, smoking
+            // and mending later, the evening at Borgar's (the tavern's free guest place gosc_8)
+            key: "janek", name: "Janek", title: "rybak", sheet: "$Npc_Janek", map: 125, speed: 3, away: ["na_morze"],
+            plan: [[0, "inside", "janek_drzwi"], [4, "work", "lodz"], [5, "inside", "na_morze"], [8.5, "work", "pomost"], [9.5, "work", "wedzarnia"],
+                   [12, "stand", "lawka"], [13, "work", "sieci"], [15, "stand", "stol_ryb"], [17, "wander", "nabrzeze"], [19, "inside", "tawerna"],
+                   [22.5, "inside", "janek_drzwi"]],
+            barks: {
+                work: ["Mewy, a sio! To nie dla was!", "Śledź idzie ławicą, jak wojsko na wojnę.", "Sieć to jak życie: jedna dziura i wszystko ucieka."],
+                stand: ["Chleb, cebula i śledź. Królewski obiad.", "Ławka twarda, ale widok na morze za darmo."],
+                wander: ["Wiatr od lądu... czuć dym. Znowu coś tam płonie.", "Prom się spóźnia. Zawsze się spóźnia."],
+                rain: ["Deszcz! Łap, w co się da. Morza się nie napijesz.", "W deszcz ryba bierze lepiej. Tylko rybak marznie."],
+                night: ["Późno już. Jutro o świcie na łódź."],
+                tavern: ["Borgar, jeszcze jedno! Ale słabe, jutro na morze.", "Opowiadałem wam, jak znalazłem chłopaka na plaży?", "Moje śledzie lepsze niż twoja kapusta, Borgar!"],
+                home: ["Sieć znowu porwana... dorsz to nie śledź, szarpie.", "Zupa rybna. Trzeci dzień z rzędu. Dobra jest."]
+            },
+            talk: {
+                morning: ["O świcie ryba głupia, a rybak mądry. Potem na odwrót.", "Śledzie biorą rano, aż woda się gotuje. Weź wędkę i stań na końcu pomostu."],
+                day: ["Wędzę na olszy. Kto wędzi na sośnie, ten je smołę.", "Wodę noszę z miasta, jak wszyscy. Morza się nie napijesz - sól wyżre ci gardło.",
+                      "Celnik liczy każdą rybę, co idzie promem. Moich nie liczy, bo za chude, mówi."],
+                evening: ["Idę do Borgara. Piwo słabe, ale opowieści mocne.", "Wieczorem morze się uspokaja. Ludzie nie."],
+                night: ["Czego tu szukasz po nocy? Jak przemytników, to ja nic nie wiem."],
+                rain: ["Deszcz! Wystaw garnki, chłopcze. Morze to nie studnia."]
+            }
+        },
+        {
+            // Roch Szkwał, the smuggler of the prologue (the cutter, the last coins, the storm). Hides by the slipway under his first name,
+            // mends nets and carries sacks on ferry days. Never goes to the town. Gone for good if the hero gives him to the customs (D20)
+            key: "przemytnik", name: "Roch", title: "łata sieci na przystani", sheet: "$Npc_Przemytnik", map: 125, speed: 3, away: ["pochylnia"],
+            when: () => { const P = window.Przystan; return !(P && typeof P.rochGone === "function" && P.rochGone()); },
+            plan: [[0, "inside", "szopa_drzwi"], [0, "inside", "pochylnia", () => !!(window.Przystan && Przystan.kuterAway())],
+                   [6, "stand", "wrak"], [9, "work", "pochylnia"], [9, "work", "molo", () => !!(window.Przystan && Przystan.ferryNow())],
+                   [13, "stand", "nabrzeze_rog"], [13, "work", "molo", () => !!(window.Przystan && Przystan.ferryNow())], [15, "stand", "nabrzeze_rog"],
+                   [16, "work", "beczka_ogien"], [21, "wander", "plaza"], [21, "inside", "pochylnia", () => !!(window.Przystan && Przystan.kuterAway())],
+                   [23.5, "inside", "szopa_drzwi"], [23.5, "inside", "pochylnia", () => !!(window.Przystan && Przystan.kuterAway())]],
+            barks: {
+                stand: ["(Roch patrzy na morze i nic nie mówi.)", "Ten kruk znowu siedzi na maszcie."],
+                work: ["Lina do liny, węzeł do węzła...", "Smoły. Gdybym miał choć garnek smoły."],
+                wander: ["Plaża w nocy jest najuczciwsza. Nikt nie kłamie, bo nikogo nie ma."],
+                rain: ["Deszcz. Dobra noc, żeby coś przewieźć. Gdyby było czym."],
+                night: ["Idź spać, chłopcze."],
+                home: ["Hm? Zamknij drzwi. Przeciąg."]
+            },
+            talk: {
+                morning: ["Kruk znowu siedział na maszcie wraku. Co rano. Patrzy na ciebie, nie na mnie."],
+                day: ["Prom co trzy dni. Na ląd puszczają tylko wojsko i ludzi z glejtem Lorda. Reszta pływa z takimi jak ja.",
+                      "Celnik ma księgę. W tej księdze jest każdy grosz i każdy człowiek. Mnie tam nie ma. I niech tak zostanie."],
+                evening: ["Vey z kantoru? Ten by sprzedał własną matkę. I sprzedał, widziałem kwit.", "Ogień w beczce. Najlepsze, co mam."],
+                night: ["Idź spać. Nocą na przystani kręcą się tylko ci, co nie powinni."],
+                rain: ["Deszcz zmywa ślady. Dlatego przemytnicy lubią deszcz. Ja nie jestem przemytnikiem, rzecz jasna."]
+            }
+        },
+        {
+            // the Lord's customs officer: the ledger, the port fee, the order to report every raven stone. At his desk in the customs house
+            // (Map128) by day, on the pier on ferry days
+            key: "celnik", name: "Sambor Kwit", title: "celnik Lorda", sheet: "$Npc_Celnik", map: 125, speed: 2,
+            plan: [[0, "inside", "komora_drzwi"], [9, "stand", "molo_kontrola", () => !!(window.Przystan && Przystan.ferryNow())], [15, "inside", "komora_drzwi"],
+                   [18, "stand", "komora_przed"], [19.5, "wander", "nabrzeze"], [21, "inside", "komora_drzwi"]],
+            barks: {
+                stand: ["Tobołki do kontroli! Po kolei!", "Opłata portowa: dwa grosze. Kto nie ma, ten czeka."],
+                wander: ["Wszystko się zgadza. Wszystko musi się zgadzać."],
+                rain: ["Deszcz moczy papiery. Zakazuję deszczu. Żartuję."],
+                night: ["Komora zamknięta. Przyjdź za dnia."],
+                home: ["Dwa grosze... dwa grosze... i jeden kamień z krukiem. Zapisane.", "Atrament znowu zgęstniał."]
+            },
+            talk: {
+                morning: ["Komora czynna od ósmej. Ty jesteś ten chłopak od Stacha, tak? Mam cię w księdze. Wszyscy są w księdze."],
+                day: ["Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Po co dworowi kruki? Nie moja rzecz. Moja rzecz to zapisać.",
+                      "Opłata portowa: dwa grosze od tobołka. Od ciebie nic, ty nie masz tobołka."],
+                evening: ["Dzień zamknięty. Rachunki się zgadzają. Prawie."],
+                night: ["Po nocy nikt uczciwy nie chodzi po przystani. Ty też wracaj."],
+                rain: ["Deszcz. Papier tego nie lubi."]
+            }
+        },
+        {
+            // the guard at the barrier (the manor guard's sheet: the Lord's colours) - by day at the barrier, at night round the quay
+            key: "straznik_przystan", name: "Strażnik przystani", title: "straż Lorda", sheet: "$Npc_Straznik", map: 125, speed: 3,
+            plan: [[0, "patrol", ["szlaban", "nabrzeze", "molo_wejscie", "nabrzeze"]], [6, "stand", "szlaban"],
+                   [22, "patrol", ["szlaban", "nabrzeze", "molo_wejscie", "nabrzeze"]]],
+            barks: {
+                stand: ["Stój. Dokąd? ...A, przechodź.", "Na przystani bez awantur, takie prawo."],
+                patrol: ["Spokojnie dziś.", "Latarnie się palą, wszystko w porządku."],
+                rain: ["Mokro jak w rybim brzuchu."],
+                night: ["Kto tam? A, to ty."]
+            },
+            talk: {
+                morning: ["Rano przypływają tylko mewy. Prom później."],
+                day: ["Pilnuję szlabanu. Kapral Wit mówi: nikt bez opłaty. Ja mówię: nikt bez powodu."],
+                evening: ["Zmiana do zmroku, potem obchód. Nuda, bracie, nuda."],
+                night: ["Nocą przystań zamknięta. Teoretycznie."],
+                rain: ["W taką pogodę nawet przemytnik siedzi w domu."]
+            }
         }
     ];
 
     // the spots of the other maps residents live on ("map" in their data): defaults only - the map's "Miejsce: <key>" events win
-    // (Map024: the guard's day post beside the left fire basket of the forecourt; his night round is the map's straz_1..4)
-    const SPOTS_BY_MAP = { 111: {}, 24: { straz_dzien: [15, 16, 2] } };
+    // (Map024: the guard's day post beside the left fire basket of the forecourt; his night round straz_1..4 - the map's "Miejsce:"
+    // markers win; 2026-10-12: the user's rebuilt garden has no straz_4 any more - the defaults keep the round: the orangery's corner,
+    // the middle path, the south path, back by the orangery's terrace)
+    const SPOTS_BY_MAP = { 111: {}, 125: { tawerna: [53, 19, 6] }, 24: { straz_dzien: [15, 16, 2], straz_1: [10, 19, 6], straz_2: [19, 19, 2], straz_3: [19, 28, 4], straz_4: [10, 28, 8] } };
 
     window.TownLifeData = { MAP: 8, FIRST_ID: 910, SPOTS, SPOTS_BY_MAP, RESIDENTS };
 })();

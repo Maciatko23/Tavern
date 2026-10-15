@@ -90,6 +90,13 @@ do studni; wyjście z archiwum na (6,13) twarzą w dół (tuż przy płycie, w �
 
 ### Map024 „Posiadłość Lorda” — oranżeria
 
+> **2026-10-12 - autor przebudował ogród dworu w edytorze** („to, co zmieniłem, ma zostać”): nie ma już pompy (116), stołu ogrodnika
+> (117), trzeciego drzewka pomarańczy (120), tylnej furtki (121), znaczników `pompa_oranzeria`, `szuflada_ogrodnika`, `woz_furtka`,
+> `straz_4` ani pasa lasu za żywopłotem; za oranżerią, pod sosną (3,20), autor postawił drewniany właz. Oranżeria, jej okna, drzwi i dwa
+> drzewka pomarańczy zostały. W1 rozdz. 5 stoi teraz na własnych polach w kodzie (`TownQuests_Data.js` SPOTS: `w1_pump` = właz 3,21,
+> `w1_drawer` = skrzynia drzewka 8,25, `w1_feliks` 2,20, `w1_kuba` 3,19), a `straz_4` (10,28) jest domyślnym polem w `TownLife_Data.js`.
+> Opis niżej to stan z 2026-10-05.
+
 W południowo-zachodniej części ogrodu, przy zachodnim żywopłocie posiadłości, stoi **oranżeria**: budynek 5 × 5 pól (x 5–9,
 y 19–23) z czerwonym dachem dworu (A3 rodzaj 56, 3 rzędy) i kamiennym parterem dworu (A4 rodzaj 105, 2 rzędy), z kominem pieca
 (oranżerię trzeba grzać zimą) i dymem. Front to cztery łukowe okna z ołowianymi szybkami, za którymi widać drzewka pomarańczy, oraz

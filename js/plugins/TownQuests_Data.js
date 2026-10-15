@@ -143,6 +143,7 @@
         skrzynia: { name: "Skrzynia Baltazara", icon: 0 },
         podkowy: { name: "Podkowy dla straży", icon: 342 },
         cwieki: { name: "Ćwieki do butów", icon: 344 },
+        zagiel: { name: "Żagiel od Marty", icon: 348 },   // (2026-10-14, D20: the harbour)
         obwieszczenie: { name: "Obwieszczenie sołtysa", icon: 0 },
         koszyki: { name: "Koszyki dla dworu", icon: 0 },
         lek: { name: "Lek z kontynentu", icon: 0 },
@@ -182,10 +183,15 @@
         // person); nomark: no yellow diamond over it
         k26_ring: { map: 118, id: 951, x: 5, y: 6, name: "Błysk w kałuży", img: ["!Quest_Places", 0, 2, 2] },
         w1_grate: { map: 118, id: 952, x: 5, y: 4, name: "Krata z krukiem" },
-        w1_pump: { map: 24, id: 951, x: 7, y: 26, name: "Pompa na włazie" },
-        w1_drawer: { map: 24, id: 952, x: 8, y: 27, name: "Szuflada ogrodnika" },
-        w1_feliks: { map: 24, id: 953, x: 6, y: 25, name: "Feliks", img: ["$Npc_Feliks", 0, 4, 1], solid: true, nomark: true },
-        w1_kuba: { map: 24, id: 954, x: 3, y: 24, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 6, 1], solid: true, nomark: true },
+        // (2026-10-12) the user rebuilt the manor's garden (Map024): the pump, the gardener's table, the back gate and their markers are
+        // gone - "to, co zmieniłem, ma zostać". The scene now uses what the garden has: the wooden hatch in the grass behind the orangery,
+        // under the pine (the user's event at 3,20 - the raven is on its bolt), the orange tree's planter by the orangery's door (8,24 - a
+        // loose board, the drawing under it), Feliks and Kuba by the hatch at night (Kuba is let in through the main gate - Wit takes his
+        // cut). Own coordinates, no markers: the hero stands on the place (O) or faces it
+        w1_pump: { map: 24, id: 951, x: 3, y: 21, name: "Właz z krukiem" },
+        w1_drawer: { map: 24, id: 952, x: 8, y: 25, name: "Skrzynia drzewka pomarańczy" },
+        w1_feliks: { map: 24, id: 953, x: 2, y: 20, name: "Feliks", img: ["$Npc_Feliks", 0, 6, 1], solid: true, nomark: true },
+        w1_kuba: { map: 24, id: 954, x: 3, y: 19, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 2, 1], solid: true, nomark: true },
         w2_book: { map: 119, id: 951, x: 6, y: 6, name: "Księga sygnałów" },
         w2_chron: { map: 119, id: 952, x: 10, y: 5, name: "Kroniki zakonu" },
         // (2026-10-06) W3 a: Melia by the Kupała bonfire before the south gate (only that night; bust: her own)
@@ -224,7 +230,9 @@
         w6_help2: { map: 3, id: 907, x: 22, y: 26, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
         w6_hide_tavern: { map: 25, id: 951, x: 40, y: 38, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
         w6_hide_grandpa: { map: 19, id: 951, x: 17, y: 6, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
-        w6_hide_belfry: { map: 108, id: 951, x: 8, y: 5, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true }
+        w6_hide_belfry: { map: 108, id: 951, x: 8, y: 5, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
+        // (2026-10-14) the harbour (Map125, tools/przystan): D20 - the cutter's wreck on the beach, dragged onto the slipway at dawn
+        przystan_wrak: { map: 125, id: 951, marker: "d20_wrak", x: 18, y: 35, name: "Wrak kutra" }
     };
 
     // W1 rozdz. 6 a/b: the sluice half open - the market well's ration (<Studnia:2>) gives this many draws a day more
@@ -1432,25 +1440,25 @@
                 // rozdz. 3: Kuba at the market
                 kubaAsk: ["> Kuba. Widziałem cię w nocy przy stawie. Kamienna rura w skale, beczka za beczką.", "(Kuba rozgląda się na boki.) Ciszej, chłopcze! ...Czego chcesz?"],
                 kubaTell: ["Dobra. Ale nikomu ani słowa. Woda jest z dworu.",
-                    "Feliks, kamerdyner Lorda. Po pierwszej w nocy odkręca coś w ogrodzie i z rury pod wodospadem leci woda. Płacę mu trzy grosze za beczkę. A jak trzeba więcej, jadę wozem pod tylną furtkę ogrodu i Feliks napełnia mi beczki z pompy w oranżerii.",
+                    "Feliks, kamerdyner Lorda. Po pierwszej w nocy odkręca coś w ogrodzie i z rury pod wodospadem leci woda. Płacę mu trzy grosze za beczkę. A jak trzeba więcej, idę nocą do ogrodu dworu - kapral przepuszcza - i Feliks napełnia mi beczki spod włazu za oranżerią.",
                     "Sołtys płaci mi dziewięć groszy za przydział - piekarnia, kuźnia, tawerna. Kapral nie widzi wozu, bo dostaje swoją działkę. Wszyscy mają swoje. Tylko studnia nie ma nic.",
                     "> A Lord?", "Lord? Lord myśli, że ogród poi głęboka studnia dworu. Feliks mu tak mówi. Ja tam nic nie wiem."],
                 kubaPay: ["Płacić? Tobie? ...Pięć groszy w każdy dzień targowy. I ani słowa.", "(Kuba zaciska zęby.) Woda jest z dworu, z ogrodu Lorda. Więcej nic nie powiem. Ty sępie."],
-                kubaFlee: ["Sołtysowi?! Nie... nie, chłopcze, proszę... To Feliks! Kamerdyner! To on otwiera mi furtkę ogrodu dworu i daje wodę z pompy w oranżerii! Ja tylko wożę!",
+                kubaFlee: ["Sołtysowi?! Nie... nie, chłopcze, proszę... To Feliks! Kamerdyner! To on wpuszcza mnie nocą do ogrodu dworu i daje wodę spod włazu za oranżerią! Ja tylko wożę!",
                     "(Kuba rzuca beczki i biegnie w stronę bramy.)"],
                 kubaLater: ["To zapomnij. I idź stąd, ludzie patrzą."],
                 kubaTribute: ["(Kuba wciska ci monety, nie patrząc w oczy.) Pięć groszy. Dzień targowy. Udław się."],
-                noteTell: ["Kuba mówi wszystko", "Kuba płaci Feliksowi, kamerdynerowi Lorda, trzy grosze za beczkę. Po pierwszej w nocy Feliks odkręca coś w ogrodzie i z rury pod wodospadem leci woda; więcej Kuba bierze z pompy w oranżerii, przez tylną furtkę ogrodu. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord myśli, że ogród poi studnia dworu."],
+                noteTell: ["Kuba mówi wszystko", "Kuba płaci Feliksowi, kamerdynerowi Lorda, trzy grosze za beczkę. Po pierwszej w nocy Feliks odkręca coś w ogrodzie i z rury pod wodospadem leci woda; więcej Kuba bierze nocą spod włazu za oranżerią w ogrodzie dworu. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord myśli, że ogród poi studnia dworu."],
                 notePay: ["Kuba płaci", "Kuba płaci mi pięć groszy w każdy dzień targowy za milczenie. Powiedział tylko tyle: woda jest z dworu, z ogrodu Lorda. Pewnie poskarży się komuś we dworze."],
-                noteFlee: ["Kuba uciekł", "Zagroziłem Kubie sołtysem. Wykrzyczał, że to Feliks, kamerdyner Lorda, daje mu wodę z pompy w oranżerii - i uciekł z miasta na tydzień. Piekarnia i kuźnia zostały bez przydziału, a Baltazar sprzedaje wodę dwa razy drożej."],
+                noteFlee: ["Kuba uciekł", "Zagroziłem Kubie sołtysem. Wykrzyczał, że to Feliks, kamerdyner Lorda, daje mu wodę spod włazu za oranżerią - i uciekł z miasta na tydzień. Piekarnia i kuźnia zostały bez przydziału, a Baltazar sprzedaje wodę dwa razy drożej."],
                 // rozdz. 5: the orangery at night
-                pump: ["> (Pompa stoi na okrągłym kamiennym włazie. W kamieniu wyryty kruk - taki sam jak na kracie w studni.)", "> (Pod włazem szumi woda. Głośno. Tu płynie.)", "> Dwór stoi na kanale zakonu."],
-                drawer: ["> (Szuflada stołu ogrodnika. Doniczki, rafia, kielnia... i zwinięty papier.)",
+                pump: ["> (Za oranżerią, w trawie pod sosną, drewniany właz. Na żelaznej zasuwie wyryty kruk - taki sam jak na kracie w studni.)", "> (Spod włazu szumi woda. Głośno. Tu płynie.)", "> Dwór stoi na kanale zakonu."],
+                drawer: ["> (Skrzynia drzewka pomarańczy przy drzwiach oranżerii. Jedna deska luźna - pod nią zawiniątko z ceraty.)",
                     "> (Rysunek: kanał spod wzgórza, rozwidlenie, zasuwa. Dopisek drobnym pismem: „zasuwa na dworze, studnia i młyn zamknięte. F.”)", "> F. jak Feliks. Biorę to."],
-                note5: ["Oranżeria nocą", "Pompa w oranżerii dworu stoi na kamiennym włazie z krukiem - dwór dobudowano na kanale zakonu. W szufladzie stołu ogrodnika leżał rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte. F.” Zabrałem go - to dowód."],
-                sawFeliks: ["> (Tylna furtka uchylona. Za żywopłotem stoi wóz Kuby z pustymi beczkami.)", "> (Feliks podaje mu przez furtkę wiadro za wiadrem, prosto z pompy.)",
+                note5: ["Oranżeria nocą", "Za oranżerią dworu, w trawie pod sosną, jest drewniany właz z krukiem na zasuwie - dwór dobudowano na kanale zakonu. W skrzyni drzewka pomarańczy przy drzwiach oranżerii leżał rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte. F.” Zabrałem go - to dowód."],
+                sawFeliks: ["> (Za oranżerią, przy włazie pod sosną, stoi Kuba z pustymi beczkami.)", "> (Feliks odsuwa zasuwę i podaje mu spod włazu wiadro za wiadrem.)",
                     "> Kamerdyner Lorda. Nocą. Po trzy grosze od beczki."],
-                noteFeliks: ["Feliks przy furtce", "Po pierwszej w nocy Feliks otwiera tylną furtkę ogrodu dworu. Za żywopłotem czeka wóz Kuby, a Feliks napełnia jego beczki z pompy w oranżerii."],
+                noteFeliks: ["Feliks przy włazie", "Po pierwszej w nocy Kuba przychodzi do ogrodu dworu z beczkami - kapral go przepuszcza. Za oranżerią, przy włazie pod sosną, Feliks napełnia mu je wodą spod włazu."],
                 caughtGuard: "Stój! Kto tu?! ...Won mi z ogrodu, obdartusie!", caughtFeliks: "Kto tam?! Straż! Straż!",
                 // rozdz. 6: the big choice
                 soltysAsk: ["Chłopcze, chodzisz jakiś zamyślony. Masz coś dla mnie?"],
@@ -1458,21 +1466,21 @@
                 soltysWait: ["W dzień targowy? Hm. Coś, co wszyscy muszą usłyszeć naraz? ...Dobrze. Będę czekał."],
                 soltysLater: ["Jak będziesz gotów, wiesz, gdzie mnie szukać."],
                 silent: ["Nic? No to nic. Woda sama się nie znajdzie, wiem, wiem..."],
-                reveal: ["> Sołtysie. To rysunek śluzy zakonu, z szuflady w oranżerii dworu. Podpisany „F.” - jak Feliks.",
+                reveal: ["> Sołtysie. To rysunek śluzy zakonu, spod drzewka przy oranżerii dworu. Podpisany „F.” - jak Feliks.",
                     "(Sołtys czyta. Raz. Drugi raz. Czerwienieje.)", "Ludzie! LUDZIE! Słuchajcie wszyscy! (Sołtys wchodzi na cembrowinę studni i czyta rysunek na głos.)",
                     "> (Tłum rośnie. Ktoś krzyczy: „Do dworu!” Idziecie pod bramę wschodnią, a Lord Zaleski wychodzi do ludzi.)",
                     "> (Lord czyta długo. Blednie. „Mój dziadek postawił dwór na kanale? Feliks...? Nie wiedziałem. Na Boga, nie wiedziałem.”)",
                     "> (Lord każe aresztować Feliksa i otworzyć śluzę - do połowy, więcej susza nie da. Na kaprala Wita patrzy jak na obcego. Na ciebie - chłodno.)",
                     "Słyszysz? Młynówka szumi! Młyn ruszy, a studnia... może da wiadro więcej na dzień. Dziękuję ci, chłopcze. Całe miasto ci dziękuje."],
                 lordAsk: ["> Panie. Muszę panu coś pokazać. Po cichu, bez świadków."],
-                lordShow: ["> (Podajesz mu rysunek.) Z szuflady w oranżerii. Pod pompą jest kanał zakonu, a ta zasuwa zamyka studnię i młyn.",
+                lordShow: ["> (Podajesz mu rysunek.) Spod drzewka przy oranżerii. Pod włazem za oranżerią jest kanał zakonu, a ta zasuwa zamyka studnię i młyn.",
                     "To... pismo Feliksa. (Lord długo milczy.) Mój dziadek postawił dwór na kanale zakonu? A ja przez trzy lata suszy myślałem, że ogród poi nasza głęboka studnia.",
                     "Chodź ze mną. Zejdziemy do oranżerii razem.",
                     "> (W oranżerii Lord sam kręci kołem zasuwy. Do połowy - więcej susza nie da. Spod ziemi dochodzi szum wody, która idzie do miasta.)",
                     "Feliks zniknie z dworu jeszcze dziś. Bez hałasu - miasto nie musi wiedzieć, że mój kamerdyner sprzedawał wodę moich ludzi.",
                     "A ty... za lojalność dwieście na poczet długu twojego dziadka. I pamiętaj: od dziś masz we dworze przyjaciela."],
                 lordLater: ["Po cichu? Hm. Wróć, kiedy się zdecydujesz."],
-                feliksAsk: ["> Feliksie. Pompa w oranżerii, właz z krukiem. I rysunek śluzy z twoim „F.”", "(Feliks uśmiecha się samymi ustami.) Ciszej, młodzieńcze. Ludzie słuchają. ...Czego pan chce?"],
+                feliksAsk: ["> Feliksie. Właz z krukiem za oranżerią. I rysunek śluzy z twoim „F.”", "(Feliks uśmiecha się samymi ustami.) Ciszej, młodzieńcze. Ludzie słuchają. ...Czego pan chce?"],
                 feliksDeal: ["Dwadzieścia groszy co tydzień. Zgoda. Pierwsze dwadzieścia - proszę. Następne za tydzień, tu, przy straganach.",
                     "(Feliks pochyla się bliżej.) Tylko niech pan uważa na drogach, młodzieńcze. Drogi bywają niebezpieczne."],
                 feliksLater: ["Z pewnością się zobaczymy. Miłego dnia, młodzieńcze."],
@@ -1523,10 +1531,10 @@
                 { ch: 4, type: "talk", to: "kowal", hours: H_KOWAL, text: "Zapytaj Tadka o kratę z krukiem (kuźnia, 6–17).",
                     say: ["> Tadek, na dnie studni jest żelazna krata. Stara, z wykutym krukiem. Kto mógł taką zrobić?",
                         "Krata z krukiem? Tej kraty nie kuł kowal, tylko zakon. Takiej roboty dziś nikt nie umie - żelazo bez rdzy po trzystu latach.",
-                        "Drugą taką widziałem raz w życiu. W ogrodzie dworu, w oranżerii - Feliks wołał mnie do pompy. Pompa stoi na kamiennym włazie, a na włazie... ten sam kruk.",
+                        "Drugą taką widziałem raz w życiu. W ogrodzie dworu, przy oranżerii - Feliks wołał mnie do zasuwy. Za nią, pod sosną, jest właz, a na zasuwie... ten sam kruk.",
                         "Feliks zapłacił mi wtedy podwójnie. Żebym zapomniał. No to zapomniałem. Do dziś."] },
                 { ch: 5, type: "custom", tick: "w1Orangery", spotFx: "w1Orangery", spots: ["w1_pump", "w1_drawer", "w1_feliks", "w1_kuba"],
-                    text: "Zakradnij się nocą (21:00–4:30) do oranżerii w ogrodzie dworu (za bramą wschodnią). Strażnik obchodzi ogród - skradaj się (C) i nie wchodź mu w oczy. Obejrzyj pompę na włazie i szufladę stołu ogrodnika." },
+                    text: "Zakradnij się nocą (21:00–4:30) do oranżerii w ogrodzie dworu (za bramą wschodnią). Strażnik obchodzi ogród - skradaj się (C) i nie wchodź mu w oczy. Obejrzyj właz z krukiem za oranżerią (pod sosną) i skrzynię drzewka pomarańczy przy drzwiach oranżerii." },
                 { ch: 6, type: "custom", talk: "w1Choice",
                     text: "Rysunek śluzy to dowód. Co z nim zrobisz? Ujawnij go z sołtysem na rynku w dzień targowy (8–14), zanieś po cichu Lordowi (drzwi dworu, 8–20), postrasz nim Feliksa (rano przy straganach) - albo powiedz sołtysowi, że nic nie masz, i milcz." },
                 { ch: 6, type: "custom", talk: "w1Feliks", tick: "w1Ambush", text: "Feliks płaci ci 20 G co tydzień za milczenie (rano przy straganach). Uważaj na drogach." },
@@ -2329,6 +2337,109 @@
                 wolves: "Wilki! Wilki pod namiotami!",
                 cold: ["(Ludmiła odwraca wzrok.) Nie mam ci nic do powiedzenia.", "(Ludmiła zasłania Elę spódnicą.) Idź sobie. Proszę."]
             }
+        },
+        // =========================================================== (2026-10-14) THE HARBOUR (Map125, docs/przystan/KONCEPCJA.md)
+        // Janek the fisherman and Roch Szkwał the smuggler (the prologue's people). Their first meetings, Janek's fish trade, the ferry,
+        // the cutter's states and the night run: Przystan.js (its handlers: k47Rod, d20Noc, w10Wyslany, w10Wiesc - TownQuests.FX)
+        // =========================================================== K47
+        {
+            id: "K47", kind: "K", title: "Pierwszy połów", giver: "janek", icon: 173, where: "Przystań, pomost rybacki", when: "8–20",
+            desc: "Janek uczy łowić w morzu: dwa śledzie z pomostu, a potem patroszenie.",
+            offer: {
+                cond: { hours: [8, 20], flags: ["janekMet"] },
+                say: ["Chcesz się nauczyć łowić w morzu? Morska ryba to nie ta ze stawu. Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie.",
+                    "Złów dwa śledzie z pomostu i przynieś mi. Pokażę ci, jak się je patroszy."],
+                options: [
+                    { label: "Spróbuję. Wędkę mam.", then: "accept", say: ["To dobrze. Koniec pomostu, spławik na fali. I cierpliwość."] },
+                    { label: "Nie mam wędki.", then: "accept", fx: "k47Rod", say: ["Masz moją starą. Kij nie najprostszy, ale ryba tego nie wie."] },
+                    { label: "Nie teraz.", then: "decline", say: ["Morze poczeka. Ono zawsze czeka."] }
+                ]
+            },
+            steps: [
+                { type: "bring", to: "janek", need: [[173, 2]], hours: [5, 21], text: "Złów w morzu 2 śledzie (z pomostu albo z brzegu przystani) i przynieś je Jankowi.",
+                    remind: ["Dwa śledzie. Najlepiej biorą o świcie i o zmierzchu. I morskiej wody nie pij, choćby nie wiem co."], hero: ["> Dwa śledzie, jak chciałeś."],
+                    done: ["No proszę! Pierwsze śledzie. Patrz: nóż tu, pod skrzela, jednym ruchem... O tak.",
+                        "Te zostaw mnie, a masz wędzonkę. I radę: dorsza szukaj przy dnie, zarzucaj daleko."] }
+            ],
+            reward: { xp: 40, items: [[106, 2]], flag: "rybackaRada",
+                note: ["Rybacka rada Janka", "Janek: „Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie i bierze rzadziej, ale jest tłustszy. Morskiej wody nie pij.” Na przystani ryby biorą mi teraz trochę lepiej."] }
+        },
+        // =========================================================== K48
+        {
+            id: "K48", kind: "K", title: "Sieci po sztormie", giver: "janek", icon: 92, where: "Przystań", when: "9–20, po „Pierwszym połowie”",
+            desc: "Sztorm, który przyniósł bohatera, porwał Jankowi sieci.",
+            offer: {
+                cond: { hours: [9, 20], flags: ["janekMet"], done: ["K47"] },
+                say: ["Ten sztorm, co i ciebie przyniósł, porwał mi sieci na strzępy. Łatam, łatam, a dziur coraz więcej.",
+                    "Sześć garści włókna i dwie liny. Załatam i znowu pójdą w morze."],
+                yes: "Przyniosę.", no: "Nie teraz.",
+                accept: ["Dobry z ciebie chłopak. Stach może być dumny."], decline: ["Jak znajdziesz chwilę, to wiesz, gdzie mnie szukać."]
+            },
+            steps: [
+                { type: "bring", to: "janek", need: [[92, 6], [93, 2]], hours: [6, 21], text: "Przynieś Jankowi 6× Włókno i 2× Lina na sieci (przystań).",
+                    remind: ["Sześć garści włókna i dwie liny. Bez nich sieć to same dziury."], hero: ["> Włókno i liny, na sieci."],
+                    done: ["Ha! Teraz to będzie sieć. Masz, za fatygę. I wędzonkę na drogę, prosto z mojej wędzarni."] }
+            ],
+            reward: { gold: 20, xp: 40, items: [[106, 2]] }
+        },
+        // =========================================================== D20
+        {
+            id: "D20", kind: "D", title: "Kuter na pochylni", giver: "przemytnik", icon: 80, where: "Przystań (plaża, pochylnia), Podgrodzie", when: "od spotkania z Rochem",
+            desc: "Roch chce połatać rozbity kuter, którym przywiózł bohatera z lądu. Deski, gwoździe, smoła, żagiel - i noc, w którą trzeba wypłynąć przed nosem celnika.",
+            offer: {
+                cond: { hours: [6, 21], flags: ["rochMet"] },
+                say: ["Kuter da się połatać. Kadłub cały, tylko burta i maszt. I żagiel, bo z tamtego zostały szmaty.",
+                    "Najpierw trzeba go ściągnąć z plaży na pochylnię. Sam nie dam rady. Janek ma silne ręce i nie zadaje pytań."],
+                yes: "Pomogę ci.", no: "Nie teraz.",
+                accept: ["Wiedziałem. Pogadaj z Jankiem. Mnie się boi, ciebie lubi."], decline: ["Kuter nie ucieknie. Leży, jak leżał."]
+            },
+            steps: [
+                { type: "talk", to: "janek", hours: [8, 20], text: "Poproś Janka o pomoc przy wraku (przystań).",
+                    say: ["> Roch chce połatać kuter. Pomożesz ściągnąć wrak z plaży na pochylnię?",
+                        "Roch, mówisz... (Janek drapie się po zaroście.) Ja tam nic nie wiem o żadnym Rochu. Ale wrak to wrak, a pochylnia stoi pusta.",
+                        "Jutro o świcie, przy wraku. Przynieś dwie liny - moje są w sieciach."] },
+                { type: "spot", spot: "przystan_wrak", hours: [5, 10], need: [[93, 2]], text: "O świcie (5–10) przyjdź do wraku na plaży z 2 linami.",
+                    early: ["> O świcie, mówił Janek. Jeszcze nie pora."],
+                    say: ["@janek: Jest i nasz pomocnik! Liny tu, pod dziób. Roch, łap za rufę!", "@przemytnik: Na trzy. Raz... dwa... ciągnij!",
+                        "> (Kadłub zgrzyta po kamieniach, ale idzie. Krok po kroku, aż na deski pochylni.)"],
+                    done: ["@janek: Uff. Leży. Ja wracam do sieci - a wy róbcie, co chcecie. Ja nic nie widziałem."],
+                    reward: { flag: "d20Pochylnia" } },
+                { type: "bring", to: "przemytnik", need: [[80, 8], [88, 20]], hours: [6, 22], text: "Przynieś Rochowi 8× Deski i 20× Gwoździe na burtę.",
+                    remind: ["Osiem desek i dwadzieścia gwoździ. Burta sama się nie zrośnie."], hero: ["> Deski i gwoździe."],
+                    done: ["Porządne deski. Burtę zrobię w dwa dni. Teraz smoła - bez smoły kuter to sito.",
+                        "Zbych z Podgrodzia pędzi smołę z karpiny. Smolarz, to i nazwisko ma. Zanieś mu drewna, zrobi."] },
+                { type: "bring", to: "drwal", need: [[61, 6]], hours: [6, 21], gives: [[176, 2]], text: "Zanieś Zbychowi Smolarzowi 6× Drewno - napędzi smoły (Podgrodzie, drewutnia).",
+                    remind: ["Smoła? Z karpiny się pędzi. Daj sześć polan, to ci napędzę."], hero: ["> Roch z przystani potrzebuje smoły. Na kuter."],
+                    done: ["Roch, powiadasz? Nie znam. ...Ale smołę znam. Masz, dwa garnki. Smarować na ciepło."] },
+                { type: "bring", to: "praczka", need: [[92, 10]], hours: [6, 18], vgives: { zagiel: 1 }, text: "Zanieś praczce Marcie 10× Włókno - uszyje żagiel (Podgrodzie).",
+                    remind: ["Żagiel? Z czego, z powietrza? Dziesięć garści lnu, to uszyję."], hero: ["> Uszyjesz żagiel na kuter? Mam len."],
+                    done: ["(Marta rozkłada płótno na kolanach.) Takiego wielkiego jeszcze nie szyłam. Masz. Mocne, podwójnym ściegiem."] },
+                { type: "bring", to: "przemytnik", need: [[176, 2], ["v:zagiel", 1]], hours: [6, 22], text: "Zanieś Rochowi smołę i żagiel.",
+                    remind: ["Smoła i żagiel. Bez nich nigdzie nie popłynę."], hero: ["> Smoła od Zbycha i żagiel od Marty."],
+                    done: ["(Roch długo gładzi płótno.) Dobra robota. Kuter będzie pływał. Jutro go zwodujemy.",
+                        "A potem trzeba wypłynąć. Nocą. Celnik nie może wiedzieć. Przyjdź wieczorem, po dwudziestej."],
+                    reward: { flag: "d20Gotowy" } },
+                { type: "custom", check: "d20Noc", text: "Kuter gotowy. Wieczorem (20–2) pomóż Rochowi wypłynąć przed nosem strażnika - albo donieś na niego celnikowi (komora celna, 8–18)." }
+            ],
+            reward: { xp: 150 }
+        },
+        // =========================================================== W10
+        {
+            id: "W10", kind: "W", title: "List do matki", giver: "janek", icon: 175, where: "Przystań: prom albo kuter Rocha", when: "od dnia 4",
+            desc: "Matka obiecała przypłynąć następnym promem. Prom przypływa co trzy dni - a jej nie ma.",
+            offer: {
+                cond: { hours: [8, 20], flags: ["janekMet"], day: 4 },
+                say: ["Twoja matka obiecała przypłynąć następnym promem, mówiłeś? Prom był... i nikogo.",
+                    "Napisz do niej. Przewoźnik promu bierze listy na ląd, trzy grosze. Tylko że celnik czyta każdy list, zanim pójdzie."],
+                yes: "Napiszę do niej.", no: "Jeszcze nie teraz.",
+                accept: ["Dobrze. Papier i węgiel dostaniesz ode mnie. Pisz prosto, bez nazwisk."], decline: ["Jak zechcesz, to wiesz, gdzie mnie szukać."]
+            },
+            steps: [
+                { type: "custom", check: "w10Wyslany", ch: 1,
+                    text: "Wyślij list do matki: promem (w dzień promu 9–15, przewoźnik na molo, 3 G - celnik go przeczyta) albo kutrem Rocha, gdy zacznie pływać." },
+                { type: "custom", check: "w10Wiesc", ch: 2, text: "Czekaj na wieści z lądu: przy następnej fali ludzi z promu albo po rejsie Rocha." },
+                { type: "pause", ch: 3, text: "Matka nie przypłynęła. Ślad prowadzi na północ, za wojskiem. Ciąg dalszy wkrótce." }
+            ]
         }
     ];
 

@@ -68,6 +68,9 @@ PRZED = {
     'uchodzca': (OK, 'ciemne włosy, oliwkowa kurta.'),
     'zebrak': (OK, 'siwe długie włosy i broda, łachmany.'),
     'marek': (BAD, 'nowy mieszkaniec bez popiersia - w rozmowie tylko dymek nad głową.'),
+    'janek': (BAD, 'nowa postać przystani (2026-10-14) bez popiersia.'),
+    'przemytnik': (BAD, 'nowa postać przystani (2026-10-14) bez popiersia.'),
+    'celnik': (BAD, 'nowa postać przystani (2026-10-14) bez popiersia.'),
 }
 # after the pass: only what changed (the rest keeps its verdict from PRZED)
 PO = {
@@ -97,6 +100,15 @@ PO = {
     'bronek': (FIXED, 'bez fartucha: kremowa lniana tunika z dekoltem w serek i sznurkiem, rudawe włosy.'),
     'zosia': (FIXED, 'zgaszona czerwona sukienka, biały poplamiony fartuszek z szelkami, jasne kucyki.'),
     'marek': (FIXED, 'nowe Marek_Bust (baza SF_Actor3_3): długie potargane ciemne włosy, długa broda, blady i zakurzony, puste spojrzenie, brudna koszula, skórzana kamizelka.'),
+    # the harbour (2026-10-14)
+    'janek': (FIXED, 'nowe Janek_Bust (baza Actor3_1): granatowa czapka z dzianiny z wywiniętym brzegiem, rudy krótki zarost z wąsami, '
+                     'ogorzała twarz, szaroniebieska koszula, skórzany fartuch z łuskami, szelki i wiklinowy kosz za ramieniem. '
+                     'Na mapie broda trochę pełniejsza.'),
+    'przemytnik': (FIXED, 'nowe Przemytnik_Bust (baza People2_1, bez okularów; kaptur z Actor3_5): brązowy kaptur z woskowanego płótna, '
+                          'pełna siwa broda z wąsami, ciemne gęste brwi, ogorzała skóra, złoty kolczyk, brązowa peleryna i płaszcz, '
+                          'ciemna kamizelka - jak na mapie i na planszy prologu.'),
+    'celnik': (FIXED, 'nowe Celnik_Bust (baza SF_People1_5, bez wąsów): czarna okrągła czapka bez daszka, krótkie siwe włosy, siwe '
+                      'bokobrody, gładki podbródek, wąskie usta, czerwony kaftan z czarnym kołnierzem i czarnym koniem, księga pod pachą.'),
 }
 
 BH = 280                 # the bust's height here

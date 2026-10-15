@@ -24,7 +24,8 @@
  * Hero_Bow, Hero_Spear, Hero_Club, Hero_Punch, Hero_Crouch, Hero_Sit, Hero_Roast,
  * Hero_LieDown, Hero_Roll, Hero_Torch): 4 wiersze (dół, lewo, prawo, góra), 17-33 klatek 96x96
  * (ChoppableTree: swingKind pyta HeroLook.swingDef). Skradanie (C): Hero_Sneak.
- * Z zapaloną pochodnią w ręku (Torch.js): Hero_TorchWalk, Hero_TorchRun, Hero_TorchSneak.
+ * Z zapaloną pochodnią w ręku (Torch.js): Hero_TorchWalk, Hero_TorchRun, Hero_TorchSneak,
+ * a schylając się po coś (kucanie): Hero_TorchCrouch.
  *
  * Menu F9, zakładka Zdarzenia: "Nowa postać" przełącza na starego Reida i z powrotem.
  */
@@ -188,8 +189,15 @@
 
     // ---- the work: the new swing sheets where there are some
     const swingCache = {};
+    // stooping with the burning torch in his hand (Torch.js): the crouch with it (the user, 2026-10-08: he does not put it down to pick
+    // something up)
+    const TORCH_SWINGS = { 6: "Hero_TorchCrouch" };
     function swingDef(kind, def) {
         if (!active() || !SWINGS[kind]) return def;
+        if (TORCH_SWINGS[kind] && torchHeld()) {
+            const key = "t" + kind;
+            return swingCache[key] || (swingCache[key] = Object.assign({}, def, SWINGS[kind], { sheet: TORCH_SWINGS[kind] }));
+        }
         return swingCache[kind] || (swingCache[kind] = Object.assign({}, def, SWINGS[kind]));
     }
 
@@ -203,7 +211,8 @@
         ImageManager.loadCharacter(SNEAK);
         for (const s of Object.values(TORCH_SHEETS)) ImageManager.loadCharacter(s);
         for (const s of Object.values(SWINGS)) ImageManager.loadSystem(s.sheet);
+        for (const s of Object.values(TORCH_SWINGS)) ImageManager.loadSystem(s);
     };
 
-    window.HeroLook = { active, setActive, swingDef, heroCell, SWINGS, ROWS, STRIDE, TORCH_SHEETS };
+    window.HeroLook = { active, setActive, swingDef, heroCell, SWINGS, ROWS, STRIDE, TORCH_SHEETS, TORCH_SWINGS };
 })();

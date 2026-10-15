@@ -1,0 +1,127 @@
+{
+  "_opis": "Arkusze pojedynczej postaci MZ (!$ = bez podniesienia o 6 px, 3x4 komórek). Komórka wyśrodkowana w poziomie na polu zdarzenia, dołem na dole pola. Pola: x/y względem pola zdarzenia (0,0), y ujemne = wyżej. Łodzie: wzór kroków 0/1/2 = kołysanie (włącz 'animacja w miejscu'/stepping, wolna prędkość). Zrobione przez tools/przystan/art/build_objects.py.",
+  "obiekty": {
+    "Lodz_Janka": {
+      "arkusz": "img/characters/!$Przystan_Lodz_Janka.png",
+      "rozmiar_arkusza": [432, 288],
+      "komorka": [144, 72],
+      "obraz_w_komorce": [0, 2, 144, 70],
+      "gdzie": "woda",
+      "kolysanie": [{"dx": 0, "dy": 0}, {"dx": 0, "dy": 1}, {"dx": 0, "dy": 2}],
+      "pola": {
+        "x_od": -1,
+        "x_do": 1,
+        "y_od": -1,
+        "y_do": 0,
+        "px_wzgledem_dolu_srodka_pola": [-72, -70, 72, -2]
+      },
+      "szerokosc_w_polach": 3.0,
+      "wysokosc_w_polach": 1.42,
+      "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
+      "gdzie_postawic": "pole wody pod środkiem kadłuba przy pomoście rybackim; kadłub dokładnie na 3 polach (x-1..x+1), dno 2 px nad dołem pola; bez przesunięcia w bok (pełna szerokość komórki)",
+      "opis": "łódź rybacka Janka: sieć, kosz, wiosła, kikut masztu"
+    },
+    "Lodz_Mala": {
+      "arkusz": "img/characters/!$Przystan_Lodz_Mala.png",
+      "rozmiar_arkusza": [360, 256],
+      "komorka": [120, 64],
+      "obraz_w_komorce": [2, 0, 116, 62],
+      "gdzie": "woda",
+      "kolysanie": [{"dx": 0, "dy": 0}, {"dx": 0, "dy": 1}, {"dx": 1, "dy": 2}],
+      "pola": {
+        "x_od": -1,
+        "x_do": 1,
+        "y_od": -1,
+        "y_do": 0,
+        "px_wzgledem_dolu_srodka_pola": [-58, -64, 56, -2]
+      },
+      "szerokosc_w_polach": 2.38,
+      "wysokosc_w_polach": 1.29,
+      "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
+      "gdzie_postawic": "pole wody pod środkiem łódki; 114 px szerokości, mieści się w x-1..x+1",
+      "opis": "mniejsza łódka: wiosła, beczułka"
+    },
+    "Kuter": {
+      "arkusz": "img/characters/!$Przystan_Kuter.png",
+      "rozmiar_arkusza": [720, 480],
+      "komorka": [240, 120],
+      "obraz_w_komorce": [11, 20, 228, 118],
+      "gdzie": "woda",
+      "kolysanie": [{"dx": 0, "dy": 0}, {"dx": 0, "dy": 1}, {"dx": 1, "dy": 2}],
+      "pola": {
+        "x_od": -2,
+        "x_do": 2,
+        "y_od": -2,
+        "y_do": 0,
+        "px_wzgledem_dolu_srodka_pola": [-109, -100, 108, -2]
+      },
+      "szerokosc_w_polach": 4.52,
+      "wysokosc_w_polach": 2.04,
+      "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
+      "gdzie_postawic": "pole wody pod środkiem kadłuba przy pochylni; szybka latarni (klatka 0) jest ok. +103 px w prawo i -53 px w górę od dołu-środka pola zdarzenia - tam światło",
+      "opis": "kuter po naprawie: łaty z jasnych desek, maszt, zwinięty łatany żagiel, zgaszona latarnia na rufie"
+    },
+    "Kuter_Wrak": {
+      "arkusz": "img/characters/!$Przystan_Kuter_Wrak.png",
+      "rozmiar_arkusza": [720, 576],
+      "komorka": [240, 144],
+      "obraz_w_komorce": [5, 24, 234, 144],
+      "gdzie": "ląd",
+      "kolysanie": null,
+      "pola": {
+        "x_od": -2,
+        "x_do": 2,
+        "y_od": -2,
+        "y_do": 0,
+        "px_wzgledem_dolu_srodka_pola": [-115, -120, 114, 0]
+      },
+      "szerokosc_w_polach": 4.77,
+      "wysokosc_w_polach": 2.5,
+      "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
+      "gdzie_postawic": "pole piasku pod środkiem kadłuba; płaski cień Winlu w prawo-dół, deski i lina leżą w dolnym rzędzie; nieruchomy (12 równych komórek)",
+      "opis": "wrak kutra na plaży: przechył, złamany maszt, podarty szary żagiel, lina, deski obok"
+    },
+    "Okret_Wrak": {
+      "arkusz": "img/characters/!$Przystan_Okret_Wrak.png",
+      "rozmiar_arkusza": [864, 768],
+      "komorka": [288, 192],
+      "obraz_w_komorce": [22, 45, 266, 192],
+      "gdzie": "woda (mielizna)",
+      "kolysanie": null,
+      "pola": {
+        "x_od": -3,
+        "x_do": 3,
+        "y_od": -3,
+        "y_do": 0,
+        "px_wzgledem_dolu_srodka_pola": [-122, -147, 122, 0]
+      },
+      "szerokosc_w_polach": 5.08,
+      "wysokosc_w_polach": 3.06,
+      "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
+      "gdzie_postawic": "daleko w zatoce na polu wody; dół obrazu = linia wody (półprzezroczysty pas); nieruchomy; lekka mgiełka (10%) już w obrazie",
+      "opis": "wrak okrętu wojennego do połowy w wodzie, złamane maszty, ciemne strzępy żagli, 3 kruki"
+    },
+    "Prom": {
+      "arkusz": "img/characters/!$Przystan_Prom.png",
+      "rozmiar_arkusza": [1152, 672],
+      "komorka": [384, 168],
+      "obraz_w_komorce": [17, 4, 366, 167],
+      "gdzie": "woda",
+      "kolysanie": [{"dx": 0, "dy": 0}, {"dx": 0, "dy": 1}, {"dx": 0, "dy": 1}],
+      "pola": {
+        "x_od": -4,
+        "x_do": 4,
+        "y_od": -3,
+        "y_do": 0,
+        "px_wzgledem_dolu_srodka_pola": [-175, -164, 174, -1]
+      },
+      "szerokosc_w_polach": 7.27,
+      "wysokosc_w_polach": 3.4,
+      "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
+      "gdzie_postawic": "pole wody pod środkiem kadłuba, górną burtą tuż pod molem; ciężki, kołysze się tylko 0/1/1 px",
+      "opis": "prom: barka z pokładem, nadbudówka na rufie, maszt ze zwiniętym żaglem i proporczykiem, skrzynie i worki, cumy",
+      "zrodlo": "raw/prom_collage.png",
+      "cumy": "liny cumownicze wychodzą ok. 1 pole nad burtę przy dziobie i rufie (postaw pachołki na molo nad tymi miejscami)"
+    }
+  }
+}

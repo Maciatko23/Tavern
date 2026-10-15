@@ -5,6 +5,7 @@
 #   Polna droga (22) --S--> Skraj lasu (23) --W--> Domek - Zewnętrze (3, grandpa's field, new gap in its east wall)
 #   Polna droga (22) --N (side lane)--> Okolice Tawerny (8) --E--> Posiadłość Lorda (24)
 #   Okolice Tawerny (8) --W (the west gate)--> Podgrodzie (111)
+#   Podgrodzie (111) --W (the forest trail, one cell)--> Przystań (125)
 #
 # Directions (RPG Maker): 2 down, 4 left, 6 right, 8 up. Every exit is a row of touch transfers on the edge tiles; the player
 # lands one tile inside the other map, next to the matching exit, facing into that map.
@@ -43,6 +44,7 @@ EDGES = [
     ((8, cells(51, 50, 51, 51), 4), (24, cells(0, 14, 0, 15), 6)),      # the town's east gate (crafts terrace, between two towers, tools/town/east_gate.py 2026-10-04) <-> Lord's estate W
     ((8, cells(0, 50, 0, 51), 6), (111, cells(45, 17, 45, 18), 4)),     # the town's west gate (by the smithy, tools/town/west_gate.py 2026-10-05) <-> Podgrodzie's east edge (tools/podgrodzie)
     ((21, cells(39, 8, 39, 10), 4), (13, cells(0, 38, 0, 40), 6)),     # the forest road's trail east (the user's) <-> the mountains' west edge (tools/mountains, 2026-10-06)
+    ((111, cells(0, 19, 0, 19), 6), (125, cells(55, 19, 55, 19), 4)),  # Podgrodzie's forest trail (skraj_lasu) <-> the harbour's east edge (tools/przystan, 2026-10-14)
 ]
 
 STEP = {2: (0, 1), 4: (-1, 0), 6: (1, 0), 8: (0, -1)}

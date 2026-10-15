@@ -374,8 +374,15 @@
     // ---- water: the can, a drink, fishing
     const canCharges = () => (farm().can ? farm().can.charges : canMax());   // a new can is full
     const setCanCharges = n => { farm().can = { charges: Math.max(0, Math.min(canMax(), n)) }; };
+    // (2026-10-14) the sea (the harbour, Map125 - the map's note <Water:salt>): salt water, no drinking and nothing filled from it,
+    // only fishing - and the catch is the sea's (herring, cod). A plank bridge / pier over the water (an A1 tile that is no water - the
+    // Winlu author's kind 2 - on layer 1 over the water) is no water either: on the pier, facing the next plank, nothing opens.
+    const seaHere = () => !!(window.$dataMap && /<Water:\s*salt\s*>/i.test($dataMap.note || ""));
+    let seaToldAt = -1e9;
     function isWaterTile(x, y) {
         if (!$gameMap.isValid(x, y)) return false;
+        const top = $gameMap.tileId(x, y, 1);
+        if (top > 0 && Tilemap.isTileA1(top) && !Tilemap.isWaterTile(top)) return false;   // (a bridge, a pier)
         for (let z = 0; z < 2; z++) {
             const id = $gameMap.tileId(x, y, z);
             if (id > 0 && Tilemap.isWaterTile(id)) return true;
@@ -470,12 +477,15 @@
             popup(rod.iconIndex, "Zarzucasz wędkę...", "#cfe6ff");
             later(96, () => {
                 const hour = T.time.hour();
-                let chance = 0.5 + ((hour >= 5 && hour < 8) || (hour >= 17 && hour < 20) ? 0.25 : 0) + (["rain", "storm"].includes($gameScreen.weatherType()) ? 0.1 : 0) - (seasonIndex(today()) === 3 ? 0.2 : 0) + perk("fish");
+                const sea = seaHere();
+                let chance = 0.5 + ((hour >= 5 && hour < 8) || (hour >= 17 && hour < 20) ? 0.25 : 0) + (["rain", "storm"].includes($gameScreen.weatherType()) ? 0.1 : 0) - (seasonIndex(today()) === 3 ? 0.2 : 0) + perk("fish")
+                    + (sea ? Number(T.call("Przystan", "fishBonus")) || 0 : 0);   // (Janek's advice, K47)
                 if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(1);
                 const roll = Math.random();
                 if (roll < chance) {
                     playSe(SE.harvest, 105);
-                    $gameParty.gainItem(itemOf(ITEM.fish), Math.random() < 0.25 ? 2 : 1);
+                    const id = !sea ? ITEM.fish : Math.random() < 0.3 ? ITEM.cod : ITEM.herring;   // (the sea: herring, now and then a cod)
+                    $gameParty.gainItem(itemOf(id), Math.random() < 0.25 ? 2 : 1);
                 } else if (roll < chance + 0.15) {
                     $gameParty.gainItem(itemOf(ITEM.fiber), 1);   // waterweed
                 } else {
@@ -651,6 +661,12 @@
     }
     function waterMenu() {
         const rod = itemOf(ITEM.rod), have = $gameParty.hasItem(rod);
+        if (seaHere()) {   // (the sea: the popup that it is salt - every time without a rod, else now and then - and only the rod)
+            if (!have || Graphics.frameCount - seaToldAt > 900) { seaToldAt = Graphics.frameCount; complain(ICON.thirst, "Woda morska jest słona - nie do picia"); }
+            if (!have) return null;
+            return { title: "Morze", entries: [{ name: "Zarzuć wędkę", icon: rod.iconIndex, right: "-" + STAMINA.fish, enabled: true,
+                help: "Śledzie biorą ławicą o świcie i o zmierzchu, dorsz rzadziej. Wędkowanie trwa około godziny. Morskiej wody nie da się pić.", run: goFishing }] };
+        }
         return { title: "Woda", entries: [
             { name: "Zarzuć wędkę", icon: rod.iconIndex, right: "-" + STAMINA.fish, enabled: have,
                 help: have ? "Ryby biorą najlepiej o świcie i o zmierzchu. Wędkowanie trwa około godziny." : "Potrzebujesz wędki. Robi się ją przy tartaku.", run: goFishing },
@@ -965,7 +981,7 @@
 
     P.plots = { isSoilTile, groundInfoAt, groundIsSoil, hasObjectTile, naturalFarmland, plotAt, claimGround, releaseGround,
         gatherRev, gatherKindOf, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, stoneSpot, stoneAt,
-        pickGather, pickStone, takeGatherFor, canCharges, isWaterTile, fillCan, needsOn, drink, fillSkin, goFishing, wellEntries,
+        pickGather, pickStone, takeGatherFor, canCharges, isWaterTile, seaHere, fillCan, needsOn, drink, fillSkin, goFishing, wellEntries,
         rationWell, rationLeft, rationOf,
         rainHoursBetween, bucketSync, bucketUnits, takeBucketWater, stowVessel, unstowVessel, ownsBucket, bagWater, setBagWater,
         bagWaterWeight, bucketFor, bucketEntries, waterMenu, rainWater, wateredRecently, growthRate, isRipe, cropStage, daysLeft,

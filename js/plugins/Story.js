@@ -129,6 +129,7 @@
     const NIGHT = [22, 6];                   // grandpa dozes
     const DAWN = 6;                          // the debt counts till dawn of the day after the deadline (the Lord's men come at dawn)
     const SOUP = 131;                        // Kapuśniak (grandpa's cabbage)
+    const PENDANT = 172;                     // Wisiorek z krukiem (the prologue: the mother gives it; in the bag from the story's start)
     const GOLD_ICON = 313;
     const TORCH = 59;                        // Pochodnia (the clue's goal: the way down under the tavern)
     const SHELTERS = ["shelter", "tent", "bedroll", "hut"];
@@ -219,6 +220,8 @@
     const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
     const WRAP_W = 540, PAGE_LINES = 3;
     let probe = null;
+    // a line measured as it will be shown: \N[n] is the actor's name (the hero's own name from the prologue's name screen)
+    const shownNames = text => String(text).replace(/\\N\[(\d+)\]/gi, (m, n) => (window.$gameActors && $gameActors.actor(Number(n)) ? $gameActors.actor(Number(n)).name() : ""));
     function wrap(text) {
         if (!probe) probe = new Bitmap(8, 8);
         probe.fontFace = $gameSystem.mainFontFace();
@@ -228,7 +231,7 @@
             let line = "";
             for (const word of para.split(" ")) {
                 const trial = line ? line + " " + word : word;
-                if (line && probe.measureTextWidth(trial) > WRAP_W) { lines.push(line); line = word; } else line = trial;
+                if (line && probe.measureTextWidth(shownNames(trial)) > WRAP_W) { lines.push(line); line = word; } else line = trial;
             }
             lines.push(line);
         }
@@ -365,18 +368,31 @@
     const hSay = (out, text) => say(out, 0, text, null);
     const lSay = (out, text) => say(out, L(), text, NPCS.lord.face);
 
+    // grandpa's first talk - after the prologue (Prologue.js): the fisherman Janek found the hero on the beach, three days of fever,
+    // grandpa reads his daughter's wet letter and goes quiet; then the debt, the field, Borgar and the Lord as before. \N[1] = the
+    // name the player chose. (2026-10-12: replaces "No, nareszcie wstałeś!...", every fact of the old talk kept.)
+    const pause = (out, frames) => (out.push(C(230, [frames])), out);
     function introList() {
         const o = [];
-        gSay(o, "No, nareszcie wstałeś! Już myślałem, że prześpisz całą wiosnę.");
-        hSay(o, "Dzień dobry, dziadku. Minę masz, jakby ci lis kurę porwał.");
-        gSay(o, "Gorzej. Jestem winien Lordowi Zaleskiemu - temu z pięknego dworu obok tawerny - " + DEBT + " złotych monet. Termin: dzień " + DEADLINE + ".");
+        gSay(o, "No, nareszcie otworzyłeś oczy. Rybak Janek przyniósł cię z plaży. Trzy dni gorączki, \\N[1]. Trzy dni.");
+        hSay(o, "Dziadku...? To naprawdę ty?");
+        gSay(o, "A kto inny, Lord Zaleski? Leż, leż. Ściskałeś w garści list. Ani na chwilę nie chciałeś puścić.");
+        pause(o, 90);   // (he reads the letter; the fire crackles)
+        gSay(o, "...Moja córka. Pisze, że twój ojciec przepadł na wojnie. A ona poszła go szukać. Że przypłynie następnym promem.");
+        hSay(o, "Obiecała.");
+        gSay(o, "To przypłynie. Twoja matka zawsze była uparta. Po mnie.");
+        pause(o, 60);
+        gSay(o, "A ja ci tu, wnuku, mam tylko... dług.");
+        hSay(o, "Dług?");
+        gSay(o, "Jestem winien Lordowi Zaleskiemu - temu z pięknego dworu obok tawerny - " + DEBT + " złotych monet. Termin: dzień " + DEADLINE + ".");
         hSay(o, DEBT + "?! Coś ty kupił, dziadku, krowę ze złota?");
-        gSay(o, "Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moje pole za lasem. A to wszystko, co mamy.");
+        gSay(o, "Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moje pole za lasem. A to wszystko, co mamy. Teraz: co my mamy.");
         gSay(o, "Ja już za stary na siekierę, ale ty masz ręce i głowę. Pole jest twoje - stawiaj na nim, co zechcesz. Tylko tam: reszta ziemi w okolicy jest cudza.");
         gSay(o, "Droga: z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód.");
         gSay(o, "A pieniądze... Borgar z tawerny „Pod Złotym Kuflem” szuka rąk do pracy, po południu i wieczorem. Z Polnej drogi ścieżką na północ. Dwór Lorda jest tuż obok - tam zanosisz spłatę.");
         hSay(o, "Czyli rano pole, wieczorem kufle. A spać kiedy?");
-        gSay(o, "Na starość. Jak ja. Masz tu kapuśniak na drogę - z mojej kapusty. No, zmykaj!");
+        gSay(o, "Na starość. Jak ja. I jak się wykurujesz, a nie od razu, gorączko jedna.");
+        gSay(o, "Masz tu kapuśniak na drogę - z mojej kapusty. A wisiorek trzymaj przy sobie. Kruk w tej rodzinie... no, to długa historia. Opowiem ci kiedyś. No, zmykaj!");
         script(o, "Story.introDone()");
         return o;
     }
@@ -689,6 +705,13 @@
             "Spłatę zanoszę do dworu Lorda, obok tawerny: za dnia (" + LORD_HOURS[0] + "-" + LORD_HOURS[1] + ") Lordowi, nocą kamerdynerowi.\n" +
             "Droga na pole: podwórze - Leśna droga - Polna droga - Skraj lasu - pole.\n" +
             "Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ. Dwór Lorda stoi na wschód od tawerny.");
+        // the prologue's wet letter (the mother's): the first open thread
+        const J = T.api("Journal"), notes = J && J.data ? (J.data().notes || []) : [];
+        if (!notes.some(n => n.title === "List od matki")) T.call("Journal", "addNote", "List od matki",
+            "Mokry, rozmyty list matki do dziadka Stacha. Straż Pewności - ludzie mówią na nich „Czarne Oczy” - spaliła naszą wieś, Brzozową Wolę. " +
+            "Ojciec przepadł na wojnie; matka poszła za wojskiem go szukać. Obiecała, że przypłynie następnym promem.\n" +
+            "Przemytnik zabrał mnie kutrem za ostatnie monety. Sztorm rozbił łódź - nie wiem, czy przeżył. Rybak Janek znalazł mnie na plaży.\n" +
+            "Mam jeszcze wisiorek z krukiem po ojcu. Dziadek na jego widok milknie.");
         if (first) tell("talk");
     }
     function thanks() {
@@ -729,8 +752,11 @@
     Game_Player.prototype.performTransfer = function() {
         const s = state();
         if (s && s.pending && this.isTransferring()) {
-            if (this._newMapId === MAP.house) delete s.pending;
-            else setState(null);   // an old-style start somewhere else: no story at all
+            if (this._newMapId === MAP.house) {
+                delete s.pending;
+                // (the prologue's pendant: what the sea left him, with the wet letter)
+                if ($dataItems[PENDANT] && $dataItems[PENDANT].name && !$gameParty.hasItem($dataItems[PENDANT])) $gameParty.gainItem($dataItems[PENDANT], 1);
+            } else setState(null);   // an old-style start somewhere else: no story at all
             syncGoals();
         }
         _performTransfer.call(this);
@@ -997,7 +1023,7 @@
 
     chapterIndex();
     window.Story = T.register(PLUGIN, {
-        NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
+        NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, PENDANT, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
         introDone, thanks, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
         lists: { intro: introList, grandpa: grandpaList, lord: lordList, borgar: ev => borgarList(ev), chat: ev => chatList(ev), ending: endingList },
         setDeadlineOn(on) { const s = state(); if (s) s.off = !on; },

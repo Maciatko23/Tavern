@@ -22,6 +22,8 @@ zbudowana na tym, co już jest: wytrzymałość, życie, rany i opatrunki, głó
 | P (przytrzymanie) | blok tarczą (mniej obrażeń, kosztuje oddech) |
 | P tuż przed trafieniem | parowanie: wróg traci równowagę, można go dobić |
 | [ / ] | poprzednia / następna broń w ręku |
+| F | następny cel miękkiego namierzania (miedziany krąg; od 2026-10-14) |
+| H | szybkie leczenie: opatrunek albo najlepsze jedzenie (od 2026-10-14) |
 | Tab | tryb walki / tryb normalny (klawisze ustalone z autorem: tylko w trybie walki O = atak, P = obrona, [ ] = broń) |
 | C + cios | atak z ukrycia na nieświadomego wroga (bez „!”), gdy się skradasz albo zachodzisz od tyłu: 2,5 raza większe obrażenia (strzał 2 razy) i złamana równowaga |
 | łuk / proca | jak teraz (celowanie kółkiem) |
@@ -126,7 +128,8 @@ je w torbie; obie widać w menu P → Postać (pod atrybutami: WYPOSAŻENIE, z t
    2 gałęzie, 2 liny), zużywa się od przyjętych ciosów. Przewrót i upadek mają własne animacje (Swing_Roll,
    szybkie Swing_LieDown), po czystym trafieniu bohater odchyla się od ciosu, ogłuszony wróg chwieje się pod
    gwiazdkami. Ekran Postaci: menu P → Postać; w prawym dolnym rogu pasek poziomu i doświadczenia (żółte „P”,
-   gdy są punkty do rozdania). Dzik z bliska (5 pól) szarżuje w prostej linii; gdy chybi, przebiega ok. 3,5
+   gdy są punkty do rozdania). Dzik z bliska (5 pól) szarżuje w prostej linii (od 2026-10-14 nie do zablokowania ani sparowania - przewrót
+   w bok); gdy chybi, przebiega ok. 3,5
    pola dalej i stoi zziajany ~1,7 s — czas na atak. Klawisze: patrz niżej.
    Dwa tryby: Tab przełącza tryb normalny (O akcja, P menu, [ ] nic) i tryb walki (na mapie O = atak,
    P = obrona, [ ] = poprzednia / następna broń, Enter, Esc i R nic; w menu i rozmowach wszystko jak zwykle;
@@ -526,6 +529,53 @@ je w torbie; obie widać w menu P → Postać (pod atrybutami: WYPOSAŻENIE, z t
      dalej, a przerwa między skokami jest o ok. 1/3 dłuższa.
    - Pochodnia się wypala: 3 godziny zegara gry, **celny cios zabiera 4 minuty**; deszcz x2, śnieg x1,5, ulewa gasi po 6 minutach.
    - Bota balansu (`tests/combat_balance.js`) to nie zmienia: walczy siekierą (podziemia, ludzie), pochodnia jest słabsza od siekier.
+
+8. **Walka przyjemniejsza, płynniejsza i wygodniejsza** (2026-10-14; nowa część `Combat_Feel.js` - na liście wtyczek po Combat_UI, Combat.js
+   wczytuje ją sam, gdyby edytor zgubił wpis; zmiany też w Combat.js, Combat_Fight.js, Combat_UI.js, Hunting_AI.js, Humans.js, Creatures.js,
+   Skills_Data.js, Farming_Data.js; test `tests/combat_feel_test.js`).
+   - **Automatyczny tryb walki**: wróg w pobliżu (8 pól) zaczyna atak (zamach, szarża, skok - jego zapowiedź) albo cios dosięgnie bohatera -
+     tryb walki włącza się sam (z ostatnią bronią; zapalona pochodnia zostaje w ręku). Gdy ostatni wróg w walce zginie, ucieknie albo się
+     podda - po ok. 1 s wraca tryb normalny (O od razu oprawia zwłoki); gdy wrogowie tylko przestali atakować (żyją w pobliżu) - po ok. 5 s
+     spokoju. Tylko gdy włączył się sam. Tab dalej przełącza; ręczne wyłączenie trzyma do następnego ataku. Nie w rozmowie, menu, wydarzeniu,
+     przy wyciemnieniu (sen), przy budowaniu. Opcje: „Automatyczny tryb walki: Wł / Wył” (domyślnie Wł).
+     **Spotkania, które zaczynają się rozmową albo zagadką**: automat ich nie przerywa - notatka mapy `<AutoWalka:off>`, wróg z flagą
+     `_noAutoCombat` (jego ataki nie włączają trybu), albo warunek innej wtyczki (`Combat.feel.holdAuto(fn)`; Creatures.js: piętro 10, póki
+     strażnik dziesiątej bramy czeka z zagadką). Tryb włączony automatycznie wyłącza się tam od razu, a także przed startem każdego zdarzenia
+     z rozmową (wiadomość, wybór albo `<AutoWalka:off>` w notatce zdarzenia) - więc strażnik zadaje zagadkę; walkę dostaje tylko ten, kto sam
+     wejdzie w trybie walki (Tab) albo uderzy zbroję.
+   - **Miękkie namierzanie**: najbliższy wróg w walce (6,5 pola) w kierunku patrzenia ma pod sobą subtelny miedziany krąg (bez blasku). Cios
+     (gdy cel jest w zasięgu broni + 1,5 pola) i strzał zwracają bohatera do celu (także po skosie), garda - do wroga, którego cios właśnie
+     nadchodzi (a bez takiego do celu); po przewrocie patrzy znów na cel.
+     **F** - następny cel (zgodnie z ruchem wskazówek zegara). Krąg gaśnie, gdy wróg ginie, ucieka albo odejdzie dalej niż 9 pól.
+   - **Bufor wciśnięć**: cios, przewrót i blok wciśnięte do 10 klatek za wcześnie (zamach przed trafieniem, przewrót, zachwianie, przerwa po
+     serii, stop-klatka) wykonują się zaraz, gdy można - P z końca przewrotu podnosi gardę „świeżo” (w oknie parowania).
+   - **Przewrót przerywa końcówkę ciosu** w chwili trafienia (sam zamach przed trafieniem zostaje nieprzerywalny). **Spacja bez strzałek**:
+     odskok od celu albo najbliższego wroga (5 pól), bez nich w tył.
+   - **Zapowiedzi ataków**: ok. 16 klatek przed ciosem wróg błyska obrysem - **ciepły czerwony** i krótki świst (Wind4): da się zablokować
+     albo sparować; **biało-złoty** i niski dzwon (Bell3): zwykła garda nie wystarczy (łapa i skok niedźwiedzia, cios z góry najemnika i zbroi,
+     szarża kamiennika i królowej, szarża dzika, krąg na posadzce, „prawda” upiora). Szarża dzika (decyzja 2026-10-14, jak w pierwotnym
+     projekcie) jest jak ciosy niedźwiedzia: ani tarcza, ani parowanie jej nie zatrzymają („Tego nie zatrzymasz!”, pełny cios z odrzutem) -
+     tylko przewrót w bok albo krok z jej linii. Markowany cios bandyty nie błyska. Każda rodzina mówi
+     sama: `isThreat()` i `combatTell()` → `{ t, heavy }` (Hunting_AI.js, Humans.js, Creatures.js). Przy pierwszym skoku wilka w grze nad
+     bohaterem raz: „P tuż przed ugryzieniem = parowanie”.
+   - **Idealne parowanie dla każdego**: „Idealne parowanie!”, stal (Parry + Sword4), iskry, ok. 0,25 s zwolnienia świata (co druga klatka),
+     wróg się zatacza; przez 1 s **kontratak +30%** („Kontratak!”). **Kontra** (umiejętność): 2 s i cios krytyczny x1,6 (nowy opis).
+   - **Trafienia**: wróg całkiem biały przez 3 klatki, potem biel gaśnie; dźwięk według broni (pięść, pałka, pochodnia, ostrze, grot, kilof)
+     i celu (zwierzę, człowiek, kolczuga najemnika, zbroja, kamień, upiór, tarcza / uniesiona pałka, słoma manekina).
+   - **Ostatni cios walki** (ginie ostatni wróg w walce w pobliżu): ok. 0,4 s zwolnienia, lekki jasny błysk i delikatne przybliżenie kamery
+     (zoom ekranu MZ x1,07, potem powrót).
+   - **Strzałki przy krawędzi ekranu**: wróg w walce poza ekranem (łucznik, wilk z tyłu) - mała strzałka przy krawędzi: miedziana, czerwona /
+     biało-złota (pulsuje), gdy szykuje cios. U góry stoją niżej, pod napisami (cel wykonany, nazwa mapy, doświadczenie).
+   - **Szybkie leczenie (H, w trybie walki)**: opatrunek, gdy jest rana albo mniej niż 40% życia, inaczej jedzenie dające najwięcej sił (tylko
+     takie, które coś da). Przykucnięcie ok. 0,6 s bez obrony (cios przerywa: „Przerwane!”, nic nie zużyte), 18 oddechu. Brak środka: dymek.
+   - **Manekin treningowy** (budynek „Manekin treningowy”: 2 drewna, 3 len; menu budowy Q na polu dziadka; obraz Farm_Dummy z PixelLab w stylu
+     stracha na wróble): w trybie walki, gdy bohater stoi obok (1,9 pola), co 1,5-2,5 s odchyla się (zamach 46 klatek z czerwoną zapowiedzią)
+     i uderza: „Idealne parowanie!” (jak prawdziwe: zwolnienie, kontratak), „Za wcześnie” (garda za wcześnie albo P wciśnięte i puszczone),
+     „Za późno” (bez gardy), „Unik!”. Nie rani. Pierwsze 5 idealnych parowań: po 5 doświadczenia. Można go bić (chwieje się, słoma).
+   - **Trudność walki** (Opcje): Łatwy - okno parowania x1,5, zamachy wrogów x1,3 dłuższe, ich ciosy x0,7; Normalny - jak dotąd; Trudny - x0,75,
+     x0,85, x1,3.
+   - Podgląd: docs/walka/walka_namierzanie.gif, walka_zapowiedz_bandyta.gif, walka_zapowiedz_niedzwiedz.gif, walka_idealne_parowanie.gif,
+     walka_manekin.gif, zrzuty walka_*.png. Narzędzia: tools/walka/capture_feel.js + make_gif_feel.py.
 
 Grafika na każdy etap: animacje postaci (przewrót, ciosy każdej broni, zamach ciężkiego ciosu, blok) i nowe
 sprite'y wrogów — PixelLab, tak jak dotychczasowe arkusze zamachów (najbardziej pracochłonna część).

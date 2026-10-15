@@ -25,6 +25,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     };
 
     await t.newGame({ map: 8, x: 8, y: 50, dir: 8, hour: 8, day: 2, quiet: true, minimap: false });
+    await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_grafit_test.js)
     await at(2, 8, 40);
 
     // ------------------------------------------------------------------ the engine

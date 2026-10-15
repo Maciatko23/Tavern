@@ -29,6 +29,10 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     t.check("two bars sit under the stamina gauge, the load under those, and the buff icons one row below that", hud.bars && hud.visible && hud.dy === 3 * 23, hud);   // (UIStyle.HUD.step)
 
     // ================= 2. the meters run down =================
+    // (2026-10-12: a spring day without rain - in the rain outdoors the hero drinks it and the water does not go down; the new game's
+    // own day may have rain in its plan)
+    const springDry = await ev("(function(){ for (let d = 1; d < 28; d++) if (!Survival.weatherPlan(d)) return d; return 1; })()");
+    await ev(`$gameSystem._dayNightDay = ${springDry}; $gameSystem._weatherOwn = false; $gameScreen.clearWeather(); 0`); await t.frames(45);
     await set(100, 100);
     await ev("$gameSystem.advanceDayNight(10); 0");
     t.check("10 hours awake: food 100 -> 84, water 100 -> 75", near(await food(), 84, 0.5) && near(await water(), 75, 0.5), { f: await food(), w: await water() });
@@ -93,8 +97,8 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     t.check("...and a rest cannot lift it above the ceiling", (await ev("$gameSystem.stamina()")) === 70);
     await set(100, 0);
     t.check("Wysuszony: ceiling 40", (await ev("$gameSystem.stamina()")) === 40);
-    await set(0, 100);
-    t.check("Głodujesz: ceiling 55", (await ev("$gameSystem.stamina()")) === 55);
+    await set(0, 100); await t.frames(3);   // (the ceiling is applied in the frame after)
+    { const st = await ev("$gameSystem.stamina()"); t.check("Głodujesz: ceiling 55", Math.round(st) === 55,   /* (starving drains it a hair each frame) */ { stamina: st, max: await ev("Math.round($gameSystem.staminaRatio() * 100)"), food: await food(), water: await water(), buffs: await ev("JSON.stringify($gameSystem._buffs || {})") }); }
     await set(100, 100);
     // starvation drains strength by the hour
     await set(0, 0);

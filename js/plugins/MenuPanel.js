@@ -159,14 +159,24 @@
             ctx.fillRect(r.x - i + 3, r.y - i + 7, r.width + i * 2, r.height + i * 2);
         }
         ctx.restore();
-        ui.panel(b, r.x, r.y, r.width, r.height, { cut: 8, fill: "rgba(12,13,17,0.97)" });
-        // the head: the title with a short yellow line under it, the subtitle on the right
-        b.fontSize = 28;
-        b.textColor = U.accent;
-        b.drawText(s.title || "", r.x + 26, r.y + 9, r.width - 52, 38, "left");
-        const tw = Math.min(180, Math.ceil(b.measureTextWidth(s.title || "")));
-        ctx.fillStyle = U.accent;
-        ctx.fillRect(r.x + 26, r.y + 47, tw, 2);
+        const G = U.grafit && U.grafit(), CH = G ? T.api("CleanHUD") : null;
+        ui.panel(b, r.x, r.y, r.width, r.height, { cut: G ? 6 : 8, fill: G ? "rgba(20,21,24,0.94)" : "rgba(12,13,17,0.97)" });
+        if (G) {   // the graphite look (docs/ui_pomysly2 idea 3): the title bold in the text's colour, no line under it
+            const main = b.fontFace;
+            if (CH && CH.face) b.fontFace = CH.face("bold");
+            b.fontSize = 30;
+            b.textColor = U.text;
+            b.drawText(s.title || "", r.x + 26, r.y + 9, r.width - 52, 40, "left");
+            b.fontFace = main;
+        } else {
+            // the head: the title with a short yellow line under it, the subtitle on the right
+            b.fontSize = 28;
+            b.textColor = U.accent;
+            b.drawText(s.title || "", r.x + 26, r.y + 9, r.width - 52, 38, "left");
+            const tw = Math.min(180, Math.ceil(b.measureTextWidth(s.title || "")));
+            ctx.fillStyle = U.accent;
+            ctx.fillRect(r.x + 26, r.y + 47, tw, 2);
+        }
         if (s.subtitle) {
             b.fontSize = 20;
             b.textColor = U.muted;
@@ -711,6 +721,282 @@
     };
 
     // ==================================================================
+    // Plecak in the graphite look ("Grafit i miedź", docs/ui_pomysly2/pomysl_3_grafit_plecak.png): five tabs underlined in copper
+    // (Wszystko, Materiały, Jedzenie, Narzędzia, Do zadań - what the active quests and contracts ask for), a grid of tiles with the
+    // counts, the chosen thing's card (Masz / Waga / Świeżość, the description, what eating it gives); Q / E the tab, the arrows the
+    // grid. The classic look keeps the list above.
+    // ==================================================================
+    const isGrafit = () => { const U = UI(); return !!(U && U.grafit && U.grafit()); };
+    const CHu = () => T.api("CleanHUD");
+    const G_CATS = [["all", "Wszystko"], ["mat", "Materiały"], ["food", "Jedzenie"], ["tool", "Narzędzia"], ["quest", "Do zadań"]];
+    const G_CAT_SET = new Set(G_CATS.map(c => c[0]));
+    const GRID = { cell: 56, gap: 8, cols: 8 };
+    const isFood = it => !!(it && it.meta && it.meta.Food !== undefined);
+    // the items the active town quests (their current step) and the quest board's contracts ask for
+    function questNeeds() {
+        const ids = new Set();
+        try {
+            const TQ = T.api("TownQuests");
+            if (TQ && TQ.QUESTS && TQ.rec) for (const q of TQ.QUESTS) {
+                const r = TQ.rec(q.id), st = r && r.s === "active" ? q.steps[r.step] : null;
+                for (const n of (st && st.need) || []) if (typeof n[0] === "number") ids.add(n[0]);
+            }
+        } catch (e) { /* (no quests: nothing) */ }
+        try {
+            const QB = T.api("QuestBoard");
+            if (QB && QB.active) for (const n of QB.active()) for (const q of n.req || []) if (q.k === "item") ids.add(q.id);
+        } catch (e) { /* (no board: nothing) */ }
+        return ids;
+    }
+    const _catMake = Window_ItemCategory.prototype.makeCommandList;
+    Window_ItemCategory.prototype.makeCommandList = function() {
+        if (!isGrafit()) return _catMake.call(this);
+        for (const [sym, name] of G_CATS) this.addCommand(name, sym);
+    };
+    const _catCols = Window_ItemCategory.prototype.maxCols;
+    Window_ItemCategory.prototype.maxCols = function() { return isGrafit() ? G_CATS.length : _catCols.call(this); };
+    Window_ItemCategory.prototype.tabWidth = function(i) { const C = CHu(); return C ? C.measure(this.commandName(i), 18) + 4 : 96; };
+    const _catRect = Window_ItemCategory.prototype.itemRect;
+    Window_ItemCategory.prototype.itemRect = function(index) {
+        if (!isGrafit()) return _catRect.call(this, index);
+        let x = 12;
+        for (let i = 0; i < index; i++) x += this.tabWidth(i) + 28;
+        return new Rectangle(x, 0, this.tabWidth(index), this.itemHeight());
+    };
+    const _catDraw = Window_ItemCategory.prototype.drawItem;
+    Window_ItemCategory.prototype.drawItem = function(index) {
+        if (!isGrafit()) return _catDraw.call(this, index);
+        const r = this.itemRect(index), U = UI(), on = index === this.index();
+        this.contents.fontSize = 18;
+        this.changeTextColor(on ? U.text : U.muted);
+        this.drawText(this.commandName(index), r.x, r.y - 4, r.width + 8, "left");
+        if (on) { const ctx = this.contents.context; ctx.fillStyle = U.accent; ctx.fillRect(r.x, r.y + r.height - 12, r.width - 4, 2); this.contents._baseTexture.update(); }
+        this.resetFontSettings();
+    };
+    const _catCursor = Window_ItemCategory.prototype.refreshCursor;
+    Window_ItemCategory.prototype.refreshCursor = function() { if (isGrafit()) this.setCursorRect(0, 0, 0, 0); else _catCursor.call(this); };
+    const _catSelect = Window_ItemCategory.prototype.select;
+    Window_ItemCategory.prototype.select = function(index) {
+        const was = this.index();
+        _catSelect.call(this, index);
+        if (isGrafit() && was !== index && this.contents) this.refresh();
+    };
+    const _ilMake = Window_ItemList.prototype.makeItemList;
+    Window_ItemList.prototype.makeItemList = function() {
+        this._questIds = G_CAT_SET.has(this._category) ? questNeeds() : null;
+        _ilMake.call(this);
+    };
+    const _ilIncludes = Window_ItemList.prototype.includes;
+    Window_ItemList.prototype.includes = function(item) {
+        if (!G_CAT_SET.has(this._category)) return _ilIncludes.call(this, item);
+        if (!item || !DataManager.isItem(item)) return false;
+        switch (this._category) {
+            case "all": return item.itypeId === 1 || item.itypeId === 2;
+            case "mat": return item.itypeId === 1 && !isFood(item);
+            case "food": return item.itypeId === 1 && isFood(item);
+            case "tool": return item.itypeId === 2 && !isKeepsake(item);   // (the keepsakes: only under "Wszystko")
+            case "quest": return !!this._questIds && this._questIds.has(item.id);
+        }
+        return false;
+    };
+    // the list as a grid of tiles (only the bag's own window, made so in Scene_Item.create)
+    function makeGrid(iw) {
+        iw._grid = true;
+        delete iw.cursorLeft;   // (the arrows walk the grid; Q / E change the tab)
+        delete iw.cursorRight;
+        iw.maxCols = () => GRID.cols;
+        iw.itemWidth = () => GRID.cell + GRID.gap;
+        iw.itemHeight = () => GRID.cell + GRID.gap;
+        iw.colSpacing = () => GRID.gap;
+        iw.rowSpacing = () => GRID.gap;
+        iw.refreshCursor = function() { this.setCursorRect(0, 0, 0, 0); };
+        iw.drawItemBackground = function() {};
+        iw.drawItem = function(index) { drawTile(this, index, this.itemAt(index)); };
+        iw.drawAllItems = function() {
+            const rows = Math.floor(this.innerHeight / this.itemHeight()), top = this.topIndex();   // (whole rows only)
+            const n = Math.max(this.maxItems(), top + rows * this.maxCols());
+            for (let i = top; i < n; i++) drawTile(this, i, i < this.maxItems() ? this.itemAt(i) : null);
+        };
+        const select = iw.select;
+        iw.select = function(index) {
+            const was = this.index();
+            select.call(this, index);
+            if (was !== index && this.contents) {
+                if (was >= 0 && was < this.maxItems()) this.redrawItem(was);
+                if (index >= 0 && index < this.maxItems()) this.redrawItem(index);
+            }
+        };
+    }
+    function drawTile(win, index, item) {
+        const r = win.itemRect(index), U = UI(), c = win.contents, on = !!item && index === win.index();
+        c.clearRect(r.x - 2, r.y - 2, r.width + 4, r.height + 4);
+        ui.panel(c, r.x, r.y, r.width, r.height, { cut: 4, fill: on ? "rgba(40,42,47,1)" : "rgba(30,32,36,1)", line: on ? U.accent : "#30323a" });
+        if (on) {   // (the chosen tile: a copper line twice as thick)
+            const ctx = c.context;
+            ctx.save(); ctx.strokeStyle = U.accent; ctx.lineWidth = 2;
+            U.roundPath(ctx, r.x + 1, r.y + 1, r.width - 2, r.height - 2, 7); ctx.stroke(); ctx.restore();
+            c._baseTexture.update();
+        }
+        if (!item) return;
+        win.drawIcon(item.iconIndex, r.x + 12, r.y + 8);
+        const n = $gameParty.numItems(item);
+        if (n > 1 || item.itypeId !== 2) {
+            c.fontSize = 14;
+            c.outlineColor = "rgba(20,21,24,1)";
+            c.outlineWidth = 4;
+            win.changeTextColor(U.text);
+            win.drawText(String(n), r.x, r.y + r.height - 26, r.width - 6, "right");
+            win.resetFontSettings();
+        }
+    }
+    // the header (the load as a thin copper bar) and the foot's right side (things · coins)
+    function Sprite_BagHead() {
+        this.initialize(...arguments);
+    }
+    Sprite_BagHead.prototype = Object.create(Sprite.prototype);
+    Sprite_BagHead.prototype.constructor = Sprite_BagHead;
+    Sprite_BagHead.prototype.initialize = function(rect) {
+        Sprite.prototype.initialize.call(this, new Bitmap(Graphics.width, Graphics.height));
+        this._rect = rect;
+        this.redraw();
+    };
+    Sprite_BagHead.prototype.redraw = function() {
+        const b = this.bitmap, r = this._rect, U = UI(), C = CHu(), S = T.api("Survival");
+        b.clear();
+        if (!C) return;
+        if (S && S.carriedWeight && S.weightCap) {
+            const load = S.carriedWeight(), cap = S.weightCap(), text = fmt(load) + " / " + fmt(cap), tw = C.measure(text, 17);
+            C.textOut(b, text, r.x + r.width - 26 - tw - 4, r.y + 15, tw + 8, 28, "left", { size: 17, plain: true, color: load > cap ? "#e8806a" : U.text });
+            const bx = r.x + r.width - 26 - tw - 14 - 90;
+            ui.bar(b, bx, r.y + 28, 90, 4, Math.min(1, load / Math.max(1, cap)), U.accent);
+            C.spaced(b, "Obciążenie", bx - 16, r.y + 19, 20, { size: 13, color: U.muted, align: "right" });
+        }
+        const n = $gameParty.items().length, text = n + " " + (n === 1 ? "rzecz" : "rzeczy") + " · " + $gameParty.gold() + " monet";
+        C.textOut(b, text, r.x + 26, r.y + r.height - FOOT + 8, r.width - 52, 26, "right", { size: 16, color: U.accent, plain: true });
+        b._baseTexture.update();
+    };
+
+    // the chosen thing's card in the graphite look
+    // a keepsake (the user, 2026-10-14: "Pamiątki" - the story's things): the note tag <Pamiatka> (or <Pamiątka>), the prologue's pendant
+    // (Story.PENDANT), and a key item that weighs nothing (<Weight:0> - every tool weighs something); never sold, never thrown away
+    function isKeepsake(it) {
+        if (!it || !DataManager.isItem(it)) return false;
+        if (it.meta && (it.meta.Pamiatka !== undefined || it.meta["Pamiątka"] !== undefined)) return true;
+        const ST = T.api("Story");
+        if (it.id === (ST && ST.PENDANT ? ST.PENDANT : 172)) return true;
+        return it.itypeId === 2 && !!it.meta && it.meta.Weight !== undefined && Number(it.meta.Weight) === 0;
+    }
+    const CAT_LABEL = it => (!it ? "" : isKeepsake(it) ? "Pamiątka" : it.itypeId === 2 ? "Narzędzie" : isFood(it) ? "Jedzenie" : "Materiał");
+    Window_ItemDetail.prototype.refreshGrafit = function() {
+        const item = this._item, U = UI(), C = CHu(), W = this.innerWidth, c = this.contents, ctx = c.context;
+        if (!item) { if (this._note) this.drawNote(0); return; }
+        ui.panel(c, 0, 0, 64, 64, { cut: 5, fill: "rgba(34,36,40,1)" });
+        const set = ImageManager.loadSystem("IconSet"), pw = ImageManager.iconWidth, ph = ImageManager.iconHeight;
+        ctx.imageSmoothingEnabled = false;
+        c.blt(set, (item.iconIndex % 16) * pw, Math.floor(item.iconIndex / 16) * ph, pw, ph, 8, 8, 48, 48);
+        if (C) {
+            C.spaced(c, CAT_LABEL(item), 82, 4, 18, { size: 13 });
+            C.textOut(c, item.name, 82, 24, W - 84, 36, "left", { size: 26, face: "bold", plain: true });
+        }
+        // the facts: a row each, a thin line under it
+        const rows = [["Masz", String($gameParty.numItems(item))]];
+        const w = T.call("Survival", "itemWeight", item);
+        if (w) rows.push(["Waga", fmt(w) + " za sztukę"]);
+        const fresh = T.call("Spoilage", "freshnessText", item.id) || "";
+        if (fresh) rows.push(["Świeżość", fresh.replace(/^Świeżość:\s*/i, ""), "#9fd08a"]);
+        const D = T.api("Durability");
+        if (D && D.TOOLS && D.TOOLS[item.id] && D.lifeOf) rows.push(["Zużycie", D.left(item.id) + " / " + D.lifeOf(item.id)]);
+        let y = 84;
+        for (const [lab, val, col] of rows) {
+            if (C) {
+                C.textOut(c, lab, 0, y - 13, 160, 26, "left", { size: 16, face: "regular", color: U.muted, plain: true });
+                C.textOut(c, val, 140, y - 13, W - 140, 26, "right", { size: 16, color: col || U.text, plain: true });
+            }
+            ctx.fillStyle = "rgba(44,46,52,1)";
+            ctx.fillRect(0, y + 14, W, 1);
+            y += 32;
+        }
+        y += 6;
+        if (isKeepsake(item) && C) {   // (a keepsake: said plainly)
+            C.textOut(c, "Pamiątka: nie do sprzedania ani wyrzucenia.", 0, y, W, 25, "left", { size: 17, color: U.accent, plain: true });
+            y += 32;
+        }
+        const desc = fresh ? this._desc.replace(fresh, "").trim() : this._desc;
+        // (wrapped by the width of the face it is drawn in - the window's own measure is the bigger main font)
+        const words = [];
+        for (const para of String(desc || "").split(/\r?\n/)) {
+            let line = "";
+            for (const word of para.split(" ")) {
+                const next = line ? line + " " + word : word;
+                if (line && C && C.measure(next, 17, "regular") > W) { words.push(line); line = word; } else line = next;
+            }
+            words.push(line);
+        }
+        while (words.length && !words[words.length - 1]) words.pop();
+        for (const line of words) {
+            if (C) C.textOut(c, line, 0, y, W, 25, "left", { size: 17, face: "regular", plain: true });
+            y += 25;
+        }
+        // what eating it gives
+        const S = T.api("Survival"), N = T.api("Needs"), food = S && S.foodInfo ? S.foodInfo(item) : null;
+        if (food && C) {
+            const fw = N && N.foodValues ? N.foodValues(item, food) : [0, 0], gains = [];
+            if (food.stamina) gains.push(["Kondycja", food.stamina, "#94bf6e"]);
+            if (fw[0]) gains.push(["Sytość", Math.round(fw[0]), "#dda650"]);
+            if (fw[1]) gains.push(["Nawodnienie", Math.round(fw[1]), "#62a6dc"]);
+            if (gains.length) {
+                y += 12;
+                C.spaced(c, "Po zjedzeniu", 0, y, 18, { size: 13 });
+                y += 26;
+                for (const [lab, v, col] of gains) {
+                    ctx.fillStyle = col;
+                    ctx.beginPath(); ctx.arc(4, y + 12, 4, 0, Math.PI * 2); ctx.fill();
+                    C.textOut(c, lab, 16, y, 200, 24, "left", { size: 16, face: "regular", plain: true });
+                    C.textOut(c, (v > 0 ? "+" : "") + v, W - 100, y, 100, 24, "right", { size: 16, plain: true });
+                    y += 24;
+                }
+            }
+        }
+        c._baseTexture.update();
+        if (this._note) this.drawNote(y + 12);
+        else if (food && $gameParty.canUse(item) && C) {   // (Enter eats: the copper button says so)
+            const by = this.innerHeight - 40;
+            ui.panel(c, 0, by, 140, 36, { cut: 4, fill: U.accent, line: U.accent });
+            C.textOut(c, "Zjedz", 0, by + 2, 140, 32, "center", { size: 17, face: "bold", color: "#1a1310", plain: true });
+        }
+    };
+    const _detailRefresh = Window_ItemDetail.prototype.refresh;
+    Window_ItemDetail.prototype.refresh = function() {
+        if (!isGrafit() || !this.contents) return _detailRefresh.call(this);
+        this.contents.clear();
+        this.refreshGrafit();
+    };
+    const _Scene_Item_create_g = Scene_Item.prototype.create;
+    Scene_Item.prototype.create = function() {
+        _Scene_Item_create_g.call(this);
+        if (!isGrafit()) return;
+        makeGrid(this._itemWindow);
+        this._itemWindow.refresh();
+        this._itemWindow.select(this._itemWindow.maxItems() > 0 ? 0 : -1);
+        this._categoryWindow.refresh();
+        const p = this._menuPanel;
+        if (p) {
+            p.set({ subtitle: "", hints: [["↑↓←→", "wybierz"], ["Q/E", "zakładka"], ["Enter", "użyj"], ["Esc", "wróć"]] });
+            this._bagHead = new Sprite_BagHead(p._spec.rect);
+            this.addChildAt(this._bagHead, this.children.indexOf(p) + 1);
+        }
+    };
+    const _Scene_Item_useItem_g = Scene_Item.prototype.useItem;
+    Scene_Item.prototype.useItem = function() {
+        _Scene_Item_useItem_g.call(this);
+        if (isGrafit()) {
+            if (this._menuPanel) this._menuPanel.set({ subtitle: "" });
+            if (this._bagHead) this._bagHead.redraw();
+            if (this._itemWindow) this._itemWindow.refresh();
+        }
+    };
+
+    // ==================================================================
     // Dziennik (Journal.js, also J): its tabs, list, detail and legend in the panel
     // ==================================================================
     const JOURNAL_SPLIT = 420;
@@ -760,7 +1046,7 @@
         this.drawText(id === 0 ? TextManager.autosave : TextManager.file + " " + id, r.x + 4, r.y + 2, r.width - 8);
         this.contents.fontSize = 18;
         this.changeTextColor(U.muted);
-        const second = !info ? "pusty" : (info.day !== undefined ? "Dzień " + info.day + (info.season ? " · " + info.season : "") : info.title || "") + (info.playtime ? "     " + info.playtime : "");
+        const second = !info ? "pusty" : (info.day !== undefined ? "Dzień " + info.day + (info.season ? " · " + info.season : "") : info.title || "") + (info.place ? " · " + info.place : "") + (info.playtime ? "     " + info.playtime : "");
         this.drawText(second, r.x + 4, r.y + 30, r.width - 8);
         if (info && info.timestamp) this.drawText(stampText(info.timestamp), r.x + 4, r.y + 2, r.width - 8, "right");
         this.resetFontSettings();
@@ -852,5 +1138,7 @@
     };
 
     window.MenuPanel = T.register("MenuPanel", { panelRect, SIZES, HEAD, FOOT, TABS, Sprite_MenuPanel, Window_ItemDetail, addCommand, addFoot,
-        commands: () => commands.map(c => c.symbol) });
+        commands: () => commands.map(c => c.symbol),
+        // (the graphite P menu's tabs - MenuRing.js - use these too)
+        makeGrid, questNeeds, stampText, commandOf, commandGlyph, isKeepsake });
 })();

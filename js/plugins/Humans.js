@@ -293,6 +293,8 @@
         return this._engaged && !this._surrendered && !this._dead && this._stun <= 0 ? Math.round(this._def.blow.dmg * this.strK() * 0.5) : 0;
     };
 
+    // the wind-ups' length by the difficulty of the fight (Combat_Feel.js windupK: Łatwy 1.3, Normalny 1, Trudny 0.85)
+    const tk = () => { const Cb = C(), f = Cb && Cb.feel; return f && f.windupK ? f.windupK() : 1; };
     // ---- the modes. sleep / sit / idle / roam (calm), wake, alert, chase, circle, windup -> strike -> recover, feint, guard, draw ->
     // loose -> reload, backoff, flank, surrender, flee, leave, gloat (the hero beaten). The picture: updateSheet
     Game_Human.prototype.setMode = function(mode, frames) {
@@ -653,7 +655,7 @@
         this._faceAng = this._lockAng;
         this._parried = false;
         this.setDirection(DIR4(hx, hy));
-        const frames = Math.round((quick && b.windup2 ? b.windup2 : b.windup) * this.dexK());
+        const frames = Math.round((quick && b.windup2 ? b.windup2 : b.windup) * this.dexK() * tk());
         this.setMode("windup", frames);
         this._feint = !quick && name === "main" && !!this._def.feint && Math.random() < this._def.feint;
         takeTurn(this);
@@ -676,6 +678,21 @@
             guardBreak: this._blow === "heavy", nonLethal: this.mercy(), onBeaten: () => beatenBy(this) });
         if (res === "hit") { this._hitStop = 2; se(this._blow === "bash" ? "Blow3" : "Blow1", 80, 90, panOf(this.centerX())); }
         return true;
+    };
+    // What Combat_Feel.js reads (2026-10-14, the fight's feel): isThreat - he fights the hero (the automatic combat mode, the soft target,
+    // the arrows at the screen's edge); combatTell - a blow or a shot of his on the way to the hero: { t: frames till it lands, heavy: a
+    // blow that breaks the guard }; null: none (a feint is no blow: it does not flash - the flash never lies; a blow at a defender: not)
+    Game_Human.prototype.isThreat = function() {
+        if (this._dead || this._surrendered || !this._engaged) return false;
+        return !["flee", "leave", "return", "gloat", "surrender"].includes(this._mode);
+    };
+    Game_Human.prototype.combatTell = function() {
+        if (this._dead || this._stun > 0 || this._surrendered || foeOf(this)) return null;
+        const m = this._mode, b = this.blowDef(), at = b ? b.hitAt || 3 : 3, heavy = this._blow === "heavy";
+        if (m === "windup" && !this._feint) return { t: Math.max(0, this._modeT) + at, heavy };
+        if (m === "strike" && !this._struck) return { t: Math.max(0, at - (this._modeLen - this._modeT)), heavy };
+        if (m === "draw" && this._def.shot) return { t: Math.max(0, this._modeT) + Math.round(this.playerDistance() / (this._def.shot.speed || 0.3)), heavy: false, shot: true };
+        return null;
     };
     // the hero parried the blow (Combat.js): he reels a long moment - and may lose his weapon (Rozbrojenie)
     Game_Human.prototype.onParried = function() {
@@ -879,7 +896,7 @@
         const s = this._def.shot, [hx, hy] = toHero(this);
         this._faceAng = Math.atan2(hy, hx);
         this.setDirection(DIR4(hx, hy));
-        this.setMode("draw", Math.round(s.draw * this.dexK()));
+        this.setMode("draw", Math.round(s.draw * this.dexK() * tk()));
         this._aim = { x: heroX(), y: heroY(), locked: false };
         se("Bow1", 55, 75, panOf(this.centerX()));
     };

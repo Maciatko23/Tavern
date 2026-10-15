@@ -8,7 +8,8 @@
 //     self-switch A the opened slab leads down to Map119 "Archiwum zakonu" (2,4); there candles (every light a flame), the
 //     markers kroniki / ksiega_sygnalow / schody; the stairs lead back up beside the slab (6,13)
 //   - the manor (Map024): the orangery's markers standable and reachable from the road's end (1,15), the guard's round a loop of
-//     reachable cells, the back gate closed (blocks) / open on self-switch A (passable), the orangery's door locked (a popup)
+//     reachable cells, the orangery's door locked (a popup); since 2026-10-12 (the user's rebuilt garden) W1's own places (the
+//     hatch behind the orangery, the orange tree's planter, Feliks and Kuba by the hatch) instead of the removed markers and the back gate
 // Shots (docs/miejsca_zadan/): dno_studni_dzien/noc, zejscie_do_studni, plyta_otwarta, archiwum, archiwum_noc, oranzeria_dzien/noc.
 // CDP_PORT=9461 node tests/quest_places_test.js
 const path = require("path");
@@ -188,30 +189,22 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.calm();
     const m24 = await t.json(MARKERS);
     await t.eval(REACH(1, 15));
-    const want = ["oranzeria_wejscie", "pompa_oranzeria", "szuflada_ogrodnika", "woz_furtka", "straz_1", "straz_2", "straz_3", "straz_4"];
+    // (2026-10-12) the user rebuilt the garden: the pump, the gardener's table, the back gate and the markers pompa_oranzeria /
+    // szuflada_ogrodnika / woz_furtka / straz_4 are gone ("to, co zmieniłem, ma zostać"). W1 rozdz. 5 now stands on TownQuests' own
+    // places (TownQuests_Data SPOTS: the wooden hatch behind the orangery under the pine - the user's event at 3,20 -, the orange
+    // tree's planter by the orangery's door, Feliks and Kuba by the hatch) and the guard's round has a default straz_4 (TownLife_Data)
+    const want = ["oranzeria_wejscie", "straz_1", "straz_2", "straz_3"];
     const reach24 = {};
     for (const k of want) reach24[k] = m24[k] ? await t.json(AT(m24[k][0], m24[k][1])) : "missing";
-    t.check("the orangery's markers stand on free cells reachable from the road's end (1,15): the door's front, the pump, the drawer, the cart outside the gate, the guard's four",
-        want.every(k => reach24[k] === true) && !!m24.tylna_furtka, { reach24, m24 });
-    const loop = await t.json(`(function(){ const pts = ${JSON.stringify(["straz_1", "straz_2", "straz_3", "straz_4"])}.map(k => (${MARKERS})[k]);
-        const W = $gameMap.width(), blocked = (x, y) => $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
-        // each leg a straight line of walkable cells (the guard can walk it with any path-finder, or straight)
-        const legs = [];
-        for (let i = 0; i < 4; i++) { const [ax, ay] = pts[i], [bx, by] = pts[(i + 1) % 4], d = ax === bx ? (by > ay ? 2 : 8) : (bx > ax ? 6 : 4);
-            let x = ax, y = ay, ok = ax === bx || ay === by;
-            while (ok && (x !== bx || y !== by)) { const nx = x + Math.sign(bx - x), ny = y + Math.sign(by - y);
-                if (!$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d) || blocked(nx, ny)) ok = false; x = nx; y = ny; }
-            legs.push(ok); }
-        return { pts, legs }; })()`);
-    t.check("the guard's round straz_1 -> 2 -> 3 -> 4 -> 1 is a loop of straight walkable legs round the west garden, past the orangery",
-        loop.legs.length === 4 && loop.legs.every(Boolean), loop);
-    const gate = await t.json(`(function(){ const e = ${byName("Tylna furtka")}; const shut = { through: e.isThrough(), prio: e._priorityType, pic: e.characterName() };
-        $gameSelfSwitches.setValue([24, e.eventId(), "A"], true); e.refresh();
-        const open = { through: e.isThrough(), prio: e._priorityType, page: e._pageIndex };
-        $gameSelfSwitches.setValue([24, e.eventId(), "A"], false); e.refresh();
-        return { at: [e.x, e.y], shut, open, gap: $gameMap.isPassable(5, 25, 4) && $gameMap.isPassable(5, 25, 6) }; })()`);
-    t.check("the back gate in the west hedge (5,25): closed it blocks, on its self-switch A it opens (walk-through); the hedge has the gap",
-        JSON.stringify(gate.at) === "[5,25]" && !gate.shut.through && gate.shut.prio === 1 && gate.open.through && gate.open.page === 1 && gate.gap, gate);
+    const places = await t.json("(function(){ const S = TownQuests.Q && window.TownQuestsData.SPOTS, o = {}; for (const k of ['w1_pump', 'w1_drawer', 'w1_feliks', 'w1_kuba']) o[k] = [S[k].x, S[k].y]; return o; })()");
+    for (const [k, [x, y]] of Object.entries(places)) reach24[k] = await t.json(AT(x, y));
+    t.check("the orangery's door front and the guard's markers stand on free cells reachable from the road's end (1,15); so do W1's own places: the hatch's (3,21), the planter's (8,25), Feliks's (2,20) and Kuba's (3,19)",
+        Object.values(reach24).every(v => v === true) && places.w1_pump.join() === "3,21" && places.w1_drawer.join() === "8,25", { reach24, places });
+    const round = await t.json(`(function(){ const pts = ["straz_1", "straz_2", "straz_3", "straz_4"].map(k => TownLife.spot(k)); return { pts, reach: pts.map(p => !!p && !!window.__reach[p[1] * $gameMap.width() + p[0]]) }; })()`);
+    t.check("the guard's round straz_1 -> 2 -> 3 -> 4: four reachable points round the west garden (straz_4 now TownLife's default 10,28 - its marker is gone)",
+        round.pts.every(Boolean) && round.reach.every(Boolean) && round.pts[3].join() === "10,28,8" && new Set(round.pts.map(p => p.join())).size === 4, round);
+    const hatch = await t.json(`(function(){ const e = $gameMap.eventsXy(3, 20).find(x => x.characterName() === "!Fantasy_door2"); return e ? { id: e.eventId(), solid: !e.isThrough(), below: $gameMap.isPassable(3, 21, 8) } : null; })()`);
+    t.check("the wooden hatch behind the orangery (the user's event, 3,20) is there - W1's hatch place is right below it (3,21)", !!hatch && hatch.solid, hatch);
     await t.locate(7, 25, 2);
     await t.eval("$gameMap.setDisplayPos(0, 15); 0");
     await t.frames(60);

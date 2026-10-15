@@ -1,9 +1,12 @@
-// "Czysty widok" (CleanHUD.js, CleanHUD_Compass.js, MenuRing.js; the user's choice 2026-10-08, mock-ups docs/ui_pomysly/pomysl_4_*):
-// the HUD without panels on the map - the parts in their corners, the old parts working but not drawn, the round goal compass in the
-// top right corner (the goal on this map and on another one, through the exits) with the load and the minimap under it, the goal's
-// title only, the gains, no bars under the hero and no experience line (the user, 2026-10-08), the breath as a fifth bar in the combat
-// mode, the thoughts over the hero, the fade under him, the minimap on M; the P menu as a ring; the option "Wygląd" back to the
-// classic look and again. CDP_PORT=9486.
+// "Czysty widok" in the graphite look "Grafit i miedź" (CleanHUD.js, CleanHUD_Compass.js, MenuRing.js; the user's choices 2026-10-08,
+// mock-ups docs/ui_pomysly/pomysl_4_*, docs/ui_pomysly2/pomysl_3_grafit_*; 2026-10-12: "paski ... poziome i po prawo od zegara, a pod
+// zegarem aktywne zadanie"): the HUD on the map - the parts in their corners, the old parts working but not drawn; top left the round
+// clock, right of it the needs as level bars one under another (one length, one spacing; low = red), under the clock the goal and the
+// day's line, "Tryb walki" under them and the breath as a fifth bar in the combat mode; the bottom left corner empty; the
+// round goal compass in the top right corner (the goal on this map and on another one, through the exits) with the load and the
+// minimap under it; the gains; no bars under the hero, no experience line; the thoughts over the hero; the fade under him (the whole
+// top left corner as one); the minimap on M; P opens the tabbed menu (its tabs: tests/menu_grafit_test.js); the option "Wygląd" back
+// to the classic look and again. CDP_PORT=9460.
 // The plugins are put into the page while they are not in js/plugins.js yet.
 "use strict";
 const path = require("path");
@@ -12,6 +15,8 @@ const kit = require("./lib/kit.js");
 kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", plugins: ["CleanHUD", "CleanHUD_Compass", "MenuRing"] }, async t => {
     t.check("wtyczki wczytane", ["CleanHUD", "CleanHUD_Compass", "MenuRing"].every(n => t.plugins[n] === "injected" || t.plugins[n] === "registered"), t.plugins);
     t.check("czysty widok jest domyślny", await t.eval("ConfigManager.uiClean === true && CleanHUD.lookClean()"));
+    // (Fullscreen.js asks for fullscreen at the first key - the browser would then eat the first Esc to leave it: used up here)
+    await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");
     const ok = await t.newGame({ story: true, skipIntro: true, hour: 10, quiet: true });
     t.check("nowa gra w domu dziadka", ok && (await t.eval("$gameMap.mapId()")) === 19);
     await t.frames(30);
@@ -20,12 +25,16 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- the parts in their places, the old ones not drawn
     let d = await dbg();
     const P = d.parts;
-    t.check("lewy górny róg: godzina i cel", P.clock.visible && P.clock.x < 20 && P.clock.y < 20 && P.clock.h > 70, P.clock);
-    t.check("cel: sam tytuł, bez drugiej linii (opis zostaje w dzienniku)", P.clock.h <= 112 && !!d.goal && !!d.goal.line, { h: P.clock.h, line: d.goal && d.goal.line });
+    t.check("lewy górny róg: zegar, pod nim cel i linia pory dnia", P.clock.visible && P.clock.x <= 12 && P.clock.y <= 12 && d.text && d.text.goal && d.text.y >= 96 && d.text.x < 80
+        && /^\S+ · dzień \d+ · \S+$/.test(d.text.day), { box: P.clock, text: d.text });
+    t.check("cel: sam tytuł (opis zostaje w dzienniku), linia pory dnia pod nim", !!d.goal && !!d.goal.line && !d.text.combat, { line: d.goal && d.goal.line, text: d.text });
+    t.check("paski potrzeb po prawej od zegara (bez głodu i pragnienia: życie i kondycja)", P.needs.visible && P.needs.x >= 98 && P.needs.y <= 56 && P.needs.y + P.needs.h >= 56 && d.bars.map(b => b.key).join() === "health,stamina" && d.bars.every(b => b.x > 98), d.bars);
+    t.check("cel pod zegarem i pod paskami (nie obok nich)", d.text.y >= 96 && d.text.y >= P.needs.y + P.needs.h, { text: d.text, needs: P.needs });
+    const bottomLeft = Object.entries(d.parts).filter(([k, r]) => r && r.visible && r.w > 0 && r.x < 420 && r.y + r.h > 470);
+    t.check("lewy dolny róg pusty (bez wachlarza)", bottomLeft.length === 0, bottomLeft);
     const cmp0 = await t.json("CleanCompass.info()");
     t.check("prawy górny róg: okrągły kompas", P.compass.visible && cmp0.centre.x > 1150 && cmp0.centre.y < 80 && P.compass.x + P.compass.w <= 1280 && P.compass.y >= 0, { box: P.compass, c: cmp0.centre });
     t.check("obciążenie pod kompasem (nie nachodzi na niego)", P.load.visible && P.load.x > 1100 && P.load.y >= cmp0.centre.y + cmp0.centre.r && P.load.y >= P.compass.y + P.compass.h - 2, { load: P.load, compass: P.compass });
-    t.check("lewy dolny róg: paski potrzeb", P.needs.visible && P.needs.x < 30 && P.needs.y > 600, P.needs);
     t.check("bez paska doświadczenia (stary nierysowany, nowego nie ma)", !d.parts.xp && d.old.xpBar === false && !(await t.eval("!!SceneManager._scene._cleanXp")), d.old.xpBar);
     t.check("stare części działają, ale nie są rysowane", Object.values(d.old).every(v => v === false) && Object.keys(d.old).length >= 8, d.old);
     await t.eval("$gameSystem._minimapHidden = undefined; 0");   // (a game that never pressed M: kit's quiet hid it)
@@ -33,9 +42,9 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const mm0 = (await dbg()).minimap;
     t.check("minimapa domyślnie ukryta", !!mm0 && mm0.visible === false && mm0.hidden === true, mm0);
     const clock = await t.eval("SceneManager._scene._cleanClock._key");
-    t.check("zegar pokazuje godzinę gry (10:00)", /^10:0\d#/.test(clock), clock);
+    t.check("zegar ze wskazówkami: godzina gry (10:00 = 600 minut)", /^60\d#/.test(clock), clock);
     t.check("cel z dziennika w lewym górnym rogu: Dojdź na pole dziadka", d.goal && d.goal.id === "story_field" && /pole dziadka/i.test(d.goal.title), d.goal);
-    await t.shot(path.join(__dirname, "..", "docs", "ui_czysty", "test_dom_dziadka.png"));
+    await t.shot(path.join(__dirname, "..", "docs", "ui_grafit", "test_hud_dom.png"));
 
     // ---------------------------------------------------------------- the compass: the goal on another map - through the exits
     const routed = await t.until("(function(){ const i = CleanCompass.info(); return !!(i && i.route && i.route.x !== undefined && !i.route.pending); })()", 30);
@@ -106,23 +115,35 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(10);
     const feetBars = await t.json(`(function(){ const s = SceneManager._scene, b = s._spriteset._combatLayer && s._spriteset._combatLayer._breath;
         return { arc: !!s._cleanArc, breath: b ? { renderable: b.renderable, opacity: b.opacity } : null }; })()`);
-    t.check("pod bohaterem żadnych pasków (bez łuku, oddech niewidoczny)", !feetBars.arc && !!feetBars.breath && feetBars.breath.renderable === false, feetBars);
+    t.check("pod bohaterem żadnych pasków (oddech pod stopami niewidoczny)", !feetBars.arc && !!feetBars.breath && feetBars.breath.renderable === false, feetBars);
 
-    // ---------------------------------------------------------------- the needs on: four bars; the fade under the hero
+    // ---------------------------------------------------------------- the needs on: four level bars of one length and spacing; low; the fade
     await t.eval("Needs.setEnabled(true); 0");
     await t.frames(10);
-    const needs = await t.json("CleanHUD.debug().parts.needs");
-    t.check("z głodem i pragnieniem: cztery paski (szerzej)", needs.visible && needs.w > 450, needs);
-    await t.eval("Needs.setEnabled(false); 0");
+    let bars = (await dbg()).bars;
+    t.check("z głodem i pragnieniem: cztery paski - życie, kondycja, sytość, nawodnienie", bars.map(b => b.key).join() === "health,stamina,food,water", bars.map(b => b.key));
+    t.check("paski poziome, jeden pod drugim: ta sama długość i grubość, równe odstępy, wyrównane do lewej", bars.every(b => b.w === bars[0].w && b.h === bars[0].h && b.x === bars[0].x) && bars[0].w > bars[0].h * 10
+        && bars.every((b, i) => i === 0 || b.y - bars[i - 1].y === bars[1].y - bars[0].y), bars.map(b => [b.x, b.y, b.w, b.h]));
+    t.check("paski po prawej od okrągłego zegara", bars.every(b => b.x > 58 + 40), bars.map(b => b.x));
+    t.check("wypełnienie w kolorze potrzeby, liczba przy pasku", bars.every(b => !b.low && /^#/.test(b.colour) && !!b.number && Math.abs(b.fill - Math.round(b.w * b.ratio)) <= 1), bars.map(b => [b.key, b.fill, b.number]));
+    await t.eval("$gameSystem._needs.water = 8; 0");
+    await t.frames(10);
+    bars = (await dbg()).bars;
+    const water = bars.find(b => b.key === "water");
+    t.check("niskie nawodnienie: pasek czerwony (miga), krótki, liczba czerwona", water && water.low && water.colour === "#ff6f5e" && water.ratio < 0.15, water);
+    await t.eval("$gameSystem._needs.water = 70; 0");
     const alphaAt = async (sx, sy) => {
         await t.eval(`(function(){ $gameMap.setDisplayPos(0, 0); $gamePlayer.locate(${sx}, ${sy}); $gameMap.setDisplayPos(0, 0); return 0; })()`);
         await t.frames(40);
-        return t.json(`(function(){ const s = SceneManager._scene; return { clock: +s._cleanClock.alpha.toFixed(2), load: +s._cleanLoad.alpha.toFixed(2), compass: +s._cleanCompass.alpha.toFixed(2) }; })()`);
+        return t.json(`(function(){ const s = SceneManager._scene; return { clock: +s._cleanClock.alpha.toFixed(2), bars: +s._cleanNeeds.alpha.toFixed(2), load: +s._cleanLoad.alpha.toFixed(2), compass: +s._cleanCompass.alpha.toFixed(2) }; })()`);
     };
     await t.go(20, 10, 12, 2);
-    const under = await alphaAt(1, 1), away = await alphaAt(10, 8);
-    t.check("bohater pod zegarem: lewy górny róg blednie, reszta nie", under.clock <= 0.35 && under.load === 1, under);
-    t.check("...a gdy odejdzie, wraca", away.clock === 1 && away.compass === 1, away);
+    const under = await alphaAt(1, 1), underBars = await alphaAt(5, 1), underGoal = await alphaAt(3, 3), away = await alphaAt(10, 8);
+    t.check("bohater pod zegarem: lewy górny róg blednie (zegar, paski, cel), reszta nie", under.clock <= 0.35 && under.bars <= 0.35 && under.load === 1, under);
+    t.check("bohater pod samymi paskami: blednie cały róg", underBars.clock <= 0.35 && underBars.bars <= 0.35, underBars);
+    t.check("bohater pod celem (pod zegarem): blednie cały róg", underGoal.clock <= 0.35 && underGoal.bars <= 0.35, underGoal);
+    t.check("...a gdy odejdzie, wraca", away.clock === 1 && away.bars === 1 && away.compass === 1, away);
+    await t.eval("Needs.setEnabled(false); 0");
 
     // ---------------------------------------------------------------- the minimap on M, under the load
     await t.key("M");
@@ -135,87 +156,58 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     mm = (await dbg()).minimap;
     t.check("M znowu ją chowa", mm && !mm.visible, mm);
 
-    // ---------------------------------------------------------------- the combat mode: the label under the compass, the weapon
+    // ---------------------------------------------------------------- the combat mode: "Tryb walki" under the goal, the breath's bar, the weapon
     await t.eval("$gameParty.gainItem($dataItems[60], 1); 0");
-    const needsW0 = (await dbg()).parts.needs.w;
+    const before = await dbg();
     await t.key("Tab");
     await t.frames(20);
     d = await dbg();
-    t.check("tryb walki: napis u góry na środku", d.top.some(x => x.k === "mode" && x.y < 80), d.top);
-    const breath5 = await t.json(`(function(){ const v = CleanHUD.needValues(); return { breath: v.breath, w: CleanHUD.debug().parts.needs.w }; })()`);
-    t.check("tryb walki: oddech jako kolejny pasek w lewym dolnym rogu", breath5.breath !== undefined && breath5.w >= needsW0 + 120, { breath5, needsW0 });
+    t.check("tryb walki: plakietka „Tryb walki” pod celem (lewy górny róg), nie u góry na środku", d.text.combat && d.text.pillY > 60 && !d.top.some(x => x.k === "mode"), { text: d.text, top: d.top });
+    const br = d.bars[d.bars.length - 1], prev = d.bars[d.bars.length - 2];
+    t.check("tryb walki: oddech jako kolejny pasek na dole (ta sama długość i odstęp; poza walką go nie ma)", br && br.key === "breath" && br.w === prev.w && br.x === prev.x && br.y - prev.y === prev.y - d.bars[d.bars.length - 3].y
+        && !before.bars.some(b => b.key === "breath"), { bars: d.bars.map(b => [b.key, b.y]), before: before.bars.map(b => b.key) });
+    t.check("tryb walki: cel zostaje pod zegarem, pod piątym paskiem (nic się nie nakłada)", d.text.x === before.text.x && d.text.y >= d.parts.needs.y + d.parts.needs.h, { text: d.text, needs: d.parts.needs });
     t.check("tryb walki: broń w prawym dolnym rogu", d.parts.weapon.visible && d.parts.weapon.x > 900 && d.parts.weapon.y > 600, d.parts.weapon);
-    await t.shot(path.join(__dirname, "..", "docs", "ui_czysty", "test_walka.png"));
+    await t.shot(path.join(__dirname, "..", "docs", "ui_grafit", "test_hud_walka.png"));
     await t.key("Tab");
     await t.frames(10);
 
-    // ---------------------------------------------------------------- P: the ring
-    await t.eval("$gameTemp._ringFeet = null; 0");
+    // ---------------------------------------------------------------- P: the tabbed menu (every tab: tests/menu_grafit_test.js)
     await t.key("P");
     t.check("P otwiera menu", await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10));
-    await t.frames(20);
-    let ring = await t.json("MenuRing.info()");
-    t.check("menu jako pierścień: 6 poleceń, wybrany Plecak (na górze)", ring && ring.order.slice(0, 6).join() === "item,journal,options,gameEnd,save,hero" && ring.selected === "item"
-        && ring.buttons[0].y < ring.centre.y - 100, ring);
-    t.check("okno poleceń ukryte, panel MenuPanel niewidoczny", !ring.window.visible && !ring.window.active && !(await t.eval("SceneManager._scene._menuPanel.visible")));
-    const back = await t.json("(function(){ const s = SceneManager._scene._backgroundSprite; return { filters: (s.filters || []).length, opacity: s.opacity }; })()");
-    t.check("mapa widoczna (bez rozmycia), przyciemniona wokół", back.filters === 0 && back.opacity === 255, back);
-    await t.shot(path.join(__dirname, "..", "docs", "ui_czysty", "test_menu_pierscien.png"));
-    await t.key("ArrowRight");
-    await t.frames(30);
-    ring = await t.json("MenuRing.info()");
-    const top1 = ring.buttons.find(b => b.sym === "journal");
-    t.check("→ obraca pierścień: Dziennik na górze", ring.selected === "journal" && top1.y < ring.centre.y - 100 && Math.abs(top1.x - ring.centre.x) < 6, { sel: ring.selected, top1 });
-    await t.key("Enter");
-    t.check("Enter otwiera dziennik (zwykłe okno)", await t.until("SceneManager._scene instanceof Journal.Scene_Journal && !SceneManager.isSceneChanging()", 10));
-    await t.frames(20);
-    // (the journal lets the first Esc after it opens go by - the same in the classic look; a player presses again)
-    let backToRing = false;
-    for (let i = 0; i < 3 && !backToRing; i++) {
-        await t.key("Escape");
-        backToRing = await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 3);
-    }
-    t.check("Esc wraca do pierścienia", backToRing);
-    ring = await t.json("MenuRing.info()");
-    t.check("...z Dziennikiem wybranym", ring && ring.selected === "journal", ring && ring.selected);
-    await t.key("ArrowLeft"); await t.key("ArrowLeft");
-    await t.frames(10);
-    ring = await t.json("MenuRing.info()");
-    t.check("← dwa razy: Postać", ring.selected === "hero", ring.selected);
-    await t.key("Enter");
-    t.check("Postać otwiera ekran bohatera", await t.until("SceneManager._scene && /Scene_Hero/.test(SceneManager._scene.constructor.name) && !SceneManager.isSceneChanging()", 10),
-        await t.scene());
-    await t.frames(20);
+    await t.frames(45);
+    const menu = await t.json("MenuRing.info()");
+    t.check("menu P: jedno okno z sześcioma zakładkami (Postać, Plecak, Dziennik, Opcje, Zapisz, Zakończ), na początku Postać", menu && menu.tabs.join() === "hero,item,journal,options,save,gameEnd" && menu.active === "hero" && !menu.window.visible, menu && menu.tabs);
+    const back = await t.json("(function(){ const s = SceneManager._scene._backgroundSprite; return { blur: s.filters && s.filters[0] ? +s.filters[0].blur.toFixed(1) : 0, opacity: s.opacity }; })()");
+    t.check("mapa za menu rozmyta (wejście się dokończyło)", back.blur >= 2.9 && back.opacity === 255, back);
     await t.key("Escape");
-    await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10);
-    await t.key("Escape");
-    t.check("Esc z pierścienia wraca do gry", await t.until(t.onMap(20), 10));
+    t.check("Esc zamyka menu", await t.until(t.onMap(20), 10));
     await t.frames(10);
 
     // ---------------------------------------------------------------- Opcje: "Wygląd" - the classic look, and back
     await t.key("P");
     await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10);
-    await t.eval("SceneManager.push(Scene_Options); 0");
-    await t.until("SceneManager._scene instanceof Scene_Options && !SceneManager.isSceneChanging()", 10);
-    await t.frames(10);
-    const opt = await t.json(`(function(){ const w = SceneManager._scene._optionsWindow, i = w.findSymbol("uiClean"); return { i, text: i >= 0 ? w.statusText(i) : null, name: i >= 0 ? w.commandName(i) : null }; })()`);
-    t.check("Opcje: „Wygląd: Czysty widok”", opt.i >= 0 && opt.name === "Wygląd" && opt.text === "Czysty widok", opt);
-    await t.shot(path.join(__dirname, "..", "docs", "ui_czysty", "test_opcje.png"));
-    await t.eval(`(function(){ const w = SceneManager._scene._optionsWindow; w.select(w.findSymbol("uiClean")); return 0; })()`);
+    await t.frames(30);
+    for (let i = 0; i < 3; i++) { await t.key("D"); await t.frames(16); }   // (the tabs, level 1: Postać -> Plecak -> Dziennik -> Opcje)
+    await t.key("O");   // (in: Opcje have no sub-tabs - straight to the list)
+    await t.frames(8);
+    const opt = await t.json(`(function(){ const i = MenuRing.info(), w = SceneManager._scene._views.options._win; return { tab: i.active, symbol: i.options.symbol, text: w.statusText(w.index()), name: w.commandName(w.index()) }; })()`);
+    t.check("Opcje (zakładka menu P): „Wygląd: Grafit” w pierwszym wierszu", opt.tab === "options" && opt.symbol === "uiClean" && opt.name === "Wygląd" && opt.text === "Grafit", opt);
     await t.key("Enter");
-    await t.frames(5);
-    const opt2 = await t.json(`(function(){ const w = SceneManager._scene._optionsWindow; return { text: w.statusText(w.findSymbol("uiClean")), cfg: ConfigManager.uiClean, saved: ConfigManager.makeData().uiClean }; })()`);
-    t.check("Enter zmienia na „Klasyczny” (i zapisuje w ustawieniach)", opt2.text === "Klasyczny" && opt2.cfg === false && opt2.saved === false, opt2);
-    await t.key("Escape");
+    const closed = await t.until(t.onMap(20), 10);
+    const opt2 = await t.json(`(function(){ return { cfg: ConfigManager.uiClean, saved: ConfigManager.makeData().uiClean }; })()`);
+    t.check("Enter zmienia na „Klasyczny” (zapisane w ustawieniach), menu Grafit się zamyka", closed && opt2.cfg === false && opt2.saved === false, opt2);
+    await t.frames(10);
+    await t.key("P");
     await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10);
     await t.frames(10);
-    t.check("klasyczny: menu P znowu jako panel", !(await t.eval("SceneManager._scene._ringOn")) && (await t.eval("SceneManager._scene._menuPanel.visible && SceneManager._scene._commandWindow.visible")));
+    t.check("klasyczny: menu P znowu jako panel", !(await t.eval("SceneManager._scene._cardOn")) && (await t.eval("SceneManager._scene._menuPanel.visible && SceneManager._scene._commandWindow.visible")));
     await t.key("Escape");
     await t.until(t.onMap(20), 10);
     await t.frames(10);
     d = await dbg();
     t.check("klasyczny: stare części znowu rysowane, czyste schowane", !d.clean && Object.values(d.old).every(v => v === true) && !d.parts.clock.visible && !d.parts.compass.visible && !d.parts.needs.visible, d.old);
-    await t.shot(path.join(__dirname, "..", "docs", "ui_czysty", "test_klasyczny.png"));
+    await t.shot(path.join(__dirname, "..", "docs", "ui_grafit", "test_klasyczny.png"));
     await t.eval("CleanHUD.setClean(true); 0");
     await t.frames(10);
     d = await dbg();

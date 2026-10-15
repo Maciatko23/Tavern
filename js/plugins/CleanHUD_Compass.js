@@ -330,7 +330,7 @@
     // outline over a lightly darkened inside, N E S W (north up, as the map is), the goal's arrow from the middle to the rim, and the
     // label under the dial ("Tawerna · 151 kroków"); the load, the torch's gauge and the minimap stand under it (CleanHUD.js)
     // ------------------------------------------------------------------
-    const DIAL = { R: 44, right: 18, top: 8, think: 15, labelGap: 8, labelH: 22, turn: 0.25 };
+    const DIAL = { R: 44, right: 18, top: 8, think: 15, labelGap: 10, labelH: 26, turn: 0.25, pillRight: 8 };
     const SIZE = DIAL.R * 2 + 30;
     function Sprite_CleanCompass() {
         this.initialize(...arguments);
@@ -360,63 +360,58 @@
         this._angle = null;
         this._box = { x: SIZE / 2 - DIAL.R - 4, y: SIZE / 2 - DIAL.R - 4, w: DIAL.R * 2 + 8, h: DIAL.R * 2 + 8 };
     };
+    // the dial in the graphite look: a graphite disc with a thin line and a soft shadow, marks every 15 degrees (longer at 45), N in
+    // copper, E S W muted
     Sprite_CleanCompass.prototype.drawDial = function() {
         const b = this.bitmap, ctx = b.context, c = SIZE / 2, R = DIAL.R;
         b.clear();
         ctx.save();
-        const g = ctx.createRadialGradient(c, c, 0, c, c, R);
-        g.addColorStop(0, "rgba(0,0,0,0.2)");
-        g.addColorStop(1, "rgba(0,0,0,0.45)");
-        ctx.fillStyle = g;
+        ctx.fillStyle = "rgba(0,0,0,0.16)";
+        ctx.beginPath(); ctx.ellipse(c, c + 3, R + 1, R + 1, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = C.panel;
         ctx.beginPath(); ctx.arc(c, c, R, 0, Math.PI * 2); ctx.fill();
-        for (const [w, col] of [[3.2, "rgba(0,0,0,0.7)"], [1.2, "rgba(246,242,234,0.85)"]]) {
-            ctx.strokeStyle = col;
-            ctx.lineWidth = w;
-            ctx.beginPath(); ctx.arc(c, c, R, 0, Math.PI * 2); ctx.stroke();
-        }
-        // ticks every 30 degrees between the letters
-        for (let d = 0; d < 360; d += 30) {
+        ctx.strokeStyle = C.line;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(c, c, R - 0.5, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = C.dim;
+        for (let d = 0; d < 360; d += 15) {
             if (d % 90 === 0) continue;
-            const a = (d - 90) * Math.PI / 180, x0 = c + Math.cos(a) * (R - 6), y0 = c + Math.sin(a) * (R - 6), x1 = c + Math.cos(a) * (R - 1), y1 = c + Math.sin(a) * (R - 1);
-            for (const [w, col] of [[3, "rgba(0,0,0,0.6)"], [1, "rgba(220,224,214,0.85)"]]) {
-                ctx.strokeStyle = col;
-                ctx.lineWidth = w;
-                ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
-            }
+            const a = d * Math.PI / 180, L = d % 45 === 0 ? 4 : 2;
+            ctx.beginPath();
+            ctx.moveTo(c + Math.sin(a) * (R - 3), c - Math.cos(a) * (R - 3));
+            ctx.lineTo(c + Math.sin(a) * (R - 3 - L), c - Math.cos(a) * (R - 3 - L));
+            ctx.stroke();
         }
         ctx.restore();
         for (const [lab, d] of [["N", 0], ["E", 90], ["S", 180], ["W", 270]]) {
-            const a = (d - 90) * Math.PI / 180, x = c + Math.cos(a) * (R - 14), y = c + Math.sin(a) * (R - 14);
-            textOut(b, lab, Math.round(x - 15), Math.round(y - 12), 30, 24, "center", { size: lab === "N" ? 17 : 14, color: lab === "N" ? C.accent : C.text, ow: 3 });
+            const a = d * Math.PI / 180, x = c + Math.sin(a) * (R - 13), y = c - Math.cos(a) * (R - 13);
+            textOut(b, lab, Math.round(x - 15), Math.round(y - 12), 30, 24, "center", { size: lab === "N" ? 15 : 13, face: lab === "N" ? "bold" : null, color: lab === "N" ? C.accent : C.muted, plain: true });
         }
         b._baseTexture.update();
+        this._dialFaces = CH.facesReady();
     };
-    // the goal's arrow, pointing up (turned to the goal): a thin line from the middle, the head on the ring
+    // the goal's arrow, pointing up (turned to the goal): a copper line from the middle and a copper head at the rim
     Sprite_CleanCompass.prototype.needleBitmap = function() {
-        const b = new Bitmap(SIZE, SIZE), ctx = b.context, c = SIZE / 2, R = DIAL.R;
+        const b = new Bitmap(SIZE, SIZE), ctx = b.context, c = SIZE / 2, R = DIAL.R, k = 7 * Math.PI / 180;
         ctx.save();
         ctx.lineCap = "round";
-        for (const [w, col] of [[4.5, "rgba(0,0,0,0.55)"], [2, "rgba(255,210,63,0.9)"]]) {
-            ctx.strokeStyle = col;
-            ctx.lineWidth = w;
-            ctx.beginPath(); ctx.moveTo(c, c - 7); ctx.lineTo(c, c - R + 22); ctx.stroke();
-        }
-        const tip = c - R - 9, base = c - R + 6;
-        ctx.beginPath(); ctx.moveTo(c, tip); ctx.lineTo(c + 7.5, base); ctx.lineTo(c, base - 3); ctx.lineTo(c - 7.5, base); ctx.closePath();
+        ctx.strokeStyle = C.accent;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(c, c); ctx.lineTo(c, c - (R - 13)); ctx.stroke();
         ctx.fillStyle = C.accent;
+        ctx.beginPath();
+        ctx.moveTo(c, c - (R - 3));
+        ctx.lineTo(c + Math.sin(k) * (R - 13), c - Math.cos(k) * (R - 13));
+        ctx.lineTo(c - Math.sin(k) * (R - 13), c - Math.cos(k) * (R - 13));
+        ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = "rgba(0,0,0,0.85)";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
         ctx.restore();
         b._baseTexture.update();
         return b;
     };
     Sprite_CleanCompass.prototype.dotBitmap = function() {
         const b = new Bitmap(14, 14), ctx = b.context;
-        ctx.fillStyle = "rgba(0,0,0,0.8)";
-        ctx.beginPath(); ctx.arc(7, 7, 4.5, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = C.accent;
+        ctx.fillStyle = C.text;
         ctx.beginPath(); ctx.arc(7, 7, 3, 0, Math.PI * 2); ctx.fill();
         b._baseTexture.update();
         return b;
@@ -426,6 +421,7 @@
         if ($gameMap && $gameMap.mapId() !== this._mapId) { this._mapId = $gameMap.mapId(); this._off = T.mapFlag("Compass", true, "off") === false; this._t = 0; this._angle = null; }
         this.visible = CH.isClean() && !this._off && !!$gameSystem;
         if (!this.visible) return;
+        if (this._dialFaces !== CH.facesReady()) this.drawDial();   // (the bold N once its face is there)
         this.x = Graphics.width - DIAL.right - DIAL.R;
         this.y = DIAL.top + DIAL.R + 4;
         if (this._t-- <= 0) {   // (the goal and the way: a few times a second)
@@ -437,7 +433,7 @@
     };
     // where the column under it goes on (the load, the torch, the minimap): the label's room is kept even without a label
     Sprite_CleanCompass.prototype.bottom = function() {
-        return this.y + DIAL.R + DIAL.labelGap + DIAL.labelH + 6;
+        return this.y + DIAL.R + DIAL.labelGap + DIAL.labelH;
     };
     Sprite_CleanCompass.prototype.updateNeedle = function() {
         const t = this._target, r = this._route, n = this._needle, l = this._label;
@@ -467,15 +463,17 @@
         this._dot.scale.set(pulse, pulse);
         l.visible = !!text;
         if (!text) return;
-        if (l._text !== text) {
+        if (l._text !== text || l._faces !== CH.facesReady()) {
             l._text = text;
-            const w = measure(text, 15) + 16, b = new Bitmap(w, DIAL.labelH);
-            textOut(b, text, 0, 0, w, DIAL.labelH, "center", { size: 15, color: C.accent });
+            l._faces = CH.facesReady();
+            const w = measure(text, 16) + 24, b = new Bitmap(w + 2, DIAL.labelH + 4);
+            CH.rpanel(b.context, 0, 0, w, DIAL.labelH, DIAL.labelH / 2);
+            textOut(b, text, 0, 0, w, DIAL.labelH, "center", { size: 16, plain: true });
             l.bitmap = b;
             l._w = w;
         }
-        // centred under the dial, kept inside the screen's right edge
-        l.x = Math.round(Math.min(0, Graphics.width - 10 - this.x - (l._w || 0) / 2));
+        // a pill under the dial, right-aligned to the screen's edge
+        l.x = Math.round(Graphics.width - DIAL.pillRight - this.x - (l._w || 0) / 2);
         l.y = DIAL.R + DIAL.labelGap;
     };
     Sprite_CleanCompass.prototype.hudRect = function() {

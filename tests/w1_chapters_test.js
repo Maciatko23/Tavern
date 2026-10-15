@@ -1,8 +1,8 @@
 // W1 "Woda spod Kruczych Skał", chapters 3-6 (TownQuests.js, user 2026-10-05: Feliks is guilty, the Lord knows nothing). Port: CDP_PORT=9463.
 // Ch. 3 Kuba at the market (a: he tells all; b: he pays 5 G a market day; c: he flees for a week - the town suffers), ch. 4 the raven
 // grate at the well's bottom (Map118) and Tadek's word about the orangery, ch. 5 the orangery at night (Map024: the guard's round -
-// caught = thrown out of the garden, opinion -3, another night; Feliks at the back gate with Kuba's cart 1:30-3:00; the pump on the
-// raven hatch, the sluice drawing in the drawer), ch. 6 the big choice: a) revealed with the sołtys on a market day (Feliks arrested -
+// caught = thrown out of the garden, opinion -3, another night; Feliks at the hatch behind the orangery with Kuba 1:30-3:00; the raven
+// hatch, the sluice drawing in the orange tree's planter - the user's rebuilt garden, 2026-10-12), ch. 6 the big choice: a) revealed with the sołtys on a market day (Feliks arrested -
 // gone from the town, the sluice half open: the mill runs, the market well still 2 draws a day, Kuba's night trips end, opinion +15), b) quietly to the Lord
 // (a story game: 200 G off grandpa's debt, lordAlly, Kuba resentful), c) Feliks pays 20 G a week, two weeks later his men on Polna
 // droga - since 2026-10-06 a real fight (Humans.js): beaten (one spared talks: a witness) = the choice comes back without a second
@@ -83,7 +83,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.go(8, 8, 50, 8);
     await at(4, 10, 20);
     const tadek = await talk("kowal", []);
-    t.check("...Tadek: 'Tej kraty nie kuł kowal, tylko zakon' - and the same raven on a hatch under the orangery's pump - chapter 5 next",
+    t.check("...Tadek: 'Tej kraty nie kuł kowal, tylko zakon' - and the same raven on a hatch by the orangery - chapter 5 next",
         /nie kuł kowal, tylko zakon/.test(tadek.text) && /oranżerii/.test(tadek.text) && (await step()) === "active:5", tadek.text.slice(0, 300));
 
     // ------------------------------------------------------------------ ch. 5: the orangery at night - caught by the guard
@@ -93,7 +93,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the manor's guard (TownLife 'straznik', Map024) walks his round in the garden at night", guard && guard.act === "patrol" && !guard.hidden && guard.sheet === "$Npc_Straznik", guard);
     const spots = await J("[951, 952].map(id => !!$gameMap.event(id) && !!$gameMap.event(id).page())");
     t.check("...the pump's and the drawer's places are on at night", spots.every(Boolean), spots);
-    await t.eval("(function(){ Hunting.setSneak(false); TownLife.hold('straznik', true, null); const g = TownLife.eventOf('straznik'); g.locate(10, 24); g.setDirection(2); $gamePlayer.locate(10, 27); return 0; })()");
+    await t.eval("(function(){ Hunting.setSneak(false); TownLife.hold('straznik', true, null); const g = TownLife.eventOf('straznik'); g.locate(10, 24); g.setDirection(2); $gamePlayer.locate(9, 26); return 0; })()");
     const op1 = await J("TownQuests.opinion()");
     const out = await t.until(t.onMap(8), 20);
     await t.frames(20);
@@ -101,31 +101,35 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("walking up to him unsneaking: caught ('Stój! Kto tu?!'), thrown out to the town's side of the east gate, opinion -3, not again tonight",
         out && thrown.x === 50 && thrown.y === 51 && thrown.tried === thrown.night && thrown.op === op1 - 3 && (await t.notices()).some(n => /Złapali cię w ogrodzie dworu/.test(n)), thrown);
 
-    // the next night: Feliks at the back gate 1:30-3:00 with Kuba's cart, watched unseen (sneaking)
-    await t.go(24, 3, 21, 2);
+    // the next night: Feliks at the hatch behind the orangery 1:30-3:00 with Kuba and his barrels, watched unseen (sneaking). (2026-10-12:
+    // the user's rebuilt garden - no back gate, no pump: the wooden hatch under the pine, 3,20; Kuba comes in by the main gate)
+    await t.go(24, 2, 26, 8);
     await at(6, 2, 30);
-    await t.eval("(function(){ Hunting.setSneak(true); TownLife.hold('straznik', true, null); const g = TownLife.eventOf('straznik'); g.locate(19, 19); g.setDirection(8); $gamePlayer.locate(3, 21); return 0; })()");
+    await t.eval("(function(){ Hunting.setSneak(true); TownLife.hold('straznik', true, null); const g = TownLife.eventOf('straznik'); g.locate(19, 19); g.setDirection(8); $gamePlayer.locate(2, 26); $gamePlayer.setDirection(8); return 0; })()");
     await t.frames(40);
-    const gate = await J(`(function(){ const e = $gameMap.events().find(x => x.event().name === "Tylna furtka"), f = $gameMap.event(953), k = $gameMap.event(954);
-        return { open: $gameSelfSwitches.value([24, e.eventId(), "A"]), through: e.isThrough(), feliks: f && f.page() && [f.x, f.y, f.characterName()], kuba: k && k.page() && [k.x, k.y, k.characterName()] }; })()`);
-    t.check("at 2:00 the back gate stands open, Feliks inside it (6,25) and Kuba with his cart outside (3,24)",
-        gate.open && gate.through && gate.feliks && gate.feliks[2] === "$Npc_Feliks" && gate.kuba && gate.kuba[2] === "$Npc_Woziwoda", gate);
+    const gate = await J(`(function(){ const f = $gameMap.event(953), k = $gameMap.event(954);
+        return { feliks: f && f.page() && [f.x, f.y, f.characterName()], kuba: k && k.page() && [k.x, k.y, k.characterName()] }; })()`);
+    t.check("at 2:00 Feliks stands by the hatch behind the orangery (2,20) and Kuba with his barrels beside it (3,19)",
+        gate.feliks && gate.feliks[2] === "$Npc_Feliks" && gate.feliks[0] === 2 && gate.feliks[1] === 20 && gate.kuba && gate.kuba[2] === "$Npc_Woziwoda" && gate.kuba[0] === 3 && gate.kuba[1] === 19, gate);
     const saw = await t.until("!!TownQuests.state().flags.w1SawFeliks", 30, 300);
     await t.frames(60);
     await t.eval("$gameMap.setDisplayPos(0, 15); 0");
     await t.frames(20);
     await t.shot(path.join(SHOTS, "w1_furtka_noc.png"));
-    t.check("...watched from the forest strip, sneaking, unseen: the scene in the hero's bubbles and the note 'Feliks przy furtce'",
-        saw && (await notes()).includes("Feliks przy furtce") && (await J("TownQuests.rec('W1').t.tried")) !== (await J("TownQuests.nightOf()")), await J("SpeechBubbles.log.slice(-3)"));
-    // after 3:00 the gate shuts; the pump and the drawer
+    t.check("...watched from the grass strip behind the orangery, sneaking, unseen: the scene in the hero's bubbles and the note 'Feliks przy włazie'",
+        saw && (await notes()).includes("Feliks przy włazie") && (await J("TownQuests.rec('W1').t.tried")) !== (await J("TownQuests.nightOf()")), await J("SpeechBubbles.log.slice(-3)"));
+    // after 3:00 Feliks and Kuba are gone; the hatch and the planter
     await at(6, 3.3, 30);
-    const shut = await J(`(function(){ const e = $gameMap.events().find(x => x.event().name === "Tylna furtka"); return { open: $gameSelfSwitches.value([24, e.eventId(), "A"]), feliks: !!$gameMap.event(953).page() }; })()`);
-    t.check("after 3:00 the gate is shut again and Feliks gone", !shut.open && !shut.feliks, shut);
-    await t.locate(7, 27, 8);
+    const shut = await J("({ feliks: !!$gameMap.event(953).page(), kuba: !!$gameMap.event(954).page() })");
+    t.check("after 3:00 Feliks and Kuba are gone", !shut.feliks && !shut.kuba, shut);
+    const where = await J("[951, 952].map(id => { const e = $gameMap.event(id); return [e.x, e.y, e.event().name]; })");
+    t.check("the hatch's place below the hatch (3,21) and the planter's place in front of the orange tree by the orangery's door (8,25)",
+        where[0][0] === 3 && where[0][1] === 21 && where[1][0] === 8 && where[1][1] === 25, where);
+    await t.locate(3, 21, 8);
     const pump = await t.talkTo("$gameMap.event(951)", [], { place: false }); pump.text = pump.text.replace(/\s+/g, " ");
     const drawer = await t.talkTo("$gameMap.event(952)", [], { place: false }); drawer.text = drawer.text.replace(/\s+/g, " ");
     const w5 = await J("({ r: TownQuests.rec('W1'), v: TownQuests.vcount('rysunek'), clue: !!TownQuests.state().clues.w1_hatch })");
-    t.check("the pump stands on the raven hatch ('Dwór stoi na kanale zakonu'), the drawer holds the sluice drawing signed 'F.' - evidence; chapter 6 next",
+    t.check("the hatch with the raven on its bolt ('Dwór stoi na kanale zakonu'), the planter holds the sluice drawing signed 'F.' - evidence; chapter 6 next",
         /kanale zakonu/.test(pump.text) && /zasuwa na dworze/.test(drawer.text) && w5.v === 1 && w5.clue && w5.r.step === 6 && (await notes()).includes("Oranżeria nocą"), { pump: pump.text.slice(0, 120), w5 });
     await t.eval("TownLife.hold('straznik', false); Hunting.setSneak(false); 0");
     await t.go(8, 36, 40, 8);

@@ -38,6 +38,7 @@ grid("chod", [2, 1, 4, 7, 8, 9, 6, 3], 4)
 grid("bieg", [2, 1, 4, 7, 8, 9, 6, 3], 4, ms=70)
 grid("skradanie", [2, 1, 4, 7, 8, 9, 6, 3], 4, ms=110)
 grid("atak", [2, 6, 8], 3, scale=2, ms=60)
+grid("schylanie", [2, 4, 6, 8], 4, scale=2, ms=90)
 p = frames_of("praca")
 if p:
     out = [f.resize((f.width * 2, f.height * 2), Image.NEAREST).convert("P", palette=Image.ADAPTIVE, colors=255) for f in p]

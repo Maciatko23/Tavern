@@ -176,7 +176,9 @@
     // "tawerna" entry in their plans) and the residents at home on "Miejsce: <key>_wnetrze" (their interior's map) - put on
     // every map that has such a spot, shown only while the plan has them in there
     const GUESTS = RES.filter(r => r.plan.some(p => p[2] === "tawerna")).map(r => r.key);
-    const indoorName = (res, e) => (e.where === "tawerna" ? "gosc_" + (GUESTS.indexOf(res.key) + 1) : res.key + "_wnetrze");
+    // (2026-10-14) away: the spots where "inside" means gone off somewhere else, not home (Janek out at sea, Roch on a night run) -
+    // shown in no interior then
+    const indoorName = (res, e) => (res.away && res.away.includes(e.where) ? null : e.where === "tawerna" ? "gosc_" + (GUESTS.indexOf(res.key) + 1) : res.key + "_wnetrze");
     function eventSpot(events, name) {
         for (const ev of events || []) {
             if (!ev || !new RegExp("^Miejsce:\\s*" + name + "\\s*$", "i").test(ev.name || "")) continue;
@@ -237,7 +239,8 @@
         const res = resOf(ev.eventId());
         if (!res) return;
         const st = stateOf(ev), e = entryAt(res, hourNow());
-        const at = e.act === "inside" && !absent(res) ? eventSpot($dataMap.events, indoorName(res, e)) : null;
+        const name = e.act === "inside" && !absent(res) ? indoorName(res, e) : null;
+        const at = name ? eventSpot($dataMap.events, name) : null;
         if (at && st.hidden !== false) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); show(ev, st); }
         else if (at && (ev.x !== at[0] || ev.y !== at[1]) && !talking(ev)) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); }
         else if (!at && !st.hidden) hide(ev, st);
@@ -426,7 +429,8 @@
     // ------------------------------------------------------------------
     const api = {
         RESIDENTS: RES, spot, entryAt, placeAll, talk, residents, homeOf, HOMES,
-        addTalkHook: fn => { if (typeof fn === "function" && !talkHooks.includes(fn)) talkHooks.push(fn); },
+        // (2026-10-14) first: before the hooks there already (Przystan.js: Janek's and Roch's first meeting comes before the quests)
+        addTalkHook: (fn, first) => { if (typeof fn === "function" && !talkHooks.includes(fn)) { if (first) talkHooks.unshift(fn); else talkHooks.push(fn); } },
         say: (key, text) => { const ev = api.eventOf(key), SB = T.api("SpeechBubbles"); if (ev && SB && !stateOf(ev).hidden) SB.say(ev, text); },
         // the lines a resident says (the plugin's own: for a hook that wants the usual talk after its part)
         lines: key => { const r = RES.find(x => x.key === key); return r ? talkOf(r) : null; },

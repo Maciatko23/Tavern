@@ -66,7 +66,7 @@
         S("m_power", "melee", 0, 2, "Mocna ręka", "Obrażenia wręcz +{melee.dmg}.", { ranks: 3, fx: { "melee.dmg": 0.05 } }),
         S("combo4", "melee", 1, 1, "Płynne kombo", "Czwarty cios w serii, najmocniejszy.", { from: ["m_power"] }),
         S("charge", "melee", 1, 3, "Rozpęd", "Ciężki cios ładuje się o 40% szybciej.", { from: ["m_power"], attr: { str: 12 } }),
-        S("riposte", "melee", 2, 1, "Kontra", "Po udanym parowaniu następny cios w ciągu 2 sekund jest krytyczny.", { from: ["combo4"], attr: { per: 12 } }),
+        S("riposte", "melee", 2, 1, "Kontra", "Każde idealne parowanie daje kontratak: następny cios w ciągu 1 sekundy jest o 30% mocniejszy. Z Kontrą masz na niego 2 sekundy i cios jest krytyczny (x1,6).", { from: ["combo4"], attr: { per: 12 } }),
         S("m_breath", "melee", 2, 2, "Oszczędny cios", "Ciosy zużywają o {melee.breath} mniej oddechu.", { ranks: 2, from: ["combo4", "charge"], fx: { "melee.breath": 0.1 } }),
         S("m_poise", "melee", 2, 3, "Łamacz gardy", "Zbijanie równowagi wroga +{melee.poise}.", { ranks: 2, from: ["charge"], fx: { "melee.poise": 0.12 } }),
         // (stage 3, 2026-10-06 - the men of Humans.js): men give up sooner before him

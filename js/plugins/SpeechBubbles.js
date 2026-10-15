@@ -122,7 +122,8 @@
     const BUSTS = { "$Npc_Dziadek:0": "Stach_Bust" };
     ["Kowal", "Piekarka", "Woziwoda", "Kapral", "Dzwonnik", "Kupiec", "Soltys", "Garbarz", "Feliks", "Lord", "Kamerdyner",
         "Straznik", "Bronek", "Zosia", "Ludmila", "Ela", "Rafal", "Praczka", "Franek", "Drwal", "Klusownik", "Znachorka",
-        "Szmaciarz", "Uchodzca", "Zebrak", "Zlodziej", "Gracz", "Bartek", "Woznica", "Marek"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
+        "Szmaciarz", "Uchodzca", "Zebrak", "Zlodziej", "Gracz", "Bartek", "Woznica", "Marek",
+        "Janek", "Przemytnik", "Celnik"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
     // the tavern regulars' RTP busts did not look like their map sheets ($Npc_Borgar...): drawn anew (tools/busts/make_<key>.py,
     // 2026-10-07). Their old names stay the keys (event tags, the plugins' data, the tests); the picture loaded for one is the new
     // file once it is found there (Tawerna.ui.loadBust asks bustFile; a file not there - the RTP picture as before)

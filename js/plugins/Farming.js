@@ -573,7 +573,8 @@
         axe: 60, sawBlade: 117, saw: 118, axeHead: 119, pickHead: 120, tent: 121, rot: 122, milk: 123, cheese: 124, sling: 125, bow: 126, arrows: 127, boughBed: 128, skin: 129,
         honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144, bird: 145, feathers: 146,
         cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140, clay: 164, rawPot: 165, dryPot: 166, firedPot: 167,
-        rawBear: 168, roastBear: 169, bearHide: 170, jacket: 171   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        rawBear: 168, roastBear: 169, bearHide: 170, jacket: 171,   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
+        herring: 173, cod: 174   // (2026-10-14) the sea fish of the harbour (Map125, <Water:salt>): Przystan.js, Farming_Plots.goFishing
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -931,6 +932,10 @@
     const RAW_MEATS = () => [ITEM.rawMeat, ITEM.rawDeer, ITEM.rawBoar, ITEM.rawWolf, ITEM.rawBear];
     const MEAT_LABEL = "surowe mięso (dowolne)";
     const meatCount = () => RAW_MEATS().reduce((t, id) => t + countOf(id), 0);
+    // (2026-10-14) "any raw fish" (a recipe's r.fish pieces, like r.meat): the pond's fish and the sea's herring and cod
+    const RAW_FISH = () => [ITEM.fish, ITEM.herring, ITEM.cod];
+    const FISH_LABEL = "surowa ryba (dowolna)";
+    const fishCount = () => RAW_FISH().reduce((t, id) => t + countOf(id), 0);
     const QUEUE_MAX = 9;
     // "2 godz. 15 min", "40 min" (rounded up to 5 minutes)
     function clockText(hours) {
@@ -985,8 +990,8 @@
             return true;
         }
         if (isWaterTile(t.x, t.y)) {
-            const water = waterMenu();
-            showMenu(water.title, water.entries);
+            const water = waterMenu();   // (null: the sea without a rod - only the popup that it is salt)
+            if (water) showMenu(water.title, water.entries);
             return true;
         }
         const menu = menuFor(t.x, t.y);
@@ -1111,9 +1116,9 @@
         spaceFor, complainNoSpace, playSe, spendStamina, perk, perkRoll, knowsSkill, farmCost, foodIsFree, useTool, requireItem,
         fx, later, lockPlayer, swingThen, NO_BUILD, missingOf, menuHooks, hasClock, clockHours, FUEL_MAX, FUEL_START,
         FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL, meatCount, QUEUE_MAX,
-        clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE };
+        RAW_FISH, FISH_LABEL, fishCount, clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE };
     const API = window.Farming = T.register("Farming", { addMenuHook: fn => menuHooks.push(fn), GATHER, QUEUE_MAX, BUILD_MAPS,
-        NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
+        NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, RAW_FISH, fishCount, FISH_LABEL, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
         HUT_ROOM, hutOf, hutDoorAt, isHutInterior, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS,
         buildingAt, canMax, clockHours, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2, HAND_RECIPES, BUILD_RANGE, CROP_LIFT,
         TILE, farm, itemOf, key, mirrorGeo, onRing, today, SMOULDER_HOURS, rainingHere });
@@ -1124,7 +1129,7 @@
         "bagWater", "bagWaterWeight", "fillSkin", "plotAt", "isSoilTile", "groundIsSoil", "naturalFarmland", "rake", "till",
         "plant", "harvest", "uproot", "groundInfoAt", "hasObjectTile", "cropStage", "isRipe", "daysLeft", "growthRate", "dig",
         "digClay", "potDryness", "takePot", "putPotOnTable", "takeTablePot", "tablePotDry", "water", "wateredRecently", "stoneAt",
-        "stoneSpot", "pickStone", "gatherAt", "gatherSpot", "pickGather", "isWaterTile", "waterMenu", "fillCan", "drink",
+        "stoneSpot", "pickStone", "gatherAt", "gatherSpot", "pickGather", "isWaterTile", "seaHere", "waterMenu", "fillCan", "drink",
         "goFishing", "rainWater", "canCharges", "gatherRev", "rationWell", "rationLeft", "rationOf"]);
     exportFrom(B, ["mapAllowsBuilding", "startFreePlacement", "placeFree", "hutShutsIn", "hutSanitize", "enterHut", "leaveHut",
         "upgradeBuilding", "roomFor", "build", "demolish", "collect", "rest", "readyProduce", "snares", "snareBait", "snareSprung",
