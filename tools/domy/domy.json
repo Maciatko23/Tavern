@@ -1,0 +1,1178 @@
+{
+ "houses": {
+  "chata": {
+   "inside": 154,
+   "land": 111,
+   "map": 111,
+   "front": [
+    6,
+    41
+   ],
+   "door_x": 4,
+   "furniture": [
+    {
+     "type": "bed",
+     "x": 7,
+     "y": 4
+    },
+    {
+     "type": "chest_s",
+     "x": 9,
+     "y": 4
+    }
+   ]
+  },
+  "zagroda": {
+   "inside": 169,
+   "land": 168,
+   "map": 168,
+   "front": [
+    20,
+    10
+   ],
+   "door_x": 6,
+   "furniture": [
+    {
+     "type": "bed",
+     "x": 9,
+     "y": 4
+    },
+    {
+     "type": "larder",
+     "x": 11,
+     "y": 4
+    },
+    {
+     "type": "chest_l",
+     "x": 1,
+     "y": 4
+    }
+   ]
+  }
+ },
+ "names": {
+  "154": "Chata pod lasem",
+  "168": "Spalona zagroda",
+  "169": "Dom Ługów"
+ },
+ "parents": {
+  "154": 111,
+  "168": 23,
+  "169": 168
+ },
+ "meta": {
+  "154": {
+   "concept": "chata",
+   "width": 12,
+   "height": 10,
+   "zones": [],
+   "spots": {
+    "landing": [
+     4,
+     8,
+     8
+    ]
+   },
+   "things": [
+    {
+     "kind": "fireplace",
+     "cat": "floorprop",
+     "cells": [
+      [
+       5,
+       4
+      ]
+     ],
+     "group": "Izba",
+     "x": 5,
+     "y": 4
+    },
+    {
+     "kind": "firewood",
+     "cat": "floorprop",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "group": "Izba drewno",
+     "x": 4,
+     "y": 4
+    },
+    {
+     "kind": "kolki_ubrania",
+     "cat": "wallitem",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "group": "Izba kołki",
+     "x": 3,
+     "y": 3,
+     "event": true,
+     "art": [
+      24,
+      20,
+      72,
+      69
+     ],
+     "fw": 96,
+     "fh": 96
+    },
+    {
+     "kind": "table_h",
+     "cat": "table",
+     "cells": [
+      [
+       1,
+       6
+      ],
+      [
+       1,
+       7
+      ],
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       7
+      ]
+     ],
+     "group": "Izba stół",
+     "x": 1,
+     "y": 6,
+     "length": 2,
+     "style": 6
+    },
+    {
+     "kind": "stool",
+     "cat": "seat",
+     "cells": [
+      [
+       3,
+       6
+      ]
+     ],
+     "group": "Izba stołki",
+     "x": 3,
+     "y": 6
+    },
+    {
+     "kind": "D(5,10)",
+     "cat": "tabletile",
+     "cells": [
+      [
+       1,
+       6
+      ]
+     ],
+     "group": null,
+     "x": 1,
+     "y": 6,
+     "sheet": "D",
+     "sc": 5,
+     "sr": 10
+    },
+    {
+     "kind": "pusta beczka",
+     "cat": "furniture",
+     "cells": [
+      [
+       1,
+       4
+      ]
+     ],
+     "group": "Izba",
+     "x": 1,
+     "y": 3,
+     "w": 1,
+     "h": 2,
+     "sheet": "D",
+     "sc": 15,
+     "sr": 0
+    },
+    {
+     "kind": "worki",
+     "cat": "furniture",
+     "cells": [
+      [
+       1,
+       8
+      ],
+      [
+       2,
+       8
+      ]
+     ],
+     "group": "Izba worki",
+     "x": 1,
+     "y": 7,
+     "w": 2,
+     "h": 2,
+     "sheet": "D",
+     "sc": 8,
+     "sr": 2
+    },
+    {
+     "kind": "miotła",
+     "cat": "furniture",
+     "cells": [
+      [
+       10,
+       8
+      ]
+     ],
+     "group": "Izba",
+     "x": 10,
+     "y": 7,
+     "w": 1,
+     "h": 2,
+     "sheet": "D",
+     "sc": 7,
+     "sr": 6
+    },
+    {
+     "kind": "pajęczyna",
+     "cat": "furniture",
+     "cells": [],
+     "group": null,
+     "x": 1,
+     "y": 1,
+     "w": 1,
+     "h": 1,
+     "sheet": "D",
+     "sc": 13,
+     "sr": 7
+    },
+    {
+     "kind": "pajęczyna",
+     "cat": "furniture",
+     "cells": [],
+     "group": null,
+     "x": 10,
+     "y": 1,
+     "w": 1,
+     "h": 1,
+     "sheet": "D",
+     "sc": 15,
+     "sr": 7
+    }
+   ],
+   "hooks": [
+    [
+     "exit",
+     4,
+     9
+    ]
+   ],
+   "wall_items": [
+    [
+     "Izba okna",
+     "window",
+     2,
+     1
+    ],
+    [
+     "Izba okna",
+     "window",
+     8,
+     1
+    ],
+    [
+     "Izba kołki",
+     "kolki_ubrania",
+     3,
+     3
+    ]
+   ],
+   "openings": [
+    [
+     "Izba",
+     [
+      4,
+      9,
+      4,
+      9
+     ]
+    ]
+   ],
+   "floor": [
+    [
+     1,
+     4,
+     "Izba"
+    ],
+    [
+     1,
+     5,
+     "Izba"
+    ],
+    [
+     1,
+     6,
+     "Izba"
+    ],
+    [
+     1,
+     7,
+     "Izba"
+    ],
+    [
+     1,
+     8,
+     "Izba"
+    ],
+    [
+     2,
+     4,
+     "Izba"
+    ],
+    [
+     2,
+     5,
+     "Izba"
+    ],
+    [
+     2,
+     6,
+     "Izba"
+    ],
+    [
+     2,
+     7,
+     "Izba"
+    ],
+    [
+     2,
+     8,
+     "Izba"
+    ],
+    [
+     3,
+     4,
+     "Izba"
+    ],
+    [
+     3,
+     5,
+     "Izba"
+    ],
+    [
+     3,
+     6,
+     "Izba"
+    ],
+    [
+     3,
+     7,
+     "Izba"
+    ],
+    [
+     3,
+     8,
+     "Izba"
+    ],
+    [
+     4,
+     4,
+     "Izba"
+    ],
+    [
+     4,
+     5,
+     "Izba"
+    ],
+    [
+     4,
+     6,
+     "Izba"
+    ],
+    [
+     4,
+     7,
+     "Izba"
+    ],
+    [
+     4,
+     8,
+     "Izba"
+    ],
+    [
+     4,
+     9,
+     "Izba"
+    ],
+    [
+     5,
+     4,
+     "Izba"
+    ],
+    [
+     5,
+     5,
+     "Izba"
+    ],
+    [
+     5,
+     6,
+     "Izba"
+    ],
+    [
+     5,
+     7,
+     "Izba"
+    ],
+    [
+     5,
+     8,
+     "Izba"
+    ],
+    [
+     6,
+     4,
+     "Izba"
+    ],
+    [
+     6,
+     5,
+     "Izba"
+    ],
+    [
+     6,
+     6,
+     "Izba"
+    ],
+    [
+     6,
+     7,
+     "Izba"
+    ],
+    [
+     6,
+     8,
+     "Izba"
+    ],
+    [
+     7,
+     4,
+     "Izba"
+    ],
+    [
+     7,
+     5,
+     "Izba"
+    ],
+    [
+     7,
+     6,
+     "Izba"
+    ],
+    [
+     7,
+     7,
+     "Izba"
+    ],
+    [
+     7,
+     8,
+     "Izba"
+    ],
+    [
+     8,
+     4,
+     "Izba"
+    ],
+    [
+     8,
+     5,
+     "Izba"
+    ],
+    [
+     8,
+     6,
+     "Izba"
+    ],
+    [
+     8,
+     7,
+     "Izba"
+    ],
+    [
+     8,
+     8,
+     "Izba"
+    ],
+    [
+     9,
+     4,
+     "Izba"
+    ],
+    [
+     9,
+     5,
+     "Izba"
+    ],
+    [
+     9,
+     6,
+     "Izba"
+    ],
+    [
+     9,
+     7,
+     "Izba"
+    ],
+    [
+     9,
+     8,
+     "Izba"
+    ],
+    [
+     10,
+     4,
+     "Izba"
+    ],
+    [
+     10,
+     5,
+     "Izba"
+    ],
+    [
+     10,
+     6,
+     "Izba"
+    ],
+    [
+     10,
+     7,
+     "Izba"
+    ],
+    [
+     10,
+     8,
+     "Izba"
+    ]
+   ],
+   "notes": [],
+   "axes": [],
+   "pins": [],
+   "id": 154,
+   "key": "chata",
+   "display": "Chata pod lasem",
+   "exits": [
+    {
+     "x": 4,
+     "y": 9,
+     "door": null,
+     "town": [
+      6,
+      41
+     ],
+     "landing": [
+      4,
+      8,
+      8
+     ],
+     "name": "Drzwi -> Podgrodzie"
+    }
+   ],
+   "residents": [],
+   "keep": [
+    [
+     7,
+     4
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     9,
+     4
+    ]
+   ]
+  },
+  "168": {
+   "id": 168,
+   "size": [
+    50,
+    36
+   ],
+   "house_event": [
+    20,
+    9
+   ],
+   "house_cells": [
+    18,
+    7,
+    22,
+    9
+   ],
+   "entry_rows": [
+    11,
+    12,
+    13
+   ],
+   "cross": [
+    34,
+    5
+   ],
+   "marta": [
+    33,
+    5
+   ],
+   "well": [
+    13,
+    10
+   ],
+   "land_cells": 779,
+   "to_clear": 32
+  },
+  "169": {
+   "concept": "zagroda",
+   "width": 13,
+   "height": 10,
+   "zones": [],
+   "spots": {
+    "landing": [
+     6,
+     8,
+     8
+    ]
+   },
+   "things": [
+    {
+     "kind": "fireplace",
+     "cat": "floorprop",
+     "cells": [
+      [
+       6,
+       4
+      ]
+     ],
+     "group": "Izba",
+     "x": 6,
+     "y": 4
+    },
+    {
+     "kind": "firewood",
+     "cat": "floorprop",
+     "cells": [
+      [
+       5,
+       4
+      ]
+     ],
+     "group": "Izba drewno",
+     "x": 5,
+     "y": 4
+    },
+    {
+     "kind": "firewood",
+     "cat": "floorprop",
+     "cells": [
+      [
+       7,
+       4
+      ]
+     ],
+     "group": "Izba drewno",
+     "x": 7,
+     "y": 4
+    },
+    {
+     "kind": "table_h",
+     "cat": "table",
+     "cells": [
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       7
+      ],
+      [
+       3,
+       6
+      ],
+      [
+       3,
+       7
+      ]
+     ],
+     "group": "Izba stół",
+     "x": 2,
+     "y": 6,
+     "length": 2,
+     "style": 6
+    },
+    {
+     "kind": "stool",
+     "cat": "seat",
+     "cells": [
+      [
+       1,
+       6
+      ]
+     ],
+     "group": "Izba stołki",
+     "x": 1,
+     "y": 6
+    },
+    {
+     "kind": "stool",
+     "cat": "seat",
+     "cells": [
+      [
+       4,
+       6
+      ]
+     ],
+     "group": "Izba stołki",
+     "x": 4,
+     "y": 6
+    },
+    {
+     "kind": "D(5,10)",
+     "cat": "tabletile",
+     "cells": [
+      [
+       2,
+       6
+      ]
+     ],
+     "group": null,
+     "x": 2,
+     "y": 6,
+     "sheet": "D",
+     "sc": 5,
+     "sr": 10
+    },
+    {
+     "kind": "pusta beczka",
+     "cat": "furniture",
+     "cells": [
+      [
+       11,
+       7
+      ]
+     ],
+     "group": "Izba",
+     "x": 11,
+     "y": 6,
+     "w": 1,
+     "h": 2,
+     "sheet": "D",
+     "sc": 15,
+     "sr": 0
+    },
+    {
+     "kind": "worki",
+     "cat": "furniture",
+     "cells": [
+      [
+       9,
+       8
+      ],
+      [
+       10,
+       8
+      ]
+     ],
+     "group": "Izba worki",
+     "x": 9,
+     "y": 7,
+     "w": 2,
+     "h": 2,
+     "sheet": "D",
+     "sc": 8,
+     "sr": 2
+    },
+    {
+     "kind": "miotła",
+     "cat": "furniture",
+     "cells": [
+      [
+       1,
+       8
+      ]
+     ],
+     "group": "Izba",
+     "x": 1,
+     "y": 7,
+     "w": 1,
+     "h": 2,
+     "sheet": "D",
+     "sc": 7,
+     "sr": 6
+    }
+   ],
+   "hooks": [
+    [
+     "exit",
+     6,
+     9
+    ]
+   ],
+   "wall_items": [
+    [
+     "Izba okna",
+     "window",
+     3,
+     1
+    ],
+    [
+     "Izba okna",
+     "window",
+     9,
+     1
+    ]
+   ],
+   "openings": [
+    [
+     "Izba",
+     [
+      6,
+      9,
+      6,
+      9
+     ]
+    ]
+   ],
+   "floor": [
+    [
+     1,
+     4,
+     "Izba"
+    ],
+    [
+     1,
+     5,
+     "Izba"
+    ],
+    [
+     1,
+     6,
+     "Izba"
+    ],
+    [
+     1,
+     7,
+     "Izba"
+    ],
+    [
+     1,
+     8,
+     "Izba"
+    ],
+    [
+     2,
+     4,
+     "Izba"
+    ],
+    [
+     2,
+     5,
+     "Izba"
+    ],
+    [
+     2,
+     6,
+     "Izba"
+    ],
+    [
+     2,
+     7,
+     "Izba"
+    ],
+    [
+     2,
+     8,
+     "Izba"
+    ],
+    [
+     3,
+     4,
+     "Izba"
+    ],
+    [
+     3,
+     5,
+     "Izba"
+    ],
+    [
+     3,
+     6,
+     "Izba"
+    ],
+    [
+     3,
+     7,
+     "Izba"
+    ],
+    [
+     3,
+     8,
+     "Izba"
+    ],
+    [
+     4,
+     4,
+     "Izba"
+    ],
+    [
+     4,
+     5,
+     "Izba"
+    ],
+    [
+     4,
+     6,
+     "Izba"
+    ],
+    [
+     4,
+     7,
+     "Izba"
+    ],
+    [
+     4,
+     8,
+     "Izba"
+    ],
+    [
+     5,
+     4,
+     "Izba"
+    ],
+    [
+     5,
+     5,
+     "Izba"
+    ],
+    [
+     5,
+     6,
+     "Izba"
+    ],
+    [
+     5,
+     7,
+     "Izba"
+    ],
+    [
+     5,
+     8,
+     "Izba"
+    ],
+    [
+     6,
+     4,
+     "Izba"
+    ],
+    [
+     6,
+     5,
+     "Izba"
+    ],
+    [
+     6,
+     6,
+     "Izba"
+    ],
+    [
+     6,
+     7,
+     "Izba"
+    ],
+    [
+     6,
+     8,
+     "Izba"
+    ],
+    [
+     6,
+     9,
+     "Izba"
+    ],
+    [
+     7,
+     4,
+     "Izba"
+    ],
+    [
+     7,
+     5,
+     "Izba"
+    ],
+    [
+     7,
+     6,
+     "Izba"
+    ],
+    [
+     7,
+     7,
+     "Izba"
+    ],
+    [
+     7,
+     8,
+     "Izba"
+    ],
+    [
+     8,
+     4,
+     "Izba"
+    ],
+    [
+     8,
+     5,
+     "Izba"
+    ],
+    [
+     8,
+     6,
+     "Izba"
+    ],
+    [
+     8,
+     7,
+     "Izba"
+    ],
+    [
+     8,
+     8,
+     "Izba"
+    ],
+    [
+     9,
+     4,
+     "Izba"
+    ],
+    [
+     9,
+     5,
+     "Izba"
+    ],
+    [
+     9,
+     6,
+     "Izba"
+    ],
+    [
+     9,
+     7,
+     "Izba"
+    ],
+    [
+     9,
+     8,
+     "Izba"
+    ],
+    [
+     10,
+     4,
+     "Izba"
+    ],
+    [
+     10,
+     5,
+     "Izba"
+    ],
+    [
+     10,
+     6,
+     "Izba"
+    ],
+    [
+     10,
+     7,
+     "Izba"
+    ],
+    [
+     10,
+     8,
+     "Izba"
+    ],
+    [
+     11,
+     4,
+     "Izba"
+    ],
+    [
+     11,
+     5,
+     "Izba"
+    ],
+    [
+     11,
+     6,
+     "Izba"
+    ],
+    [
+     11,
+     7,
+     "Izba"
+    ],
+    [
+     11,
+     8,
+     "Izba"
+    ]
+   ],
+   "notes": [],
+   "axes": [],
+   "pins": [],
+   "id": 169,
+   "key": "zagroda",
+   "display": "Dom Ługów",
+   "exits": [
+    {
+     "x": 6,
+     "y": 9,
+     "door": null,
+     "town": [
+      20,
+      10
+     ],
+     "landing": [
+      6,
+      8,
+      8
+     ],
+     "name": "Drzwi -> Zagroda"
+    }
+   ],
+   "residents": [],
+   "keep": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     9,
+     4
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     11,
+     4
+    ]
+   ]
+  }
+ }
+}

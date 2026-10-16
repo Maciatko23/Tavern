@@ -47,7 +47,7 @@
         isHutInterior, hutFloor, geoOf, buildingAt, GATHER, GATHER_KINDS, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, CONE_SHARE,
         BUCKET_REACH, itemOf, countOf, rand, popup, complain, spaceFor, complainNoSpace, playSe, spendStamina, perk, perkRoll,
         knowsSkill, farmCost, foodIsFree, useTool, requireItem, fx, later, lockPlayer, swingThen, hasClock, clockHours,
-        weatherHere, hash2 } = P.core;
+        weatherHere, hash2, landOwned, buildRegion } = P.core;
 
     // ---- ordinary ground: which tiles count as farmland without anything being cleared
     function mapAllowsFarming() {
@@ -158,6 +158,8 @@
         const region = $gameMap.regionId(x, y);
         if (BLOCK_REGION > 0 && region === BLOCK_REGION) return false;
         if (!$gameMap.checkPassage(x, y, 0x0f)) return false;
+        const br = buildRegion ? buildRegion() : 0;   // (bought land on a map of others: its region, while the hero owns it - Homes.js)
+        if (br && region === br) return !!landOwned();
         if (FARM_REGION > 0 && region === FARM_REGION) return true;   // painted by the author
         if (!AUTO_GROUND || !mapAllowsFarming()) return false;
         if ($gameMap.eventsXy(x, y).length > 0 || hasObjectTile(x, y)) return false;
@@ -289,7 +291,10 @@
     function gatherSpot(x, y) {
         const kind = gatherKindOf(x, y);
         if (!kind) return false;
-        if (!$gameMap.isValid(x, y) || !AUTO_GROUND || !mapAllowsFarming()) return false;
+        if (!$gameMap.isValid(x, y) || !AUTO_GROUND) return false;
+        // (bought land on a map of others - <BuildRegion:N>, Homes.js: things grow on it as anywhere once it is the hero's own)
+        const br = buildRegion ? buildRegion() : 0;
+        if (!mapAllowsFarming() && !(br && $gameMap.regionId(x, y) === br && landOwned())) return false;
         if (BLOCK_REGION > 0 && $gameMap.regionId(x, y) === BLOCK_REGION) return false;
         if (!$gameMap.checkPassage(x, y, 0x0f)) return false;
         if ($gameMap.eventsXy(x, y).length > 0 || hasObjectTile(x, y)) return false;
@@ -470,6 +475,9 @@
     function goFishing() {
         if (!requireItem(ITEM.rod) || !spendStamina(STAMINA.fish)) return false;
         const rod = itemOf(ITEM.rod);
+        // (2026-10-15) the red sea by the shore: worse, now and then a dead fish (CzerwonaWoda.fishAt - where the hook goes in)
+        const RW = T.api("CzerwonaWoda"), tt = P.core.targetTile ? P.core.targetTile() : null;
+        const spot = RW && RW.fishAt && tt ? RW.fishAt(tt.x, tt.y) : { mul: 1, dead: 0 };
         swingThen(FISH_KIND, () => {
             useTool(ITEM.rod);
             lockPlayer(130);
@@ -480,9 +488,12 @@
                 const sea = seaHere();
                 let chance = 0.5 + ((hour >= 5 && hour < 8) || (hour >= 17 && hour < 20) ? 0.25 : 0) + (["rain", "storm"].includes($gameScreen.weatherType()) ? 0.1 : 0) - (seasonIndex(today()) === 3 ? 0.2 : 0) + perk("fish")
                     + (sea ? Number(T.call("Przystan", "fishBonus")) || 0 : 0);   // (Janek's advice, K47)
+                chance *= spot.mul;
                 if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(1);
                 const roll = Math.random();
-                if (roll < chance) {
+                if (roll < chance && spot.dead > 0 && Math.random() < spot.dead) {
+                    RW.deadCatch();   // (a dead fish off the red shore: thrown back)
+                } else if (roll < chance) {
                     playSe(SE.harvest, 105);
                     const id = !sea ? ITEM.fish : Math.random() < 0.3 ? ITEM.cod : ITEM.herring;   // (the sea: herring, now and then a cod)
                     $gameParty.gainItem(itemOf(id), Math.random() < 0.25 ? 2 : 1);
@@ -661,11 +672,13 @@
     }
     function waterMenu() {
         const rod = itemOf(ITEM.rod), have = $gameParty.hasItem(rod);
-        if (seaHere()) {   // (the sea: the popup that it is salt - every time without a rod, else now and then - and only the rod)
+        if (seaHere()) {   // (the sea: salt, never drunk - CzerwonaWoda.js's menu: the popup, the rod, "drink anyway", no filling, no boiling)
+            const fishE = have ? { name: "Zarzuć wędkę", icon: rod.iconIndex, right: "-" + STAMINA.fish, enabled: true,
+                help: "Śledzie biorą ławicą o świcie i o zmierzchu, dorsz rzadziej. Z końca pomostu łowi się zdrowo, przy samym brzegu słabo. Wędkowanie trwa około godziny.", run: goFishing } : null;
+            const RW = T.api("CzerwonaWoda");
+            if (RW && RW.seaMenu) return RW.seaMenu(fishE);
             if (!have || Graphics.frameCount - seaToldAt > 900) { seaToldAt = Graphics.frameCount; complain(ICON.thirst, "Woda morska jest słona - nie do picia"); }
-            if (!have) return null;
-            return { title: "Morze", entries: [{ name: "Zarzuć wędkę", icon: rod.iconIndex, right: "-" + STAMINA.fish, enabled: true,
-                help: "Śledzie biorą ławicą o świcie i o zmierzchu, dorsz rzadziej. Wędkowanie trwa około godziny. Morskiej wody nie da się pić.", run: goFishing }] };
+            return fishE ? { title: "Morze", entries: [fishE] } : null;
         }
         return { title: "Woda", entries: [
             { name: "Zarzuć wędkę", icon: rod.iconIndex, right: "-" + STAMINA.fish, enabled: have,

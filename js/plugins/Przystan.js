@@ -254,6 +254,16 @@
         betrayAsk: ["> Panie celniku... na przystani ktoś szykuje kuter. Do przemytu."],
         betrayYes: ["Kuter? (Celnik odkłada pióro.) Ten łatacz sieci, Roch? Tak myślałem. Nikt nie łata sieci tak długo.",
             "Dobrze, chłopcze. Dwór pamięta przysługi. Masz, czterdzieści groszy. Wieczorem go zabierzemy. I kuter też."],
+        // (2026-10-15) the red water (CzerwonaWoda.js): why nobody boils the sea, the legend of the blood of Kruczych Skał
+        janekRed: ["Czerwona? To zakwit. W suszę morze przy brzegu gnije jak woda w beczce. Ryby się duszą, fale wyrzucają je na piasek.",
+            "> A gdyby ją przegotować?",
+            "Ojciec próbował. Rok suszy, beczki puste, to nagotował kocioł czerwonej. Pił i mówił, że słona, ale da się. Do rana go skręcało. Przeżył, ale do śmierci nie spojrzał na morze.",
+            "Trucizna zakwitu nie ucieka z parą, chłopcze. Sól też nie. Wodę noszę z miasta, jak wszyscy.",
+            "Starzy gadają, że to krew Kruczych Skał. Że coś pod skałą krwawi do morza, jak przychodzi susza. Bajki... ale w suszę zawsze czerwono."],
+        janekGrey: ["Teraz szara. Deszcz ją przepłukał. Ale dalej słona - nie pij, choćby cię suszyło.",
+            "Za parę dni bez deszczu znowu zakwitnie. Zawsze zakwita. Starzy mówią: krew Kruczych Skał wraca."],
+        rochRed: ["Czerwona woda. Na lądzie mówią, że to znak wojny. Tu mówią, że krew Kruczych Skał. Ja mówię: nie pij i nie zadawaj pytań.",
+            "Raz stałem w ciszy trzy dni na czerwonym. Kucharz pił przegotowaną. Pochowaliśmy go w tej samej wodzie."],
         refugees: [["Trzy dni na pokładzie. Ziemia się kołysze."], ["Gdzie tu miasto? Mówili, że za lasem, za takim biednym przedmieściem."],
             ["Celnik zabrał nam dwa grosze i nadzieję. Grosze były ważniejsze."]]
     };
@@ -278,6 +288,8 @@
         branches.push(fish.length ? act([], ["sell"]).concat(linesTo([], spk, [pick(TX.janekSold)])) : linesTo([], spk, TX.janekSellNone));
         labels.push("Kupię wędzoną rybę (" + BUY_SMOKED + " G).");
         branches.push(act([], ["buySmoked"]));
+        const RW = T.api("CzerwonaWoda");
+        if (RW && RW.seaHere && $gameMap.mapId() === MAP) { labels.push("A ta czerwona woda?"); branches.push(linesTo([], spk, RW.phase().grey ? TX.janekGrey : TX.janekRed)); }
         labels.push("Co słychać?");
         branches.push(linesTo([], spk, [usual("janek") || "Morze jak morze."]));
         labels.push("Bywaj.");
@@ -312,6 +324,7 @@
                 GOODS.map(([id]) => act([], ["buy", id])).concat([[]]));
             branches.push(sub);
         }
+        if (T.api("CzerwonaWoda")) { labels.push("Czemu ta woda czerwona?"); branches.push(linesTo([], spk, TX.rochRed)); }
         labels.push("Co słychać?");
         branches.push(linesTo([], spk, [usual("przemytnik") || "Nic. I dobrze."]));
         labels.push("Bywaj.");

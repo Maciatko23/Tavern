@@ -46,7 +46,7 @@
         changed, HUT_MAP, HUT_ROOM, isHutInterior, hutFloor, hutOf, hutDoorCell, mirrorGeo, geoOf, cellsOfGeo, buildingAt, itemOf,
         countOf, popup, complain, spaceFor, complainNoSpace, playSe, spendStamina, perk, perkRoll, useTool, requireItem, fx, later,
         lockPlayer, swingThen, NO_BUILD, missingOf, hasClock, clockHours, rainingHere, hoursText, costRows, targetTile,
-        MENU_MARGIN, BUILD_RANGE } = P.core;
+        MENU_MARGIN, BUILD_RANGE, landRefusal, noBuildText, landOwned, buildRegion } = P.core;
     const [hasObjectTile, plotAt, claimGround, releaseGround, bucketUnits, stowVessel, unstowVessel, bagWater, setBagWater] =
         link(PL, ["hasObjectTile", "plotAt", "claimGround", "releaseGround", "bucketUnits", "stowVessel", "unstowVessel",
             "bagWater", "setBagWater"]);
@@ -102,6 +102,8 @@
     // up on any map. The F9 placer (free) ignores it.
     function mapAllowsBuilding(mapId) {
         mapId = mapId === undefined ? $gameMap.mapId() : mapId;
+        if (landRefusal && landRefusal(mapId)) return false;   // (Homes.js: the field lost to the Lord)
+        if (mapId === $gameMap.mapId() && $dataMap && buildRegion && buildRegion()) return !!landOwned(mapId);   // (bought land: <BuildRegion:N>)
         if (mapId === $gameMap.mapId() && $dataMap) {
             const tag = T.mapFlag("Build", null, "first");
             if (tag !== null) return tag;
@@ -128,6 +130,8 @@
             if (x === d.x && y === d.y + 1) return "Zostaw wejście do chatki.";
         }
         const plot = plotAt(x, y);
+        const br = buildRegion ? buildRegion() : 0;
+        if (br && $gameMap.regionId(x, y) !== br && !free) return "Tu nie twoja ziemia.";   // (a map with bought land: only on it)
         if (!plot && !free) return "Trzeba oczyszczonej ziemi.";
         if (!plot && (!$gameMap.checkPassage(x, y, 0x0f) || hasObjectTile(x, y))) return "Tu nic nie stanie.";
         if (plot && plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
@@ -148,7 +152,7 @@
     }
     function whyNotBuild(type, x, y, flip, free) {
         const def = flip ? mirrorGeo(BUILDINGS[type]) : BUILDINGS[type];
-        if (!free && !mayBuildHere(type)) return NO_BUILD + ".";
+        if (!free && !mayBuildHere(type)) return ((landRefusal && landRefusal()) || (noBuildText ? noBuildText() : NO_BUILD)) + ".";
         if (def.single && hutOf()) return "Masz już chatkę.";
         if (isHutInterior() && !def.indoor) return "Tego nie postawisz w chatce.";
         if (isHutInterior() && hutShutsIn(type, x, y)) return "Zablokowałbyś sobie wyjście.";
@@ -471,10 +475,11 @@
 
     // null when the building may be taken down, otherwise the reason
     function demolishBlock(b) {
+        if (b.fixed) return "To część domu - zostaje na swoim miejscu.";   // (Homes.js: the bed and chests that come with a bought house)
         if (b.job && !jobReady(b)) return "W środku coś się jeszcze robi. Poczekaj, aż się skończy.";   // (a finished one is taken into the bag first)
         if (chestKinds(b) > 0) return BUILDINGS[b.type].bowl ? "Najpierw zabierz jedzenie z miski." : "Najpierw opróżnij skrzynię.";
         if ((b.pots || []).length > 0) return "Najpierw zabierz garnki ze stołu.";
-        if (b.type === "hut" && (farm().buildings[HUT_MAP] || []).length > 0) return "Najpierw wynieś z chatki wszystkie meble.";
+        if (b.type === "hut" && !b.boarded && (farm().buildings[HUT_MAP] || []).length > 0) return "Najpierw wynieś z chatki wszystkie meble.";
         return null;
     }
     function demolish(b) {
@@ -493,11 +498,25 @@
         for (const [id, n] of back) {
             if (n > 0) $gameParty.gainItem(itemOf(id), n);
         }
+        if (b.held) heldBack(b);
         return true;
+    }
+    // a boarded hut (the old one of a field bought back while a new hut stands - Homes.js): its furniture, kept inside, comes back
+    // with it (what the chests held, and every piece whole - as when a smaller room sends furniture back to the bag)
+    function heldBack(b) {
+        for (const f of b.held || []) {
+            for (const k of Object.keys(f.store || {})) {
+                const table = k[0] === "i" ? $dataItems : k[0] === "w" ? $dataWeapons : $dataArmors, item = table[Number(k.slice(1))];
+                if (item && f.store[k] > 0) $gameParty.gainItem(item, f.store[k]);
+            }
+            const def = BUILDINGS[f.type];
+            if (def) for (const [id, n] of def.cost) if (n > 0) $gameParty.gainItem(itemOf(id), n);
+        }
+        b.held = [];
     }
     function readyProduce(b) {
         const p = BUILDINGS[b.type].produce;
-        if (!p) return 0;
+        if (!p || b.empty) return 0;   // (b.empty: a yard whose animals were sold - Homes.js)
         return Math.min(p.cap, Math.floor(Math.max(0, today() - b.last) / p.period) * p.amount + (b.caught || 0));
     }
     function daysToProduce(b) {
@@ -691,6 +710,7 @@
     const HUT_DOOR_CALM = { only: ["transfer", "event"] };   // (not while going to another map or in an event)
     function enterHut(b) {
         if (!b || b.site || !T.isCalm(null, HUT_DOOR_CALM)) return false;
+        if (b.boarded) { complain(itemOf(ITEM.planks).iconIndex, "Drzwi zabite deskami."); return false; }
         hutSanitize(true);
         playSe("Door1", 100);
         $gamePlayer.reserveTransfer(HUT_MAP, HUT_ROOM.doorX, HUT_ROOM.y1, 8, 0);

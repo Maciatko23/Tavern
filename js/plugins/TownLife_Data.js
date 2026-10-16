@@ -664,7 +664,7 @@
             plan: [[0, "inside", "komora_drzwi"], [9, "stand", "molo_kontrola", () => !!(window.Przystan && Przystan.ferryNow())], [15, "inside", "komora_drzwi"],
                    [18, "stand", "komora_przed"], [19.5, "wander", "nabrzeze"], [21, "inside", "komora_drzwi"]],
             barks: {
-                stand: ["Tobołki do kontroli! Po kolei!", "Opłata portowa: dwa grosze. Kto nie ma, ten czeka."],
+                stand: ["Tobołki do kontroli! Po kolei!", "Opłata portowa: dwa grosze. Kto nie ma, ten czeka.", "Nie pić z morza! Czerwona woda! Czy ja tu do ściany mówię?"],
                 wander: ["Wszystko się zgadza. Wszystko musi się zgadzać."],
                 rain: ["Deszcz moczy papiery. Zakazuję deszczu. Żartuję."],
                 night: ["Komora zamknięta. Przyjdź za dnia."],
@@ -673,7 +673,8 @@
             talk: {
                 morning: ["Komora czynna od ósmej. Ty jesteś ten chłopak od Stacha, tak? Mam cię w księdze. Wszyscy są w księdze."],
                 day: ["Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Po co dworowi kruki? Nie moja rzecz. Moja rzecz to zapisać.",
-                      "Opłata portowa: dwa grosze od tobołka. Od ciebie nic, ty nie masz tobołka."],
+                      "Opłata portowa: dwa grosze od tobołka. Od ciebie nic, ty nie masz tobołka.",
+                      "Tabliczki stawiam nie dla ozdoby. Czerwona woda: kto pije, ten rzyga do rana. A potem przychodzi do mnie po zwrot opłaty portowej."],
                 evening: ["Dzień zamknięty. Rachunki się zgadzają. Prawie."],
                 night: ["Po nocy nikt uczciwy nie chodzi po przystani. Ty też wracaj."],
                 rain: ["Deszcz. Papier tego nie lubi."]

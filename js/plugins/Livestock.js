@@ -170,7 +170,7 @@
     function yards() {
         const f = farmOf();
         if (!f || !F() || !$gameMap) return [];
-        return (f.buildings[$gameMap.mapId()] || []).filter(b => !b.site && F().geoOf(b).yard);
+        return (f.buildings[$gameMap.mapId()] || []).filter(b => !b.site && !b.empty && F().geoOf(b).yard);   // (b.empty: its animals sold - Homes.js)
     }
     function sync() {
         if (!auto || !$gameMap || !$dataMap || !F()) return;

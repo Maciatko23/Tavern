@@ -218,7 +218,8 @@
         return true;
     }
     // the other plugins' states: read as a game loads (an older save's past, seedPast / checkEarned); after that their events tell
-    const storyPaid = () => safe(() => { const st = T.call("Story", "state"); return !!st && !st.pending && !!(st.done || st.paid >= st.debt); }, false);
+    // (the receipt: the debt paid - or, the field lost, its buyback: the Lord's deed in the frame - 2026-10-15)
+    const storyPaid = () => safe(() => { const st = T.call("Story", "state"); return !!st && !st.pending && !!(st.done || st.paid >= st.debt || (st.buy && st.buy.done)); }, false);
     const storyActive = () => safe(() => !!T.call("Story", "active"), false);
     const shiftsDone = () => safe(() => (T.call("TavernShift", "stats") || {}).done || 0, 0);
     const diceWins = () => safe(() => ($gameSystem._dice ? (T.call("TavernDice", "stats") || {}).wins || 0 : 0), 0);   // (_dice: not made by asking)
@@ -267,6 +268,7 @@
         earn(e.kind);
     }, { owner: PLUGIN });
     T.on("debtPaid", () => { if (storyPaid()) earn("receipt"); }, { owner: PLUGIN });
+    T.on("fieldBack", () => { if (storyPaid()) earn("receipt"); }, { owner: PLUGIN });
     T.on("shiftDone", () => earn("tankard"), { owner: PLUGIN });
     T.on("diceWin", () => earn("dice"), { owner: PLUGIN });
     T.on("questDone", e => {

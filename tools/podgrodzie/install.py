@@ -95,6 +95,14 @@ def town_gate_ok():
 def main():
     if TD.editor_running():
         print("STOP: the RPG Maker MZ editor is running - close it first (it would overwrite data/ on save)."); sys.exit(2)
+    # (2026-10-15) BLOKADA: Map111 w grze to już nie ta z tego etapu - ma drewnianą bramę i przejście na przystań (użytkownik,
+    # tools/przystan) oraz 20 rzędów na dole z Chatą pod lasem i jej działką (tools/domy/podgrodzie_zagroda.py, region 8,
+    # <BuildRegion:8>). Zapis staged/Map111.json zjadłby to wszystko - tylko z --force-old-map111, świadomie.
+    cur = load(DATA + "Map111.json") if os.path.exists(DATA + "Map111.json") else None
+    if cur and (cur["height"] != 36 or "<BuildRegion:" in (cur.get("note") or "")) and "--force-old-map111" not in sys.argv:
+        print("STOP: data/Map111.json jest powiększona o Chatę pod lasem (%dx%d) - ta instalacja by ją zjadła (--force-old-map111 wymusza)."
+              % (cur["width"], cur["height"]))
+        sys.exit(4)
     # (2026-10-12) the interiors were polished in place by tools/wnetrza/build.py (and the user edits them in the editor):
     # a map in data/ that differs from this tool's staged one is not overwritten without --force
     changed = [m for m in range(112, 118) if os.path.exists(os.path.join(DATA, "Map%03d.json" % m)) and

@@ -364,7 +364,9 @@
         this._purseAt = [L.slate[0] + 32, L.slate[1] + py - 7];
         if (T.call("Story", "state") && T.call("Story", "active")) {
             const s = T.call("Story", "state"), left = Math.max(0, Math.round(this.debtShown !== undefined && this.anim && this.anim.debt ? this.debtShown : s.debt - s.paid));
-            inkText(ctx, left > 0 ? "Dług dziadka: " + left + " G" : "Dług dziadka spłacony", rx, py, F.hand(20), left > 0 ? dim : "#9ff0a8", "left", 1);
+            // (2026-10-15) the field lost: what is left of its buyback
+            if (s.lost && s.buy) { const bl = Math.max(0, s.buy.price - s.buy.paid); inkText(ctx, s.buy.done ? "Pole odkupione" : "Odkup pola: " + bl + " G", rx, py, F.hand(20), s.buy.done ? "#9ff0a8" : dim, "left", 1); }
+            else inkText(ctx, left > 0 ? "Dług dziadka: " + left + " G" : "Dług dziadka spłacony", rx, py, F.hand(20), left > 0 ? dim : "#9ff0a8", "left", 1);
             this._debtAt = [L.slate[0] + rx + 60, L.slate[1] + py - 7];
         }
         this._repAt = [L.slate[0] + 94, L.slate[1] + 54];

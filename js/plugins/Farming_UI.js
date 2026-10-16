@@ -41,7 +41,9 @@
     const SCENE = {};   // the methods Farming.js puts on Scene_Map (their bodies)
     const { PL, B, S, link, ITEM, ICON, STAMINA, canMax, SEASON_NAMES, seasonIndex, seasonOf, GROUND_REST, CROPS, BUILDINGS,
         HAND_RECIPES, CROP_IDS, BUILDING_IDS, today, isHutInterior, hutOf, geoOf, buildingAt, solidAt, itemOf, countOf, complain,
-        lockPlayer, NO_BUILD, menuHooks, rainingHere, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN } = P.core;
+        lockPlayer, NO_BUILD, menuHooks, rainingHere, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, landRefusal, noBuildText } = P.core;
+    // the words when building is refused here (Homes.js: the field now the Lord's, "only on your own land" once there is some)
+    const noBuild = () => (landRefusal && landRefusal()) || (noBuildText ? noBuildText() : NO_BUILD);
     const [plotAt, canCharges, needsOn, wellEntries, bucketUnits, bucketFor, bucketEntries, wateredRecently, isRipe, daysLeft,
         rake, till, plant, harvest, uproot, water, dig, potDryness, potHoursLeft, tablePots, tablePotDry, tablePotHoursLeft,
         tableEntries, potEntries, clayEntry] =
@@ -110,8 +112,8 @@
     function placeMenuEntry(x, y) {
         // (away from the grandfather's field nothing of it may stand: the entry says so with the popup)
         if (!mapAllowsBuilding() && !BUILDING_IDS.some(t => BUILDINGS[t].instant && buildsAnywhere(BUILDINGS[t]))) {
-            return { name: "Postaw...", icon: itemOf(ITEM.tent).iconIndex, run: () => complain(itemOf(ITEM.tent).iconIndex, NO_BUILD),
-                help: NO_BUILD + ": " + placeNames() + " postawisz tylko tam.", tip: NO_BUILD + ": " + placeNames() + " postawisz tylko tam." };
+            return { name: "Postaw...", icon: itemOf(ITEM.tent).iconIndex, run: () => complain(itemOf(ITEM.tent).iconIndex, noBuild()),
+                help: noBuild() + ": " + placeNames() + " postawisz tylko tam.", tip: noBuild() + ": " + placeNames() + " postawisz tylko tam." };
         }
         return { name: "Postaw...", icon: itemOf(ITEM.tent).iconIndex, run: () => openPlaceMenu(x, y),
             help: "Stawiasz od razu, bez młotka: " + placeNames() + ".",
@@ -212,7 +214,8 @@
     function buildingMenuFor(b) {
         const def = geoOf(b);
         const entries = [];
-        if (def.door && !b.site) entries.push({ name: "Wejdź do środka", icon: 82, help: "Wchodzisz do chatki. Drzwi otwierasz też, po prostu w nie wchodząc.", run: () => enterHut(b) });
+        if (def.door && !b.site) entries.push(b.boarded ? { name: "Wejdź do środka", icon: 82, enabled: false, help: "Drzwi zabite deskami: masz już inną chatkę. Rozbierz tę, a meble ze środka wrócą do plecaka.", run: () => enterHut(b) }
+            : { name: "Wejdź do środka", icon: 82, help: "Wchodzisz do chatki. Drzwi otwierasz też, po prostu w nie wchodząc.", run: () => enterHut(b) });
         if (def.rest) {
             const fireOut = !!def.fire && !fireLit(b);
             const no = whyNoRest();
@@ -353,7 +356,7 @@
     function openBuildKeyMenu() {
         let t = targetTile();
         if (!$gameMap.isValid(t.x, t.y)) t = { x: $gamePlayer.x, y: $gamePlayer.y };
-        if (!mapAllowsBuilding()) complain(itemOf(ITEM.hammer).iconIndex, NO_BUILD);   // (the list keeps what may stand anywhere: the snare)
+        if (!mapAllowsBuilding()) complain(itemOf(ITEM.hammer).iconIndex, noBuild());   // (the list keeps what may stand anywhere: the snare)
         showMenu(isHutInterior() ? "Wyposaż chatkę" : "Budowa", buildEntries(t.x, t.y), "build");
         return true;
     }

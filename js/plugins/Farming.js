@@ -712,10 +712,14 @@
     const HUT_ROOM = { x0: 1, x1: 5, y0: 3, y1: 4, doorX: 3, doorY: 5 };   // the floor of Map100 (5 x 2); the door is the doormat (doorX, doorY) in the wall below it, the floor tile in front of it (doorX, y1) stays free
     const isHutInterior = mapId => (mapId === undefined ? $gameMap.mapId() : mapId) === HUT_MAP;
     const hutFloor = (x, y) => x >= HUT_ROOM.x0 && x <= HUT_ROOM.x1 && y >= HUT_ROOM.y0 && y <= HUT_ROOM.y1 && !(x === HUT_ROOM.doorX && y === HUT_ROOM.y1);   // the part of the floor that can be furnished (all but the tile in front of the door)
-    // the hut the player has (or is building): { b, mapId }
+    // the hut the player has (or is building): { b, mapId } - not one on land that is someone else's now (the field lost to the
+    // Lord: a new hut may go up on the hero's own land) and not a boarded one (the old hut of a field bought back while a new one stands)
     function hutOf() {
         const all = farm().buildings || {};
-        for (const mapId of Object.keys(all)) for (const b of all[mapId]) if (b.type === "hut") return { b, mapId: Number(mapId) };
+        for (const mapId of Object.keys(all)) {
+            if (landRules.length && landHeld(mapId)) continue;
+            for (const b of all[mapId]) if (b.type === "hut" && !b.boarded) return { b, mapId: Number(mapId) };
+        }
         return null;
     }
     const hutDoorCell = h => ({ x: h.b.x + geoOf(h.b).door.dx, y: h.b.y });   // the doorway: a passable cell of the hut's bottom row
@@ -907,6 +911,23 @@
     }
 
     const NO_BUILD = "Budować możesz tylko na polu dziadka";
+    // ---- whose the land is (Homes.js, 2026-10-15: the field lost to the Lord, land bought with a house): rules
+    // { held(mapId) -> true: the land is someone else's now (a hut there no longer counts, a kennel there is not the dog's home),
+    //   refuse(mapId) -> a reason why nothing may be built there now (null: the usual rules), noBuild() -> the words of the popup
+    //   when building is refused on a map that does not allow it (null: NO_BUILD) }
+    const landRules = [];
+    const ruleSays = (fn) => { for (const r of landRules) { let v = null; try { v = fn(r); } catch (e) { v = null; } if (v) return v; } return null; };
+    const landHeld = mapId => !!ruleSays(r => r.held && r.held(Number(mapId)));
+    // land bought on a map of someone else's (Homes.js, 2026-10-15): the map's note <BuildRegion:N> marks it - only the cells of
+    // region N are ground there (to build on, dig, sow), and only while a rule says the hero owns them (rule.own(mapId) -> true)
+    const landOwned = mapId => !!ruleSays(r => r.own && r.own(Number(mapId === undefined ? $gameMap.mapId() : mapId)) === true);
+    function buildRegion() {
+        const a = window.$dataMap ? T.mapTag("BuildRegion") : null, n = a ? parseInt(a.raw, 10) : 0;
+        return n > 0 ? n : 0;
+    }
+    const landRefusal = mapId => ruleSays(r => r.refuse && r.refuse(Number(mapId === undefined ? $gameMap.mapId() : mapId)));
+    const noBuildText = () => ruleSays(r => r.noBuild && r.noBuild()) || NO_BUILD;
+    const addLandRule = rule => { if (rule && typeof rule === "object" && !landRules.includes(rule)) landRules.push(rule); return rule; };
     // shared by missingMaterials/missingInputs: which [id, n] pairs of a cost/inputs list are not fully in the bag
     function missingOf(pairs) {
         return pairs.filter(([id, n]) => countOf(id) < n);
@@ -1116,8 +1137,9 @@
         spaceFor, complainNoSpace, playSe, spendStamina, perk, perkRoll, knowsSkill, farmCost, foodIsFree, useTool, requireItem,
         fx, later, lockPlayer, swingThen, NO_BUILD, missingOf, menuHooks, hasClock, clockHours, FUEL_MAX, FUEL_START,
         FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL, meatCount, QUEUE_MAX,
-        RAW_FISH, FISH_LABEL, fishCount, clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE };
-    const API = window.Farming = T.register("Farming", { addMenuHook: fn => menuHooks.push(fn), GATHER, QUEUE_MAX, BUILD_MAPS,
+        RAW_FISH, FISH_LABEL, fishCount, clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE,
+        landHeld, landRefusal, noBuildText, landOwned, buildRegion };
+    const API = window.Farming = T.register("Farming", { addMenuHook: fn => menuHooks.push(fn), addLandRule, landHeld, landRefusal, noBuildText, landOwned, buildRegion, GATHER, QUEUE_MAX, BUILD_MAPS,
         NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, RAW_FISH, fishCount, FISH_LABEL, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
         HUT_ROOM, hutOf, hutDoorAt, isHutInterior, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS,
         buildingAt, canMax, clockHours, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2, HAND_RECIPES, BUILD_RANGE, CROP_LIFT,

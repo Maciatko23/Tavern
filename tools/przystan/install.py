@@ -41,6 +41,11 @@ PLUGIN_ENTRY = {"name": "Przystan", "status": True,
                 "description": "Przystań (mapa 125): Janek i chusta matki, Roch Szkwał i jego kuter, celnik Lorda, prom w dni promu, skup ryb, list do matki. v1.0.0",
                 "parameters": {}}
 PLUGIN_AFTER = "Act3"
+# (2026-10-15) the red water of the salt sea - right after Przystan
+PLUGINS = [(PLUGIN_ENTRY, PLUGIN_AFTER),
+           ({"name": "CzerwonaWoda", "status": True,
+             "description": "Czerwona woda: w suszę morze przy wyspie zakwita (rdzawy odcień, piana, śnięte ryby), nie da się go pić ani przegotować; po deszczu szare i słone. Mapy z <Water:salt>. v1.0.0",
+             "parameters": {}}, "Przystan")]
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
 
@@ -260,14 +265,18 @@ def patched_plugins():
     raw = open(path, "rb").read()
     crlf = b"\r\n" in raw
     s = raw.decode("utf-8").replace("\r\n", "\n")
-    if '"name":"Przystan"' in s:
-        return None
     lines = s.split("\n")
-    idx = [i for i, l in enumerate(lines) if l.startswith('{"name":"%s",' % PLUGIN_AFTER)]
-    assert len(idx) == 1, "plugins.js: brak %s" % PLUGIN_AFTER
-    i = idx[0]
-    assert lines[i].endswith(","), "plugins.js: %s jest ostatni?" % PLUGIN_AFTER
-    lines.insert(i + 1, dump(PLUGIN_ENTRY) + ",")
+    changed = False
+    for entry, after in PLUGINS:
+        if any(l.startswith('{"name":"%s",' % entry["name"]) for l in lines): continue
+        idx = [i for i, l in enumerate(lines) if l.startswith('{"name":"%s",' % after)]
+        assert len(idx) == 1, "plugins.js: brak %s" % after
+        i = idx[0]
+        assert lines[i].endswith(","), "plugins.js: %s jest ostatni?" % after
+        lines.insert(i + 1, dump(entry) + ",")
+        changed = True
+    if not changed:
+        return None
     out = "\n".join(lines)
     return (out.replace("\n", "\r\n") if crlf else out).encode("utf-8")
 

@@ -1473,6 +1473,8 @@
         const sg = siege && siege.grum;
         const w = {
             story: !!ss, debtPaid: !!ss && (ss.paid >= ss.debt || !!ss.done),
+            // (2026-10-15) the field lost to the Lord at the deadline, and bought back from him (Story.js)
+            fieldLost: !!ss && !!ss.lost && !(ss.buy && ss.buy.done), fieldBack: !!ss && !!ss.lost && !!(ss.buy && ss.buy.done),
             opinion: op, locks: locks().open,
             borgar: !!fl.borgarSaying, ambrozy: !!fl.ambrozyChronicles, book: !!(fl.signalBook || fl.ambrozyChronicles),
             melia: fl.w3Sung ? "public" : fl.w3Borgar ? "borgar" : fl.w3Burned ? "burned" : null,
@@ -1495,11 +1497,15 @@
         return w;
     }
     // the Lord's stance at the Heart: ally (the quiet way of W1 - lordAlly - or his truth told, W9 ch. 6), rival (shamed at the market,
-    // W1 a: "Mówiłem: najpierw do mnie"), absent (he never learnt the hero went down - or no story, or the debt not paid)
+    // W1 a: "Mówiłem: najpierw do mnie"), absent (he never learnt the hero went down - or no story).
+    // (2026-10-15) The field lost and not bought back: he holds the hero's grandfather's land and wants to be first under the tavern -
+    // a rival, unless the hero made him an ally (W1's quiet way) or told him his truth (W9 ch. 6). Bought back: as if the debt was paid.
     function lordStance(w) {
         const f = state().forceLord;
         if (f === "ally" || f === "rival" || f === "absent") return f;
-        if (!w.story || !w.debtPaid) return "absent";
+        if (!w.story) return "absent";
+        if (w.fieldLost) { const lf0 = w.lordFlags || {}; return lf0.ally || lf0.truth ? "ally" : "rival"; }
+        if (!w.debtPaid && !w.fieldBack) return "absent";
         const lf = w.lordFlags || {};
         if (lf.ally || lf.truth) return "ally";
         if (lf.cold) return "rival";

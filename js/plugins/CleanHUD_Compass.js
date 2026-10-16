@@ -219,16 +219,23 @@
     }
     // a building of the field (Farming.js): where it stands; a building in the hut - the hut
     const FIELD = 3, HUT_MAP = 100;
+    // the hero's land: grandpa's field, or - the field lost to the Lord (2026-10-15, Homes.js) - the yard of a house he bought
+    function landNow() {
+        const H = T.api("Homes"), m = H && H.homeLand ? H.homeLand() : FIELD;
+        return m || null;
+    }
+    const landName = m => (m === FIELD ? "Pole dziadka" : mapName(m) || "Twoja ziemia");
     function buildingPlace(type) {
         const F = T.api("Farming"), farm = F && F.farm ? F.farm() : null, list = farm && farm.buildings ? farm.buildings : {};
         const def = F && F.BUILDINGS ? F.BUILDINGS[type] : null, name = def ? def.name : "";
         const on = id => (list[id] || []).find(b => b.type === type && !b.site) || null;
-        const here = $gameMap.mapId();
+        const here = $gameMap.mapId(), land = landNow();
         if (here === HUT_MAP && on(HUT_MAP)) { const b = on(HUT_MAP); return { map: HUT_MAP, x: b.x, y: b.y, name }; }
-        const b = on(FIELD) || (on(HUT_MAP) ? (list[FIELD] || []).find(x => x.type === "hut" && !x.site) : null);
+        if (!land) return null;
+        const b = on(land) || (on(HUT_MAP) ? (list[land] || []).find(x => x.type === "hut" && !x.site) : null);
         if (!b) return null;
         const d = F.BUILDINGS[b.type] || {}, w = b.w || d.w || 1, h = b.h || d.h || 1;
-        return { map: FIELD, x: b.x + (w - 1) / 2, y: b.y - (h - 1) / 2, name: b.type === type ? name : (d.name || "Chatka") };
+        return { map: land, x: b.x + (w - 1) / 2, y: b.y - (h - 1) / 2, name: b.type === type ? name : (d.name || "Chatka") };
     }
     // a goal of the journal: its own where, the table, else (a story game) a building or crafting goal - grandpa's field
     function goalPlace(g) {
@@ -239,8 +246,9 @@
         if (!w) {
             const ST = T.api("Story");
             if (!(ST && ST.active && ST.active())) return null;
-            if (g.recipe && g.recipe[0] !== "hand") return buildingPlace(g.recipe[0]) || { map: FIELD, name: "Pole dziadka" };
-            if (g.build) return { map: FIELD, name: "Pole dziadka" };
+            const land = landNow();
+            if (g.recipe && g.recipe[0] !== "hand") return buildingPlace(g.recipe[0]) || (land ? { map: land, name: landName(land) } : null);
+            if (g.build) return land ? { map: land, name: landName(land) } : null;
             return null;
         }
         return resolve(w);

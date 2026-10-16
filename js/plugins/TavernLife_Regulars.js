@@ -109,7 +109,7 @@
         try {
             if (!St || !St.active || !St.active() || !St.state()) return null;
             const s = St.state();
-            return { left: St.left(), days: St.daysLeft(), paid: s.paid, debt: s.debt, done: !!s.done };
+            return { left: St.left(), days: St.daysLeft(), paid: s.paid, debt: s.debt, done: !!s.done, lost: !!s.lost, back: !!(s.buy && s.buy.done) };
         } catch (e) { return null; }
     }
     const slot = h => (h >= 5 && h < 11 ? "morning" : h >= 11 && h < 17 ? "day" : h >= 17 && h < 22 ? "evening" : "night");
@@ -152,7 +152,9 @@
                     "Susza. Ziemia pęka jak stara struna. Ktoś musi o tym zaśpiewać, zanim wszyscy zapomną, jak brzmi deszcz."],
                 debtNear: ["Słyszałam o długu twojego dziadka. Lord ma dwór z kamieni i serce do kompletu. Trzymaj się, złotko.",
                     "Termin u Lorda tuż-tuż, prawda? Widać ci to po oczach. Gdyby pieśnią dało się płacić, zaśpiewałabym za ciebie."],
-                debtPaid: ["Spłaciłeś Lorda! Cała sala o tym mówiła. Ułożę pieśń: „Wnuk, co pole wykupił”. Albo coś krótszego."]
+                debtPaid: ["Spłaciłeś Lorda! Cała sala o tym mówiła. Ułożę pieśń: „Wnuk, co pole wykupił”. Albo coś krótszego."],
+                fieldLost: ["Słyszałam o polu, złotko. Przykro mi. Lord ma dwór z kamieni i serce do kompletu. Ale ty masz ręce i głos - zaśpiewasz jeszcze o tym polu, jak je odkupisz."],
+                fieldBack: ["Odkupiłeś pole od samego Zaleskiego! To już nie pieśń, to ballada. Trzy zwrotki co najmniej."]
             },
             rumours: [
                 { id: "kubaWater", when: () => !qRec("W1"), text: "Kuba Woziwoda nosi wodę, której w studni nie ma. Ludzie mówią: z nieba. Ja mówię: z czyjejś piwnicy." },
@@ -199,7 +201,9 @@
                 snow: ["Śnieg... Zimą kamienie śpią głębiej. Wtedy łatwiej o nich zapomnieć."],
                 drought: ["Ile dni bez deszczu? *hep* Ja wiem ile. I wiem, gdzie jest woda. Tylko nikt nie pyta.", "Sucho, synku. Sucho w ziemi, sucho w gardle. Z tych dwóch to drugie da się naprawić."],
                 debtNear: ["Dług, dług... Lordowie liczą grosze, a nie widzą, na czym siedzą. *hep* Zdążysz, synku. Albo nie. Ale raczej zdążysz."],
-                debtPaid: ["Spłacone? Hehe. Widziałem to we śnie. Wczoraj albo przedwczoraj. *hep*"]
+                debtPaid: ["Spłacone? Hehe. Widziałem to we śnie. Wczoraj albo przedwczoraj. *hep*"],
+                fieldLost: ["Pole poszło do Lorda? *hep* Ziemia nie ucieka, synku. Lordowie przychodzą i odchodzą, a pole zostaje. Wróci do ciebie. Widziałem to... albo mi się wydawało."],
+                fieldBack: ["Pole wróciło? A nie mówiłem? *hep* Mówiłem. Na pewno mówiłem."]
             },
             sleep: ["Chrrr... *hep* ...co? Kto? A, to ty. Śniła mi się woda. Dużo wody. Pod ziemią.", "Chrrr... fiuuu... (Ozzy śpi na ławie z głową na stole. Uśmiecha się przez sen.)",
                 "...nie ta cegła... trzecia od dołu... chrrr...", "(Ozzy mruczy coś przez sen i przewraca się na drugi bok. Ława trzeszczy.)"],
@@ -239,7 +243,9 @@
                 snow: ["Śnieg. Ślady widać na milę. Dobra pora na polowanie. Zła na ucieczkę."],
                 drought: ["Woda drożeje. Wojna zaczyna się od wody. Zapamiętaj.", "Sucho. Pod Wrzosową Przełęczą piliśmy z kałuż. Tu jeszcze nie jest tak źle. Jeszcze."],
                 debtNear: ["Lord chce pieniędzy. Lordowie zawsze chcą. Zarób albo uciekaj. Ja bym zarobił."],
-                debtPaid: ["Spłaciłeś. Dobrze. Wolny człowiek śpi lepiej."]
+                debtPaid: ["Spłaciłeś. Dobrze. Wolny człowiek śpi lepiej."],
+                fieldLost: ["Lord wziął pole. Tak bywa. Ja straciłem więcej niż pole i siedzę tu, piję piwo. Ty też przeżyjesz."],
+                fieldBack: ["Odkupiłeś. Uparty jesteś. To dobrze."]
             },
             rumours: [
                 { id: "wolves", when: () => day() >= 3 && !qDone("D5"), text: "Wilki chodzą pod bramą południową. Trzy, może cztery. Przewodnik jest siwy. Nie idź nocą sam." },
@@ -291,7 +297,10 @@
         const t = R0(role).talk, w = weatherNow(), dbt = debt();
         if (w && t[w]) return said(role, t[w], "w:" + w);
         if (dbt && dbt.done && t.debtPaid && !rec(role).topics.debtPaid) return said(role, t.debtPaid, "debtPaid");
-        if (dbt && !dbt.done && dbt.days <= 7 && dbt.left > 0 && t.debtNear && rec(role).topics["debt:" + day()] === undefined) { rec(role).topics["debt:" + day()] = 1; return pickDay(t.debtNear, role); }
+        // (2026-10-15) the field lost to the Lord - once; bought back - once
+        if (dbt && dbt.lost && !dbt.back && t.fieldLost && !rec(role).topics.fieldLost) return said(role, t.fieldLost, "fieldLost");
+        if (dbt && dbt.back && t.fieldBack && !rec(role).topics.fieldBack) return said(role, t.fieldBack, "fieldBack");
+        if (dbt && !dbt.done && !dbt.lost && dbt.days <= 7 && dbt.left > 0 && t.debtNear && rec(role).topics["debt:" + day()] === undefined) { rec(role).topics["debt:" + day()] = 1; return pickDay(t.debtNear, role); }
         if (dryDays() >= 6 && t.drought && rec(role).topics["dry:" + day()] === undefined) { rec(role).topics["dry:" + day()] = 1; return pickDay(t.drought, role); }
         const sl = slot(hour());
         return said(role, t[sl] || t.day, "s:" + sl);

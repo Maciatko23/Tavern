@@ -222,6 +222,10 @@ def objects(mp):
     mp.obj(10, 25, "!$Przystan_Kuter", "Kuter: na wodzie", step=True)
     # the warship on the shoal, far out in the bay (half off the map)
     mp.obj(2, 39, "!$Przystan_Okret_Wrak", "Wrak okrętu na mieliźnie", priority=1)
+    # (2026-10-15, CzerwonaWoda.js) the customs officer's warning signs: by the quay and on the beach
+    SIGN = "„NIE PIĆ! CZERWONA WODA.” Pod spodem pieczęć celnika Lorda."
+    mp.obj(19, 9, "!$Przystan_Tabliczka", "Tabliczka: Nie pić!", cmds=popup_cmds(SIGN))
+    mp.obj(21, 30, "!$Przystan_Tabliczka", "Tabliczka: Nie pić!", cmds=popup_cmds(SIGN))
     # things to look at
     mp.look(28, 5, "Beczka na deszczówkę", "Pusta. Deszcz dawno nie padał.", priority=1, through=False)
     mp.look(41, 20, "Drogowskaz", "Na wschód: Podgrodzie i miasteczko.")

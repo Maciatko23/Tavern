@@ -1,8 +1,9 @@
 // The story start (Story.js): a new game begins in grandpa's house with his talk about the debt (2500 G to Lord Zaleski by day 60),
 // the journal gets chapter 1, the way in to the tavern is walked (Polna droga -> Okolice Tawerny -> the door), Borgar hires the hero
 // and gives a shift (TavernShift.js), the Lord takes the money (a part, then all: chapter 1 ends), letters come on the way, the debt
-// counts till dawn after the deadline (a late shift on the last day, the butler at night), an unpaid debt at dawn ends the game (not
-// while the hero still sits resting), an old-style game (begun elsewhere) has no story at all, and a game saved in the middle of a talk
+// counts till dawn after the deadline (a late shift on the last day, the butler at night), an unpaid debt at dawn no longer ends the
+// game (2026-10-15): the field goes to the Lord - a letter away from the field, the Lord's men on it (not while the hero still sits
+// resting), saving goes on; an old-style game (begun elsewhere) has no story at all, and a game saved in the middle of a talk
 // loads fine. The talks run as ordinary event commands in speech bubbles; a driver in the page presses O and picks the choices the
 // test names. The payments and the steps of chapter 1 are told on the Tawerna bus (debtPayment, debtPaid, storyStep).
 // (Loads Story.js into the page when js/plugins.js does not have it.) Screenshots: docs/nowy_start/fabula_*.png
@@ -401,7 +402,8 @@ const DRIVER = String.raw`
             np.scene === "Scene_Map" && /Termin mija o świcie - do tego czasu przyjmę każdą monetę\./.test(said(nightPay)) && /Termin: dzień 60 - mija o świcie\./.test(said(nightPay)) &&
             /Zapisuję: \d+ G od wnuka Stacha\. Brakuje jeszcze \d+ G\. O świcie termin mija\./.test(said(nightPay)), { np, earned, text: said(nightPay).slice(0, 500) });
         await go(19, 8, 6);
-        // the deadline: day 60 at night, sleep -> day 61 (the day summary first), then the ending
+        // the deadline: day 60 at night, sleep -> day 61 (the day summary first), then - at grandpa's, away from the field - the field
+        // goes to the Lord: no ending, the Lord's letter, saving on (2026-10-15)
         await ev("window.__drv.on = true; window.__drv.picks = []; $gameSystem._dayNightDay = 60; $gameSystem.setDayNightHour(23); 0");
         await frames(30);
         const lastDay = await J("({ save: $gameSystem.isSaveEnabled(), scene: SceneManager._scene.constructor.name, left: Story.daysLeft() })");
@@ -409,14 +411,14 @@ const DRIVER = String.raw`
         const summary = await until("SceneManager._scene.constructor.name === 'Scene_DaySummary'", 15);
         const doomedSave = await ev("$gameSystem.isSaveEnabled()");
         for (let i = 0; i < 40 && await ev("SceneManager._scene.constructor.name === 'Scene_DaySummary'"); i++) { await ev("Input._currentState.ok = true; 0"); await sleep(120); await ev("Input._currentState.ok = false; 0"); await sleep(200); }
-        check("day 60 is still fine (1 day left, saving works); sleeping into day 61 shows the day summary first and saving is off", lastDay.save === true && lastDay.left === 1 && summary && doomedSave === false, { lastDay, summary, doomedSave });
-        const ending = await until("SceneManager._scene.constructor.name === 'Scene_StoryEnding'", 30);
-        const endLog = await J("window.__drv.log.slice(-1)[0]");
-        check("then the ending: the hero's words at dawn, a fade, the ending screen", ending && /^Świta\.\.\. Termin minął/.test(endLog.t) && (await ev("$gameSystem._story.ended")) === 61, endLog);
-        await sleep(1500);
+        check("day 60 is still fine (1 day left, saving works); sleeping into day 61 shows the day summary first and saving stays on", lastDay.save === true && lastDay.left === 1 && summary && doomedSave === true, { lastDay, summary, doomedSave });
+        const lostAt = await until("!!$gameSystem._story.lost", 30);
+        await frames(30);
+        const lostSt = await J("({ scene: SceneManager._scene.constructor.name, lost: $gameSystem._story.lost, ended: $gameSystem._story.ended, save: $gameSystem.isSaveEnabled(), notes: $gameSystem._journal.notes.map(n => n.title) })");
+        check("then no ending: the field is the Lord's (day 61), the Lord's letter and the note 'Pole przepadło', the game goes on and saves", lostAt && lostSt.scene === "Scene_Map" && lostSt.lost.day === 61 && !lostSt.ended &&
+            lostSt.save === true && lostSt.notes.includes("Pole przepadło") && lostSt.notes.some(n => /List od Lorda \(dzień 61\)/.test(n)), lostSt);
         await b.shot(path.join(SHOTS, "fabula_4_koniec.png"));
-        for (let i = 0; i < 30 && !(await ev("SceneManager._scene.constructor.name === 'Scene_Gameover'")); i++) { await ev("Input._currentState.ok = true; 0"); await sleep(120); await ev("Input._currentState.ok = false; 0"); await sleep(200); }
-        check("O on the ending screen goes to the Game Over (and the title, where a save can be loaded)", await ev("SceneManager._scene.constructor.name === 'Scene_Gameover'"));
+        check("the old ending screen is not used (it sleeps behind the parameter 'Przegrana kończy grę')", !(await ev("Story.LOSE_ENDS")) && (await ev("SceneManager._scene.constructor.name")) !== "Scene_StoryEnding");
 
         // ---- a third new game for bots: Story.skipIntro() right away - no talk runs, it counts as heard; no deadline with setDeadlineOn(false)
         await newStoryGame();
@@ -435,7 +437,7 @@ const DRIVER = String.raw`
         await ev("delete $gameTemp.pushTopNotice; 0");
         check("Story.pay(2500) outside the talks: paid in full, chapter 1 done at once (top notice, receipt in the notes)", paidOut === 2500 && sp.s.paid === 2500 && sp.s.done === 70 &&
             sp.notices.some(t => /Rozdział 1 zakończony/.test(t)) && sp.notes.includes("Pokwitowanie od Lorda"), { paidOut, paid: sp.s.paid, done: sp.s.done, notices: sp.notices, notes: sp.notes });
-        // the dawn ending waits while he sits resting: the debt open again, day 61 at 5:30 (not yet), a grass rest on the field runs past 6:00
+        // the dawn loss waits while he sits resting: the debt open again, day 61 at 5:30 (not yet), a grass rest on the field runs past 6:00
         await go(3, 26, 14);
         await ev("(function(){ const s = $gameSystem._story; s.paid = 0; s.done = 0; s.payments = []; $gameSystem._dayNightDay = 61; $gameSystem.setDayNightHour(5.5); Story.setDeadlineOn(true); return 0; })()");
         await frames(10);
@@ -449,17 +451,21 @@ const DRIVER = String.raw`
             } return null; })()`);
         await until("$gameSystem.dayNightHour() >= 6.4", 10);
         await frames(30);
-        const resting = await J("({ hour: $gameSystem.dayNightHour(), sitting: $gamePlayer.isToolSwinging(), doomed: Story.doomed(), ended: $gameSystem._story.ended, running: $gameMap.isEventRunning(), save: $gameSystem.isSaveEnabled() })");
-        check("day 61 before 6:00 (the field shown as 'Pole dziadka'): not over yet; resting past 6:00 the ending waits while he sits (doomed, saving off)", before6.night && !before6.doomed && before6.save &&
-            before6.name === "Pole dziadka" && !!spot && resting.sitting && resting.hour >= 6.4 && resting.doomed && !resting.ended && !resting.running && resting.save === false, { before6, spot, resting });
+        const resting = await J("({ hour: $gameSystem.dayNightHour(), sitting: $gamePlayer.isToolSwinging(), due: Story.pastDue(), lost: !!$gameSystem._story.lost, ended: $gameSystem._story.ended, running: $gameMap.isEventRunning(), save: $gameSystem.isSaveEnabled() })");
+        check("day 61 before 6:00 (the field shown as 'Pole dziadka'): not lost yet; resting past 6:00 the loss waits while he sits (due, saving on)", before6.night && !before6.doomed && before6.save &&
+            before6.name === "Pole dziadka" && !!spot && resting.sitting && resting.hour >= 6.4 && resting.due && !resting.lost && !resting.ended && !resting.running && resting.save === true, { before6, spot, resting });
         await ev("window.__drv.on = false; ConfigManager.uiClean = false; Input._currentState.ok = true; 0");
         await frames(4);
         await ev("Input._currentState.ok = false; 0");
         await until("!$gamePlayer.isToolSwinging()", 10);
+        const mark3 = await ev("window.__drv.log.length");
         await ev("window.__drv.on = true; window.__drv.picks = []; 0");
-        const ending3 = await until("SceneManager._scene.constructor.name === 'Scene_StoryEnding'", 30);
-        const end3 = await J("({ log: window.__drv.log.slice(-1)[0], ended: $gameSystem._story.ended })");
-        check("...he gets up (O) and only then the ending: 'Świta... Termin minął', the ending screen", ending3 && end3.ended === 61 && /^Świta\.\.\. Termin minął/.test(end3.log.t) && end3.log.who === 0, end3);
+        const lost3 = await until("!!$gameSystem._story.lost && $gameSystem._story.lost.scene > 0", 60);
+        const end3 = await J(`({ log: window.__drv.log.slice(${mark3}), lost: $gameSystem._story.lost, scene: SceneManager._scene.constructor.name, save: $gameSystem.isSaveEnabled() })`);
+        const first3 = end3.log[0] || {};
+        check("...he gets up (O) and only then the field is lost: the Lord's men come over it at once ('Dzień dobry, młodzieńcze' - the butler), the sign, the game goes on",
+            lost3 && end3.lost.day === 61 && end3.lost.scene === 61 && /^Dzień dobry, młodzieńcze/.test(first3.t || "") && first3.who === 700 && end3.scene === "Scene_Map" && end3.save &&
+            end3.log.some(l => /Kruczych Skał/.test(l.t)), { lost: end3.lost, first: first3, n: end3.log.length });
 
         // ================= 5. an old-style game: begun elsewhere (Map003) - no story, nothing changes
         await toTitle();

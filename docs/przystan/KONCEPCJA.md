@@ -317,3 +317,37 @@ Janka, łodzie z PixelLab, wrak okrętu jako tło, komora celna z wnętrzem.
 - SpeechBubbles: trzy popiersia.
 
 **Testy i zrzuty:** `tests/przystan_test.js`; zrzuty z gry `w_grze_*.png` (mapa, prom, Janek, Roch, celnik, noc, wnętrza).
+
+---
+
+## Czerwona woda (2026-10-15)
+
+Użytkownik chciał, żeby woda była tylko ze studni i z rzeki, nigdy z morza, i żeby to ograniczenie było widać i czuć. Zapytał też, czy
+nie da się gotować wody z morza. Nie da się.
+
+- **Opowieść:** w suszę morze przy wyspie zakwita. Przy brzegu jest rdzawoczerwone, cuchnie, fale wyrzucają śnięte ryby. Trucizna
+  zakwitu nie znika przy gotowaniu, a sól i tak zostaje. Starzy mówią: „krew Kruczych Skał”, czyli Serce krwawi do morza (sama legenda).
+- **Kiedy:** czerwona, gdy wśród ostatnich trzech dni nie było dwóch deszczowych. Siła zależy od liczby dni bez deszczu. Po dwóch
+  deszczowych dniach woda jest szara, ale dalej słona. Według planu pogody czerwona jest przez około **77% dni** roku.
+- **Wygląd** (bez zmiany kafelków, na każdej mapie z `<Water:salt>`):
+  - rdzawa barwa najmocniejsza przy brzegu i słabnąca w głąb morza (pomosty nie liczą się jako brzeg);
+  - rdzawa piana na linii brzegu;
+  - kilka śniętych ryb na brzegu i na pomostach (codziennie inne);
+  - szara woda po deszczu jest mętna, szarobura (poprawka użytkownika: wyraźnie widać, że to zła woda, ale słabiej niż
+    czerwień) i ma brudną pianę; porównanie przed i po w `czerwona_szara.png`;
+  - na przystani dwie tabliczki celnika „Nie pić!”.
+- **Odczuwalne:**
+  - popup nad bohaterem: „Woda jest czerwona i cuchnie.” albo „Słona - nie do picia.”;
+  - **„Napij się mimo to”**: czerwona wywołuje wymioty (woda -18, sytość -12, wytrzymałość -10) i stan **„Zatrucie”** na 8 godzin
+    (prace kosztują 30% więcej, wytrzymałość najwyżej 70%, więc i oddech w walce krótszy); szara jest słona (woda -10);
+  - **„Nabierz wody”**: odmowa;
+  - **„Przegotuj”** (z wiadrem albo kociołkiem): „Dalej czerwona. Nawet para śmierdzi.”;
+  - ptaki omijają cuchnący brzeg.
+- **Ryby:** przy samym brzegu w czerwieni biorą słabiej i czasem trafia się śnięta (bez wartości). Z końca pomostu i z głowicy mola
+  łowi się zdrowo, więc K47 da się zrobić.
+- **Rozmowy:** Janek („A ta czerwona woda?”: ojciec próbował gotować, legenda), Roch („Czemu ta woda czerwona?”), celnik (tabliczki, okrzyk).
+- **Kod:** `js/plugins/CzerwonaWoda.js` (nowa, po Przystan). Drobne zmiany w `Farming_Plots.js` (menu morza, łowienie przy brzegu),
+  `Birds.js`, `Przystan.js`, `TownLife_Data.js`.
+- **Grafika:** PixelLab, 15 generacji: `img/system/RedWater_Fish_0/1.png`, `img/characters/!$Przystan_Tabliczka.png`
+  (tools/przystan/art/czerwona).
+- **Test i zrzuty:** `tests/red_water_test.js`; `czerwona_przystan.png`, `czerwona_plaza.png`, `czerwona_popup.png`, `czerwona_szara.png`.

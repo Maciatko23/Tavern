@@ -125,6 +125,7 @@ Kilka kroków, kilka dni, 2–4 miejsca i małe wybory.
 | D17 | Petycja do Lorda *(zbieranie podpisów)* | Sołtys Bronisław | ratusz + domy + kuźnia + garbarnia + drzwi dworu | Dwór chce od każdego domu 10 G podatku wojennego. Kuby, Ignaca i obozu na to nie stać. 1) Zbierz 10 podpisów (krzyżyków) — każdego w godzinach, kiedy ta osoba jest na miejscu. Baltazar podpisze tylko za przysługę, Kapral Wit nie podpisze wcale. 2) Zanieś petycję Lordowi (8–20). 3) Lord obniża podatek o połowę i prosi: „Gdybyś coś znalazł pod Kruczymi Skałami, przyjdź najpierw do mnie”. | po dniu 20 | Opinia +8, 30 G od sołtysa; Lord cię zapamiętuje (W7) | plany dnia, rozmowy | petycja (przedmiot), list podatkowy |
 | D18 | Płaszcze przed zimą *(rzemiosło, wybór moralny)* | Garbarz Ignac | garbarnia + obóz + brama wschodnia | Idzie zima, a obóz marznie. Ignac uszyje 5 płaszczy, jeśli przyniesiesz 10× Surowa skóra i 5× Wełna. Kiedy płaszcze są gotowe, Feliks oferuje za nie trzy razy więcej — dla straży dworu. Wybór: płaszcze dla obozu (Opinia, W6) albo dla straży (90 G; Ignac jest wściekły, a część uchodźców odpływa promem). | jesień (dni 70–84) | dla obozu: Opinia +10 i płaszcz dla ciebie; dla straży: 90 G | polowanie, wełna, garbarnia, zimno | nic (Płaszcz już jest) |
 | D19 | Kość z Kruczych Skał *(kości, Akt II)* | Nieznajomy w kapturze | stół kości w tawernie + dzwonnica + zamknięty ogród | Wygraj z Nieznajomym Kość z Kruczych Skał. Na jej ściankach zamiast oczek są kreski i przerwy — rytm dzwonu. Ambroży poznaje w nim sygnał zakonu „pytanie”. Rzucona przy posągu bez nosa, kość zawsze pada tą samą ścianką i wskazuje płytę w ścieżce. | od Sławy w tawernie 80 | klucz do zagadki ogrodu (W2), +100 dośw. | kości (TavernDice), Sława w tawernie | znaczenie kości w ogrodzie |
+| D21 | Spalona zagroda *(ziemia, odbudowa, wybór moralny)* | sama się zaczyna (zgliszcza albo krzyż w zagrodzie) | Spalona zagroda (mapa 168, na zachód od Skraju lasu) + Podgrodzie (Józek Łata, Marta) + ratusz | Za Skrajem lasu stoją zgliszcza zagrody Ługów. 1) Józek Łata opowiada: sześć lat temu Jan Ług pożyczył od starego Zaleskiego na ziarno, nie oddał w terminie, ludzie dworu zmierzyli ziemię, a w nocy dom spłonął (dworscy czy sam Jan? nikt nie dowiódł). 2) Marta Ługowa: „tam jest tylko popiół i grób”, ale chciałaby, żeby z komina znowu szedł dym. 3) Sołtys: stare prawo wyspy (ziemia za długi, odłogiem ponad 5 lat, wraca do rodu, gdy ród się upomni i zapłaci wpis). Wybór, 350 G w obu: od dworu (Lord: „Popiół? Bierz…”, Opinia −2) albo przez Martę (100 wpisu, reszta dla niej, Opinia +5). 4) Odbudowa: uprzątnij zgliszcza (łopata albo siekiera, 30 uderzeń; z gruzu Kamień, Drewno, Gwoździe i osmalony konik Franka). 5) Konik dla Marty (Opinia +2). 6) Podmurówka (Kamień 30, Mokra glina 8), ściany z bali (Drewno 30, Gwoździe 30), dach (Deski 20, Włókno 25, Gwoździe 20), drzwi z paleniskiem (Deski 12, Żelazo 4, Cegła 12) - młotek, 30/50/40/30 uderzeń. Dom gotowy: dym z komina, izba (mapa 169) z łóżkiem, dużą skrzynią i kredensem. Studnia do odkopania - sucha. Marta przychodzi co 7 dni (15–18) na grób męża. | po obejrzeniu zgliszcz albo krzyża (każdy gracz; po stracie pola podsuwa to dziadek i list Lorda) | ok. 780 pól własnej ziemi (region 8), dom z izbą, +200 dośw. | Farming (`<BuildRegion:8>`), uderzenia jak plac budowy, TownQuests (kroki, wybór), Homes.js | - |
 
 ---
 
@@ -301,7 +302,7 @@ Tekst pieśni (siódma ballada, „Pieśń o Kruczych Skałach”):
 8. **Komnata Serca** (Akt III). Klucz otwiera ostatnie drzwi. Jeśli Borgar jest z tobą, w finale może zająć miejsce strażnika
    zamiast bohatera (zakończenie „strażnik”).
 
-*W grze (2026-10-06), wersja zwarta - tak otwiera się krata do podziemi:* wątek zaczyna się po spłacie długu (koniec rozdziału 1,
+*W grze (2026-10-06), wersja zwarta - tak otwiera się krata do podziemi:* wątek zaczyna się po końcu rozdziału 1 (spłata długu albo - od 2026-10-15 - strata pola;
 notatka Lorda o kamieniach pod tawerną). 1) Borgar przy barze oddaje pół klucza znad baru i mówi, że drugą połowę jego pradziadek
 zakopał z pradziadkiem Stacha przy kamiennym kopcu z krukiem na podwórzu dziadka. 2) Kopanie łopatą u stóp kopca (Map020, 8,6).
 3) Tadek łączy połówki (żelazo i węgiel) - „Klucz kasztelana” nazajutrz rano. 4) Klucz otwiera starą kratę zakonu w piwnicy
@@ -567,7 +568,11 @@ i zmianami w nocnym maratonie — questy miasta mają dawać pieniądze „cieka
 
 ### 6.3 Akt II i dalej
 
-1. **Wejście:** spłacony dług (W7 rozdz. 5) i luźna cegła (W9 rozdz. 2; D12 może ją otworzyć wcześniej).
+1. **Wejście:** koniec rozdziału 1 w jednej z dwóch wersji - **spłacony dług** (W7 rozdz. 5) **albo strata pola** (dług
+   niespłacony o świcie dnia 61: pole przechodzi na Lorda, gra toczy się dalej; Lord odsprzeda je za 3000 G bez terminu - od
+   2026-10-15, Story.js / Homes.js) - i luźna cegła (W9 rozdz. 2; D12 może ją otworzyć wcześniej). Bramki „po spłacie” w kodzie
+   (W4 „Krew kasztelana”, Akt II w TownQuests: Osada / W8, Marek w W6) pytają `Story.chapterEnded()` - spłata albo strata.
+   Zwrotka „kronika” Lorda (W3) - po spłacie połowy długu albo połowy odkupu (`Story.halfWay()`).
 2. **Równolegle w Akcie II:** W2 rozdz. 6–7 (archiwum, Noc Pytania zimą), W4 rozdz. 7–8 (Borgar), W5 rozdz. 7 (Kantor), W6
    rozdz. 6–7 (zima, Marek), W8 rozdz. 2–6 (góry, Grum), W1 rozdz. 7 (cysterna), W3 — jeśli nie została skończona w Noc
    Kupały. Zejście w głąb (W9 rozdz. 3–6) idzie piętro po piętrze, a wątki dorzucają skróty i sojuszników.

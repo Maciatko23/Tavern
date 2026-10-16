@@ -1841,7 +1841,7 @@
                 { ch: 4, type: "custom", talk: "w8Letter", tick: "w8Wall", spotFx: "w8Crate", spots: ["w8_crate"], vars: "w8Vars",
                     text: "Do Gruma idzie przez Baltazara list od mocodawców (od dnia {letter}). Dowiedz się, co w nim jest: podsłuchaj Gruma z wynajętego pokoju nad tawerną (22–24), postaw mu dzban miodu pitnego albo dwa piwa (wieczorem) - albo poszukaj kopii rozkazu w skrzyni dowódcy kopaczy (nocą, po cichu)." },
                 { ch: 5, type: "custom", spotFx: "w8Osada", spots: ["w8_gate", "w8_osada"], vars: "w8Vars",
-                    text: "Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po spłacie długu dziadka). {osada}" },
+                    text: "Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po rozdziale 1 - spłacie długu albo stracie pola). {osada}" },
                 { ch: 6, type: "custom", talk: "w8Choice", vars: "w8Vars",
                     text: "Wybór Gruma (tawerna). Żeby przeszedł na twoją stronę, potrzeba dwóch rzeczy z trzech: uratowanego Marka ({marek}), kronik zakonu ({kroniki}) i wygranego siłowania „na honor” ({honor}). Inaczej - walka z nim przy wejściu do tunelu albo praca dla jego mocodawców." },
                 { ch: 6, type: "custom", tick: "w8Duel",
@@ -1942,7 +1942,7 @@
         // =========================================================== W4 (compact, 2026-10-06): the castellan's key opens the old grate in the cellar
         {
             id: "W4", kind: "W", title: "Krew kasztelana", giver: null, icon: 0, where: "bar w tawernie, podwórze dziadka, kuźnia, piwnica tawerny",
-            when: "po spłacie długu dziadka",
+            when: "po rozdziale 1 (spłata długu albo strata pola)",
             desc: "Lord mówił, że najstarsze kamienie twierdzy leżą pod tawerną Borgara. W piwnicy jest stara krata zakonu z krukiem na zamku. Nad barem wisi pół klucza „na szczęście”.",
             steps: [
                 { ch: 1, type: "custom", talk: "w4Borgar", text: "Zapytaj Borgara o stare kamienie pod tawerną (przy barze)." },
@@ -2252,7 +2252,7 @@
                 hubWigCamp: "Wigilia w dniu {wig}, 17–20, przy ognisku obozu ({camp}): przynieś Ludmile 4 gorące dania z kociołka (gulasz, kapuśniak, zupa grzybowa, owsianka). Masz: {dishes}/4.",
                 hubWigTavern: "Wigilia w dniu {wig}, 17–23, w tawernie: przynieś Borgarowi (przy barze) 4 gorące dania z kociołka (gulasz, kapuśniak, zupa grzybowa, owsianka). Masz: {dishes}/4.",
                 hubWigDone: "Wigilia: zjedzona razem ✓.", hubWigMissed: "Wigilia minęła beze mnie.",
-                hubMarek0: "Marek (Akt II - po spłacie długu dziadka): mąż Ludmiły kopał w drużynie Rafała.",
+                hubMarek0: "Marek (Akt II - po rozdziale 1: spłacie długu albo stracie pola): mąż Ludmiły kopał w drużynie Rafała.",
                 hubMarekAsk: "Akt II. Powiedz Ludmile, czego się dowiedziałeś o Marku (obóz, za dnia).",
                 hubMarek1: "Marek stoi w niszy obozu kopaczy w Jaskini nad kamieniołomem (Góry, za Leśną drogą) - twarzą do ściany. Masz chustę Ludmiły.",
                 hubMarek2: "Marek idzie za tobą. Wyprowadź go z Jaskini (wyjście na dole): nocą po cichu (C), siłą albo dogadaj się ze strażnikiem obozu.",

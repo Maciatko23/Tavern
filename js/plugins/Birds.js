@@ -196,6 +196,7 @@
     function openGround(x, y) {
         if (!$gameMap.isValid(x, y) || !$gameMap.isPassable(x, y, 2) || $gameMap.eventsXy(x, y).length > 0) return false;
         if (window.Farming && (Farming.buildingAt(x, y) || (Farming.isWaterTile && Farming.isWaterTile(x, y)))) return false;
+        if (window.CzerwonaWoda && CzerwonaWoda.nearShore(x, y, 3)) return false;   // (2026-10-15: the red sea's shore stinks - the birds keep off)
         return !guarded($gameMap.mapId(), x, y);
     }
     function groundSpot(away, near) {

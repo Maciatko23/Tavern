@@ -43,13 +43,16 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.eval("Needs.setEnabled(true); Needs.state().water = 40; 0");
     await t.eval("$gameParty.loseItem($dataItems[100], 9); 0");
     await t.popups({ clear: true });
-    const sea = await t.json(`(function(){ const w = Farming.isWaterTile(18, 12), menu = Farming.waterMenu(); return { w, menu: menu ? menu.title : null, sea: Farming.seaHere() }; })()`);
+    const sea = await t.json(`(function(){ const w = Farming.isWaterTile(18, 12), menu = Farming.waterMenu(); return { w, menu: menu ? menu.entries.map(e => e.name) : null, sea: Farming.seaHere() }; })()`);
     const pops = await t.popups();
     t.check("the harbour's sea is water, marked salt (<Water:salt>)", sea.w && sea.sea, sea);
-    t.check("facing the sea without a rod: no menu at all, only the popup over the hero that sea water is salt", sea.menu === null && pops.some(p => /słona/i.test(p)), { sea, pops });
+    // (2026-10-15, CzerwonaWoda.js: the sea's own menu - drink anyway (poison / salt), filling refused; never the ordinary water entries)
+    t.check("facing the sea without a rod: the popup over the hero (red / salt) and the sea's menu - no rod, no ordinary drink",
+        !!sea.menu && !sea.menu.includes("Zarzuć wędkę") && !sea.menu.includes("Napij się") && sea.menu.includes("Napij się mimo to") && pops.some(p => /słona|czerwona/i.test(p)), { sea, pops });
     await t.give(100, 1);
     const withRod = await t.json(`(function(){ const m = Farming.waterMenu(); return m ? { title: m.title, names: m.entries.map(e => e.name) } : null; })()`);
-    t.check("with a rod the sea's menu has only „Zarzuć wędkę” - no drink, no waterskin, no can, no bucket", !!withRod && withRod.title === "Morze" && withRod.names.length === 1 && withRod.names[0] === "Zarzuć wędkę", withRod);
+    t.check("with a rod the sea's menu starts with „Zarzuć wędkę” - and has no plain drink, waterskin, can or bucket filling",
+        !!withRod && withRod.names[0] === "Zarzuć wędkę" && !withRod.names.some(n => /^Napij się$|bukłak|konewk|Napełnij/.test(n)), withRod);
     // the button itself, facing the water from the quay: the thirst stays as it was
     await t.locate(19, 12, 4);
     await t.press("ok");
@@ -66,7 +69,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // fishing at sea: herring, now and then a cod (cast a few times: the chance is the game's own)
     let caught = [0, 0, 0], casts = 0;
     for (; casts < 10 && caught[0] + caught[1] === 0; casts++) {
-        await t.eval("$gamePlayer.locate(19, 12); $gamePlayer.setDirection(4); if ($gameSystem.changeStamina) $gameSystem.changeStamina(100); Farming.goFishing(); 0");
+        // (from the jetty's end - the open water, healthy even in the red tide; by the shore the bloom spoils the catch)
+        await t.eval("$gamePlayer.locate(7, 7); $gamePlayer.setDirection(4); if ($gameSystem.changeStamina) $gameSystem.changeStamina(100); Farming.goFishing(); 0");
         await t.frames(200);
         await t.finish(4);
         caught = await t.json("[$gameParty.numItems($dataItems[173]), $gameParty.numItems($dataItems[174]), $gameParty.numItems($dataItems[98])]");

@@ -272,6 +272,7 @@
     // move to Tawerna.inject; the editor's own events stay far below (the biggest map, Map025, ends at 354).
     const reserved = [
         { owner: "Story", from: 901, to: 902, what: "dziadek (mapa 19), Lord (dwór)" },
+        { owner: "Homes", from: 700, to: 729, what: "pole po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
         { owner: "TownLife", from: 910, to: 949, what: "mieszkańcy miasteczka (mapa 8)" },
         { owner: "TavernLife", from: 950, to: 950, what: "sztaluga z planem karczmy (mapy 1, 25, 26)" },
         { owner: "TownQuests", from: 951, to: 959, what: "miejsca questów miasteczka (mapy 8, 22)" },

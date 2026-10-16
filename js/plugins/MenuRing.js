@@ -135,7 +135,7 @@
         // (the file lists' card: the level, the purse, grandpa's debt, the hero's bust)
         try { const xp = heroXp(); if (xp) info.level = xp.level; } catch (e) { /* (no level) */ }
         try { if (window.$gameParty) info.gold = $gameParty.gold(); } catch (e) { /* (no purse) */ }
-        try { const d = debtInfo(); if (d) info.debt = { paid: d.paid, debt: d.debt, done: d.done }; } catch (e) { /* (no debt) */ }
+        try { const d = debtInfo(); if (d) info.debt = { paid: d.paid, debt: d.debt, done: d.done, lost: !!d.lost }; } catch (e) { /* (no debt) */ }
         try { info.bust = T.ui && T.ui.heroBust ? T.ui.heroBust() : "Hero_Bust"; } catch (e) { info.bust = "Hero_Bust"; }
         return info;
     };
@@ -254,6 +254,8 @@
     function debtInfo() {
         const ST = T.api("Story"), s = ST && ST.state ? ST.state() : null;
         if (!s || s.debt === undefined || s.pending) return null;
+        // (2026-10-15) the field lost: the buyback instead of the debt (no deadline; the days left to carry things off the field)
+        if (s.lost && s.buy) return { paid: Math.min(s.buy.paid, s.buy.price), debt: s.buy.price, done: !!s.buy.done, days: ST.carryLeft ? ST.carryLeft() : 0, lost: true };
         return { paid: Math.min(s.paid, s.debt), debt: s.debt, done: !!(s.done || s.paid >= s.debt), days: ST.daysLeft ? ST.daysLeft() : 0 };
     }
 
@@ -398,9 +400,14 @@
         ctx.fillRect(x0 + 754, y0 + 10, 1, 28);
         CH.spaced(b, "Sakiewka", x0 + 564, y0 + 2, 18, { size: 12 });
         textOut(b, $gameParty.gold() + " G", x0 + 564, y0 + 20, 180, 26, "left", { size: 16, color: GOLD, plain: true });
-        CH.spaced(b, "Dług dziadka", x0 + 774, y0 + 2, 18, { size: 12 });
-        if (debt) {
-            if (debt.done) textOut(b, "spłacony", x0 + 774, y0 + 20, 200, 26, "left", { size: 16, color: GREEN_OK, plain: true });
+        CH.spaced(b, debt && debt.lost ? "Odkup pola" : "Dług dziadka", x0 + 774, y0 + 2, 18, { size: 12 });
+        if (debt && debt.lost && !debt.done) {
+            textOut(b, debt.paid + " / " + debt.debt + " G", x0 + 774, y0 + 20, 130, 26, "left", { size: 16, plain: true });
+            bar(ctx, x0 + 894, y0 + 30, 110, 4, debt.paid / Math.max(1, debt.debt), C.accent);
+            const n = debt.days, left = n > 1 ? "wynieś: " + n + " " + plural(n, "dzień", "dni", "dni") : n === 1 ? "wynieś: dziś" : "bez terminu";
+            textOut(b, left, x0 + w - 120, y0 + 20, 104, 26, "right", { size: 16, color: n >= 1 ? WARN : C.text, plain: true });
+        } else if (debt) {
+            if (debt.done) textOut(b, debt.lost ? "odkupione" : "spłacony", x0 + 774, y0 + 20, 200, 26, "left", { size: 16, color: GREEN_OK, plain: true });
             else {
                 textOut(b, debt.paid + " / " + debt.debt + " G", x0 + 774, y0 + 20, 130, 26, "left", { size: 16, plain: true });
                 bar(ctx, x0 + 894, y0 + 30, 110, 4, debt.paid / Math.max(1, debt.debt), C.accent);
@@ -1651,13 +1658,13 @@
         if (info.playtime) rows.push(["Czas gry", info.playtime]);
         if (info.level) rows.push(["Poziom", String(info.level)]);
         if (info.gold !== undefined) rows.push(["Sakiewka", info.gold + " G"]);
-        if (info.debt) rows.push(["Dług dziadka", info.debt.done ? "spłacony" : info.debt.paid + " / " + info.debt.debt + " G"]);
+        if (info.debt) rows.push([info.debt.lost ? "Odkup pola" : "Dług dziadka", info.debt.done ? (info.debt.lost ? "odkupione" : "spłacony") : info.debt.paid + " / " + info.debt.debt + " G"]);
         if (info.hutBuilt !== undefined) rows.push(["Chatka", info.hutBuilt ? "zbudowana" : "jeszcze nie ma"]);
         if (info.timestamp) rows.push(["Zapisano", stampOf(info.timestamp)]);
         let yy = y + big + 30;
         for (const [lab, val] of rows) {
             textOut(b, lab, x, yy - 13, 200, 26, "left", { size: 16, face: "regular", color: C.muted, plain: true });
-            textOut(b, String(val), x + 140, yy - 13, w - 140, 26, "right", { size: 16, color: lab === "Dług dziadka" && info.debt && info.debt.done ? GREEN_OK : C.text, plain: true });
+            textOut(b, String(val), x + 140, yy - 13, w - 140, 26, "right", { size: 16, color: (lab === "Dług dziadka" || lab === "Odkup pola") && info.debt && info.debt.done ? GREEN_OK : C.text, plain: true });
             b.context.fillStyle = "rgba(44,46,52,1)";
             b.context.fillRect(x, yy + 14, w, 1);
             yy += 32;

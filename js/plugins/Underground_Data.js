@@ -728,8 +728,9 @@
                         ["dziadek", "Tego, że cię kocham, i tak nikt mi nie musiał mówić."]);
                     else if (e.kind === "zniszczyc") out.push(["dziadek", "Coś się w nocy zmieniło. Spałem jak dziecko - pierwszy raz od lat."]);
                     else if (e.kind === "zapieczetowac") out.push(["dziadek", "Nie mów mi, co tam było. Wystarczy, że wróciłeś."]);
+                    else if (w.fieldLost) out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Pole poczeka - Lord też kiedyś umrze." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, a my - siebie nawzajem. Pole poczeka."]);
                     else out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Pole czeka." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, ty pilnuj pola."]);
-                    out.push(["dziadek", "Bałem się, że jak dług zniknie, to nikt już nie zapuka. A tu proszę - ktoś puka."]);
+                    out.push(["dziadek", w.fieldLost ? "Bałem się, że jak pole przepadnie, to nikt już nie zapuka. A tu proszę - ktoś puka." : "Bałem się, że jak dług zniknie, to nikt już nie zapuka. A tu proszę - ktoś puka."]);
                     return out;
                 }
             },

@@ -90,7 +90,11 @@
     const stockpile = mapId => built("stockpile", mapId)[0] || null;
     function kennelAnywhere() {
         const all = (F() && F().farm().buildings) || {};
-        for (const m of Object.keys(all)) { const k = (all[m] || []).find(b => b.type === "doghouse" && !b.site); if (k) return { b: k, map: Number(m) }; }
+        for (const m of Object.keys(all)) {
+            if (F().landHeld && F().landHeld(Number(m))) continue;   // (a kennel on the field lost to the Lord is not its home any more - Homes.js)
+            const k = (all[m] || []).find(b => b.type === "doghouse" && !b.site);
+            if (k) return { b: k, map: Number(m) };
+        }
         return null;
     }
     // where it lies at the kennel: the tile in front of its door; where it drops things at the stockpile: the tile in front of it

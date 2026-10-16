@@ -1456,7 +1456,8 @@
         $gameSystem.addBuff("inspired", hours);
         T.popup("Natchniony (" + hours + " godz.)", { icon: 80, kind: "good" });
     }
-    const halfPaid = () => { const St = ST(); try { const s = St && St.active && St.active() ? St.state() : null; return !!s && s.paid >= s.debt / 2; } catch (e) { return false; } };
+    // (2026-10-15) half the debt paid - or, the field lost, half its buyback (Story.halfWay)
+    const halfPaid = () => { const St = ST(); try { const s = St && St.active && St.active() ? St.state() : null; return !!s && (St.halfWay ? St.halfWay() : s.paid >= s.debt / 2); } catch (e) { return false; } };
     // the next Noc Kupały (summer, its 14th day - day 42 in the first year) from today on
     function nextKupala() {
         for (let d = day(); d < day() + 4 * T.time.seasonLength() + 2; d++) {
@@ -1485,7 +1486,8 @@
         const St = ST();
         let story = null;
         try { story = St && St.active && St.active() ? St : null; } catch (e) { story = null; }
-        if (story && !story.state().done) out.push("Twój dziadek nie śpi po nocach. Liczy dni do terminu - zostało ich " + Math.max(0, story.daysLeft()) + ". I modli się za ciebie, choć mówi, że nie umie.");
+        if (story && story.isOpen && story.isOpen()) out.push("Twój dziadek nie śpi po nocach. Liczy dni do terminu - zostało ich " + Math.max(0, story.daysLeft()) + ". I modli się za ciebie, choć mówi, że nie umie.");
+        else if (story && story.fieldLost && story.fieldLost()) out.push("Twój dziadek chodzi o świcie na skraj lasu i patrzy na pole, którego już nie ma. Nie mów mu, że wiesz. Nie żal mu ziemi - żal mu ciebie.");
         else out.push("Śni ci się woda. Ciemna, pod kamieniem. Ta sama, co mnie.");
         out.push("Zejdziesz kiedyś tam, gdzie ja wpadłem. Nie bój się ciemności, synku. Bój się pytań. Jedno pytanie - nigdy więcej.");
         return out;
@@ -2871,7 +2873,8 @@
             }
         },
         // ---- W4 (compact, 2026-10-06): the castellan's key - after the debt; it opens the order's grate in the cellar (Underground.js)
-        startW4: () => { const St = ST(); try { const s = St && St.active && St.active() ? St.state() : null; return !!s && !!s.done; } catch (e) { return false; } },
+        // (2026-10-15) after chapter 1 in either ending: the debt paid or the field lost (Story.chapterEnded)
+        startW4: () => { const St = ST(); try { const s = St && St.active && St.active() ? St.state() : null; return !!s && (St.chapterEnded ? St.chapterEnded() : !!s.done); } catch (e) { return false; } },
         w4Borgar: {
             borgarTopic: q => (q.lines || {}).askTopic,
             borgarList(q, r, st, spk) {
@@ -3993,6 +3996,8 @@
     function w6Harvest() {
         const F = T.api("Farming");
         if (!F || !F.farm || !F.CROPS) return null;
+        const St = ST();   // (2026-10-15: the field lost to the Lord - the helpers do not harvest the Lord's field)
+        try { if (St && St.fieldLost && St.fieldLost()) return null; } catch (e) { /* (no story) */ }
         const farm = F.farm(), plots = farm.plots[FIELD] || {}, got = {};
         let n = 0;
         for (const k of Object.keys(plots)) {
@@ -4096,10 +4101,10 @@
     // ---- W8 (2026-10-06): the mountains. The maps agent's switches: 15 "Gory_TunelKopaczy" (the diggers' tunnel to floor 50), 16
     // "Osada_Milczacych" (the Silent's gate); the guest rooms over the tavern (Map025) for the thin wall
     const ROOMS = 25, CAVE = 14, SW_TUNNEL = 15, SW_OSADA = 16;
-    // Act II: the debt paid (Story's chapter 1 done) - or no story game at all
+    // Act II: chapter 1 over (Story's debt paid, or - 2026-10-15 - the field lost) - or no story game at all
     function actTwo() {
         const St = ST();
-        try { return !(St && St.active && St.active()) || !!(St.state() || {}).done; } catch (e) { return true; }
+        try { return !(St && St.active && St.active()) || (St.chapterEnded ? St.chapterEnded() : !!(St.state() || {}).done); } catch (e) { return true; }
     }
     // a marker "Miejsce: <name>" on this map
     function markerAt(name) {

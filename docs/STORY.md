@@ -101,20 +101,76 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
   **Feliks**, który też przyjmuje pieniądze.
 - **Dług:** 2500 G do dnia 60. Pieniądze liczą się jeszcze w nocy po
   terminie, do świtu (6:00) dnia 61. O świcie ludzie Lorda przychodzą
-  zmierzyć pole — jeśli dług nie jest spłacony, pole przepada i gra się
-  kończy (można wczytać zapis). Przypomnienia: listy od Lorda w dniach 20,
-  40, 55, 59 i 60.
+  zmierzyć pole — jeśli dług nie jest spłacony, pole przechodzi na Lorda,
+  ale gra toczy się dalej (od 2026-10-15; dawny koniec gry śpi za
+  parametrem „Przegrana kończy grę”). Przypomnienia: listy od Lorda w
+  dniach 20, 40, 55, 59 i 60.
 - **Praca:** Borgar zatrudnia bohatera; zmiana w tawernie (od 16 do 21, raz
   dziennie, 4 godziny) to cztery mini-gry, płaca od wyniku + napiwki.
   Borgar skupuje też towar.
-- **Koniec rozdziału:** spłata całości — pole zostaje przy rodzinie,
-  dziadek dziękuje (pokwitowanie przynosi Feliks).
+- **Koniec rozdziału — dwie wersje:**
+  - **spłata całości** — pole zostaje przy rodzinie, dziadek dziękuje
+    (pokwitowanie przynosi Feliks);
+  - **strata pola** (dług niespłacony o świcie dnia 61) — kamerdyner
+    (Feliks, a gdy go nie ma, Teodor) i dwóch strażników w barwach Lorda
+    mierzą pole i stawiają znak „Własność Lorda Zaleskiego” (scena, gdy
+    bohater jest na polu albo pierwszy raz tam wejdzie; gdzie indziej list
+    od Lorda). Bohater ma **3 dni** na wyniesienie dobytku: plony, skrzynie,
+    rozbiórka budynków (połowa materiałów, jak zawsze), zwierzęta z zagród
+    (sprzedać kupcowi bydła albo zabrać — zamieszkają w nowej zagrodzie na
+    własnej ziemi), pies (idzie z bohaterem; buda i składowisko zostają przy
+    polu). Meble chatki zostają w niej, z polem; chatkę można postawić od
+    nowa na własnej ziemi. Po trzecim świcie straż zamyka pole (strażnik
+    przy wejściach ze Skraju lasu i z Łąki, dymek „Pole należy teraz do
+    Lorda.”); to, co zostało, należy do Lorda, ale nie znika.
+  - **Gdzie mieszkać potem:** dom dziadka nie był w zastawie (posłanie
+    czeka), pokój w tawernie, namiot albo leśne legowisko — i dwa domy z
+    ziemią, dla każdego gracza, także po spłacie (w miasteczku domu nie ma:
+    „gdzie tam miejsce na pole z tyłu”):
+    - **Chata pod lasem na Podgrodziu** (600 G u sołtysa, 8–16, przed
+      ratuszem albo w środku): chata z bali na dole Podgrodzia (mapa
+      powiększona o 20 rzędów u dołu), w izbie łóżko, skrzynia i palenisko;
+      obok ogrodzona działka 20 × 12 pól.
+    - **Spalona zagroda Ługów** (na zachód od Skraju lasu) — zadanie D21.
+      Sześć lat temu Jan Ług pożyczył od starego Zaleskiego (ojca Leopolda)
+      na ziarno po suchym roku, nie oddał w terminie, ludzie dworu zmierzyli
+      ziemię, a w nocy dom spłonął — Jan mówił, że to dworscy, dwór, że Jan
+      sam ze złości; nikt niczego nie dowiódł. Ługowie przenieśli się na
+      Podgrodzie, Jan zmarł zeszłej zimy, **Marta Ługowa** pierze, Franek ma
+      osiem lat. Ziemia zapisana na dwór, odłogiem. Józek Łata opowiada,
+      Marta nie chce wracać („tylko popiół i grób”), ale chciałaby, żeby z
+      komina znowu szedł dym. Sołtys zna stare prawo wyspy: ziemia zabrana
+      za długi i leżąca odłogiem ponad pięć lat wraca do rodu, jeśli ród się
+      upomni i zapłaci wpis. 350 G: od dworu („Popiół? Bierz.”, Opinia −2)
+      albo przez Martę (wpis + reszta dla niej, Opinia +5). Potem odbudowa
+      domu w pięciu etapach (zgliszcza z osmalonym konikiem Franka —
+      oddany Marcie —, podmurówka, ściany z bali, dach, drzwi z paleniskiem);
+      gotowy dom: dym z komina, izba z łóżkiem, dużą skrzynią i kredensem.
+      Ziemi ok. 780 pól (podwórze i zarośnięte pole: krzaki, pnie, kamienie
+      do usunięcia). Marta co tydzień przychodzi na grób męża przy lesie.
+    Ziemia obu domów to własna ziemia — wolno tam budować wszystko, także
+    chatkę. Bez studni (susza; studnia zagrody po odkopaniu jest sucha).
+  - **Odkup:** Lord (przed dworem 8–20, nocą kamerdyner) odsprzeda pole za
+    **3000 G**, w ratach jak dług, bez terminu. Po spłacie całości pole
+    wraca z tym, co na nim zostało (budynki, meble chatki); dziadek dziękuje
+    jak po spłacie, Lordowski akt odkupu wisi w ramce.
+  - Dziadek po stracie: smutny, ale ciepły — „Dom nie był w zastawie…
+    Jesteś cały i zdrowy - to więcej, niż śmiałem prosić.” Nikogo nie obwinia.
 - **Haczyk (propozycja, do potwierdzenia):** przy ostatniej spłacie Lord
   (albo Feliks) wspomina rodzinną bajkę: dwór postawiono z kamieni dawnej
   Twierdzy Kruczych Skał, najstarsze leżą pod tawerną, a „pod Kruczymi
   Skałami są drzwi, których nikt nie powinien otwierać”. Lord traktuje to
   jak bajkę dla dzieci — nie wiadomo jeszcze, czy dwór ma związek z
-  frakcją, która wynajęła Gruma (patrz „Otwarte wątki”).
+  frakcją, która wynajęła Gruma (patrz „Otwarte wątki”). **W wersji ze
+  stratą pola** haczyk przekazuje kamerdyner przy mierzeniu pola („Jaśnie
+  pan mówi, że to może być warte więcej niż pole”), a gdy bohatera nie ma
+  na polu — list od Lorda (dopisek); Lord przypomina o tym przy pierwszej
+  rozmowie o odkupie. Dalej obie wersje idą tak samo (Akt II, W4).
+- **Serce (Akt III) po stracie pola:** póki pole nie jest odkupione, Lord
+  przy Sercu jest **rywalem** (trzyma ziemię dziadka i chce być pierwszy
+  pod tawerną) — chyba że bohater zrobił z niego sojusznika (W1, cicha
+  droga) albo powiedział mu jego prawdę (W9 rozdz. 6). Po odkupie — jak po
+  spłacie długu.
 
 ## Postacie (przepisane pod fabułę)
 
@@ -202,6 +258,11 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   **Roch Szkwał** (przeżył sztorm, ukrywa się w szopie przy pochylni; jego kuter: wrak na plaży → zadanie D20), celnik Lorda
   **Sambor Kwit** (księga, „kamienie z krukiem do zgłoszenia”), prom przy molo w dni promu (bez kursów dla bohatera), morze słone.
   Na mieliźnie w zatoce wrak okrętu jednej ze stron (na razie tło). Koncepcja: docs/przystan/KONCEPCJA.md.
+  **Czerwona woda (od 2026-10-15):** woda pitna jest tylko w studniach, w rzece i z deszczu, nigdy z morza. W suszę morze przy wyspie
+  zakwita: przy brzegu woda jest rdzawoczerwona, cuchnie, a fale wyrzucają śnięte ryby. Rybacy wiedzą, że tej wody nie pije się nawet
+  przegotowanej: trucizna zakwitu nie znika przy gotowaniu, a sól i tak zostaje (ojciec Janka próbował i ledwo przeżył). Po kilku dniach
+  deszczu woda blednie i robi się szara, ale dalej jest słona. Starzy ludzie mówią, że to **„krew Kruczych Skał”**: Serce pod skałą
+  krwawi do morza, kiedy przychodzi susza. To tylko legenda w tle, bez związku z mechaniką Serca. Celnik stawia tabliczki „Nie pić!”.
 - **Urwisko Kruków** - morska ściana wzgórza tawerny; kruki gnieżdżą się w resztkach murów. Zakon używał ich jako posłańców. Oswojony
   kruk (jak pies) przynosi listy, poszlaki, czasem cudze sekrety.
 - **Latarnia na przylądku** - stoi na dawnej strażnicy zakonu. Soczewka to może odłamek Serca: we mgle pokazuje latarnikowi rzeczy, których
