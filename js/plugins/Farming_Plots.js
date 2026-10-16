@@ -536,11 +536,13 @@
     // ---- a well that gives little (the town's market well - user 2026-10-05: "studnia daje, ale mało", the sołtys rations it): an
     // event with <Studnia:N> in its note lets the hero draw N times a day - a drink, the waterskin, the can, the bucket: one draw each.
     // Its page runs Farming.rationWell(this). The day's draws in the farm state (per map and event name - a well of two events counts once).
-    // (+ TownQuests.wellBonus: the town's quests may give the well more - W1, the sluice half open: one draw a day more)
+    // (+ TownQuests.wellBonus: the town's quests may give the well more - W1, the sluice half open: one draw a day more - or less:
+    // the Order's cistern under 15, Cysterna.js, one draw a day less; never under one draw a day)
     function rationOf(ev) {
         const m = ev && ev.event().note && /<Studnia:\s*(\d+)\s*>/i.exec(ev.event().note);
-        const more = m ? Math.max(0, Math.floor(Number(T.call("TownQuests", "wellBonus", $gameMap.mapId(), ev.event().name)) || 0)) : 0;
-        return m ? { key: $gameMap.mapId() + ":" + ev.event().name, max: Number(m[1]) + more, name: ev.event().name } : null;
+        const more = m ? Math.floor(Number(T.call("TownQuests", "wellBonus", $gameMap.mapId(), ev.event().name)) || 0) : 0;
+        const base = m ? Number(m[1]) : 0;
+        return m ? { key: $gameMap.mapId() + ":" + ev.event().name, max: Math.max(Math.min(1, base), base + more), less: more < 0, name: ev.event().name } : null;
     }
     function rationLeft(r) {
         const rec = (farm().rations || {})[r.key];
@@ -552,7 +554,7 @@
         changed();
     }
     function rationMenu(r) {
-        const left = rationLeft(r), note = "\nStudnia daje mało - sołtys przydziela wodę: " + r.max + (r.max === 1 ? " nabranie" : " nabrania") + " na dzień. Zostało dziś: " + left + ".";
+        const left = rationLeft(r), note = "\n" + (r.less ? "Studnia prawie sucha" : "Studnia daje mało") + " - sołtys przydziela wodę: " + r.max + (r.max === 1 ? " nabranie" : " nabrania") + " na dzień. Zostało dziś: " + left + ".";
         const wrap = e => Object.assign({}, e, { enabled: e.enabled && left > 0, help: e.help + note,
             run: () => {
                 if (rationLeft(r) < 1) { complain(ICON.thirst, "Na dziś koniec przydziału"); return false; }
@@ -566,7 +568,7 @@
         const ev = interpOrEvent && typeof interpOrEvent.eventId === "function" ? $gameMap.event(interpOrEvent.eventId()) : interpOrEvent;
         const r = rationOf(ev);
         if (!r) return false;
-        if (rationLeft(r) < 1) { complain(ICON.thirst, "Na dziś koniec przydziału wody"); return false; }
+        if (rationLeft(r) < 1) { complain(ICON.thirst, r.less ? "Studnia prawie sucha - na dziś koniec przydziału" : "Na dziś koniec przydziału wody"); return false; }
         const menu = rationMenu(r), scene = SceneManager._scene;
         if (scene && typeof scene.openFarmMenu === "function") scene.openFarmMenu(menu.title, menu.entries);
         return true;

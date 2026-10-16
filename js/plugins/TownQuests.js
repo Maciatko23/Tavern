@@ -774,7 +774,8 @@
         }
         // (one thing at a time with each person: his own quest not done yet - he reminds of it before offering another)
         if (own && !story) { if (own.pop) own.pop(); return own.list; }
-        for (const q of QUESTS) if (q.giver === key && (!story || q.offer.auto) && offerable(q)) { const list = offerList(q, spk); if (list && list.length) return list; }
+        // (a quest with no offer - D24 "Oswojony kruk" starts by itself, giver grandpa - is skipped, 2026-10-16)
+        for (const q of QUESTS) if (q.giver === key && q.offer && (!story || q.offer.auto) && offerable(q)) { const list = offerList(q, spk); if (list && list.length) return list; }
         if (remind && !story) { if (remind.pop) remind.pop(); return remind.list; }
         return null;
     }
@@ -4554,7 +4555,10 @@
         for (let d = from; d < from + 40 && out.length < n; d++) {
             for (const e of D.CALENDAR.events) if (e.day === d) out.push({ day: d, title: e.title, text: e.text, wait: e.wait });
             if (T.time.isEaster(d) && !T.time.isEaster(d - 1)) out.push({ day: d, title: "Wielkanoc", text: "Pisanki, święcone, a śmigus-dyngus bez wody - sołtys zakazał." });
-            if (T.time.isWigilia(d) && !T.time.isWigilia(d - 1)) out.push({ day: d, title: "Wigilia", text: "Wspólna wieczerza. O północy Ambroży bije siedem razy." });
+            // (2026-10-16, W2 rozdz. 7) at midnight the bell of the scriptorium's tower on the cliff strikes seven - once its heart hangs there
+            if (T.time.isWigilia(d) && !T.time.isWigilia(d - 1)) out.push({ day: d, title: "Wigilia", text: S().flags.sercePustelni
+                ? "Wspólna wieczerza. O północy dzwon w wieży skryptorium na klifie bije siedem razy - Noc Pytania u brata Kleofasa."
+                : "Wspólna wieczerza. Mówią, że dawniej o północy bił siedem razy dzwon w wieży skryptorium na klifie." });
         }
         return out;
     }
@@ -4647,7 +4651,8 @@
         bellOpts: null, vcount, FX,
         // (2026-10-05) the market well's ration grows once the sluice is half open (Farming_Plots.rationOf asks it), the dice's options
         // for the tests (K39: { auto, turbo, seed, rules }), the places' events, what a resident would remark now
-        wellBonus: mapId => (has() && mapId === TOWN && S().flags.sluiceHalf ? D.WELL_BONUS || 0 : 0),
+        // (2026-10-16) minus one while the Order's cistern is under 15 (Cysterna.wellLow(): found, W1 ch. 7 done, the reserve low)
+        wellBonus: mapId => (has() && mapId === TOWN ? (S().flags.sluiceHalf ? D.WELL_BONUS || 0 : 0) - (T.call("Cysterna", "wellLow") ? 1 : 0) : 0),
         diceOpts: null, spotEv, slabId, remarkFor: key => (has() ? remarkFor(key) : null), nightOf,
         // (2026-10-06) the tavern's regulars (TavernLife_Regulars asks these), the places that answer (the gate, the plinths), the
         // regulars' quest topics, the verses of W3, the cap of K33, D6's bouts (armOpts: the tests' bot settings for the arm-wrestling)

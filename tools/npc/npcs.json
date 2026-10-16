@@ -1569,5 +1569,274 @@
     "scale": null,
     "height_px": 60,
     "notes": "Przystań, komora celna; czerwień jak u Kaprala i Strażnika ((182, 32, 27) / (127, 22, 19)), czarny koń na piersi (na 64 px mały znak). Księga pod lewą pachą: szablonowy chód gubił ją w W, NW, SE (i migała w NE), więc te 4 kierunki z trybu skeleton-v3 (księga w każdej klatce; w NW i SE w klatkach 6-8 kołysze się z ręką). W E i N księgi nie widać (lewa ręka po drugiej stronie) - tak jak w rotacjach."
+  },
+  {
+    "key": "Zolnierz",
+    "name": "Żołnierz królewski (garnizon nad zatoką)",
+    "pixellab_id": "5fbceaa7-bdc4-4f88-bcad-f969f3296b8b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "b8405a71-dc31-4d44-a84c-4db084554ed3",
+    "animation": "walk",
+    "description": "a royal army foot soldier about 25, a round steel kettle helmet with a brim, short brown beard, a pale sky-blue and white tabard with an orange phoenix on the chest over grey chain mail, chain mail sleeves, a brown leather belt with a short sword in a scabbard at the left hip, grey trousers, brown leather boots, plain medieval soldier, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Zolnierz",
+    "walk8": "Npc_Zolnierz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Garnizon (pakiet D). Drugi kolor (wariant B) robi tools/garnizon/art/recolor.py."
+  },
+  {
+    "key": "Rotmistrz",
+    "name": "Rotmistrz Florian Bełza (garnizon nad zatoką)",
+    "pixellab_id": "54201c16-d790-42cd-8de0-80f5c1d6f49a",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "703bc5be-2f2e-4f8d-98c3-6d645df2a82c",
+    "animation": "walk",
+    "description": "Florian Belza, a royal cavalry captain about 50, weathered stern tired face, short grey hair, a long thick grey drooping moustache, clean-shaven chin, a pale sky-blue and white knee-length tabard over a steel breastplate, a big orange-red phoenix with spread wings on the chest, grey chain mail sleeves, a dark blue sash at the waist, a curved sabre in a black scabbard hanging at his left hip, dark grey trousers, tall black riding boots, medieval royal army officer, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Rotmistrz",
+    "walk8": "Npc_Rotmistrz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Garnizon (pakiet D). Utyka na lewą nogę tylko w tekstach (szablon chodu)."
+  },
+  {
+    "key": "Kwatermistrz",
+    "name": "Kwatermistrz Pafnucy Kłos (garnizon nad zatoką)",
+    "pixellab_id": "8decabac-cd0d-4dc4-afa8-879665be7c8b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "87835249-65a7-4d49-986b-3ae558fc35c9",
+    "animation": "walk",
+    "description": "Pafnucy Klos, a royal army quartermaster about 45, very fat with a big round belly, ruddy red cheeks, jolly round face, bald on top with short brown hair at the sides, bushy brown side whiskers, a pale sky-blue and white army tabard with a small orange phoenix on the chest stretched over his belly, a brown leather apron over the tabard, a thick brown leather-bound ledger book held under his left arm, a small wooden abacus hanging from his belt, brown trousers, brown boots, medieval army supply officer, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Kwatermistrz",
+    "walk8": "Npc_Kwatermistrz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Garnizon (pakiet D). Fartuch wyszedł biały (nie brązowy) - popiersie tak samo."
+  },
+  {
+    "key": "Rozbitek",
+    "name": "Eryk Sowa / Ansgar Wiel (rozbitek, tawerna)",
+    "pixellab_id": "b3eace78-d16a-41a8-9e07-ac0c67976dcc",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "944a8219-246b-4109-a87e-6fa48ed30472",
+    "animation": "walk",
+    "description": "Ansgar the castaway cartographer posing as a cloth merchant, a thin gaunt man about 35, pale tired face with dark stubble, a thin pale scar over the left eyebrow, dark brown hair tied back in a short ponytail, an oversized worn grey wool coat that is too big for him, sleeves long down over the wrists, a dull grey-brown linen shirt under it, a plain leather belt with a small ink pouch, dark brown trousers, worn dark leather ankle boots, black ink stains on his fingers, poor medieval traveller, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Rozbitek",
+    "walk8": "Npc_Rozbitek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": -1,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Pakiet E (Wrak). Rozbitek z Białej Źrenicy; w tawernie gosc_9 z danych (Wrak_Data.js)."
+  },
+  {
+    "key": "Pustelnik",
+    "name": "Brat Kleofas (pustelnik na klifie)",
+    "pixellab_id": "7189e97e-a07d-4c0f-bfb3-8cc8a9912ea7",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "6aa5fc70-cbd1-4df0-916a-25443808c9fe",
+    "animation": "walk",
+    "description": "brother Kleofas, an old hermit monk chronicler about 75, thin, stooped, bald with a white fringe, faded pale blue habit, rope belt with a brass cipher disc, sandals",
+    "gens_used": 18,
+    "sheet": "$Npc_Pustelnik",
+    "walk8": "Npc_Pustelnik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
+  },
+  {
+    "key": "Werbownik",
+    "name": "Werbownik Szczepan Bęben (garnizon nad zatoką)",
+    "pixellab_id": "6f7630a7-fab8-423c-82b4-56f79eb17e0c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "11d15d8a-9a0e-433b-9947-3a9e471d7983",
+    "animation": "walk",
+    "description": "Szczepan Beben, a royal army recruiter about 30, lean confident cheerful young man, short dark moustache, a wide-brimmed dark blue felt hat with a long white feather, a pale sky-blue and white doublet with an orange phoenix on the chest, orange stripes on the sleeves, a small red and white military drum hanging at his left hip on a strap, grey trousers, brown knee-high boots, medieval recruiting sergeant, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Werbownik",
+    "walk8": "Npc_Werbownik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Garnizon (pakiet D). Bęben u lewego biodra; w chodzie S i NE dorysowany z rotacji (tools/garnizon/art/werbownik_beben.py)."
+  },
+  {
+    "key": "Latarnik",
+    "name": "Bazyli Krzesiwo (latarnik na przylądku)",
+    "pixellab_id": "639f2bbe-5e9b-4373-ae33-ec5e40773c82",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0af715b4-fcba-484d-872b-78e060c5ce32",
+    "animation": "walk",
+    "description": "Bazyli, an old lighthouse keeper about 60, tall and bony, long grey-white hair tied back, left eye clouded, long black sooty waxed coat, belt with tinder pouch and fire striker, small iron lantern at the left hip",
+    "gens_used": 24,
+    "sheet": "$Npc_Latarnik",
+    "walk8": "Npc_Latarnik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {
+        "south": "6:2"
+      }
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": ""
   }
 ]

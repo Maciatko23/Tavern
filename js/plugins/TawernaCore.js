@@ -271,6 +271,14 @@
     // The id registry. Ids are game-wide (one id = one owner on every map). The old-style injectors are reserved here until they
     // move to Tawerna.inject; the editor's own events stay far below (the biggest map, Map025, ends at 354).
     const reserved = [
+        // (2026-10-16) the six island places (docs/miejsca_wyspy/PAKIETY.md): one owner per package, the same name in its Tawerna.inject
+        { owner: "Pustelnia", from: 600, to: 609, what: "pustelnia na klifie i skryptorium (mapy 155, 156)" },
+        { owner: "Kruk", from: 610, to: 629, what: "Urwisko Kruków, kruczarnia, oswojony kruk (mapa 157 i inne)" },
+        { owner: "Latarnia", from: 630, to: 639, what: "przylądek z latarnią (mapy 159-161)" },
+        { owner: "Garnizon", from: 640, to: 669, what: "garnizon nad zatoką (mapy 162, 163; werbownik na rynku)" },
+        { owner: "Wrak", from: 670, to: 679, what: "wrak na mieliźnie, pod pokładem (mapy 165, 166), rozbitek" },
+        { owner: "Cysterna", from: 680, to: 689, what: "stara cysterna zakonu (mapa 167, zasuwa na 147, krata na 157)" },
+        { owner: "Wyspa", from: 690, to: 699, what: "przejścia do nowych miejsc na mapach użytkownika (125, 13) - wspólny rdzeń Wyspa.js" },
         { owner: "Story", from: 901, to: 902, what: "dziadek (mapa 19), Lord (dwór)" },
         { owner: "Homes", from: 700, to: 729, what: "pole po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
         { owner: "TownLife", from: 910, to: 949, what: "mieszkańcy miasteczka (mapa 8)" },

@@ -123,7 +123,10 @@
     ["Kowal", "Piekarka", "Woziwoda", "Kapral", "Dzwonnik", "Kupiec", "Soltys", "Garbarz", "Feliks", "Lord", "Kamerdyner",
         "Straznik", "Bronek", "Zosia", "Ludmila", "Ela", "Rafal", "Praczka", "Franek", "Drwal", "Klusownik", "Znachorka",
         "Szmaciarz", "Uchodzca", "Zebrak", "Zlodziej", "Gracz", "Bartek", "Woznica", "Marek",
-        "Janek", "Przemytnik", "Celnik"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
+        "Janek", "Przemytnik", "Celnik",
+        // (2026-10-16) the six island places: Kleofas, Bazyli, the garrison's three and its soldier, Ansgar (the packages used to add them at load)
+        "Pustelnik", "Latarnik", "Rotmistrz", "Kwatermistrz", "Werbownik", "Zolnierz", "Rozbitek"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
+    BUSTS["$Npc_Zolnierz_B:0"] = "Zolnierz_Bust";   // (the garrison's second soldier: a recolour, the same face)
     // the tavern regulars' RTP busts did not look like their map sheets ($Npc_Borgar...): drawn anew (tools/busts/make_<key>.py,
     // 2026-10-07). Their old names stay the keys (event tags, the plugins' data, the tests); the picture loaded for one is the new
     // file once it is found there (Tawerna.ui.loadBust asks bustFile; a file not there - the RTP picture as before)

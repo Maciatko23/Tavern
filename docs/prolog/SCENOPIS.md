@@ -124,7 +124,7 @@ Klatka: `prolog_02_kronika.png`.
   > **Matka:** Weź ten list. Dla dziadka Stacha, na Kruczej Wyspie. Oddasz mu do rąk. On cię przyjmie.
   > **\N[1]:** Dziadka? Przecież nigdy go nie widziałem.
   > **Matka:** Ale on cię widział. Na chrzcinach. Płakał jak bóbr, choć się wypierał.
-  > **Matka:** I to... wisiorek z krukiem. Był twojego ojca, a przedtem jego ojca. Nie zgub go, \N[1].
+  > **Matka:** I to... wisiorek z krukiem. Dał mi go mój ojciec, kiedy wyjeżdżałam z wyspy. Teraz jest twój. Nie zgub go, \N[1].
   > **\N[1]:** A ty? Kiedy przypłyniesz?
   > **Matka:** Następnym promem. Obiecuję.
   > *(cisza: matka zawiązuje tobołek, gładzi chłopca po głowie; świeca drga)*

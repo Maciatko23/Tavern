@@ -3,6 +3,8 @@
 // are checked. With [applied dir] (python tools/apply_newstart_maps.py --out DIR) the game gets that dir's Map003/Map008/System
 // instead of data/'s, so the ends on the existing maps can be tried before the apply script has run. Also starts a new game
 // (the start map from that System.json). Set CDP_PORT.
+// A row's 10th item (optional): a script run before the walk (the island's sandbar: the low tide); kind "action": the hero faces the
+// exit and presses OK (the Urwisko's grate - an object, not walked into).
 const { launch, sleep } = require("../../tests/cdp.js");
 const fs = require("fs"), path = require("path");
 const list = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
@@ -43,16 +45,18 @@ if (dir) for (const f of ["Map003.json", "Map008.json", "System.json"]) if (fs.e
         await frames(30);
         const KEY = { 2: "down", 4: "left", 6: "right", 8: "up" }, STEP = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
         for (const t of list) {
-            const [fm, x, y, tm, tx, ty, d, kind, walk] = t;
+            const [fm, x, y, tm, tx, ty, d, kind, walk, setup] = t;
             const [sx, sy] = [x - STEP[walk][0], y - STEP[walk][1]];
             // go to the tile before the exit
             await ev(`(function(){ $gamePlayer.reserveTransfer(${fm}, ${sx}, ${sy}, ${walk}, 2); return 0; })()`);
             for (let i = 0; i < 200; i++) { if (await ev(`$gameMap.mapId()===${fm} && !$gamePlayer.isTransferring() && SceneManager._scene.constructor.name==='Scene_Map' && !SceneManager.isSceneChanging() && $gamePlayer.x===${sx} && $gamePlayer.y===${sy}`).catch(() => false)) break; await sleep(100); }
             await frames(20);
+            if (setup) { await ev(`(function(){ ${setup}; $gameMap.requestRefresh(); return 0; })()`); await frames(10); }
             await ev(`(function(){ if ($gameMessage.isBusy()) $gameMessage.clear(); Input.clear(); Input._currentState["${KEY[walk]}"] = true; return 0; })()`);
+            if (kind === "action") { await frames(12); await ev(`(function(){ Input._currentState["${KEY[walk]}"] = false; Input._currentState.ok = true; return 0; })()`); }
             let moved = false;
             for (let i = 0; i < 100; i++) { await sleep(60); if (await ev(`$gamePlayer.isTransferring() || $gameMap.mapId()!==${fm}`)) { moved = true; break; } }
-            await ev(`(function(){ Input._currentState["${KEY[walk]}"] = false; return 0; })()`);
+            await ev(`(function(){ Input._currentState["${KEY[walk]}"] = false; Input._currentState.ok = false; return 0; })()`);
             for (let i = 0; i < 200; i++) { if (await ev(`!$gamePlayer.isTransferring() && SceneManager._scene.constructor.name==='Scene_Map' && !SceneManager.isSceneChanging() && $gameMap.mapId()===${tm}`).catch(() => false)) break; await sleep(100); }
             await frames(5);
             const r = await J(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })`);

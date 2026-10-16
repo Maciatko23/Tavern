@@ -194,6 +194,8 @@
         if (!s.noted) {
             s.noted = true;
             T.call("Journal", "addNote", TX.noteArmed[0], TX.noteArmed[1]);
+            // (2026-10-16) the lighthouse's first vision seen (Latarnia.js, flag latarniaWizja1): the warning was there already
+            if (flags().latarniaWizja1 && TX.noteVision) { T.call("Journal", "addNote", TX.noteVision[0], TX.noteVision[1]); top(TX.visionArmed, "#ffd98f"); }
         }
         if (--warnT > 0) return;
         warnT = 90;
@@ -311,7 +313,9 @@
     function specsOf(i) {
         const s = siege(), w = D.WAVES[i], W = s.waves[i], c = ctx();
         if (W.alive) return W.alive.slice();
-        const out = w.kinds.map(k => ({ kind: k, lv: D.LEVEL.kinds[k] || 0 }));
+        // (fewer(c): men of `kinds` who stay out - W12's ally warned the tavern; at least one comes)
+        const fewer = w.fewer ? Math.max(0, Math.min(w.kinds.length - 1, Number(w.fewer(c)) || 0)) : 0;
+        const out = w.kinds.slice(0, w.kinds.length - fewer).map(k => ({ kind: k, lv: D.LEVEL.kinds[k] || 0 }));
         if (w.extra) for (const x of w.extra(c) || []) out.push(Object.assign({ lv: D.LEVEL.kinds[x.kind] || 0 }, x));
         return out.concat(W.carry || []);
     }
@@ -397,6 +401,7 @@
             W.state = "live";
             W.liveAt = clockNow();
             top(w.notice, "#ffb08f");
+            if (w.fewer && w.fewerNotice && w.fewer(c) > 0) top(w.fewerNotice, "#9ff0a8");
             T.emit("act3Wave", { wave: i, id: w.id, map: w.map });
             if (here !== w.map) top(w.map === D.TAVERN ? TX.inside : TX.outside, "#ffd98f");
         }

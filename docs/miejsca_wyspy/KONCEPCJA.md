@@ -1,6 +1,13 @@
 # Sześć nowych miejsc Kruczej Wyspy: koncepcja do zatwierdzenia
 
-Wersja z 2026-10-15. To jest tylko koncepcja: w grze nic się nie zmieniło. Nie ruszałem `data/`, `js/plugins.js` ani `js/plugins/`.
+Wersja z 2026-10-15. To jest tylko koncepcja: w grze nic się nie zmieniło.
+
+> **Zatwierdzona 2026-10-16** („lecimy ze wszystkim”, wszystkie 15 rekomendacji przyjęte). Zmiany po zatwierdzeniu, przez nowe rzeczy
+> w grze: (1) numery długich zadań przesunięte o jeden, bo **D21 zajęła „Spalona zagroda”** (Homes.js) - teraz D22-D28;
+> (2) **brama Aktu II to `Story.chapterEnded()`** (spłata albo strata pola), nie sama spłata; (3) wszystkie mapy z morzem, także
+> **Pustelnia**, mają `<Water:salt>` (CzerwonaWoda.js: czerwone, trujące morze); (4) przejścia na mapach użytkownika (Map125,
+> Map013) **wstawia kod** (`Wyspa.js`, numery 690-698), pliki map zostają bez zmian. Plan budowy dla agentów:
+> `docs/miejsca_wyspy/PAKIETY.md`. Nie ruszałem `data/`, `js/plugins.js` ani `js/plugins/`.
 Szkice map powstały w pamięci z prawdziwych kafelków (narzędzia `tools/miejsca_wyspy/`: `szkice.py`, `polozenie.py`, `wejscia.py`)
 i są tylko obrazkami.
 
@@ -57,15 +64,15 @@ przylądku, garnizon i wrak przy zachodnich płyciznach, cysterna pod wzgórzem 
 
 | skąd | pola | dokąd (lądowanie, kierunek) | uwagi |
 |---|---|---|---|
-| Przystań Map125 | (14-16, 0) | Pustelnia Map155 (23-25, 34), w górę | **nowe zdarzenie na Map125**, kafelki bez zmian |
+| Przystań Map125 | (14-16, 0) | Pustelnia Map155 (23-25, 34), w górę | wstawiane w kodzie (Wyspa.js, 690-692), plik Map125 bez zmian |
 | Pustelnia Map155 | (23-25, 35) | Przystań Map125 (14-16, 1), w dół | nowa mapa |
 | Pustelnia Map155 | (47, 17-18) | Urwisko Map157 (1, 19-20), w prawo | |
 | Urwisko Map157 | (0, 19-20) | Pustelnia Map155 (46, 17-18), w lewo | |
 | Urwisko Map157 | (55, 19-20) | Przylądek Map159 (1, 33-34), w prawo | |
 | Przylądek Map159 | (0, 33-34) | Urwisko Map157 (54, 19-20), w lewo | |
-| Góry Map013 | (59, 11-13) | Przylądek Map159 (29-31, 38), w górę | **opcja**, nowe zdarzenie na Map013 |
+| Góry Map013 | (59, 11-13) | Przylądek Map159 (29-31, 38), w górę | wstawiane w kodzie (Wyspa.js, 696-698), plik Map013 bez zmian |
 | Przylądek Map159 | (29-31, 39) | Góry Map013 (58, 11-13), w lewo | opcja |
-| Przystań Map125 | (21-23, 39) | Garnizon Map162 (21-23, 1), w dół | **nowe zdarzenie na Map125** |
+| Przystań Map125 | (21-23, 39) | Garnizon Map162 (21-23, 1), w dół | wstawiane w kodzie (Wyspa.js, 693-695), plik Map125 bez zmian |
 | Garnizon Map162 | (21-23, 0) | Przystań Map125 (21-23, 38), w górę | |
 | Garnizon Map162 | (0, 20-21) | Wrak Map165 (38, 20-21), w lewo | tylko w odpływie, inaczej dymek „Łacha pod wodą.” |
 | łódź Janka (rozmowa) | - | Wrak Map165 (35, 18) | bez zdarzenia na mapie: wybór w rozmowie z Jankiem |
@@ -73,8 +80,8 @@ przylądku, garnizon i wrak przy zachodnich płyciznach, cysterna pod wzgórzem 
 | Piętro 30 Map147 | Zasuwa główna (19-21, 5) | Cysterna Map167 (3, 20), w prawo | **bez zmian w pliku Map147**: po W1 rozdz. 7 kod podmienia stronę zasuwy (jak furtkę ogrodu w K33) |
 | Cysterna Map167 | kanał (33, 2) | Urwisko Map157 (41, 16), w dół | krata otwiera się od środka, potem w obie strony |
 
-**Co zmienia się na mapach użytkownika:** dwa zdarzenia przejścia na krawędziach przystani (Map125) i jedno (opcja) na krawędzi Gór
-(Map013). Tawerna (Map001), miasteczko (Map008), Podgrodzie (Map111) i dwór (Map024) zostają bez zmian. Pola sprawdziłem
+**Co zmienia się na mapach użytkownika:** nic w plikach. Przejścia na krawędziach przystani (Map125) i Gór (Map013) wstawia kod
+(`Wyspa.js`), dopiero gdy miejsce za nimi jest zbudowane. Tawerna (Map001), miasteczko (Map008), Podgrodzie (Map111) i dwór (Map024) zostają bez zmian. Pola sprawdziłem
 (przechodniość z flag tilesetu i zdarzeń): na górnej krawędzi przystani przechodnie są pola 12-33, na dolnej 15-48, na prawej krawędzi
 Gór 11-14 (`wejscia.png`).
 
@@ -164,13 +171,13 @@ skrzynia z tarczą szyfru, okno na morze.
 ### Zadania
 - **K50 „Atrament dla pustelnika”** (krótkie, od dnia 6). Kleofasowi skończył się atrament. Przynieś 4× Szyszki (na garbnik), 1× Żelazo
   (na rdzę) i 1 porcję własnej deszczówki (zadanie zabiera wodę, nie daje). Nagroda: 2× Miód, 15 G, Kleofas zaczyna czytać kroniki.
-- **D22 „Zaszyfrowane kroniki”** (długie, Akt I-II). Sześć kart kroniki, każda w innym miejscu:
+- **D23 „Zaszyfrowane kroniki”** (długie, Akt I-II). Sześć kart kroniki, każda w innym miejscu:
   1. Archiwum zakonu (W2 rozdz. 6): jeśli kroniki zabrałeś albo dałeś Ambrożemu. Sprzedane Baltazarowi trzeba odzyskać nocą (W5).
   2. Piętro 20: ostatnia nie wyrwana karta Księgi pytań.
   3. Osada Milczących: „Rejestr straży” Najstarszego (po W8 rozdz. 5).
-  4. Kajuta wraku (D24): strona wywieziona przez Dobiesza, z notatkami Czarnych Oczu.
+  4. Kajuta wraku (D25): strona wywieziona przez Dobiesza, z notatkami Czarnych Oczu.
   5. Latarnia: kartka przepisana do Księgi mgieł przez dawnego latarnika.
-  6. Urwisko: zwitek w obrączce oswojonego kruka (D23).
+  6. Urwisko: zwitek w obrączce oswojonego kruka (D24).
 
   Każdą kartę czytasz z Kleofasem przy pulpicie: 2 godziny gry, klucz to tarcza szyfru i nacięcia na twoim wisiorku. Odczytane karty to
   rozdziały „Kroniki upadku” w dzienniku: (1) zasada jednego pytania, (2) cztery straże i kruczarze, (3) trzy pytania Dobiesza i jego
@@ -215,7 +222,7 @@ na dole zbocze wzgórza tawerny.
 | 8 | Kamienie z krukiem | w gruzie; szukają ich Czarne Oczy |
 | 9 | Zejście na zbocze | ścieżka w dół |
 | 10 | Ścieżka na wschód | do przylądka |
-| 11 | Nocny obóz obcych | ludzie Czarnych Oczu kopią nocą w gruzie (obóz Humans.js, po D24) |
+| 11 | Nocny obóz obcych | ludzie Czarnych Oczu kopią nocą w gruzie (obóz Humans.js, po D25) |
 
 Bez wnętrza (kruczarnia to otwarta ruina). Światło: tylko ognisko obozu obcych nocą.
 
@@ -224,13 +231,13 @@ Na Urwisku nie ma ludzi, są kruki. Rozmowy prowadzą trzy znane postacie:
 - **Roch** (przystań): „Kruk znowu siedział na maszcie wraku. Co rano. Patrzy na ciebie, nie na mnie.” (już to mówi w grze - to
   początek K51).
 - **Kleofas**: „Ten? To z Urwiska. Kruczarnia zakonu. Ostatni kruczarz umarł, zanim się urodziłem.”
-- **Dziadek Stach** (D23): rozpoznaje obrączkę i wreszcie opowiada „długą historię”:
+- **Dziadek Stach** (D24): rozpoznaje obrączkę i wreszcie opowiada „długą historię”:
   > **Stach:** Skąd to masz? ...Siadaj. Mój dziad trzymał kruki. Tam, na Urwisku, zanim na górze postawili karczmę. Mówił, że nasza rodzina nosi listy, których nikt nie powinien czytać. Śmiałem się z niego.
   > **Stach:** Twój ojciec też się śmiał. A potem dał ci ten kamień na szyję. *(milknie)* Dbaj o tego ptaka.
 
 ### Kruk (nowy towarzysz, jak pies)
 Kruk to ten sam ptak, który w prologu siadł na maszcie kutra. Mieszka w kruczarni, a co rano przylatuje na przystań.
-- **Oswajanie (D23):** karmisz go w kruczarni trzy razy, w trzy różne dni (surowe mięso, ryba albo resztki ze zwłok). Nie wolno przy tym
+- **Oswajanie (D24):** karmisz go w kruczarni trzy razy, w trzy różne dni (surowe mięso, ryba albo resztki ze zwłok). Nie wolno przy tym
   biegać, a psa trzeba zostawić w domu. Po trzecim razie siada ci na ramieniu i daje zdjąć zwitek z obrączki (karta kroniki nr 6).
 - **Grzęda kruka:** nowy budynek na polu dziadka, tak jak buda psa (4× Gałęzie, 2× Deski, 1× Lina, pole 1 × 1). Kruk śpi na grzędzie
   21-5. Je to, co pies (mięso, ryby), pije z kałuży, garnka, wiadra albo z miseczki przy grzędzie. Głodny przez trzy dni wraca na
@@ -252,10 +259,10 @@ Kruk to ten sam ptak, który w prologu siadł na maszcie kutra. Mieszka w krucza
 ### Zadania
 - **K51 „Kruk z masztu”** (krótkie, od dnia 8, po rozmowie z Rochem). O świcie (5-7) kruk siedzi na maszcie wraku kutra na plaży (gdy
   kuter stoi już na pochylni - na jego maszcie). Idź za nim: leci przez górną krawędź przystani, przysiada przy pustelni (dymek Kleofasa), aż do kruczarni na Urwisku. Kiedy zostaniesz z tyłu,
-  czeka (jak kot w D12). Nagroda: 40 dośw., odkrycie Urwiska, start D23.
-- **D23 „Oswojony kruk”** (długie, 3-5 dni). Trzy karmienia w kruczarni, obrączka i zwitek, rozmowa z dziadkiem, grzęda na polu.
+  czeka (jak kot w D12). Nagroda: 40 dośw., odkrycie Urwiska, start D24.
+- **D24 „Oswojony kruk”** (długie, 3-5 dni). Trzy karmienia w kruczarni, obrączka i zwitek, rozmowa z dziadkiem, grzęda na polu.
   Nagroda: kruk, karta kroniki nr 6, notatka „Ród kruczarzy”, 100 dośw.
-- **K53 „Rynny zakonu”** (krótkie, Akt II, po D27): oczyść 4 rynny w skale z gruzu i gniazd (kilof albo łopata), żeby deszcz znowu
+- **K53 „Rynny zakonu”** (krótkie, Akt II, po D28): oczyść 4 rynny w skale z gruzu i gniazd (kilof albo łopata), żeby deszcz znowu
   spływał do cysterny. Nagroda: cysterna dostaje więcej wody po każdym deszczu (punkt 8), Opinia +3. Logika zadania należy do cysterny,
   na Urwisku są tylko znaczniki „Miejsce: rynna_1..4”.
 
@@ -318,7 +325,7 @@ latarnia na samym cyplu.
 ### Zadania
 - **K49 „Tran dla latarni”** (krótkie, od dnia 24 - po drugiej fali prom nie przywozi tranu). Przynieś 4× Tran i 6× Drewno. Tran: 3 ryby
   w kociołku (nowy przepis) albo od Janka po 6 G. Nagroda: 30 G, Bazyli ufa, wstęp do laterny.
-- **D21 „Księga mgieł”** (długie). Trzy mgliste noce przy soczewce, w dowolnej kolejności. Każda daje jedną wizję i notatkę:
+- **D22 „Księga mgieł”** (długie). Trzy mgliste noce przy soczewce, w dowolnej kolejności. Każda daje jedną wizję i notatkę:
   1. „Statek bez bandery przybija nocą” - ostrzeżenie przed Nocą promu (W5) i przed napadem z Aktu III.
   2. „Człowiek z piórem w czarnej wodzie rysuje wyspę” - poszlaka do rozbitka (W12).
   3. „Kobieta przy rzece, tabor idzie na północ” - matka, zgodnie z W10 (to samo widziała uchodźczyni). Nie mówi, czy matka przypłynie.
@@ -402,13 +409,13 @@ Palisada w szkicu to ściana z bali; docelowo pale (grafika albo kafelki autora)
 ### Zadania
 - **K52 „Drewno dla garnizonu”** (krótkie, od dnia 5). 10× Drewno i 4× Węgiel drzewny dla kuchni polowej. Nagroda: 20 G, przychylność
   garnizonu +20, otwiera się skup u Kłosa.
-- **D25 „Lista poborowa”** (długie, w dzień po fali). Werbownik musi zabrać trzech ludzi z miasteczka i Podgrodzia. Na liście są m.in.
+- **D26 „Lista poborowa”** (długie, w dzień po fali). Werbownik musi zabrać trzech ludzi z miasteczka i Podgrodzia. Na liście są m.in.
   Bartek Kmieć, Zbych Smolarz i Darin (a Rafał, jeśli jest w obozie). Wybór:
   - a) pomóc - namawiasz albo wskazujesz ludzi (10 G za każdego, przychylność +5, Opinia -3 za każdego);
   - b) ostrzec i ukryć - ludzie znikają na dzień (Opinia +3 za każdego, przychylność -10, straż przeszukuje obóz i domy);
-  - c) układ - zanosisz rotmistrzowi Dziennik okrętu z wraku (D24): Czarne Oczy straciły okręt, od morza nic nie grozi. Pobór tylko
+  - c) układ - zanosisz rotmistrzowi Dziennik okrętu z wraku (D25): Czarne Oczy straciły okręt, od morza nic nie grozi. Pobór tylko
     z ochotników (przychylność +10, Opinia +5, 60 dośw.).
-- **D26 „Zboże dla obozu”** (długie, po rekwizycji D14). Obóz uchodźców głoduje, Ludmiła prosi o pomoc. Zdobądź 4 worki zboża: kup je
+- **D27 „Zboże dla obozu”** (długie, po rekwizycji D14). Obóz uchodźców głoduje, Ludmiła prosi o pomoc. Zdobądź 4 worki zboża: kup je
   nocą od Kłosa „po cenie dla swoich” (dowód, że sprzedaje królewskie zboże) albo wynieś nocą ze spichlerza (skradanie obok wartownika).
   Potem: wydaj Kłosa rotmistrzowi (przychylność +15, Kłos odpływa promem, Baltazar traci dostawcę - flaga dla W5) albo milcz (Kłos jest
   twoim dłużnikiem: lepsze ceny). Nagroda: Opinia +5 (zaufanie obozu W6), 80 dośw.
@@ -417,7 +424,7 @@ Palisada w szkicu to ściana z bali; docelowo pale (grafika albo kafelki autora)
 - **Skup wojskowy** u Kłosa: jęczmień, ziemniaki, marchew, kapusta, wędzone mięso i ryby, skóry, strzały, drewno, węgiel. Zwykła cena,
   a przez 7 dni po każdej fali ×1,5. Kiedy w mieście jest głód (tydzień po rekwizycji D14), każdy dzień sprzedaży jedzenia wojsku
   kosztuje Opinię -1 („nasze zboże idzie na wojnę”). Dobre pieniądze na dług dziadka, ale z ceną.
-- **Przychylność garnizonu** 0-100 (start 20), osobno od Opinii w miasteczku. 40: glejt na wrak (D24 legalnie). 60: kowal garnizonu
+- **Przychylność garnizonu** 0-100 (start 20), osobno od Opinii w miasteczku. 40: glejt na wrak (D25 legalnie). 60: kowal garnizonu
   sprzedaje strzały i stal. 80: po alarmie z Aktu III dwóch żołnierzy broni tawerny (wpis do obrońców Aktu III). Poniżej 10: patrol na
   drodze przystań-garnizon zagląda do torby i zabiera kamienie z krukiem.
 - **Bohater nie jest wcielany.** Jest za młody, a dług dziadka „ręczy dwór”. Pobór dotyczy innych.
@@ -475,7 +482,7 @@ pięcioma kamieniami z krukiem.
   > **Eryk:** Siadaj prosto. I nie ruszaj się, to wyjdziesz ładniej, niż jesteś.
 
 ### Zadania
-- **D24 „Mapa z wraku”** (długie, od dnia 15). Dostań się na wrak (jedna z trzech dróg), zejdź pod pokład, znajdź klucz bosmana, otwórz
+- **D25 „Mapa z wraku”** (długie, od dnia 15). Dostań się na wrak (jedna z trzech dróg), zejdź pod pokład, znajdź klucz bosmana, otwórz
   kajutę. Łup: **Mapa z zaznaczeniami** (przedmiot kluczowy), **Dziennik okrętu** (lista załogi z opisem kartografa), monety z okiem,
   5 kamieni z krukiem, karta kroniki nr 4. Co z kamieniami: zgłosić celnikowi Samborowi (rozkaz dworu, 5 G za sztukę), sprzedać
   Baltazarowi (W5, 15 G za sztukę, Baltazar „pamięta”) albo zatrzymać (Kleofas tłumaczy, czym są). Nagroda: 100 dośw.
@@ -485,7 +492,7 @@ pięcioma kamieniami z krukiem.
 - **W12 „Rozbitek”** (wątek, Akt I-II). Poszlaki (wystarczą dwie z pięciu):
   1. Dziennik okrętu: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko na nadgarstku.”
   2. Józek Łata (Podgrodzie): po sztormie sprzedał płaszcz obcemu, ten zapłacił „dziwnym groszem z okiem”.
-  3. Wizja w latarni (D21, wizja 2).
+  3. Wizja w latarni (D22, wizja 2).
   4. Nocą, w łaźni tawerny (usługa Wandy) albo przy studni: podwinięty rękaw, tatuaż oka (skradanie).
   5. Cudzy list przyniesiony przez kruka: list szyfrem Czarnych Oczu.
 
@@ -552,7 +559,7 @@ Woda w zbiorniku jest widoczna, ale jak wszędzie pod ziemią „nie do picia”
 - Żadne zadanie nie daje wody jako nagrody. Morze dalej jest słone.
 
 ### Zadania
-- **D27 „Zapas zakonu”** (długie, Akt II). Wejdź za zasuwę, przejdź obok topielców w wodzie (rodzaj stwora z podziemi), znajdź Księgę
+- **D28 „Zapas zakonu”** (długie, Akt II). Wejdź za zasuwę, przejdź obok topielców w wodzie (rodzaj stwora z podziemi), znajdź Księgę
   racji i słup miary, otwórz kratę na Urwisku od środka, zdecyduj o gałęzi dworskiej. Nagroda: czerpak (1 nabranie dziennie), 150 dośw.,
   notatka „Racje zakonu”, rozdział 6 Kroniki upadku czyta się łatwiej.
 - **K53 „Rynny zakonu”** (opisane przy Urwisku): więcej wody po deszczu.
@@ -568,9 +575,9 @@ Woda w zbiorniku jest widoczna, ale jak wszędzie pod ziemią „nie do picia”
 | kiedy | co |
 |---|---|
 | Akt I, dni 5-15 | Garnizon (K52, skup), Pustelnia (K50), kruk z masztu (K51) |
-| Akt I, dni 15-40 | Wrak (D24) - mapa z zaznaczeniami prowadzi do reszty; oswojony kruk (D23); latarnia (K49 od dnia 24, D21 w mgliste noce); pobór (D25) w dni po falach; zboże dla obozu (D26) po rekwizycji |
-| Akt I-II | Rozbitek (W12), Zaszyfrowane kroniki (D22) |
-| Akt II | Cysterna (D27, K53), Jedno pytanie (W2 rozdz. 7, Wigilia), Soczewka (W11) |
+| Akt I, dni 15-40 | Wrak (D25) - mapa z zaznaczeniami prowadzi do reszty; oswojony kruk (D24); latarnia (K49 od dnia 24, D22 w mgliste noce); pobór (D26) w dni po falach; zboże dla obozu (D27) po rekwizycji |
+| Akt I-II | Rozbitek (W12), Zaszyfrowane kroniki (D23) |
+| Akt II | Cysterna (D28, K53), Jedno pytanie (W2 rozdz. 7, Wigilia), Soczewka (W11) |
 | Akt III | ostrzeżenie Ansgara, żołnierze przy tawernie (przychylność 80), wizja „statek bez bandery”, epilog latarni i kruka |
 
 Złoto z nowych zadań w rozdziale 1: ok. 250-450 G plus skup wojskowy. To „ciekawe”, nie „konieczne” pieniądze na dług.
@@ -578,6 +585,9 @@ Złoto z nowych zadań w rozdziale 1: ok. 250-450 G plus skup wojskowy. To „ci
 ---
 
 ## 10. Budowa: pakiety, pliki, numery, PixelLab
+
+> **Aktualny plan budowy (po zatwierdzeniu): `docs/miejsca_wyspy/PAKIETY.md`** - tam są ostateczne pliki, numery, porty i zakazy.
+> Poniżej pierwsza wersja z koncepcji.
 
 ### Zasada
 Każdy pakiet ma **własne mapy, własne wtyczki, własny zakres numerów zdarzeń, własny folder narzędzi, własny test i port**. Wspólne pliki
@@ -604,12 +614,12 @@ zamkniętym edytorze (tasklist przed każdym zapisem, kopie w `backup_art_<data>
 
 | pakiet | mapy | wtyczki | numery zdarzeń | TownLife | zadania | test / port | PixelLab (ok.) |
 |---|---|---|---|---|---|---|---|
-| **A Pustelnia** | 155, 156 | `Pustelnia_Data.js`, `Pustelnia.js` | 600-609 | 944 | K50, D22, W2 rozdz. 7 | `pustelnia_test.js` / 9501 | 40 (Kleofas) |
-| **B Urwisko i kruk** | 157 | `Kruk_Data.js`, `Kruk.js` | 610-629 | - | K51, D23 (+ znaczniki dla K53) | `kruk_test.js` / 9502 | 90 (kruk: żerdź, skoki, lot, lądowanie, list; grzęda) |
-| **C Latarnia** | 159, 160, 161 | `Latarnia_Data.js`, `Latarnia.js` | 630-639 | 943 | K49, D21, W11 | `latarnia_test.js` / 9503 | 60 (Bazyli, latarnia, plansze wizji) |
-| **D Garnizon** | 162, 163 | `Garnizon_Data.js`, `Garnizon.js` | 640-669 | 945-947 | K52, D25, D26 | `garnizon_test.js` / 9504 | 155 (3 postacie + żołnierz, palisada, wieża) |
-| **E Wrak i rozbitek** | 165, 166 | `Wrak_Data.js`, `Wrak.js` | 670-679 | 948 | D24, W12 | `wrak_test.js` / 9505 | 55 (Ansgar, kadłub) |
-| **F Cysterna** | 167 | `Cysterna.js` | 680-689 | - | D27, K53 | `cysterna_test.js` / 9506 | 0-5 |
+| **A Pustelnia** | 155, 156 | `Pustelnia_Data.js`, `Pustelnia.js` | 600-609 | 944 | K50, D23, W2 rozdz. 7 | `pustelnia_test.js` / 9501 | 40 (Kleofas) |
+| **B Urwisko i kruk** | 157 | `Kruk_Data.js`, `Kruk.js` | 610-629 | - | K51, D24 (+ znaczniki dla K53) | `kruk_test.js` / 9502 | 90 (kruk: żerdź, skoki, lot, lądowanie, list; grzęda) |
+| **C Latarnia** | 159, 160, 161 | `Latarnia_Data.js`, `Latarnia.js` | 630-639 | 943 | K49, D22, W11 | `latarnia_test.js` / 9503 | 60 (Bazyli, latarnia, plansze wizji) |
+| **D Garnizon** | 162, 163 | `Garnizon_Data.js`, `Garnizon.js` | 640-669 | 945-947 | K52, D26, D27 | `garnizon_test.js` / 9504 | 155 (3 postacie + żołnierz, palisada, wieża) |
+| **E Wrak i rozbitek** | 165, 166 | `Wrak_Data.js`, `Wrak.js` | 670-679 | 948 | D25, W12 | `wrak_test.js` / 9505 | 55 (Ansgar, kadłub) |
+| **F Cysterna** | 167 | `Cysterna.js` | 680-689 | - | D28, K53 | `cysterna_test.js` / 9506 | 0-5 |
 
 Zakres 690-699 zostaje w rezerwie (np. dla przejść wstawianych w kodzie, gdybyś wolał nie dopisywać zdarzeń do Map125 i Map013).
 Sprawdziłem wolne numery: zajęte są 730-753 (test rdzenia), 760-779 (przystań), 800-827 (Serce), 840-859 (Akt III), 860-899 (stwory),

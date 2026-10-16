@@ -290,7 +290,25 @@
     // ------------------------------------------------------------------
     // The talk: the quests first, then the greeting and the menu
     // ------------------------------------------------------------------
-    const R0 = role => REGULARS[role];
+    // (2026-10-16, W12 "Rozbitek", Wrak.js) Eryk - the castaway who drew her - handed to the soldiers (flag ansgarGiven): Melia stops
+    // joking FOR GOOD - her greetings, her "what is new" by the hour and her farewells stay short and cold (the songs and the rumours stay)
+    const MELIA_SOBER = {
+        greet: [["(Melia stroi lutnię i nie podnosi wzroku.) Ty. Siadaj, jeśli musisz.", "Słucham. Mów krótko - struny same się nie nastroją."]],
+        again: ["Coś jeszcze?", "Tak?", "Słucham."],
+        bye: ["Idź.", "Do zobaczenia.", "Drzwi są tam, gdzie były."],
+        talk: {
+            morning: ["Rano stroję lutnię. Długo. Dawniej żartowałam przy tym. Dawniej.", "Eryk siadał tu rano i rysował. Stół dalej ma ślady węgla."],
+            day: ["Przepisuję stare pieśni. Nowych nie piszę.", "Ludzie pytają, czemu już nie żartuję. Niech zapytają tego, kto wydał rysownika wojsku."],
+            evening: ["Wieczorem śpiewam. Tylko stare pieśni - na nowe nie mam serca.", "Sala się śmieje. Ja gram. Tyle."],
+            night: ["Noc. Sala pusta. Nie śpię - nie mam już czym śpiewać do snu.", "Struna pękła mi wczoraj. Nie wymieniłam. Nie chce mi się."]
+        }
+    };
+    const R0 = role => {
+        const d = REGULARS[role];
+        if (role !== "melia" || !flags().ansgarGiven) return d;
+        return Object.assign({}, d, { greet: d.greet.map(() => MELIA_SOBER.greet[0]), again: MELIA_SOBER.again, bye: MELIA_SOBER.bye,
+            talk: Object.assign({}, d.talk, MELIA_SOBER.talk) });
+    };
     const said = (role, list, key) => { const r = rec(role), n = r.topics[key] || 0; r.topics[key] = n + 1; return list[n % list.length]; };
     // what is new: the weather, the drought, the debt first; else the hour's lines in turn
     function newsLine(role) {

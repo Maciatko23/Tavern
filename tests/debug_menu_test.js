@@ -1,6 +1,8 @@
-// The F9 developer menu in five tabs (Q / E switch them): Zdarzenia (clock, weather, birds, boar), Budowanie (any building
+// The F9 developer menu in six tabs (Q / E switch them): Zdarzenia (clock, weather, birds, boar), Budowanie (any building
 // put down free and finished), Przedmioty (any item in a chosen quantity, in three kinds: Narzędzia i broń / Surowce / Jedzenie,
-// switched by Tab or [ / ] or a click), Rdzeń (TawernaCore's own lines), Kot (grandpa's cat: what it does, send it somewhere);
+// switched by Tab or [ / ] or a click), Rdzeń (TawernaCore's own lines), Kot (grandpa's cat: what it does, send it somewhere),
+// Wyspa i fabuła (2026-10-16: the six island places and the story's big moments - go there, the tide, the fog, the red water,
+// the field lost, the debt, +1000 G, the prologue again, the tame raven, the garrison's favour, the cistern);
 // it opens again on the tab, the kind and the row it was left on.
 const { launch, sleep } = require("./cdp.js");
 (async () => {
@@ -40,7 +42,7 @@ const { launch, sleep } = require("./cdp.js");
         await key(F9);
         await frames(10);
         check("F9 opens Scene_Debug", (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
-        check("five tabs: Zdarzenia, Budowanie, Przedmioty, Rdzeń, Kot", JSON.stringify(await J("SceneManager._scene._tabs._list.map(c => c.name)")) === '["Zdarzenia","Budowanie","Przedmioty","Rdzeń","Kot"]');
+        check("six tabs: Zdarzenia, Budowanie, Przedmioty, Rdzeń, Kot, Wyspa i fabuła", JSON.stringify(await J("SceneManager._scene._tabs._list.map(c => c.name)")) === '["Zdarzenia","Budowanie","Przedmioty","Rdzeń","Kot","Wyspa i fabuła"]');
         const rows = await J(`SceneManager._scene._list._rows.map(r => ({ kind: r.kind, label: r.label }))`);
         let t = await tabNow();
         check("it opens on 'Zdarzenia': the two time rows, dawn / sunset / a misty morning, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the boar, a wolf pack, a deer, a bear (stage 2), the men of stage 3 (a bandit, a knife bandit, an archer, a mercenary, an ambush, a camp, a raid on a sleeper - Humans.js), the creatures of stage 4 (a creature, a boss - Creatures.js), +200 XP, the new hero on trial, the regions' colours (RegionLayers), the underground's rows (Underground.js: a floor, the grate, the locks, the lift; the Heart's endings, world and Lord - added by Underground.js itself) - nothing else", t.tab === 0 && t.sel === 0 && rows.map(r => r.kind).join().replace(/,act3_arm,act3_start,act3_reset$/, "").replace(/,underground,ugGate(,ugLocks,ugLifts(,heartEnd,heartWorld,heartLord)?)?$/, "") === "hour,day,dawn,dusk,mist,storm,strike,treestrike,calm,birds,raid,boar,wolves,deer,bear,h_bandit,h_knifer,h_archer,h_mercenary,h_ambush,h_camp,h_raid,cr_kind,cr_boss,xp,herolook,layers" && rows[0].label === "+1 godzina", rows.map(r => r.kind));
@@ -103,6 +105,21 @@ const { launch, sleep } = require("./cdp.js");
         const away = await J("(function(){ const l = SceneManager._scene._list; return { tab: SceneManager._scene._tab, rows: l._rows.map(r => r.kind + ':' + r.label) }; })()");
         check("E: 'Kot' - away from grandpa's house: it is not here, 'Zabierz mnie do domu dziadka', and its day described",
             away.tab === 4 && away.rows.some(r => r === "catHouse:Zabierz mnie do domu dziadka") && away.rows.some(r => /^info:Jego dzień/.test(r)) && away.rows.some(r => /W nocy \(22-6\)/.test(r)), away);
+        // ---------------------------------------------------------------- 'Wyspa i fabuła': the island places and the story (2026-10-16)
+        await key(E); await frames(6);
+        const isle = await J(`(function(){ const s = SceneManager._scene, l = s._list; return { tab: s._tab, sel: s._tabs.index(), band: s._kinds.visible, h: l.itemHeight(),
+            rows: l._rows.map(r => ({ kind: r.kind, label: r.label, desc: r.desc || "", head: !!r.head })), wide: l._rows.filter(r => l.textWidth(r.label) > l.innerWidth).length }; })()`);
+        const isleKinds = isle.rows.filter(r => r.kind !== "info").map(r => r.kind);
+        const goNames = isle.rows.filter(r => r.kind === "isleGo").map(r => r.label);
+        check("E: 'Wyspa i fabuła' - four parts (Przenieś mnie do / Morze i pogoda / Fabuła / Postacie), each row two lines high with its description under it",
+            isle.tab === 5 && isle.sel === 5 && !isle.band && isle.rows.filter(r => r.head).map(r => r.label).join("|") === "Przenieś mnie do:|Morze i pogoda:|Fabuła:|Postacie:" &&
+            isle.rows.filter(r => r.kind !== "info").every(r => r.desc.length > 20) && isle.h > 50 && isle.wide === 0, isle.rows.map(r => r.kind + ": " + r.label));
+        check("...'Przenieś mnie do': the harbour, the six places, the hut under the forest, the burnt farm; a room picker",
+            goNames.join("|") === "Przystań|Pustelnia na klifie|Urwisko Kruków|Przylądek z latarnią|Garnizon nad zatoką|Wrak na mieliźnie|Stara cysterna zakonu|Chata pod lasem|Spalona zagroda" &&
+            isleKinds.includes("isleInside"), goNames);
+        check("...the sea (low tide, high tide, a misty night, the water red / grey), the story (day 61 unpaid, pay the debt, +1000 G, the prologue), the people (the raven, the garrison's favour, the cistern)",
+            isleKinds.filter(k => k !== "isleGo").join() === "isleInside,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,islePrologue,isleRaven,isleFavor,isleCistern" &&
+            /^Przychylność garnizonu: \d+ \/ 100/.test(isle.rows.find(r => r.kind === "isleFavor").label), isleKinds);
         await key(E); await frames(6);
         const tz = await tabNow();
         check("E on the last tab wraps round to 'Zdarzenia' (the band of kinds hidden, the list back up)", tz.tab === 0 && !tz.band && tz.listY < t0.listY, { tab: tz.tab, band: tz.band, listY: tz.listY });
@@ -112,9 +129,9 @@ const { launch, sleep } = require("./cdp.js");
         check("a click on a tab opens it ('Budowanie')", (await tabNow()).tab === 1);
         await click("_tabs", 0); await frames(4);
         await key(Q); await frames(6);
-        check("Q goes back (wrapping to 'Kot')", (await tabNow()).tab === 4);
-        await key(Q); await key(Q); await key(Q); await key(Q); await frames(6);
-        check("Q, Q, Q, Q: back on 'Zdarzenia'", (await tabNow()).tab === 0);
+        check("Q goes back (wrapping to 'Wyspa i fabuła')", (await tabNow()).tab === 5);
+        await key(Q); await key(Q); await key(Q); await key(Q); await key(Q); await frames(6);
+        check("Q five times: back on 'Zdarzenia'", (await tabNow()).tab === 0);
 
         // ---------------------------------------------------------------- +1 hour / +1 day (set to noon, day 1: no hour rollover to worry about)
         await ev("$gameSystem.setDayNightHour(12); $gameSystem._dayNightDay = 1; 0");
@@ -131,7 +148,7 @@ const { launch, sleep } = require("./cdp.js");
         check("'+1 dzień' advances the clock by 24 hours (a whole day later)", afterDay.d === afterHour.d + 1 && Math.abs(afterDay.h - afterHour.h) < 0.1, { afterHour, afterDay });
 
         // ---------------------------------------------------------------- pick an item, raise the quantity, grant it
-        await key(Q); await key(Q); await key(Q); await frames(6);   // 'Przedmioty' (past 'Kot' and 'Rdzeń'), on its first item
+        await key(Q); await key(Q); await key(Q); await key(Q); await frames(6);   // 'Przedmioty' (past 'Wyspa i fabuła', 'Kot' and 'Rdzeń'), on its first item
         const firstItemId = await ev("SceneManager._scene._list.rowData().item.id");
         const before139 = await ev(`$gameParty.numItems($dataItems[${firstItemId}])`);
         for (let i = 0; i < 4; i++) await key(RIGHT);
@@ -146,7 +163,7 @@ const { launch, sleep } = require("./cdp.js");
         check("OK grants exactly that many of the highlighted item", after139 === before139 + 4, { before139, after139 });
 
         // ---------------------------------------------------------------- "Burza teraz": back to the map, the storm gathering
-        await key(E); await key(E); await key(E); await frames(6);   // back to 'Zdarzenia' (past 'Rdzeń' and 'Kot'): its cursor is where it was left (row 1, '+1 dzień')
+        await key(E); await key(E); await key(E); await key(E); await frames(6);   // back to 'Zdarzenia' (past 'Rdzeń', 'Kot' and 'Wyspa i fabuła'): its cursor is where it was left (row 1, '+1 dzień')
         check("each tab remembers its row: 'Zdarzenia' is back on '+1 dzień'", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().kind")) === "day");
         for (let i = 0; i < 4; i++) await key(DOWN);   // row 5 (past the dawn, the sunset and the misty morning)
         check("row 5 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
@@ -191,12 +208,97 @@ const { launch, sleep } = require("./cdp.js");
         await key(F9); await frames(10);   // open again for the closing checks
         check("after putting a building down, F9 opens on 'Budowanie' with the same building chosen (to put another)", (await tabNow()).tab === 1 && (await ev("SceneManager._scene._list.rowData().type")) === "brickworks");
 
+        // ---------------------------------------------------------------- 'Wyspa i fabuła' at work (2026-10-16)
+        // (a place's first visit may start a scene of its own - its lines dismissed, then F9 opens)
+        const openF9 = async () => {
+            for (let tries = 0; tries < 4; tries++) {
+                await frames(30);
+                for (let i = 0; i < 80 && (await ev("$gameMap.isEventRunning() || $gameMessage.isBusy() || SceneManager.isSceneChanging()")); i++) { await ev("if ($gameMessage.isBusy()) $gameMessage.clear(); 0"); await frames(8); }
+                await key(F9); await frames(10);
+                if (await ev("SceneManager._scene.constructor.name === 'Scene_Debug'")) return true;
+                console.log("NOTE F9 not open yet: " + JSON.stringify(await J("({ s: SceneManager._scene.constructor.name, ev: $gameMap.isEventRunning(), m: $gameMessage.isBusy(), farm: !!$gameTemp._farmMenuOpen, b: !!$gameTemp._buildMode })")));
+            }
+            return false;
+        };
+        const isleSel = kind => ev(`(function(){ const l = SceneManager._scene._list; l.select(l._rows.findIndex(r => ${typeof kind === "string" ? "r.kind === '" + kind + "'" : "r.kind === '" + kind[0] + "' && r.label === '" + kind[1] + "'"})); return l.index(); })()`);
+        const isleRow = kind => J(`(function(){ const r = SceneManager._scene._list._rows.find(r => r.kind === '${kind}'); return r ? r.label : null; })()`);
+        await ev("SceneManager._scene.goTo(5, 0); 0"); await frames(6);
+        const g0 = await ev("$gameParty.gold()");
+        await isleSel("isleGold"); await key(OK); await frames(6);
+        check("'+1000 G': a thousand gold, the menu stays", (await ev("$gameParty.gold()")) === g0 + 1000 && (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
+        await isleSel("isleFavor");
+        const fav0 = await ev("Garnizon.favor()");
+        await key(RIGHT); await frames(4);
+        const fav1 = await ev("Garnizon.favor()"), favLab = await isleRow("isleFavor");
+        await key(LEFT); await frames(4);
+        check("'Przychylność garnizonu': → +20, ← -20, the number in the label", fav1 === Math.min(100, fav0 + 20) && favLab.indexOf(": " + fav1 + " / 100") > 0 && (await ev("Garnizon.favor()")) === Math.max(0, fav1 - 20), { fav0, fav1, favLab });
+        await isleSel("isleWater");
+        const water = [];
+        for (let i = 0; i < 3; i++) { await key(OK); await frames(4); water.push([await ev("CzerwonaWoda.forced()"), await isleRow("isleWater")]); }
+        check("'Woda w morzu': OK - red, grey, back to the weather (CzerwonaWoda.force), the label says which",
+            water[0][0] === "red" && /czerwona \(wymuszona\)/.test(water[0][1]) && water[1][0] === "grey" && /szara \(wymuszona\)/.test(water[1][1]) && water[2][0] === null && /z pogody/.test(water[2][1]), water);
+        await isleSel(["isleTide", (await J("SceneManager._scene._list._rows.find(r => r.kind === 'isleTide' && r.tide === 'high').label"))]);
+        await key(OK); await frames(70);
+        const hi = await J("({ f: Wyspa.tideForced(), low: Wyspa.tide().low, sw: $gameSwitches.value(20) })");
+        await ev("(function(){ const l = SceneManager._scene._list; l.select(l._rows.findIndex(r => r.kind === 'isleTide' && r.tide === 'low')); return 0; })()");
+        await key(OK); await frames(70);
+        const lo = await J("({ f: Wyspa.tideForced(), low: Wyspa.tide().low, sw: $gameSwitches.value(20), label: SceneManager._scene._list.rowData().label })");
+        await key(OK); await frames(6);
+        check("'Przypływ teraz' / 'Odpływ teraz': the tide forced (switch 20 follows), OK again - from the clock",
+            hi.f === "high" && !hi.low && hi.sw === false && lo.f === "low" && lo.low && lo.sw === true && /wymuszony/.test(lo.label) && (await ev("Wyspa.tideForced()")) === null, { hi, lo });
+        await isleSel("isleCistern"); await key(OK); await frames(6);
+        check("'Otwórz cysternę': cisternOpen (and the rest of W1 ch. 7's flags), the label says so",
+            (await J("['cisternOpen','sluiceHalf','millRuns','kubaHonest'].every(k => !!TownQuests.state().flags[k])")) && /^Cysterna otwarta/.test(await isleRow("isleCistern")));
+        await isleSel("isleLose"); await key(OK); await frames(6);
+        check("'Świt dnia 61 bez spłaty' in a game without the story: nothing (the label says why), the menu stays",
+            /gra bez fabuły/.test(await isleRow("isleLose")) && (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug" && (await ev("$gameSystem.dayNightDay()")) < 61);
+        // go: the hermitage (the landing of the harbour's way up), then the wreck (the low tide set)
+        await isleSel(["isleGo", "Pustelnia na klifie"]); await key(OK);
+        for (let i = 0; i < 60 && !(await ev("$gameMap.mapId() === 155 && SceneManager._scene.constructor.name === 'Scene_Map' && !$gamePlayer.isTransferring()")); i++) await frames(10);
+        const at155 = await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
+        check("'Pustelnia na klifie': back on the map, on Map155 (24,34) - the landing of the harbour's way up", at155.join() === "155,24,34", at155);
+        await openF9();
+        check("F9 opens again on 'Wyspa i fabuła', on the same row", (await tabNow()).tab === 5 && (await ev("SceneManager._scene._list.rowData().label")) === "Pustelnia na klifie");
+        await isleSel(["isleGo", "Wrak na mieliźnie"]); await key(OK);
+        for (let i = 0; i < 60 && !(await ev("$gameMap.mapId() === 165 && SceneManager._scene.constructor.name === 'Scene_Map' && !$gamePlayer.isTransferring()")); i++) await frames(10);
+        await frames(70);
+        const at165 = await J("({ at: [$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y], tide: Wyspa.tideForced(), sw: $gameSwitches.value(20) })");
+        check("'Wrak na mieliźnie': Map165 (38,20) with the low tide set (the sandbar dry, switch 20 on)", at165.at.join() === "165,38,20" && at165.tide === "low" && at165.sw === true, at165);
+        await ev("Wyspa.forceTide(null); 0");
+        // the prologue again: the film over the map, then back - the same map, the same tile, the same purse
+        await openF9();
+        const before165 = await J("({ m: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, g: $gameParty.gold(), d: $gameSystem.dayNightDay() })");
+        await isleSel("islePrologue"); await key(OK);
+        let film = false;
+        for (let i = 0; i < 60 && !(film = await ev("SceneManager._scene.constructor.name === 'Scene_Prologue'")); i++) await frames(10);
+        await frames(60);
+        await ev("SceneManager._scene.skipAll(); 0");
+        for (let i = 0; i < 80 && !(await ev("SceneManager._scene.constructor.name === 'Scene_Map' && !SceneManager.isSceneChanging()")); i++) await frames(10);
+        await frames(20);
+        const after165 = await J("({ m: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, g: $gameParty.gold(), d: $gameSystem.dayNightDay(), scene: SceneManager._scene.constructor.name, stack: SceneManager._stack.length })");
+        check("'Odtwórz prolog': the film plays (Scene_Prologue), then back on the same map and tile, nothing else changed",
+            film && after165.scene === "Scene_Map" && after165.m === before165.m && after165.x === before165.x && after165.y === before165.y && after165.g === before165.g && after165.d === before165.d && after165.stack === 0, { before165, after165 });
+        // the raven tamed at once: its name screen, an empty field - "Kruk"
+        await openF9();
+        await isleSel("isleRaven"); await key(OK);
+        let named = false;
+        for (let i = 0; i < 120 && !(named = await ev("!!(SceneManager._scene && SceneManager._scene.done && SceneManager._scene.constructor !== Scene_Map && Kruk.state().stage === 'tame')")); i++) {
+            await ev("if ($gameMessage.isBusy()) $gameMessage.clear(); 0");   // (the hero's lines before the name screen)
+            await frames(10);
+        }
+        if (named) await ev("SceneManager._scene.done(); 0");
+        for (let i = 0; i < 60 && !(await ev("SceneManager._scene.constructor.name === 'Scene_Map' && !SceneManager.isSceneChanging()")); i++) await frames(10);
+        await frames(20);
+        const raven = await J("({ stage: Kruk.state().stage, name: Kruk.state().name, tame: !!TownQuests.state().flags.krukTame, ring: $gameParty.numItems($dataItems[179]) })");
+        check("'Oswojony kruk od razu': back on the map, the name screen (empty field: 'Kruk'), tame, the ring, flag krukTame",
+            named && raven.stage === "tame" && raven.name === "Kruk" && raven.tame && raven.ring === 1, { named, raven });
+
         // ---------------------------------------------------------------- closing
+        await openF9();
         await key(ESC);
         await frames(10);
         check("Esc closes the menu, back on the map", (await ev("SceneManager._scene.constructor.name")) === "Scene_Map");
-        await key(F9);
-        await frames(10);
+        await openF9();
         check("F9 opens it again", (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
         await key(F9);
         await frames(10);

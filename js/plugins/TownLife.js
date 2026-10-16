@@ -22,10 +22,13 @@
 // condition `when` holds (a condition registered with addCondition; an unknown one does NOT switch it) it lives on alt.map by alt.plan
 // (and says alt.talk / alt.barks): the camp of the ferry people moves out to Podgrodzie when the town shuts its gate. Coming onto its
 // old map it is away (hidden); the new map puts it in as it loads.
+// (v1.4.0, 2026-10-16, the six island places - docs/miejsca_wyspy/PAKIETY.md) Residents of other plugins come in through
+// window.TownLifeExtra (a data plugin above this one pushes them there), each with its own fixed event id (943-948 given out); an
+// indoor place may be a default of TownLifeData.SPOTS_BY_MAP[map] when the map has no "Miejsce:" event for it (Map001 untouched).
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.3.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.4.0
  * @author Claude
  *
  * @help
@@ -61,7 +64,26 @@
     if (!D) throw new Error("TownLife.js: TownLife_Data.js must stand above it in the plugin list");
     const MAP = D.MAP, FIRST = D.FIRST_ID, LAST = FIRST + 39;
     const RES = D.RESIDENTS;
-    const WANDER_R = 3;                 // tiles round the spot a stroll goes
+    // (2026-10-16, docs/miejsca_wyspy/PAKIETY.md) residents of other plugins: a data plugin above this one puts them into
+    // window.TownLifeExtra, each with its OWN fixed event id (910-949, given out in the plan) - the ids of the residents above stay
+    // FIRST + their place in the list, whatever plugins come or go. A resident without an id, with a taken id or key, or with an id
+    // the list's own residents would use, is left out (said in the console).
+    (function mergeExtra() {
+        const extra = Array.isArray(window.TownLifeExtra) ? window.TownLifeExtra : [];
+        const warn = m => { try { console.warn("TownLife: " + m); } catch (e) { /* (no console) */ } };
+        const plain = RES.filter(r => !r.id).length;
+        for (const r of extra) {
+            if (!r || !r.key) continue;
+            const id = Number(r.id);
+            if (!(id >= FIRST + plain && id <= LAST)) { warn(r.key + ": the id " + r.id + " is not free (" + (FIRST + plain) + "-" + LAST + ") - left out"); continue; }
+            if (RES.some(o => o.key === r.key || o.id === id)) { warn(r.key + ": the key or the id " + id + " is taken - left out"); continue; }
+            RES.push(r);
+        }
+    })();
+    const idOf = (r, i) => (r.id ? Number(r.id) : FIRST + i);
+    const BY_ID = new Map(RES.map((r, i) => [idOf(r, i), r]));
+    const IDS = Array.from(BY_ID.keys()).sort((a, b) => a - b);
+    const WANDER_R = 3;                // tiles round the spot a stroll goes
     const BARK_NEAR = 4.5;              // tiles: the hero this close hears a call
     const BARK_GAP = [900, 1800];       // frames between one resident's calls
     const BARK_GLOBAL = 300;            // frames between any two calls
@@ -79,7 +101,7 @@
     const barksOf = r => (altOn(r) && r.alt.barks ? r.alt.barks : r.barks);
     const isTown = () => !!($gameMap && HOMES.has($gameMap.mapId()));
     const baseSpots = mapId => (mapId === MAP ? D.SPOTS : (D.SPOTS_BY_MAP && D.SPOTS_BY_MAP[mapId]) || {});
-    const resOf = id => (id >= FIRST && id < FIRST + RES.length ? RES[id - FIRST] : null);
+    const resOf = id => BY_ID.get(id) || null;
     const hourNow = () => ($gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12);
     const raining = () => { const w = $gameScreen.weatherType(); return (w === "rain" || w === "storm") && $gameScreen.weatherPower() > 0; };
     const isNight = h => h >= 21 || h < 5;
@@ -170,7 +192,7 @@
             moveFrequency: 3, moveRoute: { list: [{ code: 0, parameters: [] }], repeat: true, skippable: false, wait: false },
             moveSpeed: res.speed || 3, moveType: 0, priorityType: 1, stepAnime: false, through: false, trigger: 0, walkAnime: true
         };
-        return { id: FIRST + i, name: res.name + " (" + res.title + ")", note: "<Town:" + res.key + ">", pages: [page], x: at[0], y: at[1] };
+        return { id: idOf(res, i), name: res.name + " (" + res.title + ")", note: "<Town:" + res.key + ">", pages: [page], x: at[0], y: at[1] };
     }
     // indoors on other maps: the tavern's guests stand on "Miejsce: gosc_N" (Map001; N = the order of the residents with a
     // "tawerna" entry in their plans) and the residents at home on "Miejsce: <key>_wnetrze" (their interior's map) - put on
@@ -187,12 +209,15 @@
         }
         return null;
     }
+    // (2026-10-16) an indoor place the map has no "Miejsce:" event for may come from the data: TownLifeData.SPOTS_BY_MAP[map][name]
+    // (the tavern Map001 stays as the user made it - a guest beyond gosc_8 sits on a place given in the data)
+    const indoorSpot = (events, mapId, name) => eventSpot(events, name) || ((D.SPOTS_BY_MAP && D.SPOTS_BY_MAP[mapId]) || {})[name] || null;
     T.inject("*", { ids: [FIRST, LAST], owner: PLUGIN, build(data, mapId) {
         if (HOMES.has(mapId)) return RES.map((r, i) => (homeOf(r) === mapId ? eventData(r, i, data, null, mapId) : null)).filter(Boolean);
         const out = [];
         RES.forEach((r, i) => {
             const names = [r.key + "_wnetrze"].concat(GUESTS.includes(r.key) ? ["gosc_" + (GUESTS.indexOf(r.key) + 1)] : []);
-            const at = names.map(n => eventSpot(data.events, n)).find(Boolean);
+            const at = names.map(n => indoorSpot(data.events, mapId, n)).find(Boolean);
             if (at) out.push(eventData(r, i, data, at, mapId));
         });
         return out;
@@ -240,7 +265,7 @@
         if (!res) return;
         const st = stateOf(ev), e = entryAt(res, hourNow());
         const name = e.act === "inside" && !absent(res) ? indoorName(res, e) : null;
-        const at = name ? eventSpot($dataMap.events, name) : null;
+        const at = name ? indoorSpot($dataMap.events, $gameMap.mapId(), name) : null;
         if (at && st.hidden !== false) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); show(ev, st); }
         else if (at && (ev.x !== at[0] || ev.y !== at[1]) && !talking(ev)) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); }
         else if (!at && !st.hidden) hide(ev, st);
@@ -249,7 +274,7 @@
     function residents() {
         if (!$gameMap) return [];
         const out = [];
-        for (let id = FIRST; id < FIRST + RES.length; id++) { const ev = $gameMap.event(id); if (ev) out.push(ev); }
+        for (const id of IDS) { const ev = $gameMap.event(id); if (ev) out.push(ev); }
         return out;
     }
     function placeAll() { for (const ev of residents()) place(ev); }

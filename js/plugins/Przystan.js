@@ -216,7 +216,7 @@
             "I ciszej z tym „przemytnikiem”. Tu jestem Roch, co łata sieci i nosi worki, jak przypłynie prom. Celnik Lorda za przemyt zabiera łódź, a człowieka zakuwa.",
             "> Nikomu nie powiem.",
             "Wiem. Dlatego jeszcze rozmawiamy. (Roch zerka na twoją szyję.) A to schowaj pod koszulę.",
-            "> Wisiorek? Był ojca.",
+            "> Wisiorek? Po dziadku. Matka mi go dała.",
             "W porcie Czarne Oczy przetrząsały każdą łódź właśnie za takimi kamieniami. Kruk na kamieniu. Kto go miał, ten dalej nie płynął. Czego szukają, nie wiem i wiedzieć nie chcę. Ale ty tego nie noś na wierzchu. Tu też ktoś skupuje kruki.",
             "Jakbyś chciał pomóc staremu... kuter da się jeszcze połatać. Deski, liny, smoła. Jak znowu popłynie, zawiozę na ląd list do twojej matki. Za darmo. No, prawie za darmo."],
         celnikMeet: ["Sambor Kwit, celnik dworu. (Celnik nie podnosi oczu znad księgi.) Opłata portowa: dwa grosze od tobołka. Ty nie masz tobołka, więc nic.",

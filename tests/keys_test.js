@@ -33,6 +33,8 @@ const path = require("path");
 
         // ---------------------------------------------------------------- the key table
         const map = await J("[87, 65, 83, 68, 81, 69, 82].map(c => Input.keyMapper[c])");
+        // (2026-10-16) K: the tame raven (Kruk.js) - its menu, or it flies in; in the keys' help of Farming.js too
+        check("K is the raven's key ('raven': its menu / call it - Kruk.js)", (await ev("Input.keyMapper[75]")) === "raven" && (await ev("!!(window.Kruk && Kruk.openRavenMenu)")));
         check("W A S D are up / left / down / right; Q and E are the page keys (pageup / pagedown); R is flip", JSON.stringify(map) === JSON.stringify(["up", "left", "down", "right", "pageup", "pagedown", "flip"]), map);
 
         // ---------------------------------------------------------------- a meadow and a full bag
@@ -71,7 +73,8 @@ const path = require("path");
         // ---------------------------------------------------------------- Q: the build menu
         await key(K.Q);
         let st = await state();
-        const expectBuild = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && !Farming.BUILDINGS[t].indoorOnly && !Farming.BUILDINGS[t].instant).map(t => Farming.BUILDINGS[t].name)`);
+        // (needFlag: on the list only once that TownQuests flag is set - the raven's perch after the raven is tame, 2026-10-16)
+        const expectBuild = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && !Farming.BUILDINGS[t].indoorOnly && !Farming.BUILDINGS[t].instant && (!Farming.BUILDINGS[t].needFlag || !!(window.TownQuests && TownQuests.state().flags[Farming.BUILDINGS[t].needFlag]))).map(t => Farming.BUILDINGS[t].name)`);
         check("Q opens the build menu ('Budowa') with every real outdoor building (not the instant ones: tent/bucket/bedroll), what can be built now first, no 'Wróć' line", st.open && st.kind === "build" && st.title === "Budowa" && JSON.stringify(st.names.slice().sort()) === JSON.stringify(expectBuild.slice().sort()) && !st.names.includes("Wróć") && st.enabled.filter((e, i) => st.names[i] !== "Zrób młotek").every((e, i, a) => i === 0 || !e || a[i - 1]), { open: st.open, kind: st.kind, title: st.title, n: st.names.length, want: expectBuild.length });
         check("the popup with the description shows for the highlighted building", st.tip);
         const indoorOnly = await J(`Object.keys(Farming.BUILDINGS).filter(t => Farming.BUILDINGS[t].indoorOnly).map(t => Farming.BUILDINGS[t].name)`);

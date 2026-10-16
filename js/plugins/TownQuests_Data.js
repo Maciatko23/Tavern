@@ -770,7 +770,8 @@
                 accept: ["> Zaniosę, dziadku.", "Dobry z ciebie wnuk. Lord stoi przed dworem od ósmej do ósmej."]
             },
             steps: [
-                { type: "bring", to: "lord", need: [["v:list", 1]], hours: [8, 20], text: "Zanieś list dziadka Lordowi (drzwi dworu, 8–20).",
+                // (kruk: the tame raven may carry it - Kruk.js's letters, 2026-10-16)
+                { type: "bring", to: "lord", need: [["v:list", 1]], hours: [8, 20], kruk: true, text: "Zanieś list dziadka Lordowi (drzwi dworu, 8–20).",
                     hero: ["> List od dziadka Stacha. Do rąk własnych."],
                     done: ["List od Stacha? (czyta) Zwłoki nie będzie. Dług to dług.",
                         "Ale powiedz mi... na polu twojego dziadka leżą jeszcze te stare kamienie? Z wyrytym krukiem? Mój dziadek je zbierał. Ładne kamienie."] }
@@ -1415,7 +1416,7 @@
             steps: [
                 { type: "custom", talk: "d17Sign", signers: ["kowal", "piekarka", "woziwoda", "garbarz", "dzwonnik", "kupiec"], signNeed: 5, vgives: { petycja: 1 },
                     text: "Zbierz krzyżyki pod petycją (co najmniej 5): Tadek, Hanka, Kuba, Ignac, Ambroży, może Baltazar. Podpisy: {n}." },
-                { type: "bring", to: "lord", need: [["v:petycja", 1]], hours: [8, 20], text: "Zanieś petycję Lordowi (drzwi dworu, 8–20).",
+                { type: "bring", to: "lord", need: [["v:petycja", 1]], hours: [8, 20], kruk: true, text: "Zanieś petycję Lordowi (drzwi dworu, 8–20).",
                     hero: ["> Petycja od miasta, panie. Ludzie nie mają z czego płacić."],
                     done: ["Petycja? (czyta długo) ...Pół. Obniżam o połowę. Tylko dlatego, że to ty przyniosłeś, a nie sołtys.",
                         "I jeszcze jedno. Mój dziadek zbierał bajki o Kruczych Skałach. Gdybyś kiedyś coś znalazł... przyjdź najpierw do mnie. Dla porządku."] },
@@ -1544,7 +1545,7 @@
                 { ch: 7, type: "custom", talk: "w1Bell", text: "Na Zasuwie głównej wykuto: „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.” Porozmawiaj z Ambrożym (za dnia, 6–21): cztery i dwa - zadzwonisz sam albo on." }
             ]
         },
-        // =========================================================== W2 (chapters 1-6; 7 "Jedno pytanie" waits)
+        // =========================================================== W2 (chapters 1-6; 7 "Jedno pytanie" at the hermitage - Pustelnia.js; 8 waits)
         {
             id: "W2", kind: "W", title: "Kod dzwonu", giver: null, icon: 0, where: "dzwonnica, rynek, ogród rycerzy, Archiwum zakonu", when: "od pierwszego nocnego dzwonu",
             desc: "Ambroży dzwoni o dziwnych godzinach. Liczba uderzeń ma znaczenie - to sygnały, których miasto już nie rozumie.",
@@ -1572,7 +1573,24 @@
                 noteChron: ["Kroniki zakonu", "W Archiwum pod ogrodem rycerzy leżą kroniki zakonu: zasada jednego pytania na rok, lista kasztelanów (ostatni: „Bogumił z rodu Kowali”) i wzmianka o cysternie pod wzgórzem, której główną zasuwę otwiera sygnał wody."],
                 // the chronicles taken: Baltazar's offer (a hook for W5)
                 sell: ["Przyjacielu... słyszałem, że masz stare księgi. Z krukiem na grzbiecie.", "Trzysta groszy. Od ręki. Na kontynencie są ludzie, którzy zbierają takie... pamiątki."],
-                sellYes: ["Interes życia, przyjacielu. Twojego, nie mojego."], sellNo: ["Szkoda. Oferta nie wygasa. Ja też nie."]
+                sellYes: ["Interes życia, przyjacielu. Twojego, nie mojego."], sellNo: ["Szkoda. Oferta nie wygasa. Ja też nie."],
+                // rozdz. 7 "Jedno pytanie" (2026-10-16, pakiet A: przeniesiony do pustelni na klifie - Pustelnia.js FX.w2Pytanie)
+                stage0: "w Akcie II Ambroży (rynek albo dzwonnica, 6–21) ma dla ciebie coś po rodzie dzwonników.",
+                stage0Wait: "zacznie się w Akcie II (po spłacie długu albo stracie pola). Ambroży ma coś po rodzie dzwonników.",
+                stage1: "zanieś serce dzwonu bratu Kleofasowi, pustelnikowi na klifie nad przystanią (za dnia).",
+                stage2: "Noc Pytania: w Wigilię (dzień {wigilia}) o północy dzwon w wieży skryptorium uderzy siedem razy. Bądź wtedy przy wieży - Kleofas odpowie na jedno pytanie.",
+                stage3: "pytanie zadane. Rozdział 8 „Alarm” czeka na Akt III. Następne pytanie u Kleofasa: Wigilia roku {rok} (dzień {wigilia}).",
+                heart: ["Chłopcze. Chodź bliżej. (Ambroży wyjmuje z worka ciężki, czarny od starości kawał żelaza.) Serce dzwonu. Mój ród przechował je od upadku zakonu.",
+                    "Nie z mojego dzwonu. Z dzwonu na klifie, nad przystanią - tam, gdzie siedzi brat pióra. Pustelnik.",
+                    "Mój mistrz mówił: kiedy dzwon i pióro znów się spotkają, będzie można zapytać.", "> Zapytać? O co?",
+                    "O jedno. Raz w roku, w Wigilię, o północy. Siedem uderzeń - sygnał pytania. Zanieś mu to. Ja jestem za stary na klify."],
+                heartNote: ["Serce dzwonu", "Ambroży dał mi serce dzwonu, które jego ród przechował od upadku zakonu. Należy do dzwonu w wieży skryptorium na klifie. „Kiedy dzwon i pióro znów się spotkają, będzie można zapytać.”"],
+                heartKleofas: ["> Ambroży z dzwonnicy przysyła to. Serce dzwonu.",
+                    "(Kleofas długo waży żelazo w dłoniach.) ...Siedemdziesiąt lat ten dzwon wisiał niemy. Mój mistrz umarł, nie usłyszawszy go ani razu.",
+                    "Dobrze. Zawieszę je, jak mi kolana pozwolą. A ty przyjdź w Wigilię. O północy dzwon uderzy siedem razy - to sygnał pytania.",
+                    "Wtedy odpowiem ci na jedno pytanie. Z kronik. Jedno, słyszysz? Tak każe reguła."],
+                heartNoteKleofas: ["Noc Pytania", "Brat Kleofas zawiesi serce w dzwonie wieży skryptorium. W Wigilię o północy dzwon uderzy siedem razy - wtedy odpowie mi z kronik na jedno pytanie. Jedno na rok."],
+                heartAway: ["Serce dzwonu? Dla brata pióra, na klifie. Ja tam nie dojdę, chłopcze. Ty dojdziesz."]
             },
             steps: [
                 { ch: 1, type: "custom", check: "w2Heard", text: "Usłysz dzwon o dziwnej porze (bądź w miasteczku nocą)." },
@@ -1595,7 +1613,12 @@
                     done: ["(Ambroży bierze księgi drżącymi rękami. Długo gładzi okładkę.) Kroniki... Mój mistrz mówił, że spłonęły.",
                         "Czterdzieści lat pilnowałem warty, której nikt nie pamiętał. A ty przyniosłeś mi pamięć. Dziękuję, chłopcze. Nie wiem, jak ci się odwdzięczę... Może kiedyś będę wiedział."],
                     reward: { opinion: 3, xp: 50, flag: "ambrozyChronicles" } },
-                { ch: 7, type: "pause", text: "Ciąg dalszy wkrótce: „Jedno pytanie” - Ambroży ma prawo zadać Sercu jedno pytanie na rok." }
+                // (2026-10-16, pakiet A - docs/miejsca_wyspy/KONCEPCJA.md 3: rozdz. 7 przeniesiony do pustelni na klifie) ONE step that walks its
+                // own stages (Pustelnia.js: TownQuests.FX.w2Pytanie, r.t.w2s): Ambroży gives the bell's heart (Act II) -> brother Kleofas hangs it
+                // in the scriptorium's tower -> the Night of the Question (the Wigilia, midnight: seven strikes) -> one question; after it the
+                // step says rozdz. 8 "Alarm" waits (Act III). It stays the LAST step: rozdz. 6 jumps to q.steps.length - 1, and old saves
+                // standing on the old pause (this index) land here
+                { ch: 7, type: "custom", talk: "w2Pytanie", tick: "w2Pytanie", vars: "w2Pytanie", text: "„Jedno pytanie” - {etap}" }
             ]
         },
 
@@ -2443,5 +2466,42 @@
         }
     ];
 
-    window.TownQuestsData = { OPINION, GREET, MARKET, CALENDAR, SIGNALS, VITEMS, SPOTS, GOSSIP, SIGN, QUESTS, WELL_BONUS, REMARKS, LUCJAN };
+    // (2026-10-16) Quests of other plugins (docs/miejsca_wyspy/PAKIETY.md): a data plugin ABOVE this one (e.g. Latarnia_Data.js) puts
+    // its pack into window.TownQuestsPacks - { owner, quests: [...], spots: {...}, vitems: {...}, remarks: [...], gossip: {...} } -
+    // and it is merged here, before TownQuests.js reads the tables (its places on new maps get their ids 951-959 like any other).
+    // A quest id or a place / thing key that is already taken is left out (said in the console) - nothing of ours is ever replaced.
+    // The quests' own steps (check / talk / fx...) go into TownQuests.FX from the plugin's engine, below TownQuests.
+    const PACKS = [];
+    (function mergePacks() {
+        const packs = Array.isArray(window.TownQuestsPacks) ? window.TownQuestsPacks : [];
+        const warn = m => { try { console.warn("TownQuests_Data: " + m); } catch (e) { /* (no console) */ } };
+        for (const p of packs) {
+            if (!p || typeof p !== "object") continue;
+            const owner = String(p.owner || "?"), got = { owner, quests: [], spots: [], vitems: [], remarks: 0, gossip: [] };
+            for (const q of p.quests || []) {
+                if (!q || !q.id) continue;
+                if (QUESTS.some(o => o.id === q.id)) { warn(owner + ": the quest id " + q.id + " is taken - left out"); continue; }
+                QUESTS.push(q); got.quests.push(q.id);
+            }
+            for (const [k, v] of Object.entries(p.spots || {})) {
+                if (SPOTS[k]) { warn(owner + ": the place " + k + " is taken - left out"); continue; }
+                SPOTS[k] = v; got.spots.push(k);
+            }
+            for (const [k, v] of Object.entries(p.vitems || {})) {
+                if (VITEMS[k]) { warn(owner + ": the thing v:" + k + " is taken - left out"); continue; }
+                VITEMS[k] = v; got.vitems.push(k);
+            }
+            for (const r of p.remarks || []) {
+                if (!r || !r.id || REMARKS.some(o => o.id === r.id)) { warn(owner + ": a remark without an id or with a taken id - left out"); continue; }
+                REMARKS.push(r); got.remarks++;
+            }
+            for (const [k, v] of Object.entries(p.gossip || {})) {
+                if (GOSSIP[k]) { warn(owner + ": the gossip of " + k + " is taken - left out"); continue; }
+                GOSSIP[k] = v; got.gossip.push(k);
+            }
+            PACKS.push(got);
+        }
+    })();
+
+    window.TownQuestsData = { OPINION, GREET, MARKET, CALENDAR, SIGNALS, VITEMS, SPOTS, GOSSIP, SIGN, QUESTS, WELL_BONUS, REMARKS, LUCJAN, PACKS };
 })();

@@ -1,0 +1,21 @@
+{
+ "tower": {
+  "cell": [
+   144,
+   256
+  ],
+  "fire": {
+   "x": 2,
+   "y": 177
+  },
+  "glassPixels": 516,
+  "foot": 253
+ },
+ "visions": [
+  "Latarnia_Wizja_1.png",
+  "Latarnia_Wizja_2.png",
+  "Latarnia_Wizja_3.png"
+ ],
+ "lens": "!$Latarnia_Soczewka",
+ "icon": "tools/latarnia/art/icons/tran_177.png"
+}

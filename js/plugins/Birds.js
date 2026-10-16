@@ -97,7 +97,12 @@
         return ((f && f.buildings[mapId]) || []).filter(b => b.type === "scarecrow" && !b.site);
     }
     function guarded(mapId, x, y) {
-        return scarecrowsOf(mapId).some(s => Math.max(Math.abs(s.x - x), Math.abs(s.y - y)) <= SCARECROW_RANGE);
+        if (scarecrowsOf(mapId).some(s => Math.max(Math.abs(s.x - x), Math.abs(s.y - y)) <= SCARECROW_RANGE)) return true;
+        // (2026-10-16) the tame raven on its perch, "Pilnuj pola" (Kruk.guards - Kruk.js): its crops count as guarded like a scarecrow's.
+        // Not while it is there in the flesh on the hero's map - then it flies at the flocks itself (Kruk.js's guardLive)
+        const K = window.Kruk;
+        if (!K || typeof K.guards !== "function" || (window.$gameMap && $gameMap.mapId() === Number(mapId) && K.pet)) return false;
+        try { return !!K.guards(mapId, x, y); } catch (e) { return false; }
     }
     // [{ x, y, plot }] of the crops of a map a flock could eat
     function openCrops(mapId) {

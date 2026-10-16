@@ -23,7 +23,7 @@ def ring(cells):
 # =============================================================================================== 1. Pustelnia na klifie
 def pustelnia():
     W, H = 48, 36
-    mp = Szkic(155, W, H, "Pustelnia na klifie", "<Clouds:on>\n<Farm:off>", seed=155)
+    mp = Szkic(155, W, H, "Pustelnia na klifie", "<Clouds:on>\n<Farm:off>\n<Water:salt>", seed=155)
     sea = set()
     for x in range(W):
         top = 3 + (1 if noise(x // 3, 0, 11) > 0.6 else 0) + (1 if x < 9 else 0)

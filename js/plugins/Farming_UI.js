@@ -122,9 +122,11 @@
 
     // shared by buildEntries/placeEntries: one menu entry per building type that passes `filter`, sharing all the
     // display logic (cost/help/facts) regardless of whether it needs a hammer and a site, or pitches straight away
+    // a building with needFlag (a TownQuests flag) shows up on the list only once that flag is set (the raven's perch: krukTame)
+    const flagOk = def => { if (!def.needFlag) return true; const s = T.call("TownQuests", "state"); return !!(s && s.flags && s.flags[def.needFlag]); };
     function buildingEntryList(x, y, filter) {
         const indoors = isHutInterior(), here = mapAllowsBuilding();   // (away from the grandfather's field: only what goes up anywhere - the snare)
-        return BUILDING_IDS.filter(type => !BUILDINGS[type].noBuild && (indoors ? BUILDINGS[type].indoor : !BUILDINGS[type].indoorOnly) && (here || buildsAnywhere(BUILDINGS[type])) && filter(BUILDINGS[type])).map(type => {
+        return BUILDING_IDS.filter(type => !BUILDINGS[type].noBuild && flagOk(BUILDINGS[type]) && (indoors ? BUILDINGS[type].indoor : !BUILDINGS[type].indoorOnly) && (here || buildsAnywhere(BUILDINGS[type])) && filter(BUILDINGS[type])).map(type => {
             const def = BUILDINGS[type];
             const missing = missingMaterials(type);
             const built = !!def.single && !!hutOf();

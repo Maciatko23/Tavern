@@ -22,7 +22,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Czerwona woda: w suszę morze przy wyspie zakwita (rdzawy odcień, piana, śnięte ryby), nie da się go pić ani przegotować; po deszczu szare i słone. Mapy z <Water:salt>. v1.0.0
+ * @plugindesc Czerwona woda: w suszę morze przy wyspie zakwita (rdzawy odcień, piana, śnięte ryby), nie da się go pić ani przegotować; po deszczu szare i słone. Mapy z <Water:salt>. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter Farming_Plots
@@ -44,6 +44,8 @@
  * słabiej i czasem trafia się śnięta ryba; z końca pomostu łowi się zdrowo.
  *
  * W skryptach: CzerwonaWoda.phase() -> { grey, red }, CzerwonaWoda.isRed().
+ * Menu F9 (zakładka „Wyspa i fabuła”) i testy: CzerwonaWoda.force("red" | "grey" | null)
+ * - woda na dziś wymuszona czerwona albo szara (null: znowu z pogody; nie zapisuje się).
  * ============================================================================
  */
 
@@ -91,7 +93,15 @@
         return n;
     }
     let phaseCache = { key: "", v: null };
+    // (2026-10-16) F9 / the tests: today's water forced red or grey (null: from the weather again); runtime only, not saved
+    let forced = null;
+    function force(kind) {
+        forced = kind === "red" || kind === "grey" ? kind : null;
+        phaseCache = { key: "", v: null };
+        return forced;
+    }
     function phase(d) {
+        if (d === undefined && forced) return forced === "grey" ? { grey: true, red: 0, rains: GREY_RAINS, forced } : { grey: false, red: 1, rains: 0, dry: 3, forced };
         const dd = d === undefined ? day() : d, key = dd + ":" + (d === undefined ? Math.floor(hour()) : "x");
         if (d === undefined && phaseCache.key === key) return phaseCache.v;
         let rains = 0;   // (an explicit day: as at its end - its whole rain counts)
@@ -414,7 +424,7 @@
     // ------------------------------------------------------------------
     // The API
     // ------------------------------------------------------------------
-    const api = { phase, isRed, seaHere, dryDays, distToLand, nearShore, deadFish, fishOn, seaMenu, drinkAnyway, fillRefused, boilRefused,
+    const api = { phase, force, forced: () => forced, isRed, seaHere, dryDays, distToLand, nearShore, deadFish, fishOn, seaMenu, drinkAnyway, fillRefused, boilRefused,
         fishAt, deadCatch, poisoned, state: () => S0(), GREY_RAINS, POISON_HOURS, POISON_CAP, Sprite_RedWater,
         // the share of red days over a stretch of the calendar (for the tests and the report)
         redShare: (d0, d1) => { let r = 0; for (let d = d0; d <= d1; d++) if (!phase(d).grey) r++; return r / (d1 - d0 + 1); } };

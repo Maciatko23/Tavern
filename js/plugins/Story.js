@@ -1063,7 +1063,7 @@
             "Mokry, rozmyty list matki do dziadka Stacha. Straż Pewności - ludzie mówią na nich „Czarne Oczy” - spaliła naszą wieś, Brzozową Wolę. " +
             "Ojciec przepadł na wojnie; matka poszła za wojskiem go szukać. Obiecała, że przypłynie następnym promem.\n" +
             "Przemytnik zabrał mnie kutrem za ostatnie monety. Sztorm rozbił łódź - nie wiem, czy przeżył. Rybak Janek znalazł mnie na plaży.\n" +
-            "Mam jeszcze wisiorek z krukiem po ojcu. Dziadek na jego widok milknie.");
+            "Mam jeszcze wisiorek z krukiem - matka dostała go od dziadka, kiedy wyjeżdżała z wyspy. Dziadek na jego widok milknie.");
         if (first) tell("talk");
     }
     function thanks() {

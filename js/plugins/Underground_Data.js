@@ -381,7 +381,41 @@
         opinionHigh: "W miasteczku mówią o tobie dobrze. Kiedy wrócisz, będzie do kogo wrócić.",
         opinionLow: "W miasteczku mało kto pyta, gdzie byłeś.",
         water: "Woda znów płynie pod rynek - mniej, niż by chcieli, ale płynie.",
-        ambrozyBook: "Ambroży trzyma Księgę sygnałów na kolanach. Siódme uderzenie znów coś znaczy."
+        ambrozyBook: "Ambroży trzyma Księgę sygnałów na kolanach. Siódme uderzenie znów coś znaczy.",
+        // (2026-10-16) the six island places (docs/miejsca_wyspy/PAKIETY.md): one line each, by what became of them -
+        // Underground.world().island (the packages' flags and state). {imie}: the raven's name. latarnia: by the lens (rozbita /
+        // sprzedana), the fire gone out (zgasla), else by the ending (the lines of LatarniaData.EPILOG, package C)
+        island: {
+            pustelnia: {
+                kroniki: "Brat Kleofas skończył odpis „Kroniki upadku”. Leży w skryptorium na klifie - dla każdego, kto wejdzie po schodach.",
+                dzwon: "W wieży skryptorium na klifie wisi serce dzwonu. W Wigilię o północy bije siedem razy, a brat Kleofas czeka na jedno pytanie."
+            },
+            kruk: "{imie} siedział na grzędzie, kiedy wróciłeś. Jakby wiedział, że wrócisz.",
+            krukStraznik: "{imie} co rano siada na kracie w piwnicy tawerny i czeka.",
+            latarnia: {
+                zniszczyc: "Latarnia na przylądku świeci dalej, ale soczewka ślepnie: we mgle Bazyli widzi już tylko mgłę.",
+                zapieczetowac: "Bazyli widzi w soczewce tylko w Noc Pytania - raz w roku, jak każe reguła zakonu.",
+                uwolnic: "Bazyli zasłonił soczewkę płótnem. Mówi, że prawdy jest teraz dość na całą wyspę - nie musi jej wypatrywać we mgle.",
+                rozbita: "Bazyli pali ogień w latarni za pękniętym szkłem i nigdy już nie zagląda w mgłę.",
+                sprzedana: "Pusty pierścień w laternie przypomina Bazylemu, że Czarne Oczy wiedziały o jedną noc więcej.",
+                zgasla: "Latarnia na przylądku zgasła na dobre. Rybacy wracają przed zmierzchem."
+            },
+            garnizon: {
+                klos: "Kwatermistrza Kłosa odesłano promem w kajdanach. Skup w garnizonie nad zatoką płaci teraz uczciwie.",
+                nasz: "Żołnierze z garnizonu nad zatoką salutują ci na drodze. Rotmistrz mówi o tobie „nasz”.",
+                wrog: "Patrol z garnizonu wciąż zatrzymuje cię na drodze. Rotmistrz ma długą pamięć."
+            },
+            wrak: {
+                ally: "Eryk Sowa - Ansgar Wiel - został na wyspie. Rysuje mapy dla rybaków z przystani i nikomu nie mówi, skąd zna te wody.",
+                given: "Rozbitka z wraku zabrał garnizon. Melia nie śpiewa już wesołych piosenek.",
+                fled: "Eryk Sowa odpłynął kutrem Rocha. Czasem przychodzi list bez podpisu, z rysunkiem kruka w rogu."
+            },
+            cysterna: {
+                galaz: "Gałąź dworska cysterny została zamknięta. Pierwszy raz od stu lat dwór czeka na deszcz jak wszyscy.",
+                rynny: "Rynny zakonu na Urwisku są czyste. Po każdym deszczu stara cysterna pije razem z miastem.",
+                otwarta: "Stara cysterna zakonu znów zbiera deszcz - głęboko pod ziemią, tam gdzie nikt jej nie widzi."
+            }
+        }
     };
 
     // ------------------------------------------------------------------ the Lord at the Heart (W7 ch. 7) and the endings' scenes (v2.1)

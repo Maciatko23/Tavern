@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w pięciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js) i kot Mruczek (co robi, każ mu). v1.6.0
+ * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna). v1.7.0
  * @author Tawerna
  *
  * @param enabled
@@ -10,7 +10,7 @@
  * @desc Wyłącz (false) przed wydaniem gry, żeby F9 nie działało u gracza. Włączone domyślnie na czas developmentu/testów.
  *
  * @help
- * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran z pięcioma zakładkami;
+ * Klawisz F9 (poza wiadomościami i innymi menu) otwiera prosty ekran z sześcioma zakładkami;
  * Q / E przełączają zakładki (jak w dzienniku), góra / dół wybierają:
  *   1. Zdarzenia:
  *      - "+1 godzina" / "+1 dzień": przesuwa zegar gry (tak jak w Farming.js).
@@ -46,6 +46,33 @@
  *      w fotelu), idź spać na posłanie, niech sam wybierze, pogłaszcz (mruczy) - po wyborze menu
  *      wraca na mapę, żeby popatrzeć. Poza domem dziadka: "Zabierz mnie do domu dziadka".
  *      Na dole: jego dzień (co robi o jakiej porze). OK na opisie czyta wszystko jeszcze raz.
+ *   6. Wyspa i fabuła (sześć miejsc Kruczej Wyspy, docs/miejsca_wyspy/, i wielkie chwile fabuły). Każdy
+ *      wiersz ma pod sobą krótki opis (szary). Wiersze:
+ *      Przenieś mnie do:
+ *      - "Przystań", "Pustelnia na klifie", "Urwisko Kruków", "Przylądek z latarnią", "Garnizon nad zatoką",
+ *        "Wrak na mieliźnie", "Stara cysterna zakonu", "Chata pod lasem", "Spalona zagroda": przenosi na pole,
+ *        na którym ląduje się zwykłym przejściem (zawsze da się na nim stać). Wrak ustawia też odpływ (łacha sucha).
+ *      - "Wnętrze: ..." - ←→ wybiera wnętrze (skryptorium, izba latarnika, laterna, kwatera rotmistrza, wrak pod
+ *        pokładem, izba chaty pod lasem, Dom Ługów), OK przenosi tam, przy drzwiach.
+ *      Morze i pogoda:
+ *      - "Odpływ teraz" / "Przypływ teraz": pływ wymuszony od razu (Wyspa.forceTide; przełącznik 20 idzie za nim);
+ *        drugi raz OK na tym samym wierszu: pływy znowu z zegara. Nie zapisuje się w zapisie gry.
+ *      - "Mglista noc na przylądku": noc (23:00, jeśli jest dzień), mgła morska tej nocy (jutrzejszy ranek mglisty),
+ *        D22 „Księga mgieł” zaczęte, jeśli jeszcze nie było; przenosi do laterny - OK przy soczewce pokazuje wizję.
+ *      - "Woda w morzu": ←→ albo OK - z pogody / czerwona / szara (CzerwonaWoda.force; nie zapisuje się).
+ *      Fabuła:
+ *      - "Świt dnia 61 bez spłaty": zegar na świt dnia po terminie, bohater na polu dziadka - pole przechodzi na
+ *        Lorda, scena ludzi dworu (Story.js); tylko w grze z fabułą, gdy dług nie jest spłacony.
+ *      - "Spłać dług" (po stracie pola: "Odkup pole"): dodaje brakujące złoto i od razu je płaci.
+ *      - "+1000 G".
+ *      - "Odtwórz prolog": sam film „Ostatni prom” (bez ekranu imienia), potem powrót na mapę, na to samo
+ *        miejsce - stan gry bez zmian, muzyka mapy wraca.
+ *      Postacie:
+ *      - "Oswojony kruk od razu": kruk z Urwiska oswojony (obrączka, flagi krukTame i kronikaKarta6), potem
+ *        ekran imienia (puste pole = "Kruk"); klawisz K otwiera jego menu.
+ *      - "Przychylność garnizonu: N / 100": ← -20, → +20 (OK też +20); progi 40 / 60 / 80 działają jak w grze.
+ *      - "Otwórz cysternę": to, co daje dzwon „cztery i dwa” (W1 rozdz. 7): flagi cisternOpen, sluiceHalf,
+ *        millRuns, kubaHonest - zasuwa na piętrze 30 prowadzi do starej cysterny, D28 może się zacząć.
  * F9 otwiera się na tej zakładce (i podzakładce) i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
  * Zakładki i podzakładki można też klikać myszą.
  * Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
@@ -73,6 +100,14 @@
             $gameTemp._debugBuild = null;
             Farming.startFreePlacement(type);
         }
+        // the island tab's acts that need the map (the raven's name screen, the prologue's film): once the map is back and calm
+        if ($gameTemp._isleAct && this === SceneManager._scene && !SceneManager.isSceneChanging() && !$gamePlayer.isTransferring() &&
+            !$gameMessage.isBusy() && !$gameMap.isEventRunning()) {
+            const what = $gameTemp._isleAct;
+            $gameTemp._isleAct = null;
+            if (what === "raven" && window.Kruk && Kruk.tameNow) Kruk.tameNow();
+            else if (what === "prologue" && window.Prologue && Prologue.replay) Prologue.replay();
+        }
     };
 
     // the three tabs: their names and the key help shown over the list
@@ -81,9 +116,69 @@
         { name: "Budowanie", help: "↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij" },
         { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij" },
         { name: "Rdzeń", help: "↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij" },
-        { name: "Kot", help: "↑↓ wybierz   OK każ mu (wraca na mapę)   na opisie OK odśwież   Q / E zakładka   Esc zamknij" }
+        { name: "Kot", help: "↑↓ wybierz   OK każ mu (wraca na mapę)   na opisie OK odśwież   Q / E zakładka   Esc zamknij" },
+        { name: "Wyspa i fabuła", help: "↑↓ wybierz   ←→ zmień   OK wykonaj (przejścia wracają na mapę)   Q / E zakładka   Esc zamknij" }
     ];
-    const ITEMS_TAB = 2, CORE_TAB = 3, CAT_TAB = 4;
+    const ITEMS_TAB = 2, CORE_TAB = 3, CAT_TAB = 4, ISLE_TAB = 5;
+    // ---- the island tab ("Wyspa i fabuła", 2026-10-16 - the user's decision): the six island places and the story's big moments at
+    // once. Where to go: [name, map, x, y, facing, the line under it, "low": the low tide set] - each the landing tile of the place's
+    // own way in (always walkable)
+    const ISLE_GO = [
+        ["Przystań", 125, 54, 19, 4, "Map125: Janek, Roch Szkwał, celnik, prom. Lądujesz przy ścieżce z Podgrodzia."],
+        ["Pustelnia na klifie", 155, 24, 34, 8, "Map155: brat Kleofas, skryptorium, ule, wieża z dzwonem. Lądujesz przy zejściu na przystań."],
+        ["Urwisko Kruków", 157, 1, 19, 6, "Map157: kruczarnia, gniazda kruków, krata przelewu cysterny. Lądujesz na ścieżce od pustelni."],
+        ["Przylądek z latarnią", 159, 30, 38, 8, "Map159: latarnik Bazyli, wieża latarni, dzwon mgłowy. Lądujesz na ścieżce z gór."],
+        ["Garnizon nad zatoką", 162, 22, 1, 2, "Map162: rotmistrz, kwatermistrz Kłos, palisada, łacha do wraku. Lądujesz przy drodze z przystani."],
+        ["Wrak na mieliźnie", 165, 38, 20, 4, "Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej.", "low"],
+        ["Stara cysterna zakonu", 167, 3, 20, 6, "Map167: zbiornik, słup z miarą, czerpak, dźwignia kraty. Lądujesz przy zejściu z piętra 30."],
+        ["Chata pod lasem", 111, 6, 41, 2, "Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa)."],
+        ["Spalona zagroda", 168, 48, 12, 4, "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."]
+    ];
+    const ISLE_INSIDE = [["Skryptorium", 156, 6, 8, 8], ["Izba latarnika", 160, 6, 8, 8], ["Laterna", 161, 5, 7, 8], ["Kwatera rotmistrza", 163, 6, 8, 8],
+        ["Wrak - pod pokładem", 166, 4, 11, 8], ["Chata pod lasem - izba", 154, 4, 8, 8], ["Dom Ługów", 169, 6, 8, 8]];
+    const WATER = [null, "red", "grey"], WATER_NAME = { red: "czerwona", grey: "szara" };
+    const isleIcon = id => ($dataItems[id] ? $dataItems[id].iconIndex : 0);
+    const storyOn = () => !!(window.Story && Story.active && Story.active());
+    const isleLabel = {
+        inside: i => "Wnętrze: " + ISLE_INSIDE[i][0] + "   ←→ zmień, OK idź",
+        tide: kind => {
+            const W = window.Wyspa, name = kind === "low" ? "Odpływ" : "Przypływ";
+            if (!W || !W.forceTide) return name + " (brak Wyspa.js)";
+            const f = W.tideForced();
+            if (f === kind) return name + " wymuszony   OK: pływy znowu z zegara";
+            return name + " teraz" + (f ? "" : "   (z zegara teraz: " + (W.tide().low ? "odpływ" : "przypływ") + ")");
+        },
+        water: () => {
+            const C = window.CzerwonaWoda;
+            if (!C || !C.force) return "Woda w morzu (brak CzerwonaWoda.js)";
+            const f = C.forced();
+            return "Woda w morzu: " + (f ? WATER_NAME[f] + " (wymuszona)" : "z pogody - dziś " + (C.phase().grey ? "szara" : "czerwona")) + "   ←→ / OK zmień";
+        },
+        lose: () => {
+            if (!storyOn()) return "Świt dnia 61 bez spłaty (gra bez fabuły - nie ma długu)";
+            const s = Story.state();
+            if (s.lost) return "Pole już przepadło (dzień " + s.lost.day + ")";
+            if (s.done || s.paid >= s.debt) return "Świt dnia 61 bez spłaty (dług już spłacony)";
+            return "Świt dnia 61 bez spłaty: strata pola, scena na polu dziadka";
+        },
+        pay: () => {
+            if (!storyOn()) return "Spłać dług (gra bez fabuły - nie ma długu)";
+            const s = Story.state();
+            if (s.lost) return s.buy && s.buy.done ? "Pole odkupione od Lorda (dzień " + s.buy.done + ")" : "Odkup pole od Lorda: " + Story.buyLeft() + " G";
+            if (s.done || s.paid >= s.debt) return "Dług spłacony (" + s.paid + " / " + s.debt + " G)";
+            return "Spłać dług: " + Story.left() + " G (z " + s.debt + " G)";
+        },
+        raven: () => {
+            if (!window.Kruk) return "Oswojony kruk (brak Kruk.js)";
+            const s = Kruk.state();
+            return s && s.stage === "tame" ? "Kruk oswojony: " + (s.name || "Kruk") : "Oswojony kruk od razu (potem ekran imienia)";
+        },
+        favor: () => (window.Garnizon && Garnizon.favor ? "Przychylność garnizonu: " + Garnizon.favor() + " / 100   ← -20   → +20" : "Przychylność garnizonu (brak Garnizon.js)"),
+        cistern: () => {
+            const q = window.TownQuests, f = q && q.state ? q.state().flags : {};
+            return f.cisternOpen ? "Cysterna otwarta (dzień " + f.cisternOpen + ")" : "Otwórz cysternę (jak dzwon „cztery i dwa”, W1 rozdz. 7)";
+        }
+    };
     // ---- the cat tab (HomeLife.js's Mruczek): what it does now, where, for how long, what is next; its doings to send it to
     const CAT_SPOTS = [
         ["hearth", "Idź spać przy palenisku", "przy palenisku"],
@@ -232,7 +327,8 @@
     // show the rows of tab `tab` (on the item tab: of kind `kind`), the cursor on row `index`
     Window_DebugList.prototype.setTab = function(tab, index, kind) {
         this._tab = tab;
-        this._rows = tab === CORE_TAB ? this.coreRows() : tab === CAT_TAB ? this.catRows() : this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
+        this._rows = tab === CORE_TAB ? this.coreRows() : tab === CAT_TAB ? this.catRows() : tab === ISLE_TAB ? this.isleRows()
+            : this._all.filter(r => r.tab === tab && (tab !== ITEMS_TAB || r.group === kind));
         this.refresh();
         this.select(Math.max(0, Math.min(index || 0, this._rows.length - 1)));
         this.ensureCursorVisible(true);
@@ -283,8 +379,38 @@
         return rows;
     };
 
+    // the island tab: read as the tab opens (and after each act that stays in the menu); headers, then the rows, each with its line
+    // under it (desc)
+    Window_DebugList.prototype.isleRows = function() {
+        const rows = [], head = label => rows.push({ tab: ISLE_TAB, kind: "info", label, head: true });
+        const row = (kind, label, icon, desc, more) => rows.push(Object.assign({ tab: ISLE_TAB, kind, label, icon, desc }, more || {}));
+        head("Przenieś mnie do:");
+        ISLE_GO.forEach((g, i) => row("isleGo", g[0], 190, g[5], { go: i }));
+        row("isleInside", isleLabel.inside(last.isle || 0), 189, "Wnętrza nowych miejsc i domów: ←→ wybierz, OK przenosi do środka, przy drzwiach.", { pick: last.isle || 0 });
+        head("Morze i pogoda:");
+        row("isleTide", isleLabel.tide("low"), 70, "Odpływ od razu: łacha z garnizonu do wraku sucha, przełącznik 20 włączony. Drugi raz: pływy z zegara.", { tide: "low" });
+        row("isleTide", isleLabel.tide("high"), 70, "Przypływ od razu: łacha pod wodą, ładownia wraku zalana. Drugi raz: pływy z zegara.", { tide: "high" });
+        row("isleFog", "Mglista noc na przylądku (wizja w latarni)", 70, "Noc z mgłą morską, D22 zaczęte; przenosi do laterny - OK przy soczewce, gdy Bazyli jest na górze.");
+        row("isleWater", isleLabel.water(), isleIcon(173) || 70, "Morze przy wyspie: kolejno z pogody / czerwone (zakwit, śnięte ryby) / szare (po deszczu).");
+        head("Fabuła:");
+        row("isleLose", isleLabel.lose(), 241, "Zegar na świt dnia po terminie, bohater na polu dziadka: pole przechodzi na Lorda, scena ludzi dworu.");
+        row("islePay", isleLabel.pay(), 314, "Brakujące złoto dodane i od razu zapłacone (po stracie pola: odkup za 3000 G).");
+        row("isleGold", "+1000 G", 314, "Tysiąc sztuk złota do sakiewki.");
+        row("islePrologue", "Odtwórz prolog „Ostatni prom”", isleIcon(172) || 87, "Sam film (bez ekranu imienia), potem powrót na mapę w to samo miejsce - stan gry bez zmian.");
+        head("Postacie:");
+        row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
+        row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).");
+        row("isleCistern", isleLabel.cistern(), 391, "Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.");
+        return rows;
+    };
+
     Window_DebugList.prototype.maxItems = function() {
         return this._rows.length;
+    };
+    // (the island tab: two lines a row - the row and its description under it)
+    Window_DebugList.prototype.itemHeight = function() {
+        const h = Window_Selectable.prototype.itemHeight.call(this);
+        return this._tab === ISLE_TAB ? h + 22 : h;
     };
 
     // named rowData, not row: Window_Selectable already has its own row(index) (a scroll-position helper,
@@ -294,6 +420,7 @@
     };
 
     Window_DebugList.prototype.drawItem = function(index) {
+        if (this._tab === ISLE_TAB) return this.drawIsleItem(index);
         const row = this._rows[index], rect = this.itemLineRect(index);
         if (row.kind === "info") {   // (the core tab: text only)
             this.changeTextColor(row.head ? ColorManager.systemColor() : ColorManager.normalColor());
@@ -307,6 +434,27 @@
         if (row.kind === "item") {
             const label = "×" + row.qty, w = this.textWidth(label) + 6;
             this.drawText(label, rect.x + rect.width - w, rect.y, w, "right");
+        }
+    };
+
+    // the island tab's row: a header (the system colour), or the icon and the label with its description under it (smaller, grey)
+    Window_DebugList.prototype.drawIsleItem = function(index) {
+        const row = this._rows[index], rect = this.itemRect(index), pad = this.itemPadding(), x = rect.x + pad, w = rect.width - pad * 2;
+        if (row.kind === "info") {
+            this.changeTextColor(ColorManager.systemColor());
+            this.drawText(row.label, x, rect.y + Math.floor((rect.height - this.lineHeight()) / 2), w, "left");
+            this.resetTextColor();
+            return;
+        }
+        this.drawIcon(row.icon || 0, x, rect.y + 4);
+        const tx = x + ImageManager.iconWidth + 6, tw = w - ImageManager.iconWidth - 6;
+        this.drawText(row.label, tx, rect.y, tw, "left");
+        if (row.desc) {
+            this.contents.fontSize = 16;
+            this.changeTextColor("#a9a39a");
+            this.drawText(row.desc, tx + 6, rect.y + 30, tw - 6, "left");
+            this.resetFontSettings();
+            this.resetTextColor();
         }
     };
 
@@ -330,6 +478,27 @@
             const n = crKeys(row.kind).length || 1;
             row.pick = (row.pick + delta + n) % n;
             row.label = crLabel(row.kind, row.pick);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleInside") {   // (which room)
+            row.pick = last.isle = (row.pick + delta + ISLE_INSIDE.length) % ISLE_INSIDE.length;
+            row.label = isleLabel.inside(row.pick);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleWater" && window.CzerwonaWoda && CzerwonaWoda.force) {   // (from the weather / red / grey)
+            CzerwonaWoda.force(WATER[(WATER.indexOf(CzerwonaWoda.forced()) + delta + WATER.length) % WATER.length]);
+            row.label = isleLabel.water();
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleFavor" && window.Garnizon && Garnizon.addFavor) {   // (the garrison's favour: 20 at a time)
+            Garnizon.addFavor(delta * 20, "F9", true);
+            row.label = isleLabel.favor();
             SoundManager.playCursor();
             this.redrawItem(this.index());
             return;
@@ -499,12 +668,94 @@
             this.popScene();
         } else if (row.kind === "info") {   // the core tab and the cat tab: read again
             this._list.setTab(this._tab, this._list.index());
+        } else if (/^isle/.test(row.kind)) {   // the island tab
+            if (this.onIsleOk(row)) return;     // (gone back to the map)
+            this._list.setTab(this._tab, this._list.index());   // (the labels read again)
         } else {
             $gameParty.gainItem(row.item, row.qty);
             $gameTemp.pushLootPopup(row.item.iconIndex, row.item.name + " ×" + row.qty, "#f3e0a0");
         }
         SoundManager.playOk();
         this._list.activate();
+    };
+
+    // the island tab's OK: true when the menu closed (back to the map), false when it stays
+    Scene_Debug.prototype.onIsleOk = function(row) {
+        const say = (icon, text, bad) => $gameTemp.pushLootPopup(icon, text, bad ? "#ffb4a0" : "#9ff0a8");
+        const back = () => { SoundManager.playOk(); this.popScene(); return true; };
+        const go = g => {
+            if (!$dataMapInfos[g[1]]) { say(row.icon, "Nie ma mapy " + g[1], true); return false; }
+            $gamePlayer.reserveTransfer(g[1], g[2], g[3], g[4], 0);
+            return back();
+        };
+        switch (row.kind) {
+            case "isleGo": {
+                const g = ISLE_GO[row.go];
+                if (g[6] === "low" && window.Wyspa && Wyspa.forceTide) Wyspa.forceTide("low");
+                return go(g);
+            }
+            case "isleInside": return go(ISLE_INSIDE[row.pick]);
+            case "isleTide":
+                if (window.Wyspa && Wyspa.forceTide) Wyspa.forceTide(Wyspa.tideForced() === row.tide ? null : row.tide);
+                break;
+            case "isleFog": {
+                const L = window.Latarnia, Q = window.TownQuests;
+                if (!L || !L.nightNow || !window.Sky || !Sky.forceMist) { say(row.icon, "Brak Latarnia.js albo Sky.js", true); break; }
+                if (L.nightNow() === null) $gameSystem.setDayNightHour(23);
+                const nk = L.nightNow() === null ? $gameSystem.dayNightDay() : L.nightNow();
+                Sky.forceMist(1, nk + 1);                                   // (the fog of the night = tomorrow's misty morning)
+                if (Q && Q.start && !Q.isActive("D22") && !Q.isDone("D22")) Q.start("D22");
+                if (L.state) L.state().visionNight = -99;                    // (a vision tonight, even if one was seen)
+                return go(["Laterna", 161, 5, 7, 8]);
+            }
+            case "isleWater":
+                if (window.CzerwonaWoda && CzerwonaWoda.force) CzerwonaWoda.force(WATER[(WATER.indexOf(CzerwonaWoda.forced()) + 1) % WATER.length]);
+                break;
+            case "isleLose": {
+                if (!storyOn()) { say(row.icon, "Gra bez fabuły - nie ma długu", true); break; }
+                const s = Story.state();
+                if (s.lost || s.done || s.paid >= s.debt || s.pending) { say(row.icon, s.lost ? "Pole już przepadło" : "Dług spłacony - pola nie stracisz", true); break; }
+                s.off = false;                                              // (the deadline on, as in a real game)
+                $gameSystem._dayNightDay = s.deadline + 1;
+                $gameSystem.setDayNightHour((Story.DAWN || 6) + 0.05);
+                return go(["Pole dziadka", Story.MAP && Story.MAP.field ? Story.MAP.field : 3, 22, 14, 2]);
+            }
+            case "islePay": {
+                if (!storyOn()) { say(row.icon, "Gra bez fabuły - nie ma długu", true); break; }
+                const s = Story.state(), lost = !!s.lost;
+                const n = lost ? (s.buy && s.buy.done ? 0 : Story.buyLeft()) : s.done ? 0 : Story.left();
+                if (!(n > 0)) { say(row.icon, "Nie ma czego spłacać", true); break; }
+                $gameParty.gainGold(n);
+                const got = Story.pay(n);
+                say(row.icon, (lost ? "Odkup pola: " : "Dług: ") + got + " G zapłacone");
+                break;
+            }
+            case "isleGold":
+                $gameParty.gainGold(1000);
+                say(row.icon, "+1000 G");
+                break;
+            case "islePrologue":
+                if (!window.Prologue || !Prologue.replay) { say(row.icon, "Brak Prologue.js", true); break; }
+                $gameTemp._isleAct = "prologue";   // (pushed over the map once it is back: Debug's Scene_Map.update)
+                return back();
+            case "isleRaven":
+                if (!window.Kruk || !Kruk.tameNow) { say(row.icon, "Brak Kruk.js", true); break; }
+                if (Kruk.state().stage === "tame") { say(row.icon, "Kruk już oswojony", true); break; }
+                $gameTemp._isleAct = "raven";
+                return back();
+            case "isleFavor":
+                if (window.Garnizon && Garnizon.addFavor) Garnizon.addFavor(20, "F9", true);
+                break;
+            case "isleCistern": {
+                const q = window.TownQuests, f = q && q.state ? q.state().flags : null;
+                if (!f) { say(row.icon, "Brak TownQuests.js", true); break; }
+                for (const k of ["cisternOpen", "sluiceHalf", "millRuns", "kubaHonest"]) if (!f[k]) f[k] = $gameSystem.dayNightDay();
+                if (window.Cysterna && Cysterna.syncSwitches) Cysterna.syncSwitches();
+                say(row.icon, "Cysterna otwarta (cisternOpen)");
+                break;
+            }
+        }
+        return false;   // (onOk's own end: the OK sound, the list active again)
     };
 
     window.Scene_Debug = Scene_Debug;

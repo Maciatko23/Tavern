@@ -170,6 +170,14 @@
             desc: "Buda dla psa wyścielona słomą. Oswojony pies śpi w niej nocą, a ranny albo zmęczony odpoczywa w środku. Przy budzie jest miska: zostaw psu jedzenie i wodę na gorsze dni. Dzikiego psa oswoisz, dając mu kilka razy mięso." },
         stockpile: { name: "Składowisko", cost: [[ITEM.wood, 4], [ITEM.branch, 6], [ITEM.stone, 4]], w: 3, h: 2, stamina: 6, hits: 12, image: "Farm_Stockpile", slots: 20,
             desc: "Ogrodzony plac na zapasy: 20 rodzajów, po 99 sztuk. Pies znosi tu gałęzie, kamienie, włókno i upolowaną zwierzynę. Co leży na składowisku, widać u góry ekranu." },
+        // the tame raven's perch (Kruk.js, package B "Urwisko Kruków", 2026-10-16 - docs/miejsca_wyspy/PAKIETY.md): it sleeps on the bar
+        // under the little roof 21-5, guards the crops round it, leaves trinkets on it in the morning; the tray is a tiny food-only chest
+        // (meat, fish) and the bowl takes water from the bag (Kruk.js's menu line), like the kennel's
+        // needFlag: on the Q build list only once the raven is tame (TownQuests flag krukTame - the coordinator's decision 2026-10-16)
+        grzeda: { name: "Grzęda kruka", cost: [[ITEM.branch, 4], [ITEM.planks, 2], [ITEM.rope, 1]], w: 1, h: 1, stamina: 4, hits: 8, image: "Farm_Grzeda",
+            slots: 2, foodOnly: true, bowl: 3, needFlag: "krukTame",
+            openName: "Korytko: jedzenie", openHelp: "Zostawiasz krukowi mięso albo rybę (2 rodzaje). Kruk je z korytka, kiedy jest głodny. Jedzenie psuje się tu jak w skrzyni.",
+            desc: "Słup z poprzeczką i daszkiem dla oswojonego kruka. Kruk śpi tu nocą, pilnuje pola przed ptakami, a rano czasem zostawia na grzędzie, co znalazł. Przy słupie korytko na mięso i miseczka na wodę." },
         chest_s: { name: "Mała skrzynia", cost: [[ITEM.planks, 4]], w: 1, stamina: 5, hits: 5, image: "Farm_ChestS", slots: 12, indoor: true,
             desc: "Schowek: 12 rodzajów przedmiotów, po 99 sztuk każdego." },
         chest_l: { name: "Duża skrzynia", cost: [[ITEM.planks, 8], [ITEM.stone, 2], [ITEM.nails, 6]], w: 2, stamina: 8, hits: 8, image: "Farm_ChestL", slots: 30, indoor: true,

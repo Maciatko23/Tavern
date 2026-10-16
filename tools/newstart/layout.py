@@ -6,6 +6,10 @@
 #   Polna droga (22) --N (side lane)--> Okolice Tawerny (8) --E--> Posiadłość Lorda (24)
 #   Okolice Tawerny (8) --W (the west gate)--> Podgrodzie (111)
 #   Podgrodzie (111) --W (the forest trail, one cell)--> Przystań (125)
+#   The six island places (2026-10-16, docs/miejsca_wyspy/PAKIETY.md) - ISLAND_EDGES / ISLAND_DOORS below, not in EDGES:
+#   Przystań (125) --N--> Pustelnia na klifie (155) --E--> Urwisko Kruków (157) --E--> Przylądek z latarnią (159) --S--> Góry (13, E edge)
+#   Przystań (125) --S--> Garnizon nad zatoką (162) --W (the sandbar, low tide only)--> Wrak na mieliźnie (165)
+#   Urwisko Kruków (157) --the overflow grate (lever, switch 17)--> Stara cysterna zakonu (167)
 #
 # Directions (RPG Maker): 2 down, 4 left, 6 right, 8 up. Every exit is a row of touch transfers on the edge tiles; the player
 # lands one tile inside the other map, next to the matching exit, facing into that map.
@@ -47,6 +51,26 @@ EDGES = [
     ((111, cells(0, 19, 0, 19), 6), (125, cells(55, 19, 55, 19), 4)),  # Podgrodzie's forest trail (skraj_lasu) <-> the harbour's east edge (tools/przystan, 2026-10-14)
 ]
 
+# (2026-10-16) the six island places: NOT in EDGES on purpose - the apply scripts (tools/apply_newstart_maps.py) write EDGES' transfers
+# into the map files, but these are events of the places' own maps (their packages' builders) and, on the user's maps (Przystań 125,
+# Góry 13), events Wyspa.js puts in at runtime once the place is built (Wyspa.ready). Only the transfer test walks them
+# (run_transfer_test.py). The third item: what the game needs first (a script run before the walk) - the sandbar only at low tide.
+ISLAND_EDGES = [
+    ((125, cells(14, 0, 16, 0), 2), (155, cells(23, 35, 25, 35), 8), None),     # the harbour's top edge <-> the hermitage's bottom
+    ((125, cells(21, 39, 23, 39), 8), (162, cells(21, 0, 23, 0), 2), None),     # the harbour's bottom edge <-> the garrison's top
+    ((155, cells(47, 17, 47, 18), 4), (157, cells(0, 19, 0, 20), 6), None),     # the hermitage E <-> the Urwisko W
+    ((157, cells(55, 19, 55, 20), 4), (159, cells(0, 33, 0, 34), 6), None),     # the Urwisko E <-> the cape W
+    ((13, cells(59, 11, 59, 13), 4), (159, cells(29, 39, 31, 39), 8), None),    # the mountains' E edge <-> the cape's bottom
+    ((162, cells(0, 20, 0, 21), 6), (165, cells(39, 20, 39, 21), 4), "Wyspa.forceTide('low')"),   # the sandbar at low tide
+]
+# the overflow grate on the Urwisko (an object - the action button, its page 2 on switch 17 = the cistern's lever pulled) and the
+# channel's end in the cistern (walked into): (map, x, y) -> (map, x, y, direction), how it is used ("action" / "door"), the walk
+# (the direction the hero faces it from), the script before
+ISLAND_DOORS = [
+    ((157, 41, 15), (167, 33, 3, 2), "action", 8, "$gameSwitches.setValue(17, true)"),
+    ((167, 33, 2), (157, 41, 16, 2), "door", 8, "$gameSwitches.setValue(17, true)"),
+]
+
 STEP = {2: (0, 1), 4: (-1, 0), 6: (1, 0), 8: (0, -1)}
 
 def landing(cell, direction):
@@ -64,6 +88,18 @@ def transfers():
             lb, la = landing(b, db), landing(a, da)
             out.append((ma, a[0], a[1], mb, lb[0], lb[1], db, "edge"))
             out.append((mb, b[0], b[1], ma, la[0], la[1], da, "edge"))
+    return out
+
+def island_transfers():
+    """the island places' transfers (ISLAND_EDGES, ISLAND_DOORS): (from map, x, y, to map, tx, ty, direction, kind, walk, setup)"""
+    out = []
+    for (fm, fx, fy), (tm, tx, ty, d), kind, walk, setup in ISLAND_DOORS:
+        out.append((fm, fx, fy, tm, tx, ty, d, kind, walk, setup))
+    for (ma, ca, da), (mb, cb, db), setup in ISLAND_EDGES:
+        for a, b in zip(ca, cb):
+            lb, la = landing(b, db), landing(a, da)
+            out.append((ma, a[0], a[1], mb, lb[0], lb[1], db, "edge", None, setup))
+            out.append((mb, b[0], b[1], ma, la[0], la[1], da, "edge", None, setup))
     return out
 
 EXISTING = (3, 8)   # existing maps that get transfers from the apply script

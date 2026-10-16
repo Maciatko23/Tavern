@@ -305,6 +305,8 @@
  *   i zostaje w menu, Q lub E ponownie zamyka, a drugi klawisz przełącza
  *   na drugie menu. W oknach Q i E przewijają strony (zakładki dziennika,
  *   ilość przenoszona w skrzyni), a przy stawianiu budynku odbijają go jak R.
+ *   K: oswojony kruk (Kruk.js, po zadaniu D24) - menu kruka (leć ze mną, grzęda,
+ *   pilnuj pola, nakarm, list, zwiad); gdy kruka nie ma przy tobie, przylatuje.
  *
  * BUDOWANIE
  *   Budować wolno tylko na polu dziadka (mapa 3) i w chatce (mapa 100) - lista BUILD_MAPS w Farming_Data.js,

@@ -44,6 +44,9 @@
  * Plansze: img/pictures/Prolog_*.png, popiersie matki Matka_Bust.png.
  * Skrypt: Prologue.info() (stan), Prologue.speed(n) (testy: n kroków na
  * klatkę), Prologue.log (sceny po kolei).
+ * Powtórka w trakcie gry (menu F9, zakładka „Wyspa i fabuła”): Prologue.replay()
+ * - sam film, bez ekranu imienia; po nim powrót na mapę tam, gdzie się było
+ * (stan gry bez zmian, muzyka mapy wraca).
  * ============================================================================
  */
 
@@ -236,7 +239,7 @@
                 ["say", "matka", "Weź ten list. Dla dziadka Stacha, na Kruczej Wyspie. Oddasz mu do rąk. On cię przyjmie."],
                 ["say", "hero", "Dziadka? Przecież nigdy go nie widziałem."],
                 ["say", "matka", "Ale on ciebie widział. Na chrzcinach. Płakał jak bóbr, choć się wypierał."],
-                ["say", "matka", "I to... wisiorek z krukiem. Był twojego ojca, a przedtem jego ojca. Nie zgub go, \\N[1]."],
+                ["say", "matka", "I to... wisiorek z krukiem. Dał mi go mój ojciec, kiedy wyjeżdżałam z wyspy. Teraz jest twój. Nie zgub go, \\N[1]."],
                 ["say", "hero", "A ty? Kiedy przypłyniesz?"],
                 ["say", "matka", "Następnym promem. Obiecuję."],
                 ["busts", false], ["wait", 70],
@@ -396,6 +399,16 @@
     Scene_Prologue.prototype.terminate = function() {
         Scene_Base.prototype.terminate.call(this);
         stopExtra(0);
+        // (a replay from the game, Prologue.replay: the map's music and sounds back as they were)
+        if (this._replay) {
+            if (this._replay.bgm && this._replay.bgm.name) AudioManager.replayBgm(this._replay.bgm);
+            if (this._replay.bgs && this._replay.bgs.name) AudioManager.replayBgs(this._replay.bgs);
+        }
+    };
+    // (2026-10-16) a replay from the game (F9): the film alone, then back to the map scene it came from (SceneManager.pop - the
+    // game's state untouched, no transfer); the map's music saved first
+    Scene_Prologue.prototype.prepare = function(opts) {
+        if (opts && opts.replay) this._replay = { bgm: AudioManager.saveBgm(), bgs: AudioManager.saveBgs() };
     };
     Scene_Prologue.prototype.beginScene = function(i) {
         this.clearScene();
@@ -938,6 +951,7 @@
         api.lastRun = { log: this._log.slice(), skipped: this._skipped || 0, all: !!this._skippedAll };
         AudioManager.fadeOutBgm(1); AudioManager.fadeOutBgs(1); stopExtra(1);
         this.startFadeOut(30, false);
+        if (this._replay) { SceneManager.pop(); return; }
         SceneManager.goto(Scene_Map);
     };
     // ---- the frame ----
@@ -1217,6 +1231,13 @@
     // For tests
     // ------------------------------------------------------------------
     api.Scene_Prologue = Scene_Prologue;
+    // (2026-10-16) the film again, from the map (F9's "Odtwórz prolog"): pushed over the map scene, popped back after it
+    api.replay = () => {
+        if (!(SceneManager._scene instanceof Scene_Map)) return false;
+        SceneManager.push(Scene_Prologue);
+        SceneManager.prepareNextScene({ replay: true });
+        return true;
+    };
     api.Scene_HeroName = Scene_HeroName;
     api.info = function() {
         const s = SceneManager._scene;

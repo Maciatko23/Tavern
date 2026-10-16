@@ -1,0 +1,1126 @@
+//=============================================================================
+// Wrak.js
+//=============================================================================
+// PAKIET E (docs/miejsca_wyspy/PAKIETY.md, koncepcja docs/miejsca_wyspy/KONCEPCJA.md punkt 7): the wreck on the shoal and the
+// castaway in the tavern. The data: Wrak_Data.js (the resident 948 "rozbitek", D25, W12, the tables). This engine:
+//   - the TIDE on the package's maps (Wyspa.tide(): two low waters a day, ~50 min later each day): the sandbar's rings and the
+//     lower hold are regions (WrakData.FLOOD) - a cell is under water from its level up: drawn as water over the tiles (a soft
+//     layer in the tilemap, the sea's colour - red or grey with CzerwonaWoda's phase), closed to walking (Game_Map.checkPassage),
+//     the hero on a cell the water takes is pushed onto the nearest dry one; a warning before the low water ends
+//   - the ways there: Janek's boat (a choice in Janek's talk at the harbour, TownLife.addTalkHook first - Przystan.js unchanged:
+//     "Nie, w innej sprawie" gives his own talk), by day, no storm, after K47 (also after D25 - the coordinator, 2026-10-16); he waits two hours at the wreck (events 670/671);
+//     on foot over the sandbar from the garrison at low water (the map's own edge events; the garrison's side is package D's)
+//   - the garrison's men with their rescue boat at the wreck 9-15 (672-674): without the pass (flag glejtWrak, package D) they
+//     catch the hero - a fine and the garrison's favour down (Garnizon.addFavor if package D has it; the bus "wrakGarnizon")
+//   - under the deck (Map166): rats (Creatures.spawn "szczur"), the boatswain's key in the lowest corner (dry only near low
+//     water), the captain's cabin: the chart (item 178 "Mapa z zaznaczeniami"), the ship's log (flags dziennikOkretu,
+//     kronikaKarta4), the coins with the eye, five raven stones
+//   - the chart's seven white eyes: the journal's tracker (Journal.addTrackerSource - the compass points at the next one not
+//     visited) and a note; a place of another package only once it is built (Wyspa.isReady)
+//   - the castaway "Eryk Sowa" (really Ansgar Wiel): the first meeting, portraits for two groszy, W12's five clues (the log, Józek
+//     Łata in Podgrodzie - a talk hook, the lighthouse's vision - flag mgla, the sleeve at the well at night, the raven's letter -
+//     flag krukTame), the talk in private: give him to the garrison / keep his secret / help him flee on Roch's cutter / the false
+//     map for Baltazar (a night raid may follow); flags ansgarGiven, ansgarAlly, ansgarFled
+//   - Wyspa.ready(165) once the real map is in data/ (not the package-0 skeleton)
+// Ids 670-679 (Tawerna.inject, owner "Wrak"). No water for the hero anywhere here (the drought): the sea is salt (<Water:salt>).
+
+/*:
+ * @target MZ
+ * @plugindesc [pakiet E] Wrak na mieliźnie (mapy 165, 166): pływy na łasze i w ładowni, łódź Janka, żołnierze garnizonu, mapa z zaznaczeniami; rozbitek Eryk Sowa (W12). v1.0.0
+ * @author Claude
+ * @base TawernaCore
+ * @orderAfter Wyspa
+ * @orderAfter TownQuests
+ * @orderAfter Przystan
+ *
+ * @help
+ * ============================================================================
+ * Wrak.js - wrak na mieliźnie i rozbitek w tawernie (pakiet E)
+ * ============================================================================
+ * Mapa 165 „Wrak na mieliźnie”: łacha w zatoce z rozbitym okrętem Czarnych
+ * Oczu. Pływy: w przypływie pierścienie piachu (regiony 61-63) są pod wodą,
+ * łacha do garnizonu tylko w odpływie (przełącznik 20). Mapa 166 „Wrak - pod
+ * pokładem”: dolna ładownia (regiony 64-65) zalana poza niską wodą.
+ * Dojście: łodzią Janka (rozmowa na przystani, za dnia) albo po łasze od
+ * garnizonu w odpływie. Żołnierze z łodzi ratowniczej (9-15) karzą bez glejtu.
+ * Rozbitek „Eryk Sowa” (W12): poszlaki i rozmowa w cztery oczy.
+ * Zdarzenia 670-679. W skryptach: Wrak.act(this, [co]), Wrak.talk(this, kto),
+ * Wrak.state(), Wrak.floodedAt(x, y), Wrak.clues().
+ * ============================================================================
+ */
+
+(() => {
+    "use strict";
+
+    const T = window.Tawerna;
+    if (!T) throw new Error("Wrak.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
+    const D = window.WrakData;
+    if (!D || !D.FLOOD) throw new Error("Wrak.js: brak Wrak_Data.js - musi stać nad TownLife na liście wtyczek (the package's data is missing)");
+    const PLUGIN = "Wrak";
+    const MAP = D.MAP, UNDER = D.UNDER, HARBOUR = 125, TOWN = 8, TAVERN = 1, PODGRODZIE = 111;
+    const IDS = D.IDS;
+    const COIN_ICON = 314;
+    const HERO = { id: 0, name: "" };
+    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const day = () => T.time.day(), hour = () => T.time.hour();
+    const now = () => day() * 24 + hour();
+    const has = () => !!window.$gameSystem && !!window.$gameMap;
+    const item = id => (window.$dataItems && $dataItems[id]) || null;
+    const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
+    const TQ = () => T.api("TownQuests") || window.TownQuests || null;
+    const TL = () => T.api("TownLife") || window.TownLife || null;
+    const WY = () => T.api("Wyspa") || window.Wyspa || null;
+    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+    // ------------------------------------------------------------------
+    // The state (the save)
+    // ------------------------------------------------------------------
+    const store = T.state.define("wrak", () => ({
+        been: 0, under: 0, key: 0, door: 0, desk: 0, chest: 0,      // the wreck: first visits, the key, the cabin
+        boat: null, boatWarned: 0,                                   // Janek's boat at the wreck: { until (absolute hour) }
+        fined: 0, glejtSeen: 0, ratsDay: 0, lowWarn: -1, floodTold: -1,
+        marks: {}, marksNoted: 0,                                    // the chart's white eyes visited (key -> day)
+        met: 0, portraits: 0, clues: {}, tatuazTry: 0, jozekTold: 0, w12: "", raid: 0, raidRoll: 1, raidDone: 0, janekAsked: 0, usualN: 0
+    }), { version: 1, owner: PLUGIN });
+    const S = () => store();
+
+    // TownQuests' flags and things
+    const qstate = () => { const q = TQ(); return q && q.state ? q.state() : null; };
+    const flags = () => { const s = qstate(); return s ? s.flags : {}; };
+    const flag = k => !!flags()[k];
+    function setFlag(k) {
+        const f = flags();
+        if (f && !f[k]) f[k] = day();
+        const q = TQ();
+        if (q && q.refreshMarkers) q.refreshMarkers();
+    }
+    const vcount = k => { const s = qstate(); return s && s.v ? s.v[k] || 0 : 0; };
+    const vgive = (k, n) => { const s = qstate(); if (s && s.v) s.v[k] = (s.v[k] || 0) + n; };
+    const vtake = (k, n) => { const s = qstate(); if (!s || !s.v) return; s.v[k] = Math.max(0, (s.v[k] || 0) - n); if (!s.v[k]) delete s.v[k]; };
+    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
+    const atStep = (id, n) => { const r = rec(id); return !!r && r.s === "active" && r.step === n; };
+    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
+    const isDone = id => { const r = rec(id); return !!r && r.s === "done"; };
+    const note = (title, text) => T.call("Journal", "addNote", title, text);
+    const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
+    const vname = k => { const V = window.TownQuestsData && TownQuestsData.VITEMS; return V && V[k] ? V[k].name : k; };
+    const vicon = k => { const V = window.TownQuestsData && TownQuestsData.VITEMS; return V && V[k] ? V[k].icon : 0; };
+    const raining = () => { const w = $gameScreen.weatherType(); return (w === "rain" || w === "storm") && $gameScreen.weatherPower() > 0; };
+    const storming = () => $gameScreen.weatherType() === "storm" && $gameScreen.weatherPower() > 0;
+    const inHours = (h, hrs) => h >= hrs[0] && h < hrs[1];
+    const hhmm = h => { const t = ((h % 24) + 24) % 24, hh = Math.floor(t), mm = Math.round((t - hh) * 60 / 10) * 10; return hh + ":" + (mm >= 60 ? "50" : (mm < 10 ? "0" : "") + mm); };
+
+    // ------------------------------------------------------------------
+    // The real map is in data/ (not the skeleton of package 0): then the way in may open (Wyspa.ready)
+    // ------------------------------------------------------------------
+    let built = null;
+    (function checkBuilt() {
+        try {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "data/Map" + String(MAP).padStart(3, "0") + ".json");
+            xhr.overrideMimeType("application/json");
+            xhr.onload = () => {
+                let ok = false;
+                try { const m = JSON.parse(xhr.responseText); ok = !!m && !/<Wyspa:szkielet>/i.test(m.note || "") && Array.isArray(m.events) && m.events.length > 5; } catch (e) { ok = false; }
+                built = ok;
+                const W = WY();
+                if (ok && W && W.ready) W.ready(MAP);
+            };
+            xhr.onerror = () => { built = false; };
+            xhr.send();
+        } catch (e) { built = false; }
+    })();
+    const isBuilt = () => built === true;
+
+    // ------------------------------------------------------------------
+    // THE TIDE: the level now, which cells are under water
+    // ------------------------------------------------------------------
+    const LOW = (window.WyspaData && WyspaData.TIDE && WyspaData.TIDE.low) || 0.15;
+    function tideNow(d, h) {
+        const W = WY();
+        if (W && W.tide) return W.tide(d, h);
+        return { level: 0.5, low: false, nextLow: 6, nextHigh: 6 };
+    }
+    const thresholdOf = (mapId, region) => {
+        const f = D.FLOOD[mapId];
+        if (!f || f[region] === undefined) return null;
+        return f[region] === "low" ? LOW : Number(f[region]);
+    };
+    // the map's cells' thresholds (built once per map), the level (once a frame)
+    let grid = null, levelNow = 0, levelAt = -1;
+    function gridOf() {
+        if (!has() || !D.FLOOD[$gameMap.mapId()]) return null;
+        if (grid && grid.map === $gameMap.mapId() && grid.data === $dataMap) return grid;
+        const W = $gameMap.width(), H = $gameMap.height(), th = new Float32Array(W * H).fill(-1);
+        let any = false;
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+            const t = thresholdOf($gameMap.mapId(), $gameMap.regionId(x, y));
+            if (t !== null) { th[y * W + x] = t; any = true; }
+        }
+        grid = { map: $gameMap.mapId(), data: $dataMap, W, H, th, any };
+        return grid;
+    }
+    function level() {
+        if (Graphics.frameCount !== levelAt) { levelAt = Graphics.frameCount; levelNow = tideNow().level; }
+        return levelNow;
+    }
+    function floodedAt(x, y) {
+        const g = gridOf();
+        if (!g || !g.any || x < 0 || y < 0 || x >= g.W || y >= g.H) return false;
+        const t = g.th[y * g.W + x];
+        return t >= 0 && level() >= t;
+    }
+    // hours from now till the low water ends (the level rises over LOW) - for the warning
+    function lowLeft() {
+        const t = tideNow();
+        if (!t.low) return 0;
+        for (let dt = 0.05; dt < 4; dt += 0.05) {
+            const hh = hour() + dt, dd = day() + Math.floor(hh / 24);
+            if (!tideNow(dd, hh % 24).low) return dt;
+        }
+        return 4;
+    }
+    // the next low water's middle (hours from now -> clock)
+    function nextLowClock() { const t = tideNow(); return hhmm(hour() + (t.low ? 0 : t.nextLow)); }
+
+    // closed to walking while under water
+    const _Game_Map_checkPassage = Game_Map.prototype.checkPassage;
+    Game_Map.prototype.checkPassage = function(x, y, bit) {
+        if (this === window.$gameMap && D.FLOOD[this._mapId] && floodedAt(x, y)) return false;
+        return _Game_Map_checkPassage.call(this, x, y, bit);
+    };
+
+    // the hero on a cell the water takes: onto the nearest dry one
+    function rescueHero() {
+        if (!has() || !D.FLOOD[$gameMap.mapId()] || $gamePlayer.isTransferring()) return false;
+        const px = $gamePlayer.x, py = $gamePlayer.y;
+        if (!floodedAt(px, py)) return false;
+        const seen = new Set([px + "," + py]), q = [[px, py]];
+        while (q.length) {
+            const [x, y] = q.shift();
+            for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
+                const nx = x + dx, ny = y + dy, k = nx + "," + ny;
+                if (seen.has(k) || !$gameMap.isValid(nx, ny)) continue;
+                seen.add(k);
+                if (Math.abs(nx - px) > 8 || Math.abs(ny - py) > 8) continue;
+                const dry = !floodedAt(nx, ny), ok = dry && [2, 4, 6, 8].some(d => _Game_Map_checkPassage.call($gameMap, nx, ny, 1 << (d / 2 - 1)))
+                    && !$gameMap.eventsXyNt(nx, ny).some(e => e.isNormalPriority());
+                if (ok) {
+                    $gamePlayer.locate(nx, ny);
+                    T.popup($gameMap.mapId() === UNDER ? "Woda wdziera się do ładowni!" : "Woda przybiera! Uciekasz na suchy piach.", { color: "#9fd4ff" });
+                    AudioManager.playSe({ name: "Water1", volume: 60, pitch: 90, pan: 0 });
+                    return true;
+                }
+                q.push([nx, ny]);
+            }
+        }
+        return false;
+    }
+
+    // ------------------------------------------------------------------
+    // The water drawn over the flooded cells, in the tilemap (z 0.6: over the ground and CzerwonaWoda's tint, under the characters):
+    // the real sea's texture (tileset 11's A1 "sea on a sandy shore", its full-water tile, animated with the tilemap's frames)
+    // under a soft mask of the flooded cells (low resolution, smoothed: the edge runs at the cells' borders), the colour of the
+    // sea now on top (CzerwonaWoda's red or grey phase - the shore water is that colour; the hold's water dark and murky), and a
+    // light line of foam at the edge. The mask is rebuilt when the level moves.
+    // ------------------------------------------------------------------
+    const S_TEX = 8;
+    const RED_RGB = [138, 44, 28], GREY_RGB = [126, 113, 86], BILGE_RGB = [40, 46, 34];
+    const WATER_TS = 11, WATER_KIND = 10;
+    // the tint over the texture: { rgb, a, foam } - the red phase's shore water; the hold: murky
+    function tintOf(mapId) {
+        const RW = T.api("CzerwonaWoda");
+        let ph = null;
+        try { ph = RW && RW.phase ? RW.phase() : null; } catch (e) { ph = null; }
+        if (mapId === UNDER) return { rgb: BILGE_RGB, a: 0.42, foam: [168, 168, 146] };
+        if (!ph) return { rgb: [64, 132, 142], a: 0, foam: [214, 226, 222] };
+        if (ph.grey) return { rgb: GREY_RGB, a: 0.6, foam: [190, 182, 160] };
+        return { rgb: RED_RGB, a: 0.45 + 0.25 * (ph.red || 0), foam: [226, 170, 140] };
+    }
+    // the full-water tile of tileset 11's A1 kind 10, three frames (as Tilemap._addAutotile cuts it: shape 0's quarters)
+    let waterCache = null;
+    function waterFrames() {
+        if (waterCache && waterCache.ok) return waterCache.frames;
+        const ts = window.$dataTilesets && $dataTilesets[WATER_TS];
+        if (!ts || !ts.tilesetNames[0]) return null;
+        const src = ImageManager.loadTileset(ts.tilesetNames[0]);
+        if (!src.isReady()) return null;
+        const tx = WATER_KIND % 8, ty = Math.floor(WATER_KIND / 8), by = ty * 6 + (Math.floor(tx / 2) % 2) * 3;
+        const Q = Tilemap.FLOOR_AUTOTILE_TABLE[0], frames = [];
+        for (let f = 0; f < 3; f++) {
+            const bx = Math.floor(tx / 4) * 8 + f * 2, t = new Bitmap(48, 48);
+            Q.forEach(([qx, qy], i) => t.blt(src, (bx * 2 + qx) * 24, (by * 2 + qy) * 24, 24, 24, (i % 2) * 24, Math.floor(i / 2) * 24));
+            frames.push(t);
+        }
+        waterCache = { ok: true, frames };
+        return frames;
+    }
+    // the mask (white, alpha = how much water) and the foam (the edge band), S_TEX texels a cell, smoothed when drawn
+    function floodBitmaps(g, lv, mapId) {
+        const W = g.W, H = g.H, val = new Float32Array(W * H), tidal = new Uint8Array(W * H), sea = new Uint8Array(W * H);
+        const realWater = (x, y) => { for (let z = 0; z < 2; z++) { const id = $gameMap.tileId(x, y, z); if (id > 0 && Tilemap.isWaterTile(id)) return true; } return false; };
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+            const i = y * W + x, t = g.th[i];
+            if (t >= 0) { tidal[i] = 1; val[i] = clamp((lv - t) / 0.05 + 0.5, 0, 1); }
+            else if (mapId === MAP && realWater(x, y)) { val[i] = 1; sea[i] = 1; }
+        }
+        const draw = new Uint8Array(W * H);
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+            if (!tidal[y * W + x]) continue;
+            for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && ny >= 0 && nx < W && ny < H) draw[ny * W + nx] = 1;
+            }
+        }
+        const at = (x, y) => val[clamp(y, 0, H - 1) * W + clamp(x, 0, W - 1)];
+        const foamRgb = tintOf(mapId).foam;
+        const mask = new Bitmap(W * S_TEX, H * S_TEX), foam = new Bitmap(W * S_TEX, H * S_TEX);
+        const mi = mask.context.createImageData(W * S_TEX, H * S_TEX), fi = foam.context.createImageData(W * S_TEX, H * S_TEX);
+        let n = 0;
+        for (let py = 0; py < H * S_TEX; py++) {
+            const cy = (py + 0.5) / S_TEX - 0.5, y0 = Math.floor(cy), fy = cy - y0, cellY = Math.floor(py / S_TEX);
+            for (let px = 0; px < W * S_TEX; px++) {
+                const ci = cellY * W + Math.floor(px / S_TEX);
+                if (!draw[ci] || sea[ci]) continue;   // (the real sea: its own tiles)
+                const cx = (px + 0.5) / S_TEX - 0.5, x0 = Math.floor(cx), fx = cx - x0;
+                const v = (at(x0, y0) * (1 - fx) + at(x0 + 1, y0) * fx) * (1 - fy) + (at(x0, y0 + 1) * (1 - fx) + at(x0 + 1, y0 + 1) * fx) * fy;
+                if (v <= 0.3) continue;
+                const p = (py * W * S_TEX + px) * 4, w = clamp((v - 0.38) / 0.24, 0, 1), edge = clamp(1 - Math.abs(v - 0.5) / 0.1, 0, 1);
+                if (w > 0) { mi.data[p] = mi.data[p + 1] = mi.data[p + 2] = 255; mi.data[p + 3] = Math.round(255 * w); n++; }
+                if (edge > 0) { fi.data[p] = foamRgb[0]; fi.data[p + 1] = foamRgb[1]; fi.data[p + 2] = foamRgb[2]; fi.data[p + 3] = Math.round(150 * edge); }
+            }
+        }
+        mask.context.putImageData(mi, 0, 0);
+        foam.context.putImageData(fi, 0, 0);
+        for (const b of [mask, foam]) { b.smooth = true; if (b._baseTexture && b._baseTexture.update) b._baseTexture.update(); }
+        mask._wrakPixels = n;
+        return { mask, foam };
+    }
+    function Sprite_WrakFlood() { this.initialize(...arguments); }
+    Sprite_WrakFlood.prototype = Object.create(Sprite.prototype);
+    Sprite_WrakFlood.prototype.constructor = Sprite_WrakFlood;
+    Sprite_WrakFlood.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this.z = 0.6;
+        this._key = "";
+        this._age = 0;
+        this._frame = -1;
+        this._layer = new Sprite();          // the water: the texture and the tint over it, cut by the mask
+        this._water = new TilingSprite();
+        this._tint = new Sprite(new Bitmap(4, 4));
+        this._mask = new Sprite();
+        this._foam = new Sprite();
+        this._layer.addChild(this._water);
+        this._layer.addChild(this._tint);
+        this.addChild(this._layer);
+        this.addChild(this._mask);
+        this.addChild(this._foam);
+        this._layer.mask = this._mask;
+    };
+    Sprite_WrakFlood.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        const g = gridOf();
+        this.visible = !!(g && g.any);
+        if (!this.visible) return;
+        const frames = waterFrames();
+        if (!frames) { this.visible = false; return; }
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), tint = tintOf(g.map);
+        const lv = level(), key = g.map + ":" + Math.round(lv * 50) + ":" + tint.rgb.join(",") + ":" + tint.a.toFixed(2);
+        if (key !== this._key) {
+            this._key = key;
+            const bm = floodBitmaps(g, Math.round(lv * 50) / 50, g.map);
+            this._mask.bitmap = bm.mask;
+            this._foam.bitmap = bm.foam;
+            for (const s of [this._mask, this._foam]) { s.scale.x = tw / S_TEX; s.scale.y = th / S_TEX; }
+            this._tint.bitmap.fillAll("rgb(" + tint.rgb.join(",") + ")");
+            this._tint.scale.x = g.W * tw / 4; this._tint.scale.y = g.H * th / 4;
+            this._tint.opacity = Math.round(255 * tint.a);
+            this._pixels = bm.mask._wrakPixels;
+        }
+        // the sea's own animation (the tilemap's frame: 0 1 2 1, every 30 frames)
+        const tm = SceneManager._scene && SceneManager._scene._spriteset && SceneManager._scene._spriteset._tilemap;
+        const f = [0, 1, 2, 1][((tm ? tm.animationFrame : Math.floor(Graphics.frameCount / 30)) || 0) % 4];
+        if (f !== this._frame) { this._frame = f; this._water.bitmap = frames[f]; this._water.move(0, 0, g.W * tw, g.H * th); }
+        this._age++;
+        this.x = Math.round(-$gameMap.displayX() * tw);
+        this.y = Math.round(-$gameMap.displayY() * th);
+        this._foam.opacity = Math.round(255 * (0.65 + 0.35 * Math.sin(this._age / 45)));
+    };
+    const _Spriteset_Map_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;
+    Spriteset_Map.prototype.createLowerLayer = function() {
+        _Spriteset_Map_createLowerLayer.call(this);
+        this._wrakFlood = new Sprite_WrakFlood();
+        this._tilemap.addChild(this._wrakFlood);
+    };
+
+    // ------------------------------------------------------------------
+    // Speech: bubbles (\SPK[n]) and choices, the way TownQuests and Przystan write them
+    // ------------------------------------------------------------------
+    const LINE = 46, PAGE = 3;
+    function wrap(text) {
+        const out = [];
+        for (const para of String(text).split("\n")) {
+            let line = "";
+            for (const w of para.split(/\s+/)) {
+                if (!w) continue;
+                if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
+            }
+            if (line) out.push(line);
+        }
+        return out;
+    }
+    function sayTo(out, spk, text, ind) {
+        const lines = wrap(text);
+        for (let i = 0; i < lines.length; i += PAGE) {
+            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
+            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
+        }
+        return out;
+    }
+    function speaker(key) {
+        const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null, r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === key) : null;
+        return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: r ? r.name : key };
+    }
+    // "> text": the hero; "@key: text": a resident nearby; else the one spoken to
+    function linesTo(out, spk, arr, ind) {
+        for (const raw of [].concat(arr || [])) {
+            if (!raw) continue;
+            const s = String(raw);
+            if (s.startsWith("> ")) { sayTo(out, HERO, s.slice(2), ind); continue; }
+            const m = /^@(\w+):\s*([\s\S]*)$/.exec(s);
+            if (m) sayTo(out, speaker(m[1]), m[2], ind);
+            else sayTo(out, spk, s, ind);
+        }
+        return out;
+    }
+    const act = (out, args, ind) => (out.push(C(355, ["Wrak.act(this, " + JSON.stringify(args) + ")"], ind)), out);
+    const qact = (out, args, ind) => (out.push(C(355, ["TownQuests.act(this, " + JSON.stringify(args) + ")"], ind)), out);
+    function choiceTo(out, labels, branches, cancel, ind) {
+        const i0 = ind || 0;
+        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
+        labels.forEach((l, i) => {
+            out.push(C(402, [i, l], i0));
+            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
+            out.push(C(0, [], i0 + 1));
+        });
+        out.push(C(404, [], i0));
+        return out;
+    }
+    function questWants(key) {
+        const q = TQ();
+        if (!q || !q.markers) return false;
+        if (q.refreshMarkers) q.refreshMarkers();
+        const m = q.markers()[key];
+        return m === "ready" || m === "new";
+    }
+    function readyFor(key) {
+        const q = TQ();
+        if (!q || !q.markers) return false;
+        if (q.refreshMarkers) q.refreshMarkers();
+        return q.markers()[key] === "ready";
+    }
+    const questTalk = key => { const q = TQ(); return q && q.talkFor ? q.talkFor(key, false) : null; };
+    function usual(key) {
+        const L = TL(), t = L && L.lines ? L.lines(key) : null;
+        if (!t) return "";
+        const h = hour(), slot = raining() && t.rain ? "rain" : h >= 5 && h < 11 ? "morning" : h >= 11 && h < 17 ? "day" : h >= 17 && h < 22 ? "evening" : "night";
+        const list = t[slot] || t.day || [];
+        if (!list.length) return "";
+        S().usualN = (S().usualN || 0) + 1;
+        return list[S().usualN % list.length];
+    }
+    const think = text => { const SB = T.api("SpeechBubbles"); if (SB && SB.say && window.$gamePlayer) SB.say($gamePlayer, text, 200); else T.popup(text, { color: "#eceef0" }); };
+    const bark = (ev, text) => { const SB = T.api("SpeechBubbles"); if (SB && SB.say && ev) SB.say(ev, text, 200); };
+    // a call a little later (frames, not real time: a paused game waits too); dropped when the map changes
+    let later = [];
+    function updateLater() {
+        if (!later.length) return;
+        const now_ = Graphics.frameCount, keep = [];
+        for (const l of later) {
+            if (l.at > now_) { keep.push(l); continue; }
+            if (l.ev && $gameMap.event(l.ev.eventId()) === l.ev) bark(l.ev, l.text);
+        }
+        later = keep;
+    }
+
+    // ------------------------------------------------------------------
+    // TEXTS
+    // ------------------------------------------------------------------
+    const TX = {
+        // Janek and his boat
+        janekOffer: ["Na wrak? (Janek zerka na mieliznę za cyplem.) Mogę cię podrzucić. Za dnia, póki morze spokojne.",
+            "Poczekam dwie godziny, nie dłużej. Woda tam chodzi pod piachem jak kot pod kocem."],
+        janekTide: "Odpływ dziś koło {t}. Wtedy łacha od garnizonu wychodzi z wody.",
+        janekNoK47: ["Na wrak? Najpierw pokaż, że umiesz trzymać wędkę, a nie tylko wiosło. Złów ze mną pierwszą rybę, to cię zawiozę."],
+        janekStorm: ["W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś."],
+        janekRow: ["Siadaj na dziobie i nie kołysz. (Janek odpycha łódź od pomostu.)"],
+        janekWait: ["Morze się zmienia, a ja mam sieci do łatania.", "Wracamy?"],
+        janekBack: ["Trzymaj się burty. (Janek wiosłuje w stronę przystani.)"],
+        janekStay: ["Jeszcze chwila. Tylko nie każ mi czekać do nocy."],
+        janekLeaving: "Jeszcze kwadrans i odpływam! Nie będę nocował na mieliźnie!",
+        janekGone: "Janek odpłynął. Zostaje łacha w odpływie... albo czekanie.",
+        // the soldiers
+        soldierCatch: ["Stój! A ty kto? Kto pozwolił łazić po królewskim łupie?", "Bez glejtu rotmistrza? Dwadzieścia groszy kary. I zmykaj z mielizny."],
+        soldierPass: "Glejt widzę. Szukaj, tylko skrzyń z pieczęcią nie ruszaj.",
+        soldierTalk: ["Wynosimy, co zostało. Rotmistrz każe wszystko spisać.", "Pod pokład? Nie, dziękuję. Tam są szczury wielkie jak psy. I woda chodzi.",
+            "Z garnizonu, z chorągwi króla. A ty skąd?"],
+        // the wreck
+        arrive: "Wrak na mieliźnie. Następny odpływ około {t}.",
+        lowEnding: "Woda zaczyna wracać. Łacha do garnizonu zaraz zniknie.",
+        flooded: "Łacha zniknęła pod wodą. Następny odpływ około {t}.",
+        skeleton: ["> (Szkielet w podartym granatowym kubraku. Na szyi, na rzemieniu, mosiężny klucz.)", "> Bosman. Klucz do kajuty... pewnie kapitańskiej."],
+        skeletonEmpty: "Kości bosmana. Nic więcej przy nim nie ma.",
+        skeletonWet: "Szkielet leży pod wodą. Trzeba poczekać na niską wodę.",
+        doorLocked: "Zamknięte. Mosiężny zamek, mocny.",
+        doorOpen: "Klucz bosmana pasuje. Zamek puszcza ze zgrzytem.",
+        desk: ["> (Na biurku kapitana skórzana tuba na mapy i gruba księga w czarnej oprawie.)",
+            "> (W tubie mapa wyspy. Siedem miejsc zaznaczonych małym białym okiem.)",
+            "> (Księga to dziennik okrętu. Między kartami luźna, bardzo stara strona - nie ich pismo.)"],
+        deskEmpty: "Puste biurko. Wziąłeś już wszystko, co miało znaczenie.",
+        chest: ["> (W skrzyni sakiewka obcych monet - na każdej otwarte oko - i drewniane pudełko.)",
+            "> (W pudełku pięć płaskich kamieni. Na każdym wyryty kruk. Taki jak na moim wisiorku.)"],
+        chestEmpty: "Pusta skrzynia.",
+        // the castaway
+        erykMeet: ["Portret? Dwa grosze albo piwo. Masz ciekawą twarz. Zmęczoną.", "> Skąd jesteś? Nie mówisz jak tutejsi.",
+            "Z lądu. Sukno. Było sukno. (Eryk uśmiecha się krzywo.) Morze lubi sukno.", "> (Eryk zerka na twój wisiorek i szybko odwraca wzrok.)",
+            "Siadaj prosto. I nie ruszaj się, to wyjdziesz ładniej, niż jesteś."],
+        erykAsk: ["Portret? Dwa grosze.", "Hm? (Eryk nie podnosi oczu znad papieru.)", "Siadaj, jak chcesz. Tylko nie zasłaniaj światła."],
+        erykPortrait: ["(Eryk rysuje szybko i pewnie. Kreska czysta jak na mapie - żadnej poprawki.)", "Masz. Nie ładniejszy, niż jesteś, ale prawdziwy."],
+        erykPortraitAgain: ["(Eryk rysuje cię jeszcze raz. Tym razem z wisiorkiem na szyi. Rysuje go dłużej niż twarz.)"],
+        erykWhere: ["Z lądu, mówiłem. Z miasta nad rzeką. Nazwa nic ci nie powie.", "Rodzina? (Eryk odkłada węgiel.) Była. Rysujmy."],
+        erykNoGold: "Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.",
+        erykCold: ["(Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)"],
+        erykWell: ["Czego? (Eryk naciąga rękaw na nadgarstek.) Idź spać, chłopcze."],
+        erykWellSeen: ["> (Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko.)", "> (Szybko opuszcza rękaw. Nie zauważył mnie.)"],
+        jozek: ["Eryk? Ten od portretów? (Józek drapie się po brodzie.) Ha! Toż on chodzi w moim płaszczu! Szarym, za dużym.",
+            "Po sztormie przyszedł do mnie mokry jak szczur. Kupił płaszcz i zapłacił dziwnym groszem. Z okiem zamiast korony. Mam go jeszcze, patrz.",
+            "> (Na monecie wybite jest otwarte oko. Takie samo jak na banderze wraku.)"],
+        letter: "Kruk przyniósł list... nie do mnie. Szyfr i pieczęć z okiem. Na wierzchu tylko: „Do A.W.”",
+        // W12: the talk in private
+        w12Open: ["> Eryk. Albo raczej... Ansgar Wiel. Kartograf z „Białej Źrenicy”.",
+            "(Eryk odkłada węgiel. Długo patrzy na ciebie, potem rozgląda się dookoła.) Nie tutaj. Chodź.",
+            "> (Odchodzicie tam, gdzie nikt nie słucha.)",
+            "Skąd... Nieważne. Tak. Ansgar Wiel. Rysowałem ich mapy. Brzegi, mielizny, kamienie z krukiem. Wszystko, czego szukali.",
+            "Okręt rozbił się w sztormie. Dopłynąłem tylko ja. Kupiłem płaszcz od starego szmaciarza i zostałem kupcem bez sukna.",
+            "Boję się wszystkich. Waszego wojska. Waszego Lorda. A najbardziej moich, gdyby przypłynęli. Oni nie zostawiają świadków.",
+            "(Ansgar zerka na twój wisiorek.) A ty nosisz kruka na szyi. Wiesz w ogóle, co to znaczy?", "...Co ze mną zrobisz?"],
+        w12Given: ["(Ansgar blednie.) ...Rozumiem. Każdy ma swoją wojnę. Ty wybrałeś swoją.",
+            "> (Wieczorem żołnierze z garnizonu wyprowadzają Eryka z tawerny. Skutego wsadzą na najbliższy prom.)"],
+        w12Ally: ["Dlaczego...? (Ansgar milknie.) Dobrze. Jestem ci winien życie.",
+            "Czytam ich szyfr jak ty czytasz pogodę. Przynieś mi kiedyś ich papiery - przeczytam bez żadnego mnicha.",
+            "I jeszcze jedno. Jeśli kiedyś po was przyjdą... wiem, którędy chodzą ich ludzie. Powiem ci, zanim przyjdą."],
+        w12Fled: ["Kuter... na ląd? Tam szukają mnie tak samo. Ale na lądzie łatwiej zniknąć niż na wyspie.",
+            "Masz. (Ansgar podaje ci zwinięty papier.) Moja własna mapa. Wszystkie kamienie z krukiem na tej wyspie, jakie znam.",
+            "I wiedz: oni nie szukają kamieni. Szukają tego, co kamienie pokazują. Drogi do Serca.",
+            "> (Tej nocy kuter Rocha odbija od pochylni bez latarni. Na dziobie siedzi chudy człowiek w za dużym szarym płaszczu.)"],
+        w12Double: ["(Ansgar uśmiecha się krzywo.) Fałszywą mapę... dla kupca, który skupuje kamienie? Mogę. Narysuję im takie miejsce, że będą kopać do zimy.",
+            "Masz. Atrament jeszcze mokry. Tylko uważaj: jeśli Baltazar to odkryje, nie przyjdzie sam."],
+        w12Later: ["Nie wiesz? (Ansgar śmieje się bez wesołości.) To ja też nie wiem, czy jutro tu jeszcze będę."],
+        w12Sale: ["> Mam mapę. Kamienie z krukiem na całej wyspie. Rysował ją ktoś, kto się zna.",
+            "(Baltazar długo ogląda papier pod światło.) ...Ładna robota. Za ładna. Sto groszy. I nie było cię tu."],
+        // D25: the stones
+        stonesAsk: "> Znalazłem na wraku kamienie z krukiem. Pięć.",
+        stonesCelnik: ["Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć groszy za sztukę. Zapiszę uczciwie."],
+        stonesCelnikOpt: ["Oddaj je celnikowi (25 G).", "Jeszcze nie."],
+        stonesCelnikDone: ["Zapisane. (Celnik wrzuca kamienie do skrzyni z pieczęcią Lorda.) Dwór pamięta przysługi."],
+        stonesKupiec: ["Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Piętnaście groszy za sztukę. Więcej nikt ci nie da. I nikomu ani słowa."],
+        stonesKupiecOpt: ["Sprzedaj je Baltazarowi (75 G).", "Jeszcze nie."],
+        stonesKupiecDone: ["Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na klucz.) Zapamiętam cię."],
+        stonesGrandpa: ["(Dziadek długo obraca kamień w palcach.) Skąd to masz? ...Z tego okrętu. Tak myślałem.",
+            "Takie same leżały kiedyś na Urwisku. Schowaj je. Nie pokazuj nikomu, a już na pewno nie ludziom Lorda."],
+        stonesGrandpaOpt: ["Zatrzymam je.", "Jeszcze pomyślę."],
+        stonesKeep: ["Dobrze. (Dziadek oddaje ci kamień.) Kiedyś ci powiem więcej. Kiedyś."],
+        stonesPustelnik: ["Kamienie posłańców. (Kleofas bierze jeden w chude palce.) Kruczarze nosili takie od Urwiska do każdej strażnicy. Znak, że list jest prawdziwy.",
+            "Nie oddawaj ich nikomu. Czarne Oczy szukają ich, bo nie wiedzą, czym są. Myślą, że to mapa."],
+        stonesPustelnikOpt: ["Zatrzymam je.", "Jeszcze pomyślę."]
+    };
+    const fill = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (v && v[k] !== undefined ? v[k] : m));
+
+    // ------------------------------------------------------------------
+    // W12's clues
+    // ------------------------------------------------------------------
+    const clueCount = () => Object.keys(S().clues || {}).filter(k => D.CLUES[k]).length;
+    function addClue(k, quiet) {
+        if (!has() || !D.CLUES[k] || S().clues[k]) return false;
+        S().clues[k] = day();
+        const c = D.CLUES[k];
+        note("Poszlaka: " + c.name, c.text);
+        if (!quiet) T.popup("Poszlaka: " + c.name, { top: true, color: "#ffe27a", sub: "Kim naprawdę jest Eryk Sowa?" });
+        autoChecks();
+        return true;
+    }
+
+    // ------------------------------------------------------------------
+    // The talks: Janek's boat (his hook, first), the castaway, Józek Łata's clue
+    // ------------------------------------------------------------------
+    let passJanek = false;
+    function boatOk() {
+        if (!isBuilt() || storming()) return false;
+        const r = rec("D25");
+        // (2026-10-16, the coordinator's decision) the boat goes on after D25 too: the wreck stays a place to go back to
+        if (!(r && r.s === "active") && !isDone("D25") && day() < D.BOAT.from) return false;
+        return true;
+    }
+    function janekHarbourTalk(ev) {
+        if ($gameMap.mapId() !== HARBOUR || !inHours(hour(), D.BOAT.hours) || !boatOk()) return null;
+        const P = T.api("Przystan");
+        if (P && P.janekAtSea && P.janekAtSea()) return null;
+        if (!flag("janekMet")) return null;
+        if (questWants("janek")) return null;
+        const spk = { id: ev.eventId(), name: "Janek" }, out = [];
+        if (D.BOAT.needQuest && !isDone(D.BOAT.needQuest)) {
+            if (S().janekAsked === day()) return null;
+            act(out, ["janekAsked"]);
+            return linesTo(out, spk, TX.janekNoK47);
+        }
+        const W = WY(), lows = W && W.lowWaters ? W.lowWaters() : [];
+        linesTo(out, spk, TX.janekOffer);
+        if (lows.length) linesTo(out, spk, [fill(TX.janekTide, { t: lows.map(hhmm).join(" i ") })]);
+        linesTo(out, spk, ["Płyniemy?"]);
+        return choiceTo(out, ["Zawieź mnie na wrak.", "Nie, w innej sprawie."],
+            [act([], ["boat"]), act([], ["passJanek"])], 1);
+    }
+    function erykTalk(ev) {
+        const spk = { id: ev.eventId(), name: "Eryk Sowa" }, out = [];
+        if (questWants("rozbitek")) { const q = questTalk("rozbitek"); if (q && q.length) return q; }
+        const e = TL() && TL().entryAt ? TL().entryAt(TL().RESIDENTS.find(r => r.key === D.RES.key), hour()) : null;
+        if (e && e.act === "work" && e.where === "rozbitek_studnia") return linesTo(out, spk, TX.erykWell);
+        if (!S().met) {
+            linesTo(out, spk, TX.erykMeet.concat(["Rysujemy?"]));
+            act(out, ["met"]);
+            return choiceTo(out, ["Narysuj mnie (2 G).", "Może innym razem."], [act([], ["portrait"]), linesTo([], spk, ["Jak chcesz. Twarz ci nie ucieknie."])], 1);
+        }
+        if (S().w12 === "double" || S().w12 === "ally") linesTo(out, spk, [usual(D.RES.key) || pick(TX.erykAsk)]);
+        else linesTo(out, spk, [pick(TX.erykAsk)]);
+        const labels = ["Narysujesz mnie? (2 G)", "Skąd jesteś?", "Co słychać?", "Bywaj."];
+        const branches = [act([], ["portrait"]), linesTo([], spk, [pick(TX.erykWhere)]), linesTo([], spk, [usual(D.RES.key) || "Nic. Rysuję."]), []];
+        return choiceTo(out, labels, branches, 3);
+    }
+    function jozekTalk(ev) {   // (before his own offers - once; a hand-in of his quest comes first)
+        if (!S().met || S().clues.jozek || S().w12 || readyFor("szmaciarz")) return null;
+        const spk = { id: ev.eventId(), name: "Józek Łata" }, out = [];
+        linesTo(out, spk, TX.jozek);
+        return act(out, ["clue", "jozek"]);
+    }
+    function hook(key, ev) {
+        if (!has()) return null;
+        if (key === "janek") {
+            if (passJanek) { passJanek = false; return null; }
+            return janekHarbourTalk(ev);
+        }
+        if (key === D.RES.key) return erykTalk(ev);
+        if (key === "szmaciarz") return jozekTalk(ev);
+        return null;
+    }
+    function hookTalk() {
+        const L = TL();
+        if (L && L.addTalkHook && !hookTalk.done) {
+            hookTalk.done = true;
+            L.addTalkHook((key, ev) => { try { return hook(key, ev); } catch (e) { console.error("[Wrak]", e); return null; } }, true);
+        }
+    }
+    hookTalk();
+
+    // the injected people of the wreck: Janek by his boat, the soldiers
+    function talk(interp, who) {
+        if (!has() || !interp) return;
+        const ev = $gameMap.event(interp.eventId());
+        if (!ev || (ev._wrak && ev._wrak.hidden)) return;
+        const out = [];
+        if (who === "janek") {
+            const spk = { id: ev.eventId(), name: "Janek" };
+            linesTo(out, spk, TX.janekWait);
+            choiceTo(out, ["Wracajmy.", "Jeszcze chwilę."], [linesTo([], spk, TX.janekBack).concat(act([], ["boatBack"])), linesTo([], spk, TX.janekStay)], 1);
+        } else if (who === "zolnierz") {
+            const spk = { id: ev.eventId(), name: "Żołnierz garnizonu" };
+            linesTo(out, spk, [TX.soldierTalk[(ev.eventId() + day()) % TX.soldierTalk.length]]);
+        }
+        if (out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
+    }
+
+    // ------------------------------------------------------------------
+    // The script calls (the wreck's things, the talks)
+    // ------------------------------------------------------------------
+    function selfSwitch(ev, on) { if (ev) $gameSelfSwitches.setValue([$gameMap.mapId(), ev.eventId(), "A"], !!on); }
+    function giveChart() {
+        if (count(D.ITEM_MAP) < 1 && item(D.ITEM_MAP)) $gameParty.gainItem(item(D.ITEM_MAP), 1);
+        T.popup(item(D.ITEM_MAP) ? item(D.ITEM_MAP).name : "Mapa z zaznaczeniami", { top: true, color: "#ffd23f", sub: "Siedem miejsc zaznaczonych białym okiem." });
+        const names = D.MARKS.map(m => m.name).join(", ");
+        note("Mapa z zaznaczeniami", "Mapa Kruczej Wyspy z kajuty „Białej Źrenicy”. Czarne Oczy zaznaczyły na niej siedem miejsc małym białym okiem: " + names +
+            ". Kompas prowadzi do następnego znaku, którego jeszcze nie widziałem.");
+    }
+    function actCall(interp, args) {
+        if (!has() || !Array.isArray(args)) return;
+        const [what, a] = args;
+        const ev = interp && interp.eventId ? $gameMap.event(interp.eventId()) : null;
+        const stop = () => { if (interp && interp._list) interp._index = interp._list.length; };
+        try {
+            if (what === "boat") {
+                if (!boatOk()) { T.popup("Nie dziś.", { color: "#ffe9a8" }); stop(); return; }
+                S().boat = { until: now() + D.BOAT.wait, from: now() };
+                S().boatWarned = 0;
+                think(TX.janekRow[0]);
+                const L = D.BOAT.landing;
+                $gamePlayer.reserveTransfer(MAP, L[0], L[1], L[2], 0);
+            } else if (what === "passJanek") {
+                passJanek = true;
+                const L = TL();
+                if (L && L.talk && interp) L.talk(interp);
+            } else if (what === "janekAsked") {
+                S().janekAsked = day();
+            } else if (what === "boatBack") {
+                S().boat = null;
+                const H = D.BOAT.harbour;
+                $gamePlayer.reserveTransfer(HARBOUR, H[0], H[1], H[2], 0);
+            } else if (what === "szkielet") {
+                if (ev && floodedAt(ev.x, ev.y)) { T.popup(TX.skeletonWet, { color: "#9fd4ff" }); return; }
+                if (S().key) { T.popup(TX.skeletonEmpty, { color: "#eceef0" }); return; }
+                S().key = day();
+                vgive("klucz_bosmana", 1);
+                AudioManager.playSe({ name: "Key", volume: 80, pitch: 100, pan: 0 });
+                T.popup(vname("klucz_bosmana"), { icon: vicon("klucz_bosmana"), kind: "good" });
+                for (const t of TX.skeleton) think(t.replace(/^> /, ""));
+                note("Klucz bosmana", "W najniższym kącie ładowni wraku leży szkielet bosmana. Na szyi miał mosiężny klucz - pewnie do kajuty kapitana.");
+                autoChecks();
+            } else if (what === "drzwi") {
+                if (!S().key && vcount("klucz_bosmana") < 1) { T.popup.need(vicon("klucz_bosmana") || 196, "Potrzebujesz klucza"); return; }
+                S().door = day();
+                selfSwitch(ev, true);
+                AudioManager.playSe({ name: "Open1", volume: 80, pitch: 90, pan: 0 });
+                T.popup(TX.doorOpen, { color: "#ffe9a8" });
+            } else if (what === "biurko") {
+                if (S().desk) { T.popup(TX.deskEmpty, { color: "#eceef0" }); return; }
+                S().desk = day();
+                giveChart();
+                vgive("dziennik_okretu", 1);
+                setFlag("dziennikOkretu");
+                setFlag("kronikaKarta4");
+                for (const t of TX.desk) think(t.replace(/^> /, ""));
+                note("Dziennik okrętu „Białej Źrenicy”", "Okręt Straży Pewności płynął po „serce skały pod krukiem”. Na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”. Zaginął w sztormie razem z okrętem - tak zapisano.");
+                note("Karta kroniki (z wraku)", "W dzienniku okrętu leżała luźna, bardzo stara karta - nie ich pismo. Na marginesach notatki Czarnych Oczu. Ktoś, kto zna szyfr zakonu, mógłby ją przeczytać.");
+                addClue("dziennik");
+                autoChecks();
+            } else if (what === "skrzynia") {
+                if (S().chest) { T.popup(TX.chestEmpty, { color: "#eceef0" }); return; }
+                S().chest = day();
+                selfSwitch(ev, true);
+                vgive("monety_oko", 1);
+                vgive("kamien_kruk", D.STONES.n);
+                AudioManager.playSe({ name: "Chest1", volume: 80, pitch: 100, pan: 0 });
+                T.popup(vname("kamien_kruk") + " ×" + D.STONES.n, { icon: vicon("kamien_kruk"), kind: "good" });
+                for (const t of TX.chest) think(t.replace(/^> /, ""));
+                note("Kamienie z krukiem", "W skrzyni kapitana: sakiewka obcych monet z okiem i pięć płaskich kamieni z wyrytym krukiem - takim jak na moim wisiorku. Celnik Lorda każe je zgłaszać, Baltazar skupuje, a Roch mówi, że Czarne Oczy ich szukają.");
+                autoChecks();
+            } else if (what === "met") {
+                if (!S().met) { S().met = day(); note("Eryk Sowa", "W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz."); autoChecks(); }
+            } else if (what === "portrait") {
+                if ($gameParty.gold() < 2) { T.popup.need(COIN_ICON, "Potrzebujesz 2 G"); stop(); return; }
+                $gameParty.loseGold(2);
+                S().portraits = (S().portraits || 0) + 1;
+                const spk = ev ? { id: ev.eventId(), name: "Eryk Sowa" } : HERO;
+                const list = linesTo([], spk, S().portraits === 1 ? TX.erykPortrait : TX.erykPortraitAgain);
+                if (S().portraits === 1) vgive("portret", 1);
+                if (interp && list.length) interp.setupChild(list.concat([C(0, [])]), interp.eventId());
+            } else if (what === "clue") {
+                if (a === "jozek") S().jozekTold = day();
+                addClue(a);
+            }
+        } catch (e) { console.error("[Wrak] act " + JSON.stringify(args), e); }
+    }
+
+    // ------------------------------------------------------------------
+    // TownQuests' handlers: D25 (the wreck, the key, the cabin, the stones) and W12 (the clues, the talk in private, the false map)
+    // ------------------------------------------------------------------
+    const STONE_KEYS = ["celnik", "kupiec", "grandpa", "pustelnik"];
+    function stonesTalk(q, r, st, key, spk) {
+        if (!STONE_KEYS.includes(key) || vcount("kamien_kruk") < D.STONES.n) return null;
+        if (key === "kupiec" && !inHours(hour(), [8, 18])) return null;
+        const out = [], L = { celnik: [TX.stonesCelnik, TX.stonesCelnikOpt, TX.stonesCelnikDone], kupiec: [TX.stonesKupiec, TX.stonesKupiecOpt, TX.stonesKupiecDone],
+            grandpa: [TX.stonesGrandpa, TX.stonesGrandpaOpt, TX.stonesKeep], pustelnik: [TX.stonesPustelnik, TX.stonesPustelnikOpt, TX.stonesKeep] }[key];
+        if (key !== "grandpa" && key !== "pustelnik") linesTo(out, HERO, [TX.stonesAsk]);
+        linesTo(out, spk, L[0].concat([{ celnik: "Oddajesz?", kupiec: "Sprzedajesz?" }[key] || "Co z nimi zrobisz?"]));
+        const yes = qact([], ["D25", "fx", "d25Kamienie", key]);
+        linesTo(yes, spk, key === "pustelnik" ? ["Mądrze. Kruk wie, komu siada na ramieniu."] : L[2]);
+        choiceTo(out, L[1], [yes, []], 1);
+        return { ready: true, list: out };
+    }
+    function stonesAct(q, key) {
+        if (!atStep("D25", 3) || vcount("kamien_kruk") < D.STONES.n) return;
+        let rw = null;
+        if (key === "celnik") {
+            vtake("kamien_kruk", D.STONES.n);
+            rw = { gold: D.STONES.celnik * D.STONES.n };
+            setFlag("wrakKamienieCelnik");
+            note("Kamienie u celnika", "Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.");
+        } else if (key === "kupiec") {
+            vtake("kamien_kruk", D.STONES.n);
+            rw = { gold: D.STONES.kupiec * D.STONES.n };
+            setFlag("wrakKamienieBaltazar");
+            note("Kamienie u Baltazara", "Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.");
+        } else {
+            setFlag("wrakKamienieZatrzymane");
+            note("Kamienie z krukiem zostają u mnie", key === "pustelnik"
+                ? "Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa."
+                : "Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku.");
+        }
+        const Q = TQ();
+        if (Q && Q.completeStep) Q.completeStep("D25", { reward: rw });
+    }
+    // the talk in private (W12, step 1): four ways out (+ "not yet")
+    function w12Talk(q, r, st, key, spk) {
+        if (key !== D.RES.key) return null;
+        const f = flags(), out = [];
+        linesTo(out, spk, TX.w12Open);
+        const labels = [], branches = [];
+        const opt = (label, how, lines) => {   // (his answer first, then the choice takes effect - "given" sends him away)
+            labels.push(label);
+            const b = linesTo([], spk, lines);
+            qact(b, ["W12", "fx", "w12Talk", how]);
+            branches.push(b);
+        };
+        opt("Wydam cię garnizonowi.", "given", TX.w12Given);
+        opt("Zachowam to dla siebie.", "ally", TX.w12Ally);
+        if (f.d20Pomoc && !f.d20Wydany) opt("Pomogę ci uciec kutrem Rocha.", "fled", TX.w12Fled);
+        opt("Fałszywa mapa dla Baltazara.", "double", TX.w12Double);
+        labels.push("Jeszcze nie wiem.");
+        branches.push(linesTo([], spk, TX.w12Later));
+        choiceTo(out, labels, branches, labels.length - 1);
+        return { ready: true, list: out };
+    }
+    function w12Choose(q, how) {
+        if (!atStep("W12", 1)) return;
+        const Q = TQ(), L = TL();
+        S().w12 = how;
+        if (how === "given") {
+            setFlag("ansgarGiven");
+            if (L && L.setGone) L.setGone(D.RES.key, true);
+            if (!T.call("Garnizon", "addFavor", 20, "W12: rozbitek wydany")) T.emit("wrakGarnizon", { favor: 20, why: "W12: rozbitek wydany" });
+            note("Wydałem Ansgara", "Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.");
+            Q.finish("W12", { gold: D.W12_GOLD.given, xp: D.W12_XP.given });
+        } else if (how === "ally") {
+            setFlag("ansgarAlly");
+            note("Ansgar zostaje", "Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.");
+            Q.finish("W12", { xp: D.W12_XP.ally });
+        } else if (how === "fled") {
+            setFlag("ansgarFled");
+            vgive("mapa_ansgara", 1);
+            if (L && L.setGone) L.setGone(D.RES.key, true);
+            note("Ansgar odpłynął", "Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.");
+            Q.finish("W12", { xp: D.W12_XP.fled });
+        } else if (how === "double") {
+            setFlag("wrakPodwojnaGra");
+            vgive("falszywa_mapa", 1);
+            note("Fałszywa mapa", "Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam.");
+            Q.completeStep("W12");
+        }
+    }
+    function w12MapTalk(q, r, st, key, spk) {
+        if (key !== "kupiec" || vcount("falszywa_mapa") < 1 || !inHours(hour(), [8, 18])) return null;
+        const out = [];
+        linesTo(out, spk, TX.w12Sale);
+        qact(out, ["W12", "fx", "w12Map", "sell"]);
+        return { ready: true, list: out };
+    }
+    function w12Sell() {
+        if (!atStep("W12", 2) || vcount("falszywa_mapa") < 1) return;
+        vtake("falszywa_mapa", 1);
+        setFlag("wrakMapaSprzedana");
+        S().raid = day() + D.RAID.after[0] + Math.floor(Math.random() * (D.RAID.after[1] - D.RAID.after[0] + 1));
+        S().raidRoll = Math.random();
+        note("Mapa dla Baltazara", "Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował.");
+        TQ().finish("W12", { gold: D.W12_GOLD.sold, xp: D.W12_XP.double });
+    }
+    function hookQuests() {
+        const q = TQ();
+        if (!q || !q.FX || hookQuests.done) return;
+        hookQuests.done = true;
+        Object.assign(q.FX, {
+            d25Ready: { cond: () => isBuilt() },
+            d25Auto: () => has() && S().been > 0,
+            d25Wrak: { check: () => S().been > 0 },
+            d25Klucz: { check: () => S().key > 0 },
+            d25Kajuta: { check: () => S().desk > 0 && S().chest > 0 },
+            d25Kamienie: {
+                talk: stonesTalk,
+                ready: (qq, r, st, key) => STONE_KEYS.includes(key) && vcount("kamien_kruk") >= D.STONES.n && (key !== "kupiec" || inHours(hour(), [8, 18])),
+                act: (qq, key) => stonesAct(qq, key)
+            },
+            w12Auto: () => has() && S().met > 0 && clueCount() >= 1,
+            w12Poszlaki: { check: () => clueCount() >= 2 },
+            w12Vars: { vars: () => ({ n: Math.min(2, clueCount()) }) },
+            w12Talk: { talk: w12Talk, ready: (qq, r, st, key) => key === D.RES.key, act: (qq, how) => w12Choose(qq, how) },
+            w12Map: { talk: w12MapTalk, ready: (qq, r, st, key) => key === "kupiec" && vcount("falszywa_mapa") > 0 && inHours(hour(), [8, 18]), act: () => w12Sell() }
+        });
+    }
+    hookQuests();
+
+    // (the castaway's talk bust Rozbitek_Bust is in SpeechBubbles' own BUSTS table since the integration)
+
+    // ------------------------------------------------------------------
+    // The tavern's seat: TownLife counts its guests by their plans (gosc_N = the order of the residents with a "tawerna" entry) -
+    // the castaway's seat goes under his real number (gosc_9 when nobody else came before him)
+    // ------------------------------------------------------------------
+    (function seat() {
+        const L = TL(), TLD = window.TownLifeData;
+        if (!L || !L.RESIDENTS || !TLD || !TLD.SPOTS_BY_MAP || !TLD.SPOTS_BY_MAP[TAVERN]) return;
+        const guests = L.RESIDENTS.filter(r => r.plan.some(p => p[2] === "tawerna")).map(r => r.key);
+        const n = guests.indexOf(D.RES.key) + 1, sb = TLD.SPOTS_BY_MAP[TAVERN];
+        if (n > 0 && n !== 9 && sb.gosc_9 === D.SPOT_TAVERN && !sb["gosc_" + n]) { sb["gosc_" + n] = D.SPOT_TAVERN; delete sb.gosc_9; }
+    })();
+
+    // ------------------------------------------------------------------
+    // The injected events (ids 670-679, Map165): Janek's boat and Janek, the rescue boat and two soldiers - placed on the map's
+    // markers "Miejsce: wrak_*" (the data's cells when a marker is gone)
+    // ------------------------------------------------------------------
+    let soldierSheet = D.SOLDIERS.sheet;
+    (function findKingSoldier() {   // (package D's soldier, when its sheet is there)
+        if (!D.SOLDIERS.sheetKing || typeof Image === "undefined") return;
+        try { const im = new Image(); im.onload = () => { soldierSheet = D.SOLDIERS.sheetKing; }; im.src = "img/characters/" + encodeURIComponent(D.SOLDIERS.sheetKing) + ".png"; } catch (e) { /* (none) */ }
+    })();
+    const BLANK = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
+        switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
+    function markerOf(data, key, dflt) {
+        const m = (data.events || []).find(e => e && String(e.name || "").trim() === "Miejsce: " + key);
+        if (m) { const img = m.pages && m.pages[0] && m.pages[0].image; return [m.x, m.y, img ? img.direction || dflt[2] : dflt[2]]; }
+        return dflt;
+    }
+    function personEv(id, name, sheet, at, who, opts) {
+        const o = opts || {};
+        const page = { conditions: Object.assign({}, BLANK), directionFix: !!o.fix, image: { tileId: 0, characterName: sheet, direction: at[2] || 2, pattern: o.pattern === undefined ? 1 : o.pattern, characterIndex: 0 },
+            list: who ? [C(355, ["Wrak.talk(this, " + JSON.stringify(who) + ");"]), C(0, [])] : [C(0, [])],
+            moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false }, moveSpeed: o.speed || 3, moveType: 0,
+            priorityType: 1, stepAnime: !!o.step, through: false, trigger: 0, walkAnime: !o.fix };
+        return { id, name, note: "<Wrak:" + (o.tag || who || "rzecz") + ">", pages: [page], x: at[0], y: at[1] };
+    }
+    T.inject(MAP, { ids: IDS, owner: PLUGIN, build(data) {
+        const B = D.BOAT, Sd = D.SOLDIERS;
+        return [
+            personEv(IDS[0], "Łódź Janka (czeka przy wraku)", "!$Przystan_Lodz_Janka", markerOf(data, "wrak_lodz", [B.boat[0], B.boat[1], 2]), null,
+                { fix: true, step: true, speed: 2, pattern: 0, tag: "lodz" }),
+            personEv(IDS[0] + 1, "Janek (czeka przy łodzi)", "$Npc_Janek", markerOf(data, "wrak_janek", B.janek), "janek"),
+            personEv(IDS[0] + 2, "Łódź ratownicza garnizonu", "!$Przystan_Lodz_Mala", markerOf(data, "wrak_lodz_ratownicza", [Sd.boat[0], Sd.boat[1], 2]), null,
+                { fix: true, step: true, speed: 2, pattern: 0, tag: "lodz_ratownicza" }),
+            personEv(IDS[0] + 3, "Żołnierz garnizonu", soldierSheet, markerOf(data, "wrak_zolnierz_1", Sd.men[0]), "zolnierz"),
+            personEv(IDS[0] + 4, "Żołnierz garnizonu", soldierSheet, markerOf(data, "wrak_zolnierz_2", Sd.men[1]), "zolnierz")
+        ];
+    } });
+    function setShown(e, on) {
+        if (!e) return;
+        const st = e._wrak || (e._wrak = { prio: e._priorityType, through: e._through, hidden: null });
+        if (on) {
+            if (st.hidden === false) return;
+            e.setTransparent(false); e.setThrough(st.through); e._priorityType = st.prio; st.hidden = false;
+        } else {
+            if (st.hidden === true) return;
+            e.setTransparent(true); e.setThrough(true); e._priorityType = 0; st.hidden = true;
+        }
+    }
+    const _Game_Event_start = Game_Event.prototype.start;
+    Game_Event.prototype.start = function() {
+        if (this._wrak && this._wrak.hidden) return;
+        _Game_Event_start.call(this);
+    };
+    const boatHere = () => !!(S().boat && now() < S().boat.until);
+    const soldiersHere = () => inHours(hour(), D.SOLDIERS.hours) && !storming();
+
+    // ------------------------------------------------------------------
+    // The map's life: arriving, the boat's time, the soldiers, the tide's warnings, the skeleton under water
+    // ------------------------------------------------------------------
+    function syncWreck() {
+        if ($gameMap.mapId() !== MAP) return;
+        const b = boatHere();
+        setShown($gameMap.event(IDS[0]), b);
+        setShown($gameMap.event(IDS[0] + 1), b);
+        const s = soldiersHere();
+        for (let k = 2; k <= 4; k++) setShown($gameMap.event(IDS[0] + k), s);
+    }
+    function boatClock() {
+        const bt = S().boat;
+        if (!bt) return;
+        const t = now();
+        if ($gameMap.mapId() === MAP && t >= bt.until - 0.25 && !S().boatWarned) {
+            S().boatWarned = 1;
+            bark($gameMap.event(IDS[0] + 1), TX.janekLeaving);
+        }
+        if (t >= bt.until) {
+            S().boat = null;
+            if ($gameMap.mapId() === MAP || $gameMap.mapId() === UNDER) T.popup(TX.janekGone, { color: "#ffe9a8" });
+        }
+    }
+    function soldiersWatch() {
+        if ($gameMap.mapId() !== MAP || !soldiersHere() || $gameMap.isEventRunning()) return;
+        const glejt = flag("glejtWrak"), sneak = !!T.call("Hunting", "sneaking");
+        for (let k = 3; k <= 4; k++) {
+            const ev = $gameMap.event(IDS[0] + k);
+            if (!ev || (ev._wrak && ev._wrak.hidden)) continue;
+            const dist = Math.hypot(ev.x - $gamePlayer.x, ev.y - $gamePlayer.y);
+            if (glejt) {
+                if (dist <= D.SOLDIERS.see && S().glejtSeen !== day()) { S().glejtSeen = day(); bark(ev, TX.soldierPass); }
+                continue;
+            }
+            if (S().fined === day() || dist > (sneak ? D.SOLDIERS.seeSneak : D.SOLDIERS.see)) continue;
+            S().fined = day();
+            const fine = Math.min(D.SOLDIERS.fine, $gameParty.gold());
+            if (fine > 0) $gameParty.loseGold(fine);
+            ev.turnTowardPlayer();
+            bark(ev, TX.soldierCatch[0]);
+            later.push({ at: Graphics.frameCount + 160, ev, text: TX.soldierCatch[1] });
+            T.popup("Kara: -" + fine + " G", { icon: COIN_ICON, kind: "need" });
+            if (!T.call("Garnizon", "addFavor", D.SOLDIERS.favor, "wrak bez glejtu")) T.emit("wrakGarnizon", { favor: D.SOLDIERS.favor, gold: -fine, why: "wrak bez glejtu" });
+            note("Złapany na wraku", "Żołnierze garnizonu złapali mnie na wraku bez glejtu rotmistrza. Kara: " + fine + " groszy. Garnizon będzie o tym pamiętał.");
+            return;
+        }
+    }
+    function tideWarnings() {
+        const m = $gameMap.mapId();
+        if (m !== MAP) return;
+        const t = tideNow(), d = day();
+        const lowKey = d * 100 + Math.floor(hour() * 2);
+        if (t.low) {
+            const left = lowLeft();
+            if (left < 0.45 && S().lowWarn < 0) { S().lowWarn = lowKey; T.popup(TX.lowEnding, { color: "#9fd4ff" }); }
+        } else if (S().lowWarn >= 0) {
+            S().lowWarn = -1;
+            T.popup(fill(TX.flooded, { t: nextLowClock() }), { color: "#9fd4ff" });
+        }
+    }
+    function skeletonUnderWater() {
+        if ($gameMap.mapId() !== UNDER) return;
+        for (const ev of $gameMap.events()) {
+            if (!ev.event() || !/<Wrak:szkielet>/.test(ev.event().note || "")) continue;
+            const wet = floodedAt(ev.x, ev.y);
+            ev.setOpacity(wet ? 90 : 255);
+        }
+    }
+    // the well at night (W12 clue 4): Eryk's sleeve rolled up - the hero close by and unseen (sneaking or behind him)
+    function wellWatch() {
+        if ($gameMap.mapId() !== TOWN || S().clues.tatuaz || !S().met) return;
+        const L = TL(), ev = L && L.eventOf ? L.eventOf(D.RES.key) : null;
+        if (!ev || (ev._town && ev._town.hidden)) return;
+        const st = L.state(D.RES.key);
+        if (!st || st.act !== "work") return;
+        const sp = D.SPOTS_TOWN.rozbitek_studnia;
+        if (ev.x !== sp[0] || ev.y !== sp[1]) return;
+        const dist = Math.hypot(ev.x - $gamePlayer.x, ev.y - $gamePlayer.y);
+        if (dist > 2.6) return;
+        const sneak = !!T.call("Hunting", "sneaking");
+        const d = ev.direction(), dx = $gamePlayer.x - ev.x, dy = $gamePlayer.y - ev.y;
+        const ahead = (d === 2 && dy > 0) || (d === 8 && dy < 0) || (d === 4 && dx < 0) || (d === 6 && dx > 0);
+        if (sneak || !ahead) {
+            addClue("tatuaz", true);
+            for (const t of TX.erykWellSeen) think(t.replace(/^> /, ""));
+            T.popup("Poszlaka: " + D.CLUES.tatuaz.name, { top: true, color: "#ffe27a", sub: "Kim naprawdę jest Eryk Sowa?" });
+        } else if (S().tatuazTry !== day()) {
+            S().tatuazTry = day();
+            bark(ev, TX.erykWell[0]);
+        }
+    }
+    // the clues that come from other packages' flags: the lighthouse's vision (C: mgla), the raven's letter (B: krukTame)
+    function flagClues() {
+        if (!S().met) return;
+        const W = WY(), fl = k => (W && W.flag ? W.flag(k) : flag(k));
+        if (!S().clues.wizja && fl("mgla")) addClue("wizja");
+        if (!S().clues.list && fl("krukTame") && day() > S().met && inHours(hour(), [6, 12]) && !$gameMap.isEventRunning()) {
+            think(TX.letter);
+            addClue("list");
+        }
+    }
+    // the chart's white eyes: a mark visited when its map is entered (with the chart in the bag)
+    function marksOpen() { const W = WY(); return D.MARKS.filter(m => !m.ready || (W && W.isReady && W.isReady(m.ready))); }
+    function visitMark(mapId) {
+        if (count(D.ITEM_MAP) < 1) return;
+        for (const m of D.MARKS) {
+            if (m.map !== mapId || S().marks[m.key]) continue;
+            S().marks[m.key] = day();
+            const n = Object.keys(S().marks).length;
+            T.popup("Znak białego oka: " + m.name, { top: true, color: "#ffe27a", sub: "Mapa z wraku: " + n + " z " + D.MARKS.length });
+            note("Znak białego oka: " + m.name, "Jedno z siedmiu miejsc zaznaczonych na mapie z wraku. Byłem tu: " + m.name + ". (" + n + " z " + D.MARKS.length + ")");
+        }
+    }
+    function nextMark() {
+        if (count(D.ITEM_MAP) < 1) return null;
+        return marksOpen().find(m => !S().marks[m.key]) || null;
+    }
+    (function tracker() {
+        const J = T.api("Journal");
+        if (!J || !J.addTrackerSource) return;
+        J.addTrackerSource(() => {
+            if (!has()) return null;
+            const m = nextMark();
+            if (!m) return null;
+            const n = Object.keys(S().marks).length;
+            return { label: "MAPA", title: "Biały znak: " + m.name, line: "Mapa z wraku: " + n + " z " + D.MARKS.length + " miejsc", key: "wrak:" + m.key,
+                icon: item(D.ITEM_MAP) ? item(D.ITEM_MAP).iconIndex : 0, where: { map: m.map, x: m.x, y: m.y, name: m.name } };
+        });
+    })();
+    // the false map's revenge: Baltazar finds out - his men at night, once (35%)
+    const RAID_MAPS = [3, 4, 8, 13, 17, 18, 20, 22, 23, 111, 125];
+    function raidWatch() {
+        const s = S();
+        if (!s.raid || s.raidDone || day() < s.raid || s.raidRoll >= D.RAID.chance) return;
+        const h = hour();
+        if (!(h >= 21 || h < 4) || !RAID_MAPS.includes($gameMap.mapId()) || $gameMap.isEventRunning()) return;
+        const Hm = T.api("Humans");
+        if (!Hm || typeof Hm.ambush !== "function") { s.raidDone = day(); return; }
+        const band = Hm.ambush(["bandit", "knifer", "archer"], { tag: "wrakZemsta", far: [5, 8], say: "Baltazar przesyła pozdrowienia za mapę!" });
+        s.raidDone = day();
+        if (band) note("Ludzie Baltazara", "Baltazar zorientował się, że mapa była fałszywa. Jego ludzie zaczaili się na mnie nocą.");
+    }
+
+    T.on("mapReady", p => {
+        if (!has()) return;
+        grid = null;
+        later = [];
+        hookQuests(); hookTalk();
+        const m = $gameMap.mapId();
+        if (m === MAP) {
+            const first = !S().been;
+            if (first) { S().been = day(); setFlag("wrakByl"); }
+            syncWreck();
+            if (p && p.transfer) T.popup(fill(TX.arrive, { t: nextLowClock() }), { color: "#9fd4ff" });
+            S().lowWarn = -1;
+            autoChecks();
+        }
+        if (m === UNDER) {
+            if (!S().under) S().under = day();
+            if (S().ratsDay !== day()) {
+                const Cr = T.api("Creatures"), ev = $gameMap.events().find(e => e.event() && e.event().name === "Miejsce: wrak_szczury");
+                const at = ev ? [ev.x, ev.y] : D.RAT.at;
+                if (Cr && Cr.spawn) { try { Cr.spawn("szczur", at[0], at[1], { level: D.RAT.level, tag: "wrak", max: D.RAT.max }); } catch (e) { console.error("[Wrak] rats", e); } }
+                S().ratsDay = day();
+            }
+            skeletonUnderWater();
+        }
+        if (S().boat && m !== MAP && m !== UNDER) S().boat = null;   // (he went away from the wreck some other way: Janek rows home)
+        visitMark(m);
+    }, { owner: PLUGIN });
+
+    let tick = 0;
+    T.onMapUpdate(() => {
+        if (!has()) return;
+        tick++;
+        updateLater();
+        const m = $gameMap.mapId();
+        if (m === MAP || m === UNDER) {
+            if (tick % 15 === 0) rescueHero();
+            if (tick % 20 === 0) { boatClock(); syncWreck(); soldiersWatch(); }
+            if (tick % 60 === 0) { tideWarnings(); skeletonUnderWater(); }
+        } else if (tick % 30 === 0) {
+            if (S().boat) boatClock();
+            if (m === TOWN) wellWatch();
+        }
+        if (tick % 120 === 0) { flagClues(); raidWatch(); }
+    }, { owner: PLUGIN, name: "wreck" });
+
+    // ------------------------------------------------------------------
+    // The API
+    // ------------------------------------------------------------------
+    const api = {
+        MAP, UNDER, IDS, DATA: D, TX, state: () => S(), act: actCall, talk, floodedAt, level: () => level(), tide: () => tideNow(),
+        clues: () => Object.assign({}, S().clues), clueCount, addClue, boatHere, soldiersHere, nextMark, marksOpen, visitMark, isBuilt,
+        sync: syncWreck, rescueHero, grid: () => gridOf(), flood: () => { const s = SceneManager._scene && SceneManager._scene._spriteset; return s && s._wrakFlood ? { key: s._wrakFlood._key, pixels: s._wrakFlood._pixels || 0, visible: s._wrakFlood.visible } : null; },
+        soldierSheet: () => soldierSheet
+    };
+    window.Wrak = T.register(PLUGIN, api);
+})();

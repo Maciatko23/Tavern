@@ -1485,7 +1485,9 @@
             camp: (w6 && w6.camp) || (fl.campInside ? "inside" : fl.campOutside ? "outside" : null),
             water: !!fl.sluiceHalf,
             feliks: fl.w1Revealed ? "arrested" : fl.lordAlly ? "sent" : fl.feliksPays ? "pays" : gone("feliks") ? "gone" : "here",
-            lordFlags: { ally: !!fl.lordAlly, cold: !!(fl.w1Revealed || fl.lordCold), truth: !!fl.lordTruth },
+            // (2026-10-16) branch: the manor's branch of the Order's cistern shut (Cysterna.js, D28) - the Lord is no ally any more
+            lordFlags: { ally: !!fl.lordAlly, cold: !!(fl.w1Revealed || fl.lordCold), truth: !!fl.lordTruth, branch: !!fl.galazDworskaZamknieta },
+            island: islandOf(fl),
             siege
         };
         const f = s.forceWorld;
@@ -1496,19 +1498,38 @@
         w.lord = { stance: L.stance || lordStance(w), choice: L.choice || null, told: L.told || null, cold: !!(w.lordFlags && w.lordFlags.cold) };
         return w;
     }
+    // (2026-10-16) what became of the six island places (their packages' flags and state, each asked defensively) - the epilogue's lines
+    // (Underground_Data EPILOGUE.island): null = the hero never got there / nothing to say
+    function islandOf(fl) {
+        const safe = f => { try { return f(); } catch (e) { return null; } };
+        const K = T.api("Kruk"), L = T.api("Latarnia"), G = T.api("Garnizon");
+        const lat = safe(() => (L && L.info ? L.info() : null));
+        const favor = safe(() => (G && G.favor ? Number(G.favor()) : null));
+        return {
+            pustelnia: fl.kleofasUfa ? "kroniki" : fl.sercePustelni ? "dzwon" : null,
+            kruk: fl.krukTame ? (safe(() => (K && K.state ? K.state().name : null)) || "Kruk") : null,
+            latarnia: !fl.latarnikMet ? null : fl.soczewkaRozbita ? "rozbita" : fl.soczewkaSprzedana ? "sprzedana"
+                : (lat && lat.built && typeof lat.fuel === "number" && lat.fuel <= 0) ? "zgasla" : "stoi",
+            garnizon: !fl.garnizonPoznany ? null : fl.klosWydany ? "klos" : favor !== null && favor >= 80 ? "nasz" : favor !== null && favor < 10 ? "wrog" : null,
+            wrak: fl.ansgarAlly ? "ally" : fl.ansgarGiven ? "given" : fl.ansgarFled ? "fled" : null,
+            cysterna: fl.galazDworskaZamknieta ? "galaz" : fl.rynnyCzyste ? "rynny" : fl.cysternaOtwarta ? "otwarta" : null
+        };
+    }
     // the Lord's stance at the Heart: ally (the quiet way of W1 - lordAlly - or his truth told, W9 ch. 6), rival (shamed at the market,
     // W1 a: "Mówiłem: najpierw do mnie"), absent (he never learnt the hero went down - or no story).
     // (2026-10-15) The field lost and not bought back: he holds the hero's grandfather's land and wants to be first under the tavern -
     // a rival, unless the hero made him an ally (W1's quiet way) or told him his truth (W9 ch. 6). Bought back: as if the debt was paid.
+    // (2026-10-16) The manor's branch of the cistern shut (D28 - the coordinator's decision: it ALWAYS chills him, flag lordCold too):
+    // an ally no more - a rival, unless his truth was told.
     function lordStance(w) {
         const f = state().forceLord;
         if (f === "ally" || f === "rival" || f === "absent") return f;
         if (!w.story) return "absent";
-        if (w.fieldLost) { const lf0 = w.lordFlags || {}; return lf0.ally || lf0.truth ? "ally" : "rival"; }
+        const lf = w.lordFlags || {}, ally = !!lf.truth || (!!lf.ally && !lf.branch);
+        if (w.fieldLost) return ally ? "ally" : "rival";
         if (!w.debtPaid && !w.fieldBack) return "absent";
-        const lf = w.lordFlags || {};
-        if (lf.ally || lf.truth) return "ally";
-        if (lf.cold) return "rival";
+        if (ally) return "ally";
+        if (lf.cold || lf.branch) return "rival";
         return "absent";
     }
     const plainWorld = w => JSON.parse(JSON.stringify(w));
@@ -1687,16 +1708,28 @@
     function epilogueLines(kind, who) {
         const d = D(), e = d.ENDINGS[kind];
         if (!e) return [];
-        return (kind === "straznik" ? (e.guardian[who] || e.guardian.hero) : e.lines).concat(epilogueExtras(kind));
+        return (kind === "straznik" ? (e.guardian[who] || e.guardian.hero) : e.lines).concat(epilogueExtras(kind, null, who));
     }
-    function epilogueExtras(kind, w0) {
+    function epilogueExtras(kind, w0, who) {
         const ep = D().EPILOGUE, out = [], w = w0 || world(), fl = questFlags();
         if (locks().open >= 3 || w.locks >= 3) out.push(ep.allLocks);
         if (w.opinion !== null && w.opinion >= 60) out.push(ep.opinionHigh);
         else if (w.opinion !== null && w.opinion < 20) out.push(ep.opinionLow);
         if (w.water) out.push(ep.water);
         if (kind === "zapieczetowac" && (w.book || fl.ambrozyChronicles || fl.signalBook)) out.push(ep.ambrozyBook);
-        return out;
+        return out.concat(islandLines(kind, w, who));
+    }
+    // (2026-10-16) the island places' lines (EPILOGUE.island), in the order of the places on the map: the cliff, the raven, the cape,
+    // the garrison, the wreck, the cistern
+    function islandLines(kind, w, who) {
+        const L = D().EPILOGUE.island, is = (w && w.island) || {}, out = [];
+        if (!L) return out;
+        const one = (tab, key) => (tab && key && typeof tab[key] === "string" ? tab[key] : null);
+        out.push(one(L.pustelnia, is.pustelnia));
+        if (is.kruk) out.push((kind === "straznik" && (who || "hero") === "hero" ? L.krukStraznik : L.kruk).replace("{imie}", is.kruk));
+        if (is.latarnia) out.push(one(L.latarnia, is.latarnia === "stoi" ? kind : is.latarnia));
+        out.push(one(L.garnizon, is.garnizon), one(L.wrak, is.wrak), one(L.cysterna, is.cysterna));
+        return out.filter(Boolean);
     }
     const valOf = (v, w) => (typeof v === "function" ? v(w) : v);
     // the scenes up above that play (HEART.SHOTS, each when its `when` holds), with their cast
@@ -1750,7 +1783,7 @@
             if (!sh.last) list = list.concat(C.fadeOut(), F.wait(10));
         }
         // the epilogue (what the town did with the hero), KONIEC and the choice: the game goes on in the tavern, or the title screen
-        const extras = epilogueExtras(kind, w);
+        const extras = epilogueExtras(kind, w, who);
         list = list.concat(F.tint([-110, -110, -110, 60], 60), F.wait(40));
         for (const l of extras) list = list.concat(F.narr(l, true));
         film.log.push(...extras);

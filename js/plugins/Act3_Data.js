@@ -71,11 +71,17 @@
         { id: "w2", map: 8, from: "gate", kinds: ["bandit", "archer", "knifer", "archer"], shout: "Łucznicy, na mur! Reszta do drzwi!",
           extra: c => (c.rafal === "enemy" ? [{ kind: "knifer", name: "Rafał", lv: 0, noSurrender: false }] : []),
           notice: ["Łucznicy!", "Druga grupa - strzelają z bramy dziedzińca."] },
+        // (2026-10-16, W12 "Rozbitek", Wrak.js) Ansgar Wiel - the castaway made an ally (flag ansgarAlly) - knew the plan: the kitchen's
+        // back door barred, one man fewer comes in that way (fewer(c): how many of `kinds` stay out; fewerNotice: the top line after)
         { id: "w3", map: 1, from: "kitchen", kinds: ["knifer", "bandit", "bandit"], shout: "Do starych drzwi! Krata jest za nimi!",
+          fewer: c => (c.flags.ansgarAlly ? 1 : 0), fewerNotice: ["Kuchnia zaryglowana", "Eryk Sowa ostrzegł Borgara - tylnymi drzwiami wchodzi ich mniej."],
           notice: ["Tylnymi drzwiami!", "Są w środku - idą przez kuchnię do starych drzwi przy piwnicy."] },
         { id: "w4", map: 1, from: "front", kinds: ["mercenary", "bandit"], shout: "Dość zabawy. Otworzyć mi tę piwnicę.",
+          // (2026-10-16, W11 "Soczewka", Latarnia.js) the lighthouse's lens sold to Baltazar (soczewkaSprzedana): the Black Eyes know
+          // more of the island - one more of their knifemen comes with the commander
           extra: c => [{ kind: "mercenary", name: "Dowódca kopaczy", look: "Captain", lv: 2, boss: true }]
-              .concat(c.grum === "enemy" ? [{ kind: "mercenary", name: "Grum", lv: 1, grum: true }] : []),
+              .concat(c.grum === "enemy" ? [{ kind: "mercenary", name: "Grum", lv: 1, grum: true }] : [])
+              .concat(c.flags.soczewkaSprzedana ? [{ kind: "knifer", name: "Nożownik Czarnych Oczu", lv: 1 }] : []),
           notice: ["Dowódca!", "Frontowymi drzwiami wchodzi dowódca kopaczy ze swoimi ludźmi."] }
     ];
     // the commander's own look (PixelLab a8bb43b1, styled on the hero; tools/humans "captain"): a mercenary's sheets of his own -
@@ -187,6 +193,10 @@
         // Ambroży spoken to while the warnings run (TownLife's talk hook): he will ring - or tells where the rope is
         ambrozyTrusts: ["Słyszałem, co mówią na rynku.", "Jeśli przyjdą do tawerny, zadzwonię trzy i jeden. Ludzie wiedzą, co to znaczy - choć niektórzy udają, że nie."],
         ambrozyNot: ["Trzy i jeden... tak dzwoniło się, kiedy ktoś szedł na twierdzę.", "Lina wisi pod dzwonem, przy mojej wieży. Kto pociągnie, ten woła całe miasto. Ale kto by mnie słuchał."],
+        // (2026-10-16, D22 "Księga mgieł", Latarnia.js) the hero saw the first vision in the lighthouse's lens (flag latarniaWizja1): the
+        // ship without a flag - now he knows what it meant (a top line and a note as the warnings begin)
+        visionArmed: ["Statek bez bandery", "Wizja z latarni: to oni. Przypłynęli."],
+        noteVision: ["Statek bez bandery", "W soczewce latarni Bazylego widziałem statek bez bandery, który przybija nocą do wyspy. Teraz wiem, kto nim przypłynął - ludzie, którzy pytają o piwnicę tawerny."],
         noteArmed: ["Obcy w miasteczku", "Ludzie mówią o obcych z mieczami, którzy pytają o piwnicę tawerny. Ktoś wie, że zszedłem głęboko - i że droga w dół zaczyna się pod naszą podłogą. Jeśli przyjdą, to nocą. Trzy uderzenia dzwonu i jedno to alarm."],
         // the siege
         start: ["Napad na tawernę!", "Ludzie frakcji pod drzwiami. Obroń tawernę."],
