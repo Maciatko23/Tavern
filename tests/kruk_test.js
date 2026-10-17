@@ -8,8 +8,8 @@
 //     żerdź w kruczarni; D24 rusza samo
 //   - D24: karmienie (bez mięsa, pies przy nodze, drugi raz tego samego dnia - popup), bieg płoszy kruka, trzecie karmienie: ramię,
 //     obrączka 179, flagi krukTame i kronikaKarta6 (karta 6 w torbie przez Pustelnię), ekran imienia (polskie litery); dziadek; grzęda
-//   - oswojony kruk: lot za bohaterem (drzewo / ziemia / ramię), menu (K), listy (raz dziennie, nie do matki, odpowiedź), zwiad (znaki
-//     na mapie), błyskotki i cudzy list (oddany właścicielowi - Opinia), pilnowanie pola (żywe i pod nieobecność), ostrzeżenie przed
+//   - oswojony kruk: lot za bohaterem (drzewo / ziemia / ramię), menu (K), listy (raz dziennie, nie do matki, odpowiedź), zwiad (raport
+//     od razu po powrocie, notatka w dzienniku, ostrzeżenie; prawdziwy: zwierzyna, jagody, grzyby, nocny obóz), błyskotki i cudzy list (oddany właścicielowi - Opinia), pilnowanie pola (żywe i pod nieobecność), ostrzeżenie przed
 //     wilkiem, głód -> powrót na Urwisko i odzyskanie, zapis i wczytanie
 //   - grzęda w Farming_Data.js (4× Gałęzie, 2× Deski, 1× Lina, 1x1) i obóz kopaczy nocą po D25
 // Przed instalacją mapy: nakładka tools/miejsca_wyspy/staging_B (sama się włącza, gdy data/Map157.json to jeszcze szkielet).
@@ -275,18 +275,63 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const back = await t.json(`({ sent: Kruk.state().sent.grandpa, pet: ${P} && ${P}.state, pops: window.__kit.pops.map(p => p.text) })`);
     t.check("po dwóch godzinach kruk wraca z odpowiedzią dziadka (dymek i popup)", back.sent === 1 && back.pet && back.pops.some(p => /^Dziadek:/.test(p)), back);
 
-    // ---------------------------------------------------------------- zwiad
-    await t.setDay(12, 9);
-    await t.frames(60);
-    await t.eval("Kruk.sendScout(3); 0");
+    // ---------------------------------------------------------------- zwiad (2026-10-17: raport zamiast znaków na mapie)
+    // the meadow (Map004) visited first: its catalogue of berry bushes and mushroom tiles is noted while the hero is there
+    await t.setDay(12, 8.5);
+    const meadow = await t.json(`(function(){ return { name: ($dataMapInfos[4] || {}).name || "" }; })()`);
+    await t.go(4, 20, 20, 2);
+    await t.until("!!(Kruk.state().cat && Kruk.state().cat[4])", 15);
+    const cat4 = await t.json("(function(){ const c = Kruk.state().cat[4]; return c ? { bush: c.bush.length, mush: c.mush.length, w: c.w } : null; })()");
+    t.check("na mapie bohatera kruk notuje, gdzie mogą rosnąć krzaki jagód i grzyby (katalog mapy 4)", cat4 && cat4.w === (await t.eval("$dataMap.width")) && cat4.bush + cat4.mush > 0, cat4);
+    await t.go(3, near.x, near.y, 2);
     await t.frames(30);
-    t.check("zwiad: kruk leci obejrzeć pole", (await S("s.away && s.away.kind")) === "scout");
+    await t.setDay(12, 9);
+    await t.notices({ clear: true });
+    await t.popups({ clear: true });
+    await t.eval("Kruk.sendScout(4); 0");
+    await t.frames(30);
+    t.check("zwiad: kruk leci obejrzeć łąkę (mapa 4), plik mapy wczytany w locie", (await S("s.away && s.away.kind")) === "scout" && (await t.eval("Kruk.mapLoaded(4)")) === true);
     await t.eval("$gameSystem.setDayNightHour($gameSystem.dayNightHour() + 1.6); 0");
     await t.until("!Kruk.state().away", 10);
-    await t.frames(80);
-    const sc = await t.json("({ scout: Kruk.state().scout, marks: Kruk.marks().length, kinds: Array.from(new Set(Kruk.marks().map(m => m.k))) })");
-    t.check("po zwiadzie na tej mapie widać znaki: krzaki z jagodami, grzyby, zwierzynę... (do końca dnia)", sc.scout && sc.scout.map === 3 && sc.marks > 0, sc);
-    await t.shot(path.join(ROOT, "tools", "urwisko", "staging", "test_zwiad.png"));
+    await t.frames(240);
+    const rep = await t.json(`(function(){ const s = Kruk.state().scout, title = "Zwiad kruka: " + s.name, notes = Journal.data().notes.filter(n => n.title === title);
+        return { scout: s, notes: notes.map(n => n.text), tops: window.__kit.tops.slice(), pops: window.__kit.pops.map(p => p.text), marks: !!SceneManager._scene._krukMarks || typeof Kruk.marks === "function",
+            plan: Kruk.state().plans && Kruk.state().plans[4], bubble: Kruk.pet && Kruk.pet.state }; })()`);
+    t.check("po powrocie od razu podsumowanie u góry: „Zwiad kruka: <łąka>” i co tam jest dziś", rep.scout && rep.scout.map === 4 && rep.tops.some(x => x.startsWith("Zwiad kruka: ") && x.includes(rep.scout.text)), rep);
+    t.check("w dzienniku notatka „Zwiad kruka: <łąka>” z dniem, porą roku i tym samym podsumowaniem", rep.notes.length === 1 && /^Dzień 12 \(wiosna\), godz\. 10:/.test(rep.notes[0]) && rep.notes[0].includes(rep.scout.text), rep.notes);
+    t.check("wilki na łące (nocą): czerwony popup „Uwaga! ...: wataha wilków ...”", rep.scout.warn && /wilk/.test(rep.scout.warn) && rep.pops.some(p => /^Uwaga! /.test(p) && /wilk/.test(p)), { warn: rep.scout.warn, pops: rep.pops });
+    t.check("bez znaczników na mapie (żadnych kółek ani strzałek, żadnego popupu przy wejściu)", !rep.marks, rep.marks);
+    // the report is TRUE: the meadow the same day - the game, the berries, the mushrooms, the night's camp
+    const num = (re, txt) => { const m = re.exec(txt); return m ? Number(m[1] || 1) : 0; };
+    const want = { rabbit: num(/(\d+) zaj/, rep.scout.text), berries: num(/(\d+) krzak/, rep.scout.text), mush: num(/(\d+) grzyb/, rep.scout.text) };
+    await t.setDay(12, 10.4);
+    await t.go(4, 20, 20, 2, { calm: false });
+    await t.eval("(function(){ Hunting.auto(true); return 0; })()");
+    await t.frames(240);
+    const live = await t.json(`(function(){ let berries = 0, mush = 0; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) {
+            const g = Farming.gatherAt(x, y); if (g === "mushroom") mush++; else if (g === "bush" && Farming.bushState(x, y) === "full") berries++; }
+        return { rabbit: Hunting.animals.filter(a => a.kind() === "rabbit").length, berries, mush }; })()`);
+    await t.eval("(function(){ Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); return 0; })()");
+    t.check("raport prawdziwy: na łące tego dnia tyle zajęcy, krzaków jagód i grzybów, ile powiedział kruk", live.rabbit === want.rabbit && live.berries === want.berries && live.mush === want.mush, { want, live, text: rep.scout.text });
+    await t.setDay(12, 22.5);
+    await t.eval("(function(){ Humans.auto(true); return 0; })()");
+    await t.frames(150);
+    const night = await t.json(`(function(){ const c = Humans.state().camps[4], b = Humans.campHere(); return { plan: Kruk.state().plans[4], camp: c && { none: !!c.none, night: c.night, n: c.members ? c.members.length : 0 }, here: !!b }; })()`);
+    await t.eval("(function(){ Humans.auto(false); Humans.clear(); return 0; })()");
+    t.check("noc na łące zgodna z raportem: obóz bandytów jest dokładnie wtedy, gdy kruk go zapowiedział (i tej wielkości)",
+        night.plan && night.camp && night.camp.night === night.plan.night && (night.plan.camp ? (!night.camp.none && night.camp.n === night.plan.size && night.here) : night.camp.none), night);
+    // ...and when the raven foretells a camp (the next night's plan, its dice made to say "camp"), the camp stands there, that big
+    await t.setDay(13, 11);
+    const plan13 = await t.json(`(function(){ const r = Math.random; Math.random = () => 0.01; try { return Kruk.planNight(4, null); } finally { Math.random = r; } })()`);
+    await t.setDay(13, 22.5);
+    await t.eval("(function(){ Humans.auto(true); return 0; })()");
+    await t.frames(150);
+    const night13 = await t.json(`(function(){ const c = Humans.state().camps[4]; return { camp: c && { none: !!c.none, night: c.night, n: c.members ? c.members.length : 0 }, men: Humans.campHere() ? Humans.band("camp") && Humans.band("camp").members.length : 0 }; })()`);
+    await t.eval("(function(){ Humans.auto(false); Humans.clear(); return 0; })()");
+    t.check("zapowiedziany obóz stoi nocą na łące, tylu ludzi, ilu powiedział kruk", plan13 && plan13.camp && night13.camp && !night13.camp.none && night13.camp.night === 13 && night13.camp.n === plan13.size, { plan13, night13 });
+    await t.go(3, near.x, near.y, 2);
+    await t.setDay(12, 9);
+    await t.frames(30);
 
     // ---------------------------------------------------------------- błyskotki: monety, cudzy list oddany właścicielowi
     const g0 = await t.gold();

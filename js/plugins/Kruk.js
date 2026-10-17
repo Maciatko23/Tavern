@@ -19,8 +19,8 @@
 //     interiors), "Zostań na grzędzie", "Pilnuj pola" (crows and sparrows chased from the crops round the perch - also while the
 //     hero is away: the raids Birds.js would count are taken over here for the crops in reach), "Zanieś list" (once a day, to people
 //     on the island, never over the sea: back in 1-2 hours with an answer; quest steps marked `kruk: true` count as delivered),
-//     "Leć na zwiad" (once a day, a visited map: till the day's end its game, people, ore, berries and mushrooms are marked on the
-//     screen there), trinkets on the perch in the morning (coins, a lost thing, a foreign letter: read / give back / sell to
+//     "Leć na zwiad" (once a day, a visited map: back with a TRUE report of today there - game, people, ore, berries, mushrooms -
+//     at the top, in a bubble and in the journal, a red warning for wolves / a bear / boars / bandits), trinkets on the perch in the morning (coins, a lost thing, a foreign letter: read / give back / sell to
 //     Baltazar), a warning caw when wolves, boars or bears come near; it eats from the perch's tray and drinks from its bowl (the
 //     kennel's way), and hungry three days it goes back to the Urwisko (fed there once: back again). K: the raven's menu / call it.
 //   - the Urwisko at night after D25: the strangers dig in the rubble - a camp of Humans.js on fixed seats (tag "kopaczeUrwisko")
@@ -48,7 +48,7 @@
  *
  * Oswojony kruk (klawisz K - menu kruka; gdy go nie ma, przylatuje):
  * leć ze mną / zostań na grzędzie / pilnuj pola, zanieś list (raz dziennie,
- * tylko po wyspie), zwiad (raz dziennie), nakarm. Rano na grzędzie czasem coś
+ * tylko po wyspie), zwiad (raz dziennie: raport w dzienniku), nakarm. Rano na grzędzie czasem coś
  * leży. Kruk nie walczy i nie ginie: głodny trzy dni wraca na Urwisko.
  *
  * Grafika: img/system/Kruk.png (arkusz), Farm_Grzeda.png, Kruk_Grzeda_Stara.png,
@@ -868,7 +868,7 @@
     }
     function scoutMenu() {
         const s = S(), done = s.scoutDay === day(), entries = scoutMaps().map(m => ({ name: m.name, icon: D.RAVEN_ICON, enabled: !done,
-            help: done ? fill(TX.scoutToday, V()) : "Kruk obleci okolicę. Do końca dnia na tej mapie zobaczysz, co wypatrzył: zwierzynę, ludzi, rudę, krzaki z jagodami i grzyby.",
+            help: done ? fill(TX.scoutToday, V()) : "Kruk obleci okolicę i wróci z raportem na dziś: zwierzyna, ludzie, ruda, krzaki z jagodami i grzyby. Zapisze się w dzienniku; o niebezpieczeństwie ostrzeże.",
             run: () => sendScout(m) }));
         if (!entries.length) entries.push({ name: "Nie znasz jeszcze takich miejsc", enabled: false, help: "" });
         const sc = SceneManager._scene;
@@ -879,6 +879,7 @@
         if (s.scoutDay === day()) { pop(TX.scoutToday); return; }
         s.scoutDay = day();
         s.away = { kind: "scout", map: m.id, name: m.name, until: clock() + R.scoutHours };
+        loadMap(m.id);
         pop(TX.scoutGone, { vars: { gdzie: m.name } });
         if (pet) sendOff();
     }
@@ -887,6 +888,10 @@
         const s = S(), a = s.away;
         if (!a || clock() < a.until) return;
         if ($gameMap.isEventRunning()) return;
+        if (a.kind === "scout") {   // (the map's file: loaded when the raven set off - or now, after a load of the game)
+            if (mapData[a.map] === undefined) { loadMap(a.map); return; }
+            if (mapData[a.map] === null) return;
+        }
         s.away = null;
         if (a.kind === "letter") {
             let text = null;
@@ -906,12 +911,9 @@
                 }
             }
             arriveWith(text, true);
-        } else if (a.kind === "scout") {
-            s.scout = { day: day(), map: a.map, name: a.name };
-            arriveWith(fill(TX.scoutBack, V({ gdzie: a.name })), false);
-        }
+        } else if (a.kind === "scout") finishScout(a);
     }
-    function arriveWith(text, letter) {
+    function arriveWith(text, letter, quiet) {
         const s = S();
         if (outdoors() && s.stage === "tame") {
             removePet();
@@ -921,7 +923,7 @@
             pet.high = !!sp.high;
             pet.then = b => { b.letter = false; caw(b); T.call("SpeechBubbles", "say", b, text, 360); };
         }
-        T.popup(text, { color: "#f3e0a0", icon: D.RAVEN_ICON });
+        if (!quiet) T.popup(text, { color: "#f3e0a0", icon: D.RAVEN_ICON });
     }
 
     // ------------------------------------------------------------------
@@ -1101,92 +1103,223 @@
     }
 
     // ------------------------------------------------------------------
-    // The scouting's marks: on the scouted map till the day's end - game, people, ore, berries, mushrooms
-    // ------------------------------------------------------------------
-    const MARK_ICON = { zwierz: 94, ludzie: 91, ruda: 85, jagody: 102, grzyby: 103 };
-    const MARK_NAME = { zwierz: "zwierzyna", ludzie: "ludzie", ruda: "ruda", jagody: "jagody", grzyby: "grzyby" };
-    let marks = [], marksT = 0, marksSaid = "";
-    function scoutHere() { const s = S(); return !!(s.scout && s.scout.day === day() && s.scout.map === $gameMap.mapId()); }
-    function collectMarks() {
-        const out = [];
-        const H = window.Hunting, Hm = T.api("Humans"), Fm = F();
-        for (const a of (H && H.animals) || []) if (a && !a._dead && a.kind) out.push({ k: "zwierz", x: a._realX + 0.5, y: a._realY + 0.6 });
-        const people = Hm && typeof Hm.list === "function" ? Hm.list() : Hm && Array.isArray(Hm.humans) ? Hm.humans : [];
-        for (const h of people || []) if (h && !h._dead && h._realX !== undefined) out.push({ k: "ludzie", x: h._realX + 0.5, y: h._realY + 0.6 });
-        for (const e of $gameMap.events()) if (e && !e._transparent && /^!\$Rock_Ore/.test(e.characterName())) out.push({ k: "ruda", x: e.x + 0.5, y: e.y + 0.6 });
-        if (Fm && Fm.gatherAt) {
-            const Wd = $gameMap.width(), Hd = $gameMap.height();
-            for (let y = 0; y < Hd; y++) for (let x = 0; x < Wd; x++) {
-                const g = Fm.gatherAt(x, y);
-                if (g === "mushroom") out.push({ k: "grzyby", x: x + 0.5, y: y + 0.6 });
-                else if ((g === "bush" && (!Fm.bushState || Fm.bushState(x, y) === "full")) || g === "berries") out.push({ k: "jagody", x: x + 0.5, y: y + 0.6 });
-            }
-        }
-        return out;
+    // The scouting (2026-10-17, the user's: a report instead of marks). Back from a map the raven tells at once what is there TODAY:
+    // a notice at the top, a bubble over it, a note "Zwiad kruka: <map>" in the journal (one per map, the newest kept) and, for
+    // wolves, a bear's tracks, boars and bandits, a red warning over the hero and a caw. The report is TRUE - what the hero finds
+    // there this day - worked out with the game's own rules while that map is not loaded:
+    //   - game: Hunting.mapTargets() asked about that map (its id and its file's note lent for one synchronous call, asMap) minus
+    //     Hunting.killedToday: populate() fills a map up to exactly that in each species' hours (only the hours still to come today
+    //     are told); a bear comes by chance only (Hunting.bearChance) - so "ślady niedźwiedzia", never a number
+    //   - people: tonight's camp of Humans.js is decided NOW with its own rule (HumansData.CAMP, the note <Camp:x> / <Humans:off>,
+    //     the calm days, the rest after a cleared camp; the size as Humans rolls it) and kept in S().plans; on that map at night the
+    //     plan goes into Humans' state before Humans rolls its own (enforcePlan, priority -5: Humans.makeCamp of that size - or "no
+    //     camp"); the day's ambush only as "możliwa zasadzka" (a chance, never certain); the Urwisko's diggers by their own rule
+    //   - ore: the map file's ore veins not mined yet (their self switch A - rocks do not grow back)
+    //   - berries, mushrooms: the tiles that can hold them are noted while the hero is on the map (S().cat: Farming.gatherKindOf +
+    //     gatherSpot, once a season); for today Farming.bushState (that map's picks) and Farming.mushroomBirth with farm().stones
+    //   A map never catalogued (visited before this) - its berries and mushrooms are not told at all, rather than guessed.
+    const mapData = {};   // mapId -> the map file's JSON (its note, its events), loaded when the raven sets off
+    function loadMap(id) {
+        if (mapData[id]) return;
+        mapData[id] = null;
+        try {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "data/Map" + String(id).padStart(3, "0") + ".json");
+            xhr.overrideMimeType("application/json");
+            xhr.onload = () => { try { mapData[id] = xhr.status < 400 ? JSON.parse(xhr.responseText) : false; } catch (e) { mapData[id] = false; } };
+            xhr.onerror = () => { mapData[id] = false; };
+            xhr.send();
+        } catch (e) { mapData[id] = false; }
     }
-    function Sprite_KrukMarks() { this.initialize(...arguments); }
-    Sprite_KrukMarks.prototype = Object.create(Sprite.prototype);
-    Sprite_KrukMarks.prototype.constructor = Sprite_KrukMarks;
-    Sprite_KrukMarks.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this, new Bitmap(Graphics.width, Graphics.height));
-        this._icons = ImageManager.loadSystem("IconSet");
-        this._t = 0;
+    // a function of another plugin that reads "this map" ($gameMap.mapId(), $dataMap's note) asked about map `id`: one synchronous
+    // call with the id and the file lent, everything put back after
+    function asMap(id, data, fn) {
+        const oldId = $gameMap._mapId, oldData = window.$dataMap;
+        try { $gameMap._mapId = id; if (data) window.$dataMap = data; return fn(); }
+        finally { $gameMap._mapId = oldId; window.$dataMap = oldData; }
+    }
+    const tagOf = (data, name) => T.tag(String((data && data.note) || ""), name);
+    function plural(n, one, few, many) {
+        if (n === 1) return one;
+        const d = n % 10, dd = n % 100;
+        return d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14) ? few : many;
+    }
+    const GAME = {
+        rabbit: n => n + " " + plural(n, "zając", "zające", "zajęcy"),
+        deer: n => (n === 1 ? "jeleń" : n + " " + plural(n, "jeleń", "jelenie", "jeleni")),
+        boar: n => (n === 1 ? "dzik" : n + " " + plural(n, "dzik", "dziki", "dzików")),
+        wolf: n => (n === 1 ? "wilk" : "wataha wilków (" + n + ")")
     };
-    Sprite_KrukMarks.prototype.update = function() {
-        Sprite.prototype.update.call(this);
-        const bm = this.bitmap;
-        this._t++;
-        if (!has() || !scoutHere() || !this._icons.isReady()) { if (this._drawn) { bm.clear(); this._drawn = false; } return; }
-        if (this._t % 3) return;
-        bm.clear();
-        this._drawn = true;
-        const tw = TILE(), th = $gameMap.tileHeight(), Wd = Graphics.width, Hd = Graphics.height, ctx = bm.context, pulse = 0.75 + 0.25 * Math.sin(this._t / 12);
-        const edges = {};
-        for (const m of marks) {
-            const sx = $gameMap.adjustX(m.x) * tw, sy = $gameMap.adjustY(m.y) * th - 34;
-            const icon = iconOf(MARK_ICON[m.k]);
-            if (sx > 8 && sx < Wd - 8 && sy > 8 && sy < Hd - 8) {
-                ctx.globalAlpha = 0.8 * pulse;
-                ctx.fillStyle = "rgba(14,14,18,0.75)"; ctx.beginPath(); ctx.arc(sx, sy, 15, 0, Math.PI * 2); ctx.fill();
-                ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = 2; ctx.stroke();
-                ctx.globalAlpha = 1;
-                bm.blt(this._icons, (icon % 16) * 32, Math.floor(icon / 16) * 32, 32, 32, sx - 12, sy - 12, 24, 24);
-            } else {
-                const cx = Wd / 2, cy = Hd / 2, dx = sx - cx, dy = sy - cy, d = Math.hypot(dx, dy);
-                if (!edges[m.k] || d < edges[m.k].d) edges[m.k] = { d, dx, dy, icon };
+    // when, of what is left of today, a species is about: "" now, "rano" / "po południu" / "wieczorem" / "nocą", null - not today
+    function whenToday(windows, h) {
+        let next = null;
+        for (const [a, b] of windows) {
+            if (h >= a && h < b) return "";
+            if (a > h && (next === null || a < next)) next = a;
+        }
+        if (next === null) return null;
+        return next >= 20 ? "nocą" : next >= 17 ? "wieczorem" : next >= 12 ? "po południu" : "rano";
+    }
+    // the night the report speaks of (its key: the day it starts on - as Humans.nightKey): tonight, or the one going on
+    function nightKeyNow() {
+        const HD = window.HumansData, to = HD && HD.CAMP ? HD.CAMP.to : 5;
+        return hour() < to ? day() - 1 : day();
+    }
+    function campChanceFor(id, data) {
+        const HD = window.HumansData;
+        if (!HD || !HD.CAMP) return 0;
+        const off = tagOf(data, "Humans");
+        if (off && /^off$/i.test(off.raw)) return 0;
+        const tag = tagOf(data, "Camp");
+        if (tag) return /^off$/i.test(tag.raw) ? 0 : Math.max(0, Math.min(1, Number(tag.raw) || 0));
+        return HD.CAMP.maps[id] || 0;
+    }
+    // tonight's camp on map `id` - decided once (the plan Humans then has to follow there)
+    function planNight(id, data) {
+        const Hm = T.api("Humans"), HD = window.HumansData;
+        if (!Hm || !Hm.state || !HD || !HD.CAMP) return null;
+        const C0 = HD.CAMP, key = nightKeyNow(), s = S(), plans = s.plans || (s.plans = {});
+        const cur = Hm.state().camps[id];
+        if (cur && cur.night === key) {   // (Humans has rolled this night already: that is what stands there)
+            plans[id] = { night: key, camp: !cur.none && !cur.over, size: cur.members ? cur.members.filter(m => m.state === "alive").length : 0, fixed: true };
+            return plans[id];
+        }
+        if (plans[id] && plans[id].night === key) return plans[id];
+        // (Humans asks these at the night's first check: day() then is the key itself, or the next day after midnight)
+        const p = campChanceFor(id, data), cleared = Hm.state().cleared[id], rested = cleared !== undefined && key - cleared < C0.rest;
+        const camp = key > C0.calmDays && !rested && p > 0 && Math.random() < p;
+        plans[id] = { night: key, camp, size: camp ? C0.size[0] + Math.floor(Math.random() * (C0.size[1] - C0.size[0] + 1)) : 0 };
+        return plans[id];
+    }
+    // on that map at night: the plan goes in before Humans rolls its own (its camp check runs at priority 0, this at -5)
+    function enforcePlan() {
+        const Hm = T.api("Humans"), HD = window.HumansData, s = S();
+        if (!Hm || !HD || !HD.CAMP || !s.plans) return;
+        const id = $gameMap.mapId(), plan = s.plans[id];
+        if (!plan || plan.fixed || id === MAP) return;
+        const h = hour();
+        if (!(h >= HD.CAMP.from || h < HD.CAMP.to)) return;
+        const key = Hm.nightKey ? Hm.nightKey() : nightKeyNow();
+        if (plan.night !== key) return;
+        const st = Hm.state(), cur = st.camps[id];
+        plan.fixed = true;
+        if (cur && cur.night === key) return;
+        if (!plan.camp) { st.camps[id] = { night: key, none: true }; return; }
+        let c = null;
+        for (const far of [HD.CAMP.far, 9, 5]) { c = Hm.makeCamp ? Hm.makeCamp({ size: plan.size, far }) : null; if (c) break; }
+        st.camps[id] = c || { night: key, none: true };
+    }
+    function ambushChanceFor(id, data) {
+        const HD = window.HumansData;
+        if (!HD || !HD.AMBUSH) return 0;
+        const off = tagOf(data, "Humans");
+        if (off && /^off$/i.test(off.raw)) return 0;
+        const tag = tagOf(data, "Ambush");
+        return tag ? (/^off$/i.test(tag.raw) ? 0 : Number(tag.raw) || 0) : HD.AMBUSH.maps[id] || 0;
+    }
+    // the tiles a map can hold berry bushes and mushrooms on (noted while the hero is there; once a season - mushrooms not in winter)
+    let catPending = false;
+    function buildCatalog() {
+        const Fm = F(), s = S(), id = $gameMap.mapId();
+        if (!Fm || !Fm.gatherKindOf || !Fm.gatherSpot || !outdoors()) return true;
+        const cats = s.cat || (s.cat = {}), season = T.time.season(), old = cats[id], W0 = $gameMap.width(), H0 = $gameMap.height();
+        if (old && old.season === season && old.w === W0) return true;
+        if (Fm.groundInfoAt && Fm.groundInfoAt(1, 1) === undefined) return false;   // (the ground pictures still loading)
+        const winter = !((Fm.GATHER && Fm.GATHER.mushroom && Fm.GATHER.mushroom.seasons) || [0, 1, 2]).includes(season);
+        const bush = [], mush = [];
+        for (let y = 0; y < H0; y++) for (let x = 0; x < W0; x++) {
+            const k = Fm.gatherKindOf(x, y);
+            if (k !== "bush" && k !== "mushroom") continue;
+            const g = Fm.gatherSpot(x, y);
+            if (g === undefined) return false;
+            if (k === "bush" && g === "bush") bush.push(y * W0 + x);
+            else if (k === "mushroom" && g === "mushroom") mush.push(y * W0 + x);
+        }
+        cats[id] = { season, w: W0, bush, mush: winter && old && old.w === W0 ? old.mush : mush, day: day() };
+        return true;
+    }
+    // what is on map `id` today: { parts, warn, text, warnText, catalogued }
+    function scoutReport(id) {
+        const data = mapData[id] || null, s = S(), parts = [], warn = [], H = window.Hunting, HP = T.api("Hunting_parts"), h = hour();
+        // the game (Hunting.js: populate fills up to these in the species' hours)
+        if (H && H.mapTargets && H.SPECIES && !(HP && HP.core && HP.core.ENABLED === false)) {
+            const targets = asMap(id, data, () => H.mapTargets()) || {}, killed = k => (H.killedToday ? H.killedToday(id, k) : 0);
+            for (const kind of ["rabbit", "deer", "boar", "wolf"]) {
+                const n = Math.max(0, (targets[kind] || 0) - killed(kind));
+                const when = n && H.SPECIES[kind] ? whenToday(H.SPECIES[kind].hours, h) : null;
+                if (!n || when === null) continue;
+                const phrase = GAME[kind](n) + (when ? " " + when : "");
+                parts.push(phrase);
+                if (kind === "wolf" || kind === "boar") warn.push(phrase);
+            }
+            if (H.bearChance && H.SPECIES.bear && killed("bear") === 0 && whenToday(H.SPECIES.bear.hours, h) !== null) {
+                let bear = false;
+                for (let hh = Math.floor(h); hh < 24 && !bear; hh++) bear = asMap(id, data, () => H.bearChance(hh)) > 0;
+                if (bear) { parts.push("ślady niedźwiedzia"); warn.push("ślady niedźwiedzia"); }
             }
         }
-        for (const k of Object.keys(edges)) {   // the nearest of each kind off the screen: an arrow at the edge
-            const e = edges[k], a = Math.atan2(e.dy, e.dx), cx = Wd / 2, cy = Hd / 2;
-            const t = Math.min((Wd / 2 - 40) / Math.max(1e-6, Math.abs(Math.cos(a))), (Hd / 2 - 40) / Math.max(1e-6, Math.abs(Math.sin(a))));
-            const x = cx + Math.cos(a) * t, y = cy + Math.sin(a) * t;
-            ctx.save(); ctx.translate(x, y); ctx.rotate(a);
-            ctx.fillStyle = "rgba(255,210,63," + (0.65 * pulse).toFixed(2) + ")"; ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(10, -8); ctx.lineTo(10, 8); ctx.closePath(); ctx.fill();
-            ctx.restore();
-            ctx.fillStyle = "rgba(14,14,18,0.7)"; ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2); ctx.fill();
-            bm.blt(this._icons, (e.icon % 16) * 32, Math.floor(e.icon / 16) * 32, 32, 32, x - 11, y - 11, 22, 22);
+        // people: tonight's camp (decided now and kept), the Urwisko's diggers, the chance of an ambush on the road
+        if (id === MAP) {
+            if (campNightFor(nightKeyNow())) { parts.push("obcy kopacze nocą (3)"); warn.push("obcy kopacze nocą (3)"); }
+        } else {
+            const plan = planNight(id, data), HD = window.HumansData;
+            if (plan && plan.camp && plan.size > 0) {
+                const ph = "obóz bandytów nocą (" + plan.size + ")";
+                parts.push(ph); warn.push(ph);
+            }
+            const amb = ambushChanceFor(id, data);
+            if (amb > 0 && HD && HD.AMBUSH && day() > HD.AMBUSH.calmDays && h < HD.AMBUSH.hours[1]) { parts.push("możliwa zasadzka przy drodze"); warn.push("możliwa zasadzka przy drodze"); }
         }
-        bm._baseTexture && bm._baseTexture.update();
-    };
-    const _createSpriteset = Scene_Map.prototype.createSpriteset;
-    Scene_Map.prototype.createSpriteset = function() {
-        _createSpriteset.call(this);
-        this._krukMarks = new Sprite_KrukMarks();
-        this.addChild(this._krukMarks);
-    };
-    function updateMarks() {
-        if (!scoutHere()) { marks = []; return; }
-        if (--marksT > 0) return;
-        marksT = 45;
-        marks = collectMarks();
-        const key = $gameMap.mapId() + ":" + day();
-        if (marksSaid !== key) {
-            marksSaid = key;
-            const n = {};
-            for (const m of marks) n[m.k] = (n[m.k] || 0) + 1;
-            const parts = Object.keys(n).map(k => MARK_NAME[k] + " " + n[k]);
-            T.popup(parts.length ? fill(TX.scoutMarks, { co: parts.join(", ") }) : TX.scoutNone, { icon: D.RAVEN_ICON, color: "#ffe27a" });
+        // ore: the veins of the map's file not mined yet
+        if (data && data.events) {
+            let ore = 0;
+            for (const e of data.events) {
+                const pg = e && e.pages && e.pages[0];
+                if (!pg || !/^!\$Rock_Ore/.test(pg.image.characterName || "") || $gameSelfSwitches.value([id, e.id, "A"])) continue;
+                ore++;
+            }
+            if (ore) parts.push(ore + " " + plural(ore, "żyła rudy", "żyły rudy", "żył rudy"));
         }
+        // berries and mushrooms (the map's catalogue, today's state of each tile)
+        const cat = (s.cat || {})[id], Fm = F();
+        if (cat && Fm && Fm.farm) {
+            const W0 = cat.w, plots = Fm.farm().plots[id] || {}, picks = (Fm.farm().stones || {})[id] || {};
+            const built = new Set();
+            if (Fm.geoOf && Fm.cellsOfGeo) for (const b of Fm.farm().buildings[id] || []) for (const c of Fm.cellsOfGeo(Fm.geoOf(b), b.x, b.y)) built.add(c.x + "," + c.y);
+            const free = k => !plots[k] && !built.has(k);
+            let berries = 0, mush = 0;
+            for (const n of cat.bush || []) {
+                const x = n % W0, y = Math.floor(n / W0), k = x + "," + y;
+                if (free(k) && asMap(id, data, () => Fm.bushState(x, y)) === "full") berries++;
+            }
+            const seasons = (Fm.GATHER && Fm.GATHER.mushroom && Fm.GATHER.mushroom.seasons) || [0, 1, 2];
+            if (seasons.includes(T.time.season())) for (const n of cat.mush || []) {
+                const x = n % W0, y = Math.floor(n / W0), k = x + "," + y, born = Fm.mushroomBirth(x, y);
+                if (born !== null && free(k) && (picks[k] === undefined || born > picks[k])) mush++;
+            }
+            if (berries) parts.push(berries + " " + plural(berries, "krzak jagód", "krzaki jagód", "krzaków jagód"));
+            if (mush) parts.push(mush + " " + plural(mush, "grzyb", "grzyby", "grzybów"));
+        }
+        const text = parts.length ? parts.join(", ") : TX.scoutEmpty;
+        return { parts, warn, text, warnText: warn.join(", "), catalogued: !!cat };
+    }
+    // the raven is back: the report at the top, in a bubble over it, in the journal; the danger in red, with a caw
+    function finishScout(a) {
+        const s = S(), r = scoutReport(a.map), name = a.name || "?";
+        s.scout = { day: day(), map: a.map, name, text: r.text, warn: r.warnText, at: clock() };
+        const title = fill(TX.scoutTitle, { gdzie: name });
+        T.popup(title, { top: true, color: "#ffe27a", sub: r.text + (r.catalogued ? "" : " " + TX.scoutNoCat) });
+        const mins = Math.floor((hour() % 1) * 60);
+        const when = "Dzień " + day() + " (" + String(T.time.seasonName()).toLowerCase() + "), godz. " + Math.floor(hour()) + ":" + String(mins).padStart(2, "0");
+        const J = T.api("Journal");
+        if (J && J.data) { const notes = J.data().notes || []; for (let i = notes.length - 1; i >= 0; i--) if (notes[i] && notes[i].title === title) notes.splice(i, 1); }
+        note(title, when + ". " + r.text + "." + (r.warn.length ? "\n" + fill(TX.scoutWarn, { gdzie: name, co: r.warnText }) : "") + (r.catalogued ? "" : "\n" + TX.scoutNoCat));
+        if (r.warn.length) {
+            T.popup(fill(TX.scoutWarn, { gdzie: name, co: r.warnText }), { color: "#ff7a6a", icon: D.RAVEN_ICON });
+            T.audio.se("Crow", { volume: 60, pitch: 78 });
+        }
+        arriveWith(fill(TX.scoutBubble, { gdzie: name, co: r.text }), false, true);
+        return r;
     }
 
     // the trinket on the perch's tray: its icon, small, with a glint now and then
@@ -1214,15 +1347,18 @@
     // The Urwisko at night after D25: the strangers dig in the rubble (a camp of Humans.js on fixed seats)
     // ------------------------------------------------------------------
     const CAMP_TAG = "kopaczeUrwisko";
+    function campNightFor(key) {
+        const HD = window.HumansData, s = S();
+        if (!T.api("Humans") || !HD || !HD.CAMP || !(isDone("D25") || flag("dziennikOkretu"))) return false;
+        return !(s.camp.cleared[key] || (s.camp.n || 0) >= 3 || key % 3 === 0);
+    }
     function campNight() {
         const Hm = T.api("Humans"), HD = window.HumansData;
-        if (!Hm || !Hm.state || !HD || !HD.CAMP || !(isDone("D25") || flag("dziennikOkretu"))) return null;
+        if (!Hm || !Hm.state || !HD || !HD.CAMP) return null;
         const h = hour();
         if (!(h >= HD.CAMP.from || h < HD.CAMP.to)) return null;
         const key = Hm.nightKey ? Hm.nightKey() : (h >= HD.CAMP.from ? day() : day() - 1);
-        const s = S();
-        if (s.camp.cleared[key] || (s.camp.n || 0) >= 3 || key % 3 === 0) return null;
-        return key;
+        return campNightFor(key) ? key : null;
     }
     function campCheck() {
         if ($gameMap.mapId() !== MAP || !built) return;
@@ -1282,7 +1418,7 @@
             { name: "Pilnuj pola", icon: D.RAVEN_ICON, enabled: !!p && s.mode !== "guard", help: p ? "Kruk siedzi na grzędzie i przegania wrony i wróble z zasiewów w promieniu " + R.guardRadius + " pól - także pod twoją nieobecność." : fill(TX.noPerch, V()) + ".", run: () => setMode("guard") },
             { name: "Nakarm", icon: meat ? iconOf(meat) : D.RAVEN_ICON, enabled: !!meat, right: meat ? item(meat).name : "", help: meat ? "Kruk zje kawałek mięsa albo rybę." : fill(TX.feedNoMeat, V()) + ".", run: feedTame },
             { name: "Zanieś list", icon: 189, enabled: s.letterDay !== day(), right: s.letterDay === day() ? "jutro" : "", help: "Raz dziennie: list do kogoś na wyspie. Kruk wróci z odpowiedzią.", run: letterMenu },
-            { name: "Leć na zwiad", icon: D.RAVEN_ICON, enabled: s.scoutDay !== day(), right: s.scoutDay === day() ? "jutro" : "", help: "Raz dziennie: kruk obleci miejsce, w którym byłeś, i pokaże, co tam jest.", run: scoutMenu }
+            { name: "Leć na zwiad", icon: D.RAVEN_ICON, enabled: s.scoutDay !== day(), right: s.scoutDay === day() ? "jutro" : "", help: "Raz dziennie: kruk obleci miejsce, w którym byłeś, i wróci z raportem na dziś (zapisze go w dzienniku, ostrzeże przed niebezpieczeństwem).", run: scoutMenu }
         ];
         for (const L of held) entries.push({ name: "Cudzy list: " + L.name, icon: 189, help: "Właściciel: " + L.ownerName + ". " + (s.held[L.id].read ? "Przeczytany." : "Nieprzeczytany."), run: () => letterChoice(L) });
         sc.openFarmMenu(fill(TX.menuTitle, V()), entries, undefined, undefined, undefined, undefined, statusNote());
@@ -1462,7 +1598,6 @@
         oldPerches = [];
         trinketSpr = null;
         later.length = 0;
-        marks = []; marksT = 0;
         thinkT = 0;
     }
     T.on("mapEnter", () => reset(), { owner: PLUGIN });
@@ -1470,7 +1605,7 @@
     T.on("mapReady", () => {
         if (!has()) return;
         hookQuests();
-        if (outdoors()) { const s0 = S(); s0.visited[$gameMap.mapId()] = day(); (s0.names = s0.names || {})[$gameMap.mapId()] = $gameMap.displayName() || ""; }
+        if (outdoors()) { const s0 = S(); s0.visited[$gameMap.mapId()] = day(); (s0.names = s0.names || {})[$gameMap.mapId()] = $gameMap.displayName() || ""; catPending = true; }
         // K51: the hero is ahead of the raven - it was faster (the next map's leg)
         const s = S();
         if (k51On() && s.k51.leg >= 1 && s.k51.leg < 5) {
@@ -1480,6 +1615,8 @@
         campCheck();
     }, { owner: PLUGIN });
     T.onMapUpdate(() => { if (has() && auto) { try { guardAway(); } catch (e) { /* (Birds' own count goes on) */ } } }, { owner: PLUGIN, name: "guardAway", priority: -5 });
+    // tonight's camp as the raven told it (before Humans' own camp check, which runs at priority 0)
+    T.onMapUpdate(() => { if (has()) { try { enforcePlan(); } catch (e) { /* (Humans rolls its own) */ } } }, { owner: PLUGIN, name: "nightPlan", priority: -5 });
     let slow = 0, failed = 0;
     T.onMapUpdate(() => {
         if (!has()) return;
@@ -1502,7 +1639,7 @@
         updateFlock();
         drawOldPerches();
         drawTrinket();
-        updateMarks();
+        if (catPending && slow % 60 === 30) catPending = !buildCatalog();
     }
 
     // ------------------------------------------------------------------
@@ -1510,13 +1647,15 @@
     // ------------------------------------------------------------------
     const api = {
         MAP, DATA: D, state: () => S(), look, edge, act: actCall, built: () => built,
-        get pet() { return pet; }, get flock() { return flock; }, marks: () => marks.slice(),
+        get pet() { return pet; }, get flock() { return flock; },
         auto: v => { auto = !!v; return auto; }, reset, think, tameNow, feedYoung, feedBlock, openRavenMenu, openYoungMenu, setMode, callRaven,
         sendLetter: key => { const L = D.LETTERS.find(x => x.key === key); if (L) sendLetter(L); return !!L; },
         sendScout: id => sendScout({ id, name: (S().names || {})[id] || ((window.$dataMapInfos || [])[id] || {}).name || "?" }), checkAway, rollTrinket, takeTrinket,
         // (for Birds.guarded, if the integration wants it: the crop at (x, y) of map mapId is under the raven's eye now)
         guards: (mapId, x, y) => { if (!has()) return false; const s = S(), p = perch(); return s.stage === "tame" && s.mode === "guard" && !s.away && !!p && p.map === Number(mapId) && guarded(p, x, y); },
-        perches, perch, wildPlace, tamePlace, legs, mastPoint, spotNearHero, guardAway, guardLive, warnCheck, collectMarks, campNight, campCheck,
+        perches, perch, wildPlace, tamePlace, legs, mastPoint, spotNearHero, guardAway, guardLive, warnCheck, campNight, campNightFor, campCheck,
+        // (the scouting: the report of a map now, its catalogue, tonight's plan, the map files read)
+        scoutReport, finishScout, buildCatalog, planNight, enforcePlan, loadMap, mapLoaded: id => !!mapData[id], whenToday, plural,
         nameScene, ravenScene, frameOf, frighten, shoulderPoint, questLetters, known, talkHook, tickNeeds
     };
     window.Kruk = T.register(PLUGIN, api);

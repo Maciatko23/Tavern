@@ -1488,6 +1488,9 @@
             // (2026-10-16) branch: the manor's branch of the Order's cistern shut (Cysterna.js, D28) - the Lord is no ally any more
             lordFlags: { ally: !!fl.lordAlly, cold: !!(fl.w1Revealed || fl.lordCold), truth: !!fl.lordTruth, branch: !!fl.galazDworskaZamknieta },
             island: islandOf(fl),
+            // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): who went down for the Heart before the hero, and how it ended -
+            // { key: grum | lord | baltazar | kopacze, outcome, deep (went down past the tenth gate), faction, floor, lordLine } or null
+            rival: (() => { try { return T.call("Rywal", "forWorld") || null; } catch (e) { return null; } })(),
             siege
         };
         const f = s.forceWorld;
@@ -1717,6 +1720,10 @@
         else if (w.opinion !== null && w.opinion < 20) out.push(ep.opinionLow);
         if (w.water) out.push(ep.water);
         if (kind === "zapieczetowac" && (w.book || fl.ambrozyChronicles || fl.signalBook)) out.push(ep.ambrozyBook);
+        // (2026-10-17) the rival of the ruins (W9 ch. 3, Rywal.js): one line by how it ended
+        let rl = null;
+        try { rl = T.call("Rywal", "epilogue", kind, w); } catch (e) { rl = null; }
+        if (typeof rl === "string" && rl) out.push(rl);
         return out.concat(islandLines(kind, w, who));
     }
     // (2026-10-16) the island places' lines (EPILOGUE.island), in the order of the places on the map: the cliff, the raven, the cape,

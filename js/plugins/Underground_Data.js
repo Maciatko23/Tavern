@@ -484,6 +484,8 @@
                     ["lord", "Mówiłem: najpierw do mnie."],
                     ["lord", w => (w.lord.cold ? "Zrobiłeś ze mnie głupca na rynku, przed całym miastem. Tu, na dole, nikt nie patrzy."
                         : "Moi ludzie szli twoimi śladami od kraty w piwnicy Borgara. Sto pięter, chłopcze. Sto.")],
+                    // (2026-10-17) his men met in the ruins (W9 ch. 3, Rywal.js - Underground.world().rival.lordLine)
+                    ["lord", w => (w.rival && w.rival.key === "lord" && w.rival.lordLine) || ""],
                     ["lord", "Dwór stoi na kamieniach tej twierdzy. To, co pod nimi, należy do mnie. Odsuń się od tego światła."],
                     ["hero", "Po co ci ono?"],
                     ["lord", "...Jedno pytanie. Mój syn, Kazimierz, zginął na kontynencie w pierwszym roku wojny."],

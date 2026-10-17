@@ -401,7 +401,7 @@
             W.state = "live";
             W.liveAt = clockNow();
             top(w.notice, "#ffb08f");
-            if (w.fewer && w.fewerNotice && w.fewer(c) > 0) top(w.fewerNotice, "#9ff0a8");
+            if (w.fewer && w.fewerNotice && w.fewer(c) > 0) top(typeof w.fewerNotice === "function" ? w.fewerNotice(c) : w.fewerNotice, "#9ff0a8");   // (2026-10-17: by who stays out - W12, W9 ch. 3)
             T.emit("act3Wave", { wave: i, id: w.id, map: w.map });
             if (here !== w.map) top(w.map === D.TAVERN ? TX.inside : TX.outside, "#ffd98f");
         }

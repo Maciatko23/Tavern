@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna). v1.7.0
+ * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna, wątki W5 i W9). v1.8.0
  * @author Tawerna
  *
  * @param enabled
@@ -53,7 +53,7 @@
  *        "Wrak na mieliźnie", "Stara cysterna zakonu", "Chata pod lasem", "Spalona zagroda": przenosi na pole,
  *        na którym ląduje się zwykłym przejściem (zawsze da się na nim stać). Wrak ustawia też odpływ (łacha sucha).
  *      - "Wnętrze: ..." - ←→ wybiera wnętrze (skryptorium, izba latarnika, laterna, kwatera rotmistrza, wrak pod
- *        pokładem, izba chaty pod lasem, Dom Ługów), OK przenosi tam, przy drzwiach.
+ *        pokładem, izba chaty pod lasem, Dom Ługów, piwnica kantoru), OK przenosi tam, przy drzwiach.
  *      Morze i pogoda:
  *      - "Odpływ teraz" / "Przypływ teraz": pływ wymuszony od razu (Wyspa.forceTide; przełącznik 20 idzie za nim);
  *        drugi raz OK na tym samym wierszu: pływy znowu z zegara. Nie zapisuje się w zapisie gry.
@@ -73,6 +73,14 @@
  *      - "Przychylność garnizonu: N / 100": ← -20, → +20 (OK też +20); progi 40 / 60 / 80 działają jak w grze.
  *      - "Otwórz cysternę": to, co daje dzwon „cztery i dwa” (W1 rozdz. 7): flagi cisternOpen, sluiceHalf,
  *        millRuns, kubaHonest - zasuwa na piętrze 30 prowadzi do starej cysterny, D28 może się zacząć.
+ *      Wątek W5 (kantor Baltazara):
+ *      - "W5: rozdział N - ...": ←→ wybiera rozdział 1-7 wątku „Towary z kontynentu”, OK ustawia go (flagi
+ *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (Kantor.debugJump).
+ *      Wątek W9 (rywal w ruinach, Rywal.js):
+ *      - "W9: rywal (wymuś wariant): ...": ←→ z gry / ludzie Baltazara / Grum z najemnikami / ludzie Lorda /
+ *        kopacze Czarnych Oczu; OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku.
+ *      - "W9: rywal - spotkanie na piętrze N": ←→ piętro 1-10, OK: rywal (wariant z wiersza wyżej) czeka na tym
+ *        piętrze, bohater na jego schodach w górę (Rywal.debugMeet).
  * F9 otwiera się na tej zakładce (i podzakładce) i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
  * Zakładki i podzakładki można też klikać myszą.
  * Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
@@ -135,11 +143,19 @@
         ["Spalona zagroda", 168, 48, 12, 4, "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."]
     ];
     const ISLE_INSIDE = [["Skryptorium", 156, 6, 8, 8], ["Izba latarnika", 160, 6, 8, 8], ["Laterna", 161, 5, 7, 8], ["Kwatera rotmistrza", 163, 6, 8, 8],
-        ["Wrak - pod pokładem", 166, 4, 11, 8], ["Chata pod lasem - izba", 154, 4, 8, 8], ["Dom Ługów", 169, 6, 8, 8]];
+        ["Wrak - pod pokładem", 166, 4, 11, 8], ["Chata pod lasem - izba", 154, 4, 8, 8], ["Dom Ługów", 169, 6, 8, 8], ["Piwnica kantoru", 171, 2, 4, 2]];
     const WATER = [null, "red", "grey"], WATER_NAME = { red: "czerwona", grey: "szara" };
     const isleIcon = id => ($dataItems[id] ? $dataItems[id].iconIndex : 0);
     const storyOn = () => !!(window.Story && Story.active && Story.active());
+    // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): straight to a chapter - ←→ the chapter, OK jumps (flags, hour, place)
+    const W5_NAMES = { 1: "dziwny kupiec", 2: "trzy stuknięcia", 3: "nocny tragarz", 4: "rejestr", 5: "komu to dać", 6: "noc promu", 7: "co dalej z kantorem" };
+    // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): the rival forced (←→ the variant), the meeting on a floor (←→ 1-10)
+    const W9_KEYS = ["", "baltazar", "grum", "lord", "kopacze"];
+    const w9Name = i => (window.RywalData ? RywalData.TX.f9Names[W9_KEYS[i]] : W9_KEYS[i] || "z gry");
     const isleLabel = {
+        w9: i => (window.Rywal ? "W9: rywal (wymuś wariant): " + w9Name(i) + "   ←→ zmień, OK zacznij" : "W9: rywal (brak Rywal.js)"),
+        w9meet: n => (window.Rywal ? "W9: rywal - spotkanie na piętrze " + n + "   ←→ piętro, OK idź" : "W9: rywal - spotkanie (brak Rywal.js)"),
+        w5: n => (window.Kantor ? "W5: rozdział " + n + " - " + W5_NAMES[n] + "   ←→ zmień, OK idź" : "W5: przeskocz do rozdziału (brak Kantor.js)"),
         inside: i => "Wnętrze: " + ISLE_INSIDE[i][0] + "   ←→ zmień, OK idź",
         tide: kind => {
             const W = window.Wyspa, name = kind === "low" ? "Odpływ" : "Przypływ";
@@ -401,6 +417,11 @@
         row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
         row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).");
         row("isleCistern", isleLabel.cistern(), 391, "Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.");
+        head("Wątek W5 (kantor Baltazara):");
+        row("isleW5", isleLabel.w5(last.w5 || 1), 189, "Ustawia „Towary z kontynentu” na początku rozdziału (flagi, pora, miejsce) i przenosi tam, gdzie się dzieje.", { pick: last.w5 || 1 });
+        head("Wątek W9 (rywal w ruinach):");
+        row("isleW9", isleLabel.w9(last.w9 || 0), 189, "Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy śladach.", { pick: last.w9 || 0 });
+        row("isleW9Meet", isleLabel.w9meet(last.w9f || 4), 190, "Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10); bohater na jego schodach, kilka kroków do ich ogniska.", { pick: last.w9f || 4 });
         return rows;
     };
 
@@ -492,6 +513,27 @@
         if (row && row.kind === "isleWater" && window.CzerwonaWoda && CzerwonaWoda.force) {   // (from the weather / red / grey)
             CzerwonaWoda.force(WATER[(WATER.indexOf(CzerwonaWoda.forced()) + delta + WATER.length) % WATER.length]);
             row.label = isleLabel.water();
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleW5") {   // (the chapter of W5: 1-7)
+            row.pick = last.w5 = ((row.pick - 1 + delta + 7) % 7) + 1;
+            row.label = isleLabel.w5(row.pick);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleW9") {   // (the rival's variant: from the game / Baltazar / Grum / the Lord / the diggers)
+            row.pick = last.w9 = (row.pick + delta + W9_KEYS.length) % W9_KEYS.length;
+            row.label = isleLabel.w9(row.pick);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleW9Meet") {   // (the floor of the meeting: 1-10)
+            row.pick = last.w9f = ((row.pick - 1 + delta + 10) % 10) + 1;
+            row.label = isleLabel.w9meet(row.pick);
             SoundManager.playCursor();
             this.redrawItem(this.index());
             return;
@@ -746,6 +788,24 @@
             case "isleFavor":
                 if (window.Garnizon && Garnizon.addFavor) Garnizon.addFavor(20, "F9", true);
                 break;
+            case "isleW5": {
+                if (!window.Kantor || !Kantor.debugJump) { say(row.icon, "Brak Kantor.js", true); break; }
+                const g = Kantor.debugJump(row.pick);
+                if (!g) { say(row.icon, "Brak zadania W5 (TownQuests)", true); break; }
+                return go(["W5", g[0], g[1], g[2], g[3]]);
+            }
+            case "isleW9": {
+                if (!window.Rywal || !Rywal.debugStart) { say(row.icon, "Brak Rywal.js", true); break; }
+                const g = Rywal.debugStart(W9_KEYS[row.pick]);
+                if (!g) { say(row.icon, "Brak podziemi (Underground.js)", true); break; }
+                return go(["W9", g[0], g[1], g[2], g[3]]);
+            }
+            case "isleW9Meet": {
+                if (!window.Rywal || !Rywal.debugMeet) { say(row.icon, "Brak Rywal.js", true); break; }
+                const g = Rywal.debugMeet(row.pick, W9_KEYS[last.w9 || 0]);
+                if (!g) { say(row.icon, "Brak piętra " + row.pick, true); break; }
+                return go(["W9", g[0], g[1], g[2], g[3]]);
+            }
             case "isleCistern": {
                 const q = window.TownQuests, f = q && q.state ? q.state().flags : null;
                 if (!f) { say(row.icon, "Brak TownQuests.js", true); break; }

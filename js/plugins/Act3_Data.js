@@ -68,18 +68,28 @@
     const WAVES = [
         { id: "w1", map: 8, from: "gate", kinds: ["bandit", "bandit", "knifer"], shout: "Pochodnie pod drzwi! Ruszać się!",
           notice: ["Pod drzwiami tawerny!", "Trzech z pochodniami idzie przez dziedziniec."] },
+        // (2026-10-17, W5 "Towary z kontynentu", Kantor.js) Baltazar Vey made an enemy (his kantor shut by the town, the register
+        // burnt by Wit, or blackmailed - flag w5BaltazarWrog): his mercenary comes with the second group
         { id: "w2", map: 8, from: "gate", kinds: ["bandit", "archer", "knifer", "archer"], shout: "Łucznicy, na mur! Reszta do drzwi!",
-          extra: c => (c.rafal === "enemy" ? [{ kind: "knifer", name: "Rafał", lv: 0, noSurrender: false }] : []),
+          extra: c => (c.rafal === "enemy" ? [{ kind: "knifer", name: "Rafał", lv: 0, noSurrender: false }] : [])
+              .concat(c.flags.w5BaltazarWrog ? [{ kind: "mercenary", name: "Najemnik Baltazara", lv: 0 }] : []),
           notice: ["Łucznicy!", "Druga grupa - strzelają z bramy dziedzińca."] },
         // (2026-10-16, W12 "Rozbitek", Wrak.js) Ansgar Wiel - the castaway made an ally (flag ansgarAlly) - knew the plan: the kitchen's
         // back door barred, one man fewer comes in that way (fewer(c): how many of `kinds` stay out; fewerNotice: the top line after)
+        // (2026-10-17, W9 rozdz. 3 "Rywal w ruinach", Rywal.js) the Black Eyes' scouts met in the ruins under the tavern: beaten there
+        // (w9FrakcjaPobita) - one man fewer comes this way, they lost their scouts and their notes; they took the Order's notes up or
+        // went down past the tenth gate (w9FrakcjaWie) - they know the cellars: a scout of the ruins comes with this group
         { id: "w3", map: 1, from: "kitchen", kinds: ["knifer", "bandit", "bandit"], shout: "Do starych drzwi! Krata jest za nimi!",
-          fewer: c => (c.flags.ansgarAlly ? 1 : 0), fewerNotice: ["Kuchnia zaryglowana", "Eryk Sowa ostrzegł Borgara - tylnymi drzwiami wchodzi ich mniej."],
+          fewer: c => (c.flags.ansgarAlly ? 1 : 0) + (c.flags.w9FrakcjaPobita ? 1 : 0),
+          fewerNotice: c => (c.flags.ansgarAlly ? ["Kuchnia zaryglowana", "Eryk Sowa ostrzegł Borgara - tylnymi drzwiami wchodzi ich mniej." + (c.flags.w9FrakcjaPobita ? " A zwiadowców z ruin już nie mają." : "")]
+              : ["Mniej ich", "Zwiadowców, których pobiłeś w ruinach, już nie mają - tylnymi drzwiami wchodzi ich mniej."]),
+          extra: c => (c.flags.w9FrakcjaWie && !c.flags.w9FrakcjaPobita ? [{ kind: "knifer", name: "Zwiadowca z ruin", lv: 0 }] : []),
           notice: ["Tylnymi drzwiami!", "Są w środku - idą przez kuchnię do starych drzwi przy piwnicy."] },
         { id: "w4", map: 1, from: "front", kinds: ["mercenary", "bandit"], shout: "Dość zabawy. Otworzyć mi tę piwnicę.",
           // (2026-10-16, W11 "Soczewka", Latarnia.js) the lighthouse's lens sold to Baltazar (soczewkaSprzedana): the Black Eyes know
           // more of the island - one more of their knifemen comes with the commander
-          extra: c => [{ kind: "mercenary", name: "Dowódca kopaczy", look: "Captain", lv: 2, boss: true }]
+          // (2026-10-17, W9 rozdz. 3) the commander killed in the ruins under the tavern (w9DowodcaPolegl): the Black Eyes sent a new one
+          extra: c => [{ kind: "mercenary", name: c.flags.w9DowodcaPolegl ? "Nowy dowódca kopaczy" : "Dowódca kopaczy", look: "Captain", lv: 2, boss: true }]
               .concat(c.grum === "enemy" ? [{ kind: "mercenary", name: "Grum", lv: 1, grum: true }] : [])
               .concat(c.flags.soczewkaSprzedana ? [{ kind: "knifer", name: "Nożownik Czarnych Oczu", lv: 1 }] : []),
           notice: ["Dowódca!", "Frontowymi drzwiami wchodzi dowódca kopaczy ze swoimi ludźmi."] }
@@ -147,6 +157,10 @@
         { key: "uchodzcy", name: "Uchodźca", sheet: "Npc_Uchodzca_Walk8", maps: [8], from: "gate", delay: 840, hp: 70, dmg: 7, poise: 18, cd: [90, 125], speed: 3.7,
           swing: "#a89070", help: true, n: 2, when: c => c.helpers && c.camp,
           lines: { start: "Uciekaliśmy przed takimi. Dość uciekania!", hit: "Widłami cię!", down: "Ach...", win: "Tu jest teraz nasz dom." } },
+        // (2026-10-17, W5) Kapral Wit Czerwień - he confessed his five groszy a week to the hero and stands with him (flag w5WitAlly)
+        { key: "wit", name: "Kapral Wit", sheet: "Npc_Kapral_Walk8", maps: [8], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
+          hide: ["kapral"], swing: "#d8d8e0", when: c => !!c.flags.w5WitAlly,
+          lines: { start: "Pięć groszy na tydzień brałem. Dziś nie biorę nic. Do bramy!", hit: "Za miasto!", down: "Ugh... trzymajcie... drzwi...", win: "Straż miejska. Nareszcie naprawdę." } },
         { key: "straz", name: "Strażnik dworu", sheet: "Npc_Straznik_Walk8", maps: [8], from: "gate", delay: 540, hp: 115, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
           swing: "#d8d8e0", n: 2, when: c => !!c.flags.lordAlly,
           lines: { start: "Jaśnie pan przysyła pozdrowienia. I włócznie.", hit: "W imieniu dworu!", down: "Ranny...!", win: "Zameldujemy jaśnie panu." } }
@@ -235,7 +249,7 @@
                 note: ["Noc pod tawerną", "Nie zatrzymaliśmy ich. Ludzie frakcji zeszli przez stare drzwi do piwnicy i dalej w dół. Na dole będą przede mną - i może przy samym Sercu."] }
         },
         // names in the outcome's lists (keys -> names)
-        names: { borgar: "Borgar", grum: "Grum", rafal: "Rafał", marek: "Marek", tadek: "Tadek", ignac: "Ignac", kuba: "Kuba", uchodzcy: "uchodźcy", straz: "strażnicy dworu" },
+        names: { borgar: "Borgar", grum: "Grum", rafal: "Rafał", marek: "Marek", tadek: "Tadek", ignac: "Ignac", kuba: "Kuba", uchodzcy: "uchodźcy", straz: "strażnicy dworu", wit: "kapral Wit" },
         // F9 (Debug.js's menu, the events tab)
         f9Arm: "Akt III: uzbrój napad (ostrzeżenia, napad następnej nocy)",
         f9Start: "Akt III: napad na tawernę teraz",

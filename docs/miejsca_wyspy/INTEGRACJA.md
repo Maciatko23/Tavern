@@ -72,7 +72,9 @@ Pliki gry pisane wprost (edytor zamknięty, `tasklist` przed każdym zapisem do 
 - [x] Akt III (`Act3_Data.js` / `Act3.js`): `ansgarAlly` - fala kuchenna o jednego mniej + napis „Kuchnia zaryglowana”; `soczewkaSprzedana` -
       dodatkowy nożownik Czarnych Oczu z dowódcą; `latarniaWizja1` - notatka i napis „Statek bez bandery” na początku ostrzeżeń;
       garnizon 80 = dwóch żołnierzy (Garnizon.js przez DEFENDERS, bez zmian).
-- [ ] W5 Baltazar (flagi `wrakKamienieBaltazar`, karta 1 od Baltazara) - W5 nie istnieje; karta 1 dalej 40 G za dnia.
+- [x] W5 Baltazar (2026-10-17, `Kantor.js`): `wrakKamienieBaltazar`, `soczewkaSprzedana`, `krukBaltazarWie`, `wrakMapaSprzedana` jako linijki rejestru;
+      karta 1 leży w szkatule w piwnicy kantoru (W5 rozdz. 4), odkup za dnia dopiero po tym rozdziale (Pustelnia.js pyta `Kantor.cardInBox`,
+      cena `Kantor.priceMul`), odkup soczewki u wroga x2 (Latarnia.js), Kłos przy tylnych drzwiach = poszlaka W5 (zdarzenie 659 Garnizonu).
 - [x] `TavernLife_Regulars.js`: Melia po wydaniu Ansgara (`ansgarGiven`) przestaje żartować NA STAŁE (powitania, nowiny, pożegnania).
 - [x] Janek sprzedaje tran na stałe (od K49 albo po poznaniu Bazylego) - `Latarnia.js`.
 - [x] Łódź Janka na wrak także po D25 - `Wrak.js`.

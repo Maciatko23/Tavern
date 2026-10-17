@@ -7,7 +7,8 @@
 //   - brother Kleofas (TownLife resident "pustelnik", 944): the first meeting (the pendant: "a messenger's sign"), honey from his
 //     hives, the chronicles' gossip, the reading of the cards (TownLife.addTalkHook first, like Przystan.js)
 //   - the six ciphered cards of the chronicle (D23): 1 the Archive's chronicles (taken: shown to Kleofas / given to Ambroży: he hands
-//     it over / left on the shelf: an injected event on Map119 / sold to Baltazar: he sells it back - W5 is not built yet), 2 the
+//     it over / left on the shelf: an injected event on Map119 / sold to Baltazar: it lies in his strongbox, taken at night in W5 rozdz. 4 -
+//     Kantor.js; after W5 rozdz. 4 he sells it back), 2 the
 //     Book of Questions on floor 20 (an injected event on Map146), 3 the Silent's "Rejestr straży" (Map123: its own event's list
 //     gets one more line in code - the map file stays), 4-6 from the packages E, C, B (their flags kronikaKarta4..6). A card in
 //     the bag is a quest thing (v:karta_N); it is read with Kleofas at the lectern (7-19, the pendant needed): two hours pass, a
@@ -418,7 +419,9 @@
             "Zostaw sobie księgi, ja je znam na pamięć. Kartę przeczytamy razem."]);
         return act(out, ["card", 1, "Luźna karta wysunęła się z grzbietu kronik zakonu."]);
     }
-    // Ambroży hands over the card of the chronicles the hero gave him; Baltazar sells it back (until W5)
+    // Ambroży hands over the card of the chronicles the hero gave him; Baltazar sells it back - (2026-10-17, W5) only once the card
+    // is no longer in his strongbox in the kantor's cellar (Kantor.cardInBox: taken there at night in W5 rozdz. 4), at his prices
+    // (double for an enemy, half in the hero's grip - Kantor.priceMul)
     function ambrozyTalk(ev) {
         const f = flags();
         if (found(1) || !(f.ambrozyChronicles || f.chroniclesForAmbrozy) || !(isActive("D23") || isDone("K50"))) return null;
@@ -427,12 +430,14 @@
         linesTo(out, spk, ["> Ambroży... w kronikach, które ci przyniosłem, nie było luźnej karty? Pisanej szyfrem?"].concat(D.TX.ambrozyCard));
         return act(out, ["card", 1, "Ambroży oddał luźną kartę z kronik zakonu."]);
     }
+    const cardPrice = () => Math.max(1, Math.round(D.CARD_BUYBACK * (T.call("Kantor", "priceMul") || 1)));
     function baltazarTalk(ev) {
         const f = flags();
         if (found(1) || !f.w5ChroniclesSold || !isActive("D23") || !inHours(hour(), [8, 18])) return null;
+        if (T.call("Kantor", "cardInBox")) return null;   // (W5: the card waits in his strongbox - the night in his cellar)
         const spk = { id: ev.eventId(), name: "Baltazar Vey" }, out = [];
         linesTo(out, spk, D.TX.balt);
-        return choiceTo(out, ["Biorę (" + D.CARD_BUYBACK + " G).", "Nie teraz."],
+        return choiceTo(out, ["Biorę (" + cardPrice() + " G).", "Nie teraz."],
             [act([], ["buyCard"]).concat(linesTo([], spk, D.TX.baltYes)), linesTo([], spk, D.TX.baltNo)], 1);
     }
     function hook(key, ev) {
@@ -474,8 +479,9 @@
             } else if (what === "card") {
                 giveCard(a, b);
             } else if (what === "buyCard") {
-                if ($gameParty.gold() < D.CARD_BUYBACK) { T.popup.need(COIN_ICON, "Potrzebujesz " + D.CARD_BUYBACK + " G"); stop(); return; }
-                $gameParty.loseGold(D.CARD_BUYBACK);
+                const price = cardPrice();
+                if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, "Potrzebujesz " + price + " G"); stop(); return; }
+                $gameParty.loseGold(price);
                 giveCard(1, "Baltazar sprzedał kartę, która wypadła z kronik.");
             } else if (what === "read") {
                 read(a);

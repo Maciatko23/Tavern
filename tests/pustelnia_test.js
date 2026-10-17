@@ -233,6 +233,16 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.eval(reset1);
     await t.eval("(function(){ const f = TownQuests.state().flags; delete f.ambrozyChronicles; f.w5ChroniclesSold = 5; return 0; })()");
     await t.gold(50);
+    // (2026-10-17, W5 - Kantor.js) the card lies in Baltazar's strongbox in the kantor's cellar: taken there at night in W5 rozdz. 4; by
+    // day he sells it back only after that chapter
+    const w5 = await t.eval("!!window.Kantor");
+    if (w5) {
+        const inBox = await t.talkTo("TownLife.eventOf('kupiec')", []);
+        t.check("kroniki sprzedane Baltazarowi: karta w szkatule w piwnicy kantoru (W5 rozdz. 4) - za dnia jej nie odsprzedaje",
+            (await t.json("TownQuests.vcount('karta_1')")) === 0 && !/Biorę/.test(JSON.stringify(inBox.choices)) && (await t.eval("Kantor.cardInBox()")), inBox.choices);
+        await t.eval("(function(){ TownQuests.start('W5', TownQuests.Q.W5.steps.findIndex(s => s.talk === 'w5Komu')); TownQuests.state().greeted.kupiec = $gameSystem.dayNightDay(); return 0; })()");
+    }
     const balt = await t.talkTo("TownLife.eventOf('kupiec')", ["Biorę"]);
-    t.check("kroniki sprzedane Baltazarowi (W5 jeszcze nie ma): odsprzedaje kartę za 40 G", (await t.json("TownQuests.vcount('karta_1')")) === 1 && (await t.gold()) === 10, balt.text.slice(0, 200));
+    t.check(w5 ? "...po rozdz. 4 W5 (karta wciąż u niego) odsprzedaje ją za 40 G" : "kroniki sprzedane Baltazarowi (bez W5): odsprzedaje kartę za 40 G",
+        (await t.json("TownQuests.vcount('karta_1')")) === 1 && (await t.gold()) === 10, balt.text.slice(0, 200));
 });

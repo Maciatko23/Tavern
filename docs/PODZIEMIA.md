@@ -457,12 +457,28 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - Pasmo 1: rodzaje stworów zgodne z kontraktem (szczur, pająk); winda na każdym ręcznym piętrze; bossowie blokują schody tylko,
   gdy wtyczka stworów ich zarejestrowała.
 
+## Rywal w ruinach (W9 rozdz. 3, Rywal.js - od 2026-10-17)
+
+Ktoś z zewnątrz schodzi po Serce przed bohaterem (kontrakt i decyzje: `docs/QUESTY_STAN.md`, „W9 rozdz. 3”). Map pięter nic nie zmienia -
+wszystko to zdarzenia wstrzykiwane **828-839** (rejestr rdzenia: „Rywal”) na Ruinach Zamku (10), piętrach 1-9 (131-139), Strażnicy (140)
+i w przedsionku Komnaty Serca (11):
+
+- **Na piętrach składanych** miejsca liczy `Rywal.layoutOf(piętro)` z danych piętra (`Underground.floorData`): droga od schodów w górę do schodów
+  w dół (flagi tilesetu, jak `verify`) - ślady butów na niej, ich znak obok schodów w dół, linka z dzwonkami w przejściu w połowie drogi, lina
+  obok; zimny obóz w środkowym pokoju; ognisko spotkania w pokoju schodów w dół (2-7 pól od nich), przywódca przy drodze, ludzie przy ogniu.
+  To samo ziarno = te same miejsca.
+- **Piętro 10**: obóz w sali straży przed bramą (ognisko 22,17, przywódca 15,17, ranny 19,19) - zbroja nie przepuszcza nikogo bez słów.
+- **Stwory**: znaczniki `<Stwor>` w promieniu 7-8 pól od ich ogniska są puste (Creatures.state().killed), póki tam obozują.
+- **Podziemia.js**: `Underground.read` i `Underground.search` owinięte - wyrwane zapiski i wybrane pojemniki mówią swoje; `world().rival`
+  i linijka epilogu z `Rywal.epilogue` (dwa krótkie wpięcia w Underground.js), zdanie Lorda o jego ludziach w `Underground_Data` LORD.arrive.rival.
+- F9 „Wyspa i fabuła”: „W9: rywal (wymuś wariant)” i „W9: rywal - spotkanie na piętrze N”.
+
 ## Czego jeszcze nie ma
 
 - prawdy jako wybór w rozmowach (W9 rozdz. 6: powiedzieć prawdę mieszkańcowi czy przemilczeć) - dane i szyna są, rozmowy nie;
 - otwarcie Zasuwy głównej sygnałem wody (W1 rozdz. 7 / W2) - jest miejsce i szyna `undergroundSluice`, skutek należy do questów;
 - połączenie z kopalnią / obozem kopaczy w górach (W8) i Marek (W6 rozdz. 7) - tunel na piętrze 50 jest zawalony;
-- rywal z zewnątrz w podziemiach (W9 rozdz. 3); alarm dzwonu i obrona tawerny (W2 rozdz. 8 / Akt III - osobna wtyczka Act3, sceny
-  zakończeń czytają tylko jej wynik);
+- (od 2026-10-17 jest: rywal z zewnątrz w ruinach - W9 rozdz. 3, wyżej); alarm dzwonu i obrona tawerny (W2 rozdz. 8 / Akt III - osobna
+  wtyczka Act3, sceny zakończeń czytają tylko jej wynik);
 - ilustracje zakończeń (obrazki) - sceny grają na prawdziwych mapach; strażnik-bohater w dalszej grze to dalej „raz w roku” (jak było);
 - mapa odkrywana w czasie chodzenia (minimapa z mgłą) - w podziemiach nie ma minimapy.

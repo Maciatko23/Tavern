@@ -184,7 +184,8 @@
             used: ["Swoje pytanie w tym roku już zadałeś. Reguła to reguła."],
             keep: ["Tego nie ma w kronikach, chłopcze. Kroniki nie piszą o żywych. Zapytaj o co innego - tego pytania nie liczę."]
         },
-        // the Baltazar route of card 1 (W2 rozdz. 6: the chronicles sold - until W5 is built, he sells the loose ciphered card back)
+        // the Baltazar route of card 1 (W2 rozdz. 6: the chronicles sold - the card lies in his strongbox in the kantor's cellar and is taken
+        // there at night in W5 rozdz. 4 (Kantor.js); after that chapter, if it is still his, he sells the loose ciphered card back)
         balt: ["Ach, przyjaciel od starych ksiąg! Kroniki już płyną na kontynent... ale wypadła z nich jedna karta. Szyfr, bazgroły. Nikt jej nie chce.",
             "Dla ciebie - czterdzieści groszy. Sentyment, rozumiesz."],
         baltYes: ["Interes to interes. Bazgroły twoje."],

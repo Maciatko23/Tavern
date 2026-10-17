@@ -168,5 +168,7 @@ null,
 {"id":166,"expanded":false,"name":"Wrak - pod pokładem","order":92,"parentId":165,"scrollX":0,"scrollY":0},
 {"id":167,"expanded":false,"name":"Stara cysterna zakonu","order":93,"parentId":10,"scrollX":0,"scrollY":0},
 {"id":168,"expanded":false,"name":"Spalona zagroda","order":81,"parentId":23,"scrollX":0,"scrollY":0},
-{"id":169,"expanded":false,"name":"Dom Ługów","order":82,"parentId":168,"scrollX":0,"scrollY":0}
+{"id":169,"expanded":false,"name":"Dom Ługów","order":82,"parentId":168,"scrollX":0,"scrollY":0},
+null,
+{"id":171,"expanded":false,"name":"Piwnica kantoru","order":94,"parentId":103,"scrollX":1104,"scrollY":708}
 ]

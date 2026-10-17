@@ -25,10 +25,13 @@
 // (v1.4.0, 2026-10-16, the six island places - docs/miejsca_wyspy/PAKIETY.md) Residents of other plugins come in through
 // window.TownLifeExtra (a data plugin above this one pushes them there), each with its own fixed event id (943-948 given out); an
 // indoor place may be a default of TownLifeData.SPOTS_BY_MAP[map] when the map has no "Miejsce:" event for it (Map001 untouched).
+// (v1.5.0, 2026-10-17, W5 "Towary z kontynentu") A resident may be "inside" somewhere that is not its home: "indoor" in its data maps an
+// inside entry's place to an indoor spot name - { w5_lada: "ludmila_lada" }: while the plan says "inside w5_lada" the resident stands on
+// the spot "ludmila_lada" of whichever interior has it (Ludmiła behind the counter of the town's honest kantor, Map103), not at home.
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.4.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.5.0
  * @author Claude
  *
  * @help
@@ -200,7 +203,9 @@
     const GUESTS = RES.filter(r => r.plan.some(p => p[2] === "tawerna")).map(r => r.key);
     // (2026-10-14) away: the spots where "inside" means gone off somewhere else, not home (Janek out at sea, Roch on a night run) -
     // shown in no interior then
-    const indoorName = (res, e) => (res.away && res.away.includes(e.where) ? null : e.where === "tawerna" ? "gosc_" + (GUESTS.indexOf(res.key) + 1) : res.key + "_wnetrze");
+    // (v1.5.0: res.indoor - an inside place that is not home: its own indoor spot, e.g. a counter in someone else's house)
+    const indoorName = (res, e) => (res.away && res.away.includes(e.where) ? null : e.where === "tawerna" ? "gosc_" + (GUESTS.indexOf(res.key) + 1)
+        : res.indoor && res.indoor[e.where] ? res.indoor[e.where] : res.key + "_wnetrze");
     function eventSpot(events, name) {
         for (const ev of events || []) {
             if (!ev || !new RegExp("^Miejsce:\\s*" + name + "\\s*$", "i").test(ev.name || "")) continue;
@@ -216,7 +221,7 @@
         if (HOMES.has(mapId)) return RES.map((r, i) => (homeOf(r) === mapId ? eventData(r, i, data, null, mapId) : null)).filter(Boolean);
         const out = [];
         RES.forEach((r, i) => {
-            const names = [r.key + "_wnetrze"].concat(GUESTS.includes(r.key) ? ["gosc_" + (GUESTS.indexOf(r.key) + 1)] : []);
+            const names = [r.key + "_wnetrze"].concat(GUESTS.includes(r.key) ? ["gosc_" + (GUESTS.indexOf(r.key) + 1)] : [], r.indoor ? Object.values(r.indoor) : []);
             const at = names.map(n => indoorSpot(data.events, mapId, n)).find(Boolean);
             if (at) out.push(eventData(r, i, data, at, mapId));
         });

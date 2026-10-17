@@ -44,6 +44,19 @@ const HOOKS = `(function(){
     return 0;
 })()`;
 
+// (2026-10-17, W5) GAME_PLUGINS_ADD="Cysterna_Data:Kantor_Data;Cysterna:Kantor" - plugins not in js/plugins.js yet (the editor was
+// open: no writing there) put into the plugin list at their places (each "after:name") before the game reads it, so that a test
+// runs as if they were installed. Nothing changes without the variable.
+const PLUGINS_ADD = process.env.GAME_PLUGINS_ADD ? `(function(){
+    const want = ${JSON.stringify(String(process.env.GAME_PLUGINS_ADD).split(";").map(x => x.split(":")).filter(x => x.length === 2))};
+    let real;
+    const add = v => { for (const [after, name] of want) { if (v.some(p => p.name === name)) continue;
+        const i = v.findIndex(p => p.name === after); v.splice(i < 0 ? v.length : i + 1, 0, { name, status: true, description: "(test)", parameters: {} }); } return v; };
+    const d = Object.getOwnPropertyDescriptor(window, "$plugins");
+    if (d && d.set) { const set = d.set; Object.defineProperty(window, "$plugins", { configurable: true, get: d.get, set(v) { set.call(window, add(v)); } }); }
+    else Object.defineProperty(window, "$plugins", { configurable: true, get() { return real; }, set(v) { real = add(v); } });
+})();` : "";
+
 // everything that moves by itself off: needs, animals, the dog, birds, livestock, the weather; the minimap hidden, combat mode off
 const QUIET = `if (window.Needs && Needs.setEnabled) Needs.setEnabled(false);
     if (window.Hunting) { Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); }
@@ -51,6 +64,7 @@ const QUIET = `if (window.Needs && Needs.setEnabled) Needs.setEnabled(false);
     if (window.Humans && Humans.auto) { Humans.auto(false); Humans.clear(); }
     if (window.Creatures && Creatures.auto) { Creatures.auto(false); Creatures.clear(); }
     if (window.Act3 && Act3.auto) Act3.auto(false);   // (the siege of the tavern does not arm itself in other systems' tests)
+    if (window.Rywal && Rywal.auto) Rywal.auto(false);   // (W9 ch. 3: the rival in the ruins does not begin / move by itself)
     if (window.Combat && Combat.feel && Combat.feel.auto) Combat.feel.auto(false);   // (the combat mode does not switch itself on - Combat_Feel.js)
     if (window.Survival && Survival.calmWeather) Survival.calmWeather(); $gameScreen.clearWeather();
     $gameSystem._minimapHidden = true; $gameSystem._combatMode = false;`;
@@ -221,6 +235,7 @@ class Test extends Report {
     async _boot() {
         await this.b.send("Page.addScriptToEvaluateOnNewDocument", { source: PAGE_SETUP });
         if (this.opts.beforeLoad) await this.b.send("Page.addScriptToEvaluateOnNewDocument", { source: this.opts.beforeLoad });
+        if (PLUGINS_ADD) await this.b.send("Page.addScriptToEvaluateOnNewDocument", { source: PLUGINS_ADD });
         const title = "!!(window.SceneManager && SceneManager._scene instanceof Scene_Title && SceneManager._scene._started && DataManager.isGlobalInfoLoaded())";
         for (let a = 0; a < 4 && !this.booted; a++) {   // (a busy server sometimes leaves the page half-loaded: go again)
             await this.b.send("Page.navigate", { url: GAME });

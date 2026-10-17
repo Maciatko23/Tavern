@@ -1838,5 +1838,41 @@
     "scale": null,
     "height_px": 59,
     "notes": ""
+  },
+  {
+    "key": "Kurier",
+    "name": "Kurier w kapturze (goście kantoru nocą, W5)",
+    "pixellab_id": "36f26fae-900f-427a-8670-55af6f899ed7",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "08fbd238-0235-4162-b7ec-2139b5d6e785",
+    "animation": "walk",
+    "description": "a hooded night courier of a foreign army, black cloak, white eye brooch, satchel",
+    "gens_used": 18,
+    "sheet": "$Npc_Kurier",
+    "walk8": "Npc_Kurier_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
   }
 ]

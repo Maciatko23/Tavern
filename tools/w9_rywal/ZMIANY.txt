@@ -1,0 +1,1 @@
+2026-10-17T13:08:43  js/plugins.js  przed 27100c6ad8c777ef0664fc84b3bbe01e6346f6a993657dbca4ff95b1f3b9d0ff  po e1e82aba288ac28ebd4eaa4072a3ae576e141a61900ae4d1d20b12d4c4504fbf  (+Rywal_Data, +Rywal pod Kantor)

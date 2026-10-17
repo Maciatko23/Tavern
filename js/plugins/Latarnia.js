@@ -843,8 +843,9 @@
             vgive("soczewka", 1);
             T.popup("Soczewka latarni", { top: true, color: "#ffd23f", sub: "Zanieś ją bratu Kleofasowi." });
         } else if (what === "buyback" && stepOf("W11") === 3 && S().lens === "baltazar") {
-            if ($gameParty.gold() < R.buyBack) { T.popup.need(COIN_ICON, "Potrzebujesz " + R.buyBack + " G"); stop(); return; }
-            $gameParty.loseGold(R.buyBack);
+            const price = buyBackPrice();
+            if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, "Potrzebujesz " + price + " G"); stop(); return; }
+            $gameParty.loseGold(price);
             S().lens = "bag";
             vgive("soczewka", 1);
             T.popup("Soczewka latarni", { top: true, color: "#ffd23f", sub: "Odkupiona od Baltazara." });
@@ -878,6 +879,8 @@
     // TownQuests' handlers: K49 (the fuel), D22 (the visions, the end), W11
     // ------------------------------------------------------------------
     const kantorOpen = () => inHours(hour(), [8, 18]);
+    // (2026-10-17, W5 "Towary z kontynentu" - Kantor.js) Baltazar's price of the lens: double for an enemy, half in the hero's grip
+    const buyBackPrice = () => Math.max(1, Math.round(R.buyBack * (T.call("Kantor", "priceMul") || 1)));
     function hookQuests() {
         const q = TQ();
         if (!q || !q.FX || hookQuests.done) return;
@@ -929,7 +932,7 @@
             w11Vars: {
                 vars: () => {
                     const r = S().raid || { day: day() }, st = S().lens;
-                    const gdzie = st === "baltazar" ? "Łódź zabrała soczewkę z zatoczki. Baltazar ma ją w kantorze - odkup ją (" + R.buyBack + " G, 8–18)." :
+                    const gdzie = st === "baltazar" ? "Łódź zabrała soczewkę z zatoczki. Baltazar ma ją w kantorze - odkup ją (" + buyBackPrice() + " G, 8–18)." :
                         "Złodzieje czekają na łódź w zatoczce szczątków na przylądku - w nocy z dnia " + (r.day + 1) + " na " + (r.day + 2) + ". Odbierz im worek.";
                     const kto = st === "whole" ? "Weź soczewkę od Bazylego i zanieś ją bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest." :
                         "Zanieś soczewkę bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.";
@@ -941,7 +944,7 @@
                 talk: (qq, r, st, key, spk) => {
                     if (key !== "kupiec" || S().lens !== "baltazar" || !kantorOpen()) return null;
                     const out = linesTo([], spk, D.TX.baltazarBack);
-                    choiceTo(out, ["Biorę (" + R.buyBack + " G).", "Nie teraz."],
+                    choiceTo(out, ["Biorę (" + buyBackPrice() + " G).", "Nie teraz."],
                         [act([], ["w11", "buyback"]).concat(linesTo([], spk, D.TX.baltazarBackYes)), linesTo([], spk, D.TX.baltazarBackNo)], 1);
                     return { ready: true, list: out };
                 }

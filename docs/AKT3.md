@@ -45,6 +45,12 @@ Stan: 2026-10-07. Kod: `js/plugins/Act3.js` (silnik napadu) i `js/plugins/Act3_D
 | 3 | tawerna (mapa 1), przez kuchnię | nożownik, 2 bandytów (+ ci, którzy przeszli przez wyważone drzwi tawerny) | stare drzwi przy piwnicy (9,14) |
 | 4 | tawerna, frontowymi drzwiami | **Dowódca kopaczy** (najemnik, poziom +2), najemnik, bandyta (+ **Grum**, gdy w W8 przeszedł do frakcji) | stare drzwi przy piwnicy |
 
+- **Ruiny pod tawerną (W9 rozdz. 3, od 2026-10-17, `Rywal.js`)**: jeśli rywalem w ruinach była frakcja (ludzie Baltazara, Grum, kopacze
+  Czarnych Oczu) - to ta sama Straż Pewności co w napadzie. Pobici w ruinach (`w9FrakcjaPobita`): fala 3 ma o jednego mniej („Zwiadowców,
+  których pobiłeś w ruinach, już nie mają”; z Erykiem Sową - o dwóch). Wynieśli zapiski zakonu / przeszli przez dziesiątą bramę
+  (`w9FrakcjaWie`): z falą 3 przychodzi jeszcze „Zwiadowca z ruin” (nożownik). Dowódca zabity w ruinach (`w9DowodcaPolegl`): w fali 4 „Nowy
+  dowódca kopaczy”. Grum zawrócony w ruinach (`grumAlly`) broni tawerny; zabity albo puszczony - nie ma go wcale. Ludzie Lorda z ruin to inna
+  strona - napadu nie zmieniają (dziennik: „Ci z ruin” przy ostrzeżeniach).
 - Poziom ludzi: poziom bohatera −1 (najmniej 3), najemnicy +1, dowódca +2.
 - Ci, którzy nie walczą (nikt ich nie zatrzymał), idą do drzwi i je wyważają — pasek nad drzwiami. **Drzwi tawerny wyważone:** szkody +20,
   ci przy drzwiach wchodzą do środka (dołączają do następnej fali w tawernie). **Stare drzwi wyważone:** każdy przy nich schodzi do piwnicy

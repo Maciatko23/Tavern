@@ -281,6 +281,12 @@
         { owner: "Wyspa", from: 690, to: 699, what: "przejścia do nowych miejsc na mapach użytkownika (125, 13) - wspólny rdzeń Wyspa.js" },
         { owner: "Story", from: 901, to: 902, what: "dziadek (mapa 19), Lord (dwór)" },
         { owner: "Homes", from: 700, to: 729, what: "pole po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
+        // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): the kantor's trapdoor, stack and counter (Map103), the night visitors of
+        // the back door (Map008), the cellar (Map171), the smugglers' camp (Map023), the ferry night's cart (Map022)
+        { owner: "Kantor", from: 730, to: 759, what: "W5: kantor nocą (klapa, skrzynie, lada - mapa 103), goście tylnych drzwi (mapa 8), piwnica kantoru (mapa 171), obóz przemytników (mapa 23), wóz w noc promu (mapa 22)" },
+        // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): the rival's traces on floors 1-10 (maps 131-140), Ruiny Zamku, their
+        // camp at the meeting, the witnesses before the Heart's door (Map011)
+        { owner: "Rywal", from: 828, to: 839, what: "W9 rozdz. 3: ślady i obóz rywala na piętrach 1-10 (mapy 131-140), Ruiny Zamku (10), świadkowie przed Komnatą Serca (11)" },
         { owner: "TownLife", from: 910, to: 949, what: "mieszkańcy miasteczka (mapa 8)" },
         { owner: "TavernLife", from: 950, to: 950, what: "sztaluga z planem karczmy (mapy 1, 25, 26)" },
         { owner: "TownQuests", from: 951, to: 959, what: "miejsca questów miasteczka (mapy 8, 22)" },
