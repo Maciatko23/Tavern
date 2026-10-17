@@ -83,7 +83,9 @@
           fewer: c => (c.flags.ansgarAlly ? 1 : 0) + (c.flags.w9FrakcjaPobita ? 1 : 0),
           fewerNotice: c => (c.flags.ansgarAlly ? ["Kuchnia zaryglowana", "Eryk Sowa ostrzegł Borgara - tylnymi drzwiami wchodzi ich mniej." + (c.flags.w9FrakcjaPobita ? " A zwiadowców z ruin już nie mają." : "")]
               : ["Mniej ich", "Zwiadowców, których pobiłeś w ruinach, już nie mają - tylnymi drzwiami wchodzi ich mniej."]),
-          extra: c => (c.flags.w9FrakcjaWie && !c.flags.w9FrakcjaPobita ? [{ kind: "knifer", name: "Zwiadowca z ruin", lv: 0 }] : []),
+          // (2026-10-17, W7 ch. 6 - Dwor.js) the hero kept silent to the Lord with Feliks still at the manor: Feliks told the faction of
+          // every descent (w7FeliksDonosi) - they know the cellars as well
+          extra: c => ((c.flags.w9FrakcjaWie || c.flags.w7FeliksDonosi) && !c.flags.w9FrakcjaPobita ? [{ kind: "knifer", name: "Zwiadowca z ruin", lv: 0 }] : []),
           notice: ["Tylnymi drzwiami!", "Są w środku - idą przez kuchnię do starych drzwi przy piwnicy."] },
         { id: "w4", map: 1, from: "front", kinds: ["mercenary", "bandit"], shout: "Dość zabawy. Otworzyć mi tę piwnicę.",
           // (2026-10-16, W11 "Soczewka", Latarnia.js) the lighthouse's lens sold to Baltazar (soczewkaSprzedana): the Black Eyes know
@@ -162,7 +164,8 @@
           hide: ["kapral"], swing: "#d8d8e0", when: c => !!c.flags.w5WitAlly,
           lines: { start: "Pięć groszy na tydzień brałem. Dziś nie biorę nic. Do bramy!", hit: "Za miasto!", down: "Ugh... trzymajcie... drzwi...", win: "Straż miejska. Nareszcie naprawdę." } },
         { key: "straz", name: "Strażnik dworu", sheet: "Npc_Straznik_Walk8", maps: [8], from: "gate", delay: 540, hp: 115, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
-          swing: "#d8d8e0", n: 2, when: c => !!c.flags.lordAlly,
+          // (2026-10-17, W7 - Dwor.js) also when the hero tells the Lord everything he finds (w7LordFirst) - not after a lie found out
+          swing: "#d8d8e0", n: 2, when: c => !!(c.flags.lordAlly || c.flags.w7LordFirst) && !c.flags.w7KlamstwoWyszlo,
           lines: { start: "Jaśnie pan przysyła pozdrowienia. I włócznie.", hit: "W imieniu dworu!", down: "Ranny...!", win: "Zameldujemy jaśnie panu." } }
     ];
 

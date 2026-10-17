@@ -138,6 +138,9 @@
         lordShamed: "Lord nie zapomniał wstydu na rynku (W1).",
         lordCold: "Lord patrzy na mnie chłodno.",
         lordForced: "Lord chce być pierwszy.",
+        // (2026-10-17, W7 ch. 6 - Dwor.js)
+        lordFirst: "Mówię Lordowi o wszystkim, co znajdę - jego ludzie idą za mną, „żeby nikt inny nie był pierwszy”.",
+        lordLie: "Skłamałem Lordowi, że pod tawerną nic nie ma. Wyszło na jaw.",
         baltazarEnemy: "Baltazar jest moim wrogiem (W5).",
         baltazarBack: "Baltazar wrócił na wyspę z najemnikami (W5).",
         baltazarFree: "Baltazar Vey nie jest w mojej garści - kantor dalej handluje dla Czarnych Oczu (W5).",
@@ -214,7 +217,10 @@
             field: "Pole twojego dziadka jest teraz pana. Ta piwnica pod tawerną... też kiedyś będzie.",
             branch: "Ogród jaśnie pana usycha, a ty grzebiesz w rurach zakonu.",
             shamed: "Pan nie zapomniał rynku. I tego, kto go tam ośmieszył.",
-            cold: "Pan mówił: kto coś znajdzie, ma przyjść najpierw do niego. Nie przyszedłeś."
+            cold: "Pan mówił: kto coś znajdzie, ma przyjść najpierw do niego. Nie przyszedłeś.",
+            // (2026-10-17, W7 ch. 6 - Dwor.js)
+            first: "Pan kazał iść twoimi śladami. Mówisz mu wszystko - a on chce zobaczyć sam. I żeby nikt inny nie był pierwszy.",
+            lie: "Kurz i szczury, powiedziałeś panu. My tu widzimy co innego."
         },
         again: { baltazar: ["Wróciłeś. Zmieniłeś zdanie, przyjacielu?"], grum: ["Jeszcze tu jesteś?"], lord: ["Znowu ty."], kopacze: ["Patrzymy na ciebie, chłopcze."] },
         // the short last line before the choice (a long one beside the choice's bubble would not fit - the bubble narrows)

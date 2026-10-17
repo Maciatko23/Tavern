@@ -166,6 +166,19 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
   pan mówi, że to może być warte więcej niż pole”), a gdy bohatera nie ma
   na polu — list od Lorda (dopisek); Lord przypomina o tym przy pierwszej
   rozmowie o odkupie. Dalej obie wersje idą tak samo (Akt II, W4).
+- **Dwór od środka (W7, wariant A - decyzja autora 2026-10-17; w grze: `Dwor.js`, mapy 172-174):** Lord Zaleski nic nie wie. Jest
+  próżny i naiwny: liczy gości, prezenty i ukłony, a w kamienie twierdzy wierzy jak w „bajkę, ale ładną”. Dziadek Lorda postawił dwór
+  z kamieni dawnej twierdzy, na kanale zakonu; w holu co dziesiąty kamień ma wyrytego kruka, a kronika rodu w bibliotece przechowuje
+  piątą zwrotkę pieśni o Kruczych Skałach. **Feliks**, kamerdyner od trzydziestu lat, prowadzi drugie życie: rano robi zakupy (papier,
+  lak i atrament na kopy), za dnia stoi za pulpitem z księgą gości, nocą schodzi przez klapę w gabinecie starym kanałem do włazu za
+  oranżerią i sprzedaje Kubie wodę z gałęzi zakonu (W1), raz w tygodniu o północy puka do tylnych drzwi kantoru Baltazara (W5), a do
+  sztabu Straży Pewności pisze listy: o wodzie, o krukach wyjmowanych ze ścian holu (sprzedanych przez kantor - trzy przy drzwiach
+  gabinetu zastąpił zwykłymi kamieniami) i o wnuku Stacha. Kiedy bohater pokaże Lordowi listy (albo mu o nich powie, a Lord sprawdzi sam),
+  Lord się łamie („Liczyłem gości, a on liczył kamienie”; płaci Koronie podatek wojenny za chorągiew w zatoce, a wróg siedział mu w
+  kuchni), Feliks idzie do wieży - albo, gdy zdążył zauważyć brak listów, ucieka promem - a Lord staje się sojusznikiem. W Akcie II pyta,
+  co jest pod Kruczymi Skałami: kto mówi mu wszystko, dostaje sto groszy na tydzień i ekwipunek, ale ludzie Lorda schodzą za nim w
+  ruiny; kto kłamie, ma po czasie wrogi dwór (myto, przeszukanie chaty); kto milczy, a Feliks wciąż jest w dworze - ma szpiega frakcji
+  za plecami. Przy Sercu Lord pyta o syna Kazimierza (Underground.js).
 - **Serce (Akt III) po stracie pola:** póki pole nie jest odkupione, Lord
   przy Sercu jest **rywalem** (trzyma ziemię dziadka i chce być pierwszy
   pod tawerną) — chyba że bohater zrobił z niego sojusznika (W1, cicha
@@ -341,7 +354,7 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   Bohatera nikt nie wciela („Ile masz lat? ...Jeszcze nie.”). **Przychylność garnizonu** (0–100): 40 - glejt na wrak, 60 - kowal
   garnizonu (strzały, stal), 80 - dwóch żołnierzy królewskich broni tawerny w Akcie III, poniżej 10 - patrol na drodze przeszukuje torbę.
 - **Posterunek straży Lorda w miasteczku** (decyzja 2026-09-29) - garnizon w miasteczku nosi barwy Lorda Zaleskiego: to jego ludzie.
-  Wiąże to dwór z wojną (otwarty wątek: czy to Lord stoi za frakcją, która wynajęła Gruma). Sprzedawca wody na rynku tylko rozmawia -
+  Wiąże to dwór z wojną (rozstrzygnięte 2026-10-17, W7 wariant A: Lord nie stoi za frakcją - frakcji sprzedaje jego kamerdyner Feliks). Sprzedawca wody na rynku tylko rozmawia -
   wody nie sprzedaje (susza zostaje).
 - **Stara cysterna zakonu** (pod wzgórzem) - zapas wody zakonu. Susza przed studnią zostaje: cysterna to nagroda za zejście w głąb, nie
   wczesne źródło wody.
@@ -391,6 +404,8 @@ gotowych kawałków pokoi narysowanych w edytorze jako szablony (rdzeń już umi
 - Nazwa i konkretny charakter frakcji, która wynajęła Gruma (dwór? wojsko?
   szpiedzy?). Czy to dwór Lorda Zaleskiego — nie przesądzone; w grze Lord
   zna tylko rodzinną bajkę o twierdzy (rozdział 1).
+  *(Rozstrzygnięte 2026-10-17 - W7, wariant A: dwór nie stoi za frakcją. Frakcja to Straż Pewności („Czarne Oczy”); we dworze ma
+  tylko Feliksa, kamerdynera, który sprzedaje jej wodę, wieści i kamienie z krukiem. Lord nic nie wie.)*
 - Czy zakon strażników ma jakichś żyjących potomków/resztki poza Borgarem.
   *(Od 2026-10-16 w grze: cztery straże w rodach, które nie wiedzą o sobie nawzajem - dzwon (Ambroży), pieśń (Melia), klucz
   (Borgar), pióro (brat Kleofas) - i kruczarze, posłańcy z Urwiska: ród dziadka Stacha.)*

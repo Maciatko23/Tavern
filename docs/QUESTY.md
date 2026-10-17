@@ -157,7 +157,7 @@ fabułą. Po tabeli każdy wątek ma swoją listę rozdziałów.
 | W4 | Krew kasztelana *(rodzinny sekret Borgara)* | Borgar (niechętnie), Tadek Młot | bar w tawernie, kuźnia, pole dziadka, drzwi dworu, piwnica tawerny, Komnata Serca | Borgar Kowal jest potomkiem ostatniego kasztelana. Połowa żelaznego klucza wisi nad barem „na szczęście”, druga jest zakopana. Składasz klucz, a potem musisz o wszystkim powiedzieć Borgarowi. | od dnia 15 do Aktu III | Klucz kasztelana (otwiera Komnatę Serca), Borgar jako sojusznik albo strażnik piwnicy; w finale Borgar może zostać strażnikiem zamiast ciebie | kopanie łopatą, cienie słońca (Sky), kuźnia, wybory | 2 połówki klucza i cały klucz, scena konfrontacji, wnętrze dworu |
 | W5 | Towary z kontynentu *(przemyt, praca od środka)* | Baltazar Vey (pośrednio), Kapral Wit, sołtys Bronisław | Kantor, tylne drzwi Kantoru nocą, brama południowa, Skraj lasu (obóz przemytników), Polna droga (wóz do przystani) | Baltazar przemyca dla jednej ze stron wojny: wywozi zboże z rekwizycji i kamienie z krukiem, przywozi mapy, narzędzia i ludzi. Najmujesz się u niego jako nocny tragarz, zdobywasz rejestr i decydujesz, co z nim zrobić. | od dnia 10 do Aktu II | 20 G za noc pracy, rejestr (dowód), łapówki albo Opinia; Kantor zostaje albo znika; tańsze żelazo i stal | skradanie, noc, ciężar, walka z ludźmi (etap 3), wybory | wnętrze Kantoru z piwnicą i gabinetem, obóz przemytników (zdarzenia na Skraju lasu), rejestr |
 | W6 | Ludzie z promu *(uchodźcy, wybory moralne)* | Ludmiła (z Elą), Rafał, sołtys Bronisław, Kapral Wit | obóz uchodźców pod murem, ratusz, tablica zleceń, pole dziadka, kopalnia (Akt II) | Wojna przypływa falami. Ludmiła szuka męża, Marka, a Rafał jest dezerterem z wyprawy po Serce. Ukrywasz go, wydajesz albo przemycasz; miasto głosuje, czy zamknąć bramy. | od pierwszej fali (dzień 10) do Aktu II | Opinia (u uchodźców i w mieście), pomocnicy na polu dziadka (żniwa), Rafał jako sojusznik w walce, odnaleziony Marek | rozmowy, skradanie, walka, uprawy, gotowanie | fale uchodźców (obóz rośnie), głosowanie w ratuszu, listy gończe na ludzi |
-| W7 | Dwór z kamieni twierdzy *(Lord, Feliks, dług i to, co po nim)* | Lord Leopold Zaleski, Feliks | drzwi dworu, ogród, wnętrze dworu (hol, biblioteka, gabinet, oranżeria), brama wschodnia | Dług dziadka i dalszy ciąg: Lord, który „zna tylko bajkę”, i Feliks, który rano robi zakupy, a nocą prowadzi interesy. Kto we dworze stoi za frakcją, zależy od wariantu do wyboru autora — w obu gra prowadzi do dowodów. | od dnia 1 (dług) do Aktu III | spłata długu (koniec rozdziału 1), odpisy z długu za wybory, w Akcie II pomoc Lorda albo jego wrogość | dług (Story), rozmowy, skradanie we dworze, wybory | wnętrze dworu, Feliks jako postać z planem dnia na mapie miasta |
+| W7 | Dwór z kamieni twierdzy *(Lord, Feliks, dług i to, co po nim)* | Lord Leopold Zaleski, Feliks | drzwi dworu, ogród, wnętrze dworu (hol, biblioteka, gabinet, oranżeria), brama wschodnia | Dług dziadka i dalszy ciąg: Lord, który „zna tylko bajkę”, i Feliks, który rano robi zakupy, a nocą prowadzi interesy. **Wariant A (decyzja autora 2026-10-17): Lord nic nie wie** - frakcji sprzedaje Feliks, a gra prowadzi do jego listów. | od dnia 1 (dług) do Aktu III | spłata długu (koniec rozdziału 1), odpisy z długu za wybory, w Akcie II pomoc Lorda albo jego wrogość | dług (Story), rozmowy, skradanie we dworze, wybory | *(w grze od 2026-10-17: wnętrze dworu - mapy 172-174, Feliks z planem dnia - `Dwor.js`)* |
 | W8 | Żelazna Pięść *(najemnik, wojna)* | Grum Żelazna Pięść | tawerna (siłowanie, kości), Góry i kamieniołom (Map013), Jaskinia (Map014), obóz kopaczy, Osada Milczących (Akt II) | Grum najmuje bohatera na przewodnika w góry. Widzisz tam obóz kopaczy z wyprawy po Serce, a Grum zaczyna wątpić. Możesz przeciągnąć go na swoją stronę, walczyć z nim albo pracować dla frakcji. | od Sławy w tawernie 40 i dnia 20 do Aktu III | 50 G za wyprawę, broń najemnika, Grum jako sojusznik albo przeciwnik | walka (najemnik z tarczą: ciężki cios, zajście od tyłu), skradanie, siłowanie, kości, przetrwanie poza domem | podpięte mapy Gór i Jaskini, obóz kopaczy, walka z ludźmi (etap 3) |
 | W9 | Serce Twierdzy *(oś główna)* | Dziadek Ozzy, Borgar, Melia, Ambroży — i samo Serce | piwnica tawerny i luźna cegła (Map009), Ruiny Zamku (Map010), 100 pięter, Komnata Serca (Map011) | Oś, w którą wpadają wszystkie wątki: trzy „zamki” do Komnaty Serca (klucz z W4, sygnał z W2, pieśń z W3), prawdy o mieszkańcach w Warstwie Prawdy i cztery zakończenia ze `STORY.md`. Stan miasta (Opinia, sojusznicy, kto żyje) zmienia finał. | Akt I (poszlaki) → Akt II (zejście) → Akt III (wybór) | zakończenie; prawdy o mieszkańcach jako wybory | wszystko: walka ze stworami z ruin, Hart ducha, podziemia składane z kawałków, dziennik | mapy podziemi (co 10. piętro ręcznie), Komnata Serca, sceny zakończeń |
 | W11 | Soczewka *(obrona, wybór)* | Baltazar Vey (oferta), latarnik Bazyli, brat Kleofas | kantor, Przylądek z latarnią (wieża, laterna, zatoczka szczątków), pustelnia na klifie | Ktoś na lądzie płaci 400 G za „szkiełko z latarni”. Ostrzegasz Bazylego, bronisz latarni przed nocnym napadem albo odbierasz soczewkę złodziejom (albo odkupujesz ją od Baltazara). Kleofas czyta w kronikach, że to „Oko Strażnicy”, a nie odłamek Serca - i ty decydujesz, co z nim zrobić. | Akt II (od dnia 25, gdy znasz Bazylego) | 150 dośw. (zostawić albo rozbić) albo 400 G i 80 dośw. (sprzedać); flagi dla Aktu III i epilogu | walka z ludźmi (Humans.js), noc, skradanie, wybór | - |
@@ -451,12 +451,11 @@ i Marek jest w domu.)*
 
 ### W7. Dwór z kamieni twierdzy
 
-Do wyboru autora (`STORY.md` zostawia to otwarte):
+**Decyzja autora (2026-10-17): wariant A.**
 
-- **Wariant A — Lord nic nie wie.** Lord jest próżny i naiwny, wierzy w „bajkę”. Feliks od lat sprzedaje frakcji wodę,
-  informacje i kamienie. Gdy Lord pozna prawdę, łamie się i staje się sojusznikiem.
-- **Wariant B — Lord wie.** Lord finansuje jedną ze stron wojny za obietnicę tytułu. Feliks jest wierny, ale przerażony — i
-  to on wyjawia prawdę bohaterowi.
+- **Wariant A — Lord nic nie wie.** Lord jest próżny i naiwny, wierzy w „bajkę”. Feliks od lat sprzedaje frakcji (Straż Pewności,
+  „Czarne Oczy”) wodę, informacje i kamienie. Gdy Lord pozna prawdę, łamie się i staje się sojusznikiem. **← w grze**
+- ~~Wariant B — Lord wie.~~ Odrzucony: Lord nie jest świadomym zdrajcą.
 
 1. **Dług** (dni 1–60). Spłaty przy drzwiach (8–20) albo nocą u Feliksa (Story); K30, K31, K32, D17. Odpisy z długu za
    wybory: zlecenia Feliksa na tablicy, D14 (oddane zboże), W1 b (milczenie), W4 (połowa klucza), K37 (sakiewka).
@@ -474,6 +473,43 @@ Do wyboru autora (`STORY.md` zostawia to otwarte):
    dworu, wyższe myto, straż przeszukuje twoją chatę).
 7. **Lord przy Sercu** (Akt III). Lord chce zadać swoje jedno pytanie (propozycja: „czy mój syn zginął na wojnie przeze
    mnie?”). Pozwolić mu, odmówić czy zapytać za niego — to jedna z prawd, które w zakończeniu zmieniają dwór.
+
+*W grze od 2026-10-17 (wariant A; `Dwor.js` + `Dwor_Data.js`, nowe mapy 172 „Dwór - Hol”, 173 „Dwór - Biblioteka”, 174 „Dwór -
+Gabinet” pod Posiadłością Lorda - `tools/w7/build_dwor.py`; zdarzenia wstrzykiwane 570-599; mapa dworu Map024 autora bez zmian - drzwi
+dworu (zdarzenie 1) i drewniany właz za oranżerią (zdarzenie 2) odpowiadają w kodzie). Jeden wątek „Dwór z kamieni twierdzy” (W7) w
+dzienniku, 8 kroków w 7 rozdziałach.* **Rozdz. 1:** zaczyna się, kiedy bohater pozna Lorda (pierwsza rozmowa przy drzwiach); kończy go
+połowa długu (1250 G) - albo, po stracie pola, połowa odkupu. **Rozdz. 2:** Lord za dnia (8–20) zaprasza do środka („Wejdę.” / „Innym
+razem.” - odmowa na ten dzień; po stracie pola dopiero po jego słowie o odkupie). Hol: mur z kamieni dawnej twierdzy (rodzaj 67), co
+dziesiąty z wyrytym krukiem (nakładki `!W7_Dwor`), przy drzwiach gabinetu trzy kruki wyjęte - zwykłe kamienie na świeżej, białej
+zaprawie; wielkie schody na piętro, dwa kominki, chorągwie Zaleskich, zbroje, płaskorzeźba z krukiem, żyrandol, gwiazda w posadzce,
+pulpit kamerdynera z księgą gości. Lord oprowadza („Feliks dba o mury... ja kamieni nie liczę, ja liczę gości”) i idzie do biblioteki;
+tam przy pulpicie czyta **kronikę rodu = piątą zwrotkę W3** („Dwór z kamieni - kamień pamięta”; gdy W3 zbiera zwrotki, trafia do niego -
+pod drzwiami Lord już jej nie podaje, póki W7 nie przejdzie przez bibliotekę). Od tej chwili drzwi dworu wpuszczają za dnia; nocą
+odpowiada kamerdyner jak dawniej. **Rozdz. 3:** trzy z czterech obserwacji (notatka „Plan dnia Feliksa” rośnie z każdą): rano na rynku
+(6–10:30 - z kilku kroków, skradając się; tuż obok bez skradania Feliks zauważa i tego ranka nic), za dnia za pulpitem w holu (10:30–20 -
+kluczyk od kantorka w kałamarzu), nocą przy włazie za oranżerią (1:30–3:00, Feliks z latarenką i Kuba z beczkami - Feliks wychodzi SPOD
+włazu; zobaczony - „Kto tam?! Straż!”, wyrzucony za bramę dworu, Opinia −3; nocny strażnik ogrodu też patrzy), raz w tygodniu o północy
+przy tylnych drzwiach kantoru (Kantor.js). Gdy Feliksa już nie ma (W1 a/b): ślady - Teodor (kantorek zamknięty, „woda pod podłogą
+gabinetu”), Hanka (papier i lak na kopy), Kuba (wychodził spod włazu), rejestr Baltazara („F.”). **Rozdz. 4:** nocą (22–5) drewniany
+właz z krukiem (zdarzenie autora 3,20) - stary kanał zakonu - klapa w podłodze gabinetu (dwór stoi na kanale; tą drogą Feliks chodzi do
+włazu). Kantorek Feliksa: listy jego ręką „Do sztabu Straży Pewności”, lak z białym okiem (woda przez kantor na prom, „pan myśli, że to
+studnia”; trzy kruki z holu wyjęte i sprzedane; „wnuk Stacha pyta o twierdzę... pan wierzy w bajki”). **Zabierz** / **przepisz** (pół
+godziny) / **zostaw**. Feliks schodzi przez gabinet o 1:30 i wraca o 3:00 - kto wtedy w gabinecie (także w trakcie przepisywania), tego
+wyprowadza drzwiami przed dwór, a klapę rygluje na dwie noce. **Prawda:** przed dworem (8–20) „Pokaż Lordowi listy Feliksa” - z odpisem
+Lord posyła strażnika po oryginały; bez listów można mu o nich powiedzieć - sprawdza sam i odpowiada nazajutrz. Lord się łamie („Liczyłem
+gości, a on liczył kamienie”, podatek wojenny dla Korony, „Kto pierwszy przychodzi z prawdą, ten jest swój”), Feliks do wieży (sądzą
+go sołtys i rotmistrz) - chyba że listy zabrano i zwlekano: wtedy Feliks zauważa i ucieka pierwszym promem; Lord sojusznikiem
+(`lordAlly`, `w7Prawda`), 250 G odpisu z długu (po stracie pola: odkup o 1000 G tańszy; po spłacie: 100 G), listy idą do rotmistrza
+(przychylność garnizonu +10). **Rozdz. 5:** koniec rozdziału 1 (spłata albo strata pola - haczyk legendy mówi Story.js). **Rozdz. 6 (Akt
+II):** gdy krata w piwnicy stoi otworem i bohater był w ruinach, Lord pyta, co jest pod Kruczymi Skałami: **„Powiem panu wszystko”** -
+100 G co tydzień (przy kolejnych rozmowach), pochodnie, liny, opatrunki i strzały ze zbrojowni, a jego ludzie schodzą za bohaterem (W9:
+rywal „ludzie Lorda”, powód „lordFirst”); **„Nic tam nie ma, panie. Kurz i szczury.”** - po tygodniu albo przy dziesiątej bramie wychodzi
+na jaw: dwór wrogi (drzwi już nie wpuszczają), myto 5 G przy bramie wschodniej, nazajutrz straż przeszukuje chatę (zabiera kamienie z
+krukiem), przy Sercu rywal; **„Tego nie powiem nikomu”** - gdy Feliks wciąż jest w dworze, słyszy i donosi frakcji (w Akcie III od kuchni
+„Zwiadowca z ruin”). **Rozdz. 7:** scena Lorda przy Sercu (Underground.js, pytanie o syna Kazimierza) - wątek kończy się, kiedy się
+rozegra (notatka „Lord przy Sercu”). Drobny skutek W9: pobici w ruinach ludzie Lorda - Lord raz to wspomina („Bartosz kuleje...
+Pamiętam, kto skończył.”), a strażnik dworu jest chłodniejszy. F9 „Wyspa i fabuła” - „W7: rozdział N” i wnętrza dworu. Test
+`tests/w7_test.js`.*
 
 ### W8. Żelazna Pięść
 
@@ -729,7 +765,10 @@ i zmianami w nocnym maratonie — questy miasta mają dawać pieniądze „cieka
    wyspy Akt III czyta: `ansgarAlly` (rozbitek ostrzega - fala od kuchni słabsza), `latarniaWizja1` (wizja statku bez bandery -
    ostrzeżenie), `soczewkaSprzedana` (napad trudniejszy) i przychylność garnizonu 80 (dwóch żołnierzy królewskich broni tawerny);
    zamknięta gałąź dworska w cysternie (`lordCold`) robi z Lorda przy Sercu rywala. W epilogu (piętro 100) każde z sześciu miejsc ma
-   swoją linijkę.
+   swoją linijkę. Od 2026-10-17 W7: Lord przy Sercu - kolejność: kłamstwo o ruinach, które wyszło na jaw → rywal (zawsze); jego
+   własna prawda (W9 rozdz. 6) → sojusznik; zamknięta gałąź dworska → rywal (także po prawdzie z W7); prawda o listach Feliksa (W7),
+   cicha droga W1 albo „powiem panu wszystko” (W7 rozdz. 6) → sojusznik (także przy stracie pola i po wstydzie z W1 a); strata pola
+   bez odkupu → rywal; W1 a / `lordCold` → rywal; inaczej nieobecny.
 
 ### 6.4 Zbiorczo: co trzeba dobudować
 

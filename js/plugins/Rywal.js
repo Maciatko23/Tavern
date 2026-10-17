@@ -123,6 +123,7 @@
     // ------------------------------------------------------------------
     function lordWhyOf(w) {
         const fl = flags();
+        if (fl.w7KlamstwoWyszlo) return "lordLie";   // (2026-10-17, W7 ch. 6: the hero lied about the ruins - it came out)
         if (!w) return "lordCold";
         if (w.fieldLost) return "lordField";
         if (w.lordFlags && w.lordFlags.branch) return "lordBranch";
@@ -138,6 +139,9 @@
         let w = null, stance = "absent";
         try { w = U && U.world ? U.world() : null; stance = w && U.lordStance ? U.lordStance(w) : "absent"; } catch (e) { w = null; }
         if (stance === "rival") return { key: "lord", why: lordWhyOf(w) };
+        // (2026-10-17, W7 ch. 6 - Dwor.js) the hero tells the Lord everything he finds: the Lord's men go down after him - not as his
+        // enemies (the Lord an ally), but the same party of the manor's guard as the rival's (W9 ch. 3)
+        if (f.w7LordFirst && !f.w7KlamstwoWyszlo) return { key: "lord", why: "lordFirst" };
         const K = T.api("Kantor");
         let mode = "normal";
         try { mode = K && K.mode ? K.mode() : "normal"; } catch (e) { mode = "normal"; }
@@ -595,7 +599,7 @@
         } else if (s.party === "grum") out.push(...(flag("w8Lost") ? G.lost : G.normal));
         else if (s.party === "kopacze") out.push(...(s.why === "kopaczeGrip" ? G.grip : G.normal));
         else out.push(...G.normal);
-        if (s.party === "lord") out.push(TX.lordWhy[{ lordField: "field", lordBranch: "branch", lordShamed: "shamed" }[s.why] || "cold"]);
+        if (s.party === "lord") out.push(TX.lordWhy[{ lordField: "field", lordBranch: "branch", lordShamed: "shamed", lordFirst: "first", lordLie: "lie" }[s.why] || "cold"]);
         out.push(...(gate ? G.gate : G.road));
         return out;
     }

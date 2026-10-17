@@ -1484,9 +1484,16 @@
             marek: !!((w6 && w6.marekSaved) || fl.marekSaved),
             camp: (w6 && w6.camp) || (fl.campInside ? "inside" : fl.campOutside ? "outside" : null),
             water: !!fl.sluiceHalf,
-            feliks: fl.w1Revealed ? "arrested" : fl.lordAlly ? "sent" : fl.feliksPays ? "pays" : gone("feliks") ? "gone" : "here",
+            // (2026-10-17, W7 variant A - Dwor.js: Feliks arrested for his letters to the faction, or fled on the ferry with them)
+            feliks: fl.w1Revealed || fl.w7FeliksZatrzymany ? "arrested" : fl.w7FeliksUciekl ? "fled" : fl.kubaResent || fl.lordAlly ? "sent"
+                : fl.feliksPays ? "pays" : gone("feliks") ? "gone" : "here",
             // (2026-10-16) branch: the manor's branch of the Order's cistern shut (Cysterna.js, D28) - the Lord is no ally any more
-            lordFlags: { ally: !!fl.lordAlly, cold: !!(fl.w1Revealed || fl.lordCold), truth: !!fl.lordTruth, branch: !!fl.galazDworskaZamknieta },
+            // (2026-10-17, W7) w7: the Lord learnt the truth of Feliks's letters (lordAlly is set with it); first: the hero tells him
+            // everything found under the rocks (Act II - his men follow him down); lie: the hero lied about the ruins and it came out
+            lordFlags: { ally: !!fl.lordAlly, cold: !!(fl.w1Revealed || fl.lordCold), truth: !!fl.lordTruth, branch: !!fl.galazDworskaZamknieta,
+                w7: !!fl.w7Prawda, first: !!fl.w7LordFirst, lie: !!fl.w7KlamstwoWyszlo },
+            // (2026-10-17) W7 "Dwór z kamieni twierdzy" (Dwor.js): { truth, how, fate, first, lie, spy, letters } or null
+            w7: (() => { try { return T.call("Dwor", "forWorld") || null; } catch (e) { return null; } })(),
             island: islandOf(fl),
             // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): who went down for the Heart before the hero, and how it ended -
             // { key: grum | lord | baltazar | kopacze, outcome, deep (went down past the tenth gate), faction, floor, lordLine } or null
@@ -1524,11 +1531,18 @@
     // a rival, unless the hero made him an ally (W1's quiet way) or told him his truth (W9 ch. 6). Bought back: as if the debt was paid.
     // (2026-10-16) The manor's branch of the cistern shut (D28 - the coordinator's decision: it ALWAYS chills him, flag lordCold too):
     // an ally no more - a rival, unless his truth was told.
+    // (2026-10-17, W7 variant A - Dwor.js) What comes first: 1) F9's force; 2) the hero lied to him about the ruins and it came out
+    // (w7KlamstwoWyszlo) - a rival, whatever was before; 3) his own truth told (W9 ch. 6) - an ally; 4) the cistern's manor branch
+    // shut - a rival (the coordinator's rule stays: even after W7's truth); 5) an ally: the truth of Feliks's letters (W7 - it sets
+    // lordAlly), W1's quiet way, or the hero telling him all he finds underground (W7 ch. 6) - also with the field lost and not
+    // bought back, also after W1 a's shame; 6) the field lost - a rival; 7) W1 a / lordCold - a rival; 8) else absent.
     function lordStance(w) {
         const f = state().forceLord;
         if (f === "ally" || f === "rival" || f === "absent") return f;
         if (!w.story) return "absent";
-        const lf = w.lordFlags || {}, ally = !!lf.truth || (!!lf.ally && !lf.branch);
+        const lf0 = w.lordFlags || {};
+        if (lf0.lie) return "rival";
+        const lf = lf0, ally = !!lf.truth || ((!!lf.ally || !!lf.w7 || !!lf.first) && !lf.branch);
         if (w.fieldLost) return ally ? "ally" : "rival";
         if (!w.debtPaid && !w.fieldBack) return "absent";
         if (ally) return "ally";
@@ -1724,6 +1738,10 @@
         let rl = null;
         try { rl = T.call("Rywal", "epilogue", kind, w); } catch (e) { rl = null; }
         if (typeof rl === "string" && rl) out.push(rl);
+        // (2026-10-17) the manor of the fortress stones (W7, Dwor.js): one line - the ravens of the hall, the lie, Feliks
+        let dl = null;
+        try { dl = T.call("Dwor", "epilogue", kind, w); } catch (e) { dl = null; }
+        if (typeof dl === "string" && dl) out.push(dl);
         return out.concat(islandLines(kind, w, who));
     }
     // (2026-10-16) the island places' lines (EPILOGUE.island), in the order of the places on the map: the cliff, the raven, the cape,

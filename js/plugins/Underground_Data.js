@@ -474,6 +474,9 @@
                     ["lord", "Zaczekaj. To ja - Zaleski. Nie bój się."],
                     ["lord", "Szedłem za tobą od dziewięćdziesiątego piętra. Moi ludzie trzymali linę, a ja trzymałem się ściany. Lewą ręką."],
                     ["lord", "Nie przyszedłem po Serce. Dwór ma dość kamieni z tej twierdzy. Przyszedłem po jedno pytanie."],
+                    // (2026-10-17) W7 (Dwor.js): the truth of Feliks's letters, or the hero told him every floor (Act II)
+                    ["lord", w => (w.lordFlags && w.lordFlags.w7 ? "Feliks wyjmował mi ze ścian kruki, a ty mi to pokazałeś. Dlatego szedłem za tobą, a nie przed tobą."
+                        : w.lordFlags && w.lordFlags.first ? "Mówiłeś mi o każdym piętrze. Dziś przyszedłem zobaczyć ostatnie." : "")],
                     ["lord", "Mój syn, Kazimierz, popłynął na kontynent w pierwszym roku wojny. Wrócił tylko jego pierścień."],
                     ["lord", "Chcę wiedzieć, czy zginął przeze mnie. Tylko to. Pozwolisz mi?"]
                 ],
@@ -482,6 +485,8 @@
                     { appear: ["lord", 15, 13, 8] }, { appear: ["guard", 15, 14, 8] }, { walk: ["lord", 16, 8, 4] }, { walk: ["guard", 15, 10, 8] },
                     { face: ["hero", 6] },
                     ["lord", "Mówiłem: najpierw do mnie."],
+                    // (2026-10-17) W7 ch. 6 (Dwor.js): the hero lied that there was nothing down there - and it came out
+                    ["lord", w => (w.lordFlags && w.lordFlags.lie ? "Kurz i szczury, mówiłeś. Sto pięter kurzu i szczurów." : "")],
                     ["lord", w => (w.lord.cold ? "Zrobiłeś ze mnie głupca na rynku, przed całym miastem. Tu, na dole, nikt nie patrzy."
                         : "Moi ludzie szli twoimi śladami od kraty w piwnicy Borgara. Sto pięter, chłopcze. Sto.")],
                     // (2026-10-17) his men met in the ruins (W9 ch. 3, Rywal.js - Underground.world().rival.lordLine)

@@ -398,7 +398,9 @@
         const l = npc("lord");
         if (!l) return;
         const key = [MAP.manor, NPCS.lord.id, "A"], away = !lordHere();
-        if (!!$gameSelfSwitches.value(key) !== away) $gameSelfSwitches.setValue(key, away);
+        // (2026-10-17, W7) the page set at once: called from setupEvents (a transfer), the map's own refresh request is dropped by
+        // Game_Map.setup right after - the Lord stayed on his "away" page by day when the hero came to the manor after a night elsewhere
+        if (!!$gameSelfSwitches.value(key) !== away) { $gameSelfSwitches.setValue(key, away); l.refresh(); }
     }
     // the existing characters the story speaks through: Borgar (tavern) and the manor's door; their own commands stay reachable
     const roles = new WeakMap();

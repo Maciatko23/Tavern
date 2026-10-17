@@ -279,6 +279,9 @@
         { owner: "Wrak", from: 670, to: 679, what: "wrak na mieliźnie, pod pokładem (mapy 165, 166), rozbitek" },
         { owner: "Cysterna", from: 680, to: 689, what: "stara cysterna zakonu (mapa 167, zasuwa na 147, krata na 157)" },
         { owner: "Wyspa", from: 690, to: 699, what: "przejścia do nowych miejsc na mapach użytkownika (125, 13) - wspólny rdzeń Wyspa.js" },
+        // (2026-10-17) W7 "Dwór z kamieni twierdzy" (Dwor.js): the Lord showing the hero round the hall and the library, Feliks
+        // coming up the study's trapdoor, his letters on the desk (maps 172-174), Feliks and Kuba at the hatch at night (Map024)
+        { owner: "Dwor", from: 570, to: 599, what: "W7: dwór Lorda - Lord w holu i bibliotece, Feliks i listy w gabinecie (mapy 172-174), Feliks i Kuba przy włazie nocą (mapa 24)" },
         { owner: "Story", from: 901, to: 902, what: "dziadek (mapa 19), Lord (dwór)" },
         { owner: "Homes", from: 700, to: 729, what: "pole po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
         // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): the kantor's trapdoor, stack and counter (Map103), the night visitors of

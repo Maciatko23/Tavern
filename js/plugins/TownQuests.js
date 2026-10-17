@@ -832,7 +832,9 @@
     const goneNow = k => !!T.call("TownLife", "gone", k);
     function remarkFor(key) {
         const s = S(), said = s.said || (s.said = {});
-        return (D.REMARKS || []).find(m => m.who === key && !said[m.id] && (!m.flag || s.flags[m.flag]) && (!m.gone || goneNow(m.gone)) && (!m.back || !goneNow(m.back))) || null;
+        // (2026-10-17, W7: `and` - a second flag needed; `unless` - a flag that keeps the remark back)
+        return (D.REMARKS || []).find(m => m.who === key && !said[m.id] && (!m.flag || s.flags[m.flag]) && (!m.and || s.flags[m.and]) && (!m.unless || !s.flags[m.unless]) &&
+            (!m.gone || goneNow(m.gone)) && (!m.back || !goneNow(m.back))) || null;
     }
     function remark(key, spk) {
         const m = remarkFor(key);
@@ -868,6 +870,17 @@
             return choiceTo(out, ["Biorę.", "Nie sprzedaję walk."], [yes, no], 1);
         }
         return null;
+    }
+    // (2026-10-17, W7 variant A - Dwor.js) W1's words once the Lord has learnt Feliks's truth from his letters (flag w7Prawda): the lines
+    // of q.lines.w7 with {fate} filled - Feliks in the tower (arrested by the Lord) or gone over the sea (fled with the letters); the
+    // sluice stays W1's (the Lord knew of Feliks, not of the sluice). null before the truth - W1 speaks as it always did
+    function w1AfterW7(q) {
+        const f = has() ? S().flags : {}, W = q && q.lines ? q.lines.w7 : null;
+        if (!W || !f.w7Prawda) return null;
+        const fate = W.fate[f.w7FeliksUciekl ? "fled" : "arrest"], fill1 = l => (typeof l === "string" ? l.replace(/\{fate\}/g, fate) : l);
+        const out = {};
+        for (const k of Object.keys(W)) if (k !== "fate") out[k] = Array.isArray(W[k]) ? W[k].map(fill1) : fill1(W[k]);
+        return out;
     }
     // the hook into Story.js's talks of the Lord and grandpa: the quest's lines first, then the story's own talk
     let storyTalkOrig = null;
@@ -2152,10 +2165,10 @@
         w1Kuba: {
             talk(q, r, st, key, spk) {
                 if (key !== "woziwoda" || !inHours(hour(), [7, 14])) return null;
-                const L = q.lines || {}, out = [];
+                const L = q.lines || {}, out = [], w7 = w1AfterW7(q);
                 linesTo(out, spk, L.kubaAsk);
-                const opts = [["Będę milczał. Powiedz mi wszystko.", "tell", L.kubaTell], ["Płać mi, a będę milczał.", "pay", L.kubaPay],
-                    ["Powiem o wszystkim sołtysowi.", "flee", L.kubaFlee], ["Nic. Zapomnij.", "", L.kubaLater]];
+                const opts = [["Będę milczał. Powiedz mi wszystko.", "tell", w7 ? w7.kubaTell : L.kubaTell], ["Płać mi, a będę milczał.", "pay", L.kubaPay],
+                    ["Powiem o wszystkim sołtysowi.", "flee", w7 ? w7.kubaFlee : L.kubaFlee], ["Nic. Zapomnij.", "", L.kubaLater]];
                 const branches = opts.map(([, how, say]) => { const b = []; linesTo(b, spk, say); if (how) script(b, [q.id, "fx", "w1Kuba", how]); return b; });
                 return { ready: true, list: choiceTo(out, opts.map(o => o[0]), branches, 3) };
             },
@@ -2164,12 +2177,12 @@
                 const r = rec(q.id), L = q.lines || {};
                 if (!r || r.s !== "active" || q.steps[r.step].talk !== "w1Kuba") return;
                 r.t.kuba = how;
-                if (how === "tell") { setFlag("kubaTold"); addNote(L.noteTell); }
+                if (how === "tell") { setFlag("kubaTold"); addNote(w1AfterW7(q) ? w1AfterW7(q).noteTell : L.noteTell); }
                 else if (how === "pay") { setFlag("kubaPays"); setFlag("feliksWarned"); addNote(L.notePay); }   // (Kuba complains at the manor: its watch is sharper)
                 else if (how === "flee") {
                     setFlag("kubaFled");
                     T.call("TownLife", "setGone", "woziwoda", day() + 7);
-                    addNote(L.noteFlee);
+                    addNote(w1AfterW7(q) ? w1AfterW7(q).noteFlee : L.noteFlee);
                     const got = addOpinion(-5, "Kuba uciekł z miasta");
                     T.popup("Kuba uciekł z miasta", { top: true, color: "#ff9f8f", sub: "Na tydzień: piekarnia i kuźnia bez przydziału, Baltazar sprzedaje wodę dwa razy drożej" + (got ? "  ·  Opinia " + got : "") });
                     for (const k of ["piekarka", "soltys", "kowal"]) if (visible(k)) { T.call("TownLife", "say", k, k === "soltys" ? "Kuba! Wracaj! A przydział?!" : "Kuba uciekł? A woda na jutro?!"); break; }
@@ -2232,7 +2245,8 @@
         // rozdz. 6: the big choice - the sołtys (a market day: reveal it to the town; any day: stay silent), the Lord (quietly), Feliks (pay me)
         w1Choice: {
             talk(q, r, st, key, spk) {
-                const L = q.lines || {}, out = [], has = vcount("rysunek") > 0, witness = S().flags.w1Confession ? L.withWitness : [];
+                const L0 = q.lines || {}, w7 = w1AfterW7(q), L = w7 ? Object.assign({}, L0, { reveal: w7.reveal, lordShow: w7.lordShow }) : L0;
+                const out = [], has = vcount("rysunek") > 0, witness = S().flags.w1Confession ? L.withWitness : [];
                 let opts;
                 if (key === "soltys" && inHours(hour(), [8, 18])) {
                     const market = isMarket(day()) && inHours(hour(), [8, 14]);
@@ -2258,13 +2272,13 @@
                     vtake("rysunek", 1);
                     for (const f of ["w1Revealed", "sluiceHalf", "millRuns", "witDegraded", "lordCold"]) setFlag(f);
                     T.call("TownLife", "setGone", "feliks", true);
-                    addNote(L.noteReveal);
+                    addNote(w1AfterW7(q) ? w1AfterW7(q).noteReveal : L.noteReveal);
                     completeStep(q, { to: PAUSE, reward: { opinion: 15 + witness, xp: 150 } });
                 } else if (how === "lord") {   // b) quietly: Feliks gone, 200 G off the debt, the Lord an ally, Kuba resentful
                     vtake("rysunek", 1);
                     for (const f of ["lordAlly", "sluiceHalf", "millRuns", "kubaResent"]) setFlag(f);
                     T.call("TownLife", "setGone", "feliks", true);
-                    addNote(L.noteLord);
+                    addNote(w1AfterW7(q) ? w1AfterW7(q).noteLord : L.noteLord);
                     completeStep(q, { to: PAUSE, reward: { debtCredit: 200, opinion: 5, xp: 150 } });
                 } else if (how === "deal") {   // c) 20 G a week - and two weeks later Feliks's men on the road
                     setFlag("feliksPays");

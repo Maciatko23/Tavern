@@ -170,5 +170,8 @@ null,
 {"id":168,"expanded":false,"name":"Spalona zagroda","order":81,"parentId":23,"scrollX":0,"scrollY":0},
 {"id":169,"expanded":false,"name":"Dom Ługów","order":82,"parentId":168,"scrollX":0,"scrollY":0},
 null,
-{"id":171,"expanded":false,"name":"Piwnica kantoru","order":94,"parentId":103,"scrollX":1104,"scrollY":708}
+{"id":171,"expanded":false,"name":"Piwnica kantoru","order":94,"parentId":103,"scrollX":1104,"scrollY":708},
+{"id":172,"expanded":false,"name":"Dwór - Hol","order":95,"parentId":24,"scrollX":1104,"scrollY":708},
+{"id":173,"expanded":false,"name":"Dwór - Biblioteka","order":96,"parentId":172,"scrollX":1104,"scrollY":708},
+{"id":174,"expanded":false,"name":"Dwór - Gabinet","order":97,"parentId":172,"scrollX":1104,"scrollY":708}
 ]
