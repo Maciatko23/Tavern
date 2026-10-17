@@ -96,8 +96,9 @@
  *     w walce, z okrzykiem; opts jak wyżej + { far: [od, do], shout }
  *   Humans.camp(opts) -> obóz tej nocy na tej mapie (opts: { size, kinds, near })
  *   Humans.list(), Humans.band(tag), Humans.clear(tag)
- *   Humans.setFoe(człowiek, sojusznik | null) - walczy z sojusznikiem
+ *   Humans.setFoe(człowiek, sojusznik | null, { ranged }) - walczy z sojusznikiem
  *     bohatera (Act3.js: obrońcy tawerny) zamiast z bohaterem; łucznik nie
+ *     (chyba że ranged: strzela np. do wilka - Starcia.js)
  *   Humans.march(człowiek, x, y) - idzie na miejsce (jego "dom"), walczy
  *     z tym, kogo spotka, i tam wraca; Humans.remove(człowiek) - znika
  *     z mapy (przeszedł przez drzwi), bez ciała
@@ -866,7 +867,7 @@
     };
     // a tile keepMin..keepMax from the hero with a clear line at him, the nearest to walk to (away from him when backing off)
     Game_Human.prototype.shootSpot = function(away) {
-        const s = this._def.shot, now = Graphics.frameCount, px = $gamePlayer.x, py = $gamePlayer.y, P = HP(), G = P.pathGrid();
+        const s = this._def.shot, now = Graphics.frameCount, [px, py] = tgtTile(this), P = HP(), G = P.pathGrid();   // (his foe's tile when he has one - Starcia.js: a wolf)
         const S2 = this._spot;
         if (S2 && now - S2.t < 60 && Math.abs(S2.px - px) + Math.abs(S2.py - py) <= 1 && !!S2.away === !!away) return S2;
         let best = null, bestS = Infinity;
@@ -892,12 +893,15 @@
             this.faceHero();
         } else this._cornered = Math.max(0, (this._cornered || 0) - 4);
     };
+    // (2026-10-17, Starcia.js) what he aims at: his foe (a wolf, a hare he hunts by the camp) when he has one, else the hero
+    const aimX = h => { const f = foeOf(h); return f ? f.centerX() : heroX(); };
+    const aimY = h => { const f = foeOf(h); return f ? f.centerY() : heroY(); };
     Game_Human.prototype.startDraw = function() {
-        const s = this._def.shot, [hx, hy] = toHero(this);
+        const s = this._def.shot, [hx, hy] = toTgt(this);
         this._faceAng = Math.atan2(hy, hx);
         this.setDirection(DIR4(hx, hy));
         this.setMode("draw", Math.round(s.draw * this.dexK() * tk()));
-        this._aim = { x: heroX(), y: heroY(), locked: false };
+        this._aim = { x: aimX(this), y: aimY(this), locked: false };
         se("Bow1", 55, 75, panOf(this.centerX()));
     };
     // drawn: the aim follows the hero, then locks (lockAt frames before the arrow leaves - the moment to step aside or roll)
@@ -906,7 +910,7 @@
         if (!aim) { this.setMode("chase"); return; }
         if (dist < 1.6) { this._aim = null; this.setMode("chase"); this._cornered = 60; return; }   // (he is on him: no shot now)
         if (this._modeT > s.lockAt) {
-            const ax = heroX(), ay = heroY();
+            const ax = aimX(this), ay = aimY(this);
             aim.x += (ax - aim.x) * 0.35;
             aim.y += (ay - aim.y) * 0.35;
             this._faceAng = Math.atan2(aim.y - this.centerY(), aim.x - this.centerX());
@@ -922,7 +926,7 @@
         if (!aim) { this.setMode("chase"); return; }
         const sx = this.centerX(), sy = this.centerY() - 0.25, dx = aim.x - sx, dy = aim.y - sy, d = Math.hypot(dx, dy) || 1;
         arrows.push({ x: sx, y: sy, vx: dx / d, vy: dy / d, from: this, dmg: Math.max(1, Math.round(s.dmg * (1 + 0.1 * (this._level - 1)) * (1 + 0.02 * (this._attr.dex - 5)))),
-            poise: s.poise, speed: s.speed, gone: 0, range: s.range + 2, sprite: null, done: false });
+            poise: s.poise, speed: s.speed, gone: 0, range: s.range + 2, sprite: null, done: false, target: foeOf(this) || null });   // (target: not the hero - Starcia.js)
         this._arrows--;
         se("Bow3", 75, 95, panOf(sx));
         this.setMode("loose", 14);
@@ -972,6 +976,11 @@
     function hitHuman(h, damage, how, extra) {
         if (h._dead || h._surrendered) return;
         extra = extra || {};
+        // (2026-10-17, Starcia.js) extra.by: whose blow - "hero" (left out), "dog" (his), or a beast's ("wolf", "boar", "bear"): a man does
+        // not kneel to a wolf (he may run instead), its kill gives the hero nothing; the hero's (or his dog's) blow - the band knows him now
+        const by = extra.by || "hero", beast = by !== "hero" && by !== "dog";
+        h._killBy = by;
+        if (!beast && h._band) h._band._heroAlarm = true;
         const k = h._def, Cb = C(), F2 = (T.api("Combat_parts") || {}).fight;
         const heavy = !!extra.heavy, hidden = extra.tag === "sneak" || extra.tag === "heart";
         // (extra.from {x, y}: a blow not of the hero's - an ally's, Act3.js - its own side for the guard and the push)
@@ -1016,11 +1025,16 @@
         if (Hn && Hn.makeNoise) Hn.makeNoise(h.centerX(), h.centerY(), hidden ? 3 : 7);   // (a fight wakes the camp; a blow from hiding hardly)
         if (h._hp <= 0) { kill(h, how); return; }
         const poise = extra.poise !== undefined ? extra.poise : Math.round(damage * 0.8);
-        if (!h._engaged && !(hidden && poise >= h._poise)) h.engage(true);   // (a blow from hiding that breaks him: he reels first, then fights - afterStun)
+        if (!h._engaged && !(hidden && poise >= h._poise)) h.engage(!beast);   // (a blow from hiding that breaks him: he reels first, then fights - afterStun)
         h._poise -= poise;
         if (h._poise <= 0) stagger(h, !!extra.knock, from);
         else if (extra.knock) knockBack(h, from);
         if (Math.random() < 0.18) say(h, pick(LINES.hurt), 80);
+        if (beast) {   // torn by a beast: no begging - low on life he may run for it
+            const s = k.surrender;
+            if (s && !h._surrenderTried && !h._noSurrender && h._hp <= h._maxHp * s.at) { h._surrenderTried = true; if (Math.random() < 0.4) h.flee(); }
+            return;
+        }
         if (!maybeSurrender(h)) morale(h._band);
     }
     function stagger(h, knock, from) {
@@ -1093,14 +1107,15 @@
         h._dead = true;
         endTurn(h);
         removeHuman(h);
-        S().killed++;
+        const by = h._killBy || "hero", his = by === "hero" || by === "dog";   // (Starcia.js: a beast's kill - no experience, not the hero's tally)
+        if (his) S().killed++; else S().beastKilled = (S().beastKilled || 0) + 1;
         const loot = (h._loot || []).slice();
         const w = h._def.weapon;
         if (w && w[0] && !h._weaponGone && Math.random() < w[1]) loot.push([w[0], 1]);
         if (h._kind === "archer" && h._arrows > 0) loot.push([D.ITEM.arrows, Math.min(6, h._arrows)]);
         dropBody(h, h._gold, loot);
-        const e = { kind: h._kind, by: "hero", how: how || "", mapId: $gameMap.mapId(), x: h.centerX(), y: h.centerY(), level: h._level, animal: h, human: true,
-            name: h._def.name, noXp: !!h._xpGiven, tag: h._tag };
+        const e = { kind: h._kind, by, how: how || "", mapId: $gameMap.mapId(), x: h.centerX(), y: h.centerY(), level: h._level, animal: h, human: true,
+            name: h._def.name, noXp: !!h._xpGiven || !his, tag: h._tag };
         h._xpGiven = true;
         T.emit("kill", e);
         se("Collapse1", 60, 95, panOf(h.centerX()));
@@ -1110,7 +1125,7 @@
             const s = S(), d = day();
             if (s.opinionDay.kill !== d) { s.opinionDay.kill = d; T.call("TownQuests", "addOpinion", D.OPINION.killBeggar, "dobiłeś człowieka, który błagał o litość"); }
         }
-        morale(h._band);
+        if (his) morale(h._band);   // (torn by wolves: the others do not kneel to them)
         bandCheck(h._band);
     }
     // the end of one man's part in the fight (killed, spared, robbed, fled) - once
@@ -1207,7 +1222,7 @@
         const dx = h.centerX() - heroX(), dy = h.centerY() - heroY(), Hn = H();
         if (Hn && Hn.faceSlant) Hn.faceSlant(dx, dy); else $gamePlayer.setDirection(DIR4(dx, dy));
         const id = Cb && Cb.handMelee ? Cb.handMelee() : 0, w = Cb && Cb.MELEE ? Cb.MELEE[id] : null, kind = w ? w.combo[0] : -1;
-        const done = () => { if (h._dead) return; se(w ? w.se : "Blow1", 85, 90); T.call("Combat", "sparksAt", h.centerX(), h.centerY() - 0.4, "#b8322a", 10); kill(h, "melee", true); };
+        const done = () => { if (h._dead) return; se(w ? w.se : "Blow1", 85, 90); T.call("Combat", "sparksAt", h.centerX(), h.centerY() - 0.4, "#b8322a", 10); h._killBy = "hero"; kill(h, "melee", true); };
         if (kind >= 0 && typeof $gamePlayer.startToolSwing === "function" && $gamePlayer.startToolSwing(kind, done)) return;
         done();
     }
@@ -1377,7 +1392,16 @@
                 a.x += a.vx * st;
                 a.y += a.vy * st;
                 a.gone += st;
-                if (!a.passed && Math.hypot(a.x - heroX(), a.y - (heroY() - 0.2)) < 0.45 && Cb && Cb.hitPlayer) {
+                const tg = a.target;   // (an arrow at a wolf or a hare - Starcia.js: it flies past the hero and finds its mark, or the ground)
+                if (tg) {
+                    const down = typeof tg.isDown === "function" && tg.isDown(), Hn = H(), sp = Hn && tg.kind ? Hn.SPECIES[tg.kind()] : null;
+                    const r = Math.max(0.45, (sp && sp.radius) || 0.5);
+                    if (!down && typeof tg.takeHit === "function" && Math.hypot(a.x - tg.centerX(), a.y - (tg.centerY() - 0.15)) < r) {
+                        tg.takeHit({ damage: a.dmg, poise: a.poise, from: a.from, name: "strzała", shot: true, knock: a.from._def.shot.knock, wound: a.from._def.shot.wound });
+                        a.done = true;
+                        break;
+                    }
+                } else if (!a.passed && Math.hypot(a.x - heroX(), a.y - (heroY() - 0.2)) < 0.45 && Cb && Cb.hitPlayer) {
                     const res = Cb.hitPlayer({ damage: a.dmg, poise: a.poise, from: { x: a.x - a.vx, y: a.y - a.vy }, attacker: a.from, name: "strzała", wound: a.from._def.shot.wound,
                         knock: a.from._def.shot.knock, unparryable: true, unblockable: !(Cb.shield && Cb.shield()), projectile: true, nonLethal: a.from.mercy(),
                         onBeaten: () => beatenBy(a.from) });
@@ -2046,8 +2070,9 @@
         // (2026-10-06, Act3.js - the tavern's defenders) a man's foe other than the hero (null: the hero again; never an archer - he
         // shoots the hero), the march to a place (his home: he walks there, fights who he meets, comes back to it), a man taken off
         // the map (gone through a door: no body, his band told)
-        setFoe(h, foe) {
-            if (!h || h._dead || (foe && (h._kind === "archer" || h._surrendered))) return false;
+        // (2026-10-17, Starcia.js: opts.ranged - the archer may have one too: he shoots at a wolf, a boar, a bear with his bow)
+        setFoe(h, foe, opts) {
+            if (!h || h._dead || (foe && ((h._kind === "archer" && !(opts && opts.ranged)) || h._surrendered))) return false;
             h._foe = foe || null;
             if (foe && !h._engaged) h.engage(false);
             return true;
@@ -2062,4 +2087,8 @@
         },
         remove(h) { if (!h || h._dead) return false; endTurn(h); removeHuman(h); bandCheck(h._band); return true; }
     });
+
+    // (2026-10-17) Starcia.js - the animals and the men fight each other, the dog beside the hero - put into the page when it is not on the
+    // plugin list (the editor was open, or dropped it): it only hooks what Hunting_AI.js, this file and Dog.js have, so after every plugin
+    if (!(window.$plugins || []).some(p => p && p.name === "Starcia") && !T.api("Starcia")) PluginManager.loadScript("Starcia");
 })();

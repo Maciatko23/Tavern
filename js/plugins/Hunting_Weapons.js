@@ -38,7 +38,7 @@
     const P = T.api("Hunting_parts") || T.register("Hunting_parts", {});
     if (P.weapons) return;   // (put into the page twice: kept as it was)
     if (!P.core || !P.ai) throw new Error("Hunting_Weapons.js: musi być pod Hunting.js i Hunting_AI.js na liście wtyczek (one of them is missing or below)");
-    const { ENABLED, ITEM, SPECIES, DIR_VEC, carcassState, tally, removeAnimal, se, popup, C, perk, perkRoll, knowsSkill, canShoot, sneaking,
+    const { ENABLED, ITEM, SPECIES, DIR_VEC, carcassState, tally, tallyGone, removeAnimal, se, popup, C, perk, perkRoll, knowsSkill, canShoot, sneaking,
         targetSources, noiseListeners, animals, roamingSpriteset: spriteset } = P.core;
     const { stagger, knockBack, enrage } = P.ai;
 
@@ -391,6 +391,7 @@
         animal._hp -= damage;
         animal._poiseT = 0;
         animal._engaged = true;
+        if (how !== "dog") animal._heroHitAt = Graphics.frameCount;   // (Starcia.js: the hero's blow turns one that fights a man on him)
         const Cb = C();
         se("Damage1", Cb ? 55 : 80, sp.aggressive ? 90 : 120);
         if (Cb && Cb.enemyHurtFx) Cb.enemyHurtFx(animal, damage, how, extra);
@@ -414,13 +415,19 @@
     // how: the last blow ("spear", "shot", "melee"; "dog" - the dog's bite). Told on the Tawerna bus as "kill" { kind, by: "hero" |
     // "dog", how, mapId, x, y (tiles), level, bounty (a wanted one's contract), animal } (Combat.js: the experience, QuestBoard.js, Journal.js,
     // HomeDecor.js listen)
-    function kill(animal, how) {
-        if (typeof animal.bearOver === "function" && SPECIES[animal.kind()].bear) animal.bearOver();   // (a bear fight lived through)
-        tally(animal);
+    // by (2026-10-17, Starcia.js): who killed it when not the hero - "dog", "wolf", "boar", "bear", "human" (a bandit's blow or arrow). Only
+    // the hero's (and the dog's) kills count as his hunt (the journal's goals, the tallies); the others' only keep the map from filling
+    // that kind again before dawn. Its carcass lies there all the same - his to dress.
+    function kill(animal, how, by) {
+        by = by || (how === "dog" ? "dog" : "hero");
+        const his = by === "hero" || by === "dog";
+        if (his && typeof animal.bearOver === "function" && SPECIES[animal.kind()].bear) animal.bearOver();   // (a bear fight lived through)
+        if (his) tally(animal); else tallyGone(animal);
         removeAnimal(animal);
         if (animal._pack && animal._pack.leader === animal) animal._pack.broken = true;   // the leader down: the pack loses heart
-        const e = { kind: animal.kind(), by: how === "dog" ? "dog" : "hero", how: how || "", mapId: $gameMap.mapId(), x: animal.centerX(), y: animal.centerY(),
+        const e = { kind: animal.kind(), by, how: how || "", mapId: $gameMap.mapId(), x: animal.centerX(), y: animal.centerY(),
             level: animal._level || 1, animal };
+        if (!his) e.noXp = true;
         if (animal._qbBounty) e.bounty = animal._qbBounty;
         T.emit("kill", e);
         se("Collapse1", 70, 130);
@@ -475,14 +482,23 @@
         return best;
     }
     const knifeOwned = () => [ITEM.knifeIron, ITEM.knifeStone].find(id => $gameParty.numItems($dataItems[id]) > 0) || 0;
-    function giveYield(kind, knife) {
-        const y = YIELD[kind];
+    // c: the carcass dressed - gnawed by wolves at night (c.gnawed, Starcia.js) it gives less: gnawLeft
+    function giveYield(kind, knife, c) {
+        const y = YIELD[kind], g = c && c.gnawed > 0 ? gnawLeft(kind, c.gnawed) : null;
         const more = k => (perkRoll(k) ? 1 : 0);   // (Rzeźnik, Skórnik, Ścięgna, Król puszczy)
-        $gameParty.gainItem($dataItems[y.meat], y.n + more("carcass.meat"));   // (the popups "+N ..." come from SurvivalHUD)
-        $gameParty.gainItem($dataItems[y.hide || ITEM.rawHide], y.skin + more("carcass.hide"));
-        $gameParty.gainItem($dataItems[ITEM.sinew], y.sinew + more("carcass.sinew"));
+        const meat = g ? g.meat : y.n + more("carcass.meat"), skin = g ? g.skin : y.skin + more("carcass.hide"), sinew = g ? g.sinew : y.sinew + more("carcass.sinew");
+        if (meat > 0) $gameParty.gainItem($dataItems[y.meat], meat);   // (the popups "+N ..." come from SurvivalHUD)
+        if (skin > 0) $gameParty.gainItem($dataItems[y.hide || ITEM.rawHide], skin);
+        if (sinew > 0) $gameParty.gainItem($dataItems[ITEM.sinew], sinew);
         T.call("Durability", "use", knife);
         se("Slash1", 55, 85);
+    }
+    // (2026-10-17, Starcia.js) what is left of a carcass the wolves have gnawed `n` times: a piece of meat less for each, the hide torn
+    // after the first (none), a sinew less after the second; with no meat left they leave nothing but bones (Starcia.js takes it away)
+    function gnawLeft(kind, n) {
+        const y = YIELD[kind];
+        if (!y || !(n > 0)) return y ? { meat: y.n, skin: y.skin, sinew: y.sinew } : null;
+        return { meat: Math.max(0, y.n - n), skin: 0, sinew: Math.max(0, y.sinew - (n >= 2 ? 1 : 0)) };
     }
     // the action button at a carcass: with a knife the hero crouches and dresses it, without one nothing (a popup)
     function dressCarcass(c) {
@@ -491,7 +507,13 @@
         if ($gamePlayer.isToolSwinging && $gamePlayer.isToolSwinging()) return true;
         const dx = c.x - ($gamePlayer._realX + 0.5), dy = c.y - ($gamePlayer._realY + 0.5);
         if (Math.hypot(dx, dy) > 0.3) $gamePlayer.setDirection(Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 4 : 6) : (dy < 0 ? 8 : 2));
-        const finish = () => { if (!carcassList().includes(c)) return; removeCarcass(c); giveYield(c.kind, knife); };
+        const finish = () => {
+            if (!carcassList().includes(c)) return;
+            removeCarcass(c);
+            giveYield(c.kind, knife, c);
+            if (c.gnawed > 0) popup($dataItems[ITEM.rawHide] ? $dataItems[ITEM.rawHide].iconIndex : 0, "Wilki ją ogryzły: mniej mięsa, skóra podarta", "#ffd98f");
+            T.emit("carcassDressed", { kind: c.kind, x: c.x, y: c.y, mapId: $gameMap.mapId(), gnawed: c.gnawed || 0 });   // (the remains - Starcia.js)
+        };
         const CT = T.api("ChoppableTree"), crouch = CT && CT.swingKindOf ? CT.swingKindOf("Swing_Crouch") : -1;
         if (crouch < 0 || !$gamePlayer.startToolSwing(crouch, finish, null)) finish();
         return true;
@@ -555,6 +577,9 @@
             e.sprite.scale.set(held ? held.scale || 0.8 : 1, held ? held.scale || 0.8 : 1);
             if (blood) blood.visible = !held;
             if (body) { body.rotation = held ? (held.dir === 4 ? 0.8 : held.dir === 6 ? -0.8 : 0) : 0; body.scale.y = held ? 1 : -1; }
+            // gnawed by wolves (Starcia.js): darker and smaller, the more they ate (the blood spread wider)
+            const g = !held && e.c.gnawed > 0 ? Math.min(1, e.c.gnawed / Math.max(1, (YIELD[e.c.kind] || {}).n || 1)) : 0;
+            if (body && e._gnaw !== g) { e._gnaw = g; body.setBlendColor([30, 8, 8, Math.round(110 + 90 * g)]); body.scale.x = 1 - 0.25 * g; if (blood) blood.scale.set(1 + 0.3 * g, 1 + 0.3 * g); }
         }
     }
 
@@ -579,6 +604,6 @@
     P.weapons = { WEAPONS, SPEAR, SHOT_SWING, YIELD, CARCASS, animate: v => { animate = !!v; }, projectiles: () => projectiles, aim: () => aim,
         cooldown: () => cooldown, resetCooldown: () => { cooldown = 0; }, countDown: () => { if (cooldown > 0) cooldown--; }, clearShots: () => { projectiles = []; },
         clearCarcassSprites: () => { carcassSprites = []; }, pickWeapon, shoot, facingVector, faceSlant, startAim, updateAim, fireAimed, endAim, thrust, spearTarget,
-        pressShoot, allTargets, makeNoise, updateProjectiles, hit, kill, dropCarcass, removeCarcass, rotCarcasses, carcasses: () => carcassList(), carcassAhead,
+        pressShoot, allTargets, makeNoise, updateProjectiles, hit, kill, dropCarcass, removeCarcass, rotCarcasses, carcasses: () => carcassList(), carcassAhead, gnawLeft,
         dressCarcass, takeFromSnare, updateCarcassSprites, updateShootKey, Sprite_AimReticle };
 })();

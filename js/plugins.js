@@ -125,6 +125,7 @@ var $plugins =
 {"name":"MenuRing","status":true,"description":"Grafit: menu P jako jedno okno z zakładkami (Postać, Plecak, Dziennik, Opcje, Zapis, Zakończ grę); poziomy jak w RPG Makerze: A/D, O wejdź, P wróć. v3.3.0","parameters":{}},
 {"name":"Equipment","status":true,"description":"Ekwipunek: części ciała (głowa, tors, płaszcz, ręce...), działa tylko to, co założone; zapis w grze. v1.0.0","parameters":{}},
 {"name":"Drops","status":true,"description":"Tobołki: rzeczy wyrzucone z plecaka (menu P, Plecak, X) leżą na ziemi; O na tobołku zabiera je z powrotem. v1.0.0","parameters":{}},
+{"name":"Starcia","status":true,"description":"Starcia: wilki napadają ludzi i obozy, ludzie odpędzają je ogniem, dzik taranuje każdego na swojej linii, niedźwiedź atakuje każdego, kto podejdzie, łucznicy przy obozie polują, mięso na ziemi ściąga wilki, pies walczy obok bohatera. v1.0.0","parameters":{}},
 {"name":"TitleScreen","status":true,"description":"Ekran tytułowy „Kufel przy kominku”: żywy ogień, iskry, świeca i para; napis i menu w stylu Grafit i miedź. v1.0.0","parameters":{"image":"Tawerna_Title_Kufel","subtitle":"Ciepły kąt na krańcu świata"}},
 {"name":"Prologue","status":true,"description":"Prolog „Ostatni prom”: ekran imienia (polskie litery) i film przed pierwszym dniem (wieś, matka, port, sztorm, plaża). v1.0.0","parameters":{"enabled":"true"}}
 ];

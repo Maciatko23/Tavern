@@ -36,9 +36,12 @@
  * (nadwyżkę tak). Noszona rzecz, której ostatnią sztukę wyrzucasz, zdejmuje
  * się sama.
  *
+ * Surowe mięso w tobołku nocą to przynęta: wilki je zwęszą (Starcia.js).
+ *
  * Dla innych wtyczek: Drops.refuse(przedmiot), Drops.maxDrop(przedmiot),
  * Drops.drop(id, ile), Drops.at(mapa, x, y), Drops.list(), Drops.spot(),
- * Drops.pickUp(tobołek), Drops.wornLast(przedmiot, ile).
+ * Drops.pickUp(tobołek), Drops.wornLast(przedmiot, ile), Drops.take(tobołek, id,
+ * ile) - coś innego niż bohater zabiera z tobołka (wilki zjadają mięso).
  */
 
 (() => {
@@ -181,6 +184,22 @@
         rev++;
         return got;
     }
+    // (2026-10-17, Starcia.js) n of item `id` taken out of a bundle by something other than the hero - the wolves eat the meat lying there
+    // (a bait); the oldest pieces go first; the bundle goes when it is empty. b: the bundle or its id. -> how many were taken
+    function take(b, id, n) {
+        const list = all(), live = b && typeof b === "object" ? b : list.find(x => x.id === b);
+        if (!live || !list.includes(live)) return 0;
+        const have = live.items[id] || 0, k = Math.min(have, Math.max(0, Math.floor(Number(n) || 0)));
+        if (k <= 0) return 0;
+        age(live);
+        const fl = live.fresh && live.fresh[id];
+        for (let left = k; fl && fl.length && left > 0;) { const q = Math.min(left, fl[0].n); fl[0].n -= q; left -= q; if (fl[0].n <= 0) fl.shift(); }
+        if (have - k > 0) live.items[id] = have - k;
+        else { delete live.items[id]; if (live.fresh) delete live.fresh[id]; }
+        if (!Object.keys(live.items).length) list.splice(list.indexOf(live), 1);
+        rev++;
+        return k;
+    }
     // O on a bundle: a short crouch, then all of it into the bag
     let busy = false;
     function pickUp(b, opts) {
@@ -266,7 +285,7 @@
     };
 
     window.Drops = T.register(PLUGIN, {
-        PIC, refuse, maxDrop, questNeed, wornLast, drop, pickUp, takeAll, spot, frontTile, canPlace,
+        PIC, refuse, maxDrop, questNeed, wornLast, drop, pickUp, takeAll, take, spot, frontTile, canPlace,
         at: (map, x, y) => at(map, x, y),
         list: () => all().map(b => ({ id: b.id, map: b.map, x: b.x, y: b.y, items: Object.assign({}, b.items) })),
         layer: () => { const s = SceneManager._scene, ss = s && s._spriteset; return ss && ss._dropLayer ? ss._dropLayer._entries.map(e => ({ id: e.b.id, x: e.sprite.x, y: e.sprite.y, pic: PIC })) : []; }

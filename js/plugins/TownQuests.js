@@ -4321,7 +4321,7 @@
                 if (members.length >= st.spawn + more) break;
                 const sx = x + ox, sy = y + oy;
                 if (!$gameMap.isValid(sx, sy) || !$gameMap.checkPassage(sx, sy, 0x0f)) continue;
-                try { const a = H.spawn("wolf", sx, sy); if (a) members.push(a); } catch (e) { report("spawn", e); }
+                try { const a = H.spawn("wolf", sx, sy); if (a) { a._noClash = true; members.push(a); } } catch (e) { report("spawn", e); }   // (_noClash: the hero's to kill - no bandit's or boar's fight - Starcia.js)
             }
             if (st.leader && members[0]) { const a = members[0]; a._tqLeader = true; a._qbScale = 1.3; a._qbName = "Przewodnik watahy"; a._qbTone = [40, 0, -10, 0]; }
             if (members.length > 1 && typeof H.makePack === "function") { try { H.makePack(members); } catch (e) { /* (alone, then) */ } }

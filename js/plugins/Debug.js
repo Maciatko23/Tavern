@@ -27,6 +27,9 @@
  *      - "Bandyta w pobliżu", "Nożownik w pobliżu", "Łucznik w pobliżu", "Najemnik w pobliżu", "Zasadzka (2 bandytów i łucznik)",
  *        "Obóz bandytów (noc)", "Napad na śpiącego (bandyci)" (Humans.js, etap 3 walki): ludzie-wrogowie kilka pól od bohatera;
  *        obóz 9-16 pól dalej (w dzień zegar idzie na 22:00); napad - grupa, która przyszłaby po śpiącego, od razu w walce.
+ *      - "Wilki przy obozie bandytów (noc)", "Dzik i bandyta", "Niedźwiedź i bandyta" (Starcia.js): zwierzęta i ludzie walczą
+ *        ze sobą kilka pól od bohatera - obóz z ogniskiem i wataha, która pod niego podchodzi (w dzień zegar idzie na 22:00);
+ *        bandyta z dzikiem / niedźwiedziem, który go zauważył.
  *      - "Stwór z ruin: ..." i "Boss podziemi: ..." (Creatures.js, etap 4 walki): ←→ wybiera rodzaj / bossa, OK przywołuje go
  *        4-7 pól od bohatera (na piętrze 10 "Strażnik dziesiątej bramy" to walka ze strażnikiem przy bramie).
  *   2. Budowanie: "Postaw: ..." (każda budowla z Farming.js): wraca na mapę w zwykłym trybie stawiania (strzałki,
@@ -318,6 +321,11 @@
                 { tab: 0, kind: "h_ambush", label: "Zasadzka (2 bandytów i łucznik)", icon: 76 },
                 { tab: 0, kind: "h_camp", label: "Obóz bandytów (noc)", icon: 64 },
                 { tab: 0, kind: "h_raid", label: "Napad na śpiącego (bandyci)", icon: 64 });
+        }
+        if (window.Starcia && window.Humans && window.Hunting) {   // Starcia.js: the beasts and the men fight each other (watch it from aside)
+            rows.push({ tab: 0, kind: "st_camp", label: "Wilki przy obozie bandytów (noc)", icon: 416 },
+                { tab: 0, kind: "st_boar", label: "Dzik i bandyta", icon: 416 },
+                { tab: 0, kind: "st_bear", label: "Niedźwiedź i bandyta", icon: $dataItems[170] ? $dataItems[170].iconIndex : 416 });
         }
         if (window.Creatures) rows.push({ tab: 0, kind: "cr_kind", pick: 0, label: crLabel("cr_kind", 0), icon: 189 },   // Creatures.js: one of the 8 kinds
             { tab: 0, kind: "cr_boss", pick: 0, label: crLabel("cr_boss", 0), icon: 189 });   // a boss (the guardian, floors 20-90)
@@ -700,6 +708,9 @@
         } else if (/^h_/.test(row.kind)) {   // Humans.js: spawned once the map is back
             this.popScene();
             Humans.pending = row.kind.slice(2);
+        } else if (/^st_/.test(row.kind)) {   // Starcia.js: the beasts and the men, once the map is back
+            this.popScene();
+            Starcia.pending = row.kind.slice(3);
         } else if (row.kind === "cr_kind" || row.kind === "cr_boss") {   // Creatures.js: spawned once the map is back
             this.popScene();
             Creatures.pending = crKeys(row.kind)[row.pick];

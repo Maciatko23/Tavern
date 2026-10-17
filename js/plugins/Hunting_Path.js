@@ -302,11 +302,16 @@
     // How far each tile near the hero is from him on foot (for a wild animal; tiles further than `reach` steps are Infinity): a search
     // out from the tiles round him (his own may be no floor - he can stand half on a wall), kept while he stays on his tile, for some
     // frames. A place "round him" across a wall, out on the map's edge behind it, is far from him on foot.
-    const heroFieldCache = { key: "", t: -1e9, dist: null };
+    // (2026-10-17, Starcia.js: a pack may fight a man or the dog - "him" is then the one it fights, so a few fields are kept, one per centre)
+    const heroFieldCaches = [];
     function heroField(reach) {
         const G = pathGrid(), hx = $gamePlayer.x, hy = $gamePlayer.y, now = Graphics.frameCount, key = G.mapId + ":" + hx + "," + hy + ":" + reach;
-        const F = heroFieldCache;
-        if (F.key === key && now - F.t < 30 && now >= F.t && F.dist && F.dist.length === G.w * G.h) return F.dist;
+        let F = heroFieldCaches.find(c => c.key === key);
+        if (F && now - F.t < 30 && now >= F.t && F.dist && F.dist.length === G.w * G.h) return F.dist;
+        if (!F) {
+            F = heroFieldCaches.length < 4 ? { key: "", t: -1e9, dist: null } : heroFieldCaches.reduce((a, b) => (a.t <= b.t ? a : b));   // (the oldest goes)
+            if (!heroFieldCaches.includes(F)) heroFieldCaches.push(F);
+        }
         const n = G.w * G.h, dist = F.dist && F.dist.length === n ? F.dist : new Float32Array(n), S4 = G.s4a, open = [];
         dist.fill(Infinity);
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {

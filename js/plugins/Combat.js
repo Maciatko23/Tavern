@@ -536,9 +536,10 @@
         return got > 0 ? { text: "+" + got + " dośw.", color: "#c9a6ff" } : null;
     });
     // a beaten animal (Hunting.js's "kill": the hero's blow or shot, the dog's bite)
-    // (noXp: a man already paid for when he gave up - Humans.js)
+    // (noXp: a man already paid for when he gave up - Humans.js; 2026-10-17, Starcia.js: another's kill - a wolf's, a bandit's arrow, the
+    // boar's charge - gives him nothing: only his own and his dog's)
     T.on("kill", e => {
-        if (e.noXp) return;
+        if (e.noXp || (e.by && e.by !== "hero" && e.by !== "dog")) return;
         const H = T.api("Hunting");
         gainXp(killXp(e.kind, e.level), e.name || ((H && H.SPECIES[e.kind]) || {}).name);
     }, { owner: "Combat" });

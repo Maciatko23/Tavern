@@ -47,6 +47,15 @@
     const atkOf = a => Math.round((SPECIES[a.kind()].atk || 10) * (1 + 0.12 * ((a._level || 1) - 1)));
     // the wind-ups' length by the difficulty of the fight (Combat_Feel.js windupK: Łatwy 1.3, Normalny 1, Trudny 0.85)
     const tk = () => { const Cb = C(), f = Cb && Cb.feel; return f && f.windupK ? f.windupK() : 1; };
+    // Whom its blow lands on (2026-10-17, Starcia.js - the animals and the men fight each other): a._clash is another it fights (a man, the
+    // dog); while it thinks Starcia.js lets that one stand in for the hero, and the blow goes to that one's takeHit (no roll, guard or parry of
+    // the hero's there). Without one the hero's defence decides, as always (Combat.hitPlayer).
+    function hitTarget(animal, opts) {
+        const f = animal._clash;
+        if (f && typeof f.takeHit === "function") return f.takeHit(Object.assign({}, opts, { from: animal }));
+        const Cb = C();
+        return Cb && Cb.hitPlayer ? Cb.hitPlayer(opts) : null;
+    }
     // the boar's temper, in frames: the warning before a charge (it stands, snorts and shows "!"), the longest charge, the run
     // back after a hit, the stagger after taking a spear
     // commit: tiles from the hero at which the charge locks its line and goes straight on; overshoot: how far past him it runs when
@@ -551,10 +560,10 @@
     function gore(animal) {
         const sp = SPECIES[animal.kind()];
         const Cb = C();
-        if (Cb && Cb.hitPlayer) {   // the hero's defence decides (a roll, a guard, a parry)
+        if (animal._clash || (Cb && Cb.hitPlayer)) {   // the hero's defence decides (a roll, a guard, a parry) - or the one it charged (Starcia.js)
             // (2026-10-14, the user's: as first designed - "przewrotem w bok": no shield and no parry holds the charge, like the bear's blows;
             // a guard raised for nothing says so - Combat.hitPlayer "Tego nie zatrzymasz!")
-            const res = Cb.hitPlayer({ damage: atkOf(animal), poise: 75, from: { x: animal.centerX(), y: animal.centerY() }, attacker: animal, name: "dzik", wound: 0.7, knock: 0.9,
+            const res = hitTarget(animal, { damage: atkOf(animal), poise: 75, from: { x: animal.centerX(), y: animal.centerY() }, attacker: animal, name: "dzik", wound: 0.7, knock: 0.9,
                 unblockable: true, unparryable: true });
             if (res === "dodged") { animal.startOvershoot(); return; }
             if (res === "parried") return;   // (it reels: onParried)
@@ -689,8 +698,8 @@
     function bite(wolf) {
         se("Bite", 90, 100);
         const Cb = C();
-        if (Cb && Cb.hitPlayer) {
-            Cb.hitPlayer({ damage: atkOf(wolf), poise: 30, from: { x: wolf.centerX(), y: wolf.centerY() }, attacker: wolf, name: "wilk", wound: 0.3, knock: 0.6 });
+        if (wolf._clash || (Cb && Cb.hitPlayer)) {   // (the one it leapt at: the hero, or a man / the dog - Starcia.js)
+            hitTarget(wolf, { damage: atkOf(wolf), poise: 30, from: { x: wolf.centerX(), y: wolf.centerY() }, attacker: wolf, name: "wilk", wound: 0.3, knock: 0.6 });
             return;
         }
         if (typeof $gameSystem.hurt === "function") $gameSystem.hurt(0.12);
@@ -1105,7 +1114,7 @@
     };
     // the hero is its enemy now: it comes (a bear met - the journal counts the ones lived through)
     Game_Animal.prototype.bearEngage = function() {
-        if (!this._met) { this._met = true; bears().met++; }
+        if (!this._met && !this._clash) { this._met = true; bears().met++; }   // (a man it goes for - Starcia.js - is no meeting of the hero's)
         this._engaged = true;
         this._f8 = 0;
         this._aware = 1;
@@ -1198,8 +1207,8 @@
         if (d > S.reach || (d > 0.3 && (hx * lx + hy * ly) / d < S.cone)) return false;   // (out of its reach or beside it: the paw goes through the air)
         se("Blow2", 85, 70, pan);
         const Cb = C();
-        if (Cb && Cb.hitPlayer) {
-            Cb.hitPlayer({ damage: Math.round(atkOf(bear) * S.mult), poise: S.poise, from: { x: bear.centerX(), y: bear.centerY() }, attacker: bear, name: "niedźwiedź",
+        if (bear._clash || (Cb && Cb.hitPlayer)) {
+            hitTarget(bear, { damage: Math.round(atkOf(bear) * S.mult), poise: S.poise, from: { x: bear.centerX(), y: bear.centerY() }, attacker: bear, name: "niedźwiedź",
                 wound: S.wound, knock: S.knock, unblockable: true, unparryable: true });
             return true;
         }
@@ -1248,8 +1257,8 @@
     function bearPin(bear) {
         const P2 = BEAR_AI.pin, Cb = C();
         se("Blow6", 95, 60);
-        if (Cb && Cb.hitPlayer) {
-            const res = Cb.hitPlayer({ damage: Math.round(atkOf(bear) * P2.mult), poise: 9999, down: P2.down, from: { x: bear.centerX(), y: bear.centerY() }, attacker: bear,
+        if (bear._clash || (Cb && Cb.hitPlayer)) {
+            const res = hitTarget(bear, { damage: Math.round(atkOf(bear) * P2.mult), poise: 9999, down: P2.down, from: { x: bear.centerX(), y: bear.centerY() }, attacker: bear,
                 name: "niedźwiedź", wound: P2.wound, knock: 0.3, unblockable: true, unparryable: true });
             bear._pinHit = res === "hit";
             if (bear._pinHit) $gameScreen.startShake(7, 9, 18);
@@ -1269,5 +1278,5 @@
     }
 
     P.ai = { BOAR, LURE, BEAR_AI, Game_Animal, atkOf, makePack, wolfEngage, disengage, gore, enrage, stagger, knockBack, snort, bite, bearSwipe, bearPin,
-        bearEngage: bear => bear.bearEngage() };
+        bearEngage: bear => bear.bearEngage(), hitTarget, ATTACKING };
 })();

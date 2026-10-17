@@ -514,7 +514,7 @@
         return d.track;
     }
 
-    // kills: Hunting.js tells every one on the bus (the hero's, the dog's)
+    // kills: Hunting.js tells every one on the bus (the hero's, the dog's - and since 2026-10-17 the beasts' and the men's: not counted)
     function onKill(animal) {
         if (!hasState() || !animal || !$gameMap) return;
         const kind = animal.kind ? animal.kind() : null, map = $gameMap.mapId();
@@ -532,7 +532,7 @@
             }
         }
     }
-    T.on("kill", e => onKill(e.animal), { owner: PLUGIN });
+    T.on("kill", e => { if (!e.by || e.by === "hero" || e.by === "dog") onKill(e.animal); }, { owner: PLUGIN });   // (not another's kill - Starcia.js)
 
     // ------------------------------------------------------------------
     // On the map: the terms, a new board, "you have everything", the wanted animals - every 30 frames (scene._qbT counts the map
