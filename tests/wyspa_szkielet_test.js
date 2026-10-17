@@ -74,10 +74,12 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         list: TownQuestsData.VITEMS.list && TownQuestsData.VITEMS.list.name, want: Object.values(WyspaData.PACKAGES).map(p => [p.owner, p.quests.join()]),
         has: Object.values(WyspaData.QUESTS).length === Object.keys(WyspaData.QUESTS).filter(id => !!TownQuests.Q[id]).length }; })()`);
     const testPacks = tq.packs.filter(p => /^Test/.test(p.owner)), owners = tq.packs.map(p => p.owner + ":" + p.quests.join());
+    // (the island's own packs only: other plugins add theirs to TownQuestsData.PACKS too - Kantor:W5, Dwor:W7 - and so does this test)
+    const islandOwners = new Set(tq.want.map(([o]) => o)), islandPacks = tq.packs.filter(p => islandOwners.has(p.owner));
     t.check("TownQuestsPacks: zadanie K99 i rzecz v:wyspa_test dochodzą; zajęte K1 i v:list zostają takie, jak były",
         tq.k99 && tq.k1 !== "Test K1" && tq.vitem === "Testowa rzecz" && tq.list !== "dubel" && testPacks.length === 2 && testPacks[0].quests.join() === "K99", { testPacks, k1: tq.k1 });
     t.check("...i paczki sześciu pakietów (K49-K53, D22-D28, W11, W12) - każdy ze swoimi zadaniami, wszystkie w TownQuests",
-        tq.packs.length === 8 && tq.want.every(([o, q]) => owners.includes(o + ":" + q)) && tq.has, { owners, want: tq.want });
+        tq.want.length === 6 && islandOwners.size === 6 && islandPacks.length === 6 && tq.want.every(([o, q]) => owners.includes(o + ":" + q)) && tq.has, { owners, want: tq.want });
 
     // ---------------------------------------------------------------- przejścia z map użytkownika (dopiero gdy miejsce gotowe)
     await t.eval(`TownLifeData.SPOTS_BY_MAP[155] = Object.assign(TownLifeData.SPOTS_BY_MAP[155] || {}, { nigdzie: [24, 30, 2] }); 0`);   // (miejsce testowego mieszkańca)

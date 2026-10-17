@@ -1,6 +1,9 @@
 // The town's east gate to the Lord's manor (user 2026-10-04, tools/town/east_gate.py): on the crafts terrace, between two towers,
 // the light path through it to the map's edge; the fire baskets' pillars blocked (RegionLayers region 2), the gate cells free;
 // walking right through it -> Map024 (1,14), walking left off the manor road's third row -> back in the gate (50,51).
+// The towers: the north one's (50,49) and the south one's body (50,53) are blocked. The south tower's top row (50-51,52) has been
+// region 3 since the user's repaint of Map008 (commit 0a9682c, 2026-10-15: bands of region 3 on rows 30/33/41/52) - drawn over
+// the hero, who walks behind it - so that cell is not asked any more.
 // Shots: docs/miasteczko/brama_lorda.png (noon), brama_lorda_noc.png (night).
 const path = require("path");
 const kit = require("./lib/kit.js");
@@ -15,7 +18,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     };
     await t.newGame({ map: 8, x: 46, y: 50, dir: 6, hour: 12, quiet: true });
     const cells = await t.json(`(function(){ const p = (x, y) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d));
-        return { gate: [p(50, 50), p(51, 50), p(50, 51), p(51, 51)], pillars: [p(49, 49), p(49, 53)], towers: [p(50, 49), p(50, 52)],
+        return { gate: [p(50, 50), p(51, 50), p(50, 51), p(51, 51)], pillars: [p(49, 49), p(49, 53)], towers: [p(50, 49), p(50, 53)],
                  exits: $gameMap.events().filter(e => /Posiadłość Lorda/.test(e.event().name)).map(e => [e.x, e.y]),
                  banners: $gameMap.events().filter(e => /Chorągiew Lorda/.test(e.event().name)).length }; })()`);
     t.check("the gate's four cells are free, the fire baskets' pillars and the towers beside it are not", cells.gate.every(Boolean) && !cells.pillars.some(Boolean) && !cells.towers.some(Boolean), cells);

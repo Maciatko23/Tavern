@@ -55,7 +55,9 @@ fs.mkdirSync(OUT, { recursive: true });
         await frames(30);
         const kinds = await ev(`(function(){ const n = {}; let loading = 0; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) { const k = Farming.gatherSpot(x, y); if (k === undefined) loading++; else if (k) n[k] = (n[k] || 0) + 1; } return { n, loading }; })()`);
         console.log("things on the ground:", JSON.stringify(kinds));
-        check("Map003 has plenty of branches, stones and flax on the ground", kinds.n.branch >= 15 && kinds.n.stone >= 15 && kinds.n.fiber >= 10, kinds);
+        // (since 2026-10-07 half of the ground things are gone on purpose - Farming GROUND_KEEP 0.5 - and the user edits Map003 by hand:
+        // 35 -> 15 -> 13 branch spots. Enough means the hammer + the workbench: 15 branches, 6 stones, 7 flax at 1-2 a spot, back in 3 days)
+        check("Map003 has plenty of branches, stones and flax on the ground", kinds.n.branch >= 10 && kinds.n.stone >= 10 && kinds.n.fiber >= 8, kinds);
         const spot = await ev(`(function(){ for (let y = 3; y < $gameMap.height() - 3; y++) for (let x = 3; x < $gameMap.width() - 3; x++) { if (Farming.gatherAt(x, y) === "branch" && $gameMap.checkPassage(x, y + 1, 0x0f) && !$gameMap.eventsXy(x, y + 1).length) return { x, y }; } return null; })()`);
         check("found a branch on the grass", !!spot, spot);
         await ev(`$gamePlayer.locate(${spot.x}, ${spot.y + 1}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${spot.x} - 13, ${spot.y} - 7); 0`);

@@ -1,5 +1,6 @@
 // Tests building sites: the marked place, walking up with a hammer, one blow per press, stamina, cancel.
 const { launch, sleep } = require("./cdp.js");
+const { QUIET } = require("./lib/kit.js");
 (async () => {
     const b = await launch({ width: 2560, height: 1440, dpr: 0.5 });
     const ev = e => b.evaluate(e);
@@ -12,6 +13,9 @@ const { launch, sleep } = require("./cdp.js");
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(11); 0");
+        // all that moves by itself off (kit.js QUIET): a bear may walk out of the forest on Map003 (Hunting BEAR_SPAWN, 10% an hour) -
+        // in a full run one did, and its blows' wound (Survival WOUND_CAP 60%) cut the stamina the blows are counted by (spent 46, not 10)
+        await ev("(function(){ " + QUIET + " return 0; })()");
         await sleep(600);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const press = async k => { await ev(`Input._currentState.${k} = true; 0`); await frames(2); await ev(`Input._currentState.${k} = false; 0`); await frames(2); };

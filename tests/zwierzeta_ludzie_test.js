@@ -272,7 +272,11 @@ kit.test({ port: 9513 }, async t => {
         Fr.last = [s.mode, s.hp, s.arrows];
         if (Fr.roast) break;
     }
-    const Fs = await t.json(`({ spit: !!(SceneManager._scene._spriteset._starciaLayer && SceneManager._scene._spriteset._starciaLayer._spit), kill: __kills.filter(k => k.kind === 'rabbit').pop() || null })`);
+    // (the spit is made by the layer's update, a frame after camp.roast is set - Scene_Map updates its sprites before the map: under
+    // load the check could come between the two, so it waits for the sprite a little)
+    const spitExpr = "!!(SceneManager._scene._spriteset._starciaLayer && SceneManager._scene._spriteset._starciaLayer._spit)";
+    if (Fr.roast) await t.until(spitExpr, 5, 50);
+    const Fs = await t.json(`({ spit: ${spitExpr}, kill: __kills.filter(k => k.kind === 'rabbit').pop() || null })`);
     if (SHOTS) { await t.eval("__cam(__F.camp.x, __F.camp.y)"); await shot("05_lucznik_upolowal_rozen.png"); }
     t.check("the arrow kills it (the kill by 'human', no experience), he fetches the carcass, the meat goes on the spit over the fire (drawn)",
         Fr.dead && Fr.roast && Fs.spit && Fs.kill && Fs.kill.by === "human" && Fs.kill.noXp && !Fr.band, Object.assign({}, Fr, Fs));
