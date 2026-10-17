@@ -81,6 +81,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
             if (f.busts.on) s.busts++;
             if (f.busts.speaking === "hero") s.hero++;
             if (f.busts.speaking === "matka") s.mother++;
+            if (f.busts.hero) s.heroBust = f.busts.hero;
             for (const fl of f.flags || []) {   // (the banners: a waving mesh - how far its points are from flat, sample by sample)
                 s.flags = s.flags || {};
                 const v = s.flags[fl.pic] || (s.flags[fl.pic] = []);
@@ -100,6 +101,8 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     t.check("wszystkie sceny po kolei: kronika, wieś, chata, port, sztorm, plaża", run && JSON.stringify(run.log) === JSON.stringify(["kronika", "wies", "chata", "port", "sztorm", "plaza"]) && !run.all && run.skipped === 0, run);
     t.check("wieś: ogień miga (światła na planszy), dymki nad ludźmi", seen.wies && seen.wies.glow >= 5 && seen.wies.bubble > 0, seen.wies);
     t.check("chata: rozmowa z popiersiami matki i bohatera", seen.chata && seen.chata.busts > 0 && seen.chata.mother > 0 && seen.chata.hero > 0, seen.chata);
+    // (2026-10-17) on the mainland, before the storm, the hero's bust is the clean one: whole clothes, no patches (Hero_Bust_Lad)
+    t.check("chata: bohater w czystym ubraniu sprzed sztormu (Hero_Bust_Lad, nie połatane Hero_Bust)", seen.chata && seen.chata.heroBust === "Hero_Bust_Lad", seen.chata);
     t.check("port: deszcz i dymki (przemytnik)", seen.port && seen.port.rain > 0 && seen.port.bubble > 0, seen.port);
     t.check("sztorm: ulewa i kołysanie pokładu", seen.sztorm && seen.sztorm.rain >= 300 && seen.sztorm.rot > 0, seen.sztorm);
     t.check("plaża: mgła i myśli bohatera", seen.plaza && seen.plaza.mist === 2 && seen.plaza.bubble > 0, seen.plaza);

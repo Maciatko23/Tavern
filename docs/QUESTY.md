@@ -334,8 +334,24 @@ notatka Lorda o kamieniach pod tawerną). 1) Borgar przy barze oddaje pół kluc
 zakopał z pradziadkiem Stacha przy kamiennym kopcu z krukiem na podwórzu dziadka. 2) Kopanie łopatą u stóp kopca (Map020, 8,6).
 3) Tadek łączy połówki (żelazo i węgiel) - „Klucz kasztelana” nazajutrz rano. 4) Klucz otwiera starą kratę zakonu w piwnicy
 (Map009 15,2; przełącznik 11 Podziemia_Zejscie). 5) Borgar słyszy o tym i mówi zdanie swojego rodu: „Nie pytam o to, czego nie chcę
-wiedzieć.” - te same słowa, których żąda strażnik dziesiątej bramy (docs/PODZIEMIA.md). Rozdz. 5 i 7–8 z listy wyżej (Lord, konfrontacja,
-Komnata Serca) czekają.
+wiedzieć.” - te same słowa, których żąda strażnik dziesiątej bramy (docs/PODZIEMIA.md).
+
+*W grze od 2026-10-17 - rozdziały 6–8 (`Kasztelan.js`, zdarzenia wstrzykiwane 540–559; mapa tawerny Map001 autora bez zmian - Borgar, lada i drzwi
+tawerny w mieście odpowiadają w kodzie):* 6) **Ród Kowali** - trzy poszlaki z siedmiu: zapiski zakonu w podziemiach (napis w murze - piętro 3, „Kasztelan
+Kowal” - 6, „Ostatni wpis” - 10: „Słowa zna tylko krew kasztelana - niech je powtarza, choćby jako żart przy piwie”, list przeora do kasztelana - 20, lista
+kasztelanów - 24 albo kroniki z Archiwum z W2), brat Kleofas (pokazany klucz: straż klucza „zamyka i nie pyta”, przysięga klucznika - „Ciekawy klucznik to
+otwarte drzwi”) i dziadek Stach („Kruk u nas, klucz u Kowali” - ród kruczarzy przechował połowę dla Kowali). Skąd nawyk Borgara: ostatni przeor kazał
+strażom zapomnieć, po co strzegą, i zostawić same słowa. 7) **Konfrontacja** - dopiero po rozdziale 1 (spłata albo strata pola - 6.2) i po zamknięciu
+(23–1, przy barze): „Powiedz mu wszystko.” / „Przemilcz. To jego tawerna.” / „Nie teraz.”. Przemilczane: Borgar dalej nie wie (przy Sercu go nie ma).
+Powiedziane: wściekłość i zamknięta tawerna na następny dzień (drzwi w mieście zamknięte, bez zmiany), następnej nocy Borgar czeka w piwnicy przy kracie -
+babka kazała mu „pilnować piwnicy i nie pytać”. Nie dublujemy scen: kto zaśpiewał mu pieśń (W3 „tylko dla Borgara”) albo powiedział o jego nocach (W9),
+ten słyszy to samo od razu, bez złości; jego noce powiedziane w tej rozmowie liczą się jako prawda W9. Potem „Chodź ze mną w dół”: idzie, gdy ufa
+(dwa z: pieśń dla niego, jego noce powiedziane, dwanaście zmian albo Sława 40; „powiem wszystko” Lordowi z W7 liczy się przeciw) - albo odmawia i pilnuje
+kraty: „zejdziesz - nie wracaj do pracy” (zmiany wracają po oblężeniu z Aktu III). „Zostań. Pilnuj piwnicy” - pilnuje bez ostrzeżenia. 8) **Komnata
+Serca** - klucz otwiera ostatnie drzwi; wątek kończy dowolne zakończenie. Borgar, który poszedł w dół, co noc (1–5) pali ogień przy dziesiątej bramie
+(kosz z chlebem i wodą), w Akcie III jest wytrzymalszy, a przy Sercu wchodzi do Komnaty i może zostać strażnikiem zamiast bohatera; strażnik kraty
+siedzi nocą w piwnicy, a stare drzwi tawerny trzymają w Akcie III lepiej. Rozdz. 5 z listy wyżej („Lord chce być pierwszy”) zrobił W7 (rozdz. 6,
+„Do kogo najpierw”, `Dwor.js`) - W4 czyta jego wynik. Rozdz. 6 z listy („Kucie nocą”) to kuźnia Tadka z wersji zwartej. Test `tests/w4_borgar_test.js`.
 
 ### W5. Towary z kontynentu
 

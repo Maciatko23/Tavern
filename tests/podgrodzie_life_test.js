@@ -68,4 +68,25 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         const home = await t.json(`(function(){ const o = {}; for (const k of ["praczka", "franek"]) { const e = TownLife.eventOf(k); o[k] = e ? [e.x, e.y, e._town.hidden] : null; } return o; })()`);
         t.check("...at night Marta and Franek are seen inside it", home.praczka && home.franek && home.praczka[2] === false && home.franek[2] === false, home);
     }
+
+    // (2026-10-17) "inside skraj_lasu" is the forest, not home: at night Rysiek is not in his hut (Map114) but by his snares on Skraj
+    // lasu (Map023, TownLifeData.SPOTS_BY_MAP[23].klusownik_las), speaking his forest lines; Zbych, gone to the forest at noon, is not
+    // in his hut (Map113) then either
+    await t.setHour(23);
+    await t.go(114, 3, 5, 8);
+    await t.frames(20);
+    const hut = await t.json(`(function(){ const e = TownLife.eventOf("klusownik"); return e ? !!e._town.hidden : "none"; })()`);
+    await t.go(23, 18, 23, 6);
+    await t.frames(20);
+    const forest = await t.json(`(function(){ const e = TownLife.eventOf("klusownik"), sp = TownLifeData.SPOTS_BY_MAP[23].klusownik_las;
+        return e ? { at: [e.x, e.y], spot: sp, hidden: !!e._town.hidden } : null; })()`);
+    const said = forest && !forest.hidden ? await t.talkTo("TownLife.eventOf('klusownik')", []) : { text: "" };
+    t.check("at night Rysiek is not in his hut but by his snares on Skraj lasu (Map023), with his forest lines",
+        hut !== false && !!forest && !forest.hidden && forest.at[0] === forest.spot[0] && forest.at[1] === forest.spot[1] && /Cicho!|źródło|pętlę/.test(said.text),
+        { hut, forest, text: said.text });
+    await t.setHour(12);
+    await t.go(113, 3, 5, 8);
+    await t.frames(20);
+    const zbych = await t.json(`(function(){ const e = TownLife.eventOf("drwal"); return e ? !!e._town.hidden : "none"; })()`);
+    t.check("...and at noon Zbych (in the forest for wood) is not in his hut", zbych !== false, zbych);
 });

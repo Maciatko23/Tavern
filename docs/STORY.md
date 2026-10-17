@@ -77,6 +77,10 @@ puste = „Reid”), potem tylko ogląda. Można pominąć scenę (krótko P) al
 - **Rodzina.** Bohater jest jedynakiem. **Ojciec** zaginął na wojnie. **Matka** zostaje na lądzie, żeby iść za wojskiem i szukać ojca.
   Pakuje synowi tobołek, daje **list do swojego ojca, dziadka Stacha** na Kruczej Wyspie, i **wisiorek z krukiem**: rodzinną pamiątkę,
   „dał mi go mój ojciec, kiedy wyjeżdżałam z wyspy” (matka pochodzi z Kruczej Wyspy, wisiorek jest z rodu Stacha). Obiecuje przypłynąć **następnym promem**. Nie przypływa - wątek otwarty.
+  *(Od 2026-10-17 w grze - W10, Przystan.js: matka pisze trzy listy. Idzie z taborem na północ, pierze i gotuje dla taboru, szuka ojca:
+  najpierw dwie wieści - obóz jeńców za rzeką albo wojsko w górach; w ostatnim liście widziała pas ojca na innym żołnierzu, wygrany
+  w kości od żywego jeńca, a jeńców pędzą na północ do kopalni soli. Ostrzega przed ludźmi z białym okiem pod płaszczem, którzy pytają
+  o kruki. Ojciec nie odnaleziony - wątek dalej otwarty.)*
 - **Port.** Prom zajęło wojsko. **Przemytnik** (siwa broda, kaptur z woskowanego płótna, złoty kolczyk) zabiera chłopca kutrem za
   ostatnie monety. Sztorm rozbija kuter; czy przemytnik przeżył - nie wiadomo. Pojawi się później na przystani wyspy.
 - **Sztorm.** Na maszcie kutra siada kruk i nie odlatuje (znak: kruki Zakonu, Urwisko Kruków). Wielka fala, ciemność.
@@ -197,6 +201,11 @@ Istniejący NPC-e z tawerny nie są przypadkowi — każdy dostaje rolę w fabul
   jak żart, nie wiedząc, że to dosłowna zasada przetrwania jego przodków.
   Jego łuk fabularny: od "to tylko stara plotka" do konfrontacji z rodzinną
   tajemnicą.
+  *(W grze od 2026-10-17 - W4 „Krew kasztelana” rozdz. 6–8, `Kasztelan.js`: ostatni kasztelan, Bogumił z rodu
+  Kowali, był też klucznikiem straży klucza; jego przysięga brzmiała „Nie pytam o to, czego nie chcę wiedzieć” -
+  ostatni przeor kazał strażom zapomnieć, po co strzegą, i zostawić same słowa, „choćby jako żart przy piwie”.
+  Babka kazała Borgarowi „pilnować piwnicy i nie pytać”. Bohater mówi mu prawdę albo ją przemilcza; Borgar idzie
+  z nim w dół (przy Sercu może zostać strażnikiem) albo pilnuje kraty w piwnicy.)*
 - **Melia Srebrogłosa (Bard)** — jej ballady zawierają fragmenty prawdziwej
   historii — sama nie wie, skąd je zna, i traktuje je jako "natchnienie".
   Naturalne źródło poszlak podawanych "w przebraniu" piosenki.

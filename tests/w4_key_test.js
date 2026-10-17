@@ -3,7 +3,8 @@
 // of the iron key that hangs over the bar "na szczęście"; the other half lies buried at the foot of the stone cairn with the raven in
 // grandpa's yard (Map020; a spade); Tadek joins the halves at the forge (iron and charcoal, the next morning) - "Klucz kasztelana";
 // the key opens the grate (Map009 15,2 - Underground.open(): switch 11, the way down to the castle's ruins); the grate's locked text
-// hints at the key while W4 runs. Last, Borgar hears of it and says his family's saying - the floor-10 guardian's password. Port 9463.
+// hints at the key while W4 runs. Last, Borgar hears of it and says his family's saying - the floor-10 guardian's password; then
+// chapter 6 of Kasztelan.js begins (tests/w4_borgar_test.js goes on from there). Port 9463.
 const path = require("path");
 const kit = require("./lib/kit.js");
 const SHOTS = path.join(__dirname, "..", "docs", "podziemia");
@@ -83,9 +84,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.go(1, 52, 31, 8);
     await at(22, 12, 30);
     const b2 = await talk("$gameMap.event(1)", ["Krata w piwnicy", "Nie teraz"]);
-    const fin = await J("({ r: TownQuests.rec('W4'), q: TownQuests.Q.W4.steps[TownQuests.rec('W4').step].type, f: TownQuests.state().flags.borgarSaying, note: (Journal.data().notes.find(n => n.title === 'Słowa Borgara') || {}).text || '' })");
-    t.check("d. Borgar goes quiet, then: 'Nie pytam o to, czego nie chcę wiedzieć.' - the guardian's password heard; the note; W4 waits for Act III",
-        /Nie pytam o to, czego nie chcę wiedzieć\./.test(b2.text) && fin.f && fin.q === "pause" && /Nie pytam o to, czego nie chcę wiedzieć/.test(fin.note), { text: b2.text.slice(-300), fin });
+    const fin = await J("({ r: TownQuests.rec('W4'), q: TownQuests.Q.W4.steps[TownQuests.rec('W4').step], f: TownQuests.state().flags.borgarSaying, note: (Journal.data().notes.find(n => n.title === 'Słowa Borgara') || {}).text || '' })");
+    t.check("d. Borgar goes quiet, then: 'Nie pytam o to, czego nie chcę wiedzieć.' - the guardian's password heard; the note; W4 goes on (2026-10-17, Kasztelan.js): chapter 6 'Ród Kowali'",
+        /Nie pytam o to, czego nie chcę wiedzieć\./.test(b2.text) && fin.f && fin.q.ch === 6 && fin.q.check === "w4Rod" && /Nie pytam o to, czego nie chcę wiedzieć/.test(fin.note), { text: b2.text.slice(-300), fin });
     const it = await J("(function(){ const x = TownQuests.journalItems().find(i => i.quest && i.quest.id === 'W4'); return x ? { right: x.right, ops: TownQuests.journalOps(x).map(o => o.text || '').join(' | ') } : null; })()");
-    t.check("the journal (Miasteczko): the arc with its chapters done and the next one 'wkrótce'", it && it.right === "wkrótce" && /Rozdział 6/.test(it.ops), it);
+    t.check("the journal (Miasteczko): the arc with its chapters done and the next one - chapter 6, the clues of Borgar's blood",
+        it && it.right === "wątek" && /Rozdział 6/.test(it.ops) && /Kowale z twierdzy/.test(it.ops) && /Poszlaki: \d z 3/.test(it.ops), it);
 });

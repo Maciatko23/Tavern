@@ -111,7 +111,10 @@
     // damage, the ones there go in (they join the next wave inside). The old door broken: each man there goes down into the cellar
     // (`down` damage each) - the faction is under the tavern
     // ---------------------------------------------------------------------------------------------------------------------------
-    const DOORS = { 8: { hp: 100, every: 30, per: 1, breach: 20 }, 1: { hp: 100, every: 36, per: 1, down: 35 } };
+    // (2026-10-17, W4 "Krew kasztelana" - Kasztelan.js) Borgar keeps the cellar's grate (flag borgarPilnuje): the men through the old
+    // door are held on the cellar's stairs - less damage each
+    const qflags = () => { try { const q = window.TownQuests; return (q && q.state && q.state() && q.state().flags) || {}; } catch (e) { return {}; } };
+    const DOORS = { 8: { hp: 100, every: 30, per: 1, breach: 20 }, 1: { hp: 100, every: 36, per: 1, get down() { return qflags().borgarPilnuje ? 20 : 35; } } };
     // the outcome: damage 0-100 (the doors, the fires, the men who got through); held: under `held` and at most `heldLost` defenders
     // down (or `heldPart` of those who fought, whichever is more); fallen: `fallen` and more; costly: the rest. The hero beaten (robbed, not killed - Humans.js): the defenders left finish it
     // (their strength against the men left - POWER) - costly when they hold, fallen when not
@@ -135,9 +138,16 @@
     // he comes (c: the state of the town - see Act3.js ctx())
     // ---------------------------------------------------------------------------------------------------------------------------
     const DEFENDERS = [
-        { key: "borgar", name: "Borgar", sheet: "Npc_Borgar_Walk8", maps: [1], from: "here", hp: 140, dmg: 12, poise: 30, cd: [70, 100], speed: 3.9, armor: 0.1,
+        // (2026-10-17, W4 - Kasztelan.js) Borgar who went down with the hero to the tenth gate (borgarIdzie) knows what he defends - he
+        // holds more; the one keeping the grate (borgarPilnuje) says so
+        { key: "borgar", name: "Borgar", sheet: "Npc_Borgar_Walk8", maps: [1], from: "here", get hp() { return qflags().borgarIdzie ? 180 : 140; }, dmg: 12, poise: 30, cd: [70, 100], speed: 3.9, armor: 0.1,
           guard: "door", hideEvent: 1, swing: "#d9c6a0", when: () => true,
-          lines: { start: "Ja pilnuję piwnicy! Ty ich zatrzymaj!", hit: "Nie w mojej tawernie!", down: "Ugh... Dalej, synu... ja tu poleżę...", win: "Następnym razem niech zapukają." } },
+          get lines() {
+              const f = qflags();
+              if (f.borgarIdzie) return { start: "Byłem na dziesiątym piętrze. Wiem, czego bronię!", hit: "Nie w mojej tawernie!", down: "Ugh... Dalej, synu... ja tu poleżę...", win: "Kowale pilnują do końca." };
+              if (f.borgarPilnuje) return { start: "Trzysta lat mój ród pilnował tej kraty! Nie przejdą!", hit: "Do piwnicy? Po moim trupie!", down: "Ugh... krata... pilnuj kraty...", win: "Krata stoi. Następnym razem niech zapukają." };
+              return { start: "Ja pilnuję piwnicy! Ty ich zatrzymaj!", hit: "Nie w mojej tawernie!", down: "Ugh... Dalej, synu... ja tu poleżę...", win: "Następnym razem niech zapukają." };
+          } },
         { key: "grum", name: "Grum", sheet: "anim8/Merc_Walk8", atk: "Merc", maps: [1, 8], from: "here", hp: 200, dmg: 20, poise: 70, cd: [60, 90], speed: 4.1, armor: 0.3,
           follow: true, hideEvent: 3, swing: "#e8e8e8", when: c => c.grum === "ally",
           lines: { start: "Znam ich. Płacili mi kiedyś. Teraz płacą za to.", hit: "Za wolno, chłopcy!", down: "Dobra... to... na razie wszystko...", win: "Żelazna Pięść nie zmienia stron dwa razy." } },

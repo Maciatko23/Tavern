@@ -219,7 +219,10 @@ kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.key("P");
     t.check("Grafit: P otwiera menu", await t.until(inMenu, 10));
     await t.frames(40);
-    for (let i = 0; i < 3; i++) { await t.key("Q"); await t.frames(18); }
+    // (the tabs go with A / D since 2026-10-12 - no Q / E: hero -> item -> journal -> options, then O into the list)
+    for (let i = 0; i < 3; i++) { await t.key("D"); await t.frames(18); }
+    await t.key("O");
+    await t.frames(6);
     const grafit = await t.json(`(function(){ const w = SceneManager._scene._views && SceneManager._scene._views.options && SceneManager._scene._views.options._win; if (!w) return null;
         const CH = Tawerna.api("CleanHUD"), texts = [], keep = CH.textOut; CH.textOut = function(b, text) { texts.push(String(text)); return keep.apply(this, arguments); };
         w.select(w.findSymbol("moodFx")); w.refresh(); CH.textOut = keep; return { active: MenuRing.info().active, sym: w.currentSymbol(), texts }; })()`);

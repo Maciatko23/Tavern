@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna, wątki W5, W7 i W9). v1.9.0
+ * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna, wątki W4, W5, W7 i W9). v1.10.0
  * @author Tawerna
  *
  * @param enabled
@@ -73,6 +73,11 @@
  *      - "Przychylność garnizonu: N / 100": ← -20, → +20 (OK też +20); progi 40 / 60 / 80 działają jak w grze.
  *      - "Otwórz cysternę": to, co daje dzwon „cztery i dwa” (W1 rozdz. 7): flagi cisternOpen, sluiceHalf,
  *        millRuns, kubaHonest - zasuwa na piętrze 30 prowadzi do starej cysterny, D28 może się zacząć.
+ *      Wątek W4 (Borgar, krew kasztelana - Kasztelan.js):
+ *      - "W4: rozdział N - ...": ←→ wybiera rozdział 1-8 wątku „Krew kasztelana” (rozdział 7 dwa razy:
+ *        konfrontacja przy barze i noc w piwnicy), OK ustawia go (dług, klucze, krata, poszlaki, flagi, pora)
+ *        i przenosi tam, gdzie się dzieje (Kasztelan.debugJump). Rozdział 8: Borgar idzie z bohaterem - nocą
+ *        jego ognisko przy dziesiątej bramie.
  *      Wątek W5 (kantor Baltazara):
  *      - "W5: rozdział N - ...": ←→ wybiera rozdział 1-7 wątku „Towary z kontynentu”, OK ustawia go (flagi
  *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (Kantor.debugJump).
@@ -153,6 +158,9 @@
     const WATER = [null, "red", "grey"], WATER_NAME = { red: "czerwona", grey: "szara" };
     const isleIcon = id => ($dataItems[id] ? $dataItems[id].iconIndex : 0);
     const storyOn = () => !!(window.Story && Story.active && Story.active());
+    // (2026-10-17) W4 "Krew kasztelana" (Kasztelan.js): straight to a chapter - ←→ 1-9 (the 7th chapter twice: the bar, the cellar's night)
+    const W4_CH = [0, 1, 2, 3, 4, 5, 6, 7, 7, 8];
+    const w4Name = i => (window.Kasztelan && Kasztelan.f9Name ? Kasztelan.f9Name(i) : "");
     // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): straight to a chapter - ←→ the chapter, OK jumps (flags, hour, place)
     const W5_NAMES = { 1: "dziwny kupiec", 2: "trzy stuknięcia", 3: "nocny tragarz", 4: "rejestr", 5: "komu to dać", 6: "noc promu", 7: "co dalej z kantorem" };
     // (2026-10-17) W7 "Dwór z kamieni twierdzy" (Dwor.js): straight to a chapter - ←→ the chapter, OK jumps (payments, flags, hour, place)
@@ -163,6 +171,7 @@
     const isleLabel = {
         w9: i => (window.Rywal ? "W9: rywal (wymuś wariant): " + w9Name(i) + "   ←→ zmień, OK zacznij" : "W9: rywal (brak Rywal.js)"),
         w9meet: n => (window.Rywal ? "W9: rywal - spotkanie na piętrze " + n + "   ←→ piętro, OK idź" : "W9: rywal - spotkanie (brak Rywal.js)"),
+        w4: i => (window.Kasztelan ? "W4: rozdział " + W4_CH[i] + " - " + w4Name(i) + "   ←→ zmień, OK idź" : "W4: przeskocz do rozdziału (brak Kasztelan.js)"),
         w5: n => (window.Kantor ? "W5: rozdział " + n + " - " + W5_NAMES[n] + "   ←→ zmień, OK idź" : "W5: przeskocz do rozdziału (brak Kantor.js)"),
         w7: n => (window.Dwor ? "W7: rozdział " + n + " - " + W7_NAMES[n] + "   ←→ zmień, OK idź" : "W7: przeskocz do rozdziału (brak Dwor.js)"),
         inside: i => "Wnętrze: " + ISLE_INSIDE[i][0] + "   ←→ zmień, OK idź",
@@ -426,6 +435,8 @@
         row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
         row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).");
         row("isleCistern", isleLabel.cistern(), 391, "Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.");
+        head("Wątek W4 (Borgar, krew kasztelana):");
+        row("isleW4", isleLabel.w4(last.w4 || 1), 189, "Ustawia „Krew kasztelana” na początku rozdziału (dług, klucze, krata, poszlaki, pora) i przenosi tam, gdzie się dzieje.", { pick: last.w4 || 1 });
         head("Wątek W5 (kantor Baltazara):");
         row("isleW5", isleLabel.w5(last.w5 || 1), 189, "Ustawia „Towary z kontynentu” na początku rozdziału (flagi, pora, miejsce) i przenosi tam, gdzie się dzieje.", { pick: last.w5 || 1 });
         head("Wątek W7 (dwór Lorda):");
@@ -524,6 +535,13 @@
         if (row && row.kind === "isleWater" && window.CzerwonaWoda && CzerwonaWoda.force) {   // (from the weather / red / grey)
             CzerwonaWoda.force(WATER[(WATER.indexOf(CzerwonaWoda.forced()) + delta + WATER.length) % WATER.length]);
             row.label = isleLabel.water();
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleW4") {   // (the chapter of W4: 1-9 - the 7th twice)
+            row.pick = last.w4 = ((row.pick - 1 + delta + 9) % 9) + 1;
+            row.label = isleLabel.w4(row.pick);
             SoundManager.playCursor();
             this.redrawItem(this.index());
             return;
@@ -806,6 +824,12 @@
             case "isleFavor":
                 if (window.Garnizon && Garnizon.addFavor) Garnizon.addFavor(20, "F9", true);
                 break;
+            case "isleW4": {
+                if (!window.Kasztelan || !Kasztelan.debugJump) { say(row.icon, "Brak Kasztelan.js", true); break; }
+                const g = Kasztelan.debugJump(row.pick);
+                if (!g) { say(row.icon, "Gra bez fabuły albo brak zadania W4", true); break; }
+                return go(["W4", g[0], g[1], g[2], g[3]]);
+            }
             case "isleW5": {
                 if (!window.Kantor || !Kantor.debugJump) { say(row.icon, "Brak Kantor.js", true); break; }
                 const g = Kantor.debugJump(row.pick);

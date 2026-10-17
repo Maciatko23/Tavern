@@ -835,6 +835,14 @@
     // ---- the night: its own layer (a dark picture with holes), so that a fire really lights up the ground around it, in the
     // real colours of the ground, and the rest stays truly dark. It replaces the dark screen tone of DayNightCycle.js.
     const NIGHT_ALPHA = 0.9;
+    // (2026-10-17, "every light is a fire" also over water) the warmth of a light's ring: the darkness left in it turns warm brown
+    // (WARM_DARK, at WARM_DARK_A of the light's strength), the world under it is multiplied by WARM_MUL (at WARM_MUL_A, less at the
+    // flame's core: WARM_MUL_CORE) and a faint warm glow (WARM_EDGE, WARM_EDGE_A) reaches the light's edge - the fire glow alone
+    // stops at FIRE_GLOW_REACH, so past it the ring was the world's own colours under the night: green-grey on grass, pale blue on water
+    const MULTIPLY_BLEND = typeof PIXI !== "undefined" && PIXI.BLEND_MODES ? PIXI.BLEND_MODES.MULTIPLY : 2;
+    const WARM_DARK = "44,20,6", WARM_DARK_A = 0.5;
+    const WARM_MUL = "255,175,105", WARM_MUL_A = 0.7, WARM_MUL_CORE = 0.5;
+    const WARM_EDGE = "255,120,40", WARM_EDGE_A = 0.12;
     function Sprite_NightLight() {
         this.initialize(...arguments);
     }
@@ -850,6 +858,14 @@
         this._age = 0;
         // the fire's warm glow of the lights put on the map as events (a brazier, a lamp...), added over the dark: the same glow and
         // flicker as a campfire's - every light in the game is a flame (user 2026-10-05: "nie ma elektryczności w grze")
+        // (2026-10-17) the fire's colour over what its light falls on: the world under each light multiplied by a warm firelight
+        // colour (the blue taken out) - without it the outer ring of a flame showed the day's cool colours, over water a pale blue
+        // halo (the harbour's baskets, the garrison's pier); drawn before the glow, so the glow still adds the fire's warmth on top
+        this._warm = new Sprite(new Bitmap(w, h));
+        this._warm.bitmap.smooth = true;
+        this._warm.blendMode = MULTIPLY_BLEND;
+        this._warm.visible = false;
+        this.addChild(this._warm);
         this._glow = new Sprite(new Bitmap(w, h));
         this._glow.bitmap.smooth = true;
         this._glow.blendMode = 1;   // additive
@@ -914,13 +930,14 @@
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = "destination-out";
         const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows ? Sun.occluders(this._spriteset) : [];
-        const glows = [];
+        const glows = [], warms = [];
         let stands = null;   // (what stands on the screen - made once a frame, when a light first has shadows to keep off it)
         for (const l of this.lights()) {
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
             const x = l.x / 2, y = l.y / 2, r = (l.r / 2) * (0.97 + 0.03 * flick);
             if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
             if (l.glow) glows.push({ x, y, r, a: l.i * fireGlowAlpha(this._age + l.id * 17) });
+            warms.push({ x, y, r, a: l.i * flick });
             const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : [];
             // the light straight into the dark - or, with things standing in it, first on its own canvas with their shadows cut out
             // of it: in a shadow the night stays as dark as around (user 2026-09-30: fires make the things around throw shadows)
@@ -947,9 +964,118 @@
             ctx.globalCompositeOperation = "destination-out";
             ctx.drawImage(c.canvas, ox, oy);
         }
+        // the darkness left in each light's ring: warm brown instead of the night's blue (its alpha - how dark - stays as it is)
+        this._warmMask = warms.length ? this.warmMask() : null;
+        if (warms.length) this.warmPass(ctx, "source-atop", (c, k) => {
+            for (const l of warms) {
+                const a = WARM_DARK_A * l.a * k, g = c.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
+                g.addColorStop(0, "rgba(" + WARM_DARK + "," + a.toFixed(3) + ")");
+                g.addColorStop(0.7, "rgba(" + WARM_DARK + "," + (a * 0.7).toFixed(3) + ")");
+                g.addColorStop(1, "rgba(" + WARM_DARK + ",0)");
+                c.fillStyle = g;
+                c.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2);
+            }
+        });
         ctx.globalCompositeOperation = "source-over";
         if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
-        this.updateGlow(glows);
+        this.updateWarm(warms, dark);
+        this.updateGlow(glows, warms, dark);
+    };
+    // The warmth is the fire's over WATER (the sea, a pond: their cool colours showed a pale blue halo); on land, whose own colours
+    // were already right (grass, earth, the trees by a campfire), only WARM_LAND of it - a touch. warmMask(): a soft mask over the
+    // screen (half size) - opaque on water cells, WARM_LAND on land (bilinear between cells: no blocky shore); null on a map with
+    // no water (then everything is drawn at WARM_LAND straight away).
+    const WARM_LAND = 0.3;
+    let waterGridOf = null, waterGrid = null;
+    function waterCells() {
+        if (waterGridOf === $dataMap) return waterGrid;
+        waterGridOf = $dataMap;
+        waterGrid = null;
+        if (!$dataMap || !$dataMap.data) return null;
+        const W = $gameMap.width(), H = $gameMap.height(), grid = new Uint8Array(W * H);
+        let any = false;
+        for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+                const top = $gameMap.tileId(x, y, 1);
+                if (top > 0 && Tilemap.isTileA1(top) && !Tilemap.isWaterTile(top)) continue;   // (a pier's planks over the water)
+                for (let z = 0; z < 2; z++) {
+                    const id = $gameMap.tileId(x, y, z);
+                    if (id > 0 && Tilemap.isWaterTile(id)) { grid[y * W + x] = 1; any = true; break; }
+                }
+            }
+        }
+        waterGrid = any ? grid : null;
+        return waterGrid;
+    }
+    Sprite_NightLight.prototype.warmMask = function() {
+        const grid = waterCells();
+        if (!grid) return null;
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), W = $gameMap.width(), H = $gameMap.height();
+        const x0 = Math.floor($gameMap.displayX()) - 1, y0 = Math.floor($gameMap.displayY()) - 1;
+        const cols = Math.ceil(Graphics.width / tw) + 3, rows = Math.ceil(Graphics.height / th) + 3;
+        const cells = this._warmCells || (this._warmCells = document.createElement("canvas"));
+        if (cells.width !== cols || cells.height !== rows) { cells.width = cols; cells.height = rows; }
+        const cc = cells.getContext("2d"), img = cc.createImageData(cols, rows), land = Math.round(255 * WARM_LAND);
+        for (let j = 0; j < rows; j++) {
+            for (let i = 0; i < cols; i++) {
+                const mx = $gameMap.roundX(x0 + i), my = $gameMap.roundY(y0 + j);
+                const water = mx >= 0 && my >= 0 && mx < W && my < H && grid[my * W + mx];
+                img.data[(j * cols + i) * 4 + 3] = water ? 255 : land;
+            }
+        }
+        cc.putImageData(img, 0, 0);
+        const w = this.bitmap.width, h = this.bitmap.height;
+        const mask = this._warmMaskCanvas || (this._warmMaskCanvas = document.createElement("canvas"));
+        if (mask.width !== w || mask.height !== h) { mask.width = w; mask.height = h; }
+        const mc = mask.getContext("2d");
+        mc.clearRect(0, 0, w, h);
+        mc.imageSmoothingEnabled = true;
+        mc.drawImage(cells, $gameMap.adjustX(x0) * tw / 2, $gameMap.adjustY(y0) * th / 2, cols * tw / 2, rows * th / 2);
+        return mask;
+    };
+    // paint(c, k) draws the warm part (at k of its strength) - straight onto the target at WARM_LAND, or (a map with water) at full
+    // strength onto a scratch canvas, cut by the mask, then onto the target with the composite `op`
+    Sprite_NightLight.prototype.warmPass = function(target, op, paint) {
+        const mask = this._warmMask;
+        if (!mask) {
+            target.globalCompositeOperation = op;
+            paint(target, WARM_LAND);
+            target.globalCompositeOperation = "source-over";
+            return;
+        }
+        const w = mask.width, h = mask.height, s = this._warmScratch || (this._warmScratch = document.createElement("canvas"));
+        if (s.width !== w || s.height !== h) { s.width = w; s.height = h; }
+        const sc = s.getContext("2d");
+        sc.globalCompositeOperation = "source-over";
+        sc.clearRect(0, 0, w, h);
+        paint(sc, 1);
+        sc.globalCompositeOperation = "destination-in";
+        sc.drawImage(mask, 0, 0);
+        sc.globalCompositeOperation = "source-over";
+        target.globalCompositeOperation = op;
+        target.drawImage(s, 0, 0);
+        target.globalCompositeOperation = "source-over";
+    };
+    // the world under the lights multiplied by the firelight's colour (MULTIPLY sprite: white = unchanged), strongest in the ring,
+    // softer at the flame (its own glow is there) and nothing past the light's edge
+    Sprite_NightLight.prototype.updateWarm = function(warms, dark) {
+        const sprite = this._warm, had = sprite.visible;
+        sprite.visible = warms.length > 0;
+        if (!sprite.visible && !had) return;
+        const bmp = sprite.bitmap, ctx = bmp.context;
+        ctx.clearRect(0, 0, bmp.width, bmp.height);
+        if (warms.length) this.warmPass(ctx, "source-over", (c, k) => {
+            for (const l of warms) {
+                const a = WARM_MUL_A * l.a * dark * k, g = c.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
+                g.addColorStop(0, "rgba(" + WARM_MUL + "," + (a * WARM_MUL_CORE).toFixed(3) + ")");
+                g.addColorStop(0.5, "rgba(" + WARM_MUL + "," + a.toFixed(3) + ")");
+                g.addColorStop(0.8, "rgba(" + WARM_MUL + "," + (a * 0.7).toFixed(3) + ")");
+                g.addColorStop(1, "rgba(" + WARM_MUL + ",0)");
+                c.fillStyle = g;
+                c.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2);
+            }
+        });
+        if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
     };
     // the buildings that stand on this map (their pictures, the fences' posts, a site's built part, the pots on a shelter's table):
     // shadows are kept off them at night as off the trees and the people (Sky.js, standing)
@@ -966,9 +1092,10 @@
     // the campfire's glow (fireGlowBitmap: its colours, FIRE_GLOW_REACH of the light's reach - a campfire's 2.2 x 96 px over its 340)
     // and flicker (fireGlowAlpha), for each light put on the map as an event; a smaller flame (i < 1, a lamp) glows a little less
     const FIRE_GLOW_REACH = 0.62;
-    Sprite_NightLight.prototype.updateGlow = function(glows) {
-        const sprite = this._glow, had = sprite.visible;
-        sprite.visible = glows.length > 0;
+    // (2026-10-17: warms - every light on the screen - add a faint warm glow from the middle of the ring out to the light's edge)
+    Sprite_NightLight.prototype.updateGlow = function(glows, warms, dark) {
+        const sprite = this._glow, had = sprite.visible, edges = warms || [];
+        sprite.visible = glows.length > 0 || edges.length > 0;
         if (!sprite.visible && !had) return;
         const bmp = sprite.bitmap, ctx = bmp.context;
         ctx.clearRect(0, 0, bmp.width, bmp.height);
@@ -981,6 +1108,16 @@
             ctx.fillStyle = g;
             ctx.fillRect(gl.x - r, gl.y - r, r * 2, r * 2);
         }
+        if (edges.length) this.warmPass(ctx, "lighter", (c, k) => {
+            for (const l of edges) {
+                const a = WARM_EDGE_A * l.a * (dark === undefined ? 1 : dark) * k, g = c.createRadialGradient(l.x, l.y, l.r * 0.35, l.x, l.y, l.r);
+                g.addColorStop(0, "rgba(" + WARM_EDGE + ",0)");
+                g.addColorStop(0.4, "rgba(" + WARM_EDGE + "," + a.toFixed(3) + ")");
+                g.addColorStop(1, "rgba(" + WARM_EDGE + ",0)");
+                c.fillStyle = g;
+                c.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2);
+            }
+        });
         ctx.globalCompositeOperation = "source-over";
         if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
     };

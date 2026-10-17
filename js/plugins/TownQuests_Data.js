@@ -1995,7 +1995,7 @@
         },
         // =========================================================== W4 (compact, 2026-10-06): the castellan's key opens the old grate in the cellar
         {
-            id: "W4", kind: "W", title: "Krew kasztelana", giver: null, icon: 0, where: "bar w tawernie, podwórze dziadka, kuźnia, piwnica tawerny",
+            id: "W4", kind: "W", title: "Krew kasztelana", giver: null, icon: 0, where: "bar w tawernie, podwórze dziadka, kuźnia, piwnica tawerny, podziemia, pustelnia na klifie",
             when: "po rozdziale 1 (spłata długu albo strata pola)",
             desc: "Lord mówił, że najstarsze kamienie twierdzy leżą pod tawerną Borgara. W piwnicy jest stara krata zakonu z krukiem na zamku. Nad barem wisi pół klucza „na szczęście”.",
             steps: [
@@ -2014,7 +2014,16 @@
                 { ch: 3, type: "custom", talk: "w4Key", text: "Tadek łączy połówki. Odbierz klucz w kuźni (od jutra rana)." },
                 { ch: 4, type: "custom", check: "w4Gate", text: "Klucz kasztelana. Zejdź do piwnicy tawerny (za luźną cegłą) i otwórz nim starą kratę zakonu." },
                 { ch: 5, type: "custom", talk: "w4Tell", text: "Krata otwarta. Powiedz o tym Borgarowi (przy barze)." },
-                { ch: 6, type: "pause", text: "Dalej - w Akcie III: klucz kasztelana otworzy ostatnie drzwi, do Komnaty Serca (W9). Lord chciał być pierwszy, jeśli coś znajdziesz..." }
+                // (2026-10-17) chapters 6-8 - Kasztelan.js (its FX): the clues of Borgar's blood, the confrontation after closing (only
+                // after chapter 1: Story.chapterEnded), the shut day and the night in the cellar, the Heart. An old save on the old pause
+                // (index 6) goes on with "Ród Kowali". "Lord chce być pierwszy" (QUESTY ch. 5) is W7's chapter 6 (Dwor.js) - read here.
+                { ch: 6, type: "custom", check: "w4Rod", talk: "w4Rod", vars: "w4Rod", rewardFx: "w4RodReward", reward: { xp: 120 },
+                    text: "Kowale z twierdzy. Kim był ród Borgara - i skąd jego zdanie „Nie pytam o to, czego nie chcę wiedzieć”? Poszlaki: {n} z {need}{jest}. {gdzie}" },
+                { ch: 7, type: "custom", talk: "w4Konfrontacja",
+                    text: "Konfrontacja. Pokaż Borgarowi klucz i powiedz, co wiesz o jego rodzie - po zamknięciu, 23–1, przy barze. Albo uszanuj jego zdanie i przemilcz. To jego tawerna." },
+                { ch: 7, type: "custom", vars: "w4Piwnica",
+                    text: "Borgar się wściekł i zamknął tawernę na dzień {dzien} - bez zmiany. Następnej nocy, od 23:00, czeka w piwnicy przy kracie." },
+                { ch: 8, type: "custom", talk: "w4Serce", check: "w4Serce", vars: "w4Serce", reward: { xp: 400 }, text: "{serce}" }
             ],
             lines: {
                 askTopic: "Zapytaj o stare kamienie pod tawerną.",
@@ -2394,7 +2403,8 @@
         },
         // =========================================================== (2026-10-14) THE HARBOUR (Map125, docs/przystan/KONCEPCJA.md)
         // Janek the fisherman and Roch Szkwał the smuggler (the prologue's people). Their first meetings, Janek's fish trade, the ferry,
-        // the cutter's states and the night run: Przystan.js (its handlers: k47Rod, d20Noc, w10Wyslany, w10Wiesc - TownQuests.FX)
+        // the cutter's states and the night run: Przystan.js (its handlers: k47Rod, d20Noc, w10Wyslany, w10Wiesc - TownQuests.FX;
+        // 2026-10-17 W10's letters: w10List1-3, w10BezFabuly, w10Vars)
         // =========================================================== K47
         {
             id: "K47", kind: "K", title: "Pierwszy połów", giver: "janek", icon: 173, where: "Przystań, pomost rybacki", when: "8–20",
@@ -2492,8 +2502,29 @@
                 { type: "custom", check: "w10Wyslany", ch: 1,
                     text: "Wyślij list do matki: promem (w dzień promu 9–15, przewoźnik na molo, 3 G - celnik go przeczyta) albo kutrem Rocha, gdy zacznie pływać." },
                 { type: "custom", check: "w10Wiesc", ch: 2, text: "Czekaj na wieści z lądu: przy następnej fali ludzi z promu albo po rejsie Rocha." },
-                { type: "pause", ch: 3, text: "Matka nie przypłynęła. Ślad prowadzi na północ, za wojskiem. Ciąg dalszy wkrótce." }
-            ]
+                // (2026-10-17, the user's variant A - Przystan.js: the letters, the answers, the epilogue line, F9) the old "pause" was
+                // step 2: a save waiting there now waits for the first letter. The mother's letters come by the ferry or Roch's cutter:
+                // the first 8 days after the news, the second 10-16 days later, the third about Act III; grandpa reads the first one
+                { type: "custom", check: "w10List1", ch: 3, reward: { xp: 40 },
+                    text: "Czekaj na list od mamy. Przyjdzie z lądu promem albo kutrem Rocha: w dzień promu zapytaj przewoźnika na molo (9–15), po rejsie - Rocha." },
+                { type: "talk", to: "grandpa", check: "w10BezFabuly", ch: 3, text: "Pokaż list od mamy dziadkowi. To jego córka.",
+                    say: ["> Dziadku... przyszedł list. Od mamy.",
+                        "(Dziadek odkłada fajkę i długo czyta, poruszając ustami.)",
+                        "Żyje. ...Żyje, uparta. Pierze koszule żołnierzom. Moja córka pierze koszule tym, co palą wsie.",
+                        "„Dalej pali tę swoją fajkę i udaje, że nie płacze.” (Dziadek odwraca się do okna.) To dym. Dym gryzie w oczy, nic więcej.",
+                        "A twój ojciec... Jak jest w obozie jeńców, to żyje. Jeńców się karmi, bo za jeńców się płaci. A jak poszedł z wojskiem w góry - to też żyje. Tak sobie mów.",
+                        "(Dziadek patrzy na twój wisiorek.) Ludzie z okiem pytają o kruki. Rób, jak pisze matka. Pod koszulą. Zawsze.",
+                        "> Odpiszę jej.",
+                        "Odpisz. Napisz, że jesteś cały i że stary dalej zrzędzi. I dopisz ode mnie... że fajka dalej śmierdzi. Ona będzie wiedziała, co to znaczy.",
+                        "Jak masz grosz, dołóż jej coś. W taborze grosz to chleb. Ser się nie psuje, wędzonka też."],
+                    reward: { xp: 60, flag: "w10Dziadek", note: ["Dziadek i list od mamy", "Dziadek czytał list od mamy długo, poruszając ustami. Mówi, że to dym gryzie go w oczy. Kazał odpisać i dopisać od niego, że „fajka dalej śmierdzi” - mama będzie wiedziała, co to znaczy. Radzi posłać jej grosz albo jedzenie, które się nie psuje: ser, wędzonkę. O wisiorku: pod koszulą, zawsze."] } },
+                { type: "custom", check: "w10List2", vars: "w10Vars", ch: 4, reward: { xp: 40 },
+                    text: "Odpisz mamie i poślij jej coś, jeśli możesz: pieniądze albo paczkę jedzenia, które się nie psuje (prom: przewoźnik w dzień promu 9–15, 3 G; kuter Rocha za darmo). {odpis}" },
+                { type: "custom", check: "w10List3", vars: "w10Vars", ch: 5,
+                    text: "Czekaj na kolejny list od mamy - przyjdzie, kiedy wojna podejdzie bliżej wyspy. {odpis}",
+                    reward: { xp: 60, note: ["Listy od mamy", "Trzy listy od mamy leżą razem, przewiązane jej chustą. Ojca wciąż szuka: ktoś nosi jego pas, wygrany w kości od żywego jeńca. Tabor idzie na północ, za góry, do kopalni soli. Mama pisze, że będzie pisać. Wątek zostaje otwarty."] } }
+            ],
+            reward: { xp: 150 }
         }
     ];
 

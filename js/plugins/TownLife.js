@@ -366,13 +366,16 @@
         }
     }
 
+    // (2026-10-17) off its own maps, "inside" a place that is not home (res.indoor - Rysiek by his snares on Skraj lasu): the place's
+    // name, whose own lines (barks[place] / talk[place]) it says there instead of the home ones; null anywhere else
+    const outPlace = (res, e) => (!isTown() && e.act === "inside" && res.indoor && res.indoor[e.where] ? e.where : null);
     // calls when the hero passes
     function barks(ev, h) {
         const res = resOf(ev.eventId()), st = stateOf(ev), now = Graphics.frameCount, SB = T.api("SpeechBubbles");
         if (!SB || st.hidden || now < st.nextBark || now < nextBarkAny || $gameMap.isEventRunning()) return;
         if (Math.hypot(ev.x - $gamePlayer.x, ev.y - $gamePlayer.y) > BARK_NEAR) return;
-        const e = entryAt(res, h), b = barksOf(res) || {};
-        const list = (!isTown() ? (e.where === "tawerna" ? b.tavern : b.home) :
+        const e = entryAt(res, h), b = barksOf(res) || {}, out = outPlace(res, e);
+        const list = (!isTown() ? (out && b[out] && b[out].length ? b[out] : e.where === "tawerna" ? b.tavern : b.home) :
             raining() && b.rain && b.rain.length ? b.rain : isNight(h) && b.night && b.night.length ? b.night : b[e.act]) || [];
         st.nextBark = now + BARK_GAP[0] + Math.floor(Math.random() * (BARK_GAP[1] - BARK_GAP[0]));
         if (!list.length) return;
@@ -443,9 +446,9 @@
             try { list = fn(res.key, ev, interp); } catch (e) { console.error(e); }
             if (list && list.length) { interp.setupChild(list.concat([{ code: 0, indent: 0, parameters: [] }]), ev.eventId()); return; }
         }
-        const h = hourNow(), t = talkOf(res) || {};
+        const h = hourNow(), t = talkOf(res) || {}, place = outPlace(res, entryAt(res, h));
         const slot = raining() && t.rain ? "rain" : h >= 5 && h < 11 ? "morning" : h >= 11 && h < 17 ? "day" : h >= 17 && h < 22 ? "evening" : "night";
-        const list = t[slot] || t.day || [];
+        const list = (place && t[place] && t[place].length ? t[place] : null) || t[slot] || t.day || [];
         if (!list.length) return;
         const st = stateOf(ev), text = list[st.talkN++ % list.length], lines = wrap(text), out = [];
         for (let i = 0; i < lines.length; i += PAGE) {

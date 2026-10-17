@@ -111,14 +111,14 @@ const { launch, sleep } = require("./cdp.js");
             rows: l._rows.map(r => ({ kind: r.kind, label: r.label, desc: r.desc || "", head: !!r.head })), wide: l._rows.filter(r => l.textWidth(r.label) > l.innerWidth).length }; })()`);
         const isleKinds = isle.rows.filter(r => r.kind !== "info").map(r => r.kind);
         const goNames = isle.rows.filter(r => r.kind === "isleGo").map(r => r.label);
-        check("E: 'Wyspa i fabuła' - seven parts (Przenieś mnie do / Morze i pogoda / Fabuła / Postacie / Wątek W5 / Wątek W7 / Wątek W9), each row two lines high with its description under it",
-            isle.tab === 5 && isle.sel === 5 && !isle.band && isle.rows.filter(r => r.head).map(r => r.label).join("|") === "Przenieś mnie do:|Morze i pogoda:|Fabuła:|Postacie:|Wątek W5 (kantor Baltazara):|Wątek W7 (dwór Lorda):|Wątek W9 (rywal w ruinach):" &&
+        check("E: 'Wyspa i fabuła' - eight parts (Przenieś mnie do / Morze i pogoda / Fabuła / Postacie / Wątek W5 / Wątek W7 / Wątek W9 / Wątek W10 - Przystan.js), each row two lines high with its description under it",
+            isle.tab === 5 && isle.sel === 5 && !isle.band && isle.rows.filter(r => r.head).map(r => r.label).join("|") === "Przenieś mnie do:|Morze i pogoda:|Fabuła:|Postacie:|Wątek W4 (Borgar, krew kasztelana):|Wątek W5 (kantor Baltazara):|Wątek W7 (dwór Lorda):|Wątek W9 (rywal w ruinach):|Wątek W10 (list do matki):" &&
             isle.rows.filter(r => r.kind !== "info").every(r => r.desc.length > 20) && isle.h > 50 && isle.wide === 0, isle.rows.map(r => r.kind + ": " + r.label));
         check("...'Przenieś mnie do': the harbour, the six places, the hut under the forest, the burnt farm; a room picker",
             goNames.join("|") === "Przystań|Pustelnia na klifie|Urwisko Kruków|Przylądek z latarnią|Garnizon nad zatoką|Wrak na mieliźnie|Stara cysterna zakonu|Chata pod lasem|Spalona zagroda" &&
             isleKinds.includes("isleInside"), goNames);
         check("...the sea (low tide, high tide, a misty night, the water red / grey), the story (day 61 unpaid, pay the debt, +1000 G, the prologue), the people (the raven, the garrison's favour, the cistern), W5's chapters, W7's chapters, W9's rival (2026-10-17)",
-            isleKinds.filter(k => k !== "isleGo").join() === "isleInside,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,islePrologue,isleRaven,isleFavor,isleCistern,isleW5,isleW7,isleW9,isleW9Meet" &&
+            isleKinds.filter(k => k !== "isleGo").join() === "isleInside,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,islePrologue,isleRaven,isleFavor,isleCistern,isleW4,isleW5,isleW7,isleW9,isleW9Meet,isleW10" &&
             /^Przychylność garnizonu: \d+ \/ 100/.test(isle.rows.find(r => r.kind === "isleFavor").label), isleKinds);
         await key(E); await frames(6);
         const tz = await tabNow();

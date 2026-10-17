@@ -63,7 +63,7 @@ Stan: 2026-10-07. Kod: `js/plugins/Act3.js` (silnik napadu) i `js/plugins/Act3_D
 
 | Klucz | Kto | Kiedy | Gdzie |
 |---|---|---|---|
-| `borgar` | Borgar | zawsze | tawerna - pilnuje starych drzwi (jego zdarzenie przy barze znika na czas walki) |
+| `borgar` | Borgar | zawsze | tawerna - pilnuje starych drzwi (jego zdarzenie przy barze znika na czas walki); od 2026-10-17 (W4, `Kasztelan.js`): poszedł z bohaterem w dół (`borgarIdzie`) - 180 PŻ zamiast 140; pilnuje kraty (`borgarPilnuje`) - za każdego, kto zejdzie do piwnicy, 20 szkód zamiast 35; własne okrzyki |
 | `grum` | Grum (wygląd najemnika) | W8: `grumAlly` | obie mapy, przy bohaterze; tarcza z przodu |
 | `rafal` | Rafał | W6: `rafalAlly` (`TownQuests.w6().rafal === "ally"`) | dziedziniec, przychodzi od bramy |
 | `marek` | Marek | W6: `marekSaved` | dziedziniec |

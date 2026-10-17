@@ -6,7 +6,8 @@ Surowe obrazy (PixelLab) leżą w raw/:
   wrak_edit_1.png        edit Pro Flash kutra (240x144): wrak na plaży
   okret_proflash_1.png   Pro Flash 256x176, wzór stylu = wrak kutra
   prom_collage.png       prom złożony w kodzie (prom_collage.py) z kadłuba kutra + skrzynie/worki Winlu
-  prom_final.png         (jeśli jest) wybrana wersja promu, inaczej prom_collage.png
+  prom_final.png         (jeśli jest) wybrana wersja promu, inaczej prom_collage.png; od 2026-10-17 to barka z PixelLab
+                         wydłużona przez build_prom.py (prom_pixellab_1.png)
 Łódź mała powstaje w kodzie z łodzi Janka (krótsza, bez sieci/masztu/kosza, z beczułką).
 
 Poprawki stylu (jak przy kamieniach/grzybach): obwódka i najciemniejsze piksele -> ciemny brąz Winlu
@@ -275,7 +276,7 @@ SPEC = {
                    "stawiaj": "daleko w zatoce na polu wody; dół obrazu = linia wody (półprzezroczysty pas); nieruchomy; "
                               "lekka mgiełka (10%) już w obrazie"},
     "Prom": {"cell": (384, 168), "where": "woda", "bob": BOB_HEAVY,
-             "opis": "prom: barka z pokładem, nadbudówka na rufie, maszt ze zwiniętym żaglem i proporczykiem, skrzynie i worki, cumy",
+             "opis": "prom: płaska barka z burtami i poręczą, wiosło sterowe na rufie, skrzynie i zwój liny na dziobie, beczki na rufie",
              "stawiaj": "pole wody pod środkiem kadłuba, górną burtą tuż pod molem; ciężki, kołysze się tylko 0/1/1 px"},
 }
 
@@ -467,8 +468,9 @@ def main():
             "opis": spec["opis"],
         }
     meta["obiekty"]["Prom"]["zrodlo"] = "raw/" + prom_name
-    meta["obiekty"]["Prom"]["cumy"] = ("liny cumownicze wychodzą ok. 1 pole nad burtę przy dziobie i rufie "
-                                       "(postaw pachołki na molo nad tymi miejscami)")
+    if prom_name == "prom_collage.png":
+        meta["obiekty"]["Prom"]["cumy"] = ("liny cumownicze wychodzą ok. 1 pole nad burtę przy dziobie i rufie "
+                                           "(postaw pachołki na molo nad tymi miejscami)")
     with open(JSON_OUT, "wb") as f:
         f.write((compact_json(meta) + "\n").encode("utf8"))
     preview(finals)

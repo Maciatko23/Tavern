@@ -1476,7 +1476,9 @@
             // (2026-10-15) the field lost to the Lord at the deadline, and bought back from him (Story.js)
             fieldLost: !!ss && !!ss.lost && !(ss.buy && ss.buy.done), fieldBack: !!ss && !!ss.lost && !!(ss.buy && ss.buy.done),
             opinion: op, locks: locks().open,
-            borgar: !!fl.borgarSaying, ambrozy: !!fl.ambrozyChronicles, book: !!(fl.signalBook || fl.ambrozyChronicles),
+            // (2026-10-17, W4 ch. 7 - Kasztelan.js) Borgar comes down to the Heart (and may stay its guardian) once he went down with the
+            // hero (flag borgarIdzie); his saying alone (borgarSaying, ch. 5) no longer brings him: told and kept by the grate, or never told
+            borgar: !!fl.borgarIdzie, ambrozy: !!fl.ambrozyChronicles, book: !!(fl.signalBook || fl.ambrozyChronicles),
             melia: fl.w3Sung ? "public" : fl.w3Borgar ? "borgar" : fl.w3Burned ? "burned" : null,
             grum: ["ally", "enemy", "ferry", "gone", "dead"].includes(sg) ? sg
                 : fl.grumDead ? "dead" : fl.grumGone ? "gone" : fl.grumAlly ? "ally" : (fl.w8Faction || fl.w8Lost) ? "faction" : null,
@@ -1498,6 +1500,9 @@
             // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): who went down for the Heart before the hero, and how it ended -
             // { key: grum | lord | baltazar | kopacze, outcome, deep (went down past the tenth gate), faction, floor, lordLine } or null
             rival: (() => { try { return T.call("Rywal", "forWorld") || null; } catch (e) { return null; } })(),
+            // (2026-10-17) W4 "Krew kasztelana" (Kasztelan.js): { stance: idzie | pilnuje | niewie | null, told, closed, warned, fired, back,
+            // clues, keyLock } or null
+            w4: (() => { try { return T.call("Kasztelan", "forWorld") || null; } catch (e) { return null; } })(),
             siege
         };
         const f = s.forceWorld;
@@ -1691,7 +1696,7 @@
     // the Heart's look and the choice of Act III (STORY.md); "Zostać strażnikiem" asks who when Borgar (W4) or Ambroży (W2) may stay
     function guardians() {
         const fl = questFlags(), s = state(), w = s.forceWorld || {};
-        return { borgar: !!fl.borgarSaying || !!w.borgar || !!s.forceLocks.all, ambrozy: !!fl.ambrozyChronicles || !!w.ambrozy || !!s.forceLocks.all };
+        return { borgar: !!fl.borgarIdzie || !!w.borgar || !!s.forceLocks.all, ambrozy: !!fl.ambrozyChronicles || !!w.ambrozy || !!s.forceLocks.all };
     }
     function choiceList() {
         const t = D().TEXT, kinds = ["zniszczyc", "straznik", "uwolnic", "zapieczetowac"];
@@ -1742,6 +1747,14 @@
         let dl = null;
         try { dl = T.call("Dwor", "epilogue", kind, w); } catch (e) { dl = null; }
         if (typeof dl === "string" && dl) out.push(dl);
+        // (2026-10-17) Borgar's blood (W4, Kasztelan.js): his fire at the tenth gate, his watch by the grate - or that he never knew
+        let kl = null;
+        try { kl = T.call("Kasztelan", "epilogue", kind, w, who); } catch (e) { kl = null; }
+        if (typeof kl === "string" && kl) out.push(kl);
+        // (2026-10-17) the mother's letters (W10, Przystan.js): one line - did the hero write back, did he send her anything
+        let ml = null;
+        try { ml = T.call("Przystan", "epilogue", kind, w); } catch (e) { ml = null; }
+        if (typeof ml === "string" && ml) out.push(ml);
         return out.concat(islandLines(kind, w, who));
     }
     // (2026-10-16) the island places' lines (EPILOGUE.island), in the order of the places on the map: the cliff, the raven, the cape,

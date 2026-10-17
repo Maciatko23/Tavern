@@ -10,6 +10,9 @@
 //     and Roch are away that night; the other way: the customs officer in the customs house (Map128) - 40 G, Roch gone for good
 //   - the cutter's states (the wreck on the beach -> on the slipway -> afloat), the ferry and its ferryman on a ferry day only
 //   - the interiors' doors open by day and lead in; every light on the harbour is a flame
+//   - (2026-10-17) W10's letters: the first 8 days after the news, by the ferryman, read in the mother's voice (her bust); grandpa's
+//     talk; the answer by the ferry (no food - a popup; 20 G - the officer's tenth); the second by Roch's cutter; the third only about
+//     Act III; the answer with a parcel; the epilogue's line (Underground.epilogueLines); F9's row in a game without the story
 // Run: CDP_PORT=9480 node tests/przystan_test.js (the server on 8765: node tools/serve.js)
 const kit = require("./lib/kit.js");
 
@@ -200,4 +203,108 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const lights = await t.json(`(function(){ return $dataMap.events.filter(e => e && /<Light:/.test(e.note)).map(e => [e.name, e.pages[0].image.characterName, /LightFlicker|LightWhen:night/.test(e.note)]); })()`);
     t.check("every light on the harbour is a fire: a lantern, a fire basket, a brazier or a fire in a barrel (flickering or lit at night)",
         lights.length >= 6 && lights.every(l => l[1] === "!Decoration" && l[2]), lights);
+
+    // ---------------------------------------------------------------- W10 „List do matki” continued (2026-10-17, the user's variant A):
+    // the mother's three letters (the ferryman / Roch), grandpa's talk, the answers with money / food, the epilogue line, F9's row
+    const ferryFrom = from => t.json(`(function(){ for (let d = ${from}; d < ${from} + 30; d++) if (Przystan.ferryToday(d)) return d; return 0; })()`);
+    const flat = o => Object.assign(o, { text: String(o.text || "").replace(/\s+/g, " ") });   // (the bubbles break the lines)
+    const declineRoch = () => t.eval("(function(){ const s = TownQuests.state(), d = Tawerna.time.day(); for (const q of TownQuestsData.QUESTS) if (q.giver === 'przemytnik') s.declined[q.id] = d; Przystan.state().newsGiven = Math.max(Przystan.state().newsGiven, Przystan.lastRunBack()); return 0; })()");
+    // (the story begins only in grandpa's house, Map019 - then off to the harbour)
+    await t.newGame({ story: true, skipIntro: true, hour: 10, day: 10, quiet: true, minimap: false });
+    await t.go(125, 30, 19, 2);
+    await t.eval(`(function(){ const f = TownQuests.state().flags; f.janekMet = 2; f.rochMet = 2; f.w10Prom = 6; f.w10Wiesc = 10;
+        Przystan.state().letterDay = 6; TownQuests.start('W10', 2, true); return 0; })()`);
+    const w0 = await t.json("({ step: TownQuests.rec('W10').step, due: Przystan.dueDay(1), next: Przystan.letterNo() })");
+    const fd0 = await ferryFrom(11);
+    await t.setDay(fd0, 10);
+    await t.frames(40);
+    const early = await t.json("Przystan.letterHere(1, 'prom')");
+    t.check("W10: after the news (day 10) the old pause (step 2) waits for the mother's first letter, due 8 days later - a ferry before that (day " + fd0 + ") brings none",
+        w0.step === 2 && w0.due === 18 && w0.next === 1 && fd0 < 18 && early === false, { w0, fd0, early });
+    const fd1 = await ferryFrom(18);
+    await t.setDay(fd1, 10);
+    await t.frames(40);
+    const l1 = flat(await t.talkTo("$gameMap.event(760)", [], { secs: 60 }));
+    const mom1 = l1.log.filter(l => l.name === "Matka");
+    const s1 = await t.json(`({ step: TownQuests.rec('W10').step, got: Przystan.letters().got.length, via: (Przystan.letters().got[0] || {}).via,
+        note: Journal.data().notes.some(n => n.title === "List od mamy" && /białe oko/.test(n.text) && !/\\\\N/.test(n.text)) })`);
+    t.check("...on the first ferry day from then (" + fd1 + ") the ferryman hands it over (the seal broken - the officer reads all); it is read in the mother's own voice: „Matka” speaks from her bust (the silent event 763)",
+        l1.done && /Pieczęć złamana/.test(l1.text) && mom1.length >= 6 && mom1.every(l => l.who === 763 && l.bust) && s1.got === 1 && s1.via === "prom",
+        { s1, n: mom1.length, mom1: mom1.map(l => [l.who, l.bust]), text: l1.text.slice(0, 300) });
+    t.check("...she is alive, goes north with the baggage train, washes and cooks, a trace of the father (a prisoner camp / the army), asks about grandpa, warns of the white eye asking about ravens; the journal keeps it („List od mamy”)",
+        /Żyję/.test(l1.text) && /taborem/.test(l1.text) && /Piorę/.test(l1.text) && /jeńców/.test(l1.text) && /fajkę/.test(l1.text) && /białe oko/.test(l1.text)
+        && /kruki/.test(l1.text) && s1.note && s1.step === 3, s1);
+    // grandpa reads his daughter's letter
+    await t.setHour(14);
+    await t.go(19, 9, 7, 8);
+    await t.frames(30);
+    const gp = flat(await t.talkTo("(window.Story && Story.npc && Story.npc('grandpa')) || $gameMap.event(901)", [], { secs: 60 }));
+    const s2 = await t.json("({ step: TownQuests.rec('W10').step, flag: !!TownQuests.state().flags.w10Dziadek, note: Journal.data().notes.some(n => n.title === 'Dziadek i list od mamy') })");
+    t.check("...grandpa reads it - his own talk („To dym. Dym gryzie w oczy”, „fajka dalej śmierdzi”), a note; W10 goes on to the answer",
+        gp.done && /Dym gryzie/.test(gp.text) && /fajka dalej śmierdzi/.test(gp.text) && s2.flag && s2.note && s2.step === 4, { s2, text: gp.text.slice(0, 300) });
+    // the answer by the ferry: food missing, then 20 G
+    const fd2 = await ferryFrom(fd1 + 1);
+    await t.go(125, 30, 19, 2);
+    await t.setDay(fd2, 10);
+    await t.frames(40);
+    await t.gold(100);
+    await t.popups({ clear: true });
+    const noFood = flat(await t.talkTo("$gameMap.event(760)", ["Poślij list", "List i paczka"]));
+    const pops10 = await t.popups();
+    const r0 = await t.json("({ n: Przystan.letters().replies.length, gold: $gameParty.gold() })");
+    t.check("answering by the ferry: a parcel of food needs 3 things that keep - without them a popup over the hero says so and nothing is sent",
+        noFood.done && r0.n === 0 && r0.gold === 100 && pops10.some(p => /jedzenia, które się nie psuje/.test(p)), { r0, pops10 });
+    const rep1 = flat(await t.talkTo("$gameMap.event(760)", ["Poślij list", "List i 20"]));
+    const rp1 = await t.json("({ rep: Przystan.letters().replies[0] || null, gold: $gameParty.gold(), f: [!!TownQuests.state().flags.w10Odpisal, !!TownQuests.state().flags.w10Pomoc] })");
+    t.check("...with 20 G: 3 G for the letter + 20 G paid, the officer's tenth taken (18 G reach her), grandpa's words written in („Fajka dalej śmierdzi”)",
+        rep1.done && rp1.gold === 77 && !!rp1.rep && rp1.rep.to === 1 && rp1.rep.via === "prom" && rp1.rep.gold === 18 && rp1.rep.gp && rp1.f[0] && rp1.f[1]
+        && /Fajka dalej śmierdzi/.test(rep1.text) && /dziesiątą część/.test(rep1.text), { rp1, text: rep1.text.slice(0, 300) });
+    // the second letter by Roch's cutter (a run that came back on its day)
+    const due2 = await t.json("Przystan.dueDay(2)");
+    await t.eval(`(function(){ const f = TownQuests.state().flags; f.d20Pomoc = 2; f.d20Gotowy = 2; Przystan.state().runDay0 = ${due2} - 1; return 0; })()`);
+    await t.setDay(due2, 10);
+    await t.frames(40);
+    const l2 = flat(await t.talkTo("TownLife.eventOf('przemytnik')", [], { secs: 60 }));
+    const s3 = await t.json("({ step: TownQuests.rec('W10').step, got: Przystan.letters().got.length, via: (Przystan.letters().got[1] || {}).via, news: Przystan.state().newsGiven })");
+    t.check("the second letter (day " + due2 + ": 8 days after the answer) comes by Roch's cutter after a run: the money showed her the prisoners' list (half of it washed out), grandpa's pipe answered; the run's news not given twice",
+        l2.done && /Znowu list od twojej matki/.test(l2.text) && /fajka śmierdzi/.test(l2.text) && /pół listy zmokło/.test(l2.text) && s3.got === 2 && s3.via === "kuter"
+        && s3.step === 5 && s3.news === due2 - 1, { due2, s3, text: l2.text.slice(0, 400) });
+    // the third letter: about Act III
+    const w3 = await t.json("Przystan.dueDay(3)");
+    await t.eval("TownQuests.state().flags.act3Held = 1; 0");
+    const due3 = await t.json("Przystan.dueDay(3)");
+    const fd3 = await ferryFrom(due3);
+    await t.setDay(fd3, 10);
+    await t.frames(40);
+    const l3 = flat(await t.talkTo("$gameMap.event(760)", [], { secs: 60 }));
+    const s4 = await t.json(`({ done: TownQuests.isDone('W10'), got: Przystan.letters().got.length, note: Journal.data().notes.some(n => n.title === "Trzeci list od mamy"),
+        end: Journal.data().notes.some(n => n.title === "Listy od mamy") })`);
+    t.check("the third letter waits for Act III (no day while the faction has not come); after the siege the ferryman brings it: the father's belt won from a LIVING prisoner, the warning too late („Już przyszli, mamo”); W10 done, the thread open",
+        w3 === null && due3 === due2 + 10 && l3.done && /Od żywego/.test(l3.text) && /Już przyszli/.test(l3.text) && /Za to, co mi posłałeś/.test(l3.text)
+        && s4.done && s4.got === 3 && s4.note && s4.end, { w3, due3, fd3, s4, text: l3.text.slice(0, 400) });
+    // the answer to it by the cutter, with a parcel; the epilogue's line
+    await t.give(105, 2); await t.give(124, 1);
+    await declineRoch();
+    const rep3 = flat(await t.talkTo("TownLife.eventOf('przemytnik')", ["Zawieziesz list do mamy", "List i paczka"]));
+    const r3 = await t.json(`({ rep: Przystan.letters().replies[1] || null, left: [$gameParty.numItems($dataItems[105]), $gameParty.numItems($dataItems[124])], ep: Przystan.epilogue(),
+        ul: (window.Underground && Underground.epilogueLines) ? Underground.epilogueLines("zniszczyc") : null })`);
+    t.check("...answered by Roch's cutter with a parcel (3 things that keep, taken from the bag); the Heart's epilogue gets the letters' line (she wrote, he wrote back and helped)",
+        rep3.done && !!r3.rep && r3.rep.to === 3 && r3.rep.via === "kuter" && r3.rep.food === 3 && r3.left[0] === 0 && r3.left[1] === 0
+        && /przeprowadziło ją przez zimę/.test(r3.ep || "") && Array.isArray(r3.ul) && r3.ul.includes(r3.ep), { r3, text: rep3.text.slice(0, 300) });
+
+    // F9 „Wyspa i fabuła”: the row (a game without the story - grandpa's step passed by)
+    await t.newGame({ map: 3, x: 22, y: 14, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
+    await t.eval("SceneManager.push(Scene_Debug); 0");
+    await t.until("SceneManager._scene instanceof Scene_Debug && !SceneManager.isSceneChanging()", 20);
+    await t.frames(6);
+    const f9 = await t.json(`(function(){ const s = SceneManager._scene; s.goTo(s._tabs._list.findIndex(c => c.name === "Wyspa i fabuła"), 0);
+        const rows = s._list._rows, i = rows.findIndex(r => r.kind === "isleW10");
+        return { head: rows.some(r => r.head && r.label === "Wątek W10 (list do matki):"), last: rows[rows.length - 1].kind, label: i >= 0 ? rows[i].label : null }; })()`);
+    await t.eval("(function(){ const s = SceneManager._scene, l = s._list; l.select(l._rows.findIndex(r => r.kind === 'isleW10')); s.onOk(); return 0; })()");
+    await t.until(t.onMap(125), 30);
+    await t.until("$gameMessage.isBusy()", 20);
+    await t.finish(80);
+    const f9b = await t.json("({ map: $gameMap.mapId(), got: Przystan.letters().got.length, step: TownQuests.rec('W10') ? TownQuests.rec('W10').step : -1, force: Przystan.letters().force, ep: Przystan.epilogue() === Przystan.TX.epilog.silent })");
+    t.check("F9 „Wyspa i fabuła”: the row „W10: przyślij list od matki (1. z 3)” - OK takes the hero to the harbour and the letter is read at once; without the story grandpa's step is passed by; unanswered, the epilogue's line says so",
+        f9.head && f9.last === "isleW10" && f9.label === "W10: przyślij list od matki (1. z 3)" && f9b.map === 125 && f9b.got === 1 && f9b.step === 4 && f9b.force === 0 && f9b.ep, { f9, f9b });
 });

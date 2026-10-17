@@ -139,6 +139,75 @@
         try { info.bust = T.ui && T.ui.heroBust ? T.ui.heroBust() : "Hero_Bust"; } catch (e) { info.bust = "Hero_Bust"; }
         return info;
     };
+    // (2026-10-17) the saves made before the place was kept: the place read once from the file itself (its map: the name the game
+    // shows - Story's "Pole dziadka" in a story game, else the map's display name, else its name in the editor), written into the
+    // file list (global info) for good; the lists on the screen are drawn again. A file that cannot be read keeps no place - the
+    // lists then show only the day (never a "-").
+    const placeFill = { tried: new Set(), busy: 0 };
+    function mapDisplayName(mapId) {
+        return new Promise(res => {
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "data/Map" + String(mapId).padStart(3, "0") + ".json");
+                xhr.overrideMimeType("application/json");
+                xhr.onload = () => { try { res(xhr.status < 400 ? String(JSON.parse(xhr.responseText).displayName || "") : ""); } catch (e) { res(""); } };
+                xhr.onerror = () => res("");
+                xhr.send();
+            } catch (e) { res(""); }
+        });
+    }
+    function placeOfSave(contents) {
+        const mapId = contents && contents.map && Number(contents.map._mapId);
+        if (!mapId) return Promise.resolve("");
+        const sys = contents.system || {}, st = (sys._tw && sys._tw.story) || sys._story, ST = T.api("Story");
+        const field = ST && ST.MAP && ST.MAP.field !== undefined ? ST.MAP.field : 3;
+        if (st && typeof st === "object" && st.debt !== undefined && !st.pending && mapId === field) return Promise.resolve("Pole dziadka");
+        const editor = String((window.$dataMapInfos && $dataMapInfos[mapId] && $dataMapInfos[mapId].name) || "").replace(/#\d+$/, "").trim();
+        return mapDisplayName(mapId).then(name => name || editor);
+    }
+    function refreshFileLists() {
+        const s = SceneManager._scene;
+        if (!s) return;
+        if (s instanceof Scene_File && s._listWindow) { s._listWindow.refresh(); s._filesCardId = -1; }
+        const v = s._views && s._views.save;
+        if (v && v._list) { v._list.refresh(); v.drawCard(); }
+        const tm = s._tsMenu, id = DataManager.latestSavefileId(), info = DataManager.savefileInfo(id);   // (the title's "Kontynuuj" line)
+        if (tm && tm._save && tm._save.ok && tm._save.id === id && info && info.place && !String(tm._save.text).includes(info.place)) {
+            tm._save.text = tm._save.text + " · " + info.place;
+            tm._key = "";
+        }
+    }
+    function fillOldPlaces() {
+        const g = DataManager._globalInfo;
+        if (!Array.isArray(g) || !window.$dataMapInfos) return;
+        g.forEach((info, id) => {
+            if (!info || info.place || placeFill.tried.has(id)) return;
+            placeFill.tried.add(id);
+            placeFill.busy++;
+            StorageManager.loadObject(DataManager.makeSavename(id))
+                .then(placeOfSave)
+                .then(place => {
+                    if (!place || DataManager._globalInfo[id] !== info || info.place) return;
+                    info.place = place;
+                    DataManager.saveGlobalInfo();
+                    refreshFileLists();
+                })
+                .catch(() => { /* (the file cannot be read: no place) */ })
+                .then(() => { placeFill.busy--; });
+        });
+    }
+    const _loadGlobalInfo = DataManager.loadGlobalInfo;
+    DataManager.loadGlobalInfo = function() {
+        _loadGlobalInfo.call(this);
+        // (the info comes in a moment; the old files' places are looked for as soon as the database (the map names) is there too)
+        let n = 0;
+        const iv = setInterval(() => {
+            if (++n > 600) { clearInterval(iv); return; }
+            if (!this.isGlobalInfoLoaded() || !this.isDatabaseLoaded()) return;
+            clearInterval(iv);
+            fillOldPlaces();
+        }, 50);
+    };
 
     // ------------------------------------------------------------------
     // Small pieces
@@ -1679,6 +1748,7 @@
     const _fileCreate = Scene_File.prototype.create;
     Scene_File.prototype.create = function() {
         _fileCreate.call(this);
+        fillOldPlaces();   // (old files without a place: looked for once, if the boot did not get to it)
         if (!useMenu()) return;
         this._grafitFiles = true;
         const P = FILEP, list = this._listWindow, st = list && list.mzkp_statusWindow, load = this.mode() !== "save";
@@ -1759,6 +1829,7 @@
         return i >= 0 ? cw.isCommandEnabled(i) : $gameSystem.isSaveEnabled();
     };
     SaveView.prototype.refresh = function() {
+        fillOldPlaces();
         this._list.refresh();
         if (this._list.index() < 0) this._list.selectSavefile(Math.max(1, $gameSystem.savefileId() || 1));
         this.drawCard();
@@ -2228,6 +2299,6 @@
     if (!(window.$plugins || []).some(p => p && p.name === "Equipment" && p.status) && !T.api("Equipment")) PluginManager.loadScript("Equipment");
     if (!(window.$plugins || []).some(p => p && p.name === "Drops") && !T.api("Drops")) PluginManager.loadScript("Drops");   // (the bundles - "Wyrzuć")
 
-    window.MenuRing = T.register(PLUGIN, { files: filesInfo, drawSaveCard, TABS, HERO_SUBS, WEAPONS, WEAR, L, HA, heroXp, needRows, toolList, goalLine, debtInfo, VIEWS, SORTS, GROUPS, sortBag, groupOf, bagSort,
+    window.MenuRing = T.register(PLUGIN, { files: filesInfo, drawSaveCard, fillOldPlaces, placeOfSave, placeFill, TABS, HERO_SUBS, WEAPONS, WEAR, L, HA, heroXp, needRows, toolList, goalLine, debtInfo, VIEWS, SORTS, GROUPS, sortBag, groupOf, bagSort,
         info: () => { const s = SceneManager._scene; return s instanceof Scene_Menu && s.menuInfo ? s.menuInfo() : null; } });
 })();

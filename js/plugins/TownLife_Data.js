@@ -362,6 +362,8 @@
             key: "drwal", name: "Zbych Smolarz", title: "drwal i węglarz", sheet: "$Npc_Drwal", map: 111,
             plan: [[0, "inside", "drwal_drzwi"], [5, "work", "drewutnia"], [10, "inside", "skraj_lasu"], [15, "work", "drewutnia"], [19, "wander", "namioty"],
                    [21.5, "inside", "drwal_drzwi"]],
+            // (2026-10-17) "inside skraj_lasu" at midday = gone to the forest for wood: away, not in his hut
+            away: ["skraj_lasu"],
             barks: {
                 work: ["Hop! ...Hop! Suche drewno pęka jak szkło.", "Węgiel dla kowala, drewno dla piekarni. A dla siebie - drzazgi.", "Nie stój pod siekierą, chłopcze."],
                 wander: ["Ogień grzeje lepiej, jak się przy nim gada.", "Darin, opowiedz jeszcze o tych żelaznych ludziach z kontynentu."],
@@ -381,7 +383,11 @@
             key: "klusownik", name: "Rysiek Sidło", title: "kłusownik", sheet: "$Npc_Klusownik", map: 111, speed: 4,
             plan: [[0, "inside", "skraj_lasu"], [4.5, "inside", "klusownik_drzwi"], [13, "wander", "plac"], [15, "wander", "kram"], [17, "wander", "namioty"],
                    [20, "inside", "skraj_lasu"]],
+            // (2026-10-17) "inside skraj_lasu" = in the woods at night, not in his hut: he crouches by his snares on Skraj lasu (Map023,
+            // spot klusownik_las in SPOTS_BY_MAP below), and says his forest lines there (barks / talk "skraj_lasu")
+            indoor: { skraj_lasu: "klusownik_las" },
             barks: {
+                skraj_lasu: ["Ciii! Spłoszysz mi zająca.", "Nie widziałeś mnie. Rozumiemy się?", "Pętla stoi, przynęta leży. Teraz tylko czekać."],
                 wander: ["Czego się gapisz?", "Zając? Jaki zając? Kupiłem na targu.", "Józek, mam dla ciebie skórki. Tylko cicho."],
                 rain: ["W deszcz zwierz idzie do wodopoju. Dobra noc na sidła."],
                 night: ["Nie widziałeś mnie. Rozumiemy się?"],
@@ -392,7 +398,11 @@
                 day: ["Las Lorda jest pełen zwierzyny. A ludzie tutaj jedzą trawę. Powiedz mi, kto tu jest złodziejem?", "Umiesz zastawić sidła? Przynęta to połowa roboty. Zając sam do pustej pętli nie przyjdzie."],
                 evening: ["Jak zajdzie słońce, idę na swoje. Gajowi Lorda śpią pijani, ale kapral Wit - nie śpi nigdy.", "Chcesz kupić skórkę? Taniej niż u kupca z kontynentu. I nie pytaj skąd."],
                 night: ["Psst. W lesie za polem twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja."],
-                rain: ["Deszcz zatrze ślady. Dzisiaj wrócę z pełną torbą."]
+                rain: ["Deszcz zatrze ślady. Dzisiaj wrócę z pełną torbą."],
+                // (in the woods, Skraj lasu - whatever the hour)
+                skraj_lasu: ["Cicho! ...Ty tutaj, o tej porze? Las nocą nie jest dla chłopaków z pola. Wracaj, zanim wilki cię zwęszą.",
+                             "Psst. W lesie za polem twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja.",
+                             "Widzisz tę pętlę przy ścieżce? Zając chodzi zawsze tą samą drogą. Głupi jak gajowy Lorda."]
             }
         },
         {
@@ -705,7 +715,8 @@
     // (Map024: the guard's day post beside the left fire basket of the forecourt; his night round straz_1..4 - the map's "Miejsce:"
     // markers win; 2026-10-12: the user's rebuilt garden has no straz_4 any more - the defaults keep the round: the orangery's corner,
     // the middle path, the south path, back by the orangery's terrace)
-    const SPOTS_BY_MAP = { 111: {}, 125: { tawerna: [53, 19, 6] }, 24: { straz_dzien: [15, 16, 2], straz_1: [10, 19, 6], straz_2: [19, 19, 2], straz_3: [19, 28, 4], straz_4: [10, 28, 8] } };
+    // (Map023 Skraj lasu: Rysiek's night place by his snares, in the small clearing by the stones - 2026-10-17)
+    const SPOTS_BY_MAP = { 111: {}, 125: { tawerna: [53, 19, 6] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [15, 16, 2], straz_1: [10, 19, 6], straz_2: [19, 19, 2], straz_3: [19, 28, 4], straz_4: [10, 28, 8] } };
 
     window.TownLifeData = { MAP: 8, FIRST_ID: 910, SPOTS, SPOTS_BY_MAP, RESIDENTS };
 })();

@@ -105,23 +105,22 @@
       "arkusz": "img/characters/!$Przystan_Prom.png",
       "rozmiar_arkusza": [1152, 672],
       "komorka": [384, 168],
-      "obraz_w_komorce": [17, 4, 366, 167],
+      "obraz_w_komorce": [17, 78, 367, 167],
       "gdzie": "woda",
       "kolysanie": [{"dx": 0, "dy": 0}, {"dx": 0, "dy": 1}, {"dx": 0, "dy": 1}],
       "pola": {
         "x_od": -4,
         "x_do": 4,
-        "y_od": -3,
+        "y_od": -1,
         "y_do": 0,
-        "px_wzgledem_dolu_srodka_pola": [-175, -164, 174, -1]
+        "px_wzgledem_dolu_srodka_pola": [-175, -90, 175, -1]
       },
-      "szerokosc_w_polach": 7.27,
-      "wysokosc_w_polach": 3.4,
+      "szerokosc_w_polach": 7.29,
+      "wysokosc_w_polach": 1.85,
       "sugerowane_przesuniecie_px": {"x": 0, "y": 0},
       "gdzie_postawic": "pole wody pod środkiem kadłuba, górną burtą tuż pod molem; ciężki, kołysze się tylko 0/1/1 px",
-      "opis": "prom: barka z pokładem, nadbudówka na rufie, maszt ze zwiniętym żaglem i proporczykiem, skrzynie i worki, cumy",
-      "zrodlo": "raw/prom_collage.png",
-      "cumy": "liny cumownicze wychodzą ok. 1 pole nad burtę przy dziobie i rufie (postaw pachołki na molo nad tymi miejscami)"
+      "opis": "prom: płaska barka z burtami i poręczą, wiosło sterowe na rufie, skrzynie i zwój liny na dziobie, beczki na rufie",
+      "zrodlo": "raw/prom_final.png (build_prom.py z raw/prom_pixellab_2.png, PixelLab Pro Flash)"
     }
   }
 }

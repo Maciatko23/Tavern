@@ -351,3 +351,21 @@ nie da się gotować wody z morza. Nie da się.
 - **Grafika:** PixelLab, 15 generacji: `img/system/RedWater_Fish_0/1.png`, `img/characters/!$Przystan_Tabliczka.png`
   (tools/przystan/art/czerwona).
 - **Test i zrzuty:** `tests/red_water_test.js`; `czerwona_przystan.png`, `czerwona_plaza.png`, `czerwona_popup.png`, `czerwona_szara.png`.
+
+## W10: listy od matki (2026-10-17, wariant A)
+
+- **Trzy listy** z lądu. Przynosi je przewoźnik promu (w dzień promu, 9–15, na molo) albo Roch po rejsie kutrem (po D20 z wypłynięciem).
+  Pierwszy przychodzi 8 dni po wieści z lądu (`w10Wiesc`). Drugi 8 dni po odpowiedzi bohatera, ale nie wcześniej niż 10 dni po pierwszym;
+  bez odpowiedzi po 16 dniach. Trzeci 10 dni po drugim, dopiero w okolicach Aktu III.
+- **Głos matki:** list czyta się w rozmowie, z popiersiem matki z prologu (`Matka_Bust`, tabliczka „Matka”). Mówi ciche, niewidoczne
+  zdarzenie 763 na przystani, ustawiane przy bohaterze. Pełna treść listu trafia do dziennika.
+- **Pierwszy list:** żyje, idzie z taborem na północ, pierze i gotuje dla taboru. O ojcu dwie wieści: obóz jeńców za rzeką albo wojsko
+  w górach. Pyta o dziadka Stacha i każe zostać przy nim. Ostrzega przed ludźmi z białym okiem pod płaszczem, którzy pytają o kruki.
+- **Dziadek** czyta list córki (krok rozmowy w TownQuests): „To dym. Dym gryzie w oczy”. Każe dopisać od siebie, że „fajka dalej śmierdzi”.
+- **Odpowiedź** (raz na każdy list): promem (3 G; z pieniędzy celnik bierze dziesiątą część) albo kutrem (za darmo). Do listu można dołożyć
+  20 G, 50 G albo paczkę 3 rzeczy, które się nie psują (wędzone mięso, wędzona ryba, ser, miód).
+- **Drugi list** zależy od odpowiedzi: pieniądze pokazały jej listę jeńców (pół zmokło) albo „odkładam po groszu”; paczka; „fajka śmierdzi”.
+  **Trzeci list:** pas ojca na innym żołnierzu, wygrany w kości od żywego jeńca; tabor idzie na północ; ostrzeżenie przed Czarnymi Oczami
+  na wyspie. Wątek zostaje otwarty.
+- **Epilog po Sercu:** jedna linijka zależna od tego, czy bohater pisał i pomagał (`Przystan.epilogue`, Underground.js).
+- **F9** „Wyspa i fabuła”: „W10: przyślij list od matki” - następny list od razu, bohater na przystani.

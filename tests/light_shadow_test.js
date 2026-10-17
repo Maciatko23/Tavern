@@ -101,4 +101,28 @@ kit.test({ port: 9442, bootCheck: "the game boots", errorCheck: "no errors in th
     t.check("...a campfire's warm glow over the dark at the lamp and at the brazier (a fire: full strength and reach, a stronger glow)",
         warm(lamps.glow) && warm(lamps.fireGlow) && lamps.fireGlow[3] > lamps.glow[3] && lamps.fire && lamps.fire.i === 1 && lamps.fire.r === 200, lamps);
     await t.shot(path.join(SHOTS, "dwor_latarnie_noc.png"));
+
+    // (2026-10-17) at night the outer ring of a fire basket's light over the WATER is warm to its edge (Farming_Render's night layer:
+    // the world under the light multiplied by the firelight's colour - in full over water, a touch on land - and the darkness left in
+    // the ring warm brown), not the pale blue halo it was
+    await t.newGame({ map: 125, x: 20, y: 12, dir: 4, hour: 22, day: 5, quiet: true, minimap: false });
+    await t.eval("$gameScreen.changeWeather('none', 0, 0); 0");
+    await t.eval("(function(){ const e = $gameMap.event(25); $gamePlayer.locate(e.x + 3, e.y); $gamePlayer.updateScroll = function(){}; $gameMap.setDisplayPos(Math.max(0, e.x - 6), Math.max(0, e.y - 6)); return 0; })()");
+    await t.frames(30);
+    const ring = await t.json(`(function(){ const N = SceneManager._scene._spriteset._nightLight, l = N && N.lights().find(l => l.id === 6025);
+        if (!l || !N._warm) return { light: !!l, warm: !!(N && N._warm) };
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        let at = null;
+        for (let y = 0; y < $gameMap.height() && !at; y++) for (let x = 0; x < $gameMap.width() && !at; x++) {
+            const sx = (($gameMap.adjustX(x) + 0.5) * tw), sy = (($gameMap.adjustY(y) + 0.5) * th), d = Math.hypot(sx - l.x, sy - l.y);
+            if (d > 0.55 * l.r && d < 0.7 * l.r && sx > 0 && sy > 0 && sx < Graphics.width && sy < Graphics.height && Farming.isWaterTile(x, y)) at = [x, y, sx, sy, Math.round(d)];
+        }
+        if (!at) return { cell: null, r: l.r };
+        const px = (c, sx, sy) => Array.from(c.getImageData(Math.round(sx / 2), Math.round(sy / 2), 1, 1).data);
+        return { cell: at, r: l.r, visible: N._warm.visible, multiply: N._warm.blendMode === PIXI.BLEND_MODES.MULTIPLY,
+            warm: px(N._warm.bitmap.context, at[2], at[3]), night: px(N.bitmap.context, at[2], at[3]) }; })()`);
+    t.check("at night the fire basket's outer ring over the water is warm (firelight colour over the sea, the darkness there warm brown)",
+        !!ring.cell && ring.visible && ring.multiply && ring.warm[3] > 100 && ring.warm[0] > ring.warm[1] && ring.warm[1] > ring.warm[2]
+        && ring.night[3] > 0 && ring.night[0] >= ring.night[2], ring);   // (the night colour there no longer blue: was 3,7,24)
+    await t.shot(path.join(SHOTS, "przystan_kosz_noc.png"));
 });

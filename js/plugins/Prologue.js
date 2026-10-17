@@ -41,7 +41,8 @@
  * polu: powrót do tytułu), Enter gotowe, mysz. Puste pole = „Reid”.
  * Film: O / Enter / klik - następna kwestia; krótko P / Esc - następna
  * scena; przytrzymaj P - pomiń cały prolog.
- * Plansze: img/pictures/Prolog_*.png, popiersie matki Matka_Bust.png.
+ * Plansze: img/pictures/Prolog_*.png, popiersie matki Matka_Bust.png,
+ * bohater przed sztormem (całe ubranie) Hero_Bust_Lad.png.
  * Skrypt: Prologue.info() (stan), Prologue.speed(n) (testy: n kroków na
  * klatkę), Prologue.log (sceny po kolei).
  * Powtórka w trakcie gry (menu F9, zakładka „Wyspa i fabuła”): Prologue.replay()
@@ -58,6 +59,7 @@
     const ON = params.enabled !== "false";
     const HOLD = 72;                     // frames P is held to skip the whole film
     const W = 1280, H = 720, BAR = 56;
+    const HERO_BUST_LAD = "Hero_Bust_Lad";   // (the hero before the storm: whole clothes - tools/busts/make_hero_lad.py)
     const C = { text: "#ece6da", muted: "#b8b0a2", dim: "#8a8478", copper: "#d08a5a", plate: "#e8c8a0", panel: "rgba(22,23,26,0.92)",
         line: "rgba(64,66,72,1)", cell: "rgba(30,32,36,1)", cellOn: "rgba(48,50,56,1)" };
     const api = { log: [], speedK: 1, info: () => null, speed(n) { api.speedK = Math.max(1, Math.floor(n) || 1); return api.speedK; } };
@@ -350,7 +352,9 @@
         for (const s of SCENES) ImageManager.loadPicture(s.board);
         for (const k in FLAGS) ImageManager.loadPicture(FLAGS[k].pic).smooth = true;
         ImageManager.loadPicture(BOY.pic).smooth = false;
-        this._bustPics = { matka: ImageManager.loadPicture("Matka_Bust"), hero: ImageManager.loadPicture("Hero_Bust") };
+        // (2026-10-17) the hero's bust: the clean one from before the storm (Hero_Bust_Lad - whole clothes, no patches) on the
+        // mainland, the torn one (Hero_Bust, the game's) from the storm on
+        this._bustPics = { matka: ImageManager.loadPicture("Matka_Bust"), hero: ImageManager.loadPicture("Hero_Bust"), heroLad: ImageManager.loadPicture(HERO_BUST_LAD) };
         this._world = new Sprite();          // the board and what sits on it (fires, lanterns), moved by the camera
         this._board = new Sprite();
         this._world.addChild(this._board);
@@ -677,6 +681,11 @@
         this._text.addChild(s);
         this._caption = s;
     };
+    // the scenes before the storm (the mainland: the chronicle, the village, the hut, the port) - the hero still in whole clothes
+    Scene_Prologue.prototype.beforeStorm = function() {
+        const i = SCENES.indexOf(this._scene), storm = SCENES.findIndex(s => s.id === "sztorm");
+        return i >= 0 && (storm < 0 || i < storm);
+    };
     // a talk line: the busts in the bottom corners (the mother left, mirrored; the hero right), the bubble from the speaker's side
     Scene_Prologue.prototype.showSay = function(who, text) {
         const B = this._bust;
@@ -684,7 +693,7 @@
             B.on = true; B.t = 0;
             for (const k in this._busts) {
                 const sp = this._busts[k];
-                sp.bitmap = this._bustPics[k];
+                sp.bitmap = k === "hero" && this.beforeStorm() ? this._bustPics.heroLad : this._bustPics[k];
                 sp.visible = true;
                 sp.scale.set(k === "matka" ? -0.78 : 0.78, 0.78);
                 sp.anchor.set(1, 1);   // (the mother mirrored: her right edge at x 0 + her width; the hero's right edge at the screen's)
@@ -1247,7 +1256,7 @@
         if (s instanceof Scene_Prologue) {
             const B = s._bust;
             return { screen: "film", scene: s._scene ? s._scene.id : null, index: s._index, step: s._step, log: s._log.slice(), lines: s._lines,
-                bubble: s._bubble ? s._bubble.text : null, hold: s._holdT, ending: !!s._ending, out: s._out, busts: { on: B.on, speaking: B.speaking },
+                bubble: s._bubble ? s._bubble.text : null, hold: s._holdT, ending: !!s._ending, out: s._out, busts: { on: B.on, speaking: B.speaking, hero: s._busts && s._busts.hero.visible ? (s._busts.hero.bitmap === s._bustPics.heroLad ? "Hero_Bust_Lad" : "Hero_Bust") : null },
                 fx: { parts: s._fx.parts.length, rain: s._fx.rain.length, glows: s._fx.glows.length, mist: s._fx.mist.length, rot: +s._world.rotation.toFixed(4) },
                 cam: s._cam.now.map(v => +v.toFixed(3)), skipped: s._skipped || 0,
                 flags: s._fx.flags.map(f => ({ pic: f.def.pic, moved: +f.moved.toFixed(1), x: f.plane.x, y: f.plane.y })),

@@ -79,10 +79,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const has = (o, re) => re.test(o.text);
 
     // =========================================================================================================== the world
-    await reset({ grumDead: 3, rafalSmuggled: 4, campOutside: 5, marekSaved: 6, sluiceHalf: 7, w3Burned: 8, borgarSaying: 2, signalBook: 2, act3Costly: 9 });
+    await reset({ grumDead: 3, rafalSmuggled: 4, campOutside: 5, marekSaved: 6, sluiceHalf: 7, w3Burned: 8, borgarSaying: 2, borgarIdzie: 2, signalBook: 2, act3Costly: 9 });
     const realAct3 = await t.eval("!!Tawerna.api('Act3')");
     const w0 = await t.json("Underground.world()");
-    t.check("world(): the quests' flags as the endings read them - Grum dead, Rafał over the sea, the camp outside, Marek saved, the water under the market, Melia's words burnt, Borgar's saying, the Book of Signals; a story game, the debt paid; the Lord absent (nothing told him)",
+    t.check("world(): the quests' flags as the endings read them - Grum dead, Rafał over the sea, the camp outside, Marek saved, the water under the market, Melia's words burnt, Borgar went down with the hero (W4 ch. 7: borgarIdzie), the Book of Signals; a story game, the debt paid; the Lord absent (nothing told him)",
         w0.grum === "dead" && w0.rafal === "gone" && w0.camp === "outside" && w0.marek && w0.water && w0.melia === "burned" && w0.borgar && w0.book &&
         w0.story && w0.debtPaid && w0.lord.stance === "absent" && w0.butler === "feliks", w0);
     if (!realAct3) {

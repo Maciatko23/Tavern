@@ -209,7 +209,7 @@ nie otwiera). **Jedyny wyjątek, celowo bardzo głęboko: Źródło pod skałą 
   to klejnot, zwierciadło, studnia czy coś żywego, więc w grze „nie da się powiedzieć, czym jest”. Gdy autor zdecyduje -
   wystarczy podmienić obrazek zdarzenia „Serce Twierdzy (blask)”.
 - **Wybór z Aktu III**: *Zniszczyć Serce* / *Zostać strażnikiem* (bohater, albo Borgar - po W4 „Słowa Borgara”, flaga
-  `borgarSaying` - albo Ambroży - po oddaniu mu kronik, `ambrozyChronicles`) / *Uwolnić prawdę dla wszystkich* / *Zapieczętować
+  `borgarIdzie` - od 2026-10-17 W4 rozdz. 7, `Kasztelan.js`; samo `borgarSaying` już nie wystarcza - albo Ambroży - po oddaniu mu kronik, `ambrozyChronicles`) / *Uwolnić prawdę dla wszystkich* / *Zapieczętować
   je - z zasadami* / *Jeszcze nie*. Potwierdzenie „Tego nie da się cofnąć.” → **zakończenie jako sceny** (niżej), epilog, „KONIEC -
   <tytuł>” i wybór: *Wrócić do gry* (bohater stoi przy barze w tawernie, następny dzień) albo *Do ekranu tytułowego*.
 - Po zakończeniu komnata pamięta wybór: odłamki (zniszczone), pusty cokół (uwolnione), kamienna pieczęć (zapieczętowane) albo
@@ -226,7 +226,7 @@ Każda wtyczka pytana ostrożnie (może jej nie być): **Story** (gra fabularna,
 | `story`, `debtPaid` | `Story.state()` | gra fabularna; spłacone (`paid >= debt` albo `done`) |
 | `opinion` | `TownQuests.opinion()` | 0-100 albo `null` |
 | `locks` | `Underground.locks().open` | 2-3 |
-| `borgar` / `ambrozy` / `book` | flagi `borgarSaying` / `ambrozyChronicles` / `signalBook` | kto schodzi z bohaterem do komnaty; Księga sygnałów |
+| `borgar` / `ambrozy` / `book` | flagi `borgarIdzie` (W4 rozdz. 7: Borgar poszedł w dół) / `ambrozyChronicles` / `signalBook` | kto schodzi z bohaterem do komnaty; Księga sygnałów |
 | `melia` | `w3Sung` / `w3Borgar` / `w3Burned` | `public` / `borgar` / `burned` / `null` |
 | `grum` | `Act3.outcome().grum` (`neutral` = jak bez W8), inaczej `grumDead` / `grumGone` / `grumAlly` / `w8Faction`, `w8Lost` | `ally` `enemy` `gone` `dead` `faction` `null` |
 | `rafal` | `Act3.outcome().rafal`, `TownQuests.w6().rafal`, inaczej `rafalAlly` / `rafalGiven`, `rafalEnemy` / `rafalSmuggled` / `rafalTaken` | `ally` `enemy` `gone` `taken` `dead` `null` |
@@ -260,7 +260,7 @@ Teksty i ustawienie scen są w `Underground_Data.js HEART` (aktorzy, miejsca, Lo
 światło Serca, napisy, karty), `Underground.js` robi z nich polecenia zdarzeń. W czasie scen: czarne pasy u góry i u dołu, schowany
 HUD, **bez autozapisu** (silnik zapisuje po każdym przejściu - zapis w połowie sceny wczytałby się w jej środek).
 
-1. **Komnata**: kto zszedł z bohaterem (Borgar - `borgarSaying`, Ambroży - `ambrozyChronicles`) wchodzi drzwiami; potem samo
+1. **Komnata**: kto zszedł z bohaterem (Borgar - `borgarIdzie`, Ambroży - `ambrozyChronicles`) wchodzi drzwiami; potem samo
    zakończenie: *zniszczyć* - szepty, zamach, pęknięcie, „przez jedną chwilę wiesz wszystko” (prawdy Warstwy Prawdy jedna po drugiej),
    ciemność i cisza; *strażnik* - bohater siada na ławie, „Mija rok”, pierwszy pytający (Lord, jeśli mu odmówiono; Ludmiła, jeśli Marek
    nie wrócił; Melia po spalonych słowach; inaczej Ozzy); Borgar („Masz. Klucz od tawerny. Zmiana co trzy dni”) albo Ambroży biorą

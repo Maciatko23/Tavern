@@ -666,8 +666,10 @@
     function borgarMenu(ev, greet) {
         const s = state(), o = [], TS = T.api("TavernShift"), opts = [];
         const why = TS && TS.canStart ? TS.canStart() : null, today = s.shiftDay === day();
+        const ban = T.call("Kasztelan", "shiftBan");   // (2026-10-17, W4: the tavern shut for a day / "zejdziesz - nie wracaj do pracy")
         let line;
         if (!TS) line = "Dziś nie ma roboty. Zajrzyj innym razem.";
+        else if (ban) line = ban;
         else if (!inShiftHours()) line = hour() < SHIFT_FROM ? "Zmiany są po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ". Teraz możesz najwyżej coś sprzedać."
             : "Za późno na zmianę - goście już się rozchodzą. Przyjdź jutro od " + SHIFT_FROM + ".";
         else if (today) line = "Na dziś wystarczy. Wracaj jutro od " + SHIFT_FROM + ".";

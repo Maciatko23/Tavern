@@ -346,6 +346,11 @@ kit.test({ port: 9460, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     m = await info();
     const sinfo = await t.json(`DataManager.savefileInfo(${m.save.id})`);
     t.check("O zapisuje grę w tym pliku (dzień, miejsce, czas gry w opisie pliku)", saved && sinfo && sinfo.day === 40 && !!sinfo.place && !!sinfo.playtime, sinfo);
+    // (2026-10-17) a save from before the place was kept: the place read once from the file itself (its map's name), never a "-"
+    await t.eval(`(function(){ const id = ${m.save.id}; delete DataManager._globalInfo[id].place; MenuRing.placeFill.tried.delete(id); MenuRing.fillOldPlaces(); return 0; })()`);
+    const oldPlace = await t.until(`!!(DataManager.savefileInfo(${m.save.id}) || {}).place`, 10);
+    const pinfo = await t.json(`DataManager.savefileInfo(${m.save.id})`);
+    t.check("stary zapis bez miejsca: miejsce odczytane z pliku (nazwa mapy) i zapamiętane na liście", oldPlace && pinfo.place === sinfo.place, { before: sinfo.place, after: pinfo.place });
     await shot("zapis");
 
     // ---------------------------------------------------------------- P up, P out
