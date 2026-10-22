@@ -665,9 +665,10 @@
         const g = !!$gameSystem._dayNightTinting && sun.outdoors && !sun.flash ? sky.golden * (1 - 0.8 * (window.Storm ? Storm.level() : 0)) : 0;
         layer.visible = g > 0.01;
         if (!layer.visible) return;
-        // (a scale that covers the screen; mirrored: the warm side where the sun is)
-        const sx = (Graphics.width / 256) * 1.02, sy = (Graphics.height / 4) * 1.02;
-        for (const s of [layer._warm, layer._cool]) s.scale.set(sky.side > 0 ? -sx : sx, sy);
+        // (a scale that covers the screen - the world's view: Tawerna.view, bigger while flying high on the eagle; mirrored: the warm
+        // side where the sun is)
+        const VW = T.view.w(), VH = T.view.h(), sx = (VW / 256) * 1.02, sy = (VH / 4) * 1.02;
+        for (const s of [layer._warm, layer._cool]) { s.scale.set(sky.side > 0 ? -sx : sx, sy); s.x = VW / 2; s.y = VH / 2; }
         layer._warm.alpha = SIDE_WARM_ALPHA * g;
         layer._cool.alpha = SIDE_COOL_ALPHA * g;
         layer._golden = g;
@@ -809,7 +810,7 @@
         this._skyFx = { rays, mist };
         if (!this._mistLayer.visible && !this._rayLayer.visible) return;
         if (this._skyFxMap !== $gameMap.mapId()) this.buildSkyFx();
-        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), GW = Graphics.width, GH = Graphics.height, f = Graphics.frameCount;
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), GW = T.view.w(), GH = T.view.h(), f = Graphics.frameCount;   // (the world's view: Tawerna.view)
         if (this._rayLayer.visible) {
             const side = sky.side, tilt = side * (0.55 + 0.4 * smooth01((12 - sky.elev) / 12)), tint = rgbInt(sky.morning ? RAY_MORNING : RAY_EVENING);
             for (const sh of this._rayLayer.children) {

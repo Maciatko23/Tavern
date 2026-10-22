@@ -48,7 +48,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const town = await t.json(`(function(){ const o = { podgrodzie: [], town: 0 }; for (const r of TownLife.RESIDENTS) { const e = TownLife.eventOf(r.key);
         if (TownLife.homeOf(r) === 111 && e) o.podgrodzie.push(r.key); if (TownLife.homeOf(r) === 8 && e) o.town++; } return o; })()`);
     // (2026-10-16) + Eryk Sowa, the castaway of the wreck (Wrak_Data.js, resident 948 "rozbitek": he lives in the town, the tavern's guest)
-    t.check("on Map008 the town's 21 residents (14 + the quests' four + Teodor, hidden till Feliks goes, + Marek, hidden till W6 brings him home, + Eryk Sowa the castaway) and none of Podgrodzie's", town.town === 21 && !town.podgrodzie.length, town);
+    // (2026-10-22) + Hieronim the gravedigger of package D (Zakon_Data.js, resident 2930 "grabarz": the old graveyard east of the town)
+    t.check("on Map008 the town's 22 residents (14 + the quests' four + Teodor, hidden till Feliks goes, + Marek, hidden till W6 brings him home, + Eryk Sowa the castaway, + Hieronim the gravedigger) and none of Podgrodzie's", town.town === 22 && !town.podgrodzie.length, town);
 
     // the night: back in Podgrodzie at 23:48 everyone is hidden (indoors, or the poacher in the forest)
     await t.go(111, 1, 1, 2);

@@ -1,0 +1,210 @@
+{
+  "paczka": "C",
+  "budzet": 150,
+  "zuzyte": 129,
+  "lista": [
+    {
+      "co": "Pasterz: postać pro 8 kier.",
+      "narzedzie": "create_character_pro",
+      "id": "c514e283-6a77-4756-ae0d-5b4109456729",
+      "generacje": 10,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Handlarz: postać pro 8 kier.",
+      "narzedzie": "create_character_pro",
+      "id": "80ea51d6-2bfe-48de-b819-e9dbf501aef4",
+      "generacje": 10,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Pasterz: chód walking-8-frames S,E",
+      "narzedzie": "animate_character_template",
+      "id": "c85d1cdf-8d35-458b-9454-e834654aaa45",
+      "generacje": 2,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Pasterz: chód walking-8-frames W",
+      "narzedzie": "animate_character_template",
+      "id": "c85d1cdf-8d35-458b-9454-e834654aaa45",
+      "generacje": 1,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Pasterz: chód walking-8-frames N,SW",
+      "narzedzie": "animate_character_template",
+      "id": "c85d1cdf-8d35-458b-9454-e834654aaa45",
+      "generacje": 2,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Pasterz: chód walking-8-frames NW",
+      "narzedzie": "animate_character_template",
+      "id": "c85d1cdf-8d35-458b-9454-e834654aaa45",
+      "generacje": 1,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Pasterz: chód walking-8-frames NE,SE",
+      "narzedzie": "animate_character_template",
+      "id": "c85d1cdf-8d35-458b-9454-e834654aaa45",
+      "generacje": 2,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Handlarz: chód walking-8-frames S,E",
+      "narzedzie": "animate_character_template",
+      "id": "ad55d9d5-f0d9-4fd9-8e24-62b491f36e11",
+      "generacje": 2,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Mielerz zimny (144x144, styl: namiot)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "87e53bbc-bd44-430b-b273-0cd08b24027f",
+      "generacje": 6,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Mielerz gotowy (edycja zimnego)",
+      "narzedzie": "edit_image_pro_flash",
+      "id": "7d678e7a-35ae-49f8-ba97-0521810d404c",
+      "generacje": 6,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Handlarz: chód walking-8-frames W",
+      "narzedzie": "animate_character_template",
+      "id": "ad55d9d5-f0d9-4fd9-8e24-62b491f36e11",
+      "generacje": 1,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Szyb poszukiwawczy (96x96, styl: Mt_Cave)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "d5d87762-bf85-4552-83e7-b52175c85749",
+      "generacje": 5,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Szyb zasypany (edycja)",
+      "narzedzie": "edit_image_pro_flash",
+      "id": "f930c68c-e5df-4593-b59d-d99f46854ab4",
+      "generacje": 5,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Handlarz: chód walking-8-frames N,SW",
+      "narzedzie": "animate_character_template",
+      "id": "ad55d9d5-f0d9-4fd9-8e24-62b491f36e11",
+      "generacje": 2,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Szałas węglarza (144x96, styl: namiot)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "f273c9db-84ba-4e19-a5b3-75c5d3f8aaf5",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Handlarz: chód walking-8-frames NW,NE",
+      "narzedzie": "animate_character_template",
+      "id": "ad55d9d5-f0d9-4fd9-8e24-62b491f36e11",
+      "generacje": 2,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Koszar wiklinowy (240x192, styl: ule)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "d0c19084-8603-4dba-b82a-14efcb227d7d",
+      "generacje": 9,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Handlarz: chód walking-8-frames SE",
+      "narzedzie": "animate_character_template",
+      "id": "ad55d9d5-f0d9-4fd9-8e24-62b491f36e11",
+      "generacje": 1,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Wóz handlarza (144x96, styl: łódź)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "5ecaff78-24f0-4ed9-8770-7c1cb79c0dab",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Osioł (64x64, styl: jeleń)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "35a2eec9-ad6e-40b3-83fc-4bf5a6251140",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Wylot jaskini (96x96, styl: Mt_Cave)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "497b244f-c1f2-4eaa-909c-46d1303b2218",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Handlarz: chód S ponownie (skeleton-v3, płaszcz znikał)",
+      "narzedzie": "animate_character_skeleton_v3",
+      "id": "0f6cbabc-164b-4ac1-90ae-43fa98dcdba2",
+      "generacje": 3,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Stare krzyże x3 (144x72, styl: dyby)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "69f1991d-5f13-40e3-b79c-96c225b3cb75",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Krzyże oczyszczone (edycja)",
+      "narzedzie": "edit_image_pro_flash",
+      "id": "792fb1eb-b2f1-4178-8544-492d67e85e7f",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Ławka (96x48, styl: Farm_Bench)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "a53c07b4-6a6d-4fc5-b639-cffb5a9bbf6d",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Juk handlarza (48x48, styl: Farm_ChestS)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "4deb5efa-03bb-43a1-b210-9a8c29bd3876",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Skrzynia przemytnika (48x48, styl: Farm_ChestS)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "fe5fd5bb-1afe-484a-b98b-bde1e410eeb4",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Stół z rejestrem (96x64, styl: Farm_Workbench)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "61cea77b-09d4-4c67-a667-03c8c13bf7e6",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "Juk handlarza - druga próba (48x48, styl: grzyb)",
+      "narzedzie": "create_image_pro_flash",
+      "id": "8c752cd3-adc7-458f-98a8-65fd0460613f",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    }
+  ]
+}

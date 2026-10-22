@@ -1,0 +1,752 @@
+[
+ {
+  "id": "D1",
+  "kind": "D",
+  "steps": 4,
+  "ch": 0,
+  "hours": 4,
+  "days": 2,
+  "kinds": "{\"bring\":2,\"talk\":2}",
+  "repeat": ""
+ },
+ {
+  "id": "D3",
+  "kind": "D",
+  "steps": 5,
+  "ch": 0,
+  "hours": 5,
+  "days": 0,
+  "kinds": "{\"bring\":4,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D4",
+  "kind": "D",
+  "steps": 3,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"custom\":1,\"talk\":2}",
+  "repeat": ""
+ },
+ {
+  "id": "D5",
+  "kind": "D",
+  "steps": 4,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"spot\":1,\"kill\":2,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D6",
+  "kind": "D",
+  "steps": 3,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":3}",
+  "repeat": ""
+ },
+ {
+  "id": "D10",
+  "kind": "D",
+  "steps": 3,
+  "ch": 0,
+  "hours": 2,
+  "days": 1,
+  "kinds": "{\"bring\":1,\"wait\":1,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D11",
+  "kind": "D",
+  "steps": 4,
+  "ch": 0,
+  "hours": 1,
+  "days": 1,
+  "kinds": "{\"custom\":3,\"spot\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D13",
+  "kind": "D",
+  "steps": 4,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":4}",
+  "repeat": ""
+ },
+ {
+  "id": "D14",
+  "kind": "D",
+  "steps": 2,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1,\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D16",
+  "kind": "D",
+  "steps": 1,
+  "ch": 0,
+  "hours": 0,
+  "days": 1,
+  "kinds": "{\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D17",
+  "kind": "D",
+  "steps": 3,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"custom\":1,\"bring\":1,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D18",
+  "kind": "D",
+  "steps": 3,
+  "ch": 0,
+  "hours": 2,
+  "days": 1,
+  "kinds": "{\"bring\":1,\"talk\":1,\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D20",
+  "kind": "D",
+  "steps": 7,
+  "ch": 0,
+  "hours": 6,
+  "days": 0,
+  "kinds": "{\"talk\":1,\"spot\":1,\"bring\":4,\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D22",
+  "kind": "D",
+  "steps": 2,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":2}",
+  "repeat": ""
+ },
+ {
+  "id": "D23",
+  "kind": "D",
+  "steps": 1,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D24",
+  "kind": "D",
+  "steps": 3,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":2,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D26",
+  "kind": "D",
+  "steps": 1,
+  "ch": 1,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D27",
+  "kind": "D",
+  "steps": 3,
+  "ch": 3,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":2,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "D28",
+  "kind": "D",
+  "steps": 4,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":4}",
+  "repeat": ""
+ },
+ {
+  "id": "K1",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K2",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K3",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"spot\":1,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K4",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 1,
+  "kinds": "{\"spot\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K5",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":1,\"talk\":1}",
+  "repeat": "daily"
+ },
+ {
+  "id": "K6",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K8",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K9",
+  "kind": "K",
+  "steps": 0,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{}",
+  "repeat": ""
+ },
+ {
+  "id": "K10",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K11",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K12",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K13",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K14",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K15",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1,\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K16",
+  "kind": "K",
+  "steps": 0,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{}",
+  "repeat": "trade"
+ },
+ {
+  "id": "K17",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"custom\":1,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K19",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":1,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K20",
+  "kind": "K",
+  "steps": 0,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{}",
+  "repeat": ""
+ },
+ {
+  "id": "K21",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K22",
+  "kind": "K",
+  "steps": 3,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1,\"custom\":2}",
+  "repeat": ""
+ },
+ {
+  "id": "K26",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"spot\":1,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K27",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K28",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K29",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K30",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K31",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 1,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K32",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K33",
+  "kind": "K",
+  "steps": 3,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":2,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K37",
+  "kind": "K",
+  "steps": 3,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":2,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K38",
+  "kind": "K",
+  "steps": 3,
+  "ch": 0,
+  "hours": 2,
+  "days": 0,
+  "kinds": "{\"spot\":1,\"custom\":1,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K39",
+  "kind": "K",
+  "steps": 3,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":2,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K40",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K41",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K42",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K43",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K44",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K45",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K46",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K47",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K48",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K49",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K50",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K51",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":2}",
+  "repeat": ""
+ },
+ {
+  "id": "K52",
+  "kind": "K",
+  "steps": 1,
+  "ch": 0,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "K53",
+  "kind": "K",
+  "steps": 2,
+  "ch": 0,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":2}",
+  "repeat": ""
+ },
+ {
+  "id": "W1",
+  "kind": "W",
+  "steps": 11,
+  "ch": 7,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":9,\"spot\":1,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "W2",
+  "kind": "W",
+  "steps": 11,
+  "ch": 7,
+  "hours": 3,
+  "days": 0,
+  "kinds": "{\"custom\":8,\"talk\":2,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "W3",
+  "kind": "W",
+  "steps": 7,
+  "ch": 4,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":7}",
+  "repeat": ""
+ },
+ {
+  "id": "W4",
+  "kind": "W",
+  "steps": 10,
+  "ch": 8,
+  "hours": 1,
+  "days": 0,
+  "kinds": "{\"custom\":8,\"spot\":1,\"bring\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "W5",
+  "kind": "W",
+  "steps": 10,
+  "ch": 7,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":10}",
+  "repeat": ""
+ },
+ {
+  "id": "W6",
+  "kind": "W",
+  "steps": 7,
+  "ch": 5,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":7}",
+  "repeat": ""
+ },
+ {
+  "id": "W7",
+  "kind": "W",
+  "steps": 8,
+  "ch": 7,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":8}",
+  "repeat": ""
+ },
+ {
+  "id": "W8",
+  "kind": "W",
+  "steps": 9,
+  "ch": 6,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":9}",
+  "repeat": ""
+ },
+ {
+  "id": "W9",
+  "kind": "W",
+  "steps": 1,
+  "ch": 1,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "W10",
+  "kind": "W",
+  "steps": 6,
+  "ch": 5,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":5,\"talk\":1}",
+  "repeat": ""
+ },
+ {
+  "id": "W11",
+  "kind": "W",
+  "steps": 7,
+  "ch": 7,
+  "hours": 0,
+  "days": 0,
+  "kinds": "{\"custom\":7}",
+  "repeat": ""
+ }
+]

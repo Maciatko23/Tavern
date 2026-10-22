@@ -35,22 +35,22 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("miejsce gotowe: Wyspa.isReady(162) (mapa 162 z notatką <Garnizon:mapa>)", await t.eval("Wyspa.isReady(162)"));
 
     if (part("mapy")) {
-        await t.newGame({ map: 125, x: 22, y: 36, dir: 2, hour: 10, day: 6, quiet: true, minimap: false });
+        await t.newGame({ map: 125, x: 22, y: 76, dir: 2, hour: 10, day: 6, quiet: true, minimap: false });   // (2026-10-18: the harbour 112x80, its south edge row 79)
         const edge = await t.json(`$dataMap.events.filter(e => e && e.id >= 693 && e.id <= 695).map(e => [e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4).join(",")])`);
-        t.check("na przystani przejścia 693-695 (21-23,39 -> 162)", edge.length === 3 && edge.every(e => e[1] === 39 && /^162,/.test(e[2])), edge);
+        t.check("na przystani przejścia 693-695 (21-23,79 -> 162)", edge.length === 3 && edge.every(e => e[1] === 79 && /^162,/.test(e[2])), edge);
         await t.hold("down", 70);
         const went = await t.until(t.onMap(162), 60);
         await t.frames(20);
         const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.note]");
-        t.check("pieszo z dolnej krawędzi przystani do garnizonu: Map162 56x40, lądowanie w rzędzie 1 (pola 21-23)",
-            went && at[0] === 162 && at[2] === 1 && at[1] >= 21 && at[1] <= 23 && at[3] === 56 && at[4] === 40, at);
+        t.check("pieszo z dolnej krawędzi przystani do garnizonu: Map162 112x80, lądowanie w rzędzie 1 (pola 21-23)",
+            went && at[0] === 162 && at[2] === 1 && at[1] >= 21 && at[1] <= 23 && at[3] === 112 && at[4] === 80, at);
         t.check("notatka mapy: <Water:salt> (czerwone, trujące morze), <Clouds:on>, <Farm:off>", /<Water:salt>/.test(at[5]) && /<Clouds:on>/.test(at[5]) && /<Farm:off>/.test(at[5]), at[5]);
         await t.calm();
         await t.hold("up", 40);
         const back = await t.until(t.onMap(125), 60);
         await t.frames(20);
         const b2 = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-        t.check("...i z powrotem: górna krawędź garnizonu -> przystań (rząd 38)", back && b2[0] === 125 && b2[2] === 38, b2);
+        t.check("...i z powrotem: górna krawędź garnizonu -> przystań (rząd 78)", back && b2[0] === 125 && b2[2] === 78, b2);
         await t.go(162, 36, 12, 2);
         const m = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean);
             const pal = ev.filter(e => /<Garnizon:palisada>/.test(e.note)).length;

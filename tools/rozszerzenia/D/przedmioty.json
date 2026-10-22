@@ -1,0 +1,98 @@
+[
+ {
+  "id": 225,
+  "name": "Klucz Strażnika",
+  "iconIndex": 512,
+  "itypeId": 2,
+  "price": 0,
+  "consumable": false,
+  "occasion": 3,
+  "scope": 0,
+  "description": "Kamienny klucz z wyrytym krukiem. Wykopany w kręgu menhirów, w cieniu Strażnika. Pasuje do płyty w środku kręgu.",
+  "note": "<Weight:0>"
+ },
+ {
+  "id": 226,
+  "name": "Pióro Skrzydlatej Straży",
+  "iconIndex": 513,
+  "itypeId": 2,
+  "price": 0,
+  "consumable": false,
+  "occasion": 3,
+  "scope": 0,
+  "description": "Długie białe pióro w srebrnej oprawce - znak jeźdźca Skrzydlatej Straży. Nosili je ci, których orzeł sam wybrał.",
+  "note": "<Weight:0>\n<Pamiatka>"
+ },
+ {
+  "id": 227,
+  "name": "Strzemię jeźdźca",
+  "iconIndex": 514,
+  "itypeId": 2,
+  "price": 0,
+  "consumable": false,
+  "occasion": 3,
+  "scope": 0,
+  "description": "Zardzewiałe strzemię spod grzędy na Orlej Grani. Za lekkie na konia - to strzemię do orlego siodła.",
+  "note": "<Weight:1>"
+ },
+ {
+  "id": 228,
+  "name": "Szarotka skalna",
+  "iconIndex": 515,
+  "itypeId": 1,
+  "price": 20,
+  "consumable": true,
+  "occasion": 2,
+  "scope": 0,
+  "description": "Biała, puszysta gwiazdka z niedostępnych półek skalnych. Najlepsze lekarstwo na zmęczenie. Rośnie tam, dokąd doleci orzeł.",
+  "note": "<Food:stamina=45,fed=2><Weight:0>"
+ },
+ {
+  "id": 229,
+  "name": "Warzucha nadmorska",
+  "iconIndex": 516,
+  "itypeId": 1,
+  "price": 6,
+  "consumable": true,
+  "occasion": 2,
+  "scope": 0,
+  "description": "Mięsiste, sinozielone liście z klifów nad morzem. Słonawe, ale sycą. Rośnie tam, gdzie nie dojdzie nikt pieszo.",
+  "note": "<Food:stamina=12,fed=14><Weight:1>"
+ },
+ {
+  "id": 230,
+  "name": "Okucie z wraku",
+  "iconIndex": 517,
+  "itypeId": 1,
+  "price": 6,
+  "consumable": false,
+  "occasion": 3,
+  "scope": 0,
+  "description": "Żelazne okucie wyrwane z kadłuba „Białej Źrenicy”, zżarte przez sól. Kowal przekuje je jak złom.",
+  "note": "<Weight:1>"
+ },
+ {
+  "id": 231,
+  "name": "Tabliczka z kadłuba",
+  "iconIndex": 518,
+  "itypeId": 2,
+  "price": 0,
+  "consumable": false,
+  "occasion": 3,
+  "scope": 0,
+  "description": "Deska z dziobu okrętu. Białe oko i litery: „BIAŁA ŹRENICA - STRAŻ PEWNOŚCI”. Ktoś w tawernie pewnie by ją poznał.",
+  "note": "<Weight:1>"
+ },
+ {
+  "id": 232,
+  "name": "Biały kamień milczenia",
+  "iconIndex": 519,
+  "itypeId": 2,
+  "price": 0,
+  "consumable": false,
+  "occasion": 3,
+  "scope": 0,
+  "description": "Gładki biały kamyk spod milczących kamieni w gaju. Zostawiony dla tego, kto wytrwał godzinę bez słowa.",
+  "note": "<Weight:0>\n<Pamiatka>"
+ }
+]

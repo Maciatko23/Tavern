@@ -487,7 +487,7 @@
         const walkers = this.swayWalkers();
         for (const e of this._swaying) {
             const fx = e.gx - ox, fy = e.gy - oy;   // the foot on the screen
-            if (fx < -64 || fx > Graphics.width + 64 || fy < -32 || fy > Graphics.height + 96) continue;
+            if (fx < -64 || fx > T.view.w() + 64 || fy < -32 || fy > T.view.h() + 96) continue;   // (T.view: the eagle's flight shows more of the world)
             const gust = Math.pow(Math.max(0, gustNoise((e.gx + 0.4 * e.gy) / GUST_SCALE - drift)), 1.3);
             const force = strength * (0.3 + 0.7 * gust) + 0.25 * W;
             let target = force * e.maxBend;
@@ -916,9 +916,22 @@
     const TORCH_SWITCH = Number((PluginManager.parameters("RoomLighting") || {}).torchSwitch || 0);
     const TORCH_LIGHT = 300;   // px: a campfire's reach
     function torchLit() { return TORCH_SWITCH > 0 && !!$gameSwitches && $gameSwitches.value(TORCH_SWITCH); }
+    // (2026-10-18) the layer covers the WORLD's view: flying high on the eagle (Orzel_Lot.js) the world is drawn at half the size and
+    // the screen shows twice as much of it each way - the night's picture follows (Tawerna.view; at scale 1 nothing changes)
+    Sprite_NightLight.prototype.fitView = function() {
+        const w = Math.ceil(T.view.w() / 2), h = Math.ceil(T.view.h() / 2);
+        if (this.bitmap && this.bitmap.width === w && this.bitmap.height === h) return;
+        for (const sp of [this, this._warm, this._glow]) {
+            const old = sp.bitmap;
+            sp.bitmap = new Bitmap(w, h);
+            sp.bitmap.smooth = true;
+            if (old && old.destroy) old.destroy();
+        }
+    };
     Sprite_NightLight.prototype.update = function() {
         Sprite.prototype.update.call(this);
         this._age++;
+        this.fitView();
         // a lightning flash (Storm.js, 0..1) lifts the night for a moment: the whole map in its real colours, then dark again
         const dark = ($gameSystem && $gameSystem._dayNightTinting && typeof $gameSystem.dayNightHour === "function" ? nightAmount() : 0) * (window.Storm ? 1 - 0.85 * Storm.flash() : 1);
         this.visible = dark > 0.01;
@@ -1012,7 +1025,7 @@
         if (!grid) return null;
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), W = $gameMap.width(), H = $gameMap.height();
         const x0 = Math.floor($gameMap.displayX()) - 1, y0 = Math.floor($gameMap.displayY()) - 1;
-        const cols = Math.ceil(Graphics.width / tw) + 3, rows = Math.ceil(Graphics.height / th) + 3;
+        const cols = Math.ceil(T.view.w() / tw) + 3, rows = Math.ceil(T.view.h() / th) + 3;
         const cells = this._warmCells || (this._warmCells = document.createElement("canvas"));
         if (cells.width !== cols || cells.height !== rows) { cells.width = cols; cells.height = rows; }
         const cc = cells.getContext("2d"), img = cc.createImageData(cols, rows), land = Math.round(255 * WARM_LAND);

@@ -115,6 +115,7 @@
     function tilesOfBuilding(type, x, y) {
         return cellsOfGeo(BUILDINGS[type], x, y);
     }
+    const OUTSIDE_FIELD_REGION = 9;   // the meadow round grandpa's field (Map003's new part): not his land - no building there
     function tileIsFree(x, y) {
         return $gameMap.eventsXy(x, y).every(e => !e.isNormalPriority()) &&
             !($gamePlayer.x === x && $gamePlayer.y === y);
@@ -132,6 +133,8 @@
         const plot = plotAt(x, y);
         const br = buildRegion ? buildRegion() : 0;
         if (br && $gameMap.regionId(x, y) !== br && !free) return "Tu nie twoja ziemia.";   // (a map with bought land: only on it)
+        // (2026-10-18) the field doubled to 80x60 (tools/powieksz): the new land round grandpa's old field is region 9 - not his
+        if (!free && OUTSIDE_FIELD_REGION > 0 && $gameMap.regionId(x, y) === OUTSIDE_FIELD_REGION && !buildsAnywhere(BUILDINGS[type])) return "To już nie pole dziadka.";
         if (!plot && !free) return "Trzeba oczyszczonej ziemi.";
         if (!plot && (!$gameMap.checkPassage(x, y, 0x0f) || hasObjectTile(x, y))) return "Tu nic nie stanie.";
         if (plot && plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
@@ -535,7 +538,8 @@
             changed();
             playSe(SE.collect, 100);
             if (snare) hunting.takeFromSnare(b.x, b.y);   // (with a knife dressed at once; without, its carcass lies there)
-            else $gameParty.gainItem(itemOf(BUILDINGS[b.type].produce.item), n + (perkRoll("produce.more") ? 1 : 0));   // (Rolnictwo: Hodowca)
+            else $gameParty.gainItem(itemOf(BUILDINGS[b.type].produce.item), n + (perkRoll("produce.more") ? 1 : 0)   // (Rolnictwo: Hodowca)
+                + (Number(T.call("Motyle", "produceBonus", b, n)) || 0));   // (Motyle.js: a hive by flowers - butterflies pollinate, now and then a jar more)
         });
         return true;
     }

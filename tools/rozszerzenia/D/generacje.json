@@ -1,0 +1,98 @@
+{
+  "paczka": "D",
+  "budzet": 110,
+  "wpisy": [
+    {
+      "co": "grabarz Hieronim - postać pro (styl bohatera)",
+      "id": "e13ed9c1-ca1a-4514-a451-9d369d195055",
+      "generacje": 10,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "grabarz - chód walking-8-frames, 8 kierunków",
+      "id": "0d1820d6-32d3-4665-956c-a3efd828630b",
+      "generacje": 8,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "kapliczka z krukiem 48x96 (pro flash)",
+      "id": "05b154b0-af6d-4097-9768-619e6408575f",
+      "generacje": 5,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "fundamenty strażnicy 192x192 (pro flash)",
+      "id": "87cbc47a-20bd-43ca-b900-439101e39ec1",
+      "generacje": 6,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "płyta z krukiem 96x96 (pro flash)",
+      "id": "bc05059a-2ade-48a7-badd-7e2a8acd43d8",
+      "generacje": 5,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "orla grzęda 64x144 (pro flash)",
+      "id": "85b78e6f-51df-4528-aab2-7bc88c9baf75",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "szubienica 144x144 (pro flash)",
+      "id": "ac7f4eb8-b530-425f-aee9-46837df194da",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "orle gniazdo 96x64 (pro flash)",
+      "id": "00d32de0-878e-4701-8604-e0f01819ffb7",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "kołki z liną 48x48 (pro flash)",
+      "id": "28ded45b-f5e0-4c26-8f7a-3851ddfb6878",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "orle siodło 48x48 (pro flash)",
+      "id": "2c629577-20a3-4bf7-8f50-72ed73717751",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "deski wraku 48x48 - odrzucone (zły kolor)",
+      "id": "8ef32557-0a39-4356-beaa-035239f3907e",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "deski wraku 48x48 (pro flash, styl kłody Winlu)",
+      "id": "6686b187-302d-4897-840d-da2142f67d4b",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "deska z nazwą okrętu 48x48 (pro flash)",
+      "id": "df1eee65-274e-4058-8bb9-d51adea310df",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "ściana z czterema wieżami 96x96 (pro flash, komora)",
+      "id": "a3f5b631-aeaf-440d-a2c6-5d0bdbe2894c",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    },
+    {
+      "co": "kamienna misa 48x64 (pro flash, komora)",
+      "id": "22dd8e37-c7d2-4880-9f31-7da4209414fb",
+      "generacje": 5,
+      "dzien": "2026-10-22"
+    }
+  ],
+  "zuzyte": 86,
+  "uwagi": "Popiersie grabarza (Grabarz_Bust) - tools/busts/make_grabarz.py, 0 generacji. Ikony 512-527 i reszta obrazków - z kafli Winlu i obrazków powyżej (tools/rozszerzenia/D/grafika.py), 0 generacji."
+}

@@ -73,7 +73,8 @@ const { launch, sleep } = require("./cdp.js");
         await give(154, 1);
         await standAt(lx, ly, 6);
         await ev("$gameParty.leader().recoverAll(); Combat.resetAct(); 0");
-        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 2}, ${ly}); a._frozen = true; })()`);
+        // (it faces him, as in 5.: an animal starts facing a random way, and one facing away takes a blow from hiding, x2.5 - Combat_Fight.js SNEAK)
+        await ev(`(function(){ const a = Hunting.spawn("boar", ${lx + 2}, ${ly}); a._frozen = true; a.setDirection(4); })()`);
         await frames(4);
         const inReach = await ev("!!Hunting.spearTarget()");
         check("a boar 2 tiles in front is within the spear's reach", inReach);

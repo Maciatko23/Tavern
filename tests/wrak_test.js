@@ -34,8 +34,8 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.frames(70);
     const m165 = await t.json(`({ note: $dataMap.note, w: $dataMap.width, h: $dataMap.height, ready: Wyspa.isReady(165), built: Wrak.isBuilt(), tide: Wrak.tide(),
         sw: $gameSwitches.value(20), d25: TownQuests.rec("D25"), been: Wrak.state().been, f: Wrak.flood() })`);
-    t.check("mapa 165: 40x30, morze słone, prawdziwa mapa (nie szkielet) - Wyspa.ready(165)",
-        m165.w === 40 && m165.h === 30 && /<Water:salt>/.test(m165.note) && !/szkielet/.test(m165.note) && m165.ready && m165.built, m165);
+    t.check("mapa 165: 80x60 (powiększona 2026-10-18), morze słone, prawdziwa mapa (nie szkielet) - Wyspa.ready(165)",
+        m165.w === 80 && m165.h === 60 && /<Water:salt>/.test(m165.note) && !/szkielet/.test(m165.note) && m165.ready && m165.built, m165);
     t.check("pierwszy raz na wraku: D25 zaczyna się samo i od razu ma za sobą krok „dostań się na wrak”",
         m165.been > 0 && m165.d25 && m165.d25.s === "active" && m165.d25.step >= 1, m165.d25);
     const lowPass = await t.json(`(function(){ const cells = [[38,20],[38,21],[36,21],[20,22],[6,17]]; return cells.map(([x,y]) => [x, y, $gameMap.regionId(x,y), Wrak.floodedAt(x,y), $gameMap.isPassable(x,y,6) || $gameMap.isPassable(x,y,4)]); })()`);
@@ -86,19 +86,19 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.setHour(LOW);
     await t.frames(70);
     await t.eval(`window.__isReadyOrig = window.__isReadyOrig || Wyspa.isReady; Wyspa.isReady = id => id === 162 ? false : window.__isReadyOrig(id); window.__kit.pops.length = 0; 0`);
-    await t.locate(38, 20, 6);
+    await t.locate(78, 20, 6);   // (the sandbar's end on the new east edge, x 79)
     await t.hold("right", 30);
     await t.frames(20);
     const notReady = await t.json("({ map: $gameMap.mapId(), pops: window.__kit.pops.map(p => p.text) })");
     t.check("łacha do garnizonu w odpływie, ale garnizon niegotowy: popup nad bohaterem, nikt nie trafia na szkielet mapy",
         notReady.map === 165 && notReady.pops.some(p => /łacha ginie w mule/.test(p)), notReady);
     await t.eval("Wyspa.isReady = window.__isReadyOrig; Wyspa.force(true); 0");
-    await t.locate(38, 21, 6);
+    await t.locate(78, 21, 6);
     await t.hold("right", 30);
     const went = await t.until("$gameMap.mapId() === 162 && !$gamePlayer.isTransferring()", 15);
     await t.frames(20);
     const land162 = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-    t.check("gotowy garnizon: łacha z (39,21) prowadzi na Map162 (1,21)", went && land162[0] === 162 && land162[1] === 1 && land162[2] === 21, land162);
+    t.check("gotowy garnizon: łacha z (79,21) prowadzi na Map162 (1,21)", went && land162[0] === 162 && land162[1] === 1 && land162[2] === 21, land162);
     await t.eval("Wyspa.force(false); 0");
 
     // ---------------------------------------------------------------- żołnierze garnizonu (9-15), kara bez glejtu

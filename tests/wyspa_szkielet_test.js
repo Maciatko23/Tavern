@@ -6,7 +6,7 @@
 //   - TownLife: mieszkaniec z window.TownLifeExtra dostaje SWÓJ stały numer (949 w teście), zajęty numer / klucz jest odrzucony
 //   - TownQuests: paczka z window.TownQuestsPacks dochodzi do zadań (K99 w teście), zajęty numer zadania jest odrzucony
 //   - przejścia z przystani (Map125) i z gór (Map013) pojawiają się dopiero, gdy miejsce jest gotowe (Wyspa.ready / force);
-//     przejście z górnej krawędzi przystani prowadzi na Map155 (24,34)
+//     przejście z górnej krawędzi przystani prowadzi na Map155 (24,70)
 //   - pływy: dwa odpływy na dobę, przełącznik 20 idzie za Wyspa.tide()
 // Przed instalacją: GAME_OVERLAY=tools/miejsca_wyspy/staging (dane z folderu roboczego) - wtyczki dopisuje sam test, gdy ich nie ma
 // w js/plugins.js. Po instalacji test działa tak samo bez nakładki.
@@ -91,21 +91,21 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.until(`$gameMap.mapId() === 125 && !$gamePlayer.isTransferring()`, 10);
     await t.frames(20);
     const on = await t.json(`$dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4).join(",")])`);
-    t.check("gotowe miejsca: na przystani przejścia 690-692 (14-16,0 -> 155) i 693-695 (21-23,39 -> 162)",
-        on.length === 6 && on[0][0] === 690 && on[0][1] === 14 && on[0][2] === 0 && on[0][3] === "155,23,34" && on[5][0] === 695 && on[5][2] === 39 && on[5][3] === "162,23,1", on);
+    t.check("gotowe miejsca: na przystani przejścia 690-692 (14-16,0 -> 155) i 693-695 (21-23,79 -> 162; mapy powiększone 2026-10-18)",
+        on.length === 6 && on[0][0] === 690 && on[0][1] === 14 && on[0][2] === 0 && on[0][3] === "155,23,70" && on[5][0] === 695 && on[5][2] === 79 && on[5][3] === "162,23,1", on);
     await t.calm();
     await t.hold("up", 80);
     const went = await t.until(t.onMap(155), 15);
     await t.frames(20);
     const landed = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.note]");
-    t.check("przejście z górnej krawędzi przystani prowadzi na Map155 (24,34) - prawdziwą mapę pustelni, nie szkielet", went && landed[0] === 155 && landed[1] === 24 && landed[2] === 34 && !/Wyspa:szkielet/.test(landed[3]), landed);
+    t.check("przejście z górnej krawędzi przystani prowadzi na Map155 (24,70) - prawdziwą mapę pustelni, nie szkielet", went && landed[0] === 155 && landed[1] === 24 && landed[2] === 70 && !/Wyspa:szkielet/.test(landed[3]), landed);
     const res = await t.json(`(function(){ const e = TownLife.eventOf("wyspa_test"); return e ? [e.eventId(), $gameMap.mapId()] : null; })()`);
     t.check("...a testowy mieszkaniec z map: 155 stoi tam jako zdarzenie 949", res && res[0] === 949, res);
     await t.eval("$gamePlayer.reserveTransfer(13, 57, 12, 6, 0); 0");
     await t.until(`$gameMap.mapId() === 13 && !$gamePlayer.isTransferring()`, 10);
     await t.frames(20);
     const gory = await t.json(`$dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters[1]])`);
-    t.check("w górach (Map013) przejścia 696-698 na prawej krawędzi (59,11-13) -> przylądek 159", gory.length === 3 && gory.every(g => g[1] === 59 && g[3] === 159), gory);
+    t.check("w górach (Map013) przejścia 696-698 na prawej krawędzi (119,11-13) -> przylądek 159", gory.length === 3 && gory.every(g => g[1] === 119 && g[3] === 159), gory);
 
     // ---------------------------------------------------------------- pływy
     const tide = await t.json(`(function(){ const w = [], d = 5; for (let h = 0; h < 24; h += 0.25) w.push(Wyspa.tide(d, h).low ? 1 : 0);

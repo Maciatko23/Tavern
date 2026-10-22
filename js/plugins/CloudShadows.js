@@ -239,7 +239,7 @@
         // world -> screen, the same way the tilemap does it (also right for maps smaller than the screen)
         this.x = this.mapPixelToScreenX(this._wx);
         this.y = this.mapPixelToScreenY(this._wy);
-        this.visible = this.x > -r && this.x < Graphics.width + r && this.y > -r && this.y < Graphics.height + r;
+        this.visible = this.x > -r && this.x < T.view.w() + r && this.y > -r && this.y < T.view.h() + r;   // (the world's view: Tawerna.view)
     };
 
     const _Spriteset_Map_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;

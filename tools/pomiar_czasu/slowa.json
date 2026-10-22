@@ -1,0 +1,1207 @@
+{
+ "files": {
+  "Act3.js": {
+   "words": 50,
+   "strings": 7,
+   "parts": {}
+  },
+  "Act3_Data.js": {
+   "words": 977,
+   "strings": 129,
+   "parts": {
+    "(wspólne)": {
+     "words": 977,
+     "strings": 129
+    }
+   }
+  },
+  "ActorPictures.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "AltMenuScreen.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "AltSaveScreen.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "Atmosphere.js": {
+   "words": 18,
+   "strings": 2,
+   "parts": {}
+  },
+  "Birds.js": {
+   "words": 35,
+   "strings": 4,
+   "parts": {}
+  },
+  "ButtonPicture.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "CharacterPolish.js": {
+   "words": 48,
+   "strings": 7,
+   "parts": {}
+  },
+  "ChoppableTree.js": {
+   "words": 21,
+   "strings": 3,
+   "parts": {}
+  },
+  "ChoppableTree_Objects.js": {
+   "words": 58,
+   "strings": 12,
+   "parts": {}
+  },
+  "ChoppableTree_Render.js": {
+   "words": 31,
+   "strings": 3,
+   "parts": {}
+  },
+  "ChoppableTree_Swing.js": {
+   "words": 27,
+   "strings": 2,
+   "parts": {}
+  },
+  "CleanHUD.js": {
+   "words": 35,
+   "strings": 4,
+   "parts": {}
+  },
+  "CleanHUD_Compass.js": {
+   "words": 13,
+   "strings": 1,
+   "parts": {}
+  },
+  "CloudShadows.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Combat.js": {
+   "words": 178,
+   "strings": 23,
+   "parts": {}
+  },
+  "Combat_Feel.js": {
+   "words": 58,
+   "strings": 7,
+   "parts": {}
+  },
+  "Combat_Fight.js": {
+   "words": 46,
+   "strings": 7,
+   "parts": {}
+  },
+  "Combat_UI.js": {
+   "words": 171,
+   "strings": 32,
+   "parts": {}
+  },
+  "Creatures.js": {
+   "words": 47,
+   "strings": 8,
+   "parts": {}
+  },
+  "Creatures_Data.js": {
+   "words": 396,
+   "strings": 48,
+   "parts": {}
+  },
+  "Cysterna.js": {
+   "words": 43,
+   "strings": 4,
+   "parts": {}
+  },
+  "Cysterna_Data.js": {
+   "words": 979,
+   "strings": 78,
+   "parts": {
+    "(wspólne)": {
+     "words": 631,
+     "strings": 58
+    },
+    "D28": {
+     "words": 114,
+     "strings": 7
+    },
+    "K53": {
+     "words": 234,
+     "strings": 13
+    }
+   }
+  },
+  "CzerwonaWoda.js": {
+   "words": 106,
+   "strings": 16,
+   "parts": {
+    "(wspólne)": {
+     "words": 106,
+     "strings": 16
+    }
+   }
+  },
+  "DayNightCycle.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Debug.js": {
+   "words": 1036,
+   "strings": 158,
+   "parts": {}
+  },
+  "Dog.js": {
+   "words": 276,
+   "strings": 36,
+   "parts": {}
+  },
+  "Drops.js": {
+   "words": 42,
+   "strings": 7,
+   "parts": {}
+  },
+  "Durability.js": {
+   "words": 26,
+   "strings": 2,
+   "parts": {}
+  },
+  "DustMotes.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Dwor.js": {
+   "words": 384,
+   "strings": 41,
+   "parts": {}
+  },
+  "Dwor_Data.js": {
+   "words": 2796,
+   "strings": 213,
+   "parts": {
+    "(wspólne)": {
+     "words": 2493,
+     "strings": 183
+    },
+    "W7": {
+     "words": 303,
+     "strings": 30
+    }
+   }
+  },
+  "Equipment.js": {
+   "words": 37,
+   "strings": 10,
+   "parts": {}
+  },
+  "Farming.js": {
+   "words": 56,
+   "strings": 9,
+   "parts": {}
+  },
+  "Farming_Build.js": {
+   "words": 357,
+   "strings": 67,
+   "parts": {}
+  },
+  "Farming_Data.js": {
+   "words": 2297,
+   "strings": 161,
+   "parts": {}
+  },
+  "Farming_Plots.js": {
+   "words": 414,
+   "strings": 59,
+   "parts": {}
+  },
+  "Farming_Render.js": {
+   "words": 4,
+   "strings": 1,
+   "parts": {}
+  },
+  "Farming_Stations.js": {
+   "words": 261,
+   "strings": 42,
+   "parts": {}
+  },
+  "Farming_UI.js": {
+   "words": 465,
+   "strings": 67,
+   "parts": {}
+  },
+  "Forestry.js": {
+   "words": 119,
+   "strings": 17,
+   "parts": {}
+  },
+  "FreeMovement.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Fullscreen.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "Garnizon.js": {
+   "words": 1724,
+   "strings": 170,
+   "parts": {}
+  },
+  "Garnizon_Data.js": {
+   "words": 1332,
+   "strings": 113,
+   "parts": {
+    "(wspólne)": {
+     "words": 497,
+     "strings": 50
+    },
+    "K52": {
+     "words": 189,
+     "strings": 14
+    },
+    "D26": {
+     "words": 214,
+     "strings": 15
+    },
+    "D27": {
+     "words": 432,
+     "strings": 34
+    }
+   }
+  },
+  "GroundDetail.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "HDLayout.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "HeroLook.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "HomeAmbience.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "HomeDecor.js": {
+   "words": 285,
+   "strings": 34,
+   "parts": {}
+  },
+  "HomeLife.js": {
+   "words": 271,
+   "strings": 34,
+   "parts": {}
+  },
+  "Homes.js": {
+   "words": 1227,
+   "strings": 111,
+   "parts": {
+    "(wspólne)": {
+     "words": 715,
+     "strings": 74
+    },
+    "D21": {
+     "words": 512,
+     "strings": 37
+    }
+   }
+  },
+  "Humans.js": {
+   "words": 107,
+   "strings": 21,
+   "parts": {}
+  },
+  "Humans_Data.js": {
+   "words": 172,
+   "strings": 33,
+   "parts": {}
+  },
+  "Hunting.js": {
+   "words": 65,
+   "strings": 11,
+   "parts": {}
+  },
+  "Hunting_AI.js": {
+   "words": 53,
+   "strings": 7,
+   "parts": {}
+  },
+  "Hunting_Path.js": {
+   "words": 27,
+   "strings": 2,
+   "parts": {}
+  },
+  "Hunting_Weapons.js": {
+   "words": 63,
+   "strings": 9,
+   "parts": {}
+  },
+  "Journal.js": {
+   "words": 2574,
+   "strings": 189,
+   "parts": {}
+  },
+  "Kantor.js": {
+   "words": 176,
+   "strings": 34,
+   "parts": {}
+  },
+  "Kantor_Data.js": {
+   "words": 2481,
+   "strings": 220,
+   "parts": {
+    "(wspólne)": {
+     "words": 2090,
+     "strings": 189
+    },
+    "W5": {
+     "words": 391,
+     "strings": 31
+    }
+   }
+  },
+  "Kasztelan.js": {
+   "words": 2007,
+   "strings": 147,
+   "parts": {
+    "(wspólne)": {
+     "words": 2007,
+     "strings": 147
+    }
+   }
+  },
+  "Kruk.js": {
+   "words": 386,
+   "strings": 51,
+   "parts": {}
+  },
+  "Kruk_Data.js": {
+   "words": 1788,
+   "strings": 164,
+   "parts": {
+    "(wspólne)": {
+     "words": 1288,
+     "strings": 131
+    },
+    "K51": {
+     "words": 151,
+     "strings": 14
+    },
+    "D24": {
+     "words": 349,
+     "strings": 19
+    }
+   }
+  },
+  "Latarnia.js": {
+   "words": 287,
+   "strings": 35,
+   "parts": {}
+  },
+  "Latarnia_Data.js": {
+   "words": 2185,
+   "strings": 183,
+   "parts": {
+    "(wspólne)": {
+     "words": 1631,
+     "strings": 139
+    },
+    "K49": {
+     "words": 175,
+     "strings": 14
+    },
+    "D22": {
+     "words": 126,
+     "strings": 11
+    },
+    "W11": {
+     "words": 253,
+     "strings": 19
+    }
+   }
+  },
+  "Livestock.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "MapZoom.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "MenuPanel.js": {
+   "words": 83,
+   "strings": 11,
+   "parts": {}
+  },
+  "MenuRing.js": {
+   "words": 304,
+   "strings": 56,
+   "parts": {}
+  },
+  "Minimap.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Mood.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Needs.js": {
+   "words": 97,
+   "strings": 18,
+   "parts": {}
+  },
+  "OptionEx.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "Prologue.js": {
+   "words": 270,
+   "strings": 33,
+   "parts": {}
+  },
+  "Przystan.js": {
+   "words": 2283,
+   "strings": 183,
+   "parts": {
+    "(wspólne)": {
+     "words": 2283,
+     "strings": 183
+    }
+   }
+  },
+  "Puddles.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "Pustelnia.js": {
+   "words": 620,
+   "strings": 48,
+   "parts": {}
+  },
+  "Pustelnia_Data.js": {
+   "words": 1963,
+   "strings": 147,
+   "parts": {
+    "(wspólne)": {
+     "words": 1485,
+     "strings": 111
+    },
+    "K50": {
+     "words": 192,
+     "strings": 15
+    },
+    "D23": {
+     "words": 286,
+     "strings": 21
+    }
+   }
+  },
+  "QuestBoard.js": {
+   "words": 153,
+   "strings": 23,
+   "parts": {}
+  },
+  "QuestBoard_Art.js": {
+   "words": 106,
+   "strings": 15,
+   "parts": {}
+  },
+  "QuestBoard_Data.js": {
+   "words": 1617,
+   "strings": 154,
+   "parts": {}
+  },
+  "QuestBoard_Scene.js": {
+   "words": 72,
+   "strings": 13,
+   "parts": {}
+  },
+  "RegionLayers.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "RoomLighting.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "Rywal.js": {
+   "words": 48,
+   "strings": 12,
+   "parts": {}
+  },
+  "Rywal_Data.js": {
+   "words": 1939,
+   "strings": 208,
+   "parts": {
+    "(wspólne)": {
+     "words": 1939,
+     "strings": 208
+    }
+   }
+  },
+  "Skills_Data.js": {
+   "words": 929,
+   "strings": 113,
+   "parts": {}
+  },
+  "Sky.js": {
+   "words": 14,
+   "strings": 1,
+   "parts": {}
+  },
+  "SpeechBubbles.js": {
+   "words": 28,
+   "strings": 2,
+   "parts": {}
+  },
+  "Spoilage.js": {
+   "words": 22,
+   "strings": 3,
+   "parts": {}
+  },
+  "Starcia.js": {
+   "words": 150,
+   "strings": 20,
+   "parts": {}
+  },
+  "Storm.js": {
+   "words": 26,
+   "strings": 3,
+   "parts": {}
+  },
+  "Story.js": {
+   "words": 3230,
+   "strings": 301,
+   "parts": {}
+  },
+  "Survival.js": {
+   "words": 60,
+   "strings": 10,
+   "parts": {}
+  },
+  "SurvivalHUD.js": {
+   "words": 17,
+   "strings": 2,
+   "parts": {}
+  },
+  "SwayingFoliage.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "TavernDice.js": {
+   "words": 59,
+   "strings": 9,
+   "parts": {}
+  },
+  "TavernDice_Art.js": {
+   "words": 295,
+   "strings": 46,
+   "parts": {}
+  },
+  "TavernDice_Data.js": {
+   "words": 1238,
+   "strings": 177,
+   "parts": {}
+  },
+  "TavernDice_Scene.js": {
+   "words": 169,
+   "strings": 19,
+   "parts": {}
+  },
+  "TavernLife.js": {
+   "words": 1791,
+   "strings": 219,
+   "parts": {}
+  },
+  "TavernLife_ArmWrestle.js": {
+   "words": 460,
+   "strings": 63,
+   "parts": {}
+  },
+  "TavernLife_Darts.js": {
+   "words": 272,
+   "strings": 30,
+   "parts": {}
+  },
+  "TavernLife_Plan.js": {
+   "words": 799,
+   "strings": 118,
+   "parts": {}
+  },
+  "TavernLife_Regulars.js": {
+   "words": 2705,
+   "strings": 239,
+   "parts": {
+    "(wspólne)": {
+     "words": 2705,
+     "strings": 239
+    }
+   }
+  },
+  "TavernLife_Render.js": {
+   "words": 38,
+   "strings": 5,
+   "parts": {}
+  },
+  "TavernShift.js": {
+   "words": 404,
+   "strings": 55,
+   "parts": {}
+  },
+  "TavernShift_Hall.js": {
+   "words": 31,
+   "strings": 2,
+   "parts": {}
+  },
+  "TavernShift_Parts.js": {
+   "words": 223,
+   "strings": 51,
+   "parts": {}
+  },
+  "TawernaCore.js": {
+   "words": 171,
+   "strings": 19,
+   "parts": {}
+  },
+  "TawernaUI.js": {
+   "words": 21,
+   "strings": 3,
+   "parts": {}
+  },
+  "TextPicture.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "TitleScreen.js": {
+   "words": 5,
+   "strings": 1,
+   "parts": {}
+  },
+  "Torch.js": {
+   "words": 101,
+   "strings": 18,
+   "parts": {}
+  },
+  "TownLife.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "TownLife_Data.js": {
+   "words": 4575,
+   "strings": 502,
+   "parts": {}
+  },
+  "TownQuests.js": {
+   "words": 924,
+   "strings": 145,
+   "parts": {}
+  },
+  "TownQuests_Data.js": {
+   "words": 23444,
+   "strings": 2014,
+   "parts": {
+    "(wspólne)": {
+     "words": 2061,
+     "strings": 242
+    },
+    "K1": {
+     "words": 111,
+     "strings": 11
+    },
+    "K2": {
+     "words": 145,
+     "strings": 16
+    },
+    "K3": {
+     "words": 135,
+     "strings": 13
+    },
+    "K4": {
+     "words": 117,
+     "strings": 14
+    },
+    "K5": {
+     "words": 119,
+     "strings": 11
+    },
+    "K6": {
+     "words": 126,
+     "strings": 14
+    },
+    "K8": {
+     "words": 139,
+     "strings": 14
+    },
+    "K9": {
+     "words": 125,
+     "strings": 14
+    },
+    "K10": {
+     "words": 180,
+     "strings": 14
+    },
+    "K11": {
+     "words": 113,
+     "strings": 13
+    },
+    "K12": {
+     "words": 146,
+     "strings": 14
+    },
+    "K13": {
+     "words": 81,
+     "strings": 9
+    },
+    "K14": {
+     "words": 145,
+     "strings": 14
+    },
+    "K15": {
+     "words": 277,
+     "strings": 27
+    },
+    "K16": {
+     "words": 105,
+     "strings": 9
+    },
+    "K17": {
+     "words": 179,
+     "strings": 18
+    },
+    "K20": {
+     "words": 66,
+     "strings": 6
+    },
+    "K21": {
+     "words": 87,
+     "strings": 10
+    },
+    "K31": {
+     "words": 160,
+     "strings": 16
+    },
+    "K32": {
+     "words": 131,
+     "strings": 11
+    },
+    "K38": {
+     "words": 170,
+     "strings": 19
+    },
+    "K26": {
+     "words": 228,
+     "strings": 21
+    },
+    "K37": {
+     "words": 208,
+     "strings": 22
+    },
+    "K39": {
+     "words": 323,
+     "strings": 31
+    },
+    "K19": {
+     "words": 205,
+     "strings": 22
+    },
+    "K27": {
+     "words": 248,
+     "strings": 21
+    },
+    "K28": {
+     "words": 110,
+     "strings": 12
+    },
+    "K29": {
+     "words": 146,
+     "strings": 14
+    },
+    "K30": {
+     "words": 115,
+     "strings": 9
+    },
+    "D4": {
+     "words": 309,
+     "strings": 28
+    },
+    "D10": {
+     "words": 193,
+     "strings": 19
+    },
+    "D18": {
+     "words": 212,
+     "strings": 22
+    },
+    "K40": {
+     "words": 116,
+     "strings": 12
+    },
+    "K41": {
+     "words": 100,
+     "strings": 12
+    },
+    "K42": {
+     "words": 101,
+     "strings": 9
+    },
+    "K43": {
+     "words": 149,
+     "strings": 14
+    },
+    "K44": {
+     "words": 71,
+     "strings": 8
+    },
+    "K45": {
+     "words": 106,
+     "strings": 12
+    },
+    "K46": {
+     "words": 92,
+     "strings": 10
+    },
+    "D1": {
+     "words": 282,
+     "strings": 29
+    },
+    "D3": {
+     "words": 293,
+     "strings": 33
+    },
+    "D5": {
+     "words": 190,
+     "strings": 21
+    },
+    "D11": {
+     "words": 236,
+     "strings": 28
+    },
+    "D14": {
+     "words": 185,
+     "strings": 19
+    },
+    "D16": {
+     "words": 129,
+     "strings": 14
+    },
+    "D17": {
+     "words": 206,
+     "strings": 18
+    },
+    "W1": {
+     "words": 2598,
+     "strings": 158
+    },
+    "W2": {
+     "words": 957,
+     "strings": 67
+    },
+    "K22": {
+     "words": 290,
+     "strings": 21
+    },
+    "K33": {
+     "words": 290,
+     "strings": 21
+    },
+    "D13": {
+     "words": 308,
+     "strings": 30
+    },
+    "D6": {
+     "words": 593,
+     "strings": 61
+    },
+    "W3": {
+     "words": 1294,
+     "strings": 116
+    },
+    "W8": {
+     "words": 1802,
+     "strings": 119
+    },
+    "W4": {
+     "words": 696,
+     "strings": 46
+    },
+    "W9": {
+     "words": 1320,
+     "strings": 91
+    },
+    "W6": {
+     "words": 2732,
+     "strings": 205
+    },
+    "K47": {
+     "words": 174,
+     "strings": 14
+    },
+    "K48": {
+     "words": 99,
+     "strings": 11
+    },
+    "D20": {
+     "words": 390,
+     "strings": 37
+    },
+    "W10": {
+     "words": 430,
+     "strings": 28
+    }
+   }
+  },
+  "UITheme.js": {
+   "words": 25,
+   "strings": 4,
+   "parts": {}
+  },
+  "Underground.js": {
+   "words": 32,
+   "strings": 5,
+   "parts": {}
+  },
+  "Underground_Data.js": {
+   "words": 6926,
+   "strings": 607,
+   "parts": {}
+  },
+  "WaterFx.js": {
+   "words": 0,
+   "strings": 0,
+   "parts": {}
+  },
+  "Wrak.js": {
+   "words": 1551,
+   "strings": 137,
+   "parts": {}
+  },
+  "Wrak_Data.js": {
+   "words": 709,
+   "strings": 66,
+   "parts": {
+    "(wspólne)": {
+     "words": 172,
+     "strings": 22
+    },
+    "D25": {
+     "words": 204,
+     "strings": 13
+    },
+    "W12": {
+     "words": 333,
+     "strings": 31
+    }
+   }
+  },
+  "Wyspa.js": {
+   "words": 28,
+   "strings": 2,
+   "parts": {}
+  },
+  "Wyspa_Data.js": {
+   "words": 81,
+   "strings": 18,
+   "parts": {
+    "(wspólne)": {
+     "words": 81,
+     "strings": 18
+    }
+   }
+  }
+ },
+ "maps": {
+  "1 TAWERNA": {
+   "words": 346,
+   "msgs": 13
+  },
+  "2 Domek - Wnętrze": {
+   "words": 29,
+   "msgs": 3
+  },
+  "8 Okolice Tawerny": {
+   "words": 44,
+   "msgs": 3
+  },
+  "9 Piwnica Tawerny": {
+   "words": 68,
+   "msgs": 3
+  },
+  "10 Ruiny Zamku": {
+   "words": 91,
+   "msgs": 5
+  },
+  "14 Jaskinia": {
+   "words": 39,
+   "msgs": 6
+  },
+  "19 Dom dziadka - Wnętrze": {
+   "words": 12,
+   "msgs": 2
+  },
+  "24 Posiadłość Lorda": {
+   "words": 4,
+   "msgs": 1
+  },
+  "25 Pokoje gości": {
+   "words": 60,
+   "msgs": 7
+  },
+  "26 Apartamenty": {
+   "words": 42,
+   "msgs": 7
+  },
+  "111 Podgrodzie": {
+   "words": 68,
+   "msgs": 4
+  },
+  "118 Dno studni": {
+   "words": 9,
+   "msgs": 1
+  },
+  "140 Podziemia: piętro 10 (Strażnica)": {
+   "words": 119,
+   "msgs": 13
+  },
+  "146 Podziemia: piętro 20 (Sala jednego pytania)": {
+   "words": 13,
+   "msgs": 2
+  },
+  "147 Podziemia: piętro 30 (Wielka cysterna)": {
+   "words": 12,
+   "msgs": 2
+  },
+  "148 Podziemia: piętro 40 (Bród Milczącej)": {
+   "words": 9,
+   "msgs": 2
+  },
+  "149 Podziemia: piętro 50 (Przekop kopaczy)": {
+   "words": 10,
+   "msgs": 2
+  },
+  "150 Podziemia: piętro 60 (Brama Pierwszych)": {
+   "words": 15,
+   "msgs": 2
+  },
+  "151 Podziemia: piętro 70 (Sala płaskorzeźb)": {
+   "words": 9,
+   "msgs": 2
+  },
+  "152 Podziemia: piętro 80 (Sala echa)": {
+   "words": 11,
+   "msgs": 2
+  },
+  "153 Podziemia: piętro 90 (Ostatnia straż)": {
+   "words": 10,
+   "msgs": 2
+  }
+ },
+ "quests": {
+  "D28": "Cysterna_Data.js",
+  "K53": "Cysterna_Data.js",
+  "W7": "Dwor_Data.js",
+  "K52": "Garnizon_Data.js",
+  "D26": "Garnizon_Data.js",
+  "D27": "Garnizon_Data.js",
+  "D21": "Homes.js",
+  "W5": "Kantor_Data.js",
+  "K51": "Kruk_Data.js",
+  "D24": "Kruk_Data.js",
+  "K49": "Latarnia_Data.js",
+  "D22": "Latarnia_Data.js",
+  "W11": "Latarnia_Data.js",
+  "K50": "Pustelnia_Data.js",
+  "D23": "Pustelnia_Data.js",
+  "K1": "TownQuests_Data.js",
+  "K2": "TownQuests_Data.js",
+  "K3": "TownQuests_Data.js",
+  "K4": "TownQuests_Data.js",
+  "K5": "TownQuests_Data.js",
+  "K6": "TownQuests_Data.js",
+  "K8": "TownQuests_Data.js",
+  "K9": "TownQuests_Data.js",
+  "K10": "TownQuests_Data.js",
+  "K11": "TownQuests_Data.js",
+  "K12": "TownQuests_Data.js",
+  "K13": "TownQuests_Data.js",
+  "K14": "TownQuests_Data.js",
+  "K15": "TownQuests_Data.js",
+  "K16": "TownQuests_Data.js",
+  "K17": "TownQuests_Data.js",
+  "K20": "TownQuests_Data.js",
+  "K21": "TownQuests_Data.js",
+  "K31": "TownQuests_Data.js",
+  "K32": "TownQuests_Data.js",
+  "K38": "TownQuests_Data.js",
+  "K26": "TownQuests_Data.js",
+  "K37": "TownQuests_Data.js",
+  "K39": "TownQuests_Data.js",
+  "K19": "TownQuests_Data.js",
+  "K27": "TownQuests_Data.js",
+  "K28": "TownQuests_Data.js",
+  "K29": "TownQuests_Data.js",
+  "K30": "TownQuests_Data.js",
+  "D4": "TownQuests_Data.js",
+  "D10": "TownQuests_Data.js",
+  "D18": "TownQuests_Data.js",
+  "K40": "TownQuests_Data.js",
+  "K41": "TownQuests_Data.js",
+  "K42": "TownQuests_Data.js",
+  "K43": "TownQuests_Data.js",
+  "K44": "TownQuests_Data.js",
+  "K45": "TownQuests_Data.js",
+  "K46": "TownQuests_Data.js",
+  "D1": "TownQuests_Data.js",
+  "D3": "TownQuests_Data.js",
+  "D5": "TownQuests_Data.js",
+  "D11": "TownQuests_Data.js",
+  "D14": "TownQuests_Data.js",
+  "D16": "TownQuests_Data.js",
+  "D17": "TownQuests_Data.js",
+  "W1": "TownQuests_Data.js",
+  "W2": "TownQuests_Data.js",
+  "K22": "TownQuests_Data.js",
+  "K33": "TownQuests_Data.js",
+  "D13": "TownQuests_Data.js",
+  "D6": "TownQuests_Data.js",
+  "W3": "TownQuests_Data.js",
+  "W8": "TownQuests_Data.js",
+  "W4": "TownQuests_Data.js",
+  "W9": "TownQuests_Data.js",
+  "W6": "TownQuests_Data.js",
+  "K47": "TownQuests_Data.js",
+  "K48": "TownQuests_Data.js",
+  "D20": "TownQuests_Data.js",
+  "W10": "TownQuests_Data.js",
+  "D25": "Wrak_Data.js",
+  "W12": "Wrak_Data.js"
+ }
+}

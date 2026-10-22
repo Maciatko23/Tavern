@@ -236,7 +236,7 @@
 
     Sprite_GrassDetail.prototype.reposition = function() {
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), ox = $gameMap.displayX() * tw, oy = $gameMap.displayY() * th;
-        const w = Graphics.width + 32, h = Graphics.height + 32;
+        const w = T.view.w() + 32, h = T.view.h() + 32;   // (the world's view: Tawerna.view)
         for (const item of this._items) {
             let x = item.wx - ox, y = item.wy - oy;
             if ($gameMap.isLoopHorizontal()) x = ((x % ($gameMap.width() * tw)) + $gameMap.width() * tw) % ($gameMap.width() * tw);

@@ -717,7 +717,7 @@
             spot.id = p.id;
             this._groundSpots.push(spot);
             // now and then a spark, while it is on the screen
-            if (x > -40 && x < Graphics.width + 40 && y > -40 && y < Graphics.height + 60 && (Graphics.frameCount + p.id * 5) % 15 === 0) {
+            if (x > -40 && x < T.view.w() + 40 && y > -40 && y < T.view.h() + 60 && (Graphics.frameCount + p.id * 5) % 15 === 0) {   // (the world's view: Tawerna.view)
                 const mx = spot.x + $gameMap.displayX() * tw, my = spot.y + $gameMap.displayY() * th;
                 if (wet && Math.random() < 0.35) this.addSpark(mx, my - 6, "#c8ccd2", 0.3, 40, true);
                 else this.addSpark(mx + (Math.random() - 0.5) * 5, my - 4, Math.random() < 0.5 ? "#ffd35a" : "#ffb43a", 0.55, 26 + Math.floor(Math.random() * 18));

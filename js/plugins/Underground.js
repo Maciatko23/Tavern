@@ -1755,6 +1755,17 @@
         let ml = null;
         try { ml = T.call("Przystan", "epilogue", kind, w); } catch (e) { ml = null; }
         if (typeof ml === "string" && ml) out.push(ml);
+        // (2026-10-18) the white eagle (Orzel.js): one line - where it circles now, or that it never came back from the ridge
+        let ol = null;
+        try { ol = T.call("Orzel", "epilogue", kind, w); } catch (e) { ol = null; }
+        if (typeof ol === "string" && ol) out.push(ol);
+        // (2026-10-22) the new terrain's packages (docs/rozszerzenia/PLAN.md): a line or a list each - the springs (Zasoby), the friendly
+        // pack and the Lord's game park (Lowy), the Ług graves and the smugglers' cave (Ludzie), the order's chamber and the grove (Zakon)
+        for (const name of ["Zasoby", "Lowy", "Ludzie", "Zakon"]) {
+            let pl = null;
+            try { pl = T.call(name, "epilogue", kind, w); } catch (e) { pl = null; }
+            for (const l of [].concat(pl || [])) if (typeof l === "string" && l) out.push(l);
+        }
         return out.concat(islandLines(kind, w, who));
     }
     // (2026-10-16) the island places' lines (EPILOGUE.island), in the order of the places on the map: the cliff, the raven, the cape,
@@ -2138,7 +2149,7 @@
             for (const ev of $gameMap.events()) {
                 const n = ev.eventId();
                 if (mine.has(n)) continue;
-                if ((id === 1 && n >= 1 && n <= 4) || (n >= 900 && n <= 949) || (n >= 951 && n <= 959)) ev.erase();
+                if ((id === 1 && n >= 1 && n <= 4) || (n >= 900 && n <= 949) || (n >= 951 && n <= 959) || (n >= 2900 && n <= 2949)) ev.erase();   // (2900-2949: the new terrain's residents)
             }
             $gamePlayer.setTransparent(!hero);
             if (hero) { $gamePlayer.locate(hero[0], hero[1]); $gamePlayer.setDirection(hero[2] || 8); }

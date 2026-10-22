@@ -147,7 +147,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("D3 the hut's furniture stays in the hut with the field (Map100 empty for a new hut), the field held: no hut of the hero's now", D.inside === 0 && Array.isArray(D.held) && D.held.length === before.inside && D.hutOf === null && D.held3, { inside: D.inside, held: D.held && D.held.length, hutOf: D.hutOf });
     t.check("D4 the dog comes along (its kennel stays on the field): following the hero on Skraj lasu", D.dog.map === 23 && D.dog.mode === "follow", { map: D.dog.map, mode: D.dog.mode });
     await t.frames(70);
-    await t.eval("$gamePlayer.reserveTransfer(3, 38, 13, 4, 0); 0");
+    await t.eval("$gamePlayer.reserveTransfer(3, 78, 13, 4, 0); 0");   // (2026-10-18: the field doubled to 80x60)
     await t.frames(20);
     await t.eval("$gamePlayer.locate(1, 13); $gameMap.event(99).start(); 0");
     await t.frames(30);
@@ -182,8 +182,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("E2 bought for 600 G: the key, the bed and the chest in the room (fixed), the deed in the journal, the goal 'a new roof' done, nothing more for sale",
         E1.own && E1.gold === 2400 && E1.furn.join() === "bed!,chest_s!" && E1.roof && E1.notes.includes("Akt kupna: Chata pod lasem") && /klucz/i.test(s2.text) && E1.forSale.length === 0, E1);
     // the hut on Podgrodzie's new rows: its door -> the room, and back
-    t.check("E3 Podgrodzie is 46 x 56 now (20 rows added at the bottom), <BuildRegion:8>", await t.go(111, 6, 41, 8) &&
-        (await J("$gameMap.width() + 'x' + $gameMap.height() + ' ' + Farming.buildRegion()")) === "46x56 8");
+    t.check("E3 Podgrodzie is 92 x 112 now (20 rows added at the bottom, then doubled 2026-10-18 by tools/powieksz), <BuildRegion:8>", await t.go(111, 6, 41, 8) &&
+        (await J("$gameMap.width() + 'x' + $gameMap.height() + ' ' + Farming.buildRegion()")) === "92x112 8");
     await t.eval("$gameMap.events().find(e => /Chata pod lasem/.test(e.event().name)).start(); 0");
     const inHut = await t.until(t.onMap(154), 20);
     await t.frames(30);
@@ -223,8 +223,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const onFarm = await t.until(t.onMap(168), 20);
     await t.frames(40);
     const Z0 = await J("(function(){ const e = $gameMap.events().find(x => /^<Zagroda:dom>/.test(x.event().note)); return { x: $gamePlayer.x, y: $gamePlayer.y, pic: e.characterName(), d: e.direction(), p: e.pattern(), id: e.eventId(), allows: Farming.mapAllowsBuilding(), smoke: $gameSelfSwitches.value([168, 711, 'A']) }; })()");
-    t.check("E7 Skraj lasu's west edge (rows 6-8, Homes' events with the signpost) -> the burnt farm (Map168, 48,12): the house a ruin (stage 0), no smoke; not his land",
-        way.sign === "!$Drogowskaz" && way.way.join() === "0,6,0,7,0,8" && onFarm && Z0.x === 48 && Z0.y === 12 && Z0.pic === "!$Zagroda_Dom" && Z0.d === 2 && Z0.p === 0 && !Z0.smoke && !Z0.allows, { way, Z0 });
+    t.check("E7 Skraj lasu's west edge (rows 6-8, Homes' events with the signpost) -> the burnt farm (Map168, 98,12 - the map doubled 2026-10-18): the house a ruin (stage 0), no smoke; not his land",
+        way.sign === "!$Drogowskaz" && way.way.join() === "0,6,0,7,0,8" && onFarm && Z0.x === 98 && Z0.y === 12 && Z0.pic === "!$Zagroda_Dom" && Z0.d === 2 && Z0.p === 0 && !Z0.smoke && !Z0.allows, { way, Z0 });
     await t.locate(20, 12, 8);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "zagroda_przed.png"));

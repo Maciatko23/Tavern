@@ -1,0 +1,7 @@
+[
+  {"id": 210, "name": "Przyprawy", "iconIndex": 496, "description": "Pieprz, kminek i suszona papryka z kontynentu w płóciennym woreczku. Od wędrownego handlarza. W mieście za to dobrze płacą.", "note": "<Weight:0>", "price": 8, "itypeId": 1, "consumable": false, "occasion": 3, "scope": 0},
+  {"id": 211, "name": "Mapa okolic", "iconIndex": 497, "description": "Mapa wędrownego handlarza: drogi, ścieżki i miejsca, o których słyszał. Zaznaczone miejsca widać w dzienniku, w zakładce „Okolice”.", "note": "<Weight:0>", "price": 0, "itypeId": 2, "consumable": false, "occasion": 3, "scope": 0},
+  {"id": 212, "name": "Skrzynia przemytu", "iconIndex": 498, "description": "Ciężka skrzynia z wypalonym krukiem, ze składu przemytników Baltazara. Celnik albo Baltazar dobrze za nią zapłacą.", "note": "<Weight:8>", "price": 0, "itypeId": 2, "consumable": false, "occasion": 3, "scope": 0},
+  {"id": 213, "name": "Dziennik kopacza", "iconIndex": 499, "description": "Brudny notes dowódcy kopaczy Czarnych Oczu. „Kopią ku piętru pięćdziesiątemu od góry…”", "note": "<Weight:0>", "price": 0, "itypeId": 2, "consumable": false, "occasion": 3, "scope": 0},
+  {"id": 214, "name": "Wełniany koc", "iconIndex": 500, "description": "Gruby koc z owczej wełny od pasterza. Kiedy odpoczywasz na ziemi, grzeje: wypoczywasz o połowę szybciej.", "note": "<Weight:2>", "price": 25, "itypeId": 1, "consumable": false, "occasion": 3, "scope": 0}
+]

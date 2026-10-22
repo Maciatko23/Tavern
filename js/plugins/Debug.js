@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna, wątki W4, W5, W7 i W9). v1.10.0
+ * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna, wątki W4, W5, W7 i W9, wiersze paczek nowego terenu z Okolice.js). v1.11.0
  * @author Tawerna
  *
  * @param enabled
@@ -143,16 +143,17 @@
     // ---- the island tab ("Wyspa i fabuła", 2026-10-16 - the user's decision): the six island places and the story's big moments at
     // once. Where to go: [name, map, x, y, facing, the line under it, "low": the low tide set] - each the landing tile of the place's
     // own way in (always walkable)
+    // (2026-10-18: the outdoor maps doubled - tools/powieksz: the landings by their east / south edges moved with them)
     const ISLE_GO = [
-        ["Przystań", 125, 54, 19, 4, "Map125: Janek, Roch Szkwał, celnik, prom. Lądujesz przy ścieżce z Podgrodzia."],
-        ["Pustelnia na klifie", 155, 24, 34, 8, "Map155: brat Kleofas, skryptorium, ule, wieża z dzwonem. Lądujesz przy zejściu na przystań."],
+        ["Przystań", 125, 110, 19, 4, "Map125: Janek, Roch Szkwał, celnik, prom. Lądujesz przy ścieżce z Podgrodzia."],
+        ["Pustelnia na klifie", 155, 24, 70, 8, "Map155: brat Kleofas, skryptorium, ule, wieża z dzwonem. Lądujesz przy zejściu na przystań."],
         ["Urwisko Kruków", 157, 1, 19, 6, "Map157: kruczarnia, gniazda kruków, krata przelewu cysterny. Lądujesz na ścieżce od pustelni."],
-        ["Przylądek z latarnią", 159, 30, 38, 8, "Map159: latarnik Bazyli, wieża latarni, dzwon mgłowy. Lądujesz na ścieżce z gór."],
+        ["Przylądek z latarnią", 159, 30, 78, 8, "Map159: latarnik Bazyli, wieża latarni, dzwon mgłowy. Lądujesz na ścieżce z gór."],
         ["Garnizon nad zatoką", 162, 22, 1, 2, "Map162: rotmistrz, kwatermistrz Kłos, palisada, łacha do wraku. Lądujesz przy drodze z przystani."],
-        ["Wrak na mieliźnie", 165, 38, 20, 4, "Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej.", "low"],
+        ["Wrak na mieliźnie", 165, 78, 20, 4, "Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej.", "low"],
         ["Stara cysterna zakonu", 167, 3, 20, 6, "Map167: zbiornik, słup z miarą, czerpak, dźwignia kraty. Lądujesz przy zejściu z piętra 30."],
         ["Chata pod lasem", 111, 6, 41, 2, "Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa)."],
-        ["Spalona zagroda", 168, 48, 12, 4, "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."]
+        ["Spalona zagroda", 168, 98, 12, 4, "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."]
     ];
     const ISLE_INSIDE = [["Skryptorium", 156, 6, 8, 8], ["Izba latarnika", 160, 6, 8, 8], ["Laterna", 161, 5, 7, 8], ["Kwatera rotmistrza", 163, 6, 8, 8],
         ["Wrak - pod pokładem", 166, 4, 11, 8], ["Chata pod lasem - izba", 154, 4, 8, 8], ["Dom Ługów", 169, 6, 8, 8], ["Piwnica kantoru", 171, 2, 4, 2],
@@ -309,6 +310,11 @@
             rows.push({ tab: 0, kind: "birds", label: "Stadko ptaków na ziemi", icon: 407 },
                 { tab: 0, kind: "raid", label: "Nalot ptaków na pole", icon: 408 });
         }
+        if (window.Motyle) {   // the butterflies (Motyle.js): a summer meadow after rain here and now (a peacock too), moths at a fire at night, the net
+            rows.push({ tab: 0, kind: "motyle", label: "Motyle teraz (łąka, lato, po deszczu)", icon: Motyle.ICON.butterfly },
+                { tab: 0, kind: "cmy", label: "Ćmy przy ogniu (noc)", icon: Motyle.ICON.butterfly },
+                { tab: 0, kind: "siatka", label: "Daj siatkę na motyle", icon: Motyle.ICON.net });
+        }
         if (window.Hunting && Hunting.SPECIES.boar) rows.push({ tab: 0, kind: "boar", label: "Dzik w pobliżu", icon: 416 });   // Hunting.js: one boar a few tiles away
         if (window.Hunting && Hunting.SPECIES.wolf) rows.push({ tab: 0, kind: "wolves", label: "Wataha wilków (3)", icon: 416 });   // Hunting.js: a pack a few tiles away
         if (window.Hunting && Hunting.SPECIES.deer) rows.push({ tab: 0, kind: "deer", label: "Jeleń w pobliżu", icon: 420 });   // Hunting.js: a deer a few tiles away (any hour)
@@ -443,6 +449,11 @@
         row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
         row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).");
         row("isleCistern", isleLabel.cistern(), 391, "Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.");
+        // (2026-10-18) the white eagle (Orzel.js): its rows come from the plugin - Orzel.f9Rows() / f9Pick(row, delta) / f9(row)
+        if (window.Orzel && Orzel.f9Rows) {
+            head("Biały orzeł:");
+            for (const r of Orzel.f9Rows()) row("isleEagle", r.label, r.icon, r.desc, { what: r.what, pick: r.pick });
+        }
         head("Wątek W4 (Borgar, krew kasztelana):");
         row("isleW4", isleLabel.w4(last.w4 || 1), 189, "Ustawia „Krew kasztelana” na początku rozdziału (dług, klucze, krata, poszlaki, pora) i przenosi tam, gdzie się dzieje.", { pick: last.w4 || 1 });
         head("Wątek W5 (kantor Baltazara):");
@@ -452,6 +463,14 @@
         head("Wątek W9 (rywal w ruinach):");
         row("isleW9", isleLabel.w9(last.w9 || 0), 189, "Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy śladach.", { pick: last.w9 || 0 });
         row("isleW9Meet", isleLabel.w9meet(last.w9f || 4), 190, "Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10); bohater na jego schodach, kilka kroków do ich ogniska.", { pick: last.w9f || 4 });
+        // (2026-10-21) the new terrain's packages (docs/rozszerzenia/PLAN.md): their rows come from Okolice.f9 - sections() / pick(row, delta)
+        // / ok(row); a package registers them with Okolice.f9.add({ owner, title, rows, pick, ok }) and never edits this file
+        if (window.Okolice && Okolice.f9 && Okolice.f9.sections) {
+            for (const sec of Okolice.f9.sections()) {
+                head(sec.title);
+                for (const r of sec.rows) row("isleOkolice", r.label, r.icon, r.desc, { owner: sec.owner, what: r.what, pick: r.pick });
+            }
+        }
         return rows;
     };
 
@@ -582,6 +601,18 @@
             this.redrawItem(this.index());
             return;
         }
+        if (row && row.kind === "isleEagle" && row.pick !== undefined && window.Orzel && Orzel.f9Pick) {   // (the white eagle's stage: 1-5)
+            Orzel.f9Pick(row, delta);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
+        if (row && row.kind === "isleOkolice" && row.pick !== undefined && window.Okolice && Okolice.f9) {   // (a package's row with a choice)
+            Okolice.f9.pick(row, delta);
+            SoundManager.playCursor();
+            this.redrawItem(this.index());
+            return;
+        }
         if (row && row.kind === "isleFavor" && window.Garnizon && Garnizon.addFavor) {   // (the garrison's favour: 20 at a time)
             Garnizon.addFavor(delta * 20, "F9", true);
             row.label = isleLabel.favor();
@@ -702,6 +733,12 @@
         } else if (row.kind === "birds" || row.kind === "raid") {
             this.popScene();   // started once the map is back (Birds.js needs its sprites)
             Birds.pending = row.kind;
+        } else if (row.kind === "motyle" || row.kind === "cmy") {
+            this.popScene();   // started once the map is back (Motyle.js needs its sprites and the fires on the screen)
+            Motyle.pending = row.kind;
+        } else if (row.kind === "siatka") {
+            $gameParty.gainItem($dataItems[Motyle.ITEM.net], 1);
+            $gameTemp.pushLootPopup(row.icon, "Siatka na motyle", "#9ff0a8");
         } else if (row.kind === "boar" || row.kind === "wolves" || row.kind === "deer" || row.kind === "bear") {
             this.popScene();   // spawned once the map is back
             Hunting.pending = row.kind;
@@ -835,6 +872,22 @@
             case "isleFavor":
                 if (window.Garnizon && Garnizon.addFavor) Garnizon.addFavor(20, "F9", true);
                 break;
+            case "isleOkolice": {   // (the new terrain's packages: Okolice.f9.ok says what happened - "back", a place to go, a popup)
+                if (!window.Okolice || !Okolice.f9) { say(row.icon, "Brak Okolice.js", true); break; }
+                const r = Okolice.f9.ok(row);
+                if (r && r.go) return go(r.go);
+                if (r && r.back) return back();
+                if (r && r.say) say(row.icon, r.say, !!r.bad);
+                break;
+            }
+            case "isleEagle": {   // (the white eagle: Orzel.f9 says what happened - "back" to the map, a place to go, a popup)
+                if (!window.Orzel || !Orzel.f9) { say(row.icon, "Brak Orzel.js", true); break; }
+                const r = Orzel.f9(row);
+                if (r && r.go) return go(r.go);
+                if (r && r.back) return back();
+                if (r && r.say) say(row.icon, r.say, !!r.bad);
+                break;
+            }
             case "isleW4": {
                 if (!window.Kasztelan || !Kasztelan.debugJump) { say(row.icon, "Brak Kasztelan.js", true); break; }
                 const g = Kasztelan.debugJump(row.pick);

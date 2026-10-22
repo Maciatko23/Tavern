@@ -72,6 +72,27 @@
     T.util = { num, flag, clamp01, warnOnce };
 
     // ------------------------------------------------------------------
+    // The view (2026-10-18, the white eagle's flight - Orzel_Lot.js): how much of the map WORLD the screen shows, in the world's own
+    // pixels. Normally the screen itself (Graphics.width x Graphics.height, scale 1 - every number exactly as before); while the world is
+    // drawn smaller (flying high: scale 0.5) the screen shows 1/scale times more of it. Whatever lives INSIDE the map's spriteset (a layer
+    // the size of the screen - the night, the rain -, a cull "is it on the screen", a count by the screen's area) asks Tawerna.view.w() /
+    // .h(), not Graphics; the interface on the scene (the HUD, the windows, the bubbles) keeps Graphics.
+    //   Tawerna.view() -> { w, h, s }; Tawerna.view.w() / .h() / .scale(); Tawerna.view.setScale(s) (Orzel_Lot only; "viewScale" on the bus)
+    // ------------------------------------------------------------------
+    let viewScale = 1;
+    T.view = () => ({ w: Graphics.width / viewScale, h: Graphics.height / viewScale, s: viewScale });
+    T.view.w = () => Graphics.width / viewScale;
+    T.view.h = () => Graphics.height / viewScale;
+    T.view.scale = () => viewScale;
+    T.view.setScale = function(s) {
+        const v = s > 0 && isFinite(s) ? s : 1;
+        if (v === viewScale) return viewScale;
+        viewScale = v;
+        if (typeof T.emit === "function") T.emit("viewScale", viewScale);
+        return viewScale;
+    };
+
+    // ------------------------------------------------------------------
     // Plugins: Tawerna.has / api / call / register (instead of window.X && X.f ? X.f() : ...)
     // ------------------------------------------------------------------
     const apis = Object.create(null);
@@ -286,6 +307,8 @@
         // post at the tenth gate - Borgar, the fire, the basket (Map140)
         { owner: "Kasztelan", from: 540, to: 559, what: "W4: Borgar przy kracie w piwnicy (mapa 9), posterunek Borgara przy dziesiątej bramie (mapa 140)" },
         { owner: "Story", from: 901, to: 902, what: "dziadek (mapa 19), Lord (dwór)" },
+        // (2026-10-18) the white eagle (Orzel.js): the climbers' path on the user's Map013, the ridge's things on Map175 (Orla Grań)
+        { owner: "Orzel", from: 500, to: 539, what: "biały orzeł: ścieżka na Orlą Grań (mapa 13), gniazdo, orlica, misa, obóz i klatka (mapa 175)" },
         { owner: "Homes", from: 700, to: 729, what: "pole po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
         // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): the kantor's trapdoor, stack and counter (Map103), the night visitors of
         // the back door (Map008), the cellar (Map171), the smugglers' camp (Map023), the ferry night's cart (Map022)
@@ -298,7 +321,15 @@
         { owner: "TownQuests", from: 951, to: 959, what: "miejsca questów miasteczka (mapy 8, 22)" },
         { owner: "HomeLife", from: 960, to: 979, what: "kot Mruczek (mapa 19)" },
         { owner: "HomeDecor", from: 980, to: 998, what: "ozdoby domu dziadka (mapa 19)" },
-        { owner: "Forestry", from: 1000, to: Infinity, what: "posadzone sosny (każda mapa)" }
+        // (2026-10-21) the planted pines end at 1999 (Forestry.js gives out the first free id of 1000-1999), the land above is the new
+        // terrain's packages' (docs/rozszerzenia/PLAN.md, pakiet 0): one owner per package, the same name in its Tawerna.inject
+        { owner: "Forestry", from: 1000, to: 1999, what: "posadzone sosny (każda mapa)" },
+        { owner: "Okolice", from: 2000, to: 2099, what: "nowy teren: rdzeń (pakiet 0)" },
+        { owner: "Zasoby", from: 2100, to: 2299, what: "nowy teren: paczka A „Woda i zasoby”" },
+        { owner: "Lowy", from: 2300, to: 2499, what: "nowy teren: paczka B „Zwierzęta i łowy”" },
+        { owner: "Ludzie", from: 2500, to: 2699, what: "nowy teren: paczka C „Ludzie”" },
+        { owner: "Zakon", from: 2700, to: 2899, what: "nowy teren: paczka D „Tajemnice i zakon”" },
+        { owner: "TownLife", from: 2900, to: 2949, what: "mieszkańcy paczek nowego terenu (drugi zakres)" }
     ];
     const injectors = [];     // { owner, from, to, maps(id), mapsText, build, when, fixSaved, editorWins }
     const dataHooks = [];     // { fn, owner }
@@ -1017,7 +1048,9 @@
                 out.push("  " + r.ids + " " + r.owner + (r.active ? " (inject" + (r.maps && r.maps !== "*" ? ", mapy " + r.maps : "") + ")" : "") + (r.what ? ": " + r.what : ""));
             }
             const inj = T.injected();
-            out.push("Wstawione tu: " + (Object.keys(inj).map(k => k + " " + inj[k].join(",")).join("; ") || "nic"));
+            // (2026-10-22) the ids in runs (2185-2198), so the line fits the F9 list with the new terrain's many events
+            const runs = ids => { const s = ids.slice().sort((a, b) => a - b), out2 = []; for (let i = 0; i < s.length; i++) { let j = i; while (j + 1 < s.length && s[j + 1] === s[j] + 1) j++; out2.push(j > i ? s[i] + "-" + s[j] : String(s[i])); i = j; } return out2.join(","); };
+            out.push("Wstawione tu: " + (Object.keys(inj).map(k => k + " " + runs(inj[k])).join("; ") || "nic"));
             const ls = T.debug.listeners(), heard = Object.keys(ls).filter(k => ls[k].length);
             out.push("Szyna: " + (heard.map(k => k + " " + ls[k].length).join(", ") || "nikt nie słucha"));
             return out;

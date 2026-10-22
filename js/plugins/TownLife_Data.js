@@ -718,5 +718,6 @@
     // (Map023 Skraj lasu: Rysiek's night place by his snares, in the small clearing by the stones - 2026-10-17)
     const SPOTS_BY_MAP = { 111: {}, 125: { tawerna: [53, 19, 6] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [15, 16, 2], straz_1: [10, 19, 6], straz_2: [19, 19, 2], straz_3: [19, 28, 4], straz_4: [10, 28, 8] } };
 
-    window.TownLifeData = { MAP: 8, FIRST_ID: 910, SPOTS, SPOTS_BY_MAP, RESIDENTS };
+    // (2026-10-21) EXTRA_RANGE: the second range of ids for TownLifeExtra (the new terrain's packages, docs/rozszerzenia/PLAN.md)
+    window.TownLifeData = { MAP: 8, FIRST_ID: 910, EXTRA_RANGE: [2900, 2949], SPOTS, SPOTS_BY_MAP, RESIDENTS };
 })();

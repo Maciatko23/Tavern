@@ -420,7 +420,7 @@
     // that kind again before dawn. Its carcass lies there all the same - his to dress.
     function kill(animal, how, by) {
         by = by || (how === "dog" ? "dog" : "hero");
-        const his = by === "hero" || by === "dog";
+        const his = by === "hero" || by === "dog" || by === "eagle";   // (2026-10-18: the white eagle's kill is his, like the dog's - Orzel.js)
         if (his && typeof animal.bearOver === "function" && SPECIES[animal.kind()].bear) animal.bearOver();   // (a bear fight lived through)
         if (his) tally(animal); else tallyGone(animal);
         removeAnimal(animal);

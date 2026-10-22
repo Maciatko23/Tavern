@@ -626,7 +626,7 @@
         this.visible = this._shown > 0.002;
         if (!this.visible || !$gameMap) return;
         if (this._mapId !== $gameMap.mapId()) this.build();
-        const W = Graphics.width, H = Graphics.height, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const W = T.view.w(), H = T.view.h(), tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();   // (the world's view: Tawerna.view)
         const k = this._shown * (1 - nightNow()), lean = Math.sin(-RAY_TILT);
         for (const sh of this._shafts) {
             const r = sh._ray, t = state.t, len = H * r.len;

@@ -178,6 +178,25 @@
             slots: 2, foodOnly: true, bowl: 3, needFlag: "krukTame",
             openName: "Korytko: jedzenie", openHelp: "Zostawiasz krukowi mięso albo rybę (2 rodzaje). Kruk je z korytka, kiedy jest głodny. Jedzenie psuje się tu jak w skrzyni.",
             desc: "Słup z poprzeczką i daszkiem dla oswojonego kruka. Kruk śpi tu nocą, pilnuje pola przed ptakami, a rano czasem zostawia na grzędzie, co znalazł. Przy słupie korytko na mięso i miseczka na wodę." },
+        // the white eagle (Orzel.js, 2026-10-18 - docs/orzel/KONCEPCJA.md): the egg's and the chick's basket (also in the hut's room), the
+        // nest of the young one (3 x 3), the adult's perch (4 x 4: only as the nest's upgrade, once brother Kleofas told how - W13 ch. 3).
+        // Each has the dog's bowl: a small food-only chest (raw meat, fish) and water portions poured from the bag (Orzel.js's menu line)
+        // needFlag: on the Q build list only once the egg is found (orzelJajo) / the eagle is a podrostek (orzelPodrostek)
+        orzel_kosz: { name: "Kosz z sianem", cost: [[ITEM.fiber, 6], [ITEM.branch, 4]], w: 1, h: 1, stamina: 3, hits: 4, image: "Farm_OrzelKosz", indoor: true,
+            slots: 2, foodOnly: true, bowl: 3, needFlag: "orzelJajo",
+            openName: "Miska: jedzenie", openHelp: "Zostawiasz pisklęciu mięso albo rybę (2 rodzaje). Psuje się tu jak w skrzyni.",
+            desc: "Pleciony kosz wyścielony sianem: tu leży orle jajo i śpi pisklę. Jajo jest w cieple, gdy kosz stoi do 3 pól od płonącego ogniska (albo w izbie chatki). Obok miseczka." },
+        orzel_gniazdo: { name: "Orle gniazdo", cost: [[ITEM.wood, 10], [ITEM.branch, 20], [ITEM.fiber, 10], [ITEM.stone, 6]], w: 3, h: 3, stamina: 12, hits: 30, image: "Farm_OrzelGniazdo",
+            slots: 3, foodOnly: true, bowl: 6, needFlag: "orzelPodrostek",
+            upgrade: { to: "orzel_grzeda", dx: 0, name: "Przebuduj na Orlą grzędę", cost: [[ITEM.wood, 6], [ITEM.planks, 10], [ITEM.rope, 4], [ITEM.hide, 2]], stamina: 12, done: "Orla grzęda gotowa",
+                needFlag: "orzelKroniki", help: "Wielkie gniazdo z grubych gałęzi na niskim podeście z kamieni i bierwion, za nim martwy pień - tak, jak opisał brat Kleofas. Dorosły orzeł mieści się w nim cały: śpi, je i odpoczywa. Potrzebne miejsce 4 × 4 pola." },
+            openName: "Miska: jedzenie", openHelp: "Zostawiasz orłu mięso albo rybę (3 rodzaje). Orzeł je z miski, kiedy jest w gnieździe. Psuje się tu jak w skrzyni.",
+            desc: "Wielkie gniazdo z gałęzi na kamiennym kręgu, z głęboką misą: dla podrostka i prawie dorosłego orła. Siedzi w nim, śpi nocą, je i odpoczywa (ranny leży tu dobę). Dorosły już się w nim nie mieści - śpi obok, na ziemi. Przy gnieździe miska na wodę i koryto na mięso." },
+        orzel_grzeda: { name: "Orla grzęda", cost: [[ITEM.wood, 16], [ITEM.branch, 20], [ITEM.fiber, 10], [ITEM.stone, 6], [ITEM.planks, 10], [ITEM.rope, 4], [ITEM.hide, 2]], w: 4, h: 4, stamina: 12, hits: 40,
+            image: "Farm_OrzelGrzeda", noBuild: true, refund: [[ITEM.wood, 4], [ITEM.branch, 8], [ITEM.planks, 4]],
+            slots: 4, foodOnly: true, bowl: 6,
+            openName: "Miska: jedzenie", openHelp: "Zostawiasz orłu mięso albo rybę (4 rodzaje). Psuje się tu jak w skrzyni.",
+            desc: "Gniazdo na miarę dorosłego białego orła, jak za Skrzydlatej Straży: wielka misa z grubych gałęzi na podeście z kamieni i bierwion, za nią martwy pień. Orzeł siedzi w niej, śpi i leży ranny, kiedy leczy rany. Z przodu kamienna misa na wodę i koryto na mięso." },
         chest_s: { name: "Mała skrzynia", cost: [[ITEM.planks, 4]], w: 1, stamina: 5, hits: 5, image: "Farm_ChestS", slots: 12, indoor: true,
             desc: "Schowek: 12 rodzajów przedmiotów, po 99 sztuk każdego." },
         chest_l: { name: "Duża skrzynia", cost: [[ITEM.planks, 8], [ITEM.stone, 2], [ITEM.nails, 6]], w: 2, stamina: 8, hits: 8, image: "Farm_ChestL", slots: 30, indoor: true,
@@ -306,9 +325,12 @@
                 // improve: makes something better instead of a new item (Farming.js IMPROVE) - the waterskin holds 8 sips instead of 4 (Needs.js);
                 // the waterskin itself is needed (tool) and stays the same item. result: what the menu says it gives
                 { id: "skin_big", name: "Powiększ bukłak", inputs: [[ITEM.hide, 1], [ITEM.sinew, 2]], output: [ITEM.skin, 1], manual: true, tool: ITEM.skin, improve: "skin", result: "większy bukłak (8 łyków)",
-                    hours: 2, stamina: 3, startSe: "Item1", swing: "crouch", desc: "Doszywasz do bukłaka drugą wyprawioną skórę, a szwy zaciągasz ścięgnami: zmieści 8 łyków wody zamiast 4. Zostaje tym samym bukłakiem." }
+                    hours: 2, stamina: 3, startSe: "Item1", swing: "crouch", desc: "Doszywasz do bukłaka drugą wyprawioną skórę, a szwy zaciągasz ścięgnami: zmieści 8 łyków wody zamiast 4. Zostaje tym samym bukłakiem." },
+                // (2026-10-18, the white eagle - Orzel.js, W13 ch. 4): the podrostek sits on the hero's hand only with this on it
+                { id: "glove_falconer", name: "Uszyj rękawicę sokolnika", inputs: [[ITEM.hide, 2], [ITEM.sinew, 1]], output: [183, 1], manual: true, unique: true,
+                    hours: 2, stamina: 3, startSe: "Item1", desc: "Gruba rękawica do łokcia z podwójnej skóry, szwy ze ścięgien. Na niej usiądzie młody orzeł - pazury nie przebiją skóry." }
             ],
-            desc: "Wyprawia skóry (także niedźwiedzią), a ze skór szyje buty, plecak, płaszcz, namiot i skórzaną kurtkę, i powiększa bukłak." },
+            desc: "Wyprawia skóry (także niedźwiedzią), a ze skór szyje buty, plecak, płaszcz, namiot, skórzaną kurtkę i rękawicę sokolnika, i powiększa bukłak." },
         // The bucket: forged at the forge (recipe bucket_item) and put down ready from the bag, like the tent; it collects rain
         // (rain.rate portions per hour of rain, up to rain.max) and goes back into the bag (pack) with its water. The well needs one.
         bucket: { name: "Wiadro", anywhere: true, cost: [[ITEM.bucket, 1]], w: 1, stamina: 2, image: "Farm_Bucket", imageFull: "Farm_Bucket_Full", instant: true, pack: ITEM.bucket,

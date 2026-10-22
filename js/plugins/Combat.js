@@ -539,7 +539,7 @@
     // (noXp: a man already paid for when he gave up - Humans.js; 2026-10-17, Starcia.js: another's kill - a wolf's, a bandit's arrow, the
     // boar's charge - gives him nothing: only his own and his dog's)
     T.on("kill", e => {
-        if (e.noXp || (e.by && e.by !== "hero" && e.by !== "dog")) return;
+        if (e.noXp || (e.by && e.by !== "hero" && e.by !== "dog" && e.by !== "eagle")) return;   // (2026-10-18: the white eagle's too - Orzel.js)
         const H = T.api("Hunting");
         gainXp(killXp(e.kind, e.level), e.name || ((H && H.SPECIES[e.kind]) || {}).name);
     }, { owner: "Combat" });

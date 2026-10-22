@@ -903,7 +903,7 @@
             if (k === null) { say(TX.f9.noQuests, true); return false; }
             if (k === 0) { say(TX.f9.allIn, true); return false; }
             $gameTemp._w10Play = k;
-            $gamePlayer.reserveTransfer(MAP, 54, 19, 4, 0);
+            $gamePlayer.reserveTransfer(MAP, 110, 19, 4, 0);   // (2026-10-18: the harbour doubled to 112x80 - one inside its east edge)
             SoundManager.playOk();
             this.popScene();
             return true;

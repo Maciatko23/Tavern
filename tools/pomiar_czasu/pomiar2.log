@@ -1,0 +1,41 @@
+piętra: ziarna 1407127152, 987654321
+{"f":1,"map":131,"from":[8,5,2],"to":[58,30,2],"arrived":true,"d8":78.9,"sekundy":25.1,"res":{"ok":true,"transferred":false,"plen":78.9,"frames":1502,"ms":25030,"hours":0.417,"stuck":0,"at":[58,30]}}
+{"f":5,"map":135,"from":[10,5,2],"to":[28,44,2],"arrived":true,"d8":55.73,"sekundy":17.8,"res":{"ok":true,"transferred":false,"plen":55.73,"frames":1062,"ms":17700,"hours":0.295,"stuck":0,"at":[28,44]}}
+{"f":11,"map":1011,"from":[26,5,2],"to":[26,44,2],"arrived":true,"d8":107.87,"sekundy":34.4,"res":{"ok":true,"transferred":false,"plen":107.87,"frames":2055,"ms":34240,"hours":0.571,"stuck":0,"at":[26,44]}}
+{"f":25,"map":1025,"from":[11,25,2],"to":[75,45,2],"arrived":true,"d8":134.62,"sekundy":42.9,"res":{"ok":true,"transferred":false,"plen":134.62,"frames":2567,"ms":42781,"hours":0.713,"stuck":0,"at":[75,45]}}
+{"f":45,"map":1045,"from":[13,46,2],"to":[12,5,2],"arrived":true,"d8":97.8,"sekundy":31.1,"res":{"ok":true,"transferred":false,"plen":97.8,"frames":1865,"ms":31081,"hours":0.518,"stuck":0,"at":[12,5]}}
+{"f":77,"map":1077,"from":[10,5,2],"to":[56,24,2],"arrived":true,"d8":114.11,"sekundy":36.3,"res":{"ok":true,"transferred":false,"plen":114.11,"frames":2174,"ms":36230,"hours":0.604,"stuck":0,"at":[56,24]}}
+{"f":95,"map":1095,"from":[60,47,2],"to":[59,5,2],"arrived":true,"d8":124.69,"sekundy":39.7,"res":{"ok":true,"transferred":false,"plen":124.69,"frames":2380,"ms":39661,"hours":0.661,"stuck":0,"at":[59,5]}}
+{"name":"miasteczko: tawerna -> brama zachodnia (Podgrodzie)","map":8,"from":[23,17],"to":[0,50],"dist":57.9,"size":[52,69]}
+{"name":"miasteczko: tawerna -> studnia na rynku","map":8,"from":[23,17],"to":[25,33],"dist":16.83,"size":[52,69]}
+{"name":"miasteczko: tawerna -> dzwonnica","map":8,"from":[23,17],"to":[48,31],"dist":38.07,"size":[52,69]}
+{"name":"miasteczko: tawerna -> ratusz","map":8,"from":[23,17],"to":[47,40],"dist":41.73,"size":[52,69]}
+{"name":"miasteczko: tawerna -> dom kowala","map":8,"from":[23,17],"to":[12,47],"dist":46.9,"size":[52,69]}
+{"name":"miasteczko: tawerna -> kantor","map":8,"from":[23,17],"to":[10,40],"dist":33.9,"size":[52,69]}
+{"name":"miasteczko: tawerna -> brama dworu","map":8,"from":[23,17],"to":[51,50],"dist":57.48,"size":[52,69]}
+{"name":"miasteczko: brama płd. -> tawerna","map":8,"from":[24,67],"to":[23,17],"dist":52.07,"size":[52,69]}
+{"name":"Podgrodzie: brama -> droga na przystań","map":111,"from":[44,17],"to":[0,19],"dist":44.83,"size":[46,56]}
+{"name":"Przystań: wejście -> ścieżka do pustelni","map":125,"from":[54,19],"to":[15,0],"dist":48.04,"size":[56,40]}
+{"name":"Przystań: wejście -> garnizon","map":125,"from":[54,19],"to":[22,39],"dist":40.28,"size":[56,40]}
+{"name":"Przystań: wejście -> chata Janka","map":125,"from":[54,19],"to":[24,5],"dist":36.38,"size":[56,40]}
+{"name":"Pustelnia: zejście -> Urwisko","map":155,"from":[24,34],"to":[47,17],"dist":37.07,"size":[48,36]}
+{"name":"Pustelnia: zejście -> skryptorium","map":155,"from":[24,34],"to":[14,9],"dist":35.24,"size":[48,36]}
+{"name":"Urwisko -> Przylądek","map":157,"from":[1,19],"to":[55,19],"dist":54,"size":[56,36]}
+{"name":"Przylądek: od urwiska -> zejście w góry","map":159,"from":[1,33],"to":[29,39],"dist":30.48,"size":[44,40]}
+{"name":"Garnizon -> łacha do wraku","map":162,"from":[22,1],"to":[0,20],"dist":null,"size":[56,40]}
+{"name":"Wrak: łacha -> zejście pod pokład","map":165,"from":[36,20],"to":[17,15],"dist":21.66,"size":[40,30]}
+{"name":"Leśna droga: od dziadka -> Polna droga","map":21,"from":[19,1],"to":[0,19],"dist":29.38,"size":[40,30]}
+{"name":"Leśna droga: od dziadka -> Góry","map":21,"from":[19,1],"to":[39,8],"dist":22.9,"size":[40,30]}
+{"name":"Polna droga: od Leśnej -> miasteczko","map":22,"from":[38,19],"to":[11,0],"dist":34.87,"size":[40,30]}
+{"name":"Polna droga: od Skraju lasu -> miasteczko","map":22,"from":[23,28],"to":[11,0],"dist":32.97,"size":[40,30]}
+{"name":"Góry: od Leśnej drogi -> Jaskinia","map":13,"from":[1,38],"to":[44,7],"dist":84.52,"size":[60,48]}
+{"name":"Góry: od Leśnej drogi -> Osada Milczących","map":13,"from":[1,38],"to":[5,0],"dist":null,"size":[60,48]}
+{"name":"Góry: od Leśnej drogi -> Przylądek","map":13,"from":[1,38],"to":[59,12],"dist":74.04,"size":[60,48]}
+{"name":"Jaskinia: wejście -> przekop (piętro 50)","map":14,"from":[20,27],"to":[3,9],"dist":27.97,"size":[40,30]}
+{"name":"Tawerna: wejście -> drzwi piwnicy","map":1,"from":[50,53],"to":[9,4],"dist":null,"size":[101,55]}
+{"name":"Piwnica -> krata zakonu","map":9,"from":[10,8],"to":[15,2],"dist":8.66,"size":[20,15]}
+{"name":"Ruiny Zamku: od piwnicy -> wielkie schody","map":10,"from":[3,7],"to":[14,6],"dist":12.83,"size":[28,19]}
+{"name":"Ruiny Zamku: od piwnicy -> winda","map":10,"from":[3,7],"to":[24,8],"dist":21.41,"size":[28,19]}
+{"name":"Posiadłość: brama -> oranżeria","map":24,"from":[1,14],"to":[7,24],"dist":22.24,"size":[40,30]}
+{"name":"Skraj lasu: od pola -> Polna droga","map":23,"from":[1,12],"to":[23,0],"dist":27.55,"size":[40,30]}
+{"name":"Podwórze dziadka: drzwi -> Leśna droga","map":20,"from":[15,8],"to":[14,21],"dist":13.41,"size":[30,22]}

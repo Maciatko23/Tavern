@@ -1,0 +1,3562 @@
+{
+ "when": "2026-10-18T07:15:06.363Z",
+ "pietra": [
+  {
+   "seed": 1407127152,
+   "floors": [
+    {
+     "f": 1,
+     "hm": 0,
+     "ok": true,
+     "steps": 83,
+     "why": "",
+     "cr": 5,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 64,
+     "h": 39
+    },
+    {
+     "f": 2,
+     "hm": 0,
+     "ok": true,
+     "steps": 96,
+     "why": "",
+     "cr": 6,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 51,
+     "h": 55
+    },
+    {
+     "f": 3,
+     "hm": 0,
+     "ok": true,
+     "steps": 71,
+     "why": "",
+     "cr": 6,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 55,
+     "h": 54
+    },
+    {
+     "f": 4,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 8,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 62,
+     "h": 53
+    },
+    {
+     "f": 5,
+     "hm": 0,
+     "ok": true,
+     "steps": 61,
+     "why": "",
+     "cr": 8,
+     "boss": 0,
+     "loot": 15,
+     "notes": 1,
+     "rocks": 0,
+     "w": 60,
+     "h": 54
+    },
+    {
+     "f": 6,
+     "hm": 0,
+     "ok": true,
+     "steps": 75,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 18,
+     "notes": 1,
+     "rocks": 0,
+     "w": 75,
+     "h": 56
+    },
+    {
+     "f": 7,
+     "hm": 0,
+     "ok": true,
+     "steps": 80,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 16,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 53
+    },
+    {
+     "f": 8,
+     "hm": 0,
+     "ok": true,
+     "steps": 132,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 19,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 58
+    },
+    {
+     "f": 9,
+     "hm": 0,
+     "ok": true,
+     "steps": 128,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 19,
+     "notes": 1,
+     "rocks": 0,
+     "w": 80,
+     "h": 56
+    },
+    {
+     "f": 10,
+     "hm": 140,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 11,
+     "hm": 0,
+     "ok": true,
+     "steps": 119,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 64,
+     "h": 55
+    },
+    {
+     "f": 12,
+     "hm": 0,
+     "ok": true,
+     "steps": 123,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 68,
+     "h": 52
+    },
+    {
+     "f": 13,
+     "hm": 0,
+     "ok": true,
+     "steps": 88,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 0,
+     "w": 66,
+     "h": 57
+    },
+    {
+     "f": 14,
+     "hm": 0,
+     "ok": true,
+     "steps": 61,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 64,
+     "h": 54
+    },
+    {
+     "f": 15,
+     "hm": 0,
+     "ok": true,
+     "steps": 82,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 55
+    },
+    {
+     "f": 16,
+     "hm": 0,
+     "ok": true,
+     "steps": 109,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 56
+    },
+    {
+     "f": 17,
+     "hm": 0,
+     "ok": true,
+     "steps": 127,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 0,
+     "w": 81,
+     "h": 58
+    },
+    {
+     "f": 18,
+     "hm": 0,
+     "ok": true,
+     "steps": 92,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 15,
+     "notes": 1,
+     "rocks": 0,
+     "w": 79,
+     "h": 56
+    },
+    {
+     "f": 19,
+     "hm": 0,
+     "ok": true,
+     "steps": 49,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 79,
+     "h": 57
+    },
+    {
+     "f": 20,
+     "hm": 146,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 21,
+     "hm": 0,
+     "ok": true,
+     "steps": 74,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 79,
+     "h": 57
+    },
+    {
+     "f": 22,
+     "hm": 0,
+     "ok": true,
+     "steps": 152,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 81,
+     "h": 56
+    },
+    {
+     "f": 23,
+     "hm": 0,
+     "ok": true,
+     "steps": 117,
+     "why": "",
+     "cr": 15,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 82,
+     "h": 56
+    },
+    {
+     "f": 24,
+     "hm": 0,
+     "ok": true,
+     "steps": 99,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 88,
+     "h": 54
+    },
+    {
+     "f": 25,
+     "hm": 0,
+     "ok": true,
+     "steps": 144,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 88,
+     "h": 56
+    },
+    {
+     "f": 26,
+     "hm": 0,
+     "ok": true,
+     "steps": 86,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 15,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 53
+    },
+    {
+     "f": 27,
+     "hm": 0,
+     "ok": true,
+     "steps": 107,
+     "why": "",
+     "cr": 17,
+     "boss": 0,
+     "loot": 17,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 55
+    },
+    {
+     "f": 28,
+     "hm": 0,
+     "ok": true,
+     "steps": 88,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 16,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 55
+    },
+    {
+     "f": 29,
+     "hm": 0,
+     "ok": true,
+     "steps": 86,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 17,
+     "notes": 1,
+     "rocks": 0,
+     "w": 91,
+     "h": 56
+    },
+    {
+     "f": 30,
+     "hm": 147,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 31,
+     "hm": 0,
+     "ok": true,
+     "steps": 97,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 3,
+     "w": 64,
+     "h": 56
+    },
+    {
+     "f": 32,
+     "hm": 0,
+     "ok": true,
+     "steps": 99,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 3,
+     "w": 64,
+     "h": 55
+    },
+    {
+     "f": 33,
+     "hm": 0,
+     "ok": true,
+     "steps": 76,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 1,
+     "w": 57,
+     "h": 57
+    },
+    {
+     "f": 34,
+     "hm": 0,
+     "ok": true,
+     "steps": 78,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 1,
+     "w": 65,
+     "h": 51
+    },
+    {
+     "f": 35,
+     "hm": 0,
+     "ok": true,
+     "steps": 130,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 3,
+     "w": 87,
+     "h": 54
+    },
+    {
+     "f": 36,
+     "hm": 0,
+     "ok": true,
+     "steps": 105,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 3,
+     "w": 80,
+     "h": 56
+    },
+    {
+     "f": 37,
+     "hm": 0,
+     "ok": true,
+     "steps": 75,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 1,
+     "w": 88,
+     "h": 49
+    },
+    {
+     "f": 38,
+     "hm": 0,
+     "ok": true,
+     "steps": 119,
+     "why": "",
+     "cr": 17,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 5,
+     "w": 77,
+     "h": 57
+    },
+    {
+     "f": 39,
+     "hm": 0,
+     "ok": true,
+     "steps": 94,
+     "why": "",
+     "cr": 15,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 3,
+     "w": 81,
+     "h": 52
+    },
+    {
+     "f": 40,
+     "hm": 148,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 41,
+     "hm": 0,
+     "ok": true,
+     "steps": 98,
+     "why": "",
+     "cr": 19,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 1,
+     "w": 77,
+     "h": 55
+    },
+    {
+     "f": 42,
+     "hm": 0,
+     "ok": true,
+     "steps": 80,
+     "why": "",
+     "cr": 18,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 5,
+     "w": 78,
+     "h": 54
+    },
+    {
+     "f": 43,
+     "hm": 0,
+     "ok": true,
+     "steps": 103,
+     "why": "",
+     "cr": 19,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 4,
+     "w": 87,
+     "h": 58
+    },
+    {
+     "f": 44,
+     "hm": 0,
+     "ok": true,
+     "steps": 73,
+     "why": "",
+     "cr": 18,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 5,
+     "w": 84,
+     "h": 53
+    },
+    {
+     "f": 45,
+     "hm": 0,
+     "ok": true,
+     "steps": 106,
+     "why": "",
+     "cr": 18,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 3,
+     "w": 88,
+     "h": 55
+    },
+    {
+     "f": 46,
+     "hm": 0,
+     "ok": true,
+     "steps": 135,
+     "why": "",
+     "cr": 18,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 4,
+     "w": 81,
+     "h": 55
+    },
+    {
+     "f": 47,
+     "hm": 0,
+     "ok": true,
+     "steps": 117,
+     "why": "",
+     "cr": 21,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 5,
+     "w": 90,
+     "h": 55
+    },
+    {
+     "f": 48,
+     "hm": 0,
+     "ok": true,
+     "steps": 127,
+     "why": "",
+     "cr": 21,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 4,
+     "w": 85,
+     "h": 55
+    },
+    {
+     "f": 49,
+     "hm": 0,
+     "ok": true,
+     "steps": 120,
+     "why": "",
+     "cr": 20,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 4,
+     "w": 86,
+     "h": 57
+    },
+    {
+     "f": 50,
+     "hm": 149,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 51,
+     "hm": 0,
+     "ok": true,
+     "steps": 92,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 57
+    },
+    {
+     "f": 52,
+     "hm": 0,
+     "ok": true,
+     "steps": 99,
+     "why": "",
+     "cr": 9,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 53
+    },
+    {
+     "f": 53,
+     "hm": 0,
+     "ok": true,
+     "steps": 77,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 74,
+     "h": 53
+    },
+    {
+     "f": 54,
+     "hm": 0,
+     "ok": true,
+     "steps": 70,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 74,
+     "h": 55
+    },
+    {
+     "f": 55,
+     "hm": 0,
+     "ok": true,
+     "steps": 126,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 73,
+     "h": 54
+    },
+    {
+     "f": 56,
+     "hm": 0,
+     "ok": true,
+     "steps": 131,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 54
+    },
+    {
+     "f": 57,
+     "hm": 0,
+     "ok": true,
+     "steps": 81,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 89,
+     "h": 54
+    },
+    {
+     "f": 58,
+     "hm": 0,
+     "ok": true,
+     "steps": 92,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 81,
+     "h": 53
+    },
+    {
+     "f": 59,
+     "hm": 0,
+     "ok": true,
+     "steps": 79,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 81,
+     "h": 55
+    },
+    {
+     "f": 60,
+     "hm": 150,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 61,
+     "hm": 0,
+     "ok": true,
+     "steps": 86,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 79,
+     "h": 54
+    },
+    {
+     "f": 62,
+     "hm": 0,
+     "ok": true,
+     "steps": 75,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 53
+    },
+    {
+     "f": 63,
+     "hm": 0,
+     "ok": true,
+     "steps": 127,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 55
+    },
+    {
+     "f": 64,
+     "hm": 0,
+     "ok": true,
+     "steps": 112,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 56
+    },
+    {
+     "f": 65,
+     "hm": 0,
+     "ok": true,
+     "steps": 79,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 52
+    },
+    {
+     "f": 66,
+     "hm": 0,
+     "ok": true,
+     "steps": 111,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 55
+    },
+    {
+     "f": 67,
+     "hm": 0,
+     "ok": true,
+     "steps": 124,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 88,
+     "h": 54
+    },
+    {
+     "f": 68,
+     "hm": 0,
+     "ok": true,
+     "steps": 116,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 57
+    },
+    {
+     "f": 69,
+     "hm": 0,
+     "ok": true,
+     "steps": 115,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 53
+    },
+    {
+     "f": 70,
+     "hm": 151,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 71,
+     "hm": 0,
+     "ok": true,
+     "steps": 106,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 56
+    },
+    {
+     "f": 72,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 89,
+     "h": 55
+    },
+    {
+     "f": 73,
+     "hm": 0,
+     "ok": true,
+     "steps": 160,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 54
+    },
+    {
+     "f": 74,
+     "hm": 0,
+     "ok": true,
+     "steps": 117,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 56
+    },
+    {
+     "f": 75,
+     "hm": 0,
+     "ok": true,
+     "steps": 100,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 54
+    },
+    {
+     "f": 76,
+     "hm": 0,
+     "ok": true,
+     "steps": 94,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 75,
+     "h": 53
+    },
+    {
+     "f": 77,
+     "hm": 0,
+     "ok": true,
+     "steps": 127,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 54
+    },
+    {
+     "f": 78,
+     "hm": 0,
+     "ok": true,
+     "steps": 73,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 54
+    },
+    {
+     "f": 79,
+     "hm": 0,
+     "ok": true,
+     "steps": 95,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 3,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 52
+    },
+    {
+     "f": 80,
+     "hm": 152,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 81,
+     "hm": 0,
+     "ok": true,
+     "steps": 130,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 3,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 54
+    },
+    {
+     "f": 82,
+     "hm": 0,
+     "ok": true,
+     "steps": 109,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 52
+    },
+    {
+     "f": 83,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 73,
+     "h": 56
+    },
+    {
+     "f": 84,
+     "hm": 0,
+     "ok": true,
+     "steps": 91,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 3,
+     "notes": 1,
+     "rocks": 0,
+     "w": 73,
+     "h": 54
+    },
+    {
+     "f": 85,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 80,
+     "h": 52
+    },
+    {
+     "f": 86,
+     "hm": 0,
+     "ok": true,
+     "steps": 111,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 82,
+     "h": 51
+    },
+    {
+     "f": 87,
+     "hm": 0,
+     "ok": true,
+     "steps": 75,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 54
+    },
+    {
+     "f": 88,
+     "hm": 0,
+     "ok": true,
+     "steps": 104,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 53
+    },
+    {
+     "f": 89,
+     "hm": 0,
+     "ok": true,
+     "steps": 108,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 82,
+     "h": 53
+    },
+    {
+     "f": 90,
+     "hm": 153,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 91,
+     "hm": 0,
+     "ok": true,
+     "steps": 93,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 53
+    },
+    {
+     "f": 92,
+     "hm": 0,
+     "ok": true,
+     "steps": 138,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 88,
+     "h": 55
+    },
+    {
+     "f": 93,
+     "hm": 0,
+     "ok": true,
+     "steps": 150,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 82,
+     "h": 54
+    },
+    {
+     "f": 94,
+     "hm": 0,
+     "ok": true,
+     "steps": 167,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 54
+    },
+    {
+     "f": 95,
+     "hm": 0,
+     "ok": true,
+     "steps": 137,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 73,
+     "h": 56
+    },
+    {
+     "f": 96,
+     "hm": 0,
+     "ok": true,
+     "steps": 125,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 54
+    },
+    {
+     "f": 97,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 53
+    },
+    {
+     "f": 98,
+     "hm": 0,
+     "ok": true,
+     "steps": 167,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 52
+    },
+    {
+     "f": 99,
+     "hm": 0,
+     "ok": true,
+     "steps": 149,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 54
+    }
+   ]
+  },
+  {
+   "seed": 987654321,
+   "floors": [
+    {
+     "f": 1,
+     "hm": 0,
+     "ok": true,
+     "steps": 45,
+     "why": "",
+     "cr": 4,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 54,
+     "h": 33
+    },
+    {
+     "f": 2,
+     "hm": 0,
+     "ok": true,
+     "steps": 70,
+     "why": "",
+     "cr": 6,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 57,
+     "h": 46
+    },
+    {
+     "f": 3,
+     "hm": 0,
+     "ok": true,
+     "steps": 86,
+     "why": "",
+     "cr": 6,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 58,
+     "h": 54
+    },
+    {
+     "f": 4,
+     "hm": 0,
+     "ok": true,
+     "steps": 84,
+     "why": "",
+     "cr": 8,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 0,
+     "w": 53,
+     "h": 54
+    },
+    {
+     "f": 5,
+     "hm": 0,
+     "ok": true,
+     "steps": 105,
+     "why": "",
+     "cr": 7,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 0,
+     "w": 67,
+     "h": 55
+    },
+    {
+     "f": 6,
+     "hm": 0,
+     "ok": true,
+     "steps": 77,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 17,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 52
+    },
+    {
+     "f": 7,
+     "hm": 0,
+     "ok": true,
+     "steps": 105,
+     "why": "",
+     "cr": 9,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 56
+    },
+    {
+     "f": 8,
+     "hm": 0,
+     "ok": true,
+     "steps": 104,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 19,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 55
+    },
+    {
+     "f": 9,
+     "hm": 0,
+     "ok": true,
+     "steps": 78,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 19,
+     "notes": 1,
+     "rocks": 0,
+     "w": 80,
+     "h": 54
+    },
+    {
+     "f": 10,
+     "hm": 140,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 11,
+     "hm": 0,
+     "ok": true,
+     "steps": 102,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 65,
+     "h": 55
+    },
+    {
+     "f": 12,
+     "hm": 0,
+     "ok": true,
+     "steps": 94,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 69,
+     "h": 56
+    },
+    {
+     "f": 13,
+     "hm": 0,
+     "ok": true,
+     "steps": 111,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 0,
+     "w": 64,
+     "h": 54
+    },
+    {
+     "f": 14,
+     "hm": 0,
+     "ok": true,
+     "steps": 83,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 53,
+     "h": 57
+    },
+    {
+     "f": 15,
+     "hm": 0,
+     "ok": true,
+     "steps": 115,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 57
+    },
+    {
+     "f": 16,
+     "hm": 0,
+     "ok": true,
+     "steps": 139,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 53
+    },
+    {
+     "f": 17,
+     "hm": 0,
+     "ok": true,
+     "steps": 135,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 74,
+     "h": 54
+    },
+    {
+     "f": 18,
+     "hm": 0,
+     "ok": true,
+     "steps": 117,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 56
+    },
+    {
+     "f": 19,
+     "hm": 0,
+     "ok": true,
+     "steps": 125,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 0,
+     "w": 80,
+     "h": 52
+    },
+    {
+     "f": 20,
+     "hm": 146,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 21,
+     "hm": 0,
+     "ok": true,
+     "steps": 121,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 56
+    },
+    {
+     "f": 22,
+     "hm": 0,
+     "ok": true,
+     "steps": 79,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 53
+    },
+    {
+     "f": 23,
+     "hm": 0,
+     "ok": true,
+     "steps": 161,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 0,
+     "w": 81,
+     "h": 56
+    },
+    {
+     "f": 24,
+     "hm": 0,
+     "ok": true,
+     "steps": 118,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 15,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 54
+    },
+    {
+     "f": 25,
+     "hm": 0,
+     "ok": true,
+     "steps": 137,
+     "why": "",
+     "cr": 15,
+     "boss": 0,
+     "loot": 15,
+     "notes": 1,
+     "rocks": 0,
+     "w": 80,
+     "h": 56
+    },
+    {
+     "f": 26,
+     "hm": 0,
+     "ok": true,
+     "steps": 125,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 57
+    },
+    {
+     "f": 27,
+     "hm": 0,
+     "ok": true,
+     "steps": 183,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 17,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 55
+    },
+    {
+     "f": 28,
+     "hm": 0,
+     "ok": true,
+     "steps": 224,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 0,
+     "w": 93,
+     "h": 55
+    },
+    {
+     "f": 29,
+     "hm": 0,
+     "ok": true,
+     "steps": 118,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 17,
+     "notes": 1,
+     "rocks": 0,
+     "w": 94,
+     "h": 55
+    },
+    {
+     "f": 30,
+     "hm": 147,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 31,
+     "hm": 0,
+     "ok": true,
+     "steps": 91,
+     "why": "",
+     "cr": 15,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 2,
+     "w": 57,
+     "h": 55
+    },
+    {
+     "f": 32,
+     "hm": 0,
+     "ok": true,
+     "steps": 55,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 7,
+     "notes": 1,
+     "rocks": 3,
+     "w": 63,
+     "h": 52
+    },
+    {
+     "f": 33,
+     "hm": 0,
+     "ok": true,
+     "steps": 41,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 2,
+     "w": 67,
+     "h": 55
+    },
+    {
+     "f": 34,
+     "hm": 0,
+     "ok": true,
+     "steps": 69,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 1,
+     "w": 61,
+     "h": 47
+    },
+    {
+     "f": 35,
+     "hm": 0,
+     "ok": true,
+     "steps": 43,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 5,
+     "w": 76,
+     "h": 54
+    },
+    {
+     "f": 36,
+     "hm": 0,
+     "ok": true,
+     "steps": 107,
+     "why": "",
+     "cr": 15,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 2,
+     "w": 87,
+     "h": 50
+    },
+    {
+     "f": 37,
+     "hm": 0,
+     "ok": true,
+     "steps": 110,
+     "why": "",
+     "cr": 17,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 6,
+     "w": 89,
+     "h": 50
+    },
+    {
+     "f": 38,
+     "hm": 0,
+     "ok": true,
+     "steps": 147,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 4,
+     "w": 75,
+     "h": 55
+    },
+    {
+     "f": 39,
+     "hm": 0,
+     "ok": true,
+     "steps": 81,
+     "why": "",
+     "cr": 16,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 1,
+     "w": 75,
+     "h": 56
+    },
+    {
+     "f": 40,
+     "hm": 148,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 41,
+     "hm": 0,
+     "ok": true,
+     "steps": 80,
+     "why": "",
+     "cr": 17,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 3,
+     "w": 92,
+     "h": 54
+    },
+    {
+     "f": 42,
+     "hm": 0,
+     "ok": true,
+     "steps": 123,
+     "why": "",
+     "cr": 19,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 4,
+     "w": 90,
+     "h": 50
+    },
+    {
+     "f": 43,
+     "hm": 0,
+     "ok": true,
+     "steps": 148,
+     "why": "",
+     "cr": 17,
+     "boss": 0,
+     "loot": 12,
+     "notes": 1,
+     "rocks": 4,
+     "w": 85,
+     "h": 53
+    },
+    {
+     "f": 44,
+     "hm": 0,
+     "ok": true,
+     "steps": 77,
+     "why": "",
+     "cr": 19,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 4,
+     "w": 80,
+     "h": 53
+    },
+    {
+     "f": 45,
+     "hm": 0,
+     "ok": true,
+     "steps": 109,
+     "why": "",
+     "cr": 17,
+     "boss": 0,
+     "loot": 13,
+     "notes": 1,
+     "rocks": 4,
+     "w": 83,
+     "h": 55
+    },
+    {
+     "f": 46,
+     "hm": 0,
+     "ok": true,
+     "steps": 133,
+     "why": "",
+     "cr": 20,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 5,
+     "w": 89,
+     "h": 56
+    },
+    {
+     "f": 47,
+     "hm": 0,
+     "ok": true,
+     "steps": 120,
+     "why": "",
+     "cr": 21,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 6,
+     "w": 88,
+     "h": 55
+    },
+    {
+     "f": 48,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 20,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 4,
+     "w": 88,
+     "h": 54
+    },
+    {
+     "f": 49,
+     "hm": 0,
+     "ok": true,
+     "steps": 184,
+     "why": "",
+     "cr": 21,
+     "boss": 0,
+     "loot": 14,
+     "notes": 1,
+     "rocks": 3,
+     "w": 89,
+     "h": 56
+    },
+    {
+     "f": 50,
+     "hm": 149,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 51,
+     "hm": 0,
+     "ok": true,
+     "steps": 109,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 7,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 53
+    },
+    {
+     "f": 52,
+     "hm": 0,
+     "ok": true,
+     "steps": 86,
+     "why": "",
+     "cr": 9,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 71,
+     "h": 54
+    },
+    {
+     "f": 53,
+     "hm": 0,
+     "ok": true,
+     "steps": 69,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 90,
+     "h": 53
+    },
+    {
+     "f": 54,
+     "hm": 0,
+     "ok": true,
+     "steps": 75,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 54
+    },
+    {
+     "f": 55,
+     "hm": 0,
+     "ok": true,
+     "steps": 124,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 58
+    },
+    {
+     "f": 56,
+     "hm": 0,
+     "ok": true,
+     "steps": 119,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 82,
+     "h": 57
+    },
+    {
+     "f": 57,
+     "hm": 0,
+     "ok": true,
+     "steps": 96,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 54
+    },
+    {
+     "f": 58,
+     "hm": 0,
+     "ok": true,
+     "steps": 89,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 54
+    },
+    {
+     "f": 59,
+     "hm": 0,
+     "ok": true,
+     "steps": 171,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 54
+    },
+    {
+     "f": 60,
+     "hm": 150,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 61,
+     "hm": 0,
+     "ok": true,
+     "steps": 114,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 9,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 54
+    },
+    {
+     "f": 62,
+     "hm": 0,
+     "ok": true,
+     "steps": 98,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 8,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 55
+    },
+    {
+     "f": 63,
+     "hm": 0,
+     "ok": true,
+     "steps": 96,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 55
+    },
+    {
+     "f": 64,
+     "hm": 0,
+     "ok": true,
+     "steps": 167,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 54
+    },
+    {
+     "f": 65,
+     "hm": 0,
+     "ok": true,
+     "steps": 93,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 90,
+     "h": 58
+    },
+    {
+     "f": 66,
+     "hm": 0,
+     "ok": true,
+     "steps": 91,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 78,
+     "h": 56
+    },
+    {
+     "f": 67,
+     "hm": 0,
+     "ok": true,
+     "steps": 110,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 56
+    },
+    {
+     "f": 68,
+     "hm": 0,
+     "ok": true,
+     "steps": 73,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 55
+    },
+    {
+     "f": 69,
+     "hm": 0,
+     "ok": true,
+     "steps": 99,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 10,
+     "notes": 1,
+     "rocks": 0,
+     "w": 89,
+     "h": 55
+    },
+    {
+     "f": 70,
+     "hm": 151,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 71,
+     "hm": 0,
+     "ok": true,
+     "steps": 168,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 58
+    },
+    {
+     "f": 72,
+     "hm": 0,
+     "ok": true,
+     "steps": 123,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 88,
+     "h": 56
+    },
+    {
+     "f": 73,
+     "hm": 0,
+     "ok": true,
+     "steps": 128,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 82,
+     "h": 54
+    },
+    {
+     "f": 74,
+     "hm": 0,
+     "ok": true,
+     "steps": 78,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 57
+    },
+    {
+     "f": 75,
+     "hm": 0,
+     "ok": true,
+     "steps": 77,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 11,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 54
+    },
+    {
+     "f": 76,
+     "hm": 0,
+     "ok": true,
+     "steps": 65,
+     "why": "",
+     "cr": 9,
+     "boss": 0,
+     "loot": 3,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 48
+    },
+    {
+     "f": 77,
+     "hm": 0,
+     "ok": true,
+     "steps": 78,
+     "why": "",
+     "cr": 9,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 52
+    },
+    {
+     "f": 78,
+     "hm": 0,
+     "ok": true,
+     "steps": 85,
+     "why": "",
+     "cr": 10,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 76,
+     "h": 55
+    },
+    {
+     "f": 79,
+     "hm": 0,
+     "ok": true,
+     "steps": 146,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 75,
+     "h": 55
+    },
+    {
+     "f": 80,
+     "hm": 152,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 81,
+     "hm": 0,
+     "ok": true,
+     "steps": 92,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 87,
+     "h": 55
+    },
+    {
+     "f": 82,
+     "hm": 0,
+     "ok": true,
+     "steps": 107,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 50
+    },
+    {
+     "f": 83,
+     "hm": 0,
+     "ok": true,
+     "steps": 122,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 71,
+     "h": 52
+    },
+    {
+     "f": 84,
+     "hm": 0,
+     "ok": true,
+     "steps": 75,
+     "why": "",
+     "cr": 11,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 80,
+     "h": 54
+    },
+    {
+     "f": 85,
+     "hm": 0,
+     "ok": true,
+     "steps": 112,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 55
+    },
+    {
+     "f": 86,
+     "hm": 0,
+     "ok": true,
+     "steps": 157,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 81,
+     "h": 55
+    },
+    {
+     "f": 87,
+     "hm": 0,
+     "ok": true,
+     "steps": 74,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 77,
+     "h": 53
+    },
+    {
+     "f": 88,
+     "hm": 0,
+     "ok": true,
+     "steps": 83,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 52
+    },
+    {
+     "f": 89,
+     "hm": 0,
+     "ok": true,
+     "steps": 96,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 56
+    },
+    {
+     "f": 90,
+     "hm": 153,
+     "ok": false,
+     "steps": null,
+     "why": "no data",
+     "cr": 0,
+     "boss": 0,
+     "loot": 0,
+     "notes": 0,
+     "rocks": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "f": 91,
+     "hm": 0,
+     "ok": true,
+     "steps": 73,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 52
+    },
+    {
+     "f": 92,
+     "hm": 0,
+     "ok": true,
+     "steps": 150,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 73,
+     "h": 52
+    },
+    {
+     "f": 93,
+     "hm": 0,
+     "ok": true,
+     "steps": 94,
+     "why": "",
+     "cr": 12,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 54
+    },
+    {
+     "f": 94,
+     "hm": 0,
+     "ok": true,
+     "steps": 113,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 4,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 55
+    },
+    {
+     "f": 95,
+     "hm": 0,
+     "ok": true,
+     "steps": 85,
+     "why": "",
+     "cr": 13,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 83,
+     "h": 54
+    },
+    {
+     "f": 96,
+     "hm": 0,
+     "ok": true,
+     "steps": 153,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 84,
+     "h": 54
+    },
+    {
+     "f": 97,
+     "hm": 0,
+     "ok": true,
+     "steps": 85,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 52
+    },
+    {
+     "f": 98,
+     "hm": 0,
+     "ok": true,
+     "steps": 90,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 85,
+     "h": 53
+    },
+    {
+     "f": 99,
+     "hm": 0,
+     "ok": true,
+     "steps": 74,
+     "why": "",
+     "cr": 14,
+     "boss": 0,
+     "loot": 5,
+     "notes": 1,
+     "rocks": 0,
+     "w": 86,
+     "h": 52
+    }
+   ]
+  }
+ ],
+ "przejscia": [
+  {
+   "f": 1,
+   "map": 131,
+   "from": [
+    8,
+    5,
+    2
+   ],
+   "to": [
+    58,
+    30,
+    2
+   ],
+   "arrived": true,
+   "d8": 78.9,
+   "sekundy": 25.1,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 78.9,
+    "frames": 1502,
+    "ms": 25030,
+    "hours": 0.417,
+    "stuck": 0,
+    "at": [
+     58,
+     30
+    ]
+   }
+  },
+  {
+   "f": 5,
+   "map": 135,
+   "from": [
+    10,
+    5,
+    2
+   ],
+   "to": [
+    28,
+    44,
+    2
+   ],
+   "arrived": true,
+   "d8": 55.73,
+   "sekundy": 17.8,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 55.73,
+    "frames": 1062,
+    "ms": 17700,
+    "hours": 0.295,
+    "stuck": 0,
+    "at": [
+     28,
+     44
+    ]
+   }
+  },
+  {
+   "f": 11,
+   "map": 1011,
+   "from": [
+    26,
+    5,
+    2
+   ],
+   "to": [
+    26,
+    44,
+    2
+   ],
+   "arrived": true,
+   "d8": 107.87,
+   "sekundy": 34.4,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 107.87,
+    "frames": 2055,
+    "ms": 34240,
+    "hours": 0.571,
+    "stuck": 0,
+    "at": [
+     26,
+     44
+    ]
+   }
+  },
+  {
+   "f": 25,
+   "map": 1025,
+   "from": [
+    11,
+    25,
+    2
+   ],
+   "to": [
+    75,
+    45,
+    2
+   ],
+   "arrived": true,
+   "d8": 134.62,
+   "sekundy": 42.9,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 134.62,
+    "frames": 2567,
+    "ms": 42781,
+    "hours": 0.713,
+    "stuck": 0,
+    "at": [
+     75,
+     45
+    ]
+   }
+  },
+  {
+   "f": 45,
+   "map": 1045,
+   "from": [
+    13,
+    46,
+    2
+   ],
+   "to": [
+    12,
+    5,
+    2
+   ],
+   "arrived": true,
+   "d8": 97.8,
+   "sekundy": 31.1,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 97.8,
+    "frames": 1865,
+    "ms": 31081,
+    "hours": 0.518,
+    "stuck": 0,
+    "at": [
+     12,
+     5
+    ]
+   }
+  },
+  {
+   "f": 77,
+   "map": 1077,
+   "from": [
+    10,
+    5,
+    2
+   ],
+   "to": [
+    56,
+    24,
+    2
+   ],
+   "arrived": true,
+   "d8": 114.11,
+   "sekundy": 36.3,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 114.11,
+    "frames": 2174,
+    "ms": 36230,
+    "hours": 0.604,
+    "stuck": 0,
+    "at": [
+     56,
+     24
+    ]
+   }
+  },
+  {
+   "f": 95,
+   "map": 1095,
+   "from": [
+    60,
+    47,
+    2
+   ],
+   "to": [
+    59,
+    5,
+    2
+   ],
+   "arrived": true,
+   "d8": 124.69,
+   "sekundy": 39.7,
+   "res": {
+    "ok": true,
+    "transferred": false,
+    "plen": 124.69,
+    "frames": 2380,
+    "ms": 39661,
+    "hours": 0.661,
+    "stuck": 0,
+    "at": [
+     59,
+     5
+    ]
+   }
+  }
+ ],
+ "drogi": [
+  {
+   "name": "miasteczko: tawerna -> brama zachodnia (Podgrodzie)",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    0,
+    50
+   ],
+   "dist": 57.9,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: tawerna -> studnia na rynku",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    25,
+    33
+   ],
+   "dist": 16.83,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: tawerna -> dzwonnica",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    48,
+    31
+   ],
+   "dist": 38.07,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: tawerna -> ratusz",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    47,
+    40
+   ],
+   "dist": 41.73,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: tawerna -> dom kowala",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    12,
+    47
+   ],
+   "dist": 46.9,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: tawerna -> kantor",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    10,
+    40
+   ],
+   "dist": 33.9,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: tawerna -> brama dworu",
+   "map": 8,
+   "from": [
+    23,
+    17
+   ],
+   "to": [
+    51,
+    50
+   ],
+   "dist": 57.48,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "miasteczko: brama płd. -> tawerna",
+   "map": 8,
+   "from": [
+    24,
+    67
+   ],
+   "to": [
+    23,
+    17
+   ],
+   "dist": 52.07,
+   "size": [
+    52,
+    69
+   ]
+  },
+  {
+   "name": "Podgrodzie: brama -> droga na przystań",
+   "map": 111,
+   "from": [
+    44,
+    17
+   ],
+   "to": [
+    0,
+    19
+   ],
+   "dist": 44.83,
+   "size": [
+    46,
+    56
+   ]
+  },
+  {
+   "name": "Przystań: wejście -> ścieżka do pustelni",
+   "map": 125,
+   "from": [
+    54,
+    19
+   ],
+   "to": [
+    15,
+    0
+   ],
+   "dist": 48.04,
+   "size": [
+    56,
+    40
+   ]
+  },
+  {
+   "name": "Przystań: wejście -> garnizon",
+   "map": 125,
+   "from": [
+    54,
+    19
+   ],
+   "to": [
+    22,
+    39
+   ],
+   "dist": 40.28,
+   "size": [
+    56,
+    40
+   ]
+  },
+  {
+   "name": "Przystań: wejście -> chata Janka",
+   "map": 125,
+   "from": [
+    54,
+    19
+   ],
+   "to": [
+    24,
+    5
+   ],
+   "dist": 36.38,
+   "size": [
+    56,
+    40
+   ]
+  },
+  {
+   "name": "Pustelnia: zejście -> Urwisko",
+   "map": 155,
+   "from": [
+    24,
+    34
+   ],
+   "to": [
+    47,
+    17
+   ],
+   "dist": 37.07,
+   "size": [
+    48,
+    36
+   ]
+  },
+  {
+   "name": "Pustelnia: zejście -> skryptorium",
+   "map": 155,
+   "from": [
+    24,
+    34
+   ],
+   "to": [
+    14,
+    9
+   ],
+   "dist": 35.24,
+   "size": [
+    48,
+    36
+   ]
+  },
+  {
+   "name": "Urwisko -> Przylądek",
+   "map": 157,
+   "from": [
+    1,
+    19
+   ],
+   "to": [
+    55,
+    19
+   ],
+   "dist": 54,
+   "size": [
+    56,
+    36
+   ]
+  },
+  {
+   "name": "Przylądek: od urwiska -> zejście w góry",
+   "map": 159,
+   "from": [
+    1,
+    33
+   ],
+   "to": [
+    29,
+    39
+   ],
+   "dist": 30.48,
+   "size": [
+    44,
+    40
+   ]
+  },
+  {
+   "name": "Garnizon -> łacha do wraku",
+   "map": 162,
+   "from": [
+    22,
+    1
+   ],
+   "to": [
+    0,
+    20
+   ],
+   "dist": null,
+   "size": [
+    56,
+    40
+   ]
+  },
+  {
+   "name": "Wrak: łacha -> zejście pod pokład",
+   "map": 165,
+   "from": [
+    36,
+    20
+   ],
+   "to": [
+    17,
+    15
+   ],
+   "dist": 21.66,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Leśna droga: od dziadka -> Polna droga",
+   "map": 21,
+   "from": [
+    19,
+    1
+   ],
+   "to": [
+    0,
+    19
+   ],
+   "dist": 29.38,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Leśna droga: od dziadka -> Góry",
+   "map": 21,
+   "from": [
+    19,
+    1
+   ],
+   "to": [
+    39,
+    8
+   ],
+   "dist": 22.9,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Polna droga: od Leśnej -> miasteczko",
+   "map": 22,
+   "from": [
+    38,
+    19
+   ],
+   "to": [
+    11,
+    0
+   ],
+   "dist": 34.87,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Polna droga: od Skraju lasu -> miasteczko",
+   "map": 22,
+   "from": [
+    23,
+    28
+   ],
+   "to": [
+    11,
+    0
+   ],
+   "dist": 32.97,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Góry: od Leśnej drogi -> Jaskinia",
+   "map": 13,
+   "from": [
+    1,
+    38
+   ],
+   "to": [
+    44,
+    7
+   ],
+   "dist": 84.52,
+   "size": [
+    60,
+    48
+   ]
+  },
+  {
+   "name": "Góry: od Leśnej drogi -> Osada Milczących",
+   "map": 13,
+   "from": [
+    1,
+    38
+   ],
+   "to": [
+    5,
+    0
+   ],
+   "dist": null,
+   "size": [
+    60,
+    48
+   ]
+  },
+  {
+   "name": "Góry: od Leśnej drogi -> Przylądek",
+   "map": 13,
+   "from": [
+    1,
+    38
+   ],
+   "to": [
+    59,
+    12
+   ],
+   "dist": 74.04,
+   "size": [
+    60,
+    48
+   ]
+  },
+  {
+   "name": "Jaskinia: wejście -> przekop (piętro 50)",
+   "map": 14,
+   "from": [
+    20,
+    27
+   ],
+   "to": [
+    3,
+    9
+   ],
+   "dist": 27.97,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Tawerna: wejście -> drzwi piwnicy",
+   "map": 1,
+   "from": [
+    50,
+    53
+   ],
+   "to": [
+    9,
+    4
+   ],
+   "dist": null,
+   "size": [
+    101,
+    55
+   ]
+  },
+  {
+   "name": "Piwnica -> krata zakonu",
+   "map": 9,
+   "from": [
+    10,
+    8
+   ],
+   "to": [
+    15,
+    2
+   ],
+   "dist": 8.66,
+   "size": [
+    20,
+    15
+   ]
+  },
+  {
+   "name": "Ruiny Zamku: od piwnicy -> wielkie schody",
+   "map": 10,
+   "from": [
+    3,
+    7
+   ],
+   "to": [
+    14,
+    6
+   ],
+   "dist": 12.83,
+   "size": [
+    28,
+    19
+   ]
+  },
+  {
+   "name": "Ruiny Zamku: od piwnicy -> winda",
+   "map": 10,
+   "from": [
+    3,
+    7
+   ],
+   "to": [
+    24,
+    8
+   ],
+   "dist": 21.41,
+   "size": [
+    28,
+    19
+   ]
+  },
+  {
+   "name": "Posiadłość: brama -> oranżeria",
+   "map": 24,
+   "from": [
+    1,
+    14
+   ],
+   "to": [
+    7,
+    24
+   ],
+   "dist": 22.24,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Skraj lasu: od pola -> Polna droga",
+   "map": 23,
+   "from": [
+    1,
+    12
+   ],
+   "to": [
+    23,
+    0
+   ],
+   "dist": 27.55,
+   "size": [
+    40,
+    30
+   ]
+  },
+  {
+   "name": "Podwórze dziadka: drzwi -> Leśna droga",
+   "map": 20,
+   "from": [
+    15,
+    8
+   ],
+   "to": [
+    14,
+    21
+   ],
+   "dist": 13.41,
+   "size": [
+    30,
+    22
+   ]
+  }
+ ]
+}

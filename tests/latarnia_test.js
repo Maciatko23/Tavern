@@ -47,23 +47,23 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---------------------------------------------------------------- z gór na przylądek
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.setDay(10, 16);
-    await t.go(13, 58, 12, 6);
+    await t.go(13, 118, 12, 6);   // (2026-10-18: Góry 120x96, the cape 88x80 - tools/powieksz)
     const edge = await t.json(`$dataMap.events.filter(e => e && e.id >= 696 && e.id <= 698).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4)])`);
-    t.check("Góry: na prawej krawędzi (59, 11-13) trzy przejścia na przylądek (Wyspa.js, 696-698)", edge.length === 3 && edge.every(e => e[3][0] === 159 && e[1] === 59), edge);
+    t.check("Góry: na prawej krawędzi (119, 11-13) trzy przejścia na przylądek (Wyspa.js, 696-698)", edge.length === 3 && edge.every(e => e[3][0] === 159 && e[1] === 119), edge);
     await t.eval("$gameMap.event(697).start(); 0");
     const up = await t.until(t.onMap(159), 30);
     await t.frames(20);
     await t.calm({ quiet: true });
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("...prowadzi na Map159 „Przylądek z latarnią” (30,38); mapa 44 x 40, tileset 11, notatka z <Water:salt>, nie szkielet",
-        up && at[0] === 159 && at[1] === 30 && at[2] === 38 && at[3] === 44 && at[4] === 40 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Przylądek z latarnią", at);
+    t.check("...prowadzi na Map159 „Przylądek z latarnią” (30,78); mapa 88 x 80, tileset 11, notatka z <Water:salt>, nie szkielet",
+        up && at[0] === 159 && at[1] === 30 && at[2] === 78 && at[3] === 88 && at[4] === 80 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Przylądek z latarnią", at);
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
-        return { south: ev.filter(e => e.y === 39 && e.x >= 29 && e.x <= 31).map(e => [e.x, tr(e) ? tr(e).slice(1, 5) : null]),
+        return { south: ev.filter(e => e.y === 79 && e.x >= 29 && e.x <= 31).map(e => [e.x, tr(e) ? tr(e).slice(1, 5) : null]),
             west: ev.filter(e => e.x === 0 && (e.y === 33 || e.y === 34)).map(e => [e.y, /isReady\\(157\\)/.test(e.pages[0].list[0].parameters[0])]),
             izba: ev.filter(e => e.name === 'Drzwi: Izba latarnika').map(e => [e.x, e.y]), tower: ev.filter(e => /<Latarnia:wieza>/.test(e.note)).map(e => [e.x, e.y, e.pages[0].image.characterName]),
             spots: ev.filter(e => /^Miejsce: /.test(e.name)).map(e => e.name.slice(9)).sort() }; })()`);
-    t.check("przejścia z kontraktu: dół (29-31, 39) -> Góry (58, 11-13, w lewo), lewa krawędź (0, 33-34) -> Urwisko (tylko gdy gotowe); izba i wieża latarni",
-        ways.south.length === 3 && ways.south.every((s, i) => s[1] && s[1][0] === 13 && s[1][1] === 58 && s[1][2] === 11 + i && s[1][3] === 4)
+    t.check("przejścia z kontraktu: dół (29-31, 79) -> Góry (118, 11-13, w lewo), lewa krawędź (0, 33-34) -> Urwisko (tylko gdy gotowe); izba i wieża latarni",
+        ways.south.length === 3 && ways.south.every((s, i) => s[1] && s[1][0] === 13 && s[1][1] === 118 && s[1][2] === 11 + i && s[1][3] === 4)
         && ways.west.length === 2 && ways.west.every(w => w[1]) && ways.izba.join() === "15,18" && ways.tower.length === 1 && ways.tower[0][2] === "!$Latarnia_Wieza", ways);
     t.check("miejsca Bazylego i pakietu na mapie: drewutnia, izba, izba_sen, laterna, lat_dzwon, lat_napad, lat_oboz",
         ways.spots.join() === "drewutnia,izba,izba_sen,lat_dzwon,lat_napad,lat_oboz,laterna", ways.spots);
@@ -76,8 +76,8 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
         const over = await t.until(t.onMap(157), 15);
         await t.frames(10);
         const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-        t.check("Urwisko (157) gotowe: lewa krawędź (0,33) prowadzi na Urwisko Kruków (54,19)", over && at.join() === "157,54,19", at);
-        await t.go(159, 30, 38, 8);
+        t.check("Urwisko (157) gotowe: lewa krawędź (0,33) prowadzi na Urwisko Kruków (110,19)", over && at.join() === "157,110,19", at);
+        await t.go(159, 30, 78, 8);
     } else {
         await t.frames(30);
         const westPop = await t.popups();

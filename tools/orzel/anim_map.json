@@ -1,0 +1,7 @@
+{
+ "dorosly": {"walk": "walk", "atk": "attack"},
+ "prawie25": {"walk": "walk", "atk": "attack"},
+ "podrostek": {"walk": "walk", "atk": "attack", "flap": "flap"},
+ "mlody": {"walk": "walk", "flap": "flap"},
+ "piskle": {"walk": "walk"}
+}

@@ -141,7 +141,7 @@
     const DIR4 = (dx, dy) => (Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 4 : 6) : (dy < 0 ? 8 : 2));
     const heroX = () => $gamePlayer._realX + 0.5, heroY = () => $gamePlayer._realY + 0.5;
     const panOf = x => Math.max(-80, Math.min(80, Math.round((x - heroX()) * 12)));
-    const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < Graphics.width + m && y > -m && y < Graphics.height + 2 * m; };
+    const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < T.view.w() + m && y > -m && y < T.view.h() + 2 * m; };   // (the world's view: Tawerna.view)
     const toHero = h => [heroX() - h.centerX(), heroY() - h.centerY()];
     // (2026-10-06, Act3.js) a man may fight someone other than the hero - h._foe, an ally of his (Act3's defenders of the tavern):
     // { centerX(), centerY(), _x, _y, _realX, _realY, takeHit({ damage, poise, from, heavy, knock, wound, name }) -> "hit" | "block" |
@@ -978,7 +978,7 @@
         extra = extra || {};
         // (2026-10-17, Starcia.js) extra.by: whose blow - "hero" (left out), "dog" (his), or a beast's ("wolf", "boar", "bear"): a man does
         // not kneel to a wolf (he may run instead), its kill gives the hero nothing; the hero's (or his dog's) blow - the band knows him now
-        const by = extra.by || "hero", beast = by !== "hero" && by !== "dog";
+        const by = extra.by || "hero", beast = by !== "hero" && by !== "dog" && by !== "eagle";   // (2026-10-18: the white eagle is his too - Orzel.js)
         h._killBy = by;
         if (!beast && h._band) h._band._heroAlarm = true;
         const k = h._def, Cb = C(), F2 = (T.api("Combat_parts") || {}).fight;
@@ -1395,7 +1395,7 @@
                 const tg = a.target;   // (an arrow at a wolf or a hare - Starcia.js: it flies past the hero and finds its mark, or the ground)
                 if (tg) {
                     const down = typeof tg.isDown === "function" && tg.isDown(), Hn = H(), sp = Hn && tg.kind ? Hn.SPECIES[tg.kind()] : null;
-                    const r = Math.max(0.45, (sp && sp.radius) || 0.5);
+                    const r = Math.max(0.45, (sp && sp.radius) || tg._hitRadius || 0.5);   // (_hitRadius: a big target of its own - the eagle, Orzel.js)
                     if (!down && typeof tg.takeHit === "function" && Math.hypot(a.x - tg.centerX(), a.y - (tg.centerY() - 0.15)) < r) {
                         tg.takeHit({ damage: a.dmg, poise: a.poise, from: a.from, name: "strzała", shot: true, knock: a.from._def.shot.knock, wound: a.from._def.shot.wound });
                         a.done = true;
@@ -1512,7 +1512,7 @@
     const SLEEP_SEATS = [[-2, 0], [2, 0], [0, 2], [-2, 1], [2, 1], [-1, 2], [1, 2], [0, -2]];
     function makeCamp(opts) {
         opts = opts || {};
-        const at = campSpot(opts.far || CAMP.far, opts.near);
+        const at = opts.at ? { x: opts.at.x, y: opts.at.y } : campSpot(opts.far || CAMP.far, opts.near);   // [Okolice/B] opts.at: a fixed camp's own place (Humans.fixedCamp)
         if (!at) return null;
         const n = opts.size || rnd(CAMP.size[0], CAMP.size[1]), kinds = opts.kinds ? opts.kinds.slice() : [];
         if (!opts.kinds) {
@@ -1569,6 +1569,7 @@
     // each second: a new night may bring a camp (rolled once a night per map), dawn ends it
     function campCheck() {
         if (!auto || !$gameMap || mapOff()) return;
+        if (fixedCheck()) return;   // [Okolice/B] a fixed camp of this map decides by itself (Humans.fixedCamp, the block at the end)
         const s = S(), id = $gameMap.mapId();
         let camp = s.camps[id];
         if (!nightNow()) {
@@ -2087,6 +2088,85 @@
         },
         remove(h) { if (!h || h._dead) return false; endTurn(h); removeHuman(h); bandCheck(h._band); return true; }
     });
+
+    // ==================================================================
+    // [Okolice/B] Stałe obozy - paczka B „Zwierzęta i łowy” (docs/rozszerzenia/PLAN.md B5; Lowy.js registers them: Map021 the robbers,
+    // Map023 the Black Eyes' hunters). Package B's only block in this file, with the two lines marked [Okolice/B] in makeCamp (opts.at)
+    // and campCheck (fixedCheck first). The file before the change: backup_art_2026-10-21/rozszerzenia/B/Humans.js.przed
+    // Humans.fixedCamp(mapId, def) - the map's one camp stands on its own place instead of a random campSpot:
+    //   def: { x, y: the fire; kinds: ["archer", ...] (else the usual mix of CAMP; size: n or [lo, hi]); looks: [a look per man];
+    //          names: [a name per man] or name: one for all (a named man is a quest man - Starcia.js leaves him be); tag (default "camp":
+    //          the beasts may fight them); day: true - it stands by day too (all awake round the fire; it ends when when() turns false);
+    //          when(): true while it stands (asked each second; without day only at night); sack: [[itemId, n]] - more in its sack;
+    //          only: false - while it does not stand, the map's random night camps go on as before (default: no other camp there) }
+    //   Humans.fixedCamp(mapId, null) takes it off; Humans.fixedCamp(mapId) -> its def
+    // ==================================================================
+    const FIXED = {};
+    function fixedCamp(mapId, def) {
+        if (def === undefined) return FIXED[mapId] || null;
+        if (!def) { delete FIXED[mapId]; return null; }
+        FIXED[mapId] = Object.assign({ tag: "camp", day: false, only: true }, def);
+        return FIXED[mapId];
+    }
+    function fixedWants(f) {
+        if (!f.day && !nightNow()) return false;
+        try { return f.when ? !!f.when() : true; } catch (e) { console.error("[Humans] fixedCamp when()", e); return false; }
+    }
+    const fixedKey = f => (f.day ? "d" + day() : nightKey());
+    function makeFixed(f, key) {
+        const size = Array.isArray(f.size) ? rnd(f.size[0], f.size[1]) : f.size;
+        const camp = makeCamp({ at: { x: f.x, y: f.y }, kinds: f.kinds ? f.kinds.slice() : undefined, size: size || undefined, tag: f.tag });
+        if (!camp) return null;
+        camp.night = key;
+        camp.fixed = true;
+        camp.members.forEach((m, i) => {
+            if (f.day) m.mode = "sit";   // (by day nobody sleeps: they sit round the fire)
+            if (f.looks && f.looks[i]) m.look = f.looks[i];
+            const name = f.names ? f.names[i] : f.name;
+            if (name) m.name = name;
+        });
+        if (f.sack && f.sack.length) {
+            const d = dropsOf(camp.mapId).find(o => o.id === camp.sack);
+            if (d) for (const [id, n] of f.sack) d.items.push([id, n]);
+        }
+        return camp;
+    }
+    // (spawnCamp spawns them as any camp's men; their looks and names are put on afterwards - spawnCamp stays as it was)
+    function dressFixed(camp) {
+        for (const h of humans) {
+            const m = h._campRef;
+            if (!m || !camp.members.includes(m)) continue;
+            if (m.look && h._look !== m.look) { h._look = m.look; h.setImage(sheetName(m.look), 0); }
+            if (m.name) h._label = m.name;
+        }
+    }
+    // campCheck asks this first: true - the camp of this map is decided here
+    function fixedCheck() {
+        const id = $gameMap.mapId(), f = FIXED[id];
+        if (!f) return false;
+        const s = S(), key = fixedKey(f);
+        let camp = s.camps[id];
+        const live = c => c && !c.none && !c.over;
+        if (!fixedWants(f)) {
+            if (live(camp) && camp.fixed) endCamp(camp);
+            if (f.only === false) return false;   // (the map's random night camps go on)
+            if (live(camp) && !camp.fixed) endCamp(camp);
+            return true;
+        }
+        if (live(camp) && !camp.fixed) endCamp(camp);   // (a random camp from before: the fixed one takes its place)
+        if (!camp || camp.night !== key || camp.none || !camp.fixed) {
+            const rested = s.cleared[id] !== undefined && day() - s.cleared[id] < CAMP.rest;   // (cleared: it rests, as every camp)
+            if (rested) return true;
+            camp = makeFixed(f, key);
+            if (!camp) return true;
+            s.camps[id] = camp;
+        }
+        if (live(camp) && campSpawned !== camp) { spawnCamp(camp); dressFixed(camp); }
+        return true;
+    }
+    window.Humans.fixedCamp = fixedCamp;
+    window.Humans.fixedCheck = fixedCheck;
+    // [Okolice/B] ---- koniec bloku paczki B ----
 
     // (2026-10-17) Starcia.js - the animals and the men fight each other, the dog beside the hero - put into the page when it is not on the
     // plugin list (the editor was open, or dropped it): it only hooks what Hunting_AI.js, this file and Dog.js have, so after every plugin

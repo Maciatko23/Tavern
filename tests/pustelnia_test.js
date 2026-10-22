@@ -1,8 +1,8 @@
 // PAKIET A "Pustelnia na klifie" (docs/miejsca_wyspy/PAKIETY.md; js/plugins/Pustelnia_Data.js + Pustelnia.js; mapy z
 // tools/pustelnia/build.py). Sprawdza:
-//   - mapy 155 (48 x 36, tileset 11, <Water:salt>, bez szkieletu) i 156 (skryptorium): przejścia z kontraktu (dół -> przystań,
+//   - mapy 155 (96 x 72 od 2026-10-18, tileset 11, <Water:salt>, bez szkieletu) i 156 (skryptorium): przejścia z kontraktu (dół -> przystań,
 //     prawa krawędź -> Urwisko tylko gdy gotowe, inaczej popup), drzwi skryptorium, miejsca Kleofasa
-//   - wejście z przystani: Wyspa.ready(155) - przejście na górnej krawędzi Map125 prowadzi na (24,34)
+//   - wejście z przystani: Wyspa.ready(155) - przejście na górnej krawędzi Map125 prowadzi na (24,70)
 //   - brat Kleofas (TownLife 944): plan dnia (skryptorium rano, ławka w południe, cela w nocy), pierwsza rozmowa (wisiorek =
 //     znak posłańca), popiersie, miód
 //   - K50 (szyszki, żelazo, własna deszczówka -> miód, 15 G), D23: karty 2 (piętro 20), 3 (Rejestr straży u Milczących), 1 (Archiwum),
@@ -43,15 +43,15 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const up = await t.until(t.onMap(155), 30);
     await t.frames(20);
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("...prowadzi na Map155 „Pustelnia na klifie” (24,34); mapa 48 x 36, tileset 11, notatka z <Water:salt>, nie szkielet",
-        up && at[0] === 155 && at[1] === 24 && at[2] === 34 && at[3] === 48 && at[4] === 36 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Pustelnia na klifie", at);
+    t.check("...prowadzi na Map155 „Pustelnia na klifie” (24,70); mapa 96 x 72 (powiększona 2026-10-18), tileset 11, notatka z <Water:salt>, nie szkielet",
+        up && at[0] === 155 && at[1] === 24 && at[2] === 70 && at[3] === 96 && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Pustelnia na klifie", at);
     await t.calm();
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
-        return { south: ev.filter(e => e.y === 35 && e.x >= 23 && e.x <= 25).map(e => [e.x, tr(e) ? tr(e).slice(1, 4) : null]),
-            east: ev.filter(e => e.x === 47 && (e.y === 17 || e.y === 18)).map(e => e.y),
+        return { south: ev.filter(e => e.y === 71 && e.x >= 23 && e.x <= 25).map(e => [e.x, tr(e) ? tr(e).slice(1, 4) : null]),
+            east: ev.filter(e => e.x === 95 && (e.y === 17 || e.y === 18)).map(e => e.y),
             door: ev.filter(e => e.name === 'Drzwi: Skryptorium').map(e => [e.x, e.y, (e.pages[0].list.find(c => c.code === 201) || {}).parameters]),
             spots: ev.filter(e => /^Miejsce: /.test(e.name)).map(e => e.name.slice(9)).sort() }; })()`);
-    t.check("przejścia z kontraktu: dół (23-25, 35) -> przystań (14-16, 1), prawa krawędź (47, 17-18) -> Urwisko; drzwi skryptorium -> Map156",
+    t.check("przejścia z kontraktu: dół (23-25, 71) -> przystań (14-16, 1), prawa krawędź (95, 17-18) -> Urwisko; drzwi skryptorium -> Map156",
         ways.south.length === 3 && ways.south.every(s => s[1] && s[1][0] === 125 && s[1][2] === 1) && ways.east.join() === "17,18"
         && ways.door.length === 1 && ways.door[0][2][1] === 156, ways);
     t.check("miejsca Kleofasa na mapie: cela, ławka, ogródek, skryptorium, ule, urwisko, wieża",
@@ -60,12 +60,12 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // not built (a stub Map157) -> a popup, no transfer
     await t.popups({ clear: true });
     const urwReady = await t.eval("Wyspa.isReady(157)");
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 47 && e.y === 17); $gamePlayer.locate(46, 17); e.start(); return 0; })()");
+    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 95 && e.y === 17); $gamePlayer.locate(94, 17); e.start(); return 0; })()");
     if (urwReady) {
         const over = await t.until(t.onMap(157), 15);
         await t.frames(10);
         const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-        t.check("Urwisko (157) gotowe: prawa krawędź (47,17) prowadzi na Urwisko Kruków (1,19)", over && at.join() === "157,1,19", at);
+        t.check("Urwisko (157) gotowe: prawa krawędź (95,17) prowadzi na Urwisko Kruków (1,19)", over && at.join() === "157,1,19", at);
         await t.go(155, 24, 30, 8);
     } else {
         await t.frames(30);

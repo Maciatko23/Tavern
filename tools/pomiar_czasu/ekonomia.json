@@ -1,0 +1,49 @@
+{
+ "szybki": {
+  "dni": 15,
+  "zmian": 15,
+  "slawa": 76,
+  "srZmiana": 128,
+  "zmianaL0": 77,
+  "co10": [
+   1620
+  ]
+ },
+ "typowy": {
+  "dni": 28,
+  "zmian": 23,
+  "slawa": 71,
+  "srZmiana": 89,
+  "zmianaL0": 54,
+  "co10": [
+   671,
+   1669
+  ]
+ },
+ "spokojny": {
+  "dni": 50,
+  "zmian": 29,
+  "slawa": 93,
+  "srZmiana": 70,
+  "zmianaL0": 42,
+  "co10": [
+   346,
+   843,
+   1359,
+   1953,
+   2567
+  ]
+ },
+ "tylkoZmiany": {
+  "dni": 32,
+  "zmian": 32,
+  "slawa": 0,
+  "srZmiana": 89,
+  "zmianaL0": 54,
+  "co10": [
+   723,
+   1552,
+   2381
+  ]
+ }
+}

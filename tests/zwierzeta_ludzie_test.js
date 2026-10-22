@@ -309,7 +309,17 @@ kit.test({ port: 9513 }, async t => {
         if (!s) return null;
         const pack = Hunting.spawnPack(s.x, s.y, 2);
         for (const w of pack.members) w._summoned = true;
-        const away = __heroAway([{ x: b.x, y: b.y }, { x: s.x, y: s.y }], 13, b.x, b.y);
+        // (2026-10-22) the hero 12+ tiles from the bundle and from the pack, but within Starcia's reach of both (CFG.near, 26): on the
+        // doubled Map004 the farthest-off tile was 27 from the bundle and the pack was never looked at
+        let away = null, am = 1e9;
+        for (let y = 2; y < $gameMap.height() - 2; y++) for (let x = 2; x < $gameMap.width() - 2; x++) {
+            if (!__free(x, y)) continue;
+            const db = Math.hypot(x - b.x, y - b.y), dp = Math.hypot(x - s.x, y - s.y), far = Math.max(db, dp);
+            if (Math.min(db, dp) < 12 || far > Starcia.CFG.near - 4) continue;
+            if (far < am) { am = far; away = { x, y, m: Math.min(db, dp) }; }
+        }
+        if (!away) away = __heroAway([{ x: b.x, y: b.y }, { x: s.x, y: s.y }], 13, b.x, b.y);
+        else { $gamePlayer.locate(away.x, away.y); __cam(b.x, b.y); }
         window.__G.pack = pack;
         return { d: Math.round(bd), away: Math.round(away.m) };
     })()`);

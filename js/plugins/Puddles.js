@@ -384,7 +384,8 @@
         }
     };
     Sprite_Puddles.prototype.place = function() {
-        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), W = Graphics.width, H = Graphics.height;
+        const V = window.Tawerna && Tawerna.view ? Tawerna.view() : null;   // (the world's view: bigger while flying high on the eagle)
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), W = V ? V.w : Graphics.width, H = V ? V.h : Graphics.height;
         for (const it of this._items.values()) {
             const x = Math.round($gameMap.adjustX(it.h.cx) * tw), y = Math.round($gameMap.adjustY(it.h.cy) * th);
             const r = (it.water.bitmap ? it.water.bitmap.width : 0) / 2 + 8;

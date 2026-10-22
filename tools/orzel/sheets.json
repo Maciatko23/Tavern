@@ -1,0 +1,211 @@
+{
+ "sheets": {
+  "1": {
+   "file": "Orzel1",
+   "cell": 48,
+   "feet": 40,
+   "stand": [
+    0,
+    1
+   ],
+   "walk": [
+    1,
+    6
+   ],
+   "pose": {
+    "file": "Orzel1_Poza",
+    "cell": 48,
+    "feet": 40,
+    "preenFrom": "stand",
+    "sit": [
+     0,
+     6
+    ],
+    "sleep": [
+     6,
+     4
+    ],
+    "hurt": [
+     10,
+     6
+    ],
+    "preen": [
+     16,
+     6
+    ]
+   }
+  },
+  "2": {
+   "file": "Orzel2",
+   "cell": 72,
+   "feet": 59,
+   "stand": [
+    0,
+    1
+   ],
+   "walk": [
+    1,
+    6
+   ],
+   "flap": [
+    7,
+    6
+   ],
+   "pose": {
+    "file": "Orzel2_Poza",
+    "cell": 72,
+    "feet": 59,
+    "preenFrom": "stand",
+    "sit": [
+     0,
+     4
+    ],
+    "sleep": [
+     4,
+     2
+    ],
+    "hurt": [
+     6,
+     4
+    ],
+    "preen": [
+     10,
+     6
+    ]
+   }
+  },
+  "3": {
+   "file": "Orzel3",
+   "cell": 96,
+   "feet": 80,
+   "stand": [
+    0,
+    1
+   ],
+   "walk": [
+    1,
+    6
+   ],
+   "atk": [
+    7,
+    6
+   ],
+   "flap": [
+    13,
+    6
+   ],
+   "pose": {
+    "file": "Orzel3_Poza",
+    "cell": 96,
+    "feet": 80,
+    "preenFrom": "sit",
+    "sit": [
+     0,
+     4
+    ],
+    "sleep": [
+     4,
+     4
+    ],
+    "hurt": [
+     8,
+     4
+    ],
+    "preen": [
+     12,
+     4
+    ]
+   }
+  },
+  "4": {
+   "file": "Orzel4",
+   "cell": 184,
+   "feet": 156,
+   "stand": [
+    0,
+    1
+   ],
+   "walk": [
+    1,
+    6
+   ],
+   "atk": [
+    7,
+    6
+   ],
+   "pose": {
+    "file": "Orzel4_Poza",
+    "cell": 184,
+    "feet": 156,
+    "preenFrom": "sit",
+    "sit": [
+     0,
+     4
+    ],
+    "sleep": [
+     4,
+     2
+    ],
+    "hurt": [
+     6,
+     4
+    ],
+    "preen": [
+     10,
+     4
+    ]
+   }
+  },
+  "5": {
+   "file": "Orzel5",
+   "cell": 256,
+   "feet": 253,
+   "stand": [
+    0,
+    1
+   ],
+   "walk": [
+    1,
+    6
+   ],
+   "atk": [
+    7,
+    8
+   ],
+   "pose": {
+    "file": "Orzel5_Poza",
+    "cell": 256,
+    "feet": 253,
+    "preenFrom": "none",
+    "sit": [
+     0,
+     3
+    ],
+    "sleep": [
+     3,
+     2
+    ],
+    "hurt": [
+     5,
+     2
+    ],
+    "preen": [
+     7,
+     4
+    ]
+   }
+  }
+ },
+ "air": {
+  "4": {
+   "file": "Orzel4_Lot",
+   "cell": 256,
+   "frames": 9
+  },
+  "5": {
+   "file": "Orzel5_Lot",
+   "cell": 256,
+   "frames": 9
+  }
+ }
+}

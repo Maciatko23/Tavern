@@ -1,0 +1,195 @@
+{
+ "when": "2026-10-18T07:19:36.808Z",
+ "zmiany": [
+  {
+   "mode": "good",
+   "level": 2,
+   "sekundy": 158.3,
+   "wynik": {
+    "total": 110,
+    "pay": 65,
+    "tips": 45,
+    "grade": 5,
+    "score": 98,
+    "hours": 4
+   },
+   "phases": [
+    [
+     "none",
+     0
+    ],
+    [
+     "card||intro",
+     0.2
+    ],
+    [
+     "card|clean|clean",
+     0.7
+    ],
+    [
+     "play|clean|",
+     1.3
+    ],
+    [
+     "banner|clean|",
+     22.2
+    ],
+    [
+     "trans|clean|",
+     22.6
+    ],
+    [
+     "card|beer|beer",
+     23
+    ],
+    [
+     "play|beer|",
+     23.4
+    ],
+    [
+     "banner|beer|",
+     47.2
+    ],
+    [
+     "trans|beer|",
+     47.8
+    ],
+    [
+     "card|kitchen|kitchen",
+     48
+    ],
+    [
+     "play|kitchen|",
+     48.7
+    ],
+    [
+     "banner|kitchen|",
+     70.8
+    ],
+    [
+     "trans|kitchen|",
+     71.4
+    ],
+    [
+     "card|serve|serve",
+     71.6
+    ],
+    [
+     "play|serve|",
+     72.2
+    ],
+    [
+     "banner|serve|",
+     156.6
+    ],
+    [
+     "summary|serve|",
+     157.2
+    ],
+    [
+     "leaving|serve|",
+     157.6
+    ],
+    [
+     "none",
+     158.2
+    ]
+   ]
+  },
+  {
+   "mode": "medium",
+   "level": 4,
+   "sekundy": 192.7,
+   "wynik": {
+    "total": 86,
+    "pay": 58,
+    "tips": 28,
+    "grade": 4,
+    "score": 77,
+    "hours": 4
+   },
+   "phases": [
+    [
+     "none",
+     0
+    ],
+    [
+     "card||intro",
+     0.2
+    ],
+    [
+     "card|clean|clean",
+     0.6
+    ],
+    [
+     "play|clean|",
+     1.2
+    ],
+    [
+     "banner|clean|",
+     41.9
+    ],
+    [
+     "trans|clean|",
+     42.3
+    ],
+    [
+     "card|beer|beer",
+     42.6
+    ],
+    [
+     "play|beer|",
+     43.2
+    ],
+    [
+     "banner|beer|",
+     69.5
+    ],
+    [
+     "trans|beer|",
+     69.9
+    ],
+    [
+     "card|kitchen|kitchen",
+     70.2
+    ],
+    [
+     "play|kitchen|",
+     70.9
+    ],
+    [
+     "banner|kitchen|",
+     95.7
+    ],
+    [
+     "trans|kitchen|",
+     96.4
+    ],
+    [
+     "card|serve|serve",
+     96.6
+    ],
+    [
+     "play|serve|",
+     97.2
+    ],
+    [
+     "banner|serve|",
+     191.1
+    ],
+    [
+     "summary|serve|",
+     191.7
+    ],
+    [
+     "leaving|serve|",
+     192.1
+    ],
+    [
+     "none",
+     192.7
+    ]
+   ]
+  }
+ ]
+}

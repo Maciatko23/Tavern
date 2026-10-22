@@ -176,7 +176,8 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
         const tryIt = spec => { try { T.inject(3, spec); return "ok"; } catch (e) { return e.message; } };
         out.overlap = tryIt({ ids: [785, 790], owner: "Other", build: () => [] });
         out.reserved = tryIt({ ids: [900, 901], owner: "Other", build: () => [] });
-        out.forestry = tryIt({ ids: [5000, 5001], owner: "Other", build: () => [] });
+        out.forestry = tryIt({ ids: [1500, 1501], owner: "Other", build: () => [] });   // (2026-10-21: Forestry 1000-1999, the packages 2000-2949)
+        out.packages = tryIt({ ids: [2150, 2151], owner: "Other", build: () => [] });
         out.same = tryIt({ ids: [780, 789], owner: "CoreTest", build });
         out.free = tryIt({ ids: [790, 791], owner: "Other", build: () => [] });
         // an editor's own event on an id of the range: left alone
@@ -186,8 +187,8 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
         // when(): false - nothing put in
         T.inject(3, { ids: [795 + 3, 798], owner: "CoreTestWhen", when: () => !!window.__ctWhen, build: () => [evd(798, 9, 5)] });
         return out; })()`);
-    t.check("id ranges: an overlap with another owner is refused (also a reserved range: Story 901-902, Forestry 1000+), the same owner again and a free range are fine",
-        /overlap/.test(inj.overlap) && /Story/.test(inj.reserved) && /Forestry/.test(inj.forestry) && inj.same === "ok" && inj.free === "ok", inj);
+    t.check("id ranges: an overlap with another owner is refused (also a reserved range: Story 901-902, Forestry 1000-1999, the package Zasoby 2100-2299), the same owner again and a free range are fine",
+        /overlap/.test(inj.overlap) && /Story/.test(inj.reserved) && /Forestry/.test(inj.forestry) && /Zasoby/.test(inj.packages) && inj.same === "ok" && inj.free === "ok", inj);
     t.check("a transfer onto Map003 again", await t.go(4, 10, 10) && await t.go(3, 22, 14));
     const put = await J(`(function(){ const e = id => $gameMap.event(id); const own = ${inj.own};
         return { a: !!e(780) && !!e(781), out: !!e(795) || !!$dataMap.events[795], note: e(780) && e(780).event().note, meta: e(780) && e(780).event().meta,
@@ -338,7 +339,7 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
     t.check("has / api / call: loaded plugins (also one with no object of its own), UITheme's UIStyle, a plugin's function called, undefined when missing",
         reg.has.join(",") === "true,true,false,true" && reg.api[0] && reg.api[1] && reg.api[2] === null && reg.call[0] === 1 && reg.call[1] === true && reg.call[2] === true, reg);
     t.check("the debug registry: the states (homeDecor, homeAmbience...), the id ranges (reserved and live), the updaters (HomeDecor, HomeAmbience), text lines for F9",
-        ["homeDecor", "homeAmbience", "homeLife", "ctState"].every(k => reg.states.includes(k)) && reg.inj.some(s => /^Story 901-902/.test(s)) && reg.inj.some(s => /^Forestry 1000-\.\.\./.test(s)) &&
+        ["homeDecor", "homeAmbience", "homeLife", "ctState"].every(k => reg.states.includes(k)) && reg.inj.some(s => /^Story 901-902/.test(s)) && reg.inj.some(s => /^Forestry 1000-1999/.test(s))   /* (2026-10-21: Forestry ends at 1999) */ &&
         reg.inj.some(s => s === "HomeDecor 980-998") && reg.inj.some(s => s === "HomeLife 960-979") && reg.ups.includes("HomeDecor.refresh") && reg.ups.includes("HomeAmbience.sound") && reg.ups.includes("HomeLife.life") && reg.lines.length >= 3 && reg.listeners > 5, reg);
 
     // ================= a tiny mini-game (Scene_MiniGame)

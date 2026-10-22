@@ -149,6 +149,9 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     t.check("three contracts can be accepted, the fourth is refused with a reason", acc.active === 3 && acc.r.slice(0, 3).every(x => x.ok) && acc.r[3] && !acc.r[3].ok && /3 zlecenia/.test(acc.r[3].why), acc);
     t.check("an accepted contract gets its term: accepted day + days - 1, and cannot be taken twice", acc.due && acc.due[2] === acc.due[0] + acc.due[1] - 1 && acc.again === false, acc.due);
     // the cycle: three days on, new notices; the contracts in hand stay
+    // (2026-10-22) the board is drawn from the whole pool of templates (the new terrain's packages added theirs): a contract of 3 days
+    // taken on day 10 would end before day 13 - the terms of the three in hand are stretched here, the cycle is what is checked
+    await t.eval("(function(){ for (const n of QuestBoard.active()) n.due = Math.max(n.due, 20); return 0; })()");
     const before = await t.json("QuestBoard.active().map(n => n.id)");
     await setDay(13, 9);
     await t.frames(40);

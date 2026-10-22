@@ -3781,7 +3781,8 @@
     // the camp's trust: the deeds the camp remembers (chapters 1-2)
     function w6TrustCount() {
         const f = S().flags, d4 = rec("D4"), p = d4 && d4.t && d4.t.pick ? d4.t.pick[1] : undefined;
-        return [isDone("K27"), !!f.campFed, !!f.elaHealed, isDone("D4") && (p === 1 || p === 2), !!f.rafalHidden, !!f.szymekFree, !!f.campCloaks].filter(Boolean).length;
+        return [isDone("K27"), !!f.campFed, !!f.elaHealed, isDone("D4") && (p === 1 || p === 2), !!f.rafalHidden, !!f.szymekFree, !!f.campCloaks,
+            !!f.elaMotyl].filter(Boolean).length;   // (2026-10-18, Motyle.js: K54 - the peacock shown to Ela and let go together)
     }
     // the first evening of the Wigilia (Tawerna time: winter, around its middle) from day d on
     function w6WigDay(d) {
@@ -4284,7 +4285,7 @@
     // Kill steps (the bus's "kill"), the wolves of D5 brought in at night
     // ------------------------------------------------------------------
     T.on("kill", e => {
-        if (!has() || !e || (e.by && e.by !== "hero" && e.by !== "dog")) return;
+        if (!has() || !e || (e.by && e.by !== "hero" && e.by !== "dog" && e.by !== "eagle")) return;
         for (const q of activeQuests()) {
             const r = rec(q.id), st = q.steps[r.step];
             if (!st || st.type !== "kill" || e.kind !== st.kind) continue;

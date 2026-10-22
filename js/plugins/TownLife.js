@@ -28,10 +28,12 @@
 // (v1.5.0, 2026-10-17, W5 "Towary z kontynentu") A resident may be "inside" somewhere that is not its home: "indoor" in its data maps an
 // inside entry's place to an indoor spot name - { w5_lada: "ludmila_lada" }: while the plan says "inside w5_lada" the resident stands on
 // the spot "ludmila_lada" of whichever interior has it (Ludmiła behind the counter of the town's honest kantor, Map103), not at home.
+// (v1.6.0, 2026-10-21, the new terrain - docs/rozszerzenia/PLAN.md) A second range of ids for the residents of other plugins:
+// TownLifeExtra takes an id of 910-949 (as before) or of TownLifeData.EXTRA_RANGE (2900-2949); one Tawerna.inject per range.
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.5.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.6.0
  * @author Claude
  *
  * @help
@@ -66,6 +68,9 @@
     const T = window.Tawerna, D = window.TownLifeData, PLUGIN = "TownLife";
     if (!D) throw new Error("TownLife.js: TownLife_Data.js must stand above it in the plugin list");
     const MAP = D.MAP, FIRST = D.FIRST_ID, LAST = FIRST + 39;
+    // (2026-10-21, docs/rozszerzenia/PLAN.md) a second range for the residents of the new terrain's packages (TownLifeExtra with an id
+    // of 2900-2949: A 2900-2904, B 2905-2909, C 2910-2929, D 2930-2939) - 910-949 is full
+    const EXTRA = D.EXTRA_RANGE || [2900, 2949];
     const RES = D.RESIDENTS;
     // (2026-10-16, docs/miejsca_wyspy/PAKIETY.md) residents of other plugins: a data plugin above this one puts them into
     // window.TownLifeExtra, each with its OWN fixed event id (910-949, given out in the plan) - the ids of the residents above stay
@@ -78,7 +83,7 @@
         for (const r of extra) {
             if (!r || !r.key) continue;
             const id = Number(r.id);
-            if (!(id >= FIRST + plain && id <= LAST)) { warn(r.key + ": the id " + r.id + " is not free (" + (FIRST + plain) + "-" + LAST + ") - left out"); continue; }
+            if (!(id >= FIRST + plain && id <= LAST) && !(id >= EXTRA[0] && id <= EXTRA[1])) { warn(r.key + ": the id " + r.id + " is not free (" + (FIRST + plain) + "-" + LAST + " or " + EXTRA[0] + "-" + EXTRA[1] + ") - left out"); continue; }
             if (RES.some(o => o.key === r.key || o.id === id)) { warn(r.key + ": the key or the id " + id + " is taken - left out"); continue; }
             RES.push(r);
         }
@@ -217,7 +222,7 @@
     // (2026-10-16) an indoor place the map has no "Miejsce:" event for may come from the data: TownLifeData.SPOTS_BY_MAP[map][name]
     // (the tavern Map001 stays as the user made it - a guest beyond gosc_8 sits on a place given in the data)
     const indoorSpot = (events, mapId, name) => eventSpot(events, name) || ((D.SPOTS_BY_MAP && D.SPOTS_BY_MAP[mapId]) || {})[name] || null;
-    T.inject("*", { ids: [FIRST, LAST], owner: PLUGIN, build(data, mapId) {
+    function residentEvents(data, mapId) {
         if (HOMES.has(mapId)) return RES.map((r, i) => (homeOf(r) === mapId ? eventData(r, i, data, null, mapId) : null)).filter(Boolean);
         const out = [];
         RES.forEach((r, i) => {
@@ -226,7 +231,11 @@
             if (at) out.push(eventData(r, i, data, at, mapId));
         });
         return out;
-    } });
+    }
+    // (2026-10-21) one injection per range of ids (the core takes only the ids of its range from each)
+    const inRange = (lo, hi) => e => !!e && e.id >= lo && e.id <= hi;
+    T.inject("*", { ids: [FIRST, LAST], owner: PLUGIN, build: (data, mapId) => residentEvents(data, mapId).filter(inRange(FIRST, LAST)) });
+    T.inject("*", { ids: [EXTRA[0], EXTRA[1]], owner: PLUGIN, build: (data, mapId) => residentEvents(data, mapId).filter(inRange(EXTRA[0], EXTRA[1])) });
 
     // ------------------------------------------------------------------
     // Hidden (inside a building): not seen, not in the way, not spoken to
@@ -299,7 +308,7 @@
     let lastHour = null, lastWhole = null, nextBarkAny = 0;
     const onScreen = ev => {
         const x = ev.screenX(), y = ev.screenY();
-        return x > -48 && y > -48 && x < Graphics.width + 48 && y < Graphics.height + 96;
+        return x > -48 && y > -48 && x < T.view.w() + 48 && y < T.view.h() + 96;   // (the world's view: Tawerna.view)
     };
     const talking = ev => ev._locked || ($gameMap._interpreter.isRunning() && $gameMap._interpreter.eventId() === ev.eventId());
 

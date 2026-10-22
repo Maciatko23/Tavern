@@ -1,0 +1,36 @@
+{
+  "paczka": "A",
+  "budzet": 90,
+  "zuzyte": 33,
+  "lista": [
+    {
+      "co": "Babka Jagna - postać pro 64x64, 8 kierunków (styl bohatera bf29bbe1)",
+      "narzedzie": "create_character pro",
+      "id": "a4e20921-6ceb-40ce-80d2-ca93cdce8a23",
+      "generacje": 10,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Arkusz 4 obiektów (źródełko, kałuża pływowa, glinianka, wysypisko) Pro Flash 256x192",
+      "narzedzie": "create_image_pro_flash",
+      "id": "d4fe2e93-50f6-4f1d-ab41-86df385522bd",
+      "generacje": 9,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Babka Jagna - chód walking-8-frames, 8 kierunków (grupa 6b579ac5)",
+      "narzedzie": "animate_character template",
+      "id": "6b579ac5-0b97-405d-9b71-e94a673b650f",
+      "generacje": 8,
+      "dzien": "2026-10-21"
+    },
+    {
+      "co": "Spalona jabłonka: edycja !$Tree_FruitBare (Pro Flash edit 160x204)",
+      "narzedzie": "edit_image_pro_flash",
+      "id": "c72a7476-1971-456c-b056-a833712b6b98",
+      "generacje": 6,
+      "dzien": "2026-10-22"
+    }
+  ],
+  "zostalo": 57
+}

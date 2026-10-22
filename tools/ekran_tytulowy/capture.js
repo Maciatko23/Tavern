@@ -19,7 +19,8 @@ const SHOTS = [
     { name: "serce_puste", map: 11, x: 15, y: 12, cx: 15, cy: 9, hour: 22, hide: true },
     { name: "chata_swit", map: 20, x: 15, y: 10, cx: 15, cy: 8, hour: 5.4, day: 30, hide: true },
     { name: "chata_rano", map: 20, x: 15, y: 10, cx: 15, cy: 8, hour: 6.6, day: 30, hide: true },
-    { name: "las_pochodnia", map: 5, x: 20, y: 15, cx: 20, cy: 15, hour: 23.5, torch: true, hide: false, dir: 2 },
+    // (2026-10-18) the empty Map005 "Las" was removed in the clean-up: the night forest is now Skraj lasu's woods (Map023)
+    { name: "las_pochodnia", map: 23, x: 20, y: 19, cx: 20, cy: 19, hour: 23.5, torch: true, hide: false, dir: 2 },
     { name: "droga_pochodnia", map: 21, x: 20, y: 12, cx: 20, cy: 12, hour: 23.5, torch: true, hide: false, dir: 2 },
     { name: "tawerna_burza", map: 8, x: 24, y: 19, cx: 24, cy: 13, hour: 23, weather: ["storm", 9], storm: true, hide: true },
     { name: "tawerna_burza_b", map: 8, x: 24, y: 19, cx: 24, cy: 14.5, hour: 23, weather: ["storm", 9], storm: true, strikeD: 0.0, strikeWait: 3, hide: true },

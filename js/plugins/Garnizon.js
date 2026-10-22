@@ -792,7 +792,7 @@
         const W = WY();
         if (!(W && W.isReady && W.isReady(WRECK))) { popupOnce("lacha", TX.looks.lachaDalej); return; }
         AudioManager.playSe({ name: "Water1", volume: 50, pitch: 110, pan: 0 });
-        $gamePlayer.reserveTransfer(WRECK, 38, y === 21 ? 21 : 20, 4, 0);
+        $gamePlayer.reserveTransfer(WRECK, 78, y === 21 ? 21 : 20, 4, 0);   // (2026-10-18: the wreck's map doubled to 80x60 - one inside its east edge)
     }
     // the quarters' door: 7-20 into Map163, else shut
     function door(interp) {

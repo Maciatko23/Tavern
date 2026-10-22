@@ -119,8 +119,9 @@ const OUT = __dirname + "/";
         await ev("$gameParty.gainItem($dataItems[80], 6); $gameParty.gainItem($dataItems[71], 4); $gameSystem.setDayNightHour(21); 0");
         await frames(10);
         const day0 = await ev("$gameSystem.dayNightDay()");
-        await ev("$gameSystem.sleepUntilHour(7); 0");
-        check("sleeping through midnight queues the summary", !!(await ev("$gameTemp._pendingSummary")) && (await ev("$gameTemp._pendingSummary.day")) === day0);
+        // (2026-10-22) read in the same step as the sleep: the map may open the summary (and take it from the queue) before the next read
+        const queued = await ev("(function(){ $gameSystem.sleepUntilHour(7); const p = $gameTemp._pendingSummary; return p ? p.day : null; })()");
+        check("sleeping through midnight queues the summary", queued === day0, { queued, day0 });
         await frames(40);
         check("the summary scene opens on the map", (await ev("SceneManager._scene.constructor.name")) === "Scene_DaySummary");
         const ops = await ev("SceneManager._scene._window.width + ':' + SceneManager._scene._window.height");

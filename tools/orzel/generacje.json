@@ -1,0 +1,149 @@
+{
+ "opis": "Biały orzeł - generacje PixelLab (etap 1: podglądy 52; etap 2: budowa). Budżet etapu 2: ok. 400. Etap 3 (gniazda na miarę, pozy z przodu): 78.",
+ "etap1": 52,
+ "etap2": [
+  {
+   "co": "dorosły 4x4, postać 8 kierunków (256, pierwsza próba - za niski, ok. 165 px, nieużyty)",
+   "id": "48ad808f-a4b0-4eab-951e-dd1a8a72534c",
+   "gen": 17
+  },
+  {
+   "co": "w locie z góry 256 (rozpiętość 248) - etap 4 (prawie dorosły)",
+   "id": "2d223ae8-fd13-45b0-b8e3-50b9ac1a5cbd",
+   "gen": 9
+  },
+  {
+   "co": "w locie: machanie skrzydłami, 8 klatek - etap 4",
+   "id": "c74b6bb0-094e-462f-8ead-a7eec36dead3",
+   "gen": 8
+  },
+  {
+   "co": "prawie dorosły, postać 8 kierunków (144, ok. 100 px - za niski, nieużyty)",
+   "id": "09764fea-e856-4b25-9b71-c0b8a9d705eb",
+   "gen": 9
+  },
+  {
+   "co": "pisklę, postać 8 kierunków (32)",
+   "id": "f0df409a-b013-4ba1-9ba1-580ca246792c",
+   "gen": 6
+  },
+  {
+   "co": "podrostek, postać 8 kierunków (80)",
+   "id": "62cc5d66-a989-4bcb-a904-5f8255b79b53",
+   "gen": 6
+  },
+  {
+   "co": "młody, postać 8 kierunków (56)",
+   "id": "cb05a5d4-6a67-4e39-9cb3-47202e0415f0",
+   "gen": 6
+  },
+  {
+   "co": "dorosły 4x4, postać 8 kierunków (256, ok. 240 px - użyty)",
+   "id": "9d271412-8c3b-4c83-94bd-217674be759d",
+   "gen": 17
+  },
+  {
+   "co": "prawie dorosły 2,5 pola, postać 8 kierunków (176, ok. 124 px - użyty)",
+   "id": "1f36dc77-61ee-4dbb-8a28-604738603841",
+   "gen": 10
+  },
+  {
+   "co": "dorosły w locie z góry, skrzydła skośnie (256) - etap 5",
+   "id": "d0935278-3d0f-46b0-bf6d-5d76923a716f",
+   "gen": 9
+  },
+  {
+   "co": "dorosły: chód 6 klatek, 5 kierunków",
+   "id": "9d271412 walk",
+   "gen": 30
+  },
+  {
+   "co": "dorosły: atak 8 klatek, 5 kierunków",
+   "id": "9d271412 attack",
+   "gen": 40
+  },
+  {
+   "co": "dorosły w locie: machanie 8 klatek",
+   "id": "9eeec435-a568-430c-b58d-a9a1ac50882f",
+   "gen": 8
+  },
+  {
+   "co": "prawie dorosły: chód 6 klatek, 5 kierunków",
+   "id": "1f36dc77 walk",
+   "gen": 17
+  },
+  {
+   "co": "prawie dorosły: atak 6 klatek, 5 kierunków",
+   "id": "1f36dc77 attack",
+   "gen": 17
+  },
+  {
+   "co": "podrostek: chód, dziobanie, podlot (6 klatek, 5 kierunków)",
+   "id": "62cc5d66 walk/attack/flap",
+   "gen": 15
+  },
+  {
+   "co": "młody: chód, machanie (6 klatek, 5 kierunków)",
+   "id": "cb05a5d4 walk/flap",
+   "gen": 10
+  },
+  {
+   "co": "pisklę: chód (6 klatek, 5 kierunków)",
+   "id": "f0df409a walk",
+   "gen": 5
+  },
+  {
+   "co": "budowle: Orle gniazdo, Orla grzęda, kosz z sianem",
+   "id": "45617968 / 1c1e20ae / 400efd1b",
+   "gen": 20
+  },
+  {
+   "co": "ikony: pióro, rękawica",
+   "id": "134236b5 / 5f45a135",
+   "gen": 10
+  },
+  {
+   "co": "Orla Grań: rozbite gniazdo, martwa orlica, strzały, misa, klatka",
+   "id": "544bcf0d / ebd05e2c / 68a27194 / 536aedd1 / fc5a45de",
+   "gen": 28
+  }
+ ],
+ "etap3_gniazda": [
+  {
+   "co": "pozy z przodu etapów 1-3 (siad, sen, ranny, pióra) - pierwsza seria v3",
+   "gen": 10
+  },
+  {
+   "co": "Kosz z sianem 80x60 (raw3/gn_kosz.png)",
+   "id": "25643550-f0e5-4ccb-a31d-aec19da7ebbb",
+   "gen": 5
+  },
+  {
+   "co": "Orle gniazdo 192x128 (raw3/gn_gniazdo.png)",
+   "id": "5e24cdcd-ce31-410f-ac7c-616172c982ee",
+   "gen": 6
+  },
+  {
+   "co": "Orla grzęda 256x256 - gniazdo na podeście z martwym pniem (raw3/gn_grzeda.png)",
+   "id": "8aee76d2-fcde-4462-b4c2-191611530958",
+   "gen": 9
+  },
+  {
+   "co": "sen od pozy siedzącej (etapy 1-3), podrostek ranny i pióra",
+   "gen": 5
+  },
+  {
+   "co": "siad: prawie dorosły (2), dorosły (4)",
+   "gen": 6
+  },
+  {
+   "co": "prawie dorosły i dorosły: sen, ranny, pióra od siadu (sen i ranny dorosłego nieużyte)",
+   "gen": 18
+  },
+  {
+   "co": "edycje: zamknięte oczy (prawie dorosły, dorosły), dorosły leżący ranny",
+   "id": "5d0caf1c / 03c8fb02 / a8b5b4ef",
+   "gen": 19
+  }
+ ]
+}

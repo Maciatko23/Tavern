@@ -1,0 +1,16 @@
+[
+  {"id": 200, "name": "Bryła soli", "iconIndex": 480, "itypeId": 1, "consumable": false, "occasion": 3, "scope": 0, "price": 12,
+   "description": "Szara, twarda bryła soli kamiennej. Położona na lizawce na Łące przez sześć dni ściąga jelenie.", "note": "<Weight:1>"},
+  {"id": 201, "name": "Poroże jelenia", "iconIndex": 481, "itypeId": 1, "consumable": false, "occasion": 3, "scope": 0, "price": 30,
+   "description": "Rozłożyste poroże. Wiosną jelenie zrzucają je przy lizawce. Trofeum - albo towar dla handlarza.", "note": "<Weight:2>"},
+  {"id": 202, "name": "Kieł odyńca", "iconIndex": 482, "itypeId": 1, "consumable": false, "occasion": 3, "scope": 0, "price": 20,
+   "description": "Zakrzywiony kieł wielkiego dzika z błotniska przy Leśnej drodze. Trofeum myśliwego.", "note": "<Weight:0>"},
+  {"id": 203, "name": "Pazur niedźwiedzia", "iconIndex": 483, "itypeId": 1, "consumable": false, "occasion": 3, "scope": 0, "price": 25,
+   "description": "Pazur długi jak palec. Kto go nosi, ten widział gawrę z bliska - i z niej wrócił.", "note": "<Weight:0>"},
+  {"id": 204, "name": "Zezwolenie na odstrzał", "iconIndex": 484, "itypeId": 2, "consumable": false, "occasion": 3, "scope": 0, "price": 0,
+   "description": "Pismo gajowego z pieczęcią dworu: jeden jeleń w tygodniu w zwierzyńcu Lorda - legalnie.", "note": "<Weight:0>\n<Pamiatka>"},
+  {"id": 205, "name": "Strzała z białym okiem", "iconIndex": 485, "itypeId": 2, "consumable": false, "occasion": 3, "scope": 0, "price": 0,
+   "description": "Czarna strzała z lotkami znaczonymi białym okiem, z obozu obcych myśliwych. Warto ją komuś pokazać: rotmistrzowi albo bratu Kleofasowi.", "note": "<Weight:0>"},
+  {"id": 206, "name": "Srebrna strzała", "iconIndex": 486, "itypeId": 2, "consumable": false, "occasion": 3, "scope": 0, "price": 0,
+   "description": "Nagroda z zawodów na strzelnicy garnizonu: strzała ze srebrnym grotem. Za piękna, żeby nią strzelać.", "note": "<Weight:0>\n<Pamiatka>"}
+]

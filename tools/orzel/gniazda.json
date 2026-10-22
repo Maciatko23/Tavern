@@ -1,0 +1,41 @@
+{
+ "orzel_kosz": {
+  "image": "Farm_OrzelKosz",
+  "rim": "Farm_OrzelKosz_Przod",
+  "size": [
+   92,
+   43
+  ],
+  "cx": 0,
+  "lip": 14,
+  "rx": 19,
+  "ry": 12,
+  "floor": 26
+ },
+ "orzel_gniazdo": {
+  "image": "Farm_OrzelGniazdo",
+  "rim": "Farm_OrzelGniazdo_Przod",
+  "size": [
+   150,
+   105
+  ],
+  "cx": 2,
+  "lip": 44,
+  "rx": 45,
+  "ry": 17,
+  "floor": 61
+ },
+ "orzel_grzeda": {
+  "image": "Farm_OrzelGrzeda",
+  "rim": "Farm_OrzelGrzeda_Przod",
+  "size": [
+   254,
+   243
+  ],
+  "cx": 0,
+  "lip": 84,
+  "rx": 83,
+  "ry": 29,
+  "floor": 113
+ }
+}

@@ -532,7 +532,7 @@
             }
         }
     }
-    T.on("kill", e => { if (!e.by || e.by === "hero" || e.by === "dog") onKill(e.animal); }, { owner: PLUGIN });   // (not another's kill - Starcia.js)
+    T.on("kill", e => { if (!e.by || e.by === "hero" || e.by === "dog" || e.by === "eagle") onKill(e.animal); }, { owner: PLUGIN });   // (not another's kill - Starcia.js)
 
     // ------------------------------------------------------------------
     // On the map: the terms, a new board, "you have everything", the wanted animals - every 30 frames (scene._qbT counts the map

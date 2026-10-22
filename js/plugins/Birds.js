@@ -187,7 +187,7 @@
     }
     // a point well outside the screen on the side the flock comes from
     function offscreenPoint(side) {
-        const w = Graphics.width / TILE(), h = Graphics.height / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();
+        const w = T.view.w() / TILE(), h = T.view.h() / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();   // (the world's view: Tawerna.view)
         const s = side || pick(["l", "r", "t", "b"]);
         if (s === "l") return { x: ox - 3, y: oy + rand(0, h) };
         if (s === "r") return { x: ox + w + 3, y: oy + rand(0, h) };
@@ -206,7 +206,7 @@
     }
     function groundSpot(away, near) {
         const px = $gamePlayer.x, py = $gamePlayer.y;
-        const ox = $gameMap.displayX(), oy = $gameMap.displayY(), vw = Graphics.width / TILE(), vh = Graphics.height / TILE();
+        const ox = $gameMap.displayX(), oy = $gameMap.displayY(), vw = T.view.w() / TILE(), vh = T.view.h() / TILE();
         for (let i = 0; i < 120; i++) {
             let x, y;
             if (near) {
@@ -364,7 +364,7 @@
         if (grounded === flock) grounded = null;
     }
     function offView(b, margin) {
-        const w = Graphics.width / TILE(), h = Graphics.height / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();
+        const w = T.view.w() / TILE(), h = T.view.h() / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();
         return b.x < ox - margin || b.x > ox + w + margin || b.y < oy - margin || b.y > oy + h + margin;
     }
 

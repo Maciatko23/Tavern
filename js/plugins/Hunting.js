@@ -224,7 +224,7 @@
     // the tiles off the map's edge a leaving animal runs to (Hunting_Path.js: escapeSpot)
     const EDGE = 2;
     // really on the screen (the engine's isNearTheScreen allows a whole screen more on every side)
-    const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < Graphics.width + m && y > -m && y < Graphics.height + 2 * m; };
+    const onScreen = ch => { const x = ch.screenX(), y = ch.screenY(), m = $gameMap.tileWidth(); return x > -m && x < T.view.w() + m && y > -m && y < T.view.h() + 2 * m; };   // (the world's view: Tawerna.view)
 
     // ------------------------------------------------------------------
     // Saved data (TawernaCore): _tw.hunt = { kills: { rabbit: n, deer: n }, killed: { mapId: { day, rabbit: n, deer: n } }, sneak } -

@@ -77,7 +77,7 @@ klucze `_needs`, `_wear` (a `_hunt` i `_forest` przez alias).
 
 ## 2. Kolejność wtyczek
 
-Lista w `js/plugins.js` (82 wtyczek, wszystkie włączone; numer = miejsce na liście):
+Lista w `js/plugins.js` (82 wtyczek w tym zestawieniu; dziś 141, wszystkie włączone; numer = miejsce na liście):
 
 ```
  0  TawernaCore                ← pierwsza, nad wszystkim
@@ -91,7 +91,7 @@ Lista w `js/plugins.js` (82 wtyczek, wszystkie włączone; numer = miejsce na li
 33  TawernaUI                  ← zaraz pod UITheme
 34  Journal, Minimap, Atmosphere, Storm, Puddles, Durability, Spoilage
 41  Hunting, Hunting_Path, Hunting_AI, Hunting_Weapons  ← części zaraz pod główną (przed Birds)
-45  Birds, Forestry, Needs, Livestock, Dog, Skills_Data
+45  Birds, Motyle_Data, Motyle, Forestry, Needs, Livestock, Dog, Skills_Data   ← Motyle (2026-10-18): motyle za dnia, ćmy nocą przy ogniu, siatka, gablotka (zakładka Dziennika), zapylanie; stan Tawerna.state("motyle"); szyna: butterflyCaught; dane i K54 w Motyle_Data (pakiet TownQuests, nad TownQuests_Data)
 51  Combat, Combat_Fight, Combat_UI                     ← części zaraz pod główną
 54  SpeechBubbles, Debug
 56  MenuPanel                  ← pod Journal (układa jego scenę), nad wtyczkami, które dokładają wpisy do menu P
@@ -105,7 +105,11 @@ Lista w `js/plugins.js` (82 wtyczek, wszystkie włączone; numer = miejsce na li
 78  TownLife_Data, TownLife     ← miasteczko według zegara: mieszkańcy 910-949 na mapie 8 (plany dnia, okrzyki, rozmowy, dzwon)
 80  TownQuests_Data, TownQuests ← questy miasteczka (docs/QUESTY.md, stan: docs/QUESTY_STAN.md): zadania w rozmowach mieszkańców (TownLife.addTalkHook), Opinia w miasteczku 0-100, zakładka dziennika „Miasteczko”, dzień targowy, sygnały dzwonu; stan Tawerna.state("townQuests"); szyna: townQuestAccepted / townQuestDone / townQuestFailed / townOpinion; zdarzenia 951-959
 86  Underground_Data, Underground ← podziemia pod tawerną (docs/PODZIEMIA.md): piętra 1-9 składane z kawałków mapy 130 (ziarno zapisu, Tawerna.onMapData na mapach 131-139), piętro 10 ręcznie (Map140), krata w piwnicy (przełącznik 11); stan Tawerna.state("underground"); szyna: undergroundFloor / undergroundDeeper / undergroundLoot / undergroundNote / undergroundGate / undergroundLift; zdarzenia stworów 860-899
+95  Okolice_Data, Zasoby_Data, Lowy_Data, Ludzie_Data, Zakon_Data ← (2026-10-21/22) nowy teren 21 powiększonych map (docs/rozszerzenia/PLAN.md): dane rdzenia i czterech paczek, nad TownLife (TownLifeExtra, TownQuestsPacks)
+134 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
 ```
+
+**Wtyczki nowego terenu (2026-10-22):** każda paczka ma swoje zdarzenia (`Tawerna.inject`, rejestr w §6), mieszkańców TownLife z drugiego zakresu 2900–2949, przedmioty (A 185–199, B 200–209, C 210–224, D 225–239), ikony (wiersze 29–32 IconSet: 464–527), stan w zapisie (`okolice`, `zasoby`, `lowy`, `ludzie`, `zakon`) i test (`okolice_szkielet_test` 9550, `zasoby_test` 9551, `lowy_test` 9552, `ludzie_test` 9553, `zakon_test` 9554). Mapy 176 (komora pod menhirami, D) i 177 (jaskinia przemytników, C). Szyna: `okoliceDiscover`, `zakonGrove`. Epilog po Sercu pyta `Zasoby/Lowy/Ludzie/Zakon.epilogue(kind, w)` (linijka albo lista). Instalator danych: `tools/rozszerzenia/instaluj.py`, opisy w plugins.js: `tools/rozszerzenia/opisy_wtyczek.py`.
 
 ButtonPicture.js i TextPicture.js (obce) leżą w `js/plugins`, ale nie są na liście. Części Combat i Hunting (partie C3, D2) wpisane
 2026-09-29: `Combat_Fight`, `Combat_UI` zaraz pod Combat; `Hunting_Path`, `Hunting_AI`, `Hunting_Weapons` zaraz pod Hunting (przed Birds).
@@ -355,17 +359,35 @@ jeden numer = jeden właściciel na każdej mapie. Nakładanie się zakresów = 
 
 | numery | właściciel | mapy | co | sposób |
 |---|---|---|---|---|
-| 1–859 | edytor | wszystkie | zdarzenia z edytora (dziś najwyżej 354: Map025); na mapach 131-139 - zdarzenia pięter zrobione przez Underground.js | - |
-| 860–899 | Underground (zarezerwowane) | 131-139 | stwory podziemi (etap 4 walki): `Underground.registerCreature(rodzaj, build)` - Underground.js wstawia je przy budowie piętra na miejscach `<Stwor:...>` | `Tawerna.inject.reserve` (piętra są danymi Underground.js: jego własne zdarzenia 1..N, jak z edytora) |
-| 900 | *wolne* | | | |
-| 901–902 | Story | 19, 24 | dziadek Stach, Lord Zaleski | `Tawerna.inject` ✓ (`when`: jest fabuła - inaczej przy `Game_Map.setup` wychodzą z danych; `fixSaved: false` - zapis ma postacie, z którymi go zrobiono); miejsce przy fotelu / drzwiach dworu ustawia własny `Game_Map.setupEvents` |
-| 903–949 | *wolne* (bierz bloki po 10) | | | |
-| 950 | TavernLife (plik TavernLife_Plan.js) | 1, 25, 26 | sztaluga z planem karczmy; nie wchodzi na mapę innego rozmiaru, na zajęte pola ani tam, gdzie jest plan z edytora (`<Tavern:plan>` - na mapie 1 dziś id 349) | `Tawerna.inject` ✓ |
-| 951–959 | *wolne* | | | |
-| 960–979 | HomeLife | 19 | kot Mruczek (+ zapas) | `Tawerna.inject` ✓ |
+| 1–499 | edytor | wszystkie | zdarzenia z edytora (od powiększenia map 2026-10-18 nowe obiekty dostają wolne numery 1–499; Map003, 008 i 013 mają je do 499); na mapach 131-139 - zdarzenia pięter zrobione przez Underground.js | - |
+| 500–539 | Orzel | 13, 175 | biały orzeł: 500–509 ścieżka wspinaczy (Map013), 510–529 rzeczy na Orlej Grani, 530–539 obóz złodziei | `Tawerna.inject` ✓ |
+| 540–559 | Kasztelan | 9, 140 | W4: Borgar przy kracie, posterunek przy dziesiątej bramie | `Tawerna.inject` ✓ |
+| 560–569 | *wolne* | | | |
+| 570–599 | Dwor | 172–174, 24 | W7: dwór Lorda | `Tawerna.inject` ✓ |
+| 600–699 | Pustelnia 600–609, Kruk 610–629, Latarnia 630–639, Garnizon 640–669, Wrak 670–679, Cysterna 680–689, Wyspa 690–699 | 119, 146, 155–167, 8, 111, 125, 13 | sześć miejsc wyspy (docs/miejsca_wyspy/PAKIETY.md) | `Tawerna.inject` ✓ |
+| 700–729 | Homes | 3, 4, 23, 168 | pole po stracie, drogowskaz, dym i Marta w Spalonej zagrodzie | `Tawerna.inject` ✓ |
+| 730–759 | Kantor | 103, 8, 171, 23, 22 | W5: kantor Baltazara | `Tawerna.inject` ✓ |
+| 760–779 | Przystan | 125 | przystań: przewoźnik, ludzie z promu | `Tawerna.inject` ✓ |
+| 780–798 | *tylko test* | 3 | `tests/core_test.js` (strona testowa) | - |
+| 800–827 | Underground | Serce, sceny | komnata Serca (800–804), ujęcia zakończeń (805–827) | `Tawerna.inject` ✓ |
+| 828–839 | Rywal | 10, 11, 131–140 | W9: rywal w ruinach | `Tawerna.inject` ✓ |
+| 840–859 | Act3 | 8 | Akt III (840–858 rezerwa, 859 lina) | `Tawerna.inject` ✓ / `reserve` |
+| 860–899 | Underground (zarezerwowane) | 131-139 | stwory podziemi | `Tawerna.inject.reserve` |
+| 901–902 | Story | 19, 24 | dziadek Stach, Lord Zaleski | `Tawerna.inject` ✓ |
+| 903–909 | TownQuests (rekwizyty) | 8, 111, 3 | namioty i ludzie W6 | `Tawerna.inject` ✓ |
+| 910–949 | TownLife | każda | mieszkańcy (pełny zakres; 949 ostatni wolny) | `Tawerna.inject` ✓ |
+| 950 | TavernLife (TavernLife_Plan.js) | 1, 25, 26 | sztaluga z planem karczmy | `Tawerna.inject` ✓ |
+| 951–959 | TownQuests (miejsca zadań) | 8, 13, 14, 19, 20, 22, 24, 25, 108, 118, 119, 120, 125 | numery osobno na każdej mapie (przydział dla paczek nowego terenu: docs/rozszerzenia/PLAN.md 3.4) | `Tawerna.inject` ✓ |
+| 960–979 | HomeLife | 19 | kot Mruczek | `Tawerna.inject` ✓ |
 | 980–998 | HomeDecor | 19 | ozdoby domu dziadka | `Tawerna.inject` ✓ |
-| 999 | *wolne* | | | |
-| 1000–∞ | Forestry | każda (`"*"`) | posadzone sosny (z `_tw.forest`) | `Tawerna.inject` ✓; drzewo z wykopanym pniakiem znika dopiero przy `Game_Map.setup` (własny hak: rekord, przełączniki, dane) |
+| 1000–1999 | Forestry | każda (`"*"`) | posadzone sosny (z `_tw.forest`); od 2026-10-21 nowe drzewo bierze **pierwszy wolny** numer z 1000–1999 | `Tawerna.inject` ✓ |
+| 2000–2099 | Okolice (pakiet 0) | nowy teren | rdzeń rozszerzeń: znaczniki, wspólne zdarzenia (docs/rozszerzenia/PLAN.md) | `Tawerna.inject` |
+| 2100–2299 | Zasoby (paczka A) | nowy teren | woda i zasoby | `Tawerna.inject` |
+| 2300–2499 | Lowy (paczka B) | nowy teren | zwierzęta i łowy | `Tawerna.inject` |
+| 2500–2699 | Ludzie (paczka C) | nowy teren | ludzie przy drogach | `Tawerna.inject` |
+| 2700–2899 | Zakon (paczka D) | nowy teren | tajemnice i zakon | `Tawerna.inject` |
+| 2900–2949 | TownLife (drugi zakres) | każda | mieszkańcy paczek nowego terenu: A 2900–2904, B 2905–2909, C 2910–2929, D 2930–2939, rezerwa 2940–2949 | `Tawerna.inject` ✓ |
+| 3000+ | *wolne* | | | |
 
 ```js
 Tawerna.inject(19, { ids: [980, 998], owner: "HomeDecor",
@@ -378,7 +400,7 @@ Tawerna.onMapData((data, mapId) => ...);   // dane każdej mapy zaraz po wczytan
 ```
 
 Rdzeń sam dopisuje `meta` wstawionym zdarzeniom (silnik robi to tylko dla zdarzeń z pliku).
-`core_test.js` używa w swojej stronie numerów 930–953 (tylko w teście).
+`core_test.js` używa w swojej stronie numerów 780–798 (tylko w teście).
 
 ---
 
@@ -569,6 +591,23 @@ godzina, pora dnia w porannej wiadomości), ChoppableTree (E2: pora owoców, dzi
 biorą też m.in. Storm, Hunting, Story, Birds, Dog; jeszcze po staremu (`Farming.seasonIndex` z zapasowym wzorem - pod spodem już
 `T.time`): Survival, Needs, UITheme. Zdarzenia `dayStart` / `hourChange` /
 `sleep` / `wake` zamiast pilnowania `lastDay`.
+
+### 9.1 Widok świata (`Tawerna.view`, 2026-10-18)
+
+Ile świata mapy widać na ekranie, w pikselach świata. Zwykle to sam ekran (`Graphics.width × Graphics.height`, skala 1 - wszystkie
+liczby dokładnie jak wcześniej). Podczas lotu na białym orle (`Orzel_Lot.js`, wysoko) świat jest rysowany w skali 0,5, więc ekran
+pokazuje go dwa razy więcej w każdą stronę.
+
+- `Tawerna.view()` → `{ w, h, s }`, `Tawerna.view.w()` / `.h()` / `.scale()`; `Tawerna.view.setScale(s)` ustawia tylko Orzel_Lot
+  (na szynie `viewScale`).
+- **Zasada:** co żyje **w spritesecie mapy** (warstwa wielkości ekranu, odrzucanie „czy jest na ekranie”, liczba czegoś na ekran),
+  pyta `Tawerna.view`, nie `Graphics`. Interfejs na scenie (HUD, okna, dymki) zostaje przy `Graphics`.
+- Już na tym: Farming_Render (noc: `Sprite_NightLight.fitView`, kołysanie, maska ciepła), Sky (boczne światło, promienie, mgła),
+  Storm (promienie), CloudShadows, Motyle, Torch, WaterFx, TownLife, Hunting/Humans (`onScreen`), Kruk, Birds, GroundDetail, Puddles.
+  Pogodę silnika (`_weather`) oraz liście i błysk burzy Orzel_Lot rysuje w skali 1/s (zawsze wielkości ekranu).
+- Jak działa oddalenie: `Game_Map.screenTileX/Y` dzielone przez skalę (przewijanie, środek kamery, zdarzenia „blisko ekranu”),
+  tilemapa tak szeroka jak widok, cały `Spriteset_Map` w skali przez zoom ekranu od punktu (0, 0), tekstury filtrowane liniowo
+  (przy 0,5 piksel ekranu = średnia 2 × 2). Szczegóły: `docs/orzel/KONCEPCJA.md` punkt 5.
 
 ---
 

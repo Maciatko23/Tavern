@@ -1874,5 +1874,196 @@
     "scale": null,
     "height_px": 60,
     "notes": ""
+  },
+  {
+    "key": "Pasterz",
+    "name": "Wawrzyn Owczarz (pasterz, Łąka #1 / Map004)",
+    "pixellab_id": "c514e283-6a77-4756-ae0d-5b4109456729",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "c85d1cdf-8d35-458b-9454-e834654aaa45",
+    "animation": "walk",
+    "description": "Wawrzyn, an old poor shepherd about 55, weathered face, short grey beard, brown felt hat with a soft floppy brim, long brown sheepskin coat with cream wool collar and hem, rope belt with a shepherd's horn, patched trousers, foot wraps, leather shoes, shepherd's crook",
+    "gens_used": 18,
+    "sheet": "$Npc_Pasterz",
+    "walk8": "Npc_Pasterz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {
+        "east": "west",
+        "south-east": "south-west"
+      },
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
+  },
+  {
+    "key": "Grabarz",
+    "name": "Hieronim (grabarz, stary cmentarz)",
+    "pixellab_id": "e13ed9c1-ca1a-4514-a451-9d369d195055",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0d1820d6-32d3-4665-956c-a3efd828630b",
+    "animation": "walk",
+    "description": "Hieronim, an old village gravedigger about 65, stocky and a little stooped, grey stubble beard, dark brown knitted wool cap, long patched earth-brown work coat, grey linen shirt, rope belt, dark grey trousers, worn muddy brown boots",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Grabarz",
+    "walk8": "Npc_Grabarz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": ""
+  },
+  {
+    "key": "Gajowy",
+    "name": "Gajowy Gniewko Bór (zwierzyniec Lorda, paczka B)",
+    "pixellab_id": "7dd9658d-2531-4ba2-a822-dd26385c551e",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "1fe3d3ab-306b-446d-9cf7-bdf723725091",
+    "animation": "walk",
+    "description": "Gniewko Bor, a gamekeeper of a lord's game park, lean weathered man about 40, short dark-brown beard, dark green wool kaftan, brown hood lowered, hunting horn at the hip, longbow on the back, worn leather boots",
+    "gens_used": 19,
+    "sheet": "$Npc_Gajowy",
+    "walk8": "Npc_Gajowy_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
+  },
+  {
+    "key": "Jagna",
+    "name": "Babka Jagna",
+    "pixellab_id": "a4e20921-6ceb-40ce-80d2-ca93cdce8a23",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "6b579ac5-0b97-405d-9b71-e94a673b650f",
+    "animation": "walk",
+    "description": "Babka Jagna, an old forest herb-woman about 75, faded moss-green headscarf, patched dark brown shawl, faded rust-brown dress, wicker basket of herbs on the left forearm, barefoot",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Jagna",
+    "walk8": "Npc_Jagna_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Paczka A (Woda i zasoby, docs/rozszerzenia/PLAN.md A5): zielarka z Omszałej łąki (Map017), TownLife 2900; kosz z ziołami na lewym przedramieniu."
+  },
+  {
+    "key": "Handlarz",
+    "name": "Szymon Juczny (wędrowny handlarz, drogi)",
+    "pixellab_id": "80ea51d6-2bfe-48de-b819-e9dbf501aef4",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "ad55d9d5-f0d9-4fd9-8e24-62b491f36e11",
+    "animation": "walk",
+    "description": "Szymon, a travelling peddler about 40, lean, short dark brown beard, wide-brimmed dark brown travel hat, long dark green hooded travelling cloak, big brown leather pack on his back with a rolled grey blanket, leather pouches at the belt, dark brown trousers, worn brown boots",
+    "gens_used": 21,
+    "sheet": "$Npc_Handlarz",
+    "walk8": "Npc_Handlarz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "south": "walk_s3"
+      },
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
   }
 ]

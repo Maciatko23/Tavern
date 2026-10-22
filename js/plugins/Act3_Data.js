@@ -66,13 +66,19 @@
     // the top line when it comes
     // ---------------------------------------------------------------------------------------------------------------------------
     const WAVES = [
+        // (2026-10-18, the white eagle - Orzel.js) the adult eagle (bond 60+, at home) defends the tavern from the air: one man fewer in each
+        // group that comes from outside (Orzel.defends())
         { id: "w1", map: 8, from: "gate", kinds: ["bandit", "bandit", "knifer"], shout: "Pochodnie pod drzwi! Ruszać się!",
+          fewer: c => (window.Orzel && Orzel.defends && Orzel.defends() ? 1 : 0),
+          fewerNotice: c => ["Biały orzeł!", (window.Orzel ? Orzel.nameOf() : "Orzeł") + " spada z nieba na dziedziniec - jednego z nich mniej."],
           notice: ["Pod drzwiami tawerny!", "Trzech z pochodniami idzie przez dziedziniec."] },
         // (2026-10-17, W5 "Towary z kontynentu", Kantor.js) Baltazar Vey made an enemy (his kantor shut by the town, the register
         // burnt by Wit, or blackmailed - flag w5BaltazarWrog): his mercenary comes with the second group
         { id: "w2", map: 8, from: "gate", kinds: ["bandit", "archer", "knifer", "archer"], shout: "Łucznicy, na mur! Reszta do drzwi!",
           extra: c => (c.rafal === "enemy" ? [{ kind: "knifer", name: "Rafał", lv: 0, noSurrender: false }] : [])
               .concat(c.flags.w5BaltazarWrog ? [{ kind: "mercenary", name: "Najemnik Baltazara", lv: 0 }] : []),
+          fewer: c => (window.Orzel && Orzel.defends && Orzel.defends() ? 1 : 0),
+          fewerNotice: c => ["Biały orzeł!", "Łucznik na murze nie zdążył naciągnąć cięciwy - " + (window.Orzel ? Orzel.nameOf() : "orzeł") + " zrzucił go z muru."],
           notice: ["Łucznicy!", "Druga grupa - strzelają z bramy dziedzińca."] },
         // (2026-10-16, W12 "Rozbitek", Wrak.js) Ansgar Wiel - the castaway made an ally (flag ansgarAlly) - knew the plan: the kitchen's
         // back door barred, one man fewer comes in that way (fewer(c): how many of `kinds` stay out; fewerNotice: the top line after)

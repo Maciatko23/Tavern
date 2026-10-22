@@ -302,6 +302,14 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   (imię nadaje gracz) mieszka na grzędzie na polu: lata z bohaterem, nosi listy po wyspie (nigdy przez morze - do matki nie poleci),
   leci na zwiad, pilnuje pola przed ptakami, rano przynosi błyskotki, a czasem cudze listy (małe sekrety mieszkańców). Po wyprawie na
   wrak nocą kopią tu w gruzie obcy ludzie Czarnych Oczu: szukają kamieni z krukiem.
+- **Orla Grań** (W13 „Skrzydlata Straż”, w grze od 2026-10-18: Orzel.js, Map175 nad kamieniołomem w Górach) - kruczarze nosili listy
+  zakonu, a jego **Skrzydlata Straż** trzymała na grani białe orły: kruk niósł słowo, orzeł pilnował drogi i murów. Straż wymarła razem
+  z zakonem, orły zostały na grani. W noc burzy w Akcie II latarnik Bazyli widzi z laterny białe skrzydła i pochodnie: ludzie Czarnych
+  Oczu (strzały z białym okiem) zabili ostatnią orlicę i rozbili gniazdo (D29). Bohater zabiera jedyne całe jajo, grzeje je i wychowuje
+  orła (imię nadaje gracz, domyślnie Śnieżny): pisklę, młody, szarobrązowy podrostek, prawie biały, wreszcie dorosły ok. czterech pól,
+  który unosi bohatera nad wyspą (lot z oddaleniem widoku, nurkowanie na wroga, przelot nad krawędzią mapy). Lord chce go kupić - nie
+  dostanie; Czarne Oczy raz go kradną (klatka na grani); w Akcie III broni tawerny, a epilog mówi, co z nim było. Orzeł nigdy nie
+  przynosi wody i nie leci w burzę.
 - **Latarnia na przylądku** - stoi na dawnej strażnicy zakonu. Soczewka to może odłamek Serca: we mgle pokazuje latarnikowi rzeczy, których
   nie powinien wiedzieć - poważny odpowiednik Ozzy'ego.
   **W grze od 2026-10-16 (Map159, Izba latarnika Map160, Laterna Map161; ścieżką z Urwiska albo z Gór):** latarnik **Bazyli Krzesiwo**
@@ -394,6 +402,50 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
 - **Święty gaj ze starym dębem** - starszy niż zakon; święta: Noc Kupały (kwiat paproci - wydarzenie jednej nocy w roku), dożynki.
 - **Gorące źródła** - odpoczynek (drabina odpoczynku), plotki i schadzki, spotkania przemytników.
 - **Leśniczówka** - leśniczy kontra kłusownicy (biedni z miasteczka); polowania na dzika i wilki; spór, po czyjej stronie stanąć.
+
+### Nowy teren (rozszerzenia 2026-10-22)
+
+21 map pod gołym niebem powiększonych dwa razy (2026-10-18) dostało na nowym terenie cztery paczki treści (`docs/rozszerzenia/PLAN.md`, opisy `docs/rozszerzenia/A-D.md`).
+
+**Woda i zasoby (A)**
+
+- Zagroda Rzepków za lasem na południe od pola dziadka: Wojciech Rzepka z rodziną odszedł do miasta, kiedy studnia wyschła
+  (list w ruinie chaty).
+- Babka Jagna, zielarka z Omszałej łąki: ma swoją polankę z arcydzięglem, dziurawcem i kozłkiem; po deszczu wychodzą
+  obok czarcie kręgi grzybów - nocą w środku siada mgła i coś szepcze („grzybnia oddycha”).
+- Moneta z krukiem z wysypiska Podgrodzia: „grosz strażnicy”, którym płacono przewoźnikom zakonu (Kleofas).
+
+**Zwierzęta i łowy (B)**
+
+- **Zwierzyniec Lorda** za żywopłotem dworu (wyłom za oranżerią): jelenie i dziki Lorda, gajowy Gniewko Bór i jego leśniczówka. Kłusownika Ryśka Sidło można wydać albo ostrzec; zezwolenie na odstrzał daje jednego jelenia na tydzień.
+- **Nora Szarego Kła** na Skraju lasu: wataha z norą pod korzeniami; zostawione szczenięta czynią ją przyjazną.
+- **Gawra pod granią** w Górach i **obóz obcych myśliwych** (Czarne Oczy, strzały z białym okiem) na Skraju lasu; ich dowódca szuka w górach wejścia pod ziemię.
+- **Błotnisko Czarnego Ryja** przy Leśnej drodze, **lizawka z zasiadką** na Łące, **strzelnica garnizonu** z zawodami co tydzień.
+
+**Ludzie (C)**
+
+- **Stare groby Ługów** (Map168): rodzice i dziadkowie Jana Ługa; „stary Ług przyszedł tu z kontynentu, kiedy zagroda była jeszcze lasem”.
+  Krzyż Jana przy drodze (Homes) bez zmian.
+- **Jaskinia przemytników** pod zatoczką przystani: skład Baltazara (worki, beczki z solą i rybą, rejestr jego pismem, pusta przegródka po
+  kamieniu z krukiem). Wejście tylko w odpływie.
+- **Szyb kopaczy** w górach: Czarne Oczy kopią „ku piętru pięćdziesiątemu od góry” (dziennik dowódcy) – inna droga niż tunel w Jaskini (Map014).
+- **Wawrzyn Owczarz** (pasterz, Łąka), **Szymon Juczny** (wędrowny handlarz, cztery drogi), patrole garnizonu na przylądku i wybrzeżu.
+
+**Tajemnice i zakon (D)**
+
+- **Strażnice zakonu**: cztery wieże na czterech drogach – przy Polnej drodze, w Górach (droga ku przylądkowi), nad morzem na Urwisku i
+  czwarta na przylądku, na której dziś stoi latarnia. Z każdej widać ogień sąsiedniej; „piąte oko to kruk” – kruczarze nosili listy między
+  wieżami. Z trzech wież na drogach widać krąg kamieni na Łące menhirów.
+- **Krąg menhirów** jest starszy niż zakon. Bracia warty składali przy nim przysięgę „patrzę i nie pytam”. Najwyższy kamień to Strażnik;
+  w jego cieniu, o godzinie „czterech części drogi słońca z pięciu”, zakopano kamienny klucz. Pod płytą z krukiem jest komora pierwszego
+  strażnika warty: sarkofag, misa z okiem i ściana z wykutą wyspą i czterema wieżami.
+- **Zapiski strażnic** (6 kart, osobne od „Kroniki upadku”): roku 106 wieże gasły jedna po drugiej, kruki puszczono wolno; ostatni wpis
+  kończy się słowami „nie pytaj o to, czego nie chcesz wiedzieć” – tymi samymi, które Borgar powtarza jak żart.
+- **Skrzydlata Straż**: kamienne grzędy z żelazną poprzeczką i misą na deszczówkę na Orlej Grani; orle siodło z pasami na piersi, strzemiona
+  pod szyją ptaka; Pióro Skrzydlatej Straży w srebrnej oprawce – znak jeźdźca, „którego orzeł sam wybrał”.
+- **Stary cmentarz** za miasteczkiem: trzy groby braci zakonu (Bogusław, Żelisław, Wit – strażnik bramy, zginął w roku upadku); za braci
+  dzwoniło się „cztery i jeden”. Grabarz Hieronim i jego ojciec ich nie ruszają. Szubienica Lorda przy wschodniej drodze.
+- **Gaj Milczących**: siedem białych kamieni, godzina ciszy o zmierzchu.
 
 ### Podziemia - 100 pięter w dół
 

@@ -1,0 +1,19 @@
+{
+  "paczka": "B",
+  "budzet": 85,
+  "zuzyte": 60,
+  "uwaga": "Liczone z odpowiedzi PixelLab (charged_generations / cost). Chodzenie gajowego: 8 kierunków zamówionych razem, wschód nie wyszedł (przeciążenie) i był zamówiony drugi raz (1) - liczę ostrożnie 8 + 1.",
+  "wpisy": [
+    {"co": "gajowy Gniewko Bór - postać pro 64x64, 8 kierunków, styl bohatera (style_character_id bohatera)", "narzedzie": "create_character pro", "id": "7dd9658d-2531-4ba2-a822-dd26385c551e", "generacje": 10, "data": "2026-10-21"},
+    {"co": "gajowy - chodzenie walking-8-frames, 8 kierunków (grupa 1fe3d3ab)", "narzedzie": "animate_character template", "generacje": 8, "data": "2026-10-21"},
+    {"co": "gajowy - chodzenie, wschód jeszcze raz", "narzedzie": "animate_character template", "generacje": 1, "data": "2026-10-21"},
+    {"co": "wilcza nora 144x96 (raw/nora_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "67e12734-87e8-4431-9b20-3494e96bfa23", "generacje": 6, "data": "2026-10-21"},
+    {"co": "gawra 96x96 (raw/gawra_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "fb89058e-918b-4979-86a0-ceb836c0192a", "generacje": 5, "data": "2026-10-21"},
+    {"co": "leśniczówka 240x208 (raw/lesniczowka_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "89ad4c27-0544-410e-b9ac-87da23f31de9", "generacje": 9, "data": "2026-10-21"},
+    {"co": "lizawka 64x64 (raw/lizawka_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "56c58fb1-97f2-4327-83d7-20754c24c467", "generacje": 5, "data": "2026-10-21"},
+    {"co": "zasiadka 96x64 (raw/zasiadka_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "accdb28b-6c41-432d-8baa-22ac5413caf0", "generacje": 5, "data": "2026-10-21"},
+    {"co": "błotnisko 192x144 (raw/bloto_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "4078b0c3-fc17-42d0-abd5-5e5820d6f673", "generacje": 6, "data": "2026-10-21"},
+    {"co": "paśnik 96x96 (raw/pasnik_proflash_1.png)", "narzedzie": "create_image_pro_flash", "job": "83d25db4-8815-44a1-adc2-fbdbcc4deac7", "generacje": 5, "data": "2026-10-21"},
+    {"co": "bez generacji: tarcza i stojak (Winlu Outside_C), cierń (!$Bush_Bare_Hedge), gałęzie wyłomu (Gather_Branch), sidła (Farm_Snare + gałąź), poroże i 7 ikon (rysowane w Pythonie), popiersie (tools/busts/make_gajowy.py)", "generacje": 0}
+  ]
+}

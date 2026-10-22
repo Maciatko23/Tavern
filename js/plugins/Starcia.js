@@ -83,6 +83,8 @@
  *   Starcia.alive(kto), Starcia.freeMan(człowiek), Starcia.freeBeast(zwierzę),
  *   Starcia.setPackClash(wataha, cel), Starcia.clearPack(wataha),
  *   Starcia.setManFoe(człowiek, zwierzę), Starcia.fires(), Starcia.baits(),
+ *   Starcia.addFighter({ is, alive, by }) - inny sprzymierzeniec bohatera, na
+ *     którego zwierzę może się rzucić (biały orzeł, Orzel.js),
  *   Starcia.tick() - jedno spojrzenie wszystkich (testy).
  * SZYNA: "kill" z by: "wolf" | "boar" | "bear" | "human" (cudze zabicie, noXp),
  *   "clash" { a, b, kind: "start" } - ktoś rzucił się na kogoś (nie bohatera).
@@ -161,6 +163,11 @@
     const isMan = x => !!(x && GH() && x instanceof GH());
     const isBeast = x => !!(x && x instanceof GA);
     const isDog = x => !!(x && GD() && x instanceof GD());
+    // (2026-10-18) other fighters of the hero's side that a beast may turn on - the white eagle (Orzel.js): { is(t), alive(t), by }.
+    // One of them as a beast's `_clash` stands in for the hero while it thinks (like the dog); lost (gone up into the air, away) - the
+    // beast just lets it go (back to the hero), its pack and its temper stay as they were
+    const others = [];
+    const otherOf = x => (x ? others.find(o => o.is(x)) || null : null);
     // a man who takes part: a plain bandit (a camp's, the road's, a raid's, F9's) - never a quest's (a tag of its own, a name)
     function freeMan(h) {
         return isMan(h) && !h._dead && !h._surrendered && CFG.tags.includes(h._tag || "") && !h._label && !h._noClash && !h._robber;
@@ -192,6 +199,8 @@
         if (isMan(t)) return !t._dead && !t._surrendered && HM().list.includes(t);
         if (isDog(t)) return t === dogNow();
         if (isBeast(t)) return !t._dead && t._hp > 0 && H().animals.includes(t);
+        const o = otherOf(t);
+        if (o) return !!o.alive(t);
         return false;
     }
     const wolvesOut = live => P.core.activeNow("wolf") || live.some(m => m._summoned);
@@ -270,6 +279,7 @@
         const f = a._clash;
         if (!f) return null;
         if (alive(f) && f !== hero()) return f;
+        if (otherOf(f)) { a._clash = null; return null; }   // (the eagle up in the air: back to the hero, the pack as it was)
         if (a._pack) { repick(a._pack); return a._clash || null; }
         a._clash = null;
         return null;
@@ -289,6 +299,7 @@
             const f = this._clash ? clashOk(this) : null;
             if (fireFirst(this, f)) return undefined;
             if (!f) return fn.call(this);
+            if (typeof f.standFor === "function") f.standFor(this);   // (a big one - the eagle: the part of its body nearest this beast)
             realP = window.$gamePlayer;
             swapA = this;
             window.$gamePlayer = f;
@@ -379,7 +390,7 @@
         const sp = SP[a.kind()], by = o.by || "human", from = o.from || null;
         if (o.fire) dmg += CFG.fire.burn;
         a._hp -= dmg;
-        a._poiseT = 0;
+        if (!o.steady) a._poiseT = 0;   // (o.steady: a blow that does not shake its balance - the eagle's quick ones, Orzel.js)
         a._wounded = true;
         soundAt(a, () => {
             fxHit(a, dmg, o.fire ? "#ffa040" : null);
@@ -392,8 +403,8 @@
         if (a._hp <= 0) return "hit";
         retaliate(a, from);
         const heavy = !!o.heavy, poise = o.poise !== undefined ? o.poise : Math.round(dmg * 0.8);
-        a._poise -= sp.heavy && !heavy ? Math.round(poise * P.ai.BEAR_AI.light) : poise;
-        if (a._poise <= 0 && a._mode !== "lunge") { P.ai.stagger(a, false); knockFrom(a, from); }
+        if (!o.steady) a._poise -= sp.heavy && !heavy ? Math.round(poise * P.ai.BEAR_AI.light) : poise;
+        if (!o.steady && a._poise <= 0 && a._mode !== "lunge") { P.ai.stagger(a, false); knockFrom(a, from); }
         else if (o.knock && !sp.heavy && a._mode !== "charge" && a._mode !== "lunge") knockFrom(a, from);
         if (o.fire && sp.pack) {   // a brand: it yelps and keeps off a while
             a._brandFear = Math.max(a._brandFear || 0, CFG.fire.fear);
@@ -436,6 +447,8 @@
         if (!from) return "human";
         if (isDog(from)) return "dog";
         if (isBeast(from)) return from.kind();
+        const o = otherOf(from);
+        if (o) return o.by || "hero";
         return "human";
     }
     GA.prototype.takeHit = function(info) {
@@ -815,6 +828,7 @@
         if (!freeBeast(a)) return;
         if (a._clash) {
             const t = a._clash;
+            if (otherOf(t)) { if (!alive(t) || a._mode === "flee") a._clash = null; return; }   // (the eagle: let go when it is up - its charge goes on at the hero)
             if (alive(t) && t !== hero() && dist(a, t) < SP.boar.sight * 1.6 && a._mode !== "flee") return;
             a._clash = null;
             if (a._mode === "warn" || a._mode === "charge" || a._mode === "approach") { a.setMode("roam"); a._aware = 0.4; }
@@ -829,6 +843,7 @@
         const B = P.ai.BEAR_AI;
         if (a._clash) {
             const t = a._clash, h = a._home || { x: a._x, y: a._y };
+            if (otherOf(t)) { if (!alive(t) || a._mode === "flee" || a._mode === "leave") a._clash = null; return; }   // (the eagle up: back to the hero)
             if (alive(t) && t !== hero() && dist(a, t) < B.lose && Math.hypot(a._x - h.x, a._y - h.y) <= B.leash && a._mode !== "leave") return;
             a._clash = null;
             a._engaged = false;
@@ -1347,6 +1362,8 @@
         auto: v => { auto = !!v; }, tick, tickBeasts, tickMen,
         alive, freeMan, freeBeast, dogNow, hero, fires: fireSpots, fireNear, shielded, baits,
         setPackClash, clearPack, pickPrey, packTick, boarTick, bearTick, boarRam, manTick, archerTick, setManFoe, calmDown, hurtBeast, dogFight, campGame,
-        get swapping() { return swapA; }
+        get swapping() { return swapA; },
+        // (2026-10-18) another fighter of the hero's side the beasts may turn on (the white eagle): { is(t), alive(t), by }
+        addFighter: def => { if (def && typeof def.is === "function" && !others.includes(def)) others.push(def); return others.length; }
     });
 })();

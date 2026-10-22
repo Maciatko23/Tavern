@@ -111,7 +111,7 @@
             const s = this.sprite, b = s.bitmap, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
             s.x = Math.round(this.left - $gameMap.displayX() * tw);
             s.y = Math.round(this.top - $gameMap.displayY() * th);
-            s.visible = s.x + b.width > 0 && s.y + b.height > 0 && s.x < Graphics.width && s.y < Graphics.height;
+            s.visible = s.x + b.width > 0 && s.y + b.height > 0 && s.x < T.view.w() && s.y < T.view.h();   // (the world's view: Tawerna.view)
             return s.visible;
         }
         paint(fn) {

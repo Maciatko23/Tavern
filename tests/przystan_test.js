@@ -31,7 +31,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const inHarbour = await t.until(t.onMap(125), 20);
     await t.frames(30);
     const landed = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
-    t.check("walking west off Podgrodzie's forest trail (0,19) leads to the harbour, landing on its east edge (54,19)", inHarbour && landed[0] === 125 && landed[1] === 54 && landed[2] === 19, landed);
+    t.check("walking west off Podgrodzie's forest trail (0,19) leads to the harbour, landing on its east edge (110,19 - the harbour doubled to 112x80 2026-10-18)", inHarbour && landed[0] === 125 && landed[1] === 110 && landed[2] === 19, landed);
     await t.calm();
     await t.hold("right", 30);
     const back = await t.until(t.onMap(111), 20);

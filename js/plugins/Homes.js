@@ -300,12 +300,14 @@
     // the guards at the two ways onto the field (shown once it is shut)
     const GUARD_TALK = "Tawerna.call(\"Homes\", \"guardTalk\", this)";
     T.inject([MEADOW], { ids: [GUARD_MEADOW, GUARD_MEADOW], owner: PLUGIN, when: () => storyGame(), build: () => [
-        shownOnA(GUARD_MEADOW, "Strażnik dworu", 27, 28, { characterName: "$Npc_Straznik", direction: 4 }, stub(GUARD_TALK))] });
+        // (2026-10-18) Łąka (Map004) doubled to 80x60: its south exit to the field moved from row 29 to row 59 - he stands beside it
+        shownOnA(GUARD_MEADOW, "Strażnik dworu", 27, 58, { characterName: "$Npc_Straznik", direction: 4 }, stub(GUARD_TALK))] });
     // Skraj lasu: the guard (story), the way west to the burnt farm (its west edge above the way onto the field: the open grass of
     // rows 6-8, the user's tiles untouched) and the signpost by it (everyone)
     T.inject([EDGE], { ids: [GUARD_EDGE, SIGNPOST], owner: PLUGIN, build() {
         const out = WAY.map((id, i) => ({ id, name: "Przejście -> Spalona zagroda", note: "", x: 0, y: 6 + i,
-            pages: [page({ characterName: "" }, [C(201, [0, ZAGRODA, 48, 11 + i, 4, 0]), C(0, [])], { priorityType: 0, trigger: 1, walkAnime: false })] }));
+            // (2026-10-18: the burnt farm doubled to 100x72 - its east edge is x 99, one inside it 98)
+            pages: [page({ characterName: "" }, [C(201, [0, ZAGRODA, 98, 11 + i, 4, 0]), C(0, [])], { priorityType: 0, trigger: 1, walkAnime: false })] }));
         out.push({ id: SIGNPOST, name: "Drogowskaz: Spalona zagroda", note: "", x: 1, y: 5,
             pages: [page({ characterName: "!$Drogowskaz", direction: 2, pattern: 1 }, stub("Tawerna.call(\"Homes\", \"signpost\")"), { directionFix: true, walkAnime: false })] });
         if (storyGame()) out.push(shownOnA(GUARD_EDGE, "Strażnik dworu", 1, 11, { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)));

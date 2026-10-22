@@ -1,6 +1,6 @@
 // PAKIET B "Urwisko Kruków" i oswojony kruk (docs/miejsca_wyspy/PAKIETY.md; js/plugins/Kruk_Data.js + Kruk.js; mapa z
 // tools/urwisko/build.py; grafika tools/kruk/art/build_sheet.py). Sprawdza:
-//   - mapa 157 (56 x 36, tileset 11, <Water:salt>, bez szkieletu): przejścia z kontraktu (lewa krawędź -> pustelnia, prawa ->
+//   - mapa 157 (112 x 72 od 2026-10-18, tileset 11, <Water:salt>, bez szkieletu): przejścia z kontraktu (lewa krawędź -> pustelnia, prawa ->
 //     przylądek tylko gdy gotowy, inaczej popup), krata przelewu (41,15) z dwiema stronami (przełącznik 17 -> cysterna 167 33,3),
 //     znaczniki rynien K53, kruczarnia ze starymi żerdziami, stado kruków, kamienie z krukiem w gruzie
 //   - wejście od pustelni: Wyspa.ready(157) - prawa krawędź Map155 prowadzi na (1,19)
@@ -48,31 +48,31 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.eval("if (window.Creatures && Creatures.auto) Creatures.auto(false); 0");
     await t.setDay(6, 10);
-    await t.go(155, 45, 17, 6);
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 47 && e.y === 17); $gamePlayer.locate(46, 17); e.start(); return 0; })()");
+    await t.go(155, 93, 17, 6);   // (2026-10-18: the hermitage 96x72, its east edge x 95; the Urwisko 112x72 - tools/powieksz)
+    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 95 && e.y === 17); $gamePlayer.locate(94, 17); e.start(); return 0; })()");
     const came = await t.until(t.onMap(157), 30);
     await t.frames(30);
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("prawa krawędź pustelni (47,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 56 x 36, tileset 11, <Water:salt>, nie szkielet",
-        came && at[0] === 157 && at[1] === 1 && at[2] === 19 && at[3] === 56 && at[4] === 36 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Urwisko Kruków", at);
+    t.check("prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 112 x 72, tileset 11, <Water:salt>, nie szkielet",
+        came && at[0] === 157 && at[1] === 1 && at[2] === 19 && at[3] === 112 && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Urwisko Kruków", at);
     await t.calm();
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
         const g = ev.find(e => e.name === 'Przelew cysterny');
         return { west: ev.filter(e => e.x === 0 && (e.y === 19 || e.y === 20)).map(e => tr(e) ? tr(e).slice(1, 4) : null),
-            east: ev.filter(e => e.x === 55 && (e.y === 19 || e.y === 20)).map(e => String(e.pages[0].list[0].parameters[0]).includes('isReady(159)')),
+            east: ev.filter(e => e.x === 111 && (e.y === 19 || e.y === 20)).map(e => String(e.pages[0].list[0].parameters[0]).includes('isReady(159)')),
             grate: g && { x: g.x, y: g.y, img: [g.pages[0].image.characterName, g.pages[0].image.characterIndex, g.pages[0].image.direction, g.pages[0].image.pattern],
                 p2: g.pages[1] && g.pages[1].conditions.switch1Valid && g.pages[1].conditions.switch1Id, to: g.pages[1] && /reserveTransfer\\(167, 33, 3/.test(g.pages[1].list[0].parameters[0]) },
             rynny: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).map(e => e.name.slice(9)).sort(),
             rynnyObok: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).every(e => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => $gameMap.isPassable(e.x + dx, e.y + dy, 2) && !$gameMap.eventsXy(e.x + dx, e.y + dy).some(o => o.isNormalPriority()))),
-            land: [[1, 19], [1, 20], [54, 19], [54, 20], [41, 16]].every(([x, y]) => $gameMap.isPassable(x, y, 2)) }; })()`);
-    t.check("przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (46,17-18), prawa (55,19-20) -> przylądek z bramą Wyspa.isReady(159); lądowania przechodnie",
-        ways.west.length === 2 && ways.west.every(w => w && w[0] === 155 && w[1] === 46) && ways.east.length === 2 && ways.east.every(Boolean) && ways.land, ways);
+            land: [[1, 19], [1, 20], [110, 19], [110, 20], [41, 16]].every(([x, y]) => $gameMap.isPassable(x, y, 2)) }; })()`);
+    t.check("przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) -> przylądek z bramą Wyspa.isReady(159); lądowania przechodnie",
+        ways.west.length === 2 && ways.west.every(w => w && w[0] === 155 && w[1] === 94) && ways.east.length === 2 && ways.east.every(Boolean) && ways.land, ways);
     t.check("krata przelewu (41,15): „Przelew cysterny”, !Quest_Places 0/2/0, strona 2 na przełączniku 17 -> cysterna 167 (33,3); znaczniki rynna_1..4 dla K53 (każdy z wolnym polem obok - pakiet F stawia tam gruz)",
         ways.grate && ways.grate.x === 41 && ways.grate.y === 15 && ways.grate.img.join() === "!Quest_Places,0,2,0" && ways.grate.p2 === 17 && ways.grate.to
         && ways.rynny.join() === "rynna_1,rynna_2,rynna_3,rynna_4" && ways.rynnyObok, ways);
     // the east edge: the cape not built -> a popup (or, when package C is in, the way through)
     await t.popups({ clear: true });
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 55 && e.y === 19); $gamePlayer.locate(54, 19); e.start(); return 0; })()");
+    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 111 && e.y === 19); $gamePlayer.locate(110, 19); e.start(); return 0; })()");
     await t.frames(30);
     const eastPop = await t.popups(), capeReady = await t.eval("Wyspa.isReady(159)");
     t.check("prawa krawędź: przylądek niegotowy - popup nad bohaterem, bez przejścia (gotowy - przejście)",

@@ -550,6 +550,7 @@
         let best = null, bd = anywhere ? 999 : DOG.huntRange;
         for (const a of (window.Hunting && Hunting.animals) || []) {
             if (!a || a._dead || !(a._hp > 0) || !["rabbit", "deer"].includes(a.kind()) || a._dogSpared > Graphics.frameCount) continue;
+            if (a._noDog) continue;   // [Okolice/B] the deer at the salt lick and in the Lord's park (Lowy.js): the dog leaves them be
             const dd = Math.hypot(a.centerX() - g.centerX(), a.centerY() - g.centerY());
             if (dd < bd && (anywhere || Math.hypot(a._x - home.x, a._y - home.y) < DOG.reach)) { bd = dd; best = { ref: a }; }
         }

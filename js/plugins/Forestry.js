@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Leśnictwo: sosny sadzone z nasion (z szyszek) rosną przez kilka dni w prawdziwe drzewa, które ścinasz jak każde inne. v1.0.0
+ * @plugindesc Leśnictwo: sosny sadzone z nasion (z szyszek) rosną przez kilka dni w prawdziwe drzewa, które ścinasz jak każde inne. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -42,7 +42,7 @@
  *
  * Posadzone drzewa są zapisywane w grze (Tawerna.state "forest", w starszych
  * zapisach $gameSystem._forest) i przy każdym wczytaniu mapy dopisywane do jej
- * zdarzeń przez rdzeń (Tawerna.inject, numery od 1000 w górę, daleko od tych,
+ * zdarzeń przez rdzeń (Tawerna.inject, numery 1000-1999, daleko od tych,
  * które nadaje edytor). Strony i pniak kopiują zwykłą sosnę z tej samej mapy
  * (albo, gdy jej nie ma, wbudowany wzór z pniakiem 516).
  *
@@ -62,6 +62,10 @@
     const PLANT_STAMINA = 2;
     const CROUCH_KIND = 6;          // ChoppableTree's crouch (sowing, collecting)
     const FIRST_ID = 1000;          // planted trees get event ids from here on, far above what the editor gives out
+    // (2026-10-21, docs/rozszerzenia/PLAN.md) ...and end at 1999: from 2000 up the ids belong to the new terrain's packages (TawernaCore
+    // registry). A new tree takes the first free id of the range (not the map's event count any more - the packages' events at 2000+
+    // would push it out of the range); the old saves' trees (1000 and a little above) keep theirs.
+    const LAST_ID = 1999;
     const GRAPHICS = ["!$Pine_A", "!$Pine_B", "!$Pine_C"];
     const DEFAULT_STUMP_TILE = 516;
 
@@ -135,7 +139,7 @@
     // loading a map: its planted trees go into $dataMap.events before the map sets its events up (the core's Tawerna.inject, ids
     // 1000 and up on every map). Every one of them, always: the map data is loaded again after each menu while the map's events stay
     // as they were, so an event must never lose its data.
-    T.inject("*", { ids: [FIRST_ID, Infinity], owner: PLUGIN, build(data, mapId) {
+    T.inject("*", { ids: [FIRST_ID, LAST_ID], owner: PLUGIN, build(data, mapId) {
         const list = window.$gameSystem && window.$gameSelfSwitches ? store().maps[mapId] : null;
         if (!list || list.length === 0) return null;
         const pages = templatePages(data);
@@ -177,7 +181,7 @@
         if (event._pageIndex === 0 && event.characterName() !== pic) event.setImage(pic, page.image.characterIndex || 0);
     }
     function growAll(map) {
-        for (const e of map.events()) if (e.eventId() >= FIRST_ID) applyGrowth(e);
+        for (const e of map.events()) if (e.eventId() >= FIRST_ID && e.eventId() <= LAST_ID) applyGrowth(e);
     }
     const _Game_Map_setupEvents = Game_Map.prototype.setupEvents;
     Game_Map.prototype.setupEvents = function() {
@@ -210,10 +214,12 @@
         if (standingTreeNear(x, y)) return "Za blisko innego drzewa: zostaw mu miejsce na korzenie.";
         return null;
     }
+    // the first id of 1000-1999 neither the map's data nor a record of this map holds (0: the map is full)
     function nextId(mapId) {
-        let id = Math.max(FIRST_ID, $dataMap.events.length);
-        for (const r of treesOf(mapId)) id = Math.max(id, r.id + 1);
-        return id;
+        const taken = new Set(treesOf(mapId).map(r => r.id));
+        const events = ($dataMap && $dataMap.events) || [];
+        for (let id = FIRST_ID; id <= LAST_ID; id++) if (!taken.has(id) && !events[id]) return id;
+        return 0;
     }
     // puts the event on the map now (the saved record makes it come back with the map later)
     function spawn(rec) {
@@ -239,8 +245,9 @@
         const done = () => {
             if (whyNot(x, y)) return;   // (something got there during the crouch)
             $gameParty.loseItem(seed, 1);
-            const mapId = $gameMap.mapId(), F = T.api("Farming");
-            const rec = { id: nextId(mapId), x, y, day: day(), graphic: GRAPHICS[Math.floor(F ? F.hash2(x, y, 521) * GRAPHICS.length : 0)] };
+            const mapId = $gameMap.mapId(), F = T.api("Farming"), id = nextId(mapId);
+            if (!id) { refuse(seed.iconIndex, "Za dużo posadzonych drzew na tej mapie."); return; }
+            const rec = { id, x, y, day: day(), graphic: GRAPHICS[Math.floor(F ? F.hash2(x, y, 521) * GRAPHICS.length : 0)] };
             treesOf(mapId).push(rec);
             spawn(rec);
             T.audio.se("Earth1", { volume: 80, pitch: 110 });
@@ -259,6 +266,6 @@
             run: () => plant(x, y) };
     }
 
-    window.Forestry = T.register(PLUGIN, { GROW_DAYS, FIRST_ID, SEED, LOOKS, plant, plantEntry, whyNot, stageOf, growthOf, graphicOf, statsOf, treesOf, spawn, applyGrowth,
+    window.Forestry = T.register(PLUGIN, { GROW_DAYS, FIRST_ID, LAST_ID, nextId, SEED, LOOKS, plant, plantEntry, whyNot, stageOf, growthOf, graphicOf, statsOf, treesOf, spawn, applyGrowth,
         state: store });
 })();

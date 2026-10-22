@@ -166,9 +166,9 @@
         setAnim(b, SH.caw[0], SH.caw[1], 6, null);
         if (onScreen(b, 2)) T.audio.se("Crow", { volume: loud ? 55 : 32, pitch: Math.round(rand(72, 86)), pan: panOf(b.x) });
     }
-    const panOf = x => Math.max(-80, Math.min(80, ((x - $gameMap.displayX()) / (Graphics.width / TILE()) - 0.5) * 140));
+    const panOf = x => Math.max(-80, Math.min(80, ((x - $gameMap.displayX()) / (T.view.w() / TILE()) - 0.5) * 140));
     function onScreen(b, margin) {
-        const m = margin || 0, w = Graphics.width / TILE(), h = Graphics.height / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();
+        const m = margin || 0, w = T.view.w() / TILE(), h = T.view.h() / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();   // (the world's view: Tawerna.view)
         return b.x > ox - m && b.x < ox + w + m && b.y - b.z / 48 > oy - m && b.y < oy + h + m;
     }
     // to (x, y, z): a take-off first when it sits; `p.off` - out of the screen and gone; `p.hero` - onto the hero's shoulder
@@ -424,7 +424,7 @@
     }
     // a point off the screen on the side of (x, y) (or a random side)
     function offscreenFrom(x, y) {
-        const w = Graphics.width / TILE(), h = Graphics.height / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();
+        const w = T.view.w() / TILE(), h = T.view.h() / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();
         const cx = ox + w / 2, cy = oy + h / 2, dx = (x === undefined ? rand(-1, 1) : x - cx), dy = (y === undefined ? rand(-1, 1) : y - cy);
         if (Math.abs(dx) * h > Math.abs(dy) * w) return { x: dx > 0 ? ox + w + 3 : ox - 3, y: oy + rand(1, h - 1), z: 90, off: true };
         return { x: ox + rand(1, w - 1), y: dy > 0 ? oy + h + 4 : oy - 3, z: 90, off: true };
