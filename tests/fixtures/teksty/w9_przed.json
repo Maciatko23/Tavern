@@ -1,0 +1,253 @@
+{
+ "zadania": {
+  "W9": {
+   "title": "Serce Twierdzy",
+   "where": "podziemia pod tawerną (Warstwa Prawdy, piętra 76-99) - potem miasteczko, tawerna, dwór i dom dziadka",
+   "when": "Akt II - od pierwszej prawdy z Warstwy Prawdy",
+   "desc": "Głęboko pod tawerną leżą kartki zapisane moim pismem, choć nic nie pisałem - małe prawdy o ludziach z góry. Po powrocie mogę każdemu powiedzieć, co o nim wiem. Albo przemilczeć. To zmienia, jak na mnie patrzą.",
+   "steps": {
+    "0": {
+     "text": "Prawdy z Warstwy Prawdy - poznane: {known}, powiedziane: {told}, przemilczane: {kept}. Kto jeszcze czeka: {open}. Powiedzieć czy przemilczeć - wybierasz w rozmowie z tą osobą (raz na dzień)."
+    }
+   },
+   "lines": {
+    "found": "> (Prawda o {name}. Kiedy wrócę na górę... powiedzieć? Czy przemilczeć?)",
+    "remember": "> (Kartka z dołu, zapisana moim pismem: „{truth}” Powiedzieć?)",
+    "optTell": "Powiedz prawdę.",
+    "optKeep": "Przemilcz.",
+    "optLater": "Nie teraz.",
+    "topic": "Mam ci coś do powiedzenia... (kartka z dołu)",
+    "borgarTopic": "Borgarze... muszę ci coś powiedzieć. (kartka z dołu)",
+    "none": "nikt",
+    "gone": " (nie ma go w mieście)"
+   },
+   "truths": {
+    "borgar": {
+     "name": "Borgarze",
+     "tell": [
+      "> Borgarze. Co noc schodzisz do piwnicy i stajesz przed kratą. Rano tego nie pamiętasz.",
+      "(Borgar przestaje wycierać kufel.) Przestawiam beczki. Dlatego tam schodzę. ...Prawda?",
+      "(Długa cisza.) Ojciec też przestawiał beczki. I jego ojciec. Myślałem, że to u nas rodzinne - zamiłowanie do porządku.",
+      "Nie pytam o to, czego nie chcę wiedzieć. A ty mi właśnie powiedziałeś. ...Zamykaj kratę na noc, chłopcze. Nie mnie przed nią. Ją przede mną."
+     ],
+     "keep": [
+      "> (Borgar ziewa. Mówi, że źle spał - w nocy przestawiał beczki. Nic nie mówisz.)"
+     ],
+     "told": {
+      "note": [
+       "Prawda dla Borgara",
+       "Powiedziałem Borgarowi, że co noc staje przed kratą w piwnicy. Jego ojciec i dziadek też „przestawiali beczki”. Prosił, żebym zamykał kratę na noc - nie jego przed nią, tylko ją przed nim."
+      ]
+     }
+    },
+    "melia": {
+     "name": "Melii",
+     "tell": [
+      "> Melio. Znasz jeszcze jedną zwrotkę. Ósmą. I za każdym razem gubisz melodię.",
+      "(Melia o mało nie upuszcza lutni.) Nikomu o tym nie mówiłam. Nikomu!",
+      "Słowa pamiętam. Melodii nie. Zaczynam i... cisza. Jakby ktoś zabierał mi ją z ust.",
+      "Może kiedyś ją złapię. Przy tobie. Obiecaj, że będziesz wtedy słuchał."
+     ],
+     "keep": [
+      "> (Melia stroi lutnię i zaczyna coś nowego. Urywa po trzech nutach. Nic nie mówisz.)"
+     ]
+    },
+    "ozzy": {
+     "name": "Ozzym",
+     "tell": [
+      "> Ozzy. Ty nie jesteś taki pijany, jak udajesz.",
+      "(Ozzy przestaje się kiwać. Patrzy prosto i trzeźwo - przez całe trzy uderzenia serca.) No to wiesz.",
+      "Kto pije, tego nikt nie pyta, skąd wie. A ja wiem za dużo, synu. ...*hep* Postawisz mi piwo? Bo zaczynam trzeźwieć, a tego nie lubię."
+     ],
+     "keep": [
+      "> (Ozzy czka i puszcza do ciebie oko. Jakby wiedział, że wiesz. Nic nie mówisz.)"
+     ]
+    },
+    "grum": {
+     "name": "Grumie",
+     "tell": [
+      "> Grum. Nosisz w sakwie list, którego nie otworzyłeś od roku.",
+      "(Grum odstawia kufel. Powoli.) Kto grzebał w mojej sakwie?",
+      "...Nikt. Wiem, że nikt. (Długo milczy.) Wiem, co w nim jest. Dlatego go nie otwieram. Jak otworzę, to będzie prawda. A tak - jeszcze nie jest.",
+      "Siłować się z tobą będę dalej. Ale o liście - ani słowa. Nikomu."
+     ],
+     "keep": [
+      "> (Grum klepie się po sakwie, jakby sprawdzał, czy coś tam jest. Nic nie mówisz.)"
+     ]
+    },
+    "piekarka": {
+     "name": "Hance",
+     "tell": [
+      "> Hanko... Wiem, że pieczesz codziennie o jeden bochenek za dużo.",
+      "(Hanka odkłada łopatę. Długo patrzy w piec.) Skąd ty... Kto ci powiedział, kochaneczku?",
+      "Ktoś przychodził po niego co rano. Już nie przychodzi. Tyle.",
+      "...Wiesz co? Od jutra ten bochenek pójdzie do obozu pod murem. Niech ktoś znowu po niego przychodzi."
+     ],
+     "keep": [
+      "> (Hanka podaje komuś chleb. Na półce zostaje jeden bochenek - jak co dzień. Nic nie mówisz.)"
+     ]
+    },
+    "woziwoda": {
+     "name": "Kubie",
+     "tell": [
+      "> Kuba. Ty nie umiesz pływać, prawda? I boisz się głębokiej wody.",
+      "(Kuba czerwienieje po uszy.) Ciszej! Woziwoda, co się boi wody... Całe miasto by się śmiało.",
+      "W beczce woda jest grzeczna. W stawie - nie. ...Nikomu nie powiesz?",
+      "> Nikomu."
+     ],
+     "keep": [
+      "> (Kuba przelewa wodę z beczki do beczki. Ręce mu drżą, kiedy jest jej za dużo naraz. Nic nie mówisz.)"
+     ]
+    },
+    "feliks": {
+     "name": "Feliksie",
+     "tell": [
+      "> Feliksie. Ta druga kartka - na której liczy pan, ile sprzedane beczki kosztowały miasto. Jest dłuższa niż pierwsza.",
+      "(Feliks blednie. Sięga do kieszeni, jakby sprawdzał, czy kartka wciąż tam jest.) Nikt tego nie widział. Nikt.",
+      "Liczę, bo ktoś musi. Lord nie liczy. Sołtys liczy wiadra, nie ludzi. ...Proszę już iść, młodzieńcze. Proszę."
+     ],
+     "keep": [
+      "> (Feliks przechodzi obok z koszykiem. W kieszeni szeleści mu papier. Nic nie mówisz.)"
+     ],
+     "told": {
+      "note": [
+       "Druga kartka Feliksa",
+       "Powiedziałem Feliksowi, że wiem o jego drugiej kartce - tej, na której liczy, ile sprzedana woda kosztowała miasto. Zbladł. Mówi, że liczy, bo ktoś musi."
+      ]
+     }
+    },
+    "dzwonnik": {
+     "name": "Ambrożym",
+     "tell": [
+      "> Ambroży... Wiem, że raz zadzwoniłeś źle. I że nikt tego nie zauważył.",
+      "(Ambroży siada na stopniu.) Dawno. Bardzo dawno. Cztery zamiast trzech, w środku nocy. Miasto spało. Rano nikt nic nie powiedział.",
+      "A ja co noc liczę te cztery uderzenia, zanim zasnę. ...Dziwne. Powiedziałeś to na głos - i jakby mniej ciąży. (Ambroży się śmieje. Cicho, ale się śmieje.)"
+     ],
+     "keep": [
+      "> (Ambroży liczy coś pod nosem, patrząc na dzwon. Nic nie mówisz.)"
+     ]
+    },
+    "kowal": {
+     "name": "Tadku",
+     "tell": [
+      "> Tadek. Kujesz lepiej niż ojciec. I dajesz mu poprawiać swoją robotę.",
+      "(Tadek odkłada młot.) ...Ciszej. Stary ma słuch jak nietoperz, kiedy chce.",
+      "A co mam robić? Zabrać mu kuźnię? On tu przychodzi, bo ma po co. Jak przestanie przychodzić... no. Nie mów mu. Nigdy."
+     ],
+     "keep": [
+      "> (Tadek oddaje komuś podkowę: „Ojciec poprawiał”. Nic nie mówisz.)"
+     ]
+    },
+    "kapral": {
+     "name": "Wicie",
+     "tell": [
+      "> Wicie. Śpisz z mieczem pod poduszką. I nie boisz się wroga - tylko swoich.",
+      "(Wit robi krok bliżej. Ręka na rękojeści.) Kto ci to powiedział?",
+      "...Nikt? To jeszcze gorzej. (Puszcza miecz.) Swoi wiedzą, gdzie śpisz. Wróg nie. Zapamiętaj to, chłopcze. I zapomnij, co mi powiedziałeś."
+     ],
+     "keep": [
+      "> (Wit stoi plecami do muru. Zawsze plecami do muru. Nic nie mówisz.)"
+     ]
+    },
+    "ludmila": {
+     "name": "Ludmile",
+     "tell": [
+      "> Ludmiło. Tę kołysankę zza morza śpiewasz dopiero wtedy, kiedy Ela już śpi. Sobie.",
+      "(Ludmiła zakrywa usta dłonią.) Słyszałeś? ...Nie. Nie mogłeś słyszeć, śpiewam cicho.",
+      "Mama mi ją śpiewała. Jak Ela ją usłyszy, zapyta o babcię. A ja nie wiem, co jej powiedzieć. ...Może dziś zaśpiewam, zanim zaśnie. Może."
+     ],
+     "keep": [
+      "> (Ludmiła nuci coś i urywa, kiedy Ela podchodzi bliżej. Nic nie mówisz.)"
+     ]
+    },
+    "lord": {
+     "name": "Lordzie",
+     "tell": [
+      "> Panie. Boi się pan ciszy we dworze. Dlatego zawsze ktoś tam mówi - choćby pan sam, do siebie.",
+      "(Lord otwiera usta, żeby coś powiedzieć. I nic nie mówi. Przez chwilę jest zupełnie cicho.)",
+      "...Słyszysz? Tak brzmi ten dom, kiedy nikt nie mówi. Stoi na kamieniach twierdzy - w ciszy słychać, że one pamiętają.",
+      "Nikomu ani słowa. Nikomu."
+     ],
+     "keep": [
+      "> (Lord mówi bez przerwy - o pogodzie, o podatku, o cenie wosku. Nic nie mówisz.)"
+     ]
+    },
+    "soltys": {
+     "name": "sołtysie",
+     "tell": [
+      "> Sołtysie. Przed snem liczysz wiadra ze studni. Zamiast pacierza.",
+      "(Sołtys parska śmiechem, potem poważnieje.) A ty byś nie liczył? Każde wiadro to czyjś chleb, czyjaś zupa, czyjeś pranie.",
+      "Pacierz też mówię. Potem. Jak się doliczę. ...Rzadko się doliczam."
+     ],
+     "keep": [
+      "> (Sołtys mruczy liczby, patrząc na studnię. Nic nie mówisz.)"
+     ]
+    },
+    "kupiec": {
+     "name": "Baltazarze",
+     "tell": [
+      "> Baltazarze. Nie urodziłeś się kupcem. Liczyć nauczyłeś się tam, gdzie liczono ludzi.",
+      "(Uśmiech Baltazara nie znika. Tylko oczy przestają się uśmiechać.) Ciekawe rzeczy opowiadają w tym mieście, przyjacielu.",
+      "Rada, za darmo, raz: nie każda prawda jest towarem. Niektórych nikt nie kupi. Za niektóre się płaci."
+     ],
+     "keep": [
+      "> (Baltazar liczy monety szybko i równo, nie patrząc na nie. Nic nie mówisz.)"
+     ],
+     "told": {
+      "note": [
+       "Baltazar ostrzega",
+       "Powiedziałem Baltazarowi, że nie urodził się kupcem - że liczyć nauczył się tam, gdzie liczono ludzi. Uśmiechał się dalej, tylko oczy przestały. „Za niektóre prawdy się płaci.”"
+      ]
+     }
+    },
+    "garbarz": {
+     "name": "Ignacu",
+     "tell": [
+      "> Ignac. Ty nie znosisz zapachu skór.",
+      "(Ignac odkłada skrobak.) ...Trzydzieści lat. Nikt mnie o to nie zapytał. Ja sam siebie też nie.",
+      "Ojciec garbował, to i ja garbuję. A czy muszę? Hm. Pomyślę. Ale skóry przynoś dalej - z czegoś trzeba żyć."
+     ],
+     "keep": [
+      "> (Ignac oddycha przez usta nad kadzią. Jak zawsze. Nic nie mówisz.)"
+     ]
+    },
+    "rafal": {
+     "name": "Rafale",
+     "tell": [
+      "> Rafał. Ty też to widziałeś, prawda? Przez chwilę. To, czego twój towarzysz dotknął w skale.",
+      "(Rafał łapie cię za rękę.) Ciszej. ...Tak. Chwilę. Wystarczyło.",
+      "Od tamtej pory nie śpię pod ścianą. Ściana pamięta. ...Ty też byłeś na dole? To wiesz, o czym mówię."
+     ],
+     "keep": [
+      "> (Rafał rozkłada posłanie z dala od muru, na samym środku obozu. Nic nie mówisz.)"
+     ]
+    },
+    "dziadek": {
+     "name": "dziadku",
+     "tell": [
+      "> Dziadku. Bałeś się nie tylko Lorda. Bałeś się, że jak dług zniknie, nikt już nie zapuka do twoich drzwi.",
+      "(Dziadek Stach długo patrzy w ogień.) Głupi stary... Skąd ty to wiesz, wnuku?",
+      "Dług to był przynajmniej ktoś, kto o mnie pamiętał. Punktualnie. ...Ty będziesz pukał? Choć raz na jakiś czas?",
+      "> Będę, dziadku."
+     ],
+     "keep": [
+      "> (Dziadek nasłuchuje kroków przed domem. Kiedy to tylko wiatr, wraca do ognia. Nic nie mówisz.)"
+     ]
+    },
+    "kot": {
+     "name": "Mruczku",
+     "openAs": "Mruczek (powiedz dziadkowi)",
+     "tell": [
+      "> Dziadku... Mruczek schodzi pod tawernę. Głęboko. Był tam przede mną. Wiele razy.",
+      "(Dziadek drapie kota za uchem.) Kot chodzi, gdzie chce. Jak każdy w tej rodzinie.",
+      "> (Mruczek mruży oczy. Jakby się uśmiechał.)"
+     ],
+     "keep": [
+      "> (Mruczek przeciąga się przy piecu i patrzy na ciebie, jakby wiedział, że wiesz. Nic nie mówisz.)"
+     ]
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W9\\./)"
+}

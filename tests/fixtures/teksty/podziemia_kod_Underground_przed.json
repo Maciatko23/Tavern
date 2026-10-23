@@ -1,0 +1,67 @@
+{
+ "kod": {
+  "addTorch": {
+   "0": "Wypalona pochodnia"
+  },
+  "addTrap": {
+   "0": "Pułapka: kolce"
+  },
+  "generate": {
+   "0": "Zapiski: {title}",
+   "1": "stwór"
+  },
+  "stairs": {
+   "0": "strażnik piętra"
+  },
+  "liftOn": {
+   "0": "Kołowrót windy",
+   "1": "winda kasztelana (piętro {f})"
+  },
+  "read": {
+   "0": "Warstwa Prawdy: ",
+   "1": "Zapiski zakonu: ",
+   "2": "{text}\n(Podziemia, piętro {floor})",
+   "3": "prawda (",
+   "4": "zapiski zakonu ("
+  },
+  "guardianStrike": {
+   "0": "pusta zbroja"
+  },
+  "gate10Opened": {
+   "0": "dziesiąta brama"
+  },
+  "openLock": {
+   "0": "Zamek otwarty: {1}",
+   "1": "Otwartych zamków: {open} z 3",
+   "2": "zamek Komnaty Serca ({1})"
+  },
+  "ending": {
+   "0": "Serce Twierdzy: {title}"
+  },
+  "heartData": {
+   "0": "Serce Twierdzy (blask)"
+  },
+  "glowEvent": {
+   "0": "Serce Twierdzy (blask)"
+  },
+  "heartEvent": {
+   "0": "Serce Twierdzy"
+  },
+  "updateCinema": {
+   "0": "rgba(0, 0, 0, 0.85)"
+  },
+  "heartEnd": {
+   "0": "Serce: zakończenie „{1}”   ←→ zmień, OK zagraj (świat i Lord z rzędów niżej)"
+  },
+  "heartWorld": {
+   "0": "Serce: świat - {name}   ←→"
+  },
+  "heartLord": {
+   "0": "Serce: Lord przy Sercu - {name}   ←→"
+  },
+  "verify": {
+   "0": "no data"
+  }
+ },
+ "_opis": "Napisy kodu Underground.js sprzed przeniesienia do js/teksty/podziemia.txt (kod.*)"
+}

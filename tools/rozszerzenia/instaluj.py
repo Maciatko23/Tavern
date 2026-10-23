@@ -3,7 +3,7 @@
 # dane_przed_rozszerzeniami/<kto>/, zapis w układzie edytora. Bez --wykonaj tylko pokazuje, co by zrobił.
 #
 #   python tools/rozszerzenia/instaluj.py --pakiet0 [--wykonaj]
-#       staging pakietu 0 (tools/rozszerzenia/pakiet0.py) -> data/, js/plugins.js, img/system/IconSet.png; każdy plik musi być taki,
+#       staging pakietu 0 (tools/rozszerzenia/pakiet0.py) -> data/, js/tawerna_wtyczki.js, img/system/IconSet.png; każdy plik musi być taki,
 #       jak w chwili przygotowania stagingu (SHA.txt) - inaczej STOP i trzeba przygotować staging na nowo
 #   python tools/rozszerzenia/instaluj.py --paczka A --przedmioty tools/rozszerzenia/A/przedmioty.json [--wykonaj]
 #       przedmioty paczki: JSON [{ "id": 185, "name": ..., "iconIndex": ..., "description": ..., "note": ..., "price": ..., "itypeId": ...,

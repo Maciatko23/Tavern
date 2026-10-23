@@ -1,0 +1,355 @@
+{
+ "mieszkancy": {
+  "0": {
+   "name": "Rotmistrz Bełza",
+   "title": "rotmistrz chorągwi królewskiej",
+   "barks": {
+    "stand": [
+     "Wyżej tarcza! Wyżej, mówię! Wróg nie będzie czekał, aż się wyśpisz.",
+     "Krok! Krok! Kto zgubi krok, ten zgubi głowę.",
+     "Zupa jak zupa. Na wojnie każda dobra."
+    ],
+    "patrol": [
+     "Wartownik! Co na wodzie? ...Nic? To patrz dalej.",
+     "Ta łacha w odpływie... Kto chce, przejdzie do wraku suchą nogą. Pilnować."
+    ],
+    "rain": [
+     "Deszcz. Prochu i tak nie mamy, to nie zamoknie.",
+     "Do namiotów, kto nie na warcie!"
+    ],
+    "night": [
+     "Spać, spać. Pobudka o szóstej, jak zawsze."
+    ],
+    "home": [
+     "(Rotmistrz pisze coś długo, potem przekreśla.)",
+     "Czterdziestu ludzi... dwudziestu dwóch zaginionych... Pióro mi się kończy, nie atrament."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Musztra o szóstej. Chłopcy klną, a potem żyją. Tak to działa.",
+     "Ranek. Wtedy morze jest najuczciwsze - widać, co płynie."
+    ],
+    "day": [
+     "Lord wpuścił nas za pieniądze. Korona chce za to podatku wojennego. Ty płacisz, on płaci, ja pilnuję. Wojna kosztuje każdego.",
+     "Twój dziadek, Stach... Lord mu nie popuści. Nie przez złość. Przez nasz podatek. Przykro mi, chłopcze.",
+     "Z tej wieży widać wrak na mieliźnie. Czarne Oczy. Nie pytaj, czego szukali. Ja też nie wiem."
+    ],
+    "evening": [
+     "Przy ogniu nie ma stopni. Siadaj, jak chcesz. Tylko nie pytaj o bitwy.",
+     "Noga mi dokucza na zmianę pogody. Lewa. Pamiątka spod Brzozowej Woli."
+    ],
+    "night": [
+     "Po nocy w garnizonie kręcą się tylko wartownicy i złodzieje. Którym jesteś?"
+    ],
+    "rain": [
+     "Deszcz. Niech pada. Beczki pełne to spokojni żołnierze."
+    ]
+   }
+  },
+  "1": {
+   "name": "Kwatermistrz Kłos",
+   "title": "kwatermistrz garnizonu",
+   "barks": {
+    "work": [
+     "Worek, dwa worki, trzy worki... a w księdze dwa. Hm. Poprawię potem.",
+     "Jęczmień z rekwizycji. Suchy, czysty, królewski."
+    ],
+    "stand": [
+     "Skup! Kto ma ziemniaki, kapustę, mięso wędzone? Król płaci!",
+     "Liczydło nie kłamie. Ja czasem, ono nigdy."
+    ],
+    "rain": [
+     "Plandeka na worki! Szybciej, szybciej!"
+    ],
+    "night": [
+     "(Kłos chrapie w namiocie.)"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Ranek, a ja już po trzech rachunkach. Dwa się zgadzają.",
+     "Zboże z rekwizycji leży w spichlerzu. Na wojnę. Wszystko na wojnę."
+    ],
+    "day": [
+     "Kupuję dla wojska: zboże, warzywa, mięso, skóry, drewno, węgiel. Uczciwie. No, prawie.",
+     "Po każdej fali z promu wojsko je jak smok. Wtedy płacę więcej. Półtora raza!"
+    ],
+    "evening": [
+     "Przy ogniu każdy ma brzuch. Ja mam dwa razy większy, to i dwa razy głodny.",
+     "Zupa? Z naszego zboża. Ludzie w mieście patrzą na nią jak na złoto."
+    ],
+    "night": [
+     "Ciii. Nocą skup zamknięty. Chyba że... nie, zamknięty."
+    ],
+    "rain": [
+     "W deszcz worki gniją. A za zgniłe worki rotmistrz mnie zgnoi."
+    ]
+   }
+  },
+  "2": {
+   "name": "Werbownik Bęben",
+   "title": "werbownik chorągwi królewskiej",
+   "alt": {
+    "barks": {
+     "stand": [
+      "Za króla, chłopcy! Buty, żołd i chwała!",
+      "Kto silny i zdrowy, do mnie! Wojsko nie gryzie!",
+      "Trrrum-tum-tum! Lista otwarta!"
+     ]
+    },
+    "talk": {
+     "day": [
+      "Lista otwarta do drugiej! Buty, żołd, strawa. A ty jesteś za młody - przyjdź za rok, to zapiszę cię pierwszego."
+     ]
+    }
+   },
+   "barks": {
+    "stand": [
+     "Za króla, chłopcy! Trrrum-tum-tum!",
+     "Buty, żołd i chwała! Kto się zapisze?",
+     "Ty! Ty tam! ...A, za młody. Szkoda."
+    ],
+    "wander": [
+     "Trrrum-tum... Bęben się nazywam i bęben noszę. Przypadek? Nie sądzę."
+    ],
+    "rain": [
+     "Bęben nie lubi deszczu. Ja też nie."
+    ],
+    "night": [
+     "(Bęben pod pachą, ziewa.) Jutro znowu lista..."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Wcześnie wstajesz! Wojsko lubi takich. Szkoda, że za młody jesteś."
+    ],
+    "day": [
+     "Lista poborowa, królewska pieczęć. Dzień po każdej fali z promu - rynek w miasteczku. Bęben, lista i dobre słowo.",
+     "Ludzie chowają się przede mną po stodołach. A ja im daję buty! Buty! Kto im dał buty przez całe życie?"
+    ],
+    "evening": [
+     "Za króla, chłopcy... (ciszej) i za tych, co nie wrócili."
+    ],
+    "night": [
+     "Śpij, chłopcze. Werbownik też czasem śpi."
+    ],
+    "rain": [
+     "W deszcz nikt się nie zapisuje. Ludzie wolą suche nogi od chwały."
+    ]
+   }
+  }
+ },
+ "zadania": {
+  "K52": {
+   "title": "Drewno dla garnizonu",
+   "where": "Garnizon nad zatoką: kuchnia polowa",
+   "when": "od dnia 5, 8-18",
+   "desc": "Kuchnia polowa garnizonu zjada drwa jak smok. Kwatermistrz Kłos potrzebuje drewna i węgla - a potem chętnie coś od ciebie kupi.",
+   "offer": {
+    "say": [
+     "Ty jesteś ten od rotmistrza? Wnuk Stacha? To słuchaj. Kuchnia polowa zjada drwa jak smok, a moi chłopcy rąbać nie umieją, tylko ciąć.",
+     "Dziesięć polan drewna i cztery worki węgla drzewnego. Przyniesiesz, dostaniesz dwadzieścia groszy - i wpiszę cię do księgi skupu. Będziesz mi sprzedawał."
+    ],
+    "yes": "Przyniosę drewno i węgiel.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Dziesięć i cztery! Liczydło nie zapomni, ja też nie."
+    ],
+    "decline": [
+     "Drwa poczekają. Zupa nie."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś kwatermistrzowi Kłosowi 10× Drewno i 4× Węgiel drzewny (garnizon nad zatoką).",
+     "remind": [
+      "Dziesięć polan i cztery worki węgla. Liczydło czeka."
+     ],
+     "hero": [
+      "> Drewno i węgiel dla kuchni polowej."
+     ],
+     "done": [
+      "O! Suche, równe, porządne. Rotmistrz się ucieszy, a ja jeszcze bardziej.",
+      "Masz dwadzieścia groszy. I od dziś jesteś w mojej księdze: przynoś zboże, warzywa, mięso, skóry - wojsko kupi."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Skup wojskowy",
+     "Kwatermistrz Kłos z garnizonu nad zatoką kupuje dla wojska zboże, warzywa, wędzone mięso i ryby, skóry, strzały, drewno i węgiel. Przez tydzień po każdej fali z promu płaci półtora raza więcej. Ale kiedy w mieście głód, ludzie patrzą krzywo na każdy worek, który idzie na wojnę."
+    ]
+   }
+  },
+  "D26": {
+   "title": "Lista poborowa",
+   "where": "Rynek w miasteczku, Podgrodzie, garnizon",
+   "when": "dzień po fali z promu (11, 25, 39, 53), 8-16",
+   "desc": "Werbownik Bęben musi zabrać do wojska trzech ludzi z miasteczka i Podgrodzia. Na liście: Bartek Kmieć, Zbych Smolarz, Darin z Kontynentu (Rafała z obozu szuka już kto inny - W6). Pomóc, ostrzec - czy zanieść rotmistrzowi coś lepszego niż rekrutów?",
+   "offer": {
+    "say": [
+     "Ty! Chłopak od Stacha! Słuchaj, mam kłopot. Rotmistrz chce trzech ludzi z tej fali. Trzech! A wszyscy chowają się po stodołach.",
+     "Lista: Bartek Kmieć, Zbych Smolarz z Podgrodzia i ten Darin z kontynentu. Był jeszcze jeden z obozu pod murem, Rafał, ale tego szuka już kto inny. Znasz ich. Ciebie posłuchają. Dziesięć groszy za każdego, co się zgłosi."
+    ],
+    "options": {
+     "0": {
+      "label": "Pomogę ci.",
+      "say": [
+       "Wiedziałem! Powiedz im: buty, żołd, strawa. I że nikt ich nie pośle na pierwszą linię. Pierwszy tydzień."
+      ]
+     },
+     "1": {
+      "label": "Zobaczę, co da się zrobić.",
+      "say": [
+       "Zobacz, zobacz. Tylko szybko - ja muszę mieć trzech."
+      ]
+     },
+     "2": {
+      "label": "Nie będę łapał ludzi do wojska.",
+      "say": [
+       "Łapał? Ja nikogo nie łapię. Zapraszam! ...Dobra, idź."
+      ]
+     }
+    }
+   },
+   "steps": {
+    "0": {
+     "text": "Lista poborowa: {lista} - porozmawiaj z każdym (namów albo ostrzeż). Załatwione: {n}/3. Albo zanieś rotmistrzowi Dziennik okrętu z wraku: dowód, że od morza nic nie grozi."
+    }
+   },
+   "lines": {
+    "ask": "Werbownik cię szuka. Jesteś na liście.",
+    "help": "Zgłoś się sam. Buty, żołd, strawa - i lepiej z własnej woli niż w łańcuchu.",
+    "warn": "Schowaj się na dzień albo dwa. Werbownik nie będzie czekał wiecznie.",
+    "deal": "Panie rotmistrzu... mam coś lepszego niż trzech rekrutów."
+   }
+  },
+  "D27": {
+   "title": "Zboże dla obozu",
+   "where": "Obóz pod murem, garnizon (spichlerz, kwatermistrz)",
+   "when": "po rekwizycji zboża (D14), nocą",
+   "desc": "Obóz uchodźców głoduje. Ludmiła prosi o cztery worki zboża. Zboże jest - w spichlerzu garnizonu, z rekwizycji. Kupić nocą od kwatermistrza „po cenie dla swoich” albo wynieść ze spichlerza obok wartownika?",
+   "offer": {
+    "say": [
+     "(Ludmiła trzyma Elę za rękę.) Trzeci dzień jemy korzonki. Dwór zabrał zboże z pól, a garnizon ma pełny spichlerz. Na wojnę, mówią.",
+     "Cztery worki. Tylko cztery, na zimę dla dzieci. Mówią, że ich kwatermistrz nocą sprzedaje zboże kupcowi z kantoru... Może tobie też sprzeda?"
+    ],
+    "yes": "Zdobędę cztery worki.",
+    "no": "Nie dam rady.",
+    "accept": [
+     "Niech ci Bóg... (urywa) Dziękuję. Przyjdź do nas pod mur, jak będziesz miał."
+    ],
+    "decline": [
+     "Rozumiem. Każdy ma swoje."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zdobądź 4 worki zboża z garnizonu: kup je nocą od kwatermistrza Kłosa (20-2, „po cenie dla swoich”) albo wynieś ze spichlerza (nocą, obok wartownika - skradaj się). Masz: {n}/4."
+    },
+    "1": {
+     "text": "Zanieś Ludmile 4 worki zboża (obóz pod murem w miasteczku).",
+     "remind": [
+      "Cztery worki... Nie śmiem prosić o więcej."
+     ],
+     "hero": [
+      "> Cztery worki zboża. Dla dzieci."
+     ],
+     "done": [
+      "(Ludmiła długo patrzy na worki, potem na ciebie.) Ela, zobacz... Zboże. Prawdziwe zboże.",
+      "Nie zapomnimy ci tego. Cały obóz nie zapomni."
+     ]
+    },
+    "2": {
+     "text": "Kłos sprzedaje królewskie zboże. Wydaj go rotmistrzowi (garnizon) - albo idź do Kłosa i powiedz, że będziesz milczał."
+    }
+   },
+   "lines": {
+    "accuse": [
+     "> Panie rotmistrzu. Kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kupiłem od niego cztery worki - dla obozu.",
+     "(Rotmistrz długo milczy.) Kłos. Pafnucy Kłos. Dwadzieścia lat z nim w polu...",
+     "Dobrze, że powiedziałeś. Popłynie najbliższym promem - w łańcuchu. A ty... worki niech zostaną w obozie. Nie widziałem ich."
+    ],
+    "accuseStolen": [
+     "> Panie rotmistrzu. Kwatermistrz sprzedaje nocą zboże z rekwizycji kupcowi z kantoru.",
+     "Dowód? ...Księga. Sprawdzę jego księgę. (Rotmistrz wstaje.) Jeśli to prawda, Kłos popłynie najbliższym promem."
+    ],
+    "silent": [
+     "> Nikomu nie powiem o nocnym zbożu.",
+     "(Kłos ociera czoło.) Ty... ty jesteś złoty chłopak. Złoty! Od dziś w skupie masz ode mnie lepszą cenę. Jak dla swojego."
+    ],
+    "klosGone": [
+     "(Na miejscu kwatermistrza stoi młody żołnierz z księgą.) Kłos? Popłynął. W łańcuchu. Skup prowadzi teraz rotmistrz - przez mnie."
+    ]
+   }
+  }
+ },
+ "rzeczy": {
+  "worek_zboza": {
+   "name": "Worek zboża z rekwizycji"
+  },
+  "glejt_wrak": {
+   "name": "Glejt garnizonu na wrak"
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Słyszałeś? Kwatermistrz garnizonu popłynął w łańcuchu. Taki porządny człowiek... (Baltazar uśmiecha się krzywo.) Ktoś będzie musiał go zastąpić. W interesach."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Dzieci jedzą. Pierwszy raz od tygodnia nikt nie płakał w nocy. Dziękuję ci jeszcze raz."
+   ]
+  },
+  "2": {
+   "lines": [
+    "Wojsko przetrząsało Podgrodzie. Szukali ludzi z listy. Nie znaleźli... Dobrze. Ale ktoś ich ostrzegł, a ja nie chcę wiedzieć kto."
+   ]
+  },
+  "3": {
+   "lines": [
+    "Ludzi biorą do wojska. Wczoraj z listy, jutro kto? Kto będzie rąbał drwa dla całego Podgrodzia?"
+   ]
+  },
+  "4": {
+   "lines": [
+    "Trrrum! Mam ludzi z listy! Rotmistrz zadowolony, a ja mam spokój do następnej fali. Dziękuję ci, chłopcze."
+   ]
+  },
+  "5": {
+   "lines": [
+    "Ktoś ich ostrzegł. Ludzie z listy jakby się pod ziemię zapadli... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?"
+   ]
+  }
+ },
+ "zolnierze": {
+  "0": {
+   "name": "Wartownik"
+  },
+  "1": {
+   "name": "Wartownik"
+  },
+  "2": {
+   "name": "Żołnierz"
+  },
+  "3": {
+   "name": "Żołnierz"
+  },
+  "4": {
+   "name": "Żołnierz"
+  },
+  "5": {
+   "name": "Żołnierz"
+  },
+  "6": {
+   "name": "Kowal garnizonu"
+  },
+  "7": {
+   "name": "Wartownik na wieży"
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Garnizon_Data.js: RESIDENTS=mieszkancy:/\\.(name|title)$|\\.(barks|talk)\\./, Q_K52=zadania.K52:zadanie, Q_D26=zadania.D26:zadanie, Q_D27=zadania.D27:zadanie, VITEMS=rzeczy:nazwy, REMARKS=uwagi:/\\.lines$/, SOLDIERS=zolnierze:/\\.name$/)"
+}

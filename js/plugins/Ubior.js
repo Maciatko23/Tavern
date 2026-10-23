@@ -26,10 +26,14 @@
 //     (HEADROOM rows over each cell) and a child sprite of whoever shows the sheet draws it right over the frame - the cells, the
 //     anchors of the feet and every other plugin stay as they were. The weapons on the swings (new kinds drawn along the swing's
 //     axis, materials) are Ubior_Bron.js, put in through addLayer().
+//   - (2026-10-23, 1.2: docs/ekwipunek/METODA.md "Zbroja z PixelLab") The leather jerkin, the mail, the bracers, the greaves, the shod
+//     boots, the leather hood and the kettle hat drawn by PixelLab: a state of the hero wearing them, moved offline onto every frame of
+//     every sheet (tools/ubior/zbroja_pl.py -> img/system/Ubior_PL_<kind>_<sheet>.png, the helmets Ubior_HelmPL_<kind>.png, 8 views);
+//     the other materials repaint its colours (PL, PL_HELM). The other kinds: as before.
 
 /*:
  * @target MZ
- * @plugindesc Ubiór na bohaterze: wszystko, co założone (głowa, tors, nogi, stopy, pas, rękawice, plecy; hełmy, zbroje, karwasze, nagolenniki), widać na postaci we wszystkich arkuszach, na karcie postaci i na popiersiu. v1.1.0
+ * @plugindesc Ubiór na bohaterze: wszystko, co założone (głowa, tors, nogi, stopy, pas, rękawice, plecy; hełmy, zbroje, karwasze, nagolenniki), widać na postaci we wszystkich arkuszach, na karcie postaci i na popiersiu. v1.2.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -61,6 +65,12 @@
  * Notatka przedmiotu: <Ubior:miejsce,wzor> albo <Zbroja:miejsce,wzor>.
  * Nad głową: co wystaje nad klatkę (hełm w chodzie), rysuje się nad nią
  * (pasek „nad głową” arkusza) - klatki i kotwice stóp bez zmian.
+ * Zbroja z PixelLab (2026-10-23, próba): skórznia, kolczuga, karwasze,
+ * nagolenniki, buty okute, kaptur skórzany i kapalin narysowane przez
+ * PixelLab na postaci (stan postaci w zbroi) i przeniesione na każdą klatkę
+ * każdego arkusza (tools/ubior/zbroja_pl.py, img/system/Ubior_PL_*,
+ * Ubior_HelmPL_*); inne materiały to przemalowanie. Ubior.pl(false) - stary
+ * wygląd (porównanie).
  *
  * Skrypt (próby, test):
  *   Ubior.set({ glowa: "chusta_czerwona", tors: "kaftan_czerwony" })
@@ -95,7 +105,7 @@
     const SHEETS = {};
     for (const n of ["Walk", "Run", "Sneak", "TorchWalk", "TorchRun", "TorchSneak"]) SHEETS["Hero_" + n] = { folder: "characters", cell: 64, rows: W8 };
     for (const n of ["Axe", "AxeSide", "Pick", "Shovel", "Rake", "Hoe", "Hammer", "Rod", "Sling", "Bow", "Spear", "Club", "Punch", "Crouch", "Sit",
-        "Roast", "LieDown", "Roll", "Torch", "TorchCrouch", "Net"]) SHEETS["Hero_" + n] = { folder: "system", cell: 96, rows: W4 };
+        "Roast", "LieDown", "Roll", "Torch", "TorchCrouch", "Net", "Sword"]) SHEETS["Hero_" + n] = { folder: "system", cell: 96, rows: W4 };
     const BACK = { N: true, NW: true, NE: true };
     const FRONT = { S: true, SW: true, SE: true };
 
@@ -203,21 +213,57 @@
         napiersnik: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "blacha" }
     };
     const KARWASZE = ["skora", "skora_czarna", "braz", "zelazo", "stal", "zakon"], NAGOLENNIKI = ["skora", "braz", "zelazo", "stal", "zakon"], OKUTE = ["zelazo", "stal", "zakon"];
+    // ---- the armour from PixelLab (2026-10-23, docs/ekwipunek/METODA.md "Zbroja z PixelLab", tools/ubior/zbroja_pl.py): a kind drawn from a
+    // PixelLab state of the hero (the same figure wearing it) and moved offline onto every frame of every sheet, part by part - per sheet
+    // a layer img/system/Ubior_PL_<plik>_<sheet>.png (the sheets without their weapon: _BezBroni_<sheet>) in the state's own colours; the
+    // helmets: a picture of 8 views img/system/Ubior_HelmPL_<plik>.png (255 - the helmet, 64 - an opening: the frame's hair stays) put on
+    // the top of the hair like the drawn ones. natywny: the material the state wears (drawn as it is); another material: the main family of
+    // colours (glowny: "cieply" - leather, "szary" - metal) through the material's ramp by brightness (lo..hi: that family's brightness in
+    // the state), the other family (rivets, straps, the belt): reszta "akcent" - the material's accent ramp (lo2..hi2), "natywny" - as it is.
+    // A kind not here (or its file missing) is drawn the old way (a texture on the shirt, the bands of the bracers and greaves, a picture).
+    const PL = {
+        skorznia: { plik: "Skorznia", miejsce: "tors", natywny: "skora", glowny: "cieply", lo: 0.153, hi: 0.764, reszta: "akcent", lo2: 0.615, hi2: 0.917 },
+        kolczuga: { plik: "Kolczuga", miejsce: "tors", natywny: "zelazo", glowny: "szary", lo: 0.286, hi: 0.682, reszta: "natywny" },
+        karwasze: { plik: "Karwasze", miejsce: "rece", natywny: "skora", glowny: "cieply", lo: 0.153, hi: 0.703, reszta: "akcent", lo2: 0.6, hi2: 0.92 },
+        nagolenniki: { plik: "Nagolenniki", miejsce: "nogi", natywny: "zelazo", glowny: "szary", lo: 0.149, hi: 0.809, reszta: "natywny" },
+        buty_okute: { plik: "Buty", miejsce: "stopy", natywny: "zelazo", glowny: "szary", lo: 0.149, hi: 0.809, reszta: "natywny" },
+        // (the second stage, 2026-10-23: the rest of the torso kinds; "oba": the linen's warm shadows and grey lights both - the material)
+        przeszywanica: { plik: "Przeszywanica", miejsce: "tors", natywny: "len", glowny: "oba", lo: 0.354, hi: 0.924 },
+        luska: { plik: "Luska", miejsce: "tors", natywny: "zelazo", glowny: "szary", lo: 0.144, hi: 0.754, reszta: "natywny" },
+        napiersnik: { plik: "Napiersnik", miejsce: "tors", natywny: "stal", glowny: "szary", lo: 0.229, hi: 0.979, reszta: "natywny" }
+    };
+    // (the helmets: the picture's frame w x h, anchor = the top of the hair - tools/ubior/zbroja_pl.py prints them)
+    const PL_HELM = {
+        kaptur: { plik: "Kaptur", w: 26, h: 24, anchor: [12, 2], natywny: "skora", glowny: "cieply", lo: 0.188, hi: 0.413, reszta: "natywny" },
+        kapalin: { plik: "Kapalin", w: 28, h: 24, anchor: [13, 3], natywny: "zelazo", glowny: "szary", lo: 0.149, hi: 0.809, reszta: "natywny" },
+        // (the second stage: the coif - quilted for the soft materials, mail for the metals -, the nasal, the open helm, the Order's helm)
+        czepiec: { plik: "Czepiec", w: 26, h: 25, anchor: [12, 2], natywny: "len", glowny: "oba", lo: 0.52, hi: 0.924 },
+        czepiec_kolczy: { plik: "CzepiecKolczy", helm: "czepiec", w: 24, h: 24, anchor: [11, 2], natywny: "zelazo", glowny: "szary", lo: 0.205, hi: 0.809, reszta: "natywny" },
+        nosal: { plik: "Nosal", w: 24, h: 28, anchor: [11, 6], natywny: "zelazo", glowny: "szary", lo: 0.227, hi: 0.93, reszta: "natywny" },
+        otwarty: { plik: "Otwarty", w: 24, h: 25, anchor: [11, 3], natywny: "stal", glowny: "szary", lo: 0.189, hi: 0.979, reszta: "natywny" },
+        zakonny: { plik: "Zakonny", w: 24, h: 25, anchor: [11, 3], natywny: "zelazo", glowny: "szary", lo: 0.271, hi: 0.848, reszta: "natywny" }
+    };
+    for (const [k, h] of Object.entries(PL_HELM)) PICTURES["helmpl_" + k] = { file: "Ubior_HelmPL_" + h.plik, w: h.w, h: h.h, anchor: h.anchor, views: 8,
+        cut: h.h, template: false, helm: h.helm || k, pl: h };
+    // the PixelLab picture of a helmet's kind in a material (the coif: mail for the metals, quilted for the rest); null - the drawn one
+    const plHelmOf = (k, m) => (k === "czepiec" && METAL[m] && PL_HELM.czepiec_kolczy ? "helmpl_czepiec_kolczy" : PL_HELM[k] ? "helmpl_" + k : null);
     function armourPatterns() {
         const out = {}, akc = (kind, m) => kind === "jasny" ? MATERIALY[m].rampa.slice(3) : kind ? MATERIALY[kind].akcent : MATERIALY[m].akcent;
         for (const [k, h] of Object.entries(HELMY)) {
             for (const m of h.materialy) {
-                out["helm_" + k + "_" + m] = { miejsce: "glowa", nakladka: "helm_" + k, rampa: MATERIALY[m].rampa, rampaAkcentu: akc(h.akcent, m), material: m,
+                out["helm_" + k + "_" + m] = { miejsce: "glowa", nakladka: plHelmOf(k, m) || "helm_" + k, rampa: MATERIALY[m].rampa, rampaAkcentu: akc(h.akcent, m), material: m,
                     faktura: h.faktura ? h.faktura[METAL[m] ? "metal" : "miekki"] || null : null, polysk: MATERIALY[m].polysk || 0 };
             }
         }
         for (const [k, z] of Object.entries(ZBROJE)) {
-            for (const m of z.materialy) out["zbroja_" + k + "_" + m] = { miejsce: "tors", rampa: MATERIALY[m].rampa, faktura: z.faktura, material: m, polysk: MATERIALY[m].polysk || 0 };
+            for (const m of z.materialy) out["zbroja_" + k + "_" + m] = { miejsce: "tors", rampa: MATERIALY[m].rampa, faktura: z.faktura, material: m, polysk: MATERIALY[m].polysk || 0,
+                pl: PL[k] ? k : null };
         }
         for (const m of KARWASZE) out["karwasze_" + m] = { miejsce: "rece", nakladka: "karwasze", rampa: MATERIALY[m].rampa, material: m,
-            rampaDloni: METAL[m] ? MATERIALY.skora.rampa : null };
-        for (const m of NAGOLENNIKI) out["nagolenniki_" + m] = { miejsce: "nogi", nakladka: "nagolenniki", rampa: MATERIALY[m].rampa, material: m, polysk: MATERIALY[m].polysk || 0 };
-        for (const m of OKUTE) out["buty_okute_" + m] = { miejsce: "stopy", nakladka: "buty", rampa: MATERIALY.skora.rampa, okucie: MATERIALY[m].rampa, material: m };
+            rampaDloni: METAL[m] ? MATERIALY.skora.rampa : null, pl: "karwasze" };
+        for (const m of NAGOLENNIKI) out["nagolenniki_" + m] = { miejsce: "nogi", nakladka: "nagolenniki", rampa: MATERIALY[m].rampa, material: m, polysk: MATERIALY[m].polysk || 0,
+            pl: "nagolenniki" };
+        for (const m of OKUTE) out["buty_okute_" + m] = { miejsce: "stopy", nakladka: "buty", rampa: MATERIALY.skora.rampa, okucie: MATERIALY[m].rampa, material: m, pl: "buty_okute" };
         return out;
     }
     Object.assign(WZORY_GRAFIKI, armourPatterns());
@@ -413,6 +459,38 @@
         lutCache.set(ck, f);
         return f;
     }
+
+    // ---- the PixelLab armour in another material (PL, PL_HELM): null - its own colours; else a colour -> colour of the material
+    let plOff = false;   // (Ubior.pl(false): the old look, for comparing)
+    const plLuts = new Map();
+    function plLut(def, material) {
+        if (!material || material === def.natywny || !MATERIALY[material]) return null;
+        const ck = def.plik + ":" + material;
+        let f = plLuts.get(ck);
+        if (f) return f;
+        const M = MATERIALY[material], main = M.rampa.map(hex), acc = (M.akcent || M.rampa.slice(3)).map(hex), seen = new Map();
+        const at = (ramp, l, lo, hi) => ramp[Math.round(Math.max(0, Math.min(1, (l - lo) / Math.max(0.01, hi - lo))) * (ramp.length - 1))];
+        f = (r, g, b) => {
+            const k = (r << 16) | (g << 8) | b;
+            let c = seen.get(k);
+            if (c) return c;
+            const l = luma(r, g, b), mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+            const warm = mx > 0 && (mx - mn) / mx >= 0.18 && r >= b;
+            if (l <= 0.09) c = [r, g, b];                                              // (the outline)
+            else if (def.glowny === "oba" || (def.glowny === "cieply") === warm) c = at(main, l, def.lo, def.hi);
+            else if (def.reszta === "akcent") c = at(acc, l, def.lo2 || 0.3, def.hi2 || 0.9);
+            else c = [r, g, b];
+            seen.set(k, c);
+            return c;
+        };
+        plLuts.set(ck, f);
+        return f;
+    }
+    // the layer of a PL kind on a sheet (its mask's file tells the sheet without its weapon): the picture, null while it loads, false - none
+    const plFile = (def, name, maskFile) => "Ubior_PL_" + def.plik + "_" + (maskFile && maskFile.indexOf("Ubior_Maska_BezBroni_") === 0 ? "BezBroni_" + name : name);
+    const PL_PART = { tors: P.koszula, nogi: P.spodnie, stopy: P.stopy, rece: P.skora };
+    const PL_ORDER = ["tors", "nogi", "stopy", "rece"];   // (the bracers last: over the jerkin's sleeves)
+    const plOf = w => (!plOff && w && w.pl && PL[w.pl]) || null;
 
     // ---- a head not over the body: the angle of the picture (0 = upright, the way to the head from the body, snapped to a quarter when
     // near one), the top of the hair along that way (the anchor) and the view from the face (in the picture's own frame)
@@ -853,16 +931,41 @@
     // turned with the head when he lies or rolls; grey -> the material, reddish -> the accent, alpha 64 -> an opening (the face shows);
     // the hair it does not cover goes (its cut rows); a tool in front stays in front; over the cell's top: the strip over the head
     const HELM_VIEW = { S: [0, false], SW: [1, false], W: [2, false], NW: [3, false], N: [4, false], SE: [1, true], E: [2, true], NE: [3, true] };
+    // (the PixelLab helmets: 8 views of their own - the light falls the same way in each, no mirror)
+    const HELM_VIEW8 = { S: [0, false], SW: [1, false], W: [2, false], NW: [3, false], N: [4, false], NE: [5, false], E: [6, false], SE: [7, false] };
     function helmet(d, parts, W, ci, cell, w, kind) {
         const def = PICTURES[kind], pic = pictureOf(def.file);
         if (!pic || !w._ramp) return null;
         const turn = ci.upright ? null : ci.turn;
         if (!ci.upright && !turn) return null;
         const th = turn ? turn.th : 0, ax = ci.x0 + (turn ? turn.ax : ci.ax), ay = ci.y0 + (turn ? turn.ay : ci.ay);
-        const [frame, mirror] = HELM_VIEW[turn ? turn.view : ci.dir] || HELM_VIEW.S;
+        const views = def.views === 8 ? HELM_VIEW8 : HELM_VIEW;
+        const [frame, mirror] = views[turn ? turn.view : ci.dir] || views.S;
         const cs = Math.cos(-th), sn = Math.sin(-th), A = def.anchor, fw = def.w, fh = def.h, pd = pic.data, pw = pic.w, fx = frame * fw;
         const ramp = w._ramp, n = ramp.length, acc = w._akcent || ramp.slice(-4), tex = FAKTURY[w.faktura] || null;
-        const R = 27, X0 = Math.max(ci.x0, ax - R), X1 = Math.min(ci.x0 + cell - 1, ax + R);
+        const plDef = def.pl || null, plL = plDef ? plLut(plDef, w.material) : null;
+        // (a PixelLab picture: the lowest solid row of each column of this view - the helmet's lower edge; a column without any: the
+        // nearest one's)
+        let plBottom = null;
+        if (plDef) {
+            const cache = def._bottom || (def._bottom = {});
+            plBottom = cache[frame];
+            if (!plBottom) {
+                plBottom = new Int16Array(fw).fill(-1);
+                for (let x = 0; x < fw; x++) for (let y = 0; y < fh; y++) if (pd[(y * pw + fx + x) * 4 + 3] === 255) plBottom[x] = y;
+                for (let pass = 0; pass < fw; pass++) {
+                    let more = false;
+                    for (let x = 0; x < fw; x++) {
+                        if (plBottom[x] >= 0) continue;
+                        const n = Math.max(x > 0 ? plBottom[x - 1] : -1, x < fw - 1 ? plBottom[x + 1] : -1);
+                        if (n >= 0) { plBottom[x] = n; more = true; }
+                    }
+                    if (!more) break;
+                }
+                cache[frame] = plBottom;
+            }
+        }
+        const R = Math.max(27, fw, fh), X0 = Math.max(ci.x0, ax - R), X1 = Math.min(ci.x0 + cell - 1, ax + R);
         const Y0 = Math.max(ci.y0 - HEADROOM, ay - R), Y1 = Math.min(ci.y0 + cell - 1, ay + R);
         // the picture's pixel under (X, Y): sx, sy (maybe outside the frame) and its alpha
         let sx = 0, sy = 0, al = 0, hp = 0;
@@ -880,14 +983,16 @@
             for (let X = X0; X <= X1; X++) {
                 at(X, Y);
                 const inCell = Y >= ci.y0, i = Y * W + X, L = inCell ? parts[i] : 0;
-                // the hair it does not cover (over its cut rows; never in an opening)
-                if (inCell && isHair(L) && al === 0 && sy < def.cut && d[i * 4 + 3]) { d[i * 4 + 3] = 0; cut++; }
+                // the hair it does not cover (over its cut rows; never in an opening; a PixelLab one: down to its lower edge in that
+                // column - the nape under the hood stays when he bends his head)
+                if (inCell && isHair(L) && al === 0 && (plBottom ? sy <= plBottom[Math.max(0, Math.min(fw - 1, sx))] : sy < def.cut) && d[i * 4 + 3]) { d[i * 4 + 3] = 0; cut++; }
                 if (al !== 255) continue;
                 solid[(Y - Y0) * bw + X - X0] = 1;
                 if (inCell && L === P.narzedzie) { hidden++; continue; }
                 const r = pd[hp], g = pd[hp + 1], b = pd[hp + 2];
                 let c;
-                if (r < 20 && g < 20 && b < 20) c = OUTLINE;
+                if (plDef) c = plL ? plL(r, g, b) : [r, g, b];                     // (PixelLab: its own colours, or the material's)
+                else if (r < 20 && g < 20 && b < 20) c = OUTLINE;
                 else if (r - g >= 30) c = acc[Math.max(0, Math.min(acc.length - 1, Math.round((r - 110) / 120 * (acc.length - 1))))];
                 else {
                     const t = Math.max(0, Math.min(1, (luma(r, g, b) - TEMPLATE_RANGE[0]) / (TEMPLATE_RANGE[1] - TEMPLATE_RANGE[0])));
@@ -901,8 +1006,25 @@
                 drawn++;
             }
         }
+        // the hair's dark outline left alone around the cut hair (strands sticking out of a small hood; the masks call some of them
+        // outline, eyes or tool): dark pixels with nothing but dark or empty around them, outside the picture - gone too
+        const dark = j => luma(d[j * 4], d[j * 4 + 1], d[j * 4 + 2]) < 0.12;
+        for (let Y = Math.max(Y0, ci.y0 + 1); Y < Math.min(Y1, ci.y0 + cell - 1); Y++) {
+            for (let X = Math.max(X0, ci.x0 + 1); X < Math.min(X1, ci.x0 + cell - 1); X++) {
+                const i = Y * W + X, L = parts[i];
+                if (!(L === P.kontur || L === P.oczyUsta || L === P.narzedzie) || !d[i * 4 + 3] || !dark(i)) continue;
+                at(X, Y);
+                if (al !== 0 || (plBottom ? sy > plBottom[Math.max(0, Math.min(fw - 1, sx))] : sy >= def.cut)) continue;
+                let lone = true;
+                for (const j of [i - 1, i + 1, i - W, i + W, i - W - 1, i - W + 1, i + W - 1, i + W + 1]) {
+                    if (d[j * 4 + 3] && !dark(j)) { lone = false; break; }
+                }
+                if (lone) { d[i * 4 + 3] = 0; cut++; }
+            }
+        }
         // its shadow: under each lower edge of it (the brim, the hood's opening) the skin, the hair, the eyes a pixel or two darker
-        if (!turn) {
+        // (a PixelLab helmet has its own shading)
+        if (!turn && !plDef) {
             for (let X = X0; X <= X1; X++) {
                 for (let Y = Math.max(Y0, ci.y0); Y < Y1; Y++) {
                     if (!solid[(Y - Y0) * bw + X - X0] || solid[(Y + 1 - Y0) * bw + X - X0]) continue;
@@ -1027,7 +1149,14 @@
     const report = {};
     function compose(name, src, mask, o, lay) {
         const def = SHEETS[name], px = pixels(src), W = px.w, H = px.h, d = px.data, cell = def.cell, Wz = patterns();
-        const parts = lay && lay.length ? mask.parts.slice() : mask.parts;   // (a layer changes the parts - its weapon is the tool now)
+        // (the PixelLab armour's layers worn here: their pictures, loaded - composed() waits for them)
+        const plLay = [];
+        for (const place of PL_ORDER) {
+            const w = o[place] && Wz[o[place]], pdef = plOf(w), pic = pdef ? pictureOf(plFile(pdef, name, mask.file)) : null;
+            if (pic && pic.w === W && pic.h === H) plLay.push({ place, w, pdef, pic });
+        }
+        // (a layer changes the parts - its weapon is the tool now, the armour's skirt is the shirt)
+        const parts = (lay && lay.length) || plLay.length ? mask.parts.slice() : mask.parts;
         const rows = Math.floor(H / cell);
         OV = { d: new Uint8ClampedArray(W * rows * OH * 4), W, cell, any: false };
         const tors = o.tors && Wz[o.tors], hands = o.rece && Wz[o.rece], legs = o.nogi && Wz[o.nogi];
@@ -1054,8 +1183,24 @@
             }
         }
         const cells = cellsOf(name, mask);
-        if (armour) armourShirt(d, parts, W, H, cell, cells, armour);
-        if (bracer) bracers(d, parts, W, H, bracer);
+        // the PixelLab armour: its layer over the frame (its own colours or the material's), the parts under it become the shirt /
+        // the trousers / the feet / the forearm
+        const plDone = {};
+        for (const { place, w, pdef, pic } of plLay) {
+            const lut = plLut(pdef, w.material), pd = pic.data, part = PL_PART[place];
+            for (let i = 0, N = W * H; i < N; i++) {
+                const p = i * 4;
+                if (!pd[p + 3]) continue;
+                // (alpha 254: the state's tunic under the breastplate - as it is in every material)
+                const c = lut && pd[p + 3] === 255 ? lut(pd[p], pd[p + 1], pd[p + 2]) : null;
+                if (c) { d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2]; } else { d[p] = pd[p]; d[p + 1] = pd[p + 1]; d[p + 2] = pd[p + 2]; }
+                d[p + 3] = 255;
+                if (parts[i] !== P.narzedzie) parts[i] = part;
+            }
+            plDone[place] = true;
+        }
+        if (armour && !plDone.tors) armourShirt(d, parts, W, H, cell, cells, armour);
+        if (bracer && !plDone.rece) bracers(d, parts, W, H, bracer);
         if (tors && tors._haft) trim(d, parts, W, H, tors);
         // the layers (the weapon in hand), before the overlays: what they draw is the tool a helmet stays behind
         for (const { L, key } of lay || []) {
@@ -1064,15 +1209,17 @@
         // 2. the overlays, cell by cell
         const head = o.glowa && Wz[o.glowa], feet = o.stopy && Wz[o.stopy], back = o.plecy && Wz[o.plecy], belt = o.pas && Wz[o.pas];
         const helm = head && PICTURES[head.nakladka] && PICTURES[head.nakladka].helm ? head : null;
+        // (a PixelLab helmet with Ubior.pl(false): the old drawn picture of its kind)
+        const headKind = head ? (plOff && PICTURES[head.nakladka] && PICTURES[head.nakladka].pl ? "helm_" + PICTURES[head.nakladka].helm : head.nakladka) : null;
         const rep = [];
         for (const ci of cells) {
-            if (greaves) (ci.upright ? greaveBand(d, parts, W, ci, cell, greaves) : boots(d, parts, W, ci, cell, greaves, { rows: 7, feet: false, shine: !!greaves.polysk }));
-            if (feet && feet.nakladka === "buty" && feet._ramp) boots(d, parts, W, ci, cell, feet);
+            if (greaves && !plDone.nogi) (ci.upright ? greaveBand(d, parts, W, ci, cell, greaves) : boots(d, parts, W, ci, cell, greaves, { rows: 7, feet: false, shine: !!greaves.polysk }));
+            if (feet && feet.nakladka === "buty" && feet._ramp && !plDone.stopy) boots(d, parts, W, ci, cell, feet);
             if (ci.none || !ci.upright) {
                 // (lying, rolling: a helmet turns with the head; the hats and the back things hide)
                 if (helm && !ci.none && ci.turn) {
-                    const r = helmet(d, parts, W, ci, cell, helm, helm.nakladka);
-                    rep.push(Object.assign({ c: ci.c, r: ci.r, dir: ci.dir, x: ci.turn.ax, y: ci.turn.ay, hx: ci.hx, hy: ci.hy, top: ci.top, fixed: false, kind: helm.nakladka }, r || {}));
+                    const r = helmet(d, parts, W, ci, cell, helm, headKind);
+                    rep.push(Object.assign({ c: ci.c, r: ci.r, dir: ci.dir, x: ci.turn.ax, y: ci.turn.ay, hx: ci.hx, hy: ci.hy, top: ci.top, fixed: false, kind: headKind }, r || {}));
                 } else if (head || back) rep.push({ c: ci.c, r: ci.r, dir: ci.dir, none: ci.none, off: true });
                 continue;
             }
@@ -1081,7 +1228,7 @@
             if (back && back.nakladka === "plecak") backpack(d, parts, W, ci, cell, back);
             if (back && back.nakladka === "torba") bag(d, parts, W, ci, cell, back);
             if (head) {
-                const kind = head.nakladka;
+                const kind = headKind;
                 let r = null;
                 if (kind === "kapelusz" || kind === "czapka") r = headPicture(d, parts, W, ci, cell, head, kind);
                 else if (helm) r = helmet(d, parts, W, ci, cell, head, kind);
@@ -1159,6 +1306,10 @@
         for (const place of ORDER) {
             const w = o[place] && Wz[o[place]], pd = w && w.nakladka && PICTURES[w.nakladka];
             if (pd && !pictureOf(pd.file)) return null;
+            if (pd && pd.pl && plOff && !pictureOf(PICTURES["helm_" + pd.helm].file)) return null;
+            // (a PixelLab layer still loading: wait; missing - false: the old way)
+            const pdef = plOf(w);
+            if (pdef && pictureOf(plFile(pdef, name, maskFile)) === null) return null;
         }
         for (const { L, key } of lay || []) if (L.ready && !L.ready(name, key)) return null;
         const t0 = performance.now();
@@ -1354,6 +1505,13 @@
         BUST_HEAD["helm_" + k] = "Ubior_Bust_Helm_" + k[0].toUpperCase() + k.slice(1);
         BUST_CUT["helm_" + k] = cut;
     }
+    // (the PixelLab helmets: the bust keeps the drawn picture of the kind)
+    for (const k of Object.keys(PL_HELM)) {
+        const h = "helm_" + (PL_HELM[k].helm || k);
+        BUST_HEAD["helmpl_" + k] = BUST_HEAD[h];
+        BUST_CUT["helmpl_" + k] = BUST_CUT[h];
+        if (BUST_OPEN[h]) BUST_OPEN["helmpl_" + k] = BUST_OPEN[h];
+    }
     const bustKept = new Map();
     function bustComposed(src, o) {
         const Wz = patterns(), tors = o.tors && Wz[o.tors], head = o.glowa && Wz[o.glowa], ck = (tors ? tors.key : "") + "|" + (head ? head.key : "");
@@ -1447,9 +1605,16 @@
         hookBusts();
     };
     function preload() {
-        if (!window.$gameSystem || !keyOf(outfitNow()).replace(/\|/g, "")) return;
+        const o = window.$gameSystem ? outfitNow() : {};
+        if (!window.$gameSystem || !keyOf(o).replace(/\|/g, "")) return;
         for (const name of Object.keys(SHEETS)) _loadSystem.call(ImageManager, "Ubior_Maska_" + name);
         for (const p of Object.values(PICTURES)) _loadSystem.call(ImageManager, p.file);
+        // (the PixelLab armour worn: its layers of the walk, the run and sneaking at once - the swings' when they are first shown)
+        const Wz = patterns();
+        for (const place of PL_ORDER) {
+            const d = plOf(o[place] && Wz[o[place]]);
+            if (d) for (const name of ["Hero_Walk", "Hero_Run", "Hero_Sneak"]) _loadSystem.call(ImageManager, plFile(d, name, null));
+        }
     }
 
     // ---- frames where the head thing sits badly: no hair found, cut by the cell's edge, its place jumps (more than the head does),
@@ -1482,7 +1647,7 @@
 
     // (liveKey: the outfit's part of a live sheet's key - what Ubior.key() says; liveFullKey: with the layers' - the weapon)
     const outfitPart = k => (k === null || k === undefined ? k : String(k).split("#")[0]);
-    const api = { VERSION: "1.1.0", FULL: true, SHEETS, PARTS: P, PLACES, ORDER, FROM_ITEM, PICTURES, WZORY_GRAFIKI, MATERIALY, HELMY, ZBROJE, HEADROOM, OH, TOP_ROWS,
+    const api = { VERSION: "1.2.0", FULL: true, SHEETS, PARTS: P, PLACES, ORDER, FROM_ITEM, PICTURES, WZORY_GRAFIKI, MATERIALY, HELMY, ZBROJE, HEADROOM, OH, TOP_ROWS,
         patterns, wear, takeOff, set,
         outfit: () => outfitNow(), sheet: name => (SHEETS[name] ? sheetFor(name, SHEETS[name].folder) || plain(name) : null), tryOn, itemLook, cellWithHead,
         bust: () => bustFor() || _loadPicture.call(ImageManager, BUST), bustKey: () => (bustLive ? bustLive.key : null),
@@ -1492,6 +1657,9 @@
         // (for Ubior_Bron.js: its layer, the masks, the pictures, the ramps; the strip of a live sheet)
         addLayer, layers: () => layers.slice(), maskOf, pictureOf, lutOf, luma, pixels, loadSystemPlain: n => _loadSystem.call(ImageManager, n),
         strip: name => (live[name] && live[name].bmp._ubiorStrip.on ? live[name].bmp._ubiorStrip.bmp : null), Sprite_UbiorHead,
-        changed, clear: () => { kept.clear(); bustKept.clear(); for (const k of Object.keys(live)) live[k].key = null; if (bustLive) bustLive.key = null; changed(); } };
+        changed, clear: () => { kept.clear(); bustKept.clear(); for (const k of Object.keys(live)) live[k].key = null; if (bustLive) bustLive.key = null; changed(); },
+        // (2026-10-23: the armour from PixelLab - PL, PL_HELM; pl(false): the old look, for comparing - pl() says which is on)
+        PL, PL_HELM, plFile,
+        pl: on => { if (on !== undefined) { plOff = !on; kept.clear(); for (const k of Object.keys(live)) live[k].key = null; changed(); } return !plOff; } };
     window.Ubior = T && T.register ? T.register(PLUGIN, api) : api;
 })();

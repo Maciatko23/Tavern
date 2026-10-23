@@ -1,0 +1,20 @@
+{
+ "obrona": {
+  "imie": {
+   "name": "Żołnierz królewski"
+  },
+  "a": {
+   "start": "Garnizon królewski! Za tawernę!",
+   "hit": "Za króla!",
+   "down": "Ranny... trzymajcie... linię...",
+   "win": "Rotmistrz kazał przekazać: garnizon pamięta przyjaciół."
+  },
+  "b": {
+   "start": "Za króla! I za Stacha!",
+   "hit": "Za króla!",
+   "down": "Ranny... trzymajcie... linię...",
+   "win": "Rotmistrz kazał przekazać: garnizon pamięta przyjaciół."
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Garnizon.js: OBRONA=obrona)"
+}

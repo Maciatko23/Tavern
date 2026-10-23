@@ -1,0 +1,245 @@
+# Teksty domów (wtyczka Homes.js): ziemia po stracie działki, Chata pod lasem, Spalona zagroda Ługów i jej odbudowa, Marta, zadanie D21.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz domy
+
+# ======================================================================== WORDS (slowa)
+slowa.znak = Własność Lorda Leopolda Zaleskiego. Wstęp tylko za zgodą dworu.
+slowa.soltys = Sołtys Bronisław
+slowa.konik = Osmalony konik
+
+# ======================================================================== HOUSES (domy)
+domy.chata.name = Chata pod lasem
+domy.chata.what = chatę pod lasem na Podgrodziu
+domy.chata.where = Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki).
+domy.zagroda.name = Zagroda Ługów
+domy.zagroda.what = spaloną zagrodę Ługów
+domy.zagroda.where = na zachód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu.
+
+# ======================================================================== ANIMALS (zwierzeta)
+[zwierzeta.cow]
+krowy
+Krowy
+oborze
+
+[zwierzeta.sheep]
+owce
+Owce
+owczarni
+
+[zwierzeta.hen]
+kury
+Kury
+kurniku
+
+# ======================================================================== STAGE_NAMES (etapy)
+[etapy]
+zgliszcza
+uprzątnięte zgliszcza
+podmurówka
+ściany z bali
+dach
+gotowy dom
+
+# ======================================================================== WORK (prace)
+prace.0.name = Uprzątnij zgliszcza
+prace.0.help = Rozbierz osmalone belki, wynieś popiół i gruz. Potrzebna łopata albo siekiera. Z gruzu coś się jeszcze przyda.
+prace.1.name = Podmurówka
+prace.1.help = Kamienie na glinę - nowa podmurówka na starym miejscu.
+prace.2.name = Ściany z bali
+prace.2.help = Bale na podmurówce, na zrąb, z otworami na drzwi i okna.
+prace.3.name = Dach
+prace.3.help = Krokwie, łaty i strzecha z wiązek włókna.
+prace.4.name = Drzwi, okiennice, palenisko
+prace.4.help = Drzwi na żelaznych zawiasach, okiennice, palenisko z cegły z kominem.
+
+# ======================================================================== MARTA_WORDS (marta)
+[marta.dni.0]
+Janku... w naszym domu znowu pali się ogień. Słyszysz? Dym idzie, jak za ciebie.
+(Marta poprawia kwiaty przy krzyżu.) Przychodzę raz na tydzień. Posiedzę, popatrzę na komin - i wracam do prania.
+
+[marta.dni.1]
+Franek śpi z tym konikiem co noc. Mówi, że koń pachnie domem.
+Dobrze, że tu ktoś mieszka. Ziemia nie lubi być sama.
+
+[marta.dni.2]
+Jan zawsze mówił, że ta ziemia urodzi, jak się jej da wody. Wody nie ma... a ty i tak sadzisz. Uparty jak on.
+Idź, idź. Ja tu jeszcze chwilę posiedzę.
+
+# ======================================================================== D21 (zadania.D21)
+zadania.D21.title = Spalona zagroda
+zadania.D21.where = Spalona zagroda (na zachód od Skraju lasu), Podgrodzie, ratusz
+zadania.D21.when = po obejrzeniu zgliszcz albo krzyża
+zadania.D21.desc = Za Skrajem lasu stoją zgliszcza zagrody. Pole zarosło, przy lesie stoi brzozowy krzyż. Czyja to ziemia - i czy da się tu jeszcze zamieszkać?
+zadania.D21.steps.0.text = Zapytaj Józka Łatę na Podgrodziu, czyja to zagroda - handlarz starzyzną wie wszystko o wszystkich.
+[zadania.D21.steps.0.say]
+> Józku, za Skrajem lasu stoi spalona zagroda. Czyja to?
+Spalona zagroda? Ługów. Jana Ługa. Sześć lat temu był suchy rok i Jan pożyczył od starego Zaleskiego na ziarno. Od ojca naszego Lorda.
+Nie oddał w terminie. Przyszli ludzie dworu, zmierzyli ziemię... a w nocy dom poszedł z dymem.
+Jan mówił, że to dworscy podpalili. Dwór mówił, że Jan sam, ze złości. Kto by tam dowiódł.
+Wdowa pierze teraz na Podgrodziu - Marta. Jan zmarł zeszłej zimy. Idź do niej, jak chcesz wiedzieć więcej. Tylko delikatnie.
+
+zadania.D21.steps.1.text = Porozmawiaj z Martą Ługową (praczka na Podgrodziu) o zagrodzie.
+[zadania.D21.steps.1.say]
+> Marto... byłem w zagrodzie za lasem. Józek mówi, że była wasza.
+(Marta długo wyżyma koszulę.) Była nasza. Jan postawił dom własnymi rękami, jak Franek się urodził.
+Wrócić tam? Nie. Tam jest tylko popiół i grób. Franek nawet nie pamięta domu - miał dwa lata.
+Ale wiesz co... chciałabym, żeby ktoś tam znowu palił ogień. Żeby z komina szedł dym, jak za Jana.
+Ziemia jest zapisana na dwór. Sołtys trzyma księgę gruntów - on ci powie, czy da się coś zrobić.
+
+zadania.D21.steps.2.text = Idź do sołtysa (ratusz, 8–16) z {price} G: zagrodę można kupić od dworu albo po staremu prawu, przez Martę.
+[zadania.D21.steps.2.remind]
+Zagroda Ługów? Ziemia zapisana na dwór, odłogiem od sześciu lat.
+Stare prawo wyspy mówi: ziemia zabrana za długi, co leży odłogiem ponad pięć lat, wraca do rodu, jeśli ród się o nią upomni i zapłaci wpis do księgi.
+Dwór sprzeda ją za {price} G. Po staremu wyjdzie tyle samo: sto wpisu i reszta dla Marty, żeby się zrzekła na ciebie. Wróć z pieniędzmi.
+
+[zadania.D21.steps.2.say]
+> W sprawie zagrody Ługów. Mam pieniądze.
+
+[zadania.D21.steps.2.choice.ask]
+Dobrze. To jak - od dworu, czy po staremu, przez Martę? Akt dostaniesz ten sam.
+
+zadania.D21.steps.2.choice.options.0.label = Od dworu (wszystko dla Lorda)
+[zadania.D21.steps.2.choice.options.0.say]
+(Sołtys posyła chłopca do dworu. Chłopiec wraca po godzinie, zdyszany.)
+Kamerdyner kazał przekazać: „Popiół? Bierz. Tylko nie rozpowiadaj, że dwór handluje popiołem.”
+Masz akt. Ludzie powiedzą, że Lord znowu zarobił na Ługach... ale ziemia twoja.
+
+zadania.D21.steps.2.choice.options.1.label = Przez Martę (sto do księgi, reszta dla niej)
+[zadania.D21.steps.2.choice.options.1.say]
+Po staremu, mówisz? Dobrze. Marta była u mnie rano - powiedziała, że jak się ktoś znajdzie, to się zrzeknie.
+Sto do księgi, a resztę zaniosę jej jeszcze dziś. Podpisze krzyżykiem i po sprawie.
+Masz akt. Ziemia twoja - i dobrze zrobiłeś, chłopcze.
+
+zadania.D21.steps.3.text = Uprzątnij zgliszcza domu Ługów (łopata albo siekiera; akcja przy zgliszczach).
+zadania.D21.steps.4.text = Zanieś Marcie osmalonego konika, którego znalazłeś w popiele (Podgrodzie).
+[zadania.D21.steps.4.remind]
+Coś jeszcze?
+
+[zadania.D21.steps.4.hero]
+> Marto, to było w popiele. Pod belką przy piecu.
+
+[zadania.D21.steps.4.done]
+(Marta bierze konika w obie ręce. Długo nic nie mówi.)
+Jan go wystrugał. Franek nie wypuszczał go z rąk... a potem został w domu, jak uciekaliśmy.
+Franek! Chodź tu, zobacz, co ci przyniósł pan z zagrody. Dziękuję. Nawet nie wiesz, jak bardzo.
+
+zadania.D21.steps.5.text = Odbuduj dom Ługów: podmurówka, ściany z bali, dach, drzwi z paleniskiem (akcja przy domu).
+[zadania.D21.reward.note]
+Zagroda Ługów
+Dom Ługów stoi znowu. Z komina idzie dym, jak chciała Marta. Pole i podwórze wokół są moje.
+
+# ======================================================================== z kodu Homes.js (kod.<funkcja>.<n>, w kolejności kodu)
+# refuse
+kod.refuse.0 = Działka należy teraz do Lorda
+kod.refuse.1 = To nie twoja ziemia
+# noBuild
+kod.noBuild.0 = Budować możesz tylko na własnej ziemi
+# build
+kod.build.0 = Strażnik dworu
+kod.build.1 = Znak: Własność Lorda Zaleskiego
+kod.build.2 = Przejście -> Spalona zagroda
+kod.build.3 = Drogowskaz: Spalona zagroda
+kod.build.4 = Marta Ługowa
+# smokeEv
+kod.smokeEv.0 = Dym z komina
+# door
+kod.door.0 = Na sprzedaż: {price} G. Pytaj sołtysa w ratuszu.
+# guardTalk
+kod.guardTalk.0 = Działka należy teraz do jaśnie pana Zaleskiego. Rozkaz: nikogo nie wpuszczać. Jak chcesz ją odzyskać - idź do dworu.
+kod.guardTalk.1 = Rozkaz to rozkaz, młodzieńcze.
+# glowna
+kod.glowna.0 = Pies przybiegł z działki - jego buda została u Lorda. Idzie z tobą.
+kod.glowna.1 = zwierzęta
+kod.glowna.2 = Zwierzęta
+kod.glowna.3 = " poszły z tobą."
+kod.glowna.4 = " sprzedane."
+kod.glowna.5 = Zagroda pusta - {1}{2}
+kod.glowna.6 = Sprzedaj zwierzęta ({price} G)
+kod.glowna.7 = Kupiec bydła z miasteczka czeka przy drodze z wozem - płaci od ręki: {n} × {2} G. Zagroda zostaje pusta.
+kod.glowna.8 = Zabierz zwierzęta
+kod.glowna.9 = {1} pójdą z tobą. Poczekają u dziadka, aż na własnej ziemi postawisz nową zagrodę tego rodzaju - wtedy w niej zamieszkają.
+kod.glowna.10 = Twoje {1} z działki zamieszkały w nowej {2}.
+kod.glowna.11 = Chata na sprzedaż! Na Podgrodziu, pod lasem, z działką - pytać w ratuszu!
+# reserveTransfer
+kod.reserveTransfer.0 = Działka należy teraz do Lorda.
+# sellAnimals
+kod.sellAnimals.0 = {1} sprzedane: +{price} G
+# takeAnimals
+kod.takeAnimals.0 = {1} idą z tobą - poczekają u dziadka na nową zagrodę.
+# soltysList
+kod.soltysList.0 = Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - za palisadą, przy lesie, na południe od osady. Wyjdź południową bramą i idź ścieżką na zachód.
+kod.soltysList.1 = Nowa, z bali. Postawił ją cieśla na sprzedaż i kupca się nie doczekał. Obok ogrodzona działka pod uprawę. {price} G.
+kod.soltysList.2 = Na swojej ziemi budujesz, co chcesz. Tylko studni nie obiecuję - wodę i tak dzielimy z rynku.
+kod.soltysList.3 = Jest jeszcze zagroda Ługów za Skrajem lasu, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.
+kod.soltysList.4 = W sprawie chaty? Ratusz słucha.
+kod.soltysList.5 = Kup {what} ({price} G)
+kod.soltysList.6 = Nic, dziękuję
+# run
+kod.run.0 = Domy na sprzedaż
+kod.run.1 = Do widzenia
+# buyNow
+kod.buyNow.0 = Kupiłeś: {name}
+kod.buyNow.1 = Klucz w kieszeni. Działka obok chaty jest twoja - możesz na niej budować.
+kod.buyNow.2 = Akt kupna: {name}
+kod.buyNow.3 = Dzień {1}: kupiłem od sołtysa {what} za {price} G.\nGdzie: {where}\nW izbie: palenisko, łóżko i skrzynia. Na działce wolno mi budować, co zechcę - także chatkę. Studni nie ma: wodę trzeba łapać albo nosić.
+# buy
+kod.buy.0 = Za mało złota: {1} / {price} G
+kod.buy.1 = Wróć, jak uzbierasz. Chata poczeka - nikt się o nią nie bije.
+kod.buy.2 = Proszę - klucz. Wpisuję do księgi gruntów: {1}, właściciel... ty. Witaj w sąsiedztwie!
+# grantLand
+kod.grantLand.0 = Akt własności: {name}
+kod.grantLand.1 = Pole i podwórze są twoje. Dom trzeba odbudować - zacznij od zgliszcz.
+kod.grantLand.2 = po staremu prawu, przez Martę Ługową (sto do księgi, reszta dla niej)
+kod.grantLand.3 = od dworu, przez ratusz
+kod.grantLand.4 = Dzień {1}: {2} - {price} G.\nGdzie: {where}\nDom spalony: odbudowa w pięciu etapach (akcja przy zgliszczach). Na polu i podwórzu wolno mi budować, kopać i siać. Studnia zasypana - i pewnie sucha.
+# ruin
+kod.ruin.0 = Zgliszcza domu. Ogień był tu dawno - w popiele rośnie trawa. Czyj to był dom?
+kod.ruin.1 = Zgliszcza domu Ługów. Ziemia zapisana na dwór.
+# well
+kod.well.0 = Stara studnia, zasypana gruzem po samą cembrowinę.
+kod.well.1 = Sucho. Ani kropli - tylko piach i kamienie na dnie.
+# cross
+kod.cross.0 = Prosty krzyż z brzozy. Wycięte nożem: „Jan Ług”. Ktoś zostawił polne kwiaty.
+# signpost
+kod.signpost.0 = Na zachód: zagroda Ługów. Deska omszała, napis ledwo widać.
+# costText
+kod.costText.0 = {1} ×{n} (masz {3})
+kod.costText.1 = bez materiałów
+# needTool
+kod.needTool.0 = Potrzebujesz: {name}
+kod.needTool.1 = Potrzebujesz łopaty albo siekiery
+# houseMenu
+kod.houseMenu.0 = łopata albo siekiera
+kod.houseMenu.1 = młotek
+kod.houseMenu.2 = Dom Ługów: {1}{2}
+kod.houseMenu.3 = Pracuj dalej: {1}
+kod.houseMenu.4 = "Zacznij: "
+kod.houseMenu.5 = Zostało uderzeń: {left}.
+kod.houseMenu.6 = Materiały: {1}. Uderzeń: {left}.
+kod.houseMenu.7 = {help}\n{2} Narzędzie: {tool}. Każde uderzenie kosztuje {4} wytrzymałości. Przytrzymaj O, a będziesz pracować bez przerwy.
+kod.houseMenu.8 = Co dalej
+kod.houseMenu.9 = Potem: {next}. Na koniec z komina pójdzie dym, a w izbie staną łóżko, duża skrzynia i kredens.
+# wellMenu
+kod.wellMenu.0 = Stara studnia{1}
+kod.wellMenu.1 = Kop dalej
+kod.wellMenu.2 = Odkop studnię
+kod.wellMenu.3 = Wybierz gruz łopatą. Uderzeń: {1}. Każde kosztuje {2} wytrzymałości.
+# begin
+kod.begin.0 = Brakuje: {name} {2}/{n}
+# strike
+kod.strike.0 = Jesteś zbyt zmęczony
+# stageDone
+kod.stageDone.0 = Zgliszcza uprzątnięte
+kod.stageDone.1 = Z gruzu: Kamień ×12, Drewno ×6, Gwoździe ×6 - i osmalony drewniany konik pod belką przy piecu.
+kod.stageDone.2 = Dom Ługów: {1}
+kod.stageDone.3 = Dalej: {1}.
+kod.stageDone.4 = Dom stoi. Z komina idzie dym.
+kod.stageDone.5 = Dom Ługów odbudowany
+kod.stageDone.6 = Dzień {1}: dom w zagrodzie Ługów stoi znowu - podmurówka, bale, strzecha, drzwi i palenisko. W izbie łóżko, duża skrzynia i kredens. Z komina idzie dym.
+# wellDug
+kod.wellDug.0 = Studnia odkopana
+kod.wellDug.1 = Na dnie sucho - piach i kamienie. Woda odeszła stąd dawno.
+kod.wellDug.2 = Studnia Ługów
+kod.wellDug.3 = Dzień {1}: odkopałem starą studnię w zagrodzie Ługów. Sucha. Susza zabrała wodę głęboko pod ziemię - deszczówka zostaje jedyną wodą tutaj.
+# martaTalk
+kod.martaTalk.0 = Marta Ługowa

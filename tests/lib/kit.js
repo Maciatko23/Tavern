@@ -44,9 +44,10 @@ const HOOKS = `(function(){
     return 0;
 })()`;
 
-// (2026-10-17, W5) GAME_PLUGINS_ADD="Cysterna_Data:Kantor_Data;Cysterna:Kantor" - plugins not in js/plugins.js yet (the editor was
-// open: no writing there) put into the plugin list at their places (each "after:name") before the game reads it, so that a test
-// runs as if they were installed. Nothing changes without the variable.
+// (2026-10-17, W5) GAME_PLUGINS_ADD="Cysterna_Data:Kantor_Data;Cysterna:Kantor" - plugins not on the game's list yet
+// (js/tawerna_wtyczki.js) put into the plugin list at their places (each "after:name") before the game reads it, so that a test
+// runs as if they were installed. Nothing changes without the variable. (Since 2026-10-23 the page's $plugins is the merged list -
+// the game's list and js/plugins.js - which js/plugins/TawernaLoader.js hands to this hook as js/plugins.js was handed before.)
 const PLUGINS_ADD = process.env.GAME_PLUGINS_ADD ? `(function(){
     const want = ${JSON.stringify(String(process.env.GAME_PLUGINS_ADD).split(";").map(x => x.split(":")).filter(x => x.length === 2))};
     let real;
@@ -246,7 +247,8 @@ class Test extends Report {
         await this.eval(HOOKS);
         return true;
     }
-    // plugins not in js/plugins.js yet: put into the page (a script tag); t.plugins[name] = "registered" / "injected" / "failed".
+    // plugins not on the plugin list yet (the game's list js/tawerna_wtyczki.js + js/plugins.js): put into the page (a script tag);
+    // t.plugins[name] = "registered" / "injected" / "failed".
     // The core (TawernaCore.js, which the newer plugins need) goes in first when it is not registered either.
     async injectPlugins(names) {
         if (names.length && !names.includes("TawernaCore") && fs.existsSync(path.join(TESTS, "..", "js", "plugins", "TawernaCore.js"))) names = ["TawernaCore"].concat(names);
@@ -359,6 +361,9 @@ class Test extends Report {
         for (let i = 0; i < max; i++) {
             if ((await this.scene()) !== "Scene_Map" || (await this.eval("$gameMessage.isBusy()"))) { await this.press("ok"); await this.frames(10); continue; }
             if (await this.eval("!!$gameTemp._pendingSummary")) { await this.eval("$gameScreen.startFadeIn(1); 0"); await this.frames(10); continue; }
+            // (2026-10-23: the summary taken off the queue is still on its way in - the map is the scene for a few frames more; a
+            // tab of the shared browser came here then and left the summary open for the rest of needs_test)
+            if (await this.eval("SceneManager.isSceneChanging()")) { await this.frames(5); continue; }
             return true;
         }
         return false;
@@ -461,14 +466,15 @@ class Test extends Report {
     }
 }
 
-// opts: port, width, height, dpr, plugins (put into the page when not registered), overlay (GAME_OVERLAY), profile, beforeLoad (a
-// script run in the page before the game's own), bootCheck (a name: "the game boots" as a check), errorCheck (see done), evalTimeout
+// opts: port, width, height, dpr, turbo (N game updates a drawn frame - tests/cdp.js TEST_TURBO), plugins (put into the page when not registered), overlay (GAME_OVERLAY), overlayJs (GAME_OVERLAY_JS:
+// the overlay's index.html and js/* too), profile, beforeLoad (a script run in the page before the game's own), bootCheck (a name:
+// "the game boots" as a check), errorCheck (see done), evalTimeout
 async function open(opts = {}) {
     const port = portOf(opts);
     process.env.CDP_PORT = String(port);
     await freePort(port);
     const { launch } = require("../cdp.js");
-    const b = await launch({ port, width: opts.width || 1280, height: opts.height || 720, dpr: opts.dpr || 1, overlay: opts.overlay, profile: opts.profile });
+    const b = await launch({ port, width: opts.width || 1280, height: opts.height || 720, dpr: opts.dpr || 1, overlay: opts.overlay, overlayJs: opts.overlayJs, profile: opts.profile, turbo: opts.turbo });
     const t = new Test(b, opts, port);
     const booted = await t._boot().catch(e => { console.log("NOTE boot: " + e.message); return false; });
     if (opts.bootCheck) t.check(opts.bootCheck, booted);

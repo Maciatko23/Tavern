@@ -51,12 +51,15 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("motyle");   // (the words of this file: js/teksty/motyle.txt, kod.*)
 
     const PLUGIN = "Motyle";
     const T = window.Tawerna;
     if (!T) throw new Error("Motyle.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const D = window.MotyleData;
     if (!D) throw new Error("Motyle.js: brak Motyle_Data.js - musi stać wyżej na liście wtyczek (the butterflies' data is missing)");
+    // (2026-10-23) the words: js/teksty/motyle.txt (D.TX; D.TX.kod - the words of this file)
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
     const params = PluginManager.parameters(PLUGIN);
     const ENABLED = params.enabled !== "false";
     const SP = D.SPECIES, ORDER = D.ORDER, SH = D.SHEET;
@@ -275,7 +278,7 @@
     // { k, n, why }: n butterflies on the map round the screen
     function wanted() {
         const p = profile();
-        if (!ENABLED || !p) return { n: 0, why: "brak motyli na tej mapie" };
+        if (!ENABLED || !p) return { n: 0, why: TK.kod.wanted[0] };
         const forced = !!(force && Graphics.frameCount < force.until);
         const s = forced ? force.season : season();
         let k = p.k * D.SEASON_K[s];
@@ -285,9 +288,9 @@
         let wk = 1, why = "pogoda";
         if (!forced) {
             if (rainingNow()) return { n: 0, why: "deszcz" };
-            if (stormLevel() > 0) { wk *= D.WEATHER.gather; why = "burza nadchodzi"; }
+            if (stormLevel() > 0) { wk *= D.WEATHER.gather; why = TK.kod.wanted[1]; }
             const since = hoursSinceRain();
-            if (since > 0 && since <= D.WEATHER.afterRainHours) { wk *= D.WEATHER.afterRain; why = "po deszczu"; }
+            if (since > 0 && since <= D.WEATHER.afterRainHours) { wk *= D.WEATHER.afterRain; why = TK.kod.wanted[2]; }
             const dd = dryDays();
             if (dd >= D.WEATHER.dry2[0]) { wk *= D.WEATHER.dry2[1]; why = "susza"; } else if (dd >= D.WEATHER.dry1[0]) { wk *= D.WEATHER.dry1[1]; why = "sucho"; }
             if (wind() >= D.WEATHER.windy[0]) wk *= D.WEATHER.windy[1];
@@ -848,7 +851,7 @@
     // ------------------------------------------------------------------
     (function addRecipe() {
         const F = window.Farming, wb = F && F.BUILDINGS && F.BUILDINGS.workbench;
-        if (wb && Array.isArray(wb.recipes) && !wb.recipes.some(r => r.id === D.NET_RECIPE.id)) wb.recipes.push(Object.assign({}, D.NET_RECIPE));
+        if (wb && Array.isArray(wb.recipes) && !wb.recipes.some(r => r.id === D.NET_RECIPE.id)) wb.recipes.push(D.NET_RECIPE);   // (the data's own object: its name and description come from js/teksty/motyle.txt when the game starts)
     })();
     let NET_KIND = -1;
     (function addSwing() {
@@ -935,14 +938,14 @@
         T.popup(D.TX.caught + nameOf(kind), { icon: kindIcon(kind), kind: "good" });
         if (first) {
             const n = ORDER.filter(k => s.caught[k]).length;
-            T.popup(D.TX.newKind, { top: true, color: "#ffe27a", sub: nameOf(kind) + "  ·  " + n + " z " + ORDER.length + (n === ORDER.length ? "  ·  " + D.TX.full : "") });
+            T.popup(D.TX.newKind, { top: true, color: "#ffe27a", sub: fill(D.TX.kod.nowyOkaz, { nazwa: nameOf(kind), n, z: ORDER.length }) + (n === ORDER.length ? "  ·  " + D.TX.full : "") });
         }
         T.emit("butterflyCaught", { kind, first });
         if (kind === "pawik" && questActive("K54") && vcount("pawik") === 0) {
             vgive("pawik", 1);
             s.pawikNet = day();
             removeInsect(b);
-            T.popup(D.TX.pawikNet, { top: true, color: "#ffe27a", sub: "Zadanie: Motyl z oczkami" });
+            T.popup(D.TX.pawikNet, { top: true, color: "#ffe27a", sub: D.TX.kod.zadaniePawik });
             refreshQuest();
             return { kind, kept: true };
         }
@@ -1038,19 +1041,22 @@
         if (!qflag("kleofasCzyta")) return null;
         const s = store(), fresh = ORDER.filter(k => s.caught[k] && !s.kron[k]);
         if (!fresh.length) return null;
-        const spk = { id: ev.eventId(), name: "Brat Kleofas" }, out = [];
+        const spk = { id: ev.eventId(), name: D.TX.kod.kleofas }, out = [];
         const all = ORDER.every(k => s.caught[k]);
         if (all && !s.kronDone) linesTo(out, spk, D.KLEOFAS.full);
         else linesTo(out, spk, D.KLEOFAS.partial, { lista: fresh.map(nameOf).join(", ") });
         out.push(C(355, ["Motyle.act(this, " + JSON.stringify(["kron", fresh, all]) + ")"]));
         return out;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: the chronicle of butterflies is an errand at Kleofas's talk - right after
+    // Latarnia's, before every other takeover (as the old hook, put first at the first map)
     function hookTalk() {
-        const L = T.api("TownLife");
-        if (!L || !L.addTalkHook || hookTalk.done) return;
+        if (hookTalk.done) return;
         hookTalk.done = true;
-        L.addTalkHook((key, ev) => { try { return key === "pustelnik" ? kleofasTalk(ev) : null; } catch (e) { console.error("[Motyle]", e); return null; } }, true);
+        T.talk.takeover({ owner: PLUGIN, who: "pustelnik", priority: T.talk.PRIORITY.errand + 10,
+            run: ctx => { try { return kleofasTalk(ctx.ev); } catch (e) { console.error("[Motyle]", e); return null; } } });
     }
+    hookTalk();
     function act(interp, args) {
         if (!Array.isArray(args)) return;
         const [what, a, b] = args;
@@ -1063,7 +1069,7 @@
                 for (const [id, n] of rw.items || []) if (itemOf(id)) $gameParty.gainItem(itemOf(id), n);
                 if (rw.xp) T.call("Combat", "gainXp", rw.xp, D.KLEOFAS.note[0]);
                 T.call("Journal", "addNote", D.KLEOFAS.note[0], D.KLEOFAS.note[1]);
-                T.popup(D.KLEOFAS.note[0], { top: true, color: "#9ff0a8", sub: "Miód ×2  ·  " + rw.xp + " dośw." });
+                T.popup(D.KLEOFAS.note[0], { top: true, color: "#9ff0a8", sub: fill(D.TX.kod.kronikaNagroda, { xp: rw.xp }) });
             }
         }
     }
@@ -1089,7 +1095,7 @@
         const p = pollen($gameMap.mapId(), b.x, b.y);
         let extra = 0;
         for (let i = 0; i < n; i++) if (Math.random() < D.POLLEN.honey * p) extra++;
-        if (extra) T.popup(D.TX.honey + extra + " " + (itemOf(D.ITEM.honey) ? itemOf(D.ITEM.honey).name : "Miód"), { icon: D.ICON.butterfly, kind: "good" });
+        if (extra) T.popup(D.TX.honey + extra + " " + (itemOf(D.ITEM.honey) ? itemOf(D.ITEM.honey).name : D.TX.kod.miod), { icon: D.ICON.butterfly, kind: "good" });
         return extra;
     }
     // the harvest (Farming's bus): a flowering crop by flowers +1 now and then; a nibbled cabbage -1 (never the last head)
@@ -1147,7 +1153,7 @@
         const s = store(), out = [];
         for (const k of ORDER) {
             const got = !!s.caught[k];
-            out.push({ label: got ? nameOf(k) : nameOf(k) + " (nie złapany)", icon: got ? kindIcon(k) : 0, mark: got ? "done" : "todo", right: got ? "×" + (s.counts[k] || 1) : "", dim: !got, motyl: k });
+            out.push({ label: got ? nameOf(k) : nameOf(k) + D.TX.kod.niezlapany, icon: got ? kindIcon(k) : 0, mark: got ? "done" : "todo", right: got ? "×" + (s.counts[k] || 1) : "", dim: !got, motyl: k });
         }
         out.push({ label: D.CASE.pollenTitle, icon: itemOf(D.ITEM.honey) ? itemOf(D.ITEM.honey).iconIndex : 0, mark: "todo", info: "pollen" });
         if (qflag("elaMotyl") || ($gameParty && itemOf(D.ITEM.drawing) && $gameParty.hasItem(itemOf(D.ITEM.drawing)))) out.push({ label: D.CASE.drawingTitle, icon: D.ICON.drawing, mark: "done", info: "drawing" });
@@ -1158,27 +1164,27 @@
         const s = store();
         if (!it) return { ops: [{ k: "title", text: D.CASE.title }, { k: "rule" }, { k: "p", text: D.CASE.empty }] };
         if (it.info === "pollen") {
-            return { ops: [{ k: "title", text: D.CASE.pollenTitle }, { k: "sub", text: "motyle przy kwiatach" }, { k: "rule" }, { k: "p", text: D.CASE.pollen },
-                { k: "h", text: "Liczby" }, { k: "p", text: "Ziemniaki i owoce: +1 sztuka z szansą " + Math.round(D.POLLEN.crop * 100) + "% (przy pełnym zapyleniu). Ul: każdy słoik z szansą " + Math.round(D.POLLEN.honey * 100) + "% na drugi. Bielinki: -1 główka kapusty (nigdy ostatnia)." },
+            return { ops: [{ k: "title", text: D.CASE.pollenTitle }, { k: "sub", text: D.TX.kod.zapylanieSub }, { k: "rule" }, { k: "p", text: D.CASE.pollen },
+                { k: "h", text: D.TX.kod.liczby }, { k: "p", text: fill(D.TX.kod.liczbyTekst, { crop: Math.round(D.POLLEN.crop * 100), honey: Math.round(D.POLLEN.honey * 100) }) },
                 { k: "muted", text: D.CASE.kleofasHint }] };
         }
-        if (it.info === "drawing") return { ops: [{ k: "title", text: D.CASE.drawingTitle, narrow: true }, { k: "sub", text: "pamiątka z obozu pod murem", narrow: true }, { k: "rule" }, { k: "p", text: D.CASE.drawing, narrow: true }], image: "Motyle_Rysunek_Eli" };
+        if (it.info === "drawing") return { ops: [{ k: "title", text: D.CASE.drawingTitle, narrow: true }, { k: "sub", text: D.TX.kod.rysunekSub, narrow: true }, { k: "rule" }, { k: "p", text: D.CASE.drawing, narrow: true }], image: "Motyle_Rysunek_Eli" };
         if (it.info === "kron") return { ops: [{ k: "title", text: D.KLEOFAS.note[0] }, { k: "rule" }, { k: "p", text: D.KLEOFAS.note[1] }] };
         const k = it.motyl, sp = SP[k], got = !!s.caught[k];
         if (!sp) return { ops: [] };
         // (the card stands top right: the title and the first paragraph beside it, narrower - "narrow")
-        const ops = [{ k: "title", text: sp.name, narrow: true }, { k: "sub", text: sp.latin + (got ? "  ·  złapany dnia " + s.caught[k] : "  ·  jeszcze nie złapany"), narrow: true }, { k: "rule" }];
-        ops.push({ k: "p", text: got ? sp.desc : "Opis pojawi się w gablotce, kiedy go złapiesz.", narrow: true });
-        ops.push({ k: "h", text: "Gdzie i kiedy" }, { k: "p", text: sp.where });
-        if (got) ops.push({ k: "muted", text: "W gablotce: ×" + (s.counts[k] || 1) + (s.kron[k] ? "  ·  zapisany w kronice brata Kleofasa" : "") });
+        const ops = [{ k: "title", text: sp.name, narrow: true }, { k: "sub", text: sp.latin + (got ? fill(D.TX.kod.zlapanyDnia, { dzien: s.caught[k] }) : D.TX.kod.jeszczeNie), narrow: true }, { k: "rule" }];
+        ops.push({ k: "p", text: got ? sp.desc : D.TX.kod.opisPozniej, narrow: true });
+        ops.push({ k: "h", text: D.TX.kod.gdzie }, { k: "p", text: sp.where });
+        if (got) ops.push({ k: "muted", text: fill(D.TX.kod.wGablotce, { n: s.counts[k] || 1 }) + (s.kron[k] ? D.TX.kod.wKronice : "") });
         return { ops, image: sp.card + (got ? "" : "_Cien") };
     }
     function addCaseTab() {
         const J = T.api("Journal");
         if (!J || !J.addTab || (J.TABS || []).includes(D.CASE.tab)) return;
         J.addTab({ name: D.CASE.tab, items: () => caseItems(), detail: it => caseDetail(it),
-            legend: () => { const s = store(), n = ORDER.filter(k => s.caught[k]).length; return "Gatunków w gablotce: " + n + " z " + ORDER.length + (s.kronDone ? "  ·  w kronice" : ""); },
-            help: "↑↓ okaz   ←/→ zakładka   Anuluj: wróć" });
+            legend: () => { const s = store(), n = ORDER.filter(k => s.caught[k]).length; return fill(D.TX.kod.legenda, { n, z: ORDER.length }) + (s.kronDone ? D.TX.kod.legendaKronika : ""); },
+            help: D.TX.kod.pomoc });
     }
     // the cards load with the journal's scene (no blank frame)
     const _Scene_Map_create = Scene_Map.prototype.create;

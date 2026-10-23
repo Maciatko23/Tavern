@@ -51,6 +51,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("ludzie");   // (the words of this file: js/teksty/ludzie.txt, kod.*)
 
     const PLUGIN = "Ludzie";
     const T = window.Tawerna;
@@ -210,7 +211,7 @@
     const kilnCycle = () => Math.floor((workDay(D.CYCLE.kiln.dawn) - D.CYCLE.kiln.work[0]) / D.CYCLE.kiln.every);
     const stopIndex = () => ((workDay(D.CYCLE.dawn) % 4) + 4) % 4;
     const stopMap = () => D.CYCLE.stops[stopIndex()];
-    const stopName = m => ({ 22: "Polna droga", 21: "Leśna droga", 4: "Łąka", 3: "Kruczy Jar" })[m === undefined ? stopMap() : m] || "";
+    const stopName = m => ({ 22: TK.kod.stopName[0], 21: TK.kod.stopName[1], 4: TK.kod.stopName[2], 3: TK.kod.stopName[3] })[m === undefined ? stopMap() : m] || "";
     function pasterz018() {
         if (!has()) return false;
         const p = D.CYCLE.pasture018, h = hour();
@@ -268,7 +269,7 @@
             list: o.list || [C(355, ["Ludzie.act(this);"]), C(0, [])], moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false },
             moveSpeed: o.speed || 3, moveType: 0, priorityType: o.priority === undefined ? 1 : o.priority, stepAnime: !!o.step, through: !!o.through, trigger: 0,
             walkAnime: !!o.walk };
-        return { id, name: "Ludzie: " + name, note: "<Ludzie:" + (o.key || name) + ">" + (o.note || ""), pages: [page], x, y };
+        return { id, name: Watki.wstaw(TK.kod.eventData[0], { name: name }), note: "<Ludzie:" + (o.key || name) + ">" + (o.note || ""), pages: [page], x, y };
     }
     const FIRE = ["!Decoration", 2, 4, 0];
     const fireEv = (id, at, key) => eventData(id, "Ognisko", at[0], at[1], { key, img: FIRE, step: true, speed: 3 });
@@ -277,40 +278,42 @@
         const out = [];
         if (mapId === M.droga) {
             out.push(eventData(EV.mielerz, "Mielerz", D.KILN_AT.x, D.KILN_AT.y, { key: "mielerz", img: ["!$Lud_Mielerz", 0, 2, 1], note: "<Occupy:left=1,right=1,up=2>" }));
-            out.push(eventData(EV.dym, "Dym z mielerza", D.KILN_AT.x, D.KILN_AT.y - 2, { key: "dym", img: ["!Fantasy_chimney", 0, 2, 1], priority: 2, through: true, step: true, list: [C(0, [])] }));
-            out.push(eventData(EV.szalas, "Szałas węglarza", D.SHED_AT.x, D.SHED_AT.y, { key: "szalas", img: ["!$Lud_Szalas", 0, 2, 1], note: BIG }));
+            // (2026-10-23, the user: "mielerz chyba nie powinien mieć kamiennego komina") smoke only, from the mound's top and sides
+            // (tools/ludzie/dym_mielerza.py: !Fantasy_chimney's smoke without the stone stack)
+            out.push(eventData(EV.dym, TK.kod.build[0], D.KILN_AT.x, D.KILN_AT.y - 2, { key: "dym", img: ["!$Dym_Mielerz", 0, 2, 1], priority: 2, through: true, step: true, list: [C(0, [])] }));
+            out.push(eventData(EV.szalas, TK.kod.build[1], D.SHED_AT.x, D.SHED_AT.y, { key: "szalas", img: ["!$Lud_Szalas", 0, 2, 1], note: BIG }));
             out.push(fireEv(EV.ogien021, D.STOPS[21].ogien, "ogien"));
-            out.push(eventData(EV.tobol021, "Tobołek handlarza", D.STOPS[21].tobol[0], D.STOPS[21].tobol[1], { key: "tobol", img: ["!$Lud_Juk", 0, 2, 1] }));
+            out.push(eventData(EV.tobol021, TK.kod.build[2], D.STOPS[21].tobol[0], D.STOPS[21].tobol[1], { key: "tobol", img: ["!$Lud_Juk", 0, 2, 1] }));
             const k = has() ? S().k65 : null, j = D.JUK_SPOTS[k && k.spot >= 0 ? k.spot : 0];
-            out.push(eventData(EV.juk, "Zgubiony juk", j[0], j[1], { key: "juk", img: ["!$Lud_Juk", 0, 2, 1] }));
+            out.push(eventData(EV.juk, TK.kod.build[3], j[0], j[1], { key: "juk", img: ["!$Lud_Juk", 0, 2, 1] }));
         } else if (mapId === M.polna || mapId === M.laka || mapId === M.domek) {
             const st = D.STOPS[mapId], ids = { 22: [EV.woz022, EV.osiol022, EV.ogien022], 4: [EV.woz004, 0, EV.ogien004], 3: [EV.woz003, EV.osiol003, EV.ogien003] }[mapId];
-            out.push(eventData(ids[0], "Wóz handlarza", st.woz[0], st.woz[1], { key: "woz", img: ["!$Lud_Woz", 0, 2, 1], note: BIG }));
-            if (ids[1] && st.osiol) out.push(eventData(ids[1], "Osiołek handlarza", st.osiol[0], st.osiol[1], { key: "osiol", img: ["!$Lud_Osiol", 0, 2, 0], step: true, speed: 2 }));
+            out.push(eventData(ids[0], TK.kod.build[4], st.woz[0], st.woz[1], { key: "woz", img: ["!$Lud_Woz", 0, 2, 1], note: BIG }));
+            if (ids[1] && st.osiol) out.push(eventData(ids[1], TK.kod.build[5], st.osiol[0], st.osiol[1], { key: "osiol", img: ["!$Lud_Osiol", 0, 2, 0], step: true, speed: 2 }));
             out.push(fireEv(ids[2], st.ogien, "ogien"));
             if (mapId === M.laka) {
                 out.push(eventData(EV.koszar, "Koszar", D.FOLD.gate[0], D.FOLD.gate[1], { key: "koszar", img: ["!$Lud_Koszar", 0, 2, 1], priority: 0, through: true }));
-                D.FOLD.fence.forEach(([x, y], i) => out.push(eventData(EV.plot[0] + i, "Płot koszaru", x, y, { key: "plot" })));
+                D.FOLD.fence.forEach(([x, y], i) => out.push(eventData(EV.plot[0] + i, TK.kod.build[6], x, y, { key: "plot" })));
                 const O = OK();
-                if (O && O.blank) out.push(Object.assign(O.blank(EV.krzak004, 47, 49, "Znacznik pastwiska (krzak)"), {}));
+                if (O && O.blank) out.push(Object.assign(O.blank(EV.krzak004, 47, 49, TK.kod.build[7]), {}));
             }
         } else if (mapId === M.gory) {
             const c = D.CAMP;
-            out.push(eventData(EV.namiotA, "Namiot kopaczy", c.tentA[0], c.tentA[1], { key: "namiot", img: ["!$Mt_Tent", 0, 2, 1], note: BIG }));
-            out.push(eventData(EV.namiotB, "Namiot kopaczy", c.tentB[0], c.tentB[1], { key: "namiot", img: ["!$Mt_Tent", 0, 2, 1], note: BIG }));
-            out.push(eventData(EV.skrzyniaKop, "Skrzynia dowódcy kopaczy", c.chest[0], c.chest[1], { key: "skrzyniaKop", img: ["!$Lud_Skrzynia", 0, 2, 1] }));
+            out.push(eventData(EV.namiotA, TK.kod.build[8], c.tentA[0], c.tentA[1], { key: "namiot", img: ["!$Mt_Tent", 0, 2, 1], note: BIG }));
+            out.push(eventData(EV.namiotB, TK.kod.build[8], c.tentB[0], c.tentB[1], { key: "namiot", img: ["!$Mt_Tent", 0, 2, 1], note: BIG }));
+            out.push(eventData(EV.skrzyniaKop, TK.kod.build[9], c.chest[0], c.chest[1], { key: "skrzyniaKop", img: ["!$Lud_Skrzynia", 0, 2, 1] }));
             out.push(fireEv(EV.ogienKop, c.fire, "ogienKop"));
-            out.push(eventData(EV.szyb, "Szyb poszukiwawczy", c.shaft[0], c.shaft[1], { key: "szyb", img: ["!$Lud_Szyb", 0, 2, 1] }));
-            out.push(eventData(EV.skrzynkiA, "Skrzynie kopaczy", c.crates[0][0], c.crates[0][1], { key: "skrzynki", img: ["!$Lud_Skrzynia", 0, 2, 0] }));
-            out.push(eventData(EV.skrzynkiB, "Skrzynie kopaczy", c.crates[1][0], c.crates[1][1], { key: "skrzynki", img: ["!$Lud_Skrzynia", 0, 2, 2] }));
+            out.push(eventData(EV.szyb, TK.kod.build[10], c.shaft[0], c.shaft[1], { key: "szyb", img: ["!$Lud_Szyb", 0, 2, 1] }));
+            out.push(eventData(EV.skrzynkiA, TK.kod.build[11], c.crates[0][0], c.crates[0][1], { key: "skrzynki", img: ["!$Lud_Skrzynia", 0, 2, 0] }));
+            out.push(eventData(EV.skrzynkiB, TK.kod.build[11], c.crates[1][0], c.crates[1][1], { key: "skrzynki", img: ["!$Lud_Skrzynia", 0, 2, 2] }));
             const O = OK();
-            if (O && O.blank) out.push(O.blank(EV.krzak013, c.bush[0], c.bush[1], "Znacznik obozu (krzak)"));
+            if (O && O.blank) out.push(O.blank(EV.krzak013, c.bush[0], c.bush[1], TK.kod.build[12]));
         } else if (mapId === M.przystan) {
-            out.push(eventData(EV.wylot, "Wylot jaskini", D.CAVE.mouth[0], D.CAVE.mouth[1], { key: "wylot", img: ["!$Lud_Jaskinia", 0, 2, 1], note: "<Occupy:right=1><LudOff:24,0>" }));
+            out.push(eventData(EV.wylot, TK.kod.build[13], D.CAVE.mouth[0], D.CAVE.mouth[1], { key: "wylot", img: ["!$Lud_Jaskinia", 0, 2, 1], note: "<Occupy:right=1><LudOff:24,0>" }));
         } else if (mapId === M.zagroda) {
-            D.GRAVES.crosses.forEach(([x, y], i) => out.push(eventData(EV.krzyz[i], "Stary krzyż Ługów", x, y, { key: "krzyz", img: ["!$Lud_KrzyzStary", 0, 2, i] })));
-            out.push(eventData(EV.lawka, "Ławka przy grobach", D.GRAVES.bench[0], D.GRAVES.bench[1], { key: "lawka", img: ["!$Lud_Lawka", 0, 2, 1], priority: 0, through: true, note: "<LudOff:24,0>" }));
-            out.push(eventData(EV.marta, "Marta Ługowa", D.GRAVES.marta[0], D.GRAVES.marta[1], { key: "marta", img: ["$Npc_Praczka", 0, 8, 1], fix: false, walk: true }));
+            D.GRAVES.crosses.forEach(([x, y], i) => out.push(eventData(EV.krzyz[i], TK.kod.build[14], x, y, { key: "krzyz", img: ["!$Lud_KrzyzStary", 0, 2, i] })));
+            out.push(eventData(EV.lawka, TK.kod.build[15], D.GRAVES.bench[0], D.GRAVES.bench[1], { key: "lawka", img: ["!$Lud_Lawka", 0, 2, 1], priority: 0, through: true, note: "<LudOff:24,0>" }));
+            out.push(eventData(EV.marta, TK.kod.build[16], D.GRAVES.marta[0], D.GRAVES.marta[1], { key: "marta", img: ["$Npc_Praczka", 0, 8, 1], fix: false, walk: true }));
         }
         return out.filter(e => e && e.x >= 0 && e.y >= 0 && e.x < data.width && e.y < data.height);
     }
@@ -334,12 +337,8 @@
         ev.setTransparent(true); ev.setThrough(true); ev._priorityType = 0;
     }
     const setShown = (ev, on, dir, pattern) => (on ? showEv(ev, dir, pattern) : hideEv(ev));
-    // hidden, it never starts (the action button on its cell, a touch)
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (this._ludHidden === true) return;
-        _Game_Event_start.call(this);
-    };
+    // hidden, it never starts (the action button on its cell, a touch) - the core's one start hook (2026-10-23)
+    T.onEventStart(ev => ev._ludHidden === true, { owner: PLUGIN, priority: "hidden" });
     // <LudOff:dx,dy>: the picture moved by some pixels (the cave's mouth over two cells, the bench)
     const offOf = ev => {
         if (ev._ludOff !== undefined) return ev._ludOff;
@@ -672,7 +671,7 @@
     function strike(ev, spec) {
         if (!spec.can()) return false;
         const F = T.api("Farming"), cost = F && F.hitCost ? F.hitCost() : 2;
-        if (cost > 0 && typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(cost)) { T.popup.need(STAMINA_ICON, "Jesteś zbyt zmęczony"); return false; }
+        if (cost > 0 && typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(cost)) { T.popup.need(STAMINA_ICON, TK.kod.strike[0]); return false; }
         const c = T.api("Combat"), rate = c && c.workSpeed ? c.workSpeed() : 1;
         const next = () => { again = { id: ev.eventId(), spec, at: Graphics.frameCount + Math.max(2, Math.round(12 / rate)) }; };
         const started = $gamePlayer.startToolSwing && $gamePlayer.startToolSwing(6, () => spec.blow(), next, { rate });
@@ -711,7 +710,7 @@
         const list = who === "pasterz" ? D.SHEPHERD_SELLS : pedlarGoods(), g = list.find(x => x.id === id), it = named(id);
         if (!g || !it) return false;
         const cost = priceOf(g, who === "pasterz" ? shepherdMul() : pedlarMul());
-        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, "Potrzebujesz " + cost + " G"); return false; }
+        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.buy[0], { cost: cost })); return false; }
         $gameParty.loseGold(cost);
         $gameParty.gainItem(it, g.n);
         T.popup(it.name + (g.n > 1 ? " ×" + g.n : ""), { icon: it.iconIndex, kind: "good" });
@@ -720,14 +719,14 @@
             S().shop.map = day();
             const O = OK();
             if (O && O.revealAll) O.revealAll();
-            note("Mapa okolic", "Kupiłem od wędrownego handlarza mapę okolic. Zaznaczone na niej miejsca widać teraz w dzienniku, w zakładce „Okolice” - kompas poprowadzi do każdego.");
+            note(TK.kod.buy[1], TK.kod.buy[2]);
         }
         return true;
     }
     const buysOf = who => (who === "pasterz" ? D.SHEPHERD_BUYS : D.PEDLAR_BUYS).filter(b => named(b.id) && count(b.id) > 0);
     function sellList(spk, who) {
         const list = buysOf(who);
-        if (!list.length) return linesTo([], spk, who === "pasterz" ? ["Soli nie masz? Szkoda. Tylko sól od ciebie kupię."] : TX.pedlarNoBuy);
+        if (!list.length) return linesTo([], spk, who === "pasterz" ? [TK.kod.sellList[0]] : TX.pedlarNoBuy);
         const labels = list.map(b => item(b.id).name + " ×" + count(b.id) + " - " + b.price * count(b.id) + " G").concat([TX.menu.nothing]);
         return choiceTo([], labels, list.map(b => cmdAct([], ["sell", who, b.id])).concat([[]]), labels.length - 1);
     }
@@ -745,12 +744,12 @@
         const s = S().shop;
         if (s.water === day()) { T.popup.need(iconOf(129), TX.pedlarWaterDone); return; }
         const cost = waterPrice();
-        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, "Potrzebujesz " + cost + " G"); return; }
+        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.water[0], { cost: cost })); return; }
         $gameParty.loseGold(cost);
         s.water = day();
         const N = T.api("Needs") || window.Needs, got = N && N.drink ? N.drink(D.PEDLAR_WATER.sip) : 0;
         T.audio.se("Water1", { volume: 60 });
-        T.popup("Łyk wody z beczki" + (got ? ": nawodnienie +" + got : ""), { icon: iconOf(129), kind: "good" });
+        T.popup(Watki.wstaw(TK.kod.water[2], { "1": got ? Watki.wstaw(TK.kod.water[1], { got: got }) : "" }), { icon: iconOf(129), kind: "good" });
         sayLater(interp, linesTo([], spk, [TX.pedlarWaterLine]));
     }
     function rumour(spk, interp) {
@@ -782,13 +781,13 @@
         const sh = D.SHEARING, s = S().shop;
         if (!shearSeason()) { info(TX.shearNo); return; }
         if (s.shear === day()) { info(TX.shearDone); return; }
-        if (count(sh.tool) <= 0) { T.popup.need(item(sh.tool) ? item(sh.tool).iconIndex : 0, "Potrzebujesz nożyc"); return; }
+        if (count(sh.tool) <= 0) { T.popup.need(item(sh.tool) ? item(sh.tool).iconIndex : 0, TK.kod.shear[0]); return; }
         s.shear = day();
         T.call("Durability", "use", sh.tool);
         if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(sh.hours);
         if (item(111)) $gameParty.gainItem(item(111), sh.wool);
         $gameParty.gainGold(sh.gold);
-        T.popup("Wełna ×" + sh.wool + "  ·  +" + sh.gold + " G", { icon: 367, kind: "good" });
+        T.popup(Watki.wstaw(TK.kod.shear[1], { wool: sh.wool, gold: sh.gold }), { icon: 367, kind: "good" });
         sayLater(interp, linesTo([], spk, TX.shearOk));
     }
     // Zbych's charcoal: 4 G a sack, 10 a burn (a burn = his 6-day cycle); the hero's wood burnt (12 -> 8 in 2 days)
@@ -796,16 +795,16 @@
     function buyCoal(n) {
         const left = coalLeft(), k = Math.min(n, left), cost = k * D.KILN.coal;
         if (k <= 0) { info(TX.coalOut); return; }
-        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, "Potrzebujesz " + cost + " G"); return; }
+        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.buyCoal[0], { cost: cost })); return; }
         $gameParty.loseGold(cost);
         S().shop.coalN += k;
         $gameParty.gainItem(item(79), k);
-        T.popup("Węgiel drzewny ×" + k, { icon: item(79).iconIndex, kind: "good" });
+        T.popup(Watki.wstaw(TK.kod.buyCoal[1], { k: k }), { icon: item(79).iconIndex, kind: "good" });
     }
     function giveWood(spk, interp) {
         const s = S();
         if (s.order && !s.order.got) { info(TX.woodBusy); return; }
-        if (count(61) < D.KILN.wood) { T.popup.need(item(61).iconIndex, "Potrzebujesz: " + item(61).name + " " + count(61) + "/" + D.KILN.wood); return; }
+        if (count(61) < D.KILN.wood) { T.popup.need(item(61).iconIndex, Watki.wstaw(TK.kod.giveWood[0], { name: item(61).name, "2": count(61), wood: D.KILN.wood })); return; }
         $gameParty.loseItem(item(61), D.KILN.wood);
         s.order = { day: day(), ready: day() + D.KILN.days, got: 0 };
         sayLater(interp, linesTo([], spk, [TX.woodOk]));
@@ -816,13 +815,13 @@
         if (day() < o.ready) { sayLater(interp, linesTo([], spk, [fill(TX.collectWait, { day: o.ready })])); return; }
         o.got = day();
         $gameParty.gainItem(item(79), D.KILN.give);
-        T.popup("Węgiel drzewny ×" + D.KILN.give, { icon: item(79).iconIndex, kind: "good" });
+        T.popup(Watki.wstaw(TK.kod.collectCoal[0], { give: D.KILN.give }), { icon: item(79).iconIndex, kind: "good" });
         sayLater(interp, linesTo([], spk, [TX.collectOk]));
     }
     function buySteel() {
         const s = S().shop, sm = D.SMITH, it = item(sm.steel);
         if (s.steel === day()) { info(TX.smithDone); return; }
-        if ($gameParty.gold() < sm.price) { T.popup.need(COIN_ICON, "Potrzebujesz " + sm.price + " G"); return; }
+        if ($gameParty.gold() < sm.price) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.buySteel[0], { price: sm.price })); return; }
         $gameParty.loseGold(sm.price);
         s.steel = day();
         $gameParty.gainItem(it, 1);
@@ -844,14 +843,14 @@
     }
     const spkOf = (ev, name) => ({ id: ev.eventId(), name });
     function pedlarMenu(ev) {
-        const spk = spkOf(ev, "Szymon Juczny"), h = hour();
+        const spk = spkOf(ev, TK.kod.pedlarMenu[0]), h = hour();
         if (h < 7 || h >= 20) return linesTo([], spk, TX.pedlarNight);
         const out = linesTo([], spk, [pick(TX.pedlarHello)]);
         const labels = [TX.menu.buy, TX.menu.sell, TX.menu.water + " (" + waterPrice() + " G)", TX.menu.rumour, TX.menu.talk, TX.menu.bye];
         return choiceTo(out, labels, [shopList(spk, "handlarz"), sellList(spk, "handlarz"), cmdAct([], ["water"]), cmdAct([], ["rumour"]), cmdAct([], ["talk", "handlarz"]), []], 5);
     }
     function shepherdMenu(ev) {
-        const spk = spkOf(ev, "Wawrzyn Owczarz"), h = hour();
+        const spk = spkOf(ev, TK.kod.shepherdMenu[0]), h = hour();
         if (h < 6 || h >= 21) return linesTo([], spk, TX.shepherdNight);
         const out = linesTo([], spk, [pick(TX.shepherdHello)]);
         const labels = [TX.menu.buy, TX.menu.sell], branches = [shopList(spk, "pasterz"), sellList(spk, "pasterz")];
@@ -861,7 +860,7 @@
         return choiceTo(out, labels, branches, labels.length - 1);
     }
     function zbychMenu(ev) {
-        const spk = spkOf(ev, "Zbych Smolarz"), o = S().order;
+        const spk = spkOf(ev, TK.kod.zbychMenu[0]), o = S().order;
         const out = linesTo([], spk, [pick(TX.zbychHello)]);
         const left = coalLeft(), labels = [], branches = [];
         if (left > 0) {
@@ -869,25 +868,19 @@
             if (left >= 5) { labels.push(TX.menu.coal + " (×5 - " + D.KILN.coal * 5 + " G)"); branches.push(cmdAct([], ["coal", 5])); }
         }
         if (o && !o.got) { labels.push(TX.menu.collect); branches.push(cmdAct([], ["collect"])); }
-        else { labels.push(TX.menu.wood + " (" + D.KILN.wood + " polan)"); branches.push(cmdAct([], ["wood"])); }
+        else { labels.push(Watki.wstaw(TK.kod.zbychMenu[1], { wood: TX.menu.wood, wood2: D.KILN.wood })); branches.push(cmdAct([], ["wood"])); }
         labels.push(TX.menu.talk, TX.menu.bye);
         branches.push(cmdAct([], ["talk", "drwal"]), []);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
-    // (2026-10-23, Bron.js) other trades of the same people, as lines of their own menus - their rules, hours and words kept:
-    // addMenu(fn(key, ev) -> [{ label, cmds, say }]) - say: a line said before a soldier's choice
-    const extraMenus = [];
-    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
-    function extraRows(key, ev) {
-        const out = [];
-        for (const fn of extraMenus) { try { for (const r of fn(key, ev) || []) if (r && r.label) out.push(r); } catch (e) { console.error("[Ludzie] menu " + key, e); } }
-        return out;
-    }
+    // (2026-10-23, docs/ROZMOWY.md) Tadek's menu takes the other systems' rows through the core's talk service (Tawerna.talk.option,
+    // who "kowal" - Bron.js: his weapons): the steel, their rows, "Porozmawiaj", the farewell last - as the old addMenu did
     function smithMenu(ev) {
-        const spk = spkOf(ev, "Tadek Młot"), it = item(D.SMITH.steel), extra = extraRows("kowal", ev);
+        const spk = spkOf(ev, TK.kod.smithMenu[0]), it = item(D.SMITH.steel);
         const out = linesTo([], spk, TX.smithHello);
-        return choiceTo(out, [TX.menu.steel + " (" + (it ? it.name : "Stal") + " - " + D.SMITH.price + " G)"].concat(extra.map(r => r.label), [TX.menu.talk, TX.menu.bye]),
-            [cmdAct([], ["steel"])].concat(extra.map(r => r.cmds || []), [cmdAct([], ["talk", "kowal"]), []]), extra.length + 2);
+        const rows = T.talk.rows("kowal", { ev }, [{ label: TX.menu.steel + " (" + (it ? it.name : "Stal") + " - " + D.SMITH.price + " G)", cmds: cmdAct([], ["steel"]) },
+            { label: TX.menu.talk, cmds: cmdAct([], ["talk", "kowal"]), order: T.talk.ORDER.chat }]);
+        return T.talk.menu(out, rows, TX.menu.bye);
     }
     // the patrol: the search (under the garrison's favour 10) when the hero comes close, else its usual words
     let searchFor = "";
@@ -903,7 +896,7 @@
     function crateExtra(key, ev) {
         if (!isDone("D34") || count(D.ITEMS.skrzynia) <= 0) return null;
         if (key === "kupiec" && !baltazarOk()) return null;
-        const spk = spkOf(ev, key === "celnik" ? "Sambor Kwit" : "Baltazar Vey");
+        const spk = spkOf(ev, key === "celnik" ? TK.kod.crateExtra[0] : TK.kod.crateExtra[1]);
         return choiceTo([], [key === "celnik" ? TX.crateLabel.celnik : TX.crateLabel.baltazar, TX.crateLabel.keep], [cmdAct([], ["d34", key === "celnik" ? "celnik" : "baltazar"]), []], 1);
     }
     function talkHook(key, ev) {
@@ -916,10 +909,11 @@
         if (key === "kowal" && flag("ludKowalRabat")) return questFirst(key) ? null : smithMenu(ev);
         return null;
     }
-    (function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook) L.addTalkHook((key, ev) => { try { return talkHook(key, ev); } catch (e) { report("talk " + key, e); return null; } }, true);
-    })();
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: the package's people (the pedlar, the shepherd, Zbych, Tadek with the
+    // discount), the patrols' search, the crate at the officer's and Baltazar's - "owner" takeovers, after Zakon's (as the old hooks)
+    const TALK_WHO = ["celnik", "kupiec", "handlarz", "pasterz", "drwal", "kowal"];
+    T.talk.takeover({ owner: PLUGIN, who: (key => /^patrol_/.test(key) || TALK_WHO.includes(key)), priority: T.talk.PRIORITY.owner + 50,
+        run: ctx => { try { return talkHook(ctx.who, ctx.ev); } catch (e) { report("talk " + ctx.who, e); return null; } } });
 
     // ------------------------------------------------------------------
     // The patrols: the pair (the second one cell behind the first), the search, the night round of K66
@@ -954,9 +948,9 @@
         const gs = G.state(), F = G.DATA && G.DATA.FAVOR ? G.DATA.FAVOR : {}, spk = { id: interp ? interp.eventId() : -1, name: "Patrol" };
         gs.patrolDay = day();
         let lines;
-        if (!flag("rochMet")) { if (G.addFavor) G.addFavor(F.stonesSeen || -2, "kruk na szyi"); lines = G.TX && G.TX.patrolPendant ? G.TX.patrolPendant : []; }
+        if (!flag("rochMet")) { if (G.addFavor) G.addFavor(F.stonesSeen || -2, TK.kod.patrolSearch[0]); lines = G.TX && G.TX.patrolPendant ? G.TX.patrolPendant : []; }
         else {
-            if ($gameParty.gold() >= 5) { $gameParty.loseGold(5); T.popup("-5 G (opłata za przepustkę)", { icon: COIN_ICON, kind: "bad" }); }
+            if ($gameParty.gold() >= 5) { $gameParty.loseGold(5); T.popup(TK.kod.patrolSearch[1], { icon: COIN_ICON, kind: "bad" }); }
             lines = G.TX && G.TX.patrolClean ? G.TX.patrolClean : [];
         }
         sayLater(interp, linesTo([], spk, lines));
@@ -969,7 +963,7 @@
         if (heroAt(P.at[0], P.at[1]) > P.r) return;
         const H = HM();
         if (!H || !H.ambush) return;
-        const band = H.ambush(P.kinds, { tag: "ludPatrol", far: [5, 8], say: "Brać ich! Żołnierzyki z latarenką!" });
+        const band = H.ambush(P.kinds, { tag: "ludPatrol", far: [5, 8], say: TK.kod.patrolNightTick[0] });
         if (!band) return;
         k.ambush = day();
         const L = TL(), lead = L && L.eventOf ? L.eventOf("patrol_latarnia_1") : null, fol = L && L.eventOf ? L.eventOf("patrol_latarnia_2") : null;
@@ -986,7 +980,7 @@
         const d = day(), h = hour(), nightOf = h < 12 ? d - 1 : d;
         if (d > k.burn + 1 || (d === k.burn + 1 && h >= 4)) {   // the night is over: unguarded (or the hero ran) - the thieves dug half of it out
             k.spoiled = d;
-            note("Rozkopany mielerz", "W noc wypału nikt nie pilnował mielerza Zbycha. Rabusie rozkopali kopiec i wynieśli część węgla. Zbych da tylko połowę.");
+            note(TK.kod.k63Tick[0], TK.kod.k63Tick[1]);
             autoChecks();
             return;
         }
@@ -996,7 +990,7 @@
         if (k.near < (OPTS.kilnWait || A.wait)) return;
         const H = HM();
         if (!H || !H.ambush) return;
-        const band = H.ambush(A.kinds, { tag: "ludMielerz", far: [6, 9], say: "Węgiel! Bierzcie worki, szybko!" });
+        const band = H.ambush(A.kinds, { tag: "ludMielerz", far: [6, 9], say: TK.kod.k63Tick[2] });
         if (band) { k.ambush = d; T.popup(TX.kilnNight, { top: true, color: "#ff9f8f" }); }
     }
     const coalReady = () => { const k = S().k63; return !!k && day() * 24 + hour() >= (k.burn + 2) * 24 + 8; };
@@ -1026,7 +1020,7 @@
         let band = null;
         D.CAMP_MEN.forEach((m, i) => {
             const [x, y] = spots[i], mode = night ? "sleep" : i === 3 ? "idle" : "sit";
-            const h = H.spawn(m.kind, x, y, { tag: "ludKopacze", name: "Kopacz Czarnych Oczu", look: m.look, mode, band: band || undefined, noBand: !band });
+            const h = H.spawn(m.kind, x, y, { tag: "ludKopacze", name: TK.kod.spawnCamp[0], look: m.look, mode, band: band || undefined, noBand: !band });
             if (!h) return;
             band = band || h._band;
             h._seatF8 = faceTo(x, y, i === 3 && !night ? c.shaft : c.fire);
@@ -1051,7 +1045,7 @@
         const H = HM(), c = D.CAVE, s = S().d34;
         if (!OPTS.auto || !H || !H.spawn || !onMap(M.jaskinia) || s.taken || s.opened) return;
         if (!inHours(hour(), c.slawek.hours) || (H.band && H.band("ludJaskinia"))) return;
-        const h = H.spawn(c.slawek.kind, c.seat[0], c.seat[1], { tag: "ludJaskinia", name: "Sławek", look: c.slawek.look, mode: "sit" });
+        const h = H.spawn(c.slawek.kind, c.seat[0], c.seat[1], { tag: "ludJaskinia", name: TK.kod.spawnSlawek[0], look: c.slawek.look, mode: "sit" });
         if (h) h._seatF8 = 8;
     }
 
@@ -1065,8 +1059,8 @@
         switch (key) {
             case "mielerz": info(TX.kiln[kilnState()]); return;
             case "szalas": info(TX.shed); return;
-            case "ogien": case "ogienKop": info(key === "ogien" ? "Ognisko handlarza. Ciepło i trochę dymu." : TX.camp.fireDay); return;
-            case "tobol": info("Tobołek handlarza, ściągnięty rzemieniem."); return;
+            case "ogien": case "ogienKop": info(key === "ogien" ? TK.kod.eventAct[0] : TX.camp.fireDay); return;
+            case "tobol": info(TK.kod.eventAct[1]); return;
             case "woz": info(TX.wagon); return;
             case "osiol": info(TX.donkey); T.audio.se("Horse", { volume: 45, pitch: 130 }); return;
             case "koszar": case "plot": info(TX.fold); return;
@@ -1078,7 +1072,7 @@
                 k.picked = day();
                 vgive("juk", 1);
                 hideEv(ev);
-                T.popup("Juk handlarza", { icon: D.VITEMS.juk.icon, kind: "good" });
+                T.popup(TK.kod.eventAct[2], { icon: D.VITEMS.juk.icon, kind: "good" });
                 autoChecks();
                 return;
             }
@@ -1088,7 +1082,7 @@
                 s.d35.journal = day();
                 const it = named(D.ITEMS.dziennik);
                 if (it) $gameParty.gainItem(it, 1);
-                T.popup(it ? it.name : "Dziennik kopacza", { icon: it ? it.iconIndex : 0, kind: "good" });
+                T.popup(it ? it.name : TK.kod.eventAct[3], { icon: it ? it.iconIndex : 0, kind: "good" });
                 note(TX.journalNote[0], TX.journalNote[1]);
                 showEv(ev, 4, 1);
                 T.audio.se("Book1", { volume: 60 });
@@ -1099,8 +1093,8 @@
                 if (s.d35.how) { info(TX.camp.shaftDone); return; }
                 if (!atStep("D35", 1)) { info(TX.camp.shaft); return; }
                 const sh = D.SHAFT;
-                if (count(sh.saw) <= 0) { T.popup.need(item(sh.saw) ? item(sh.saw).iconIndex : 0, "Potrzebujesz piły"); return; }
-                if (count(sh.rope) <= 0 && !s.d35.hits) { T.popup.need(item(sh.rope) ? item(sh.rope).iconIndex : 0, "Potrzebujesz liny"); return; }
+                if (count(sh.saw) <= 0) { T.popup.need(item(sh.saw) ? item(sh.saw).iconIndex : 0, TK.kod.eventAct[4]); return; }
+                if (count(sh.rope) <= 0 && !s.d35.hits) { T.popup.need(item(sh.rope) ? item(sh.rope).iconIndex : 0, TK.kod.eventAct[5]); return; }
                 strike(ev, {
                     can: () => !S().d35.how && atStep("D35", 1),
                     blow: () => {
@@ -1148,7 +1142,7 @@
             case "lawka": info(TX.graves.bench); return;
             case "marta": {
                 ev.turnTowardPlayer();
-                sayLater(interp, linesTo([], spkOf(ev, "Marta Ługowa"), TX.martaLines[day() % TX.martaLines.length]));
+                sayLater(interp, linesTo([], spkOf(ev, TK.kod.eventAct[6]), TX.martaLines[day() % TX.martaLines.length]));
                 return;
             }
             default: return;
@@ -1159,8 +1153,8 @@
         if (g.done) return;
         g.done = day();
         setFlag("ludGroby");
-        opinion(2, "Groby Ługów");
-        xp(30, "Groby Ługów");
+        opinion(2, TK.kod.gravesDone[0]);
+        xp(30, TK.kod.gravesDone[0]);
         think(TX.graves.done);
         const O = OK();
         if (O && O.discover) O.discover("lud_groby");
@@ -1176,7 +1170,7 @@
         if (H && H.clear && onMap(M.gory)) H.clear("ludKopacze");
         if (how === "zasyp") { think(TX.shaftDone); const sh = evOf(EV.szyb); if (sh) showEv(sh, 4, 1); }
         else if (how === "grum") setFlag("ludSzyb");
-        else if (how === "rotmistrz") { setFlag("ludSzybRotmistrz"); const G = GZ(); if (G && G.addFavor) G.addFavor(8, "szyb kopaczy"); }
+        else if (how === "rotmistrz") { setFlag("ludSzybRotmistrz"); const G = GZ(); if (G && G.addFavor) G.addFavor(8, TK.kod.shaftChoice[0]); }
         if (count(D.ITEMS.dziennik) > 0 && how !== "zasyp") $gameParty.loseItem(item(D.ITEMS.dziennik), 1);
         autoChecks();
     }
@@ -1199,7 +1193,7 @@
         if (how === 0) {
             s.taken = day();
             if (it) $gameParty.gainItem(it, 1);
-            T.popup(it ? it.name : "Skrzynia przemytu", { icon: it ? it.iconIndex : 0, kind: "good" });
+            T.popup(it ? it.name : TK.kod.niche[0], { icon: it ? it.iconIndex : 0, kind: "good" });
             if (s.stash) setFlag("ludObieSkrzynie");
             autoChecks();
         } else {
@@ -1245,13 +1239,13 @@
             switch (what) {
                 case "buy": buy(a, b); return;
                 case "sell": sell(a, b); return;
-                case "water": water(ev ? spkOf(ev, "Szymon Juczny") : HERO, interp); return;
-                case "rumour": rumour(ev ? spkOf(ev, "Szymon Juczny") : HERO, interp); return;
+                case "water": water(ev ? spkOf(ev, TK.kod.act[0]) : HERO, interp); return;
+                case "rumour": rumour(ev ? spkOf(ev, TK.kod.act[0]) : HERO, interp); return;
                 case "talk": plainTalk(a, ev ? spkOf(ev, speaker(a).name) : speaker(a), interp); return;
-                case "shear": shear(ev ? spkOf(ev, "Wawrzyn Owczarz") : HERO, interp); return;
+                case "shear": shear(ev ? spkOf(ev, TK.kod.act[1]) : HERO, interp); return;
                 case "coal": buyCoal(a || 1); return;
-                case "wood": giveWood(ev ? spkOf(ev, "Zbych Smolarz") : HERO, interp); return;
-                case "collect": collectCoal(ev ? spkOf(ev, "Zbych Smolarz") : HERO, interp); return;
+                case "wood": giveWood(ev ? spkOf(ev, TK.kod.act[2]) : HERO, interp); return;
+                case "collect": collectCoal(ev ? spkOf(ev, TK.kod.act[2]) : HERO, interp); return;
                 case "steel": buySteel(); return;
                 case "szukaj": patrolSearch(interp); return;
                 case "k63wegiel": k63Coal(a); return;
@@ -1268,7 +1262,7 @@
         if (!k || k.taken || !atStep("K63", 2)) return;
         k.taken = day();
         $gameParty.gainItem(item(79), n);
-        T.popup("Węgiel drzewny ×" + n, { icon: item(79).iconIndex, kind: "good" });
+        T.popup(Watki.wstaw(TK.kod.k63Coal[0], { n: n }), { icon: item(79).iconIndex, kind: "good" });
         const q = TQ();
         if (q && q.completeStep) q.completeStep("K63");
     }
@@ -1295,9 +1289,9 @@
                 const k = S().k63 || {};
                 if (!coalReady()) return { ready: false, list: linesTo([], spk, [fill(TX.collectWait, { day: (k.burn || day()) + 2 })]) };
                 const n = k.spoiled ? 5 : k.lost ? 6 : 10;
-                const lines = k.spoiled ? ["Rabusie rozkopali kopiec w nocy. Uratowałem pięć worków. Resztę dokup albo przynieś z innego wypału."]
-                    : k.lost ? ["Pobili cię, a i tak coś zostało. Sześć worków - więcej nie dam rady."]
-                    : ["Kopiec ostygł, węgiel jak smoła. Dziesięć worków dla Tadka - i dzięki za noc przy kopcu."];
+                const lines = k.spoiled ? [TK.kod.talk[0]]
+                    : k.lost ? [TK.kod.talk[1]]
+                    : [TK.kod.talk[2]];
                 return { ready: true, list: cmdAct(linesTo([], spk, lines), ["k63wegiel", n]) };
             }
         };
@@ -1308,7 +1302,7 @@
         FX.ludOwcaVars = { vars: () => { const k = S().k64 || { spot: 0 }; return { gdzie: D.SHEEP_WHERE[k.spot || 0] }; } };
         // K65
         FX.ludJuk = { check: () => { const k = S().k65; return !!k && !!k.picked; } };
-        FX.ludJukVars = { vars: (Q, r) => { const k = S().k65 || { spot: 0 }; return { gdzie: ["za mielerzem, przy drodze", "dalej na wschód, przy zakręcie", "aż pod lasem na północnym wschodzie"][k.spot || 0], do: (r && r.sday ? r.sday : day()) + 2, postoj: stopName() }; } };
+        FX.ludJukVars = { vars: (Q, r) => { const k = S().k65 || { spot: 0 }; return { gdzie: [TK.kod.vars[0], TK.kod.vars[1], TK.kod.vars[2]][k.spot || 0], do: (r && r.sday ? r.sday : day()) + 2, postoj: stopName() }; } };
         // K66
         FX.ludPatrolNoc = { check: () => { const k = S().k66; return !!k && !!k.done; }, tick: () => patrolNightTick() };
         FX.ludPatrolVars = { vars: () => ({}) };
@@ -1316,7 +1310,7 @@
         FX.ludJaskiniaOtwarta = { cond: () => caveOpen() };
         FX.ludD34Start = () => has() && onMap(M.jaskinia) && caveOpen();
         FX.ludSkrzynia = { check: () => { const s = S().d34; return !!(s.taken || s.opened || s.stash) && count(D.ITEMS.skrzynia) + (s.opened ? 1 : 0) > 0; } };
-        FX.ludD34Vars = { vars: () => ({ balt: baltazarOk() ? " - albo Baltazarowi Veyowi (kantor w miasteczku)" : "" }) };
+        FX.ludD34Vars = { vars: () => ({ balt: baltazarOk() ? TK.kod.vars[3] : "" }) };
         FX.ludKomuSkrzynia = {
             ready: (Q, r, st, key) => (key === "celnik" || (key === "kupiec" && baltazarOk()) ? count(D.ITEMS.skrzynia) > 0 : null),
             talk(Q, r, st, key, spk) {
@@ -1329,7 +1323,7 @@
         FX.ludD35Start = () => has() && onMap(M.gory) && campActive() && heroAt(D.CAMP.chest[0], D.CAMP.chest[1]) <= D.CAMP.near;
         FX.ludDziennik = { check: () => !!S().d35.journal };
         FX.ludSzybKoniec = { check: () => !!S().d35.how };
-        FX.ludD35Vars = { vars: () => ({ grum: grumOk() ? ", powiedz Grumowi (tawerna)" : "" }) };
+        FX.ludD35Vars = { vars: () => ({ grum: grumOk() ? TK.kod.vars[4] : "" }) };
         FX.ludSzybKomu = {
             ready: (Q, r, st, key) => ((key === "grum" && grumOk()) || key === "rotmistrz" ? count(D.ITEMS.dziennik) > 0 && !S().d35.how : null),
             talk(Q, r, st, key, spk) {
@@ -1337,7 +1331,7 @@
                 const lines = key === "grum" ? TX.shaftGrum : TX.shaftCaptain;
                 const out = linesTo([], spk, [lines[0]]);
                 const rest = cmdAct(linesTo([], spk, lines.slice(1)), ["d35", key === "grum" ? "grum" : "rotmistrz"]);
-                return { ready: true, list: choiceTo(out, ["Powiedz o szybie.", "Jeszcze nie."], [rest, []], 1) };
+                return { ready: true, list: choiceTo(out, [TK.kod.talk[3], TK.kod.talk[4]], [rest, []], 1) };
             }
         };
     }
@@ -1354,7 +1348,7 @@
     T.on("townQuestDone", e => {
         if (!has() || !e) return;
         const G = GZ();
-        if (e.id === "K66" && G && G.addFavor) G.addFavor(5, "nocny patrol");
+        if (e.id === "K66" && G && G.addFavor) G.addFavor(5, TK.kod.glowna[0]);
     }, { owner: PLUGIN });
     // K63's five days: from the day it was taken to 21:00 of the fifth day after
     function k63Deadline() {
@@ -1444,8 +1438,8 @@
         ["Patrol: przylądek z latarnią", 159, 53, 46, 2], ["Patrol: garnizon (wybrzeże)", 162, 60, 46, 2]
     ];
     let f9Place = 0, f9Stop = 0;
-    const placeLabel = i => "Miejsce " + (i + 1) + "/" + PLACES.length + ": " + PLACES[i][0] + "   ←→";
-    const stopLabel = i => "Dzień handlarza: " + stopName(D.CYCLE.stops[i]) + "   ←→";
+    const placeLabel = i => Watki.wstaw(TK.kod.placeLabel[0], { "1": i + 1, length: PLACES.length, "3": PLACES[i][0] });
+    const stopLabel = i => Watki.wstaw(TK.kod.stopLabel[0], { "1": stopName(D.CYCLE.stops[i]) });
     // the first day from today on whose number fits test (the clock's hour kept; a transfer then reloads the map)
     function jumpDay(test, h) {
         let d = day();
@@ -1459,15 +1453,15 @@
         rows: () => {
             const s = has() ? S() : null;
             return [
-                { label: placeLabel(f9Place), icon: 190, desc: "←→ wybierz miejsce paczki C, OK przenosi na nie.", what: "go", pick: f9Place },
-                { label: "Dzień mielerza: Zbych przy kopcu, kopiec się tli", icon: 334, desc: "Dzień cyklu 2 (rano, 10:00) - przenosi na Leśną drogę pod mielerz.", what: "kiln" },
-                { label: stopLabel(f9Stop), icon: 496, desc: "←→ postój; OK: dzień tego postoju (10:00) i przeniesienie do wozu.", what: "stop", pick: f9Stop },
-                { label: "Pasterz z owcami przy menhirach", icon: 367, desc: "Dzień, w którym stado pasie się na Łące menhirów (10:00) - przenosi tam.", what: "p018" },
-                { label: "K66: noc patrolu (przylądek, 20:55)", icon: 387, desc: "Zaczyna K66, ustawia 20:55 i przenosi pod latarnię - o 21 patrol wyrusza.", what: "patrol" },
-                { label: "W8 gotowe: obóz kopaczy " + (s && s.force.camp ? "(wymuszony - OK wyłącza)" : "(OK wymusza)"), icon: 499, desc: "Obóz kopaczy stoi bez rozdziału 3 wątku W8 (tylko do prób).", what: "camp" },
-                { label: "Odpływ teraz (wejście do jaskini)", icon: 190, desc: "Wyspa.forceTide(„low”) i przeniesienie do zatoczki.", what: "tide" },
-                { label: "W5 rozdz. 4: jaskinia otwarta " + (s && s.force.cave ? "(wymuszona)" : ""), icon: 498, desc: "Wejście do jaskini bez rozdziału 4 wątku W5 (tylko do prób).", what: "cave" },
-                { label: "Burza wczoraj (pasterz zgubił owcę - K64)", icon: 367, desc: "Udaje burzę z wczoraj: pasterz da zadanie K64.", what: "storm" }
+                { label: placeLabel(f9Place), icon: 190, desc: TK.kod.rows[0], what: "go", pick: f9Place },
+                { label: TK.kod.rows[1], icon: 334, desc: TK.kod.rows[2], what: "kiln" },
+                { label: stopLabel(f9Stop), icon: 496, desc: TK.kod.rows[3], what: "stop", pick: f9Stop },
+                { label: TK.kod.rows[4], icon: 367, desc: TK.kod.rows[5], what: "p018" },
+                { label: TK.kod.rows[6], icon: 387, desc: TK.kod.rows[7], what: "patrol" },
+                { label: Watki.wstaw(TK.kod.rows[10], { "1": s && s.force.camp ? TK.kod.rows[8] : TK.kod.rows[9] }), icon: 499, desc: TK.kod.rows[11], what: "camp" },
+                { label: TK.kod.rows[12], icon: 190, desc: TK.kod.rows[13], what: "tide" },
+                { label: Watki.wstaw(TK.kod.rows[14], { "1": s && s.force.cave ? "(wymuszona)" : "" }), icon: 498, desc: TK.kod.rows[15], what: "cave" },
+                { label: TK.kod.rows[16], icon: 367, desc: TK.kod.rows[17], what: "storm" }
             ];
         },
         pick(row, delta) {
@@ -1475,23 +1469,23 @@
             if (row.what === "stop") { f9Stop = row.pick = ((row.pick || 0) + delta + 4) % 4; row.label = stopLabel(row.pick); }
         },
         ok(row) {
-            if (!has()) return { say: "Najpierw gra", bad: true };
+            if (!has()) return { say: TK.kod.ok[0], bad: true };
             const s = S();
             if (row.what === "go") { const p = PLACES[row.pick || 0]; if (p[1] === M.przystan || p[1] === M.jaskinia) { const W = T.api("Wyspa") || window.Wyspa; if (W && W.forceTide) W.forceTide("low"); } return { go: p }; }
             if (row.what === "kiln") { jumpDay(d => ((d % 6) + 6) % 6 === 2, 10); return { go: ["Mielerz", 21, 49, 21, 8] }; }
-            if (row.what === "stop") { const i = row.pick || 0, m = D.CYCLE.stops[i]; jumpDay(d => ((d % 4) + 4) % 4 === i, 10); const p = PLACES.find(x => x[1] === m && /Postój/.test(x[0])); return { go: p || ["Postój", m, 50, 20, 2] }; }
-            if (row.what === "p018") { jumpDay(d => d % D.CYCLE.pasture018.every === D.CYCLE.pasture018.at, 10); return { go: ["Pastwisko przy menhirach", 18, 68, 34, 8] }; }
+            if (row.what === "stop") { const i = row.pick || 0, m = D.CYCLE.stops[i]; jumpDay(d => ((d % 4) + 4) % 4 === i, 10); const p = PLACES.find(x => x[1] === m && /Postój/.test(x[0])); return { go: p || [TK.kod.ok[1], m, 50, 20, 2] }; }
+            if (row.what === "p018") { jumpDay(d => d % D.CYCLE.pasture018.every === D.CYCLE.pasture018.at, 10); return { go: [TK.kod.ok[2], 18, 68, 34, 8] }; }
             if (row.what === "patrol") {
                 const q = TQ();
                 if (q && q.start && !isActive("K66")) q.start("K66");
                 if (s.k66) s.k66.night = day();
                 $gameSystem.setDayNightHour(20.9);
-                return { go: ["Przylądek z latarnią", 159, 53, 46, 2] };
+                return { go: [TK.kod.ok[3], 159, 53, 46, 2] };
             }
-            if (row.what === "camp") { s.force.camp = !s.force.camp; s.camp.gone = 0; return s.force.camp ? { go: ["Obóz kopaczy", 13, 101, 77, 8] } : { say: "Obóz kopaczy: jak w wątku W8" }; }
-            if (row.what === "tide") { const W = T.api("Wyspa") || window.Wyspa; if (W && W.forceTide) W.forceTide("low"); return { go: ["Zatoczka przemytników", 125, 16, 66, 8] }; }
-            if (row.what === "cave") { s.force.cave = !s.force.cave; return { say: "Jaskinia " + (s.force.cave ? "otwarta (wymuszona)" : "jak w wątku W5") }; }
-            if (row.what === "storm") { s.force.storm = day() - 1; return { say: "Burza „wczoraj” - pasterz da zadanie K64" }; }
+            if (row.what === "camp") { s.force.camp = !s.force.camp; s.camp.gone = 0; return s.force.camp ? { go: [TK.kod.ok[4], 13, 101, 77, 8] } : { say: TK.kod.ok[5] }; }
+            if (row.what === "tide") { const W = T.api("Wyspa") || window.Wyspa; if (W && W.forceTide) W.forceTide("low"); return { go: [TK.kod.ok[6], 125, 16, 66, 8] }; }
+            if (row.what === "cave") { s.force.cave = !s.force.cave; return { say: Watki.wstaw(TK.kod.ok[9], { "1": s.force.cave ? TK.kod.ok[7] : TK.kod.ok[8] }) }; }
+            if (row.what === "storm") { s.force.storm = day() - 1; return { say: TK.kod.ok[10] }; }
             return null;
         }
     };
@@ -1506,7 +1500,7 @@
         if (c) out.push(D.EPILOG.cave[c]);
         return out;
     }
-    window.Ludzie = T.register(PLUGIN, { epilogue, addMenu,
+    window.Ludzie = T.register(PLUGIN, { epilogue,
         PKG: "C", VERSION: D.VERSION, DATA: D, ready: true, state: () => S(), act, opts: OPTS, auto: v => { OPTS.auto = !!v; },
         // for the other packages: B (the bandits' camp by the kiln), D (the eagle's stash)
         mielerzBurning, stashFound,

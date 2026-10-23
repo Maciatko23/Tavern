@@ -83,6 +83,7 @@
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Kantor] " + where + ":", e);
     const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const K = () => TX.kod;   // (the words of this file: js/teksty/kantor.txt, kod.*)
 
     // ------------------------------------------------------------------
     // The state (the save)
@@ -244,39 +245,39 @@
     function build(data, mapId) {
         const out = [];
         if (mapId === M.kantor) {
-            out.push(eventData(EV.klapa, "Klapa do piwnicy", P.klapa[0], P.klapa[1], { key: "klapa", walk: false, fix: true }));
-            out.push(eventData(EV.stos, "Skrzynie pod tylnymi drzwiami", P.stos[0], P.stos[1], { key: "stos", img: ART.stos1, fix: true, walk: false }));
+            out.push(eventData(EV.klapa, K().nazwy.klapa, P.klapa[0], P.klapa[1], { key: "klapa", walk: false, fix: true }));
+            out.push(eventData(EV.stos, K().nazwy.stos, P.stos[0], P.stos[1], { key: "stos", img: ART.stos1, fix: true, walk: false }));
             out.push(eventData(EV.lada, D.TX.lada, P.lada[0], P.lada[1], { key: "lada", walk: false, fix: true }));
         } else if (mapId === M.town) {
-            out.push(eventData(EV.kurier, "Kurier w kapturze", P.gateIn[0], P.gateIn[1], { key: "kurier", img: ART.kurier, speed: 4, through: true, priority: 0 }));
-            out.push(eventData(EV.gosc, "Nocny gość", P.east[0], P.east[1], { key: "gosc", img: ART.feliks, speed: 3, through: true, priority: 0 }));
+            out.push(eventData(EV.kurier, K().nazwy.kurier, P.gateIn[0], P.gateIn[1], { key: "kurier", img: ART.kurier, speed: 4, through: true, priority: 0 }));
+            out.push(eventData(EV.gosc, K().nazwy.gosc, P.east[0], P.east[1], { key: "gosc", img: ART.feliks, speed: 3, through: true, priority: 0 }));
         } else if (mapId === M.piwnica) {
             const spot = name => { const e = (data.events || []).find(v => v && v.name === "Miejsce: " + name); return e ? [e.x, e.y] : null; };
             const pl = (name, def) => spot(name) || def;
-            out.push(eventData(EV.baltazar, "Baltazar Vey", P.baltazar[0], P.baltazar[1], { key: "baltazar", img: ART.baltazar, speed: 4 }));
+            out.push(eventData(EV.baltazar, K().nazwy.baltazar, P.baltazar[0], P.baltazar[1], { key: "baltazar", img: ART.baltazar, speed: 4 }));
             const sl = pl("w5_slawek", P.slawek);
-            out.push(eventData(EV.slawek, "Sławek", sl[0], sl[1], { key: "slawek", img: [ART.slawek[0], 0, 8, 1] }));
+            out.push(eventData(EV.slawek, K().nazwy.slawek, sl[0], sl[1], { key: "slawek", img: [ART.slawek[0], 0, 8, 1] }));
             const st = pl("w5_sterta", P.sterta), wk = pl("w5_worki", P.worki), km = pl("w5_kamienie", P.kamienie), sz = pl("w5_szkatula", P.szkatula), si = pl("w5_siedzisko", P.siedzisko);
-            out.push(eventData(EV.sterta, "Skrzynie do wyniesienia", st[0], st[1], { key: "sterta", img: ART.sterta, fix: true, walk: false, note: "<Occupy:left=1>" }));
-            out.push(eventData(EV.worki, "Worki zboża", wk[0], wk[1], { key: "worki", img: ART.worki, fix: true, walk: false }));
-            out.push(eventData(EV.kamienie, "Skrzynia z kamieniami", km[0], km[1], { key: "kamienie", img: ART.kamienie, fix: true, walk: false }));
-            out.push(eventData(EV.mapy, "Zwoje map", 13, 5, { key: "mapy", img: ART.mapy, fix: true, walk: false }));
-            out.push(eventData(EV.biurko, "Rejestr na biurku", P.biurko[0], P.biurko[1], { key: "biurko", tileId: 598, fix: true, walk: false }));
-            out.push(eventData(EV.szkatula, "Szkatuła", sz[0], sz[1], { key: "szkatula", img: ART.szkatula, fix: true, walk: false }));
-            out.push(eventData(EV.siedzisko, "Skrzynia do siedzenia", si[0], si[1], { key: "siedzisko", img: ART.skrzynia, fix: true, walk: false }));
+            out.push(eventData(EV.sterta, K().nazwy.sterta, st[0], st[1], { key: "sterta", img: ART.sterta, fix: true, walk: false, note: "<Occupy:left=1>" }));
+            out.push(eventData(EV.worki, K().nazwy.worki, wk[0], wk[1], { key: "worki", img: ART.worki, fix: true, walk: false }));
+            out.push(eventData(EV.kamienie, K().nazwy.kamienie, km[0], km[1], { key: "kamienie", img: ART.kamienie, fix: true, walk: false }));
+            out.push(eventData(EV.mapy, K().nazwy.mapy, 13, 5, { key: "mapy", img: ART.mapy, fix: true, walk: false }));
+            out.push(eventData(EV.biurko, K().nazwy.biurko, P.biurko[0], P.biurko[1], { key: "biurko", tileId: 598, fix: true, walk: false }));
+            out.push(eventData(EV.szkatula, K().nazwy.szkatula, sz[0], sz[1], { key: "szkatula", img: ART.szkatula, fix: true, walk: false }));
+            out.push(eventData(EV.siedzisko, K().nazwy.siedzisko, si[0], si[1], { key: "siedzisko", img: ART.skrzynia, fix: true, walk: false }));
         } else if (mapId === M.skraj) {
             const lit = campWanted();
-            out.push(eventData(EV.ogien, "Ognisko przemytników", P.ognisko[0], P.ognisko[1], { key: "ogien", img: ["!Decoration", 2, 4, 0], step: true, fix: true, walk: false, note: lit ? FIRE_LIGHT : "" }));
-            out.push(eventData(EV.wozOboz, "Wóz przemytników", P.wozOboz[0], P.wozOboz[1], { key: "wozOboz", img: ART.woz, fix: true, walk: false, note: "<Occupy:right=1>" }));
-            out.push(eventData(EV.skrzynieOboz, "Skrzynie", P.skrzynieOboz[0], P.skrzynieOboz[1], { key: "skrzynieOboz", img: ART.stos2, fix: true, walk: false }));
-            out.push(eventData(EV.kurierOboz, "Kurier w kapturze", P.kurierOboz[0], P.kurierOboz[1], { key: "kurierOboz", img: [ART.kurier[0], 0, P.kurierOboz[2], 1] }));
+            out.push(eventData(EV.ogien, K().nazwy.ogien, P.ognisko[0], P.ognisko[1], { key: "ogien", img: ["!Decoration", 2, 4, 0], step: true, fix: true, walk: false, note: lit ? FIRE_LIGHT : "" }));
+            out.push(eventData(EV.wozOboz, K().nazwy.wozOboz, P.wozOboz[0], P.wozOboz[1], { key: "wozOboz", img: ART.woz, fix: true, walk: false, note: "<Occupy:right=1>" }));
+            out.push(eventData(EV.skrzynieOboz, K().nazwy.skrzynie, P.skrzynieOboz[0], P.skrzynieOboz[1], { key: "skrzynieOboz", img: ART.stos2, fix: true, walk: false }));
+            out.push(eventData(EV.kurierOboz, K().nazwy.kurier, P.kurierOboz[0], P.kurierOboz[1], { key: "kurierOboz", img: [ART.kurier[0], 0, P.kurierOboz[2], 1] }));
         } else if (mapId === M.droga) {
             // (the men by the cart keep a small fire - every light a flame; its light only when the map comes up on the ferry night)
-            out.push(eventData(EV.ogienProm, "Ognisko przy wozie", P.ogienProm[0], P.ogienProm[1], { key: "ogienProm", img: ["!Decoration", 2, 4, 0], step: true, fix: true, walk: false, note: has() && at("w5Prom") && ferryNow() ? FIRE_LIGHT : "" }));
-            out.push(eventData(EV.wozProm, "Wóz z ładunkiem", P.wozProm[0], P.wozProm[1], { key: "wozProm", img: ART.wozWorki, fix: true, walk: false, note: "<Occupy:right=1>" }));
-            out.push(eventData(EV.skrzynieProm, "Skrzynie", P.skrzynieProm[0], P.skrzynieProm[1], { key: "skrzynieProm", img: ART.stos3, fix: true, walk: false }));
-            out.push(eventData(EV.rafal, "Rafał", P.rafal[0], P.rafal[1], { key: "rafal", img: ART.rafal }));
-            P.guards.forEach((g, i) => out.push(eventData(EV.straz1 + i, "Człowiek Baltazara", g[0], g[1], { key: "straz" + i, img: [ART.slawek[0], 0, 4, 1] })));
+            out.push(eventData(EV.ogienProm, K().nazwy.ogienProm, P.ogienProm[0], P.ogienProm[1], { key: "ogienProm", img: ["!Decoration", 2, 4, 0], step: true, fix: true, walk: false, note: has() && at("w5Prom") && ferryNow() ? FIRE_LIGHT : "" }));
+            out.push(eventData(EV.wozProm, K().nazwy.wozProm, P.wozProm[0], P.wozProm[1], { key: "wozProm", img: ART.wozWorki, fix: true, walk: false, note: "<Occupy:right=1>" }));
+            out.push(eventData(EV.skrzynieProm, K().nazwy.skrzynie, P.skrzynieProm[0], P.skrzynieProm[1], { key: "skrzynieProm", img: ART.stos3, fix: true, walk: false }));
+            out.push(eventData(EV.rafal, K().nazwy.rafal, P.rafal[0], P.rafal[1], { key: "rafal", img: ART.rafal }));
+            P.guards.forEach((g, i) => out.push(eventData(EV.straz1 + i, K().nazwy.straz, g[0], g[1], { key: "straz" + i, img: [ART.slawek[0], 0, 4, 1] })));
         }
         return out.filter(e => e.x < data.width && e.y < data.height);
     }
@@ -498,7 +499,7 @@
         const men = campMen(), engaged = men.some(h => h._engaged);
         if (engaged) {   // (a fight: the courier runs off into the forest)
             const k = evOf(EV.kurierOboz);
-            if (k && !hidden(k)) { say(k, "Kupiec się dowie!", 120); hideEv(k); S().camp.fled = nightOf(); }
+            if (k && !hidden(k)) { say(k, K().kurierUcieka, 120); hideEv(k); S().camp.fled = nightOf(); }
             campTalk = null;
             return;
         }
@@ -526,7 +527,7 @@
         if (!at("w5Oboz")) return;
         S().camp.fought = day();
         vgive("list_przewozowy", 1);
-        T.popup("List przewozowy z pieczęcią kantoru", { top: true, color: "#ffd23f", sub: "W worku przy ognisku: „kamienie z krukiem - do sztabu, zboże - na prom”." });
+        T.popup(K().list, { top: true, color: "#ffd23f", sub: K().listSub });
         notePair(TX.noteObozFight);
         complete();
     }
@@ -542,17 +543,18 @@
     function shiftOn() { return working() && shiftTime() && !(S().shift.night === nightOf() && S().shift.over); }
     // the kantor's doors on Map008 (the user's events 94 and 95, <Town:door=kantor>): what they do while W5 needs them
     const DOOR_STUB = [C(355, ["Kantor.door(this);"]), C(0, [])];
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        if (this._mapId === M.town && window.$gameMap && $gameMap.mapId() === M.town && has()) {
-            const d = this.event();
+    // (2026-10-23) the core's one list hook (Tawerna.onEventList): a scene at a door - after Kasztelan's and Dwor's, before Homes' (as the
+    // old wrappers by the plugin list)
+    T.onEventList(ev => {
+        if (ev._mapId === M.town && window.$gameMap && $gameMap.mapId() === M.town && has()) {
+            const d = ev.event();
             if (d && /<Town:door=kantor>/.test(d.note || "")) {
-                const back = this.x === P.backDoor[0] && this.y === P.backDoor[1];
+                const back = ev.x === P.backDoor[0] && ev.y === P.backDoor[1];
                 if (closedNow() || (back && working() && shiftTime())) return DOOR_STUB;
             }
         }
-        return _Game_Event_list.call(this);
-    };
+        return null;
+    }, { owner: PLUGIN, priority: T.onEventList.PRIORITY.scene + 20 });
     const closedNow = () => S().outcome === "closed" && !S().honest;
     function door(interp) {
         const ev = interp && $gameMap.event(interp.eventId());
@@ -596,7 +598,7 @@
         if (s.shift.paid) return;
         s.shift.paid = true;
         $gameParty.gainGold(D.PAY.shift);
-        T.popup("+" + D.PAY.shift + " G od Baltazara", { icon: COIN_ICON, kind: "gold" });
+        T.popup(fill(K().zaplata, { n: D.PAY.shift }), { icon: COIN_ICON, kind: "gold" });
         think(TX.baltazarPay.map(l => l));
         s.shifts++;
         s.shift.over = true;
@@ -709,7 +711,7 @@
         r.lastCaught = nightOf();
         if (r.took === "take") { vtake("rejestr", 1); r.took = ""; }
         s.shift.over = true;
-        T.popup("Przyłapany", { top: true, color: "#ff9f8f", sub: "Baltazar wyrzuca cię z kantoru. Dziś bez zapłaty - spróbuj następnej nocy." });
+        T.popup(K().przylapany, { top: true, color: "#ff9f8f", sub: K().przylapanySub });
         think(r.caught > 1 ? TX.caughtAgain : TX.caught, b);
         if (b) b.setDirection(4);
         pendingOut = Graphics.frameCount + 240;   // (thrown out: the street before the back door, after his words)
@@ -719,7 +721,7 @@
         const s = S(), r = s.reg;
         s.shift.over = true;
         $gameParty.gainGold(D.PAY.shift);
-        T.popup("+" + D.PAY.shift + " G od Baltazara", { icon: COIN_ICON, kind: "gold" });
+        T.popup(fill(K().zaplata, { n: D.PAY.shift }), { icon: COIN_ICON, kind: "gold" });
         think(TX.baltazarAfter, evOf(EV.baltazar));
         if (r.took) { r.done = day(); autoChecks(); }
     }
@@ -748,14 +750,14 @@
         return out;
     }
     function registerNote(copy) {
-        note(D.TX.noteRejestr, (copy ? TX.rejestrOdpis : TX.rejestrWzial) + " W środku: " + registerText().join(" "));
+        note(D.TX.noteRejestr, fill(K().notatkaRejestru, { jak: copy ? TX.rejestrOdpis : TX.rejestrWzial, tresc: registerText().join(" ") }));
     }
     function takeRegister(how, interp) {
         const s = S(), r = s.reg;
         if (r.state !== "out" || r.took) return;
         if (how === "take") {
             vgive("rejestr", 1); r.took = "take";
-            T.popup(D.VITEMS.rejestr.name, { top: true, color: "#ffd23f", sub: "Wyjdź z gabinetu, zanim Baltazar wróci." });
+            T.popup(D.VITEMS.rejestr.name, { top: true, color: "#ffd23f", sub: K().wyjdzZGabinetu });
             think(TX.biurkoTaken);
             registerNote(false);
         } else if (how === "copy") {
@@ -764,7 +766,7 @@
             const t = clock();
             if (t >= r.back) { r.state = "returning"; const b = evOf(EV.baltazar); if (b) { b.locate(P.gabinetDoor[0] - 1, P.gabinetDoor[1]); showEv(b); } caught(); return; }
             vgive("odpis_rejestru", 1); r.took = "copy";
-            T.popup(D.VITEMS.odpis_rejestru.name, { top: true, color: "#ffd23f", sub: "Oryginał zostaje na biurku. Wyjdź z gabinetu." });
+            T.popup(D.VITEMS.odpis_rejestru.name, { top: true, color: "#ffd23f", sub: K().oryginalZostaje });
             think(TX.biurkoCopied);
             registerNote(true);
         }
@@ -784,13 +786,13 @@
         if (!cardInBox()) { T.popup(TX.szkatulaNic, { kind: "info" }); return null; }
         s.reg.card = day();
         think(TX.szkatulaKarta);
-        if (!T.call("Pustelnia", "giveCard", 1, "Karta z kronik zakonu - ze szkatuły Baltazara.")) vgive("karta_1", 1);
+        if (!T.call("Pustelnia", "giveCard", 1, K().kartaZeSzkatuly)) vgive("karta_1", 1);
         return null;
     }
     function siedzisko() {
-        if (!regNight() || !checkedIn() || S().reg.state) { T.popup("Skrzynia. Twarda.", { kind: "info" }); return null; }
+        if (!regNight() || !checkedIn() || S().reg.state) { T.popup(K().skrzyniaTwarda, { kind: "info" }); return null; }
         const t = clock();
-        if (t >= 24 + TM.out - 0.1) { T.popup("Zaraz wpół do pierwszej.", { kind: "info" }); return null; }
+        if (t >= 24 + TM.out - 0.1) { T.popup(K().zarazWpol, { kind: "info" }); return null; }
         const out = linesTo([], HERO, ["> " + TX.siedzisko]);
         return choiceTo(out, [TX.czekaj, TX.nieCzekaj], [[C(221, []), C(355, ["Kantor.act(this, [\"wait\"]);"]), C(230, [30]), C(222, [])], []], 1);
     }
@@ -881,7 +883,7 @@
         if (fight.some(h => h._engaged)) { T.popup(TX.promWoz, { kind: "info" }); return null; }
         // nobody has noticed him: the swap
         const out = linesTo([], HERO, ["> " + TX.promSwapAsk]);
-        return choiceTo(out, ["Podmień.", "Zostaw."], [act([], ["swap"]), []], 1);
+        return choiceTo(out, [K().podmien, K().zostaw], [act([], ["swap"]), []], 1);
     }
     function swap() {
         if (count(D.STONE_ITEM) < D.STONES.swap) { T.popup.need(item(D.STONE_ITEM) ? item(D.STONE_ITEM).iconIndex : 0, TX.promSwapNeed); return; }
@@ -890,14 +892,14 @@
         ferryEnd("swapped");
     }
     function straz() {
-        const s = S(), spk = { id: EV.straz1, name: "Człowiek Baltazara" }, out = linesTo([], spk, TX.promSwoj);
+        const s = S(), spk = { id: EV.straz1, name: K().nazwy.straz }, out = linesTo([], spk, TX.promSwoj);
         return choiceTo(out, TX.promSwojOpts, [act(linesTo([], spk, TX.promLetGo), ["letgo"]), act([], ["swap"]), []], 2);
     }
     function rafal() {
         const s = S();
         if (!rafalOnCart()) return null;
         if (fightingMen().some(h => h._engaged)) { T.popup(TX.rafalWait, { kind: "info" }); return null; }
-        const spk = { id: EV.rafal, name: "Rafał" }, out = linesTo([], spk, TX.rafalFree);
+        const spk = { id: EV.rafal, name: K().nazwy.rafal }, out = linesTo([], spk, TX.rafalFree);
         return act(out, ["rafal"]);
     }
     function freeRafal() {
@@ -907,7 +909,7 @@
         setFlag("rafalAlly"); setFlag("w5RafalFreed");
         T.call("TownLife", "setGone", "rafal", false);
         notePair(TX.noteRafal);
-        opinion(3, "Rafał uwolniony");
+        opinion(3, K().rafalOpinia);
         hideEv(evOf(EV.rafal));
     }
 
@@ -919,11 +921,9 @@
     function w5Vars() {
         const s = S(), r = w5();
         const d = s.ferry.day || (at("w5Prom") ? ferryDay() : 0);
-        const akt2 = !actTwo() ? "zacznie się w Akcie II (po spłacie długu albo stracie działki)." :
-            s.outcome === "closed" ? "sołtys szuka kogoś do pustego kantoru (ratusz, 8–18)." :
-            s.outcome === "double" ? "Baltazar ma dla wspólnika nowy towar (kantor, 8–18)." : "Baltazar sprzedaje wrogom drożej (kantor, 8–18).";
-        return { n: Math.min(2, clueList().length), zmiany: Math.min(D.SHIFTS, s.shifts), rejestr: vcount("rejestr") > 0 ? "Rejestr Baltazara masz w torbie" : "Odpis rejestru masz w torbie",
-            zebranie: s.zebranie || day() + 1, prom: d ? "noc z dnia " + d + " na " + (d + 1) : "najbliższy prom", akt2 };
+        const A = K().akt2, akt2 = !actTwo() ? A.przed : s.outcome === "closed" ? A.closed : s.outcome === "double" ? A.double : A.enemy;
+        return { n: Math.min(2, clueList().length), zmiany: Math.min(D.SHIFTS, s.shifts), noce: D.SHIFTS, rejestr: vcount("rejestr") > 0 ? K().rejestrMasz : K().odpisMasz,
+            zebranie: s.zebranie || day() + 1, prom: d ? fill(K().promNoc, { d, d2: d + 1 }) : K().promNajblizszy, akt2 };
     }
     function hookQuests() {
         const q = TQ();
@@ -1017,7 +1017,7 @@
             scheduleRaid();
             if (hour() >= 7) $gameSystem._dayNightDay = day() + 1;   // (a night in the guardhouse: out at seven in the morning)
             $gameSystem.setDayNightHour(7);
-            T.popup("Noc w wartowni", { top: true, color: "#ff9f8f", sub: "Rejestr spłonął w koszu żarowym. Baltazar już wie." });
+            T.popup(K().wartownia, { top: true, color: "#ff9f8f", sub: K().wartowniaSub });
             complete({ to: prom, reward: { opinion: -1, xp: 30 } });
         } else if (how === "soltys") {
             giveUpRegister();
@@ -1046,7 +1046,7 @@
         for (const f of ["w5Zamkniety", "w5Soltys", "w5BaltazarWrog"]) setFlag(f);
         notePair(TX.noteZebranie);
         // the loose card of the chronicles found in the strongbox: the reeve hands it over
-        if (cardInBoxAny()) { S().reg.card = day(); if (!T.call("Pustelnia", "giveCard", 1, "Sołtys znalazł ją w szkatule Baltazara.")) vgive("karta_1", 1); }
+        if (cardInBoxAny()) { S().reg.card = day(); if (!T.call("Pustelnia", "giveCard", 1, K().kartaSoltys)) vgive("karta_1", 1); }
         closeKantor();
         complete({ reward: { opinion: 12, xp: 150 } });
     }
@@ -1114,16 +1114,16 @@
         const g = D.GOODS.find(x => x.id === id);
         if (!g || !item(id)) return false;
         const cost = Math.max(1, Math.round(g.price * g.n * (D.PRICE[kind] || 1)));
-        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, "Potrzebujesz " + cost + " G"); return false; }
+        if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, fill(K().potrzebujesz, { n: cost })); return false; }
         $gameParty.loseGold(cost);
         $gameParty.gainItem(item(id), g.n);
         T.popup(item(id).name + " ×" + g.n, { icon: item(id).iconIndex, kind: "good" });
         return true;
     }
-    // Baltazar's own talk after W5 (TownLife's hook - after TownQuests: the quests speak first): the weekly cut, the shop
+    // Baltazar's own talk after W5 (the core's talk service, below the quests: they speak first): the weekly cut, the shop
     function baltazarHook(key, ev) {
         if (key !== "kupiec" || !has()) return null;
-        const s = S(), spk = { id: ev.eventId(), name: "Baltazar Vey" };
+        const s = S(), spk = { id: ev.eventId(), name: K().nazwy.baltazar };
         const out = [];
         if (s.outcome === "double" && day() - (s.weekPaid || 0) >= 7 && inHours(hour(), TM.work)) {
             s.weekPaid = day();
@@ -1131,38 +1131,37 @@
             act(out, ["pay", D.PAY.double]);
         }
         if (isDone("W5") && (mode() === "grip" || mode() === "enemy") && inHours(hour(), TM.work)) {
-            const extra = extraRows("kupiec", ev);
-            choiceTo(out, [TX.sklepAsk].concat(extra.map(r => r.label), [TX.sklepBye]), [shopList(spk)].concat(extra.map(r => r.cmds || []), [[]]), extra.length + 1);
+            // (2026-10-23) the other systems' rows (Tawerna.talk.option, who "kupiec" - Bron.js: the kantor's weapons) after his shop
+            T.talk.menu(out, T.talk.rows("kupiec", { ev }, [{ label: TX.sklepAsk, cmds: shopList(spk) }]), TX.sklepBye);
         }
         return out.length ? out : null;
     }
     // (2026-10-17, the user) Ludmiła behind the counter of the honest kantor (Map103, 9-15): a short word and the shop - her quests'
     // hand-ins first (TownQuests), her camp's news on a choice (TownQuests' talk of her: offers, reminders - or a line of the camp)
     const ludmilaHere = () => { const L = TL(), ev = L && L.eventOf ? L.eventOf("ludmila") : null; return onMap(M.kantor) && !!ev && !(ev._town && ev._town.hidden) ? ev : null; };
-    // (2026-10-23, Bron.js) other trades of the same people, as lines of their own menus - their rules, hours and words kept:
-    // addMenu(fn(key, ev) -> [{ label, cmds, say }]) - say: a line said before a soldier's choice
-    const extraMenus = [];
-    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
-    function extraRows(key, ev) {
-        const out = [];
-        for (const fn of extraMenus) { try { for (const r of fn(key, ev) || []) if (r && r.label) out.push(r); } catch (e) { console.error("[Kantor] menu " + key, e); } }
-        return out;
-    }
+    // (2026-10-23, docs/ROZMOWY.md) her menu takes the other systems' rows through the core's talk service (Tawerna.talk.option, who
+    // "ludmila" - Bron.js: the kantor's weapons): the goods, their rows, her camp's news, the farewell last - as the old addMenu did
     function ladaMenu(spk, ev) {
-        const out = linesTo([], spk, [pick(TX.ladaLudmila)]), extra = extraRows("ludmila", ev);
-        return choiceTo(out, [TX.ladaPokaz].concat(extra.map(r => r.label), [TX.ladaOboz, TX.ladaBywaj]),
-            [shopList(spk, "honest", true)].concat(extra.map(r => r.cmds || []), [act([], ["ludmilaTalk"]), []]), extra.length + 2);
+        const out = linesTo([], spk, [pick(TX.ladaLudmila)]);
+        const rows = T.talk.rows("ludmila", { ev }, [{ label: TX.ladaPokaz, cmds: shopList(spk, "honest", true) },
+            { label: TX.ladaOboz, cmds: act([], ["ludmilaTalk"]), order: T.talk.ORDER.chat }]);
+        return T.talk.menu(out, rows, TX.ladaBywaj);
     }
     function ludmilaHook(key, ev) {
         if (key !== "ludmila" || !has() || !onMap(M.kantor) || S().honest !== "ludmila") return null;
         const q = TQ();
         try { if (q && q.talkFor && q.talkFor("ludmila", true)) return null; } catch (e) { /* (her quests speak through TownQuests) */ }
-        return ladaMenu({ id: ev.eventId(), name: "Ludmiła" }, ev);
+        return ladaMenu({ id: ev.eventId(), name: K().nazwy.ludmila }, ev);
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: Ludmiła behind the honest counter - an "owner" takeover (steps aside for her
+    // quests' hand-ins itself); Baltazar's weekly cut and shop after W5 - "shop + 20": only when the quests (and Pustelnia's card, Kruk's
+    // letters...) have nothing for him, before Bron's shop of his (whose row comes into this menu) and the greeting of the day
     (function hookTalk() {
         const L = TL();
-        if (L && L.addTalkHook) L.addTalkHook((key, ev) => { try { return ludmilaHook(key, ev); } catch (e) { report("talk", e); return null; } }, true);
-        if (L && L.addTalkHook) L.addTalkHook((key, ev) => { try { return baltazarHook(key, ev); } catch (e) { report("talk", e); return null; } });
+        T.talk.takeover({ owner: PLUGIN, name: "ludmila", who: "ludmila", priority: T.talk.PRIORITY.owner + 20,
+            run: ctx => { try { return ludmilaHook(ctx.who, ctx.ev); } catch (e) { report("talk", e); return null; } } });
+        T.talk.takeover({ owner: PLUGIN, name: "baltazar", who: "kupiec", priority: T.talk.PRIORITY.shop + 20,
+            run: ctx => { try { return baltazarHook(ctx.who, ctx.ev); } catch (e) { report("talk", e); return null; } } });
         if (L && L.addCondition) {
             L.addCondition("w5Shift", () => { try { return shiftOn(); } catch (e) { return false; } });
             L.addCondition("w5Harbour", () => { try { return S().outcome === "closed" && !!S().back; } catch (e) { return false; } });
@@ -1175,8 +1174,8 @@
         const s = S();
         if (!s.honest) return null;
         const lu = s.honest === "ludmila" ? ludmilaHere() : null;
-        if (lu) return ladaMenu({ id: lu.eventId(), name: "Ludmiła" });
-        if (!inHours(hour(), [8, 21])) { T.popup("Kantor miejski zamknięty na noc.", { kind: "info" }); return null; }
+        if (lu) return ladaMenu({ id: lu.eventId(), name: K().nazwy.ludmila });
+        if (!inHours(hour(), [8, 21])) { T.popup(K().ladaNoc, { kind: "info" }); return null; }
         return linesTo([], HERO, TX.ladaPusta[s.honest] || TX.ladaPusta.ratusz).concat(shopList({ id: EV.lada, name: TX.lada }, "honest", true));
     }
     // Map103: the stack's look by tonight's crates, the trapdoor (an empty event on the user's tile)
@@ -1205,8 +1204,8 @@
                 sterta: () => sterta(ev), worki: () => (T.popup(TX.worki, { kind: "info" }), null), kamienie: () => (T.popup(TX.kamienie, { kind: "info" }), setFlag("w5Kamienie"), null),
                 mapy: () => (T.popup(TX.mapy, { kind: "info" }), null), biurko: () => biurko(), szkatula: () => szkatula(), siedzisko: () => siedzisko(),
                 wozProm: () => wozProm(), skrzynieProm: () => (T.popup(TX.promWoz, { kind: "info" }), null), rafal: () => rafal(),
-                straz0: () => straz(), straz1: () => straz(), wozOboz: () => (T.popup("Wóz przemytników. Skrzynie pod płachtą.", { kind: "info" }), null),
-                skrzynieOboz: () => (T.popup("Skrzynie z pieczęcią kantoru.", { kind: "info" }), null), ogien: () => null, ogienProm: () => null, kurierOboz: () => null,
+                straz0: () => straz(), straz1: () => straz(), wozOboz: () => (T.popup(K().wozOboz, { kind: "info" }), null),
+                skrzynieOboz: () => (T.popup(K().skrzynieOboz, { kind: "info" }), null), ogien: () => null, ogienProm: () => null, kurierOboz: () => null,
                 kurier: () => null, gosc: () => null }[k];
             const out = list ? list() : null;
             if (out && out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
@@ -1230,17 +1229,17 @@
         else if (what === "letgo") { if (ferryNow() && !S().ferry.state) ferryEnd("letgo"); }
         else if (what === "rafal") freeRafal();
         else if (what === "buy") { if (!buy(a, b)) stop(); }
-        else if (what === "pay") { $gameParty.gainGold(a); T.popup("+" + a + " G od Baltazara", { icon: COIN_ICON, kind: "gold" }); }
+        else if (what === "pay") { $gameParty.gainGold(a); T.popup(fill(K().zaplata, { n: a }), { icon: COIN_ICON, kind: "gold" }); }
         else if (what === "ludmilaTalk") {   // (her own quests' talk - TownQuests - or a word of the camp)
             const q = TQ(), lu = ludmilaHere();
             let list = null;
             try { list = q && q.talkFor ? q.talkFor("ludmila") : null; } catch (e) { list = null; }
-            if (!list || !list.length) list = linesTo([], { id: lu ? lu.eventId() : -1, name: "Ludmiła" }, TX.ladaObozLine);
+            if (!list || !list.length) list = linesTo([], { id: lu ? lu.eventId() : -1, name: K().nazwy.ludmila }, TX.ladaObozLine);
             if (interp) interp.setupChild(list.concat([C(0, [])]), interp.eventId());
         }
     }
     function talkBaltazar(ev) {
-        const s = S(), spk = { id: ev.eventId(), name: "Baltazar Vey" };
+        const s = S(), spk = { id: ev.eventId(), name: K().nazwy.baltazar };
         if (!checkedIn()) return linesTo([], spk, TX.baltazarDone);
         if (regNight()) {
             if (s.reg.state) return linesTo([], spk, [TX.baltazarWraca]);
@@ -1251,7 +1250,7 @@
         if (!s.shift.n && !s.shift.carrying) return linesTo([], spk, TX.baltazarStart);
         return linesTo([], spk, TX.baltazarWork, { left: D.CRATES - s.shift.n });
     }
-    function talkSlawek(ev) { return linesTo([], { id: ev.eventId(), name: "Sławek" }, TX.slawekTalk); }
+    function talkSlawek(ev) { return linesTo([], { id: ev.eventId(), name: K().nazwy.slawek }, TX.slawekTalk); }
 
     // ------------------------------------------------------------------
     // The frame: the visitors, the camp, the cellar, the ferry night, the world
@@ -1280,7 +1279,7 @@
     T.on("humansDone", e => {
         if (!has() || !e) return;
         if (e.tag === CAMP_TAG && !campMen().some(h => !h._surrendered && !h._defeated)) campFought();
-        if (e.tag === PROM_TAG && !fightingMen().length && ferryNow()) { S().ferry.cleared = day(); think(["> (Ludzie Baltazara pobici. Wóz stoi - ładunek jest mój.)"]); }
+        if (e.tag === PROM_TAG && !fightingMen().length && ferryNow()) { S().ferry.cleared = day(); think([K().pobici]); }
     }, { owner: PLUGIN });
     T.on("heroRobbed", e => {
         if (!has() || !e) return;
@@ -1328,7 +1327,7 @@
     // API
     // ------------------------------------------------------------------
     window.Kantor = T.register(PLUGIN, {
-        DATA: D, state: () => S(), act: actCall, addMenu, door, clues: clueList, trust, witTrusts, registerText, cardInBox, priceMul, priceOf, mode,
+        DATA: D, state: () => S(), act: actCall, door, clues: clueList, trust, witTrusts, registerText, cardInBox, priceMul, priceOf, mode,
         ferryDay, ferryNow, shiftOn, checkedIn, outcome: () => S().outcome, debugJump, JUMP, step: () => cur(),
         // tests: a visitor's phase, the camp's men, the ferry's men
         visitors: () => Object.assign({}, vis), campMen, promMen, fightingMen, spawnCamp, campWanted, opts: OPTS, backDoorEv, cellarState: () => S().reg

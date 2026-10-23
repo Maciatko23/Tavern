@@ -1,0 +1,175 @@
+{
+ "caught": "Złapany: ",
+ "newKind": "Nowy okaz w gablotce",
+ "missed": "Uciekł...",
+ "released": "Wypuszczasz go. Odlatuje.",
+ "pawikNet": "Pawik w siatce. Pokaż go Eli przed zmierzchem.",
+ "pawikGone": "Pawik w siatce osłabł. Wypuszczasz go - odfruwa.",
+ "noNet": "Potrzebujesz siatki na motyle",
+ "honey": "Motyle przy kwiatach: +",
+ "crop": "Zapylone kwiaty: +",
+ "nibbled": "Bielinki podgryzły kapustę: -",
+ "full": "Gablotka pełna: wszystkie gatunki",
+ "f9none": "Nie ma tu ognia - wbijam pochodnię",
+ "f9moths": "Ćmy lecą do ognia",
+ "f9butter": "Motyle: łąka, lato, po deszczu",
+ "f9net": "Siatka na motyle",
+ "gatunki": {
+  "cytrynek": {
+   "name": "Cytrynek",
+   "latin": "Gonepteryx rhamni",
+   "desc": "Pierwszy motyl wiosny. Cytrynowożółty, z ostro zakończonymi skrzydłami i pomarańczową kropką na każdym z nich. Zimuje jako dorosły motyl w gęstwinie, więc budzi się, kiedy w cieniu jeszcze leży śnieg.",
+   "where": "Łąki, Kruczy Jar, ogrody. Najwięcej wiosną, latem mniej, jesienią pojedyncze."
+  },
+  "pawik": {
+   "name": "Pawik",
+   "latin": "Aglais io",
+   "desc": "Rdzawoczerwony, z czterema oczkami jak na pawim piórze - błękitnymi, w żółtej obwódce. Złożone skrzydła ma niemal czarne, jak zeschły liść. Jego gąsienice żyją na pokrzywach.",
+   "where": "Rzadki: wylatuje tylko o świcie po deszczu, wiosną i latem, kiedy słońce suszy kwiaty. Lubi pokrzywy."
+  },
+  "modraszek": {
+   "name": "Modraszek",
+   "latin": "Polyommatus icarus",
+   "desc": "Mały, błękitny jak niebo nad łąką, z białą frędzlą na brzegach skrzydeł. Spód skrzydeł ma szarobeżowy, w pomarańczowe kropki. Szybki i płochliwy - najtrudniej go złapać.",
+   "where": "Kwitnące łąki, najwięcej latem."
+  },
+  "bielinek": {
+   "name": "Bielinek",
+   "latin": "Pieris brassicae",
+   "desc": "Biały, z czarnymi końcami przednich skrzydeł i czarnymi kropkami. Leci wszędzie tam, gdzie rośnie kapusta: składa na niej jaja, a gąsienice obgryzają liście.",
+   "where": "Wszędzie przy kwiatach, jesienią przy kapuście. Strach na wróble albo kruk pilnujący pola odpędzą go od grządek."
+  },
+  "cma": {
+   "name": "Ćma",
+   "latin": "nocny gatunek",
+   "desc": "Szarobrązowa ćma o trójkątnych skrzydłach. Za dnia śpi przyklejona do kory, nocą leci do każdego ognia: krąży wokół ogniska, pochodni i latarni, aż zakręci się jej w głowie.",
+   "where": "Nocą przy ogniu: ogniska, pochodnie (także wbite w ziemię), latarnie, kosze ogniowe. Najłatwiej ją złapać właśnie przy płomieniu."
+  }
+ },
+ "mapy": {
+  "3": {
+   "name": "Kruczy Jar"
+  },
+  "4": {
+   "name": "łąka"
+  },
+  "8": {
+   "name": "ogród rycerzy"
+  },
+  "17": {
+   "name": "łąka"
+  },
+  "18": {
+   "name": "łąka"
+  },
+  "20": {
+   "name": "podwórze dziadka"
+  },
+  "24": {
+   "name": "ogród Lorda"
+  },
+  "111": {
+   "name": "działka pod lasem"
+  },
+  "155": {
+   "name": "pustelnia"
+  },
+  "168": {
+   "name": "Spalona zagroda"
+  }
+ },
+ "przepis": {
+  "name": "Zrób siatkę na motyle",
+  "desc": "Długi kij, obręcz z giętkiej gałązki i worek z lnianego włókna. Podejdź do motyla (najlepiej skradając się, C) i naciśnij O. Złapany trafia do gablotki w Dzienniku, a ty go wypuszczasz."
+ },
+ "gablotka": {
+  "title": "Gablotka z motylami",
+  "pollenTitle": "Zapylanie",
+  "pollen": "Motyle przy kwiatach zapylają to, co kwitnie: zbiór ziemniaków (kwitną) i owoce dzikich jabłoni i grusz bywają większe o jedną sztukę, a ul w pobliżu kwiatów daje czasem słoik miodu więcej. Najwięcej wiosną i latem, jesienią mniej, zimą wcale. Bielinki za to podgryzają kapustę - strach na wróble albo kruk pilnujący pola je odpędzą.",
+  "kleofasHint": "Brat Kleofas z pustelni na klifie spisze złapane gatunki w kronice - jeśli ma czym pisać.",
+  "empty": "Gablotka jest pusta. Zrób w warsztacie siatkę na motyle (gałęzie i włókno), podejdź do motyla - najlepiej skradając się (C) - i naciśnij O.",
+  "drawingTitle": "Rysunek Eli",
+  "drawing": "Pawik z czterema oczkami, Ela w chustce i ja z siatką. Kredka trochę się kruszyła, więc słońce ma tylko pół promieni. Ela mówi, że to dlatego, że było rano."
+ },
+ "kleofas": {
+  "partial": [
+   "Motyle? (Kleofas sięga po pióro.) Mów, jakie złapałeś.",
+   "> {lista}.",
+   "Zapisane. Zakon spisał zielnik, ale motyli nikt nigdy nie liczył. Będziesz pierwszy."
+  ],
+  "full": [
+   "Cytrynek, pawik, modraszek, bielinek i ćma. Pięć. (Kleofas dmucha na atrament.)",
+   "Pszczoły nie dadzą rady same. Motyle zapylają to, czego pszczołom się nie chce. Masz - z moich uli. Zasłużyłeś."
+  ],
+  "note": [
+   "Kronika motyli",
+   "Brat Kleofas wpisał do kroniki wszystkie pięć gatunków z mojej gablotki: cytrynka, pawika, modraszka, bielinka i ćmę. Pierwsza taka lista od czasów zakonu."
+  ]
+ },
+ "zadania": {
+  "K54": {
+   "title": "Motyl z oczkami",
+   "where": "obóz uchodźców (Ela)",
+   "when": "wiosną i latem, za dnia, od dnia 3",
+   "desc": "Ela widziała w książce mamy motyla z oczkami na skrzydłach - pawika. Żywego nie widziała nigdy. Złap go siatką i pokaż jej. Nie zabijaj.",
+   "offer": {
+    "say": [
+     "Mama miała książkę z obrazkami. Taką ze zwierzętami. Spaliła się razem z chatą...",
+     "Był tam motyl z oczkami na skrzydłach! Cztery oczka, niebieskie, z żółtym. Mama mówi, że to pawik.",
+     "Ja jeszcze nigdy takiego nie widziałam. Naprawdę. Złapiesz mi? Tylko go nie zabijaj!"
+    ],
+    "yes": "Złapię i ci pokażę.",
+    "no": "Może kiedyś.",
+    "accept": [
+     "Mama mówi, że pawiki wylatują rano po deszczu, jak słońce suszy skrzydła. I że lubią pokrzywy, bo tam się rodzą.",
+     "Łapie się je siatką. Taką na kiju. Ty umiesz wszystko zrobić, prawda?"
+    ],
+    "decline": [
+     "Dobrze... To narysuję go sobie jeszcze raz. Z pamięci."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zrób siatkę na motyle (warsztat: gałęzie i włókno), złap pawika i pokaż go Eli w obozie. Pawiki latają tylko o świcie po deszczu, wiosną i latem, i lubią pokrzywy. W siatce wytrzyma do zmierzchu.",
+     "remind": [
+      "Pawik! Z oczkami! Rano po deszczu, pamiętasz?"
+     ],
+     "hero": [
+      "> Ela, chodź tu. Powoli... Zobacz, co mam w siatce."
+     ],
+     "done": [
+      "(Ela przykłada nos do siatki i wstrzymuje oddech.)",
+      "Oczka! Cztery! Patrzą na mnie... Jest ładniejszy niż w książce!",
+      "Wypuścimy go? Razem? Na trzy... Leć, motylku!",
+      "(Pawik wyfruwa z siatki, okrąża obóz i znika nad murem.)",
+      "Poczekaj! Mam coś dla ciebie. Narysowałam go wczoraj, z pamięci. Teraz wiem, że dobrze. I ciebie dorysowałam. Z siatką."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Motyl z oczkami",
+     "Złapałem pawika i pokazałem go Eli. Wypuściliśmy go razem, a ona dała mi swój rysunek: pawik, ona i ja z siatką. Ludmiła się uśmiechnęła - pierwszy raz, odkąd ją znam."
+    ]
+   }
+  }
+ },
+ "rzeczy": {
+  "pawik": {
+   "name": "Pawik w siatce"
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Ela narysowała tego motyla już dziesięć razy. Na desce, na piasku, na ścianie namiotu. Dziękuję ci. Długo się tak nie śmiała."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Myślisz, że pawik wróci? Mama mówi, że jak się coś wypuści, to wraca. Albo jego dzieci."
+   ]
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Motyle_Data.js: TX, SPECIES=gatunki:/\\.(name|latin|desc|where)$/, MAPS=mapy:/\\.name$/, NET_RECIPE=przepis:/^(name|desc)$/, CASE=gablotka:/^(?!tab$)/, KLEOFAS=kleofas:/^(partial|full|note)/, K54=zadania.K54:zadanie, VITEMS=rzeczy:nazwy, REMARKS=uwagi:/\\.lines$/)"
+}

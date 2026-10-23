@@ -1,0 +1,689 @@
+# Teksty paczki C „Ludzie przy drogach” (wtyczki Ludzie_Data.js i Ludzie.js): pasterz, handlarz, mielerz, celnik, patrole, Zbych, zadania K63-K66, D34, D35.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz ludzie
+
+# ======================================================================== PATROL_BARKS (patrol.barks)
+[patrol.barks.patrol]
+Rabusie kręcą się po drogach. Widziałeś kogoś obcego?
+Ludzie z białym okiem na płaszczu... jak zobaczysz, daj znać do garnizonu.
+Krok równo! Patrzeć w krzaki, nie w niebo.
+Obcy na wybrzeżu? Mów od razu, chłopcze.
+
+[patrol.barks.rain]
+Mokro jak w wiadrze. A obchód i tak trzeba zrobić.
+
+[patrol.barks.night]
+Kto idzie? ...A, ty. Wracaj do domu, nocą tu niebezpiecznie.
+
+# ======================================================================== PATROL_TALK (patrol.talk)
+[patrol.talk.morning]
+Obchód o świcie. Rotmistrz mówi: kto rano chodzi, ten wieczorem śpi spokojnie.
+
+[patrol.talk.day]
+Rabusie z lasu napadają na wozy. A od morza przychodzą obcy z białym okiem na szyi. Czarne Oczy, tak ich zwą. Uważaj na nich.
+Patrolujemy brzeg i drogi. Jak coś zobaczysz - garnizon nad zatoką, rotmistrz Bełza.
+
+[patrol.talk.evening]
+Koniec obchodu. Jeszcze tylko do bramy i spać.
+
+[patrol.talk.night]
+Noc. Nie łaź sam po wybrzeżu.
+
+[patrol.talk.rain]
+Deszcz to dobra pora dla złodziei. Oczy szeroko.
+
+# ======================================================================== RESIDENTS (mieszkancy)
+# „pasterz”
+mieszkancy.0.name = Wawrzyn Owczarz
+mieszkancy.0.title = pasterz
+[mieszkancy.0.alt.barks.wander]
+Tu trawa lepsza. Kamienie trzymają rosę.
+Hej, owieczki, nie pod kamienie! Tam niedobrze.
+
+[mieszkancy.0.alt.barks.stand]
+Stare kamienie. Mój dziad mówił, że one pamiętają.
+
+[mieszkancy.0.alt.talk.day]
+Co trzeci dzień przyprowadzam je tutaj. Między kamieniami trawa nie wysycha. Dziwne miejsce, ale owce je lubią.
+Nocą bym tu nie został. Kamienie rzucają cienie, nawet jak nie ma słońca.
+
+[mieszkancy.0.barks.stand]
+Hej, hej, owieczki, do domu!
+Raz, dwa, trzy... sześć. Wszystkie.
+Tylko nie wchodź do koszaru, spłoszysz je.
+
+[mieszkancy.0.barks.wander]
+Trawa coraz suchsza. Jeszcze tydzień bez deszczu i będę pasł na kamieniach.
+Hej, Siwa! Nie odchodź!
+Wilk w nocy wył za lasem. Trzeba pilnować.
+
+[mieszkancy.0.barks.rain]
+Deszcz! Owce mokre, ale trawa odżyje.
+Pod koszar, pod koszar!
+
+[mieszkancy.0.barks.night]
+Śpij, chłopcze. Owce śpią, wilki nie.
+
+[mieszkancy.0.talk.morning]
+Wstaję przed owcami, kładę się po nich. Takie życie pasterza.
+Wełna, mleko, ser - od moich owiec. Jak chcesz, sprzedam. Uczciwie.
+
+[mieszkancy.0.talk.day]
+Sześć owiec, mój cały majątek. Wilki biorą jedną na rok, susza drugą. Dlatego koszar z wikliny - plecionki wilk nie przeskoczy.
+Lizawki brakuje. Owce bez soli chudną. Jak masz bryłę soli, kupię.
+
+[mieszkancy.0.talk.evening]
+Wieczorem zaganiam je za płot. Policz ze mną: jedna, dwie... sześć. Dobrze.
+Po burzy zawsze którejś brakuje. Głupie zwierzę ucieka przed grzmotem i nie wie dokąd.
+
+[mieszkancy.0.talk.night]
+Cicho. Nasłuchuję wilków.
+
+[mieszkancy.0.talk.rain]
+Deszcz to dla mnie święto. Trawa odrośnie.
+
+# „wędrowny handlarz”
+mieszkancy.1.name = Szymon Juczny
+mieszkancy.1.title = wędrowny handlarz
+[mieszkancy.1.barks.work]
+Przyprawy z kontynentu! Lina, gwoździe, strzały!
+Kupuję skóry i wełnę, płacę lepiej niż w mieście!
+Mapa okolic, jedyna taka! Kto kupi?
+
+[mieszkancy.1.barks.stand]
+Rozkładam towar, chwileczkę.
+Hej, chłopcze! Wóz otwarty.
+
+[mieszkancy.1.barks.wander]
+Jeszcze godzinka i zwijam kram.
+Dziś mało ludzi. Jutro inna droga.
+
+[mieszkancy.1.barks.rain]
+Plandeka na towar! Szybciej, osiołku, nie stój!
+
+[mieszkancy.1.barks.night]
+Ognisko grzeje. Siadaj, jak chcesz, tylko nic nie ruszaj z wozu.
+
+[mieszkancy.1.talk.morning]
+Rano rozkładam towar. Cztery drogi, cztery postoje - Polna, Leśna, Łąka i Kruczy Jar przy działce twojego dziadka. Dzień tu, dzień tam.
+Co dzień inny towar. Co mi wpadnie w ręce po drodze, to sprzedaję.
+
+[mieszkancy.1.talk.day]
+Chodzę od wsi do wsi od dwudziestu lat. Słyszę to, czego w miasteczku nikt ci nie powie.
+Skupuję skóry, wełnę, miód, wosk, rzadkie zioła, poroże, pazury. Płacę lepiej niż w mieście - bo w mieście płacą źle.
+
+[mieszkancy.1.talk.evening]
+Wieczorem siadam przy ogniu. Osiołek je, ja liczę. Zwykle wychodzi, że mniej niż rano.
+Woda? Mam beczkę. Ale wody nie rozdaję - wiozę ją z daleka. Łyk raz na dzień, i drogo.
+
+[mieszkancy.1.talk.night]
+Śpię jednym okiem. Rabusie lubią wędrownych kupców.
+
+[mieszkancy.1.talk.rain]
+Deszcz moczy plandekę, ale napełnia beczkę. Pół na pół.
+
+# „patrol garnizonu (przylądek)”
+mieszkancy.2.name = Żołnierz z patrolu
+mieszkancy.2.title = patrol garnizonu (przylądek)
+# „patrol garnizonu (przylądek)”
+mieszkancy.3.name = Żołnierz z patrolu
+mieszkancy.3.title = patrol garnizonu (przylądek)
+# „patrol garnizonu (wybrzeże)”
+mieszkancy.4.name = Żołnierz z patrolu
+mieszkancy.4.title = patrol garnizonu (wybrzeże)
+# „patrol garnizonu (wybrzeże)”
+mieszkancy.5.name = Żołnierz z patrolu
+mieszkancy.5.title = patrol garnizonu (wybrzeże)
+
+# ======================================================================== ZBYCH_ALT (zbychAlt)
+[zbychAlt.barks.work]
+Ciągu za dużo... zatkać dziurę darnią.
+Dym siwy - dobrze. Dym żółty - źle. Dziś siwy.
+Nie podchodź blisko, chłopcze, kopiec może się zapaść.
+
+[zbychAlt.barks.stand]
+Kawałek chleba, łyk wody i z powrotem do kopca.
+
+[zbychAlt.barks.wander]
+W nocy trzeba pilnować. Kopiec nie lubi wiatru. Ani złodziei.
+
+[zbychAlt.barks.rain]
+Deszcz na mielerz - jak woda na kowadło. Szybko, płachtą!
+
+[zbychAlt.barks.night]
+Śpię przy kopcu. Węgiel sam się nie zrobi.
+
+[zbychAlt.talk.morning]
+Mielerz rozpalony. Dwa dni tli się pod darnią, potem rozgarniam - i jest węgiel. Kowal bierze najwięcej.
+Masz drewno? Dwanaście polan - po wypale dostaniesz osiem worków węgla. Uczciwie.
+
+[zbychAlt.talk.day]
+Węgiel drzewny po cztery grosze. Więcej niż dziesięć z jednego wypału nie dam - kowal by mnie zabił.
+Las Lorda za plecami. Ja biorę tylko suche, leżące. Gajowy wie i milczy.
+
+[zbychAlt.talk.evening]
+Wieczorem obchodzę kopiec dookoła. Każda dziura w darni to stracony węgiel.
+
+[zbychAlt.talk.night]
+Śpię w szałasie, jednym okiem. Rabusie wiedzą, że węgiel to grosz.
+
+[zbychAlt.talk.rain]
+Deszcz? Dla mielerza zły, dla lasu dobry. Niech pada.
+
+# ======================================================================== K63 (zadania.K63)
+zadania.K63.title = Węgiel dla kowala
+zadania.K63.where = Kuźnia; mielerz Zbycha przy Leśnej drodze
+zadania.K63.when = od dnia 4, 7–18
+zadania.K63.desc = Kowal Tadek potrzebuje dziesięciu worków węgla drzewnego w pięć dni. Zbych Smolarz wypali je, jeśli dostanie drewno - i jeśli ktoś przypilnuje kopca w noc wypału.
+[zadania.K63.offer.say]
+Węgla mi brakuje. Palenisko gaśnie, a zamówień pełno. Dziesięć worków potrzebuję, w pięć dni.
+Zbych Smolarz pali węgiel w mielerzu przy Leśnej drodze. Zanieś mu drewno, niech wypali dla mnie. Zapłacę uczciwie.
+
+zadania.K63.offer.yes = Załatwię węgiel.
+zadania.K63.offer.no = Nie teraz.
+[zadania.K63.offer.accept]
+Dziesięć worków, pięć dni. Liczę na ciebie, chłopcze.
+
+[zadania.K63.offer.decline]
+Trudno. Palenisko poczeka. Ja nie.
+
+zadania.K63.steps.0.text = Zanieś Zbychowi Smolarzowi 12× Drewno (Podgrodzie, a w dni wypału mielerz przy Leśnej drodze; 6–20).
+[zadania.K63.steps.0.hero]
+> Kowal Tadek potrzebuje węgla. Przyniosłem drewno na wypał.
+
+[zadania.K63.steps.0.done]
+Dwanaście polan, suche. Dobre. Dziś wieczorem rozpalę mielerz przy Leśnej drodze.
+Tylko... w noc wypału rabusie lubią rozkopać kopiec i wynieść węgiel, zanim ostygnie. Przypilnujesz go ze mną tej nocy?
+
+[zadania.K63.steps.0.remind]
+Dwanaście polan suchego drewna. Bez tego nie rozpalę.
+
+zadania.K63.steps.1.text = Noc wypału (dzień {noc}, 22–2): pilnuj mielerza przy Leśnej drodze. Rabusie kręcą się po lesie.
+zadania.K63.steps.2.text = Odbierz węgiel od Zbycha - gotowy dnia {gotowy} (przy mielerzu albo w Podgrodziu).
+zadania.K63.steps.3.text = Zanieś kowalowi Tadkowi 10× Węgiel drzewny (kuźnia w miasteczku).
+[zadania.K63.steps.3.hero]
+> Węgiel od Zbycha. Dziesięć worków.
+
+[zadania.K63.steps.3.done]
+O! Czarny, lekki, dźwięczy jak trzeba. Zbych umie palić.
+Masz czterdzieści groszy. I słuchaj: stal ode mnie dostaniesz taniej niż u wojskowych. Raz na dzień, dla przyjaciela.
+
+[zadania.K63.steps.3.remind]
+Dziesięć worków węgla. Palenisko czeka.
+
+[zadania.K63.reward.note]
+Stal od kowala
+Kowal Tadek sprzedaje mi stal taniej niż kowal garnizonu - raz na dzień, „dla przyjaciela”. Za węgiel, który przywiozłem od Zbycha.
+
+zadania.K63.fail.text = Kowal nie doczekał się węgla.
+
+# ======================================================================== K64 (zadania.K64)
+zadania.K64.title = Zabłąkana owca
+zadania.K64.where = Łąka (koszar), Omszała łąka
+zadania.K64.when = po burzy, 7–19
+zadania.K64.desc = Po burzy Wawrzynowi Owczarzowi brakuje owcy. Uciekła przed grzmotem na Omszałą łąkę. Trzeba ją znaleźć i przyprowadzić do koszaru.
+[zadania.K64.offer.say]
+Pięć. Liczę i liczę - pięć. Siwa uciekła w burzę. Głupia, boi się grzmotu i leci przed siebie.
+Pewnie na Omszałej łące, tam zawsze ucieka. Ja nie mogę zostawić stada. Przyprowadzisz ją? Pójdzie za tobą, jak ją zawołasz.
+
+zadania.K64.offer.yes = Przyprowadzę Siwą.
+zadania.K64.offer.no = Nie mam czasu.
+[zadania.K64.offer.accept]
+Dzięki ci! Podejdź do niej spokojnie, nie biegnij. Pójdzie.
+
+[zadania.K64.offer.decline]
+Trudno... wilki będą miały ucztę.
+
+zadania.K64.steps.0.text = Znajdź Siwą na Omszałej łące (pasterz mówi: {gdzie}) i podejdź do niej - przycisk akcji: pójdzie za tobą.
+zadania.K64.steps.1.text = Zaprowadź Siwą na Łąkę, na pastwisko pod koszarem. Idzie za tobą - nie biegnij.
+zadania.K64.steps.2.text = Powiedz Wawrzynowi, że Siwa wróciła.
+[zadania.K64.steps.2.say]
+> Siwa wróciła. Cała i zdrowa.
+
+[zadania.K64.steps.2.done]
+Siwa! Ty głupia... (pasterz drapie owcę za uchem) Sześć. Znowu sześć.
+Masz ser, trzy krążki, i trzydzieści groszy. A u mnie odtąd płacisz mniej - jak swój.
+
+[zadania.K64.reward.note]
+Swój u pasterza
+Wawrzyn Owczarz sprzedaje mi wełnę, ser, mleko i koc taniej - za Siwą, którą przyprowadziłem po burzy.
+
+# ======================================================================== K65 (zadania.K65)
+zadania.K65.title = Zgubiony juk
+zadania.K65.where = Leśna droga (na wschód od mielerza)
+zadania.K65.when = od dnia 3, 8–18
+zadania.K65.desc = Szymonowi Jucznemu spadł z wozu juk na Leśnej drodze. Trzeba go znaleźć przed drugą nocą - zanim rabusie z lasu rozbiją przy nim obóz.
+[zadania.K65.offer.say]
+Nieszczęście, chłopcze. Na Leśnej drodze, za mielerzem, juk mi spadł z wozu. Nawet nie wiem kiedy - osiołek szarpnął na wybojach.
+W juku przyprawy z kontynentu. Jak go rabusie znajdą, przepadło. Dwie noce - potem rozbijają tam obóz. Znajdziesz go?
+
+zadania.K65.offer.yes = Poszukam juka.
+zadania.K65.offer.no = Nie teraz.
+[zadania.K65.offer.accept]
+Na wschód od mielerza, przy drodze. Skórzany, z rzemieniami. Pośpiesz się.
+
+[zadania.K65.offer.decline]
+Szkoda. Przyprawy pachniały jak raj.
+
+zadania.K65.steps.0.deadline.text = Rabusie znaleźli juk pierwsi.
+zadania.K65.steps.0.text = Znajdź juk handlarza na Leśnej drodze, przy drodze na wschód od mielerza ({gdzie}) - przed drugą nocą (do dnia {do}, 5:00).
+zadania.K65.steps.1.text = Oddaj juk Szymonowi Jucznemu (dziś: {postoj}).
+[zadania.K65.steps.1.hero]
+> Twój juk. Leżał przy drodze.
+
+[zadania.K65.steps.1.done]
+Mój juk! Cały! (handlarz zagląda do środka) Przyprawy są, pieczęć cała.
+Dwadzieścia pięć groszy. I u mnie zawsze taniej - słowo wędrownego kupca.
+
+[zadania.K65.steps.1.remind]
+Skórzany juk z rzemieniami. Leśna droga, za mielerzem.
+
+[zadania.K65.reward.note]
+Taniej u handlarza
+Szymon Juczny sprzedaje mi taniej - za juk, który znalazłem na Leśnej drodze.
+
+# ======================================================================== K66 (zadania.K66)
+zadania.K66.title = Nocny patrol
+zadania.K66.where = Przylądek z latarnią (nocą)
+zadania.K66.when = od dnia 6, 8–20
+zadania.K66.desc = Rotmistrz Bełza chce, żebyś poszedł z nocnym patrolem po przylądku przy latarni. Rabusie napadają tam na ludzi, a jego żołnierze są młodzi.
+[zadania.K66.offer.say]
+Patrol na przylądku przy latarni. Dwóch żółtodziobów. Rabusie wiedzą, że nocą wracają do koszar - i wtedy napadają.
+Dziś w nocy puszczę patrol jeszcze raz, od dziewiątej do północy. Pójdziesz z nimi? Ty znasz las lepiej niż oni.
+
+zadania.K66.offer.yes = Pójdę z patrolem.
+zadania.K66.offer.no = Nie tej nocy.
+[zadania.K66.offer.accept]
+O dziewiątej spod latarni. Trzymaj się blisko nich.
+
+[zadania.K66.offer.decline]
+Rozumiem. Noc jest długa, a ty jeden.
+
+zadania.K66.steps.0.deadline.text = Patrol poszedł bez ciebie.
+zadania.K66.steps.0.text = Dziś w nocy (21–24) idź z patrolem po przylądku z latarnią. Żołnierze wyruszają o 21 - trzymaj się blisko nich.
+zadania.K66.steps.1.text = Zamelduj rotmistrzowi Bełzie, jak poszedł patrol (garnizon nad zatoką).
+[zadania.K66.steps.1.say]
+> Rabusie napadli na patrol przy latarni. Odparliśmy ich.
+
+[zadania.K66.steps.1.done]
+(Rotmistrz kiwa głową.) Żołnierze mówią, że stanąłeś pierwszy. Dobrze.
+Trzydzieści groszy. I garnizon będzie o tobie pamiętał.
+
+zadania.K66.fail.text = Patrol poszedł bez ciebie.
+
+# ======================================================================== D34 (zadania.D34)
+zadania.D34.title = Jaskinia pod zatoczką
+zadania.D34.where = Przystań: zatoczka przemytników, jaskinia (tylko w odpływie)
+zadania.D34.when = od W5 rozdz. 4
+zadania.D34.desc = Przemytnicy Baltazara mają skład w jaskini pod zatoczką. Wejść można tylko w odpływie, nocą pilnuje Sławek. Skrzynia przemytu - komu ją oddać?
+[zadania.D34.offer.say]
+Ty jesteś od Stacha. Słuchaj. Przemytnicy Baltazara trzymają towar w jaskini pod zatoczką. Wejście tylko w odpływie - dlatego nikt go nie pilnuje.
+Przynieś mi skrzynię ze składu. Z pieczęcią kruka. Zapisze się w księdze - i dostaniesz czterdzieści groszy.
+
+zadania.D34.offer.yes = Przyniosę skrzynię.
+zadania.D34.offer.no = Nie mieszam się w to.
+[zadania.D34.offer.accept]
+Uważaj na odpływ. Woda wraca szybko. I nocą jest tam Sławek - człowiek Baltazara.
+
+[zadania.D34.offer.decline]
+Jak chcesz. Księga poczeka.
+
+zadania.D34.steps.0.text = Znajdź skład przemytników w jaskini pod zatoczką (przystań, na południowym zachodzie; wejście tylko w odpływie) i zabierz Skrzynię przemytu z niszy. Nocą pilnuje Sławek.
+zadania.D34.steps.1.text = Skrzynia przemytu jest ciężka. Oddaj ją celnikowi Samborowi (przystań){balt}.
+[zadania.D34.reward.note]
+Jaskinia przemytników
+Pod zatoczką przemytników, w skale nad przystanią, Baltazar miał skład. W odpływie można tam wejść suchą nogą.
+
+# ======================================================================== D35 (zadania.D35)
+zadania.D35.title = Szyb pod Orlą Granią
+zadania.D35.where = Góry i kamieniołom: obóz kopaczy na wschodzie
+zadania.D35.when = W8 od rozdz. 3
+zadania.D35.desc = Kopacze Czarnych Oczu drążą szyb w skale na wschodzie gór. Dziennik ich dowódcy powie po co. Potem: zasypać szyb, powiedzieć Grumowi - albo rotmistrzowi.
+zadania.D35.steps.0.text = Obóz kopaczy Czarnych Oczu (Góry, na wschodzie): w skrzyni dowódcy przy namiotach leży jego dziennik. Zabierz go po cichu - nocą kopacze śpią.
+zadania.D35.steps.1.text = „Kopią ku piętru pięćdziesiątemu od góry…” Co z szybem? Zasyp go (Lina i piła, przy szybie){grum}, albo powiedz rotmistrzowi (garnizon nad zatoką).
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.juk.name = Juk handlarza
+
+# ======================================================================== REMARKS (uwagi)
+# ludRochSkrzynie, mówi: przemytnik
+[uwagi.0.lines]
+Dwie skrzynie Baltazara? Jedna w jaskini, druga w gąszczu, gdzie tylko ptak doleci... (Roch gwiżdże.) Chłopcze, ty masz nosa lepszego niż celnik.
+Baltazar policzy straty i zacznie szukać, kto mu je zrobił. Uważaj na przystani.
+
+# ludMartaGroby, mówi: praczka
+[uwagi.1.lines]
+Byłeś przy starych grobach Ługów? Ktoś je oczyścił... (Marta ociera oczy.) To ty.
+Tam leżą rodzice Jana i jego dziadkowie. Jan mówił, że stary Ług przyszedł tu z kontynentu, kiedy zagroda była jeszcze lasem. Dziękuję.
+
+# ludKowalWegiel, mówi: drwal
+[uwagi.2.lines]
+Tadek zadowolony z węgla? To dobrze. Przyjdź, jak będziesz miał drewno - zawsze coś wypalę.
+
+# ludRotmistrzSzyb, mówi: rotmistrz
+[uwagi.3.lines]
+Moi ludzie rozbili obóz kopaczy pod skałą. Szyb zasypany. Czarne Oczy kopały ku podziemiom zakonu... Dobrze, że powiedziałeś mnie, a nie komuś innemu.
+
+# ======================================================================== SHEEP_WHERE (owcaGdzie)
+[owcaGdzie]
+przy starym dębie na zachodzie
+między krzakami w środku łąki
+na północnym wschodzie, pod lasem
+
+# ======================================================================== TX
+menu.buy = Pokaż towar.
+menu.sell = Sprzedam ci coś.
+menu.talk = Co słychać?
+menu.bye = Bywaj.
+menu.water = Łyk wody z beczki
+menu.rumour = Słyszałeś coś ciekawego?
+menu.coal = Kupię węgiel
+menu.wood = Dam drewno na wypał
+menu.collect = Odbiorę węgiel.
+menu.shear = Pomogę przy strzyży.
+menu.steel = Kupię stal
+menu.nothing = Nic.
+[pedlarHello]
+Witaj, wędrowcze! Patrz, wybieraj. Co dzień co innego.
+Hej, chłopcze od Stacha! Dziś mam coś dla ciebie.
+Towar z czterech dróg. Wybieraj.
+
+[pedlarNight]
+Nocą nie handluję. Przyjdź rano, po ósmej.
+
+[pedlarNoBuy]
+Nie masz nic, co bym wziął. Skóry, wełna, miód, wosk, rzadkie zioła, trofea - to kupuję.
+
+pedlarMapSold = Mapę już masz - drugiej takiej nie zrobię.
+pedlarWaterDone = Dziś już piłeś z mojej beczki. Jutro.
+pedlarWaterNone = Beczka sucha. Upał wypił wszystko.
+pedlarWaterLine = Łyk z beczki. Woda z daleka - stąd cena.
+[rumourNone]
+Nic nowego. Wszystko, o czym słyszałem, już wiesz.
+
+[rumourDone]
+Dziś już ci mówiłem, co wiem. Jutro coś usłyszę.
+
+rumour = Ludzie gadają, że na mapie „{map}” jest {name}. Popytaj, poszukaj.
+[shepherdHello]
+Owce zdrowe, wełna gęsta. Co ci trzeba?
+A, chłopak od Stacha. Mleka? Sera?
+
+[shepherdNight]
+Śpię przy owcach. Przyjdź rano.
+
+shearNo = Strzyża wiosną, w środku pory. Teraz owce nie dadzą.
+shearDone = Dziś już strzygliśmy. Jutro, jak chcesz.
+[shearOk]
+Trzymaj ją mocno za kark... o tak. (Godzina mija na strzyży.) Masz wełnę i dziesięć groszy. Dobra robota.
+
+[zbychHello]
+Węgla trzeba? Albo drewno masz?
+Siekiera, kopiec, dym. Czego chcesz?
+
+coalOut = Z tego wypału już nic nie zostało. Za kilka dni nowy.
+woodOk = Dwanaście polan. Za dwa dni będzie z tego osiem worków węgla.
+woodBusy = Jeden wypał naraz, chłopcze. Ten twój jeszcze się tli.
+collectWait = Jeszcze się tli. Dnia {day} rozgarnę.
+collectOk = Osiem worków, czarne jak noc. Twoje.
+[smithHello]
+Stal? Dla ciebie zawsze. Raz na dzień, taniej niż u wojskowych.
+
+smithDone = Dziś już brałeś. Jutro.
+kiln.cold = Zimny mielerz. Polana pod darnią czekają na ogień.
+kiln.burn = Mielerz się tli. Gorąco bije spod darni - nie podchodź.
+kiln.ready = Węgiel gotowy. Kopiec rozgarnięty, czarne bryły dymią jeszcze.
+shed = Szałas węglarza. Siennik, kociołek i siekiera. Zbych tu śpi w dni wypału.
+wagon = Wóz handlarza. Plandeka zawiązana na supły - nie ruszaj.
+donkey = Osiołek. Patrzy na ciebie, jakby pytał o marchew.
+fold = Koszar z wikliny. Owce za płotem są bezpieczne.
+camp.tent = Namiot kopaczy. Śmierdzi potem i dymem.
+camp.crates = Skrzynie z narzędziami: kilofy, łopaty, liny.
+camp.fireDay = Ognisko kopaczy.
+camp.chestEmpty = Pusta skrzynia. Dziennik już zabrałeś.
+camp.chestTaken = W skrzyni pod kocem - gruby notes w skórzanej oprawie. Dziennik dowódcy.
+camp.shaft = Szyb wykuty w skale, obity belkami. W dole czarno. Kopią ku podziemiom.
+camp.shaftDone = Szyb zasypany. Belki zawalone, wejście pełne kamieni.
+camp.shaftNeed = Żeby podciąć stemple, trzeba piły. I liny, żeby zwalić belki.
+[journalNote]
+Dziennik kopacza
+„Kopią ku piętru pięćdziesiątemu od góry. Kamień miękki, sztolnia idzie szybko. Białe oko każe się śpieszyć - zanim zakon się obudzi.” - z dziennika dowódcy kopaczy Czarnych Oczu (obóz pod skałą, Góry).
+
+[shaftDone]
+Ostatnie podcięcie - belki trzeszczą, strop się sypie. Szyb zasypany. Kopacze nie wrócą tu szybko.
+
+[shaftGrum]
+> Kopacze Czarnych Oczu drążą szyb pod skałą, na wschodzie gór. Ku piętru pięćdziesiątemu. Mam ich dziennik.
+(Grum długo milczy.) Pięćdziesiąte... od góry. To moi mocodawcy, chłopcze. Albo ich rywale. Tak czy owak - dobrze, że mi powiedziałeś.
+Pójdę tam z ludźmi. Kopacze zwiną obóz. A ty... trzymaj ten dziennik przy sobie.
+
+[shaftCaptain]
+> Panie rotmistrzu. Pod skałą na wschodzie gór kopacze z białym okiem drążą szyb. Ku podziemiom zakonu. Mam ich dziennik.
+(Rotmistrz bierze dziennik, czyta.) Czarne Oczy... na naszej wyspie. Wyślę ludzi jeszcze dziś. Obóz będzie rozbity, szyb zasypany.
+Dobrze zrobiłeś, chłopcze. Garnizon to zapamięta.
+
+cave.closed = Otwór zawalony głazami. Ktoś je tu ułożył - celowo.
+cave.flooded = Wejście zalane. Trzeba odpływu.
+cave.enter = Wchodzisz do jaskini...
+cave.niche = Nisza w skale. Pusto - skrzynię już zabrałeś.
+cave.nicheLook = W niszy skrzynia z wypalonym krukiem. Ciężka.
+cave.table = Stół przemytników. Rejestr: skrzynie, kamienie z krukiem, worki zboża. Pismo Baltazara.
+cave.barrel = Beczki z solą i suszoną rybą. Na wieku znak kruka.
+cave.salt = Woda morska. Słona - nie do picia.
+[caveTake]
+Weź skrzynię (ciężka).
+Wyłam wieko i zajrzyj.
+Zostaw.
+
+[caveOpened]
+Pod wiekiem: przyprawy w woreczkach, gwoździe, sakiewka z groszem... i pusta przegródka po kamieniu z krukiem. Celnik się dowie, że ktoś tu był.
+
+[crateCelnik]
+> Skrzynia z jaskini pod zatoczką. Pieczęć kruka.
+(Celnik zapisuje długo.) Jedna skrzynia, pieczęć kruka, skład przemytników... Zgadza się.
+Czterdzieści groszy. I w księdze stoi teraz, że wnuk Stacha jest po stronie prawa.
+
+[crateCelnik2]
+Druga? (Celnik unosi brwi.) Skąd... nie, nie mów. Dwadzieścia więcej. I nikomu ani słowa.
+
+[crateBaltazar]
+> Twoja skrzynia. Z jaskini pod zatoczką.
+(Baltazar uśmiecha się szeroko.) Mój przyjaciel! Wiedziałem, że jesteś rozsądny. Dziewięćdziesiąt groszy.
+Celnik nic nie wie, prawda? Prawda.
+
+[crateBaltazar2]
+I druga? Ach, przyjacielu... Czterdzieści więcej. Rozsądek się opłaca.
+
+crateLabel.celnik = Oddaj skrzynię celnikowi.
+crateLabel.baltazar = Oddaj skrzynię Baltazarowi.
+crateLabel.keep = Jeszcze nie.
+stash = Druga skrzynia przemytu z pieczęcią kruka. Ciężka.
+graves.dirty = Stary krzyż, zarośnięty chwastami i mchem.
+graves.clean = Oczyszczony krzyż. Ktoś tu dba o pamięć.
+graves.cleaning = Wyrywasz chwasty, zdzierasz mech...
+[graves.done]
+Trzy stare krzyże czyste. Ławka znowu widać. Ługowie mają tu spokój.
+
+graves.bench = Stara ławka przy grobach. Usiąść, pomyśleć.
+[patrolSearch]
+Stój! Przeszukanie. Rozkaz rotmistrza.
+
+[patrolNight]
+Do broni! Rabusie!
+Za króla!
+
+patrolNightStart = Patrol wyrusza spod latarni. Trzymaj się blisko.
+kilnNight = Ktoś skrada się do mielerza...
+sheepFound = Siwa idzie za tobą.
+sheepHome = Siwa wróciła do stada.
+sheepLook = Owca pasterza. Beczy na twój widok.
+sheepLost = Zabłąkana owca. Drży i beczy żałośnie.
+blanket = Koc grzeje: odpoczywasz szybciej.
+
+# ======================================================================== ITEM_NAMES (nazwyRzeczy)
+nazwyRzeczy.210 = Przyprawy
+nazwyRzeczy.211 = Mapa okolic
+nazwyRzeczy.212 = Skrzynia przemytu
+nazwyRzeczy.213 = Dziennik kopacza
+nazwyRzeczy.214 = Wełniany koc
+
+# ======================================================================== EPILOG (epilog)
+epilog.graves = Marta Ługowa siada czasem przy starych grobach w lesie, tych, które oczyściłeś. Mówi, że teraz widać imiona - i że dziadkowie Jana mieliby co opowiadać.
+epilog.cave.celnik = Jaskinia pod zatoczką stoi pusta: celnik Sambor przybił przy wejściu deskę z pieczęcią. Przemytnicy szukają nowej dziury w brzegu.
+epilog.cave.baltazar = Skrzynia z jaskini wróciła do Baltazara. W jego księgach stoisz teraz po stronie zysków - a on niczego nie zapomina.
+epilog.cave.otwarta = Jaskinię pod zatoczką zalewa przypływ jak dawniej. O wyłamanej skrzyni mówi się na przystani szeptem - nikt nie wie, że to ty.
+
+# ======================================================================== z kodu Ludzie.js (kod.<funkcja>.<n>, w kolejności kodu)
+# stopName
+kod.stopName.0 = Polna droga
+kod.stopName.1 = Leśna droga
+kod.stopName.2 = Łąka
+kod.stopName.3 = Kruczy Jar
+# eventData
+kod.eventData.0 = Ludzie: {name}
+# build
+kod.build.0 = Dym z mielerza
+kod.build.1 = Szałas węglarza
+kod.build.2 = Tobołek handlarza
+kod.build.3 = Zgubiony juk
+kod.build.4 = Wóz handlarza
+kod.build.5 = Osiołek handlarza
+kod.build.6 = Płot koszaru
+kod.build.7 = Znacznik pastwiska (krzak)
+kod.build.8 = Namiot kopaczy
+kod.build.9 = Skrzynia dowódcy kopaczy
+kod.build.10 = Szyb poszukiwawczy
+kod.build.11 = Skrzynie kopaczy
+kod.build.12 = Znacznik obozu (krzak)
+kod.build.13 = Wylot jaskini
+kod.build.14 = Stary krzyż Ługów
+kod.build.15 = Ławka przy grobach
+kod.build.16 = Marta Ługowa
+# strike
+kod.strike.0 = Jesteś zbyt zmęczony
+# buy
+kod.buy.0 = Potrzebujesz {cost} G
+kod.buy.1 = Mapa okolic
+kod.buy.2 = Kupiłem od wędrownego handlarza mapę okolic. Zaznaczone na niej miejsca widać teraz w dzienniku, w zakładce „Okolice” - kompas poprowadzi do każdego.
+# sellList
+kod.sellList.0 = Soli nie masz? Szkoda. Tylko sól od ciebie kupię.
+# water
+kod.water.0 = Potrzebujesz {cost} G
+kod.water.1 = : nawodnienie +{got}
+kod.water.2 = Łyk wody z beczki{1}
+# shear
+kod.shear.0 = Potrzebujesz nożyc
+kod.shear.1 = Wełna ×{wool}  ·  +{gold} G
+# buyCoal
+kod.buyCoal.0 = Potrzebujesz {cost} G
+kod.buyCoal.1 = Węgiel drzewny ×{k}
+# giveWood
+kod.giveWood.0 = Potrzebujesz: {name} {2}/{wood}
+# collectCoal
+kod.collectCoal.0 = Węgiel drzewny ×{give}
+# buySteel
+kod.buySteel.0 = Potrzebujesz {price} G
+# pedlarMenu
+kod.pedlarMenu.0 = Szymon Juczny
+# shepherdMenu
+kod.shepherdMenu.0 = Wawrzyn Owczarz
+# zbychMenu
+kod.zbychMenu.0 = Zbych Smolarz
+kod.zbychMenu.1 = {wood} ({wood2} polan)
+# smithMenu
+kod.smithMenu.0 = Tadek Młot
+# crateExtra
+kod.crateExtra.0 = Sambor Kwit
+kod.crateExtra.1 = Baltazar Vey
+# patrolSearch
+kod.patrolSearch.0 = kruk na szyi
+kod.patrolSearch.1 = -5 G (opłata za przepustkę)
+# patrolNightTick
+kod.patrolNightTick.0 = Brać ich! Żołnierzyki z latarenką!
+# k63Tick
+kod.k63Tick.0 = Rozkopany mielerz
+kod.k63Tick.1 = W noc wypału nikt nie pilnował mielerza Zbycha. Rabusie rozkopali kopiec i wynieśli część węgla. Zbych da tylko połowę.
+kod.k63Tick.2 = Węgiel! Bierzcie worki, szybko!
+# spawnCamp
+kod.spawnCamp.0 = Kopacz Czarnych Oczu
+# spawnSlawek
+kod.spawnSlawek.0 = Sławek
+# eventAct
+kod.eventAct.0 = Ognisko handlarza. Ciepło i trochę dymu.
+kod.eventAct.1 = Tobołek handlarza, ściągnięty rzemieniem.
+kod.eventAct.2 = Juk handlarza
+kod.eventAct.3 = Dziennik kopacza
+kod.eventAct.4 = Potrzebujesz piły
+kod.eventAct.5 = Potrzebujesz liny
+kod.eventAct.6 = Marta Ługowa
+# gravesDone
+kod.gravesDone.0 = Groby Ługów
+# shaftChoice
+kod.shaftChoice.0 = szyb kopaczy
+# niche
+kod.niche.0 = Skrzynia przemytu
+# act
+kod.act.0 = Szymon Juczny
+kod.act.1 = Wawrzyn Owczarz
+kod.act.2 = Zbych Smolarz
+# k63Coal
+kod.k63Coal.0 = Węgiel drzewny ×{n}
+# talk
+kod.talk.0 = Rabusie rozkopali kopiec w nocy. Uratowałem pięć worków. Resztę dokup albo przynieś z innego wypału.
+kod.talk.1 = Pobili cię, a i tak coś zostało. Sześć worków - więcej nie dam rady.
+kod.talk.2 = Kopiec ostygł, węgiel jak smoła. Dziesięć worków dla Tadka - i dzięki za noc przy kopcu.
+kod.talk.3 = Powiedz o szybie.
+kod.talk.4 = Jeszcze nie.
+# vars
+kod.vars.0 = za mielerzem, przy drodze
+kod.vars.1 = dalej na wschód, przy zakręcie
+kod.vars.2 = aż pod lasem na północnym wschodzie
+kod.vars.3 = " - albo Baltazarowi Veyowi (kantor w miasteczku)"
+kod.vars.4 = , powiedz Grumowi (tawerna)
+# glowna
+kod.glowna.0 = nocny patrol
+# placeLabel
+kod.placeLabel.0 = Miejsce {1}/{length}: {3}   ←→
+# stopLabel
+kod.stopLabel.0 = Dzień handlarza: {1}   ←→
+# rows
+kod.rows.0 = ←→ wybierz miejsce paczki C, OK przenosi na nie.
+kod.rows.1 = Dzień mielerza: Zbych przy kopcu, kopiec się tli
+kod.rows.2 = Dzień cyklu 2 (rano, 10:00) - przenosi na Leśną drogę pod mielerz.
+kod.rows.3 = ←→ postój; OK: dzień tego postoju (10:00) i przeniesienie do wozu.
+kod.rows.4 = Pasterz z owcami przy menhirach
+kod.rows.5 = Dzień, w którym stado pasie się na Łące menhirów (10:00) - przenosi tam.
+kod.rows.6 = K66: noc patrolu (przylądek, 20:55)
+kod.rows.7 = Zaczyna K66, ustawia 20:55 i przenosi pod latarnię - o 21 patrol wyrusza.
+kod.rows.8 = (wymuszony - OK wyłącza)
+kod.rows.9 = (OK wymusza)
+kod.rows.10 = W8 gotowe: obóz kopaczy {1}
+kod.rows.11 = Obóz kopaczy stoi bez rozdziału 3 wątku W8 (tylko do prób).
+kod.rows.12 = Odpływ teraz (wejście do jaskini)
+kod.rows.13 = Wyspa.forceTide(„low”) i przeniesienie do zatoczki.
+kod.rows.14 = W5 rozdz. 4: jaskinia otwarta {1}
+kod.rows.15 = Wejście do jaskini bez rozdziału 4 wątku W5 (tylko do prób).
+kod.rows.16 = Burza wczoraj (pasterz zgubił owcę - K64)
+kod.rows.17 = Udaje burzę z wczoraj: pasterz da zadanie K64.
+# ok
+kod.ok.0 = Najpierw gra
+kod.ok.1 = Postój
+kod.ok.2 = Pastwisko przy menhirach
+kod.ok.3 = Przylądek z latarnią
+kod.ok.4 = Obóz kopaczy
+kod.ok.5 = Obóz kopaczy: jak w wątku W8
+kod.ok.6 = Zatoczka przemytników
+kod.ok.7 = otwarta (wymuszona)
+kod.ok.8 = jak w wątku W5
+kod.ok.9 = Jaskinia {1}
+kod.ok.10 = Burza „wczoraj” - pasterz da zadanie K64
+
+# ======================================================================== TX
+[martaLines.0]
+(Marta poprawia kamyki przy krzyżach.) Rodzice Jana. I dziadkowie. Dobrze, że ktoś tu zajrzał.
+Przychodzę raz na jakiś czas. Posiedzę - i do prania.
+
+[martaLines.1]
+Stary Ług przyszedł tu z kontynentu, jak zagroda była jeszcze lasem. Tak mówił Jan.
+Idź, idź. Ja jeszcze chwilę.
+

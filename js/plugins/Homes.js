@@ -103,6 +103,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("domy");   // (the words of this file: js/teksty/domy.txt, kod.*)
 
     const PLUGIN = "Homes";
     const T = window.Tawerna;
@@ -120,33 +121,34 @@
     const BUILD_REGION = 8;
     // the yards' animals sold in the carrying-out days (a buyer from the town): G an animal
     const PRICE = { cow: 60, sheep: 30, hen: 8 };
-    const ANIMALS = { cow: ["krowy", "Krowy", "oborze"], sheep: ["owce", "Owce", "owczarni"], hen: ["kury", "Kury", "kurniku"] };
+    const ANIMALS = {};
+    Watki.scal(ANIMALS, "domy", "zwierzeta");   // (its words: js/teksty/domy.txt, zwierzeta)
     // the homes: the map of their land (region 8 there), the room (its landing from the door), the furniture Farming draws and runs,
     // put in at the purchase - the farm's when the house is rebuilt (tools/domy/build.py keeps their cells free)
     const HOUSES = {
-        chata: { key: "chata", name: "Chata pod lasem", what: "chatę pod lasem na Podgrodziu", price: num(params.priceHut, 600), soltys: true,
+        chata: { key: "chata", price: num(params.priceHut, 600), soltys: true,
             land: PODGRODZIE, doorName: /Chata pod lasem/, front: [8, 81], inside: 154, landing: [4, 8, 8],
-            furniture: [{ type: "bed", x: 7, y: 4 }, { type: "chest_s", x: 9, y: 4 }],
-            where: "Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki)." },
-        zagroda: { key: "zagroda", name: "Zagroda Ługów", what: "spaloną zagrodę Ługów", price: num(params.priceFarm, 350), soltys: false,
+            furniture: [{ type: "bed", x: 7, y: 4 }, { type: "chest_s", x: 9, y: 4 }] },
+        zagroda: { key: "zagroda", price: num(params.priceFarm, 350), soltys: false,
             land: ZAGRODA, front: [20, 10], inside: 169, landing: [6, 8, 8],
-            furniture: [{ type: "bed", x: 9, y: 4 }, { type: "larder", x: 11, y: 4 }, { type: "chest_l", x: 1, y: 4 }],
-            where: "na zachód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu." }
+            furniture: [{ type: "bed", x: 9, y: 4 }, { type: "larder", x: 11, y: 4 }, { type: "chest_l", x: 1, y: 4 }] }
     };
+    Watki.scal(HOUSES, "domy", "domy");   // (its words: js/teksty/domy.txt, domy)
     const KEYS = Object.keys(HOUSES);
     const houseOfLand = mapId => KEYS.map(k => HOUSES[k]).find(h => h.land === mapId) || null;
     const houseOfRoom = mapId => KEYS.map(k => HOUSES[k]).find(h => h.inside === mapId) || null;
 
     // the burnt house: the work from one stage to the next (materials taken at the start, then blows like a building site's)
-    const STAGE_NAMES = ["zgliszcza", "uprzątnięte zgliszcza", "podmurówka", "ściany z bali", "dach", "gotowy dom"];
+    const STAGE_NAMES = [];
+    Watki.scal(STAGE_NAMES, "domy", "etapy");   // (its words: js/teksty/domy.txt, etapy)
     const WORK = [
-        { name: "Uprzątnij zgliszcza", cost: [], hits: 30, clear: true, yield: [[64, 12], [61, 6], [88, 6]],
-            help: "Rozbierz osmalone belki, wynieś popiół i gruz. Potrzebna łopata albo siekiera. Z gruzu coś się jeszcze przyda." },
-        { name: "Podmurówka", cost: [[64, 30], [164, 8]], hits: 30, help: "Kamienie na glinę - nowa podmurówka na starym miejscu." },
-        { name: "Ściany z bali", cost: [[61, 30], [88, 30]], hits: 50, help: "Bale na podmurówce, na zrąb, z otworami na drzwi i okna." },
-        { name: "Dach", cost: [[80, 20], [92, 25], [88, 20]], hits: 40, help: "Krokwie, łaty i strzecha z wiązek włókna." },
-        { name: "Drzwi, okiennice, palenisko", cost: [[80, 12], [86, 4], [84, 12]], hits: 30, help: "Drzwi na żelaznych zawiasach, okiennice, palenisko z cegły z kominem." }
+        { cost: [], hits: 30, clear: true, yield: [[64, 12], [61, 6], [88, 6]] },
+        { cost: [[64, 30], [164, 8]], hits: 30 },
+        { cost: [[61, 30], [88, 30]], hits: 50 },
+        { cost: [[80, 20], [92, 25], [88, 20]], hits: 40 },
+        { cost: [[80, 12], [86, 4], [84, 12]], hits: 30 }
     ];
+    Watki.scal(WORK, "domy", "prace");   // (its words: js/teksty/domy.txt, prace)
     const WELL_HITS = 15;
     const ITEM = { stone: 64, wood: 61, nails: 88, shovel: 62, axe: 60, ironAxe: 115, steelAxe: 407, hammer: 89 };
     const KIND = { hammer: 7, shovel: 2, axe: 0 };
@@ -244,14 +246,14 @@
         own(mapId) { const h = houseOfLand(mapId); return h ? owns(h.key) : undefined; },
         refuse(mapId) {
             if (fieldLost()) {
-                if (mapId === FIELD) return "Działka należy teraz do Lorda";
-                if (mapId === HUT_MAP) { const h = F().hutOf ? F().hutOf() : null; if (h && h.mapId === FIELD) return "Działka należy teraz do Lorda"; }
+                if (mapId === FIELD) return TK.kod.refuse[0];
+                if (mapId === HUT_MAP) { const h = F().hutOf ? F().hutOf() : null; if (h && h.mapId === FIELD) return TK.kod.refuse[0]; }
             }
             const house = houseOfLand(mapId);
-            if (house && !owns(house.key)) return "To nie twoja ziemia";
+            if (house && !owns(house.key)) return TK.kod.refuse[1];
             return null;
         },
-        noBuild: () => (ownsAny() || (storyGame() && T.call("Story", "state") && T.call("Story", "state").lost) ? "Budować możesz tylko na własnej ziemi" : null)
+        noBuild: () => (ownsAny() || (storyGame() && T.call("Story", "state") && T.call("Story", "state").lost) ? TK.kod.noBuild[0] : null)
     };
     if (F() && F().addLandRule) F().addLandRule(rule);
 
@@ -274,7 +276,9 @@
         return { id, name, note: "<Homes:" + id + ">", x, y, pages: [hidden(), page(image, list, Object.assign({}, onA, extra || {}))] };
     }
     const stub = js => [C(355, [js]), C(0, [])];
-    const SIGN_TEXT = "Własność Lorda Leopolda Zaleskiego. Wstęp tylko za zgodą dworu.";
+    // (the words read by name: the sign of the field, the sołtys as a speaker, the burnt horse of D21)
+    const WORDS = {};
+    Watki.scal(WORDS, "domy", "slowa");   // (its words: js/teksty/domy.txt, slowa)
     // where the sign stands: by the way in from the forest's edge (east), on a cell no building of the field covers
     const SIGN_SPOTS = [[37, 11], [36, 11], [37, 15], [36, 15], [35, 11], [35, 15], [34, 11], [37, 10], [37, 16]];
     function fieldCellsTaken() {
@@ -291,33 +295,40 @@
         const b = butlerName(), [sx, sy] = signSpot();
         return [
             shownOnA(CAST.butler, b, 37, 12, { characterName: b === "Teodor" ? "$Npc_Kamerdyner" : "$Npc_Feliks" }, null, { through: true }),
-            shownOnA(CAST.measurer, "Strażnik dworu", 37, 13, { characterName: "$Npc_Straznik" }, null, { through: true }),
-            shownOnA(CAST.watch, "Strażnik dworu", 37, 14, { characterName: "$Npc_Straznik" }, stub("Story.talk(this, \"watch\")")),
-            shownOnA(SIGN, "Znak: Własność Lorda Zaleskiego", sx, sy, { characterName: "!$Lord_Sign", direction: 2, pattern: 1 },
-                stub("Tawerna.popup(" + JSON.stringify(SIGN_TEXT) + ", { color: \"info\" })"), { stepAnime: true, walkAnime: false, moveSpeed: 2, moveFrequency: 2 })
+            shownOnA(CAST.measurer, TK.kod.build[0], 37, 13, { characterName: "$Npc_Straznik" }, null, { through: true }),
+            shownOnA(CAST.watch, TK.kod.build[0], 37, 14, { characterName: "$Npc_Straznik" }, stub("Story.talk(this, \"watch\")")),
+            shownOnA(SIGN, TK.kod.build[1], sx, sy, { characterName: "!$Lord_Sign", direction: 2, pattern: 1 },
+                stub("Tawerna.popup(" + JSON.stringify(WORDS.znak) + ", { color: \"info\" })"), { stepAnime: true, walkAnime: false, moveSpeed: 2, moveFrequency: 2 })
         ];
     } });
     // the guards at the two ways onto the field (shown once it is shut)
     const GUARD_TALK = "Tawerna.call(\"Homes\", \"guardTalk\", this)";
     T.inject([MEADOW], { ids: [GUARD_MEADOW, GUARD_MEADOW], owner: PLUGIN, when: () => storyGame(), build: () => [
         // (2026-10-18) Łąka (Map004) doubled to 80x60: its south exit to the field moved from row 29 to row 59 - he stands beside it
-        shownOnA(GUARD_MEADOW, "Strażnik dworu", 27, 58, { characterName: "$Npc_Straznik", direction: 4 }, stub(GUARD_TALK))] });
+        shownOnA(GUARD_MEADOW, TK.kod.build[0], 27, 58, { characterName: "$Npc_Straznik", direction: 4 }, stub(GUARD_TALK))] });
     // Skraj lasu: the guard (story), the way west to the burnt farm (its west edge above the way onto the field: the open grass of
     // rows 6-8, the user's tiles untouched) and the signpost by it (everyone)
     T.inject([EDGE], { ids: [GUARD_EDGE, SIGNPOST], owner: PLUGIN, build() {
-        const out = WAY.map((id, i) => ({ id, name: "Przejście -> Spalona zagroda", note: "", x: 0, y: 6 + i,
+        const out = WAY.map((id, i) => ({ id, name: TK.kod.build[2], note: "", x: 0, y: 6 + i,
             // (2026-10-18: the burnt farm doubled to 100x72 - its east edge is x 99, one inside it 98)
             pages: [page({ characterName: "" }, [C(201, [0, ZAGRODA, 98, 11 + i, 4, 0]), C(0, [])], { priorityType: 0, trigger: 1, walkAnime: false })] }));
-        out.push({ id: SIGNPOST, name: "Drogowskaz: Spalona zagroda", note: "", x: 1, y: 5,
+        out.push({ id: SIGNPOST, name: TK.kod.build[3], note: "", x: 1, y: 5,
             pages: [page({ characterName: "!$Drogowskaz", direction: 2, pattern: 1 }, stub("Tawerna.call(\"Homes\", \"signpost\")"), { directionFix: true, walkAnime: false })] });
-        if (storyGame()) out.push(shownOnA(GUARD_EDGE, "Strażnik dworu", 1, 11, { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)));
+        if (storyGame()) out.push(shownOnA(GUARD_EDGE, TK.kod.build[0], 1, 11, { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)));
         return out;
     } });
     // the burnt farm: the chimney's smoke once the house is rebuilt, Marta at the cross (her husband's grave) some afternoons
+    // (2026-10-23, the user: chimney smoke badly placed) the rebuilt house draws its own chimney: smoke only (no second stone block),
+    // its base at the chimney's opening (the house 20,9: the opening at x 901, y 271 in the map's pixels)
+    const smokeEv = () => {
+        const e = shownOnA(SMOKE, TK.kod.smokeEv[0], 18, 5, { characterName: "!$Dym_Komin", direction: 2, pattern: 1 }, null,
+            { priorityType: 2, through: true, stepAnime: true, walkAnime: false, directionFix: true, moveSpeed: 3, moveFrequency: 3 });
+        e.note += "<Px:14,-15>";
+        return e;
+    };
     T.inject([ZAGRODA], { ids: [SMOKE, MARTA], owner: PLUGIN, build: () => [
-        shownOnA(SMOKE, "Dym z komina", 18, 5, { characterName: "!Fantasy_chimney", direction: 2, pattern: 1 }, null,
-            { priorityType: 2, through: true, stepAnime: true, walkAnime: false, directionFix: true, moveSpeed: 3, moveFrequency: 3 }),
-        shownOnA(MARTA, "Marta Ługowa", 33, 5, { characterName: "$Npc_Praczka", direction: 6 }, stub("Tawerna.call(\"Homes\", \"martaTalk\", this)"),
+        smokeEv(),
+        shownOnA(MARTA, TK.kod.build[4], 33, 5, { characterName: "$Npc_Praczka", direction: 6 }, stub("Tawerna.call(\"Homes\", \"martaTalk\", this)"),
             { directionFix: false, walkAnime: true })
     ] });
     // Podgrodzie's "Chata pod lasem" (the door Map111 got with its new rows): its words while it is for sale, the way in once bought
@@ -332,11 +343,8 @@
         return r;
     }
     const CHATA_STUB = stub("Tawerna.call(\"Homes\", \"door\", this, \"chata\")");
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        if (roleOf(this) === "chata") return CHATA_STUB;
-        return _Game_Event_list.call(this);
-    };
+    // (2026-10-23) the core's one list hook: a scene at a door, after Kantor's, before TownQuests' (as the old wrappers)
+    T.onEventList(ev => (roleOf(ev) === "chata" ? CHATA_STUB : null), { owner: PLUGIN, priority: T.onEventList.PRIORITY.scene + 10 });
     // the farm's house: its picture's frame is the stage (0-2 on the "down" row, 3-5 on the "left" one of !$Zagroda_Dom)
     const _setupPageSettings = Game_Event.prototype.setupPageSettings;
     Game_Event.prototype.setupPageSettings = function() {
@@ -356,7 +364,7 @@
         if (!h || !interp) return;
         if (!owns(key)) {
             S().heard = S().heard || day();
-            popupOnce("Na sprzedaż: " + h.price + " G. Pytaj sołtysa w ratuszu.", { color: "info" });
+            popupOnce(Watki.wstaw(TK.kod.door[0], { price: h.price }), { color: "info" });
             return;
         }
         goIn(interp, h, true);
@@ -424,8 +432,8 @@
         const ev = interp && $gameMap.event(interp.eventId());
         if (!ev) return;
         const out = [];
-        say(out, ev.eventId(), fieldLocked() ? "Działka należy teraz do jaśnie pana Zaleskiego. Rozkaz: nikogo nie wpuszczać. Jak chcesz ją odzyskać - idź do dworu."
-            : "Rozkaz to rozkaz, młodzieńcze.");
+        say(out, ev.eventId(), fieldLocked() ? TK.kod.guardTalk[0]
+            : TK.kod.guardTalk[1]);
         interp.setupChild(end(out), ev.eventId());
     }
 
@@ -449,7 +457,7 @@
         if (d && d.tame && (d.map === FIELD || d.map === HUT_MAP)) {
             const here = window.$gameMap ? $gameMap.mapId() : 0, there = here === FIELD || here === HUT_MAP ? EDGE : here;
             d.map = there; d.x = -1; d.y = -1; d.mode = "follow";
-            if (here !== FIELD && here !== HUT_MAP) T.popup("Pies przybiegł z działki - jego buda została u Lorda. Idzie z tobą.", { icon: 431, color: "#cfe6a8" });
+            if (here !== FIELD && here !== HUT_MAP) T.popup(TK.kod.glowna[0], { icon: 431, color: "#cfe6a8" });
         }
     }, { owner: PLUGIN });
     // the field bought back: the sign and the guards go, the hut's furniture comes back (or the old hut is boarded up while a new one stands)
@@ -480,7 +488,7 @@
     Game_Player.prototype.reserveTransfer = function(mapId, x, y, d, fadeType) {
         if (mapId === FIELD && fieldLocked() && !($gameTemp && $gameTemp._homesLetIn) && window.$gameMap && $gameMap.mapId() !== FIELD) {
             if ($gameMap.mapId() === HUT_MAP) return _reserveTransfer.call(this, EDGE, 1, 13, 6, fadeType);
-            popupOnce("Działka należy teraz do Lorda.", { color: "#ff9f8f" });
+            popupOnce(TK.kod.reserveTransfer[0], { color: "#ff9f8f" });
             stepBack(this);
             return;
         }
@@ -504,26 +512,26 @@
     // ------------------------------------------------------------------
     if (F() && F().addMenuHook) F().addMenuHook((b, def, entries) => {
         if (!def.yard || b.site) return null;
-        const a = def.yard.animal, names = ANIMALS[a] || ["zwierzęta", "Zwierzęta", "zagrodzie"];
-        if (b.empty) return "Zagroda pusta - " + names[0] + (b.empty === "taken" ? " poszły z tobą." : " sprzedane.");
+        const a = def.yard.animal, names = ANIMALS[a] || [TK.kod.glowna[1], TK.kod.glowna[2], "zagrodzie"];
+        if (b.empty) return Watki.wstaw(TK.kod.glowna[5], { "1": names[0], "2": b.empty === "taken" ? TK.kod.glowna[3] : TK.kod.glowna[4] });
         if (!onField() || !fieldLost() || fieldLocked()) return null;
         const n = def.yard.count || 1, price = (PRICE[a] || 10) * n;
         entries.unshift(
-            { name: "Sprzedaj zwierzęta (" + price + " G)", icon: GOLD_ICON, help: "Kupiec bydła z miasteczka czeka przy drodze z wozem - płaci od ręki: " + n + " × " + (PRICE[a] || 10) + " G. Zagroda zostaje pusta.", run: () => sellAnimals(b, price, names) },
-            { name: "Zabierz zwierzęta", icon: 82, help: names[1] + " pójdą z tobą. Poczekają u dziadka, aż na własnej ziemi postawisz nową zagrodę tego rodzaju - wtedy w niej zamieszkają.", run: () => takeAnimals(b, a, n, names) });
+            { name: Watki.wstaw(TK.kod.glowna[6], { price: price }), icon: GOLD_ICON, help: Watki.wstaw(TK.kod.glowna[7], { n: n, "2": PRICE[a] || 10 }), run: () => sellAnimals(b, price, names) },
+            { name: TK.kod.glowna[8], icon: 82, help: Watki.wstaw(TK.kod.glowna[9], { "1": names[1] }), run: () => takeAnimals(b, a, n, names) });
         return null;
     });
     function sellAnimals(b, price, names) {
         b.empty = "sold";
         $gameParty.gainGold(price);
         T.audio.se("Coin", { volume: 80, pitch: 100 });
-        T.popup(names[1] + " sprzedane: +" + price + " G", { icon: GOLD_ICON, kind: "gold" });
+        T.popup(Watki.wstaw(TK.kod.sellAnimals[0], { "1": names[1], price: price }), { icon: GOLD_ICON, kind: "gold" });
         if (window.Livestock && Livestock.sync) Livestock.sync();
     }
     function takeAnimals(b, a, n, names) {
         b.empty = "taken";
         S().herd[a] = (S().herd[a] || 0) + n;
-        T.popup(names[1] + " idą z tobą - poczekają u dziadka na nową zagrodę.", { icon: 82, color: "#cfe6a8" });
+        T.popup(Watki.wstaw(TK.kod.takeAnimals[0], { "1": names[1] }), { icon: 82, color: "#cfe6a8" });
         if (window.Livestock && Livestock.sync) Livestock.sync();
     }
     T.on("build", e => {
@@ -531,47 +539,45 @@
         const f = F(), def = f && f.BUILDINGS ? f.BUILDINGS[e.type] : null, a = def && def.yard && def.yard.animal;
         if (!a || !(S().herd[a] > 0)) return;
         S().herd[a] = 0;
-        const names = ANIMALS[a] || ["zwierzęta", "Zwierzęta", "zagrodzie"];
-        T.popup("Twoje " + names[0] + " z działki zamieszkały w nowej " + names[2] + ".", { icon: 82, color: "#9ff0a8" });
+        const names = ANIMALS[a] || [TK.kod.glowna[1], TK.kod.glowna[2], "zagrodzie"];
+        T.popup(Watki.wstaw(TK.kod.glowna[10], { "1": names[0], "2": names[2] }), { icon: 82, color: "#9ff0a8" });
     }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
     // The hut for sale: the sołtys (8-16) - his talk as ever, then "Domy na sprzedaż" once the hero has heard of it
     // ------------------------------------------------------------------
     const saleHours = () => hour() >= SALE_HOURS[0] && hour() < SALE_HOURS[1];
-    const SOLTYS = "Sołtys Bronisław";
-    let skipOnce = 0;
+    // (the sołtys as a speaker: WORDS.soltys)
     // "Domy na sprzedaż" (the item after his usual talk, the user 2026-10-15): what he has, then buying
     function soltysList(ev) {
         const o = [], id = ev.eventId(), s = S(), left = forSale();
         if (!s.told) {
-            say(o, id, "Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - za palisadą, przy lesie, na południe od osady. Wyjdź południową bramą i idź ścieżką na zachód.", SOLTYS);
-            say(o, id, "Nowa, z bali. Postawił ją cieśla na sprzedaż i kupca się nie doczekał. Obok ogrodzona działka pod uprawę. " + HOUSES.chata.price + " G.", SOLTYS);
-            say(o, id, "Na swojej ziemi budujesz, co chcesz. Tylko studni nie obiecuję - wodę i tak dzielimy z rynku.", SOLTYS);
-            if (!owns("zagroda")) say(o, id, "Jest jeszcze zagroda Ługów za Skrajem lasu, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.", SOLTYS);
+            say(o, id, TK.kod.soltysList[0], WORDS.soltys);
+            say(o, id, Watki.wstaw(TK.kod.soltysList[1], { price: HOUSES.chata.price }), WORDS.soltys);
+            say(o, id, TK.kod.soltysList[2], WORDS.soltys);
+            if (!owns("zagroda")) say(o, id, TK.kod.soltysList[3], WORDS.soltys);
             o.push(C(355, ["Tawerna.call(\"Homes\", \"told\")"]));
-        } else say(o, id, "W sprawie chaty? Ratusz słucha.", SOLTYS);
-        const opts = left.map(k => ({ label: "Kup " + HOUSES[k].what + " (" + HOUSES[k].price + " G)", js: "Tawerna.call(\"Homes\", \"buy\", this, \"" + k + "\")" }));
-        opts.push({ label: "Nic, dziękuję", js: [] });
+        } else say(o, id, TK.kod.soltysList[4], WORDS.soltys);
+        const opts = left.map(k => ({ label: Watki.wstaw(TK.kod.soltysList[5], { what: HOUSES[k].what, price: HOUSES[k].price }), js: "Tawerna.call(\"Homes\", \"buy\", this, \"" + k + "\")" }));
+        opts.push({ label: TK.kod.soltysList[6], js: [] });
         return choose(o, opts);
     }
-    // his talk as ever (the quests, the greeting, his usual words: TownLife's hooks after this one), then one more item:
+    // his talk as ever (the quests, the greeting, his usual words: the takeovers below this one), then one more item:
     // "Domy na sprzedaż" - only once the hero has heard of the hut, in the town hall's hours, while it is for sale
+    // (2026-10-23, docs/ROZMOWY.md: the core's talk service, "wrap" - right above the quests, as the old hook)
     const L0 = T.api("TownLife");
-    if (L0 && L0.addTalkHook) L0.addTalkHook((key, ev) => {
-        if (key !== "soltys" || !ev) return null;
-        if (skipOnce === ev.eventId()) { skipOnce = 0; return null; }
+    T.talk.takeover({ owner: PLUGIN, who: "soltys", priority: T.talk.PRIORITY.wrap, run: ctx => {
+        const ev = ctx.ev;
+        if (!ev) return null;
         if (!S().heard || !forSale().length || !saleHours()) return null;
         const out = [C(355, ["Tawerna.call(\"Homes\", \"chat\", this)"])];
-        return choose(out, [{ label: "Domy na sprzedaż", js: "Tawerna.call(\"Homes\", \"offer\", this)" }, { label: "Do widzenia", js: [] }]);
-    }, true);
-    // the usual talk in a child of this one (the rest of the hooks and TownLife's own words); the item comes after it
+        return choose(out, [{ label: TK.kod.run[0], js: "Tawerna.call(\"Homes\", \"offer\", this)" }, { label: TK.kod.run[1], js: [] }]);
+    } });
+    // the usual talk in a child of this one (the rest of the takeovers and TownLife's own words, without this one); the item comes after it
     function chat(interp) {
         const ev = interp && $gameMap.event(interp.eventId());
         if (!ev || !window.TownLife) return;
-        skipOnce = ev.eventId();
-        TownLife.talk(interp);
-        skipOnce = 0;
+        TownLife.talk(interp, { skip: PLUGIN });
     }
     function offer(interp) {
         const ev = interp && $gameMap.event(interp.eventId());
@@ -586,9 +592,8 @@
         own(h);
         furnish(h);
         T.audio.se("Coin", { volume: 80, pitch: 100 });
-        T.popup("Kupiłeś: " + h.name, { top: true, color: "#ffd23f", sub: "Klucz w kieszeni. Działka obok chaty jest twoja - możesz na niej budować." });
-        T.call("Journal", "addNote", "Akt kupna: " + h.name, "Dzień " + day() + ": kupiłem od sołtysa " + h.what + " za " + h.price + " G.\n" +
-            "Gdzie: " + h.where + "\nW izbie: palenisko, łóżko i skrzynia. Na działce wolno mi budować, co zechcę - także chatkę. Studni nie ma: wodę trzeba łapać albo nosić.");
+        T.popup(Watki.wstaw(TK.kod.buyNow[0], { name: h.name }), { top: true, color: "#ffd23f", sub: TK.kod.buyNow[1] });
+        T.call("Journal", "addNote", Watki.wstaw(TK.kod.buyNow[2], { name: h.name }), Watki.wstaw(TK.kod.buyNow[3], { "1": day(), what: h.what, price: h.price, where: h.where }));
         T.emit("homeBought", { key, day: day(), price: h.price });
         T.call("Journal", "evaluateGoals");
         return true;
@@ -604,11 +609,11 @@
         if (!h || !ev || owns(key)) return;
         const out = [];
         if ($gameParty.gold() < h.price) {
-            T.popup("Za mało złota: " + $gameParty.gold() + " / " + h.price + " G", { icon: GOLD_ICON, kind: "need" });
-            say(out, ev.eventId(), "Wróć, jak uzbierasz. Chata poczeka - nikt się o nią nie bije.", SOLTYS);
+            T.popup(Watki.wstaw(TK.kod.buy[0], { "1": $gameParty.gold(), price: h.price }), { icon: GOLD_ICON, kind: "need" });
+            say(out, ev.eventId(), TK.kod.buy[1], WORDS.soltys);
         } else {
             buyNow(key);
-            say(out, ev.eventId(), "Proszę - klucz. Wpisuję do księgi gruntów: " + h.name.toLowerCase() + ", właściciel... ty. Witaj w sąsiedztwie!", SOLTYS);
+            say(out, ev.eventId(), Watki.wstaw(TK.kod.buy[2], { "1": h.name.toLowerCase() }), WORDS.soltys);
         }
         interp.setupChild(end(out), ev.eventId());
     }
@@ -618,9 +623,8 @@
         if (!h || owns(key)) return false;
         own(h);
         if (key === "zagroda") Z().how = how || Z().how || "lord";
-        T.popup("Akt własności: " + h.name, { top: true, color: "#ffd23f", sub: "Pole i podwórze są twoje. Dom trzeba odbudować - zacznij od zgliszcz." });
-        T.call("Journal", "addNote", "Akt własności: " + h.name, "Dzień " + day() + ": " + (how === "marta" ? "po staremu prawu, przez Martę Ługową (sto do księgi, reszta dla niej)" : "od dworu, przez ratusz") +
-            " - " + h.price + " G.\nGdzie: " + h.where + "\nDom spalony: odbudowa w pięciu etapach (akcja przy zgliszczach). Na polu i podwórzu wolno mi budować, kopać i siać. Studnia zasypana - i pewnie sucha.");
+        T.popup(Watki.wstaw(TK.kod.grantLand[0], { name: h.name }), { top: true, color: "#ffd23f", sub: TK.kod.grantLand[1] });
+        T.call("Journal", "addNote", Watki.wstaw(TK.kod.grantLand[0], { name: h.name }), Watki.wstaw(TK.kod.grantLand[4], { "1": day(), "2": how === "marta" ? TK.kod.grantLand[2] : TK.kod.grantLand[3], price: h.price, where: h.where }));
         T.emit("homeBought", { key, day: day(), price: h.price });
         T.call("Journal", "evaluateGoals");
         return true;
@@ -661,7 +665,7 @@
         if (!ev || ev._transparent || $gameMap.isEventRunning() || Math.hypot(ev.x - $gamePlayer.x, ev.y - $gamePlayer.y) > 7) return;
         S().bark = day();
         S().heard = S().heard || day();
-        L.say("soltys", "Chata na sprzedaż! Na Podgrodziu, pod lasem, z działką - pytać w ratuszu!");
+        L.say("soltys", TK.kod.glowna[11]);
     }, { owner: PLUGIN, name: "soltys" });
 
     // ------------------------------------------------------------------
@@ -678,8 +682,8 @@
         if (!owns("zagroda")) {
             const first = !Z().seen;
             seen();
-            popupOnce(first ? "Zgliszcza domu. Ogień był tu dawno - w popiele rośnie trawa. Czyj to był dom?"
-                : "Zgliszcza domu Ługów. Ziemia zapisana na dwór.", { color: "info" });
+            popupOnce(first ? TK.kod.ruin[0]
+                : TK.kod.ruin[1], { color: "info" });
             return;
         }
         if (stage() >= 5) { goIn(interp, HOUSES.zagroda, false); return; }   // (the picture is the house: no door animation)
@@ -688,21 +692,21 @@
     function well(interp) {
         if (!onFarm()) return;
         const z = Z();
-        if (!owns("zagroda")) { popupOnce("Stara studnia, zasypana gruzem po samą cembrowinę.", { color: "info" }); return; }
-        if (z.wellDone) { popupOnce("Sucho. Ani kropli - tylko piach i kamienie na dnie.", { color: "info" }); return; }
+        if (!owns("zagroda")) { popupOnce(TK.kod.well[0], { color: "info" }); return; }
+        if (z.wellDone) { popupOnce(TK.kod.well[1], { color: "info" }); return; }
         menuAsk = "well";
     }
     function cross() {
         seen();
-        popupOnce("Prosty krzyż z brzozy. Wycięte nożem: „Jan Ług”. Ktoś zostawił polne kwiaty.", { color: "info" });
+        popupOnce(TK.kod.cross[0], { color: "info" });
     }
     function signpost() {
-        popupOnce("Na zachód: zagroda Ługów. Deska omszała, napis ledwo widać.", { color: "info" });
+        popupOnce(TK.kod.signpost[0], { color: "info" });
     }
     const workOf = () => (stage() < 5 ? WORK[stage()] : null);
     const hitsOf = w => Math.max(1, Math.round(w.hits * (1 - Math.min(0.75, Number(T.call("Combat", "perk", "build.hits")) || 0))));
     const hitCost = () => { const f = F(); return f && f.hitCost ? f.hitCost() : 2; };
-    const costText = w => (w.cost.length ? w.cost.map(([id, n]) => (itemOf(id) ? itemOf(id).name : "?") + " ×" + n + " (masz " + countOf(id) + ")").join(", ") : "bez materiałów");
+    const costText = w => (w.cost.length ? w.cost.map(([id, n]) => Watki.wstaw(TK.kod.costText[0], { "1": itemOf(id) ? itemOf(id).name : "?", n: n, "3": countOf(id) })).join(", ") : TK.kod.costText[1]);
     // the tool for the work: clearing - the shovel, else an axe; building - the hammer
     function toolFor(target) {
         if (target === "well") return countOf(ITEM.shovel) > 0 ? { id: ITEM.shovel, kind: KIND.shovel } : null;
@@ -717,27 +721,26 @@
     function needTool(target) {
         const clear = target === "house" && workOf() && workOf().clear;
         T.popup.need(iconOf(target === "well" || clear ? ITEM.shovel : ITEM.hammer),
-            target === "well" ? "Potrzebujesz: " + itemOf(ITEM.shovel).name : clear ? "Potrzebujesz łopaty albo siekiery" : "Potrzebujesz: " + itemOf(ITEM.hammer).name);
+            target === "well" ? Watki.wstaw(TK.kod.needTool[0], { name: itemOf(ITEM.shovel).name }) : clear ? TK.kod.needTool[1] : Watki.wstaw(TK.kod.needTool[0], { name: itemOf(ITEM.hammer).name }));
     }
     function houseMenu() {
         const z = Z(), w = workOf();
         if (!w) return null;
         const going = z.work && z.work.i === stage();
         const left = going ? z.work.need - z.work.done : hitsOf(w);
-        const tool = w.clear ? "łopata albo siekiera" : "młotek";
-        const title = "Dom Ługów: " + STAGE_NAMES[stage()] + (going ? " - " + w.name.toLowerCase() + " (" + z.work.done + "/" + z.work.need + ")" : "");
-        const entries = [{ name: going ? "Pracuj dalej: " + w.name.toLowerCase() : (w.clear ? "" : "Zacznij: ") + w.name, icon: iconOf(w.clear ? ITEM.shovel : ITEM.hammer), right: "-" + hitCost(),
-            help: w.help + "\n" + (going ? "Zostało uderzeń: " + left + "." : "Materiały: " + costText(w) + ". Uderzeń: " + left + ".") + " Narzędzie: " + tool +
-                ". Każde uderzenie kosztuje " + hitCost() + " wytrzymałości. Przytrzymaj O, a będziesz pracować bez przerwy.",
+        const tool = w.clear ? TK.kod.houseMenu[0] : TK.kod.houseMenu[1];
+        const title = Watki.wstaw(TK.kod.houseMenu[2], { "1": STAGE_NAMES[stage()], "2": going ? " - " + w.name.toLowerCase() + " (" + z.work.done + "/" + z.work.need + ")" : "" });
+        const entries = [{ name: going ? Watki.wstaw(TK.kod.houseMenu[3], { "1": w.name.toLowerCase() }) : (w.clear ? "" : TK.kod.houseMenu[4]) + w.name, icon: iconOf(w.clear ? ITEM.shovel : ITEM.hammer), right: "-" + hitCost(),
+            help: Watki.wstaw(TK.kod.houseMenu[7], { help: w.help, "2": going ? Watki.wstaw(TK.kod.houseMenu[5], { left: left }) : Watki.wstaw(TK.kod.houseMenu[6], { "1": costText(w), left: left }), tool: tool, "4": hitCost() }),
             run: () => (going ? strike("house") : begin()) }];
         const next = WORK.slice(stage() + 1).map(x => x.name.toLowerCase()).join(", ");
-        if (next) entries.push({ name: "Co dalej", icon: iconOf(80), help: "Potem: " + next + ". Na koniec z komina pójdzie dym, a w izbie staną łóżko, duża skrzynia i kredens.", run: () => {} });
+        if (next) entries.push({ name: TK.kod.houseMenu[8], icon: iconOf(80), help: Watki.wstaw(TK.kod.houseMenu[9], { next: next }), run: () => {} });
         return { title, entries };
     }
     function wellMenu() {
         const z = Z();
-        return { title: "Stara studnia" + (z.well ? " (" + z.well + "/" + WELL_HITS + ")" : ""), entries: [{ name: z.well ? "Kop dalej" : "Odkop studnię", icon: iconOf(ITEM.shovel), right: "-" + hitCost(),
-            help: "Wybierz gruz łopatą. Uderzeń: " + (WELL_HITS - z.well) + ". Każde kosztuje " + hitCost() + " wytrzymałości.", run: () => strike("well") }] };
+        return { title: Watki.wstaw(TK.kod.wellMenu[0], { "1": z.well ? " (" + z.well + "/" + WELL_HITS + ")" : "" }), entries: [{ name: z.well ? TK.kod.wellMenu[1] : TK.kod.wellMenu[2], icon: iconOf(ITEM.shovel), right: "-" + hitCost(),
+            help: Watki.wstaw(TK.kod.wellMenu[3], { "1": WELL_HITS - z.well, "2": hitCost() }), run: () => strike("well") }] };
     }
     T.onMapUpdate(scene => {
         if (!menuAsk || $gameMap.isEventRunning()) return;
@@ -752,7 +755,7 @@
         if (!toolFor("house")) { needTool("house"); return false; }
         const miss = w.cost.filter(([id, n]) => countOf(id) < n);
         if (miss.length) {
-            for (const [id, n] of miss.slice(0, 2)) T.popup.need(iconOf(id), "Brakuje: " + itemOf(id).name + " " + countOf(id) + "/" + n);
+            for (const [id, n] of miss.slice(0, 2)) T.popup.need(iconOf(id), Watki.wstaw(TK.kod.begin[0], { name: itemOf(id).name, "2": countOf(id), n: n }));
             return false;
         }
         for (const [id, n] of w.cost) $gameParty.loseItem(itemOf(id), n, false);
@@ -784,7 +787,7 @@
         if (target === "house" && !(Z().work && Z().work.i === stage())) return false;
         if (target === "well" && Z().wellDone) return false;
         const cost = hitCost();
-        if (cost > 0 && typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(cost)) { T.popup.need(82, "Jesteś zbyt zmęczony"); return false; }
+        if (cost > 0 && typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(cost)) { T.popup.need(82, TK.kod.strike[0]); return false; }
         const c = T.api("Combat"), rate = c && c.workSpeed ? c.workSpeed() : 1;
         const next = () => { again = { target, at: Graphics.frameCount + Math.max(2, Math.round(12 / rate)) }; };
         const started = $gamePlayer.startToolSwing && $gamePlayer.startToolSwing(tool.kind, () => blow(target, tool), next, { rate });
@@ -831,14 +834,13 @@
         if (w.clear) {
             const Q = tq();
             if (Q && Q.state && Q.isActive && Q.isActive("D21")) { const v = Q.state().v; v.konik = (v.konik || 0) + 1; }
-            T.popup("Zgliszcza uprzątnięte", { top: true, color: "#9ff0a8", sub: "Z gruzu: Kamień ×12, Drewno ×6, Gwoździe ×6 - i osmalony drewniany konik pod belką przy piecu." });
-        } else T.popup("Dom Ługów: " + STAGE_NAMES[s], { top: true, color: "#9ff0a8", sub: s < 5 ? "Dalej: " + WORK[s].name.toLowerCase() + "." : "Dom stoi. Z komina idzie dym." });
+            T.popup(TK.kod.stageDone[0], { top: true, color: "#9ff0a8", sub: TK.kod.stageDone[1] });
+        } else T.popup(Watki.wstaw(TK.kod.stageDone[2], { "1": STAGE_NAMES[s] }), { top: true, color: "#9ff0a8", sub: s < 5 ? Watki.wstaw(TK.kod.stageDone[3], { "1": WORK[s].name.toLowerCase() }) : TK.kod.stageDone[4] });
         if (s >= 5) {
             furnish(HOUSES.zagroda);
             sw(ZAGRODA, SMOKE, true);
             if (onFarm()) $gameMap.requestRefresh();
-            T.call("Journal", "addNote", "Dom Ługów odbudowany", "Dzień " + day() + ": dom w zagrodzie Ługów stoi znowu - podmurówka, bale, strzecha, drzwi i palenisko. " +
-                "W izbie łóżko, duża skrzynia i kredens. Z komina idzie dym.");
+            T.call("Journal", "addNote", TK.kod.stageDone[5], Watki.wstaw(TK.kod.stageDone[6], { "1": day() }));
         }
         T.emit("zagrodaStage", { stage: s });
         const Q = tq();
@@ -847,8 +849,8 @@
     }
     function wellDug() {
         Z().wellDone = day();
-        T.popup("Studnia odkopana", { top: true, color: "#cfe6a8", sub: "Na dnie sucho - piach i kamienie. Woda odeszła stąd dawno." });
-        T.call("Journal", "addNote", "Studnia Ługów", "Dzień " + day() + ": odkopałem starą studnię w zagrodzie Ługów. Sucha. Susza zabrała wodę głęboko pod ziemię - deszczówka zostaje jedyną wodą tutaj.");
+        T.popup(TK.kod.wellDug[0], { top: true, color: "#cfe6a8", sub: TK.kod.wellDug[1] });
+        T.call("Journal", "addNote", TK.kod.wellDug[2], Watki.wstaw(TK.kod.wellDug[3], { "1": day() }));
     }
 
     // Marta at her husband's grave: once the quest is over (her son's toy given back), every 7th day, 15-18 (TownLife keeps her
@@ -874,17 +876,19 @@
         const on = martaAway();
         if (on !== martaShown || on !== swOn(ZAGRODA, MARTA)) { martaShown = on; sw(ZAGRODA, MARTA, on); $gameMap.requestRefresh(); }
     }, { owner: PLUGIN, name: "marta" });
-    const MARTA_LINES = [
-        ["Janku... w naszym domu znowu pali się ogień. Słyszysz? Dym idzie, jak za ciebie.", "(Marta poprawia kwiaty przy krzyżu.) Przychodzę raz na tydzień. Posiedzę, popatrzę na komin - i wracam do prania."],
-        ["Franek śpi z tym konikiem co noc. Mówi, że koń pachnie domem.", "Dobrze, że tu ktoś mieszka. Ziemia nie lubi być sama."],
-        ["Jan zawsze mówił, że ta ziemia urodzi, jak się jej da wody. Wody nie ma... a ty i tak sadzisz. Uparty jak on.", "Idź, idź. Ja tu jeszcze chwilę posiedzę."]
-    ];
+    const MARTA_WORDS = { dni: [
+        [],
+        [],
+        []
+    ] };
+    Watki.scal(MARTA_WORDS, "domy", "marta");   // (its words: js/teksty/domy.txt, marta)
+    const MARTA_LINES = MARTA_WORDS.dni;
     function martaTalk(interp) {
         const ev = interp && $gameMap.event(interp.eventId());
         if (!ev) return;
         const lines = MARTA_LINES[day() % MARTA_LINES.length], out = [];
         ev.turnTowardPlayer();
-        for (const l of lines) say(out, ev.eventId(), l, "Marta Ługowa");
+        for (const l of lines) say(out, ev.eventId(), l, TK.kod.martaTalk[0]);
         interp.setupChild(end(out), ev.eventId());
     }
 
@@ -918,63 +922,35 @@
     // toy back to Marta -> the house rebuilt
     // ------------------------------------------------------------------
     const D21 = {
-        id: "D21", kind: "D", title: "Spalona zagroda", giver: null, icon: 61, autoStart: "d21Start",
-        where: "Spalona zagroda (na zachód od Skraju lasu), Podgrodzie, ratusz", when: "po obejrzeniu zgliszcz albo krzyża",
-        desc: "Za Skrajem lasu stoją zgliszcza zagrody. Pole zarosło, przy lesie stoi brzozowy krzyż. Czyja to ziemia - i czy da się tu jeszcze zamieszkać?",
+        id: "D21", kind: "D", giver: null, icon: 61, autoStart: "d21Start",
         steps: [
-            { type: "talk", to: "szmaciarz", hours: [7, 20], text: "Zapytaj Józka Łatę na Podgrodziu, czyja to zagroda - handlarz starzyzną wie wszystko o wszystkich.",
-                say: ["> Józku, za Skrajem lasu stoi spalona zagroda. Czyja to?",
-                    "Spalona zagroda? Ługów. Jana Ługa. Sześć lat temu był suchy rok i Jan pożyczył od starego Zaleskiego na ziarno. Od ojca naszego Lorda.",
-                    "Nie oddał w terminie. Przyszli ludzie dworu, zmierzyli ziemię... a w nocy dom poszedł z dymem.",
-                    "Jan mówił, że to dworscy podpalili. Dwór mówił, że Jan sam, ze złości. Kto by tam dowiódł.",
-                    "Wdowa pierze teraz na Podgrodziu - Marta. Jan zmarł zeszłej zimy. Idź do niej, jak chcesz wiedzieć więcej. Tylko delikatnie."] },
-            { type: "talk", to: "praczka", hours: [6, 21], text: "Porozmawiaj z Martą Ługową (praczka na Podgrodziu) o zagrodzie.",
-                say: ["> Marto... byłem w zagrodzie za lasem. Józek mówi, że była wasza.",
-                    "(Marta długo wyżyma koszulę.) Była nasza. Jan postawił dom własnymi rękami, jak Franek się urodził.",
-                    "Wrócić tam? Nie. Tam jest tylko popiół i grób. Franek nawet nie pamięta domu - miał dwa lata.",
-                    "Ale wiesz co... chciałabym, żeby ktoś tam znowu palił ogień. Żeby z komina szedł dym, jak za Jana.",
-                    "Ziemia jest zapisana na dwór. Sołtys trzyma księgę gruntów - on ci powie, czy da się coś zrobić."] },
-            { type: "talk", to: "soltys", hours: [8, 16], gold: num(params.priceFarm, 350),
-                text: "Idź do sołtysa (ratusz, 8–16) z {price} G: zagrodę można kupić od dworu albo po staremu prawu, przez Martę.",
-                remind: ["Zagroda Ługów? Ziemia zapisana na dwór, odłogiem od sześciu lat.",
-                    "Stare prawo wyspy mówi: ziemia zabrana za długi, co leży odłogiem ponad pięć lat, wraca do rodu, jeśli ród się o nią upomni i zapłaci wpis do księgi.",
-                    "Dwór sprzeda ją za {price} G. Po staremu wyjdzie tyle samo: sto wpisu i reszta dla Marty, żeby się zrzekła na ciebie. Wróć z pieniędzmi."],
-                say: ["> W sprawie zagrody Ługów. Mam pieniądze."],
-                choice: { ask: ["Dobrze. To jak - od dworu, czy po staremu, przez Martę? Akt dostaniesz ten sam."],
+            { type: "talk", to: "szmaciarz", hours: [7, 20] },
+            { type: "talk", to: "praczka", hours: [6, 21] },
+            { type: "talk", to: "soltys", hours: [8, 16], gold: num(params.priceFarm, 350), vars: "d21Vars",
+                choice: { 
                     options: [
-                        { label: "Od dworu (wszystko dla Lorda)", flag: "d21Lord", fx: "d21Deed", reward: { opinion: -2 },
-                            say: ["(Sołtys posyła chłopca do dworu. Chłopiec wraca po godzinie, zdyszany.)",
-                                "Kamerdyner kazał przekazać: „Popiół? Bierz. Tylko nie rozpowiadaj, że dwór handluje popiołem.”",
-                                "Masz akt. Ludzie powiedzą, że Lord znowu zarobił na Ługach... ale ziemia twoja."] },
-                        { label: "Przez Martę (sto do księgi, reszta dla niej)", flag: "d21Marta", fx: "d21Deed", reward: { opinion: 5 },
-                            say: ["Po staremu, mówisz? Dobrze. Marta była u mnie rano - powiedziała, że jak się ktoś znajdzie, to się zrzeknie.",
-                                "Sto do księgi, a resztę zaniosę jej jeszcze dziś. Podpisze krzyżykiem i po sprawie.",
-                                "Masz akt. Ziemia twoja - i dobrze zrobiłeś, chłopcze."] }
+                        { flag: "d21Lord", fx: "d21Deed", reward: { opinion: -2 } },
+                        { flag: "d21Marta", fx: "d21Deed", reward: { opinion: 5 } }
                     ] } },
-            { type: "custom", check: "d21Clear", text: "Uprzątnij zgliszcza domu Ługów (łopata albo siekiera; akcja przy zgliszczach)." },
-            { type: "bring", to: "praczka", need: [["v:konik", 1]], hours: [6, 21], reward: { opinion: 2 },
-                text: "Zanieś Marcie osmalonego konika, którego znalazłeś w popiele (Podgrodzie).",
-                remind: ["Coś jeszcze?"], hero: ["> Marto, to było w popiele. Pod belką przy piecu."],
-                done: ["(Marta bierze konika w obie ręce. Długo nic nie mówi.)", "Jan go wystrugał. Franek nie wypuszczał go z rąk... a potem został w domu, jak uciekaliśmy.",
-                    "Franek! Chodź tu, zobacz, co ci przyniósł pan z zagrody. Dziękuję. Nawet nie wiesz, jak bardzo."] },
-            { type: "custom", check: "d21Built", text: "Odbuduj dom Ługów: podmurówka, ściany z bali, dach, drzwi z paleniskiem (akcja przy domu)." }
+            { type: "custom", check: "d21Clear" },
+            { type: "bring", to: "praczka", need: [["v:konik", 1]], hours: [6, 21], reward: { opinion: 2 } },
+            { type: "custom", check: "d21Built" }
         ],
-        reward: { xp: 200, note: ["Zagroda Ługów", "Dom Ługów stoi znowu. Z komina idzie dym, jak chciała Marta. Pole i podwórze wokół są moje."] }
+        reward: { xp: 200 }
     };
+    Watki.scal(D21, "domy", "zadania.D21");   // (its words: js/teksty/domy.txt, zadania.D21)
     (function registerD21() {
         const Q = window.TownQuests, D = window.TownQuestsData;
         if (!Q || !Q.QUESTS || !Q.FX) return;
         if (D && D.VITEMS && !D.VITEMS.konik) Object.defineProperty(D.VITEMS, "konik", { enumerable: true,
-            value: { name: "Osmalony konik", get icon() { return window.$dataItems && $dataItems[ITEM.wood] ? $dataItems[ITEM.wood].iconIndex : 0; } } });
+            value: { get name() { return WORDS.konik; }, get icon() { return window.$dataItems && $dataItems[ITEM.wood] ? $dataItems[ITEM.wood].iconIndex : 0; } } });
         Object.assign(Q.FX, {
             d21Start: () => !!Z().seen,
             d21Clear: { check: () => stage() >= 1 },
             d21Built: { check: () => stage() >= 5 },
-            d21Deed: { pick: (q, op) => grantLand("zagroda", op && op.flag === "d21Marta" ? "marta" : "lord") }
+            d21Deed: { pick: (q, op) => grantLand("zagroda", op && op.flag === "d21Marta" ? "marta" : "lord") },
+            d21Vars: { vars: () => ({ price: HOUSES.zagroda.price }) }   // ({price} of the sołtys's step: TownQuests fills it)
         });
-        const vars = D21.steps[2];
-        vars.text = vars.text.replace("{price}", HOUSES.zagroda.price);
-        vars.remind = vars.remind.map(l => l.replace("{price}", HOUSES.zagroda.price));
         if (!Q.Q.D21) { Q.QUESTS.push(D21); Q.Q.D21 = D21; }
     })();
 

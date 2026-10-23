@@ -113,101 +113,70 @@
     const P159 = ["lud_p159_1", "lud_p159_2", "lud_p159_3", "lud_p159_4", "lud_p159_5"];
     const P162 = ["lud_p162_1", "lud_p162_2", "lud_p162_3", "lud_p162_4"];
     const PATROL_BARKS = {
-        patrol: ["Rabusie kręcą się po drogach. Widziałeś kogoś obcego?", "Ludzie z białym okiem na płaszczu... jak zobaczysz, daj znać do garnizonu.",
-                 "Krok równo! Patrzeć w krzaki, nie w niebo.", "Obcy na wybrzeżu? Mów od razu, chłopcze."],
-        rain: ["Mokro jak w wiadrze. A obchód i tak trzeba zrobić."],
-        night: ["Kto idzie? ...A, ty. Wracaj do domu, nocą tu niebezpiecznie."]
     };
+    Watki.scal(PATROL_BARKS, "ludzie", "patrol.barks");   // (its words: js/teksty/ludzie.txt, patrol.barks)
     const PATROL_TALK = {
-        morning: ["Obchód o świcie. Rotmistrz mówi: kto rano chodzi, ten wieczorem śpi spokojnie."],
-        day: ["Rabusie z lasu napadają na wozy. A od morza przychodzą obcy z białym okiem na szyi. Czarne Oczy, tak ich zwą. Uważaj na nich.",
-              "Patrolujemy brzeg i drogi. Jak coś zobaczysz - garnizon nad zatoką, rotmistrz Bełza."],
-        evening: ["Koniec obchodu. Jeszcze tylko do bramy i spać."],
-        night: ["Noc. Nie łaź sam po wybrzeżu."],
-        rain: ["Deszcz to dobra pora dla złodziei. Oczy szeroko."]
     };
+    Watki.scal(PATROL_TALK, "ludzie", "patrol.talk");   // (its words: js/teksty/ludzie.txt, patrol.talk)
     const RESIDENTS = [
         {
             // Wawrzyn Owczarz, the shepherd (about 55, a sheepskin coat, a felt hat, a crook): by the fold at dawn, the flock on the
             // pasture by day, he drives them in at half past six, sleeps in the fold. Every third day (d % 3 = 2) by the menhirs (Map018)
-            key: "pasterz", id: 2910, name: "Wawrzyn Owczarz", title: "pasterz", sheet: "$Npc_Pasterz", map: MAP.laka, speed: 3,
+            key: "pasterz", id: 2910, sheet: "$Npc_Pasterz", map: MAP.laka, speed: 3,
             away: ["koszar_brama"],
             plan: [[0, "inside", "koszar_brama"], [6, "stand", "koszar_brama"], [7, "wander", "pastwisko"], [12, "stand", "pastwisko_cien"],
                    [13, "wander", "pastwisko"], [18.5, "stand", "pastwisko_brzeg"], [19.5, "stand", "koszar_brama"], [21, "inside", "koszar_brama"]],
             alt: {
                 map: MAP.menhiry, when: "ludPasterz018",
                 plan: [[0, "wander", "pastwisko_018"], [12, "stand", "pastwisko_018_kamien"], [13, "wander", "pastwisko_018"]],
-                barks: { wander: ["Tu trawa lepsza. Kamienie trzymają rosę.", "Hej, owieczki, nie pod kamienie! Tam niedobrze."],
-                         stand: ["Stare kamienie. Mój dziad mówił, że one pamiętają."] },
-                talk: { day: ["Co trzeci dzień przyprowadzam je tutaj. Między kamieniami trawa nie wysycha. Dziwne miejsce, ale owce je lubią.",
-                              "Nocą bym tu nie został. Kamienie rzucają cienie, nawet jak nie ma słońca."] }
+                barks: { },
+                talk: { }
             },
             barks: {
-                stand: ["Hej, hej, owieczki, do domu!", "Raz, dwa, trzy... sześć. Wszystkie.", "Tylko nie wchodź do koszaru, spłoszysz je."],
-                wander: ["Trawa coraz suchsza. Jeszcze tydzień bez deszczu i będę pasł na kamieniach.", "Hej, Siwa! Nie odchodź!", "Wilk w nocy wył za lasem. Trzeba pilnować."],
-                rain: ["Deszcz! Owce mokre, ale trawa odżyje.", "Pod koszar, pod koszar!"],
-                night: ["Śpij, chłopcze. Owce śpią, wilki nie."]
             },
             talk: {
-                morning: ["Wstaję przed owcami, kładę się po nich. Takie życie pasterza.", "Wełna, mleko, ser - od moich owiec. Jak chcesz, sprzedam. Uczciwie."],
-                day: ["Sześć owiec, mój cały majątek. Wilki biorą jedną na rok, susza drugą. Dlatego koszar z wikliny - plecionki wilk nie przeskoczy.",
-                      "Lizawki brakuje. Owce bez soli chudną. Jak masz bryłę soli, kupię."],
-                evening: ["Wieczorem zaganiam je za płot. Policz ze mną: jedna, dwie... sześć. Dobrze.", "Po burzy zawsze którejś brakuje. Głupie zwierzę ucieka przed grzmotem i nie wie dokąd."],
-                night: ["Cicho. Nasłuchuję wilków."],
-                rain: ["Deszcz to dla mnie święto. Trawa odrośnie."]
             }
         },
         {
             // Szymon Juczny, the travelling pedlar (about 40, a travel cloak, a wide hat, packs on his back): four stops in turn - Polna
             // droga (the main one: the wagon, the donkey), Leśna droga, Łąka, the field of grandpa (d % 4); trades 8-18, by the fire in the
             // evening, asleep under the wagon's tarp at night. His "alt" map is the day's stop (a getter: Ludzie.js's ludHandlarzW)
-            key: "handlarz", id: 2911, name: "Szymon Juczny", title: "wędrowny handlarz", sheet: "$Npc_Handlarz", map: MAP.polna, speed: 3,
+            key: "handlarz", id: 2911, sheet: "$Npc_Handlarz", map: MAP.polna, speed: 3,
             away: ["handlarz_woz"],
             plan: [[0, "inside", "handlarz_woz"], [6.5, "stand", "handlarz_lada"], [8, "work", "handlarz_lada"], [18, "wander", "handlarz_lada"],
                    [19.5, "stand", "handlarz_sen"], [22, "inside", "handlarz_woz"]],
             alt: { get map() { const L = window.Ludzie; try { return L && L.stopMap ? L.stopMap() : MAP.polna; } catch (e) { return MAP.polna; } }, when: "ludHandlarzW" },
             barks: {
-                work: ["Przyprawy z kontynentu! Lina, gwoździe, strzały!", "Kupuję skóry i wełnę, płacę lepiej niż w mieście!", "Mapa okolic, jedyna taka! Kto kupi?"],
-                stand: ["Rozkładam towar, chwileczkę.", "Hej, chłopcze! Wóz otwarty."],
-                wander: ["Jeszcze godzinka i zwijam kram.", "Dziś mało ludzi. Jutro inna droga."],
-                rain: ["Plandeka na towar! Szybciej, osiołku, nie stój!"],
-                night: ["Ognisko grzeje. Siadaj, jak chcesz, tylko nic nie ruszaj z wozu."]
             },
             talk: {
-                morning: ["Rano rozkładam towar. Cztery drogi, cztery postoje - Polna, Leśna, Łąka i Kruczy Jar przy działce twojego dziadka. Dzień tu, dzień tam.",
-                          "Co dzień inny towar. Co mi wpadnie w ręce po drodze, to sprzedaję."],
-                day: ["Chodzę od wsi do wsi od dwudziestu lat. Słyszę to, czego w miasteczku nikt ci nie powie.",
-                      "Skupuję skóry, wełnę, miód, wosk, rzadkie zioła, poroże, pazury. Płacę lepiej niż w mieście - bo w mieście płacą źle."],
-                evening: ["Wieczorem siadam przy ogniu. Osiołek je, ja liczę. Zwykle wychodzi, że mniej niż rano.", "Woda? Mam beczkę. Ale wody nie rozdaję - wiozę ją z daleka. Łyk raz na dzień, i drogo."],
-                night: ["Śpię jednym okiem. Rabusie lubią wędrownych kupców."],
-                rain: ["Deszcz moczy plandekę, ale napełnia beczkę. Pół na pół."]
             }
         },
         {
-            key: "patrol_latarnia_1", id: 2912, name: "Żołnierz z patrolu", title: "patrol garnizonu (przylądek)", sheet: "$Npc_Zolnierz", map: MAP.przyladek, speed: 3,
+            key: "patrol_latarnia_1", id: 2912, sheet: "$Npc_Zolnierz", map: MAP.przyladek, speed: 3,
             away: ["lud_p159_noc"],
             plan: [[0, "inside", "lud_p159_noc"], [7, "patrol", P159], [19, "inside", "lud_p159_noc"], [21, "patrol", P159, "ludNocnyPatrol"]],
             barks: PATROL_BARKS, talk: PATROL_TALK
         },
         {
-            key: "patrol_latarnia_2", id: 2913, name: "Żołnierz z patrolu", title: "patrol garnizonu (przylądek)", sheet: "$Npc_Zolnierz_B", map: MAP.przyladek, speed: 3,
+            key: "patrol_latarnia_2", id: 2913, sheet: "$Npc_Zolnierz_B", map: MAP.przyladek, speed: 3,
             away: ["lud_p159_noc"],
             plan: [[0, "inside", "lud_p159_noc"], [7, "patrol", P159], [19, "inside", "lud_p159_noc"], [21, "patrol", P159, "ludNocnyPatrol"]],
             barks: PATROL_BARKS, talk: PATROL_TALK
         },
         {
-            key: "patrol_garnizon_1", id: 2914, name: "Żołnierz z patrolu", title: "patrol garnizonu (wybrzeże)", sheet: "$Npc_Zolnierz", map: MAP.garnizon, speed: 3,
+            key: "patrol_garnizon_1", id: 2914, sheet: "$Npc_Zolnierz", map: MAP.garnizon, speed: 3,
             away: ["koszary_drzwi"],
             plan: [[0, "inside", "koszary_drzwi"], [7, "patrol", P162], [19, "inside", "koszary_drzwi"]],
             barks: PATROL_BARKS, talk: PATROL_TALK
         },
         {
-            key: "patrol_garnizon_2", id: 2915, name: "Żołnierz z patrolu", title: "patrol garnizonu (wybrzeże)", sheet: "$Npc_Zolnierz_B", map: MAP.garnizon, speed: 3,
+            key: "patrol_garnizon_2", id: 2915, sheet: "$Npc_Zolnierz_B", map: MAP.garnizon, speed: 3,
             away: ["koszary_drzwi"],
             plan: [[0, "inside", "koszary_drzwi"], [7, "patrol", P162], [19, "inside", "koszary_drzwi"]],
             barks: PATROL_BARKS, talk: PATROL_TALK
         }
     ];
+    Watki.scal(RESIDENTS, "ludzie", "mieszkancy");   // (its words: js/teksty/ludzie.txt, mieszkancy)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(...RESIDENTS);
     // the pairs: the second walks one cell behind the first (Ludzie.js: TownLife.hold while they patrol)
     const PAIRS = [["patrol_latarnia_1", "patrol_latarnia_2"], ["patrol_garnizon_1", "patrol_garnizon_2"]];
@@ -218,22 +187,11 @@
         plan: [[0, "inside", "szalas_drzwi"], [5.5, "work", "mielerz_praca"], [12, "stand", "szalas_przed"], [13, "work", "mielerz_praca"],
                [17, "wander", "mielerz_obchod"], [20.5, "inside", "szalas_drzwi"]],
         barks: {
-            work: ["Ciągu za dużo... zatkać dziurę darnią.", "Dym siwy - dobrze. Dym żółty - źle. Dziś siwy.", "Nie podchodź blisko, chłopcze, kopiec może się zapaść."],
-            stand: ["Kawałek chleba, łyk wody i z powrotem do kopca."],
-            wander: ["W nocy trzeba pilnować. Kopiec nie lubi wiatru. Ani złodziei."],
-            rain: ["Deszcz na mielerz - jak woda na kowadło. Szybko, płachtą!"],
-            night: ["Śpię przy kopcu. Węgiel sam się nie zrobi."]
         },
         talk: {
-            morning: ["Mielerz rozpalony. Dwa dni tli się pod darnią, potem rozgarniam - i jest węgiel. Kowal bierze najwięcej.",
-                      "Masz drewno? Dwanaście polan - po wypale dostaniesz osiem worków węgla. Uczciwie."],
-            day: ["Węgiel drzewny po cztery grosze. Więcej niż dziesięć z jednego wypału nie dam - kowal by mnie zabił.",
-                  "Las Lorda za plecami. Ja biorę tylko suche, leżące. Gajowy wie i milczy."],
-            evening: ["Wieczorem obchodzę kopiec dookoła. Każda dziura w darni to stracony węgiel."],
-            night: ["Śpię w szałasie, jednym okiem. Rabusie wiedzą, że węgiel to grosz."],
-            rain: ["Deszcz? Dla mielerza zły, dla lasu dobry. Niech pada."]
         }
     };
+    Watki.scal(ZBYCH_ALT, "ludzie", "zbychAlt");   // (its words: js/teksty/ludzie.txt, zbychAlt)
     const TLD = window.TownLifeData;
     if (TLD && Array.isArray(TLD.RESIDENTS)) {
         const zb = TLD.RESIDENTS.find(r => r.key === "drwal");
@@ -294,147 +252,95 @@
 
     // ------------------------------------------------------------------ the quests (TownQuests packs; their own steps: Ludzie.js FX)
     const K63 = {
-        id: "K63", kind: "K", title: "Węgiel dla kowala", giver: "kowal", icon: 79, where: "Kuźnia; mielerz Zbycha przy Leśnej drodze", when: "od dnia 4, 7–18",
-        desc: "Kowal Tadek potrzebuje dziesięciu worków węgla drzewnego w pięć dni. Zbych Smolarz wypali je, jeśli dostanie drewno - i jeśli ktoś przypilnuje kopca w noc wypału.",
+        id: "K63", kind: "K", giver: "kowal", icon: 79, 
         offer: {
-            cond: { hours: [7, 18], day: 4 },
-            say: ["Węgla mi brakuje. Palenisko gaśnie, a zamówień pełno. Dziesięć worków potrzebuję, w pięć dni.",
-                  "Zbych Smolarz pali węgiel w mielerzu przy Leśnej drodze. Zanieś mu drewno, niech wypali dla mnie. Zapłacę uczciwie."],
-            yes: "Załatwię węgiel.", no: "Nie teraz.",
-            accept: ["Dziesięć worków, pięć dni. Liczę na ciebie, chłopcze."], decline: ["Trudno. Palenisko poczeka. Ja nie."]
+            cond: { hours: [7, 18], day: 4 }
         },
         steps: [
-            { type: "bring", to: "drwal", need: [[61, 12]], hours: [6, 20], fx: "ludK63Drewno",
-              text: "Zanieś Zbychowi Smolarzowi 12× Drewno (Podgrodzie, a w dni wypału mielerz przy Leśnej drodze; 6–20).",
-              hero: ["> Kowal Tadek potrzebuje węgla. Przyniosłem drewno na wypał."],
-              done: ["Dwanaście polan, suche. Dobre. Dziś wieczorem rozpalę mielerz przy Leśnej drodze.",
-                     "Tylko... w noc wypału rabusie lubią rozkopać kopiec i wynieść węgiel, zanim ostygnie. Przypilnujesz go ze mną tej nocy?"],
-              remind: ["Dwanaście polan suchego drewna. Bez tego nie rozpalę."] },
-            { type: "custom", check: "ludK63Noc", tick: "ludK63Noc", vars: "ludK63Vars",
-              text: "Noc wypału (dzień {noc}, 22–2): pilnuj mielerza przy Leśnej drodze. Rabusie kręcą się po lesie." },
-            { type: "custom", talk: "ludK63Wegiel", vars: "ludK63Vars",
-              text: "Odbierz węgiel od Zbycha - gotowy dnia {gotowy} (przy mielerzu albo w Podgrodziu)." },
-            { type: "bring", to: "kowal", need: [[79, 10]], hours: [6, 21],
-              text: "Zanieś kowalowi Tadkowi 10× Węgiel drzewny (kuźnia w miasteczku).",
-              hero: ["> Węgiel od Zbycha. Dziesięć worków."],
-              done: ["O! Czarny, lekki, dźwięczy jak trzeba. Zbych umie palić.",
-                     "Masz czterdzieści groszy. I słuchaj: stal ode mnie dostaniesz taniej niż u wojskowych. Raz na dzień, dla przyjaciela."],
-              remind: ["Dziesięć worków węgla. Palenisko czeka."] }
+            { type: "bring", to: "drwal", need: [[61, 12]], hours: [6, 20], fx: "ludK63Drewno" },
+            { type: "custom", check: "ludK63Noc", tick: "ludK63Noc", vars: "ludK63Vars" },
+            { type: "custom", talk: "ludK63Wegiel", vars: "ludK63Vars" },
+            { type: "bring", to: "kowal", need: [[79, 10]], hours: [6, 21] }
         ],
-        reward: { gold: 40, opinion: 3, xp: 100, flag: "ludKowalRabat",
-            note: ["Stal od kowala", "Kowal Tadek sprzedaje mi stal taniej niż kowal garnizonu - raz na dzień, „dla przyjaciela”. Za węgiel, który przywiozłem od Zbycha."] },
-        fail: { opinion: -2, text: "Kowal nie doczekał się węgla." }
+        reward: { gold: 40, opinion: 3, xp: 100, flag: "ludKowalRabat" },
+        fail: { opinion: -2 }
     };
+    Watki.scal(K63, "ludzie", "zadania.K63");   // (its words: js/teksty/ludzie.txt, zadania.K63)
     const K64 = {
-        id: "K64", kind: "K", title: "Zabłąkana owca", giver: "pasterz", icon: 111, where: "Łąka (koszar), Omszała łąka", when: "po burzy, 7–19",
-        desc: "Po burzy Wawrzynowi Owczarzowi brakuje owcy. Uciekła przed grzmotem na Omszałą łąkę. Trzeba ją znaleźć i przyprowadzić do koszaru.",
+        id: "K64", kind: "K", giver: "pasterz", icon: 111, 
         offer: {
-            cond: { hours: [7, 19], fn: "ludPoBurzy" },
-            say: ["Pięć. Liczę i liczę - pięć. Siwa uciekła w burzę. Głupia, boi się grzmotu i leci przed siebie.",
-                  "Pewnie na Omszałej łące, tam zawsze ucieka. Ja nie mogę zostawić stada. Przyprowadzisz ją? Pójdzie za tobą, jak ją zawołasz."],
-            yes: "Przyprowadzę Siwą.", no: "Nie mam czasu.",
-            accept: ["Dzięki ci! Podejdź do niej spokojnie, nie biegnij. Pójdzie."], decline: ["Trudno... wilki będą miały ucztę."]
+            cond: { hours: [7, 19], fn: "ludPoBurzy" }
         },
         steps: [
-            { type: "custom", check: "ludOwcaIdzie", vars: "ludOwcaVars",
-              text: "Znajdź Siwą na Omszałej łące (pasterz mówi: {gdzie}) i podejdź do niej - przycisk akcji: pójdzie za tobą." },
-            { type: "custom", check: "ludOwcaDoma", vars: "ludOwcaVars",
-              text: "Zaprowadź Siwą na Łąkę, na pastwisko pod koszarem. Idzie za tobą - nie biegnij." },
-            { type: "talk", to: "pasterz", hours: [6, 22], text: "Powiedz Wawrzynowi, że Siwa wróciła.",
-              say: ["> Siwa wróciła. Cała i zdrowa."],
-              done: ["Siwa! Ty głupia... (pasterz drapie owcę za uchem) Sześć. Znowu sześć.",
-                     "Masz ser, trzy krążki, i trzydzieści groszy. A u mnie odtąd płacisz mniej - jak swój."] }
+            { type: "custom", check: "ludOwcaIdzie", vars: "ludOwcaVars" },
+            { type: "custom", check: "ludOwcaDoma", vars: "ludOwcaVars" },
+            { type: "talk", to: "pasterz", hours: [6, 22] }
         ],
-        reward: { gold: 30, xp: 80, items: [[124, 3]], flag: "ludOwcaRabat",
-            note: ["Swój u pasterza", "Wawrzyn Owczarz sprzedaje mi wełnę, ser, mleko i koc taniej - za Siwą, którą przyprowadziłem po burzy."] }
+        reward: { gold: 30, xp: 80, items: [[124, 3]], flag: "ludOwcaRabat" }
     };
+    Watki.scal(K64, "ludzie", "zadania.K64");   // (its words: js/teksty/ludzie.txt, zadania.K64)
     const K65 = {
-        id: "K65", kind: "K", title: "Zgubiony juk", giver: "handlarz", icon: 210, where: "Leśna droga (na wschód od mielerza)", when: "od dnia 3, 8–18",
-        desc: "Szymonowi Jucznemu spadł z wozu juk na Leśnej drodze. Trzeba go znaleźć przed drugą nocą - zanim rabusie z lasu rozbiją przy nim obóz.",
+        id: "K65", kind: "K", giver: "handlarz", icon: 210, 
         offer: {
-            cond: { hours: [8, 18], day: 3 },
-            say: ["Nieszczęście, chłopcze. Na Leśnej drodze, za mielerzem, juk mi spadł z wozu. Nawet nie wiem kiedy - osiołek szarpnął na wybojach.",
-                  "W juku przyprawy z kontynentu. Jak go rabusie znajdą, przepadło. Dwie noce - potem rozbijają tam obóz. Znajdziesz go?"],
-            yes: "Poszukam juka.", no: "Nie teraz.",
-            accept: ["Na wschód od mielerza, przy drodze. Skórzany, z rzemieniami. Pośpiesz się."], decline: ["Szkoda. Przyprawy pachniały jak raj."]
+            cond: { hours: [8, 18], day: 3 }
         },
         steps: [
-            { type: "custom", check: "ludJuk", vars: "ludJukVars", deadline: { day: 2, hour: 5, text: "Rabusie znaleźli juk pierwsi." },
-              text: "Znajdź juk handlarza na Leśnej drodze, przy drodze na wschód od mielerza ({gdzie}) - przed drugą nocą (do dnia {do}, 5:00)." },
-            { type: "bring", to: "handlarz", need: [["v:juk", 1]], hours: [6, 21], vars: "ludJukVars",
-              text: "Oddaj juk Szymonowi Jucznemu (dziś: {postoj}).",
-              hero: ["> Twój juk. Leżał przy drodze."],
-              done: ["Mój juk! Cały! (handlarz zagląda do środka) Przyprawy są, pieczęć cała.", "Dwadzieścia pięć groszy. I u mnie zawsze taniej - słowo wędrownego kupca."],
-              remind: ["Skórzany juk z rzemieniami. Leśna droga, za mielerzem."] }
+            { type: "custom", check: "ludJuk", vars: "ludJukVars", deadline: { day: 2, hour: 5 } },
+            { type: "bring", to: "handlarz", need: [["v:juk", 1]], hours: [6, 21], vars: "ludJukVars" }
         ],
-        reward: { gold: 25, xp: 60, flag: "ludJukRabat",
-            note: ["Taniej u handlarza", "Szymon Juczny sprzedaje mi taniej - za juk, który znalazłem na Leśnej drodze."] }
+        reward: { gold: 25, xp: 60, flag: "ludJukRabat" }
     };
+    Watki.scal(K65, "ludzie", "zadania.K65");   // (its words: js/teksty/ludzie.txt, zadania.K65)
     const K66 = {
-        id: "K66", kind: "K", title: "Nocny patrol", giver: "rotmistrz", icon: 127, where: "Przylądek z latarnią (nocą)", when: "od dnia 6, 8–20",
-        desc: "Rotmistrz Bełza chce, żebyś poszedł z nocnym patrolem po przylądku przy latarni. Rabusie napadają tam na ludzi, a jego żołnierze są młodzi.",
+        id: "K66", kind: "K", giver: "rotmistrz", icon: 127, 
         offer: {
-            cond: { hours: [8, 20], day: 6, flags: ["garnizonPoznany"] },
-            say: ["Patrol na przylądku przy latarni. Dwóch żółtodziobów. Rabusie wiedzą, że nocą wracają do koszar - i wtedy napadają.",
-                  "Dziś w nocy puszczę patrol jeszcze raz, od dziewiątej do północy. Pójdziesz z nimi? Ty znasz las lepiej niż oni."],
-            yes: "Pójdę z patrolem.", no: "Nie tej nocy.",
-            accept: ["O dziewiątej spod latarni. Trzymaj się blisko nich."], decline: ["Rozumiem. Noc jest długa, a ty jeden."]
+            cond: { hours: [8, 20], day: 6, flags: ["garnizonPoznany"] }
         },
         steps: [
-            { type: "custom", check: "ludPatrolNoc", tick: "ludPatrolNoc", vars: "ludPatrolVars", deadline: { day: 1, hour: 0.5, text: "Patrol poszedł bez ciebie." },
-              text: "Dziś w nocy (21–24) idź z patrolem po przylądku z latarnią. Żołnierze wyruszają o 21 - trzymaj się blisko nich." },
-            { type: "talk", to: "rotmistrz", hours: [6, 22], text: "Zamelduj rotmistrzowi Bełzie, jak poszedł patrol (garnizon nad zatoką).",
-              say: ["> Rabusie napadli na patrol przy latarni. Odparliśmy ich."],
-              done: ["(Rotmistrz kiwa głową.) Żołnierze mówią, że stanąłeś pierwszy. Dobrze.", "Trzydzieści groszy. I garnizon będzie o tobie pamiętał."] }
+            { type: "custom", check: "ludPatrolNoc", tick: "ludPatrolNoc", vars: "ludPatrolVars", deadline: { day: 1, hour: 0.5 } },
+            { type: "talk", to: "rotmistrz", hours: [6, 22] }
         ],
         reward: { gold: 30, xp: 100, flag: "ludPatrolDone" },
-        fail: { opinion: 0, text: "Patrol poszedł bez ciebie." }
+        fail: { opinion: 0 }
     };
+    Watki.scal(K66, "ludzie", "zadania.K66");   // (its words: js/teksty/ludzie.txt, zadania.K66)
     const D34 = {
-        id: "D34", kind: "D", title: "Jaskinia pod zatoczką", giver: "celnik", icon: 212, autoStart: "ludD34Start",
-        where: "Przystań: zatoczka przemytników, jaskinia (tylko w odpływie)", when: "od W5 rozdz. 4",
-        desc: "Przemytnicy Baltazara mają skład w jaskini pod zatoczką. Wejść można tylko w odpływie, nocą pilnuje Sławek. Skrzynia przemytu - komu ją oddać?",
+        id: "D34", kind: "D", giver: "celnik", icon: 212, autoStart: "ludD34Start",
         offer: {
-            cond: { hours: [8, 18], fn: "ludJaskiniaOtwarta" },
-            say: ["Ty jesteś od Stacha. Słuchaj. Przemytnicy Baltazara trzymają towar w jaskini pod zatoczką. Wejście tylko w odpływie - dlatego nikt go nie pilnuje.",
-                  "Przynieś mi skrzynię ze składu. Z pieczęcią kruka. Zapisze się w księdze - i dostaniesz czterdzieści groszy."],
-            yes: "Przyniosę skrzynię.", no: "Nie mieszam się w to.",
-            accept: ["Uważaj na odpływ. Woda wraca szybko. I nocą jest tam Sławek - człowiek Baltazara."], decline: ["Jak chcesz. Księga poczeka."]
+            cond: { hours: [8, 18], fn: "ludJaskiniaOtwarta" }
         },
         steps: [
-            { type: "custom", check: "ludSkrzynia", text: "Znajdź skład przemytników w jaskini pod zatoczką (przystań, na południowym zachodzie; wejście tylko w odpływie) i zabierz Skrzynię przemytu z niszy. Nocą pilnuje Sławek." },
-            { type: "custom", talk: "ludKomuSkrzynia", vars: "ludD34Vars",
-              text: "Skrzynia przemytu jest ciężka. Oddaj ją celnikowi Samborowi (przystań){balt}." }
-        ],
-        reward: { xp: 150, note: ["Jaskinia przemytników", "Pod zatoczką przemytników, w skale nad przystanią, Baltazar miał skład. W odpływie można tam wejść suchą nogą."] }
-    };
-    const D35 = {
-        id: "D35", kind: "D", title: "Szyb pod Orlą Granią", giver: null, autoStart: "ludD35Start", icon: 213,
-        where: "Góry i kamieniołom: obóz kopaczy na wschodzie", when: "W8 od rozdz. 3",
-        desc: "Kopacze Czarnych Oczu drążą szyb w skale na wschodzie gór. Dziennik ich dowódcy powie po co. Potem: zasypać szyb, powiedzieć Grumowi - albo rotmistrzowi.",
-        steps: [
-            { type: "custom", check: "ludDziennik",
-              text: "Obóz kopaczy Czarnych Oczu (Góry, na wschodzie): w skrzyni dowódcy przy namiotach leży jego dziennik. Zabierz go po cichu - nocą kopacze śpią." },
-            { type: "custom", talk: "ludSzybKomu", check: "ludSzybKoniec", vars: "ludD35Vars",
-              text: "„Kopią ku piętru pięćdziesiątemu od góry…” Co z szybem? Zasyp go (Lina i piła, przy szybie){grum}, albo powiedz rotmistrzowi (garnizon nad zatoką)." }
+            { type: "custom", check: "ludSkrzynia" },
+            { type: "custom", talk: "ludKomuSkrzynia", vars: "ludD34Vars" }
         ],
         reward: { xp: 150 }
     };
-    const VITEMS = { juk: { name: "Juk handlarza", icon: 496 } };
+    Watki.scal(D34, "ludzie", "zadania.D34");   // (its words: js/teksty/ludzie.txt, zadania.D34)
+    const D35 = {
+        id: "D35", kind: "D", giver: null, autoStart: "ludD35Start", icon: 213,
+        steps: [
+            { type: "custom", check: "ludDziennik" },
+            { type: "custom", talk: "ludSzybKomu", check: "ludSzybKoniec", vars: "ludD35Vars" }
+        ],
+        reward: { xp: 150 }
+    };
+    Watki.scal(D35, "ludzie", "zadania.D35");   // (its words: js/teksty/ludzie.txt, zadania.D35)
+    const VITEMS = { juk: { icon: 496 } };
+    Watki.scal(VITEMS, "ludzie", "rzeczy");   // (its words: js/teksty/ludzie.txt, rzeczy)
     const REMARKS = [
-        { id: "ludRochSkrzynie", who: "przemytnik", flag: "ludObieSkrzynie", lines: ["Dwie skrzynie Baltazara? Jedna w jaskini, druga w gąszczu, gdzie tylko ptak doleci... (Roch gwiżdże.) Chłopcze, ty masz nosa lepszego niż celnik.",
-            "Baltazar policzy straty i zacznie szukać, kto mu je zrobił. Uważaj na przystani."] },
-        { id: "ludMartaGroby", who: "praczka", flag: "ludGroby", lines: ["Byłeś przy starych grobach Ługów? Ktoś je oczyścił... (Marta ociera oczy.) To ty.",
-            "Tam leżą rodzice Jana i jego dziadkowie. Jan mówił, że stary Ług przyszedł tu z kontynentu, kiedy zagroda była jeszcze lasem. Dziękuję."] },
-        { id: "ludKowalWegiel", who: "drwal", flag: "ludKowalRabat", lines: ["Tadek zadowolony z węgla? To dobrze. Przyjdź, jak będziesz miał drewno - zawsze coś wypalę."] },
-        { id: "ludRotmistrzSzyb", who: "rotmistrz", flag: "ludSzybRotmistrz", lines: ["Moi ludzie rozbili obóz kopaczy pod skałą. Szyb zasypany. Czarne Oczy kopały ku podziemiom zakonu... Dobrze, że powiedziałeś mnie, a nie komuś innemu."] }
+        { id: "ludRochSkrzynie", who: "przemytnik", flag: "ludObieSkrzynie" },
+        { id: "ludMartaGroby", who: "praczka", flag: "ludGroby" },
+        { id: "ludKowalWegiel", who: "drwal", flag: "ludKowalRabat" },
+        { id: "ludRotmistrzSzyb", who: "rotmistrz", flag: "ludSzybRotmistrz" }
     ];
+    Watki.scal(REMARKS, "ludzie", "uwagi");   // (its words: js/teksty/ludzie.txt, uwagi)
     (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Ludzie", quests: [K63, K64, K65, K66, D34, D35], vitems: VITEMS, remarks: REMARKS });
 
     // ------------------------------------------------------------------ the camps and places of the quests
     const JUK_SPOTS = [[55, 12], [61, 11], [67, 8]];
     const SHEEP_SPOTS = [[40, 40], [60, 38], [72, 30]];
-    const SHEEP_WHERE = ["przy starym dębie na zachodzie", "między krzakami w środku łąki", "na północnym wschodzie, pod lasem"];
+    const SHEEP_WHERE = [];
+    Watki.scal(SHEEP_WHERE, "ludzie", "owcaGdzie");   // (its words: js/teksty/ludzie.txt, owcaGdzie)
     const PASTURE = { 4: { x: 43, y: 44, w: 7, h: 6 }, 18: { x: 65, y: 29, w: 7, h: 5 } };
     const FOLD = { cells: [[51, 41], [52, 41], [53, 41], [51, 42], [52, 42], [53, 42]], gate: [52, 43], fence: [[50, 40], [51, 40], [52, 40], [53, 40], [54, 40],
         [50, 41], [54, 41], [50, 42], [54, 42], [50, 43], [51, 43], [53, 43], [54, 43]] };
@@ -458,90 +364,19 @@
     const SHAFT = { rope: 93, saw: 118, blows: 6 };
 
     // ------------------------------------------------------------------ the texts
-    const TX = {
-        menu: { buy: "Pokaż towar.", sell: "Sprzedam ci coś.", talk: "Co słychać?", bye: "Bywaj.", water: "Łyk wody z beczki", rumour: "Słyszałeś coś ciekawego?",
-                coal: "Kupię węgiel", wood: "Dam drewno na wypał", collect: "Odbiorę węgiel.", shear: "Pomogę przy strzyży.", steel: "Kupię stal", nothing: "Nic." },
-        pedlarHello: ["Witaj, wędrowcze! Patrz, wybieraj. Co dzień co innego.", "Hej, chłopcze od Stacha! Dziś mam coś dla ciebie.", "Towar z czterech dróg. Wybieraj."],
-        pedlarNight: ["Nocą nie handluję. Przyjdź rano, po ósmej."],
-        pedlarNoBuy: ["Nie masz nic, co bym wziął. Skóry, wełna, miód, wosk, rzadkie zioła, trofea - to kupuję."],
-        pedlarMapSold: "Mapę już masz - drugiej takiej nie zrobię.",
-        pedlarWaterDone: "Dziś już piłeś z mojej beczki. Jutro.",
-        pedlarWaterNone: "Beczka sucha. Upał wypił wszystko.",
-        pedlarWaterLine: "Łyk z beczki. Woda z daleka - stąd cena.",
-        rumourNone: ["Nic nowego. Wszystko, o czym słyszałem, już wiesz."],
-        rumourDone: ["Dziś już ci mówiłem, co wiem. Jutro coś usłyszę."],
-        rumour: "Ludzie gadają, że na mapie „{map}” jest {name}. Popytaj, poszukaj.",
-        shepherdHello: ["Owce zdrowe, wełna gęsta. Co ci trzeba?", "A, chłopak od Stacha. Mleka? Sera?"],
-        shepherdNight: ["Śpię przy owcach. Przyjdź rano."],
-        shearNo: "Strzyża wiosną, w środku pory. Teraz owce nie dadzą.",
-        shearDone: "Dziś już strzygliśmy. Jutro, jak chcesz.",
-        shearOk: ["Trzymaj ją mocno za kark... o tak. (Godzina mija na strzyży.) Masz wełnę i dziesięć groszy. Dobra robota."],
-        zbychHello: ["Węgla trzeba? Albo drewno masz?", "Siekiera, kopiec, dym. Czego chcesz?"],
-        coalOut: "Z tego wypału już nic nie zostało. Za kilka dni nowy.",
-        woodOk: "Dwanaście polan. Za dwa dni będzie z tego osiem worków węgla.",
-        woodBusy: "Jeden wypał naraz, chłopcze. Ten twój jeszcze się tli.",
-        collectWait: "Jeszcze się tli. Dnia {day} rozgarnę.",
-        collectOk: "Osiem worków, czarne jak noc. Twoje.",
-        smithHello: ["Stal? Dla ciebie zawsze. Raz na dzień, taniej niż u wojskowych."],
-        smithDone: "Dziś już brałeś. Jutro.",
-        kiln: { cold: "Zimny mielerz. Polana pod darnią czekają na ogień.", burn: "Mielerz się tli. Gorąco bije spod darni - nie podchodź.", ready: "Węgiel gotowy. Kopiec rozgarnięty, czarne bryły dymią jeszcze." },
-        shed: "Szałas węglarza. Siennik, kociołek i siekiera. Zbych tu śpi w dni wypału.",
-        wagon: "Wóz handlarza. Plandeka zawiązana na supły - nie ruszaj.",
-        donkey: "Osiołek. Patrzy na ciebie, jakby pytał o marchew.",
-        fold: "Koszar z wikliny. Owce za płotem są bezpieczne.",
-        camp: { tent: "Namiot kopaczy. Śmierdzi potem i dymem.", crates: "Skrzynie z narzędziami: kilofy, łopaty, liny.", fireDay: "Ognisko kopaczy.",
-                chestEmpty: "Pusta skrzynia. Dziennik już zabrałeś.", chestTaken: "W skrzyni pod kocem - gruby notes w skórzanej oprawie. Dziennik dowódcy.",
-                shaft: "Szyb wykuty w skale, obity belkami. W dole czarno. Kopią ku podziemiom.", shaftDone: "Szyb zasypany. Belki zawalone, wejście pełne kamieni.",
-                shaftNeed: "Żeby podciąć stemple, trzeba piły. I liny, żeby zwalić belki." },
-        journalNote: ["Dziennik kopacza", "„Kopią ku piętru pięćdziesiątemu od góry. Kamień miękki, sztolnia idzie szybko. Białe oko każe się śpieszyć - zanim zakon się obudzi.” - z dziennika dowódcy kopaczy Czarnych Oczu (obóz pod skałą, Góry)."],
-        shaftDone: ["Ostatnie podcięcie - belki trzeszczą, strop się sypie. Szyb zasypany. Kopacze nie wrócą tu szybko."],
-        shaftGrum: ["> Kopacze Czarnych Oczu drążą szyb pod skałą, na wschodzie gór. Ku piętru pięćdziesiątemu. Mam ich dziennik.",
-                    "(Grum długo milczy.) Pięćdziesiąte... od góry. To moi mocodawcy, chłopcze. Albo ich rywale. Tak czy owak - dobrze, że mi powiedziałeś.",
-                    "Pójdę tam z ludźmi. Kopacze zwiną obóz. A ty... trzymaj ten dziennik przy sobie."],
-        shaftCaptain: ["> Panie rotmistrzu. Pod skałą na wschodzie gór kopacze z białym okiem drążą szyb. Ku podziemiom zakonu. Mam ich dziennik.",
-                       "(Rotmistrz bierze dziennik, czyta.) Czarne Oczy... na naszej wyspie. Wyślę ludzi jeszcze dziś. Obóz będzie rozbity, szyb zasypany.",
-                       "Dobrze zrobiłeś, chłopcze. Garnizon to zapamięta."],
-        cave: { closed: "Otwór zawalony głazami. Ktoś je tu ułożył - celowo.", flooded: "Wejście zalane. Trzeba odpływu.", enter: "Wchodzisz do jaskini...",
-                niche: "Nisza w skale. Pusto - skrzynię już zabrałeś.", nicheLook: "W niszy skrzynia z wypalonym krukiem. Ciężka.",
-                table: "Stół przemytników. Rejestr: skrzynie, kamienie z krukiem, worki zboża. Pismo Baltazara.", barrel: "Beczki z solą i suszoną rybą. Na wieku znak kruka.",
-                salt: "Woda morska. Słona - nie do picia." },
-        caveTake: ["Weź skrzynię (ciężka).", "Wyłam wieko i zajrzyj.", "Zostaw."],
-        caveOpened: ["Pod wiekiem: przyprawy w woreczkach, gwoździe, sakiewka z groszem... i pusta przegródka po kamieniu z krukiem. Celnik się dowie, że ktoś tu był."],
-        crateCelnik: ["> Skrzynia z jaskini pod zatoczką. Pieczęć kruka.", "(Celnik zapisuje długo.) Jedna skrzynia, pieczęć kruka, skład przemytników... Zgadza się.",
-                      "Czterdzieści groszy. I w księdze stoi teraz, że wnuk Stacha jest po stronie prawa."],
-        crateCelnik2: ["Druga? (Celnik unosi brwi.) Skąd... nie, nie mów. Dwadzieścia więcej. I nikomu ani słowa."],
-        crateBaltazar: ["> Twoja skrzynia. Z jaskini pod zatoczką.", "(Baltazar uśmiecha się szeroko.) Mój przyjaciel! Wiedziałem, że jesteś rozsądny. Dziewięćdziesiąt groszy.",
-                        "Celnik nic nie wie, prawda? Prawda."],
-        crateBaltazar2: ["I druga? Ach, przyjacielu... Czterdzieści więcej. Rozsądek się opłaca."],
-        crateLabel: { celnik: "Oddaj skrzynię celnikowi.", baltazar: "Oddaj skrzynię Baltazarowi.", keep: "Jeszcze nie." },
-        stash: "Druga skrzynia przemytu z pieczęcią kruka. Ciężka.",
-        graves: { dirty: "Stary krzyż, zarośnięty chwastami i mchem.", clean: "Oczyszczony krzyż. Ktoś tu dba o pamięć.", cleaning: "Wyrywasz chwasty, zdzierasz mech...",
-                  done: ["Trzy stare krzyże czyste. Ławka znowu widać. Ługowie mają tu spokój."], bench: "Stara ławka przy grobach. Usiąść, pomyśleć." },
-        martaLines: [["(Marta poprawia kamyki przy krzyżach.) Rodzice Jana. I dziadkowie. Dobrze, że ktoś tu zajrzał.", "Przychodzę raz na jakiś czas. Posiedzę - i do prania."],
-                     ["Stary Ług przyszedł tu z kontynentu, jak zagroda była jeszcze lasem. Tak mówił Jan.", "Idź, idź. Ja jeszcze chwilę."]],
-        patrolSearch: ["Stój! Przeszukanie. Rozkaz rotmistrza."],
-        patrolNight: ["Do broni! Rabusie!", "Za króla!"],
-        patrolNightStart: "Patrol wyrusza spod latarni. Trzymaj się blisko.",
-        kilnNight: "Ktoś skrada się do mielerza...",
-        sheepFound: "Siwa idzie za tobą.",
-        sheepHome: "Siwa wróciła do stada.",
-        sheepLook: "Owca pasterza. Beczy na twój widok.",
-        sheepLost: "Zabłąkana owca. Drży i beczy żałośnie.",
-        blanket: "Koc grzeje: odpoczywasz szybciej."
-    };
+    const TX = { menu: {}, kiln: {}, camp: {}, cave: {}, crateLabel: {}, graves: {}, martaLines: [[], []] };
+    Watki.scal(TX, "ludzie", "");   // (its words: js/teksty/ludzie.txt)
 
     // the items of the package (installed by tools/rozszerzenia/instaluj.py from tools/rozszerzenia/C/przedmioty.json)
-    const ITEM_NAMES = { 210: "Przyprawy", 211: "Mapa okolic", 212: "Skrzynia przemytu", 213: "Dziennik kopacza", 214: "Wełniany koc" };
+    const ITEM_NAMES = {};
+    Watki.scal(ITEM_NAMES, "ludzie", "nazwyRzeczy");   // (its words: js/teksty/ludzie.txt, nazwyRzeczy)
 
     // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Ludzie.epilogue): one or two by what the hero did
     const EPILOG = {
-        graves: "Marta Ługowa siada czasem przy starych grobach w lesie, tych, które oczyściłeś. Mówi, że teraz widać imiona - i że dziadkowie Jana mieliby co opowiadać.",
         cave: {
-            celnik: "Jaskinia pod zatoczką stoi pusta: celnik Sambor przybił przy wejściu deskę z pieczęcią. Przemytnicy szukają nowej dziury w brzegu.",
-            baltazar: "Skrzynia z jaskini wróciła do Baltazara. W jego księgach stoisz teraz po stronie zysków - a on niczego nie zapomina.",
-            otwarta: "Jaskinię pod zatoczką zalewa przypływ jak dawniej. O wyłamanej skrzyni mówi się na przystani szeptem - nikt nie wie, że to ty."
         }
     };
+    Watki.scal(EPILOG, "ludzie", "epilog");   // (its words: js/teksty/ludzie.txt, epilog)
     window.LudzieData = { EPILOG, VERSION, PKG: "C", OWNER: "Ludzie", IDS: P ? P.ids : [2500, 2699], RESIDENT_IDS: P ? P.residents : [2910, 2929],
         ITEM_IDS: P ? P.items : [210, 224], ICONS: P ? P.icons : [496, 511], SWITCHES: P ? P.switches : [25, 26], MAP, EV, SPOTS, DISCOVER, CYCLE, KILN,
         RESIDENTS, PAIRS, ZBYCH_ALT, SPOTS_BY_MAP, ITEMS, ITEM_NAMES, PEDLAR_SELLS, PEDLAR_MAP, PEDLAR_BUYS, PEDLAR_WATER, PEDLAR_DISCOUNT,

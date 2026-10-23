@@ -120,14 +120,22 @@
     // buildings go up only inside the ring of wall tiles (the A3 wall autotiles the user painted on the lower layers; the new land's
     // A4 cliffs are not it), at least WALL_GAP free tiles from the wall and from the gates. Read from the map's own tiles as it loads, so a
     // wall the user moves later moves the rule with it.
-    const WALLED_FIELD_MAP = 3, WALL_GAP = 2;
+    const WALLED_FIELD_MAP = 3, WALL_GAP = 2, FENCE_TILES = new Set([208, 209, 216, 217]);
     let walledFor = null, walledSet = null;
     function walledField() {
         if ($gameMap.mapId() !== WALLED_FIELD_MAP || !$dataMap) return null;
         if (walledFor === $dataMap) return walledSet;
         walledFor = $dataMap; walledSet = null;
         const W = $dataMap.width, H = $dataMap.height, d = $dataMap.data;
-        const isWall = (x, y) => { for (let z = 0; z < 2; z++) { const t = d[(z * H + y) * W + x] || 0; if (t >= 4352 && t < 5888) return true; } return false; };
+        // (2026-10-23: the user put a wooden fence there instead - Fantasy_Outside_B's rails 208/209 and posts 216/217 on the upper
+        // layers; the rule stopped seeing a ring and let him build anywhere: the fence is the ring as the wall was)
+        const isWall = (x, y) => {
+            for (let z = 0; z < 4; z++) {
+                const t = d[(z * H + y) * W + x] || 0;
+                if (z < 2 ? t >= 4352 && t < 5888 : FENCE_TILES.has(t)) return true;
+            }
+            return false;
+        };
         // the ring: every wall tile (its pieces between the gates)
         const ring = [];
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (isWall(x, y)) ring.push([x, y]);

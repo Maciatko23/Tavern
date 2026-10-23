@@ -46,27 +46,14 @@
             // Florian Bełza, about 50, grey moustache, the phoenix on his tabard, a sabre, limps on the left leg; stern, just, tired of
             // the war; keeps the list of the missing. 6-7 drill, 7-12 the office (Map163), 12-13 the kitchen, 13-16 the round (the gate,
             // the shore, the pier, the tower), 16-20 the office, 20-22 by the fire, 22-6 asleep
-            key: "rotmistrz", id: 945, name: "Rotmistrz Bełza", title: "rotmistrz chorągwi królewskiej", sheet: "$Npc_Rotmistrz", map: MAP, speed: 2,
+            key: "rotmistrz", id: 945, sheet: "$Npc_Rotmistrz", map: MAP, speed: 2,
             away: ["spi"],
             plan: [[0, "inside", "spi"], [6, "stand", "musztra"], [7, "inside", "kwatera_drzwi"], [12, "stand", "kuchnia"],
                    [13, "patrol", ["brama_wew", "brzeg", "pomost", "brzeg", "brama_wew", "wieza"]], [16, "inside", "kwatera_drzwi"],
                    [20, "stand", "ognisko"], [22, "inside", "spi"]],
             barks: {
-                stand: ["Wyżej tarcza! Wyżej, mówię! Wróg nie będzie czekał, aż się wyśpisz.", "Krok! Krok! Kto zgubi krok, ten zgubi głowę.",
-                        "Zupa jak zupa. Na wojnie każda dobra."],
-                patrol: ["Wartownik! Co na wodzie? ...Nic? To patrz dalej.", "Ta łacha w odpływie... Kto chce, przejdzie do wraku suchą nogą. Pilnować."],
-                rain: ["Deszcz. Prochu i tak nie mamy, to nie zamoknie.", "Do namiotów, kto nie na warcie!"],
-                night: ["Spać, spać. Pobudka o szóstej, jak zawsze."],
-                home: ["(Rotmistrz pisze coś długo, potem przekreśla.)", "Czterdziestu ludzi... dwudziestu dwóch zaginionych... Pióro mi się kończy, nie atrament."]
             },
             talk: {
-                morning: ["Musztra o szóstej. Chłopcy klną, a potem żyją. Tak to działa.", "Ranek. Wtedy morze jest najuczciwsze - widać, co płynie."],
-                day: ["Lord wpuścił nas za pieniądze. Korona chce za to podatku wojennego. Ty płacisz, on płaci, ja pilnuję. Wojna kosztuje każdego.",
-                      "Twój dziadek, Stach... Lord mu nie popuści. Nie przez złość. Przez nasz podatek. Przykro mi, chłopcze.",
-                      "Z tej wieży widać wrak na mieliźnie. Czarne Oczy. Nie pytaj, czego szukali. Ja też nie wiem."],
-                evening: ["Przy ogniu nie ma stopni. Siadaj, jak chcesz. Tylko nie pytaj o bitwy.", "Noga mi dokucza na zmianę pogody. Lewa. Pamiątka spod Brzozowej Woli."],
-                night: ["Po nocy w garnizonie kręcą się tylko wartownicy i złodzieje. Którym jesteś?"],
-                rain: ["Deszcz. Niech pada. Beczki pełne to spokojni żołnierze."]
             }
         },
         {
@@ -75,54 +62,35 @@
             // his tent; the nights after a ferry day 23-1 at the kantor's back door in the town (W5's "three knocks") - there he is an
             // event of Garnizon.js on Map008 (659), not a TownLife alt: an alt switching at night while the hero is in the town would
             // leave TownLife's resident without an event there
-            key: "kwatermistrz", id: 946, name: "Kwatermistrz Kłos", title: "kwatermistrz garnizonu", sheet: "$Npc_Kwatermistrz", map: MAP, speed: 2,
+            key: "kwatermistrz", id: 946, sheet: "$Npc_Kwatermistrz", map: MAP, speed: 2,
             away: ["namiot_kwat"],
             plan: [[0, "inside", "namiot_kwat"], [7, "work", "spichlerz"], [9, "stand", "skup"], [12, "stand", "kuchnia"], [13, "stand", "skup"],
                    [16, "work", "spichlerz"], [18, "stand", "ognisko_2"], [22, "inside", "namiot_kwat"]],
             barks: {
-                work: ["Worek, dwa worki, trzy worki... a w księdze dwa. Hm. Poprawię potem.", "Jęczmień z rekwizycji. Suchy, czysty, królewski."],
-                stand: ["Skup! Kto ma ziemniaki, kapustę, mięso wędzone? Król płaci!", "Liczydło nie kłamie. Ja czasem, ono nigdy."],
-                rain: ["Plandeka na worki! Szybciej, szybciej!"],
-                night: ["(Kłos chrapie w namiocie.)"]
             },
             talk: {
-                morning: ["Ranek, a ja już po trzech rachunkach. Dwa się zgadzają.", "Zboże z rekwizycji leży w spichlerzu. Na wojnę. Wszystko na wojnę."],
-                day: ["Kupuję dla wojska: zboże, warzywa, mięso, skóry, drewno, węgiel. Uczciwie. No, prawie.",
-                      "Po każdej fali z promu wojsko je jak smok. Wtedy płacę więcej. Półtora raza!"],
-                evening: ["Przy ogniu każdy ma brzuch. Ja mam dwa razy większy, to i dwa razy głodny.", "Zupa? Z naszego zboża. Ludzie w mieście patrzą na nią jak na złoto."],
-                night: ["Ciii. Nocą skup zamknięty. Chyba że... nie, zamknięty."],
-                rain: ["W deszcz worki gniją. A za zgniłe worki rotmistrz mnie zgnoi."]
             }
         },
         {
             // Szczepan Bęben, the recruiter, about 30: a hat with a feather, a drum at his belt, a loud voice ("Za króla, chłopcy!").
             // At his table before the gate 8-16; the day after each wave (11, 25, 39, 53) on the town's market 8:30-14:30
-            key: "werbownik", id: 947, name: "Werbownik Bęben", title: "werbownik chorągwi królewskiej", sheet: "$Npc_Werbownik", map: MAP, speed: 3,
+            key: "werbownik", id: 947, sheet: "$Npc_Werbownik", map: MAP, speed: 3,
             away: ["koszary_drzwi"],
             plan: [[0, "inside", "koszary_drzwi"], [7, "wander", "przed_brama"], [8, "stand", "stol_werbownika"], [12, "wander", "przed_brama"],
                    [13, "stand", "stol_werbownika"], [16, "wander", "musztra"], [19, "stand", "ognisko"], [22, "inside", "koszary_drzwi"]],
             alt: {
                 map: TOWN, when: "garnizonRynek",
                 plan: [[0, "inside", "brama_pld"], [8.5, "stand", "garnizon_werbownik"], [14.5, "inside", "brama_pld"]],
-                barks: { stand: ["Za króla, chłopcy! Buty, żołd i chwała!", "Kto silny i zdrowy, do mnie! Wojsko nie gryzie!", "Trrrum-tum-tum! Lista otwarta!"] },
-                talk: { day: ["Lista otwarta do drugiej! Buty, żołd, strawa. A ty jesteś za młody - przyjdź za rok, to zapiszę cię pierwszego."] }
+                barks: { },
+                talk: { }
             },
             barks: {
-                stand: ["Za króla, chłopcy! Trrrum-tum-tum!", "Buty, żołd i chwała! Kto się zapisze?", "Ty! Ty tam! ...A, za młody. Szkoda."],
-                wander: ["Trrrum-tum... Bęben się nazywam i bęben noszę. Przypadek? Nie sądzę."],
-                rain: ["Bęben nie lubi deszczu. Ja też nie."],
-                night: ["(Bęben pod pachą, ziewa.) Jutro znowu lista..."]
             },
             talk: {
-                morning: ["Wcześnie wstajesz! Wojsko lubi takich. Szkoda, że za młody jesteś."],
-                day: ["Lista poborowa, królewska pieczęć. Dzień po każdej fali z promu - rynek w miasteczku. Bęben, lista i dobre słowo.",
-                      "Ludzie chowają się przede mną po stodołach. A ja im daję buty! Buty! Kto im dał buty przez całe życie?"],
-                evening: ["Za króla, chłopcy... (ciszej) i za tych, co nie wrócili."],
-                night: ["Śpij, chłopcze. Werbownik też czasem śpi."],
-                rain: ["W deszcz nikt się nie zapisuje. Ludzie wolą suche nogi od chwały."]
             }
         }
     ];
+    Watki.scal(RESIDENTS, "garnizon", "mieszkancy");   // (its words: js/teksty/garnizon.txt, mieszkancy)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(...RESIDENTS);
 
     // their places: on Map162/163 the maps' "Miejsce:" events (these are only the defaults); on Map008 (TownLife's town spots) two
@@ -144,99 +112,67 @@
 
     // ------------------------------------------------------------------ the quests (TownQuests packs)
     const Q_K52 = {
-        id: "K52", kind: "K", title: "Drewno dla garnizonu", giver: "kwatermistrz", icon: 61, where: "Garnizon nad zatoką: kuchnia polowa", when: "od dnia 5, 8-18",
-        desc: "Kuchnia polowa garnizonu zjada drwa jak smok. Kwatermistrz Kłos potrzebuje drewna i węgla - a potem chętnie coś od ciebie kupi.",
+        id: "K52", kind: "K", giver: "kwatermistrz", icon: 61, 
         offer: {
-            cond: { hours: [8, 18], day: 5, flags: ["garnizonPoznany"] },
-            say: ["Ty jesteś ten od rotmistrza? Wnuk Stacha? To słuchaj. Kuchnia polowa zjada drwa jak smok, a moi chłopcy rąbać nie umieją, tylko ciąć.",
-                  "Dziesięć polan drewna i cztery worki węgla drzewnego. Przyniesiesz, dostaniesz dwadzieścia groszy - i wpiszę cię do księgi skupu. Będziesz mi sprzedawał."],
-            yes: "Przyniosę drewno i węgiel.", no: "Nie teraz.",
-            accept: ["Dziesięć i cztery! Liczydło nie zapomni, ja też nie."], decline: ["Drwa poczekają. Zupa nie."]
+            cond: { hours: [8, 18], day: 5, flags: ["garnizonPoznany"] }
         },
         steps: [
-            { type: "bring", to: "kwatermistrz", need: [[61, 10], [79, 4]], hours: [7, 22], text: "Przynieś kwatermistrzowi Kłosowi 10× Drewno i 4× Węgiel drzewny (garnizon nad zatoką).",
-              remind: ["Dziesięć polan i cztery worki węgla. Liczydło czeka."], hero: ["> Drewno i węgiel dla kuchni polowej."],
-              done: ["O! Suche, równe, porządne. Rotmistrz się ucieszy, a ja jeszcze bardziej.",
-                     "Masz dwadzieścia groszy. I od dziś jesteś w mojej księdze: przynoś zboże, warzywa, mięso, skóry - wojsko kupi."] }
+            { type: "bring", to: "kwatermistrz", need: [[61, 10], [79, 4]], hours: [7, 22] }
         ],
-        reward: { gold: 20, xp: 50, flag: "k52Skup",
-            note: ["Skup wojskowy", "Kwatermistrz Kłos z garnizonu nad zatoką kupuje dla wojska zboże, warzywa, wędzone mięso i ryby, skóry, strzały, drewno i węgiel. Przez tydzień po każdej fali z promu płaci półtora raza więcej. Ale kiedy w mieście głód, ludzie patrzą krzywo na każdy worek, który idzie na wojnę."] },
+        reward: { gold: 20, xp: 50, flag: "k52Skup" },
         rewardFxNote: "przychylność garnizonu +20 (Garnizon.js: flag k52Skup)"
     };
+    Watki.scal(Q_K52, "garnizon", "zadania.K52");   // (its words: js/teksty/garnizon.txt, zadania.K52)
     const Q_D26 = {
-        id: "D26", kind: "D", title: "Lista poborowa", giver: "werbownik", icon: 0, where: "Rynek w miasteczku, Podgrodzie, garnizon", when: "dzień po fali z promu (11, 25, 39, 53), 8-16",
-        desc: "Werbownik Bęben musi zabrać do wojska trzech ludzi z miasteczka i Podgrodzia. Na liście: Bartek Kmieć, Zbych Smolarz, Darin z Kontynentu (Rafała z obozu szuka już kto inny - W6). Pomóc, ostrzec - czy zanieść rotmistrzowi coś lepszego niż rekrutów?",
+        id: "D26", kind: "D", giver: "werbownik", icon: 0, 
         offer: {
             cond: { hours: [8, 16], fn: "d26Dzien" },
-            say: ["Ty! Chłopak od Stacha! Słuchaj, mam kłopot. Rotmistrz chce trzech ludzi z tej fali. Trzech! A wszyscy chowają się po stodołach.",
-                  "Lista: Bartek Kmieć, Zbych Smolarz z Podgrodzia i ten Darin z kontynentu. Był jeszcze jeden z obozu pod murem, Rafał, ale tego szuka już kto inny. Znasz ich. Ciebie posłuchają. Dziesięć groszy za każdego, co się zgłosi."],
             options: [
-                { label: "Pomogę ci.", then: "accept", flag: "d26Pomoc", say: ["Wiedziałem! Powiedz im: buty, żołd, strawa. I że nikt ich nie pośle na pierwszą linię. Pierwszy tydzień."] },
-                { label: "Zobaczę, co da się zrobić.", then: "accept", say: ["Zobacz, zobacz. Tylko szybko - ja muszę mieć trzech."] },
-                { label: "Nie będę łapał ludzi do wojska.", then: "decline", say: ["Łapał? Ja nikogo nie łapię. Zapraszam! ...Dobra, idź."] }
+                { then: "accept", flag: "d26Pomoc" },
+                { then: "accept" },
+                { then: "decline" }
             ]
         },
         steps: [
-            { type: "custom", talk: "d26Ludzie", check: "d26Ludzie", vars: "d26Ludzie", ch: 1,
-              text: "Lista poborowa: {lista} - porozmawiaj z każdym (namów albo ostrzeż). Załatwione: {n}/3. Albo zanieś rotmistrzowi Dziennik okrętu z wraku: dowód, że od morza nic nie grozi." }
+            { type: "custom", talk: "d26Ludzie", check: "d26Ludzie", vars: "d26Ludzie", ch: 1 }
         ],
         reward: { xp: 60 },
         lines: {
-            ask: "Werbownik cię szuka. Jesteś na liście.",
-            help: "Zgłoś się sam. Buty, żołd, strawa - i lepiej z własnej woli niż w łańcuchu.",
-            warn: "Schowaj się na dzień albo dwa. Werbownik nie będzie czekał wiecznie.",
-            deal: "Panie rotmistrzu... mam coś lepszego niż trzech rekrutów."
         }
     };
+    Watki.scal(Q_D26, "garnizon", "zadania.D26");   // (its words: js/teksty/garnizon.txt, zadania.D26)
     const Q_D27 = {
-        id: "D27", kind: "D", title: "Zboże dla obozu", giver: "ludmila", icon: 74, where: "Obóz pod murem, garnizon (spichlerz, kwatermistrz)", when: "po rekwizycji zboża (D14), nocą",
-        desc: "Obóz uchodźców głoduje. Ludmiła prosi o cztery worki zboża. Zboże jest - w spichlerzu garnizonu, z rekwizycji. Kupić nocą od kwatermistrza „po cenie dla swoich” albo wynieść ze spichlerza obok wartownika?",
+        id: "D27", kind: "D", giver: "ludmila", icon: 74, 
         offer: {
-            cond: { hours: [7, 20], fn: "d27Gotowe" },
-            say: ["(Ludmiła trzyma Elę za rękę.) Trzeci dzień jemy korzonki. Dwór zabrał zboże z pól, a garnizon ma pełny spichlerz. Na wojnę, mówią.",
-                  "Cztery worki. Tylko cztery, na zimę dla dzieci. Mówią, że ich kwatermistrz nocą sprzedaje zboże kupcowi z kantoru... Może tobie też sprzeda?"],
-            yes: "Zdobędę cztery worki.", no: "Nie dam rady.",
-            accept: ["Niech ci Bóg... (urywa) Dziękuję. Przyjdź do nas pod mur, jak będziesz miał."], decline: ["Rozumiem. Każdy ma swoje."]
+            cond: { hours: [7, 20], fn: "d27Gotowe" }
         },
         steps: [
-            { type: "custom", check: "d27Worki", vars: "d27Worki", ch: 1,
-              text: "Zdobądź 4 worki zboża z garnizonu: kup je nocą od kwatermistrza Kłosa (20-2, „po cenie dla swoich”) albo wynieś ze spichlerza (nocą, obok wartownika - skradaj się). Masz: {n}/4." },
-            { type: "bring", to: "ludmila", need: [["v:worek_zboza", 4]], hours: [6, 22], ch: 2, text: "Zanieś Ludmile 4 worki zboża (obóz pod murem w miasteczku).",
-              remind: ["Cztery worki... Nie śmiem prosić o więcej."], hero: ["> Cztery worki zboża. Dla dzieci."],
-              done: ["(Ludmiła długo patrzy na worki, potem na ciebie.) Ela, zobacz... Zboże. Prawdziwe zboże.",
-                     "Nie zapomnimy ci tego. Cały obóz nie zapomni."], reward: { opinion: 5 } },
-            { type: "custom", talk: "d27Klos", check: "d27Klos", ch: 3,
-              text: "Kłos sprzedaje królewskie zboże. Wydaj go rotmistrzowi (garnizon) - albo idź do Kłosa i powiedz, że będziesz milczał." }
+            { type: "custom", check: "d27Worki", vars: "d27Worki", ch: 1 },
+            { type: "bring", to: "ludmila", need: [["v:worek_zboza", 4]], hours: [6, 22], ch: 2, 
+              reward: { opinion: 5 } },
+            { type: "custom", talk: "d27Klos", check: "d27Klos", ch: 3 }
         ],
         reward: { xp: 80, flag: "d27Done" },
         lines: {
-            accuse: ["> Panie rotmistrzu. Kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kupiłem od niego cztery worki - dla obozu.",
-                     "(Rotmistrz długo milczy.) Kłos. Pafnucy Kłos. Dwadzieścia lat z nim w polu...",
-                     "Dobrze, że powiedziałeś. Popłynie najbliższym promem - w łańcuchu. A ty... worki niech zostaną w obozie. Nie widziałem ich."],
-            accuseStolen: ["> Panie rotmistrzu. Kwatermistrz sprzedaje nocą zboże z rekwizycji kupcowi z kantoru.",
-                           "Dowód? ...Księga. Sprawdzę jego księgę. (Rotmistrz wstaje.) Jeśli to prawda, Kłos popłynie najbliższym promem."],
-            silent: ["> Nikomu nie powiem o nocnym zbożu.",
-                     "(Kłos ociera czoło.) Ty... ty jesteś złoty chłopak. Złoty! Od dziś w skupie masz ode mnie lepszą cenę. Jak dla swojego."],
-            klosGone: ["(Na miejscu kwatermistrza stoi młody żołnierz z księgą.) Kłos? Popłynął. W łańcuchu. Skup prowadzi teraz rotmistrz - przez mnie."]
         }
     };
+    Watki.scal(Q_D27, "garnizon", "zadania.D27");   // (its words: js/teksty/garnizon.txt, zadania.D27)
 
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({
-        owner: "Garnizon",
-        quests: [Q_K52, Q_D26, Q_D27],
-        vitems: {
-            worek_zboza: { name: "Worek zboża z rekwizycji", icon: 74 },
-            glejt_wrak: { name: "Glejt garnizonu na wrak", icon: 0 }
-        },
-        remarks: [
-            { id: "garnizonKlosWydany", who: "kupiec", flag: "klosWydany", lines: ["Słyszałeś? Kwatermistrz garnizonu popłynął w łańcuchu. Taki porządny człowiek... (Baltazar uśmiecha się krzywo.) Ktoś będzie musiał go zastąpić. W interesach."] },
-            { id: "garnizonD27Ludmila", who: "ludmila", flag: "d27Done", lines: ["Dzieci jedzą. Pierwszy raz od tygodnia nikt nie płakał w nocy. Dziękuję ci jeszcze raz."] },
-            { id: "garnizonD26Soltys", who: "soltys", flag: "d26Ostrzezeni", lines: ["Wojsko przetrząsało Podgrodzie. Szukali ludzi z listy. Nie znaleźli... Dobrze. Ale ktoś ich ostrzegł, a ja nie chcę wiedzieć kto."] },
-            { id: "garnizonD26Wzieci", who: "praczka", flag: "d26Wzieci", lines: ["Ludzi biorą do wojska. Wczoraj z listy, jutro kto? Kto będzie rąbał drwa dla całego Podgrodzia?"] },
-            { id: "garnizonD26Beben", who: "werbownik", flag: "d26Wzieci", lines: ["Trrrum! Mam ludzi z listy! Rotmistrz zadowolony, a ja mam spokój do następnej fali. Dziękuję ci, chłopcze."] },
-            { id: "garnizonD26BebenPusto", who: "werbownik", flag: "d26Ostrzezeni", lines: ["Ktoś ich ostrzegł. Ludzie z listy jakby się pod ziemię zapadli... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?"] }
-        ]
-    });
+    const VITEMS = {
+        worek_zboza: { icon: 74 },
+        glejt_wrak: { icon: 0 }
+    };
+    Watki.scal(VITEMS, "garnizon", "rzeczy");   // (its words: js/teksty/garnizon.txt, rzeczy)
+    const REMARKS = [
+        { id: "garnizonKlosWydany", who: "kupiec", flag: "klosWydany" },
+        { id: "garnizonD27Ludmila", who: "ludmila", flag: "d27Done" },
+        { id: "garnizonD26Soltys", who: "soltys", flag: "d26Ostrzezeni" },
+        { id: "garnizonD26Wzieci", who: "praczka", flag: "d26Wzieci" },
+        { id: "garnizonD26Beben", who: "werbownik", flag: "d26Wzieci" },
+        { id: "garnizonD26BebenPusto", who: "werbownik", flag: "d26Ostrzezeni" }
+    ];
+    Watki.scal(REMARKS, "garnizon", "uwagi");   // (its words: js/teksty/garnizon.txt, uwagi)
+    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Garnizon", quests: [Q_K52, Q_D26, Q_D27], vitems: VITEMS, remarks: REMARKS });
 
     // ------------------------------------------------------------------ the military buying (Kłos; after K52)
     // [item id, price a piece]; "food" - selling it in the hungry week costs the town's opinion
@@ -264,16 +200,17 @@
     // plan: [hour, spot | [patrol spots], act] - act: "stand" (default), "work", "patrol", "inside" (hidden); the spots are the
     // map's "Miejsce:" events (z_*). sheet: A / B (the same man in two colours)
     const SOLDIERS = [
-        { id: 640, name: "Wartownik", sheet: "A", role: "brama", plan: [[0, "z_noc_brama"], [6, "z_brama_l"], [22, "z_noc_brama"]], sentry: [22, 6] },
-        { id: 641, name: "Wartownik", sheet: "B", role: "brama", plan: [[0, "inside", "z_koszary"], [6, "z_brama_p"], [14, "z_wieza"], [20, "z_ognisko_1"], [22, "inside", "z_koszary"]] },
+        { id: 640, sheet: "A", role: "brama", plan: [[0, "z_noc_brama"], [6, "z_brama_l"], [22, "z_noc_brama"]], sentry: [22, 6] },
+        { id: 641, sheet: "B", role: "brama", plan: [[0, "inside", "z_koszary"], [6, "z_brama_p"], [14, "z_wieza"], [20, "z_ognisko_1"], [22, "inside", "z_koszary"]] },
         // (9-15 he rows the rescue boat to the wreck: he and the boat are away - Garnizon.js hides the boat then)
-        { id: 642, name: "Żołnierz", sheet: "B", role: "pomost", plan: [[0, "z_noc_pomost"], [6, "z_cwicz_1"], [7, "z_pomost"], [9, "inside", "z_lodz"], [15, "z_pomost"], [19, "z_ognisko_2"], [22, "z_noc_pomost"]], sentry: [22, 6] },
-        { id: 643, name: "Żołnierz", sheet: "A", role: "beczki", plan: [[0, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]], [6, "z_beczki"], [22, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]]], sentry: [22, 6] },
-        { id: 644, name: "Żołnierz", sheet: "A", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_2"], [12, "z_ognisko_1"], [13, "z_cwicz_2"], [17, "work", "z_spichlerz"], [19, "z_ognisko_1"], [21, "inside", "z_namiot"]] },
-        { id: 645, name: "Żołnierz", sheet: "B", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_3"], [12, "z_ognisko_2"], [13, "z_cwicz_3"], [17, "z_pomost"], [19, "z_ognisko_2"], [21, "inside", "z_namiot"]] },
-        { id: 646, name: "Kowal garnizonu", sheet: "A", role: "kowal", plan: [[0, "inside", "z_koszary"], [7, "work", "z_kuznia"], [12, "z_ognisko_1"], [13, "work", "z_kuznia"], [19, "z_ognisko_1"], [21, "inside", "z_koszary"]] },
-        { id: 647, name: "Wartownik na wieży", sheet: "B", role: "wieza", plan: [[0, "inside", "z_koszary"], [6, "z_wieza"], [14, "z_cwicz_1"], [18, "z_wieza"], [21, "inside", "z_koszary"]] }
+        { id: 642, sheet: "B", role: "pomost", plan: [[0, "z_noc_pomost"], [6, "z_cwicz_1"], [7, "z_pomost"], [9, "inside", "z_lodz"], [15, "z_pomost"], [19, "z_ognisko_2"], [22, "z_noc_pomost"]], sentry: [22, 6] },
+        { id: 643, sheet: "A", role: "beczki", plan: [[0, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]], [6, "z_beczki"], [22, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]]], sentry: [22, 6] },
+        { id: 644, sheet: "A", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_2"], [12, "z_ognisko_1"], [13, "z_cwicz_2"], [17, "work", "z_spichlerz"], [19, "z_ognisko_1"], [21, "inside", "z_namiot"]] },
+        { id: 645, sheet: "B", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_3"], [12, "z_ognisko_2"], [13, "z_cwicz_3"], [17, "z_pomost"], [19, "z_ognisko_2"], [21, "inside", "z_namiot"]] },
+        { id: 646, sheet: "A", role: "kowal", plan: [[0, "inside", "z_koszary"], [7, "work", "z_kuznia"], [12, "z_ognisko_1"], [13, "work", "z_kuznia"], [19, "z_ognisko_1"], [21, "inside", "z_koszary"]] },
+        { id: 647, sheet: "B", role: "wieza", plan: [[0, "inside", "z_koszary"], [6, "z_wieza"], [14, "z_cwicz_1"], [18, "z_wieza"], [21, "inside", "z_koszary"]] }
     ];
+    Watki.scal(SOLDIERS, "garnizon", "zolnierze");   // (its words: js/teksty/garnizon.txt, zolnierze)
     // the recruits of D26 (help): drilling in the garrison for RECRUIT_STAY days (their own sheets), events 648-651
     // (Rafał is not on the list: the deserter of W6 - recruiting him would cut across his own thread; the recruiter only mentions him)
     const RECRUITS = { bartek: { id: 648, spot: "z_cwicz_1" }, drwal: { id: 649, spot: "z_cwicz_2" }, uchodzca: { id: 650, spot: "z_cwicz_3" } };

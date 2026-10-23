@@ -13,7 +13,9 @@ i dalej:
 ```
 node tests/run.js smoke          szybki zestaw (~6 min)
 node tests/run.js full           wszystkie *_test.js
-node tests/run.js unit           logika bez przeglądarki (tests/unit/)
+node tests/run.js unit           logika bez przeglądarki (tests/unit/, ~10 s)
+node tests/run.js znacznik       na początku pracy; na końcu:
+node tests/run.js zmiany --od znacznik    unit + testy dotknięte zmianami (mapa testów tests/mapa_testow.json)
 node tests/run.js keys_test hut  wybrane
 ```
 Wynik: `tests/results.txt` (skrót + tabela) + `tests/out_<test>.txt` (pełny log każdego testu).

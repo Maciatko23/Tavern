@@ -113,13 +113,14 @@
     const ZBLAKANE = {
         map: 168, area: { x0: 72, y0: 18, x1: 95, y1: 35 }, start: { x: 84, y: 28, w: 3, h: 3 },
         list: [
-            { key: "krasula", kind: "cow", name: "Krasula", sheet: "$Animal_Cow", speed: 2.4, rope: true },
-            { key: "owca", kind: "sheep", name: "Owca Ługów", sheet: "$Animal_Sheep", speed: 3, rope: true },
-            { key: "kura1", kind: "hen", name: "Kura Ługów", sheet: "$Animal_Hen", speed: 3.4, rope: false },
-            { key: "kura2", kind: "hen", name: "Kura Ługów", sheet: "$Animal_Hen", speed: 3.4, rope: false }
+            { key: "krasula", kind: "cow", sheet: "$Animal_Cow", speed: 2.4, rope: true },
+            { key: "owca", kind: "sheep", sheet: "$Animal_Sheep", speed: 3, rope: true },
+            { key: "kura1", kind: "hen", sheet: "$Animal_Hen", speed: 3.4, rope: false },
+            { key: "kura2", kind: "hen", sheet: "$Animal_Hen", speed: 3.4, rope: false }
         ],
         farm: { x: 22, y: 12, r: 4, stage: 3 }, catchHen: 0.5, henRun: 3, milkEvery: 7, milk: 2
     };
+    Watki.scal(ZBLAKANE, "lowy", "zblakane");   // (its words: js/teksty/lowy.txt, zblakane)
 
     // ------------------------------------------------------------------ B8 the soldiers' range (Map162)
     const STRZELNICA = {
@@ -179,31 +180,16 @@
     // Gniewko Bór, about 40: a green kaftan, a bow on his back, a horn at his hip. Calm, dry, loyal to the forest more than to the Lord.
     // 6-20 his round through the park, at night in his lodge (61,4)
     const GAJOWY = {
-        key: "gajowy", id: RESIDENT, name: "Gajowy Gniewko Bór", title: "gajowy zwierzyńca Lorda", sheet: "$Npc_Gajowy", map: 24, speed: 3,
+        key: "gajowy", id: RESIDENT, sheet: "$Npc_Gajowy", map: 24, speed: 3,
         away: ["lesniczowka"],
         plan: [[0, "inside", "lesniczowka"], [6, "work", "gaj_lesniczowka"], [7, "patrol", ["gaj_1", "gaj_2", "gaj_3", "gaj_4", "gaj_5"]],
                [12, "stand", "gaj_pasnik"], [13, "patrol", ["gaj_5", "gaj_4", "gaj_3", "gaj_2", "gaj_1"]], [20, "inside", "lesniczowka"]],
         barks: {
-            patrol: ["Tropy. Świeże. Jeleń i łania, poszły do wody.", "Ktoś tu łamał gałęzie... Nie zwierzę. Zwierzę tak nie łamie.",
-                     "Cicho tu. Za cicho. Albo wilk, albo człowiek."],
-            work: ["Siekiera, drwa, woda. Gajowy też musi jeść.", "Róg wisi, łuk wisi. Dzień się zaczyna."],
-            stand: ["Zimą siano, latem sól. Zwierz pamięta, kto go karmił.", "Paśnik trzeba podbić. Dziki znowu podryły nogę."],
-            rain: ["W deszcz tropy płyną. Kłusownik to wie."],
-            night: ["(Z leśniczówki słychać, jak ktoś ostrzy nóż.)"],
-            home: ["(Gajowy smaruje cięciwę łojem.)"]
         },
         talk: {
-            morning: ["Rano zwierzyna chodzi do wody. Wtedy widać, kto tu rządzi. Nie Lord, chłopcze. Las.",
-                      "Jeleni jest teraz pięć, może sześć. Dwa dziki. Liczę je co dzień, jak sakwy."],
-            day: ["To zwierzyniec Lorda. Polują tu goście dworu, raz do roku. Reszta roku należy do zwierzyny. I do mnie.",
-                  "Widzisz wyłom w żywopłocie? Zarósłby, gdyby nie ludzie. Ludzie chodzą skrótem. Ja patrzę, kto chodzi.",
-                  "Bez zezwolenia nie strzelaj. Grzywnę biorę ja, nie Lord. Ale biorę."],
-            evening: ["Wieczorem jelenie wychodzą na łąkę. Najpiękniejsza pora. I najgorsza - wtedy przychodzą kłusownicy.",
-                      "Siadam przy paśniku i słucham. Las mówi, kto w nim jest."],
-            night: ["Nocą zwierzyniec śpi. A ja śpię jednym okiem."],
-            rain: ["Deszcz. Dobrze. Kłusownik w deszcz siedzi w domu, bo zostawia ślady."]
         }
     };
+    Watki.scal(GAJOWY, "lowy", "mieszkaniec");   // (its words: js/teksty/lowy.txt, mieszkaniec)
     const GAJ_SPOTS = {
         lesniczowka: [61, 5, 2], gaj_lesniczowka: [62, 6, 2], gaj_pasnik: [60, 23, 8],
         gaj_1: [13, 40, 2], gaj_2: [30, 50, 2], gaj_3: [53, 45, 2], gaj_4: [71, 20, 2], gaj_5: [61, 5, 2]
@@ -218,237 +204,110 @@
     if (window.SpeechBubbles && SpeechBubbles.BUSTS) SpeechBubbles.BUSTS["$Npc_Gajowy:0"] = "Gajowy_Bust";
 
     // ------------------------------------------------------------------ the texts (popups, talks)
-    const TX = {
-        // B1
-        pupsFled: "Szczenięta uciekły w gąszcz.",
-        denEmpty: "Nora jest pusta. Wataha nie wróci tu przez kilka tygodni.",
-        meatLeft: "Zostawiłeś mięso przy norze. Wilki je znajdą.",
-        meatTaken: "Wilki zabrały mięso spod nory ({n}/3).",
-        denFriend: "Wataha spod nory cię zna. Wilki z Leśnej drogi i Skraju lasu nie zaatakują cię.",
-        denFriendSub: "Szczenięta zostały z matką. Nic im nie zabrałeś.",
-        gift: "Przy norze leży zając. Dar watahy.",
-        betrayed: "Uderzyłeś wilka z nory. Wataha ci tego nie zapomni.",
-        // B2
-        snore: "Z gawry dochodzi chrapanie.",
-        peekAsk: "Gawra. Ze środka czuć zwierzę i mokrą sierść.",
-        peekSleep: "Zajrzyj do środka",
-        peekLeave: "Odejdź po cichu",
-        woke: "Obudziłeś niedźwiedzia!",
-        wokeSub: "Jest wściekły: przez minutę uderza mocniej.",
-        empty: "Gawra jest pusta. Wiosną może przyjdzie nowy niedźwiedź.",
-        nobody: "W gawrze nikogo nie ma. Gospodarz chodzi gdzieś po lesie.",
-        claw: "Pazur niedźwiedzia",
-        // B3
-        muddy: "Jesteś ubłocony",
-        muddySub: "Pachniesz jak las: zwierzęta wyczują cię później (2 h).",
-        muddyNoDrink: "Błotem się nie napijesz.",
-        tusk: "Kieł odyńca",
-        // B4
-        lickAsk: "Wydrążony pieniek. W środku biały nalot po soli.",
-        lickPut: "Połóż bryłę soli",
-        lickNo: "Nic nie kładź",
-        lickNeed: "Potrzebna bryła soli (handlarz, Roch na przystani).",
-        lickSet: "Sól na lizawce: jelenie będą przychodzić przez 6 dni.",
-        lickActive: "Sól jeszcze leży: jelenie przychodzą o świcie i o zmierzchu (zostało {n} dni).",
-        hideIn: "Zasiadka: siedzisz w chruście. Zwierzęta wyczują cię później, a łuk trzymasz pewniej.",
-        antler: "Zrzucone poroże",
-        antlerSub: "Jeleń zgubił je przy lizawce.",
-        // B5
-        czoArrow: "Strzała z białym okiem",
-        // B6
-        parkFirst: "Za żywopłotem: zwierzyniec Lorda. Tu poluje tylko dwór.",
-        parkShut: "Wyłom zarósł cierniem. Gajowy go zamknął na {n} dni.",
-        caught: "Gajowy cię widział!",
-        found: "Gajowy znalazł ścierwo w zwierzyńcu.",
-        legal: "Zezwolenie: ten jeleń jest twój, legalnie.",
-        legalUsed: "Zezwolenie było już użyte w tym tygodniu.",
-        snareFound: "Sidła kłusownika ({n}/3)",
-        // B7
-        roped: "{name} idzie za tobą na powrozie.",
-        ropeNeed: "Potrzebna lina na powróz.",
-        henCaught: "Złapałeś kurę!",
-        henMissed: "Kura uciekła z gdakaniem.",
-        delivered: "{name} wróciła do zagrody.",
-        letGo: "Puszczasz {name}.",
-        // B8
-        noBow: "Bez łuku ani rusz.",
-        roundStart: "Runda: 5 strzałów ćwiczebnych. Mierz w tarcze.",
-        roundEnd: "Koniec rundy: {n} pkt.",
-        shotPts: "+{n}",
-        shotMiss: "pudło",
-        contest: "Zawody! Rywale: {list}. Twoja runda decyduje.",
-        noContest: "Zawody są co siódmy dzień, od 10 do 12.",
-        silver: "Srebrna strzała"
-    };
+    const TX = Watki.teksty("lowy");
 
     // the talks (lines: "> " the hero, "@key: " another speaker, else the one spoken to)
     const TALK = {
-        gajowyFine1: ["Stój! To zwierzyniec Lorda, a ty strzelasz do jego zwierzyny.",
-                      "Czterdzieści groszy grzywny. Nie dla Lorda - dla zwierzyńca: na sól i siano. I nie rób tego drugi raz."],
-        gajowyFine2: ["Znowu ty. Drugi raz. Sześćdziesiąt groszy.",
-                      "Myślisz, że nie widzę? Las ma oczy. Ja mam lepsze."],
-        gajowyFine3: ["Trzeci raz. Wystarczy.",
-                      "Osiemdziesiąt groszy. I zarastam wyłom cierniem. Przez tydzień do zwierzyńca nie wejdziesz.",
-                      "Lord kazałby cię powiesić. Ja każę ci się nauczyć. To różnica."],
-        gajowyNoGold: "Nie masz tyle? To biorę mięso i skóry. Zwierzyna wraca do zwierzyńca, choćby tak.",
-        gajowyFound: "(Gajowy trzyma w ręku kawał sierści.) Znalazłem ścierwo przy ścieżce. Twoja robota, prawda? Nie kłam. Tropy prowadzą do ciebie.",
-        gajowyEscort: "Wyprowadzę cię. I nie wracaj, póki nie zarośnie.",
-        // D32 the ambush
-        rysiekMeet: ["(Z ciemności wychodzi chudy człowiek z workiem. Zatrzymuje się, kiedy cię widzi.)",
-                     "@rysiek: O. Ty. Wnuk Stacha. Co tu robisz po nocy? ...Aha. Gajowy cię przysłał.",
-                     "@rysiek: Słuchaj. Mam w Podgrodziu matkę i dwóch małych braci. Lord ma pięćdziesiąt jeleni. Ja biorę jednego na miesiąc."],
-        rysiekGive: ["> Pójdziesz ze mną do gajowego.",
-                     "@rysiek: (Rysiek patrzy długo.) Tak myślałem. Dobra. Nie będę uciekał. Nogi mam za słabe na gajowego.",
-                     "(Odprowadzasz Ryśka do leśniczówki. Gajowy zabiera mu sidła i worek.)"],
-        rysiekWarn: ["> Uciekaj. I nie wracaj tu. Gajowy wie o sidłach.",
-                     "@rysiek: (Rysiek kiwa głową.) Nie zapomnę ci tego. Przyjdź do mnie w Podgrodziu: skóry dla ciebie zawsze taniej.",
-                     "(Rysiek znika w ciemności. Sidła zostały - zaniesiesz je gajowemu.)"],
-        // D33 the hunters
-        czoMeet: ["(Przy ognisku siedzą dwaj obcy. Na kołczanie białe oko.)",
-                  "@czo: Hej, chłopcze. Polujemy na niedźwiedzia spod grani. Skóra dla naszego dowódcy. Znasz gawrę?",
-                  "@czo: Pomożesz - dostaniesz osiemdziesiąt groszy. Nie pomożesz - nie wchodź nam w drogę."],
-        czoHelp: ["> Pomogę. Znam gawrę.",
-                  "@czo: Dobrze. Ubij niedźwiedzia, przynieś nam wieść, że leży. Resztę zrobimy sami."],
-        czoDrive: ["> To nie wasz las. Wynoście się.",
-                   "@czo: (Obcy wstają. Jeden kładzie strzałę na cięciwę.) Głupi chłopak. Pożałujesz."],
-        czoPaid: ["@czo: Leży? Dobra robota. Masz osiemdziesiąt.",
-                  "@czo: (Ciszej.) Dowódca szuka w górach wejścia pod ziemię. Szyb przy obozie kopaczy. Nie mów nikomu, że ode mnie."],
-        // the white-eye arrow shown
-        arrowRotmistrz: ["> Panie rotmistrzu. Znalazłem to w obozie obcych myśliwych na Skraju lasu.",
-                         "(Rotmistrz obraca strzałę w palcach.) Białe oko. Czarne Oczy. W NASZYM lesie? To już nie myśliwi, to zwiadowcy.",
-                         "Dobrze, że przyszedłeś. Wyślę patrol. Garnizon ci tego nie zapomni."],
-        arrowKleofas: ["> Bracie Kleofasie. Widziałem je też w lesie... Takie strzały. Na Skraju lasu, w obozie obcych myśliwych.",
-                       "(Kleofas długo milczy.) Te same lotki, co w piersi orlicy. Oni są już na wyspie, chłopcze. Nie tylko na morzu.",
-                       "Zapiszę to w kronice. Strzeż się ich."],
-        // the stockman's cheap hides (Rysiek warned)
-        rysiekShop: "Skóry dla ciebie taniej. Ze zwierzyńca? ...Nie pytaj.",
-        // Marta's milk (K62)
-        martaMilk: "Krasula daje mleko jak przed pożarem. Masz, to twoje - dwa dzbanki. Za to, że ją przyprowadziłeś."
     };
+    Watki.scal(TALK, "lowy", "rozmowy");   // (its words: js/teksty/lowy.txt, rozmowy)
 
     // ------------------------------------------------------------------ the quests (TownQuests packs)
     const Q_K59 = {
-        id: "K59", kind: "K", title: "Nora pod korzeniami", giver: null, icon: 161, where: "Skraj lasu: wilcza nora pod korzeniami starego pnia",
-        when: "za dnia", autoStart: "lowK59Start",
-        desc: "Łowczy Bogdan pisał na tablicy o watasze, która ma norę na Skraju lasu. Rozbić watahę - czy zostawić szczenięta w spokoju i dać watasze jeść?",
+        id: "K59", kind: "K", giver: null, icon: 161, 
+        autoStart: "lowK59Start",
         steps: [
-            { type: "custom", check: "lowK59", vars: "lowK59",
-              text: "Wilcza nora na Skraju lasu. Rozbij watahę (zabij dorosłe wilki spod nory) albo zostaw szczenięta: w trzech różnych dniach zostaw przy norze surowe mięso. Mięso: {n}/3." }
+            { type: "custom", check: "lowK59", vars: "lowK59" }
         ],
         reward: { xp: 0 }
     };
+    Watki.scal(Q_K59, "lowy", "zadania.K59");   // (its words: js/teksty/lowy.txt, zadania.K59)
     const Q_K60 = {
-        id: "K60", kind: "K", title: "Sól dla jeleni", giver: null, icon: 201, where: "Łąka: lizawka i zasiadka", when: "o świcie (5-8)",
+        id: "K60", kind: "K", giver: null, icon: 201, 
         autoStart: "lowK60Start",
-        desc: "Łowczy Bogdan zostawił u Borgara wiadomość: przy lizawce na Łące trzeba położyć sól. Kto o świcie posiedzi w zasiadce, zobaczy jelenie. Bogdan zapłaci za poroże albo mięso jelenia spod lizawki.",
         steps: [
-            { type: "custom", check: "lowK60Sol", text: "Połóż bryłę soli na lizawce na Łące (bryłę sprzedaje handlarz albo Roch na przystani)." },
-            { type: "custom", check: "lowK60Swit", text: "O świcie (5-8) posiedź w zasiadce przy lizawce, aż przyjdą jelenie." },
-            { type: "custom", check: "lowK60Lup", text: "Zdobądź poroże jelenia albo mięso jelenia spod lizawki (wiosną leży tam czasem zrzucone poroże)." }
+            { type: "custom", check: "lowK60Sol" },
+            { type: "custom", check: "lowK60Swit" },
+            { type: "custom", check: "lowK60Lup" }
         ],
-        reward: { gold: 40, xp: 80, note: ["Sól dla jeleni", "Położyłem sól na lizawce na Łące i o świcie siedziałem w zasiadce. Jelenie przychodzą lizać sól o świcie i o zmierzchu, przez sześć dni. Bogdan przysłał przez Borgara czterdzieści groszy."] }
+        reward: { gold: 40, xp: 80 }
     };
+    Watki.scal(Q_K60, "lowy", "zadania.K60");   // (its words: js/teksty/lowy.txt, zadania.K60)
     const Q_K61 = {
-        id: "K61", kind: "K", title: "Zawody strzeleckie", giver: "kwatermistrz", icon: 126, where: "Garnizon nad zatoką: strzelnica", when: "co 7 dni, 10-12",
+        id: "K61", kind: "K", giver: "kwatermistrz", icon: 126, 
         autoStart: "lowK61Start",
-        desc: "Kwatermistrz Kłos chce zobaczyć, czy chłopak spoza wojska pokona jego najlepszego strzelca. Zawody są na strzelnicy garnizonu co siódmy dzień przed południem.",
         offer: {
-            cond: { hours: [8, 18], fn: "lowK61Offer" },
-            say: ["Strzelasz? Z łuku? Hah! To pokaż. Co siódmy dzień przed południem chłopcy strzelają do tarcz o garść groszy.",
-                  "Sierżant Bełt bije wszystkich od roku. Trzydzieści sześć punktów na pięć strzał. Pobij go, a postawię ci pięćdziesiąt groszy."],
-            yes: "Pobiję go.", no: "Nie teraz.",
-            accept: ["Ha! Lubię takich. Strzelnica jest na południe od obozu. Łuk masz mieć swój, strzały dostaniesz nasze."],
-            decline: ["Jak chcesz. Bełt i tak by wygrał."]
+            cond: { hours: [8, 18], fn: "lowK61Offer" }
         },
         steps: [
-            { type: "custom", check: "lowK61", text: "Na zawodach na strzelnicy garnizonu (co 7 dni, 10-12) pokonaj sierżanta Bełta: więcej niż 36 punktów na 5 strzał." }
+            { type: "custom", check: "lowK61" }
         ],
-        reward: { gold: 50, xp: 120, note: ["Zawody strzeleckie", "Na strzelnicy garnizonu pokonałem sierżanta Bełta. Kwatermistrz postawił pięćdziesiąt groszy, a chłopcy z garnizonu patrzą na mnie inaczej."] }
+        reward: { gold: 50, xp: 120 }
     };
+    Watki.scal(Q_K61, "lowy", "zadania.K61");   // (its words: js/teksty/lowy.txt, zadania.K61)
     const Q_K62 = {
-        id: "K62", kind: "K", title: "Krasula i kury Ługów", giver: "praczka", icon: 123, where: "Spalona zagroda: wschodnie łąki", when: "za dnia",
-        desc: "Po pożarze zwierzęta Ługów rozbiegły się po łąkach na wschód od zagrody: krowa Krasula, owca i dwie kury. Marta prosi, żeby wróciły do domu.",
+        id: "K62", kind: "K", giver: "praczka", icon: 123, 
         offer: {
-            cond: { hours: [6, 19], done: ["D21"] },
-            say: ["Mieszkasz teraz w naszej zagrodzie... Dobrze. Lepiej ty niż obcy.",
-                  "Po pożarze Krasula uciekła. I owca, i kury. Mówią, że chodzą dzikie po łąkach na wschód od zagrody. Przyprowadzisz je? Do domu?"],
-            yes: "Przyprowadzę je.", no: "Nie teraz.",
-            accept: ["Krasula idzie za tym, kto ma linę i dobre słowo. Kury... kury trzeba łapać. Powodzenia."],
-            decline: ["Rozumiem. Może kiedyś."]
+            cond: { hours: [6, 19] }
         },
         steps: [
-            { type: "custom", check: "lowK62", vars: "lowK62",
-              text: "Odprowadź zwierzęta Ługów do zagrody (przy domu) albo do swojej zagrody: krowę i owcę na powrozie (lina), kury złap rękami. Wróciło: {n}/4." }
+            { type: "custom", check: "lowK62", vars: "lowK62" }
         ],
-        reward: { gold: 30, xp: 100, flag: "lowMlekoMarty",
-            note: ["Krasula wróciła", "Krasula, owca i kury Ługów wróciły do domu. Marta co tydzień ma dla mnie dwa dzbanki mleka."] }
+        reward: { gold: 30, xp: 100, flag: "lowMlekoMarty" }
     };
+    Watki.scal(Q_K62, "lowy", "zadania.K62");   // (its words: js/teksty/lowy.txt, zadania.K62)
     const Q_D32 = {
-        id: "D32", kind: "D", title: "Gajowy i kłusownik", giver: "gajowy", icon: 204, where: "Zwierzyniec Lorda: sidła, nocna zasadzka", when: "nocą 22-3",
-        desc: "Gajowy wie, że ktoś zastawia sidła w zwierzyńcu. Trzeba je znaleźć i nocą przyłapać kłusownika. Wydać go - czy ostrzec?",
+        id: "D32", kind: "D", giver: "gajowy", icon: 204, 
         offer: {
-            cond: { hours: [6, 20], fn: "lowD32Offer" },
-            say: ["Ktoś zastawia sidła w zwierzyńcu. Trzy, może cztery. Znajduję zające z pętlą na szyi, a sideł nie widzę - sprytny jest.",
-                  "Ty chodzisz po lesie. Masz oczy. Znajdź sidła, a potem posiedź nocą przy którymś. Kłusownik zawsze wraca po zdobycz."],
-            yes: "Znajdę go.", no: "Nie moja sprawa.",
-            accept: ["Dobrze. Sidła są gdzieś przy ścieżkach zwierzyny. Szukaj przy krzakach, gdzie trawa jest wydeptana."],
-            decline: ["Jak chcesz. Sam go złapię. Kiedyś."]
+            cond: { hours: [6, 20], fn: "lowD32Offer" }
         },
         steps: [
-            { type: "custom", check: "lowD32Sidla", vars: "lowD32Sidla", text: "Znajdź w zwierzyńcu trzy sidła kłusownika i zabierz je. Masz: {n}/3." },
-            { type: "custom", check: "lowD32Noc", text: "Nocą (22-3) zaczaj się w zwierzyńcu przy miejscu po drugich sidłach (w głębi zwierzyńca, na zachód od paśnika) i poczekaj na kłusownika." },
-            { type: "talk", to: "gajowy", text: "Wróć do gajowego (leśniczówka, za dnia na obchodzie).",
-              say: ["> Sideł już nie ma. Kłusownika też.",
-                    "Wiem. Rano przeszedłem cały zwierzyniec. Pierwszy raz od roku żaden zając nie wisiał w pętli.",
-                    "Masz. Zezwolenie na odstrzał: jeden jeleń w tygodniu, legalnie. Zasłużyłeś."] }
+            { type: "custom", check: "lowD32Sidla", vars: "lowD32Sidla" },
+            { type: "custom", check: "lowD32Noc" },
+            { type: "talk", to: "gajowy" }
         ],
-        reward: { xp: 120, items: [[204, 1]], note: ["Zezwolenie na odstrzał", "Gajowy Gniewko Bór dał mi zezwolenie: jeden jeleń w tygodniu w zwierzyńcu Lorda - legalnie. Reszta zwierzyny dalej jest dworu."] }
+        reward: { xp: 120, items: [[204, 1]] }
     };
+    Watki.scal(Q_D32, "lowy", "zadania.D32");   // (its words: js/teksty/lowy.txt, zadania.D32)
     const Q_D33 = {
-        id: "D33", kind: "D", title: "Gawra pod granią", giver: null, icon: 203, where: "Skraj lasu: obóz obcych myśliwych; Góry: gawra", when: "Akt II, za dnia",
+        id: "D33", kind: "D", giver: null, icon: 203, 
         autoStart: "lowD33Start",
-        desc: "Na Skraju lasu rozbili obóz obcy myśliwi z białym okiem na lotkach - Czarne Oczy. Polują na niedźwiedzia spod grani dla skóry. Pomóc im - czy przegnać i ochronić gawrę?",
         steps: [
-            { type: "custom", check: "lowD33Wybor", text: "Podejdź za dnia do obozu obcych myśliwych na Skraju lasu i porozmawiaj z nimi." },
-            { type: "custom", check: "lowD33Koniec", vars: "lowD33", text: "{co}" }
+            { type: "custom", check: "lowD33Wybor" },
+            { type: "custom", check: "lowD33Koniec", vars: "lowD33" }
         ],
         reward: { xp: 150 }
     };
+    Watki.scal(Q_D33, "lowy", "zadania.D33");   // (its words: js/teksty/lowy.txt, zadania.D33)
 
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({
-        owner: "Lowy",
-        quests: [Q_K59, Q_K60, Q_K61, Q_K62, Q_D32, Q_D33],
-        remarks: [
-            { id: "lowCzoKleofas", who: "pustelnik", flag: "lowCzoPrzegnani", lines: ["Słyszałem, że przegnałeś obcych myśliwych spod grani. Niedźwiedź jest starszy od nich wszystkich. Dobrze zrobiłeś."] },
-            { id: "lowCzoBazyli", who: "latarnik", flag: "lowCzoPrzegnani", lines: ["Z wieży widziałem dym na Skraju lasu. Teraz go nie ma. Twoja robota? Czarnym Oczom nie wolno dawać się zadomowić."] },
-            { id: "lowCzoPomocBazyli", who: "latarnik", flag: "lowCzoPomoc", lines: ["Pomagałeś obcym myśliwym? (Bazyli patrzy w morze.) Uważaj, z kim pijesz przy ognisku, chłopcze."] },
-            { id: "lowWydalRyskaPraczka", who: "praczka", flag: "lowWydalRyska", lines: ["Ryśka zabrali do dworu. Jego matka płacze trzeci dzień. Kto go wydał? ...Nie, nie chcę wiedzieć."] },
-            { id: "lowOstrzeglRysiek", who: "klusownik", flag: "lowOstrzegl", lines: ["Gajowy mnie szukał, wiesz? Nie znalazł. (Rysiek mruga.) Skóry masz u mnie taniej. Pamiętam."] },
-            { id: "lowMartaKrasula", who: "praczka", flag: "lowMlekoMarty", lines: ["Krasula poznała mnie od razu. Wylizała mi rękę jak pies. Dziękuję ci."] }
-        ]
-    });
+    const REMARKS = [
+        { id: "lowCzoKleofas", who: "pustelnik", flag: "lowCzoPrzegnani" },
+        { id: "lowCzoBazyli", who: "latarnik", flag: "lowCzoPrzegnani" },
+        { id: "lowCzoPomocBazyli", who: "latarnik", flag: "lowCzoPomoc" },
+        { id: "lowWydalRyskaPraczka", who: "praczka", flag: "lowWydalRyska" },
+        { id: "lowOstrzeglRysiek", who: "klusownik", flag: "lowOstrzegl" },
+        { id: "lowMartaKrasula", who: "praczka", flag: "lowMlekoMarty" }
+    ];
+    Watki.scal(REMARKS, "lowy", "uwagi");   // (its words: js/teksty/lowy.txt, uwagi)
+    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Lowy", quests: [Q_K59, Q_K60, Q_K61, Q_K62, Q_D32, Q_D33], remarks: REMARKS });
 
     // ------------------------------------------------------------------ the board (QuestBoard: its tables are live objects)
     const QB = window.QuestBoard;
     const T2 = (a, b) => [a, b];
     const BEASTS = {
-        bandit: { one: "rabuś", few: "rabusie", many: "rabusiów", sheet: "$Human_Bandit", icon: 156 },
-        archer: { one: "łucznik", few: "łucznicy", many: "łuczników", sheet: "$Human_Archer", icon: 127 },
-        bear: { one: "niedźwiedź", few: "niedźwiedzie", many: "niedźwiedzi", sheet: "$Animal_Bear", icon: 203 }
+        bandit: { sheet: "$Human_Bandit", icon: 156 },
+        archer: { sheet: "$Human_Archer", icon: 127 },
+        bear: { sheet: "$Animal_Bear", icon: 203 }
     };
+    Watki.scal(BEASTS, "lowy", "bestie");   // (its words: js/teksty/lowy.txt, bestie)
     const TEMPLATES = {
-        oboz: { id: "low_oboz_021", type: "hunt", giver: "wit", title: ["Rabusie przy Leśnej drodze"],
-            text: ["Wiozłem garnki na jarmark Leśną drogą. Wiozłem. Rabusie mają obóz na polanie przy drodze, nocą palą tam ognisko. Rozbij go, a jarmark się odbędzie."],
-            req: [{ kill: "bandit", maps: [21], n: [null, T2(2, 2), T2(2, 3), T2(3, 3), T2(3, 4)] }],
-            note: ["Rabusie przy Leśnej drodze", "Rozbiłem obóz rabusiów na polanie przy Leśnej drodze. Wit może znowu wozić garnki na jarmark."] },
-        czo: { id: "low_czo_023", type: "hunt", giver: "bogdan", title: ["Obcy myśliwi"],
-            text: ["Na Skraju lasu siedzą obcy myśliwi. Strzelają do wszystkiego, co się rusza, a skóry wywożą na prom. To nie myśliwi, to złodzieje lasu. Przegnaj ich."],
-            req: [{ kill: "archer", maps: [23], n: [null, null, T2(1, 1), T2(1, 1), T2(1, 1)] }],
-            note: ["Obcy myśliwi", "Przegnałem obcych myśliwych ze Skraju lasu. Bogdan mówi, że las odetchnie."] },
-        poroze: { id: "low_poroze", type: "deliver", giver: "bogdan", title: ["Poroże dla łowczego"],
-            text: ["Potrzebuję poroża. Na rękojeści noży i na guziki dla dworu. Jelenie zrzucają je wiosną przy lizawce na Łące. Albo zdobądź je inaczej - nie pytam jak."],
+        oboz: { id: "low_oboz_021", type: "hunt", giver: "wit", 
+            req: [{ kill: "bandit", maps: [21], n: [null, T2(2, 2), T2(2, 3), T2(3, 3), T2(3, 4)] }] },
+        czo: { id: "low_czo_023", type: "hunt", giver: "bogdan", 
+            req: [{ kill: "archer", maps: [23], n: [null, null, T2(1, 1), T2(1, 1), T2(1, 1)] }] },
+        poroze: { id: "low_poroze", type: "deliver", giver: "bogdan", 
             req: [{ item: 201, n: [null, T2(1, 1), T2(1, 1), T2(1, 2), T2(2, 2)] }] }
     };
+    Watki.scal(TEMPLATES, "lowy", "tablica");   // (its words: js/teksty/lowy.txt, tablica)
     function addBoard() {
         if (!QB) return;
         try {
@@ -464,10 +323,8 @@
 
     // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Lowy.epilogue): one or two by what the hero did
     const EPILOG = {
-        pack: "Wataha spod korzeni na Skraju lasu nie rusza cię do dziś. Raz w tygodniu przy norze leży zając - szczenięta, które zostawiłeś, mają już własne.",
-        park: "Gajowy Gniewko Bór dalej liczy jelenie w zwierzyńcu Lorda - i ani razu nie musiał liczyć twoich.",
-        permit: "Raz w tygodniu, z zezwoleniem w zanadrzu, przechodzisz przez wyłom w żywopłocie na jelenia. Gniewko Bór kiwa ci głową jak swojemu."
     };
+    Watki.scal(EPILOG, "lowy", "epilog");   // (its words: js/teksty/lowy.txt, epilog)
     window.LowyData = { EPILOG,
         VERSION, PKG: "B", OWNER: "Lowy", ready: true,
         IDS_RANGE: P ? P.ids : [2300, 2499], RESIDENTS: P ? P.residents : [2905, 2909], ITEMS: P ? P.items : [200, 209], ICONS: P ? P.icons : [480, 495],

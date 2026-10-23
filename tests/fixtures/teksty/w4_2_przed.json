@@ -1,0 +1,13 @@
+{
+ "zadania": {
+  "W4": {
+   "lines": {
+    "key": [
+     "Proszę. Klucz kasztelana. Ciężki, co? Jakby ważył więcej niż żelazo.",
+     "Nie mów Borgarowi, że to ja. Albo... powiedz. Niech wie, że jego ród coś znaczył."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W4\\./)"
+}

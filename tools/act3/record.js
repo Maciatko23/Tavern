@@ -2,7 +2,7 @@
 //   CDP_PORT=9470 node tools/act3/record.js <scene> <out folder> [frames] [every] [lead]
 // scene: outside (the yard at night: the townsfolk, Grum, Rafał and Marek against wave 2, the fires on the front) |
 //        inside (the tavern: the commander of the diggers through the front door, Grum by the hero, Borgar at the old door).
-// Act3.js and Act3_Data.js are put into the page when js/plugins.js does not list them yet. Pictures <out>/f_000.png ... and
+// Act3.js and Act3_Data.js are put into the page when the plugin list (js/tawerna_wtyczki.js) does not have them yet. Pictures <out>/f_000.png ... and
 // info.json (the hero's place on the screen); tools/humans/make_gif.py crops and joins them.
 const path = require("path"), fs = require("fs");
 const kit = require(path.join(__dirname, "..", "..", "tests", "lib", "kit.js"));

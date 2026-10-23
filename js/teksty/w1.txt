@@ -1,0 +1,307 @@
+# Wątek W1 (wtyczka TownQuests_Data.js): tytuł, opis, rozdziały, rozmowy. Klucze: zadania.W1.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz w1
+
+# ======================================================================== QUESTS (zadania)
+# W1, „Woda spod Kruczych Skał”
+zadania.W1.title = Woda spod Kruczych Skał
+zadania.W1.where = studnia na rynku, staw za halą, dno studni, ogród dworu nocą, Wielka cysterna w podziemiach (piętro 30), dzwonnica
+zadania.W1.when = od dnia 3
+zadania.W1.desc = Skąd Kuba ma tyle wody, skoro studnia na rynku ledwo daje parę wiader na dzień? Czemu ogród Lorda jest zielony? Kto osłabił studnię i młyn?
+zadania.W1.lines.caught = Ty?! Co tu robisz po nocy?! Idź spać, chłopcze. I nic nie widziałeś!
+[zadania.W1.lines.seen]
+> (Kuba podstawia beczkę pod kamienną rurę wystającą ze skały pod wodospadem. Woda leje się gęstym strumieniem. Beczka za beczką.)
+> (Na murze nad wodospadem mignęła latarnia. Ktoś tam stał i patrzył. Zgasła.)
+> Skąd ta rura w skale? I kto trzyma tę latarnię?
+
+[zadania.W1.lines.note]
+Woda Kuby - noc
+Kuba wychodzi z domu po pierwszej w nocy i idzie do stawu za tawerną. Nabiera wodę z kamiennej rury w skale pod wodospadem, beczka za beczką. Na murze nad wodospadem ktoś stał z latarnią - zgasła, zanim zobaczyłem twarz.
+
+[zadania.W1.lines.kubaAsk]
+> Kuba. Widziałem cię w nocy przy stawie. Kamienna rura w skale, beczka za beczką.
+(Kuba rozgląda się na boki.) Ciszej, chłopcze! ...Czego chcesz?
+
+[zadania.W1.lines.kubaTell]
+Dobra. Ale nikomu ani słowa. Woda jest z dworu.
+Feliks, kamerdyner Lorda. Po pierwszej w nocy odkręca coś w ogrodzie i z rury pod wodospadem leci woda. Płacę mu trzy grosze za beczkę. A jak trzeba więcej, idę nocą do ogrodu dworu - kapral przepuszcza - i Feliks napełnia mi beczki spod włazu za oranżerią.
+Sołtys płaci mi dziewięć groszy za przydział - piekarnia, kuźnia, tawerna. Kapral nie widzi wozu, bo dostaje swoją działkę. Wszyscy mają swoje. Tylko studnia nie ma nic.
+> A Lord?
+Lord? Lord myśli, że ogród poi głęboka studnia dworu. Feliks mu tak mówi. Ja tam nic nie wiem.
+
+[zadania.W1.lines.kubaPay]
+Płacić? Tobie? ...Pięć groszy w każdy dzień targowy. I ani słowa.
+(Kuba zaciska zęby.) Woda jest z dworu, z ogrodu Lorda. Więcej nic nie powiem. Ty sępie.
+
+[zadania.W1.lines.kubaFlee]
+Sołtysowi?! Nie... nie, chłopcze, proszę... To Feliks! Kamerdyner! To on wpuszcza mnie nocą do ogrodu dworu i daje wodę spod włazu za oranżerią! Ja tylko wożę!
+(Kuba rzuca beczki i biegnie w stronę bramy.)
+
+[zadania.W1.lines.kubaLater]
+To zapomnij. I idź stąd, ludzie patrzą.
+
+[zadania.W1.lines.kubaTribute]
+(Kuba wciska ci monety, nie patrząc w oczy.) Pięć groszy. Dzień targowy. Udław się.
+
+[zadania.W1.lines.noteTell]
+Kuba mówi wszystko
+Kuba płaci Feliksowi, kamerdynerowi Lorda, trzy grosze za beczkę. Po pierwszej w nocy Feliks odkręca coś w ogrodzie i z rury pod wodospadem leci woda; więcej Kuba bierze nocą spod włazu za oranżerią w ogrodzie dworu. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord myśli, że ogród poi studnia dworu.
+
+[zadania.W1.lines.notePay]
+Kuba płaci
+Kuba płaci mi pięć groszy w każdy dzień targowy za milczenie. Powiedział tylko tyle: woda jest z dworu, z ogrodu Lorda. Pewnie poskarży się komuś we dworze.
+
+[zadania.W1.lines.noteFlee]
+Kuba uciekł
+Zagroziłem Kubie sołtysem. Wykrzyczał, że to Feliks, kamerdyner Lorda, daje mu wodę spod włazu za oranżerią - i uciekł z miasta na tydzień. Piekarnia i kuźnia zostały bez przydziału, a Baltazar sprzedaje wodę dwa razy drożej.
+
+[zadania.W1.lines.pump]
+> (Za oranżerią, w trawie pod sosną, drewniany właz. Na żelaznej zasuwie wyryty kruk - taki sam jak na kracie w studni.)
+> (Spod włazu szumi woda. Głośno. Tu płynie.)
+> Dwór stoi na kanale zakonu.
+
+[zadania.W1.lines.drawer]
+> (Skrzynia drzewka pomarańczy przy drzwiach oranżerii. Jedna deska luźna - pod nią zawiniątko z ceraty.)
+> (Rysunek: kanał spod wzgórza, rozwidlenie, zasuwa. Dopisek drobnym pismem: „zasuwa na dworze, studnia i młyn zamknięte. F.”)
+> F. jak Feliks. Biorę to.
+
+[zadania.W1.lines.note5]
+Oranżeria nocą
+Za oranżerią dworu, w trawie pod sosną, jest drewniany właz z krukiem na zasuwie - dwór dobudowano na kanale zakonu. W skrzyni drzewka pomarańczy przy drzwiach oranżerii leżał rysunek śluzy z dopiskiem: „zasuwa na dworze, studnia i młyn zamknięte. F.” Zabrałem go - to dowód.
+
+[zadania.W1.lines.sawFeliks]
+> (Za oranżerią, przy włazie pod sosną, stoi Kuba z pustymi beczkami.)
+> (Feliks odsuwa zasuwę i podaje mu spod włazu wiadro za wiadrem.)
+> Kamerdyner Lorda. Nocą. Po trzy grosze od beczki.
+
+[zadania.W1.lines.noteFeliks]
+Feliks przy włazie
+Po pierwszej w nocy Kuba przychodzi do ogrodu dworu z beczkami - kapral go przepuszcza. Za oranżerią, przy włazie pod sosną, Feliks napełnia mu je wodą spod włazu.
+
+zadania.W1.lines.caughtGuard = Stój! Kto tu?! ...Won mi z ogrodu, obdartusie!
+zadania.W1.lines.caughtFeliks = Kto tam?! Straż! Straż!
+[zadania.W1.lines.soltysAsk]
+Chłopcze, chodzisz jakiś zamyślony. Masz coś dla mnie?
+
+[zadania.W1.lines.soltysMarket]
+Dziś targ, cały rynek pełen ludzi. A ty chodzisz jakiś zamyślony, chłopcze. Masz coś dla mnie?
+
+[zadania.W1.lines.soltysWait]
+W dzień targowy? Hm. Coś, co wszyscy muszą usłyszeć naraz? ...Dobrze. Będę czekał.
+
+[zadania.W1.lines.soltysLater]
+Jak będziesz gotów, wiesz, gdzie mnie szukać.
+
+[zadania.W1.lines.silent]
+Nic? No to nic. Woda sama się nie znajdzie, wiem, wiem...
+
+[zadania.W1.lines.reveal]
+> Sołtysie. To rysunek śluzy zakonu, spod drzewka przy oranżerii dworu. Podpisany „F.” - jak Feliks.
+(Sołtys czyta. Raz. Drugi raz. Czerwienieje.)
+Ludzie! LUDZIE! Słuchajcie wszyscy! (Sołtys wchodzi na cembrowinę studni i czyta rysunek na głos.)
+> (Tłum rośnie. Ktoś krzyczy: „Do dworu!” Idziecie pod bramę wschodnią, a Lord Zaleski wychodzi do ludzi.)
+> (Lord czyta długo. Blednie. „Mój dziadek postawił dwór na kanale? Feliks...? Nie wiedziałem. Na Boga, nie wiedziałem.”)
+> (Lord każe aresztować Feliksa i otworzyć śluzę - do połowy, więcej susza nie da. Na kaprala Wita patrzy jak na obcego. Na ciebie - chłodno.)
+Słyszysz? Młynówka szumi! Młyn ruszy, a studnia... może da wiadro więcej na dzień. Dziękuję ci, chłopcze. Całe miasto ci dziękuje.
+
+[zadania.W1.lines.lordAsk]
+> Panie. Muszę panu coś pokazać. Po cichu, bez świadków.
+
+[zadania.W1.lines.lordShow]
+> (Podajesz mu rysunek.) Spod drzewka przy oranżerii. Pod włazem za oranżerią jest kanał zakonu, a ta zasuwa zamyka studnię i młyn.
+To... pismo Feliksa. (Lord długo milczy.) Mój dziadek postawił dwór na kanale zakonu? A ja przez trzy lata suszy myślałem, że ogród poi nasza głęboka studnia.
+Chodź ze mną. Zejdziemy do oranżerii razem.
+> (W oranżerii Lord sam kręci kołem zasuwy. Do połowy - więcej susza nie da. Spod ziemi dochodzi szum wody, która idzie do miasta.)
+Feliks zniknie z dworu jeszcze dziś. Bez hałasu - miasto nie musi wiedzieć, że mój kamerdyner sprzedawał wodę moich ludzi.
+A ty... za lojalność dwieście na poczet długu twojego dziadka. I pamiętaj: od dziś masz we dworze przyjaciela.
+
+[zadania.W1.lines.lordLater]
+Po cichu? Hm. Wróć, kiedy się zdecydujesz.
+
+[zadania.W1.lines.feliksAsk]
+> Feliksie. Właz z krukiem za oranżerią. I rysunek śluzy z twoim „F.”
+(Feliks uśmiecha się samymi ustami.) Ciszej, młodzieńcze. Ludzie słuchają. ...Czego pan chce?
+
+[zadania.W1.lines.feliksDeal]
+Dwadzieścia groszy co tydzień. Zgoda. Pierwsze dwadzieścia - proszę. Następne za tydzień, tu, przy straganach.
+(Feliks pochyla się bliżej.) Tylko niech pan uważa na drogach, młodzieńcze. Drogi bywają niebezpieczne.
+
+[zadania.W1.lines.feliksLater]
+Z pewnością się zobaczymy. Miłego dnia, młodzieńcze.
+
+[zadania.W1.lines.noteReveal]
+Woda wróciła
+Ujawniłem rysunek śluzy razem z sołtysem w dzień targowy. Lord o niczym nie wiedział - kazał aresztować Feliksa i otworzyć śluzę do połowy. Młyn rusza, studnia na rynku daje trochę więcej. Lord jest mi wdzięczny, ale chłodny. Kaprala Wita zdegradowali.
+
+[zadania.W1.lines.noteLord]
+Śluza otwarta po cichu
+Zaniosłem rysunek śluzy Lordowi. Nic nie wiedział. Sam otworzył zasuwę do połowy, Feliks po cichu zniknął z dworu, a mnie Lord odpisał 200 G z długu dziadka - „za lojalność”. Miasto widzi tylko, że woda wraca. Kuba został bez towaru i ma do mnie żal.
+
+[zadania.W1.lines.noteDeal]
+Milczenie Feliksa
+Feliks płaci mi dwadzieścia groszy co tydzień za milczenie o śluzie. Ostrzegł mnie, żebym uważał na drogach.
+
+[zadania.W1.lines.noteSilent]
+Milczę
+Powiedziałem sołtysowi, że nic nie mam. Rysunek śluzy został u mnie. Woda dalej płynie pod dwór.
+
+[zadania.W1.lines.feliksWeek]
+(Feliks wsuwa ci sakiewkę do ręki, nie patrząc.) Dwadzieścia. Jak co tydzień. Liczę, że pamięć ma pan krótką.
+
+zadania.W1.lines.w7.fate.arrest = Feliks siedzi w wieży
+zadania.W1.lines.w7.fate.fled = Feliks uciekł promem
+[zadania.W1.lines.w7.kubaTell]
+Dobra. Ale nikomu ani słowa. Woda jest z dworu.
+Dawał mi ją Feliks, kamerdyner Lorda - spod włazu za oranżerią, po trzy grosze za beczkę. {fate}, a zasuwy pod włazem nikt nie ruszył: woda dalej płynie pod dwór. Biorę ją teraz sam, nocą. Kapral dalej nie widzi wozu.
+Sołtys płaci mi dziewięć groszy za przydział - piekarnia, kuźnia, tawerna. Wszyscy mają swoje. Tylko studnia nie ma nic.
+> A Lord?
+Lord? Lord wie o Feliksie - o jakichś listach, o tych z okiem. O zasuwie nie wie. Nikt mu nie pokazał, gdzie jest.
+
+[zadania.W1.lines.w7.kubaFlee]
+Sołtysowi?! Nie... nie, chłopcze, proszę... To był Feliks! Dawał mi wodę spod włazu za oranżerią! {fate}, a woda dalej leci - ja tylko wożę!
+(Kuba rzuca beczki i biegnie w stronę bramy.)
+
+[zadania.W1.lines.w7.noteTell]
+Kuba mówi wszystko
+Kuba brał wodę od Feliksa spod włazu za oranżerią, po trzy grosze za beczkę. {fate}, ale zasuwy nikt nie ruszył - woda dalej płynie pod dwór, a Kuba bierze ją teraz sam, nocą. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord wie o listach Feliksa - o zasuwie nie wie.
+
+[zadania.W1.lines.w7.noteFlee]
+Kuba uciekł
+Zagroziłem Kubie sołtysem. Wykrzyczał, że to Feliks dawał mu wodę spod włazu za oranżerią ({fate}, a woda dalej leci) - i uciekł z miasta na tydzień. Piekarnia i kuźnia zostały bez przydziału, a Baltazar sprzedaje wodę dwa razy drożej.
+
+[zadania.W1.lines.w7.reveal]
+> Sołtysie. To rysunek śluzy zakonu, spod drzewka przy oranżerii dworu. Podpisany „F.” - jak Feliks.
+(Sołtys czyta. Raz. Drugi raz. Czerwienieje.)
+Ludzie! LUDZIE! Słuchajcie wszyscy! (Sołtys wchodzi na cembrowinę studni i czyta rysunek na głos.)
+> (Tłum rośnie. Ktoś krzyczy: „Do dworu!” Idziecie pod bramę wschodnią, a Lord Zaleski wychodzi do ludzi.)
+> (Lord czyta długo. Nie blednie - o Feliksie wie od dnia, w którym przyniosłem mu listy. „{fate}. Sprzedawał moją wodę tym z okiem - to wiedziałem. Ale gdzie jest ta zasuwa, nie wiedziałem.”)
+> (Lord każe otworzyć śluzę - do połowy, więcej susza nie da. Na kaprala Wita patrzy jak na obcego. Na mnie z wyrzutem: „Raz przyszedłeś z tym najpierw do mnie. Czemu nie drugi?”)
+Słyszysz? Młynówka szumi! Młyn ruszy, a studnia... może da wiadro więcej na dzień. Dziękuję ci, chłopcze. Całe miasto ci dziękuje.
+
+[zadania.W1.lines.w7.lordShow]
+> (Podajesz mu rysunek.) Spod drzewka przy oranżerii. Pod włazem za oranżerią jest kanał zakonu, a ta zasuwa zamyka studnię i młyn.
+Znowu jego ręka. (Lord długo patrzy.) W listach pisał, że ogród pije z gałęzi zakonu. Nie pisał, gdzie zamknął miastu wodę. Myślałem, że to przenośnia.
+Chodź ze mną. Zejdziemy do oranżerii razem.
+> (W oranżerii Lord sam kręci kołem zasuwy. Do połowy - więcej susza nie da. Spod ziemi dochodzi szum wody, która idzie do miasta.)
+{fate} - a jego zasuwa wreszcie otwarta. Miasto nie musi wiedzieć, czyja to była ręka. Wystarczy, że woda wraca.
+Drugi raz przychodzisz z prawdą najpierw do mnie. Dwieście groszy - za lojalność. I nie odmawiaj.
+
+[zadania.W1.lines.w7.noteReveal]
+Woda wróciła
+Ujawniłem rysunek śluzy razem z sołtysem w dzień targowy. O Feliksie Lord wiedział już ode mnie ({fate}), ale nie o zasuwie - kazał otworzyć śluzę do połowy. Młyn rusza, studnia na rynku daje trochę więcej. Lord ma mi za złe, że tym razem poszedłem na rynek. Kaprala Wita zdegradowali.
+
+[zadania.W1.lines.w7.noteLord]
+Śluza otwarta po cichu
+Zaniosłem rysunek śluzy Lordowi. O Feliksie wiedział już z jego listów ({fate}) - o zasuwie nie. Sam otworzył ją do połowy i dał mi 200 G - „drugi raz najpierw do mnie”. Miasto widzi tylko, że woda wraca. Kuba został bez towaru i ma do mnie żal.
+
+[zadania.W1.lines.ambush]
+> (Zza krzaków przy drodze wychodzi dwóch ludzi w kapturach. Jeden ma pałkę.)
+> („Pozdrowienia od kamerdynera” - słyszysz, zanim pałka spada ci na ramię.)
+> (Kiedy wstajesz, sakiewka jest lżejsza. Feliks już nie zapłaci.)
+
+[zadania.W1.lines.noteAmbush]
+Napad na Polnej drodze
+Dwa tygodnie po umowie z Feliksem napadli mnie na Polnej drodze jego ludzie w kapturach - „pozdrowienia od kamerdynera”. Pobili mnie, zabrali pieniądze i rysunek śluzy. Feliks więcej nie płaci, a dowodu już nie mam.
+
+zadania.W1.lines.manName = Człowiek Feliksa
+zadania.W1.lines.ambushShout = Pozdrowienia od kamerdynera!
+[zadania.W1.lines.ambushStart]
+> (Zza krzaków przy drodze wychodzą ludzie w kapturach. Pałki w rękach.)
+> Feliks. Dwa tygodnie - i przysłał swoich.
+
+[zadania.W1.lines.ambushArcher]
+> (Na skraju drogi ktoś napina łuk. Za moje milczenie Feliks płaci już nie tylko mnie.)
+
+[zadania.W1.lines.ambushWon]
+> (Po wszystkim. Ludzie Feliksa leżą albo uciekli.)
+> Feliks więcej nie zapłaci. Ale rysunek śluzy wciąż mam - i wiem, co o mnie myśli.
+
+[zadania.W1.lines.confession]
+> (Ten, którego puściłem, wybełkotał jeszcze przez ramię: „Kamerdyner płaci po dziesięć groszy... Kazał zabrać ci papier!”)
+
+[zadania.W1.lines.ambushLost]
+> (Budzę się w rowie przy drodze. Sakiewka lżejsza... i nie ma rysunku śluzy.)
+> Feliks dostał, czego chciał. Dowodu już nie mam.
+
+[zadania.W1.lines.ambushFled]
+> (Uciekłem z drogi. Ale oni wiedzą, którędy chodzę - będą czekać znowu.)
+
+[zadania.W1.lines.noteAmbushWon]
+Napad na Polnej drodze
+Dwa tygodnie po umowie z Feliksem napadli mnie na Polnej drodze jego ludzie - „pozdrowienia od kamerdynera”. Pobiłem ich. Feliks więcej nie płaci, ale rysunek śluzy wciąż mam: mogę go jeszcze pokazać sołtysowi albo Lordowi.
+
+[zadania.W1.lines.noteConfession]
+Człowiek Feliksa mówi
+Jeden z ludzi, którzy napadli mnie na Polnej drodze, błagał o litość - puściłem go, a on się wygadał: kamerdyner płaci im po dziesięć groszy i kazał zabrać mi „papier”. Mam świadka.
+
+[zadania.W1.lines.withWitness]
+> I jeszcze jedno: ludzie Feliksa napadli mnie na Polnej drodze. Jeden z nich przyznał, kto im płaci.
+
+[zadania.W1.lines.sluiceSeen]
+> „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.”
+> Cztery i dwa - tak dzwoni Ambroży, kiedy po suszy pada pierwszy deszcz. „Woda idzie.”
+
+[zadania.W1.lines.bellAsk]
+Cztery i dwa? (Ambroży siada na stopniu.) Tak dzwoniono, kiedy trzeba było otworzyć cysterny. Woda idzie. Trzysta lat nikt tak nie dzwonił na wezwanie.
+Byłeś na dole. Przy zasuwie. ...Widzę po tobie.
+Chcesz zadzwonić sam? Cztery, przerwa, dwa - sześć uderzeń, ani jednego więcej. Albo zadzwonię ja.
+
+zadania.W1.lines.optBellSelf = Zadzwonię sam.
+zadania.W1.lines.optBellHim = Zadzwoń ty, Ambroży.
+zadania.W1.lines.optBellLater = Jeszcze nie.
+[zadania.W1.lines.bellSelf]
+To chodź na wieżę. I licz na głos.
+
+[zadania.W1.lines.bellHim]
+Dobrze. Słuchaj. I zapamiętaj, jak to brzmi.
+
+[zadania.W1.lines.bellLater]
+Dzwon poczeka. Czekał trzysta lat.
+
+[zadania.W1.lines.bellWrong]
+Źle. Za dużo albo za mało - zasuwa nie usłyszy. Spróbuj jeszcze raz, kiedy będziesz gotów.
+
+[zadania.W1.lines.bellQuit]
+Puściłeś sznur? Nic się nie stało. Dzwon poczeka.
+
+[zadania.W1.lines.waterComes]
+> (Ostatnie uderzenie gaśnie nad dachami. Przez chwilę nic.)
+> (Potem spod rynku dochodzi głuchy szum - jakby ktoś głęboko pod ziemią odetchnął.)
+> Zasuwa usłyszała. Woda idzie starym kanałem zakonu - pod rynek.
+
+zadania.W1.lines.waterAmbrozy = Cztery i dwa... Słyszysz? Woda idzie.
+zadania.W1.lines.shout.soltys = Studnia! W studni stoi woda! Ludzie, nie pchać się - po kolei!
+zadania.W1.lines.shout.kowal = Koryto młynówki mokre! Młyn ruszy!
+zadania.W1.lines.shout.piekarka = Woda! Prawdziwa woda w studni!
+zadania.W1.lines.shout.woziwoda = W studni... woda? Sama przyszła?!
+zadania.W1.lines.shout.garbarz = Słyszycie? Pod rynkiem szumi!
+[zadania.W1.lines.noteCistern]
+Zasuwa główna otwarta
+Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu puściła wodę starym kanałem pod rynek. Studnia na rynku znów ma wodę - ale sołtys zamknął ją na klucz i wydziela racje domom; przybysz dalej dostaje swoje dwa nabrania na dzień. Młyn ruszył, Kuba rozwozi racje za uczciwy grosz od sołtysa. Mnie z tego nic nie kapnie: na działce dziadka liczy się tylko moja deszczówka.
+
+zadania.W1.steps.0.text = Zbieraj poszlaki o wodzie Kuby ({n}/3): „Pęknięta beczka”, „Smak wody”, „Łój do latarni”, „Nocna warta”, „Pierścionek w studni”.
+zadania.W1.steps.1.text = Kuba chodzi gdzieś nocą. Wyjdź za nim po cichu (C - skradanie), kiedy po pierwszej w nocy wyjdzie z domu na tarasie rzemieślników. Nie daj się zobaczyć.
+zadania.W1.steps.2.text = Porozmawiaj z Kubą o tym, co widziałeś nocą przy stawie (studnia na rynku, 7–14).
+zadania.W1.steps.3.text = Zejdź na dno studni na rynku (2× Lina; zejście z boku studni, od wschodu) i posłuchaj przy kracie z krukiem.
+[zadania.W1.steps.3.say]
+> (Krata z krukiem. Za nią ciemność i chłód. Przykładasz ucho do żelaza.)
+> (Gdzieś w głębi szumi woda. Dużo wody. Płynie... ale nie tutaj.)
+> Kanał prowadzi pod rynek, a woda idzie inną drogą. Ktoś ją odciął od studni. I od młynówki.
+
+[zadania.W1.steps.3.reward.note]
+Krata z krukiem
+Na dnie studni, za kratą z krukiem w zamurowanym kanale zakonu, szumi woda. Płynie, ale nie do studni. Ktoś odciął studnię - i młynówkę - od kanału.
+
+zadania.W1.steps.4.text = Zapytaj Tadka o kratę z krukiem (kuźnia, 6–17).
+[zadania.W1.steps.4.say]
+> Tadek, na dnie studni jest żelazna krata. Stara, z wykutym krukiem. Kto mógł taką zrobić?
+Krata z krukiem? Tej kraty nie kuł kowal, tylko zakon. Takiej roboty dziś nikt nie umie - żelazo bez rdzy po trzystu latach.
+Drugą taką widziałem raz w życiu. W ogrodzie dworu, przy oranżerii - Feliks wołał mnie do zasuwy. Za nią, pod sosną, jest właz, a na zasuwie... ten sam kruk.
+Feliks zapłacił mi wtedy podwójnie. Żebym zapomniał. No to zapomniałem. Do dziś.
+
+zadania.W1.steps.5.text = Zakradnij się nocą (21:00–4:30) do oranżerii w ogrodzie dworu (za bramą wschodnią). Strażnik obchodzi ogród - skradaj się (C) i nie wchodź mu w oczy. Obejrzyj właz z krukiem za oranżerią (pod sosną) i skrzynię drzewka pomarańczy przy drzwiach oranżerii.
+zadania.W1.steps.6.text = Rysunek śluzy to dowód. Co z nim zrobisz? Ujawnij go z sołtysem na rynku w dzień targowy (8–14), zanieś po cichu Lordowi (drzwi dworu, 8–20), postrasz nim Feliksa (rano przy straganach) - albo powiedz sołtysowi, że nic nie masz, i milcz.
+zadania.W1.steps.7.text = Feliks płaci ci 20 G co tydzień za milczenie (rano przy straganach). Uważaj na drogach.
+zadania.W1.steps.8.text = Feliks przestał płacić. Jego ludzie czekali na ciebie na Polnej drodze - uciekłeś, ale będą czekać znowu. Pobij ich albo daj się złapać.
+zadania.W1.steps.9.text = W Akcie II: kanał spod studni na rynku prowadzi do cysterny zakonu pod wzgórzem. Zejdź do podziemi i znajdź w Wielkiej cysternie (piętro 30) jej Zasuwę główną.
+zadania.W1.steps.10.text = Na Zasuwie głównej wykuto: „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.” Porozmawiaj z Ambrożym (za dnia, 6–21): cztery i dwa - zadzwonisz sam albo on.

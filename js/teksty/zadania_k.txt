@@ -1,0 +1,1368 @@
+# Krótkie zadania miasteczka K (wtyczka TownQuests_Data.js): tytuły, opisy, rozmowy, kroki. Klucze: zadania.<id zadania>.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zadania_k
+
+# ======================================================================== QUESTS (zadania)
+# K1, „Węgiel do paleniska”
+zadania.K1.title = Węgiel do paleniska
+zadania.K1.where = kuźnia, taras rzemieślników
+zadania.K1.when = 6–17, od dnia 2
+zadania.K1.desc = Palenisko Tadka przygasa, a węgla nie ma - węglarz z gór nie przyjechał. Węgiel drzewny daje piec na działce albo drzewo zwęglone piorunem.
+[zadania.K1.offer.say]
+Palenisko mi przygasa, a węgla ani grudki. Węglarz z gór nie przyjechał - wojna, drogi, licho wie co.
+Przyniesiesz pięć worków węgla drzewnego? Z pieca na działce albo z drzewa, w które walnął piorun. Przed dziewiątą - to ci jeszcze naostrzę narzędzie.
+
+zadania.K1.offer.yes = Przyniosę węgiel.
+zadania.K1.offer.no = Nie teraz.
+[zadania.K1.offer.accept]
+No to czekam. Tylko nie każ mi czekać do zimy.
+
+[zadania.K1.offer.decline]
+Twoja wola. Palenisko poczeka. Ja też.
+
+zadania.K1.steps.0.text = Przynieś Tadkowi 5× Węgiel drzewny (kuźnia, 6–17). Przed 9:00 naostrzy ci narzędzie.
+[zadania.K1.steps.0.remind]
+Węgiel, chłopcze. Pięć worków. Bez tego kuję na zimno.
+
+[zadania.K1.steps.0.hero]
+> Mam węgiel. Pięć worków.
+
+[zadania.K1.steps.0.done]
+O, to rozumiem! Palenisko odżyje.
+
+# K2, „Woda do hartowania”
+zadania.K2.title = Woda do hartowania
+zadania.K2.where = kuźnia
+zadania.K2.when = 6–17, po 3 dniach bez deszczu
+zadania.K2.desc = Koryto do hartowania wyschło i kuźnia stoi. Tadek prosi o dwie porcje twojej deszczówki - z wiadra albo z bukłaka. Woda dla siebie czy dla innych?
+[zadania.K2.offer.say]
+Koryto do hartowania wyschło do dna. Rozgrzane żelazo muszę w czymś studzić, inaczej pęka.
+Przydział od Kuby starcza ledwo do picia. Masz deszczówkę? Dwie porcje - z wiadra albo z bukłaka. Zapłacę uczciwie.
+
+zadania.K2.offer.options.0.label = Przyniosę dwie porcje.
+[zadania.K2.offer.options.0.say]
+Dobry z ciebie chłopak. Tylko nie odejmuj sobie od ust.
+
+zadania.K2.offer.options.1.label = Nie mogę - sam ledwo mam.
+[zadania.K2.offer.options.1.say]
+Rozumiem. Każdy ma swoje pragnienie. Pójdę prosić sołtysa o większy przydział.
+
+zadania.K2.offer.options.2.label = Nie teraz.
+[zadania.K2.offer.options.2.say]
+Koryto poczeka. Ja też.
+
+zadania.K2.steps.0.text = Oddaj Tadkowi 2 porcje swojej deszczówki (z wiadra noszonego w plecaku albo z bukłaka).
+[zadania.K2.steps.0.remind]
+Dwie porcje deszczówki, chłopcze. Z wiadra albo z bukłaka.
+
+[zadania.K2.steps.0.hero]
+> Mam deszczówkę. Dwie porcje.
+
+[zadania.K2.steps.0.done]
+Deszczówka! Czysta jak łza. Koryto znowu syczy, jak trzeba.
+
+[zadania.K2.steps.0.choice.ask]
+Co wolisz w zamian? Grosz czy gwoździe?
+
+zadania.K2.steps.0.choice.options.0.label = 25 groszy.
+[zadania.K2.steps.0.choice.options.0.say]
+Masz. Uczciwie zarobione.
+
+zadania.K2.steps.0.choice.options.1.label = Sześć gwoździ.
+[zadania.K2.steps.0.choice.options.1.say]
+Sześć gwoździ, kute dziś rano. Trzymaj.
+
+# K3, „Podkowa w słońcu”
+zadania.K3.title = Podkowa w słońcu
+zadania.K3.where = kuźnia → Polna droga
+zadania.K3.when = w południe (11–14), przy słońcu
+zadania.K3.desc = Z wozu Wieśka wypadła podkowa dla konia Lorda. W samo południe błyska w słońcu między kamieniami na Polnej drodze - szukasz błysku, nie podkowy.
+[zadania.K3.offer.say]
+Wiesiek wiózł mi podkowy dla konia Lorda i jedną zgubił na Polnej drodze. Lord już o nią pytał. Dwa razy.
+Szukaj w samo południe, przy słońcu - podkowa błyska między kamieniami. Szukaj błysku, nie podkowy.
+
+zadania.K3.offer.yes = Poszukam.
+zadania.K3.offer.no = Nie teraz.
+[zadania.K3.offer.accept]
+Polna droga, między kamieniami. Od jedenastej do drugiej, póki słońce stoi wysoko.
+
+[zadania.K3.offer.decline]
+Ech. Lord zapyta trzeci raz.
+
+zadania.K3.steps.0.text = Znajdź podkowę na Polnej drodze: w południe (11–14), przy słońcu, błyska między kamieniami.
+[zadania.K3.steps.0.say]
+> (Coś błysnęło w słońcu.) Jest! Nowa podkowa, z herbem Lorda wybitym na pręcie.
+
+zadania.K3.steps.1.text = Oddaj podkowę Tadkowi (kuźnia, 6–17).
+[zadania.K3.steps.1.remind]
+Znalazłeś? Nie? Szukaj w południe, jak słońce wysoko.
+
+[zadania.K3.steps.1.hero]
+> Znalazłem podkowę. Błyszczała, jak mówiłeś.
+
+[zadania.K3.steps.1.done]
+Ha! Ta sama. Lord nie będzie miał się do czego przyczepić. Dobre oko masz.
+
+# K4, „Chleb przed świtem”
+zadania.K4.title = Chleb przed świtem
+zadania.K4.where = piekarnia na rynku
+zadania.K4.when = dzień przed; 3:30–5:00
+zadania.K4.desc = Piec Hanki musi ruszyć o czwartej, inaczej o szóstej nie będzie chleba. A drewna brak. Trzeba wstać przed świtem.
+[zadania.K4.offer.say]
+Piec musi ruszyć o czwartej, inaczej o szóstej nie będzie chleba. A drewna mi brakuje - drwal leży w gorączce.
+Przyniesiesz jutro cztery polana? Między wpół do czwartej a piątą, pod okienko piekarni. Zapukaj, otworzę.
+
+zadania.K4.offer.yes = Przyniosę przed świtem.
+zadania.K4.offer.no = Nie dam rady.
+[zadania.K4.offer.accept]
+Złoty chłopak! Tylko nie zaśpij, kochaneczku.
+
+[zadania.K4.offer.decline]
+Nic to. Spalę stare koszyki.
+
+zadania.K4.steps.0.text = Jutro między 3:30 a 5:00 przynieś Hance 4× Drewno pod okienko piekarni.
+[zadania.K4.steps.0.early]
+Okienko piekarni zamknięte. Hanka otworzy przed świtem (3:30–5:00).
+
+[zadania.K4.steps.0.say]
+> (Pukasz w okienko.) Hanko! Drewno!
+Już, już! Cztery polana - złoty chłopak. Masz dwa bochny prosto z pieca, jeszcze gorące.
+
+zadania.K4.fail.text = Hanka rozpaliła piec czym się dało.
+# K5, „Bochenki do dziewiątej”
+zadania.K5.title = Bochenki do dziewiątej
+zadania.K5.where = stragan → dzwonnik, brama wschodnia, obóz pod murem, ratusz
+zadania.K5.when = 6–9, codziennie
+zadania.K5.desc = Cztery bochny przed dziewiątą: Ambrożemu, kapralowi Witowi przy bramie wschodniej, Ludmile do obozu pod murem i sołtysowi pod ratusz. Każdy rzuci słowo plotki.
+[zadania.K5.offer.say]
+Pomożesz? Cztery bochny trzeba roznieść przed dziewiątą: Ambrożemu, kapralowi przy bramie wschodniej, Ludmile do obozu pod murem i sołtysowi pod ratusz.
+Za Ludmiłę płaci sołtys, reszta z góry. Ja płacę tobie - dwanaście groszy.
+
+zadania.K5.offer.yes = Roznoszę!
+zadania.K5.offer.no = Nie dziś.
+[zadania.K5.offer.accept]
+Leć! Tylko nie zjedz po drodze.
+
+[zadania.K5.offer.decline]
+To sama polecę. Moje nogi, moja sprawa.
+
+zadania.K5.steps.0.text = Roznieś 4 bochny przed 9:00: Ambroży (rynek), kapral Wit (brama wschodnia), Ludmiła (obóz pod murem), sołtys (ratusz, od 8:00).
+zadania.K5.steps.1.text = Wróć do Hanki po zapłatę (stragan, do 14:00).
+[zadania.K5.steps.1.say]
+> Wszystko rozniesione.
+Wszyscy dostali? I nikt nie marudził? To zasłużyłeś. Dwanaście groszy, proszę.
+
+zadania.K5.fail.text = Chleb wystygł, a ludzie czekali.
+# K6, „Jęczmień do żaren”
+zadania.K6.title = Jęczmień do żaren
+zadania.K6.where = stragan na rynku
+zadania.K6.when = lato i jesień, 6–14
+zadania.K6.desc = Mąki z młyna nie ma, bo koło stoi, odkąd opadł strumień. Hanka zmieli jęczmień z działki dziadka w ręcznych żarnach.
+[zadania.K6.offer.say]
+Mąki z młyna już nie będzie, póki koło stoi. Mam stare żarna po babce - zmielę ręcznie, byle było co.
+Masz jęczmień z działki dziadka? Cztery garście. Upiekę ci za to placek z jagodami.
+
+zadania.K6.offer.yes = Przyniosę jęczmień.
+zadania.K6.offer.no = Jeszcze nie urósł.
+[zadania.K6.offer.accept]
+Czekam, kochaneczku. Żarna już naoliwione.
+
+[zadania.K6.offer.decline]
+Jak urośnie, to pamiętaj o mnie.
+
+zadania.K6.steps.0.text = Przynieś Hance 4× Jęczmień (stragan, 6–14).
+[zadania.K6.steps.0.remind]
+Cztery garście jęczmienia, kochaneczku. Żarna czekają.
+
+[zadania.K6.steps.0.hero]
+> Jęczmień z działki dziadka. Cztery garście.
+
+[zadania.K6.steps.0.done]
+Piękne ziarno! Jutro będą podpłomyki. A to placek dla ciebie - obiecałam.
+
+[zadania.K6.reward.note]
+Młyn stoi
+Hanka mieli jęczmień w ręcznych żarnach, bo młyn stoi, odkąd opadł strumień. Koło i kamienie podobno są całe - brakuje tylko wody w korycie.
+
+# K8, „Pęknięta beczka”
+zadania.K8.title = Pęknięta beczka
+zadania.K8.where = studnia na rynku
+zadania.K8.when = 7–14
+zadania.K8.desc = Beczka Kuby cieknie, a każda kropla to pieniądz. Dwie deski, cztery gwoździe i młotek - obręcz zbijesz na miejscu.
+[zadania.K8.offer.say]
+Psia kość, beczka cieknie! Każda kropla to grosz, a tu leje się na bruk.
+Przyniesiesz dwie deski i cztery gwoździe? I młotek, bo mój... pożyczyłem i przepadł. Obręcz zbijesz tu, na miejscu.
+
+zadania.K8.offer.yes = Przyniosę.
+zadania.K8.offer.no = Nie teraz.
+[zadania.K8.offer.accept]
+Tylko szybko, zanim do reszty wycieknie.
+
+[zadania.K8.offer.decline]
+No to cieknie dalej. Pięknie.
+
+zadania.K8.steps.0.text = Przynieś Kubie 2× Deski i 4× Gwoździe i zbij obręcz młotkiem (studnia na rynku, 7–14).
+[zadania.K8.steps.0.remind]
+Dwie deski, cztery gwoździe, młotek. Cieknie, słyszysz?
+
+[zadania.K8.steps.0.hero]
+> Deski, gwoździe, młotek. Pokaż tę beczkę.
+
+[zadania.K8.steps.0.done]
+No! Trzyma jak dzwon. Masz, zarobiłeś.
+> Skąd ty w ogóle bierzesz tyle wody?
+Z daleka. Nie pytaj.
+> (Mokre klepki pachną dziwnie słodko. Jak róża.)
+
+[zadania.K8.reward.note]
+Beczka Kuby
+Kuba ma wodę codziennie, choć studnia na rynku ledwo daje parę wiader. Zapytany skąd - „Z daleka. Nie pytaj.” Mokre klepki jego beczki pachniały słodko, jak róża.
+
+# K9, „Kłótnia w kolejce”
+zadania.K9.title = Kłótnia w kolejce
+zadania.K9.where = studnia na rynku
+zadania.K9.when = 7–8:30, po 3 dniach bez deszczu
+zadania.K9.desc = Tadek i Ignac pokłócili się o przydział wody. Kuba prosi, żebyś rozsądził - jego nie posłuchają.
+[zadania.K9.offer.say]
+Ratunku, chłopcze. Tadek i Ignac skoczyli sobie do oczu o przydział. Każdy krzyczy, że jego robota ważniejsza.
+Kowal bez wody nie hartuje, garbarz nie wyprawi skór. A ja mam jedną beczkę na nich dwóch. Kto ma brać pierwszy? Ty powiedz - mnie nie posłuchają.
+
+zadania.K9.offer.options.0.label = Po połowie, a na zmianę co dzień pierwszy.
+[zadania.K9.offer.options.0.say]
+Po połowie i na zmianę... A wiesz, że to ma sens? Idę im powiedzieć.
+> (Po chwili Ignac przynosi ci miskę kapuśniaku. „Za rozum” - mówi.)
+
+zadania.K9.offer.options.1.label = Niech rzucą kośćmi.
+[zadania.K9.offer.options.1.say]
+Kośćmi? O wodę? No dobra...
+Ignac przegrał i teraz nie gada z Tadkiem. Pięknie. Dzięki.
+
+zadania.K9.offer.options.2.label = To nie moja sprawa.
+[zadania.K9.offer.options.2.say]
+Niczyja. Jak zawsze.
+
+# K10, „Smak wody”
+zadania.K10.title = Smak wody
+zadania.K10.where = garbarnia
+zadania.K10.when = 6:30–17, po „Pękniętej beczce”
+zadania.K10.desc = Ignac moczy skóry w wodzie od Kuby, a one potem pachną różami. W taką suszę, kiedy w mieście nie ma jednego kwiatka. Porównaj z własną deszczówką.
+[zadania.K10.offer.cond.done]
+K8
+
+[zadania.K10.offer.say]
+Powiem ci coś dziwnego. Moczę skóry w wodzie od Kuby, a one potem pachną różami. Różami! W taką suszę, kiedy w całym mieście nie ma jednego kwiatka.
+Powąchaj moją kadź, jak mi nie wierzysz. A potem powąchaj swoją deszczówkę.
+
+zadania.K10.offer.yes = Powącham.
+zadania.K10.offer.no = Nie mam czasu na wąchanie skór.
+[zadania.K10.offer.accept]
+> (Pochylasz się nad kadzią.) Róża... i coś jak rdza. Żelazo?
+No właśnie. A teraz twoja deszczówka. Przynieś trochę - w wiadrze albo w bukłaku.
+
+[zadania.K10.offer.decline]
+Jak chcesz. Ja i tak wiem swoje.
+
+zadania.K10.steps.0.text = Pokaż Ignacowi trochę swojej deszczówki (wiadro albo bukłak) - do porównania.
+[zadania.K10.steps.0.remind]
+Deszczówka, chłopcze. W wiadrze albo w bukłaku. Nie wylewaj jej - tylko powąchamy.
+
+[zadania.K10.steps.0.hero]
+> Moja deszczówka. Nie pachnie niczym. Trochę dachem.
+
+[zadania.K10.steps.0.done]
+No właśnie. A woda Kuby pachnie różą i żelazem.
+Róże rosną tylko tam, gdzie ktoś je podlewa. Ciekawe, kto w tym mieście ma wodę na róże.
+
+[zadania.K10.reward.note]
+Smak wody
+Woda Kuby pachnie różą i żelazem (kadź Ignaca), deszczówka nie pachnie niczym. Ignac: „Róże rosną tylko tam, gdzie ktoś je podlewa.”
+
+# K11, „Myto przy bramie”
+zadania.K11.title = Myto przy bramie
+zadania.K11.where = brama wschodnia (do dworu)
+zadania.K11.when = 6–18
+zadania.K11.desc = Kapral Wit chce dwa grosze myta „na wojnę” od każdego, kto idzie do dworu. Można zapłacić albo odrobić - kosze żarowe żrą drewno.
+[zadania.K11.offer.say]
+Stać. Brama do dworu Lorda Zaleskiego. Myto: dwa grosze. Na wojnę.
+Nie masz? Możesz odrobić - kosze żarowe przy bramie żrą drewno jak smok. Sześć polan i jesteśmy kwita.
+
+zadania.K11.offer.options.0.label = Płacę dwa grosze.
+[zadania.K11.offer.options.0.say]
+Dziękuję. Zapamiętam twoją gębę - następnym razem przechodzisz bez gadania.
+
+zadania.K11.offer.options.1.label = Odrobię: przyniosę 6 polan.
+[zadania.K11.offer.options.1.say]
+Sześć polan. Do koszy przy bramie. Czekam.
+
+zadania.K11.offer.options.2.label = Nie teraz.
+[zadania.K11.offer.options.2.say]
+Brama nie ucieknie. Myto też nie.
+
+zadania.K11.steps.0.text = Przynieś kapralowi Witowi 6× Drewno do koszy żarowych (brama wschodnia, 6–18).
+[zadania.K11.steps.0.remind]
+Sześć polan, chłopcze. Kosze same się nie nakarmią.
+
+[zadania.K11.steps.0.hero]
+> Sześć polan do koszy.
+
+[zadania.K11.steps.0.done]
+Równo ułożone. Dobra robota. Jesteś teraz znany straży - przechodź śmiało.
+
+# K12, „Łój do latarni”
+zadania.K12.title = Łój do latarni
+zadania.K12.where = obchód murów, wieczorem
+zadania.K12.when = 18–23
+zadania.K12.desc = W latarni patrolu kończy się łój. Kawał tłustego mięsa z dzika albo jelenia - Wit wytopi łój. Albo dwie pochodnie.
+[zadania.K12.offer.say]
+W latarni kończy się łój, a do rana daleko. Dwór obiecał świece. Obiecał.
+Przynieś kawał tłustego mięsa z dzika albo jelenia - wytopię łój. Albo dwie pochodnie, jak już masz.
+
+zadania.K12.offer.yes = Przyniosę.
+zadania.K12.offer.no = Nie teraz.
+[zadania.K12.offer.accept]
+Wieczorem obchodzę mury. Znajdziesz mnie.
+
+[zadania.K12.offer.decline]
+To będę chodził po ciemku. Nie pierwszy raz.
+
+zadania.K12.steps.0.text = Przynieś kapralowi Witowi 1× Surowe mięso dzika albo jelenia (na łój) albo 2× Pochodnia (obchód murów, 18–23).
+[zadania.K12.steps.0.remind]
+Tłuste mięso albo dwie pochodnie. Latarnia ledwo się tli.
+
+[zadania.K12.steps.0.hero]
+> Masz. Na latarnię.
+
+[zadania.K12.steps.0.done]
+Dzięki. Powiem ci jedno, bo jesteś w porządku: po północy to nie ja jestem w tym mieście najdziwniejszy.
+Ktoś chodzi z beczkami, kiedy porządni ludzie śpią. Ja nic nie mówiłem.
+
+[zadania.K12.reward.note]
+Kapral o nocy
+Kapral Wit: „Po północy to nie ja jestem w tym mieście najdziwniejszy. Ktoś chodzi z beczkami, kiedy porządni ludzie śpią.”
+
+# K13, „Sznur dzwonu”
+zadania.K13.title = Sznur dzwonu
+zadania.K13.where = rynek → dzwonnica
+zadania.K13.when = rano, do 12:00
+zadania.K13.desc = Sznur dzwonu się przetarł. Dwie liny przed południem - inaczej pierwszy raz w historii miasta nie zadzwoni południe.
+[zadania.K13.offer.say]
+Sznur się przetarł. Jeszcze jedno szarpnięcie i pęknie. A w południe trzeba dzwonić. Zawsze trzeba.
+Przynieś mi dwie liny przed dwunastą. Proszę.
+
+zadania.K13.offer.yes = Przyniosę liny.
+zadania.K13.offer.no = Nie zdążę.
+[zadania.K13.offer.accept]
+Przed dwunastą. Pamiętaj.
+
+[zadania.K13.offer.decline]
+Wytrzyma. Musi.
+
+zadania.K13.steps.0.text = Przynieś Ambrożemu 2× Lina przed 12:00 (ławka na rynku, przed południem przy dzwonnicy).
+[zadania.K13.steps.0.remind]
+Dwie liny, chłopcze. Słońce idzie w górę.
+
+[zadania.K13.steps.0.hero]
+> Dwie liny. Zdążyłem?
+
+[zadania.K13.steps.0.done]
+Zdążyłeś. Południe zadzwoni, jak zawsze. Jak od trzystu lat.
+
+zadania.K13.fail.text = W południe dzwon milczał. Pierwszy raz od trzystu lat.
+# K14, „Dzwonnik ma chore kolana”
+zadania.K14.title = Dzwonnik ma chore kolana
+zadania.K14.where = dzwonnica
+zadania.K14.when = 17:30–18:15, od Opinii 20
+zadania.K14.desc = O osiemnastej Ambroży nie da rady wejść po schodach. Zadzwoń za niego: sześć uderzeń, kiedy serce dzwonu jest na górze. Ani jednego więcej.
+[zadania.K14.offer.say]
+Kolana... nie wejdę dziś po schodach. A szósta za chwilę.
+Zadzwonisz za mnie? Sześć uderzeń. Ciągnij, kiedy serce dzwonu jest na górze. Ani jednego więcej.
+
+zadania.K14.offer.yes = Zadzwonię.
+zadania.K14.offer.no = Nie umiem.
+[zadania.K14.offer.accept]
+Idź. Sznur jest nowy.
+
+[zadania.K14.offer.decline]
+To jakoś wejdę. Jakoś.
+
+zadania.K14.steps.0.text = Zadzwoń za Ambrożego o 18:00: dokładnie 6 uderzeń (porozmawiaj z nim przy dzwonnicy, 17:30–18:15).
+zadania.K14.fail.text = Ambroży wszedł po schodach sam. Powoli.
+[zadania.K14.lines.go]
+Sznur jest tam, na górze. Sześć razy. Ani jednego więcej.
+
+[zadania.K14.lines.ok]
+Równo jak za dawnych lat. Dziękuję, chłopcze. Kolana też dziękują.
+
+[zadania.K14.lines.badRhythm]
+Liczba dobra, choć krzywo. Dzwon wybaczy. Ja też.
+
+[zadania.K14.lines.wrong]
+Nie tak! Nie tak... Trzy i jeden to coś innego...
+(Ambroży blednie jak ściana.) Nic. Nic się nie stało. Idź już.
+
+[zadania.K14.lines.quit]
+Nie zadzwoniłeś? To... wejdę sam. Jakoś.
+
+[zadania.K14.lines.note]
+Dzwon: liczba ma znaczenie
+Zadzwoniłem za Ambrożego złą liczbę razy. Zbladł: „Trzy i jeden to coś innego...” Liczba uderzeń coś znaczy.
+
+# K15, „Ostrożnie, kruche”
+zadania.K15.title = Ostrożnie, kruche
+zadania.K15.where = kantor → woźnica przed bramą południową
+zadania.K15.when = 21:30–22:30
+zadania.K15.desc = Baltazar chce, żeby skrzynia stanęła na wozie woźnicy Wojciecha przed bramą południową o dziesiątej wieczorem. „Nie otwierać - kruche.” Skrzynia jest ciężka.
+[zadania.K15.offer.say]
+Ach, przyjaciel. Mam drobną prośbę. Ta skrzynia ma stanąć na wozie pod bramą południową. O dziesiątej. Nie otwierać - kruche.
+Pięć groszy teraz, dwadzieścia potem. Uczciwie?
+
+zadania.K15.offer.yes = Zaniosę.
+zadania.K15.offer.no = Nie noszę cudzych skrzyń po nocy.
+[zadania.K15.offer.accept]
+Wiedziałem, że się dogadamy. Ostrożnie na schodach.
+
+[zadania.K15.offer.decline]
+Szkoda. Znajdę kogoś mniej... wybrednego.
+
+zadania.K15.steps.0.text = Zanieś skrzynię Baltazara woźnicy Wojciechowi - czeka z wozem przed bramą południową - przed 22:30. Nie otwieraj (albo oddaj ją kapralowi Witowi).
+[zadania.K15.steps.0.early]
+Skrzynia od Veya? Postawisz ją tu o dziesiątej. Nie wcześniej.
+
+[zadania.K15.steps.0.remind]
+Czekam na towar od Veya. Ty go masz?
+
+[zadania.K15.steps.0.hero]
+> Skrzynia od Baltazara. Na wóz.
+
+[zadania.K15.steps.0.done]
+Od Veya? Postaw z tyłu, na słomie. Ja przytrzymam konie.
+
+zadania.K15.steps.0.choice.options.0.label = Postaw skrzynię na wozie.
+[zadania.K15.steps.0.choice.options.0.say]
+> (Stawiasz skrzynię na słomie.)
+Dobrze. Idź już, chłopcze. Nikt cię tu nie widział.
+
+zadania.K15.steps.0.choice.options.1.label = Najpierw zajrzyj do środka.
+[zadania.K15.steps.0.choice.options.1.say]
+> (Wojciech odwraca się do koni. Zamek pęka cicho. W słomie leżą stare kamienie z wyrytym krukiem.)
+> (Szybko zamykasz wieko i stawiasz skrzynię na wozie.)
+Co tak długo? ...Dobra. Idź już.
+
+[zadania.K15.steps.0.choice.options.1.note]
+Skrzynia Baltazara
+W skrzyni, którą Baltazar kazał nocą postawić na wozie woźnicy Wojciecha przed bramą południową, leżały w słomie stare kamienie z wyrytym krukiem.
+
+zadania.K15.steps.1.text = Odbierz zapłatę u Baltazara (kantor, 8–18).
+zadania.K15.fail.text = Wóz odjechał bez skrzyni. Baltazar nie będzie zachwycony.
+[zadania.K15.lines.wit]
+> Kapralu, Baltazar kazał mi to zanieść na wóz pod bramą południową. O tej porze.
+Skrzynia od Veya? Nocą? ...Dobrze zrobiłeś, że przyszedłeś do mnie. Ja się tym zajmę.
+
+[zadania.K15.lines.payClean]
+Skrzynia dotarła cała. Lubię ludzi, którzy nie zadają pytań. Dwadzieścia groszy, jak obiecałem.
+
+[zadania.K15.lines.payOpened]
+Zamek pęknięty. Ciekawość to piękna cecha... u kota. Dziesięć groszy i zapomnij, że mnie znasz.
+
+[zadania.K15.lines.payWit]
+Słyszałem, że lubisz kaprala. Ja też... lubiłem ciebie. Nic ci nie jestem winien, przyjacielu.
+
+# K16, „Grzyby po dwakroć”
+zadania.K16.title = Grzyby po dwakroć
+zadania.K16.where = kantor
+zadania.K16.when = dzień po promie, 8–18
+zadania.K16.desc = Dzień po promie Baltazar skupuje grzyby, jagody i wędzone mięso po podwójnej cenie - do dziesięciu sztuk. Dziwne, że bierze tylko to, co długo wytrzyma.
+[zadania.K16.lines.intro]
+Wczoraj przypłynął prom, a jutro odpływa. Skupuję grzyby, jagody i wędzone mięso. Płacę podwójnie - tylko dziś i tylko do dziesięciu sztuk.
+
+[zadania.K16.lines.none]
+Nie masz nic, co wytrzyma drogę? Szkoda. Do następnego promu, przyjacielu.
+
+[zadania.K16.lines.full]
+Na dziś mam dość. Następny prom za trzy dni.
+
+[zadania.K16.lines.sold]
+Interes zrobiony. Do następnego promu, przyjacielu.
+
+zadania.K16.lines.no = Nic nie sprzedam.
+[zadania.K16.reward.note]
+Zapasy Baltazara
+Dzień po promie Baltazar skupuje po podwójnej cenie grzyby, jagody i wędzone mięso - tylko to, co długo wytrzyma. Jakby ktoś szykował zapasy na długą drogę.
+
+# K17, „Obwieszczenie o racjach”
+zadania.K17.title = Obwieszczenie o racjach
+zadania.K17.where = ratusz → tawerna, piekarnia, kuźnia, kantor
+zadania.K17.when = 8–18
+zadania.K17.desc = Cztery obwieszczenia: woda tylko na przydział, a za kradzież deszczówki - kara. Trzeba je przybić gwoździem na tawernie, piekarni, kuźni i kantorze.
+[zadania.K17.offer.say]
+Mam tu cztery obwieszczenia. Woda tylko na przydział, a za kradzież deszczówki - kara. Trzeba je przybić: na tawernie, na piekarni, na kuźni i na kantorze.
+Gwoździe i młotek masz swoje? To dobrze, bo ratusz nie ma ani jednego, ani drugiego.
+
+zadania.K17.offer.yes = Przybiję.
+zadania.K17.offer.no = Nie teraz.
+[zadania.K17.offer.accept]
+Cztery gwoździe, cztery ściany. Ludzie będą psioczyć - nie słuchaj.
+
+[zadania.K17.offer.decline]
+To niech wiszą w ratuszu. Nikt tu nie zagląda.
+
+zadania.K17.steps.0.text = Przybij 4 obwieszczenia (1 gwóźdź i młotek na każde): ściana tawerny, piekarni, kuźni i kantoru.
+zadania.K17.steps.1.text = Wróć do sołtysa (ratusz albo rynek).
+[zadania.K17.steps.1.say]
+> Wiszą wszystkie cztery.
+Dobra robota. I co mówili?
+> Hanka pyta, czym zarobi na ciasto. Tadek klnie. Baltazar się cieszy.
+Baltazar się cieszy... Zapamiętam. Teraz przynajmniej wiem, kto jest przeciw mnie.
+
+zadania.K17.react.notice_bakery = Kara za deszczówkę? A czym ja zarobię na ciasto?
+zadania.K17.react.notice_smithy = Psiakrew! Jeszcze tego brakowało!
+zadania.K17.react.notice_kantor = Racje? Doskonale. Racje zawsze dobrze się sprzedają.
+[zadania.K17.reward.note]
+Obwieszczenie o racjach
+Przybiłem obwieszczenia sołtysa. Hanka pytała, czym zarobi na ciasto, Tadek klął, a Baltazar się ucieszył - racje zawsze dobrze się sprzedają.
+
+# K20, „Pierwsza skóra”
+zadania.K20.title = Pierwsza skóra
+zadania.K20.where = garbarnia
+zadania.K20.when = 6:30–17, po pierwszym polowaniu
+zadania.K20.desc = Ignac kupi twoją pierwszą surową skórę i pokaże, jak ciąć, żeby ścięgna nie szły na zmarnowanie.
+[zadania.K20.offer.say]
+Masz surową skórę? Pokaż... Pierwsza? Widać po cięciach.
+Kupię ją - osiem groszy. I pokażę ci, jak ciąć, żeby ścięgna nie szły na zmarnowanie.
+
+zadania.K20.offer.options.0.label = Sprzedam.
+[zadania.K20.offer.options.0.say]
+Patrz: tu, wzdłuż, a nie w poprzek. Następne trzy zwierzęta oprawisz czyściej - zobaczysz, ile ścięgien zostanie.
+
+zadania.K20.offer.options.1.label = Zostawię sobie.
+[zadania.K20.offer.options.1.say]
+Twoja skóra, twoja sprawa. Ale tniesz jak rzeźnik.
+
+# K21, „Garbnik z lasu”
+zadania.K21.title = Garbnik z lasu
+zadania.K21.where = garbarnia
+zadania.K21.when = 6:30–13, oddać do 17:00
+zadania.K21.desc = Skończył się garbnik. Dziesięć szyszek i cztery naręcza gałęzi (na korę) - przed piątą po południu, potem kadź stygnie.
+[zadania.K21.offer.say]
+Skończył mi się garbnik. Bez kory i szyszek skóra zgnije, zanim się wyprawi.
+Przynieś dziesięć szyszek i cztery naręcza gałęzi. Przed piątą po południu - potem kadź stygnie.
+
+zadania.K21.offer.yes = Przyniosę.
+zadania.K21.offer.no = Nie dziś.
+[zadania.K21.offer.accept]
+Do piątej. Las niedaleko.
+
+[zadania.K21.offer.decline]
+To jutro będzie śmierdziało bardziej niż zwykle.
+
+zadania.K21.steps.0.text = Przynieś Ignacowi 10× Szyszki i 4× Gałęzie przed 17:00 (garbarnia).
+[zadania.K21.steps.0.remind]
+Dziesięć szyszek i cztery naręcza gałęzi. Kadź stygnie.
+
+[zadania.K21.steps.0.hero]
+> Szyszki i gałęzie. Na korę.
+
+[zadania.K21.steps.0.done]
+W samą porę. Kadź jeszcze ciepła. Dzięki, chłopcze.
+
+zadania.K21.fail.text = Kadź wystygła.
+# K31, „Imieniny Lorda”
+zadania.K31.title = Imieniny Lorda
+zadania.K31.where = rynek (Feliks) → drzwi dworu
+zadania.K31.when = dzień 33, do 20:00
+zadania.K31.desc = Na imieniny Lorda każdy dom coś niesie. Lord lubi miód pitny i placek jagodowy. Dwa dzbany miodu i placek - w dniu 33, do 20:00.
+[zadania.K31.offer.say]
+W dniu trzydziestym trzecim jaśnie pan obchodzi imieniny. Każdy dom coś przynosi - taki zwyczaj. A zwyczajów pilnuję ja.
+Jaśnie pan lubi miód pitny i placek jagodowy. Dwa dzbany miodu i placek - może łaskawiej spojrzy na dług pana dziadka.
+
+zadania.K31.offer.yes = Zaniosę prezent.
+zadania.K31.offer.no = Nie stać mnie.
+[zadania.K31.offer.accept]
+Dzień trzydziesty trzeci, przed ósmą wieczorem. Do rąk jaśnie pana.
+
+[zadania.K31.offer.decline]
+Rozumiem. Jaśnie pan i tak nie liczy prezentów. Ja liczę.
+
+zadania.K31.steps.0.text = W dniu 33 (8–20) zanieś Lordowi 2× Miód pitny i 1× Placek jagodowy (drzwi dworu).
+[zadania.K31.steps.0.early]
+Imieniny są trzydziestego trzeciego. Nie wcześniej, młodzieńcze.
+
+[zadania.K31.steps.0.remind]
+Imieniny! I co, z pustymi rękami?
+
+[zadania.K31.steps.0.hero]
+> Na imieniny, panie. Miód pitny i placek z jagodami.
+
+[zadania.K31.steps.0.done]
+Miód pitny i placek! Feliks, zapisz: wnuk Stacha pamiętał.
+Przyjmij czterdzieści groszy. Albo... zapiszę je na poczet długu twojego dziadka. Wybieraj.
+
+zadania.K31.steps.0.choice.options.0.label = Wezmę pieniądze.
+[zadania.K31.steps.0.choice.options.0.say]
+Proszę. Wnuk Stacha wie, co dobre.
+
+zadania.K31.steps.0.choice.options.1.label = Zapisz na dług dziadka.
+[zadania.K31.steps.0.choice.options.1.say]
+Feliks, zapisz: czterdzieści na poczet długu. Rozsądny chłopak.
+
+zadania.K31.fail.text = Imieniny minęły bez twojego prezentu.
+# K32, „List od dziadka”
+zadania.K32.title = List od dziadka
+zadania.K32.where = dom dziadka → drzwi dworu
+zadania.K32.when = dni 5–20, Lord 8–20
+zadania.K32.desc = Dziadek prosi w liście o zwłokę w spłacie długu. Zwłoki nie będzie - ale Lord zada dziwne pytanie.
+[zadania.K32.offer.say]
+Wnuku... napisałem do Lorda. Proszę o zwłokę. Wiem, wiem - nic to nie da. Ale ojciec mnie uczył: proś, zanim zaczniesz się kłócić.
+Zaniesiesz mu ten list? Do rąk własnych.
+
+[zadania.K32.offer.accept]
+> Zaniosę, dziadku.
+Dobry z ciebie wnuk. Lord stoi przed dworem od ósmej do ósmej.
+
+zadania.K32.steps.0.text = Zanieś list dziadka Lordowi (drzwi dworu, 8–20).
+[zadania.K32.steps.0.hero]
+> List od dziadka Stacha. Do rąk własnych.
+
+[zadania.K32.steps.0.done]
+List od Stacha? (czyta) Zwłoki nie będzie. Dług to dług.
+Ale powiedz mi... na działce twojego dziadka leżą jeszcze te stare kamienie? Z wyrytym krukiem? Mój dziadek je zbierał. Ładne kamienie.
+
+[zadania.K32.reward.note]
+Lord pyta o kamienie
+Lord nie da zwłoki. Za to zapytał, czy na działce dziadka leżą jeszcze stare kamienie z wyrytym krukiem - „mój dziadek je zbierał”.
+
+# K38, „Nocna warta”
+zadania.K38.title = Nocna warta
+zadania.K38.where = brama twierdzy (górny dziedziniec)
+zadania.K38.when = 1:00–3:00, od Opinii 20
+zadania.K38.desc = Strażnik przy bramie twierdzy ma gorączkę. Postój tam od pierwszej do trzeciej w nocy i zapamiętaj, co zobaczysz.
+[zadania.K38.offer.say]
+Mój człowiek przy bramie twierdzy złapał gorączkę. Ktoś musi tam postać od pierwszej do trzeciej w nocy.
+Patrzysz, słuchasz, nic nie robisz. Jak coś zobaczysz - zapamiętaj. Piętnaście groszy.
+
+zadania.K38.offer.yes = Postoję.
+zadania.K38.offer.no = Nocą śpię.
+[zadania.K38.offer.accept]
+Posterunek przy bramie twierdzy, od strony tawerny. Pierwsza w nocy. Nie spóźnij się.
+
+[zadania.K38.offer.decline]
+Jak wszyscy.
+
+zadania.K38.steps.0.text = Stań na posterunku przy bramie twierdzy między 0:45 a 1:30 (górny dziedziniec, przed tawerną).
+[zadania.K38.steps.0.early]
+Warta zaczyna się o pierwszej w nocy.
+
+[zadania.K38.steps.0.say]
+> Zaczynam wartę. Do trzeciej.
+
+zadania.K38.steps.1.text = Pilnuj bramy twierdzy do 3:00. Nie odchodź od posterunku.
+zadania.K38.steps.2.text = Zamelduj się u kaprala Wita (obchód murów, 18–23).
+zadania.K38.fail.text = Posterunek stał pusty.
+zadania.K38.lines.fox = Lis przemknął pod murem...
+zadania.K38.lines.owl = Sowa pohukuje na wieży.
+zadania.K38.lines.kuba = Kuba? Z pustymi beczkami, o tej porze? Idzie w stronę stawu...
+zadania.K38.lines.left = Zszedłeś z posterunku przed trzecią.
+[zadania.K38.lines.reportKuba]
+> Lis, sowa... I Kuba, koło drugiej, z pustymi beczkami. Szedł w stronę stawu za tawerną.
+Kuba? ...Nie widziałeś niczego, czego ja bym nie widział. Masz piętnaście groszy. Dobrze się spisałeś.
+
+[zadania.K38.lines.reportQuiet]
+> Lis, sowa. Poza tym spokój.
+Spokój to dobra wiadomość. Masz piętnaście groszy.
+
+# K26, „Pierścionek w studni”
+zadania.K26.title = Pierścionek w studni
+zadania.K26.where = studnia na rynku → dno studni (Map118)
+zadania.K26.when = za dnia, nie w deszcz
+zadania.K26.desc = Zosia wrzuciła do studni na rynku pierścionek matki - „chciałam zobaczyć, czy plusknie”. Trzeba zejść na dno po dwóch linach (z boku studni, od wschodu).
+[zadania.K26.offer.say]
+(Zosia ma czerwone oczy.) Wrzuciłam do studni pierścionek mamy. Chciałam zobaczyć, czy plusknie... Nie pluskło.
+Mama jeszcze nie wie. Zejdziesz po niego? Tata mówi, że studnia głęboka na dwie liny.
+
+zadania.K26.offer.yes = Zejdę po niego.
+zadania.K26.offer.no = Nie teraz.
+[zadania.K26.offer.accept]
+Naprawdę? Z boku studni są kamienie, tam się wiąże linę. Tylko nie mów mamie!
+
+[zadania.K26.offer.decline]
+...Dobrze. Może sam wypłynie.
+
+zadania.K26.steps.0.text = Zejdź na dno studni na rynku (2× Lina; z boku studni, stojąc na wschód od niej) i znajdź pierścionek - za dnia, nie w deszcz.
+[zadania.K26.steps.0.early]
+Na dnie ciemno choć oko wykol. Zejdę za dnia.
+
+zadania.K26.steps.0.wet = W deszcz z szybu leje się woda - nic nie widać.
+[zadania.K26.steps.0.say]
+> (W płytkiej kałuży coś błyska. Cienki srebrny pierścionek z niebieskim oczkiem.)
+> (Nad kałużą, w ścianie, zamurowany łuk kanału. W zworniku wyryty kruk, u stóp żelazna krata.)
+> Ktoś kiedyś odciął tę studnię od kanału.
+
+[zadania.K26.steps.0.reward.note]
+Studnia odcięta
+Na dnie studni na rynku jest zamurowany łuk kanału zakonu: w zworniku kruk, u stóp żelazna krata. Ktoś kiedyś odciął tę studnię od wody spod wzgórza.
+
+zadania.K26.steps.1.text = Oddaj pierścionek Zosi (rynek, za dnia).
+[zadania.K26.steps.1.remind]
+Znalazłeś? ...Jeszcze nie?
+
+[zadania.K26.steps.1.hero]
+> Twój pierścionek. Leżał w kałuży na samym dnie.
+
+[zadania.K26.steps.1.done]
+Pierścionek mamy! Dziękuję, dziękuję! ...Nie mów jej, dobrze? To będzie nasza tajemnica.
+A co tam było, na dole? Smoki? Nie? Szkoda.
+
+# K37, „Sakiewka Lorda”
+zadania.K37.title = Sakiewka Lorda
+zadania.K37.where = rynek → taras rzemieślników
+zadania.K37.when = dzień targowy, 8:30–10:30
+zadania.K37.desc = W dzień targowy złodziejaszek odciął Feliksowi sakiewkę dworu - pieniądze jaśnie pana - i ucieka schodami w dół, na taras rzemieślników. Dogoń go (bieg: Shift).
+zadania.K37.steps.0.text = Dogoń złodziejaszka! Ucieka schodami w dół, na taras rzemieślników (bieg: Shift).
+zadania.K37.steps.1.text = Złapałeś złodziejaszka. Porozmawiaj z nim - co z nim zrobisz?
+zadania.K37.steps.2.text = Oddaj sakiewkę Feliksowi (rynek, rano 7–10:30).
+[zadania.K37.steps.2.hero]
+> Sakiewka dworu. Złodziejaszek już jej nie ma.
+
+[zadania.K37.steps.2.done]
+Sakiewka! Cała? (liczy) Cała. Jaśnie pan się dowie, kto mu ją oddał.
+Pięćdziesiąt na poczet długu pana dziadka - z wdzięczności dworu. Zapiszę.
+
+zadania.K37.fail.text = Złodziejaszek zniknął między namiotami pod murem.
+zadania.K37.lines.shout = Złodziej! Sakiewka jaśnie pana! Łapać go!
+zadania.K37.lines.run = Z drogi!
+[zadania.K37.lines.look]
+Nie dogonisz!
+Hehe!
+Bosy mnie goni?!
+
+zadania.K37.lines.caught = Puść! Puść, nic nie zrobiłem!
+[zadania.K37.lines.giveBack]
+(Szymek oddaje sakiewkę i patrzy w ziemię.) Masz. I tak by mnie złapali.
+
+[zadania.K37.lines.free]
+> Uciekaj. I więcej nie kradnij.
+(Szymek patrzy na ciebie, jakby nie wierzył.) ...Dziękuję. Nie zapomnę ci tego. Nigdy.
+
+[zadania.K37.lines.keep]
+> Sakiewka zostaje u mnie. A ty zmykaj.
+(Szymek otwiera usta, zamyka je - i ucieka.)
+
+zadania.K37.lines.gone = Złodziejaszek wykorzystał chwilę i uciekł.
+[zadania.K37.lines.noteFree]
+Szymek z obozu
+Złodziejaszek, który odciął sakiewkę dworu, to Szymek - głodny chłopak z obozu pod murem. Puściłem go. Ludzie z obozu tego nie zapomną.
+
+[zadania.K37.lines.noteKeep]
+Sakiewka dworu
+Zatrzymałem sakiewkę dworu, którą odebrałem złodziejaszkowi. Osiemdziesiąt groszy.
+
+# K39, „Kości z targu”
+zadania.K39.title = Kości z targu
+zadania.K39.where = tawerna (Bartek) → stragan na rynku (Lucjan)
+zadania.K39.when = dzień targowy, 10–14
+zadania.K39.desc = Bartek Kmieć przegrał na targu wszystko z wędrownym graczem, Lucjanem Kością: „ma szczęście jak diabeł”. Zagraj z Lucjanem i wypatrz, kiedy podmienia kość (Czujność 10+).
+[zadania.K39.offer.say]
+Przegrałem wszystko. Wszystko! Jęczmień z całego pola, a potem jeszcze grosze na mąkę.
+Na targu siedzi taki jeden, Lucjan Kość. Ma szczęście jak diabeł - siedem szóstek z rzędu! Ty masz bystre oczy. Zagraj z nim i patrz mu na ręce.
+
+zadania.K39.offer.yes = Zagram z nim i popatrzę.
+zadania.K39.offer.no = Hazard to nie dla mnie.
+[zadania.K39.offer.accept]
+W dzień targowy, przed południem, przy straganie z prawej. Tylko nie przegraj wszystkiego jak ja.
+
+[zadania.K39.offer.decline]
+Mądry. Mądrzejszy ode mnie.
+
+zadania.K39.steps.0.text = Zagraj w kości z Lucjanem Kością (rynek, przy prawym straganie; w dzień targowy 10–14) i patrz mu na ręce. Bez Czujności 10 nic nie zobaczysz.
+zadania.K39.steps.1.text = Widziałeś, jak Lucjan podmienia kość. Powiedz mu, co o tym myślisz (rynek, w dzień targowy 10–14).
+zadania.K39.steps.2.text = Wróć do Bartka (tawerna, 14–21).
+[zadania.K39.steps.2.say]
+> Lucjan grał oszukaną kością. Wyrzuciłem go z targu.
+Oszukaną?! Wiedziałem! ...To znaczy, nie wiedziałem, ale czułem.
+Masz. Pięć groszy. Ostatnie, jakie mam, ale są twoje. Uczciwie.
+
+[zadania.K39.lines.play]
+Kości, mój drogi? Pięć groszy za partię. Gramy do tysiąca pięciuset.
+
+[zadania.K39.lines.playNo]
+Szczęście nie lubi czekać.
+
+[zadania.K39.lines.spotted]
+> (Teraz! Sięgając po kubek, Lucjan zgarnął jedną kość rękawem - a na stół wróciła inna, cięższa.)
+> Podmienia kość. Szczęście jak diabeł... z rękawa.
+
+[zadania.K39.lines.notSpotted]
+> (Szczęście jak diabeł... Patrzyłem mu na ręce, ale nic nie widać.)
+> (Ktoś bystrzejszy może by coś zauważył. Czujność 10.)
+
+[zadania.K39.lines.out]
+> Ludzie! Ten człowiek gra oszukaną kością! Zobaczcie jego rękaw!
+(Na targu robi się gwar. Lucjan zgarnia kości i znika za bramą południową, zanim ktoś zawoła straż.)
+
+[zadania.K39.lines.share]
+Rozsądny człowiek! Dziesięć groszy - proszę. Miło robić z panem interesy.
+
+[zadania.K39.lines.later]
+Pomyśl, mój drogi. Pomyśl.
+
+[zadania.K39.lines.noteOut]
+Kości z targu
+Lucjan Kość, wędrowny gracz z targu, podmieniał kość - wyciągał z rękawa cięższą. Zdemaskowałem go przy ludziach i uciekł z miasta.
+
+[zadania.K39.lines.noteShare]
+Kości z targu
+Lucjan Kość gra oszukaną kością. Wziąłem od niego dziesięć groszy i milczę.
+
+# K19, „Spis obozu”
+zadania.K19.title = Spis obozu
+zadania.K19.where = ratusz → obóz pod murem
+zadania.K19.when = od dnia 10, za dnia
+zadania.K19.desc = Pod murem śpią ludzie z promu. Sołtys liczy racje wody na głowy - policz ich. Ktoś poprosi, żebyś go nie liczył.
+[zadania.K19.offer.say]
+Pod murem, przy stogach, śpią ludzie z promu. Muszę wiedzieć ilu - racje wody liczę na głowy.
+Policz ich. Porozmawiaj z każdym, żebym potem nie słyszał, że kogoś pominąłem.
+
+zadania.K19.offer.yes = Policzę.
+zadania.K19.offer.no = Nie teraz.
+[zadania.K19.offer.accept]
+Pod murem na tarasie rzemieślników. Rano albo wieczorem ich zastaniesz.
+
+[zadania.K19.offer.decline]
+To policzę na oko. Jak zawsze.
+
+zadania.K19.steps.0.text = Porozmawiaj z każdym w obozie pod murem: Ludmiła, Ela i... ktoś jeszcze (Rafał wychodzi tylko o świcie i późnym wieczorem). Policzeni: {n}/3.
+zadania.K19.steps.1.text = Powiedz sołtysowi, ilu ludzi jest w obozie.
+[zadania.K19.steps.1.say]
+Policzyłeś? No, mów. Ilu?
+
+zadania.K19.steps.1.choice.options.0.label = Troje: kobieta, dziecko i mężczyzna.
+[zadania.K19.steps.1.choice.options.0.say]
+Troje. Mężczyzna? Kapral będzie chciał wiedzieć, kto to. Dziękuję, spisałem.
+
+zadania.K19.steps.1.choice.options.1.label = Dwoje: matka z córką.
+[zadania.K19.steps.1.choice.options.1.say]
+Dwoje. Dobrze, łatwiej o wodę dla dwojga. Dziękuję.
+
+[zadania.K19.lines.ludmila]
+> Sołtys liczy ludzi w obozie. Na racje wody.
+Ludmiła. I córka, Ela. Dwie. Napisz, że dwie... i że Ela pije mało. Bardzo mało.
+
+[zadania.K19.lines.ela]
+> A ty jak masz na imię?
+Ela. Mam sześć lat. I konika. To znaczy... miałam.
+
+[zadania.K19.lines.rafal]
+> Sołtys liczy ludzi w obozie.
+Nie licz mnie. Proszę. Mnie tu nie ma. Jak kapral zobaczy moje imię na liście... na kontynencie wieszają za mniej.
+
+[zadania.K19.lines.rafalYes]
+...Dziękuję. Nie zapomnę.
+
+[zadania.K19.lines.rafalNo]
+Rozumiem. Każdy robi, co musi. Ja też.
+
+# K27, „Konik dla Eli”
+zadania.K27.title = Konik dla Eli
+zadania.K27.where = obóz pod murem
+zadania.K27.when = rano i wieczorem
+zadania.K27.desc = Od przeprawy Ela nie śpi. Jej drewniany konik został w spalonej chacie na kontynencie. Kawałek drewna i nóż - może zaśnie.
+[zadania.K27.offer.say]
+Od przeprawy Ela nie śpi. Budzi się z krzykiem. W domu miała drewnianego konika... został w spalonej chacie.
+Umiesz strugać? Kawałek drewna i nóż. Może by zasnęła.
+
+zadania.K27.offer.yes = Wystrugam jej konika.
+zadania.K27.offer.no = Nie umiem strugać.
+[zadania.K27.offer.accept]
+Dziękuję... Ela kocha konie. Tata obiecał jej prawdziwego.
+
+[zadania.K27.offer.decline]
+Rozumiem. Każdy ma swoje kłopoty.
+
+zadania.K27.steps.0.text = Wystrugaj Eli konika: 1× Drewno i nóż (kamienny albo żelazny). Daj go Eli (obóz pod murem, rano i wieczorem). Albo poproś Melię, żeby zaśpiewała Eli kołysankę pod murem (tawerna, 17–21).
+[zadania.K27.steps.0.remind]
+...?
+
+[zadania.K27.steps.0.hero]
+> (Strugasz z polana konika. Krzywy, ale ma grzywę i cztery nogi.) Proszę. To dla ciebie.
+
+[zadania.K27.steps.0.done]
+Konik! ...Ma na imię Wiatr. Tak jak tamten.
+@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają. Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział.
+
+[zadania.K27.reward.note]
+Konik dla Eli
+Wystrugałem Eli konika. Ludmiła: „Tam, skąd uciekamy, wszyscy szukają serca skały. Ludzie giną za coś, czego nikt nie widział.”
+
+[zadania.K27.lines.meliaAsk]
+> Melio... Pod murem jest dziewczynka, Ela. Od przeprawy nie śpi. Zaśpiewałabyś jej?
+Dziecku, które nie śpi? (Melia już sięga po lutnię.) Pójdę.
+Ale dziś wieczorem scena w tawernie będzie pusta - Borgar mi tego nie daruje. Trudno.
+
+[zadania.K27.lines.meliaGone]
+> (Melia owija lutnię chustą i wychodzi w stronę muru.)
+
+[zadania.K27.lines.morning]
+> Słyszałem, że Melia była tu wieczorem.
+Była. Śpiewała Eli, aż mała zasnęła. Pierwszy raz od przeprawy przespała całą noc.
+@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają.
+@ludmila: Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział.
+
+# K28, „Kocioł dla obozu”
+zadania.K28.title = Kocioł dla obozu
+zadania.K28.where = obóz pod murem
+zadania.K28.when = rano i wieczorem; zimą liczy się podwójnie
+zadania.K28.desc = W obozie jedzą raz na dwa dni. Ugotuj w kociołku coś gorącego - kapuśniak, gulasz albo zupę grzybową - dwie porcje.
+[zadania.K28.offer.say]
+Jemy raz na dwa dni. Rafał przynosi, co znajdzie, ale... Ela rośnie.
+Gdybyś ugotował coś ciepłego - kapuśniak, gulasz, zupę - dwie porcje. Starczy nam na dwa dni.
+
+zadania.K28.offer.yes = Ugotuję.
+zadania.K28.offer.no = Sam ledwo mam co jeść.
+[zadania.K28.offer.accept]
+Niech Bóg ci to wynagrodzi. Ja nie mam czym.
+
+[zadania.K28.offer.decline]
+Rozumiem. Naprawdę.
+
+zadania.K28.steps.0.text = Przynieś Ludmile 2 porcje gorącej zupy z kociołka: Kapuśniak, Gulasz albo Zupa grzybowa (obóz pod murem).
+[zadania.K28.steps.0.remind]
+Nic, nic... Ela już zjadła kromkę od pani Hanki.
+
+[zadania.K28.steps.0.hero]
+> Gorące. Z kociołka. Dwie porcje.
+
+[zadania.K28.steps.0.done]
+Ciepłe! Ela, chodź, jedz powoli... Dziękuję ci. Nie zapomnę.
+
+# K29, „Rana Rafała”
+zadania.K29.title = Rana Rafała
+zadania.K29.where = ulica rzemieślników
+zadania.K29.when = o świcie (4:30–6:30) albo późnym wieczorem (21–23:30)
+zadania.K29.desc = Rafał ukrywa ranę po strzale. Załóż mu opatrunek - tak, żeby nie widział tego kapral Wit, który obchodzi mury do jedenastej.
+[zadania.K29.offer.say]
+Nie patrz tak. ...Dobra. Patrz. (Rafał odsłania ramię - zaogniona rana po strzale.)
+Opatrzysz? Tylko po cichu. Kapral chodzi tędy wieczorem. Jak mnie zobaczy z raną od strzały... na kontynencie wieszają za mniej.
+
+zadania.K29.offer.yes = Przyniosę opatrunek.
+zadania.K29.offer.no = Nie mieszam się.
+[zadania.K29.offer.accept]
+...Dzięki. Będę tu, o świcie albo późnym wieczorem. Nikomu ani słowa.
+
+[zadania.K29.offer.decline]
+Mądrze. Ja bym się nie mieszał.
+
+zadania.K29.steps.0.text = Załóż Rafałowi opatrunek (1× Opatrunek) - o świcie albo późnym wieczorem, kiedy kaprala Wita nie ma w pobliżu.
+[zadania.K29.steps.0.remind]
+Opatrunek. Ziołowy. Sam nie zrobię - nie mam czym.
+
+[zadania.K29.steps.0.hero]
+> Pokaż ramię. Tylko nie krzycz.
+
+[zadania.K29.steps.0.done]
+(Zakładasz opatrunek. Rafał zaciska zęby.)
+...Dziękuję. Nie wiem, czemu to robisz. Ale dziękuję.
+
+[zadania.K29.reward.note]
+Rana Rafała
+Rafał ma ranę po strzale i ukrywa się przed kapralem Witem - na kontynencie wieszają dezerterów. Opatrzyłem go po cichu.
+
+# K30, „Koszyki dla dworu”
+zadania.K30.title = Koszyki dla dworu
+zadania.K30.where = stragany → drzwi dworu
+zadania.K30.when = dni targowe, 7–9
+zadania.K30.desc = Feliks robi zakupy dla dworu i nie da rady wszystkiego unieść. Trzy ciężkie koszyki do rąk Lorda przed dziewiątą.
+[zadania.K30.offer.say]
+Dzień targowy, a ja mam tylko dwie ręce. Trzy koszyki na śniadanie jaśnie pana.
+Zaniesie je pan do dworu? Przed dziewiątą - jaśnie pan stoi przed drzwiami od ósmej. Zapłacę. Pięć groszy do ręki, pięć na poczet długu.
+
+zadania.K30.offer.yes = Zaniosę.
+zadania.K30.offer.no = Nie dziś.
+[zadania.K30.offer.accept]
+Ostrożnie, w tym są jajka. Do rąk jaśnie pana.
+
+[zadania.K30.offer.decline]
+Trudno. Poniosę na raty.
+
+zadania.K30.steps.0.text = Zanieś Lordowi 3 koszyki od Feliksa przed 9:00 (drzwi dworu; Lord stoi przed nimi od 8:00). Są ciężkie.
+[zadania.K30.steps.0.hero]
+> Koszyki od Feliksa, panie. Na śniadanie.
+
+[zadania.K30.steps.0.done]
+Koszyki od Feliksa? Postaw tu. ...Wnuk Stacha nosi koszyki dla dworu. Twój dziadek też kiedyś nosił. Feliks, zapisz pięć na dług.
+
+zadania.K30.fail.text = Śniadanie jaśnie pana wystygło.
+# K40, „Woda na pranie”
+zadania.K40.title = Woda na pranie
+zadania.K40.where = Podgrodzie, sznury z praniem
+zadania.K40.when = 5–17, od dnia 2
+zadania.K40.desc = Marta nosi wodę z miasta, z przydziału przy studni - dwa wiadra na dzień to za mało na prześcieradła z dworu. Prosi o dwie porcje twojej deszczówki.
+[zadania.K40.offer.say]
+Prześcieradła z dworu... Feliks chce je na jutro, a ja z przydziału mam ledwie na namoczenie.
+Masz może deszczówkę? Dwie porcje starczyłyby mi na płukanie. Zapłacę, ile mogę.
+
+zadania.K40.offer.yes = Przyniosę deszczówkę.
+zadania.K40.offer.no = Sam mam mało.
+[zadania.K40.offer.accept]
+Niech ci Bóg wynagrodzi. Będę przy sznurach.
+
+[zadania.K40.offer.decline]
+Rozumiem. Każdy liczy każdą kroplę.
+
+zadania.K40.steps.0.text = Daj Marcie 2 porcje swojej deszczówki (wiadro albo bukłak; Podgrodzie, przy praniu).
+[zadania.K40.steps.0.remind]
+Dwie porcje, kochaneczku. Choćby z bukłaka.
+
+[zadania.K40.steps.0.hero]
+> Masz. Dwie porcje deszczówki.
+
+[zadania.K40.steps.0.done]
+Czysta jak łza... Dworskie prześcieradła będą białe. Masz, weź te grosze. I przynieś mi kiedyś tę podartą koszulę - zaceruję.
+
+# K41, „Zioła dla babki Jadwigi”
+zadania.K41.title = Zioła dla babki Jadwigi
+zadania.K41.where = Podgrodzie, ogródek ziół
+zadania.K41.when = 6–18
+zadania.K41.desc = Babka Jadwiga robi opatrunki dla całego Podgrodzia, a krwawnik w jej ogródku zżółkł od suszy.
+[zadania.K41.offer.say]
+Krwawnik mi uschnął, dziecko. A ludzie się ranią - przy drewnie, przy sidłach, przy murze.
+Przynieś mi trzy krwawniki i dwie pokrzywy z łąki. Zrobię opatrunki - i tobie dam.
+
+zadania.K41.offer.yes = Nazbieram.
+zadania.K41.offer.no = Nie teraz, babciu.
+[zadania.K41.offer.accept]
+Krwawnik ma białe baldachy, pokrzywa parzy. Nie pomylisz.
+
+[zadania.K41.offer.decline]
+Idź z Bogiem.
+
+zadania.K41.steps.0.text = Przynieś babce Jadwidze 3× Krwawnik i 2× Pokrzywa (Podgrodzie).
+[zadania.K41.steps.0.remind]
+Trzy krwawniki, dwie pokrzywy. Stara Jadwiga nie zapomina.
+
+[zadania.K41.steps.0.hero]
+> Zioła, babciu. Jak prosiłaś.
+
+[zadania.K41.steps.0.done]
+Piękne, świeże! Masz - dwa opatrunki. Przyłóż na ranę, zawiąż mocno. I nie dziękuj, tylko uważaj na siebie.
+
+# K42, „Kram Józka”
+zadania.K42.title = Kram Józka
+zadania.K42.where = Podgrodzie, kram starzyzny
+zadania.K42.when = 7–20
+zadania.K42.desc = Daszek nad kramem Józka się zapada. Potrzeba desek, gwoździ i młotka.
+[zadania.K42.offer.say]
+Widzisz ten daszek? Jeszcze jeden wiatr i cała starzyzna wyląduje w błocie. A starzyzna w błocie to już nie starzyzna, tylko błoto.
+Dwie deski, cztery gwoździe i młotek. Zbijesz? Zapłacę - i dam ci coś z kramu. Coś dobrego!
+
+zadania.K42.offer.yes = Zbiję.
+zadania.K42.offer.no = Nie teraz.
+[zadania.K42.offer.accept]
+Wiedziałem, że masz dobre ręce! Dobre ręce poznaję od razu.
+
+[zadania.K42.offer.decline]
+Szkoda. Daszek też szkoda.
+
+zadania.K42.steps.0.text = Przynieś Józkowi 2× Deski i 4× Gwoździe i zbij daszek młotkiem (kram starzyzny).
+[zadania.K42.steps.0.remind]
+Deski, gwoździe, młotek. Daszek czeka. Ja też.
+
+[zadania.K42.steps.0.hero]
+> Deski, gwoździe. I młotek. Przytrzymaj.
+
+[zadania.K42.steps.0.done]
+Stoi! Jak nowy! No, prawie jak nowy. Masz, dwie liny - mocne, z portu. Prawie nieużywane.
+
+# K43, „Drewno na ognisko”
+zadania.K43.title = Drewno na ognisko
+zadania.K43.where = Podgrodzie, obóz uchodźców
+zadania.K43.when = 17–22
+zadania.K43.desc = Ognisko w obozie uchodźców przygasa, a w nocy przy murze zimno. Darin prosi o drewno.
+[zadania.K43.offer.say]
+Ogień nam przygasa. W nocy przy murze jest zimno, a dzieci śpią pod gołym niebem.
+Sześć polan wystarczy do świtu. Nie mam czym zapłacić... ale mogę ci coś opowiedzieć. O kontynencie.
+
+zadania.K43.offer.yes = Przyniosę drewno.
+zadania.K43.offer.no = Nie dziś.
+[zadania.K43.offer.accept]
+Dziękuję, wyspiarzu.
+
+[zadania.K43.offer.decline]
+Rozumiem. Każdy ma swoje ognisko.
+
+zadania.K43.steps.0.text = Przynieś Darinowi 6× Drewno na ognisko (obóz uchodźców w Podgrodziu).
+[zadania.K43.steps.0.remind]
+Sześć polan, dobrze? Ogień czeka.
+
+[zadania.K43.steps.0.hero]
+> Drewno. Sześć polan.
+
+[zadania.K43.steps.0.done]
+Ogień do świtu! Siadaj.
+W Varnhel na kontynencie każdy król chce Serca. Mówią, że jest pod jakąś twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Nikt nie wie, pod którą.
+> Pod twierdzą na wyspie...?
+Tak mówili oficerowie. Dlatego tu przypływają statki z ludźmi, którzy nie wyglądają na uchodźców.
+
+[zadania.K43.reward.note]
+Opowieść Darina
+Darin słyszał od oficerów na kontynencie, że Serce, o które walczą królowie, leży pod twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Tawerna stoi na dawnym zamku...
+
+# K44, „Lina dla Zbycha”
+zadania.K44.title = Lina dla Zbycha
+zadania.K44.where = Podgrodzie, drewutnia
+zadania.K44.when = 15–21
+zadania.K44.desc = Zbychowi pękła lina do wiązania drewna, a nowej nie ma za co kupić.
+[zadania.K44.offer.say]
+Pękła mi lina. Drewno wiążę teraz łykiem i rozłazi się po drodze.
+Dwie liny, chłopcze. Za to dostaniesz węgiel z mielerza - kowal płaci za taki uczciwie.
+
+zadania.K44.offer.yes = Przyniosę liny.
+zadania.K44.offer.no = Nie teraz.
+[zadania.K44.offer.accept]
+Dobrze. Rąbię do zmroku.
+
+[zadania.K44.offer.decline]
+Ech. To jeszcze trochę łyka.
+
+zadania.K44.steps.0.text = Przynieś Zbychowi 2× Lina (drewutnia w Podgrodziu).
+[zadania.K44.steps.0.remind]
+Dwie liny. Łyko już się kończy.
+
+[zadania.K44.steps.0.hero]
+> Liny. Dwie.
+
+[zadania.K44.steps.0.done]
+Mocne! Masz, trzy worki węgla. Z mojego mielerza, najlepszy w okolicy.
+
+# K45, „Włókno na pętle”
+zadania.K45.title = Włókno na pętle
+zadania.K45.where = Podgrodzie
+zadania.K45.when = 13–20
+zadania.K45.desc = Rysiek robi pętle na zające z włókna lnu, bo drutu nikt mu nie sprzeda.
+[zadania.K45.offer.say]
+Psst. Potrzebuję włókna. Sześć garści. Na pętle.
+Nie pytaj, na co pętle. Przyniesiesz - podzielę się tym, co w nie wpadnie.
+
+zadania.K45.offer.yes = Przyniosę włókno.
+zadania.K45.offer.no = Nie chcę mieć z tym nic wspólnego.
+[zadania.K45.offer.accept]
+Mądry chłopak. I cichy, mam nadzieję.
+
+[zadania.K45.offer.decline]
+Jak chcesz. Ale głodny będziesz ty, nie ja.
+
+zadania.K45.steps.0.text = Przynieś Ryśkowi 6× Włókno na pętle (Podgrodzie).
+[zadania.K45.steps.0.remind]
+Sześć garści włókna. Ciszej mów.
+
+[zadania.K45.steps.0.hero]
+> Włókno. Sześć garści.
+
+[zadania.K45.steps.0.done]
+Dobre włókno. Masz, dwa zające z wczorajszej nocy. I rada za darmo: pusta pętla nic nie złapie. Zawsze daj przynętę.
+
+[zadania.K45.reward.note]
+Rada Ryśka
+Rysiek: „Pusta pętla nic nie złapie. Zawsze daj przynętę.” Sidła łapią tylko z przynętą.
+
+# K46, „Suchar dla Franka”
+zadania.K46.title = Suchar dla Franka
+zadania.K46.where = Podgrodzie
+zadania.K46.when = 7–19
+zadania.K46.desc = Franek od rana nic nie jadł, a mama pierze do wieczora.
+[zadania.K46.offer.say]
+Masz coś do jedzenia? Mama pierze, a ja od rana nic... Choćby kawałek chleba.
+
+zadania.K46.offer.yes = Przyniosę ci chleb.
+zadania.K46.offer.no = Nie mam nic.
+[zadania.K46.offer.accept]
+Naprawdę? Będę tu! Albo tam. Gdzieś będę!
+
+[zadania.K46.offer.decline]
+Aha...
+
+zadania.K46.steps.0.text = Przynieś Frankowi 1× Chleb (Podgrodzie).
+[zadania.K46.steps.0.remind]
+Chleb? Masz już?
+
+[zadania.K46.steps.0.hero]
+> Masz. Cały bochenek.
+
+[zadania.K46.steps.0.done]
+Cały?! ...Dziękuję!
+Wiesz co? Powiem ci tajemnicę. Kuba woziwoda wyjeżdża po pierwszej w nocy z pustymi beczkami, a przed świtem wraca z pełnymi. Widziałem z dachu!
+
+[zadania.K46.reward.note]
+Tajemnica Franka
+Franek widział z dachu: Kuba woziwoda wyjeżdża po pierwszej w nocy z pustymi beczkami, a przed świtem wraca z pełnymi.
+
+# K22, „Struna dla Melii”
+zadania.K22.title = Struna dla Melii
+zadania.K22.where = tawerna (Melia) → garbarnia (Ignac) → tawerna
+zadania.K22.when = 10–17, oddać przed 18:00
+zadania.K22.desc = W lutni Melii pękła najcieńsza struna. Ignac skręci nową ze ścięgien. Jeśli zdążysz przed szóstą wieczorem, Melia zaśpiewa zwrotkę, której nikt jeszcze nie słyszał.
+[zadania.K22.offer.say]
+Słyszałeś to? Brzdęk - i cisza. Pękła mi struna, ta najcieńsza, co śpiewa najwyżej. Bez niej każda ballada kuleje jak koń bez podkowy.
+Dobrą strunę skręca się ze ścięgien. Garbarz Ignac to umie, tylko trzeba mu dać materiał.
+Zdążysz przed szóstą? O szóstej wychodzę na scenę.
+
+zadania.K22.offer.yes = Zdobędę ścięgna dla Ignaca.
+zadania.K22.offer.no = Nie teraz.
+[zadania.K22.offer.accept]
+Dwa ścięgna, czyste, bez tłuszczu. Ignac siedzi w garbarni na tarasie rzemieślników. Pospiesz się, złotko!
+
+[zadania.K22.offer.decline]
+Trudno. Zagram na pięciu. Ludzie i tak słuchają słów, nie strun.
+
+zadania.K22.steps.0.text = Zdobądź 2× Ścięgna (z oprawiania zwierzyny) i zanieś je Ignacowi (garbarnia, 6:30–17). Melia czeka do 18:00.
+[zadania.K22.steps.0.remind]
+Ścięgna na strunę? Dwa, chłopcze. Jedno to nie struna, tylko sznurowadło.
+
+[zadania.K22.steps.0.hero]
+> Melia z tawerny potrzebuje struny do lutni. Mam dwa ścięgna.
+
+[zadania.K22.steps.0.done]
+Dla Melii? Dla niej zrobię. Namoczyć, rozczesać, skręcić, wysuszyć... Daj mi godzinę.
+
+zadania.K22.steps.1.text = Ignac skręca strunę. Odbierz ją od niego po godzinie (garbarnia, potem ulica rzemieślników albo tawerna).
+zadania.K22.steps.2.text = Zanieś strunę Melii (tawerna). Przed 18:00 tego samego dnia zaśpiewa nową zwrotkę.
+[zadania.K22.lines.twisting]
+Jeszcze schnie. Struna to nie chleb - na szybko nie wyjdzie. Wróć za chwilę.
+
+[zadania.K22.lines.string]
+Proszę. Struna jak się patrzy - śpiewa, aż ucho boli. Za robotę nic nie chcę. Niech Melia zaśpiewa kiedyś coś dla mnie. Coś wesołego.
+
+[zadania.K22.lines.hero]
+> Twoja struna, Melio. Od Ignaca, ze ścięgien.
+
+[zadania.K22.lines.onTime]
+Struna! I to jaka... (Melia nawleka ją, stroi, szarpie raz i drugi.) Słyszysz? Śpiewa wyżej niż ja.
+Coś mi przyszło do głowy. Właśnie teraz, przy tej strunie. Posłuchaj - tego nikt jeszcze nie słyszał. Ja też nie.
+
+[zadania.K22.lines.after]
+Skąd ja to wzięłam? Nie wiem. Przyszło razem ze struną. Masz, piętnaście groszy - i natchnienie w prezencie. Zasłużyłeś.
+
+# K33, „Czapka Ozzy'ego”
+zadania.K33.title = Czapka Ozzy'ego
+zadania.K33.where = tawerna → furtka ogrodu rycerzy (na lewo od tawerny)
+zadania.K33.when = wieczorem
+zadania.K33.desc = Ozzy zgubił czapkę i twierdzi, że leży na głowie rycerza - tego bez nosa - w zamkniętym ogrodzie za murem. Leży. Skąd on to wie?
+[zadania.K33.offer.say]
+Czapka! Moja czapka! Ktoś mi ją ukradł... albo sam zgubiłem. Jedno z dwojga. *hep*
+Wiem, gdzie jest. Leży na głowie rycerza. Tego bez nosa. Za murem, w ogrodzie, gdzie nikt nie chodzi. Skąd wiem? Wiem i już.
+Przyniesiesz? Stawiam piwo. Prawdziwe, nie to, co Borgar leje gościom.
+
+zadania.K33.offer.yes = Przyniosę ci czapkę.
+zadania.K33.offer.no = Wyśpij się, dziadku.
+[zadania.K33.offer.accept]
+Furtka zamknięta, krata gęsta... ale ty masz ręce. I procę, co? Rycerz nie obrazi się za jeden kamyk. *hep*
+
+[zadania.K33.offer.decline]
+Śpij, śpij... Czapka poczeka. Rycerzowi i tak w niej ciepło.
+
+zadania.K33.steps.0.text = Strąć czapkę Ozzy'ego z głowy lewego posągu w ogrodzie rycerzy (furtka na lewo od tawerny). Furtka zamknięta - strzel przez kratę z procy albo łuku: stań przed furtką na wprost lewego posągu, przytrzymaj F, aż kółko się zwęży, i puść.
+zadania.K33.steps.1.text = Czapka spadła tuż za kratę furtki. Sięgnij po nią przez pręty (O przed furtką).
+zadania.K33.steps.2.text = Oddaj czapkę Dziadkowi Ozzy'emu (tawerna).
+[zadania.K33.steps.2.hero]
+> Twoja czapka, dziadku. Leżała na głowie rycerza. Tego... bez nosa.
+
+[zadania.K33.steps.2.done]
+Moja czapeczka! (Ozzy wkłada ją tyłem na przód.) Mówiłem? Mówiłem!
+> Skąd wiedziałeś, że tam leży? Furtka jest zamknięta na klucz.
+(Ozzy przestaje się uśmiechać. Przez chwilę patrzy na ciebie całkiem trzeźwo.) Widziałem. Tak jak widzę, że ty...
+*hep* Eee tam. Piwo! Stawiam piwo, jak obiecałem!
+
+[zadania.K33.reward.note]
+Czapka Ozzy'ego
+Czapka Ozzy'ego leżała na głowie posągu w zamkniętym ogrodzie rycerzy - dokładnie tam, gdzie mówił. Strąciłem ją przez kratę furtki. Ozzy od dawna nie wychodzi z tawerny. Skąd wiedział?
+
+[zadania.K33.lines.hit]
+> (Trafiony! Czapka spada z głowy rycerza, toczy się po ścieżce... i zatrzymuje tuż za kratą furtki.)
+
+[zadania.K33.lines.pick]
+> (Kucasz przy furtce i sięgasz ręką między pręty. Jeszcze kawałek... Jest!)
+> (Stara, filcowa, łatana. Pachnie piwem i dymem. Czapka Ozzy'ego.)
+
+# K47, „Pierwszy połów”
+zadania.K47.title = Pierwszy połów
+zadania.K47.where = Przystań, pomost rybacki
+zadania.K47.when = 8–20
+zadania.K47.desc = Janek uczy łowić w morzu: dwa śledzie z pomostu, a potem patroszenie.
+[zadania.K47.offer.say]
+Chcesz się nauczyć łowić w morzu? Morska ryba to nie ta ze stawu. Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie.
+Złów dwa śledzie z pomostu i przynieś mi. Pokażę ci, jak się je patroszy.
+
+zadania.K47.offer.options.0.label = Spróbuję. Wędkę mam.
+[zadania.K47.offer.options.0.say]
+To dobrze. Koniec pomostu, spławik na fali. I cierpliwość.
+
+zadania.K47.offer.options.1.label = Nie mam wędki.
+[zadania.K47.offer.options.1.say]
+Masz moją starą. Kij nie najprostszy, ale ryba tego nie wie.
+
+zadania.K47.offer.options.2.label = Nie teraz.
+[zadania.K47.offer.options.2.say]
+Morze poczeka. Ono zawsze czeka.
+
+zadania.K47.steps.0.text = Złów w morzu 2 śledzie (z pomostu albo z brzegu przystani) i przynieś je Jankowi.
+[zadania.K47.steps.0.remind]
+Dwa śledzie. Najlepiej biorą o świcie i o zmierzchu. I morskiej wody nie pij, choćby nie wiem co.
+
+[zadania.K47.steps.0.hero]
+> Dwa śledzie, jak chciałeś.
+
+[zadania.K47.steps.0.done]
+No proszę! Pierwsze śledzie. Patrz: nóż tu, pod skrzela, jednym ruchem... O tak.
+Te zostaw mnie, a masz wędzonkę. I radę: dorsza szukaj przy dnie, zarzucaj daleko.
+
+[zadania.K47.reward.note]
+Rybacka rada Janka
+Janek: „Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie i bierze rzadziej, ale jest tłustszy. Morskiej wody nie pij.” Na przystani ryby biorą mi teraz trochę lepiej.
+
+# K48, „Sieci po sztormie”
+zadania.K48.title = Sieci po sztormie
+zadania.K48.where = Przystań
+zadania.K48.when = 9–20, po „Pierwszym połowie”
+zadania.K48.desc = Sztorm, który przyniósł bohatera, porwał Jankowi sieci.
+[zadania.K48.offer.cond.done]
+K47
+
+[zadania.K48.offer.say]
+Ten sztorm, co i ciebie przyniósł, porwał mi sieci na strzępy. Łatam, łatam, a dziur coraz więcej.
+Sześć garści włókna i dwie liny. Załatam i znowu pójdą w morze.
+
+zadania.K48.offer.yes = Przyniosę.
+zadania.K48.offer.no = Nie teraz.
+[zadania.K48.offer.accept]
+Dobry z ciebie chłopak. Stach może być dumny.
+
+[zadania.K48.offer.decline]
+Jak znajdziesz chwilę, to wiesz, gdzie mnie szukać.
+
+zadania.K48.steps.0.text = Przynieś Jankowi 6× Włókno i 2× Lina na sieci (przystań).
+[zadania.K48.steps.0.remind]
+Sześć garści włókna i dwie liny. Bez nich sieć to same dziury.
+
+[zadania.K48.steps.0.hero]
+> Włókno i liny, na sieci.
+
+[zadania.K48.steps.0.done]
+Ha! Teraz to będzie sieć. Masz, za fatygę. I wędzonkę na drogę, prosto z mojej wędzarni.
+
+# ======================================================================== QUESTS (zadania)
+# K37
+[zadania.K37.lines.talk]
+> Mam cię. Oddawaj sakiewkę.
+(Chłopak ma może trzynaście lat. Chudy jak tyczka.) Puść... Ja nie dla siebie. W obozie nie ma co jeść. Ela płacze z głodu po nocach.
+
+# K39
+[zadania.K39.lines.face]
+> Widziałem rękaw, Lucjanie. I cięższą kość.
+(Lucjan przestaje się uśmiechać.) Ciii! ...Mój drogi, po co od razu krzyczeć? Dogadajmy się.
+
+# K29
+zadania.K29.lines.guard = Cicho! Kapral idzie. Nie teraz - przyjdź, jak przejdzie.
+# K22
+[zadania.K22.lines.late]
+Struna! Na dzisiejszy wieczór za późno, złotko, ale nic to - jutro zagram na niej pierwszą balladę.
+Masz, dziesięć groszy. Ignacowi podziękuję piosenką.
+

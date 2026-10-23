@@ -23,14 +23,20 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- the key and the placer
         check("R is the key 'flip'", (await ev("Input.keyMapper[82]")) === "flip");
+        // (2026-10-23: inside the field's fence - Farming.fieldAllows. The fenced field is wild: no 10 x 7 without a tree, a rock or a
+        // bush - the window with the fewest is taken and they are carried off to the map's far corner, as yard_test does)
         const B = await ev(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y) && Farming.naturalFarmland(x, y) && Farming.gatherKindOf(x, y) !== "bush";
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !Farming.hasObjectTile(x, y) && Farming.naturalFarmland(x, y) && Farming.fieldAllows(x, y);
+            const evsIn = (bx, by) => { const out = []; for (let y = by; y < by + 7; y++) for (let x = bx; x < bx + 10; x++) out.push(...$gameMap.eventsXy(x, y)); return out; };
+            let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 7 && ok; y++) for (let x = bx; x < bx + 10; x++) { if (!free(x, y)) { ok = false; break; } }
-                if (ok) return { bx, by };
+                if (ok) { const n = evsIn(bx, by).length; if (!best || n < best.n) best = { bx, by, n }; }
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of evsIn(best.bx, best.by)) e.locate($gameMap.width() - 1, $gameMap.height() - 1);
+            return { bx: best.bx, by: best.by }; })()`);
         check("found a meadow", !!B, B);
         const { bx, by } = B;
         await ev(`$gamePlayer.locate(${bx + 3}, ${by + 5}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${bx} - 5, ${by} - 2); $gameSystem.setStamina(300); 0`);

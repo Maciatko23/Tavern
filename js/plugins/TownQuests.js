@@ -2,9 +2,9 @@
 // TownQuests.js
 //=============================================================================
 // The town's quests (docs/QUESTY.md; the user, 2026-10-04: "zrób to wszystko co tylko możesz"): a small quest engine over
-// TownLife.js's residents. A resident with something to say about a quest says it instead of the usual talk (TownLife.addTalkHook):
-// an offer with a choice, a reminder (what is missing pops up over the hero), the hand-in, the reward. The Lord and grandpa Stach
-// (Story.js) speak first about a quest too (Story.talk is wrapped: the quest's lines, then the story's own talk). The places a quest
+// TownLife.js's residents. A resident with something to say about a quest says it instead of the usual talk (Tawerna.talk.takeover,
+// "quest" priority): an offer with a choice, a reminder (what is missing pops up over the hero), the hand-in, the reward. The Lord and
+// grandpa Stach (Story.js) speak first about a quest too (a takeover of their talk: the quest's lines, then the story's own talk). The places a quest
 // needs (a window, a wall, a gate, a glint on the road) are events put into the maps (Tawerna.inject, ids 951-959), there only while
 // a quest needs them. "Opinia w miasteczku" 0-100 (the town's opinion of the hero, its tiers and greetings), the market day every
 // 7 days, the calendar (ferry days, the dated days of the year), the bell's signals (W2) and a little bell-ringing mini-game.
@@ -807,11 +807,16 @@
         const g = pick(mine && mine.length ? mine : D.GREET.any[tier]), usual = usualLine(key, ev);
         return sayTo([], spk, g + (usual ? " " + usual : ""));
     }
-    function residentTalk(key, ev) {
+    // part: "content" - what the quests have to say (2026-10-23: a takeover at "quest", above the shops), "greeting" - the greeting of
+    // the day (a takeover at "greet", below the shops: a shopkeeper's menu says it itself); no part - both, as before
+    function residentTalk(key, ev, part) {
         if (!has()) return null;
         const res = resident(key), spk = { id: ev.eventId(), name: res ? res.name : key };
         // (a market day's money and a remark after what happened come first - each once; then the quests, then the greeting)
-        try { return sideTalk(key, spk) || remark(key, spk) || talkFor(key, spk, false) || w6Cold(key, spk) || greeting(key, ev, spk); } catch (e) { report("talk " + key, e); return null; }
+        try {
+            const said = part === "greeting" ? null : sideTalk(key, spk) || remark(key, spk) || talkFor(key, spk, false) || w6Cold(key, spk);
+            return said || (part === "content" ? null : greeting(key, ev, spk));
+        } catch (e) { report("talk " + key, e); return null; }
     }
     // (2026-10-06) a tavern regular's talk (TavernLife_Regulars asks it first, its own greeting and menu come after): { list, kind,
     // pop } - kind "ready" (a hand-in now), "offer", "remind" (his own quest, what is missing pops up), "remark" - or null
@@ -890,33 +895,23 @@
         for (const k of Object.keys(W)) if (k !== "fate") out[k] = Array.isArray(W[k]) ? W[k].map(fill1) : fill1(W[k]);
         return out;
     }
-    // the hook into Story.js's talks of the Lord and grandpa: the quest's lines first, then the story's own talk
-    let storyTalkOrig = null;
+    // Story.js's talks of the Lord and grandpa: the quest's lines first, then the story's own talk (2026-10-23, docs/ROZMOWY.md: a takeover
+    // of the core's talk service, "quest", instead of wrapping Story.talk; the story's talk after it = the same talk without this one)
     function storyTalk(interp, role) {
-        if (storyTalkOrig) return storyTalkOrig.call(ST(), interp, role);
-    }
-    function hookStory() {
         const St = ST();
-        if (!St || typeof St.talk !== "function" || St.talk._townQuests) return;
-        storyTalkOrig = St.talk;
-        const wrapped = function(interp, role) {
-            let pre = null;
-            if ((role === "lord" || role === "grandpa") && interp && has() && storyOn()) {
-                try {
-                    const ev = $gameMap.event(interp.eventId());
-                    if (ev) pre = talkFor(role, { id: ev.eventId(), name: nameOf(role) }, true);
-                } catch (e) { report("story talk", e); pre = null; }
-            }
-            if (pre && pre.length) {
-                interp.setupChild(pre.concat([C(355, ["TownQuests.storyTalk(this, " + JSON.stringify(role) + ")"]), C(0, [])]), interp.eventId());
-                return;
-            }
-            return storyTalkOrig.apply(this, arguments);
-        };
-        wrapped._townQuests = true;
-        St.talk = wrapped;
+        if (St && typeof St.talk === "function") return St.talk(interp, role, { skip: PLUGIN });
     }
-    hookStory();
+    T.talk.takeover({ owner: PLUGIN, name: "story", who: ["lord", "grandpa"], priority: T.talk.PRIORITY.quest, run: ctx => {
+        const role = ctx.who;
+        let pre = null;
+        if (ctx.interp && has() && storyOn()) {
+            try {
+                const ev = ctx.ev;
+                if (ev) pre = talkFor(role, { id: ev.eventId(), name: nameOf(role) }, true);
+            } catch (e) { report("story talk", e); pre = null; }
+        }
+        return pre && pre.length ? pre.concat([C(355, ["TownQuests.storyTalk(this, " + JSON.stringify(role) + ")"])]) : null;
+    } });
 
     // the places of the quests (injected events): which one, what it says
     const SPOT_LIST = Object.keys(D.SPOTS).map(k => Object.assign({ key: k }, D.SPOTS[k]));
@@ -1636,20 +1631,21 @@
     // the gate (K33: the cap through the bars) and the statues' plinths (W3: the carved verse) answer the action button
     const STUB_GATE = [C(355, ["TownQuests.place(this, 'gate')"]), C(0, [])], STUB_STATUE = [C(355, ["TownQuests.place(this, 'statue')"]), C(0, [])];
     const plinthWanted = () => { const r = has() ? rec("W3") : null; return !!r && r.s === "active" && Q.W3.steps[r.step].talk === "w3Verse" && !hasVerse("cokoly"); };
-    const _Game_Event_list_tq = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        if (window.$gameMap && $gameMap.mapId() === TOWN && has() && this._mapId === TOWN) {
-            const d = this.event(), p = this.page();
+    // (2026-10-23) the core's one list hook (Tawerna.onEventList): the quests' scenes at a gate, a plinth, the grate, W6's board - after
+    // Kasztelan's (the grate), Dwor's, Kantor's and Homes', over the tavern's own (as the old wrappers by the plugin list)
+    T.onEventList(ev => {
+        if (window.$gameMap && $gameMap.mapId() === TOWN && has() && ev._mapId === TOWN) {
+            const d = ev.event(), p = ev.page();
             if (d && capStep() === 1 && /^Furtka ogrodu rycerzy/.test(d.name || "")) return STUB_GATE;
-            if (d && p && plinthWanted() && /^!Statue/.test(p.image.characterName || "") && this.y === CAP.statue[1]) return STUB_STATUE;
+            if (d && p && plinthWanted() && /^!Statue/.test(p.image.characterName || "") && ev.y === CAP.statue[1]) return STUB_STATUE;
         }
-        if (window.$gameMap && $gameMap.mapId() === CELLAR && this._mapId === CELLAR && has() && w4On()) {
-            const d = this.event();
+        if (window.$gameMap && $gameMap.mapId() === CELLAR && ev._mapId === CELLAR && has() && w4On()) {
+            const d = ev.event();
             if (d && /^Stara krata zakonu/.test(d.name || "") && !T.call("Underground", "isOpen")) return STUB_GRATE;
         }
-        if (window.$gameMap && has() && this._mapId === $gameMap.mapId()) { const w6 = w6List(this); if (w6) return w6; }   // (2026-10-07: W6 - the board, Marek, the camp's guard)
-        return _Game_Event_list_tq.call(this);
-    };
+        if (window.$gameMap && has() && ev._mapId === $gameMap.mapId()) { const w6 = w6List(ev); if (w6) return w6; }   // (2026-10-07: W6 - the board, Marek, the camp's guard)
+        return null;
+    }, { owner: PLUGIN, priority: T.onEventList.PRIORITY.scene });
     function placeTalk(interp, what) {
         const ev = interp && $gameMap.event(interp.eventId());
         if (!ev || !has()) return;
@@ -4471,9 +4467,14 @@
     // ------------------------------------------------------------------
     // TownLife's talk: the quests speak first
     // ------------------------------------------------------------------
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: what the quests have to say - "quest", below the other systems' takeovers of
+    // a resident (the errands, the owners, the first meetings, the sołtys's houses), ABOVE the shops (a shop never hides a quest's line);
+    // the greeting of the day - "greet", below the shops, above "after" (Act III's Ambroży, as before)
     const L0 = TL();
-    if (L0 && L0.addTalkHook) L0.addTalkHook((key, ev) => residentTalk(key, ev));
-    else console.warn("[TownQuests] TownLife.js not found - the residents will not talk about quests");
+    const isResident = key => !!resident(key);
+    T.talk.takeover({ owner: PLUGIN, who: isResident, priority: T.talk.PRIORITY.quest, run: ctx => residentTalk(ctx.who, ctx.ev, "content") });
+    T.talk.takeover({ owner: PLUGIN, name: "greeting", who: isResident, priority: T.talk.PRIORITY.greet, run: ctx => residentTalk(ctx.who, ctx.ev, "greeting") });
+    if (!L0) console.warn("[TownQuests] TownLife.js not found - the residents will not talk about quests");
     // Kuba's night trips for water (TownLife_Data: his plan's entry "w1Water") end once the sluice is half open (W1 rozdz. 6 a/b)
     if (L0 && L0.addCondition) L0.addCondition("w1Water", () => !(has() && S().flags.sluiceHalf));
     // (2026-10-07) W6: the camp moved out to Podgrodzie (TownLife "alt" of Ludmiła, Ela, Rafał, Marek); Rafał by the camp's fire while

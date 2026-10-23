@@ -13,9 +13,10 @@ kit.test({ port: 9561, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- mur działki dziadka
     const wall = await t.json(`(function(){ const why = (x, y) => Farming.whyNotBuild("doghouse", x, y, false, false);
-        return { corner: why(3, 10), rise: why(10, 5), riseOk: why(10, 6), mid: why(20, 15), east: why(36, 15), south: why(20, 25), gate: why(20, 3) }; })()`);
+        return { corner: why(3, 10), rise: why(10, 5), riseOk: why(10, 6), mid: why(20, 15), east: why(36, 15), south: why(20, 26), gate: why(20, 3) }; })()`);
+    // (2026-10-23: the wall is a wooden fence now - rails at y 3 and y 28, posts at x 2 and x 37: the lowest row 2 tiles off is y 26)
     const W = "Buduj w obrębie muru, 2 kratki od niego.";
-    t.check("mur działki: przy murze (x 3), pod wzniesieniem (y 5), przy murze na dole (y 25) i z prawej (x 36) - nie wolno",
+    t.check("mur działki: przy murze (x 3), pod wzniesieniem (y 5), przy murze na dole (y 26) i z prawej (x 36) - nie wolno",
         wall.corner === W && wall.rise === W && wall.east === W && wall.south === W && wall.gate === W, wall);
     t.check("mur działki: w środku i 2 rzędy pod wzniesieniem (y 6) - mur nie przeszkadza (najwyżej inny powód)", wall.mid !== W && wall.riseOk !== W, wall);
     const newPart = await t.json(`Farming.whyNotBuild("doghouse", 60, 40, false, false)`);

@@ -1,0 +1,213 @@
+{
+ "mieszkaniec": {
+  "name": "Eryk Sowa",
+  "title": "kupiec suknem z lądu",
+  "barks": {
+   "wander": [
+    "Ile za ten chleb? ...Drogo. Jak wszędzie.",
+    "Ładne światło na tym rynku. Szkoda, że węgla mało.",
+    "(Eryk szkicuje coś na skrawku papieru i chowa go do rękawa.)"
+   ],
+   "stand": [
+    "Morze. Zawsze to samo morze.",
+    "(Eryk patrzy na zatokę, aż oczy mu łzawią.)",
+    "Stąd widać mieliznę. I to, co na niej leży."
+   ],
+   "work": [
+    "Zimna. Dobrze.",
+    "Kto tam? ...A, to ty. Idź spać."
+   ],
+   "rain": [
+    "Deszcz. Na morzu deszcz to łaska. Na lądzie tylko błoto."
+   ],
+   "night": [
+    "Późno. Nie widziałeś mnie."
+   ],
+   "tavern": [
+    "Portret za piwo! Kto chętny?",
+    "Sukno było. Teraz jest węgiel i papier.",
+    "Borgar, jeszcze jedno. Na kredyt? ...Nie? To nie."
+   ],
+   "home": [
+    "(Eryk śpi niespokojnie i mamrocze coś w obcym języku.)"
+   ]
+  },
+  "talk": {
+   "morning": [
+    "Rano rysuję najlepiej. Twarze są jeszcze szczere.",
+    "Śniadanie u Borgara. Owsianka jak klej, ale ciepła."
+   ],
+   "day": [
+    "Ludzie płacą za portret piwem. Dobry interes, póki wątroba wytrzyma.",
+    "Nie pytaj o sukno. Sukno poszło na dno."
+   ],
+   "evening": [
+    "Wieczorem tawerna gada. Ja słucham. I rysuję.",
+    "Melia śpiewa o krukach. Ładnie śpiewa. Za ładnie."
+   ],
+   "night": [
+    "Po nocy nie rysuję. Po nocy ludzie mają za dużo cieni na twarzy."
+   ],
+   "rain": [
+    "Morze w deszcz wygląda jak w domu. Prawie."
+   ]
+  }
+ },
+ "zadania": {
+  "D25": {
+   "title": "Mapa z wraku",
+   "where": "Wrak na mieliźnie (łódź Janka z przystani albo łacha od garnizonu w odpływie)",
+   "when": "od dnia 15",
+   "desc": "Na mieliźnie w zatoce leży „Biała Źrenica” - okręt Czarnych Oczu, rozbity tej samej nocy co kuter Rocha. Roch mówi, że w kajucie kapitana muszą być mapy.",
+   "offer": {
+    "say": [
+     "Widziałeś okręt na mieliźnie? Tam, za cyplem. Czarne Oczy. Rozbił się tej samej nocy co mój kuter.",
+     "Taki okręt nie pływa bez map. A ich mapy to mapy kamieni z krukiem. Kto wie, czego szukają, ten wie, przed czym się chować.",
+     "Żołnierze z garnizonu wyławiają z niego, co się da, ale pod pokład nie schodzą. Boją się szczurów i wody."
+    ],
+    "yes": "Popłynę na wrak.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Janek cię podwiezie, za dnia. Albo idź po łasze od garnizonu, kiedy morze odejdzie. Tylko nie daj się złapać żołnierzom bez glejtu."
+    ],
+    "decline": [
+     "Wrak nie ucieknie. Chyba że morze go zabierze."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Dostań się na wrak na mieliźnie: łodzią Janka (przystań, za dnia) albo pieszo po łasze od garnizonu, w odpływie."
+    },
+    "1": {
+     "text": "Zejdź pod pokład przez dziurę w burcie i znajdź klucz bosmana. Dolna ładownia jest sucha tylko przy niskiej wodzie."
+    },
+    "2": {
+     "text": "Otwórz kluczem kajutę kapitana i przeszukaj biurko i skrzynię."
+    },
+    "3": {
+     "text": "Pięć kamieni z krukiem: zgłoś je celnikowi (przystań, 5 G za sztukę), sprzedaj Baltazarowi (kantor, 15 G za sztukę) albo zatrzymaj i pokaż dziadkowi."
+    }
+   }
+  },
+  "W12": {
+   "title": "Rozbitek",
+   "where": "Tawerna, rynek, Podgrodzie, wrak",
+   "when": "po spotkaniu Eryka Sowy",
+   "desc": "Eryk Sowa rysuje w tawernie portrety za piwo i mówi, że handlował suknem. Sukna nikt nie widział, a palce ma czarne od atramentu.",
+   "steps": {
+    "0": {
+     "text": "Kim jest Eryk Sowa? Zbierz poszlaki ({n} z 2): dziennik okrętu z wraku, Józek Łata z Podgrodzia, wizja w latarni, podwinięty rękaw nocą przy studni, cudzy list."
+    },
+    "1": {
+     "text": "Porozmawiaj z Erykiem w cztery oczy (tawerna, rynek albo mury)."
+    },
+    "2": {
+     "text": "Zanieś fałszywą mapę Baltazarowi (kantor, 8-18)."
+    }
+   }
+  }
+ },
+ "rzeczy": {
+  "dziennik_okretu": {
+   "name": "Dziennik okrętu „Białej Źrenicy”"
+  },
+  "klucz_bosmana": {
+   "name": "Klucz bosmana"
+  },
+  "kamien_kruk": {
+   "name": "Kamień z krukiem"
+  },
+  "monety_oko": {
+   "name": "Monety z okiem"
+  },
+  "falszywa_mapa": {
+   "name": "Fałszywa mapa kamieni (rysunek Ansgara)"
+  },
+  "mapa_ansgara": {
+   "name": "Mapa Ansgara: kamienie z krukiem na wyspie"
+  },
+  "portret": {
+   "name": "Portret węglem (od Eryka Sowy)"
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Byłeś na tym wraku? Ja bym tam nie lazł. Morze chodzi tam pod piachem jak kot pod kocem."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Masz ich dziennik? Nie pokazuj go nikomu na przystani. Celnik czyta wszystko, co ma litery."
+   ]
+  },
+  "2": {
+   "lines": [
+    "(Melia nie podnosi wzroku znad lutni.) Eryk narysował mnie kiedyś. Za darmo. A ty go wydałeś wojsku.",
+    "Nie mam dziś ochoty na żarty. Ani jutro."
+   ]
+  },
+  "3": {
+   "lines": [
+    "Wojsko zabrało tego rysownika z tawerny. Kartograf Czarnych Oczu, mówią. Zapisałem go w księdze. Uczciwie."
+   ]
+  },
+  "4": {
+   "lines": [
+    "Twój kartograf rzygał przez całą drogę. Ale dopłynął. Kazał ci powiedzieć: „Oko nie śpi, ale mruga”.",
+    "Nie wiem, co to znaczy, i nie chcę wiedzieć."
+   ]
+  },
+  "5": {
+   "lines": [
+    "Eryk znowu mnie rysuje. Mówi, że ma lepszą rękę, odkąd lżej mu na sercu. Coś ty mu powiedział?"
+   ]
+  }
+ },
+ "znaki": {
+  "0": {
+   "name": "Wzgórze tawerny"
+  },
+  "1": {
+   "name": "Kamieniołom w Górach"
+  },
+  "2": {
+   "name": "Przylądek z latarnią"
+  },
+  "3": {
+   "name": "Pustelnia na klifie"
+  },
+  "4": {
+   "name": "Urwisko Kruków"
+  },
+  "5": {
+   "name": "Kopiec z krukiem przy chacie dziadka"
+  },
+  "6": {
+   "name": "Dwór Lorda"
+  }
+ },
+ "poszlaki": {
+  "dziennik": {
+   "name": "Dziennik okrętu",
+   "text": "W dzienniku „Białej Źrenicy”, na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”."
+  },
+  "jozek": {
+   "name": "Płaszcz od Józka Łaty",
+   "text": "Józek Łata sprzedał po sztormie swój stary szary płaszcz obcemu. Ten zapłacił dziwnym groszem: z okiem zamiast korony."
+  },
+  "wizja": {
+   "name": "Wizja w latarni",
+   "text": "W mgle soczewka latarni pokazała człowieka z piórem, który rysuje wybrzeże wyspy - i białe oko na jego nadgarstku."
+  },
+  "tatuaz": {
+   "name": "Tatuaż przy studni",
+   "text": "Nocą przy studni Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko."
+  },
+  "list": {
+   "name": "Cudzy list",
+   "text": "Kruk przyniósł list, który nie był do mnie: szyfr, którego nie umiem przeczytać, i pieczęć z okiem. Zaczyna się od słów „Do A.W.”."
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Wrak_Data.js: resident=mieszkaniec:/^(name|title)$|^(barks|talk)\\./, D25=zadania.D25:zadanie, W12=zadania.W12:zadanie, VITEMS=rzeczy:nazwy, REMARKS=uwagi:/\\.lines$/, MARKS=znaki:/\\.name$/, CLUES=poszlaki:/\\.(name|text)$/)"
+}

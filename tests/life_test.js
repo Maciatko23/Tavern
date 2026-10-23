@@ -90,13 +90,19 @@ fs.mkdirSync(OUT, { recursive: true });
         // ================= 3. wear at the other places tools are used =================
         // 13 x 8 free tiles; the search runs to the map's last inner row (it stopped 10 rows short of the bottom edge - Map003 as the
         // user remade it, 2026-09, has room for it only near its bottom fence)
+        // (2026-10-23: inside the field's fence - Farming.fieldAllows; the fenced field is wild: the window with the fewest trees, rocks
+        // and bushes is taken and they are carried off to the map's far corner, as yard_test does)
         const B = await ev(`(function(){
+            const evsIn = (bx, by) => { const out = []; for (let y = by; y < by + 8; y++) for (let x = bx; x < bx + 13; x++) out.push(...$gameMap.eventsXy(x, y)); return out; };
+            let best = null;
             for (let by = 2; by + 8 < $gameMap.height(); by++) for (let bx = 2; bx + 13 < $gameMap.width(); bx++) {
                 let ok = true;
-                for (let y = by; y < by + 8 && ok; y++) for (let x = bx; x < bx + 13; x++) { if (!$gameMap.checkPassage(x, y, 0x0f) || $gameMap.eventsXy(x, y).length > 0 || Farming.hasObjectTile(x, y)) { ok = false; break; } }
-                if (ok) return { bx, by };
+                for (let y = by; y < by + 8 && ok; y++) for (let x = bx; x < bx + 13; x++) { if (!$gameMap.checkPassage(x, y, 0x0f) || Farming.hasObjectTile(x, y) || !Farming.fieldAllows(x, y)) { ok = false; break; } }
+                if (ok) { const n = evsIn(bx, by).length; if (!best || n < best.n) best = { bx, by, n }; }
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of evsIn(best.bx, best.by)) e.locate($gameMap.width() - 1, $gameMap.height() - 1);
+            return { bx: best.bx, by: best.by }; })()`);
         check("found room for the test yard", !!B, B);
         const { bx, by } = B;
         await ev(`(function(){ const f = $gameSystem._farm; const P = f.plots[3] = f.plots[3] || {}; const L = f.buildings[3] = f.buildings[3] || [];

@@ -1,0 +1,373 @@
+{
+ "mieszkaniec": {
+  "name": "Brat Kleofas",
+  "title": "pustelnik, kronikarz zakonu",
+  "barks": {
+   "stand": [
+    "(Kleofas mruczy psalm pod nosem. Fałszuje.)",
+    "Morze jak krew... W kronikach trzy razy przez trzysta lat. A teraz co roku.",
+    "Chleb z miodem. Lepszy niż połowa ksiąg, które przepisałem."
+   ],
+   "work": [
+    "Szałwio, ty uparta. Rośnij.",
+    "Pszczoły wiedzą, kiedy przyjdzie deszcz. Ja nie.",
+    "Nie machaj rękami przy ulach, chłopcze. One pamiętają."
+   ],
+   "rain": [
+    "Deszcz! Dzbany pod rynnę, prędko!"
+   ],
+   "night": [
+    "Siedem uderzeń. Siedem. Pamiętaj."
+   ],
+   "home": [
+    "(Skrzypi pióro.)",
+    "...i roku tego morze zakwitło krwią...",
+    "Nie oddychaj na karty. I nie dotykaj, bo masz tłuste palce."
+   ]
+  },
+  "talk": {
+   "morning": [
+    "Godzinki odmówione, morze na miejscu. Można pisać.",
+    "Wstaję o czwartej. Mój mistrz wstawał o trzeciej. Dlatego umarł przede mną."
+   ],
+   "day": [
+    "Przepisuję kroniki, bo papier gnije, a pamięć jeszcze szybciej.",
+    "Do miasta nie schodzę. Zrobili z nas piosenkę. Ja wolę ciszę.",
+    "Miód mam swój. Wosk też. Świece z wosku nie kopcą na karty."
+   ],
+   "evening": [
+    "Słońce schodzi do morza. Kronikarze zapisywali każdy zachód, który był czerwony. Brakło im atramentu.",
+    "Wieczorem czyta się najgorzej, a myśli najlepiej."
+   ],
+   "night": [
+    "Po nocy chodzą tylko złodzieje i głupcy. Którym jesteś?"
+   ],
+   "rain": [
+    "Deszcz! Cicho bądź i słuchaj, jak bębni. Najpiękniejsza muzyka na tej skale."
+   ]
+  }
+ },
+ "karty": {
+  "0": {
+   "title": "Zasada jednego pytania",
+   "where": "kroniki z Archiwum zakonu (pod ogrodem rycerzy)",
+   "read": [
+    "(Kleofas obraca tarczę szyfru, przykłada ją do nacięć na twoim wisiorku i czyta powoli, palcem po linijce.)",
+    "„Serce odpowiada każdemu i na wszystko. Dlatego my pytamy raz.”",
+    "„Strażnik dzwonu ma prawo zadać jedno pytanie na rok. Nowicjusz jedno na całe życie. Kronikarz zapisuje pytanie i odpowiedź. Kto pyta drugi raz w roku, przestaje być bratem.”",
+    "> Czemu tylko jedno?",
+    "Bo prawda to nie woda, chłopcze. Nie pije się jej do syta. Jedna szklanka na rok - i człowiek zostaje człowiekiem."
+   ],
+   "note": "Serce Twierdzy odpowiada każdemu i na wszystko. Zakon pytał raz: strażnik dzwonu jedno pytanie na rok, nowicjusz jedno na całe życie. Kronikarz zapisywał pytania i odpowiedzi. Kto zapytał drugi raz w roku, przestawał być bratem."
+  },
+  "1": {
+   "title": "Cztery straże i kruczarze",
+   "where": "Księga pytań na dwudziestym piętrze podziemi (ostatnia nie wyrwana karta)",
+   "read": [
+    "„Po każdym pytaniu straże rozchodzą się do swoich zadań: dzwon woła, pieśń pamięta, klucz zamyka, pióro zapisuje.”",
+    "„A kruczarze z Urwiska niosą wieść tam, gdzie dzwon nie sięga. Ich znakiem jest kamień z krukiem na szyi.”",
+    "Dzwon to Ambroży i jego ród. Pióro to ja. Klucz i pieśń... nie wiem, gdzie się podziały. Ktoś musiał zamykać. Ktoś musiał pamiętać, kiedy wszyscy zapomną.",
+    "(Kleofas patrzy na twoją szyję.) A kamień z krukiem nosił posłaniec. Mówiłem ci: to nie ozdoba."
+   ],
+   "note": "Zakon miał cztery straże: dzwon (woła), pieśń (pamięta), klucz (zamyka) i pióro (zapisuje). Piąci byli kruczarze z Urwiska - posłańcy z kamieniem z krukiem na szyi. Dzwon to ród Ambrożego, pióro - Kleofas. Klucz i pieśń? Taki kamień noszę ja."
+  },
+  "2": {
+   "title": "Trzy pytania Dobiesza",
+   "where": "Rejestr straży w chacie Najstarszego (Osada Milczących)",
+   "read": [
+    "„Roku sto szóstego brat Dobiesz zapytał trzy razy w jednym roku: czy twierdza przetrwa, czy żona go kocha, czy przyjaciel go zdradzi.”",
+    "„Po trzecim pytaniu przestał gasić świece i zamykać drzwi. Wyrwał z Księgi pytań karty z odpowiedziami i nocą uciekł łodzią na ląd.”",
+    "„Wrócił po latach, stary i bez kart. Zszedł na dół z ostatnimi.”",
+    "Dlatego Księga pytań ma wyrwane strony, chłopcze. Ktoś za morzem trzymał je przez trzysta lat. Oby tylko trzymał."
+   ],
+   "note": "Roku sto szóstego brat Dobiesz zapytał Serce trzy razy w jednym roku: czy twierdza przetrwa, czy żona go kocha, czy przyjaciel go zdradzi. Potem wyrwał z Księgi pytań karty z odpowiedziami i uciekł na ląd. Wrócił po latach bez kart i zszedł na dół z ostatnimi."
+  },
+  "3": {
+   "title": "Upadek i zapieczętowanie",
+   "where": "kajuta wraku na mieliźnie",
+   "read": [
+    "„Kiedy Dobiesz odpłynął, wardy gasły jedna po drugiej. Bracia schodzili na dół i nie wracali.”",
+    "„Ostatni przeor zamknął drogę trzema zamkami: kluczem, dzwonem i pieśnią. Na górze rozgłosiliśmy, że to przeklęta ruina, żeby nikt nie kopał.”",
+    "(Na marginesie ktoś dopisał obcym, ostrym pismem.) „Wyspa. Pod twierdzą. Szukać kamieni z krukiem.”",
+    "To nie nasza ręka. Ta karta wróciła zza morza... z tymi, co wyrwane strony przeczytali."
+   ],
+   "note": "Po ucieczce Dobiesza wardy gasły, bracia schodzili na dół i nie wracali. Ostatni przeor zamknął drogę trzema zamkami - kluczem, dzwonem i pieśnią - a na górze rozgłoszono, że to przeklęta ruina. Na marginesie karty z wraku ktoś obcy dopisał: „Wyspa. Pod twierdzą. Szukać kamieni z krukiem.”"
+  },
+  "4": {
+   "title": "Imiona kruczarzy",
+   "where": "Księga mgieł w latarni na przylądku",
+   "read": [
+    "„Kruczarze z Urwiska, pokolenie po pokoleniu: Jarosz. Mszczuj. Wit Kamień. Bogdan. Stanisław z Urwiska, i syn jego Józef, ostatni, co trzymał kruki.”",
+    "(Kleofas podnosi wzrok.) Stanisław z Urwiska. Twój dziadek to Stach, prawda? Stanisław.",
+    "W rodach kruczarzy imiona wracały co trzecie pokolenie. Twój pradziad nosił listy zakonu. A dziad twojego dziadka trzymał kruki na Urwisku."
+   ],
+   "note": "Imiona kruczarzy z Urwiska, pokolenie po pokoleniu. Na końcu: „Stanisław z Urwiska i syn jego Józef, ostatni, co trzymał kruki”. Stanisław to imię mojego pradziada. Dziadek Stach nosi je po nim."
+  },
+  "5": {
+   "title": "Cysterna i racje wody",
+   "where": "zwitek w obrączce kruka z Urwiska",
+   "read": [
+    "„Cysterna pod wzgórzem pije deszcz z rynien na Urwisku. Pół dla twierdzy, ćwierć dla miasta, ćwierć dla tych, co przyjdą.”",
+    "„Zasuwę główną otwiera sygnał wody: cztery i dwa. Kto bierze więcej niż swoją rację, ten pije z cudzego dzbana.”",
+    "Ćwierć dla tych, co przyjdą... Ciekawe, czy ktoś jeszcze o tej ćwierci pamięta."
+   ],
+   "note": "Cysterna zakonu pod wzgórzem pije deszcz z rynien na Urwisku: pół dla twierdzy, ćwierć dla miasta, ćwierć dla tych, co przyjdą. Zasuwę główną otwiera sygnał wody - cztery i dwa. „Kto bierze więcej niż swoją rację, ten pije z cudzego dzbana.”"
+  }
+ },
+ "pytania": {
+  "0": {
+   "label": "Co ukrywa mój dziadek?"
+  },
+  "1": {
+   "label": "Kto zdradzi miasteczko?"
+  },
+  "2": {
+   "label": "Czy Lord wiedział o wodzie?"
+  },
+  "3": {
+   "label": "Czym naprawdę jest Serce?"
+  },
+  "4": {
+   "label": "Co Dobiesz wywiózł za morze?"
+  },
+  "5": {
+   "label": "Czy moja matka żyje?"
+  }
+ },
+ "meetTorch": [
+  "Stój. Z ogniem nie podchodź do ksiąg. Zgaś to albo zostań tam, gdzie stoisz."
+ ],
+ "meet": [
+  "...Czego tu szukasz? Do miasta jest w drugą stronę.",
+  "> Szedłem wzdłuż klifu. Nie wiedziałem, że ktoś tu mieszka.",
+  "Mało kto wie. I dobrze. (Kleofas patrzy na twoją szyję.) Pokaż to.",
+  "> Wisiorek? Matka dała mi go na drogę. Był jej ojca, dziadka Stacha.",
+  "Stacha... Hm. To by się zgadzało. To nie ozdoba, chłopcze. To znak posłańca. Kruki nie biorą się znikąd.",
+  "Jestem Kleofas. Przepisuję tu rzeczy, których nikt już nie czyta. Jak przyniesiesz atrament, może ci coś przeczytam."
+ ],
+ "meetNote": [
+  "Pustelnik na klifie",
+  "Nad przystanią, na klifie, mieszka brat Kleofas - ostatni kronikarz zakonu. Przepisuje kroniki w kamiennym skryptorium. Na mój wisiorek powiedział: „To nie ozdoba. To znak posłańca.”"
+ ],
+ "ask": [
+  "Hm?",
+  "Mów. Krótko.",
+  "Słucham, chłopcze. Tylko nie stój w świetle."
+ ],
+ "honeyAsk": [
+  "Miód z moich uli. Dwanaście groszy słoik. Dla posłańca nie ma zniżek. Posłańcy płacą jak wszyscy."
+ ],
+ "honeyBuy": [
+  "Masz. Nie jedz od razu. Miód lubi czekać."
+ ],
+ "honeyNone": [
+  "Nie ma już. Pszczoły też mają swoje prawa."
+ ],
+ "pendant": [
+  "Nacięcia na krawędzi. Siedem, trzy, pięć i dwa. Przyłożysz je do mojej tarczy - i szyfr się otwiera.",
+  "Kruczarze nosili takie kamienie. Każdy ród miał swoje nacięcia. Twój to klucz do kronik. Nie sprzedawaj go. Nigdy."
+ ],
+ "chronicles": [
+  "Kroniki piszą, że w roku wielkiej suszy bracia mierzyli wodę w cysternie łokciem. I że nikt nie pił więcej niż łokieć na miesiąc.",
+  "Kroniki piszą, że kasztelan Bogumił z rodu Kowali nosił klucz na łańcuchu i nigdy go nie zdejmował. Nawet w łaźni.",
+  "Kroniki piszą, że kruki z Urwiska przylatywały do skryptorium co rano. Kronikarz zostawiał im okruchy na parapecie. Ja też zostawiam.",
+  "Kroniki piszą, że morze czerwieniało w suszę trzy razy w trzysta lat. Teraz czerwienieje co roku. Nikt już tego nie zapisuje. Poza mną.",
+  "Kroniki piszą, że ostatni przeor zszedł na dół ze świecą i nie wrócił. Świeca podobno pali się do dziś. Bzdura. Ale ładna."
+ ],
+ "readWhere": [
+  "Nie tutaj. Szyfr czyta się przy pulpicie, w skryptorium, przy dobrym świetle. Chodź za dnia."
+ ],
+ "readNoCard": [
+  "Nie masz żadnej karty. Przynieś, to przeczytamy."
+ ],
+ "readNoInk": [
+  "Bez atramentu nie przepiszę ani litery. Najpierw atrament."
+ ],
+ "readNoQuest": [
+  "Najpierw porozmawiajmy, chłopcze. Potem karty."
+ ],
+ "readLate": [
+  "Za ciemno. Oczy mam stare. Przyjdź jutro, między siódmą a dziewiętnastą."
+ ],
+ "readGo": [
+  "Siadaj. Tarcza, wisiorek, świeca. I milcz, póki nie skończę."
+ ],
+ "readDone": [
+  "Zapisane. Karta wraca do skrzyni, a ty do swoich spraw."
+ ],
+ "noKleofas": "Bez brata Kleofasa nie odczytasz szyfru.",
+ "noPendant": "Potrzebujesz wisiorka z krukiem",
+ "bellMute": "Dzwon w wieży. Bez serca - niemy od upadku zakonu.",
+ "bellHung": "Dzwon w wieży. Ma znowu serce. Kleofas nie pozwala dzwonić bez potrzeby.",
+ "dial": "Mosiężna tarcza szyfru na okutej skrzyni. Dwa kręgi liter, a na krawędzi nacięcia - takie same jak na twoim wisiorku.",
+ "dialNoPendant": "Mosiężna tarcza szyfru. Dwa kręgi liter i nacięcia na krawędzi. Bez klucza to tylko krąg liter.",
+ "hives": "Trzy ule brata Kleofasa. Pszczoły brzęczą leniwie - kwiatów mało, susza.",
+ "hivesDusk": "Ule. Pszczoły już śpią.",
+ "edge": "Ścieżka urywa się nad przepaścią. Dalej, na wschód, nie przejdziesz.",
+ "night": {
+  "early": [
+   "Jeszcze nie. Czekaj na dzwon. O północy."
+  ],
+  "ask": [
+   "Siedem. Słyszałeś? Pierwszy raz od upadku zakonu.",
+   "Pytaj. Jedno pytanie. Zastanów się dobrze, bo drugiego nie będzie do przyszłej Wigilii."
+  ],
+  "askAgain": [
+   "Siedem uderzeń. Rok minął. Pytaj, chłopcze. Jedno."
+  ],
+  "later": [
+   "Jeszcze nie wiesz? Do pierwszej poczekam. Potem idę spać, a pytanie przepada do przyszłego roku."
+  ],
+  "done": [
+   "Zapisałem. Pytanie i odpowiedź, jak każe reguła. Następne za rok."
+  ],
+  "used": [
+   "Swoje pytanie w tym roku już zadałeś. Reguła to reguła."
+  ],
+  "keep": [
+   "Tego nie ma w kronikach, chłopcze. Kroniki nie piszą o żywych. Zapytaj o co innego - tego pytania nie liczę."
+  ]
+ },
+ "balt": [
+  "Ach, przyjaciel od starych ksiąg! Kroniki już płyną na kontynent... ale wypadła z nich jedna karta. Szyfr, bazgroły. Nikt jej nie chce.",
+  "Dla ciebie - czterdzieści groszy. Sentyment, rozumiesz."
+ ],
+ "baltYes": [
+  "Interes to interes. Bazgroły twoje."
+ ],
+ "baltNo": [
+  "Karta poczeka. Ja też."
+ ],
+ "ambrozyCard": [
+  "Karta? Luźna, pisana szyfrem? Była w kronikach, wypadła mi przy dzwonie. (Ambroży wyciąga ją zza pazuchy.)",
+  "Nie umiem tego czytać. Ty też nie. Ale jak brat pióra żyje... niech czyta."
+ ],
+ "zadania": {
+  "K50": {
+   "title": "Atrament dla pustelnika",
+   "where": "pustelnia na klifie (nad przystanią)",
+   "when": "za dnia, od dnia 6",
+   "desc": "Bratu Kleofasowi wysechł atrament. Nowy zrobi z garbnika z szyszek, rdzy z żelaza i wody - deszczówki, której sam nie ma.",
+   "offer": {
+    "say": [
+     "Atrament mi wysechł. Ostatni kałamarz rozcieńczałem, aż pisałem samą wodą. Kronika z wody to żadna kronika.",
+     "Na nowy trzeba garbnika z szyszek, rdzy z żelaza i wody. Wody, chłopcze - deszczówki. Moja cysterna pusta od lat.",
+     "Przyniesiesz? Cztery szyszki, kawałek żelaza i porcję deszczówki."
+    ],
+    "yes": "Przyniosę.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Szyszki z sosen, nie z ziemi - te z ziemi zgniły. Żelazo może być stare. Rdza i tak jest najlepsza."
+    ],
+    "decline": [
+     "To będę pisał kredą. Po murach."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś bratu Kleofasowi 4× Szyszki, 1× Żelazo i 1 porcję własnej deszczówki (pustelnia na klifie, za dnia).",
+     "remind": [
+      "Szyszki, żelazo, deszczówka. Nie zapomniałem, to i ty nie zapominaj."
+     ],
+     "hero": [
+      "> Masz. Szyszki, żelazo i woda z mojego zapasu."
+     ],
+     "done": [
+      "(Kleofas tłucze szyszki w moździerzu, wrzuca żelazo do garnka z wodą i stawia przy piecu.)",
+      "Garbnik i rdza. Trzy dni i będzie czarny jak sumienie poborcy. Dziękuję.",
+      "Masz, za fatygę. I przyjdź, jak znajdziesz coś do czytania. Teraz mam czym pisać - to i czym czytać."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Atrament dla pustelnika",
+     "Przyniosłem bratu Kleofasowi szyszki, żelazo i własną deszczówkę na atrament. Teraz może czytać ze mną zaszyfrowane karty kroniki."
+    ]
+   }
+  },
+  "D23": {
+   "title": "Zaszyfrowane kroniki",
+   "where": "skryptorium na klifie + karty po całej wyspie",
+   "when": "Akt I-II, karta po karcie",
+   "desc": "Kroniki zakonu pisano szyfrem. Kluczem są tarcza Kleofasa i nacięcia na twoim wisiorku. Sześć kart przetrwało upadek - rozwiało je po wyspie.",
+   "offer": {
+    "cond": {
+     "done": [
+      "K50"
+     ]
+    },
+    "say": [
+     "Słuchaj. Kroniki zakonu pisano szyfrem. Klucz miał kronikarz - i posłańcy. Twój wisiorek ma nacięcia na krawędzi. To klucz do mojej tarczy.",
+     "Mój mistrz pisał, że sześć kart przetrwało upadek. Rozwiało je po wyspie. Przynieś mi każdą, jaką znajdziesz, a przeczytamy je razem. Przy pulpicie, za dnia."
+    ],
+    "yes": "Poszukam kart.",
+    "no": "Może później.",
+    "accept": [
+     "Pierwsza powinna leżeć w kronikach pod ogrodem rycerzy, jeśli ktoś je jeszcze ma. Druga w Księdze pytań, głęboko pod ziemią, na dwudziestym piętrze. Trzecia u Milczących, w ich rejestrze.",
+     "O reszcie mój mistrz napisał tylko trzy słowa: morze, mgła i kruk. Rób z tym, co chcesz."
+    ],
+    "decline": [
+     "Karty poczekają. Leżały trzysta lat."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Znajdź karty kroniki i odczytaj je z bratem Kleofasem przy pulpicie w skryptorium (7–19, potrzebny wisiorek). Odczytane: {n}/6.{wtorbie}{gdzie}"
+    }
+   },
+   "reward": {
+    "note": [
+     "Kronika upadku",
+     "Odczytaliśmy z bratem Kleofasem wszystkie sześć kart kroniki. Kleofas mi ufa: w Noc Pytania mogę zapytać o wszystko, co zapisano."
+    ]
+   }
+  }
+ },
+ "rzeczy": {
+  "karta_1": {
+   "name": "Zaszyfrowana karta kroniki (z Archiwum)"
+  },
+  "karta_2": {
+   "name": "Zaszyfrowana karta kroniki (z Księgi pytań)"
+  },
+  "karta_3": {
+   "name": "Zaszyfrowana karta kroniki (z Rejestru straży)"
+  },
+  "karta_4": {
+   "name": "Zaszyfrowana karta kroniki (z wraku)"
+  },
+  "karta_5": {
+   "name": "Zaszyfrowana karta kroniki (z Księgi mgieł)"
+  },
+  "karta_6": {
+   "name": "Zaszyfrowana karta kroniki (zwitek z obrączki)"
+  },
+  "serce_dzwonu": {
+   "name": "Serce dzwonu (od Ambrożego)"
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Byłeś na klifie? U brata pióra? ...Mój mistrz mówił, że tam siedzi ostatni kronikarz. Myślałem, że to bajka dla uczniów."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Pustelnik nad przystanią? Wiem, wiem. Podatku nie płaci, bo nie ma z czego. Do miasta nie schodzi, to i kłopotu nie robi."
+   ]
+  },
+  "2": {
+   "lines": [
+    "Słyszałem, że chodzisz do starego mnicha na klifie. Gdyby miał jakieś księgi na sprzedaż... wiesz, gdzie mnie szukać, przyjacielu."
+   ]
+  }
+ },
+ "plotki": {
+  "pustelnik": [
+   "Chleb? Z miasta? ...Dziękuję. Kroniki piszą, że piekarze z miasta zawsze dodawali do mąki popiół. Ten nie ma popiołu. Postęp."
+  ]
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Pustelnia_Data.js: RESIDENT=mieszkaniec:/^(name|title)$|^(barks|talk)\\./, CARDS=karty:/\\.(title|where|read|note)$/, QUESTIONS=pytania:/\\.label$/, TX, K50=zadania.K50:zadanie, D23=zadania.D23:zadanie, VITEMS=rzeczy:nazwy, REMARKS=uwagi:/\\.lines$/, GOSSIP=plotki:zostaw)"
+}

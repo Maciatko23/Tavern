@@ -470,13 +470,14 @@
     const STUB = [C(355, ["TavernLife.use(this)"]), C(0, [])];
     const CORE_KINDS = new Set(["meal", "mealtable", "bath", "stage", "bed"]);
     const kinds = Object.create(null);   // kind -> fn(tag, event, interpreter): a talk (a list of commands) or null
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        const t = pageTag(this.page());
+    // (2026-10-23) the core's one list hook (Tawerna.onEventList): the tavern's own places - after HomeLife's and the regulars', before
+    // QuestBoard's and Story's (as the old wrappers by the plugin list)
+    T.onEventList(ev => {
+        const t = pageTag(ev.page());
         if (t && (CORE_KINDS.has(t.kind) || kinds[t.kind])) return STUB;
-        if (t && (t.kind === "door" || t.kind === "gate") && $gameSystem && repLocked(this, t)) return STUB;   // (below the reputation it needs)
-        return _Game_Event_list.call(this);
-    };
+        if (t && (t.kind === "door" || t.kind === "gate") && $gameSystem && repLocked(ev, t)) return STUB;   // (below the reputation it needs)
+        return null;
+    }, { owner: PLUGIN, priority: T.onEventList.PRIORITY.own + 10 });
 
     // the people of the tavern (found by name or by look, as Story.js finds Borgar; the "Atmosfera - ..." parallel events are skipped)
     const NPCS = {
@@ -1638,10 +1639,12 @@
         }
         else if (what === "sleep") { if (sleepNow(arg)) hold(interp); }
     }
-    // Story.js's Borgar: two more lines in his menu
+    // Story.js's Borgar: two more lines in his menu (and the quests' topics at the bar) - (2026-10-23, docs/ROZMOWY.md) an option of the
+    // core's talk service, who "borgar", before his "Pogadaj"
     function borgarOptions() {
         return [{ label: "Zjedz coś", js: "TavernLife.talk(this, \"meal\")" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, \"room\")" }].concat(questBar());
     }
+    T.talk.option({ owner: PLUGIN, id: "borgar", who: "borgar", rows: () => borgarOptions().map(o => ({ label: o.label, cmds: [C(355, [o.js])] })) });
 
     // ==================================================================
     // The map drives it all (the core's frame, after the map and its events); a new map, a new game or a loaded one start clean

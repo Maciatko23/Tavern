@@ -1,0 +1,15 @@
+{
+ "imiona": [
+  "Śnieżny",
+  "Szron",
+  "Biel",
+  "Zefir",
+  "Grom",
+  "Strażnik",
+  "Obłok",
+  "Lodowy",
+  "Wicher",
+  "Perłowy"
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Orzel.js: NAMES=imiona)"
+}

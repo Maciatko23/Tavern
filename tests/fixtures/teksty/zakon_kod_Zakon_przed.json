@@ -1,0 +1,130 @@
+{
+ "kod": {
+  "blank": {
+   "0": "Znacznik (Zakon)"
+  },
+  "buildMap": {
+   "0": "Fundamenty strażnicy",
+   "1": "Zawalona płyta z krukiem",
+   "2": "Kopiec z krukiem",
+   "3": "Kamień z krukiem (kopiec)",
+   "4": "Strażnik (menhir)",
+   "5": "Płyta z krukiem",
+   "6": "Ubita ziemia",
+   "7": "Schody w górę (Łąka menhirów)",
+   "8": "Sarkofag pierwszego strażnika",
+   "9": "Wypalona pochodnia",
+   "10": "Kamienna misa",
+   "11": "Ściana z czterema wieżami",
+   "12": "Skrzynia w komorze",
+   "13": "Kamienny brat",
+   "14": "Strzęp liny",
+   "15": "Stare kołki w skale",
+   "16": "Skrytka przemytników",
+   "17": "Warzucha w szczelinie",
+   "18": "Stare gniazdo",
+   "19": "Gniazdo zakonnych orłów",
+   "20": "Szarotka na półce",
+   "21": "Kamień z krukiem",
+   "22": "Stare palenisko",
+   "23": "Warzucha na klifie",
+   "24": "Orla grzęda Straży",
+   "25": "Ślad jeźdźca",
+   "26": "Murek cmentarza",
+   "27": "Lampka na słupie",
+   "28": "Grób z krukiem",
+   "29": "Stary grób",
+   "30": "Biały kamień milczenia",
+   "31": "Środek gaju",
+   "32": "Kawałek wraku {n}"
+  },
+  "giveCard": {
+   "0": "Zapiski strażnic ({n})"
+  },
+  "readCard": {
+   "0": "Zapiski strażnic ({n}): {title}",
+   "1": "Zapiski strażnic ({n})",
+   "2": "Przeczytane Zapiski strażnic {1}/6"
+  },
+  "chWall": {
+   "0": "ściana z czterema wieżami"
+  },
+  "perch": {
+   "0": "orla grzęda Straży",
+   "1": "północna",
+   "2": "środkowa",
+   "3": "południowa",
+   "4": "Orla grzęda Straży ({1})"
+  },
+  "done": {
+   "0": "Grób z krukiem: {name}"
+  },
+  "glowna": {
+   "0": "{1} - jedyna droga w dół bez orła."
+  },
+  "perchUpdate": {
+   "0": "Orzeł",
+   "1": "{1}  ·  więź +{PERCH_BOND}"
+  },
+  "finishGrove": {
+   "0": "Godzina milczenia"
+  },
+  "kleofasTalk": {
+   "0": "Brat Kleofas",
+   "1": "Co tam masz w tej skórze? ...Zapiski strażnic! Dziennik braci warty. Tego nie trzeba szyfrem czytać - pisali prosto, jak żołnierze.",
+   "2": "Następna karta Zapisków? Daj, przeczytam.",
+   "3": "Zapiski strażnic ({n}): {title}",
+   "4": "Przeczytaj mi Zapiski strażnic ({n}).",
+   "5": "Nie, w innej sprawie."
+  },
+  "grabarzTalk": {
+   "0": "Ambroży cię przysłał? Do tych z krukiem? Dwa w północnym rzędzie, przy murku, jeden w południowym, po prawej.",
+   "1": "Czyść rękami, nie łopatą. Ojciec mówił: kamień brata zakonu dotyka się jak chleba."
+  },
+  "ansgarTalk": {
+   "0": "Eryk Sowa",
+   "1": "(Eryk widzi deskę w twojej torbie i blednie.) Skąd... To z dziobu. Sam ją przybijałem w porcie, zanim wypłynęliśmy.",
+   "2": "„Biała Źrenica”. Straż Pewności. Schowaj to, chłopcze. Jak zobaczy to ktoś z garnizonu, zacznie pytać. A jak zobaczy ktoś z naszych... nie zapyta."
+  },
+  "f9Label": {
+   "0": "Miejsce D {1}/{length}: {3} (mapa {4})   ←→"
+  },
+  "rows": {
+   "0": "←→ wybierz miejsce paczki D, OK przenosi na nie.",
+   "1": "Ustaw godzinę cienia Strażnika (dziś)",
+   "2": "Godzina w środku dzisiejszego okna zagadki cieni (krąg menhirów), bez deszczu.",
+   "3": "Daj Klucz Strażnika",
+   "4": "Kamienny klucz do płyty w kręgu (bez kopania).",
+   "5": "Daj wszystkie Zapiski strażnic",
+   "6": "Sześć kart Zapisków w torbie (do przeczytania u Kleofasa).",
+   "7": "Orzeł dorosły, lot",
+   "8": "Orzeł na etapie 5 obok bohatera i start lotu (lądowanie: L, nurkowanie: Spacja w niskim locie).",
+   "9": "Sztorm się skończył (kawałek wraku)",
+   "10": "Piasek odsłania następny kawałek wraku na płyciźnie (zakon.wreck +1).",
+   "11": "Odpływ teraz",
+   "12": "Wyspa.forceTide(\"low\") - płycizny suche, kawałki wraku widać.",
+   "13": "Akt II (dług spłacony, osada otwarta)",
+   "14": "Story: rozdział 1 zamknięty, przełącznik 16 (Osada Milczących).",
+   "15": "Zmierzch w gaju Milczących",
+   "16": "Przenosi do środka gaju o zachodzie słońca."
+  },
+  "ok": {
+   "0": "Brak gry",
+   "1": "Dziś cień nie sięga dołu",
+   "2": "Okno cienia: {1}-{2}, ustawiono {3}",
+   "3": "Klucz Strażnika w torbie",
+   "4": "Zapiski strażnic: {1}/6",
+   "5": "Brak orła",
+   "6": "Śnieżny",
+   "7": ", w powietrzu",
+   "8": "Orzeł dorosły{1}",
+   "9": "Kawałek wraku {wreck}/3 odsłonięty",
+   "10": "Wszystkie kawałki już odsłonięte",
+   "11": "Odpływ",
+   "12": "Akt II",
+   "13": "Przełącznik 16 włączony (gra bez fabuły)",
+   "14": "Gaj Milczących (zmierzch)"
+  }
+ },
+ "_opis": "Napisy kodu Zakon.js sprzed przeniesienia do js/teksty/zakon.txt (kod.*)"
+}

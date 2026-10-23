@@ -41,6 +41,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("orzel");   // (the words of this file: js/teksty/orzel.txt, kodLot.*)
 
     const T = window.Tawerna, D = window.OrzelData;
     if (!T || !D) throw new Error("Orzel_Lot.js: brak TawernaCore.js / Orzel_Data.js (the core or the eagle's data is missing)");
@@ -333,7 +334,7 @@
         if (s.st < cfg.cost) { pop(TX.diveTired); return; }
         if (e.cool > 0) { pop(TX.diveWait); return; }
         const foe = O().pickFoe(e);
-        if (!foe) { pop("Nie ma na kogo nurkować"); return; }
+        if (!foe) { pop(TK.kodLot.dive[0]); return; }
         lot.phase = "dive"; lot.t = 0; lot.foe = foe;
         e.diving = true;
     }
@@ -431,7 +432,7 @@
         s.mode = "follow";
         s.map = $gameMap.mapId();
         s.lands = s.lands || {};
-        s.lands[$gameMap.mapId()] = { x: sp.x, y: sp.y, name: $gameMap.displayName() || ("Mapa " + $gameMap.mapId()) };
+        s.lands[$gameMap.mapId()] = { x: sp.x, y: sp.y, name: $gameMap.displayName() || (Watki.wstaw(TK.kodLot.dismount[0], { "1": $gameMap.mapId() })) };
         lot = null;
         fog.alpha = 0;
         T.emit("orzelLand", { map: $gameMap.mapId() });
@@ -443,17 +444,17 @@
         const sc = SceneManager._scene, s = S();
         if (!sc || !sc.openFarmMenu) return;
         const spot = landingSpot(), entries = [];
-        entries.push({ name: "Ląduj tutaj", icon: D.ICON.orzel, enabled: !spot.why, right: spot.why || "", help: "Orzeł siada na otwartej ziemi (4 × 4 pola, w miastach na placu).", run: () => tryLand() });
-        entries.push({ name: lot.level === "high" ? "Zniż lot" : "Wznieś się", icon: D.ICON.orzel, help: "Wysoko lecisz szybciej i widzisz więcej. Nisko orzeł nurkuje i ląduje (to samo: Q).", run: () => setLevel(lot.level === "high" ? "low" : "high") });
+        entries.push({ name: TK.kodLot.flightMenu[0], icon: D.ICON.orzel, enabled: !spot.why, right: spot.why || "", help: TK.kodLot.flightMenu[1], run: () => tryLand() });
+        entries.push({ name: lot.level === "high" ? TK.kodLot.flightMenu[2] : TK.kodLot.flightMenu[3], icon: D.ICON.orzel, help: TK.kodLot.flightMenu[4], run: () => setLevel(lot.level === "high" ? "low" : "high") });
         const lands = s.lands || {};
         for (const id of Object.keys(lands)) {
             if (Number(id) === $gameMap.mapId()) continue;
             const L = lands[id];
-            entries.push({ name: TX.farTitle + ": " + L.name, icon: 190, enabled: s.st >= FLY.far.cost && !stormNow(), right: FLY.far.cost + "% sił",
+            entries.push({ name: TX.farTitle + ": " + L.name, icon: 190, enabled: s.st >= FLY.far.cost && !stormNow(), right: Watki.wstaw(TK.kodLot.flightMenu[5], { cost: FLY.far.cost }),
                 help: fill(TX.farHelp, { c: FLY.far.cost }), run: () => farFly(Number(id), L) });
         }
         if (entries.length === 2) entries.push({ name: TX.farTitle, icon: 190, enabled: false, help: TX.farNone });
-        sc.openFarmMenu(fill(TX.panelTitle, V()), entries, undefined, undefined, undefined, undefined, Math.round(s.st) + " / " + O().maxSt() + " sił skrzydeł");
+        sc.openFarmMenu(fill(TX.panelTitle, V()), entries, undefined, undefined, undefined, undefined, Watki.wstaw(TK.kodLot.flightMenu[6], { "1": Math.round(s.st), "2": O().maxSt() }));
     }
     function farFly(mapId, L) {
         const s = S();
@@ -579,7 +580,7 @@
         bm.fontSize = 15;
         bm.textColor = spot && !spot.why ? "#9ff0a8" : "#c8c0b0";
         const landLine = lot.level === "high" ? "" : spot && !spot.why ? TX.landOk + "   " : spot ? TX.landNo + ": " + spot.why + "   " : "";
-        bm.drawText(landLine + "WASD: lot  Shift: szybciej  Q: wyżej/niżej  Spacja: nurkuj  L: ląduj  Enter: menu", 14, 38, 612, 24, "left");
+        bm.drawText(Watki.wstaw(TK.kodLot.updatePanel[0], { landLine: landLine }), 14, 38, 612, 24, "left");
     }
     let clouds = [], fogBands = [];
     let solidBmp = null;

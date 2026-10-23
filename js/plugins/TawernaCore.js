@@ -44,6 +44,11 @@
  *  Tawerna.audio.se(nazwa, opcje) - dźwięk, który nigdy nie zatrzyma gry
  *      („Failed to load”); Tawerna.audio.bgsLayer(...) - warstwy tła.
  *  Tawerna.popup(tekst, opcje) - dymek nad bohaterem (braki: kind "need").
+ *  Tawerna.talk - rozmowy z postaciami: przejęcia rozmowy z nazwanym
+ *      priorytetem (takeover), opcje dopisywane do menu postaci (option),
+ *      run / rows / menu; pożegnanie zawsze na końcu (docs/ROZMOWY.md).
+ *  Tawerna.onEventStart / onEventList - start zdarzenia i jego polecenia:
+ *      jeden hak rdzenia z priorytetami zamiast haków każdej wtyczki.
  *  Tawerna.has("Wtyczka"), Tawerna.api("Wtyczka"), Tawerna.call(...)
  *  Tawerna.debug - stany, wstawienia, zegary (czas na klatkę) dla F9.
  *  <Px:dx,dy> w notatce zdarzenia - jego obrazek przesunięty o piksele
@@ -951,6 +956,228 @@
     T.popup.COLORS = COLORS;
 
     // ------------------------------------------------------------------
+    // Talks with characters (2026-10-23, docs/ROZMOWY.md, docs/ARCHITEKTURA.md section 16): ONE service for every system that speaks
+    // through a character. Before it each plugin hooked TownLife's talk (addTalkHook, "first" = put at the front) or another plugin's
+    // menu (addMenu) in its own way, and the order of the plugin list decided who spoke - a shop once took Kłos's whole talk and his
+    // lines were gone. Now:
+    //   - a talk = the character's own lines (the `base` of whoever starts the talk: TownLife's line of the hour, Story's grandpa...),
+    //     unless a TAKEOVER wants it: Tawerna.talk.takeover({ owner, who, priority, run(ctx) -> commands | null }). The takeovers are
+    //     asked from the highest priority down (named levels: Tawerna.talk.PRIORITY), the first with commands has the talk;
+    //   - a character's MENU (Kłos's, Tadek's, a shopkeeper's...) = its own rows + the OPTIONS other systems add:
+    //     Tawerna.talk.option({ owner, who, when(ctx), label, order, cmds(ctx) | run(ctx), say }), merged by `order`
+    //     (Tawerna.talk.ORDER), the farewell always last (Tawerna.talk.menu);
+    //   - at equal priority / order: the owner's name, then the order of its own calls - never the plugin list.
+    // who: a character's key ("kwatermistrz" - TownLife's residents; "zolnierz:beczki", "borgar", "grandpa"...), a list of keys, "*",
+    // a RegExp or fn(key, ctx). ctx: { who, ev, interp, eventId, skip }. The commands are the engine's (101/401 with \SPK[n], 102/402/404),
+    // so SpeechBubbles shows them as before (bubbles over the speaker; O picks, P - the last row - goes back).
+    // ------------------------------------------------------------------
+    // (2026-10-23, the user's rule: a shop is one more row of a character's menu and never takes its lines) a shop opens by itself
+    // only when nobody above has anything to say: the quests' content, the owners' errands, the letters, the hermitage... - below
+    // "quest", above the greeting of the day (a shop's menu says its own greeting)
+    const TALK_PRIORITY = {
+        scene: 1000,     // a scene of a quest or of the story that must have the talk whatever else is there
+        errand: 900,     // another system's short errand at someone's talk ("Nie, w innej sprawie" lets the rest speak)
+        owner: 700,      // the system that owns the character or the place: its first meeting, its menu, its errands
+        handBack: 650,   // something to hand back to its owner (the raven's letters)
+        meet: 600,       // the harbour's and the hermitage's people: first meetings, their own menus
+        wrap: 550,       // the usual talk with one more item after it
+        quest: 500,      // the town's quests: hand-ins, offers, reminders, the steps' talks, remarks
+        shop: 450,       // a trade menu of a character without one of its own: only when all the above have nothing
+        greet: 400,      // the greeting of the day (TownQuests, by the town's opinion)
+        after: 300       // only when the quests have nothing and no greeting is due
+    };
+    const TALK_ORDER = { first: 0, own: 100, extra: 500, chat: 800 };
+    const END = () => ({ code: 0, indent: 0, parameters: [] });
+    const takeovers = [], talkOptions = [];
+    let talkLast = { who: "", by: "", frame: -1 };
+    function whoTest(who) {
+        if (who === undefined || who === null || who === "*") return () => true;
+        if (typeof who === "function") return (key, ctx) => { try { return !!who(key, ctx); } catch (e) { report("talk who()", e); return false; } };
+        if (who instanceof RegExp) return key => who.test(String(key));
+        const set = new Set([].concat(who).map(String));
+        return key => set.has(String(key));
+    }
+    const whoText = who => (who === undefined || who === null || who === "*" ? "*" : typeof who === "function" ? "fn" : who instanceof RegExp ? String(who) : [].concat(who).join(","));
+    const bandOf = p => { let best = ""; for (const k of Object.keys(TALK_PRIORITY)) if (p >= TALK_PRIORITY[k] && (!best || TALK_PRIORITY[k] > TALK_PRIORITY[best])) best = k; return best || "base"; };
+    const byPriority = (a, b) => b.priority - a.priority || (a.owner < b.owner ? -1 : a.owner > b.owner ? 1 : 0) || a.n - b.n;
+    function priorityOf(p, what) {
+        if (typeof p === "string" && TALK_PRIORITY[p] !== undefined) return TALK_PRIORITY[p];
+        const v = num(p, NaN);
+        if (!isFinite(v)) throw new Error("Tawerna.talk." + what + ": a priority is needed (a number or a name of Tawerna.talk.PRIORITY)");
+        return v;
+    }
+    const skipSet = s => new Set(s === undefined || s === null || s === "" ? [] : [].concat(s).map(String));
+    const talk = T.talk = { PRIORITY: TALK_PRIORITY, ORDER: TALK_ORDER };
+    // Tawerna.talk.takeover({ owner, who, priority, run, name }) -> off()
+    talk.takeover = function(spec) {
+        const s = spec || {}, owner = String(s.owner || "");
+        if (!owner) throw new Error("Tawerna.talk.takeover: an owner is needed");
+        if (typeof s.run !== "function") throw new Error("Tawerna.talk.takeover: " + owner + " has no run(ctx)");
+        const name = String(s.name || "");
+        for (let i = takeovers.length - 1; i >= 0; i--) if (takeovers[i].owner === owner && takeovers[i].name === name) takeovers.splice(i, 1);   // (the same one again: the new one)
+        const t = { owner, name, who: s.who, whoText: whoText(s.who), test: whoTest(s.who), priority: priorityOf(s.priority, "takeover"), run: s.run, n: seq++ };
+        takeovers.push(t);
+        takeovers.sort(byPriority);
+        return () => { const i = takeovers.indexOf(t); if (i >= 0) takeovers.splice(i, 1); };
+    };
+    // Tawerna.talk.option({ owner, who, when, label, order, cmds | run, say, id }) -> off(); label / cmds / say may be fn(ctx)
+    //   or { owner, who, when, order, rows(ctx) -> [{ label, cmds, say }] } - several rows at once (a list that changes: a shop's goods)
+    talk.option = function(spec) {
+        const s = spec || {}, owner = String(s.owner || "");
+        if (!owner) throw new Error("Tawerna.talk.option: an owner is needed");
+        if (!s.label && typeof s.rows !== "function") throw new Error("Tawerna.talk.option: " + owner + " has no label (nor rows)");
+        const id = owner + ":" + (s.id !== undefined ? s.id : whoText(s.who) + ":" + (typeof s.label === "string" ? s.label : seq));
+        for (let i = talkOptions.length - 1; i >= 0; i--) if (talkOptions[i].id === id) talkOptions.splice(i, 1);
+        const o = { id, owner, who: s.who, whoText: whoText(s.who), test: whoTest(s.who), when: typeof s.when === "function" ? s.when : null, label: s.label,
+            rows: typeof s.rows === "function" ? s.rows : null,
+            order: num(s.order, TALK_ORDER.extra), cmds: s.cmds || null, run: typeof s.run === "function" ? s.run : null, say: s.say || "", n: seq++ };
+        talkOptions.push(o);
+        return () => { const i = talkOptions.indexOf(o); if (i >= 0) talkOptions.splice(i, 1); };
+    };
+    function ctxOf(interp, who, o) {
+        const ev = o.ev || (interp && window.$gameMap && typeof interp.eventId === "function" ? $gameMap.event(interp.eventId()) : null) || null;
+        return { who, ev, interp: interp || null, eventId: ev ? ev.eventId() : interp && typeof interp.eventId === "function" ? interp.eventId() : 0, skip: skipSet(o.skip) };
+    }
+    // the commands of the talk now: the first takeover's, else base(ctx) -> { list, by } (nothing is played)
+    talk.resolve = function(interp, who, opts) {
+        const o = opts || {}, ctx = ctxOf(interp, who, o);
+        for (const t of takeovers.slice()) {
+            if (ctx.skip.has(t.owner) || !t.test(who, ctx)) continue;
+            let list = null;
+            try { list = t.run(ctx); } catch (e) { report("talk: takeover of " + t.owner + (t.name ? "." + t.name : "") + " (" + who + ")", e); }
+            if (list && list.length) return { list, by: t.owner, ctx };
+        }
+        if (typeof o.base === "function") {
+            let list = null;
+            try { list = o.base(ctx); } catch (e) { report("talk: the own lines of " + who, e); }
+            if (list && list.length) return { list, by: o.owner || "", ctx };
+        }
+        return { list: null, by: "", ctx };
+    };
+    // Tawerna.talk.run(interp, who, { ev, base(ctx), owner, skip }) - plays the talk in a child of the interpreter; -> who had it ("" none)
+    //   skip: an owner (or a list) left out this time - "Porozmawiaj" / "Nie, w innej sprawie": the same talk without that one
+    talk.run = function(interp, who, opts) {
+        const r = talk.resolve(interp, who, opts);
+        talkLast = { who: String(who), by: r.by, frame: Graphics.frameCount };
+        if (r.list && interp) interp.setupChild(r.list.concat([END()]), r.ctx.eventId);
+        return r.by;
+    };
+    talk.last = () => Object.assign({}, talkLast);
+    // a menu's rows: own rows ({ label, cmds, say, order } - order Tawerna.talk.ORDER.own unless given) and the options for this
+    // character, in order; opts.owner: only that owner's options (its own rows then too: none)
+    talk.rows = function(who, ctx, own, opts) {
+        const o = opts || {}, c = Object.assign({ who, ev: null, interp: null, eventId: 0, skip: skipSet() }, ctx || {}, { who });
+        if (!(c.skip instanceof Set)) c.skip = skipSet(c.skip);
+        const rows = [];
+        (own || []).forEach((r, i) => { if (r && r.label) rows.push({ label: r.label, cmds: r.cmds || [], say: r.say || "", order: num(r.order, TALK_ORDER.own), owner: "", k: i }); });
+        for (const opt of talkOptions) {
+            if ((o.owner && opt.owner !== o.owner) || c.skip.has(opt.owner) || !opt.test(who, c)) continue;
+            try {
+                if (opt.when && !opt.when(c)) continue;
+                if (opt.rows) {
+                    let j = 0;
+                    for (const r of opt.rows(c) || []) {
+                        if (r && r.label) rows.push({ label: r.label, cmds: r.cmds || [], say: r.say || "", order: opt.order, owner: opt.owner, k: 1e9 + opt.n + (j++) / 1000 });
+                    }
+                    continue;
+                }
+                const label = typeof opt.label === "function" ? opt.label(c) : opt.label;
+                if (!label) continue;
+                const cmds = opt.run ? [{ code: 355, indent: 0, parameters: ["Tawerna.talk.pick(this, " + JSON.stringify(opt.id) + ", " + JSON.stringify(String(who)) + ")"] }]
+                    : typeof opt.cmds === "function" ? opt.cmds(c) || [] : (opt.cmds || []).map(x => Object.assign({}, x));
+                rows.push({ label, cmds, say: typeof opt.say === "function" ? opt.say(c) || "" : opt.say, order: opt.order, owner: opt.owner, k: 1e9 + opt.n });
+            } catch (e) { report("talk: option " + opt.id, e); }
+        }
+        rows.sort((a, b) => a.order - b.order || (a.owner < b.owner ? -1 : a.owner > b.owner ? 1 : 0) || a.k - b.k);
+        return rows;
+    };
+    // a choice of labels and branches (as the plugins' own choiceTo): 102, one 402 + its commands each, 404
+    talk.choice = function(out, labels, branches, cancel, indent) {
+        const i0 = indent || 0;
+        out.push({ code: 102, indent: i0, parameters: [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0] });
+        labels.forEach((l, i) => {
+            out.push({ code: 402, indent: i0, parameters: [i, l] });
+            for (const c of (branches && branches[i]) || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
+            out.push({ code: 0, indent: i0 + 1, parameters: [] });
+        });
+        out.push({ code: 404, indent: i0, parameters: [] });
+        return out;
+    };
+    // a menu: the rows, then the farewell (always last; P picks it): bye = "Bywaj." or { label, cmds }
+    talk.menu = function(out, rows, bye, indent) {
+        const b = typeof bye === "object" && bye ? bye : { label: bye || "Bywaj.", cmds: [] };
+        const labels = rows.map(r => r.label).concat([b.label]), branches = rows.map(r => r.cmds || []).concat([b.cmds || []]);
+        return talk.choice(out, labels, branches, labels.length - 1, indent);
+    };
+    // a row given as run(ctx): Tawerna.talk.pick(this, id, who) in its branch; the commands it gives back play in a child
+    talk.pick = function(interp, id, who) {
+        const opt = talkOptions.find(o => o.id === id);
+        if (!opt || !opt.run) return false;
+        const ctx = ctxOf(interp, who, {});
+        let list = null;
+        try { list = opt.run(ctx); } catch (e) { report("talk: option " + id, e); return false; }
+        if (list && list.length && interp) interp.setupChild(list.concat([END()]), ctx.eventId);
+        return true;
+    };
+    // who would be asked for this character, from the first (F9, the tests, docs/ROZMOWY.md)
+    talk.takeovers = who => takeovers.filter(t => who === undefined || t.test(who, { who, skip: skipSet() }))
+        .map(t => ({ owner: t.owner, name: t.name, who: t.whoText, priority: t.priority, band: bandOf(t.priority) }));
+    talk.options = who => talkOptions.filter(o => who === undefined || o.test(who, { who, skip: skipSet() }))
+        .map(o => ({ id: o.id, owner: o.owner, who: o.whoText, order: o.order }));
+
+    // ------------------------------------------------------------------
+    // An event about to start, and the commands an event runs: one hook each for every system (2026-10-23; before - 8 plugins wrapped
+    // Game_Event.start and 10 wrapped Game_Event.list, and the plugin list decided which wrapper was asked first)
+    //   Tawerna.onEventStart(fn(ev) -> true: taken - the event does not start, { owner, priority })   (Tawerna.onEventStart.PRIORITY)
+    //   Tawerna.onEventList(fn(ev) -> a list of commands instead of the page's | null, { owner, priority })   (.PRIORITY)
+    // From the highest priority down; equal: the owner's name, then the order of its calls.
+    // ------------------------------------------------------------------
+    const startGates = [], listHooks = [];
+    function gate(store, what) {
+        const f = function(fn, opts) {
+            if (typeof fn !== "function") throw new Error("Tawerna." + what + ": not a function");
+            const o = opts || {}, owner = String(o.owner || "");
+            const g = { fn, owner, name: String(o.name || ""), priority: num(typeof o.priority === "string" ? f.PRIORITY[o.priority] : o.priority, 0), n: seq++, errors: 0 };
+            for (let i = store.length - 1; i >= 0; i--) if (owner && store[i].owner === owner && store[i].name === g.name) store.splice(i, 1);
+            store.push(g);
+            store.sort(byPriority);
+            return () => { const i = store.indexOf(g); if (i >= 0) store.splice(i, 1); };
+        };
+        f.list = () => store.map(g => ({ owner: g.owner, name: g.name, priority: g.priority }));
+        return f;
+    }
+    T.onEventStart = gate(startGates, "onEventStart");
+    // hidden: a character or a thing its system hides never starts; instead: something else happens instead of the page;
+    // before: told before any event starts (never takes it)
+    T.onEventStart.PRIORITY = { hidden: 900, instead: 500, before: 100 };
+    T.onEventList = gate(listHooks, "onEventList");
+    // closed: a place shut now (its door, its counter); scene: a quest's or the story's scene at a door, a prop, a person;
+    // own: a system's own use of an event (a hearth, the tavern's tagged places and its regulars, the board); person: a character's talk
+    // of the story (the last asked)
+    T.onEventList.PRIORITY = { closed: 900, scene: 800, own: 500, person: 300 };
+    const _Game_Event_start_core = Game_Event.prototype.start;
+    Game_Event.prototype.start = function() {
+        for (const g of startGates.slice()) {
+            let taken = false;
+            try { taken = g.fn(this) === true; } catch (e) { report("onEventStart" + (g.owner ? " (" + g.owner + ")" : ""), e); }
+            if (taken) return;
+        }
+        _Game_Event_start_core.call(this);
+    };
+    const _Game_Event_list_core = Game_Event.prototype.list;
+    Game_Event.prototype.list = function() {
+        for (let i = 0; i < listHooks.length; i++) {
+            const h = listHooks[i];
+            let l = null;
+            try { l = h.fn(this); } catch (e) { if (!h.errors++) report("onEventList" + (h.owner ? " (" + h.owner + ")" : "") + " - told once", e); l = null; }
+            if (l) return l;
+        }
+        return _Game_Event_list_core.call(this);
+    };
+    // the page's own commands, past every hook (a story gone: the character's own talk)
+    T.onEventList.own = ev => _Game_Event_list_core.call(ev);
+
+    // ------------------------------------------------------------------
     // Saved-state hooks (inner): the states are looked over the moment a game object set exists
     // ------------------------------------------------------------------
     const _DataManager_createGameObjects = DataManager.createGameObjects;
@@ -1051,6 +1278,8 @@
             return out;
         },
         layers: () => audio.layers(),
+        // (2026-10-23) the talks' service: who takes a talk, what menus get, the start and list hooks
+        talks: () => ({ takeovers: talk.takeovers(), options: talk.options(), start: T.onEventStart.list(), list: T.onEventList.list() }),
         frameMs: () => round(updaters.reduce((s, u) => s + (u.on ? u.ms : 0), 0), 3),
         // the lines the F9 menu shows (Debug.js, the "Rdzeń" tab): the time a frame, the states, the map's updaters, the id ranges,
         // what was put into this map, who listens on the bus
@@ -1074,6 +1303,9 @@
             out.push("Wstawione tu: " + (Object.keys(inj).map(k => k + " " + runs(inj[k])).join("; ") || "nic"));
             const ls = T.debug.listeners(), heard = Object.keys(ls).filter(k => ls[k].length);
             out.push("Szyna: " + (heard.map(k => k + " " + ls[k].length).join(", ") || "nikt nie słucha"));
+            const tk = T.debug.talks();
+            out.push("Rozmowy: przejęcia " + tk.takeovers.length + ", opcje " + tk.options.length + ", start zdarzeń " + tk.start.length + ", polecenia zdarzeń " + tk.list.length);
+            out.push("  przejęcia od pierwszego: " + (tk.takeovers.map(t => t.owner + (t.name ? "." + t.name : "") + " " + t.priority).join(", ") || "brak"));
             return out;
         }
     };

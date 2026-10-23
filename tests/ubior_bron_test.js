@@ -19,7 +19,8 @@ const SHOTS = path.join(OUT, "shots");
 fs.mkdirSync(SHOTS, { recursive: true });
 const NONE = { glowa: "", tors: "", nogi: "", stopy: "", pas: "", rece: "", plecy: "" };
 // the swing's frame of the blow in each row (HeroLook.js SWINGS hit) - the key frames: before, the blow, after; rows S and W
-const HIT = { Hero_Club: [9, 7], Hero_Axe: [8, 7], Hero_AxeSide: [10, 10], Hero_Pick: [8, 9], Hero_Spear: [8, 10], Hero_Punch: [12, 13], Hero_Bow: [14, 14], Hero_Sling: [9, 11] };
+const HIT = { Hero_Club: [9, 7], Hero_Axe: [8, 7], Hero_AxeSide: [10, 10], Hero_Pick: [8, 9], Hero_Spear: [8, 10], Hero_Punch: [12, 13], Hero_Bow: [14, 14], Hero_Sling: [9, 11],
+    Hero_Sword: [9, 11] };   // (2026-10-23: the sword's own swing, PixelLab - miecz, długi miecz, szabla, tasak)
 const keyFrames = sheet => {
     const out = [];
     for (const r of [0, 1]) { const h = HIT[sheet][r]; for (const c of [Math.max(0, h - 5), h, Math.min(16, h + 4)]) out.push([r, c]); }
@@ -44,7 +45,7 @@ kit.test({ port: 9585, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
     await t.frames(30);
     t.clearErrors();
     const ver = await t.json("({ u: Ubior.VERSION, b: UbiorBron.VERSION, layers: Ubior.layers().map(l => l.name) })");
-    t.check("Ubior 1.1 z warstwą broni", ver.u === "1.1.0" && ver.layers.includes("bron"), ver);
+    t.check("Ubior 1.1+ z warstwą broni", /^1\.[12]\./.test(ver.u) && ver.layers.includes("bron"), ver);
     const before = await t.eval("Ubior.stats().length");
     // a crop: the cell with what is over its head (Ubior.cellWithHead), 96 x 108, the feet about the same height in every sheet
     const crop = (name, c, r) => t.eval(`(function(){ const b = Ubior.sheet(${JSON.stringify(name)}), cell = Ubior.SHEETS[${JSON.stringify(name)}].cell;
@@ -109,8 +110,9 @@ kit.test({ port: 9585, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
     }
     t.check("każdy hełm (" + helms.length + ") we wszystkich ujęciach, także leżąc, w przewrocie i na orle", helmOk);
     t.check("hełmy w chodzie nieucięte krawędzią klatki (pasek nad głową)", meta.helmy.every(h => h.clipped === 0), meta.helmy.filter(h => h.clipped).map(h => h.key));
-    // over the head on the screen: the child sprite of the walking hero draws the helmet's crown over his frame
-    await t.eval(`Ubior.set(${JSON.stringify(Object.assign({}, NONE, { glowa: "helm_zakonny_zakon", tors: "zbroja_napiersnik_zakon", rece: "karwasze_zakon", nogi: "nagolenniki_zakon", stopy: "buty_okute_stal" }))}); 0`);
+    // over the head on the screen: the child sprite of the walking hero draws the helmet's crown over his frame (the old drawn great helm -
+    // Ubior.pl(false): the PixelLab helmets, 2026-10-23, fit in the walking cell and need no strip)
+    await t.eval(`Ubior.pl(false); Ubior.set(${JSON.stringify(Object.assign({}, NONE, { glowa: "helm_zakonny_zakon", tors: "zbroja_napiersnik_zakon", rece: "karwasze_zakon", nogi: "nagolenniki_zakon", stopy: "buty_okute_stal" }))}); 0`);
     await t.until(`Ubior.liveKey("Hero_Walk") === Ubior.key()`, 20, 50);
     await t.eval(`(function(){ const sc = SceneManager._scene; sc.__updateMain = sc.updateMain; sc.updateMain = function(){};
         const hide = s => { s.update = function(){ this.visible = false; }; s.visible = false; };
@@ -145,7 +147,8 @@ kit.test({ port: 9585, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
         await clipShot(`s_k${s.kind}.png`, at);
         meta.shots.mapa.push({ label: s.label, file: `s_k${s.kind}.png`, head: at.head });
     }
-    t.check("na mapie: duszek nad głową bohatera rysuje koronę hełmu nad klatką (chód 3 kierunki)", screenOk, meta.shots.mapa);
+    t.check("na mapie: duszek nad głową bohatera rysuje koronę hełmu nad klatką (chód 3 kierunki; stary rysowany hełm zakonny)", screenOk, meta.shots.mapa);
+    await t.eval("Ubior.pl(true); 0");
     // the shield in the guard: its picture instead of the icon (forced look; Combat_UI's guard)
     meta.shots.tarcza = [];
     const shieldKeys = await t.json("Object.keys(Ubior_Data.WZORY_TARCZ)");

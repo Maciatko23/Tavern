@@ -1,0 +1,67 @@
+{
+ "kodDane": {
+  "towerFound": {
+   "0": "> (Pod płytą sucha wnęka, a w niej zwój w natłuszczonej skórze.)",
+   "1": "> Zapiski strażnic. Karta {n}. Pismo proste, jak u żołnierza - ale ja tego nie przeczytam. Brat Kleofas przeczyta."
+  },
+  "prayedSub": {
+   "0": "Prace kosztują 10% mniej sił  ·  {h} h"
+  },
+  "offered": {
+   "0": "Dar przy kapliczce  ·  błogosławieństwo {h} h"
+  },
+  "cairnHit": {
+   "0": "Zdejmujesz kamienie {n}/{m}"
+  },
+  "cairnFound": {
+   "0": "> (W środku kopca, pod kamieniem z krukiem, zwój w natłuszczonej skórze.)",
+   "1": "> Zapiski strażnic, karta {n}. Układam kamienie z powrotem, jak były. Kruk na wierzch."
+  },
+  "holeHit": {
+   "0": "Kopiesz {n}/{m}"
+  },
+  "downAsk": {
+   "0": "Strzęp liny przywiązany do pnia. Schodzi w dół przez gąszcz.",
+   "1": "Stare kołki wbite w skałę i strzęp liny. Prowadzą w dół."
+  },
+  "nestFeathers": {
+   "0": "Pióra ×{n}"
+  },
+  "herbPicked": {
+   "0": "{name} zerwana"
+  },
+  "perchLook": {
+   "0": "> Orla grzęda Straży. Kamienny słup, żelazna poprzeczka wytarta pazurami, na górze misa na deszczówkę.",
+   "1": "> Pod słupem w trawie leży zardzewiałe strzemię.",
+   "2": "> Pod słupem zbutwiałe siodło. Za małe dla konia, za szerokie dla człowieka.",
+   "3": "> W szczelinie słupa tkwią pióra, białe jak sól."
+  },
+  "perchEagle": {
+   "0": "{name} siada na grzędzie Straży"
+  },
+  "graveHit": {
+   "0": "Czyścisz kamień {n}/{m}"
+  },
+  "groveWait": {
+   "0": "Cisza w gaju  ·  zostało {m} min"
+  },
+  "ravenFeed": {
+   "0": "Rzuć im: {name}."
+  },
+  "wreckLook": {
+   "0": "Deski kadłuba z żelaznymi okuciami, do połowy w piasku.",
+   "1": "Z piasku wystaje rzeźbiona deska.",
+   "2": "Róg małej skrzyni okutej żelazem."
+  },
+  "wreckHit": {
+   "0": "Odkopujesz {n}/{m}"
+  },
+  "wreckGot": {
+   "0": "> (Wyrywam z desek dwa okucia. Sól zjadła je do połowy, ale żelazo to żelazo.)",
+   "1": "> (Deska z dziobu okrętu. Białe oko i litery: BIAŁA ŹRENICA - STRAŻ PEWNOŚCI.)",
+   "2": "> Ktoś w tawernie by ją poznał. Ktoś, kto rysuje portrety za piwo.",
+   "3": "> (Skrzynka kapitańska. W środku sakiewka z monetami i słój smoły, szczelnie zalakowany.)"
+  }
+ },
+ "_opis": "Napisy kodu Zakon_Data.js sprzed przeniesienia do js/teksty/zakon.txt (kodDane.*)"
+}

@@ -22,7 +22,7 @@
  * Praca i walka: każdy ruch ma nowy arkusz w img/system (Hero_Axe, Hero_AxeSide,
  * Hero_Pick, Hero_Shovel, Hero_Rake, Hero_Hoe, Hero_Hammer, Hero_Rod, Hero_Sling,
  * Hero_Bow, Hero_Spear, Hero_Club, Hero_Punch, Hero_Crouch, Hero_Sit, Hero_Roast,
- * Hero_LieDown, Hero_Roll, Hero_Torch): 4 wiersze (dół, lewo, prawo, góra), 17-33 klatek 96x96
+ * Hero_LieDown, Hero_Roll, Hero_Torch, Hero_Sword - miecz: wypad i szerokie cięcie): 4 wiersze (dół, lewo, prawo, góra), 17-33 klatek 96x96
  * (ChoppableTree: swingKind pyta HeroLook.swingDef). Skradanie (C): Hero_Sneak.
  * Z zapaloną pochodnią w ręku (Torch.js): Hero_TorchWalk, Hero_TorchRun, Hero_TorchSneak,
  * a schylając się po coś (kucanie): Hero_TorchCrouch.
@@ -64,7 +64,8 @@
         17: { sheet: "Hero_LieDown", hit: [16, 16, 16, 16] },  // knocked down
         18: { sheet: "Hero_Club", hit: [9, 7, 7, 11] },        // the club
         19: { sheet: "Hero_Punch", hit: [12, 13, 13, 6] },     // a punch (from behind: the fists up and down again, no turning)
-        20: { sheet: "Hero_Torch", hit: [7, 7, 7, 9] }         // the burning torch (Torch.js): raised, swept in front of him, back up
+        20: { sheet: "Hero_Torch", hit: [7, 7, 7, 9] },        // the burning torch (Torch.js): raised, swept in front of him, back up
+        21: { sheet: "Hero_Sword", hit: [9, 11, 11, 11] }      // the sword (2026-10-23, PixelLab: a lunge, the blade far out in front, a wide cut)
     };
     // the torch in his hand (Torch.js: lit and not stuck in the ground while he works): the same walk with the torch held - the hand
     // nearer the camera, behind him from the back (tools/torch/build_torch_walk.py)

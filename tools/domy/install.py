@@ -7,7 +7,8 @@
 #                           rebuilt house's room) - build.py; data/Map170.json (the town house's yard of v1.0.0) removed
 #   3. data/MapInfos.json   154 "Chata pod lasem" (child of 111), 168 "Spalona zagroda" (child of 23 Skraj lasu), 169 "Dom Ługów"
 #                           (child of 168); 170 emptied (null). The rest of the lines as they were
-#   4. js/plugins.js        Homes's line: the new description and parameters (priceHut, priceFarm); registered after TownQuests
+#   4. js/tawerna_wtyczki.js Homes's line (the game's plugin list - since 2026-10-23 not js/plugins.js): the new description and
+#                          parameters (priceHut, priceFarm); registered after TownQuests
 #                           if the editor dropped it
 # Map111 is the user's map: written only when it is still the 46 x 36 one this was staged from (the stage is checked against it).
 # A map of ours changed in the editor since the last install (installed.json keeps the hashes) is left alone (--force replaces it).
@@ -135,7 +136,7 @@ def patched_mapinfos():
 
 
 def patched_plugins():
-    path = ROOT + "js/plugins.js"
+    path = ROOT + "js/tawerna_wtyczki.js"   # (the game's plugin list, one entry a line like js/plugins.js)
     raw = open(path, "rb").read()
     crlf = b"\r\n" in raw
     lines = raw.decode("utf-8").replace("\r\n", "\n").split("\n")
@@ -147,8 +148,8 @@ def patched_plugins():
         lines[i] = line if lines[i].endswith(",") else line[:-1]
     else:
         idx = [i for i, l in enumerate(lines) if l.startswith('{"name":"%s",' % PLUGIN_AFTER)]
-        assert len(idx) == 1, "plugins.js: brak %s" % PLUGIN_AFTER
-        assert lines[idx[0]].endswith(","), "plugins.js: %s jest ostatni?" % PLUGIN_AFTER
+        assert len(idx) == 1, "lista gry (js/tawerna_wtyczki.js): brak %s" % PLUGIN_AFTER
+        assert lines[idx[0]].endswith(","), "lista gry: %s jest ostatni?" % PLUGIN_AFTER
         lines.insert(idx[0] + 1, line)
     out = "\n".join(lines)
     return (out.replace("\n", "\r\n") if crlf else out).encode("utf-8")
@@ -175,7 +176,7 @@ def main():
         gone.append(path)
     plan.append((DATA + "MapInfos.json", patched_mapinfos()))
     plug = patched_plugins()
-    if plug: plan.append((ROOT + "js/plugins.js", plug))
+    if plug: plan.append((ROOT + "js/tawerna_wtyczki.js", plug))
     if keep: print("POMINIĘTE (zmienione w edytorze albo cudze; --force zastąpi):", keep)
     print("do zapisu:", [os.path.relpath(p, ROOT) for p, _ in plan], "do usunięcia:", [os.path.relpath(p, ROOT) for p in gone])
     if DRY:

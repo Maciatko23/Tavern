@@ -39,6 +39,7 @@
     const O = window.OkoliceData, P = O ? O.PACKAGES.A : null;
     const VERSION = "1.1.0";
     const T = (a, b) => [a, b];
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
 
     // ------------------------------------------------------------------
     // The items (PLAN.md 3.2; data/Items.json 185-199 through tools/rozszerzenia/instaluj.py) and the ones of the game we use
@@ -115,10 +116,11 @@
     // A5 Jagna's glade (Map017) and the rare herbs: seasons (0 spring .. 3 winter), days to grow back
     // ------------------------------------------------------------------
     const HERBS = {
-        arcydziegiel: { item: ITEM.arcydziegiel, seasons: [1, 2], regrow: 6, name: "Arcydzięgiel", look: 0 },
-        dziurawiec: { item: ITEM.dziurawiec, seasons: [1], regrow: 5, name: "Dziurawiec", look: 1 },
-        kozlek: { item: ITEM.kozlek, seasons: [0, 1, 2], regrow: 7, name: "Kozłek lekarski", look: 2 }
+        arcydziegiel: { item: ITEM.arcydziegiel, seasons: [1, 2], regrow: 6, look: 0 },
+        dziurawiec: { item: ITEM.dziurawiec, seasons: [1], regrow: 5, look: 1 },
+        kozlek: { item: ITEM.kozlek, seasons: [0, 1, 2], regrow: 7, look: 2 }
     };
+    Watki.scal(HERBS, "zasoby", "ziola");   // (its words: js/teksty/zasoby.txt, ziola)
     const GLADE = { map: 17, x: 65, y: 12, w: 5, h: 3, stand: [67, 15],
         herbs: [{ id: 2104, kind: "arcydziegiel", x: 66, y: 12 }, { id: 2105, kind: "dziurawiec", x: 68, y: 13 }, { id: 2106, kind: "kozlek", x: 66, y: 14 }] };
 
@@ -129,30 +131,20 @@
     // once a day when the hero has some and she trusts him (trust >= 0)
     const JAGNA_BUYS = [{ id: 228, price: 20 }, { id: 229, price: 6 }];
     const JAGNA_BUY_TX = {
-        ask: ["Pachnie mi tu skałą i morzem... Ziele z klifu? Z półek, gdzie człowiek nie sięgnie? Kupię, zapłacę uczciwie."],
-        no: "Nie teraz.",
-        thanks: ["Dobre, świeże. Na gorączkę i na płuca nie ma lepszego. Przynoś, jak znowu orzeł cię tam zaniesie."]
     };
+    Watki.scal(JAGNA_BUY_TX, "zasoby", "jagnaSkup");   // (its words: js/teksty/zasoby.txt, jagnaSkup)
     const JAGNA = {
-        key: "jagna", id: 2900, name: "Babka Jagna", title: "zielarka", sheet: "$Npc_Jagna", map: 17, speed: 2,
+        key: "jagna", id: 2900, sheet: "$Npc_Jagna", map: 17, speed: 2,
         away: ["jagna_las"],
         plan: [[0, "inside", "jagna_las"], [5, "work", "jagna_polanka", "zasRosa"], [10, "inside", "jagna_las"],
                [18, "stand", "jagna_krag", "zasPoDeszczu"], [20, "inside", "jagna_las"]],
         barks: {
-            work: ["Rosa... rosa jest najlepsza. Ziele pije, póki słońce nie wstanie.", "Kozłek na sen, dziurawiec na smutek, arcydzięgiel na wszystko inne.", "Hm-hm-hm... (nuci coś pod nosem)"],
-            stand: ["Kręgi znowu wyszły. Mówiłam, że po deszczu wyjdą.", "Nie wchodź w środek po zmroku, chłopcze. Ja ci mówię."],
-            rain: ["Pij, ziemio, pij."],
             night: []
         },
         talk: {
-            morning: ["Rano rosa, w południe susza. Zioła zbiera się rano, chłopcze - potem już tylko siano.",
-                      "Moja polanka nie jest duża, ale tu jeszcze coś rośnie. Wiesz czemu? Bo nikt jej nie depcze."],
-            day: ["Woda ucieka, a z nią zioła. Gdzie spod kamieni jeszcze się sączy, tam szukaj rzadkiego ziela."],
-            evening: ["Po deszczu wychodzą grzyby w kręgach. Ludzie mówią: czarci krąg. Ja mówię: grzybnia. Ale w środek nocą nie wchodzę."],
-            night: ["Nocą zioła śpią. I ty idź spać."],
-            rain: ["Deszcz! Niech pada, niech pada. Jutro będzie co zbierać."]
         }
     };
+    Watki.scal(JAGNA, "zasoby", "mieszkaniec");   // (its words: js/teksty/zasoby.txt, mieszkaniec)
 
     // ------------------------------------------------------------------
     // A6 Podgrodzie (Map111): three kitchen gardens, the rubbish heap, the clay pit
@@ -238,245 +230,130 @@
     // ------------------------------------------------------------------
     const TX = {
         spring: {
-            found: "Spod kamieni sączy się czysta woda. Ktoś kiedyś obłożył to miejsce kamieniami.",
-            menu: "Źródełko", note: "Woda ze źródełka: jedna porcja na każde nabranie.",
-            dry: "Ledwie wilgotny mech. Woda wróci po deszczu.", ice: "Lód. Trzeba poczekać na odwilż.",
-            left: n => (n === 1 ? "Została jedna porcja na dziś." : "Zostały " + n + " porcje na dziś."),
-            helpPortion: "\nŹródełko: każde nabranie zabiera jedną porcję.",
-            dog: "Pies węszy w gąszczu...", frogs: "Gdzieś w lesie rechoczą żaby..."
+            left: n => (n === 1 ? TX.spring.leftOne : fill(TX.spring.leftN, { n }))
         },
         farm: {
-            ruinMenu: "Ruina chaty Rzepków", search: "Przeszukaj chatę", searchHelp: "Zajrzyj pod belki i do zawalonej izby.",
-            searched: "Pusta izba. Wszystko, co było coś warte, już zabrałeś.",
-            letterTitle: "List Wojciecha Rzepki",
-            letter: ["„Kto to znajdzie - my poszli do miasta. Ziemia nie rodzi, studnia wyschła, a dzieci płaczą z pragnienia.",
-                     "Studnia była dobra, kamienna, ojciec ją kopał. Zasypałem ją, żeby bydło nie wpadło. Może kiedyś deszcz wróci.",
-                     "Lina i gwoździe w skrzyni pod oknem - weź, komu potrzeba. Wojciech Rzepka.”"],
-            gardenMenu: "Zdziczały ogródek", weed: "Wypiel ogródek", weedHelp: "Motyką wyrwiesz chwasty: pod nimi dzikie ziemniaki i marchew, a czasem nasiona. Odrasta po 12 dniach.",
-            gardenDone: "Ogródek wypielony. Chwasty odrosną za kilka dni.", gardenYield: "Spod chwastów: ",
-            needHoe: "Potrzebna motyka.",
-            fence: "Resztki płotu. Deski spróchniałe, słupki krzywe."
         },
         well: {
-            menu: "Studnia sąsiada", names: ["Zasypana studnia", "Pusta cembrowina", "Studnia deszczowa"],
-            clear: "Oczyść studnię", clearHelp: "Wybierz gruz łopatą. Na dnie coś brzęczy.",
-            fix: "Napraw studnię", fixHelp: "Nowa cembrowina z bloków, kołowrót na linie, daszek z desek. Młotek.",
-            needShovel: "Potrzebna łopata.", needHammer: "Potrzebny młotek.",
-            cleared: ["Studnia oczyszczona", "Na dnie zardzewiałe wiadro - i piach. Woda odeszła stąd dawno."],
-            fixed: ["Studnia naprawiona", "Zbiera tylko deszcz: najwyżej cztery porcje. W upał paruje, zimą zamarza."],
-            empty: "Sucho. Studnia zbiera tylko deszcz - poczekaj, aż popada.", ice: "Woda w studni zamarzła.",
-            note: n => "Deszczówka w studni: " + n + "/4 porcji. Każde nabranie zabiera jedną."
+            note: n => fill(TX.well.noteN, { n })
         },
         hive: {
-            menu: "Dziki ul", take: "Wybierz plaster", takeHelp: "Nożem wytniesz plaster z miodem i woskiem. Bez dymu pszczoły żądlą - weź zapaloną pochodnię albo rozpal ognisko obok.",
-            needKnife: "Potrzebny nóż.", sleep: "Pszczoły śpią w głębi pnia.", empty: "Plaster wybrany. Pszczoły zrobią nowy za kilka dni.",
-            stung: "Pszczoły! Użądlenie!", calm: "Dym usypia pszczoły. Plaster wychodzi czysto.", spring: "Wiosną plaster jeszcze młody - tylko trochę miodu."
         },
         ring: {
-            pick: "Grzyby z kręgu", whisper: "...coś szepcze w mgle...", fog: "Mgła siada w środku kręgu."
         },
         herb: {
-            notYours: "Nie twoje, chłopcze.", season: "Nie jego pora.", picked: "Zerwane. Odrośnie za kilka dni.",
-            noticed: ["(Jagna patrzy na ciebie spod chusty.) Byłeś na mojej polance, kiedy mnie nie było.", "Oddaj, co zerwałeś. Ziele z cudzej ziemi nie leczy - ono pamięta, czyje jest."],
-            first: ["Hm? Bosy chłopak na mojej łące. Rzadki gość.", "Jestem Jagna. Zbieram zioła, póki susza wszystkiego nie spaliła. Moja polanka to moja polanka - pamiętaj."],
-            ring: ["Byłeś nocą w kręgu, co? Widzę po oczach.", "Mgła, szept... To grzybnia oddycha, chłopcze. Ale ja bym tam drugi raz nie szła."],
-            permit: "Jagna pozwala: po jednym zielu z każdej kępy, kiedy odrośnie."
         },
         dump: {
-            menu: "Wysypisko", dig: "Grzeb w śmieciach", digHelp: "Rękami albo łopatą (łopatą więcej). Raz na dzień - wysypisko daje cztery grzebania dziennie.",
-            done: "Na dziś dość grzebania. Sąsiedzi patrzą krzywo.", out: "Wysypisko przekopane na dziś. Jutro ludzie wyrzucą nowe.",
-            nothing: "Same skorupy.", found: "Znalezisko: "
         },
         clay: {
-            menu: "Glinianka", dig: "Kop glinę", digHelp: "Łopatą wybierzesz mokrą glinę na garnki: dwie grudy na raz, najwyżej sześć na dzień z całej glinianki.",
-            needShovel: "Potrzebna łopata.", out: "Na dziś glina wybrana. Ściany muszą odpocząć.", drink: "Napij się", muddy: "Mętna, z gliną. Tego się nie pije.",
-            water: "\nNa dnie po deszczu stoi mętna woda."
         },
         quarry: {
-            menu: "Ściana ciosowa", cut: "Wyrąb blok", cutHelp: "Kilofem odłupiesz blok kamienny (ciężki: 6). Ściana daje sześć bloków na tydzień.",
-            needPick: "Potrzebny kilof.", out: "Ściana na razie wybrana. Wróć za kilka dni.", got: "Blok kamienny wyrąbany"
         },
         pool: {
-            menu: "Kałuża pływowa", catch: "Złap kraba", catchHelp: "Szybko, z boku, za skorupę. Krab ucieka bokiem.",
-            pinch: "Szczypie!", fled: "Krab zwiał pod kamień.", none: "W kałuży nie ma już krabów. Następny odpływ przyniesie nowe.",
-            salt: "Słona. Morskiej wody się nie pije.", drink: "Napij się", got: "Złapany krab"
         },
-        drift: { take: "Drewno dryfowe", got: "Drewno dryfowe" },
+        drift: { },
         orchard: {
-            menu: "Spalona jabłonka", stages: ["spalona", "przycięta", "opatrzona", "podlewana", "żyje"],
-            prune: "Przytnij spalone gałęzie", pruneHelp: "Nożycami albo siekierą odetniesz zwęglone gałęzie. Z nich - trochę węgla.",
-            dress: "Opatrz rany maścią", dressHelp: "Maść szczepiarska (glina z woskiem) zamyka rany drzewa.",
-            water: "Podlej drzewo", waterHelp: "Jedno podlanie konewką dziennie, w trzech różnych dniach. Konewkę napełnisz tylko swoją wodą.",
-            pick: "Zerwij jabłka", needCut: "Potrzebne nożyce albo siekiera.", needSalve: "Brakuje: Maść szczepiarska.",
-            needCan: "Potrzebna konewka.", canEmpty: "Konewka pusta.", wateredToday: "Dziś już podlane.",
-            alive: "Drzewo żyje. Za kilka dni puści liście.", leaves: "Liście! Drzewo żyje.", noFruit: "Jeszcze nie ma owoców.",
-            fruit: "Dzikie jabłka z sadu Ługów"
         },
         field: {
-            menu: "Pole mieszczan", sow: "Dniówka: siew", reap: "Dniówka: żniwa", workHelp: "Dwadzieścia uderzeń w polu, od szóstej do drugiej. Zapłata: 15 G i trochę plonów. Raz na dzień.",
-            steal: "Ukradnij plony", stealHelp: "Nikt nie patrzy... Ale ludzie się dowiedzą.", notNow: "Na polu nie ma teraz roboty.",
-            doneToday: "Dniówka na dziś odrobiona.", paid: "Dniówka", stolen: "Ktoś cię widział!", hours: "Dniówka od szóstej do drugiej po południu."
         },
         garden: {
-            menu: "Ogródek", help: "Pomóż przy grządkach", helpHelp: "Motyką, od szóstej do południa, raz na dzień. Dostaniesz dwa warzywa.",
-            steal: "Ukradnij warzywa", stealHelp: "Nocą, po cichu. Jeśli ktoś z Podgrodzia zobaczy - wstyd na całą okolicę.",
-            winter: "Zimą grządki śpią.", doneToday: "Dziś już pomagałeś przy grządkach.", hours: "Pomoc przy grządkach od szóstej do południa.",
-            thanks: "Dzięki za pomoc!", seen: "Ktoś cię widział!", night: "Kraść można tylko nocą.", nothing: "Na grządkach nic jeszcze nie urosło.",
-            stolenRecently: "Tu już ktoś niedawno kradł."
         },
-        needs: { tired: "Jesteś zbyt zmęczony", missing: (name, have, n) => "Brakuje: " + name + " " + have + "/" + n }
+        needs: { missing: (name, have, n) => fill(TX.needs.missingN, { name, have, n }) }
     };
+    Watki.scal(TX, "zasoby", "");   // (its words: js/teksty/zasoby.txt)
 
     // ------------------------------------------------------------------
     // The quests (TownQuests packs): K55-K58, D30-D31 - texts in TownQuests' format; the engine's handlers (check, vars, cond) are
     // in Zasoby.js (TownQuests.FX)
     // ------------------------------------------------------------------
     const Q_K55 = {
-        id: "K55", kind: "K", title: "Świece dla dzwonnika", giver: "dzwonnik", icon: ITEM.wosk, where: "dzwonnica → dzikie ule za działką dziadka", when: "8-18, od dnia 3",
-        desc: "Ambrożemu kończą się świece, a w dzwonnicy po ciemku łatwo skręcić kark. Potrzebuje wosku - z dzikich uli w sosnach.",
+        id: "K55", kind: "K", giver: "dzwonnik", icon: ITEM.wosk,
         offer: {
-            cond: { hours: [8, 18], day: 3 },
-            say: ["Świece się kończą, chłopcze. W dzwonnicy po ciemku łatwo skręcić kark na schodach, a kościół biedny.",
-                  "Gdybyś trafił na dziki ul... wosk to wosk. Cztery kawałki starczą mi na zimę świec."],
-            yes: "Poszukam wosku.", no: "Nie teraz.",
-            accept: ["Pszczoły nie lubią gości. Weź dym - zapaloną pochodnię albo ognisko obok. I nóż, bo plaster sam nie wyjdzie."],
-            decline: ["Pan Bóg widzi i po ciemku."]
+            cond: { hours: [8, 18], day: 3 }
         },
         steps: [
-            { type: "bring", to: "dzwonnik", need: [[ITEM.wosk, 4]], hours: [6, 21],
-              text: "Przynieś Ambrożemu 4× Wosk pszczeli (dzikie ule w dziuplach sosen za działką dziadka).",
-              remind: ["Cztery kawałki wosku. Pszczoły w sosnach za działką twojego dziadka - słyszałem, jak bzyczą."],
-              hero: ["> Wosk, jak prosiłeś. Cztery kawałki."],
-              done: ["Pachnie latem... Dobry wosk, żółty. Wystarczy na całą zimę.", "Masz trzydzieści groszy. I dziękuję - w imieniu schodów dzwonnicy."] }
+            { type: "bring", to: "dzwonnik", need: [[ITEM.wosk, 4]], hours: [6, 21] }
         ],
         reward: { gold: 30, xp: 50, opinion: 2 }
     };
+    Watki.scal(Q_K55, "zasoby", "zadania.K55");   // (its words: js/teksty/zasoby.txt, zadania.K55)
     const Q_K56 = {
-        id: "K56", kind: "K", title: "Ogródki Podgrodzia", giver: "znachorka", icon: ITEM.cabbage, where: "Podgrodzie, ogródki na północy", when: "6-12, trzy dni w tygodniu",
-        desc: "Ogródki pod murem schną, a ręce do pracy w Podgrodziu stare. Babka Jadwiga prosi o trzy dni pomocy przy grządkach w ciągu tygodnia.",
+        id: "K56", kind: "K", giver: "znachorka", icon: ITEM.cabbage,
         offer: {
-            cond: { hours: [6, 18], day: 4 },
-            say: ["Ogródki pod murem schną, dziecko, a ręce u nas stare. Marta pierze, Franek mały, a ja ledwo się schylam.",
-                  "Pomóż przy grządkach trzy dni w tym tygodniu - motyką, nie gadaniem. Zapłacę groszem i ziołami."],
-            yes: "Pomogę.", no: "Nie dam rady.",
-            accept: ["Rano, od szóstej do południa. Grządki są na północ od chat. Podlewać nie trzeba - wody i tak nie ma."],
-            decline: ["Idź z Bogiem."]
+            cond: { hours: [6, 18], day: 4 }
         },
         steps: [
-            { type: "custom", check: "k56Dni", vars: "k56Dni", when: { deadline: { day: 7, late: "fail" } },
-              text: "Pomagaj przy ogródkach Podgrodzia (rano 6-12, motyka): {n}/3 dni. Masz na to tydzień." }
+            { type: "custom", check: "k56Dni", vars: "k56Dni", when: { deadline: { day: 7, late: "fail" } } }
         ],
         reward: { gold: 25, xp: 60, opinion: 2, items: [[ITEM.herb, 3]] },
-        fail: { opinion: -1, text: "Tydzień minął, a grządki same się nie opielą." }
+        fail: { opinion: -1 }
     };
+    Watki.scal(Q_K56, "zasoby", "zadania.K56");   // (its words: js/teksty/zasoby.txt, zadania.K56)
     const Q_K57 = {
-        id: "K57", kind: "K", title: "Studnia sąsiada", giver: "grandpa", icon: ITEM.bucket, where: "działka dziadka → zagroda Rzepków na południu", when: "od dnia 3",
-        desc: "Za lasem stała zagroda Rzepków. Studnia im wyschła i poszli do miasta. Dziadek myśli, że dałoby się ją wzmocnić - choćby na deszczówkę.",
+        id: "K57", kind: "K", giver: "grandpa", icon: ITEM.bucket,
         offer: {
-            cond: { day: 3, story: true },
-            say: ["Wnuku... za lasem, na południe od działki, stała zagroda Rzepków. Wojciech z żoną i dzieciakami. Studnia im wyschła i poszli do miasta.",
-                  "Studnia była głęboka, kamienna - stary Rzepka ją kopał. Może dałoby się ją oczyścić i wzmocnić, choćby na deszczówkę. Bliżej niż do miasta."],
-            yes: "Zajrzę tam.", no: "Później, dziadku.",
-            accept: ["Weź łopatę - gruzu tam pewnie po samą cembrowinę. A na naprawę trzeba porządnych bloków z kamieniołomu w górach, nie polnych kamyków."],
-            decline: ["Studnia nie ucieknie. Woda już uciekła."]
+            cond: { day: 3, story: true }
         },
         steps: [
-            { type: "custom", check: "k57Zagroda", text: "Znajdź opuszczoną zagrodę Rzepków (Kruczy Jar, na południe od działki, za lasem)." },
-            { type: "custom", check: "k57Oczyszczona", text: "Oczyść zasypaną studnię Rzepków łopatą." },
-            { type: "custom", check: "k57Bloki", vars: "k57Bloki", text: "Zdobądź materiał na naprawę: Blok kamienny {b}/4 (ściana ciosowa w górach), Lina {l}/2, Deski {d}/2." },
-            { type: "custom", check: "k57Naprawiona", text: "Napraw studnię Rzepków młotkiem." }
+            { type: "custom", check: "k57Zagroda" },
+            { type: "custom", check: "k57Oczyszczona" },
+            { type: "custom", check: "k57Bloki", vars: "k57Bloki" },
+            { type: "custom", check: "k57Naprawiona" }
         ],
-        reward: { xp: 60, note: ["Studnia Rzepków", "Studnia w zagrodzie Rzepków znowu stoi. Wody w niej nie ma - zbiera tylko deszcz, najwyżej cztery porcje. W upał paruje, zimą zamarza. Ale to zawsze bliżej niż do miasta."] }
+        reward: { xp: 60 }
     };
+    Watki.scal(Q_K57, "zasoby", "zadania.K57");   // (its words: js/teksty/zasoby.txt, zadania.K57)
     const Q_K58 = {
-        id: "K58", kind: "K", title: "Sad Ługów", giver: "praczka", icon: ITEM.wildApple, where: "Podgrodzie → Spalona zagroda, sad", when: "po odbudowie zagrody (D21)",
-        desc: "Za domem Ługów był sad: osiem jabłonek, które sadził Jan. Spłonęły razem z domem. Marta prosi, żeby spróbować je odratować.",
+        id: "K58", kind: "K", giver: "praczka", icon: ITEM.wildApple,
         offer: {
-            cond: { hours: [5, 17], fn: "k58Gotowe" },
-            say: ["Za naszym domem był sad. Osiem jabłonek - Jan sadził je, jak się pobraliśmy. Spłonęły razem z domem.",
-                  "Mówią, że spalone drzewo można odratować, jak się je przytnie, opatrzy i podleje. Ja nie mam czasu, a ty masz dobre ręce."],
-            yes: "Spróbuję je odratować.", no: "Nie teraz.",
-            accept: ["Babka Jagna z łąki zna maść do drzew. Glina i wosk - tak mówiła moja matka. Konewka i trochę wody... wiem, wiem. Woda."],
-            decline: ["Rozumiem. Sad poczekał tyle lat, poczeka i dłużej."]
+            cond: { hours: [5, 17], fn: "k58Gotowe" }
         },
         steps: [
-            { type: "custom", check: "k58Sad", vars: "k58Sad", text: "Odratuj spalony sad Ługów (Spalona zagroda): przytnij, opatrz maścią szczepiarską, podlej w trzech dniach. Gotowe drzewa: {n}/8." },
-            { type: "talk", to: "praczka", hours: [5, 22], text: "Powiedz Marcie, że sad żyje (Podgrodzie).",
-              hero: ["> Marto... sad Ługów żyje. Wszystkie osiem drzew."],
-              done: ["(Marta zakrywa usta dłonią.) Jan by... Jan by się ucieszył.", "Masz, weź te grosze. Jak zakwitną, pójdę je zobaczyć. Z Frankiem."] }
+            { type: "custom", check: "k58Sad", vars: "k58Sad" },
+            { type: "talk", to: "praczka", hours: [5, 22] }
         ],
-        reward: { gold: 40, xp: 120, flag: "zasSadMarta",
-            note: ["Sad Ługów", "Osiem jabłonek Jana Ługa żyje. Wiosną zakwitną, latem i jesienią dadzą dzikie jabłka - co kilka dni. Marta czasem przychodzi do sadu w dni z owocami."] }
+        reward: { gold: 40, xp: 120, flag: "zasSadMarta" }
     };
+    Watki.scal(Q_K58, "zasoby", "zadania.K58");   // (its words: js/teksty/zasoby.txt, zadania.K58)
     const Q_D30 = {
-        id: "D30", kind: "D", title: "Zioła Jagny", giver: "jagna", icon: ITEM.kozlek, where: "Omszała łąka, polanka Jagny; dzikie zioła przy źródełkach", when: "rano przy polance; lato (wszystkie trzy zioła)",
-        desc: "Jagna nauczy maści do drzew i naparu na sen - jeśli przyniesiesz jej trzy rzadkie zioła. Nie z jej polanki: „z ręki, nie z mojej ziemi”.",
+        id: "D30", kind: "D", giver: "jagna", icon: ITEM.kozlek,
         offer: {
-            cond: { hours: [5, 20], fn: "d30Gotowe" },
-            say: ["Patrzysz na moje kępy, chłopcze. Widzę. Arcydzięgiel, dziurawiec, kozłek - rzadkie, uparte ziele. Rośnie tam, gdzie woda jeszcze nie uciekła.",
-                  "Chcesz się czegoś nauczyć? Przynieś mi każde z nich - ale nie z mojej polanki. Z ręki, nie z mojej ziemi. Wtedy pokażę ci maść do drzew i napar na sen."],
-            yes: "Przyniosę.", no: "Może kiedyś.",
-            accept: ["Arcydzięgiel lubi mokre miejsca, latem i jesienią. Dziurawiec tylko latem, w słońcu. Kozłek - w wilgotnym cieniu, od wiosny do jesieni.",
-                     "Szukaj tam, gdzie spod kamieni sączy się woda. I nie depcz mi kęp."],
-            decline: ["Ziele poczeka. Ja też, choć mniej niż ziele."]
+            cond: { hours: [5, 20], fn: "d30Gotowe" }
         },
         steps: [
-            { type: "bring", to: "jagna", need: [[ITEM.arcydziegiel, 1]], hours: [5, 21], ch: 1,
-              text: "Przynieś Jagnie Arcydzięgiel (rośnie dziko przy ukrytym źródełku w lesie; lato i jesień).",
-              remind: ["Arcydzięgiel. Wysoki, z białozielonym baldachem. Mokre miejsce, lato albo jesień."], hero: ["> Arcydzięgiel. Z dzikiego miejsca, nie z twojej polanki."],
-              done: ["(Jagna wącha łodygę.) Dziki. Dobry. Pachnie wodą spod kamieni.", "Teraz dziurawiec. Tylko latem, chłopcze - w słońcu."] },
-            { type: "bring", to: "jagna", need: [[ITEM.dziurawiec, 1]], hours: [5, 21], ch: 2,
-              text: "Przynieś Jagnie Dziurawiec (dziko przy starym źródle Ługów w Spalonej zagrodzie; tylko latem).",
-              remind: ["Dziurawiec. Żółte gwiazdki, a liście pod słońce jakby podziurawione igłą."], hero: ["> Dziurawiec. Żółty, jak mówiłaś."],
-              done: ["Ha! Podziurawiony jak sito. Prawdziwy.", "Ostatni: kozłek. Pachnie kotem i snem."] },
-            { type: "bring", to: "jagna", need: [[ITEM.kozlek, 1]], hours: [5, 21], ch: 3,
-              text: "Przynieś Jagnie Kozłek lekarski (dziko przy źródełku w mchu na Omszałej łące; wiosna, lato, jesień).",
-              remind: ["Kozłek. Różowawe baldachy, korzeń pachnie... no, kotem."], hero: ["> Kozłek lekarski. Z ręki, nie z ziemi."],
-              done: ["(Jagna kiwa głową, długo.) Z ręki, nie z ziemi. Dobrze.",
-                     "Słuchaj więc. Glina z woskiem - na rany drzew, maść szczepiarska. Kozłek w kociołku, łyk wody - napar na głęboki sen.",
-                     "I zrywaj z mojej polanki, kiedy trzeba. Po jednym z kępy. Ziele lubi, jak się je szanuje."] }
+            { type: "bring", to: "jagna", need: [[ITEM.arcydziegiel, 1]], hours: [5, 21], ch: 1 },
+            { type: "bring", to: "jagna", need: [[ITEM.dziurawiec, 1]], hours: [5, 21], ch: 2 },
+            { type: "bring", to: "jagna", need: [[ITEM.kozlek, 1]], hours: [5, 21], ch: 3 }
         ],
-        reward: { xp: 120, flag: "zasD30",
-            note: ["Nauka Jagny", "Maść szczepiarska: Mokra glina + Wosk pszczeli (Wytwórz..., ręcznie) - na rany drzew. Napar z kozłka: Kozłek lekarski + porcja wody w kociołku - pierwszy sen po wypiciu daje więcej sił. Mogę zrywać z polanki Jagny: po jednym zielu z kępy, kiedy odrośnie."] }
+        reward: { xp: 120, flag: "zasD30" }
     };
+    Watki.scal(Q_D30, "zasoby", "zadania.D30");   // (its words: js/teksty/zasoby.txt, zadania.D30)
     const Q_D31 = {
-        id: "D31", kind: "D", title: "Skarby wysypiska", giver: "szmaciarz", icon: ITEM.moneta, where: "Podgrodzie, wysypisko za chatami", when: "7-20, od dnia 3",
-        desc: "Józek Łata szuka na wysypisku trzech rzeczy: swojego medalika, starego klucza z kółkiem i „czegoś z kruczym znakiem”.",
+        id: "D31", kind: "D", giver: "szmaciarz", icon: ITEM.moneta,
         offer: {
-            cond: { hours: [7, 20], day: 3 },
-            say: ["Wysypisko za chatami to moja kopalnia! Ludzie wyrzucają skarby i nawet nie wiedzą.",
-                  "Szukam trzech rzeczy: mojego medalika - zgubiłem, jak się trochę zapomniałem; starego klucza z kółkiem; i czegoś z kruczym znakiem. Kupiec z kontynentu płaci za takie."],
-            yes: "Pogrzebię.", no: "Nie lubię śmieci.",
-            accept: ["Grzebać możesz raz na dzień, bo potem sąsiedzi się drą. Łopatą idzie lepiej, rękami - też idzie."],
-            decline: ["Śmieci nie lubią ciebie, ty nie lubisz śmieci. Sprawiedliwie."]
+            cond: { hours: [7, 20], day: 3 }
         },
         steps: [
-            { type: "custom", check: "d31Rzeczy", vars: "d31Rzeczy", ch: 1, text: "Szukaj na wysypisku Podgrodzia: medalik, stary klucz, coś z kruczym znakiem. Znalezione: {n}/3." },
-            { type: "bring", to: "szmaciarz", need: [["v:zas_medalik", 1], ["v:zas_klucz", 1], ["v:zas_moneta_kruk", 1]], hours: [7, 22], ch: 2,
-              text: "Zanieś Józkowi znaleziska z wysypiska (kram starzyzny w Podgrodziu).",
-              remind: ["Medalik, klucz i to z krukiem. Trzy rzeczy. Liczę na palcach, żeby nie pomylić."],
-              hero: ["> Medalik, klucz z kółkiem i moneta z krukiem. Wszystko z wysypiska."],
-              done: ["Mój medalik! Święty Krzysztof, patron podróżnych - a ja nigdzie nie podróżuję. Dlatego zgubiłem.",
-                     "A ta moneta z krukiem... Takie bito, zanim tu był jakikolwiek Lord. Stary Kleofas na klifie by wiedział, co to za kruk. Kupiec da za nią dobrze - a ja dam tobie."] }
+            { type: "custom", check: "d31Rzeczy", vars: "d31Rzeczy", ch: 1 },
+            { type: "bring", to: "szmaciarz", need: [["v:zas_medalik", 1], ["v:zas_klucz", 1], ["v:zas_moneta_kruk", 1]], hours: [7, 22], ch: 2 }
         ],
-        reward: { gold: 40, xp: 100, opinion: 3, flag: "zasMonetaKruk",
-            note: ["Moneta z krukiem", "Na wysypisku Podgrodzia znalazłem starą monetę z wybitym krukiem - Józek mówi, że takie bito, zanim tu był jakikolwiek Lord. Kleofas z klifu może wiedzieć więcej."] }
+        reward: { gold: 40, xp: 100, opinion: 3, flag: "zasMonetaKruk" }
     };
+    Watki.scal(Q_D31, "zasoby", "zadania.D31");   // (its words: js/teksty/zasoby.txt, zadania.D31)
 
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({
-        owner: "Zasoby",
-        quests: [Q_K55, Q_K56, Q_K57, Q_K58, Q_D30, Q_D31],
-        vitems: {
-            zas_medalik: { name: "Medalik ze świętym Krzysztofem", icon: 314 },
-            zas_klucz: { name: "Stary klucz z kółkiem", icon: 195 },
-            zas_moneta_kruk: { name: "Moneta z krukiem", icon: 473 }
-        },
-        remarks: [
-            { id: "zasJadwigaJagna", who: "znachorka", flag: "zasD30", lines: ["Słyszałam, że Jagna z łąki pokazała ci maść do drzew. Ho, ho. Mnie przez czterdzieści lat nie pokazała."] },
-            { id: "zasFranekSad", who: "franek", flag: "zasSadMarta", lines: ["Mama mówi, że jabłonki taty żyją! Pójdziemy je zobaczyć, jak zakwitną!"] },
-            { id: "zasKleofasMoneta", who: "pustelnik", flag: "zasMonetaKruk", lines: ["Moneta z krukiem z wysypiska? (Kleofas obraca ją w palcach.) Grosz strażnicy. Płacono nim przewoźnikom zakonu... Dawno. Bardzo dawno."] }
-        ]
-    });
+    const VITEMS = {
+        zas_medalik: { icon: 314 },
+        zas_klucz: { icon: 195 },
+        zas_moneta_kruk: { icon: 473 }
+    };
+    Watki.scal(VITEMS, "zasoby", "rzeczy");   // (its words: js/teksty/zasoby.txt, rzeczy)
+    const REMARKS = [
+        { id: "zasJadwigaJagna", who: "znachorka", flag: "zasD30" },
+        { id: "zasFranekSad", who: "franek", flag: "zasSadMarta" },
+        { id: "zasKleofasMoneta", who: "pustelnik", flag: "zasMonetaKruk" }
+    ];
+    Watki.scal(REMARKS, "zasoby", "uwagi");   // (its words: js/teksty/zasoby.txt, uwagi)
+    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Zasoby", quests: [Q_K55, Q_K56, Q_K57, Q_K58, Q_D30, Q_D31], vitems: VITEMS, remarks: REMARKS });
 
     // ------------------------------------------------------------------
     // Babka Jagna into TownLife (the second range of ids) and her places on Map017
@@ -492,23 +369,16 @@
     // The quest board: four notices (keys "zas_") and the worth of the new items
     // ------------------------------------------------------------------
     const QB_TEMPLATES = [
-        { id: "zas_dziki_miod", type: "gather", giver: "melia", seasons: [1, 2], title: ["Miód na miód pitny", "Dziki miód dla bardki"],
-            text: ["Miód pitny sam się nie nastawi, a pszczelarz z miasta chce za garniec tyle, co za pieśń. Przynieś miodu - dzikiego, z dziupli. Słodszy.",
-                   "Ballada o pszczołach wymaga miodu. Wszystkie ballady wymagają miodu, ale ta szczególnie."],
+        { id: "zas_dziki_miod", type: "gather", giver: "melia", seasons: [1, 2],
             req: [{ item: ITEM.honey, n: [T(2, 2), T(2, 3), T(3, 4), null, null] }] },
-        { id: "zas_ziola_rzadkie", type: "gather", giver: "jagna", seasons: [0, 1, 2], from: 6, title: ["Kozłek dla Jagny", "Rzadkie ziele"],
-            text: ["Kozłek lekarski, z dzikiego miejsca. Ludzie nie śpią przez tę suszę, a ja nie nadążam z naparem.",
-                   "Ziele z wilgotnego cienia - kozłek. Przy źródełkach jeszcze rośnie. Z ręki, nie z mojej polanki."],
+        { id: "zas_ziola_rzadkie", type: "gather", giver: "jagna", seasons: [0, 1, 2], from: 6,
             req: [{ item: ITEM.kozlek, n: [null, T(1, 1), T(1, 2), T(2, 2), null] }] },
-        { id: "zas_bloki", type: "gather", giver: "kazimierz", from: 8, title: ["Bloki kamienne", "Kamień ciosowy na podmurówkę"],
-            text: ["Dwór zamówił podmurówkę pod nową szopę. Polnymi kamieniami nie postawię - potrzeba bloków ciosowych z gór.",
-                   "Bloki z kamieniołomu, równe, ciężkie. Plecy mnie bolą od samego myślenia."],
+        { id: "zas_bloki", type: "gather", giver: "kazimierz", from: 8,
             req: [{ item: ITEM.blok, n: [null, T(2, 2), T(2, 3), T(3, 4), null] }] },
-        { id: "zas_kraby", type: "craft", giver: "borgar", from: 5, title: ["Kraby z ogniska", "Coś z morza na stół"],
-            text: ["Goście z promu pytają o kraby. Kraby! W karczmie na wzgórzu! Przynieś pieczone kraby, to im podam.",
-                   "Ktoś mi powiedział, że w zatoczce za przystanią w odpływie łazi pełno krabów. Upiecz parę, zapłacę."],
+        { id: "zas_kraby", type: "craft", giver: "borgar", from: 5,
             req: [{ item: ITEM.krabPieczony, n: [T(2, 2), T(2, 3), T(3, 3), null, null] }] }
     ];
+    Watki.scal(QB_TEMPLATES, "zasoby", "tablica", "id");   // (its words: js/teksty/zasoby.txt, tablica, by the id)
     const QB_EV = { 185: 4, 186: 5, 187: 8, 188: 6, 189: 2, 190: 6, 191: 6, 192: 5, 193: 3, 194: 5, 195: 8, 196: 8 };
     (function questBoard() {
         const TW = window.Tawerna, QBP = TW && TW.api("QuestBoard_parts"), data = QBP && QBP.data;
@@ -525,9 +395,8 @@
 
     // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Zasoby.epilogue): one or two by what the hero did
     const EPILOG = {
-        springs: "Źródełka, które znalazłeś w lasach i pod skałami, dalej biją - miska, dwie na dzień, w upał ani kropli. Nie mówisz o nich nikomu.",
-        well: "Studnia Rzepków za działką dziadka zbiera deszcz w nową cembrowinę. Kiedy pada, ktoś zawsze przychodzi z wiadrem - nie zawsze ty."
     };
+    Watki.scal(EPILOG, "zasoby", "epilog");   // (its words: js/teksty/zasoby.txt, epilog)
     window.ZasobyData = { EPILOG, VERSION, PKG: "A", OWNER: "Zasoby", STATE: "zasoby", IDS_RANGE: P ? P.ids : [2100, 2299], RESIDENTS: P ? P.residents : [2900, 2904],
         ITEMS: P ? P.items : [185, 199], ICONS: P ? P.icons : [464, 479], SWITCHES: { studnia: 21, rez: 22 }, ITEM, ICON, IDS,
         SPRINGS, SPRING_RULE, FARMSTEAD, HIVES, HIVE_RULE, RINGS, HERBS, GLADE, JAGNA, JAGNA_SPOTS, JAGNA_BUYS, JAGNA_BUY_TX, GARDENS, GARDEN_RULE, DUMP, CLAYPIT, D31_THINGS,

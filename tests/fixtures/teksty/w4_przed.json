@@ -1,0 +1,104 @@
+{
+ "zadania": {
+  "W4": {
+   "title": "Krew kasztelana",
+   "where": "bar w tawernie, podwórze dziadka, kuźnia, piwnica tawerny, podziemia, pustelnia na klifie",
+   "when": "po rozdziale 1 (spłata długu albo strata działki)",
+   "desc": "Lord mówił, że najstarsze kamienie twierdzy leżą pod tawerną Borgara. W piwnicy jest stara krata zakonu z krukiem na zamku. Nad barem wisi pół klucza „na szczęście”.",
+   "steps": {
+    "0": {
+     "text": "Zapytaj Borgara o stare kamienie pod tawerną (przy barze)."
+    },
+    "1": {
+     "text": "Druga połowa klucza leży zakopana u stóp kamiennego kopca z krukiem na podwórzu dziadka. Weź łopatę.",
+     "say": [
+      "> (U stóp kamiennego kopca, na najniższym kamieniu, ktoś wyrył kruka. Kopiesz łopatą w twardej ziemi.)"
+     ],
+     "done": [
+      "> (Stuk! Żelazo. Zawiniątko z natłuszczonej skóry - a w nim druga połowa klucza. Na uchwycie ten sam kruk.)"
+     ],
+     "reward": {
+      "note": [
+       "Druga połowa klucza",
+       "U stóp kamiennego kopca na podwórzu dziadka, pod kamieniem z wyrytym krukiem, była zakopana druga połowa starego klucza - zawinięta w natłuszczoną skórę."
+      ]
+     }
+    },
+    "2": {
+     "text": "Zanieś obie połówki Tadkowi (kuźnia, 6–17), do tego 1× Żelazo i 2× Węgiel drzewny. Niech je złączy.",
+     "remind": [
+      "Połówki klucza? Dawaj obie. I żelazo z węglem - z powietrza nie skuję."
+     ],
+     "hero": [
+      "> Tadek, połącz te dwie połówki. Potrzebuję całego klucza."
+     ],
+     "done": [
+      "(Tadek obraca połówki w palcach.) Zakonna robota. Kowal to u Borgarów nie zawód, tylko tytuł - wiedziałeś? Kowale kuli zamki zakonu.",
+      "Złączę je. Przyjdź jutro rano - takie żelazo musi stygnąć powoli."
+     ]
+    },
+    "3": {
+     "text": "Tadek łączy połówki. Odbierz klucz w kuźni (od jutra rana)."
+    },
+    "4": {
+     "text": "Klucz kasztelana. Zejdź do piwnicy tawerny (za luźną cegłą) i otwórz nim starą kratę zakonu."
+    },
+    "5": {
+     "text": "Krata otwarta. Powiedz o tym Borgarowi (przy barze)."
+    }
+   },
+   "lines": {
+    "askTopic": "Zapytaj o stare kamienie pod tawerną.",
+    "ask": [
+     "> Borgarze. Lord mówi, że najstarsze kamienie twierdzy leżą pod twoją tawerną. I że pod Kruczymi Skałami są drzwi.",
+     "(Borgar przestaje wycierać kufel.) Lord dużo mówi. ...Dobra. Nie tutaj. (Ścisza głos.)",
+     "W piwnicy, za moimi beczkami, jest stara krata. Zakonna. Zamek z krukiem. Odkąd pamiętam, nikt jej nie otworzył - i dobrze.",
+     "Widzisz to nad barem? Pół klucza. Dziadek kazał: „nie zdejmuj, nie pytaj”. Na szczęście, mówił. (Borgar zdejmuje go z gwoździa.)",
+     "Druga połowa... Dziadek mówił, że jego ojciec zakopał ją razem z ojcem Stacha. Przy kamiennym kopcu z krukiem, na podwórzu twojego dziadka.",
+     "Masz. Ziemia tam twarda - weź łopatę. I o nic mnie więcej nie pytaj."
+    ],
+    "noteAsk": [
+     "Pół klucza „na szczęście”",
+     "Borgar zdjął znad baru połowę starego klucza z krukiem - taki sam kruk jest na zamku kraty zakonu w piwnicy. Drugą połowę zakopał jego pradziadek razem z pradziadkiem Stacha, przy kamiennym kopcu z krukiem na podwórzu dziadka."
+    ],
+    "forgeWait": [
+     "Jutro rano, mówiłem. Żelazo nie lubi pośpiechu."
+    ],
+    "noteKey": [
+     "Klucz kasztelana",
+     "Tadek złączył obie połówki w palenisku. Klucz kasztelana - z krukiem na uchwycie, cięższy, niż powinien być. Pasuje do kraty zakonu w piwnicy tawerny."
+    ],
+    "grate": [
+     "> (Stara krata zakonu. Zamek ma wyryty znak kruka - taki sam jak na kluczu znad baru Borgara.)"
+    ],
+    "grateAsk": [
+     "> (Krata ani drgnie. To piwnica Borgara - może on coś wie.)"
+    ],
+    "grateHalf": [
+     "> (Połówka klucza wchodzi w zamek tylko do połowy. Trzeba całego klucza.)"
+    ],
+    "grateOpen": [
+     "> (Klucz kasztelana wchodzi w zamek z krukiem jak w masło. Zgrzyt - i krata, która nie drgnęła od trzystu lat, ustępuje.)",
+     "> (Za nią schody znikają w ciemności. Pachnie zimnym kamieniem.)"
+    ],
+    "noteGate": [
+     "Krata otwarta",
+     "Klucz kasztelana otworzył starą kratę zakonu w piwnicy tawerny. Za nią schody w dół - do Ruin Zamku."
+    ],
+    "tellTopic": "Krata w piwnicy jest otwarta.",
+    "tell": [
+     "> Borgarze. Krata w piwnicy. Otworzyłem ją kluczem twojego dziadka. Za nią są schody - w dół, głęboko.",
+     "(Borgar odstawia kufel. Długo wyciera ręce w fartuch, choć są suche.)",
+     "Babka powtarzała mi jedno zdanie. Kazała je mówić, zanim zrozumiem. Mówiła, że tak mówił jej dziadek, a jemu jego ojciec.",
+     "Nie pytam o to, czego nie chcę wiedzieć.",
+     "(Borgar patrzy na ciebie długo.) Teraz ty to wiesz. Nie wiem, czy to dobrze. Idź już. I wracaj na górę. Zawsze wracaj na górę."
+    ],
+    "noteTell": [
+     "Słowa Borgara",
+     "Borgar powtórzył zdanie, którego nauczyła go babka - jego ród mówił je od pokoleń: „Nie pytam o to, czego nie chcę wiedzieć.” Mówi, że tak trzeba mówić, kiedy się schodzi w dół."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W4\\./)"
+}

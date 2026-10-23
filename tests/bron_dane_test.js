@@ -201,7 +201,13 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
     if (town && tadek) {
         await t.eval(`(function(){ const q = TownQuests; window.__qkeep = { remarkFor: q.remarkFor, talkFor: q.talkFor, markers: q.markers, offerable: q.offerable };
             q.remarkFor = () => null; q.talkFor = () => null; q.markers = () => ({}); q.offerable = () => false; return 0; })()`);
-        const talk1 = await t.talkTo(tadek, ["Nic, dziękuję"]);
+        // (2026-10-23, docs/ROZMOWY.md: the shop is below the quests in the core's talk service - TownQuests' own offer of Tadek comes
+        // first; refused - "Nic, dziękuję" is not there, so the last row - his shop menu comes on the next talk)
+        let talk1 = null;
+        for (let i = 0; i < 10; i++) {   // (his several offers, one after another - each refused)
+            talk1 = await t.talkTo(tadek, ["Nic, dziękuję"]);
+            if ((talk1.choices || []).some(c => [].concat(c.choices || c.list || c).includes("Pokaż broń i zbroje"))) break;
+        }
         const talk2 = await t.talkTo(tadek, ["Porozmawiaj"]);
         await t.eval("(function(){ Object.assign(TownQuests, window.__qkeep); return 0; })()");
         const ch1 = (talk1.choices || []).map(c => [].concat(c.choices || c.list || c).join("|")).join(" ");

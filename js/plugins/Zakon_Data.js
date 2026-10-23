@@ -44,6 +44,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("zakon");   // (the words of this file: js/teksty/zakon.txt, kodDane.*)
 
     const O = window.OkoliceData, P = O ? O.PACKAGES.D : null;
     const VERSION = "1.1.0";
@@ -314,19 +315,14 @@
     // zak_karta_1..6). The cairns give 1-3, the towers 4-6 - in the order they are found. Brother Kleofas reads them (his talk:
     // 2 hours, 40 XP, a note "Zapiski strażnic (N): ..."). NOT the chronicle's cards (kronikaKarta*) - those are Pustelnia's.
     const CARDS = [
-        { n: 1, title: "Warta", note: "Cztery wieże na czterech drogach, a piąte oko to kruk. Z każdej wieży widać ogień sąsiedniej. Kiedy ogień gaśnie, kruk leci z listem do następnej. Tak strażnice zakonu pilnowały wyspy, zanim ktokolwiek dopłynął do brzegu. Z trzech wież na drogach widać ten sam krąg kamieni na łące.",
-          read: ["„Cztery wieże na czterech drogach, a piąte oko to kruk.”", "„Z każdej wieży widać ogień sąsiedniej. Kiedy ogień gaśnie, kruk leci z listem do następnej.”", "„Z trzech wież na drogach widać krąg kamieni na łące. Krąg pilnuje nas, a my kręgu.”"] },
-        { n: 2, title: "Krąg", note: "Krąg kamieni na łące jest starszy niż zakon. Bracia warty składali przy nim przysięgę: patrzeć i nie pytać. Najwyższy kamień, poszarpany, stoi od północnego zachodu - nazwali go Strażnikiem.",
-          read: ["„Krąg na łące stał, zanim przyszliśmy. Nie my go postawiliśmy i nie nam go burzyć.”", "„Przy kręgu brat warty składa przysięgę: patrzę i nie pytam.”", "„Najwyższy kamień, poszarpany jak skała z gór, stoi od północnego zachodu. Zwiemy go Strażnikiem.”"] },
-        { n: 3, title: "Godzina", note: "„Gdy słońce przejdzie cztery części swej drogi z pięciu, Strażnik wskaże ręką.” Kopać tam, gdzie padnie cień Strażnika - i tylko wtedy. Latem to późne popołudnie, zimą wcześniej, bo dzień krótszy. W deszcz cienia nie ma.",
-          read: ["„Gdy słońce przejdzie cztery części swej drogi z pięciu, Strażnik wskaże ręką.”", "„Kop tam, gdzie padnie jego ręka, i tylko wtedy. Ziemia odda klucz temu, kto zna godzinę.”", "(Kleofas:) Ręka to cień, chłopcze. Słońce idzie od wschodu do zachodu - cztery piąte drogi to późne popołudnie. Latem później, zimą wcześniej. I nie w deszcz."] },
-        { n: 4, title: "Klucz", note: "Klucz do komory pod kręgiem wykuto z kamienia, nie z żelaza - żelazo rdzewieje, kamień czeka. Wyryto na nim kruka. Zakopano go w kręgu, w cieniu Strażnika, żeby znalazł go tylko ten, kto czyta zapiski strażnic.",
-          read: ["„Klucz wykuliśmy z kamienia, nie z żelaza. Żelazo rdzewieje, kamień czeka.”", "„Na kluczu kruk, jak na płycie. Zakopaliśmy go w kręgu, w cieniu Strażnika.”", "„Kto nie czytał tych słów, przejdzie po nim sto razy i nie znajdzie.”"] },
-        { n: 5, title: "Komora", note: "Pod płytą z krukiem w środku kręgu jest komora. Leży w niej pierwszy strażnik warty, a na ścianie wykuto cztery wieże: trzy na drogach i czwartą na przylądku, skąd widać morze. Kto wejdzie, niech nie bierze niczego prócz tego, co mu zostawiono.",
-          read: ["„Pod płytą z krukiem jest komora. Śpi w niej pierwszy strażnik warty.”", "„Na ścianie wykuliśmy cztery wieże: trzy na drogach i czwartą na przylądku, skąd widać morze.”", "„Kto wejdzie, niech nie bierze niczego prócz tego, co mu zostawiono.”"] },
-        { n: 6, title: "Ostatnia warta", note: "Roku sto szóstego wieże gasły jedna po drugiej. Bracia warty puścili kruki wolno i zeszli z wież. Ostatni wpis: „Gasimy ogień. Kto znajdzie te słowa, niech pamięta, czego strzegliśmy: nie pytaj o to, czego nie chcesz wiedzieć.”",
-          read: ["„Roku sto szóstego wieże gasły jedna po drugiej.”", "„Kruki puściliśmy wolno. Ogień zgasimy sami, zanim zgaśnie od wiatru.”", "„Kto znajdzie te słowa, niech pamięta, czego strzegliśmy: nie pytaj o to, czego nie chcesz wiedzieć.”", "(Kleofas cicho:) Tak samo mawiał mój mistrz. I karczmarz Borgar, choć nie wie skąd."] }
+        { n: 1 },
+        { n: 2 },
+        { n: 3 },
+        { n: 4 },
+        { n: 5 },
+        { n: 6 }
     ];
+    Watki.scal(CARDS, "zakon", "karty");   // (its words: js/teksty/zakon.txt, karty)
     const VITEMS = {};
     for (const c of CARDS) VITEMS["zak_karta_" + c.n] = { name: "Zapiski strażnic (" + c.n + ")", icon: ICON.karta };
     VITEMS.zak_imiona = { name: "Imiona z grobów z krukiem", icon: ICON.grob };
@@ -335,132 +331,50 @@
     // ------------------------------------------------------------------ the texts
     const TX = {
         // the work
-        tired: "Jesteś zbyt zmęczony",
-        needShovel: "Potrzebujesz łopaty",
         // the foundations
-        towerLook: ["> (Obmurówki dawnej wieży. Z kamieni sterczy jeszcze żelazny hak na pochodnię.)", "> Płyta w środku zawaliła się do piwnicy. Wyryty kruk patrzy w niebo."],
-        towerAsk: "Zajrzeć pod płytę?", towerTake: "Zajrzyj pod płytę.", towerLeave: "Zostaw.",
-        towerFound: n => ["> (Pod płytą sucha wnęka, a w niej zwój w natłuszczonej skórze.)", "> Zapiski strażnic. Karta " + n + ". Pismo proste, jak u żołnierza - ale ja tego nie przeczytam. Brat Kleofas przeczyta."],
-        towerEmpty: "Pod płytą pusto. Kartę już masz.",
-        towersRing: ["> Trzy wieże, trzy płyty z krukiem. Z każdej widać łąkę z kamiennym kręgiem. Strażnice patrzyły na krąg."],
+        towerFound: n => [TK.kodDane.towerFound[0], Watki.wstaw(TK.kodDane.towerFound[1], { n: n })],
         // the shrines
-        shrineAsk: "Kapliczka z krukiem przy drodze.", shrinePray: "Pomódl się.", shrineCoin: "Zostaw 1 G.", shrineFood: "Zostaw coś do jedzenia.", shrineLeave: "Odejdź.",
-        prayed: "Błogosławieństwo drogi", prayedSub: h => "Prace kosztują 10% mniej sił  ·  " + h + " h",
-        prayedToday: "Już się tu dziś modliłeś",
-        prayThink: ["> (Słowa same przychodzą, choć nikt mnie ich nie uczył.)"],
-        offered: h => "Dar przy kapliczce  ·  błogosławieństwo " + h + " h",
-        offerFull: "Błogosławieństwo i tak już trwa najdłużej, jak może",
-        offerNeedPrayer: "Najpierw się pomódl",
-        noCoin: "Nie masz ani grosza", noFood: "Nie masz nic do jedzenia",
-        offeredToday: "Dziś już coś tu zostawiłeś",
+        prayedSub: h => Watki.wstaw(TK.kodDane.prayedSub[0], { h: h }),
+        offered: h => Watki.wstaw(TK.kodDane.offered[0], { h: h }),
         // the cairns
-        cairnAsk: "Kopiec z krukiem. Szczyt da się zdjąć rękami.", cairnTake: "Rozbierz szczyt.", cairnLeave: "Zostaw.",
-        cairnHit: (n, m) => "Zdejmujesz kamienie " + n + "/" + m,
-        cairnFound: n => ["> (W środku kopca, pod kamieniem z krukiem, zwój w natłuszczonej skórze.)", "> Zapiski strażnic, karta " + n + ". Układam kamienie z powrotem, jak były. Kruk na wierzch."],
-        cairnDone: "Kopiec złożony z powrotem. Kartę już masz.",
+        cairnHit: (n, m) => Watki.wstaw(TK.kodDane.cairnHit[0], { n: n, m: m }),
+        cairnFound: n => [TK.kodDane.cairnFound[0], Watki.wstaw(TK.kodDane.cairnFound[1], { n: n })],
         // the ring and the riddle
-        stoneLook: ["> Stojący kamień, wyższy ode mnie. Ktoś go tu postawił, zanim powstał zakon."],
-        watchmanLook: ["> Strażnik. Najwyższy z kamieni, poszarpany jak skała z gór.", "> Jego cień chodzi po kręgu jak wskazówka."],
-        plateLook: ["> Płaska płyta w środku kręgu. Wyryty kruk, a pod nim wąska szczelina - jak na klucz."],
-        plateAsk: "Płyta z krukiem.", plateKey: "Włóż kamienny klucz.", plateDown: "Zejdź po schodach.", plateLeave: "Odejdź.",
-        plateOpen: ["> (Klucz wchodzi gładko, jakby szczelinę wykuto wczoraj. Coś zgrzyta pod ziemią.)", "> Płyta zsuwa się na bok. Pod nią schody w ciemność."],
-        plateNoKey: "Szczelina na klucz. Nie masz klucza",
-        holeLook: "Ubita ziemia. Coś tu jest, ale nie teraz… Strażnik nie patrzy.",
-        holeRain: "W deszczu nie ma cienia. Strażnik nie wskaże",
-        holeDug: "Tu był klucz. Dołek już zarasta",
-        holeHit: (n, m) => "Kopiesz " + n + "/" + m,
-        keyFound: ["> (Łopata stuka o kamień. W ziemi leży klucz - kamienny, z wyrytym krukiem.)", "> Cień Strażnika pada dokładnie tutaj. Cztery części drogi z pięciu."],
-        keyGot: "Klucz Strażnika",
+        holeHit: (n, m) => Watki.wstaw(TK.kodDane.holeHit[0], { n: n, m: m }),
         // the chamber
-        chamberFirst: ["> (Chłód i zapach kamienia. Tu nikt nie oddychał od stuleci.)", "> Komora pod menhirami. Bez pochodni nic tu nie zobaczę."],
-        chamberDark: "Ciemno. Przydałaby się pochodnia",
-        sarcLook: ["> Sarkofag. Na wieku wykuto kruka z rozpostartymi skrzydłami i jedno słowo: STRAŻNIK.", "> Pierwszy strażnik warty. Nie ruszam wieka."],
-        basinLook: ["> Kamienna misa na nóżce. Sucha. Na dnie wykuto oko - zamknięte."],
-        basinWater: ["> W misie trochę wody, która skapała z płyty po deszczu. Nie piję - to nie moja woda."],
-        statueLook: ["> Kamienny brat w kapturze. Ręce złożone, twarz odwrócona."],
-        wallLook: ["> Na ścianie wykuto wyspę. Cztery wieże: przy Polnej drodze, w Górach, nad morzem na Urwisku - i czwarta na przylądku, tam, gdzie dziś stoi latarnia.",
-            "> Między wieżami linie, a na nich ptaki: kruki. Z każdej wieży linia biegnie do kręgu na łące.", "> Latarnia stoi na strażnicy zakonu. Bazyli by się zdziwił. Albo i nie."],
-        chestFeather: ["> (W skrzyni, owinięte w lnianą chustę, leży długie białe pióro w srebrnej oprawce.)", "> Pióro Skrzydlatej Straży. „Kto wejdzie, niech nie bierze niczego prócz tego, co mu zostawiono.” Chyba zostawiono je mnie."],
-        chestGold: ["> (W skrzyni sakiewka ze starymi monetami z krukiem. I kartka: „Na drogę”.)"],
-        chestEmpty: "Skrzynia pusta",
         // the eagle's places
-        downAsk: kind => (kind === "lina" ? "Strzęp liny przywiązany do pnia. Schodzi w dół przez gąszcz." : "Stare kołki wbite w skałę i strzęp liny. Prowadzą w dół."),
-        downGo: "Zejdź na dół.", downStay: "Zostań.",
-        downWarn: "Na górę nie wejdziesz bez orła",
-        downThink: ["> (Kołki trzeszczą, ale trzymają. Z powrotem tędy nie wejdę.)"],
-        stashLook: ["> (Skrzynia przykryta gałęziami. Na wieku wypalony znak: kotwica i oko.)"],
-        stashTaken: "Skrzynia pusta. Ktoś ją już opróżnił - ty",
-        stashLoot: "Skrzynia przemytników",
-        nestLook: ["> Stare gniazdo z gałęzi grubych jak ramię. Puste od lat."],
-        nestFeathers: n => "Pióra ×" + n,
-        nestEmpty: "W gnieździe pusto. Pióra przybędą",
-        nestOrderLook: ["> Gniazdo zakonnych orłów. Gałęzie splecione z drutem - ktoś je kiedyś naprawiał."],
-        nestOrderFeather: ["> (Między gałęziami, wbite w splot, tkwi pióro w srebrnej oprawce.)", "> Pióro Skrzydlatej Straży. Jeździec zostawił je tu dla następnego."],
-        herbLook: "Roślina w szczelinie skały",
-        herbPicked: name => name + " zerwana",
-        herbGone: "Zerwane. Odrośnie za kilka dni",
-        ravenStoneLook: ["> Kamień z wyrytym krukiem, zwrócony na wschód, ku Kręgowi. Kruczarze znaczyli tak swoje drogi.", "> Tę drogę znaczył ktoś, kto latał."],
-        campLook: ["> Stare palenisko w kręgu kamieni. Popiół dawno zbity deszczem. Obok kość i strzęp płótna."],
-        diveHerb: "Warzucha nadmorska",
-        diveYoung: "Tylko dorosły orzeł zanurkuje tak nisko",
-        diveTired: "Orzeł jest zbyt zmęczony",
-        diveGone: "Tu już zerwane. Odrośnie",
+        downAsk: kind => (kind === "lina" ? TK.kodDane.downAsk[0] : TK.kodDane.downAsk[1]),
+        nestFeathers: n => Watki.wstaw(TK.kodDane.nestFeathers[0], { n: n }),
+        herbPicked: name => Watki.wstaw(TK.kodDane.herbPicked[0], { name: name }),
         // the perches
-        perchLook: n => ["> Orla grzęda Straży. Kamienny słup, żelazna poprzeczka wytarta pazurami, na górze misa na deszczówkę."].concat(n === 1 ? ["> Pod słupem w trawie leży zardzewiałe strzemię."] : n === 2 ? ["> Pod słupem zbutwiałe siodło. Za małe dla konia, za szerokie dla człowieka."] : ["> W szczelinie słupa tkwią pióra, białe jak sól."]),
-        perchWater: "W misie deszczówka. To woda orłów - nie twoja",
-        perchDry: "Misa sucha",
-        perchEagle: name => name + " siada na grzędzie Straży",
-        stirrupGot: "Strzemię jeźdźca",
-        traceTaken: "Tu leżało strzemię. Masz je w torbie",
-        featherTaken: "Pióra już zebrane",
-        saddleLook: ["> Siodło z dwoma pasami na piersi, nie na brzuchu. Orle siodło. Skóra rozpada się w palcach."],
+        perchLook: n => [TK.kodDane.perchLook[0]].concat(n === 1 ? [TK.kodDane.perchLook[1]] : n === 2 ? [TK.kodDane.perchLook[2]] : [TK.kodDane.perchLook[3]]),
+        perchEagle: name => Watki.wstaw(TK.kodDane.perchEagle[0], { name: name }),
         // the cemetery and the gallows
-        graveLook: "Zwykły grób. Imienia nie da się już odczytać",
-        graveRavenAsk: "Kamień z krukiem, zarośnięty mchem i błotem.", graveClean: "Oczyść kamień.", graveLeave: "Zostaw.",
-        graveHit: (n, m) => "Czyścisz kamień " + n + "/" + m,
+        graveHit: (n, m) => Watki.wstaw(TK.kodDane.graveHit[0], { n: n, m: m }),
         graveNames: {
-            1: { name: "Brat Bogusław", line: "„Brat Bogusław, strażnik wieży przy drodze. Patrzył czterdzieści lat.”" },
-            2: { name: "Brat Żelisław", line: "„Brat Żelisław, kronikarz. Pióro po nim przejął uczeń.”" },
-            3: { name: "Brat Wit", line: "„Brat Wit, strażnik bramy, roku sto szóstego.” - roku upadku." }
+            1: { },
+            2: { },
+            3: { }
         },
         graveRead: k => ["> " + k.line],
-        graveAll: ["> Trzy imiona braci zakonu. Przepisuję je na kartkę - Ambroży będzie wiedział, co z nimi zrobić."],
-        lampLook: "Lampka na słupie. Grabarz zapala ją o zmierzchu",
-        gallowsLook: ["> Szubienica Lorda. Belka poczerniała od deszczu, pusty sznur kołysze się na wietrze.", "> Tu dwór wiesza kłusowników i przemytników. Przy drodze, żeby każdy widział."],
-        gallowsNight: ["> (Belka skrzypi, choć nie ma wiatru.)"],
         // the grove
-        groveFirst: ["> (Cisza. Nawet ptaki tu nie śpiewają.)", "> Gaj Milczących. Siedem białych kamieni w kręgu."],
-        groveNotYet: "Milczący przychodzą tu o zmierzchu",
-        groveStart: ["> (Staję w środku kręgu. Nie mówię nic.)"],
-        groveBroken: "Milczący odwracają głowy.",
-        groveDone: ["> (Godzina minęła. Przy jednym z kamieni leży biały kamyk, którego wcześniej tam nie było.)", "> Wiedzieli za dużo, więc przestali mówić. Teraz rozumiem trochę, dlaczego."],
-        groveDoneSub: "Spokój Milczących  ·  6 h",
-        groveTodayBroken: "Dziś już złamałeś ciszę. Jutro o zmierzchu",
-        groveStone: "Biały kamień milczenia. Zimny i gładki",
-        groveWait: m => "Cisza w gaju  ·  zostało " + m + " min",
+        groveWait: m => Watki.wstaw(TK.kodDane.groveWait[0], { m: m }),
         // the ravens
-        ravenAsk: "Kruki na skale przyglądają ci się z ukosa.", ravenFeed: name => "Rzuć im: " + name + ".", ravenLeave: "Zostaw je.",
-        ravenFedToday: "Dziś już je karmiłeś",
-        ravenNoFood: "Kruki chcą ryby albo mięsa",
-        ravenGift: "Kruk zostawia coś błyszczącego",
+        ravenFeed: name => Watki.wstaw(TK.kodDane.ravenFeed[0], { name: name }), 
         // the wreck
-        wreckLook: n => (n === 1 ? "Deski kadłuba z żelaznymi okuciami, do połowy w piasku." : n === 2 ? "Z piasku wystaje rzeźbiona deska." : "Róg małej skrzyni okutej żelazem."),
-        wreckAsk: "Odkopać łopatą?", wreckDig: "Odkop.", wreckLeave: "Zostaw.",
-        wreckHit: (n, m) => "Odkopujesz " + n + "/" + m,
-        wreckHigh: "Przypływ. Piasek pod wodą",
-        wreckGot: n => (n === 1 ? ["> (Wyrywam z desek dwa okucia. Sól zjadła je do połowy, ale żelazo to żelazo.)"] :
-            n === 2 ? ["> (Deska z dziobu okrętu. Białe oko i litery: BIAŁA ŹRENICA - STRAŻ PEWNOŚCI.)", "> Ktoś w tawernie by ją poznał. Ktoś, kto rysuje portrety za piwo."] :
-            ["> (Skrzynka kapitańska. W środku sakiewka z monetami i słój smoły, szczelnie zalakowany.)"]),
-        wreckShown: "Po sztormie piasek odsłonił coś na płyciźnie",
-        // the gravedigger
-        digger: "Hieronim"
+        wreckLook: n => (n === 1 ? TK.kodDane.wreckLook[0] : n === 2 ? TK.kodDane.wreckLook[1] : TK.kodDane.wreckLook[2]),
+        wreckHit: (n, m) => Watki.wstaw(TK.kodDane.wreckHit[0], { n: n, m: m }),
+        wreckGot: n => (n === 1 ? [TK.kodDane.wreckGot[0]] :
+            n === 2 ? [TK.kodDane.wreckGot[1], TK.kodDane.wreckGot[2]] :
+            [TK.kodDane.wreckGot[3]])
     };
+    Watki.scal(TX, "zakon", "");   // (its words: js/teksty/zakon.txt)
 
     // ------------------------------------------------------------------ the resident: Hieronim the gravedigger (TownLife 2930, Map008)
     // 6-18 at the cemetery (the graves, the gate, digging), 18 he lights the lamp and goes home - away for the night (no interior).
     const cemeteryRain = () => !!(window.Zakon && Zakon.raining && Zakon.raining());
     const RESIDENT = {
-        key: "grabarz", id: 2930, name: "Hieronim", title: "grabarz", sheet: "$Npc_Grabarz", map: 8, speed: 2,
+        key: "grabarz", id: 2930, sheet: "$Npc_Grabarz", map: 8, speed: 2,
         away: ["grabarz_chata"],
         plan: [[0, "inside", "grabarz_chata"],
                [6, "work", "grabarz_groby"],
@@ -473,23 +387,11 @@
                [17.5, "stand", "grabarz_lampa"],
                [18, "inside", "grabarz_chata"]],
         barks: {
-            work: ["(Hieronim grabi liście z grobu.)", "Ziemia tu twarda jak serce lichwiarza.", "Tych z krukiem nie ruszam. Mój ojciec też nie ruszał.",
-                "(Hieronim prostuje plecy i stęka.)", "Każdemu po równo: dwa łokcie wszerz, cztery wzdłuż."],
-            stand: ["Spokojnie tu. Najspokojniej w całym miasteczku.", "Kto idzie? A, ty. Żywy, to dobrze."],
-            wander: ["(Hieronim poprawia krzyż, który się przechylił.)", "Mech znowu wlazł na kamienie."],
-            rain: ["Deszcz. Ziemia miękka - dobrze się kopie, źle się chodzi."],
-            night: ["Po zmroku na cmentarz nie chodź. Nie przez duchy. Przez straż Lorda."]
         },
         talk: {
-            morning: ["Rano się kopie, póki ziemia chłodna. Po południu już tylko się grabi.", "Hieronim jestem. Grabarz. Mój ojciec był grabarzem i jego ojciec też. Kopiemy dla wszystkich, nikt nie kopie dla nas."],
-            day: ["Te trzy kamienie z krukiem? Starsze niż miasteczko. Ojciec mówił: to bracia z zamku, nie ruszaj, nie zamiataj, nie pytaj.",
-                "Szubienica przy wschodniej drodze to nie moja robota. Ja tylko potem kopię. Pod murem, bez krzyża.",
-                "Ludzie myślą, że grabarz to smutna robota. A ja ci powiem: umarli nie kłamią, nie piją na kredyt i nie kłócą się o miedzę."],
-            evening: ["Zapalę lampkę i do domu. Lampka musi się palić - tak było zawsze.", "Kiedyś przy tych z krukiem ktoś zostawiał kwiaty. Od lat już nikt."],
-            night: ["Czego tu szukasz po nocy? Idź spać."],
-            rain: ["W deszcz lepiej nie kopać - woda zalewa dół szybciej, niż wyrzucisz ziemię."]
         }
     };
+    Watki.scal(RESIDENT, "zakon", "mieszkaniec");   // (its words: js/teksty/zakon.txt, mieszkaniec)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(RESIDENT);
     // his places on Map008 (TownLife reads only TownLifeData.SPOTS on its own map - not SPOTS_BY_MAP[8])
     const SPOTS_TOWN = {
@@ -504,142 +406,102 @@
 
     // ------------------------------------------------------------------ the quests (TownQuests packs; icon = the item's id)
     const K67 = {
-        id: "K67", kind: "K", title: "Trzy kruki przy drogach", giver: "dzwonnik", icon: ITEM.klucz,
-        where: "kapliczki z krukiem: Polna droga, Leśna droga, Łąka", when: "od dnia 4, za dnia",
-        desc: "Ambroży mówi, że przy drogach stoją kapliczki z krukiem i że jego mistrz kazał przy każdej się pomodlić, „to zrozumiesz, po co je stawiano”.",
+        id: "K67", kind: "K", giver: "dzwonnik", icon: ITEM.klucz,
         offer: {
-            cond: { hours: [7, 20], day: 4 },
-            say: ["Przy drogach za miastem stoją kapliczki z krukiem. Trzy. Mój mistrz chodził od jednej do drugiej co wiosnę.",
-                "Mówił: pomódl się przy każdej, a zrozumiesz, po co je stawiano. Ja już nie mam kolan na takie drogi."],
-            yes: "Obejdę je za ciebie.", no: "Może kiedyś.",
-            accept: ["Przy Polnej drodze, przy Leśnej i na Łące, przy drodze w góry. Kruk pod daszkiem - nie pomylisz."],
-            decline: ["Kapliczki poczekają. Czekają od dawna."]
+            cond: { hours: [7, 20], day: 4 }
         },
         steps: [
-            { type: "custom", check: "k67Modl", vars: "k67Vars", text: "Pomódl się przy trzech kapliczkach z krukiem: przy Polnej drodze, przy Leśnej drodze i na Łące ({n}/3)." },
-            { type: "talk", to: "dzwonnik", hours: [6, 21], text: "Wróć do Ambrożego i powiedz mu, że kruki przy drogach są obejrzane.",
-              say: ["Wszystkie trzy? Mój mistrz mówił, że kruk przy drodze znaczył: w pobliżu jest woda albo schronienie zakonu.",
-                  "Wody już tam nie ma, przynajmniej nie na wierzchu. Ale kto szuka, ten może jeszcze znaleźć. Uważnie, przy kamieniach i w mchu."] }
+            { type: "custom", check: "k67Modl", vars: "k67Vars" },
+            { type: "talk", to: "dzwonnik", hours: [6, 21] }
         ],
-        reward: { xp: 80, flag: "zakKapliczki", note: ["Trzy kruki przy drogach", "Pomodliłem się przy trzech kapliczkach z krukiem. Ambroży mówi, że kruk przy drodze znaczył: w pobliżu jest woda albo schronienie zakonu. Wody nie widać na wierzchu - ale może jeszcze gdzieś bije, w mchu, pod kamieniem, w gąszczu."] }
+        reward: { xp: 80, flag: "zakKapliczki" }
     };
+    Watki.scal(K67, "zakon", "zadania.K67");   // (its words: js/teksty/zakon.txt, zadania.K67)
     const K68 = {
-        id: "K68", kind: "K", title: "Zapiski strażnic", giver: "pustelnik", icon: ITEM.klucz,
-        where: "kopce z krukiem i fundamenty strażnic → pustelnia na klifie", when: "po pierwszej znalezionej karcie Zapisków",
-        desc: "Brat Kleofas rozpoznał kartę ze „Zapisków strażnic” - dziennika braci warty z czterech wież zakonu. Kart było sześć: trzy w kopcach z krukiem, trzy w fundamentach strażnic.",
+        id: "K68", kind: "K", giver: "pustelnik", icon: ITEM.klucz,
         offer: {
-            cond: { hours: [7, 19], fn: "k68Pora" },
-            say: ["Zapiski strażnic! Nie kroniki - dziennik warty. Bracia z wież pisali je prosto, jak żołnierze, bez szyfru.",
-                "Było ich sześć kart. Trzy schowali w kopcach z krukiem przy drogach, trzy pod płytami swoich wież. Mój mistrz szukał ich całe życie.",
-                "Przynieś mi je wszystkie. Przeczytam ci każdą - po jednej, bo oczy mam już stare."],
-            yes: "Przyniosę wszystkie sześć.", no: "Nie teraz.",
-            accept: ["Kopce stoją przy starych drogach: na Omszałej łące, na Skraju lasu i tu, nad klifem. Wieże... z wież zostały fundamenty. Szukaj płyt z krukiem."],
-            decline: ["Karty leżały trzysta lat. Poleżą jeszcze."]
+            cond: { hours: [7, 19], fn: "k68Pora" }
         },
         steps: [
-            { type: "custom", check: "k68Karty", vars: "k68Vars", text: "Znajdź wszystkie Zapiski strażnic: trzy w kopcach z krukiem (Omszała łąka, Skraj lasu, nad klifem pustelni) i trzy pod płytami strażnic (Polna droga, Góry, Urwisko) ({n}/6)." },
-            { type: "custom", check: "k68Czytaj", vars: "k68Vars", text: "Daj bratu Kleofasowi przeczytać wszystkie Zapiski strażnic (przeczytane {r}/6; za dnia, w pustelni)." }
+            { type: "custom", check: "k68Karty", vars: "k68Vars" },
+            { type: "custom", check: "k68Czytaj", vars: "k68Vars" }
         ],
-        reward: { xp: 150, flag: "zakZapiski", note: ["Zapiski strażnic", "Sześć kart dziennika braci warty. Cztery wieże pilnowały wyspy, kruki niosły listy, a krąg kamieni na łące był miejscem przysięgi: „patrzę i nie pytam”. W kręgu zakopano kamienny klucz do komory pod płytą z krukiem - tam, gdzie pada cień najwyższego kamienia, Strażnika, gdy słońce przejdzie cztery części swej drogi z pięciu."] }
+        reward: { xp: 150, flag: "zakZapiski" }
     };
+    Watki.scal(K68, "zakon", "zadania.K68");   // (its words: js/teksty/zakon.txt, zadania.K68)
     const D36 = {
-        id: "D36", kind: "D", title: "Cień Strażnika", giver: null, icon: ITEM.klucz, autoStart: "d36Start",
-        where: "krąg menhirów (Łąka menhirów) → komora pod menhirami", when: "po Zapiskach strażnic albo przy płycie w kręgu",
-        desc: "W kręgu menhirów na łące, w cieniu najwyższego kamienia, zakopano kamienny klucz. Pod płytą z krukiem jest komora pierwszego strażnika warty.",
+        id: "D36", kind: "D", giver: null, icon: ITEM.klucz, autoStart: "d36Start",
         steps: [
-            { type: "custom", check: "d36Zapiski", vars: "d36Vars", text: "Dowiedz się, o której godzinie Strażnik „wskazuje ręką”: przeczytaj z Kleofasem Zapiski strażnic o godzinie i o kluczu ({n}/2) - albo patrz na cień najwyższego kamienia." },
-            { type: "custom", check: "d36Kop", text: "Gdy słońce przejdzie cztery części swej drogi z pięciu, kop łopatą tam, gdzie padnie cień Strażnika (krąg menhirów, w ubitej ziemi). Nie w deszcz." },
-            { type: "custom", check: "d36Komora", text: "Włóż Klucz Strażnika w płytę z krukiem w środku kręgu i zejdź do komory. Weź pochodnię." },
-            { type: "custom", check: "d36Mapa", text: "Obejrzyj ścianę z wykutymi wieżami w komorze pod menhirami." }
+            { type: "custom", check: "d36Zapiski", vars: "d36Vars" },
+            { type: "custom", check: "d36Kop" },
+            { type: "custom", check: "d36Komora" },
+            { type: "custom", check: "d36Mapa" }
         ],
-        reward: { xp: 200, flag: "zakKomora", note: ["Komora pod menhirami", "Pod kręgiem menhirów leży pierwszy strażnik warty. Na ścianie jego komory wykuto cztery wieże zakonu: przy Polnej drodze, w Górach, nad morzem na Urwisku - i czwartą na przylądku, gdzie dziś stoi latarnia Bazylego. Z każdej linia biegnie do kręgu. Kruki niosły listy między wieżami, a krąg był sercem warty."] }
+        reward: { xp: 200, flag: "zakKomora" }
     };
+    Watki.scal(D36, "zakon", "zadania.D36");   // (its words: js/teksty/zakon.txt, zadania.D36)
     const K69 = {
-        id: "K69", kind: "K", title: "Grzędy Straży", giver: "latarnik", icon: ITEM.strzemie, autoStart: "k69Start",
-        where: "Orla Grań → pustelnia na klifie", when: "po „Jaju z grani” (D29)",
-        desc: "Na Orlej Grani stoją ruiny kamiennych grzęd Skrzydlatej Straży. Bazyli widział je z laterny: „trzy słupy jak palce”.",
+        id: "K69", kind: "K", giver: "latarnik", icon: ITEM.strzemie, autoStart: "k69Start",
         offer: {
-            cond: { hours: [14, 22], flags: ["orzelJajo"] },
-            say: ["Z laterny widać grań. Kiedy mgła opada, stoją tam trzy słupy jak palce. Grzędy - tak mówił mój poprzednik.",
-                "Skrzydlata Straż sadzała na nich orły. Byłeś tam, jajo przyniosłeś. Obejrzyj te słupy porządnie. I przynieś Kleofasowi, co znajdziesz - on to zapisze."],
-            yes: "Obejrzę je.", no: "Innym razem.",
-            accept: ["Trzy grzędy: północna, środkowa i ta nad urwiskiem. Uważaj na krawędź."],
-            decline: ["Słupy stały trzysta lat. Postoją."]
+            cond: { hours: [14, 22], flags: ["orzelJajo"] }
         },
         steps: [
-            { type: "custom", check: "k69Grzedy", vars: "k69Vars", text: "Obejrzyj trzy grzędy Skrzydlatej Straży na Orlej Grani ({n}/3)." },
-            { type: "bring", to: "pustelnik", need: [[ITEM.strzemie, 1]], hours: [7, 19], text: "Zanieś bratu Kleofasowi strzemię spod grzędy.",
-              hero: ["> Bracie, spod grzędy na Orlej Grani. Za lekkie na konia."],
-              done: ["(Kleofas obraca strzemię w palcach.) Orle siodło. Jeździec siedział za skrzydłami, nogi w strzemionach pod szyją ptaka.",
-                  "W Księdze gniazd jest jedno zdanie, które zawsze mi się podobało: „jeźdźca nosił tylko orzeł, który sam go wybrał”. Konia się kupuje. Orła - nie."] }
+            { type: "custom", check: "k69Grzedy", vars: "k69Vars" },
+            { type: "bring", to: "pustelnik", need: [[ITEM.strzemie, 1]], hours: [7, 19] }
         ],
-        reward: { xp: 120, flag: "zakGrzedy", items: [[ITEM.strzemie, 1]], note: ["Grzędy Straży", "Trzy grzędy Skrzydlatej Straży na Orlej Grani: kamienne słupy z żelazną poprzeczką i misą na deszczówkę. Pod nimi strzemię i orle siodło. Kleofas czytał z Księgi gniazd: „jeźdźca nosił tylko orzeł, który sam go wybrał”."] }
+        reward: { xp: 120, flag: "zakGrzedy", items: [[ITEM.strzemie, 1]] }
     };
+    Watki.scal(K69, "zakon", "zadania.K69");   // (its words: js/teksty/zakon.txt, zadania.K69)
     const K70 = {
-        id: "K70", kind: "K", title: "Kawałki wraku", giver: "rozbitek", icon: ITEM.okucie, autoStart: "k70Start",
-        where: "wrak na mieliźnie (płycizny, w odpływie)", when: "po sztormie, gdy piasek odsłoni pierwszy kawałek",
-        desc: "Sztormy wymywają z płycizn przy wraku „Białej Źrenicy” kolejne kawałki okrętu. Widać je tylko w odpływie.",
+        id: "K70", kind: "K", giver: "rozbitek", icon: ITEM.okucie, autoStart: "k70Start",
         offer: {
-            cond: { fn: "k70Pora" },
-            say: ["(Eryk odkłada węgiel do rysowania i mówi ciszej.) Słyszałem rybaków. Po sztormie z piasku przy mieliźnie coś wystaje.",
-                "Gdyby ktoś to odkopał... Nie chcę niczego dla siebie. Chcę tylko wiedzieć, co z niej zostało."],
-            yes: "Odkopię, co się da.", no: "Nie moja sprawa.",
-            accept: ["W odpływie. Tylko w odpływie - przypływ tam przychodzi szybciej, niż myślisz."],
-            decline: ["Rozumiem. Morze i tak wszystko zabierze."]
+            cond: { fn: "k70Pora" }
         },
         steps: [
-            { type: "custom", check: "k70Kawalki", vars: "k70Vars", text: "Odkop łopatą kawałki wraku na płyciznach przy mieliźnie - w odpływie, po każdym sztormie piasek odsłania kolejny ({n}/3)." }
+            { type: "custom", check: "k70Kawalki", vars: "k70Vars" }
         ],
-        reward: { xp: 120, flag: "zakWrak", note: ["Kawałki wraku", "Z płycizn przy „Białej Źrenicy” odkopałem okucia kadłuba, deskę z nazwą okrętu i skrzynkę kapitańską. Deska mówi wprost: BIAŁA ŹRENICA - STRAŻ PEWNOŚCI. Kto zna ten okręt, zna Czarne Oczy."] }
+        reward: { xp: 120, flag: "zakWrak" }
     };
+    Watki.scal(K70, "zakon", "zadania.K70");   // (its words: js/teksty/zakon.txt, zadania.K70)
     const D37 = {
-        id: "D37", kind: "D", title: "Groby z krukiem", giver: "dzwonnik", icon: ITEM.kamien,
-        where: "stary cmentarz za miasteczkiem → dzwonnica", when: "od dnia 6, za dnia",
-        desc: "Na starym cmentarzu za miasteczkiem są trzy kamienie z krukiem. Ambroży chce znać imiona, które pod mchem zarosły.",
+        id: "D37", kind: "D", giver: "dzwonnik", icon: ITEM.kamien,
         offer: {
-            cond: { hours: [7, 20], day: 6 },
-            say: ["Na starym cmentarzu, za miasteczkiem, leżą bracia z zamku. Trzy kamienie z krukiem. Mech je zjadł.",
-                "Mój mistrz znał ich imiona na pamięć. Ja zapomniałem. Wstyd mi. Oczyść te kamienie i przepisz, co na nich stoi."],
-            yes: "Oczyszczę je.", no: "Nie dziś.",
-            accept: ["Grabarz Hieronim cię wpuści. On ich nie rusza - jego ojciec też nie ruszał. Ale tobie pozwoli."],
-            decline: ["Mech poczeka. Zawsze czeka."]
+            cond: { hours: [7, 20], day: 6 }
         },
         steps: [
-            { type: "custom", check: "d37Groby", vars: "d37Vars", text: "Oczyść trzy kamienie z krukiem na starym cmentarzu i odczytaj imiona ({n}/3)." },
-            { type: "bring", to: "dzwonnik", need: [["v:zak_imiona", 1]], hours: [6, 21], text: "Zanieś Ambrożemu imiona z grobów z krukiem.",
-              hero: ["> Bogusław, strażnik wieży. Żelisław, kronikarz. I Wit, strażnik bramy - roku sto szóstego."],
-              done: ["(Ambroży powtarza imiona bezgłośnie.) Wit... Pamiętam. Mistrz dzwonił za nich co roku. Cztery i jeden.",
-                  "Cztery straże i ten piąty, który niesie słowo. Tak się dzwoniło na pogrzeb brata. Dziś zadzwonię znowu. Pierwszy raz od czterdziestu lat."] }
+            { type: "custom", check: "d37Groby", vars: "d37Vars" },
+            { type: "bring", to: "dzwonnik", need: [["v:zak_imiona", 1]], hours: [6, 21] }
         ],
-        reward: { xp: 120, opinion: 3, flag: "zakGroby", note: ["Groby z krukiem", "Na starym cmentarzu leżą bracia zakonu: Bogusław, strażnik wieży przy drodze; Żelisław, kronikarz; Wit, strażnik bramy, który zginął w roku upadku. Ambroży mówi, że za braci dzwoniło się „cztery i jeden”: cztery straże i piąty, który niesie słowo."] }
+        reward: { xp: 120, opinion: 3, flag: "zakGroby" }
     };
+    Watki.scal(D37, "zakon", "zadania.D37");   // (its words: js/teksty/zakon.txt, zadania.D37)
     const D38 = {
-        id: "D38", kind: "D", title: "Godzina milczenia", giver: null, icon: ITEM.kamien, autoStart: "d38Start",
-        where: "gaj Milczących (za Osadą Milczących)", when: "Akt II, o zmierzchu",
-        desc: "Milczący przychodzą do gaju o zmierzchu i stoją godzinę bez słowa w kręgu białych kamieni. Kto wytrzyma z nimi, coś zrozumie.",
+        id: "D38", kind: "D", giver: null, icon: ITEM.kamien, autoStart: "d38Start",
         steps: [
-            { type: "custom", check: "d38Godzina", text: "O zmierzchu stań w środku kręgu białych kamieni i wytrzymaj godzinę bez ruchu poza krąg, bez biegu, z bronią schowaną, bez rozmowy." }
+            { type: "custom", check: "d38Godzina" }
         ],
-        reward: { xp: 150, flag: "zakGaj", note: ["Godzina milczenia", "Stałem godzinę w gaju Milczących, w kręgu białych kamieni. Milczący odeszli od ludzi, bo wiedzieli za dużo: dotknęli prawdy, której nie da się nosić i mówić naraz. Przy kamieniu został dla mnie biały kamyk."] }
+        reward: { xp: 150, flag: "zakGaj" }
     };
+    Watki.scal(D38, "zakon", "zadania.D38");   // (its words: js/teksty/zakon.txt, zadania.D38)
     const REMARKS = [
-        { id: "zakGrabarzSoltys", who: "soltys", flag: "zakGroby", lines: ["Ambroży dzwonił wczoraj „cztery i jeden”. Pół miasta pytało, kto umarł. A on tylko: „Bracia”. Stary dziwak."] },
-        { id: "zakGrobyKowal", who: "kowal", flag: "zakGroby", lines: ["Słyszałem ten dzwon. Mój dziad mówił, że tak dzwoniono, kiedy chowano kogoś z zamku. Myślałem, że to bajka."] },
-        { id: "zakKomoraOzzy", who: "dzwonnik", flag: "zakKomora", lines: ["Pierwszy strażnik warty... Mistrz mówił, że on wciąż patrzy. Że dlatego krąg stoi. Wierzę mu, choć już nie wiem w co."] },
-        { id: "zakWrakRozbitek", who: "rozbitek", flag: "zakWrak", lines: ["(Eryk patrzy na swoje dłonie.) Deska z nazwą. Myślałem, że morze ją zabrało. Morze nie bierze tego, co ma wrócić."] },
-        { id: "zakGajSoltys", who: "soltys", flag: "zakGaj", lines: ["Byłeś u Milczących w gaju? I wróciłeś taki... cichy. Nie podoba mi się to."] }
+        { id: "zakGrabarzSoltys", who: "soltys", flag: "zakGroby" },
+        { id: "zakGrobyKowal", who: "kowal", flag: "zakGroby" },
+        { id: "zakKomoraOzzy", who: "dzwonnik", flag: "zakKomora" },
+        { id: "zakWrakRozbitek", who: "rozbitek", flag: "zakWrak" },
+        { id: "zakGajSoltys", who: "soltys", flag: "zakGaj" }
     ];
+    Watki.scal(REMARKS, "zakon", "uwagi");   // (its words: js/teksty/zakon.txt, uwagi)
     const GOSSIP = {
-        dzwonnik: ["Kapliczki z krukiem przy drogach? Mój mistrz mówił, że kruk znaczył wodę albo schronienie. Dziś już ani jednego, ani drugiego."],
-        grabarz: ["Tych trzech z krukiem nikt nie odwiedza. Ja tylko kosę obok przeciągnę."]
+        dzwonnik: [],
+        grabarz: []
     };
+    Watki.scal(GOSSIP, "zakon", "plotki");   // (its words: js/teksty/zakon.txt, plotki)
     (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Zakon", quests: [K67, K68, D36, K69, K70, D37, D38], vitems: VITEMS, remarks: REMARKS, gossip: GOSSIP });
 
     // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Zakon.epilogue): one or two by what the hero did
     const EPILOG = {
-        chamber: "Pod płytą z krukiem na Łące menhirów śpi pierwszy strażnik warty. Ściana z czterema wieżami pamięta, gdzie stały - teraz pamiętasz i ty.",
-        grove: "W gaju Milczących siedem białych kamieni stoi jak stało. O zmierzchu ktoś tam zawsze milczy przez godzinę - czasem ty."
     };
+    Watki.scal(EPILOG, "zakon", "epilog");   // (its words: js/teksty/zakon.txt, epilog)
     window.ZakonData = { EPILOG, VERSION, PKG: "D", OWNER: "Zakon", IDS, RESIDENTS: P ? P.residents : [2930, 2939], ITEMS: P ? P.items : [225, 239],
         ICONS: P ? P.icons : [512, 527], SWITCHES: P ? P.switches : [27, 28],
         ITEM, ICON, SW, MAPS, RAVEN_FOOD, IMG, TOWERS, SLAB_AT, SHRINES, CAIRNS, RING, CHAMBER, EAGLE, REGROW, CLIFF, DIVE, PERCHES, PERCH_BOND, PERCH_NEAR,

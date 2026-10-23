@@ -112,7 +112,7 @@
     const NOTICES = params.notices !== "false";
 
     // <decor-data> (tools/house/decor/make_decor.py writes this line - do not edit by hand)
-    const DECOR_ART = {"rogi":["!House_Decor",0,2,0,1,2,[56,64,88,109],[]],"kiel":["!House_Decor",0,2,1,1,2,[67,69,77,91],[]],"kiel_rog":["!House_Decor",0,2,2,1,2,[54,80,64,100],[]],"list":["!House_Decor",1,2,0,4,5,[65,89,80,109],[]],"polka_kufel":["!House_Decor",1,2,1,3,2,[53,72,91,101],[["kufel",65,72,81,89]]],"polka_kosci":["!House_Decor",1,2,2,3,2,[53,79,91,101],[["kosci",66,80,81,89]]],"polka_oba":["!House_Decor",2,2,0,3,2,[53,72,91,101],[["kufel",56,72,72,89],["kosci",75,80,90,89]]],"skora":["!House_Decor",2,2,1,3,6,[6,64,90,113],[]],"gwozdz":["!House_Decor",2,2,2,17,2,[72,73,74,75],[]],"pokwitowanie":["!House_Decor",3,2,0,17,2,[55,71,89,102],[]],"pokwitowanie_zima":["!House_Decor",3,2,1,17,2,[52,59,92,102],[]],"recznik":["!House_Decor",3,2,2,15,2,[49,68,95,114],[]],"recznik_zima":["!House_Decor",0,4,0,15,2,[49,59,95,114],[]],"chodnik":["!House_Decor",0,4,1,16,6,[17,107,127,133],[]],"wyc_2":["!House_Decor",0,4,2,2,3,[63,86,82,112],[]],"wyc_16":["!House_Decor",1,4,0,16,3,[63,86,82,112],[]],"wyc_7":["!House_Decor",1,4,1,7,3,[60,87,85,112],[]],"wyc_11":["!House_Decor",1,4,2,11,3,[60,87,85,112],[]],"ziola":["!House_Decor",2,4,0,9,2,[55,96,90,126],[]],"wieniec":["!House_Decor",2,4,1,9,2,[52,54,92,112],[]],"bazie":["!House_Decor",2,4,2,4,10,[49,71,70,102],[]],"kwiaty":["!House_Decor",3,4,0,4,10,[47,69,71,102],[]],"pisanki":["!House_Decor",3,4,1,2,10,[68,74,96,102],[]],"jablka":["!House_Decor",3,4,2,2,10,[69,78,96,102],[]],"wigilia":["!$House_Decor_Big",0,2,0,3,10,[69,120,219,183],[]],"dynie_l":["!House_Decor",0,6,0,8,11,[51,100,93,139],[]],"dynie_r":["!House_Decor",0,6,1,10,11,[51,100,93,139],[]],"snop":["!House_Decor",0,6,2,17,7,[54,86,91,140],[]],"skrzynia":["!House_Decor",1,6,0,17,8,[48,85,95,121],[]]};
+    const DECOR_ART = {"rogi":["!House_Decor",0,2,0,1,2,[56,64,88,109],[]],"kiel":["!House_Decor",0,2,1,1,2,[67,69,77,91],[]],"kiel_rog":["!House_Decor",0,2,2,1,2,[54,80,64,100],[]],"list":["!House_Decor",1,2,0,4,5,[65,89,80,109],[]],"polka_kufel":["!House_Decor",1,2,1,3,2,[53,72,91,101],[["kufel",65,72,81,89]]],"polka_kosci":["!House_Decor",1,2,2,3,2,[53,79,91,101],[["kosci",66,80,81,89]]],"polka_oba":["!House_Decor",2,2,0,3,2,[53,72,91,101],[["kufel",56,72,72,89],["kosci",75,80,90,89]]],"skora":["!House_Decor",2,2,1,3,6,[6,64,90,113],[]],"gwozdz":["!House_Decor",2,2,2,17,2,[72,73,74,75],[]],"pokwitowanie":["!House_Decor",3,2,0,17,2,[55,71,89,102],[]],"pokwitowanie_zima":["!House_Decor",3,2,1,17,2,[52,59,92,102],[]],"recznik":["!House_Decor",3,2,2,15,2,[49,68,95,114],[]],"recznik_zima":["!House_Decor",0,4,0,15,2,[49,59,95,114],[]],"chodnik":["!House_Decor",0,4,1,16,6,[17,107,127,133],[]],"wyc_2":["!House_Decor",0,4,2,2,3,[63,86,82,112],[]],"wyc_16":["!House_Decor",1,4,0,16,3,[63,86,82,112],[]],"wyc_7":["!House_Decor",1,4,1,7,3,[60,87,85,112],[]],"wyc_11":["!House_Decor",1,4,2,11,3,[60,87,85,112],[]],"ziola":["!House_Decor",2,4,0,9,2,[55,96,90,126],[]],"wieniec":["!House_Decor",2,4,1,9,2,[52,54,92,112],[]],"bazie":["!House_Decor",2,4,2,4,10,[49,71,70,102],[]],"kwiaty":["!House_Decor",3,4,0,4,10,[47,69,71,102],[]],"pisanki":["!House_Decor",3,4,1,2,10,[68,74,96,102],[]],"jablka":["!House_Decor",3,4,2,2,10,[69,78,96,102],[]],"wigilia":["!$House_Decor_Big",0,2,0,2,11,[72,124,171,183],[]],"dynie_l":["!House_Decor",0,6,0,8,11,[51,100,93,139],[]],"dynie_r":["!House_Decor",0,6,1,10,11,[51,100,93,139],[]],"snop":["!House_Decor",0,6,2,17,7,[54,86,91,140],[]],"skrzynia":["!House_Decor",1,6,0,17,8,[48,85,95,121],[]]};
     // </decor-data>
     const FRAME = { "!House_Decor": [144, 144], "!$House_Decor_Big": [288, 192] };
 
@@ -135,9 +135,11 @@
         { id: 990, key: "wyc_16", x: 16, y: 3, prio: 0 },
         { id: 991, key: "chodnik", x: 16, y: 6, prio: 0, z: 0.5, need: "quilt" },
         { id: 992, key: "komin", x: 9, y: 2, prio: 0, need: "hearth" },
-        { id: 993, key: "stol_p", x: 4, y: 10, prio: 0, need: "table" },   // (the table is 3 tiles since the user's edit of 2026-09-29)
-        { id: 994, key: "stol_l", x: 2, y: 10, prio: 0, need: "table" },
-        { id: 995, key: "wigilia", x: 3, y: 10, prio: 0, z: 0.8, need: "table" },
+        // (2026-10-23) the table since the user's edit of 2026-10-17: two cells wide in the corner (1..2, 10..11, its top map pixels
+        // 51..143 x 508..551), the candle on the round stool behind it (2,10); px: the picture moved onto the top (TawernaCore <Px>)
+        { id: 993, key: "stol_p", x: 2, y: 11, prio: 0, px: [13, 7], need: "table" },   // (the jug: the right half of the top)
+        { id: 994, key: "stol_l", x: 1, y: 11, prio: 0, px: [-6, 8], need: "table" },   // (the basket: the left half)
+        { id: 995, key: "wigilia", x: 2, y: 11, prio: 0, z: 0.8, need: "table" },        // (the cloth over the whole top: tools/house/decor/wigilia_stol2.py)
         { id: 996, key: "dynie_l", x: 8, y: 11, prio: 1, need: "door" },
         { id: 997, key: "dynie_r", x: 10, y: 11, prio: 1, need: "door" },
         { id: 998, key: "snop", x: 17, y: 7, prio: 1, need: "chest" }
@@ -151,7 +153,7 @@
         picture: d => hasEvent(d, 15, 2, e => /Matki Boskiej/i.test(e.name)),
         quilt: d => hasEvent(d, 17, 5, e => /Kołdra/i.test(e.name) || imageOf(e) === "!$House_Quilt"),
         hearth: d => hasEvent(d, 9, 4, e => /Palenisko/i.test(e.name)),
-        table: d => hasEvent(d, 3, 10, e => /świeca/i.test(e.name)),
+        table: d => hasEvent(d, 2, 10, e => /świeca/i.test(e.name)),
         door: d => hasEvent(d, 9, 12, e => /^Drzwi/i.test(e.name)),
         chest: d => hasEvent(d, 17, 8, e => /Skrzynia dziadka/i.test(e.name))
     };
@@ -323,7 +325,7 @@
     const BLANK_COND = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1,
         switch1Valid: false, switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
     function slotData(s) {
-        return { id: s.id, name: "Ozdoba: " + s.key, note: "<HomeDecor:" + s.key + ">", x: s.x, y: s.y, pages: [{
+        return { id: s.id, name: "Ozdoba: " + s.key, note: "<HomeDecor:" + s.key + ">" + (s.px ? "<Px:" + s.px[0] + "," + s.px[1] + ">" : ""), x: s.x, y: s.y, pages: [{
             conditions: Object.assign({}, BLANK_COND), directionFix: true,
             image: { tileId: 0, characterName: "", direction: 2, pattern: 0, characterIndex: 0 },
             list: [{ code: 0, indent: 0, parameters: [] }], moveFrequency: 3,
@@ -396,7 +398,7 @@
     };
 
     // Christmas Eve: the dishes (Winlu D tiles) are taken off the table while the cloth lies on it, and put back after
-    const TABLE_CELLS = [[2, 9], [3, 9], [4, 9], [2, 10], [3, 10], [4, 10]];
+    const TABLE_CELLS = [[1, 10], [2, 10], [1, 11], [2, 11]];   // (the table of 2026-10-17)
     let cleared = null;   // { data: the map's tile array, list: [[index, tileId]] taken off }
     function clearTable(on) {
         if (!$dataMap || !Array.isArray($dataMap.data) || !onHouse()) return false;
@@ -436,6 +438,8 @@
             // (what stands on the floor and blocks - the pumpkins, the sheaf - changes only as the house is entered or on an
             // explicit refresh: the people's ways, worked out as they come in, stay true during a visit)
             if (s && s.prio === 1 && !force && ev._decorLook !== undefined) continue;
+            // (a game saved with the table's things where they stood before the candle moved: on their places now)
+            if (s && (ev.x !== s.x || ev.y !== s.y)) ev.locate(s.x, s.y);
             if (s) show(ev, lookOf(s.key));
             else if (isGrandpasChest(ev) && ev._decorLook !== "skrzynia") paintChest(ev);
         }

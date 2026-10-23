@@ -1,0 +1,105 @@
+{
+ "serce": {
+  "LORD": {
+   "allowAfter": {
+    "ally": {
+     "0": {
+      "1": "Dziękuję. Za to, że pozwoliłeś - i za to, że odciągnąłeś."
+     },
+     "1": {
+      "1": "Jedno pytanie. Teraz rozumiem, czemu zakon dawał tylko jedno."
+     }
+    },
+    "rival": {
+     "0": {
+      "1": "Zabierz mnie stąd."
+     },
+     "1": {
+      "1": "Rób z tym światłem, co chcesz. Ja już wiem. To mi wystarczy... aż nadto."
+     }
+    }
+   },
+   "refuse": {
+    "ally": {
+     "0": {
+      "1": "...Masz rację. Gdybym usłyszał odpowiedź, musiałbym z nią żyć."
+     },
+     "1": {
+      "1": "Wolę pamiętać go takim, jakim był. Bywaj."
+     }
+    }
+   },
+   "told": {
+    "silent": {
+     "0": {
+      "1": "..."
+     },
+     "1": {
+      "1": "Rozumiem. Skoro milczysz, to wiem dość."
+     },
+     "2": {
+      "1": "Może tak lepiej."
+     }
+    }
+   },
+   "askForRival": {
+    "0": {
+     "1": "Zostawię ci to światło. Dwór ma dość kamieni, które pamiętają."
+    }
+   }
+  },
+  "ASKERS": {
+   "0": {
+    "lines": {
+     "0": {
+      "1": "Rok minął. Teraz... teraz mogę zapytać?"
+     }
+    }
+   },
+   "1": {
+    "lines": {
+     "0": {
+      "1": "Jedno pytanie, tak? Czy Marek żyje?"
+     }
+    }
+   },
+   "2": {
+    "lines": {
+     "0": {
+      "1": "Spaliłam słowa. Ale melodia została. Chcę wiedzieć, czyja to była pieśń."
+     }
+    }
+   },
+   "3": {
+    "lines": {
+     "0": {
+      "1": "Sześćdziesiąt lat temu wpadłem tu jako chłopak. Chcę wiedzieć, co wtedy zobaczyłem."
+     }
+    }
+   }
+  },
+  "DEBUG": {
+   "endings": {
+    "0": {
+     "1": "hero"
+    },
+    "1": {
+     "1": "hero"
+    },
+    "2": {
+     "1": "borgar"
+    },
+    "3": {
+     "1": "ambrozy"
+    },
+    "4": {
+     "1": "hero"
+    },
+    "5": {
+     "1": "hero"
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Underground_Data.js: HEART=serce:pary:/(^|\\.)(name|ask|notice|caption|SON|AFTER|AFTER_GUARDIAN)$|(^|\\.)(NAMES|opts|tellOpts|card)(\\.|$)|\\.1$/)"
+}

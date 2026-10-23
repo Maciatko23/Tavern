@@ -1,0 +1,314 @@
+# Nazwy miejsc w stylu „Kronika” (CleanHUD.js): podpis pod nazwą mapy i jedno zdanie o miejscu przy pierwszej wizycie.
+#   mapa.<id>.pod   podpis (małymi literami; gra pokazuje go wersalikami)
+#   mapa.<id>.opis  jedno zdanie o miejscu (tylko miejsca na zewnątrz, jaskinie i piętra podziemi z nazwą; wnętrza go nie mają)
+#   pasmo.<n>.opis  zdanie przy pierwszym zejściu w pasmo podziemi (piętra składane przez grę: „Piętro N” + nazwa pasma)
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz miejsca
+
+# ======================================================================== Miejsca na zewnątrz
+# 3 Kruczy Jar
+mapa.3.pod = działka dziadka w obrębie muru
+mapa.3.opis = Sucha ziemia za kamiennym murem i dług, który na niej ciąży.
+
+# 4 Łąka
+mapa.4.pod = pastwisko przy starej drodze
+mapa.4.opis = Owce, świerszcze i trawa, która faluje jak morze.
+
+# 8 Okolice Tawerny
+mapa.8.pod = miasteczko pod zamkowym tarasem
+mapa.8.opis = Studnia na rynku daje mało, za to plotek nigdy nie brakuje.
+
+# 9 Piwnica Tawerny
+mapa.9.pod = zapasy Borgara i pradawny mur
+mapa.9.opis = Ten mur stał tu, zanim ktokolwiek nalał pierwsze piwo.
+
+# 10 Ruiny Zamku
+mapa.10.pod = sala bramna pod piwnicą
+mapa.10.opis = Schody prowadzą w dół dalej, niż sięga blask pochodni.
+
+# 12 Mroczny Las
+mapa.12.pod = gęstwina bez ścieżek i słońca
+mapa.12.opis = Gałęzie splatają się nad głową i tłumią odgłos kroków.
+
+# 13 Góry i kamieniołom
+mapa.13.pod = skalne półki i ciosane bloki
+mapa.13.opis = Wiatr gwiżdże w szczelinach, a w skale drzemie żelazo.
+
+# 14 Jaskinia
+mapa.14.pod = sztolnia w ścianie gór
+mapa.14.opis = Z mroku dobiega stuk kilofów i trzask płonących polan.
+
+# 17 Omszała łąka
+mapa.17.pod = mech, zioła i ciche źródełko
+mapa.17.opis = Po deszczu grzyby wyrastają tu w równych, dziwnych kręgach.
+
+# 18 Łąka menhirów
+mapa.18.pod = krąg głazów starszy niż pamięć
+mapa.18.opis = Najwyższy kamień rzuca długi cień, jakby coś wskazywał.
+
+# 20 Dom dziadka (podwórze)
+mapa.20.pod = podwórze starego Stacha
+mapa.20.opis = Dym z komina znaczy, że dziadek czeka z kapuśniakiem.
+
+# 21 Leśna droga
+mapa.21.pod = trakt przez sosnowy las
+mapa.21.opis = Ślady kół, żywica i czyjeś ognisko gdzieś w głębi.
+
+# 22 Polna droga
+mapa.22.pod = szlak wśród spieczonych pól
+mapa.22.opis = Kurz po kostki, a przy kapliczce leżą polne kwiaty.
+
+# 23 Skraj lasu
+mapa.23.pod = tu kończą się pola, zaczyna dzicz
+mapa.23.opis = Pod korzeniami ktoś mieszka i nie lubi obcych.
+
+# 24 Posiadłość Lorda
+mapa.24.pod = dwór Zaleskich z oranżerią
+mapa.24.opis = Nawet w suszę trawa jest tu zielona i równo przycięta.
+
+# 111 Podgrodzie
+mapa.111.pod = biedna dzielnica za murami miasta
+mapa.111.opis = Tu dym pachnie smołą, a każdy grosz liczy się dwa razy.
+
+# 118 Dno studni
+mapa.118.pod = wilgotna komora pod rynkiem
+mapa.118.opis = Z góry sączy się światło, a ze ścian ciągnie chłodem.
+
+# 120 Osada Milczących
+mapa.120.pod = ukryta dolina w górach
+mapa.120.opis = Ludzie z płótnem na ustach patrzą w gładką ścianę skały.
+
+# 125 Przystań
+mapa.125.pod = tu przybijają ostatnie promy
+mapa.125.opis = Woda pamięta wojnę lepiej niż ludzie.
+
+# 155 Pustelnia na klifie
+mapa.155.pod = ule i księgi nad przepaścią
+mapa.155.opis = Pszczoły brzęczą nad urwiskiem, a dzwon w wieży milczy.
+
+# 157 Urwisko Kruków
+mapa.157.pod = ruiny murów nad morzem
+mapa.157.opis = Kruki krążą nad gruzem, czujne jak wartownicy.
+
+# 159 Przylądek z latarnią
+mapa.159.pod = skały, mgła i samotna wieża
+mapa.159.opis = Nocą płomień ze szczytu widać z połowy wyspy.
+
+# 162 Garnizon nad zatoką
+mapa.162.pod = chorągiew królewska z lądu
+mapa.162.opis = Bęben, musztra i zapach kaszy z polowej kuchni.
+
+# 165 Wrak na mieliźnie
+mapa.165.pod = przełamany okręt w zatoce
+mapa.165.opis = Morze odsłania go dwa razy na dobę i dwa razy zabiera.
+
+# 167 Stara cysterna zakonu
+mapa.167.pod = zbiornik wody pod wzgórzem
+mapa.167.opis = Woda stoi tu ciemna i cicha, odmierzana co do wiadra.
+
+# 168 Spalona zagroda
+mapa.168.pod = dawne gospodarstwo Ługów
+mapa.168.opis = Osmalone belki sterczą z popiołu, a pole zarosło ostem.
+
+# 175 Orla Grań
+mapa.175.pod = wysokie grzędy pod samym niebem
+mapa.175.opis = Stąd cała wyspa wygląda na małą i bezbronną.
+
+# 176 Komora pod menhirami
+mapa.176.pod = krypta pod starym kręgiem
+mapa.176.opis = Powietrze stoi tu nieruszone od setek lat.
+
+# 177 Jaskinia przemytników
+mapa.177.pod = skład pod zatoczką przystani
+mapa.177.opis = Przypływ strzeże tego składu sumienniej niż strażnik.
+
+# ======================================================================== Wnętrza (tylko podpis)
+# 1 Tawerna
+mapa.1.pod = karczma „Pod Złotym Kuflem”
+# 2 Domek - Wnętrze
+mapa.2.pod = stara izba na działce dziadka
+# 19 Dom dziadka (wnętrze)
+mapa.19.pod = bielone ściany i kamienny komin
+# 25 Pokoje gości
+mapa.25.pod = izby na piętrze tawerny
+# 26 Apartamenty
+mapa.26.pod = komnaty dla zamożnych gości
+# 100 Chatka
+mapa.100.pod = dach postawiony własnymi rękami
+# 102 Piekarnia
+mapa.102.pod = ciepły piec i bochenki Hanki
+# 103 Kantor
+mapa.103.pod = waga, skrzynie i towar zza morza
+# 104 Ratusz
+mapa.104.pod = siedziba sołtysa i księga racji
+# 105 Dom kowala
+mapa.105.pod = izba Tadka Młota przy kuźni
+# 106 Dom garbarza
+mapa.106.pod = skóry na ramach i buty Ignaca
+# 107 Dom woziwody
+mapa.107.pod = beczki, nosidła i wóz Kuby
+# 108 Dzwonnica
+mapa.108.pod = wieża dzwonnika Ambrożego
+# 109 Dom mieszczan
+mapa.109.pod = izba rodziny Bronka i Zosi
+# 110 Izba pod skałą
+mapa.110.pod = izdebka wykuta w murze tarasu
+# 112 Chata praczki
+mapa.112.pod = izba Marty Ługowej i Franka
+# 113 Chata drwala
+mapa.113.pod = siekiery, kliny i smolne drwa
+# 114 Chata kłusownika
+mapa.114.pod = sidła, wnyki i wyprawione futra
+# 115 Izba znachorki
+mapa.115.pod = pęki ziół babki Jadwigi
+# 116 Kram starzyzny
+mapa.116.pod = rupiecie i skarby Józka Łaty
+# 117 Dom uchodźców
+mapa.117.pod = schronienie dla ludzi z promu
+# 119 Archiwum zakonu
+mapa.119.pod = sklepienie pod ogrodem rycerzy
+# 121 Wspólna izba (Osada Milczących)
+mapa.121.pod = palenisko i ławy dla całej osady
+# 122 Chata tkaczki (Osada Milczących)
+mapa.122.pod = krosno i białe pasy płótna
+# 123 Chata Najstarszego (Osada Milczących)
+mapa.123.pod = kamyki ułożone w równe rzędy
+# 124 Chata rzeźbiarza (Osada Milczących)
+mapa.124.pod = dłuta, wióry i świeże rzeźby
+# 126 Chata Janka
+mapa.126.pod = dom rybaka, który cię znalazł
+# 127 Szopa przy pochylni
+mapa.127.pod = sieci, smoła i stare wiosła
+# 128 Komora celna
+mapa.128.pod = pieczęcie i rejestr celnika
+# 154 Chata pod lasem
+mapa.154.pod = dom z działką na Podgrodziu
+# 156 Skryptorium
+mapa.156.pod = pióra, atrament i kroniki
+# 160 Izba latarnika
+mapa.160.pod = sadza, drwa i posłanie Bazylego
+# 161 Laterna
+mapa.161.pod = ogień i wielka soczewka
+# 163 Kwatera rotmistrza
+mapa.163.pod = mapy, szabla i lista zaginionych
+# 166 Wrak - pod pokładem
+mapa.166.pod = ładownia, w której chlupie woda
+# 169 Dom Ługów
+mapa.169.pod = izba odbudowana na zgliszczach
+# 171 Piwnica kantoru
+mapa.171.pod = ciemny skład pod domem kupca
+# 172 Dwór - Hol
+mapa.172.pod = przedsionek z księgą gości
+# 173 Dwór - Biblioteka
+mapa.173.pod = półki ksiąg rodu Zaleskich
+# 174 Dwór - Gabinet
+mapa.174.pod = biurko i fotel jaśnie pana
+# 178 Kaplica
+mapa.178.pod = ławy, ołtarz i cmentarna cisza
+# 179 Dom grabarza
+mapa.179.pod = chata Hieronima przy cmentarzu
+# 180 Strażnica Lorda
+mapa.180.pod = izba straży w czerwonych barwach
+# 181 Stajnia z wozownią
+mapa.181.pod = boksy, chomąta i zapach siana
+# 182 Dom przekupki
+mapa.182.pod = kosze jabłek i izba Agaty
+# 183 Kamienica mieszczan
+mapa.183.pod = zegar, biblioteczka i dwa fotele
+# 184 Dom szwaczki
+mapa.184.pod = pracownia Doroty Igły
+# 185 Dom wdowy
+mapa.185.pod = izba Haliny i jej dzieci
+# 186 Stary dom kupca
+mapa.186.pod = wyblakły przepych dawnych lat
+# 187 Dom cieśli
+mapa.187.pod = deski, kozioł i piła Leona
+# 188 Dom staruszków
+mapa.188.pod = kot śpiący przy ciepłym palenisku
+# 189 Dom weterana
+mapa.189.pod = pęknięta tarcza nad kominkiem
+# 190 Izba do wynajęcia
+mapa.190.pod = siennik, kurz i pusta skrzynia
+# 193 Dom czeladnika piekarza
+mapa.193.pod = łóżko w kącie i mąka na podłodze
+# 194 Kamienica ze sklepikiem
+mapa.194.pod = świece i mydło na ladzie
+# 195 Dom rybaka
+mapa.195.pod = ryby suszone na drążkach
+# 196 Dom balwierza
+mapa.196.pod = brzytwa, lustro i zielarnia
+# 197 Dom skryby
+mapa.197.pod = tablica, kreda i ławy uczniów
+# 198 Dom kamieniarza
+mapa.198.pod = nagrobki czekające na imiona
+# 201 Szynk
+mapa.201.pod = karczemka Mietka Kwaśniaka
+# 202 Przytułek
+mapa.202.pod = prycze dla chorych i bezdomnych
+# 203 Garncarnia
+mapa.203.pod = koło i piec Wita Zdunia
+# 204 Lepianka
+mapa.204.pod = jedna izba na całą rodzinę
+# 205 Lepianka wdowy
+mapa.205.pod = koza za przegrodą z desek
+# 206 Chata węglarza
+mapa.206.pod = czarny pył na każdym sprzęcie
+# 207 Chata tkaczki (Podgrodzie)
+mapa.207.pod = len, kołowrotek i kosz przędzy
+# 208 Chata rybaka
+mapa.208.pod = para wioseł i sieć na ścianie
+# 209 Chata pod strzechą
+mapa.209.pod = kocioł, posłania i trochę ciepła
+# 210 Chałupa z desek
+mapa.210.pod = piec kuchenny i mała spiżarka
+# 211 Szopa
+mapa.211.pod = widły, grabie i połamane koło
+# 212 Komórka
+mapa.212.pod = worki zboża i beczki kapusty
+
+# ======================================================================== Piętra podziemi zrobione ręcznie (tylko zdanie)
+# 140 Strażnica (piętro 10)
+mapa.140.opis = Pusta zbroja nadal trzyma wartę przy schodach.
+
+# 146 Sala jednego pytania (piętro 20)
+mapa.146.opis = Kamienni bracia stoją plecami do światła.
+
+# 147 Wielka cysterna (piętro 30)
+mapa.147.opis = Ogromna niecka, a na dnie ledwie stęchła kałuża.
+
+# 148 Bród Milczącej (piętro 40)
+mapa.148.opis = Most z lin kołysze się nad wodą, która nigdy nie milknie.
+
+# 149 Przekop kopaczy (piętro 50)
+mapa.149.opis = Za ścianą huczy rzeka, a skała nosi świeże rany po kilofach.
+
+# 150 Brama Pierwszych (piętro 60)
+mapa.150.opis = Kamienne postacie patrzą w bramę, nie na ciebie.
+
+# 151 Sala płaskorzeźb (piętro 70)
+mapa.151.opis = W koszach płonie ogień, choć nikt nie dokłada drewna.
+
+# 152 Sala echa (piętro 80)
+mapa.152.opis = Każde słowo wraca, ale nie zawsze to samo.
+
+# 153 Ostatnia straż (piętro 90)
+mapa.153.opis = Posłania równo zasłane, a kosz z ogniem dawno wystygł.
+
+# 11 Komnata Serca (piętro 100)
+mapa.11.opis = Tu cisza ma ciężar, a światło nie ma kształtu.
+
+# ======================================================================== Pasma podziemi (zdanie przy pierwszym zejściu w pasmo)
+# 1 Piwnice zamku (piętra 1-10)
+pasmo.1.opis = Pod każdą piwnicą jest następna, coraz zimniejsza.
+
+# 2 Kwatery i kaplica zakonu (piętra 11-30)
+pasmo.2.opis = Ktoś tu żył, modlił się i liczył dni do końca warty.
+
+# 3 Jaskinie i podziemna rzeka (piętra 31-50)
+pasmo.3.opis = Ciosany kamień ustępuje dzikiej skale i czarnej wodzie.
+
+# 4 Ruiny starsze niż zakon (piętra 51-75)
+pasmo.4.opis = Te sale budowały ręce, których imion nikt nie zapisał.
+
+# 5 Warstwa Prawdy (piętra 76-99)
+pasmo.5.opis = Płomienie palą się tu na niebiesko, a ciemność szepcze.

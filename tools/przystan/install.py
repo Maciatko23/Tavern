@@ -9,7 +9,8 @@
 #   4. data/MapInfos.json      125 "Przystań" (a child of 111 "Podgrodzie"), 126-128 (children of 125) in the free rows
 #   5. data/Items.json         173 Śledź, 174 Dorsz, 175 Chusta matki (a keepsake: <Weight:0><Pamiatka>), 176 Smoła - appended
 #                                 (ids checked free); their icons into free cells of img/system/IconSet.png (tools/przystan/art/icons)
-#   6. js/plugins.js           Przystan.js registered after Act3 (before CleanHUD) - the editor drops entries it has not seen
+#   6. js/tawerna_wtyczki.js   Przystan.js registered after Act3 (before CleanHUD) - the game's plugin list (since 2026-10-23;
+#                              the editor neither reads nor writes it)
 # A map of ours changed in the editor since the last install (tools/przystan/installed.json keeps the hashes) is left alone
 # (--force replaces it). Everything replaced is copied to backup_art_2026-10-14/przystan/ first. Files keep their line endings
 # (all of these are LF), UTF-8, the editor's one-line-per-entry layout.
@@ -259,9 +260,9 @@ def patched_items_and_icons():
     return out, buf.getvalue(), icons
 
 
-# ------------------------------------------------------------------------------------------------ plugins.js
+# ------------------------------------------------------------------------------------------------ the game's plugin list
 def patched_plugins():
-    path = ROOT + "js/plugins.js"
+    path = ROOT + "js/tawerna_wtyczki.js"
     raw = open(path, "rb").read()
     crlf = b"\r\n" in raw
     s = raw.decode("utf-8").replace("\r\n", "\n")
@@ -270,9 +271,9 @@ def patched_plugins():
     for entry, after in PLUGINS:
         if any(l.startswith('{"name":"%s",' % entry["name"]) for l in lines): continue
         idx = [i for i, l in enumerate(lines) if l.startswith('{"name":"%s",' % after)]
-        assert len(idx) == 1, "plugins.js: brak %s" % after
+        assert len(idx) == 1, "lista gry (js/tawerna_wtyczki.js): brak %s" % after
         i = idx[0]
-        assert lines[i].endswith(","), "plugins.js: %s jest ostatni?" % after
+        assert lines[i].endswith(","), "lista gry: %s jest ostatni?" % after
         lines.insert(i + 1, dump(entry) + ",")
         changed = True
     if not changed:
@@ -305,7 +306,7 @@ def main():
         plan.append((ROOT + "img/system/IconSet.png", iconset))
         plan.append((DATA + "Items.json", items))
     plug = patched_plugins()
-    if plug: plan.append((ROOT + "js/plugins.js", plug))
+    if plug: plan.append((ROOT + "js/tawerna_wtyczki.js", plug))
     print("drzwi Map125:", ", ".join("%d %s -> Map%d" % d for d in doors))
     print("Map111:", why111)
     print("ikony przedmiotów:", icons)

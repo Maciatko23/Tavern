@@ -1,4 +1,4 @@
-# Pakiet 0 rozszerzeń nowego terenu (docs/rozszerzenia/PLAN.md 2.3-2.8): przygotowuje STAGING (data/ i js/plugins.js zostają nietknięte).
+# Pakiet 0 rozszerzeń nowego terenu (docs/rozszerzenia/PLAN.md 2.3-2.8): przygotowuje STAGING (data/ i lista gry zostają nietknięte).
 #   python tools/rozszerzenia/pakiet0.py            staging -> tools/rozszerzenia/staging/ (+ SHA.txt, ZMIANY.txt)
 #   python tools/rozszerzenia/instaluj.py --pakiet0 [--wykonaj]   instaluje go (edytor zamknięty, kopie do archiwum)
 # Co zmienia:
@@ -8,7 +8,7 @@
 #   data/Map176.json, data/Map177.json   puste szkielety 20x14, tileset 12 (rysują je paczki D i C)
 #   data/System.json     nazwy przełączników 21-28
 #   data/Map024.json, Map125.json, Map165.json   kafle (tools/rozszerzenia/kafle.py)
-#   js/plugins.js        10 nowych wtyczek (dane przed TownLife, silniki po Orzel_Lot), opisy zmienionych wtyczek
+#   js/tawerna_wtyczki.js 10 nowych wtyczek (lista gry; do 2026-10-23 js/plugins.js) (dane przed TownLife, silniki po Orzel_Lot), opisy zmienionych wtyczek
 import os, sys, json, re, shutil
 from wspolne import ROOT, STAGING, read_json, json_text, dump, sha1, sha1_bytes
 import kafle
@@ -109,17 +109,17 @@ def stage_tiles():
 
 
 def stage_plugins():
-    p = os.path.join(ROOT, "js", "plugins.js")
+    p = os.path.join(ROOT, "js", "tawerna_wtyczki.js")   # (the game's plugin list)
     raw = open(p, "rb").read().decode("utf-8")
-    head, sep, rest = raw.partition("var $plugins =\n[\n")
-    if not sep: raise SystemExit("STOP: js/plugins.js w nieznanym układzie")
+    head, sep, rest = raw.partition("var $tawernaWtyczki =\n[\n")
+    if not sep: raise SystemExit("STOP: js/tawerna_wtyczki.js w nieznanym układzie")
     body, tail = rest.rsplit("\n];", 1)
     lines = body.split(",\n")
     entries = [json.loads(l) for l in lines]
-    if ",\n".join(dump(e) for e in entries) != body: raise SystemExit("STOP: js/plugins.js nie wraca do tej samej postaci po odczycie - przerwano")
+    if ",\n".join(dump(e) for e in entries) != body: raise SystemExit("STOP: js/tawerna_wtyczki.js nie wraca do tej samej postaci po odczycie - przerwano")
     names = [e["name"] for e in entries]
     for n in DATA_PLUGINS + ENGINE_PLUGINS:
-        if n in names: raise SystemExit("STOP: js/plugins.js ma już %s" % n)
+        if n in names: raise SystemExit("STOP: lista gry ma już %s" % n)
     def entry(n): return {"name": n, "status": True, "description": plugindesc(n), "parameters": {}}
     i = names.index("Dwor_Data") + 1
     entries[i:i] = [entry(n) for n in DATA_PLUGINS]
@@ -132,8 +132,8 @@ def stage_plugins():
     if not (names.index("Zakon_Data") < names.index("TownLife") and names.index("Okolice") > names.index("Orzel_Lot") and names.index("Zakon") < names.index("TitleScreen")):
         raise SystemExit("STOP: zła kolejność wtyczek")
     text = head + sep + ",\n".join(dump(e) for e in entries) + "\n];" + tail
-    OUT["js/plugins.js"] = text.encode("utf-8")
-    log("js/plugins.js: +%s (po Dwor_Data), +%s (po Orzel_Lot); opisy: %s" % (", ".join(DATA_PLUGINS), ", ".join(ENGINE_PLUGINS), ", ".join(DESC_UPDATE)))
+    OUT["js/tawerna_wtyczki.js"] = text.encode("utf-8")
+    log("js/tawerna_wtyczki.js: +%s (po Dwor_Data), +%s (po Orzel_Lot); opisy: %s" % (", ".join(DATA_PLUGINS), ", ".join(ENGINE_PLUGINS), ", ".join(DESC_UPDATE)))
 
 
 def main():
@@ -150,7 +150,7 @@ def main():
     open(os.path.join(STAGING, "ZMIANY.txt"), "w", encoding="utf-8", newline="\n").write(
         "Pakiet 0 rozszerzeń nowego terenu (docs/rozszerzenia/PLAN.md) - staging z tools/rozszerzenia/pakiet0.py\n\n" + "\n".join(LOG) +
         "\n\nInstalacja: python tools/rozszerzenia/instaluj.py --pakiet0 --wykonaj (edytor zamknięty; kopie: Tawerna_archiwum_2026-10-18/dane_przed_rozszerzeniami/pakiet0/)\n"
-        "Po instalacji: otwórz projekt w edytorze na nowo i raz zajrzyj do Menedżera wtyczek przed zapisem.\n")
+        "Po instalacji: otwórz projekt w edytorze na nowo (wtyczki są na liście gry - edytor jej nie zapisuje).\n")
     print("staging: %d plików -> %s" % (len(OUT), STAGING))
 
 

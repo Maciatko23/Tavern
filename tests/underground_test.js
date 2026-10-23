@@ -5,6 +5,8 @@
 //   - the stairs connect: down lands on the next floor's stairs up, up lands on the stairs down; every floor 1-9 of five seeds has
 //     a walk from its stairs up to its stairs down (tile flags + blocking events, the engine's rules)
 //   - containers give what the generator put in once, then they are empty; the notes go into the journal
+//   - (2026-10-23) a floor is a maze 80x60 (as Kruczy Jar): the minimap on there under its fog (tiles seen kept in the save); a save
+//     from another generator loads on the stairs up of the floor made anew (also after a change of the project)
 // Shots: docs/podziemia/gra_*.png.
 const path = require("path");
 const kit = require("./lib/kit.js");
@@ -61,11 +63,18 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const on1 = await t.until(t.onMap(131), 20);
     await t.frames(40);
     const f1 = await t.json(`(function(){ const i = Underground.info(); return { at: [$gamePlayer.x, $gamePlayer.y], up: i.spots.up, down: i.spots.down, floor: i.floor,
-        deepest: Underground.deepest(), seed: Underground.seed(), name: $gameMap.displayName(), dark: Tawerna.mapFlag("Dark", false) }; })()`);
+        deepest: Underground.deepest(), seed: Underground.seed(), name: $gameMap.displayName(), dark: Tawerna.mapFlag("Dark", false),
+        chron: window.CleanHUD && CleanHUD.isClean() ? CleanHUD.debug().name : null }; })()`);
     const tops = await t.notices();
+    // (the clean look: the map's name - CleanHUD's „Kronika” - says "Piętro N" with the band's name and no notice comes under it;
+    // the classic look: the notice "Piętro N | band")
+    const said = (f, chron, band, notices) => {
+        const notice = notices.some(n => n.startsWith("Piętro " + f + " |") && (f < 11 || /Kwatery/.test(n)));
+        return chron ? chron.title === "Piętro " + f && band.test(chron.sub) && !notice : notice;
+    };
     t.check("walking into the great stairs: floor 1 (map 131), the hero on the landing of its stairs up", on1 && f1.floor === 1 && f1.at[0] === f1.up[0] && f1.at[1] === f1.up[1], f1);
-    t.check("the notice 'Piętro 1' at the top, the map's name 'Podziemia - piętro 1', the deepest floor 1, a seed of the save, a dark map",
-        tops.some(n => /^Piętro 1 \|/.test(n)) && f1.name === "Podziemia - piętro 1" && f1.deepest === 1 && f1.seed > 0 && f1.dark, { tops, f1 });
+    t.check("'Piętro 1' at the top (the clean look: the map's name with the band 'piwnice zamku'; the classic one: the notice), the map's name 'Podziemia - piętro 1', the deepest floor 1, a seed of the save, a dark map",
+        said(1, f1.chron, /^piwnice zamku$/, tops) && f1.name === "Podziemia - piętro 1" && f1.deepest === 1 && f1.seed > 0 && f1.dark, { tops, f1 });
     await t.shot(path.join(SHOTS, "gra_pietro1.png"));
     const SIG = `(function(){ let h = 0; for (const v of $dataMap.data) h = (h * 31 + v) | 0; return { w: $dataMap.width, h: $dataMap.height, data: h,
         ev: $dataMap.events.filter(Boolean).map(e => e.name + "@" + e.x + "," + e.y).join("|").length, n: $gameMap.events().length }; })()`;
@@ -109,6 +118,39 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const loaded = await t.loadFrom(1, { quiet: true });
     const sig1c = await t.json(SIG);
     t.check("saved on floor 1 and loaded: the same floor, the same events", loaded && JSON.stringify(sig1c) === JSON.stringify(sig1), { sig1, sig1c });
+
+    // ---- the maze (2026-10-23): floor 1 as big as Kruczy Jar (80x60), blind ends; the minimap on there under its fog - the tiles seen
+    // grow as the hero goes and are kept in the save
+    await t.eval(`(function(){ const u = Underground.info().spots.up; $gamePlayer.locate(u[0], u[1]); return 0; })()`);
+    await t.frames(12);
+    const fog0 = await t.json(`({ w: $dataMap.width, h: $dataMap.height, ends: Underground.info().deadEnds.length, fog: !!Minimap.fogOf($gameMap.mapId()),
+        wanted: !!(SceneManager._scene._minimap && SceneManager._scene._minimap._wanted), seen: Underground.seenCount() })`);
+    // (to a blind end far from both stairs - the hero has stood by both already, and by the container)
+    const far = await t.json(`(function(){ const i = Underground.info(), u = i.spots.up, d = i.spots.down;
+        const best = i.deadEnds.slice().sort((a, b) => Math.min(Math.hypot(b.x - u[0], b.y - u[1]), Math.hypot(b.x - d[0], b.y - d[1])) - Math.min(Math.hypot(a.x - u[0], a.y - u[1]), Math.hypot(a.x - d[0], a.y - d[1])))[0];
+        return best ? [best.x, best.y] : d.slice(0, 2); })()`);
+    await t.locate(far[0], far[1], 2);
+    await t.frames(12);
+    const fog1 = await t.json("Underground.seenCount()");
+    await t.saveTo(4);
+    await t.loadFrom(4, { quiet: true });
+    const fog2 = await t.json("({ seen: Underground.seenCount(), fog: !!Minimap.fogOf($gameMap.mapId()), kept: !!Underground.state().seen[1] })");
+    t.check("floor 1 is a maze as big as Kruczy Jar (80x60) with blind ends; the minimap is on there under its fog: the tiles seen grow as the hero goes (" +
+        fog0.seen + " -> " + fog1 + " of 4800) and stay seen after a save and a load (" + fog2.seen + ")",
+        fog0.w === 80 && fog0.h === 60 && fog0.ends >= 5 && fog0.fog && fog0.wanted && fog0.seen > 0 && fog1 > fog0.seen && fog2.fog && fog2.kept && fog2.seen >= fog1, { fog0, fog1, fog2 });
+    // ---- a save from before the maze (its floors made by another generator: the library's signature kept in it is another one) - the
+    // floor is made anew, its searched containers and its seen tiles forgotten, the hero on its stairs up; also when the project changed
+    // since the save (the engine moves the hero back to where he stood: that is overruled)
+    await t.eval("Underground.state().lib[1] = 12345; 0");
+    await t.saveTo(4);
+    await t.eval("$dataSystem.versionId += 1; 0");
+    await t.loadFrom(4, { quiet: true });
+    await t.eval("$dataSystem.versionId -= 1; 0");
+    await t.frames(10);
+    const old = await t.json(`({ at: [$gamePlayer.x, $gamePlayer.y], up: Underground.info().spots.up, lib: Underground.state().lib[1], seen: Underground.seenCount(),
+        box: ${box ? `$gameSelfSwitches.value([131, ${box.id}, "A"])` : "false"}, map: $gameMap.mapId() })`);
+    t.check("an old save (floor 1 of another generator) loads on the stairs up of the floor made anew - also after a change of the project; what was searched and seen there is forgotten",
+        old.map === 131 && old.at.join() === old.up.slice(0, 2).join() && old.lib !== 12345 && !old.box && old.seen < fog2.seen, old);
 
     // ---- another seed: another floor; every floor 1-9 of five seeds has a way from its stairs up to its stairs down
     const seeds = await t.json(`(function(){ const keep = Underground.seed(), out = { differ: false, bad: [], steps: [] };
@@ -255,11 +297,12 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const on11 = await t.until(t.onMap(1011), 20);
     await t.frames(30);
     const f11 = await t.json(`(function(){ const i = Underground.info(); return { at: [$gamePlayer.x, $gamePlayer.y], up: i.spots.up, down: i.spots.down, floor: i.floor,
-        band: i.band, ts: $dataMap.tilesetId, w: $dataMap.width, name: $gameMap.displayName(), deepest: Underground.deepest(), poziom: Tawerna.mapTag("Poziom") }; })()`);
+        band: i.band, ts: $dataMap.tilesetId, w: $dataMap.width, name: $gameMap.displayName(), deepest: Underground.deepest(), poziom: Tawerna.mapTag("Poziom"),
+        chron: window.CleanHUD && CleanHUD.isClean() ? CleanHUD.debug().name : null }; })()`);
     const tops11 = await t.notices();
     t.check("floor 10's stairs down lead to floor 11: map 1011 (no file of its own - it loads the shell Map145 and is made from band 2's chunks on tileset 12), on its stairs up",
         on11 && f11.floor === 11 && f11.band === 2 && f11.ts === 12 && f11.w > 17 && f11.at.join() === f11.up.slice(0, 2).join() && f11.name === "Podziemia - piętro 11", f11);
-    t.check("...the notice 'Piętro 11 | Kwatery i kaplica zakonu', the deepest floor 11", tops11.some(n => /^Piętro 11 \|.*Kwatery/.test(n)) && f11.deepest === 11, tops11);
+    t.check("...'Piętro 11' with 'Kwatery i kaplica zakonu' (the map's name in the clean look, else the notice), the deepest floor 11", said(11, f11.chron, /^kwatery i kaplica zakonu$/, tops11) && f11.deepest === 11, { tops11, chron: f11.chron });
     await t.shot(path.join(SHOTS, "gra_pietro11.png"));
     const sig11 = await t.json(sigOf);
     await t.locate(f11.up[0], f11.up[1], 8);

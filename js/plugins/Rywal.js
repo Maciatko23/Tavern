@@ -17,6 +17,7 @@
 //     appended to TownQuests' W9 - the old saves' step numbers stay), Act III (Act3_Data reads w9FrakcjaPobita / w9FrakcjaWie /
 //     w9DowodcaPolegl; grumAlly / grumGone / grumDead), the Heart (Underground.world().rival, its epilogue line, the Lord's line;
 //     the ones who went down past the gate wait before the Heart's door as witnesses)
+// (2026-10-23) The words: js/teksty/rywal.txt (Rywal_Data's TX - Watki.js reads the file when the game starts).
 // API: window.Rywal (Tawerna.api("Rywal")).
 
 /*:
@@ -52,6 +53,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("rywal");   // (the words of this file: js/teksty/rywal.txt, kod.*)
     const T = window.Tawerna;
     const D = window.RywalData;
     if (!T) throw new Error("Rywal.js: brak TawernaCore.js");
@@ -110,7 +112,7 @@
     function setFlag(k) { const f = flags(); if (f && k && !f[k]) f[k] = day(); }
     const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
     const note = (title, text) => T.call("Journal", "addNote", title, text);
-    const xp = (n, why) => T.call("Combat", "gainXp", n, why || "W9: rywal w ruinach");
+    const xp = (n, why) => T.call("Combat", "gainXp", n, why || TK.kod.xp[0]);
     const actTwo = () => { const q = TQ(); try { return !!(q && q.actTwo && q.actTwo()); } catch (e) { return false; } };
     const gateOpen = () => { const U = UG(); try { return !!(U && U.isOpen && U.isOpen()); } catch (e) { return false; } };
     const party = () => (S().party ? D.PARTIES[S().party] || null : null);
@@ -397,20 +399,20 @@
     // the party at its camp (the meeting): the fire, the leader, the men; at the tenth gate a wounded one too
     function groupEvents(P, lay, gate) {
         const out = [];
-        out.push(eventData(EV.fire, "Ognisko rywala", lay.fire[0], lay.fire[1], { key: "fire", img: ART.fire, fix: true, walk: false, step: true, note: D.FIRE_LIGHT }));
+        out.push(eventData(EV.fire, TK.kod.groupEvents[0], lay.fire[0], lay.fire[1], { key: "fire", img: ART.fire, fix: true, walk: false, step: true, note: D.FIRE_LIGHT }));
         if (lay.lead) out.push(eventData(EV.lead, P.lead.name, lay.lead[0], lay.lead[1], { key: "lead", img: [P.lead.img[0], P.lead.img[1], lay.lead[2] || 2, 1], dir: lay.lead[2] || 2, speed: 4 }));
         const men = menOf(P);
         (lay.men || []).slice(0, men.length).forEach((c, i) => out.push(eventData(EV.man0 + i, men[i].name, c[0], c[1], { key: "man" + i, img: [men[i].img[0], men[i].img[1], c[2] || 2, 1], dir: c[2] || 2, speed: 4 })));
-        if (lay.bed) out.push(eventData(EV.bed, "Posłanie", lay.bed[0], lay.bed[1], { key: "bed", img: ART.bedSpread, fix: true, walk: false, priority: 0, through: true }));
+        if (lay.bed) out.push(eventData(EV.bed, TK.kod.groupEvents[1], lay.bed[0], lay.bed[1], { key: "bed", img: ART.bedSpread, fix: true, walk: false, priority: 0, through: true }));
         if (gate && lay.wounded) out.push(eventData(EV.extra, "Ranny", lay.wounded[0], lay.wounded[1], { key: "wounded", img: [P.wounded[0], P.wounded[1], lay.wounded[2] || 2, 1], fix: true, walk: false }));
-        else if (lay.bed2) out.push(eventData(EV.extra, "Posłanie", lay.bed2[0], lay.bed2[1], { key: "bed", img: ART.bedRolled, fix: true, walk: false, priority: 0, through: true }));
+        else if (lay.bed2) out.push(eventData(EV.extra, TK.kod.groupEvents[1], lay.bed2[0], lay.bed2[1], { key: "bed", img: ART.bedRolled, fix: true, walk: false, priority: 0, through: true }));
         return out;
     }
     // the camp they left behind (after the meeting's end, or a camp floor they passed)
     function campLeft(lay) {
         const out = [];
-        if (lay.fire) out.push(eventData(EV.fire, "Wygasłe ognisko", lay.fire[0], lay.fire[1], { key: "ash", img: ART.ash, fix: true, walk: false }));
-        if (lay.bed) out.push(eventData(EV.bed, "Posłanie", lay.bed[0], lay.bed[1], { key: "bed", img: ART.bedHeap, fix: true, walk: false, priority: 0, through: true }));
+        if (lay.fire) out.push(eventData(EV.fire, TK.kod.campLeft[0], lay.fire[0], lay.fire[1], { key: "ash", img: ART.ash, fix: true, walk: false }));
+        if (lay.bed) out.push(eventData(EV.bed, TK.kod.campLeft[1], lay.bed[0], lay.bed[1], { key: "bed", img: ART.bedHeap, fix: true, walk: false, priority: 0, through: true }));
         return out;
     }
     // the men of the party (Baltazar the enemy: a mercenary instead of the archer)
@@ -444,19 +446,19 @@
     }
     function buildRuins(P) {
         const R = D.RUINS, out = [];
-        R.prints.forEach((p, i) => out.push(decal(EV.printsA + i, "Ślady butów", p, printsArt(p[2]), "prints")));
-        out.push(decal(EV.mark, P.mark === "pennant" ? "Proporczyk z czarnym koniem" : "Białe oko kredą", R.mark, markArt(P), "mark"));
+        R.prints.forEach((p, i) => out.push(decal(EV.printsA + i, TK.kod.buildRuins[0], p, printsArt(p[2]), "prints")));
+        out.push(decal(EV.mark, P.mark === "pennant" ? TK.kod.buildRuins[1] : TK.kod.buildRuins[2], R.mark, markArt(P), "mark"));
         return out;
     }
     function buildFloor(P, f, mapId) {
         const s = S(), lay = layoutOf(f), out = [];
         if (!lay) return out;
         const here = f === s.rf, tr = s.trail[f] || null;
-        if (lay.printsA) out.push(decal(EV.printsA, "Ślady butów", lay.printsA, printsArt(lay.printsA[2]), "prints"));
-        if (lay.printsB && (tr || here)) out.push(decal(EV.printsB, "Ślady butów", lay.printsB, printsArt(lay.printsB[2]), "prints"));
-        if (lay.mark && tr) out.push(decal(EV.mark, P.mark === "pennant" ? "Proporczyk z czarnym koniem" : "Białe oko kredą", lay.mark, markArt(P), "mark"));
-        if (tr && TR.rope.includes(f) && lay.rope && !s.ropes[f]) out.push(eventData(EV.rope, "Porzucona lina", lay.rope[0], lay.rope[1], { key: "rope", img: ART.ropeEnd, fix: true, walk: false, priority: 0, through: true }));
-        if (tr && TR.trap.includes(f) && lay.trap) out.push(decal(EV.trap, "Linka z dzwonkami", lay.trap, s.traps[f] ? ART.wireCut : lay.trap[2] === "V" ? ART.wireV : ART.wireH, "trap"));
+        if (lay.printsA) out.push(decal(EV.printsA, TK.kod.buildFloor[0], lay.printsA, printsArt(lay.printsA[2]), "prints"));
+        if (lay.printsB && (tr || here)) out.push(decal(EV.printsB, TK.kod.buildFloor[0], lay.printsB, printsArt(lay.printsB[2]), "prints"));
+        if (lay.mark && tr) out.push(decal(EV.mark, P.mark === "pennant" ? TK.kod.buildFloor[1] : TK.kod.buildFloor[2], lay.mark, markArt(P), "mark"));
+        if (tr && TR.rope.includes(f) && lay.rope && !s.ropes[f]) out.push(eventData(EV.rope, TK.kod.buildFloor[3], lay.rope[0], lay.rope[1], { key: "rope", img: ART.ropeEnd, fix: true, walk: false, priority: 0, through: true }));
+        if (tr && TR.trap.includes(f) && lay.trap) out.push(decal(EV.trap, TK.kod.buildFloor[4], lay.trap, s.traps[f] ? ART.wireCut : lay.trap[2] === "V" ? ART.wireV : ART.wireH, "trap"));
         if (here && !s.outcome) {
             if (lay.fire) { out.push(...groupEvents(P, lay, false)); clearCreatures(mapId, lay.spawns, lay.fire, 7); }
         } else if (here || (s.outcome && s.outFloor === f)) {
@@ -468,8 +470,8 @@
     }
     function buildGate(P, mapId) {
         const s = S(), G = D.FLOOR10, out = [];
-        G.prints.forEach((p, i) => out.push(decal(EV.printsA + i, "Ślady butów", p, printsArt(p[2]), "prints")));
-        out.push(decal(EV.mark, P.mark === "pennant" ? "Proporczyk z czarnym koniem" : "Białe oko kredą", G.mark, markArt(P), "mark"));
+        G.prints.forEach((p, i) => out.push(decal(EV.printsA + i, TK.kod.buildGate[0], p, printsArt(p[2]), "prints")));
+        out.push(decal(EV.mark, P.mark === "pennant" ? TK.kod.buildGate[1] : TK.kod.buildGate[2], G.mark, markArt(P), "mark"));
         const lay = { fire: G.fire, lead: G.lead, men: G.men, bed: G.bed, bed2: G.bed2, wounded: G.wounded };
         if (!s.outcome) { out.push(...groupEvents(P, lay, true)); clearCreatures(mapId, [G.spider], G.fire, 8); }
         else out.push(...campLeft(lay));
@@ -482,7 +484,7 @@
         out.push(eventData(EV.lead, P.lead.name, H.lead[0], H.lead[1], { key: "witness", img: [P.lead.img[0], P.lead.img[1], H.lead[2], 1], dir: H.lead[2] }));
         const m = menOf(P)[0];
         out.push(eventData(EV.man0, m.name, H.man[0], H.man[1], { key: "witnessMan", img: [m.img[0], m.img[1], H.man[2], 1], dir: H.man[2] }));
-        out.push(eventData(EV.fire, "Wygasłe ognisko", H.ash[0], H.ash[1], { key: "ash", img: ART.ash, fix: true, walk: false }));
+        out.push(eventData(EV.fire, TK.kod.buildHeart[0], H.ash[0], H.ash[1], { key: "ash", img: ART.ash, fix: true, walk: false }));
         return out;
     }
     const injMaps = id => id === M.ruins || id === M.heart || id === M.floor10 || (id > 130 && id < 140);
@@ -618,7 +620,7 @@
         if (s.party === "kopacze" && knowsWords()) opts.push([TX.opt.guide, act(linesTo(linesTo([], spk, TX.guide.ask), spk, TX.guide.say), ["deal", "przewodnik"])]);
         if (s.party === "lord") opts.push([TX.opt.report, act(linesTo(linesTo([], spk, TX.report.ask), spk, TX.report.say), ["deal", "raport"])]);
         if (s.party === "grum") {
-            const rs = grumReasons(), ask = linesTo([], spk, TX.turn.ask, { powody: rs.join(" ") || "Ty wiesz, czemu." });
+            const rs = grumReasons(), ask = linesTo([], spk, TX.turn.ask, { powody: rs.join(" ") || TX.turn.powodyBrak });
             opts.push([TX.opt.turn, grumCount() >= 2 ? act(linesTo(ask, spk, TX.turn.say), ["turn"]) : linesTo(ask, spk, TX.turn.need)]);
         }
         if ((s.party === "baltazar" || s.party === "lord") && !gate && knowsGuardian()) opts.push([TX.opt.warn, act(linesTo(linesTo([], spk, TX.warn.ask), spk, TX.warn[s.party]), ["warn"])]);
@@ -733,13 +735,14 @@
             delete s.torn[key];
             if (!nt || (st.notes && st.notes[key])) continue;
             if (st.notes) st.notes[key] = true;
-            note("Zapiski zakonu: " + nt.title, nt.text + "\n(Podziemia, piętro " + floor + " - wyrwane przez rywala, odebrane w ruinach)");
-            T.call("Combat", "discover", "ug_note_" + key, "zapiski zakonu (" + nt.title + ")", 20);
+            const nv = { tytul: nt.title, tekst: nt.text, pietro: floor };
+            note(fill(TX.odebrane.tytul, nv), fill(TX.odebrane.tekst, nv));
+            T.call("Combat", "discover", "ug_note_" + key, fill(TX.odebrane.odkrycie, nv), 20);
             T.emit("undergroundNote", { key: String(key), floor, title: nt.title });
             n++;
         }
         s.recovered = n;
-        if (n && U) T.popup("Zapiski zakonu: " + n, { kind: "info", icon: 191 });
+        if (n && U) T.popup(fill(TX.odebrane.ile, { n }), { kind: "info", icon: 191 });
     }
 
     // ------------------------------------------------------------------
@@ -751,7 +754,7 @@
         if (!q || !q.Q || !q.Q.W9 || !q.FX || hookQuests.done) return;
         hookQuests.done = true;
         const W9 = q.Q.W9;
-        if (!W9.steps.some(st => st.w9r)) for (const st of D.STEPS) W9.steps.push(Object.assign({}, st));
+        if (!W9.steps.some(st => st.w9r)) for (const st of D.STEPS) W9.steps.push(Object.defineProperties({}, Object.getOwnPropertyDescriptors(st)));   // (the text: a getter of the words)
         q.FX.w9Rywal = { vars: () => stepVars() };
     }
     hookQuests();
@@ -832,7 +835,7 @@
             T.audio.se("Bell2", { volume: 70, pitch: 150 });
             T.audio.se("Blow1", { volume: 70, pitch: 90 });
             const U = UG(), dmg = TR.trapDamage + TR.trapPerFloor * f;
-            if (U && U.hurt) U.hurt(dmg, { poise: 40, knock: 0.9, name: "linka z dzwonkami", from: { x: t[0] + (t[2] === "V" ? -0.6 : 0), y: t[1] + (t[2] === "V" ? 0 : -0.6) } });
+            if (U && U.hurt) U.hurt(dmg, { poise: 40, knock: 0.9, name: TX.trapName, from: { x: t[0] + (t[2] === "V" ? -0.6 : 0), y: t[1] + (t[2] === "V" ? 0 : -0.6) } });
             T.popup(TX.trapHit, { top: true, color: "#ff9f8f", sub: TX.trapHitSub });
         }
         noteOnce("trap", TX.noteTrap);

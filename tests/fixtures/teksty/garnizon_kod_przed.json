@@ -1,0 +1,286 @@
+{
+ "progi": {
+  "40": [
+   "Garnizon ci ufa",
+   "Rotmistrz da ci glejt na wrak, jeśli o niego poprosisz."
+  ],
+  "60": [
+   "Przyjaciel garnizonu",
+   "Kowal garnizonu sprzeda ci strzały i stal."
+  ],
+  "80": [
+   "Swój dla wojska",
+   "Gdyby kiedyś zabrzmiał alarm, żołnierze królewscy staną przy tawernie."
+  ]
+ },
+ "belzaMeet": [
+  "Stój. Czyj jesteś?",
+  "> Wnuk Stacha. Z działki za lasem.",
+  "Stacha... Ten od długu u Lorda. (Rotmistrz mierzy cię wzrokiem od bosych stóp po czuprynę.) Ile masz lat? ...Jeszcze nie. Przyjdź za rok, to dostaniesz buty i żołd.",
+  "Florian Bełza, rotmistrz chorągwi królewskiej. Stoimy tu z łaski twojego Lorda - i za pieniądze Korony.",
+  "Masz zboże, to sprzedaj je Kłosowi, kwatermistrzowi. Na wojnie każdy worek się liczy. Masz ręce, to drwa zawsze się przydadzą."
+ ],
+ "belzaAsk": [
+  "Słucham.",
+  "Mów krótko. Wojna nie czeka.",
+  "Hm?"
+ ],
+ "belzaFavor": {
+  "low": [
+   "Patrzą na ciebie krzywo. Chłopcy mówią, że kręcisz się, gdzie nie trzeba. Uważaj."
+  ],
+  "mid": [
+   "Jesteś wnuk Stacha, co nosi drwa. Tyle o tobie wiedzą."
+  ],
+  "good": [
+   "Chłopcy cię lubią. Kłos mówi, że jesteś uczciwy. Od Kłosa to dużo."
+  ],
+  "best": [
+   "Jesteś tu swój. Gdyby coś się działo w mieście - wiesz, gdzie nas szukać."
+  ]
+ },
+ "glejtAsk": [
+  "> Potrzebuję wejść na wrak. W odpływie, po łasze."
+ ],
+ "glejtNo": [
+  "Wrak to sprawa wojska. Moi chłopcy łowią z niego, co się da, a kto inny tam łazi, ten złodziej.",
+  "Zasłuż się garnizonowi, to pomyślę. Na razie: nie."
+ ],
+ "glejtYes": [
+  "(Rotmistrz pisze kilka słów i przyciska pieczęć z feniksem.) Masz. Glejt garnizonu. Wartownicy cię przepuszczą, łódź ratownicza też nie przegoni.",
+  "Tylko jedno: co znajdziesz w kajucie - papiery, mapy, księgi - przynosisz najpierw mnie. Czarne Oczy nie płynęły tu po ryby."
+ ],
+ "missingAsk": [
+  "> Co to za lista na pana stole?"
+ ],
+ "missing": [
+  "Lista zaginionych. Moja chorągiew i trzy inne. Czterdziestu ludzi z Brzozowej Woli, z Olszyny, z Zarzecza...",
+  "> Z Brzozowej Woli? Ja jestem z Brzozowej Woli.",
+  "(Rotmistrz przesuwa palcem po kolumnie.) Nazwisk tu nie ma, chłopcze. Tylko chorągwie i liczby. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”.",
+  "Zaginiony to nie poległy. Zapamiętaj to. Ja pamiętam."
+ ],
+ "missingAgain": [
+  "Lista się nie zmienia. Zaginiony to nie poległy."
+ ],
+ "whyAsk": [
+  "> Czemu Lord was tu wpuścił?"
+ ],
+ "why": [
+  "Bo Korona zapłaciła mu za kwaterę. A potem kazała mu płacić podatek wojenny. Tak to działa: on bierze od nas, Korona od niego, on od was.",
+  "Dlatego tak naciska na dług twojego dziadka. Nie ze złości. Z rachunku. Przykro mi."
+ ],
+ "draftAsk": [
+  "> Weźmiecie mnie do wojska?"
+ ],
+ "draft": [
+  "Ciebie? Za młody. A twój dziadek ma dług, za który ręczy dwór - Lord nie da sobie zabrać dłużnika. Pobór dotyczy innych.",
+  "I dobrze. Na wojnie nie ma nic, czego warto szukać w twoim wieku."
+ ],
+ "belzaSkup": [
+  "Skup prowadzę teraz sam, przez chłopaka z księgą. Ceny te same, co u Kłosa. Uczciwe."
+ ],
+ "klosMeet": [
+  "(Kwatermistrz odrywa wzrok od liczydła.) O! Nowa twarz. Pafnucy Kłos, kwatermistrz. Liczę, ważę, kupuję, wydaję.",
+  "Najpierw pokłoń się rotmistrzowi. U nas porządek: rotmistrz, potem zupa, potem Kłos."
+ ],
+ "klosMeetKnown": [
+  "(Kwatermistrz odrywa wzrok od liczydła.) O! Wnuk Stacha, rotmistrz mówił. Pafnucy Kłos, kwatermistrz. Liczę, ważę, kupuję, wydaję.",
+  "Kuchnia polowa zjada drwa jak smok. Jak masz ręce do siekiery - mam dla ciebie robotę."
+ ],
+ "klosAsk": [
+  "Co tam, chłopcze?",
+  "Liczydło słucha.",
+  "Kupujesz, sprzedajesz, czy tylko przechodzisz?"
+ ],
+ "klosNoSkup": [
+  "Skup tylko dla tych z księgi. Przynieś najpierw drwa dla kuchni - to cię wpiszę."
+ ],
+ "klosNothing": [
+  "Nic z mojej listy nie masz. Zboże, warzywa, mięso wędzone, ryby, skóry, strzały, drewno, węgiel - to kupuję."
+ ],
+ "klosSold": [
+  "Dobre. Król płaci, Kłos liczy. Masz.",
+  "Wpisane. Z ciebie dobry dostawca."
+ ],
+ "klosPrices": [
+  "Po fali z promu wojsko je jak smok - płacę półtora raza. Teraz cena zwykła.",
+  "Fala z promu przeszła, wojsko głodne - płacę półtora raza! Korzystaj."
+ ],
+ "grainAsk": [
+  "> Sprzedasz cztery worki zboża? Po cenie dla swoich."
+ ],
+ "grain": [
+  "(Kłos rozgląda się na boki.) Ciii! ...Cztery worki. Po piętnaście groszy. Sześćdziesiąt. I nikomu ani słowa, rozumiemy się?",
+  "To zboże z rekwizycji. Królewskie. Ale król ma go dużo, a ja mam brzuch. Sam rozumiesz."
+ ],
+ "grainYes": [
+  "(Kłos znika w ciemności spichlerza i wraca z czterema workami.) Bierz i idź tyłem, koło namiotów. Nie widziałem cię."
+ ],
+ "grainNo": [
+  "Nie masz? To nie ma o czym gadać. I o niczym nie gadaliśmy."
+ ],
+ "grainDay": [
+  "Zboże? Za dnia? Przy rotmistrzu? Zwariowałeś? (szeptem) Przyjdź po zmroku, po dwudziestej."
+ ],
+ "bebenMeet": [
+  "Trrrum-tum-tum! Witaj, młody! Szczepan Bęben, werbownik chorągwi królewskiej. Bęben się nazywam i bęben noszę!",
+  "Ile masz lat? ...Hm. Za młody. Szkoda! Taki bosy, a już wygląda, jakby przeszedł pół wojny. Przyjdź za rok, zapiszę cię pierwszego."
+ ],
+ "bebenAsk": [
+  "Za króla, chłopcze! Co słychać?",
+  "Trrrum! Mów.",
+  "Hm? Zapisać cię? Za młody, mówiłem!"
+ ],
+ "bebenDraft": [
+  "Ciebie? Nie. Rotmistrz mówi: dług twojego dziadka trzyma cię przy wyspie mocniej niż łańcuch. Dwór ręczy. Pobór jest dla innych.",
+  "Ale jak będziesz miał szesnaście... (puka w bęben) trrrum!"
+ ],
+ "soldier": {
+  "brama": [
+   "Stój! Kto idzie? ...A, wnuk Stacha. Przechodź.",
+   "Brama otwarta za dnia. Nocą - pytaj wartownika.",
+   "Rotmistrz w kwaterze. Nie przeszkadzaj mu bez potrzeby."
+  ],
+  "bramaNoc": [
+   "Stój! ...Nocą tu nie łaź, chłopcze. Wartownik najpierw dźga, potem pyta.",
+   "Spać idź. Garnizon śpi, tylko my nie."
+  ],
+  "beczki": [
+   "Woda dla wojska. Odejdź.",
+   "Beczki z promu. Liczone. Odejdź, mówię."
+  ],
+  "pomost": [
+   "Łowimy, co morze wyrzuci z wraku. Skrzynie, beczki... raz but z nogą w środku. Nie pytaj.",
+   "Łódź ratownicza. Rotmistrz każe pływać do wraku od dziewiątej do trzeciej. Potem fala."
+  ],
+  "wieza": [
+   "Z wieży widać wrak. W odpływie łacha wychodzi z wody aż pod jego burtę. Rotmistrz nie pozwala chodzić - chyba że masz glejt.",
+   "Nocą na wraku coś błyska. Rotmistrz mówi, że to księżyc w szkle. Ja tam nie wiem."
+  ],
+  "cwiczy": [
+   "Sztych, zasłona, sztych! ...Ręce mi odpadają.",
+   "Od świtu machamy. Wróg nie przyjdzie, a my machamy.",
+   "Masz coś do jedzenia? Nie? To czemu stoisz?"
+  ],
+  "kowal": [
+   "Kowal garnizonu. Groty, ćwieki, okucia. Strzały i stal - tylko dla przyjaciół garnizonu. Pogadaj z rotmistrzem."
+  ],
+  "kowalShop": [
+   "Przyjaciel garnizonu? To co innego. Strzały po trzy grosze, stal po pięćdziesiąt pięć. Bierzesz?"
+  ],
+  "noc": [
+   "(Żołnierz śpi na stojąco.)"
+  ]
+ },
+ "soldierBarks": {
+  "brama": [
+   "Brama! Kto idzie?",
+   "Spokój na drodze."
+  ],
+  "beczki": [
+   "Woda liczona! Odejdź!"
+  ],
+  "pomost": [
+   "Wiosła w górę!",
+   "Fala idzie."
+  ],
+  "cwiczy": [
+   "Raz! Dwa! Sztych!",
+   "Zasłona! Sztych!",
+   "Ręce mi odpadną..."
+  ],
+  "kowal": [
+   "(Brzdęk młotka.)",
+   "Kto następny do okucia?"
+  ],
+  "wieza": [
+   "Na wodzie czysto!",
+   "Wrak stoi, jak stał."
+  ],
+  "noc": [
+   "Stój, kto idzie?",
+   "Cisza..."
+  ]
+ },
+ "recruit": {
+  "bartek": [
+   "(Bartek trzyma halabardę jak grabie.) Wojsko. Ja. Żona mnie zabije. Albo i nie - może się ucieszy, że w kości nie gram."
+  ],
+  "drwal": [
+   "(Zbych ociera czoło.) Siekiera lżejsza od tej halabardy. Ale strawa jest. Pierwszy raz od miesiąca jem do syta."
+  ],
+  "uchodzca": [
+   "(Darin stoi w szeregu prosto jak struna.) W wojsku już byłem. Na kontynencie. Ręce pamiętają. Głowa wolałaby zapomnieć."
+  ]
+ },
+ "klosKantor": [
+  "(Kłos podskakuje.) Ja? Tutaj? Po... sól. Po sól przyszedłem. Wojsko też musi solić.",
+  "Idź spać, chłopcze. Nic nie widziałeś. I ja też nic."
+ ],
+ "klosKantorD27": [
+  "Ciii! Ty tutaj? ...Zboże? Nie tu, nie przy kantorze. W garnizonie, po zmroku, przy moim namiocie."
+ ],
+ "klosKantorBarks": [
+  "(Kłos stuka trzy razy w tylne drzwi kantoru.)",
+  "Ciii...",
+  "Nikogo tu nie ma. Ja też nie."
+ ],
+ "search": [
+  "Szukamy ludzi z listy poborowej. Widziałeś Smolarza? Albo tego Darina? ...Nie? To idź.",
+  "Rozkaz rotmistrza. Przeszukać obóz i domy. Nic osobistego."
+ ],
+ "searchBarks": [
+  "Gdzie oni się pochowali?",
+  "Szukać po stodołach!",
+  "Ktoś ich ostrzegł, mówię wam."
+ ],
+ "patrol": [
+  "Stój! Rewizja. Rozkaz rotmistrza: kto się kręci przy garnizonie, pokazuje torbę."
+ ],
+ "patrolPendant": [
+  "A to co? Na szyi? (Żołnierz ciągnie za rzemień.) Kruk na kamieniu... Rotmistrz kazał zapisywać każdego z krukiem. Zapisane. Idź."
+ ],
+ "patrolClean": [
+  "Nic. Dobra, idź. I nie kręć się tu bez potrzeby."
+ ],
+ "barrels": "Woda dla wojska. Odejdź.",
+ "looks": {
+  "kocioł": "Kocioł zupy z królewskiego zboża. Pachnie tak, że w mieście ktoś by za to zabił.",
+  "wieza": "Wieża strażnicza. Na górze wartownik patrzy na zatokę i wrak. Drabina tylko dla wojska.",
+  "dyby": "Dyby. Na desce wycięte nożem: „ZŁODZIEJ”, „DEZERTER”, a ktoś dopisał: „NIEWINNY”.",
+  "stol": "Stół werbownika: lista poborowa, kałamarz i pieczęć z feniksem. „ZA KRÓLA, CHŁOPCY!”",
+  "spichlerz": "Spichlerz z rekwizycji. Na drzwiach kłódka wielka jak pięść. Klucz ma kwatermistrz.",
+  "spichlerzNoc": "Kłódka. A obok chodzi wartownik. Lepiej nie.",
+  "drzwiZamkniete": "Kwatera rotmistrza. Zamknięte - rotmistrz przyjmuje od 7 do 20.",
+  "lachaPodWoda": "Łacha pod wodą.",
+  "lachaDalej": "Dalej łacha tonie w głębokiej wodzie. Do wraku tędy dziś nie dojdziesz.",
+  "lachaWraca": "Woda przybiera! Wracaj na brzeg."
+ },
+ "caught": [
+  "Stój! Złodziej! Do mnie!"
+ ],
+ "stocksMorning": [
+  "(Noc w dybach. Rano przychodzi rotmistrz.)",
+  "@rotmistrz: Złodziej zboża. Wnuk Stacha. (Rotmistrz kręci głową.) Wypuścić go. Worki zostają w spichlerzu.",
+  "@rotmistrz: Drugi raz nie będę taki miły."
+ ],
+ "stocksNoRot": [
+  "(Noc w dybach. Rano żołnierz otwiera kłódkę.) Rotmistrz kazał cię wypuścić. Worki zostają. Zmykaj."
+ ],
+ "granaryTake": [
+  "(Kłódka puszcza z cichym zgrzytem. W ciemności pachnie zbożem. Bierzesz cztery worki - ciężkie, ale dasz radę.)"
+ ],
+ "d26Deal": [
+  "> Panie rotmistrzu, mam coś lepszego niż trzech rekrutów. Dziennik okrętu z wraku.",
+  "(Rotmistrz czyta długo, przewraca kartki.) „Biała Źrenica”... Straż Pewności. Płynęli po coś na tę wyspę i stracili okręt w sztormie.",
+  "Więc od morza nic nam teraz nie grozi. Czarne Oczy straciły jedyny okręt w tych wodach.",
+  "Bęben! Lista poborowa - tylko ochotnicy. Kto nie chce, ten nie idzie. (Do ciebie.) Dobra robota, chłopcze."
+ ],
+ "d26Done": [
+  "Trzech! Mam trzech! Rotmistrz będzie zadowolony. Masz, uczciwie, jak obiecałem."
+ ],
+ "d26DoneWarn": [
+  "Nikogo! Wszyscy jakby się pod ziemię zapadli. Ktoś ich ostrzegł... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?"
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Garnizon.js: TH_TEXT=progi, TX)"
+}

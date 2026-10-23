@@ -281,11 +281,10 @@
         return role && $gameMap.event(ev.eventId()) === ev ? role : null;
     }
     const STUB = [C(355, ["TavernLife.regular(this)"]), C(0, [])];
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        if (window.$gameMap && $gameMap.mapId() === TAVERN && this._trigger !== 3 && this._trigger !== 4 && regularOf(this)) return STUB;
-        return _Game_Event_list.call(this);
-    };
+    // (2026-10-23) the core's one list hook (Tawerna.onEventList): the regulars' talk - over TavernLife's places, below HomeLife's (as the
+    // old wrappers by the plugin list)
+    T.onEventList(ev => (window.$gameMap && $gameMap.mapId() === TAVERN && ev._trigger !== 3 && ev._trigger !== 4 && regularOf(ev) ? STUB : null),
+        { owner: "TavernLife_Regulars", priority: T.onEventList.PRIORITY.own + 20 });
 
     // ------------------------------------------------------------------
     // The talk: the quests first, then the greeting and the menu

@@ -1,0 +1,1046 @@
+{
+ "zadania": {
+  "D4": {
+   "title": "Złodziej o świcie",
+   "where": "stragan na rynku + obóz pod murem",
+   "when": "od dnia 11, o świcie",
+   "desc": "Co rano z kosza Hanki znika jeden bochen. Zaczaj się przed szóstą przy straganie - po cichu - i zobacz, kto to.",
+   "offer": {
+    "say": [
+     "Co rano znika mi jeden bochen. Z kosza, przed szóstą, kiedy jeszcze rozkładam stragan.",
+     "Zaczaisz się jutro o wpół do szóstej przy straganie? Tylko cicho - złodziej nie może cię zobaczyć."
+    ],
+    "yes": "Zaczaję się.",
+    "no": "To tylko jeden bochen.",
+    "accept": [
+     "Wpół do szóstej, przy moim straganie. Ja udam, że nic nie wiem."
+    ],
+    "decline": [
+     "Jeden dziś, jeden jutro... Ech."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zaczaj się przy straganie Hanki między 5:20 a 5:50, skradając się (C). Złodziej nie może cię zobaczyć."
+    },
+    "1": {
+     "text": "Mała postać uciekła w stronę obozu pod murem. Porozmawiaj z Elą.",
+     "say": [
+      "> To ty bierzesz chleb od pani Hanki?",
+      "...Dla mamy. Mama nie je, żebym ja jadła. Nie mów pani Hance. Proszę."
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Muszę jej powiedzieć.",
+        "say": [
+         "(Ela płacze.)"
+        ]
+       },
+       "1": {
+        "label": "Będę płacił za twój chleb.",
+        "say": [
+         "> Od dziś chleb dla ciebie jest zapłacony. Na tydzień z góry.",
+         "Naprawdę? ...Dziękuję!"
+        ]
+       },
+       "2": {
+        "label": "Pogadam z Hanką o pracy dla twojej mamy.",
+        "say": [
+         "Mama umie piec! W domu piekła dla całej wsi!"
+        ]
+       }
+      }
+     }
+    },
+    "2": {
+     "text": "Wróć do Hanki."
+    }
+   },
+   "lines": {
+    "seen": [
+     "> (Mała postać wysuwa się zza straganu, łapie bochen z kosza i biegnie w dół, w stronę muru. Dwa warkoczyki.)"
+    ],
+    "spotted": "Złodziej cię zobaczył i uciekł. Spróbuj jutro - po cichu (C).",
+    "hankaTell": [
+     "> To Ela, córka Ludmiły z obozu. Nosi chleb matce.",
+     "Mała Ela? ...Powiem sołtysowi. Złodziej to złodziej, choćby i mały. Dziękuję ci."
+    ],
+    "hankaPay": [
+     "> To Ela, córka Ludmiły z obozu. Za jej chleb zapłacę ja - masz za tydzień z góry.",
+     "Ty płacisz za cudzy chleb? ...Dobry z ciebie chłopak. Niech mała bierze, co trzeba."
+    ],
+    "hankaWork": [
+     "> To Ela, córka Ludmiły z obozu. Jej matka umie piec. Może by ci pomagała przy piecu o czwartej?",
+     "Ludmiła przy moim piecu? ...A wiesz, że czwarta rano to ciężka godzina dla jednej baby? Niech przyjdzie jutro. Zobaczymy, co umie.",
+     "@ela: Narysowałam ci coś. To kruk nad tawerną. A tu schody w dół. Mama mówi, że w nocy coś tam stuka."
+    ]
+   }
+  },
+  "D10": {
+   "title": "Gorączka Eli",
+   "where": "obóz + łąki + kantor",
+   "when": "wiosna i lato, 2 dni",
+   "desc": "Ela ma gorączkę. Pomoże gorący wywar z ziół i trochę czystej wody do przemywania czoła - z twojej deszczówki. Baltazar ma też „lek z kontynentu”.",
+   "offer": {
+    "say": [
+     "Ela ma gorączkę. Od wczoraj. Pali się cała.",
+     "Wywar z ziół by pomógł. I trochę czystej wody do przemywania czoła. Ja nie mam ani ognia, ani wody."
+    ],
+    "yes": "Zrobię wywar.",
+    "no": "Nie mam wody dla innych.",
+    "accept": [
+     "Dziękuję... Będę przy niej. Cały czas."
+    ],
+    "decline": [
+     "...Rozumiem. Woda to woda."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zaparz Wywar ziołowy (3× Zioła na ogniu) i oddaj go Ludmile z 1 porcją swojej deszczówki. (Baltazar sprzedaje też „lek z kontynentu” za 60 G.)",
+     "remind": [
+      "Wywar z ziół. I trochę wody na czoło. Tylko tyle."
+     ],
+     "hero": [
+      "> Wywar dla Eli. I czysta woda - z mojej deszczówki."
+     ],
+     "done": [
+      "Ciepły... Ela, pij powoli. Ja przy niej posiedzę całą noc."
+     ]
+    },
+    "1": {
+     "text": "Ela przespi noc z gorączką. Zajrzyj rano."
+    },
+    "2": {
+     "text": "Zajrzyj rano do Ludmiły i Eli (obóz pod murem)."
+    }
+   },
+   "lines": {
+    "lek": [
+     "Lek z kontynentu. Działa na wszystko, co ma gorączkę. Sześćdziesiąt groszy, przyjacielu."
+    ],
+    "lekBuy": [
+     "Mądry wybór. Proszę. Tylko nie pytaj, skąd mam."
+    ],
+    "lekNo": [
+     "Zioła też leczą. Czasem."
+    ],
+    "morning": [
+     "Gorączka spadła! Ela zjadła pół kromki i spytała o konika. Nie wiem, jak ci dziękować."
+    ],
+    "morningLek": [
+     "Gorączka spadła. Ten flakonik... spójrz. Pieczęć wojska z kontynentu. Skąd kupiec ma lekarstwa armii?"
+    ]
+   }
+  },
+  "D18": {
+   "title": "Płaszcze przed zimą",
+   "where": "garbarnia + obóz pod murem (+ Feliks na rynku)",
+   "when": "jesień, od dnia 70",
+   "desc": "Idzie zima, a obóz pod murem marznie. Ignac uszyje pięć płaszczy z dziesięciu skór i pięciu kłębków wełny. Komu je oddasz?",
+   "offer": {
+    "say": [
+     "Idzie zima. Ci pod murem nie przeżyją jej w tym, w czym przypłynęli.",
+     "Uszyję pięć płaszczy, jeśli przyniesiesz dziesięć surowych skór i pięć kłębków wełny. Robotę daję za darmo. Raz w życiu."
+    ],
+    "yes": "Przyniosę.",
+    "no": "Nie dam rady.",
+    "accept": [
+     "Dziesięć skór, pięć wełny. Zima nie poczeka."
+    ],
+    "decline": [
+     "Rozumiem. Ale zima zrozumie mniej."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Ignacowi 10× Surowa skóra i 5× Wełna (garbarnia).",
+     "remind": [
+      "Dziesięć skór i pięć wełny. Liczę dni do mrozu."
+     ],
+     "hero": [
+      "> Skóry i wełna. Wszystko."
+     ],
+     "done": [
+      "Dwa dni szycia. Przyjdź pojutrze."
+     ]
+    },
+    "1": {
+     "text": "Odbierz płaszcze u Ignaca (2 dni szycia).",
+     "early": [
+      "Jeszcze szyję. Pojutrze, mówiłem."
+     ],
+     "say": [
+      "Gotowe. Pięć płaszczy, ciepłych jak piec. Zanieś je do obozu, zanim ktoś się zainteresuje."
+     ]
+    },
+    "2": {
+     "text": "Zanieś płaszcze do obozu pod murem (Ludmiła). Feliks kręci się rano przy straganach - też coś o nich słyszał."
+    }
+   },
+   "lines": {
+    "camp": [
+     "> Płaszcze. Od Ignaca. Dla was wszystkich.",
+     "Płaszcze... Ela, patrz! Ciepłe! ...Nie wiem, co powiedzieć. Weź jeden dla siebie - Ignac uszył sześć, wiem, liczyłam."
+    ],
+    "feliks": [
+     "Słyszałem o tych płaszczach. Straż dworu marznie na murach - zapłacę za nie trzy razy tyle, co są warte. Dziewięćdziesiąt groszy."
+    ],
+    "feliksYes": [
+     "Rozsądna decyzja. Jaśnie pan doceni. Pan Ignac... cóż, nie musi wiedzieć od razu."
+    ],
+    "feliksNo": [
+     "Szkoda. Straż będzie marzła. Ale to pana sumienie."
+    ]
+   }
+  },
+  "D1": {
+   "title": "Buty od szewca",
+   "where": "garbarnia + łąki i las + kuźnia",
+   "when": "od dnia 5, 4–6 dni",
+   "desc": "Ignac nie może patrzeć na bose stopy bohatera. Trzy skóry, ćwieki od Tadka, miara o świcie i dwa dni czekania - a potem prawdziwe buty.",
+   "offer": {
+    "say": [
+     "Patrzę na twoje bose nogi i serce mi pęka. Szewc ze mnie czy nie szewc?",
+     "Zrobię ci buty. Prawdziwe. Przynieś trzy surowe skóry - z jelenia albo z dzika, zając za cienki."
+    ],
+    "yes": "Przyniosę skóry.",
+    "no": "Bosy też dojdę.",
+    "accept": [
+     "Trzy skóry. A potem zobaczymy, jaką masz stopę."
+    ],
+    "decline": [
+     "Dojdziesz. Do pierwszego ciernia."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Ignacowi 3× Surowa skóra (z jelenia albo z dzika).",
+     "remind": [
+      "Trzy skóry, chłopcze. Grube."
+     ],
+     "hero": [
+      "> Trzy skóry. Grube, jak chciałeś."
+     ],
+     "done": [
+      "Dobre. Dwa dni w kadzi. A ty idź do Tadka - niech wykuje dwanaście ćwieków. Żelazo daj swoje."
+     ]
+    },
+    "1": {
+     "text": "Zanieś Tadkowi 1× Żelazo - wykuje 12 ćwieków do butów.",
+     "remind": [
+      "Ćwieki? Z czego, z powietrza? Daj kawałek żelaza."
+     ],
+     "hero": [
+      "> Ignac mówi, że wykujesz dwanaście ćwieków do butów."
+     ],
+     "done": [
+      "Ćwieki dla Ignaca? Ha, buty z ćwiekami - jak u rycerza. Masz, jeszcze ciepłe."
+     ]
+    },
+    "2": {
+     "text": "Miara: przyjdź do Ignaca o 7:00 rano (7–8), boso, po rosie - najwcześniej 2 dni po oddaniu skór. Przynieś ćwieki.",
+     "early": [
+      "Miarę biorę o siódmej rano, po rosie. Wtedy ślad najlepszy. I skóry muszą swoje odleżeć - dwa dni."
+     ],
+     "say": [
+      "> Ćwieki od Tadka. I stopy, jak chciałeś.",
+      "Stań na glinie. O tak. Dobra stopa - szeroka, chłopska. Za dwa dni odbierasz."
+     ]
+    },
+    "3": {
+     "text": "Odbierz buty u Ignaca (2 dni po mierze, 6:30–17).",
+     "early": [
+      "Jeszcze szyję. Dwa dni, mówiłem."
+     ],
+     "say": [
+      "Gotowe. Ale powiedz mi jeszcze, jak je wykończyć. Miękko, żeby zwierz nie słyszał? Czy na ćwiekach, żeby śnieg i kamień nie straszne?"
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Buty łowcy - ciche.",
+        "say": [
+         "Ciche jak kot. Zwierz usłyszy cię dopiero, jak już będziesz przy nim."
+        ]
+       },
+       "1": {
+        "label": "Podkute buty - pewne.",
+        "say": [
+         "Na ćwiekach. Po lodzie przejdziesz jak po rynku, a kamienie ci nie straszne."
+        ]
+       }
+      }
+     }
+    }
+   },
+   "reward": {
+    "note": [
+     "Buty od Ignaca",
+     "Ignac uszył mi buty na miarę. Pierwsze prawdziwe buty w moim życiu."
+    ]
+   }
+  },
+  "D3": {
+   "title": "Ręka kowala",
+   "where": "kuźnia + brama wschodnia + ratusz + garbarnia",
+   "when": "3 kolejne dni, 6–17",
+   "desc": "Tadek poparzył dłoń. Przez trzy dni zastępujesz go: podkowy dla straży, gwoździe dla sołtysa, nóż dla Ignaca. Spóźnisz się - klient się obrazi.",
+   "offer": {
+    "cond": {
+     "done": [
+      "K1"
+     ]
+    },
+    "say": [
+     "Poparzyłem dłoń. Głupio, o własne szczypce. Trzy dni nie utrzymam młota.",
+     "Zastąpisz mnie? Mam trzy zamówienia, każde na inny dzień. Spóźnisz się - klient się obrazi, a obrażony klient to stracony klient."
+    ],
+    "yes": "Zastąpię cię.",
+    "no": "Nie dam rady.",
+    "accept": [
+     "Dziś podkowy dla straży. Przynieś dwa kawałki żelaza i worek węgla - wykujesz je tu, przy mnie. Wit odbiera o piątej."
+    ],
+    "decline": [
+     "To kuźnia postoi. Ech."
+    ]
+   },
+   "steps": {
+    "0": {
+     "deadline": {
+      "text": "Wit wziął podkowy od kowala z sąsiedniej wsi."
+     },
+     "text": "Dzień 1: wykuj u Tadka 4 podkowy (2× Żelazo, 1× Węgiel drzewny), potem oddaj je kapralowi Witowi do 17:00.",
+     "remind": [
+      "Dwa kawałki żelaza i węgiel. Bez tego nie ma podków."
+     ],
+     "hero": [
+      "> Żelazo i węgiel. Pokaż, jak się kuje podkowy."
+     ],
+     "done": [
+      "Grzej... teraz klepnij... obróć... Ha! Krzywa, ale koń nie zauważy.",
+      "> (Godzina przy palenisku. Cztery podkowy, ręce czarne od sadzy.)",
+      "Leć z nimi do Wita. Do piątej."
+     ]
+    },
+    "1": {
+     "deadline": {
+      "text": "Kapral Wit czekał na podkowy do piątej."
+     },
+     "text": "Dzień 1: oddaj 4 podkowy kapralowi Witowi przy bramie wschodniej do 17:00.",
+     "hero": [
+      "> Podkowy od Tadka. Cztery."
+     ],
+     "done": [
+      "Na czas. Konie straży dziękują. Ja też."
+     ]
+    },
+    "2": {
+     "deadline": {
+      "text": "Sołtys kupił gwoździe u Baltazara. Drożej."
+     },
+     "text": "Dzień 2: zanieś sołtysowi 20× Gwoździe (na scenę na dożynki) do 18:00 następnego dnia.",
+     "remind": [
+      "Dwadzieścia gwoździ, młody. Scena sama się nie zbije."
+     ],
+     "hero": [
+      "> Gwoździe od Tadka. Dwadzieścia."
+     ],
+     "done": [
+      "Dwadzieścia, równiutko. Na dożynki będzie scena jak się patrzy."
+     ]
+    },
+    "3": {
+     "deadline": {
+      "text": "Ignac kroi skóry kamiennym nożem i klnie."
+     },
+     "text": "Dzień 3: zanieś Ignacowi 1× Nóż żelazny do 17:00.",
+     "remind": [
+      "Nóż, chłopcze. Żelazny. Moim kamiennym to można chleb kroić, nie skórę."
+     ],
+     "hero": [
+      "> Nóż żelazny. Od Tadka."
+     ],
+     "done": [
+      "Ostry jak język sołtysa. Dzięki."
+     ]
+    },
+    "4": {
+     "text": "Wróć do Tadka po zapłatę.",
+     "say": [
+      "Słyszałem, słyszałem. Ludzie zadowoleni.",
+      "Mam dla ciebie sześćdziesiąt groszy. Albo... wiesz, ręka goi się długo, a cyrulik drogi. Wybieraj, ja nie będę."
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Wezmę 60 groszy.",
+        "say": [
+         "Uczciwie zarobione. Masz."
+        ]
+       },
+       "1": {
+        "label": "Zostaw je sobie na leczenie.",
+        "say": [
+         "...Tego ci nie zapomnę, chłopcze. Póki mam kuźnię, masz u mnie wszystko."
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "D5": {
+   "title": "Wataha pod bramą",
+   "where": "brama południowa + Polna droga + Skraj lasu",
+   "when": "3 noce",
+   "desc": "Wilki podchodzą pod mur, a straż ma z dworu rozkaz nie wychodzić. Ślady o świcie, dwa wilki zwiadowcy na Polnej drodze, a potem przewodnik watahy na Skraju lasu.",
+   "offer": {
+    "say": [
+     "Wilki podchodzą pod mur. Nocą słychać je aż na rynku. A ja mam z dworu rozkaz: straż nie wychodzi za bramy.",
+     "Ty nie jesteś strażą. Obejrzyj o świcie ślady pod bramą południową. Weź strzały - przydadzą się."
+    ],
+    "yes": "Zajmę się tym.",
+    "no": "To nie dla mnie.",
+    "accept": [
+     "Sześć strzał. Nie zmarnuj ani jednej."
+    ],
+    "decline": [
+     "Rozumiem. Wilk to nie zając."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "O świcie (5–9) obejrzyj tropy pod bramą południową.",
+     "early": [
+      "Tropy najlepiej widać o świcie, po rosie."
+     ],
+     "say": [
+      "> Tropy. Duże. Trzy, może cztery wilki... Jeden ślad większy od reszty. Idą od Polnej drogi."
+     ]
+    },
+    "1": {
+     "text": "Nocą (21–5) zabij 2 wilki zwiadowców na Polnej drodze."
+    },
+    "2": {
+     "text": "Nocą zabij przewodnika watahy na Skraju lasu (największy wilk)."
+    },
+    "3": {
+     "text": "Wróć do kaprala Wita (brama wschodnia, 6–18).",
+     "say": [
+      "Słyszałem. Przewodnik watahy, mówią. Sam?",
+      "No to teraz pytanie: komu przypiszemy zasługę? Mnie by się przydała. Ale ty ją masz."
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Zasługa twoja, kapralu.",
+        "say": [
+         "...Jestem twoim dłużnikiem. Raz przepuszczę cię nocą bez pytań. Raz."
+        ]
+       },
+       "1": {
+        "label": "Powiem o wszystkim sołtysowi.",
+        "say": [
+         "Uczciwie. Sołtys ogłosi to na rynku. Masz osiemdziesiąt groszy od miasta."
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "D11": {
+   "title": "Ognie na murach",
+   "where": "brama wschodnia i mury",
+   "when": "5 wieczorów, 18–21",
+   "desc": "Kosze żarowe gasną, a dwór nie przysyła węgla. Przez pięć wieczorów przynoś kapralowi po 3× Węgiel drzewny przed 21:00. Czwartej nocy ktoś zalewa kosz wodą.",
+   "offer": {
+    "say": [
+     "Kosze żarowe gasną. Dwór obiecał węgiel i jak zwykle - obiecał.",
+     "Pięć wieczorów, po trzy worki węgla, przed dziewiątą. Płacę na koniec. Siedemdziesiąt groszy."
+    ],
+    "yes": "Będę nosił węgiel.",
+    "no": "Nie mam tyle węgla.",
+    "accept": [
+     "Pięć wieczorów. Każdego wieczoru trzy worki. Przed dziewiątą."
+    ],
+    "decline": [
+     "To będziemy marzli przy zimnych koszach."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś kapralowi Witowi 3× Węgiel drzewny przed 21:00 (obchód murów, 18–21) - po jednej dostawie na wieczór. Dostawy: {n}/5."
+    },
+    "1": {
+     "text": "Nocą (po 21:00) zajrzyj do kosza żarowego przy bramie wschodniej.",
+     "early": [
+      "Kosz płonie równo. Coś się stanie dopiero nocą."
+     ],
+     "say": [
+      "> Kosz zgaszony. Zalany wodą - w taką suszę! Z popiołu jeszcze kapie.",
+      "> Na bruku mokre ślady butów. Prowadzą w stronę kantoru."
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Powiem kapralowi.",
+        "say": [
+         "> Wit musi to wiedzieć."
+        ]
+       },
+       "1": {
+        "label": "Pójdę do Baltazara.",
+        "say": [
+         "> Kantor... Ciekawe, co Baltazar na to."
+        ]
+       }
+      }
+     }
+    },
+    "2": {
+     "text": "Powiedz o zalanym koszu kapralowi Witowi (18–23) albo idź do Baltazara (kantor)."
+    },
+    "3": {
+     "text": "Dokończ dostawy węgla dla kaprala Wita (po 3× Węgiel drzewny, 18–21). Dostawy: {n}/5."
+    }
+   },
+   "lines": {
+    "give": [
+     "> Trzy worki węgla."
+    ],
+    "thanks": [
+     "Kosze dziękują. Dostaw: {n} z pięciu."
+    ],
+    "remind": [
+     "Trzy worki węgla, przed dziewiątą. Kosze ledwo się tlą."
+    ],
+    "wit": [
+     "> Ktoś zalał kosz przy bramie wschodniej. Wodą. Mokre ślady prowadziły do kantoru.",
+     "Wodą? W taką suszę?! ...Kantor, mówisz. Tej nocy popilnuję sam. A ty noś węgiel dalej."
+    ],
+    "bribe": [
+     "Mokre ślady? Ach, ludzie chodzą, gdzie chcą, przyjacielu.",
+     "Trzydzieści groszy i zapomnisz, dokąd prowadziły?"
+    ],
+    "bribeYes": [
+     "Rozsądny człowiek. Ciemność przy bramie też jest towarem, wiesz?"
+    ],
+    "bribeNo": [
+     "Szkoda. No cóż - idź do swojego kaprala."
+    ]
+   }
+  },
+  "D14": {
+   "title": "Zboże na wojnę",
+   "where": "brama wschodnia + działka dziadka",
+   "when": "od dnia 24, 3 dni",
+   "desc": "Dwór zbiera „zboże na wojnę”: trzecią część jęczmienia z każdego pola. Z działki dziadka - sześć garści. Oddać, przekupić kaprala czy schować?",
+   "offer": {
+    "say": [
+     "Rozkaz z dworu. Po bitwie na kontynencie zbieramy zboże na wojnę - trzecią część jęczmienia z każdego pola.",
+     "Z działki twojego dziadka: sześć garści jęczmienia. Za trzy dni. Nie mów, że nie ostrzegałem."
+    ],
+    "options": {
+     "0": {
+      "label": "Oddam.",
+      "say": [
+       "Za trzy dni, tu, przy bramie. Lord zapisze to na poczet długu."
+      ]
+     },
+     "1": {
+      "label": "Ile, żebyś zapomniał?",
+      "say": [
+       "Dwadzieścia groszy... Nie widziałem działki twojego dziadka. Nikt nie widział."
+      ]
+     },
+     "2": {
+      "label": "Nie mam zboża.",
+      "say": [
+       "Nie masz? Za trzy dni sprawdzę. Lepiej, żebyś naprawdę nie miał."
+      ]
+     }
+    }
+   },
+   "steps": {
+    "0": {
+     "text": "Oddaj kapralowi Witowi 6× Jęczmień w ciągu 3 dni (brama wschodnia, 6–18).",
+     "remind": [
+      "Sześć garści jęczmienia. Rozkaz to rozkaz."
+     ],
+     "hero": [
+      "> Sześć garści. Na wojnę."
+     ],
+     "done": [
+      "Zapisane. Lord zaliczy to na dług twojego dziadka - pięćdziesiąt groszy. Przynajmniej tyle."
+     ]
+    },
+    "1": {
+     "text": "Za 3 dni kapral Wit sprawdzi, czy na pewno nie masz jęczmienia (brama wschodnia, 6–18)."
+    }
+   },
+   "fail": {
+    "text": "Kapral nie dostał zboża. Straż patrzy na ciebie krzywo."
+   },
+   "lines": {
+    "caught": [
+     "Nie masz zboża? A to co w worku? Jęczmień, jak żywy.",
+     "Czterdzieści groszy kary. I straż cię zapamięta."
+    ],
+    "clean": [
+     "Nic? Pusto w worku? No to nic. Masz szczęście, że nie lubię grzebać w cudzych skrzyniach."
+    ]
+   }
+  },
+  "D16": {
+   "title": "Uczeń dzwonnika",
+   "where": "dzwonnica",
+   "when": "od Opinii 40, 4 dni (6:00, 12:00 albo 18:00)",
+   "desc": "Ambroży szuka następcy „na wszelki wypadek”. Przez cztery dni dzwonisz z nim o szóstej, w południe albo o osiemnastej - rytmy coraz trudniejsze.",
+   "offer": {
+    "say": [
+     "Jestem stary. Kiedyś ktoś będzie musiał dzwonić za mnie. Na wszelki wypadek.",
+     "Przyjdź do dzwonu o szóstej, w południe albo o osiemnastej. Cztery dni. Nauczę cię wszystkiego... co wolno."
+    ],
+    "yes": "Będę przychodził.",
+    "no": "Nie mam głowy do dzwonów.",
+    "accept": [
+     "Dzwon nie czeka. Bądź przed pełną godziną."
+    ],
+    "decline": [
+     "Nikt nie ma. To właśnie jest kłopot."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Dzwoń z Ambrożym przy dzwonnicy o 6:00, 12:00 albo 18:00 (raz dziennie, 4 różne dni). Lekcje: {n}/4."
+    }
+   },
+   "lines": {
+    "go": [
+     "Teraz. Licz w myślach i ciągnij równo."
+    ],
+    "ok": [
+     "Dobrze. Lekcja {n} z czterech."
+    ],
+    "again": [
+     "Jeszcze nie. Następnym razem, przy dzwonie."
+    ],
+    "done": [
+     "Zwykłe godziny już umiesz. Inne... może kiedyś."
+    ],
+    "wait": [
+     "Dziś już dzwoniłeś. Jutro."
+    ]
+   },
+   "reward": {
+    "note": [
+     "Uczeń dzwonnika",
+     "Ambroży dał mi klucz do dzwonnicy. „Zwykłe godziny już umiesz. Inne... może kiedyś.”"
+    ]
+   }
+  },
+  "D17": {
+   "title": "Petycja do Lorda",
+   "where": "ratusz + kuźnia + garbarnia + piekarnia + dzwonnica + drzwi dworu",
+   "when": "po dniu 20",
+   "desc": "Dwór chce od każdego domu dziesięć groszy podatku wojennego. Zbierz krzyżyki pod petycją - każdego łap przy robocie - i zanieś ją Lordowi.",
+   "offer": {
+    "say": [
+     "Dwór chce od każdego domu dziesięć groszy podatku wojennego. Kuby, Ignaca i połowy miasta na to nie stać.",
+     "Napisałem petycję. Zbierz podpisy - krzyżyki - od ludzi. Każdego łap wtedy, kiedy jest przy robocie. Potem zanieś ją Lordowi."
+    ],
+    "yes": "Zbiorę podpisy.",
+    "no": "To się nie uda.",
+    "accept": [
+     "Tadek, Hanka, Kuba, Ignac, Ambroży... I kto jeszcze zechce. Kapral nie podpisze, nawet nie próbuj."
+    ],
+    "decline": [
+     "Może i nie. Ale trzeba spróbować."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zbierz krzyżyki pod petycją (co najmniej 5): Tadek, Hanka, Kuba, Ignac, Ambroży, może Baltazar. Podpisy: {n}."
+    },
+    "1": {
+     "text": "Zanieś petycję Lordowi (drzwi dworu, 8–20).",
+     "hero": [
+      "> Petycja od miasta, panie. Ludzie nie mają z czego płacić."
+     ],
+     "done": [
+      "Petycja? (czyta długo) ...Pół. Obniżam o połowę. Tylko dlatego, że to ty przyniosłeś, a nie sołtys.",
+      "I jeszcze jedno. Mój dziadek zbierał bajki o Kruczych Skałach. Gdybyś kiedyś coś znalazł... przyjdź najpierw do mnie. Dla porządku."
+     ]
+    },
+    "2": {
+     "text": "Wróć do sołtysa z odpowiedzią Lorda.",
+     "say": [
+      "> Lord obniżył podatek o połowę.",
+      "O połowę! Chłopcze... Całe miasto będzie o tym gadać. Masz trzydzieści groszy - z kasy ratusza, uczciwie."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Petycja do Lorda",
+     "Lord obniżył podatek wojenny o połowę. I dodał: „Gdybyś coś znalazł pod Kruczymi Skałami... przyjdź najpierw do mnie.”"
+    ]
+   }
+  },
+  "D13": {
+   "title": "Zakład Ozzy'ego",
+   "where": "tawerna + cała okolica + piekarnia + brama wschodnia",
+   "when": "3 dni",
+   "desc": "Ozzy po pijaku przepowiada trzy rzeczy na trzy dni. Grum zakłada się, że to bzdury. Sprawdź każdą przepowiednię na własne oczy.",
+   "offer": {
+    "yes": "Sprawdzę to.",
+    "no": "Dziadku, ty już nie pij.",
+    "accept": [
+     "(Z drugiego końca sali dobiega głos Gruma: „Bzdury! Dziesięć groszy za każdą, że nic się nie sprawdzi!”)",
+     "Słyszałeś? Idź do niego, synku. Weź zakład. *hep*"
+    ],
+    "decline": [
+     "Nie wierzysz? Nikt nie wierzy. Dlatego ciągle mam rację. *hep*"
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Grum słyszał przepowiednie Ozzy'ego i chce się założyć. Pogadaj z Grumem (tawerna)."
+    },
+    "1": {
+     "text": "Sprawdź przepowiednie Ozzy'ego na własne oczy: {p1}; {p2}; {p3}. Sprawdzone: {n}/3."
+    },
+    "2": {
+     "text": "Przepowiednie minęły. Odbierz zakład od Gruma (tawerna)."
+    },
+    "3": {
+     "text": "Wróć do Ozzy'ego (tawerna)."
+    }
+   },
+   "lines": {
+    "offer": [
+     "*hep* Słuchajcie wszyscy! Ozzy wie, co będzie!"
+    ],
+    "bet": [
+     "> Grum, słyszałeś Ozzy'ego?",
+     "Cała sala słyszała. Bzdury.",
+     "Zakład: dziesięć groszy za każdą przepowiednię, która się sprawdzi - płacę ja.",
+     "Ale musisz to zobaczyć na własne oczy. Z gadania nie płacę.",
+     "> Stoi."
+    ],
+    "storm": "> (Burza. {hour}, co do kwadransa. Tak, jak mówił Ozzy.)",
+    "rain": "> (Pada. {hour}. Tak, jak mówił Ozzy.)",
+    "hankaOven": [
+     "Piec! Mój piec pękł! W nocy coś trzasnęło i sklepienie rozeszło się na dwoje - chleb na dziś mam z żaren i z płaczu!",
+     "> (Piec Hanki. Pojutrze, mówił Ozzy. Pojutrze.)"
+    ],
+    "witShoe": [
+     "Koń zgubił podkowę. Na równej drodze, na rynku, w biały dzień. Kowal mówi, że gwoździe były nowe. Tfu.",
+     "> (Koń kaprala. Za trzy dni, mówił Ozzy.)"
+    ],
+    "missed": "> (Przepowiednia minęła, a mnie przy niej nie było. Grum za nią nie zapłaci.)",
+    "pay": [
+     "> Sprawdziło się, Grum. Widziałem na własne oczy.",
+     "Hm. {n} na trzy. Masz. {gold} groszy. Zakład to zakład.",
+     "Ten stary pijak mnie przeraża. Nie mów mu, że to powiedziałem."
+    ],
+    "payNone": [
+     "> Nic nie widziałem na własne oczy.",
+     "To nic nie płacę. Zakład to zakład. Ale... słyszałem, że wszystko się sprawdziło. Hm."
+    ],
+    "ozzy": [
+     "> Dziadku. Wszystko się sprawdziło. Burza, piec, podkowa.",
+     "(Ozzy odstawia kufel. Pierwszy raz widzisz go trzeźwego. Mówi cicho i ani razu nie czka.)"
+    ],
+    "ozzyEnd": [
+     "(Ozzy mruga - i znowu jest pijany.) *hep* Co ja gadałem? Nieważne. Postaw piwo, to ci powiem, co będzie jutro."
+    ]
+   }
+  },
+  "D6": {
+   "title": "Siłacz z targu",
+   "where": "kuźnia → tawerna (Grum, Borgar, stół do siłowania)",
+   "when": "do najbliższego targu (3 dni i więcej), wieczorem",
+   "desc": "W dzień targowy wieczorem w tawernie jest turniej siłowania na rękę o beczkę piwa od Borgara. Co roku wygrywa Grum. Tadek chce, żeby ktoś wreszcie utarł mu nosa.",
+   "offer": {
+    "say": [
+     "Wiesz, że w dzień targowy wieczorem w tawernie jest turniej na rękę? Przy stole Gruma, o beczkę piwa od Borgara. Ja i Grum, co roku. I co roku Grum.",
+     "Ty masz krzepę, widziałem, jak nosisz polana. Stań do turnieju.",
+     "Potrenuj z Grumem trzy wieczory - niech się nauczy, że też można przegrać."
+    ],
+    "yes": "Stanę do turnieju.",
+    "no": "Nie mam krzepy.",
+    "accept": [
+     "Ha! Trzy wieczory z Grumem przy stole, potem zapis u Borgara - dwa grosze. Turniej w targ wieczorem, od szóstej."
+    ],
+    "decline": [
+     "Szkoda. To Grum znowu wypije beczkę sam."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Trenuj z Grumem: siłuj się z nim w trzech różnych dniach przed turniejem (dzień {market}). Treningi: {n}/3."
+    },
+    "1": {
+     "text": "Zapisz się na turniej u Borgara przy barze (2 G) - najpóźniej wieczorem w dzień targowy (dzień {market})."
+    },
+    "2": {
+     "text": "Dzień {market}, wieczór 18–22: turniej przy stole do siłowania w tawernie. Podejdź do stołu - trzy walki."
+    }
+   },
+   "lines": {
+    "signTopic": "Zapisz mnie na turniej na rękę (2 G).",
+    "sign": [
+     "> Chcę stanąć do turnieju na rękę.",
+     "Ty? No, no. Dwa grosze wpisowego - zbieram na beczkę dla zwycięzcy. W targ wieczorem, od szóstej, przy stole Gruma."
+    ],
+    "signDone": [
+     "A, i jeszcze jedno. Kantorowy Baltazar o ciebie pytał. Ten od zakładów. Uważaj na niego."
+    ],
+    "bribe": [
+     "Przyjacielu... słyszałem, że stajesz do turnieju. Postawiłem trochę na Gruma. Ot, drobny zakład.",
+     "Czterdzieści groszy dla ciebie, jeśli przegrasz pierwszą walkę. Z woźnicą. Nikt się nie dowie, a ty nic nie tracisz."
+    ],
+    "bribeYes": [
+     "Rozsądny człowiek. Proszę - czterdzieści. Miło robić z tobą interesy."
+    ],
+    "bribeNo": [
+     "Szkoda. Honor to piękna rzecz. I bardzo droga."
+    ],
+    "walkover": [
+     "> (Turniej się skończył - nie stawiłem się do następnej walki.)"
+    ],
+    "call": [
+     "> (Borgar uderza kuflem w ladę: „Ludzie! Turniej na rękę! Pierwsza walka: wnuk Stacha przeciw Wojciechowi, woźnicy!”)",
+     "> (Borgar woła: „Półfinał! Wnuk Stacha przeciw Tadkowi Młotowi, kowalowi!”)",
+     "> (Borgar woła: „Finał! Wnuk Stacha przeciw Grumowi Żelaznej Pięści! O beczkę piwa!”)"
+    ],
+    "go": "Do stołu!",
+    "wait": "Jeszcze chwilę.",
+    "throw": "Przegram. (Jak chciał Baltazar.)",
+    "fair": "Walczę uczciwie.",
+    "won": [
+     "> (Łokieć drży, ale ręka rywala ląduje na blacie. Sala wiwatuje.)"
+    ],
+    "next": "> (Następna walka przy tym samym stole. Teraz: {who}.)",
+    "champion": [
+     "> (Ręka Gruma uderza o blat. W sali cisza - a potem ryk całej tawerny.)",
+     "> (Borgar woła: „Mamy nowego siłacza! Beczka piwa dla wnuka Stacha! I pas siłacza, jak co roku!”)"
+    ],
+    "lostQf": [
+     "> (Woźnica kładzie ci rękę na blat. Ludzie wzruszają ramionami.)"
+    ],
+    "lostSf": [
+     "> (Tadek wygrywa i klepie cię po plecach: „Dobra robota, chłopcze. Za rok!”)"
+    ],
+    "lostF": [
+     "> (Grum kładzie ci rękę na blat. Powoli, prawie z szacunkiem.)",
+     "> (Borgar woła: „Grum znowu! Ale co to była za walka, ludzie!”)"
+    ],
+    "sold": [
+     "> (Puszczasz rękę. Woźnica nie może uwierzyć, że wygrał. Baltazar przy stoliku pod ścianą kiwa ci głową.)"
+    ],
+    "noteWon": [
+     "Siłacz z targu",
+     "Wygrałem turniej na rękę w tawernie, w wieczór dnia targowego - po kolei z woźnicą Wojciechem, kowalem Tadkiem i z Grumem. Mam pas siłacza (większy udźwig) i beczkę piwa, którą wypiliśmy razem."
+    ],
+    "noteSold": [
+     "Sprzedana walka",
+     "Wziąłem od Baltazara czterdzieści groszy i przegrałem pierwszą walkę turnieju w tawernie. Grum coś podejrzewa."
+    ]
+   },
+   "rivals": {
+    "0": {
+     "name": "Wojciech",
+     "sub": "woźnica",
+     "with": "z Wojciechem, woźnicą",
+     "kicker": "TURNIEJ W TAWERNIE · ĆWIERĆFINAŁ",
+     "lines": {
+      "hello": [
+       "Na rękę? Ja całe życie lejce trzymam. Łapa jak imadło!"
+      ],
+      "round": [
+       "No, chłopcze, łokieć na stół."
+      ],
+      "burst": [
+       "Wio!",
+       "Hej-ha!",
+       "Prrr!"
+      ],
+      "winning": [
+       "Lejce cięższe!",
+       "Ha! Słabo, słabo!"
+      ],
+      "losing": [
+       "Ej... ej, spokojnie!",
+       "Co ty jesz, kamienie?"
+      ],
+      "roundHe": [
+       "Raz dla mnie!"
+      ],
+      "roundYou": [
+       "No dobra, raz dla ciebie."
+      ],
+      "won": [
+       "Ha! Woźnica jeszcze umie!"
+      ],
+      "lost": [
+       "Dobra, dobra. Idź, pokaż reszcie."
+      ]
+     }
+    },
+    "1": {
+     "name": "Tadek Młot",
+     "sub": "kowal",
+     "with": "z Tadkiem Młotem, kowalem",
+     "kicker": "TURNIEJ W TAWERNIE · PÓŁFINAŁ",
+     "lines": {
+      "hello": [
+       "Sam cię namówiłem, to teraz nie płacz. Kowadło nie płacze."
+      ],
+      "round": [
+       "Łokieć na stół. Jak przy kowadle."
+      ],
+      "burst": [
+       "Hah!",
+       "Młotem!",
+       "Uch!"
+      ],
+      "winning": [
+       "Żelazo giąłem grubsze od ciebie!",
+       "To wszystko?"
+      ],
+      "losing": [
+       "No, no... nieźle!",
+       "Uch... mocny jesteś!"
+      ],
+      "roundHe": [
+       "Kowal górą!"
+      ],
+      "roundYou": [
+       "Dobrze! Tak trzymaj!"
+      ],
+      "won": [
+       "Kowal wygrywa! Ale ty, chłopcze, nie wstydź się."
+      ],
+      "lost": [
+       "Pokonałeś mnie! Ha! To teraz idź i pokonaj Gruma!"
+      ]
+     }
+    },
+    "2": {
+     "name": "Grum",
+     "sub": "Żelazna Pięść, najemnik",
+     "with": "z Grumem - finał",
+     "kicker": "TURNIEJ W TAWERNIE · FINAŁ",
+     "lines": {
+      "hello": [
+       "Finał. Tylko ty i ja. Nie oszczędzaj mnie. Ja ciebie nie będę."
+      ]
+     }
+    }
+   }
+  },
+  "D20": {
+   "title": "Kuter na pochylni",
+   "where": "Przystań (plaża, pochylnia), Podgrodzie",
+   "when": "od spotkania z Rochem",
+   "desc": "Roch chce połatać rozbity kuter, którym przywiózł bohatera z lądu. Deski, gwoździe, smoła, żagiel - i noc, w którą trzeba wypłynąć przed nosem celnika.",
+   "offer": {
+    "say": [
+     "Kuter da się połatać. Kadłub cały, tylko burta i maszt. I żagiel, bo z tamtego zostały szmaty.",
+     "Najpierw trzeba go ściągnąć z plaży na pochylnię. Sam nie dam rady. Janek ma silne ręce i nie zadaje pytań."
+    ],
+    "yes": "Pomogę ci.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Wiedziałem. Pogadaj z Jankiem. Mnie się boi, ciebie lubi."
+    ],
+    "decline": [
+     "Kuter nie ucieknie. Leży, jak leżał."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Poproś Janka o pomoc przy wraku (przystań).",
+     "say": [
+      "> Roch chce połatać kuter. Pomożesz ściągnąć wrak z plaży na pochylnię?",
+      "Roch, mówisz... (Janek drapie się po zaroście.) Ja tam nic nie wiem o żadnym Rochu. Ale wrak to wrak, a pochylnia stoi pusta.",
+      "Jutro o świcie, przy wraku. Przynieś dwie liny - moje są w sieciach."
+     ]
+    },
+    "1": {
+     "text": "O świcie (5–10) przyjdź do wraku na plaży z 2 linami.",
+     "early": [
+      "> O świcie, mówił Janek. Jeszcze nie pora."
+     ],
+     "say": [
+      "@janek: Jest i nasz pomocnik! Liny tu, pod dziób. Roch, łap za rufę!",
+      "@przemytnik: Na trzy. Raz... dwa... ciągnij!",
+      "> (Kadłub zgrzyta po kamieniach, ale idzie. Krok po kroku, aż na deski pochylni.)"
+     ],
+     "done": [
+      "@janek: Uff. Leży. Ja wracam do sieci - a wy róbcie, co chcecie. Ja nic nie widziałem."
+     ]
+    },
+    "2": {
+     "text": "Przynieś Rochowi 8× Deski i 20× Gwoździe na burtę.",
+     "remind": [
+      "Osiem desek i dwadzieścia gwoździ. Burta sama się nie zrośnie."
+     ],
+     "hero": [
+      "> Deski i gwoździe."
+     ],
+     "done": [
+      "Porządne deski. Burtę zrobię w dwa dni. Teraz smoła - bez smoły kuter to sito.",
+      "Zbych z Podgrodzia pędzi smołę z karpiny. Smolarz, to i nazwisko ma. Zanieś mu drewna, zrobi."
+     ]
+    },
+    "3": {
+     "text": "Zanieś Zbychowi Smolarzowi 6× Drewno - napędzi smoły (Podgrodzie, drewutnia).",
+     "remind": [
+      "Smoła? Z karpiny się pędzi. Daj sześć polan, to ci napędzę."
+     ],
+     "hero": [
+      "> Roch z przystani potrzebuje smoły. Na kuter."
+     ],
+     "done": [
+      "Roch, powiadasz? Nie znam. ...Ale smołę znam. Masz, dwa garnki. Smarować na ciepło."
+     ]
+    },
+    "4": {
+     "text": "Zanieś praczce Marcie 10× Włókno - uszyje żagiel (Podgrodzie).",
+     "remind": [
+      "Żagiel? Z czego, z powietrza? Dziesięć garści lnu, to uszyję."
+     ],
+     "hero": [
+      "> Uszyjesz żagiel na kuter? Mam len."
+     ],
+     "done": [
+      "(Marta rozkłada płótno na kolanach.) Takiego wielkiego jeszcze nie szyłam. Masz. Mocne, podwójnym ściegiem."
+     ]
+    },
+    "5": {
+     "text": "Zanieś Rochowi smołę i żagiel.",
+     "remind": [
+      "Smoła i żagiel. Bez nich nigdzie nie popłynę."
+     ],
+     "hero": [
+      "> Smoła od Zbycha i żagiel od Marty."
+     ],
+     "done": [
+      "(Roch długo gładzi płótno.) Dobra robota. Kuter będzie pływał. Jutro go zwodujemy.",
+      "A potem trzeba wypłynąć. Nocą. Celnik nie może wiedzieć. Przyjdź wieczorem, po dwudziestej."
+     ]
+    },
+    "6": {
+     "text": "Kuter gotowy. Wieczorem (20–2) pomóż Rochowi wypłynąć przed nosem strażnika - albo donieś na niego celnikowi (komora celna, 8–18)."
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^D\\d+\\./)"
+}

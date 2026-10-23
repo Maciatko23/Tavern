@@ -1,0 +1,1241 @@
+# Teksty podziemi (wtyczki Underground_Data.js i Underground.js): piętra, łupy, winda, zamki Komnaty Serca, zakończenia, epilog, Warstwa Prawdy, zapiski zakonu, sceny przy Sercu.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz podziemia
+
+# ======================================================================== T
+floorNameN = Podziemia - piętro {n}
+noticeN = Piętro {n}
+noticeSubDeep = {band} · najgłębiej: {n}
+deeperN = Najgłębiej, jak dotąd: piętro {n}
+empty.skrzynia = Pusta.
+empty.skrzynka = Pusta skrzynka.
+empty.beczka = Na dnie tylko kurz.
+empty.worek = Pusty worek.
+empty.dzban = Pusty dzban.
+empty.monety = Nic więcej tu nie ma.
+empty.kosci = Zostawię go w spokoju.
+empty.grzyby =
+empty.wozek = Wózek jest pusty.
+empty.sakwa = Pusta sakwa.
+empty.relikwiarz = Pusty relikwiarz.
+found.skrzynia = W skrzyni...
+found.skrzynka = W skrzynce...
+found.beczka = Na dnie beczki...
+found.worek = W worku...
+found.dzban = W dzbanie...
+found.monety = Stare monety, rozsypane w kurzu.
+found.kosci = Przy kościach strażnika...
+found.grzyby = Grzyby z jaskini.
+found.wozek = W wózku...
+found.sakwa = W sakwie...
+found.relikwiarz = W relikwiarzu...
+nothing.skrzynia = Ktoś był tu przede mną.
+nothing.skrzynka = Same drzazgi.
+nothing.beczka = Pusta. Pachnie jeszcze winem.
+nothing.worek = Zbutwiałe płótno, nic w środku.
+nothing.dzban = Pusty.
+nothing.monety =
+nothing.kosci = Nic przy nim nie ma.
+nothing.grzyby =
+nothing.wozek = Tylko kamienny pył.
+nothing.sakwa = Ktoś ją już opróżnił.
+nothing.relikwiarz = Pusty. Ktoś zabrał to, co w nim było.
+goldN = Stare monety: {n} G
+torchOut = Wypalona pochodnia. Ktoś zapalił ją dawno temu.
+stairsUp = Schody w górę
+stairsDown = Schody w dół
+noFloor = Dalej nie ma już schodów. Tylko skała.
+[gateClosed]
+Stara krata, wpuszczona w mur dawnej twierdzy. Za nią schody znikają w ciemności.
+Zamek ma wyryty znak kruka i zardzewiał na kamień. Krata ani drgnie.
+
+gateOpen = Krata stoi otworem. Schody prowadzą w dół, do ruin twierdzy.
+trapHit = Kolce!
+water = Mętna, lodowata woda. Pachnie żelazem i kamieniem - tego nie będę pić.
+[windlassLook]
+> (Kołowrót windy kasztelana. Łańcuch zardzewiały, ale cały - idzie w górę, w ciemność szybu.)
+
+windlassAsk = Zakręcić kołowrotem?
+windlassYes = Zakręcić
+windlassNo = Zostawić
+[windlassTurned]
+> (Coś wysoko w górze szczęka i zgrzyta... Klatka drgnęła. Winda znów chodzi!)
+
+[windlassOn]
+> (Kołowrót chodzi lekko. Klatka czeka.)
+
+[cageStuck]
+> (Klatka windy wisi na łańcuchu, zablokowana. Trzeba poruszyć kołowrót.)
+
+[shaftEmpty]
+> (Pusty szyb. Łańcuchy giną w ciemności, gdzieś bardzo głęboko.)
+
+liftAsk = Dokąd jechać?
+liftStay = Zostać
+liftRuins = Ruiny Zamku (na górę)
+liftStopN = Piętro {n}
+liftStopNamed = Piętro {n} - {name}
+liftOnN = Winda kasztelana staje na piętrze {n}
+liftSub = Kołowrót poruszony - klatka zjedzie tu z Ruin Zamku
+bossBlocksN = Najpierw {name}. Tędy nie przejdę.
+bossDoneN = {name} - pokonany
+firstVisit.1 = Piwnice zamku... Ktoś tu kiedyś naprawdę mieszkał.
+firstVisit.3 = Im niżej, tym starsze kamienie.
+firstVisit.5 = Zimno tu. I cicho - aż za cicho.
+firstVisit.7 = Ściany są tu gładsze. Jakby ktoś je wycierał rękami.
+firstVisit.9 = Słyszę coś... jakby ktoś szeptał za murem.
+firstVisit.11 = Cele, refektarz... Tu zakon naprawdę żył.
+firstVisit.15 = Wszędzie ta sama zasada, wyryta w kamieniu. Jedno pytanie.
+firstVisit.21 = Pachnie wilgocią. Gdzieś tu była woda.
+firstVisit.25 = Ktoś zostawił świecę. Wypalona do końca.
+firstVisit.31 = Koniec murów. Dalej jest już tylko skała.
+firstVisit.35 = Słyszę rzekę. Gdzieś pod nogami.
+firstVisit.41 = Świeża kreda na ścianie. Ktoś tu był niedawno.
+firstVisit.45 = Grzyby świecą tu jak gwiazdy. Nie podoba mi się to.
+firstVisit.51 = Tych ścian nie stawiał zakon.
+firstVisit.55 = Twarze na kamieniu... zatarte. Wszystkie.
+firstVisit.61 = Kurz nie opada. Wisi w powietrzu i czeka.
+firstVisit.65 = Każdy ślad stóp prowadzi w dół.
+firstVisit.71 = Ciepło. Coraz cieplej, choć to nie ma sensu.
+firstVisit.76 = Ktoś mnie woła. Moim głosem.
+firstVisit.81 = Znam to miejsce. Nigdy tu nie byłem.
+firstVisit.85 = Wiem rzeczy, których nikt mi nie powiedział.
+firstVisit.91 = Ostatnie piętra. Czuję je w zębach.
+firstVisit.95 = Jeszcze trochę. Tylko jeszcze trochę.
+firstVisit.99 = Za tymi drzwiami... wiem, co jest za tymi drzwiami.
+[lockKeyNo]
+> (Zamek z krukiem, taki sam jak na kracie w piwnicy Borgara. Bez klucza ani drgnie.)
+
+[lockKeyYes]
+> (Klucz kasztelana wchodzi w zamek. Obraca się sam, jakby ktoś po drugiej stronie na niego czekał.)
+
+[lockKeyDone]
+> (Zamek z krukiem jest otwarty.)
+
+[lockSignalNo]
+> (Kamienny dzwon bez serca, a pod nim siedem nacięć w kamieniu. Ile razy uderzyć? Nie znam sygnału, który by tu pasował.)
+
+lockSignalAsk = Uderzyć w kamienny dzwon?
+lockSignalOpt = Siedem razy - sygnał „pytanie”
+lockSignalLeave = Zostawić
+[lockSignalYes]
+> (Siedem uderzeń. Kamień odpowiada z głębi - siódmym, którego nie zadałem.)
+
+[lockSignalDone]
+> (Dzwon jeszcze drży. Zamek dzwonu jest otwarty.)
+
+[lockSongNo]
+> (Kamień z wyrytymi pustymi wersami - sześć rzędów kresek, bez słów. Ktoś musiałby znać pieśń, żeby je wypełnić.)
+
+lockSongAsk = Zaśpiewać przy kamieniu?
+lockSongOpt = Pieśń o Kruczych Skałach
+[lockSongYes]
+> (Śpiewasz cicho, zwrotka po zwrotce. Puste wersy na kamieniu wypełniają się słowami.)
+> (Przy ostatniej - „nie odpowiadaj, gdy głos nieznany” - kamień milknie i ustępuje.)
+
+[lockSongDone]
+> (Na kamieniu stoją słowa pieśni. Zamek pieśni jest otwarty.)
+
+[doorShutN]
+> (Ostatnie drzwi. Trzy zamki: klucz, dzwon i pieśń. Otwartych: {n} z 3.)
+> (Napis nad drzwiami: KTO MA DWA, TEN WEJDZIE. KTO MA TRZY, TEN WYJDZIE.)
+
+[doorOpen]
+> (Drzwi Komnaty Serca stoją otworem. Za nimi światło, które nie rzuca cienia.)
+
+lockNames.key = klucz kasztelana
+lockNames.signal = sygnał dzwonu
+lockNames.song = pieśń
+[heartLook]
+> (Na kamiennym cokole, w środku kręgu, jest Serce Twierdzy.)
+> (Nie da się powiedzieć, czym jest. Kiedy patrzysz wprost, widzisz światło. Kiedy odwracasz wzrok - wiesz, że ono patrzy na ciebie.)
+> (Wiesz naraz kilka rzeczy, o które nie pytałeś. Odsuwasz je, zanim się ułożą w zdania.)
+
+heartAsk = Co zrobić z Sercem?
+heartChoices.zniszczyc = Zniszczyć Serce
+heartChoices.straznik = Zostać strażnikiem
+heartChoices.uwolnic = Uwolnić prawdę dla wszystkich
+heartChoices.zapieczetowac = Zapieczętować je - z zasadami
+heartChoices.wait = Jeszcze nie
+heartConfirm = Tego nie da się cofnąć. Na pewno?
+heartYes = Tak
+heartNo = Nie, jeszcze nie
+guardianWho = Kto zostanie strażnikiem?
+guardianHero = Ja
+guardianBorgar = Borgar
+guardianAmbrozy = Ambroży
+[heartAfter.zniszczyc]
+> (Na cokole leżą ciemne odłamki. Nie świecą. Nic nie mówią.)
+
+[heartAfter.straznik]
+> (Kamienna ława przed Sercem jest zajęta. Strażnik nie podnosi głowy.)
+
+[heartAfter.uwolnic]
+> (Cokół jest pusty. Światło poszło w górę i już nie wróci.)
+
+[heartAfter.zapieczetowac]
+> (Serce śpi pod kamienną pieczęcią. Na pieczęci wyryto: JEDNO PYTANIE. RAZ W ROKU. PRZY ŚWIADKACH.)
+
+[heartAfterGuardian.hero]
+> (Kamienna ława przed Sercem czeka na ciebie. Raz w roku wolno ci wyjść na górę - i zawsze wracasz.)
+
+[heartAfterGuardian.borgar]
+Nie pytaj. ...Dobra, jedno powiem: tu na dole przynajmniej nikt nie zamawia na krechę.
+
+[heartAfterGuardian.ambrozy]
+Cztery i dwa... siedem... Ciii. Liczę. Nikt nie odwołał warty, więc liczę.
+
+endTitle = KONIEC
+endAsk = Co dalej?
+endContinue = Wrócić do gry (tawerna, następny dzień)
+endTitleScreen = Do ekranu tytułowego
+
+# ======================================================================== ENDINGS (zakonczenia)
+# „Serce zniszczone”
+zakonczenia.zniszczyc.title = Serce zniszczone
+[zakonczenia.zniszczyc.lines]
+Uderzasz raz. Światło pęka jak lód na wiosnę - i przez jedną chwilę wiesz wszystko. Potem nic.
+Gdzieś wysoko, w piwnicy tawerny, Borgar budzi się w nocy i nie pamięta, po co wstał.
+Na kontynencie wojna trwa dalej. Nikt już nie dostanie pewności. Wszyscy muszą zgadywać - jak przedtem.
+Wracasz na górę z pustymi rękami. Pierwszy raz od dawna niczego nie musisz wiedzieć.
+
+# „Nowy strażnik”
+zakonczenia.straznik.title = Nowy strażnik
+[zakonczenia.straznik.guardian.hero]
+Siadasz na kamiennej ławie przed Sercem. Jest zimna, jakby czekała na ciebie od trzystu lat.
+Raz w roku ktoś zejdzie i zada jedno pytanie. Ty zdecydujesz, ile prawdy udźwignie.
+Na górze życie toczy się bez ciebie. Borgar stawia na barze kufel dla kogoś, kto nie przychodzi.
+Uczysz się milczeć. Uczysz się nie pytać.
+
+[zakonczenia.straznik.guardian.borgar]
+Borgar siada na kamiennej ławie. „Ktoś z rodu musiał wrócić na wartę” - mówi. „Ja przynajmniej wiem, czego nie chcę wiedzieć.”
+Raz w roku ktoś zejdzie i zada jedno pytanie. Borgar odpowie tyle, ile trzeba - ani słowa więcej.
+Warta idzie jak za zakonu: zmiana co trzy dni. Co trzecią noc Borgar zamyka wcześniej i schodzi na dół. Nad barem wisi pusty gwóźdź po połówce klucza.
+
+[zakonczenia.straznik.guardian.ambrozy]
+Ambroży schodzi, choć kolana bolą go przy każdym stopniu. „Nikt nie odwołał warty” - mówi i siada przed Sercem.
+Raz w roku dzwon na górze uderzy siedem razy. Ambroży nauczył cię rytmu - w dni jego warty dzwonisz ty.
+Warta idzie jak za zakonu: zmiana co trzy dni. Miasto jeszcze nie wie, czego mu brakuje, kiedy dzwonnica milczy.
+
+# „Prawda dla wszystkich”
+zakonczenia.uwolnic.title = Prawda dla wszystkich
+[zakonczenia.uwolnic.lines]
+Otwierasz Serce jak okno. Światło idzie w górę - przez sto pięter, przez piwnicę, przez deski tawerny.
+Rano całe miasto wie wszystko o wszystkich.
+Nikt nie krzyczy. Ludzie po prostu przestają się do siebie odzywać.
+Po tygodniu na rynku stoją puste stragany. Prawda nikogo nie uczyniła szczerym - tylko samotnym.
+Ty też wiesz wszystko. Także to, czego nie chciałeś.
+
+# „Pieczęć z zasadami”
+zakonczenia.zapieczetowac.title = Pieczęć z zasadami
+[zakonczenia.zapieczetowac.lines]
+Zamykasz Serce. Nie na zawsze - na rok.
+Spisujesz zasady na nowo: jedno pytanie, przy świadkach, zapisane w księdze. Ale tym razem księga zostaje na górze, u ludzi.
+Twierdza znów odmierza prawdę. Nikomu jej nie zabraniasz - pilnujesz tylko, żeby nikt nie wziął więcej, niż uniesie.
+To nie jest szczęśliwe zakończenie. To uczciwe.
+
+# ======================================================================== EPILOGUE (epilog)
+epilog.allLocks = Trzy zamki otworzyły się przed tobą - klucz Borgara, dzwon Ambrożego, pieśń Melii. Na górze ktoś ci zaufał. Zabierasz to ze sobą.
+epilog.opinionHigh = W miasteczku mówią o tobie dobrze. Kiedy wrócisz, będzie do kogo wrócić.
+epilog.opinionLow = W miasteczku mało kto pyta, gdzie byłeś.
+epilog.water = Woda znów płynie pod rynek - mniej, niż by chcieli, ale płynie.
+epilog.ambrozyBook = Ambroży trzyma Księgę sygnałów na kolanach. Siódme uderzenie znów coś znaczy.
+epilog.island.pustelnia.kroniki = Brat Kleofas skończył odpis „Kroniki upadku”. Leży w skryptorium na klifie - dla każdego, kto wejdzie po schodach.
+epilog.island.pustelnia.dzwon = W wieży skryptorium na klifie wisi serce dzwonu. W Wigilię o północy bije siedem razy, a brat Kleofas czeka na jedno pytanie.
+epilog.island.kruk = {imie} siedział na grzędzie, kiedy wróciłeś. Jakby wiedział, że wrócisz.
+epilog.island.krukStraznik = {imie} co rano siada na kracie w piwnicy tawerny i czeka.
+epilog.island.latarnia.zniszczyc = Latarnia na przylądku świeci dalej, ale soczewka ślepnie: we mgle Bazyli widzi już tylko mgłę.
+epilog.island.latarnia.zapieczetowac = Bazyli widzi w soczewce tylko w Noc Pytania - raz w roku, jak każe reguła zakonu.
+epilog.island.latarnia.uwolnic = Bazyli zasłonił soczewkę płótnem. Mówi, że prawdy jest teraz dość na całą wyspę - nie musi jej wypatrywać we mgle.
+epilog.island.latarnia.rozbita = Bazyli pali ogień w latarni za pękniętym szkłem i nigdy już nie zagląda w mgłę.
+epilog.island.latarnia.sprzedana = Pusty pierścień w laternie przypomina Bazylemu, że Czarne Oczy wiedziały o jedną noc więcej.
+epilog.island.latarnia.zgasla = Latarnia na przylądku zgasła na dobre. Rybacy wracają przed zmierzchem.
+epilog.island.garnizon.klos = Kwatermistrza Kłosa odesłano promem w kajdanach. Skup w garnizonie nad zatoką płaci teraz uczciwie.
+epilog.island.garnizon.nasz = Żołnierze z garnizonu nad zatoką salutują ci na drodze. Rotmistrz mówi o tobie „nasz”.
+epilog.island.garnizon.wrog = Patrol z garnizonu wciąż zatrzymuje cię na drodze. Rotmistrz ma długą pamięć.
+epilog.island.wrak.ally = Eryk Sowa - Ansgar Wiel - został na wyspie. Rysuje mapy dla rybaków z przystani i nikomu nie mówi, skąd zna te wody.
+epilog.island.wrak.given = Rozbitka z wraku zabrał garnizon. Melia nie śpiewa już wesołych piosenek.
+epilog.island.wrak.fled = Eryk Sowa odpłynął kutrem Rocha. Czasem przychodzi list bez podpisu, z rysunkiem kruka w rogu.
+epilog.island.cysterna.galaz = Gałąź dworska cysterny została zamknięta. Pierwszy raz od stu lat dwór czeka na deszcz jak wszyscy.
+epilog.island.cysterna.rynny = Rynny zakonu na Urwisku są czyste. Po każdym deszczu stara cysterna pije razem z miastem.
+epilog.island.cysterna.otwarta = Stara cysterna zakonu znów zbiera deszcz - głęboko pod ziemią, tam gdzie nikt jej nie widzi.
+
+# ======================================================================== WHISPERS (szepty)
+[szepty]
+...nie odwracaj się...
+Wiesz już. Zawsze wiedziałeś.
+Zapytaj. Tylko jedno pytanie...
+Kto schodzi, ten pyta.
+Oni na górze też kłamią.
+Policz, ile kosztuje prawda.
+Za tobą ktoś idzie. To ty.
+Dlaczego tu zszedłeś? Naprawdę?
+Ciepło... coraz cieplej...
+Nie odpowiadaj.
+Twoje imię brzmi tu inaczej.
+Jeszcze jedno piętro. Jeszcze jedno.
+Ile razy już tu byłeś?
+Wróć na górę. Albo zostań.
+Ktoś cię kocha. Ktoś cię zdradzi. Który to który?
+...siedem... siedem...
+
+# ======================================================================== APPARITIONS (zjawy)
+zjawy.0.name = Borgar
+zjawy.0.line = Wracaj na górę. Zawsze wracaj na górę.
+zjawy.1.name = Melia
+zjawy.1.line = Nie tę zwrotkę... nie tę.
+zjawy.2.name = Ozzy
+zjawy.2.line = Mówiłem ci. Mówiłem wszystkim.
+zjawy.3.name = Dziadek Stach
+zjawy.3.line = Wnusiu? Co ty tu robisz tak głęboko?
+zjawy.4.name = Hanka
+zjawy.4.line = Weź bochenek. Zostało.
+zjawy.5.name = Ambroży
+zjawy.5.line = Siedem... liczyłeś? Siedem?
+zjawy.6.name = Grum
+zjawy.6.line = Nie patrz na mnie tak.
+zjawy.7.name = Feliks
+zjawy.7.line = Nikt nie musi wiedzieć.
+zjawy.8.name = Lord Zaleski
+zjawy.8.line = Mówiłem: najpierw do mnie.
+zjawy.9.name = Tadek
+zjawy.9.line = Za ciężki ten klucz. Za ciężki.
+zjawy.10.name = Ludmiła
+zjawy.10.line = Ciii... Ela śpi.
+zjawy.11.name = Kuba
+zjawy.11.line = Wody? Nie mam już wody.
+
+# ======================================================================== TRUTH_WHO (prawdaKto)
+prawdaKto.borgar = Borgar
+prawdaKto.melia = Melia
+prawdaKto.ozzy = Ozzy
+prawdaKto.grum = Grum
+prawdaKto.piekarka = Hanka Mączna
+prawdaKto.woziwoda = Kuba Woziwoda
+prawdaKto.feliks = Feliks
+prawdaKto.dzwonnik = Ambroży
+prawdaKto.kowal = Tadek Młot
+prawdaKto.dziadek = Dziadek Stach
+prawdaKto.kapral = Kapral Wit
+prawdaKto.ludmila = Ludmiła
+prawdaKto.lord = Lord Zaleski
+prawdaKto.soltys = Sołtys Bronisław
+prawdaKto.kupiec = Baltazar Vey
+prawdaKto.garbarz = Ignac
+prawdaKto.rafal = Rafał
+prawdaKto.kot = Mruczek
+prawdaKto.hero = ty
+prawdaKto.straznik = strażnik, który pytał ponad miarę
+
+# ======================================================================== NOTES (notatki)
+# „Spis piwnicy”
+notatki.1.title = Spis piwnicy
+notatki.1.where = kartka przybita do beczki
+notatki.1.text = Wino - czterdzieści beczek. Zboże - dwanaście worków. Łój - trzy skrzynie.\nKlucz u kasztelana. Kto bierze, ten wpisuje.\nKto nie wpisze, ten tłumaczy się przeorowi.
+# „Brat Jarosz”
+notatki.2.title = Brat Jarosz
+notatki.2.where = notatka na skrawku pergaminu
+notatki.2.text = Brat Jarosz znowu zszedł niżej bez latarni. Mówi, że na dole i tak jest jasno.\nPrzeor kazał mu pościć trzy dni. Jarosz się śmiał - że już wie, ile wytrzyma.
+# „Napis w murze”
+notatki.3.title = Napis w murze
+notatki.3.where = litery wyryte w kamieniu
+notatki.3.text = NIE PYTAJ O TO, CZEGO NIE CHCESZ WIEDZIEĆ.\n\nPod spodem, mniejszymi literami, inną ręką:\n...a jeśli chcesz, pytaj raz w roku. Nie częściej.
+# „Rok trzydziesty drugi straży”
+notatki.4.title = Rok trzydziesty drugi straży
+notatki.4.where = zapiski kronikarza
+notatki.4.text = Nowicjusze pytali o pogodę na zbiory. Odpowiedź była dobra, żniwa też.\nDwóch płakało potem do rana. Żaden nie chciał powiedzieć dlaczego.
+# „Rozkaz o zmianach warty”
+notatki.5.title = Rozkaz o zmianach warty
+notatki.5.where = kartka pod kamieniem
+notatki.5.text = Straż przy schodach zmieniamy co trzy dni, nie co siedem.\nKto stoi dłużej, zaczyna słyszeć pytania, których nikt nie zadał.
+# „Kasztelan Kowal”
+notatki.6.title = Kasztelan Kowal
+notatki.6.where = zatarty napis nad niszą
+notatki.6.text = Z rozkazu kasztelana Kowala zamurowano boczne korytarze.\nZa dużo ich było - za dużo dróg w dół.\nKowale kują zamki. Kowale trzymają klucze.
+# „Liczenie stopni”
+notatki.7.title = Liczenie stopni
+notatki.7.where = rysy na ścianie, jak u więźnia
+notatki.7.text = Liczę stopnie, żeby nie myśleć.\nCzterysta dwanaście do dziesiątej bramy.\nTrzeci od góry jest pusty. Wiedzą o tym tylko ci, którzy śpiewają.
+# „Straż dziesiątej bramy”
+notatki.8.title = Straż dziesiątej bramy
+notatki.8.where = list bez podpisu
+notatki.8.text = Straż na dziesiątym nie śpi i nie je. Zbroja pamięta słowa, które jej daliśmy.\nKto zapomni słów, niech nie schodzi.\nKto ich nigdy nie znał - niech zawróci, póki może.
+# „Jeszcze jedno pytanie”
+notatki.9.title = Jeszcze jedno pytanie
+notatki.9.where = pomięta kartka, pismo się trzęsie
+notatki.9.text = Jeszcze jedno. Tylko jedno. Wiem, że mój rok jeszcze nie minął.\nAle muszę wiedzieć, czy ona... Czy on mnie zdradzi... Czy twierdza...\nJedno. Potem już nigdy.
+# „Rozpiska cel”
+notatki.11.title = Rozpiska cel
+notatki.11.where = tabliczka przy drzwiach
+notatki.11.text = Cela pierwsza - brat furtian. Druga i trzecia - nowicjusze. Czwarta - brat kucharz.\nCela siódma - pusta.\nNikt nie chce spać tam, gdzie spał brat Dobiesz.
+# „Kuchnia zakonu”
+notatki.12.title = Kuchnia zakonu
+notatki.12.where = kartka nad paleniskiem
+notatki.12.text = Na dzień: dwie miski kaszy, chleb, kubek wody z cysterny.\nW post - sama woda.\nWoda jest święta, bo jest jej mało. Kto ją rozleje, ten nosi wiadra przez tydzień.
+# „Brat furtian”
+notatki.13.title = Brat furtian
+notatki.13.where = zapiski przy schodach
+notatki.13.text = Kto schodzi niżej niż kaplica, wpisuje się u mnie.\nKto nie wraca do wieczerzy, temu zapalam świecę.\nWczoraj zapaliłem trzy.
+# „Reguła milczenia”
+notatki.14.title = Reguła milczenia
+notatki.14.where = napis nad drzwiami refektarza
+notatki.14.text = W REFEKTARZU MILCZYMY.\nNie dlatego, że słowa grzeszą.\nDlatego, że pytania same się rodzą, kiedy się mówi.
+# „Losowanie”
+notatki.15.title = Losowanie
+notatki.15.where = kartka w pustym dzbanie
+notatki.15.text = Kto zada pytanie w tym roku, rozstrzyga los: kamyki w dzbanie, jeden czarny.\nBrat Sulisław wyciągnął czarny trzeci raz z rzędu. Przeor kazał losować jeszcze raz.\nSulisław płakał. Z ulgi.
+# „Pytania odrzucone”
+notatki.16.title = Pytania odrzucone
+notatki.16.where = lista w księdze, przekreślona
+notatki.16.text = Czy wojna dojdzie do wyspy? - odrzucone, za duże.\nCzy moja matka żyje? - odrzucone, nie dla zakonu.\nGdzie zgubiłem nóż? - odrzucone, za małe.\nPrzeor mówi: pytanie ma ważyć tyle, ile człowiek udźwignie.
+# „Kapelan do nowicjuszy”
+notatki.17.title = Kapelan do nowicjuszy
+notatki.17.where = kazanie zapisane na marginesie
+notatki.17.text = Nie bójcie się ciemności na dole. Ciemność niczego wam nie powie.\nBójcie się światła.
+# „Dzwon na górze”
+notatki.18.title = Dzwon na górze
+notatki.18.where = kartka przybita do drzwi celi
+notatki.18.text = Gdy dzwon uderzy siedem razy, kto ma prawo pytać, schodzi.\nReszta zostaje w celach i nie wygląda przez drzwi.\nTaka jest umowa. Nie my ją wymyśliliśmy.
+# „Skarga brata kucharza”
+notatki.19.title = Skarga brata kucharza
+notatki.19.where = kartka w spiżarni
+notatki.19.text = Znowu ktoś wyjadł miód ze spiżarni. Znowu nikt nie wie kto.\nW zakonie, który strzeże prawdy!\nWstyd. Pytam: kto? I nikt nie chce wiedzieć.
+# „Spis wody”
+notatki.21.title = Spis wody
+notatki.21.where = tabliczka przy cysternie
+notatki.21.text = Poziom w cysternie: dwa łokcie mniej niż wiosną.\nKanał pod rynek otwieramy co trzeci dzień.\nMłyn dostaje resztę. Jeśli zostanie reszta.
+# „Sygnał wody”
+notatki.22.title = Sygnał wody
+notatki.22.where = rozkaz na ścianie śluzy
+notatki.22.text = Cztery i dwa - woda idzie.\nKiedy dzwon tak bije, brat od zasuwy schodzi i otwiera kanał.\nBez sygnału zasuwa zostaje zamknięta. Woda nie płynie sama do tych, którzy o nią nie proszą.
+# „Brat Dobiesz”
+notatki.23.title = Brat Dobiesz
+notatki.23.where = list bez adresata
+notatki.23.text = Dobiesz zapytał mnie przy wieczerzy, czy wiem, co o mnie myśli przeor.\nNie wiem. Nie chcę wiedzieć.\nDobiesz się śmiał: - Ja już wiem. I o tobie też.
+# „Lista kasztelanów (odpis)”
+notatki.24.title = Lista kasztelanów (odpis)
+notatki.24.where = zwój w skrzyni
+notatki.24.text = ...Radomił z Kruczych Skał. Sobiesław z Brodu. Bogumił z rodu Kowali, kasztelan i klucznik.\nKlucz nosi przy sobie. Słowa zna na pamięć.\nNastępny - z tego samego rodu. Jeśli ród przetrwa.
+# „Rok bez pytania”
+notatki.25.title = Rok bez pytania
+notatki.25.where = kronika, jedna linijka
+notatki.25.text = Tego roku nikt nie zapytał. Los padł na brata, który umarł zimą.\nPrzeor powiedział, że to też jest odpowiedź.
+# „Modlitwa nad cysterną”
+notatki.26.title = Modlitwa nad cysterną
+notatki.26.where = słowa wydrapane przy misie
+notatki.26.text = Daj nam wody tyle, ile trzeba.\nDaj nam prawdy tyle, ile uniesiemy.\nReszty nie dawaj.
+# „List do domu”
+notatki.27.title = List do domu
+notatki.27.where = niewysłany list nowicjusza
+notatki.27.text = Mamo, jest tu ciepło i sucho. Jemy dobrze.\nNie pytaj, czym się zajmujemy - i tak nie mógłbym powiedzieć.\nMógłbym tylko zapytać. Ale o ciebie nie wolno mi pytać.
+# „Rozkaz przeora”
+notatki.28.title = Rozkaz przeora
+notatki.28.where = pieczęć na drzwiach dolnej kaplicy
+notatki.28.text = Zamknąć dolną kaplicę. Brat Dobiesz schodził tamtędy nocą.\nKto go spotka na schodach, niech nie odpowiada, gdy będzie pytał.\nNawet jeśli zapyta o imię.
+# „Ostatni dzień kwater”
+notatki.29.title = Ostatni dzień kwater
+notatki.29.where = kartka na pustym łóżku
+notatki.29.text = Wynieśliśmy z cel wszystko, co dało się unieść.\nReszta zostaje dla tych, którzy przyjdą po nas.\nNiech myślą, że żyliśmy biednie. To prawda.
+# „Znak zwiadowcy”
+notatki.31.title = Znak zwiadowcy
+notatki.31.where = kreda na ścianie
+notatki.31.text = Tu kończą się mury zakonu. Dalej skała robi, co chce.\nIdźcie przy lewej ścianie. Prawa kłamie.
+# „Mapa zwiadowcy”
+notatki.32.title = Mapa zwiadowcy
+notatki.32.where = strzęp mapy
+notatki.32.text = Rzeka płynie z północy na południe. Albo odwrotnie.\nKompas tu kręci się w kółko - jakby i on wolał nie wiedzieć.
+# „O grzybach”
+notatki.33.title = O grzybach
+notatki.33.where = kartka w sakwie zwiadowcy
+notatki.33.text = Szare jeść można. Fioletowych nie ruszać.\nBrat Bogusz zjadł jednego i przez dwa dni opowiadał nam nasze sny. Wszystkie się zgadzały.
+# „Ruda”
+notatki.34.title = Ruda
+notatki.34.where = zapiski kowala zakonu
+notatki.34.text = W ścianach jest żelazo. Kowale zakonu brali je stąd na zamki i klucze.\nŻelazo z dołu jest cięższe, niż powinno. Kowal mówi, że pamięta, skąd je wzięto.
+# „Nie pić z rzeki”
+notatki.35.title = Nie pić z rzeki
+notatki.35.where = wyryte nad brzegiem
+notatki.35.text = NIE PIĆ Z RZEKI.\nKto pił, ten słyszał potem płynącą wodę w każdej ciszy.\nWodę bierzcie z góry, w bukłakach. Każda kropla z góry jest warta więcej niż cała rzeka.
+# „Kamieniarze”
+notatki.36.title = Kamieniarze
+notatki.36.where = ślady dłut i kilka słów
+notatki.36.text = Kamień na twierdzę ciosano tu, pod ziemią, i wyciągano szybem.\nNiektóre ślady dłut są starsze niż zakon.\nStarsze niż kamieniarze? Tego nie wiem.
+# „Nietoperze”
+notatki.37.title = Nietoperze
+notatki.37.where = kartka zwiadowcy
+notatki.37.text = Gdy nietoperze zrywają się naraz, gaś pochodnię i licz do stu.\nOne wiedzą, kiedy coś idzie. My dowiadujemy się za późno.
+# „Echo”
+notatki.38.title = Echo
+notatki.38.where = dwie linijki na skale
+notatki.38.text = Zawołałem swoje imię.\nEcho wróciło z cudzym.
+# „Lina”
+notatki.39.title = Lina
+notatki.39.where = kartka przy wbitym haku
+notatki.39.text = Brat Zbysław poszedł dalej sam. Zostawił linę przywiązaną do skały.\nLina jest. Zbysława nie ma.\nLina jest ciepła.
+# „Kartka kopacza”
+notatki.41.title = Kartka kopacza
+notatki.41.where = świeży papier, nie zakonny
+notatki.41.text = Płacą za każdy sążeń. Nie mówią, kto płaci.\nMówią tylko: szukajcie drzwi pod skałą.\nJakby skała miała drzwi.
+# „Znak na ścianie”
+notatki.42.title = Znak na ścianie
+notatki.42.where = kreda, świeża
+notatki.42.text = Strzałka w dół i trzy kreski.\nKtoś tu był przede mną. Niedawno.\nPod strzałką, inną ręką: NIE TĘDY.
+# „Milcząca”
+notatki.43.title = Milcząca
+notatki.43.where = zapiski zwiadowcy zakonu
+notatki.43.text = Rzeka nie ma nazwy. Zakon nazywał ją Milczącą,\nbo tam, gdzie jest najgłębsza, nie szumi wcale.
+# „Brat od pochodni”
+notatki.44.title = Brat od pochodni
+notatki.44.where = kartka w pustej skrzynce
+notatki.44.text = Każda pochodnia, którą tu zapalisz, zgaśnie po trzech dniach.\nZostaw następną dla tego, kto pójdzie po tobie.\nTak robimy. Dlatego ktoś jeszcze wraca.
+# „Kopacz, który przestał mówić”
+notatki.45.title = Kopacz, który przestał mówić
+notatki.45.where = zapiski kopacza
+notatki.45.text = Jan dotknął ściany, tam gdzie świeciła. Od wtedy siedzi i patrzy.\nKiedy pytamy, co widział, kręci głową.\nKiedy pytamy, czy nas słyszy - kiwa.
+# „Kryształy”
+notatki.46.title = Kryształy
+notatki.46.where = dopisek na mapie kopaczy
+notatki.46.text = Kryształy rosną tylko tam, gdzie ktoś kiedyś płakał - tak mówił stary kopacz.\nGłupota. Ale jest ich tu dużo.
+# „Sieci”
+notatki.47.title = Sieci
+notatki.47.where = kartka owinięta pajęczyną
+notatki.47.text = Pajęczyny są tu grube jak liny. Nie przecinać nożem - ostrze grzęźnie.\nPalić. I nie patrzeć w górę, kiedy się pali.
+# „Rozkaz (strzęp)”
+notatki.48.title = Rozkaz (strzęp)
+notatki.48.where = podarty list z obcą pieczęcią
+notatki.48.text = ...znaleźć wejście za każdą cenę. Świadków nie...\n...drzwi pod skałą mają być otwarte przed...\nReszta zamoczona w rzece.
+# „Ostatni zwiadowca”
+notatki.49.title = Ostatni zwiadowca
+notatki.49.where = kartka wciśnięta w szczelinę
+notatki.49.text = Dalej nie ma już ścian zakonu. Są inne. Starsze.\nKtoś je wyrównał, zanim urodził się ktokolwiek z nas.\nZanim urodził się zakon.
+# „Uczony zakonu”
+notatki.51.title = Uczony zakonu
+notatki.51.where = zapiski na woskowej tabliczce
+notatki.51.text = Te ściany nie są nasze. Nasi kamieniarze nie znali takich łuków.\nZakon nie zbudował twierdzy na pustym miejscu. Zbudował ją nad czymś.
+# „Pismo”
+notatki.52.title = Pismo
+notatki.52.where = przerysowane znaki
+notatki.52.text = Znaki biegną w trzech rzędach. Jeden rząd powtarza się co siedem znaków.\nSiedem - jak uderzenia dzwonu.\nPrzypadek? Przeor mówi, że tu nie ma przypadków.
+# „Twarze”
+notatki.53.title = Twarze
+notatki.53.where = kartka uczonego
+notatki.53.text = Na każdej płaskorzeźbie postacie mają zatarte twarze.\nNie zniszczone przez czas. Zatarte dłutem. Starannie, jedna po drugiej.
+# „Pierwsza myśl”
+notatki.54.title = Pierwsza myśl
+notatki.54.where = woskowa tabliczka brata Wincentego
+notatki.54.text = Brat Wincenty: to była świątynia.\nLudzie przychodzili tu modlić się do światła i odchodzili mądrzejsi.
+# „Druga myśl”
+notatki.55.title = Druga myśl
+notatki.55.where = dopisek brata Radosta
+notatki.55.text = Brat Radost: to nie świątynia, tylko straż. Tacy jak my, tylko dawniej.\nNas też ktoś kiedyś znajdzie i nazwie świątynią.
+# „Trzecia myśl”
+notatki.56.title = Trzecia myśl
+notatki.56.where = zdanie zamazane węglem
+notatki.56.text = Nikt z nas nie chce powiedzieć głośno trzeciej możliwości.\nZapisuję ją tu i zamazuję:\n(dalej tylko czarna smuga węgla)
+# „Kości”
+notatki.57.title = Kości
+notatki.57.where = zapiski uczonego
+notatki.57.text = Kości tutaj nie leżą jak w krypcie.\nLeżą jak ludzie, którzy usiedli i już nie wstali.\nWszyscy twarzą w tę samą stronę. W dół.
+# „Dłuto z brązu”
+notatki.58.title = Dłuto z brązu
+notatki.58.where = kartka owinięta wokół dłuta
+notatki.58.text = Znaleźliśmy dłuto z brązu. Ostrze wyszczerbione,\njakby ktoś zacierał nim coś twardszego niż kamień.
+# „Rachunek lat”
+notatki.59.title = Rachunek lat
+notatki.59.where = liczby na marginesie
+notatki.59.text = Przeor kazał liczyć warstwy kurzu na posadzce.\nWyszło więcej lat, niż ma wyspa.\nPrzeor kazał przestać liczyć.
+# „Płaskorzeźba z misą”
+notatki.61.title = Płaskorzeźba z misą
+notatki.61.where = opis uczonego
+notatki.61.text = Postać nalewa wodę do misy przed światłem.\nNastępna scena: misa pusta, postać leży.\nNastępna: inna postać nalewa wodę.
+# „Imię”
+notatki.62.title = Imię
+notatki.62.where = dwie ręce na jednej kartce
+notatki.62.text = Przy każdej scenie powtarza się jedno słowo.\nWincenty czyta je: „Pierwszy”. Radost czyta: „Ostatni”.\nRóżnica jednej kreski.
+# „Kamienne straże”
+notatki.63.title = Kamienne straże
+notatki.63.where = zapiski uczonego
+notatki.63.text = Posągi przy przejściach mają oczy zwrócone do środka, nie na zewnątrz.\nNie pilnowały, żeby nikt nie wszedł.
+# „Ślady stóp”
+notatki.64.title = Ślady stóp
+notatki.64.where = kartka uczonego
+notatki.64.text = W kurzu ślady bosych stóp. Prowadzą w dół. Żaden nie wraca.\nŚlady są stare. Albo nie - kurz tu nie opada.
+# „Notatka przeora”
+notatki.65.title = Notatka przeora
+notatki.65.where = rozkaz z pieczęcią
+notatki.65.text = Nie przepisujcie tych znaków na górę.\nCo jest wyryte w kamieniu, niech zostanie w kamieniu.
+# „Sale”
+notatki.66.title = Sale
+notatki.66.where = plan narysowany palcem w sadzy
+notatki.66.text = Sale układają się w krąg, a krąg w spiralę.\nKażda następna jest trochę mniejsza. Jakby ktoś szedł w dół i za każdym razem brał ze sobą mniej.
+# „Brat Wincenty”
+notatki.67.title = Brat Wincenty
+notatki.67.where = zapiski brata Radosta
+notatki.67.text = Wincenty przestał spać. Mówi, że rozumie już połowę znaków.\nPytam, co mówią. Odpowiada: że nie powinienem rozumieć drugiej połowy.
+# „Pochodnie Pierwszych”
+notatki.68.title = Pochodnie Pierwszych
+notatki.68.where = kartka przy pustym koszu na ogień
+notatki.68.text = Kosze na ogień stoją tu wszędzie. Puste od wieków.\nZapaliliśmy jeden. Płonął do rana bez drewna. Zgasiliśmy go wodą ze święconego dzbana.
+# „Ołtarz bez boga”
+notatki.69.title = Ołtarz bez boga
+notatki.69.where = zapiski uczonego
+notatki.69.text = Ołtarz jest pusty. Na nim wgłębienie - jakby coś tu kiedyś leżało,\na potem ktoś to zniósł niżej.
+# „Pęknięcie”
+notatki.71.title = Pęknięcie
+notatki.71.where = kartka uczonego
+notatki.71.text = Tu ruiny się kończą. Dalej ściany wyglądają jak...\nnie wiem. Jak pamięć o ścianach.
+# „Ostatnia płaskorzeźba”
+notatki.72.title = Ostatnia płaskorzeźba
+notatki.72.where = zapiski brata Radosta
+notatki.72.text = Postać stoi sama przed światłem. Twarz nietknięta.\nWincenty mówi, że to nie jest żadna postać. Że to my.
+# „Zakaz”
+notatki.73.title = Zakaz
+notatki.73.where = rozkaz na drzwiach
+notatki.73.text = Od tego miejsca bracia schodzą tylko parami.\nJeden mówi. Drugi słucha, czy tamten mówi prawdę.
+# „Wincenty odszedł”
+notatki.74.title = Wincenty odszedł
+notatki.74.where = kartka zostawiona na posłaniu
+notatki.74.text = Nie szukajcie mnie.\nWiem, gdzie jestem. Pierwszy raz w życiu wiem.\n- W.
+# „Granica”
+notatki.75.title = Granica
+notatki.75.where = zapiski brata Radosta
+notatki.75.text = Za tą salą zaczyna się to, co przeor nazywa Warstwą.\nPowietrze jest ciepłe. Słychać głosy - zawsze w języku tego, kto słucha.
+# mówi: borgar, „Prawda o Borgarze”
+notatki.76.title = Prawda o Borgarze
+notatki.76.where = kartka zapisana twoim pismem, choć nic nie pisałeś
+notatki.76.text = Borgar co noc schodzi do piwnicy i staje przed kratą.\nRano tego nie pamięta. Przestawia beczki, żeby mieć powód, dla którego tam był.
+# mówi: melia, „Prawda o Melii”
+notatki.77.title = Prawda o Melii
+notatki.77.where = kartka zapisana twoim pismem
+notatki.77.text = Melia zna jeszcze jedną zwrotkę. Ósmą.\nNigdy jej nie zaśpiewała - za każdym razem, gdy zaczyna, zapomina melodii.
+# mówi: ozzy, „Prawda o Ozzym”
+notatki.78.title = Prawda o Ozzym
+notatki.78.where = kartka zapisana twoim pismem
+notatki.78.text = Ozzy nie jest tak pijany, jak udaje.\nPije, żeby nikt nie pytał, skąd wie to, co wie.
+# mówi: grum, „Prawda o Grumie”
+notatki.79.title = Prawda o Grumie
+notatki.79.where = kartka zapisana twoim pismem
+notatki.79.text = Grum nosi w sakwie list, którego nie otworzył od roku.\nWie, co w nim jest. Dlatego go nie otwiera.
+# mówi: piekarka, „Prawda o Hance”
+notatki.81.title = Prawda o Hance
+notatki.81.where = kartka zapisana twoim pismem
+notatki.81.text = Hanka Mączna piecze codziennie o jeden bochenek za dużo.\nOd dnia, w którym ktoś przestał po niego przychodzić.
+# mówi: woziwoda, „Prawda o Kubie”
+notatki.82.title = Prawda o Kubie
+notatki.82.where = kartka zapisana twoim pismem
+notatki.82.text = Kuba Woziwoda nie umie pływać i boi się głębokiej wody.\nWozi ją całe życie.
+# mówi: feliks, „Prawda o Feliksie”
+notatki.83.title = Prawda o Feliksie
+notatki.83.where = kartka zapisana twoim pismem
+notatki.83.text = Feliks zapisuje każdą beczkę wody, którą sprzedał.\nNa osobnej kartce liczy, ile kosztowały miasto. Ta druga kartka jest dłuższa.
+# mówi: dzwonnik, „Prawda o Ambrożym”
+notatki.84.title = Prawda o Ambrożym
+notatki.84.where = kartka zapisana twoim pismem
+notatki.84.text = Ambroży raz w życiu zadzwonił źle. Nikt tego nie zauważył.\nPamięta to każdej nocy, zanim zaśnie.
+# mówi: kowal, „Prawda o Tadku”
+notatki.85.title = Prawda o Tadku
+notatki.85.where = kartka zapisana twoim pismem
+notatki.85.text = Tadek kuje lepiej niż jego ojciec i dobrze o tym wie.\nPozwala staremu poprawiać swoją robotę, żeby ojciec miał po co przychodzić do kuźni.
+# mówi: dziadek, „Prawda o dziadku Stachu”
+notatki.86.title = Prawda o dziadku Stachu
+notatki.86.where = kartka zapisana twoim pismem
+notatki.86.text = Dziadek Stach bał się nie tylko Lorda.\nBał się, że kiedy dług zniknie, nikt już nie zapuka do jego drzwi.
+# mówi: kapral, „Prawda o kapralu Wicie”
+notatki.87.title = Prawda o kapralu Wicie
+notatki.87.where = kartka zapisana twoim pismem
+notatki.87.text = Kapral Wit śpi z mieczem pod poduszką.\nNie boi się wroga. Boi się swoich.
+# mówi: ludmila, „Prawda o Ludmile”
+notatki.88.title = Prawda o Ludmile
+notatki.88.where = kartka zapisana twoim pismem
+notatki.88.text = Ludmiła śpiewa kołysankę zza morza dopiero wtedy, gdy Ela już śpi.\nŚpiewa ją sobie.
+# mówi: lord, „Prawda o Lordzie”
+notatki.89.title = Prawda o Lordzie
+notatki.89.where = kartka zapisana twoim pismem
+notatki.89.text = Lord Zaleski boi się ciszy we dworze bardziej niż czegokolwiek.\nDlatego zawsze ktoś tam musi mówić - choćby on sam, do siebie.
+# mówi: soltys, „Prawda o sołtysie”
+notatki.91.title = Prawda o sołtysie
+notatki.91.where = kartka zapisana twoim pismem
+notatki.91.text = Sołtys Bronisław zna na pamięć, ile wiader daje studnia.\nLiczy je przed snem zamiast pacierza.
+# mówi: kupiec, „Prawda o Baltazarze”
+notatki.92.title = Prawda o Baltazarze
+notatki.92.where = kartka zapisana twoim pismem
+notatki.92.text = Baltazar Vey nie urodził się kupcem.\nLiczyć nauczył się tam, gdzie liczono ludzi. Nie mówi gdzie.
+# mówi: garbarz, „Prawda o Ignacu”
+notatki.93.title = Prawda o Ignacu
+notatki.93.where = kartka zapisana twoim pismem
+notatki.93.text = Ignac nie znosi zapachu skór.\nRobi to, bo robił to jego ojciec, a on nigdy nie zapytał, czy musi.
+# mówi: rafal, „Prawda o Rafale”
+notatki.94.title = Prawda o Rafale
+notatki.94.where = kartka zapisana twoim pismem
+notatki.94.text = Rafał widział przez chwilę to, czego dotknął jego towarzysz w skale.\nOd tamtej pory nie śpi pod ścianą.
+# mówi: kot, „Prawda o Mruczku”
+notatki.95.title = Prawda o Mruczku
+notatki.95.where = kartka zapisana twoim pismem, w rogu ślad łapy
+notatki.95.text = Mruczek schodził tu przed tobą. Wiele razy.\nKoty o nic nie pytają, więc nikt im niczego nie mówi.
+# mówi: hero, „Prawda o tobie”
+notatki.96.title = Prawda o tobie
+notatki.96.where = kartka zapisana twoim pismem
+notatki.96.text = Zszedłeś tu nie dla długu, nie dla pieniędzy i nie dla Borgara.\nZszedłeś, bo chciałeś wiedzieć. Tak samo zaczynał każdy z nich.
+# mówi: hero, „Prawda o kłamstwie”
+notatki.97.title = Prawda o kłamstwie
+notatki.97.where = kartka zapisana twoim pismem
+notatki.97.text = Ktoś na górze kłamie ci prosto w oczy. Nie powiem kto.\nI tak zaczniesz się zastanawiać. To też jest cena.
+# mówi: straznik, „Prawda o strażniku”
+notatki.98.title = Prawda o strażniku
+notatki.98.where = kartka zapisana twoim pismem
+notatki.98.text = Nikt nie wie, co zrobił strażnik, który pytał ponad miarę.\nMoże otworzył bramy. A może tylko przestał ich pilnować - bo nic już nie miało dla niego wagi.
+# mówi: hero, „Ostatnie schody”
+notatki.99.title = Ostatnie schody
+notatki.99.where = kartka zapisana twoim pismem
+notatki.99.text = Za następnymi drzwiami są trzy zamki: klucz, dzwon i pieśń.\nJeden to za mało. Trzy - więcej, niż ktokolwiek przed tobą przyniósł.
+# „Reguła straży dziesiątej bramy”
+notatki.10a.title = Reguła straży dziesiątej bramy
+notatki.10a.where = zwój na kamiennym cokole
+notatki.10a.text = Tu kończą się piwnice, a zaczyna straż.\nKto zszedł aż tutaj, niech wie: twierdza nie strzeże skarbu. Twierdza odmierza.\nJedno pytanie na rok. Zadane przy świadkach, zapisane w księdze.\nKto pyta ponad miarę, temu Serce odpowie na wszystko naraz - i nic już nie będzie miało dla niego wagi.
+# „Dziennik wartownika”
+notatki.10b.title = Dziennik wartownika
+notatki.10b.where = księga na pulpicie
+notatki.10b.text = Brat Dobiesz wrócił z dołu przed świtem, choć jego rok jeszcze nie minął.\nNie powiedział, o co pytał. Od tamtej pory nie gasi świec i nie zamyka drzwi.\nMówi, że nie ma już przed czym się chować. Przeor kazał zdjąć go z warty. Za późno.
+# „Napis nad windą”
+notatki.10c.title = Napis nad windą
+notatki.10c.where = litery wykute nad klatką
+notatki.10c.text = WINDA KASZTELANA.\nW dół - tylko dla straży.\nW górę - dla każdego, kto jeszcze chce wrócić.
+# „Ostatni wpis”
+notatki.10d.title = Ostatni wpis
+notatki.10d.where = kartka wciśnięta w szczelinę muru
+notatki.10d.text = Zamurowaliśmy przejścia i rozgłosiliśmy, że to przeklęta ruina. Niech myślą, że nic tu nie ma.\nZbroja zostaje na straży. Słowa zna tylko krew kasztelana - niech je powtarza, choćby jako żart przy piwie.\nNiech nikt nie pamięta, po co.
+# „Księga pytań”
+notatki.20a.title = Księga pytań
+notatki.20a.where = ciężka księga na pulpicie w kręgu
+notatki.20a.text = Rok po roku, imię i pytanie. Przy większości pytań - odpowiedź zakryta czarnym pasem atramentu.\nRok sto czwarty: brat Wszebor - „czy brat mój żyje?” Rok sto piąty: nikt. Rok sto szósty: brat Dobiesz - „czy twierdza przetrwa?”\nRok sto szósty, drugi wpis, inną ręką: brat Dobiesz. Trzeci wpis: brat Dobiesz. Dalej strony są wyrwane.
+# „Reguła rytuału”
+notatki.20b.title = Reguła rytuału
+notatki.20b.where = zwój wiszący przy krześle pytającego
+notatki.20b.text = Pytający siada w kręgu. Bracia stoją za kręgiem, plecami do światła.\nPytanie mówi się raz, głośno. Odpowiedź słyszy tylko pytający.\nKto wyjdzie z kręgu przed końcem, ten pytał na próżno. Kto zostanie po końcu - ten pyta dalej. Takiego trzeba wynieść.
+# „Przeor do kasztelana”
+notatki.20c.title = Przeor do kasztelana
+notatki.20c.where = list z pękniętą pieczęcią
+notatki.20c.text = Bogumile, zbroja w kaplicy znów się ruszała. Mówią, że to moja dawna zbroja i że pilnuje kręgu lepiej niż ja.\nNiech pilnuje. Ja już nie umiem odmawiać.\nZejdę na dół z ostatnimi. Klucz zostaw swojemu rodowi. Słowa też.
+# „Dziennik cysterny”
+notatki.30a.title = Dziennik cysterny
+notatki.30a.where = księga w niszy przy zasuwie
+notatki.30a.text = Wiosna: po brzegi. Lato: łokieć mniej. Jesień: dwa.\nKanał pod rynek otwarty co trzeci dzień, jak nakazano.\nOstatni wpis: zamykamy zasuwę na dobre. Nikt na górze nie będzie wiedział, skąd szła woda. Niech myślą, że ze studni.
+# „Zasuwa główna”
+notatki.30b.title = Zasuwa główna
+notatki.30b.where = litery wykute na zasuwie, pod krukiem
+notatki.30b.text = ZASUWA GŁÓWNA. CZTERY I DWA.\nOtwiera ją sygnał wody z dzwonu na górze, nie ręka.\nKto ją otworzy bez sygnału, ten zaleje rynek albo nie da nic - zasuwa sama wie, którą drogą puścić wodę.
+# „Gniazdo”
+notatki.30c.title = Gniazdo
+notatki.30c.where = kartka przy kościach, przegryziona
+notatki.30c.text = Szczury urosły od czasu, gdy cysterna wyschła. Piją z kałuży na dnie.\nNajwiększa siedzi w gnieździe z kości. Bracia mówią, że jest stara jak zakon.\nNie schodzić na dno w pojedynkę.
+# „Zwiadowcy przy brodzie”
+notatki.40a.title = Zwiadowcy przy brodzie
+notatki.40a.where = dziennik pod kamieniem
+notatki.40a.text = Bród na Milczącej - jedyne miejsce, gdzie da się przejść na drugi brzeg.\nPostawiliśmy most z lin. Pająki postawiły swój.\nNasz się trzyma. Na razie.
+# „Winda zwiadowców”
+notatki.40b.title = Winda zwiadowców
+notatki.40b.where = tabliczka przy kołowrocie
+notatki.40b.text = Szyb z czasów kamieniarzy. Kasztelan kazał go odkopać i zawiesić klatkę.\nŁańcuch jest jeden, od Ruin Zamku aż tutaj. Kto kręci kołowrotem, ten wraca.
+# „Obóz kopaczy”
+notatki.50a.title = Obóz kopaczy
+notatki.50a.where = kartka przy posłaniu
+notatki.50a.text = Szóstego dnia skończył się chleb. Siódmego - lampa.\nPrzekop doszedł do rzeki i tu się skończył. Od strony gór zawaliło się za nami.\nKto czyta, niech powie mojej żonie, że wrócę. Niech nie pyta, kiedy.
+# „Źródło”
+notatki.50b.title = Źródło
+notatki.50b.where = napis nad misą źródła
+notatki.50b.text = ŹRÓDŁO POD SKAŁĄ. Jedyna czysta woda pod twierdzą.\nTrzy czerpania na dzień - nie więcej. Kto zaczerpnie więcej, ten zamąci je dla wszystkich.\nZakon wpisał je do regestru. Kopacze nie umieli czytać.
+# „Zawał”
+notatki.50c.title = Zawał
+notatki.50c.where = ślady na belce
+notatki.50c.text = Belki pękły od strony gór. Za zawałem słychać kilofy - albo wodę.\nTunel kopaczy prowadzi stąd na wschód, do kopalni. Kiedyś znów się otworzy.
+# „Brama Pierwszych”
+notatki.60a.title = Brama Pierwszych
+notatki.60a.where = zapiski uczonego zakonu
+notatki.60a.text = Brama jest starsza niż wszystko, co znamy. Zakon nazwał ją Bramą Pierwszych, bo nie wiedział, jak ją nazwać.\nOdźwierny stoi przy niej, odkąd ktokolwiek pamięta. Zakon nigdy go nie ruszył.\nOn też nigdy nie ruszył zakonu. Do czasu.
+# „Napis nad bramą”
+notatki.60b.title = Napis nad bramą
+notatki.60b.where = dwa odczyty na jednej tabliczce
+notatki.60b.text = Odczyt brata Wincentego: TU ZACZYNA SIĘ ODPOWIEDŹ.\nOdczyt brata Radosta: TU KOŃCZY SIĘ PYTANIE.\nPrzeor: oba są złe. I oba prawdziwe.
+# „Sala płaskorzeźb”
+notatki.70a.title = Sala płaskorzeźb
+notatki.70a.where = opis uczonego
+notatki.70a.text = Siedem płaskorzeźb, jedna po drugiej. Ludzie schodzą, klękają przed światłem, wstają.\nNa szóstej nikt już nie wstaje. Na siódmej - ktoś schodzi znowu.\nNie umiemy powiedzieć, czy to opowieść o pierwszych, czy rada dla następnych.
+# „Wincenty o twarzach”
+notatki.70b.title = Wincenty o twarzach
+notatki.70b.where = pismo brata Wincentego, drżące
+notatki.70b.text = Już wiem, czemu zatarli twarze. Nie żeby ich nie poznano.\nŻeby nikt nie zobaczył na nich tego, co zobaczyli oni.\nAlbo żeby nie zobaczył siebie. Nie wiem. Jeszcze nie.
+# mówi: hero, „Sala echa”
+notatki.80a.title = Sala echa
+notatki.80a.where = słowa, które słyszysz, zanim je przeczytasz
+notatki.80a.text = Tu każde słowo wraca dwa razy. Raz takie, jakie je powiedziałeś.\nDrugi raz - takie, jakie je pomyślałeś.
+# „Ostatni zapis Radosta”
+notatki.80b.title = Ostatni zapis Radosta
+notatki.80b.where = kartka przygnieciona kamieniem
+notatki.80b.text = Doszedłem do sali, w której echo odpowiada.\nZadałem mu jedno pytanie. Odpowiedziało moim głosem i miało rację.\nWracam na górę. Jeśli nie wrócę - to też odpowiedź.
+# „Ostatnia straż”
+notatki.90a.title = Ostatnia straż
+notatki.90a.where = księga warty na stole
+notatki.90a.text = Warta przy Sercu: dwóch braci, zmiana co trzy dni. Nie patrzeć w dół. Nie odpowiadać.\nOstatni wpis: zostałem sam. Zmiany nie będzie.
+# „Ostatni przeor”
+notatki.90b.title = Ostatni przeor
+notatki.90b.where = list przybity nożem do belki
+notatki.90b.text = Zostaję. Ktoś musi.\nGdy przyjdzie następny, niech wie: nie byłem bohaterem. Byłem tym, który nie miał już dokąd wrócić.\nNie bądź taki jak ja. Miej dokąd wracać.
+# „Lista tych, co zeszli”
+notatki.90c.title = Lista tych, co zeszli
+notatki.90c.where = imiona wydrapane na ścianie
+notatki.90c.text = Jarosz. Dobiesz. Sulisław. Bogusz. Zbysław. Wincenty. Radost.\nPod spodem miejsce na jeszcze jedno imię - puste.\nKamień jest tam gładki, jakby ktoś często przesuwał po nim palcem.
+# „Napis nad drzwiami”
+notatki.100a.title = Napis nad drzwiami
+notatki.100a.where = litery nad ostatnimi drzwiami
+notatki.100a.text = TRZY ZAMKI: KLUCZ, DZWON I PIEŚŃ.\nKTO MA DWA, TEN WEJDZIE.\nKTO MA TRZY, TEN WYJDZIE.
+
+# ======================================================================== LOOT_NAMES (lupy)
+lupy.skrzynia = Skrzynia
+lupy.skrzynka = Skrzynka
+lupy.beczka = Beczka
+lupy.worek = Worek
+lupy.dzban = Dzban
+lupy.monety = Stare monety
+lupy.kosci = Szczątki strażnika
+lupy.grzyby = Grzyby
+lupy.wozek = Wózek kopaczy
+lupy.sakwa = Porzucona sakwa
+lupy.relikwiarz = Relikwiarz
+
+# ======================================================================== BOSSES (bossowie)
+bossowie.20.name = Przeor w zbroi
+bossowie.30.name = Królowa szczurów
+bossowie.40.name = Matka pająków
+bossowie.50.name = Topielec z głębiny
+bossowie.60.name = Kamienny Odźwierny
+bossowie.70.name = Zbroja bez herbu
+bossowie.80.name = Upiór pytającego
+bossowie.90.name = Ostatni Strażnik
+
+# ======================================================================== FLOORS (pietra)
+pietra.10.name = Strażnica
+pietra.20.name = Sala jednego pytania
+pietra.30.name = Wielka cysterna
+pietra.40.name = Bród Milczącej
+pietra.50.name = Przekop kopaczy
+pietra.60.name = Brama Pierwszych
+pietra.70.name = Sala płaskorzeźb
+pietra.80.name = Sala echa
+pietra.90.name = Ostatnia straż
+pietra.100.name = Komnata Serca
+
+# ======================================================================== BANDS (pasma)
+pasma.0.name = Piwnice zamku
+pasma.1.name = Kwatery i kaplica zakonu
+pasma.2.name = Jaskinie i podziemna rzeka
+pasma.3.name = Ruiny starsze niż zakon
+pasma.4.name = Warstwa Prawdy
+pasma.5.name = Serce Twierdzy
+
+# ======================================================================== HEART (serce)
+serce.ACTORS.lord.name = Lord Zaleski
+serce.ACTORS.guard.name = Strażnik dworu
+serce.ACTORS.borgar.name = Borgar
+serce.ACTORS.ambrozy.name = Ambroży
+serce.ACTORS.melia.name = Melia
+serce.ACTORS.ozzy.name = Ozzy
+serce.ACTORS.grum.name = Grum
+serce.ACTORS.dziadek.name = Dziadek Stach
+serce.ACTORS.kuba.name = Kuba
+serce.ACTORS.hanka.name = Hanka
+serce.ACTORS.soltys.name = Sołtys
+serce.ACTORS.tadek.name = Tadek
+serce.ACTORS.ludmila.name = Ludmiła
+serce.ACTORS.ela.name = Ela
+serce.ACTORS.marek.name = Marek
+serce.ACTORS.rafal.name = Rafał
+serce.ACTORS.teodor.name = Teodor
+serce.ACTORS.feliks.name = Feliks
+serce.SON = Kazimierz
+serce.NAMES.borgar = Borgar
+serce.NAMES.grum = Grum
+serce.NAMES.tadek = Tadek
+serce.NAMES.kowal = Tadek
+serce.NAMES.melia = Melia
+serce.NAMES.ozzy = Ozzy
+serce.NAMES.ambrozy = Ambroży
+serce.NAMES.dzwonnik = Ambroży
+serce.NAMES.rafal = Rafał
+serce.NAMES.marek = Marek
+serce.NAMES.kuba = Kuba
+serce.NAMES.woziwoda = Kuba
+serce.NAMES.ignac = Ignac
+serce.NAMES.garbarz = Ignac
+serce.NAMES.wit = Wit
+serce.NAMES.kapral = Kapral Wit
+serce.NAMES.hanka = Hanka
+serce.NAMES.piekarka = Hanka
+serce.NAMES.ludmila = Ludmiła
+serce.NAMES.soltys = sołtys
+serce.NAMES.kupiec = Baltazar
+serce.NAMES.baltazar = Baltazar
+serce.NAMES.hero = ty
+serce.NAMES.dog = pies
+serce.NAMES.uchodzcy = uchodźcy z obozu
+serce.NAMES.straz = strażnicy dworu
+# (opis)
+serce.LORD.arrive.ally.0.1 = Za tobą kroki - ciche, ostrożne. Ktoś schodzi ostatnimi schodami.
+# mówi: lord
+serce.LORD.arrive.ally.4.1 = Zaczekaj. To ja - Zaleski. Nie bój się.
+# mówi: lord
+serce.LORD.arrive.ally.5.1 = Szedłem za tobą od dziewięćdziesiątego piętra. Moi ludzie trzymali linę, a ja trzymałem się ściany. Lewą ręką.
+# mówi: lord
+serce.LORD.arrive.ally.6.1 = Nie przyszedłem po Serce. Dwór ma dość kamieni z tej twierdzy. Przyszedłem po jedno pytanie.
+# mówi: lord
+serce.LORD.arrive.ally.8.1 = Mój syn, Kazimierz, popłynął na kontynent w pierwszym roku wojny. Wrócił tylko jego pierścień.
+# mówi: lord
+serce.LORD.arrive.ally.9.1 = Chcę wiedzieć, czy zginął przeze mnie. Tylko to. Pozwolisz mi?
+# (opis)
+serce.LORD.arrive.rival.0.1 = Za tobą kroki - ciężkie, w butach z cholewami. I stuk drzewca o kamień.
+# mówi: lord
+serce.LORD.arrive.rival.6.1 = Mówiłem: najpierw do mnie.
+# mówi: lord
+serce.LORD.arrive.rival.10.1 = Dwór stoi na kamieniach tej twierdzy. To, co pod nimi, należy do mnie. Odsuń się od tego światła.
+# mówi: hero
+serce.LORD.arrive.rival.11.1 = Po co ci ono?
+# mówi: lord
+serce.LORD.arrive.rival.12.1 = ...Jedno pytanie. Mój syn, Kazimierz, zginął na kontynencie w pierwszym roku wojny.
+# mówi: lord
+serce.LORD.arrive.rival.13.1 = Chcę wiedzieć, czy przeze mnie. Potem zdecyduję, co dalej z tym... światłem.
+serce.LORD.ask = Co zrobisz?
+serce.LORD.opts.allow = Pozwól mu zapytać.
+serce.LORD.opts.refuseAlly = Nie. To za dużo dla każdego.
+serce.LORD.opts.refuseRival = Nie. Stań mu na drodze.
+serce.LORD.opts.askFor = Zapytam za ciebie.
+# mówi: lord
+serce.LORD.allow.2.1 = Czy mój syn zginął przeze mnie?
+# (opis)
+serce.LORD.allow.5.1 = Światło nie odpowiada słowami. Lord po prostu wie - widać to po jego twarzy.
+# mówi: lord
+serce.LORD.allow.6.1 = Tak. I nie.
+# mówi: lord
+serce.LORD.allow.7.1 = Raz, przy stole, nazwałem go tchórzem. Raz. Popłynął, żeby mi pokazać, że nim nie jest.
+# mówi: lord
+serce.LORD.allow.8.1 = Zginął, osłaniając odwrót innych. Nikt mu tego nie kazał. ...Był odważniejszy niż jego ojciec.
+# mówi: lord
+serce.LORD.allow.10.1 = Czekaj... ono mówi dalej... o dworze, o żonie, o mnie... Nie! Nie pytałem o to!
+# (opis)
+serce.LORD.allow.11.1 = Odciągasz Lorda od światła. Jest lekki jak dziecko.
+# mówi: lord
+serce.LORD.refuse.rival.0.1 = Odsuń go.
+# mówi: guard
+serce.LORD.refuse.rival.4.1 = Jaśnie panie... ja widzę swoją matkę. Nie żyje od dziesięciu lat.
+# mówi: guard
+serce.LORD.refuse.rival.5.1 = Nie podejdę bliżej. Nie tutaj.
+# mówi: lord
+serce.LORD.refuse.rival.11.1 = Nie... Nie chcę wiedzieć.
+# mówi: lord
+serce.LORD.refuse.rival.12.1 = Nie pytam o to, czego nie chcę wiedzieć.
+# mówi: hero
+serce.LORD.refuse.rival.13.1 = (To powiedzenie Borgara. Lord nie wie, skąd je zna.)
+# mówi: lord
+serce.LORD.refuse.rival.14.1 = Zostaw to sobie. Zostaw to wszystko sobie.
+# mówi: hero
+serce.LORD.askFor.1.1 = Czy syn Lorda zginął przez niego?
+# (opis)
+serce.LORD.askFor.4.1 = Wiesz. Lord raz, przy stole, nazwał syna tchórzem. Kazimierz popłynął na wojnę, żeby pokazać ojcu, że nim nie jest.
+# (opis)
+serce.LORD.askFor.5.1 = Zginął, osłaniając odwrót innych. Nikt mu tego nie kazał.
+# (opis)
+serce.LORD.askFor.7.1 = I wiesz jeszcze więcej - o Lordzie, o dworze, o sobie. Odsuwasz to, zanim ułoży się w zdania.
+# mówi: lord
+serce.LORD.askFor.10.1 = I? Co powiedziało?
+serce.LORD.tellOpts.truth = Powiedz mu całą prawdę.
+serce.LORD.tellOpts.mercy = Powiedz: „Nie przez ciebie.”
+serce.LORD.tellOpts.silent = Nic nie mów.
+# mówi: hero
+serce.LORD.told.truth.0.1 = Raz nazwałeś go tchórzem. Popłynął, żeby ci pokazać, że nim nie jest. Zginął, osłaniając innych.
+# mówi: lord
+serce.LORD.told.truth.2.1 = Tak. Pamiętam ten wieczór. Myślałem, że on nie pamięta.
+# mówi: lord
+serce.LORD.told.truth.3.1 = Dziękuję, że powiedziałeś mi wszystko. Ciężko to unieść - ale to moje.
+# mówi: hero
+serce.LORD.told.mercy.0.1 = Nie przez ciebie. Zginął, osłaniając innych. Był odważny.
+# mówi: lord
+serce.LORD.told.mercy.1.1 = Odważny... tak. Zawsze był.
+# (opis)
+serce.LORD.told.mercy.2.1 = Lord uśmiecha się - pierwszy raz, odkąd go znasz.
+# mówi: hero
+serce.LORD.told.mercy.3.1 = (Połowa prawdy. Serce wie, która połowa.)
+# mówi: hero
+serce.LORD.leave.2.1 = (Znowu jesteś z Sercem sam.)
+# (opis)
+serce.COMPANIONS.arrive.1 = Za tobą kroki. Nie jesteś tu sam.
+# mówi: borgar
+serce.COMPANIONS.borgar.1 = Nie puszczę cię samego na ostatnie piętro. Dziadek by mi nie darował.
+# mówi: ambrozy
+serce.COMPANIONS.ambrozy.1 = Powoli, powoli... Kolana już nie te. Ale wartę zdaje się osobiście.
+serce.AFTER = Wracasz na górę. Sto pięter - i ani jednego głosu za plecami.
+serce.AFTER_GUARDIAN = Na górę już nie wracasz. Ale Serce pokazuje strażnikowi, co dzieje się w mieście. Tylko to, co trzeba.
+serce.DEBUG.worlds.0.name = jak w grze
+serce.DEBUG.worlds.1.name = dobry (trzy zamki, Opinia 75, Grum i Rafał z tobą, Marek wrócił, tawerna obroniona)
+serce.DEBUG.worlds.2.name = zły (dwa zamki, Opinia 10, Grum zginął, Rafał wydany, obóz za murem, tawerna padła)
+serce.DEBUG.worlds.3.name = mieszany (Opinia 45, Grum z frakcją, Rafał za morzem, oblężenie drogo okupione)
+# mówi: borgar
+serce.DEBUG.worlds.3.world.siege.defenders.1 = tadek
+serce.DEBUG.lords.0.name = jak w grze
+serce.DEBUG.lords.1.name = sojusznik
+serce.DEBUG.lords.2.name = rywal (chce być pierwszy)
+serce.DEBUG.lords.3.name = nieobecny
+
+# ======================================================================== HEART (serce)
+# mówi: lord
+serce.LORD.allowAfter.ally.0.1 = Dziękuję. Za to, że pozwoliłeś - i za to, że odciągnąłeś.
+# mówi: lord
+serce.LORD.allowAfter.ally.1.1 = Jedno pytanie. Teraz rozumiem, czemu zakon dawał tylko jedno.
+# mówi: lord
+serce.LORD.allowAfter.rival.0.1 = Zabierz mnie stąd.
+# mówi: lord
+serce.LORD.allowAfter.rival.1.1 = Rób z tym światłem, co chcesz. Ja już wiem. To mi wystarczy... aż nadto.
+# mówi: lord
+serce.LORD.refuse.ally.0.1 = ...Masz rację. Gdybym usłyszał odpowiedź, musiałbym z nią żyć.
+# mówi: lord
+serce.LORD.refuse.ally.1.1 = Wolę pamiętać go takim, jakim był. Bywaj.
+# mówi: hero
+serce.LORD.told.silent.0.1 = ...
+# mówi: lord
+serce.LORD.told.silent.1.1 = Rozumiem. Skoro milczysz, to wiem dość.
+# mówi: lord
+serce.LORD.told.silent.2.1 = Może tak lepiej.
+# mówi: lord
+serce.LORD.askForRival.0.1 = Zostawię ci to światło. Dwór ma dość kamieni, które pamiętają.
+# mówi: lord
+# mówi: asker
+serce.ASKERS.0.lines.0.1 = Rok minął. Teraz... teraz mogę zapytać?
+# mówi: ludmila
+# mówi: asker
+serce.ASKERS.1.lines.0.1 = Jedno pytanie, tak? Czy Marek żyje?
+# mówi: melia
+# mówi: asker
+serce.ASKERS.2.lines.0.1 = Spaliłam słowa. Ale melodia została. Chcę wiedzieć, czyja to była pieśń.
+# mówi: ozzy
+# mówi: asker
+serce.ASKERS.3.lines.0.1 = Sześćdziesiąt lat temu wpadłem tu jako chłopak. Chcę wiedzieć, co wtedy zobaczyłem.
+# mówi: zniszczyc
+serce.DEBUG.endings.0.1 = hero
+# mówi: straznik
+serce.DEBUG.endings.1.1 = hero
+# mówi: straznik
+serce.DEBUG.endings.2.1 = borgar
+# mówi: straznik
+serce.DEBUG.endings.3.1 = ambrozy
+# mówi: uwolnic
+serce.DEBUG.endings.4.1 = hero
+# mówi: zapieczetowac
+serce.DEBUG.endings.5.1 = hero
+
+# ======================================================================== z kodu Underground_Data.js (sceny.<funkcja>.<n>, w kolejności kodu)
+# glowna
+sceny.glowna.0 = Feliks wyjmował mi ze ścian kruki, a ty mi to pokazałeś. Dlatego szedłem za tobą, a nie przed tobą.
+sceny.glowna.1 = Mówiłeś mi o każdym piętrze. Dziś przyszedłem zobaczyć ostatnie.
+sceny.glowna.2 = Kurz i szczury, mówiłeś. Sto pięter kurzu i szczurów.
+sceny.glowna.3 = Zrobiłeś ze mnie głupca na rynku, przed całym miastem. Tu, na dole, nikt nie patrzy.
+sceny.glowna.4 = Moi ludzie szli twoimi śladami od kraty w piwnicy Borgara. Sto pięter, chłopcze. Sto.
+# zniszczyc
+sceny.zniszczyc.0 = Nikt nie powinien wiedzieć wszystkiego. Ani ja.
+sceny.zniszczyc.1 = Dziadek mówił: nie pytaj. Nie mówił, co zrobić, kiedy już wiesz. ...Rób, co musisz.
+sceny.zniszczyc.2 = Siedemset lat warty - i wszystko skończy się jednym uderzeniem. Niech tak będzie.
+sceny.zniszczyc.3 = (Bierzesz zamach.)
+sceny.zniszczyc.4 = Cisza. Pierwszy raz od stu pięter - cisza w głowie.
+sceny.zniszczyc.5 = Słyszysz? ...Nic. Ja też nic. Chyba pierwszy raz w życiu.
+sceny.zniszczyc.6 = Dzwon na górze nie będzie miał już po co bić siedem razy. Dobrze. Moje kolana się ucieszą.
+# straznik
+sceny.straznik.0 = Wiedziałem, że tu dojdziesz. Szedłem za tobą od dziesiątej bramy.
+sceny.straznik.1 = Ktoś z rodu musiał wrócić na wartę. Kowale kuli zamki zakonu - i ich pilnowali.
+sceny.straznik.2 = Ja przynajmniej wiem, czego nie chcę wiedzieć. To połowa tej roboty.
+sceny.straznik.3 = Masz. Klucz od tawerny. Warta idzie jak za zakonu - zmiana co trzy dni. W moje noce tawerna jest twoja.
+sceny.straznik.4 = Idź już. I nie oglądaj się. ...Nie pytaj.
+sceny.straznik.5 = Nikt nie odwołał warty. Więc przyszedłem ją objąć.
+sceny.straznik.6 = Siedemdziesiąt lat dzwoniłem dla miasta, które zapomniało, co znaczą dzwony. Tu przynajmniej ktoś wie.
+sceny.straznik.7 = Rytm znasz. Cztery i dwa - woda. Siedem - pytanie. W dni mojej warty dzwonisz ty.
+sceny.straznik.8 = Idź, dziecko. Tylko nie przychodź tu za często.
+sceny.straznik.9 = Ty? ...Dobrze. Ktoś musi. Będę stawiał na barze kufel. Dla ciebie.
+sceny.straznik.10 = Raz w roku zadzwonię siedem razy. Wtedy będziesz wiedział, że ktoś schodzi.
+sceny.straznik.11 = (Siadasz na kamiennej ławie. Jest zimna, jakby czekała na ciebie od trzystu lat.)
+sceny.straznik.12 = Mija rok.
+sceny.straznik.13 = (Odpowiadasz. Tyle, ile trzeba - ani słowa więcej.)
+# uwolnic
+sceny.uwolnic.0 = Niech wszyscy wiedzą. Koniec z kłamstwami.
+sceny.uwolnic.1 = Nie! Nie pytaj... nie za wszystkich naraz—
+sceny.uwolnic.2 = Dziecko, zakon trzymał to w kamieniu, bo wiedział, co robi...
+sceny.uwolnic.3 = Piętro 90
+sceny.uwolnic.4 = Piętro 50
+sceny.uwolnic.5 = Piętro 10
+sceny.uwolnic.6 = Piwnica tawerny
+sceny.uwolnic.7 = Światło idzie w górę - przez sto pięter, przez piwnicę, przez deski tawerny. Przez ciebie.
+sceny.uwolnic.8 = Wiem... wiem, co zrobił mój dziadek. I co ja zrobiłbym na jego miejscu. Nie chciałem tego wiedzieć.
+sceny.uwolnic.9 = Słyszę wszystkie dzwony naraz. Wszystkie, które kiedykolwiek biły.
+sceny.uwolnic.10 = (Wiesz wszystko. Także to, czego nie chciałeś.)
+# zapieczetowac
+sceny.zapieczetowac.0 = Nie zniszczę cię. I nikomu cię nie oddam. Ale nie będziesz już mówić, kiedy nikt nie pyta.
+sceny.zapieczetowac.1 = Księga sygnałów. Zapiszemy zasady na nowo - i zostawimy je na górze, u ludzi.
+sceny.zapieczetowac.2 = Zasady trzeba spisać. Na górze, u ludzi - nie tu, w kamieniu.
+sceny.zapieczetowac.3 = Klucz zostanie u mnie. Ale nie sam - z dwoma innymi zamkami.
+sceny.zapieczetowac.4 = (Wycinasz w kamieniu pieczęci: JEDNO PYTANIE. RAZ W ROKU. PRZY ŚWIADKACH.)
+sceny.zapieczetowac.5 = (Trzy zamki - trzech strażników zasad: klucz u Borgara, dzwon u Ambrożego, pieśń u Melii. Nikt sam nie otworzy.)
+sceny.zapieczetowac.6 = (Dwa zamki otwarte, trzeci milczy. Na razie musi wystarczyć.)
+# steps
+sceny.steps.0 = Wiem. Od tamtego ranka wiem wszystko - o wodzie, o Feliksie, o sobie.
+sceny.steps.1 = Dwór pełen kamieni, które pamiętają. A ja myślałem, że to bajki dla dzieci.
+sceny.steps.2 = Wszyscy wiedzą wszystko. Także to, co powiedziałem kiedyś synowi przy stole.
+sceny.steps.3 = Nikt mi nie patrzy w oczy. Ja też nikomu.
+sceny.steps.4 = Ach, to ty. Mówią, że chodziłeś po piwnicach Borgara.
+sceny.steps.5 = Drzwi pod Kruczymi Skałami... bajki dla dzieci. Prawda?
+sceny.steps.6 = Lord nigdy się nie dowie, jak blisko był odpowiedzi na swoje jedno pytanie.
+sceny.steps.7 = Jaśnie pan nie przyjmuje. Od tamtej nocy siedzi w bibliotece i czyta bajki o Kruczych Skałach.
+sceny.steps.8 = Na wrotach dworu ktoś wyrył kruka. Nikt się nie przyznaje.
+sceny.steps.9 = Posadziłem w ogrodzie jabłoń. Dla Kazimierza.
+sceny.steps.10 = Podlewam ją sam, wiadrem. Jak wszyscy w mieście.
+sceny.steps.11 = Wiem już. Wystarczy mi na resztę życia.
+sceny.steps.12 = Jaśnie pan od tamtej nocy nie wychodzi z biblioteki. Ale nie każe już nikogo szukać pod skałami.
+sceny.steps.13 = Piszę do niego listy. Do Kazimierza. Nie wysyłam - nie ma dokąd.
+sceny.steps.14 = Może tak jest lepiej. Pamiętam go takim, jakim był.
+sceny.steps.15 = Cisza we dworze już mnie nie straszy. Teraz, kiedy wiem, mogę w niej siedzieć.
+sceny.steps.16 = Dziękuję, że powiedziałeś mi wszystko. Mało kto ma odwagę.
+sceny.steps.17 = „Nie przez ciebie.” Powtarzam to sobie co rano.
+sceny.steps.18 = Lord nosi pierścień syna na łańcuszku. Uśmiecha się częściej niż kiedyś.
+sceny.steps.19 = Nie powiedziałeś ani słowa. Czasem myślę, że to była najuczciwsza odpowiedź.
+sceny.steps.20 = Stragany stoją puste. Nikt nie krzyczy. Ludzie po prostu przestali się do siebie odzywać.
+sceny.steps.21 = ...Wiem, co o mnie myślisz. Teraz wszyscy wszystko wiemy.
+sceny.steps.22 = Kuba, wiem o twoich beczkach. Ty wiesz o moich wiadrach. Nie mamy sobie nic do powiedzenia.
+sceny.steps.23 = Prom przywiózł wieści. Na kontynencie znowu walczą - po staremu, na ślepo.
+sceny.steps.24 = Niech walczą na ślepo. Byle daleko od nas.
+sceny.steps.25 = W południe dzwon na wieży uderza siedem razy. Nikt w mieście nie wie, po co. Tylko strażnik na dole.
+sceny.steps.26 = W południe dzwon na wieży uderza siedem razy. Nikt w mieście nie wie, po co. Tylko ty.
+sceny.steps.27 = Siedem razy? Ambroży, znowu ci się pomyliło?
+sceny.steps.28 = Nie pomyliło. Ktoś schodzi z pytaniem.
+sceny.steps.29 = Jedno pytanie, raz w roku, przy świadkach. Spisałem to w księdze ratusza - słowo w słowo.
+sceny.steps.30 = A Księga sygnałów wraca na wieżę. Siódme uderzenie znów coś znaczy.
+sceny.steps.31 = Racje z cysterny! Kolejka, ludzie - starczy dla każdego... prawie.
+sceny.steps.32 = Woda tylko na przydział sołtysa! Jak zawsze.
+sceny.steps.33 = To ten, co zszedł na sam dół! Masz, bochenek. Na koszt piekarni.
+sceny.steps.34 = Ktoś odwraca wzrok. Mało kto pyta, gdzie byłeś.
+sceny.steps.35 = Od nocy oblężenia nikt nie zamyka bramy przed zmrokiem. Wiemy już, że się obronimy.
+sceny.steps.36 = Pół miasta pomaga odbudować tawernę. Reszta udaje, że nie widzi.
+sceny.steps.37 = Obóz został za murem, w Podgrodziu. Nocą przy ognisku słychać wilki.
+sceny.steps.38 = Spod muru zniknęły namioty. Uchodźcy mieszkają w mieście i pracują przy kieracie.
+sceny.steps.39 = Marek siedzi przy Ludmile. Długo milczał - jak ludzie z Osady Milczących.
+sceny.steps.40 = Teraz wszyscy wiecie to, co ja wiedziałem. Rozumiecie już, czemu milczałem?
+sceny.steps.41 = Cisza. W głowie cisza. Pierwszy raz od tamtej skały.
+sceny.steps.42 = Tato! Powiedziałeś coś!
+sceny.steps.43 = Tato, powiedz coś!
+sceny.steps.44 = Mówi. Znowu mówi.
+sceny.steps.45 = Lulaj, dziecię, za siódmą górą...
+sceny.steps.46 = Mamo, a tata wróci?
+sceny.steps.47 = ...Śpij.
+sceny.steps.48 = Kiedyś Ludmiła zejdzie na dół z jednym pytaniem. Wiesz już, jakie zada.
+sceny.steps.49 = Nikt już nie wiesza listów gończych. Zostaję - ktoś musi pilnować obozu nocą.
+sceny.steps.50 = Rafała tu nie ma. Wydali go dworowi, a potem wrócił z najemnikami. Ela pyta o niego co dzień.
+sceny.steps.51 = Rafał przysłał list zza morza. Pisze, że żyje. I że pamięta.
+sceny.steps.52 = Rafała zabrali ludzie dworu. Nikt nie wie, dokąd.
+sceny.steps.53 = Rafał nie wrócił z tamtej nocy pod tawerną. Ela zostawia mu przy ognisku kromkę chleba.
+sceny.steps.54 = Stawiam drugi talerz. Na wszelki wypadek.
+sceny.steps.55 = Raz w roku ktoś puka do drzwi. Dziadek zawsze otwiera pierwszy.
+sceny.steps.56 = Wnusiu? Wróciłeś.
+sceny.steps.57 = Wiem, gdzie byłeś. Wszyscy wiemy wszystko... Siadaj. Zjedz.
+sceny.steps.58 = Tego, że cię kocham, i tak nikt mi nie musiał mówić.
+sceny.steps.59 = Coś się w nocy zmieniło. Spałem jak dziecko - pierwszy raz od lat.
+sceny.steps.60 = Nie mów mi, co tam było. Wystarczy, że wróciłeś.
+sceny.steps.61 = Borgar został na dole, a ty wróciłeś? Dobrze. Działka poczeka - Lord też kiedyś umrze.
+sceny.steps.62 = Ambroży został na dole? Dzwonnik pilnuje dzwonów, a my - siebie nawzajem. Działka poczeka.
+sceny.steps.63 = Borgar został na dole, a ty wróciłeś? Dobrze. Działka czeka.
+sceny.steps.64 = Ambroży został na dole? Dzwonnik pilnuje dzwonów, ty pilnuj działki.
+sceny.steps.65 = Bałem się, że jak działka przepadnie, to nikt już nie zapuka. A tu proszę - ktoś puka.
+sceny.steps.66 = Bałem się, że jak dług zniknie, to nikt już nie zapuka. A tu proszę - ktoś puka.
+sceny.steps.67 = Pusto. Pierwszy raz od sześćdziesięciu lat pusto w głowie. ...Postawi ktoś piwo? Ot tak, bez przepowiedni?
+sceny.steps.68 = Dziś w nocy nie zszedłem do piwnicy. Pierwszy raz, odkąd pamiętam.
+sceny.steps.69 = Słowa spaliłam, a teraz i melodia ucichła. Może to i lepiej.
+sceny.steps.70 = Ballady zostaną. Tylko nikt już nie będzie w nich szukał prawdy. Może to i lepiej.
+sceny.steps.71 = W tawernie jest cicho. Borgar wyciera ladę. Nikt nie zamawia - wszyscy wiedzą, co by kto zamówił.
+sceny.steps.72 = Mówiłem wam. Mówiłem wszystkim. Teraz wszyscy wiecie... i co? Lepiej wam?
+sceny.steps.73 = Nie mam już czego śpiewać. Wszyscy znają wszystkie słowa.
+sceny.steps.74 = Klucz wraca nad bar. Tym razem wiem, po co tu wisi.
+sceny.steps.75 = Słów już nie mam. Ale zanucę melodię - raz, ostatni. Niech śpi, jak Serce.
+sceny.steps.76 = Zaśpiewam pieśń jeszcze raz. Całą - i ostatni raz. Potem niech śpi, jak Serce.
+sceny.steps.77 = Chrrr... jedno pytanie... raz w roku... chrrr...
+sceny.steps.78 = Co trzecią noc schodzę na wartę. Dziś mam wolne. Napijesz się?
+sceny.steps.79 = Kowal wrócił do zamków zakonu. Dziadek by się cieszył. Albo bał.
+sceny.steps.80 = Ułożyłam nową zwrotkę. O karczmarzu, który zszedł na wartę i wrócił na zmianę.
+sceny.steps.81 = Ambroży nauczył cię rytmu? To dzwoń. Miasto musi słyszeć, że ktoś pilnuje.
+sceny.steps.82 = Stary dzwonnik siedzi na dole i liczy do siedmiu. Czuję go, jak się czuje burzę.
+sceny.steps.83 = Ułożyłam nową zwrotkę. O dzwonniku, któremu nikt nie odwołał warty.
+sceny.steps.84 = Kufel dla kogoś, kto nie przychodzi... Zawsze stoi pełny.
+sceny.steps.85 = Ułożyłam nową zwrotkę. O strażniku, który zszedł sam.
+sceny.steps.86 = Siedzi tam na dole. Czuję go, jak się czuje burzę.
+sceny.steps.87 = Na kontynencie nikt już nie dostanie pewności. Będą musieli wygrywać jak ludzie - albo przegrywać.
+sceny.steps.88 = Frakcja wie teraz wszystko. Ja też. Nie wracam tam.
+sceny.steps.89 = Raz w roku, przy świadkach? Mogę być świadkiem. Mam ciężką rękę na tych, co by chcieli dwa razy.
+sceny.steps.90 = Zostaję na wyspie. Ktoś musi pilnować tej tawerny, kiedy strażnik siedzi na dole.
+sceny.steps.91 = Grum stał tamtej nocy po drugiej stronie drzwi. Wolałbym go więcej nie oglądać.
+sceny.steps.92 = Gruma nie widziano od tamtej nocy. Podobno popłynął z kopaczami frakcji.
+sceny.steps.93 = Stół Gruma stoi pusty. Przy nim pije się za nieobecnych.
+sceny.steps.94 = Borgar stawia pełny kufel na pustym stole Gruma.
+sceny.steps.95 = Za Gruma.
+sceny.steps.96 = Hm. Wróciłeś z dołu. Postawię ci piwo - i o nic nie zapytam.
+sceny.steps.97 = Drzwi po oblężeniu mają nowe okucia. Kto ich wtedy bronił, pije tu za pół ceny - do końca życia.
+sceny.steps.98 = Na belce nad barem ktoś wyrył imiona obrońców: {defenders}.
+sceny.steps.99 = Tamtej nocy straciliśmy pół ław i parę zębów. Ale tawerna stoi.
+sceny.steps.100 = Wypijmy za tych, co wtedy oberwali: {lost}. Niech się prędko wylizują.
+sceny.steps.101 = Odbudowujemy. Kamienie twierdzy wytrzymały gorsze rzeczy niż najemników.
+sceny.steps.102 = Okna zabite deskami, ale w kominku znów płonie ogień.
+sceny.steps.103 = Strażnik może wyjść na górę raz w roku. Dziś jest ten dzień.
+sceny.steps.104 = ...Wróciłeś. Na jeden dzień? To siadaj. Kufel czeka od roku.
+sceny.steps.105 = Siadaj. Nic nie mów - i tak wiem. Pierwsze piwo na koszt firmy.
+sceny.steps.106 = Siadaj. Pierwsze piwo na koszt firmy.
+# endingName
+sceny.endingName.0 = Zniszczyć
+sceny.endingName.1 = Strażnik
+sceny.endingName.2 = Uwolnić
+sceny.endingName.3 = Zapieczętować
+sceny.endingName.4 = Ambroży
+
+# ======================================================================== z kodu Underground.js (kod.<funkcja>.<n>, w kolejności kodu)
+# addTorch
+kod.addTorch.0 = Wypalona pochodnia
+# addTrap
+kod.addTrap.0 = Pułapka: kolce
+# generate
+kod.generate.0 = Zapiski: {title}
+kod.generate.1 = stwór
+# stairs
+kod.stairs.0 = strażnik piętra
+# liftOn
+kod.liftOn.0 = Kołowrót windy
+kod.liftOn.1 = winda kasztelana (piętro {f})
+# read
+kod.read.0 = "Warstwa Prawdy: "
+kod.read.1 = "Zapiski zakonu: "
+kod.read.2 = {text}\n(Podziemia, piętro {floor})
+kod.read.3 = prawda (
+kod.read.4 = zapiski zakonu (
+# guardianStrike
+kod.guardianStrike.0 = pusta zbroja
+# gate10Opened
+kod.gate10Opened.0 = dziesiąta brama
+# openLock
+kod.openLock.0 = Zamek otwarty: {1}
+kod.openLock.1 = Otwartych zamków: {open} z 3
+kod.openLock.2 = zamek Komnaty Serca ({1})
+# ending
+kod.ending.0 = Serce Twierdzy: {title}
+# heartData
+kod.heartData.0 = Serce Twierdzy (blask)
+# glowEvent
+kod.glowEvent.0 = Serce Twierdzy (blask)
+# heartEvent
+kod.heartEvent.0 = Serce Twierdzy
+# updateCinema
+kod.updateCinema.0 = rgba(0, 0, 0, 0.85)
+# heartEnd
+kod.heartEnd.0 = Serce: zakończenie „{1}”   ←→ zmień, OK zagraj (świat i Lord z rzędów niżej)
+# heartWorld
+kod.heartWorld.0 = Serce: świat - {name}   ←→
+# heartLord
+kod.heartLord.0 = Serce: Lord przy Sercu - {name}   ←→
+# verify
+kod.verify.0 = no data

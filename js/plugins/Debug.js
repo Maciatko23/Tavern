@@ -80,8 +80,9 @@
  *      Wątek W4 (Borgar, krew kasztelana - Kasztelan.js):
  *      - "W4: rozdział N - ...": ←→ wybiera rozdział 1-8 wątku „Krew kasztelana” (rozdział 7 dwa razy:
  *        konfrontacja przy barze i noc w piwnicy), OK ustawia go (dług, klucze, krata, poszlaki, flagi, pora)
- *        i przenosi tam, gdzie się dzieje (Kasztelan.debugJump). Rozdział 8: Borgar idzie z bohaterem - nocą
- *        jego ognisko przy dziesiątej bramie.
+ *        i przenosi tam, gdzie się dzieje. Rozdział 8: Borgar idzie z bohaterem - nocą jego ognisko przy
+ *        dziesiątej bramie. (Od 2026-10-23 ten wiersz daje silnik wątków Watki.js z danych wątku -
+ *        Kasztelan_Data.js; tak samo każdy wątek silnika ze skokami: Watki.f9.)
  *      Wątek W5 (kantor Baltazara):
  *      - "W5: rozdział N - ...": ←→ wybiera rozdział 1-7 wątku „Towary z kontynentu”, OK ustawia go (flagi
  *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (Kantor.debugJump).
@@ -163,20 +164,18 @@
     const WATER = [null, "red", "grey"], WATER_NAME = { red: "czerwona", grey: "szara" };
     const isleIcon = id => ($dataItems[id] ? $dataItems[id].iconIndex : 0);
     const storyOn = () => !!(window.Story && Story.active && Story.active());
-    // (2026-10-17) W4 "Krew kasztelana" (Kasztelan.js): straight to a chapter - ←→ 1-9 (the 7th chapter twice: the bar, the cellar's night)
-    const W4_CH = [0, 1, 2, 3, 4, 5, 6, 7, 7, 8];
-    const w4Name = i => (window.Kasztelan && Kasztelan.f9Name ? Kasztelan.f9Name(i) : "");
+    // (2026-10-17) W4 "Krew kasztelana": straight to a chapter - since 2026-10-23 a row of the thread engine (Watki.f9, the jumps in
+    // Kasztelan_Data.js; ←→ 1-9, the 7th chapter twice: the bar, the cellar's night)
     // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): straight to a chapter - ←→ the chapter, OK jumps (flags, hour, place)
     const W5_NAMES = { 1: "dziwny kupiec", 2: "trzy stuknięcia", 3: "nocny tragarz", 4: "rejestr", 5: "komu to dać", 6: "noc promu", 7: "co dalej z kantorem" };
     // (2026-10-17) W7 "Dwór z kamieni twierdzy" (Dwor.js): straight to a chapter - ←→ the chapter, OK jumps (payments, flags, hour, place)
     const W7_NAMES = { 1: "dług", 2: "zaproszenie", 3: "dwa życia Feliksa", 4: "gabinet nocą", 5: "prawda i ostatnia spłata", 6: "do kogo najpierw", 7: "Lord przy Sercu" };
     // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): the rival forced (←→ the variant), the meeting on a floor (←→ 1-10)
     const W9_KEYS = ["", "baltazar", "grum", "lord", "kopacze"];
-    const w9Name = i => (window.RywalData ? RywalData.TX.f9Names[W9_KEYS[i]] : W9_KEYS[i] || "z gry");
+    const w9Name = i => (window.RywalData ? RywalData.TX.f9Names[W9_KEYS[i] || "gra"] : W9_KEYS[i] || "z gry");   // (js/teksty/rywal.txt: "" - "gra")
     const isleLabel = {
         w9: i => (window.Rywal ? "W9: rywal (wymuś wariant): " + w9Name(i) + "   ←→ zmień, OK zacznij" : "W9: rywal (brak Rywal.js)"),
         w9meet: n => (window.Rywal ? "W9: rywal - spotkanie na piętrze " + n + "   ←→ piętro, OK idź" : "W9: rywal - spotkanie (brak Rywal.js)"),
-        w4: i => (window.Kasztelan ? "W4: rozdział " + W4_CH[i] + " - " + w4Name(i) + "   ←→ zmień, OK idź" : "W4: przeskocz do rozdziału (brak Kasztelan.js)"),
         w5: n => (window.Kantor ? "W5: rozdział " + n + " - " + W5_NAMES[n] + "   ←→ zmień, OK idź" : "W5: przeskocz do rozdziału (brak Kantor.js)"),
         w7: n => (window.Dwor ? "W7: rozdział " + n + " - " + W7_NAMES[n] + "   ←→ zmień, OK idź" : "W7: przeskocz do rozdziału (brak Dwor.js)"),
         inside: i => "Wnętrze: " + ISLE_INSIDE[i][0] + "   ←→ zmień, OK idź",
@@ -211,6 +210,13 @@
             if (!window.Kruk) return "Oswojony kruk (brak Kruk.js)";
             const s = Kruk.state();
             return s && s.stage === "tame" ? "Kruk oswojony: " + (s.name || "Kruk") : "Oswojony kruk od razu (potem ekran imienia)";
+        },
+        // (2026-10-23) the texts' files read again (Watki.przeladuj): the last result in the label
+        texts: () => {
+            const W = window.Watki;
+            if (!W || !W.przeladuj) return "Wczytaj teksty od nowa (brak Watki.js)";
+            const r = W.ostatnieWczytanie();
+            return "Wczytaj teksty od nowa" + (r ? "   (" + r.text + ")" : "   (" + W.pliki().length + " plików w js/teksty)");
         },
         favor: () => (window.Garnizon && Garnizon.favor ? "Przychylność garnizonu: " + Garnizon.favor() + " / 100   ← -20   → +20" : "Przychylność garnizonu (brak Garnizon.js)"),
         cistern: () => {
@@ -447,6 +453,7 @@
         row("isleGold", "+1000 G", 314, "Tysiąc sztuk złota do sakiewki.");
         row("isleXp", "+10 000 doświadczenia", 87, "Dziesięć tysięcy punktów doświadczenia naraz: poziomy, punkty atrybutów i umiejętności jak za zwykłe zdobycie.");
         row("islePrologue", "Odtwórz prolog „Ostatni prom”", isleIcon(172) || 87, "Sam film (bez ekranu imienia), potem powrót na mapę w to samo miejsce - stan gry bez zmian.");
+        row("isleTexts", isleLabel.texts(), 189, "Pliki js/teksty/*.txt czytane jeszcze raz z dysku: poprawka w pliku widoczna od razu, bez ponownego uruchamiania gry. Wynik: ile plików albo pierwszy błąd z numerem linii.");
         head("Postacie:");
         row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
         row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).");
@@ -456,8 +463,14 @@
             head("Biały orzeł:");
             for (const r of Orzel.f9Rows()) row("isleEagle", r.label, r.icon, r.desc, { what: r.what, pick: r.pick });
         }
-        head("Wątek W4 (Borgar, krew kasztelana):");
-        row("isleW4", isleLabel.w4(last.w4 || 1), 189, "Ustawia „Krew kasztelana” na początku rozdziału (dług, klucze, krata, poszlaki, pora) i przenosi tam, gdzie się dzieje.", { pick: last.w4 || 1 });
+        // (2026-10-23) the threads of the engine (Watki.js) with chapter jumps in their data - W4 first: each its header and its row
+        // (Watki.f9.sekcje() / wybierz(row, delta) / ok(row)); a thread's data registers them, never this file
+        if (window.Watki && Watki.f9) {
+            for (const sec of Watki.f9.sekcje()) {
+                head(sec.head);
+                for (const r of sec.rows) row(r.kind, r.label, r.icon, r.desc, { pick: r.pick, watek: r.watek });
+            }
+        }
         head("Wątek W5 (kantor Baltazara):");
         row("isleW5", isleLabel.w5(last.w5 || 1), 189, "Ustawia „Towary z kontynentu” na początku rozdziału (flagi, pora, miejsce) i przenosi tam, gdzie się dzieje.", { pick: last.w5 || 1 });
         head("Wątek W7 (dwór Lorda):");
@@ -568,9 +581,8 @@
             this.redrawItem(this.index());
             return;
         }
-        if (row && row.kind === "isleW4") {   // (the chapter of W4: 1-9 - the 7th twice)
-            row.pick = last.w4 = ((row.pick - 1 + delta + 9) % 9) + 1;
-            row.label = isleLabel.w4(row.pick);
+        if (row && row.watek && window.Watki && Watki.f9) {   // (a thread of the engine: its chapter - W4: 1-9, the 7th twice)
+            Watki.f9.wybierz(row, delta);
             SoundManager.playCursor();
             this.redrawItem(this.index());
             return;
@@ -816,6 +828,12 @@
             $gamePlayer.reserveTransfer(g[1], g[2], g[3], g[4], 0);
             return back();
         };
+        if (row.watek && window.Watki && Watki.f9) {   // (a thread of the engine: the chapter set up, then there - or why not)
+            const r = Watki.f9.ok(row) || {};
+            if (r.go) return go(r.go);
+            if (r.say) say(row.icon, r.say, !!r.bad);
+            return false;
+        }
         switch (row.kind) {
             case "isleGo": {
                 const g = ISLE_GO[row.go];
@@ -898,12 +916,6 @@
                 if (r && r.say) say(row.icon, r.say, !!r.bad);
                 break;
             }
-            case "isleW4": {
-                if (!window.Kasztelan || !Kasztelan.debugJump) { say(row.icon, "Brak Kasztelan.js", true); break; }
-                const g = Kasztelan.debugJump(row.pick);
-                if (!g) { say(row.icon, "Gra bez fabuły albo brak zadania W4", true); break; }
-                return go(["W4", g[0], g[1], g[2], g[3]]);
-            }
             case "isleW5": {
                 if (!window.Kantor || !Kantor.debugJump) { say(row.icon, "Brak Kantor.js", true); break; }
                 const g = Kantor.debugJump(row.pick);
@@ -927,6 +939,15 @@
                 const g = Rywal.debugMeet(row.pick, W9_KEYS[last.w9 || 0]);
                 if (!g) { say(row.icon, "Brak piętra " + row.pick, true); break; }
                 return go(["W9", g[0], g[1], g[2], g[3]]);
+            }
+            case "isleTexts": {   // (the texts' files again: the label and a notice on the map say how it went)
+                if (!window.Watki || !Watki.przeladuj) { say(row.icon, "Brak Watki.js", true); break; }
+                Watki.przeladuj(r => {
+                    if (window.Tawerna) Tawerna.popup(r.text, { top: true, color: r.bad ? "#ff9f8f" : "#9ff0a8" });
+                    const s = SceneManager._scene;
+                    if (s instanceof Scene_Debug && s._list && s._tab === ISLE_TAB) s._list.setTab(s._tab, s._list.index());
+                });
+                break;
             }
             case "isleCistern": {
                 const q = window.TownQuests, f = q && q.state ? q.state().flags : null;

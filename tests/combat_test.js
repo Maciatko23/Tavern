@@ -155,8 +155,13 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         // a roll through the charge
         await charge();
         for (let i = 0; i < 90 && (await ev("__boar.playerDistance()")) > 2.2; i++) await frames(1);
+        // (2026-10-23: the roll and its safe frames noted in the game's own loop - read afterwards, a busy machine came after the short
+        // window and saw iframes 0)
+        await ev(`(function(){ const R = window.__rollRec = { mode: null, iframes: 0 }; const u = window.__rollU = SceneManager.updateMain; SceneManager.updateMain = function() { u.apply(this, arguments);
+            const a = Combat.act; if (a && a.mode === "roll") { R.mode = "roll"; R.iframes = Math.max(R.iframes, a.iframes || 0); } }; return 0; })()`);
         await down(40); await key(SPACE); await up(40);   // (down arrow held: rolls sideways out of the lane)
-        const rolled = await J("({ mode: Combat.act.mode, iframes: Combat.act.iframes })");
+        await frames(2);
+        const rolled = await J("(function(){ SceneManager.updateMain = window.__rollU; const R = window.__rollRec; return { mode: R.mode || Combat.act.mode, iframes: Math.max(R.iframes, Combat.act.iframes || 0) }; })()");
         for (let i = 0; i < 60 && ["charge", "overshoot"].includes(await ev("__boar._mode")) === false; i++) await frames(2);
         // (it still runs past him: about 2 tiles in, then 3.5 past at its charge speed - some 50 frames from the roll; a fixed 40 frames
         // after it was a race the full run sometimes lost, 2026-10-22. Waited until it stops, the overshoot itself ends by 90 frames)

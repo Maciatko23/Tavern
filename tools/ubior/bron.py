@@ -36,7 +36,8 @@ ROWS = ['S', 'W', 'E', 'N']
 T_, H_, K_ = KOD['narzedzie'], KOD['dlonie'], KOD['kontur']
 KONTUR = (10, 9, 8)
 # klatka ciosu w każdym wierszu (HeroLook.js SWINGS: hit) - stąd strona ostrza
-HIT = {'Hero_Club': [9, 7, 7, 11], 'Hero_Axe': [8, 7, 7, 10], 'Hero_AxeSide': [10, 10, 10, 9], 'Hero_Pick': [8, 9, 9, 9], 'Hero_Spear': [8, 10, 10, 11]}
+HIT = {'Hero_Club': [9, 7, 7, 11], 'Hero_Axe': [8, 7, 7, 10], 'Hero_AxeSide': [10, 10, 10, 9], 'Hero_Pick': [8, 9, 9, 9], 'Hero_Spear': [8, 10, 10, 11],
+       'Hero_Sword': [9, 11, 11, 11]}
 # arkusz -> jego własna broń i nowe rodzaje rysowane na nim
 ARKUSZE = {
     'Hero_Club': dict(wlasna='palka', nowe=['miecz', 'dlugi_miecz', 'tasak', 'szabla', 'sztylet', 'buzdygan', 'kiscien', 'kostur', 'mlot']),
@@ -44,6 +45,8 @@ ARKUSZE = {
     'Hero_AxeSide': dict(wlasna='siekiera', nowe=['topor', 'czekan', 'bardysz']),
     'Hero_Pick': dict(wlasna='kilof', nowe=['mlot']),
     'Hero_Spear': dict(wlasna='wlocznia', nowe=['rohatyna', 'sulica']),
+    # (2026-10-23: zamach mieczem z PixelLab - tools/ubior/miecz_arkusz.py - szerokie cięcie z wyciągniętą ręką)
+    'Hero_Sword': dict(wlasna='miecz', nowe=['dlugi_miecz', 'tasak', 'szabla']),
 }
 # pięści: sztylet w dłoni, która uderza (bez starej broni - oś z przedramienia)
 PIESC = 'Hero_Punch'
@@ -392,6 +395,56 @@ def lerp_angle(a, b, t):
     return a + d * t
 
 
+# arkusze, na których broń to ostrze (miecz z PixelLab): oś z samego metalu, chwyt = dłoń najbliżej nasady ostrza (ręka wyciągnięta w tej
+# samej linii co miecz - wschód - inaczej "przedłużała" broń aż do drugiej dłoni), długość odniesienia na sztywno (najdłuższa
+# klatka ma rękę na tej samej prostej)
+OSTRZE = {'Hero_Sword': dict(L=34.0)}
+
+
+def blade_axis(cimg, clab, a):
+    """oś miecza: prosta przez szare piksele broni, od dłoni (chwyt, 3 px rękojeści za nim) do końca ostrza; None - bez ostrza"""
+    T = a['T']
+    ys, xs = np.nonzero(T)
+    rgb = cimg[ys, xs, :3].astype(float) / 255
+    h, sat, val = hsv(rgb)
+    # (metal ostrza: szare piksele, które maska dała broni - nie szary rękaw tuniki w tej samej linii)
+    metal = (((sat < 0.16) & (val >= 0.28)) | (val > 0.88)) & (clab[ys, xs] == T_)
+    if metal.sum() < 6:
+        return None
+    # (ostrze = największa spójna plama metalu; szary kawałek za dłonią to rękaw albo druga ręka)
+    mm = np.zeros_like(T)
+    mm[ys[metal], xs[metal]] = True
+    comps = components(mm)
+    my, mx = comps[0]
+    if len(my) < 6:
+        return None
+    c, v = thin_fit(mx, my)
+    sm = (mx + 0.5 - c[0]) * v[0] + (my + 0.5 - c[1]) * v[1]
+    hy, hx = np.nonzero(clab == H_)
+    grip = None
+    if len(hy):
+        hs = (hx + 0.5 - c[0]) * v[0] + (hy + 0.5 - c[1]) * v[1]
+        hp = np.abs((hx + 0.5 - c[0]) * v[1] - (hy + 0.5 - c[1]) * v[0])
+        near = hp <= 4
+        if near.any():
+            # (ostrze leży po tej stronie dłoni, po której jest więcej metalu)
+            if (sm > hs[near].mean()).sum() < (sm < hs[near].mean()).sum():
+                v, sm, hs = -v, -sm, -hs
+            front = near & (hs <= sm.min() + 2)
+            grip = float(hs[front].max()) if front.any() else float(hs[near].max())
+    tip = float(sm.max())
+    if grip is None:
+        grip = float(sm.min()) - 1
+    butt = grip - 3.0
+    px, py = xs + 0.5, ys + 0.5
+    st = (px - c[0]) * v[0] + (py - c[1]) * v[1]
+    pp = np.abs((px - c[0]) * v[1] - (py - c[1]) * v[0])
+    keep = (st >= butt - 1) & (st <= tip + 1) & (pp <= 3)
+    T2 = np.zeros_like(T)
+    T2[ys[keep], xs[keep]] = True
+    return dict(c=c, v=v, smin=butt, smax=tip, L=tip - butt, grip=grip, n=int(keep.sum()), T=T2, ostrze=True)
+
+
 def analyse(name):
     """osie wszystkich klatek arkusza (po wyrównaniu niepewnych z sąsiadów)"""
     img, lab = load(name)
@@ -404,17 +457,22 @@ def analyse(name):
             sl = (slice(r * CELL, (r + 1) * CELL), slice(c * CELL, (c + 1) * CELL))
             fix = POPRAWKI.get((name, r, c), {})
             a = axis_of(img[sl], lab[sl], flip=bool(fix.get('odwroc')), has_metal=name != 'Hero_Club', ref=refs[r], zmaz=fix.get('zmaz', ()))
+            if a and name in OSTRZE:
+                a = blade_axis(img[sl], lab[sl], a)
             if a:
                 a['fix'] = fix
             ax[r][c] = a
     lens = [a['L'] for row in ax for a in row if a]
     Lref = float(np.percentile(lens, 90)) if lens else 1.0
+    if name in OSTRZE:
+        Lref = OSTRZE[name]['L']
     for r in range(rows):
         row = ax[r]
         for a in row:
             if not a:
                 continue
-            a['pewna'] = a['L'] >= 0.55 * Lref and a['grip'] is not None and a['n'] >= 25 and a['fix'].get('pewna', True)
+            # (ostrze: krótsze w skrócie perspektywy, gdy miecz celuje w widza - i tak pewne, jeśli jest dłoń i kawałek metalu)
+            a['pewna'] = a['L'] >= (0.3 if a.get('ostrze') else 0.55) * Lref and a['grip'] is not None and a['n'] >= (12 if a.get('ostrze') else 25)                 and a['fix'].get('pewna', True)
             # punkty w układzie klatki: koniec trzonka, chwyt, czubek
             a['butt'] = a['c'] + a['v'] * a['smin']
             a['tip'] = a['c'] + a['v'] * a['smax']
@@ -443,6 +501,9 @@ def analyse(name):
             a['tip'] = a['butt'] + v * L
             a['L'] = L
             a['interp'] = True
+            # (ostrze prawie niewidoczne - miecz przed ciałem, widziany z tyłu: nowy rodzaj też schowany, starą broń i tak wymazuje)
+            if name in OSTRZE and a.get('n', 0) < 30:
+                a['ukryta'] = True
             # the weapon's pixels again, along this axis (the pieces the first look took for something else)
             y0, x0 = r * CELL, i * CELL
             cim, cla = img[y0:y0 + CELL, x0:x0 + CELL], lab[y0:y0 + CELL, x0:x0 + CELL]
@@ -906,7 +967,7 @@ def render_kind(name, kind, img, lab, cimg, clab, ax, Lref):
     for r in range(rows):
         for c in range(cols):
             a = ax[r][c]
-            if not a:
+            if not a or a.get('ukryta'):
                 continue
             y0, x0 = r * CELL, c * CELL
             v = a['v']

@@ -10,7 +10,7 @@
 //   - the work by hand or with the shovel (the cairn's top, the grave's stone, the key's hole, the wreck's pieces): N blows with the
 //     game's tool swing (startToolSwing: crouch / shovel), stamina each blow (Farming.hitCost), O held = the next blow (as Homes.js)
 //   - "Zapiski strażnic": six cards (TownQuests vitems zak_karta_1..6) from the cairns (1-3) and the towers (4-6); brother Kleofas
-//     reads them (his talk, first: TownLife.addTalkHook) - 2 hours, 40 XP, a note
+//     reads them (his talk: Tawerna.talk.takeover) - 2 hours, 40 XP, a note
 //   - the shadow riddle: the Watchman's shadow (Okolice.shadowAt, the rock's real foot) over the hole, the sun's light, no rain
 //   - the eagle: the dive in low flight over a cliff herb (Space, the adult; before Orzel_Lot reads the key - priority 4), the
 //     perches (the eagle near one: bond +5 once), the one-way ways down from the landing places
@@ -47,6 +47,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("zakon");   // (the words of this file: js/teksty/zakon.txt, kod.*)
 
     const PLUGIN = "Zakon";
     const T = window.Tawerna;
@@ -208,7 +209,7 @@
             trigger: o.trigger || 0, directionFix: true, cond });
     }
     const ev = (id, name, x, y, pages, note) => OK().event(id, name, x, y, pages, note || "");
-    const blank = (id, x, y, name) => OK().blank(id, x, y, name || "Znacznik (Zakon)");
+    const blank = (id, x, y, name) => OK().blank(id, x, y, name || TK.kod.blank[0]);
     // a thing with one look, or a second one on self switch B
     const thing = (id, name, x, y, look, args, o) => {
         const q = o || {};
@@ -226,9 +227,9 @@
         for (const t of D.TOWERS.filter(t => t.map === map)) {
             // the ring of low walls (one picture, below the hero, the hero walks in): its 4x4 tiles in the middle of the 6x6 place
             // (x+1..x+4, y+1..y+4); the frame is 5 tiles wide (the picture in its left 4), centred on x+3
-            out.push(thing(t.ids.ring, "Fundamenty strażnicy", t.x + 3, t.y + 4, IMG.fundament, null, { priority: 0, through: true }));
+            out.push(thing(t.ids.ring, TK.kod.buildMap[0], t.x + 3, t.y + 4, IMG.fundament, null, { priority: 0, through: true }));
             const sx = t.x + D.SLAB_AT[0], sy = t.y + D.SLAB_AT[1];
-            out.push(thing(t.ids.slab, "Zawalona płyta z krukiem", sx, sy, IMG.plytaStr, ["tower", t.key], { lookB: IMG.plytaStrZbadana, note: "<ZakFlat>" }));
+            out.push(thing(t.ids.slab, TK.kod.buildMap[1], sx, sy, IMG.plytaStr, ["tower", t.key], { lookB: IMG.plytaStrZbadana, note: "<ZakFlat>" }));
             t.bushes.forEach((b, i) => { if (!(b[0] === sx && b[1] === sy)) out.push(blank(t.ids.blank + i, b[0], b[1])); });
         }
         // 7.2 the shrines (a candle at night: the light is drawn only in the dark outside)
@@ -239,36 +240,36 @@
         // 7.3 the cairns: the cairn (a rock picture - its own list, never mined; the sun's shadow comes with the rock picture) and the
         // raven stone on its top (gone once the top was taken down - the card found)
         for (const c of D.CAIRNS.filter(c => c.map === map)) {
-            out.push(thing(c.ids.cairn, "Kopiec z krukiem", c.at[0], c.at[1], ["!$Rock_Cairn", 2, 0], ["cairn", c.key]));
-            out.push(thing(c.ids.stone, "Kamień z krukiem (kopiec)", c.at[0], c.at[1], IMG.kopiecKruk, null, { priority: 1, through: true, lookB: null }));
+            out.push(thing(c.ids.cairn, TK.kod.buildMap[2], c.at[0], c.at[1], ["!$Rock_Cairn", 2, 0], ["cairn", c.key]));
+            out.push(thing(c.ids.stone, TK.kod.buildMap[3], c.at[0], c.at[1], IMG.kopiecKruk, null, { priority: 1, through: true, lookB: null }));
         }
         // 7.4 the ring of menhirs, the plate, the hole
         if (map === D.RING.map) {
             const R = D.RING;
             R.stones.forEach((p, i) => out.push(thing(R.stoneIds + i, "Menhir", p[0], p[1], [R.stoneImg, 2, 0], ["stone"])));
-            out.push(thing(R.watchman.id, "Strażnik (menhir)", R.watchman.x, R.watchman.y, [R.watchman.img, 2, 0], ["watchman"]));
-            out.push(ev(R.plate.id, "Płyta z krukiem", R.plate.x, R.plate.y, [
+            out.push(thing(R.watchman.id, TK.kod.buildMap[4], R.watchman.x, R.watchman.y, [R.watchman.img, 2, 0], ["watchman"]));
+            out.push(ev(R.plate.id, TK.kod.buildMap[5], R.plate.x, R.plate.y, [
                 pg({ look: IMG.plyta, args: ["plate"] }),
                 pg({ look: IMG.plytaOtwarta, args: ["plateDown"], sw: D.SW.komora, priority: 0, trigger: 1 })], "<Zakon:plyta><ZakFlat>"));
-            out.push(thing(R.hole.id, "Ubita ziemia", R.hole.x, R.hole.y, IMG.dol, ["hole"], { lookB: IMG.dolKopany, argsB: ["hole"], priorityB: 0, throughB: true, note: "<ZakFlat>" }));
+            out.push(thing(R.hole.id, TK.kod.buildMap[6], R.hole.x, R.hole.y, IMG.dol, ["hole"], { lookB: IMG.dolKopany, argsB: ["hole"], priorityB: 0, throughB: true, note: "<ZakFlat>" }));
         }
         // 7.4 the chamber (this package's own map)
         if (map === D.CHAMBER.map) {
             const K = D.CHAMBER;
-            out.push(ev(K.stairs.id, "Schody w górę (Łąka menhirów)", K.stairs.x, K.stairs.y, [pg({ look: ["!Fantasy_door5", 2, 0], args: ["chStairs"], priority: 1, trigger: 1 })], "<Zakon:schody>"));
-            for (const sc of K.sarcophagus) out.push(thing(sc.id, "Sarkofag pierwszego strażnika", sc.x, sc.y, null, ["chSarc"], { priority: 1 }));
-            for (const tc of K.torches) out.push(thing(tc.id, "Wypalona pochodnia", tc.x, tc.y, IMG.pochodniaZimna, null, { priority: 1, through: true }));
-            out.push(thing(K.basin.id, "Kamienna misa", K.basin.x, K.basin.y, IMG.komoraMisa, ["chBasin"]));
-            out.push(thing(K.wall.id, "Ściana z czterema wieżami", K.wall.x, K.wall.y, IMG.komoraMapa, ["chWall"]));
-            out.push(thing(K.chest.id, "Skrzynia w komorze", K.chest.x, K.chest.y, IMG.komoraSkrzynia, ["chChest"], { lookB: IMG.komoraSkrzyniaOtw }));
-            for (const st of K.statues) out.push(thing(st.id, "Kamienny brat", st.x, st.y, null, ["chStatue"], { priority: 1 }));
+            out.push(ev(K.stairs.id, TK.kod.buildMap[7], K.stairs.x, K.stairs.y, [pg({ look: ["!Fantasy_door5", 2, 0], args: ["chStairs"], priority: 1, trigger: 1 })], "<Zakon:schody>"));
+            for (const sc of K.sarcophagus) out.push(thing(sc.id, TK.kod.buildMap[8], sc.x, sc.y, null, ["chSarc"], { priority: 1 }));
+            for (const tc of K.torches) out.push(thing(tc.id, TK.kod.buildMap[9], tc.x, tc.y, IMG.pochodniaZimna, null, { priority: 1, through: true }));
+            out.push(thing(K.basin.id, TK.kod.buildMap[10], K.basin.x, K.basin.y, IMG.komoraMisa, ["chBasin"]));
+            out.push(thing(K.wall.id, TK.kod.buildMap[11], K.wall.x, K.wall.y, IMG.komoraMapa, ["chWall"]));
+            out.push(thing(K.chest.id, TK.kod.buildMap[12], K.chest.x, K.chest.y, IMG.komoraSkrzynia, ["chChest"], { lookB: IMG.komoraSkrzyniaOtw }));
+            for (const st of K.statues) out.push(thing(st.id, TK.kod.buildMap[13], st.x, st.y, null, ["chStatue"], { priority: 1 }));
         }
         // 7.5 the eagle's places
         for (const e of D.EAGLE.filter(e => e.map === map)) {
-            out.push(thing(e.down.id, e.rope === "lina" ? "Strzęp liny" : "Stare kołki w skale", e.down.at[0], e.down.at[1], IMG.kolki, ["down", e.key], { priority: 0 }));
+            out.push(thing(e.down.id, e.rope === "lina" ? TK.kod.buildMap[14] : TK.kod.buildMap[15], e.down.at[0], e.down.at[1], IMG.kolki, ["down", e.key], { priority: 0 }));
             for (const t of e.things) {
-                const name = { stash: "Skrytka przemytników", warzucha: "Warzucha w szczelinie", nest: "Stare gniazdo", nestOrder: "Gniazdo zakonnych orłów",
-                    szarotka: "Szarotka na półce", ravenStone: "Kamień z krukiem", camp: "Stare palenisko" }[t.kind] || "Rzecz";
+                const name = { stash: TK.kod.buildMap[16], warzucha: TK.kod.buildMap[17], nest: TK.kod.buildMap[18], nestOrder: TK.kod.buildMap[19],
+                    szarotka: TK.kod.buildMap[20], ravenStone: TK.kod.buildMap[21], camp: TK.kod.buildMap[22] }[t.kind] || "Rzecz";
                 const look = { stash: IMG.skrytka, warzucha: IMG.warzucha, nest: IMG.gniazdo, nestOrder: IMG.gniazdo, szarotka: IMG.ziele, ravenStone: IMG.kamienKruk, camp: IMG.ognisko }[t.kind];
                 const lookB = { stash: IMG.skrytkaPusta, warzucha: IMG.zieleZerwane, nest: IMG.gniazdoPuste, nestOrder: IMG.gniazdoPuste, szarotka: IMG.zieleZerwane }[t.kind];
                 out.push(thing(t.id, name, t.x, t.y, look, ["eagleThing", e.key, t.id], lookB ? { lookB } : {}));
@@ -276,12 +277,12 @@
             (e.bushes || []).forEach((b, i) => out.push(blank(e.blankId + i, b[0], b[1])));
         }
         // 7.5 the cliff herbs (in the sea by the cliff: seen from the eagle's back, picked in a dive)
-        for (const c of D.CLIFF.filter(c => c.map === map)) out.push(thing(c.id, "Warzucha na klifie", c.x, c.y, IMG.warzucha, null, { priority: 0, through: true, lookB: IMG.zieleZerwane }));
+        for (const c of D.CLIFF.filter(c => c.map === map)) out.push(thing(c.id, TK.kod.buildMap[23], c.x, c.y, IMG.warzucha, null, { priority: 0, through: true, lookB: IMG.zieleZerwane }));
         // 7.6 the perches
         for (const p of D.PERCHES.filter(p => p.map === map)) {
-            out.push(thing(p.id, "Orla grzęda Straży", p.at[0], p.at[1], IMG.grzeda, ["perch", p.n], { lookB: IMG.grzedaWoda }));
+            out.push(thing(p.id, TK.kod.buildMap[24], p.at[0], p.at[1], IMG.grzeda, ["perch", p.n], { lookB: IMG.grzedaWoda }));
             const tr = p.trace, look = tr.kind === "pioro" ? IMG.pioro : tr.kind === "siodlo" ? IMG.siodlo : IMG.slady;
-            out.push(thing(tr.id, "Ślad jeźdźca", tr.x, tr.y, look, ["trace", p.n], { lookB: tr.kind === "siodlo" ? IMG.siodlo : IMG.sladyPuste }));
+            out.push(thing(tr.id, TK.kod.buildMap[25], tr.x, tr.y, look, ["trace", p.n], { lookB: tr.kind === "siodlo" ? IMG.siodlo : IMG.sladyPuste }));
         }
         // 7.7 the cemetery and the gallows
         if (map === D.CEMETERY.map) {
@@ -290,13 +291,13 @@
             for (let x = G.x; x <= x1; x++) for (const y of [G.y, y1]) {
                 if (gate.has(x + "," + y) || (x === G.lamp.x && y === G.lamp.y)) continue;
                 const corner = x === G.x || x === x1;
-                out.push(thing(id++, "Murek cmentarza", x, y, corner ? IMG.murekRog : IMG.murekH, null));
+                out.push(thing(id++, TK.kod.buildMap[26], x, y, corner ? IMG.murekRog : IMG.murekH, null));
             }
-            for (let y = G.y + 1; y < y1; y++) for (const x of [G.x, x1]) out.push(thing(id++, "Murek cmentarza", x, y, IMG.murekV, null));
-            out.push(thing(G.lamp.id, "Lampka na słupie", G.lamp.x, G.lamp.y, IMG.lampa, ["lamp"], { note: LIGHT.lamp }));
+            for (let y = G.y + 1; y < y1; y++) for (const x of [G.x, x1]) out.push(thing(id++, TK.kod.buildMap[26], x, y, IMG.murekV, null));
+            out.push(thing(G.lamp.id, TK.kod.buildMap[27], G.lamp.x, G.lamp.y, IMG.lampa, ["lamp"], { note: LIGHT.lamp }));
             for (const g of G.graves) {
-                if (g.raven) out.push(thing(g.id, "Grób z krukiem", g.x, g.y, IMG.grobKruk, ["grave", g.raven], { lookB: IMG.grobKrukCzysty }));
-                else out.push(thing(g.id, "Stary grób", g.x, g.y, IMG[g.img], ["graveOld"]));
+                if (g.raven) out.push(thing(g.id, TK.kod.buildMap[28], g.x, g.y, IMG.grobKruk, ["grave", g.raven], { lookB: IMG.grobKrukCzysty }));
+                else out.push(thing(g.id, TK.kod.buildMap[29], g.x, g.y, IMG[g.img], ["graveOld"]));
             }
             const W = D.GALLOWS;
             out.push(thing(W.id, "Szubienica", W.at[0], W.at[1], IMG.szubienica, ["gallows"], { note: "<Occupy:left=1,right=1>" }));
@@ -304,13 +305,13 @@
         // 7.8 the grove of the Silent
         if (map === D.GROVE.map) {
             const G = D.GROVE;
-            G.stones.forEach((p, i) => out.push(thing(G.ids + i, "Biały kamień milczenia", p[0], p[1], IMG.kamienMilcz, ["gstone", i], i === 0 ? { lookB: IMG.kamienMilczDar } : {})));
-            out.push(blank(G.centreId, G.centre[0], G.centre[1], "Środek gaju"));
+            G.stones.forEach((p, i) => out.push(thing(G.ids + i, TK.kod.buildMap[30], p[0], p[1], IMG.kamienMilcz, ["gstone", i], i === 0 ? { lookB: IMG.kamienMilczDar } : {})));
+            out.push(blank(G.centreId, G.centre[0], G.centre[1], TK.kod.buildMap[31]));
         }
         // 7.10 the wreck's pieces (page 1 nothing; B the piece out of the sand at low tide; C the hole left)
         if (map === D.WRECK.map) {
             for (const p of D.WRECK.pieces) {
-                out.push(ev(p.id, "Kawałek wraku " + p.n, p.x, p.y, [
+                out.push(ev(p.id, Watki.wstaw(TK.kod.buildMap[32], { n: p.n }), p.x, p.y, [
                     pg({ look: null, priority: 0, through: true }),
                     pg({ look: IMG[p.img], args: ["wreck", p.n], b: true }),
                     pg({ look: IMG.wrakDol, args: ["wreckHole", p.n], c: true, priority: 0, through: true })], "<Zakon:wrak:" + p.n + "><ZakFlat>"));
@@ -418,7 +419,7 @@
         if (!n || s.cards[n]) return false;
         s.cards[n] = day();
         if (!s.read[n]) vgive("zak_karta_" + n, 1);
-        pop("Zapiski strażnic (" + n + ")", ICON.karta, "#ffd866");
+        pop(Watki.wstaw(TK.kod.giveCard[0], { n: n }), ICON.karta, "#ffd866");
         se("Book1", 80, 100);
         autoChecks();
         return true;
@@ -430,9 +431,9 @@
         s.read[n] = day();
         vtake("zak_karta_" + n, 1);
         if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(D.READ_TIME);
-        T.call("Journal", "addNote", "Zapiski strażnic (" + n + "): " + c.title, c.note);
-        T.call("Combat", "gainXp", D.READ_XP, "Zapiski strażnic (" + n + ")", true);
-        pop("Przeczytane Zapiski strażnic " + cardsRead() + "/6", ICON.karta, "#ffd866");
+        T.call("Journal", "addNote", Watki.wstaw(TK.kod.readCard[0], { n: n, title: c.title }), c.note);
+        T.call("Combat", "gainXp", D.READ_XP, Watki.wstaw(TK.kod.readCard[1], { n: n }), true);
+        pop(Watki.wstaw(TK.kod.readCard[2], { "1": cardsRead() }), ICON.karta, "#ffd866");
         if (n === 3 || n === 4) { const O = OK(); if (O && O.hint) O.hint("menhiry_krag"); }
         autoChecks();
         return true;
@@ -619,7 +620,7 @@
         const first = !s.chamber.wall;
         if (first) s.chamber.wall = day();
         runList(interp, linesTo([], HERO, TX.wallLook));
-        if (first) { T.call("Combat", "gainXp", 30, "ściana z czterema wieżami", true); autoChecks(); }
+        if (first) { T.call("Combat", "gainXp", 30, TK.kod.chWall[0], true); autoChecks(); }
     };
     ACT.chChest = interp => {
         const s = S();
@@ -698,8 +699,8 @@
         pop(rainWater() ? TX.perchWater : TX.perchDry, ICON.gniazdo);
         if (first) {
             discover(p.key, true);
-            T.call("Combat", "gainXp", 40, "orla grzęda Straży", true);
-            T.call("Journal", "addNote", "Orla grzęda Straży (" + ["północna", "środkowa", "południowa"][n - 1] + ")", TX.perchLook(n).map(l => l.replace(/^> /, "")).join(" "));
+            T.call("Combat", "gainXp", 40, TK.kod.perch[0], true);
+            T.call("Journal", "addNote", Watki.wstaw(TK.kod.perch[4], { "1": [TK.kod.perch[1], TK.kod.perch[2], TK.kod.perch[3]][n - 1] }), TX.perchLook(n).map(l => l.replace(/^> /, "")).join(" "));
         }
         autoChecks();
     };
@@ -740,7 +741,7 @@
                 s.graves[n] = day();
                 se("Item3", 60, 80);
                 think(TX.graveRead(TX.graveNames[n]));
-                T.call("Journal", "addNote", "Grób z krukiem: " + TX.graveNames[n].name, TX.graveNames[n].line);
+                T.call("Journal", "addNote", Watki.wstaw(TK.kod.done[0], { name: TX.graveNames[n].name }), TX.graveNames[n].line);
                 if ([1, 2, 3].every(k => s.graves[k]) && !s.names) {
                     s.names = day();
                     vgive("zak_imiona", 1);
@@ -797,9 +798,9 @@
             } });
     };
     // Kleofas's reading (the talk's branches)
-    let passKleofas = false;
+    // ("Nie, w innej sprawie": the same talk again without this plugin's part - the core's talk service, skip)
     ACT.read = (interp, n) => { readCard(n); };
-    ACT.pass = interp => { passKleofas = true; const L = T.api("TownLife"); if (L && L.talk && interp) L.talk(interp); };
+    ACT.pass = interp => { const L = T.api("TownLife"); if (L && L.talk && interp) L.talk(interp, { skip: PLUGIN }); };
     ACT.told = (interp, k) => { S().told[k] = day(); };
     ACT.ravenFeed = (interp, key, ri, itemId) => feedRavens(key, ri, itemId);
 
@@ -847,7 +848,7 @@
             if (x.map !== m) continue;
             if (dist(p.x, p.y, x.x + 1.5, x.y + 1.5) > 6) continue;
             S().eagle[x.key] = S().eagle[x.key] || day();
-            if (!S().told["land:" + x.key]) { S().told["land:" + x.key] = day(); think([TX.downAsk(x.rope).replace(/\.$/, "") + " - jedyna droga w dół bez orła."]); }
+            if (!S().told["land:" + x.key]) { S().told["land:" + x.key] = day(); think([Watki.wstaw(TK.kod.glowna[0], { "1": TX.downAsk(x.rope).replace(/\.$/, "") })]); }
         }
     }, { owner: PLUGIN });
     function perchUpdate() {
@@ -860,7 +861,7 @@
             if (dist(e.x, e.y, p.at[0] + 0.5, p.at[1] + 0.9) > D.PERCH_NEAR) continue;
             s.perchBond[p.n] = day();
             if (O.addBond) O.addBond(D.PERCH_BOND);
-            pop(TX.perchEagle(O.nameOf ? O.nameOf() : "Orzeł") + "  ·  więź +" + D.PERCH_BOND, ICON.gniazdo, "#e8eef4");
+            pop(Watki.wstaw(TK.kod.perchUpdate[1], { "1": TX.perchEagle(O.nameOf ? O.nameOf() : TK.kod.perchUpdate[0]), PERCH_BOND: D.PERCH_BOND }), ICON.gniazdo, "#e8eef4");
         }
     }
 
@@ -916,7 +917,7 @@
         $gameSystem.addBuff("spokoj", 6);
         discover("gaj", true);
         se("Bell1", 40, 70);
-        top("Godzina milczenia", TX.groveDoneSub, "#e8eef4");
+        top(TK.kod.finishGrove[0], TX.groveDoneSub, "#e8eef4");
         think(TX.groveDone);
         T.emit("zakonGrove", { done: true });
         sync();
@@ -1180,42 +1181,44 @@
         if (!n) return null;
         const q = TQ(), mk = q && q.markers ? q.markers().pustelnik : null;
         if (mk === "ready") return null;   // (a quest hand-in first)
-        const c = D.CARDS.find(x => x.n === n), spk = { id: ev.eventId(), name: "Brat Kleofas" }, out = [];
-        linesTo(out, spk, [!s.told.kleofasZapiski ? "Co tam masz w tej skórze? ...Zapiski strażnic! Dziennik braci warty. Tego nie trzeba szyfrem czytać - pisali prosto, jak żołnierze." : "Następna karta Zapisków? Daj, przeczytam."]);
+        const c = D.CARDS.find(x => x.n === n), spk = { id: ev.eventId(), name: TK.kod.kleofasTalk[0] }, out = [];
+        linesTo(out, spk, [!s.told.kleofasZapiski ? TK.kod.kleofasTalk[1] : TK.kod.kleofasTalk[2]]);
         if (!s.told.kleofasZapiski) act(out, ["told", "kleofasZapiski"]);
         const branch = [C(221, [])].concat(act([], ["read", n]), [C(222, [])]);
-        plain(branch, "Zapiski strażnic (" + n + "): " + c.title, c.read);
-        return choiceTo(out, ["Przeczytaj mi Zapiski strażnic (" + n + ").", "Nie, w innej sprawie."], [branch, act([], ["pass"])], 1);
+        plain(branch, Watki.wstaw(TK.kod.kleofasTalk[3], { n: n, title: c.title }), c.read);
+        return choiceTo(out, [Watki.wstaw(TK.kod.kleofasTalk[4], { n: n }), TK.kod.kleofasTalk[5]], [branch, act([], ["pass"])], 1);
     }
     function grabarzTalk(ev) {
         const s = S();
         if (!isActive("D37") || s.told.grabarzGroby || [1, 2, 3].every(k => s.graves[k])) return null;
         const spk = { id: ev.eventId(), name: "Hieronim" }, out = [];
-        linesTo(out, spk, ["Ambroży cię przysłał? Do tych z krukiem? Dwa w północnym rzędzie, przy murku, jeden w południowym, po prawej.",
-            "Czyść rękami, nie łopatą. Ojciec mówił: kamień brata zakonu dotyka się jak chleba."]);
+        linesTo(out, spk, [TK.kod.grabarzTalk[0],
+            TK.kod.grabarzTalk[1]]);
         return act(out, ["told", "grabarzGroby"]);
     }
     function ansgarTalk(ev) {
         const s = S();
         if (count(ITEM.tabliczka) < 1 || s.told.ansgarTabliczka) return null;
-        const spk = { id: ev.eventId(), name: "Eryk Sowa" }, out = [];
-        linesTo(out, spk, ["(Eryk widzi deskę w twojej torbie i blednie.) Skąd... To z dziobu. Sam ją przybijałem w porcie, zanim wypłynęliśmy.",
-            "„Biała Źrenica”. Straż Pewności. Schowaj to, chłopcze. Jak zobaczy to ktoś z garnizonu, zacznie pytać. A jak zobaczy ktoś z naszych... nie zapyta."]);
+        const spk = { id: ev.eventId(), name: TK.kod.ansgarTalk[0] }, out = [];
+        linesTo(out, spk, [TK.kod.ansgarTalk[1],
+            TK.kod.ansgarTalk[2]]);
         return act(out, ["told", "ansgarTabliczka"]);
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: the owner of the order's matters at Kleofas, Hieronim and Eryk - first of the
+    // "owner" takeovers (as the old hook: the last one put first at the load)
     function hookTalk() {
-        const L = T.api("TownLife");
-        if (!L || !L.addTalkHook || hookTalk.done) return;
+        if (hookTalk.done) return;
         hookTalk.done = true;
-        L.addTalkHook((key, ev) => {
+        T.talk.takeover({ owner: PLUGIN, who: ["pustelnik", "grabarz", "rozbitek"], priority: T.talk.PRIORITY.owner + 60, run: ctx => {
+            const key = ctx.who, ev = ctx.ev;
             try {
                 if (!has()) return null;
-                if (key === "pustelnik") { if (passKleofas) { passKleofas = false; return null; } return kleofasTalk(ev); }
+                if (key === "pustelnik") return kleofasTalk(ev);
                 if (key === "grabarz") return grabarzTalk(ev);
                 if (key === "rozbitek") return ansgarTalk(ev);
             } catch (e) { report("talk", e); }
             return null;
-        }, true);
+        } });
     }
     hookTalk();
 
@@ -1304,21 +1307,21 @@
         [["Stary cmentarz", 8, 9, 27], ["Szubienica", 8, 88, 125], ["Gaj Milczących (środek)", 120, 57, 54], ["Kruki: pustelnia", 155, 76, 49], ["Kruki: Urwisko", 157, 78, 39],
          ["Płycizna P2 (wrak)", 165, 62, 19]]);
     let f9Spot = 0;
-    const f9Label = i => "Miejsce D " + (i + 1) + "/" + GO.length + ": " + GO[i][0] + " (mapa " + GO[i][1] + ")   ←→";
+    const f9Label = i => Watki.wstaw(TK.kod.f9Label[0], { "1": i + 1, length: GO.length, "3": GO[i][0], "4": GO[i][1] });
     (function f9() {
         const O = OK();
         if (!O || !O.f9) return;
         O.f9.add({ owner: PLUGIN, title: "Paczka D: Tajemnice i zakon:",
             rows: () => [
-                { label: f9Label(f9Spot), icon: ICON.plyta, desc: "←→ wybierz miejsce paczki D, OK przenosi na nie.", what: "spot", pick: f9Spot },
-                { label: "Ustaw godzinę cienia Strażnika (dziś)", icon: ICON.klucz, desc: "Godzina w środku dzisiejszego okna zagadki cieni (krąg menhirów), bez deszczu.", what: "shadow" },
-                { label: "Daj Klucz Strażnika", icon: ICON.klucz, desc: "Kamienny klucz do płyty w kręgu (bez kopania).", what: "key" },
-                { label: "Daj wszystkie Zapiski strażnic", icon: ICON.karta, desc: "Sześć kart Zapisków w torbie (do przeczytania u Kleofasa).", what: "cards" },
-                { label: "Orzeł dorosły, lot", icon: ICON.gniazdo, desc: "Orzeł na etapie 5 obok bohatera i start lotu (lądowanie: L, nurkowanie: Spacja w niskim locie).", what: "eagle" },
-                { label: "Sztorm się skończył (kawałek wraku)", icon: ICON.okucie, desc: "Piasek odsłania następny kawałek wraku na płyciźnie (zakon.wreck +1).", what: "storm" },
-                { label: "Odpływ teraz", icon: ICON.okucie, desc: "Wyspa.forceTide(\"low\") - płycizny suche, kawałki wraku widać.", what: "tide" },
-                { label: "Akt II (dług spłacony, osada otwarta)", icon: ICON.kamien, desc: "Story: rozdział 1 zamknięty, przełącznik 16 (Osada Milczących).", what: "act2" },
-                { label: "Zmierzch w gaju Milczących", icon: ICON.spokoj, desc: "Przenosi do środka gaju o zachodzie słońca.", what: "grove" }
+                { label: f9Label(f9Spot), icon: ICON.plyta, desc: TK.kod.rows[0], what: "spot", pick: f9Spot },
+                { label: TK.kod.rows[1], icon: ICON.klucz, desc: TK.kod.rows[2], what: "shadow" },
+                { label: TK.kod.rows[3], icon: ICON.klucz, desc: TK.kod.rows[4], what: "key" },
+                { label: TK.kod.rows[5], icon: ICON.karta, desc: TK.kod.rows[6], what: "cards" },
+                { label: TK.kod.rows[7], icon: ICON.gniazdo, desc: TK.kod.rows[8], what: "eagle" },
+                { label: TK.kod.rows[9], icon: ICON.okucie, desc: TK.kod.rows[10], what: "storm" },
+                { label: TK.kod.rows[11], icon: ICON.okucie, desc: TK.kod.rows[12], what: "tide" },
+                { label: TK.kod.rows[13], icon: ICON.kamien, desc: TK.kod.rows[14], what: "act2" },
+                { label: TK.kod.rows[15], icon: ICON.spokoj, desc: TK.kod.rows[16], what: "grove" }
             ],
             pick(row, delta) {
                 if (row.what !== "spot") return;
@@ -1326,38 +1329,38 @@
                 row.label = f9Label(row.pick);
             },
             ok(row) {
-                if (!has()) return { say: "Brak gry", bad: true };
+                if (!has()) return { say: TK.kod.ok[0], bad: true };
                 const s = S();
                 if (row.what === "spot") { const g = GO[row.pick || 0]; return { go: [g[0], g[1], g[2], g[3], 2] }; }
                 if (row.what === "shadow") {
                     const w = shadowWindow(day());
-                    if (!w) return { say: "Dziś cień nie sięga dołu", bad: true };
+                    if (!w) return { say: TK.kod.ok[1], bad: true };
                     const S0 = T.api("Survival"); if (S0 && S0.calmWeather) S0.calmWeather();
                     $gameSystem.setDayNightHour((w[0] + w[1]) / 2);
-                    return { say: "Okno cienia: " + w[0].toFixed(2) + "-" + w[1].toFixed(2) + ", ustawiono " + ((w[0] + w[1]) / 2).toFixed(2) };
+                    return { say: Watki.wstaw(TK.kod.ok[2], { "1": w[0].toFixed(2), "2": w[1].toFixed(2), "3": ((w[0] + w[1]) / 2).toFixed(2) }) };
                 }
-                if (row.what === "key") { if (count(ITEM.klucz) < 1) give(ITEM.klucz, 1); s.key = s.key || day(); sync(); return { say: "Klucz Strażnika w torbie" }; }
-                if (row.what === "cards") { for (let n = 1; n <= 6; n++) giveCard(n); return { say: "Zapiski strażnic: " + cardsFound() + "/6" }; }
+                if (row.what === "key") { if (count(ITEM.klucz) < 1) give(ITEM.klucz, 1); s.key = s.key || day(); sync(); return { say: TK.kod.ok[3] }; }
+                if (row.what === "cards") { for (let n = 1; n <= 6; n++) giveCard(n); return { say: Watki.wstaw(TK.kod.ok[4], { "1": cardsFound() }) }; }
                 if (row.what === "eagle") {
                     const O = T.api("Orzel"), L = T.api("Orzel_Lot");
-                    if (!O || !O.forceStage) return { say: "Brak orła", bad: true };
+                    if (!O || !O.forceStage) return { say: TK.kod.ok[5], bad: true };
                     O.forceStage(5);
                     O.state().bond = Math.max(O.state().bond || 0, 80);
                     O.state().st = O.maxSt ? O.maxSt() : 100;
-                    O.state().name = O.state().name || "Śnieżny";
+                    O.state().name = O.state().name || TK.kod.ok[6];
                     if (L && L.mount) L.mount();
-                    return { say: "Orzeł dorosły" + (L && L.flying && L.flying() ? ", w powietrzu" : "") };
+                    return { say: Watki.wstaw(TK.kod.ok[8], { "1": L && L.flying && L.flying() ? TK.kod.ok[7] : "" }) };
                 }
-                if (row.what === "storm") { return { say: revealWreck() ? "Kawałek wraku " + s.wreck + "/3 odsłonięty" : "Wszystkie kawałki już odsłonięte" }; }
-                if (row.what === "tide") { const W = T.api("Wyspa"); if (W && W.forceTide) W.forceTide("low"); sync(); return { say: "Odpływ" }; }
+                if (row.what === "storm") { return { say: revealWreck() ? Watki.wstaw(TK.kod.ok[9], { wreck: s.wreck }) : TK.kod.ok[10] }; }
+                if (row.what === "tide") { const W = T.api("Wyspa"); if (W && W.forceTide) W.forceTide("low"); sync(); return { say: TK.kod.ok[11] }; }
                 if (row.what === "act2") {
                     const st = T.api("Story"), ss = st && st.state ? st.state() : null;
                     if (ss) { ss.paid = ss.debt || ss.paid; ss.done = ss.done || day(); }
                     $gameSwitches.setValue(16, true);
                     autoChecks();
-                    return { say: ss ? "Akt II" : "Przełącznik 16 włączony (gra bez fabuły)" };
+                    return { say: ss ? TK.kod.ok[12] : TK.kod.ok[13] };
                 }
-                if (row.what === "grove") { $gameSystem.setDayNightHour(Math.round(sunset(day()) * 100) / 100); return { go: ["Gaj Milczących (zmierzch)", 120, D.GROVE.centre[0], D.GROVE.centre[1] + 1, 8] }; }
+                if (row.what === "grove") { $gameSystem.setDayNightHour(Math.round(sunset(day()) * 100) / 100); return { go: [TK.kod.ok[14], 120, D.GROVE.centre[0], D.GROVE.centre[1] + 1, 8] }; }
                 return null;
             } });
     })();

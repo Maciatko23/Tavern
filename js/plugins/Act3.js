@@ -82,7 +82,8 @@
     const D = window.Act3Data;
     if (!D) throw new Error("Act3.js: brak Act3_Data.js - musi stać nad Act3.js na liście wtyczek");
     const PLUGIN = "Act3";
-    const TX = D.TEXT;
+    const TX = D.TEXT;   // (js/teksty/akt3.txt; TX.kod - the words of this file)
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
 
     const Q = () => T.api("TownQuests");
     const UG = () => T.api("Underground");
@@ -208,7 +209,7 @@
                 if (s.warn.who[r.key]) continue;
                 const ev = L.eventOf(r.key);
                 if (!near(ev)) continue;
-                const lines = TX.warnBarks[r.key] || TX.warnBarks["*"];
+                const lines = TX.warnBarks[r.key] || TX.warnBarks.inni;   // (inni: everyone without words of his own)
                 s.warn.who[r.key] = true;
                 say(ev, pick(lines), 300);
                 warnT = 360;
@@ -236,15 +237,19 @@
         if (key !== "dzwonnik" || (ph !== "armed" && ph !== "siege")) return null;
         const lines = ctx().ambrozy ? TX.ambrozyTrusts : TX.ambrozyNot, out = [];
         lines.forEach((l, i) => {
-            out.push({ code: 101, indent: 0, parameters: ["", 0, 0, 2, "Ambroży"] });
+            out.push({ code: 101, indent: 0, parameters: ["", 0, 0, 2, TX.kod.ambrozy] });
             out.push({ code: 401, indent: 0, parameters: [(i === 0 ? "\\SPK[" + ev.eventId() + "]" : "\\SPK[" + ev.eventId() + "]") + l] });
         });
         return out;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: "after" - only when the quests (and Pustelnia) have nothing for Ambroży,
+    // the last of the takeovers (as the old hook, put last at the first map frame)
     function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook && !hookTalk.done) { hookTalk.done = true; L.addTalkHook(ambrozyTalk); }
+        if (hookTalk.done) return;
+        hookTalk.done = true;
+        T.talk.takeover({ owner: PLUGIN, who: "dzwonnik", priority: T.talk.PRIORITY.after, run: c => ambrozyTalk(c.who, c.ev) });
     }
+    hookTalk();
 
     // ------------------------------------------------------------------
     // The siege: its start, the bell, the waves, the doors, the end
@@ -302,7 +307,7 @@
         if (s.bell) { if (where) say($gamePlayer, TX.bellDone, 150); return false; }
         const q = Q();
         if (!q || !q.openBell) { ringBell("hero"); return true; }
-        q.openBell({ target: 4, title: "Trzy i jeden", sub: "dzwonnica - alarm", who: "Trzy, przerwa, jeden: cztery uderzenia", period: 100, window: 0.87 }, res => {
+        q.openBell({ target: 4, title: TX.kod.dzwon.tytul, sub: TX.kod.dzwon.sub, who: TX.kod.dzwon.jak, period: 100, window: 0.87 }, res => {
             if (res && (res.ok || res.right || res.none)) ringBell("hero");
             else say($gamePlayer, TX.bellWrong, 200);
         });
@@ -513,7 +518,7 @@
         if (!how) return;
         a.fated = true;
         if (a.grum) { s.grumFate = how === "killed" ? "dead" : "gone"; if (how !== "killed") say(h, TX.grumEnemyBeaten, 240); }
-        if (a.name === "Rafał") s.rafalFate = how === "killed" ? "dead" : "gone";
+        if (a.name === TX.fale.imiona.rafal) s.rafalFate = how === "killed" ? "dead" : "gone";
         if (a.boss) { s.bossBeaten = true; if (how !== "killed") say(h, TX.bossBeaten, 240); }
     }
     function nextWave() {
@@ -606,10 +611,10 @@
         // what it brings: the town's opinion; experience and Borgar's gold for a hero who fought
         const q = Q();
         const op = out.offscreen ? (out.result === "fallen" ? -5 : -2) : R.opinion;
-        if (q && q.addOpinion && op) q.addOpinion(op, out.offscreen ? "nie było cię, kiedy frakcja uderzyła na tawernę" : "noc pod tawerną");
+        if (q && q.addOpinion && op) q.addOpinion(op, out.offscreen ? TX.kod.opiniaBezCiebie : TX.kod.opiniaNoc);
         if (!out.offscreen) {
             const C = CB();
-            if (C && C.gainXp && R.xp) C.gainXp(R.xp, "Akt III");
+            if (C && C.gainXp && R.xp) C.gainXp(R.xp, TX.kod.xp);
             if (R.gold && !out.heroBeaten) $gameParty.gainGold(R.gold);
         }
         const names = out.lost.map(k => TX.names[k] || k).join(", ") || "nikt";
@@ -817,7 +822,7 @@
             const fx = from.centerX() - this.centerX(), fy = from.centerY() - this.centerY(), dd = Math.hypot(fx, fy) || 1;
             if ((fx * Math.cos(this._faceAng) + fy * Math.sin(this._faceAng)) / dd > 0.3 && Math.random() < 0.6) {
                 dmg = Math.round(dmg * 0.2);
-                if (F2) F2.numberAt(this.centerX(), this.centerY() - 1.3, dmg > 0 ? "Blok -" + dmg : "Zablokowane!", "#cfd6de", 0.75);
+                if (F2) F2.numberAt(this.centerX(), this.centerY() - 1.3, dmg > 0 ? fill(TX.kod.blok, { n: dmg }) : TX.kod.zablokowane, "#cfd6de", 0.75);
                 se("Sword4", 70, 115);
                 this._hp -= dmg;
                 if (this._hp <= 0) this.goDown();
@@ -1187,7 +1192,7 @@
         const b = sp.bitmap, ctx = b.context;
         b.clear();
         b.fontSize = 13; b.fontBold = true; b.outlineWidth = 3; b.outlineColor = "rgba(0,0,0,0.9)"; b.textColor = s.broken[m] ? "#ff9f8f" : "#ffe9a8";
-        b.drawText(s.broken[m] ? (m === D.TOWN ? "Wyważone!" : "Puściły!") : D.SPOTS[m].doorName, 0, 0, 96, 16, "center");
+        b.drawText(s.broken[m] ? (m === D.TOWN ? TX.kod.wywazone : TX.kod.puscily) : D.SPOTS[m].doorName, 0, 0, 96, 16, "center");
         ctx.fillStyle = "rgba(0,0,0,0.8)"; ctx.fillRect(10, 18, 76, 9);
         ctx.fillStyle = "#3a2414"; ctx.fillRect(11, 19, 74, 7);
         ctx.fillStyle = hp > 50 ? "#d9a441" : hp > 25 ? "#e07a2f" : "#e5484d"; ctx.fillRect(11, 19, Math.round(74 * hp / 100), 7);
@@ -1216,7 +1221,7 @@
                 const b = bar.bitmap, c2 = b.context, hp = Math.max(0, d._hp / d._maxHp);
                 b.clear();
                 b.fontSize = 12; b.fontBold = true; b.outlineWidth = 3; b.outlineColor = "rgba(0,0,0,0.9)"; b.textColor = d._down ? "#cfd6de" : "#bdf5a8";
-                b.drawText(d._down ? d._def.name + " (ranny)" : d._def.name, 0, 0, 90, 15, "center");
+                b.drawText(d._down ? fill(TX.kod.ranny, { imie: d._def.name }) : d._def.name, 0, 0, 90, 15, "center");
                 if (!d._down) {
                     c2.fillStyle = "rgba(0,0,0,0.75)"; c2.fillRect(23, 17, 44, 7);
                     c2.fillStyle = "#1d3a1c"; c2.fillRect(24, 18, 42, 5);
@@ -1316,7 +1321,7 @@
             const row = this._list && this._list.rowData ? this._list.rowData() : null;
             if (row && row.kind === "act3_arm") { debugArm(); this.popScene(); return; }
             if (row && row.kind === "act3_start") { debugStart(); this.popScene(); return; }
-            if (row && row.kind === "act3_reset") { reset(); $gameTemp.pushLootPopup(row.icon, "Akt III: wyczyszczony", "#9ff0a8"); this._list.activate(); return; }
+            if (row && row.kind === "act3_reset") { reset(); $gameTemp.pushLootPopup(row.icon, TX.kod.f9Wyczyszczony, "#9ff0a8"); this._list.activate(); return; }
             _onOk.call(this);
         };
     }
@@ -1327,7 +1332,7 @@
         s.phase = "idle";
         s.outcome = null;
         arm();
-        T.popup("Akt III: napad następnej nocy (dzień " + s.siegeDay + ")", { top: true, color: "#ffd98f" });
+        T.popup(fill(TX.kod.f9Napad, { dzien: s.siegeDay }), { top: true, color: "#ffd98f" });
         return true;
     }
     // the strike now: on the town map in front of the tavern at 22:00 (from anywhere)

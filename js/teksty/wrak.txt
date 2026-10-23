@@ -1,0 +1,414 @@
+# Teksty wraku na mieliźnie (wtyczki Wrak_Data.js i Wrak.js): Janek i łódź, żołnierze, zalewanie, kajuta, poszlaki i znaki mapy, Eryk Sowa, zadania D25 i W12.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz wrak
+
+# ======================================================================== resident (mieszkaniec)
+mieszkaniec.name = Eryk Sowa
+mieszkaniec.title = kupiec suknem z lądu
+[mieszkaniec.barks.wander]
+Ile za ten chleb? ...Drogo. Jak wszędzie.
+Ładne światło na tym rynku. Szkoda, że węgla mało.
+(Eryk szkicuje coś na skrawku papieru i chowa go do rękawa.)
+
+[mieszkaniec.barks.stand]
+Morze. Zawsze to samo morze.
+(Eryk patrzy na zatokę, aż oczy mu łzawią.)
+Stąd widać mieliznę. I to, co na niej leży.
+
+[mieszkaniec.barks.work]
+Zimna. Dobrze.
+Kto tam? ...A, to ty. Idź spać.
+
+[mieszkaniec.barks.rain]
+Deszcz. Na morzu deszcz to łaska. Na lądzie tylko błoto.
+
+[mieszkaniec.barks.night]
+Późno. Nie widziałeś mnie.
+
+[mieszkaniec.barks.tavern]
+Portret za piwo! Kto chętny?
+Sukno było. Teraz jest węgiel i papier.
+Borgar, jeszcze jedno. Na kredyt? ...Nie? To nie.
+
+[mieszkaniec.barks.home]
+(Eryk śpi niespokojnie i mamrocze coś w obcym języku.)
+
+[mieszkaniec.talk.morning]
+Rano rysuję najlepiej. Twarze są jeszcze szczere.
+Śniadanie u Borgara. Owsianka jak klej, ale ciepła.
+
+[mieszkaniec.talk.day]
+Ludzie płacą za portret piwem. Dobry interes, póki wątroba wytrzyma.
+Nie pytaj o sukno. Sukno poszło na dno.
+
+[mieszkaniec.talk.evening]
+Wieczorem tawerna gada. Ja słucham. I rysuję.
+Melia śpiewa o krukach. Ładnie śpiewa. Za ładnie.
+
+[mieszkaniec.talk.night]
+Po nocy nie rysuję. Po nocy ludzie mają za dużo cieni na twarzy.
+
+[mieszkaniec.talk.rain]
+Morze w deszcz wygląda jak w domu. Prawie.
+
+# ======================================================================== D25 (zadania.D25)
+zadania.D25.title = Mapa z wraku
+zadania.D25.where = Wrak na mieliźnie (łódź Janka z przystani albo łacha od garnizonu w odpływie)
+zadania.D25.when = od dnia 15
+zadania.D25.desc = Na mieliźnie w zatoce leży „Biała Źrenica” - okręt Czarnych Oczu, rozbity tej samej nocy co kuter Rocha. Roch mówi, że w kajucie kapitana muszą być mapy.
+[zadania.D25.offer.say]
+Widziałeś okręt na mieliźnie? Tam, za cyplem. Czarne Oczy. Rozbił się tej samej nocy co mój kuter.
+Taki okręt nie pływa bez map. A ich mapy to mapy kamieni z krukiem. Kto wie, czego szukają, ten wie, przed czym się chować.
+Żołnierze z garnizonu wyławiają z niego, co się da, ale pod pokład nie schodzą. Boją się szczurów i wody.
+
+zadania.D25.offer.yes = Popłynę na wrak.
+zadania.D25.offer.no = Nie teraz.
+[zadania.D25.offer.accept]
+Janek cię podwiezie, za dnia. Albo idź po łasze od garnizonu, kiedy morze odejdzie. Tylko nie daj się złapać żołnierzom bez glejtu.
+
+[zadania.D25.offer.decline]
+Wrak nie ucieknie. Chyba że morze go zabierze.
+
+zadania.D25.steps.0.text = Dostań się na wrak na mieliźnie: łodzią Janka (przystań, za dnia) albo pieszo po łasze od garnizonu, w odpływie.
+zadania.D25.steps.1.text = Zejdź pod pokład przez dziurę w burcie i znajdź klucz bosmana. Dolna ładownia jest sucha tylko przy niskiej wodzie.
+zadania.D25.steps.2.text = Otwórz kluczem kajutę kapitana i przeszukaj biurko i skrzynię.
+zadania.D25.steps.3.text = Pięć kamieni z krukiem: zgłoś je celnikowi (przystań, 5 G za sztukę), sprzedaj Baltazarowi (kantor, 15 G za sztukę) albo zatrzymaj i pokaż dziadkowi.
+
+# ======================================================================== W12 (zadania.W12)
+zadania.W12.title = Rozbitek
+zadania.W12.where = Tawerna, rynek, Podgrodzie, wrak
+zadania.W12.when = po spotkaniu Eryka Sowy
+zadania.W12.desc = Eryk Sowa rysuje w tawernie portrety za piwo i mówi, że handlował suknem. Sukna nikt nie widział, a palce ma czarne od atramentu.
+zadania.W12.steps.0.text = Kim jest Eryk Sowa? Zbierz poszlaki ({n} z 2): dziennik okrętu z wraku, Józek Łata z Podgrodzia, wizja w latarni, podwinięty rękaw nocą przy studni, cudzy list.
+zadania.W12.steps.1.text = Porozmawiaj z Erykiem w cztery oczy (tawerna, rynek albo mury).
+zadania.W12.steps.2.text = Zanieś fałszywą mapę Baltazarowi (kantor, 8-18).
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.dziennik_okretu.name = Dziennik okrętu „Białej Źrenicy”
+rzeczy.klucz_bosmana.name = Klucz bosmana
+rzeczy.kamien_kruk.name = Kamień z krukiem
+rzeczy.monety_oko.name = Monety z okiem
+rzeczy.falszywa_mapa.name = Fałszywa mapa kamieni (rysunek Ansgara)
+rzeczy.mapa_ansgara.name = Mapa Ansgara: kamienie z krukiem na wyspie
+rzeczy.portret.name = Portret węglem (od Eryka Sowy)
+
+# ======================================================================== REMARKS (uwagi)
+# wrakJanek, mówi: janek
+[uwagi.0.lines]
+Byłeś na tym wraku? Ja bym tam nie lazł. Morze chodzi tam pod piachem jak kot pod kocem.
+
+# wrakRoch, mówi: przemytnik
+[uwagi.1.lines]
+Masz ich dziennik? Nie pokazuj go nikomu na przystani. Celnik czyta wszystko, co ma litery.
+
+# ansgarMelia, mówi: melia
+[uwagi.2.lines]
+(Melia nie podnosi wzroku znad lutni.) Eryk narysował mnie kiedyś. Za darmo. A ty go wydałeś wojsku.
+Nie mam dziś ochoty na żarty. Ani jutro.
+
+# ansgarCelnik, mówi: celnik
+[uwagi.3.lines]
+Wojsko zabrało tego rysownika z tawerny. Kartograf Czarnych Oczu, mówią. Zapisałem go w księdze. Uczciwie.
+
+# ansgarFledRoch, mówi: przemytnik
+[uwagi.4.lines]
+Twój kartograf rzygał przez całą drogę. Ale dopłynął. Kazał ci powiedzieć: „Oko nie śpi, ale mruga”.
+Nie wiem, co to znaczy, i nie chcę wiedzieć.
+
+# ansgarAllyMelia, mówi: melia
+[uwagi.5.lines]
+Eryk znowu mnie rysuje. Mówi, że ma lepszą rękę, odkąd lżej mu na sercu. Coś ty mu powiedział?
+
+# ======================================================================== MARKS (znaki)
+znaki.0.name = Wzgórze tawerny
+znaki.1.name = Kamieniołom w Górach
+znaki.2.name = Przylądek z latarnią
+znaki.3.name = Pustelnia na klifie
+znaki.4.name = Urwisko Kruków
+znaki.5.name = Kopiec z krukiem przy chacie dziadka
+znaki.6.name = Dwór Lorda
+
+# ======================================================================== CLUES (poszlaki)
+poszlaki.dziennik.name = Dziennik okrętu
+poszlaki.dziennik.text = W dzienniku „Białej Źrenicy”, na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”.
+poszlaki.jozek.name = Płaszcz od Józka Łaty
+poszlaki.jozek.text = Józek Łata sprzedał po sztormie swój stary szary płaszcz obcemu. Ten zapłacił dziwnym groszem: z okiem zamiast korony.
+poszlaki.wizja.name = Wizja w latarni
+poszlaki.wizja.text = W mgle soczewka latarni pokazała człowieka z piórem, który rysuje wybrzeże wyspy - i białe oko na jego nadgarstku.
+poszlaki.tatuaz.name = Tatuaż przy studni
+poszlaki.tatuaz.text = Nocą przy studni Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko.
+poszlaki.list.name = Cudzy list
+poszlaki.list.text = Kruk przyniósł list, który nie był do mnie: szyfr, którego nie umiem przeczytać, i pieczęć z okiem. Zaczyna się od słów „Do A.W.”.
+
+# ======================================================================== TX
+[janekOffer]
+Na wrak? (Janek zerka na mieliznę za cyplem.) Mogę cię podrzucić. Za dnia, póki morze spokojne.
+Poczekam dwie godziny, nie dłużej. Woda tam chodzi pod piachem jak kot pod kocem.
+
+janekTide = Odpływ dziś koło {t}. Wtedy łacha od garnizonu wychodzi z wody.
+[janekNoK47]
+Na wrak? Najpierw pokaż, że umiesz trzymać wędkę, a nie tylko wiosło. Złów ze mną pierwszą rybę, to cię zawiozę.
+
+[janekStorm]
+W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś.
+
+[janekRow]
+Siadaj na dziobie i nie kołysz. (Janek odpycha łódź od pomostu.)
+
+[janekWait]
+Morze się zmienia, a ja mam sieci do łatania.
+Wracamy?
+
+[janekBack]
+Trzymaj się burty. (Janek wiosłuje w stronę przystani.)
+
+[janekStay]
+Jeszcze chwila. Tylko nie każ mi czekać do nocy.
+
+janekLeaving = Jeszcze kwadrans i odpływam! Nie będę nocował na mieliźnie!
+janekGone = Janek odpłynął. Zostaje łacha w odpływie... albo czekanie.
+[soldierCatch]
+Stój! A ty kto? Kto pozwolił łazić po królewskim łupie?
+Bez glejtu rotmistrza? Dwadzieścia groszy kary. I zmykaj z mielizny.
+
+soldierPass = Glejt widzę. Szukaj, tylko skrzyń z pieczęcią nie ruszaj.
+[soldierTalk]
+Wynosimy, co zostało. Rotmistrz każe wszystko spisać.
+Pod pokład? Nie, dziękuję. Tam są szczury wielkie jak psy. I woda chodzi.
+Z garnizonu, z chorągwi króla. A ty skąd?
+
+arrive = Wrak na mieliźnie. Następny odpływ około {t}.
+lowEnding = Woda zaczyna wracać. Łacha do garnizonu zaraz zniknie.
+flooded = Łacha zniknęła pod wodą. Następny odpływ około {t}.
+[skeleton]
+> (Szkielet w podartym granatowym kubraku. Na szyi, na rzemieniu, mosiężny klucz.)
+> Bosman. Klucz do kajuty... pewnie kapitańskiej.
+
+skeletonEmpty = Kości bosmana. Nic więcej przy nim nie ma.
+skeletonWet = Szkielet leży pod wodą. Trzeba poczekać na niską wodę.
+doorLocked = Zamknięte. Mosiężny zamek, mocny.
+doorOpen = Klucz bosmana pasuje. Zamek puszcza ze zgrzytem.
+[desk]
+> (Na biurku kapitana skórzana tuba na mapy i gruba księga w czarnej oprawie.)
+> (W tubie mapa wyspy. Siedem miejsc zaznaczonych małym białym okiem.)
+> (Księga to dziennik okrętu. Między kartami luźna, bardzo stara strona - nie ich pismo.)
+
+deskEmpty = Puste biurko. Wziąłeś już wszystko, co miało znaczenie.
+[chest]
+> (W skrzyni sakiewka obcych monet - na każdej otwarte oko - i drewniane pudełko.)
+> (W pudełku pięć płaskich kamieni. Na każdym wyryty kruk. Taki jak na moim wisiorku.)
+
+chestEmpty = Pusta skrzynia.
+[erykMeet]
+Portret? Dwa grosze albo piwo. Masz ciekawą twarz. Zmęczoną.
+> Skąd jesteś? Nie mówisz jak tutejsi.
+Z lądu. Sukno. Było sukno. (Eryk uśmiecha się krzywo.) Morze lubi sukno.
+> (Eryk zerka na twój wisiorek i szybko odwraca wzrok.)
+Siadaj prosto. I nie ruszaj się, to wyjdziesz ładniej, niż jesteś.
+
+[erykAsk]
+Portret? Dwa grosze.
+Hm? (Eryk nie podnosi oczu znad papieru.)
+Siadaj, jak chcesz. Tylko nie zasłaniaj światła.
+
+[erykPortrait]
+(Eryk rysuje szybko i pewnie. Kreska czysta jak na mapie - żadnej poprawki.)
+Masz. Nie ładniejszy, niż jesteś, ale prawdziwy.
+
+[erykPortraitAgain]
+(Eryk rysuje cię jeszcze raz. Tym razem z wisiorkiem na szyi. Rysuje go dłużej niż twarz.)
+
+[erykWhere]
+Z lądu, mówiłem. Z miasta nad rzeką. Nazwa nic ci nie powie.
+Rodzina? (Eryk odkłada węgiel.) Była. Rysujmy.
+
+erykNoGold = Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.
+[erykCold]
+(Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)
+
+[erykWell]
+Czego? (Eryk naciąga rękaw na nadgarstek.) Idź spać, chłopcze.
+
+[erykWellSeen]
+> (Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko.)
+> (Szybko opuszcza rękaw. Nie zauważył mnie.)
+
+[jozek]
+Eryk? Ten od portretów? (Józek drapie się po brodzie.) Ha! Toż on chodzi w moim płaszczu! Szarym, za dużym.
+Po sztormie przyszedł do mnie mokry jak szczur. Kupił płaszcz i zapłacił dziwnym groszem. Z okiem zamiast korony. Mam go jeszcze, patrz.
+> (Na monecie wybite jest otwarte oko. Takie samo jak na banderze wraku.)
+
+letter = Kruk przyniósł list... nie do mnie. Szyfr i pieczęć z okiem. Na wierzchu tylko: „Do A.W.”
+[w12Open]
+> Eryk. Albo raczej... Ansgar Wiel. Kartograf z „Białej Źrenicy”.
+(Eryk odkłada węgiel. Długo patrzy na ciebie, potem rozgląda się dookoła.) Nie tutaj. Chodź.
+> (Odchodzicie tam, gdzie nikt nie słucha.)
+Skąd... Nieważne. Tak. Ansgar Wiel. Rysowałem ich mapy. Brzegi, mielizny, kamienie z krukiem. Wszystko, czego szukali.
+Okręt rozbił się w sztormie. Dopłynąłem tylko ja. Kupiłem płaszcz od starego szmaciarza i zostałem kupcem bez sukna.
+Boję się wszystkich. Waszego wojska. Waszego Lorda. A najbardziej moich, gdyby przypłynęli. Oni nie zostawiają świadków.
+(Ansgar zerka na twój wisiorek.) A ty nosisz kruka na szyi. Wiesz w ogóle, co to znaczy?
+...Co ze mną zrobisz?
+
+[w12Given]
+(Ansgar blednie.) ...Rozumiem. Każdy ma swoją wojnę. Ty wybrałeś swoją.
+> (Wieczorem żołnierze z garnizonu wyprowadzają Eryka z tawerny. Skutego wsadzą na najbliższy prom.)
+
+[w12Ally]
+Dlaczego...? (Ansgar milknie.) Dobrze. Jestem ci winien życie.
+Czytam ich szyfr jak ty czytasz pogodę. Przynieś mi kiedyś ich papiery - przeczytam bez żadnego mnicha.
+I jeszcze jedno. Jeśli kiedyś po was przyjdą... wiem, którędy chodzą ich ludzie. Powiem ci, zanim przyjdą.
+
+[w12Fled]
+Kuter... na ląd? Tam szukają mnie tak samo. Ale na lądzie łatwiej zniknąć niż na wyspie.
+Masz. (Ansgar podaje ci zwinięty papier.) Moja własna mapa. Wszystkie kamienie z krukiem na tej wyspie, jakie znam.
+I wiedz: oni nie szukają kamieni. Szukają tego, co kamienie pokazują. Drogi do Serca.
+> (Tej nocy kuter Rocha odbija od pochylni bez latarni. Na dziobie siedzi chudy człowiek w za dużym szarym płaszczu.)
+
+[w12Double]
+(Ansgar uśmiecha się krzywo.) Fałszywą mapę... dla kupca, który skupuje kamienie? Mogę. Narysuję im takie miejsce, że będą kopać do zimy.
+Masz. Atrament jeszcze mokry. Tylko uważaj: jeśli Baltazar to odkryje, nie przyjdzie sam.
+
+[w12Later]
+Nie wiesz? (Ansgar śmieje się bez wesołości.) To ja też nie wiem, czy jutro tu jeszcze będę.
+
+[w12Sale]
+> Mam mapę. Kamienie z krukiem na całej wyspie. Rysował ją ktoś, kto się zna.
+(Baltazar długo ogląda papier pod światło.) ...Ładna robota. Za ładna. Sto groszy. I nie było cię tu.
+
+stonesAsk = > Znalazłem na wraku kamienie z krukiem. Pięć.
+[stonesCelnik]
+Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć groszy za sztukę. Zapiszę uczciwie.
+
+[stonesCelnikOpt]
+Oddaj je celnikowi (25 G).
+Jeszcze nie.
+
+[stonesCelnikDone]
+Zapisane. (Celnik wrzuca kamienie do skrzyni z pieczęcią Lorda.) Dwór pamięta przysługi.
+
+[stonesKupiec]
+Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Piętnaście groszy za sztukę. Więcej nikt ci nie da. I nikomu ani słowa.
+
+[stonesKupiecOpt]
+Sprzedaj je Baltazarowi (75 G).
+Jeszcze nie.
+
+[stonesKupiecDone]
+Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na klucz.) Zapamiętam cię.
+
+[stonesGrandpa]
+(Dziadek długo obraca kamień w palcach.) Skąd to masz? ...Z tego okrętu. Tak myślałem.
+Takie same leżały kiedyś na Urwisku. Schowaj je. Nie pokazuj nikomu, a już na pewno nie ludziom Lorda.
+
+[stonesGrandpaOpt]
+Zatrzymam je.
+Jeszcze pomyślę.
+
+[stonesKeep]
+Dobrze. (Dziadek oddaje ci kamień.) Kiedyś ci powiem więcej. Kiedyś.
+
+[stonesPustelnik]
+Kamienie posłańców. (Kleofas bierze jeden w chude palce.) Kruczarze nosili takie od Urwiska do każdej strażnicy. Znak, że list jest prawdziwy.
+Nie oddawaj ich nikomu. Czarne Oczy szukają ich, bo nie wiedzą, czym są. Myślą, że to mapa.
+
+[stonesPustelnikOpt]
+Zatrzymam je.
+Jeszcze pomyślę.
+
+# ======================================================================== z kodu Wrak.js (kod.<funkcja>.<n>, w kolejności kodu)
+# rescueHero
+kod.rescueHero.0 = Woda wdziera się do ładowni!
+kod.rescueHero.1 = Woda przybiera! Uciekasz na suchy piach.
+# addClue
+kod.addClue.0 = Poszlaka: {name}
+kod.addClue.1 = Kim naprawdę jest Eryk Sowa?
+# janekHarbourTalk
+kod.janekHarbourTalk.0 = Płyniemy?
+kod.janekHarbourTalk.1 = Zawieź mnie na wrak.
+kod.janekHarbourTalk.2 = Nie, w innej sprawie.
+# erykTalk
+kod.erykTalk.0 = Eryk Sowa
+kod.erykTalk.1 = Narysuj mnie (2 G).
+kod.erykTalk.2 = Może innym razem.
+kod.erykTalk.3 = Jak chcesz. Twarz ci nie ucieknie.
+kod.erykTalk.4 = Narysujesz mnie? (2 G)
+kod.erykTalk.5 = Skąd jesteś?
+kod.erykTalk.6 = Co słychać?
+kod.erykTalk.7 = Nic. Rysuję.
+# jozekTalk
+kod.jozekTalk.0 = Józek Łata
+# talk
+kod.talk.0 = Jeszcze chwilę.
+kod.talk.1 = Żołnierz garnizonu
+# giveChart
+kod.giveChart.0 = Mapa z zaznaczeniami
+kod.giveChart.1 = Siedem miejsc zaznaczonych białym okiem.
+kod.giveChart.2 = Mapa Kruczej Wyspy z kajuty „Białej Źrenicy”. Czarne Oczy zaznaczyły na niej siedem miejsc małym białym okiem: {names}. Kompas prowadzi do następnego znaku, którego jeszcze nie widziałem.
+# actCall
+kod.actCall.0 = Nie dziś.
+kod.actCall.1 = Klucz bosmana
+kod.actCall.2 = W najniższym kącie ładowni wraku leży szkielet bosmana. Na szyi miał mosiężny klucz - pewnie do kajuty kapitana.
+kod.actCall.3 = Potrzebujesz klucza
+kod.actCall.4 = Dziennik okrętu „Białej Źrenicy”
+kod.actCall.5 = Okręt Straży Pewności płynął po „serce skały pod krukiem”. Na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”. Zaginął w sztormie razem z okrętem - tak zapisano.
+kod.actCall.6 = Karta kroniki (z wraku)
+kod.actCall.7 = W dzienniku okrętu leżała luźna, bardzo stara karta - nie ich pismo. Na marginesach notatki Czarnych Oczu. Ktoś, kto zna szyfr zakonu, mógłby ją przeczytać.
+kod.actCall.8 = Kamienie z krukiem
+kod.actCall.9 = W skrzyni kapitana: sakiewka obcych monet z okiem i pięć płaskich kamieni z wyrytym krukiem - takim jak na moim wisiorku. Celnik Lorda każe je zgłaszać, Baltazar skupuje, a Roch mówi, że Czarne Oczy ich szukają.
+kod.actCall.10 = Eryk Sowa
+kod.actCall.11 = W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz.
+kod.actCall.12 = Potrzebujesz 2 G
+# stonesTalk
+kod.stonesTalk.0 = Co z nimi zrobisz?
+kod.stonesTalk.1 = Mądrze. Kruk wie, komu siada na ramieniu.
+# stonesAct
+kod.stonesAct.0 = Kamienie u celnika
+kod.stonesAct.1 = Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.
+kod.stonesAct.2 = Kamienie u Baltazara
+kod.stonesAct.3 = Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.
+kod.stonesAct.4 = Kamienie z krukiem zostają u mnie
+kod.stonesAct.5 = Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa.
+kod.stonesAct.6 = Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku.
+# w12Talk
+kod.w12Talk.0 = Wydam cię garnizonowi.
+kod.w12Talk.1 = Zachowam to dla siebie.
+kod.w12Talk.2 = Pomogę ci uciec kutrem Rocha.
+kod.w12Talk.3 = Fałszywa mapa dla Baltazara.
+kod.w12Talk.4 = Jeszcze nie wiem.
+# w12Choose
+kod.w12Choose.0 = W12: rozbitek wydany
+kod.w12Choose.1 = Wydałem Ansgara
+kod.w12Choose.2 = Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.
+kod.w12Choose.3 = Ansgar zostaje
+kod.w12Choose.4 = Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.
+kod.w12Choose.5 = Ansgar odpłynął
+kod.w12Choose.6 = Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.
+kod.w12Choose.7 = Fałszywa mapa
+kod.w12Choose.8 = Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam.
+# w12Sell
+kod.w12Sell.0 = Mapa dla Baltazara
+kod.w12Sell.1 = Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował.
+# build
+kod.build.0 = Łódź Janka (czeka przy wraku)
+kod.build.1 = Janek (czeka przy łodzi)
+kod.build.2 = Łódź ratownicza garnizonu
+kod.build.3 = Żołnierz garnizonu
+# soldiersWatch
+kod.soldiersWatch.0 = Kara: -{fine} G
+kod.soldiersWatch.1 = wrak bez glejtu
+kod.soldiersWatch.2 = Złapany na wraku
+kod.soldiersWatch.3 = Żołnierze garnizonu złapali mnie na wraku bez glejtu rotmistrza. Kara: {fine} groszy. Garnizon będzie o tym pamiętał.
+# wellWatch
+kod.wellWatch.0 = Poszlaka: {name}
+kod.wellWatch.1 = Kim naprawdę jest Eryk Sowa?
+# visitMark
+kod.visitMark.0 = Znak białego oka: {name}
+kod.visitMark.1 = Mapa z wraku: {n} z {length}
+kod.visitMark.2 = Jedno z siedmiu miejsc zaznaczonych na mapie z wraku. Byłem tu: {name}. ({n} z {length})
+# tracker
+kod.tracker.0 = Biały znak: {name}
+kod.tracker.1 = Mapa z wraku: {n} z {length} miejsc
+# raidWatch
+kod.raidWatch.0 = Baltazar przesyła pozdrowienia za mapę!
+kod.raidWatch.1 = Ludzie Baltazara
+kod.raidWatch.2 = Baltazar zorientował się, że mapa była fałszywa. Jego ludzie zaczaili się na mnie nocą.

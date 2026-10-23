@@ -1,0 +1,273 @@
+{
+ "janekMeet": [
+  "Ej... Ej! To ty! \\N[1], tak? To ty! Myślałem, że nie przeżyjesz. Siny byłeś jak dorsz w listopadzie.",
+  "> To ty mnie znalazłeś? Na plaży?",
+  "Ja. O świcie, pod wydmą, przy tym wraku. W garści list, ani myślałeś go puścić. Na szyi kruk, taki sam jak u Stacha. To wziąłem cię na plecy i do niego.",
+  "> Dziękuję. Nie wiem, jak ci się odwdzięczę.",
+  "Daj spokój. Morze daje, morze bierze. A jak raz odda człowieka żywego, to trzeba go zanieść, gdzie trzeba.",
+  "A! Czekaj. Dwa dni później morze wyrzuciło jeszcze to. (Janek podaje ci mokry tobołek.) Chleb zjadły mewy, ser też. Ale chusta została. Haftowana, ładna."
+ ],
+ "janekMeet2": [
+  "> To mamy... Haftowała ją całą zimę.",
+  "To trzymaj blisko. ...No! Jakbyś chciał ryby, to wiesz, gdzie Janek. A jakbyś chciał je łowić, przyjdź o świcie. O świcie biorą najlepiej."
+ ],
+ "rochMeet": [
+  "(Roch patrzy na ciebie długo.) ...No proszę. Chłopak od ostatnich monet. Żyjesz.",
+  "> Ty! Myślałem, że morze cię wzięło. Stałeś przy sterze, a potem ta fala...",
+  "Wzięło. I wypluło. Mnie zawsze wypluwa, nie smakuję mu. Trzy dni siedziałem na skałach za cyplem i piłem deszcz z kamieni. A kuter... sam widziałeś. Leży na plaży jak zdechły wieloryb.",
+  "I ciszej z tym „przemytnikiem”. Tu jestem Roch, co łata sieci i nosi worki, jak przypłynie prom. Celnik Lorda za przemyt zabiera łódź, a człowieka zakuwa.",
+  "> Nikomu nie powiem.",
+  "Wiem. Dlatego jeszcze rozmawiamy. (Roch zerka na twoją szyję.) A to schowaj pod koszulę.",
+  "> Wisiorek? Po dziadku. Matka mi go dała.",
+  "W porcie Czarne Oczy przetrząsały każdą łódź właśnie za takimi kamieniami. Kruk na kamieniu. Kto go miał, ten dalej nie płynął. Czego szukają, nie wiem i wiedzieć nie chcę. Ale ty tego nie noś na wierzchu. Tu też ktoś skupuje kruki.",
+  "Jakbyś chciał pomóc staremu... kuter da się jeszcze połatać. Deski, liny, smoła. Jak znowu popłynie, zawiozę na ląd list do twojej matki. Za darmo. No, prawie za darmo."
+ ],
+ "celnikMeet": [
+  "Sambor Kwit, celnik dworu. (Celnik nie podnosi oczu znad księgi.) Opłata portowa: dwa grosze od tobołka. Ty nie masz tobołka, więc nic.",
+  "Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Gdybyś jakiś znalazł - przynieś. Zapłacę uczciwie. Zapiszę uczciwie."
+ ],
+ "janekMenuAsk": [
+  "Co tam, \\N[1]?",
+  "Ryby, pogaduchy, czy tylko przechodzisz?",
+  "Mów, chłopcze. Sieć poczeka."
+ ],
+ "janekSellNone": [
+  "Nie masz ryb? To łów! Morze pełne, tylko głupie, nie samo do koszyka wskoczy."
+ ],
+ "janekSold": [
+  "Dobre ryby. Masz, uczciwie, jak u Janka.",
+  "Śledź jak srebro. Masz pieniądze."
+ ],
+ "janekBuyNo": [
+  "Szesnaście groszy, chłopcze. Na kredyt to ja daję tylko mewom."
+ ],
+ "janekBuy": [
+  "Masz, prosto z wędzarni. Jeszcze ciepła."
+ ],
+ "janekBetray": [
+  "Roch... zabrali go. Ktoś doniósł. (Janek długo patrzy w morze.) Nie patrz tak na mnie. Ja nic nie mówię."
+ ],
+ "rochMenuAsk": [
+  "Czego?",
+  "Mów, chłopcze. Cicho.",
+  "Hm?"
+ ],
+ "rochNightAsk": [
+  "(Roch mówi szeptem.) Kuter gotowy. Strażnik chodzi po nabrzeżu do dwudziestej drugiej, potem siada przy koksowniku.",
+  "Gdyby ktoś go zagadał... na kwadrans... wypłynę cicho, bez latarni."
+ ],
+ "rochNightHelp": [
+  "> Zagadam strażnika. Płyń.",
+  "> (Strażnik przy koksowniku słucha twojej opowieści o wilkach z Polnej drogi. Za plecami, bez latarni, kuter odbija od pochylni.)",
+  "@straznik_przystan: ...I co, uciekłeś mu? Ha! Dobry z ciebie gawędziarz. A teraz zmykaj, noc.",
+  "> (Kiedy oglądasz się na morze, kutra już nie ma. Tylko kruk krąży nad wodą.)"
+ ],
+ "rochNightLater": [
+  "Nie dziś? Dobrze. Kuter poczeka. Ja też."
+ ],
+ "rochNews": {
+  "0": [
+   "Byłem na lądzie. Brzozowa Wola spalona do gołej ziemi. Ludzie poszli za rzekę albo za wojskiem.",
+   "Ale w obozie pod lasem baby gadały o kobiecie w chuście w czerwone kwiaty. Pytała o chłopca z krukiem. Poszła z taborem na północ, za wojskiem."
+  ],
+  "1": [
+   "Na lądzie gorzej. Czarne Oczy zajęły port. Prom pływa już tylko z ich pieczęcią."
+  ],
+  "2": [
+   "Kamienie z krukiem idą po trzy złote za sztukę. Ktoś je zbiera, i to nie dla pamiątki."
+  ],
+  "3": [
+   "W porcie mówią, że ktoś z wyspy płaci za mapy wybrzeża. Złotem, nie miedziakami."
+  ],
+  "4": [
+   "Wojsko ściąga każdą łódź na południe. Coś szykują. Albo czegoś szukają."
+  ]
+ },
+ "rochLetter": [
+  "List do matki? Daj. Schowam pod deskę w dziobie, tam nawet Czarne Oczy nie zaglądają.",
+  "Jak ją znajdę, oddam do rąk. Jak nie - przywiozę, co ludzie mówią."
+ ],
+ "rochGoods": [
+  "Z lądu przywiozłem to i owo. Drożej niż w mieście, bo i droga dłuższa."
+ ],
+ "rochGoodsNone": [
+  "Nic dziś nie mam. Następnym razem."
+ ],
+ "ferry": [
+  "Prom wraca na ląd o trzeciej. Na pokład tylko wojsko i ludzie z glejtem Lorda. Ty glejtu nie masz, chłopcze.",
+  "Listy biorę. Trzy grosze, a celnik i tak każdy przeczyta."
+ ],
+ "ferryLetter": [
+  "Trzy grosze. Dobrze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem. Odpowiedź, jak będzie, przywiozę."
+ ],
+ "ferryNews": [
+  "Twój list doszedł do Brzozowej Woli. Wsi już nie ma, chłopcze. Spalona.",
+  "Ale w obozie za rzeką baby gadały o kobiecie w chuście w czerwone kwiaty. Pytała o syna z krukiem na szyi. Poszła z taborem na północ, za wojskiem."
+ ],
+ "ferryNewsScarf": [
+  "> (Wyjmujesz chustę matki.) Taka chusta? Takie kwiaty?",
+  "Takie same. Tak mówiły. Takie same."
+ ],
+ "betrayAsk": [
+  "> Panie celniku... na przystani ktoś szykuje kuter. Do przemytu."
+ ],
+ "betrayYes": [
+  "Kuter? (Celnik odkłada pióro.) Ten łatacz sieci, Roch? Tak myślałem. Nikt nie łata sieci tak długo.",
+  "Dobrze, chłopcze. Dwór pamięta przysługi. Masz, czterdzieści groszy. Wieczorem go zabierzemy. I kuter też."
+ ],
+ "janekRed": [
+  "Czerwona? To zakwit. W suszę morze przy brzegu gnije jak woda w beczce. Ryby się duszą, fale wyrzucają je na piasek.",
+  "> A gdyby ją przegotować?",
+  "Ojciec próbował. Rok suszy, beczki puste, to nagotował kocioł czerwonej. Pił i mówił, że słona, ale da się. Do rana go skręcało. Przeżył, ale do śmierci nie spojrzał na morze.",
+  "Trucizna zakwitu nie ucieka z parą, chłopcze. Sól też nie. Wodę noszę z miasta, jak wszyscy.",
+  "Starzy gadają, że to krew Kruczych Skał. Że coś pod skałą krwawi do morza, jak przychodzi susza. Bajki... ale w suszę zawsze czerwono."
+ ],
+ "janekGrey": [
+  "Teraz szara. Deszcz ją przepłukał. Ale dalej słona - nie pij, choćby cię suszyło.",
+  "Za parę dni bez deszczu znowu zakwitnie. Zawsze zakwita. Starzy mówią: krew Kruczych Skał wraca."
+ ],
+ "rochRed": [
+  "Czerwona woda. Na lądzie mówią, że to znak wojny. Tu mówią, że krew Kruczych Skał. Ja mówię: nie pij i nie zadawaj pytań.",
+  "Raz stałem w ciszy trzy dni na czerwonym. Kucharz pił przegotowaną. Pochowaliśmy go w tej samej wodzie."
+ ],
+ "refugees": {
+  "0": [
+   "Trzy dni na pokładzie. Ziemia się kołysze."
+  ],
+  "1": [
+   "Gdzie tu miasto? Mówili, że za lasem, za takim biednym przedmieściem."
+  ],
+  "2": [
+   "Celnik zabrał nam dwa grosze i nadzieję. Grosze były ważniejsze."
+  ]
+ },
+ "momName": "Matka",
+ "ferryLetterIn": [
+  "Ej, chłopcze! Mam coś dla ciebie. Z lądu. (Przewoźnik wyjmuje zza pazuchy złożony list.)",
+  "Pieczęć złamana - celnik czyta wszystko. Ale doszedł."
+ ],
+ "ferryLetterMore": [
+  "Znowu list do ciebie, chłopcze. Ta sama ręka. (Przewoźnik podaje ci list.)",
+  "Celnik czytał go dłużej niż zwykle. Coś sobie zapisał w księdze."
+ ],
+ "rochLetterFound": [
+  "Mam coś dla ciebie. (Roch wyjmuje zza kurtki list owinięty w ceratę.)",
+  "Znalazłem ją. Twoją matkę. W taborze, przy kotle z kaszą. Chusta w czerwone kwiaty - poznałem od razu.",
+  "Długo nie gadaliśmy, wojsko patrzy. Napisała to przy kotle, węglem, i kazała oddać do rąk. To oddaję."
+ ],
+ "rochLetterPort": [
+  "Mam coś dla ciebie. (Roch wyjmuje zza kurtki list owinięty w ceratę.)",
+  "W porcie, w karczmie, leżał list do chłopca z krukiem na wyspie. Nikt nie chciał go wieźć. Wziąłem.",
+  "Celnik go nie widział. Pieczęć cała."
+ ],
+ "rochLetterMore": [
+  "Znowu list od twojej matki. Szedł przez trzy ręce, zanim trafił do mnie. (Roch podaje ci list w ceracie.)"
+ ],
+ "letters": {
+  "1": [
+   "\\N[1], synku. Twój list szedł za mną od spalonej wsi przez trzy obozy. Czytałam go przy ognisku tyle razy, że przetarł się na zgięciach.",
+   "Żyję i jestem zdrowa. Idę z taborem na północ, za wojskiem. Piorę żołnierzom koszule, a wieczorem gotuję kaszę w wielkim kotle. Za to mam miskę i miejsce na wozie.",
+   "Ojca szukam w każdym obozie. Jeden woźnica przysięgał, że widział go jesienią w obozie jeńców za rzeką. Drugi mówi, że poszedł z wojskiem dalej, w góry. Nie wiem, komu wierzyć. Wierzę obu - tak lżej.",
+   "Jak tam mój ojciec? Dalej pali tę swoją fajkę i udaje, że nie płacze? Ucałuj go ode mnie. Zostań przy nim, synku. Słuchaj go, nawet kiedy zrzędzi.",
+   "I uważaj na siebie. Do obozu przychodzą ludzie w zwykłych płaszczach, ale pod spodem noszą białe oko. Pytają o kruki: o kamienie z krukiem i o tych, co je noszą. Schowaj wisiorek.",
+   "Wrócę po ciebie. Nie wiem kiedy, ale wrócę. Twoja mama."
+  ],
+  "2": {
+   "replied": "Synku! Twój list przyszedł w deszczowy dzień i od razu przestało padać. Tak mi się przynajmniej zdawało.",
+   "silent": "\\N[1], synku. Nie wiem, czy mój list do ciebie doszedł. Piszę drugi, na wszelki wypadek.",
+   "pipe": "Powiedz ojcu, że fajka śmierdzi, bo jej nie czyści. Od trzydziestu lat mu to powtarzam. ...Dobrze wiedzieć, że dalej śmierdzi.",
+   "kiss": "Ucałuj ode mnie ojca. Pewnie dalej zrzędzi. Niech zrzędzi - to znaczy, że zdrowy.",
+   "gold": "Za twoje pieniądze pisarz w obozie jeńców pokazał mi listę. Ojca na niej nie ma. Ale pół listy zmokło i atrament się rozmył - nie wiem, co było w tamtej połowie.",
+   "noGold": "W obozie jeńców za rzeką pisarz ma listę jeńców. Za pokazanie chce srebra. Odkładam po groszu.",
+   "food": "Twoja paczka doszła cała. Podzieliłam się z praczkami z taboru - pierwszy raz od jesieni jadłyśmy coś innego niż kaszę. Śmiałyśmy się jak głupie.",
+   "land": "Tabor stoi teraz pod miastem, którego nazwy nie wolno pisać. Chleb po trzy grosze, a na drogach więcej wojska niż ludzi. Port zajęły Czarne Oczy - promy pływają tylko z ich pieczęcią.",
+   "end": "Nie przestaję szukać. Ty nie przestawaj pisać. Mama.",
+   "hero": [
+    "> (Składasz list i chowasz go razem z pierwszym.)"
+   ],
+   "heroGold": [
+    "> (Pół listy zmokło. Może właśnie w tamtej połowie...)",
+    "> (Składasz list i chowasz go razem z pierwszym.)"
+   ]
+  },
+  "3": {
+   "open": "Synku, piszę w pośpiechu, przy kaganku, bo o świcie tabor rusza.",
+   "belt": "Widziałam pas twojego ojca. Ten z mosiężną klamrą, którą sam wyklepał. Nosił go żołnierz z innej chorągwi. Powiedział, że wygrał go w kości od jeńca. Od żywego jeńca, synku. Od żywego.",
+   "north": "Pytałam, gdzie ten jeniec. Wzruszył ramionami: jeńców pędzą na północ, za góry, do kopalni soli. Więc i ja idę na północ.",
+   "warn": "W taborze gadają, że Czarne Oczy szykują ludzi na waszą wyspę. Że czegoś szukają pod skałami. Jeśli przyjdą - nie bądź bohaterem. Bądź żywy.",
+   "help": "Za to, co mi posłałeś, kupiłam buty na zimę. Stare rozpadły się w błocie. Chodzę w nowych i przy każdym kroku myślę o tobie.",
+   "wrote": "Twoje listy noszę za pazuchą. Wszystkie. Papier zrobił się miękki jak płótno.",
+   "silent": "Nie wiem, czy moje listy do ciebie dochodzą. Jeśli tak - napisz choć słowo. Jedno.",
+   "end": "Nie wiem, czy następny list dojdzie. Ale ja będę pisać. Ucałuj ojca. Mama.",
+   "heroBelt": "> (Od żywego jeńca. Czytasz to zdanie, aż litery zaczynają pływać.)",
+   "heroCame": "> (Już przyszli, mamo. Byli tu, pod tawerną.)",
+   "heroRocks": "> (Pod skałami... Skąd w taborze wiedzą o skałach?)"
+  },
+  "hero1": [
+   "> (Czytasz list drugi raz. Potem trzeci.)",
+   "> ...Żyje."
+  ]
+ },
+ "letterTitles": [
+  "List od mamy",
+  "Drugi list od mamy",
+  "Trzeci list od mamy"
+ ],
+ "reply": {
+  "first": "> (Piszesz węglem na papierze od Janka: że jesteś cały, że dziadek zrzędzi i pali fajkę, że morze oddało jej chustę.)",
+  "second": "> (Piszesz o działce dziadka, o tawernie Borgara, o Janku i jego śledziach. O ruinach pod tawerną nie piszesz ani słowa.)",
+  "more": "> (Piszesz krótko: że żyjesz, że czekasz, że wyspa trzyma się mocno. I że dziadek też.)",
+  "pipe": "> (Na końcu dopisujesz od dziadka: „Fajka dalej śmierdzi”.)",
+  "gold": "> (Zawijasz w list {n} groszy.)",
+  "food": "> (Do listu dokładasz paczkę: to, co się nie zepsuje w drodze.)",
+  "ferry": [
+   "Trzy grosze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem."
+  ],
+  "ferryCut": [
+   "Pieniądze? Celnik weźmie dziesiątą część - cło. Reszta dojdzie, słowo przewoźnika."
+  ],
+  "roch": [
+   "Pod deskę w dziobie. Tam nawet Czarne Oczy nie zaglądają. Dojdzie do rąk, jak ją znajdę. A znajdę."
+  ]
+ },
+ "replyOpts": {
+  "ferry": "Poślij list do mamy (3 G).",
+  "roch": "Zawieziesz list do mamy?",
+  "plain": "Sam list.",
+  "no": "Jednak nie.",
+  "gold": "List i {n} G.",
+  "food": "List i paczka jedzenia ({n} szt.)."
+ },
+ "replyTitles": [
+  "Odpisałem mamie",
+  "Drugi list do mamy",
+  "Trzeci list do mamy"
+ ],
+ "replyPop": "List do mamy płynie na ląd",
+ "foodNeed": "Potrzebujesz 3 sztuk jedzenia, które się nie psuje: ser, wędzonka, wędzona ryba, miód",
+ "janekLetter": {
+  "prom": "Przewoźnik pytał o ciebie. Ma coś z lądu - leć na molo.",
+  "kuter": "Roch cię szukał. Wrócił z lądu i coś dla ciebie ma."
+ },
+ "vars": {
+  "write": "Odpisz, jeśli chcesz - następny list i tak przyjdzie, kiedy tabor stanie na dłużej.",
+  "sent": "Twój list już płynie - czekaj na odpowiedź.",
+  "write2": "Możesz jej odpisać: przewoźnik promu albo Roch.",
+  "sent2": "Twój list już płynie."
+ },
+ "epilog": {
+  "none": "Od matki wciąż nie ma listu. Kiedy przypływa prom, przewoźnik z daleka kręci głową - a ty i tak schodzisz na molo.",
+  "silent": "Listy od matki leżą w skrzyni, przewiązane jej chustą. Nie odpisałeś na żaden. Ona pisze dalej - coraz krócej.",
+  "wrote": "Listy od matki leżą w skrzyni, przewiązane jej chustą. Odpisujesz na każdy. Ojca wciąż szuka - pisze „jeszcze nie znalazłam”, nigdy „już nie szukam”.",
+  "helped": "Matka pisze, że to, co jej posłałeś, przeprowadziło ją przez zimę w taborze. Ojca wciąż szuka. Co trzy dni prom przywozi trochę nadziei - i zabiera twoją odpowiedź."
+ },
+ "f9": {
+  "head": "Wątek W10 (list do matki):",
+  "label": "W10: przyślij list od matki ({n}. z 3)",
+  "none": "W10: wszystkie trzy listy od matki już przyszły",
+  "desc": "Następny list od mamy od razu: wątek na właściwym kroku, bohater na przystani, list czyta się zaraz po przejściu.",
+  "noQuests": "Brak zadań miasteczka (TownQuests.js)",
+  "allIn": "Wszystkie trzy listy od matki już przyszły"
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Przystan.js: TX)"
+}

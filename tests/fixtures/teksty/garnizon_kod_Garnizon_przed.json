@@ -1,0 +1,111 @@
+{
+ "kod": {
+  "addFavor": {
+   "0": "Przychylność garnizonu {1}{got}",
+   "1": "Garnizon: {1}"
+  },
+  "favorWord": {
+   "0": "swój",
+   "1": "przyjaciel garnizonu"
+  },
+  "sell": {
+   "0": "Skup wojskowy",
+   "1": " - Opinia {got}",
+   "2": "„Nasze zboże idzie na wojnę”{1}"
+  },
+  "skupBranch": {
+   "0": "{name} ×{2} - {3} G/szt.",
+   "1": "Wszystko z tej listy ({1} G)."
+  },
+  "rotmistrzTalk": {
+   "0": "Rotmistrz Bełza",
+   "1": "Jak garnizon na mnie patrzy?",
+   "2": "Wpuścicie mnie na wrak?",
+   "3": "Co to za lista na pana stole?",
+   "4": "Czemu Lord was tu wpuścił?",
+   "5": "Weźmiecie mnie do wojska?",
+   "6": "Mam coś lepszego niż rekrutów: Dziennik okrętu.",
+   "7": "Kwatermistrz sprzedaje królewskie zboże.",
+   "8": "Sprzedam coś wojsku."
+  },
+  "kwatTalk": {
+   "0": "Kwatermistrz Kłos",
+   "1": "Sprzedam coś wojsku.",
+   "2": "Sprzedasz cztery worki zboża? Po cenie dla swoich.",
+   "3": "Biorę ({1} G).",
+   "4": "Nie mam tyle.",
+   "5": "Nikomu nie powiem o nocnym zbożu.",
+   "6": "Co słychać?",
+   "7": "Liczę. Zawsze liczę."
+  },
+  "werbTalk": {
+   "0": "Werbownik Bęben",
+   "1": "Weźmiecie mnie do wojska?",
+   "2": "Co słychać?"
+  },
+  "buildMap": {
+   "0": "{1} (rekrut)",
+   "1": "Lista poborowa",
+   "2": "Żołnierz (szuka ludzi z listy)",
+   "3": "Kwatermistrz Kłos"
+  },
+  "look": {
+   "0": "Lista poborowa z pieczęcią z feniksem. Kilka nazwisk już przekreślonych."
+  },
+  "granary": {
+   "0": "Worek zboża z rekwizycji ×4"
+  },
+  "actCall": {
+   "0": "Garnizon nad zatoką",
+   "1": "Na południe od przystani stoi garnizon wojsk królewskich z lądu - chorągiew z feniksem. Rotmistrz Florian Bełza: surowy, sprawiedliwy, zmęczony wojną. Lord wpuścił ich za pieniądze i płaci Koronie podatek wojenny - dlatego tak naciska na dług dziadka. Kwatermistrz Kłos skupuje dla wojska zboże i drwa.",
+   "2": " - następny próg: {next}",
+   "3": "Przychylność garnizonu: {fv}/100 ({2}){3}",
+   "4": "Potrzebujesz {cost} G",
+   "5": "Glejt garnizonu na wrak",
+   "6": "Wartownicy i łódź ratownicza przepuszczą cię na wrak.",
+   "7": "Glejt na wrak",
+   "8": "Rotmistrz Bełza dał mi glejt garnizonu na wrak na mieliźnie. Do wraku dojdę w odpływie po łasze spod garnizonu. Papiery z kajuty mam przynieść najpierw jemu.",
+   "9": "Lista zaginionych",
+   "10": "Na stole rotmistrza leży lista zaginionych czterech chorągwi. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”. Nazwisk nie ma. „Zaginiony to nie poległy” - powiedział.",
+   "11": "Worek zboża z rekwizycji ×4",
+   "12": "kruk na szyi",
+   "13": "-5 G (opłata za przepustkę)",
+   "14": "złodziej zboża",
+   "15": "Noc w dybach",
+   "16": "Złapali mnie przy spichlerzu garnizonu z workami zboża. Noc w dybach, rano rotmistrz kazał mnie wypuścić. Worki zostały w spichlerzu."
+  },
+  "vars": {
+   "0": " (zgłosił się)",
+   "1": " (ukryty)"
+  },
+  "talk": {
+   "0": "(Nic nie mów.)"
+  },
+  "act": {
+   "0": "dziennik okrętu",
+   "1": "+10 G od werbownika",
+   "2": "pobór",
+   "3": "kwatermistrz wydany",
+   "4": "Kłos wydany",
+   "5": "Powiedziałem rotmistrzowi, że kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kłos popłynie najbliższym promem - w łańcuchu. Baltazar z kantoru stracił dostawcę.",
+   "6": "Kłos moim dłużnikiem",
+   "7": "Obiecałem Kłosowi, że nikomu nie powiem o nocnym zbożu. W skupie płaci mi teraz lepiej - „jak dla swojego”."
+  },
+  "helpReply": {
+   "0": "Wojsko? ...Może i lepiej. W wojsku przynajmniej nie ma kości. Pójdę.",
+   "1": "Siekierę zostawię Marcie. ...Pójdę. Tam przynajmniej karmią.",
+   "2": "Znowu wojsko. Dobrze. Lepiej z własnej woli niż w łańcuchu. Pójdę.",
+   "3": "Pójdę."
+  },
+  "warnReply": {
+   "0": "Werbownik? Dzięki, chłopcze. Schowam się u szwagra na Młynówce.",
+   "1": "Dzięki. Pójdę w las na dzień czy dwa. Las mnie zna.",
+   "2": "Znowu ktoś mnie ostrzega. Na kontynencie też ostrzegali. Dziękuję. Zniknę.",
+   "3": "Dzięki."
+  },
+  "sync": {
+   "0": "rozbitek wydany"
+  }
+ },
+ "_opis": "Napisy kodu Garnizon.js sprzed przeniesienia do js/teksty/garnizon.txt (kod.*)"
+}

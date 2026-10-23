@@ -1,0 +1,183 @@
+{
+ "kod": {
+  "stopName": {
+   "0": "Polna droga",
+   "1": "Leśna droga",
+   "2": "Łąka",
+   "3": "Kruczy Jar"
+  },
+  "eventData": {
+   "0": "Ludzie: {name}"
+  },
+  "build": {
+   "0": "Dym z mielerza",
+   "1": "Szałas węglarza",
+   "2": "Tobołek handlarza",
+   "3": "Zgubiony juk",
+   "4": "Wóz handlarza",
+   "5": "Osiołek handlarza",
+   "6": "Płot koszaru",
+   "7": "Znacznik pastwiska (krzak)",
+   "8": "Namiot kopaczy",
+   "9": "Skrzynia dowódcy kopaczy",
+   "10": "Szyb poszukiwawczy",
+   "11": "Skrzynie kopaczy",
+   "12": "Znacznik obozu (krzak)",
+   "13": "Wylot jaskini",
+   "14": "Stary krzyż Ługów",
+   "15": "Ławka przy grobach",
+   "16": "Marta Ługowa"
+  },
+  "strike": {
+   "0": "Jesteś zbyt zmęczony"
+  },
+  "buy": {
+   "0": "Potrzebujesz {cost} G",
+   "1": "Mapa okolic",
+   "2": "Kupiłem od wędrownego handlarza mapę okolic. Zaznaczone na niej miejsca widać teraz w dzienniku, w zakładce „Okolice” - kompas poprowadzi do każdego."
+  },
+  "sellList": {
+   "0": "Soli nie masz? Szkoda. Tylko sól od ciebie kupię."
+  },
+  "water": {
+   "0": "Potrzebujesz {cost} G",
+   "1": ": nawodnienie +{got}",
+   "2": "Łyk wody z beczki{1}"
+  },
+  "shear": {
+   "0": "Potrzebujesz nożyc",
+   "1": "Wełna ×{wool}  ·  +{gold} G"
+  },
+  "buyCoal": {
+   "0": "Potrzebujesz {cost} G",
+   "1": "Węgiel drzewny ×{k}"
+  },
+  "giveWood": {
+   "0": "Potrzebujesz: {name} {2}/{wood}"
+  },
+  "collectCoal": {
+   "0": "Węgiel drzewny ×{give}"
+  },
+  "buySteel": {
+   "0": "Potrzebujesz {price} G"
+  },
+  "pedlarMenu": {
+   "0": "Szymon Juczny"
+  },
+  "shepherdMenu": {
+   "0": "Wawrzyn Owczarz"
+  },
+  "zbychMenu": {
+   "0": "Zbych Smolarz",
+   "1": "{wood} ({wood2} polan)"
+  },
+  "smithMenu": {
+   "0": "Tadek Młot"
+  },
+  "crateExtra": {
+   "0": "Sambor Kwit",
+   "1": "Baltazar Vey"
+  },
+  "patrolSearch": {
+   "0": "kruk na szyi",
+   "1": "-5 G (opłata za przepustkę)"
+  },
+  "patrolNightTick": {
+   "0": "Brać ich! Żołnierzyki z latarenką!"
+  },
+  "k63Tick": {
+   "0": "Rozkopany mielerz",
+   "1": "W noc wypału nikt nie pilnował mielerza Zbycha. Rabusie rozkopali kopiec i wynieśli część węgla. Zbych da tylko połowę.",
+   "2": "Węgiel! Bierzcie worki, szybko!"
+  },
+  "spawnCamp": {
+   "0": "Kopacz Czarnych Oczu"
+  },
+  "spawnSlawek": {
+   "0": "Sławek"
+  },
+  "eventAct": {
+   "0": "Ognisko handlarza. Ciepło i trochę dymu.",
+   "1": "Tobołek handlarza, ściągnięty rzemieniem.",
+   "2": "Juk handlarza",
+   "3": "Dziennik kopacza",
+   "4": "Potrzebujesz piły",
+   "5": "Potrzebujesz liny",
+   "6": "Marta Ługowa"
+  },
+  "gravesDone": {
+   "0": "Groby Ługów"
+  },
+  "shaftChoice": {
+   "0": "szyb kopaczy"
+  },
+  "niche": {
+   "0": "Skrzynia przemytu"
+  },
+  "act": {
+   "0": "Szymon Juczny",
+   "1": "Wawrzyn Owczarz",
+   "2": "Zbych Smolarz"
+  },
+  "k63Coal": {
+   "0": "Węgiel drzewny ×{n}"
+  },
+  "talk": {
+   "0": "Rabusie rozkopali kopiec w nocy. Uratowałem pięć worków. Resztę dokup albo przynieś z innego wypału.",
+   "1": "Pobili cię, a i tak coś zostało. Sześć worków - więcej nie dam rady.",
+   "2": "Kopiec ostygł, węgiel jak smoła. Dziesięć worków dla Tadka - i dzięki za noc przy kopcu.",
+   "3": "Powiedz o szybie.",
+   "4": "Jeszcze nie."
+  },
+  "vars": {
+   "0": "za mielerzem, przy drodze",
+   "1": "dalej na wschód, przy zakręcie",
+   "2": "aż pod lasem na północnym wschodzie",
+   "3": " - albo Baltazarowi Veyowi (kantor w miasteczku)",
+   "4": ", powiedz Grumowi (tawerna)"
+  },
+  "glowna": {
+   "0": "nocny patrol"
+  },
+  "placeLabel": {
+   "0": "Miejsce {1}/{length}: {3}   ←→"
+  },
+  "stopLabel": {
+   "0": "Dzień handlarza: {1}   ←→"
+  },
+  "rows": {
+   "0": "←→ wybierz miejsce paczki C, OK przenosi na nie.",
+   "1": "Dzień mielerza: Zbych przy kopcu, kopiec się tli",
+   "2": "Dzień cyklu 2 (rano, 10:00) - przenosi na Leśną drogę pod mielerz.",
+   "3": "←→ postój; OK: dzień tego postoju (10:00) i przeniesienie do wozu.",
+   "4": "Pasterz z owcami przy menhirach",
+   "5": "Dzień, w którym stado pasie się na Łące menhirów (10:00) - przenosi tam.",
+   "6": "K66: noc patrolu (przylądek, 20:55)",
+   "7": "Zaczyna K66, ustawia 20:55 i przenosi pod latarnię - o 21 patrol wyrusza.",
+   "8": "(wymuszony - OK wyłącza)",
+   "9": "(OK wymusza)",
+   "10": "W8 gotowe: obóz kopaczy {1}",
+   "11": "Obóz kopaczy stoi bez rozdziału 3 wątku W8 (tylko do prób).",
+   "12": "Odpływ teraz (wejście do jaskini)",
+   "13": "Wyspa.forceTide(„low”) i przeniesienie do zatoczki.",
+   "14": "W5 rozdz. 4: jaskinia otwarta {1}",
+   "15": "Wejście do jaskini bez rozdziału 4 wątku W5 (tylko do prób).",
+   "16": "Burza wczoraj (pasterz zgubił owcę - K64)",
+   "17": "Udaje burzę z wczoraj: pasterz da zadanie K64."
+  },
+  "ok": {
+   "0": "Najpierw gra",
+   "1": "Postój",
+   "2": "Pastwisko przy menhirach",
+   "3": "Przylądek z latarnią",
+   "4": "Obóz kopaczy",
+   "5": "Obóz kopaczy: jak w wątku W8",
+   "6": "Zatoczka przemytników",
+   "7": "otwarta (wymuszona)",
+   "8": "jak w wątku W5",
+   "9": "Jaskinia {1}",
+   "10": "Burza „wczoraj” - pasterz da zadanie K64"
+  }
+ },
+ "_opis": "Napisy kodu Ludzie.js sprzed przeniesienia do js/teksty/ludzie.txt (kod.*)"
+}

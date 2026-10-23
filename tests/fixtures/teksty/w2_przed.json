@@ -1,0 +1,163 @@
+{
+ "zadania": {
+  "W2": {
+   "title": "Kod dzwonu",
+   "where": "dzwonnica, rynek, ogród rycerzy, Archiwum zakonu",
+   "when": "od pierwszego nocnego dzwonu",
+   "desc": "Ambroży dzwoni o dziwnych godzinach. Liczba uderzeń ma znaczenie - to sygnały, których miasto już nie rozumie.",
+   "lines": {
+    "garden": [
+     "> (Za furtką cicho, jakby miasto zostało za murem. Dwa kamienne posągi rycerzy pilnują kopca, między nimi miecz wbity w kamień.)",
+     "> (Na tarczach posągów są nacięcia - krótkie i długie, jak uderzenia dzwonu. Najdłuższy rząd ma siedem.)",
+     "> Ambroży mówił: „Tam jest reszta”. Reszta czego?"
+    ],
+    "note": [
+     "Ogród rycerzy",
+     "Furtka za tawerną otwiera się kluczem Ambrożego. W ogrodzie stoją posągi strażników zakonu, między nimi miecz wbity w kamień. Na ich tarczach są nacięcia jak uderzenia dzwonu - najdłuższy rząd ma siedem. Siedem to sygnał „pytanie”."
+    ],
+    "ringGo": [
+     "Siedem? W południe? ...Tak stało w księdze, której już nie mam. Dzwoń, chłopcze. Ja popatrzę w stronę ogrodu."
+    ],
+    "ringOk": [
+     "...Siedem. Pierwszy raz od czterdziestu lat. Biegnij do ogrodu, póki słońce stoi wysoko!"
+    ],
+    "ringWrong": [
+     "Nie siedem. Dzwon nie odpowie na złe pytanie. Jutro w południe spróbujesz jeszcze raz."
+    ],
+    "ringQuit": [
+     "Nie zadzwoniłeś? Południe nie czeka, chłopcze."
+    ],
+    "shadow": [
+     "> (Słońce stoi w zenicie. Cienie posągów i miecza wbitego w kamień schodzą się w jednym miejscu: na płycie w ścieżce.)",
+     "> (Pod ziemią coś zgrzyta. Płyta drży i odsuwa się sama - w dół prowadzą kamienne schody.)"
+    ],
+    "shadowLate": [
+     "> (Cienie już się rozeszły. Za późno. Trzeba zadzwonić jeszcze raz - jutro w południe.)"
+    ],
+    "noteSlab": [
+     "Płyta w ogrodzie rycerzy",
+     "Zadzwoniłem z wieży siedem razy w samo południe - sygnał „pytanie”. Cienie posągów i miecza zbiegły się na płycie w ścieżce ogrodu rycerzy, a płyta odsunęła się: pod nią są schody w dół."
+    ],
+    "book": [
+     "> (Na pulpicie leży otwarta księga. Na pierwszej karcie kruk i słowa: „Dzwon mówi do tych, co pamiętają”.)",
+     "> (Każdy sygnał zapisany starannie: ile uderzeń, kiedy i co znaczy. Teraz znam je wszystkie.)"
+    ],
+    "chronicles": [
+     "> (Na regale stoją kroniki zakonu. Zasada jednego pytania: „Strażnik dzwonu ma prawo zadać Sercu jedno pytanie na rok”.)",
+     "> (Lista kasztelanów. Ostatni: „Bogumił z rodu Kowali”. Kowal... jak Borgar Kowal?)",
+     "> (I wzmianka o cysternie pod wzgórzem: „Zasuwę główną otwiera sygnał wody”.)"
+    ],
+    "chronTake": [
+     "> (Pakujesz kroniki do torby. Ciężkie. Ktoś na kontynencie dałby za nie fortunę.)"
+    ],
+    "chronLeave": [
+     "> (Odstawiasz kroniki na regał. Leżały tu trzysta lat - poleżą jeszcze.)"
+    ],
+    "chronGive": [
+     "> (Pakujesz kroniki ostrożnie. Ambroży pilnował tej warty całe życie - powinien je zobaczyć.)"
+    ],
+    "noteChron": [
+     "Kroniki zakonu",
+     "W Archiwum pod ogrodem rycerzy leżą kroniki zakonu: zasada jednego pytania na rok, lista kasztelanów (ostatni: „Bogumił z rodu Kowali”) i wzmianka o cysternie pod wzgórzem, której główną zasuwę otwiera sygnał wody."
+    ],
+    "sell": [
+     "Przyjacielu... słyszałem, że masz stare księgi. Z krukiem na grzbiecie.",
+     "Trzysta groszy. Od ręki. Na kontynencie są ludzie, którzy zbierają takie... pamiątki."
+    ],
+    "sellYes": [
+     "Interes życia, przyjacielu. Twojego, nie mojego."
+    ],
+    "sellNo": [
+     "Szkoda. Oferta nie wygasa. Ja też nie."
+    ],
+    "stage0": "w Akcie II Ambroży (rynek albo dzwonnica, 6–21) ma dla ciebie coś po rodzie dzwonników.",
+    "stage0Wait": "zacznie się w Akcie II (po spłacie długu albo stracie działki). Ambroży ma coś po rodzie dzwonników.",
+    "stage1": "zanieś serce dzwonu bratu Kleofasowi, pustelnikowi na klifie nad przystanią (za dnia).",
+    "stage2": "Noc Pytania: w Wigilię (dzień {wigilia}) o północy dzwon w wieży skryptorium uderzy siedem razy. Bądź wtedy przy wieży - Kleofas odpowie na jedno pytanie.",
+    "stage3": "pytanie zadane. Rozdział 8 „Alarm” czeka na Akt III. Następne pytanie u Kleofasa: Wigilia roku {rok} (dzień {wigilia}).",
+    "heart": [
+     "Chłopcze. Chodź bliżej. (Ambroży wyjmuje z worka ciężki, czarny od starości kawał żelaza.) Serce dzwonu. Mój ród przechował je od upadku zakonu.",
+     "Nie z mojego dzwonu. Z dzwonu na klifie, nad przystanią - tam, gdzie siedzi brat pióra. Pustelnik.",
+     "Mój mistrz mówił: kiedy dzwon i pióro znów się spotkają, będzie można zapytać.",
+     "> Zapytać? O co?",
+     "O jedno. Raz w roku, w Wigilię, o północy. Siedem uderzeń - sygnał pytania. Zanieś mu to. Ja jestem za stary na klify."
+    ],
+    "heartNote": [
+     "Serce dzwonu",
+     "Ambroży dał mi serce dzwonu, które jego ród przechował od upadku zakonu. Należy do dzwonu w wieży skryptorium na klifie. „Kiedy dzwon i pióro znów się spotkają, będzie można zapytać.”"
+    ],
+    "heartKleofas": [
+     "> Ambroży z dzwonnicy przysyła to. Serce dzwonu.",
+     "(Kleofas długo waży żelazo w dłoniach.) ...Siedemdziesiąt lat ten dzwon wisiał niemy. Mój mistrz umarł, nie usłyszawszy go ani razu.",
+     "Dobrze. Zawieszę je, jak mi kolana pozwolą. A ty przyjdź w Wigilię. O północy dzwon uderzy siedem razy - to sygnał pytania.",
+     "Wtedy odpowiem ci na jedno pytanie. Z kronik. Jedno, słyszysz? Tak każe reguła."
+    ],
+    "heartNoteKleofas": [
+     "Noc Pytania",
+     "Brat Kleofas zawiesi serce w dzwonie wieży skryptorium. W Wigilię o północy dzwon uderzy siedem razy - wtedy odpowie mi z kronik na jedno pytanie. Jedno na rok."
+    ],
+    "heartAway": [
+     "Serce dzwonu? Dla brata pióra, na klifie. Ja tam nie dojdę, chłopcze. Ty dojdziesz."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Usłysz dzwon o dziwnej porze (bądź w miasteczku nocą)."
+    },
+    "1": {
+     "text": "Zapytaj Ambrożego o nocne dzwonienie (rynek albo ogród zakonu, za dnia).",
+     "say": [
+      "> Słyszałem w nocy dzwon. Trzy uderzenia o trzeciej.",
+      "Nie słyszałeś. Ludzie śpią o trzeciej.",
+      "> Słyszałem.",
+      "...Trzy to nie godzina. Trzy to... Nieważne. Ktoś musi pamiętać, to pamiętam. Zapisuj, jak chcesz. Każde uderzenie."
+     ]
+    },
+    "2": {
+     "text": "Zdobądź zaufanie Ambrożego - zostań jego uczniem („Uczeń dzwonnika”, od Opinii 40)."
+    },
+    "3": {
+     "text": "Zapisz trzy różne sygnały dzwonu i to, co się wtedy działo (w dzienniku: Sygnały dzwonu). Sygnały: {n}/3."
+    },
+    "4": {
+     "text": "Pokaż Ambrożemu tabelę sygnałów przy dzwonie (17:45–18:15).",
+     "say": [
+      "> Spisałem twoje dzwonienia. Każde przychodzi, kiedy coś się dzieje: warta, deszcz po suszy, piorun. To nie godziny. To słowa.",
+      "(Ambroży długo milczy. Ma mokre oczy.)",
+      "Nikt... od czterdziestu lat nikt nie zapytał. Jestem ostatnim uczniem straży zakonu. Dzwonię, bo nikt nie odwołał warty.",
+      "Masz. Klucz do furtki ogrodu rycerzy. Tam jest reszta. Kiedyś."
+     ]
+    },
+    "5": {
+     "text": "Otwórz kluczem Ambrożego furtkę ogrodu rycerzy (na lewo od tawerny) i wejdź do środka."
+    },
+    "6": {
+     "text": "Zadzwoń z wieży sygnał „pytanie” - siedem uderzeń - w południe (Ambroży przy dzwonnicy, 11:40–12:15)."
+    },
+    "7": {
+     "text": "Biegnij do ogrodu rycerzy: między 12:00 a 12:30 cienie posągów coś wskazują."
+    },
+    "8": {
+     "text": "Zejdź schodami pod płytą do Archiwum zakonu. Przeczytaj Księgę sygnałów na pulpicie i zajrzyj do kronik na regale."
+    },
+    "9": {
+     "text": "Zanieś kroniki zakonu Ambrożemu (rynek, ogród zakonu albo dzwonnica, za dnia).",
+     "remind": [
+      "Coś przyniosłeś? Widzę, że coś niesiesz..."
+     ],
+     "hero": [
+      "> Ambroży. To kroniki zakonu. Z Archiwum pod ogrodem."
+     ],
+     "done": [
+      "(Ambroży bierze księgi drżącymi rękami. Długo gładzi okładkę.) Kroniki... Mój mistrz mówił, że spłonęły.",
+      "Czterdzieści lat pilnowałem warty, której nikt nie pamiętał. A ty przyniosłeś mi pamięć. Dziękuję, chłopcze. Nie wiem, jak ci się odwdzięczę... Może kiedyś będę wiedział."
+     ]
+    },
+    "10": {
+     "text": "„Jedno pytanie” - {etap}"
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W2\\./)"
+}

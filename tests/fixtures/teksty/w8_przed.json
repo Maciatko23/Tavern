@@ -1,0 +1,249 @@
+{
+ "zadania": {
+  "W8": {
+   "title": "Żelazna Pięść",
+   "where": "tawerna → Góry i kamieniołom (za Leśną drogą), Jaskinia z obozem kopaczy, pokoje gości nad tawerną, Osada Milczących (Akt II)",
+   "when": "po wygranej z Grumem na rękę i w kości",
+   "desc": "Grum nieprzypadkowo wypytuje o góry na wschodzie. Ktoś mu płaci. Rozmowa otwiera się, kiedy pokonasz go na rękę i w kości.",
+   "steps": {
+    "0": {
+     "text": "Pokonałeś Gruma na rękę i w kości. Grum chce pogadać - usiądź z nim (tawerna)."
+    },
+    "1": {
+     "text": "Grum zapłaci 50 G za wyprawę w góry. Powiedz mu w tawernie, że jesteś gotów - wyruszycie następnego dnia o świcie."
+    },
+    "2": {
+     "text": "Dzień {trip}, o świcie (5–9): Grum czeka u wejścia w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień (2 porcje), wodę w bukłaku i zioła albo opatrunek."
+    },
+    "3": {
+     "text": "Prowadź Gruma do starego kamieniołomu zakonu - na półce nad schodami, przy kruku wykutym w ścianie. Zdążcie przed nocą (dzień {trip})."
+    },
+    "4": {
+     "text": "Grum chce zobaczyć, kto drąży tunel w Jaskini nad kamieniołomem. W obozie kopaczy, w niszy przy ścianie, stoi milczący człowiek - Grum czeka obok."
+    },
+    "5": {
+     "text": "Do Gruma idzie przez Baltazara list od mocodawców (od dnia {letter}). Dowiedz się, co w nim jest: podsłuchaj Gruma z wynajętego pokoju nad tawerną (22–24), postaw mu dzban miodu pitnego albo dwa piwa (wieczorem) - albo poszukaj kopii rozkazu w skrzyni dowódcy kopaczy (nocą, po cichu)."
+    },
+    "6": {
+     "text": "Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po rozdziale 1 - spłacie długu albo stracie działki). {osada}"
+    },
+    "7": {
+     "text": "Wybór Gruma (tawerna). Żeby przeszedł na twoją stronę, potrzeba dwóch rzeczy z trzech: uratowanego Marka ({marek}), kronik zakonu ({kroniki}) i wygranego siłowania „na honor” ({honor}). Inaczej - walka z nim przy wejściu do tunelu albo praca dla jego mocodawców."
+    },
+    "8": {
+     "text": "Grum czeka przy wejściu do tunelu kopaczy w Jaskini. Najemnik z tarczą: ciężki cios łamie mu gardę, od tyłu tarczy nie ma."
+    }
+   },
+   "lines": {
+    "ask": [
+     "Siadaj. Pokonałeś mnie na rękę. I w kości. Dwa razy to nie przypadek.",
+     "Pytanie. Byłeś na wschodzie? W górach? Słyszałeś coś o jaskiniach? O starym kamieniołomie?"
+    ],
+    "optStones": "Lord pyta o kamienie z krukiem.",
+    "optHeart": "Na kontynencie szukają serca skały.",
+    "optArchive": "Pod ogrodem rycerzy jest archiwum zakonu.",
+    "optNothing": "Nic nie wiem o górach.",
+    "optWhy": "A po co ci to?",
+    "stones": [
+     "> Lord pyta, czy na działce dziadka leżą kamienie z krukiem. Jego dziadek je zbierał.",
+     "Kamienie z krukiem. (Grum marszczy brwi.) Takie same kupują ludzie z kontynentu. Hm. Kamieniołom jest w górach. Stamtąd je brano."
+    ],
+    "heart": [
+     "> Ludmiła z obozu mówi, że na kontynencie wszyscy szukają serca skały.",
+     "Serce skały. (Grum milknie na dłużej.) To samo słyszałem w obozie, zanim tu przypłynąłem. Myślałem, że to bajka dla rekrutów."
+    ],
+    "archive": [
+     "> Pod ogrodem rycerzy jest archiwum zakonu. Byłem tam.",
+     "Zakon. Archiwum. Pod ogrodem. (Grum patrzy na ciebie inaczej niż zwykle.) Nie mów o tym nikomu. Mnie też nie powinieneś."
+    ],
+    "nothing": [
+     "> Nic nie wiem o górach.",
+     "Nic. Jak wszyscy. Hm."
+    ],
+    "why": [
+     "> A po co ci to?",
+     "Po co? (Grum długo milczy.) Płacą mi. Ktoś z kontynentu. Mam znaleźć drogę w góry, do jaskiń, i kogoś, kto ją zna."
+    ],
+    "end": [
+     "Pięćdziesiąt groszy za wyprawę. Jak się nauczysz drogi w góry i przeżyjesz dzień bez karczmy - przyjdź. Zabiorę cię.",
+     "I... nie mów nikomu, że pytałem. Nikomu."
+    ],
+    "note": [
+     "Grum pyta o góry",
+     "Grum pyta o góry na wschodzie, jaskinie i stary kamieniołom. Ktoś z kontynentu płaci mu za znalezienie drogi i przewodnika. Za wyprawę w góry da 50 G - kiedy będę znał drogę."
+    ],
+    "hireAsk": [
+     "Góry. Pamiętasz? Pięćdziesiąt groszy, jak mnie zaprowadzisz do starego kamieniołomu i obaj wrócimy.",
+     "Wyjście o świcie, przy wejściu w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień, wodę w bukłaku i zioła. W górach nikt ci nie poda."
+    ],
+    "optHire": "Jutro o świcie.",
+    "optHireLater": "Jeszcze nie.",
+    "hireYes": [
+     "Dobrze. O świcie. Spóźnisz się - pójdę sam. A sam zabłądzę, i to będzie twoja wina."
+    ],
+    "hireNo": [
+     "Hm. Góry poczekają. Ja nie zawsze."
+    ],
+    "start": [
+     "Jesteś. Hm. Pokaż, co niesiesz."
+    ],
+    "startOk": [
+     "Jedzenie, woda, zioła. Dobrze. Na wojnie połowa ginie od głupoty, nie od strzał.",
+     "Prowadź. Kamieniołom jest gdzieś na wschodzie, wysoko. Ja idę za tobą."
+    ],
+    "startMissing": [
+     "Z tym? (Grum kręci głową.) Bez jedzenia, wody i ziół w góry nie idę. Masz czas do dziewiątej. Potem idę sam."
+    ],
+    "tripMissed": [
+     "> (Świt minął, a Grum nie czekał. Trzeba z nim pogadać jeszcze raz w tawernie.)"
+    ],
+    "quarry": [
+     "(Grum długo patrzy na kruka wykutego w ścianie kamieniołomu.) Ten sam znak co na kamieniach, które skupują ludzie z kontynentu.",
+     "Stąd brano kamień na twierdzę. I na dwór waszego Lorda - widzisz te bloki? Na każdym dziesiątym kruk.",
+     "(Grum podnosi wzrok na półkę nad kamieniołomem. Wysoko w skale czernieje wejście do jaskini.) A tam? Tam ktoś pali ogień. W jaskini. Hm.",
+     "Masz. Pięćdziesiąt. Zarobione. (Grum wciska ci sakiewkę.) Zajrzymy do tej jaskini. Ja tu zostaję - przyjdź, kiedy będziesz gotów."
+    ],
+    "quarryLost": [
+     "> (Noc. Zgubiłem Gruma w górach. Wróci do tawerny wściekły - trzeba będzie zacząć od nowa.)"
+    ],
+    "noteQuarry": [
+     "Stary kamieniołom",
+     "Zaprowadziłem Gruma do starego kamieniołomu zakonu w górach. Stąd brano kamień na twierdzę i na dwór Lorda - na blokach kruk. Wysoko nad kamieniołomem, w jaskini, ktoś pali ogień. Grum zapłacił 50 G."
+    ],
+    "campNoMarek": [
+     "> (Nisza przy ścianie jest pusta. Na kamieniu jaśniejszy ślad - tu stał Marek, zanim go stąd wyprowadziłem.)",
+     "(Grum patrzy na pustą niszę.) Kopacze mówią, że stał tu jeden. Marek. „Dotknął czegoś w skale i przestał mówić.” A potem ktoś go wyprowadził. Ty?",
+     "> Ja. Mówi już. Pojedyncze słowa - ale mówi.",
+     "(Grum blednie. Pierwszy raz widzisz, jak Grum blednie.) Marek. Kopał w drużynie, którą przysłali przede mną. Myślałem, że zdezerterował.",
+     "Płacą mi, żebym znalazł drogę do tego, co mu to zrobiło. (Długo milczy.) Wracamy. Muszę się napić. I pomyśleć. W tej kolejności."
+    ],
+    "camp": [
+     "> (W niszy przy ścianie stoi człowiek. Twarzą do skały. Nie kopie, nie mówi, nie odwraca się. Tylko kiwa głową - nie wiadomo do kogo.)",
+     "(Grum mówi cicho, prawie szeptem.) Tych od kilofów znam. Tacy sami jak ja - za żołd. Ale ten...",
+     "> Kopacze mówią na niego Marek. „Dotknął czegoś w skale i przestał mówić.”",
+     "(Grum blednie. Pierwszy raz widzisz, jak Grum blednie.) Marek. Kopał w drużynie, którą przysłali przede mną. Myślałem, że zdezerterował.",
+     "Płacą mi, żebym znalazł drogę do tego, co mu to zrobiło. (Długo milczy.) Wracamy. Muszę się napić. I pomyśleć. W tej kolejności."
+    ],
+    "noteCamp": [
+     "Obóz kopaczy",
+     "W jaskini nad kamieniołomem ludzie frakcji, która wynajęła Gruma, drążą tunel na zachód - w stronę Kruczych Skał; jego koniec się zawalił. W niszy stoi Marek z drużyny, którą przysłali przed Grumem: patrzy w ścianę i milczy. Grum zbladł."
+    ],
+    "letterTopic": "Napij się ze mną. Ja stawiam.",
+    "letterDrunk": [
+     "Stawiasz? (Grum patrzy na dzban.) Hm. Siadaj.",
+     "(Trzeci kubek. Grum mówi coraz wolniej.) Wiesz, co przyszło? List. Przez tego waszego kupca z kantoru. Pieczęć jak trzeba.",
+     "> (Grum wyciąga z zanadrza złożoną kartkę i kładzie ją na stole. Czytasz do góry nogami: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)",
+     "Świadków nie zostawiać. (Grum stuka palcem w kartkę.) Świadek to ty. Świadek to Marek. Świadek to ta śpiewaczka, co śpiewa o skale. ...Nalej."
+    ],
+    "letterNoDrink": [
+     "Stawiasz? Czym? Dzban miodu pitnego albo dwa piwa - inaczej to nie jest stawianie."
+    ],
+    "letterEarly": [
+     "Napić się? Nie dziś. Czekam na coś. Jak przyjdzie - pogadamy."
+    ],
+    "wall": [
+     "> (Zza ściany sąsiedniego pokoju głosy. Grum - i ktoś z miękkim, kupieckim głosem. Baltazar.)",
+     "> („...list z pieczęcią, jak obiecałem. Moi mocodawcy - i pańscy - nie lubią czekać.”)",
+     "> (Szelest papieru. Grum czyta na głos, powoli: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)",
+     "> („Świadków?” - „Wszyscy jesteśmy świadkami, panie Grum. Pytanie, czyimi.” Kroki. Drzwi.)"
+    ],
+    "crate": [
+     "> (Skrzynia dowódcy pod płachtą namiotu. Wieko luźne. Mapy, rachunki za chleb... i kartka z pieczęcią.)",
+     "> (Kopia rozkazu: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Pod spodem dopisek: „list do G. przez B.V.”)"
+    ],
+    "crateDay": "Kopacze nie śpią - nocą (21–5) i po cichu (C).",
+    "crateLoud": "Za głośno - skradaj się (C).",
+    "noteLetter": [
+     "Rozkaz dla Gruma",
+     "Mocodawcy Gruma przysłali mu przez Baltazara list z pieczęcią: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Świadkami są wszyscy, którzy wiedzą - ja też."
+    ],
+    "gate": [
+     "(Grum stoi przed bramą z pali.) Mówią, że za nią mieszkają ci, co wiedzieli za dużo. Kopacze się tu nie zapuszczają.",
+     "> (Za palisadą cisza. Potem zgrzyt - ktoś po drugiej stronie odsuwa belkę. Brama uchyla się. Nikt się nie pokazuje.)",
+     "Wpuszczają nas. Hm. Idę za tobą."
+    ],
+    "osada": [
+     "(Grum zatrzymuje się na skraju kręgu. Ludzie z białymi pasami na ustach siedzą przy płaskim kamieniu i patrzą w skałę. Nikt się nie odwraca.)",
+     "Na wojnie widziałem ludzi bez rąk, bez nóg, bez twarzy. Ci mają wszystko. Tylko nic już dla nich nie waży.",
+     "(Najstarszy z nich podnosi na Gruma oczy. Długo. Grum pierwszy spuszcza wzrok.)",
+     "To jest ta pewność, za którą mi płacą? Absolutna pewność. Tak wygląda. ...Wracajmy. Muszę coś postanowić."
+    ],
+    "noteOsada": [
+     "Osada Milczących",
+     "Za bramą w wąwozie mieszkają Milczący - ludzie, którzy „wiedzieli za dużo”. Siedzą w kręgu z białymi pasami na ustach i patrzą w skałę. Grum zobaczył, co Serce robi z człowiekiem. Musi coś postanowić."
+    ],
+    "osadaOpen": "Brama otwarta - Grum czeka w Osadzie, przy kręgu.",
+    "choiceTopic": "Musimy pogadać. O tunelu.",
+    "choiceAsk": [
+     "Myślałem. Nad Markiem. Nad tymi z białymi pasami. Nad listem.",
+     "Płacą dobrze. Ale nie wiem już, za co. Powiedz mi, po której stronie stoisz - a ja ci powiem, po której stanę ja."
+    ],
+    "optHonour": "Siłujmy się - na honor.",
+    "optAlly": "Stań po mojej stronie.",
+    "optFaction": "Pracuję dla twoich mocodawców.",
+    "optFight": "Nie pozwolę ci zejść do Serca.",
+    "optLater": "Jeszcze nie.",
+    "honourGo": [
+     "Na honor. (Grum wstaje i zdejmuje rękawicę.) Przy wszystkich. Bez stawki."
+    ],
+    "honourWon": [
+     "> („Na honor. Przegrałem uczciwie” - Grum długo patrzy na swoją rękę na blacie. - „Zapamiętam.”)"
+    ],
+    "honourLost": [
+     "> („Na honor wygrałem ja” - Grum kładzie twoją rękę na blat. - „Jutro spróbuj znowu, jak chcesz.”)"
+    ],
+    "ally": [
+     "(Grum długo milczy. Potem kładzie na stole list z pieczęcią - i drze go na pół.) Dobrze. Twoja strona.",
+     "Ten zawał w tunelu przebijemy razem. My dwaj. Nikt więcej tędy nie zejdzie bez nas. A mocodawcom napiszę, że góry zjadły drogę."
+    ],
+    "faction": [
+     "(Grum przygląda ci się długo.) Pieniądze. Hm. Uczciwe przynajmniej. Masz. Sto groszy zadatku.",
+     "Kopacze przebiją zawał. Ty zaprowadzisz ich dalej. Tylko pamiętaj: świadków nie zostawiać. Ty też jesteś świadkiem."
+    ],
+    "fight": [
+     "(Grum wstaje powoli.) Nie pozwolisz. Hm. Szanuję to.",
+     "Będę przy wejściu do tunelu, w jaskini. Przyjdź. Tam pogadamy po mojemu."
+    ],
+    "choiceLater": [
+     "Myśl. Ja też myślę."
+    ],
+    "noteAlly": [
+     "Grum po mojej stronie",
+     "Grum podarł list mocodawców. Przechodzi na moją stronę - zawał w tunelu kopaczy przebiliśmy razem, my dwaj. Za nim jest przekop na pięćdziesiątym piętrze podziemi."
+    ],
+    "noteFaction": [
+     "Pracuję dla frakcji",
+     "Wziąłem od Gruma sto groszy zadatku: pracuję dla jego mocodawców. Kopacze przebili zawał w tunelu - do pięćdziesiątego piętra podziemi - a ja mam ich prowadzić w dół. „Świadków nie zostawiać.”"
+    ],
+    "duelShout": "Bez urazy, chłopcze. Robota to robota.",
+    "duelWon": [
+     "> (Grum klęczy przy wejściu do tunelu. Tarcza leży obok.)",
+     "> („Dobra robota... Odpływam pierwszym promem. Mocodawcy znajdą sobie innego przewodnika - ale nie tak szybko.”)"
+    ],
+    "duelKilled": [
+     "> (Grum leży przy wejściu do tunelu i już nie wstanie. Kopacze patrzą z daleka. Nikt nic nie mówi.)"
+    ],
+    "duelLost": [
+     "> (Budzę się przy wejściu do jaskini. Grum stał nade mną: „Nie zabijam chłopców. Wracaj na swoją działkę.”)",
+     "> (Z głębi tunelu słychać kilofy. Kopacze przebijają zawał.)"
+    ],
+    "duelAway": [
+     "> (Odszedłem od tunelu. Grum czeka dalej - wie, że wrócę.)"
+    ],
+    "noteDuelWon": [
+     "Grum pokonany",
+     "Pobiłem Gruma przy wejściu do tunelu kopaczy. Odpłynie pierwszym promem; mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma."
+    ],
+    "noteDuelKilled": [
+     "Grum nie żyje",
+     "Grum zginął przy wejściu do tunelu kopaczy, z mojej ręki. Mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma."
+    ],
+    "noteDuelLost": [
+     "Grum wygrał",
+     "Grum pobił mnie przy wejściu do tunelu - i nie zabił. Kopacze przebili zawał: frakcja idzie w dół, do pięćdziesiątego piętra."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W8\\./)"
+}

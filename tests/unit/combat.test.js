@@ -21,7 +21,10 @@ const OLD_API = ["ATTRS", "SKILLS", "TREES", "MELEE", "SHIELDS", "MAX_LEVEL", "A
     // (2026-10-12, the Grafit Postać card - MenuRing.js / Equipment.js: what the attributes, the blows and the defence give in numbers, the hand)
     "attrInfo", "fightInfo", "defenseInfo", "meleeInfo", "woundChance", "handChoices", "setHand",
     // (2026-10-14, the fight's feel: Combat_Feel.js - the automatic combat mode, the soft target, the warnings, the quick heal, the dummy)
-    "feel"];
+    "feel",
+    // (2026-10-23, the weapons and armour - Bron.js / Bron_Data.js: perks from the worn things, the ranged weapon in the hand, the
+    // weapon as it works at the hero's level, the gear read again)
+    "addPerkSource", "rangedItem", "weaponNow", "refreshGear"];
 const FILES = ["TawernaCore", "Skills_Data", "Combat", "Combat_Fight", "Combat_UI"];
 
 // a save as the game stores it, read back: plain fields of a Game_System (what JsonEx gives)

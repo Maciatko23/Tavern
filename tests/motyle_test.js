@@ -46,7 +46,8 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const n = [448, 449, 450, 451, 452, 453].map(i => { x.clearRect(0, 0, 32, 32); x.drawImage(b._image || b._canvas, (i % 16) * 32, Math.floor(i / 16) * 32, 32, 32, 0, 0, 32, 32); const d = x.getImageData(0, 0, 32, 32).data; let k = 0; for (let j = 3; j < d.length; j += 4) if (d[j] > 0) k++; return k; });
         return { h: b.height, n, kinds: MotyleData.ICON.kinds }; })()`);
     // (2026-10-18: 453-457 are the white eagle's icons now - Orzel.js; the butterflies' own row ends at 452)
-    t.check("IconSet urósł o rząd (928 px): ikony gatunków 448-452 narysowane (453 to już ikona orła - Orzel.js)", row.h === 928 && row.n.slice(0, 5).every(k => k > 60) && row.kinds.pawik === 449 && Object.values(row.kinds).every(i => i >= 448 && i <= 452), row);
+    // (2026-10-23: IconSet rośnie dalej - ubiór i broń dokładają rzędy pod motylami: wysokość co najmniej 928)
+    t.check("IconSet urósł o rząd (928 px): ikony gatunków 448-452 narysowane (453 to już ikona orła - Orzel.js)", row.h >= 928 && row.n.slice(0, 5).every(k => k > 60) && row.kinds.pawik === 449 && Object.values(row.kinds).every(i => i >= 448 && i <= 452), row);
 
     // ---------------------------------------------------------------- ciemny pokój: dom dziadka (Map019) nocą - ćmy przy świecach
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
@@ -125,7 +126,9 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const calm = await M("(function(){ const dx = window.__b.x - window.__x0; Storm.wind = window.__W; return Math.round(dx); })()");
     t.check("wiatr (Storm.wind) znosi lot w prawo (z wiatrem gry)", windy - calm >= 25, { windy, calm });
     // sitting on a flower: the wings open and shut slowly
-    await t.eval(`(function(){ const b = window.__b, s = Motyle.spots.find(s => s.kind === 'flower') || Motyle.spots[0]; Motyle.land(b, s); b.sit.left = 2000; b.sit.hold = 5; window.__fr = []; b.free = 9999;
+    // (2026-10-23: the hero - and the screen - beside the flower: a butterfly off the screen is not drawn, its frame stood still)
+    await t.eval(`(function(){ const b = window.__b, s = Motyle.spots.find(s => s.kind === 'flower') || Motyle.spots[0]; $gamePlayer.locate(Math.floor(s.x / 48), Math.min($gameMap.height() - 1, Math.floor(s.y / 48) + 2)); $gamePlayer.center($gamePlayer.x, $gamePlayer.y);
+        Motyle.land(b, s); b.sit.left = 2000; b.sit.hold = 5; window.__fr = []; b.free = 9999;
         window.__iv = setInterval(() => { if (b.spr && window.__fr.length < 2000) window.__fr.push(Math.round(b.spr._frame.x / 16)); }, 4); return 0; })()`);
     await t.frames(400);
     const sitFr = await M(`(function(){ clearInterval(window.__iv); const f = window.__fr; let changes = 0; for (let i = 1; i < f.length; i++) if (f[i] !== f[i - 1]) changes++; return { n: f.length, set: [...new Set(f)].sort().join(), changes, state: window.__b.state }; })()`);
@@ -137,11 +140,15 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.eval(`(function(){ Motyle.clear(); $gameSystem._sneak = ${mode === "sneak"}; const p = $gamePlayer; p.locate(${20}, ${15}); p.setDirection(6);
             const s = { x: (p.x + 3.5) * 48, y: (p.y + 0.9) * 48, z: 6, kind: 'flower' }; const b = Motyle.spawn('bielinek', { at: { x: s.x, y: s.y, z: 6 } }); Motyle.land(b, s); b.sit.left = 99999; b.free = 0; window.__b = b; return 0; })()`);
         await t.frames(10);
+        // (2026-10-23: the distance in the very frame it takes off, noted in the game's own loop - looked at from outside every 4
+        // frames a running hero was a step nearer already: 1.98 under a loaded machine)
+        await t.eval(`(function(){ window.__scare = null; window.__bx = window.__b.x; const u = window.__scareU = SceneManager.updateMain; SceneManager.updateMain = function() { u.apply(this, arguments);
+            const b = window.__b; if (b && window.__scare === null && b.state === 'flee') window.__scare = Math.abs(window.__bx / 48 - ($gamePlayer._realX + 0.5)); if (b && b.state !== 'flee') window.__bx = b.x; }; return 0; })()`);
         await t.eval(`Input._currentState.right = true; ${mode === "run" ? "Input._currentState.shift = true;" : ""} 0`);
         let fled = false;
         for (let i = 0; i < 30 && !fled; i++) { await t.frames(4); fled = await t.eval("window.__b.state === 'flee'"); if (await t.eval("$gamePlayer._realX > " + (20 + 3.2))) break; }
-        await t.eval("Input._currentState.right = false; Input._currentState.shift = false; $gameSystem._sneak = false; 0");
-        const d = await t.eval("Math.abs(window.__b.x / 48 - ($gamePlayer._realX + 0.5)).toFixed(2)");
+        await t.eval("Input._currentState.right = false; Input._currentState.shift = false; $gameSystem._sneak = false; SceneManager.updateMain = window.__scareU; 0");
+        const d = await t.eval("(window.__scare !== null ? window.__scare : Math.abs(window.__b.x / 48 - ($gamePlayer._realX + 0.5))).toFixed(2)");
         return { fled, d };
     };
     const run = await scareRun("run");
@@ -209,6 +216,7 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     for (let i = 0; i < 3 && (await t.eval("!!$gameTemp._farmMenuOpen")); i++) { await t.press("escape"); await t.frames(10); }   // (O opened the ground's menu)
     await t.give(180, 1);
     await t.eval("Motyle.netOpts.roll = 0; 0");
+    await sitAhead("cytrynek");   // (2026-10-23: again, right before the swing - the steps above take long enough on a busy machine for it to fly off)
     await t.popups({ clear: true });
     await t.press("ok");
     const sw = await M("{ swing: !!$gamePlayer._swingEvent, kind: $gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind, sheet: ChoppableTree.swingKind(Motyle.netKind).sheet }");
@@ -258,14 +266,17 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // a moth in the net (the display case: the night kind)
     // (not facing the stuck torch: O at it takes it back into the hand - Torch.js; from below-left / below-right, facing up)
     await t.eval("Motyle.netOpts.roll = 0; 0");
-    let aimed = false;
-    for (let i = 0; i < 40 && !aimed; i++) {
-        await t.eval("(function(){ const at = [[20, 16], [22, 16]][" + (i % 2) + "]; $gamePlayer.locate(at[0], at[1]); $gamePlayer.setDirection(8); return 0; })()");
-        await t.frames(3);
-        aimed = await t.eval("Motyle.netTargets().length > 0");
+    // (2026-10-23: the moth goes round the flame - by the time the swing comes it can be past the net: up to four swings, each aimed)
+    for (let tries = 0; tries < 4 && !(await t.eval("!!Motyle.store().caught.cma")); tries++) {
+        let aimed = false;
+        for (let i = 0; i < 40 && !aimed; i++) {
+            await t.eval("(function(){ const at = [[20, 16], [22, 16]][" + (i % 2) + "]; $gamePlayer.locate(at[0], at[1]); $gamePlayer.setDirection(8); return 0; })()");
+            await t.frames(3);
+            aimed = await t.eval("Motyle.netTargets().length > 0");
+        }
+        await t.press("ok");
+        await t.frames(60);
     }
-    await t.press("ok");
-    await t.frames(60);
     const moth = await M("{ cma: !!Motyle.store().caught.cma, n: Motyle.moths.length }");
     await t.eval("Motyle.netOpts.roll = null; 0");
     t.check("ćmę też łapie się siatką (gatunek nocny w gablotce), wraca do ognia", moth.cma && moth.n >= 1, moth);

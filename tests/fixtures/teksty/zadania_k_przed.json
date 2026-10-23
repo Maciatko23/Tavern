@@ -1,0 +1,1792 @@
+{
+ "zadania": {
+  "K1": {
+   "title": "Węgiel do paleniska",
+   "where": "kuźnia, taras rzemieślników",
+   "when": "6–17, od dnia 2",
+   "desc": "Palenisko Tadka przygasa, a węgla nie ma - węglarz z gór nie przyjechał. Węgiel drzewny daje piec na działce albo drzewo zwęglone piorunem.",
+   "offer": {
+    "say": [
+     "Palenisko mi przygasa, a węgla ani grudki. Węglarz z gór nie przyjechał - wojna, drogi, licho wie co.",
+     "Przyniesiesz pięć worków węgla drzewnego? Z pieca na działce albo z drzewa, w które walnął piorun. Przed dziewiątą - to ci jeszcze naostrzę narzędzie."
+    ],
+    "yes": "Przyniosę węgiel.",
+    "no": "Nie teraz.",
+    "accept": [
+     "No to czekam. Tylko nie każ mi czekać do zimy."
+    ],
+    "decline": [
+     "Twoja wola. Palenisko poczeka. Ja też."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Tadkowi 5× Węgiel drzewny (kuźnia, 6–17). Przed 9:00 naostrzy ci narzędzie.",
+     "remind": [
+      "Węgiel, chłopcze. Pięć worków. Bez tego kuję na zimno."
+     ],
+     "hero": [
+      "> Mam węgiel. Pięć worków."
+     ],
+     "done": [
+      "O, to rozumiem! Palenisko odżyje."
+     ]
+    }
+   }
+  },
+  "K2": {
+   "title": "Woda do hartowania",
+   "where": "kuźnia",
+   "when": "6–17, po 3 dniach bez deszczu",
+   "desc": "Koryto do hartowania wyschło i kuźnia stoi. Tadek prosi o dwie porcje twojej deszczówki - z wiadra albo z bukłaka. Woda dla siebie czy dla innych?",
+   "offer": {
+    "say": [
+     "Koryto do hartowania wyschło do dna. Rozgrzane żelazo muszę w czymś studzić, inaczej pęka.",
+     "Przydział od Kuby starcza ledwo do picia. Masz deszczówkę? Dwie porcje - z wiadra albo z bukłaka. Zapłacę uczciwie."
+    ],
+    "options": {
+     "0": {
+      "label": "Przyniosę dwie porcje.",
+      "say": [
+       "Dobry z ciebie chłopak. Tylko nie odejmuj sobie od ust."
+      ]
+     },
+     "1": {
+      "label": "Nie mogę - sam ledwo mam.",
+      "say": [
+       "Rozumiem. Każdy ma swoje pragnienie. Pójdę prosić sołtysa o większy przydział."
+      ]
+     },
+     "2": {
+      "label": "Nie teraz.",
+      "say": [
+       "Koryto poczeka. Ja też."
+      ]
+     }
+    }
+   },
+   "steps": {
+    "0": {
+     "text": "Oddaj Tadkowi 2 porcje swojej deszczówki (z wiadra noszonego w plecaku albo z bukłaka).",
+     "remind": [
+      "Dwie porcje deszczówki, chłopcze. Z wiadra albo z bukłaka."
+     ],
+     "hero": [
+      "> Mam deszczówkę. Dwie porcje."
+     ],
+     "done": [
+      "Deszczówka! Czysta jak łza. Koryto znowu syczy, jak trzeba."
+     ],
+     "choice": {
+      "ask": [
+       "Co wolisz w zamian? Grosz czy gwoździe?"
+      ],
+      "options": {
+       "0": {
+        "label": "25 groszy.",
+        "say": [
+         "Masz. Uczciwie zarobione."
+        ]
+       },
+       "1": {
+        "label": "Sześć gwoździ.",
+        "say": [
+         "Sześć gwoździ, kute dziś rano. Trzymaj."
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "K3": {
+   "title": "Podkowa w słońcu",
+   "where": "kuźnia → Polna droga",
+   "when": "w południe (11–14), przy słońcu",
+   "desc": "Z wozu Wieśka wypadła podkowa dla konia Lorda. W samo południe błyska w słońcu między kamieniami na Polnej drodze - szukasz błysku, nie podkowy.",
+   "offer": {
+    "say": [
+     "Wiesiek wiózł mi podkowy dla konia Lorda i jedną zgubił na Polnej drodze. Lord już o nią pytał. Dwa razy.",
+     "Szukaj w samo południe, przy słońcu - podkowa błyska między kamieniami. Szukaj błysku, nie podkowy."
+    ],
+    "yes": "Poszukam.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Polna droga, między kamieniami. Od jedenastej do drugiej, póki słońce stoi wysoko."
+    ],
+    "decline": [
+     "Ech. Lord zapyta trzeci raz."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Znajdź podkowę na Polnej drodze: w południe (11–14), przy słońcu, błyska między kamieniami.",
+     "say": [
+      "> (Coś błysnęło w słońcu.) Jest! Nowa podkowa, z herbem Lorda wybitym na pręcie."
+     ]
+    },
+    "1": {
+     "text": "Oddaj podkowę Tadkowi (kuźnia, 6–17).",
+     "remind": [
+      "Znalazłeś? Nie? Szukaj w południe, jak słońce wysoko."
+     ],
+     "hero": [
+      "> Znalazłem podkowę. Błyszczała, jak mówiłeś."
+     ],
+     "done": [
+      "Ha! Ta sama. Lord nie będzie miał się do czego przyczepić. Dobre oko masz."
+     ]
+    }
+   }
+  },
+  "K4": {
+   "title": "Chleb przed świtem",
+   "where": "piekarnia na rynku",
+   "when": "dzień przed; 3:30–5:00",
+   "desc": "Piec Hanki musi ruszyć o czwartej, inaczej o szóstej nie będzie chleba. A drewna brak. Trzeba wstać przed świtem.",
+   "offer": {
+    "say": [
+     "Piec musi ruszyć o czwartej, inaczej o szóstej nie będzie chleba. A drewna mi brakuje - drwal leży w gorączce.",
+     "Przyniesiesz jutro cztery polana? Między wpół do czwartej a piątą, pod okienko piekarni. Zapukaj, otworzę."
+    ],
+    "yes": "Przyniosę przed świtem.",
+    "no": "Nie dam rady.",
+    "accept": [
+     "Złoty chłopak! Tylko nie zaśpij, kochaneczku."
+    ],
+    "decline": [
+     "Nic to. Spalę stare koszyki."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Jutro między 3:30 a 5:00 przynieś Hance 4× Drewno pod okienko piekarni.",
+     "early": [
+      "Okienko piekarni zamknięte. Hanka otworzy przed świtem (3:30–5:00)."
+     ],
+     "say": [
+      "> (Pukasz w okienko.) Hanko! Drewno!",
+      "Już, już! Cztery polana - złoty chłopak. Masz dwa bochny prosto z pieca, jeszcze gorące."
+     ]
+    }
+   },
+   "fail": {
+    "text": "Hanka rozpaliła piec czym się dało."
+   }
+  },
+  "K5": {
+   "title": "Bochenki do dziewiątej",
+   "where": "stragan → dzwonnik, brama wschodnia, obóz pod murem, ratusz",
+   "when": "6–9, codziennie",
+   "desc": "Cztery bochny przed dziewiątą: Ambrożemu, kapralowi Witowi przy bramie wschodniej, Ludmile do obozu pod murem i sołtysowi pod ratusz. Każdy rzuci słowo plotki.",
+   "offer": {
+    "say": [
+     "Pomożesz? Cztery bochny trzeba roznieść przed dziewiątą: Ambrożemu, kapralowi przy bramie wschodniej, Ludmile do obozu pod murem i sołtysowi pod ratusz.",
+     "Za Ludmiłę płaci sołtys, reszta z góry. Ja płacę tobie - dwanaście groszy."
+    ],
+    "yes": "Roznoszę!",
+    "no": "Nie dziś.",
+    "accept": [
+     "Leć! Tylko nie zjedz po drodze."
+    ],
+    "decline": [
+     "To sama polecę. Moje nogi, moja sprawa."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Roznieś 4 bochny przed 9:00: Ambroży (rynek), kapral Wit (brama wschodnia), Ludmiła (obóz pod murem), sołtys (ratusz, od 8:00)."
+    },
+    "1": {
+     "text": "Wróć do Hanki po zapłatę (stragan, do 14:00).",
+     "say": [
+      "> Wszystko rozniesione.",
+      "Wszyscy dostali? I nikt nie marudził? To zasłużyłeś. Dwanaście groszy, proszę."
+     ]
+    }
+   },
+   "fail": {
+    "text": "Chleb wystygł, a ludzie czekali."
+   }
+  },
+  "K6": {
+   "title": "Jęczmień do żaren",
+   "where": "stragan na rynku",
+   "when": "lato i jesień, 6–14",
+   "desc": "Mąki z młyna nie ma, bo koło stoi, odkąd opadł strumień. Hanka zmieli jęczmień z działki dziadka w ręcznych żarnach.",
+   "offer": {
+    "say": [
+     "Mąki z młyna już nie będzie, póki koło stoi. Mam stare żarna po babce - zmielę ręcznie, byle było co.",
+     "Masz jęczmień z działki dziadka? Cztery garście. Upiekę ci za to placek z jagodami."
+    ],
+    "yes": "Przyniosę jęczmień.",
+    "no": "Jeszcze nie urósł.",
+    "accept": [
+     "Czekam, kochaneczku. Żarna już naoliwione."
+    ],
+    "decline": [
+     "Jak urośnie, to pamiętaj o mnie."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Hance 4× Jęczmień (stragan, 6–14).",
+     "remind": [
+      "Cztery garście jęczmienia, kochaneczku. Żarna czekają."
+     ],
+     "hero": [
+      "> Jęczmień z działki dziadka. Cztery garście."
+     ],
+     "done": [
+      "Piękne ziarno! Jutro będą podpłomyki. A to placek dla ciebie - obiecałam."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Młyn stoi",
+     "Hanka mieli jęczmień w ręcznych żarnach, bo młyn stoi, odkąd opadł strumień. Koło i kamienie podobno są całe - brakuje tylko wody w korycie."
+    ]
+   }
+  },
+  "K8": {
+   "title": "Pęknięta beczka",
+   "where": "studnia na rynku",
+   "when": "7–14",
+   "desc": "Beczka Kuby cieknie, a każda kropla to pieniądz. Dwie deski, cztery gwoździe i młotek - obręcz zbijesz na miejscu.",
+   "offer": {
+    "say": [
+     "Psia kość, beczka cieknie! Każda kropla to grosz, a tu leje się na bruk.",
+     "Przyniesiesz dwie deski i cztery gwoździe? I młotek, bo mój... pożyczyłem i przepadł. Obręcz zbijesz tu, na miejscu."
+    ],
+    "yes": "Przyniosę.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Tylko szybko, zanim do reszty wycieknie."
+    ],
+    "decline": [
+     "No to cieknie dalej. Pięknie."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Kubie 2× Deski i 4× Gwoździe i zbij obręcz młotkiem (studnia na rynku, 7–14).",
+     "remind": [
+      "Dwie deski, cztery gwoździe, młotek. Cieknie, słyszysz?"
+     ],
+     "hero": [
+      "> Deski, gwoździe, młotek. Pokaż tę beczkę."
+     ],
+     "done": [
+      "No! Trzyma jak dzwon. Masz, zarobiłeś.",
+      "> Skąd ty w ogóle bierzesz tyle wody?",
+      "Z daleka. Nie pytaj.",
+      "> (Mokre klepki pachną dziwnie słodko. Jak róża.)"
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Beczka Kuby",
+     "Kuba ma wodę codziennie, choć studnia na rynku ledwo daje parę wiader. Zapytany skąd - „Z daleka. Nie pytaj.” Mokre klepki jego beczki pachniały słodko, jak róża."
+    ]
+   }
+  },
+  "K9": {
+   "title": "Kłótnia w kolejce",
+   "where": "studnia na rynku",
+   "when": "7–8:30, po 3 dniach bez deszczu",
+   "desc": "Tadek i Ignac pokłócili się o przydział wody. Kuba prosi, żebyś rozsądził - jego nie posłuchają.",
+   "offer": {
+    "say": [
+     "Ratunku, chłopcze. Tadek i Ignac skoczyli sobie do oczu o przydział. Każdy krzyczy, że jego robota ważniejsza.",
+     "Kowal bez wody nie hartuje, garbarz nie wyprawi skór. A ja mam jedną beczkę na nich dwóch. Kto ma brać pierwszy? Ty powiedz - mnie nie posłuchają."
+    ],
+    "options": {
+     "0": {
+      "label": "Po połowie, a na zmianę co dzień pierwszy.",
+      "say": [
+       "Po połowie i na zmianę... A wiesz, że to ma sens? Idę im powiedzieć.",
+       "> (Po chwili Ignac przynosi ci miskę kapuśniaku. „Za rozum” - mówi.)"
+      ]
+     },
+     "1": {
+      "label": "Niech rzucą kośćmi.",
+      "say": [
+       "Kośćmi? O wodę? No dobra...",
+       "Ignac przegrał i teraz nie gada z Tadkiem. Pięknie. Dzięki."
+      ]
+     },
+     "2": {
+      "label": "To nie moja sprawa.",
+      "say": [
+       "Niczyja. Jak zawsze."
+      ]
+     }
+    }
+   }
+  },
+  "K10": {
+   "title": "Smak wody",
+   "where": "garbarnia",
+   "when": "6:30–17, po „Pękniętej beczce”",
+   "desc": "Ignac moczy skóry w wodzie od Kuby, a one potem pachną różami. W taką suszę, kiedy w mieście nie ma jednego kwiatka. Porównaj z własną deszczówką.",
+   "offer": {
+    "cond": {
+     "done": [
+      "K8"
+     ]
+    },
+    "say": [
+     "Powiem ci coś dziwnego. Moczę skóry w wodzie od Kuby, a one potem pachną różami. Różami! W taką suszę, kiedy w całym mieście nie ma jednego kwiatka.",
+     "Powąchaj moją kadź, jak mi nie wierzysz. A potem powąchaj swoją deszczówkę."
+    ],
+    "yes": "Powącham.",
+    "no": "Nie mam czasu na wąchanie skór.",
+    "accept": [
+     "> (Pochylasz się nad kadzią.) Róża... i coś jak rdza. Żelazo?",
+     "No właśnie. A teraz twoja deszczówka. Przynieś trochę - w wiadrze albo w bukłaku."
+    ],
+    "decline": [
+     "Jak chcesz. Ja i tak wiem swoje."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Pokaż Ignacowi trochę swojej deszczówki (wiadro albo bukłak) - do porównania.",
+     "remind": [
+      "Deszczówka, chłopcze. W wiadrze albo w bukłaku. Nie wylewaj jej - tylko powąchamy."
+     ],
+     "hero": [
+      "> Moja deszczówka. Nie pachnie niczym. Trochę dachem."
+     ],
+     "done": [
+      "No właśnie. A woda Kuby pachnie różą i żelazem.",
+      "Róże rosną tylko tam, gdzie ktoś je podlewa. Ciekawe, kto w tym mieście ma wodę na róże."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Smak wody",
+     "Woda Kuby pachnie różą i żelazem (kadź Ignaca), deszczówka nie pachnie niczym. Ignac: „Róże rosną tylko tam, gdzie ktoś je podlewa.”"
+    ]
+   }
+  },
+  "K11": {
+   "title": "Myto przy bramie",
+   "where": "brama wschodnia (do dworu)",
+   "when": "6–18",
+   "desc": "Kapral Wit chce dwa grosze myta „na wojnę” od każdego, kto idzie do dworu. Można zapłacić albo odrobić - kosze żarowe żrą drewno.",
+   "offer": {
+    "say": [
+     "Stać. Brama do dworu Lorda Zaleskiego. Myto: dwa grosze. Na wojnę.",
+     "Nie masz? Możesz odrobić - kosze żarowe przy bramie żrą drewno jak smok. Sześć polan i jesteśmy kwita."
+    ],
+    "options": {
+     "0": {
+      "label": "Płacę dwa grosze.",
+      "say": [
+       "Dziękuję. Zapamiętam twoją gębę - następnym razem przechodzisz bez gadania."
+      ]
+     },
+     "1": {
+      "label": "Odrobię: przyniosę 6 polan.",
+      "say": [
+       "Sześć polan. Do koszy przy bramie. Czekam."
+      ]
+     },
+     "2": {
+      "label": "Nie teraz.",
+      "say": [
+       "Brama nie ucieknie. Myto też nie."
+      ]
+     }
+    }
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś kapralowi Witowi 6× Drewno do koszy żarowych (brama wschodnia, 6–18).",
+     "remind": [
+      "Sześć polan, chłopcze. Kosze same się nie nakarmią."
+     ],
+     "hero": [
+      "> Sześć polan do koszy."
+     ],
+     "done": [
+      "Równo ułożone. Dobra robota. Jesteś teraz znany straży - przechodź śmiało."
+     ]
+    }
+   }
+  },
+  "K12": {
+   "title": "Łój do latarni",
+   "where": "obchód murów, wieczorem",
+   "when": "18–23",
+   "desc": "W latarni patrolu kończy się łój. Kawał tłustego mięsa z dzika albo jelenia - Wit wytopi łój. Albo dwie pochodnie.",
+   "offer": {
+    "say": [
+     "W latarni kończy się łój, a do rana daleko. Dwór obiecał świece. Obiecał.",
+     "Przynieś kawał tłustego mięsa z dzika albo jelenia - wytopię łój. Albo dwie pochodnie, jak już masz."
+    ],
+    "yes": "Przyniosę.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Wieczorem obchodzę mury. Znajdziesz mnie."
+    ],
+    "decline": [
+     "To będę chodził po ciemku. Nie pierwszy raz."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś kapralowi Witowi 1× Surowe mięso dzika albo jelenia (na łój) albo 2× Pochodnia (obchód murów, 18–23).",
+     "remind": [
+      "Tłuste mięso albo dwie pochodnie. Latarnia ledwo się tli."
+     ],
+     "hero": [
+      "> Masz. Na latarnię."
+     ],
+     "done": [
+      "Dzięki. Powiem ci jedno, bo jesteś w porządku: po północy to nie ja jestem w tym mieście najdziwniejszy.",
+      "Ktoś chodzi z beczkami, kiedy porządni ludzie śpią. Ja nic nie mówiłem."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Kapral o nocy",
+     "Kapral Wit: „Po północy to nie ja jestem w tym mieście najdziwniejszy. Ktoś chodzi z beczkami, kiedy porządni ludzie śpią.”"
+    ]
+   }
+  },
+  "K13": {
+   "title": "Sznur dzwonu",
+   "where": "rynek → dzwonnica",
+   "when": "rano, do 12:00",
+   "desc": "Sznur dzwonu się przetarł. Dwie liny przed południem - inaczej pierwszy raz w historii miasta nie zadzwoni południe.",
+   "offer": {
+    "say": [
+     "Sznur się przetarł. Jeszcze jedno szarpnięcie i pęknie. A w południe trzeba dzwonić. Zawsze trzeba.",
+     "Przynieś mi dwie liny przed dwunastą. Proszę."
+    ],
+    "yes": "Przyniosę liny.",
+    "no": "Nie zdążę.",
+    "accept": [
+     "Przed dwunastą. Pamiętaj."
+    ],
+    "decline": [
+     "Wytrzyma. Musi."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Ambrożemu 2× Lina przed 12:00 (ławka na rynku, przed południem przy dzwonnicy).",
+     "remind": [
+      "Dwie liny, chłopcze. Słońce idzie w górę."
+     ],
+     "hero": [
+      "> Dwie liny. Zdążyłem?"
+     ],
+     "done": [
+      "Zdążyłeś. Południe zadzwoni, jak zawsze. Jak od trzystu lat."
+     ]
+    }
+   },
+   "fail": {
+    "text": "W południe dzwon milczał. Pierwszy raz od trzystu lat."
+   }
+  },
+  "K14": {
+   "title": "Dzwonnik ma chore kolana",
+   "where": "dzwonnica",
+   "when": "17:30–18:15, od Opinii 20",
+   "desc": "O osiemnastej Ambroży nie da rady wejść po schodach. Zadzwoń za niego: sześć uderzeń, kiedy serce dzwonu jest na górze. Ani jednego więcej.",
+   "offer": {
+    "say": [
+     "Kolana... nie wejdę dziś po schodach. A szósta za chwilę.",
+     "Zadzwonisz za mnie? Sześć uderzeń. Ciągnij, kiedy serce dzwonu jest na górze. Ani jednego więcej."
+    ],
+    "yes": "Zadzwonię.",
+    "no": "Nie umiem.",
+    "accept": [
+     "Idź. Sznur jest nowy."
+    ],
+    "decline": [
+     "To jakoś wejdę. Jakoś."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zadzwoń za Ambrożego o 18:00: dokładnie 6 uderzeń (porozmawiaj z nim przy dzwonnicy, 17:30–18:15)."
+    }
+   },
+   "fail": {
+    "text": "Ambroży wszedł po schodach sam. Powoli."
+   },
+   "lines": {
+    "go": [
+     "Sznur jest tam, na górze. Sześć razy. Ani jednego więcej."
+    ],
+    "ok": [
+     "Równo jak za dawnych lat. Dziękuję, chłopcze. Kolana też dziękują."
+    ],
+    "badRhythm": [
+     "Liczba dobra, choć krzywo. Dzwon wybaczy. Ja też."
+    ],
+    "wrong": [
+     "Nie tak! Nie tak... Trzy i jeden to coś innego...",
+     "(Ambroży blednie jak ściana.) Nic. Nic się nie stało. Idź już."
+    ],
+    "quit": [
+     "Nie zadzwoniłeś? To... wejdę sam. Jakoś."
+    ],
+    "note": [
+     "Dzwon: liczba ma znaczenie",
+     "Zadzwoniłem za Ambrożego złą liczbę razy. Zbladł: „Trzy i jeden to coś innego...” Liczba uderzeń coś znaczy."
+    ]
+   }
+  },
+  "K15": {
+   "title": "Ostrożnie, kruche",
+   "where": "kantor → woźnica przed bramą południową",
+   "when": "21:30–22:30",
+   "desc": "Baltazar chce, żeby skrzynia stanęła na wozie woźnicy Wojciecha przed bramą południową o dziesiątej wieczorem. „Nie otwierać - kruche.” Skrzynia jest ciężka.",
+   "offer": {
+    "say": [
+     "Ach, przyjaciel. Mam drobną prośbę. Ta skrzynia ma stanąć na wozie pod bramą południową. O dziesiątej. Nie otwierać - kruche.",
+     "Pięć groszy teraz, dwadzieścia potem. Uczciwie?"
+    ],
+    "yes": "Zaniosę.",
+    "no": "Nie noszę cudzych skrzyń po nocy.",
+    "accept": [
+     "Wiedziałem, że się dogadamy. Ostrożnie na schodach."
+    ],
+    "decline": [
+     "Szkoda. Znajdę kogoś mniej... wybrednego."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zanieś skrzynię Baltazara woźnicy Wojciechowi - czeka z wozem przed bramą południową - przed 22:30. Nie otwieraj (albo oddaj ją kapralowi Witowi).",
+     "early": [
+      "Skrzynia od Veya? Postawisz ją tu o dziesiątej. Nie wcześniej."
+     ],
+     "remind": [
+      "Czekam na towar od Veya. Ty go masz?"
+     ],
+     "hero": [
+      "> Skrzynia od Baltazara. Na wóz."
+     ],
+     "done": [
+      "Od Veya? Postaw z tyłu, na słomie. Ja przytrzymam konie."
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Postaw skrzynię na wozie.",
+        "say": [
+         "> (Stawiasz skrzynię na słomie.)",
+         "Dobrze. Idź już, chłopcze. Nikt cię tu nie widział."
+        ]
+       },
+       "1": {
+        "label": "Najpierw zajrzyj do środka.",
+        "say": [
+         "> (Wojciech odwraca się do koni. Zamek pęka cicho. W słomie leżą stare kamienie z wyrytym krukiem.)",
+         "> (Szybko zamykasz wieko i stawiasz skrzynię na wozie.)",
+         "Co tak długo? ...Dobra. Idź już."
+        ],
+        "note": [
+         "Skrzynia Baltazara",
+         "W skrzyni, którą Baltazar kazał nocą postawić na wozie woźnicy Wojciecha przed bramą południową, leżały w słomie stare kamienie z wyrytym krukiem."
+        ]
+       }
+      }
+     }
+    },
+    "1": {
+     "text": "Odbierz zapłatę u Baltazara (kantor, 8–18)."
+    }
+   },
+   "fail": {
+    "text": "Wóz odjechał bez skrzyni. Baltazar nie będzie zachwycony."
+   },
+   "lines": {
+    "wit": [
+     "> Kapralu, Baltazar kazał mi to zanieść na wóz pod bramą południową. O tej porze.",
+     "Skrzynia od Veya? Nocą? ...Dobrze zrobiłeś, że przyszedłeś do mnie. Ja się tym zajmę."
+    ],
+    "payClean": [
+     "Skrzynia dotarła cała. Lubię ludzi, którzy nie zadają pytań. Dwadzieścia groszy, jak obiecałem."
+    ],
+    "payOpened": [
+     "Zamek pęknięty. Ciekawość to piękna cecha... u kota. Dziesięć groszy i zapomnij, że mnie znasz."
+    ],
+    "payWit": [
+     "Słyszałem, że lubisz kaprala. Ja też... lubiłem ciebie. Nic ci nie jestem winien, przyjacielu."
+    ]
+   }
+  },
+  "K16": {
+   "title": "Grzyby po dwakroć",
+   "where": "kantor",
+   "when": "dzień po promie, 8–18",
+   "desc": "Dzień po promie Baltazar skupuje grzyby, jagody i wędzone mięso po podwójnej cenie - do dziesięciu sztuk. Dziwne, że bierze tylko to, co długo wytrzyma.",
+   "lines": {
+    "intro": [
+     "Wczoraj przypłynął prom, a jutro odpływa. Skupuję grzyby, jagody i wędzone mięso. Płacę podwójnie - tylko dziś i tylko do dziesięciu sztuk."
+    ],
+    "none": [
+     "Nie masz nic, co wytrzyma drogę? Szkoda. Do następnego promu, przyjacielu."
+    ],
+    "full": [
+     "Na dziś mam dość. Następny prom za trzy dni."
+    ],
+    "sold": [
+     "Interes zrobiony. Do następnego promu, przyjacielu."
+    ],
+    "no": "Nic nie sprzedam."
+   },
+   "reward": {
+    "note": [
+     "Zapasy Baltazara",
+     "Dzień po promie Baltazar skupuje po podwójnej cenie grzyby, jagody i wędzone mięso - tylko to, co długo wytrzyma. Jakby ktoś szykował zapasy na długą drogę."
+    ]
+   }
+  },
+  "K17": {
+   "title": "Obwieszczenie o racjach",
+   "where": "ratusz → tawerna, piekarnia, kuźnia, kantor",
+   "when": "8–18",
+   "desc": "Cztery obwieszczenia: woda tylko na przydział, a za kradzież deszczówki - kara. Trzeba je przybić gwoździem na tawernie, piekarni, kuźni i kantorze.",
+   "offer": {
+    "say": [
+     "Mam tu cztery obwieszczenia. Woda tylko na przydział, a za kradzież deszczówki - kara. Trzeba je przybić: na tawernie, na piekarni, na kuźni i na kantorze.",
+     "Gwoździe i młotek masz swoje? To dobrze, bo ratusz nie ma ani jednego, ani drugiego."
+    ],
+    "yes": "Przybiję.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Cztery gwoździe, cztery ściany. Ludzie będą psioczyć - nie słuchaj."
+    ],
+    "decline": [
+     "To niech wiszą w ratuszu. Nikt tu nie zagląda."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przybij 4 obwieszczenia (1 gwóźdź i młotek na każde): ściana tawerny, piekarni, kuźni i kantoru."
+    },
+    "1": {
+     "text": "Wróć do sołtysa (ratusz albo rynek).",
+     "say": [
+      "> Wiszą wszystkie cztery.",
+      "Dobra robota. I co mówili?",
+      "> Hanka pyta, czym zarobi na ciasto. Tadek klnie. Baltazar się cieszy.",
+      "Baltazar się cieszy... Zapamiętam. Teraz przynajmniej wiem, kto jest przeciw mnie."
+     ]
+    }
+   },
+   "react": {
+    "notice_bakery": "Kara za deszczówkę? A czym ja zarobię na ciasto?",
+    "notice_smithy": "Psiakrew! Jeszcze tego brakowało!",
+    "notice_kantor": "Racje? Doskonale. Racje zawsze dobrze się sprzedają."
+   },
+   "reward": {
+    "note": [
+     "Obwieszczenie o racjach",
+     "Przybiłem obwieszczenia sołtysa. Hanka pytała, czym zarobi na ciasto, Tadek klął, a Baltazar się ucieszył - racje zawsze dobrze się sprzedają."
+    ]
+   }
+  },
+  "K20": {
+   "title": "Pierwsza skóra",
+   "where": "garbarnia",
+   "when": "6:30–17, po pierwszym polowaniu",
+   "desc": "Ignac kupi twoją pierwszą surową skórę i pokaże, jak ciąć, żeby ścięgna nie szły na zmarnowanie.",
+   "offer": {
+    "say": [
+     "Masz surową skórę? Pokaż... Pierwsza? Widać po cięciach.",
+     "Kupię ją - osiem groszy. I pokażę ci, jak ciąć, żeby ścięgna nie szły na zmarnowanie."
+    ],
+    "options": {
+     "0": {
+      "label": "Sprzedam.",
+      "say": [
+       "Patrz: tu, wzdłuż, a nie w poprzek. Następne trzy zwierzęta oprawisz czyściej - zobaczysz, ile ścięgien zostanie."
+      ]
+     },
+     "1": {
+      "label": "Zostawię sobie.",
+      "say": [
+       "Twoja skóra, twoja sprawa. Ale tniesz jak rzeźnik."
+      ]
+     }
+    }
+   }
+  },
+  "K21": {
+   "title": "Garbnik z lasu",
+   "where": "garbarnia",
+   "when": "6:30–13, oddać do 17:00",
+   "desc": "Skończył się garbnik. Dziesięć szyszek i cztery naręcza gałęzi (na korę) - przed piątą po południu, potem kadź stygnie.",
+   "offer": {
+    "say": [
+     "Skończył mi się garbnik. Bez kory i szyszek skóra zgnije, zanim się wyprawi.",
+     "Przynieś dziesięć szyszek i cztery naręcza gałęzi. Przed piątą po południu - potem kadź stygnie."
+    ],
+    "yes": "Przyniosę.",
+    "no": "Nie dziś.",
+    "accept": [
+     "Do piątej. Las niedaleko."
+    ],
+    "decline": [
+     "To jutro będzie śmierdziało bardziej niż zwykle."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Ignacowi 10× Szyszki i 4× Gałęzie przed 17:00 (garbarnia).",
+     "remind": [
+      "Dziesięć szyszek i cztery naręcza gałęzi. Kadź stygnie."
+     ],
+     "hero": [
+      "> Szyszki i gałęzie. Na korę."
+     ],
+     "done": [
+      "W samą porę. Kadź jeszcze ciepła. Dzięki, chłopcze."
+     ]
+    }
+   },
+   "fail": {
+    "text": "Kadź wystygła."
+   }
+  },
+  "K31": {
+   "title": "Imieniny Lorda",
+   "where": "rynek (Feliks) → drzwi dworu",
+   "when": "dzień 33, do 20:00",
+   "desc": "Na imieniny Lorda każdy dom coś niesie. Lord lubi miód pitny i placek jagodowy. Dwa dzbany miodu i placek - w dniu 33, do 20:00.",
+   "offer": {
+    "say": [
+     "W dniu trzydziestym trzecim jaśnie pan obchodzi imieniny. Każdy dom coś przynosi - taki zwyczaj. A zwyczajów pilnuję ja.",
+     "Jaśnie pan lubi miód pitny i placek jagodowy. Dwa dzbany miodu i placek - może łaskawiej spojrzy na dług pana dziadka."
+    ],
+    "yes": "Zaniosę prezent.",
+    "no": "Nie stać mnie.",
+    "accept": [
+     "Dzień trzydziesty trzeci, przed ósmą wieczorem. Do rąk jaśnie pana."
+    ],
+    "decline": [
+     "Rozumiem. Jaśnie pan i tak nie liczy prezentów. Ja liczę."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "W dniu 33 (8–20) zanieś Lordowi 2× Miód pitny i 1× Placek jagodowy (drzwi dworu).",
+     "early": [
+      "Imieniny są trzydziestego trzeciego. Nie wcześniej, młodzieńcze."
+     ],
+     "remind": [
+      "Imieniny! I co, z pustymi rękami?"
+     ],
+     "hero": [
+      "> Na imieniny, panie. Miód pitny i placek z jagodami."
+     ],
+     "done": [
+      "Miód pitny i placek! Feliks, zapisz: wnuk Stacha pamiętał.",
+      "Przyjmij czterdzieści groszy. Albo... zapiszę je na poczet długu twojego dziadka. Wybieraj."
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Wezmę pieniądze.",
+        "say": [
+         "Proszę. Wnuk Stacha wie, co dobre."
+        ]
+       },
+       "1": {
+        "label": "Zapisz na dług dziadka.",
+        "say": [
+         "Feliks, zapisz: czterdzieści na poczet długu. Rozsądny chłopak."
+        ]
+       }
+      }
+     }
+    }
+   },
+   "fail": {
+    "text": "Imieniny minęły bez twojego prezentu."
+   }
+  },
+  "K32": {
+   "title": "List od dziadka",
+   "where": "dom dziadka → drzwi dworu",
+   "when": "dni 5–20, Lord 8–20",
+   "desc": "Dziadek prosi w liście o zwłokę w spłacie długu. Zwłoki nie będzie - ale Lord zada dziwne pytanie.",
+   "offer": {
+    "say": [
+     "Wnuku... napisałem do Lorda. Proszę o zwłokę. Wiem, wiem - nic to nie da. Ale ojciec mnie uczył: proś, zanim zaczniesz się kłócić.",
+     "Zaniesiesz mu ten list? Do rąk własnych."
+    ],
+    "accept": [
+     "> Zaniosę, dziadku.",
+     "Dobry z ciebie wnuk. Lord stoi przed dworem od ósmej do ósmej."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zanieś list dziadka Lordowi (drzwi dworu, 8–20).",
+     "hero": [
+      "> List od dziadka Stacha. Do rąk własnych."
+     ],
+     "done": [
+      "List od Stacha? (czyta) Zwłoki nie będzie. Dług to dług.",
+      "Ale powiedz mi... na działce twojego dziadka leżą jeszcze te stare kamienie? Z wyrytym krukiem? Mój dziadek je zbierał. Ładne kamienie."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Lord pyta o kamienie",
+     "Lord nie da zwłoki. Za to zapytał, czy na działce dziadka leżą jeszcze stare kamienie z wyrytym krukiem - „mój dziadek je zbierał”."
+    ]
+   }
+  },
+  "K38": {
+   "title": "Nocna warta",
+   "where": "brama twierdzy (górny dziedziniec)",
+   "when": "1:00–3:00, od Opinii 20",
+   "desc": "Strażnik przy bramie twierdzy ma gorączkę. Postój tam od pierwszej do trzeciej w nocy i zapamiętaj, co zobaczysz.",
+   "offer": {
+    "say": [
+     "Mój człowiek przy bramie twierdzy złapał gorączkę. Ktoś musi tam postać od pierwszej do trzeciej w nocy.",
+     "Patrzysz, słuchasz, nic nie robisz. Jak coś zobaczysz - zapamiętaj. Piętnaście groszy."
+    ],
+    "yes": "Postoję.",
+    "no": "Nocą śpię.",
+    "accept": [
+     "Posterunek przy bramie twierdzy, od strony tawerny. Pierwsza w nocy. Nie spóźnij się."
+    ],
+    "decline": [
+     "Jak wszyscy."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Stań na posterunku przy bramie twierdzy między 0:45 a 1:30 (górny dziedziniec, przed tawerną).",
+     "early": [
+      "Warta zaczyna się o pierwszej w nocy."
+     ],
+     "say": [
+      "> Zaczynam wartę. Do trzeciej."
+     ]
+    },
+    "1": {
+     "text": "Pilnuj bramy twierdzy do 3:00. Nie odchodź od posterunku."
+    },
+    "2": {
+     "text": "Zamelduj się u kaprala Wita (obchód murów, 18–23)."
+    }
+   },
+   "fail": {
+    "text": "Posterunek stał pusty."
+   },
+   "lines": {
+    "fox": "Lis przemknął pod murem...",
+    "owl": "Sowa pohukuje na wieży.",
+    "kuba": "Kuba? Z pustymi beczkami, o tej porze? Idzie w stronę stawu...",
+    "left": "Zszedłeś z posterunku przed trzecią.",
+    "reportKuba": [
+     "> Lis, sowa... I Kuba, koło drugiej, z pustymi beczkami. Szedł w stronę stawu za tawerną.",
+     "Kuba? ...Nie widziałeś niczego, czego ja bym nie widział. Masz piętnaście groszy. Dobrze się spisałeś."
+    ],
+    "reportQuiet": [
+     "> Lis, sowa. Poza tym spokój.",
+     "Spokój to dobra wiadomość. Masz piętnaście groszy."
+    ]
+   }
+  },
+  "K26": {
+   "title": "Pierścionek w studni",
+   "where": "studnia na rynku → dno studni (Map118)",
+   "when": "za dnia, nie w deszcz",
+   "desc": "Zosia wrzuciła do studni na rynku pierścionek matki - „chciałam zobaczyć, czy plusknie”. Trzeba zejść na dno po dwóch linach (z boku studni, od wschodu).",
+   "offer": {
+    "say": [
+     "(Zosia ma czerwone oczy.) Wrzuciłam do studni pierścionek mamy. Chciałam zobaczyć, czy plusknie... Nie pluskło.",
+     "Mama jeszcze nie wie. Zejdziesz po niego? Tata mówi, że studnia głęboka na dwie liny."
+    ],
+    "yes": "Zejdę po niego.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Naprawdę? Z boku studni są kamienie, tam się wiąże linę. Tylko nie mów mamie!"
+    ],
+    "decline": [
+     "...Dobrze. Może sam wypłynie."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zejdź na dno studni na rynku (2× Lina; z boku studni, stojąc na wschód od niej) i znajdź pierścionek - za dnia, nie w deszcz.",
+     "early": [
+      "Na dnie ciemno choć oko wykol. Zejdę za dnia."
+     ],
+     "wet": "W deszcz z szybu leje się woda - nic nie widać.",
+     "say": [
+      "> (W płytkiej kałuży coś błyska. Cienki srebrny pierścionek z niebieskim oczkiem.)",
+      "> (Nad kałużą, w ścianie, zamurowany łuk kanału. W zworniku wyryty kruk, u stóp żelazna krata.)",
+      "> Ktoś kiedyś odciął tę studnię od kanału."
+     ],
+     "reward": {
+      "note": [
+       "Studnia odcięta",
+       "Na dnie studni na rynku jest zamurowany łuk kanału zakonu: w zworniku kruk, u stóp żelazna krata. Ktoś kiedyś odciął tę studnię od wody spod wzgórza."
+      ]
+     }
+    },
+    "1": {
+     "text": "Oddaj pierścionek Zosi (rynek, za dnia).",
+     "remind": [
+      "Znalazłeś? ...Jeszcze nie?"
+     ],
+     "hero": [
+      "> Twój pierścionek. Leżał w kałuży na samym dnie."
+     ],
+     "done": [
+      "Pierścionek mamy! Dziękuję, dziękuję! ...Nie mów jej, dobrze? To będzie nasza tajemnica.",
+      "A co tam było, na dole? Smoki? Nie? Szkoda."
+     ]
+    }
+   }
+  },
+  "K37": {
+   "title": "Sakiewka Lorda",
+   "where": "rynek → taras rzemieślników",
+   "when": "dzień targowy, 8:30–10:30",
+   "desc": "W dzień targowy złodziejaszek odciął Feliksowi sakiewkę dworu - pieniądze jaśnie pana - i ucieka schodami w dół, na taras rzemieślników. Dogoń go (bieg: Shift).",
+   "steps": {
+    "0": {
+     "text": "Dogoń złodziejaszka! Ucieka schodami w dół, na taras rzemieślników (bieg: Shift)."
+    },
+    "1": {
+     "text": "Złapałeś złodziejaszka. Porozmawiaj z nim - co z nim zrobisz?"
+    },
+    "2": {
+     "text": "Oddaj sakiewkę Feliksowi (rynek, rano 7–10:30).",
+     "hero": [
+      "> Sakiewka dworu. Złodziejaszek już jej nie ma."
+     ],
+     "done": [
+      "Sakiewka! Cała? (liczy) Cała. Jaśnie pan się dowie, kto mu ją oddał.",
+      "Pięćdziesiąt na poczet długu pana dziadka - z wdzięczności dworu. Zapiszę."
+     ]
+    }
+   },
+   "fail": {
+    "text": "Złodziejaszek zniknął między namiotami pod murem."
+   },
+   "lines": {
+    "shout": "Złodziej! Sakiewka jaśnie pana! Łapać go!",
+    "run": "Z drogi!",
+    "look": [
+     "Nie dogonisz!",
+     "Hehe!",
+     "Bosy mnie goni?!"
+    ],
+    "caught": "Puść! Puść, nic nie zrobiłem!",
+    "giveBack": [
+     "(Szymek oddaje sakiewkę i patrzy w ziemię.) Masz. I tak by mnie złapali."
+    ],
+    "free": [
+     "> Uciekaj. I więcej nie kradnij.",
+     "(Szymek patrzy na ciebie, jakby nie wierzył.) ...Dziękuję. Nie zapomnę ci tego. Nigdy."
+    ],
+    "keep": [
+     "> Sakiewka zostaje u mnie. A ty zmykaj.",
+     "(Szymek otwiera usta, zamyka je - i ucieka.)"
+    ],
+    "gone": "Złodziejaszek wykorzystał chwilę i uciekł.",
+    "noteFree": [
+     "Szymek z obozu",
+     "Złodziejaszek, który odciął sakiewkę dworu, to Szymek - głodny chłopak z obozu pod murem. Puściłem go. Ludzie z obozu tego nie zapomną."
+    ],
+    "noteKeep": [
+     "Sakiewka dworu",
+     "Zatrzymałem sakiewkę dworu, którą odebrałem złodziejaszkowi. Osiemdziesiąt groszy."
+    ]
+   }
+  },
+  "K39": {
+   "title": "Kości z targu",
+   "where": "tawerna (Bartek) → stragan na rynku (Lucjan)",
+   "when": "dzień targowy, 10–14",
+   "desc": "Bartek Kmieć przegrał na targu wszystko z wędrownym graczem, Lucjanem Kością: „ma szczęście jak diabeł”. Zagraj z Lucjanem i wypatrz, kiedy podmienia kość (Czujność 10+).",
+   "offer": {
+    "say": [
+     "Przegrałem wszystko. Wszystko! Jęczmień z całego pola, a potem jeszcze grosze na mąkę.",
+     "Na targu siedzi taki jeden, Lucjan Kość. Ma szczęście jak diabeł - siedem szóstek z rzędu! Ty masz bystre oczy. Zagraj z nim i patrz mu na ręce."
+    ],
+    "yes": "Zagram z nim i popatrzę.",
+    "no": "Hazard to nie dla mnie.",
+    "accept": [
+     "W dzień targowy, przed południem, przy straganie z prawej. Tylko nie przegraj wszystkiego jak ja."
+    ],
+    "decline": [
+     "Mądry. Mądrzejszy ode mnie."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zagraj w kości z Lucjanem Kością (rynek, przy prawym straganie; w dzień targowy 10–14) i patrz mu na ręce. Bez Czujności 10 nic nie zobaczysz."
+    },
+    "1": {
+     "text": "Widziałeś, jak Lucjan podmienia kość. Powiedz mu, co o tym myślisz (rynek, w dzień targowy 10–14)."
+    },
+    "2": {
+     "text": "Wróć do Bartka (tawerna, 14–21).",
+     "say": [
+      "> Lucjan grał oszukaną kością. Wyrzuciłem go z targu.",
+      "Oszukaną?! Wiedziałem! ...To znaczy, nie wiedziałem, ale czułem.",
+      "Masz. Pięć groszy. Ostatnie, jakie mam, ale są twoje. Uczciwie."
+     ]
+    }
+   },
+   "lines": {
+    "play": [
+     "Kości, mój drogi? Pięć groszy za partię. Gramy do tysiąca pięciuset."
+    ],
+    "playNo": [
+     "Szczęście nie lubi czekać."
+    ],
+    "spotted": [
+     "> (Teraz! Sięgając po kubek, Lucjan zgarnął jedną kość rękawem - a na stół wróciła inna, cięższa.)",
+     "> Podmienia kość. Szczęście jak diabeł... z rękawa."
+    ],
+    "notSpotted": [
+     "> (Szczęście jak diabeł... Patrzyłem mu na ręce, ale nic nie widać.)",
+     "> (Ktoś bystrzejszy może by coś zauważył. Czujność 10.)"
+    ],
+    "out": [
+     "> Ludzie! Ten człowiek gra oszukaną kością! Zobaczcie jego rękaw!",
+     "(Na targu robi się gwar. Lucjan zgarnia kości i znika za bramą południową, zanim ktoś zawoła straż.)"
+    ],
+    "share": [
+     "Rozsądny człowiek! Dziesięć groszy - proszę. Miło robić z panem interesy."
+    ],
+    "later": [
+     "Pomyśl, mój drogi. Pomyśl."
+    ],
+    "noteOut": [
+     "Kości z targu",
+     "Lucjan Kość, wędrowny gracz z targu, podmieniał kość - wyciągał z rękawa cięższą. Zdemaskowałem go przy ludziach i uciekł z miasta."
+    ],
+    "noteShare": [
+     "Kości z targu",
+     "Lucjan Kość gra oszukaną kością. Wziąłem od niego dziesięć groszy i milczę."
+    ]
+   }
+  },
+  "K19": {
+   "title": "Spis obozu",
+   "where": "ratusz → obóz pod murem",
+   "when": "od dnia 10, za dnia",
+   "desc": "Pod murem śpią ludzie z promu. Sołtys liczy racje wody na głowy - policz ich. Ktoś poprosi, żebyś go nie liczył.",
+   "offer": {
+    "say": [
+     "Pod murem, przy stogach, śpią ludzie z promu. Muszę wiedzieć ilu - racje wody liczę na głowy.",
+     "Policz ich. Porozmawiaj z każdym, żebym potem nie słyszał, że kogoś pominąłem."
+    ],
+    "yes": "Policzę.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Pod murem na tarasie rzemieślników. Rano albo wieczorem ich zastaniesz."
+    ],
+    "decline": [
+     "To policzę na oko. Jak zawsze."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Porozmawiaj z każdym w obozie pod murem: Ludmiła, Ela i... ktoś jeszcze (Rafał wychodzi tylko o świcie i późnym wieczorem). Policzeni: {n}/3."
+    },
+    "1": {
+     "text": "Powiedz sołtysowi, ilu ludzi jest w obozie.",
+     "say": [
+      "Policzyłeś? No, mów. Ilu?"
+     ],
+     "choice": {
+      "options": {
+       "0": {
+        "label": "Troje: kobieta, dziecko i mężczyzna.",
+        "say": [
+         "Troje. Mężczyzna? Kapral będzie chciał wiedzieć, kto to. Dziękuję, spisałem."
+        ]
+       },
+       "1": {
+        "label": "Dwoje: matka z córką.",
+        "say": [
+         "Dwoje. Dobrze, łatwiej o wodę dla dwojga. Dziękuję."
+        ]
+       }
+      }
+     }
+    }
+   },
+   "lines": {
+    "ludmila": [
+     "> Sołtys liczy ludzi w obozie. Na racje wody.",
+     "Ludmiła. I córka, Ela. Dwie. Napisz, że dwie... i że Ela pije mało. Bardzo mało."
+    ],
+    "ela": [
+     "> A ty jak masz na imię?",
+     "Ela. Mam sześć lat. I konika. To znaczy... miałam."
+    ],
+    "rafal": [
+     "> Sołtys liczy ludzi w obozie.",
+     "Nie licz mnie. Proszę. Mnie tu nie ma. Jak kapral zobaczy moje imię na liście... na kontynencie wieszają za mniej."
+    ],
+    "rafalYes": [
+     "...Dziękuję. Nie zapomnę."
+    ],
+    "rafalNo": [
+     "Rozumiem. Każdy robi, co musi. Ja też."
+    ]
+   }
+  },
+  "K27": {
+   "title": "Konik dla Eli",
+   "where": "obóz pod murem",
+   "when": "rano i wieczorem",
+   "desc": "Od przeprawy Ela nie śpi. Jej drewniany konik został w spalonej chacie na kontynencie. Kawałek drewna i nóż - może zaśnie.",
+   "offer": {
+    "say": [
+     "Od przeprawy Ela nie śpi. Budzi się z krzykiem. W domu miała drewnianego konika... został w spalonej chacie.",
+     "Umiesz strugać? Kawałek drewna i nóż. Może by zasnęła."
+    ],
+    "yes": "Wystrugam jej konika.",
+    "no": "Nie umiem strugać.",
+    "accept": [
+     "Dziękuję... Ela kocha konie. Tata obiecał jej prawdziwego."
+    ],
+    "decline": [
+     "Rozumiem. Każdy ma swoje kłopoty."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Wystrugaj Eli konika: 1× Drewno i nóż (kamienny albo żelazny). Daj go Eli (obóz pod murem, rano i wieczorem). Albo poproś Melię, żeby zaśpiewała Eli kołysankę pod murem (tawerna, 17–21).",
+     "remind": [
+      "...?"
+     ],
+     "hero": [
+      "> (Strugasz z polana konika. Krzywy, ale ma grzywę i cztery nogi.) Proszę. To dla ciebie."
+     ],
+     "done": [
+      "Konik! ...Ma na imię Wiatr. Tak jak tamten.",
+      "@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają. Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Konik dla Eli",
+     "Wystrugałem Eli konika. Ludmiła: „Tam, skąd uciekamy, wszyscy szukają serca skały. Ludzie giną za coś, czego nikt nie widział.”"
+    ]
+   },
+   "lines": {
+    "meliaAsk": [
+     "> Melio... Pod murem jest dziewczynka, Ela. Od przeprawy nie śpi. Zaśpiewałabyś jej?",
+     "Dziecku, które nie śpi? (Melia już sięga po lutnię.) Pójdę.",
+     "Ale dziś wieczorem scena w tawernie będzie pusta - Borgar mi tego nie daruje. Trudno."
+    ],
+    "meliaGone": [
+     "> (Melia owija lutnię chustą i wychodzi w stronę muru.)"
+    ],
+    "morning": [
+     "> Słyszałem, że Melia była tu wieczorem.",
+     "Była. Śpiewała Eli, aż mała zasnęła. Pierwszy raz od przeprawy przespała całą noc.",
+     "@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają.",
+     "@ludmila: Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział."
+    ]
+   }
+  },
+  "K28": {
+   "title": "Kocioł dla obozu",
+   "where": "obóz pod murem",
+   "when": "rano i wieczorem; zimą liczy się podwójnie",
+   "desc": "W obozie jedzą raz na dwa dni. Ugotuj w kociołku coś gorącego - kapuśniak, gulasz albo zupę grzybową - dwie porcje.",
+   "offer": {
+    "say": [
+     "Jemy raz na dwa dni. Rafał przynosi, co znajdzie, ale... Ela rośnie.",
+     "Gdybyś ugotował coś ciepłego - kapuśniak, gulasz, zupę - dwie porcje. Starczy nam na dwa dni."
+    ],
+    "yes": "Ugotuję.",
+    "no": "Sam ledwo mam co jeść.",
+    "accept": [
+     "Niech Bóg ci to wynagrodzi. Ja nie mam czym."
+    ],
+    "decline": [
+     "Rozumiem. Naprawdę."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Ludmile 2 porcje gorącej zupy z kociołka: Kapuśniak, Gulasz albo Zupa grzybowa (obóz pod murem).",
+     "remind": [
+      "Nic, nic... Ela już zjadła kromkę od pani Hanki."
+     ],
+     "hero": [
+      "> Gorące. Z kociołka. Dwie porcje."
+     ],
+     "done": [
+      "Ciepłe! Ela, chodź, jedz powoli... Dziękuję ci. Nie zapomnę."
+     ]
+    }
+   }
+  },
+  "K29": {
+   "title": "Rana Rafała",
+   "where": "ulica rzemieślników",
+   "when": "o świcie (4:30–6:30) albo późnym wieczorem (21–23:30)",
+   "desc": "Rafał ukrywa ranę po strzale. Załóż mu opatrunek - tak, żeby nie widział tego kapral Wit, który obchodzi mury do jedenastej.",
+   "offer": {
+    "say": [
+     "Nie patrz tak. ...Dobra. Patrz. (Rafał odsłania ramię - zaogniona rana po strzale.)",
+     "Opatrzysz? Tylko po cichu. Kapral chodzi tędy wieczorem. Jak mnie zobaczy z raną od strzały... na kontynencie wieszają za mniej."
+    ],
+    "yes": "Przyniosę opatrunek.",
+    "no": "Nie mieszam się.",
+    "accept": [
+     "...Dzięki. Będę tu, o świcie albo późnym wieczorem. Nikomu ani słowa."
+    ],
+    "decline": [
+     "Mądrze. Ja bym się nie mieszał."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Załóż Rafałowi opatrunek (1× Opatrunek) - o świcie albo późnym wieczorem, kiedy kaprala Wita nie ma w pobliżu.",
+     "remind": [
+      "Opatrunek. Ziołowy. Sam nie zrobię - nie mam czym."
+     ],
+     "hero": [
+      "> Pokaż ramię. Tylko nie krzycz."
+     ],
+     "done": [
+      "(Zakładasz opatrunek. Rafał zaciska zęby.)",
+      "...Dziękuję. Nie wiem, czemu to robisz. Ale dziękuję."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Rana Rafała",
+     "Rafał ma ranę po strzale i ukrywa się przed kapralem Witem - na kontynencie wieszają dezerterów. Opatrzyłem go po cichu."
+    ]
+   }
+  },
+  "K30": {
+   "title": "Koszyki dla dworu",
+   "where": "stragany → drzwi dworu",
+   "when": "dni targowe, 7–9",
+   "desc": "Feliks robi zakupy dla dworu i nie da rady wszystkiego unieść. Trzy ciężkie koszyki do rąk Lorda przed dziewiątą.",
+   "offer": {
+    "say": [
+     "Dzień targowy, a ja mam tylko dwie ręce. Trzy koszyki na śniadanie jaśnie pana.",
+     "Zaniesie je pan do dworu? Przed dziewiątą - jaśnie pan stoi przed drzwiami od ósmej. Zapłacę. Pięć groszy do ręki, pięć na poczet długu."
+    ],
+    "yes": "Zaniosę.",
+    "no": "Nie dziś.",
+    "accept": [
+     "Ostrożnie, w tym są jajka. Do rąk jaśnie pana."
+    ],
+    "decline": [
+     "Trudno. Poniosę na raty."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zanieś Lordowi 3 koszyki od Feliksa przed 9:00 (drzwi dworu; Lord stoi przed nimi od 8:00). Są ciężkie.",
+     "hero": [
+      "> Koszyki od Feliksa, panie. Na śniadanie."
+     ],
+     "done": [
+      "Koszyki od Feliksa? Postaw tu. ...Wnuk Stacha nosi koszyki dla dworu. Twój dziadek też kiedyś nosił. Feliks, zapisz pięć na dług."
+     ]
+    }
+   },
+   "fail": {
+    "text": "Śniadanie jaśnie pana wystygło."
+   }
+  },
+  "K40": {
+   "title": "Woda na pranie",
+   "where": "Podgrodzie, sznury z praniem",
+   "when": "5–17, od dnia 2",
+   "desc": "Marta nosi wodę z miasta, z przydziału przy studni - dwa wiadra na dzień to za mało na prześcieradła z dworu. Prosi o dwie porcje twojej deszczówki.",
+   "offer": {
+    "say": [
+     "Prześcieradła z dworu... Feliks chce je na jutro, a ja z przydziału mam ledwie na namoczenie.",
+     "Masz może deszczówkę? Dwie porcje starczyłyby mi na płukanie. Zapłacę, ile mogę."
+    ],
+    "yes": "Przyniosę deszczówkę.",
+    "no": "Sam mam mało.",
+    "accept": [
+     "Niech ci Bóg wynagrodzi. Będę przy sznurach."
+    ],
+    "decline": [
+     "Rozumiem. Każdy liczy każdą kroplę."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Daj Marcie 2 porcje swojej deszczówki (wiadro albo bukłak; Podgrodzie, przy praniu).",
+     "remind": [
+      "Dwie porcje, kochaneczku. Choćby z bukłaka."
+     ],
+     "hero": [
+      "> Masz. Dwie porcje deszczówki."
+     ],
+     "done": [
+      "Czysta jak łza... Dworskie prześcieradła będą białe. Masz, weź te grosze. I przynieś mi kiedyś tę podartą koszulę - zaceruję."
+     ]
+    }
+   }
+  },
+  "K41": {
+   "title": "Zioła dla babki Jadwigi",
+   "where": "Podgrodzie, ogródek ziół",
+   "when": "6–18",
+   "desc": "Babka Jadwiga robi opatrunki dla całego Podgrodzia, a krwawnik w jej ogródku zżółkł od suszy.",
+   "offer": {
+    "say": [
+     "Krwawnik mi uschnął, dziecko. A ludzie się ranią - przy drewnie, przy sidłach, przy murze.",
+     "Przynieś mi trzy krwawniki i dwie pokrzywy z łąki. Zrobię opatrunki - i tobie dam."
+    ],
+    "yes": "Nazbieram.",
+    "no": "Nie teraz, babciu.",
+    "accept": [
+     "Krwawnik ma białe baldachy, pokrzywa parzy. Nie pomylisz."
+    ],
+    "decline": [
+     "Idź z Bogiem."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś babce Jadwidze 3× Krwawnik i 2× Pokrzywa (Podgrodzie).",
+     "remind": [
+      "Trzy krwawniki, dwie pokrzywy. Stara Jadwiga nie zapomina."
+     ],
+     "hero": [
+      "> Zioła, babciu. Jak prosiłaś."
+     ],
+     "done": [
+      "Piękne, świeże! Masz - dwa opatrunki. Przyłóż na ranę, zawiąż mocno. I nie dziękuj, tylko uważaj na siebie."
+     ]
+    }
+   }
+  },
+  "K42": {
+   "title": "Kram Józka",
+   "where": "Podgrodzie, kram starzyzny",
+   "when": "7–20",
+   "desc": "Daszek nad kramem Józka się zapada. Potrzeba desek, gwoździ i młotka.",
+   "offer": {
+    "say": [
+     "Widzisz ten daszek? Jeszcze jeden wiatr i cała starzyzna wyląduje w błocie. A starzyzna w błocie to już nie starzyzna, tylko błoto.",
+     "Dwie deski, cztery gwoździe i młotek. Zbijesz? Zapłacę - i dam ci coś z kramu. Coś dobrego!"
+    ],
+    "yes": "Zbiję.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Wiedziałem, że masz dobre ręce! Dobre ręce poznaję od razu."
+    ],
+    "decline": [
+     "Szkoda. Daszek też szkoda."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Józkowi 2× Deski i 4× Gwoździe i zbij daszek młotkiem (kram starzyzny).",
+     "remind": [
+      "Deski, gwoździe, młotek. Daszek czeka. Ja też."
+     ],
+     "hero": [
+      "> Deski, gwoździe. I młotek. Przytrzymaj."
+     ],
+     "done": [
+      "Stoi! Jak nowy! No, prawie jak nowy. Masz, dwie liny - mocne, z portu. Prawie nieużywane."
+     ]
+    }
+   }
+  },
+  "K43": {
+   "title": "Drewno na ognisko",
+   "where": "Podgrodzie, obóz uchodźców",
+   "when": "17–22",
+   "desc": "Ognisko w obozie uchodźców przygasa, a w nocy przy murze zimno. Darin prosi o drewno.",
+   "offer": {
+    "say": [
+     "Ogień nam przygasa. W nocy przy murze jest zimno, a dzieci śpią pod gołym niebem.",
+     "Sześć polan wystarczy do świtu. Nie mam czym zapłacić... ale mogę ci coś opowiedzieć. O kontynencie."
+    ],
+    "yes": "Przyniosę drewno.",
+    "no": "Nie dziś.",
+    "accept": [
+     "Dziękuję, wyspiarzu."
+    ],
+    "decline": [
+     "Rozumiem. Każdy ma swoje ognisko."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Darinowi 6× Drewno na ognisko (obóz uchodźców w Podgrodziu).",
+     "remind": [
+      "Sześć polan, dobrze? Ogień czeka."
+     ],
+     "hero": [
+      "> Drewno. Sześć polan."
+     ],
+     "done": [
+      "Ogień do świtu! Siadaj.",
+      "W Varnhel na kontynencie każdy król chce Serca. Mówią, że jest pod jakąś twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Nikt nie wie, pod którą.",
+      "> Pod twierdzą na wyspie...?",
+      "Tak mówili oficerowie. Dlatego tu przypływają statki z ludźmi, którzy nie wyglądają na uchodźców."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Opowieść Darina",
+     "Darin słyszał od oficerów na kontynencie, że Serce, o które walczą królowie, leży pod twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Tawerna stoi na dawnym zamku..."
+    ]
+   }
+  },
+  "K44": {
+   "title": "Lina dla Zbycha",
+   "where": "Podgrodzie, drewutnia",
+   "when": "15–21",
+   "desc": "Zbychowi pękła lina do wiązania drewna, a nowej nie ma za co kupić.",
+   "offer": {
+    "say": [
+     "Pękła mi lina. Drewno wiążę teraz łykiem i rozłazi się po drodze.",
+     "Dwie liny, chłopcze. Za to dostaniesz węgiel z mielerza - kowal płaci za taki uczciwie."
+    ],
+    "yes": "Przyniosę liny.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Dobrze. Rąbię do zmroku."
+    ],
+    "decline": [
+     "Ech. To jeszcze trochę łyka."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Zbychowi 2× Lina (drewutnia w Podgrodziu).",
+     "remind": [
+      "Dwie liny. Łyko już się kończy."
+     ],
+     "hero": [
+      "> Liny. Dwie."
+     ],
+     "done": [
+      "Mocne! Masz, trzy worki węgla. Z mojego mielerza, najlepszy w okolicy."
+     ]
+    }
+   }
+  },
+  "K45": {
+   "title": "Włókno na pętle",
+   "where": "Podgrodzie",
+   "when": "13–20",
+   "desc": "Rysiek robi pętle na zające z włókna lnu, bo drutu nikt mu nie sprzeda.",
+   "offer": {
+    "say": [
+     "Psst. Potrzebuję włókna. Sześć garści. Na pętle.",
+     "Nie pytaj, na co pętle. Przyniesiesz - podzielę się tym, co w nie wpadnie."
+    ],
+    "yes": "Przyniosę włókno.",
+    "no": "Nie chcę mieć z tym nic wspólnego.",
+    "accept": [
+     "Mądry chłopak. I cichy, mam nadzieję."
+    ],
+    "decline": [
+     "Jak chcesz. Ale głodny będziesz ty, nie ja."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Ryśkowi 6× Włókno na pętle (Podgrodzie).",
+     "remind": [
+      "Sześć garści włókna. Ciszej mów."
+     ],
+     "hero": [
+      "> Włókno. Sześć garści."
+     ],
+     "done": [
+      "Dobre włókno. Masz, dwa zające z wczorajszej nocy. I rada za darmo: pusta pętla nic nie złapie. Zawsze daj przynętę."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Rada Ryśka",
+     "Rysiek: „Pusta pętla nic nie złapie. Zawsze daj przynętę.” Sidła łapią tylko z przynętą."
+    ]
+   }
+  },
+  "K46": {
+   "title": "Suchar dla Franka",
+   "where": "Podgrodzie",
+   "when": "7–19",
+   "desc": "Franek od rana nic nie jadł, a mama pierze do wieczora.",
+   "offer": {
+    "say": [
+     "Masz coś do jedzenia? Mama pierze, a ja od rana nic... Choćby kawałek chleba."
+    ],
+    "yes": "Przyniosę ci chleb.",
+    "no": "Nie mam nic.",
+    "accept": [
+     "Naprawdę? Będę tu! Albo tam. Gdzieś będę!"
+    ],
+    "decline": [
+     "Aha..."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Frankowi 1× Chleb (Podgrodzie).",
+     "remind": [
+      "Chleb? Masz już?"
+     ],
+     "hero": [
+      "> Masz. Cały bochenek."
+     ],
+     "done": [
+      "Cały?! ...Dziękuję!",
+      "Wiesz co? Powiem ci tajemnicę. Kuba woziwoda wyjeżdża po pierwszej w nocy z pustymi beczkami, a przed świtem wraca z pełnymi. Widziałem z dachu!"
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Tajemnica Franka",
+     "Franek widział z dachu: Kuba woziwoda wyjeżdża po pierwszej w nocy z pustymi beczkami, a przed świtem wraca z pełnymi."
+    ]
+   }
+  },
+  "K22": {
+   "title": "Struna dla Melii",
+   "where": "tawerna (Melia) → garbarnia (Ignac) → tawerna",
+   "when": "10–17, oddać przed 18:00",
+   "desc": "W lutni Melii pękła najcieńsza struna. Ignac skręci nową ze ścięgien. Jeśli zdążysz przed szóstą wieczorem, Melia zaśpiewa zwrotkę, której nikt jeszcze nie słyszał.",
+   "offer": {
+    "say": [
+     "Słyszałeś to? Brzdęk - i cisza. Pękła mi struna, ta najcieńsza, co śpiewa najwyżej. Bez niej każda ballada kuleje jak koń bez podkowy.",
+     "Dobrą strunę skręca się ze ścięgien. Garbarz Ignac to umie, tylko trzeba mu dać materiał.",
+     "Zdążysz przed szóstą? O szóstej wychodzę na scenę."
+    ],
+    "yes": "Zdobędę ścięgna dla Ignaca.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Dwa ścięgna, czyste, bez tłuszczu. Ignac siedzi w garbarni na tarasie rzemieślników. Pospiesz się, złotko!"
+    ],
+    "decline": [
+     "Trudno. Zagram na pięciu. Ludzie i tak słuchają słów, nie strun."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Zdobądź 2× Ścięgna (z oprawiania zwierzyny) i zanieś je Ignacowi (garbarnia, 6:30–17). Melia czeka do 18:00.",
+     "remind": [
+      "Ścięgna na strunę? Dwa, chłopcze. Jedno to nie struna, tylko sznurowadło."
+     ],
+     "hero": [
+      "> Melia z tawerny potrzebuje struny do lutni. Mam dwa ścięgna."
+     ],
+     "done": [
+      "Dla Melii? Dla niej zrobię. Namoczyć, rozczesać, skręcić, wysuszyć... Daj mi godzinę."
+     ]
+    },
+    "1": {
+     "text": "Ignac skręca strunę. Odbierz ją od niego po godzinie (garbarnia, potem ulica rzemieślników albo tawerna)."
+    },
+    "2": {
+     "text": "Zanieś strunę Melii (tawerna). Przed 18:00 tego samego dnia zaśpiewa nową zwrotkę."
+    }
+   },
+   "lines": {
+    "twisting": [
+     "Jeszcze schnie. Struna to nie chleb - na szybko nie wyjdzie. Wróć za chwilę."
+    ],
+    "string": [
+     "Proszę. Struna jak się patrzy - śpiewa, aż ucho boli. Za robotę nic nie chcę. Niech Melia zaśpiewa kiedyś coś dla mnie. Coś wesołego."
+    ],
+    "hero": [
+     "> Twoja struna, Melio. Od Ignaca, ze ścięgien."
+    ],
+    "onTime": [
+     "Struna! I to jaka... (Melia nawleka ją, stroi, szarpie raz i drugi.) Słyszysz? Śpiewa wyżej niż ja.",
+     "Coś mi przyszło do głowy. Właśnie teraz, przy tej strunie. Posłuchaj - tego nikt jeszcze nie słyszał. Ja też nie."
+    ],
+    "after": [
+     "Skąd ja to wzięłam? Nie wiem. Przyszło razem ze struną. Masz, piętnaście groszy - i natchnienie w prezencie. Zasłużyłeś."
+    ]
+   }
+  },
+  "K33": {
+   "title": "Czapka Ozzy'ego",
+   "where": "tawerna → furtka ogrodu rycerzy (na lewo od tawerny)",
+   "when": "wieczorem",
+   "desc": "Ozzy zgubił czapkę i twierdzi, że leży na głowie rycerza - tego bez nosa - w zamkniętym ogrodzie za murem. Leży. Skąd on to wie?",
+   "offer": {
+    "say": [
+     "Czapka! Moja czapka! Ktoś mi ją ukradł... albo sam zgubiłem. Jedno z dwojga. *hep*",
+     "Wiem, gdzie jest. Leży na głowie rycerza. Tego bez nosa. Za murem, w ogrodzie, gdzie nikt nie chodzi. Skąd wiem? Wiem i już.",
+     "Przyniesiesz? Stawiam piwo. Prawdziwe, nie to, co Borgar leje gościom."
+    ],
+    "yes": "Przyniosę ci czapkę.",
+    "no": "Wyśpij się, dziadku.",
+    "accept": [
+     "Furtka zamknięta, krata gęsta... ale ty masz ręce. I procę, co? Rycerz nie obrazi się za jeden kamyk. *hep*"
+    ],
+    "decline": [
+     "Śpij, śpij... Czapka poczeka. Rycerzowi i tak w niej ciepło."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Strąć czapkę Ozzy'ego z głowy lewego posągu w ogrodzie rycerzy (furtka na lewo od tawerny). Furtka zamknięta - strzel przez kratę z procy albo łuku: stań przed furtką na wprost lewego posągu, przytrzymaj F, aż kółko się zwęży, i puść."
+    },
+    "1": {
+     "text": "Czapka spadła tuż za kratę furtki. Sięgnij po nią przez pręty (O przed furtką)."
+    },
+    "2": {
+     "text": "Oddaj czapkę Dziadkowi Ozzy'emu (tawerna).",
+     "hero": [
+      "> Twoja czapka, dziadku. Leżała na głowie rycerza. Tego... bez nosa."
+     ],
+     "done": [
+      "Moja czapeczka! (Ozzy wkłada ją tyłem na przód.) Mówiłem? Mówiłem!",
+      "> Skąd wiedziałeś, że tam leży? Furtka jest zamknięta na klucz.",
+      "(Ozzy przestaje się uśmiechać. Przez chwilę patrzy na ciebie całkiem trzeźwo.) Widziałem. Tak jak widzę, że ty...",
+      "*hep* Eee tam. Piwo! Stawiam piwo, jak obiecałem!"
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Czapka Ozzy'ego",
+     "Czapka Ozzy'ego leżała na głowie posągu w zamkniętym ogrodzie rycerzy - dokładnie tam, gdzie mówił. Strąciłem ją przez kratę furtki. Ozzy od dawna nie wychodzi z tawerny. Skąd wiedział?"
+    ]
+   },
+   "lines": {
+    "hit": [
+     "> (Trafiony! Czapka spada z głowy rycerza, toczy się po ścieżce... i zatrzymuje tuż za kratą furtki.)"
+    ],
+    "pick": [
+     "> (Kucasz przy furtce i sięgasz ręką między pręty. Jeszcze kawałek... Jest!)",
+     "> (Stara, filcowa, łatana. Pachnie piwem i dymem. Czapka Ozzy'ego.)"
+    ]
+   }
+  },
+  "K47": {
+   "title": "Pierwszy połów",
+   "where": "Przystań, pomost rybacki",
+   "when": "8–20",
+   "desc": "Janek uczy łowić w morzu: dwa śledzie z pomostu, a potem patroszenie.",
+   "offer": {
+    "say": [
+     "Chcesz się nauczyć łowić w morzu? Morska ryba to nie ta ze stawu. Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie.",
+     "Złów dwa śledzie z pomostu i przynieś mi. Pokażę ci, jak się je patroszy."
+    ],
+    "options": {
+     "0": {
+      "label": "Spróbuję. Wędkę mam.",
+      "say": [
+       "To dobrze. Koniec pomostu, spławik na fali. I cierpliwość."
+      ]
+     },
+     "1": {
+      "label": "Nie mam wędki.",
+      "say": [
+       "Masz moją starą. Kij nie najprostszy, ale ryba tego nie wie."
+      ]
+     },
+     "2": {
+      "label": "Nie teraz.",
+      "say": [
+       "Morze poczeka. Ono zawsze czeka."
+      ]
+     }
+    }
+   },
+   "steps": {
+    "0": {
+     "text": "Złów w morzu 2 śledzie (z pomostu albo z brzegu przystani) i przynieś je Jankowi.",
+     "remind": [
+      "Dwa śledzie. Najlepiej biorą o świcie i o zmierzchu. I morskiej wody nie pij, choćby nie wiem co."
+     ],
+     "hero": [
+      "> Dwa śledzie, jak chciałeś."
+     ],
+     "done": [
+      "No proszę! Pierwsze śledzie. Patrz: nóż tu, pod skrzela, jednym ruchem... O tak.",
+      "Te zostaw mnie, a masz wędzonkę. I radę: dorsza szukaj przy dnie, zarzucaj daleko."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Rybacka rada Janka",
+     "Janek: „Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie i bierze rzadziej, ale jest tłustszy. Morskiej wody nie pij.” Na przystani ryby biorą mi teraz trochę lepiej."
+    ]
+   }
+  },
+  "K48": {
+   "title": "Sieci po sztormie",
+   "where": "Przystań",
+   "when": "9–20, po „Pierwszym połowie”",
+   "desc": "Sztorm, który przyniósł bohatera, porwał Jankowi sieci.",
+   "offer": {
+    "cond": {
+     "done": [
+      "K47"
+     ]
+    },
+    "say": [
+     "Ten sztorm, co i ciebie przyniósł, porwał mi sieci na strzępy. Łatam, łatam, a dziur coraz więcej.",
+     "Sześć garści włókna i dwie liny. Załatam i znowu pójdą w morze."
+    ],
+    "yes": "Przyniosę.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Dobry z ciebie chłopak. Stach może być dumny."
+    ],
+    "decline": [
+     "Jak znajdziesz chwilę, to wiesz, gdzie mnie szukać."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Przynieś Jankowi 6× Włókno i 2× Lina na sieci (przystań).",
+     "remind": [
+      "Sześć garści włókna i dwie liny. Bez nich sieć to same dziury."
+     ],
+     "hero": [
+      "> Włókno i liny, na sieci."
+     ],
+     "done": [
+      "Ha! Teraz to będzie sieć. Masz, za fatygę. I wędzonkę na drogę, prosto z mojej wędzarni."
+     ]
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^K\\d+\\./)"
+}

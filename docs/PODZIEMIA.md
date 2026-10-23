@@ -1,10 +1,11 @@
 # Podziemia - sto pięter pod tawerną
 
-Stan: 2026-10-07 (Lord przy Sercu i zakończenia jako sceny - Underground.js v2.1). Wtyczki `js/plugins/Underground_Data.js` (dane i teksty) i `js/plugins/Underground.js` (generator i gra),
+Stan: 2026-10-23 (piętra-labirynty 80x60 i minimapa z mgłą - Underground.js v2.2; wcześniej 2026-10-07: Lord przy Sercu i zakończenia jako sceny). Wtyczki `js/plugins/Underground_Data.js` (dane i teksty) i `js/plugins/Underground.js` (generator i gra),
 narzędzia `tools/underground/`, testy `tests/underground_test.js` i `tests/unit/underground.test.js`.
 Zgodnie z planem ze `STORY.md` („Podziemia - 100 pięter w dół”) i `QUESTY.md` (W9, W3, W4, W2): pasma pięter, co 10. piętro
-zrobione ręcznie (fabuła, boss, przystanek windy), piętra pomiędzy **składane automatycznie z kawałków pokoi narysowanych jako
-mapa**, każdy zapis ma swoje stałe **ziarno** - piętro wygląda tak samo po powrocie. Na dole Komnata Serca i wybór z Aktu III.
+zrobione ręcznie (fabuła, boss, przystanek windy), piętra pomiędzy to **labirynty 80x60 (jak Kruczy Jar - działka dziadka) z salami z
+kawałków pokoi narysowanych jako mapa**, każdy zapis ma swoje stałe **ziarno** - piętro wygląda tak samo po powrocie. Na dole Komnata
+Serca i wybór z Aktu III.
 
 ## Pasma
 
@@ -72,26 +73,65 @@ Stan wtyczki: `Tawerna.state("underground")`: `seed` (ziarno zapisu), `deepest` 
 **`bosses`** (pokonani bossowie pięter), **`locks`** (otwarte zamki Komnaty Serca), `forceLocks` (F9 / testy), **`truths`**
 (poznane prawdy Warstwy Prawdy: `{ "85": { who: "kowal", floor: 85 } }`), **`ending`** (`{ kind, guardian, locks, day, lord, world }` po
 wyborze z Aktu III - `world` to stan świata, z którego zrobiono sceny), **`lord`** (`{ stance, choice, told, day }` - Lord przy Sercu),
-`forceWorld` / `forceLord` (F9 i testy: świat i Lord „na próbę”). Przeszukane skrzynie to samoprzełączniki A zdarzeń pięter (na piętrach 11-99 - na mapach 1000+N).
+`forceWorld` / `forceLord` (F9 i testy: świat i Lord „na próbę”), **`seen`** (widziane pola pięter generowanych - mgła minimapy:
+`{ "57": { w: 80, h: 60, b: "<base64>" } }`). Przeszukane skrzynie to samoprzełączniki A zdarzeń pięter (na piętrach 11-99 - na mapach 1000+N).
 
-## Jak powstaje piętro (Underground.js)
+## Jak powstaje piętro (Underground.js) - labirynt (od 2026-10-23)
 
 Mapa piętra wczytuje się jak zwykle, a `Tawerna.onMapData` podmienia jej dane na piętro zrobione z ziarna zapisu i numeru
-piętra (ten sam wynik za każdym razem - także po wczytaniu zapisu):
+piętra (ten sam wynik za każdym razem - także po wczytaniu zapisu). Liczby labiryntu są w `Underground_Data.MAZE` (pasmo może je
+zmienić własnym `maze: {...}`), co leży w ślepych zaułkach - w `deadEnd` pasma.
 
-1. **Plan**: siatka 3x2 / 3x3 / 4x3 pól, w niej tyle pokoi, ile mówi pasmo (pasmo 1: lista 4-8; pasma 2-5: `{ min, max }`,
-   rośnie z głębią: 6-9, 6-9, 7-10, 7-10), połączonych drzewem korytarzy plus do dwóch pętli. Schody w górę w pokoju startowym, w
-   dół w pokoju najdalszym od niego.
-2. **Kawałki**: każdy pokój to kawałek z biblioteki pasma (losowany według wagi, bez powtórek, póki są inne), przesunięty losowo w
-   swoim polu.
-3. **Korytarze**: pędzel 2x2 po drodze w kształcie L / Z od drzwi do drzwi; tnie tylko skałę. Nad korytarzem lico ściany na 2
-   rzędy - rodzaj ściany i podłogi korytarza ma każde pasmo swój (cegła zakonu, ziemia i głazy jaskini, gotyk ruin, blady kamień).
-4. **Kształty**: każde zmienione pole i jego sąsiedzi dostają kształt autokafla tak, jak liczy go edytor (wodospady A1 - swoje
-   4 kształty); skała różnych rodzajów łączy się bez szwu. Cień ściany jak w edytorze.
-5. **Zdarzenia**: zdarzenia kawałków z ich znacznikami (niżej), schody, pochodnie w korytarzach (w paśmie 5 niebieskie), zapiski
-   piętra (w paśmie 5 - prawda).
-6. **Sprawdzenie**: droga z pola przed schodami w górę do pola przed schodami w dół - `Underground.verify(piętro)`; testy
-   sprawdzają ją na wielu ziarnach wszystkich pasm.
+1. **Rozmiar i siatka**: każde piętro 1-9 i 11-99 ma **80x60** (jak Map003 Kruczy Jar). Labirynt stoi na siatce węzłów 19x11: węzeł to
+   podłoga 2x2 co 4 kratki w poziomie i co 5 w pionie (między korytarzami ściana z licem na 2 rzędy i jej górą - lico nigdy nie wisi
+   pod podłogą).
+2. **Sale**: kawałki pasma (losowane według wagi, bez powtórek, póki są inne; liczba w `rooms` pasma: pasmo 1 - 4,4,5,5,5,6,6,6,6,
+   pasma 2-3 - 5-7, pasma 4-5 - 6-7). Sala schodów w górę stoi w jednym rogu piętra, sala schodów w dół w przeciwnym; reszta
+   rozłożona jak najdalej od siebie. Sala zajmuje węzły pod sobą i dookoła ramki; strefy dwóch sal się nie stykają (zawsze jest
+   korytarz między nimi). Sala jest przesunięta tak, by jej drzwi trafiały w kolumny / rzędy węzłów.
+3. **Labirynt**: „rosnące drzewo” po wolnych węzłach i salach od sali schodów w górę - najczęściej rośnie najnowszy węzeł (`newest`
+   0.72: długie kręte korytarze), czasem losowy (odnogi); `straight` 0.35 - jak często idzie dalej prosto. Drzwi sali łączą się z
+   najbliższym węzłem po swojej stronie prostym przekopem 2 kratki przez ścianę sali.
+4. **Pętle**: 4-6 przejść między częściami labiryntu odległymi po drzewie o co najmniej 12 węzłów (`loops`, `loopMin` - żeby nie
+   trzeba było ciągle zawracać) i czasem drugie wejście do sali (`doorLoop` 0.35).
+5. **Szerokość**: z grafu odcina się w kółko węzły z jednym przejściem (nie sale). Co zostaje - drogi między salami i wokół pętli - to
+   **korytarze główne, 2 kratki** (droga schody-schody zawsze nimi idzie); co odpadło to **boczne odnogi kończące się ślepo, 1 kratka**
+   (`narrow`). Węzeł, do którego prowadzą tylko drzwi sali, nie jest kopany (drzwi zostają zamknięte - nie ma drzwi w ślepy zaułek).
+6. **Ślepe zaułki** (średnio ~21 na piętro) - każdy coś daje (`deadEnd` pasma): pojemnik rodzaju z kawałków pasma na końcu (`loot`,
+   rodzaje i wagi w `kinds`, najwyżej `maxLoot` na piętro; obrazki biorą się z pierwszego takiego pojemnika w bibliotece pasma,
+   skrzynia / skrzynka / beczka z `ART`), **zasadzka** - miejsce stwora 2-3 kroki przed końcem (`guard`, rodzaje `guards` z kontraktu
+   pasma, od piętra `guardFrom`, najwyżej `maxGuards`), kolce na drodze do pojemnika (`trap`), w Warstwie Prawdy szept (`whisper`) i
+   zjawa (`vision`); gdy limity się skończą - szczątki strażnika (`kosci`).
+7. **Kształty, cienie, lico**: każde zmienione pole i jego sąsiedzi dostają kształt autokafla jak w edytorze (wodospady A1 - swoje 4
+   kształty); nad korytarzem lico na 2 rzędy w rodzaju ściany pasma; cień ściany jak w edytorze; trochę kurzu na podłodze korytarzy.
+8. **Zdarzenia**: zdarzenia kawałków z ich znacznikami (niżej; miejsca stworów bliżej niż 4,5 pola od schodów w górę odpadają),
+   schody (`<Minimap:exit>` - na minimapie jak wyjście), zapiski piętra (w paśmie 5 - prawda) na jednym z miejsc `<Zapiski>`, pochodnie
+   na licu głównych korytarzy (co `torchEvery[1]` pól, najwyżej `MAZE.torchMax` = 40; w paśmie 5 niebieskie), zawartość zaułków.
+   Miejsca stworów są w pomieszanej kolejności (wtyczka stworów wypełnia je po kolei do swojego limitu 22 - rozłożone po piętrze).
+9. **Sprawdzenie**: droga z pola przed schodami w górę do pola przed schodami w dół - `Underground.verify(piętro)`; testy
+   sprawdzają ją na wielu ziarnach wszystkich pasm (i to, że wszystkie sale są osiągalne, a zaułki mają zawartość).
+
+Czas: piętro robi się średnio w ~7 ms (najdłużej ~20 ms, 1800 pięter w Node); w grze trzyma się ostatnie 24 piętra.
+Średnio na piętro (4 ziarna x 89 pięter): ~1600 pól do chodzenia (było ~800), droga schody-schody ~115 kroków, ~21 ślepych zaułków,
+~6 pętli, 20 pochodni w korytarzach, 9-16 miejsc stworów, ~84 zdarzenia (wszystkie < 500). Pojemników i złota jest mniej więcej tyle
+samo na pole co przedtem (pasmo 1: ~36 pojemników, ~86 G na piętro - było 15 i 37 G na dwa razy mniejszym piętrze).
+
+### Mapa odkrywana w miarę chodzenia (minimapa z mgłą)
+
+Na piętrach generowanych **minimapa jest włączona** (`<Minimap:on>` w notatce piętra; w czystym widoku jak wszędzie - pod klawiszem M),
+ale pokazuje tylko to, co bohater **już widział**: podłogę do 6 kroków od siebie (po korytarzu, nie przez skałę), ściany obok i lico nad
+nią. Widziane pola są w stanie zapisu dla każdego piętra (`seen: { piętro: { w, h, b } }` - bit na pole, base64); po zmianie
+generatora albo biblioteki pasma są zapominane razem z piętrem. Minimap.js dostał ogólny hak: `Minimap.addFog(fn)` - `fn(mapId)` daje
+`null` albo `{ rev, seen(x, y) }`; schody (zdarzenia z `<Minimap:exit>`) są na niej białymi ramkami. Piętra ręczne (10-100) zostają bez
+minimapy (ich notatki mają `<Minimap:off>`).
+
+### Korytarze 1-kratkowe (sprawdzone w grze, 2026-10-23)
+
+Bohater (FreeMovement, stopy 0,56 kratki) chodzi odnogami 1-kratkowymi w obie strony i wchodzi w nie z boku (pomoc przy rogach);
+stwory (Hunting_Path `path8` - skos tylko, gdy obie proste drogi wolne) idą nimi gęsiego: szczury, pająk i pusta zbroja dochodzą do
+bohatera, gryzą / tną, a jego ciosy je trafiają - tak samo jak w korytarzu 2-kratkowym. W wąskim nie da się tylko uskoczyć w bok ani
+zostać okrążonym (roje podchodzą po jednym). Zgodnie z zasadą map (`docs/MAPY_ZASADY.md`: główne przejścia co najmniej 2 kratki)
+korytarze główne są 2-kratkowe, wąskie są tylko boczne odnogi do ślepych zaułków.
 
 Wejście na piętro: napis u góry „Piętro N” (na ręcznych: „Piętro 20 - Sala jednego pytania”) z pasmem i najgłębszym piętrem;
 przy pierwszym wejściu na wybrane piętra zdanie bohatera w dymku (coraz mroczniejsze); doświadczenie za odkrycie mapy (Combat).
@@ -99,8 +139,11 @@ przy pierwszym wejściu na wybrane piętra zdanie bohatera w dymku (coraz mroczn
 ### Ziarno
 
 Losowane raz na zapis (`seed`). To samo ziarno + to samo piętro = to samo piętro. Jeśli autor zmieni bibliotekę kawałków pasma
-(albo generator - `GEN_VERSION`), stary zapis dostaje piętra tego pasma na nowo: ich przeszukane skrzynie są zapomniane, a bohater
-stojący na takim piętrze trafia przed jego schody w górę.
+(albo generator - `GEN_VERSION`, od labiryntu **2**), stary zapis dostaje piętra tego pasma na nowo: ich przeszukane skrzynie i widziane
+pola są zapomniane, a bohater stojący na takim piętrze trafia przed jego schody w górę - także gdy projekt zmienił się od zapisu
+(silnik przenosi go wtedy na stare miejsce - `Scene_Load.reloadMapIfUpdated`; Underground.js przestawia go po wczytaniu mapy).
+Zapis sprzed labiryntu: wszystkie piętra 1-9 i 11-99 są nowe (labirynty), stan reszty (najgłębsze piętro, zapiski, prawdy, winda,
+bossowie, zamki, zakończenie) zostaje.
 
 ## Kawałki - format i jak narysować nowy
 
@@ -180,6 +223,7 @@ nie otwiera). **Jedyny wyjątek, celowo bardzo głęboko: Źródło pod skałą 
 
 ## Warstwa Prawdy (piętra 76-99)
 
+- (labirynt) miejsca szeptów i zjaw są także w ślepych zaułkach (`deadEnd.whisper` 0.35, `vision` 0.08).
 - **Szepty**: co 20-40 s głos z ciemności - z najbliższego miejsca `<Szept>` (do 9 pól), inaczej nad bohaterem
   (`WHISPERS` w danych: „Wiesz już. Zawsze wiedziałeś.”, „Za tobą ktoś idzie. To ty.”...). Szyna `undergroundWhisper`.
 - **Zjawy**: podchodząc na 6 pól do miejsca `<Zjawa>` (raz na wizytę) bohater widzi kogoś z góry - postać mieszkańca
@@ -318,9 +362,12 @@ kości i słomy na dnie suchej cysterny; gryzie i taranuje, a gdy traci siły, p
 
 - `Underground.registerCreature(rodzaj, (spawn, ctx) => daneZdarzenia)` - przy budowie **każdej mapy podziemi** (generowanej i
   ręcznej) dla każdego miejsca tego rodzaju gra wstawia zdarzenie stwora: numery **860-899** (rezerwacja w rdzeniu);
-  `spawn = { x, y, kind, floor, room }`, `ctx = { floor, mapId, seed, rng }`; `"*"` obsługuje miejsca `dowolny`;
+  `spawn = { x, y, kind, floor, room }` (`room` - klucz sali albo `"zaulek"`: zasadzka w ślepym zaułku labiryntu),
+  `ctx = { floor, mapId, seed, rng }`; `"*"` obsługuje miejsca `dowolny`;
   `registerCreature(rodzaj, null)` wyrejestrowuje. Po zamknięciu menu / wczytaniu zapisu zdarzenia mapy idą za jej danymi.
-- `Underground.spawns()` - miejsca na obecnej mapie; szyna `undergroundFloor { floor, mapId, spawns, first }`.
+- `Underground.spawns()` - miejsca na obecnej mapie; szyna `undergroundFloor { floor, mapId, spawns, first }`. Na piętrach-labiryntach
+  miejsca są w pomieszanej kolejności (Creatures.js wypełnia je po kolei do limitu 22 - reszta czeka na następną wizytę), miejsc z
+  kawałków bliżej niż 4,5 pola od schodów w górę nie ma; zaułki dokładają 0-7 zasadzek (pasmo 1 od piętra 3).
 - **Bossowie**: `Underground.bossDefeated(NN)` po zwycięstwie (otwiera schody w dół, napis u góry, szyna `undergroundBoss`);
   `Underground.bossCleared(NN)`, `Underground.bosses()`.
 - `Underground.onGuardian(fn)` - walka zamiast zagadki na piętrze 10 (`fn(eventId)` → true, gdy przejmuje strażnika).
@@ -351,6 +398,8 @@ Przeczytane trafiają do dziennika i dają trochę doświadczenia (prawdy więce
 
 ## Łupy
 
+Na piętrach-labiryntach także w **ślepych zaułkach** (rodzaje i wagi: `deadEnd.kinds` pasma - najczęściej szczątki strażnika, worki,
+skrzynki, dzbany; rzadko skrzynia albo relikwiarz) - pojemników i złota mniej więcej tyle samo na pole co na dawnych piętrach.
 Przydatne, ale nie psujące gry: stare monety (więcej z głębią - mnożnik pasma 1.3-2.4), pochodnie, liny, gwoździe, deski,
 węgiel, opatrunki, strzały, żelazo, stal (relikwiarze, rzadko), miód w dzbanach, **grzyby** (pasmo 3, zbierane raz), **ruda**
 (wózki kopaczy i skały z rudą - kilof). Ręczne piętra mają skrzynie ze stałą zawartością. Bez wody do picia (poza źródłem na 50).
@@ -359,7 +408,10 @@ węgiel, opatrunki, strzały, żelazo, stal (relikwiarze, rzadko), miód w dzban
 
 Mapy: `floorOf(mapId)`, `mapOf(piętro)`, `bandOf(piętro)`, `handmadeOf(piętro)`, `isGenerated`, `isVirtual`, `isUnderground`,
 `info()`, `spawns()`, `deepest()`, `seed()`, `setSeed(n)`, `go(piętro 0-100)`, `stairs("up"|"down")`, `landing(...)`,
-`verify(piętro)`, `generate`, `parseLibrary`, `checkChunk`, `reachable(mapa, pole, flagi)`, `roomsOf`.
+`verify(piętro)`, `generate`, `planMaze` (= `planFloor`), `mazeOf(pasmo)`, `parseLibrary`, `checkChunk`, `reachable(mapa, pole, flagi)`,
+`roomsOf`, `floorData(piętro)` → `{ map, info }` (`info`: `spots`, `rooms` [{ key, chunk, x, y, w, h, start, end }], `spawns`, `loot`, `traps`,
+`notes`, `whispers`, `visions`, `deadEnds` [{ x, y, what }], `links` (przekopy drzwi sal), `maze` { cols, rows, nodes, main, branch, loops,
+torches, tries }). Mgła: `fog(mapId)` → `{ rev, seen(x, y) }` albo null, `reveal(x, y, zasięg)`, `seenCount()`, `fogSave()`.
 Krata / winda / skrót: `isOpen()`, `open()`, `close()`, `lift(b)`, `liftOn(piętro)`, `liftStops()`, `liftMenu(interp)`,
 `windlass(interp)`, `cage(interp)`, `shortcut(b)`.
 Stwory: `registerCreature`, `hasCreature`, `bossDefeated(NN)`, `bossCleared(NN)`, `bosses()`, `onGuardian(fn)`.
@@ -411,11 +463,15 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 
 ## Testy
 
-- `node tests/unit/underground.test.js` (36 sprawdzeń) - biblioteki pięciu pasm (kawałki, ich sprawdzenie, rodzaje stworów z
-  kontraktu), ziarno, piętra wszystkich pasm wielu ziaren (droga schody-schody, liczba pokoi, zapiski, poprawne autokafle,
-  wodospady, bez dziur, < 860 zdarzeń), Warstwa Prawdy (szepty, zjawy, niebieskie płomienie), szum rzeki, mapy pięter ⇄ numery,
-  zapiski 11-99 i opisy bossów, piętra ręczne 10-100 (drogi, bossowie, zamki, Serce tylko za drzwiami).
-- `CDP_PORT=9466 node tests/run.js underground_test` (59 sprawdzeń) - w grze: wszystko pasma 1 jak dotąd oraz: piętro 10 ⇄ 11
+- `node tests/unit/underground.test.js` (42 sprawdzenia) - biblioteki pięciu pasm (kawałki, ich sprawdzenie, rodzaje stworów z
+  kontraktu), ziarno, piętra wszystkich pasm wielu ziaren - 873 piętra: **80x60**, droga schody-schody, liczba sal, **każda sala
+  osiągalna (każde jej drzwi)**, **droga schody-schody 2 kratki szeroka w korytarzach**, **ślepe zaułki (5+) osiągalne i z zawartością**,
+  zasadzki z kontraktu pasma, zapiski, poprawne autokafle, wodospady, bez dziur, **lico zawsze z górą (poza salami)**, < 500 zdarzeń,
+  <= 40 miejsc stworów, **czas** (średnio ~7 ms, 99% < 11 ms); Warstwa Prawdy (szepty, zjawy, niebieskie płomienie), szum rzeki, mapy
+  pięter ⇄ numery, zapiski 11-99 i opisy bossów, piętra ręczne 10-100 (drogi, bossowie, zamki, Serce tylko za drzwiami).
+- `node tests/run.js underground_test --port 9601` (61 sprawdzeń) - w grze: wszystko pasma 1 jak dotąd (od 2026-10-23 także: piętro 1 ma 80x60 i ślepe
+  zaułki, minimapa z mgłą - widziane pola rosną w czasie chodzenia i zostają po zapisie i wczytaniu; zapis „sprzed labiryntu” - inny
+  podpis biblioteki - wczytuje się na schodach w górę piętra zrobionego na nowo, także po zmianie projektu) oraz: piętro 10 ⇄ 11
   (mapa 1011 ze skorupy, tileset 12), to samo piętro po powrocie, droga na wszystkich piętrach 11-99 dwóch ziaren (162), piętro
   19 → 20, boss trzyma schody (i puszcza po `bossDefeated`), nowy przystanek windy (20) ⇄ Ruiny Zamku, piętra 30-90 osiągalne,
   woda na 40. nie do picia, źródło na 50., zapis/wczytanie na 57., Warstwa Prawdy na 85. (szept, chwila, zjawa Borgara, prawda w
@@ -432,7 +488,10 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - Biblioteki: `kawalki_pasmo1.png` (+ `_siatka`), `kawalki_pasmo2..5.png`.
 - Piętra ręczne: `pietro10_straznica_map140.png`, `pietro20_map146.png` ... `pietro90_map153.png`, `pietro100_map011.png`.
 - Piętra składane jednego ziarna (20261006): `pietro1..9_ziarno20261006.png` oraz po pięć z każdego pasma - 11, 15, 19, 25, 29 /
-  31, 35, 39, 45, 49 / 51, 57, 65, 71, 75 / 76, 79, 85, 95, 99.
+  31, 35, 39, 45, 49 / 51, 57, 65, 71, 75 / 76, 79, 85, 95, 99 - **to jeszcze dawny generator (przed labiryntem)**.
+- Labirynt (2026-10-23, ziarno 20261023, całe piętro w 1/4): `labirynt_p5_przed.png` / `labirynt_p5_po.png` (pasmo 1), `p15` (2), `p35`
+  (3), `p57` (4), `p85` (5) - przed i po; z gry: `gra_labirynt_pietro3.png`, `gra_labirynt_pietro35.png`, `gra_labirynt_pietro85.png`
+  (korytarz z pochodniami, minimapa z mgłą - odkryta droga schody-schody), `gra_labirynt_zaulek.png` (dzban w 1-kratkowym zaułku).
 - Z gry: `gra_piwnica_krata.png`, `gra_ruiny_zamku.png`, `gra_pietro1.png`, `gra_pietro10.png`, `gra_straznik.png`,
   `gra_ruiny_winda.png`, `gra_pietro11.png`, `gra_pietro20.png` ... `gra_pietro90.png`, `gra_pietro57.png`,
   `gra_pietro85_zjawa.png`, `gra_pietro100.png`, `gra_komnata_drzwi.png`, `gra_serce_wybor.png`, `gra_serce_zapieczetowane.png`.
@@ -481,4 +540,6 @@ i w przedsionku Komnaty Serca (11):
 - (od 2026-10-17 jest: rywal z zewnątrz w ruinach - W9 rozdz. 3, wyżej); alarm dzwonu i obrona tawerny (W2 rozdz. 8 / Akt III - osobna
   wtyczka Act3, sceny zakończeń czytają tylko jej wynik);
 - ilustracje zakończeń (obrazki) - sceny grają na prawdziwych mapach; strażnik-bohater w dalszej grze to dalej „raz w roku” (jak było);
-- mapa odkrywana w czasie chodzenia (minimapa z mgłą) - w podziemiach nie ma minimapy.
+- (od 2026-10-23 jest: mapa odkrywana w czasie chodzenia - minimapa z mgłą na piętrach-labiryntach); piętra ręczne 10-100 są bez minimapy;
+- jaskinie (pasmo 3) i ruiny mają ten sam prostokątny labirynt co piwnice (inne kafle ścian i podłóg) - nieregularne korytarze jaskiń to
+  osobny pomysł.

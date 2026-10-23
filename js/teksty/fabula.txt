@@ -1,0 +1,362 @@
+# Teksty fabuły (wtyczka Story.js): dom dziadka, dług u Lorda, praca u Borgara, strata działki, rozdział 1.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz fabula
+
+# ======================================================================== NPCS (postacie)
+postacie.grandpa.name = Dziadek Stach
+postacie.lord.name = Lord Leopold Zaleski
+
+# ======================================================================== MAP_FIELD (pole)
+pole.name = Kruczy Jar
+
+# ======================================================================== HINTS (rady)
+[rady]
+Głodny? Na łąkach rosną jagody i grzyby - po deszczu wyłażą nowe. Dzikie ziemniaki i marchew wykopiesz gołymi rękami.
+Studni na działce nie ma, a susza trzyma. Łap deszczówkę: garnek, wiadro, beczka - co tylko masz.
+Borgar daje jedną zmianę dziennie, od {od} do {do}. Przyjdź wypoczęty, bo zmęczony kufla nie udźwigniesz.
+Nadmiar plonów sprzedasz Borgarowi. Uczciwie płaci... jak na karczmarza.
+Twoje posłanie zawsze tu czeka. Pod dachem śpi się lepiej niż pod krzakiem.
+Zające łatwiej złapać we wnyki z przynętą niż gołymi rękami. Ja w twoim wieku... no, ja też nie łapałem.
+Na działce stawiaj, co chcesz - to nasza ziemia, wszystko w obrębie muru. Za murem już nie nasze: tam nic nie stawiaj, bo Lord by się wściekł.
+
+# ======================================================================== LOSS_HINTS (radyPoStracie)
+[radyPoStracie]
+Dom nie był w zastawie. Twoje posłanie stoi, gdzie stało - śpij tu, ile chcesz.
+Sołtys w ratuszu sprzedaje chatę pod lasem na Podgrodziu, z działką obok. Ziemia przy niej jest twoja - tam budujesz, co zechcesz.
+Borgar wynajmuje pokoje nad tawerną. Drogo, ale za to pod dachem i blisko roboty.
+Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Kiedyś ją odkupimy - albo i nie. Ziemia to tylko ziemia.
+Na noc w lesie wystarczy namiot albo leśne legowisko. Ale pod dachem śpi się lepiej - wiesz, gdzie mnie szukać.
+Za Skrajem lasu, na zachód, stoi zagroda Ługów. Lord wziął ją za długi, jak naszą działkę, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu.
+
+# ======================================================================== HOOK (dawnaTwierdza)
+[dawnaTwierdza]
+Mój dwór postawiono z kamieni dawnej twierdzy - Kruczych Skał. Najstarsze z nich wciąż leżą pod tawerną Borgara.
+Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną... przyjdź najpierw do mnie. To może być warte więcej niż działka.
+
+# ======================================================================== z kodu Story.js (kod.<funkcja>.<n>, w kolejności kodu)
+# dni
+kod.dni.0 = 1 dzień
+kod.dni.1 = {n} dni
+# zostalo
+kod.zostalo.0 = został
+kod.zostalo.1 = zostały
+kod.zostalo.2 = zostało
+# daysPhrase
+kod.daysPhrase.0 = dziś ostatni dzień
+kod.daysPhrase.1 = termin mija o świcie
+kod.daysPhrase.2 = termin minął
+# carryPhrase
+kod.carryPhrase.0 = dziś ostatni dzień
+kod.carryPhrase.1 = o świcie działkę zamkną
+# statusLine
+kod.statusLine.0 = Działka odkupiona: {price} G.
+kod.statusLine.1 = Za działkę oddałeś już {paid} z {price} G, brakuje {3} G.
+kod.statusLine.2 = Działkę odkupisz za {price} G - w ratach, bez terminu.
+kod.statusLine.3 = Dług spłacony: {debt} G.
+kod.statusLine.4 = to dziś
+kod.statusLine.5 = mija o świcie
+kod.statusLine.6 = minął
+kod.statusLine.7 = Oddałeś już {paid} G, brakuje {2} G.
+kod.statusLine.8 = Na razie nic nie oddałeś - brakuje {1} G.
+kod.statusLine.9 = {1} Termin: dzień {deadline} - {when}.
+# introList
+kod.introList.0 = No, nareszcie otworzyłeś oczy. Rybak Janek przyniósł cię z plaży. Trzy dni gorączki, \N[1]. Trzy dni.
+kod.introList.1 = Dziadku...? To naprawdę ty?
+kod.introList.2 = A kto inny, Lord Zaleski? Leż, leż. Ściskałeś w garści list. Ani na chwilę nie chciałeś puścić.
+kod.introList.3 = ...Moja córka. Pisze, że twój ojciec przepadł na wojnie. A ona poszła go szukać. Że przypłynie następnym promem.
+kod.introList.4 = Obiecała.
+kod.introList.5 = To przypłynie. Twoja matka zawsze była uparta. Po mnie.
+kod.introList.6 = A ja ci tu, wnuku, mam tylko... dług.
+kod.introList.7 = Dług?
+kod.introList.8 = Jestem winien Lordowi Zaleskiemu - temu z pięknego dworu obok tawerny - {DEBT} złotych monet. Termin: dzień {DEADLINE}.
+kod.introList.9 = {DEBT}?! Coś ty kupił, dziadku, krowę ze złota?
+kod.introList.10 = Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moją działkę za lasem. A to wszystko, co mamy. Teraz: co my mamy.
+kod.introList.11 = Ja już za stary na siekierę, ale ty masz ręce i głowę. Działka jest twoja - stawiaj na niej, co zechcesz.
+kod.introList.12 = Tylko tam, wnuku: moja działka w Kruczym Jarze to to, co w obrębie muru. Dalej, za murem, to już nie moja ziemia - tam nic nie stawiaj.
+kod.introList.13 = Droga: z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód, do Kruczego Jaru.
+kod.introList.14 = A pieniądze... Borgar z tawerny „Pod Złotym Kuflem” szuka rąk do pracy, po południu i wieczorem. Z Polnej drogi ścieżką na północ. Dwór Lorda jest tuż obok - tam zanosisz spłatę.
+kod.introList.15 = Czyli rano działka, wieczorem kufle. A spać kiedy?
+kod.introList.16 = Na starość. Jak ja. I jak się wykurujesz, a nie od razu, gorączko jedna.
+kod.introList.17 = Masz tu kapuśniak na drogę - z mojej kapusty. A wisiorek trzymaj przy sobie. Kruk w tej rodzinie... no, to długa historia. Opowiem ci kiedyś. No, zmykaj!
+# WHERE_TO_PAY
+kod.WHERE_TO_PAY.0 = Lord przyjmuje za dnia, od {1} do {2}, przed swoim dworem obok tawerny. Nocą zapukaj do drzwi - {3}, jego kamerdyner, też weźmie pieniądze.
+# lossFirstList
+kod.lossFirstList.0 = Wnuku... Wiem. {1} był tu o świcie z pismem. Długo czytał, a ja długo nie słuchałem.
+kod.lossFirstList.1 = Dziadku, ja... Zabrakło niewiele.
+kod.lossFirstList.2 = Cicho. Nie po to cię matka do mnie przysłała, żebyś się zamartwiał o kawałek ziemi. Jesteś cały i zdrowy - to więcej, niż śmiałem prosić.
+kod.lossFirstList.3 = Dom nie był w zastawie. Twoje posłanie stoi, gdzie stało, i będzie stało, póki ja tu jestem.
+kod.lossFirstList.4 = masz na to już tylko dzisiejszy dzień
+kod.lossFirstList.5 = masz na to {1}
+kod.lossFirstList.6 = Tylko leć zabrać z działki, co twoje - {1}. Narzędzia, co tam w skrzyniach, zwierzaki, psa. Bierz najpierw to, czego nie odbudujesz.
+kod.lossFirstList.7 = A działka... Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Może kiedyś ją odkupimy. A jak nie - ziemia to tylko ziemia.
+# grandpaLossList
+kod.grandpaLossList.0 = Działka znowu nasza. Czasem chodzę tam rano, tak tylko, popatrzeć.
+kod.grandpaLossList.1 = Odkupiłeś ziemię od samego Zaleskiego. Twoja matka by nie uwierzyła. Ja też ledwo wierzę.
+kod.grandpaLossList.2 = już tylko dziś
+kod.grandpaLossList.3 = Z działki zostało ci do zabrania {1}. Potem straż Lorda nikogo tam nie wpuści.
+kod.grandpaLossList.4 = Za działkę oddałeś już {paid} z {price} G. Nie śpiesz się - Lord nie ma terminu, a ja mam czas.
+kod.grandpaLossList.5 = Działka... Nie myśl o niej za dużo, wnuku. Lord odsprzeda ją za {price} G, kiedy będzie cię stać. Albo nigdy - też dobrze.
+# grandpaList
+kod.grandpaList.0 = Wnuku! {1} przyniósł akt odkupu. Działka za lasem znowu nasza - z tym, co na niej zostało!
+kod.grandpaList.1 = Trzy tysiące... Ile ty się nadźwigałeś kufli. Masz, dwa kapuśniaki. Na więcej mnie nie stać, ale serce mam pełne.
+kod.grandpaList.2 = Wnuku! {1}, kamerdyner Lorda, przyniósł pokwitowanie. Spłaciłeś wszystko, co do grosza!
+kod.grandpaList.3 = Działka zostaje przy nas. Nie wiem, jak ci dziękować... Masz, dwa kapuśniaki. Na więcej mnie nie stać - sam wiesz czemu.
+kod.grandpaList.4 = Chrrr... Hm? Wnuku, czemu nie jesteś u Lorda?! Brakuje jeszcze {1} G, a o świcie mija termin. {2} przyjmuje pieniądze i nocą - leć!
+kod.grandpaList.5 = Chrrr... Hm? Wnuku... O świcie straż Lorda zamyka działkę. Zabrałeś już, co twoje?
+kod.grandpaList.6 = Chrrr... Hm? A, to ty. Idź spać, jutro też jest dzień.
+kod.grandpaList.7 = Działka nasza, dług spłacony... a ja dalej nie mogę w to uwierzyć.
+kod.grandpaList.8 = Lord podobno raczył cię bajdami o starej twierdzy. On tak zawsze - nie słuchaj go za bardzo.
+kod.grandpaList.9 = Dziś mija termin!
+kod.grandpaList.10 = Termin mija o świcie!
+kod.grandpaList.11 = {1} Brakuje jeszcze {2} G - leć do Lorda z tym, co masz.
+kod.grandpaList.12 = Idzie ci lepiej niż mnie kiedykolwiek.
+kod.grandpaList.13 = Lord nie będzie czekał... ale ty dasz radę. Masz to po mnie.
+kod.grandpaList.14 = Lordowi oddałeś już {paid} z {debt} G. Do terminu {3} {4}. {5}
+kod.grandpaList.15 = Czasu jeszcze sporo, ale nie zwlekaj.
+kod.grandpaList.16 = Lordowi nie oddaliśmy jeszcze ani grosza, a do terminu {1} {2}. {3}
+kod.grandpaList.17 = Działka jest za lasem, w Kruczym Jarze: z podwórza na południe, leśną drogą do Polnej, na skraj lasu i na zachód. Moje jest to, co w obrębie muru.
+kod.grandpaList.18 = Borgar szuka ludzi do pracy. Od {SHIFT_FROM} do {SHIFT_TO} zajrzyj do „Złotego Kufla”: z Polnej drogi ścieżką na północ.
+# payOptions
+kod.payOptions.0 = Oddaj {n} G
+kod.payOptions.1 = Odkup działkę ({need} G)
+kod.payOptions.2 = Spłać cały dług ({need} G)
+kod.payOptions.3 = Oddaj wszystko, co masz ({all} G)
+kod.payOptions.4 = Odejdź
+# payList
+kod.payList.0 = Pusta sakiewka? Działka poczeka - ja nie mam terminu.
+kod.payList.1 = Pusta sakiewka? Wróć, gdy coś zarobisz. Podobno Borgar z tawerny szuka ludzi.
+kod.payList.2 = Bez pieniędzy? Jaśnie pan przyjmuje tylko monety. {1}
+kod.payList.3 = Ile dziś dajesz za działkę?
+kod.payList.4 = Ile dziś przynosisz?
+kod.payList.5 = Ile dziś oddajesz?
+# lordLossList
+kod.lordLossList.0 = Działka znów wasza, akt podpisany. Pozdrów Stacha. A gdybyś coś znalazł pod tawerną Borgara... najpierw przyjdź z tym do mnie.
+kod.lordLossList.1 = "A, wnuk Stacha. "
+kod.lordLossList.2 = "Ty pewnie jesteś wnukiem Stacha. Lord Leopold Zaleski. "
+kod.lordLossList.3 = {1}Przykra sprawa z tą działką - ale akt to akt, a termin to termin.
+kod.lordLossList.4 = Nie jestem jednak zachłanny. Odsprzedam je: {price} złotych monet, w ratach, jak dług. Bez terminu - ziemia nie ucieknie, a mnie się nie śpieszy z oraniem.
+kod.lordLossList.5 = Jeszcze jedno, młodzieńcze. {1}
+kod.lordLossList.6 = I pamiętaj, co ci przekazał {1} o drzwiach pod Kruczymi Skałami. Nie żartowałem.
+# buyFinalList
+kod.buyFinalList.0 = Całe {price} złotych monet za działkę. Zapisuję... i podpisuję w imieniu jaśnie pana - kazał, gdyby do tego doszło.
+kod.buyFinalList.1 = Działka wraca do Stacha z tym, co na niej zostało. Akt odkupu zaniosę mu osobiście, a strażnika odwołamy jeszcze dziś.
+kod.buyFinalList.2 = Trzy tysiące, co do grosza. Słowo się rzekło: działka wraca do Stacha - z tym, co na niej zostało.
+kod.buyFinalList.3 = {1} zaniesie mu akt odkupu, a strażnika odwołam jeszcze dziś. Ród Stacha mnie zaskakuje, młodzieńcze. Coraz częściej.
+# butlerBye
+kod.butlerBye.0 = Jaśnie pan przyjmuje od ósmej.
+kod.butlerBye.1 = Do widzenia.
+# lordList
+kod.lordList.0 = Nie pukaj, młodzieńcze - stoję tuż obok!
+kod.lordList.1 = Pozdrów ode mnie Stacha. A gdybyś coś znalazł pod tawerną Borgara... najpierw przyjdź z tym do mnie.
+kod.lordList.2 = Hola, hola! Kim jesteś i czemu depczesz mój dziedziniec?
+kod.lordList.3 = Jestem wnukiem Stacha. Przyszedłem w sprawie długu.
+kod.lordList.4 = Ach, Stach! Lord Leopold Zaleski, do usług... to znaczy raczej ty do moich. {debt} złotych monet, płatne do dnia {deadline}.
+kod.lordList.5 = Przynoś, ile masz. {1}, mój kamerdyner, zapisze każdy grosz. {2} zapisuje nawet to, co mówię przez sen.
+kod.lordList.6 = Termin tuż-tuż, młodzieńcze. {1} już ostrzy pióro.
+# doorList
+kod.doorList.0 = *puk, puk*
+kod.doorList.1 = już
+kod.doorList.2 = Kto tam o tej porze? A, wnuk Stacha. Jaśnie pan {1} śpi.
+kod.doorList.3 = Działka odkupiona, akt podpisany. {1}
+kod.doorList.4 = Jeśli przyniosłeś pieniądze za działkę, przyjmę je i zapiszę w księdze. Jaśnie pan przyjmuje gości od {1} do {2}.
+kod.doorList.5 = Dług spłacony, młodzieńcze. {1}
+kod.doorList.6 = Termin mija o świcie - do tego czasu przyjmę każdą monetę.
+kod.doorList.7 = Jaśnie pan przyjmuje gości od {1} do {2}.
+kod.doorList.8 = Jeśli przyniosłeś pieniądze, przyjmę je i zapiszę w księdze. {1}
+# borgarList
+kod.borgarList.0 = Hej, ty! Wyglądasz, jakbyś szukał roboty. Albo jedzenia. Albo jednego i drugiego.
+kod.borgarList.1 = Dziadek Stach mówił, że potrzebujesz rąk do pracy.
+kod.borgarList.2 = Stach! Ten stary zrzęda jeszcze żyje? Ha! Winien mi za trzy kufle od zeszłej zimy... Nieważne.
+kod.borgarList.3 = Po południu i wieczorem mam urwanie głowy. Przychodź między {SHIFT_FROM} a {SHIFT_TO}: sprzątanie, beczka, kuchnia, sala. Płacę od roboty, a goście dorzucą napiwki.
+kod.borgarList.4 = Jedna zmiana dziennie - więcej nie wytrzymasz, uwierz mi. No, witaj w „Złotym Kuflu”!
+# borgarMenu
+kod.borgarMenu.0 = Dziś nie ma roboty. Zajrzyj innym razem.
+kod.borgarMenu.1 = Zmiany są po południu i wieczorem, od {SHIFT_FROM} do {SHIFT_TO}. Teraz możesz najwyżej coś sprzedać.
+kod.borgarMenu.2 = Za późno na zmianę - goście już się rozchodzą. Przyjdź jutro od {SHIFT_FROM}.
+kod.borgarMenu.3 = Na dziś wystarczy. Wracaj jutro od {SHIFT_FROM}.
+kod.borgarMenu.4 = Ledwo stoisz na nogach. Odpocznij, bo mi kufle potłuczesz.
+kod.borgarMenu.5 = Zmiana skończy się po północy - potem
+kod.borgarMenu.6 = Po zmianie
+kod.borgarMenu.7 = Dziś mija termin u Lorda, a brakuje jeszcze {1} G! {2} prosto do dworu, kamerdyner przyjmuje pieniądze do świtu. Bierzesz?
+kod.borgarMenu.8 = Weź zmianę
+kod.borgarMenu.9 = Sala sama się nie obsłuży. Bierzesz zmianę?
+kod.borgarMenu.10 = To jak, bierzesz zmianę?
+kod.borgarMenu.11 = Sprzedaj towar
+kod.borgarMenu.12 = Nie teraz
+# shiftIntro
+kod.shiftIntro.0 = Fartuch na grzbiet i do roboty! Na odkup działki dziadka brakuje jeszcze {1} G - każda zmiana to krok bliżej.
+kod.shiftIntro.1 = Fartuch na grzbiet! Działka odkupiona, więc dziś pracujesz na własną kieszeń.
+kod.shiftIntro.2 = Fartuch na grzbiet i do roboty! Do spłaty długu dziadka brakuje jeszcze {1} G - każda zmiana to krok bliżej.
+kod.shiftIntro.3 = Fartuch na grzbiet! Dług dziadka spłacony, więc dziś pracujesz na własną kieszeń.
+# afterShiftList
+kod.afterShiftList.0 = Uciekłeś w połowie zmiany? Trudno. Jutro spróbujemy jeszcze raz.
+kod.afterShiftList.1 = Tak się robi! Goście zachwyceni, a ja spokojny. Zarobiłeś dziś {total} G.
+kod.afterShiftList.2 = Nieźle! Jeszcze trochę wprawy i będziesz lepszy ode mnie. Zarobiłeś dziś {total} G.
+kod.afterShiftList.3 = Bywało lepiej... Ale przynajmniej kufle całe. Prawie. Masz {total} G.
+kod.afterShiftList.4 = " Lordowi wisicie jeszcze {1} G - zanieś mu, zanim przepijesz."
+kod.afterShiftList.5 = " Odkładaj na działkę - Lord sprzedaje, ale nie rozdaje."
+# deadlineWarn
+kod.deadlineWarn.0 = " Dziś mija termin u Lorda, a brakuje jeszcze {1} G - kamerdyner przyjmuje pieniądze do świtu."
+kod.deadlineWarn.1 = " Do spłaty brakuje jeszcze {1} G, a o świcie mija termin u Lorda! Biegnij do dworu - kamerdyner otworzy."
+# finalList
+kod.finalList.0 = Całe {sum} złotych monet, co do grosza! Jaśnie pan będzie zachwycony... na swój sposób.
+kod.finalList.1 = Kazał przekazać, gdyby do tego doszło: działka zostaje przy was. Pokwitowanie zaniosę dziadkowi osobiście.
+kod.finalList.2 = Skoro pracujesz u Borgara, powinieneś wiedzieć: dwór postawiono z kamieni dawnej twierdzy, Kruczych Skał. Najstarsze wciąż leżą pod jego tawerną.
+kod.finalList.3 = Znasz tawernę Borgara? Dwór postawiono z kamieni dawnej twierdzy, Kruczych Skał. Najstarsze wciąż leżą pod tawerną.
+kod.finalList.4 = Jaśnie pan mawia, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. I proszę mi wierzyć - wcale się przy tym nie śmieje.
+kod.finalList.5 = Kazał też przekazać: gdybyś kiedyś znalazł zejście pod tawerną, przyjdź z tym najpierw do niego. Dobranoc... to znaczy, do widzenia.
+kod.finalList.6 = Całe {sum} złotych monet, co do grosza. Przyznam, nie wierzyłem, że ktoś z rodu Stacha odda choćby połowę.
+kod.finalList.7 = Działka zostaje przy was. {1} zaniesie dziadkowi pokwitowanie - niech je sobie oprawi w ramkę.
+kod.finalList.8 = "Jeszcze jedno, młodzieńcze. Pracujesz u Borgara, prawda? "
+kod.finalList.9 = "Jeszcze jedno, młodzieńcze. Znasz tawernę Borgara? "
+kod.finalList.10 = {1}Mój dwór postawiono z kamieni dawnej twierdzy - Kruczych Skał. Najstarsze z nich wciąż leżą pod jego tawerną.
+kod.finalList.11 = Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Długo miałem to za bajdy dla dzieci.
+kod.finalList.12 = Ale ojciec nie żartował, kiedy o tym mówił. I ja też nie żartuję. Gdybyś kiedyś znalazł zejście pod tawerną... przyjdź najpierw do mnie. Bywaj.
+# endingList
+kod.endingList.0 = "Świta... "
+kod.endingList.1 = "Już dzień... "
+kod.endingList.2 = {1}Termin minął, a dług dziadka wciąż niespłacony.
+# measureList
+kod.measureList.0 = Dzień dobry, młodzieńcze. Proszę się nie niepokoić - przychodzimy z pismem, nie z widłami.
+kod.measureList.1 = Z pismem? O tej porze?
+kod.measureList.2 = Termin minął o świcie, a dług Stacha wciąż niespłacony - zabrakło {missing} G. Zgodnie z aktem działka za lasem należy od dziś do jaśnie pana Zaleskiego.
+kod.measureList.3 = Czterdzieści kroków na trzydzieści. Zgadza się z aktem.
+kod.measureList.4 = Jaśnie pan nie jest potworem. Masz {1}: zbierz plony, opróżnij skrzynie, rozbierz, co postawiłeś, zabierz zwierzęta i psa. Co zostanie po {2} świcie, zostaje przy działce.
+kod.measureList.5 = Znak stoi. Własność Lorda Zaleskiego.
+kod.measureList.6 = I jeszcze jedno. Jaśnie pan działkę odsprzeda - {price} złotych monet, w ratach, jak dług. Bez terminu. Wystarczy przyjść do dworu.
+kod.measureList.7 = Kazał też przekazać rzecz dziwniejszą. Dwór postawiono z kamieni dawnej twierdzy, Kruczych Skał - najstarsze leżą podobno pod tawerną Borgara.
+kod.measureList.8 = Pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną, przyjdź z tym najpierw do niego. Jaśnie pan mówi, że to może być warte więcej niż działka... Ja tylko przekazuję.
+kod.measureList.9 = Trzy dni
+kod.measureList.10 = Strażnik zostanie przy znaku, żeby nikt nie wynosił więcej, niż swoje. Pozdrów Stacha, młodzieńcze.
+# watchList
+kod.watchList.0 = Rozkaz to rozkaz, młodzieńcze.
+kod.watchList.1 = Masz jeszcze {1}. Bierz, co twoje - ja tylko patrzę, żeby nikt nie zabrał więcej.
+kod.watchList.2 = Dziś ostatni dzień. O świcie mam rozkaz nikogo tu nie wpuszczać.
+kod.watchList.3 = O świcie zamykamy działkę. Pośpiesz się, młodzieńcze.
+# escortList
+kod.escortList.0 = *Ktoś wali w drzwi chatki.*
+kod.escortList.1 = Strażnik (zza drzwi): Minęły {1}, młodzieńcze! Działka należy teraz do jaśnie pana - wychodź, odprowadzę cię.
+kod.escortList.2 = Minęły {1}, młodzieńcze. Działka należy teraz do jaśnie pana. Proszę za mną - bez awantur.
+kod.escortList.3 = Strażnik Lorda: Minęły {1}! Działka należy teraz do jaśnie pana - proszę ją opuścić.
+kod.escortList.4 = ...Do widzenia, działko dziadka.
+# lostNoteText
+kod.lostNoteText.0 = Dzień {day}: termin minął o świcie, a dług dziadka nie został spłacony (zabrakło {missing} G). Działka za lasem należy teraz do Lorda Zaleskiego.\nMam {3} (do świtu dnia {4}), żeby zabrać z działki, co moje: plony, skrzynie, budynki (rozbiórka oddaje część materiałów), zwierzęta z zagród i psa. Potem straż nikogo tam nie wpuści, a to, co zostanie, należy do Lorda.\nLord odsprzeda działkę za {price} G - w ratach, bez terminu (dwór obok tawerny: za dnia Lord, nocą kamerdyner). Po spłacie działka wróci z tym, co na niej zostało.\nDom dziadka nie był w zastawie - posłanie czeka. Pokój wynajmie Borgar, a sołtys w ratuszu (8-16) sprzedaje Chatę pod lasem na Podgrodziu (600 G) - z działką, na której wolno budować. Za Skrajem lasu, na zachód, stoi spalona zagroda Ługów: ziemia też zabrana za długi, odłogiem od lat - może da się ją odkupić i odbudować dom.\nSłowa Lorda: dwór zbudowano z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać. Lord chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...
+# lostLetterText
+kod.lostLetterText.0 = Termin minął o świcie, a dług Stacha pozostał niespłacony (zabrakło {missing} G). Zgodnie z aktem działka za lasem przechodzi na własność dworu - moi ludzie zmierzą ją i postawią znak. Daję ci {2} na zabranie z niej twoich rzeczy. Działkę odsprzedam: {price} G, w ratach, bez terminu. Gdybyś szukał dachu nad głową: sołtys sprzedaje chatę pod lasem na Podgrodziu. A jeśli wolisz popiół - zagroda Ługów za Skrajem lasu też jest moja.\nPS. Pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś znalazł zejście pod tawerną Borgara, przyjdź najpierw do mnie. Leopold Zaleski.
+# pick
+kod.pick.0 = "{1}, zapisz: "
+kod.pick.1 = "Zapisuję: "
+kod.pick.2 = {1} G za działkę od wnuka Stacha. Brakuje jeszcze {2} G.
+kod.pick.3 = " O świcie termin mija."
+kod.pick.4 = " Pospiesz się - termin tuż-tuż."
+kod.pick.5 = {1} G od wnuka Stacha. Brakuje jeszcze {2} G.{3}
+# chatList
+kod.chatList.0 = Pytaj, byle szybko - goście czekają.
+kod.chatList.1 = Sprzedaj towar
+# loseField
+kod.loseField.0 = Rozdział 1 zakończony: działka przepadła
+kod.loseField.1 = {1} na wyniesienie dobytku  ·  odkup: {BUYBACK} G
+kod.loseField.2 = List od Lorda Zaleskiego
+kod.loseField.3 = Działka przechodzi na dwór. (Dziennik: Notatki)
+kod.loseField.4 = List od Lorda (dzień {1})
+kod.loseField.5 = Działka przepadła
+# measured
+kod.measured.0 = Działka przepadła
+# lockField
+kod.lockField.0 = Działka dziadka zamknięta
+kod.lockField.1 = Minęły {1} - działka należy teraz do Lorda.
+kod.lockField.2 = List od Lorda (dzień {1})
+kod.lockField.3 = Minęły {1}. Działka za lasem jest własnością dworu, a moja straż pilnuje, by tak zostało. Oferta pozostaje aktualna: {price} G, w ratach, bez terminu. Leopold Zaleski.
+# fieldReturned
+kod.fieldReturned.0 = odkup działki
+kod.fieldReturned.1 = Działka dziadka znowu wasza!
+kod.fieldReturned.2 = Wraca z tym, co na niej zostało.
+kod.fieldReturned.3 = Akt odkupu działki
+kod.fieldReturned.4 = Dzień {1}: oddałem Lordowi ostatnią ratę - razem {price} G. Działka za lasem znowu należy do dziadka Stacha, a z nim wszystko, czego nie zdążyłem rozebrać. {3} zaniesie dziadkowi akt odkupu.
+# introDone
+kod.introDone.0 = Dług dziadka Stacha
+kod.introDone.1 = Dziadek jest winien Lordowi Leopoldowi Zaleskiemu {debt} G. Termin: dzień {deadline} (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego działkę za lasem, w Kruczym Jarze.\nNa tej działce mogę budować (i tylko tam: w obrębie muru; za murem to już nie ziemia dziadka).\nBorgar z tawerny „Pod Złotym Kuflem” daje pracę po południu i wieczorem, od {SHIFT_FROM} do {SHIFT_TO}.\nSpłatę zanoszę do dworu Lorda, obok tawerny: za dnia ({5}-{6}) Lordowi, nocą kamerdynerowi.\nDroga na działkę: podwórze - Leśna droga - Polna droga - Skraj lasu - Kruczy Jar.\nDroga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ. Dwór Lorda stoi na wschód od tawerny.
+kod.introDone.2 = List od matki
+kod.introDone.3 = "Mokry, rozmyty list matki do dziadka Stacha. Straż Pewności - ludzie mówią na nich „Czarne Oczy” - spaliła naszą wieś, Brzozową Wolę. "
+kod.introDone.4 = Ojciec przepadł na wojnie; matka poszła za wojskiem go szukać. Obiecała, że przypłynie następnym promem.\n
+kod.introDone.5 = Przemytnik zabrał mnie kutrem za ostatnie monety. Sztorm rozbił łódź - nie wiem, czy przeżył. Rybak Janek znalazł mnie na plaży.\n
+kod.introDone.6 = Mam jeszcze wisiorek z krukiem - matka dostała go od dziadka, kiedy wyjeżdżała z wyspy. Dziadek na jego widok milknie.
+# chapterDone
+kod.chapterDone.0 = rozdział 1
+kod.chapterDone.1 = Rozdział 1 zakończony: dług dziadka spłacony!
+kod.chapterDone.2 = Działka zostaje przy was.
+kod.chapterDone.3 = Pokwitowanie od Lorda
+kod.chapterDone.4 = Dług dziadka spłacony w dniu {done}: {debt} G. Działka zostaje przy nas.\nW dworze wspomnieli, że zbudowano go z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze z nich leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać.\nLord nie żartował. Chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...
+# onArrive
+kod.onArrive.0 = Więc to jest Kruczy Jar... A w obrębie muru - działka dziadka.
+# storyGoals
+kod.storyGoals.0 = Porozmawiaj z dziadkiem
+kod.storyGoals.1 = Dziadek Stach czeka w swoim domu. Ma ci coś ważnego do powiedzenia.
+kod.storyGoals.2 = Dojdź na działkę dziadka
+kod.storyGoals.3 = Działka dziadka
+kod.storyGoals.4 = Z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód, do Kruczego Jaru. Budować wolno ci tylko na działce dziadka - w obrębie muru.
+kod.storyGoals.5 = Znajdź pracę w tawernie
+kod.storyGoals.6 = Borgar, karczmarz z tawerny „Pod Złotym Kuflem”, szuka rąk do pracy. Tawerna stoi przy ścieżce na północ od Polnej drogi. Porozmawiaj z nim.
+kod.storyGoals.7 = Przepracuj zmianę u Borgara
+kod.storyGoals.8 = Zmiany są po południu i wieczorem, od {SHIFT_FROM} do {SHIFT_TO}, jedna dziennie. Sprzątanie, beczka, kuchnia i sala - płaci od roboty, a goście dają napiwki.
+kod.storyGoals.9 = Znajdź nowy dach nad głową
+kod.storyGoals.10 = Dom dziadka nie był w zastawie - posłanie zawsze czeka, a pokój wynajmie Borgar. Własny dach z ziemią, na której wolno budować: Chata pod lasem na Podgrodziu (sołtys w ratuszu, 8-16, 600 G) albo spalona zagroda Ługów za Skrajem lasu - do odkupienia i odbudowy. Chatkę postawisz od nowa na własnej ziemi.
+kod.storyGoals.11 = Drzwi pod Kruczymi Skałami
+kod.storyGoals.12 = Lord mówił poważnie: najstarsze kamienie dawnej twierdzy leżą pod tawerną Borgara, a pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Rozejrzyj się w tawernie - może jest tam zejście do piwnic.
+# title
+kod.title.0 = Zbuduj schronienie
+kod.title.1 = Zbuduj schronienie na działce
+kod.title.2 = ostatni dzień
+kod.title.3 = do świtu
+kod.title.4 = Wynieś dobytek z działki ({1})
+kod.title.5 = Odkup działkę dziadka ({1} / {price} G)
+kod.title.6 = Odkup działkę dziadka
+kod.title.7 = Dług dziadka: działka przepadła ({paid}/{debt} G)
+kod.title.8 = Spłać dług dziadka ({1}/{debt} G)
+kod.title.9 = Spłać dług dziadka
+# where
+kod.where.0 = Działka dziadka
+# text
+kod.text.0 = Postaw legowisko, namiot, wiatę albo chatkę - na własnej ziemi (chatę z działką sprzedaje sołtys, a zagrodę Ługów za Skrajem lasu da się odkupić), a namiot i leśne legowisko gdziekolwiek. Noc pod gołym niebem męczy i bywa niebezpieczna.
+kod.text.1 = Na działce dziadka postaw legowisko, namiot, wiatę albo chatkę. Noc pod gołym niebem męczy i bywa niebezpieczna.
+kod.text.2 = Działka przechodzi na Lorda o świcie dnia {1}. Do tego czasu zbierz plony, opróżnij skrzynie, rozbierz budynki (rozbiórka oddaje część materiałów), sprzedaj zwierzęta z zagród (menu zagrody) i zabierz psa. Meble z chatki zostaną w niej, jeśli ich nie wyniesiesz. Co zostanie na działce, należy potem do Lorda - wróci, gdy odkupisz działkę.
+kod.text.3 = "Oddałeś już {paid} G. "
+kod.text.4 = Lord odsprzeda działkę za {1} G - w ratach, jak dług, bez terminu: za dnia ({2}-{3}) przed dworem, nocą u kamerdynera. {4}Po spłacie działka wraca z tym, co na niej zostało.
+kod.text.5 = Dług dziadka.
+kod.text.6 = Termin minął w dniu {deadline} - spłacono {paid} z {debt} G. O świcie dnia {day} działka przeszła na Lorda Zaleskiego. Lord odsprzeda ją za {price} G.
+kod.text.7 = Dług spłacony: {debt} G. Działka zostaje przy was.
+kod.text.8 = do terminu {1}
+kod.text.9 = dziś mija termin
+kod.text.10 = termin mija o świcie
+kod.text.11 = Spłacono {paid} z {debt} G, {3}. Dziś dzień {4}, termin: dzień {deadline}. Pieniądze zanosisz Lordowi Zaleskiemu do dworu obok tawerny (za dnia, od {6} do {7}) albo kamerdynerowi (nocą). W noc po terminie kamerdyner przyjmuje je jeszcze do świtu - o świcie Lord zabierze działkę.
+# letterText
+kod.letterText.0 = Uprzejmie przypominam, że dziś mija termin spłaty długu ({sum}). {2} przyjmie pieniądze jeszcze tej nocy, do świtu. O świcie moi ludzie przyjdą zmierzyć działkę.
+kod.letterText.1 = Pojutrze o świcie działka przechodzi na własność dworu, chyba że wcześniej zobaczę {sum}. {2} już grzeje lak do pieczęci.
+kod.letterText.2 = Do terminu {1}. Brakuje {sum}. {3} ostrzy pióro do aktu przejęcia działki - proszę go do tego nie zmuszać.
+kod.letterText.3 = Uprzejmie przypominam o długu Stacha: {sum} do dnia {deadline}. Do terminu {3}. Z wyrazami szacunku, Leopold Zaleski. PS. {4} pozdrawia.
+# updateLetters
+kod.updateLetters.0 = List od Lorda Zaleskiego
+kod.updateLetters.1 = Do spłaty {1} G - {2}. (Dziennik: Notatki)
+kod.updateLetters.2 = List od Lorda (dzień {today})
+# create
+kod.create.0 = Świt {1}. dnia przyniósł ludzi Lorda Zaleskiego - z pieczęcią, sznurem mierniczym i bardzo uprzejmym kamerdynerem.
+kod.create.1 = Dziadek Stach długo stał przy płocie i nic nie mówił. Działka za lasem, a z nią wszystko, co na niej postawiłeś, należy teraz do dworu.
+kod.create.2 = Może gdzieś, w innym zapisie, ta historia potoczy się inaczej...
+kod.create.3 = KONIEC GRY
+kod.create.4 = Działka przepadła
+kod.create.5 = Spłacono {paid} z {debt} G  ·  zabrakło {3} G
+kod.create.6 = O - dalej
+# debtText
+kod.debtText.0 = odkupiona · działka znowu wasza
+kod.debtText.1 = "  ·  działka należy do Lorda"
+kod.debtText.2 = "  ·  wynieś dobytek: {1}"
+kod.debtText.3 = spłacony · działka zostaje przy was
+kod.debtText.4 = "do dnia {deadline}  ·  "
+# drawDebtFoot
+kod.drawDebtFoot.0 = ODKUP POLA
+kod.drawDebtFoot.1 = DŁUG DZIADKA
+# drawItem
+kod.drawItem.0 = Dług dziadka: {lastMenuLine}
+# queueDayBanner
+kod.queueDayBanner.0 = z działki wynieś dobytek: {1}
+kod.queueDayBanner.1 = do spłaty {1} G, {2}

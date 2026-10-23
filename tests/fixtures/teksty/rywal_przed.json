@@ -1,0 +1,516 @@
+{
+ "cellar": [
+  "> (Krata uchylona. Na stopniach świeże błoto... Ktoś zszedł tu w nocy.)"
+ ],
+ "noteStart": [
+  "Ktoś schodzi przede mną",
+  "Krata w piwnicy Borgara była w nocy uchylona, a na stopniach do Ruin Zamku zostało świeże błoto. {znak} Ktoś zszedł nocą przez naszą piwnicę i idzie w dół - przede mną. {why}"
+ ],
+ "znak": {
+  "eye": "Przy wielkich schodach kredą na posadzce: otwarte oko. Białe oko - znak Straży Pewności, Czarnych Oczu.",
+  "pennant": "Przy wielkich schodach wbity w szczelinę proporczyk: czarny koń na czerwieni - herb Zaleskich."
+ },
+ "firstTop": [
+  "Ktoś schodzi przede mną",
+  "Świeże ślady w ruinach pod tawerną. Nie jestem tu sam."
+ ],
+ "markEye": "Kredą na posadzce: otwarte oko i strzałka w dół. Znak Czarnych Oczu.",
+ "markPennant": "Proporczyk z czarnym koniem wbity w szczelinę. Ludzie Lorda byli tu przede mną.",
+ "prints": "Świeże ślady butów w kurzu. Kilku ludzi, ciężkie, okute buty.",
+ "campCold": "Wygasłe ognisko. Popiół zimny - spali tu i poszli w dół.",
+ "campLeft": "Ich ognisko. Jeszcze ciepłe.",
+ "bed": "Posłanie z wełnianego koca. Zostawili je.",
+ "rope": "Porzucona lina. Komuś się już nie przydała.",
+ "ropeTaken": "Lina ×1",
+ "noteCamp": [
+  "Zimne ognisko w ruinach",
+  "Na piętrze {f} wygasłe ognisko i posłanie. Spali tu - i poszli dalej w dół."
+ ],
+ "trapHit": "Linka z dzwonkami!",
+ "trapHitSub": "Ktoś rozciągnął ją w poprzek przejścia - na tych, co idą za nimi.",
+ "trapCut": [
+  "> (Linka w poprzek przejścia, z dzwonkami. Przestępuję ją ostrożnie i przecinam.)"
+ ],
+ "trapDone": "Przecięta linka z dzwonkami.",
+ "noteTrap": [
+  "Linka z dzwonkami",
+  "W ruinach ktoś rozciąga w poprzek przejść linki z dzwonkami - na tych, co idą za nimi. Skradając się (C), widzę je w porę."
+ ],
+ "robbed": "Wieko wyważone, w środku pusto. W kurzu świeże ślady palców - ktoś był tu przede mną.",
+ "noteRobbed": [
+  "Puste skrzynie",
+  "Na piętrach, którymi idą, skrzynie i beczki wybrane do dna. Ktoś zbiera to, co zostawił zakon - zanim ja tam dojdę."
+ ],
+ "torn": {
+  "eye": "Kartki wyrwane - przy gwoździu zostały tylko strzępy. Obok kredą: białe oko.",
+  "pennant": "Kartki wyrwane - przy gwoździu zostały strzępy, a na nich czerwona nitka z sukna."
+ },
+ "noteTorn": [
+  "Wyrwane zapiski",
+  "Z zapisków zakonu ktoś wyrywa kartki - te o schodach, kluczach i dziesiątej bramie. Szukają drogi w dół."
+ ],
+ "stop": {
+  "baltazar": "No proszę. Przyjaciel.",
+  "grum": "Stój. To ja.",
+  "lord": "Stój! W imieniu dworu!",
+  "kopacze": "Stać. Kto idzie?"
+ },
+ "bark": {
+  "baltazar": "Gadaj z szefem. Ja tylko noszę.",
+  "grum": "Grum mówi za nas.",
+  "lord": "Starszy mówi za nas.",
+  "kopacze": "Dowódca mówi. My kopiemy."
+ },
+ "woundedBark": "Ta zbroja... ona się rusza... (ranny jęczy)",
+ "greet": {
+  "baltazar": {
+   "intro": [
+    "(Przy ognisku stoi Baltazar Vey w kupieckim płaszczu, z latarnią w ręku. Za nim jego ludzie.)"
+   ],
+   "normal": [
+    "Przyjacielu! Co za spotkanie - i to w piwnicy. Myślałem, że ciekawość zostawiłeś na górze."
+   ],
+   "enemy": [
+    "Ach. Wróg z rejestrem. Zawsze pod nogami - nawet sto stopni pod ziemią."
+   ],
+   "back": [
+    "Zamknęli mi kantor, przyjacielu. To otworzę sobie coś większego. Pod tawerną."
+   ],
+   "road": [
+    "Sztab płaci za każdy kamień tej twierdzy. A za drzwi pod skałą - za drzwi zapłaci tyle, że kupię całą wyspę."
+   ],
+   "gate": [
+    "Tylko ta zbroja przy bramie... {ranny} spróbował przejść - ledwo żyje. Nie przepuszcza bez słów.",
+    "A ty... ty je znasz, prawda? Widzę po oczach."
+   ]
+  },
+  "grum": {
+   "intro": [
+    "(Przy ognisku siedzi Grum z tarczą na kolanach. Jego najemnicy wstają na twój widok.)"
+   ],
+   "normal": [
+    "Mówiłem ci, chłopcze. Nie schodź tu."
+   ],
+   "lost": [
+    "Raz cię już położyłem przy tunelu. Nie każ mi drugi raz."
+   ],
+   "road": [
+    "Rozkaz z lądu: drzwi pod skałą. Świadków nie zostawiać.",
+    "...Ale ja nie zabijam tych, z którymi siłowałem się na rękę. Idź na górę."
+   ],
+   "gate": [
+    "Zbroja przy bramie stoi i czeka na słowa. My czekamy razem z nią. {ranny} już nie czeka - leży."
+   ]
+  },
+  "lord": {
+   "intro": [
+    "(Trzech strażników dworu w czerwonych kaftanach. Starszy wstaje od ognia.)"
+   ],
+   "normal": [
+    "Stój! W imieniu jaśnie pana Zaleskiego."
+   ],
+   "road": [
+    "Pan kazał zobaczyć, co jest pod tawerną - zanim zrobi to ktoś inny. Ty na przykład."
+   ],
+   "gate": [
+    "Ta zbroja przy bramie... {ranny} ledwo uszedł. O tym jaśnie pan nie mówił."
+   ]
+  },
+  "kopacze": {
+   "intro": [
+    "(Przy ognisku stoi człowiek w czarnej zbroi, z białym okiem na tarczy. Dwóch kopaczy podnosi kilofy.)"
+   ],
+   "normal": [
+    "Czarne Oczy patrzą, chłopcze. Ty schodzisz - my idziemy twoimi śladami."
+   ],
+   "grip": [
+    "Kupiec mówi, że jesteś nasz. Kupiec mówi dużo. Sztab woli patrzeć sam."
+   ],
+   "road": [
+    "Pewność, chłopcze. Kto ma Serce, ten wie. Koniec zgadywania, koniec wojen o plotki. Tego chce sztab."
+   ],
+   "gate": [
+    "Zbroja przy bramie zna słowa, których my nie znamy. {ranny} już tego nie zapomni.",
+    "Ty je znasz."
+   ]
+  }
+ },
+ "lordWhy": {
+  "field": "Działka twojego dziadka jest teraz pana. Ta piwnica pod tawerną... też kiedyś będzie.",
+  "branch": "Ogród jaśnie pana usycha, a ty grzebiesz w rurach zakonu.",
+  "shamed": "Pan nie zapomniał rynku. I tego, kto go tam ośmieszył.",
+  "cold": "Pan mówił: kto coś znajdzie, ma przyjść najpierw do niego. Nie przyszedłeś.",
+  "first": "Pan kazał iść twoimi śladami. Mówisz mu wszystko - a on chce zobaczyć sam. I żeby nikt inny nie był pierwszy.",
+  "lie": "Kurz i szczury, powiedziałeś panu. My tu widzimy co innego."
+ },
+ "again": {
+  "baltazar": [
+   "Wróciłeś. Zmieniłeś zdanie, przyjacielu?"
+  ],
+  "grum": [
+   "Jeszcze tu jesteś?"
+  ],
+  "lord": [
+   "Znowu ty."
+  ],
+  "kopacze": [
+   "Patrzymy na ciebie, chłopcze."
+  ]
+ },
+ "ask": {
+  "baltazar": "No więc, przyjacielu?",
+  "grum": "No?",
+  "lord": "Co powiesz?",
+  "kopacze": "Mów."
+ },
+ "opt": {
+  "fight": {
+   "baltazar": "Odejdźcie albo was przegonię.",
+   "grum": "Odejdź, Grum. Albo cię zmuszę.",
+   "lord": "Zejdźcie mi z drogi.",
+   "kopacze": "Zawracajcie albo was zmuszę."
+  },
+  "sell": "Sprzedam ci słowa strażnika.",
+  "guide": "Poprowadzę was przez bramę.",
+  "report": "Raport zdam jaśnie panu sam.",
+  "turn": "To nie twoja wojna, Grum.",
+  "warn": "Dalej czeka zbroja, która zabija każdego bez słów.",
+  "leave": "Nie moja sprawa."
+ },
+ "fightStart": {
+  "baltazar": "Chłopcy, przyjaciel chce się bić. Ja nie lubię widoku krwi.",
+  "grum": "Dobra. Jak mus, to mus.",
+  "lord": "Za dwór!",
+  "kopacze": "Brać go. Żywego - wie za dużo."
+ },
+ "sell": {
+  "ask": [
+   "> Słowa strażnika dziesiątej bramy. Ile dasz?"
+  ],
+  "say": [
+   "Sto pięćdziesiąt groszy. Uczciwie - jak u mnie zawsze.",
+   "> Nie pytam o to, czego nie chcę wiedzieć.",
+   "(Baltazar powtarza je szeptem, jakby liczył monety.) ...Interes życia, przyjacielu. Chłopcy, zbierać się. W dół."
+  ]
+ },
+ "guide": {
+  "ask": [
+   "> Znam słowa. Przeprowadzę was przez bramę."
+  ],
+  "say": [
+   "Rozsądnie. Sto groszy teraz, reszta - kiedy zobaczymy światło.",
+   "(Przy bramie mówisz zbroi słowa Borgara. Zbroja opuszcza miecz. Czarne Oczy przechodzą jeden po drugim.)",
+   "Dalej trafimy sami. Do zobaczenia na dole, chłopcze."
+  ]
+ },
+ "report": {
+  "ask": [
+   "> Wracajcie na górę. Co tu znajdę, zaniosę panu sam - pierwszemu."
+  ],
+  "say": [
+   "(Starszy drapie się pod hełmem.) Pan lubi, kiedy przychodzi się najpierw do niego...",
+   "Dobrze. Ale jak nie przyjdziesz - wrócimy. Z dłuższą liną. Zbierać się, chłopcy."
+  ]
+ },
+ "turn": {
+  "ask": [
+   "> To nie twoja wojna, Grum. {powody}"
+  ],
+  "say": [
+   "(Grum długo patrzy w ogień.) ...Żelazna Pięść nie zmienia stron dwa razy. Ale raz może.",
+   "Chłopaki, na górę. Płacić już nie będą - za to, co tu widziałem, nikt nie zapłaci.",
+   "A ty... jak przyjdą po twoją tawernę, stanę przy drzwiach."
+  ],
+  "need": [
+   "Ładnie mówisz. Za mało, chłopcze. Żelazna Pięść nie zmienia stron dla słów."
+  ],
+  "powody": {
+   "marek": "Marek wrócił do Ludmiły i Eli.",
+   "kroniki": "Kroniki zakonu są w dobrych rękach.",
+   "honor": "Na rękę wygrałem z tobą uczciwie - na honor."
+  }
+ },
+ "warn": {
+  "ask": [
+   "> Dalej, przy dziesiątej bramie, stoi zbroja. Zabija każdego, kto nie zna słów. Widziałem."
+  ],
+  "baltazar": [
+   "Zbroja, która zabija? (Baltazar blednie pod latarnią.) Interes to interes - ale trup nie handluje. Zbieramy się."
+  ],
+  "lord": [
+   "Zbroja, co zabija? Za to dwór mi nie płaci. Wracamy, chłopcy - pan dostanie raport, że tu nic nie ma."
+  ]
+ },
+ "leave": {
+  "baltazar": [
+   "Idź, idź. Spotkamy się niżej. Albo wyżej."
+  ],
+  "grum": [
+   "Idź. I patrz pod nogi - ktoś tu rozciąga linki."
+  ],
+  "lord": [
+   "Idź swoją drogą. My tu jeszcze posiedzimy."
+  ],
+  "kopacze": [
+   "Idź. Pójdziemy twoimi śladami."
+  ]
+ },
+ "goneUp": {
+  "baltazar": "Interes to interes.",
+  "grum": "Na górę, chłopaki.",
+  "lord": "Wracamy.",
+  "kopacze": "Zbierać się."
+ },
+ "goneDown": {
+  "baltazar": "W dół, chłopcy. Do Serca.",
+  "kopacze": "Za mną. W dół."
+ },
+ "outcome": {
+  "pobici": [
+   "Rywal w ruinach: pobici",
+   "{Kto} pobici na piętrze {f}. Nie zejdą już przede mną.{zwrot}"
+  ],
+  "wygrali": [
+   "Rywal w ruinach: pobity",
+   "{Kto} pobili mnie na piętrze {f} i zabrali, co miałem. Wrócili na górę z łupem - i z kartkami zakonu w worku."
+  ],
+  "zawrocili": [
+   "Rywal w ruinach: zawrócili",
+   "Powiedziałem im o zbroi przy dziesiątej bramie. {Kto} zawrócili na górę - z tym, co już zabrali po drodze."
+  ],
+  "haslo": [
+   "Rywal w ruinach: słowa strażnika",
+   "Sprzedałem słowa strażnika dziesiątej bramy. {Kto} poszli w dół. Kiedyś zobaczę ich znowu - niżej."
+  ],
+  "przewodnik": [
+   "Rywal w ruinach: przewodnik",
+   "Przeprowadziłem {kto} przez dziesiątą bramę. Idą w dół, do Serca. Za mną - albo przede mną."
+  ],
+  "raport": [
+   "Rywal w ruinach: raport dla Lorda",
+   "Ludzie Lorda wrócili na górę. Obiecałem, że z tym, co znajdę, przyjdę do jaśnie pana pierwszy."
+  ],
+  "sojusz": [
+   "Grum zawrócił",
+   "Grum i jego najemnicy zawrócili w ruinach. „Jak przyjdą po twoją tawernę, stanę przy drzwiach.”"
+  ],
+  "odeszli": [
+   "Rywal w ruinach: odeszli",
+   "{Kto} czekali przy dziesiątej bramie - zbroja ich nie przepuściła. Odeszli na górę z tym, co zebrali po drodze."
+  ],
+  "odeszliUnseen": [
+   "Ktoś był w ruinach",
+   "Borgar mówi, że w nocy obcy wyszli z piwnicy, obładowani workami. Ktoś był w ruinach pod tawerną przede mną - i już go tam nie ma."
+  ]
+ },
+ "recovered": " W ich worku wyrwane kartki zapisków zakonu ({n}) - teraz są u mnie.",
+ "grumFate": {
+  "killed": "Grum nie żyje. Leży w ruinach, z tarczą pod głową.",
+  "spared": "Grum podniósł się, splunął i poszedł na górę. „Odpływam pierwszym promem.”",
+  "robbed": "Grum oddał sakiewkę bez słowa i poszedł na górę. „Odpływam.”",
+  "fled": "Grum wycofał się w ciemność. Na górę - i na prom."
+ },
+ "captainDead": "Dowódca kopaczy nie żyje. Czarne Oczy przyślą nowego.",
+ "topOutcome": {
+  "pobici": [
+   "Rywal pobity",
+   "{kto} nie zejdą już przede mną."
+  ],
+  "wygrali": [
+   "Pobity",
+   "{kto} poszli z łupem na górę."
+  ],
+  "zawrocili": [
+   "Zawrócili",
+   "{kto} wracają na górę."
+  ],
+  "haslo": [
+   "Słowa sprzedane",
+   "{kto} idą w dół. +150 G"
+  ],
+  "przewodnik": [
+   "Przez bramę",
+   "{kto} idą w dół. +100 G"
+  ],
+  "raport": [
+   "Ludzie Lorda zawrócili",
+   "Raport dla jaśnie pana - pierwszy."
+  ],
+  "sojusz": [
+   "Grum zawrócił",
+   "Stanie przy drzwiach tawerny."
+  ],
+  "odeszli": [
+   "Rywal odszedł",
+   "{kto} wrócili na górę."
+  ],
+  "odeszliUnseen": [
+   "Ktoś był w ruinach",
+   "Obcy wyszli w nocy z piwnicy tawerny."
+  ]
+ },
+ "borgar": [
+  "> (Borgar mówi, że w nocy ktoś wyszedł z piwnicy, obładowany workami. „Obcy. Nie pytałem.”)"
+ ],
+ "noteAct3": {
+  "faction": [
+   "Ci z ruin",
+   "Ludzie, którzy pytają o piwnicę tawerny, to ta sama Straż Pewności, którą spotkałem w ruinach - albo ich bracia. Czarne Oczy wiedzą, że droga w dół zaczyna się pod naszą podłogą."
+  ],
+  "lord": [
+   "Ci z ruin",
+   "Ludzie, którzy pytają o piwnicę tawerny, to nie ludzie Lorda z ruin - to Czarne Oczy. Dwór i frakcja chcą tego samego."
+  ]
+ },
+ "heartLine": {
+  "baltazar": "Trzy zamki, przyjacielu. Słowa nie wystarczą. Otwieraj - popatrzymy.",
+  "kopacze": "Trzy zamki. Sztab o tym nie wiedział. Otwieraj. Popatrzymy."
+ },
+ "heartMan": "...",
+ "step": "Rywal w ruinach: {kto} schodzą po Serce przede mną (piętra 1–10). {gdzie} Znak: {znaki}.",
+ "stepAfter": "{koniec} Dalej w głąb: pod dziesiątą bramą kwatery i kaplica zakonu (piętra 11–30), niżej jaskinie, a na samym dole - Serce.",
+ "gdzie": {
+  "none": "Ślady zaczynają się w Ruinach Zamku.",
+  "seen": "Ostatni ślad: piętro {f}.",
+  "met": "Spotkani na piętrze {f}.",
+  "gate": "Czekają przy dziesiątej bramie."
+ },
+ "znaki": {
+  "eye": "białe oko kredą",
+  "pennant": "proporczyk z czarnym koniem (herb Zaleskich)"
+ },
+ "ktoUnseen": "ktoś z zewnątrz",
+ "znakiUnseen": "nie wiem - śladów nie widziałem",
+ "koniec": {
+  "pobici": "Rywal w ruinach pobity na piętrze {f}.",
+  "wygrali": "Rywal w ruinach pobił mnie i wrócił na górę z łupem.",
+  "zawrocili": "Rywal w ruinach zawrócił.",
+  "haslo": "Rywal poszedł w dół ze słowami strażnika.",
+  "przewodnik": "Rywal poszedł w dół za moją sprawą.",
+  "raport": "Ludzie Lorda wrócili na górę - raport zdam ja.",
+  "sojusz": "Grum zawrócił w ruinach.",
+  "odeszli": "Rywal odszedł spod dziesiątej bramy.",
+  "odeszliUnseen": "Ktoś był w ruinach przede mną i wyszedł nocą przez piwnicę tawerny."
+ },
+ "epilogue": {
+  "deep": {
+   "baltazar": "Baltazar Vey widział drzwi Komnaty Serca. Na lądzie opowiada o nich za darmo - nikt nie chce płacić za bajki.",
+   "kopacze": "Czarne Oczy doszły aż pod drzwi Komnaty. Trzech zamków nie otworzyły. Sztab dostał raport, którego nie umie przeczytać."
+  },
+  "pobici": {
+   "faction": "Kartki zakonu, które Czarne Oczy wyrwały w ruinach, leżą teraz w twojej skrzyni.",
+   "lord": "Strażnicy dworu omijają piwnicę tawerny szerokim łukiem."
+  },
+  "sojusz": "Grum mówi w tawernie, że raz w życiu zmienił stronę. Nie mówi, w którą.",
+  "raport": "Raport dla jaśnie pana był krótki. Lord czyta go co wieczór.",
+  "lost": "Kartki zakonu z ruin popłynęły na ląd. Ktoś je tam czyta przy świecy."
+ },
+ "lordLine": {
+  "pobici": "Moich ludzi pobiłeś w ruinach. Bartosz do dziś kuleje.",
+  "raport": "Obiecałeś mi raport. Przyszedłeś po Serce sam.",
+  "zawrocili": "Moi ludzie wrócili z ruin i mówili o zbroi, co zabija. Tchórze.",
+  "wygrali": "Moi ludzie wrócili z ruin z twoją sakiewką. Myślałem, że to wystarczy.",
+  "odeszli": "Moi ludzie czekali przy dziesiątej bramie trzy dni. Ty przeszedłeś."
+ },
+ "f9Names": {
+  "": "z gry",
+  "baltazar": "ludzie Baltazara",
+  "grum": "Grum z najemnikami",
+  "lord": "ludzie Lorda",
+  "kopacze": "kopacze Czarnych Oczu"
+ },
+ "f9": "W9: rywal (wymuś wariant): {name}   ←→ zmień, OK zacznij",
+ "f9desc": "Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy jego śladach.",
+ "f9Meet": "W9: rywal - spotkanie na piętrze {n}   ←→ piętro, OK idź",
+ "f9MeetDesc": "Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10) - bohater na jego schodach, kilka kroków do ich ogniska.",
+ "why": {
+  "grumFaction": "Grum przeszedł do frakcji (W8: praca dla Czarnych Oczu, zawał przebity).",
+  "grumLost": "Grum pobił mnie przy tunelu i został z frakcją (W8).",
+  "lordField": "Lord trzyma działkę dziadka i chce być pierwszy pod tawerną.",
+  "lordBranch": "Zamknąłem gałąź dworską w cysternie - Lord jest chłodny.",
+  "lordShamed": "Lord nie zapomniał wstydu na rynku (W1).",
+  "lordCold": "Lord patrzy na mnie chłodno.",
+  "lordForced": "Lord chce być pierwszy.",
+  "lordFirst": "Mówię Lordowi o wszystkim, co znajdę - jego ludzie idą za mną, „żeby nikt inny nie był pierwszy”.",
+  "lordLie": "Skłamałem Lordowi, że pod tawerną nic nie ma. Wyszło na jaw.",
+  "baltazarEnemy": "Baltazar jest moim wrogiem (W5).",
+  "baltazarBack": "Baltazar wrócił na wyspę z najemnikami (W5).",
+  "baltazarFree": "Baltazar Vey nie jest w mojej garści - kantor dalej handluje dla Czarnych Oczu (W5).",
+  "kopaczeGrip": "Baltazar jest w mojej garści, ale frakcja patrzy na każdy mój krok (podwójna gra, W5) - przysłała swoich.",
+  "kopaczeAll": "Nikt na górze nie jest mi wrogiem - więc Czarne Oczy przysłały swoich kopaczy.",
+  "forced": "(wymuszone w F9)"
+ },
+ "partie": {
+  "baltazar": {
+   "name": "Ludzie Baltazara",
+   "kto": "ludzie Baltazara Veya (Czarne Oczy)",
+   "lead": {
+    "name": "Baltazar Vey"
+   },
+   "men": {
+    "0": {
+     "name": "Człowiek Baltazara"
+    },
+    "1": {
+     "name": "Człowiek Baltazara"
+    },
+    "2": {
+     "name": "Łucznik Baltazara"
+    }
+   },
+   "enemyMan": {
+    "name": "Najemnik Baltazara"
+   },
+   "wName": "Józek"
+  },
+  "grum": {
+   "name": "Grum i najemnicy",
+   "kto": "Grum Żelazna Pięść i jego najemnicy",
+   "lead": {
+    "name": "Grum"
+   },
+   "men": {
+    "0": {
+     "name": "Najemnik"
+    },
+    "1": {
+     "name": "Najemnik"
+    }
+   },
+   "wName": "Olbracht"
+  },
+  "lord": {
+   "name": "Ludzie Lorda",
+   "kto": "ludzie Lorda Zaleskiego (straż dworu)",
+   "lead": {
+    "name": "Starszy straży dworu"
+   },
+   "men": {
+    "0": {
+     "name": "Strażnik dworu"
+    },
+    "1": {
+     "name": "Strażnik dworu"
+    }
+   },
+   "wName": "Bartosz"
+  },
+  "kopacze": {
+   "name": "Kopacze Czarnych Oczu",
+   "kto": "kopacze Czarnych Oczu z dowódcą",
+   "lead": {
+    "name": "Dowódca kopaczy"
+   },
+   "men": {
+    "0": {
+     "name": "Kopacz Czarnych Oczu"
+    },
+    "1": {
+     "name": "Kopacz Czarnych Oczu"
+    }
+   },
+   "wName": "Wolf"
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Rywal_Data.js, TX, WHY=why, PARTIES=partie)"
+}

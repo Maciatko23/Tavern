@@ -153,7 +153,8 @@ const { launch, sleep } = require("./cdp.js");
                 window.__saveAfterSum = !!(SceneManager._nextScene && SceneManager._nextScene.constructor.name === "Scene_DaySummary"); return _r.apply(this, arguments); };
             const _p = SceneManager.push; SceneManager.push = function(c) { if (c && c.name === "Scene_DaySummary") window.__sumAt = Graphics.frameCount; return _p.apply(this, arguments); }; })(); 0`);
         await ev("$gameSystem.setDayNightHour(22); $gameSystem.sleepUntilHour(7); 0");
-        check("sleeping in a bed asks for an autosave", (await ev("!!$gameTemp._atmoAutosave")) === true);
+        // (2026-10-23: asked for - or already done: on a busy machine the map's next frames served the request before it was read)
+        check("sleeping in a bed asks for an autosave", (await ev("!!$gameTemp._atmoAutosave || window.__saveAt >= 0")) === true);
         // the night ends a day: its summary opens first (Journal.js) and the autosave comes in that very frame, after it; OK closes it
         for (let i = 0; i < 40 && (await ev("window.__saveAt")) < 0; i++) await frames(6);
         const order = await ev("({ save: window.__saveAt, summary: window.__sumAt, afterSummary: window.__saveAfterSum, scene: SceneManager._scene.constructor.name })");
@@ -174,8 +175,8 @@ const { launch, sleep } = require("./cdp.js");
         // resting on a bench (1 hour) does not save, a bedroll (5 hours) does
         await ev("Atmosphere.afterRest({ restHours: 1 }); 0");
         check("a one hour rest does not", !(await ev("!!$gameTemp._atmoAutosave")));
-        await ev("Atmosphere.afterRest({ restHours: 5 }); 0");
-        check("a night on the bedroll (5 h) does", !!(await ev("!!$gameTemp._atmoAutosave")));
+        await ev("window.__saveAt = -1; Atmosphere.afterRest({ restHours: 5 }); 0");
+        check("a night on the bedroll (5 h) does", !!(await ev("!!$gameTemp._atmoAutosave || window.__saveAt >= 0")));
     } catch (e) { console.log("ERR", e.message); }
     console.log("console errors:", b.logs.filter(l => /EXC|rror/.test(l)).slice(-4));
     console.log(results.filter(Boolean).length + "/" + results.length + " passed");

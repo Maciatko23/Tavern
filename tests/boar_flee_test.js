@@ -54,7 +54,8 @@ const { launch, sleep } = require("./cdp.js");
         // out of sight: gone into the forest, counted for today (no fresh boar before dawn)
         const t0 = await ev("Hunting.killedToday ? Hunting.killedToday(3, 'boar') : ($gameSystem._hunt && $gameSystem._hunt.killed && $gameSystem._hunt.killed[3] ? ($gameSystem._hunt.killed[3].boar || 0) : 0)");
         await ev(`(function(){ __boar.locate(${S.x + 9}, ${S.y}); $gamePlayer.locate(${S.x}, ${S.y}); $gamePlayer.reserveTransfer(3, ${S.x}, ${S.y}, 2, 2); return 0; })()`);
-        await ev(`(function(){ const far = [[3, 3], [$gameMap.width() - 4, 3], [3, $gameMap.height() - 4], [$gameMap.width() - 4, $gameMap.height() - 4]].sort((a, b) => Math.hypot(b[0] - __boar.x, b[1] - __boar.y) - Math.hypot(a[0] - __boar.x, a[1] - __boar.y))[0];
+        // (the transfer reserved above puts him back at S anyway; a slow machine has already begun it - the map's data is null then)
+        await ev(`(function(){ if (!$dataMap) return 0; const far = [[3, 3], [$gameMap.width() - 4, 3], [3, $gameMap.height() - 4], [$gameMap.width() - 4, $gameMap.height() - 4]].sort((a, b) => Math.hypot(b[0] - __boar.x, b[1] - __boar.y) - Math.hypot(a[0] - __boar.x, a[1] - __boar.y))[0];
             $gamePlayer.locate(far[0], far[1]); $gamePlayer.center(far[0], far[1]); return 0; })()`);
         for (let i = 0; i < 40 && (await ev("Hunting.animals.some(a => a.kind() === 'boar')")); i++) await frames(15);
         const gone = await J("({ left: Hunting.animals.filter(a => a.kind() === 'boar').length, kills: Object.assign({}, ($gameSystem._hunt || {}).kills) })");

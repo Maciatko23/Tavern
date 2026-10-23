@@ -59,27 +59,15 @@
     const SPOT_ROOMS = [6, 38, 4];        // Map025: room 7, by the narrow bed (Map025 unchanged)
 
     const resident = {
-        key: RES.key, id: RES.id, name: "Eryk Sowa", title: "kupiec suknem z lądu", sheet: "$Npc_Rozbitek", speed: 3,
+        key: RES.key, id: RES.id, sheet: "$Npc_Rozbitek", speed: 3,
         plan: [[0, "inside", "rozbitek_noc"], [8, "inside", "tawerna"], [10, "wander", "rozbitek_rynek"], [13, "inside", "tawerna"],
                [17, "stand", "rozbitek_mury"], [19, "inside", "tawerna"], [22, "work", "rozbitek_studnia"], [23, "inside", "rozbitek_noc"]],
         barks: {
-            wander: ["Ile za ten chleb? ...Drogo. Jak wszędzie.", "Ładne światło na tym rynku. Szkoda, że węgla mało.",
-                "(Eryk szkicuje coś na skrawku papieru i chowa go do rękawa.)"],
-            stand: ["Morze. Zawsze to samo morze.", "(Eryk patrzy na zatokę, aż oczy mu łzawią.)", "Stąd widać mieliznę. I to, co na niej leży."],
-            work: ["Zimna. Dobrze.", "Kto tam? ...A, to ty. Idź spać."],
-            rain: ["Deszcz. Na morzu deszcz to łaska. Na lądzie tylko błoto."],
-            night: ["Późno. Nie widziałeś mnie."],
-            tavern: ["Portret za piwo! Kto chętny?", "Sukno było. Teraz jest węgiel i papier.", "Borgar, jeszcze jedno. Na kredyt? ...Nie? To nie."],
-            home: ["(Eryk śpi niespokojnie i mamrocze coś w obcym języku.)"]
         },
         talk: {
-            morning: ["Rano rysuję najlepiej. Twarze są jeszcze szczere.", "Śniadanie u Borgara. Owsianka jak klej, ale ciepła."],
-            day: ["Ludzie płacą za portret piwem. Dobry interes, póki wątroba wytrzyma.", "Nie pytaj o sukno. Sukno poszło na dno."],
-            evening: ["Wieczorem tawerna gada. Ja słucham. I rysuję.", "Melia śpiewa o krukach. Ładnie śpiewa. Za ładnie."],
-            night: ["Po nocy nie rysuję. Po nocy ludzie mają za dużo cieni na twarzy."],
-            rain: ["Morze w deszcz wygląda jak w domu. Prawie."]
         }
     };
+    Watki.scal(resident, "wrak", "mieszkaniec");   // (its words: js/teksty/wrak.txt, mieszkaniec)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(resident);
     const TLD = window.TownLifeData;
     if (TLD) {
@@ -93,81 +81,74 @@
     // ------------------------------------------------------------------ the quests (TownQuests)
     const ICON = { map: 190, log: 189, key: 196, coins: 208, stone: 319, paper: 191 };
     const D25 = {
-        id: "D25", kind: "D", title: "Mapa z wraku", giver: "przemytnik", icon: ICON.map,
-        where: "Wrak na mieliźnie (łódź Janka z przystani albo łacha od garnizonu w odpływie)", when: "od dnia 15",
-        desc: "Na mieliźnie w zatoce leży „Biała Źrenica” - okręt Czarnych Oczu, rozbity tej samej nocy co kuter Rocha. Roch mówi, że w kajucie kapitana muszą być mapy.",
+        id: "D25", kind: "D", giver: "przemytnik", icon: ICON.map,
         offer: {
-            cond: { day: 15, hours: [6, 21], flags: ["rochMet"], noFlags: ["d20Wydany"], fn: "d25Ready" },   // (d25Ready: the wreck's map is in data/)
-            say: ["Widziałeś okręt na mieliźnie? Tam, za cyplem. Czarne Oczy. Rozbił się tej samej nocy co mój kuter.",
-                "Taki okręt nie pływa bez map. A ich mapy to mapy kamieni z krukiem. Kto wie, czego szukają, ten wie, przed czym się chować.",
-                "Żołnierze z garnizonu wyławiają z niego, co się da, ale pod pokład nie schodzą. Boją się szczurów i wody."],
-            yes: "Popłynę na wrak.", no: "Nie teraz.",
-            accept: ["Janek cię podwiezie, za dnia. Albo idź po łasze od garnizonu, kiedy morze odejdzie. Tylko nie daj się złapać żołnierzom bez glejtu."],
-            decline: ["Wrak nie ucieknie. Chyba że morze go zabierze."]
+            cond: { day: 15, hours: [6, 21], flags: ["rochMet"], noFlags: ["d20Wydany"], fn: "d25Ready" }
         },
         autoStart: "d25Auto",
         steps: [
-            { type: "custom", check: "d25Wrak", text: "Dostań się na wrak na mieliźnie: łodzią Janka (przystań, za dnia) albo pieszo po łasze od garnizonu, w odpływie." },
-            { type: "custom", check: "d25Klucz", text: "Zejdź pod pokład przez dziurę w burcie i znajdź klucz bosmana. Dolna ładownia jest sucha tylko przy niskiej wodzie." },
-            { type: "custom", check: "d25Kajuta", text: "Otwórz kluczem kajutę kapitana i przeszukaj biurko i skrzynię." },
-            { type: "custom", talk: "d25Kamienie", text: "Pięć kamieni z krukiem: zgłoś je celnikowi (przystań, 5 G za sztukę), sprzedaj Baltazarowi (kantor, 15 G za sztukę) albo zatrzymaj i pokaż dziadkowi." }
+            { type: "custom", check: "d25Wrak" },
+            { type: "custom", check: "d25Klucz" },
+            { type: "custom", check: "d25Kajuta" },
+            { type: "custom", talk: "d25Kamienie" }
         ],
         reward: { xp: 100 }
     };
+    Watki.scal(D25, "wrak", "zadania.D25");   // (its words: js/teksty/wrak.txt, zadania.D25)
     const W12 = {
-        id: "W12", kind: "W", title: "Rozbitek", giver: RES.key, icon: ICON.paper,
-        where: "Tawerna, rynek, Podgrodzie, wrak", when: "po spotkaniu Eryka Sowy",
-        desc: "Eryk Sowa rysuje w tawernie portrety za piwo i mówi, że handlował suknem. Sukna nikt nie widział, a palce ma czarne od atramentu.",
+        id: "W12", kind: "W", giver: RES.key, icon: ICON.paper,
         autoStart: "w12Auto",
         steps: [
-            { ch: 1, type: "custom", check: "w12Poszlaki", vars: "w12Vars",
-                text: "Kim jest Eryk Sowa? Zbierz poszlaki ({n} z 2): dziennik okrętu z wraku, Józek Łata z Podgrodzia, wizja w latarni, podwinięty rękaw nocą przy studni, cudzy list." },
-            { ch: 2, type: "custom", talk: "w12Talk", text: "Porozmawiaj z Erykiem w cztery oczy (tawerna, rynek albo mury)." },
-            { ch: 3, type: "custom", talk: "w12Map", text: "Zanieś fałszywą mapę Baltazarowi (kantor, 8-18)." }
+            { ch: 1, type: "custom", check: "w12Poszlaki", vars: "w12Vars" },
+            { ch: 2, type: "custom", talk: "w12Talk" },
+            { ch: 3, type: "custom", talk: "w12Map" }
         ]
     };
+    Watki.scal(W12, "wrak", "zadania.W12");   // (its words: js/teksty/wrak.txt, zadania.W12)
 
     const VITEMS = {
-        dziennik_okretu: { name: "Dziennik okrętu „Białej Źrenicy”", icon: ICON.log },
-        klucz_bosmana: { name: "Klucz bosmana", icon: ICON.key },
-        kamien_kruk: { name: "Kamień z krukiem", icon: ICON.stone },
-        monety_oko: { name: "Monety z okiem", icon: ICON.coins },
-        falszywa_mapa: { name: "Fałszywa mapa kamieni (rysunek Ansgara)", icon: ICON.paper },
-        mapa_ansgara: { name: "Mapa Ansgara: kamienie z krukiem na wyspie", icon: ICON.map },
-        portret: { name: "Portret węglem (od Eryka Sowy)", icon: ICON.paper }
+        dziennik_okretu: { icon: ICON.log },
+        klucz_bosmana: { icon: ICON.key },
+        kamien_kruk: { icon: ICON.stone },
+        monety_oko: { icon: ICON.coins },
+        falszywa_mapa: { icon: ICON.paper },
+        mapa_ansgara: { icon: ICON.map },
+        portret: { icon: ICON.paper }
     };
+    Watki.scal(VITEMS, "wrak", "rzeczy");   // (its words: js/teksty/wrak.txt, rzeczy)
     const REMARKS = [
-        { id: "wrakJanek", who: "janek", flag: "wrakByl", lines: ["Byłeś na tym wraku? Ja bym tam nie lazł. Morze chodzi tam pod piachem jak kot pod kocem."] },
-        { id: "wrakRoch", who: "przemytnik", flag: "dziennikOkretu", lines: ["Masz ich dziennik? Nie pokazuj go nikomu na przystani. Celnik czyta wszystko, co ma litery."] },
-        { id: "ansgarMelia", who: "melia", flag: "ansgarGiven",
-            lines: ["(Melia nie podnosi wzroku znad lutni.) Eryk narysował mnie kiedyś. Za darmo. A ty go wydałeś wojsku.", "Nie mam dziś ochoty na żarty. Ani jutro."] },
-        { id: "ansgarCelnik", who: "celnik", flag: "ansgarGiven", lines: ["Wojsko zabrało tego rysownika z tawerny. Kartograf Czarnych Oczu, mówią. Zapisałem go w księdze. Uczciwie."] },
-        { id: "ansgarFledRoch", who: "przemytnik", flag: "ansgarFled",
-            lines: ["Twój kartograf rzygał przez całą drogę. Ale dopłynął. Kazał ci powiedzieć: „Oko nie śpi, ale mruga”.", "Nie wiem, co to znaczy, i nie chcę wiedzieć."] },
-        { id: "ansgarAllyMelia", who: "melia", flag: "ansgarAlly", lines: ["Eryk znowu mnie rysuje. Mówi, że ma lepszą rękę, odkąd lżej mu na sercu. Coś ty mu powiedział?"] }
+        { id: "wrakJanek", who: "janek", flag: "wrakByl" },
+        { id: "wrakRoch", who: "przemytnik", flag: "dziennikOkretu" },
+        { id: "ansgarMelia", who: "melia", flag: "ansgarGiven" },
+        { id: "ansgarCelnik", who: "celnik", flag: "ansgarGiven" },
+        { id: "ansgarFledRoch", who: "przemytnik", flag: "ansgarFled" },
+        { id: "ansgarAllyMelia", who: "melia", flag: "ansgarAlly" }
     ];
+    Watki.scal(REMARKS, "wrak", "uwagi");   // (its words: js/teksty/wrak.txt, uwagi)
     (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Wrak", quests: [D25, W12], vitems: VITEMS, remarks: REMARKS });
 
     // ------------------------------------------------------------------ the seven marks of the chart from the captain's cabin
     // (item 178): the white eyes. `ready`: a place of another package - only once Wyspa.isReady(map)
     const MARKS = [
-        { key: "tawerna", name: "Wzgórze tawerny", map: 8, x: 51, y: 18 },
-        { key: "kamieniolom", name: "Kamieniołom w Górach", map: 13, x: 40, y: 18 },
-        { key: "latarnia", name: "Przylądek z latarnią", map: 159, ready: 159 },
-        { key: "pustelnia", name: "Pustelnia na klifie", map: 155, ready: 155 },
-        { key: "urwisko", name: "Urwisko Kruków", map: 157, ready: 157 },
-        { key: "kopiec", name: "Kopiec z krukiem przy chacie dziadka", map: 20, x: 8, y: 7 },
-        { key: "dwor", name: "Dwór Lorda", map: 24, x: 20, y: 13 }
+        { key: "tawerna", map: 8, x: 51, y: 18 },
+        { key: "kamieniolom", map: 13, x: 40, y: 18 },
+        { key: "latarnia", map: 159, ready: 159 },
+        { key: "pustelnia", map: 155, ready: 155 },
+        { key: "urwisko", map: 157, ready: 157 },
+        { key: "kopiec", map: 20, x: 8, y: 7 },
+        { key: "dwor", map: 24, x: 20, y: 13 }
     ];
+    Watki.scal(MARKS, "wrak", "znaki");   // (its words: js/teksty/wrak.txt, znaki)
 
     // ------------------------------------------------------------------ W12's clues
     const CLUES = {
-        dziennik: { name: "Dziennik okrętu", text: "W dzienniku „Białej Źrenicy”, na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”." },
-        jozek: { name: "Płaszcz od Józka Łaty", text: "Józek Łata sprzedał po sztormie swój stary szary płaszcz obcemu. Ten zapłacił dziwnym groszem: z okiem zamiast korony." },
-        wizja: { name: "Wizja w latarni", text: "W mgle soczewka latarni pokazała człowieka z piórem, który rysuje wybrzeże wyspy - i białe oko na jego nadgarstku." },
-        tatuaz: { name: "Tatuaż przy studni", text: "Nocą przy studni Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko." },
-        list: { name: "Cudzy list", text: "Kruk przyniósł list, który nie był do mnie: szyfr, którego nie umiem przeczytać, i pieczęć z okiem. Zaczyna się od słów „Do A.W.”." }
+        dziennik: { },
+        jozek: { },
+        wizja: { },
+        tatuaz: { },
+        list: { }
     };
+    Watki.scal(CLUES, "wrak", "poszlaki");   // (its words: js/teksty/wrak.txt, poszlaki)
 
     window.WrakData = {
         MAP, UNDER, IDS: [670, 679], OWNER: "Wrak", FLOOD, RES, SPOTS_TOWN, SPOT_TAVERN, SPOT_ROOMS, MARKS, CLUES, ICON, ITEM_MAP: 178,

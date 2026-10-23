@@ -6,10 +6,21 @@
 //   node tests/run.js full                  every tests/*_test.js (not the ones in SKIP_FULL)
 //   node tests/run.js unit                  tests/unit/*.test.js - pure logic in Node, no browser, seconds
 //   node tests/run.js needs bubbles_test    just these (the name with or without _test; smoke/<name> for tests/smoke/)
+//   node tests/run.js zmiany                the tests for what changed since the last commit (tests/mapa_testow.json - measured: the
+//                                           functions each test runs, the files it loads) + unit (+ smoke when the change is in
+//                                           code every game runs); `zmiany --od REF`: since REF; `zmiany Bron data/Map003.json`:
+//                                           for these files / plugins only; `zmiany --od znacznik[:name]`: since the marker
+//   node tests/run.js znacznik [name]       the marker: the files as they are now (tests/znaczniki/, not in git) - set it when a
+//                                           session begins, ask `zmiany --od znacznik` at its end (only what this session changed)
+//   node tests/run.js mapa [names]        measures the map: every test (or these) once with the coverage on - not a pass/fail run,
+//                                           long; `--czesc 1/2` (any list): half of it, balanced by time (two ports in parallel)
+//   node tests/run.js --odswiez-mape <names>  the same for these tests (after a test or the code it tests changed a lot)
 //   node tests/run.js affected Farming Dog  the tests that use these plugins (their parts too) + the smoke set
 //   node tests/run.js changed               the same for the plugins changed since the last "full" run (else: git's changes)
-//   options: --port N (CDP port, default CDP_PORT or 9396), --retry N (default 1), --timeout S (a test's limit, default 420),
-//            --list (only print what would run), --reuse / --no-reuse (one shared browser for the run: a tab per test)
+//   options: --port N (CDP port, default CDP_PORT or 9396), --retry N (default 1), --timeout S (a test's limit, default 420; 900
+//            when measuring), --list (only print what would run; with zmiany: why), --reuse / --no-reuse (one shared browser for
+//            the run: a tab per test), --turbo N / --bez-turbo (N game updates a drawn frame - the list TURBO below), --czesc k/n
+// The unit tests go all at once (several Node processes): the whole set in the time of the longest.
 // Each test's whole output goes to tests/out_<name>.txt (as with run.sh). The game server on 127.0.0.1:8765 is started by itself
 // (tools/serve.js) when nothing answers there. tests/last_results.json keeps every test's last result: the table's "before".
 "use strict";
@@ -43,6 +54,11 @@ const SMOKE = [
 ];
 // not in "full": long runs that are not pass / fail tests (the marathon plays days and messages the phone)
 const SKIP_FULL = ["marathon_test"];
+// turbo (tests/cdp.js TEST_TURBO): these run N game updates for each drawn frame - the same frames, the clock time divided (checked
+// green both ways, 2026-10-23); --turbo N: every test so (to try one before it goes on this list), --bez-turbo: none
+// (tried and left off: tavern_shift_test - P and the abort by the clock, heart_test - stops, creatures_test, birds_test - the aim's
+// circle; underground_test is slower with it - the floors' generator is the work, not the frames)
+const TURBO = { tavern_dice_test: 3, story_test: 3, tavern_life_test: 3, home_life_test: 3, forest_fight_test: 3, survival_test: 3 };
 
 // ---------------------------------------------------------------- the command line
 const args = process.argv.slice(2);
@@ -50,11 +66,18 @@ const opt = (name, def) => { const i = args.indexOf("--" + name); if (i < 0) ret
 const flag = name => { const i = args.indexOf("--" + name); if (i < 0) return false; args.splice(i, 1); return true; };
 const PORT = Number(opt("port", process.env.CDP_PORT || 9396));
 const RETRY = Number(opt("retry", 1));
-const TIMEOUT = Number(opt("timeout", 420));
 const LIST = flag("list");
 const REUSE_DEFAULT = true;   // (a shared browser for the run - see cdp.js CDP_ATTACH)
 const NO_REUSE = flag("no-reuse"), REUSE = !NO_REUSE && (flag("reuse") || REUSE_DEFAULT);
-if (!args.length) { console.log("usage: node tests/run.js smoke|full|unit|affected <Plugin...>|changed|<name...> [--port N] [--retry N] [--timeout S] [--list] [--reuse|--no-reuse]"); process.exit(2); }
+const OD = opt("od", null);                       // zmiany --od REF
+const TURBO_ALL = Number(opt("turbo", 0)) || 0;    // --turbo N: every test with N game updates a frame
+const NO_TURBO = flag("bez-turbo");
+const PART = opt("czesc", null);                  // --czesc k/n: the k-th of n parts of the list (balanced by the last times)
+const REFRESH = flag("odswiez-mape");             // --odswiez-mape <names>: measure these into the map
+const STALE = flag("nieaktualne");                // mapa --nieaktualne: the tests measured on an older plugin version
+const MEASURE = REFRESH || args.includes("mapa");
+const TIMEOUT = Number(opt("timeout", MEASURE ? 900 : 420));
+if (!args.length && !REFRESH) { console.log("usage: node tests/run.js smoke|full|unit|zmiany [files] [--od REF|znacznik[:name]]|znacznik [name]|mapa [names]|affected <Plugin...>|changed|<name...> [--odswiez-mape <names>] [--czesc k/n] [--port N] [--retry N] [--timeout S] [--list] [--reuse|--no-reuse]"); process.exit(2); }
 const ROOT = path.join(TESTS, "..");
 const LAST = path.join(TESTS, "last_results.json");
 function readLast() { try { return JSON.parse(fs.readFileSync(LAST, "utf8")); } catch (e) { return { tests: {}, plugins: null }; } }
@@ -66,10 +89,10 @@ function writeLast(update) {   // (read, merge, write through a temp file: two r
     try { fs.renameSync(tmp, LAST); } catch (e) { try { fs.unlinkSync(tmp); } catch (e2) {} }
 }
 const LAST_BEFORE = readLast();
-// the plugins in js/plugins.js; a part belongs to its main plugin (Farming_Build -> Farming)
+// the game's plugins (the game's list js/tawerna_wtyczki.js merged with js/plugins.js - tests/lib/wtyczki.js); a part belongs to
+// its main plugin (Farming_Build -> Farming)
 function pluginNames() {
-    const s = fs.readFileSync(path.join(ROOT, "js", "plugins.js"), "utf8");
-    return JSON.parse(s.slice(s.indexOf("["), s.lastIndexOf("]") + 1)).map(p => p.name);
+    return require("./lib/wtyczki.js").nazwy();
 }
 const pluginHash = n => { try { return crypto.createHash("sha1").update(fs.readFileSync(path.join(ROOT, "js", "plugins", n + ".js"))).digest("hex").slice(0, 12); } catch (e) { return null; } };
 function changedPlugins() {
@@ -80,16 +103,74 @@ function changedPlugins() {
         return out.split(/\r?\n/).map(l => /js\/plugins\/([^/]+)\.js$/.exec(l.trim())).filter(Boolean).map(m => m[1]);
     } catch (e) { return pluginNames(); }
 }
+// the tests that name these plugins in their code (and, with the map measured, the ones that run their functions - tests/lib/mapa.js)
 function testsFor(plugins) {
     const words = new Set();
     for (const n of plugins) { words.add(n); words.add(n.split("_")[0]); }
     const re = new RegExp("\\b(" + [...words].map(w => w.replace(/[^\w]/g, "")).filter(Boolean).join("|") + ")\\b");
-    const all = e2eAll().concat(unitAll(), fs.existsSync(path.join(TESTS, "smoke")) ? fs.readdirSync(path.join(TESTS, "smoke")).filter(f => f.endsWith(".js")).map(f => "smoke/" + f.replace(/\.js$/, "")) : []);
-    return all.filter(n => { try { return re.test(fs.readFileSync(path.join(TESTS, n + ".js"), "utf8")); } catch (e) { return false; } });
+    const all = e2eAll().concat(unitAll(), smokeAll());
+    const out = all.filter(n => { try { return re.test(fs.readFileSync(path.join(TESTS, n + ".js"), "utf8")); } catch (e) { return false; } });
+    const M = require("./lib/mapa.js"), map = M.load();
+    if (map) for (const p of plugins) for (const n of M.users(map, "js/plugins/" + p + ".js")) if (!out.includes(n) && all.includes(n)) out.push(n);
+    return out;
 }
 
 const e2eAll = () => fs.readdirSync(TESTS).filter(f => /_test\.js$/.test(f)).map(f => f.replace(/\.js$/, "")).filter(n => !SKIP_FULL.includes(n)).sort();
 const unitAll = () => (fs.existsSync(UNIT) ? fs.readdirSync(UNIT).filter(f => /\.test\.js$/.test(f)).sort().map(f => "unit/" + f.replace(/\.js$/, "")) : []);
+const smokeAll = () => (fs.existsSync(path.join(TESTS, "smoke")) ? fs.readdirSync(path.join(TESTS, "smoke")).filter(f => f.endsWith(".js")).sort().map(f => "smoke/" + f.replace(/\.js$/, "")) : []);
+// a test's usual time (the last run, else the map's measurement): for the estimate and for --czesc
+const secsOf = n => { const l = LAST_BEFORE.tests[n]; if (l && l.secs) return l.secs; const m = mapCache().testy[n]; return m && m.sek ? m.sek : 30; };
+let _map;
+const mapCache = () => _map || (_map = require("./lib/mapa.js").load() || { testy: {} });
+
+// ---------------------------------------------------------------- zmiany: the tests for what changed (tests/lib/mapa.js)
+const why = new Map();   // name -> why it runs (printed with the list)
+const isChangeArg = x => fs.existsSync(path.join(ROOT, x)) || fs.existsSync(path.join(ROOT, "js", "plugins", x.replace(/\.js$/, "") + ".js")) || /^(js|data|img|audio|tests)[\\/]/.test(x);
+const toPath = x => {
+    x = x.replace(/\\/g, "/").replace(/^\.\//, "");
+    if (!x.includes("/") && fs.existsSync(path.join(ROOT, "js", "plugins", x.replace(/\.js$/, "") + ".js"))) return "js/plugins/" + x.replace(/\.js$/, "") + ".js";
+    const abs = path.resolve(ROOT, x);
+    return path.relative(ROOT, abs).replace(/\\/g, "/");
+};
+function pickForChanges(files) {
+    const M = require("./lib/mapa.js"), mark = /^znacznik(?::(.+))?$/.exec(OD || ""), ref = mark ? null : OD || "HEAD";
+    let changes, since;
+    try {
+        if (mark) { const r = M.markChanges(mark[1]); since = `od znacznika ${mark[1] || "domyslny"} (${r.when})`; changes = r.changes; if (files.length) { const want = new Set(files.map(toPath)); changes = changes.filter(c => want.has(c.path)); } }
+        else { since = files.length ? "(podane pliki, od " + ref + ")" : "od " + ref; changes = files.length ? files.map(f => ({ path: toPath(f), status: "M" })) : M.gitChanges(ref); }
+        for (const c of changes) if (c.baseSpec === undefined) c.baseSpec = ref + ":" + c.path;
+    } catch (e) { console.log("zmiany: " + e.message); process.exit(2); }
+    const game = changes.filter(c => /^(js|data|img|audio|fonts|effects|movies|css)\/|^index\.html$|^tests\/([^/]+_test\.js|smoke\/[^/]+\.js|fixtures\/[^/]+\.json|lib\/[^/]+\.js|cdp\.js|run\.js|unit\/.+)$/.test(c.path));
+    const base = M.readBlobs(game.filter(c => M.needsText(c.path) && c.baseSpec).map(c => c.baseSpec));
+    for (const c of game) {
+        const f = path.join(ROOT, c.path), here = fs.existsSync(f);
+        if (M.needsText(c.path)) { const b = c.baseSpec ? base.get(c.baseSpec) : null; c.base = b === undefined ? null : b; c.now = here ? fs.readFileSync(f, "utf8") : null; }
+        else c.now = here ? undefined : null;
+    }
+    console.log(`zmiany ${since}: ${changes.length} plik(ów), ${game.length} dotyczy gry / testów`);
+    const out = unitAll();
+    const map = M.load();
+    if (!map) {   // (no map yet: the old way - the tests that name the changed plugins, and smoke)
+        const plugins = game.map(c => /^js\/plugins\/([^/]+)\.js$/.exec(c.path)).filter(Boolean).map(m => m[1]);
+        console.log("  uwaga: brak tests/mapa_testow.json (node tests/run.js mapa) - testy wymieniające zmienione wtyczki + smoke");
+        for (const n of SMOKE.concat(testsFor(plugins))) if (!out.includes(n)) out.push(n);
+        return out;
+    }
+    const r = M.select(map, game);
+    if (r.smoke.length) for (const n of SMOKE) { out.push(n); why.set(n, "smoke: " + r.smoke.slice(0, 3).join("; ") + (r.smoke.length > 3 ? "; …" : "")); }
+    for (const [n, reasons] of r.tests) {
+        if (SKIP_FULL.includes(n) || out.includes(n) || !resolve(n).file) continue;
+        out.push(n);
+        why.set(n, reasons.join("; "));
+    }
+    const shown = LIST ? r.notes : r.notes.slice(0, 12);
+    for (const n of shown) console.log("  uwaga: " + n);
+    if (shown.length < r.notes.length) console.log(`  (i ${r.notes.length - shown.length} uwag więcej - wszystkie: --list)`);
+    const browser = out.filter(n => !n.startsWith("unit/")), secs = browser.reduce((s, n) => s + secsOf(n), 0), all = e2eAll().length + smokeAll().length;
+    console.log(`  -> ${browser.length} test(ów) w przeglądarce z ${all} (+ ${out.length - browser.length} unit), ${browser.length ? "~" + Math.max(1, Math.round(secs / 60)) + " min" : "tylko unit (~10 s)"}` +
+        (browser.length > 0.6 * all ? "  - to prawie pełny przebieg: zapytaj gracza" : "") + (map.zmierzono ? `  [mapa z ${map.zmierzono}]` : ""));
+    return out;
+}
 // a name -> { name, file, unit }
 function resolve(n) {
     n = n.replace(/\\/g, "/").replace(/^tests\//, "").replace(/\.js$/, "");
@@ -102,6 +183,7 @@ function resolve(n) {
 }
 let names = [];
 const FULL = args.includes("full");
+const KEYWORDS = ["smoke", "full", "unit", "affected", "changed", "zmiany", "mapa", "znacznik"];
 for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === "smoke") names.push(...SMOKE);
@@ -110,16 +192,49 @@ for (let i = 0; i < args.length; i++) {
     else if (a === "affected" || a === "changed") {
         let plugins = [];
         if (a === "changed") plugins = changedPlugins();
-        else while (i + 1 < args.length && !["smoke", "full", "unit", "affected", "changed"].includes(args[i + 1])) plugins.push(args[++i]);
+        else while (i + 1 < args.length && !KEYWORDS.includes(args[i + 1])) plugins.push(args[++i]);
         const t = testsFor(plugins);
         console.log(`${a}: ${plugins.length ? plugins.join(", ") : "(no plugin changed)"} -> ${t.length} test(s) + smoke`);
         names.push(...SMOKE, ...t);
     }
+    else if (a === "zmiany") {
+        const files = [];
+        while (i + 1 < args.length && !KEYWORDS.includes(args[i + 1]) && isChangeArg(args[i + 1])) files.push(args[++i]);
+        names.push(...pickForChanges(files));
+    }
+    else if (a === "znacznik") {   // (the files as they are now: zmiany --od znacznik[:name] later)
+        const name = i + 1 < args.length && !KEYWORDS.includes(args[i + 1]) ? args[++i] : null;
+        const r = require("./lib/mapa.js").mark(name);
+        console.log(`znacznik ${name || "domyslny"}: ${r.files} plików zapamiętanych (${path.relative(ROOT, r.file)}); później: node tests/run.js zmiany --od znacznik${name ? ":" + name : ""}`);
+    }
+    else if (a === "mapa") {
+        const own = [];
+        while (i + 1 < args.length && !KEYWORDS.includes(args[i + 1])) own.push(args[++i]);
+        if (STALE) {   // (--nieaktualne: the tests measured on an older version of a plugin, or while one changed)
+            const M = require("./lib/mapa.js"), map = M.load(), stale = map ? M.staleTests(map) : [];
+            console.log(`mapa --nieaktualne: ${stale.length} test(ów) zmierzonych na starszej wersji wtyczki`);
+            names.push(...stale.filter(n => resolve(n).file));
+        } else names.push(...(own.length ? own : e2eAll().concat(smokeAll())));
+    }
     else names.push(a);
 }
-const list = [];
+if (!names.length && args.includes("znacznik")) process.exit(0);
+let list = [];
 for (const n of names) { const r = resolve(n); if (!list.some(x => x.name === r.name)) list.push(r); }
-if (LIST) { for (const r of list) console.log((r.file ? "" : "(missing) ") + r.name); process.exit(0); }
+if (MEASURE) {   // (the unit tests run in Node: nothing to measure in the browser)
+    const u = list.filter(t => t.unit);
+    if (u.length) console.log(`mapa: ${u.length} test(ów) unit pominiętych (bez przeglądarki)`);
+    list = list.filter(t => !t.unit);
+}
+if (PART) {   // --czesc k/n: the longest first, each into the part that is the shortest so far; the k-th part
+    const [k, n] = PART.split("/").map(Number);
+    if (!(n >= 1 && k >= 1 && k <= n)) { console.log("--czesc k/n, e.g. 1/2"); process.exit(2); }
+    const bins = Array.from({ length: n }, () => ({ secs: 0, items: [] }));
+    for (const t of list.slice().sort((p, q) => secsOf(q.name) - secsOf(p.name))) { const b = bins.reduce((m, x) => (x.secs < m.secs ? x : m)); b.items.push(t); b.secs += secsOf(t.name); }
+    list = bins[k - 1].items;
+    console.log(`część ${k}/${n}: ${list.length} test(ów), ~${Math.round(bins[k - 1].secs / 60)} min`);
+}
+if (LIST) { for (const r of list) console.log((r.file ? "" : "(missing) ") + r.name + (why.has(r.name) ? "   <- " + why.get(r.name) : "")); process.exit(0); }
 
 // ---------------------------------------------------------------- helpers
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -176,6 +291,12 @@ function runOnce(t) {
         const out = outFile(t.name), fd = fs.openSync(out, "w"), t0 = Date.now();
         const env = Object.assign({}, process.env, { CDP_PORT: String(PORT) });
         if (REUSE && !t.unit) env.CDP_ATTACH = "1"; else delete env.CDP_ATTACH;
+        // (measuring: tests/cdp.js writes the coverage and the requested files there; the plugins as they were at the start)
+        const cover = MEASURE && !t.unit ? path.join(os.tmpdir(), `tawerna_mapa_${PORT}_${t.name.replace(/\//g, "_")}.json`) : null;
+        if (cover) { try { fs.unlinkSync(cover); } catch (e) {} env.TEST_COVERAGE = cover; } else delete env.TEST_COVERAGE;
+        const turbo = NO_TURBO ? 1 : TURBO_ALL || TURBO[t.name] || 0;
+        if (turbo && !t.unit) env.TEST_TURBO = String(turbo); else if (!process.env.TEST_TURBO) delete env.TEST_TURBO;
+        const before = cover ? require("./lib/mapa.js").pluginHashes() : null;
         const child = spawn(process.execPath, [t.file], { cwd: TESTS, stdio: ["ignore", fd, fd], env });
         let timedOut = false;
         const limit = t.unit ? 120 : TIMEOUT;
@@ -184,7 +305,7 @@ function runOnce(t) {
             clearTimeout(timer);
             fs.closeSync(fd);
             if (timedOut) fs.appendFileSync(out, `\nERR timeout: the test ran longer than ${limit} s and was stopped\n`);
-            res({ code, timedOut, secs: Math.round((Date.now() - t0) / 1000), text: fs.readFileSync(out, "utf8") });
+            res({ code, timedOut, secs: Math.round((Date.now() - t0) / 1000), text: fs.readFileSync(out, "utf8"), cover, before });
         });
     });
 }
@@ -210,6 +331,13 @@ function status(r, p) {
     if (needsBrowser && !(await ensureServer())) { console.log("the game server does not answer on 127.0.0.1:8765 (node tools/serve.js)"); process.exit(2); }
     console.log(`${list.length} test(s), CDP port ${PORT}, one at a time${REUSE && needsBrowser ? ", one shared browser" : ""}\n`);
     if (REUSE && needsBrowser) { await freePort(PORT); if (!(await sharedBrowser())) { console.log("the shared browser did not start"); process.exit(2); } }
+    // the unit tests (Node, no browser) all at once, several at a time: the whole set in the time of the longest
+    const early = new Map(), units = list.filter(t => t.unit && t.file);
+    if (units.length > 1) {
+        let next = 0;
+        const worker = async () => { while (next < units.length) { const t = units[next++]; early.set(t.name, await runOnce(t)); } };
+        await Promise.all(Array.from({ length: Math.min(units.length, Math.max(2, os.cpus().length - 2)) }, worker));
+    }
     for (const t of list) {
         if (!t.file) { rows.push({ name: t.name, res: "-", status: "MISSING", secs: 0, tries: 0 }); sections.push(`=== ${t.name} : no such file`); console.log(`${t.name.padEnd(34)} MISSING`); continue; }
         let r, p, st, tries = 0;
@@ -217,7 +345,7 @@ function status(r, p) {
             tries++;
             if (!t.unit && REUSE) await sharedBrowser();
             else if (!t.unit) await freePort(PORT);
-            r = await runOnce(t);
+            r = tries === 1 && early.has(t.name) ? early.get(t.name) : await runOnce(t);
             if (!t.unit && REUSE) await closeStrayTabs();
             else if (!t.unit) await freePort(PORT);   // (a browser left behind by a killed test)
             p = parse(r.text);
@@ -233,8 +361,15 @@ function status(r, p) {
         const was = LAST_BEFORE.tests[t.name];
         const before = was ? `${was.res} ${was.status}` : "-";
         rows.push({ name: t.name, res, status: st, secs: r.secs, tries, before });
-        writeLast(L => { L.tests[t.name] = { res, status: st, secs: r.secs, when: new Date().toISOString().slice(0, 16).replace("T", " "), port: PORT }; });
+        // (a measuring run is not a verdict: the "before" column stays as it was; the map notes the result)
+        if (!MEASURE) writeLast(L => { L.tests[t.name] = { res, status: st, secs: r.secs, when: new Date().toISOString().slice(0, 16).replace("T", " "), port: PORT }; });
         console.log(`${t.name.padEnd(34)} ${res.padStart(7)}  ${st.padEnd(7)} ${String(r.secs).padStart(4)} s   before: ${before}${tries > 1 ? "  (" + tries + " tries)" : ""}`);
+        if (r.cover) {
+            let m = null;
+            try { m = require("./lib/mapa.js").merge(t.name, { wynik: res, status: st, sek: r.secs }, r.cover, r.before); } catch (e) { console.log("    mapa: " + e.message); }
+            console.log(m ? `    mapa: ${m.plugins} wtyczek, ${m.functions} wykonanych funkcji / bloków, ${m.files} plików, ${m.maps} map${m.unsure.length ? ", zmienione w trakcie: " + m.unsure.join(" ") : ""}` : "    mapa: brak pomiaru (test nie otworzył przeglądarki?)");
+            try { fs.unlinkSync(r.cover); } catch (e) {}
+        }
         if (st !== "ok") for (const l of p.lines.filter(l => /^(FAIL|ERR)/.test(l)).slice(0, 6)) console.log("    " + l.slice(0, 200));
         // (the run.sh section: the FAIL / ERR / summary / console lines, the last 12)
         sections.push(`=== ${t.name}\n` + p.lines.filter(l => /^FAIL|^ERR|passed|console errors/.test(l)).slice(-12).join("\n"));

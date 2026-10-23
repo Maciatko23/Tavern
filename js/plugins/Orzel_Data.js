@@ -48,14 +48,15 @@
     // an hour (a full belly lasts a day); pieces: raw meat (or fish) a day; hunt: what it finds itself (from the third stage: a share
     // of its food, abstract); fly: 0 - cannot, 1 - short flights (podloty), 2 - flies freely, 3 - carries the hero
     const STAGES = [
-        { key: "jajo", name: "Jajo", care: 0, warmHours: 36 },
+        { key: "jajo", care: 0, warmHours: 36 },
         // (the user 2026-10-18: each next stage takes three times as long as the one before - 5, 15, 45, 135 days)
-        { key: "piskle", name: "Pisklę", care: 5, tiles: 0.5, land: 1, hp: 15, st: 0, pieces: 1, hunt: 0, fly: 0, warmNights: true, speed: 3.2 },
-        { key: "mlody", name: "Młody", care: 15, tiles: 0.9, land: 1, hp: 25, st: 0, pieces: 2, hunt: 0, fly: 0, speed: 3.6 },
-        { key: "podrostek", name: "Podrostek", care: 45, tiles: 1.2, land: 1, hp: 40, st: 40, pieces: 2, hunt: 0.25, fly: 1, speed: 4.2 },
-        { key: "prawie", name: "Prawie dorosły", care: 135, tiles: 2.5, land: 3, hp: 90, st: 60, pieces: 3, hunt: 0.4, fly: 2, speed: 4.5 },
-        { key: "dorosly", name: "Dorosły", care: 0, tiles: 4, land: 4, hp: 220, st: 100, pieces: 4, hunt: 0.6, fly: 3, speed: 4.5 }
+        { key: "piskle", care: 5, tiles: 0.5, land: 1, hp: 15, st: 0, pieces: 1, hunt: 0, fly: 0, warmNights: true, speed: 3.2 },
+        { key: "mlody", care: 15, tiles: 0.9, land: 1, hp: 25, st: 0, pieces: 2, hunt: 0, fly: 0, speed: 3.6 },
+        { key: "podrostek", care: 45, tiles: 1.2, land: 1, hp: 40, st: 40, pieces: 2, hunt: 0.25, fly: 1, speed: 4.2 },
+        { key: "prawie", care: 135, tiles: 2.5, land: 3, hp: 90, st: 60, pieces: 3, hunt: 0.4, fly: 2, speed: 4.5 },
+        { key: "dorosly", care: 0, tiles: 4, land: 4, hp: 220, st: 100, pieces: 4, hunt: 0.6, fly: 3, speed: 4.5 }
     ];
+    Watki.scal(STAGES, "orzel", "etapy");   // (its words: js/teksty/orzel.txt, etapy)
     // the care days at which each stage begins (0: hatched): 0, 5, 20, 65, 200
     const STAGE_AT = (() => { const out = [0, 0]; for (let s = 1; s < 5; s++) out.push(out[s] + STAGES[s].care); return out; })();
 
@@ -186,170 +187,49 @@
     const IDLE = { sit: 15 * 60, sitNight: 8 * 60, sleepNight: 20 * 60, near: 2.5, far: 3.5, preen: 0.05 };
 
     // ------------------------------------------------------------------ the texts
-    const TX = {
-        defaultName: "Śnieżny",
-        stageUp: ["", "Pisklę się wykluło!", "{imie} podrósł - już nie pisklę.", "{imie} wyrósł na podrostka. Pierwsze pióra, pierwsze podloty.",
-            "{imie} jest prawie dorosły. Lata, gdzie chce, i uniesie cię na grzbiecie (L).", "{imie} jest dorosły - największy i najsilniejszy. Z tobą na grzbiecie nurkuje na wrogów."],
-        eggCold: "Jajo stygnie. Ogrzej je: przy ogniu, w domu albo śpiąc z nim przy sobie.",
-        eggWarm: "Jajo jest ciepłe ({h}/{n} godz.)",
-        eggKnock: "Coś puka w skorupkę od środka...",
-        hatch: ["(Skorupka pęka. Ze środka wypełza mokre, białe pisklę i od razu wpatruje się w ciebie.)", "Ma cię za matkę. Cóż - teraz jesteś."],
-        noEgg: "Nie masz jaja",
-        noMeat: "Nie masz mięsa ani ryby",
-        noWater: "Nie masz wody: nabierz do wiadra albo bukłaka",
-        bowlFull: "Miska jest pełna",
-        fed: "{imie} zjadł {co}",
-        notHungry: "{imie} nie jest głodny",
-        pet: ["{imie} stroszy pióra ♥", "{imie} trąca cię dziobem ♥", "{imie} przymyka oczy ♥"],
-        petAgain: "{imie} lubi to, ale wystarczy na dziś",
-        follow: "{imie} idzie za tobą", followAir: "{imie} leci z tobą", rose: "{imie} wzbił się w powietrze",
-        stay: "{imie} zostaje tutaj", home: "{imie} wraca do gniazda", noNest: "Najpierw postaw mu gniazdo",
-        cold: "{imie} zmarzł w nocy - trzymaj go przy ogniu albo w domu",
-        hungry: "{imie} jest głodny", thirsty: "{imie} chce pić",
-        fled: ["{imie} krąży nad polem i krzyczy...", "...i odlatuje w stronę gór."],
-        fledNote: ["Orzeł odleciał", "Zaniedbałem go. {imie} odleciał na Orlą Grań. Za trzy dni mogę go zawołać (L) albo pójść po niego na grań z mięsem."],
-        callTooSoon: "{imie} jeszcze nie wróci. Daj mu czas ({d} dni).",
-        callBack: "{imie} wraca z gór!",
-        ridgeBack: "{imie} sfruwa ci na rękę. Wrócił.",
-        ridgeBackNote: ["Wrócił", "Poszedłem po niego na Orlą Grań z mięsem. {imie} sfrunął mi na rękę i wrócił ze mną."],
-        hurt: "{imie} ranny - odlatuje do gniazda", healed: "{imie} wyzdrowiał",
-        hurtAir: "{imie} jest ranny - ląduj!", hurtDown: "{imie} opada - jest ranny!",
-        tired: "{imie} jest zmęczony - musi odpocząć",
-        tiredAway: "{imie} jest zmęczony - odlatuje odpocząć", tiredHop: "{imie} jest zmęczony - odskakuje na bok odpocząć",
-        restedBack: "{imie} odpoczął - wraca do walki!",
-        outside: "{imie} czeka na zewnątrz",
-        tooBig: "{imie} się tu nie zmieści",
-        noSneak: "Orzeł jest za duży, żeby się skradać - {imie} czeka",
-        cannotFly: "{imie} jeszcze nie uniesie człowieka",
-        bondLow: "{imie} jeszcze ci nie ufa na tyle (więź {b}/{n})",
-        tooTired: "{imie} jest za zmęczony na lot ({p}%)",
-        storm: "Nie w taką pogodę - {imie} nie wystartuje w burzę",
-        notHere: "Tu {imie} nie wystartuje - za ciasno albo pod dachem",
-        // the flight
-        mount: "Wsiadasz na grzbiet. Trzymaj się!",
-        high: "Wysoko", low: "Nisko",
-        landOk: "L: tu wylądujesz", landNo: "Tu nie wylądujesz",
-        landWhyTrees: "Za ciasno: drzewa, skały albo budynki",
-        landWhyWater: "Pod tobą woda", landWhyCrops: "Nie siadaj na uprawach",
-        landWhyMap: "Tu nie wolno lądować", landWhyTown: "W mieście lądujesz tylko na placu",
-        landWhyHigh: "Zniż lot (Q), żeby wylądować",
-        tiredAir: "{imie} słabnie - wyląduj!", forced: "{imie} musi wylądować",
-        stormLand: "Burza! {imie} schodzi do lądowania",
-        edgeSea: "Dalej tylko morze.", edgeFog: "Za gęsta mgła - {imie} zawraca.", edgeMountain: "Za wysokie góry - {imie} zawraca.",
-        noSaveAir: "Najpierw wyląduj",
-        dive: "Nurkuj!", diveTired: "{imie} jest za zmęczony na nurkowanie", diveWait: "{imie} łapie oddech",
-        diveHigh: "Najpierw zniż lot (Q)", diveYoung: "{imie} jeszcze nie nurkuje z tobą na grzbiecie - dopiero dorosły",
-        farTitle: "Lot daleki", farNone: "Nie znasz jeszcze żadnego lądowiska poza tym",
-        farHelp: "Lecisz nad chmurami do miejsca, w którym już raz wylądowałeś ({c}% sił).",
-        panelTitle: "Lot: {imie}", panelStrength: "Siła skrzydeł",
-        panelKeys: "WASD / strzałki: lot   Shift: szybciej   Spacja: nurkuj   Q: wyżej / niżej   L: ląduj   M: lot daleki",
-        // the menu
-        menuTitle: "Orzeł: {imie}", menuEgg: "Orle jajo",
-        mPet: "Pogłaszcz", mFeed: "Nakarm", mWater: "Nalej wody", mFollow: "Chodź za mną", mStay: "Zostań tu", mHome: "Wracaj do gniazda",
-        mFly: "Leć!", mAttack: "Atakuj!", mEggPut: "Połóż jajo w koszu", mEggTake: "Weź jajo z kosza",
-        hPet: "Raz dziennie głaskanie umacnia więź.", hFeed: "Surowe mięso albo ryba (pieczone mniej syci, owoców nie je).",
-        hWater: "Porcja wody z wiadra albo bukłaka do jego miski. Starszy orzeł pije też sam, w górach.",
-        hFollow: "Idzie (albo leci) za tobą, także na inne mapy. Przed domami i pod ziemią czeka na zewnątrz.",
-        hStay: "Siada tutaj i czeka.", hHome: "Wraca do gniazda i tam czeka (je i pije z miski).",
-        hFly: "Wsiadasz mu na grzbiet i lecisz nisko nad koronami drzew (Q - wyżej: kamera się oddala; L - lądowanie).",
-        hAttack: "Rzuca się na wroga, którego masz na celu (F).",
-        status: "Życie {hp}/{mhp} · Siła {st}/{mst} · Jedzenie {f} · Woda {w} · Więź {b} · {etap}{dni}",
-        statusEgg: "Ciepło: {h}/{n} godz. · {gdzie}",
-        // the nest's menu lines (Farming's hook)
-        nestFood: "Miska: jedzenie", nestNote: "Miska: jedzenie {f}, woda {w}/{max}",
-        basketEmpty: "Kosz czeka na jajo.", basketEgg: "W koszu leży orle jajo ({h}/{n} godz. ciepła).",
-        // the ridge (Map175)
-        eggTake: ["(Pod nawisem, w szczelinie, leży jedno jajo - całe. Jeszcze ciepłe.)", "> Ostatnie..."],
-        eggTaken: "Masz orle jajo. Trzeba je ogrzać: przy ogniu, w domu albo śpiąc z nim przy sobie.",
-        mother: ["(Biała orlica leży w kamieniach. Wielka jak wóz. W piersi tkwią dwie strzały z lotkami z białym okiem.)",
-            "(Ktoś wyrwał jej najdłuższe lotki z obu skrzydeł. Na trofeum.)"],
-        arrows: ["(Strzały czarne, groty kute, lotki ze znakiem otwartego oka.)", "> Czarne Oczy..."],
-        bowl: ["(Kamienna misa wykuta w skale, większa niż koryto. Po deszczu stoi w niej woda - nie dla ludzi.)",
-            "(Na krawędzi wyryto orła nad krukiem.)"],
-        carving: ["(Na płycie wyryty orzeł z rozpostartymi skrzydłami, a pod nim kruk.)", "(Pod spodem napis zakonu, zatarty: ...STRAŻ...)"],
-        camp: ["(Zimne ognisko, kości, pusta manierka i zerwana sieć. Myśliwi siedzieli tu kilka dni.)"],
-        noEggYet: ["(Gniazdo jest całe, ale puste. Orły krążą wysoko nad granią i krzyczą.)", "> Lepiej ich nie płoszyć."],
-        wayUp: "Ścieżka wspinaczy prowadzi na grań",
-        wayUpLocked: "Ściana jest za stroma. Ktoś tu się kiedyś wspinał - stare kołki w skale.",
-        // the theft (W13 ch. 4)
-        theftWarn: "Ktoś kręci się nocą przy gnieździe...",
-        theftDone: ["Gniazdo jest puste. Sieć, ślady butów, czarna lotka ze znakiem oka.", "Zabrali go w góry."],
-        theftSaved: "Złodzieje uciekli bez łupu!",
-        // the epilogue's line (Underground_Data EPILOGUE reads Orzel.epilogue())
-        // (the keys: Underground_Data ENDINGS - the ending chosen at the Heart)
-        epilogue: {
-            gone: "Biały orzeł nie wrócił z gór. Rybacy mówią, że czasem widzą go nad granią.",
-            zniszczyc: "{imie} odleciał na Orlą Grań, gdy Serce ucichło. Wraca co wiosnę i siada na dachu tawerny.",
-            straznik: "{imie} siedzi na dzwonnicy w każdą Noc Pytania i patrzy na morze, jak Skrzydlata Straż przed wiekami.",
-            uwolnic: "Kiedy prawda rozlała się po mieście, tylko {imie} niczego się nie bał. Krąży nad wyspą jak dawniej.",
-            zapieczetowac: "{imie} krąży o świcie nad tawerną. Dzieci z miasteczka liczą, ile razy okrąży wieżę.",
-            any: "{imie} krąży o świcie nad tawerną."
-        }
-    };
+    const TX = Watki.teksty("orzel");
 
     // ------------------------------------------------------------------ the quests (a TownQuests pack; docs/QUESTY.md, the next free D and W)
     const D29 = {
-        id: "D29", kind: "D", title: "Jajo z grani", giver: "latarnik", icon: ITEM.jajo,
-        where: "przylądek z latarnią → Góry → Orla Grań", when: "Akt II, po burzy",
-        desc: "W noc burzy Bazyli widział z laterny białe skrzydła nad granią w górach - i pochodnie. Orły nie latają w burzę bez powodu.",
+        id: "D29", kind: "D", giver: "latarnik", icon: ITEM.jajo,
         offer: {
-            cond: { hours: [14, 22], fn: "d29Pora" },
-            say: ["W noc burzy patrzyłem na góry. W błyskach - białe skrzydła nad granią. Ogromne. I pochodnie pod nimi.",
-                "Mój dziad mówił, że nad kamieniołomem gnieździły się kiedyś białe orły zakonu. Skrzydlata Straż. Myślałem, że to bajka.",
-                "Pochodnie w burzę, na grani? Tam nikt nie chodzi po dobremu."],
-            yes: "Pójdę zobaczyć.", no: "To nie moja sprawa.",
-            accept: ["Na wysokiej półce nad kamieniołomem są stare kołki w skale - wspinacze zakonu tamtędy chodzili. Uważaj na siebie."],
-            decline: ["Jak chcesz. Wiatr i tak wszystko zapisze. Ja też."]
+            cond: { hours: [14, 22], fn: "d29Pora" }
         },
         steps: [
-            { type: "custom", check: "d29Jajo", text: "Wejdź na Orlą Grań (Góry, wysoka półka nad kamieniołomem: stare kołki w skale) i zobacz, co się stało z gniazdem." }
+            { type: "custom", check: "d29Jajo" }
         ],
-        reward: { xp: 100, flag: "orzelJajo",
-            note: ["Strzały z białym okiem", "Na Orlej Grani leży martwa biała orlica - zastrzelona strzałami Czarnych Oczu, z wyrwanymi lotkami. W gnieździe ocalało jedno jajo. Wziąłem je. Trzeba je ogrzać: przy ogniu, w domu albo śpiąc z nim przy sobie."] }
+        reward: { xp: 100, flag: "orzelJajo" }
     };
+    Watki.scal(D29, "orzel", "zadania.D29");   // (its words: js/teksty/orzel.txt, zadania.D29)
     const W13 = {
-        id: "W13", kind: "W", title: "Skrzydlata Straż", giver: null, icon: ITEM.jajo,
-        where: "dom, Orla Grań, pustelnia na klifie, dwór Lorda", when: "Akt II",
-        desc: "Wychowuję białego orła z jaja z Orlej Grani. Zakon miał kiedyś takie orły - Skrzydlatą Straż.",
+        id: "W13", kind: "W", giver: null, icon: ITEM.jajo,
         autoStart: "w13Start",
         steps: [
-            { ch: 1, type: "custom", check: "w13Wyklucie", vars: "w13Vars", text: "Ogrzej orle jajo: {cieplo}. Ciepło jest przy ogniu, w domu albo gdy śpisz z jajem przy sobie." },
-            { ch: 2, type: "talk", to: "grandpa", text: "Pokaż pisklę dziadkowi.",
-                say: ["> Dziadku... wykluł się. Orzeł. Biały."],
-                done: ["(Dziadek długo patrzy na pisklę.) Biały... Skąd to masz? ...Z grani nad kamieniołomem?",
-                    "Dziad mi mówił, że kruczarze mieli kiedyś i orły. Kruki nosiły listy, a białe orły pilnowały wybrzeża. Skrzydlata Straż. Myślałem, że zmyśla, jak zawsze.",
-                    "No to masz teraz kłopot na dwadzieścia lat. Karm go surowym mięsem, nie dawaj zmarznąć. I nie pozwól mu zjeść mojego kota."],
-                reward: { xp: 40, note: ["Skrzydlata Straż", "Dziadek mówi, że kruczarze - nasz ród - trzymali kiedyś nie tylko kruki, ale i białe orły zakonu. Kruki nosiły listy, orły pilnowały wybrzeża. Skrzydlata Straż."] } },
-            { ch: 3, type: "talk", to: "pustelnik", need: [[ITEM.pioro, 1]], text: "Zanieś pióro białego orła bratu Kleofasowi (pustelnia na klifie). Pióra zrzuca podrostek.",
-                remind: ["Orzeł? Biały? Przynieś mi pióro, to uwierzę."],
-                say: ["> Bracie, to pióro mojego orła. Białego."],
-                done: ["(Kleofas obraca pióro pod światło.) Na Serce... „Pióro długie na łokieć, białe jak sól”. Tak pisze Księga gniazd.",
-                    "Skrzydlata Straż. Zakon hodował je na Orlej Grani - kruczarze, twój ród. Wypatrywały okrętów, zanim ktokolwiek zobaczył żagiel.",
-                    "W Księdze jest też, że orły piły tylko z kamiennych mis na grani. Deszczówkę. I że jeźdźca nosi tylko orzeł, który sam go wybrał.",
-                    "Postaw mu grzędę, kiedy dorośnie. Prawdziwą, z pnia. Napiszę ci, jak."],
-                reward: { xp: 80, flag: "orzelKroniki", note: ["Księga gniazd", "Brat Kleofas przeczytał w Księdze gniazd o Skrzydlatej Straży: białe orły zakonu wychowywane przez kruczarzy na Orlej Grani, wypatrywały okrętów. Piły deszczówkę z kamiennych mis. Jeźdźca nosi tylko orzeł, który sam go wybrał. Kleofas pokazał mi, jak zbudować Orlą grzędę."] } },
-            { ch: 4, type: "custom", check: "w13Podlot", vars: "w13Vars", text: "Zrób w garbarni Rękawicę sokolnika (skóra, ścięgno) i naucz podrostka siadać na ręce: {gdzie}" },
-            { ch: 5, type: "custom", check: "w13Kradziez", vars: "w13Vars", text: "{kradziez}" },
-            { ch: 6, type: "talk", to: "lord", text: "Lord Zaleski chce widzieć białego orła. Porozmawiaj z nim przed dworem (8–20).",
-                say: ["> Jaśnie panie, słyszałem, że pan o mnie pytał."],
-                done: ["Pytałem, pytałem! Cała wyspa mówi o białym orle! Wiesz, młodzieńcze, że w herbie Zaleskich jest orzeł? Nad krukiem! To znak!",
-                    "Sprzedaj mi go. Dam ci... tysiąc pięćset. Nie? To chociaż - w dzień mojej uczty niech przeleci nad dworem. Goście będą mówić o tym latami!"],
-                choice: { ask: ["(Co odpowiesz Lordowi?)"], options: [
-                    { label: "Orzeł nie jest na sprzedaż. I nie lata na pokaz.", say: ["Ach! Hm. Rozumiem. Wolny ptak, wolny człowiek. ...Szkoda."], flag: "orzelLordOdmowa", reward: { xp: 40 } },
-                    { label: "Przelecę z nim nad dworem.", say: ["Wspaniale! Wspaniale! Powiem Feliksowi, żeby przygotował balkon. To będzie dzień!"], flag: "orzelLordPokaz", reward: { xp: 60, opinion: 3 } }
+            { ch: 1, type: "custom", check: "w13Wyklucie", vars: "w13Vars" },
+            { ch: 2, type: "talk", to: "grandpa", 
+                reward: { xp: 40 } },
+            { ch: 3, type: "talk", to: "pustelnik", need: [[ITEM.pioro, 1]], 
+                reward: { xp: 80, flag: "orzelKroniki" } },
+            { ch: 4, type: "custom", check: "w13Podlot", vars: "w13Vars" },
+            { ch: 5, type: "custom", check: "w13Kradziez", vars: "w13Vars" },
+            { ch: 6, type: "talk", to: "lord", 
+                choice: { options: [
+                    { flag: "orzelLordOdmowa", reward: { xp: 40 } },
+                    { flag: "orzelLordPokaz", reward: { xp: 60, opinion: 3 } }
                 ] } },
-            { ch: 7, type: "custom", check: "w13Lot", vars: "w13Vars", text: "{lot}" }
+            { ch: 7, type: "custom", check: "w13Lot", vars: "w13Vars" }
         ],
-        reward: { xp: 200,
-            note: ["Skrzydlata Straż", "Pierwszy lot na grzbiecie {imie}. Z góry wyspa jest mała: latarnia, port, dym z komina dziadka. Ostatni orzeł Skrzydlatej Straży wybrał mnie na jeźdźca."] }
+        reward: { xp: 200 }
     };
+    Watki.scal(W13, "orzel", "zadania.W13");   // (its words: js/teksty/orzel.txt, zadania.W13)
     const REMARKS = [
-        { id: "orzelJanek", who: "janek", flag: "orzelLot", lines: ["Widziałem cię! Nad zatoką! Na orle! Mówiłem żonie, nie uwierzyła. Mówi, że za dużo słońca."] },
-        { id: "orzelKleofas", who: "pustelnik", flag: "orzelLot", lines: ["Jeździec Skrzydlatej Straży. W kronikach ostatni był trzysta lat temu. ...Tylko nie lataj nad pustelnią. Pszczoły się denerwują."] },
-        { id: "orzelBazyli", who: "latarnik", flag: "orzelJajo", lines: ["Białe orły... W noc burzy wiatr niósł krzyk. Zapisałem go. Nie wiem jak, ale zapisałem."] },
-        { id: "orzelRoch", who: "przemytnik", flag: "orzelLot", lines: ["Przemytnik z orłem byłby bogaty. Ty jesteś tylko głupi. I szczęśliwy. Zazdroszczę."] },
-        { id: "orzelAmbrozy", who: "dzwonnik", flag: "orzelLot", lines: ["Orzeł nad dzwonnicą... Mój mistrz mówił, że Skrzydlata Straż siadała na wieży, kiedy szedł okręt. Dzwoniło się wtedy cztery i jeden."] }
+        { id: "orzelJanek", who: "janek", flag: "orzelLot" },
+        { id: "orzelKleofas", who: "pustelnik", flag: "orzelLot" },
+        { id: "orzelBazyli", who: "latarnik", flag: "orzelJajo" },
+        { id: "orzelRoch", who: "przemytnik", flag: "orzelLot" },
+        { id: "orzelAmbrozy", who: "dzwonnik", flag: "orzelLot" }
     ];
+    Watki.scal(REMARKS, "orzel", "uwagi");   // (its words: js/teksty/orzel.txt, uwagi)
     const VITEMS = {};
     (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Orzel", quests: [D29, W13], vitems: VITEMS, remarks: REMARKS });
 

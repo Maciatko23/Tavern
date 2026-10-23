@@ -1,0 +1,110 @@
+{
+ "kod": {
+  "strike": {
+   "0": "Brakuje narzędzia"
+  },
+  "workText": {
+   "0": " ({total} uderzeń)"
+  },
+  "withBlanks": {
+   "0": "Znacznik (Zasoby)"
+  },
+  "springEvents": {
+   "0": "Omszałe kamienie"
+  },
+  "build": {
+   "0": "Ściana ciosowa",
+   "1": "Uderz w kamień",
+   "2": "Żyła rudy",
+   "3": "Kałuża pływowa",
+   "4": "Jabłonka Ługów",
+   "5": "Marta Ługowa",
+   "6": "Ruina chaty Rzepków",
+   "7": "Zdziczały ogródek",
+   "8": "Studnia sąsiada",
+   "9": "Resztki płotu",
+   "10": "Dziki ul",
+   "11": "Grządki",
+   "12": "Pole mieszczan"
+  },
+  "driftEvents": {
+   "0": "Drewno dryfowe"
+  },
+  "useSpring": {
+   "0": "{name} ({left} na dziś)"
+  },
+  "searchRuin": {
+   "0": "Dzień {1}: w ruinie chaty Rzepków (za lasem, na południe od działki) list Wojciecha Rzepki: ziemia nie rodziła, studnia wyschła, poszli do miasta. Studnię zasypał, żeby bydło nie wpadło."
+  },
+  "useWell": {
+   "0": "{1} ×{n} (masz {3})",
+   "1": "Materiały już położone.",
+   "2": "Materiały: {cost}."
+  },
+  "done": {
+   "0": "Studnia Rzepków",
+   "1": "Dzień {1}: naprawiłem studnię w zagrodzie Rzepków. Zbiera tylko deszcz - najwyżej cztery porcje; w upał paruje, zimą zamarza.",
+   "2": "Pomoc przy ogródkach",
+   "3": "Dniówka w polu"
+  },
+  "stealPlot": {
+   "0": "Kradzież z ogródka"
+  },
+  "useMarta": {
+   "0": "(Marta zbiera jabłka do fartucha.) Jan sadził je, jak się pobraliśmy. Słyszysz, jak szumią?",
+   "1": "Weź sobie, weź. Sad rodzi dla wszystkich - tak by chciał.",
+   "2": "Marta Ługowa"
+  },
+  "run": {
+   "0": "Kradzież z pola"
+  },
+  "glowna": {
+   "0": "Głęboki sen: +20% sił"
+  },
+  "onOff": {
+   "0": "wł.",
+   "1": "wył."
+  },
+  "rows": {
+   "0": "Idź do: {1} ({2}/{length})   ←→",
+   "1": "←→ wybierz miejsce paczki A, OK przenosi tam.",
+   "2": "Deszcz wczoraj: {1}",
+   "3": "Udaje deszcz wczoraj (źródełka +1, kręgi grzybów, woda w gliniance). Tylko do końca sesji.",
+   "4": "Upał dziś: {1}",
+   "5": "Udaje upał: źródełka suche, studnia traci porcję. Tylko do końca sesji.",
+   "6": "Śnieg dziś: {1}",
+   "7": "Udaje śnieg: źródełka i studnia zamarzają.",
+   "8": "Pływ: {1}   (OK: odpływ / przypływ / naturalny)",
+   "9": "Kałuże z krabami są tylko w odpływie.",
+   "10": "Sztorm się skończył (drewno z morza)",
+   "11": "Na brzegach (przystań, pustelnia, garnizon) leży nowe drewno dryfowe.",
+   "12": "Studnia sąsiada: etap {wellPick}   ←→ (OK ustawia)",
+   "13": "0 zasypana, 1 pusta cembrowina, 2 deszczowa (z 4 porcjami).",
+   "14": "Sad Ługów: etap {treePick}   ←→ (OK ustawia)",
+   "15": "0 spalony, 1 przycięty, 2 opatrzony, 3 podlany raz, 4 żyje (z liśćmi i owocami od zaraz).",
+   "16": "Jagna: D30 krok {1}   ←→ (OK ustawia)",
+   "17": "Zaczyna D30 od wybranego kroku (1 arcydzięgiel, 2 dziurawiec, 3 kozłek) i daje to zioło.",
+   "18": "Pełne źródełka i limity dnia od nowa",
+   "19": "Czyści dzisiejsze nabrania, wysypisko, glinkę, ścianę ciosową, ule, zioła."
+  },
+  "pick": {
+   "0": "Idź do: {1} ({2}/{length})   ←→",
+   "1": "Studnia sąsiada: etap {wellPick}   ←→ (OK ustawia)",
+   "2": "Sad Ługów: etap {treePick}   ←→ (OK ustawia)",
+   "3": "Jagna: D30 krok {1}   ←→ (OK ustawia)"
+  },
+  "ok": {
+   "0": "Deszcz wczoraj: {1}",
+   "1": "Upał dziś: {1}",
+   "2": "Śnieg dziś: {1}",
+   "3": "Pływ: {1}",
+   "4": "Morze wyrzuciło drewno",
+   "5": "Studnia: etap {wellPick}",
+   "6": "Sad: etap {treePick}",
+   "7": "Brak TownQuests",
+   "8": "D30: krok {1}",
+   "9": "Limity dnia wyczyszczone"
+  }
+ },
+ "_opis": "Napisy kodu Zasoby.js sprzed przeniesienia do js/teksty/zasoby.txt (kod.*)"
+}

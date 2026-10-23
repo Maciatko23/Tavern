@@ -1,9 +1,9 @@
 # python tools/w5/install.py [--check] [--force]
-# Instalacja wątku W5 „Towary z kontynentu” (Kantor_Data.js, Kantor.js, mapa 171 „Piwnica kantoru”) do data/ i js/plugins.js.
-# TYLKO przy zamkniętym edytorze RPG Maker MZ (edytor przy zapisie nadpisuje js/plugins.js i pliki map). Skrypt:
+# Instalacja wątku W5 „Towary z kontynentu” (Kantor_Data.js, Kantor.js, mapa 171 „Piwnica kantoru”) do data/ i na listę wtyczek
+# gry js/tawerna_wtyczki.js. TYLKO przy zamkniętym edytorze RPG Maker MZ (edytor przy zapisie nadpisuje pliki map). Skrypt:
 #   1) sprawdza tasklist: działa RPGMZ.exe -> przerywa (nic nie zapisuje)
-#   2) kopie zapasowe do backup_art_2026-10-17/w5/install/ (js/plugins.js, data/MapInfos.json)
-#   3) js/plugins.js: dopisuje (jeśli ich nie ma) wpis Kantor_Data zaraz pod Cysterna_Data i Kantor zaraz pod Cysterna - na
+#   2) kopie zapasowe do backup_art_2026-10-17/w5/install/ (js/tawerna_wtyczki.js, data/MapInfos.json)
+#   3) js/tawerna_wtyczki.js: dopisuje (jeśli ich nie ma) wpis Kantor_Data zaraz pod Cysterna_Data i Kantor zaraz pod Cysterna - na
 #      AKTUALNYM pliku (wpisy dodane przez edytor zostają), końcówki linii jak w pliku
 #   4) data/MapInfos.json: dopisuje wpis 171 „Piwnica kantoru” (rodzic 103) - na AKTUALNYM pliku
 #   5) data/Map171.json: kopia z tools/w5/staging/data/Map171.json (gdy w data/ już jest inny plik 171: przerywa, chyba że --force)
@@ -14,7 +14,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 STAGED_MAP = os.path.join(HERE, "staging", "data", "Map171.json")
 BACKUP = os.path.join(ROOT, "backup_art_2026-10-17", "w5", "install")
-PLUGINS = os.path.join(ROOT, "js", "plugins.js")
+PLUGINS = os.path.join(ROOT, "js", "tawerna_wtyczki.js")   # (the game's plugin list since 2026-10-23)
 INFOS = os.path.join(ROOT, "data", "MapInfos.json")
 MAP171 = os.path.join(ROOT, "data", "Map171.json")
 ENTRIES = [
@@ -47,7 +47,7 @@ def plugins_new():
         if entry["name"] in names:
             continue
         if after not in names:
-            raise SystemExit("js/plugins.js: nie ma wpisu " + after + " - przerywam")
+            raise SystemExit("js/tawerna_wtyczki.js: nie ma wpisu " + after + " - przerywam")
         i = names.index(after)
         lines.insert(i + 1, json.dumps(entry, ensure_ascii=False, separators=(",", ":")) + ",")
         names.insert(i + 1, entry["name"])
@@ -86,7 +86,7 @@ def main():
     if os.path.exists(MAP171) and sha(MAP171) != sha(STAGED_MAP) and not a.force:
         print("data/Map171.json już jest i różni się od tools/w5/staging/data/Map171.json - przerywam (--force, żeby nadpisać)")
         return 1
-    print("js/plugins.js: dopisze " + (", ".join(added) if added else "nic (wpisy już są)"))
+    print("js/tawerna_wtyczki.js: dopisze " + (", ".join(added) if added else "nic (wpisy już są)"))
     print("data/MapInfos.json: " + ("dopisze 171 „Piwnica kantoru”" if infos else "171 już jest"))
     print("data/Map171.json: " + ("skopiuje z tools/w5/staging" if sha(MAP171) != sha(STAGED_MAP) else "już taki sam"))
     if a.check:
@@ -106,7 +106,7 @@ def main():
     if sha(MAP171) != sha(STAGED_MAP):
         shutil.copy2(STAGED_MAP, MAP171)
     print("Zainstalowane. Kopie: " + os.path.relpath(BACKUP, ROOT))
-    print("Po instalacji: w edytorze otwórz Menedżer wtyczek przed zapisem (żeby edytor nie zgubił nowych wpisów).")
+    print("Po instalacji: przeładuj projekt w edytorze (mapy); wtyczki są na liście gry js/tawerna_wtyczki.js - edytor jej nie zapisuje.")
     return 0
 
 

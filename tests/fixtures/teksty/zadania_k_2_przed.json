@@ -1,0 +1,34 @@
+{
+ "zadania": {
+  "K37": {
+   "lines": {
+    "talk": [
+     "> Mam cię. Oddawaj sakiewkę.",
+     "(Chłopak ma może trzynaście lat. Chudy jak tyczka.) Puść... Ja nie dla siebie. W obozie nie ma co jeść. Ela płacze z głodu po nocach."
+    ]
+   }
+  },
+  "K39": {
+   "lines": {
+    "face": [
+     "> Widziałem rękaw, Lucjanie. I cięższą kość.",
+     "(Lucjan przestaje się uśmiechać.) Ciii! ...Mój drogi, po co od razu krzyczeć? Dogadajmy się."
+    ]
+   }
+  },
+  "K29": {
+   "lines": {
+    "guard": "Cicho! Kapral idzie. Nie teraz - przyjdź, jak przejdzie."
+   }
+  },
+  "K22": {
+   "lines": {
+    "late": [
+     "Struna! Na dzisiejszy wieczór za późno, złotko, ale nic to - jutro zagram na niej pierwszą balladę.",
+     "Masz, dziesięć groszy. Ignacowi podziękuję piosenką."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^K\\d+\\./)"
+}

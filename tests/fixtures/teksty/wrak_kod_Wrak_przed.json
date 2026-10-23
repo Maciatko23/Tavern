@@ -1,0 +1,120 @@
+{
+ "kod": {
+  "rescueHero": {
+   "0": "Woda wdziera się do ładowni!",
+   "1": "Woda przybiera! Uciekasz na suchy piach."
+  },
+  "addClue": {
+   "0": "Poszlaka: {name}",
+   "1": "Kim naprawdę jest Eryk Sowa?"
+  },
+  "janekHarbourTalk": {
+   "0": "Płyniemy?",
+   "1": "Zawieź mnie na wrak.",
+   "2": "Nie, w innej sprawie."
+  },
+  "erykTalk": {
+   "0": "Eryk Sowa",
+   "1": "Narysuj mnie (2 G).",
+   "2": "Może innym razem.",
+   "3": "Jak chcesz. Twarz ci nie ucieknie.",
+   "4": "Narysujesz mnie? (2 G)",
+   "5": "Skąd jesteś?",
+   "6": "Co słychać?",
+   "7": "Nic. Rysuję."
+  },
+  "jozekTalk": {
+   "0": "Józek Łata"
+  },
+  "talk": {
+   "0": "Jeszcze chwilę.",
+   "1": "Żołnierz garnizonu"
+  },
+  "giveChart": {
+   "0": "Mapa z zaznaczeniami",
+   "1": "Siedem miejsc zaznaczonych białym okiem.",
+   "2": "Mapa Kruczej Wyspy z kajuty „Białej Źrenicy”. Czarne Oczy zaznaczyły na niej siedem miejsc małym białym okiem: {names}. Kompas prowadzi do następnego znaku, którego jeszcze nie widziałem."
+  },
+  "actCall": {
+   "0": "Nie dziś.",
+   "1": "Klucz bosmana",
+   "2": "W najniższym kącie ładowni wraku leży szkielet bosmana. Na szyi miał mosiężny klucz - pewnie do kajuty kapitana.",
+   "3": "Potrzebujesz klucza",
+   "4": "Dziennik okrętu „Białej Źrenicy”",
+   "5": "Okręt Straży Pewności płynął po „serce skały pod krukiem”. Na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”. Zaginął w sztormie razem z okrętem - tak zapisano.",
+   "6": "Karta kroniki (z wraku)",
+   "7": "W dzienniku okrętu leżała luźna, bardzo stara karta - nie ich pismo. Na marginesach notatki Czarnych Oczu. Ktoś, kto zna szyfr zakonu, mógłby ją przeczytać.",
+   "8": "Kamienie z krukiem",
+   "9": "W skrzyni kapitana: sakiewka obcych monet z okiem i pięć płaskich kamieni z wyrytym krukiem - takim jak na moim wisiorku. Celnik Lorda każe je zgłaszać, Baltazar skupuje, a Roch mówi, że Czarne Oczy ich szukają.",
+   "10": "Eryk Sowa",
+   "11": "W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz.",
+   "12": "Potrzebujesz 2 G"
+  },
+  "stonesTalk": {
+   "0": "Co z nimi zrobisz?",
+   "1": "Mądrze. Kruk wie, komu siada na ramieniu."
+  },
+  "stonesAct": {
+   "0": "Kamienie u celnika",
+   "1": "Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.",
+   "2": "Kamienie u Baltazara",
+   "3": "Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.",
+   "4": "Kamienie z krukiem zostają u mnie",
+   "5": "Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa.",
+   "6": "Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku."
+  },
+  "w12Talk": {
+   "0": "Wydam cię garnizonowi.",
+   "1": "Zachowam to dla siebie.",
+   "2": "Pomogę ci uciec kutrem Rocha.",
+   "3": "Fałszywa mapa dla Baltazara.",
+   "4": "Jeszcze nie wiem."
+  },
+  "w12Choose": {
+   "0": "W12: rozbitek wydany",
+   "1": "Wydałem Ansgara",
+   "2": "Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.",
+   "3": "Ansgar zostaje",
+   "4": "Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.",
+   "5": "Ansgar odpłynął",
+   "6": "Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.",
+   "7": "Fałszywa mapa",
+   "8": "Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam."
+  },
+  "w12Sell": {
+   "0": "Mapa dla Baltazara",
+   "1": "Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował."
+  },
+  "build": {
+   "0": "Łódź Janka (czeka przy wraku)",
+   "1": "Janek (czeka przy łodzi)",
+   "2": "Łódź ratownicza garnizonu",
+   "3": "Żołnierz garnizonu"
+  },
+  "soldiersWatch": {
+   "0": "Kara: -{fine} G",
+   "1": "wrak bez glejtu",
+   "2": "Złapany na wraku",
+   "3": "Żołnierze garnizonu złapali mnie na wraku bez glejtu rotmistrza. Kara: {fine} groszy. Garnizon będzie o tym pamiętał."
+  },
+  "wellWatch": {
+   "0": "Poszlaka: {name}",
+   "1": "Kim naprawdę jest Eryk Sowa?"
+  },
+  "visitMark": {
+   "0": "Znak białego oka: {name}",
+   "1": "Mapa z wraku: {n} z {length}",
+   "2": "Jedno z siedmiu miejsc zaznaczonych na mapie z wraku. Byłem tu: {name}. ({n} z {length})"
+  },
+  "tracker": {
+   "0": "Biały znak: {name}",
+   "1": "Mapa z wraku: {n} z {length} miejsc"
+  },
+  "raidWatch": {
+   "0": "Baltazar przesyła pozdrowienia za mapę!",
+   "1": "Ludzie Baltazara",
+   "2": "Baltazar zorientował się, że mapa była fałszywa. Jego ludzie zaczaili się na mnie nocą."
+  }
+ },
+ "_opis": "Napisy kodu Wrak.js sprzed przeniesienia do js/teksty/wrak.txt (kod.*)"
+}

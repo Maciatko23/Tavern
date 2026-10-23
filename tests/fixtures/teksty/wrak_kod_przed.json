@@ -1,0 +1,177 @@
+{
+ "janekOffer": [
+  "Na wrak? (Janek zerka na mieliznę za cyplem.) Mogę cię podrzucić. Za dnia, póki morze spokojne.",
+  "Poczekam dwie godziny, nie dłużej. Woda tam chodzi pod piachem jak kot pod kocem."
+ ],
+ "janekTide": "Odpływ dziś koło {t}. Wtedy łacha od garnizonu wychodzi z wody.",
+ "janekNoK47": [
+  "Na wrak? Najpierw pokaż, że umiesz trzymać wędkę, a nie tylko wiosło. Złów ze mną pierwszą rybę, to cię zawiozę."
+ ],
+ "janekStorm": [
+  "W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś."
+ ],
+ "janekRow": [
+  "Siadaj na dziobie i nie kołysz. (Janek odpycha łódź od pomostu.)"
+ ],
+ "janekWait": [
+  "Morze się zmienia, a ja mam sieci do łatania.",
+  "Wracamy?"
+ ],
+ "janekBack": [
+  "Trzymaj się burty. (Janek wiosłuje w stronę przystani.)"
+ ],
+ "janekStay": [
+  "Jeszcze chwila. Tylko nie każ mi czekać do nocy."
+ ],
+ "janekLeaving": "Jeszcze kwadrans i odpływam! Nie będę nocował na mieliźnie!",
+ "janekGone": "Janek odpłynął. Zostaje łacha w odpływie... albo czekanie.",
+ "soldierCatch": [
+  "Stój! A ty kto? Kto pozwolił łazić po królewskim łupie?",
+  "Bez glejtu rotmistrza? Dwadzieścia groszy kary. I zmykaj z mielizny."
+ ],
+ "soldierPass": "Glejt widzę. Szukaj, tylko skrzyń z pieczęcią nie ruszaj.",
+ "soldierTalk": [
+  "Wynosimy, co zostało. Rotmistrz każe wszystko spisać.",
+  "Pod pokład? Nie, dziękuję. Tam są szczury wielkie jak psy. I woda chodzi.",
+  "Z garnizonu, z chorągwi króla. A ty skąd?"
+ ],
+ "arrive": "Wrak na mieliźnie. Następny odpływ około {t}.",
+ "lowEnding": "Woda zaczyna wracać. Łacha do garnizonu zaraz zniknie.",
+ "flooded": "Łacha zniknęła pod wodą. Następny odpływ około {t}.",
+ "skeleton": [
+  "> (Szkielet w podartym granatowym kubraku. Na szyi, na rzemieniu, mosiężny klucz.)",
+  "> Bosman. Klucz do kajuty... pewnie kapitańskiej."
+ ],
+ "skeletonEmpty": "Kości bosmana. Nic więcej przy nim nie ma.",
+ "skeletonWet": "Szkielet leży pod wodą. Trzeba poczekać na niską wodę.",
+ "doorLocked": "Zamknięte. Mosiężny zamek, mocny.",
+ "doorOpen": "Klucz bosmana pasuje. Zamek puszcza ze zgrzytem.",
+ "desk": [
+  "> (Na biurku kapitana skórzana tuba na mapy i gruba księga w czarnej oprawie.)",
+  "> (W tubie mapa wyspy. Siedem miejsc zaznaczonych małym białym okiem.)",
+  "> (Księga to dziennik okrętu. Między kartami luźna, bardzo stara strona - nie ich pismo.)"
+ ],
+ "deskEmpty": "Puste biurko. Wziąłeś już wszystko, co miało znaczenie.",
+ "chest": [
+  "> (W skrzyni sakiewka obcych monet - na każdej otwarte oko - i drewniane pudełko.)",
+  "> (W pudełku pięć płaskich kamieni. Na każdym wyryty kruk. Taki jak na moim wisiorku.)"
+ ],
+ "chestEmpty": "Pusta skrzynia.",
+ "erykMeet": [
+  "Portret? Dwa grosze albo piwo. Masz ciekawą twarz. Zmęczoną.",
+  "> Skąd jesteś? Nie mówisz jak tutejsi.",
+  "Z lądu. Sukno. Było sukno. (Eryk uśmiecha się krzywo.) Morze lubi sukno.",
+  "> (Eryk zerka na twój wisiorek i szybko odwraca wzrok.)",
+  "Siadaj prosto. I nie ruszaj się, to wyjdziesz ładniej, niż jesteś."
+ ],
+ "erykAsk": [
+  "Portret? Dwa grosze.",
+  "Hm? (Eryk nie podnosi oczu znad papieru.)",
+  "Siadaj, jak chcesz. Tylko nie zasłaniaj światła."
+ ],
+ "erykPortrait": [
+  "(Eryk rysuje szybko i pewnie. Kreska czysta jak na mapie - żadnej poprawki.)",
+  "Masz. Nie ładniejszy, niż jesteś, ale prawdziwy."
+ ],
+ "erykPortraitAgain": [
+  "(Eryk rysuje cię jeszcze raz. Tym razem z wisiorkiem na szyi. Rysuje go dłużej niż twarz.)"
+ ],
+ "erykWhere": [
+  "Z lądu, mówiłem. Z miasta nad rzeką. Nazwa nic ci nie powie.",
+  "Rodzina? (Eryk odkłada węgiel.) Była. Rysujmy."
+ ],
+ "erykNoGold": "Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.",
+ "erykCold": [
+  "(Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)"
+ ],
+ "erykWell": [
+  "Czego? (Eryk naciąga rękaw na nadgarstek.) Idź spać, chłopcze."
+ ],
+ "erykWellSeen": [
+  "> (Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko.)",
+  "> (Szybko opuszcza rękaw. Nie zauważył mnie.)"
+ ],
+ "jozek": [
+  "Eryk? Ten od portretów? (Józek drapie się po brodzie.) Ha! Toż on chodzi w moim płaszczu! Szarym, za dużym.",
+  "Po sztormie przyszedł do mnie mokry jak szczur. Kupił płaszcz i zapłacił dziwnym groszem. Z okiem zamiast korony. Mam go jeszcze, patrz.",
+  "> (Na monecie wybite jest otwarte oko. Takie samo jak na banderze wraku.)"
+ ],
+ "letter": "Kruk przyniósł list... nie do mnie. Szyfr i pieczęć z okiem. Na wierzchu tylko: „Do A.W.”",
+ "w12Open": [
+  "> Eryk. Albo raczej... Ansgar Wiel. Kartograf z „Białej Źrenicy”.",
+  "(Eryk odkłada węgiel. Długo patrzy na ciebie, potem rozgląda się dookoła.) Nie tutaj. Chodź.",
+  "> (Odchodzicie tam, gdzie nikt nie słucha.)",
+  "Skąd... Nieważne. Tak. Ansgar Wiel. Rysowałem ich mapy. Brzegi, mielizny, kamienie z krukiem. Wszystko, czego szukali.",
+  "Okręt rozbił się w sztormie. Dopłynąłem tylko ja. Kupiłem płaszcz od starego szmaciarza i zostałem kupcem bez sukna.",
+  "Boję się wszystkich. Waszego wojska. Waszego Lorda. A najbardziej moich, gdyby przypłynęli. Oni nie zostawiają świadków.",
+  "(Ansgar zerka na twój wisiorek.) A ty nosisz kruka na szyi. Wiesz w ogóle, co to znaczy?",
+  "...Co ze mną zrobisz?"
+ ],
+ "w12Given": [
+  "(Ansgar blednie.) ...Rozumiem. Każdy ma swoją wojnę. Ty wybrałeś swoją.",
+  "> (Wieczorem żołnierze z garnizonu wyprowadzają Eryka z tawerny. Skutego wsadzą na najbliższy prom.)"
+ ],
+ "w12Ally": [
+  "Dlaczego...? (Ansgar milknie.) Dobrze. Jestem ci winien życie.",
+  "Czytam ich szyfr jak ty czytasz pogodę. Przynieś mi kiedyś ich papiery - przeczytam bez żadnego mnicha.",
+  "I jeszcze jedno. Jeśli kiedyś po was przyjdą... wiem, którędy chodzą ich ludzie. Powiem ci, zanim przyjdą."
+ ],
+ "w12Fled": [
+  "Kuter... na ląd? Tam szukają mnie tak samo. Ale na lądzie łatwiej zniknąć niż na wyspie.",
+  "Masz. (Ansgar podaje ci zwinięty papier.) Moja własna mapa. Wszystkie kamienie z krukiem na tej wyspie, jakie znam.",
+  "I wiedz: oni nie szukają kamieni. Szukają tego, co kamienie pokazują. Drogi do Serca.",
+  "> (Tej nocy kuter Rocha odbija od pochylni bez latarni. Na dziobie siedzi chudy człowiek w za dużym szarym płaszczu.)"
+ ],
+ "w12Double": [
+  "(Ansgar uśmiecha się krzywo.) Fałszywą mapę... dla kupca, który skupuje kamienie? Mogę. Narysuję im takie miejsce, że będą kopać do zimy.",
+  "Masz. Atrament jeszcze mokry. Tylko uważaj: jeśli Baltazar to odkryje, nie przyjdzie sam."
+ ],
+ "w12Later": [
+  "Nie wiesz? (Ansgar śmieje się bez wesołości.) To ja też nie wiem, czy jutro tu jeszcze będę."
+ ],
+ "w12Sale": [
+  "> Mam mapę. Kamienie z krukiem na całej wyspie. Rysował ją ktoś, kto się zna.",
+  "(Baltazar długo ogląda papier pod światło.) ...Ładna robota. Za ładna. Sto groszy. I nie było cię tu."
+ ],
+ "stonesAsk": "> Znalazłem na wraku kamienie z krukiem. Pięć.",
+ "stonesCelnik": [
+  "Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć groszy za sztukę. Zapiszę uczciwie."
+ ],
+ "stonesCelnikOpt": [
+  "Oddaj je celnikowi (25 G).",
+  "Jeszcze nie."
+ ],
+ "stonesCelnikDone": [
+  "Zapisane. (Celnik wrzuca kamienie do skrzyni z pieczęcią Lorda.) Dwór pamięta przysługi."
+ ],
+ "stonesKupiec": [
+  "Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Piętnaście groszy za sztukę. Więcej nikt ci nie da. I nikomu ani słowa."
+ ],
+ "stonesKupiecOpt": [
+  "Sprzedaj je Baltazarowi (75 G).",
+  "Jeszcze nie."
+ ],
+ "stonesKupiecDone": [
+  "Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na klucz.) Zapamiętam cię."
+ ],
+ "stonesGrandpa": [
+  "(Dziadek długo obraca kamień w palcach.) Skąd to masz? ...Z tego okrętu. Tak myślałem.",
+  "Takie same leżały kiedyś na Urwisku. Schowaj je. Nie pokazuj nikomu, a już na pewno nie ludziom Lorda."
+ ],
+ "stonesGrandpaOpt": [
+  "Zatrzymam je.",
+  "Jeszcze pomyślę."
+ ],
+ "stonesKeep": [
+  "Dobrze. (Dziadek oddaje ci kamień.) Kiedyś ci powiem więcej. Kiedyś."
+ ],
+ "stonesPustelnik": [
+  "Kamienie posłańców. (Kleofas bierze jeden w chude palce.) Kruczarze nosili takie od Urwiska do każdej strażnicy. Znak, że list jest prawdziwy.",
+  "Nie oddawaj ich nikomu. Czarne Oczy szukają ich, bo nie wiedzą, czym są. Myślą, że to mapa."
+ ],
+ "stonesPustelnikOpt": [
+  "Zatrzymam je.",
+  "Jeszcze pomyślę."
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Wrak.js: TX)"
+}

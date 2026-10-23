@@ -85,7 +85,9 @@ const { launch, sleep } = require("./cdp.js");
         const from = await ev("$gamePlayer._realX");
         await press("left"); await frames(20);
         const stopped = await ev(`({ walk: !!($gameTemp._buildMode && $gameTemp._buildMode.walk), mode: !!$gameTemp._buildMode, built: !!Farming.buildingAt(${bx + 7}, ${by + 3}), move: $gamePlayer.canMove(), x: $gamePlayer._realX })`);
-        check("an arrow on the way stops the walk; the placer stays, nothing built", !stopped.walk && stopped.mode && !stopped.built && !stopped.move && stopped.x <= from + 0.01, { from, stopped });
+        await frames(20);
+        const later = await ev("$gamePlayer._realX");   // (2026-10-23: he stops - a step already begun may end a pixel on: then he stands)
+        check("an arrow on the way stops the walk; the placer stays, nothing built", !stopped.walk && stopped.mode && !stopped.built && !stopped.move && stopped.x <= from + 0.1 && Math.abs(later - stopped.x) < 0.01, { from, stopped, later });
         await press("cancel"); await frames(4);
         await ev(`$gameParty.loseItem($dataItems[80], 2); 0`);
 

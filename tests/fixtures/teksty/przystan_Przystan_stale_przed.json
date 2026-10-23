@@ -1,0 +1,17 @@
+{
+ "ludzie": {
+  "0": {
+   "name": "Przewoźnik promu"
+  },
+  "1": {
+   "name": "Człowiek z promu"
+  },
+  "2": {
+   "name": "Kobieta z promu"
+  },
+  "3": {
+   "name": "Matka (list)"
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Przystan.js: PEOPLE=ludzie:/^\\d+\\.name$/)"
+}

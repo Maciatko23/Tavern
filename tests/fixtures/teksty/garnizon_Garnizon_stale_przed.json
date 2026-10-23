@@ -1,0 +1,8 @@
+{
+ "rekruci": {
+  "bartek": "Bartek Kmieć",
+  "drwal": "Zbych Smolarz",
+  "uchodzca": "Darin z Kontynentu"
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Garnizon.js: RECRUIT_NAMES=rekruci)"
+}

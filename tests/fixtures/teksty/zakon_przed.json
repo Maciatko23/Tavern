@@ -1,0 +1,567 @@
+{
+ "karty": {
+  "0": {
+   "title": "Warta",
+   "note": "Cztery wieże na czterech drogach, a piąte oko to kruk. Z każdej wieży widać ogień sąsiedniej. Kiedy ogień gaśnie, kruk leci z listem do następnej. Tak strażnice zakonu pilnowały wyspy, zanim ktokolwiek dopłynął do brzegu. Z trzech wież na drogach widać ten sam krąg kamieni na łące.",
+   "read": [
+    "„Cztery wieże na czterech drogach, a piąte oko to kruk.”",
+    "„Z każdej wieży widać ogień sąsiedniej. Kiedy ogień gaśnie, kruk leci z listem do następnej.”",
+    "„Z trzech wież na drogach widać krąg kamieni na łące. Krąg pilnuje nas, a my kręgu.”"
+   ]
+  },
+  "1": {
+   "title": "Krąg",
+   "note": "Krąg kamieni na łące jest starszy niż zakon. Bracia warty składali przy nim przysięgę: patrzeć i nie pytać. Najwyższy kamień, poszarpany, stoi od północnego zachodu - nazwali go Strażnikiem.",
+   "read": [
+    "„Krąg na łące stał, zanim przyszliśmy. Nie my go postawiliśmy i nie nam go burzyć.”",
+    "„Przy kręgu brat warty składa przysięgę: patrzę i nie pytam.”",
+    "„Najwyższy kamień, poszarpany jak skała z gór, stoi od północnego zachodu. Zwiemy go Strażnikiem.”"
+   ]
+  },
+  "2": {
+   "title": "Godzina",
+   "note": "„Gdy słońce przejdzie cztery części swej drogi z pięciu, Strażnik wskaże ręką.” Kopać tam, gdzie padnie cień Strażnika - i tylko wtedy. Latem to późne popołudnie, zimą wcześniej, bo dzień krótszy. W deszcz cienia nie ma.",
+   "read": [
+    "„Gdy słońce przejdzie cztery części swej drogi z pięciu, Strażnik wskaże ręką.”",
+    "„Kop tam, gdzie padnie jego ręka, i tylko wtedy. Ziemia odda klucz temu, kto zna godzinę.”",
+    "(Kleofas:) Ręka to cień, chłopcze. Słońce idzie od wschodu do zachodu - cztery piąte drogi to późne popołudnie. Latem później, zimą wcześniej. I nie w deszcz."
+   ]
+  },
+  "3": {
+   "title": "Klucz",
+   "note": "Klucz do komory pod kręgiem wykuto z kamienia, nie z żelaza - żelazo rdzewieje, kamień czeka. Wyryto na nim kruka. Zakopano go w kręgu, w cieniu Strażnika, żeby znalazł go tylko ten, kto czyta zapiski strażnic.",
+   "read": [
+    "„Klucz wykuliśmy z kamienia, nie z żelaza. Żelazo rdzewieje, kamień czeka.”",
+    "„Na kluczu kruk, jak na płycie. Zakopaliśmy go w kręgu, w cieniu Strażnika.”",
+    "„Kto nie czytał tych słów, przejdzie po nim sto razy i nie znajdzie.”"
+   ]
+  },
+  "4": {
+   "title": "Komora",
+   "note": "Pod płytą z krukiem w środku kręgu jest komora. Leży w niej pierwszy strażnik warty, a na ścianie wykuto cztery wieże: trzy na drogach i czwartą na przylądku, skąd widać morze. Kto wejdzie, niech nie bierze niczego prócz tego, co mu zostawiono.",
+   "read": [
+    "„Pod płytą z krukiem jest komora. Śpi w niej pierwszy strażnik warty.”",
+    "„Na ścianie wykuliśmy cztery wieże: trzy na drogach i czwartą na przylądku, skąd widać morze.”",
+    "„Kto wejdzie, niech nie bierze niczego prócz tego, co mu zostawiono.”"
+   ]
+  },
+  "5": {
+   "title": "Ostatnia warta",
+   "note": "Roku sto szóstego wieże gasły jedna po drugiej. Bracia warty puścili kruki wolno i zeszli z wież. Ostatni wpis: „Gasimy ogień. Kto znajdzie te słowa, niech pamięta, czego strzegliśmy: nie pytaj o to, czego nie chcesz wiedzieć.”",
+   "read": [
+    "„Roku sto szóstego wieże gasły jedna po drugiej.”",
+    "„Kruki puściliśmy wolno. Ogień zgasimy sami, zanim zgaśnie od wiatru.”",
+    "„Kto znajdzie te słowa, niech pamięta, czego strzegliśmy: nie pytaj o to, czego nie chcesz wiedzieć.”",
+    "(Kleofas cicho:) Tak samo mawiał mój mistrz. I karczmarz Borgar, choć nie wie skąd."
+   ]
+  }
+ },
+ "tired": "Jesteś zbyt zmęczony",
+ "needShovel": "Potrzebujesz łopaty",
+ "towerLook": [
+  "> (Obmurówki dawnej wieży. Z kamieni sterczy jeszcze żelazny hak na pochodnię.)",
+  "> Płyta w środku zawaliła się do piwnicy. Wyryty kruk patrzy w niebo."
+ ],
+ "towerAsk": "Zajrzeć pod płytę?",
+ "towerTake": "Zajrzyj pod płytę.",
+ "towerLeave": "Zostaw.",
+ "towerEmpty": "Pod płytą pusto. Kartę już masz.",
+ "towersRing": [
+  "> Trzy wieże, trzy płyty z krukiem. Z każdej widać łąkę z kamiennym kręgiem. Strażnice patrzyły na krąg."
+ ],
+ "shrineAsk": "Kapliczka z krukiem przy drodze.",
+ "shrinePray": "Pomódl się.",
+ "shrineCoin": "Zostaw 1 G.",
+ "shrineFood": "Zostaw coś do jedzenia.",
+ "shrineLeave": "Odejdź.",
+ "prayed": "Błogosławieństwo drogi",
+ "prayedToday": "Już się tu dziś modliłeś",
+ "prayThink": [
+  "> (Słowa same przychodzą, choć nikt mnie ich nie uczył.)"
+ ],
+ "offerFull": "Błogosławieństwo i tak już trwa najdłużej, jak może",
+ "offerNeedPrayer": "Najpierw się pomódl",
+ "noCoin": "Nie masz ani grosza",
+ "noFood": "Nie masz nic do jedzenia",
+ "offeredToday": "Dziś już coś tu zostawiłeś",
+ "cairnAsk": "Kopiec z krukiem. Szczyt da się zdjąć rękami.",
+ "cairnTake": "Rozbierz szczyt.",
+ "cairnLeave": "Zostaw.",
+ "cairnDone": "Kopiec złożony z powrotem. Kartę już masz.",
+ "stoneLook": [
+  "> Stojący kamień, wyższy ode mnie. Ktoś go tu postawił, zanim powstał zakon."
+ ],
+ "watchmanLook": [
+  "> Strażnik. Najwyższy z kamieni, poszarpany jak skała z gór.",
+  "> Jego cień chodzi po kręgu jak wskazówka."
+ ],
+ "plateLook": [
+  "> Płaska płyta w środku kręgu. Wyryty kruk, a pod nim wąska szczelina - jak na klucz."
+ ],
+ "plateAsk": "Płyta z krukiem.",
+ "plateKey": "Włóż kamienny klucz.",
+ "plateDown": "Zejdź po schodach.",
+ "plateLeave": "Odejdź.",
+ "plateOpen": [
+  "> (Klucz wchodzi gładko, jakby szczelinę wykuto wczoraj. Coś zgrzyta pod ziemią.)",
+  "> Płyta zsuwa się na bok. Pod nią schody w ciemność."
+ ],
+ "plateNoKey": "Szczelina na klucz. Nie masz klucza",
+ "holeLook": "Ubita ziemia. Coś tu jest, ale nie teraz… Strażnik nie patrzy.",
+ "holeRain": "W deszczu nie ma cienia. Strażnik nie wskaże",
+ "holeDug": "Tu był klucz. Dołek już zarasta",
+ "keyFound": [
+  "> (Łopata stuka o kamień. W ziemi leży klucz - kamienny, z wyrytym krukiem.)",
+  "> Cień Strażnika pada dokładnie tutaj. Cztery części drogi z pięciu."
+ ],
+ "keyGot": "Klucz Strażnika",
+ "chamberFirst": [
+  "> (Chłód i zapach kamienia. Tu nikt nie oddychał od stuleci.)",
+  "> Komora pod menhirami. Bez pochodni nic tu nie zobaczę."
+ ],
+ "chamberDark": "Ciemno. Przydałaby się pochodnia",
+ "sarcLook": [
+  "> Sarkofag. Na wieku wykuto kruka z rozpostartymi skrzydłami i jedno słowo: STRAŻNIK.",
+  "> Pierwszy strażnik warty. Nie ruszam wieka."
+ ],
+ "basinLook": [
+  "> Kamienna misa na nóżce. Sucha. Na dnie wykuto oko - zamknięte."
+ ],
+ "basinWater": [
+  "> W misie trochę wody, która skapała z płyty po deszczu. Nie piję - to nie moja woda."
+ ],
+ "statueLook": [
+  "> Kamienny brat w kapturze. Ręce złożone, twarz odwrócona."
+ ],
+ "wallLook": [
+  "> Na ścianie wykuto wyspę. Cztery wieże: przy Polnej drodze, w Górach, nad morzem na Urwisku - i czwarta na przylądku, tam, gdzie dziś stoi latarnia.",
+  "> Między wieżami linie, a na nich ptaki: kruki. Z każdej wieży linia biegnie do kręgu na łące.",
+  "> Latarnia stoi na strażnicy zakonu. Bazyli by się zdziwił. Albo i nie."
+ ],
+ "chestFeather": [
+  "> (W skrzyni, owinięte w lnianą chustę, leży długie białe pióro w srebrnej oprawce.)",
+  "> Pióro Skrzydlatej Straży. „Kto wejdzie, niech nie bierze niczego prócz tego, co mu zostawiono.” Chyba zostawiono je mnie."
+ ],
+ "chestGold": [
+  "> (W skrzyni sakiewka ze starymi monetami z krukiem. I kartka: „Na drogę”.)"
+ ],
+ "chestEmpty": "Skrzynia pusta",
+ "downGo": "Zejdź na dół.",
+ "downStay": "Zostań.",
+ "downWarn": "Na górę nie wejdziesz bez orła",
+ "downThink": [
+  "> (Kołki trzeszczą, ale trzymają. Z powrotem tędy nie wejdę.)"
+ ],
+ "stashLook": [
+  "> (Skrzynia przykryta gałęziami. Na wieku wypalony znak: kotwica i oko.)"
+ ],
+ "stashTaken": "Skrzynia pusta. Ktoś ją już opróżnił - ty",
+ "stashLoot": "Skrzynia przemytników",
+ "nestLook": [
+  "> Stare gniazdo z gałęzi grubych jak ramię. Puste od lat."
+ ],
+ "nestEmpty": "W gnieździe pusto. Pióra przybędą",
+ "nestOrderLook": [
+  "> Gniazdo zakonnych orłów. Gałęzie splecione z drutem - ktoś je kiedyś naprawiał."
+ ],
+ "nestOrderFeather": [
+  "> (Między gałęziami, wbite w splot, tkwi pióro w srebrnej oprawce.)",
+  "> Pióro Skrzydlatej Straży. Jeździec zostawił je tu dla następnego."
+ ],
+ "herbLook": "Roślina w szczelinie skały",
+ "herbGone": "Zerwane. Odrośnie za kilka dni",
+ "ravenStoneLook": [
+  "> Kamień z wyrytym krukiem, zwrócony na wschód, ku Kręgowi. Kruczarze znaczyli tak swoje drogi.",
+  "> Tę drogę znaczył ktoś, kto latał."
+ ],
+ "campLook": [
+  "> Stare palenisko w kręgu kamieni. Popiół dawno zbity deszczem. Obok kość i strzęp płótna."
+ ],
+ "diveHerb": "Warzucha nadmorska",
+ "diveYoung": "Tylko dorosły orzeł zanurkuje tak nisko",
+ "diveTired": "Orzeł jest zbyt zmęczony",
+ "diveGone": "Tu już zerwane. Odrośnie",
+ "perchWater": "W misie deszczówka. To woda orłów - nie twoja",
+ "perchDry": "Misa sucha",
+ "stirrupGot": "Strzemię jeźdźca",
+ "traceTaken": "Tu leżało strzemię. Masz je w torbie",
+ "featherTaken": "Pióra już zebrane",
+ "saddleLook": [
+  "> Siodło z dwoma pasami na piersi, nie na brzuchu. Orle siodło. Skóra rozpada się w palcach."
+ ],
+ "graveLook": "Zwykły grób. Imienia nie da się już odczytać",
+ "graveRavenAsk": "Kamień z krukiem, zarośnięty mchem i błotem.",
+ "graveClean": "Oczyść kamień.",
+ "graveLeave": "Zostaw.",
+ "graveNames": {
+  "1": {
+   "name": "Brat Bogusław",
+   "line": "„Brat Bogusław, strażnik wieży przy drodze. Patrzył czterdzieści lat.”"
+  },
+  "2": {
+   "name": "Brat Żelisław",
+   "line": "„Brat Żelisław, kronikarz. Pióro po nim przejął uczeń.”"
+  },
+  "3": {
+   "name": "Brat Wit",
+   "line": "„Brat Wit, strażnik bramy, roku sto szóstego.” - roku upadku."
+  }
+ },
+ "graveAll": [
+  "> Trzy imiona braci zakonu. Przepisuję je na kartkę - Ambroży będzie wiedział, co z nimi zrobić."
+ ],
+ "lampLook": "Lampka na słupie. Grabarz zapala ją o zmierzchu",
+ "gallowsLook": [
+  "> Szubienica Lorda. Belka poczerniała od deszczu, pusty sznur kołysze się na wietrze.",
+  "> Tu dwór wiesza kłusowników i przemytników. Przy drodze, żeby każdy widział."
+ ],
+ "gallowsNight": [
+  "> (Belka skrzypi, choć nie ma wiatru.)"
+ ],
+ "groveFirst": [
+  "> (Cisza. Nawet ptaki tu nie śpiewają.)",
+  "> Gaj Milczących. Siedem białych kamieni w kręgu."
+ ],
+ "groveNotYet": "Milczący przychodzą tu o zmierzchu",
+ "groveStart": [
+  "> (Staję w środku kręgu. Nie mówię nic.)"
+ ],
+ "groveBroken": "Milczący odwracają głowy.",
+ "groveDone": [
+  "> (Godzina minęła. Przy jednym z kamieni leży biały kamyk, którego wcześniej tam nie było.)",
+  "> Wiedzieli za dużo, więc przestali mówić. Teraz rozumiem trochę, dlaczego."
+ ],
+ "groveDoneSub": "Spokój Milczących  ·  6 h",
+ "groveTodayBroken": "Dziś już złamałeś ciszę. Jutro o zmierzchu",
+ "groveStone": "Biały kamień milczenia. Zimny i gładki",
+ "ravenAsk": "Kruki na skale przyglądają ci się z ukosa.",
+ "ravenLeave": "Zostaw je.",
+ "ravenFedToday": "Dziś już je karmiłeś",
+ "ravenNoFood": "Kruki chcą ryby albo mięsa",
+ "ravenGift": "Kruk zostawia coś błyszczącego",
+ "wreckAsk": "Odkopać łopatą?",
+ "wreckDig": "Odkop.",
+ "wreckLeave": "Zostaw.",
+ "wreckHigh": "Przypływ. Piasek pod wodą",
+ "wreckShown": "Po sztormie piasek odsłonił coś na płyciźnie",
+ "digger": "Hieronim",
+ "mieszkaniec": {
+  "name": "Hieronim",
+  "title": "grabarz",
+  "barks": {
+   "work": [
+    "(Hieronim grabi liście z grobu.)",
+    "Ziemia tu twarda jak serce lichwiarza.",
+    "Tych z krukiem nie ruszam. Mój ojciec też nie ruszał.",
+    "(Hieronim prostuje plecy i stęka.)",
+    "Każdemu po równo: dwa łokcie wszerz, cztery wzdłuż."
+   ],
+   "stand": [
+    "Spokojnie tu. Najspokojniej w całym miasteczku.",
+    "Kto idzie? A, ty. Żywy, to dobrze."
+   ],
+   "wander": [
+    "(Hieronim poprawia krzyż, który się przechylił.)",
+    "Mech znowu wlazł na kamienie."
+   ],
+   "rain": [
+    "Deszcz. Ziemia miękka - dobrze się kopie, źle się chodzi."
+   ],
+   "night": [
+    "Po zmroku na cmentarz nie chodź. Nie przez duchy. Przez straż Lorda."
+   ]
+  },
+  "talk": {
+   "morning": [
+    "Rano się kopie, póki ziemia chłodna. Po południu już tylko się grabi.",
+    "Hieronim jestem. Grabarz. Mój ojciec był grabarzem i jego ojciec też. Kopiemy dla wszystkich, nikt nie kopie dla nas."
+   ],
+   "day": [
+    "Te trzy kamienie z krukiem? Starsze niż miasteczko. Ojciec mówił: to bracia z zamku, nie ruszaj, nie zamiataj, nie pytaj.",
+    "Szubienica przy wschodniej drodze to nie moja robota. Ja tylko potem kopię. Pod murem, bez krzyża.",
+    "Ludzie myślą, że grabarz to smutna robota. A ja ci powiem: umarli nie kłamią, nie piją na kredyt i nie kłócą się o miedzę."
+   ],
+   "evening": [
+    "Zapalę lampkę i do domu. Lampka musi się palić - tak było zawsze.",
+    "Kiedyś przy tych z krukiem ktoś zostawiał kwiaty. Od lat już nikt."
+   ],
+   "night": [
+    "Czego tu szukasz po nocy? Idź spać."
+   ],
+   "rain": [
+    "W deszcz lepiej nie kopać - woda zalewa dół szybciej, niż wyrzucisz ziemię."
+   ]
+  }
+ },
+ "zadania": {
+  "K67": {
+   "title": "Trzy kruki przy drogach",
+   "where": "kapliczki z krukiem: Polna droga, Leśna droga, Łąka",
+   "when": "od dnia 4, za dnia",
+   "desc": "Ambroży mówi, że przy drogach stoją kapliczki z krukiem i że jego mistrz kazał przy każdej się pomodlić, „to zrozumiesz, po co je stawiano”.",
+   "offer": {
+    "say": [
+     "Przy drogach za miastem stoją kapliczki z krukiem. Trzy. Mój mistrz chodził od jednej do drugiej co wiosnę.",
+     "Mówił: pomódl się przy każdej, a zrozumiesz, po co je stawiano. Ja już nie mam kolan na takie drogi."
+    ],
+    "yes": "Obejdę je za ciebie.",
+    "no": "Może kiedyś.",
+    "accept": [
+     "Przy Polnej drodze, przy Leśnej i na Łące, przy drodze w góry. Kruk pod daszkiem - nie pomylisz."
+    ],
+    "decline": [
+     "Kapliczki poczekają. Czekają od dawna."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Pomódl się przy trzech kapliczkach z krukiem: przy Polnej drodze, przy Leśnej drodze i na Łące ({n}/3)."
+    },
+    "1": {
+     "text": "Wróć do Ambrożego i powiedz mu, że kruki przy drogach są obejrzane.",
+     "say": [
+      "Wszystkie trzy? Mój mistrz mówił, że kruk przy drodze znaczył: w pobliżu jest woda albo schronienie zakonu.",
+      "Wody już tam nie ma, przynajmniej nie na wierzchu. Ale kto szuka, ten może jeszcze znaleźć. Uważnie, przy kamieniach i w mchu."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Trzy kruki przy drogach",
+     "Pomodliłem się przy trzech kapliczkach z krukiem. Ambroży mówi, że kruk przy drodze znaczył: w pobliżu jest woda albo schronienie zakonu. Wody nie widać na wierzchu - ale może jeszcze gdzieś bije, w mchu, pod kamieniem, w gąszczu."
+    ]
+   }
+  },
+  "K68": {
+   "title": "Zapiski strażnic",
+   "where": "kopce z krukiem i fundamenty strażnic → pustelnia na klifie",
+   "when": "po pierwszej znalezionej karcie Zapisków",
+   "desc": "Brat Kleofas rozpoznał kartę ze „Zapisków strażnic” - dziennika braci warty z czterech wież zakonu. Kart było sześć: trzy w kopcach z krukiem, trzy w fundamentach strażnic.",
+   "offer": {
+    "say": [
+     "Zapiski strażnic! Nie kroniki - dziennik warty. Bracia z wież pisali je prosto, jak żołnierze, bez szyfru.",
+     "Było ich sześć kart. Trzy schowali w kopcach z krukiem przy drogach, trzy pod płytami swoich wież. Mój mistrz szukał ich całe życie.",
+     "Przynieś mi je wszystkie. Przeczytam ci każdą - po jednej, bo oczy mam już stare."
+    ],
+    "yes": "Przyniosę wszystkie sześć.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Kopce stoją przy starych drogach: na Omszałej łące, na Skraju lasu i tu, nad klifem. Wieże... z wież zostały fundamenty. Szukaj płyt z krukiem."
+    ],
+    "decline": [
+     "Karty leżały trzysta lat. Poleżą jeszcze."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Znajdź wszystkie Zapiski strażnic: trzy w kopcach z krukiem (Omszała łąka, Skraj lasu, nad klifem pustelni) i trzy pod płytami strażnic (Polna droga, Góry, Urwisko) ({n}/6)."
+    },
+    "1": {
+     "text": "Daj bratu Kleofasowi przeczytać wszystkie Zapiski strażnic (przeczytane {r}/6; za dnia, w pustelni)."
+    }
+   },
+   "reward": {
+    "note": [
+     "Zapiski strażnic",
+     "Sześć kart dziennika braci warty. Cztery wieże pilnowały wyspy, kruki niosły listy, a krąg kamieni na łące był miejscem przysięgi: „patrzę i nie pytam”. W kręgu zakopano kamienny klucz do komory pod płytą z krukiem - tam, gdzie pada cień najwyższego kamienia, Strażnika, gdy słońce przejdzie cztery części swej drogi z pięciu."
+    ]
+   }
+  },
+  "D36": {
+   "title": "Cień Strażnika",
+   "where": "krąg menhirów (Łąka menhirów) → komora pod menhirami",
+   "when": "po Zapiskach strażnic albo przy płycie w kręgu",
+   "desc": "W kręgu menhirów na łące, w cieniu najwyższego kamienia, zakopano kamienny klucz. Pod płytą z krukiem jest komora pierwszego strażnika warty.",
+   "steps": {
+    "0": {
+     "text": "Dowiedz się, o której godzinie Strażnik „wskazuje ręką”: przeczytaj z Kleofasem Zapiski strażnic o godzinie i o kluczu ({n}/2) - albo patrz na cień najwyższego kamienia."
+    },
+    "1": {
+     "text": "Gdy słońce przejdzie cztery części swej drogi z pięciu, kop łopatą tam, gdzie padnie cień Strażnika (krąg menhirów, w ubitej ziemi). Nie w deszcz."
+    },
+    "2": {
+     "text": "Włóż Klucz Strażnika w płytę z krukiem w środku kręgu i zejdź do komory. Weź pochodnię."
+    },
+    "3": {
+     "text": "Obejrzyj ścianę z wykutymi wieżami w komorze pod menhirami."
+    }
+   },
+   "reward": {
+    "note": [
+     "Komora pod menhirami",
+     "Pod kręgiem menhirów leży pierwszy strażnik warty. Na ścianie jego komory wykuto cztery wieże zakonu: przy Polnej drodze, w Górach, nad morzem na Urwisku - i czwartą na przylądku, gdzie dziś stoi latarnia Bazylego. Z każdej linia biegnie do kręgu. Kruki niosły listy między wieżami, a krąg był sercem warty."
+    ]
+   }
+  },
+  "K69": {
+   "title": "Grzędy Straży",
+   "where": "Orla Grań → pustelnia na klifie",
+   "when": "po „Jaju z grani” (D29)",
+   "desc": "Na Orlej Grani stoją ruiny kamiennych grzęd Skrzydlatej Straży. Bazyli widział je z laterny: „trzy słupy jak palce”.",
+   "offer": {
+    "say": [
+     "Z laterny widać grań. Kiedy mgła opada, stoją tam trzy słupy jak palce. Grzędy - tak mówił mój poprzednik.",
+     "Skrzydlata Straż sadzała na nich orły. Byłeś tam, jajo przyniosłeś. Obejrzyj te słupy porządnie. I przynieś Kleofasowi, co znajdziesz - on to zapisze."
+    ],
+    "yes": "Obejrzę je.",
+    "no": "Innym razem.",
+    "accept": [
+     "Trzy grzędy: północna, środkowa i ta nad urwiskiem. Uważaj na krawędź."
+    ],
+    "decline": [
+     "Słupy stały trzysta lat. Postoją."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Obejrzyj trzy grzędy Skrzydlatej Straży na Orlej Grani ({n}/3)."
+    },
+    "1": {
+     "text": "Zanieś bratu Kleofasowi strzemię spod grzędy.",
+     "hero": [
+      "> Bracie, spod grzędy na Orlej Grani. Za lekkie na konia."
+     ],
+     "done": [
+      "(Kleofas obraca strzemię w palcach.) Orle siodło. Jeździec siedział za skrzydłami, nogi w strzemionach pod szyją ptaka.",
+      "W Księdze gniazd jest jedno zdanie, które zawsze mi się podobało: „jeźdźca nosił tylko orzeł, który sam go wybrał”. Konia się kupuje. Orła - nie."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Grzędy Straży",
+     "Trzy grzędy Skrzydlatej Straży na Orlej Grani: kamienne słupy z żelazną poprzeczką i misą na deszczówkę. Pod nimi strzemię i orle siodło. Kleofas czytał z Księgi gniazd: „jeźdźca nosił tylko orzeł, który sam go wybrał”."
+    ]
+   }
+  },
+  "K70": {
+   "title": "Kawałki wraku",
+   "where": "wrak na mieliźnie (płycizny, w odpływie)",
+   "when": "po sztormie, gdy piasek odsłoni pierwszy kawałek",
+   "desc": "Sztormy wymywają z płycizn przy wraku „Białej Źrenicy” kolejne kawałki okrętu. Widać je tylko w odpływie.",
+   "offer": {
+    "say": [
+     "(Eryk odkłada węgiel do rysowania i mówi ciszej.) Słyszałem rybaków. Po sztormie z piasku przy mieliźnie coś wystaje.",
+     "Gdyby ktoś to odkopał... Nie chcę niczego dla siebie. Chcę tylko wiedzieć, co z niej zostało."
+    ],
+    "yes": "Odkopię, co się da.",
+    "no": "Nie moja sprawa.",
+    "accept": [
+     "W odpływie. Tylko w odpływie - przypływ tam przychodzi szybciej, niż myślisz."
+    ],
+    "decline": [
+     "Rozumiem. Morze i tak wszystko zabierze."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Odkop łopatą kawałki wraku na płyciznach przy mieliźnie - w odpływie, po każdym sztormie piasek odsłania kolejny ({n}/3)."
+    }
+   },
+   "reward": {
+    "note": [
+     "Kawałki wraku",
+     "Z płycizn przy „Białej Źrenicy” odkopałem okucia kadłuba, deskę z nazwą okrętu i skrzynkę kapitańską. Deska mówi wprost: BIAŁA ŹRENICA - STRAŻ PEWNOŚCI. Kto zna ten okręt, zna Czarne Oczy."
+    ]
+   }
+  },
+  "D37": {
+   "title": "Groby z krukiem",
+   "where": "stary cmentarz za miasteczkiem → dzwonnica",
+   "when": "od dnia 6, za dnia",
+   "desc": "Na starym cmentarzu za miasteczkiem są trzy kamienie z krukiem. Ambroży chce znać imiona, które pod mchem zarosły.",
+   "offer": {
+    "say": [
+     "Na starym cmentarzu, za miasteczkiem, leżą bracia z zamku. Trzy kamienie z krukiem. Mech je zjadł.",
+     "Mój mistrz znał ich imiona na pamięć. Ja zapomniałem. Wstyd mi. Oczyść te kamienie i przepisz, co na nich stoi."
+    ],
+    "yes": "Oczyszczę je.",
+    "no": "Nie dziś.",
+    "accept": [
+     "Grabarz Hieronim cię wpuści. On ich nie rusza - jego ojciec też nie ruszał. Ale tobie pozwoli."
+    ],
+    "decline": [
+     "Mech poczeka. Zawsze czeka."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Oczyść trzy kamienie z krukiem na starym cmentarzu i odczytaj imiona ({n}/3)."
+    },
+    "1": {
+     "text": "Zanieś Ambrożemu imiona z grobów z krukiem.",
+     "hero": [
+      "> Bogusław, strażnik wieży. Żelisław, kronikarz. I Wit, strażnik bramy - roku sto szóstego."
+     ],
+     "done": [
+      "(Ambroży powtarza imiona bezgłośnie.) Wit... Pamiętam. Mistrz dzwonił za nich co roku. Cztery i jeden.",
+      "Cztery straże i ten piąty, który niesie słowo. Tak się dzwoniło na pogrzeb brata. Dziś zadzwonię znowu. Pierwszy raz od czterdziestu lat."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Groby z krukiem",
+     "Na starym cmentarzu leżą bracia zakonu: Bogusław, strażnik wieży przy drodze; Żelisław, kronikarz; Wit, strażnik bramy, który zginął w roku upadku. Ambroży mówi, że za braci dzwoniło się „cztery i jeden”: cztery straże i piąty, który niesie słowo."
+    ]
+   }
+  },
+  "D38": {
+   "title": "Godzina milczenia",
+   "where": "gaj Milczących (za Osadą Milczących)",
+   "when": "Akt II, o zmierzchu",
+   "desc": "Milczący przychodzą do gaju o zmierzchu i stoją godzinę bez słowa w kręgu białych kamieni. Kto wytrzyma z nimi, coś zrozumie.",
+   "steps": {
+    "0": {
+     "text": "O zmierzchu stań w środku kręgu białych kamieni i wytrzymaj godzinę bez ruchu poza krąg, bez biegu, z bronią schowaną, bez rozmowy."
+    }
+   },
+   "reward": {
+    "note": [
+     "Godzina milczenia",
+     "Stałem godzinę w gaju Milczących, w kręgu białych kamieni. Milczący odeszli od ludzi, bo wiedzieli za dużo: dotknęli prawdy, której nie da się nosić i mówić naraz. Przy kamieniu został dla mnie biały kamyk."
+    ]
+   }
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Ambroży dzwonił wczoraj „cztery i jeden”. Pół miasta pytało, kto umarł. A on tylko: „Bracia”. Stary dziwak."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Słyszałem ten dzwon. Mój dziad mówił, że tak dzwoniono, kiedy chowano kogoś z zamku. Myślałem, że to bajka."
+   ]
+  },
+  "2": {
+   "lines": [
+    "Pierwszy strażnik warty... Mistrz mówił, że on wciąż patrzy. Że dlatego krąg stoi. Wierzę mu, choć już nie wiem w co."
+   ]
+  },
+  "3": {
+   "lines": [
+    "(Eryk patrzy na swoje dłonie.) Deska z nazwą. Myślałem, że morze ją zabrało. Morze nie bierze tego, co ma wrócić."
+   ]
+  },
+  "4": {
+   "lines": [
+    "Byłeś u Milczących w gaju? I wróciłeś taki... cichy. Nie podoba mi się to."
+   ]
+  }
+ },
+ "plotki": {
+  "dzwonnik": [
+   "Kapliczki z krukiem przy drogach? Mój mistrz mówił, że kruk znaczył wodę albo schronienie. Dziś już ani jednego, ani drugiego."
+  ],
+  "grabarz": [
+   "Tych trzech z krukiem nikt nie odwiedza. Ja tylko kosę obok przeciągnę."
+  ]
+ },
+ "epilog": {
+  "chamber": "Pod płytą z krukiem na Łące menhirów śpi pierwszy strażnik warty. Ściana z czterema wieżami pamięta, gdzie stały - teraz pamiętasz i ty.",
+  "grove": "W gaju Milczących siedem białych kamieni stoi jak stało. O zmierzchu ktoś tam zawsze milczy przez godzinę - czasem ty."
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Zakon_Data.js: CARDS=karty:/\\.(title|note|read)$/, TX, RESIDENT=mieszkaniec:/^(name|title)$|^(barks|talk)\\./, K67=zadania.K67:zadanie, K68=zadania.K68:zadanie, D36=zadania.D36:zadanie, K69=zadania.K69:zadanie, K70=zadania.K70:zadanie, D37=zadania.D37:zadanie, D38=zadania.D38:zadanie, REMARKS=uwagi:/\\.lines$/, GOSSIP=plotki:zostaw, EPILOG=epilog)"
+}

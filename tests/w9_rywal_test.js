@@ -15,7 +15,7 @@
 const fs = require("fs");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
-if (!/"name":"Rywal"/.test(fs.readFileSync(path.join(ROOT, "js", "plugins.js"), "utf8")) && !process.env.GAME_PLUGINS_ADD) process.env.GAME_PLUGINS_ADD = "Kantor:Rywal_Data;Rywal_Data:Rywal";
+if (!/"name":"Rywal"/.test(require("./lib/wtyczki.js").tekst()) && !process.env.GAME_PLUGINS_ADD) process.env.GAME_PLUGINS_ADD = "Kantor:Rywal_Data;Rywal_Data:Rywal";
 const kit = require("./lib/kit.js");
 const DOCS = path.join(ROOT, "docs", "w9_rywal");
 

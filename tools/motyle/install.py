@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Motyle: przedmioty 180 Siatka na motyle i 181 Rysunek Eli (data/Items.json) oraz wpisy Motyle_Data + Motyle w js/plugins.js
-(zaraz pod Birds). Każdy krok osobno - przed każdym zapisem sprawdź osobnym poleceniem, że edytor RPG Maker jest zamknięty
+"""Motyle: przedmioty 180 Siatka na motyle i 181 Rysunek Eli (data/Items.json) oraz wpisy Motyle_Data + Motyle na liście gry
+js/tawerna_wtyczki.js (zaraz pod Birds; do 2026-10-23 w js/plugins.js). Każdy krok osobno - przed każdym zapisem sprawdź osobnym poleceniem, że edytor RPG Maker jest zamknięty
 (tasklist), nigdy w jednym łańcuchu z zapisem.
 
   python tools/motyle/install.py --stage     pliki do tools/motyle/staging/ (+ ZMIANY.txt z SHA256 oryginałów), nic w grze
   python tools/motyle/install.py --items     zapis data/Items.json   (kopia w backup_art_2026-10-18/motyle/)
-  python tools/motyle/install.py --plugins   zapis js/plugins.js     (kopia w backup_art_2026-10-18/motyle/)
+  python tools/motyle/install.py --plugins   zapis js/tawerna_wtyczki.js (kopia w backup_art_2026-10-18/motyle/; edytor może być otwarty)
 
 Nic nie nadpisuje: id 180/181 muszą być wolne (albo już te same), wpis wtyczki - nieobecny (albo już ten sam). Końcówki linii zostają.
 """
@@ -15,7 +15,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 STAGE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "staging")
 BACKUP = os.path.join(ROOT, "backup_art_2026-10-18", "motyle")
 ITEMS = os.path.join(ROOT, "data", "Items.json")
-PLUGINS = os.path.join(ROOT, "js", "plugins.js")
+PLUGINS = os.path.join(ROOT, "js", "tawerna_wtyczki.js")   # (the game's plugin list)
 
 
 def item(i, name, icon, desc, note):
@@ -69,7 +69,7 @@ def plugins_text(raw, crlf):
             if p["name"] in names:
                 cur = json.loads(lines[names.index(p["name"])].rstrip(","))
                 if cur != p:
-                    print("plugins.js: wpis %s jest już (inny) - zostawiam" % p["name"])
+                    print("lista gry: wpis %s jest już (inny) - zostawiam" % p["name"])
         return None
     at = names.index("Birds")
     add = [json.dumps(p, ensure_ascii=False, separators=(",", ":")) + "," for p in NEW_PLUGINS]
@@ -95,11 +95,11 @@ def main():
         praw, pcrlf = read_text(PLUGINS)
         pt = plugins_text(praw, pcrlf)
         if pt:
-            open(os.path.join(STAGE, "js", "plugins.js"), "wb").write(pt)
+            open(os.path.join(STAGE, "js", "tawerna_wtyczki.js"), "wb").write(pt)
         with open(os.path.join(STAGE, "ZMIANY.txt"), "w", encoding="utf8", newline="\n") as f:
             f.write("Motyle - pliki do skopiowania przy zamkniętym edytorze RPG Maker\n")
             f.write("data/Items.json  oryginał sha256 %s  (dochodzą 180 Siatka na motyle, 181 Rysunek Eli)\n" % sha(ITEMS))
-            f.write("js/plugins.js    oryginał sha256 %s  (Motyle_Data i Motyle zaraz pod Birds)\n" % sha(PLUGINS))
+            f.write("js/tawerna_wtyczki.js  oryginał sha256 %s  (Motyle_Data i Motyle zaraz pod Birds)\n" % sha(PLUGINS))
         print("staging ok:", STAGE)
     elif mode == "--items":
         raw, crlf = read_text(ITEMS)
@@ -113,10 +113,10 @@ def main():
         raw, crlf = read_text(PLUGINS)
         new = plugins_text(raw, crlf)
         if not new:
-            print("plugins.js: już jest"); return
+            print("lista gry: już jest"); return
         backup(PLUGINS)
         open(PLUGINS, "wb").write(new)
-        print("plugins.js zapisany (Motyle_Data, Motyle pod Birds)")
+        print("lista gry js/tawerna_wtyczki.js zapisana (Motyle_Data, Motyle pod Birds)")
     else:
         sys.exit(__doc__)
 

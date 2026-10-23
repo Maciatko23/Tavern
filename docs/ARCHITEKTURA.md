@@ -1,6 +1,8 @@
 # Architektura gry „Tawerna” (wtyczki RPG Maker MZ)
 
 Stan: 2026-09-29, etap 3 porządków („żeby to było ładne, czytelne, proste do rozszerzenia”).
+**Od 2026-10-23 wtyczki ładują się z listy gry `js/tawerna_wtyczki.js`** (ładowacz `js/plugins/TawernaLoader.js` z `index.html`);
+`js/plugins.js` (edytor) trzyma tylko ładowacz i trzy obce wtyczki z parametrami z edytora. Nowa wtyczka = wiersz na liście gry - sekcja 2.0.
 Kod: 76 wtyczek w `js/plugins.js` (71 naszych), ok. 52 800 linii (48 400 naszych). Rdzeń: **TawernaCore.js** i **TawernaUI.js**
 (zestaw interfejsu). Przeniesione na rdzeń jako wzorce w etapie 2: **HomeDecor.js**, **HomeAmbience.js**, **HomeLife.js**.
 Etap 3, partia A (2026-09-29): zakładka F9 „Rdzeń”, znaczniki notatki mapy przez `Tawerna.mapFlag/mapTag` (18 wtyczek), dymki
@@ -77,7 +79,82 @@ klucze `_needs`, `_wear` (a `_hunt` i `_forest` przez alias).
 
 ## 2. Kolejność wtyczek
 
-Lista w `js/plugins.js` (82 wtyczek w tym zestawieniu; dziś 141, wszystkie włączone; numer = miejsce na liście):
+### 2.0 Skąd gra bierze wtyczki (od 2026-10-23): lista gry i ładowacz
+
+Edytor RPG Maker MZ przy każdym zapisie projektu pisze `js/plugins.js` od nowa - z listy, którą wczytał przy otwarciu
+projektu. Wtyczka dopisana do tego pliku przy otwartym edytorze znikała. Dlatego wtyczki gry stoją teraz na **liście gry**:
+
+- **`js/tawerna_wtyczki.js`** - wszystkie wtyczki gry (148 w dniu przejścia), w kolejności ładowania, z parametrami; jeden wpis
+  w wierszu, ten sam układ co `js/plugins.js` (`var $tawernaWtyczki =` + tablica wpisów `{name, status, description, parameters}`).
+  Edytor tego pliku nie zna i go nie zapisuje.
+- **`js/plugins/TawernaLoader.js`** (ładowacz) - wczytuje go `index.html`: dwa wiersze nad `js/main.js` (najpierw lista, potem
+  ładowacz). Zanim `main.js` wczyta silnik i `js/plugins.js`, ładowacz zamienia `window.$plugins` w akcesor: `var $plugins = ...`
+  z `js/plugins.js` przechodzi przez jego setter i wychodzi scalone z listą gry. Dalej wszystko po staremu: `main.js` woła
+  `PluginManager.setup($plugins)`, silnik wstawia skrypty po kolei (`async = false`), każdy wykonuje się przed `load` okna, czyli
+  przed `Scene_Boot` i `DataManager`; brak pliku wtyczki = „Failed to load: js/plugins/X.js” przy starcie;
+  `PluginManager.parameters(nazwa)` i `window.$plugins` jak dawniej (każda wtyczka raz, w kolejności listy; ładowacz stoi w `$plugins`
+  pierwszy, `PluginManager.setup` go pomija - już działa). Haki testów na `$plugins` (REGISTERED=1, `GAME_PLUGINS_ADD`) dostają
+  scaloną listę, tak jak dawniej cały `js/plugins.js`. `TawernaLoader.info()` mówi, jak poszło (tryb, wpisy tylko z edytora,
+  parametry z edytora).
+- **Edytor nie zmienia `index.html` ani `js/main.js`**: przy zapisie podmienia w `index.html` tylko tytuł (sprawdzone w RPGMZ.exe:
+  wyrażenie `(<title>)[^<]*(</title>)`), a `main.js` tylko czyta (numer wersji). `js/main.js` i `rmmz_*.js` zostają takie jak z RPG
+  Maker MZ. Przy podmianie plików silnika z nowej wersji RPG Maker (folder `newdata`) **nie** nadpisywać `index.html` (albo dopisać
+  te dwa wiersze na nowo).
+
+Zasady scalania (`TawernaLoader.js`; druga ręka w `tests/lib/wtyczki.js`, sprawdza je `tests/ladowacz_test.js`):
+
+1. Kolejność = lista gry; każda wtyczka raz (drugi wpis tej samej nazwy - na liście albo w `js/plugins.js` - pominięty).
+2. Wtyczka, która stoi i na liście, i w `js/plugins.js`, bierze z edytora włączenie i parametry - **parametr po parametrze**
+   (czego wpis edytora nie ma, zostaje z listy). Wyłączona w edytorze = wyłączona w grze.
+3. Wtyczka tylko w `js/plugins.js` (np. obca dodana w Menedżerze wtyczek): stoi nad wpisem TawernaLoader - wczytuje się przed listą
+   gry, pod nim - po liście. `js/plugins.js` bez wpisu TawernaLoader (stary zapis edytora) - każda zaraz za wtyczką, która stoi nad
+   nią w `js/plugins.js`.
+4. Zapasowe wejście: gdyby `index.html` stracił te dwa wiersze, wpis TawernaLoader w `js/plugins.js` wczyta ładowacz jak zwykłą
+   wtyczkę; ten doczyta listę i dołoży resztę (każdą raz, wszystkie przed `Scene_Boot`), ale **po** wtyczkach z `js/plugins.js` -
+   kolejność tylko przybliżona, w konsoli ostrzeżenie. Wtedy przywrócić dwa wiersze w `index.html`.
+5. Brak listy gry (plik zniknął albo ma błąd składni): przy starcie ekran błędu silnika „Failed to load: js/tawerna_wtyczki.js”.
+
+**Co jest w `js/plugins.js`** (to widać w Menedżerze wtyczek edytora): `TawernaLoader` (pierwszy; nie wyłączać i nie usuwać - to
+zapasowe wejście) oraz `ActorPictures`, `OptionEx`, `HDLayout` - obce wtyczki, których parametry ustawia się w edytorze (OptionEx:
+domyślna głośność i polskie nazwy opcji - zmieniane 2026-09-26; ActorPictures: obrazki aktorów; HDLayout: układ okien). Te trzy
+stoją też na liście gry (ich miejsce w kolejności), a parametry z edytora mają pierwszeństwo. Nasze wtyczki mają parametry stałe
+albo domyślne - są tylko na liście gry. Zmiana parametru naszej wtyczki = zmiana wiersza na liście gry (albo dodać tę wtyczkę
+w Menedżerze wtyczek i ustawić tam - wtedy wygrywa edytor, `--sprawdz` to pokaże).
+
+**Nowa wtyczka** (edytor może być otwarty): plik `js/plugins/Nazwa.js` (nagłówek z `@plugindesc`), potem wiersz na liście gry:
+
+```
+python tools/wtyczki.py --dodaj Nazwa --po Poprzednia            podgląd (opis z @plugindesc, parametry z @default)
+python tools/wtyczki.py --dodaj Nazwa --po Poprzednia --wykonaj  zapis (albo --przed Następna; bez --po/--przed: na koniec)
+python tools/wtyczki.py --sprawdz                                kontrola: pliki, podwójne wpisy, index.html, js/plugins.js
+python tools/wtyczki.py                                          lista z numerami (E = stoi też w js/plugins.js)
+```
+
+Bez `js/plugins.js`, bez zamykania edytora, bez Menedżera wtyczek; gra i testy widzą wtyczkę od następnego startu. Instalatory
+w `tools/*` (w5, w7, w9_rywal, orzel, motyle, przystan, domy, rozszerzenia, miejsca_wyspy, kruczy_jar) piszą już listę gry. Z Pythona:
+`tools/wtyczki.py` jako moduł (`czytaj_liste`, `wpis_z_pliku`, `dodaj`, `Plik.zapisz`); z Node: `tests/lib/wtyczki.js` (`lista()`,
+`edytor()`, `merge()`, `nazwy()`, `tekst()`).
+
+**Gdy edytor zapisze `js/plugins.js` po swojemu:**
+- ze starą, długą listą (edytor otwarty sprzed przejścia na ładowacz): gra działa (każda wtyczka raz, w kolejności listy), ale
+  parametry z tego zapisu mają pierwszeństwo przed listą; `python tools/wtyczki.py --sprawdz` to pokaże, a przy zamkniętym edytorze
+  `python tools/wtyczki.py --plugins-js --wykonaj` przywraca krótki `js/plugins.js` (kopia poprzedniego do
+  `Tawerna_archiwum_2026-10-18/dane_przed_ladowaczem/`);
+- z samym ładowaczem albo bez którejś z trzech obcych: gra działa, ich parametry z listy gry.
+
+Obcą wtyczkę dodaną w edytorze można przenieść na listę: `python tools/wtyczki.py --przenies --wykonaj` (trafia tam, gdzie gra i tak
+ją wczytuje).
+
+**Wdrażanie** (Plik → Wdrażanie): katalog `js/` idzie do paczki w całości - „Wyklucz nieużywane pliki” dotyczy tylko `img/`, `audio/`
+i `effects/` (pomoc RPG Maker MZ, rozdział o wdrażaniu: 01_11_03), więc lista gry, ładowacz i wszystkie wtyczki są w paczce; `index.html`
+też (edytor zmienia w nim tylko tytuł). Uwaga: „Wyklucz nieużywane pliki” liczy grafiki i dźwięki z bazy danych, map i parametrów
+wtyczek z `js/plugins.js` - pliki, które nasze wtyczki biorą z kodu (prawie wszystkie obrazki i dźwięki) albo z parametrów na liście
+gry, uznałby za nieużywane i wyrzucił. Wdrażać **bez** tej opcji (tak samo było przed ładowaczem). Po wdrożeniu uruchomić grę z paczki
+raz (tytuł + mapa).
+
+### 2.1 Lista
+
+Lista gry `js/tawerna_wtyczki.js` (do 2026-10-23 `js/plugins.js`; 82 wtyczek w tym zestawieniu; dziś 148, wszystkie włączone; numer = miejsce na liście; w `$plugins` stoi przed nią jeszcze TawernaLoader):
 
 ```
  0  TawernaCore                ← pierwsza, nad wszystkim
@@ -109,7 +186,7 @@ Lista w `js/plugins.js` (82 wtyczek w tym zestawieniu; dziś 141, wszystkie wł�
 134 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
 ```
 
-**Wtyczki nowego terenu (2026-10-22):** każda paczka ma swoje zdarzenia (`Tawerna.inject`, rejestr w §6), mieszkańców TownLife z drugiego zakresu 2900–2949, przedmioty (A 185–199, B 200–209, C 210–224, D 225–239), ikony (wiersze 29–32 IconSet: 464–527), stan w zapisie (`okolice`, `zasoby`, `lowy`, `ludzie`, `zakon`) i test (`okolice_szkielet_test` 9550, `zasoby_test` 9551, `lowy_test` 9552, `ludzie_test` 9553, `zakon_test` 9554). Mapy 176 (komora pod menhirami, D) i 177 (jaskinia przemytników, C). Szyna: `okoliceDiscover`, `zakonGrove`. Epilog po Sercu pyta `Zasoby/Lowy/Ludzie/Zakon.epilogue(kind, w)` (linijka albo lista). Instalator danych: `tools/rozszerzenia/instaluj.py`, opisy w plugins.js: `tools/rozszerzenia/opisy_wtyczek.py`.
+**Wtyczki nowego terenu (2026-10-22):** każda paczka ma swoje zdarzenia (`Tawerna.inject`, rejestr w §6), mieszkańców TownLife z drugiego zakresu 2900–2949, przedmioty (A 185–199, B 200–209, C 210–224, D 225–239), ikony (wiersze 29–32 IconSet: 464–527), stan w zapisie (`okolice`, `zasoby`, `lowy`, `ludzie`, `zakon`) i test (`okolice_szkielet_test` 9550, `zasoby_test` 9551, `lowy_test` 9552, `ludzie_test` 9553, `zakon_test` 9554). Mapy 176 (komora pod menhirami, D) i 177 (jaskinia przemytników, C). Szyna: `okoliceDiscover`, `zakonGrove`. Epilog po Sercu pyta `Zasoby/Lowy/Ludzie/Zakon.epilogue(kind, w)` (linijka albo lista). Instalator danych: `tools/rozszerzenia/instaluj.py`, opisy na liście gry: `tools/rozszerzenia/opisy_wtyczek.py`.
 
 ButtonPicture.js i TextPicture.js (obce) leżą w `js/plugins`, ale nie są na liście. Części Combat i Hunting (partie C3, D2) wpisane
 2026-09-29: `Combat_Fight`, `Combat_UI` zaraz pod Combat; `Hunting_Path`, `Hunting_AI`, `Hunting_Weapons` zaraz pod Hunting (przed Birds).
@@ -180,8 +257,8 @@ Reguły:
    Odwołania w trakcie gry idą przez `Tawerna.api/call` - kolejność ich nie dotyczy.
 5. **Nazwy plików się nie zmieniają** (edytor trzyma po nich parametry). Podział dużej wtyczki = nowy plik obok
    (`Nazwa_Render.js`, `Nazwa_Data.js`, `Nazwa_UI.js`), stara nazwa zostaje.
-6. **Edytor:** nowy plik dopisuj z zamkniętym edytorem, potem raz otwórz Menedżer wtyczek i zapisz (inaczej edytor wyrzuci
-   wpis). Po zmianach w `data/*.json` - przeładuj projekt w edytorze.
+6. **Nowa wtyczka = wiersz na liście gry** `js/tawerna_wtyczki.js` (`python tools/wtyczki.py --dodaj Nazwa --po Poprzednia --wykonaj`,
+   sekcja 2.0) - edytor może być otwarty, `js/plugins.js` się nie rusza. Po zmianach w `data/*.json` - przeładuj projekt w edytorze.
 
 ---
 
@@ -510,6 +587,7 @@ starymi wyrażeniami i nowymi wywołaniami: te same wartości.
 | `<Polish:off>` | off | CharacterPolish, GroundDetail | bez cieni / kępek trawy |
 | `<Clock:off>`, `<Stamina:off>` | off | SurvivalHUD | bez zegara / paska sił |
 | `<HomeAmbience>` | - | HomeAmbience | klimat domu na tej mapie |
+| `<NazwaMapy:słowo>` | wnetrze / miejsce / off | CleanHUD | nazwa mapy „Kronika” przy wejściu: mała (wnętrze) albo pełna mimo zestawu kafli; `off` - bez nazwy (bez tagu: wnętrze według profilu Atmosphere) |
 
 ### 8.2 Zdarzenia (notatka / komentarze strony)
 
@@ -812,6 +890,7 @@ TavernLife_Plan).
 | drzewka umiejętności | `js/plugins/Skills_Data.js` | ręcznie |
 | bloki generowane w wtyczkach | `// <decor-data>` w HomeDecor (tools/house/decor/make_decor.py), `PLAN_DATA` w TavernLife (tools/tavern/plan/make_plan.py) | tylko generator - nie edytować ręcznie |
 | teksty w grze | tablice na górze wtyczki (`LINES`, `EARNED_NOTE`, przepisy), rozmowy przez `\SPK[n]` | ręcznie, po polsku |
+| teksty wątków (od 2026-10-23) | `js/teksty/<nazwa>.txt` (format: `docs/WATKI_DANE.md` 3; czyta `Watki.teksty`, przy starcie razem z `data/`) | ręcznie, po polsku; `node tools/teksty.js sprawdz` |
 | grafiki | `img/characters` (`!House_Decor`...), `img/pictures` (`*_Bust`), `img/system` (`QuestBoard_*`, Window.png) | PixelLab + narzędzia |
 | czcionki | `fonts/` (Alegreya Sans, Alegreya SC, Caveat + licencje OFL) | - |
 
@@ -826,11 +905,13 @@ tekstów w środku logiki; zapis plików z Pythona zawsze binarnie, z zachowanie
    działa bez zmian obok nowego).
 2. **Potem wtyczka po wtyczce** (lista niżej), **nigdy wszystko naraz**. Jeden krok = jedna wtyczka (albo ciasna grupa).
 3. **Po każdym kroku testy na zielono**: testy tej wtyczki, `core_test.js`, `core_fixtures_test.js` i `core_fixtures_b2_test.js`
-   (stare zapisy), `node tests/run.js smoke`, `node tests/run.js unit`. Kilka wątków naraz: każdy na swoim porcie (`--port`; przy
+   (stare zapisy), `node tests/run.js smoke`, `node tests/run.js unit`. Od 2026-10-23 zwykle wystarczy
+   `node tests/run.js zmiany --od znacznik` (znacznik na początku pracy: `node tests/run.js znacznik`) - unit i testy, które według
+   zmierzonej mapy (`tests/mapa_testow.json`) wykonują zmienione funkcje, z smoke, gdy zmiana jest w kodzie każdej gry (`docs/TESTY.md`). Kilka wątków naraz: każdy na swoim porcie (`--port`; przy
    porcie innym niż 9396 wyniki idą do `tests/out_<nazwa>_p<port>.txt` - `docs/TESTY.md`); przy pełnym obciążeniu procesora
    strona gry potrafi wczytać się w połowie (losowe „brak X.js”, `SceneManager is not defined`, przekroczony czas) - wtedy
    powtórzyć test, zanim się go uzna za zepsuty.
-4. **Nazwy wtyczek bez zmian** (edytor trzyma parametry po nazwie), parametry bez zmian, API `window.Nazwa` bez zmian
+4. **Nazwy wtyczek bez zmian** (lista gry i edytor trzymają parametry po nazwie), parametry bez zmian, API `window.Nazwa` bez zmian
    (testy i inne wtyczki go używają) - najwyżej dochodzą nowe rzeczy.
 
 Przepis na jedną wtyczkę (tak przeszły HomeDecor, HomeAmbience, HomeLife):
@@ -1063,8 +1144,145 @@ tylko czasy (bez `N/M passed` - `run.js` pokazuje CRASH).
   `_treeFruit` / `_smoulder`, `chop`; `hold_gather_test` (13) i `tree_strike_test` - części w stronie, `chop`, stary zapis. Z `REGISTERED=1`
   (części na liście strony jak w `js/plugins.js`): `smoke/farm`, `hold_gather_test`, `tree_strike_test`.
 - Szybkie przebiegi (GPU, jedna przeglądarka na przebieg, `affected` / `changed`, kolumna `before`) i serwer gry `tools/serve.js` -
-  `docs/TESTY.md`, „Szybkie testy”.
+  `docs/TESTY.md`, „Szybkie testy”. Od 2026-10-23: testy dobierane do zmian (`zmiany`, mapa testów z pomiaru pokrycia V8:
+  `tests/lib/mapa.js`, `tests/mapa_testow.json`, `node tests/run.js mapa` / `--odswiez-mape`), turbo (`TEST_TURBO`, lista `TURBO` w
+  `tests/run.js`), testy unit równolegle; rdzeń bez przeglądarki: `unit/core`, `unit/core_map`, `unit/talk` - `docs/TESTY.md`.
 - Menu P (partia C1): `menu_panel_test` (panel, karta, plecak, dziennik, zapis, koniec gry), `tavern_plan_test` („Plan karczmy” w
   menu tylko w karczmie, otwiera plan, P wraca do menu), `story_test` i `smoke/story` (linia długu: `Story.lastMenuLine/Label`),
   `hero_menu_test` (Postać pierwsza, liczba punktów), `journal_test` (Dziennik w kolumnie komend).
-- Wtyczki spoza `js/plugins.js` wkłada zestaw testów (`kit.test({ plugins: [...] })`, rdzeń sam na początek).
+- Wtyczki spoza listy wtyczek (`js/tawerna_wtyczki.js` + `js/plugins.js`) wkłada zestaw testów (`kit.test({ plugins: [...] })`, rdzeń sam na początek).
+
+---
+
+## 16. Rozmowy z postaciami (`Tawerna.talk`, 2026-10-23)
+
+Spis wszystkich rozmów w grze, drabina przejęć mieszkańców, menu z opcjami, haki zdarzeń i znalezione konflikty: **`docs/ROZMOWY.md`**.
+Test: `tests/rozmowy_test.js`.
+
+### 16.1 Zasada
+
+1. **Rozmowa z postacią = przejęcie albo jej własne kwestie.** Kto mówi, rozstrzyga **nazwany priorytet** przejęcia
+   (`Tawerna.talk.PRIORITY`), nigdy kolejność listy wtyczek ani chwila rejestracji. Równy priorytet: nazwa właściciela.
+2. **Menu postaci = jej wiersze + opcje innych systemów + pożegnanie zawsze na końcu.** System, który chce dopisać do czyjejś
+   rozmowy jeden wiersz (sklep, temat, usługa), dopisuje **opcję** - nigdy nie przejmuje całej rozmowy (tak zginęły kwestie Kłosa).
+3. **Przejęcie tylko wtedy, gdy rozmowa musi być inna**: scena zadania, pierwsze spotkanie, grzywna, oddanie rzeczy. Przejęcie, które
+   ma ustąpić zadaniom, stoi niżej niż `quest` (sklepy: `shop`) - wtedy zadania mówią pierwsze bez żadnych wyjątków we wtyczce;
+   menu właściciela postaci nad zadaniami (`owner`, `meet`) pyta TownQuests samo (`questWants`).
+4. Polecenia to zwykłe polecenia silnika (101/401 z `\SPK[n]`, 102/402/404) - SpeechBubbles pokazuje je jak dotąd (O wybór,
+   P = ostatni wiersz = pożegnanie). Usługa nic nie zapisuje; stan rozmów (flagi, `met`, `greeted`) zostaje w stanach wtyczek.
+5. Wtyczka **nie owija** `TownLife.talk`, `Story.talk`, `Game_Event.prototype.start` ani `Game_Event.prototype.list` - jest na to
+   usługa i dwa haki rdzenia (16.6).
+
+### 16.2 API
+
+```js
+// przejęcie: run(ctx) -> polecenia (rozmowa jego) albo null (pytaj dalej)
+const off = Tawerna.talk.takeover({ owner: "Wtyczka", name: "", who: ["kowal", "kupiec"],   // klucz, lista, "*", RegExp albo fn(key, ctx)
+    priority: Tawerna.talk.PRIORITY.owner + 10, run: ctx => ... });
+// opcja w menu postaci: jeden wiersz (label, cmds albo run) albo kilka naraz (rows)
+Tawerna.talk.option({ owner: "Wtyczka", id: "sklep", who: "kwatermistrz", order: Tawerna.talk.ORDER.extra,
+    when: ctx => ..., label: "Pokaż zbrojownię", cmds: [/* polecenia gałęzi */], say: "" });   // label / cmds / say mogą być fn(ctx)
+Tawerna.talk.option({ owner: "Wtyczka", id: "x", who: "borgar", rows: ctx => [{ label, cmds, say }] });
+Tawerna.talk.option({ owner: "Wtyczka", id: "y", who: "kowal", label: "Coś", run: ctx => [/* polecenia po wyborze */] });   // (pick)
+// rozmowa: przejęcia, a bez nich base(ctx); skip - właściciel pominięty tym razem
+Tawerna.talk.run(interp, "kowal", { ev, owner: "TownLife", base: ctx => [/* własne kwestie */], skip: "Bron" });   // -> kto miał rozmowę
+Tawerna.talk.resolve(interp, who, opts)              // to samo bez grania: { list, by, ctx }
+Tawerna.talk.rows(who, ctx, ownRows, { owner })      // wiersze menu: własne + opcje, po order
+Tawerna.talk.menu(out, rows, "Bywaj.")               // wybór: wiersze, pożegnanie ostatnie (= anulowanie)
+Tawerna.talk.choice(out, labels, branches, cancel)   // goły wybór (jak choiceTo wtyczek)
+Tawerna.talk.takeovers(who) / .options(who) / .last()  // F9, testy: kto po kolei, jakie opcje, kto mówił ostatnio
+```
+
+`ctx = { who, ev, interp, eventId, skip }`. Priorytety (od najwyższego): `scene` 1000 (scena, która musi mieć rozmowę), `errand` 900
+(cudza krótka sprawa z „Nie, w innej sprawie”), `owner` 700 (wtyczka, do której postać należy), `handBack` 650 (oddanie rzeczy
+właścicielowi), `meet` 600 (pierwsze spotkania i menu ludzi przystani i pustelni), `wrap` 550 (zwykła rozmowa i jeden wiersz po niej),
+`quest` 500 (co mają do powiedzenia zadania TownQuests), **`shop` 450** (sklep postaci bez własnego menu - tylko gdy wszyscy wyżej nic
+nie mają; decyzja 2026-10-23: sklep nigdy nie zabiera kwestii postaci), `greet` 400 (powitanie dnia TownQuests), `after` 300. Liczba w paśmie
+(`owner + 50`) ustala kolejność wtyczek tego samego pasma - pełna drabina w `docs/ROZMOWY.md`, rozdz. 1. Kolejność wierszy menu
+(`Tawerna.talk.ORDER`): `first` 0, `own` 100 (domyślna dla własnych wierszy), `extra` 500 (domyślna dla opcji), `chat` 800 („Co
+słychać?”, „Porozmawiaj”); pożegnanie nie jest wierszem - `menu` zawsze dokłada je na koniec.
+
+**Kto (`who`)**: klucz mieszkańca TownLife (`kwatermistrz`, `kowal`...), rola Story (`grandpa`, `lord`, `door`, `borgar`, `watch`),
+żołnierz garnizonu `zolnierz:<rola>`. Przejęcie z `"*"` albo szerokim `fn` łapie **każdą** postać, także Story - przejęcie tylko dla
+mieszkańców bierze `who: key => !!TownLife.RESIDENTS.find(r => r.key === key)` (jak TownQuests).
+
+### 16.3 Jak dodać opcję (wiersz w czyimś menu)
+
+```js
+// Bron.js: „Pokaż zbrojownię” w menu Kłosa - jego kwestie i jego menu zostają, sklep to jeden wiersz
+Tawerna.talk.option({ owner: PLUGIN, id: "sklep:kwatermistrz", who: "kwatermistrz",
+    rows: ctx => menuRows("kwatermistrz", ctx.ev) || [] });   // [] - nic dziś (godziny, przychylność, Kłos wydany)
+```
+
+Opcja pojawi się w każdym menu tej postaci, które bierze opcje (rozdz. 2 `docs/ROZMOWY.md`). Postać bez menu (zwykły mieszkaniec:
+jedna linijka) opcji nie pokazuje - wtedy potrzebne jest przejęcie albo menu właściciela.
+
+### 16.4 Jak dodać przejęcie
+
+```js
+// Act3.js: Ambroży w oblężeniu - tylko gdy zadania nic nie mają ("after")
+Tawerna.talk.takeover({ owner: PLUGIN, who: "dzwonnik", priority: Tawerna.talk.PRIORITY.after, run: c => ambrozyTalk(c.who, c.ev) });
+// Zakon.js: „Nie, w innej sprawie” = ta sama rozmowa bez tej wtyczki
+ACT.pass = interp => TownLife.talk(interp, { skip: PLUGIN });
+```
+
+Wybór pasma: czy to musi być przed zadaniami (`scene` ... `wrap`), czy po nich (`after`)? Czy ustępuje samo (`questWants`)?
+Nowe przejęcie dopisz do tabeli w `docs/ROZMOWY.md` i do drabiny w `tests/rozmowy_test.js`.
+
+### 16.5 Postać z własnym menu i własne wejście rozmowy
+
+```js
+// Garnizon.js, menu Kłosa: własne wiersze (kolejność own), „Co słychać?” (chat), opcje innych między nimi, „Bywaj.” na końcu
+const rows = labels.map((label, i) => ({ label, cmds: branches[i] }));
+rows.push({ label: "Co słychać?", cmds: ..., order: Tawerna.talk.ORDER.chat });
+return Tawerna.talk.menu(out, Tawerna.talk.rows("kwatermistrz", { ev }, rows), "Bywaj.");
+// Story.js: nowa postać / nowe wejście rozmowy - inni mogą je przejąć (TownQuests: linie zadania u Lorda i dziadka)
+function talk(interp, role, opts) {
+    const ev = $gameMap.event(interp.eventId());
+    if (ev) Tawerna.talk.run(interp, role, { ev, owner: PLUGIN, skip: opts && opts.skip, base: () => ownTalk(ev, role) });
+}
+```
+
+Menu biorą dziś opcje u: Kłosa i żołnierzy garnizonu (Garnizon), Tadka z rabatem (Ludzie), Ludmiły i Baltazara po W5 (Kantor),
+sklepikarzy ubrań (Ubior_Sklepy), Borgara (Story). `addMenu` (Garnizon, Kantor, Ludzie, Ubior_Sklepy) usunięte.
+
+### 16.6 Start zdarzenia i jego polecenia
+
+```js
+Tawerna.onEventStart(ev => !!(ev._town && ev._town.hidden), { owner: PLUGIN, priority: "hidden" });   // true = nie startuje
+Tawerna.onEventList(ev => (warunek ? STUB : null), { owner: PLUGIN, priority: Tawerna.onEventList.PRIORITY.scene + 10 });
+Tawerna.onEventList.own(ev)   // własne polecenia strony z pominięciem haków
+```
+
+Start: `hidden` 900 (ukryta postać nie startuje), `instead` 500 (coś innego zamiast strony: stół kości, kot na posłaniu), `before` 100
+(powiadomienie, zawsze `false`: tryb walki). Polecenia: `closed` 900 (zamknięte: bar, drzwi), `scene` 800 (scena zadania przy drzwiach,
+rzeczy, osobie), `own` 500 (własne miejsca systemu: kocioł, tawerna, bywalcy, tablica), `person` 300 (rozmowy fabuły). Kto gdzie:
+`docs/ROZMOWY.md`, rozdz. 4. Jedyny hak poza rdzeniem: `Game_Event.list` w ChoppableTree (kamienie i krzaki z pustą stroną).
+
+### 16.7 Sprawdzanie
+
+- F9, zakładka „Rdzeń”: wiersz „Rozmowy: przejęcia N, opcje M, start zdarzeń S, polecenia zdarzeń L” i przejęcia od pierwszego;
+  `Tawerna.debug.talks()` - całość.
+- `tests/rozmowy_test.js` (17): usługa (priorytety, remis, skip, opcje dwóch systemów w dowolnej kolejności rejestracji, pożegnanie
+  ostatnie, `pick`), drabina gry (sklepy pod zadaniami, nad powitaniem dnia), kolejność haków startu i poleceń, Kłos z jego menu i sklepem jako wierszem,
+  przejęcie `scene` nad Garnizonem, stary `TownLife.addTalkHook`, ukryty mieszkaniec nie startuje, stary zapis `tavern_evening` -
+  menu Borgara z opcjami TavernLife.
+
+---
+
+## 17. Wątki jako dane i teksty w plikach (`Watki.js`, 2026-10-23)
+
+Całość - spis wątków, silnik, format tekstów, pilot, plan dalszych etapów: **`docs/WATKI_DANE.md`**.
+
+- **Silnik** `js/plugins/Watki.js` (warstwa 3, zaraz pod Journal): `Watki.watek(def)` - wątek jako dane: stan (`Tawerna.state`, wersja,
+  migracje), rozdziały (kroki zadania TownQuests na ich numerach - dziennik, znaczniki i nagrody zostają TownQuests; albo własny
+  rekord i źródło dziennika „watki”), warunki `gdy`, akcje `zrob` (nazwane: `Watki.act(this, [id, akcja, ...])`), rozmowy (drzewa
+  kluczy tekstów z wyborami), tematy przy barze Borgara, skoki F9 (`Watki.f9` - Debug.js pokazuje sekcję każdego wątku). Kod specjalny
+  (sceny, walki, ruch, wstawiane zdarzenia) zostaje we wtyczce wątku jako haki (`w.haki({...})`).
+- **Teksty** `js/teksty/<nazwa>.txt`: `klucz = tekst`, `[klucz]` + kwestie (do pustej linii), `> ` bohater, `{x}` wstawia gra.
+  `Watki.teksty("nazwa")` daje obiekt wypełniany przy starcie gry (`DataManager.loadDatabase` / `isDatabaseLoaded` - przed tytułem;
+  brak pliku = Retry silnika). Narzędzie: `node tools/teksty.js sprawdz | porownaj | wyciagnij | lista`.
+- **Rozmowy w poleceniach zdarzeń**: jeden budowniczy `Watki.mowa` (`wrap` 46 znaków, 3 linie w oknie, `\SPK[n]`, `choiceTo`) zamiast
+  kopii w każdej wtyczce wątku (kopie znikają etapami).
+- **Pilot**: W4 rozdz. 6-8 - `Kasztelan_Data.js` (dane), `Kasztelan.js` (haki), `js/teksty/kasztelan.txt`. Testy: `tests/unit/watki.test.js`,
+  `tests/watki_test.js` (port 9625), `w4_borgar_test`, `w4_key_test`.

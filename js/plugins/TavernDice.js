@@ -625,13 +625,13 @@
         }
         return null;
     }
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
+    // (2026-10-23: the core's one start hook, "instead" - the table opens instead of the page)
+    TW.onEventStart(ev => {
         // (the action button or a touch - not an autorun or parallel page)
-        const tag = !this._erased && (this._trigger === undefined || this._trigger === null || this._trigger <= 2) ? diceTag(this) : null;
-        if (tag) { openTable({ only: tag.only, eventId: this.eventId() }); return; }
-        _Game_Event_start.call(this);
-    };
+        const tag = !ev._erased && (ev._trigger === undefined || ev._trigger === null || ev._trigger <= 2) ? diceTag(ev) : null;
+        if (tag) { openTable({ only: tag.only, eventId: ev.eventId() }); return true; }
+        return false;
+    }, { owner: PLUGIN, priority: "instead" });
     function popupMsg(text, colour) {
         TW.popup(text, { color: colour || "#ff9f8f" });
         TavernDice.lastRefusal = text;

@@ -8,6 +8,8 @@
 // place along the edge, by the offset of the nearest such event (its own spot -> its target), and after the map loads he is moved to the
 // nearest tile he can stand on, if that one is blocked.
 // Not while an event runs, in build mode, in the eagle's flight (Orzel_Lot crosses the edges itself) or on a map with <EdgeWalk:off>.
+// A transfer behind a condition in its event (a branch: Wrak's sandbar open only when the garrison is ready) is not taken out of it:
+// the event itself is started, as if he walked into it (its refusal and its popup stay).
 
 /*:
  * @target MZ
@@ -30,6 +32,8 @@
  * poleceniem „Przenieś gracza” na brzegu mapy, z aktywną stroną). Bez
  * takiego przejścia - albo gdy jest zamknięte warunkiem - nic się nie
  * dzieje. Blokady innych wtyczek (np. działka zajęta przez Lorda) działają.
+ * Przejście ukryte w warunku zdarzenia (np. łacha Wraku: tylko gdy garnizon
+ * gotowy) uruchamia samo zdarzenie - jego odmowa i dymek zostają.
  * Na nowej mapie bohater staje w tym samym miejscu wzdłuż krawędzi
  * (przesunięcie z najbliższego przejścia), a gdy tam nie da się stać -
  * na najbliższym wolnym polu.
@@ -74,7 +78,7 @@
             const page = ev.page && ev.page();
             if (!page || !page.list) continue;
             const c = page.list.find(cmd => cmd.code === 201 && cmd.parameters && cmd.parameters[0] === 0);
-            if (c && c.parameters[1] !== $gameMap.mapId()) out.push({ ev, cmd: c.parameters });
+            if (c && c.parameters[1] !== $gameMap.mapId()) out.push({ ev, cmd: c.parameters, gated: (c.indent || 0) > 0 });
         }
         return out;
     }
@@ -83,7 +87,10 @@
         if (!list.length) return false;
         const along = side === "W" || side === "E" ? p.y : p.x;
         list.sort((a, b) => Math.abs((side === "W" || side === "E" ? a.ev.y : a.ev.x) - along) - Math.abs((side === "W" || side === "E" ? b.ev.y : b.ev.x) - along));
-        const { ev, cmd } = list[0];
+        const { ev, cmd, gated } = list[0];
+        // (2026-10-23) the transfer inside a branch of its event (Wrak's sandbar: "if Wyspa.isReady(162) - over, else a popup"): the
+        // event decides, as if he walked into it - it used to be taken out of the branch, so he went onto a map not ready yet
+        if (gated) { if (!ev.isStarting() && !$gameMap.isEventRunning()) ev.start(); return true; }
         const [, mapId, cx, cy, dir, fade] = cmd;
         const x = side === "W" || side === "E" ? cx : cx + (p.x - ev.x);
         const y = side === "W" || side === "E" ? cy + (p.y - ev.y) : cy;

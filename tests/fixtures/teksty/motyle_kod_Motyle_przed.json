@@ -1,0 +1,10 @@
+{
+ "kod": {
+  "wanted": {
+   "0": "brak motyli na tej mapie",
+   "1": "burza nadchodzi",
+   "2": "po deszczu"
+  }
+ },
+ "_opis": "Napisy kodu Motyle.js sprzed przeniesienia do js/teksty/motyle.txt (kod.*)"
+}

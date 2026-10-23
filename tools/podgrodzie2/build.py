@@ -649,9 +649,10 @@ def chata(b, d):
         b.tl(x + col, wt, Bt(k[0], 12), 3); b.tl(x + col, wt + 1, Bt(k[0], 13), 3)
     if d["komin"] is not None:
         cx = x + d["komin"]
-        b.tl(cx, y - 1, Bt(d["styl"], 10), 3); b.tl(cx, y, Bt(d["styl"], 11), 3)
-        b.region(cx, y - 1, 2)
-        b.obraz("Dym z komina", cx, y - 1, "!Fantasy_chimney", 0, 2, (x + y) % 3, prio=2, through=True, step=True)
+        # (2026-10-23, gracz: kominy stały daszkiem kratkę nad dachem, na trawie za domem) cały komin na dachu: daszek w górnym
+        # rzędzie dachu, trzon pod nim, dym na daszku (tools/mapy/kominy.py przesunął tak gotową mapę)
+        b.tl(cx, y, Bt(d["styl"], 10), 3); b.tl(cx, y + 1, Bt(d["styl"], 11), 3)
+        b.obraz("Dym z komina", cx, y, "!Fantasy_chimney", 0, 2, (x + y) % 3, prio=2, through=True, step=True)
     if d["lukarna"]:
         dc, di = d["lukarna"]
         b.obraz("Okienko w dachu", x + dc, y + max(1, d["rh"] - 2), "!Roof_Windows", di, 2, 0, prio=1)

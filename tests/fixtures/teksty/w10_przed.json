@@ -1,0 +1,68 @@
+{
+ "zadania": {
+  "W10": {
+   "title": "List do matki",
+   "where": "Przystań: prom albo kuter Rocha",
+   "when": "od dnia 4",
+   "desc": "Matka obiecała przypłynąć następnym promem. Prom przypływa co trzy dni - a jej nie ma.",
+   "offer": {
+    "say": [
+     "Twoja matka obiecała przypłynąć następnym promem, mówiłeś? Prom był... i nikogo.",
+     "Napisz do niej. Przewoźnik promu bierze listy na ląd, trzy grosze. Tylko że celnik czyta każdy list, zanim pójdzie."
+    ],
+    "yes": "Napiszę do niej.",
+    "no": "Jeszcze nie teraz.",
+    "accept": [
+     "Dobrze. Papier i węgiel dostaniesz ode mnie. Pisz prosto, bez nazwisk."
+    ],
+    "decline": [
+     "Jak zechcesz, to wiesz, gdzie mnie szukać."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Wyślij list do matki: promem (w dzień promu 9–15, przewoźnik na molo, 3 G - celnik go przeczyta) albo kutrem Rocha, gdy zacznie pływać."
+    },
+    "1": {
+     "text": "Czekaj na wieści z lądu: przy następnej fali ludzi z promu albo po rejsie Rocha."
+    },
+    "2": {
+     "text": "Czekaj na list od mamy. Przyjdzie z lądu promem albo kutrem Rocha: w dzień promu zapytaj przewoźnika na molo (9–15), po rejsie - Rocha."
+    },
+    "3": {
+     "text": "Pokaż list od mamy dziadkowi. To jego córka.",
+     "say": [
+      "> Dziadku... przyszedł list. Od mamy.",
+      "(Dziadek odkłada fajkę i długo czyta, poruszając ustami.)",
+      "Żyje. ...Żyje, uparta. Pierze koszule żołnierzom. Moja córka pierze koszule tym, co palą wsie.",
+      "„Dalej pali tę swoją fajkę i udaje, że nie płacze.” (Dziadek odwraca się do okna.) To dym. Dym gryzie w oczy, nic więcej.",
+      "A twój ojciec... Jak jest w obozie jeńców, to żyje. Jeńców się karmi, bo za jeńców się płaci. A jak poszedł z wojskiem w góry - to też żyje. Tak sobie mów.",
+      "(Dziadek patrzy na twój wisiorek.) Ludzie z okiem pytają o kruki. Rób, jak pisze matka. Pod koszulą. Zawsze.",
+      "> Odpiszę jej.",
+      "Odpisz. Napisz, że jesteś cały i że stary dalej zrzędzi. I dopisz ode mnie... że fajka dalej śmierdzi. Ona będzie wiedziała, co to znaczy.",
+      "Jak masz grosz, dołóż jej coś. W taborze grosz to chleb. Ser się nie psuje, wędzonka też."
+     ],
+     "reward": {
+      "note": [
+       "Dziadek i list od mamy",
+       "Dziadek czytał list od mamy długo, poruszając ustami. Mówi, że to dym gryzie go w oczy. Kazał odpisać i dopisać od niego, że „fajka dalej śmierdzi” - mama będzie wiedziała, co to znaczy. Radzi posłać jej grosz albo jedzenie, które się nie psuje: ser, wędzonkę. O wisiorku: pod koszulą, zawsze."
+      ]
+     }
+    },
+    "4": {
+     "text": "Odpisz mamie i poślij jej coś, jeśli możesz: pieniądze albo paczkę jedzenia, które się nie psuje (prom: przewoźnik w dzień promu 9–15, 3 G; kuter Rocha za darmo). {odpis}"
+    },
+    "5": {
+     "text": "Czekaj na kolejny list od mamy - przyjdzie, kiedy wojna podejdzie bliżej wyspy. {odpis}",
+     "reward": {
+      "note": [
+       "Listy od mamy",
+       "Trzy listy od mamy leżą razem, przewiązane jej chustą. Ojca wciąż szuka: ktoś nosi jego pas, wygrany w kości od żywego jeńca. Tabor idzie na północ, za góry, do kopalni soli. Mama pisze, że będzie pisać. Wątek zostaje otwarty."
+      ]
+     }
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W10\\./)"
+}

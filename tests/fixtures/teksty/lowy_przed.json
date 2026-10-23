@@ -1,0 +1,429 @@
+{
+ "mieszkaniec": {
+  "name": "Gajowy Gniewko Bór",
+  "title": "gajowy zwierzyńca Lorda",
+  "barks": {
+   "patrol": [
+    "Tropy. Świeże. Jeleń i łania, poszły do wody.",
+    "Ktoś tu łamał gałęzie... Nie zwierzę. Zwierzę tak nie łamie.",
+    "Cicho tu. Za cicho. Albo wilk, albo człowiek."
+   ],
+   "work": [
+    "Siekiera, drwa, woda. Gajowy też musi jeść.",
+    "Róg wisi, łuk wisi. Dzień się zaczyna."
+   ],
+   "stand": [
+    "Zimą siano, latem sól. Zwierz pamięta, kto go karmił.",
+    "Paśnik trzeba podbić. Dziki znowu podryły nogę."
+   ],
+   "rain": [
+    "W deszcz tropy płyną. Kłusownik to wie."
+   ],
+   "night": [
+    "(Z leśniczówki słychać, jak ktoś ostrzy nóż.)"
+   ],
+   "home": [
+    "(Gajowy smaruje cięciwę łojem.)"
+   ]
+  },
+  "talk": {
+   "morning": [
+    "Rano zwierzyna chodzi do wody. Wtedy widać, kto tu rządzi. Nie Lord, chłopcze. Las.",
+    "Jeleni jest teraz pięć, może sześć. Dwa dziki. Liczę je co dzień, jak sakwy."
+   ],
+   "day": [
+    "To zwierzyniec Lorda. Polują tu goście dworu, raz do roku. Reszta roku należy do zwierzyny. I do mnie.",
+    "Widzisz wyłom w żywopłocie? Zarósłby, gdyby nie ludzie. Ludzie chodzą skrótem. Ja patrzę, kto chodzi.",
+    "Bez zezwolenia nie strzelaj. Grzywnę biorę ja, nie Lord. Ale biorę."
+   ],
+   "evening": [
+    "Wieczorem jelenie wychodzą na łąkę. Najpiękniejsza pora. I najgorsza - wtedy przychodzą kłusownicy.",
+    "Siadam przy paśniku i słucham. Las mówi, kto w nim jest."
+   ],
+   "night": [
+    "Nocą zwierzyniec śpi. A ja śpię jednym okiem."
+   ],
+   "rain": [
+    "Deszcz. Dobrze. Kłusownik w deszcz siedzi w domu, bo zostawia ślady."
+   ]
+  }
+ },
+ "zblakane": {
+  "list": {
+   "0": {
+    "name": "Krasula"
+   },
+   "1": {
+    "name": "Owca Ługów"
+   },
+   "2": {
+    "name": "Kura Ługów"
+   },
+   "3": {
+    "name": "Kura Ługów"
+   }
+  }
+ },
+ "pupsFled": "Szczenięta uciekły w gąszcz.",
+ "denEmpty": "Nora jest pusta. Wataha nie wróci tu przez kilka tygodni.",
+ "meatLeft": "Zostawiłeś mięso przy norze. Wilki je znajdą.",
+ "meatTaken": "Wilki zabrały mięso spod nory ({n}/3).",
+ "denFriend": "Wataha spod nory cię zna. Wilki z Leśnej drogi i Skraju lasu nie zaatakują cię.",
+ "denFriendSub": "Szczenięta zostały z matką. Nic im nie zabrałeś.",
+ "gift": "Przy norze leży zając. Dar watahy.",
+ "betrayed": "Uderzyłeś wilka z nory. Wataha ci tego nie zapomni.",
+ "snore": "Z gawry dochodzi chrapanie.",
+ "peekAsk": "Gawra. Ze środka czuć zwierzę i mokrą sierść.",
+ "peekSleep": "Zajrzyj do środka",
+ "peekLeave": "Odejdź po cichu",
+ "woke": "Obudziłeś niedźwiedzia!",
+ "wokeSub": "Jest wściekły: przez minutę uderza mocniej.",
+ "empty": "Gawra jest pusta. Wiosną może przyjdzie nowy niedźwiedź.",
+ "nobody": "W gawrze nikogo nie ma. Gospodarz chodzi gdzieś po lesie.",
+ "claw": "Pazur niedźwiedzia",
+ "muddy": "Jesteś ubłocony",
+ "muddySub": "Pachniesz jak las: zwierzęta wyczują cię później (2 h).",
+ "muddyNoDrink": "Błotem się nie napijesz.",
+ "tusk": "Kieł odyńca",
+ "lickAsk": "Wydrążony pieniek. W środku biały nalot po soli.",
+ "lickPut": "Połóż bryłę soli",
+ "lickNo": "Nic nie kładź",
+ "lickNeed": "Potrzebna bryła soli (handlarz, Roch na przystani).",
+ "lickSet": "Sól na lizawce: jelenie będą przychodzić przez 6 dni.",
+ "lickActive": "Sól jeszcze leży: jelenie przychodzą o świcie i o zmierzchu (zostało {n} dni).",
+ "hideIn": "Zasiadka: siedzisz w chruście. Zwierzęta wyczują cię później, a łuk trzymasz pewniej.",
+ "antler": "Zrzucone poroże",
+ "antlerSub": "Jeleń zgubił je przy lizawce.",
+ "czoArrow": "Strzała z białym okiem",
+ "parkFirst": "Za żywopłotem: zwierzyniec Lorda. Tu poluje tylko dwór.",
+ "parkShut": "Wyłom zarósł cierniem. Gajowy go zamknął na {n} dni.",
+ "caught": "Gajowy cię widział!",
+ "found": "Gajowy znalazł ścierwo w zwierzyńcu.",
+ "legal": "Zezwolenie: ten jeleń jest twój, legalnie.",
+ "legalUsed": "Zezwolenie było już użyte w tym tygodniu.",
+ "snareFound": "Sidła kłusownika ({n}/3)",
+ "roped": "{name} idzie za tobą na powrozie.",
+ "ropeNeed": "Potrzebna lina na powróz.",
+ "henCaught": "Złapałeś kurę!",
+ "henMissed": "Kura uciekła z gdakaniem.",
+ "delivered": "{name} wróciła do zagrody.",
+ "letGo": "Puszczasz {name}.",
+ "noBow": "Bez łuku ani rusz.",
+ "roundStart": "Runda: 5 strzałów ćwiczebnych. Mierz w tarcze.",
+ "roundEnd": "Koniec rundy: {n} pkt.",
+ "shotPts": "+{n}",
+ "shotMiss": "pudło",
+ "contest": "Zawody! Rywale: {list}. Twoja runda decyduje.",
+ "noContest": "Zawody są co siódmy dzień, od 10 do 12.",
+ "silver": "Srebrna strzała",
+ "rozmowy": {
+  "gajowyFine1": [
+   "Stój! To zwierzyniec Lorda, a ty strzelasz do jego zwierzyny.",
+   "Czterdzieści groszy grzywny. Nie dla Lorda - dla zwierzyńca: na sól i siano. I nie rób tego drugi raz."
+  ],
+  "gajowyFine2": [
+   "Znowu ty. Drugi raz. Sześćdziesiąt groszy.",
+   "Myślisz, że nie widzę? Las ma oczy. Ja mam lepsze."
+  ],
+  "gajowyFine3": [
+   "Trzeci raz. Wystarczy.",
+   "Osiemdziesiąt groszy. I zarastam wyłom cierniem. Przez tydzień do zwierzyńca nie wejdziesz.",
+   "Lord kazałby cię powiesić. Ja każę ci się nauczyć. To różnica."
+  ],
+  "gajowyNoGold": "Nie masz tyle? To biorę mięso i skóry. Zwierzyna wraca do zwierzyńca, choćby tak.",
+  "gajowyFound": "(Gajowy trzyma w ręku kawał sierści.) Znalazłem ścierwo przy ścieżce. Twoja robota, prawda? Nie kłam. Tropy prowadzą do ciebie.",
+  "gajowyEscort": "Wyprowadzę cię. I nie wracaj, póki nie zarośnie.",
+  "rysiekMeet": [
+   "(Z ciemności wychodzi chudy człowiek z workiem. Zatrzymuje się, kiedy cię widzi.)",
+   "@rysiek: O. Ty. Wnuk Stacha. Co tu robisz po nocy? ...Aha. Gajowy cię przysłał.",
+   "@rysiek: Słuchaj. Mam w Podgrodziu matkę i dwóch małych braci. Lord ma pięćdziesiąt jeleni. Ja biorę jednego na miesiąc."
+  ],
+  "rysiekGive": [
+   "> Pójdziesz ze mną do gajowego.",
+   "@rysiek: (Rysiek patrzy długo.) Tak myślałem. Dobra. Nie będę uciekał. Nogi mam za słabe na gajowego.",
+   "(Odprowadzasz Ryśka do leśniczówki. Gajowy zabiera mu sidła i worek.)"
+  ],
+  "rysiekWarn": [
+   "> Uciekaj. I nie wracaj tu. Gajowy wie o sidłach.",
+   "@rysiek: (Rysiek kiwa głową.) Nie zapomnę ci tego. Przyjdź do mnie w Podgrodziu: skóry dla ciebie zawsze taniej.",
+   "(Rysiek znika w ciemności. Sidła zostały - zaniesiesz je gajowemu.)"
+  ],
+  "czoMeet": [
+   "(Przy ognisku siedzą dwaj obcy. Na kołczanie białe oko.)",
+   "@czo: Hej, chłopcze. Polujemy na niedźwiedzia spod grani. Skóra dla naszego dowódcy. Znasz gawrę?",
+   "@czo: Pomożesz - dostaniesz osiemdziesiąt groszy. Nie pomożesz - nie wchodź nam w drogę."
+  ],
+  "czoHelp": [
+   "> Pomogę. Znam gawrę.",
+   "@czo: Dobrze. Ubij niedźwiedzia, przynieś nam wieść, że leży. Resztę zrobimy sami."
+  ],
+  "czoDrive": [
+   "> To nie wasz las. Wynoście się.",
+   "@czo: (Obcy wstają. Jeden kładzie strzałę na cięciwę.) Głupi chłopak. Pożałujesz."
+  ],
+  "czoPaid": [
+   "@czo: Leży? Dobra robota. Masz osiemdziesiąt.",
+   "@czo: (Ciszej.) Dowódca szuka w górach wejścia pod ziemię. Szyb przy obozie kopaczy. Nie mów nikomu, że ode mnie."
+  ],
+  "arrowRotmistrz": [
+   "> Panie rotmistrzu. Znalazłem to w obozie obcych myśliwych na Skraju lasu.",
+   "(Rotmistrz obraca strzałę w palcach.) Białe oko. Czarne Oczy. W NASZYM lesie? To już nie myśliwi, to zwiadowcy.",
+   "Dobrze, że przyszedłeś. Wyślę patrol. Garnizon ci tego nie zapomni."
+  ],
+  "arrowKleofas": [
+   "> Bracie Kleofasie. Widziałem je też w lesie... Takie strzały. Na Skraju lasu, w obozie obcych myśliwych.",
+   "(Kleofas długo milczy.) Te same lotki, co w piersi orlicy. Oni są już na wyspie, chłopcze. Nie tylko na morzu.",
+   "Zapiszę to w kronice. Strzeż się ich."
+  ],
+  "rysiekShop": "Skóry dla ciebie taniej. Ze zwierzyńca? ...Nie pytaj.",
+  "martaMilk": "Krasula daje mleko jak przed pożarem. Masz, to twoje - dwa dzbanki. Za to, że ją przyprowadziłeś."
+ },
+ "zadania": {
+  "K59": {
+   "title": "Nora pod korzeniami",
+   "where": "Skraj lasu: wilcza nora pod korzeniami starego pnia",
+   "when": "za dnia",
+   "desc": "Łowczy Bogdan pisał na tablicy o watasze, która ma norę na Skraju lasu. Rozbić watahę - czy zostawić szczenięta w spokoju i dać watasze jeść?",
+   "steps": {
+    "0": {
+     "text": "Wilcza nora na Skraju lasu. Rozbij watahę (zabij dorosłe wilki spod nory) albo zostaw szczenięta: w trzech różnych dniach zostaw przy norze surowe mięso. Mięso: {n}/3."
+    }
+   }
+  },
+  "K60": {
+   "title": "Sól dla jeleni",
+   "where": "Łąka: lizawka i zasiadka",
+   "when": "o świcie (5-8)",
+   "desc": "Łowczy Bogdan zostawił u Borgara wiadomość: przy lizawce na Łące trzeba położyć sól. Kto o świcie posiedzi w zasiadce, zobaczy jelenie. Bogdan zapłaci za poroże albo mięso jelenia spod lizawki.",
+   "steps": {
+    "0": {
+     "text": "Połóż bryłę soli na lizawce na Łące (bryłę sprzedaje handlarz albo Roch na przystani)."
+    },
+    "1": {
+     "text": "O świcie (5-8) posiedź w zasiadce przy lizawce, aż przyjdą jelenie."
+    },
+    "2": {
+     "text": "Zdobądź poroże jelenia albo mięso jelenia spod lizawki (wiosną leży tam czasem zrzucone poroże)."
+    }
+   },
+   "reward": {
+    "note": [
+     "Sól dla jeleni",
+     "Położyłem sól na lizawce na Łące i o świcie siedziałem w zasiadce. Jelenie przychodzą lizać sól o świcie i o zmierzchu, przez sześć dni. Bogdan przysłał przez Borgara czterdzieści groszy."
+    ]
+   }
+  },
+  "K61": {
+   "title": "Zawody strzeleckie",
+   "where": "Garnizon nad zatoką: strzelnica",
+   "when": "co 7 dni, 10-12",
+   "desc": "Kwatermistrz Kłos chce zobaczyć, czy chłopak spoza wojska pokona jego najlepszego strzelca. Zawody są na strzelnicy garnizonu co siódmy dzień przed południem.",
+   "offer": {
+    "say": [
+     "Strzelasz? Z łuku? Hah! To pokaż. Co siódmy dzień przed południem chłopcy strzelają do tarcz o garść groszy.",
+     "Sierżant Bełt bije wszystkich od roku. Trzydzieści sześć punktów na pięć strzał. Pobij go, a postawię ci pięćdziesiąt groszy."
+    ],
+    "yes": "Pobiję go.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Ha! Lubię takich. Strzelnica jest na południe od obozu. Łuk masz mieć swój, strzały dostaniesz nasze."
+    ],
+    "decline": [
+     "Jak chcesz. Bełt i tak by wygrał."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Na zawodach na strzelnicy garnizonu (co 7 dni, 10-12) pokonaj sierżanta Bełta: więcej niż 36 punktów na 5 strzał."
+    }
+   },
+   "reward": {
+    "note": [
+     "Zawody strzeleckie",
+     "Na strzelnicy garnizonu pokonałem sierżanta Bełta. Kwatermistrz postawił pięćdziesiąt groszy, a chłopcy z garnizonu patrzą na mnie inaczej."
+    ]
+   }
+  },
+  "K62": {
+   "title": "Krasula i kury Ługów",
+   "where": "Spalona zagroda: wschodnie łąki",
+   "when": "za dnia",
+   "desc": "Po pożarze zwierzęta Ługów rozbiegły się po łąkach na wschód od zagrody: krowa Krasula, owca i dwie kury. Marta prosi, żeby wróciły do domu.",
+   "offer": {
+    "cond": {
+     "done": [
+      "D21"
+     ]
+    },
+    "say": [
+     "Mieszkasz teraz w naszej zagrodzie... Dobrze. Lepiej ty niż obcy.",
+     "Po pożarze Krasula uciekła. I owca, i kury. Mówią, że chodzą dzikie po łąkach na wschód od zagrody. Przyprowadzisz je? Do domu?"
+    ],
+    "yes": "Przyprowadzę je.",
+    "no": "Nie teraz.",
+    "accept": [
+     "Krasula idzie za tym, kto ma linę i dobre słowo. Kury... kury trzeba łapać. Powodzenia."
+    ],
+    "decline": [
+     "Rozumiem. Może kiedyś."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Odprowadź zwierzęta Ługów do zagrody (przy domu) albo do swojej zagrody: krowę i owcę na powrozie (lina), kury złap rękami. Wróciło: {n}/4."
+    }
+   },
+   "reward": {
+    "note": [
+     "Krasula wróciła",
+     "Krasula, owca i kury Ługów wróciły do domu. Marta co tydzień ma dla mnie dwa dzbanki mleka."
+    ]
+   }
+  },
+  "D32": {
+   "title": "Gajowy i kłusownik",
+   "where": "Zwierzyniec Lorda: sidła, nocna zasadzka",
+   "when": "nocą 22-3",
+   "desc": "Gajowy wie, że ktoś zastawia sidła w zwierzyńcu. Trzeba je znaleźć i nocą przyłapać kłusownika. Wydać go - czy ostrzec?",
+   "offer": {
+    "say": [
+     "Ktoś zastawia sidła w zwierzyńcu. Trzy, może cztery. Znajduję zające z pętlą na szyi, a sideł nie widzę - sprytny jest.",
+     "Ty chodzisz po lesie. Masz oczy. Znajdź sidła, a potem posiedź nocą przy którymś. Kłusownik zawsze wraca po zdobycz."
+    ],
+    "yes": "Znajdę go.",
+    "no": "Nie moja sprawa.",
+    "accept": [
+     "Dobrze. Sidła są gdzieś przy ścieżkach zwierzyny. Szukaj przy krzakach, gdzie trawa jest wydeptana."
+    ],
+    "decline": [
+     "Jak chcesz. Sam go złapię. Kiedyś."
+    ]
+   },
+   "steps": {
+    "0": {
+     "text": "Znajdź w zwierzyńcu trzy sidła kłusownika i zabierz je. Masz: {n}/3."
+    },
+    "1": {
+     "text": "Nocą (22-3) zaczaj się w zwierzyńcu przy miejscu po drugich sidłach (w głębi zwierzyńca, na zachód od paśnika) i poczekaj na kłusownika."
+    },
+    "2": {
+     "text": "Wróć do gajowego (leśniczówka, za dnia na obchodzie).",
+     "say": [
+      "> Sideł już nie ma. Kłusownika też.",
+      "Wiem. Rano przeszedłem cały zwierzyniec. Pierwszy raz od roku żaden zając nie wisiał w pętli.",
+      "Masz. Zezwolenie na odstrzał: jeden jeleń w tygodniu, legalnie. Zasłużyłeś."
+     ]
+    }
+   },
+   "reward": {
+    "note": [
+     "Zezwolenie na odstrzał",
+     "Gajowy Gniewko Bór dał mi zezwolenie: jeden jeleń w tygodniu w zwierzyńcu Lorda - legalnie. Reszta zwierzyny dalej jest dworu."
+    ]
+   }
+  },
+  "D33": {
+   "title": "Gawra pod granią",
+   "where": "Skraj lasu: obóz obcych myśliwych; Góry: gawra",
+   "when": "Akt II, za dnia",
+   "desc": "Na Skraju lasu rozbili obóz obcy myśliwi z białym okiem na lotkach - Czarne Oczy. Polują na niedźwiedzia spod grani dla skóry. Pomóc im - czy przegnać i ochronić gawrę?",
+   "steps": {
+    "0": {
+     "text": "Podejdź za dnia do obozu obcych myśliwych na Skraju lasu i porozmawiaj z nimi."
+    },
+    "1": {
+     "text": "{co}"
+    }
+   }
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Słyszałem, że przegnałeś obcych myśliwych spod grani. Niedźwiedź jest starszy od nich wszystkich. Dobrze zrobiłeś."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Z wieży widziałem dym na Skraju lasu. Teraz go nie ma. Twoja robota? Czarnym Oczom nie wolno dawać się zadomowić."
+   ]
+  },
+  "2": {
+   "lines": [
+    "Pomagałeś obcym myśliwym? (Bazyli patrzy w morze.) Uważaj, z kim pijesz przy ognisku, chłopcze."
+   ]
+  },
+  "3": {
+   "lines": [
+    "Ryśka zabrali do dworu. Jego matka płacze trzeci dzień. Kto go wydał? ...Nie, nie chcę wiedzieć."
+   ]
+  },
+  "4": {
+   "lines": [
+    "Gajowy mnie szukał, wiesz? Nie znalazł. (Rysiek mruga.) Skóry masz u mnie taniej. Pamiętam."
+   ]
+  },
+  "5": {
+   "lines": [
+    "Krasula poznała mnie od razu. Wylizała mi rękę jak pies. Dziękuję ci."
+   ]
+  }
+ },
+ "bestie": {
+  "bandit": {
+   "one": "rabuś",
+   "few": "rabusie",
+   "many": "rabusiów"
+  },
+  "archer": {
+   "one": "łucznik",
+   "few": "łucznicy",
+   "many": "łuczników"
+  },
+  "bear": {
+   "one": "niedźwiedź",
+   "few": "niedźwiedzie",
+   "many": "niedźwiedzi"
+  }
+ },
+ "tablica": {
+  "oboz": {
+   "title": [
+    "Rabusie przy Leśnej drodze"
+   ],
+   "text": [
+    "Wiozłem garnki na jarmark Leśną drogą. Wiozłem. Rabusie mają obóz na polanie przy drodze, nocą palą tam ognisko. Rozbij go, a jarmark się odbędzie."
+   ],
+   "note": [
+    "Rabusie przy Leśnej drodze",
+    "Rozbiłem obóz rabusiów na polanie przy Leśnej drodze. Wit może znowu wozić garnki na jarmark."
+   ]
+  },
+  "czo": {
+   "title": [
+    "Obcy myśliwi"
+   ],
+   "text": [
+    "Na Skraju lasu siedzą obcy myśliwi. Strzelają do wszystkiego, co się rusza, a skóry wywożą na prom. To nie myśliwi, to złodzieje lasu. Przegnaj ich."
+   ],
+   "note": [
+    "Obcy myśliwi",
+    "Przegnałem obcych myśliwych ze Skraju lasu. Bogdan mówi, że las odetchnie."
+   ]
+  },
+  "poroze": {
+   "title": [
+    "Poroże dla łowczego"
+   ],
+   "text": [
+    "Potrzebuję poroża. Na rękojeści noży i na guziki dla dworu. Jelenie zrzucają je wiosną przy lizawce na Łące. Albo zdobądź je inaczej - nie pytam jak."
+   ]
+  }
+ },
+ "epilog": {
+  "pack": "Wataha spod korzeni na Skraju lasu nie rusza cię do dziś. Raz w tygodniu przy norze leży zając - szczenięta, które zostawiłeś, mają już własne.",
+  "park": "Gajowy Gniewko Bór dalej liczy jelenie w zwierzyńcu Lorda - i ani razu nie musiał liczyć twoich.",
+  "permit": "Raz w tygodniu, z zezwoleniem w zanadrzu, przechodzisz przez wyłom w żywopłocie na jelenia. Gniewko Bór kiwa ci głową jak swojemu."
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Lowy_Data.js: GAJOWY=mieszkaniec:/^(name|title)$|^(barks|talk)\\./, ZBLAKANE=zblakane:/\\.name$/, TX, TALK=rozmowy, Q_K59=zadania.K59:zadanie, Q_K60=zadania.K60:zadanie, Q_K61=zadania.K61:zadanie, Q_K62=zadania.K62:zadanie, Q_D32=zadania.D32:zadanie, Q_D33=zadania.D33:zadanie, REMARKS=uwagi:/\\.lines$/, BEASTS=bestie:/\\.(one|few|many)$/, TEMPLATES=tablica:/\\.(title|text|note)$/, EPILOG=epilog)"
+}

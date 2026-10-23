@@ -168,7 +168,9 @@
     // ==================================================================
     const BD = () => T.api("Bron_Data");
     const SWING = { club: () => ({ combo: [CLUB, CLUB, CLUB], heavy: CLUB, hold: 7 }), punch: () => ({ combo: [PUNCH, PUNCH, PUNCH], heavy: PUNCH, hold: 5 }),
-        axe: () => ({ combo: [3, 3, 0], heavy: 0, hold: 10 }), pick: () => ({ combo: [1, 1], heavy: 1, hold: 14 }), spear: () => ({ combo: [15, 15, 15], heavy: 15, hold: 9 }) };
+        axe: () => ({ combo: [3, 3, 0], heavy: 0, hold: 10 }), pick: () => ({ combo: [1, 1], heavy: 1, hold: 14 }), spear: () => ({ combo: [15, 15, 15], heavy: 15, hold: 9 }),
+        // (2026-10-23) the sword's own wide slash (Hero_Sword: miecz, tasak, szabla, dlugi_miecz); without the sheet: the club
+        sword: () => { const k = swingKindOf("sword"); return k >= 0 ? { combo: [k, k, k], heavy: k, hold: 8 } : SWING.club(); } };
     const OLD_ORDER = MELEE_ORDER.slice();
     const NOTE = { bron: /<Bron:\s*([a-z_]+)\s*,\s*([a-z_]+)\s*(?:,\s*[A-Za-z0-9_]+\s*)?>/, tarcza: /<Tarcza:\s*[A-Za-z0-9_]+\s*>/, zbroja: /<Zbroja:\s*([a-z]+)\s*,/ };
     let gearOf = null, gearLen = 0;

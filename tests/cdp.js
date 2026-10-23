@@ -8,8 +8,65 @@ const os = require("os");
 const EDGE = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const PORT = Number(process.env.CDP_PORT) || 9333;   // (another port lets a long run - the marathon - go beside the other tests)
 // GAME_OVERLAY=<folder in the project>: its data/*.json and img/characters/*.png are served instead of (or beside) the game's own -
-// a test of files not installed yet (e.g. tools/apply_tavern_interior.py --out tools/tavern/staging/install_preview)
+// a test of files not installed yet (e.g. tools/apply_tavern_interior.py --out tools/tavern/staging/install_preview).
+// GAME_OVERLAY_JS=1 (opts.overlayJs): its index.html and js/* too (a staged js/tawerna_wtyczki.js, another js/plugins.js -
+// tests/ladowacz_test.js)
 const OVERLAY = process.env.GAME_OVERLAY ? path.resolve(__dirname, "..", process.env.GAME_OVERLAY) : null;
+const OVERLAY_JS = process.env.GAME_OVERLAY_JS === "1";
+const OVERLAY_TYPES = { ".json": "application/json", ".png": "image/png", ".js": "text/javascript; charset=utf-8", ".html": "text/html; charset=utf-8" };
+// TEST_COVERAGE=<file> (tests/run.js mapa / --odswiez-mape - tests/lib/mapa.js): which functions and blocks (an if's branch, the
+// rest of a function after an early return) of the game's js/ files ran - V8's precise block coverage - and which of the game's
+// files the page asked the server for, and the maps it went onto; written into <file> as JSON when a browser closes and when the
+// process ends. Nothing changes without the variable.
+const COVER_FILE = process.env.TEST_COVERAGE || null;
+const cover = COVER_FILE ? { scripts: {}, urls: {}, maps: {} } : null;
+// (the maps the game really set up - Game_Map.setup -, not the ones a plugin reads ahead: put into every page, read at each take)
+const COVER_PAGE = `(function(){ window.__mapaMaps = {}; const iv = setInterval(function(){ if (!window.Game_Map || !Game_Map.prototype.setup) return;
+    clearInterval(iv); const _s = Game_Map.prototype.setup; Game_Map.prototype.setup = function(id) { window.__mapaMaps[id] = 1; return _s.apply(this, arguments); }; }, 50); })();`;
+// TEST_TURBO=N (else opts.turbo; tests/run.js sets it for the tests of its TURBO list): the game's logic runs N updates for each drawn frame
+// (SceneManager.determineRepeatNumber) - all that counts game frames (moves, fades, messages, the dice rolling, t.frames(n)) goes N
+// times faster by the clock, the same frames in the same order; only what is timed by the wall clock is not sped up. 0/1: off.
+const TURBO_PAGE = n => `(function(){ const N = ${n}; const iv = setInterval(function(){ if (!window.SceneManager || !SceneManager.determineRepeatNumber) return;
+    clearInterval(iv); const d = SceneManager.determineRepeatNumber; SceneManager.determineRepeatNumber = function(dt) { const k = d.call(this, dt); return k > 0 ? k * N : 0; };
+    window.__turbo = N; }, 5); })();`;
+const GAME_PREFIX = "http://127.0.0.1:8765/";
+const gamePath = url => { if (!url || url.indexOf(GAME_PREFIX) !== 0) return null; try { return decodeURIComponent(url.slice(GAME_PREFIX.length).split(/[?#]/)[0]); } catch (e) { return null; } };
+// the innermost of ranges (sorted: start up, end down) holding [s, e]
+function innermost(list, s, e) {
+    let lo = 0, hi = list.length - 1, at = -1;
+    while (lo <= hi) { const mid = (lo + hi) >> 1; if (list[mid].s <= s) { at = mid; lo = mid + 1; } else hi = mid - 1; }
+    for (let i = at; i >= 0; i--) if (list[i].e >= e) return list[i];
+    return null;
+}
+// One take (takePreciseCoverage resets the counts). V8 leaves out a block whose count is its parent's: such a block ran in this
+// take exactly when the innermost range round it did. A range seen for the first time takes the state the innermost known range
+// round it had in the takes before. Each range: { s, e, hit, name } (a block's name: its function's and "#").
+function coverAdd(result) {
+    for (const sc of result || []) {
+        const rel = gamePath(sc.url);
+        if (!rel || !/^js\/.*\.js$/.test(rel)) continue;
+        const known = cover.scripts[rel] || (cover.scripts[rel] = new Map());
+        const take = [];
+        for (const f of sc.functions) f.ranges.forEach((r, k) => take.push({ s: r.startOffset, e: r.endOffset, c: r.count, name: (f.functionName || "") + (k ? "#" : "") }));
+        const order = (a, b) => a.s - b.s || b.e - a.e;
+        take.sort(order);
+        const before = [...known.values()].sort(order);
+        for (const t of take) {
+            const key = t.s + ":" + t.e;
+            if (known.has(key)) continue;
+            const p = innermost(before, t.s, t.e);
+            known.set(key, { s: t.s, e: t.e, hit: p ? p.hit : 0, name: t.name });
+        }
+        for (const k of known.values()) { const t = innermost(take, k.s, k.e); if (t && t.c > 0) k.hit = 1; }
+    }
+}
+function coverWrite() {
+    if (!cover) return;
+    const scripts = {};
+    for (const [rel, m] of Object.entries(cover.scripts)) { const o = scripts[rel] = {}; for (const [k, v] of m) o[k] = [v.hit, v.name]; }
+    try { fs.writeFileSync(COVER_FILE, JSON.stringify({ scripts, urls: cover.urls, maps: cover.maps, blocks: true })); } catch (e) {}
+}
+if (cover) process.on("exit", coverWrite);
 
 function getJson(url) {
     return new Promise((res, rej) => {
@@ -51,9 +108,10 @@ function spawnBrowser(port, profile, w, h) {
 const GAME_ORIGIN = "http://127.0.0.1:8765";
 async function launch(opts = {}) {
     const w = opts.width || 1280, h = opts.height || 720;
-    // opts.port / opts.overlay: the same as CDP_PORT / GAME_OVERLAY, for one launch (tests/lib/kit.js)
+    // opts.port / opts.overlay / opts.overlayJs: the same as CDP_PORT / GAME_OVERLAY / GAME_OVERLAY_JS, for one launch (tests/lib/kit.js)
     const PORT = Number(opts.port) || module.exports.PORT;
     const OVERLAY = opts.overlay ? path.resolve(__dirname, "..", opts.overlay) : module.exports.OVERLAY;
+    const OVERLAY_WITH_JS = opts.overlayJs !== undefined ? !!opts.overlayJs : OVERLAY_JS;
     // the browser profile lives in the system temp folder (not in the synced project) and is removed on close(); opts.profile: an
     // existing profile (its saves - e.g. the watched game's) that is kept
     const attach = process.env.CDP_ATTACH === "1" && !opts.profile && PORT === (Number(process.env.CDP_PORT) || PORT);
@@ -78,20 +136,39 @@ async function launch(opts = {}) {
         else if (m.method === "Runtime.consoleAPICalled") logs.push(m.params.args.map(a => a.value ?? a.description).join(" "));
         else if (m.method === "Runtime.exceptionThrown") logs.push("EXC: " + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text));
         else if (m.method === "Fetch.requestPaused") overlay(m.params);
+        else if (cover && m.method === "Network.requestWillBeSent") { const rel = gamePath(m.params.request && m.params.request.url); if (rel) cover.urls[rel] = 1; }
     };
     function overlay(p) {
         const rel = decodeURIComponent(new URL(p.request.url).pathname).replace(/^\/+/, "");
         const f = OVERLAY && path.join(OVERLAY, rel);
         if (f && fs.existsSync(f) && fs.statSync(f).isFile()) {
             send("Fetch.fulfillRequest", { requestId: p.requestId, responseCode: 200, body: fs.readFileSync(f).toString("base64"),
-                responseHeaders: [{ name: "Content-Type", value: rel.endsWith(".json") ? "application/json" : "image/png" }, { name: "Cache-Control", value: "no-store" }] }).catch(() => {});
+                responseHeaders: [{ name: "Content-Type", value: OVERLAY_TYPES[path.extname(rel).toLowerCase()] || "image/png" }, { name: "Cache-Control", value: "no-store" }] }).catch(() => {});
         } else send("Fetch.continueRequest", { requestId: p.requestId }).catch(() => {});
     }
-    const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, { res, rej }); ws.send(JSON.stringify({ id: i, method, params })); });
+    const rawSend = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, { res, rej }); ws.send(JSON.stringify({ id: i, method, params })); });
+    // (TEST_COVERAGE: the counts are taken before every navigation - the page's scripts go with it -, every 10 s and on close)
+    let coverTimer = null, closed = false;
+    const takeCover = async () => {
+        if (!cover || closed) return;
+        try { coverAdd((await rawSend("Profiler.takePreciseCoverage")).result); } catch (e) {}
+        try { const r = await rawSend("Runtime.evaluate", { expression: "JSON.stringify(window.__mapaMaps || {})", returnByValue: true }); Object.assign(cover.maps, JSON.parse(r.result.value || "{}")); } catch (e) {}
+    };
+    const send = cover ? async (method, params) => { if (method === "Page.navigate" || method === "Page.reload") await takeCover(); return rawSend(method, params); } : rawSend;
     await send("Runtime.enable"); await send("Page.enable"); await send("Emulation.setFocusEmulationEnabled", { enabled: true });
+    const turbo = Number(process.env.TEST_TURBO !== undefined && process.env.TEST_TURBO !== "" ? process.env.TEST_TURBO : opts.turbo) || 0;   // (the variable wins: TEST_TURBO=1 - off)
+    if (turbo > 1) await send("Page.addScriptToEvaluateOnNewDocument", { source: TURBO_PAGE(Math.min(8, Math.round(turbo))) });
+    if (cover) {
+        await send("Profiler.enable");
+        await send("Profiler.startPreciseCoverage", { callCount: true, detailed: true });
+        await send("Page.addScriptToEvaluateOnNewDocument", { source: COVER_PAGE });
+        coverTimer = setInterval(() => { takeCover().then(coverWrite); }, 10000);
+        coverTimer.unref();
+    }
     // (a tab of a shared browser: the game's saves and options of the tests before are gone, as in a fresh profile)
     if (attach) await send("Storage.clearDataForOrigin", { origin: GAME_ORIGIN, storageTypes: "all" }).catch(() => {});
-    if (OVERLAY) await send("Fetch.enable", { patterns: [{ urlPattern: "*/data/*", requestStage: "Request" }, { urlPattern: "*/img/characters/*", requestStage: "Request" }] });
+    if (OVERLAY) await send("Fetch.enable", { patterns: [{ urlPattern: "*/data/*", requestStage: "Request" }, { urlPattern: "*/img/characters/*", requestStage: "Request" }]
+        .concat(OVERLAY_WITH_JS ? [{ urlPattern: "*/index.html", requestStage: "Request" }, { urlPattern: "*/js/*", requestStage: "Request" }] : []) });
     // never the browser's cache: a kept profile (the watched game's) served old plugin files - the day 100-110 run played an old Dog.js
     await send("Network.enable"); await send("Network.setCacheDisabled", { cacheDisabled: true });
     await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: opts.dpr || 1, mobile: false });
@@ -106,6 +183,7 @@ async function launch(opts = {}) {
     };
     const exited = proc ? new Promise(r => proc.once("exit", r)) : Promise.resolve();
     const close = async () => {
+        if (cover) { clearInterval(coverTimer); await takeCover(); closed = true; coverWrite(); }
         if (attach) {   // (only this tab: the browser is the run's)
             try { await request("GET", `http://127.0.0.1:${PORT}/json/close/${page.id}`); } catch (e) {}
             try { ws.close(); } catch (e) {}
@@ -118,4 +196,4 @@ async function launch(opts = {}) {
     };
     return { send, evaluate, shot, close, logs, sleep };
 }
-module.exports = { launch, sleep, PORT, OVERLAY, spawnBrowser, request, getJson };
+module.exports = { launch, sleep, PORT, OVERLAY, OVERLAY_JS, spawnBrowser, request, getJson };

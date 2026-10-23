@@ -1,0 +1,477 @@
+# Teksty wątku W7 „Dwór z kamieni twierdzy” (wtyczki Dwor_Data.js i Dwor.js): Lord Zaleski, Feliks, hol, biblioteka, gabinet, ogród nocą, prawda, spłaty, Serce.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz dwor
+
+# ======================================================================== TX
+drzwiWejdz = Wejść do dworu?
+drzwiTak = Wejdź.
+drzwiNie = Nie teraz.
+kamien = Kamień z dawnej twierdzy z wyrytym krukiem. Co dziesiąty kamień w tej ścianie ma takiego kruka.
+brak = Tu powinien być kruk. Kamień jaśniejszy od innych, zaprawa wokół biała i świeża. Ktoś go niedawno wymienił.
+brakPo = Tu był kruk. Feliks wyjął go i sprzedał - jak dwa następne obok drzwi gabinetu.
+schody = Schody na piętro - pokoje jaśnie pana. Bez zaproszenia ani kroku dalej.
+ksiega = Księga gości dworu. Ostatnie wpisy: „kurier z przystani - w sprawie wosku”, „kupiec V. - w sprawie wosku”. Wosku? Pismo Feliksa.
+ksiegaTeodor = Księga gości dworu. Od kilku dni pisze w niej ktoś inny - równe, okrągłe litery Teodora.
+gabZamkniety = Gabinet jaśnie pana. Zamknięty na klucz - klucz nosi {butler}.
+gabNoc = Drzwi na hol zamknięte na klucz - od tamtej strony.
+biurko = Rachunki dworu. Jaśnie pan podpisuje, co mu podsuną - na każdej stronie ten sam zamaszysty podpis i ani jednej poprawki.
+biurkoPo = Rachunki dworu. Między kartkami - ołówkowe kreski Lorda. Teraz czyta wszystko, strona po stronie.
+mapa = Mapa wyspy. Ktoś zaznaczył ołówkiem dwór, wzgórze tawerny i kopiec z krukiem przy chacie dziadka. Pismo Feliksa.
+[kronikaSam]
+(Kronika rodu Zaleskich. Na zakładce - piąta zwrotka starej pieśni:)
+„Dwór z kamieni - kamień pamięta, / skąd go wzięła ręka przeklęta. / Kruk na progu, kruk na ścianie - / nikt nie pyta, co się stanie.”
+
+klapaZejdz = Zejść do kanału?
+klapaTak = Zejdź.
+klapaNie = Jeszcze nie.
+[kanalDol]
+> (Stary kanał zakonu. Po kostki w mule, gdzieś za kratą szumi woda. Kilkadziesiąt kroków - i drabina do włazu za oranżerią.)
+
+wlazZejdz = Zejść przez właz?
+wlazTak = Zejdź do kanału.
+wlazNie = Nie teraz.
+wlazZamkniety = Zasuwa włazu zamknięta od środka.
+wlazFeliks = Przy włazie stoi Feliks z Kubą. Nie teraz.
+wlazDzien = Za dnia ogrodnik i straż widzą każdy krok. Nocą.
+wlazRygiel = Zasuwa zaryglowana od dołu. Feliks pilnuje się teraz bardziej - spróbuj za dwie noce.
+[kanalGora]
+> (Kanał prowadzi pod dworem. Na końcu - drabina i klapa w podłodze. Ostrożnie, ramieniem...)
+
+[zaproAsk]
+Wnuku Stacha! Połowa długu - i to przed terminem. Przyznam, zaczynam cię lubić.
+Ty pewnie nigdy nie byłeś w środku? Wejdź. Pokażę ci coś, czego nawet Stach nie widział: ściany z kamieni twierdzy.
+
+[zaproAskBuy]
+Wnuku Stacha. Połowa za działkę - przyznam, nie wierzyłem. Ty pewnie nigdy nie byłeś w środku?
+Wejdź. Pokażę ci, z czego jest ten dom. Ściany z kamieni twierdzy.
+
+[zaproAskCold]
+Wnuku Stacha. Po tamtym targu nie myślałem, że jeszcze cię tu zobaczę. A jednak - połowa długu, co do grosza.
+Wejdź. Skoro całe miasto wie, co płynęło pod moim dworem, zobacz chociaż, z czego ten dwór jest zrobiony.
+
+[zaproAskAlly]
+Mój przyjaciel od zasuwy! I połowa długu na dodatek. Nigdy cię nie oprowadziłem po domu - wstyd.
+Wejdź. Pokażę ci ściany z kamieni twierdzy. Teraz, kiedy Feliksa nie ma, sam muszę pilnować, kto tu wchodzi.
+
+zaproTak = Wejdę.
+zaproNie = Innym razem.
+[zaproLater]
+Jak chcesz. Drzwi poczekają - od ósmej do ósmej.
+
+[tour.0]
+lord
+Witaj w moim domu. Hol pamięta jeszcze mojego dziadka - to on postawił ten dwór.
+
+[tour.1]
+lord
+Każdy kamień w tych ścianach przywieziono z ruin dawnej twierdzy. Z Kruczych Skał. Dziadek kazał je układać tak, jak leżały.
+
+[tour.2]
+walk
+lordKruki
+
+[tour.3]
+lord
+Widzisz? Co dziesiąty ma wyrytego kruka. Mówią, że jeden kruk pilnuje dziewięciu kamieni.
+
+[tour.4]
+hero
+(Liczysz. Kruk... dziewięć gładkich... kruk. A przy drzwiach gabinetu - trzy zwykłe kamienie, jaśniejsze, na białej, świeżej zaprawie.)
+
+[tour.5]
+hero
+Tu brakuje kruków. Trzech.
+
+[tour.6]
+lord
+Feliks dba o mury. Coś kruszeje, to wymienia. Przy tej wilgoci...
+
+[tour.7]
+lord
+(Lord macha ręką.) Ja kamieni nie liczę, młodzieńcze. Ja liczę gości.
+
+[tour.8]
+feliks
+(Feliks za pulpitem podnosi wzrok znad księgi gości. Patrzy na ciebie dłużej, niż trzeba.)
+
+[tour.9]
+lord
+Chodź do biblioteki - drzwi na lewo. Mam tam coś ładniejszego niż kamienie: kronikę rodu.
+
+[tourKronika.0]
+lord
+Kronika rodu Zaleskich. Dziadek spisał w niej wszystko, co starzy mówili o twierdzy. Posłuchaj.
+
+[tourKronika.1]
+lord
+„Dwór z kamieni - kamień pamięta, / skąd go wzięła ręka przeklęta. / Kruk na progu, kruk na ścianie - / nikt nie pyta, co się stanie.”
+
+[tourKronika.2]
+lord
+To bajki, ale ładne. „Ręka przeklęta” - podobno o moim dziadku, że ruszył kamienie twierdzy. Bzdura. Kamień to kamień.
+
+[tourKronika.3]
+lord
+Przychodź, kiedy zechcesz - od ósmej do ósmej drzwi dworu są dla ciebie otwarte. {butler} wie.
+
+tourMuryGone = Feliks dbał o mury, póki tu służył. Coś kruszało, to wymieniał. Przy tej wilgoci...
+tourLordWaits = Jaśnie pan czeka w bibliotece - drzwi na lewo.
+[noteKronika]
+Kronika rodu Zaleskich
+Lord pokazał mi hol dworu: ściany z kamieni dawnej twierdzy, co dziesiąty z wyrytym krukiem. Przy drzwiach gabinetu brakuje trzech kruków - na ich miejscu zwykłe kamienie na świeżej zaprawie. „Feliks dba o mury.”\nW bibliotece kronika rodu, piąta zwrotka pieśni o Kruczych Skałach: „Dwór z kamieni - kamień pamięta, / skąd go wzięła ręka przeklęta. / Kruk na progu, kruk na ścianie - / nikt nie pyta, co się stanie.”\nLord: „To bajki, ale ładne.” Drzwi dworu są dla mnie otwarte od ósmej do ósmej.
+
+notePlanTitle = Plan dnia Feliksa
+plan.head = Feliks, kamerdyner jaśnie pana. Co widziałem na własne oczy:
+plan.rano = 6–10:30, rynek: zakupy dla dworu przy straganach, rachunki u sołtysa. U Hanki bierze bułki dla dworu - i papier, lak, atrament na kopy. Za dużo jak na rachunki jednego domu.
+plan.dzien = 10:30–20, hol dworu: za pulpitem z księgą gości. Co godzinę zagląda do gabinetu; kluczyk od kantorka chowa do kałamarza.
+plan.noc = ok. 1:30–3:00, ogród dworu: Feliks wychodzi SPOD włazu z krukiem za oranżerią - nie z dworu! - i napełnia Kubie beczki. Kanał pod włazem musi prowadzić do środka dworu.
+plan.kantor = raz w tygodniu, o północy: tylne drzwi kantoru Baltazara (trzy stuknięcia). Wychodzi z sakiewką.
+plan.miss = (jeszcze nie widziałem)
+plan.gone = Feliksa już nie ma w dworze. Co zostało po nim:
+plan.teodor = Teodor: kantorek Feliksa w gabinecie wciąż zamknięty na kluczyk. Klucza nie znalazł - „Feliks nosił go zawsze przy sobie... albo w kałamarzu”.
+plan.hanka = Hanka: Feliks kupował papier i lak na kopy. „Mówił, że jaśnie pan dużo pisze. Jaśnie pan? On nawet listów nie czyta.”
+plan.kuba = Kuba: Feliks zawsze pytał, kto pyta o wodę - i zapisywał. Wychodził spod włazu za oranżerią, nie z dworu.
+plan.rejestr = Rejestr Baltazara: „F.” - dwie beczki wody na tydzień, o północy, tylna furtka dworu.
+plan.foot = Zostaje gabinet. Nocą, starym kanałem spod włazu za oranżerią.
+obsRano = > (Feliks przy straganie Hanki: bułki... i papier, lak, atrament. Na kopy.)
+obsDzien = > (Feliks zagląda do gabinetu, wraca do pulpitu - i wrzuca kluczyk do kałamarza.)
+[obsNoc]
+> (Feliks... wyszedł spod włazu, nie z dworu. Kanał pod włazem musi prowadzić do środka.)
+
+feliksSpotted = Pan coś ode mnie chciał, młodzieńcze?
+feliksNocKto = Kto tam?! ...Straż!
+caughtNoc = Wyrzucony za bramę dworu - spróbuj innej nocy
+guardSees = Stój! Kto tam łazi po ogrodzie jaśnie pana?!
+[slady.kamerdyner]
+> Teodorze, co zostało po Feliksie?
+Po Feliksie? Kantorek w gabinecie jaśnie pana, zamknięty na kluczyk. Klucza nie znalazłem - nosił go zawsze przy sobie... albo w kałamarzu. Taki nawyk pisarzy.
+I jeszcze to: w nocy czasem słychać pod podłogą gabinetu wodę. Jak w kanale.
+
+[slady.piekarka]
+> Hanko, Feliks kupował coś u ciebie poza bułkami?
+Papier i lak! Na kopy. Mówił, że jaśnie pan dużo pisze. Jaśnie pan? On nawet listów nie czyta, to Feliks mu czytał.
+
+[slady.woziwoda]
+> Kuba, o co pytał cię Feliks przy beczkach?
+(Kuba się rozgląda.) Zawsze o to samo: kto pyta o wodę. I zapisywał. Po co kamerdynerowi takie zapiski?
+I wychodził spod włazu za oranżerią. Nie z dworu - spod włazu. Jakby tam miał drzwi.
+
+[szuflada.open]
+> (Kantorek Feliksa. Szuflada zamknięta na kluczyk.)
+
+szuflada.key = > (Kluczyk - w kałamarzu. Widziałem, jak go tam chowa.)
+szuflada.keyGuess = > (Kluczyk... leży w kałamarzu. Stary nawyk pisarzy.)
+szuflada.bundle = > (W szufladzie plik listów, przewiązany czarnym sznurkiem. Na laku - otwarte białe oko.)
+[szuflada.letters]
+> „Do sztabu Straży Pewności. Woda: dwie beczki na tydzień idą przez kantor na prom. Ogród dworu poję z gałęzi zakonu - pan myśli, że to studnia.”
+> „Kamienie: z holu wyjąłem w tym miesiącu trzy z krukiem, przy drzwiach gabinetu. Na ich miejsce zwykłe, na świeżą zaprawę. Pan nie liczy kamieni - pan liczy gości.”
+
+szuflada.lastHere = > „Wnuk Stacha spłaca dług i pyta o twierdzę. Zna Borgara. Patrzę na niego. Pan nic nie wie i nie dowie się - pan wierzy w bajki. F.”
+szuflada.lastGone = > „Ktoś widział mnie przy włazie. Jeśli zniknę - kamienie z holu są u kupca. Szukajcie innego przy dworze. F.”
+szuflada.lastPays = > „Wnuk Stacha wie o zasuwie. Płacę mu dwadzieścia groszy na tydzień - niech myśli, że to wystarczy. Moi ludzie zajmą się resztą. Pan nic nie wie. F.”
+szuflada.hand = > (Pismo Feliksa. To samo, co w księdze gości i na rachunkach dworu.)
+szuflada.ask = Co z nimi zrobisz?
+szuflada.take = Zabierz listy.
+szuflada.copy = Przepisz je (pół godziny).
+szuflada.leave = Zostaw je.
+[szuflada.tookSay]
+> (Listy za pazuchą. Szuflada zamknięta, kluczyk w kałamarzu - jakby nikt jej nie ruszał.)
+
+[szuflada.copySay]
+> (Przepisujesz słowo w słowo, przy świecy jaśnie pana. Oryginały wracają do szuflady.)
+
+[szuflada.leaveSay]
+> (Listy wracają do szuflady. Wiesz, co w nich jest - to na razie musi wystarczyć.)
+
+szuflada.done = > (Szuflada pusta. Listy są u mnie.)
+szuflada.doneCopy = > (Listy leżą, jak leżały. Odpis mam w torbie.)
+[caughtGab]
+Ty?! Tutaj?! ...
+Wynoś się. Drzwiami, nie kanałem. I módl się, żebym to ja pierwszy nie poszedł z tym do jaśnie pana.
+
+caughtGabPopup = Feliks cię przyłapał w gabinecie
+caughtGabSub = Wyprowadzony przed dwór - klapa zaryglowana na dwie noce
+[noteListy]
+Listy Feliksa
+W gabinecie dworu, w zamkniętym kantorku Feliksa (kluczyk w kałamarzu) leżą listy pisane jego ręką „Do sztabu Straży Pewności” - lak z białym okiem:\n- woda z gałęzi zakonu idzie przez kantor Baltazara na prom; ogród dworu pije z kanału, Lord myśli, że ze studni,\n- Feliks wyjmuje z holu kamienie z krukiem i wstawia zwykłe (trzy przy drzwiach gabinetu),\n- donosi o mnie: „wnuk Stacha pyta o twierdzę”.\nLord nic nie wie - „pan wierzy w bajki”.
+
+[noteFlee]
+Feliks uciekł
+Feliks zauważył, że listy zniknęły z kantorka. Uciekł promem na ląd, zanim Lord się dowiedział.
+
+[prawdaAsk]
+> Panie. Muszę panu coś pokazać. To listy - z kantorka Feliksa, w gabinecie.
+
+prawdaOpt = Pokaż Lordowi listy Feliksa.
+prawdaLater = Jeszcze nie.
+[prawdaLaterSay]
+Listy? Od Feliksa? ...Jak chcesz. Wiesz, gdzie mnie szukać.
+
+powiedzOpt = Powiedz Lordowi o listach w kantorku Feliksa.
+[powiedzSay]
+> Panie. W gabinecie, w kantorku Feliksa, leżą listy. Do tych z białym okiem. Pisane jego ręką.
+(Lord długo milczy.) To poważne oskarżenie, młodzieńcze. Feliks służy temu domowi od trzydziestu lat.
+...Sprawdzę sam. W nocy, kiedy wszyscy śpią. Przyjdź jutro.
+
+[powiedzWait]
+Przyjdź jutro, mówiłem. Dziś jeszcze nie wiem, co myśleć.
+
+[sprawdzil]
+Sprawdziłem. Kantorek, kałamarz, kluczyk. Wszystko tak, jak mówiłeś.
+
+[copyCheck]
+To nie jego pismo - to twoje. Przepisałeś...
+Wiem, gdzie Feliks trzyma kluczyk. (Lord woła przez ramię.) Bartosz! Gabinet, kantorek, szuflada. Przynieś, co tam leży.
+(Po chwili strażnik wraca z plikiem listów przewiązanym czarnym sznurkiem. Lord łamie lak z okiem.)
+
+[prawda]
+To jego ręka. Trzydzieści lat znam tę rękę. Pisała mi rachunki, zaproszenia, życzenia na imieniny...
+„Pan nie liczy kamieni - pan liczy gości.” ...Ma rację. Liczyłem gości. Ilu przyszło, kto przyniósł miód, kto się ukłonił niżej.
+A on w tym czasie wyjmował mi ze ścian kruki i sprzedawał wodę z mojego ogrodu tym... z białym okiem. Tym, co palą wsie na lądzie.
+Płacę Koronie podatek wojenny, żeby chorągiew w zatoce broniła nas przed nimi. A oni siedzieli mi w kuchni. Przy moim stole.
+(Lord siada na stopniu przed drzwiami dworu. Nagle wygląda na starego człowieka.)
+Mój ojciec mawiał: przyjdź najpierw do mnie. Myślałem, że chodzi o skarby. Chodziło o ludzi. Kto pierwszy przychodzi z prawdą, ten jest swój.
+
+fate.arrest = (Lord wstaje.) Straż! Feliksa do wieży. Niech czeka na sołtysa i rotmistrza - niech oni go sądzą, nie ja. Ja bym... nie umiał.
+fate.fled = Uciekł, mówisz? Promem? ...Niech płynie do swoich. Kruków ze ścian już mi nie wyjmie.
+fate.jailed = Siedzi już w wieży - za wodę. Teraz posiedzi za resztę.
+fate.sent = Odprawiłem go za wodę - po cichu, z sakiewką na drogę. Z sakiewką! Niech go teraz szukają ci z okiem.
+fate.gone = Feliksa już tu nie ma. A jego listy zostały - jak kamienie, które ukradł.
+reward.debt = Dług twojego dziadka... Zapiszę sam: dwieście pięćdziesiąt mniej. Nie, nie dziękuj. To ja dziękuję.
+reward.buyback = Działkę Stacha odsprzedam ci za dwa tysiące. Tysiąc mniej. Tyle są warte te listy - i to, że przyszedłeś z nimi do mnie.
+reward.other = Weź to - sto groszy. I zapamiętaj: drzwi tego domu są dla ciebie otwarte zawsze.
+prawdaPays = „Wnuk Stacha wie o zasuwie. Płacę mu...” (Lord podnosi wzrok.) Brałeś od niego pieniądze. ...A jednak przyszedłeś z tym do mnie. To liczę bardziej.
+[w1Broke]
+Feliks już nie płaci
+{fate} - dwudziestu groszy na tydzień już nie będzie, a jego ludzie nie mają po co czekać na Polnej drodze. Rysunek śluzy wciąż mam: mogę go pokazać sołtysowi albo Lordowi.
+
+w1BrokeFate.arrest = Feliks siedzi w wieży
+w1BrokeFate.fled = Feliks uciekł promem
+prawdaKoniec = Dziękuję. Nie wiem jeszcze za co bardziej - za listy, czy za to, że przyszedłeś z nimi do mnie, a nie na rynek.
+prawdaGaraz = Listy pójdą do rotmistrza w zatoce. Niech Korona wie, kogo tu karmiła.
+prawdaGalaz = I jeszcze ten kanał w cysternie... Zamknąłeś mi wodę, a teraz przynosisz prawdę. Nie wiem, czy ci dziękować, czy cię przeklinać.
+[noteTruth]
+Prawda dla Lorda
+Pokazałem Lordowi listy Feliksa. Lord się złamał: „Liczyłem gości, a on liczył kamienie.” {fate}\nOd dziś Lord jest po mojej stronie - „kto pierwszy przychodzi z prawdą, ten jest swój”.
+
+fateNote.arrest = Feliks siedzi w wieży - sądzić go będą sołtys i rotmistrz.
+fateNote.fled = Feliks uciekł promem, zanim Lord się dowiedział.
+fateNote.jailed = Feliks już siedział w wieży za wodę (W1).
+fateNote.sent = Feliksa Lord już wcześniej odprawił za wodę (W1).
+fateNote.gone = Feliksa już nie ma w dworze.
+[najpierwAsk.normal]
+Słyszałem od Borgara... a raczej od jego beczek: krata w piwnicy tawerny stoi otworem. A ty schodzisz w dół.
+Mówiłem ci - przyjdź najpierw do mnie. No więc? Co tam jest, pod Kruczymi Skałami?
+
+[najpierwAsk.ally]
+Po tym, co zrobiłeś z Feliksem, ufam ci bardziej niż własnej straży.
+Krata w piwnicy tawerny stoi otworem. Powiesz mi, co tam jest, pod Kruczymi Skałami?
+
+[najpierwAsk.cold]
+Po tamtym targu nie liczę na twoją szczerość. Ale pytam: krata w piwnicy stoi otworem. Co tam jest, pod Kruczymi Skałami?
+
+optLord = Powiem panu wszystko - co piętro, co znajdę.
+optLie = Nic tam nie ma, panie. Kurz i szczury.
+optSilent = Tego nie powiem nikomu. Także panu.
+[sayLord]
+Wiedziałem, że ród Stacha ma honor. Sto groszy na tydzień - za każde słowo. I weź coś ze zbrojowni: pochodnie, liny, opatrunki, strzały.
+Moi ludzie pójdą za tobą. Nie przeszkadzać - pilnować, żebyś wrócił. I żeby nikt inny nie był pierwszy.
+
+[sayLie]
+Kurz i szczury... Dobrze. Wierzę ci. Na razie.
+
+[saySilent]
+Milczysz? ...Szanuję milczenie. Ale pamiętam je.
+
+saySilentFeliks = (Za plecami Lorda, w drzwiach dworu, stoi Feliks. Słyszał każde słowo.)
+[tydzien]
+Twoje sto groszy. Co nowego pod tawerną?
+> Schodzę głębiej, panie. Ostrożnie.
+
+[tydzienNie]
+Sto groszy? Mój ogród usycha przez twoje grzebanie w rurach zakonu. Nie tym razem.
+
+[lieOut]
+Lord wie, że skłamałeś
+Kurz i szczury - powiedziałem Lordowi. Ludzie w tawernie gadają, że zszedłem do dziesiątej bramy i dalej. Lord wie. Dwór jest teraz wrogi: wyższe myto u bramy wschodniej, a straż dworu zapowiedziała przeszukanie mojej chaty.
+
+lieOutPopup = Lord wie, że skłamałeś
+lieOutSub = Wrogość dworu: wyższe myto, przeszukanie chaty
+[lordHostile]
+Kurz i szczury, mówiłeś. Moi ludzie słyszą w tawernie co innego.
+Kłamca nie wejdzie do mojego domu. Płać, co winien - i idź.
+
+toll = Myto dworu! Dla ciebie - z rozkazu jaśnie pana - pięć groszy.
+[search]
+Przeszukanie
+Straż dworu przewróciła mi chatę do góry nogami. {what} „Z rozkazu jaśnie pana - za kłamstwo.”
+
+searchTook = Zabrali kamienie z krukiem ({n}).
+searchNone = Nic nie znaleźli - wszystko leży na podłodze.
+[donosi]
+Daleko pan dziś schodził, młodzieńcze?
+Piwnica tawerny... wilgotna, prawda?
+Jaśnie pan pytał o pana. Powiedziałem, że nic nie wiem.
+
+[noteDonosi]
+Feliks patrzy
+Odmówiłem Lordowi, a Feliks to słyszał. Teraz widzę go wszędzie - przy studni, pod tawerną, na drodze. Ktoś na lądzie wie o każdym moim zejściu.
+
+w9Lord = Moi ludzie wrócili z ruin posiniaczeni. Bartosz kuleje. ...Nie pytam, kto zaczął. Pamiętam, kto skończył.
+w9Guard = Bartosz jeszcze kuleje. Przechodź szybko, chłopcze.
+serce.ally = Lord jest po twojej stronie - zejdzie za tobą aż do Serca, z jednym pytaniem: o syna, Kazimierza.
+serce.rival = Lord jest ci wrogi - jego ludzie pójdą twoimi śladami, a on sam stanie przy Sercu przeciw tobie. Też z pytaniem o syna.
+serce.absent = Lord nie wie, że schodzisz w głąb - przy Sercu go nie będzie. Nigdy nie zada swojego pytania o syna.
+[noteSerce]
+Lord przy Sercu
+Lord Zaleski przy Sercu Twierdzy: {how}
+
+serceHow.allow = pozwoliłem mu zadać jedno pytanie - o syna, Kazimierza.
+serceHow.refuse = nie pozwoliłem mu zapytać.
+serceHow.askFor = zapytałem za niego.
+serceHow.none = nie przyszedł.
+epilog.truth = W holu dworu brakuje trzech kruków. Lord nie kazał ich zamurować - „niech każdy gość pyta, gdzie są”.
+epilog.lie = Dwór Zaleskich zamyka bramę przed wnukiem Stacha. Myto przy bramie wschodniej wciąż kosztuje go pięć groszy.
+epilog.fled = Gdzieś na lądzie Feliks pisze listy do sztabu, którego już nikt nie czyta.
+epilog.silent = Lord do dziś nie wie, kto mu wyjmował kruki ze ścian. Liczy gości.
+f9 = W7: rozdział {n} - {name}   ←→ zmień, OK idź
+f9desc = Ustawia „Dwór z kamieni twierdzy” na początku rozdziału {n} (spłaty, flagi, pora) i przenosi tam, gdzie się dzieje.
+f9names.1 = dług
+f9names.2 = zaproszenie
+f9names.3 = dwa życia Feliksa
+f9names.4 = gabinet nocą
+f9names.5 = prawda i ostatnia spłata
+f9names.6 = do kogo najpierw
+f9names.7 = Lord przy Sercu
+
+# ======================================================================== W7 (zadania.W7)
+zadania.W7.title = Dwór z kamieni twierdzy
+zadania.W7.where = drzwi dworu, hol, biblioteka, gabinet, ogród dworu nocą, rynek
+zadania.W7.when = od dnia 1 (dług) do Aktu III
+zadania.W7.desc = Lord Zaleski zna tylko bajkę o kamieniach twierdzy. Jego kamerdyner Feliks rano robi zakupy, a nocą prowadzi interesy. Z kim?
+zadania.W7.steps.0.text = Dług dziadka u Lorda Zaleskiego: {dlug}
+zadania.W7.steps.1.text = Zaproszenie: {zapro}
+zadania.W7.steps.2.text = {feliks}
+zadania.W7.steps.3.text = Gabinet nocą: {gabinet}
+zadania.W7.steps.4.text = {prawda}
+zadania.W7.steps.5.text = Ostatnia spłata: {splata}
+zadania.W7.steps.6.text = Do kogo najpierw: {najpierw}
+zadania.W7.steps.7.text = Lord przy Sercu: {serce}
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.listy_feliksa.name = Listy Feliksa (do sztabu)
+rzeczy.odpis_listow.name = Odpis listów Feliksa
+
+# ======================================================================== REMARKS (uwagi)
+# w7Hanka, mówi: piekarka
+[uwagi.0.lines]
+Feliksa zabrali do wieży! Kamerdynera! Mówią, że listy pisał... do tych z okiem. A ja mu sprzedawałam papier.
+
+# w7Soltys, mówi: soltys
+[uwagi.1.lines]
+Jaśnie pan przysłał mi Feliksa w łańcuchach. Do sądu. Trzydzieści lat rachunków dworu - teraz wiem, czemu zawsze się zgadzały.
+
+# w7Kuba, mówi: woziwoda
+[uwagi.2.lines]
+Feliksa już nie ma, co? ...Dobrze. Pytał za dużo. Ja tylko woziłem beczki.
+
+# w7Ucieczka, mówi: kapral
+[uwagi.3.lines]
+Kamerdyner dworu odpłynął porannym promem. Z jednym kuferkiem. Pierwszy raz widziałem, żeby Feliks się śpieszył.
+
+# w7Teodor, mówi: kamerdyner
+[uwagi.4.lines]
+Jaśnie pan od wczoraj czyta rachunki. Wszystkie. Strona po stronie. Trzydzieści lat nie czytał.
+
+# w7Straz, mówi: straznik
+[uwagi.5.lines]
+Feliksa zabrali do wieży. Kamerdyner - kto by pomyślał. Jaśnie pan od tamtej nocy sam obchodzi hol i liczy kruki.
+
+# w7StrazW9, mówi: straznik
+[uwagi.6.lines]
+(Strażnik nie patrzy ci w oczy.) Bartosz jeszcze kuleje po waszym spotkaniu w ruinach. Przechodź. Szybko.
+
+# w7StrazKlamstwo, mówi: straznik
+[uwagi.7.lines]
+Kurz i szczury, co? Jaśnie pan kazał cię nie wpuszczać. Rozkaz to rozkaz.
+
+# ======================================================================== HOME_BARKS (wHolu)
+[wHolu.feliks]
+Jaśnie pan przyjmuje od ósmej... ach, pan już w środku.
+Proszę niczego nie dotykać, młodzieńcze. Kamienie pamiętają.
+(Feliks coś zapisuje w księdze gości.)
+
+[wHolu.kamerdyner]
+Rachunki dworu są otwarte - jaśnie pan teraz sam je czyta.
+(Teodor ściera kurz z pulpitu.)
+
+# ======================================================================== NO_FELIKS (bezFeliksa)
+bezFeliksa.strazRano = Straż dworu. Pilnuję, żeby nikt obcy nie deptał jaśnie panu kwiatów.
+bezFeliksa.strazRanoWiadra = Ogród podlewamy teraz wiadrami. Jak wszyscy w mieście.
+bezFeliksa.strazRanoWoda = Ogród dalej zielony, choć Feliksa już nie ma. Pod oranżerią szumi woda, jak szumiała.
+[bezFeliksa.strazNoc]
+Nocą do ogrodu nie wolno. Rozkaz jaśnie pana.
+
+[bezFeliksa.strazBarkNoc]
+Zimno... do świtu jeszcze daleko.
+Odkąd Feliksa nie ma, nocą w ogrodzie cicho jak w grobie.
+
+[bezFeliksa.teodorDzien]
+Pod oranżerią szumi woda. Feliks nie zostawił klucza... ani wyjaśnień. Jaśnie pan teraz sam czyta rachunki, strona po stronie.
+
+
+# ======================================================================== z kodu Dwor.js (kod.*)
+# nazwy zdarzeń i mówiących
+kod.nazwy.lord = Lord Zaleski
+kod.nazwy.lordPelne = Lord Leopold Zaleski
+kod.nazwy.feliks = Feliks
+kod.nazwy.listy = Listy Feliksa
+kod.nazwy.kuba = Kuba Woziwoda
+
+kod.notatkaUzupelniona = Notatka uzupełniona: {tytul}
+kod.xp.kronika = kronika rodu
+kod.xp.plan = plan dnia Feliksa
+kod.xp.prawda = prawda dla Lorda
+kod.opiniaOgrod = nocą w ogrodzie dworu
+kod.zlapali = Złapali cię w ogrodzie dworu
+kod.opinia = "  ·  Opinia {n}"
+kod.feliksZauwazyl = Feliks cię zauważył
+kod.szufladaPusta = Szuflada pusta - listy są u jaśnie pana.
+kod.odpisDlugu = Lord odpisuje z długu
+kod.odpisDluguSub = {n} G mniej do spłaty
+kod.odkupTanszy = Odkup działki tańszy
+kod.odkupTanszySub = Lord odsprzeda działkę za {n} G
+kod.odLorda = +{n} G od Lorda
+kod.przychylnosc = listy Feliksa
+kod.najpierw.tytul = Do kogo najpierw
+kod.najpierw.lord = Powiedziałem Lordowi, że będę mu mówił o wszystkim, co znajdę pod tawerną. Płaci sto groszy na tydzień i dał mi ekwipunek ze zbrojowni. Jego ludzie pójdą za mną w dół - „pilnować, żebym wrócił, i żeby nikt inny nie był pierwszy”.
+kod.najpierw.klamstwo = Skłamałem Lordowi: „Nic tam nie ma, kurz i szczury.” Uwierzył. Na razie.
+kod.najpierw.milczenie = Nie powiedziałem Lordowi, co jest pod tawerną. „Szanuję milczenie. Ale pamiętam je.”
+kod.uciekl = Uciekł promem na ląd
+kod.myto = Myto dworu: -{n} G
+kod.rozgosc = Rozgość się.
+kod.kronikaNaPulpicie = Kronika leży na pulpicie. Czytaj śmiało.
+
+# słowa kroków zadania W7 ({dlug}, {zapro}, {feliks}, {gabinet}, {prawda}, {splata}, {najpierw}, {serce} w zadania.W7)
+kod.kroki.dlugPrzepadla = działka przepadła - odkup: {ile} / {cena} G (połowa otworzy drzwi dworu)
+kod.kroki.dlugSplacono = spłacono {ile} z {dlug} G. Kiedy oddasz połowę, Lord zaprosi cię do dworu.
+kod.kroki.zaproBiblioteka = Lord czeka w bibliotece dworu (hol, drzwi na lewo) - kronika rodu leży na pulpicie.
+kod.kroki.zaproPrzedDworem = Lord przed dworem (8–20) chce cię zaprosić do środka - porozmawiaj z nim.
+kod.kroki.feliksSlady = Ślady Feliksa: Feliksa nie ma już w dworze. Popytaj o niego Teodora (rynek rano, hol za dnia), Hankę przy straganie i Kubę przy studni - i zajrzyj do rejestru Baltazara. Ślady i obserwacje: {n}/{need}.
+kod.kroki.feliksDwaZycia = Dwa życia Feliksa: śledź go przez dobę - z ukrycia (C). Rano na rynku (6–10:30), za dnia w holu dworu (10:30–20), nocą przy włazie za oranżerią (ok. 2:00), w noc tygodnia przy tylnych drzwiach kantoru (północ). Widziane: {n}/{need}.
+kod.kroki.gabinet = nocą (22–5) właz z krukiem za oranżerią (ogród dworu, pod sosną) prowadzi starym kanałem zakonu pod gabinet. W gabinecie - kantorek Feliksa. Uważaj na strażnika w ogrodzie
+kod.kroki.gabinetFeliks = " i na Feliksa: o 1:30 schodzi przez gabinet do kanału, o 3:00 wraca."
+kod.kroki.gabinetKoniec = .
+kod.kroki.prawdaZna = Lord zna prawdę.
+kod.kroki.prawdaListy = Prawda dla Lorda: pokaż mu listy Feliksa (przed dworem, 8–20).
+kod.kroki.prawdaSprawdza = Lord sprawdza kantorek sam - przyjdź do niego następnego dnia (8–20).
+kod.kroki.prawdaKantorek = Prawda dla Lorda: listy zostały w kantorku. Możesz powiedzieć o nich Lordowi (przed dworem, 8–20) - albo milczeć.
+kod.kroki.prawda = Prawda dla Lorda.
+kod.kroki.listyWTorbie = " Listy Feliksa wciąż masz w torbie - Lord czeka na prawdę."
+kod.kroki.splataDone = dług spłacony.
+kod.kroki.splataPrzepadla = działka przepadła - rozdział 1 i tak się skończył.
+kod.kroki.splataTermin = Lord przyjmuje spłatę przed dworem (8–20), nocą kamerdyner. Termin: dzień {dzien}.
+kod.kroki.najpierwAkt2 = w Akcie II (po spłacie długu albo stracie działki).
+kod.kroki.najpierwZejdz = kiedy zejdziesz pod tawernę (krata w piwnicy), Lord zapyta, co tam jest.
+kod.kroki.najpierwPyta = Lord pyta przed dworem (8–20), co jest pod Kruczymi Skałami.
+kod.kroki.serceTydzien = " Sto groszy na tydzień - u Lorda przed dworem."

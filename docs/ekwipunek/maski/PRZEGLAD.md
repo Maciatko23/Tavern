@@ -7,33 +7,34 @@ problem z kapeluszem.
 
 | arkusz | klatki | poprawki ręczne | kapelusz schowany | problemy kapelusza | składanie (ms) |
 |---|---:|---:|---|---|---:|
-| Hero_Walk | 72 | 0 | - | 0 | 2.7-8.4 |
-| Hero_Run | 72 | 0 | - | 0 | 1.7-5.9 |
-| Hero_Sneak | 56 | 0 | - | 0 | 1.1-4.7 |
-| Hero_TorchWalk | 72 | 0 | - | 0 | 1.7-5.9 |
-| Hero_TorchRun | 72 | 0 | - | 0 | 1.4-5.5 |
-| Hero_TorchSneak | 56 | 0 | - | 0 | 0.9-3.6 |
-| Hero_Axe | 68 | 2 | - | 0 | 3.0-10.4 |
-| Hero_AxeSide | 68 | 0 | - | 0 | 3.1-9.6 |
-| Hero_Pick | 68 | 0 | - | 0 | 3.2-8.8 |
-| Hero_Shovel | 68 | 0 | - | 0 | 2.9-8.3 |
-| Hero_Rake | 68 | 0 | - | 1 | 2.8-9.4 |
-| Hero_Hoe | 68 | 2 | - | 0 | 3.1-8.8 |
-| Hero_Hammer | 68 | 0 | - | 0 | 3.0-10.5 |
-| Hero_Rod | 68 | 0 | - | 0 | 2.9-9.5 |
-| Hero_Sling | 68 | 0 | - | 0 | 3.0-9.8 |
-| Hero_Bow | 68 | 0 | - | 0 | 2.7-7.1 |
-| Hero_Spear | 68 | 0 | - | 2 | 2.9-7.3 |
-| Hero_Club | 68 | 0 | - | 1 | 3.1-9.1 |
-| Hero_Punch | 68 | 0 | - | 0 | 3.0-11.3 |
-| Hero_Crouch | 132 | 0 | - | 0 | 5.0-17.9 |
-| Hero_Sit | 132 | 0 | - | 0 | 5.4-19.0 |
-| Hero_Roast | 132 | 0 | - | 0 | 4.9-13.7 |
-| Hero_LieDown | 132 | 0 | w0: 12-20; w1: 13-19; w2: 13-19; w3: 10-22 | 0 | 6.1-19.5 |
-| Hero_Roll | 52 | 0 | w0: 5-6; w1: 5-7; w2: 5-7; w3: 5-6 | 0 | 1.9-9.3 |
-| Hero_Torch | 68 | 0 | - | 0 | 3.0-9.3 |
-| Hero_TorchCrouch | 132 | 0 | - | 0 | 4.9-18.1 |
-| Hero_Net | 68 | 8 | - | 2 | 2.9-8.3 |
+| Hero_Walk | 72 | 0 | - | 0 | 3.5-8.8 |
+| Hero_Run | 72 | 0 | - | 0 | 1.7-7.7 |
+| Hero_Sneak | 56 | 0 | - | 0 | 1.3-5.1 |
+| Hero_TorchWalk | 72 | 0 | - | 0 | 1.9-6.3 |
+| Hero_TorchRun | 72 | 0 | - | 0 | 1.6-5.5 |
+| Hero_TorchSneak | 56 | 0 | - | 0 | 1.0-3.5 |
+| Hero_Axe | 68 | 2 | - | 0 | 2.7-11.4 |
+| Hero_AxeSide | 68 | 0 | - | 0 | 3.1-10.9 |
+| Hero_Pick | 68 | 0 | - | 0 | 2.9-12.4 |
+| Hero_Shovel | 68 | 0 | - | 0 | 3.2-11.0 |
+| Hero_Rake | 68 | 0 | - | 1 | 2.8-11.2 |
+| Hero_Hoe | 68 | 2 | - | 0 | 3.2-8.6 |
+| Hero_Hammer | 68 | 0 | - | 0 | 2.8-11.6 |
+| Hero_Rod | 68 | 0 | - | 0 | 3.1-10.5 |
+| Hero_Sling | 68 | 0 | - | 0 | 2.9-8.0 |
+| Hero_Bow | 68 | 0 | - | 0 | 2.8-8.7 |
+| Hero_Spear | 68 | 0 | - | 2 | 3.1-8.3 |
+| Hero_Club | 68 | 0 | - | 1 | 2.8-9.1 |
+| Hero_Punch | 68 | 0 | - | 0 | 3.5-9.4 |
+| Hero_Crouch | 132 | 0 | - | 0 | 6.9-16.9 |
+| Hero_Sit | 132 | 0 | - | 0 | 5.9-14.5 |
+| Hero_Roast | 132 | 0 | - | 0 | 5.4-12.9 |
+| Hero_LieDown | 132 | 0 | w0: 12-20; w1: 13-19; w2: 13-19; w3: 10-22 | 0 | 5.2-20.0 |
+| Hero_Roll | 52 | 0 | w0: 5-6; w1: 5-7; w2: 5-7; w3: 5-6 | 0 | 2.2-8.8 |
+| Hero_Torch | 68 | 0 | - | 0 | 2.8-11.6 |
+| Hero_TorchCrouch | 132 | 0 | - | 0 | 5.0-20.2 |
+| Hero_Net | 68 | 8 | - | 2 | 2.9-9.0 |
+| Hero_Sword | 68 | 1 | - | 0 | 3.1-6.5 |
 
 ## Uwagi i problemy kapelusza (poza schowanymi)
 
@@ -61,3 +62,4 @@ problem z kapeluszem.
 - **Hero_Roll**: w0 k1: skok o 0,9 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią; w0 k2: skok o 0,6 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią; w0 k10: skok o 0,-6 px od klatki 9 - cała głowa tyle samo: nakrycie idzie z nią; w0 k11: skok o 0,-9 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią; w1 k1: skok o -6,12 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią; w1 k2: skok o -1,7 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią; w1 k11: skok o 1,-7 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią; w1 k12: skok o 6,-12 px od klatki 11 - cała głowa tyle samo: nakrycie idzie z nią; w2 k1: skok o 6,12 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią; w2 k2: skok o 1,7 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią; w2 k11: skok o -1,-7 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią; w2 k12: skok o -6,-12 px od klatki 11 - cała głowa tyle samo: nakrycie idzie z nią; w3 k1: skok o 0,7 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią; w3 k2: skok o 1,10 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią; w3 k10: skok o -1,-10 px od klatki 9 - cała głowa tyle samo: nakrycie idzie z nią; w3 k11: skok o 0,-7 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią
 - **Hero_TorchCrouch**: w0 k3: skok o 0,3 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią; w0 k4: skok o 0,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w0 k5: skok o 0,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią; w0 k28: skok o 0,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią; w0 k29: skok o 0,-4 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią; w0 k30: skok o 0,-3 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią; w1 k1: góra włosów myląca (44,21) - wg środka głowy (46,21); w1 k3: skok o -3,4 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią; w1 k4: skok o -1,5 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w1 k5: skok o -1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią; w1 k7: skok o -1,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią; w1 k26: skok o 1,-3 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią; w1 k28: skok o 1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią; w1 k29: skok o 1,-5 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią; w1 k30: skok o 3,-4 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią; w1 k31: góra włosów myląca (44,21) - wg środka głowy (46,21); w2 k1: góra włosów myląca (51,21) - wg środka głowy (49,21); w2 k3: skok o 3,4 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią; w2 k4: skok o 1,5 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w2 k5: skok o 1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią; w2 k7: skok o 1,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią; w2 k26: skok o -1,-3 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią; w2 k28: skok o -1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią; w2 k29: skok o -1,-5 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią; w2 k30: skok o -3,-4 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią; w2 k31: góra włosów myląca (51,21) - wg środka głowy (49,21); w3 k4: skok o 0,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w3 k5: skok o 0,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią; w3 k6: skok o 0,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią; w3 k27: skok o 0,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią; w3 k28: skok o 0,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią; w3 k29: skok o 0,-3 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią
 - **Hero_Net**: w0 k3: mało nad włosami (38% przy zwykłych 76%); w0 k3: góra włosów myląca (55,22) - wg środka głowy (55,20); w0 k3: skok o 3,0 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią; w0 k4: mało nad włosami (31% przy zwykłych 76%); w0 k4: góra włosów myląca (43,24) - wg środka głowy (43,22); w0 k4: skok o -12,2 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w0 k4: narzędzie zasłania część nakrycia (tak ma być); w0 k5: góra włosów myląca (47,23) - wg środka głowy (47,21); w0 k5: skok o 4,-1 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią; w0 k5: narzędzie zasłania część nakrycia (tak ma być); w0 k6: skok o 5,0 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią
+- **Hero_Sword**: w1 k4: skok o 4,1 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w1 k4: narzędzie zasłania część nakrycia (tak ma być); w1 k5: narzędzie zasłania część nakrycia (tak ma być); w2 k4: skok o -4,1 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią; w2 k5: narzędzie zasłania część nakrycia (tak ma być)

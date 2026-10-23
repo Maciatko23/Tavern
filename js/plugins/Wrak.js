@@ -7,7 +7,7 @@
 //     lower hold are regions (WrakData.FLOOD) - a cell is under water from its level up: drawn as water over the tiles (a soft
 //     layer in the tilemap, the sea's colour - red or grey with CzerwonaWoda's phase), closed to walking (Game_Map.checkPassage),
 //     the hero on a cell the water takes is pushed onto the nearest dry one; a warning before the low water ends
-//   - the ways there: Janek's boat (a choice in Janek's talk at the harbour, TownLife.addTalkHook first - Przystan.js unchanged:
+//   - the ways there: Janek's boat (a choice in Janek's talk at the harbour, Tawerna.talk.takeover - Przystan.js unchanged:
 //     "Nie, w innej sprawie" gives his own talk), by day, no storm, after K47 (also after D25 - the coordinator, 2026-10-16); he waits two hours at the wreck (events 670/671);
 //     on foot over the sandbar from the garrison at low water (the map's own edge events; the garrison's side is package D's)
 //   - the garrison's men with their rescue boat at the wreck 9-15 (672-674): without the pass (flag glejtWrak, package D) they
@@ -51,6 +51,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("wrak");   // (the words of this file: js/teksty/wrak.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Wrak.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -208,7 +209,7 @@
                     && !$gameMap.eventsXyNt(nx, ny).some(e => e.isNormalPriority());
                 if (ok) {
                     $gamePlayer.locate(nx, ny);
-                    T.popup($gameMap.mapId() === UNDER ? "Woda wdziera się do ładowni!" : "Woda przybiera! Uciekasz na suchy piach.", { color: "#9fd4ff" });
+                    T.popup($gameMap.mapId() === UNDER ? TK.kod.rescueHero[0] : TK.kod.rescueHero[1], { color: "#9fd4ff" });
                     AudioManager.playSe({ name: "Water1", volume: 60, pitch: 90, pan: 0 });
                     return true;
                 }
@@ -447,94 +448,7 @@
     // ------------------------------------------------------------------
     // TEXTS
     // ------------------------------------------------------------------
-    const TX = {
-        // Janek and his boat
-        janekOffer: ["Na wrak? (Janek zerka na mieliznę za cyplem.) Mogę cię podrzucić. Za dnia, póki morze spokojne.",
-            "Poczekam dwie godziny, nie dłużej. Woda tam chodzi pod piachem jak kot pod kocem."],
-        janekTide: "Odpływ dziś koło {t}. Wtedy łacha od garnizonu wychodzi z wody.",
-        janekNoK47: ["Na wrak? Najpierw pokaż, że umiesz trzymać wędkę, a nie tylko wiosło. Złów ze mną pierwszą rybę, to cię zawiozę."],
-        janekStorm: ["W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś."],
-        janekRow: ["Siadaj na dziobie i nie kołysz. (Janek odpycha łódź od pomostu.)"],
-        janekWait: ["Morze się zmienia, a ja mam sieci do łatania.", "Wracamy?"],
-        janekBack: ["Trzymaj się burty. (Janek wiosłuje w stronę przystani.)"],
-        janekStay: ["Jeszcze chwila. Tylko nie każ mi czekać do nocy."],
-        janekLeaving: "Jeszcze kwadrans i odpływam! Nie będę nocował na mieliźnie!",
-        janekGone: "Janek odpłynął. Zostaje łacha w odpływie... albo czekanie.",
-        // the soldiers
-        soldierCatch: ["Stój! A ty kto? Kto pozwolił łazić po królewskim łupie?", "Bez glejtu rotmistrza? Dwadzieścia groszy kary. I zmykaj z mielizny."],
-        soldierPass: "Glejt widzę. Szukaj, tylko skrzyń z pieczęcią nie ruszaj.",
-        soldierTalk: ["Wynosimy, co zostało. Rotmistrz każe wszystko spisać.", "Pod pokład? Nie, dziękuję. Tam są szczury wielkie jak psy. I woda chodzi.",
-            "Z garnizonu, z chorągwi króla. A ty skąd?"],
-        // the wreck
-        arrive: "Wrak na mieliźnie. Następny odpływ około {t}.",
-        lowEnding: "Woda zaczyna wracać. Łacha do garnizonu zaraz zniknie.",
-        flooded: "Łacha zniknęła pod wodą. Następny odpływ około {t}.",
-        skeleton: ["> (Szkielet w podartym granatowym kubraku. Na szyi, na rzemieniu, mosiężny klucz.)", "> Bosman. Klucz do kajuty... pewnie kapitańskiej."],
-        skeletonEmpty: "Kości bosmana. Nic więcej przy nim nie ma.",
-        skeletonWet: "Szkielet leży pod wodą. Trzeba poczekać na niską wodę.",
-        doorLocked: "Zamknięte. Mosiężny zamek, mocny.",
-        doorOpen: "Klucz bosmana pasuje. Zamek puszcza ze zgrzytem.",
-        desk: ["> (Na biurku kapitana skórzana tuba na mapy i gruba księga w czarnej oprawie.)",
-            "> (W tubie mapa wyspy. Siedem miejsc zaznaczonych małym białym okiem.)",
-            "> (Księga to dziennik okrętu. Między kartami luźna, bardzo stara strona - nie ich pismo.)"],
-        deskEmpty: "Puste biurko. Wziąłeś już wszystko, co miało znaczenie.",
-        chest: ["> (W skrzyni sakiewka obcych monet - na każdej otwarte oko - i drewniane pudełko.)",
-            "> (W pudełku pięć płaskich kamieni. Na każdym wyryty kruk. Taki jak na moim wisiorku.)"],
-        chestEmpty: "Pusta skrzynia.",
-        // the castaway
-        erykMeet: ["Portret? Dwa grosze albo piwo. Masz ciekawą twarz. Zmęczoną.", "> Skąd jesteś? Nie mówisz jak tutejsi.",
-            "Z lądu. Sukno. Było sukno. (Eryk uśmiecha się krzywo.) Morze lubi sukno.", "> (Eryk zerka na twój wisiorek i szybko odwraca wzrok.)",
-            "Siadaj prosto. I nie ruszaj się, to wyjdziesz ładniej, niż jesteś."],
-        erykAsk: ["Portret? Dwa grosze.", "Hm? (Eryk nie podnosi oczu znad papieru.)", "Siadaj, jak chcesz. Tylko nie zasłaniaj światła."],
-        erykPortrait: ["(Eryk rysuje szybko i pewnie. Kreska czysta jak na mapie - żadnej poprawki.)", "Masz. Nie ładniejszy, niż jesteś, ale prawdziwy."],
-        erykPortraitAgain: ["(Eryk rysuje cię jeszcze raz. Tym razem z wisiorkiem na szyi. Rysuje go dłużej niż twarz.)"],
-        erykWhere: ["Z lądu, mówiłem. Z miasta nad rzeką. Nazwa nic ci nie powie.", "Rodzina? (Eryk odkłada węgiel.) Była. Rysujmy."],
-        erykNoGold: "Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.",
-        erykCold: ["(Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)"],
-        erykWell: ["Czego? (Eryk naciąga rękaw na nadgarstek.) Idź spać, chłopcze."],
-        erykWellSeen: ["> (Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko.)", "> (Szybko opuszcza rękaw. Nie zauważył mnie.)"],
-        jozek: ["Eryk? Ten od portretów? (Józek drapie się po brodzie.) Ha! Toż on chodzi w moim płaszczu! Szarym, za dużym.",
-            "Po sztormie przyszedł do mnie mokry jak szczur. Kupił płaszcz i zapłacił dziwnym groszem. Z okiem zamiast korony. Mam go jeszcze, patrz.",
-            "> (Na monecie wybite jest otwarte oko. Takie samo jak na banderze wraku.)"],
-        letter: "Kruk przyniósł list... nie do mnie. Szyfr i pieczęć z okiem. Na wierzchu tylko: „Do A.W.”",
-        // W12: the talk in private
-        w12Open: ["> Eryk. Albo raczej... Ansgar Wiel. Kartograf z „Białej Źrenicy”.",
-            "(Eryk odkłada węgiel. Długo patrzy na ciebie, potem rozgląda się dookoła.) Nie tutaj. Chodź.",
-            "> (Odchodzicie tam, gdzie nikt nie słucha.)",
-            "Skąd... Nieważne. Tak. Ansgar Wiel. Rysowałem ich mapy. Brzegi, mielizny, kamienie z krukiem. Wszystko, czego szukali.",
-            "Okręt rozbił się w sztormie. Dopłynąłem tylko ja. Kupiłem płaszcz od starego szmaciarza i zostałem kupcem bez sukna.",
-            "Boję się wszystkich. Waszego wojska. Waszego Lorda. A najbardziej moich, gdyby przypłynęli. Oni nie zostawiają świadków.",
-            "(Ansgar zerka na twój wisiorek.) A ty nosisz kruka na szyi. Wiesz w ogóle, co to znaczy?", "...Co ze mną zrobisz?"],
-        w12Given: ["(Ansgar blednie.) ...Rozumiem. Każdy ma swoją wojnę. Ty wybrałeś swoją.",
-            "> (Wieczorem żołnierze z garnizonu wyprowadzają Eryka z tawerny. Skutego wsadzą na najbliższy prom.)"],
-        w12Ally: ["Dlaczego...? (Ansgar milknie.) Dobrze. Jestem ci winien życie.",
-            "Czytam ich szyfr jak ty czytasz pogodę. Przynieś mi kiedyś ich papiery - przeczytam bez żadnego mnicha.",
-            "I jeszcze jedno. Jeśli kiedyś po was przyjdą... wiem, którędy chodzą ich ludzie. Powiem ci, zanim przyjdą."],
-        w12Fled: ["Kuter... na ląd? Tam szukają mnie tak samo. Ale na lądzie łatwiej zniknąć niż na wyspie.",
-            "Masz. (Ansgar podaje ci zwinięty papier.) Moja własna mapa. Wszystkie kamienie z krukiem na tej wyspie, jakie znam.",
-            "I wiedz: oni nie szukają kamieni. Szukają tego, co kamienie pokazują. Drogi do Serca.",
-            "> (Tej nocy kuter Rocha odbija od pochylni bez latarni. Na dziobie siedzi chudy człowiek w za dużym szarym płaszczu.)"],
-        w12Double: ["(Ansgar uśmiecha się krzywo.) Fałszywą mapę... dla kupca, który skupuje kamienie? Mogę. Narysuję im takie miejsce, że będą kopać do zimy.",
-            "Masz. Atrament jeszcze mokry. Tylko uważaj: jeśli Baltazar to odkryje, nie przyjdzie sam."],
-        w12Later: ["Nie wiesz? (Ansgar śmieje się bez wesołości.) To ja też nie wiem, czy jutro tu jeszcze będę."],
-        w12Sale: ["> Mam mapę. Kamienie z krukiem na całej wyspie. Rysował ją ktoś, kto się zna.",
-            "(Baltazar długo ogląda papier pod światło.) ...Ładna robota. Za ładna. Sto groszy. I nie było cię tu."],
-        // D25: the stones
-        stonesAsk: "> Znalazłem na wraku kamienie z krukiem. Pięć.",
-        stonesCelnik: ["Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć groszy za sztukę. Zapiszę uczciwie."],
-        stonesCelnikOpt: ["Oddaj je celnikowi (25 G).", "Jeszcze nie."],
-        stonesCelnikDone: ["Zapisane. (Celnik wrzuca kamienie do skrzyni z pieczęcią Lorda.) Dwór pamięta przysługi."],
-        stonesKupiec: ["Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Piętnaście groszy za sztukę. Więcej nikt ci nie da. I nikomu ani słowa."],
-        stonesKupiecOpt: ["Sprzedaj je Baltazarowi (75 G).", "Jeszcze nie."],
-        stonesKupiecDone: ["Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na klucz.) Zapamiętam cię."],
-        stonesGrandpa: ["(Dziadek długo obraca kamień w palcach.) Skąd to masz? ...Z tego okrętu. Tak myślałem.",
-            "Takie same leżały kiedyś na Urwisku. Schowaj je. Nie pokazuj nikomu, a już na pewno nie ludziom Lorda."],
-        stonesGrandpaOpt: ["Zatrzymam je.", "Jeszcze pomyślę."],
-        stonesKeep: ["Dobrze. (Dziadek oddaje ci kamień.) Kiedyś ci powiem więcej. Kiedyś."],
-        stonesPustelnik: ["Kamienie posłańców. (Kleofas bierze jeden w chude palce.) Kruczarze nosili takie od Urwiska do każdej strażnicy. Znak, że list jest prawdziwy.",
-            "Nie oddawaj ich nikomu. Czarne Oczy szukają ich, bo nie wiedzą, czym są. Myślą, że to mapa."],
-        stonesPustelnikOpt: ["Zatrzymam je.", "Jeszcze pomyślę."]
-    };
+    const TX = Watki.teksty("wrak");
     const fill = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (v && v[k] !== undefined ? v[k] : m));
 
     // ------------------------------------------------------------------
@@ -545,8 +459,8 @@
         if (!has() || !D.CLUES[k] || S().clues[k]) return false;
         S().clues[k] = day();
         const c = D.CLUES[k];
-        note("Poszlaka: " + c.name, c.text);
-        if (!quiet) T.popup("Poszlaka: " + c.name, { top: true, color: "#ffe27a", sub: "Kim naprawdę jest Eryk Sowa?" });
+        note(Watki.wstaw(TK.kod.addClue[0], { name: c.name }), c.text);
+        if (!quiet) T.popup(Watki.wstaw(TK.kod.addClue[0], { name: c.name }), { top: true, color: "#ffe27a", sub: TK.kod.addClue[1] });
         autoChecks();
         return true;
     }
@@ -554,7 +468,6 @@
     // ------------------------------------------------------------------
     // The talks: Janek's boat (his hook, first), the castaway, Józek Łata's clue
     // ------------------------------------------------------------------
-    let passJanek = false;
     function boatOk() {
         if (!isBuilt() || storming()) return false;
         const r = rec("D25");
@@ -577,48 +490,46 @@
         const W = WY(), lows = W && W.lowWaters ? W.lowWaters() : [];
         linesTo(out, spk, TX.janekOffer);
         if (lows.length) linesTo(out, spk, [fill(TX.janekTide, { t: lows.map(hhmm).join(" i ") })]);
-        linesTo(out, spk, ["Płyniemy?"]);
-        return choiceTo(out, ["Zawieź mnie na wrak.", "Nie, w innej sprawie."],
+        linesTo(out, spk, [TK.kod.janekHarbourTalk[0]]);
+        return choiceTo(out, [TK.kod.janekHarbourTalk[1], TK.kod.janekHarbourTalk[2]],
             [act([], ["boat"]), act([], ["passJanek"])], 1);
     }
     function erykTalk(ev) {
-        const spk = { id: ev.eventId(), name: "Eryk Sowa" }, out = [];
+        const spk = { id: ev.eventId(), name: TK.kod.erykTalk[0] }, out = [];
         if (questWants("rozbitek")) { const q = questTalk("rozbitek"); if (q && q.length) return q; }
         const e = TL() && TL().entryAt ? TL().entryAt(TL().RESIDENTS.find(r => r.key === D.RES.key), hour()) : null;
         if (e && e.act === "work" && e.where === "rozbitek_studnia") return linesTo(out, spk, TX.erykWell);
         if (!S().met) {
             linesTo(out, spk, TX.erykMeet.concat(["Rysujemy?"]));
             act(out, ["met"]);
-            return choiceTo(out, ["Narysuj mnie (2 G).", "Może innym razem."], [act([], ["portrait"]), linesTo([], spk, ["Jak chcesz. Twarz ci nie ucieknie."])], 1);
+            return choiceTo(out, [TK.kod.erykTalk[1], TK.kod.erykTalk[2]], [act([], ["portrait"]), linesTo([], spk, [TK.kod.erykTalk[3]])], 1);
         }
         if (S().w12 === "double" || S().w12 === "ally") linesTo(out, spk, [usual(D.RES.key) || pick(TX.erykAsk)]);
         else linesTo(out, spk, [pick(TX.erykAsk)]);
-        const labels = ["Narysujesz mnie? (2 G)", "Skąd jesteś?", "Co słychać?", "Bywaj."];
-        const branches = [act([], ["portrait"]), linesTo([], spk, [pick(TX.erykWhere)]), linesTo([], spk, [usual(D.RES.key) || "Nic. Rysuję."]), []];
+        const labels = [TK.kod.erykTalk[4], TK.kod.erykTalk[5], TK.kod.erykTalk[6], "Bywaj."];
+        const branches = [act([], ["portrait"]), linesTo([], spk, [pick(TX.erykWhere)]), linesTo([], spk, [usual(D.RES.key) || TK.kod.erykTalk[7]]), []];
         return choiceTo(out, labels, branches, 3);
     }
     function jozekTalk(ev) {   // (before his own offers - once; a hand-in of his quest comes first)
         if (!S().met || S().clues.jozek || S().w12 || readyFor("szmaciarz")) return null;
-        const spk = { id: ev.eventId(), name: "Józek Łata" }, out = [];
+        const spk = { id: ev.eventId(), name: TK.kod.jozekTalk[0] }, out = [];
         linesTo(out, spk, TX.jozek);
         return act(out, ["clue", "jozek"]);
     }
     function hook(key, ev) {
         if (!has()) return null;
-        if (key === "janek") {
-            if (passJanek) { passJanek = false; return null; }
-            return janekHarbourTalk(ev);
-        }
+        if (key === "janek") return janekHarbourTalk(ev);
         if (key === D.RES.key) return erykTalk(ev);
         if (key === "szmaciarz") return jozekTalk(ev);
         return null;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: an "owner" takeover - after Zakon's (Eryk), Latarnia's (Janek's tran), before
+    // Garnizon's and Przystan's (Janek's own menu), as the old hooks; "Nie, w innej sprawie" = the same talk without this plugin (skip)
     function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook && !hookTalk.done) {
-            hookTalk.done = true;
-            L.addTalkHook((key, ev) => { try { return hook(key, ev); } catch (e) { console.error("[Wrak]", e); return null; } }, true);
-        }
+        if (hookTalk.done) return;
+        hookTalk.done = true;
+        T.talk.takeover({ owner: PLUGIN, who: ["janek", D.RES.key, "szmaciarz"], priority: T.talk.PRIORITY.owner + 10,
+            run: ctx => { try { return hook(ctx.who, ctx.ev); } catch (e) { console.error("[Wrak]", e); return null; } } });
     }
     hookTalk();
 
@@ -631,9 +542,9 @@
         if (who === "janek") {
             const spk = { id: ev.eventId(), name: "Janek" };
             linesTo(out, spk, TX.janekWait);
-            choiceTo(out, ["Wracajmy.", "Jeszcze chwilę."], [linesTo([], spk, TX.janekBack).concat(act([], ["boatBack"])), linesTo([], spk, TX.janekStay)], 1);
+            choiceTo(out, ["Wracajmy.", TK.kod.talk[0]], [linesTo([], spk, TX.janekBack).concat(act([], ["boatBack"])), linesTo([], spk, TX.janekStay)], 1);
         } else if (who === "zolnierz") {
-            const spk = { id: ev.eventId(), name: "Żołnierz garnizonu" };
+            const spk = { id: ev.eventId(), name: TK.kod.talk[1] };
             linesTo(out, spk, [TX.soldierTalk[(ev.eventId() + day()) % TX.soldierTalk.length]]);
         }
         if (out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
@@ -645,10 +556,9 @@
     function selfSwitch(ev, on) { if (ev) $gameSelfSwitches.setValue([$gameMap.mapId(), ev.eventId(), "A"], !!on); }
     function giveChart() {
         if (count(D.ITEM_MAP) < 1 && item(D.ITEM_MAP)) $gameParty.gainItem(item(D.ITEM_MAP), 1);
-        T.popup(item(D.ITEM_MAP) ? item(D.ITEM_MAP).name : "Mapa z zaznaczeniami", { top: true, color: "#ffd23f", sub: "Siedem miejsc zaznaczonych białym okiem." });
+        T.popup(item(D.ITEM_MAP) ? item(D.ITEM_MAP).name : TK.kod.giveChart[0], { top: true, color: "#ffd23f", sub: TK.kod.giveChart[1] });
         const names = D.MARKS.map(m => m.name).join(", ");
-        note("Mapa z zaznaczeniami", "Mapa Kruczej Wyspy z kajuty „Białej Źrenicy”. Czarne Oczy zaznaczyły na niej siedem miejsc małym białym okiem: " + names +
-            ". Kompas prowadzi do następnego znaku, którego jeszcze nie widziałem.");
+        note(TK.kod.giveChart[0], Watki.wstaw(TK.kod.giveChart[2], { names: names }));
     }
     function actCall(interp, args) {
         if (!has() || !Array.isArray(args)) return;
@@ -657,16 +567,15 @@
         const stop = () => { if (interp && interp._list) interp._index = interp._list.length; };
         try {
             if (what === "boat") {
-                if (!boatOk()) { T.popup("Nie dziś.", { color: "#ffe9a8" }); stop(); return; }
+                if (!boatOk()) { T.popup(TK.kod.actCall[0], { color: "#ffe9a8" }); stop(); return; }
                 S().boat = { until: now() + D.BOAT.wait, from: now() };
                 S().boatWarned = 0;
                 think(TX.janekRow[0]);
                 const L = D.BOAT.landing;
                 $gamePlayer.reserveTransfer(MAP, L[0], L[1], L[2], 0);
             } else if (what === "passJanek") {
-                passJanek = true;
                 const L = TL();
-                if (L && L.talk && interp) L.talk(interp);
+                if (L && L.talk && interp) L.talk(interp, { skip: PLUGIN });
             } else if (what === "janekAsked") {
                 S().janekAsked = day();
             } else if (what === "boatBack") {
@@ -681,10 +590,10 @@
                 AudioManager.playSe({ name: "Key", volume: 80, pitch: 100, pan: 0 });
                 T.popup(vname("klucz_bosmana"), { icon: vicon("klucz_bosmana"), kind: "good" });
                 for (const t of TX.skeleton) think(t.replace(/^> /, ""));
-                note("Klucz bosmana", "W najniższym kącie ładowni wraku leży szkielet bosmana. Na szyi miał mosiężny klucz - pewnie do kajuty kapitana.");
+                note(TK.kod.actCall[1], TK.kod.actCall[2]);
                 autoChecks();
             } else if (what === "drzwi") {
-                if (!S().key && vcount("klucz_bosmana") < 1) { T.popup.need(vicon("klucz_bosmana") || 196, "Potrzebujesz klucza"); return; }
+                if (!S().key && vcount("klucz_bosmana") < 1) { T.popup.need(vicon("klucz_bosmana") || 196, TK.kod.actCall[3]); return; }
                 S().door = day();
                 selfSwitch(ev, true);
                 AudioManager.playSe({ name: "Open1", volume: 80, pitch: 90, pan: 0 });
@@ -697,8 +606,8 @@
                 setFlag("dziennikOkretu");
                 setFlag("kronikaKarta4");
                 for (const t of TX.desk) think(t.replace(/^> /, ""));
-                note("Dziennik okrętu „Białej Źrenicy”", "Okręt Straży Pewności płynął po „serce skały pod krukiem”. Na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”. Zaginął w sztormie razem z okrętem - tak zapisano.");
-                note("Karta kroniki (z wraku)", "W dzienniku okrętu leżała luźna, bardzo stara karta - nie ich pismo. Na marginesach notatki Czarnych Oczu. Ktoś, kto zna szyfr zakonu, mógłby ją przeczytać.");
+                note(TK.kod.actCall[4], TK.kod.actCall[5]);
+                note(TK.kod.actCall[6], TK.kod.actCall[7]);
                 addClue("dziennik");
                 autoChecks();
             } else if (what === "skrzynia") {
@@ -710,15 +619,15 @@
                 AudioManager.playSe({ name: "Chest1", volume: 80, pitch: 100, pan: 0 });
                 T.popup(vname("kamien_kruk") + " ×" + D.STONES.n, { icon: vicon("kamien_kruk"), kind: "good" });
                 for (const t of TX.chest) think(t.replace(/^> /, ""));
-                note("Kamienie z krukiem", "W skrzyni kapitana: sakiewka obcych monet z okiem i pięć płaskich kamieni z wyrytym krukiem - takim jak na moim wisiorku. Celnik Lorda każe je zgłaszać, Baltazar skupuje, a Roch mówi, że Czarne Oczy ich szukają.");
+                note(TK.kod.actCall[8], TK.kod.actCall[9]);
                 autoChecks();
             } else if (what === "met") {
-                if (!S().met) { S().met = day(); note("Eryk Sowa", "W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz."); autoChecks(); }
+                if (!S().met) { S().met = day(); note(TK.kod.actCall[10], TK.kod.actCall[11]); autoChecks(); }
             } else if (what === "portrait") {
-                if ($gameParty.gold() < 2) { T.popup.need(COIN_ICON, "Potrzebujesz 2 G"); stop(); return; }
+                if ($gameParty.gold() < 2) { T.popup.need(COIN_ICON, TK.kod.actCall[12]); stop(); return; }
                 $gameParty.loseGold(2);
                 S().portraits = (S().portraits || 0) + 1;
-                const spk = ev ? { id: ev.eventId(), name: "Eryk Sowa" } : HERO;
+                const spk = ev ? { id: ev.eventId(), name: TK.kod.actCall[10] } : HERO;
                 const list = linesTo([], spk, S().portraits === 1 ? TX.erykPortrait : TX.erykPortraitAgain);
                 if (S().portraits === 1) vgive("portret", 1);
                 if (interp && list.length) interp.setupChild(list.concat([C(0, [])]), interp.eventId());
@@ -739,9 +648,9 @@
         const out = [], L = { celnik: [TX.stonesCelnik, TX.stonesCelnikOpt, TX.stonesCelnikDone], kupiec: [TX.stonesKupiec, TX.stonesKupiecOpt, TX.stonesKupiecDone],
             grandpa: [TX.stonesGrandpa, TX.stonesGrandpaOpt, TX.stonesKeep], pustelnik: [TX.stonesPustelnik, TX.stonesPustelnikOpt, TX.stonesKeep] }[key];
         if (key !== "grandpa" && key !== "pustelnik") linesTo(out, HERO, [TX.stonesAsk]);
-        linesTo(out, spk, L[0].concat([{ celnik: "Oddajesz?", kupiec: "Sprzedajesz?" }[key] || "Co z nimi zrobisz?"]));
+        linesTo(out, spk, L[0].concat([{ celnik: "Oddajesz?", kupiec: "Sprzedajesz?" }[key] || TK.kod.stonesTalk[0]]));
         const yes = qact([], ["D25", "fx", "d25Kamienie", key]);
-        linesTo(yes, spk, key === "pustelnik" ? ["Mądrze. Kruk wie, komu siada na ramieniu."] : L[2]);
+        linesTo(yes, spk, key === "pustelnik" ? [TK.kod.stonesTalk[1]] : L[2]);
         choiceTo(out, L[1], [yes, []], 1);
         return { ready: true, list: out };
     }
@@ -752,17 +661,17 @@
             vtake("kamien_kruk", D.STONES.n);
             rw = { gold: D.STONES.celnik * D.STONES.n };
             setFlag("wrakKamienieCelnik");
-            note("Kamienie u celnika", "Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.");
+            note(TK.kod.stonesAct[0], TK.kod.stonesAct[1]);
         } else if (key === "kupiec") {
             vtake("kamien_kruk", D.STONES.n);
             rw = { gold: D.STONES.kupiec * D.STONES.n };
             setFlag("wrakKamienieBaltazar");
-            note("Kamienie u Baltazara", "Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.");
+            note(TK.kod.stonesAct[2], TK.kod.stonesAct[3]);
         } else {
             setFlag("wrakKamienieZatrzymane");
-            note("Kamienie z krukiem zostają u mnie", key === "pustelnik"
-                ? "Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa."
-                : "Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku.");
+            note(TK.kod.stonesAct[4], key === "pustelnik"
+                ? TK.kod.stonesAct[5]
+                : TK.kod.stonesAct[6]);
         }
         const Q = TQ();
         if (Q && Q.completeStep) Q.completeStep("D25", { reward: rw });
@@ -779,11 +688,11 @@
             qact(b, ["W12", "fx", "w12Talk", how]);
             branches.push(b);
         };
-        opt("Wydam cię garnizonowi.", "given", TX.w12Given);
-        opt("Zachowam to dla siebie.", "ally", TX.w12Ally);
-        if (f.d20Pomoc && !f.d20Wydany) opt("Pomogę ci uciec kutrem Rocha.", "fled", TX.w12Fled);
-        opt("Fałszywa mapa dla Baltazara.", "double", TX.w12Double);
-        labels.push("Jeszcze nie wiem.");
+        opt(TK.kod.w12Talk[0], "given", TX.w12Given);
+        opt(TK.kod.w12Talk[1], "ally", TX.w12Ally);
+        if (f.d20Pomoc && !f.d20Wydany) opt(TK.kod.w12Talk[2], "fled", TX.w12Fled);
+        opt(TK.kod.w12Talk[3], "double", TX.w12Double);
+        labels.push(TK.kod.w12Talk[4]);
         branches.push(linesTo([], spk, TX.w12Later));
         choiceTo(out, labels, branches, labels.length - 1);
         return { ready: true, list: out };
@@ -795,23 +704,23 @@
         if (how === "given") {
             setFlag("ansgarGiven");
             if (L && L.setGone) L.setGone(D.RES.key, true);
-            if (!T.call("Garnizon", "addFavor", 20, "W12: rozbitek wydany")) T.emit("wrakGarnizon", { favor: 20, why: "W12: rozbitek wydany" });
-            note("Wydałem Ansgara", "Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.");
+            if (!T.call("Garnizon", "addFavor", 20, TK.kod.w12Choose[0])) T.emit("wrakGarnizon", { favor: 20, why: TK.kod.w12Choose[0] });
+            note(TK.kod.w12Choose[1], TK.kod.w12Choose[2]);
             Q.finish("W12", { gold: D.W12_GOLD.given, xp: D.W12_XP.given });
         } else if (how === "ally") {
             setFlag("ansgarAlly");
-            note("Ansgar zostaje", "Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.");
+            note(TK.kod.w12Choose[3], TK.kod.w12Choose[4]);
             Q.finish("W12", { xp: D.W12_XP.ally });
         } else if (how === "fled") {
             setFlag("ansgarFled");
             vgive("mapa_ansgara", 1);
             if (L && L.setGone) L.setGone(D.RES.key, true);
-            note("Ansgar odpłynął", "Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.");
+            note(TK.kod.w12Choose[5], TK.kod.w12Choose[6]);
             Q.finish("W12", { xp: D.W12_XP.fled });
         } else if (how === "double") {
             setFlag("wrakPodwojnaGra");
             vgive("falszywa_mapa", 1);
-            note("Fałszywa mapa", "Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam.");
+            note(TK.kod.w12Choose[7], TK.kod.w12Choose[8]);
             Q.completeStep("W12");
         }
     }
@@ -828,7 +737,7 @@
         setFlag("wrakMapaSprzedana");
         S().raid = day() + D.RAID.after[0] + Math.floor(Math.random() * (D.RAID.after[1] - D.RAID.after[0] + 1));
         S().raidRoll = Math.random();
-        note("Mapa dla Baltazara", "Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował.");
+        note(TK.kod.w12Sell[0], TK.kod.w12Sell[1]);
         TQ().finish("W12", { gold: D.W12_GOLD.sold, xp: D.W12_XP.double });
     }
     function hookQuests() {
@@ -896,13 +805,13 @@
     T.inject(MAP, { ids: IDS, owner: PLUGIN, build(data) {
         const B = D.BOAT, Sd = D.SOLDIERS;
         return [
-            personEv(IDS[0], "Łódź Janka (czeka przy wraku)", "!$Przystan_Lodz_Janka", markerOf(data, "wrak_lodz", [B.boat[0], B.boat[1], 2]), null,
+            personEv(IDS[0], TK.kod.build[0], "!$Przystan_Lodz_Janka", markerOf(data, "wrak_lodz", [B.boat[0], B.boat[1], 2]), null,
                 { fix: true, step: true, speed: 2, pattern: 0, tag: "lodz" }),
-            personEv(IDS[0] + 1, "Janek (czeka przy łodzi)", "$Npc_Janek", markerOf(data, "wrak_janek", B.janek), "janek"),
-            personEv(IDS[0] + 2, "Łódź ratownicza garnizonu", "!$Przystan_Lodz_Mala", markerOf(data, "wrak_lodz_ratownicza", [Sd.boat[0], Sd.boat[1], 2]), null,
+            personEv(IDS[0] + 1, TK.kod.build[1], "$Npc_Janek", markerOf(data, "wrak_janek", B.janek), "janek"),
+            personEv(IDS[0] + 2, TK.kod.build[2], "!$Przystan_Lodz_Mala", markerOf(data, "wrak_lodz_ratownicza", [Sd.boat[0], Sd.boat[1], 2]), null,
                 { fix: true, step: true, speed: 2, pattern: 0, tag: "lodz_ratownicza" }),
-            personEv(IDS[0] + 3, "Żołnierz garnizonu", soldierSheet, markerOf(data, "wrak_zolnierz_1", Sd.men[0]), "zolnierz"),
-            personEv(IDS[0] + 4, "Żołnierz garnizonu", soldierSheet, markerOf(data, "wrak_zolnierz_2", Sd.men[1]), "zolnierz")
+            personEv(IDS[0] + 3, TK.kod.build[3], soldierSheet, markerOf(data, "wrak_zolnierz_1", Sd.men[0]), "zolnierz"),
+            personEv(IDS[0] + 4, TK.kod.build[3], soldierSheet, markerOf(data, "wrak_zolnierz_2", Sd.men[1]), "zolnierz")
         ];
     } });
     function setShown(e, on) {
@@ -916,11 +825,8 @@
             e.setTransparent(true); e.setThrough(true); e._priorityType = 0; st.hidden = true;
         }
     }
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (this._wrak && this._wrak.hidden) return;
-        _Game_Event_start.call(this);
-    };
+    // (hidden: it never starts - the core's one start hook, 2026-10-23)
+    T.onEventStart(ev => !!(ev._wrak && ev._wrak.hidden), { owner: PLUGIN, priority: "hidden" });
     const boatHere = () => !!(S().boat && now() < S().boat.until);
     const soldiersHere = () => inHours(hour(), D.SOLDIERS.hours) && !storming();
 
@@ -966,9 +872,9 @@
             ev.turnTowardPlayer();
             bark(ev, TX.soldierCatch[0]);
             later.push({ at: Graphics.frameCount + 160, ev, text: TX.soldierCatch[1] });
-            T.popup("Kara: -" + fine + " G", { icon: COIN_ICON, kind: "need" });
-            if (!T.call("Garnizon", "addFavor", D.SOLDIERS.favor, "wrak bez glejtu")) T.emit("wrakGarnizon", { favor: D.SOLDIERS.favor, gold: -fine, why: "wrak bez glejtu" });
-            note("Złapany na wraku", "Żołnierze garnizonu złapali mnie na wraku bez glejtu rotmistrza. Kara: " + fine + " groszy. Garnizon będzie o tym pamiętał.");
+            T.popup(Watki.wstaw(TK.kod.soldiersWatch[0], { fine: fine }), { icon: COIN_ICON, kind: "need" });
+            if (!T.call("Garnizon", "addFavor", D.SOLDIERS.favor, TK.kod.soldiersWatch[1])) T.emit("wrakGarnizon", { favor: D.SOLDIERS.favor, gold: -fine, why: TK.kod.soldiersWatch[1] });
+            note(TK.kod.soldiersWatch[2], Watki.wstaw(TK.kod.soldiersWatch[3], { fine: fine }));
             return;
         }
     }
@@ -1010,7 +916,7 @@
         if (sneak || !ahead) {
             addClue("tatuaz", true);
             for (const t of TX.erykWellSeen) think(t.replace(/^> /, ""));
-            T.popup("Poszlaka: " + D.CLUES.tatuaz.name, { top: true, color: "#ffe27a", sub: "Kim naprawdę jest Eryk Sowa?" });
+            T.popup(Watki.wstaw(TK.kod.wellWatch[0], { name: D.CLUES.tatuaz.name }), { top: true, color: "#ffe27a", sub: TK.kod.wellWatch[1] });
         } else if (S().tatuazTry !== day()) {
             S().tatuazTry = day();
             bark(ev, TX.erykWell[0]);
@@ -1034,8 +940,8 @@
             if (m.map !== mapId || S().marks[m.key]) continue;
             S().marks[m.key] = day();
             const n = Object.keys(S().marks).length;
-            T.popup("Znak białego oka: " + m.name, { top: true, color: "#ffe27a", sub: "Mapa z wraku: " + n + " z " + D.MARKS.length });
-            note("Znak białego oka: " + m.name, "Jedno z siedmiu miejsc zaznaczonych na mapie z wraku. Byłem tu: " + m.name + ". (" + n + " z " + D.MARKS.length + ")");
+            T.popup(Watki.wstaw(TK.kod.visitMark[0], { name: m.name }), { top: true, color: "#ffe27a", sub: Watki.wstaw(TK.kod.visitMark[1], { n: n, length: D.MARKS.length }) });
+            note(Watki.wstaw(TK.kod.visitMark[0], { name: m.name }), Watki.wstaw(TK.kod.visitMark[2], { name: m.name, n: n, length: D.MARKS.length }));
         }
     }
     function nextMark() {
@@ -1050,7 +956,7 @@
             const m = nextMark();
             if (!m) return null;
             const n = Object.keys(S().marks).length;
-            return { label: "MAPA", title: "Biały znak: " + m.name, line: "Mapa z wraku: " + n + " z " + D.MARKS.length + " miejsc", key: "wrak:" + m.key,
+            return { label: "MAPA", title: Watki.wstaw(TK.kod.tracker[0], { name: m.name }), line: Watki.wstaw(TK.kod.tracker[1], { n: n, length: D.MARKS.length }), key: "wrak:" + m.key,
                 icon: item(D.ITEM_MAP) ? item(D.ITEM_MAP).iconIndex : 0, where: { map: m.map, x: m.x, y: m.y, name: m.name } };
         });
     })();
@@ -1063,9 +969,9 @@
         if (!(h >= 21 || h < 4) || !RAID_MAPS.includes($gameMap.mapId()) || $gameMap.isEventRunning()) return;
         const Hm = T.api("Humans");
         if (!Hm || typeof Hm.ambush !== "function") { s.raidDone = day(); return; }
-        const band = Hm.ambush(["bandit", "knifer", "archer"], { tag: "wrakZemsta", far: [5, 8], say: "Baltazar przesyła pozdrowienia za mapę!" });
+        const band = Hm.ambush(["bandit", "knifer", "archer"], { tag: "wrakZemsta", far: [5, 8], say: TK.kod.raidWatch[0] });
         s.raidDone = day();
-        if (band) note("Ludzie Baltazara", "Baltazar zorientował się, że mapa była fałszywa. Jego ludzie zaczaili się na mnie nocą.");
+        if (band) note(TK.kod.raidWatch[1], TK.kod.raidWatch[2]);
     }
 
     T.on("mapReady", p => {

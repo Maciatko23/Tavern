@@ -7,7 +7,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Podziemia pod tawerną: 100 pięter - piętra składane z kawałków pokoi (stałe ziarno zapisu), co 10. piętro ręcznie, schody, winda, bossowie, łupy, pułapki, zapiski zakonu, Warstwa Prawdy, Komnata Serca, Lord przy Sercu i zakończenia jako sceny. v2.1.0
+ * @plugindesc Podziemia pod tawerną: 100 pięter - piętra-labirynty 80x60 z salami z kawałków pokoi (stałe ziarno zapisu), mapa odkrywana w czasie chodzenia, co 10. piętro ręcznie, schody, winda, bossowie, łupy, pułapki, zapiski zakonu, Warstwa Prawdy, Komnata Serca, Lord przy Sercu i zakończenia jako sceny. v2.2.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter Underground_Data
@@ -42,10 +42,14 @@
  *   1-10 Piwnice zamku, 11-30 Kwatery i kaplica zakonu, 31-50 Jaskinie
  *   i podziemna rzeka, 51-75 Ruiny starsze niż zakon, 76-99 Warstwa Prawdy,
  *   100 Komnata Serca (Map011).
- *   - piętra pomiędzy składa gra z gotowych kawałków pokoi narysowanych na
- *     mapach „Podziemia: kawałki (pasmo N)” (Map130, Map141-144), łącząc je
- *     korytarzami; każdy zapis ma swoje ziarno, więc piętro wygląda tak samo
- *     po powrocie. Piętra 1-9 mają własne puste mapy (131-139), piętra 11-99
+ *   - piętra pomiędzy to labirynty wielkości Kruczego Jaru (80x60): kręte
+ *     korytarze (główne 2 kratki, boczne odnogi 1), ślepe zaułki - w każdym
+ *     coś jest (skrzynka, szczątki, stwór w zasadzce, kolce, szept) - i kilka
+ *     pętli; sale to gotowe kawałki pokoi narysowane na mapach
+ *     „Podziemia: kawałki (pasmo N)” (Map130, Map141-144), schody w dół w sali
+ *     w przeciwnym rogu niż schody w górę; minimapa (M) pokazuje tylko to, co
+ *     bohater już zobaczył; każdy zapis ma swoje ziarno, więc piętro wygląda
+ *     tak samo po powrocie. Piętra 1-9 mają własne puste mapy (131-139), piętra 11-99
  *     nie mają plików - wczytują wspólną skorupę (Map145) jako mapa 1000+N;
  *   - co 10. piętro jest zrobione ręcznie (Map140, Map146-153, Map011):
  *     zapiski zakonu, boss (etap 4 walki), przystanek windy;
@@ -74,12 +78,14 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("podziemia");   // (the words of this file: js/teksty/podziemia.txt, kod.*)
 
     const PLUGIN = "Underground";
     const T = window.Tawerna;
     if (!T) throw new Error("Underground.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const D = () => window.Underground_Data;
-    const GEN_VERSION = 1;          // a change of the generator that moves things: old saves' floors are made again (see onLoad)
+    // a change of the generator that moves things: old saves' floors are made again (see the "load" handler) - 2: the maze (2026-10-23)
+    const GEN_VERSION = 2;
 
     // ======================================================================================================================
     // Small pure helpers: the random numbers (the save's seed -> the same floor every time), the editor's autotile shapes
@@ -218,14 +224,23 @@
 
     // ======================================================================================================================
     // The generator: one floor from the band's chunks and the save's seed. Pure: gives a map object like $dataMap
-    // (width, height, data, events, note, displayName...) and the floor's facts (spots, rooms, spawns, loot).
+    // (width, height, data, events, note, displayName...) and the floor's facts (spots, rooms, spawns, loot, blind ends).
+    //
+    // Since 2026-10-23 (GEN_VERSION 2) a floor is a labyrinth as big as Kruczy Jar (grandpa's plot, Map003: 80x60 -
+    // Underground_Data.MAZE): a lattice of junctions (a 2x2 floor every px tiles across and py tiles down - room between them for
+    // a wall face two rows tall over every corridor and its top), the band's chunks put on it first as halls (the junctions under a
+    // hall and round its frame left out), then a "growing tree" over the junctions and the halls (mostly the newest cell grows: long
+    // winding corridors; now and then a random one: side branches); a hall's door joins the nearest junction by a short straight
+    // cut. A few loops join far parts of the maze (no endless turning back). The ways that join the halls and go round the loops
+    // are the main corridors, 2 tiles wide; the side branches that end blind are 1 tile wide, and every blind end holds something
+    // (the band's `deadEnd`: a container, a guard a few steps back, spikes on the way, in the Truth Layer a whisper or a vision).
+    // The stairs up are in a hall in one corner of the floor, the stairs down in a hall in the opposite one.
     // ======================================================================================================================
-    const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
     function bandOf(floor) {
         const d = D();
         return d ? d.BANDS.find(b => floor >= b.from && floor <= b.to) || null : null;
     }
-    // how many rooms a generated floor has: the band's list (floor `from` first) or { min, max } growing with the depth
+    // how many halls (chunks) a generated floor has: the band's list (floor `from` first) or { min, max } growing with the depth
     function roomsOf(floor, band) {
         const r = band.rooms;
         if (Array.isArray(r)) return r[floor - band.from] || r[r.length - 1];
@@ -235,81 +250,207 @@
         }
         return 6;
     }
+    // the maze's numbers (Underground_Data.MAZE, a band's own `maze` over them) and its lattice's size
+    function mazeOf(band) {
+        const d = D();
+        const m = Object.assign({ width: 80, height: 60, x0: 3, y0: 4, px: 4, py: 5, newest: 0.72, straight: 0.35, loops: [5, 8], loopMin: 12,
+            doorLoop: 0.35, narrow: true, torchMax: 40, tries: 12 }, (d && d.MAZE) || {}, (band && band.maze) || {});
+        m.cols = Math.floor((m.width - 3 - m.x0) / m.px) + 1;
+        m.rows = Math.floor((m.height - 3 - m.y0) / m.py) + 1;
+        return m;
+    }
 
-    // the plan: which grid cells hold rooms, which chunk each, where, how they connect
-    function planFloor(floor, band, chunks, r) {
-        const n = Math.max(2, roomsOf(floor, band));
-        const [cols, rows] = n <= 4 ? [3, 2] : n <= 6 ? [3, 3] : [4, 3];
-        const key = (c, w) => c + "," + w;
-        const start = [r.int(0, cols - 1), r.int(0, rows - 1)];
-        const cells = new Map([[key(start[0], start[1]), start]]);
-        for (let guard = 0; cells.size < Math.min(n, cols * rows) && guard < 5000; guard++) {
-            const [c, w] = r.pick([...cells.values()]), [dx, dy] = r.pick(DIRS), nc = c + dx, nw = w + dy;
-            if (nc < 0 || nw < 0 || nc >= cols || nw >= rows || cells.has(key(nc, nw))) continue;
-            cells.set(key(nc, nw), [nc, nw]);
-        }
-        const list = [...cells.values()];
-        // the corridors: a random spanning tree from the start (depth first), then a few loops
-        const edges = [], inTree = new Set([key(start[0], start[1])]), stack = [start], has = new Set();
-        const ek = (a, b) => [key(a[0], a[1]), key(b[0], b[1])].sort().join("|");
-        while (stack.length) {
-            const cur = stack[stack.length - 1];
-            const next = r.shuffle(DIRS.slice()).map(([dx, dy]) => [cur[0] + dx, cur[1] + dy])
-                .find(p => cells.has(key(p[0], p[1])) && !inTree.has(key(p[0], p[1])));
-            if (!next) { stack.pop(); continue; }
-            inTree.add(key(next[0], next[1]));
-            edges.push([cur, next]); has.add(ek(cur, next));
-            stack.push(next);
-        }
-        let loops = 0;
-        for (const a of r.shuffle(list.slice())) {
-            for (const [dx, dy] of DIRS) {
-                const b = [a[0] + dx, a[1] + dy];
-                if (loops >= 2 || !cells.has(key(b[0], b[1])) || has.has(ek(a, b))) continue;
-                if (r.chance(0.3)) { edges.push([a, b]); has.add(ek(a, b)); loops++; }
-            }
-        }
-        // the far room (most steps from the start) holds the stairs down
-        const adj = new Map(list.map(p => [key(p[0], p[1]), []]));
-        for (const [a, b] of edges) { adj.get(key(a[0], a[1])).push(b); adj.get(key(b[0], b[1])).push(a); }
-        const dist = new Map([[key(start[0], start[1]), 0]]), q = [start];
-        while (q.length) {
-            const p = q.shift();
-            for (const nb of adj.get(key(p[0], p[1]))) if (!dist.has(key(nb[0], nb[1]))) { dist.set(key(nb[0], nb[1]), dist.get(key(p[0], p[1])) + 1); q.push(nb); }
-        }
-        let end = list[0], best = -1;
-        for (const p of list) { const d = dist.get(key(p[0], p[1])); if (d > best || (d === best && r.chance(0.5))) { best = d; end = p; } }
-        // the chunks: by weight, each at most once while there are others; the stairs' rooms need a chunk with a stairs place
+    // the plan: where each hall stands (which chunk), the maze over the lattice (which junctions, which ways, how wide), the blind ends
+    function planMaze(floor, band, chunks, r) {
+        const M = mazeOf(band), W = M.width, H = M.height, cols = M.cols, rows = M.rows, N = cols * rows;
+        const NX = k => M.x0 + k * M.px, NY = w => M.y0 + w * M.py;
         const pool = chunks.filter(c => floor >= c.floors[0] && floor <= c.floors[1] && ["N", "S", "E", "W"].every(s => c.doors[s].length));
         if (!pool.length) throw new Error("Underground: no usable chunk for floor " + floor);
-        const used = new Map();
-        const choose = needStairs => {
-            let cand = pool.filter(c => !needStairs || c.stairs.length >= 1);
-            if (!cand.length) cand = pool;
-            const fresh = cand.filter(c => !used.has(c.name));
-            const c = r.weighted(fresh.length ? fresh : cand, o => o.weight / (1 + (used.get(o.name) || 0) * 3));
-            used.set(c.name, (used.get(c.name) || 0) + 1);
-            return c;
+        const want = Math.max(2, roomsOf(floor, band));
+        const mod = (a, m) => ((a % m) + m) % m;
+        // the junctions a hall at (x, y) keeps out: those under it and round its frame (a corridor beside it: its frame is the wall;
+        // over it: its own rock row is the wall's top; under it: two rows more - the corridor's wall face and its top)
+        const zoneOf = (x, y, c) => {
+            const out = [];
+            for (let w = 0; w < rows; w++) {
+                const Y = NY(w);
+                if (Y + 1 < y || Y > y + c.h + 1) continue;
+                for (let k = 0; k < cols; k++) { const X = NX(k); if (X + 1 >= x && X <= x + c.w - 1) out.push(w * cols + k); }
+            }
+            return out;
         };
-        const rooms = list.map(p => ({ col: p[0], row: p[1], key: key(p[0], p[1]), start: p === start, end: p === end }));
-        for (const rm of rooms.filter(o => o.start || o.end)) rm.chunk = choose(true);
-        for (const rm of rooms.filter(o => !o.chunk)) rm.chunk = choose(false);
-        // the positions: columns as wide as their widest room, rows as tall as their tallest, random gaps and offsets
-        const M = 2, colW = [], rowH = [], gx = [], gy = [];
-        for (let c = 0; c < cols; c++) colW[c] = Math.max(6, ...rooms.filter(o => o.col === c).map(o => o.chunk.w));
-        for (let w = 0; w < rows; w++) rowH[w] = Math.max(6, ...rooms.filter(o => o.row === w).map(o => o.chunk.h));
-        for (let c = 0; c < cols - 1; c++) gx[c] = r.int(5, 8);
-        for (let w = 0; w < rows - 1; w++) gy[w] = r.int(7, 9);
-        const colX = [M], rowY = [M];
-        for (let c = 1; c < cols; c++) colX[c] = colX[c - 1] + colW[c - 1] + gx[c - 1];
-        for (let w = 1; w < rows; w++) rowY[w] = rowY[w - 1] + rowH[w - 1] + gy[w - 1];
-        for (const rm of rooms) {
-            rm.x = colX[rm.col] + r.int(0, colW[rm.col] - rm.chunk.w);
-            rm.y = rowY[rm.row] + r.int(0, rowH[rm.row] - rm.chunk.h);
+        // the doors that meet the lattice straight: N / S on a junction's column (or one beside it), W / E on its rows
+        const fitX = (x, c) => c.doors.N.concat(c.doors.S).filter(([dx]) => { const m = mod(x + dx - M.x0, M.px); return m <= 1 || m === M.px - 1; }).length;
+        const fitY = (y, c) => c.doors.W.concat(c.doors.E).filter(([, dy]) => mod(y + dy - M.y0, M.py) <= 1).length;
+        const colAt = bx => { for (const X of [bx, bx - 1, bx + 1]) { const k = (X - M.x0) / M.px; if (Number.isInteger(k) && k >= 0 && k < cols) return k; } return -1; };
+        const rowAt = by => { for (const Y of [by, by - 1]) { const w = (Y - M.y0) / M.py; if (Number.isInteger(w) && w >= 0 && w < rows) return w; } return -1; };
+        const fails = [];   // (why a plan was tried again: "hall N" - no room for it, "cut" - a hall left out of the maze)
+        for (let attempt = 0; attempt < M.tries; attempt++) {
+            const n = Math.max(2, want - Math.floor(attempt / 4));   // (a very unlucky seed: a hall fewer after every four tries)
+            // ---- the halls: the stairs' two first (a corner and the opposite one), the rest spread out; none touches another's zone
+            const used = new Map();
+            const choose = needStairs => {
+                let cand = pool.filter(c => !needStairs || c.stairs.length >= 1);
+                if (!cand.length) cand = pool;
+                const fresh = cand.filter(c => !used.has(c.name));
+                const c = r.weighted(fresh.length ? fresh : cand, o => o.weight / (1 + (used.get(o.name) || 0) * 3));
+                used.set(c.name, (used.get(c.name) || 0) + 1);
+                return c;
+            };
+            const rooms = [], taken = new Uint8Array(N), near = new Uint8Array(N);
+            const q = r.int(0, 3), tx = q & 1 ? 0.8 : 0.2, ty = q & 2 ? 0.78 : 0.22;
+            const targets = [[W * tx, H * ty], [W * (1 - tx), H * (1 - ty)]];
+            let ok = true;
+            for (let i = 0; i < n && ok; i++) {
+                const c = choose(i < 2);
+                let best = null;
+                const tryAt = (x, y, fx, fy) => {
+                    const zone = zoneOf(x, y, c);
+                    if (zone.some(z => near[z])) return;
+                    const cx = x + c.w / 2, cy = y + c.h / 2;
+                    let score = (fx + fy) * 3 + r() * 2;
+                    if (i < 2) score -= Math.hypot(cx - targets[i][0], cy - targets[i][1]) / 3;
+                    else score += Math.min(...rooms.map(o => Math.hypot(cx - o.cx, (cy - o.cy) * 1.2))) / 5;
+                    if (!best || score > best.score) best = { x, y, zone, score, cx, cy };
+                };
+                for (let t = 0; t < 70; t++) {
+                    let x = r.int(2, W - 2 - c.w), y = r.int(2, H - 2 - c.h), fx = -1, fy = -1;
+                    const x1 = x, y1 = y;
+                    for (let s = 0; s < M.px && x1 + s + c.w <= W - 2; s++) { const f = fitX(x1 + s, c); if (f > fx) { fx = f; x = x1 + s; } }
+                    for (let s = 0; s < M.py && y1 + s + c.h <= H - 2; s++) { const f = fitY(y1 + s, c); if (f > fy) { fy = f; y = y1 + s; } }
+                    tryAt(x, y, fx, fy);
+                }
+                // (a crowded floor: every place looked at)
+                if (!best) for (let y = 2; y + c.h <= H - 2; y++) for (let x = 2; x + c.w <= W - 2; x++) tryAt(x, y, fitX(x, c), fitY(y, c));
+                if (!best) { ok = false; fails.push("hall " + i); break; }
+                rooms.push({ key: String(i), idx: i, chunk: c, x: best.x, y: best.y, cx: best.cx, cy: best.cy, start: i === 0, end: i === 1 });
+                for (const z of best.zone) {
+                    taken[z] = 1;
+                    const k = z % cols, w = (z / cols) | 0;
+                    for (let dw = -1; dw <= 1; dw++) for (let dk = -1; dk <= 1; dk++) {
+                        const kk = k + dk, ww = w + dw;
+                        if (kk >= 0 && ww >= 0 && kk < cols && ww < rows) near[ww * cols + kk] = 1;
+                    }
+                }
+            }
+            if (!ok) continue;
+            // ---- the ways: the lattice between free junctions, a hall's door to the nearest junction on its side
+            const adj = Array.from({ length: N + rooms.length }, () => []);
+            const link = (a, b, e) => { e.a = a; e.b = b; adj[a].push(e); adj[b].push(e); };
+            const latEdges = [];
+            for (let w = 0; w < rows; w++) for (let k = 0; k < cols; k++) {
+                const a = w * cols + k;
+                if (taken[a]) continue;
+                if (k + 1 < cols && !taken[a + 1]) { const e = { kind: "lat", dir: "H" }; link(a, a + 1, e); latEdges.push(e); }
+                if (w + 1 < rows && !taken[a + cols]) { const e = { kind: "lat", dir: "V" }; link(a, a + cols, e); latEdges.push(e); }
+            }
+            const doorEdges = [];
+            for (const rm of rooms) {
+                const c = rm.chunk, x = rm.x, y = rm.y, id = N + rm.idx;
+                const add = (side, bx, by, k, w) => {
+                    if (k < 0 || w < 0 || k >= cols || w >= rows || taken[w * cols + k]) return;
+                    const e = { kind: "door", dir: side, side, door: [bx, by], room: rm };
+                    link(id, w * cols + k, e);
+                    doorEdges.push(e);
+                };
+                let wN = -1, wS = -1, kW = -1, kE = -1;
+                for (let w = rows - 1; w >= 0 && wN < 0; w--) if (NY(w) + 1 <= y - 1) wN = w;
+                for (let w = 0; w < rows && wS < 0; w++) if (NY(w) >= y + c.h + 2) wS = w;
+                for (let k = cols - 1; k >= 0 && kW < 0; k--) if (NX(k) + 1 <= x - 1) kW = k;
+                for (let k = 0; k < cols && kE < 0; k++) if (NX(k) >= x + c.w) kE = k;
+                for (const [dx, dy] of c.doors.N) add("N", x + dx, y + dy, colAt(x + dx), wN);
+                for (const [dx, dy] of c.doors.S) add("S", x + dx, y + dy, colAt(x + dx), wS);
+                for (const [dx, dy] of c.doors.W) add("W", x + dx, y + dy, kW, rowAt(y + dy));
+                for (const [dx, dy] of c.doors.E) add("E", x + dx, y + dy, kE, rowAt(y + dy));
+            }
+            // ---- the growing tree from the stairs-up hall: the newest cell mostly (long corridors), a random one now and then (branches)
+            const V = N + rooms.length, seen = new Uint8Array(V), inTree = new Set(), lastDir = new Array(V).fill(null);
+            const start = N + 0, active = [start];
+            seen[start] = 1;
+            const other = (e, v) => (e.a === v ? e.b : e.a);
+            while (active.length) {
+                const idx = r.chance(M.newest) ? active.length - 1 : r.int(0, active.length - 1), cur = active[idx];
+                const opts = adj[cur].filter(e => !seen[other(e, cur)]);
+                if (!opts.length) { active.splice(idx, 1); continue; }
+                let e = null;
+                if (lastDir[cur] && r.chance(M.straight)) e = opts.find(o => o.kind === "lat" && o.dir === lastDir[cur]) || null;   // (on: the way it came is behind)
+                if (!e) e = r.pick(opts);
+                const nx = other(e, cur);
+                seen[nx] = 1;
+                inTree.add(e);
+                lastDir[nx] = e.kind === "lat" ? e.dir : null;
+                active.push(nx);
+            }
+            if (rooms.some(rm => !seen[N + rm.idx])) { fails.push("cut"); continue; }   // (a hall cut off: another try)
+            // ---- the loops: lattice ways between far parts of the tree (its depth from the start; far = many steps round), spread out
+            const parent = new Int32Array(V).fill(-1), depth = new Int32Array(V).fill(-1);
+            depth[start] = 0;
+            const bfs = [start];
+            for (let h = 0; h < bfs.length; h++) {
+                const v = bfs[h];
+                for (const e of adj[v]) {
+                    if (!inTree.has(e)) continue;
+                    const u = other(e, v);
+                    if (depth[u] >= 0) continue;
+                    depth[u] = depth[v] + 1; parent[u] = v; bfs.push(u);
+                }
+            }
+            const treeDist = (a, b) => {
+                let x = a, y = b, n2 = 0;
+                while (x !== y) { if (depth[x] >= depth[y]) { x = parent[x]; n2++; } else { y = parent[y]; n2++; } if (x < 0 || y < 0) return 0; }
+                return n2;
+            };
+            const cand = latEdges.filter(e => !inTree.has(e) && seen[e.a] && seen[e.b]).map(e => ({ e, d: treeDist(e.a, e.b) })).filter(o => o.d >= M.loopMin);
+            const loops = [], wantLoops = r.int(M.loops[0], M.loops[1]);
+            const cheb = (a, b) => Math.max(Math.abs((a % cols) - (b % cols)), Math.abs(((a / cols) | 0) - ((b / cols) | 0)));
+            while (loops.length < wantLoops && cand.length) {
+                const o = r.weighted(cand, c2 => c2.d);
+                cand.splice(cand.indexOf(o), 1);
+                if (loops.some(l => cheb(l.a, o.e.a) <= 2)) continue;
+                loops.push(o.e);
+            }
+            // ...and a hall's spare door opened too now and then (a hall with more than one way in)
+            const doorLoops = [];
+            for (const rm of rooms) {
+                const spare = adj[N + rm.idx].filter(e => !inTree.has(e) && seen[other(e, N + rm.idx)]);
+                if (spare.length && r.chance(M.doorLoop)) doorLoops.push(r.pick(spare));
+            }
+            const edges = [...inTree].concat(loops, doorLoops);
+            // ---- the main ways and the side branches: the leaves (a junction with one way) pruned again and again - what stays joins
+            // the halls or goes round a loop (2 tiles wide), what went is a side branch (1 tile wide); a leaf behind a hall's door only
+            // (a door into a blind end) is not dug at all
+            const deg = new Int32Array(V), alive = new Uint8Array(V), live = new Set(edges);
+            for (let v = 0; v < V; v++) alive[v] = seen[v];
+            for (const e of edges) { deg[e.a]++; deg[e.b]++; }
+            const edgesOf = v => adj[v].filter(e => live.has(e));
+            let changed = true;
+            while (changed) {
+                changed = false;
+                for (let v = 0; v < N; v++) {
+                    if (!alive[v] || deg[v] !== 1) continue;
+                    const e = edgesOf(v)[0];
+                    if (e && e.kind === "door") { live.delete(e); deg[e.a]--; deg[e.b]--; alive[v] = 0; changed = true; }
+                }
+            }
+            const main = new Uint8Array(V), d2 = Int32Array.from(deg), queue = [];
+            for (let v = 0; v < V; v++) if (alive[v]) main[v] = 1;
+            for (let v = 0; v < N; v++) if (alive[v] && d2[v] <= 1) queue.push(v);
+            while (queue.length) {
+                const v = queue.pop();
+                if (!main[v] || v >= N) continue;
+                main[v] = 0;
+                for (const e of edgesOf(v)) { const u = other(e, v); if (main[u] && u < N && --d2[u] <= 1) queue.push(u); }
+            }
+            if (!M.narrow) for (let v = 0; v < N; v++) if (alive[v]) main[v] = 1;
+            const deadEnds = [];
+            for (let v = 0; v < N; v++) if (alive[v] && deg[v] === 1) deadEnds.push({ node: v, next: other(edgesOf(v)[0], v) });
+            // the far hall gets the stairs down (the second hall stands in the opposite corner)
+            const nodes = [];
+            for (let v = 0; v < N; v++) if (alive[v]) nodes.push(v);
+            return { W, H, M, cols, rows, NX, NY, N, rooms, edges: [...live], alive, main, deg, deadEnds, nodes, ox: M.narrow ? r.int(0, 1) : 0,
+                loops: loops.length + doorLoops.filter(e => live.has(e)).length, attempt, fails };
         }
-        const W = colX[cols - 1] + colW[cols - 1] + M, H = rowY[rows - 1] + rowH[rows - 1] + M;
-        const byKey = new Map(rooms.map(o => [o.key, o]));
-        return { W, H, rooms, edges: edges.map(([a, b]) => [byKey.get(key(a[0], a[1])), byKey.get(key(b[0], b[1]))]), cols, rows };
+        throw new Error("Underground: no maze for floor " + floor);
     }
 
     // the tileset's passage flags as the engine reads them (Game_Map.checkPassage over the four layers, top first)
@@ -327,13 +468,25 @@
             return false;
         };
     }
+    // a chunk event of each container kind of a library (its pictures for the containers of the blind ends)
+    const templatesOf = new WeakMap();
+    function lootTemplates(chunks) {
+        if (templatesOf.has(chunks)) return templatesOf.get(chunks);
+        const out = {};
+        for (const c of chunks) for (const ce of c.events) {
+            const k = ce.tags.Lup ? String(ce.tags.Lup).trim() : "";
+            if (k && !out[k] && ce.data && ce.data.pages && ce.data.pages.length) out[k] = ce.data;
+        }
+        templatesOf.set(chunks, out);
+        return out;
+    }
 
     function generate(floor, seed, chunks, opts) {
         const o = opts || {}, d = D(), band = bandOf(floor);
         if (!band || !chunks || !chunks.length) return null;
         const r = rng(hash(seed >>> 0, "floor", floor, band.id));
-        const plan = planFloor(floor, band, chunks, r);
-        const W = plan.W, H = plan.H, N = W * H;
+        const plan = planMaze(floor, band, chunks, r);
+        const W = plan.W, H = plan.H, N = W * H, cols = plan.cols, NX = plan.NX, NY = plan.NY, ox = plan.ox;
         const data = new Array(N * 6).fill(0);
         const at = (z, x, y) => (z * H + y) * W + x;
         const inside = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
@@ -343,7 +496,7 @@
         const markDirty = (x, y, ring) => {
             for (let dy = -ring; dy <= ring; dy++) for (let dx = -ring; dx <= ring; dx++) if (inside(x + dx, y + dy)) dirty[(y + dy) * W + x + dx] = 1;
         };
-        // ---- the rooms: every layer of the chunk copied; its border (and the rock round it) shaped again later
+        // ---- the halls: every layer of the chunk copied; its border (and the rock round it) shaped again later
         for (const rm of plan.rooms) {
             const c = rm.chunk;
             for (let z = 0; z < 6; z++) for (let dy = 0; dy < c.h; dy++) for (let dx = 0; dx < c.w; dx++) {
@@ -355,52 +508,49 @@
         const k0 = (x, y) => kindOf(data[at(0, x, y)]);
         const isWall = (x, y) => { if (!inside(x, y)) return true; const k = k0(x, y); return k < 0 ? !data[at(0, x, y)] : (k >= 48 && k < 80) || k >= 80; };
         const isTop = (x, y) => inside(x, y) && isA4Top(k0(x, y));
-        // ---- the corridors: a 2x2 brush along an L / Z path from door to door; only rock is cut, room floor stays
-        const carved = new Set(), corridorCells = [];
-        const carve = (x, y) => {
-            for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) {
-                const cx = x + dx, cy = y + dy;
-                if (!inside(cx, cy) || cx < 1 || cy < 1 || cx >= W - 1 || cy >= H - 1) continue;
+        // ---- the corridors: rectangles of the lattice cut into the rock (the halls' floors stay); main 2 wide, side branches 1 wide
+        const carved = new Set(), mainSet = new Set(), corridorCells = [];
+        const carveRect = (x0, y0, x1, y1, main) => {   // (from the top-left to the bottom-right corner; an empty one cuts nothing)
+            for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) {
+                if (cx < 1 || cy < 1 || cx >= W - 1 || cy >= H - 1) continue;
                 if (!isWall(cx, cy)) continue;
                 data[at(0, cx, cy)] = autoId(cor.floor, 0);
-                for (let z = 1; z < 6; z++) if (z !== 4) data[at(z, cx, cy)] = 0;
-                data[at(4, cx, cy)] = 0;
+                for (let z = 1; z < 6; z++) data[at(z, cx, cy)] = 0;
                 const k = cy * W + cx;
-                if (!carved.has(k)) { carved.add(k); corridorCells.push([cx, cy]); }
+                if (!carved.has(k)) { carved.add(k); corridorCells.push([cx, cy]); if (main) mainSet.add(k); }
                 markDirty(cx, cy, 2);
             }
         };
-        const line = (x0, y0, x1, y1) => {
-            const sx = Math.sign(x1 - x0), sy = Math.sign(y1 - y0);
-            let x = x0, y = y0;
-            carve(x, y);
-            while (x !== x1 || y !== y1) { if (x !== x1) x += sx; else y += sy; carve(x, y); }
-        };
+        const main = v => !!plan.main[v];
+        const kOf = v => v % cols, wOf = v => (v / cols) | 0;
+        // a junction's own tiles: 2x2, or one (x0 + ox, its lower row) on a side branch
+        const left = v => NX(kOf(v)) + (main(v) ? 0 : ox), right = v => NX(kOf(v)) + (main(v) ? 1 : ox), top = v => NY(wOf(v)) + (main(v) ? 0 : 1);
+        for (const v of plan.nodes) carveRect(left(v), top(v), right(v), NY(wOf(v)) + 1, main(v));
         const links = [];
-        for (const [a0, b0] of plan.edges) {
-            let a = a0, b = b0;
-            if (a.row === b.row) {
-                if (a.col > b.col) [a, b] = [b, a];
-                const da = r.pick(a.chunk.doors.E), db = r.pick(b.chunk.doors.W);
-                const ax = a.x + da[0], ay = a.y + da[1], bx = b.x + db[0], by = b.y + db[1];
-                const lo = a.x + a.chunk.w, hi = Math.max(lo, b.x - 2), m = r.int(lo, hi);
-                line(ax + 1, ay, m, ay); line(m, ay, m, by); line(m, by, bx - 1, by);
-                links.push({ a: a.key, b: b.key, from: [ax, ay], to: [bx, by] });
-            } else {
-                if (a.row > b.row) [a, b] = [b, a];
-                const da = r.pick(a.chunk.doors.S), db = r.pick(b.chunk.doors.N);
-                const ax = a.x + da[0], ay = a.y + da[1], bx = b.x + db[0], by = b.y + db[1];
-                const lo = a.y + a.chunk.h + 2, hi = Math.max(lo, b.y - 2), m = r.int(lo, hi);
-                line(ax, ay + 1, ax, m); line(ax, m, bx, m); line(bx, m, bx, by - 1);
-                links.push({ a: a.key, b: b.key, from: [ax, ay], to: [bx, by] });
+        for (const e of plan.edges) {
+            if (e.kind === "lat") {
+                const a = Math.min(e.a, e.b), b = Math.max(e.a, e.b), wide = main(a) && main(b);
+                const X = NX(kOf(a)), Y = NY(wOf(a));
+                if (b === a + 1) wide ? carveRect(X + 2, Y, X + 3, Y + 1, true) : carveRect(right(a) + 1, Y + 1, left(b) - 1, Y + 1, false);
+                else wide ? carveRect(X, Y + 2, X + 1, Y + 4, true) : carveRect(X + ox, Y + 2, X + ox, top(b) - 1, false);
+                continue;
             }
+            // a hall's door: a straight cut 2 wide from the door through the hall's wall to its junction (which may be a branch's)
+            // (W / E: the cut stays beside the junction's column - a branch's one tile joined on its own row only, so the cut's lower
+            // row never eats the top of the wall over the corridor below)
+            const v = e.a < plan.N ? e.a : e.b, [bx, by] = e.door, X = NX(kOf(v)), Y = NY(wOf(v));
+            if (e.side === "N") carveRect(bx, main(v) ? Y : Y + 1, bx + 1, by - 1, true);
+            else if (e.side === "S") carveRect(bx, by + 1, bx + 1, Y + 1, true);
+            else if (e.side === "W") { carveRect(X + 2, by, bx - 1, by + 1, true); if (!main(v)) carveRect(X + ox + 1, Y + 1, X + 1, Y + 1, true); }
+            else { carveRect(bx + 1, by, X - 1, by + 1, true); if (!main(v)) carveRect(X, Y + 1, X + ox - 1, Y + 1, true); }
+            links.push({ a: e.room.key, b: kOf(v) + "," + wOf(v), side: e.side, from: [bx, by], to: [X, Y] });
         }
         // ---- the corridors' north walls: a face two rows tall over every corridor cell that has rock above it
         const faceLow = [];
         for (const [x, y] of corridorCells) {
             if (!isTop(x, y - 1)) continue;
             data[at(0, x, y - 1)] = autoId(cor.side, 0);
-            faceLow.push([x, y - 1]);
+            faceLow.push([x, y - 1, mainSet.has(y * W + x)]);
             markDirty(x, y - 1, 1);
             if (isTop(x, y - 2) && inside(x, y - 3)) { data[at(0, x, y - 2)] = autoId(cor.side, 0); markDirty(x, y - 2, 1); }
         }
@@ -419,12 +569,12 @@
             for (let z = 0; z < 2; z++) {
                 const id = data[at(z, x, y)], k = kindOf(id);
                 if (k < 0) continue;
-                const top = isA4Top(k);
+                const topK = isA4Top(k);
                 const same = (dx, dy) => {
                     const nx = x + dx, ny = y + dy;
                     if (!inside(nx, ny)) return true;
                     const nk = kindOf(data[at(z, nx, ny)]);
-                    return top ? isA4Top(nk) : nk === k;
+                    return topK ? isA4Top(nk) : nk === k;
                 };
                 data[at(z, x, y)] = autoId(k, isWallKind(k) ? wallShape(same) : isFallKind(k) ? (same(-1, 0) ? 0 : 1) | (same(1, 0) ? 0 : 2) : floorShape(same));
             }
@@ -453,26 +603,69 @@
         const blue = band.torch === "blue";
         const torchArt = lit => art(blue ? (lit ? d.ART.blueLit : d.ART.blueOut) : (lit ? d.ART.torchLit : d.ART.torchOut));
         const torchLight = blue ? d.BLUE_LIGHT : d.TORCH_LIGHT;
-        // the stairs: up in the start room, down in the far room, each on one of the chunk's stairs places (a lower wall face
+        const addTorch = (x, y, lit) => evd(lit ? "Pochodnia" : TK.kod.addTorch[0], x, y, lit ? torchLight : "",
+            [page({ image: torchArt(lit), through: true, step: lit, list: [] })]);
+        const addSpawn = (x, y, kind, room) => {
+            spawns.push({ x, y, kind, floor, room });
+            evd("Miejsce: stwór", x, y, "<Stwor:" + kind + ">", [page({ through: true })]);
+        };
+        const addWhisper = (x, y) => { const e = evd("Szept", x, y, "<Szept>", [page({ through: true })]); whispers.push({ id: e.id, x, y }); };
+        const addVision = (x, y) => { const e = evd("Zjawa", x, y, "<Zjawa>", [page({ through: true, priority: 1 })]); visions.push({ id: e.id, x, y }); };
+        const addTrap = (x, y) => {
+            const e = evd(TK.kod.addTrap[0], x, y, "<Pulapka:kolce>", [page({ image: art(d.ART.spikes), through: true })]);
+            e.pages[0].image.direction = d.SPIKE_STEPS[0];
+            traps.push({ id: e.id, x, y, phase: r.int(0, d.SPIKES.period - 1) });
+        };
+        // a container: what is in it rolled now (the save's seed - the same every time); page 2 (self switch A: searched) the "open"
+        // picture if the kind has one - or nothing at all for a thing that is taken away (mushrooms)
+        const addLoot = (kind, x, y, src) => {
+            const table = d.LOOT[kind];
+            if (!table) return null;
+            const full = r.chance(table.full !== undefined ? table.full : band.lootFull);
+            const got = [];
+            if (full) for (let i = 0; i < (table.picks || 1); i++) {
+                const pick = r.weighted(table.list, q2 => q2.w || 1);
+                if (pick.gold) got.push({ gold: Math.round((r.int(pick.gold[0], pick.gold[1]) + Math.floor(floor / 3)) * (band.gold || 1)) });
+                else got.push({ item: pick.item, n: r.int(pick.n[0], pick.n[1]) });
+            }
+            const plain = { skrzynia: d.ART.chest, skrzynka: d.ART.crate, beczka: d.ART.barrel }[kind];
+            const pages = src ? src.pages.map(p => JSON.parse(JSON.stringify(p))) : plain ? [page({ image: art(plain), priority: 1 })] : null;
+            if (!pages) return null;
+            const openArt = { skrzynia: d.ART.chestOpen, skrzynka: d.ART.crateOpen, beczka: d.ART.barrelOpen }[kind];
+            pages[0].list = [scriptCmd("Underground.search(this.eventId())"), { code: 0, indent: 0, parameters: [] }];
+            pages[0].trigger = 0;
+            const second = JSON.parse(JSON.stringify(pages[0]));
+            second.conditions = Object.assign(blankCond(), { selfSwitchValid: true, selfSwitchCh: "A" });
+            if (table.gone) {
+                second.image = { tileId: 0, characterName: "", characterIndex: 0, direction: 2, pattern: 0 };
+                second.list = [{ code: 0, indent: 0, parameters: [] }];
+                second.priorityType = 0; second.through = true;
+            } else if (openArt && pages[0].image.characterName) second.image = art(openArt);
+            const e = evd((src && src.name) || d.LOOT_NAMES[kind], x, y, "<Lup:" + kind + ">", [pages[0], second]);
+            loot[e.id] = { kind, got };
+            return e;
+        };
+        // the stairs: up in the start hall, down in the far one, each on one of the chunk's stairs places (a lower wall face
         // row; one lands on the floor cell below it, facing down)
         const pickStairs = (rm, avoid) => {
             const list = rm.chunk.stairs.filter(s => !avoid || s[0] !== avoid[0] || s[1] !== avoid[1]);
             const s = r.pick(list.length ? list : rm.chunk.stairs);
             return s ? [rm.x + s[0], rm.y + s[1]] : null;
         };
-        const startRoom = plan.rooms.find(o => o.start), endRoom = plan.rooms.find(o => o.end);
+        const startRoom = plan.rooms.find(q2 => q2.start), endRoom = plan.rooms.find(q2 => q2.end);
         const up = pickStairs(startRoom);
         const down = pickStairs(endRoom, startRoom === endRoom && up ? [up[0] - endRoom.x, up[1] - endRoom.y] : null);
         if (up) {
-            evd(d.TEXT.stairsUp, up[0], up[1], "", [page({ image: art(d.ART.stairsUp), priority: 1, trigger: 1,
+            evd(d.TEXT.stairsUp, up[0], up[1], "<Minimap:exit>", [page({ image: art(d.ART.stairsUp), priority: 1, trigger: 1,
                 list: [seCmd("Move1", 80, 95), scriptCmd("Underground.stairs(\"up\")")] })]);
             spots.up = [up[0], up[1] + 1, 2];
         }
         if (down) {
-            evd(d.TEXT.stairsDown, down[0], down[1], "", [page({ image: art(d.ART.stairsDown), priority: 1, trigger: 1,
+            evd(d.TEXT.stairsDown, down[0], down[1], "<Minimap:exit>", [page({ image: art(d.ART.stairsDown), priority: 1, trigger: 1,
                 list: [seCmd("Move1", 80, 85), scriptCmd("Underground.stairs(\"down\")")] })]);
             spots.down = [down[0], down[1] + 1, 2];
         }
+        const nearUp = (x, y, dist) => !!spots.up && Math.hypot(x - spots.up[0], y - spots.up[1]) < dist;
         // the chunks' own events (their tags read here)
         const noteRooms = [];
         for (const rm of plan.rooms) {
@@ -482,62 +675,16 @@
                 if (t.Losowo !== undefined && !r.chance((Number(t.Losowo) || 50) / 100)) continue;
                 const src = ce.data;
                 if (t.Stwor !== undefined) {
-                    const kind = String(t.Stwor === true ? "dowolny" : t.Stwor).trim();
-                    spawns.push({ x, y, kind, floor, room: rm.key });
-                    evd("Miejsce: stwór", x, y, "<Stwor:" + kind + ">", [page({ through: true })]);
+                    if (nearUp(x, y, 4.5)) continue;   // (not on the hero's head as he comes down the stairs)
+                    addSpawn(x, y, String(t.Stwor === true ? "dowolny" : t.Stwor).trim(), rm.key);
                     continue;
                 }
-                if (t.Szept) {   // (the Truth Layer: a voice from the dark comes from here)
-                    const e = evd("Szept", x, y, "<Szept>", [page({ through: true })]);
-                    whispers.push({ id: e.id, x, y });
-                    continue;
-                }
-                if (t.Zjawa) {   // (the Truth Layer: someone is seen here for a moment)
-                    const e = evd("Zjawa", x, y, "<Zjawa>", [page({ through: true, priority: 1 })]);
-                    visions.push({ id: e.id, x, y });
-                    continue;
-                }
+                if (t.Szept) { addWhisper(x, y); continue; }   // (the Truth Layer: a voice from the dark comes from here)
+                if (t.Zjawa) { addVision(x, y); continue; }    // (the Truth Layer: someone is seen here for a moment)
                 if (t.Zapiski) { noteRooms.push({ rm, x, y, src }); continue; }
-                if (t.Pochodnia) {
-                    const lit = r.chance(band.roomTorchLit);
-                    evd(lit ? "Pochodnia" : "Wypalona pochodnia", x, y, lit ? torchLight : "",
-                        [page({ image: torchArt(lit), through: true, step: lit, list: [] })]);
-                    continue;
-                }
-                if (t.Pulapka) {
-                    if (!r.chance(band.trapOn)) continue;
-                    const e = evd("Pułapka: kolce", x, y, "<Pulapka:kolce>", [page({ image: art(d.ART.spikes), through: true })]);
-                    e.pages[0].image.direction = d.SPIKE_STEPS[0];
-                    traps.push({ id: e.id, x, y, phase: r.int(0, d.SPIKES.period - 1) });
-                    continue;
-                }
-                if (t.Lup) {
-                    const kind = String(t.Lup).trim(), table = d.LOOT[kind];
-                    if (!table) continue;
-                    const full = r.chance(table.full !== undefined ? table.full : band.lootFull);
-                    const got = [];
-                    if (full) for (let i = 0; i < (table.picks || 1); i++) {
-                        const pick = r.weighted(table.list, q => q.w || 1);
-                        if (pick.gold) got.push({ gold: Math.round((r.int(pick.gold[0], pick.gold[1]) + Math.floor(floor / 3)) * (band.gold || 1)) });
-                        else got.push({ item: pick.item, n: r.int(pick.n[0], pick.n[1]) });
-                    }
-                    const pages = src.pages.map(p => JSON.parse(JSON.stringify(p)));
-                    // page 1 as drawn (closed), page 2 (self switch A: searched) the "open" picture if the type has one - or nothing at
-                    // all for a thing that is taken away (mushrooms)
-                    const openArt = { skrzynia: d.ART.chestOpen, skrzynka: d.ART.crateOpen, beczka: d.ART.barrelOpen }[kind];
-                    pages[0].list = [scriptCmd("Underground.search(this.eventId())"), { code: 0, indent: 0, parameters: [] }];
-                    pages[0].trigger = 0;
-                    const second = JSON.parse(JSON.stringify(pages[0]));
-                    second.conditions = Object.assign(blankCond(), { selfSwitchValid: true, selfSwitchCh: "A" });
-                    if (table.gone) {
-                        second.image = { tileId: 0, characterName: "", characterIndex: 0, direction: 2, pattern: 0 };
-                        second.list = [{ code: 0, indent: 0, parameters: [] }];
-                        second.priorityType = 0; second.through = true;
-                    } else if (openArt && pages[0].image.characterName) second.image = art(openArt);
-                    const e = evd(src.name || d.LOOT_NAMES[kind], x, y, "<Lup:" + kind + ">", [pages[0], second]);
-                    loot[e.id] = { kind, got };
-                    continue;
-                }
+                if (t.Pochodnia) { addTorch(x, y, r.chance(band.roomTorchLit)); continue; }
+                if (t.Pulapka) { if (r.chance(band.trapOn)) addTrap(x, y); continue; }
+                if (t.Lup) { addLoot(String(t.Lup).trim(), x, y, src); continue; }
                 evd(src.name, x, y, src.note, JSON.parse(JSON.stringify(src.pages)));
             }
         }
@@ -548,23 +695,58 @@
             const pages = JSON.parse(JSON.stringify(n.src.pages));
             pages[0].list = [scriptCmd("Underground.read(" + floor + ")"), { code: 0, indent: 0, parameters: [] }];
             pages[0].trigger = 0;
-            const e = evd("Zapiski: " + note.title, n.x, n.y, "<Zapiski:" + floor + ">", [pages[0]]);
+            const e = evd(Watki.wstaw(TK.kod.generate[0], { title: note.title }), n.x, n.y, "<Zapiski:" + floor + ">", [pages[0]]);
             notes.push({ id: e.id, floor, x: n.x, y: n.y });
         }
-        // the corridors' torches: on the lower row of their north walls, spaced out
+        // ---- the blind ends: each holds something - a container of the band's kinds at the end, a guard a few steps back (an ambush),
+        // spikes on the way, in the Truth Layer a whisper or a vision; past the caps at least a lost guard's remains
+        const de = band.deadEnd || {}, tpl = lootTemplates(chunks);
+        const kinds = Object.keys(de.kinds || {}).filter(k => d.LOOT[k] && (tpl[k] || { skrzynia: 1, skrzynka: 1, beczka: 1 }[k]));
+        const guards = Object.keys(de.guards || {});
+        const occupied = new Set(events.filter(Boolean).map(e => e.y * W + e.x));
+        const deadEnds = [];
+        let lootN = 0, guardN = 0;
+        for (const end of r.shuffle(plan.deadEnds.slice())) {
+            const v = end.node, nv = end.next, X = NX(kOf(v)), Y = NY(wOf(v));
+            const step = nv === v + 1 ? [1, 0] : nv === v - 1 ? [-1, 0] : nv > v ? [0, 1] : [0, -1];
+            const back = [];   // (from the blind end back towards the junction it hangs on)
+            for (let i = 0, x = X + (main(v) ? 0 : ox), y = Y + 1; i < 7 && carved.has(y * W + x); i++, x += step[0], y += step[1]) back.push([x, y]);
+            if (!back.length) continue;
+            const [ex, ey] = back[0], what = [];
+            if (occupied.has(ey * W + ex)) continue;
+            if (band.whispers && r.chance(de.whisper || 0)) { const w0 = back[1] || back[0]; addWhisper(w0[0], w0[1]); what.push("szept"); }
+            if (band.whispers && back[3] && r.chance(de.vision || 0)) { addVision(back[3][0], back[3][1]); what.push("zjawa"); }
+            let box = null;
+            if (kinds.length && lootN < (de.maxLoot || 0) && (r.chance(de.loot || 0) || !what.length)) {
+                const kind = r.weighted(kinds, k => de.kinds[k]);
+                box = addLoot(kind, ex, ey, tpl[kind]);
+                if (box) { lootN++; what.push(kind); }
+            }
+            let g = null;
+            if (guards.length && floor >= (de.guardFrom || 1) && guardN < (de.maxGuards || 0) && (r.chance(de.guard || 0) || !what.length)) {
+                g = box ? back[Math.min(back.length - 1, r.int(2, 3))] : back[0];
+                if (g && (!box || back.length > 2)) { addSpawn(g[0], g[1], r.weighted(guards, k => de.guards[k]), "zaulek"); guardN++; what.push(TK.kod.generate[1]); }
+                else g = null;
+            }
+            const spike = g === back[2] ? back[3] : back[2];   // (not on the guard's place)
+            if (box && spike && back.length > 3 && r.chance((de.trap || 0) * (band.trapOn || 0) * 2)) { addTrap(spike[0], spike[1]); what.push("kolce"); }
+            if (!what.length && tpl.kosci && addLoot("kosci", ex, ey, tpl.kosci)) what.push("kosci");
+            if (what.length) deadEnds.push({ x: ex, y: ey, what });
+        }
+        // the creatures' places in a mixed order (the creature plugin fills them in this order up to its cap - spread over the floor)
+        r.shuffle(spawns);
+        // the corridors' torches: on the lower row of the main corridors' north walls, spaced out
         const placed = [];
-        const minGap = band.torchEvery[0];
-        for (const [x, y] of r.shuffle(faceLow.slice())) {
+        const minGap = band.torchEvery[1], most = Math.min(plan.M.torchMax, Math.ceil(mainSet.size / (band.torchEvery[1] * 3)));
+        for (const [x, y] of r.shuffle(faceLow.filter(f => f[2]))) {
+            if (placed.length >= most) break;
             if (placed.some(([px, py]) => Math.abs(px - x) + Math.abs(py - y) < minGap)) continue;
             if (!inside(x, y + 1) || isWall(x, y + 1)) continue;
             if (events.some(e => e && e.x === x && e.y === y)) continue;
             placed.push([x, y]);
-            const lit = r.chance(band.torchLit);
-            evd(lit ? "Pochodnia" : "Wypalona pochodnia", x, y, lit ? torchLight : "",
-                [page({ image: torchArt(lit), through: true, step: lit, list: [] })]);
-            if (placed.length >= Math.ceil(corridorCells.length / (band.torchEvery[1] * 2))) break;
+            addTorch(x, y, r.chance(band.torchLit));
         }
-        // ---- the map object (like $dataMap); a river's sound when a room has water (band 3), the band's own sound otherwise
+        // ---- the map object (like $dataMap); a river's sound when a hall has water (band 3), the band's own sound otherwise
         const level = band.level + Math.floor((floor - band.from) / 2);
         const water = plan.rooms.some(rm => rm.chunk.water > 0);
         const bgs = water && band.bgsWater ? band.bgsWater : band.bgs || null;
@@ -580,7 +762,9 @@
         const info = { floor, band: band.id, bandName: band.name, seed: seed >>> 0, width: W, height: H, spots, spawns, loot, traps, notes,
             whispers, visions, water,
             rooms: plan.rooms.map(rm => ({ key: rm.key, chunk: rm.chunk.name, x: rm.x, y: rm.y, w: rm.chunk.w, h: rm.chunk.h, start: rm.start, end: rm.end })),
-            links, corridorCells: corridorCells.length, level };
+            links, corridorCells: corridorCells.length, level, deadEnds,
+            maze: { cols: plan.cols, rows: plan.rows, nodes: plan.nodes.length, main: mainSet.size, branch: corridorCells.length - mainSet.size,
+                loops: plan.loops, torches: placed.length, tries: plan.attempt + 1 } };
         if (o.flags) info.check = verifyMap(map, info, o.flags);
         return { map, info };
     }
@@ -699,12 +883,13 @@
     // ======================================================================================================================
     const inGame = typeof DataManager !== "undefined" && typeof Scene_Map !== "undefined" && typeof window.$plugins !== "undefined";
     const libs = {};            // chunk map id -> parsed chunks
-    const cache = new Map();    // "seed:floor" -> { map, info }
+    const cache = new Map();    // "seed:floor" -> { map, info } (the last CACHE_MAX floors asked for)
+    const CACHE_MAX = 24;
     const creatures = {};       // kind -> build(spawn, ctx) -> event data
     const DATA_NAME = id => "$dataUndergroundChunks" + id;
 
     const store = T.state.define("underground", () => ({ seed: 0, deepest: 0, visited: {}, notes: {}, lib: {}, gold: 0, found: 0,
-        lifts: {}, bosses: {}, locks: {}, forceLocks: {}, truths: {}, ending: null, lord: null, forceWorld: null, forceLord: null }), { version: 1, owner: PLUGIN });
+        lifts: {}, bosses: {}, locks: {}, forceLocks: {}, truths: {}, ending: null, lord: null, forceWorld: null, forceLord: null, seen: {} }), { version: 1, owner: PLUGIN });
     const state = () => {
         const s = store();
         // (saves from band 1's days: the newer parts)
@@ -715,6 +900,7 @@
         if (!s.truths) s.truths = {};
         if (s.ending === undefined) s.ending = null;
         if (s.lord === undefined) s.lord = null;
+        if (!s.seen) s.seen = {};   // (the tiles seen on each generated floor - the minimap's fog, since 2026-10-23)
         return s;
     };
     function seedOf() {
@@ -740,7 +926,10 @@
         const band = bandOf(floor), chunks = library(band);
         if (!chunks || handmadeOf(floor)) return null;
         const seed = seedOf(), k = seed + ":" + floor;
-        if (!cache.has(k)) cache.set(k, generate(floor, seed, chunks, { flags: flags(band) }));
+        if (!cache.has(k)) {
+            cache.set(k, generate(floor, seed, chunks, { flags: flags(band) }));
+            if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);   // (the oldest one: made again when it is needed)
+        }
         return cache.get(k);
     }
 
@@ -777,7 +966,8 @@
                     for (let f = b.from; f <= b.to; f++) {
                         const id = mapOf(f);
                         if (handmadeOf(f) || object[id]) continue;
-                        object[id] = { id, expanded: false, name: d.TEXT.floorName(f), order: 10000 + f, parentId: d.MAPS.ruins, scrollX: 0, scrollY: 0 };
+                        // (the name a getter: the words of js/teksty/podziemia.txt come in after the map list)
+                        object[id] = { id, expanded: false, get name() { return d.TEXT.floorName(f); }, order: 10000 + f, parentId: d.MAPS.ruins, scrollX: 0, scrollY: 0 };
                     }
                 }
             }
@@ -829,7 +1019,10 @@
         }
     }
 
-    // ---- the save: a floor saved under another library or generator is made again (the hero goes to its stairs up)
+    // ---- the save: a floor saved under another library or generator is made again (the hero goes to its stairs up - also when the
+    // engine moves him back to where he stood because the project changed since the save: Scene_Load.reloadMapIfUpdated; see
+    // onMapLoaded below)
+    let relocate = null;   // { mapId, spot } for the first map loaded after a load
     function sigNow(band) {
         const chunks = library(band);
         return chunks ? librarySig(chunks) : 0;
@@ -845,17 +1038,22 @@
                 const had = s.lib[b.id];
                 s.lib[b.id] = sig;
                 if (had === undefined || had === sig) continue;
-                // the floors of this band changed: their searched containers and the hero's place there are forgotten
+                // the floors of this band changed: their searched containers, the tiles seen there and the hero's place are forgotten
                 for (let f = b.from; f <= b.to; f++) {
                     if (!isGenerated(mapOf(f))) continue;
                     const mid = mapOf(f);
                     for (const k of Object.keys($gameSelfSwitches._data)) if (k.split(",")[0] === String(mid)) delete $gameSelfSwitches._data[k];
+                    delete s.seen[f];
                 }
                 if (isGenerated($gameMap.mapId()) && bandOf(floorOf($gameMap.mapId())) === b) {
                     const f = floorOf($gameMap.mapId());
                     cache.clear();
                     const got = floorData(f), sp = got && got.info.spots.up;
-                    if (sp) { $gamePlayer.reserveTransfer($gameMap.mapId(), sp[0], sp[1], sp[2], 0); $gamePlayer.requestMapReload(); }
+                    if (sp) {
+                        $gamePlayer.reserveTransfer($gameMap.mapId(), sp[0], sp[1], sp[2], 0);
+                        $gamePlayer.requestMapReload();
+                        relocate = { mapId: $gameMap.mapId(), spot: sp.slice() };
+                    }
                 }
             }
         }, { owner: PLUGIN });
@@ -879,12 +1077,20 @@
                 }
             }
             _Scene_Map_onMapLoaded.call(this);
+            // a save made on a floor that is made anew now (another generator or library): the hero on its stairs up
+            const moveTo = relocate;
+            relocate = null;
+            if (moveTo && window.$gameMap && $gameMap.mapId() === moveTo.mapId) {
+                $gamePlayer.locate(moveTo.spot[0], moveTo.spot[1]);
+                $gamePlayer.setDirection(moveTo.spot[2] || 2);
+                return;
+            }
             // a save from before the cellar was rebuilt (Map009 was one big floor then): a hero standing in what is now wall goes to
-            // the foot of the stairs from the tavern (the same for the other hand-made maps)
+            // the foot of the stairs from the tavern (the same for the other hand-made maps, and a generated floor: its stairs up)
             if (!this._transfer && window.$gameMap && D()) {
                 const d = D(), id = $gameMap.mapId(), x = $gamePlayer.x, y = $gamePlayer.y;
-                const f = floorOf(id), hm = !isGenerated(id) && d.FLOORS[f];
-                const spot = { [d.MAPS.cellar]: [10, 8], [d.MAPS.ruins]: d.SPOTS.ruinsFromCellar }[id] || (hm ? hm.up : null);
+                const f = floorOf(id), hm = !isGenerated(id) && d.FLOORS[f], got = isGenerated(id) ? floorData(f) : null;
+                const spot = { [d.MAPS.cellar]: [10, 8], [d.MAPS.ruins]: d.SPOTS.ruinsFromCellar }[id] || (hm ? hm.up : got ? got.info.spots.up : null);
                 if (spot && ![2, 4, 6, 8].some(dir => $gameMap.isPassable(x, y, dir))) $gamePlayer.locate(spot[0], spot[1]);
             }
         };
@@ -920,6 +1126,7 @@
     if (inGame) {
         T.on("mapReady", e => {
             const mapId = e.mapId, f = floorOf(mapId), d = D();
+            fogStart(mapId);
             truth.reset(mapId);
             if (!f || !d) return;
             if (mapId === d.MAPS.heart) syncDoor();
@@ -929,7 +1136,9 @@
             if (deeper) s.deepest = f;
             if (e.transfer) {
                 const hm = d.FLOORS[f] && !isGenerated(mapId) ? d.FLOORS[f].name : "";
-                T.popup(d.TEXT.notice(f) + (hm ? " - " + hm : ""), { top: true, sub: d.TEXT.noticeSub(band.name, s.deepest) });
+                // (the clean look's map name - CleanHUD's „Kronika” - says the floor, its hall, its band and the deepest one itself:
+                // no notice under it then)
+                if (!T.call("CleanHUD", "saysFloor")) T.popup(d.TEXT.notice(f) + (hm ? " - " + hm : ""), { top: true, sub: d.TEXT.noticeSub(band.name, s.deepest) });
                 if (first && d.TEXT.firstVisit[f]) T.call("SpeechBubbles", "say", $gamePlayer, d.TEXT.firstVisit[f], 260);
             }
             if (deeper) T.emit("undergroundDeeper", { floor: f });
@@ -967,7 +1176,7 @@
         if (nf > 0 && !bandOf(nf)) { popupHere(d.TEXT.noFloor); return false; }
         if (dir === "down" && !bossCleared(f)) {
             const b = d.BOSSES[f];
-            popupHere(d.TEXT.bossBlocks(b ? b.name : "strażnik piętra"));
+            popupHere(d.TEXT.bossBlocks(b ? b.name : TK.kod.stairs[0]));
             return false;
         }
         return travel(landing(nf, dir === "down" ? "up" : "down"));
@@ -1003,10 +1212,10 @@
         sw("lift", true);
         // (the windlass of this stop shows its lever down: its self switch A)
         if (window.$gameMap && floorOf($gameMap.mapId()) === f) {
-            for (const ev of $gameMap.events()) if (ev.event() && ev.event().name === "Kołowrót windy") $gameSelfSwitches.setValue([$gameMap.mapId(), ev.eventId(), "A"], true);
+            for (const ev of $gameMap.events()) if (ev.event() && ev.event().name === TK.kod.liftOn[0]) $gameSelfSwitches.setValue([$gameMap.mapId(), ev.eventId(), "A"], true);
         }
         T.popup(d.TEXT.liftOn(f), { top: true, sub: d.TEXT.liftSub });
-        if (first) T.call("Combat", "discover", f === 10 ? "ug_lift" : "ug_lift_" + f, "winda kasztelana (piętro " + f + ")", 40);
+        if (first) T.call("Combat", "discover", f === 10 ? "ug_lift" : "ug_lift_" + f, Watki.wstaw(TK.kod.liftOn[1], { f: f }), 40);
         T.emit("undergroundLift", { on: true, floor: f });
         return true;
     }
@@ -1104,8 +1313,8 @@
         if (!s.notes[key]) {
             s.notes[key] = true;
             const truthOf = n.who && n.who !== "straznik";
-            T.call("Journal", "addNote", (truthOf ? "Warstwa Prawdy: " : "Zapiski zakonu: ") + n.title, n.text + "\n(Podziemia, piętro " + floor + ")");
-            T.call("Combat", "discover", "ug_note_" + key, (truthOf ? "prawda (" : "zapiski zakonu (") + n.title + ")", truthOf ? 40 : 20);
+            T.call("Journal", "addNote", (truthOf ? TK.kod.read[0] : TK.kod.read[1]) + n.title, Watki.wstaw(TK.kod.read[2], { text: n.text, floor: floor }));
+            T.call("Combat", "discover", "ug_note_" + key, (truthOf ? TK.kod.read[3] : TK.kod.read[4]) + n.title + ")", truthOf ? 40 : 20);
             T.emit("undergroundNote", { key: String(key), floor, title: n.title });
             if (n.who) {
                 s.truths[key] = { who: n.who, floor };
@@ -1137,7 +1346,7 @@
     // the blow of the armour's sword: from the guardian toward the hero (a roll dodges it, the shield takes some - Combat's rules)
     function guardianStrike(damage) {
         const g = $gameMap.events().find(e => e.event() && /<Stwor:zbroja_straznik>/.test(e.event().note || ""));
-        return hurt(damage, { poise: damage >= 12 ? 40 : 10, knock: damage >= 12 ? 1.2 : 0.8, name: "pusta zbroja",
+        return hurt(damage, { poise: damage >= 12 ? 40 : 10, knock: damage >= 12 ? 1.2 : 0.8, name: TK.kod.guardianStrike[0],
             from: g ? { x: g.x, y: g.y } : null });
     }
     // stepping on the line in front of the gate: the guardian's own talk starts (once at a time; not after he let one by)
@@ -1148,7 +1357,7 @@
         return true;
     }
     function gate10Opened() {
-        T.call("Combat", "discover", "ug_gate10", "dziesiąta brama", 80);
+        T.call("Combat", "discover", "ug_gate10", TK.kod.gate10Opened[0], 80);
         T.emit("undergroundGate", { floor: 10 });
         return true;
     }
@@ -1213,6 +1422,97 @@
             }
             return _triggerButtonAction.call(this);
         };
+    }
+
+    // ======================================================================================================================
+    // The floor found as one walks it (2026-10-23): on a generated floor the tiles the hero has seen - the floor round him up to
+    // SIGHT steps along the ways (never through the rock), the walls beside it and the wall faces over it - are kept per floor in
+    // the save (state().seen: { floor: { w, h, b } }, b - a bit a tile in base64); Minimap.js shows only them (Minimap.addFog).
+    // ======================================================================================================================
+    const SIGHT = 6;
+    const fog = { mapId: 0, floor: 0, w: 0, h: 0, bits: null, open: null, rev: 0, at: -1 };
+    const B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    function bitsToText(bits) {
+        let out = "";
+        for (let i = 0; i < bits.length; i += 3) {
+            const n = (bits[i] << 16) | ((bits[i + 1] || 0) << 8) | (bits[i + 2] || 0);
+            out += B64[(n >> 18) & 63] + B64[(n >> 12) & 63] + B64[(n >> 6) & 63] + B64[n & 63];
+        }
+        return out;
+    }
+    function textToBits(text, len) {
+        const bits = new Uint8Array(len), s = String(text || "");
+        for (let i = 0, j = 0; i + 4 <= s.length && j < len; i += 4) {
+            const n = (B64.indexOf(s[i]) << 18) | (B64.indexOf(s[i + 1]) << 12) | (B64.indexOf(s[i + 2]) << 6) | B64.indexOf(s[i + 3]);
+            if (n < 0) break;
+            for (const sh of [16, 8, 0]) if (j < len) bits[j++] = (n >> sh) & 255;
+        }
+        return bits;
+    }
+    // the floor left: what was seen there goes into the save's state
+    function fogSave() {
+        if (!fog.bits || !fog.floor) return;
+        state().seen[fog.floor] = { w: fog.w, h: fog.h, b: bitsToText(fog.bits) };
+    }
+    function fogForget() { fog.mapId = 0; fog.floor = 0; fog.bits = null; fog.open = null; fog.at = -1; fog.rev++; }
+    // a map entered: its tiles seen so far (a generated floor only), the tiles one sees along (floor, water - not the rock)
+    function fogStart(mapId) {
+        fogSave();
+        fogForget();
+        fog.mapId = mapId;
+        if (!D() || !isGenerated(mapId) || !window.$dataMap || !$dataMap.data) return;
+        const f = floorOf(mapId), w = $dataMap.width, h = $dataMap.height, n = w * h, kept = state().seen[f];
+        fog.floor = f; fog.w = w; fog.h = h;
+        fog.bits = kept && kept.w === w && kept.h === h ? textToBits(kept.b, Math.ceil(n / 8)) : new Uint8Array(Math.ceil(n / 8));
+        fog.open = new Uint8Array(n);
+        for (let i = 0; i < n; i++) { const id = $dataMap.data[i], k = kindOf(id); fog.open[i] = id && !((k >= 48 && k < 80) || k >= 80) ? 1 : 0; }
+    }
+    const seenAt = (x, y) => { if (!fog.bits || x < 0 || y < 0 || x >= fog.w || y >= fog.h) return false; const i = y * fog.w + x; return !!(fog.bits[i >> 3] & (1 << (i & 7))); };
+    // the hero looks round from (x0, y0): a walk of SIGHT steps along the open tiles; each one seen with its neighbours and the wall
+    // face over it (three rows: the face and its top)
+    function reveal(x0, y0, sight) {
+        if (!fog.bits) return 0;
+        const w = fog.w, h = fog.h, open = fog.open, bits = fog.bits, far = sight === undefined ? SIGHT : sight;
+        let added = 0;
+        const see = (x, y) => {
+            if (x < 0 || y < 0 || x >= w || y >= h) return;
+            const i = y * w + x;
+            if (!(bits[i >> 3] & (1 << (i & 7)))) { bits[i >> 3] |= 1 << (i & 7); added++; }
+        };
+        if (x0 < 0 || y0 < 0 || x0 >= w || y0 >= h) return 0;
+        const start = y0 * w + x0, dist = new Map([[start, 0]]), q = [start];
+        for (let qi = 0; qi < q.length; qi++) {
+            const i = q[qi], x = i % w, y = (i / w) | 0, dd = dist.get(i);
+            for (let dy = -3; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (dy >= -1 || !open[(y + dy) * w + x + dx]) see(x + dx, y + dy);
+            if (dd >= far) continue;
+            for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+                const nx = x + dx, ny = y + dy, j = ny * w + nx;
+                if (nx < 0 || ny < 0 || nx >= w || ny >= h || !open[j] || dist.has(j)) continue;
+                dist.set(j, dd + 1);
+                q.push(j);
+            }
+        }
+        if (added) fog.rev++;
+        return added;
+    }
+    // for Minimap.js: null off a generated floor, else { rev, seen(x, y) }
+    function fogFor(mapId) {
+        if (!fog.bits || fog.mapId !== mapId) return null;
+        return { rev: fog.rev, seen: seenAt };
+    }
+    function fogHook() { const M = window.Minimap; if (M && M.addFog) M.addFog(fogFor); }
+    if (inGame) {
+        fogHook();
+        T.on("save", () => fogSave(), { owner: PLUGIN });
+        T.on("load", () => fogForget(), { owner: PLUGIN });       // (the state of the save loaded: the floor is read again on mapReady)
+        T.on("newGame", () => fogForget(), { owner: PLUGIN });
+        T.onMapUpdate(() => {   // (the map's fog is read on mapReady - fogStart)
+            if (!fog.bits || fog.mapId !== $gameMap.mapId() || Graphics.frameCount % 4) return;
+            const idx = $gamePlayer.y * fog.w + $gamePlayer.x;
+            if (idx === fog.at) return;
+            fog.at = idx;
+            reveal($gamePlayer.x, $gamePlayer.y);
+        }, { owner: PLUGIN, name: "fog" });
     }
 
     // ======================================================================================================================
@@ -1418,8 +1718,8 @@
         if (s.locks[name]) return false;
         s.locks[name] = true;
         const l = locks();
-        T.popup("Zamek otwarty: " + d.TEXT.lockNames[name], { top: true, sub: "Otwartych zamków: " + l.open + " z 3" });
-        T.call("Combat", "discover", "ug_lock_" + name, "zamek Komnaty Serca (" + d.TEXT.lockNames[name] + ")", 60);
+        T.popup(Watki.wstaw(TK.kod.openLock[0], { "1": d.TEXT.lockNames[name] }), { top: true, sub: Watki.wstaw(TK.kod.openLock[1], { open: l.open }) });
+        T.call("Combat", "discover", "ug_lock_" + name, Watki.wstaw(TK.kod.openLock[2], { "1": d.TEXT.lockNames[name] }), 60);
         T.emit("undergroundLock", { lock: name, open: l.open, door: l.door });
         syncDoor();
         return true;
@@ -1847,7 +2147,7 @@
         if (!d.ENDINGS[kind] || s.ending) return false;
         const g = kind === "straznik" ? (who || "hero") : null, w = world();
         s.ending = { kind, guardian: g, locks: locks().open, day: T.call("Survival", "day") || T.time.day() || 0, lord: Object.assign({}, w.lord) };
-        T.call("Combat", "discover", "ug_ending", "Serce Twierdzy: " + d.ENDINGS[kind].title, 500);
+        T.call("Combat", "discover", "ug_ending", Watki.wstaw(TK.kod.ending[0], { title: d.ENDINGS[kind].title }), 500);
         T.emit("undergroundEnding", Object.assign({}, s.ending));
         const list = filmList(kind, g || "hero", w);
         s.ending.world = plainWorld(Object.assign({}, w, { shots: film.shots }));
@@ -1869,7 +2169,7 @@
         const s = state();
         if (!s || !s.ending || s.ending.kind === "straznik") return;
         for (const e of events) {
-            if (!e || e.name !== "Serce Twierdzy (blask)") continue;
+            if (!e || e.name !== TK.kod.heartData[0]) continue;
             const img = e.pages[0].image;
             if (s.ending.kind === "zniszczyc") Object.assign(img, { characterName: "", tileId: 512 + 32 });   // (Dungeon D: crystal shards lying)
             else if (s.ending.kind === "uwolnic") Object.assign(img, { characterName: "", tileId: 0 });
@@ -1881,8 +2181,8 @@
 
     // ---- what the scenes' script calls do (Underground.film.*: `this` of the event's interpreter first)
     const charOf = id => (id < 0 ? $gamePlayer : id > 0 ? $gameMap.event(id) : null);
-    const glowEvent = () => (window.$gameMap ? $gameMap.events().find(e => e.event() && e.event().name === "Serce Twierdzy (blask)") || null : null);
-    const heartEvent = () => (window.$gameMap ? $gameMap.events().find(e => e.event() && e.event().name === "Serce Twierdzy") || null : null);
+    const glowEvent = () => (window.$gameMap ? $gameMap.events().find(e => e.event() && e.event().name === TK.kod.glowEvent[0]) || null : null);
+    const heartEvent = () => (window.$gameMap ? $gameMap.events().find(e => e.event() && e.event().name === TK.kod.heartEvent[0]) || null : null);
     // a path of 4-way steps on the map's passage (events left out: the cast walks through), [] when none
     function pathTo(sx, sy, tx, ty) {
         if (sx === tx && sy === ty) return [];
@@ -1989,7 +2289,7 @@
                 b.fontFace = $gameSystem.mainFontFace();
                 b.fontSize = 44;
                 b.textColor = "#ffd866";
-                b.outlineColor = "rgba(0, 0, 0, 0.85)";
+                b.outlineColor = TK.kod.updateCinema[0];
                 b.outlineWidth = 7;
                 b.drawText(c.text, 0, 10, Graphics.width, 70, "center");
                 sp._capText = c.text;
@@ -2193,9 +2493,9 @@
         debugHooked = true;
         const dbg = () => H().DEBUG, pick = { end: 0, world: 0, lord: 0 };
         const label = {
-            heartEnd: () => { const [k, w] = dbg().endings[pick.end]; return "Serce: zakończenie „" + dbg().endingName(k, w) + "”   ←→ zmień, OK zagraj (świat i Lord z rzędów niżej)"; },
-            heartWorld: () => "Serce: świat - " + dbg().worlds[pick.world].name + "   ←→",
-            heartLord: () => "Serce: Lord przy Sercu - " + dbg().lords[pick.lord].name + "   ←→"
+            heartEnd: () => { const [k, w] = dbg().endings[pick.end]; return Watki.wstaw(TK.kod.heartEnd[0], { "1": dbg().endingName(k, w) }); },
+            heartWorld: () => Watki.wstaw(TK.kod.heartWorld[0], { name: dbg().worlds[pick.world].name }),
+            heartLord: () => Watki.wstaw(TK.kod.heartLord[0], { name: dbg().lords[pick.lord].name })
         };
         const ROWS = { heartEnd: "end", heartWorld: "world", heartLord: "lord" };
         const SIZE = { end: () => dbg().endings.length, world: () => dbg().worlds.length, lord: () => dbg().lords.length };
@@ -2248,11 +2548,13 @@
     // ---- the debug / test helpers
     function verify(floor) {
         const got = floorData(floor);
-        if (!got) return { ok: false, why: "no data" };
+        if (!got) return { ok: false, why: TK.kod.verify[0] };
         return verifyMap(got.map, got.info, flags(bandOf(floor)));
     }
     function setSeed(n) {
         state().seed = (Number(n) >>> 0) || 1;
+        state().seen = {};   // (other floors now: nothing of them seen)
+        fogForget();
         cache.clear();
         return state().seed;
     }
@@ -2265,8 +2567,8 @@
     }
 
     const api = {
-        GEN_VERSION, hash, rng, floorShape, wallShape, parseLibrary, librarySig, planFloor, generate, verifyMap, reachable, checkChunk, tagsOf,
-        roomsOf, floorOf, mapOf, bandOf, handmadeOf, isGenerated, isVirtual, isUnderground, library, floorData, flags,
+        GEN_VERSION, hash, rng, floorShape, wallShape, parseLibrary, librarySig, planMaze, planFloor: planMaze, mazeOf, generate, verifyMap, reachable,
+        checkChunk, tagsOf, roomsOf, floorOf, mapOf, bandOf, handmadeOf, isGenerated, isVirtual, isUnderground, library, floorData, flags,
         info: infoOf, spawns: mapId => { const i = infoOf(mapId); return i ? i.spawns : spawnsOfMap(); },
         registerCreature(kind, build) { creatures[String(kind)] = build; cache.clear(); return true; },
         hasCreature: kind => !!creatures[kind],
@@ -2281,7 +2583,9 @@
         filmLog: () => film.log.slice(), forceWorld: w => { state().forceWorld = w ? JSON.parse(JSON.stringify(w)) : null; return state().forceWorld; },
         forceLord: v => { state().forceLord = v || null; return state().forceLord; },
         truths: () => Object.assign({}, state().truths), whisper, startMoment, showVision: (id, i) => { const ev = $gameMap.event(id); return ev ? showVision(ev, i !== undefined ? D().APPARITIONS[i] : null) : null; },
-        waterAt, clearCache: () => cache.clear()
+        waterAt, clearCache: () => cache.clear(),
+        fog: fogFor, reveal: (x, y, sight) => reveal(x, y, sight), seenCount: () => { let n = 0; if (fog.bits) for (const b of fog.bits) for (let k = b; k; k &= k - 1) n++; return n; },
+        fogSave
     };
     window.Underground = T.register(PLUGIN, api);
 

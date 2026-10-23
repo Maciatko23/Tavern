@@ -1,0 +1,477 @@
+# Teksty paczki B „Łowy i zwierzęta” (wtyczki Lowy_Data.js i Lowy.js): nora, gawra, bagno, lizawka, obozy, zwierzyniec i gajowy, zbłąkane zwierzęta, strzelnica, zadania K59-K62, D32, D33.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz lowy
+
+# ======================================================================== GAJOWY (mieszkaniec)
+mieszkaniec.name = Gajowy Gniewko Bór
+mieszkaniec.title = gajowy zwierzyńca Lorda
+[mieszkaniec.barks.patrol]
+Tropy. Świeże. Jeleń i łania, poszły do wody.
+Ktoś tu łamał gałęzie... Nie zwierzę. Zwierzę tak nie łamie.
+Cicho tu. Za cicho. Albo wilk, albo człowiek.
+
+[mieszkaniec.barks.work]
+Siekiera, drwa, woda. Gajowy też musi jeść.
+Róg wisi, łuk wisi. Dzień się zaczyna.
+
+[mieszkaniec.barks.stand]
+Zimą siano, latem sól. Zwierz pamięta, kto go karmił.
+Paśnik trzeba podbić. Dziki znowu podryły nogę.
+
+[mieszkaniec.barks.rain]
+W deszcz tropy płyną. Kłusownik to wie.
+
+[mieszkaniec.barks.night]
+(Z leśniczówki słychać, jak ktoś ostrzy nóż.)
+
+[mieszkaniec.barks.home]
+(Gajowy smaruje cięciwę łojem.)
+
+[mieszkaniec.talk.morning]
+Rano zwierzyna chodzi do wody. Wtedy widać, kto tu rządzi. Nie Lord, chłopcze. Las.
+Jeleni jest teraz pięć, może sześć. Dwa dziki. Liczę je co dzień, jak sakwy.
+
+[mieszkaniec.talk.day]
+To zwierzyniec Lorda. Polują tu goście dworu, raz do roku. Reszta roku należy do zwierzyny. I do mnie.
+Widzisz wyłom w żywopłocie? Zarósłby, gdyby nie ludzie. Ludzie chodzą skrótem. Ja patrzę, kto chodzi.
+Bez zezwolenia nie strzelaj. Grzywnę biorę ja, nie Lord. Ale biorę.
+
+[mieszkaniec.talk.evening]
+Wieczorem jelenie wychodzą na łąkę. Najpiękniejsza pora. I najgorsza - wtedy przychodzą kłusownicy.
+Siadam przy paśniku i słucham. Las mówi, kto w nim jest.
+
+[mieszkaniec.talk.night]
+Nocą zwierzyniec śpi. A ja śpię jednym okiem.
+
+[mieszkaniec.talk.rain]
+Deszcz. Dobrze. Kłusownik w deszcz siedzi w domu, bo zostawia ślady.
+
+# ======================================================================== ZBLAKANE (zblakane)
+zblakane.list.0.name = Krasula
+zblakane.list.1.name = Owca Ługów
+zblakane.list.2.name = Kura Ługów
+zblakane.list.3.name = Kura Ługów
+
+# ======================================================================== TX
+pupsFled = Szczenięta uciekły w gąszcz.
+denEmpty = Nora jest pusta. Wataha nie wróci tu przez kilka tygodni.
+meatLeft = Zostawiłeś mięso przy norze. Wilki je znajdą.
+meatTaken = Wilki zabrały mięso spod nory ({n}/3).
+denFriend = Wataha spod nory cię zna. Wilki z Leśnej drogi i Skraju lasu nie zaatakują cię.
+denFriendSub = Szczenięta zostały z matką. Nic im nie zabrałeś.
+gift = Przy norze leży zając. Dar watahy.
+betrayed = Uderzyłeś wilka z nory. Wataha ci tego nie zapomni.
+snore = Z gawry dochodzi chrapanie.
+peekAsk = Gawra. Ze środka czuć zwierzę i mokrą sierść.
+peekSleep = Zajrzyj do środka
+peekLeave = Odejdź po cichu
+woke = Obudziłeś niedźwiedzia!
+wokeSub = Jest wściekły: przez minutę uderza mocniej.
+empty = Gawra jest pusta. Wiosną może przyjdzie nowy niedźwiedź.
+nobody = W gawrze nikogo nie ma. Gospodarz chodzi gdzieś po lesie.
+claw = Pazur niedźwiedzia
+muddy = Jesteś ubłocony
+muddySub = Pachniesz jak las: zwierzęta wyczują cię później (2 h).
+muddyNoDrink = Błotem się nie napijesz.
+tusk = Kieł odyńca
+lickAsk = Wydrążony pieniek. W środku biały nalot po soli.
+lickPut = Połóż bryłę soli
+lickNo = Nic nie kładź
+lickNeed = Potrzebna bryła soli (handlarz, Roch na przystani).
+lickSet = Sól na lizawce: jelenie będą przychodzić przez 6 dni.
+lickActive = Sól jeszcze leży: jelenie przychodzą o świcie i o zmierzchu (zostało {n} dni).
+hideIn = Zasiadka: siedzisz w chruście. Zwierzęta wyczują cię później, a łuk trzymasz pewniej.
+antler = Zrzucone poroże
+antlerSub = Jeleń zgubił je przy lizawce.
+czoArrow = Strzała z białym okiem
+parkFirst = Za żywopłotem: zwierzyniec Lorda. Tu poluje tylko dwór.
+parkShut = Wyłom zarósł cierniem. Gajowy go zamknął na {n} dni.
+caught = Gajowy cię widział!
+found = Gajowy znalazł ścierwo w zwierzyńcu.
+legal = Zezwolenie: ten jeleń jest twój, legalnie.
+legalUsed = Zezwolenie było już użyte w tym tygodniu.
+snareFound = Sidła kłusownika ({n}/3)
+roped = {name} idzie za tobą na powrozie.
+ropeNeed = Potrzebna lina na powróz.
+henCaught = Złapałeś kurę!
+henMissed = Kura uciekła z gdakaniem.
+delivered = {name} wróciła do zagrody.
+letGo = Puszczasz {name}.
+noBow = Bez łuku ani rusz.
+roundStart = Runda: 5 strzałów ćwiczebnych. Mierz w tarcze.
+roundEnd = Koniec rundy: {n} pkt.
+shotPts = +{n}
+shotMiss = pudło
+contest = Zawody! Rywale: {list}. Twoja runda decyduje.
+noContest = Zawody są co siódmy dzień, od 10 do 12.
+silver = Srebrna strzała
+
+# ======================================================================== TALK (rozmowy)
+[rozmowy.gajowyFine1]
+Stój! To zwierzyniec Lorda, a ty strzelasz do jego zwierzyny.
+Czterdzieści groszy grzywny. Nie dla Lorda - dla zwierzyńca: na sól i siano. I nie rób tego drugi raz.
+
+[rozmowy.gajowyFine2]
+Znowu ty. Drugi raz. Sześćdziesiąt groszy.
+Myślisz, że nie widzę? Las ma oczy. Ja mam lepsze.
+
+[rozmowy.gajowyFine3]
+Trzeci raz. Wystarczy.
+Osiemdziesiąt groszy. I zarastam wyłom cierniem. Przez tydzień do zwierzyńca nie wejdziesz.
+Lord kazałby cię powiesić. Ja każę ci się nauczyć. To różnica.
+
+rozmowy.gajowyNoGold = Nie masz tyle? To biorę mięso i skóry. Zwierzyna wraca do zwierzyńca, choćby tak.
+rozmowy.gajowyFound = (Gajowy trzyma w ręku kawał sierści.) Znalazłem ścierwo przy ścieżce. Twoja robota, prawda? Nie kłam. Tropy prowadzą do ciebie.
+rozmowy.gajowyEscort = Wyprowadzę cię. I nie wracaj, póki nie zarośnie.
+[rozmowy.rysiekMeet]
+(Z ciemności wychodzi chudy człowiek z workiem. Zatrzymuje się, kiedy cię widzi.)
+@rysiek: O. Ty. Wnuk Stacha. Co tu robisz po nocy? ...Aha. Gajowy cię przysłał.
+@rysiek: Słuchaj. Mam w Podgrodziu matkę i dwóch małych braci. Lord ma pięćdziesiąt jeleni. Ja biorę jednego na miesiąc.
+
+[rozmowy.rysiekGive]
+> Pójdziesz ze mną do gajowego.
+@rysiek: (Rysiek patrzy długo.) Tak myślałem. Dobra. Nie będę uciekał. Nogi mam za słabe na gajowego.
+(Odprowadzasz Ryśka do leśniczówki. Gajowy zabiera mu sidła i worek.)
+
+[rozmowy.rysiekWarn]
+> Uciekaj. I nie wracaj tu. Gajowy wie o sidłach.
+@rysiek: (Rysiek kiwa głową.) Nie zapomnę ci tego. Przyjdź do mnie w Podgrodziu: skóry dla ciebie zawsze taniej.
+(Rysiek znika w ciemności. Sidła zostały - zaniesiesz je gajowemu.)
+
+[rozmowy.czoMeet]
+(Przy ognisku siedzą dwaj obcy. Na kołczanie białe oko.)
+@czo: Hej, chłopcze. Polujemy na niedźwiedzia spod grani. Skóra dla naszego dowódcy. Znasz gawrę?
+@czo: Pomożesz - dostaniesz osiemdziesiąt groszy. Nie pomożesz - nie wchodź nam w drogę.
+
+[rozmowy.czoHelp]
+> Pomogę. Znam gawrę.
+@czo: Dobrze. Ubij niedźwiedzia, przynieś nam wieść, że leży. Resztę zrobimy sami.
+
+[rozmowy.czoDrive]
+> To nie wasz las. Wynoście się.
+@czo: (Obcy wstają. Jeden kładzie strzałę na cięciwę.) Głupi chłopak. Pożałujesz.
+
+[rozmowy.czoPaid]
+@czo: Leży? Dobra robota. Masz osiemdziesiąt.
+@czo: (Ciszej.) Dowódca szuka w górach wejścia pod ziemię. Szyb przy obozie kopaczy. Nie mów nikomu, że ode mnie.
+
+[rozmowy.arrowRotmistrz]
+> Panie rotmistrzu. Znalazłem to w obozie obcych myśliwych na Skraju lasu.
+(Rotmistrz obraca strzałę w palcach.) Białe oko. Czarne Oczy. W NASZYM lesie? To już nie myśliwi, to zwiadowcy.
+Dobrze, że przyszedłeś. Wyślę patrol. Garnizon ci tego nie zapomni.
+
+[rozmowy.arrowKleofas]
+> Bracie Kleofasie. Widziałem je też w lesie... Takie strzały. Na Skraju lasu, w obozie obcych myśliwych.
+(Kleofas długo milczy.) Te same lotki, co w piersi orlicy. Oni są już na wyspie, chłopcze. Nie tylko na morzu.
+Zapiszę to w kronice. Strzeż się ich.
+
+rozmowy.rysiekShop = Skóry dla ciebie taniej. Ze zwierzyńca? ...Nie pytaj.
+rozmowy.martaMilk = Krasula daje mleko jak przed pożarem. Masz, to twoje - dwa dzbanki. Za to, że ją przyprowadziłeś.
+
+# ======================================================================== Q_K59 (zadania.K59)
+zadania.K59.title = Nora pod korzeniami
+zadania.K59.where = Skraj lasu: wilcza nora pod korzeniami starego pnia
+zadania.K59.when = za dnia
+zadania.K59.desc = Łowczy Bogdan pisał na tablicy o watasze, która ma norę na Skraju lasu. Rozbić watahę - czy zostawić szczenięta w spokoju i dać watasze jeść?
+zadania.K59.steps.0.text = Wilcza nora na Skraju lasu. Rozbij watahę (zabij dorosłe wilki spod nory) albo zostaw szczenięta: w trzech różnych dniach zostaw przy norze surowe mięso. Mięso: {n}/3.
+
+# ======================================================================== Q_K60 (zadania.K60)
+zadania.K60.title = Sól dla jeleni
+zadania.K60.where = Łąka: lizawka i zasiadka
+zadania.K60.when = o świcie (5-8)
+zadania.K60.desc = Łowczy Bogdan zostawił u Borgara wiadomość: przy lizawce na Łące trzeba położyć sól. Kto o świcie posiedzi w zasiadce, zobaczy jelenie. Bogdan zapłaci za poroże albo mięso jelenia spod lizawki.
+zadania.K60.steps.0.text = Połóż bryłę soli na lizawce na Łące (bryłę sprzedaje handlarz albo Roch na przystani).
+zadania.K60.steps.1.text = O świcie (5-8) posiedź w zasiadce przy lizawce, aż przyjdą jelenie.
+zadania.K60.steps.2.text = Zdobądź poroże jelenia albo mięso jelenia spod lizawki (wiosną leży tam czasem zrzucone poroże).
+[zadania.K60.reward.note]
+Sól dla jeleni
+Położyłem sól na lizawce na Łące i o świcie siedziałem w zasiadce. Jelenie przychodzą lizać sól o świcie i o zmierzchu, przez sześć dni. Bogdan przysłał przez Borgara czterdzieści groszy.
+
+# ======================================================================== Q_K61 (zadania.K61)
+zadania.K61.title = Zawody strzeleckie
+zadania.K61.where = Garnizon nad zatoką: strzelnica
+zadania.K61.when = co 7 dni, 10-12
+zadania.K61.desc = Kwatermistrz Kłos chce zobaczyć, czy chłopak spoza wojska pokona jego najlepszego strzelca. Zawody są na strzelnicy garnizonu co siódmy dzień przed południem.
+[zadania.K61.offer.say]
+Strzelasz? Z łuku? Hah! To pokaż. Co siódmy dzień przed południem chłopcy strzelają do tarcz o garść groszy.
+Sierżant Bełt bije wszystkich od roku. Trzydzieści sześć punktów na pięć strzał. Pobij go, a postawię ci pięćdziesiąt groszy.
+
+zadania.K61.offer.yes = Pobiję go.
+zadania.K61.offer.no = Nie teraz.
+[zadania.K61.offer.accept]
+Ha! Lubię takich. Strzelnica jest na południe od obozu. Łuk masz mieć swój, strzały dostaniesz nasze.
+
+[zadania.K61.offer.decline]
+Jak chcesz. Bełt i tak by wygrał.
+
+zadania.K61.steps.0.text = Na zawodach na strzelnicy garnizonu (co 7 dni, 10-12) pokonaj sierżanta Bełta: więcej niż 36 punktów na 5 strzał.
+[zadania.K61.reward.note]
+Zawody strzeleckie
+Na strzelnicy garnizonu pokonałem sierżanta Bełta. Kwatermistrz postawił pięćdziesiąt groszy, a chłopcy z garnizonu patrzą na mnie inaczej.
+
+# ======================================================================== Q_K62 (zadania.K62)
+zadania.K62.title = Krasula i kury Ługów
+zadania.K62.where = Spalona zagroda: wschodnie łąki
+zadania.K62.when = za dnia
+zadania.K62.desc = Po pożarze zwierzęta Ługów rozbiegły się po łąkach na wschód od zagrody: krowa Krasula, owca i dwie kury. Marta prosi, żeby wróciły do domu.
+[zadania.K62.offer.cond.done]
+D21
+
+[zadania.K62.offer.say]
+Mieszkasz teraz w naszej zagrodzie... Dobrze. Lepiej ty niż obcy.
+Po pożarze Krasula uciekła. I owca, i kury. Mówią, że chodzą dzikie po łąkach na wschód od zagrody. Przyprowadzisz je? Do domu?
+
+zadania.K62.offer.yes = Przyprowadzę je.
+zadania.K62.offer.no = Nie teraz.
+[zadania.K62.offer.accept]
+Krasula idzie za tym, kto ma linę i dobre słowo. Kury... kury trzeba łapać. Powodzenia.
+
+[zadania.K62.offer.decline]
+Rozumiem. Może kiedyś.
+
+zadania.K62.steps.0.text = Odprowadź zwierzęta Ługów do zagrody (przy domu) albo do swojej zagrody: krowę i owcę na powrozie (lina), kury złap rękami. Wróciło: {n}/4.
+[zadania.K62.reward.note]
+Krasula wróciła
+Krasula, owca i kury Ługów wróciły do domu. Marta co tydzień ma dla mnie dwa dzbanki mleka.
+
+# ======================================================================== Q_D32 (zadania.D32)
+zadania.D32.title = Gajowy i kłusownik
+zadania.D32.where = Zwierzyniec Lorda: sidła, nocna zasadzka
+zadania.D32.when = nocą 22-3
+zadania.D32.desc = Gajowy wie, że ktoś zastawia sidła w zwierzyńcu. Trzeba je znaleźć i nocą przyłapać kłusownika. Wydać go - czy ostrzec?
+[zadania.D32.offer.say]
+Ktoś zastawia sidła w zwierzyńcu. Trzy, może cztery. Znajduję zające z pętlą na szyi, a sideł nie widzę - sprytny jest.
+Ty chodzisz po lesie. Masz oczy. Znajdź sidła, a potem posiedź nocą przy którymś. Kłusownik zawsze wraca po zdobycz.
+
+zadania.D32.offer.yes = Znajdę go.
+zadania.D32.offer.no = Nie moja sprawa.
+[zadania.D32.offer.accept]
+Dobrze. Sidła są gdzieś przy ścieżkach zwierzyny. Szukaj przy krzakach, gdzie trawa jest wydeptana.
+
+[zadania.D32.offer.decline]
+Jak chcesz. Sam go złapię. Kiedyś.
+
+zadania.D32.steps.0.text = Znajdź w zwierzyńcu trzy sidła kłusownika i zabierz je. Masz: {n}/3.
+zadania.D32.steps.1.text = Nocą (22-3) zaczaj się w zwierzyńcu przy miejscu po drugich sidłach (w głębi zwierzyńca, na zachód od paśnika) i poczekaj na kłusownika.
+zadania.D32.steps.2.text = Wróć do gajowego (leśniczówka, za dnia na obchodzie).
+[zadania.D32.steps.2.say]
+> Sideł już nie ma. Kłusownika też.
+Wiem. Rano przeszedłem cały zwierzyniec. Pierwszy raz od roku żaden zając nie wisiał w pętli.
+Masz. Zezwolenie na odstrzał: jeden jeleń w tygodniu, legalnie. Zasłużyłeś.
+
+[zadania.D32.reward.note]
+Zezwolenie na odstrzał
+Gajowy Gniewko Bór dał mi zezwolenie: jeden jeleń w tygodniu w zwierzyńcu Lorda - legalnie. Reszta zwierzyny dalej jest dworu.
+
+# ======================================================================== Q_D33 (zadania.D33)
+zadania.D33.title = Gawra pod granią
+zadania.D33.where = Skraj lasu: obóz obcych myśliwych; Góry: gawra
+zadania.D33.when = Akt II, za dnia
+zadania.D33.desc = Na Skraju lasu rozbili obóz obcy myśliwi z białym okiem na lotkach - Czarne Oczy. Polują na niedźwiedzia spod grani dla skóry. Pomóc im - czy przegnać i ochronić gawrę?
+zadania.D33.steps.0.text = Podejdź za dnia do obozu obcych myśliwych na Skraju lasu i porozmawiaj z nimi.
+zadania.D33.steps.1.text = {co}
+
+# ======================================================================== REMARKS (uwagi)
+# lowCzoKleofas, mówi: pustelnik
+[uwagi.0.lines]
+Słyszałem, że przegnałeś obcych myśliwych spod grani. Niedźwiedź jest starszy od nich wszystkich. Dobrze zrobiłeś.
+
+# lowCzoBazyli, mówi: latarnik
+[uwagi.1.lines]
+Z wieży widziałem dym na Skraju lasu. Teraz go nie ma. Twoja robota? Czarnym Oczom nie wolno dawać się zadomowić.
+
+# lowCzoPomocBazyli, mówi: latarnik
+[uwagi.2.lines]
+Pomagałeś obcym myśliwym? (Bazyli patrzy w morze.) Uważaj, z kim pijesz przy ognisku, chłopcze.
+
+# lowWydalRyskaPraczka, mówi: praczka
+[uwagi.3.lines]
+Ryśka zabrali do dworu. Jego matka płacze trzeci dzień. Kto go wydał? ...Nie, nie chcę wiedzieć.
+
+# lowOstrzeglRysiek, mówi: klusownik
+[uwagi.4.lines]
+Gajowy mnie szukał, wiesz? Nie znalazł. (Rysiek mruga.) Skóry masz u mnie taniej. Pamiętam.
+
+# lowMartaKrasula, mówi: praczka
+[uwagi.5.lines]
+Krasula poznała mnie od razu. Wylizała mi rękę jak pies. Dziękuję ci.
+
+# ======================================================================== BEASTS (bestie)
+bestie.bandit.one = rabuś
+bestie.bandit.few = rabusie
+bestie.bandit.many = rabusiów
+bestie.archer.one = łucznik
+bestie.archer.few = łucznicy
+bestie.archer.many = łuczników
+bestie.bear.one = niedźwiedź
+bestie.bear.few = niedźwiedzie
+bestie.bear.many = niedźwiedzi
+
+# ======================================================================== TEMPLATES (tablica)
+# low_oboz_021
+[tablica.oboz.title]
+Rabusie przy Leśnej drodze
+
+[tablica.oboz.text]
+Wiozłem garnki na jarmark Leśną drogą. Wiozłem. Rabusie mają obóz na polanie przy drodze, nocą palą tam ognisko. Rozbij go, a jarmark się odbędzie.
+
+[tablica.oboz.note]
+Rabusie przy Leśnej drodze
+Rozbiłem obóz rabusiów na polanie przy Leśnej drodze. Wit może znowu wozić garnki na jarmark.
+
+# low_czo_023
+[tablica.czo.title]
+Obcy myśliwi
+
+[tablica.czo.text]
+Na Skraju lasu siedzą obcy myśliwi. Strzelają do wszystkiego, co się rusza, a skóry wywożą na prom. To nie myśliwi, to złodzieje lasu. Przegnaj ich.
+
+[tablica.czo.note]
+Obcy myśliwi
+Przegnałem obcych myśliwych ze Skraju lasu. Bogdan mówi, że las odetchnie.
+
+# low_poroze
+[tablica.poroze.title]
+Poroże dla łowczego
+
+[tablica.poroze.text]
+Potrzebuję poroża. Na rękojeści noży i na guziki dla dworu. Jelenie zrzucają je wiosną przy lizawce na Łące. Albo zdobądź je inaczej - nie pytam jak.
+
+# ======================================================================== EPILOG (epilog)
+epilog.pack = Wataha spod korzeni na Skraju lasu nie rusza cię do dziś. Raz w tygodniu przy norze leży zając - szczenięta, które zostawiłeś, mają już własne.
+epilog.park = Gajowy Gniewko Bór dalej liczy jelenie w zwierzyńcu Lorda - i ani razu nie musiał liczyć twoich.
+epilog.permit = Raz w tygodniu, z zezwoleniem w zanadrzu, przechodzisz przez wyłom w żywopłocie na jelenia. Gniewko Bór kiwa ci głową jak swojemu.
+
+# ======================================================================== z kodu Lowy.js (kod.<funkcja>.<n>, w kolejności kodu)
+# n23
+kod.n23.0 = Wilcza nora
+kod.n23.1 = Namiot obcych myśliwych
+# n13
+kod.n13.0 = Gawra (wylot)
+# n21
+kod.n21.0 = Błotnisko
+kod.n21.1 = Namiot rabusiów
+# n4
+kod.n4.0 = Zrzucone poroże
+# n24
+kod.n24.0 = Wyłom (cierń)
+kod.n24.1 = Wyłom w żywopłocie
+kod.n24.2 = Leśniczówka
+kod.n24.3 = Paśnik
+kod.n24.4 = Rysiek Sidło
+kod.n24.5 = Sidła
+# n162
+kod.n162.0 = Tarcza ({d} kroków)
+kod.n162.1 = Stojak z łukami
+kod.n162.2 = Żołnierz na strzelnicy
+# speaker
+kod.speaker.0 = Rysiek Sidło
+# spawnBountyAt
+kod.spawnBountyAt.0 = spawnBounty {tpl}: {message}
+# denBroken
+kod.denBroken.0 = Nora pod korzeniami
+kod.denBroken.1 = Rozbiłem watahę spod nory na Skraju lasu. Szczenięta uciekły w gąszcz. Nora będzie pusta przez kilka tygodni.
+# befriend
+kod.befriend.0 = Nora pod korzeniami
+kod.befriend.1 = Trzy dni zostawiałem mięso przy wilczej norze. Wataha mnie zna: wilki z Leśnej drogi i Skraju lasu mnie nie atakują, a raz w tygodniu przy norze leży zając - dar watahy.
+# czoTick
+kod.czoTick.0 = Pomogę wam.
+kod.czoTick.1 = Wynoście się z naszego lasu.
+# czoResolve
+kod.czoResolve.0 = Gawra pod granią
+kod.czoResolve.1 = Przegnałem obcych myśliwych ze Skraju lasu. Niedźwiedź spod grani ma spokój - chodzę przy gawrze, a on mnie nie rusza, póki nie biegnę.
+kod.czoResolve.2 = Pomogłem obcym myśliwym ubić niedźwiedzia spod grani. Zapłacili osiemdziesiąt groszy i powiedzieli, że ich dowódca szuka w górach wejścia pod ziemię - przy obozie kopaczy jest szyb.
+# crime
+kod.crime.0 = Kłusownictwo w zwierzyńcu Lorda
+kod.crime.1 = Stój! Kłusownik!
+# payFine
+kod.payFine.0 = -{fine} G (grzywna)
+kod.payFine.1 = Gajowy zabrał mięso i skóry ({n})
+kod.payFine.2 = kłusownictwo w zwierzyńcu
+# rysiekList
+kod.rysiekList.0 = Pójdziesz ze mną do gajowego.
+kod.rysiekList.1 = Uciekaj. Gajowy wie o sidłach.
+# rysiekDecide
+kod.rysiekDecide.0 = kłusownik wydany gajowemu
+kod.rysiekDecide.1 = kłusownik ostrzeżony
+# strayAction
+kod.strayAction.0 = Puść wolno
+kod.strayAction.1 = Prowadź dalej
+kod.strayAction.2 = Prowadzisz już zwierzę.
+kod.strayAction.3 = Krowa patrzy na ciebie spokojnie.
+kod.strayAction.4 = Owca drepcze w miejscu.
+kod.strayAction.5 = Załóż powróz (lina)
+# startRound
+kod.startRound.0 = Strzelaj z łuku (F) do trzech tarcz. Środek 10, pierścień 5, brzeg 2.
+# endRound
+kod.endRound.0 = Runda przerwana
+kod.endRound.1 = same pudła
+# contestResult
+kod.contestResult.0 = Zawody: wygrał {name} ({score} pkt).
+kod.contestResult.1 = zawody strzeleckie
+kod.contestResult.2 = Zawody: pokonałeś {beat} z 3 rywali! +{gold} G
+kod.contestResult.3 = Sierżant Bełt kłania się nisko.
+# drillTick
+kod.drillTick.0 = Napnij! ...Puść!
+kod.drillTick.1 = Wiatr od morza, bierz poprawkę.
+kod.drillTick.2 = Dziesiątka! Widziałeś?
+kod.drillTick.3 = Łokieć wyżej, ciamajdo.
+# vars
+kod.vars.0 = Niedźwiedź spod grani nie żyje. Wróć do obozu myśliwych na Skraju lasu po zapłatę.
+kod.vars.1 = Upoluj niedźwiedzia spod gawry w Górach (Góry, nad kamieniołomem) i wróć do obozu myśliwych.
+kod.vars.2 = Przegnaj obcych myśliwych: pokonaj wszystkich w ich obozie na Skraju lasu (za dnia).
+# hookQuests
+kod.hookQuests.0 = zawody strzeleckie
+# talkHook
+kod.talkHook.0 = Pokaż skóry
+kod.talkHook.1 = Nic nie trzeba
+# lookAt
+kod.lookAt.0 = > (Z nory dochodzi ciche skomlenie. Wataha cię zna.)
+kod.lookAt.1 = > (Korzenie, jama, kości. Pachnie wilkiem. Lepiej nie podchodzić bliżej.)
+kod.lookAt.2 = > (Skórzany namiot. Na kołku kołczan: lotki strzał znaczone białym okiem.)
+kod.lookAt.3 = > (Połatany namiot. W środku śmierdzi dymem i kwaśnym piwem.)
+kod.lookAt.4 = > (Leśniczówka gajowego. Nad drzwiami poroże, przy drzwiach róg. Drzwi zamknięte na skobel.)
+kod.lookAt.5 = > (Paśnik pełen siana. Wokół tropy jeleni.)
+kod.lookAt.6 = > (Paśnik. Latem pusty - zimą gajowy dokłada tu siana.)
+kod.lookAt.7 = Żołnierz
+kod.lookAt.8 = Chcesz postrzelać? Stojak z łukami po lewej. Strzały są wojska.
+kod.lookAt.9 = Co siódmy dzień są zawody. Sierżant Bełt wygrywa od roku.
+kod.lookAt.10 = > (Słomiana tarcza na {d} kroków. Pełna dziur.)
+# rangeMenu
+kod.rangeMenu.0 = Najpierw dokończ rundę ({shots}/{shots2})
+kod.rangeMenu.1 = Runda ćwiczebna (5 strzał)
+kod.rangeMenu.2 = Zawody (dziś!)
+kod.rangeMenu.3 = Odejdź
+kod.rangeMenu.4 = " Dziś zawody, od 10 do 12."
+kod.rangeMenu.5 = > (Stojak z łukami. Na desce: „Strzały ćwiczebne - wojsko”.){1}
+# actCall
+kod.actCall.0 = strzała z białym okiem
+kod.actCall.1 = Strzały z białym okiem (las)
+kod.actCall.2 = Pokazałem bratu Kleofasowi strzałę z obozu obcych myśliwych na Skraju lasu. Te same lotki z białym okiem, co w piersi orlicy na Orlej Grani. Czarne Oczy są już na wyspie - nie tylko na morzu.
+# placeLabel
+kod.placeLabel.0 = Miejsce {1}/{length}: {name}   ←→
+# f9Rows
+kod.f9Rows.0 = ←→ wybierz miejsce paczki B, OK przenosi na nie.
+kod.f9Rows.1 = Wataha i szczenięta przy norze (dzień)
+kod.f9Rows.2 = Dzień (10:00), szczenięta także poza wiosną i latem; przenosi pod norę.
+kod.f9Rows.3 = Zostaw szczenięta: wataha przyjazna ({1})
+kod.f9Rows.4 = Przełącza przyjaźń watahy spod nory (jak po trzech dniach z mięsem).
+kod.f9Rows.5 = Niedźwiedź w gawrze: obudź (zima)
+kod.f9Rows.6 = Dziś jak zima: niedźwiedź śpi w gawrze. Przenosi pod gawrę - zajrzyj, a się obudzi.
+kod.f9Rows.7 = Sól na lizawce + świt w zasiadce
+kod.f9Rows.8 = Sól na 6 dni, godzina 5:30, przenosi do zasiadki.
+kod.f9Rows.9 = Obóz rabusiów teraz (noc)
+kod.f9Rows.10 = Godzina 22:00, obóz przy Leśnej drodze stoi tej nocy.
+kod.f9Rows.11 = Obóz myśliwych Czarnych Oczu teraz
+kod.f9Rows.12 = Godzina 10:00, obóz na Skraju lasu stoi dziś (także przed Aktem II).
+kod.f9Rows.13 = Kłusownictwo: {count} razy   ←→
+kod.f9Rows.14 = ←→ ile razy już złapany; OK ustawia (następne złapanie liczy się od tego).
+kod.f9Rows.15 = Zawody strzeleckie dziś
+kod.f9Rows.16 = Dziś zawody, godzina 10:30, przenosi na linię strzału.
+kod.f9Rows.17 = Zbłąkane zwierzęta Ługów
+kod.f9Rows.18 = Przenosi na łąki Spalonej zagrody (lina w torbie).
+# f9Pick
+kod.f9Pick.0 = Kłusownictwo: {pick} razy (OK ustawia)   ←→
+# f9Ok
+kod.f9Ok.0 = Wataha przyjazna: {1}
+kod.f9Ok.1 = Kłusownictwo: {count}

@@ -1,0 +1,646 @@
+# Teksty garnizonu nad zatoką (wtyczki Garnizon_Data.js i Garnizon.js): rotmistrz, Kłos, werbownik, żołnierze, przychylność, łacha, zadania K52, D26, D27.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz garnizon
+
+# ======================================================================== RESIDENTS (mieszkancy)
+# „rotmistrz chorągwi królewskiej”
+mieszkancy.0.name = Rotmistrz Bełza
+mieszkancy.0.title = rotmistrz chorągwi królewskiej
+[mieszkancy.0.barks.stand]
+Wyżej tarcza! Wyżej, mówię! Wróg nie będzie czekał, aż się wyśpisz.
+Krok! Krok! Kto zgubi krok, ten zgubi głowę.
+Zupa jak zupa. Na wojnie każda dobra.
+
+[mieszkancy.0.barks.patrol]
+Wartownik! Co na wodzie? ...Nic? To patrz dalej.
+Ta łacha w odpływie... Kto chce, przejdzie do wraku suchą nogą. Pilnować.
+
+[mieszkancy.0.barks.rain]
+Deszcz. Prochu i tak nie mamy, to nie zamoknie.
+Do namiotów, kto nie na warcie!
+
+[mieszkancy.0.barks.night]
+Spać, spać. Pobudka o szóstej, jak zawsze.
+
+[mieszkancy.0.barks.home]
+(Rotmistrz pisze coś długo, potem przekreśla.)
+Czterdziestu ludzi... dwudziestu dwóch zaginionych... Pióro mi się kończy, nie atrament.
+
+[mieszkancy.0.talk.morning]
+Musztra o szóstej. Chłopcy klną, a potem żyją. Tak to działa.
+Ranek. Wtedy morze jest najuczciwsze - widać, co płynie.
+
+[mieszkancy.0.talk.day]
+Lord wpuścił nas za pieniądze. Korona chce za to podatku wojennego. Ty płacisz, on płaci, ja pilnuję. Wojna kosztuje każdego.
+Twój dziadek, Stach... Lord mu nie popuści. Nie przez złość. Przez nasz podatek. Przykro mi, chłopcze.
+Z tej wieży widać wrak na mieliźnie. Czarne Oczy. Nie pytaj, czego szukali. Ja też nie wiem.
+
+[mieszkancy.0.talk.evening]
+Przy ogniu nie ma stopni. Siadaj, jak chcesz. Tylko nie pytaj o bitwy.
+Noga mi dokucza na zmianę pogody. Lewa. Pamiątka spod Brzozowej Woli.
+
+[mieszkancy.0.talk.night]
+Po nocy w garnizonie kręcą się tylko wartownicy i złodzieje. Którym jesteś?
+
+[mieszkancy.0.talk.rain]
+Deszcz. Niech pada. Beczki pełne to spokojni żołnierze.
+
+# „kwatermistrz garnizonu”
+mieszkancy.1.name = Kwatermistrz Kłos
+mieszkancy.1.title = kwatermistrz garnizonu
+[mieszkancy.1.barks.work]
+Worek, dwa worki, trzy worki... a w księdze dwa. Hm. Poprawię potem.
+Jęczmień z rekwizycji. Suchy, czysty, królewski.
+
+[mieszkancy.1.barks.stand]
+Skup! Kto ma ziemniaki, kapustę, mięso wędzone? Król płaci!
+Liczydło nie kłamie. Ja czasem, ono nigdy.
+
+[mieszkancy.1.barks.rain]
+Plandeka na worki! Szybciej, szybciej!
+
+[mieszkancy.1.barks.night]
+(Kłos chrapie w namiocie.)
+
+[mieszkancy.1.talk.morning]
+Ranek, a ja już po trzech rachunkach. Dwa się zgadzają.
+Zboże z rekwizycji leży w spichlerzu. Na wojnę. Wszystko na wojnę.
+
+[mieszkancy.1.talk.day]
+Kupuję dla wojska: zboże, warzywa, mięso, skóry, drewno, węgiel. Uczciwie. No, prawie.
+Po każdej fali z promu wojsko je jak smok. Wtedy płacę więcej. Półtora raza!
+
+[mieszkancy.1.talk.evening]
+Przy ogniu każdy ma brzuch. Ja mam dwa razy większy, to i dwa razy głodny.
+Zupa? Z naszego zboża. Ludzie w mieście patrzą na nią jak na złoto.
+
+[mieszkancy.1.talk.night]
+Ciii. Nocą skup zamknięty. Chyba że... nie, zamknięty.
+
+[mieszkancy.1.talk.rain]
+W deszcz worki gniją. A za zgniłe worki rotmistrz mnie zgnoi.
+
+# „werbownik chorągwi królewskiej”
+mieszkancy.2.name = Werbownik Bęben
+mieszkancy.2.title = werbownik chorągwi królewskiej
+[mieszkancy.2.alt.barks.stand]
+Za króla, chłopcy! Buty, żołd i chwała!
+Kto silny i zdrowy, do mnie! Wojsko nie gryzie!
+Trrrum-tum-tum! Lista otwarta!
+
+[mieszkancy.2.alt.talk.day]
+Lista otwarta do drugiej! Buty, żołd, strawa. A ty jesteś za młody - przyjdź za rok, to zapiszę cię pierwszego.
+
+[mieszkancy.2.barks.stand]
+Za króla, chłopcy! Trrrum-tum-tum!
+Buty, żołd i chwała! Kto się zapisze?
+Ty! Ty tam! ...A, za młody. Szkoda.
+
+[mieszkancy.2.barks.wander]
+Trrrum-tum... Bęben się nazywam i bęben noszę. Przypadek? Nie sądzę.
+
+[mieszkancy.2.barks.rain]
+Bęben nie lubi deszczu. Ja też nie.
+
+[mieszkancy.2.barks.night]
+(Bęben pod pachą, ziewa.) Jutro znowu lista...
+
+[mieszkancy.2.talk.morning]
+Wcześnie wstajesz! Wojsko lubi takich. Szkoda, że za młody jesteś.
+
+[mieszkancy.2.talk.day]
+Lista poborowa, królewska pieczęć. Dzień po każdej fali z promu - rynek w miasteczku. Bęben, lista i dobre słowo.
+Ludzie chowają się przede mną po stodołach. A ja im daję buty! Buty! Kto im dał buty przez całe życie?
+
+[mieszkancy.2.talk.evening]
+Za króla, chłopcy... (ciszej) i za tych, co nie wrócili.
+
+[mieszkancy.2.talk.night]
+Śpij, chłopcze. Werbownik też czasem śpi.
+
+[mieszkancy.2.talk.rain]
+W deszcz nikt się nie zapisuje. Ludzie wolą suche nogi od chwały.
+
+# ======================================================================== Q_K52 (zadania.K52)
+zadania.K52.title = Drewno dla garnizonu
+zadania.K52.where = Garnizon nad zatoką: kuchnia polowa
+zadania.K52.when = od dnia 5, 8-18
+zadania.K52.desc = Kuchnia polowa garnizonu zjada drwa jak smok. Kwatermistrz Kłos potrzebuje drewna i węgla - a potem chętnie coś od ciebie kupi.
+[zadania.K52.offer.say]
+Ty jesteś ten od rotmistrza? Wnuk Stacha? To słuchaj. Kuchnia polowa zjada drwa jak smok, a moi chłopcy rąbać nie umieją, tylko ciąć.
+Dziesięć polan drewna i cztery worki węgla drzewnego. Przyniesiesz, dostaniesz dwadzieścia groszy - i wpiszę cię do księgi skupu. Będziesz mi sprzedawał.
+
+zadania.K52.offer.yes = Przyniosę drewno i węgiel.
+zadania.K52.offer.no = Nie teraz.
+[zadania.K52.offer.accept]
+Dziesięć i cztery! Liczydło nie zapomni, ja też nie.
+
+[zadania.K52.offer.decline]
+Drwa poczekają. Zupa nie.
+
+zadania.K52.steps.0.text = Przynieś kwatermistrzowi Kłosowi 10× Drewno i 4× Węgiel drzewny (garnizon nad zatoką).
+[zadania.K52.steps.0.remind]
+Dziesięć polan i cztery worki węgla. Liczydło czeka.
+
+[zadania.K52.steps.0.hero]
+> Drewno i węgiel dla kuchni polowej.
+
+[zadania.K52.steps.0.done]
+O! Suche, równe, porządne. Rotmistrz się ucieszy, a ja jeszcze bardziej.
+Masz dwadzieścia groszy. I od dziś jesteś w mojej księdze: przynoś zboże, warzywa, mięso, skóry - wojsko kupi.
+
+[zadania.K52.reward.note]
+Skup wojskowy
+Kwatermistrz Kłos z garnizonu nad zatoką kupuje dla wojska zboże, warzywa, wędzone mięso i ryby, skóry, strzały, drewno i węgiel. Przez tydzień po każdej fali z promu płaci półtora raza więcej. Ale kiedy w mieście głód, ludzie patrzą krzywo na każdy worek, który idzie na wojnę.
+
+# ======================================================================== Q_D26 (zadania.D26)
+zadania.D26.title = Lista poborowa
+zadania.D26.where = Rynek w miasteczku, Podgrodzie, garnizon
+zadania.D26.when = dzień po fali z promu (11, 25, 39, 53), 8-16
+zadania.D26.desc = Werbownik Bęben musi zabrać do wojska trzech ludzi z miasteczka i Podgrodzia. Na liście: Bartek Kmieć, Zbych Smolarz, Darin z Kontynentu (Rafała z obozu szuka już kto inny - W6). Pomóc, ostrzec - czy zanieść rotmistrzowi coś lepszego niż rekrutów?
+[zadania.D26.offer.say]
+Ty! Chłopak od Stacha! Słuchaj, mam kłopot. Rotmistrz chce trzech ludzi z tej fali. Trzech! A wszyscy chowają się po stodołach.
+Lista: Bartek Kmieć, Zbych Smolarz z Podgrodzia i ten Darin z kontynentu. Był jeszcze jeden z obozu pod murem, Rafał, ale tego szuka już kto inny. Znasz ich. Ciebie posłuchają. Dziesięć groszy za każdego, co się zgłosi.
+
+zadania.D26.offer.options.0.label = Pomogę ci.
+[zadania.D26.offer.options.0.say]
+Wiedziałem! Powiedz im: buty, żołd, strawa. I że nikt ich nie pośle na pierwszą linię. Pierwszy tydzień.
+
+zadania.D26.offer.options.1.label = Zobaczę, co da się zrobić.
+[zadania.D26.offer.options.1.say]
+Zobacz, zobacz. Tylko szybko - ja muszę mieć trzech.
+
+zadania.D26.offer.options.2.label = Nie będę łapał ludzi do wojska.
+[zadania.D26.offer.options.2.say]
+Łapał? Ja nikogo nie łapię. Zapraszam! ...Dobra, idź.
+
+zadania.D26.steps.0.text = Lista poborowa: {lista} - porozmawiaj z każdym (namów albo ostrzeż). Załatwione: {n}/3. Albo zanieś rotmistrzowi Dziennik okrętu z wraku: dowód, że od morza nic nie grozi.
+zadania.D26.lines.ask = Werbownik cię szuka. Jesteś na liście.
+zadania.D26.lines.help = Zgłoś się sam. Buty, żołd, strawa - i lepiej z własnej woli niż w łańcuchu.
+zadania.D26.lines.warn = Schowaj się na dzień albo dwa. Werbownik nie będzie czekał wiecznie.
+zadania.D26.lines.deal = Panie rotmistrzu... mam coś lepszego niż trzech rekrutów.
+
+# ======================================================================== Q_D27 (zadania.D27)
+zadania.D27.title = Zboże dla obozu
+zadania.D27.where = Obóz pod murem, garnizon (spichlerz, kwatermistrz)
+zadania.D27.when = po rekwizycji zboża (D14), nocą
+zadania.D27.desc = Obóz uchodźców głoduje. Ludmiła prosi o cztery worki zboża. Zboże jest - w spichlerzu garnizonu, z rekwizycji. Kupić nocą od kwatermistrza „po cenie dla swoich” albo wynieść ze spichlerza obok wartownika?
+[zadania.D27.offer.say]
+(Ludmiła trzyma Elę za rękę.) Trzeci dzień jemy korzonki. Dwór zabrał zboże z pól, a garnizon ma pełny spichlerz. Na wojnę, mówią.
+Cztery worki. Tylko cztery, na zimę dla dzieci. Mówią, że ich kwatermistrz nocą sprzedaje zboże kupcowi z kantoru... Może tobie też sprzeda?
+
+zadania.D27.offer.yes = Zdobędę cztery worki.
+zadania.D27.offer.no = Nie dam rady.
+[zadania.D27.offer.accept]
+Niech ci Bóg... (urywa) Dziękuję. Przyjdź do nas pod mur, jak będziesz miał.
+
+[zadania.D27.offer.decline]
+Rozumiem. Każdy ma swoje.
+
+zadania.D27.steps.0.text = Zdobądź 4 worki zboża z garnizonu: kup je nocą od kwatermistrza Kłosa (20-2, „po cenie dla swoich”) albo wynieś ze spichlerza (nocą, obok wartownika - skradaj się). Masz: {n}/4.
+zadania.D27.steps.1.text = Zanieś Ludmile 4 worki zboża (obóz pod murem w miasteczku).
+[zadania.D27.steps.1.remind]
+Cztery worki... Nie śmiem prosić o więcej.
+
+[zadania.D27.steps.1.hero]
+> Cztery worki zboża. Dla dzieci.
+
+[zadania.D27.steps.1.done]
+(Ludmiła długo patrzy na worki, potem na ciebie.) Ela, zobacz... Zboże. Prawdziwe zboże.
+Nie zapomnimy ci tego. Cały obóz nie zapomni.
+
+zadania.D27.steps.2.text = Kłos sprzedaje królewskie zboże. Wydaj go rotmistrzowi (garnizon) - albo idź do Kłosa i powiedz, że będziesz milczał.
+[zadania.D27.lines.accuse]
+> Panie rotmistrzu. Kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kupiłem od niego cztery worki - dla obozu.
+(Rotmistrz długo milczy.) Kłos. Pafnucy Kłos. Dwadzieścia lat z nim w polu...
+Dobrze, że powiedziałeś. Popłynie najbliższym promem - w łańcuchu. A ty... worki niech zostaną w obozie. Nie widziałem ich.
+
+[zadania.D27.lines.accuseStolen]
+> Panie rotmistrzu. Kwatermistrz sprzedaje nocą zboże z rekwizycji kupcowi z kantoru.
+Dowód? ...Księga. Sprawdzę jego księgę. (Rotmistrz wstaje.) Jeśli to prawda, Kłos popłynie najbliższym promem.
+
+[zadania.D27.lines.silent]
+> Nikomu nie powiem o nocnym zbożu.
+(Kłos ociera czoło.) Ty... ty jesteś złoty chłopak. Złoty! Od dziś w skupie masz ode mnie lepszą cenę. Jak dla swojego.
+
+[zadania.D27.lines.klosGone]
+(Na miejscu kwatermistrza stoi młody żołnierz z księgą.) Kłos? Popłynął. W łańcuchu. Skup prowadzi teraz rotmistrz - przez mnie.
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.worek_zboza.name = Worek zboża z rekwizycji
+rzeczy.glejt_wrak.name = Glejt garnizonu na wrak
+
+# ======================================================================== REMARKS (uwagi)
+# garnizonKlosWydany, mówi: kupiec
+[uwagi.0.lines]
+Słyszałeś? Kwatermistrz garnizonu popłynął w łańcuchu. Taki porządny człowiek... (Baltazar uśmiecha się krzywo.) Ktoś będzie musiał go zastąpić. W interesach.
+
+# garnizonD27Ludmila, mówi: ludmila
+[uwagi.1.lines]
+Dzieci jedzą. Pierwszy raz od tygodnia nikt nie płakał w nocy. Dziękuję ci jeszcze raz.
+
+# garnizonD26Soltys, mówi: soltys
+[uwagi.2.lines]
+Wojsko przetrząsało Podgrodzie. Szukali ludzi z listy. Nie znaleźli... Dobrze. Ale ktoś ich ostrzegł, a ja nie chcę wiedzieć kto.
+
+# garnizonD26Wzieci, mówi: praczka
+[uwagi.3.lines]
+Ludzi biorą do wojska. Wczoraj z listy, jutro kto? Kto będzie rąbał drwa dla całego Podgrodzia?
+
+# garnizonD26Beben, mówi: werbownik
+[uwagi.4.lines]
+Trrrum! Mam ludzi z listy! Rotmistrz zadowolony, a ja mam spokój do następnej fali. Dziękuję ci, chłopcze.
+
+# garnizonD26BebenPusto, mówi: werbownik
+[uwagi.5.lines]
+Ktoś ich ostrzegł. Ludzie z listy jakby się pod ziemię zapadli... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?
+
+# ======================================================================== SOLDIERS (zolnierze)
+zolnierze.0.name = Wartownik
+zolnierze.1.name = Wartownik
+zolnierze.2.name = Żołnierz
+zolnierze.3.name = Żołnierz
+zolnierze.4.name = Żołnierz
+zolnierze.5.name = Żołnierz
+zolnierze.6.name = Kowal garnizonu
+zolnierze.7.name = Wartownik na wieży
+
+# ======================================================================== TH_TEXT (progi)
+[progi.40]
+Garnizon ci ufa
+Rotmistrz da ci glejt na wrak, jeśli o niego poprosisz.
+
+[progi.60]
+Przyjaciel garnizonu
+Kowal garnizonu sprzeda ci strzały i stal.
+
+[progi.80]
+Swój dla wojska
+Gdyby kiedyś zabrzmiał alarm, żołnierze królewscy staną przy tawernie.
+
+# ======================================================================== TX
+[belzaMeet]
+Stój. Czyj jesteś?
+> Wnuk Stacha. Z działki za lasem.
+Stacha... Ten od długu u Lorda. (Rotmistrz mierzy cię wzrokiem od bosych stóp po czuprynę.) Ile masz lat? ...Jeszcze nie. Przyjdź za rok, to dostaniesz buty i żołd.
+Florian Bełza, rotmistrz chorągwi królewskiej. Stoimy tu z łaski twojego Lorda - i za pieniądze Korony.
+Masz zboże, to sprzedaj je Kłosowi, kwatermistrzowi. Na wojnie każdy worek się liczy. Masz ręce, to drwa zawsze się przydadzą.
+
+[belzaAsk]
+Słucham.
+Mów krótko. Wojna nie czeka.
+Hm?
+
+[belzaFavor.low]
+Patrzą na ciebie krzywo. Chłopcy mówią, że kręcisz się, gdzie nie trzeba. Uważaj.
+
+[belzaFavor.mid]
+Jesteś wnuk Stacha, co nosi drwa. Tyle o tobie wiedzą.
+
+[belzaFavor.good]
+Chłopcy cię lubią. Kłos mówi, że jesteś uczciwy. Od Kłosa to dużo.
+
+[belzaFavor.best]
+Jesteś tu swój. Gdyby coś się działo w mieście - wiesz, gdzie nas szukać.
+
+[glejtAsk]
+> Potrzebuję wejść na wrak. W odpływie, po łasze.
+
+[glejtNo]
+Wrak to sprawa wojska. Moi chłopcy łowią z niego, co się da, a kto inny tam łazi, ten złodziej.
+Zasłuż się garnizonowi, to pomyślę. Na razie: nie.
+
+[glejtYes]
+(Rotmistrz pisze kilka słów i przyciska pieczęć z feniksem.) Masz. Glejt garnizonu. Wartownicy cię przepuszczą, łódź ratownicza też nie przegoni.
+Tylko jedno: co znajdziesz w kajucie - papiery, mapy, księgi - przynosisz najpierw mnie. Czarne Oczy nie płynęły tu po ryby.
+
+[missingAsk]
+> Co to za lista na pana stole?
+
+[missing]
+Lista zaginionych. Moja chorągiew i trzy inne. Czterdziestu ludzi z Brzozowej Woli, z Olszyny, z Zarzecza...
+> Z Brzozowej Woli? Ja jestem z Brzozowej Woli.
+(Rotmistrz przesuwa palcem po kolumnie.) Nazwisk tu nie ma, chłopcze. Tylko chorągwie i liczby. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”.
+Zaginiony to nie poległy. Zapamiętaj to. Ja pamiętam.
+
+[missingAgain]
+Lista się nie zmienia. Zaginiony to nie poległy.
+
+[whyAsk]
+> Czemu Lord was tu wpuścił?
+
+[why]
+Bo Korona zapłaciła mu za kwaterę. A potem kazała mu płacić podatek wojenny. Tak to działa: on bierze od nas, Korona od niego, on od was.
+Dlatego tak naciska na dług twojego dziadka. Nie ze złości. Z rachunku. Przykro mi.
+
+[draftAsk]
+> Weźmiecie mnie do wojska?
+
+[draft]
+Ciebie? Za młody. A twój dziadek ma dług, za który ręczy dwór - Lord nie da sobie zabrać dłużnika. Pobór dotyczy innych.
+I dobrze. Na wojnie nie ma nic, czego warto szukać w twoim wieku.
+
+[belzaSkup]
+Skup prowadzę teraz sam, przez chłopaka z księgą. Ceny te same, co u Kłosa. Uczciwe.
+
+[klosMeet]
+(Kwatermistrz odrywa wzrok od liczydła.) O! Nowa twarz. Pafnucy Kłos, kwatermistrz. Liczę, ważę, kupuję, wydaję.
+Najpierw pokłoń się rotmistrzowi. U nas porządek: rotmistrz, potem zupa, potem Kłos.
+
+[klosMeetKnown]
+(Kwatermistrz odrywa wzrok od liczydła.) O! Wnuk Stacha, rotmistrz mówił. Pafnucy Kłos, kwatermistrz. Liczę, ważę, kupuję, wydaję.
+Kuchnia polowa zjada drwa jak smok. Jak masz ręce do siekiery - mam dla ciebie robotę.
+
+[klosAsk]
+Co tam, chłopcze?
+Liczydło słucha.
+Kupujesz, sprzedajesz, czy tylko przechodzisz?
+
+[klosNoSkup]
+Skup tylko dla tych z księgi. Przynieś najpierw drwa dla kuchni - to cię wpiszę.
+
+[klosNothing]
+Nic z mojej listy nie masz. Zboże, warzywa, mięso wędzone, ryby, skóry, strzały, drewno, węgiel - to kupuję.
+
+[klosSold]
+Dobre. Król płaci, Kłos liczy. Masz.
+Wpisane. Z ciebie dobry dostawca.
+
+[klosPrices]
+Po fali z promu wojsko je jak smok - płacę półtora raza. Teraz cena zwykła.
+Fala z promu przeszła, wojsko głodne - płacę półtora raza! Korzystaj.
+
+[grainAsk]
+> Sprzedasz cztery worki zboża? Po cenie dla swoich.
+
+[grain]
+(Kłos rozgląda się na boki.) Ciii! ...Cztery worki. Po piętnaście groszy. Sześćdziesiąt. I nikomu ani słowa, rozumiemy się?
+To zboże z rekwizycji. Królewskie. Ale król ma go dużo, a ja mam brzuch. Sam rozumiesz.
+
+[grainYes]
+(Kłos znika w ciemności spichlerza i wraca z czterema workami.) Bierz i idź tyłem, koło namiotów. Nie widziałem cię.
+
+[grainNo]
+Nie masz? To nie ma o czym gadać. I o niczym nie gadaliśmy.
+
+[grainDay]
+Zboże? Za dnia? Przy rotmistrzu? Zwariowałeś? (szeptem) Przyjdź po zmroku, po dwudziestej.
+
+[bebenMeet]
+Trrrum-tum-tum! Witaj, młody! Szczepan Bęben, werbownik chorągwi królewskiej. Bęben się nazywam i bęben noszę!
+Ile masz lat? ...Hm. Za młody. Szkoda! Taki bosy, a już wygląda, jakby przeszedł pół wojny. Przyjdź za rok, zapiszę cię pierwszego.
+
+[bebenAsk]
+Za króla, chłopcze! Co słychać?
+Trrrum! Mów.
+Hm? Zapisać cię? Za młody, mówiłem!
+
+[bebenDraft]
+Ciebie? Nie. Rotmistrz mówi: dług twojego dziadka trzyma cię przy wyspie mocniej niż łańcuch. Dwór ręczy. Pobór jest dla innych.
+Ale jak będziesz miał szesnaście... (puka w bęben) trrrum!
+
+[soldier.brama]
+Stój! Kto idzie? ...A, wnuk Stacha. Przechodź.
+Brama otwarta za dnia. Nocą - pytaj wartownika.
+Rotmistrz w kwaterze. Nie przeszkadzaj mu bez potrzeby.
+
+[soldier.bramaNoc]
+Stój! ...Nocą tu nie łaź, chłopcze. Wartownik najpierw dźga, potem pyta.
+Spać idź. Garnizon śpi, tylko my nie.
+
+[soldier.beczki]
+Woda dla wojska. Odejdź.
+Beczki z promu. Liczone. Odejdź, mówię.
+
+[soldier.pomost]
+Łowimy, co morze wyrzuci z wraku. Skrzynie, beczki... raz but z nogą w środku. Nie pytaj.
+Łódź ratownicza. Rotmistrz każe pływać do wraku od dziewiątej do trzeciej. Potem fala.
+
+[soldier.wieza]
+Z wieży widać wrak. W odpływie łacha wychodzi z wody aż pod jego burtę. Rotmistrz nie pozwala chodzić - chyba że masz glejt.
+Nocą na wraku coś błyska. Rotmistrz mówi, że to księżyc w szkle. Ja tam nie wiem.
+
+[soldier.cwiczy]
+Sztych, zasłona, sztych! ...Ręce mi odpadają.
+Od świtu machamy. Wróg nie przyjdzie, a my machamy.
+Masz coś do jedzenia? Nie? To czemu stoisz?
+
+[soldier.kowal]
+Kowal garnizonu. Groty, ćwieki, okucia. Strzały i stal - tylko dla przyjaciół garnizonu. Pogadaj z rotmistrzem.
+
+[soldier.kowalShop]
+Przyjaciel garnizonu? To co innego. Strzały po trzy grosze, stal po pięćdziesiąt pięć. Bierzesz?
+
+[soldier.noc]
+(Żołnierz śpi na stojąco.)
+
+[soldierBarks.brama]
+Brama! Kto idzie?
+Spokój na drodze.
+
+[soldierBarks.beczki]
+Woda liczona! Odejdź!
+
+[soldierBarks.pomost]
+Wiosła w górę!
+Fala idzie.
+
+[soldierBarks.cwiczy]
+Raz! Dwa! Sztych!
+Zasłona! Sztych!
+Ręce mi odpadną...
+
+[soldierBarks.kowal]
+(Brzdęk młotka.)
+Kto następny do okucia?
+
+[soldierBarks.wieza]
+Na wodzie czysto!
+Wrak stoi, jak stał.
+
+[soldierBarks.noc]
+Stój, kto idzie?
+Cisza...
+
+[recruit.bartek]
+(Bartek trzyma halabardę jak grabie.) Wojsko. Ja. Żona mnie zabije. Albo i nie - może się ucieszy, że w kości nie gram.
+
+[recruit.drwal]
+(Zbych ociera czoło.) Siekiera lżejsza od tej halabardy. Ale strawa jest. Pierwszy raz od miesiąca jem do syta.
+
+[recruit.uchodzca]
+(Darin stoi w szeregu prosto jak struna.) W wojsku już byłem. Na kontynencie. Ręce pamiętają. Głowa wolałaby zapomnieć.
+
+[klosKantor]
+(Kłos podskakuje.) Ja? Tutaj? Po... sól. Po sól przyszedłem. Wojsko też musi solić.
+Idź spać, chłopcze. Nic nie widziałeś. I ja też nic.
+
+[klosKantorD27]
+Ciii! Ty tutaj? ...Zboże? Nie tu, nie przy kantorze. W garnizonie, po zmroku, przy moim namiocie.
+
+[klosKantorBarks]
+(Kłos stuka trzy razy w tylne drzwi kantoru.)
+Ciii...
+Nikogo tu nie ma. Ja też nie.
+
+[search]
+Szukamy ludzi z listy poborowej. Widziałeś Smolarza? Albo tego Darina? ...Nie? To idź.
+Rozkaz rotmistrza. Przeszukać obóz i domy. Nic osobistego.
+
+[searchBarks]
+Gdzie oni się pochowali?
+Szukać po stodołach!
+Ktoś ich ostrzegł, mówię wam.
+
+[patrol]
+Stój! Rewizja. Rozkaz rotmistrza: kto się kręci przy garnizonie, pokazuje torbę.
+
+[patrolPendant]
+A to co? Na szyi? (Żołnierz ciągnie za rzemień.) Kruk na kamieniu... Rotmistrz kazał zapisywać każdego z krukiem. Zapisane. Idź.
+
+[patrolClean]
+Nic. Dobra, idź. I nie kręć się tu bez potrzeby.
+
+barrels = Woda dla wojska. Odejdź.
+looks.kocioł = Kocioł zupy z królewskiego zboża. Pachnie tak, że w mieście ktoś by za to zabił.
+looks.wieza = Wieża strażnicza. Na górze wartownik patrzy na zatokę i wrak. Drabina tylko dla wojska.
+looks.dyby = Dyby. Na desce wycięte nożem: „ZŁODZIEJ”, „DEZERTER”, a ktoś dopisał: „NIEWINNY”.
+looks.stol = Stół werbownika: lista poborowa, kałamarz i pieczęć z feniksem. „ZA KRÓLA, CHŁOPCY!”
+looks.spichlerz = Spichlerz z rekwizycji. Na drzwiach kłódka wielka jak pięść. Klucz ma kwatermistrz.
+looks.spichlerzNoc = Kłódka. A obok chodzi wartownik. Lepiej nie.
+looks.drzwiZamkniete = Kwatera rotmistrza. Zamknięte - rotmistrz przyjmuje od 7 do 20.
+looks.lachaPodWoda = Łacha pod wodą.
+looks.lachaDalej = Dalej łacha tonie w głębokiej wodzie. Do wraku tędy dziś nie dojdziesz.
+looks.lachaWraca = Woda przybiera! Wracaj na brzeg.
+[caught]
+Stój! Złodziej! Do mnie!
+
+[stocksMorning]
+(Noc w dybach. Rano przychodzi rotmistrz.)
+@rotmistrz: Złodziej zboża. Wnuk Stacha. (Rotmistrz kręci głową.) Wypuścić go. Worki zostają w spichlerzu.
+@rotmistrz: Drugi raz nie będę taki miły.
+
+[stocksNoRot]
+(Noc w dybach. Rano żołnierz otwiera kłódkę.) Rotmistrz kazał cię wypuścić. Worki zostają. Zmykaj.
+
+[granaryTake]
+(Kłódka puszcza z cichym zgrzytem. W ciemności pachnie zbożem. Bierzesz cztery worki - ciężkie, ale dasz radę.)
+
+[d26Deal]
+> Panie rotmistrzu, mam coś lepszego niż trzech rekrutów. Dziennik okrętu z wraku.
+(Rotmistrz czyta długo, przewraca kartki.) „Biała Źrenica”... Straż Pewności. Płynęli po coś na tę wyspę i stracili okręt w sztormie.
+Więc od morza nic nam teraz nie grozi. Czarne Oczy straciły jedyny okręt w tych wodach.
+Bęben! Lista poborowa - tylko ochotnicy. Kto nie chce, ten nie idzie. (Do ciebie.) Dobra robota, chłopcze.
+
+[d26Done]
+Trzech! Mam trzech! Rotmistrz będzie zadowolony. Masz, uczciwie, jak obiecałem.
+
+[d26DoneWarn]
+Nikogo! Wszyscy jakby się pod ziemię zapadli. Ktoś ich ostrzegł... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?
+
+# ======================================================================== z kodu Garnizon.js (kod.<funkcja>.<n>, w kolejności kodu)
+# addFavor
+kod.addFavor.0 = Przychylność garnizonu {1}{got}
+kod.addFavor.1 = Garnizon: {1}
+# favorWord
+kod.favorWord.0 = swój
+kod.favorWord.1 = przyjaciel garnizonu
+# sell
+kod.sell.0 = Skup wojskowy
+kod.sell.1 = " - Opinia {got}"
+kod.sell.2 = „Nasze zboże idzie na wojnę”{1}
+# skupBranch
+kod.skupBranch.0 = {name} ×{2} - {3} G/szt.
+kod.skupBranch.1 = Wszystko z tej listy ({1} G).
+# rotmistrzTalk
+kod.rotmistrzTalk.0 = Rotmistrz Bełza
+kod.rotmistrzTalk.1 = Jak garnizon na mnie patrzy?
+kod.rotmistrzTalk.2 = Wpuścicie mnie na wrak?
+kod.rotmistrzTalk.3 = Co to za lista na pana stole?
+kod.rotmistrzTalk.4 = Czemu Lord was tu wpuścił?
+kod.rotmistrzTalk.5 = Weźmiecie mnie do wojska?
+kod.rotmistrzTalk.6 = Mam coś lepszego niż rekrutów: Dziennik okrętu.
+kod.rotmistrzTalk.7 = Kwatermistrz sprzedaje królewskie zboże.
+kod.rotmistrzTalk.8 = Sprzedam coś wojsku.
+# kwatTalk
+kod.kwatTalk.0 = Kwatermistrz Kłos
+kod.kwatTalk.1 = Sprzedam coś wojsku.
+kod.kwatTalk.2 = Sprzedasz cztery worki zboża? Po cenie dla swoich.
+kod.kwatTalk.3 = Biorę ({1} G).
+kod.kwatTalk.4 = Nie mam tyle.
+kod.kwatTalk.5 = Nikomu nie powiem o nocnym zbożu.
+kod.kwatTalk.6 = Co słychać?
+kod.kwatTalk.7 = Liczę. Zawsze liczę.
+# werbTalk
+kod.werbTalk.0 = Werbownik Bęben
+kod.werbTalk.1 = Weźmiecie mnie do wojska?
+kod.werbTalk.2 = Co słychać?
+# buildMap
+kod.buildMap.0 = {1} (rekrut)
+kod.buildMap.1 = Lista poborowa
+kod.buildMap.2 = Żołnierz (szuka ludzi z listy)
+kod.buildMap.3 = Kwatermistrz Kłos
+# look
+kod.look.0 = Lista poborowa z pieczęcią z feniksem. Kilka nazwisk już przekreślonych.
+# granary
+kod.granary.0 = Worek zboża z rekwizycji ×4
+# actCall
+kod.actCall.0 = Garnizon nad zatoką
+kod.actCall.1 = Na południe od przystani stoi garnizon wojsk królewskich z lądu - chorągiew z feniksem. Rotmistrz Florian Bełza: surowy, sprawiedliwy, zmęczony wojną. Lord wpuścił ich za pieniądze i płaci Koronie podatek wojenny - dlatego tak naciska na dług dziadka. Kwatermistrz Kłos skupuje dla wojska zboże i drwa.
+kod.actCall.2 = " - następny próg: {next}"
+kod.actCall.3 = Przychylność garnizonu: {fv}/100 ({2}){3}
+kod.actCall.4 = Potrzebujesz {cost} G
+kod.actCall.5 = Glejt garnizonu na wrak
+kod.actCall.6 = Wartownicy i łódź ratownicza przepuszczą cię na wrak.
+kod.actCall.7 = Glejt na wrak
+kod.actCall.8 = Rotmistrz Bełza dał mi glejt garnizonu na wrak na mieliźnie. Do wraku dojdę w odpływie po łasze spod garnizonu. Papiery z kajuty mam przynieść najpierw jemu.
+kod.actCall.9 = Lista zaginionych
+kod.actCall.10 = Na stole rotmistrza leży lista zaginionych czterech chorągwi. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”. Nazwisk nie ma. „Zaginiony to nie poległy” - powiedział.
+kod.actCall.11 = Worek zboża z rekwizycji ×4
+kod.actCall.12 = kruk na szyi
+kod.actCall.13 = -5 G (opłata za przepustkę)
+kod.actCall.14 = złodziej zboża
+kod.actCall.15 = Noc w dybach
+kod.actCall.16 = Złapali mnie przy spichlerzu garnizonu z workami zboża. Noc w dybach, rano rotmistrz kazał mnie wypuścić. Worki zostały w spichlerzu.
+# vars
+kod.vars.0 = " (zgłosił się)"
+kod.vars.1 = " (ukryty)"
+# talk
+kod.talk.0 = (Nic nie mów.)
+# act
+kod.act.0 = dziennik okrętu
+kod.act.1 = +10 G od werbownika
+kod.act.2 = pobór
+kod.act.3 = kwatermistrz wydany
+kod.act.4 = Kłos wydany
+kod.act.5 = Powiedziałem rotmistrzowi, że kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kłos popłynie najbliższym promem - w łańcuchu. Baltazar z kantoru stracił dostawcę.
+kod.act.6 = Kłos moim dłużnikiem
+kod.act.7 = Obiecałem Kłosowi, że nikomu nie powiem o nocnym zbożu. W skupie płaci mi teraz lepiej - „jak dla swojego”.
+# helpReply
+kod.helpReply.0 = Wojsko? ...Może i lepiej. W wojsku przynajmniej nie ma kości. Pójdę.
+kod.helpReply.1 = Siekierę zostawię Marcie. ...Pójdę. Tam przynajmniej karmią.
+kod.helpReply.2 = Znowu wojsko. Dobrze. Lepiej z własnej woli niż w łańcuchu. Pójdę.
+kod.helpReply.3 = Pójdę.
+# warnReply
+kod.warnReply.0 = Werbownik? Dzięki, chłopcze. Schowam się u szwagra na Młynówce.
+kod.warnReply.1 = Dzięki. Pójdę w las na dzień czy dwa. Las mnie zna.
+kod.warnReply.2 = Znowu ktoś mnie ostrzega. Na kontynencie też ostrzegali. Dziękuję. Zniknę.
+kod.warnReply.3 = Dzięki.
+# sync
+kod.sync.0 = rozbitek wydany
+
+# ======================================================================== RECRUIT_NAMES (rekruci)
+rekruci.bartek = Bartek Kmieć
+rekruci.drwal = Zbych Smolarz
+rekruci.uchodzca = Darin z Kontynentu
+
+# ======================================================================== OBRONA (obrona)
+obrona.imie.name = Żołnierz królewski
+obrona.a.start = Garnizon królewski! Za tawernę!
+obrona.a.hit = Za króla!
+obrona.a.down = Ranny... trzymajcie... linię...
+obrona.a.win = Rotmistrz kazał przekazać: garnizon pamięta przyjaciół.
+obrona.b.start = Za króla! I za Stacha!
+obrona.b.hit = Za króla!
+obrona.b.down = Ranny... trzymajcie... linię...
+obrona.b.win = Rotmistrz kazał przekazać: garnizon pamięta przyjaciół.

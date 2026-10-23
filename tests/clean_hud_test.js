@@ -7,7 +7,9 @@
 // under it (2026-10-23: what it needs, have / need, growing as things are picked up - a goal's recipe, a town quest's step; the load
 // hidden) and the minimap under that; the gains; no bars under the hero, no experience line; the thoughts over the hero; the fade under him (the whole
 // top left corner as one); the minimap on M; P opens the menu „Lista” (its pages: tests/menu_lista_test.js); the option "Wygląd" back
-// to the classic look and again. CDP_PORT=9460.
+// to the classic look and again; (2026-10-23) the map's name "Kronika" as one comes in - first visit ~5 s with the place's sentence,
+// later ~3 s, a room smaller ~2.5 s, an underground floor with its band (red on a guardian's floor), cleared at once by a transfer,
+// an older save not playing the long one on the maps it knows (docs/ui_nazwa_mapy). CDP_PORT=9460.
 // The plugins are put into the page while they are not in js/plugins.js yet.
 "use strict";
 const path = require("path");
@@ -82,14 +84,87 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const direct = await t.json(`(function(){ $gamePlayer.locate(4, 6); return CleanCompass.route({ map: 19, x: 10, y: 6 }); })()`);
     t.check("cel na tej mapie: wprost, 6 kroków", direct && direct.direct && Math.round(direct.steps) === 6, direct);
 
-    // ---------------------------------------------------------------- the map's name as one comes in, then it goes
-    await t.go(20, 10, 12, 2);
-    await t.frames(10);
-    let top = (await dbg()).top;
-    t.check("nazwa miejsca po wejściu u góry na środku", top.some(x => x.k === "name" && x.y < 30), top);
-    await t.frames(260);
-    top = (await dbg()).top;
-    t.check("...i gaśnie po chwili", !top.some(x => x.k === "name"), top);
+    // ---------------------------------------------------------------- the map's name as one comes in: "Kronika" (docs/ui_nazwa_mapy, 2026-10-23)
+    // first visit ~5 s with the sentence, a later one ~3 s without it, a room smaller ~2.5 s, a floor of the underground with its
+    // band, a transfer while it shows clears it at once, an older save does not play the long one on the maps it knows (at the end)
+    const nm = () => t.json("(function(){ const d = CleanHUD.debug(); return d && d.name; })()");
+    const word = k => t.json(`Watki.tekst("miejsca", ${JSON.stringify(k)}) || ""`);
+    const toMap = (id, x, y) => t.eval(`$gamePlayer.reserveTransfer(${id}, ${x}, ${y}, 2, 0); 0`);
+    // the chronicle of map `id` up, at its frame `at` at least
+    const nameOn = (id, at) => t.until(`(function(){ const d = ${t.onMap(id)} && CleanHUD.debug(); return !!(d && d.name && d.name.mapId === ${id} && d.name.t >= ${at || 0}); })()`, 30, 30);
+    // its whole show over: how it ended (frames from its start, why)
+    const nameEnd = async id => {
+        await t.until(`(function(){ const l = CleanHUD.debug().nameLast; return !!(l && l.mapId === ${id} && l.why !== "new"); })()`, 20, 50);
+        return t.json("CleanHUD.debug().nameLast");
+    };
+    // its box between the left column and the clock / the compass
+    const boxOk = (n, dd) => !!n.box && n.box.x >= dd.corner.x + dd.corner.w && n.box.x + n.box.w <= Math.min(dd.text.clock.x - dd.text.clock.r, dd.parts.compass.visible ? dd.parts.compass.x : 1280);
+    let lastDbg = null;
+    await toMap(20, 10, 12);
+    t.check("podwórze dziadka: napis się pojawia", await nameOn(20, 1));
+    let n = await nm();
+    const pod20 = await word("mapa.20.pod"), opis20 = await word("mapa.20.opis");
+    t.check("pierwsza wizyta: nazwa złotem u góry na środku (48 px) z podpisem i zdaniem o miejscu z js/teksty/miejsca.txt, pokaz 300 klatek (5 s)",
+        n && n.mode === "first" && n.title === "Dom dziadka" && n.size === 48 && !!pod20 && n.sub === pod20 && !!opis20 && n.opis === opis20 && n.dur === 300 && n.y < 30, n);
+    t.check("...litery wchodzą po kolei (na początku nie wszystkie)", n.letters === 10 && n.lettersIn < n.letters, n);
+    await nameOn(20, 130);
+    n = await nm();
+    lastDbg = await dbg();
+    t.check("...po 2 s: wszystkie litery, podpis i zdanie, niżej „M: pokaż mapę”; w stosie u góry na środku", n.lettersIn === n.letters && n.opacity === 255 && /M: pokaż mapę/.test(n.hint)
+        && lastDbg.top.some(x => x.k === "name" && x.y < 30), { n, top: lastDbg.top });
+    t.check("...nie zachodzi na HUD w rogach (lewa kolumna, zegar)", boxOk(n, lastDbg), { box: n.box, corner: lastDbg.corner, clock: lastDbg.text.clock, compass: lastDbg.parts.compass });
+    await t.shot(path.join(__dirname, "..", "docs", "ui_nazwa_mapy", "test_pierwsza_wizyta.png"));
+    let end = await nameEnd(20);
+    t.check("...trzyma się do 4,4 s i znika: cały pokaz ok. 5 s (300 klatek)", end && end.why === "end" && end.mode === "first" && end.frames >= 295 && end.frames <= 305, end);
+    t.check("...i znika ze stosu", !(await dbg()).top.some(x => x.k === "name"));
+
+    // a room: grandpa's house - smaller, words only, ~2.5 s
+    await toMap(19, 4, 6);
+    await nameOn(19, 30);
+    n = await nm();
+    const pod19 = await word("mapa.19.pod");
+    t.check("wnętrze (dom dziadka): mniejsza nazwa (30 px) z podpisem, bez zdania, ok. 2,5 s (150 klatek)", n && n.mode === "inside" && n.kind === "inside" && n.size === 30 && n.sub === pod19 && !!pod19 && !n.opis && n.dur === 150, n);
+    end = await nameEnd(19);
+    t.check("...pokaz wnętrza trwa 150 klatek", end && end.why === "end" && end.frames >= 145 && end.frames <= 155, end);
+
+    // the second visit: no sentence, ~3 s
+    await toMap(20, 10, 12);
+    await nameOn(20, 30);
+    n = await nm();
+    t.check("druga wizyta: nazwa, ornament i podpis, bez zdania, ok. 3 s (180 klatek)", n && n.mode === "again" && !n.first && n.sub === pod20 && !n.opis && n.dur === 180 && n.size === 48, n);
+    end = await nameEnd(20);
+    t.check("...pokaz trwa 180 klatek", end && end.why === "end" && end.frames >= 175 && end.frames <= 185, end);
+    t.check("odwiedziny w stanie gry (Tawerna.state nazwaMapy): podwórze 2 razy", (await t.json("CleanHUD.visits().odw[20]")) === 2);
+
+    // a transfer while it shows: the old one goes at once
+    await toMap(19, 4, 6);
+    await nameOn(19, 20);
+    await t.eval("window.__kronika = SceneManager._scene._cleanTop._items.name; 0");
+    await toMap(20, 10, 12);
+    await t.frames(2);
+    const cut = await t.json("(function(){ const c = window.__kronika; return { visible: c.visible, t: c._t, last: CleanHUD.debug() && CleanHUD.debug().nameLast }; })()");
+    t.check("przejście na inną mapę w trakcie: stary napis znika od razu (po 2 klatkach)", !cut.visible && cut.t < 0 && cut.last && cut.last.mapId === 19 && cut.last.why === "map", cut);
+    t.check("...a na nowej mapie jej własny", await nameOn(20, 5));
+    await t.eval("delete window.__kronika; 0");
+
+    // the underground: a generated floor - "Piętro N" with its band's name; a guardian's floor in red; the notice not doubled
+    await t.notices({ clear: true });
+    await t.eval("Underground.go(12); 0");
+    await nameOn(1012, 30);
+    n = await nm();
+    const band2 = await t.json(`({ name: Underground_Data.BANDS[1].name.toLocaleLowerCase("pl"), opis: Watki.tekst("miejsca", "pasmo.2.opis") })`);
+    t.check("piętro podziemi (12, składane): „Piętro 12”, podpis - nazwa pasma, przy pierwszym zejściu w pasmo jego zdanie", n && n.title === "Piętro 12" && n.floor === 12 && n.sub === band2.name
+        && !!band2.opis && n.opis === band2.opis && n.mode === "first" && !n.boss, { n, band2 });
+    t.check("...bez osobnego komunikatu „Piętro 12” pod spodem (nazwa mówi to sama)", !(await t.notices()).some(x => /^Piętro 12/.test(x)), await t.notices());
+    await t.eval("Underground.go(20); 0");
+    await nameOn(146, 130);
+    n = await nm();
+    t.check("piętro 20 (strażnik): nazwa sali, pod nią „piętro 20 · pasmo”, złoto przechodzi w czerwień", n && n.title === "Sala jednego pytania" && n.sub === "piętro 20 · " + band2.name && n.boss && n.red >= 0.9, n);
+    await t.shot(path.join(__dirname, "..", "docs", "ui_nazwa_mapy", "test_pietro20.png"));
+    await t.eval("Underground.go(13); 0");
+    await nameOn(1013, 30);
+    n = await nm();
+    t.check("piętro 13: pasmo już znane - krótko, bez zdania; niżej „najgłębiej: piętro 20”", n && n.title === "Piętro 13" && n.mode === "again" && !n.opis && /najgłębiej: piętro 20/.test(n.hint), n);
     await t.go(19, 4, 6, 2);
     await t.eval("CleanCompass.refresh(); 0");
     await t.frames(20);
@@ -266,4 +341,18 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(10);
     d = await dbg();
     t.check("i z powrotem czysty widok", d.clean && d.parts.clock.visible && Object.values(d.old).every(v => v === false), d.parts.clock);
+
+    // ---------------------------------------------------------------- the map's name and an older save (from before "Kronika")
+    // tests/fixtures/day40_farm: day 40 on Kruczy Jar; Combat's "odkrycie" remembers Map003 and Map019 - those count as visited
+    const loaded = await t.loadFixture("day40_farm", { quiet: true });
+    const vs = await t.json("CleanHUD.visits()");
+    t.check("stary zapis: mapy znane grze (odkrycia z Combat, mapa, na której stoi) są odwiedzone", loaded && vs.gotowe && vs.odw[3] >= 1 && vs.odw[19] >= 1 && !vs.odw[22], vs);
+    await toMap(3, 22, 14);
+    await nameOn(3, 10);
+    n = await nm();
+    t.check("...Kruczy Jar (znany): krótki pokaz, bez zdania - nie długi jak za pierwszym razem", n && n.mode === "again" && !n.opis && n.dur === 180, n);
+    await toMap(22, 12, 2);
+    await nameOn(22, 10);
+    n = await nm();
+    t.check("...Polna droga (nigdy nie był): pierwsza wizyta, ze zdaniem", n && n.mode === "first" && !!n.opis && n.opis === (await word("mapa.22.opis")), n);
 });

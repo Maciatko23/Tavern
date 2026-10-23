@@ -1,6 +1,6 @@
 // Zrzuty "Czystego widoku" (CleanHUD.js, CleanHUD_Compass.js, MenuRing.js) do porównania z makietami docs/ui_pomysly/pomysl_4_*.png.
 //   CDP_PORT=9486 node tools/ui_czysty/capture.js [nazwa...]
-// Bez nazw: wszystkie ujęcia. Zrzuty idą do docs/ui_czysty/. Wtyczki są wstrzykiwane, gdy nie ma ich jeszcze w js/plugins.js.
+// Bez nazw: wszystkie ujęcia. Zrzuty idą do docs/ui_czysty/. Wtyczki są wstrzykiwane, gdy nie ma ich jeszcze na liście gry (js/tawerna_wtyczki.js).
 // Ujęcia: hud (zapis day40_farm, godz. 11, potrzeby jak na makiecie), klasyczny (to samo w starym wyglądzie), menu (pierścień P),
 // snieg, burza, noc, kamieniolom (jasne tła), walka (tryb walki, oddech jako piąty pasek), miasto (kompas do osoby w miasteczku).
 "use strict";

@@ -208,3 +208,91 @@ Spear w1/w2 k10, Club w2 k3) - na zbliżeniu kapelusz idzie z głową, i Net w0 
 Zestawienia: `wzory_glowa.png`, `wzory_tors.png`, `wzory_nogi_stopy.png`, `wzory_pas_rece_plecy.png` (każdy z 37 wzorów osobno:
 chód w 3 kierunkach, z pochodnią, siekiera z boku, łuk, siedzi, leży), `stroje_w_grze.png` (4 pełne stroje na mapie, zrzuty z
 ekranu), `popiersia.png` (popiersie w 4 strojach + karta postaci). Test: `node tests/ubior_test.js` (12/12, bez błędów).
+
+---
+
+# Zbroja z PixelLab (próba 2026-10-23)
+
+Gracz: „skórzany kaptur jest zbyt duży i masywny, część hełmów też; zbroję ma być widać na postaci”. Próba na dwóch zestawach: PixelLab
+rysuje **bohatera w zbroi** (stan postaci „Wiesniak I pro”, ten sam człowiek, ta sama skala), a narzędzie przenosi tę zbroję na każdą
+klatkę każdego arkusza. Rodzaje bez PixelLab działają jak dotąd (faktura na koszuli, rysowane hełmy).
+
+## Stany PixelLab (tools/ubior/pixellab/)
+
+| zestaw | stan (id) | płótno | co na nim | rodzaje w grze |
+|---|---|---|---|---|
+| skórzany | „Zbroja skorzana” `b12a1a58-ad83-4b2c-a739-42a91bf96f63` | 64x64 | mały kaptur przylegający do głowy, skórznia z nitami i naramiennikami, karwasze | `helm_kaptur_*`, `zbroja_skorznia_*`, `karwasze_*` |
+| żelazny | „Zbroja zelazna” `27a409ea-121d-446a-bdee-ef8a42ea8a25` | 72x72 (korona kapalinu) | kapalin, kolczuga do pół uda z pasem, nagolenniki, buty z okutymi noskami | `helm_kapalin_*`, `zbroja_kolczuga_*`, `nagolenniki_*`, `buty_okute_*` |
+
+Większe płótno (72) nie zmienia skali postaci (61 px wzrostu jak w obrotach bazowych) - figura leży w środku, narzędzie i tak dopasowuje
+przesunięcie (-4, -4). Kolumna 0 `Hero_Walk` to dokładnie obroty postaci bazowej (sprawdzone piksel w piksel).
+
+## Jak to działa (tools/ubior/zbroja_pl.py)
+
+1. **Stan na bazie.** Obrót stanu nakładany na obrót bazowy (przesunięcie, przy którym najwięcej pikseli się zgadza - twarz, stopy).
+   Piksel stanu różny od bazy (suma |dR|+|dG|+|dB| > 34) = zbroja; skóra narysowana od nowa (twarz, dłonie - paleta skóry bazy) - nie.
+2. **Części.** Każdy piksel stanu dostaje grupę z maski bazy (`Ubior_Maska_Hero_Walk`, kolumna 0): głowa, tułów (koszula, pas, szyja
+   pod brodą - kołnierz), przedramię (skóra spójna z dłonią), łydka, stopa; piksele poza sylwetką bazy (naramienniki, dół kolczugi,
+   rondo) - grupa najbliższego piksela. Wysokości nóg z bazy: buty = 4 dolne wiersze, nagolenniki od dołu tuniki + 2 do butów, wyżej -
+   dół kolczugi (należy do tułowia).
+3. **Przeniesienie na klatki** (arkusze 4-wierszowe: dół = S, lewo = W, prawo = E, góra = N; chody: 8 kierunków):
+   - **tułów**: oś od środka tułowia do środka głowy w klatce i w pozie stojącej, potem dopasowanie (przesunięcie do 5 px, skala wzdłuż
+     osi 0,8-1,2), przy którym najwięcej pikseli tułowia klatki pada na tułów pozy stojącej (pas, rąbek i ręka przed brzuchem bywają
+     schowane - pojedynczy punkt nie wystarczał). Każdy piksel tułowia klatki bierze kolor z miejsca, na które pada; 2 px poza sylwetkę
+     tylko tam, gdzie zbroja w pozie stojącej wystaje (naramienniki). Piksel bez źródła (rękaw ręki uniesionej nad głowę) - najbliższy
+     piksel zbroi o tej samej parzystości x, y (wzór kolczugi się nie rozmywa). Cieniowanie klatki (jaśniej / ciemniej niż ten punkt
+     w pozie stojącej, wygładzone 3 x 3) przesuwa kolor o 1-3 stopnie po palecie zbroi.
+   - **przedramiona, łydki, stopy**: odległość wzdłuż kończyny (od dłoni / od podeszwy, po pikselach kończyny - działa siedząc, leżąc,
+     w przewrocie) przeskalowana do długości nogi w pozie stojącej; piksel bierze piksel zbroi z tej samej odległości o najbliższej
+     jasności względnej (cień i światło klatki wybierają odcień); buty: ten sam udział odcieni co w pozie stojącej (skórzana cholewa i
+     żelazny nosek). Kontur klatki zostaje konturem.
+   - brzeg nowej sylwetki dostaje kontur; broń, dłonie, twarz, włosy zostają na wierzchu (nie należą do żadnej warstwy).
+4. **Wynik**: warstwa na arkusz `img/system/Ubior_PL_<Rodzaj>_<arkusz>.png` (Skorznia, Karwasze, Kolczuga, Nagolenniki, Buty; 28 arkuszy
+   + 6 bez broni = 170 plików, razem 4,1 MB, ~2 min), hełmy `img/system/Ubior_HelmPL_Kaptur.png`, `Ubior_HelmPL_Kapalin.png`: 8 widoków
+   (S, SW, W, NW, N, NE, E, SE - własne, bez lustra), alfa 255 = hełm, 64 = okno (włosy klatki zostają: grzywka pod rondem), 0 = włosy
+   klatki znikają (to, co sterczy spod kaptura). Punkt zaczepienia = góra włosów bazy w tym widoku (jak `cellsOf` w Ubior.js).
+   `python tools/ubior/zbroja_pl.py --odniesienie KATALOG` - kontrola kroku 1-2, `--palety` - zakresy jasności do tabeli `PL`.
+
+## W grze (js/plugins/Ubior.js 1.2)
+
+- Tabela `PL` (skorznia, kolczuga, karwasze, nagolenniki, buty_okute) i `PL_HELM` (kaptur, kapalin): wzór z kluczem tego rodzaju ma
+  `pl` (tors, ręce, nogi, stopy) albo nakładkę `helmpl_<rodzaj>` (głowa). Składanie: warstwy PL po przemalowaniu ubrań, przed
+  nakładkami (kolejność: tułów, nagolenniki, buty, karwasze), części pod nimi w masce stają się koszulą / spodniami / stopami / skórą
+  (hełm dalej chowa się za bronią); stara faktura / pasy karwaszy i nagolenników / cholewki - tylko gdy warstwy PL nie ma.
+- Hełm PL: ten sam `helmet()` co rysowane - punkt zaczepienia na górze włosów, pasek nad głową (korona nad klatką chodu), obrót leżąc
+  i w przewrocie; bez dorysowanego cienia (PixelLab ma własny).
+- **Materiały**: natywny (skórznia, karwasze, kaptur: `skora`; kolczuga, nagolenniki, buty, kapalin: `zelazo`) = kolory PixelLab bez
+  zmian. Inny: rodzina główna (ciepła - skóra / szara - metal) przez rampę materiału z `MATERIALY` wg jasności (zakres jasności tej
+  rodziny w stanie), druga rodzina: nity skórzni i karwaszy - rampa akcentu materiału, pas kolczugi, rzemienie, skóra butów - bez zmian.
+- Arkusz bez broni (pod nową broń z Ubior_Bron.js) bierze swoją warstwę `Ubior_PL_<Rodzaj>_BezBroni_<arkusz>`.
+- `Ubior.pl(false)` - stary wygląd tych rodzajów (porównanie, test), `Ubior.pl(true)` - znowu PixelLab.
+- Popiersie w rozmowach: dalej rysowane obrazki `Ubior_Bust_Helm_*` (kaptur na popiersiu nadal duży - do zrobienia osobno).
+
+## Ocena (zestawienia: pixellab_proba_zbroje.png, pixellab_proba_materialy.png, pixellab_proba_mapa.png)
+
+- Dobrze: kaptur mały i przylegający (1 px nad włosami zamiast dużej bryły), kapalin w skali głowy z rondem; skórznia z nitami,
+  szwami i naramiennikami, kolczuga z wzorem kółek i pasem - z daleka widać, że to zbroja, a nie kolor tuniki. Chód 8 kierunków, bieg,
+  praca, walka: zbroja siedzi na ciele w każdej klatce, idzie za tułowiem, przedramionami i nogami (także siedząc i leżąc).
+- Słabiej: klatki z ręką uniesioną nad głowę (rękaw bez źródła - kolor najbliższego piksela zbroi), skrzyżowane nogi siedząc (nagolenniki
+  jako szara plama), przewrót (tułów skulony - tekstura ściśnięta), pas skórzni / kolczugi przy dłoni na biodrze miejscami rozmyty.
+  Zachód arkuszy zamachów to lustro wschodu, więc i zbroja z boku jest lustrzana (jak cała postać).
+
+## Drugi etap (2026-10-23): reszta rodzajów
+
+Gracz po próbie: „jest dużo lepiej” - reszta od razu. Pięć kolejnych stanów (po 10 generacji, razem 50):
+
+| stan (id) | płótno | rodzaje w grze | natywny materiał |
+|---|---|---|---|
+| „Przeszywanica” `3a5332ce-96d3-4b76-a65a-6ddda5047594` | 64 | `zbroja_przeszywanica_*`, `helm_czepiec_len`, `helm_czepiec_skora` (czepiec pikowany) | len |
+| „Luska” `23a34d61-a805-4c6b-96b0-3eb5e8b88c59` | 72 | `zbroja_luska_*`, `helm_nosal_*` | żelazo |
+| „Napiersnik” `7299a467-558a-4987-900d-e5c08221712e` | 72 | `zbroja_napiersnik_*`, `helm_otwarty_*` | stal |
+| „Helm zakonny” `c2d16ef1-6fef-4949-8dad-27f0acdb86c8` | 72 | `helm_zakonny_*` (zwarty garnczkowy hełm w skali głowy, jak kapalin) | żelazo |
+| „Czepiec kolczy” `7d735706-f6f2-4418-872e-98ef2fe12d5c` | 64 | `helm_czepiec_zelazo`, `_stal`, `_zakon` (metal = kolczy, reszta pikowany) | żelazo |
+
+Zmiany w metodzie: przeszywanica i czepiec pikowany mają jasne płótno w dwóch rodzinach kolorów (ciepłe cienie, szare światła) - w innym
+materiale obie idą przez rampę (`glowny: "oba"`); napierśnik leży na tunice - tunika stanu poza płytą (płyta = zmienione piksele
+domknięte i z wypełnionymi dziurami, bo stal bywa tak szara jak tunika) idzie w warstwie z alfą 254 i gra nie przemalowuje jej
+materiałem (brązowy napierśnik, szare rękawy); hełm zakonny zasłania całą głowę - w obrazku wszystko, co nie jest skórą, bez „okna”.
+Razem po obu etapach: 272 warstwy `Ubior_PL_*` (8 rodzajów x 34 arkusze) i 7 hełmów `Ubior_HelmPL_*`, 8,3 MB.
+Po tym etapie każdy klucz `helm_*` i `zbroja_*` (oraz karwasze, nagolenniki, buty okute) stoi na grafice PixelLab; stare rysowane
+`Ubior_Helm_*` zostają tylko dla `Ubior.pl(false)` i popiersi. Zestawienia: `pixellab_zbroje_reszta.png`, `pixellab_zbroje_reszta_mapa.png`.

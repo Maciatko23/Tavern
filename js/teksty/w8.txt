@@ -1,0 +1,232 @@
+# Wątek W8 (wtyczka TownQuests_Data.js): tytuł, opis, rozdziały, rozmowy. Klucze: zadania.W8.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz w8
+
+# ======================================================================== QUESTS (zadania)
+# W8, „Żelazna Pięść”
+zadania.W8.title = Żelazna Pięść
+zadania.W8.where = tawerna → Góry i kamieniołom (za Leśną drogą), Jaskinia z obozem kopaczy, pokoje gości nad tawerną, Osada Milczących (Akt II)
+zadania.W8.when = po wygranej z Grumem na rękę i w kości
+zadania.W8.desc = Grum nieprzypadkowo wypytuje o góry na wschodzie. Ktoś mu płaci. Rozmowa otwiera się, kiedy pokonasz go na rękę i w kości.
+zadania.W8.steps.0.text = Pokonałeś Gruma na rękę i w kości. Grum chce pogadać - usiądź z nim (tawerna).
+zadania.W8.steps.1.text = Grum zapłaci 50 G za wyprawę w góry. Powiedz mu w tawernie, że jesteś gotów - wyruszycie następnego dnia o świcie.
+zadania.W8.steps.2.text = Dzień {trip}, o świcie (5–9): Grum czeka u wejścia w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień (2 porcje), wodę w bukłaku i zioła albo opatrunek.
+zadania.W8.steps.3.text = Prowadź Gruma do starego kamieniołomu zakonu - na półce nad schodami, przy kruku wykutym w ścianie. Zdążcie przed nocą (dzień {trip}).
+zadania.W8.steps.4.text = Grum chce zobaczyć, kto drąży tunel w Jaskini nad kamieniołomem. W obozie kopaczy, w niszy przy ścianie, stoi milczący człowiek - Grum czeka obok.
+zadania.W8.steps.5.text = Do Gruma idzie przez Baltazara list od mocodawców (od dnia {letter}). Dowiedz się, co w nim jest: podsłuchaj Gruma z wynajętego pokoju nad tawerną (22–24), postaw mu dzban miodu pitnego albo dwa piwa (wieczorem) - albo poszukaj kopii rozkazu w skrzyni dowódcy kopaczy (nocą, po cichu).
+zadania.W8.steps.6.text = Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po rozdziale 1 - spłacie długu albo stracie działki). {osada}
+zadania.W8.steps.7.text = Wybór Gruma (tawerna). Żeby przeszedł na twoją stronę, potrzeba dwóch rzeczy z trzech: uratowanego Marka ({marek}), kronik zakonu ({kroniki}) i wygranego siłowania „na honor” ({honor}). Inaczej - walka z nim przy wejściu do tunelu albo praca dla jego mocodawców.
+zadania.W8.steps.8.text = Grum czeka przy wejściu do tunelu kopaczy w Jaskini. Najemnik z tarczą: ciężki cios łamie mu gardę, od tyłu tarczy nie ma.
+[zadania.W8.lines.ask]
+Siadaj. Pokonałeś mnie na rękę. I w kości. Dwa razy to nie przypadek.
+Pytanie. Byłeś na wschodzie? W górach? Słyszałeś coś o jaskiniach? O starym kamieniołomie?
+
+zadania.W8.lines.optStones = Lord pyta o kamienie z krukiem.
+zadania.W8.lines.optHeart = Na kontynencie szukają serca skały.
+zadania.W8.lines.optArchive = Pod ogrodem rycerzy jest archiwum zakonu.
+zadania.W8.lines.optNothing = Nic nie wiem o górach.
+zadania.W8.lines.optWhy = A po co ci to?
+[zadania.W8.lines.stones]
+> Lord pyta, czy na działce dziadka leżą kamienie z krukiem. Jego dziadek je zbierał.
+Kamienie z krukiem. (Grum marszczy brwi.) Takie same kupują ludzie z kontynentu. Hm. Kamieniołom jest w górach. Stamtąd je brano.
+
+[zadania.W8.lines.heart]
+> Ludmiła z obozu mówi, że na kontynencie wszyscy szukają serca skały.
+Serce skały. (Grum milknie na dłużej.) To samo słyszałem w obozie, zanim tu przypłynąłem. Myślałem, że to bajka dla rekrutów.
+
+[zadania.W8.lines.archive]
+> Pod ogrodem rycerzy jest archiwum zakonu. Byłem tam.
+Zakon. Archiwum. Pod ogrodem. (Grum patrzy na ciebie inaczej niż zwykle.) Nie mów o tym nikomu. Mnie też nie powinieneś.
+
+[zadania.W8.lines.nothing]
+> Nic nie wiem o górach.
+Nic. Jak wszyscy. Hm.
+
+[zadania.W8.lines.why]
+> A po co ci to?
+Po co? (Grum długo milczy.) Płacą mi. Ktoś z kontynentu. Mam znaleźć drogę w góry, do jaskiń, i kogoś, kto ją zna.
+
+[zadania.W8.lines.end]
+Pięćdziesiąt groszy za wyprawę. Jak się nauczysz drogi w góry i przeżyjesz dzień bez karczmy - przyjdź. Zabiorę cię.
+I... nie mów nikomu, że pytałem. Nikomu.
+
+[zadania.W8.lines.note]
+Grum pyta o góry
+Grum pyta o góry na wschodzie, jaskinie i stary kamieniołom. Ktoś z kontynentu płaci mu za znalezienie drogi i przewodnika. Za wyprawę w góry da 50 G - kiedy będę znał drogę.
+
+[zadania.W8.lines.hireAsk]
+Góry. Pamiętasz? Pięćdziesiąt groszy, jak mnie zaprowadzisz do starego kamieniołomu i obaj wrócimy.
+Wyjście o świcie, przy wejściu w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień, wodę w bukłaku i zioła. W górach nikt ci nie poda.
+
+zadania.W8.lines.optHire = Jutro o świcie.
+zadania.W8.lines.optHireLater = Jeszcze nie.
+[zadania.W8.lines.hireYes]
+Dobrze. O świcie. Spóźnisz się - pójdę sam. A sam zabłądzę, i to będzie twoja wina.
+
+[zadania.W8.lines.hireNo]
+Hm. Góry poczekają. Ja nie zawsze.
+
+[zadania.W8.lines.start]
+Jesteś. Hm. Pokaż, co niesiesz.
+
+[zadania.W8.lines.startOk]
+Jedzenie, woda, zioła. Dobrze. Na wojnie połowa ginie od głupoty, nie od strzał.
+Prowadź. Kamieniołom jest gdzieś na wschodzie, wysoko. Ja idę za tobą.
+
+[zadania.W8.lines.startMissing]
+Z tym? (Grum kręci głową.) Bez jedzenia, wody i ziół w góry nie idę. Masz czas do dziewiątej. Potem idę sam.
+
+[zadania.W8.lines.tripMissed]
+> (Świt minął, a Grum nie czekał. Trzeba z nim pogadać jeszcze raz w tawernie.)
+
+[zadania.W8.lines.quarry]
+(Grum długo patrzy na kruka wykutego w ścianie kamieniołomu.) Ten sam znak co na kamieniach, które skupują ludzie z kontynentu.
+Stąd brano kamień na twierdzę. I na dwór waszego Lorda - widzisz te bloki? Na każdym dziesiątym kruk.
+(Grum podnosi wzrok na półkę nad kamieniołomem. Wysoko w skale czernieje wejście do jaskini.) A tam? Tam ktoś pali ogień. W jaskini. Hm.
+Masz. Pięćdziesiąt. Zarobione. (Grum wciska ci sakiewkę.) Zajrzymy do tej jaskini. Ja tu zostaję - przyjdź, kiedy będziesz gotów.
+
+[zadania.W8.lines.quarryLost]
+> (Noc. Zgubiłem Gruma w górach. Wróci do tawerny wściekły - trzeba będzie zacząć od nowa.)
+
+[zadania.W8.lines.noteQuarry]
+Stary kamieniołom
+Zaprowadziłem Gruma do starego kamieniołomu zakonu w górach. Stąd brano kamień na twierdzę i na dwór Lorda - na blokach kruk. Wysoko nad kamieniołomem, w jaskini, ktoś pali ogień. Grum zapłacił 50 G.
+
+[zadania.W8.lines.campNoMarek]
+> (Nisza przy ścianie jest pusta. Na kamieniu jaśniejszy ślad - tu stał Marek, zanim go stąd wyprowadziłem.)
+(Grum patrzy na pustą niszę.) Kopacze mówią, że stał tu jeden. Marek. „Dotknął czegoś w skale i przestał mówić.” A potem ktoś go wyprowadził. Ty?
+> Ja. Mówi już. Pojedyncze słowa - ale mówi.
+(Grum blednie. Pierwszy raz widzisz, jak Grum blednie.) Marek. Kopał w drużynie, którą przysłali przede mną. Myślałem, że zdezerterował.
+Płacą mi, żebym znalazł drogę do tego, co mu to zrobiło. (Długo milczy.) Wracamy. Muszę się napić. I pomyśleć. W tej kolejności.
+
+[zadania.W8.lines.camp]
+> (W niszy przy ścianie stoi człowiek. Twarzą do skały. Nie kopie, nie mówi, nie odwraca się. Tylko kiwa głową - nie wiadomo do kogo.)
+(Grum mówi cicho, prawie szeptem.) Tych od kilofów znam. Tacy sami jak ja - za żołd. Ale ten...
+> Kopacze mówią na niego Marek. „Dotknął czegoś w skale i przestał mówić.”
+(Grum blednie. Pierwszy raz widzisz, jak Grum blednie.) Marek. Kopał w drużynie, którą przysłali przede mną. Myślałem, że zdezerterował.
+Płacą mi, żebym znalazł drogę do tego, co mu to zrobiło. (Długo milczy.) Wracamy. Muszę się napić. I pomyśleć. W tej kolejności.
+
+[zadania.W8.lines.noteCamp]
+Obóz kopaczy
+W jaskini nad kamieniołomem ludzie frakcji, która wynajęła Gruma, drążą tunel na zachód - w stronę Kruczych Skał; jego koniec się zawalił. W niszy stoi Marek z drużyny, którą przysłali przed Grumem: patrzy w ścianę i milczy. Grum zbladł.
+
+zadania.W8.lines.letterTopic = Napij się ze mną. Ja stawiam.
+[zadania.W8.lines.letterDrunk]
+Stawiasz? (Grum patrzy na dzban.) Hm. Siadaj.
+(Trzeci kubek. Grum mówi coraz wolniej.) Wiesz, co przyszło? List. Przez tego waszego kupca z kantoru. Pieczęć jak trzeba.
+> (Grum wyciąga z zanadrza złożoną kartkę i kładzie ją na stole. Czytasz do góry nogami: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)
+Świadków nie zostawiać. (Grum stuka palcem w kartkę.) Świadek to ty. Świadek to Marek. Świadek to ta śpiewaczka, co śpiewa o skale. ...Nalej.
+
+[zadania.W8.lines.letterNoDrink]
+Stawiasz? Czym? Dzban miodu pitnego albo dwa piwa - inaczej to nie jest stawianie.
+
+[zadania.W8.lines.letterEarly]
+Napić się? Nie dziś. Czekam na coś. Jak przyjdzie - pogadamy.
+
+[zadania.W8.lines.wall]
+> (Zza ściany sąsiedniego pokoju głosy. Grum - i ktoś z miękkim, kupieckim głosem. Baltazar.)
+> („...list z pieczęcią, jak obiecałem. Moi mocodawcy - i pańscy - nie lubią czekać.”)
+> (Szelest papieru. Grum czyta na głos, powoli: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)
+> („Świadków?” - „Wszyscy jesteśmy świadkami, panie Grum. Pytanie, czyimi.” Kroki. Drzwi.)
+
+[zadania.W8.lines.crate]
+> (Skrzynia dowódcy pod płachtą namiotu. Wieko luźne. Mapy, rachunki za chleb... i kartka z pieczęcią.)
+> (Kopia rozkazu: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Pod spodem dopisek: „list do G. przez B.V.”)
+
+zadania.W8.lines.crateDay = Kopacze nie śpią - nocą (21–5) i po cichu (C).
+zadania.W8.lines.crateLoud = Za głośno - skradaj się (C).
+[zadania.W8.lines.noteLetter]
+Rozkaz dla Gruma
+Mocodawcy Gruma przysłali mu przez Baltazara list z pieczęcią: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Świadkami są wszyscy, którzy wiedzą - ja też.
+
+[zadania.W8.lines.gate]
+(Grum stoi przed bramą z pali.) Mówią, że za nią mieszkają ci, co wiedzieli za dużo. Kopacze się tu nie zapuszczają.
+> (Za palisadą cisza. Potem zgrzyt - ktoś po drugiej stronie odsuwa belkę. Brama uchyla się. Nikt się nie pokazuje.)
+Wpuszczają nas. Hm. Idę za tobą.
+
+[zadania.W8.lines.osada]
+(Grum zatrzymuje się na skraju kręgu. Ludzie z białymi pasami na ustach siedzą przy płaskim kamieniu i patrzą w skałę. Nikt się nie odwraca.)
+Na wojnie widziałem ludzi bez rąk, bez nóg, bez twarzy. Ci mają wszystko. Tylko nic już dla nich nie waży.
+(Najstarszy z nich podnosi na Gruma oczy. Długo. Grum pierwszy spuszcza wzrok.)
+To jest ta pewność, za którą mi płacą? Absolutna pewność. Tak wygląda. ...Wracajmy. Muszę coś postanowić.
+
+[zadania.W8.lines.noteOsada]
+Osada Milczących
+Za bramą w wąwozie mieszkają Milczący - ludzie, którzy „wiedzieli za dużo”. Siedzą w kręgu z białymi pasami na ustach i patrzą w skałę. Grum zobaczył, co Serce robi z człowiekiem. Musi coś postanowić.
+
+zadania.W8.lines.osadaOpen = Brama otwarta - Grum czeka w Osadzie, przy kręgu.
+zadania.W8.lines.choiceTopic = Musimy pogadać. O tunelu.
+[zadania.W8.lines.choiceAsk]
+Myślałem. Nad Markiem. Nad tymi z białymi pasami. Nad listem.
+Płacą dobrze. Ale nie wiem już, za co. Powiedz mi, po której stronie stoisz - a ja ci powiem, po której stanę ja.
+
+zadania.W8.lines.optHonour = Siłujmy się - na honor.
+zadania.W8.lines.optAlly = Stań po mojej stronie.
+zadania.W8.lines.optFaction = Pracuję dla twoich mocodawców.
+zadania.W8.lines.optFight = Nie pozwolę ci zejść do Serca.
+zadania.W8.lines.optLater = Jeszcze nie.
+[zadania.W8.lines.honourGo]
+Na honor. (Grum wstaje i zdejmuje rękawicę.) Przy wszystkich. Bez stawki.
+
+[zadania.W8.lines.honourWon]
+> („Na honor. Przegrałem uczciwie” - Grum długo patrzy na swoją rękę na blacie. - „Zapamiętam.”)
+
+[zadania.W8.lines.honourLost]
+> („Na honor wygrałem ja” - Grum kładzie twoją rękę na blat. - „Jutro spróbuj znowu, jak chcesz.”)
+
+[zadania.W8.lines.ally]
+(Grum długo milczy. Potem kładzie na stole list z pieczęcią - i drze go na pół.) Dobrze. Twoja strona.
+Ten zawał w tunelu przebijemy razem. My dwaj. Nikt więcej tędy nie zejdzie bez nas. A mocodawcom napiszę, że góry zjadły drogę.
+
+[zadania.W8.lines.faction]
+(Grum przygląda ci się długo.) Pieniądze. Hm. Uczciwe przynajmniej. Masz. Sto groszy zadatku.
+Kopacze przebiją zawał. Ty zaprowadzisz ich dalej. Tylko pamiętaj: świadków nie zostawiać. Ty też jesteś świadkiem.
+
+[zadania.W8.lines.fight]
+(Grum wstaje powoli.) Nie pozwolisz. Hm. Szanuję to.
+Będę przy wejściu do tunelu, w jaskini. Przyjdź. Tam pogadamy po mojemu.
+
+[zadania.W8.lines.choiceLater]
+Myśl. Ja też myślę.
+
+[zadania.W8.lines.noteAlly]
+Grum po mojej stronie
+Grum podarł list mocodawców. Przechodzi na moją stronę - zawał w tunelu kopaczy przebiliśmy razem, my dwaj. Za nim jest przekop na pięćdziesiątym piętrze podziemi.
+
+[zadania.W8.lines.noteFaction]
+Pracuję dla frakcji
+Wziąłem od Gruma sto groszy zadatku: pracuję dla jego mocodawców. Kopacze przebili zawał w tunelu - do pięćdziesiątego piętra podziemi - a ja mam ich prowadzić w dół. „Świadków nie zostawiać.”
+
+zadania.W8.lines.duelShout = Bez urazy, chłopcze. Robota to robota.
+[zadania.W8.lines.duelWon]
+> (Grum klęczy przy wejściu do tunelu. Tarcza leży obok.)
+> („Dobra robota... Odpływam pierwszym promem. Mocodawcy znajdą sobie innego przewodnika - ale nie tak szybko.”)
+
+[zadania.W8.lines.duelKilled]
+> (Grum leży przy wejściu do tunelu i już nie wstanie. Kopacze patrzą z daleka. Nikt nic nie mówi.)
+
+[zadania.W8.lines.duelLost]
+> (Budzę się przy wejściu do jaskini. Grum stał nade mną: „Nie zabijam chłopców. Wracaj na swoją działkę.”)
+> (Z głębi tunelu słychać kilofy. Kopacze przebijają zawał.)
+
+[zadania.W8.lines.duelAway]
+> (Odszedłem od tunelu. Grum czeka dalej - wie, że wrócę.)
+
+[zadania.W8.lines.noteDuelWon]
+Grum pokonany
+Pobiłem Gruma przy wejściu do tunelu kopaczy. Odpłynie pierwszym promem; mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma.
+
+[zadania.W8.lines.noteDuelKilled]
+Grum nie żyje
+Grum zginął przy wejściu do tunelu kopaczy, z mojej ręki. Mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma.
+
+[zadania.W8.lines.noteDuelLost]
+Grum wygrał
+Grum pobił mnie przy wejściu do tunelu - i nie zabił. Kopacze przebili zawał: frakcja idzie w dół, do pięćdziesiątego piętra.
+
+# ======================================================================== QUESTS (zadania)
+# W8
+[zadania.W8.lines.need]
+Żeby iść przeciw tym, co płacą, muszę mieć pewność. Nie tę z jaskini - zwykłą, ludzką.
+Pokaż mi, że ktoś wraca z dołu cały - Marek. Albo że zakon wiedział, co trzyma - ich kroniki. Albo pokonaj mnie na rękę, na honor, przy wszystkich. Dwie z trzech.
+

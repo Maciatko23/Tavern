@@ -1,0 +1,550 @@
+# Teksty paczki A „Woda i zasoby” (wtyczki Zasoby_Data.js i Zasoby.js): źródełka, studnia Rzepków, ule, kręgi, zioła i Jagna, Podgrodzie, zatoczka, sad, zadania K55-K58, D30, D31.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zasoby
+
+# ======================================================================== HERBS (ziola)
+ziola.arcydziegiel.name = Arcydzięgiel
+ziola.dziurawiec.name = Dziurawiec
+ziola.kozlek.name = Kozłek lekarski
+
+# ======================================================================== JAGNA_BUY_TX (jagnaSkup)
+[jagnaSkup.ask]
+Pachnie mi tu skałą i morzem... Ziele z klifu? Z półek, gdzie człowiek nie sięgnie? Kupię, zapłacę uczciwie.
+
+jagnaSkup.no = Nie teraz.
+[jagnaSkup.thanks]
+Dobre, świeże. Na gorączkę i na płuca nie ma lepszego. Przynoś, jak znowu orzeł cię tam zaniesie.
+
+# ======================================================================== JAGNA (mieszkaniec)
+mieszkaniec.name = Babka Jagna
+mieszkaniec.title = zielarka
+[mieszkaniec.barks.work]
+Rosa... rosa jest najlepsza. Ziele pije, póki słońce nie wstanie.
+Kozłek na sen, dziurawiec na smutek, arcydzięgiel na wszystko inne.
+Hm-hm-hm... (nuci coś pod nosem)
+
+[mieszkaniec.barks.stand]
+Kręgi znowu wyszły. Mówiłam, że po deszczu wyjdą.
+Nie wchodź w środek po zmroku, chłopcze. Ja ci mówię.
+
+[mieszkaniec.barks.rain]
+Pij, ziemio, pij.
+
+[mieszkaniec.talk.morning]
+Rano rosa, w południe susza. Zioła zbiera się rano, chłopcze - potem już tylko siano.
+Moja polanka nie jest duża, ale tu jeszcze coś rośnie. Wiesz czemu? Bo nikt jej nie depcze.
+
+[mieszkaniec.talk.day]
+Woda ucieka, a z nią zioła. Gdzie spod kamieni jeszcze się sączy, tam szukaj rzadkiego ziela.
+
+[mieszkaniec.talk.evening]
+Po deszczu wychodzą grzyby w kręgach. Ludzie mówią: czarci krąg. Ja mówię: grzybnia. Ale w środek nocą nie wchodzę.
+
+[mieszkaniec.talk.night]
+Nocą zioła śpią. I ty idź spać.
+
+[mieszkaniec.talk.rain]
+Deszcz! Niech pada, niech pada. Jutro będzie co zbierać.
+
+# ======================================================================== TX
+spring.found = Spod kamieni sączy się czysta woda. Ktoś kiedyś obłożył to miejsce kamieniami.
+spring.menu = Źródełko
+spring.note = Woda ze źródełka: jedna porcja na każde nabranie.
+spring.dry = Ledwie wilgotny mech. Woda wróci po deszczu.
+spring.ice = Lód. Trzeba poczekać na odwilż.
+spring.leftOne = Została jedna porcja na dziś.
+spring.leftN = Zostały {n} porcje na dziś.
+spring.helpPortion = \nŹródełko: każde nabranie zabiera jedną porcję.
+spring.dog = Pies węszy w gąszczu...
+spring.frogs = Gdzieś w lesie rechoczą żaby...
+farm.ruinMenu = Ruina chaty Rzepków
+farm.search = Przeszukaj chatę
+farm.searchHelp = Zajrzyj pod belki i do zawalonej izby.
+farm.searched = Pusta izba. Wszystko, co było coś warte, już zabrałeś.
+farm.letterTitle = List Wojciecha Rzepki
+[farm.letter]
+„Kto to znajdzie - my poszli do miasta. Ziemia nie rodzi, studnia wyschła, a dzieci płaczą z pragnienia.
+Studnia była dobra, kamienna, ojciec ją kopał. Zasypałem ją, żeby bydło nie wpadło. Może kiedyś deszcz wróci.
+Lina i gwoździe w skrzyni pod oknem - weź, komu potrzeba. Wojciech Rzepka.”
+
+farm.gardenMenu = Zdziczały ogródek
+farm.weed = Wypiel ogródek
+farm.weedHelp = Motyką wyrwiesz chwasty: pod nimi dzikie ziemniaki i marchew, a czasem nasiona. Odrasta po 12 dniach.
+farm.gardenDone = Ogródek wypielony. Chwasty odrosną za kilka dni.
+farm.gardenYield = "Spod chwastów: "
+farm.needHoe = Potrzebna motyka.
+farm.fence = Resztki płotu. Deski spróchniałe, słupki krzywe.
+well.menu = Studnia sąsiada
+[well.names]
+Zasypana studnia
+Pusta cembrowina
+Studnia deszczowa
+
+well.clear = Oczyść studnię
+well.clearHelp = Wybierz gruz łopatą. Na dnie coś brzęczy.
+well.fix = Napraw studnię
+well.fixHelp = Nowa cembrowina z bloków, kołowrót na linie, daszek z desek. Młotek.
+well.needShovel = Potrzebna łopata.
+well.needHammer = Potrzebny młotek.
+[well.cleared]
+Studnia oczyszczona
+Na dnie zardzewiałe wiadro - i piach. Woda odeszła stąd dawno.
+
+[well.fixed]
+Studnia naprawiona
+Zbiera tylko deszcz: najwyżej cztery porcje. W upał paruje, zimą zamarza.
+
+well.empty = Sucho. Studnia zbiera tylko deszcz - poczekaj, aż popada.
+well.ice = Woda w studni zamarzła.
+well.noteN = Deszczówka w studni: {n}/4 porcji. Każde nabranie zabiera jedną.
+hive.menu = Dziki ul
+hive.take = Wybierz plaster
+hive.takeHelp = Nożem wytniesz plaster z miodem i woskiem. Bez dymu pszczoły żądlą - weź zapaloną pochodnię albo rozpal ognisko obok.
+hive.needKnife = Potrzebny nóż.
+hive.sleep = Pszczoły śpią w głębi pnia.
+hive.empty = Plaster wybrany. Pszczoły zrobią nowy za kilka dni.
+hive.stung = Pszczoły! Użądlenie!
+hive.calm = Dym usypia pszczoły. Plaster wychodzi czysto.
+hive.spring = Wiosną plaster jeszcze młody - tylko trochę miodu.
+ring.pick = Grzyby z kręgu
+ring.whisper = ...coś szepcze w mgle...
+ring.fog = Mgła siada w środku kręgu.
+herb.notYours = Nie twoje, chłopcze.
+herb.season = Nie jego pora.
+herb.picked = Zerwane. Odrośnie za kilka dni.
+[herb.noticed]
+(Jagna patrzy na ciebie spod chusty.) Byłeś na mojej polance, kiedy mnie nie było.
+Oddaj, co zerwałeś. Ziele z cudzej ziemi nie leczy - ono pamięta, czyje jest.
+
+[herb.first]
+Hm? Bosy chłopak na mojej łące. Rzadki gość.
+Jestem Jagna. Zbieram zioła, póki susza wszystkiego nie spaliła. Moja polanka to moja polanka - pamiętaj.
+
+[herb.ring]
+Byłeś nocą w kręgu, co? Widzę po oczach.
+Mgła, szept... To grzybnia oddycha, chłopcze. Ale ja bym tam drugi raz nie szła.
+
+herb.permit = Jagna pozwala: po jednym zielu z każdej kępy, kiedy odrośnie.
+dump.menu = Wysypisko
+dump.dig = Grzeb w śmieciach
+dump.digHelp = Rękami albo łopatą (łopatą więcej). Raz na dzień - wysypisko daje cztery grzebania dziennie.
+dump.done = Na dziś dość grzebania. Sąsiedzi patrzą krzywo.
+dump.out = Wysypisko przekopane na dziś. Jutro ludzie wyrzucą nowe.
+dump.nothing = Same skorupy.
+dump.found = "Znalezisko: "
+clay.menu = Glinianka
+clay.dig = Kop glinę
+clay.digHelp = Łopatą wybierzesz mokrą glinę na garnki: dwie grudy na raz, najwyżej sześć na dzień z całej glinianki.
+clay.needShovel = Potrzebna łopata.
+clay.out = Na dziś glina wybrana. Ściany muszą odpocząć.
+clay.drink = Napij się
+clay.muddy = Mętna, z gliną. Tego się nie pije.
+clay.water = \nNa dnie po deszczu stoi mętna woda.
+quarry.menu = Ściana ciosowa
+quarry.cut = Wyrąb blok
+quarry.cutHelp = Kilofem odłupiesz blok kamienny (ciężki: 6). Ściana daje sześć bloków na tydzień.
+quarry.needPick = Potrzebny kilof.
+quarry.out = Ściana na razie wybrana. Wróć za kilka dni.
+quarry.got = Blok kamienny wyrąbany
+pool.menu = Kałuża pływowa
+pool.catch = Złap kraba
+pool.catchHelp = Szybko, z boku, za skorupę. Krab ucieka bokiem.
+pool.pinch = Szczypie!
+pool.fled = Krab zwiał pod kamień.
+pool.none = W kałuży nie ma już krabów. Następny odpływ przyniesie nowe.
+pool.salt = Słona. Morskiej wody się nie pije.
+pool.drink = Napij się
+pool.got = Złapany krab
+drift.take = Drewno dryfowe
+drift.got = Drewno dryfowe
+orchard.menu = Spalona jabłonka
+[orchard.stages]
+spalona
+przycięta
+opatrzona
+podlewana
+żyje
+
+orchard.prune = Przytnij spalone gałęzie
+orchard.pruneHelp = Nożycami albo siekierą odetniesz zwęglone gałęzie. Z nich - trochę węgla.
+orchard.dress = Opatrz rany maścią
+orchard.dressHelp = Maść szczepiarska (glina z woskiem) zamyka rany drzewa.
+orchard.water = Podlej drzewo
+orchard.waterHelp = Jedno podlanie konewką dziennie, w trzech różnych dniach. Konewkę napełnisz tylko swoją wodą.
+orchard.pick = Zerwij jabłka
+orchard.needCut = Potrzebne nożyce albo siekiera.
+orchard.needSalve = Brakuje: Maść szczepiarska.
+orchard.needCan = Potrzebna konewka.
+orchard.canEmpty = Konewka pusta.
+orchard.wateredToday = Dziś już podlane.
+orchard.alive = Drzewo żyje. Za kilka dni puści liście.
+orchard.leaves = Liście! Drzewo żyje.
+orchard.noFruit = Jeszcze nie ma owoców.
+orchard.fruit = Dzikie jabłka z sadu Ługów
+field.menu = Pole mieszczan
+field.sow = Dniówka: siew
+field.reap = Dniówka: żniwa
+field.workHelp = Dwadzieścia uderzeń w polu, od szóstej do drugiej. Zapłata: 15 G i trochę plonów. Raz na dzień.
+field.steal = Ukradnij plony
+field.stealHelp = Nikt nie patrzy... Ale ludzie się dowiedzą.
+field.notNow = Na polu nie ma teraz roboty.
+field.doneToday = Dniówka na dziś odrobiona.
+field.paid = Dniówka
+field.stolen = Ktoś cię widział!
+field.hours = Dniówka od szóstej do drugiej po południu.
+garden.menu = Ogródek
+garden.help = Pomóż przy grządkach
+garden.helpHelp = Motyką, od szóstej do południa, raz na dzień. Dostaniesz dwa warzywa.
+garden.steal = Ukradnij warzywa
+garden.stealHelp = Nocą, po cichu. Jeśli ktoś z Podgrodzia zobaczy - wstyd na całą okolicę.
+garden.winter = Zimą grządki śpią.
+garden.doneToday = Dziś już pomagałeś przy grządkach.
+garden.hours = Pomoc przy grządkach od szóstej do południa.
+garden.thanks = Dzięki za pomoc!
+garden.seen = Ktoś cię widział!
+garden.night = Kraść można tylko nocą.
+garden.nothing = Na grządkach nic jeszcze nie urosło.
+garden.stolenRecently = Tu już ktoś niedawno kradł.
+needs.tired = Jesteś zbyt zmęczony
+needs.missingN = Brakuje: {name} {have}/{n}
+
+# ======================================================================== Q_K55 (zadania.K55)
+zadania.K55.title = Świece dla dzwonnika
+zadania.K55.where = dzwonnica → dzikie ule za działką dziadka
+zadania.K55.when = 8-18, od dnia 3
+zadania.K55.desc = Ambrożemu kończą się świece, a w dzwonnicy po ciemku łatwo skręcić kark. Potrzebuje wosku - z dzikich uli w sosnach.
+[zadania.K55.offer.say]
+Świece się kończą, chłopcze. W dzwonnicy po ciemku łatwo skręcić kark na schodach, a kościół biedny.
+Gdybyś trafił na dziki ul... wosk to wosk. Cztery kawałki starczą mi na zimę świec.
+
+zadania.K55.offer.yes = Poszukam wosku.
+zadania.K55.offer.no = Nie teraz.
+[zadania.K55.offer.accept]
+Pszczoły nie lubią gości. Weź dym - zapaloną pochodnię albo ognisko obok. I nóż, bo plaster sam nie wyjdzie.
+
+[zadania.K55.offer.decline]
+Pan Bóg widzi i po ciemku.
+
+zadania.K55.steps.0.text = Przynieś Ambrożemu 4× Wosk pszczeli (dzikie ule w dziuplach sosen za działką dziadka).
+[zadania.K55.steps.0.remind]
+Cztery kawałki wosku. Pszczoły w sosnach za działką twojego dziadka - słyszałem, jak bzyczą.
+
+[zadania.K55.steps.0.hero]
+> Wosk, jak prosiłeś. Cztery kawałki.
+
+[zadania.K55.steps.0.done]
+Pachnie latem... Dobry wosk, żółty. Wystarczy na całą zimę.
+Masz trzydzieści groszy. I dziękuję - w imieniu schodów dzwonnicy.
+
+# ======================================================================== Q_K56 (zadania.K56)
+zadania.K56.title = Ogródki Podgrodzia
+zadania.K56.where = Podgrodzie, ogródki na północy
+zadania.K56.when = 6-12, trzy dni w tygodniu
+zadania.K56.desc = Ogródki pod murem schną, a ręce do pracy w Podgrodziu stare. Babka Jadwiga prosi o trzy dni pomocy przy grządkach w ciągu tygodnia.
+[zadania.K56.offer.say]
+Ogródki pod murem schną, dziecko, a ręce u nas stare. Marta pierze, Franek mały, a ja ledwo się schylam.
+Pomóż przy grządkach trzy dni w tym tygodniu - motyką, nie gadaniem. Zapłacę groszem i ziołami.
+
+zadania.K56.offer.yes = Pomogę.
+zadania.K56.offer.no = Nie dam rady.
+[zadania.K56.offer.accept]
+Rano, od szóstej do południa. Grządki są na północ od chat. Podlewać nie trzeba - wody i tak nie ma.
+
+[zadania.K56.offer.decline]
+Idź z Bogiem.
+
+zadania.K56.steps.0.text = Pomagaj przy ogródkach Podgrodzia (rano 6-12, motyka): {n}/3 dni. Masz na to tydzień.
+zadania.K56.fail.text = Tydzień minął, a grządki same się nie opielą.
+
+# ======================================================================== Q_K57 (zadania.K57)
+zadania.K57.title = Studnia sąsiada
+zadania.K57.where = działka dziadka → zagroda Rzepków na południu
+zadania.K57.when = od dnia 3
+zadania.K57.desc = Za lasem stała zagroda Rzepków. Studnia im wyschła i poszli do miasta. Dziadek myśli, że dałoby się ją wzmocnić - choćby na deszczówkę.
+[zadania.K57.offer.say]
+Wnuku... za lasem, na południe od działki, stała zagroda Rzepków. Wojciech z żoną i dzieciakami. Studnia im wyschła i poszli do miasta.
+Studnia była głęboka, kamienna - stary Rzepka ją kopał. Może dałoby się ją oczyścić i wzmocnić, choćby na deszczówkę. Bliżej niż do miasta.
+
+zadania.K57.offer.yes = Zajrzę tam.
+zadania.K57.offer.no = Później, dziadku.
+[zadania.K57.offer.accept]
+Weź łopatę - gruzu tam pewnie po samą cembrowinę. A na naprawę trzeba porządnych bloków z kamieniołomu w górach, nie polnych kamyków.
+
+[zadania.K57.offer.decline]
+Studnia nie ucieknie. Woda już uciekła.
+
+zadania.K57.steps.0.text = Znajdź opuszczoną zagrodę Rzepków (Kruczy Jar, na południe od działki, za lasem).
+zadania.K57.steps.1.text = Oczyść zasypaną studnię Rzepków łopatą.
+zadania.K57.steps.2.text = Zdobądź materiał na naprawę: Blok kamienny {b}/4 (ściana ciosowa w górach), Lina {l}/2, Deski {d}/2.
+zadania.K57.steps.3.text = Napraw studnię Rzepków młotkiem.
+[zadania.K57.reward.note]
+Studnia Rzepków
+Studnia w zagrodzie Rzepków znowu stoi. Wody w niej nie ma - zbiera tylko deszcz, najwyżej cztery porcje. W upał paruje, zimą zamarza. Ale to zawsze bliżej niż do miasta.
+
+# ======================================================================== Q_K58 (zadania.K58)
+zadania.K58.title = Sad Ługów
+zadania.K58.where = Podgrodzie → Spalona zagroda, sad
+zadania.K58.when = po odbudowie zagrody (D21)
+zadania.K58.desc = Za domem Ługów był sad: osiem jabłonek, które sadził Jan. Spłonęły razem z domem. Marta prosi, żeby spróbować je odratować.
+[zadania.K58.offer.say]
+Za naszym domem był sad. Osiem jabłonek - Jan sadził je, jak się pobraliśmy. Spłonęły razem z domem.
+Mówią, że spalone drzewo można odratować, jak się je przytnie, opatrzy i podleje. Ja nie mam czasu, a ty masz dobre ręce.
+
+zadania.K58.offer.yes = Spróbuję je odratować.
+zadania.K58.offer.no = Nie teraz.
+[zadania.K58.offer.accept]
+Babka Jagna z łąki zna maść do drzew. Glina i wosk - tak mówiła moja matka. Konewka i trochę wody... wiem, wiem. Woda.
+
+[zadania.K58.offer.decline]
+Rozumiem. Sad poczekał tyle lat, poczeka i dłużej.
+
+zadania.K58.steps.0.text = Odratuj spalony sad Ługów (Spalona zagroda): przytnij, opatrz maścią szczepiarską, podlej w trzech dniach. Gotowe drzewa: {n}/8.
+zadania.K58.steps.1.text = Powiedz Marcie, że sad żyje (Podgrodzie).
+[zadania.K58.steps.1.hero]
+> Marto... sad Ługów żyje. Wszystkie osiem drzew.
+
+[zadania.K58.steps.1.done]
+(Marta zakrywa usta dłonią.) Jan by... Jan by się ucieszył.
+Masz, weź te grosze. Jak zakwitną, pójdę je zobaczyć. Z Frankiem.
+
+[zadania.K58.reward.note]
+Sad Ługów
+Osiem jabłonek Jana Ługa żyje. Wiosną zakwitną, latem i jesienią dadzą dzikie jabłka - co kilka dni. Marta czasem przychodzi do sadu w dni z owocami.
+
+# ======================================================================== Q_D30 (zadania.D30)
+zadania.D30.title = Zioła Jagny
+zadania.D30.where = Omszała łąka, polanka Jagny; dzikie zioła przy źródełkach
+zadania.D30.when = rano przy polance; lato (wszystkie trzy zioła)
+zadania.D30.desc = Jagna nauczy maści do drzew i naparu na sen - jeśli przyniesiesz jej trzy rzadkie zioła. Nie z jej polanki: „z ręki, nie z mojej ziemi”.
+[zadania.D30.offer.say]
+Patrzysz na moje kępy, chłopcze. Widzę. Arcydzięgiel, dziurawiec, kozłek - rzadkie, uparte ziele. Rośnie tam, gdzie woda jeszcze nie uciekła.
+Chcesz się czegoś nauczyć? Przynieś mi każde z nich - ale nie z mojej polanki. Z ręki, nie z mojej ziemi. Wtedy pokażę ci maść do drzew i napar na sen.
+
+zadania.D30.offer.yes = Przyniosę.
+zadania.D30.offer.no = Może kiedyś.
+[zadania.D30.offer.accept]
+Arcydzięgiel lubi mokre miejsca, latem i jesienią. Dziurawiec tylko latem, w słońcu. Kozłek - w wilgotnym cieniu, od wiosny do jesieni.
+Szukaj tam, gdzie spod kamieni sączy się woda. I nie depcz mi kęp.
+
+[zadania.D30.offer.decline]
+Ziele poczeka. Ja też, choć mniej niż ziele.
+
+zadania.D30.steps.0.text = Przynieś Jagnie Arcydzięgiel (rośnie dziko przy ukrytym źródełku w lesie; lato i jesień).
+[zadania.D30.steps.0.remind]
+Arcydzięgiel. Wysoki, z białozielonym baldachem. Mokre miejsce, lato albo jesień.
+
+[zadania.D30.steps.0.hero]
+> Arcydzięgiel. Z dzikiego miejsca, nie z twojej polanki.
+
+[zadania.D30.steps.0.done]
+(Jagna wącha łodygę.) Dziki. Dobry. Pachnie wodą spod kamieni.
+Teraz dziurawiec. Tylko latem, chłopcze - w słońcu.
+
+zadania.D30.steps.1.text = Przynieś Jagnie Dziurawiec (dziko przy starym źródle Ługów w Spalonej zagrodzie; tylko latem).
+[zadania.D30.steps.1.remind]
+Dziurawiec. Żółte gwiazdki, a liście pod słońce jakby podziurawione igłą.
+
+[zadania.D30.steps.1.hero]
+> Dziurawiec. Żółty, jak mówiłaś.
+
+[zadania.D30.steps.1.done]
+Ha! Podziurawiony jak sito. Prawdziwy.
+Ostatni: kozłek. Pachnie kotem i snem.
+
+zadania.D30.steps.2.text = Przynieś Jagnie Kozłek lekarski (dziko przy źródełku w mchu na Omszałej łące; wiosna, lato, jesień).
+[zadania.D30.steps.2.remind]
+Kozłek. Różowawe baldachy, korzeń pachnie... no, kotem.
+
+[zadania.D30.steps.2.hero]
+> Kozłek lekarski. Z ręki, nie z ziemi.
+
+[zadania.D30.steps.2.done]
+(Jagna kiwa głową, długo.) Z ręki, nie z ziemi. Dobrze.
+Słuchaj więc. Glina z woskiem - na rany drzew, maść szczepiarska. Kozłek w kociołku, łyk wody - napar na głęboki sen.
+I zrywaj z mojej polanki, kiedy trzeba. Po jednym z kępy. Ziele lubi, jak się je szanuje.
+
+[zadania.D30.reward.note]
+Nauka Jagny
+Maść szczepiarska: Mokra glina + Wosk pszczeli (Wytwórz..., ręcznie) - na rany drzew. Napar z kozłka: Kozłek lekarski + porcja wody w kociołku - pierwszy sen po wypiciu daje więcej sił. Mogę zrywać z polanki Jagny: po jednym zielu z kępy, kiedy odrośnie.
+
+# ======================================================================== Q_D31 (zadania.D31)
+zadania.D31.title = Skarby wysypiska
+zadania.D31.where = Podgrodzie, wysypisko za chatami
+zadania.D31.when = 7-20, od dnia 3
+zadania.D31.desc = Józek Łata szuka na wysypisku trzech rzeczy: swojego medalika, starego klucza z kółkiem i „czegoś z kruczym znakiem”.
+[zadania.D31.offer.say]
+Wysypisko za chatami to moja kopalnia! Ludzie wyrzucają skarby i nawet nie wiedzą.
+Szukam trzech rzeczy: mojego medalika - zgubiłem, jak się trochę zapomniałem; starego klucza z kółkiem; i czegoś z kruczym znakiem. Kupiec z kontynentu płaci za takie.
+
+zadania.D31.offer.yes = Pogrzebię.
+zadania.D31.offer.no = Nie lubię śmieci.
+[zadania.D31.offer.accept]
+Grzebać możesz raz na dzień, bo potem sąsiedzi się drą. Łopatą idzie lepiej, rękami - też idzie.
+
+[zadania.D31.offer.decline]
+Śmieci nie lubią ciebie, ty nie lubisz śmieci. Sprawiedliwie.
+
+zadania.D31.steps.0.text = Szukaj na wysypisku Podgrodzia: medalik, stary klucz, coś z kruczym znakiem. Znalezione: {n}/3.
+zadania.D31.steps.1.text = Zanieś Józkowi znaleziska z wysypiska (kram starzyzny w Podgrodziu).
+[zadania.D31.steps.1.remind]
+Medalik, klucz i to z krukiem. Trzy rzeczy. Liczę na palcach, żeby nie pomylić.
+
+[zadania.D31.steps.1.hero]
+> Medalik, klucz z kółkiem i moneta z krukiem. Wszystko z wysypiska.
+
+[zadania.D31.steps.1.done]
+Mój medalik! Święty Krzysztof, patron podróżnych - a ja nigdzie nie podróżuję. Dlatego zgubiłem.
+A ta moneta z krukiem... Takie bito, zanim tu był jakikolwiek Lord. Stary Kleofas na klifie by wiedział, co to za kruk. Kupiec da za nią dobrze - a ja dam tobie.
+
+[zadania.D31.reward.note]
+Moneta z krukiem
+Na wysypisku Podgrodzia znalazłem starą monetę z wybitym krukiem - Józek mówi, że takie bito, zanim tu był jakikolwiek Lord. Kleofas z klifu może wiedzieć więcej.
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.zas_medalik.name = Medalik ze świętym Krzysztofem
+rzeczy.zas_klucz.name = Stary klucz z kółkiem
+rzeczy.zas_moneta_kruk.name = Moneta z krukiem
+
+# ======================================================================== REMARKS (uwagi)
+# zasJadwigaJagna, mówi: znachorka
+[uwagi.0.lines]
+Słyszałam, że Jagna z łąki pokazała ci maść do drzew. Ho, ho. Mnie przez czterdzieści lat nie pokazała.
+
+# zasFranekSad, mówi: franek
+[uwagi.1.lines]
+Mama mówi, że jabłonki taty żyją! Pójdziemy je zobaczyć, jak zakwitną!
+
+# zasKleofasMoneta, mówi: pustelnik
+[uwagi.2.lines]
+Moneta z krukiem z wysypiska? (Kleofas obraca ją w palcach.) Grosz strażnicy. Płacono nim przewoźnikom zakonu... Dawno. Bardzo dawno.
+
+# ======================================================================== EPILOG (epilog)
+epilog.springs = Źródełka, które znalazłeś w lasach i pod skałami, dalej biją - miska, dwie na dzień, w upał ani kropli. Nie mówisz o nich nikomu.
+epilog.well = Studnia Rzepków za działką dziadka zbiera deszcz w nową cembrowinę. Kiedy pada, ktoś zawsze przychodzi z wiadrem - nie zawsze ty.
+
+# ======================================================================== z kodu Zasoby.js (kod.<funkcja>.<n>, w kolejności kodu)
+# strike
+kod.strike.0 = Brakuje narzędzia
+# workText
+kod.workText.0 = " ({total} uderzeń)"
+# withBlanks
+kod.withBlanks.0 = Znacznik (Zasoby)
+# springEvents
+kod.springEvents.0 = Omszałe kamienie
+# build
+kod.build.0 = Ściana ciosowa
+kod.build.1 = Uderz w kamień
+kod.build.2 = Żyła rudy
+kod.build.3 = Kałuża pływowa
+kod.build.4 = Jabłonka Ługów
+kod.build.5 = Marta Ługowa
+kod.build.6 = Ruina chaty Rzepków
+kod.build.7 = Zdziczały ogródek
+kod.build.8 = Studnia sąsiada
+kod.build.9 = Resztki płotu
+kod.build.10 = Dziki ul
+kod.build.11 = Grządki
+kod.build.12 = Pole mieszczan
+# driftEvents
+kod.driftEvents.0 = Drewno dryfowe
+# useSpring
+kod.useSpring.0 = {name} ({left} na dziś)
+# searchRuin
+kod.searchRuin.0 = Dzień {1}: w ruinie chaty Rzepków (za lasem, na południe od działki) list Wojciecha Rzepki: ziemia nie rodziła, studnia wyschła, poszli do miasta. Studnię zasypał, żeby bydło nie wpadło.
+# useWell
+kod.useWell.0 = {1} ×{n} (masz {3})
+kod.useWell.1 = Materiały już położone.
+kod.useWell.2 = Materiały: {cost}.
+# done
+kod.done.0 = Studnia Rzepków
+kod.done.1 = Dzień {1}: naprawiłem studnię w zagrodzie Rzepków. Zbiera tylko deszcz - najwyżej cztery porcje; w upał paruje, zimą zamarza.
+kod.done.2 = Pomoc przy ogródkach
+kod.done.3 = Dniówka w polu
+# stealPlot
+kod.stealPlot.0 = Kradzież z ogródka
+# useMarta
+kod.useMarta.0 = (Marta zbiera jabłka do fartucha.) Jan sadził je, jak się pobraliśmy. Słyszysz, jak szumią?
+kod.useMarta.1 = Weź sobie, weź. Sad rodzi dla wszystkich - tak by chciał.
+kod.useMarta.2 = Marta Ługowa
+# run
+kod.run.0 = Kradzież z pola
+# glowna
+kod.glowna.0 = Głęboki sen: +20% sił
+# onOff
+kod.onOff.0 = wł.
+kod.onOff.1 = wył.
+# rows
+kod.rows.0 = Idź do: {1} ({2}/{length})   ←→
+kod.rows.1 = ←→ wybierz miejsce paczki A, OK przenosi tam.
+kod.rows.2 = Deszcz wczoraj: {1}
+kod.rows.3 = Udaje deszcz wczoraj (źródełka +1, kręgi grzybów, woda w gliniance). Tylko do końca sesji.
+kod.rows.4 = Upał dziś: {1}
+kod.rows.5 = Udaje upał: źródełka suche, studnia traci porcję. Tylko do końca sesji.
+kod.rows.6 = Śnieg dziś: {1}
+kod.rows.7 = Udaje śnieg: źródełka i studnia zamarzają.
+kod.rows.8 = Pływ: {1}   (OK: odpływ / przypływ / naturalny)
+kod.rows.9 = Kałuże z krabami są tylko w odpływie.
+kod.rows.10 = Sztorm się skończył (drewno z morza)
+kod.rows.11 = Na brzegach (przystań, pustelnia, garnizon) leży nowe drewno dryfowe.
+kod.rows.12 = Studnia sąsiada: etap {wellPick}   ←→ (OK ustawia)
+kod.rows.13 = 0 zasypana, 1 pusta cembrowina, 2 deszczowa (z 4 porcjami).
+kod.rows.14 = Sad Ługów: etap {treePick}   ←→ (OK ustawia)
+kod.rows.15 = 0 spalony, 1 przycięty, 2 opatrzony, 3 podlany raz, 4 żyje (z liśćmi i owocami od zaraz).
+kod.rows.16 = Jagna: D30 krok {1}   ←→ (OK ustawia)
+kod.rows.17 = Zaczyna D30 od wybranego kroku (1 arcydzięgiel, 2 dziurawiec, 3 kozłek) i daje to zioło.
+kod.rows.18 = Pełne źródełka i limity dnia od nowa
+kod.rows.19 = Czyści dzisiejsze nabrania, wysypisko, glinkę, ścianę ciosową, ule, zioła.
+# pick
+kod.pick.0 = Idź do: {1} ({2}/{length})   ←→
+kod.pick.1 = Studnia sąsiada: etap {wellPick}   ←→ (OK ustawia)
+kod.pick.2 = Sad Ługów: etap {treePick}   ←→ (OK ustawia)
+kod.pick.3 = Jagna: D30 krok {1}   ←→ (OK ustawia)
+# ok
+kod.ok.0 = Deszcz wczoraj: {1}
+kod.ok.1 = Upał dziś: {1}
+kod.ok.2 = Śnieg dziś: {1}
+kod.ok.3 = Pływ: {1}
+kod.ok.4 = Morze wyrzuciło drewno
+kod.ok.5 = Studnia: etap {wellPick}
+kod.ok.6 = Sad: etap {treePick}
+kod.ok.7 = Brak TownQuests
+kod.ok.8 = D30: krok {1}
+kod.ok.9 = Limity dnia wyczyszczone
+
+# ======================================================================== QB_TEMPLATES (tablica)
+# zas_dziki_miod
+[tablica.zas_dziki_miod.title]
+Miód na miód pitny
+Dziki miód dla bardki
+
+[tablica.zas_dziki_miod.text]
+Miód pitny sam się nie nastawi, a pszczelarz z miasta chce za garniec tyle, co za pieśń. Przynieś miodu - dzikiego, z dziupli. Słodszy.
+Ballada o pszczołach wymaga miodu. Wszystkie ballady wymagają miodu, ale ta szczególnie.
+
+# zas_ziola_rzadkie
+[tablica.zas_ziola_rzadkie.title]
+Kozłek dla Jagny
+Rzadkie ziele
+
+[tablica.zas_ziola_rzadkie.text]
+Kozłek lekarski, z dzikiego miejsca. Ludzie nie śpią przez tę suszę, a ja nie nadążam z naparem.
+Ziele z wilgotnego cienia - kozłek. Przy źródełkach jeszcze rośnie. Z ręki, nie z mojej polanki.
+
+# zas_bloki
+[tablica.zas_bloki.title]
+Bloki kamienne
+Kamień ciosowy na podmurówkę
+
+[tablica.zas_bloki.text]
+Dwór zamówił podmurówkę pod nową szopę. Polnymi kamieniami nie postawię - potrzeba bloków ciosowych z gór.
+Bloki z kamieniołomu, równe, ciężkie. Plecy mnie bolą od samego myślenia.
+
+# zas_kraby
+[tablica.zas_kraby.title]
+Kraby z ogniska
+Coś z morza na stół
+
+[tablica.zas_kraby.text]
+Goście z promu pytają o kraby. Kraby! W karczmie na wzgórzu! Przynieś pieczone kraby, to im podam.
+Ktoś mi powiedział, że w zatoczce za przystanią w odpływie łazi pełno krabów. Upiecz parę, zapłacę.
+

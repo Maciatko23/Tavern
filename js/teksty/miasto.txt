@@ -1,0 +1,727 @@
+# Teksty miasteczka (wtyczka TownQuests_Data.js): Opinia, powitania, dzień targowy, kalendarz, rzeczy bez bazy, uwagi mieszkańców, Lucjan Kość, plotki K5, podpisy D17.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz miasto
+
+# ======================================================================== OPINION (opinia)
+opinia.tiers.0.name = Obcy
+opinia.tiers.0.text = Obcy chłopak w łachmanach. Ludzie odpowiadają półsłówkami.
+opinia.tiers.1.name = Bywalec
+opinia.tiers.1.text = Znają twoją twarz. Kapral Wit da ci nocną wartę, Ambroży pozwoli ci zadzwonić za siebie.
+opinia.tiers.2.name = Sąsiad
+opinia.tiers.2.text = Mówią ci „dzień dobry”. Ambroży szuka ucznia - może to ty.
+opinia.tiers.3.name = Zaufany
+opinia.tiers.3.text = Ludzie witają cię jak swojego i pytają o zdanie.
+opinia.tiers.4.name = Jeden z nas
+opinia.tiers.4.text = Miasto stanie po twojej stronie, kiedy przyjdzie co do czego.
+
+# ======================================================================== GREET (powitania)
+[powitania.any.0]
+Hm?
+Czego?
+Słucham.
+
+[powitania.any.1]
+A, to ty.
+Dzień dobry.
+Znowu ty? Dobrze.
+
+[powitania.any.2]
+Dzień dobry, sąsiedzie!
+O, sąsiad.
+Dobrze cię widzieć.
+
+[powitania.any.3]
+O, nasz chłopak! Mów, co trzeba.
+Tobie zawsze chętnie.
+
+[powitania.any.4]
+Nasz! Siadaj, mów, co słychać.
+Dla ciebie wszystko, wiesz o tym.
+
+[powitania.kowal.0]
+Hm. Bosy. Czego?
+
+[powitania.kowal.1]
+A, wnuk Stacha.
+
+[powitania.kowal.2]
+Sąsiad! Tylko nie siadaj na gorącym kowadle.
+
+[powitania.kowal.3]
+O, mój pomocnik!
+
+[powitania.kowal.4]
+Ha! Nasz chłop! Dawaj grabę.
+
+[powitania.piekarka.0]
+Tak?
+
+[powitania.piekarka.1]
+A, to ty, kochaneczku.
+
+[powitania.piekarka.2]
+Sąsiad! Pachnie chlebkiem, prawda?
+
+[powitania.piekarka.3]
+Mój złoty chłopak!
+
+[powitania.piekarka.4]
+Synku! Chodź, niech cię uściskam.
+
+[powitania.woziwoda.0]
+Czego? Wody nie ma.
+
+[powitania.woziwoda.1]
+A, to ty.
+
+[powitania.woziwoda.2]
+O, sąsiad.
+
+[powitania.woziwoda.3]
+Ty jesteś w porządku, wiesz?
+
+[powitania.woziwoda.4]
+Przyjacielu!
+
+[powitania.kapral.0]
+Stać. Kto idzie?
+
+[powitania.kapral.1]
+Znam cię. Spocznij.
+
+[powitania.kapral.2]
+Sąsiad. W porządku.
+
+[powitania.kapral.3]
+Dobrze, że jesteś. Spokojniej z tobą w mieście.
+
+[powitania.kapral.4]
+Ty to masz u mnie wolną bramę.
+
+[powitania.dzwonnik.0]
+Kto tam?
+
+[powitania.dzwonnik.1]
+A... ty.
+
+[powitania.dzwonnik.2]
+Witaj, chłopcze.
+
+[powitania.dzwonnik.3]
+Dobrze, że przyszedłeś.
+
+[powitania.dzwonnik.4]
+Mój uczniu...
+
+[powitania.kupiec.0]
+Tak? Czym mogę służyć?
+
+[powitania.kupiec.1]
+A, przyjaciel.
+
+[powitania.kupiec.2]
+Drogi sąsiad!
+
+[powitania.kupiec.3]
+Mój najlepszy klient!
+
+[powitania.kupiec.4]
+Ach, chluba tego miasta!
+
+[powitania.soltys.0]
+Słucham, słucham.
+
+[powitania.soltys.1]
+A, młody od Stacha.
+
+[powitania.soltys.2]
+Dzień dobry, sąsiedzie.
+
+[powitania.soltys.3]
+Dobrze, że jesteś. Potrzebuję rozsądnej głowy.
+
+[powitania.soltys.4]
+Ty to masz u mnie posłuch.
+
+[powitania.garbarz.0]
+Czego? Skóry masz?
+
+[powitania.garbarz.1]
+A, bosy. Dzień dobry.
+
+[powitania.garbarz.2]
+Sąsiad!
+
+[powitania.garbarz.3]
+O, chłopak, co nie marudzi!
+
+[powitania.garbarz.4]
+Nasz! Wchodź, siadaj.
+
+[powitania.feliks.0]
+Słucham? Spieszę się.
+
+[powitania.feliks.1]
+A, wnuk pana Stacha.
+
+[powitania.feliks.2]
+Dzień dobry, młodzieńcze.
+
+[powitania.feliks.3]
+Miło pana widzieć, doprawdy.
+
+[powitania.feliks.4]
+Ach, nasz dobrodziej!
+
+[powitania.bronek.0]
+Ty jesteś ten bosy?
+
+[powitania.bronek.1]
+Cześć!
+
+[powitania.bronek.2]
+Hej, sąsiad!
+
+[powitania.bronek.3]
+To ty! Chodź się bawić!
+
+[powitania.bronek.4]
+Mój najlepszy kolega!
+
+[powitania.zosia.0]
+...Dzień dobry.
+
+[powitania.zosia.1]
+Cześć!
+
+[powitania.zosia.2]
+Dzień dobry, sąsiedzie!
+
+[powitania.zosia.3]
+To ty! Chodź, pokażę ci coś!
+
+[powitania.zosia.4]
+Mój rycerz!
+
+[powitania.ludmila.0]
+Dzień dobry... panie.
+
+[powitania.ludmila.1]
+Dzień dobry.
+
+[powitania.ludmila.2]
+Dobrze, że jesteś.
+
+[powitania.ludmila.3]
+Nasz dobry człowiek.
+
+[powitania.ludmila.4]
+Dla nas jesteś jak rodzina.
+
+[powitania.ela.0]
+...
+
+[powitania.ela.1]
+Cześć.
+
+[powitania.ela.2]
+Hej!
+
+[powitania.ela.3]
+To ty! Mama mówi, że jesteś dobry.
+
+[powitania.ela.4]
+Mój przyjaciel!
+
+[powitania.rafal.0]
+Czego?
+
+[powitania.rafal.1]
+Ty znowu.
+
+[powitania.rafal.2]
+A, to ty. W porządku.
+
+[powitania.rafal.3]
+Dobrze, że to ty.
+
+[powitania.rafal.4]
+Bracie.
+
+[powitania.zlodziej.0]
+Czego? Nic nie wziąłem!
+
+[powitania.zlodziej.1]
+A, bosy. Cześć.
+
+[powitania.zlodziej.2]
+Hej, sąsiad!
+
+[powitania.zlodziej.3]
+To ty! Chodź, pokażę ci skrót przez mur!
+
+[powitania.zlodziej.4]
+Mój brat! No... prawie brat.
+
+[powitania.gracz.0]
+Kości, mój drogi?
+
+[powitania.gracz.1]
+A, znajoma twarz!
+
+[powitania.gracz.2]
+Witaj, przyjacielu!
+
+[powitania.gracz.3]
+Mój ulubiony gracz!
+
+[powitania.gracz.4]
+Ach, sława tego miasta!
+
+[powitania.bartek.0]
+Hm? Ja nic nie mam. Wszystko przegrałem.
+
+[powitania.bartek.1]
+A, to ty.
+
+[powitania.bartek.2]
+Dzień dobry, sąsiedzie.
+
+[powitania.bartek.3]
+Dobry z ciebie człowiek.
+
+[powitania.bartek.4]
+Przyjacielu! Siadaj, choć nie mam czym poczęstować.
+
+[powitania.woznica.0]
+Z drogi, chłopcze.
+
+[powitania.woznica.1]
+A, to ty.
+
+[powitania.woznica.2]
+Dzień dobry.
+
+[powitania.woznica.3]
+O, dobry człowiek!
+
+[powitania.woznica.4]
+Ty to masz u mnie miejsce na koźle.
+
+[powitania.straznik.0]
+Stój. Czego tu?
+
+[powitania.straznik.1]
+Znam cię. Bez hałasu.
+
+[powitania.straznik.2]
+Dzień dobry, sąsiedzie.
+
+[powitania.straznik.3]
+Witaj. Spokojnie dziś w ogrodzie.
+
+[powitania.straznik.4]
+Ty to masz u mnie wolne przejście. Prawie.
+
+# ======================================================================== MARKET (targ)
+[targ.notice]
+Dziś dzień targowy
+Na rynku gwar do drugiej po południu.
+
+[targ.barks.piekarka]
+Dzień targowy! Chleb tańszy, kto pierwszy!
+Bułki z kminkiem, tylko dziś!
+Weź dwa, kochaneczku, drugi taniej!
+
+[targ.barks.woziwoda]
+W targ przydział jak zawsze - po dzbanie na dom!
+Kolejka, ludzie, kolejka!
+
+[targ.barks.kupiec]
+Sukno z kontynentu! Noże, gwoździe, przyprawy!
+Targ to targ - targujmy się!
+Dla przyjaciół rabat. Dla reszty też, tylko mniejszy.
+
+[targ.barks.soltys]
+Ludzie, porządek przy straganach!
+Opłata targowa - grosz od stołu!
+
+[targ.barks.dzwonnik]
+Targ... jak za dawnych lat. Tylko ciszej.
+Dziś dzwon bije weselej.
+
+[targ.barks.kowal]
+Kto kupi podkowę na szczęście?
+Noże ostrzę od ręki!
+
+[targ.barks.garbarz]
+Pasy, rzemienie, sakiewki!
+Buty na miarę - przyjmuję zamówienia!
+
+[targ.barks.kapral]
+Pilnować sakiewek! W tłoku są złodzieje.
+Spokojnie, ludzie, spokojnie.
+
+[targ.barks.gracz]
+Kości! Kto zagra o pięć groszy?
+Dziś szczęście hojne - podejdź, mój drogi!
+
+# ======================================================================== CALENDAR (kalendarz)
+# „Prom po bitwie”
+kalendarz.events.0.title = Prom po bitwie
+kalendarz.events.0.text = Prom przywiezie ludzi z kontynentu - pierwsza fala uchodźców. Pod murem staną namioty.
+# „Druga fala z promu”
+kalendarz.events.1.title = Druga fala z promu
+kalendarz.events.1.text = Namiotów przybędzie, przy beczkach Kuby będą kłótnie, a w ratuszu zebranie: zamknąć bramę dla nowych? Dwór zacznie zbierać zboże na wojnę.
+# „Imieniny Lorda”
+kalendarz.events.2.title = Imieniny Lorda
+kalendarz.events.2.text = U drzwi dworu kolejka z prezentami. Lord lubi miód pitny i placek jagodowy.
+# „Trzecia fala z promu”
+kalendarz.events.3.title = Trzecia fala z promu
+kalendarz.events.3.text = Znowu nowi ludzie z kontynentu. Ceny na tydzień w górę.
+kalendarz.events.3.wait = obóz uchodźców
+# „Noc Kupały”
+kalendarz.events.4.title = Noc Kupały
+kalendarz.events.4.text = Ogniska przy bramie południowej, kwiat paproci w lesie - jedna noc w roku. Jeśli Melia ma całą siódmą balladę, może ją tu zaśpiewać.
+kalendarz.events.4.wait = łąka za bramą i ogniska na mapie (na razie tylko ognisko Melii w jej wątku)
+# „Czwarta fala i noc promu”
+kalendarz.events.5.title = Czwarta fala i noc promu
+kalendarz.events.5.text = Wielki ładunek na przystań. Ktoś będzie chciał coś wywieźć po cichu.
+kalendarz.events.5.wait = przystań i wóz
+# „Dożynki”
+kalendarz.events.6.title = Dożynki
+kalendarz.events.6.text = Wieniec z jęczmienia, konkurs na największą kapustę, uczta Lorda dla miasta. Lord przypomni o długu dziadka.
+kalendarz.events.6.wait = święto na rynku
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.podkowa.name = Podkowa z herbem Lorda
+rzeczy.bochen.name = Bochen od Hanki
+rzeczy.list.name = List dziadka do Lorda
+rzeczy.petycja.name = Petycja sołtysa
+rzeczy.skrzynia.name = Skrzynia Baltazara
+rzeczy.podkowy.name = Podkowy dla straży
+rzeczy.cwieki.name = Ćwieki do butów
+rzeczy.zagiel.name = Żagiel od Marty
+rzeczy.obwieszczenie.name = Obwieszczenie sołtysa
+rzeczy.koszyki.name = Koszyki dla dworu
+rzeczy.lek.name = Lek z kontynentu
+rzeczy.plaszcze.name = Płaszcze od Ignaca
+rzeczy.rysunek.name = Rysunek śluzy (podpisany „F.”)
+rzeczy.pierscionek.name = Pierścionek matki Zosi
+rzeczy.sakiewka.name = Sakiewka dworu
+rzeczy.kroniki.name = Kroniki zakonu
+rzeczy.struna.name = Struna ze ścięgien (dla Melii)
+rzeczy.czapka.name = Czapka Ozzy'ego
+rzeczy.pas.name = Pas siłacza (udźwig +8)
+rzeczy.klucz_borgar.name = Połowa klucza (znad baru Borgara)
+rzeczy.klucz_kopiec.name = Połowa klucza (spod kopca z krukiem)
+rzeczy.klucz_kasztelana.name = Klucz kasztelana
+rzeczy.chusta.name = Chusta Ludmiły (z koniem wyszytym przez Elę)
+
+# ======================================================================== REMARKS (uwagi)
+# kubaFledPiek, mówi: piekarka
+[uwagi.kubaFledPiek.lines]
+Kuba uciekł, a przydziału nie ma. Na czym ja mam chleb piec, kochaneczku? Na ślinie?
+
+# kubaFledKowal, mówi: kowal
+[uwagi.kubaFledKowal.lines]
+Koryto suche. Baltazar chce sześć groszy za wiadro. Sześć! Kto Kubę spłoszył, ten niech teraz za mnie kuje.
+
+# kubaFledKupiec, mówi: kupiec
+[uwagi.kubaFledKupiec.lines]
+Woda? Dla miasta - sześć groszy za wiadro, przyjacielu. Dla ciebie... nie mam. Przykro mi. Naprawdę.
+
+# kubaBack, mówi: woziwoda
+[uwagi.kubaBack.lines]
+Wróciłem. Nie dzięki tobie. Sołtys dał mi jeszcze jedną szansę... to ty mi jej nie psuj.
+
+# kubaResent, mówi: woziwoda
+[uwagi.kubaResent.lines]
+Przez ciebie nie mam towaru. Woda wróciła do studni, a ja zostałem z pustymi beczkami. Wielkie dzięki, chłopcze.
+
+# kubaReveal, mówi: woziwoda
+[uwagi.kubaReveal.lines]
+Woda wróciła do młynówki, a ja zostałem z pustymi beczkami. Sołtys mówi, że mogę nosić wodę do domów. Za grosz. Uczciwy grosz. Jakoś to będzie.
+
+# witDegraded, mówi: kapral
+[uwagi.witDegraded.lines]
+Kapral? Już nie kapral. Zwykły strażnik przy bramie. ...Może i dobrze. Przynajmniej śpię w nocy.
+
+# soltysReveal, mówi: soltys
+[uwagi.soltysReveal.lines]
+Słyszysz młyn? Ruszył! Hanka już nie mieli w żarnach. A studnia daje wiadro więcej na dzień. Niewiele, ale nasze.
+
+# hankaMill, mówi: piekarka
+[uwagi.hankaMill.lines]
+Mąka z młyna! Prawdziwa mąka, nie z żaren! Kochaneczku, chodź tu, niech cię uściskam.
+
+# guardLordW7, mówi: straznik
+[uwagi.guardLordW7.lines]
+Śluza pod oranżerią otwarta do połowy - jaśnie pan sam kręcił kołem. O Feliksie się tu nie mówi. Ogród podlewamy teraz wiadrami. Jak wszyscy.
+
+# guardRevealW7, mówi: straznik
+[uwagi.guardRevealW7.lines]
+Śluza otwarta, młyn ruszył. Jaśnie pan sam stał przy zasuwie - po Feliksie nikomu już nie ufa. Ogród podlewamy teraz wiadrami.
+
+# guardLord, mówi: straznik
+[uwagi.guardLord.lines]
+Feliksa nie ma. Jaśnie pan mówi, że wyjechał. Ogród podlewamy teraz wiadrami. Jak wszyscy.
+
+# guardReveal, mówi: straznik
+[uwagi.guardReveal.lines]
+Feliksa zabrali w kajdanach. Kto by pomyślał - kamerdyner. Ogród podlewamy teraz wiadrami.
+
+# kapralK37, mówi: kapral
+[uwagi.kapralK37.lines]
+Ktoś zgarnął sakiewkę dworu i nie oddał. Ludzie widzieli. Mam cię na oku, chłopcze.
+
+# szymekFree, mówi: zlodziej
+[uwagi.szymekFree.lines]
+Ty jesteś ten, co mnie puścił. Połowę dałem Ludmile, na chleb dla Eli. Drugą połowę... też na chleb.
+
+# bartekShare, mówi: bartek
+[uwagi.bartekShare.lines]
+Lucjan dalej gra na targu i dalej wygrywa. A ty mówiłeś, że mu popatrzysz na ręce...
+
+# grumD6Won, mówi: grum
+[uwagi.grumD6Won.lines]
+Pobiłeś mnie przy wszystkich. W mojej własnej tawernie. ...Dobra robota. Następnym razem nie będzie tak łatwo. Następnym razem zjem śniadanie.
+
+# grumD6Sold, mówi: grum
+[uwagi.grumD6Sold.lines]
+Przegrałeś z woźnicą. Z woźnicą! A kantorowy stał z boku i się uśmiechał. Hm. Nie pytam. Na razie.
+
+# kupiecD6Crossed, mówi: kupiec
+[uwagi.kupiecD6Crossed.lines]
+Wziąłeś moje czterdzieści groszy i wygrałeś. Zapamiętam to sobie, przyjacielu. Ja wszystko pamiętam. Dosłownie wszystko.
+
+# kowalD6Won, mówi: kowal
+[uwagi.kowalD6Won.lines]
+Pierwszy raz od dziesięciu lat ktoś położył Gruma przy ludziach! Ha! A beczkę piwa wypiliśmy we trzech. Głównie ja.
+
+# hankaOven, mówi: piekarka
+[uwagi.hankaOven.lines]
+Tadek załatał mi piec gliną i żelazną obręczą. Skąd ten stary pijak z tawerny wiedział, że pęknie?!
+
+# grumD13, mówi: grum
+[uwagi.grumD13.lines]
+Ten stary pijak. Trzy na trzy. Już przy nim nie piję. Boję się, co powie o mnie.
+
+# meliaBurned, mówi: melia
+[uwagi.meliaBurned.lines]
+Spaliłeś słowa... Może tak trzeba było. Tylko czemu w środku mam teraz tak cicho?
+
+# meliaSung, mówi: melia
+[uwagi.meliaSung.lines]
+Całe miasto śpiewa teraz moją pieśń. Dzieci przy studni, Hanka przy piecu. Nie wiem, czy się cieszyć, czy bać.
+
+# ozzyCapGrum, mówi: grum
+[uwagi.ozzyCapGrum.lines]
+Ozzy ma znowu czapkę. Mówi, że leżała na posągu za murem. Ozzy od tygodnia nie wychodził z tawerny. Sprawdzałem.
+
+# feliksAmbushWon, mówi: feliks
+[uwagi.feliksAmbushWon.lines]
+(Feliks na twój widok o mało nie upuszcza koszyka.) Pan... zdrów? Jak miło. Doprawdy, jak miło.
+
+# feliksRobbed, mówi: feliks
+[uwagi.feliksRobbed.lines]
+Słyszałem o napadzie na Polnej drodze. Straszne czasy, młodzieńcze. Mówiłem - drogi bywają niebezpieczne.
+
+# kapralAmbushWon, mówi: kapral
+[uwagi.kapralAmbushWon.lines]
+Na Polnej drodze ktoś przetrzepał trzech zbirów w kapturach. Bosy, mówią. Nie pytam, kto. Ale dobra robota.
+
+# soltysCistern, mówi: soltys
+[uwagi.soltysCistern.lines]
+Studnia pełna! Pierwszy raz od trzech lat! Klucz noszę przy sobie - racje po równo, dla każdego domu.
+Tobie dalej dwa wiadra na dzień, jak dotąd. Wiem, wiem... Ale ty masz swoją deszczówkę na działce Stacha. A miasto ma tylko tę studnię.
+
+# kubaCistern, mówi: woziwoda
+[uwagi.kubaCistern.lines]
+Rozwożę racje ze studni. Za grosz od domu, z kasy sołtysa. Uczciwy grosz. ...Lżej się nosi, wiesz? Beczka ta sama, a jakby lżejsza.
+
+# hankaCistern, mówi: piekarka
+[uwagi.hankaCistern.lines]
+Woda w studni i mąka z młyna! Kochaneczku, pierwszy chleb z tego ciasta jest twój. Nie dyskutuj.
+
+# tadekCistern, mówi: kowal
+[uwagi.tadekCistern.lines]
+Koryto pełne, młyn się kręci, a ja chłodzę żelazo w prawdziwej wodzie. Ojciec mówił, że zakon wiedział, co robi. Miał rację, stary.
+
+# ambrozyCistern, mówi: dzwonnik
+[uwagi.ambrozyCistern.lines]
+Cztery i dwa... Trzysta lat ten dzwon czekał, żeby ktoś go o to poprosił. Śpię teraz lepiej.
+
+# baltazarCistern, mówi: kupiec
+[uwagi.baltazarCistern.lines]
+Woda w studni. Piękna sprawa, przyjacielu. Dla miasta. (Baltazar uśmiecha się samymi ustami.) Moje beczki w piwnicy straciły połowę ceny.
+
+# feliksCistern, mówi: feliks
+[uwagi.feliksCistern.lines]
+(Feliks patrzy na ciebie długo.) Woda pod rynkiem. Zakonnym kanałem, obok dworu. ...Moje gratulacje, młodzieńcze. Szczerze.
+
+# ludmilaLoaf, mówi: ludmila
+[uwagi.ludmilaLoaf.lines]
+Pani Hanka przysyła nam co rano bochenek. Mówi, że i tak jej zostaje. ...Wiem, że to ty coś jej powiedziałeś. Dziękuję.
+
+# elaLullaby, mówi: ela
+[uwagi.elaLullaby.lines]
+Mama śpiewała mi wczoraj piosenkę zza morza! O łódce i o gwiazdach. Mówi, że od babci. Znasz ją?
+
+# zosiaBell, mówi: zosia
+[uwagi.zosiaBell.lines]
+Pan Ambroży się dziś śmiał! Na wieży! Mama mówi, że od lat nie słyszała, żeby się śmiał.
+
+# ludmilaGiven, mówi: ludmila
+[uwagi.ludmilaGiven.lines]
+Wydałeś go. Za sto dwadzieścia groszy. ...Nie podchodź do Eli. Proszę.
+
+# elaGiven, mówi: ela
+[uwagi.elaGiven.lines]
+(Ela odwraca się i płacze w rękaw.) Rafał robił mi łódki z kory... Gdzie go zabrali?
+
+# kapralGiven, mówi: kapral
+[uwagi.kapralGiven.lines]
+Dezerter siedzi w lochu dworu. Dobra robota, chłopcze. Jaśnie pan pamięta takie rzeczy.
+
+# ludmilaAlly, mówi: ludmila
+[uwagi.ludmilaAlly.lines]
+Rafał wrócił do obozu. Mówi, że siedział tydzień jak mysz pod miotłą. Dziękuję ci - za niego i za nas.
+
+# rafalAlly, mówi: rafal
+[uwagi.rafalAlly.lines]
+Tydzień w ukryciu. Myślałem, że zwariuję. (Rafał ściska ci rękę.) Mam u ciebie dług. Kiedy przyjdzie co do czego - stanę obok ciebie. Z kilofem, z nożem, z czym trzeba.
+
+# ludmilaSmuggled, mówi: ludmila
+[uwagi.ludmilaSmuggled.lines]
+Rafał odpłynął. Zostawił Eli łódkę z kory. ...Mam nadzieję, że tam, dokąd płynie, nie wieszają.
+
+# kupiecSmuggled, mówi: kupiec
+[uwagi.kupiecSmuggled.lines]
+Skrzynia dopłynęła cała, przyjacielu. Skrzynie zawsze dopływają, jeśli się o nie dba. Zapamiętam, że wiesz, jak się u mnie płaci.
+
+# ludmilaTaken, mówi: ludmila
+[uwagi.ludmilaTaken.lines]
+Zabrali Rafała. Związanego. Ela pytała, czy go powieszą. Co miałam jej powiedzieć?
+
+# kapralTaken, mówi: kapral
+[uwagi.kapralTaken.lines]
+Dezertera mamy. Ktoś go chował - nie pytam kto. Tym razem.
+
+# soltysOutside, mówi: soltys
+[uwagi.soltysOutside.lines]
+Brama zamknięta dla nowych. Miasto zdecydowało. ...Dobrze mi z tym nie jest, ale wody nie wyczaruję.
+
+# soltysInside, mówi: soltys
+[uwagi.soltysInside.lines]
+Wpuściliśmy ich. Pracują - na działce Stacha, przy studni, gdzie trzeba. Kłótni przy beczkach mniej. Zobaczymy.
+
+# kubaInside, mówi: woziwoda
+[uwagi.kubaInside.lines]
+Ci nowi noszą ze mną beczki. Za miskę zupy. Dziwne czasy - ale plecy mniej bolą.
+
+# kubaOutside, mówi: woziwoda
+[uwagi.kubaOutside.lines]
+Kolejka przy beczkach krótsza. A za murem, na Podgrodziu, nocą wyją wilki. Nie wiem, co gorsze.
+
+# hankaWigilia, mówi: piekarka
+[uwagi.hankaWigilia.lines]
+Wigilia przy jednym stole z obozem... Kochaneczku, dawno tak nie płakałam przy opłatku.
+
+# grumMarek, mówi: grum
+[uwagi.grumMarek.lines]
+Marek wrócił z jaskini? Żywy, z głową? ...Hm. To jednak można wrócić z dołu cały. Zapamiętam.
+
+# soltysMarek, mówi: soltys
+[uwagi.soltysMarek.lines]
+Słyszałem, kogo przyprowadziłeś z gór. Męża Ludmiły. Zapisałem go do racji - z przyjemnością, pierwszy raz w tym roku.
+
+# ======================================================================== LUCJAN (lucjan)
+lucjan.name = Lucjan Kość
+lucjan.short = Lucjan
+lucjan.role = wędrowny gracz
+lucjan.quote = Kości, mój drogi? Pięć groszy - a może wygrasz dziesięć.
+[lucjan.lines.greet]
+Kości, mój drogi? Pięć groszy - a może wygrasz dziesięć.
+Siadaj, siadaj. Szczęście lubi odważnych.
+
+[lucjan.lines.meFirst]
+Pozwolisz, że zacznę? Kości mnie lubią.
+
+[lucjan.lines.heroFirst]
+Gość przodem. Proszę.
+
+[lucjan.lines.myBig]
+Ach! Co za dzień!
+Widzisz? Szczęście to kwestia wychowania.
+
+[lucjan.lines.myBust]
+Ojej. Nawet szczęście czasem śpi.
+Pudło? Pierwsze w tym tygodniu.
+
+[lucjan.lines.myHot]
+Wszystkie sześć! Kto by pomyślał!
+
+[lucjan.lines.push]
+Jeszcze raz. Kości są ciepłe.
+
+[lucjan.lines.bank]
+Zapiszę. Skromnie.
+
+[lucjan.lines.heroBust]
+Pech, mój drogi. Zdarza się najlepszym.
+Oj. Kości dziś kapryśne.
+
+[lucjan.lines.heroHot]
+Ho, ho! Ktoś tu ma rękę!
+
+[lucjan.lines.heroBig]
+Pięknie rzucone. Prawie jak ja.
+
+[lucjan.lines.heroSmall]
+Ostrożnie, ostrożnie...
+
+[lucjan.lines.win]
+Moje! Dziękuję za grę, mój drogi.
+Szczęście było dziś po mojej stronie. Jak zwykle.
+
+[lucjan.lines.lose]
+Wygrałeś? No proszę... Gratuluję. Szczerze.
+Hm. Kości się pomyliły.
+
+[lucjan.lines.lucky]
+Ta? Zwykła kość. Najzwyklejsza na świecie.
+
+[lucjan.lines.chat]
+Na kontynencie grałem z generałem. Przegrał konia.
+Szczęście to nie grzech, mój drogi. Grzech to nie spróbować.
+
+[lucjan.lines.tired]
+Na dziś dość, mój drogi. Szczęście też musi odpocząć.
+
+# ======================================================================== GOSSIP (plotki)
+[plotki.dzwonnik]
+Chleb? Dziękuję. Słyszałeś w nocy dzwon? Nie? To dobrze. Ludzie powinni spać.
+Dziękuję, chłopcze. Kruki siedzą dziś nisko. Będzie deszcz albo kłopot.
+
+[plotki.kapral]
+Od Hanki? Dobra kobieta. Między nami: do kantoru wnoszą nocą więcej skrzyń, niż przypływa łodzi.
+Dzięki. Dwór kazał liczyć obcych przy bramie. Wychodzi ich więcej, niż wchodzi.
+
+[plotki.ludmila]
+Chleb? Dla nas? ...Dziękuję. Ela, chodź! Wiesz, w nocy ktoś chodzi koło stogów. Z beczkami.
+Dziękuję. Na kontynencie mówią, że wyspa ma pod skałami coś, za co warto ginąć. Tu nikt o tym nie mówi.
+
+[plotki.soltys]
+Dziękuję. Lord znów podnosi podatek - na wojnę. A ogród ma zielony jak na wiosnę.
+Dziękuję. Uchodźców będzie więcej. Gdzie ja ich, na litość, pomieszczę?
+
+# ======================================================================== SIGN (podpisy)
+podpisy.kowal = Petycja? Daj, postawię krzyżyk. Duży, żeby Lord widział.
+podpisy.piekarka = Dziesięć groszy od domu? Z czego, z mąki? Podpisuję, kochaneczku.
+podpisy.woziwoda = Podpiszę... tylko nie mów nikomu, że ja. Lord daje mi przepustkę.
+podpisy.garbarz = Krzyżyk umiem. Na skórze bym ładniej postawił, ale niech będzie.
+podpisy.dzwonnik = Ostatni raz podpisywałem coś dla zamku... dawno. Daj.
+podpisy.kupiec = Podpis kupca kosztuje, przyjacielu. Ale dla ciebie... zgoda.
+podpisy.kupiecAsk = Mój podpis? Jestem tu gościem, przyjacielu. Gość nie podpisuje się pod niczym... za darmo. Trzy wyprawione skóry i postawię najpiękniejszy krzyżyk w mieście.
+podpisy.kapral = Ja służę Lordowi. Nie podpiszę. I nie widziałem, że to nosisz.

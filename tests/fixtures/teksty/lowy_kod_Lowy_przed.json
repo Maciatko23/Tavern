@@ -1,0 +1,168 @@
+{
+ "kod": {
+  "n23": {
+   "0": "Wilcza nora",
+   "1": "Namiot obcych myśliwych"
+  },
+  "n13": {
+   "0": "Gawra (wylot)"
+  },
+  "n21": {
+   "0": "Błotnisko",
+   "1": "Namiot rabusiów"
+  },
+  "n4": {
+   "0": "Zrzucone poroże"
+  },
+  "n24": {
+   "0": "Wyłom (cierń)",
+   "1": "Wyłom w żywopłocie",
+   "2": "Leśniczówka",
+   "3": "Paśnik",
+   "4": "Rysiek Sidło",
+   "5": "Sidła"
+  },
+  "n162": {
+   "0": "Tarcza ({d} kroków)",
+   "1": "Stojak z łukami",
+   "2": "Żołnierz na strzelnicy"
+  },
+  "speaker": {
+   "0": "Rysiek Sidło"
+  },
+  "spawnBountyAt": {
+   "0": "spawnBounty {tpl}: {message}"
+  },
+  "denBroken": {
+   "0": "Nora pod korzeniami",
+   "1": "Rozbiłem watahę spod nory na Skraju lasu. Szczenięta uciekły w gąszcz. Nora będzie pusta przez kilka tygodni."
+  },
+  "befriend": {
+   "0": "Nora pod korzeniami",
+   "1": "Trzy dni zostawiałem mięso przy wilczej norze. Wataha mnie zna: wilki z Leśnej drogi i Skraju lasu mnie nie atakują, a raz w tygodniu przy norze leży zając - dar watahy."
+  },
+  "czoTick": {
+   "0": "Pomogę wam.",
+   "1": "Wynoście się z naszego lasu."
+  },
+  "czoResolve": {
+   "0": "Gawra pod granią",
+   "1": "Przegnałem obcych myśliwych ze Skraju lasu. Niedźwiedź spod grani ma spokój - chodzę przy gawrze, a on mnie nie rusza, póki nie biegnę.",
+   "2": "Pomogłem obcym myśliwym ubić niedźwiedzia spod grani. Zapłacili osiemdziesiąt groszy i powiedzieli, że ich dowódca szuka w górach wejścia pod ziemię - przy obozie kopaczy jest szyb."
+  },
+  "crime": {
+   "0": "Kłusownictwo w zwierzyńcu Lorda",
+   "1": "Stój! Kłusownik!"
+  },
+  "payFine": {
+   "0": "-{fine} G (grzywna)",
+   "1": "Gajowy zabrał mięso i skóry ({n})",
+   "2": "kłusownictwo w zwierzyńcu"
+  },
+  "rysiekList": {
+   "0": "Pójdziesz ze mną do gajowego.",
+   "1": "Uciekaj. Gajowy wie o sidłach."
+  },
+  "rysiekDecide": {
+   "0": "kłusownik wydany gajowemu",
+   "1": "kłusownik ostrzeżony"
+  },
+  "strayAction": {
+   "0": "Puść wolno",
+   "1": "Prowadź dalej",
+   "2": "Prowadzisz już zwierzę.",
+   "3": "Krowa patrzy na ciebie spokojnie.",
+   "4": "Owca drepcze w miejscu.",
+   "5": "Załóż powróz (lina)"
+  },
+  "startRound": {
+   "0": "Strzelaj z łuku (F) do trzech tarcz. Środek 10, pierścień 5, brzeg 2."
+  },
+  "endRound": {
+   "0": "Runda przerwana",
+   "1": "same pudła"
+  },
+  "contestResult": {
+   "0": "Zawody: wygrał {name} ({score} pkt).",
+   "1": "zawody strzeleckie",
+   "2": "Zawody: pokonałeś {beat} z 3 rywali! +{gold} G",
+   "3": "Sierżant Bełt kłania się nisko."
+  },
+  "drillTick": {
+   "0": "Napnij! ...Puść!",
+   "1": "Wiatr od morza, bierz poprawkę.",
+   "2": "Dziesiątka! Widziałeś?",
+   "3": "Łokieć wyżej, ciamajdo."
+  },
+  "vars": {
+   "0": "Niedźwiedź spod grani nie żyje. Wróć do obozu myśliwych na Skraju lasu po zapłatę.",
+   "1": "Upoluj niedźwiedzia spod gawry w Górach (Góry, nad kamieniołomem) i wróć do obozu myśliwych.",
+   "2": "Przegnaj obcych myśliwych: pokonaj wszystkich w ich obozie na Skraju lasu (za dnia)."
+  },
+  "hookQuests": {
+   "0": "zawody strzeleckie"
+  },
+  "talkHook": {
+   "0": "Pokaż skóry",
+   "1": "Nic nie trzeba"
+  },
+  "lookAt": {
+   "0": "> (Z nory dochodzi ciche skomlenie. Wataha cię zna.)",
+   "1": "> (Korzenie, jama, kości. Pachnie wilkiem. Lepiej nie podchodzić bliżej.)",
+   "2": "> (Skórzany namiot. Na kołku kołczan: lotki strzał znaczone białym okiem.)",
+   "3": "> (Połatany namiot. W środku śmierdzi dymem i kwaśnym piwem.)",
+   "4": "> (Leśniczówka gajowego. Nad drzwiami poroże, przy drzwiach róg. Drzwi zamknięte na skobel.)",
+   "5": "> (Paśnik pełen siana. Wokół tropy jeleni.)",
+   "6": "> (Paśnik. Latem pusty - zimą gajowy dokłada tu siana.)",
+   "7": "Żołnierz",
+   "8": "Chcesz postrzelać? Stojak z łukami po lewej. Strzały są wojska.",
+   "9": "Co siódmy dzień są zawody. Sierżant Bełt wygrywa od roku.",
+   "10": "> (Słomiana tarcza na {d} kroków. Pełna dziur.)"
+  },
+  "rangeMenu": {
+   "0": "Najpierw dokończ rundę ({shots}/{shots2})",
+   "1": "Runda ćwiczebna (5 strzał)",
+   "2": "Zawody (dziś!)",
+   "3": "Odejdź",
+   "4": " Dziś zawody, od 10 do 12.",
+   "5": "> (Stojak z łukami. Na desce: „Strzały ćwiczebne - wojsko”.){1}"
+  },
+  "actCall": {
+   "0": "strzała z białym okiem",
+   "1": "Strzały z białym okiem (las)",
+   "2": "Pokazałem bratu Kleofasowi strzałę z obozu obcych myśliwych na Skraju lasu. Te same lotki z białym okiem, co w piersi orlicy na Orlej Grani. Czarne Oczy są już na wyspie - nie tylko na morzu."
+  },
+  "placeLabel": {
+   "0": "Miejsce {1}/{length}: {name}   ←→"
+  },
+  "f9Rows": {
+   "0": "←→ wybierz miejsce paczki B, OK przenosi na nie.",
+   "1": "Wataha i szczenięta przy norze (dzień)",
+   "2": "Dzień (10:00), szczenięta także poza wiosną i latem; przenosi pod norę.",
+   "3": "Zostaw szczenięta: wataha przyjazna ({1})",
+   "4": "Przełącza przyjaźń watahy spod nory (jak po trzech dniach z mięsem).",
+   "5": "Niedźwiedź w gawrze: obudź (zima)",
+   "6": "Dziś jak zima: niedźwiedź śpi w gawrze. Przenosi pod gawrę - zajrzyj, a się obudzi.",
+   "7": "Sól na lizawce + świt w zasiadce",
+   "8": "Sól na 6 dni, godzina 5:30, przenosi do zasiadki.",
+   "9": "Obóz rabusiów teraz (noc)",
+   "10": "Godzina 22:00, obóz przy Leśnej drodze stoi tej nocy.",
+   "11": "Obóz myśliwych Czarnych Oczu teraz",
+   "12": "Godzina 10:00, obóz na Skraju lasu stoi dziś (także przed Aktem II).",
+   "13": "Kłusownictwo: {count} razy   ←→",
+   "14": "←→ ile razy już złapany; OK ustawia (następne złapanie liczy się od tego).",
+   "15": "Zawody strzeleckie dziś",
+   "16": "Dziś zawody, godzina 10:30, przenosi na linię strzału.",
+   "17": "Zbłąkane zwierzęta Ługów",
+   "18": "Przenosi na łąki Spalonej zagrody (lina w torbie)."
+  },
+  "f9Pick": {
+   "0": "Kłusownictwo: {pick} razy (OK ustawia)   ←→"
+  },
+  "f9Ok": {
+   "0": "Wataha przyjazna: {1}",
+   "1": "Kłusownictwo: {count}"
+  }
+ },
+ "_opis": "Napisy kodu Lowy.js sprzed przeniesienia do js/teksty/lowy.txt (kod.*)"
+}

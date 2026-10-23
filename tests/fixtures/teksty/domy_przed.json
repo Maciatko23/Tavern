@@ -1,0 +1,173 @@
+{
+ "slowa": {
+  "znak": "Własność Lorda Leopolda Zaleskiego. Wstęp tylko za zgodą dworu.",
+  "soltys": "Sołtys Bronisław",
+  "konik": "Osmalony konik"
+ },
+ "domy": {
+  "chata": {
+   "name": "Chata pod lasem",
+   "what": "chatę pod lasem na Podgrodziu",
+   "where": "Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki)."
+  },
+  "zagroda": {
+   "name": "Zagroda Ługów",
+   "what": "spaloną zagrodę Ługów",
+   "where": "na zachód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu."
+  }
+ },
+ "zwierzeta": {
+  "cow": [
+   "krowy",
+   "Krowy",
+   "oborze"
+  ],
+  "sheep": [
+   "owce",
+   "Owce",
+   "owczarni"
+  ],
+  "hen": [
+   "kury",
+   "Kury",
+   "kurniku"
+  ]
+ },
+ "etapy": [
+  "zgliszcza",
+  "uprzątnięte zgliszcza",
+  "podmurówka",
+  "ściany z bali",
+  "dach",
+  "gotowy dom"
+ ],
+ "prace": {
+  "0": {
+   "name": "Uprzątnij zgliszcza",
+   "help": "Rozbierz osmalone belki, wynieś popiół i gruz. Potrzebna łopata albo siekiera. Z gruzu coś się jeszcze przyda."
+  },
+  "1": {
+   "name": "Podmurówka",
+   "help": "Kamienie na glinę - nowa podmurówka na starym miejscu."
+  },
+  "2": {
+   "name": "Ściany z bali",
+   "help": "Bale na podmurówce, na zrąb, z otworami na drzwi i okna."
+  },
+  "3": {
+   "name": "Dach",
+   "help": "Krokwie, łaty i strzecha z wiązek włókna."
+  },
+  "4": {
+   "name": "Drzwi, okiennice, palenisko",
+   "help": "Drzwi na żelaznych zawiasach, okiennice, palenisko z cegły z kominem."
+  }
+ },
+ "marta": {
+  "dni": {
+   "0": [
+    "Janku... w naszym domu znowu pali się ogień. Słyszysz? Dym idzie, jak za ciebie.",
+    "(Marta poprawia kwiaty przy krzyżu.) Przychodzę raz na tydzień. Posiedzę, popatrzę na komin - i wracam do prania."
+   ],
+   "1": [
+    "Franek śpi z tym konikiem co noc. Mówi, że koń pachnie domem.",
+    "Dobrze, że tu ktoś mieszka. Ziemia nie lubi być sama."
+   ],
+   "2": [
+    "Jan zawsze mówił, że ta ziemia urodzi, jak się jej da wody. Wody nie ma... a ty i tak sadzisz. Uparty jak on.",
+    "Idź, idź. Ja tu jeszcze chwilę posiedzę."
+   ]
+  }
+ },
+ "zadania": {
+  "D21": {
+   "title": "Spalona zagroda",
+   "where": "Spalona zagroda (na zachód od Skraju lasu), Podgrodzie, ratusz",
+   "when": "po obejrzeniu zgliszcz albo krzyża",
+   "desc": "Za Skrajem lasu stoją zgliszcza zagrody. Pole zarosło, przy lesie stoi brzozowy krzyż. Czyja to ziemia - i czy da się tu jeszcze zamieszkać?",
+   "steps": {
+    "0": {
+     "text": "Zapytaj Józka Łatę na Podgrodziu, czyja to zagroda - handlarz starzyzną wie wszystko o wszystkich.",
+     "say": [
+      "> Józku, za Skrajem lasu stoi spalona zagroda. Czyja to?",
+      "Spalona zagroda? Ługów. Jana Ługa. Sześć lat temu był suchy rok i Jan pożyczył od starego Zaleskiego na ziarno. Od ojca naszego Lorda.",
+      "Nie oddał w terminie. Przyszli ludzie dworu, zmierzyli ziemię... a w nocy dom poszedł z dymem.",
+      "Jan mówił, że to dworscy podpalili. Dwór mówił, że Jan sam, ze złości. Kto by tam dowiódł.",
+      "Wdowa pierze teraz na Podgrodziu - Marta. Jan zmarł zeszłej zimy. Idź do niej, jak chcesz wiedzieć więcej. Tylko delikatnie."
+     ]
+    },
+    "1": {
+     "text": "Porozmawiaj z Martą Ługową (praczka na Podgrodziu) o zagrodzie.",
+     "say": [
+      "> Marto... byłem w zagrodzie za lasem. Józek mówi, że była wasza.",
+      "(Marta długo wyżyma koszulę.) Była nasza. Jan postawił dom własnymi rękami, jak Franek się urodził.",
+      "Wrócić tam? Nie. Tam jest tylko popiół i grób. Franek nawet nie pamięta domu - miał dwa lata.",
+      "Ale wiesz co... chciałabym, żeby ktoś tam znowu palił ogień. Żeby z komina szedł dym, jak za Jana.",
+      "Ziemia jest zapisana na dwór. Sołtys trzyma księgę gruntów - on ci powie, czy da się coś zrobić."
+     ]
+    },
+    "2": {
+     "text": "Idź do sołtysa (ratusz, 8–16) z {price} G: zagrodę można kupić od dworu albo po staremu prawu, przez Martę.",
+     "remind": [
+      "Zagroda Ługów? Ziemia zapisana na dwór, odłogiem od sześciu lat.",
+      "Stare prawo wyspy mówi: ziemia zabrana za długi, co leży odłogiem ponad pięć lat, wraca do rodu, jeśli ród się o nią upomni i zapłaci wpis do księgi.",
+      "Dwór sprzeda ją za {price} G. Po staremu wyjdzie tyle samo: sto wpisu i reszta dla Marty, żeby się zrzekła na ciebie. Wróć z pieniędzmi."
+     ],
+     "say": [
+      "> W sprawie zagrody Ługów. Mam pieniądze."
+     ],
+     "choice": {
+      "ask": [
+       "Dobrze. To jak - od dworu, czy po staremu, przez Martę? Akt dostaniesz ten sam."
+      ],
+      "options": {
+       "0": {
+        "label": "Od dworu (wszystko dla Lorda)",
+        "say": [
+         "(Sołtys posyła chłopca do dworu. Chłopiec wraca po godzinie, zdyszany.)",
+         "Kamerdyner kazał przekazać: „Popiół? Bierz. Tylko nie rozpowiadaj, że dwór handluje popiołem.”",
+         "Masz akt. Ludzie powiedzą, że Lord znowu zarobił na Ługach... ale ziemia twoja."
+        ]
+       },
+       "1": {
+        "label": "Przez Martę (sto do księgi, reszta dla niej)",
+        "say": [
+         "Po staremu, mówisz? Dobrze. Marta była u mnie rano - powiedziała, że jak się ktoś znajdzie, to się zrzeknie.",
+         "Sto do księgi, a resztę zaniosę jej jeszcze dziś. Podpisze krzyżykiem i po sprawie.",
+         "Masz akt. Ziemia twoja - i dobrze zrobiłeś, chłopcze."
+        ]
+       }
+      }
+     }
+    },
+    "3": {
+     "text": "Uprzątnij zgliszcza domu Ługów (łopata albo siekiera; akcja przy zgliszczach)."
+    },
+    "4": {
+     "text": "Zanieś Marcie osmalonego konika, którego znalazłeś w popiele (Podgrodzie).",
+     "remind": [
+      "Coś jeszcze?"
+     ],
+     "hero": [
+      "> Marto, to było w popiele. Pod belką przy piecu."
+     ],
+     "done": [
+      "(Marta bierze konika w obie ręce. Długo nic nie mówi.)",
+      "Jan go wystrugał. Franek nie wypuszczał go z rąk... a potem został w domu, jak uciekaliśmy.",
+      "Franek! Chodź tu, zobacz, co ci przyniósł pan z zagrody. Dziękuję. Nawet nie wiesz, jak bardzo."
+     ]
+    },
+    "5": {
+     "text": "Odbuduj dom Ługów: podmurówka, ściany z bali, dach, drzwi z paleniskiem (akcja przy domu)."
+    }
+   },
+   "reward": {
+    "note": [
+     "Zagroda Ługów",
+     "Dom Ługów stoi znowu. Z komina idzie dym, jak chciała Marta. Pole i podwórze wokół są moje."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Homes.js: WORDS=slowa, HOUSES=domy:/^\\w+\\.(name|what|where)$/, ANIMALS=zwierzeta, STAGE_NAMES=etapy, WORK=prace:/^\\d+\\.(name|help)$/, MARTA_WORDS=marta, D21=zadania.D21:zadanie)"
+}

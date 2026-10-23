@@ -756,51 +756,51 @@
  "ms": {
   "Hero_Walk": {
    "n": 41,
-   "min": 1.2,
-   "max": 7.7,
-   "avg": 2.3
+   "min": 1.1,
+   "max": 8.7,
+   "avg": 2.6
   },
   "Hero_TorchWalk": {
    "n": 38,
-   "min": 2.6,
-   "max": 7.4,
-   "avg": 4
+   "min": 2.8,
+   "max": 9.5,
+   "avg": 4.2
   },
   "Hero_AxeSide": {
    "n": 41,
-   "min": 4.2,
-   "max": 14,
-   "avg": 6.2
+   "min": 4.7,
+   "max": 13.3,
+   "avg": 6.7
   },
   "Hero_Bow": {
    "n": 38,
-   "min": 3.7,
-   "max": 10.6,
-   "avg": 5.5
+   "min": 4.3,
+   "max": 10.7,
+   "avg": 6
   },
   "Hero_Sit": {
    "n": 41,
-   "min": 8.4,
-   "max": 18.7,
-   "avg": 10.9
+   "min": 8.8,
+   "max": 22.1,
+   "avg": 12
   },
   "Hero_LieDown": {
    "n": 38,
-   "min": 7.1,
-   "max": 18.1,
-   "avg": 9.6
+   "min": 7,
+   "max": 20.9,
+   "avg": 10.4
   },
   "Hero_Crouch": {
    "n": 4,
-   "min": 5.6,
-   "max": 18.4,
-   "avg": 11.7
+   "min": 6.2,
+   "max": 22.3,
+   "avg": 13.4
   },
   "Hero_Bust": {
    "n": 4,
-   "min": 3.6,
-   "max": 8.9,
-   "avg": 6
+   "min": 4,
+   "max": 9.8,
+   "avg": 5.6
   }
  }
 }

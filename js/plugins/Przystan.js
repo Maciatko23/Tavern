@@ -5,7 +5,7 @@
 // 128 Komora celna - tools/przystan, docs/przystan/KONCEPCJA.md, approved by the user 2026-10-14). Its people are TownLife residents
 // (TownLife_Data.js: janek 939, przemytnik 940, celnik 941, straznik_przystan 942); their quests are TownQuests' (K47, K48, D20, W10 in
 // TownQuests_Data.js). This plugin is what is the harbour's own:
-//   - the first meetings, before any quest (TownLife.addTalkHook(fn, first)): Janek, who found the hero on the beach, gives back the
+//   - the first meetings, before any quest (Tawerna.talk.takeover, "meet" priority): Janek, who found the hero on the beach, gives back the
 //     mother's scarf the sea threw up with the bundle (item 175, a keepsake); Roch Szkwał, the smuggler of the prologue, alive, hiding
 //     under his first name - "hide that pendant"; the customs officer's ledger
 //   - Janek's trade: he buys the sea's herring (173) and cod (174) and the pond's fish, sells smoked fish
@@ -65,6 +65,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("przystan");   // (the words of this file: js/teksty/przystan.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Przystan.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -270,151 +271,35 @@
     // TEXTS
     // ------------------------------------------------------------------
     const TX = {
-        janekMeet: ["Ej... Ej! To ty! \\N[1], tak? To ty! Myślałem, że nie przeżyjesz. Siny byłeś jak dorsz w listopadzie.",
-            "> To ty mnie znalazłeś? Na plaży?",
-            "Ja. O świcie, pod wydmą, przy tym wraku. W garści list, ani myślałeś go puścić. Na szyi kruk, taki sam jak u Stacha. To wziąłem cię na plecy i do niego.",
-            "> Dziękuję. Nie wiem, jak ci się odwdzięczę.",
-            "Daj spokój. Morze daje, morze bierze. A jak raz odda człowieka żywego, to trzeba go zanieść, gdzie trzeba.",
-            "A! Czekaj. Dwa dni później morze wyrzuciło jeszcze to. (Janek podaje ci mokry tobołek.) Chleb zjadły mewy, ser też. Ale chusta została. Haftowana, ładna."],
-        janekMeet2: ["> To mamy... Haftowała ją całą zimę.",
-            "To trzymaj blisko. ...No! Jakbyś chciał ryby, to wiesz, gdzie Janek. A jakbyś chciał je łowić, przyjdź o świcie. O świcie biorą najlepiej."],
-        rochMeet: ["(Roch patrzy na ciebie długo.) ...No proszę. Chłopak od ostatnich monet. Żyjesz.",
-            "> Ty! Myślałem, że morze cię wzięło. Stałeś przy sterze, a potem ta fala...",
-            "Wzięło. I wypluło. Mnie zawsze wypluwa, nie smakuję mu. Trzy dni siedziałem na skałach za cyplem i piłem deszcz z kamieni. A kuter... sam widziałeś. Leży na plaży jak zdechły wieloryb.",
-            "I ciszej z tym „przemytnikiem”. Tu jestem Roch, co łata sieci i nosi worki, jak przypłynie prom. Celnik Lorda za przemyt zabiera łódź, a człowieka zakuwa.",
-            "> Nikomu nie powiem.",
-            "Wiem. Dlatego jeszcze rozmawiamy. (Roch zerka na twoją szyję.) A to schowaj pod koszulę.",
-            "> Wisiorek? Po dziadku. Matka mi go dała.",
-            "W porcie Czarne Oczy przetrząsały każdą łódź właśnie za takimi kamieniami. Kruk na kamieniu. Kto go miał, ten dalej nie płynął. Czego szukają, nie wiem i wiedzieć nie chcę. Ale ty tego nie noś na wierzchu. Tu też ktoś skupuje kruki.",
-            "Jakbyś chciał pomóc staremu... kuter da się jeszcze połatać. Deski, liny, smoła. Jak znowu popłynie, zawiozę na ląd list do twojej matki. Za darmo. No, prawie za darmo."],
-        celnikMeet: ["Sambor Kwit, celnik dworu. (Celnik nie podnosi oczu znad księgi.) Opłata portowa: dwa grosze od tobołka. Ty nie masz tobołka, więc nic.",
-            "Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Gdybyś jakiś znalazł - przynieś. Zapłacę uczciwie. Zapiszę uczciwie."],
-        janekMenuAsk: ["Co tam, \\N[1]?", "Ryby, pogaduchy, czy tylko przechodzisz?", "Mów, chłopcze. Sieć poczeka."],
-        janekSellNone: ["Nie masz ryb? To łów! Morze pełne, tylko głupie, nie samo do koszyka wskoczy."],
-        janekSold: ["Dobre ryby. Masz, uczciwie, jak u Janka.", "Śledź jak srebro. Masz pieniądze."],
-        janekBuyNo: ["Szesnaście groszy, chłopcze. Na kredyt to ja daję tylko mewom."],
-        janekBuy: ["Masz, prosto z wędzarni. Jeszcze ciepła."],
-        janekBetray: ["Roch... zabrali go. Ktoś doniósł. (Janek długo patrzy w morze.) Nie patrz tak na mnie. Ja nic nie mówię."],
-        rochMenuAsk: ["Czego?", "Mów, chłopcze. Cicho.", "Hm?"],
-        rochNightAsk: ["(Roch mówi szeptem.) Kuter gotowy. Strażnik chodzi po nabrzeżu do dwudziestej drugiej, potem siada przy koksowniku.",
-            "Gdyby ktoś go zagadał... na kwadrans... wypłynę cicho, bez latarni."],
-        rochNightHelp: ["> Zagadam strażnika. Płyń.",
-            "> (Strażnik przy koksowniku słucha twojej opowieści o wilkach z Polnej drogi. Za plecami, bez latarni, kuter odbija od pochylni.)",
-            "@straznik_przystan: ...I co, uciekłeś mu? Ha! Dobry z ciebie gawędziarz. A teraz zmykaj, noc.",
-            "> (Kiedy oglądasz się na morze, kutra już nie ma. Tylko kruk krąży nad wodą.)"],
-        rochNightLater: ["Nie dziś? Dobrze. Kuter poczeka. Ja też."],
         rochNews: [
-            ["Byłem na lądzie. Brzozowa Wola spalona do gołej ziemi. Ludzie poszli za rzekę albo za wojskiem.",
-                "Ale w obozie pod lasem baby gadały o kobiecie w chuście w czerwone kwiaty. Pytała o chłopca z krukiem. Poszła z taborem na północ, za wojskiem."],
-            ["Na lądzie gorzej. Czarne Oczy zajęły port. Prom pływa już tylko z ich pieczęcią."],
-            ["Kamienie z krukiem idą po trzy złote za sztukę. Ktoś je zbiera, i to nie dla pamiątki."],
-            ["W porcie mówią, że ktoś z wyspy płaci za mapy wybrzeża. Złotem, nie miedziakami."],
-            ["Wojsko ściąga każdą łódź na południe. Coś szykują. Albo czegoś szukają."]],
-        rochLetter: ["List do matki? Daj. Schowam pod deskę w dziobie, tam nawet Czarne Oczy nie zaglądają.", "Jak ją znajdę, oddam do rąk. Jak nie - przywiozę, co ludzie mówią."],
-        rochGoods: ["Z lądu przywiozłem to i owo. Drożej niż w mieście, bo i droga dłuższa."],
-        rochGoodsNone: ["Nic dziś nie mam. Następnym razem."],
-        ferry: ["Prom wraca na ląd o trzeciej. Na pokład tylko wojsko i ludzie z glejtem Lorda. Ty glejtu nie masz, chłopcze.",
-            "Listy biorę. Trzy grosze, a celnik i tak każdy przeczyta."],
-        ferryLetter: ["Trzy grosze. Dobrze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem. Odpowiedź, jak będzie, przywiozę."],
-        ferryNews: ["Twój list doszedł do Brzozowej Woli. Wsi już nie ma, chłopcze. Spalona.",
-            "Ale w obozie za rzeką baby gadały o kobiecie w chuście w czerwone kwiaty. Pytała o syna z krukiem na szyi. Poszła z taborem na północ, za wojskiem."],
-        ferryNewsScarf: ["> (Wyjmujesz chustę matki.) Taka chusta? Takie kwiaty?", "Takie same. Tak mówiły. Takie same."],
-        betrayAsk: ["> Panie celniku... na przystani ktoś szykuje kuter. Do przemytu."],
-        betrayYes: ["Kuter? (Celnik odkłada pióro.) Ten łatacz sieci, Roch? Tak myślałem. Nikt nie łata sieci tak długo.",
-            "Dobrze, chłopcze. Dwór pamięta przysługi. Masz, czterdzieści groszy. Wieczorem go zabierzemy. I kuter też."],
+            [],
+            [],
+            [],
+            [],
+            []],
         // (2026-10-15) the red water (CzerwonaWoda.js): why nobody boils the sea, the legend of the blood of Kruczych Skał
-        janekRed: ["Czerwona? To zakwit. W suszę morze przy brzegu gnije jak woda w beczce. Ryby się duszą, fale wyrzucają je na piasek.",
-            "> A gdyby ją przegotować?",
-            "Ojciec próbował. Rok suszy, beczki puste, to nagotował kocioł czerwonej. Pił i mówił, że słona, ale da się. Do rana go skręcało. Przeżył, ale do śmierci nie spojrzał na morze.",
-            "Trucizna zakwitu nie ucieka z parą, chłopcze. Sól też nie. Wodę noszę z miasta, jak wszyscy.",
-            "Starzy gadają, że to krew Kruczych Skał. Że coś pod skałą krwawi do morza, jak przychodzi susza. Bajki... ale w suszę zawsze czerwono."],
-        janekGrey: ["Teraz szara. Deszcz ją przepłukał. Ale dalej słona - nie pij, choćby cię suszyło.",
-            "Za parę dni bez deszczu znowu zakwitnie. Zawsze zakwita. Starzy mówią: krew Kruczych Skał wraca."],
-        rochRed: ["Czerwona woda. Na lądzie mówią, że to znak wojny. Tu mówią, że krew Kruczych Skał. Ja mówię: nie pij i nie zadawaj pytań.",
-            "Raz stałem w ciszy trzy dni na czerwonym. Kucharz pił przegotowaną. Pochowaliśmy go w tej samej wodzie."],
-        refugees: [["Trzy dni na pokładzie. Ziemia się kołysze."], ["Gdzie tu miasto? Mówili, że za lasem, za takim biednym przedmieściem."],
-            ["Celnik zabrał nam dwa grosze i nadzieję. Grosze były ważniejsze."]],
+        refugees: [[], [],
+            []],
         // (2026-10-17) W10 continued: the mother's letters - read in her voice (event 763 with Matka_Bust, the plate "Matka"), who
         // brings them, the hero's answers; grandpa's talk is TownQuests_Data's (W10's step 3)
-        momName: "Matka",
-        ferryLetterIn: ["Ej, chłopcze! Mam coś dla ciebie. Z lądu. (Przewoźnik wyjmuje zza pazuchy złożony list.)",
-            "Pieczęć złamana - celnik czyta wszystko. Ale doszedł."],
-        ferryLetterMore: ["Znowu list do ciebie, chłopcze. Ta sama ręka. (Przewoźnik podaje ci list.)",
-            "Celnik czytał go dłużej niż zwykle. Coś sobie zapisał w księdze."],
-        rochLetterFound: ["Mam coś dla ciebie. (Roch wyjmuje zza kurtki list owinięty w ceratę.)",
-            "Znalazłem ją. Twoją matkę. W taborze, przy kotle z kaszą. Chusta w czerwone kwiaty - poznałem od razu.",
-            "Długo nie gadaliśmy, wojsko patrzy. Napisała to przy kotle, węglem, i kazała oddać do rąk. To oddaję."],
-        rochLetterPort: ["Mam coś dla ciebie. (Roch wyjmuje zza kurtki list owinięty w ceratę.)",
-            "W porcie, w karczmie, leżał list do chłopca z krukiem na wyspie. Nikt nie chciał go wieźć. Wziąłem.",
-            "Celnik go nie widział. Pieczęć cała."],
-        rochLetterMore: ["Znowu list od twojej matki. Szedł przez trzy ręce, zanim trafił do mnie. (Roch podaje ci list w ceracie.)"],
         letters: {
-            1: ["\\N[1], synku. Twój list szedł za mną od spalonej wsi przez trzy obozy. Czytałam go przy ognisku tyle razy, że przetarł się na zgięciach.",
-                "Żyję i jestem zdrowa. Idę z taborem na północ, za wojskiem. Piorę żołnierzom koszule, a wieczorem gotuję kaszę w wielkim kotle. Za to mam miskę i miejsce na wozie.",
-                "Ojca szukam w każdym obozie. Jeden woźnica przysięgał, że widział go jesienią w obozie jeńców za rzeką. Drugi mówi, że poszedł z wojskiem dalej, w góry. Nie wiem, komu wierzyć. Wierzę obu - tak lżej.",
-                "Jak tam mój ojciec? Dalej pali tę swoją fajkę i udaje, że nie płacze? Ucałuj go ode mnie. Zostań przy nim, synku. Słuchaj go, nawet kiedy zrzędzi.",
-                "I uważaj na siebie. Do obozu przychodzą ludzie w zwykłych płaszczach, ale pod spodem noszą białe oko. Pytają o kruki: o kamienie z krukiem i o tych, co je noszą. Schowaj wisiorek.",
-                "Wrócę po ciebie. Nie wiem kiedy, ale wrócę. Twoja mama."],
-            hero1: ["> (Czytasz list drugi raz. Potem trzeci.)", "> ...Żyje."],
             2: {
-                replied: "Synku! Twój list przyszedł w deszczowy dzień i od razu przestało padać. Tak mi się przynajmniej zdawało.",
-                silent: "\\N[1], synku. Nie wiem, czy mój list do ciebie doszedł. Piszę drugi, na wszelki wypadek.",
-                pipe: "Powiedz ojcu, że fajka śmierdzi, bo jej nie czyści. Od trzydziestu lat mu to powtarzam. ...Dobrze wiedzieć, że dalej śmierdzi.",
-                kiss: "Ucałuj ode mnie ojca. Pewnie dalej zrzędzi. Niech zrzędzi - to znaczy, że zdrowy.",
-                gold: "Za twoje pieniądze pisarz w obozie jeńców pokazał mi listę. Ojca na niej nie ma. Ale pół listy zmokło i atrament się rozmył - nie wiem, co było w tamtej połowie.",
-                noGold: "W obozie jeńców za rzeką pisarz ma listę jeńców. Za pokazanie chce srebra. Odkładam po groszu.",
-                food: "Twoja paczka doszła cała. Podzieliłam się z praczkami z taboru - pierwszy raz od jesieni jadłyśmy coś innego niż kaszę. Śmiałyśmy się jak głupie.",
-                land: "Tabor stoi teraz pod miastem, którego nazwy nie wolno pisać. Chleb po trzy grosze, a na drogach więcej wojska niż ludzi. Port zajęły Czarne Oczy - promy pływają tylko z ich pieczęcią.",
-                end: "Nie przestaję szukać. Ty nie przestawaj pisać. Mama.",
-                hero: ["> (Składasz list i chowasz go razem z pierwszym.)"],
-                heroGold: ["> (Pół listy zmokło. Może właśnie w tamtej połowie...)", "> (Składasz list i chowasz go razem z pierwszym.)"]
             },
             3: {
-                open: "Synku, piszę w pośpiechu, przy kaganku, bo o świcie tabor rusza.",
-                belt: "Widziałam pas twojego ojca. Ten z mosiężną klamrą, którą sam wyklepał. Nosił go żołnierz z innej chorągwi. Powiedział, że wygrał go w kości od jeńca. Od żywego jeńca, synku. Od żywego.",
-                north: "Pytałam, gdzie ten jeniec. Wzruszył ramionami: jeńców pędzą na północ, za góry, do kopalni soli. Więc i ja idę na północ.",
-                warn: "W taborze gadają, że Czarne Oczy szykują ludzi na waszą wyspę. Że czegoś szukają pod skałami. Jeśli przyjdą - nie bądź bohaterem. Bądź żywy.",
-                help: "Za to, co mi posłałeś, kupiłam buty na zimę. Stare rozpadły się w błocie. Chodzę w nowych i przy każdym kroku myślę o tobie.",
-                wrote: "Twoje listy noszę za pazuchą. Wszystkie. Papier zrobił się miękki jak płótno.",
-                silent: "Nie wiem, czy moje listy do ciebie dochodzą. Jeśli tak - napisz choć słowo. Jedno.",
-                end: "Nie wiem, czy następny list dojdzie. Ale ja będę pisać. Ucałuj ojca. Mama.",
-                heroBelt: "> (Od żywego jeńca. Czytasz to zdanie, aż litery zaczynają pływać.)",
-                heroCame: "> (Już przyszli, mamo. Byli tu, pod tawerną.)",
-                heroRocks: "> (Pod skałami... Skąd w taborze wiedzą o skałach?)"
             }
         },
-        letterTitles: ["List od mamy", "Drugi list od mamy", "Trzeci list od mamy"],
         reply: {
-            first: "> (Piszesz węglem na papierze od Janka: że jesteś cały, że dziadek zrzędzi i pali fajkę, że morze oddało jej chustę.)",
-            second: "> (Piszesz o działce dziadka, o tawernie Borgara, o Janku i jego śledziach. O ruinach pod tawerną nie piszesz ani słowa.)",
-            more: "> (Piszesz krótko: że żyjesz, że czekasz, że wyspa trzyma się mocno. I że dziadek też.)",
-            pipe: "> (Na końcu dopisujesz od dziadka: „Fajka dalej śmierdzi”.)",
-            gold: "> (Zawijasz w list {n} groszy.)",
-            food: "> (Do listu dokładasz paczkę: to, co się nie zepsuje w drodze.)",
-            ferry: ["Trzy grosze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem."],
-            ferryCut: ["Pieniądze? Celnik weźmie dziesiątą część - cło. Reszta dojdzie, słowo przewoźnika."],
-            roch: ["Pod deskę w dziobie. Tam nawet Czarne Oczy nie zaglądają. Dojdzie do rąk, jak ją znajdę. A znajdę."]
         },
-        replyOpts: { ferry: "Poślij list do mamy (3 G).", roch: "Zawieziesz list do mamy?", plain: "Sam list.", no: "Jednak nie.", gold: "List i {n} G.",
-            food: "List i paczka jedzenia ({n} szt.)." },
-        replyTitles: ["Odpisałem mamie", "Drugi list do mamy", "Trzeci list do mamy"],
-        replyPop: "List do mamy płynie na ląd",
-        foodNeed: "Potrzebujesz 3 sztuk jedzenia, które się nie psuje: ser, wędzonka, wędzona ryba, miód",
-        janekLetter: { prom: "Przewoźnik pytał o ciebie. Ma coś z lądu - leć na molo.", kuter: "Roch cię szukał. Wrócił z lądu i coś dla ciebie ma." },
+        replyOpts: { },
+        janekLetter: { },
         // W10's step lines ({odpis} in TownQuests_Data's W10, FX w10Vars)
-        vars: { write: "Odpisz, jeśli chcesz - następny list i tak przyjdzie, kiedy tabor stanie na dłużej.", sent: "Twój list już płynie - czekaj na odpowiedź.",
-            write2: "Możesz jej odpisać: przewoźnik promu albo Roch.", sent2: "Twój list już płynie." },
+        vars: { },
         // one line in the epilogue after the Heart (Underground.js asks Przystan.epilogue)
         epilog: {
-            none: "Od matki wciąż nie ma listu. Kiedy przypływa prom, przewoźnik z daleka kręci głową - a ty i tak schodzisz na molo.",
-            silent: "Listy od matki leżą w skrzyni, przewiązane jej chustą. Nie odpisałeś na żaden. Ona pisze dalej - coraz krócej.",
-            wrote: "Listy od matki leżą w skrzyni, przewiązane jej chustą. Odpisujesz na każdy. Ojca wciąż szuka - pisze „jeszcze nie znalazłam”, nigdy „już nie szukam”.",
-            helped: "Matka pisze, że to, co jej posłałeś, przeprowadziło ją przez zimę w taborze. Ojca wciąż szuka. Co trzy dni prom przywozi trochę nadziei - i zabiera twoją odpowiedź."
         },
-        f9: { head: "Wątek W10 (list do matki):", label: "W10: przyślij list od matki ({n}. z 3)", none: "W10: wszystkie trzy listy od matki już przyszły",
-            desc: "Następny list od mamy od razu: wątek na właściwym kroku, bohater na przystani, list czyta się zaraz po przejściu.",
-            noQuests: "Brak zadań miasteczka (TownQuests.js)", allIn: "Wszystkie trzy listy od matki już przyszły" }
+        f9: { }
     };
+    Watki.scal(TX, "przystan", "");   // (its words: js/teksty/przystan.txt)
 
     // ------------------------------------------------------------------
     // W10: the letter as it is read (the carrier's words, then the mother's own - her bust - then the hero's) and the answer
@@ -483,14 +368,14 @@
         linesTo(out, spk, [lw ? TX.janekLetter[lw] : pick(TX.janekMenuAsk)]);
         const labels = [], branches = [];
         const fish = [ITEM.herring, ITEM.cod, ITEM.fish].filter(id => count(id) > 0);
-        labels.push(fish.length ? "Sprzedam ryby (" + fish.map(id => item(id).name.toLowerCase() + " ×" + count(id)).join(", ") + ")." : "Kupujesz ryby?");
+        labels.push(fish.length ? Watki.wstaw(TK.kod.janekTalk[0], { "1": fish.map(id => item(id).name.toLowerCase() + " ×" + count(id)).join(", ") }) : TK.kod.janekTalk[1]);
         branches.push(fish.length ? act([], ["sell"]).concat(linesTo([], spk, [pick(TX.janekSold)])) : linesTo([], spk, TX.janekSellNone));
-        labels.push("Kupię wędzoną rybę (" + BUY_SMOKED + " G).");
+        labels.push(Watki.wstaw(TK.kod.janekTalk[2], { BUY_SMOKED: BUY_SMOKED }));
         branches.push(act([], ["buySmoked"]));
         const RW = T.api("CzerwonaWoda");
-        if (RW && RW.seaHere && $gameMap.mapId() === MAP) { labels.push("A ta czerwona woda?"); branches.push(linesTo([], spk, RW.phase().grey ? TX.janekGrey : TX.janekRed)); }
-        labels.push("Co słychać?");
-        branches.push(linesTo([], spk, [usual("janek") || "Morze jak morze."]));
+        if (RW && RW.seaHere && $gameMap.mapId() === MAP) { labels.push(TK.kod.janekTalk[3]); branches.push(linesTo([], spk, RW.phase().grey ? TX.janekGrey : TX.janekRed)); }
+        labels.push(TK.kod.janekTalk[4]);
+        branches.push(linesTo([], spk, [usual("janek") || TK.kod.janekTalk[5]]));
         labels.push("Bywaj.");
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
@@ -502,7 +387,7 @@
         const h = hour();
         if (atStep("D20", 6) && (h >= 20 || h < 2)) {
             linesTo(out, spk, TX.rochNightAsk);
-            return choiceTo(out, ["Zagadam strażnika. Płyń.", "Jeszcze nie dziś."],
+            return choiceTo(out, [TK.kod.rochTalk[0], TK.kod.rochTalk[1]],
                 [act([], ["d20Help"]).concat(linesTo([], spk, TX.rochNightHelp)), linesTo([], spk, TX.rochNightLater)], 1);
         }
         // (W10) a letter from the mother came with the cutter: handed over first
@@ -518,31 +403,31 @@
         }
         linesTo(out, spk, [pick(TX.rochMenuAsk)]);
         const labels = [], branches = [];
-        if (atStep("W10", 0) && f.d20Pomoc) { labels.push("Zawieziesz list do mojej matki?"); branches.push(act([], ["w10Kuter"]).concat(linesTo([], spk, TX.rochLetter))); }
+        if (atStep("W10", 0) && f.d20Pomoc) { labels.push(TK.kod.rochTalk[2]); branches.push(act([], ["w10Kuter"]).concat(linesTo([], spk, TX.rochLetter))); }
         else if (canReply() && rochRuns()) { labels.push(TX.replyOpts.roch); branches.push(replyMenu("kuter", spk)); }
         if (back && back >= day() - 2) {
-            labels.push("Co przywiozłeś z lądu?");
+            labels.push(TK.kod.rochTalk[3]);
             const sub = linesTo([], spk, TX.rochGoods);
-            choiceTo(sub, GOODS.map(([id, p]) => item(id).name + " - " + p + " G").concat(["Nic nie trzeba."]),
+            choiceTo(sub, GOODS.map(([id, p]) => item(id).name + " - " + p + " G").concat([TK.kod.rochTalk[4]]),
                 GOODS.map(([id]) => act([], ["buy", id])).concat([[]]));
             branches.push(sub);
         }
-        if (T.api("CzerwonaWoda")) { labels.push("Czemu ta woda czerwona?"); branches.push(linesTo([], spk, TX.rochRed)); }
-        labels.push("Co słychać?");
-        branches.push(linesTo([], spk, [usual("przemytnik") || "Nic. I dobrze."]));
+        if (T.api("CzerwonaWoda")) { labels.push(TK.kod.rochTalk[5]); branches.push(linesTo([], spk, TX.rochRed)); }
+        labels.push(TK.kod.rochTalk[6]);
+        branches.push(linesTo([], spk, [usual("przemytnik") || TK.kod.rochTalk[7]]));
         labels.push("Bywaj.");
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
     function celnikTalk(ev) {
-        const spk = { id: ev.eventId(), name: "Sambor Kwit" }, out = [];
+        const spk = { id: ev.eventId(), name: TK.kod.celnikTalk[0] }, out = [];
         if (!S().celnikMet) { act(out, ["celnikMet"]); return linesTo(out, spk, TX.celnikMeet); }
         // D20: the hero may give Roch away - in the customs house, at the officer's desk
         if ($gameMap.mapId() === CUSTOMS && atStep("D20", 6) && !flags().d20Wydany) {
-            linesTo(out, spk, [usual("celnik") || "Słucham."]);
-            return choiceTo(out, ["Ktoś szykuje kuter do przemytu.", "Nic, tylko patrzę."],
-                [linesTo([], spk, TX.betrayAsk).concat(choiceTo([], ["Tak. To Roch, ten od sieci.", "Nie... pomyliłem się."],
-                    [act([], ["d20Betray"]).concat(linesTo([], spk, TX.betrayYes)), linesTo([], spk, ["Pomyliłeś się. Dobrze. Ja też się czasem mylę. Rzadko."])], 1)), []], 1);
+            linesTo(out, spk, [usual("celnik") || TK.kod.celnikTalk[1]]);
+            return choiceTo(out, [TK.kod.celnikTalk[2], TK.kod.celnikTalk[3]],
+                [linesTo([], spk, TX.betrayAsk).concat(choiceTo([], [TK.kod.celnikTalk[4], TK.kod.celnikTalk[5]],
+                    [act([], ["d20Betray"]).concat(linesTo([], spk, TX.betrayYes)), linesTo([], spk, [TK.kod.celnikTalk[6]])], 1)), []], 1);
         }
         return null;
     }
@@ -553,9 +438,13 @@
         if (key === "celnik") return celnikTalk(ev);
         return null;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: Janek, Roch and the officer - first meetings and their menus before the
+    // quests ("meet"; the quests' hand-ins come through their questWants), after the other plugins' errands at them (as the old hooks)
     function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook && !hookTalk.done) { hookTalk.done = true; L.addTalkHook((key, ev) => { try { return hook(key, ev); } catch (e) { console.error("[Przystan]", e); return null; } }, true); }
+        if (hookTalk.done) return;
+        hookTalk.done = true;
+        T.talk.takeover({ owner: PLUGIN, who: ["janek", "przemytnik", "celnik"], priority: T.talk.PRIORITY.meet,
+            run: ctx => { try { return hook(ctx.who, ctx.ev); } catch (e) { console.error("[Przystan]", e); return null; } } });
     }
     hookTalk();
 
@@ -566,7 +455,7 @@
         if (!ev || (ev._przystan && ev._przystan.hidden)) return;
         const out = [];
         if (who === "ferry") {
-            const spk = { id: ev.eventId(), name: "Przewoźnik promu" }, f = flags(), lk = letterNo();
+            const spk = { id: ev.eventId(), name: TK.kod.talk[0] }, f = flags(), lk = letterNo();
             if (atStep("W10", 1) && f.w10Prom && day() >= S().letterDay + 3) {
                 linesTo(out, spk, TX.ferryNews);
                 if (count(ITEM.scarf) > 0) linesTo(out, spk, TX.ferryNewsScarf);
@@ -575,9 +464,9 @@
                 letterList(lk, "prom", spk).forEach(c => out.push(c));   // (W10: a letter from the mother)
             } else {
                 linesTo(out, spk, TX.ferry);
-                if (atStep("W10", 0)) choiceTo(out, ["Weź list do mojej matki (" + LETTER_FERRY + " G).", "Nie, dziękuję."],
+                if (atStep("W10", 0)) choiceTo(out, [Watki.wstaw(TK.kod.talk[1], { LETTER_FERRY: LETTER_FERRY }), TK.kod.talk[2]],
                     [act([], ["w10Ferry"]).concat(linesTo([], spk, TX.ferryLetter)), []], 1);
-                else if (canReply()) choiceTo(out, [TX.replyOpts.ferry, "Nie, dziękuję."], [replyMenu("prom", spk), []], 1);
+                else if (canReply()) choiceTo(out, [TX.replyOpts.ferry, TK.kod.talk[2]], [replyMenu("prom", spk), []], 1);
             }
         } else {
             const spk = { id: ev.eventId(), name: ev.event().name };
@@ -596,13 +485,13 @@
                 if (!f.janekMet) {
                     setFlag("janekMet");
                     if (count(ITEM.scarf) < 1 && item(ITEM.scarf)) $gameParty.gainItem(item(ITEM.scarf), 1);
-                    T.popup("Chusta matki", { top: true, color: "#ffd23f", sub: "Morze oddało ją razem z tobołkiem. Pamiątka." });
-                    note("Chusta matki", "Rybak Janek znalazł mnie na plaży i zaniósł do dziadka. Dwa dni później morze wyrzuciło mój tobołek: została tylko chusta mamy, haftowana w czerwone kwiaty.");
+                    T.popup(TK.kod.actCall[0], { top: true, color: "#ffd23f", sub: TK.kod.actCall[1] });
+                    note(TK.kod.actCall[0], TK.kod.actCall[2]);
                 }
             } else if (what === "rochMet") {
                 if (!f.rochMet) {
                     setFlag("rochMet");
-                    note("Przemytnik żyje", "Przemytnik, który przewiózł mnie kutrem, przeżył sztorm. Na przystani mówią na niego Roch. Kazał schować wisiorek: na lądzie Czarne Oczy szukają kamieni z krukiem, a na wyspie ktoś je skupuje.");
+                    note(TK.kod.actCall[3], TK.kod.actCall[4]);
                 }
             } else if (what === "celnikMet") {
                 S().celnikMet = day();
@@ -616,20 +505,20 @@
                 }
                 if (gold > 0) { $gameParty.gainGold(gold); S().sold += gold; T.popup("+" + gold + " G", { icon: COIN_ICON, kind: "good" }); }
             } else if (what === "buySmoked") {
-                if ($gameParty.gold() < BUY_SMOKED) { T.popup.need(COIN_ICON, "Potrzebujesz " + BUY_SMOKED + " G"); stop(); return; }
+                if ($gameParty.gold() < BUY_SMOKED) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.actCall[5], { BUY_SMOKED: BUY_SMOKED })); stop(); return; }
                 $gameParty.loseGold(BUY_SMOKED);
                 $gameParty.gainItem(item(ITEM.smokedFish), 1);
             } else if (what === "buy") {
                 const g = GOODS.find(x => x[0] === a);
                 if (!g) return;
-                if ($gameParty.gold() < g[1]) { T.popup.need(COIN_ICON, "Potrzebujesz " + g[1] + " G"); stop(); return; }
+                if ($gameParty.gold() < g[1]) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.actCall[6], { "1": g[1] })); stop(); return; }
                 $gameParty.loseGold(g[1]);
                 $gameParty.gainItem(item(g[0]), 1);
             } else if (what === "d20Help") {
                 if (!f.d20Pomoc && atStep("D20", 6)) {
                     S().runDay0 = hour() < 6 ? day() - 1 : day();
                     setFlag("d20Pomoc");
-                    note("Kuter wypłynął", "Zagadałem strażnika przy koksowniku, a Roch wypłynął nocą połatanym kutrem. Będzie pływał na ląd co kilka nocy i przywoził wieści - i towary.");
+                    note(TK.kod.actCall[7], TK.kod.actCall[8]);
                 }
             } else if (what === "d20Betray") {
                 if (!f.d20Wydany && atStep("D20", 6)) {
@@ -638,22 +527,22 @@
                     setFlag("d20Wydany");
                     const L = TL();
                     if (L && L.setGone) L.setGone("przemytnik", true);
-                    note("Wydałem Rocha", "Doniosłem celnikowi na Rocha i jego kuter. Dostałem czterdzieści groszy. Wieczorem go zabrali - i kuter też.");
+                    note(TK.kod.actCall[9], TK.kod.actCall[10]);
                 }
             } else if (what === "rochNews") {
                 S().newsGiven = Math.max(S().newsGiven, a || 0);
-                if (b && f.w10Kuter && atStep("W10", 1)) newsOfMother("Roch przywiózł z lądu");
+                if (b && f.w10Kuter && atStep("W10", 1)) newsOfMother(TK.kod.actCall[11]);
                 else S().newsN = (S().newsN || 0) + 1;
             } else if (what === "w10Kuter") {
                 if (atStep("W10", 0)) { S().letterDay = day(); S().letterHour = hour(); setFlag("w10Kuter"); }
             } else if (what === "w10Ferry") {
                 if (!atStep("W10", 0)) return;
-                if ($gameParty.gold() < LETTER_FERRY) { T.popup.need(COIN_ICON, "Potrzebujesz " + LETTER_FERRY + " G"); stop(); return; }
+                if ($gameParty.gold() < LETTER_FERRY) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.actCall[12], { LETTER_FERRY: LETTER_FERRY })); stop(); return; }
                 $gameParty.loseGold(LETTER_FERRY);
                 S().letterDay = day(); S().letterHour = hour();
                 setFlag("w10Prom");
             } else if (what === "ferryNews") {
-                if (atStep("W10", 1)) newsOfMother("Przewoźnik promu przywiózł");
+                if (atStep("W10", 1)) newsOfMother(TK.kod.actCall[13]);
             } else if (what === "w10Open") {
                 // (the mother's voice: her silent event beside the hero, so the talk's bubble has her bust)
                 const ev = $gameMap.mapId() === MAP ? $gameMap.event(MOTHER) : null;
@@ -677,7 +566,7 @@
         const w = W(), k = w.got.length;
         if (!k || replyTo(k)) { stop(); return; }
         const fee = via === "prom" ? LETTER_FERRY : 0, g = gift === "g1" ? W10.gold[0] : gift === "g2" ? W10.gold[1] : 0;
-        if ($gameParty.gold() < fee + g) { T.popup.need(COIN_ICON, "Potrzebujesz " + (fee + g) + " G"); stop(); return; }
+        if ($gameParty.gold() < fee + g) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.replyAct[0], { "1": fee + g })); stop(); return; }
         const names = [];
         let food = 0;
         if (gift === "food") {
@@ -703,11 +592,9 @@
         w.food += food;
         setFlag("w10Odpisal");
         if (net || food) setFlag("w10Pomoc");
-        const text = "Posłałem list do mamy " + (via === "prom" ? "promem (celnik go przeczyta)" : "kutrem Rocha") +
-            (g ? ", a w nim " + net + " G" + (net !== g ? " (z " + g + " G dziesiątą część wziął celnik)" : "") : "") +
-            (food ? ", do tego paczkę: " + names.join(", ") : "") + "." + (gp ? " Dopisałem od dziadka: „Fajka dalej śmierdzi”." : "");
+        const text = Watki.wstaw(TK.kod.replyAct[7], { "1": via === "prom" ? TK.kod.replyAct[1] : TK.kod.replyAct[2], "2": g ? Watki.wstaw(TK.kod.replyAct[4], { net: net, "2": net !== g ? Watki.wstaw(TK.kod.replyAct[3], { g: g }) : "" }) : "", "3": food ? Watki.wstaw(TK.kod.replyAct[5], { "1": names.join(", ") }) : "", "4": gp ? TK.kod.replyAct[6] : "" });
         note(TX.replyTitles[Math.min(w.replies.length, TX.replyTitles.length) - 1] + (w.replies.length > TX.replyTitles.length ? " (" + w.replies.length + ")" : ""), text);
-        T.popup(TX.replyPop, { top: true, color: "#ffd23f", sub: via === "prom" ? "Promem, przez ręce celnika." : "Kutrem Rocha, pod deską w dziobie." });
+        T.popup(TX.replyPop, { top: true, color: "#ffd23f", sub: via === "prom" ? TK.kod.replyAct[8] : TK.kod.replyAct[9] });
     }
     // (the mother's bust is asked for before her first words: SpeechBubbles checks a tag's picture once, then knows it)
     function probeBust(ev) {
@@ -717,7 +604,7 @@
     function newsOfMother(who) {
         if (flags().w10Wiesc) return;
         setFlag("w10Wiesc");
-        note("Wieści o mamie", who + " wieści z lądu: Brzozowa Wola spalona. W obozie za rzeką widziano kobietę w chuście w czerwone kwiaty - pytała o chłopca z krukiem. Poszła z taborem na północ, za wojskiem.");
+        note(TK.kod.newsOfMother[0], Watki.wstaw(TK.kod.newsOfMother[1], { who: who }));
     }
 
     // ------------------------------------------------------------------
@@ -728,7 +615,7 @@
         if (!q || !q.FX || hookQuests.done) return;
         hookQuests.done = true;
         q.FX.k47Rod = { pick() {
-            if (count(ITEM.rod) > 0) { T.popup("Przecież masz wędkę", { icon: item(ITEM.rod).iconIndex, color: "#ffe9a8" }); return; }
+            if (count(ITEM.rod) > 0) { T.popup(TK.kod.pick[0], { icon: item(ITEM.rod).iconIndex, color: "#ffe9a8" }); return; }
             $gameParty.gainItem(item(ITEM.rod), 1);
         } };
         q.FX.d20Noc = { check: () => !!(flags().d20Pomoc || flags().d20Wydany) };
@@ -760,14 +647,15 @@
     // The ferryman and the people off the ferry (ids 760-779, Map125) - there only while the ferry is (Przystan's update)
     // ------------------------------------------------------------------
     const PEOPLE = [
-        { id: 760, name: "Przewoźnik promu", sheet: "$Npc_Kopacz", x: 11, y: 17, d: 2, who: "ferry", show: () => ferryNow() },
-        { id: 761, name: "Człowiek z promu", sheet: "$Npc_Bogdan", x: 15, y: 16, d: 6, who: "refugee", show: () => waveNow() },
-        { id: 762, name: "Kobieta z promu", sheet: "$Npc_Halina", x: 16, y: 16, d: 4, who: "refugee", show: () => waveNow() },
+        { id: 760, sheet: "$Npc_Kopacz", x: 11, y: 17, d: 2, who: "ferry", show: () => ferryNow() },
+        { id: 761, sheet: "$Npc_Bogdan", x: 15, y: 16, d: 6, who: "refugee", show: () => waveNow() },
+        { id: 762, sheet: "$Npc_Halina", x: 16, y: 16, d: 4, who: "refugee", show: () => waveNow() },
         // (W10) the mother's voice: never seen, never started - the letters' speaker (her bust, the plate "Matka"); moved beside the
         // hero as a letter is read (act w10Open)
-        { id: MOTHER, name: "Matka (list)", sheet: "$Npc_Halina", x: 12, y: 18, d: 2, who: "mother", show: () => false,
+        { id: MOTHER, sheet: "$Npc_Halina", x: 12, y: 18, d: 2, who: "mother", show: () => false,
           note: "<Bust:Matka_Bust><BustName:Matka>" }
     ];
+    Watki.scal(PEOPLE, "przystan", "ludzie");   // (its words: js/teksty/przystan.txt, ludzie)
     function personData(p) {
         const page = {
             conditions: { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
@@ -814,20 +702,16 @@
         const ev = byName(), k = kuterState(), away = kuterAway();
         const show = (name, on) => (ev[name] || []).forEach(e => setShown(e, on));
         show("Prom", ferryNow());
-        show("Łódź Janka", !janekAtSea());
-        show("Kuter: wrak na plaży", k === "beach");
-        show("Kuter: na pochylni", k === "slip");
+        show(TK.kod.sync[0], !janekAtSea());
+        show(TK.kod.sync[1], k === "beach");
+        show(TK.kod.sync[2], k === "slip");
         // (on a run night the cutter goes once Roch is aboard: he walks to it and is gone - then it sails)
         const L = TL(), roch = L && L.eventOf ? L.eventOf("przemytnik") : null, aboard = !roch || !!(roch._town && roch._town.hidden);
-        show("Kuter: na wodzie", k === "water" && !(away && aboard));
+        show(TK.kod.sync[3], k === "water" && !(away && aboard));
         for (const p of PEOPLE) setShown($gameMap.event(p.id), p.show());
     }
     // a thing hidden (the ferry on other days, the cutter that is elsewhere, the ferryman away) never starts
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (this._przystan && this._przystan.hidden) return;
-        _Game_Event_start.call(this);
-    };
+    T.onEventStart(ev => !!(ev._przystan && ev._przystan.hidden), { owner: PLUGIN, priority: "hidden" });   // (the core's one start hook, 2026-10-23)
     const _Game_Map_setupEvents = Game_Map.prototype.setupEvents;
     Game_Map.prototype.setupEvents = function() {
         _Game_Map_setupEvents.call(this);
@@ -863,7 +747,7 @@
         $gameTemp._w10Play = 0;
         if (letterNo() !== k) return;
         const ev = $gameMap.event(760), here = ev && !(ev._przystan && ev._przystan.hidden);
-        $gameMap._interpreter.setup(letterList(k, "prom", { id: here ? 760 : -1, name: "Przewoźnik promu" }).concat([C(0, [])]), 0);
+        $gameMap._interpreter.setup(letterList(k, "prom", { id: here ? 760 : -1, name: TK.kod.playPending[0] }).concat([C(0, [])]), 0);
     }
     // one line for the epilogue after the Heart: null - the hero never wrote to her
     function epilogue() {
@@ -893,7 +777,7 @@
             };
             P.isleRows._w10 = true;
             const names = this._tabs && this._tabs._list ? this._tabs._list.map(c => c.name) : [];
-            if (L._tab === names.indexOf("Wyspa i fabuła")) L.setTab(L._tab, L.index());   // (opened on the island tab: read again)
+            if (L._tab === names.indexOf(TK.kod.create[0])) L.setTab(L._tab, L.index());   // (opened on the island tab: read again)
         };
         const _ok = SD.prototype.onIsleOk;
         SD.prototype.onIsleOk = function(row) {

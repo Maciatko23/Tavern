@@ -55,12 +55,14 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("cysterna");   // (the words of this file: js/teksty/cysterna.txt, kod.*)
 
     const T = window.Tawerna, D = window.CysternaData;
     if (!T) throw new Error("Cysterna.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     if (!D) throw new Error("Cysterna.js: brak Cysterna_Data.js - musi być wyżej na liście wtyczek (the cistern's data is missing)");
     const PLUGIN = "Cysterna";
-    const MAP = D.MAP, F30 = D.FLOOR30, URW = D.URWISKO, TOWN = D.TOWN, R = D.RESERVE, TX = D.TX;
+    const MAP = D.MAP, F30 = D.FLOOR30, URW = D.URWISKO, TOWN = D.TOWN, R = D.RESERVE, TX = D.TX;   // (TX: js/teksty/cysterna.txt; TX.kod - the words of this file)
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
     const HERO = { id: 0, name: "" };
     const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
     const has = () => !!window.$gameSystem;
@@ -155,8 +157,8 @@
         if (s.reserve < R.low && !s.low) {
             s.low = day();
             setFlag("cysternaNisko");
-            const got = T.call("TownQuests", "addOpinion", R.lowOpinion, "Cysterna zakonu") || 0;
-            T.popup(TX.lowNotice, { top: true, color: "#ff9f8f", sub: TX.lowSub + (got ? "  ·  Opinia " + got : "") });
+            const got = T.call("TownQuests", "addOpinion", R.lowOpinion, TX.kod.opiniaNisko) || 0;
+            T.popup(TX.lowNotice, { top: true, color: "#ff9f8f", sub: TX.lowSub + (got ? fill(TX.kod.opinia, { n: got }) : "") });
             autoChecks();
         } else if (s.reserve >= R.lowBack && s.low) s.low = 0;
     }
@@ -399,7 +401,7 @@
                 if (list.length < n) list.push({ water: max, uses: 0 });
                 else { const v = list.slice(-n).reverse().find(x => (x.water || 0) < max); v.water = max; }
                 T.audio.se("Water2", { volume: 75, pitch: 100 });
-                pop("Garnek pełny (" + max + "/" + max + ")", icon, "#9fd4ff");
+                pop(fill(TX.kod.garnekPelny, { n: max }), icon, "#9fd4ff");
                 useDraw("pot");
                 return true;
             } };
@@ -420,7 +422,7 @@
         if (!scene || typeof scene.openFarmMenu !== "function") return false;
         const parts = T.api("Farming_parts"), well = parts && parts.plots && parts.plots.wellEntries ? parts.plots.wellEntries() : [];
         const entries = [drinkEntry(), wellEntry(well[1], "skin"), wellEntry(well[3], "bucket"), potEntry(), wellEntry(well[2], "can")].filter(Boolean);
-        scene.openFarmMenu(TX.menuTitle + " (zapas " + Math.round(level()) + "/100)", entries, "", 0, null, null, TX.menuNote);
+        scene.openFarmMenu(fill(TX.kod.menuZapas, { tytul: TX.menuTitle, n: Math.round(level()) }), entries, "", 0, null, null, TX.menuNote);
         return true;
     }
     function ladle(interp) {
@@ -439,7 +441,7 @@
         if (!has()) return;
         settle();
         const lv = level(), k = Math.min(10, Math.floor(lv / 10));
-        runList(interp, plain([], "Słup miary", [TX.post(lv, D.ORD_GEN[k]), lv >= R.reach ? TX.postReach : TX.postDry, "(Zapas wody: " + Math.round(lv) + "/100.)"]));
+        runList(interp, plain([], TX.kod.slup, [TX.post(lv, D.ORD_GEN[k]), lv >= R.reach ? TX.postReach : TX.postDry, fill(TX.kod.zapasWody, { n: Math.round(lv) })]));
         if (!S().read.slup) { S().read.slup = day(); autoChecks(); }
     }
     function read(key, interp) {
@@ -449,8 +451,8 @@
         runList(interp || null, plain([], n.title, n.lines));
         if (!S().read[key]) {
             S().read[key] = day();
-            if (n.note) T.call("Journal", "addNote", "Zapiski zakonu: " + n.title, n.note);
-            T.call("Combat", "discover", "cysterna_" + key, "zapiski zakonu (" + n.title + ")", 20);
+            if (n.note) T.call("Journal", "addNote", fill(TX.kod.zapiskiTytul, { tytul: n.title }), n.note);
+            T.call("Combat", "discover", "cysterna_" + key, fill(TX.kod.zapiskiOdkrycie, { tytul: n.title }), 20);
             autoChecks();
         }
         return true;
@@ -474,7 +476,7 @@
         T.audio.se("Gate2", { volume: 75, pitch: 85 });
         T.popup(TX.leverPull, { top: true, color: "#9ff0a8", sub: TX.leverSub });
         const w = W();
-        think(w && w.isReady && w.isReady(URW) ? TX.leverThink : ["> Krata puściła. Ale za nią kanał zasypany gruzem - tędy jeszcze nie wyjdę."]);
+        think(w && w.isReady && w.isReady(URW) ? TX.leverThink : TX.kod.kanalZasypany);
         autoChecks();
     }
     function rainGate(interp) {
@@ -505,12 +507,12 @@
         s.branch = "closed";
         s.branchDay = day();
         setFlag("galazDworskaZamknieta");
-        const got = T.call("TownQuests", "addOpinion", 3, "Gałąź dworska zamknięta") || 0;
+        const got = T.call("TownQuests", "addOpinion", 3, TX.kod.opiniaGalaz) || 0;
         setFlag("lordCold");   // (always - not only when he was an ally: the coordinator's decision 2026-10-16)
         think(TX.branchLord);
         syncEvents();
         T.audio.se("Gate2", { volume: 85, pitch: 75 });
-        T.popup(TX.branchClosed, { top: true, color: "#ffe27a", sub: TX.branchClosedSub + (got ? "  ·  Opinia +" + got : "") });
+        T.popup(TX.branchClosed, { top: true, color: "#ffe27a", sub: TX.branchClosedSub + (got ? fill(TX.kod.opiniaPlus, { n: got }) : "") });
         autoChecks();
         return true;
     }
@@ -579,7 +581,7 @@
             list: [C(355, ["Cysterna.gutter(this, " + n + ");"]), C(0, [])],
             moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false }, moveSpeed: 3, moveType: 0,
             priorityType: 1, stepAnime: false, through: false, trigger: 0, walkAnime: false };
-        return { id, name: "Rynna zakonu (zapchana) " + n, note: "<Cysterna:rynna_" + n + ">", pages: [page], x, y };
+        return { id, name: Watki.wstaw(TK.kod.gutterEvent[0], { n: n }), note: "<Cysterna:rynna_" + n + ">", pages: [page], x, y };
     }
     function gutterEvents(data) {
         if (!has() || !data || !Array.isArray(data.events)) return [];

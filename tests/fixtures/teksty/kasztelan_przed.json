@@ -1,0 +1,325 @@
+{
+ "clues": {
+  "napis": "napis w murze (piętro 3)",
+  "kowal": "„Kasztelan Kowal” (piętro 6)",
+  "wpis": "„Ostatni wpis” (piętro 10)",
+  "przeor": "list przeora do kasztelana (piętro 20)",
+  "lista": "lista kasztelanów",
+  "kleofas": "brat Kleofas",
+  "dziadek": "dziadek Stach"
+ },
+ "where": "Szukaj w zapiskach zakonu w podziemiach, w kronikach z Archiwum, u brata Kleofasa na klifie (pokaż mu klucz) i u dziadka Stacha.",
+ "whereDone": "Wiem dość. Teraz Borgar.",
+ "kleofas": [
+  "> Bracie Kleofasie. Poznajesz ten klucz?",
+  "(Kleofas obraca klucz w palcach. Długo patrzy na kruka na uchwycie.) Klucz straży. Pisałem w kronice, że przepadł razem z ostatnim kasztelanem.",
+  "> Z kasztelanem?",
+  "Bogumił z rodu Kowali. Kasztelan i klucznik. Kowale kuli zamki zakonu, a potem ich pilnowali - z ojca na syna.",
+  "Każda straż miała swoją przysięgę. Dzwon woła. Pieśń pamięta. Pióro zapisuje. A klucz zamyka - i nie pyta.",
+  "Klucznik przysięgał: „Nie pytam o to, czego nie chcę wiedzieć.” Kto trzyma klucz do Serca, nie może być ciekawy. Ciekawy klucznik to otwarte drzwi.",
+  "> Tak samo mówi Borgar. Karczmarz. Jak żart, przy piwie.",
+  "(Kleofas milknie. Długo.) Ostatni przeor kazał strażom zapomnieć, po co strzegą. Zostawić same słowa. Widać zostawili.",
+  "Klucz przetrwał. A ja myślałem, że została tylko pieśń w knajpianych balladach. ...Twój karczmarz pilnuje, chłopcze. Tylko nie wie czego."
+ ],
+ "noteKleofas": [
+  "Straż klucza",
+  "Brat Kleofas poznał klucz: to klucz straży zakonu. Ostatni kasztelan, Bogumił z rodu Kowali, był też klucznikiem - Kowale kuli zamki zakonu i ich pilnowali. Przysięga klucznika brzmiała: „Nie pytam o to, czego nie chcę wiedzieć.” Kto trzyma klucz do Serca, nie może być ciekawy."
+ ],
+ "dziadek": [
+  "> Dziadku. Pod kopcem z krukiem na podwórzu leżała połowa klucza. Wiedziałeś?",
+  "(Dziadek odkłada fajkę.) Wiedziałem, że coś tam leży. Ojciec kazał orać dookoła i nie pytać.",
+  "Jak byłem mały, mówił mi: „Kruk u nas, klucz u Kowali. Przyjdzie kiedyś Kowal, powie swoje słowa - oddać mu, co jego.”",
+  "> Borgar jest Kowalem.",
+  "No przecie. Borgar Kowal. Jego dziad i mój ojciec pili w tej samej karczmie, na tych samych starych kamieniach.",
+  "Myślałem, że to taka gadka starych ludzi, synku. Jak o kruku, co przynosi listy. ...A ty mi teraz mówisz, że kruki przynosiły."
+ ],
+ "noteDziadek": [
+  "Kruk u nas, klucz u Kowali",
+  "Dziadek Stach pamięta słowa swojego ojca: „Kruk u nas, klucz u Kowali. Przyjdzie kiedyś Kowal, powie swoje słowa - oddać mu, co jego.” Ród dziadka przechował połowę klucza dla rodu Borgara. Karczma Kowali od zawsze stała na kamieniach twierdzy."
+ ],
+ "rodThink": [
+  "> (Bogumił z rodu Kowali, kasztelan i klucznik. A zdanie Borgara to nie żart - to przysięga straży klucza.)",
+  "> (Powiedzieć mu? Po zamknięciu, przy barze. ...Albo uszanować jego słowa. To jego tawerna.)"
+ ],
+ "noteRod": "Borgar Kowal jest z rodu ostatniego kasztelana twierdzy - Bogumiła z rodu Kowali, kasztelana i klucznika. Kowale kuli zamki zakonu i ich pilnowali. Zdanie Borgara „Nie pytam o to, czego nie chcę wiedzieć” to nie żart przy piwie, tylko przysięga straży klucza - zakon kazał ją powtarzać, żeby nikt nie pamiętał, po co. Skąd wiem: {skad}.",
+ "topic": "Borgarze... chodzi o twój ród.",
+ "notNow": [
+  "Nie teraz, chłopcze. Sala pełna, uszy wszędzie. Po zamknięciu - od jedenastej do pierwszej.",
+  "Po zamknięciu. Od jedenastej. Teraz mam ręce pełne kufli."
+ ],
+ "notYet": [
+  "Najpierw spłać swoje sprawy u Lorda. Potem pogadamy o moich."
+ ],
+ "intro": [
+  "(Borgar wyciera ostatni kufel. Sala pusta, świece dopalają się na stołach.)",
+  "Zamknięte. ...Ale ty nie przyszedłeś na piwo, co? Masz tę minę."
+ ],
+ "introHero": [
+  "> (Klucz kasztelana ciąży w kieszeni.)"
+ ],
+ "ask": "No? Mów albo idź spać.",
+ "optTell": "Powiedz mu wszystko.",
+ "optKeep": "Przemilcz. To jego tawerna.",
+ "optLater": "Nie teraz.",
+ "later": [
+  "To idź spać. Ja też pójdę. ...Kiedyś."
+ ],
+ "tellCore": [
+  "> Borgarze. Twój ród to Kowale z twierdzy. Ostatni kasztelan, Bogumił, był z twojej krwi. Kasztelan i klucznik."
+ ],
+ "tellLista": [
+  "> Jest na liście kasztelanów zakonu: „Bogumił z rodu Kowali. Następny - z tego samego rodu. Jeśli ród przetrwa.”"
+ ],
+ "tellSlowa": [
+  "> A twoje zdanie... „Nie pytam o to, czego nie chcę wiedzieć.” To nie żart. To przysięga straży klucza. Zakon kazał wam ją powtarzać - choćby przy piwie."
+ ],
+ "tellDziadek": [
+  "> Mój dziadek pamięta: „Kruk u nas, klucz u Kowali.” Nasze rody przechowały ten klucz na pół."
+ ],
+ "tellKlucz": [
+  "> (Kładziesz klucz kasztelana na ladzie. Kruk na uchwycie łapie światło świecy.)"
+ ],
+ "tellNoce": [
+  "> I jeszcze jedno. Co noc schodzisz do piwnicy i stajesz przed kratą. Rano tego nie pamiętasz."
+ ],
+ "lordFirst": [
+  "A Lordowi powiedziałeś pierwszemu. Jego ludzie łażą mi teraz po piwnicy."
+ ],
+ "preparedSong": [
+  "(Borgar długo milczy. Kładzie dłoń na kluczu.) Od tamtej nocy, kiedy Melia śpiewała tylko dla mnie, wiedziałem, że to przyjdzie."
+ ],
+ "preparedNights": [
+  "(Borgar kiwa głową, powoli.) Po tym, co mi powiedziałeś o moich nocach... spodziewałem się czegoś takiego."
+ ],
+ "anger": [
+  "(Borgar uderza pięścią w ladę. Kufle podskakują.)",
+  "Kasztelan. Klucznik. Przysięga. Ja leję piwo, chłopcze! Babka szorowała tu podłogi, a dziadek nosił beczki!",
+  "Całe życie powtarzam to zdanie gościom, a oni się śmieją. A ty mi mówisz, że mój ród... że ja...",
+  "Wynoś się. Jutro nie otwieram. Dla nikogo. Dla ciebie też."
+ ],
+ "angerThink": [
+  "> (Pierwszy raz widziałem Borgara takiego. Jutro tawerna zamknięta.)"
+ ],
+ "noteAnger": [
+  "Borgar zamknął tawernę",
+  "Powiedziałem Borgarowi o jego rodzie: kasztelan, klucznik, przysięga. Wściekł się - jutro tawerna zamknięta, dla wszystkich. Następnej nocy mam przyjść do piwnicy? Nie powiedział. Ale wiem, gdzie go szukać."
+ ],
+ "keepThink": [
+  "> (To jego tawerna. Jego krew i jego słowa. „Nie pytam o to, czego nie chcę wiedzieć” - może właśnie tak ma zostać.)"
+ ],
+ "keepSay": [
+  "> Nic, Borgarze. Dobranoc."
+ ],
+ "keepBorgar": [
+  "(Borgar patrzy na ciebie długo. Potem chowa ścierkę za pas.) ...Dobranoc. Nie wiem, co chciałeś powiedzieć. I nie chcę wiedzieć."
+ ],
+ "noteKeep": [
+  "Przemilczane",
+  "Nie powiedziałem Borgarowi, kim był jego ród. To jego tawerna i jego słowa: „Nie pytam o to, czego nie chcę wiedzieć.” Klucz kasztelana zostaje u mnie. Borgar dalej nie wie, czego pilnuje."
+ ],
+ "closedBar": [
+  "Zamknięte, mówiłem. Dziś nie nalewam. Nikomu."
+ ],
+ "closedCounter": "Za ladą pusto. Na desce kredą: „Dziś nieczynne”.",
+ "closedDoor": "Zamknięte. Na drzwiach kredą: „Dziś nieczynne”.",
+ "awayCounter": "Za ladą pusto. Borgar wyszedł - na ladzie stoi świeca.",
+ "cellarIntro": [
+  "(Borgar siedzi na beczce przy kracie. Kosz z żarem grzeje mu ręce. Nie podnosi głowy.)",
+  "Siadaj. ...Nie spałem całą noc i cały dzień. Myślałem."
+ ],
+ "grandma": [
+  "Babka. Babka Kowalowa. Jak byłem mały, przyprowadziła mnie tutaj, do tej kraty, i powiedziała: „Pilnuj piwnicy i nie pytaj.”",
+  "Myślałem, że chodzi o piwo. O złodziei. ...A ona wiedziała. Albo nie wiedziała - tylko powtarzała, co jej powtórzono."
+ ],
+ "grandmaNights": [
+  "Co noc tu stoję, mówisz. Teraz wiem dlaczego. Krew ciągnie do kraty."
+ ],
+ "grandmaEnd": [
+  "Kowale kuli zamki i ich pilnowali. Trzysta lat. A ja nawet nie wiedziałem czego."
+ ],
+ "verdictAsk": "No to co teraz, chłopcze?",
+ "optCome": "Chodź ze mną w dół.",
+ "optStay": "Zostań. Pilnuj piwnicy.",
+ "askCome": [
+  "> Chodź ze mną w dół, Borgarze. Twój ród trzymał ten klucz. Niech go nie niesie obcy."
+ ],
+ "askStay": [
+  "> Zostań. Pilnuj piwnicy - jak twój ród. Ja zejdę sam."
+ ],
+ "whySong": "Melia mi to wyśpiewała, ty mi to powiedziałeś. Dwa razy to już nie przypadek.",
+ "whyNights": "Powiedziałeś mi o moich nocach, choć mogłeś milczeć.",
+ "whyShifts": "Tyle wieczorów stałeś za moim barem. Komu mam ufać, jak nie tobie?",
+ "whyNotShifts": "Znam cię za krótko, żeby iść za tobą w ciemność.",
+ "whyNotLord": "Lordowi powiedziałeś pierwszemu. Jego ludzie już łażą mi po piwnicy.",
+ "whyNotAny": "Ty idziesz po coś na dół. Ja nie wiem nawet po co.",
+ "comeYes": [
+  "(Borgar wstaje. Kolana mu trzeszczą.) Babka by mnie zabiła. Ale babki nie ma, a ty jesteś.",
+  "Na dziesiątym piętrze stoi zbroja, co zna moje słowa? To niech je usłyszy z mojej gęby.",
+  "Za dnia nalewam. Ale co noc, po zamknięciu, schodzę do dziesiątej bramy. Rozpalę tam ogień. Będzie gdzie wrócić.",
+  "Klucz zostaw sobie. A jak dojdziesz do samego dołu - nie pójdziesz sam. Kowale pilnują kluczy do końca."
+ ],
+ "comeNo": [
+  "Nie."
+ ],
+ "comeNoEnd": [
+  "Moje miejsce jest tu. Przy kracie. Babka kazała pilnować - to będę pilnował.",
+  "A ty posłuchaj. Zejdziesz tam jeszcze raz - nie wracaj do pracy. Za mój bar nie staje ktoś, kto łazi tam, gdzie mój ród trzymał drzwi zamknięte."
+ ],
+ "stayYes": [
+  "(Borgar kiwa głową, powoli.) Tak. To umiem. Pilnować.",
+  "Co noc, po zamknięciu, siądę tu z koszem żaru. Kto zejdzie bez ciebie - nie wyjdzie bez mojej wiedzy.",
+  "A ty schodź, kiedy musisz. Tylko wracaj na górę. Zawsze wracaj na górę."
+ ],
+ "notes": {
+  "idzie": [
+   "Borgar idzie ze mną",
+   "Borgar wie, kim był jego ród. Babka kazała mu „pilnować piwnicy i nie pytać”. Poprosiłem, żeby zszedł ze mną - i zszedł: co noc po zamknięciu (od pierwszej do piątej) pali ogień przy dziesiątej bramie, w koszu zostawia chleb i wodę. Klucz kasztelana mam ja. „Kowale pilnują kluczy do końca.”"
+  ],
+  "pilnuje": [
+   "Borgar pilnuje piwnicy",
+   "Borgar wie, kim był jego ród. Babka kazała mu „pilnować piwnicy i nie pytać” - i tak zrobi: co noc po zamknięciu (od pierwszej do piątej) siedzi przy kracie z koszem żaru. „Zawsze wracaj na górę.”"
+  ],
+  "ostrzegl": [
+   "Borgar pilnuje piwnicy",
+   "Borgar wie, kim był jego ród, ale ze mną w dół nie pójdzie. Co noc po zamknięciu (od pierwszej do piątej) siedzi przy kracie z koszem żaru. Ostrzegł: „Zejdziesz tam jeszcze raz - nie wracaj do pracy.”"
+  ]
+ },
+ "tops": {
+  "idzie": [
+   "Borgar idzie z tobą",
+   "Co noc pali ogień przy dziesiątej bramie"
+  ],
+  "pilnuje": [
+   "Borgar pilnuje piwnicy",
+   "Co noc przy kracie, od pierwszej do piątej"
+  ],
+  "ostrzegl": [
+   "Borgar pilnuje piwnicy",
+   "„Zejdziesz - nie wracaj do pracy”"
+  ]
+ },
+ "grateWarn": [
+  "> (Borgar mówił: zejdziesz tam jeszcze raz - nie wracaj do pracy.)"
+ ],
+ "grateAsk": "> Zejść mimo to?",
+ "optDown": "Zejdź.",
+ "optUp": "Zostań na górze.",
+ "firedThink": [
+  "> (Zszedłem. Borgar się dowie - zawsze się dowiaduje.)"
+ ],
+ "noteFired": [
+  "Bez pracy u Borgara",
+  "Zszedłem przez kratę, choć Borgar ostrzegał. Za jego bar już nie wejdę - jeść da, pokój wynajmie, ale zmiany nie. Może kiedyś mu przejdzie."
+ ],
+ "shiftClosed": "Zamknięte, mówiłem. Dziś żadnej zmiany.",
+ "shiftFired": "Mówiłem: zejdziesz - nie wracaj do pracy. Jeść ci dam, pokój wynajmę. Za bar nie wejdziesz.",
+ "reconcileTopic": "Borgarze... po tamtej nocy?",
+ "reconcile": [
+  "> Borgarze... Po tamtej nocy. Bronili jej obaj - ty piwnicy, ja drzwi.",
+  "(Borgar odstawia kufel.) Przyszli z góry, nie z dołu. Pilnowałem kraty, a oni weszli drzwiami. ...Babka nie wszystko wiedziała.",
+  "Wracaj za bar. Pilnujemy tej samej rzeczy, każdy z innej strony."
+ ],
+ "noteReconcile": [
+  "Z powrotem za barem",
+  "Po oblężeniu Borgar przyjął mnie z powrotem: „Pilnujemy tej samej rzeczy, każdy z innej strony.” Zmiany znowu są moje."
+ ],
+ "cellarGuard": [
+  "Cicho. Słuchaj... nic. Dobrze, że nic.",
+  "Kto schodzi, ten wraca. Ty też. Pamiętaj.",
+  "Babka siedziała tu przede mną. Teraz wiem, po co.",
+  "Na górze już zamknięte. Idź spać, chłopcze."
+ ],
+ "cellarGuardDown": [
+  "Znowu w dół? ...Wracaj na górę. Zawsze wracaj na górę."
+ ],
+ "postFirst": [
+  "(Borgar dokłada drew do ognia.) No i jestem. Dziesiąta brama, ognisko, kosz z chlebem. Jak u mnie w karczmie, tylko goście cichsi.",
+  "Zbroja patrzy na mnie, jakby mnie znała. Może zna. Kowale kuli jej zamek."
+ ],
+ "postLines": [
+  "Siadaj przy ogniu. Na dole nikt nie zamawia na krechę.",
+  "Weź chleb z kosza. Wody też. Na dole jej nie ma.",
+  "Słyszałem coś z dołu. Pewnie nic. Na dole zawsze coś słychać.",
+  "O piątej wracam na górę. Kufle same się nie umyją."
+ ],
+ "basketTake": [
+  "> (Pod płótnem: bochenek chleba i dzban wody. Na płótnie kredą: „Wracaj na górę. B.”)"
+ ],
+ "basketEmpty": "Kosz pusty. Borgar dokłada co noc.",
+ "fireCellar": "Kosz z żarem Borgara. Grzeje przy kracie.",
+ "firePost": "Ognisko Borgara przy dziesiątej bramie.",
+ "keyLock": [
+  "> (Klucz kasztelana obraca się w zamku z krukiem. Kowale kuli ten zamek - i ten klucz.)"
+ ],
+ "noteKeyLock": [
+  "Klucz kasztelana na dole",
+  "Klucz kasztelana otworzył zamek ostatnich drzwi pod Kruczymi Skałami - do Komnaty Serca. Kowale kuli i zamek, i klucz."
+ ],
+ "serce": {
+  "idzie": "Borgar idzie ze mną: co noc (1–5) pali ogień przy dziesiątej bramie - w koszu chleb i woda. Klucz kasztelana otworzy ostatnie drzwi, do Komnaty Serca (piętro 100). Borgar zejdzie tam ze mną - może zostać strażnikiem zamiast mnie.",
+  "pilnuje": "Borgar pilnuje piwnicy: co noc (1–5) siedzi przy kracie. Klucz kasztelana otworzy ostatnie drzwi, do Komnaty Serca (piętro 100).",
+  "niewie": "Przemilczałem Borgarowi, kim był jego ród. Klucz kasztelana otworzy ostatnie drzwi, do Komnaty Serca (piętro 100).",
+  "warned": " Borgar ostrzegł: zejdziesz - nie wracaj do pracy.",
+  "fired": " Za bar Borgara nie wrócę - chyba że coś się zmieni.",
+  "back": " Po oblężeniu Borgar przyjął mnie z powrotem za bar."
+ },
+ "endNote": {
+  "guardian": [
+   "Krew kasztelana",
+   "Borgar został strażnikiem Serca. „Ktoś z rodu musiał wrócić na wartę.” Klucz kasztelana wrócił do Kowali - tam, gdzie był trzysta lat."
+  ],
+  "idzie": [
+   "Krew kasztelana",
+   "Borgar zszedł ze mną do samego Serca - jak Kowale, którzy pilnowali kluczy do końca. Klucz kasztelana wraca nad bar. Tym razem wiadomo, po co tam wisi."
+  ],
+  "pilnuje": [
+   "Krew kasztelana",
+   "Klucz kasztelana otworzył ostatnie drzwi. Borgar został na górze, przy kracie. Wie już, czego pilnuje - i że ktoś wraca."
+  ],
+  "niewie": [
+   "Krew kasztelana",
+   "Klucz kasztelana otworzył ostatnie drzwi. Borgar nie wie, czyj to był klucz. Dalej powtarza gościom swoje zdanie - jak żart przy piwie."
+  ],
+  "none": [
+   "Krew kasztelana",
+   "Serce zostało za mną. Klucz kasztelana też. Borgar o niczym nie wie - nie zdążyłem mu powiedzieć."
+  ]
+ },
+ "epilog": {
+  "idzie": "Ogień przy dziesiątej bramie dogasa co rano - i co noc ktoś go rozpala. Borgar mówi, że to dla tych, co wracają.",
+  "pilnuje": "Borgar co noc siada przy kracie z koszem żaru. Wie już, czego pilnuje. I już nie przestawia beczek.",
+  "fired": "Za bar Borgara już nie wróciłeś. Mijacie się na rynku i kiwacie głowami - jak dwaj strażnicy z różnych zmian.",
+  "niewie": "Borgar dalej powtarza gościom swoje zdanie, jak żart przy piwie. Nie wie po co. Może tak jest lepiej."
+ },
+ "w9After": [
+  "(Borgar milknie.) Po tym, co mi powiedziałeś o moim rodzie... to nie beczki. To krata. Krew ciągnie."
+ ],
+ "remarks": {
+  "w4Zamkniete": [
+   "Słyszałeś, kochaneczku? Borgar nie otworzył karczmy! Pierwszy raz, odkąd pamiętam. Chory czy co?"
+  ],
+  "w4Kowadlo": [
+   "Borgar był u mnie w kuźni. Stał i patrzył na kowadło. Nic nie mówił. ...Powiedziałeś mu, co?"
+  ]
+ },
+ "f9": {
+  "nazwy": {
+   "1": "pół klucza znad baru",
+   "2": "kopiec z krukiem",
+   "3": "kuźnia Tadka",
+   "4": "krata w piwnicy",
+   "5": "słowa Borgara",
+   "6": "ród Kowali",
+   "7": "konfrontacja",
+   "8": "noc w piwnicy",
+   "9": "Komnata Serca"
+  }
+ },
+ "kroki": {
+  "w4Rod": "Kowale z twierdzy. Kim był ród Borgara - i skąd jego zdanie „Nie pytam o to, czego nie chcę wiedzieć”? Poszlaki: {n} z {need}{jest}. {gdzie}",
+  "w4Konfrontacja": "Konfrontacja. Pokaż Borgarowi klucz i powiedz, co wiesz o jego rodzie - po zamknięciu, 23–1, przy barze. Albo uszanuj jego zdanie i przemilcz. To jego tawerna.",
+  "w4Piwnica": "Borgar się wściekł i zamknął tawernę na dzień {dzien} - bez zmiany. Następnej nocy, od 23:00, czeka w piwnicy przy kracie.",
+  "w4Serce": "{serce}"
+ },
+ "_opis": "Teksty W4 rozdz. 6-8 sprzed przeniesienia (2026-10-23): TX z Kasztelan.js, teksty kroków W4 6-9 z TownQuests_Data.js, uwagi mieszkańców - w kluczach js/teksty/kasztelan.txt. Pominięte: cellarStep (= kroki.w4Piwnica), basketLook (nieużywany)."
+}

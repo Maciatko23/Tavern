@@ -698,11 +698,9 @@
         return false;
     }
     // the cat's own event must not start with the straw bed's "sleep?" when it lies on it (that one goes first)
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (this.eventId() === CAT && here() && $gameMap.eventsXy(this.x, this.y).some(e => e !== this && e.isNormalPriority() && (e.list() || []).length > 1)) return;
-        _Game_Event_start.call(this);
-    };
+    // (2026-10-23: the core's one start hook, "instead")
+    T.onEventStart(ev => ev.eventId() === CAT && here() && $gameMap.eventsXy(ev.x, ev.y).some(e => e !== ev && e.isNormalPriority() && (e.list() || []).length > 1),
+        { owner: PLUGIN, priority: "instead" });
 
     // O on the cat: it purrs; once a day a moment's rest
     function pet(interp) {
@@ -733,11 +731,8 @@
     // The soup: once a day from eight, a bowl from grandpa's kettle (a story game)
     // ------------------------------------------------------------------
     const CAULDRON = [C(355, ["HomeLife.cauldron(this)"]), C(0, [])];
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        if (this._homeKind === "hearth" && this._mapId === MAP && storyOn()) return CAULDRON;
-        return _Game_Event_list.call(this);
-    };
+    // (2026-10-23: the core's one list hook - a place's own use, first of them as the old wrapper by the plugin list)
+    T.onEventList(ev => (ev._homeKind === "hearth" && ev._mapId === MAP && storyOn() ? CAULDRON : null), { owner: PLUGIN, priority: T.onEventList.PRIORITY.own + 30 });
     function cauldron() {
         if (!storyOn() || !$dataItems[SOUP]) return false;
         const s = S(), g = grandpa(), awake = !!g && !asleep(g) && introDone(), item = $dataItems[SOUP];

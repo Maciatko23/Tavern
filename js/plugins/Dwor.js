@@ -81,6 +81,7 @@
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Dwor] " + where + ":", e);
     const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const K = () => TX.kod;   // (the words of this file: js/teksty/dwor.txt, kod.*)
     const sneaking = () => !!T.call("Hunting", "sneaking");
 
     // ------------------------------------------------------------------
@@ -134,7 +135,7 @@
         const J = T.api("Journal"), d = J && J.data ? J.data() : null, n = d && d.notes ? d.notes.find(x => x.title === title) : null;
         if (!n) return note(title, text);
         n.text = text; n.day = day();
-        T.popup("Notatka uzupełniona: " + title, { color: "#eceef0" });
+        T.popup(fill(K().notatkaUzupelniona, { tytul: title }), { color: "#eceef0" });
     }
 
     // ------------------------------------------------------------------
@@ -218,18 +219,18 @@
     function build(data, mapId) {
         const out = [];
         const spot = (name, def) => { const e = (data.events || []).find(v => v && v.name === "Miejsce: " + name); return e ? [e.x, e.y, def ? def[2] : 2] : def; };
-        if (mapId === M.hol) { const p = spot("lord_hol", P.hol.lord); out.push(eventData(EV.lordHol, "Lord Leopold Zaleski", p[0], p[1], { key: "lordHol", img: ART.lord, dir: P.hol.lord[2], bustName: "Lord Zaleski" })); }
-        else if (mapId === M.bib) { const p = spot("lord_kronika", P.bib.lord); out.push(eventData(EV.lordBib, "Lord Leopold Zaleski", p[0], p[1], { key: "lordBib", img: ART.lord, dir: P.bib.lord[2], bustName: "Lord Zaleski" })); }
+        if (mapId === M.hol) { const p = spot("lord_hol", P.hol.lord); out.push(eventData(EV.lordHol, K().nazwy.lordPelne, p[0], p[1], { key: "lordHol", img: ART.lord, dir: P.hol.lord[2], bustName: K().nazwy.lord })); }
+        else if (mapId === M.bib) { const p = spot("lord_kronika", P.bib.lord); out.push(eventData(EV.lordBib, K().nazwy.lordPelne, p[0], p[1], { key: "lordBib", img: ART.lord, dir: P.bib.lord[2], bustName: K().nazwy.lord })); }
         else if (mapId === M.gab) {
             const f = spot("feliks_klapa", P.gab.feliks), l = spot("listy", [P.gab.listy[0], P.gab.listy[1], 8]);
-            out.push(eventData(EV.feliksGab, "Feliks", f[0], f[1], { key: "feliksGab", img: ART.feliks, dir: 8, bustName: "Feliks" }));
-            out.push(eventData(EV.listy, "Listy Feliksa", l[0], l[1], { key: "listy", img: ART.listy, fix: true, walk: false, priority: 0, through: true }));
+            out.push(eventData(EV.feliksGab, K().nazwy.feliks, f[0], f[1], { key: "feliksGab", img: ART.feliks, dir: 8, bustName: K().nazwy.feliks }));
+            out.push(eventData(EV.listy, K().nazwy.listy, l[0], l[1], { key: "listy", img: ART.listy, fix: true, walk: false, priority: 0, through: true }));
         } else if (mapId === M.manor) {
             const pf = P.manor.feliksNoc, pk = P.manor.kubaNoc;
             // (Feliks keeps a small lantern by the hatch - every light a flame; its light only when the map comes up in his hours)
             const lit = has() && hatchNight() && !w1Hatch() ? LANTERN : "";
-            out.push(eventData(EV.feliksNoc, "Feliks", pf[0], pf[1], { key: "feliksNoc", img: ART.feliks, dir: pf[2], bustName: "Feliks", note: lit }));
-            out.push(eventData(EV.kubaNoc, "Kuba Woziwoda", pk[0], pk[1], { key: "kubaNoc", img: ART.kuba, dir: pk[2], bustName: "Kuba Woziwoda" }));
+            out.push(eventData(EV.feliksNoc, K().nazwy.feliks, pf[0], pf[1], { key: "feliksNoc", img: ART.feliks, dir: pf[2], bustName: K().nazwy.feliks, note: lit }));
+            out.push(eventData(EV.kubaNoc, K().nazwy.kuba, pk[0], pk[1], { key: "kubaNoc", img: ART.kuba, dir: pk[2], bustName: K().nazwy.kuba }));
         }
         return out.filter(e => e.x < data.width && e.y < data.height);
     }
@@ -286,16 +287,17 @@
     }
     const canEnter = () => storyOn() && inHours(hour(), TM.lord) && (S().invited > 0 || S().tour === 1) && !S().lieOut;
     const hatchOn = () => storyOn() && reached("w7Gabinet");
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        if (this._mapId === M.manor && has()) {
+    // (2026-10-23) the core's one list hook (Tawerna.onEventList): a scene at the manor's door - over Story's own door talk, after
+    // Kasztelan's (as the old wrappers by the plugin list)
+    T.onEventList(ev => {
+        if (ev._mapId === M.manor && has()) {
             try {
-                if (isDoor(this) && canEnter()) return DOOR_STUB;
-                if (hatchOn() && isHatch(this)) return HATCH_STUB;
+                if (isDoor(ev) && canEnter()) return DOOR_STUB;
+                if (hatchOn() && isHatch(ev)) return HATCH_STUB;
             } catch (e) { report("list", e); }
         }
-        return _Game_Event_list.call(this);
-    };
+        return null;
+    }, { owner: PLUGIN, priority: T.onEventList.PRIORITY.scene + 30 });
     function door(interp) {
         if (!has() || !interp) return;
         if (canEnter()) {
@@ -324,7 +326,7 @@
     // ------------------------------------------------------------------
     // Chapter 2: the tour (the hall on arrival, the chronicle in the library)
     // ------------------------------------------------------------------
-    const LORD_HOL = { id: EV.lordHol, name: "Lord Zaleski" }, LORD_BIB = { id: EV.lordBib, name: "Lord Zaleski" };
+    const LORD_HOL = { id: EV.lordHol, get name() { return K().nazwy.lord; } }, LORD_BIB = { id: EV.lordBib, get name() { return K().nazwy.lord; } };
     const ROUTE = (id, codes, wait) => C(205, [id, { list: codes.map(c => (typeof c === "number" ? { code: c, indent: null } : Object.assign({ indent: null }, c))).concat([{ code: 0 }]),
         repeat: false, skippable: true, wait: !!wait }]);
     const rep = (code, n) => Array(n).fill(code);
@@ -364,7 +366,7 @@
         // W3 "Pieśń o Kruczych Skałach": the fifth verse (the chronicle) - when W3 is collecting its verses now
         const q = TQ();
         try { if (q && q.act && isActive("W3") && q.hasVerse && !q.hasVerse("kronika")) q.act(null, ["W3", "fx", "w3Verse", "kronika"]); } catch (e) { report("w3 verse", e); }
-        xp(60, "kronika rodu");
+        xp(60, K().xp.kronika);
         autoChecks();
         sync();
     }
@@ -403,7 +405,7 @@
         s.obs[k] = day();
         if (line) think([].concat(line));
         noteSet(TX.notePlanTitle, planText());
-        xp(30, "plan dnia Feliksa");
+        xp(30, K().xp.plan);
         autoChecks();
     }
     function traced(k) {
@@ -431,8 +433,8 @@
     function throwOut(why) {
         const o = P.manor.out;
         pendingOut = { at: Graphics.frameCount + 75, map: o[0], x: o[1], y: o[2], dir: o[3] };
-        const got = opinion(-3, "nocą w ogrodzie dworu");
-        T.popup(why || "Złapali cię w ogrodzie dworu", { top: true, color: "#ff9f8f", sub: TX.caughtNoc + (got ? "  ·  Opinia " + got : "") });
+        const got = opinion(-3, K().opiniaOgrod);
+        T.popup(why || K().zlapali, { top: true, color: "#ff9f8f", sub: TX.caughtNoc + (got ? fill(K().opinia, { n: got }) : "") });
     }
     function updateWatch() {
         const s = S(), stepOn = at("w7Feliks") || at("w7Gabinet"), h = hour();
@@ -462,7 +464,7 @@
         const f = evOf(EV.feliksNoc);
         if (at("w7Feliks") && !s.obs.noc && f && !hidden(f)) {
             if (guardSees(f, eyes.feliks || (eyes.feliks = {}), 4, 2.2, true) >= 1) {   // (by the hatch itself: nothing hides the hero from him)
-                eyes.feliks = {}; s.garden = nightOf(); say(f, TX.feliksNocKto, 160); throwOut("Feliks cię zauważył"); return;
+                eyes.feliks = {}; s.garden = nightOf(); say(f, TX.feliksNocKto, 160); throwOut(K().feliksZauwazyl); return;
             }
             if (dist(f, $gamePlayer) <= OBS.hatch && ++s.acc.noc >= OBS.noc) observed("noc", TX.obsNoc);
         }
@@ -482,7 +484,7 @@
     const GAB = { id: EV.feliksGab, name: "Feliks" };
     function drawerList() {
         const s = S(), out = [], O = TX.szuflada;
-        if (s.truth) { T.popup("Szuflada pusta - listy są u jaśnie pana.", { kind: "info" }); return null; }
+        if (s.truth) { T.popup(K().szufladaPusta, { kind: "info" }); return null; }
         if (s.letters === "take") return linesTo(out, HERO, [O.done]);
         if (s.letters === "copy") return linesTo(out, HERO, [O.doneCopy]);
         linesTo(out, HERO, O.open.concat([s.obs.dzien ? O.key : O.keyGuess, O.bundle]));
@@ -537,7 +539,7 @@
     // ------------------------------------------------------------------
     // The truth: the letters (or the word) to the Lord - he breaks; Feliks arrested / fled / already gone; the Lord an ally
     // ------------------------------------------------------------------
-    const LORD = () => { const St = ST(); return { id: St && St.NPCS ? St.NPCS.lord.id : 902, name: "Lord Zaleski" }; };
+    const LORD = () => { const St = ST(); return { id: St && St.NPCS ? St.NPCS.lord.id : 902, name: K().nazwy.lord }; };
     const lieOut = () => !!S().lieOut;
     function truthReady() {
         const s = S();
@@ -603,20 +605,20 @@
         if (ss && !ss.lost && !ss.done && ss.paid < ss.debt) {
             $gameParty.gainGold(D.PAY.truthDebt);
             const paid = T.call("Story", "pay", D.PAY.truthDebt) || 0;
-            T.popup("Lord odpisuje z długu", { top: true, color: "#ffe27a", sub: paid + " G mniej do spłaty" });
+            T.popup(K().odpisDlugu, { top: true, color: "#ffe27a", sub: fill(K().odpisDluguSub, { n: paid }) });
         } else if (ss && ss.lost && ss.buy && !ss.buy.done) {
             ss.buy.price = Math.max(ss.buy.paid, ss.buy.price - D.PAY.truthBuyback);
-            T.popup("Odkup działki tańszy", { top: true, color: "#ffe27a", sub: "Lord odsprzeda działkę za " + ss.buy.price + " G" });
+            T.popup(K().odkupTanszy, { top: true, color: "#ffe27a", sub: fill(K().odkupTanszySub, { n: ss.buy.price }) });
             if (ss.buy.paid >= ss.buy.price && St.fieldReturned) St.fieldReturned();
         } else {
             $gameParty.gainGold(D.PAY.truthElse);
-            T.popup("+" + D.PAY.truthElse + " G od Lorda", { icon: COIN_ICON, kind: "gold" });
+            T.popup(fill(K().odLorda, { n: D.PAY.truthElse }), { icon: COIN_ICON, kind: "gold" });
         }
         const G = T.api("Garnizon");
-        try { if (G && G.addFavor) G.addFavor(10, "listy Feliksa"); } catch (e) { report("garrison", e); }
+        try { if (G && G.addFavor) G.addFavor(10, K().przychylnosc); } catch (e) { report("garrison", e); }
         if (fate === "arrest") w1Broke("arrest");
         notePair(TX.noteTruth, { fate: TX.fateNote[fate] || "" });
-        xp(200, "prawda dla Lorda");
+        xp(200, K().xp.prawda);
         T.emit("w7Prawda", { how: s.how, fate });
         autoChecks();
     }
@@ -657,16 +659,16 @@
             setFlag("w7LordFirst");
             s.weekPaid = day();
             $gameParty.gainGold(D.PAY.week);
-            T.popup("+" + D.PAY.week + " G od Lorda", { icon: COIN_ICON, kind: "gold" });
+            T.popup(fill(K().odLorda, { n: D.PAY.week }), { icon: COIN_ICON, kind: "gold" });
             for (const [id, n] of D.GEAR) if (window.$dataItems && $dataItems[id]) { $gameParty.gainItem($dataItems[id], n); T.popup($dataItems[id].name + " ×" + n, { icon: $dataItems[id].iconIndex, kind: "good" }); }
-            note("Do kogo najpierw", "Powiedziałem Lordowi, że będę mu mówił o wszystkim, co znajdę pod tawerną. Płaci sto groszy na tydzień i dał mi ekwipunek ze zbrojowni. Jego ludzie pójdą za mną w dół - „pilnować, żebym wrócił, i żeby nikt inny nie był pierwszy”.");
+            note(K().najpierw.tytul, K().najpierw.lord);
         } else if (how === "lie") {
             setFlag("w7Klamstwo");
-            note("Do kogo najpierw", "Skłamałem Lordowi: „Nic tam nie ma, kurz i szczury.” Uwierzył. Na razie.");
+            note(K().najpierw.tytul, K().najpierw.klamstwo);
         } else {
             setFlag("w7Milczenie");
             if (feliksHere()) { setFlag("w7FeliksDonosi"); notePair(TX.noteDonosi); }
-            else note("Do kogo najpierw", "Nie powiedziałem Lordowi, co jest pod tawerną. „Szanuję milczenie. Ale pamiętam je.”");
+            else note(K().najpierw.tytul, K().najpierw.milczenie);
         }
         autoChecks();
     }
@@ -725,7 +727,7 @@
                 T.call("TownLife", "setGone", "feliks", true);
                 w1Broke("fled");
                 notePair(TX.noteFlee);
-                T.popup(TX.noteFlee[0], { top: true, color: "#ffb4a0", sub: "Uciekł promem na ląd" });
+                T.popup(TX.noteFlee[0], { top: true, color: "#ffb4a0", sub: K().uciekl });
             }
         }
         // the lie found out: the tenth gate passed, or a week gone by
@@ -752,7 +754,7 @@
             const n = Math.min(D.PAY.toll, $gameParty.gold());
             const w = residentEv("kapral");
             if (w) say(w, TX.toll, 180);
-            if (n > 0) { $gameParty.loseGold(n); T.popup("Myto dworu: -" + n + " G", { icon: COIN_ICON, kind: "bad" }); }
+            if (n > 0) { $gameParty.loseGold(n); T.popup(fill(K().myto, { n }), { icon: COIN_ICON, kind: "bad" }); }
         }
         // Feliks the spy (the hero kept silent with Feliks still in the manor)
         if (f.w7FeliksDonosi && feliksHere() && s.donosi !== day()) {
@@ -771,25 +773,23 @@
     // ------------------------------------------------------------------
     function w7Vars() {
         const s = S(), St = ST(), ss = St && St.state ? St.state() : null, f = flags();
-        const dlug = !ss ? "-" : ss.lost ? "działka przepadła - odkup: " + Math.min(ss.buy.paid, ss.buy.price) + " / " + ss.buy.price + " G (połowa otworzy drzwi dworu)"
-            : "spłacono " + Math.min(ss.paid, ss.debt) + " z " + ss.debt + " G. Kiedy oddasz połowę, Lord zaprosi cię do dworu.";
-        const zapro = s.tour === 1 ? "Lord czeka w bibliotece dworu (hol, drzwi na lewo) - kronika rodu leży na pulpicie."
-            : "Lord przed dworem (8–20) chce cię zaprosić do środka - porozmawiaj z nim.";
+        const V = K().kroki, n = Math.min(obsCount(), OBS.need), need = OBS.need;
+        const dlug = !ss ? "-" : ss.lost ? fill(V.dlugPrzepadla, { ile: Math.min(ss.buy.paid, ss.buy.price), cena: ss.buy.price })
+            : fill(V.dlugSplacono, { ile: Math.min(ss.paid, ss.debt), dlug: ss.debt });
+        const zapro = s.tour === 1 ? V.zaproBiblioteka : V.zaproPrzedDworem;
         const gone0 = gone("feliks");
-        const feliks = gone0 ? "Ślady Feliksa: Feliksa nie ma już w dworze. Popytaj o niego Teodora (rynek rano, hol za dnia), Hankę przy straganie i Kubę przy studni - i zajrzyj do rejestru Baltazara. Ślady i obserwacje: " + Math.min(obsCount(), OBS.need) + "/" + OBS.need + "."
-            : "Dwa życia Feliksa: śledź go przez dobę - z ukrycia (C). Rano na rynku (6–10:30), za dnia w holu dworu (10:30–20), nocą przy włazie za oranżerią (ok. 2:00), w noc tygodnia przy tylnych drzwiach kantoru (północ). Widziane: " + Math.min(obsCount(), OBS.need) + "/" + OBS.need + ".";
-        const gabinet = "nocą (22–5) właz z krukiem za oranżerią (ogród dworu, pod sosną) prowadzi starym kanałem zakonu pod gabinet. W gabinecie - kantorek Feliksa. Uważaj na strażnika w ogrodzie" +
-            (tradeOn() ? " i na Feliksa: o 1:30 schodzi przez gabinet do kanału, o 3:00 wraca." : ".");
-        const prawda = s.truth ? "Lord zna prawdę." : hasProof() ? "Prawda dla Lorda: pokaż mu listy Feliksa (przed dworem, 8–20)."
-            : s.letters === "left" ? (s.told ? "Lord sprawdza kantorek sam - przyjdź do niego następnego dnia (8–20)." : "Prawda dla Lorda: listy zostały w kantorku. Możesz powiedzieć o nich Lordowi (przed dworem, 8–20) - albo milczeć.")
-            : "Prawda dla Lorda.";
-        const extra = !s.truth && hasProof() ? " Listy Feliksa wciąż masz w torbie - Lord czeka na prawdę." : "";
-        const splata = (ss && (ss.done || ss.paid >= ss.debt) ? "dług spłacony." : ss && ss.lost ? "działka przepadła - rozdział 1 i tak się skończył." : "Lord przyjmuje spłatę przed dworem (8–20), nocą kamerdyner. Termin: dzień " + (ss ? ss.deadline : 60) + ".") + extra;
-        const najpierw = (!actTwo() ? "w Akcie II (po spłacie długu albo stracie działki)." : !beenDown() ? "kiedy zejdziesz pod tawernę (krata w piwnicy), Lord zapyta, co tam jest." : "Lord pyta przed dworem (8–20), co jest pod Kruczymi Skałami.") + extra;
+        const feliks = fill(gone0 ? V.feliksSlady : V.feliksDwaZycia, { n, need });
+        const gabinet = V.gabinet + (tradeOn() ? V.gabinetFeliks : V.gabinetKoniec);
+        const prawda = s.truth ? V.prawdaZna : hasProof() ? V.prawdaListy
+            : s.letters === "left" ? (s.told ? V.prawdaSprawdza : V.prawdaKantorek)
+            : V.prawda;
+        const extra = !s.truth && hasProof() ? V.listyWTorbie : "";
+        const splata = (ss && (ss.done || ss.paid >= ss.debt) ? V.splataDone : ss && ss.lost ? V.splataPrzepadla : fill(V.splataTermin, { dzien: ss ? ss.deadline : 60 })) + extra;
+        const najpierw = (!actTwo() ? V.najpierwAkt2 : !beenDown() ? V.najpierwZejdz : V.najpierwPyta) + extra;
         const U = UG();
         let stance = "absent";
         try { stance = U && U.world && U.lordStance ? U.lordStance(U.world()) : "absent"; } catch (e) { stance = "absent"; }
-        const serce = (TX.serce[stance] || TX.serce.absent) + (s.najpierw === "lord" && !lieOut() ? " Sto groszy na tydzień - u Lorda przed dworem." : "") + extra;
+        const serce = (TX.serce[stance] || TX.serce.absent) + (s.najpierw === "lord" && !lieOut() ? V.serceTydzien : "") + extra;
         return { dlug, zapro, feliks, gabinet, prawda, splata, najpierw, serce, butler: butler() };
     }
     function hookQuests() {
@@ -883,8 +883,8 @@
                     out.push(C(101, ["", 0, 0, 2, ""]), C(401, ["\\SPK[0]" + TX.klapaZejdz]));
                     return choiceTo(out, [TX.klapaTak, TX.klapaNie], [yes, []], 1);
                 },
-                lordHol: () => linesTo([], LORD_HOL, [s.tour === 1 ? TX.tourLordWaits : "Rozgość się."]),
-                lordBib: () => linesTo([], LORD_BIB, [TX.tourLordWaits.replace("Jaśnie pan czeka w bibliotece - drzwi na lewo.", "Kronika leży na pulpicie. Czytaj śmiało.")]),
+                lordHol: () => linesTo([], LORD_HOL, [s.tour === 1 ? TX.tourLordWaits : K().rozgosc]),
+                lordBib: () => linesTo([], LORD_BIB, [K().kronikaNaPulpicie]),
                 feliksNoc: () => null, kubaNoc: () => null, feliksGab: () => null, listy: () => null
             }[k];
             const out = list ? list() : null;
@@ -904,7 +904,7 @@
         else if (what === "powiedz") { if (!s.told) { s.told = day(); setFlag("w7LordWie"); } }
         else if (what === "prawda") truthDone(a);
         else if (what === "najpierw") najpierw(a);
-        else if (what === "tydzien") { if (day() - (s.weekPaid || 0) >= 7) { s.weekPaid = day(); $gameParty.gainGold(D.PAY.week); T.popup("+" + D.PAY.week + " G od Lorda", { icon: COIN_ICON, kind: "gold" }); } }
+        else if (what === "tydzien") { if (day() - (s.weekPaid || 0) >= 7) { s.weekPaid = day(); $gameParty.gainGold(D.PAY.week); T.popup(fill(K().odLorda, { n: D.PAY.week }), { icon: COIN_ICON, kind: "gold" }); } }
         else if (what === "hostileSaid") s.hostileSaid = day();
         else if (what === "weekNie") s.weekPaid = day();
         else if (what === "zaproNo") s.zaproNo = day();

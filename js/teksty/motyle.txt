@@ -1,0 +1,161 @@
+# Teksty motyli i ciem (wtyczki Motyle_Data.js i Motyle.js): gatunki, gablotka w Dzienniku, siatka, kronika Kleofasa, zadanie K54.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz motyle
+
+# ======================================================================== TX
+caught = "Złapany: "
+newKind = Nowy okaz w gablotce
+missed = Uciekł...
+released = Wypuszczasz go. Odlatuje.
+pawikNet = Pawik w siatce. Pokaż go Eli przed zmierzchem.
+pawikGone = Pawik w siatce osłabł. Wypuszczasz go - odfruwa.
+noNet = Potrzebujesz siatki na motyle
+honey = Motyle przy kwiatach: +
+crop = Zapylone kwiaty: +
+nibbled = Bielinki podgryzły kapustę: -
+full = Gablotka pełna: wszystkie gatunki
+f9none = Nie ma tu ognia - wbijam pochodnię
+f9moths = Ćmy lecą do ognia
+f9butter = Motyle: łąka, lato, po deszczu
+f9net = Siatka na motyle
+
+# ======================================================================== SPECIES (gatunki)
+gatunki.cytrynek.name = Cytrynek
+gatunki.cytrynek.latin = Gonepteryx rhamni
+gatunki.cytrynek.desc = Pierwszy motyl wiosny. Cytrynowożółty, z ostro zakończonymi skrzydłami i pomarańczową kropką na każdym z nich. Zimuje jako dorosły motyl w gęstwinie, więc budzi się, kiedy w cieniu jeszcze leży śnieg.
+gatunki.cytrynek.where = Łąki, Kruczy Jar, ogrody. Najwięcej wiosną, latem mniej, jesienią pojedyncze.
+gatunki.pawik.name = Pawik
+gatunki.pawik.latin = Aglais io
+gatunki.pawik.desc = Rdzawoczerwony, z czterema oczkami jak na pawim piórze - błękitnymi, w żółtej obwódce. Złożone skrzydła ma niemal czarne, jak zeschły liść. Jego gąsienice żyją na pokrzywach.
+gatunki.pawik.where = Rzadki: wylatuje tylko o świcie po deszczu, wiosną i latem, kiedy słońce suszy kwiaty. Lubi pokrzywy.
+gatunki.modraszek.name = Modraszek
+gatunki.modraszek.latin = Polyommatus icarus
+gatunki.modraszek.desc = Mały, błękitny jak niebo nad łąką, z białą frędzlą na brzegach skrzydeł. Spód skrzydeł ma szarobeżowy, w pomarańczowe kropki. Szybki i płochliwy - najtrudniej go złapać.
+gatunki.modraszek.where = Kwitnące łąki, najwięcej latem.
+gatunki.bielinek.name = Bielinek
+gatunki.bielinek.latin = Pieris brassicae
+gatunki.bielinek.desc = Biały, z czarnymi końcami przednich skrzydeł i czarnymi kropkami. Leci wszędzie tam, gdzie rośnie kapusta: składa na niej jaja, a gąsienice obgryzają liście.
+gatunki.bielinek.where = Wszędzie przy kwiatach, jesienią przy kapuście. Strach na wróble albo kruk pilnujący pola odpędzą go od grządek.
+gatunki.cma.name = Ćma
+gatunki.cma.latin = nocny gatunek
+gatunki.cma.desc = Szarobrązowa ćma o trójkątnych skrzydłach. Za dnia śpi przyklejona do kory, nocą leci do każdego ognia: krąży wokół ogniska, pochodni i latarni, aż zakręci się jej w głowie.
+gatunki.cma.where = Nocą przy ogniu: ogniska, pochodnie (także wbite w ziemię), latarnie, kosze ogniowe. Najłatwiej ją złapać właśnie przy płomieniu.
+
+# ======================================================================== MAPS (mapy)
+mapy.3.name = Kruczy Jar
+mapy.4.name = łąka
+mapy.8.name = ogród rycerzy
+mapy.17.name = łąka
+mapy.18.name = łąka
+mapy.20.name = podwórze dziadka
+mapy.24.name = ogród Lorda
+mapy.111.name = działka pod lasem
+mapy.155.name = pustelnia
+mapy.168.name = Spalona zagroda
+
+# ======================================================================== NET_RECIPE (przepis)
+przepis.name = Zrób siatkę na motyle
+przepis.desc = Długi kij, obręcz z giętkiej gałązki i worek z lnianego włókna. Podejdź do motyla (najlepiej skradając się, C) i naciśnij O. Złapany trafia do gablotki w Dzienniku, a ty go wypuszczasz.
+
+# ======================================================================== CASE (gablotka)
+gablotka.title = Gablotka z motylami
+gablotka.pollenTitle = Zapylanie
+gablotka.pollen = Motyle przy kwiatach zapylają to, co kwitnie: zbiór ziemniaków (kwitną) i owoce dzikich jabłoni i grusz bywają większe o jedną sztukę, a ul w pobliżu kwiatów daje czasem słoik miodu więcej. Najwięcej wiosną i latem, jesienią mniej, zimą wcale. Bielinki za to podgryzają kapustę - strach na wróble albo kruk pilnujący pola je odpędzą.
+gablotka.kleofasHint = Brat Kleofas z pustelni na klifie spisze złapane gatunki w kronice - jeśli ma czym pisać.
+gablotka.empty = Gablotka jest pusta. Zrób w warsztacie siatkę na motyle (gałęzie i włókno), podejdź do motyla - najlepiej skradając się (C) - i naciśnij O.
+gablotka.drawingTitle = Rysunek Eli
+gablotka.drawing = Pawik z czterema oczkami, Ela w chustce i ja z siatką. Kredka trochę się kruszyła, więc słońce ma tylko pół promieni. Ela mówi, że to dlatego, że było rano.
+
+# ======================================================================== KLEOFAS (kleofas)
+[kleofas.partial]
+Motyle? (Kleofas sięga po pióro.) Mów, jakie złapałeś.
+> {lista}.
+Zapisane. Zakon spisał zielnik, ale motyli nikt nigdy nie liczył. Będziesz pierwszy.
+
+[kleofas.full]
+Cytrynek, pawik, modraszek, bielinek i ćma. Pięć. (Kleofas dmucha na atrament.)
+Pszczoły nie dadzą rady same. Motyle zapylają to, czego pszczołom się nie chce. Masz - z moich uli. Zasłużyłeś.
+
+[kleofas.note]
+Kronika motyli
+Brat Kleofas wpisał do kroniki wszystkie pięć gatunków z mojej gablotki: cytrynka, pawika, modraszka, bielinka i ćmę. Pierwsza taka lista od czasów zakonu.
+
+# ======================================================================== K54 (zadania.K54)
+zadania.K54.title = Motyl z oczkami
+zadania.K54.where = obóz uchodźców (Ela)
+zadania.K54.when = wiosną i latem, za dnia, od dnia 3
+zadania.K54.desc = Ela widziała w książce mamy motyla z oczkami na skrzydłach - pawika. Żywego nie widziała nigdy. Złap go siatką i pokaż jej. Nie zabijaj.
+[zadania.K54.offer.say]
+Mama miała książkę z obrazkami. Taką ze zwierzętami. Spaliła się razem z chatą...
+Był tam motyl z oczkami na skrzydłach! Cztery oczka, niebieskie, z żółtym. Mama mówi, że to pawik.
+Ja jeszcze nigdy takiego nie widziałam. Naprawdę. Złapiesz mi? Tylko go nie zabijaj!
+
+zadania.K54.offer.yes = Złapię i ci pokażę.
+zadania.K54.offer.no = Może kiedyś.
+[zadania.K54.offer.accept]
+Mama mówi, że pawiki wylatują rano po deszczu, jak słońce suszy skrzydła. I że lubią pokrzywy, bo tam się rodzą.
+Łapie się je siatką. Taką na kiju. Ty umiesz wszystko zrobić, prawda?
+
+[zadania.K54.offer.decline]
+Dobrze... To narysuję go sobie jeszcze raz. Z pamięci.
+
+zadania.K54.steps.0.text = Zrób siatkę na motyle (warsztat: gałęzie i włókno), złap pawika i pokaż go Eli w obozie. Pawiki latają tylko o świcie po deszczu, wiosną i latem, i lubią pokrzywy. W siatce wytrzyma do zmierzchu.
+[zadania.K54.steps.0.remind]
+Pawik! Z oczkami! Rano po deszczu, pamiętasz?
+
+[zadania.K54.steps.0.hero]
+> Ela, chodź tu. Powoli... Zobacz, co mam w siatce.
+
+[zadania.K54.steps.0.done]
+(Ela przykłada nos do siatki i wstrzymuje oddech.)
+Oczka! Cztery! Patrzą na mnie... Jest ładniejszy niż w książce!
+Wypuścimy go? Razem? Na trzy... Leć, motylku!
+(Pawik wyfruwa z siatki, okrąża obóz i znika nad murem.)
+Poczekaj! Mam coś dla ciebie. Narysowałam go wczoraj, z pamięci. Teraz wiem, że dobrze. I ciebie dorysowałam. Z siatką.
+
+[zadania.K54.reward.note]
+Motyl z oczkami
+Złapałem pawika i pokazałem go Eli. Wypuściliśmy go razem, a ona dała mi swój rysunek: pawik, ona i ja z siatką. Ludmiła się uśmiechnęła - pierwszy raz, odkąd ją znam.
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.pawik.name = Pawik w siatce
+
+# ======================================================================== REMARKS (uwagi)
+# elaMotylLudmila, mówi: ludmila
+[uwagi.0.lines]
+Ela narysowała tego motyla już dziesięć razy. Na desce, na piasku, na ścianie namiotu. Dziękuję ci. Długo się tak nie śmiała.
+
+# elaMotylEla, mówi: ela
+[uwagi.1.lines]
+Myślisz, że pawik wróci? Mama mówi, że jak się coś wypuści, to wraca. Albo jego dzieci.
+
+
+# ======================================================================== z kodu Motyle.js (kod.*)
+# napis u góry po nowym gatunku ({nazwa}, {n} z {z} gatunków); zadanie K54
+kod.nowyOkaz = {nazwa}  ·  {n} z {z}
+kod.zadaniePawik = Zadanie: Motyl z oczkami
+# kronika brata Kleofasa (imię nad dymkiem, nagroda)
+kod.kleofas = Brat Kleofas
+kod.kronikaNagroda = Miód ×2  ·  {xp} dośw.
+kod.miod = Miód
+# gablotka w Dzienniku
+kod.niezlapany = " (nie złapany)"
+kod.zapylanieSub = motyle przy kwiatach
+kod.liczby = Liczby
+kod.liczbyTekst = Ziemniaki i owoce: +1 sztuka z szansą {crop}% (przy pełnym zapyleniu). Ul: każdy słoik z szansą {honey}% na drugi. Bielinki: -1 główka kapusty (nigdy ostatnia).
+kod.rysunekSub = pamiątka z obozu pod murem
+kod.zlapanyDnia = "  ·  złapany dnia {dzien}"
+kod.jeszczeNie = "  ·  jeszcze nie złapany"
+kod.opisPozniej = Opis pojawi się w gablotce, kiedy go złapiesz.
+kod.gdzie = Gdzie i kiedy
+kod.wGablotce = W gablotce: ×{n}
+kod.wKronice = "  ·  zapisany w kronice brata Kleofasa"
+kod.legenda = Gatunków w gablotce: {n} z {z}
+kod.legendaKronika = "  ·  w kronice"
+kod.pomoc = ↑↓ okaz   ←/→ zakładka   Anuluj: wróć
+
+# ======================================================================== z kodu Motyle.js (kod.<funkcja>.<n>, w kolejności kodu)
+# wanted
+kod.wanted.0 = brak motyli na tej mapie
+kod.wanted.1 = burza nadchodzi
+kod.wanted.2 = po deszczu

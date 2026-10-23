@@ -31,6 +31,7 @@
     // (`delayDays`), from `from` o'clock to `to` - while he is in the tavern or the town. A night he is away the men wait; after
     // `waitNights` such nights they strike without him (the outcome reckoned from his allies).
     // ---------------------------------------------------------------------------------------------------------------------------
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
     const TRIGGER = { floor: 50, needOpen: true, maps: [1, 8, 9], delayDays: 1, from: 21, to: 4, waitNights: 3, siegeMaps: [1, 8] };
 
     // the maps and their places: the town (Map008) - the tavern's door, the yard's gate the men come through, where the townsfolk
@@ -39,7 +40,7 @@
     const TOWN = 8, TAVERN = 1;
     const SPOTS = {
         8: {
-            door: [51, 17], doorTile: [51, 16], doorName: "Drzwi tawerny",
+            door: [51, 17], doorTile: [51, 16],
             gate: [[51, 31], [52, 31], [51, 30], [52, 30], [50, 30], [53, 29], [50, 29], [51, 32], [52, 32]],
             guard: [[48, 18], [54, 18], [46, 19], [56, 19], [49, 28], [53, 28], [44, 18], [58, 18]],
             from: [[51, 32], [52, 32], [51, 31], [52, 31]],
@@ -47,7 +48,7 @@
             fires: [[48, 15, 0.9], [54, 15, 1.0], [45, 16, 0.75], [57, 16, 0.8], [51, 14, 0.7]]
         },
         1: {
-            door: [9, 14], doorTile: [9, 13], doorName: "Stare drzwi (piwnica)",
+            door: [9, 14], doorTile: [9, 13],
             kitchen: [[45, 11], [47, 11], [43, 12], [49, 12], [45, 13], [41, 12]],
             front: [[50, 51], [49, 51], [51, 51], [50, 50], [48, 50], [52, 50]],
             guard: [[10, 16], [8, 16], [11, 17], [7, 17]],
@@ -55,6 +56,7 @@
             borgar: [52, 31], entry: [50, 53]
         }
     };
+    Watki.scal(SPOTS, "akt3", "miejsca");   // (its words: js/teksty/akt3.txt, miejsca)
     // the events Act3 puts into the maps (Tawerna.inject, its range 840-859): 859 - the bell's rope on the town map (the alarm); 854-858
     // kept for later (the whole 840-858 in the core's registry; tests/core_test.js moved its free test ids to the 700s, 2026-10-07)
     const IDS = { from: 840, to: 859, rope: 859 };
@@ -68,40 +70,37 @@
     const WAVES = [
         // (2026-10-18, the white eagle - Orzel.js) the adult eagle (bond 60+, at home) defends the tavern from the air: one man fewer in each
         // group that comes from outside (Orzel.defends())
-        { id: "w1", map: 8, from: "gate", kinds: ["bandit", "bandit", "knifer"], shout: "Pochodnie pod drzwi! Ruszać się!",
+        { id: "w1", map: 8, from: "gate", kinds: ["bandit", "bandit", "knifer"],
           fewer: c => (window.Orzel && Orzel.defends && Orzel.defends() ? 1 : 0),
-          fewerNotice: c => ["Biały orzeł!", (window.Orzel ? Orzel.nameOf() : "Orzeł") + " spada z nieba na dziedziniec - jednego z nich mniej."],
-          notice: ["Pod drzwiami tawerny!", "Trzech z pochodniami idzie przez dziedziniec."] },
+          fewerNotice: c => [TEXT.fale.orzel, fill(TEXT.fale.orzelSpada, { imie: window.Orzel ? Orzel.nameOf() : TEXT.fale.orzelImie })] },
         // (2026-10-17, W5 "Towary z kontynentu", Kantor.js) Baltazar Vey made an enemy (his kantor shut by the town, the register
         // burnt by Wit, or blackmailed - flag w5BaltazarWrog): his mercenary comes with the second group
-        { id: "w2", map: 8, from: "gate", kinds: ["bandit", "archer", "knifer", "archer"], shout: "Łucznicy, na mur! Reszta do drzwi!",
-          extra: c => (c.rafal === "enemy" ? [{ kind: "knifer", name: "Rafał", lv: 0, noSurrender: false }] : [])
-              .concat(c.flags.w5BaltazarWrog ? [{ kind: "mercenary", name: "Najemnik Baltazara", lv: 0 }] : []),
+        { id: "w2", map: 8, from: "gate", kinds: ["bandit", "archer", "knifer", "archer"],
+          extra: c => (c.rafal === "enemy" ? [{ kind: "knifer", name: TEXT.fale.imiona.rafal, lv: 0, noSurrender: false }] : [])
+              .concat(c.flags.w5BaltazarWrog ? [{ kind: "mercenary", name: TEXT.fale.imiona.najemnik, lv: 0 }] : []),
           fewer: c => (window.Orzel && Orzel.defends && Orzel.defends() ? 1 : 0),
-          fewerNotice: c => ["Biały orzeł!", "Łucznik na murze nie zdążył naciągnąć cięciwy - " + (window.Orzel ? Orzel.nameOf() : "orzeł") + " zrzucił go z muru."],
-          notice: ["Łucznicy!", "Druga grupa - strzelają z bramy dziedzińca."] },
+          fewerNotice: c => [TEXT.fale.orzel, fill(TEXT.fale.orzelLucznik, { imie: window.Orzel ? Orzel.nameOf() : TEXT.fale.orzelImieMale })] },
         // (2026-10-16, W12 "Rozbitek", Wrak.js) Ansgar Wiel - the castaway made an ally (flag ansgarAlly) - knew the plan: the kitchen's
         // back door barred, one man fewer comes in that way (fewer(c): how many of `kinds` stay out; fewerNotice: the top line after)
         // (2026-10-17, W9 rozdz. 3 "Rywal w ruinach", Rywal.js) the Black Eyes' scouts met in the ruins under the tavern: beaten there
         // (w9FrakcjaPobita) - one man fewer comes this way, they lost their scouts and their notes; they took the Order's notes up or
         // went down past the tenth gate (w9FrakcjaWie) - they know the cellars: a scout of the ruins comes with this group
-        { id: "w3", map: 1, from: "kitchen", kinds: ["knifer", "bandit", "bandit"], shout: "Do starych drzwi! Krata jest za nimi!",
+        { id: "w3", map: 1, from: "kitchen", kinds: ["knifer", "bandit", "bandit"],
           fewer: c => (c.flags.ansgarAlly ? 1 : 0) + (c.flags.w9FrakcjaPobita ? 1 : 0),
-          fewerNotice: c => (c.flags.ansgarAlly ? ["Kuchnia zaryglowana", "Eryk Sowa ostrzegł Borgara - tylnymi drzwiami wchodzi ich mniej." + (c.flags.w9FrakcjaPobita ? " A zwiadowców z ruin już nie mają." : "")]
-              : ["Mniej ich", "Zwiadowców, których pobiłeś w ruinach, już nie mają - tylnymi drzwiami wchodzi ich mniej."]),
+          fewerNotice: c => (c.flags.ansgarAlly ? [TEXT.fale.kuchnia, TEXT.fale.kuchniaSub + (c.flags.w9FrakcjaPobita ? TEXT.fale.kuchniaZwiadowcy : "")]
+              : [TEXT.fale.mniej, TEXT.fale.mniejSub]),
           // (2026-10-17, W7 ch. 6 - Dwor.js) the hero kept silent to the Lord with Feliks still at the manor: Feliks told the faction of
           // every descent (w7FeliksDonosi) - they know the cellars as well
-          extra: c => ((c.flags.w9FrakcjaWie || c.flags.w7FeliksDonosi) && !c.flags.w9FrakcjaPobita ? [{ kind: "knifer", name: "Zwiadowca z ruin", lv: 0 }] : []),
-          notice: ["Tylnymi drzwiami!", "Są w środku - idą przez kuchnię do starych drzwi przy piwnicy."] },
-        { id: "w4", map: 1, from: "front", kinds: ["mercenary", "bandit"], shout: "Dość zabawy. Otworzyć mi tę piwnicę.",
+          extra: c => ((c.flags.w9FrakcjaWie || c.flags.w7FeliksDonosi) && !c.flags.w9FrakcjaPobita ? [{ kind: "knifer", name: TEXT.fale.imiona.zwiadowca, lv: 0 }] : []) },
+        { id: "w4", map: 1, from: "front", kinds: ["mercenary", "bandit"],
           // (2026-10-16, W11 "Soczewka", Latarnia.js) the lighthouse's lens sold to Baltazar (soczewkaSprzedana): the Black Eyes know
           // more of the island - one more of their knifemen comes with the commander
           // (2026-10-17, W9 rozdz. 3) the commander killed in the ruins under the tavern (w9DowodcaPolegl): the Black Eyes sent a new one
-          extra: c => [{ kind: "mercenary", name: c.flags.w9DowodcaPolegl ? "Nowy dowódca kopaczy" : "Dowódca kopaczy", look: "Captain", lv: 2, boss: true }]
-              .concat(c.grum === "enemy" ? [{ kind: "mercenary", name: "Grum", lv: 1, grum: true }] : [])
-              .concat(c.flags.soczewkaSprzedana ? [{ kind: "knifer", name: "Nożownik Czarnych Oczu", lv: 1 }] : []),
-          notice: ["Dowódca!", "Frontowymi drzwiami wchodzi dowódca kopaczy ze swoimi ludźmi."] }
+          extra: c => [{ kind: "mercenary", name: c.flags.w9DowodcaPolegl ? TEXT.fale.imiona.nowyDowodca : TEXT.fale.imiona.dowodca, look: "Captain", lv: 2, boss: true }]
+              .concat(c.grum === "enemy" ? [{ kind: "mercenary", name: TEXT.fale.imiona.grum, lv: 1, grum: true }] : [])
+              .concat(c.flags.soczewkaSprzedana ? [{ kind: "knifer", name: TEXT.fale.imiona.nozownik, lv: 1 }] : []) }
     ];
+    Watki.scal(WAVES, "akt3", "fale.lista");   // (its words: js/teksty/akt3.txt, fale.lista)
     // the commander's own look (PixelLab a8bb43b1, styled on the hero; tools/humans "captain"): a mercenary's sheets of his own -
     // img/characters/anim8/Captain_<Walk8|Atk8|Guard8|Kneel8|Lie8>.png and $Human_Captain[_Atk|_Guard|_Kneel|_Lie].png; anim: the
     // frames of his blow sheet (Humans.js LOOKS)
@@ -146,44 +145,40 @@
     const DEFENDERS = [
         // (2026-10-17, W4 - Kasztelan.js) Borgar who went down with the hero to the tenth gate (borgarIdzie) knows what he defends - he
         // holds more; the one keeping the grate (borgarPilnuje) says so
-        { key: "borgar", name: "Borgar", sheet: "Npc_Borgar_Walk8", maps: [1], from: "here", get hp() { return qflags().borgarIdzie ? 180 : 140; }, dmg: 12, poise: 30, cd: [70, 100], speed: 3.9, armor: 0.1,
+        { key: "borgar", sheet: "Npc_Borgar_Walk8", maps: [1], from: "here", get hp() { return qflags().borgarIdzie ? 180 : 140; }, dmg: 12, poise: 30, cd: [70, 100], speed: 3.9, armor: 0.1,
           guard: "door", hideEvent: 1, swing: "#d9c6a0", when: () => true,
-          get lines() {
-              const f = qflags();
-              if (f.borgarIdzie) return { start: "Byłem na dziesiątym piętrze. Wiem, czego bronię!", hit: "Nie w mojej tawernie!", down: "Ugh... Dalej, synu... ja tu poleżę...", win: "Kowale pilnują do końca." };
-              if (f.borgarPilnuje) return { start: "Trzysta lat mój ród pilnował tej kraty! Nie przejdą!", hit: "Do piwnicy? Po moim trupie!", down: "Ugh... krata... pilnuj kraty...", win: "Krata stoi. Następnym razem niech zapukają." };
-              return { start: "Ja pilnuję piwnicy! Ty ich zatrzymaj!", hit: "Nie w mojej tawernie!", down: "Ugh... Dalej, synu... ja tu poleżę...", win: "Następnym razem niech zapukają." };
-          } },
-        { key: "grum", name: "Grum", sheet: "anim8/Merc_Walk8", atk: "Merc", maps: [1, 8], from: "here", hp: 200, dmg: 20, poise: 70, cd: [60, 90], speed: 4.1, armor: 0.3,
+          get lines() { const f = qflags(), B = TEXT.borgarObrona; return Object.assign({}, f.borgarIdzie ? B.idzie : f.borgarPilnuje ? B.pilnuje : B.zwykle); } },
+        { key: "grum", sheet: "anim8/Merc_Walk8", atk: "Merc", maps: [1, 8], from: "here", hp: 200, dmg: 20, poise: 70, cd: [60, 90], speed: 4.1, armor: 0.3,
           follow: true, hideEvent: 3, swing: "#e8e8e8", when: c => c.grum === "ally",
-          lines: { start: "Znam ich. Płacili mi kiedyś. Teraz płacą za to.", hit: "Za wolno, chłopcy!", down: "Dobra... to... na razie wszystko...", win: "Żelazna Pięść nie zmienia stron dwa razy." } },
-        { key: "rafal", name: "Rafał", sheet: "Npc_Rafal_Walk8", maps: [8], from: "gate", delay: 420, hp: 85, dmg: 10, poise: 24, cd: [80, 110], speed: 3.9,
+          lines: {} },
+        { key: "rafal", sheet: "Npc_Rafal_Walk8", maps: [8], from: "gate", delay: 420, hp: 85, dmg: 10, poise: 24, cd: [80, 110], speed: 3.9,
           hide: ["rafal"], swing: "#b0a090", when: c => c.rafal === "ally",
-          lines: { start: "Ukryłeś mnie, kiedy mnie szukali. Teraz ja!", hit: "To za Marka!", down: "Nie... dam rady...", win: "Już nie muszę uciekać." } },
-        { key: "marek", name: "Marek", sheet: "Npc_Marek_Walk8", maps: [8], from: "gate", delay: 480, hp: 95, dmg: 11, poise: 26, cd: [80, 110], speed: 3.8,
+          lines: {} },
+        { key: "marek", sheet: "Npc_Marek_Walk8", maps: [8], from: "gate", delay: 480, hp: 95, dmg: 11, poise: 26, cd: [80, 110], speed: 3.8,
           hide: ["marek"], swing: "#b0a090", when: c => c.marek,
-          lines: { start: "Znam ich twarze z tunelu. Nie przejdą.", hit: "Za tych, co zostali na dole!", down: "Ludmiła... powiedz jej...", win: "Wystarczy. Wracam do domu." } },
-        { key: "tadek", name: "Tadek", sheet: "Npc_Kowal_Walk8", maps: [8], from: "gate", delay: 600, hp: 120, dmg: 14, poise: 32, cd: [85, 115], speed: 3.7,
+          lines: {} },
+        { key: "tadek", sheet: "Npc_Kowal_Walk8", maps: [8], from: "gate", delay: 600, hp: 120, dmg: 14, poise: 32, cd: [85, 115], speed: 3.7,
           hide: ["kowal"], swing: "#c8c8d0", help: true, when: c => c.helpers || (c.bell && c.flags.tadekFriend),
-          lines: { start: "Kto podnosi rękę na tawernę, ma do czynienia z młotem!", hit: "Kowadło bije mocniej!", down: "Aj... ręka...", win: "Kuźnia otwarta od rana. Jakby co." } },
-        { key: "ignac", name: "Ignac", sheet: "Npc_Garbarz_Walk8", maps: [8], from: "gate", delay: 720, hp: 85, dmg: 9, poise: 22, cd: [85, 120], speed: 3.7,
+          lines: {} },
+        { key: "ignac", sheet: "Npc_Garbarz_Walk8", maps: [8], from: "gate", delay: 720, hp: 85, dmg: 9, poise: 22, cd: [85, 120], speed: 3.7,
           hide: ["garbarz"], swing: "#b0a090", help: true, when: c => c.helpers,
-          lines: { start: "Skórę wam wyprawię, łobuzy!", hit: "Ha!", down: "Uff... starczy mi...", win: "Dobra robota, chłopcze." } },
-        { key: "kuba", name: "Kuba", sheet: "Npc_Woziwoda_Walk8", maps: [8], from: "gate", delay: 780, hp: 80, dmg: 8, poise: 20, cd: [85, 120], speed: 3.8,
+          lines: {} },
+        { key: "kuba", sheet: "Npc_Woziwoda_Walk8", maps: [8], from: "gate", delay: 780, hp: 80, dmg: 8, poise: 20, cd: [85, 120], speed: 3.8,
           hide: ["woziwoda"], swing: "#b0a090", help: true, when: c => c.helpers,
-          lines: { start: "Z drągiem od beczek - też się da!", hit: "Masz!", down: "Ała... noga...", win: "Wody wam nie dam. Ale pomóc - zawsze." } },
-        { key: "uchodzcy", name: "Uchodźca", sheet: "Npc_Uchodzca_Walk8", maps: [8], from: "gate", delay: 840, hp: 70, dmg: 7, poise: 18, cd: [90, 125], speed: 3.7,
+          lines: {} },
+        { key: "uchodzcy", sheet: "Npc_Uchodzca_Walk8", maps: [8], from: "gate", delay: 840, hp: 70, dmg: 7, poise: 18, cd: [90, 125], speed: 3.7,
           swing: "#a89070", help: true, n: 2, when: c => c.helpers && c.camp,
-          lines: { start: "Uciekaliśmy przed takimi. Dość uciekania!", hit: "Widłami cię!", down: "Ach...", win: "Tu jest teraz nasz dom." } },
+          lines: {} },
         // (2026-10-17, W5) Kapral Wit Czerwień - he confessed his five groszy a week to the hero and stands with him (flag w5WitAlly)
-        { key: "wit", name: "Kapral Wit", sheet: "Npc_Kapral_Walk8", maps: [8], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
+        { key: "wit", sheet: "Npc_Kapral_Walk8", maps: [8], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
           hide: ["kapral"], swing: "#d8d8e0", when: c => !!c.flags.w5WitAlly,
-          lines: { start: "Pięć groszy na tydzień brałem. Dziś nie biorę nic. Do bramy!", hit: "Za miasto!", down: "Ugh... trzymajcie... drzwi...", win: "Straż miejska. Nareszcie naprawdę." } },
-        { key: "straz", name: "Strażnik dworu", sheet: "Npc_Straznik_Walk8", maps: [8], from: "gate", delay: 540, hp: 115, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
+          lines: {} },
+        { key: "straz", sheet: "Npc_Straznik_Walk8", maps: [8], from: "gate", delay: 540, hp: 115, dmg: 13, poise: 30, cd: [80, 110], speed: 3.8, armor: 0.15,
           // (2026-10-17, W7 - Dwor.js) also when the hero tells the Lord everything he finds (w7LordFirst) - not after a lie found out
           swing: "#d8d8e0", n: 2, when: c => !!(c.flags.lordAlly || c.flags.w7LordFirst) && !c.flags.w7KlamstwoWyszlo,
-          lines: { start: "Jaśnie pan przysyła pozdrowienia. I włócznie.", hit: "W imieniu dworu!", down: "Ranny...!", win: "Zameldujemy jaśnie panu." } }
+          lines: {} }
     ];
+    Watki.scal(DEFENDERS, "akt3", "obroncy");   // (its words: js/teksty/akt3.txt, obroncy)
 
     // ---------------------------------------------------------------------------------------------------------------------------
     // Ambroży trusts the hero (he rings the alarm himself): the bell's lessons (D16 - the key of the tower), the chronicles given to
@@ -201,79 +196,7 @@
     // ---------------------------------------------------------------------------------------------------------------------------
     // The words
     // ---------------------------------------------------------------------------------------------------------------------------
-    const TEXT = {
-        // the warnings: calls of the town's people near the hero (one each a day), Borgar and Grum in the tavern
-        warnBarks: {
-            kowal: ["Obcy w kolczugach kupili dziś u mnie dziesięć grotów. Nie targowali się. Nie podoba mi się to."],
-            piekarka: ["Rano przy piecu stało dwóch obcych. Pytali, o której Borgar zamyka."],
-            woziwoda: ["Na przystani przybił prom bez flagi. Wysiedli sami chłopcy z mieczami."],
-            kapral: ["Kazali nam dziś nie patrzeć w stronę tawerny po zmroku. Nie powiem, kto kazał."],
-            soltys: ["Ktoś pytał w ratuszu o stare plany tawerny. O piwnice."],
-            garbarz: ["Psy całą noc ujadały na drodze do przystani. Ktoś tam obozuje."],
-            ludmila: ["Widziałam takich ludzi na kontynencie. Zawsze przed spaloną wsią."],
-            rafal: ["To ludzie od kopaczy. Poznaję ich po butach. Idą po wasze schody w dół."],
-            kupiec: ["Jutro w nocy nie wychodź z domu, chłopcze. Radzę jako kupiec, nie jako przyjaciel."],
-            zlodziej: ["Jakiś wielki w kolczudze dał mi grosz, żebym mu pokazał tylne drzwi tawerny. Nie pokazałem! ...Prawie."],
-            dzwonnik: ["Coś wisi w powietrzu. Trzy i jeden - pamiętasz, co to znaczy?"],
-            "*": ["Za dużo obcych w miasteczku. Za dużo.", "Słyszałeś? Pytają o piwnicę tawerny..."]
-        },
-        borgarWarn: ["Dwóch obcych pytało dziś o piwnicę. Powiedziałem, że trzymam tam kapustę.", "Jeśli przyjdą, to nocą. Tacy zawsze przychodzą nocą."],
-        grumWarn: {
-            ally: "Znam ten zapach. Jutro w nocy przyjdą moi dawni płatnicy. Będę przy drzwiach.",
-            enemy: "Nie pij jutro wieczorem w tawernie, przyjacielu. Posłuchaj mnie choć raz.",
-            neutral: "Jutro w nocy będzie tu gorąco. To nie moja wojna."
-        },
-        // Ambroży spoken to while the warnings run (TownLife's talk hook): he will ring - or tells where the rope is
-        ambrozyTrusts: ["Słyszałem, co mówią na rynku.", "Jeśli przyjdą do tawerny, zadzwonię trzy i jeden. Ludzie wiedzą, co to znaczy - choć niektórzy udają, że nie."],
-        ambrozyNot: ["Trzy i jeden... tak dzwoniło się, kiedy ktoś szedł na twierdzę.", "Lina wisi pod dzwonem, przy mojej wieży. Kto pociągnie, ten woła całe miasto. Ale kto by mnie słuchał."],
-        // (2026-10-16, D22 "Księga mgieł", Latarnia.js) the hero saw the first vision in the lighthouse's lens (flag latarniaWizja1): the
-        // ship without a flag - now he knows what it meant (a top line and a note as the warnings begin)
-        visionArmed: ["Statek bez bandery", "Wizja z latarni: to oni. Przypłynęli."],
-        noteVision: ["Statek bez bandery", "W soczewce latarni Bazylego widziałem statek bez bandery, który przybija nocą do wyspy. Teraz wiem, kto nim przypłynął - ludzie, którzy pytają o piwnicę tawerny."],
-        noteArmed: ["Obcy w miasteczku", "Ludzie mówią o obcych z mieczami, którzy pytają o piwnicę tawerny. Ktoś wie, że zszedłem głęboko - i że droga w dół zaczyna się pod naszą podłogą. Jeśli przyjdą, to nocą. Trzy uderzenia dzwonu i jedno to alarm."],
-        // the siege
-        start: ["Napad na tawernę!", "Ludzie frakcji pod drzwiami. Obroń tawernę."],
-        startInside: "Walą w drzwi! Na zewnątrz, szybko!",
-        bellAmbrozy: ["Dzwon: trzy i jeden", "Ambroży bije na alarm."],
-        bellNeeded: ["Alarm: trzy i jeden", "Lina dzwonu wisi przy wieży Ambrożego (na wschód od rynku)."],
-        bellHero: ["Dzwon: trzy i jeden", "Całe miasteczko to słyszy."],
-        bellWrong: "To nie był alarm... Jeszcze raz: trzy, przerwa, jeden.",
-        bellDone: "Już dzwoni się na alarm.",
-        bellCalm: "Nie ma powodu bić na alarm.",
-        helpComes: ["Miasteczko idzie z pomocą", "Z młotami i widłami - na dziedziniec tawerny."],
-        helpNot: ["Drzwi domów zostają zamknięte", "Miasteczko słyszy dzwon - i udaje, że śpi."],
-        helpNotBark: ["Zamknij okiennice, Bronek!", "To nie nasza sprawa...", "Niech straż to załatwi."],
-        grumNeutral: "To nie moja wojna. Siedzę i piję.",
-        meliaHide: "Melia chowa lutnię pod ladę.",
-        ozzyHide: "Ozzy wlazł pod stół.",
-        doorBreach: ["Wyważyli drzwi tawerny!", "Ci, co się wdarli, idą w głąb tawerny."],
-        cellarBreach: ["Zeszli do piwnicy!", "Stare drzwi puściły - ludzie frakcji są pod tawerną."],
-        inside: ["Są w środku!", "Wracaj do tawerny - idą do starych drzwi przy piwnicy."],
-        outside: ["Są pod drzwiami!", "Na dziedzińcu tawerny - wyjdź do nich."],
-        bossBeaten: "Myślisz, że jesteśmy jedyni? Za nami przyjdą następni.",
-        grumEnemy: "Mówiłem ci, żebyś nie przychodził. Teraz już za późno.",
-        grumEnemyBeaten: "Dobra. Twoja wygrana. Odpływam pierwszym promem.",
-        offscreenNotice: ["Kiedy cię nie było...", "Frakcja uderzyła na tawernę."],
-        beaten: "Pobili cię - a reszta toczyła się bez ciebie.",
-        // the outcomes: the top notice, Borgar's words, the journal's note
-        outcome: {
-            held: { title: "Tawerna obroniona", sub: "Do świtu nikt już nie zapuka. Borgar stawia wszystkim.",
-                say: "Nie wiem, co oni tam chcieli znaleźć... ale nie dostali tego. Masz. Na koszt firmy - i to też.",
-                note: ["Noc pod tawerną", "Frakcja uderzyła na tawernę - i odeszła z niczym. Piwnica jest nasza, krata cała. Miasteczko o tym mówi."] },
-            costly: { title: "Tawerna ocalała - ale drogo", sub: "Okopcone ściany, połamane stoły, ranni ludzie. Piwnica nasza.",
-                say: "Stoi. Okopcona, połamana, ale stoi. Odbudujemy. Ludzi szkoda bardziej niż stołów.",
-                note: ["Noc pod tawerną", "Obroniliśmy piwnicę, ale tawerna wygląda jak po pożarze. Ranni: {lost}. Frakcja wróci - już wie, gdzie jest droga w dół."] },
-            fallen: { title: "Tawerna padła", sub: "Zeszli do piwnicy. Teraz są pod nami - i przed nami.",
-                say: "Przeszli przez stare drzwi... Krata stoi otworem. Synu - oni są już na dole. Przed tobą.",
-                note: ["Noc pod tawerną", "Nie zatrzymaliśmy ich. Ludzie frakcji zeszli przez stare drzwi do piwnicy i dalej w dół. Na dole będą przede mną - i może przy samym Sercu."] }
-        },
-        // names in the outcome's lists (keys -> names)
-        names: { borgar: "Borgar", grum: "Grum", rafal: "Rafał", marek: "Marek", tadek: "Tadek", ignac: "Ignac", kuba: "Kuba", uchodzcy: "uchodźcy", straz: "strażnicy dworu", wit: "kapral Wit" },
-        // F9 (Debug.js's menu, the events tab)
-        f9Arm: "Akt III: uzbrój napad (ostrzeżenia, napad następnej nocy)",
-        f9Start: "Akt III: napad na tawernę teraz",
-        f9Reset: "Akt III: wyczyść stan napadu"
-    };
+    const TEXT = Watki.teksty("akt3");
 
     window.Act3Data = { TRIGGER, TOWN, TAVERN, SPOTS, IDS, WAVES, CAPTAIN, LEVEL, PACE, DOORS, OUTCOME, POWER, REWARD, SCARS, DEFENDERS, AMBROZY, HELP, TEXT };
 })();

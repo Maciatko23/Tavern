@@ -9,7 +9,7 @@
 # plik czytany z dysku w chwili zapisu (i sprawdzany jeszcze raz tuż przed zapisem - ktoś go zmienił: od nowa); gdy w Items.json są
 # już przedmioty 250+ albo IconSet ma już coś w rzędach 528+, a to nie jest dokładnie to samo - przerywa, nic nie nadpisuje;
 # drugie uruchomienie po udanej instalacji mówi „już zainstalowane”.
-# Po instalacji koordynator dopisuje do js/plugins.js (przy zamkniętym edytorze): Ubior_Data (pod Equipment), Ubior (pod nim),
+# Wtyczki: lista gry js/tawerna_wtyczki.js (od 2026-10-23; edytor może być otwarty): Ubior_Data (pod Equipment), Ubior (pod nim),
 # Ubior_Sklepy (na końcu listy, pod TownQuests / Kantor / MenuRing).
 import hashlib
 import io
@@ -196,7 +196,7 @@ def main():
     if TRY:
         say("Próba skończona.")
     elif a or b:
-        say("Zainstalowane. Teraz js/plugins.js (przy zamkniętym edytorze): Ubior_Data pod Equipment, Ubior pod nim, Ubior_Sklepy na końcu.")
+        say("Zainstalowane. Wtyczki na liście gry js/tawerna_wtyczki.js (python tools/wtyczki.py --sprawdz): Ubior_Data pod Equipment, Ubior pod nim, Ubior_Sklepy na końcu.")
     else:
         say("Nic do zrobienia - już zainstalowane.")
 

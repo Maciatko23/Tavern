@@ -9,10 +9,11 @@
 //     rangedItem) - the old 126 / 125 too.
 //   - the wear (Durability.js): every new thing gets its life (blows, jabs, shots; the armour and the shields: the blows taken) and its
 //     workbench mending; the smith, the tanner and the seamstress mend for money.
-//   - the trade, in the talks (TownLife.addTalkHook, first - a quest's hand-in, offer or remark still comes first): Tadek the smith,
-//     quartermaster Kłos (from the garrison's favour 15), the kantor (Baltazar, after W5 Ludmiła); the tanner, the seamstress and the
-//     rag-and-bone man get one line more in their clothes' menu (Ubior_Sklepy.addMenu). Their window: Scene_BronSklep (buy / sell / mend).
-//     "Porozmawiaj" gives the talk to the rest of the hooks (the quests, Garnizon's menu, Ludzie's steel, the usual lines).
+//   - the trade, in the talks (the core's Tawerna.talk, docs/ROZMOWY.md): Tadek the smith and Baltazar - their own shop menu, a takeover at
+//     "shop" priority (only when the quests, the owners' menus, the letters... have nothing to say to them); quartermaster Kłos (from the garrison's favour 15) and his
+//     deputy, Ludmiła, Baltazar after W5, Tadek with the discount (Ludzie), the tanner, the seamstress and the rag-and-bone man - one row
+//     more in THEIR menus (Tawerna.talk.option: their own lines stay). Their window: Scene_BronSklep (buy / sell / mend).
+//     "Porozmawiaj" gives the talk to the rest of the takeovers (the quests, Garnizon's menu, Ludzie's steel, the usual lines).
 //   - the recipes: the forge (iron, steel), the tannery (leather), the workbench (wood, stone, trophies) - each on the list from the
 //     hero's level `poziom - PRZEPISY.widac`.
 //   - the loot: Humans' bandits / knifers / archers / mercenaries and the camps' sacks, Creatures' armours / drowned / wraiths / shadows,
@@ -386,36 +387,12 @@
         return out;
     }
     const cmdAct = args => [C(355, ["Bron.act(this, " + JSON.stringify(args) + ")"])];
-    // the quests speak first: a remark, a ready hand-in, an offer, a quest's marker over the head
-    function questFirst(key) {
-        const q = TQ();
-        if (!q) return false;
-        try {
-            if (q.remarkFor && q.remarkFor(key)) return true;
-            if (q.talkFor && q.talkFor(key, true)) return true;
-            if ((q.QUESTS || []).some(x => x.giver === key && x.offer && q.offerable && q.offerable(x.id))) return true;
-            if (q.markers) { if (q.refreshMarkers) q.refreshMarkers(); const m = q.markers()[key]; if (m === "ready" || m === "new") return true; }
-        } catch (e) { /* (the quests speak through TownQuests) */ }
-        return false;
-    }
-    // the others' first words: Garnizon's first meeting with Kłos (and his trade only for friends), Baltazar's weekly cut, Ludmiła only
-    // behind the honest counter
-    // (Tadek's menu of Ludzie.js - the steel at a discount - and Baltazar's shop of Kantor.js after W5 get this trade as one line more
-    // instead: their own menus come then)
-    const qflag = k => { const q = TQ(), st = q && q.state ? q.state() : null; return !!(st && st.flags && st.flags[k]); };
-    const YIELD = {
-        kowal: () => qflag("ludKowalRabat") && !!T.api("Ludzie") && !!T.api("Ludzie").addMenu,
-        kupiec: () => {
-            const K = T.api("Kantor"), st = K && K.state ? K.state() : null, q = TQ();
-            if (!st) return false;
-            if (st.outcome === "double" && day() - (st.weekPaid || 0) >= 7) return true;   // (the weekly cut first)
-            const w = K.DATA && K.DATA.TIME && K.DATA.TIME.work, mode = K.mode ? K.mode() : "";
-            return !!(q && q.isDone && q.isDone("W5") && (mode === "grip" || mode === "enemy") && (!w || inHours(hour(), w)) && K.addMenu);
-        }
-    };
+    // (2026-10-23, docs/ROZMOWY.md) who speaks before this shop is the core's talk service's business, not this plugin's: the shop is a
+    // takeover at "shop" priority - below the quests (a step's talk, a reminder, a hand-in, an offer, a remark), the owners' menus (Ludzie's
+    // Tadek with the discount, Kantor's Baltazar after W5 and his weekly cut), the raven's letters, the hermitage's card; above the
+    // greeting of the day. Its own trade in those menus: an option (menuRows)
     const sells = key => listOf(key).some(id => item(id));
     const openNow = key => { const s = shop(key); return !!s && inHours(hour(), s.godziny) && sells(key); };
-    let skipTalk = "";
     function menu(key, resident, ev) {
         const s = shop(key), d = D(), spk = { id: ev.eventId(), name: s.kto }, out = [], M = d.SKLEP_TEKSTY.menu;
         sayTo(out, spk, pick(s.teksty.witaj));
@@ -430,18 +407,15 @@
     // (only Tadek and Baltazar have no menu of their own to take one line more: the others' trade goes into their menus - menuRows)
     const OWN_TALK = { kowal: true, kupiec: true };
     function talkHook(resident, ev) {
-        if (skipTalk && skipTalk === resident) return null;   // ("Porozmawiaj": the others' turn)
         const key = SHOP_OF[resident], s = key ? shop(key) : null;
         if (!OWN_TALK[resident] || !s || !has() || !ev || !openNow(key)) return null;
-        if (questFirst(resident) || (YIELD[resident] && YIELD[resident]())) return null;
         return menu(key, resident, ev);
     }
-    // "Porozmawiaj": the same talk once more, without this menu - the quests, the others' menus, the usual lines
+    // "Porozmawiaj": the same talk once more, without this menu - the quests, the others' menus, the usual lines (the core's skip)
     function plainTalk(resident, interp) {
         const L = TL();
         if (!L || !L.talk || !interp) return;
-        skipTalk = resident;
-        try { L.talk(interp); } finally { skipTalk = ""; }
+        L.talk(interp, { skip: PLUGIN });
     }
     // ---- one line more in the others' own menus (their rules, hours and words kept): Kłos's (Garnizon, from the garrison's favour and
     // while he is there), his deputy's - once Kłos is handed over (D27): the soldier by the barrels and the granary (role "beczki", event
@@ -468,6 +442,16 @@
         const key = SHOP_OF[resident], s = key ? shop(key) : null;
         if (!s || !s.ubior || !has() || !sells(key)) return null;
         return [{ label: s.menu, cmds: cmdAct(["otworz", key, "kup"]) }];
+    }
+    // (2026-10-23, docs/ROZMOWY.md) into the core's talk service at the load: Tadek's and Baltazar's own shop menu - a takeover at "shop"
+    // (+10: below Kantor's Baltazar after W5, +20; above Ubior_Sklepy's clothes shops); the row in the others' menus - an option for each
+    T.talk.takeover({ owner: PLUGIN, who: Object.keys(OWN_TALK), priority: T.talk.PRIORITY.shop + 10,
+        run: ctx => { try { return talkHook(ctx.who, ctx.ev); } catch (err) { report("talk " + ctx.who, err); return null; } } });
+    for (const who of ["kwatermistrz", "zolnierz:" + DEPUTY.role, "ludmila", "kupiec", "kowal"]) {
+        T.talk.option({ owner: PLUGIN, id: "sklep:" + who, who, rows: ctx => { try { return menuRows(who, ctx.ev) || []; } catch (err) { report("menu " + who, err); return []; } } });
+    }
+    for (const who of Object.keys(SHOP_OF).filter(k => !OWN_TALK[k] && k !== "kwatermistrz" && k !== "ludmila")) {   // (the clothes' shopkeepers)
+        T.talk.option({ owner: PLUGIN, id: "ubior:" + who, who, rows: () => { try { return ubiorMenu(who) || []; } catch (err) { report("menu " + who, err); return []; } } });
     }
     // the events' script: Bron.act(this, [what, key, tab])
     function act(interp, args) {
@@ -899,19 +883,8 @@
             UG.search = wrapped;
             wired.underground = true;
         }
-        // the talks: Tadek, Kłos, the kantor; one line more in the clothes' shops
-        const L = TL();
-        if (L && L.addTalkHook && !wired.talk) {
-            L.addTalkHook((key, ev) => { try { return talkHook(key, ev); } catch (err) { report("talk " + key, err); return null; } }, true);
-            wired.talk = true;
-        }
-        // one line more in Kłos's (and his deputy's) menu, Ludmiła's and Baltazar's (Kantor), Tadek's steel (Ludzie)
-        for (const name of ["Garnizon", "Kantor", "Ludzie"]) {
-            const A = T.api(name);
-            if (A && A.addMenu && !wired["menu" + name]) { A.addMenu((key, ev) => menuRows(key, ev)); wired["menu" + name] = true; }
-        }
-        const US = T.api("Ubior_Sklepy");
-        if (US && US.addMenu && !wired.ubior) { US.addMenu(key => ubiorMenu(key)); wired.ubior = true; }
+        // the talks (Tadek, Kłos, the kantor, the clothes' shops): the core's talk service, put in once at the load (above)
+        wired.talk = true;
         // F9 (Debug.js, the tab "Wyspa i fabuła")
         const OK = T.api("Okolice");
         if (OK && OK.f9 && OK.f9.add && !wired.f9) {
@@ -1005,7 +978,7 @@
     const api = { VERSION: "1.0.0", act, otworz, kup, sprzedaj, napraw, oferta, tabsOf, doRow, bonus, luck, opis, level, lack: id => lackOf(D() && D().przedmiot(id)),
         rangedItem, rangedKind, rangedDef, rangedOwned, hasRanged, anyRanged, owns, isRanged, usedToday, sellPrice, repairPrice,
         buyPrice: (key, id, used) => { const p = D() && D().przedmiot(id); return p ? buyPrice(key, p, used) : 0; },
-        menu: (resident, ev) => { const key = SHOP_OF[resident]; return key && shop(key) && ev ? menu(key, resident, ev) : null; }, talkHook, openNow, questFirst, menuRows,
+        menu: (resident, ev) => { const key = SHOP_OF[resident]; return key && shop(key) && ev ? menu(key, resident, ev) : null; }, talkHook, openNow, menuRows,
         syncRecipes, wire, wired: () => Object.assign({}, wired), ugExtra, giveUnique, checkUniques, setFor, f9Rows, f9Ok, f9Pick, refresh: dirty, state: () => store(), Scene_BronSklep };
     window.Bron = T.register(PLUGIN, api);
 })();

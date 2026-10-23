@@ -42,40 +42,32 @@
     // px a frame in the air; shy: tiles a walking hero may come before it takes off (running: RUN_SHY for all); net: the chance a swing of
     // the net catches it (sitting x1.2, flying x0.85, on the shoulder x1.3, sneaking x1.1 - at most 0.95); likes: where it lands most
     const SPECIES = {
-        cytrynek: { name: "Cytrynek", latin: "Gonepteryx rhamni", row: 0, season: [3, 1.6, 1.4, 0], speed: 1.15, shy: 1.7, net: 0.72, size: 1,
-            card: "Motyle_Gablotka_Cytrynek",
-            desc: "Pierwszy motyl wiosny. Cytrynowożółty, z ostro zakończonymi skrzydłami i pomarańczową kropką na każdym z nich. Zimuje jako dorosły motyl w gęstwinie, więc budzi się, kiedy w cieniu jeszcze leży śnieg.",
-            where: "Łąki, Kruczy Jar, ogrody. Najwięcej wiosną, latem mniej, jesienią pojedyncze." },
-        pawik: { name: "Pawik", latin: "Aglais io", row: 1, season: [0, 0, 0, 0], speed: 1.05, shy: 2.1, net: 0.55, size: 1, rare: true, likes: ["nettle"],
-            card: "Motyle_Gablotka_Pawik",
-            desc: "Rdzawoczerwony, z czterema oczkami jak na pawim piórze - błękitnymi, w żółtej obwódce. Złożone skrzydła ma niemal czarne, jak zeschły liść. Jego gąsienice żyją na pokrzywach.",
-            where: "Rzadki: wylatuje tylko o świcie po deszczu, wiosną i latem, kiedy słońce suszy kwiaty. Lubi pokrzywy." },
-        modraszek: { name: "Modraszek", latin: "Polyommatus icarus", row: 2, season: [1, 3, 0.4, 0], speed: 1.35, shy: 1.4, net: 0.6, size: 0.85,
-            card: "Motyle_Gablotka_Modraszek",
-            desc: "Mały, błękitny jak niebo nad łąką, z białą frędzlą na brzegach skrzydeł. Spód skrzydeł ma szarobeżowy, w pomarańczowe kropki. Szybki i płochliwy - najtrudniej go złapać.",
-            where: "Kwitnące łąki, najwięcej latem." },
-        bielinek: { name: "Bielinek", latin: "Pieris brassicae", row: 3, season: [1.6, 2.2, 1.8, 0], speed: 1.1, shy: 1.5, net: 0.78, size: 1, likes: ["cabbage"],
-            card: "Motyle_Gablotka_Bielinek",
-            desc: "Biały, z czarnymi końcami przednich skrzydeł i czarnymi kropkami. Leci wszędzie tam, gdzie rośnie kapusta: składa na niej jaja, a gąsienice obgryzają liście.",
-            where: "Wszędzie przy kwiatach, jesienią przy kapuście. Strach na wróble albo kruk pilnujący pola odpędzą go od grządek." },
-        cma: { name: "Ćma", latin: "nocny gatunek", row: 4, season: [1, 1, 0.6, 0], speed: 1.4, shy: 1.0, net: 0.82, size: 0.95, night: true,
-            card: "Motyle_Gablotka_Cma",
-            desc: "Szarobrązowa ćma o trójkątnych skrzydłach. Za dnia śpi przyklejona do kory, nocą leci do każdego ognia: krąży wokół ogniska, pochodni i latarni, aż zakręci się jej w głowie.",
-            where: "Nocą przy ogniu: ogniska, pochodnie (także wbite w ziemię), latarnie, kosze ogniowe. Najłatwiej ją złapać właśnie przy płomieniu." }
+        cytrynek: { row: 0, season: [3, 1.6, 1.4, 0], speed: 1.15, shy: 1.7, net: 0.72, size: 1,
+            card: "Motyle_Gablotka_Cytrynek" },
+        pawik: { row: 1, season: [0, 0, 0, 0], speed: 1.05, shy: 2.1, net: 0.55, size: 1, rare: true, likes: ["nettle"],
+            card: "Motyle_Gablotka_Pawik" },
+        modraszek: { row: 2, season: [1, 3, 0.4, 0], speed: 1.35, shy: 1.4, net: 0.6, size: 0.85,
+            card: "Motyle_Gablotka_Modraszek" },
+        bielinek: { row: 3, season: [1.6, 2.2, 1.8, 0], speed: 1.1, shy: 1.5, net: 0.78, size: 1, likes: ["cabbage"],
+            card: "Motyle_Gablotka_Bielinek" },
+        cma: { row: 4, season: [1, 1, 0.6, 0], speed: 1.4, shy: 1.0, net: 0.82, size: 0.95, night: true,
+            card: "Motyle_Gablotka_Cma" }
     };
+    Watki.scal(SPECIES, "motyle", "gatunki");   // (its words: js/teksty/motyle.txt, gatunki)
     const ORDER = ["cytrynek", "pawik", "modraszek", "bielinek", "cma"];
 
     // where they live: map -> how many (1 = a meadow full of flowers). zone: only that rectangle of the map (x0, y0, x1, y1); region: only
     // the bought land of <BuildRegion:N> (Homes.js), and only once it is the hero's own
     const MAPS = {
-        4: { k: 1, name: "łąka" }, 17: { k: 1, name: "łąka" }, 18: { k: 1, name: "łąka" },
-        24: { k: 1, name: "ogród Lorda" },
-        3: { k: 0.85, name: "Kruczy Jar" }, 20: { k: 0.8, name: "podwórze dziadka" },
-        8: { k: 0.8, name: "ogród rycerzy", zone: [1, 5, 12, 16] },
-        111: { k: 0.8, name: "działka pod lasem", region: true }, 168: { k: 0.8, name: "Spalona zagroda", region: true },
-        155: { k: 0.6, name: "pustelnia" },
+        4: { k: 1 }, 17: { k: 1 }, 18: { k: 1 },
+        24: { k: 1 },
+        3: { k: 0.85 }, 20: { k: 0.8 },
+        8: { k: 0.8, zone: [1, 5, 12, 16] },
+        111: { k: 0.8, region: true }, 168: { k: 0.8, region: true },
+        155: { k: 0.6 },
         12: { k: 0 }   // (the Dark Forest: none)
     };
+    Watki.scal(MAPS, "motyle", "mapy");   // (its words: js/teksty/motyle.txt, mapy)
     const WILD = { k: 0.35, tilesets: [9] };   // other outdoor maps of the meadows' tileset: a few
 
     // which tiles are flowers. A2: the autotile kinds of the flowery meadow (12 the mixed one, 13 the blue stars); upper: B/C/D tiles
@@ -114,81 +106,44 @@
     const CABBAGE = { nibble: 600, away: 0.2, loss: 1 };
 
     // the net: made at the workbench, cheap (2 branches, 3 fibres)
-    const NET_RECIPE = { id: "butterfly_net", name: "Zrób siatkę na motyle", inputs: [[ITEM.branch, 2], [ITEM.fiber, 3]], output: [ITEM.net, 1], manual: true, unique: true,
-        hours: 1, stamina: 2, startSe: "Item1",
-        desc: "Długi kij, obręcz z giętkiej gałązki i worek z lnianego włókna. Podejdź do motyla (najlepiej skradając się, C) i naciśnij O. Złapany trafia do gablotki w Dzienniku, a ty go wypuszczasz." };
+    const NET_RECIPE = { id: "butterfly_net", inputs: [[ITEM.branch, 2], [ITEM.fiber, 3]], output: [ITEM.net, 1], manual: true, unique: true,
+        hours: 1, stamina: 2, startSe: "Item1" };
+    Watki.scal(NET_RECIPE, "motyle", "przepis");   // (its words: js/teksty/motyle.txt, przepis)
     const REACH = 1.15;   // tiles round the net's point in front of him (0.9 tile ahead)
 
-    const TX = {
-        caught: "Złapany: ",
-        newKind: "Nowy okaz w gablotce",
-        missed: "Uciekł...",
-        released: "Wypuszczasz go. Odlatuje.",
-        pawikNet: "Pawik w siatce. Pokaż go Eli przed zmierzchem.",
-        pawikGone: "Pawik w siatce osłabł. Wypuszczasz go - odfruwa.",
-        noNet: "Potrzebujesz siatki na motyle",
-        honey: "Motyle przy kwiatach: +",
-        crop: "Zapylone kwiaty: +",
-        nibbled: "Bielinki podgryzły kapustę: -",
-        full: "Gablotka pełna: wszystkie gatunki",
-        f9none: "Nie ma tu ognia - wbijam pochodnię",
-        f9moths: "Ćmy lecą do ognia",
-        f9butter: "Motyle: łąka, lato, po deszczu",
-        f9net: "Siatka na motyle"
-    };
+    const TX = Watki.teksty("motyle");
 
     // the journal's display case (Journal tab "Gablotka")
     const CASE = {
-        tab: "Gablotka",
-        title: "Gablotka z motylami",
-        pollenTitle: "Zapylanie",
-        pollen: "Motyle przy kwiatach zapylają to, co kwitnie: zbiór ziemniaków (kwitną) i owoce dzikich jabłoni i grusz bywają większe o jedną sztukę, a ul w pobliżu kwiatów daje czasem słoik miodu więcej. Najwięcej wiosną i latem, jesienią mniej, zimą wcale. Bielinki za to podgryzają kapustę - strach na wróble albo kruk pilnujący pola je odpędzą.",
-        kleofasHint: "Brat Kleofas z pustelni na klifie spisze złapane gatunki w kronice - jeśli ma czym pisać.",
-        empty: "Gablotka jest pusta. Zrób w warsztacie siatkę na motyle (gałęzie i włókno), podejdź do motyla - najlepiej skradając się (C) - i naciśnij O.",
-        drawingTitle: "Rysunek Eli",
-        drawing: "Pawik z czterema oczkami, Ela w chustce i ja z siatką. Kredka trochę się kruszyła, więc słońce ma tylko pół promieni. Ela mówi, że to dlatego, że było rano."
+        tab: "Gablotka"
     };
+    Watki.scal(CASE, "motyle", "gablotka");   // (its words: js/teksty/motyle.txt, gablotka)
 
     // brother Kleofas writes the kinds into the chronicle (Motyle.js: a talk of his while the hero has a kind he has not written yet)
     const KLEOFAS = {
-        partial: ["Motyle? (Kleofas sięga po pióro.) Mów, jakie złapałeś.", "> {lista}.", "Zapisane. Zakon spisał zielnik, ale motyli nikt nigdy nie liczył. Będziesz pierwszy."],
-        full: ["Cytrynek, pawik, modraszek, bielinek i ćma. Pięć. (Kleofas dmucha na atrament.)",
-            "Pszczoły nie dadzą rady same. Motyle zapylają to, czego pszczołom się nie chce. Masz - z moich uli. Zasłużyłeś."],
-        note: ["Kronika motyli", "Brat Kleofas wpisał do kroniki wszystkie pięć gatunków z mojej gablotki: cytrynka, pawika, modraszka, bielinka i ćmę. Pierwsza taka lista od czasów zakonu."],
         reward: { items: [[ITEM.honey, 2]], xp: 40 }
     };
+    Watki.scal(KLEOFAS, "motyle", "kleofas");   // (its words: js/teksty/motyle.txt, kleofas)
 
     // ------------------------------------------------------------------ K54 "Motyl z oczkami" (docs/QUESTY.md, the next free K number)
     const K54 = {
-        id: "K54", kind: "K", title: "Motyl z oczkami", giver: "ela", icon: ICON.butterfly, where: "obóz uchodźców (Ela)", when: "wiosną i latem, za dnia, od dnia 3",
-        desc: "Ela widziała w książce mamy motyla z oczkami na skrzydłach - pawika. Żywego nie widziała nigdy. Złap go siatką i pokaż jej. Nie zabijaj.",
+        id: "K54", kind: "K", giver: "ela", icon: ICON.butterfly, 
         offer: {
-            cond: { hours: [7, 19], day: 3, fn: "k54Pora" },
-            say: ["Mama miała książkę z obrazkami. Taką ze zwierzętami. Spaliła się razem z chatą...",
-                "Był tam motyl z oczkami na skrzydłach! Cztery oczka, niebieskie, z żółtym. Mama mówi, że to pawik.",
-                "Ja jeszcze nigdy takiego nie widziałam. Naprawdę. Złapiesz mi? Tylko go nie zabijaj!"],
-            yes: "Złapię i ci pokażę.", no: "Może kiedyś.",
-            accept: ["Mama mówi, że pawiki wylatują rano po deszczu, jak słońce suszy skrzydła. I że lubią pokrzywy, bo tam się rodzą.",
-                "Łapie się je siatką. Taką na kiju. Ty umiesz wszystko zrobić, prawda?"],
-            decline: ["Dobrze... To narysuję go sobie jeszcze raz. Z pamięci."]
+            cond: { hours: [7, 19], day: 3, fn: "k54Pora" }
         },
         steps: [
-            { type: "bring", to: "ela", need: [["v:pawik", 1]], hours: [6, 21],
-                text: "Zrób siatkę na motyle (warsztat: gałęzie i włókno), złap pawika i pokaż go Eli w obozie. Pawiki latają tylko o świcie po deszczu, wiosną i latem, i lubią pokrzywy. W siatce wytrzyma do zmierzchu.",
-                remind: ["Pawik! Z oczkami! Rano po deszczu, pamiętasz?"],
-                hero: ["> Ela, chodź tu. Powoli... Zobacz, co mam w siatce."],
-                done: ["(Ela przykłada nos do siatki i wstrzymuje oddech.)", "Oczka! Cztery! Patrzą na mnie... Jest ładniejszy niż w książce!",
-                    "Wypuścimy go? Razem? Na trzy... Leć, motylku!", "(Pawik wyfruwa z siatki, okrąża obóz i znika nad murem.)",
-                    "Poczekaj! Mam coś dla ciebie. Narysowałam go wczoraj, z pamięci. Teraz wiem, że dobrze. I ciebie dorysowałam. Z siatką."] }
+            { type: "bring", to: "ela", need: [["v:pawik", 1]], hours: [6, 21] }
         ],
-        reward: { xp: 60, opinion: 2, flag: "elaMotyl", items: [[ITEM.drawing, 1]],
-            note: ["Motyl z oczkami", "Złapałem pawika i pokazałem go Eli. Wypuściliśmy go razem, a ona dała mi swój rysunek: pawik, ona i ja z siatką. Ludmiła się uśmiechnęła - pierwszy raz, odkąd ją znam."] }
+        reward: { xp: 60, opinion: 2, flag: "elaMotyl", items: [[ITEM.drawing, 1]] }
     };
-    const VITEMS = { pawik: { name: "Pawik w siatce", icon: ICON.butterfly } };
+    Watki.scal(K54, "motyle", "zadania.K54");   // (its words: js/teksty/motyle.txt, zadania.K54)
+    const VITEMS = { pawik: { icon: ICON.butterfly } };
+    Watki.scal(VITEMS, "motyle", "rzeczy");   // (its words: js/teksty/motyle.txt, rzeczy)
     const REMARKS = [
-        { id: "elaMotylLudmila", who: "ludmila", flag: "elaMotyl", lines: ["Ela narysowała tego motyla już dziesięć razy. Na desce, na piasku, na ścianie namiotu. Dziękuję ci. Długo się tak nie śmiała."] },
-        { id: "elaMotylEla", who: "ela", flag: "elaMotyl", lines: ["Myślisz, że pawik wróci? Mama mówi, że jak się coś wypuści, to wraca. Albo jego dzieci."] }
+        { id: "elaMotylLudmila", who: "ludmila", flag: "elaMotyl" },
+        { id: "elaMotylEla", who: "ela", flag: "elaMotyl" }
     ];
+    Watki.scal(REMARKS, "motyle", "uwagi");   // (its words: js/teksty/motyle.txt, uwagi)
     (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Motyle", quests: [K54], vitems: VITEMS, remarks: REMARKS });
 
     window.MotyleData = { ITEM, ICON, SHEET, SPECIES, ORDER, MAPS, WILD, FLOWERS, LIMITS, WEATHER, SEASON_K, RUN_SHY, SNEAK_SHY, PAWIK, SHOULDER,

@@ -59,6 +59,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("kruk");   // (the words of this file: js/teksty/kruk.txt, kod.*)
 
     const T = window.Tawerna, D = window.KrukData;
     if (!T) throw new Error("Kruk.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -608,11 +609,11 @@
     function openYoungMenu() {
         const s = S(), meat = meatInBag(), why = feedBlock();
         const n = s.feeds.length;
-        const entries = [{ name: "Połóż mu mięso", icon: meat ? iconOf(meat) : D.RAVEN_ICON, right: meat ? item(meat).name : "", enabled: !why,
-            help: why ? fill(why, V()) + "." : "Kładziesz kawałek mięsa na kamieniu pod żerdzią. Kruk bierze jedzenie z ręki dopiero po kilku dniach. Raz dziennie.", run: feedYoung }];
+        const entries = [{ name: TK.kod.openYoungMenu[0], icon: meat ? iconOf(meat) : D.RAVEN_ICON, right: meat ? item(meat).name : "", enabled: !why,
+            help: why ? fill(why, V()) + "." : TK.kod.openYoungMenu[1], run: feedYoung }];
         const sc = SceneManager._scene;
-        if (sc && sc.openFarmMenu) sc.openFarmMenu(s.stage === "gone" ? ravenName() : "Młody kruk", entries, undefined, undefined, undefined, undefined,
-            s.stage === "gone" ? "Wrócił na Urwisko, bo był głodny. Nakarm go, to wróci z tobą." : "Karmienia: " + Math.min(n, R.feedNeed) + "/" + R.feedNeed + " (każde innego dnia).");
+        if (sc && sc.openFarmMenu) sc.openFarmMenu(s.stage === "gone" ? ravenName() : TK.kod.openYoungMenu[2], entries, undefined, undefined, undefined, undefined,
+            s.stage === "gone" ? TK.kod.openYoungMenu[3] : Watki.wstaw(TK.kod.openYoungMenu[4], { "1": (Math.min(n, R.feedNeed)), feedNeed: (R.feedNeed) }));
     }
     function feedYoung() {
         const why = feedBlock();
@@ -660,7 +661,7 @@
         list.push(C(0, []));
         if (!$gameMap.isEventRunning()) $gameMap._interpreter.setup(list, 0);
         else nameScene();
-        T.popup(item(D.ITEM.ring) ? item(D.ITEM.ring).name : "Obrączka z krukiem", { top: true, color: "#ffd23f", sub: TX.ringSub, icon: iconOf(D.ITEM.ring) });
+        T.popup(item(D.ITEM.ring) ? item(D.ITEM.ring).name : TK.kod.tameNow[0], { top: true, color: "#ffd23f", sub: TX.ringSub, icon: iconOf(D.ITEM.ring) });
         autoChecks();
     }
     // the hungry raven fed at the Urwisko: back to the hero
@@ -712,9 +713,9 @@
                 ctx.fillRect(16, 18, PW - 36, 82);
                 ctx.textAlign = "center"; ctx.textBaseline = "middle";
                 ctx.font = "600 34px " + ($gameSystem.mainFontFace ? $gameSystem.mainFontFace() : "serif"); ctx.fillStyle = "#ece6da";
-                ctx.fillText("Jak nazwiesz kruka?", PW / 2, 46);
+                ctx.fillText(TK.kod.redraw[0], PW / 2, 46);
                 ctx.font = "17px " + ($gameSystem.mainFontFace ? $gameSystem.mainFontFace() : "serif"); ctx.fillStyle = "#b8b0a2";
-                ctx.fillText("Kruk siedzi ci na ramieniu i przechyla łeb. Czeka.", PW / 2, 84);
+                ctx.fillText(TK.kod.redraw[1], PW / 2, 84);
                 if (!this.text()) {   // (the field's grey "Reid" -> "Kruk")
                     ctx.fillStyle = "rgba(30,32,36,1)"; ctx.fillRect(150, 124, PW - 304, 44);
                     ctx.font = "bold 36px " + ($gameSystem.mainFontFace ? $gameSystem.mainFontFace() : "serif"); ctx.fillStyle = "#5e5a54";
@@ -722,7 +723,7 @@
                 }
                 ctx.fillStyle = "rgba(20,21,24,1)"; ctx.fillRect(200, b.height - 50, PW - 400, 30);
                 ctx.font = "14px " + ($gameSystem.mainFontFace ? $gameSystem.mainFontFace() : "serif"); ctx.fillStyle = "#77736b";
-                ctx.fillText("Puste pole = „" + R.defaultName + "”", PW / 2, b.height - 34);
+                ctx.fillText(Watki.wstaw(TK.kod.redraw[2], { defaultName: (R.defaultName) }), PW / 2, b.height - 34);
                 ctx.restore();
                 b._baseTexture.update();
             }
@@ -851,15 +852,15 @@
     function letterMenu() {
         const s = S(), entries = [];
         const done = s.letterDay === day();
-        for (const qL of questLetters()) entries.push({ name: "Zadanie: " + qL.title, icon: D.RAVEN_ICON, enabled: !done, help: done ? fill(TX.letterToday, V()) : "Kruk zaniesie to, co trzeba, za ciebie.", run: () => sendLetter(null, qL) });
+        for (const qL of questLetters()) entries.push({ name: Watki.wstaw(TK.kod.letterMenu[0], { title: (qL.title) }), icon: D.RAVEN_ICON, enabled: !done, help: done ? fill(TX.letterToday, V()) : TK.kod.letterMenu[1], run: () => sendLetter(null, qL) });
         for (const L of D.LETTERS) {
             if (!known(L)) continue;
             entries.push({ name: L.name, icon: D.RAVEN_ICON, enabled: !done, right: s.sent[L.key] ? "×" + s.sent[L.key] : "",
-                help: done ? fill(TX.letterToday, V()) : "Kruk zaniesie list i wróci z odpowiedzią za godzinę albo dwie.", run: () => sendLetter(L) });
+                help: done ? fill(TX.letterToday, V()) : TK.kod.letterMenu[2], run: () => sendLetter(L) });
         }
         entries.push({ name: D.MOTHER.name, icon: D.RAVEN_ICON, enabled: false, help: D.MOTHER.why });
         const sc = SceneManager._scene;
-        if (sc && sc.openFarmMenu) sc.openFarmMenu("Zanieś list", entries, undefined, undefined, undefined, undefined, "Raz dziennie. Tylko po wyspie.");
+        if (sc && sc.openFarmMenu) sc.openFarmMenu(TK.kod.letterMenu[3], entries, undefined, undefined, undefined, undefined, TK.kod.letterMenu[4]);
     }
     function scoutMaps() {
         const s = S(), infos = window.$dataMapInfos || [];
@@ -868,11 +869,11 @@
     }
     function scoutMenu() {
         const s = S(), done = s.scoutDay === day(), entries = scoutMaps().map(m => ({ name: m.name, icon: D.RAVEN_ICON, enabled: !done,
-            help: done ? fill(TX.scoutToday, V()) : "Kruk obleci okolicę i wróci z raportem na dziś: zwierzyna, ludzie, ruda, krzaki z jagodami i grzyby. Zapisze się w dzienniku; o niebezpieczeństwie ostrzeże.",
+            help: done ? fill(TX.scoutToday, V()) : TK.kod.scoutMenu[0],
             run: () => sendScout(m) }));
-        if (!entries.length) entries.push({ name: "Nie znasz jeszcze takich miejsc", enabled: false, help: "" });
+        if (!entries.length) entries.push({ name: TK.kod.scoutMenu[1], enabled: false, help: "" });
         const sc = SceneManager._scene;
-        if (sc && sc.openFarmMenu) sc.openFarmMenu("Leć na zwiad", entries, undefined, undefined, undefined, undefined, "Raz dziennie. Miejsca, w których byłeś.");
+        if (sc && sc.openFarmMenu) sc.openFarmMenu(TK.kod.scoutMenu[2], entries, undefined, undefined, undefined, undefined, TK.kod.scoutMenu[3]);
     }
     function sendScout(m) {
         const s = S();
@@ -907,7 +908,7 @@
                 if (!s.opinion[a.to] && a.to !== "grandpa") {   // (the first letter to a resident: he likes it - Opinion +1, once)
                     s.opinion[a.to] = day();
                     const q = TQ();
-                    if (q && q.addOpinion) q.addOpinion(1, "list przez kruka");
+                    if (q && q.addOpinion) q.addOpinion(1, TK.kod.checkAway[0]);
                 }
             }
             arriveWith(text, true);
@@ -936,7 +937,7 @@
         if (s.trinket) return;   // (yesterday's still lies there)
         const T0 = D.TRINKET, r = Math.random();
         if (r < T0.chance.coins) s.trinket = { kind: "coins", n: T0.coins[0] + Math.floor(Math.random() * (T0.coins[1] - T0.coins[0] + 1)) };
-        else if (r < T0.chance.coins + T0.chance.thing) { const t = pick(T0.things); s.trinket = { kind: "thing", id: t[0], n: t[1], text: t[2] }; }
+        else if (r < T0.chance.coins + T0.chance.thing) { const i = Math.floor(Math.random() * T0.things.length), t = T0.things[i]; s.trinket = { kind: "thing", id: t[0], n: t[1], text: T0.thingWords[i] }; }
         else if (r < T0.chance.coins + T0.chance.thing + T0.chance.letter) {
             const free = D.FOREIGN.filter(L => !s.held[L.id] && !s.gone[L.id] && ownerAround(L.owner));
             if (free.length) s.trinket = { kind: "letter", id: pick(free).id };
@@ -966,9 +967,9 @@
         const sc = SceneManager._scene;
         if (!sc || !sc.openFarmMenu) return;
         sc.openFarmMenu(fill(TX.letterAsk, { co: L.name }), [
-            { name: TX.letterRead, icon: 189, help: "Czytasz cudzy list. Właściciel to pozna po pieczęci.", run: () => readForeign(L) },
-            { name: TX.letterKeep, icon: 189, help: "Chowasz list. Oddasz go " + L.ownerName + (L.sell ? " albo sprzedasz Baltazarowi w kantorze." : "."), run: () => {} }
-        ], undefined, undefined, undefined, undefined, "Właściciel: " + L.ownerName);
+            { name: TX.letterRead, icon: 189, help: TK.kod.letterChoice[0], run: () => readForeign(L) },
+            { name: TX.letterKeep, icon: 189, help: Watki.wstaw(TK.kod.letterChoice[2], { ownerName: (L.ownerName), "2": (L.sell ? TK.kod.letterChoice[1] : ".") }), run: () => {} }
+        ], undefined, undefined, undefined, undefined, Watki.wstaw(TK.kod.letterChoice[3], { ownerName: (L.ownerName) }));
     }
     function readForeign(L) {
         const s = S(), h = s.held[L.id];
@@ -987,7 +988,7 @@
         const mine = heldFor(key);
         if (mine.length) {
             const L = mine[0], out = [], h = S().held[L.id];
-            sayTo(out, { id: 0 }, "To chyba twoje. Kruk przyniósł.");
+            sayTo(out, { id: 0 }, TK.kod.talkHook[0]);
             for (const line of h.read ? L.backRead : L.back) sayTo(out, spk, line);
             out.push(C(355, ["Kruk.act(this, [\"back\", " + JSON.stringify(L.id) + "])"]));
             return out;
@@ -999,7 +1000,7 @@
             const out = [];
             sayTo(out, { id: 0 }, TX.letterSellAsk[0].replace(/^> /, ""));
             sayTo(out, spk, TX.letterSellAsk[1]);
-            const labels = sell.map(L => fill(TX.letterSellOpt, { co: L.name, g: L.sell })).concat(["Nic. Zapomnij."]);
+            const labels = sell.map(L => fill(TX.letterSellOpt, { co: L.name, g: L.sell })).concat([TK.kod.talkHook[1]]);
             const branches = sell.map(L => [C(355, ["Kruk.act(this, [\"sell\", " + JSON.stringify(L.id) + "])"])].concat(sayTo([], spk, TX.letterSold[0]))).concat([[]]);
             out.push(C(102, [labels, labels.length - 1, 0, 2, 0]));
             labels.forEach((l, i) => { out.push(C(402, [i, l])); for (const c of branches[i]) out.push(Object.assign({}, c, { indent: (c.indent || 0) + 1 })); out.push(C(0, [], 1)); });
@@ -1027,10 +1028,10 @@
         }
         return out;
     }
-    (function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook) L.addTalkHook((key, ev) => { try { return talkHook(key, ev); } catch (e) { console.error("[Kruk]", e); return null; } }, true);
-    })();
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: a letter the raven brought goes back to its owner, Baltazar buys the others -
+    // "handBack": after the owners' takeovers (Garnizon...), before Pustelnia's and Przystan's, as the old hooks
+    T.talk.takeover({ owner: PLUGIN, who: (key => key === "kupiec" || D.FOREIGN.some(L => L.owner === key)), priority: T.talk.PRIORITY.handBack,
+        run: ctx => { try { return talkHook(ctx.who, ctx.ev); } catch (e) { console.error("[Kruk]", e); return null; } } });
 
     // ------------------------------------------------------------------
     // "Pilnuj pola": live - it flies at a flock on the crops round the perch; away - Birds' raids on those crops are taken over here
@@ -1082,7 +1083,7 @@
     }
     function finishAway(saved, eaten) {
         if (saved) pop(TX.chaseAway);
-        if (eaten) T.popup("Pod twoją nieobecność ptaki wyjadły " + eaten + (eaten === 1 ? " roślinę" : eaten < 5 ? " rośliny" : " roślin") + " (za daleko od grzędy)", { icon: iconOf(146), color: "#ffb4a0" });
+        if (eaten) T.popup(Watki.wstaw(TK.kod.finishAway[3], { eaten: (eaten), "2": (eaten === 1 ? TK.kod.finishAway[0] : eaten < 5 ? TK.kod.finishAway[1] : TK.kod.finishAway[2]) }), { icon: iconOf(146), color: "#ffb4a0" });
     }
 
     // ------------------------------------------------------------------
@@ -1097,7 +1098,7 @@
         if (!a) return;
         warnAt = Graphics.frameCount;
         caw(pet, true);
-        T.call("SpeechBubbles", "say", pet, "Kra! Kra!", 120);
+        T.call("SpeechBubbles", "say", pet, TK.kod.warnCheck[0], 120);
         pop(TX.warn, { color: "#ffb4a0" });
         if (pet.state === "shoulder") { pet.high = false; flyTo(pet, spotNearHero(true)); }
     }
@@ -1145,10 +1146,10 @@
         return d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14) ? few : many;
     }
     const GAME = {
-        rabbit: n => n + " " + plural(n, "zając", "zające", "zajęcy"),
-        deer: n => (n === 1 ? "jeleń" : n + " " + plural(n, "jeleń", "jelenie", "jeleni")),
-        boar: n => (n === 1 ? "dzik" : n + " " + plural(n, "dzik", "dziki", "dzików")),
-        wolf: n => (n === 1 ? "wilk" : "wataha wilków (" + n + ")")
+        rabbit: n => n + " " + plural(n, TK.kod.rabbit[0], TK.kod.rabbit[1], TK.kod.rabbit[2]),
+        deer: n => (n === 1 ? TK.kod.deer[0] : n + " " + plural(n, TK.kod.deer[0], "jelenie", "jeleni")),
+        boar: n => (n === 1 ? "dzik" : n + " " + plural(n, "dzik", "dziki", TK.kod.boar[0])),
+        wolf: n => (n === 1 ? "wilk" : Watki.wstaw(TK.kod.wolf[0], { n: (n) }))
     };
     // when, of what is left of today, a species is about: "" now, "rano" / "po południu" / "wieczorem" / "nocą", null - not today
     function whenToday(windows, h) {
@@ -1158,7 +1159,7 @@
             if (a > h && (next === null || a < next)) next = a;
         }
         if (next === null) return null;
-        return next >= 20 ? "nocą" : next >= 17 ? "wieczorem" : next >= 12 ? "po południu" : "rano";
+        return next >= 20 ? TK.kod.whenToday[0] : next >= 17 ? "wieczorem" : next >= 12 ? TK.kod.whenToday[1] : "rano";
     }
     // the night the report speaks of (its key: the day it starts on - as Humans.nightKey): tonight, or the one going on
     function nightKeyNow() {
@@ -1255,20 +1256,20 @@
             if (H.bearChance && H.SPECIES.bear && killed("bear") === 0 && whenToday(H.SPECIES.bear.hours, h) !== null) {
                 let bear = false;
                 for (let hh = Math.floor(h); hh < 24 && !bear; hh++) bear = asMap(id, data, () => H.bearChance(hh)) > 0;
-                if (bear) { parts.push("ślady niedźwiedzia"); warn.push("ślady niedźwiedzia"); }
+                if (bear) { parts.push(TK.kod.scoutReport[0]); warn.push(TK.kod.scoutReport[0]); }
             }
         }
         // people: tonight's camp (decided now and kept), the Urwisko's diggers, the chance of an ambush on the road
         if (id === MAP) {
-            if (campNightFor(nightKeyNow())) { parts.push("obcy kopacze nocą (3)"); warn.push("obcy kopacze nocą (3)"); }
+            if (campNightFor(nightKeyNow())) { parts.push(TK.kod.scoutReport[1]); warn.push(TK.kod.scoutReport[1]); }
         } else {
             const plan = planNight(id, data), HD = window.HumansData;
             if (plan && plan.camp && plan.size > 0) {
-                const ph = "obóz bandytów nocą (" + plan.size + ")";
+                const ph = Watki.wstaw(TK.kod.scoutReport[2], { size: (plan.size) });
                 parts.push(ph); warn.push(ph);
             }
             const amb = ambushChanceFor(id, data);
-            if (amb > 0 && HD && HD.AMBUSH && day() > HD.AMBUSH.calmDays && h < HD.AMBUSH.hours[1]) { parts.push("możliwa zasadzka przy drodze"); warn.push("możliwa zasadzka przy drodze"); }
+            if (amb > 0 && HD && HD.AMBUSH && day() > HD.AMBUSH.calmDays && h < HD.AMBUSH.hours[1]) { parts.push(TK.kod.scoutReport[3]); warn.push(TK.kod.scoutReport[3]); }
         }
         // ore: the veins of the map's file not mined yet
         if (data && data.events) {
@@ -1278,7 +1279,7 @@
                 if (!pg || !/^!\$Rock_Ore/.test(pg.image.characterName || "") || $gameSelfSwitches.value([id, e.id, "A"])) continue;
                 ore++;
             }
-            if (ore) parts.push(ore + " " + plural(ore, "żyła rudy", "żyły rudy", "żył rudy"));
+            if (ore) parts.push(ore + " " + plural(ore, TK.kod.scoutReport[4], TK.kod.scoutReport[5], TK.kod.scoutReport[6]));
         }
         // berries and mushrooms (the map's catalogue, today's state of each tile)
         const cat = (s.cat || {})[id], Fm = F();
@@ -1297,8 +1298,8 @@
                 const x = n % W0, y = Math.floor(n / W0), k = x + "," + y, born = Fm.mushroomBirth(x, y);
                 if (born !== null && free(k) && (picks[k] === undefined || born > picks[k])) mush++;
             }
-            if (berries) parts.push(berries + " " + plural(berries, "krzak jagód", "krzaki jagód", "krzaków jagód"));
-            if (mush) parts.push(mush + " " + plural(mush, "grzyb", "grzyby", "grzybów"));
+            if (berries) parts.push(berries + " " + plural(berries, TK.kod.scoutReport[7], TK.kod.scoutReport[8], TK.kod.scoutReport[9]));
+            if (mush) parts.push(mush + " " + plural(mush, "grzyb", "grzyby", TK.kod.scoutReport[10]));
         }
         const text = parts.length ? parts.join(", ") : TX.scoutEmpty;
         return { parts, warn, text, warnText: warn.join(", "), catalogued: !!cat };
@@ -1310,7 +1311,7 @@
         const title = fill(TX.scoutTitle, { gdzie: name });
         T.popup(title, { top: true, color: "#ffe27a", sub: r.text + (r.catalogued ? "" : " " + TX.scoutNoCat) });
         const mins = Math.floor((hour() % 1) * 60);
-        const when = "Dzień " + day() + " (" + String(T.time.seasonName()).toLowerCase() + "), godz. " + Math.floor(hour()) + ":" + String(mins).padStart(2, "0");
+        const when = Watki.wstaw(TK.kod.finishScout[0], { "1": (day()), "2": (String(T.time.seasonName()).toLowerCase()), "3": (Math.floor(hour())), "4": (String(mins).padStart(2, "0")) });
         const J = T.api("Journal");
         if (J && J.data) { const notes = J.data().notes || []; for (let i = notes.length - 1; i >= 0; i--) if (notes[i] && notes[i].title === title) notes.splice(i, 1); }
         note(title, when + ". " + r.text + "." + (r.warn.length ? "\n" + fill(TX.scoutWarn, { gdzie: name, co: r.warnText }) : "") + (r.catalogued ? "" : "\n" + TX.scoutNoCat));
@@ -1390,7 +1391,7 @@
         const s = S();
         s.camp.cleared[key] = day();
         s.camp.n = (s.camp.n || 0) + 1;
-        if (s.camp.n === 3) note("Urwisko spokojne", "Trzy noce z rzędu przepędziłem obcych kopaczy z Urwiska. Chyba dali sobie spokój z kamieniami z krukiem. Na razie.");
+        if (s.camp.n === 3) note(TK.kod.glowna[0], TK.kod.glowna[1]);
     }, { owner: PLUGIN });
     function campSeen() {
         const s = S(), Hm = T.api("Humans");
@@ -1412,21 +1413,21 @@
         if (s.stage !== "tame") { openYoungMenu(); return; }
         const meat = meatInBag(), held = D.FOREIGN.filter(L => s.held[L.id]);
         const entries = [
-            { name: "Pogłaszcz", icon: D.RAVEN_ICON, help: "Kruk stroszy pióra.", run: () => { if (pet) caw(pet); pop(TX.pet); } },
-            { name: "Leć ze mną", icon: D.RAVEN_ICON, enabled: s.mode !== "follow", help: "Kruk leci z tobą z mapy na mapę i siada na drzewach, na ziemi albo na twoim ramieniu. Przed domami czeka na zewnątrz.", run: () => setMode("follow") },
-            { name: "Zostań na grzędzie", icon: D.RAVEN_ICON, enabled: !!p && s.mode !== "perch", help: p ? "Kruk wraca na grzędę i tam czeka." : fill(TX.noPerch, V()) + ".", run: () => setMode("perch") },
-            { name: "Pilnuj pola", icon: D.RAVEN_ICON, enabled: !!p && s.mode !== "guard", help: p ? "Kruk siedzi na grzędzie i przegania wrony i wróble z zasiewów w promieniu " + R.guardRadius + " pól - także pod twoją nieobecność." : fill(TX.noPerch, V()) + ".", run: () => setMode("guard") },
-            { name: "Nakarm", icon: meat ? iconOf(meat) : D.RAVEN_ICON, enabled: !!meat, right: meat ? item(meat).name : "", help: meat ? "Kruk zje kawałek mięsa albo rybę." : fill(TX.feedNoMeat, V()) + ".", run: feedTame },
-            { name: "Zanieś list", icon: 189, enabled: s.letterDay !== day(), right: s.letterDay === day() ? "jutro" : "", help: "Raz dziennie: list do kogoś na wyspie. Kruk wróci z odpowiedzią.", run: letterMenu },
-            { name: "Leć na zwiad", icon: D.RAVEN_ICON, enabled: s.scoutDay !== day(), right: s.scoutDay === day() ? "jutro" : "", help: "Raz dziennie: kruk obleci miejsce, w którym byłeś, i wróci z raportem na dziś (zapisze go w dzienniku, ostrzeże przed niebezpieczeństwem).", run: scoutMenu }
+            { name: TK.kod.openRavenMenu[0], icon: D.RAVEN_ICON, help: TK.kod.openRavenMenu[1], run: () => { if (pet) caw(pet); pop(TX.pet); } },
+            { name: TK.kod.openRavenMenu[2], icon: D.RAVEN_ICON, enabled: s.mode !== "follow", help: TK.kod.openRavenMenu[3], run: () => setMode("follow") },
+            { name: TK.kod.openRavenMenu[4], icon: D.RAVEN_ICON, enabled: !!p && s.mode !== "perch", help: p ? TK.kod.openRavenMenu[5] : fill(TX.noPerch, V()) + ".", run: () => setMode("perch") },
+            { name: TK.kod.openRavenMenu[6], icon: D.RAVEN_ICON, enabled: !!p && s.mode !== "guard", help: p ? Watki.wstaw(TK.kod.openRavenMenu[7], { guardRadius: (R.guardRadius) }) : fill(TX.noPerch, V()) + ".", run: () => setMode("guard") },
+            { name: "Nakarm", icon: meat ? iconOf(meat) : D.RAVEN_ICON, enabled: !!meat, right: meat ? item(meat).name : "", help: meat ? TK.kod.openRavenMenu[8] : fill(TX.feedNoMeat, V()) + ".", run: feedTame },
+            { name: TK.kod.openRavenMenu[9], icon: 189, enabled: s.letterDay !== day(), right: s.letterDay === day() ? "jutro" : "", help: TK.kod.openRavenMenu[10], run: letterMenu },
+            { name: TK.kod.openRavenMenu[11], icon: D.RAVEN_ICON, enabled: s.scoutDay !== day(), right: s.scoutDay === day() ? "jutro" : "", help: TK.kod.openRavenMenu[12], run: scoutMenu }
         ];
-        for (const L of held) entries.push({ name: "Cudzy list: " + L.name, icon: 189, help: "Właściciel: " + L.ownerName + ". " + (s.held[L.id].read ? "Przeczytany." : "Nieprzeczytany."), run: () => letterChoice(L) });
+        for (const L of held) entries.push({ name: Watki.wstaw(TK.kod.openRavenMenu[13], { name: (L.name) }), icon: 189, help: Watki.wstaw(TK.kod.openRavenMenu[14], { ownerName: (L.ownerName), "2": (s.held[L.id].read ? "Przeczytany." : "Nieprzeczytany.") }), run: () => letterChoice(L) });
         sc.openFarmMenu(fill(TX.menuTitle, V()), entries, undefined, undefined, undefined, undefined, statusNote());
     }
     function statusNote() {
         const s = S();
-        const mode = { follow: "leci z tobą", perch: "na grzędzie", guard: "pilnuje pola" }[s.mode] || s.mode;
-        return "Jedzenie " + Math.round(s.food) + " · Woda " + Math.round(s.water) + " · " + mode + (s.away ? " · w drodze" : "");
+        const mode = { follow: TK.kod.statusNote[0], perch: TK.kod.statusNote[1], guard: TK.kod.statusNote[2] }[s.mode] || s.mode;
+        return Watki.wstaw(TK.kod.statusNote[4], { "1": (Math.round(s.food)), "2": (Math.round(s.water)), mode: (mode), "4": (s.away ? TK.kod.statusNote[3] : "") });
     }
     function setMode(mode) {
         const s = S(), p = perch();
@@ -1443,7 +1444,7 @@
         if (s.stage !== "tame") return false;
         if (s.away) { pop(TX.busy); return true; }
         if (pet && pet.kind === "pet") { openRavenMenu(); return true; }
-        if (!outdoors()) { pop("{imie} czeka na zewnątrz"); return true; }
+        if (!outdoors()) { pop(TK.kod.callRaven[0]); return true; }
         s.mode = "follow";
         pop(TX.follow);
         thinkT = 0;
@@ -1475,13 +1476,13 @@
         const s = S(), max = def.bowl || R.bowlMax, at = Math.max(0, entries.findIndex(e => e.name === def.openName) + 1);
         const haveWater = (F().bagWater && F().bagWater() >= 1) || (window.Needs && Needs.skinCharges && Needs.skinCharges() >= 1);
         const add = [];
-        if (s.trinket) add.push({ name: "Weź, co przyniósł kruk", icon: s.trinket.kind === "coins" ? 314 : s.trinket.kind === "letter" ? 189 : iconOf(s.trinket.id), right: trinketLabel(s.trinket),
-            help: "Rano na grzędzie coś leży. Kruki znoszą, co błyszczy - i co komuś wypadło.", run: takeTrinket });
-        add.push({ name: "Nalej wody do miseczki", icon: 391, right: (b.bowlWater || 0) + "/" + max, enabled: (b.bowlWater || 0) < max && !!haveWater,
-            help: (b.bowlWater || 0) >= max ? TX.bowlFull + "." : haveWater ? "Nalewasz porcję wody z wiadra (albo z bukłaka). Kruk napije się, kiedy zechce." : TX.bowlNone + ".", run: () => pourWater(b) });
-        if (s.stage === "tame") add.push({ name: "Kruk: " + ravenName(), icon: D.RAVEN_ICON, help: "Menu kruka (albo klawisz K).", run: openRavenMenu });
+        if (s.trinket) add.push({ name: TK.kod.glowna[2], icon: s.trinket.kind === "coins" ? 314 : s.trinket.kind === "letter" ? 189 : iconOf(s.trinket.id), right: trinketLabel(s.trinket),
+            help: TK.kod.glowna[3], run: takeTrinket });
+        add.push({ name: TK.kod.glowna[4], icon: 391, right: (b.bowlWater || 0) + "/" + max, enabled: (b.bowlWater || 0) < max && !!haveWater,
+            help: (b.bowlWater || 0) >= max ? TX.bowlFull + "." : haveWater ? TK.kod.glowna[5] : TX.bowlNone + ".", run: () => pourWater(b) });
+        if (s.stage === "tame") add.push({ name: Watki.wstaw(TK.kod.glowna[6], { "1": (ravenName()) }), icon: D.RAVEN_ICON, help: TK.kod.glowna[7], run: openRavenMenu });
         entries.splice(at, 0, ...add);
-        return s.stage === "tame" ? statusNote() : "Grzęda czeka na kruka.";
+        return s.stage === "tame" ? statusNote() : TK.kod.glowna[8];
     });
 
     // ------------------------------------------------------------------
@@ -1494,7 +1495,7 @@
                 if (!inHours(hour(), R.feedHours)) { T.popup(TX.ravenryNight, { color: "info" }); return; }
                 if (S().stage !== "tame") { if (!S().feeds.length && S().stage === "wild") T.popup(TX.ravenryLook, { color: "info" }); openYoungMenu(); return; }
             }
-            T.popup(S().stage === "tame" ? fill("Stare żerdzie zakonu. {imie} czasem tu zagląda - do swoich.", V()) : TX.ravenryEmpty, { color: "info" });
+            T.popup(S().stage === "tame" ? fill(TK.kod.look[0], V()) : TX.ravenryEmpty, { color: "info" });
         } else if (what === "baszta") T.popup(TX.towerLook, { color: "info" });
         else if (what === "gniazdo") T.popup(TX.nestLook, { color: "info" });
         else if (/^kamien\d$/.test(what)) {
@@ -1527,7 +1528,7 @@
                 s.gone[a] = "back";
                 if (!h.read) {
                     const q = TQ();
-                    if (q && q.addOpinion) q.addOpinion(1, "oddany list");
+                    if (q && q.addOpinion) q.addOpinion(1, TK.kod.actCall[0]);
                     setFlag("krukUfa_" + L.owner);
                 }
                 if (L.backGold) { $gameParty.gainGold(L.backGold); T.popup("+" + L.backGold + " G", { icon: 314, kind: "gold" }); }
@@ -1557,7 +1558,7 @@
                 check: () => S().k51.leg >= 5 || S().stage !== "wild",
                 vars: () => {
                     const leg = S().k51.leg;
-                    return { gdzie: leg <= 1 ? "Kruk czeka przy górnej krawędzi przystani (ścieżka na klif)." : leg === 2 ? "Kruk przysiadł przy pustelni na klifie." : "Kruk poleciał na wschód, na Urwisko Kruków." };
+                    return { gdzie: leg <= 1 ? TK.kod.vars[0] : leg === 2 ? TK.kod.vars[1] : TK.kod.vars[2] };
                 }
             },
             d24Start: () => isDone("K51") || S().feeds.length > 0 || S().stage === "tame",

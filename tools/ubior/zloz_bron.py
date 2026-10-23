@@ -1,5 +1,6 @@
 # tools/ubior/zloz_bron.py - obrazki broni, hełmów, zbroi i tarcz z wyników tests/ubior_bron_test.js:
-#   docs/ekwipunek/bron_wrecz.png       zamach pałką: miecze, tasak, szabla, sztylet, buzdygan, kiścień, kostur, młot, pałka (materiały)
+#   docs/ekwipunek/bron_wrecz.png       zamach pałką: sztylet, buzdygan, kiścień, kostur, młot, pałka; zamach mieczem (Hero_Sword, 2026-10-23):
+#                                       miecze, długie miecze, tasak, szabla (materiały)
 #   docs/ekwipunek/bron_topory.png      zamach siekierą: siekiera, topór, czekan, bardysz
 #   docs/ekwipunek/bron_drzewcowe.png   włócznia, rohatyna, sulica (pchnięcie), kilof i młot (kilof), sztylet w pięści
 #   docs/ekwipunek/bron_dystans.png     łuki, proce (materiały)
@@ -57,7 +58,7 @@ def main(argv):
     meta = json.load(open(os.path.join(src, 'meta.json'), encoding='utf-8'))
     P = lambda f: os.path.join(shots, f) if f else None
     # the weapons, by their swing
-    groups = [('bron_wrecz', ['Hero_Club'], 'Broń na zamachu pałką (nowe rodzaje na osi starej pałki, materiały)'),
+    groups = [('bron_wrecz', ['Hero_Club', 'Hero_Sword'], 'Broń na zamachu pałką i mieczem (nowe rodzaje na osi starej broni, materiały)'),
               ('bron_topory', ['Hero_Axe', 'Hero_AxeSide'], 'Broń na zamachu siekierą'),
               ('bron_drzewcowe', ['Hero_Spear', 'Hero_Pick', 'Hero_Punch'], 'Pchnięcie (włócznie), kilof / młot, sztylet w pięści'),
               ('bron_dystans', ['Hero_Bow', 'Hero_Sling'], 'Łuki i proce (materiały)')]

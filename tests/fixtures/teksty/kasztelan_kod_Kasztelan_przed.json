@@ -1,0 +1,10 @@
+{
+ "kod": {
+  "build": {
+   "0": "Kosz z żarem Borgara",
+   "1": "Ognisko Borgara",
+   "2": "Kosz Borgara"
+  }
+ },
+ "_opis": "Napisy kodu Kasztelan.js sprzed przeniesienia do js/teksty/kasztelan.txt (kod.*)"
+}

@@ -1,0 +1,288 @@
+# Teksty Aktu III - napad na tawernę (wtyczki Act3_Data.js i Act3.js): ostrzeżenia, dzwon, fale napastników, obrońcy, wyniki.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz akt3
+
+# ======================================================================== TEXT
+[warnBarks.kowal]
+Obcy w kolczugach kupili dziś u mnie dziesięć grotów. Nie targowali się. Nie podoba mi się to.
+
+[warnBarks.piekarka]
+Rano przy piecu stało dwóch obcych. Pytali, o której Borgar zamyka.
+
+[warnBarks.woziwoda]
+Na przystani przybił prom bez flagi. Wysiedli sami chłopcy z mieczami.
+
+[warnBarks.kapral]
+Kazali nam dziś nie patrzeć w stronę tawerny po zmroku. Nie powiem, kto kazał.
+
+[warnBarks.soltys]
+Ktoś pytał w ratuszu o stare plany tawerny. O piwnice.
+
+[warnBarks.garbarz]
+Psy całą noc ujadały na drodze do przystani. Ktoś tam obozuje.
+
+[warnBarks.ludmila]
+Widziałam takich ludzi na kontynencie. Zawsze przed spaloną wsią.
+
+[warnBarks.rafal]
+To ludzie od kopaczy. Poznaję ich po butach. Idą po wasze schody w dół.
+
+[warnBarks.kupiec]
+Jutro w nocy nie wychodź z domu, chłopcze. Radzę jako kupiec, nie jako przyjaciel.
+
+[warnBarks.zlodziej]
+Jakiś wielki w kolczudze dał mi grosz, żebym mu pokazał tylne drzwi tawerny. Nie pokazałem! ...Prawie.
+
+[warnBarks.dzwonnik]
+Coś wisi w powietrzu. Trzy i jeden - pamiętasz, co to znaczy?
+
+[warnBarks.inni]
+Za dużo obcych w miasteczku. Za dużo.
+Słyszałeś? Pytają o piwnicę tawerny...
+
+[borgarWarn]
+Dwóch obcych pytało dziś o piwnicę. Powiedziałem, że trzymam tam kapustę.
+Jeśli przyjdą, to nocą. Tacy zawsze przychodzą nocą.
+
+grumWarn.ally = Znam ten zapach. Jutro w nocy przyjdą moi dawni płatnicy. Będę przy drzwiach.
+grumWarn.enemy = Nie pij jutro wieczorem w tawernie, przyjacielu. Posłuchaj mnie choć raz.
+grumWarn.neutral = Jutro w nocy będzie tu gorąco. To nie moja wojna.
+[ambrozyTrusts]
+Słyszałem, co mówią na rynku.
+Jeśli przyjdą do tawerny, zadzwonię trzy i jeden. Ludzie wiedzą, co to znaczy - choć niektórzy udają, że nie.
+
+[ambrozyNot]
+Trzy i jeden... tak dzwoniło się, kiedy ktoś szedł na twierdzę.
+Lina wisi pod dzwonem, przy mojej wieży. Kto pociągnie, ten woła całe miasto. Ale kto by mnie słuchał.
+
+[visionArmed]
+Statek bez bandery
+Wizja z latarni: to oni. Przypłynęli.
+
+[noteVision]
+Statek bez bandery
+W soczewce latarni Bazylego widziałem statek bez bandery, który przybija nocą do wyspy. Teraz wiem, kto nim przypłynął - ludzie, którzy pytają o piwnicę tawerny.
+
+[noteArmed]
+Obcy w miasteczku
+Ludzie mówią o obcych z mieczami, którzy pytają o piwnicę tawerny. Ktoś wie, że zszedłem głęboko - i że droga w dół zaczyna się pod naszą podłogą. Jeśli przyjdą, to nocą. Trzy uderzenia dzwonu i jedno to alarm.
+
+[start]
+Napad na tawernę!
+Ludzie frakcji pod drzwiami. Obroń tawernę.
+
+startInside = Walą w drzwi! Na zewnątrz, szybko!
+[bellAmbrozy]
+Dzwon: trzy i jeden
+Ambroży bije na alarm.
+
+[bellNeeded]
+Alarm: trzy i jeden
+Lina dzwonu wisi przy wieży Ambrożego (na wschód od rynku).
+
+[bellHero]
+Dzwon: trzy i jeden
+Całe miasteczko to słyszy.
+
+bellWrong = To nie był alarm... Jeszcze raz: trzy, przerwa, jeden.
+bellDone = Już dzwoni się na alarm.
+bellCalm = Nie ma powodu bić na alarm.
+[helpComes]
+Miasteczko idzie z pomocą
+Z młotami i widłami - na dziedziniec tawerny.
+
+[helpNot]
+Drzwi domów zostają zamknięte
+Miasteczko słyszy dzwon - i udaje, że śpi.
+
+[helpNotBark]
+Zamknij okiennice, Bronek!
+To nie nasza sprawa...
+Niech straż to załatwi.
+
+grumNeutral = To nie moja wojna. Siedzę i piję.
+meliaHide = Melia chowa lutnię pod ladę.
+ozzyHide = Ozzy wlazł pod stół.
+[doorBreach]
+Wyważyli drzwi tawerny!
+Ci, co się wdarli, idą w głąb tawerny.
+
+[cellarBreach]
+Zeszli do piwnicy!
+Stare drzwi puściły - ludzie frakcji są pod tawerną.
+
+[inside]
+Są w środku!
+Wracaj do tawerny - idą do starych drzwi przy piwnicy.
+
+[outside]
+Są pod drzwiami!
+Na dziedzińcu tawerny - wyjdź do nich.
+
+bossBeaten = Myślisz, że jesteśmy jedyni? Za nami przyjdą następni.
+grumEnemy = Mówiłem ci, żebyś nie przychodził. Teraz już za późno.
+grumEnemyBeaten = Dobra. Twoja wygrana. Odpływam pierwszym promem.
+[offscreenNotice]
+Kiedy cię nie było...
+Frakcja uderzyła na tawernę.
+
+beaten = Pobili cię - a reszta toczyła się bez ciebie.
+# „Tawerna obroniona”
+outcome.held.title = Tawerna obroniona
+outcome.held.sub = Do świtu nikt już nie zapuka. Borgar stawia wszystkim.
+outcome.held.say = Nie wiem, co oni tam chcieli znaleźć... ale nie dostali tego. Masz. Na koszt firmy - i to też.
+[outcome.held.note]
+Noc pod tawerną
+Frakcja uderzyła na tawernę - i odeszła z niczym. Piwnica jest nasza, krata cała. Miasteczko o tym mówi.
+
+# „Tawerna ocalała - ale drogo”
+outcome.costly.title = Tawerna ocalała - ale drogo
+outcome.costly.sub = Okopcone ściany, połamane stoły, ranni ludzie. Piwnica nasza.
+outcome.costly.say = Stoi. Okopcona, połamana, ale stoi. Odbudujemy. Ludzi szkoda bardziej niż stołów.
+[outcome.costly.note]
+Noc pod tawerną
+Obroniliśmy piwnicę, ale tawerna wygląda jak po pożarze. Ranni: {lost}. Frakcja wróci - już wie, gdzie jest droga w dół.
+
+# „Tawerna padła”
+outcome.fallen.title = Tawerna padła
+outcome.fallen.sub = Zeszli do piwnicy. Teraz są pod nami - i przed nami.
+outcome.fallen.say = Przeszli przez stare drzwi... Krata stoi otworem. Synu - oni są już na dole. Przed tobą.
+[outcome.fallen.note]
+Noc pod tawerną
+Nie zatrzymaliśmy ich. Ludzie frakcji zeszli przez stare drzwi do piwnicy i dalej w dół. Na dole będą przede mną - i może przy samym Sercu.
+
+fale.orzel = Biały orzeł!
+fale.orzelImie = Orzeł
+fale.orzelImieMale = orzeł
+fale.orzelSpada = {imie} spada z nieba na dziedziniec - jednego z nich mniej.
+fale.orzelLucznik = Łucznik na murze nie zdążył naciągnąć cięciwy - {imie} zrzucił go z muru.
+fale.kuchnia = Kuchnia zaryglowana
+fale.kuchniaSub = Eryk Sowa ostrzegł Borgara - tylnymi drzwiami wchodzi ich mniej.
+fale.kuchniaZwiadowcy = " A zwiadowców z ruin już nie mają."
+fale.mniej = Mniej ich
+fale.mniejSub = Zwiadowców, których pobiłeś w ruinach, już nie mają - tylnymi drzwiami wchodzi ich mniej.
+fale.imiona.rafal = Rafał
+fale.imiona.najemnik = Najemnik Baltazara
+fale.imiona.zwiadowca = Zwiadowca z ruin
+fale.imiona.dowodca = Dowódca kopaczy
+fale.imiona.nowyDowodca = Nowy dowódca kopaczy
+fale.imiona.grum = Grum
+fale.imiona.nozownik = Nożownik Czarnych Oczu
+borgarObrona.idzie.start = Byłem na dziesiątym piętrze. Wiem, czego bronię!
+borgarObrona.idzie.hit = Nie w mojej tawernie!
+borgarObrona.idzie.down = Ugh... Dalej, synu... ja tu poleżę...
+borgarObrona.idzie.win = Kowale pilnują do końca.
+borgarObrona.pilnuje.start = Trzysta lat mój ród pilnował tej kraty! Nie przejdą!
+borgarObrona.pilnuje.hit = Do piwnicy? Po moim trupie!
+borgarObrona.pilnuje.down = Ugh... krata... pilnuj kraty...
+borgarObrona.pilnuje.win = Krata stoi. Następnym razem niech zapukają.
+borgarObrona.zwykle.start = Ja pilnuję piwnicy! Ty ich zatrzymaj!
+borgarObrona.zwykle.hit = Nie w mojej tawernie!
+borgarObrona.zwykle.down = Ugh... Dalej, synu... ja tu poleżę...
+borgarObrona.zwykle.win = Następnym razem niech zapukają.
+names.borgar = Borgar
+names.grum = Grum
+names.rafal = Rafał
+names.marek = Marek
+names.tadek = Tadek
+names.ignac = Ignac
+names.kuba = Kuba
+names.uchodzcy = uchodźcy
+names.straz = strażnicy dworu
+names.wit = kapral Wit
+f9Arm = Akt III: uzbrój napad (ostrzeżenia, napad następnej nocy)
+f9Start = Akt III: napad na tawernę teraz
+f9Reset = Akt III: wyczyść stan napadu
+
+# ======================================================================== WAVES (fale.lista)
+# w1
+fale.lista.0.shout = Pochodnie pod drzwi! Ruszać się!
+[fale.lista.0.notice]
+Pod drzwiami tawerny!
+Trzech z pochodniami idzie przez dziedziniec.
+
+# w2
+fale.lista.1.shout = Łucznicy, na mur! Reszta do drzwi!
+[fale.lista.1.notice]
+Łucznicy!
+Druga grupa - strzelają z bramy dziedzińca.
+
+# w3
+fale.lista.2.shout = Do starych drzwi! Krata jest za nimi!
+[fale.lista.2.notice]
+Tylnymi drzwiami!
+Są w środku - idą przez kuchnię do starych drzwi przy piwnicy.
+
+# w4
+fale.lista.3.shout = Dość zabawy. Otworzyć mi tę piwnicę.
+[fale.lista.3.notice]
+Dowódca!
+Frontowymi drzwiami wchodzi dowódca kopaczy ze swoimi ludźmi.
+
+# ======================================================================== DEFENDERS (obroncy)
+obroncy.0.name = Borgar
+obroncy.1.name = Grum
+obroncy.1.lines.start = Znam ich. Płacili mi kiedyś. Teraz płacą za to.
+obroncy.1.lines.hit = Za wolno, chłopcy!
+obroncy.1.lines.down = Dobra... to... na razie wszystko...
+obroncy.1.lines.win = Żelazna Pięść nie zmienia stron dwa razy.
+obroncy.2.name = Rafał
+obroncy.2.lines.start = Ukryłeś mnie, kiedy mnie szukali. Teraz ja!
+obroncy.2.lines.hit = To za Marka!
+obroncy.2.lines.down = Nie... dam rady...
+obroncy.2.lines.win = Już nie muszę uciekać.
+obroncy.3.name = Marek
+obroncy.3.lines.start = Znam ich twarze z tunelu. Nie przejdą.
+obroncy.3.lines.hit = Za tych, co zostali na dole!
+obroncy.3.lines.down = Ludmiła... powiedz jej...
+obroncy.3.lines.win = Wystarczy. Wracam do domu.
+obroncy.4.name = Tadek
+obroncy.4.lines.start = Kto podnosi rękę na tawernę, ma do czynienia z młotem!
+obroncy.4.lines.hit = Kowadło bije mocniej!
+obroncy.4.lines.down = Aj... ręka...
+obroncy.4.lines.win = Kuźnia otwarta od rana. Jakby co.
+obroncy.5.name = Ignac
+obroncy.5.lines.start = Skórę wam wyprawię, łobuzy!
+obroncy.5.lines.hit = Ha!
+obroncy.5.lines.down = Uff... starczy mi...
+obroncy.5.lines.win = Dobra robota, chłopcze.
+obroncy.6.name = Kuba
+obroncy.6.lines.start = Z drągiem od beczek - też się da!
+obroncy.6.lines.hit = Masz!
+obroncy.6.lines.down = Ała... noga...
+obroncy.6.lines.win = Wody wam nie dam. Ale pomóc - zawsze.
+obroncy.7.name = Uchodźca
+obroncy.7.lines.start = Uciekaliśmy przed takimi. Dość uciekania!
+obroncy.7.lines.hit = Widłami cię!
+obroncy.7.lines.down = Ach...
+obroncy.7.lines.win = Tu jest teraz nasz dom.
+obroncy.8.name = Kapral Wit
+obroncy.8.lines.start = Pięć groszy na tydzień brałem. Dziś nie biorę nic. Do bramy!
+obroncy.8.lines.hit = Za miasto!
+obroncy.8.lines.down = Ugh... trzymajcie... drzwi...
+obroncy.8.lines.win = Straż miejska. Nareszcie naprawdę.
+obroncy.9.name = Strażnik dworu
+obroncy.9.lines.start = Jaśnie pan przysyła pozdrowienia. I włócznie.
+obroncy.9.lines.hit = W imieniu dworu!
+obroncy.9.lines.down = Ranny...!
+obroncy.9.lines.win = Zameldujemy jaśnie panu.
+
+# ======================================================================== SPOTS (miejsca)
+miejsca.1.doorName = Stare drzwi (piwnica)
+miejsca.8.doorName = Drzwi tawerny
+
+# ======================================================================== z kodu Act3.js (kod.*)
+kod.ambrozy = Ambroży
+kod.dzwon.tytul = Trzy i jeden
+kod.dzwon.sub = dzwonnica - alarm
+kod.dzwon.jak = Trzy, przerwa, jeden: cztery uderzenia
+kod.opiniaBezCiebie = nie było cię, kiedy frakcja uderzyła na tawernę
+kod.opiniaNoc = noc pod tawerną
+kod.xp = Akt III
+kod.blok = Blok -{n}
+kod.zablokowane = Zablokowane!
+kod.wywazone = Wyważone!
+kod.puscily = Puściły!
+kod.ranny = {imie} (ranny)
+kod.f9Wyczyszczony = Akt III: wyczyszczony
+kod.f9Napad = Akt III: napad następnej nocy (dzień {dzien})

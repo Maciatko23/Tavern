@@ -24,7 +24,8 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- a free 6x4 patch of natural ground
         const B = await ev(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y) && Farming.naturalFarmland(x, y) && Farming.gatherKindOf(x, y) !== "bush";
+            // (2026-10-23: inside the field's fence - Farming.fieldAllows; the doubled map's new part is not grandpa's land)
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y) && Farming.naturalFarmland(x, y) && Farming.gatherKindOf(x, y) !== "bush" && Farming.fieldAllows(x, y);
             for (let by = 1; by < $gameMap.height() - 4; by++) for (let bx = 1; bx < $gameMap.width() - 6; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 4 && ok; y++) for (let x = bx; x < bx + 6; x++) { if (!free(x, y)) { ok = false; break; } }

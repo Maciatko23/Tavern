@@ -1,0 +1,10 @@
+{
+ "zadania": {
+  "D6": {
+   "lines": {
+    "late": "Turniej odbył się bez ciebie."
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^D\\d+\\./)"
+}

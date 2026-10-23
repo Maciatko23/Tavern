@@ -11,7 +11,7 @@
 # plik czytany z dysku w chwili zapisu (i sprawdzany jeszcze raz tuż przed zapisem - ktoś go zmienił: od nowa); gdy w Items.json są
 # już przedmioty 300+ albo IconSet ma już coś w rzędach 576+, a to nie jest dokładnie to samo - przerywa, nic nie nadpisuje;
 # drugie uruchomienie po udanej instalacji mówi „już zainstalowane”.
-# Po instalacji koordynator dopisuje do js/plugins.js (przy zamkniętym edytorze): Bron_Data pod Ubior_Data, Bron na końcu listy -
+# Wtyczki: lista gry js/tawerna_wtyczki.js (od 2026-10-23; edytor może być otwarty): Bron_Data pod Ubior_Data, Bron na końcu listy -
 # pod Ubior_Sklepy (przed TitleScreen i Prologue).
 import hashlib
 import io
@@ -207,7 +207,7 @@ def main():
     if TRY:
         say("Próba skończona.")
     elif a or b:
-        say("Zainstalowane. Teraz js/plugins.js (przy zamkniętym edytorze): Bron_Data pod Ubior_Data, Bron na końcu - pod Ubior_Sklepy.")
+        say("Zainstalowane. Wtyczki na liście gry js/tawerna_wtyczki.js (python tools/wtyczki.py --sprawdz): Bron_Data pod Ubior_Data, Bron na końcu - pod Ubior_Sklepy.")
     else:
         say("Nic do zrobienia - już zainstalowane.")
 

@@ -16,7 +16,7 @@
 //     full hour (its rope runs from the gallery: Bazyli pulls it)
 //   - Bazyli Krzesiwo (TownLife 943): his plan's hours follow the sun (Sky.sunTimes) - the same array, the hours changed in place;
 //     indoors he is shown only in the room his plan has him in (Latarnia.indoorSpot - a getter in TownLifeData.SPOTS_BY_MAP);
-//     his talk (TownLife.addTalkHook, first): the first meeting (the raven on the neck, seen in the fog), the quests, his menu (buys
+//     his talk (Tawerna.talk.takeover, "errand" priority): the first meeting (the raven on the neck, seen in the fog), the quests, his menu (buys
 //     fuel, the weather for two days exactly from the weather plan, the stock, the Book of Fogs)
 //   - the visions (D22): in a fog, at night, in the lantern room, with Bazyli there - once a night: a white screen, the vision on a
 //     round board (img/pictures/Latarnia_Wizja_N), one sentence, a journal note; "Ciężka głowa" until noon (Survival.defineBuff:
@@ -66,6 +66,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("latarnia");   // (the words of this file: js/teksty/latarnia.txt, kod.*)
 
     const T = window.Tawerna, D = window.LatarniaData;
     if (!T) throw new Error("Latarnia.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -238,7 +239,7 @@
         if (S().burnDay < nk) burn(nk);
         return S().nights[nk] === 1;
     }
-    const nightsText = n => { const k = Math.floor(n); return k === 1 ? "jedną noc" : k >= 2 && k <= 4 ? k + " noce" : k + " nocy"; };
+    const nightsText = n => { const k = Math.floor(n); return k === 1 ? TK.kod.nightsText[0] : k >= 2 && k <= 4 ? Watki.wstaw(TK.kod.nightsText[1], { k: k }) : Watki.wstaw(TK.kod.nightsText[2], { k: k }); };
 
     // ------------------------------------------------------------------
     // Event commands: speech bubbles (\SPK[n]) and choices, the way TownQuests / Pustelnia write them
@@ -323,11 +324,11 @@
         try { plan = Sv && Sv.weatherPlan ? Sv.weatherPlan(d) : null; } catch (e) { plan = null; }
         let s;
         if (!plan) s = "sucho";
-        else if (plan.storm) s = "burza od " + hh(plan.storm.start) + " do " + hh(plan.storm.end) + ", potem deszcz do " + hh(plan.end);
-        else s = (plan.type === "snow" ? "śnieg" : "deszcz") + " od " + hh(plan.start) + " do " + hh(plan.end);
+        else if (plan.storm) s = Watki.wstaw(TK.kod.weatherOf[0], { "1": hh(plan.storm.start), "2": hh(plan.storm.end), "3": hh(plan.end) });
+        else s = (plan.type === "snow" ? TK.kod.weatherOf[1] : "deszcz") + " od " + hh(plan.start) + " do " + hh(plan.end);
         const m = mistOf(d);
-        if (m >= D.FOG.at) s += ", rano gęsta mgła";
-        else if (m >= 0.3) s += ", rano trochę mgły";
+        if (m >= D.FOG.at) s += TK.kod.weatherOf[2];
+        else if (m >= 0.3) s += TK.kod.weatherOf[3];
         return s;
     }
     function forecast() {
@@ -374,7 +375,7 @@
         const labels = [], branches = [];
         // selling fuel: a small menu of what he has to give
         const kinds = FUEL_IDS.filter(id => count(id) > 0);
-        labels.push("Kupisz opał?");
+        labels.push(TK.kod.bazyliTalk[0]);
         if (kinds.length) {
             const sub = [];
             linesTo(sub, spk, D.TX.sell);
@@ -382,14 +383,14 @@
                 kinds.map(id => act([], ["sell", id])).concat([[]]), kinds.length);
             branches.push(sub);
         } else branches.push(linesTo([], spk, D.TX.sellNone));
-        labels.push("Jaka będzie pogoda?");
+        labels.push(TK.kod.bazyliTalk[1]);
         branches.push(act([], ["weather"]));
-        labels.push("Ile masz opału?");
+        labels.push(TK.kod.bazyliTalk[2]);
         branches.push(act([], ["stock"]));
-        labels.push("Co piszesz w księdze?");
+        labels.push(TK.kod.bazyliTalk[3]);
         branches.push(act([], ["bookN"]).concat(linesTo([], spk, [D.TX.book[(S().bookN || 0) % D.TX.book.length]])));
-        labels.push("Co słychać?");
-        branches.push(linesTo([], spk, [usual() || "Cicho. Morze gada za nas."]));
+        labels.push(TK.kod.bazyliTalk[4]);
+        branches.push(linesTo([], spk, [usual() || TK.kod.bazyliTalk[5]]));
         labels.push("Bywaj.");
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
@@ -407,7 +408,7 @@
         if (j.day === day() && j.n >= 4) return null;
         const spk = { id: ev.eventId(), name: "Janek" }, out = [];
         linesTo(out, spk, D.TX.janekTran);
-        return choiceTo(out, ["Kupię dzbanek tranu (6 G).", "Nie, w innej sprawie."], [act([], ["janekTran"]), act([], ["passJanek"])], 1);
+        return choiceTo(out, [TK.kod.janekTalk[0], TK.kod.janekTalk[1]], [act([], ["janekTran"]), act([], ["passJanek"])], 1);
     }
     function hook(key, ev) {
         if (!has()) return null;
@@ -415,13 +416,15 @@
         if (key === "janek") return janekTalk(ev);
         return null;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: an errand at Janek's talk (the tran), Bazyli's whole talk - before every other
+    // takeover (as the old hook, put first at the first map: "Nie, w innej sprawie" lets the others speak)
     function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook && !hookTalk.done) {
-            hookTalk.done = true;
-            L.addTalkHook((key, ev) => { try { return hook(key, ev); } catch (e) { console.error("[Latarnia]", e); return null; } }, true);
-        }
+        if (hookTalk.done) return;
+        hookTalk.done = true;
+        T.talk.takeover({ owner: PLUGIN, who: [KEY, "janek"], priority: T.talk.PRIORITY.errand + 20,
+            run: ctx => { try { return hook(ctx.who, ctx.ev); } catch (e) { console.error("[Latarnia]", e); return null; } } });
     }
+    hookTalk();
 
     // ------------------------------------------------------------------
     // Script calls from the talks: Latarnia.act(this, [what, ...])
@@ -453,7 +456,7 @@
                 if (j.day !== day()) { j.day = day(); j.n = 0; }
                 const jev = interp ? $gameMap.event(interp.eventId()) : null;
                 if (j.n >= 4) { if (jev) say(jev, D.TX.janekTranNone[0]); stop(); return; }
-                if ($gameParty.gold() < D.FUEL.price[D.ITEM.tran]) { T.popup.need(COIN_ICON, "Potrzebujesz " + D.FUEL.price[D.ITEM.tran] + " G"); stop(); return; }
+                if ($gameParty.gold() < D.FUEL.price[D.ITEM.tran]) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.actCall[0], { "1": D.FUEL.price[D.ITEM.tran] })); stop(); return; }
                 $gameParty.loseGold(D.FUEL.price[D.ITEM.tran]);
                 $gameParty.gainItem(item(D.ITEM.tran), 1);
                 j.n++;
@@ -461,7 +464,7 @@
             } else if (what === "passJanek") {
                 passJanekUntil = Graphics.frameCount + 600;
                 const L = TL();
-                if (L && L.talk && interp) L.talk(interp);
+                if (L && L.talk && interp) L.talk(interp, { skip: PLUGIN });   // (the same talk without this errand - the core's skip)
             } else if (what === "d22") {
                 d22End(a);
             } else if (what === "w11") {
@@ -600,9 +603,9 @@
         S().visions[n] = day();
         S().visionNight = nightNow() === null ? day() : nightNow();
         if (first) {
-            note("Księga mgieł: " + v.title, v.note);
+            note(Watki.wstaw(TK.kod.seeVision[0], { title: v.title }), v.note);
             if (v.flag) setFlag(v.flag);
-            xp(40, "wizja w latarni");
+            xp(40, TK.kod.seeVision[1]);
         }
         const q = TQ();
         if (q && q.autoChecks) q.autoChecks();
@@ -713,7 +716,7 @@
         let n = 0;
         kinds.forEach((kind, i) => {
             const x = at[0] + (inside ? (i % 2 ? 1 : -1) : i % 2), y = at[1] - (inside ? 0 : Math.floor(i / 2));
-            const h = H.spawn(kind, x, y, { tag: R.tag, level: 6, engaged: inside, say: i === 0 ? (inside ? "Szkło! Brać szkło!" : "Cicho... do wieży.") : null });
+            const h = H.spawn(kind, x, y, { tag: R.tag, level: 6, engaged: inside, say: i === 0 ? (inside ? TK.kod.spawnRaid[0] : TK.kod.spawnRaid[1]) : null });
             if (!h) return;
             n++;
             if (!inside && H.march) H.march(h, D.TOWER[0], D.TOWER[1] + 1);
@@ -827,7 +830,7 @@
             list: [C(355, ["Latarnia.sack(this);"]), C(0, [])],
             moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false }, moveSpeed: 3, moveType: 0,
             priorityType: 1, stepAnime: false, through: false, trigger: 0, walkAnime: false };
-        return [{ id: D.IDS[0], name: "Worek złodziei", note: "<Latarnia:worek>", pages: [page], x: at[0], y: at[1] }];
+        return [{ id: D.IDS[0], name: TK.kod.build[0], note: "<Latarnia:worek>", pages: [page], x: at[0], y: at[1] }];
     } });
     function w11Act(what, a, interp, stop) {
         const q = TQ();
@@ -841,14 +844,14 @@
         } else if (what === "give" && stepOf("W11") === 4 && S().lens === "whole") {
             S().lens = "bag";
             vgive("soczewka", 1);
-            T.popup("Soczewka latarni", { top: true, color: "#ffd23f", sub: "Zanieś ją bratu Kleofasowi." });
+            T.popup(TK.kod.w11Act[0], { top: true, color: "#ffd23f", sub: TK.kod.w11Act[1] });
         } else if (what === "buyback" && stepOf("W11") === 3 && S().lens === "baltazar") {
             const price = buyBackPrice();
-            if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, "Potrzebujesz " + price + " G"); stop(); return; }
+            if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.w11Act[2], { price: price })); stop(); return; }
             $gameParty.loseGold(price);
             S().lens = "bag";
             vgive("soczewka", 1);
-            T.popup("Soczewka latarni", { top: true, color: "#ffd23f", sub: "Odkupiona od Baltazara." });
+            T.popup(TK.kod.w11Act[0], { top: true, color: "#ffd23f", sub: TK.kod.w11Act[3] });
             q.completeStep("W11");
         } else if (what === "kleofas" && stepOf("W11") === 4 && S().lens === "bag") {
             note(D.TX.kleofasNote[0], D.TX.kleofasNote[1]);
@@ -891,8 +894,8 @@
             d22Wizje: {
                 check: () => seenCount() >= D.VISIONS.length,
                 vars: () => {
-                    const nf = nextFog(), k = fogNow() ? " Mgła jest teraz - wejdź na górę." : nf === null ? "" : nf === day() ? " Dziś w nocy będzie mgła." :
-                        " Bazyli mówi, że mgła przyjdzie w nocy z dnia " + nf + " na " + (nf + 1) + ".";
+                    const nf = nextFog(), k = fogNow() ? TK.kod.vars[0] : nf === null ? "" : nf === day() ? TK.kod.vars[1] :
+                        Watki.wstaw(TK.kod.vars[2], { nf: nf, "2": nf + 1 });
                     return { n: seenCount(), kiedy: k };
                 }
             },
@@ -901,13 +904,13 @@
                 talk: (qq, r, st, key, spk) => {
                     if (key !== KEY) return null;
                     const out = [];
-                    linesTo(out, spk, ["Trzy mgły. Trzy razy patrzyłeś w szkło. (Bazyli otwiera Księgę mgieł na czystej stronie.)", "Co widziałeś?"]);
-                    choiceTo(out, ["Powiem ci.", "Zachowam to dla siebie."], [
-                        linesTo([], spk, ["> Statek bez bandery. Człowieka z piórem w czarnej wodzie. I kobietę nad rzeką.",
-                            "(Bazyli pisze długo, nie podnosząc głowy.) Teraz to i twoje, i księgi. Lżej będzie nieść we dwóch.",
-                            "Weź to. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu, zanim umarł. Szyfr. Ja nie umiem tego czytać."]).concat(act([], ["d22", "tell"])),
-                        linesTo([], spk, ["> Zachowam to dla siebie.", "Niektóre rzeczy lepiej nosić samemu. Rozumiem.",
-                            "Ale to weź. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu. Szyfr. Mnie się nie przyda."]).concat(act([], ["d22", "keep"]))
+                    linesTo(out, spk, [TK.kod.talk[0], TK.kod.talk[1]]);
+                    choiceTo(out, [TK.kod.talk[2], TK.kod.talk[3]], [
+                        linesTo([], spk, [TK.kod.talk[4],
+                            TK.kod.talk[5],
+                            TK.kod.talk[6]]).concat(act([], ["d22", "tell"])),
+                        linesTo([], spk, [TK.kod.talk[7], TK.kod.talk[8],
+                            TK.kod.talk[9]]).concat(act([], ["d22", "keep"]))
                     ], -1);
                     return { ready: true, list: out };
                 }
@@ -919,7 +922,7 @@
                 talk: (qq, r, st, key, spk) => {
                     if (key !== "kupiec" || !kantorOpen()) return null;
                     const out = linesTo([], spk, D.TX.baltazar);
-                    choiceTo(out, ["Nie sprzedam cudzego.", "Pomyślę."],
+                    choiceTo(out, [TK.kod.talk[10], TK.kod.talk[11]],
                         [linesTo([], spk, D.TX.baltazarNo.slice(1)).concat(act([], ["w11", "oferta", 0])),
                          linesTo([], spk, D.TX.baltazarMaybe.slice(1)).concat(act([], ["w11", "oferta", 1]))], -1);
                     return { ready: true, list: out };
@@ -932,10 +935,10 @@
             w11Vars: {
                 vars: () => {
                     const r = S().raid || { day: day() }, st = S().lens;
-                    const gdzie = st === "baltazar" ? "Łódź zabrała soczewkę z zatoczki. Baltazar ma ją w kantorze - odkup ją (" + buyBackPrice() + " G, 8–18)." :
-                        "Złodzieje czekają na łódź w zatoczce szczątków na przylądku - w nocy z dnia " + (r.day + 1) + " na " + (r.day + 2) + ". Odbierz im worek.";
-                    const kto = st === "whole" ? "Weź soczewkę od Bazylego i zanieś ją bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest." :
-                        "Zanieś soczewkę bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.";
+                    const gdzie = st === "baltazar" ? Watki.wstaw(TK.kod.vars[3], { "1": buyBackPrice() }) :
+                        Watki.wstaw(TK.kod.vars[4], { "1": r.day + 1, "2": r.day + 2 });
+                    const kto = st === "whole" ? TK.kod.vars[5] :
+                        TK.kod.vars[6];
                     return { d: r.day, d1: r.day + 1, gdzie, kto };
                 }
             },
@@ -944,7 +947,7 @@
                 talk: (qq, r, st, key, spk) => {
                     if (key !== "kupiec" || S().lens !== "baltazar" || !kantorOpen()) return null;
                     const out = linesTo([], spk, D.TX.baltazarBack);
-                    choiceTo(out, ["Biorę (" + buyBackPrice() + " G).", "Nie teraz."],
+                    choiceTo(out, [Watki.wstaw(TK.kod.talk[12], { "1": buyBackPrice() }), TK.kod.talk[13]],
                         [act([], ["w11", "buyback"]).concat(linesTo([], spk, D.TX.baltazarBackYes)), linesTo([], spk, D.TX.baltazarBackNo)], 1);
                     return { ready: true, list: out };
                 }
@@ -972,7 +975,7 @@
                 talk: (qq, r, st, key, spk) => {
                     if (key !== KEY || S().lens !== "bag") return null;
                     const out = linesTo([], spk, D.TX.choiceAsk);
-                    choiceTo(out, ["Zostaw je w latarni.", "Rozbij je.", "Sprzedam je Baltazarowi."], [
+                    choiceTo(out, [TK.kod.talk[14], TK.kod.talk[15], TK.kod.talk[16]], [
                         linesTo([], spk, D.TX.choiceLeave).concat(act([], ["w11", "leave"])),
                         linesTo([], spk, D.TX.choiceBreak).concat(act([], ["w11", "break"])),
                         linesTo([], spk, D.TX.choiceSell).concat(act([], ["w11", "sell"]))], -1);
@@ -1000,10 +1003,11 @@
         if (!c || !Array.isArray(c.recipes)) { console.warn("[Latarnia] Farming.BUILDINGS.cauldron is missing - the oil recipe waits for the integration"); return; }
         if (!c.recipes.some(r => r.id === RECIPE.id)) c.recipes.push(RECIPE);
     })();
-    (function defineBuffs() {
+    // (once the words are in - its name is js/teksty/latarnia.txt's; still before any game)
+    Watki.poTekstach(function defineBuffs() {
         const Sv = window.Survival, H = D.HEAVY;
-        if (Sv && Sv.defineBuff) Sv.defineBuff(H.key, { name: H.name, icon: H.icon, bad: true, desc: "po wizji w latarni: do południa prace kosztują więcej sił", cost: H.cost });
-    })();
+        if (Sv && Sv.defineBuff) Sv.defineBuff(H.key, { name: H.name, icon: H.icon, bad: true, desc: TK.kod.defineBuffs[0], cost: H.cost });
+    });
     // (Bazyli's talk bust Latarnik_Bust is in SpeechBubbles' own BUSTS table since the integration)
 
     // ------------------------------------------------------------------

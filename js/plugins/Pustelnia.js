@@ -5,7 +5,7 @@
 // approved by the user 2026-10-16 (docs/miejsca_wyspy/KONCEPCJA.md section 3). The data and texts: Pustelnia_Data.js.
 //   - the place is built: Wyspa.ready(155) - the harbour's top edge (Map125 14-16, 0) leads up here (Wyspa.js puts it in)
 //   - brother Kleofas (TownLife resident "pustelnik", 944): the first meeting (the pendant: "a messenger's sign"), honey from his
-//     hives, the chronicles' gossip, the reading of the cards (TownLife.addTalkHook first, like Przystan.js)
+//     hives, the chronicles' gossip, the reading of the cards (Tawerna.talk.takeover, "meet" priority, like Przystan.js)
 //   - the six ciphered cards of the chronicle (D23): 1 the Archive's chronicles (taken: shown to Kleofas / given to Ambroży: he hands
 //     it over / left on the shelf: an injected event on Map119 / sold to Baltazar: it lies in his strongbox, taken at night in W5 rozdz. 4 -
 //     Kantor.js; after W5 rozdz. 4 he sells it back), 2 the
@@ -49,6 +49,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("pustelnia");   // (the words of this file: js/teksty/pustelnia.txt, kod.*)
 
     const T = window.Tawerna, D = window.PustelniaData;
     if (!T) throw new Error("Pustelnia.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -67,6 +68,9 @@
     const W = () => window.Wyspa || T.api("Wyspa") || null;
     const pick = list => list[Math.floor(Math.random() * list.length)];
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
+    // (2026-10-23) the words: js/teksty/pustelnia.txt (D.TX; D.TX.kod - the words of this file)
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const K = () => D.TX.kod;
 
     // ------------------------------------------------------------------
     // The state (the save): what the hermitage itself remembers (the quests' records and flags are TownQuests')
@@ -218,7 +222,7 @@
         if (!found(n)) setFlag(CARD(n).flag);
         S().got[n] = day();
         if (vcount("karta_" + n) < 1) vgive("karta_" + n, 1);
-        T.popup(vname("karta_" + n), { top: true, color: "#ffd23f", sub: why || "Karta pisana szyfrem. Brat Kleofas umie ją przeczytać." });
+        T.popup(vname("karta_" + n), { top: true, color: "#ffd23f", sub: why || K().kartaSzyfr });
         const q = TQ();
         if (q && q.refreshMarkers) q.refreshMarkers();
         return true;
@@ -235,9 +239,9 @@
         S().read[n] = day();
         vtake("karta_" + n, 1);
         if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(D.READ_TIME);
-        note("Kronika upadku (" + n + "): " + c.title, c.note);
-        const got = xp(40, "karta kroniki: " + c.title);
-        T.popup("Kronika upadku: " + c.title, { top: true, color: "#ffe27a", sub: "Odczytane karty: " + readCount() + "/6" + (got ? "  ·  +" + got + " dośw." : "") });
+        note(fill(K().kronikaNotatka, { n, tytul: c.title }), c.note);
+        const got = xp(40, fill(K().kronikaXp, { tytul: c.title }));
+        T.popup(fill(K().kronikaTytul, { tytul: c.title }), { top: true, color: "#ffe27a", sub: fill(K().odczytane, { n: readCount() }) + (got ? fill(K().dosw, { n: got }) : "") });
         const q = TQ();
         if (q && q.autoChecks) q.autoChecks();
         if (q && q.refreshMarkers) q.refreshMarkers();
@@ -268,7 +272,7 @@
         const cards = inBag();
         if (cards.length === 1) return readList(cards[0]);
         const out = [];
-        return choiceTo(out, cards.map(n => "Karta: " + CARD(n).title).concat(["Nie teraz."]),
+        return choiceTo(out, cards.map(n => fill(K().karta, { tytul: CARD(n).title })).concat([K().nieTeraz]),
             cards.map(n => readList(n)).concat([[]]), cards.length);
     }
     // the lectern in the scriptorium (Map156): Pustelnia.lectern(this)
@@ -294,36 +298,25 @@
     // the answer from the chronicles and the game's state: { lines, note }
     function answer(id) {
         const f = flags();
-        if (id === "dziadek") return {
-            lines: ["(Kleofas otwiera najstarszą z kronik i długo wodzi palcem po marginesach.)",
-                "Twój dziadek nie ukrywa zbrodni, chłopcze. Ukrywa ród. Kruczarze z Urwiska - posłańcy zakonu. Jego dziad trzymał kruki tam, gdzie dziś stoi karczma.",
-                "Kiedy zakon upadł, nosili listy dalej. Dla straży, które nie wiedziały o sobie nawzajem. Twój ojciec wiedział, co ci daje, kiedy wieszał ci ten kamień na szyi."],
-            note: "Dziadek ukrywa ród: kruczarze z Urwiska, posłańcy zakonu. Jego dziad trzymał kruki tam, gdzie dziś stoi karczma, a po upadku zakonu ród dalej nosił listy dla straży, które nie wiedziały o sobie nawzajem. Ojciec wiedział, co mi daje." };
+        const A = D.TX.odpowiedzi;
+        if (id === "dziadek") return { lines: A.dziadek.lines.slice(), note: A.dziadek.note };
         if (id === "zdrajca") {
-            const lines = ["Kroniki piszą o zdrajcach w każdym stuleciu. Zawsze był ktoś, kto skupował kamienie z krukiem i sprzedawał je za morze."];
-            let n = "W każdym stuleciu ktoś skupował kamienie z krukiem i sprzedawał je za morze. Dziś to Baltazar Vey z kantoru.";
-            if (f.w5ChroniclesSold) { lines.push("Dziś to człowiek z kantoru. Baltazar Vey. Już raz go nakarmiłeś - kronikami, które płyną teraz na ląd."); n += " Sprzedałem mu kroniki - płyną na ląd."; }
-            else lines.push("Dziś skupuje je człowiek z kantoru. Baltazar Vey. Pilnuj go, zanim sprzeda wyspę razem z ludźmi.");
+            const Z = A.zdrajca, lines = Z.lines.slice();
+            let n = Z.note;
+            if (f.w5ChroniclesSold) { lines.push(Z.sprzedane); n += Z.sprzedaneNote; }
+            else lines.push(Z.pilnuj);
             const w1 = rec("W1"), settled = f.w1Revealed || f.lordAlly || f.feliksPays || f.w1Silent;
-            if (w1 && !settled) { lines.push("A wodę miastu już raz zamknięto. Ten, kto to zrobił, siedzi bliżej dworu niż karczmy."); n += " Wodę miastu zamknął ktoś bliżej dworu niż karczmy."; }
-            if (f.feliksPays && !f.feliksBroke) { lines.push("I jeszcze jedno. Kto ci płaci za milczenie, ten kupuje też ciebie."); n += " Kto mi płaci za milczenie, kupuje i mnie."; }
+            if (w1 && !settled) { lines.push(Z.woda); n += Z.wodaNote; }
+            if (f.feliksPays && !f.feliksBroke) { lines.push(Z.milczenie); n += Z.milczenieNote; }
             return { lines, note: n };
         }
         if (id === "lord") {
-            const lines = ["Nie. Lord myśli, że jego ogród pije z głębokiej studni dworu. Wodę zamknął ten, kto mu tę studnię pokazał."];
-            if (f.w1Revealed || f.lordAlly) lines.push("Teraz już wie. Przez ciebie.");
-            return { lines, note: "Lord nie wiedział o wodzie. Myślał, że jego ogród pije z głębokiej studni dworu. Wodę zamknął ten, kto mu tę studnię pokazał." };
+            const lines = A.lord.lines.slice();
+            if (f.w1Revealed || f.lordAlly) lines.push(A.lord.wie);
+            return { lines, note: A.lord.note };
         }
-        if (id === "serce") return {
-            lines: ["Serce nie jest skarbem ani potworem. Odpowiada każdemu i na wszystko - bez litości i bez pytania o pozwolenie.",
-                "Zakon pytał raz w roku, bo tyle prawdy człowiek uniesie. Kto pytał częściej, przestawał spać. Potem przestawał kochać. W końcu przestawał się bać.",
-                "Tak upadła twierdza. Nie od miecza. Od pytań."],
-            note: "Serce nie jest skarbem ani potworem: odpowiada każdemu i na wszystko, bez litości. Zakon pytał raz w roku, bo tyle prawdy człowiek uniesie. Twierdza upadła nie od miecza, tylko od pytań." };
-        if (id === "dobiesz") return {
-            lines: ["Karty z odpowiedziami. Jego trzy - i wszystkie odpowiedzi braci z czterdziestu lat przed nim.",
-                "Kto je przeczyta, ten wie, że pod wyspą jest coś, co odpowiada. Karty przeleżały trzysta lat w klasztorze na lądzie. Czarne Oczy je znalazły.",
-                "Dlatego szukają kamieni z krukiem. Myślą, że posłańcy znają drogę."],
-            note: "Dobiesz wywiózł za morze karty z odpowiedziami Serca - swoje i braci z czterdziestu lat przed nim. Przeleżały trzysta lat w klasztorze na lądzie, aż znalazły je Czarne Oczy. Dlatego szukają kamieni z krukiem." };
+        if (id === "serce") return { lines: A.serce.lines.slice(), note: A.serce.note };
+        if (id === "dobiesz") return { lines: A.dobiesz.lines.slice(), note: A.dobiesz.note };
         return { lines: D.TX.night.keep, note: "" };
     }
     function nightTalk(spk) {
@@ -341,21 +334,21 @@
             linesTo(b, spk, answer(qd.id).lines);
             return linesTo(b, spk, D.TX.night.done);
         });
-        return choiceTo(out, list.map(qd => qd.label).concat(["Jeszcze nie wiem."]), branches.concat([linesTo([], spk, D.TX.night.later)]), list.length);
+        return choiceTo(out, list.map(qd => qd.label).concat([K().jeszczeNieWiem]), branches.concat([linesTo([], spk, D.TX.night.later)]), list.length);
     }
     function ask(id) {
         const n = nightOf(day(), hour()), qd = D.QUESTIONS.find(x => x.id === id);
         if (!n || n.phase !== "open" || !qd || qd.keep || S().asked[n.year]) return false;
         const a = answer(id);
         S().asked[n.year] = { id, day: day() };
-        note("Jedno pytanie (rok " + n.year + ")", "W Noc Pytania zapytałem brata Kleofasa: „" + qd.label + "” Odpowiedź z kronik: " + a.note);
-        const got = xp(100, "Jedno pytanie");
+        note(fill(K().pytanieTytul, { rok: n.year }), fill(K().pytanieNotatka, { pytanie: qd.label, odpowiedz: a.note }));
+        const got = xp(100, K().pytanieXp);
         // (W2 rozdz. 7 the first time: the step turns into rozdz. 8 waiting)
         const r = rec("W2");
         if (r && r.s === "active" && r.t && (r.t.w2s || 0) === 2) {
             r.t.w2s = 3;
-            T.popup("Kod dzwonu: rozdz. 7 „Jedno pytanie”", { top: true, color: "#9ff0a8", sub: "Pytanie zadane" + (got ? "  ·  +" + got + " dośw." : "") });
-        } else T.popup("Jedno pytanie (rok " + n.year + ")", { top: true, color: "#9ff0a8", sub: "Pytanie zadane" + (got ? "  ·  +" + got + " dośw." : "") });
+            T.popup(K().pytanieW2, { top: true, color: "#9ff0a8", sub: K().pytanieZadane + (got ? fill(K().dosw, { n: got }) : "") });
+        } else T.popup(fill(K().pytanieTytul, { rok: n.year }), { top: true, color: "#9ff0a8", sub: K().pytanieZadane + (got ? fill(K().dosw, { n: got }) : "") });
         const q = TQ();
         if (q && q.refreshMarkers) q.refreshMarkers();
         return true;
@@ -369,7 +362,7 @@
             S().rung[n.year] = day();
             if ($gameMap.mapId() === MAP || $gameMap.mapId() === INNER) { bellLeft = 7; bellNext = Graphics.frameCount + 20; }
             const ev = kleofasEv();
-            if (ev && kleofasHere()) say(ev, "Siedem... Słuchaj. Siedem.");
+            if (ev && kleofasHere()) say(ev, K().siedem);
         }
         if (bellLeft > 0 && Graphics.frameCount >= bellNext) {
             T.audio.se(BELL.name, { volume: $gameMap.mapId() === MAP ? BELL.volume : 55, pitch: BELL.pitch });
@@ -395,29 +388,27 @@
         linesTo(out, spk, [pick(D.TX.ask)]);
         const labels = [], branches = [];
         if (inBag().length) {   // (outside the scriptorium he sends the hero to the lectern)
-            labels.push("Przeczytajmy kartę.");
+            labels.push(K().menu.czytaj);
             const b = readBlock();
             branches.push(b ? (b.say ? linesTo([], spk, b.say) : act([], ["pop", b.need || b.pop])) : readChoice());
         }
-        if (vcount("kroniki") > 0 && !found(1)) { labels.push("Mam kroniki zakonu z Archiwum."); branches.push(chronicleCard(spk)); }
-        labels.push("Kupię miód (" + D.HONEY_PRICE + " G).");
+        if (vcount("kroniki") > 0 && !found(1)) { labels.push(K().menu.kroniki); branches.push(chronicleCard(spk)); }
+        labels.push(fill(K().menu.miod, { cena: D.HONEY_PRICE }));
         branches.push(act([], ["honey"]));
-        labels.push("Co to za wisiorek?");
+        labels.push(K().menu.wisiorek);
         branches.push(linesTo([], spk, D.TX.pendant));
-        labels.push("Co piszą kroniki?");
+        labels.push(K().menu.coPisza);
         branches.push(act([], ["chron"]).concat(linesTo([], spk, [D.TX.chronicles[(S().chronN || 0) % D.TX.chronicles.length]])));
-        labels.push("Co słychać?");
-        branches.push(linesTo([], spk, [usual() || "Cicho. I dobrze."]));
-        labels.push("Bywaj.");
+        labels.push(K().menu.coSlychac);
+        branches.push(linesTo([], spk, [usual() || K().cicho]));
+        labels.push(K().menu.bywaj);
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
     function chronicleCard(spk) {
         const out = [];
-        linesTo(out, spk, ["> Mam kroniki zakonu. Z Archiwum pod ogrodem rycerzy.",
-            "(Kleofas kartkuje je drżącymi palcami. Z grzbietu wysuwa luźną kartę, gęsto zapisaną.) Kroniki są jawne. A ta... ta jest pisana szyfrem.",
-            "Zostaw sobie księgi, ja je znam na pamięć. Kartę przeczytamy razem."]);
-        return act(out, ["card", 1, "Luźna karta wysunęła się z grzbietu kronik zakonu."]);
+        linesTo(out, spk, K().kronikiKarta);
+        return act(out, ["card", 1, K().kronikiKartaPopup]);
     }
     // Ambroży hands over the card of the chronicles the hero gave him; Baltazar sells it back - (2026-10-17, W5) only once the card
     // is no longer in his strongbox in the kantor's cellar (Kantor.cardInBox: taken there at night in W5 rozdz. 4), at his prices
@@ -426,18 +417,18 @@
         const f = flags();
         if (found(1) || !(f.ambrozyChronicles || f.chroniclesForAmbrozy) || !(isActive("D23") || isDone("K50"))) return null;
         if (!inHours(hour(), [6, 21])) return null;
-        const spk = { id: ev.eventId(), name: "Ambroży" }, out = [];
-        linesTo(out, spk, ["> Ambroży... w kronikach, które ci przyniosłem, nie było luźnej karty? Pisanej szyfrem?"].concat(D.TX.ambrozyCard));
-        return act(out, ["card", 1, "Ambroży oddał luźną kartę z kronik zakonu."]);
+        const spk = { id: ev.eventId(), name: K().ambrozy }, out = [];
+        linesTo(out, spk, K().ambrozyPyta.concat(D.TX.ambrozyCard));
+        return act(out, ["card", 1, K().ambrozyPopup]);
     }
     const cardPrice = () => Math.max(1, Math.round(D.CARD_BUYBACK * (T.call("Kantor", "priceMul") || 1)));
     function baltazarTalk(ev) {
         const f = flags();
         if (found(1) || !f.w5ChroniclesSold || !isActive("D23") || !inHours(hour(), [8, 18])) return null;
         if (T.call("Kantor", "cardInBox")) return null;   // (W5: the card waits in his strongbox - the night in his cellar)
-        const spk = { id: ev.eventId(), name: "Baltazar Vey" }, out = [];
+        const spk = { id: ev.eventId(), name: K().baltazar }, out = [];
         linesTo(out, spk, D.TX.balt);
-        return choiceTo(out, ["Biorę (" + cardPrice() + " G).", "Nie teraz."],
+        return choiceTo(out, [fill(K().biore, { cena: cardPrice() }), K().nieTeraz],
             [act([], ["buyCard"]).concat(linesTo([], spk, D.TX.baltYes)), linesTo([], spk, D.TX.baltNo)], 1);
     }
     function hook(key, ev) {
@@ -447,12 +438,13 @@
         if (key === "kupiec") return baltazarTalk(ev);
         return null;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: Kleofas's own talk, Ambroży's and Baltazar's card - "meet", after Kruk's
+    // letters, before Przystan's people and the quests (as the old hooks; Kleofas speaks of his quests himself - questWants)
     function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook && !hookTalk.done) {
-            hookTalk.done = true;
-            L.addTalkHook((key, ev) => { try { return hook(key, ev); } catch (e) { console.error("[Pustelnia]", e); return null; } }, true);
-        }
+        if (hookTalk.done) return;
+        hookTalk.done = true;
+        T.talk.takeover({ owner: PLUGIN, who: [KEY, "dzwonnik", "kupiec"], priority: T.talk.PRIORITY.meet + 10,
+            run: ctx => { try { return hook(ctx.who, ctx.ev); } catch (e) { console.error("[Pustelnia]", e); return null; } } });
     }
     hookTalk();
 
@@ -469,7 +461,7 @@
                 if (h.day !== day()) { h.day = day(); h.n = 0; }
                 const ev = kleofasEv();
                 if (h.n >= 3) { if (ev) say(ev, D.TX.honeyNone[0]); stop(); return; }
-                if ($gameParty.gold() < D.HONEY_PRICE) { T.popup.need(COIN_ICON, "Potrzebujesz " + D.HONEY_PRICE + " G"); stop(); return; }
+                if ($gameParty.gold() < D.HONEY_PRICE) { T.popup.need(COIN_ICON, fill(K().potrzebujesz, { cena: D.HONEY_PRICE })); stop(); return; }
                 $gameParty.loseGold(D.HONEY_PRICE);
                 $gameParty.gainItem(item(D.ITEM.honey), 1);
                 h.n++;
@@ -480,9 +472,9 @@
                 giveCard(a, b);
             } else if (what === "buyCard") {
                 const price = cardPrice();
-                if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, "Potrzebujesz " + price + " G"); stop(); return; }
+                if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, fill(K().potrzebujesz, { cena: price })); stop(); return; }
                 $gameParty.loseGold(price);
-                giveCard(1, "Baltazar sprzedał kartę, która wypadła z kronik.");
+                giveCard(1, K().baltazarPopup);
             } else if (what === "read") {
                 read(a);
             } else if (what === "pop") {
@@ -514,12 +506,7 @@
     // a card picked up from where it lies: 2 floor 20, 1 the Archive's shelf, 3 the Silent's register
     function pickCard(interp, n) {
         if (!has() || found(n)) return;
-        const lines = {
-            2: "Przy Księdze pytań leży karta, która nie dała się wyrwać: zapisana szyfrem, z krukiem w rogu.",
-            1: "Między kronikami na regale tkwi luźna karta pisana szyfrem.",
-            3: "Między kartami rejestru tkwi luźna karta pisana szyfrem. Kruk w rogu - jak na moim wisiorku."
-        };
-        say($gamePlayer, lines[n] || "");
+        say($gamePlayer, K().kartaLezy[n] || "");
         giveCard(n);
         const ev = interp && $gameMap.event(interp.eventId());
         if (ev && interp.eventId() >= D.IDS[0] && interp.eventId() <= D.IDS[1]) ev.erase();
@@ -537,16 +524,16 @@
     T.inject([FLOOR20, ARCHIVE], { ids: D.IDS, owner: PLUGIN, build(data, mapId) {
         if (!has()) return [];
         if (mapId === FLOOR20 && !found(2))
-            return [cardEvent(600, 2, 21, 16, { characterName: "!Underground_Props", characterIndex: 0, direction: 6, pattern: 2 }, "Karta kroniki (Księga pytań)")];
+            return [cardEvent(600, 2, 21, 16, { characterName: "!Underground_Props", characterIndex: 0, direction: 6, pattern: 2 }, TK.kod.build[0])];
         if (mapId === ARCHIVE && flag("chroniclesLeft") && !found(1))
-            return [cardEvent(601, 1, 10, 4, null, "Karta kroniki (regał w Archiwum)")];
+            return [cardEvent(601, 1, 10, 4, null, TK.kod.build[1])];
         return [];
     } });
     // the Silent's register (Map123 "Rejestr straży"): one more line at the end of its pages - the map file stays as it is
     T.onMapData((data, mapId) => {
         if (mapId !== ELDER || !data || !data.events) return;
         for (const e of data.events) {
-            if (!e || e.name !== "Rejestr straży") continue;
+            if (!e || e.name !== TK.kod.glowna[0]) continue;
             for (const pg of e.pages || []) {
                 const list = pg.list || [];
                 if (list.some(c => c.code === 355 && /Pustelnia\.pick/.test(String(c.parameters[0])))) continue;
@@ -577,7 +564,7 @@
             setFlag("sercePustelni");
             if (L.heartNoteKleofas) note(L.heartNoteKleofas[0], L.heartNoteKleofas[1]);
             const nn = nextNight();
-            T.popup("Kod dzwonu: Noc Pytania", { top: true, color: "#ffe27a", sub: "Wigilia, dzień " + nn.wig + ", o północy - przy wieży skryptorium" });
+            T.popup(K().nocPytania, { top: true, color: "#ffe27a", sub: fill(K().nocPytaniaSub, { dzien: nn.wig }) });
         }
         if (q && q.refreshMarkers) q.refreshMarkers();
     }
@@ -590,8 +577,8 @@
                 check: () => readCount() >= 6,
                 vars: () => {
                     const bag = inBag(), miss = D.CARDS.filter(c => !found(c.n) && !isRead(c.n));
-                    return { n: readCount(), wtorbie: bag.length ? " Do odczytania: " + bag.length + "." : "",
-                        gdzie: miss.length ? " Szukaj: " + miss.slice(0, 2).map(c => c.where).join("; ") + "." : "" };
+                    return { n: readCount(), wtorbie: bag.length ? fill(K().doOdczytania, { n: bag.length }) : "",
+                        gdzie: miss.length ? fill(K().szukaj, { gdzie: miss.slice(0, 2).map(c => c.where).join("; ") }) : "" };
                 },
                 ready: (qq, r, st, key) => (key === KEY && inBag().length > 0 && inHours(hour(), D.READ_HOURS) ? true : null),
                 talk: () => null

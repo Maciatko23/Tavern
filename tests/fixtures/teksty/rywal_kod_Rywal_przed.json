@@ -1,0 +1,36 @@
+{
+ "kod": {
+  "xp": {
+   "0": "W9: rywal w ruinach"
+  },
+  "groupEvents": {
+   "0": "Ognisko rywala",
+   "1": "Posłanie"
+  },
+  "campLeft": {
+   "0": "Wygasłe ognisko",
+   "1": "Posłanie"
+  },
+  "buildRuins": {
+   "0": "Ślady butów",
+   "1": "Proporczyk z czarnym koniem",
+   "2": "Białe oko kredą"
+  },
+  "buildFloor": {
+   "0": "Ślady butów",
+   "1": "Proporczyk z czarnym koniem",
+   "2": "Białe oko kredą",
+   "3": "Porzucona lina",
+   "4": "Linka z dzwonkami"
+  },
+  "buildGate": {
+   "0": "Ślady butów",
+   "1": "Proporczyk z czarnym koniem",
+   "2": "Białe oko kredą"
+  },
+  "buildHeart": {
+   "0": "Wygasłe ognisko"
+  }
+ },
+ "_opis": "Napisy kodu Rywal.js sprzed przeniesienia do js/teksty/rywal.txt (kod.*)"
+}

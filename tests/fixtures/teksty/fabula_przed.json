@@ -1,0 +1,35 @@
+{
+ "postacie": {
+  "grandpa": {
+   "name": "Dziadek Stach"
+  },
+  "lord": {
+   "name": "Lord Leopold Zaleski"
+  }
+ },
+ "pole": {
+  "name": "Kruczy Jar"
+ },
+ "rady": [
+  "Głodny? Na łąkach rosną jagody i grzyby - po deszczu wyłażą nowe. Dzikie ziemniaki i marchew wykopiesz gołymi rękami.",
+  "Studni na działce nie ma, a susza trzyma. Łap deszczówkę: garnek, wiadro, beczka - co tylko masz.",
+  "Borgar daje jedną zmianę dziennie, od {od} do {do}. Przyjdź wypoczęty, bo zmęczony kufla nie udźwigniesz.",
+  "Nadmiar plonów sprzedasz Borgarowi. Uczciwie płaci... jak na karczmarza.",
+  "Twoje posłanie zawsze tu czeka. Pod dachem śpi się lepiej niż pod krzakiem.",
+  "Zające łatwiej złapać we wnyki z przynętą niż gołymi rękami. Ja w twoim wieku... no, ja też nie łapałem.",
+  "Na działce stawiaj, co chcesz - to nasza ziemia, wszystko w obrębie muru. Za murem już nie nasze: tam nic nie stawiaj, bo Lord by się wściekł."
+ ],
+ "radyPoStracie": [
+  "Dom nie był w zastawie. Twoje posłanie stoi, gdzie stało - śpij tu, ile chcesz.",
+  "Sołtys w ratuszu sprzedaje chatę pod lasem na Podgrodziu, z działką obok. Ziemia przy niej jest twoja - tam budujesz, co zechcesz.",
+  "Borgar wynajmuje pokoje nad tawerną. Drogo, ale za to pod dachem i blisko roboty.",
+  "Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Kiedyś ją odkupimy - albo i nie. Ziemia to tylko ziemia.",
+  "Na noc w lesie wystarczy namiot albo leśne legowisko. Ale pod dachem śpi się lepiej - wiesz, gdzie mnie szukać.",
+  "Za Skrajem lasu, na zachód, stoi zagroda Ługów. Lord wziął ją za długi, jak naszą działkę, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu."
+ ],
+ "dawnaTwierdza": [
+  "Mój dwór postawiono z kamieni dawnej twierdzy - Kruczych Skał. Najstarsze z nich wciąż leżą pod tawerną Borgara.",
+  "Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną... przyjdź najpierw do mnie. To może być warte więcej niż działka."
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Story.js: NPCS=postacie:/^\\w+\\.name$/, MAP_FIELD=pole, HINTS=rady, LOSS_HINTS=radyPoStracie, HOOK=dawnaTwierdza)"
+}

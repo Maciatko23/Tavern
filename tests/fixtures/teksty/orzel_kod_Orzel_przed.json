@@ -1,0 +1,122 @@
+{
+ "kod": {
+  "giveFeather": {
+   "0": "Orzeł zrzucił pióro: {name}"
+  },
+  "done": {
+   "0": "{n} - tak będzie się nazywał"
+  },
+  "redraw": {
+   "0": "Jak nazwiesz orła?",
+   "1": "Białe pisklę patrzy na ciebie i piszczy. Czeka.",
+   "2": "Puste pole = „{defaultName}”"
+  },
+  "pourWater": {
+   "0": "Woda w misce: {bowlWater}/{max}"
+  },
+  "giveWater": {
+   "0": "{imie} pije"
+  },
+  "statusNote": {
+   "0": "w koszu",
+   "1": "w torbie",
+   "2": " ({1} dni do kolejnego)"
+  },
+  "callKey": {
+   "0": "{imie} jest w niewoli - na Orlej Grani",
+   "1": "{imie} jest gdzie indziej - wróć po niego"
+  },
+  "openEggMenu": {
+   "0": "Jajo w cieple: {1}/{warmHours} godz.",
+   "1": "Ciepło jest przy ogniu (do 3 pól), w domu, w koszu z sianem przy ognisku albo gdy śpisz z jajem w torbie."
+  },
+  "glowna": {
+   "0": "Bierzesz jajo do torby.",
+   "1": "Jajo w koszu z sianem jest w cieple, gdy kosz stoi do 3 pól od płonącego ogniska (albo w izbie chatki).",
+   "2": "Nalej wody do miski",
+   "3": "Porcja wody z wiadra (albo z bukłaka). Orzeł napije się z miski, kiedy będzie w gnieździe.",
+   "4": "Menu orła (albo klawisz L)."
+  },
+  "eggIn": {
+   "0": "Jajo leży w koszu"
+  },
+  "eggOut": {
+   "0": "Jajo w torbie"
+  },
+  "build": {
+   "0": "Ścieżka wspinaczy (Orla Grań)",
+   "1": "Orle gniazdo (rozbite)",
+   "2": "Martwa orlica",
+   "3": "Strzały z białym okiem",
+   "4": "Kamienna misa",
+   "5": "Płyta z orłem",
+   "6": "Zimne ognisko myśliwych",
+   "7": "Przejście -> Góry i kamieniołom"
+  },
+  "look": {
+   "0": "Rozbite gniazdo. Puste."
+  },
+  "theftMorning": {
+   "0": "Złodzieje Czarnych Oczu zabrali {imie} z gniazda w nocy. Ślady prowadzą w góry - na Orlą Grań."
+  },
+  "theftCage": {
+   "0": "Pusta klatka z żerdzi. Ktoś ją tu zostawił.",
+   "1": "Najpierw strażnicy!",
+   "2": "Otwierasz klatkę. {imie} wyskakuje i stroszy pióra!"
+  },
+  "campGuards": {
+   "0": "Myśliwy Czarnych Oczu"
+  },
+  "vars": {
+   "0": "{1}/{warmHours} godzin",
+   "1": "pierwsze podloty dopiero u podrostka (dzień {1} opieki).",
+   "2": "rękawica jeszcze nieuszyta.",
+   "3": "stań przy nim z rękawicą i zawołaj go (L).",
+   "4": "Pilnuj gniazda nocą - ktoś pytał w tawernie o białego ptaka.",
+   "5": "Złodzieje przy gnieździe! Przegoń ich.",
+   "6": "Złodzieje zabrali orła na Orlą Grań. Odbij go z klatki.",
+   "7": "Orzeł bezpieczny.",
+   "8": "Gdy będzie prawie dorosły (dzień {1} opieki), poleć na nim pierwszy raz (L przy orle).",
+   "9": "Wsiądź na grzbiet i leć (L przy orle)."
+  },
+  "gloveCheck": {
+   "0": "{imie} siada ci na rękawicy. Ciężki jak worek zboża!",
+   "1": "Na rękawicy",
+   "2": "{imie} pierwszy raz usiadł mi na rękawicy sokolnika. Brat Kleofas mówił, że jeźdźca nosi tylko orzeł, który sam go wybrał."
+  },
+  "f9Rows": {
+   "0": "etap {stage}",
+   "1": "{1}/{warmHours} godz.",
+   "2": "Orle jajo: już jest ({1})",
+   "3": "Daj orle jajo",
+   "4": "Jajo w torbie, flaga orzelJajo, D29 zrobione, W13 rusza. Wykluje się po 36 godzinach w cieple.",
+   "5": "Jajo na grani gotowe (Akt II + burza)",
+   "6": "Na Orlej Grani w gnieździe leży jajo - bez czekania na Akt II i burzę.",
+   "7": "Etap orła: {f9Stage} - {name}   ←→ zmień, OK ustaw",
+   "8": "Wykluty od razu, dni opieki jak na tym etapie, najedzony i napojony, staje obok ciebie (5: dorosły, nosi bohatera).",
+   "9": " (najpierw orzeł)",
+   "10": "Więź 100, najedzony, napojony, wypoczęty{1}",
+   "11": "Więź z orłem na 100 (lot od 60), pełne życie i siła skrzydeł.",
+   "12": "Dosiądź orła (lot)",
+   "13": "Dorosły orzeł przy tobie, od razu w powietrzu (wysoko, x0,5). L - lądowanie.",
+   "14": "Wyląduj teraz",
+   "15": "Orzeł schodzi w najbliższym wolnym miejscu (także awaryjnie).",
+   "16": "Kradzież (W13 rozdz. 5): orzeł w klatce na grani",
+   "17": "Czarne Oczy zabrały orła do klatki na Orlej Grani; przenosi tam (dwóch strażników).",
+   "18": "Przenieś na Orlą Grań (Map175)",
+   "19": "Szczyt ścieżki wspinaczy nad kamieniołomem w Górach."
+  },
+  "f9Pick": {
+   "0": "Etap orła: {f9Stage} - {name}   ←→ zmień, OK ustaw"
+  },
+  "f9": {
+   "0": "Orle jajo już jest",
+   "1": "Orle jajo w torbie",
+   "2": "Jajo czeka w gnieździe na Orlej Grani",
+   "3": "Najpierw orzeł",
+   "4": "Więź 100",
+   "5": "Orla Grań"
+  }
+ },
+ "_opis": "Napisy kodu Orzel.js sprzed przeniesienia do js/teksty/orzel.txt (kod.*)"
+}

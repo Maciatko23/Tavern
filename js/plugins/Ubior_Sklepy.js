@@ -2,8 +2,8 @@
 // Ubior_Sklepy.js
 //=============================================================================
 // The hero's clothes at work (the data: Ubior_Data.js; the look: Ubior.js; the parts of the body: Equipment.js):
-//   - the trade, in the talks of the residents who deal in them (TownLife.addTalkHook, first - a quest's hand-in, offer or remark
-//     still comes first, like Ludzie.js's pedlar): Dorota Igła the seamstress, Ignac the tanner and shoemaker, Agata the market woman,
+//   - the trade, in the talks of the residents who deal in them (the core's Tawerna.talk: a takeover at "shop" priority - only when the
+//     quests and the other systems have nothing to say to them; other systems' rows in the menu: Tawerna.talk.option): Dorota Igła the seamstress, Ignac the tanner and shoemaker, Agata the market woman,
 //     Józek Łata the rag-and-bone man of Podgrodzie. Their menu "Pokaż ubrania / Sprzedaj ubrania / Napraw / Ufarbuj / Porozmawiaj"
 //     opens the shop's window (Scene_UbiorSklep, Tawerna.ui pieces: the black and yellow look of the game); the greeting by the
 //     town's opinion (TownQuests) is said by the shopkeeper before the menu. The kantor (Kantor.js) gets the festive shirt among its
@@ -243,12 +243,8 @@
             OK.f9.add({ owner: PLUGIN, title: "Ubiór (ubrania, sklepy):", rows: f9Rows, ok: f9Ok });
             wired.f9 = true;
         }
-        // the talks of the shopkeepers
-        const L = TL();
-        if (L && L.addTalkHook && !wired.talk) {
-            L.addTalkHook((key, ev) => { try { return talkHook(key, ev); } catch (e) { report("talk " + key, e); return null; } }, true);
-            wired.talk = true;
-        }
+        // the talks of the shopkeepers: the core's talk service, put in once at the load (below talkHook)
+        wired.talk = true;
         return wired;
     }
 
@@ -549,21 +545,8 @@
         return out;
     }
     const cmdAct = args => [C(355, ["Ubior_Sklepy.act(this, " + JSON.stringify(args) + ")"])];
-    // the quests speak first: a remark, a ready hand-in, an offer (as Ludzie.js's questFirst)
-    function questFirst(key) {
-        const q = TQ();
-        if (!q) return false;
-        try {
-            if (q.remarkFor && q.remarkFor(key)) return true;
-            if (q.talkFor && q.talkFor(key, true)) return true;
-            if ((q.QUESTS || []).some(x => x.giver === key && x.offer && q.offerable && q.offerable(x.id))) return true;
-        } catch (e) { /* (the quests speak through TownQuests) */ }
-        return false;
-    }
-    // the other first talks of the same people: Józek's clue of W12 (Wrak.js) comes before his stall
-    const YIELD = {
-        szmaciarz: () => { const W = T.api("Wrak"), s = W && W.state ? W.state() : null; return !!(s && s.met && !(s.clues || {}).jozek && !s.w12); }
-    };
+    // (2026-10-23) the quests and the other first talks of the same people (Józek's clue of W12, Wrak.js) come before the stall by the
+    // core's talk service's priorities (this shop: "shop", below them) - no list of exceptions here
     const open = key => { const s = shop(key); return !!s && inHours(hour(), s.godziny) && s.sprzedaje.some(w => { const p = D().poWzorze(w); return p && item(p.id); }); };
     // the greeting of the day by the town's opinion (TownQuests' own: said here, before the menu); null: greeted already today
     function greeting(key) {
@@ -573,30 +556,25 @@
         const tier = Math.min(4, (q.tier ? q.tier() : 0) + (schludnosc() >= 2 ? 1 : 0)), mine = G[key] && G[key][tier];
         return pick(mine && mine.length ? mine : G.any[tier]);
     }
-    // (2026-10-23) other trades of the same shopkeeper, as lines of this menu before "Porozmawiaj" (Bron.js: the leather armour, the
-    // padded jacks, the old weapons): Ubior_Sklepy.addMenu(fn(key, ev) -> [{ label, cmds }])
-    const extraMenus = [];
-    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
+    // (2026-10-23, docs/ROZMOWY.md) other trades of the same shopkeeper come as rows of this menu before "Porozmawiaj" through the core's
+    // talk service (Tawerna.talk.option, who = the shopkeeper's key - Bron.js: the leather armour, the padded jacks, the old weapons)
     function menu(key, ev) {
         const s = shop(key), d = D(), spk = { id: ev.eventId(), name: s.kto }, out = [];
         const g = greeting(key);
         sayTo(out, spk, (g ? g + " " : "") + pick(s.teksty.witaj));
-        const M = d.TEKSTY.menu, labels = [], branches = [];
-        for (const t of tabsOf(key)) { labels.push(M[t]); branches.push(cmdAct(["otworz", key, t])); }
-        for (const fn of extraMenus) {
-            let rows = null;
-            try { rows = fn(key, ev); } catch (e) { report("menu " + key, e); }
-            for (const r of rows || []) if (r && r.label) { labels.push(r.label); branches.push(r.cmds || []); }
-        }
-        labels.push(M.rozmowa, M.nic);
-        branches.push(cmdAct(["rozmowa", key]), []);
-        return choiceTo(out, labels, branches, labels.length - 1);
+        const M = d.TEKSTY.menu, own = tabsOf(key).map(t => ({ label: M[t], cmds: cmdAct(["otworz", key, t]) }));
+        own.push({ label: M.rozmowa, cmds: cmdAct(["rozmowa", key]), order: T.talk.ORDER.chat });
+        return T.talk.menu(out, T.talk.rows(key, { ev }, own), M.nic);
     }
     function talkHook(key, ev) {
         if (!has() || !shop(key) || !ev || !open(key)) return null;
-        if (questFirst(key) || (YIELD[key] && YIELD[key]())) return null;
         return menu(key, ev);
     }
+    // the shopkeepers' own menu: a takeover at "shop" priority - only when nothing above has anything to say to them (the quests: a step's
+    // talk, a reminder, a hand-in, an offer, a remark; Wrak's clue at Józek...), above the greeting of the day (said in the menu itself);
+    // who: a resident with a clothes' shop (Ubior_Data.SKLEPY with hours)
+    T.talk.takeover({ owner: PLUGIN, who: (key => !!shop(key)), priority: T.talk.PRIORITY.shop,
+        run: ctx => { try { return talkHook(ctx.who, ctx.ev); } catch (e) { report("talk " + ctx.who, e); return null; } } });
     // "Porozmawiaj": the quests' talk of the resident (a reminder, an offer), else one of its usual lines
     function plainTalk(key, interp) {
         const q = TQ(), L = TL(), ev = interp && $gameMap.event(interp.eventId()), s = shop(key);
@@ -842,6 +820,6 @@
 
     const api = { VERSION: "1.0.0", act, otworz, kup, sprzedaj, napraw, farbuj, oferta, tabsOf, doRow, bonus, udzwig, predkosc, schludnosc, heat, worn: () => worn().map(w => w.id),
         refresh, wire, wired: () => Object.assign({}, wired), usedToday, sellPrice, buyPrice: (key, wzor, used) => { const p = D() && D().poWzorze(wzor), s = shop(key); return p ? buyPrice(p, used && s ? s.uzywane : null) : 0; },
-        repairPrice, dyePrice, f9Rows, f9Ok, menu: (key, ev) => (shop(key) && ev ? menu(key, ev) : null), talkHook, open, state: () => store(), Scene_UbiorSklep, addMenu };
+        repairPrice, dyePrice, f9Rows, f9Ok, menu: (key, ev) => (shop(key) && ev ? menu(key, ev) : null), talkHook, open, state: () => store(), Scene_UbiorSklep };
     window.Ubior_Sklepy = T.register(PLUGIN, api);
 })();

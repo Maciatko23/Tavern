@@ -162,8 +162,10 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`Livestock.animals.forEach(a => { a._frozen = false; }); 0`);
         const shy = await J(`(function(){ const a = Livestock.animals[0]; const other = Livestock.animals[1]; other._frozen = true; a._wait = 999; return { x: a._x, y: a._y }; })()`);
         await ev(`$gamePlayer.locate(${shy.x}, ${Math.min(cy - 1, shy.y + 1)}); 0`);
-        await frames(50);
-        const shyD = await J(`(function(){ const a = Livestock.animals[0]; return Math.hypot(a._realX - $gamePlayer._realX, a._realY - $gamePlayer._realY); })()`);
+        // (2026-10-23: till it has stepped aside, at most 150 frames - a fixed 50 was short on a busy machine once)
+        const shyNow = () => J(`(function(){ const a = Livestock.animals[0]; return Math.hypot(a._realX - $gamePlayer._realX, a._realY - $gamePlayer._realY); })()`);
+        for (let i = 0; i < 15 && (await shyNow()) < 1; i++) await frames(10);
+        const shyD = await shyNow();
         check("a cow steps aside when the player comes close", shyD >= 1, shyD);
 
         // ---------------------------------------------------------------- the scene is rebuilt (menu): animals keep their pictures

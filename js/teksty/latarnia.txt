@@ -1,0 +1,442 @@
+# Teksty latarni na przylądku (wtyczki Latarnia_Data.js i Latarnia.js): latarnik Bazyli, wizje we mgle, opał, zadania K49, D22 i W11, epilog.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz latarnia
+
+# ======================================================================== RESIDENT (mieszkaniec)
+mieszkaniec.name = Bazyli Krzesiwo
+mieszkaniec.title = latarnik
+[mieszkaniec.barks.work]
+Drewno na noc. Noc zawsze jest dłuższa, niż się myśli.
+(Bazyli rąbie równo, bez pośpiechu. Polano za polanem.)
+Tran śmierdzi, drewno dymi. Ogień nie wybiera.
+
+[mieszkaniec.barks.stand]
+(Bazyli patrzy w morze jednym okiem. Drugie, białe, patrzy gdzie indziej.)
+
+[mieszkaniec.barks.rain]
+Deszcz. W deszcz morze kłamie mniej niż we mgle.
+
+[mieszkaniec.barks.night]
+Nie stój po ciemku pod wieżą. Statki patrzą w ogień, nie pod nogi.
+
+[mieszkaniec.barks.home]
+(Bazyli pisze coś w grubej księdze. Pióro skrzypi.)
+Ogień trzeba karmić jak dziecko. Po trochu i często.
+(Bazyli przeciera soczewkę skórką. Długo. Bardzo długo.)
+(Bazyli dorzuca do kosza polano i patrzy, jak się zajmuje.)
+
+[mieszkaniec.talk.morning]
+Noc minęła. Żaden statek nie poszedł na skały. Zapisane.
+O świcie gaszę ogień. Dzień świeci sam.
+
+[mieszkaniec.talk.day]
+Za dnia śpię. Jak sowa. Tylko mniej mądry.
+Drewno, tran, węgiel. Ogień nie pyta, skąd.
+
+[mieszkaniec.talk.evening]
+Zaraz zmierzch. Trzeba wejść na górę.
+Soczewkę czyszczę co wieczór. Kurz to też mgła, tylko mała.
+
+[mieszkaniec.talk.night]
+Nie gadaj tyle. Patrz na morze.
+Tam, gdzie ogień nie sięga, zaczyna się to, czego nie ma na żadnej mapie.
+
+[mieszkaniec.talk.rain]
+W deszcz ogień widać na pół mili. We mgle - na rzut kamieniem. Dlatego dzwon.
+
+# ======================================================================== VISIONS (wizje)
+# „Statek bez bandery”
+wizje.0.title = Statek bez bandery
+wizje.0.line = Statek bez bandery przybija nocą. Nikt nie zapala na nim światła.
+wizje.0.note = W soczewce latarni: statek bez bandery i bez świateł wypływa z mgły i przybija nocą do kamienistego brzegu. Z łodzi wysiadają ludzie w kapturach, jedna przysłonięta latarnia. Bazyli nie powiedział, czy to już było, czy dopiero będzie.
+# „Człowiek z piórem”
+wizje.1.title = Człowiek z piórem
+wizje.1.line = Człowiek z piórem stoi w czarnej wodzie i rysuje wyspę. Na nadgarstku ma białe oko.
+wizje.1.note = W soczewce latarni: chudy człowiek w długim płaszczu stoi po pas w czarnej wodzie i rysuje na karcie wybrzeże wyspy. Atrament kapie z pióra do wody. Na lewym nadgarstku ma wytatuowane białe, otwarte oko.
+# „Kobieta nad rzeką”
+wizje.2.title = Kobieta nad rzeką
+wizje.2.line = Kobieta w chuście w czerwone kwiaty ogląda się za siebie. Tabor idzie na północ.
+wizje.2.note = W soczewce latarni: kobieta w chuście w czerwone kwiaty stoi nad szeroką rzeką i ogląda się za siebie, a za nią długi tabor idzie na północ. Wyglądała jak mama. Tyle samo mówiły wieści z lądu: poszła z taborem na północ. Nic więcej szkło nie pokazało.
+
+# ======================================================================== HEAVY (bufor)
+bufor.name = Ciężka głowa
+
+# ======================================================================== TX
+[meet]
+(Bazyli długo na ciebie patrzy. Jedno oko ma białe jak mleko.) Kruk na szyi.
+Widziałem go we mgle. Trzy noce temu. Na szyi chłopca, który wyszedł z morza.
+> ...Mnie? Trzy noce temu byłem jeszcze w gorączce u dziadka.
+Wiem. Zapisałem. (Bazyli stuka palcem w grubą księgę pod pachą.) Bazyli. Pilnuję ognia, żeby statki nie szły na skały. Czasem ogień pokazuje więcej, niż powinien.
+Jak przyniesiesz tranu, zapłacę. Jak będzie mgła, możesz wejść na górę. Ale tylko raz na noc. I nie pytaj mnie, co znaczy to, co zobaczysz.
+
+[meetNote]
+Latarnik z przylądka
+Na północno-wschodnim przylądku pilnuje ognia latarnik Bazyli Krzesiwo. Mówi, że trzy noce przed moim przebudzeniem widział we mgle kruka na szyi chłopca, który wyszedł z morza. Wszystko, co widzi w szkle latarni, zapisuje w Księdze mgieł.
+
+[ask]
+Hm.
+Mów.
+Słucham. Krótko, ogień czeka.
+
+[sell]
+Za drewno dwa grosze, za węgiel cztery, za tran sześć. Więcej nie dam, ale biorę zawsze.
+
+[sellNone]
+Nie masz nic, co się pali. Poza sobą.
+
+[sellDone]
+Ogień ci dziękuje. Ja też, tylko ciszej.
+
+[sellFull]
+Szopa pełna. Przynieś, jak ubędzie.
+
+[sellDay]
+Dziś już dość. Więcej nie zmieszczę w szopie.
+
+[weatherAgain]
+Już mówiłem dziś. Pogoda nie zmienia się od pytania.
+
+weatherHead = Jutro: {d1}. Pojutrze: {d2}.
+[book]
+„Noc spokojna. Morze czerwone aż po widnokrąg. Śnięte ryby na kamieniach.” Tyle dziś.
+„Kuter bez latarni minął cypel o drugiej. Nie mój interes.” Tak piszę. Krótko.
+Księga mgieł ma sto lat. Pisał ją latarnik przede mną i ten przed nim. Wszystko, co widzieli w szkle.
+Nie czytam ci, co tam jest. Czytają to ci, co przyjdą po mnie.
+
+stock = Opału na {n}.
+[stockNone]
+Nic. Dziś zgaśnie, jak nikt nie przyniesie.
+
+[stockFerry]
+Prom przywozi tran co tydzień. Póki przywozi.
+
+[stockWar]
+Prom już nie wozi tranu. Wojna. Jak nikt nie przyniesie, latarnia zgaśnie.
+
+[up]
+Drzwi na górę są otwarte. Tylko nie dotykaj ognia.
+
+[sleepyDay]
+(Bazyli przeciera twarz.) Śpię za dnia, chłopcze. Mów szybko.
+
+[mistComing]
+Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi.
+
+[afterVision]
+Nie mów nic. Jeszcze nie.
+(Bazyli maczy pióro i coś zapisuje, nie patrząc na ciebie.)
+
+[visionsDone]
+Szkło pokazało ci, co miało. Teraz pokazuje tylko twoją twarz.
+
+izbaAsleep = Drzwi zaryglowane od środka. Zza nich słychać miarowe chrapanie.
+towerDay = Drzwi latarni zamknięte. Bazyli nosi klucz przy pasie.
+towerNight = Z góry dobiega głos Bazylego: „Nie teraz. Przyjdź z tranem albo we mgłę.”
+towerMist = Z góry woła Bazyli: „Wejdź. Mgła idzie.”
+towerBroken = Drzwi latarni wyważone. Zamek zwisa na jednym gwoździu.
+edge = Ścieżka na zachód urywa się nad osuwiskiem. Dalej nie przejdziesz.
+slup = Słup dawnej strażnicy zakonu. Na górze wykuty kruk z rozpostartymi skrzydłami - taki sam jak na twoim wisiorku.
+slupNoPendant = Słup dawnej strażnicy zakonu. Na górze wykuty kruk z rozpostartymi skrzydłami.
+plyta = Płyta posadzki dawnej strażnicy. Wyryty krąg i słowa: „Patrz, a nie pytaj”.
+dzwon = Dzwon mgłowy. Linka biegnie od jego serca aż na galerię latarni.
+dzwonMist = Dzwon mgłowy. Co godzinę, kiedy jest mgła, Bazyli ciągnie linkę z galerii.
+drewno = Drewutnia. Polana ułożone równo jak książki na półce.
+beczki = Beczki tranu. Zapas latarni: {n}.
+beczkiNone = Beczki tranu. Puste. Pachną tylko rybą.
+lensDay = Soczewka. Grube, zielonkawe szkło w mosiężnym pierścieniu. W dzień tylko szkło.
+lensNoMist = Soczewka. Za nią tylko ogień i noc nad morzem.
+lensUsed = Dziś już patrzyłeś. Szkło nie pokazuje dwa razy tej samej nocy.
+[lensNoQuest]
+(Bazyli kładzie dłoń na pierścieniu.) Najpierw pogadamy. Potem patrz.
+
+lensNoBazyli = Bez Bazylego nie dotykaj szkła.
+lensGone = Pusty pierścień. Ktoś wyważył soczewkę z oprawy.
+lensBag = Pusty pierścień. Soczewka jest w twojej torbie.
+lensBroken = Pęknięte szkło. Ogień przez nie świeci, ale mgła nic już w nim nie pokazuje.
+lensSold = Pusty pierścień. Soczewka płynie na ląd.
+bookLook = Księga mgieł. Gruba, oprawiona w skórę foczą. Pismo kilku rąk, coraz młodsze ku końcowi.
+bookOwn = Księga mgieł. Na ostatnich stronach twoje wizje, zapisane ręką Bazylego.
+heavy = Ciężka głowa
+heavySub = Po wizji: do południa prace kosztują więcej sił.
+heavyResist = Głowa lekka - Hart ducha
+wreckEmpty = Zatoczka szczątków. Nic nowego. Morze wyrzuca coś dopiero po sztormie.
+wreckGot = Morze wyrzuciło po sztormie
+wreckEye = Na desce rozbitej skrzyni wypalone oko - znak Czarnych Oczu.
+bell = Dzwon mgłowy
+fireOut = Latarnia nie świeci. Brak opału.
+[janekTran]
+Tran? Mam trochę z wątroby dorsza. Śmierdzi, ale się pali. Sześć groszy dzbanek.
+
+[janekTranBuy]
+Masz. Tylko nie rozlej w łodzi, bo mi ryby uciekną.
+
+[janekTranNone]
+Więcej nie mam. Wątroba dorsza to nie studnia.
+
+[baltazar]
+Ach, przyjaciel! Ty bywasz na przylądku, prawda? U tego latarnika z bielmem.
+Mam kupca na lądzie, który płaci za stare szkła. Takie z latarni, w mosiężnym pierścieniu. Czterysta groszy, przyjacielu. Czterysta.
+Gdyby szkiełko... zginęło, nikt by nie płakał. Latarnia świeci ogniem, nie szkłem.
+
+[baltazarNo]
+> Nie sprzedam cudzego.
+Szkoda. Ktoś inny sprzeda. Zawsze ktoś sprzedaje.
+
+[baltazarMaybe]
+> Pomyślę.
+Myśl, przyjacielu. Tylko szybko. Mój kupiec nie lubi czekać.
+
+[warn]
+> Baltazar z kantoru chce kupić twoją soczewkę. Za czterysta.
+(Bazyli długo milczy.) Czterysta. Za szkło, w którym widać Serce przez łzy. Tanio.
+Przyjdą po nie. Widziałem to we mgle, tylko nie wiedziałem kiedy. Teraz wiem: jutro w nocy.
+Jak chcesz pomóc, czuwaj tu jutro w nocy. Po północy.
+
+raidStart = Ktoś wyważa drzwi latarni!
+raidInside = Na schodach kroki! Ktoś wbiegł na górę!
+raidWin = Latarnia obroniona
+raidWinSub = Soczewka została na miejscu.
+raidLost = Soczewka skradziona
+raidLostSub = Złodzieje czekają w zatoczce szczątków na łódź - tej nocy jeszcze tam będą.
+[bazyliRobbed]
+(Bazyli ma rozbitą wargę i siniak pod zdrowym okiem.) Przyszli we trzech. Wyważyli drzwi i wyrwali szkło z oprawy.
+Nie płyną od razu. Czekają na łódź w zatoczce, tam gdzie morze wyrzuca szczątki. Dziś w nocy jeszcze tam będą.
+
+[bazyliDefended]
+(Bazyli ociera krew z czoła.) Dobrze, że byłeś. Sam bym ich nie zatrzymał.
+Weź szkło do pustelnika na klifie. Kroniki znają je lepiej niż ja. I przynieś z powrotem.
+
+[bazyliGive]
+Weź szkło do pustelnika na klifie. Niech przeczyta w kronikach, czym jest. I przynieś z powrotem.
+
+[bazyliBagFirst]
+Masz je? Zanieś najpierw pustelnikowi. Potem pogadamy.
+
+sack = Worek złodziei. W środku, owinięta w szmatę - soczewka latarni.
+sackGot = Soczewka latarni
+[baltazarBack]
+Ach, szkiełko z latarni! Trafiło do mnie przez... pośrednika. Czysta uczciwość, przyjacielu.
+Dla ciebie - sto pięćdziesiąt groszy. Bo cię lubię.
+
+[baltazarBackYes]
+Interes to interes. Szkiełko twoje.
+
+[baltazarBackNo]
+Szkiełko poczeka. Mój kupiec - nie.
+
+[kleofas]
+> Bracie, to szkło z latarni na przylądku. Bazyli widzi w nim rzeczy we mgle.
+(Kleofas obraca soczewkę w palcach i długo patrzy przez nią na płomień świecy.) Zielonkawe. Ciężkie jak kamień. Takiego szkła nie robi żadna huta.
+(Kleofas wyjmuje najstarszą z kronik.) „Oko Strażnicy. Wyszlifowane z kryształu Pierwszych, z głębi, gdzie kamień świeci sam z siebie.”
+„We mgle odbija Serce jak przez łzy. Pokazuje, co Serce wie, ale nie odpowiada. Strażnica patrzyła przez nie na morze, żeby nikt nie przypłynął niezapowiedziany.”
+To nie jest kawałek Serca, chłopcze. Serce jest jedno. Ale ludzie na lądzie nie odróżniają odbicia od źródła. Dlatego płacą.
+
+[kleofasNote]
+Oko Strażnicy
+Brat Kleofas przeczytał w kronikach: soczewka latarni to „Oko Strażnicy”, wyszlifowane przez zakon z kryształu Pierwszych. We mgle odbija Serce jak przez łzy - pokazuje, co Serce wie, ale nie odpowiada. To nie odłamek Serca: Serce jest jedno.
+
+[bazyliReads]
+(Bazyli otwiera Księgę mgieł na pierwszej stronie, pisanej ręką kogoś bardzo starego.)
+„Oko Strażnicy. Szlifowane z kryształu Pierwszych. We mgle odbija Serce jak przez łzy. Nie odpowiada - pokazuje.”
+Tyle wiem od tego, co był przede mną. Pustelnik na klifie wiedziałby więcej, gdyby ktoś do niego doszedł.
+
+[choiceAsk]
+Teraz już wiesz, co to jest. Ja wiedziałem od dawna.
+Zrób, co trzeba. Ja tylko pilnuję ognia.
+
+[choiceLeave]
+> Zostaw je w latarni. Ty go pilnujesz najlepiej.
+(Bazyli wkłada soczewkę w pierścień i dokręca śruby.) Będzie świecić. I patrzeć. Ja też.
+
+[choiceBreak]
+> Rozbij je. Nikt więcej po nie nie przyjdzie.
+(Bazyli waży soczewkę w dłoni, potem uderza nią o kamienny parapet. Szkło pęka z dźwiękiem jak dzwon.)
+Latarnia będzie świecić dalej. Ogień nie potrzebuje oka. Tylko ja już nic nie zobaczę we mgle.
+(Wkłada pęknięte szkło z powrotem w pierścień.) Niech zostanie. Na pamiątkę.
+
+[choiceSell]
+> Sprzedam je Baltazarowi.
+(Bazyli patrzy na ciebie zdrowym okiem.) Twoja wola. Ja i tak widziałem dość.
+Tylko pamiętaj: kto kupuje szkło, chce widzieć, co ono widzi. Czarne Oczy będą wiedziały jedną noc więcej niż my.
+
+[sold]
+Ach! Szkiełko! (Baltazar ogląda soczewkę pod światło.) Piękne. Czterysta, jak mówiłem. Słowo kupca.
+Mój kupiec się ucieszy. A ty... ty niczego nie widziałeś, przyjacielu.
+
+[soldNote]
+Soczewka sprzedana
+Sprzedałem Oko Strażnicy Baltazarowi za czterysta groszy. Płynie na ląd. Bazyli mówi, że Czarne Oczy będą wiedziały jedną noc więcej niż my.
+
+[leaveNote]
+Oko Strażnicy zostaje
+Soczewka wróciła do latarni na przylądku. Bazyli jej pilnuje - i dalej patrzy przez nią we mgle.
+
+[breakNote]
+Oko Strażnicy rozbite
+Bazyli rozbił soczewkę o parapet. Latarnia świeci dalej, ale we mgle nikt już nic w niej nie zobaczy.
+
+# ======================================================================== K49 (zadania.K49)
+zadania.K49.title = Tran dla latarni
+zadania.K49.where = przylądek z latarnią
+zadania.K49.when = od dnia 24
+zadania.K49.desc = Od drugiej fali prom nie przywozi tranu. Bazylemu kończy się opał - bez niego latarnia zgaśnie, a statki pójdą na skały.
+[zadania.K49.offer.say]
+Słuchaj. Od drugiej fali prom nie przywozi tranu. Wojsko bierze wszystko, co się pali.
+Opału mam na kilka nocy. Potem latarnia zgaśnie, a statki pójdą na skały. Albo przypłyną tam, gdzie nie powinny.
+Przynieś mi cztery dzbanki tranu i sześć polan. Tran wytopisz z ryb w kociołku - trzy ryby na dzbanek. Albo kup od Janka na przystani.
+
+zadania.K49.offer.yes = Przyniosę.
+zadania.K49.offer.no = Nie teraz.
+[zadania.K49.offer.accept]
+Ryby, kociołek, ogień. Smród na pół wyspy, ale się pali.
+
+[zadania.K49.offer.decline]
+To będę palił krzesłami.
+
+zadania.K49.steps.0.text = Przynieś Bazylemu 4× Tran i 6× Drewno (przylądek z latarnią). Tran: 3 surowe ryby w kociołku albo od Janka na przystani (6 G).
+[zadania.K49.steps.0.remind]
+Cztery dzbanki tranu i sześć polan. Ogień nie czeka.
+
+[zadania.K49.steps.0.hero]
+> Masz. Tran i drewno.
+
+[zadania.K49.steps.0.done]
+(Bazyli wącha tran, kiwa głową i niesie dzbanki do beczek.)
+Dobry. Rybny, gęsty. Tydzień nocy z głowy.
+Masz. I... drzwi latarni są dla ciebie otwarte. Nocą też. Tylko nie dotykaj ognia.
+
+[zadania.K49.reward.note]
+Tran dla latarni
+Przyniosłem Bazylemu tran i drewno. Latarnia na przylądku świeci dalej, a drzwi do laterny są dla mnie otwarte.
+
+# ======================================================================== D22 (zadania.D22)
+zadania.D22.title = Księga mgieł
+zadania.D22.where = laterna na przylądku, mgliste noce
+zadania.D22.when = po pierwszej rozmowie z Bazylem
+zadania.D22.desc = We mgle soczewka latarni pokazuje rzeczy, których nikt nie powinien wiedzieć. Bazyli wszystko zapisuje w Księdze mgieł.
+[zadania.D22.offer.say]
+Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi.
+Jak przyjdzie, wejdź na górę. Spójrz w szkło. Raz. Potem nic nie mów.
+Trzy mgły. Trzy razy. Wtedy pogadamy.
+
+zadania.D22.offer.yes = Przyjdę.
+zadania.D22.offer.no = Nie dziś.
+[zadania.D22.offer.accept]
+Tylko raz na noc. Szkło nie lubi chciwych.
+
+[zadania.D22.offer.decline]
+Mgła wróci. Zawsze wraca.
+
+zadania.D22.steps.0.text = W mgliste noce spójrz w soczewkę latarni (laterna na szczycie wieży, nocą we mgle, raz na noc). Wizje: {n}/3.{kiedy}
+zadania.D22.steps.1.text = Bazyli pyta, co widziałeś. Powiedz mu - albo zachowaj to dla siebie.
+[zadania.D22.reward.note]
+Księga mgieł
+Trzy mgliste noce przy soczewce latarni. Bazyli dał mi kartę, którą dawny latarnik przepisał do Księgi mgieł z kroniki zakonu - pisaną szyfrem.
+
+# ======================================================================== W11 (zadania.W11)
+zadania.W11.title = Soczewka
+zadania.W11.where = kantor Baltazara, przylądek z latarnią, pustelnia na klifie
+zadania.W11.when = Akt II
+zadania.W11.desc = Ktoś na lądzie płaci za „szkiełko z latarni”. Soczewka Bazylego to nie zwykłe szkło.
+zadania.W11.steps.0.text = Baltazar Vey pyta o „szkiełko z latarni”. Porozmawiaj z nim w kantorze (8–18).
+zadania.W11.steps.1.text = Baltazar chce kupić soczewkę latarni za 400 G. Ostrzeż Bazylego (przylądek).
+zadania.W11.steps.2.text = Ktoś przyjdzie po soczewkę. Czuwaj przy latarni w nocy z dnia {d} na {d1} - po północy.
+zadania.W11.steps.3.text = Soczewkę skradziono. {gdzie}
+zadania.W11.steps.4.text = {kto}
+zadania.W11.steps.5.text = Wiesz, czym jest Oko Strażnicy. Zdecyduj u Bazylego: zostawić soczewkę w latarni, rozbić ją albo sprzedać Baltazarowi.
+zadania.W11.steps.6.text = Zanieś soczewkę Baltazarowi (kantor, 8–18) - 400 G.
+
+# ======================================================================== VITEMS (rzeczy)
+rzeczy.soczewka.name = Soczewka latarni (Oko Strażnicy)
+
+# ======================================================================== REMARKS (uwagi)
+# latJanekOgien, mówi: janek
+[uwagi.0.lines]
+Latarnia na przylądku zgasła tej nocy. Pierwszy raz, odkąd pamiętam. Rybacy mówią, że to zły znak. Ja mówię, że brak tranu.
+
+# latCelnik, mówi: celnik
+[uwagi.1.lines]
+Latarnik z przylądka? Zapisuje wszystko w swojej księdze. Nawet więcej niż ja. Tylko jego księgi nikt nie sprawdza.
+
+# latRoch, mówi: przemytnik
+[uwagi.2.lines]
+Bazyli dalej pali? To dobrze. Bez jego ognia pół zatoki to same skały. Nawet przemytnik woli widzieć, gdzie umiera.
+
+# latKleofas, mówi: pustelnik
+[uwagi.3.lines]
+Słyszałem, że ktoś napadł na latarnię. Kroniki piszą, że po Oko przychodzili zawsze nocą. I zawsze odchodzili z pustymi rękami. Do teraz.
+
+# ======================================================================== GOSSIP (plotki)
+[plotki.latarnik]
+Chleb? Dziękuję. Zjem o świcie, jak zgaszę ogień. Przy ogniu nie jem - okruchy na soczewce.
+
+# ======================================================================== EPILOG (epilog)
+epilog.zniszczenie = Latarnia na przylądku świeci dalej, ale soczewka ślepnie: we mgle Bazyli widzi już tylko mgłę.
+epilog.zasady = Bazyli widzi w soczewce tylko w Noc Pytania - raz w roku, jak każe reguła zakonu.
+epilog.rozbita = Bazyli pali ogień w latarni za pękniętym szkłem i nigdy już nie zagląda w mgłę.
+epilog.sprzedana = Pusty pierścień w laternie przypomina Bazylemu, że Czarne Oczy wiedziały o jedną noc więcej.
+epilog.zgasla = Latarnia na przylądku zgasła na dobre. Rybacy wracają przed zmierzchem.
+
+# ======================================================================== z kodu Latarnia.js (kod.<funkcja>.<n>, w kolejności kodu)
+# nightsText
+kod.nightsText.0 = jedną noc
+kod.nightsText.1 = {k} noce
+kod.nightsText.2 = {k} nocy
+# weatherOf
+kod.weatherOf.0 = burza od {1} do {2}, potem deszcz do {3}
+kod.weatherOf.1 = śnieg
+kod.weatherOf.2 = , rano gęsta mgła
+kod.weatherOf.3 = , rano trochę mgły
+# bazyliTalk
+kod.bazyliTalk.0 = Kupisz opał?
+kod.bazyliTalk.1 = Jaka będzie pogoda?
+kod.bazyliTalk.2 = Ile masz opału?
+kod.bazyliTalk.3 = Co piszesz w księdze?
+kod.bazyliTalk.4 = Co słychać?
+kod.bazyliTalk.5 = Cicho. Morze gada za nas.
+# janekTalk
+kod.janekTalk.0 = Kupię dzbanek tranu (6 G).
+kod.janekTalk.1 = Nie, w innej sprawie.
+# actCall
+kod.actCall.0 = Potrzebujesz {1} G
+# seeVision
+kod.seeVision.0 = Księga mgieł: {title}
+kod.seeVision.1 = wizja w latarni
+# spawnRaid
+kod.spawnRaid.0 = Szkło! Brać szkło!
+kod.spawnRaid.1 = Cicho... do wieży.
+# build
+kod.build.0 = Worek złodziei
+# w11Act
+kod.w11Act.0 = Soczewka latarni
+kod.w11Act.1 = Zanieś ją bratu Kleofasowi.
+kod.w11Act.2 = Potrzebujesz {price} G
+kod.w11Act.3 = Odkupiona od Baltazara.
+# vars
+kod.vars.0 = " Mgła jest teraz - wejdź na górę."
+kod.vars.1 = " Dziś w nocy będzie mgła."
+kod.vars.2 = " Bazyli mówi, że mgła przyjdzie w nocy z dnia {nf} na {2}."
+kod.vars.3 = Łódź zabrała soczewkę z zatoczki. Baltazar ma ją w kantorze - odkup ją ({1} G, 8–18).
+kod.vars.4 = Złodzieje czekają na łódź w zatoczce szczątków na przylądku - w nocy z dnia {1} na {2}. Odbierz im worek.
+kod.vars.5 = Weź soczewkę od Bazylego i zanieś ją bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.
+kod.vars.6 = Zanieś soczewkę bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.
+# talk
+kod.talk.0 = Trzy mgły. Trzy razy patrzyłeś w szkło. (Bazyli otwiera Księgę mgieł na czystej stronie.)
+kod.talk.1 = Co widziałeś?
+kod.talk.2 = Powiem ci.
+kod.talk.3 = Zachowam to dla siebie.
+kod.talk.4 = > Statek bez bandery. Człowieka z piórem w czarnej wodzie. I kobietę nad rzeką.
+kod.talk.5 = (Bazyli pisze długo, nie podnosząc głowy.) Teraz to i twoje, i księgi. Lżej będzie nieść we dwóch.
+kod.talk.6 = Weź to. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu, zanim umarł. Szyfr. Ja nie umiem tego czytać.
+kod.talk.7 = > Zachowam to dla siebie.
+kod.talk.8 = Niektóre rzeczy lepiej nosić samemu. Rozumiem.
+kod.talk.9 = Ale to weź. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu. Szyfr. Mnie się nie przyda.
+kod.talk.10 = Nie sprzedam cudzego.
+kod.talk.11 = Pomyślę.
+kod.talk.12 = Biorę ({1} G).
+kod.talk.13 = Nie teraz.
+kod.talk.14 = Zostaw je w latarni.
+kod.talk.15 = Rozbij je.
+kod.talk.16 = Sprzedam je Baltazarowi.
+# defineBuffs
+kod.defineBuffs.0 = po wizji w latarni: do południa prace kosztują więcej sił

@@ -1,0 +1,586 @@
+{
+ "klapaZamknieta": "Klapa zamknięta na kłódkę.",
+ "klapaZejdz": "Zejść do piwnicy?",
+ "tylneZamkniete": "Tylne drzwi zamknięte na zasuwę.",
+ "tylneSpoznienie": "Za późno. Nikt już nie otwiera.",
+ "kantorZamkniety": "Kantor zamknięty z rozkazu sołtysa.",
+ "stukanie": "(Trzy stuknięcia w tylne drzwi kantoru.)",
+ "drzwiOtwarte": "Kto? ...Wchodź. Szybko.",
+ "kurierBarks": [
+  "...",
+  "Zimno jak u mnie w domu.",
+  "Trzy razy. Nie dwa, nie cztery."
+ ],
+ "kurierSploszony": "Ktoś tu jest... Nie dziś.",
+ "kurierWychodzi": "Wóz o świcie. Kamienie pod słomą.",
+ "felixBark": "Szybko, szybko... Lord śpi, a ja tu stoję.",
+ "grumBark": "Mój żołd. Z lądu. I nic więcej nie mów.",
+ "noteKnock": [
+  "Trzy stuknięcia",
+  "Po północy ktoś w kapturze zapukał trzy razy w tylne drzwi kantoru, a Baltazar go wpuścił. Ambroży zadzwonił z dzwonnicy trzy i jeden - „obcy w murach”. Gość wyszedł bramą południową."
+ ],
+ "noteFeliks": [
+  "Feliks u Baltazara",
+  "O północy Feliks, kamerdyner Lorda, zapukał do tylnych drzwi kantoru. Wyszedł z sakiewką."
+ ],
+ "noteGrum": [
+  "Grum u Baltazara",
+  "Nocą Grum Żelazna Pięść zapukał do tylnych drzwi kantoru. „Mój żołd. Z lądu.” Ktoś z kontynentu płaci mu przez Baltazara."
+ ],
+ "noteKlos": [
+  "Kłos przy kantorze",
+  "Po promie, nocą, kwatermistrz Kłos z garnizonu stuka trzy razy w tylne drzwi kantoru. Królewskie zboże wychodzi tylnymi drzwiami."
+ ],
+ "obozRozmowa": {
+  "0": [
+   "kurier",
+   "Sztab chce więcej kamieni. Każdy z krukiem. Płacą w srebrze."
+  ],
+  "1": [
+   "a",
+   "Kupiec mówi, że miejscowi znoszą je jak gruz. Za grosze."
+  ],
+  "2": [
+   "b",
+   "A zboże? Rekwizycja dworu idzie przez nas. Garnizon sprzedaje swoje nocą."
+  ],
+  "3": [
+   "kurier",
+   "Zboże to nic. Liczą się drzwi pod skałą. Kupiec ma to zapisać - wszystko, każdy grosz, każde imię."
+  ],
+  "4": [
+   "a",
+   "Zapisuje. W tej swojej księdze. Ciągle zapisuje."
+  ],
+  "5": [
+   "kurier",
+   "Następny prom - wielki ładunek. Ktoś ma pilnować wozu."
+  ]
+ },
+ "obozHeard": [
+  "> (Księga. Baltazar wszystko zapisuje.)",
+  "> (Kamienie z krukiem, zboże z rekwizycji, „drzwi pod skałą”... dla jakiegoś sztabu.)"
+ ],
+ "noteObozHeard": [
+  "Obóz przemytników",
+  "Na Skraju lasu, przy ognisku, siedzą ludzie Baltazara z kurierem w kapturze. Sztab z lądu chce kamieni z krukiem, zboże z rekwizycji idzie przez nich, a „liczą się drzwi pod skałą”. Baltazar wszystko zapisuje w swojej księdze. Na następny prom szykują wielki ładunek."
+ ],
+ "noteObozFight": [
+  "Obóz przemytników",
+  "Na Skraju lasu ludzie Baltazara siedzieli przy ognisku z kurierem w kapturze. Zobaczyli mnie - była bijatyka. W ich worku list przewozowy z pieczęcią kantoru: „kamienie z krukiem - do sztabu, zboże - na prom”."
+ ],
+ "obozPobity": [
+  "> (Ludzie z obozu mnie pobili. Ogień zgaszony, ich nie ma. Wrócą następnej nocy.)"
+ ],
+ "najemTrust": [
+  "Przyjacielu. Ty umiesz nie zadawać pytań - to rzadki towar.",
+  "Potrzebuję silnych rąk nocą. Skrzynie z piwnicy pod tylne drzwi. Dwadzieścia groszy za noc.",
+  "Od dziesiątej, tylnymi drzwiami. Nie spóźniaj się - po wpół do dwunastej nikt ci nie otworzy."
+ ],
+ "najemCold": [
+  "(Baltazar długo ci się przygląda.) Moi ludzie mówią, że ktoś kręcił się nocą przy Skraju lasu. Ktoś ciekawski.",
+  "Ciekawskich wolę mieć blisko. Będziesz nosił skrzynie. Dwadzieścia groszy za noc - i patrzę ci na ręce.",
+  "Od dziesiątej, tylnymi drzwiami. Po wpół do dwunastej nikt ci nie otworzy."
+ ],
+ "najemFight": [
+  "(Baltazar uśmiecha się samymi ustami.) Moich ludzi ktoś pobił przy Skraju lasu. Nie wiem kto. A ty wiesz?",
+  "Nieważne. Kto umie się bić, ten udźwignie skrzynię. Dwadzieścia groszy za noc. Od dziesiątej, tylne drzwi."
+ ],
+ "najemYes": "Przyjdę.",
+ "najemNo": "Nie dziś.",
+ "najemOk": [
+  "Dobrze. Tylne drzwi, dziesiąta. Puk, puk, puk."
+ ],
+ "najemLater": [
+  "Oferta nie ucieka. Ja też nie."
+ ],
+ "noteNajem": [
+  "Nocny tragarz",
+  "Baltazar najął mnie do nocnej roboty: od dziesiątej wieczorem, tylnymi drzwiami kantoru, skrzynie z piwnicy pod tylne drzwi. Dwadzieścia groszy za noc."
+ ],
+ "baltazarStart": [
+  "Jesteś. Trzy skrzynie z kupki pod schody, na górę, pod tylne drzwi. Ostrożnie - kruche.",
+  "Sławek pilnuje. Ja liczę."
+ ],
+ "baltazarWork": [
+  "Jeszcze {left}. Nie mam całej nocy."
+ ],
+ "baltazarPay": [
+  "Wszystko? Dobrze. Dwadzieścia groszy. Do jutra, przyjacielu."
+ ],
+ "baltazarDone": [
+  "Na dziś koniec. Idź spać - i nie śnij za głośno."
+ ],
+ "baltazarLate": [
+  "Spóźniłeś się. Dziś nie ma roboty."
+ ],
+ "baltazarNight3": [
+  "Dziś nic nie nosisz. Czekamy na wóz - o wpół do pierwszej idę na górę go przyjąć.",
+  "Posiedź tu. Pilnuj skrzyń razem ze Sławkiem."
+ ],
+ "czekaj": "Poczekam (do wpół do pierwszej).",
+ "nieCzekaj": "Rozejrzę się.",
+ "baltazarIdzie": "Idę na górę. Dwadzieścia minut. Niczego nie dotykaj.",
+ "baltazarWraca": "Wóz przyjęty. Wszystko w porządku?",
+ "baltazarAfter": [
+  "Wóz pojechał. Masz swoje dwadzieścia groszy. Idź spać."
+ ],
+ "caught": [
+  "(Baltazar staje w drzwiach gabinetu.) Szukasz czegoś w moim biurku, przyjacielu?",
+  "Wynocha. Dziś nie płacę. Jutro... zobaczymy, czy jeszcze cię lubię."
+ ],
+ "caughtAgain": [
+  "Znowu? Jeszcze raz cię tu zobaczę, to popłyniesz do zatoki z kamieniami u nóg. Wynocha."
+ ],
+ "slawekAlarm": "Hej! Szefie! Grzebie ci w papierach!",
+ "slawekHej": "Hej. Dokąd? Szef kazał siedzieć przy skrzyniach.",
+ "slawekBarks": [
+  "(Sławek ziewa.)",
+  "Te beczki to nie wino, wiesz?",
+  "Nie gap się tak. Noś."
+ ],
+ "slawekTalk": [
+  "Noś, nie gadaj. Szef nie lubi gadania."
+ ],
+ "sterta": "Skrzynia z kupki. Ciężka.",
+ "stertaPusta": "Na dziś wszystko wyniesione.",
+ "stertaNiesiesz": "Już niesiesz jedną.",
+ "stosPolozona": "Skrzynia pod tylnymi drzwiami ({n}/{max}).",
+ "stosNic": "Pod drzwiami czekają skrzynie na wóz.",
+ "widzi": {
+  "0": [
+   "> (W skrzyni, pod słomą, worki zboża. Na workach pieczęć dworu: „Zboże na wojnę”. Rekwizycja.)"
+  ],
+  "1": [
+   "> (Skrzynia lżejsza. W środku kamienie. Na każdym wyryty kruk - jak na moim wisiorku.)"
+  ],
+  "2": [
+   "> (Dziś nic nie nosimy. Na stole w gabinecie leżą zwoje map wyspy.)"
+  ]
+ },
+ "noteWidzi": {
+  "0": [
+   "Co nosi kantor (noc 1)",
+   "Pierwszej nocy w piwnicy kantoru: worki zboża z pieczęcią dworu - „Zboże na wojnę”. Rekwizycja idzie nie na wojnę, tylko tylnymi drzwiami do Baltazara."
+  ],
+  "1": [
+   "Co nosi kantor (noc 2)",
+   "Drugiej nocy w skrzyniach kamienie z wyrytym krukiem. „Pamiątki”, które Baltazar skupuje od ludzi, płyną nocą na ląd."
+  ],
+  "2": [
+   "Co nosi kantor (noc 3)",
+   "Trzeciej nocy na stole w gabinecie zwoje map wyspy. Ktoś na lądzie rysuje Kruczą Wyspę kamień po kamieniu."
+  ]
+ },
+ "worki": "Worki zboża. Pieczęć dworu: „Zboże na wojnę”.",
+ "kamienie": "Kamienie z krukiem. Kilkadziesiąt. „Pamiątki”.",
+ "mapy": "Zwoje map wyspy. Kredą zaznaczone kamienie z krukiem i Krucze Skały.",
+ "biurkoZamkniete": "Baltazar siedzi przy biurku.",
+ "biurkoNic": "Rejestru już tu nie ma.",
+ "biurkoOdpis": "Rejestr leży, jak leżał. Odpis mam w torbie.",
+ "biurkoAsk": [
+  "> (Na biurku leży gruba księga w skórze. Rejestr. Imiona, kwoty, daty.)"
+ ],
+ "biurkoTake": "Zabierz rejestr.",
+ "biurkoCopy": "Przepisz go (kwadrans).",
+ "biurkoLeave": "Zostaw.",
+ "biurkoTaken": [
+  "> (Chowasz rejestr pod koszulę. Ciężki. Baltazar zauważy - jutro.)"
+ ],
+ "biurkoCopied": [
+  "> (Przepisujesz rejestr węglem na luźne kartki. Kwadrans. Ręce się trzęsą.)"
+ ],
+ "szkatula": "Szkatuła. Zamknięta na skobel.",
+ "szkatulaKarta": [
+  "> (W szkatule, między wekslami, leży luźna karta gęsto zapisana szyfrem. Karta z kronik zakonu, które sprzedałem Baltazarowi.)"
+ ],
+ "szkatulaNic": "W szkatule weksle i monety z okiem. Nic, co by mi się przydało.",
+ "siedzisko": "Usiąść na skrzyni i poczekać?",
+ "noteRejestr": "Rejestr Baltazara",
+ "rejestrWzial": "Zabrałem Baltazarowi rejestr z biurka w piwnicy kantoru.",
+ "rejestrOdpis": "Przepisałem rejestr Baltazara z jego biurka w piwnicy kantoru. Oryginał został na miejscu.",
+ "komuWit": {
+  "ask": [
+   "> Kapralu. To rejestr Baltazara. Imiona, kwoty. Twoje też."
+  ],
+  "trust": [
+   "(Wit czyta długo. Przy pierwszej linijce zamyka oczy.) „K.W. - pięć groszy na tydzień.” To ja. Brałem. Za to, żeby przy bramie było ciemno.",
+   "Myślałem: co mi zależy, ktoś przemyca sukno. A to kamienie, zboże dzieci z obozu... i ktoś z lądu, kto szuka drzwi pod skałą.",
+   "Pomogłeś mi przy wilkach, nie zapomniałem. Idziemy razem do sołtysa. Powiem, co brałem. Kantor zamkną - a ja będę stał przy tobie, kiedy przyjdą po swoje."
+  ],
+  "burn": [
+   "(Wit przegląda rejestr, aż zatrzymuje się na jednej linijce. Patrzy na ciebie.)",
+   "Nic tu nie ma. Bazgroły kupca. (Rejestr ląduje w koszu żarowym.)",
+   "A ty spędzisz noc w wartowni. Za włóczenie się po nocy. Straż!"
+  ]
+ },
+ "komuSoltys": {
+  "ask": [
+   "> Panie sołtysie. To rejestr Baltazara Veya. Zboże z rekwizycji, kamienie z krukiem, łapówki - wszystko zapisane."
+  ],
+  "say": [
+   "(Sołtys czyta i blednie.) Zboże dzieci z obozu... a ja liczyłem racje co do kubka.",
+   "Jutro w południe zwołam ludzi do ratusza. Niech miasto samo zobaczy, kogo karmiło. Przyjdź - bez ciebie nikt w to nie uwierzy."
+  ]
+ },
+ "komuBaltazar": {
+  "ask": [
+   "> Baltazarze. Mam twój rejestr. Każde imię, każdy grosz."
+  ],
+  "say": [
+   "(Baltazar nawet nie mruga.) Ach. Ciekawość. Mówiłem, że to piękna cecha... u kota.",
+   "No dobrze. Czego chcesz, przyjacielu?"
+  ],
+  "double": "Pracujmy razem (podwójna gra).",
+  "blackmail": "Pięćdziesiąt groszy - i zapominam.",
+  "later": "Jeszcze nie wiem.",
+  "doubleSay": [
+   "Rozsądnie. Pracujesz dla mnie dalej - trzydzieści groszy na tydzień, za samo milczenie.",
+   "A ty mówisz mi, kto pyta o kantor. Wiesz, ilu ludzi chce wiedzieć to, co ty wiesz? Jesteśmy wspólnikami, przyjacielu."
+  ],
+  "blackmailSay": [
+   "(Baltazar odlicza pięćdziesiąt groszy, jakby płacił za pogrzeb.) Masz. A teraz posłuchaj.",
+   "Od dziś jesteś mi obcy. Obcym sprzedaję drożej. A noce na wyspie są długie."
+  ],
+  "laterSay": [
+   "Pomyśl. Ja zaczekam. Rejestry nie uciekają."
+  ]
+ },
+ "noteWit": [
+  "Wit stanie przy mnie",
+  "Dałem rejestr kapralowi Witowi. Przyznał się, że brał od Baltazara pięć groszy na tydzień za ciemność przy bramie. Poszliśmy razem do sołtysa: kantor zamknięty, a Wit stanie przy mnie, kiedy przyjdą po swoje."
+ ],
+ "noteWitBurn": [
+  "Rejestr w ogniu",
+  "Kapral Wit spalił rejestr Baltazara w koszu żarowym - sam był w nim zapisany. Noc spędziłem w wartowni. Baltazar już wie, kto mu grzebał w biurku."
+ ],
+ "noteSoltys": [
+  "Zebranie w ratuszu",
+  "Dałem rejestr Baltazara sołtysowi. Jutro w południe zebranie w ratuszu."
+ ],
+ "noteDouble": [
+  "Wspólnik Baltazara",
+  "Powiedziałem Baltazarowi, że mam jego rejestr - i że będę z nim pracował. Trzydzieści groszy na tydzień za milczenie, a on chce wiedzieć, kto pyta o kantor. Gram na dwie strony."
+ ],
+ "noteBlackmail": [
+  "Szantaż",
+  "Wziąłem od Baltazara pięćdziesiąt groszy za milczenie o rejestrze. Od dziś jestem dla niego obcy - ceny podwójne, a noce na wyspie są długie."
+ ],
+ "zebranie": {
+  "say": [
+   "(W ratuszu tłoczno. Sołtys czyta rejestr na głos - linijka po linijce.)",
+   "@soltys: Zboże z rekwizycji: tylnymi drzwiami do kantoru. Kamienie z krukiem: na ląd, do jakiegoś sztabu. Łapówki - straż, garnizon, dwór.",
+   "(Ktoś krzyczy, ktoś płacze. Hanka trzaska drzwiami.)",
+   "Kantor zamknięty. Od dziś, z rozkazu ratusza. Baltazar Vey ma opuścić wyspę najbliższym promem."
+  ],
+  "notYet": [
+   "Zebranie jutro w południe. Przyjdź do ratusza."
+  ]
+ },
+ "noteZebranie": [
+  "Kantor zamknięty",
+  "Na zebraniu w ratuszu sołtys przeczytał rejestr Baltazara. Kantor zamknięty z rozkazu ratusza, Baltazar ma odpłynąć najbliższym promem. Miasto patrzy na mnie inaczej."
+ ],
+ "promFirst": "Wóz z ładunkiem Baltazara czeka na Polnej drodze, przy rozwidleniu na wschód.",
+ "promStraz": [
+  "Kto idzie?!",
+  "To ten od rejestru! Brać go!",
+  "Kupiec mówił, że przyjdzie!"
+ ],
+ "promZasadzka": "Zasadzka! Z krzaków!",
+ "promSwoj": [
+  "Swój. Kupiec mówił, że przyjdziesz.",
+  "Pilnuj z nami. O trzeciej ruszamy na przystań."
+ ],
+ "promSwojOpts": [
+  "Puszczam wóz.",
+  "Odwrócę wasze oczy... (podmień skrzynie)",
+  "Nic."
+ ],
+ "promLetGo": [
+  "Dobry z ciebie wspólnik. Masz trzydzieści groszy od kupca."
+ ],
+ "promWoz": "Wóz z ładunkiem. Skrzynie przykryte słomą.",
+ "promSwapAsk": "Podmienić kamienie z krukiem na zwykłe kamienie?",
+ "promSwapped": [
+  "> (Wyjmujesz kamienie z krukiem i wkładasz w słomę zwykłe kamienie. Na przystani nikt nie zajrzy.)"
+ ],
+ "promSeized": [
+  "> (Skrzynie pod słomą: kamienie z krukiem, dziesiątki. I zwoje map wyspy. Biorę, co uniosę.)"
+ ],
+ "promSwapNeed": "Potrzebujesz: Kamień ×6",
+ "promGone": [
+  "Wóz pojechał",
+  "Ładunek Baltazara odpłynął z nocnym promem."
+ ],
+ "noteSwapped": [
+  "Podmienione skrzynie",
+  "W noc promu podmieniłem ładunek na wozie Baltazara: kamienie z krukiem są u mnie, a na ląd popłynęły zwykłe kamienie."
+ ],
+ "noteSeized": [
+  "Ładunek z wozu",
+  "W noc promu pobiłem ludzi Baltazara przy wozie na Polnej drodze. Kamienie z krukiem i mapy nie popłynęły na ląd."
+ ],
+ "noteLetGo": [
+  "Wóz pojechał",
+  "W noc promu pilnowałem wozu Baltazara razem z jego ludźmi. Kamienie z krukiem popłynęły na ląd. Dostałem trzydzieści groszy."
+ ],
+ "noteGone": [
+  "Wóz pojechał",
+  "Nie było mnie przy wozie w noc promu. Ładunek Baltazara - kamienie z krukiem i mapy - popłynął na ląd."
+ ],
+ "noteBeaten": [
+  "Wóz pojechał",
+  "Ludzie Baltazara pobili mnie przy wozie na Polnej drodze. Ładunek popłynął na ląd."
+ ],
+ "rafalTied": "Rafał! Związany! Pomóż mi!",
+ "rafalFree": [
+  "(Przecinasz sznury.) Myślałem, że już po mnie. Dwór sprzedał mnie im jak worek zboża - do kopania pod skałą.",
+  "Wracam do Ludmiły. Nie zapomnę ci tego."
+ ],
+ "rafalWait": "Najpierw ci przy wozie!",
+ "noteRafal": [
+  "Rafał wolny",
+  "Na wozie Baltazara w noc promu leżał związany Rafał - dwór oddał go przemytnikom do kopania pod skałą. Uwolniłem go. Wrócił do Ludmiły."
+ ],
+ "noteRafalGone": [
+  "Rafał odpłynął",
+  "Na wozie Baltazara w noc promu był Rafał - dwór sprzedał go przemytnikom. Wóz odjechał. Rafał odpłynął na ląd, do kopaczy."
+ ],
+ "akt2Soltys": [
+  "Kantor stoi pusty od zebrania. Szkoda budynku - i ludzie chcą soli, żelaza, gwoździ.",
+  "Kto ma go prowadzić? Ludmiła z obozu, uczciwie i za małą dolę - czy ratusz?"
+ ],
+ "akt2Ludmila": "Ludmiła i obóz.",
+ "akt2Ratusz": "Ratusz.",
+ "akt2LudmilaSay": [
+  "Ludmiła... Dobrze. Obóz ma ręce, ratusz ma papiery. Uczciwy kantor, ceny o dziesiątą część niższe."
+ ],
+ "akt2RatuszSay": [
+  "Ratusz. Dobrze - skrzynka na monety i cennik na ladzie. Ceny o dziesiątą część niższe niż u Baltazara."
+ ],
+ "akt2Grip": [
+  "(Baltazar wita cię jak wspólnika.) Teraz przywożę żelazo i stal. Dla ciebie - pół ceny.",
+  "Ale wiesz, jak to jest ze wspólnikami. Ty wiesz o mnie wszystko... a ja o tobie. O każdym twoim kroku w dół, pod tawernę."
+ ],
+ "akt2Enemy": [
+  "(Baltazar nie podaje ręki.) Żelazo i stal są. Dla ciebie - podwójnie. Interes to interes, nawet z wrogiem."
+ ],
+ "noteHonest": [
+  "Uczciwy kantor",
+  "Kantor znów otwarty - uczciwy. Żelazo, stal, gwoździe i lina o dziesiątą część taniej niż u Baltazara."
+ ],
+ "noteGrip": [
+  "Baltazar w garści",
+  "Baltazar sprzedaje mi żelazo i stal za pół ceny. Ale frakcja, dla której pracuje, wie o każdym moim kroku w podziemiach."
+ ],
+ "noteEnemy": [
+  "Kantor wroga",
+  "Baltazar sprzedaje mi wszystko dwa razy drożej. Wiem, że jego ludzie patrzą na mnie nocą."
+ ],
+ "noteBack": [
+  "Baltazar wrócił",
+  "Baltazar Vey wrócił na wyspę z najemnikami. Siedzi w składzie portowym na przystani. Kantoru już nie ma - jest wojna."
+ ],
+ "sklepAsk": "Pokaż towar.",
+ "sklepNic": "Nic.",
+ "sklepBye": "Bywaj.",
+ "sklepPowitanie": {
+  "honest": [
+   "Kantor miejski. Ceny uczciwe, monety do skrzynki."
+  ],
+  "grip": [
+   "Wspólniku. Pół ceny, jak się umawialiśmy."
+  ],
+  "enemy": [
+   "Czego? Ceny dla ciebie podwójne."
+  ]
+ },
+ "ladaLudmila": [
+  "Kantor miejski. Uczciwa waga, uczciwa cena - o dziesiątą część taniej niż u Baltazara.",
+  "Ela liczy gwoździe. Myli się tylko na swoją niekorzyść."
+ ],
+ "ladaPokaz": "Pokaż towar.",
+ "ladaOboz": "Co słychać w obozie?",
+ "ladaBywaj": "Bywaj.",
+ "ladaObozLine": [
+  "W obozie? Ludzie mają pracę - noszą, ważą, liczą. Pierwszy raz od promu nikt nie żebrze pod murem."
+ ],
+ "ladaPusta": {
+  "ludmila": [
+   "(Na ladzie cennik i skrzynka na monety. Ludmiła stoi tu od dziewiątej do trzeciej.)"
+  ],
+  "ratusz": [
+   "(Na ladzie cennik z pieczęcią ratusza i skrzynka na monety. „Uczciwość na słowo - sołtys liczy co wieczór.”)"
+  ]
+ },
+ "dzialka": [
+  "Twoja działka, wspólniku. Trzydzieści groszy. Za milczenie."
+ ],
+ "lada": "Lada kantoru miejskiego",
+ "napadShout": "Pozdrowienia od kupca!",
+ "f9": "W5: przeskocz do rozdziału {n}",
+ "f9desc": "Ustawia wątek „Towary z kontynentu” na początku rozdziału {n} (flagi, pora, miejsce) i przenosi bohatera tam, gdzie się dzieje.",
+ "rejestr": {
+  "0": {
+   "line": "K.W. - 5 G na tydzień. Za ciemność przy bramie."
+  },
+  "1": {
+   "line": "F. - dwie beczki wody na tydzień, o północy, tylna furtka dworu.",
+   "alt": "F. - nie przychodzi. Szukać innego przy dworze."
+  },
+  "2": {
+   "line": "G.Ż.P. - żołd z lądu, 40 G na miesiąc. Rozkaz: drzwi pod skałą, za każdą cenę."
+  },
+  "3": {
+   "line": "P.K. (garnizon) - 4 worki zboża z rekwizycji na każdy prom.",
+   "alt": "P.K. (garnizon) - wpadł. Dostawca do zastąpienia."
+  },
+  "4": {
+   "line": "Zboże z rekwizycji dworu (D.) - przez bramę wschodnią, nocą."
+  },
+  "5": {
+   "line": "Kamienie z krukiem - do sztabu Straży Pewności (białe oko). Płacić do 15 G za sztukę."
+  },
+  "6": {
+   "line": "Chłopak od Stacha - 5 kamieni z wraku, 75 G."
+  },
+  "7": {
+   "line": "Chłopak od Stacha - kroniki zakonu, 300 G. Na prom."
+  },
+  "8": {
+   "line": "Chłopak od Stacha - listy z kruka. Czytać wszystkie."
+  },
+  "9": {
+   "line": "Kopacz R. - za morze, 50 G (chłopak zapłacił)."
+  },
+  "10": {
+   "line": "Mapa kamieni od E.S. - do sztabu."
+  },
+  "11": {
+   "line": "Oko z latarni - 400 G. Sztab zapłaci tysiąc."
+  },
+  "12": {
+   "line": "Chłopak od Stacha otworzył skrzynię. Uważać."
+  },
+  "13": {
+   "line": "Turniej - 40 G dla chłopaka od Stacha, żeby przegrał."
+  },
+  "14": {
+   "line": "Czekamy na drzwi pod skałą."
+  }
+ },
+ "zadania": {
+  "W5": {
+   "title": "Towary z kontynentu",
+   "where": "kantor, tylne drzwi kantoru nocą, Skraj lasu, Polna droga",
+   "when": "od dnia 10 do Aktu II",
+   "desc": "Baltazar Vey przywozi z kontynentu to, czego wyspa nie ma, a wywozi to, czego ma za dużo. Co dokładnie - i dla kogo?",
+   "steps": {
+    "0": {
+     "text": "Dziwny kupiec: co wywozi Baltazar Vey? Poszlaki ({n} z 2): skrzynia na nocnym wozie, skup zapasów po promie, zalany kosz i mokre ślady, lek z pieczęcią wojska, „trzy i jeden” z dzwonnicy, nocni goście przy kantorze."
+    },
+    "1": {
+     "text": "Trzy stuknięcia: po północy obserwuj tylne drzwi kantoru (przy tawernie, na zachód od rynku) - z ukrycia (C), żeby gość cię nie zauważył."
+    },
+    "2": {
+     "text": "Kurier w kapturze wychodzi bramą południową. Idź jego drogą przez Polną drogę na Skraj lasu: przy ognisku obóz przemytników (21–4). Podejdź po cichu (C) i posłuchaj."
+    },
+    "3": {
+     "text": "Nocny tragarz: porozmawiaj z Baltazarem (przed kantorem, 8–18)."
+    },
+    "4": {
+     "text": "Nocny tragarz: przyjdź tylnymi drzwiami kantoru (22–23:30) i noś skrzynie z piwnicy pod tylne drzwi. Noce: {zmiany}/{noce}."
+    },
+    "5": {
+     "text": "Rejestr: trzecia noc w kantorze (22–23:30, tylne drzwi). O wpół do pierwszej Baltazar wychodzi na dwadzieścia minut - zabierz albo przepisz rejestr z jego biurka w gabinecie. Sławek pilnuje składu."
+    },
+    "6": {
+     "text": "Komu to dać? {rejestr}: kapralowi Witowi (brama wschodnia, mury), sołtysowi (ratusz, 8–18) albo samemu Baltazarowi (kantor, 8–18) - podwójna gra albo szantaż."
+    },
+    "7": {
+     "text": "Zebranie w ratuszu: dzień {zebranie}, 12–16 - porozmawiaj z sołtysem."
+    },
+    "8": {
+     "text": "Noc promu: {prom}. Wóz z ładunkiem Baltazara stanie nocą (21–3) na Polnej drodze, przy rozwidleniu na wschód. Kamienie z krukiem płyną na ląd."
+    },
+    "9": {
+     "text": "Co dalej z Kantorem: {akt2}"
+    }
+   }
+  }
+ },
+ "rzeczy": {
+  "rejestr": {
+   "name": "Rejestr Baltazara"
+  },
+  "odpis_rejestru": {
+   "name": "Odpis rejestru Baltazara"
+  },
+  "skrzynia_w5": {
+   "name": "Skrzynia z piwnicy kantoru"
+  },
+  "list_przewozowy": {
+   "name": "List przewozowy z pieczęcią kantoru"
+  }
+ },
+ "uwagi": {
+  "0": {
+   "lines": [
+    "Mówiłem, że ktoś na wyspie skupuje kamienie z krukiem. Teraz już wiesz kto. Kupiec z kantoru.",
+    "Uważaj. Kto handluje kamieniami, ten handluje i ludźmi."
+   ]
+  },
+  "1": {
+   "lines": [
+    "Pięć groszy na tydzień. Tyle byłem wart. (Wit poprawia tabard.) Teraz już nic nie biorę. I nikogo nie wpuszczam po ciemku."
+   ]
+  },
+  "2": {
+   "lines": [
+    "Słyszałeś? Zboże z rekwizycji szło nocą do kantoru! A ja ważyłam mąkę na gramy... Dobrze, że ktoś to wyciągnął."
+   ]
+  },
+  "3": {
+   "lines": [
+    "Kantor... ja? (Ludmiła się śmieje, pierwszy raz od dawna.) Obóz będzie miał pracę. Dziękuję."
+   ]
+  },
+  "4": {
+   "lines": [
+    "Kantor zamknięty? Ehem. To... smutne. Taki porządny kupiec. (Kłos ociera czoło.)"
+   ]
+  },
+  "5": {
+   "lines": [
+    "Trzy i jeden. Słyszałeś w nocy? Tak się dzwoniło, kiedy obcy kręcili się w murach. Ktoś znowu kręci się przy kantorze."
+   ]
+  }
+ },
+ "kupiec": {
+  "barks": {
+   "stand": [
+    "Towary z kontynentu. Dla przyjaciół. Przyjaciół mam teraz mniej.",
+    "Najemnicy kosztują. Wszystko kosztuje."
+   ],
+   "rain": [
+    "Deszcz. Na przystani zawsze deszcz."
+   ]
+  },
+  "talk": {
+   "morning": [
+    "Wróciłem, przyjacielu. Wyspa beze mnie była nudna."
+   ],
+   "day": [
+    "Kantor zamknęli. Przystań jest szersza."
+   ],
+   "evening": [
+    "Wieczorem nie handluję. Moi ludzie handlują za mnie."
+   ],
+   "rain": [
+    "W deszcz nawet najemnicy śpią."
+   ]
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Kantor_Data.js: TX, REGISTER=rejestr:/(^|\\.)(line|alt)$/, W5=zadania.W5:zadanie, VITEMS=rzeczy:nazwy, REMARKS=uwagi:/lines/, KUPIEC_PRZYSTAN=kupiec)"
+}

@@ -18,7 +18,7 @@
 const fs = require("fs");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
-if (!/"name":"Dwor"/.test(fs.readFileSync(path.join(ROOT, "js", "plugins.js"), "utf8")) && !process.env.GAME_PLUGINS_ADD) process.env.GAME_PLUGINS_ADD = "Kantor_Data:Dwor_Data;Rywal:Dwor";
+if (!/"name":"Dwor"/.test(require("./lib/wtyczki.js").tekst()) && !process.env.GAME_PLUGINS_ADD) process.env.GAME_PLUGINS_ADD = "Kantor_Data:Dwor_Data;Rywal:Dwor";
 const OVERLAY = fs.existsSync(path.join(ROOT, "data", "Map172.json")) ? undefined : "tools/w7/staging";
 const kit = require("./lib/kit.js");
 const DOCS = path.join(ROOT, "docs", "w7");

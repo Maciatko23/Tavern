@@ -48,6 +48,14 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
         else if (!(s instanceof Scene_Map) || SceneManager.isSceneChanging() || $gameMessage.isBusy() || $gameTemp._pendingSummary) calm = 0;
         else calm++;
         if (calm >= 20 || n > 600) { clearInterval(iv); res(calm); } }, 16); })`);
+    // (2026-10-23: in a tab of run.js's shared browser the summary sometimes came after both waits above and stayed open over the
+    // warnings and the drinks below - 18 checks red: closed here for sure, and said what held it)
+    for (let i = 0; i < 3; i++) {
+        const st = await t.json("({ scene: SceneManager._scene.constructor.name, changing: SceneManager.isSceneChanging(), pending: !!$gameTemp._pendingSummary, journal: !!(SceneManager._scene.canUseJournal && SceneManager._scene.canUseJournal()), bright: $gameScreen.brightness() })");
+        if (st.scene === "Scene_Map" && !st.changing && !st.pending) break;
+        console.log("NOTE the day's summary is still on its way: " + JSON.stringify(st));
+        await t.dismiss();
+    }
     t.check("9 hours of sleep cost half: food -7.2, water -11.3", near(await food(), 92.8, 0.5) && near(await water(), 88.7, 0.5), { f: await food(), w: await water() });
     await set(100, 100);
     await ev("$gameSystem.trySpendStamina(10); 0");
@@ -96,7 +104,7 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     await ev("$gameSystem.setStamina(100); $gameSystem.changeStamina(15); 0");
     t.check("...and a rest cannot lift it above the ceiling", (await ev("$gameSystem.stamina()")) === 70);
     await set(100, 0);
-    t.check("Wysuszony: ceiling 40", (await ev("$gameSystem.stamina()")) === 40);
+    t.check("Wysuszony: ceiling 40", Math.round(await ev("$gameSystem.stamina()")) === 40);   // (parched: it drains a hair each frame, as starving below)
     await set(0, 100); await t.frames(3);   // (the ceiling is applied in the frame after)
     { const st = await ev("$gameSystem.stamina()"); t.check("Głodujesz: ceiling 55", Math.round(st) === 55,   /* (starving drains it a hair each frame) */ { stamina: st, max: await ev("Math.round($gameSystem.staminaRatio() * 100)"), food: await food(), water: await water(), buffs: await ev("JSON.stringify($gameSystem._buffs || {})") }); }
     await set(100, 100);
@@ -157,7 +165,7 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     t.check("Napij się: water 40 -> 80", dr === true && near(await water(), 80, 0.6), await water());
     t.check("...with a popup 'Nawodnienie +40' (water icon)", (await popups()).some(p => /Nawodnienie \+40/.test(p)), await popups());
     await set(100, 100); await clearPopups();
-    t.check("not thirsty and not tired: 'Nie chce ci się pić', nothing happens", (await ev("Farming.drink()")) === false && (await popups()).includes("Nie chce ci się pić") && (await water()) === 100);
+    t.check("not thirsty and not tired: 'Nie chce ci się pić', nothing happens", (await ev("Farming.drink()")) === false && (await popups()).includes("Nie chce ci się pić") && near(await water(), 100, 0.05));   // (the clock runs: a hair less than 100)
     // no flask yet
     await clearPopups();
     await drinkKey();

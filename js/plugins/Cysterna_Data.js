@@ -71,114 +71,64 @@
     const GUTTER = { n: 4, image: "!$Rock_Rubble", stamina: 8, gateStamina: 10 };
 
     // ------------------------------------------------------------------ the words
-    const ORD_GEN = ["", "pierwszego", "drugiego", "trzeciego", "czwartego", "piątego", "szóstego", "siódmego", "ósmego", "dziewiątego", "dziesiątego"];
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const ORD_GEN = [];
+    Watki.scal(ORD_GEN, "cysterna", "ordGen");   // (its words: js/teksty/cysterna.txt, ordGen)
     const TX = {
         // the ladle
-        wedged: "Korba czerpaka zaklinowana żelaznym klinem z krukiem.",
-        wedgedThink: ["> Ktoś tu pilnował racji. Najpierw zobaczę, czyja to woda i ile jej zostało."],
-        unwedge: ["> (Wybijam klin z korby czerpaka.) Jedno nabranie na dzień - tak stoi w Księdze racji. Tak będzie."],
-        usedToday: "Dziś już czerpałeś. Reguła zakonu: jedno nabranie na dzień.",
-        tooLow: "Łańcuch za krótki - kubeł wisi nad wodą.",
-        tooLowThink: ["> Żelazna obręcz przy trzecim znaku wystaje z wody. Dalej łańcuch nie sięga - i tak miało być."],
-        menuTitle: "Czerpak zakonu",
-        menuNote: "Jedno nabranie na dzień: napij się do syta albo napełnij jedno naczynie.",
-        drinkName: "Napij się do syta", drinkHelp: "Zimna woda z głębi cysterny. Pijesz, ile wlezie - to twoje jedyne nabranie dziś.",
-        potName: "Napełnij gliniany garnek", potHelp: "Garnek z plecaka: 3 porcje wody. Jedno nabranie dziś.", potNone: "Nie masz glinianego garnka w plecaku.",
-        potFull: "Garnki w plecaku są pełne.",
-        oneDraw: "\nTo twoje jedyne nabranie dziś (reguła zakonu).",
-        drank: "Nawodnienie +", drankStamina: "+8 wytrzymałości", notThirsty: "Nie chce ci się pić",
         // the post
-        post: (lv, gen) => (lv >= 100 ? "Słup miary: woda sięga dziesiątego znaku, pod sam kapitel. Cysterna pełna." :
-            lv < 10 ? "Słup miary: woda nie sięga nawet pierwszego znaku." : "Słup miary: woda sięga " + gen + " znaku."),
-        postReach: "Łańcuch czerpaka sięga do trzeciego znaku - woda jest w zasięgu.",
-        postDry: "Żelazna obręcz przy trzecim znaku wystaje z wody - łańcuch czerpaka jej nie dosięgnie.",
+        post: (lv, gen) => (lv >= 100 ? TX.postFull : lv < 10 ? TX.postNone : fill(TX.postGen, { gen })),
         // the gates
-        grateShut: "Krata z krukiem. Zamknięta - od środka trzyma ją rygiel z dźwignią obok.",
-        grateBlocked: "Za kratą kanał zasypany gruzem. Tędy jeszcze nie wyjdziesz.",
-        leverPull: "Krata przelewu otwarta", leverSub: "Przejście na Urwisko - teraz w obie strony.",
-        leverDone: "Dźwignia opuszczona. Krata stoi otworem.",
-        leverThink: ["> Za kratą świeże powietrze i krzyk mew. Urwisko - prosto nad morzem."],
-        rainShut: "Zasuwa deszczowa: zardzewiała na amen.",
-        rainOpen: "Zasuwa deszczowa otwarta", rainOpenSub: "Deszcz z Urwiska znów spłynie do cysterny.",
-        rainTired: "Jesteś zbyt zmęczony",
-        rainClogged: ["> Z kanału ledwo kapie. Rynny na Urwisku muszą być zapchane."],
-        rainLook: n => "Zasuwa deszczowa otwarta. Rynny na Urwisku: oczyszczone " + n + "/4.",
-        branchFirst: ["> (Łańcuch zasuwy świeżo nasmarowany. Na belce ktoś wydrapał: „F.”)",
-            "> Gałąź dworska. Woda płynie pod posadzką na wschód, pod dwór Lorda. Feliks tu bywał - i to niedawno."],
-        branchAsk: "Zamknąć gałąź dworską? Ogród Lorda zostanie bez wody.",
-        branchClose: "Zamknij gałąź.", branchLeave: "Zostaw, jak jest.",
-        branchClosed: "Gałąź dworska zamknięta", branchClosedSub: "Ogród Lorda zostaje bez wody. Zapas cysterny starczy na dłużej.",
-        branchLeft: ["> Niech płynie. Na razie."],
-        branchShut: "Zasuwa gałęzi dworskiej zamknięta. Klin siedzi mocno.",
-        branchLord: ["> Lord się dowie, kto mu zakręcił wodę. Prędzej czy później."],
+        rainLook: n => fill(TX.rainLookN, { n }),
         // the water of the tank
-        tankWater: "Przy brzegu woda stoi pod kożuchem szlamu. Czysta jest tylko z głębi - z czerpaka.",
         // the gutters on the Urwisko
-        gutterLook: "Rynna zakonu, wykuta w skale - zapchana gruzem i starym gniazdem.",
-        gutterNeed: "Potrzebujesz kilofa albo łopaty",
-        gutterDone: n => "Rynna oczyszczona (" + n + "/4)",
-        gutterAll: ["> Wszystkie cztery czyste. Przy następnym deszczu woda spłynie do cysterny, a nie do morza."],
+        gutterDone: n => fill(TX.gutterDoneN, { n }),
         // the arrival
-        firstVisit: ["> (Za zasuwą chłód i zapach mokrego kamienia. A potem - woda. Dużo wody. Stoi w ciemności od stuleci.)",
-            "> Stara cysterna zakonu. Prawdziwy zapas pod wzgórzem."],
-        arrive: lv => "Stara cysterna zakonu  ·  zapas " + Math.round(lv) + "/100",
-        // the town's well under 15
-        wellLow: "Studnia prawie sucha - sołtys daje dziś jedno nabranie",
-        lowNotice: "Cysterna zakonu prawie pusta", lowSub: "Studnia na rynku daje mniej. Ludzie szemrzą."
+        arrive: lv => fill(TX.arriveN, { lv: Math.round(lv) })
     };
+    Watki.scal(TX, "cysterna", "");   // (its words: js/teksty/cysterna.txt)
     // the notes read in the cistern (the message window, like the Order's notes underground; the first time into the journal)
     const NOTES = {
-        ksiega: { title: "Księga racji wodnego", where: "Stara cysterna zakonu",
-            lines: ["„Jedno wiadro na strażnika na dzień. Kto bierze dwa, ten pije z cudzego dzbana.”",
-                "„Pół dla twierdzy, ćwierć dla miasta, ćwierć dla tych, co przyjdą.”",
-                "„Łańcuch czerpaka skuto tak, by sięgał do trzeciego znaku. Poniżej trzeciego woda należy do miasta. Łańcucha nie przedłużać.”",
-                "„Rynny na Urwisku czyścić po każdej jesieni. Zasuwę deszczową trzymać otwartą, póki pada.”",
-                "„Gałąź pod kasztelanię otwierać tylko w oblężenie.”",
-                "(Ostatni wpis, drżącą ręką:) „Wody na czterdzieści lat, jeśli nikt nie będzie chciwy.”"],
-            note: "W kącie wodnego leży Księga racji. Reguła zakonu: jedno wiadro na strażnika na dzień - „kto bierze dwa, ten pije z cudzego dzbana”. Łańcuch czerpaka sięga tylko do trzeciego znaku na słupie miary: poniżej woda należy do miasta. Rynny na Urwisku trzeba czyścić, zasuwę deszczową trzymać otwartą. Gałąź pod kasztelanię - dziś pod dwór Lorda - otwierano tylko w oblężenie." },
-        tablica: { title: "Tablica nad czerpakiem", where: "Stara cysterna zakonu",
-            lines: ["Na kamiennej tablicy wykuto kubeł na łańcuchu i trzy słowa: JEDNO NA DZIEŃ.",
-                "Pod spodem ktoś wydrapał kreski - dzień po dniu, jak więzień w celi. Urywają się po czterdziestu."],
-            note: "" }
+        ksiega: { },
+        tablica: { }
     };
-    const NOTE_DONE = ["Racje zakonu", "Pod wzgórzem tawerny jest stara cysterna zakonu - prawdziwy zapas wody, za Zasuwą główną z trzydziestego piętra. Czerpak daje jedno nabranie na dzień, a łańcuch sięga tylko do trzeciego znaku na słupie miary. Z tej samej wody pije studnia na rynku i ogród Lorda, a przybywa jej tylko z deszczu, przez rynny na Urwisku. Kanał przelewu wychodzi kratą z krukiem na Urwisko."];
+    Watki.scal(NOTES, "cysterna", "notatki");   // (its words: js/teksty/cysterna.txt, notatki)
+    const NOTE_DONE = [];
+    Watki.scal(NOTE_DONE, "cysterna", "noteDone");   // (its words: js/teksty/cysterna.txt, noteDone)
 
     // ------------------------------------------------------------------ the quests (TownQuests packs - docs/QUESTY_STAN.md "Jak dopisać")
     const D28 = {
-        id: "D28", kind: "D", title: "Zapas zakonu", giver: null, icon: 391, autoStart: "d28Start",
-        where: "podziemia: piętro 30 (Wielka cysterna) → Stara cysterna zakonu", when: "Akt II, po rozdz. 7 „Wody spod Kruczych Skał” (W1)",
-        desc: "Cztery i dwa otworzyło nie tylko kanał pod rynek. Za Zasuwą główną na trzydziestym piętrze stoi stara cysterna zakonu - zapas wody pod wzgórzem. Ile jej zostało i komu płynie?",
+        id: "D28", kind: "D", giver: null, icon: 391, autoStart: "d28Start",
         steps: [
-            { type: "custom", check: "d28Wejdz", text: "Zasuwa główna w Wielkiej cysternie (piętro 30, winda kasztelana) stoi otworem. Przejdź za nią." },
-            { type: "custom", check: "d28Ksiega", vars: "d28Vars", text: "Stara cysterna zakonu. W wodzie czają się topielce. Znajdź w kącie wodnego Księgę racji i obejrzyj słup miary przy grobli ({n}/2)." },
-            { type: "custom", check: "d28Krata", text: "Kanał przelewu prowadzi do kraty z krukiem na Urwisku. Otwórz ją dźwignią od środka (kanał na północnym wschodzie)." },
-            { type: "custom", check: "d28Galaz", text: "Gałąź dworska (wnęka we wschodniej ścianie) puszcza wodę pod dwór Lorda. Zamknij ją albo zostaw - twoja decyzja." }
+            { type: "custom", check: "d28Wejdz" },
+            { type: "custom", check: "d28Ksiega", vars: "d28Vars" },
+            { type: "custom", check: "d28Krata" },
+            { type: "custom", check: "d28Galaz" }
         ],
         reward: { xp: 150, note: NOTE_DONE }
     };
+    Watki.scal(D28, "cysterna", "zadania.D28");   // (its words: js/teksty/cysterna.txt, zadania.D28)
     const K53 = {
-        id: "K53", kind: "K", title: "Rynny zakonu", giver: null, icon: 391, autoStart: "k53Start",
-        where: "Stara cysterna zakonu → Urwisko Kruków", when: "Akt II, po „Zapasie zakonu”",
-        desc: "Cysterna pije deszcz z rynien wykutych w skale Urwiska. Przez lata zapchały się gruzem i gniazdami, a zasuwa deszczowa zardzewiała. Deszcz spływa do morza.",
+        id: "K53", kind: "K", giver: null, icon: 391, autoStart: "k53Start",
         steps: [
-            { type: "custom", check: "k53Zasuwa", text: "Otwórz zasuwę deszczową w cysternie (północna ściana, obok kanału przelewu)." },
-            { type: "custom", check: "k53Rynny", vars: "k53Vars", text: "Oczyść rynny zakonu na Urwisku z gruzu i gniazd ({n}/4) - kilofem albo łopatą." }
+            { type: "custom", check: "k53Zasuwa" },
+            { type: "custom", check: "k53Rynny", vars: "k53Vars" }
         ],
-        reward: { xp: 60, opinion: 3, flag: "rynnyCzyste",
-            note: ["Rynny zakonu", "Otworzyłem zasuwę deszczową w starej cysternie i oczyściłem cztery rynny zakonu na Urwisku. Każdy deszcz znowu napełnia cysternę - trzy razy więcej niż przez zapchane rynny."] }
+        reward: { xp: 60, opinion: 3, flag: "rynnyCzyste" }
     };
+    Watki.scal(K53, "cysterna", "zadania.K53");   // (its words: js/teksty/cysterna.txt, zadania.K53)
     const REMARKS = [
-        { id: "cystSoltys", who: "soltys", flag: "cysternaOtwarta", lines: ["Byłeś pod wzgórzem, przy starej cysternie? Mój dziad mówił, że tam jest woda na sto lat. I że nikt jej nie liczy. Policz, skoro już tam chodzisz."] },
-        { id: "cystNiskoSoltys", who: "soltys", flag: "cysternaNisko", lines: ["Studnia ledwo ciurka. Jedno nabranie na dom, więcej nie dam. Woda pod rynkiem się kończy - słychać to po echu."] },
-        { id: "cystNiskoKuba", who: "woziwoda", flag: "cysternaNisko", lines: ["Beczki wożę pół puste. W studni widać dno. Jak tak dalej pójdzie, będę woził piasek."] },
-        { id: "cystGalazStraz", who: "straznik", flag: "galazDworskaZamknieta", lines: ["Pompa w oranżerii charczy na sucho. Jaśnie pan pytał, kto zakręcił wodę. Ja nic nie wiem. I ty też nic nie wiesz, prawda?"] },
-        { id: "cystGalazKowal", who: "kowal", flag: "galazDworskaZamknieta", lines: ["Słyszałem, że dworski ogród usycha. A w studni jakby więcej wody. Nie pytam, kto to zrobił. Ale piwo mu stawiam."] },
-        { id: "cystRynny", who: "dzwonnik", flag: "rynnyCzyste", lines: ["Pada, a ja słyszę wodę pod wzgórzem. Jak za mojego mistrza. Ktoś oczyścił rynny na Urwisku? ...Cztery i dwa, chłopcze. Woda idzie."] }
+        { id: "cystSoltys", who: "soltys", flag: "cysternaOtwarta" },
+        { id: "cystNiskoSoltys", who: "soltys", flag: "cysternaNisko" },
+        { id: "cystNiskoKuba", who: "woziwoda", flag: "cysternaNisko" },
+        { id: "cystGalazStraz", who: "straznik", flag: "galazDworskaZamknieta" },
+        { id: "cystGalazKowal", who: "kowal", flag: "galazDworskaZamknieta" },
+        { id: "cystRynny", who: "dzwonnik", flag: "rynnyCzyste" }
     ];
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({
-        owner: "Cysterna", quests: [D28, K53], remarks: REMARKS,
-        gossip: { dzwonnik: ["Cysterna zakonu? Mój mistrz mówił: jedno wiadro na strażnika na dzień. I że kto bierze dwa, ten pije z cudzego dzbana. Dziś nikt nie liczy wiader."] }
-    });
+    Watki.scal(REMARKS, "cysterna", "uwagi");   // (its words: js/teksty/cysterna.txt, uwagi)
+    const GOSSIP = { dzwonnik: [] };   // (the key stays: TownQuests_Data copies the gossip key by key while the plugins load)
+    Watki.scal(GOSSIP, "cysterna", "plotki");   // (its words: js/teksty/cysterna.txt, plotki)
+    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Cysterna", quests: [D28, K53], remarks: REMARKS, gossip: GOSSIP });
 
     // <POZIOMY> (tools/cysterna/build.py - nie zmieniaj ręcznie)
     const LEVEL_TILES = {

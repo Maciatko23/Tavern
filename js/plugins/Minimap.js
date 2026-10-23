@@ -56,6 +56,9 @@
  *
  * Notatka mapy <Minimap:off> wyłącza mapkę na tej mapie, <Minimap:on> włącza ją
  * także wtedy, gdy mapa mieści się na ekranie.
+ * Mgła: na mapach, dla których inna wtyczka ją podaje (Minimap.addFog - piętra
+ * podziemi z Underground.js), widać tylko to, co bohater już zobaczył.
+ * Zdarzenie z <Minimap:exit> w notatce to wyjście (np. schody podziemi).
  * ============================================================================
  */
 
@@ -133,6 +136,20 @@
     }
 
     // ------------------------------------------------------------------
+    // The fog (2026-10-23, Underground.js: a floor below is found as one walks it). A plugin gives Minimap.addFog(fn): fn(mapId) ->
+    // null (no fog on this map) or { rev, seen(x, y) } - the tiles not seen yet stay dark, their dots too; rev changes when more is seen
+    // ------------------------------------------------------------------
+    const fogs = [];
+    function fogOf(mapId) {
+        for (const fn of fogs) {
+            let f = null;
+            try { f = fn(mapId); } catch (e) { f = null; }
+            if (f) return f;
+        }
+        return null;
+    }
+
+    // ------------------------------------------------------------------
     // What an event is, for the dots on the map
     // ------------------------------------------------------------------
     const eventKinds = {};
@@ -141,6 +158,7 @@
         const d = ev.event();
         if (!d) return null;   // (an event without data: nothing to draw)
         const note = d.note || "", name = ev.characterName(), tile = ev.tileId();
+        if (/<Minimap:exit>/i.test(note)) return "exit";   // (a way to another map that is not a plain transfer: the stairs below)
         if (!name && !tile) return null;
         const graphic = name || "";
         if (tile) return /<(Tree|Stump)/i.test(note) ? "stump" : null;
@@ -223,6 +241,8 @@
         this._panelH = mh + PAD * 2;
         this._terrain = new Bitmap(mw, mh);
         this._composite = new Bitmap(mw, mh);
+        this._fogBmp = null;
+        this._fogRev = null;
         this._frame.bitmap = roundedPanel(PANEL_W, this._panelH);
         this._map.bitmap = this._composite;
         this._map.x = Math.floor((PANEL_W - mw) / 2);
@@ -264,9 +284,30 @@
         return true;
     };
 
-    // the terrain plus everything that changes: trees that fall, buildings, fields
+    // the fog's own picture: dark over every tile not seen yet (repainted only when more was seen)
+    Sprite_Minimap.prototype.paintFog = function(fog) {
+        if (!this._fogBmp) this._fogBmp = new Bitmap(this._terrain.width, this._terrain.height);
+        const S = this._scale, ctx = this._fogBmp.context, w = $gameMap.width(), h = $gameMap.height();
+        this._fogBmp.clear();
+        ctx.fillStyle = "#08090c";
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                if (fog.seen(x, y)) continue;
+                let x2 = x;
+                while (x2 + 1 < w && !fog.seen(x2 + 1, y)) x2++;
+                ctx.fillRect(x * S, y * S, (x2 - x + 1) * S, S);
+                x = x2;
+            }
+        }
+        this._fogBmp._baseTexture.update();
+        this._fogRev = fog.rev;
+    };
+
+    // the terrain plus everything that changes: trees that fall, buildings, fields; the fog over all of it
     Sprite_Minimap.prototype.paintOverlay = function() {
         const S = this._scale, bmp = this._composite, ctx = bmp.context;
+        const fog = fogOf($gameMap.mapId());
+        if (fog && fog.rev !== this._fogRev) this.paintFog(fog);
         bmp.clear();
         bmp.blt(this._terrain, 0, 0, this._terrain.width, this._terrain.height, 0, 0);
         const rect = (x, y, w, h, colour) => { ctx.fillStyle = colour; ctx.fillRect(Math.round(x * S), Math.round(y * S), Math.max(1, Math.round(w * S)), Math.max(1, Math.round(h * S))); };
@@ -310,6 +351,7 @@
                 }
             }
         }
+        if (fog && this._fogBmp) bmp.blt(this._fogBmp, 0, 0, this._fogBmp.width, this._fogBmp.height, 0, 0);   // (over everything not seen yet)
         bmp._baseTexture.update();
     };
 
@@ -377,6 +419,9 @@
             }
             return null;
         },
-        toggle() { if ($gameSystem) $gameSystem._minimapHidden = !$gameSystem._minimapHidden; }
+        toggle() { if ($gameSystem) $gameSystem._minimapHidden = !$gameSystem._minimapHidden; },
+        // a fog over some maps (Underground.js): fn(mapId) -> null or { rev, seen(x, y) } - see fogOf above
+        addFog(fn) { if (typeof fn === "function" && !fogs.includes(fn)) fogs.push(fn); return true; },
+        fogOf
     };
 })();

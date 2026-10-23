@@ -1,11 +1,12 @@
 # python tools/orzel/install.py [--install] [--force]
-# Biały orzeł (etap 2): what goes into data/ and js/plugins.js and img/system/IconSet.png. Without --install: built into
+# Biały orzeł (etap 2): what goes into data/ and js/tawerna_wtyczki.js (the game's plugin list; js/plugins.js before
+# 2026-10-23) and img/system/IconSet.png. Without --install: built into
 # tools/orzel/staging/ (the files as they would be, ZMIANY.txt with their SHA-256) - nothing in the game changes.
 #   data/Map175.json       "Orla Grań" (tools/orzel/gran.py)
 #   data/MapInfos.json     + 175 "Orla Grań" under 13 "Góry i kamieniołom"
 #   data/Items.json        + 182 Orle jajo, 183 Rękawica sokolnika, 184 Pióro białego orła
 #   img/system/IconSet.png + icons 453-457 (tools/orzel/icons, from props.py)
-#   js/plugins.js          + Orzel_Data (after Kruk_Data, above TownQuests_Data), Orzel and Orzel_Lot (after Starcia)
+#   js/tawerna_wtyczki.js  + Orzel_Data (after Kruk_Data, above TownQuests_Data), Orzel and Orzel_Lot (after Starcia)
 # --install writes them: refuses while the RPG Maker MZ editor runs (checked right before writing); backups to
 # backup_art_2026-10-18/orzel/; repeatable (what is there already is left as it is, our entries are found by id / name).
 # A Map175.json changed in the editor since the last install (tools/orzel/installed.json) is left alone unless --force.
@@ -153,7 +154,7 @@ def patch_plugins(raw):
             if l.startswith('{"name":"%s"' % after):
                 idx = i
         if idx is None:
-            sys.exit("plugins.js: nie ma %s - nie wiem, gdzie wpisać %s" % (after, entry["name"]))
+            sys.exit("lista gry (js/tawerna_wtyczki.js): nie ma %s - nie wiem, gdzie wpisać %s" % (after, entry["name"]))
         line = dump(entry)
         # (the list's lines end with "," except the last one before "];")
         lines.insert(idx + 1, line + ",")
@@ -171,7 +172,7 @@ def main():
         "data/MapInfos.json": patch_mapinfos(read(DATA + "MapInfos.json")),
         "data/Items.json": patch_items(read(DATA + "Items.json")),
         "img/system/IconSet.png": patch_iconset(read(ROOT + "img/system/IconSet.png")),
-        "js/plugins.js": patch_plugins(read(ROOT + "js/plugins.js")),
+        "js/tawerna_wtyczki.js": patch_plugins(read(ROOT + "js/tawerna_wtyczki.js")),
     }
     os.makedirs(STAGING, exist_ok=True)
     report = []

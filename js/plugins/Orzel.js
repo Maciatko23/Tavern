@@ -58,6 +58,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("orzel");   // (the words of this file: js/teksty/orzel.txt, kod.*)
 
     const T = window.Tawerna, D = window.OrzelData;
     if (!T) throw new Error("Orzel.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -357,7 +358,7 @@
         const it = item(D.ITEM.pioro);
         if (!it) return;
         $gameParty.gainItem(it, 1);
-        T.popup("Orzeł zrzucił pióro: " + it.name, { icon: it.iconIndex, kind: "gain" });
+        T.popup(Watki.wstaw(TK.kod.giveFeather[0], { name: it.name }), { icon: it.iconIndex, kind: "gain" });
     }
     // the egg -> the chick (the name screen right after)
     function hatch() {
@@ -384,7 +385,8 @@
     let pendingName = false;
 
     // the name: the prologue's screen (Prologue.Scene_HeroName) with the eagle's words (the raven's way, Kruk.js)
-    const NAMES = ["Śnieżny", "Szron", "Biel", "Zefir", "Grom", "Strażnik", "Obłok", "Lodowy", "Wicher", "Perłowy"];
+    const NAMES = [];
+    Watki.scal(NAMES, "orzel", "imiona");   // (its words: js/teksty/orzel.txt, imiona)
     let Scene_EagleName = null;
     function eagleScene() {
         if (Scene_EagleName) return Scene_EagleName;
@@ -407,7 +409,7 @@
                 this._leaving = true;
                 SoundManager.playOk();
                 SceneManager.pop();
-                T.popup(n + " - tak będzie się nazywał", { top: true, color: "#9ff0a8", icon: D.ICON.orzel });
+                T.popup(Watki.wstaw(TK.kod.done[0], { n: n }), { top: true, color: "#9ff0a8", icon: D.ICON.orzel });
                 autoChecks();
             }
             back() { this.done(); }
@@ -423,9 +425,9 @@
                 ctx.fillRect(16, 18, PW - 36, 82);
                 ctx.textAlign = "center"; ctx.textBaseline = "middle";
                 ctx.font = "600 34px " + font(); ctx.fillStyle = "#ece6da";
-                ctx.fillText("Jak nazwiesz orła?", PW / 2, 46);
+                ctx.fillText(TK.kod.redraw[0], PW / 2, 46);
                 ctx.font = "17px " + font(); ctx.fillStyle = "#b8b0a2";
-                ctx.fillText("Białe pisklę patrzy na ciebie i piszczy. Czeka.", PW / 2, 84);
+                ctx.fillText(TK.kod.redraw[1], PW / 2, 84);
                 if (!this.text()) {
                     ctx.fillStyle = "rgba(30,32,36,1)"; ctx.fillRect(150, 124, PW - 304, 44);
                     ctx.font = "bold 36px " + font(); ctx.fillStyle = "#5e5a54";
@@ -433,7 +435,7 @@
                 }
                 ctx.fillStyle = "rgba(20,21,24,1)"; ctx.fillRect(200, b.height - 50, PW - 400, 30);
                 ctx.font = "14px " + font(); ctx.fillStyle = "#77736b";
-                ctx.fillText("Puste pole = „" + TX.defaultName + "”", PW / 2, b.height - 34);
+                ctx.fillText(Watki.wstaw(TK.kod.redraw[2], { defaultName: TX.defaultName }), PW / 2, b.height - 34);
                 ctx.restore();
                 b._baseTexture.update();
             }
@@ -1357,7 +1359,7 @@
         if (!takeWater()) return false;
         b.bowlWater = (b.bowlWater || 0) + 1;
         T.audio.se("Water1", { volume: 70, pitch: 110 });
-        T.popup("Woda w misce: " + b.bowlWater + "/" + max, { icon: 391, color: "#9fd4ff" });
+        T.popup(Watki.wstaw(TK.kod.pourWater[0], { bowlWater: b.bowlWater, max: max }), { icon: 391, color: "#9fd4ff" });
         return true;
     }
     function takeWater() {
@@ -1374,7 +1376,7 @@
         const s = S();
         s.water = Math.min(100, s.water + CARE.waterPortion);
         T.audio.se("Water1", { volume: 70, pitch: 120 });
-        pop("{imie} pije", { color: "#9fd4ff" });
+        pop(TK.kod.giveWater[0], { color: "#9fd4ff" });
         return true;
     }
 
@@ -1383,8 +1385,8 @@
     // ------------------------------------------------------------------
     function statusNote() {
         const s = S();
-        if (s.stage === 0) return fill(TX.statusEgg, { h: Math.floor(s.egg.warm), n: ST[0].warmHours, gdzie: s.egg.where === "basket" ? "w koszu" : "w torbie" });
-        const next = s.stage < 5 ? " (" + (D.STAGE_AT[s.stage + 1] - s.care) + " dni do kolejnego)" : "";
+        if (s.stage === 0) return fill(TX.statusEgg, { h: Math.floor(s.egg.warm), n: ST[0].warmHours, gdzie: s.egg.where === "basket" ? TK.kod.statusNote[0] : TK.kod.statusNote[1] });
+        const next = s.stage < 5 ? Watki.wstaw(TK.kod.statusNote[2], { "1": D.STAGE_AT[s.stage + 1] - s.care }) : "";
         return fill(TX.status, { hp: Math.round(s.hp), mhp: maxHp(), st: Math.round(s.st), mst: maxSt(), f: Math.round(s.food), w: Math.round(s.water),
             b: Math.round(s.bond), etap: stageDef().name, dni: next });
     }
@@ -1440,20 +1442,20 @@
             callBack(false);
             return true;
         }
-        if (s.theft && (s.theft.state === "camp" || s.theft.state === "taken")) { pop("{imie} jest w niewoli - na Orlej Grani"); return true; }
+        if (s.theft && (s.theft.state === "camp" || s.theft.state === "taken")) { pop(TK.kod.callKey[0]); return true; }
         if (s.hurtUntil && clock() < s.hurtUntil) { pop(TX.hurt); return true; }
         if (eagle && Math.hypot(eagle.x - heroPoint().x, eagle.y - heroPoint().y) < 10) { openMenu(); return true; }
         // not here: the flyers come, the walkers wait where they are
         if (s.stage >= 4 && outdoors() && !underground()) { s.mode = "follow"; s.map = $gameMap.mapId(); removeEagle(); spawnHere({ near: true, flyIn: true }); pop(TX.followAir); return true; }
         if (s.map === $gameMap.mapId() && eagle) { openMenu(); return true; }
-        pop("{imie} jest gdzie indziej - wróć po niego");
+        pop(TK.kod.callKey[1]);
         return true;
     }
     function openEggMenu() {
         const s = S(), sc = SceneManager._scene;
         if (!sc || !sc.openFarmMenu) return;
-        sc.openFarmMenu(TX.menuEgg, [{ name: "Jajo w cieple: " + Math.floor(s.egg.warm) + "/" + ST[0].warmHours + " godz.", icon: D.ICON.jajo, enabled: false,
-            help: "Ciepło jest przy ogniu (do 3 pól), w domu, w koszu z sianem przy ognisku albo gdy śpisz z jajem w torbie." }], undefined, undefined, undefined, undefined, statusNote());
+        sc.openFarmMenu(TX.menuEgg, [{ name: Watki.wstaw(TK.kod.openEggMenu[0], { "1": Math.floor(s.egg.warm), warmHours: ST[0].warmHours }), icon: D.ICON.jajo, enabled: false,
+            help: TK.kod.openEggMenu[1] }], undefined, undefined, undefined, undefined, statusNote());
     }
     if (!Input.keyMapper[D.KEY]) Input.keyMapper[D.KEY] = "eagle";
     const CALM_MENU = { only: ["onMap", "event", "farmMenu"] };
@@ -1477,13 +1479,13 @@
         if (!b || !NEST_TYPES.includes(b.type) || b.site) return null;
         const s = S(), max = def.bowl || 3, at = Math.max(0, entries.findIndex(e => e.name === def.openName) + 1), add = [];
         if (b.type === "orzel_kosz" && s.have && s.stage === 0) {
-            if (s.egg.where === "basket" && s.egg.basket === b.id) add.push({ name: TX.mEggTake, icon: D.ICON.jajo, help: "Bierzesz jajo do torby.", run: () => eggOut(b) });
-            else if (count(D.ITEM.jajo) > 0) add.push({ name: TX.mEggPut, icon: D.ICON.jajo, help: "Jajo w koszu z sianem jest w cieple, gdy kosz stoi do 3 pól od płonącego ogniska (albo w izbie chatki).", run: () => eggIn(b) });
+            if (s.egg.where === "basket" && s.egg.basket === b.id) add.push({ name: TX.mEggTake, icon: D.ICON.jajo, help: TK.kod.glowna[0], run: () => eggOut(b) });
+            else if (count(D.ITEM.jajo) > 0) add.push({ name: TX.mEggPut, icon: D.ICON.jajo, help: TK.kod.glowna[1], run: () => eggIn(b) });
         }
         const haveWater = (F().bagWater && F().bagWater() >= 1) || (T.api("Needs") && T.api("Needs").skinCharges && T.api("Needs").skinCharges() >= 1);
-        add.push({ name: "Nalej wody do miski", icon: 391, right: (b.bowlWater || 0) + "/" + max, enabled: (b.bowlWater || 0) < max && !!haveWater,
-            help: "Porcja wody z wiadra (albo z bukłaka). Orzeł napije się z miski, kiedy będzie w gnieździe.", run: () => pourWater(b) });
-        if (s.have && s.stage >= 1) add.push({ name: fill(TX.menuTitle, V()), icon: D.ICON.orzel, help: "Menu orła (albo klawisz L).", run: openMenu });
+        add.push({ name: TK.kod.glowna[2], icon: 391, right: (b.bowlWater || 0) + "/" + max, enabled: (b.bowlWater || 0) < max && !!haveWater,
+            help: TK.kod.glowna[3], run: () => pourWater(b) });
+        if (s.have && s.stage >= 1) add.push({ name: fill(TX.menuTitle, V()), icon: D.ICON.orzel, help: TK.kod.glowna[4], run: openMenu });
         // the nest's upgrade to the perch: only once brother Kleofas told how (W13 ch. 3 - flag orzelKroniki)
         if (b.type === "orzel_gniazdo" && def.upgrade && !flag(def.upgrade.needFlag || "orzelKroniki")) {
             const ui = entries.findIndex(e => e.name === def.upgrade.name);
@@ -1500,14 +1502,14 @@
         tickNeeds();
         $gameParty.loseItem(item(D.ITEM.jajo), 1);
         s.egg.where = "basket"; s.egg.basket = b.id;
-        T.popup("Jajo leży w koszu", { icon: D.ICON.jajo, color: "#f3e0a0" });
+        T.popup(TK.kod.eggIn[0], { icon: D.ICON.jajo, color: "#f3e0a0" });
     }
     function eggOut(b) {
         const s = S();
         tickNeeds();
         $gameParty.gainItem(item(D.ITEM.jajo), 1);
         s.egg.where = "bag"; s.egg.basket = null;
-        T.popup("Jajo w torbie", { icon: D.ICON.jajo, color: "#f3e0a0" });
+        T.popup(TK.kod.eggOut[0], { icon: D.ICON.jajo, color: "#f3e0a0" });
     }
 
     // ------------------------------------------------------------------
@@ -1846,7 +1848,7 @@
         const out = [];
         D.WAY_UP.cells.forEach(([x, y], k) => {
             if (x >= data.width || y >= data.height) return;
-            out.push(ev(500 + k, "Ścieżka wspinaczy (Orla Grań)", x, y, [page([script("Orzel.wayUp()")], { priority: 1, trigger: 0 })], "<Orzel:wspinaczka>"));
+            out.push(ev(500 + k, TK.kod.build[0], x, y, [page([script("Orzel.wayUp()")], { priority: 1, trigger: 0 })], "<Orzel:wspinaczka>"));
         });
         return out;
     } });
@@ -1858,16 +1860,16 @@
         // shut, row 4 open)
         const s = S(), egg = eggReady() && !s.have && !(s.flags && s.flags.eggTaken);
         const caged = !!(s.theft && s.theft.state === "camp");
-        at("orzel_jajo", 510, "Orle gniazdo (rozbite)", [script("Orzel.look('gniazdo')")], { priority: 1, pic: "!$Orzel_Gniazdo", dir: egg ? 2 : 4, note: "<Occupy:left=1,right=1>" });
-        at("orzel_orlica", 511, "Martwa orlica", [script("Orzel.look('orlica')")], { priority: 1, pic: "!$Orzel_Orlica", note: "<Occupy:left=1,right=1>" });
-        at("orzel_strzaly", 512, "Strzały z białym okiem", [script("Orzel.look('strzaly')")], { priority: 0, pic: "!$Orzel_Strzaly" });
-        at("orzel_misa", 513, "Kamienna misa", [script("Orzel.look('misa')")], { priority: 1, pic: "!$Orzel_Misa", note: "<Occupy:left=1>" });
-        at("orzel_plyta", 514, "Płyta z orłem", [script("Orzel.look('plyta')")], { priority: 1 });
-        at("orzel_oboz", 515, "Zimne ognisko myśliwych", [script("Orzel.look('oboz')")], { priority: 0 });
+        at("orzel_jajo", 510, TK.kod.build[1], [script("Orzel.look('gniazdo')")], { priority: 1, pic: "!$Orzel_Gniazdo", dir: egg ? 2 : 4, note: "<Occupy:left=1,right=1>" });
+        at("orzel_orlica", 511, TK.kod.build[2], [script("Orzel.look('orlica')")], { priority: 1, pic: "!$Orzel_Orlica", note: "<Occupy:left=1,right=1>" });
+        at("orzel_strzaly", 512, TK.kod.build[3], [script("Orzel.look('strzaly')")], { priority: 0, pic: "!$Orzel_Strzaly" });
+        at("orzel_misa", 513, TK.kod.build[4], [script("Orzel.look('misa')")], { priority: 1, pic: "!$Orzel_Misa", note: "<Occupy:left=1>" });
+        at("orzel_plyta", 514, TK.kod.build[5], [script("Orzel.look('plyta')")], { priority: 1 });
+        at("orzel_oboz", 515, TK.kod.build[6], [script("Orzel.look('oboz')")], { priority: 0 });
         at("orzel_klatka", 516, "Klatka", [script("Orzel.look('klatka')")], { priority: 1, pic: "!$Orzel_Klatka", dir: caged ? 2 : 4, note: "<Occupy:left=1>" });
         D.WAY_DOWN.cells.forEach(([x, y], k) => {
             if (x >= data.width || y >= data.height) return;
-            out.push(ev(520 + k, "Przejście -> Góry i kamieniołom", x, y, [page([{ code: 201, indent: 0, parameters: [0, D.WAY_DOWN.to, D.WAY_DOWN.land[0] + k % 2, D.WAY_DOWN.land[1], D.WAY_DOWN.dir, 0] }],
+            out.push(ev(520 + k, TK.kod.build[7], x, y, [page([{ code: 201, indent: 0, parameters: [0, D.WAY_DOWN.to, D.WAY_DOWN.land[0] + k % 2, D.WAY_DOWN.land[1], D.WAY_DOWN.dir, 0] }],
                 { priority: 0, trigger: 1 })], "<Orzel:zejscie>"));
         });
         return out;
@@ -1882,7 +1884,7 @@
         try {
             if (what === "gniazdo") {
                 if (!eggReady() && !s.have) { say(TX.noEggYet); return; }
-                if (s.have || s.flags.eggTaken) { T.popup("Rozbite gniazdo. Puste.", { color: "info" }); return; }
+                if (s.have || s.flags.eggTaken) { T.popup(TK.kod.look[0], { color: "info" }); return; }
                 say(TX.eggTake);
                 $gameParty.gainItem(item(D.ITEM.jajo), 1);
                 s.have = true; s.stage = 0; s.flags.eggTaken = day();
@@ -1948,16 +1950,16 @@
         if ((t.state === "taken" || t.state === "plan") && !night()) {
             t.state = "camp";
             for (const l of TX.theftDone) T.popup(l, { color: "#ffd0a0", top: true });
-            note("Porwany", "Złodzieje Czarnych Oczu zabrali {imie} z gniazda w nocy. Ślady prowadzą w góry - na Orlą Grań.");
+            note("Porwany", TK.kod.theftMorning[0]);
             removeEagle();
             autoChecks();
         }
     }
     function theftCage() {
         const s = S(), t = s.theft, Hm = HM();
-        if (!t || t.state !== "camp") { T.popup("Pusta klatka z żerdzi. Ktoś ją tu zostawił.", { color: "info" }); return; }
+        if (!t || t.state !== "camp") { T.popup(TK.kod.theftCage[0], { color: "info" }); return; }
         const guards = Hm ? Hm.list.filter(h => h._tag === "orzelStraz" && !h._dead && !h._surrendered && h._mode !== "flee") : [];
-        if (guards.length) { T.popup("Najpierw strażnicy!", { color: "#ffb4a0" }); return; }
+        if (guards.length) { T.popup(TK.kod.theftCage[1], { color: "#ffb4a0" }); return; }
         t.state = "freed";
         const cage = $gameMap.event(516);
         if (cage) cage.setDirection(4);
@@ -1966,7 +1968,7 @@
         s.bond = Math.min(100, s.bond + 10);
         removeEagle();
         spawnHere({ near: true });
-        pop("Otwierasz klatkę. {imie} wyskakuje i stroszy pióra!", { color: "#9ff0a8", top: true });
+        pop(TK.kod.theftCage[2], { color: "#9ff0a8", top: true });
         setFlag("orzelUwolniony");
         autoChecks();
     }
@@ -1978,7 +1980,7 @@
         if (!m) return;
         t.guards = true;
         for (const [dx, dy, kind] of [[-2, 1, "bandit"], [2, 1, "archer"]]) {
-            if (Hm.spawn) Hm.spawn(kind, m.x + dx, m.y + dy, { tag: "orzelStraz", name: "Myśliwy Czarnych Oczu" });   // (2026-10-21: "name" - Humans reads opts.name; "label" showed nothing)
+            if (Hm.spawn) Hm.spawn(kind, m.x + dx, m.y + dy, { tag: "orzelStraz", name: TK.kod.campGuards[0] });   // (2026-10-21: "name" - Humans reads opts.name; "label" showed nothing)
         }
     }
 
@@ -1995,11 +1997,11 @@
             w13Start: () => S().have,
             w13Vars: { vars: () => {
                 const s = S(), t = s.theft;
-                const cieplo = Math.floor(s.egg.warm) + "/" + ST[0].warmHours + " godzin";
-                const gdzie = s.stage < 3 ? "pierwsze podloty dopiero u podrostka (dzień " + D.STAGE_AT[3] + " opieki)." : count(D.ITEM.rekawica) < 1 ? "rękawica jeszcze nieuszyta." : "stań przy nim z rękawicą i zawołaj go (L).";
-                const kradziez = !t || t.state === "plan" ? "Pilnuj gniazda nocą - ktoś pytał w tawernie o białego ptaka." : t.state === "fight" ? "Złodzieje przy gnieździe! Przegoń ich." :
-                    t.state === "camp" ? "Złodzieje zabrali orła na Orlą Grań. Odbij go z klatki." : "Orzeł bezpieczny.";
-                const lot = s.stage < 4 ? "Gdy będzie prawie dorosły (dzień " + D.STAGE_AT[4] + " opieki), poleć na nim pierwszy raz (L przy orle)." : "Wsiądź na grzbiet i leć (L przy orle).";
+                const cieplo = Watki.wstaw(TK.kod.vars[0], { "1": Math.floor(s.egg.warm), warmHours: ST[0].warmHours });
+                const gdzie = s.stage < 3 ? Watki.wstaw(TK.kod.vars[1], { "1": D.STAGE_AT[3] }) : count(D.ITEM.rekawica) < 1 ? TK.kod.vars[2] : TK.kod.vars[3];
+                const kradziez = !t || t.state === "plan" ? TK.kod.vars[4] : t.state === "fight" ? TK.kod.vars[5] :
+                    t.state === "camp" ? TK.kod.vars[6] : TK.kod.vars[7];
+                const lot = s.stage < 4 ? Watki.wstaw(TK.kod.vars[8], { "1": D.STAGE_AT[4] }) : TK.kod.vars[9];
                 return { cieplo, gdzie, kradziez, lot, imie: nameOf() };
             } },
             w13Wyklucie: { check: () => S().stage >= 1 },
@@ -2016,8 +2018,8 @@
         if (Math.hypot(eagle.x - heroPoint().x, eagle.y - heroPoint().y) > 2.5) return;
         s.glove = true;
         addBond(5);
-        pop("{imie} siada ci na rękawicy. Ciężki jak worek zboża!", { color: "#9ff0a8", top: true });
-        note("Na rękawicy", "{imie} pierwszy raz usiadł mi na rękawicy sokolnika. Brat Kleofas mówił, że jeźdźca nosi tylko orzeł, który sam go wybrał.");
+        pop(TK.kod.gloveCheck[0], { color: "#9ff0a8", top: true });
+        note(TK.kod.gloveCheck[1], TK.kod.gloveCheck[2]);
         autoChecks();
     }
 
@@ -2087,41 +2089,41 @@
     function f9Rows() {
         const s = S(), icon = D.ICON.orzel, have = s.have && s.stage >= 1;
         return [
-            { what: "jajo", icon: D.ICON.jajo, label: s.have ? "Orle jajo: już jest (" + (s.stage ? "etap " + s.stage : Math.floor(s.egg.warm) + "/" + ST[0].warmHours + " godz.") + ")" : "Daj orle jajo",
-              desc: "Jajo w torbie, flaga orzelJajo, D29 zrobione, W13 rusza. Wykluje się po 36 godzinach w cieple." },
-            { what: "gotowe", icon: D.ICON.jajo, label: "Jajo na grani gotowe (Akt II + burza)", desc: "Na Orlej Grani w gnieździe leży jajo - bez czekania na Akt II i burzę." },
-            { what: "etap", icon, pick: f9Stage, label: "Etap orła: " + f9Stage + " - " + ST[f9Stage].name + "   ←→ zmień, OK ustaw",
-              desc: "Wykluty od razu, dni opieki jak na tym etapie, najedzony i napojony, staje obok ciebie (5: dorosły, nosi bohatera)." },
-            { what: "wiez", icon, label: "Więź 100, najedzony, napojony, wypoczęty" + (have ? "" : " (najpierw orzeł)"), desc: "Więź z orłem na 100 (lot od 60), pełne życie i siła skrzydeł." },
-            { what: "dosiadz", icon, label: "Dosiądź orła (lot)", desc: "Dorosły orzeł przy tobie, od razu w powietrzu (wysoko, x0,5). L - lądowanie." },
-            { what: "wyladuj", icon, label: "Wyląduj teraz", desc: "Orzeł schodzi w najbliższym wolnym miejscu (także awaryjnie)." },
-            { what: "kradziez", icon, label: "Kradzież (W13 rozdz. 5): orzeł w klatce na grani", desc: "Czarne Oczy zabrały orła do klatki na Orlej Grani; przenosi tam (dwóch strażników)." },
-            { what: "gran", icon: 190, label: "Przenieś na Orlą Grań (Map175)", desc: "Szczyt ścieżki wspinaczy nad kamieniołomem w Górach." }
+            { what: "jajo", icon: D.ICON.jajo, label: s.have ? Watki.wstaw(TK.kod.f9Rows[2], { "1": s.stage ? Watki.wstaw(TK.kod.f9Rows[0], { stage: s.stage }) : Watki.wstaw(TK.kod.f9Rows[1], { "1": Math.floor(s.egg.warm), warmHours: ST[0].warmHours }) }) : TK.kod.f9Rows[3],
+              desc: TK.kod.f9Rows[4] },
+            { what: "gotowe", icon: D.ICON.jajo, label: TK.kod.f9Rows[5], desc: TK.kod.f9Rows[6] },
+            { what: "etap", icon, pick: f9Stage, label: Watki.wstaw(TK.kod.f9Rows[7], { f9Stage: f9Stage, name: ST[f9Stage].name }),
+              desc: TK.kod.f9Rows[8] },
+            { what: "wiez", icon, label: Watki.wstaw(TK.kod.f9Rows[10], { "1": have ? "" : TK.kod.f9Rows[9] }), desc: TK.kod.f9Rows[11] },
+            { what: "dosiadz", icon, label: TK.kod.f9Rows[12], desc: TK.kod.f9Rows[13] },
+            { what: "wyladuj", icon, label: TK.kod.f9Rows[14], desc: TK.kod.f9Rows[15] },
+            { what: "kradziez", icon, label: TK.kod.f9Rows[16], desc: TK.kod.f9Rows[17] },
+            { what: "gran", icon: 190, label: TK.kod.f9Rows[18], desc: TK.kod.f9Rows[19] }
         ];
     }
     function f9Pick(row, delta) {
         f9Stage = ((f9Stage - 1 + delta + 5) % 5) + 1;
         row.pick = f9Stage;
-        row.label = "Etap orła: " + f9Stage + " - " + ST[f9Stage].name + "   ←→ zmień, OK ustaw";
+        row.label = Watki.wstaw(TK.kod.f9Pick[0], { f9Stage: f9Stage, name: ST[f9Stage].name });
     }
     function f9(row) {
         const s = S();
         switch (row.what) {
             case "jajo":
-                if (s.have) return { say: "Orle jajo już jest", bad: true };
+                if (s.have) return { say: TK.kod.f9[0], bad: true };
                 giveEgg();
                 if (TQ() && TQ().finish && !isDone("D29")) TQ().finish("D29");
-                return { say: "Orle jajo w torbie" };
+                return { say: TK.kod.f9[1] };
             case "gotowe":
                 s.flags.f9Egg = true;
-                return { say: "Jajo czeka w gnieździe na Orlej Grani" };
+                return { say: TK.kod.f9[2] };
             case "etap":
                 f9Pending = { act: "stage", stage: f9Stage };
                 return { back: true };
             case "wiez":
-                if (!s.have || !s.stage) return { say: "Najpierw orzeł", bad: true };
+                if (!s.have || !s.stage) return { say: TK.kod.f9[3], bad: true };
                 s.bond = 100; s.food = 100; s.water = 100; s.hp = maxHp(); s.st = maxSt(); s.away = null; s.hurtUntil = 0;
-                return { say: "Więź 100" };
+                return { say: TK.kod.f9[4] };
             case "dosiadz":
                 f9Pending = { act: "mount" };
                 return { back: true };
@@ -2132,9 +2134,9 @@
                 if (!s.have || !s.stage) forceStage(3);
                 s.theft = { state: "camp", night: day() };
                 removeEagle();
-                return { go: ["Orla Grań", D.MAP, D.WAY_UP.land[0], D.WAY_UP.land[1], 8] };
+                return { go: [TK.kod.f9[5], D.MAP, D.WAY_UP.land[0], D.WAY_UP.land[1], 8] };
             case "gran":
-                return { go: ["Orla Grań", D.MAP, D.WAY_UP.land[0], D.WAY_UP.land[1], 8] };
+                return { go: [TK.kod.f9[5], D.MAP, D.WAY_UP.land[0], D.WAY_UP.land[1], 8] };
         }
         return null;
     }

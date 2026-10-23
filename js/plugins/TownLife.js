@@ -33,10 +33,13 @@
 // (v1.7.0, 2026-10-22, the new Podgrodzie - docs/podgrodzie/NOWE_PODGRODZIE.md) a third range, 2950-2959 (TawernaCore's registry):
 // TownLifeData.EXTRA_RANGES lists every range past 910-949 ([[2900, 2949], [2950, 2959]]) - one Tawerna.inject per range, ids of
 // TownLifeExtra checked against all of them.
+// (v1.8.0, 2026-10-23, docs/ROZMOWY.md) A resident's talk goes through the core's one service (Tawerna.talk.run, who = its key): the
+// other systems' takeovers by their named priorities, else its own line; addTalkHook is only an old door onto it. Hidden residents never
+// start through the core's Tawerna.onEventStart.
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.7.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.8.0
  * @author Claude
  *
  * @help
@@ -260,11 +263,8 @@
         ev._priorityType = 1;
     }
     // hidden, it never starts: it stands on the cell in front of its door, and the action button pressed there is for the door
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (this._town && this._town.hidden) return;
-        _Game_Event_start.call(this);
-    };
+    // (2026-10-23: the core's one start hook - Tawerna.onEventStart)
+    T.onEventStart(ev => !!(ev._town && ev._town.hidden), { owner: PLUGIN, priority: "hidden" });
     const stateOf = ev => ev._town || (ev._town = { i: -1, patrol: 0, stuck: 0, hidden: false, nextBark: 0, wait: 0, talkN: 0, wanderTo: null });
 
     // straight where the plan puts it now (coming onto the map, the clock jumping)
@@ -452,34 +452,42 @@
         if (line) out.push(line);
         return out;
     }
-    // other plugins (quests) speak first: fn(key, event, interpreter) -> a list of event commands (it ends the talk) or null
-    const talkHooks = [];
-    function talk(interp) {
-        const ev = $gameMap.event(interp.eventId()), res = ev && resOf(ev.eventId());
-        if (!res || stateOf(ev).hidden) return;
-        for (const fn of talkHooks) {
-            let list = null;
-            try { list = fn(res.key, ev, interp); } catch (e) { console.error(e); }
-            if (list && list.length) { interp.setupChild(list.concat([{ code: 0, indent: 0, parameters: [] }]), ev.eventId()); return; }
-        }
+    // (2026-10-23, docs/ROZMOWY.md) a resident's talk goes through the core's service: the takeovers of the other systems first (their
+    // named priorities - Tawerna.talk.PRIORITY: the quests, the shops, the first meetings...), else the resident's own line of the hour.
+    // who = the resident's key. opts.skip: an owner left out this time ("Porozmawiaj", "Nie, w innej sprawie": the rest of the talk)
+    function ownLines(res, ev) {
         const h = hourNow(), t = talkOf(res) || {}, place = outPlace(res, entryAt(res, h));
         const slot = raining() && t.rain ? "rain" : h >= 5 && h < 11 ? "morning" : h >= 11 && h < 17 ? "day" : h >= 17 && h < 22 ? "evening" : "night";
         const list = (place && t[place] && t[place].length ? t[place] : null) || t[slot] || t.day || [];
-        if (!list.length) return;
+        if (!list.length) return null;
         const st = stateOf(ev), text = list[st.talkN++ % list.length], lines = wrap(text), out = [];
         for (let i = 0; i < lines.length; i += PAGE) {
             out.push({ code: 101, indent: 0, parameters: ["", 0, 0, 2, res.name] });
             lines.slice(i, i + PAGE).forEach((l, j) => out.push({ code: 401, indent: 0, parameters: [(j === 0 ? "\\SPK[" + ev.eventId() + "]" : "") + l] }));
         }
-        out.push({ code: 0, indent: 0, parameters: [] });
-        interp.setupChild(out, ev.eventId());
+        return out;
+    }
+    function talk(interp, opts) {
+        const ev = $gameMap.event(interp.eventId()), res = ev && resOf(ev.eventId());
+        if (!res || stateOf(ev).hidden) return;
+        T.talk.run(interp, res.key, { ev, owner: PLUGIN, skip: opts && opts.skip, base: () => ownLines(res, ev) });
+    }
+    // (old) TownLife.addTalkHook(fn(key, ev, interp), first): kept for a plugin from outside - a takeover of the core's service at
+    // "owner" (first) or "after" (else) priority; the game's own plugins register Tawerna.talk.takeover with their own priority
+    let oldHooks = 0;
+    function addTalkHook(fn, first) {
+        if (typeof fn !== "function" || fn._twTalk) return;
+        fn._twTalk = true;
+        T.util.warnOnce("addTalkHook", "TownLife.addTalkHook is old - use Tawerna.talk.takeover({ owner, who, priority, run }) (docs/ROZMOWY.md)");
+        T.talk.takeover({ owner: "addTalkHook", name: String(++oldHooks), who: (key => RES.some(r => r.key === key)), priority: first ? T.talk.PRIORITY.owner + oldHooks / 1000 : T.talk.PRIORITY.after - oldHooks / 1000,
+            run: ctx => fn(ctx.who, ctx.ev, ctx.interp) });
     }
 
     // ------------------------------------------------------------------
     const api = {
         RESIDENTS: RES, spot, entryAt, placeAll, talk, residents, homeOf, HOMES,
-        // (2026-10-14) first: before the hooks there already (Przystan.js: Janek's and Roch's first meeting comes before the quests)
-        addTalkHook: (fn, first) => { if (typeof fn === "function" && !talkHooks.includes(fn)) { if (first) talkHooks.unshift(fn); else talkHooks.push(fn); } },
+        // (2026-10-23) old: Tawerna.talk.takeover instead (docs/ROZMOWY.md)
+        addTalkHook,
         say: (key, text) => { const ev = api.eventOf(key), SB = T.api("SpeechBubbles"); if (ev && SB && !stateOf(ev).hidden) SB.say(ev, text); },
         // the lines a resident says (the plugin's own: for a hook that wants the usual talk after its part)
         lines: key => { const r = RES.find(x => x.key === key); return r ? talkOf(r) : null; },

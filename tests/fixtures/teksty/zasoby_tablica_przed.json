@@ -1,0 +1,45 @@
+{
+ "tablica": {
+  "zas_dziki_miod": {
+   "title": [
+    "Miód na miód pitny",
+    "Dziki miód dla bardki"
+   ],
+   "text": [
+    "Miód pitny sam się nie nastawi, a pszczelarz z miasta chce za garniec tyle, co za pieśń. Przynieś miodu - dzikiego, z dziupli. Słodszy.",
+    "Ballada o pszczołach wymaga miodu. Wszystkie ballady wymagają miodu, ale ta szczególnie."
+   ]
+  },
+  "zas_ziola_rzadkie": {
+   "title": [
+    "Kozłek dla Jagny",
+    "Rzadkie ziele"
+   ],
+   "text": [
+    "Kozłek lekarski, z dzikiego miejsca. Ludzie nie śpią przez tę suszę, a ja nie nadążam z naparem.",
+    "Ziele z wilgotnego cienia - kozłek. Przy źródełkach jeszcze rośnie. Z ręki, nie z mojej polanki."
+   ]
+  },
+  "zas_bloki": {
+   "title": [
+    "Bloki kamienne",
+    "Kamień ciosowy na podmurówkę"
+   ],
+   "text": [
+    "Dwór zamówił podmurówkę pod nową szopę. Polnymi kamieniami nie postawię - potrzeba bloków ciosowych z gór.",
+    "Bloki z kamieniołomu, równe, ciężkie. Plecy mnie bolą od samego myślenia."
+   ]
+  },
+  "zas_kraby": {
+   "title": [
+    "Kraby z ogniska",
+    "Coś z morza na stół"
+   ],
+   "text": [
+    "Goście z promu pytają o kraby. Kraby! W karczmie na wzgórzu! Przynieś pieczone kraby, to im podam.",
+    "Ktoś mi powiedział, że w zatoczce za przystanią w odpływie łazi pełno krabów. Upiecz parę, zapłacę."
+   ]
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Zasoby_Data.js: QB_TEMPLATES=tablica:id:/(title|text)$/)"
+}

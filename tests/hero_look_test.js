@@ -44,12 +44,16 @@ const OUT = process.argv[2] || "";
         check("switched on: the new sheet Hero_Walk (visible), standing = column 0, facing down = row 0, 64x64 cells", s1.sheet === "Hero_Walk" && /Hero_Walk/.test(s1.url) && s1.visible === true && s1.col === 0 && s1.row === 0 && s1.frame[2] === 64 && s1.frame[3] === 64, s1);
 
         // walking right: row 6, the columns go round 1..8 with the distance
+        // (2026-10-23: the frames noted in the game's own loop - read from outside every 3 frames, a busy machine skipped one)
+        await ev(`(function(){ window.__walkCols = {}; const u = window.__walkU = SceneManager.updateMain; SceneManager.updateMain = function() { u.apply(this, arguments);
+            const s = SceneManager._scene && SceneManager._scene._spriteset && SceneManager._scene._spriteset._characterSprites.find(c => c._character === $gamePlayer);
+            if (s && s._heroCell) { window.__walkCols[s._heroCell.col] = 1; window.__walkRow = s._heroCell.row; } }; return 0; })()`);
         await ev("Input._currentState.right = true; 0");
-        const cols = new Set();
-        let rowR = null;
-        for (let i = 0; i < 16; i++) { await frames(3); const s = await S(); cols.add(s.col); rowR = s.row; }
+        await frames(48);
         if (OUT) await b.shot(OUT + "hero_walk_right.png");
         await ev("Input._currentState.right = false; 0");
+        const walk = await J("(function(){ SceneManager.updateMain = window.__walkU; return { cols: Object.keys(window.__walkCols).map(Number), row: window.__walkRow }; })()");
+        const cols = new Set(walk.cols), rowR = walk.row;
         check("walking right: row 6 (right), the legs go through all 8 frames", rowR === 6 && [1, 2, 3, 4, 5, 6, 7, 8].every(c => cols.has(c)), { rowR, cols: [...cols].sort() });
         await frames(12);
         check("stopped: he stands (column 0), still facing right", (await S()).col === 0 && (await S()).row === 6);
@@ -124,8 +128,8 @@ const OUT = process.argv[2] || "";
 
         // the side axe swing (a standing tree) plays the new sheet when it is there
         // every kind of swing plays a new sheet, and every sheet loads: 4 rows of 96x96 cells, at least 13 frames
-        const kinds = await J(`(function(){ const out = []; for (let k = 0; k < 20; k++) out.push(ChoppableTree.swingKind(k).sheet); return out; })()`);
-        check("every kind of swing (0-19) plays a new Hero_ sheet", kinds.every(n => /^Hero_/.test(n)), kinds);
+        const kinds = await J(`(function(){ const out = []; for (let k = 0; k < 22; k++) out.push(ChoppableTree.swingKind(k).sheet); return out; })()`);
+        check("every kind of swing (0-21, the torch 20, the sword 21: Hero_Sword) plays a new Hero_ sheet", kinds.every(n => /^Hero_/.test(n)) && kinds[21] === "Hero_Sword", kinds);
         const sheets = [...new Set(kinds)];
         await ev(`window.__sheets = ${JSON.stringify(sheets)}.map(n => ImageManager.loadSystem(n)); 0`);
         for (let i = 0; i < 40 && !(await ev("__sheets.every(b => b.isReady() || b.isError())")); i++) await frames(5);

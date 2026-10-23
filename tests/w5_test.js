@@ -19,7 +19,7 @@
 const fs = require("fs");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
-if (!/"name":"Kantor"/.test(fs.readFileSync(path.join(ROOT, "js", "plugins.js"), "utf8")) && !process.env.GAME_PLUGINS_ADD) process.env.GAME_PLUGINS_ADD = "Cysterna_Data:Kantor_Data;Cysterna:Kantor";
+if (!/"name":"Kantor"/.test(require("./lib/wtyczki.js").tekst()) && !process.env.GAME_PLUGINS_ADD) process.env.GAME_PLUGINS_ADD = "Cysterna_Data:Kantor_Data;Cysterna:Kantor";
 const OVERLAY = fs.existsSync(path.join(ROOT, "data", "Map171.json")) ? undefined : "tools/w5/staging";
 const kit = require("./lib/kit.js");
 const DOCS = path.join(ROOT, "docs", "w5");

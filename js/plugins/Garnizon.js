@@ -13,8 +13,8 @@
 //     - a patrol on the road searches the hero's bag
 //   - the military buying at Kłos (after K52): grain, vegetables, smoked meat and fish, hides, arrows, wood, charcoal; x1.5 for a week
 //     after each wave; in the hungry week after the requisition (D14) every day of selling food costs the town's opinion
-//   - the talks (TownLife.addTalkHook first): the first meetings (the captain: "Ile masz lat? ...Jeszcze nie."), the menus, the list of
-//     the missing (the father's banner: only the word "zaginiony"), the pass; the hero is never conscripted
+//   - the talks (the core's Tawerna.talk: a takeover at "owner" priority; Kłos's menu takes others' options): the first meetings (the
+//     captain: "Ile masz lat? ...Jeszcze nie."), the menus, the list of the missing (the father's banner: only the word "zaginiony"), the pass; the hero is never conscripted
 //   - D26 (the recruits: help / warn / the ship's log), D27 (the grain: bought at night from Kłos or carried out of the granary past the
 //     sentries; Kłos given up or kept quiet) - TownQuests.FX handlers
 //   - the sandbar (Map162 rows 20-21): sea tiles; at low tide (Wyspa.tide, switch 20) the wet sand shows (img/system/Garnizon_Lacha.png)
@@ -55,6 +55,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("garnizon");   // (the words of this file: js/teksty/garnizon.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Garnizon.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -105,22 +106,20 @@
     // ------------------------------------------------------------------
     const favor = () => (has() ? S().favor : F.start);
     const TH_TEXT = {
-        40: ["Garnizon ci ufa", "Rotmistrz da ci glejt na wrak, jeśli o niego poprosisz."],
-        60: ["Przyjaciel garnizonu", "Kowal garnizonu sprzeda ci strzały i stal."],
-        80: ["Swój dla wojska", "Gdyby kiedyś zabrzmiał alarm, żołnierze królewscy staną przy tawernie."]
     };
+    Watki.scal(TH_TEXT, "garnizon", "progi");   // (its words: js/teksty/garnizon.txt, progi)
     function addFavor(n, why, quiet) {
         if (!has() || !n) return 0;
         const s = S(), before = s.favor;
         s.favor = Math.max(0, Math.min(100, before + n));
         const got = s.favor - before;
         if (!got) return 0;
-        if (!quiet) T.popup("Przychylność garnizonu " + (got > 0 ? "+" : "") + got, { kind: got > 0 ? "good" : "bad" });
+        if (!quiet) T.popup(Watki.wstaw(TK.kod.addFavor[0], { "1": got > 0 ? "+" : "", got: got }), { kind: got > 0 ? "good" : "bad" });
         for (const t of [40, 60, 80]) {
             if (before < t && s.favor >= t && !s.th[t]) {
                 s.th[t] = day();
                 T.popup(TH_TEXT[t][0], { top: true, color: "#ffe27a", sub: TH_TEXT[t][1] });
-                note("Garnizon: " + TH_TEXT[t][0].toLowerCase(), TH_TEXT[t][1]);
+                note(Watki.wstaw(TK.kod.addFavor[1], { "1": TH_TEXT[t][0].toLowerCase() }), TH_TEXT[t][1]);
             }
         }
         T.emit("garnizonFavor", { favor: s.favor, change: got, why: why || "" });
@@ -128,7 +127,7 @@
     }
     function favorWord(v) {
         const f = v === undefined ? favor() : v;
-        return f >= 80 ? "swój" : f >= 60 ? "przyjaciel garnizonu" : f >= 40 ? "zaufany" : f >= 20 ? "znajomy" : f >= 10 ? "obcy" : "podejrzany";
+        return f >= 80 ? TK.kod.favorWord[0] : f >= 60 ? TK.kod.favorWord[1] : f >= 40 ? "zaufany" : f >= 20 ? "znajomy" : f >= 10 ? "obcy" : "podejrzany";
     }
 
     // ------------------------------------------------------------------
@@ -183,8 +182,8 @@
         if (s.saleDay !== day()) { s.saleDay = day(); addFavor(F.saleDay, "skup"); }
         if (food && hungerWeek() && s.hungerDay !== day()) {
             s.hungerDay = day();
-            const got = opinion(-1, "Skup wojskowy");
-            T.popup("„Nasze zboże idzie na wojnę”" + (got ? " - Opinia " + got : ""), { kind: "bad" });
+            const got = opinion(-1, TK.kod.sell[0]);
+            T.popup(Watki.wstaw(TK.kod.sell[2], { "1": got ? Watki.wstaw(TK.kod.sell[1], { got: got }) : "" }), { kind: "bad" });
         }
         return gold;
     }
@@ -264,112 +263,7 @@
     // ------------------------------------------------------------------
     // TEXTS
     // ------------------------------------------------------------------
-    const TX = {
-        belzaMeet: ["Stój. Czyj jesteś?", "> Wnuk Stacha. Z działki za lasem.",
-            "Stacha... Ten od długu u Lorda. (Rotmistrz mierzy cię wzrokiem od bosych stóp po czuprynę.) Ile masz lat? ...Jeszcze nie. Przyjdź za rok, to dostaniesz buty i żołd.",
-            "Florian Bełza, rotmistrz chorągwi królewskiej. Stoimy tu z łaski twojego Lorda - i za pieniądze Korony.",
-            "Masz zboże, to sprzedaj je Kłosowi, kwatermistrzowi. Na wojnie każdy worek się liczy. Masz ręce, to drwa zawsze się przydadzą."],
-        belzaAsk: ["Słucham.", "Mów krótko. Wojna nie czeka.", "Hm?"],
-        belzaFavor: {
-            low: ["Patrzą na ciebie krzywo. Chłopcy mówią, że kręcisz się, gdzie nie trzeba. Uważaj."],
-            mid: ["Jesteś wnuk Stacha, co nosi drwa. Tyle o tobie wiedzą."],
-            good: ["Chłopcy cię lubią. Kłos mówi, że jesteś uczciwy. Od Kłosa to dużo."],
-            best: ["Jesteś tu swój. Gdyby coś się działo w mieście - wiesz, gdzie nas szukać."]
-        },
-        glejtAsk: ["> Potrzebuję wejść na wrak. W odpływie, po łasze."],
-        glejtNo: ["Wrak to sprawa wojska. Moi chłopcy łowią z niego, co się da, a kto inny tam łazi, ten złodziej.",
-            "Zasłuż się garnizonowi, to pomyślę. Na razie: nie."],
-        glejtYes: ["(Rotmistrz pisze kilka słów i przyciska pieczęć z feniksem.) Masz. Glejt garnizonu. Wartownicy cię przepuszczą, łódź ratownicza też nie przegoni.",
-            "Tylko jedno: co znajdziesz w kajucie - papiery, mapy, księgi - przynosisz najpierw mnie. Czarne Oczy nie płynęły tu po ryby."],
-        missingAsk: ["> Co to za lista na pana stole?"],
-        missing: ["Lista zaginionych. Moja chorągiew i trzy inne. Czterdziestu ludzi z Brzozowej Woli, z Olszyny, z Zarzecza...",
-            "> Z Brzozowej Woli? Ja jestem z Brzozowej Woli.",
-            "(Rotmistrz przesuwa palcem po kolumnie.) Nazwisk tu nie ma, chłopcze. Tylko chorągwie i liczby. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”.",
-            "Zaginiony to nie poległy. Zapamiętaj to. Ja pamiętam."],
-        missingAgain: ["Lista się nie zmienia. Zaginiony to nie poległy."],
-        whyAsk: ["> Czemu Lord was tu wpuścił?"],
-        why: ["Bo Korona zapłaciła mu za kwaterę. A potem kazała mu płacić podatek wojenny. Tak to działa: on bierze od nas, Korona od niego, on od was.",
-            "Dlatego tak naciska na dług twojego dziadka. Nie ze złości. Z rachunku. Przykro mi."],
-        draftAsk: ["> Weźmiecie mnie do wojska?"],
-        draft: ["Ciebie? Za młody. A twój dziadek ma dług, za który ręczy dwór - Lord nie da sobie zabrać dłużnika. Pobór dotyczy innych.",
-            "I dobrze. Na wojnie nie ma nic, czego warto szukać w twoim wieku."],
-        belzaSkup: ["Skup prowadzę teraz sam, przez chłopaka z księgą. Ceny te same, co u Kłosa. Uczciwe."],
-        klosMeet: ["(Kwatermistrz odrywa wzrok od liczydła.) O! Nowa twarz. Pafnucy Kłos, kwatermistrz. Liczę, ważę, kupuję, wydaję.",
-            "Najpierw pokłoń się rotmistrzowi. U nas porządek: rotmistrz, potem zupa, potem Kłos."],
-        klosMeetKnown: ["(Kwatermistrz odrywa wzrok od liczydła.) O! Wnuk Stacha, rotmistrz mówił. Pafnucy Kłos, kwatermistrz. Liczę, ważę, kupuję, wydaję.",
-            "Kuchnia polowa zjada drwa jak smok. Jak masz ręce do siekiery - mam dla ciebie robotę."],
-        klosAsk: ["Co tam, chłopcze?", "Liczydło słucha.", "Kupujesz, sprzedajesz, czy tylko przechodzisz?"],
-        klosNoSkup: ["Skup tylko dla tych z księgi. Przynieś najpierw drwa dla kuchni - to cię wpiszę."],
-        klosNothing: ["Nic z mojej listy nie masz. Zboże, warzywa, mięso wędzone, ryby, skóry, strzały, drewno, węgiel - to kupuję."],
-        klosSold: ["Dobre. Król płaci, Kłos liczy. Masz.", "Wpisane. Z ciebie dobry dostawca."],
-        klosPrices: ["Po fali z promu wojsko je jak smok - płacę półtora raza. Teraz cena zwykła.", "Fala z promu przeszła, wojsko głodne - płacę półtora raza! Korzystaj."],
-        grainAsk: ["> Sprzedasz cztery worki zboża? Po cenie dla swoich."],
-        grain: ["(Kłos rozgląda się na boki.) Ciii! ...Cztery worki. Po piętnaście groszy. Sześćdziesiąt. I nikomu ani słowa, rozumiemy się?",
-            "To zboże z rekwizycji. Królewskie. Ale król ma go dużo, a ja mam brzuch. Sam rozumiesz."],
-        grainYes: ["(Kłos znika w ciemności spichlerza i wraca z czterema workami.) Bierz i idź tyłem, koło namiotów. Nie widziałem cię."],
-        grainNo: ["Nie masz? To nie ma o czym gadać. I o niczym nie gadaliśmy."],
-        grainDay: ["Zboże? Za dnia? Przy rotmistrzu? Zwariowałeś? (szeptem) Przyjdź po zmroku, po dwudziestej."],
-        bebenMeet: ["Trrrum-tum-tum! Witaj, młody! Szczepan Bęben, werbownik chorągwi królewskiej. Bęben się nazywam i bęben noszę!",
-            "Ile masz lat? ...Hm. Za młody. Szkoda! Taki bosy, a już wygląda, jakby przeszedł pół wojny. Przyjdź za rok, zapiszę cię pierwszego."],
-        bebenAsk: ["Za króla, chłopcze! Co słychać?", "Trrrum! Mów.", "Hm? Zapisać cię? Za młody, mówiłem!"],
-        bebenDraft: ["Ciebie? Nie. Rotmistrz mówi: dług twojego dziadka trzyma cię przy wyspie mocniej niż łańcuch. Dwór ręczy. Pobór jest dla innych.",
-            "Ale jak będziesz miał szesnaście... (puka w bęben) trrrum!"],
-        soldier: {
-            brama: ["Stój! Kto idzie? ...A, wnuk Stacha. Przechodź.", "Brama otwarta za dnia. Nocą - pytaj wartownika.", "Rotmistrz w kwaterze. Nie przeszkadzaj mu bez potrzeby."],
-            bramaNoc: ["Stój! ...Nocą tu nie łaź, chłopcze. Wartownik najpierw dźga, potem pyta.", "Spać idź. Garnizon śpi, tylko my nie."],
-            beczki: ["Woda dla wojska. Odejdź.", "Beczki z promu. Liczone. Odejdź, mówię."],
-            pomost: ["Łowimy, co morze wyrzuci z wraku. Skrzynie, beczki... raz but z nogą w środku. Nie pytaj.",
-                "Łódź ratownicza. Rotmistrz każe pływać do wraku od dziewiątej do trzeciej. Potem fala."],
-            wieza: ["Z wieży widać wrak. W odpływie łacha wychodzi z wody aż pod jego burtę. Rotmistrz nie pozwala chodzić - chyba że masz glejt.",
-                "Nocą na wraku coś błyska. Rotmistrz mówi, że to księżyc w szkle. Ja tam nie wiem."],
-            cwiczy: ["Sztych, zasłona, sztych! ...Ręce mi odpadają.", "Od świtu machamy. Wróg nie przyjdzie, a my machamy.", "Masz coś do jedzenia? Nie? To czemu stoisz?"],
-            kowal: ["Kowal garnizonu. Groty, ćwieki, okucia. Strzały i stal - tylko dla przyjaciół garnizonu. Pogadaj z rotmistrzem."],
-            kowalShop: ["Przyjaciel garnizonu? To co innego. Strzały po trzy grosze, stal po pięćdziesiąt pięć. Bierzesz?"],
-            noc: ["(Żołnierz śpi na stojąco.)"]
-        },
-        soldierBarks: {
-            brama: ["Brama! Kto idzie?", "Spokój na drodze."], beczki: ["Woda liczona! Odejdź!"], pomost: ["Wiosła w górę!", "Fala idzie."],
-            cwiczy: ["Raz! Dwa! Sztych!", "Zasłona! Sztych!", "Ręce mi odpadną..."], kowal: ["(Brzdęk młotka.)", "Kto następny do okucia?"],
-            wieza: ["Na wodzie czysto!", "Wrak stoi, jak stał."], noc: ["Stój, kto idzie?", "Cisza..."]
-        },
-        recruit: {
-            bartek: ["(Bartek trzyma halabardę jak grabie.) Wojsko. Ja. Żona mnie zabije. Albo i nie - może się ucieszy, że w kości nie gram."],
-            drwal: ["(Zbych ociera czoło.) Siekiera lżejsza od tej halabardy. Ale strawa jest. Pierwszy raz od miesiąca jem do syta."],
-            uchodzca: ["(Darin stoi w szeregu prosto jak struna.) W wojsku już byłem. Na kontynencie. Ręce pamiętają. Głowa wolałaby zapomnieć."]
-        },
-        klosKantor: ["(Kłos podskakuje.) Ja? Tutaj? Po... sól. Po sól przyszedłem. Wojsko też musi solić.", "Idź spać, chłopcze. Nic nie widziałeś. I ja też nic."],
-        klosKantorD27: ["Ciii! Ty tutaj? ...Zboże? Nie tu, nie przy kantorze. W garnizonie, po zmroku, przy moim namiocie."],
-        klosKantorBarks: ["(Kłos stuka trzy razy w tylne drzwi kantoru.)", "Ciii...", "Nikogo tu nie ma. Ja też nie."],
-        search: ["Szukamy ludzi z listy poborowej. Widziałeś Smolarza? Albo tego Darina? ...Nie? To idź.", "Rozkaz rotmistrza. Przeszukać obóz i domy. Nic osobistego."],
-        searchBarks: ["Gdzie oni się pochowali?", "Szukać po stodołach!", "Ktoś ich ostrzegł, mówię wam."],
-        patrol: ["Stój! Rewizja. Rozkaz rotmistrza: kto się kręci przy garnizonie, pokazuje torbę."],
-        patrolPendant: ["A to co? Na szyi? (Żołnierz ciągnie za rzemień.) Kruk na kamieniu... Rotmistrz kazał zapisywać każdego z krukiem. Zapisane. Idź."],
-        patrolClean: ["Nic. Dobra, idź. I nie kręć się tu bez potrzeby."],
-        barrels: "Woda dla wojska. Odejdź.",
-        looks: {
-            kocioł: "Kocioł zupy z królewskiego zboża. Pachnie tak, że w mieście ktoś by za to zabił.",
-            wieza: "Wieża strażnicza. Na górze wartownik patrzy na zatokę i wrak. Drabina tylko dla wojska.",
-            dyby: "Dyby. Na desce wycięte nożem: „ZŁODZIEJ”, „DEZERTER”, a ktoś dopisał: „NIEWINNY”.",
-            stol: "Stół werbownika: lista poborowa, kałamarz i pieczęć z feniksem. „ZA KRÓLA, CHŁOPCY!”",
-            spichlerz: "Spichlerz z rekwizycji. Na drzwiach kłódka wielka jak pięść. Klucz ma kwatermistrz.",
-            spichlerzNoc: "Kłódka. A obok chodzi wartownik. Lepiej nie.",
-            drzwiZamkniete: "Kwatera rotmistrza. Zamknięte - rotmistrz przyjmuje od 7 do 20.",
-            lachaPodWoda: "Łacha pod wodą.",
-            lachaDalej: "Dalej łacha tonie w głębokiej wodzie. Do wraku tędy dziś nie dojdziesz.",
-            lachaWraca: "Woda przybiera! Wracaj na brzeg."
-        },
-        caught: ["Stój! Złodziej! Do mnie!"],
-        stocksMorning: ["(Noc w dybach. Rano przychodzi rotmistrz.)", "@rotmistrz: Złodziej zboża. Wnuk Stacha. (Rotmistrz kręci głową.) Wypuścić go. Worki zostają w spichlerzu.",
-            "@rotmistrz: Drugi raz nie będę taki miły."],
-        stocksNoRot: ["(Noc w dybach. Rano żołnierz otwiera kłódkę.) Rotmistrz kazał cię wypuścić. Worki zostają. Zmykaj."],
-        granaryTake: ["(Kłódka puszcza z cichym zgrzytem. W ciemności pachnie zbożem. Bierzesz cztery worki - ciężkie, ale dasz radę.)"],
-        d26Deal: ["> Panie rotmistrzu, mam coś lepszego niż trzech rekrutów. Dziennik okrętu z wraku.",
-            "(Rotmistrz czyta długo, przewraca kartki.) „Biała Źrenica”... Straż Pewności. Płynęli po coś na tę wyspę i stracili okręt w sztormie.",
-            "Więc od morza nic nam teraz nie grozi. Czarne Oczy straciły jedyny okręt w tych wodach.",
-            "Bęben! Lista poborowa - tylko ochotnicy. Kto nie chce, ten nie idzie. (Do ciebie.) Dobra robota, chłopcze."],
-        d26Done: ["Trzech! Mam trzech! Rotmistrz będzie zadowolony. Masz, uczciwie, jak obiecałem."],
-        d26DoneWarn: ["Nikogo! Wszyscy jakby się pod ziemię zapadli. Ktoś ich ostrzegł... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?"]
-    };
+    const TX = Watki.teksty("garnizon");
 
     // ------------------------------------------------------------------
     // The residents' talks (TownLife's hook, first)
@@ -384,91 +278,82 @@
         const items = sellable();
         if (!items.length) return linesTo(b, spk, TX.klosNothing);
         linesTo(b, spk, [TX.klosPrices[waveWeek() ? 1 : 0]]);
-        const labels = items.map(x => item(x.id).name + " ×" + count(x.id) + " - " + priceOf(x.id) + " G/szt.").slice(0, 7);
+        const labels = items.map(x => Watki.wstaw(TK.kod.skupBranch[0], { name: item(x.id).name, "2": count(x.id), "3": priceOf(x.id) })).slice(0, 7);
         const shown = items.slice(0, 7);
         const branches = shown.map(x => act([], ["sell", [x.id]]).concat(linesTo([], spk, [pick(TX.klosSold)])));
-        labels.push("Wszystko z tej listy (" + shown.reduce((s, x) => s + count(x.id) * priceOf(x.id), 0) + " G).");
+        labels.push(Watki.wstaw(TK.kod.skupBranch[1], { "1": shown.reduce((s, x) => s + count(x.id) * priceOf(x.id), 0) }));
         branches.push(act([], ["sell", shown.map(x => x.id)]).concat(linesTo([], spk, [pick(TX.klosSold)])));
         labels.push("Nic.");
         branches.push([]);
         return choiceTo(b, labels, branches, labels.length - 1);
     }
     function rotmistrzTalk(ev) {
-        const spk = { id: ev.eventId(), name: "Rotmistrz Bełza" }, f = flags(), out = [], s = S();
+        const spk = { id: ev.eventId(), name: TK.kod.rotmistrzTalk[0] }, f = flags(), out = [], s = S();
         if (!s.met.rotmistrz) return metTalk("rotmistrz", out, spk, TX.belzaMeet);
         if (questWants("rotmistrz")) { const q = questTalk("rotmistrz"); if (q && q.length) return q; }
         linesTo(out, spk, [pick(TX.belzaAsk)]);
         const labels = [], branches = [];
-        labels.push("Jak garnizon na mnie patrzy?");
+        labels.push(TK.kod.rotmistrzTalk[1]);
         const fv = favor();
         branches.push(linesTo([], spk, fv >= 60 ? TX.belzaFavor.best : fv >= 40 ? TX.belzaFavor.good : fv >= 15 ? TX.belzaFavor.mid : TX.belzaFavor.low).concat(act([], ["favorInfo"])));
         if (!f.glejtWrak) {
-            labels.push("Wpuścicie mnie na wrak?");
+            labels.push(TK.kod.rotmistrzTalk[2]);
             branches.push(linesTo([], spk, TX.glejtAsk).concat(fv >= F.glejt ? act([], ["glejt"]).concat(linesTo([], spk, TX.glejtYes)) : linesTo([], spk, TX.glejtNo)));
         }
-        labels.push("Co to za lista na pana stole?");
+        labels.push(TK.kod.rotmistrzTalk[3]);
         branches.push(s.missing ? linesTo([], spk, TX.missingAgain) : linesTo([], spk, TX.missingAsk).concat(linesTo([], spk, TX.missing), act([], ["missing"])));
-        labels.push("Czemu Lord was tu wpuścił?");
+        labels.push(TK.kod.rotmistrzTalk[4]);
         branches.push(linesTo([], spk, TX.whyAsk).concat(linesTo([], spk, TX.why)));
-        labels.push("Weźmiecie mnie do wojska?");
+        labels.push(TK.kod.rotmistrzTalk[5]);
         branches.push(linesTo([], spk, TX.draftAsk).concat(linesTo([], spk, TX.draft)));
         if (atStep("D26", 0) && f.dziennikOkretu && !s.d26.deal) {
-            labels.unshift("Mam coś lepszego niż rekrutów: Dziennik okrętu.");
+            labels.unshift(TK.kod.rotmistrzTalk[6]);
             branches.unshift(tqAct([], ["D26", "fx", "d26Ludzie", { key: "rotmistrz", how: "deal" }]).concat(linesTo([], spk, TX.d26Deal)));
         }
         if (atStep("D27", 2)) {
             const L = (TQ().Q.D27 || {}).lines || {};
-            labels.unshift("Kwatermistrz sprzedaje królewskie zboże.");
+            labels.unshift(TK.kod.rotmistrzTalk[7]);
             branches.unshift(tqAct([], ["D27", "fx", "d27Klos", "accuse"]).concat(linesTo([], spk, f.d27Kupione ? L.accuse : L.accuseStolen)));
         }
-        if (klosGone()) { labels.push("Sprzedam coś wojsku."); branches.push(linesTo([], spk, TX.belzaSkup).concat(skupBranch(spk))); }
+        if (klosGone()) { labels.push(TK.kod.rotmistrzTalk[8]); branches.push(linesTo([], spk, TX.belzaSkup).concat(skupBranch(spk))); }
         labels.push("Bywaj.");
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
-    // (2026-10-23, Bron.js) other trades of the same people, as lines of their own menus - their rules, hours and words kept:
-    // addMenu(fn(key, ev) -> [{ label, cmds, say }]) - say: a line said before a soldier's choice
-    const extraMenus = [];
-    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
-    function extraRows(key, ev) {
-        const out = [];
-        for (const fn of extraMenus) { try { for (const r of fn(key, ev) || []) if (r && r.label) out.push(r); } catch (e) { console.error("[Garnizon] menu " + key, e); } }
-        return out;
-    }
+    // (2026-10-23, docs/ROZMOWY.md) Kłos's menu and a soldier's word take the other systems' rows through the core's talk service
+    // (Tawerna.talk.option - Bron.js: the quartermaster's armoury; who "kwatermistrz", "zolnierz:<role>"): Kłos's own rows first, theirs,
+    // "Co słychać?", the farewell last - his lines are never taken away (the bug of 2026-10-23: a shop took his whole talk)
     function kwatTalk(ev) {
-        const spk = { id: ev.eventId(), name: "Kwatermistrz Kłos" }, f = flags(), out = [], s = S();
+        const spk = { id: ev.eventId(), name: TK.kod.kwatTalk[0] }, f = flags(), out = [], s = S();
         if (!s.met.kwatermistrz) return metTalk("kwatermistrz", out, spk, s.met.rotmistrz ? TX.klosMeetKnown : TX.klosMeet);
         if (questWants("kwatermistrz")) { const q = questTalk("kwatermistrz"); if (q && q.length) return q; }
         linesTo(out, spk, [pick(TX.klosAsk)]);
         const labels = [], branches = [];
-        labels.push("Sprzedam coś wojsku.");
+        labels.push(TK.kod.kwatTalk[1]);
         branches.push(f.k52Skup ? skupBranch(spk) : linesTo([], spk, TX.klosNoSkup));
         if (atStep("D27", 0) && vcount("worek_zboza") < 4) {
-            labels.push("Sprzedasz cztery worki zboża? Po cenie dla swoich.");
+            labels.push(TK.kod.kwatTalk[2]);
             const night = hour() >= 20 || hour() < 2;
             branches.push(linesTo([], spk, TX.grainAsk).concat(night
-                ? linesTo([], spk, TX.grain).concat(choiceTo([], ["Biorę (" + 4 * D.GRAIN_PRICE + " G).", "Nie mam tyle."],
+                ? linesTo([], spk, TX.grain).concat(choiceTo([], [Watki.wstaw(TK.kod.kwatTalk[3], { "1": 4 * D.GRAIN_PRICE }), TK.kod.kwatTalk[4]],
                     [act([], ["grain"]).concat(linesTo([], spk, TX.grainYes)), linesTo([], spk, TX.grainNo)], 1))
                 : linesTo([], spk, TX.grainDay)));
         }
         if (atStep("D27", 2)) {
             const L = (TQ().Q.D27 || {}).lines || {};
-            labels.unshift("Nikomu nie powiem o nocnym zbożu.");
+            labels.unshift(TK.kod.kwatTalk[5]);
             branches.unshift(linesTo([], spk, L.silent.slice(0, 1)).concat(tqAct([], ["D27", "fx", "d27Klos", "silent"]), linesTo([], spk, L.silent.slice(1))));
         }
-        for (const r of extraRows("kwatermistrz", ev)) { labels.push(r.label); branches.push(r.cmds || []); }
-        labels.push("Co słychać?");
-        branches.push(linesTo([], spk, [usual("kwatermistrz") || "Liczę. Zawsze liczę."]));
-        labels.push("Bywaj.");
-        branches.push([]);
-        return choiceTo(out, labels, branches, labels.length - 1);
+        const rows = labels.map((label, i) => ({ label, cmds: branches[i] }));
+        rows.push({ label: TK.kod.kwatTalk[6], cmds: linesTo([], spk, [usual("kwatermistrz") || TK.kod.kwatTalk[7]]), order: T.talk.ORDER.chat });
+        return T.talk.menu(out, T.talk.rows("kwatermistrz", { ev }, rows), "Bywaj.");
     }
     function werbTalk(ev) {
-        const spk = { id: ev.eventId(), name: "Werbownik Bęben" }, out = [], s = S();
+        const spk = { id: ev.eventId(), name: TK.kod.werbTalk[0] }, out = [], s = S();
         if (!s.met.werbownik) return metTalk("werbownik", out, spk, TX.bebenMeet);
         if (questWants("werbownik")) { const q = questTalk("werbownik"); if (q && q.length) return q; }
         linesTo(out, spk, [pick(TX.bebenAsk)]);
-        return choiceTo(out, ["Weźmiecie mnie do wojska?", "Co słychać?", "Bywaj."],
+        return choiceTo(out, [TK.kod.werbTalk[1], TK.kod.werbTalk[2], "Bywaj."],
             [linesTo([], spk, TX.bebenDraft), linesTo([], spk, [usual("werbownik") || "Trrrum-tum-tum."]), []], 2);
     }
     function hook(key, ev) {
@@ -478,12 +363,13 @@
         if (key === "werbownik") return werbTalk(ev);
         return null;
     }
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: the garrison's people - an "owner" takeover after Lowy's (the arrow shown to
+    // the captain) and Wrak's, as the old hooks
     function hookTalk() {
-        const L = TL();
-        if (L && L.addTalkHook && !hookTalk.done) {
-            hookTalk.done = true;
-            L.addTalkHook((key, ev) => { try { return hook(key, ev); } catch (e) { console.error("[Garnizon]", e); return null; } }, true);
-        }
+        if (hookTalk.done) return;
+        hookTalk.done = true;
+        T.talk.takeover({ owner: PLUGIN, who: ["rotmistrz", "kwatermistrz", "werbownik"], priority: T.talk.PRIORITY.owner,
+            run: ctx => { try { return hook(ctx.who, ctx.ev); } catch (e) { console.error("[Garnizon]", e); return null; } } });
     }
     hookTalk();
 
@@ -492,7 +378,8 @@
     // ------------------------------------------------------------------
     const SHEETS = { A: "$Npc_Zolnierz", B: "$Npc_Zolnierz_B" };
     const RECRUIT_SHEETS = { bartek: "$Npc_Bartek", drwal: "$Npc_Drwal", uchodzca: "$Npc_Uchodzca" };
-    const RECRUIT_NAMES = { bartek: "Bartek Kmieć", drwal: "Zbych Smolarz", uchodzca: "Darin z Kontynentu" };
+    const RECRUIT_NAMES = { };
+    Watki.scal(RECRUIT_NAMES, "garnizon", "rekruci");   // (its words: js/teksty/garnizon.txt, rekruci)
     const BLANK = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1,
         switch1Valid: false, switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
     function eventData(id, name, sheet, x, y, d, script, note, opts) {
@@ -539,20 +426,20 @@
             }
             for (const [key, r] of Object.entries(D.RECRUITS)) {
                 const at = sp[r.spot] || [30, 22, 8];
-                out.push(eventData(r.id, RECRUIT_NAMES[key] + " (rekrut)", RECRUIT_SHEETS[key], at[0], at[1] + 1, 8,
+                out.push(eventData(r.id, Watki.wstaw(TK.kod.buildMap[0], { "1": RECRUIT_NAMES[key] }), RECRUIT_SHEETS[key], at[0], at[1] + 1, 8,
                     "Garnizon.talk(this);", "<Garnizon:rekrut=" + key + ">"));
             }
             out.push(eventData(D.PATROL.id, "Patrol", SHEETS.B, D.PATROL.x, D.PATROL.y, 8, "Garnizon.talk(this);", "<Garnizon:patrol><Bust:Zolnierz_Bust>"));
         } else if (mapId === TOWN) {
             const L = D.TOWN_EVENTS.list;
-            out.push(eventData(L.id, "Lista poborowa", "!Town_Props", L.x, L.y, 2, "Garnizon.look(this, \"lista\");", "<Garnizon:lista><Occupy:right=1>",
+            out.push(eventData(L.id, TK.kod.buildMap[1], "!Town_Props", L.x, L.y, 2, "Garnizon.look(this, \"lista\");", "<Garnizon:lista><Occupy:right=1>",
                 { index: 3, pattern: 2, dfix: true, walk: false }));
-            D.TOWN_EVENTS.search.forEach((p, k) => out.push(eventData(p.id, "Żołnierz (szuka ludzi z listy)", k ? SHEETS.A : SHEETS.B, p.x, p.y, 2,
+            D.TOWN_EVENTS.search.forEach((p, k) => out.push(eventData(p.id, TK.kod.buildMap[2], k ? SHEETS.A : SHEETS.B, p.x, p.y, 2,
                 "Garnizon.talk(this);", "<Garnizon:szuka><Bust:Zolnierz_Bust>")));
             const K = D.TOWN_EVENTS.klos;
-            out.push(eventData(K.id, "Kwatermistrz Kłos", "$Npc_Kwatermistrz", K.x, K.y, K.d, "Garnizon.talk(this);", "<Garnizon:klos_kantor>"));
+            out.push(eventData(K.id, TK.kod.buildMap[3], "$Npc_Kwatermistrz", K.x, K.y, K.d, "Garnizon.talk(this);", "<Garnizon:klos_kantor>"));
         } else if (mapId === PODG) {
-            D.PODGRODZIE_EVENTS.forEach((p, k) => out.push(eventData(p.id, "Żołnierz (szuka ludzi z listy)", k ? SHEETS.B : SHEETS.A, p.x, p.y, 2,
+            D.PODGRODZIE_EVENTS.forEach((p, k) => out.push(eventData(p.id, TK.kod.buildMap[2], k ? SHEETS.B : SHEETS.A, p.x, p.y, 2,
                 "Garnizon.talk(this);", "<Garnizon:szuka><Bust:Zolnierz_Bust>")));
         }
         return out;
@@ -567,11 +454,7 @@
         if (on && st.hidden !== false) { e.setTransparent(false); e.setThrough(st.through); e._priorityType = st.prio; st.hidden = false; }
         else if (!on && st.hidden !== true) { e.setTransparent(true); e.setThrough(true); e._priorityType = 0; st.hidden = true; }
     }
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (this._garn && this._garn.hidden) return;
-        _Game_Event_start.call(this);
-    };
+    T.onEventStart(ev => !!(ev._garn && ev._garn.hidden), { owner: PLUGIN, priority: "hidden" });   // (the core's one start hook, 2026-10-23)
     const soldierOf = id => D.SOLDIERS.find(s => s.id === id) || null;
     let boatCache = null;
     function boats() {
@@ -743,9 +626,9 @@
             } else if (isNight() && soldierOf(ev.eventId()) && soldierOf(ev.eventId()).sentry) {
                 linesTo(out, spk, [pick(TX.soldier.bramaNoc)]);
             } else linesTo(out, spk, [pick(TX.soldier[role] || TX.soldier.cwiczy)]);
-            const extra = extraRows("zolnierz:" + role, ev), said = extra.find(r => r.say);
+            const extra = T.talk.rows("zolnierz:" + role, { ev }), said = extra.find(r => r.say);
             if (said) linesTo(out, spk, [said.say]);
-            if (extra.length) choiceTo(out, extra.map(r => r.label).concat(["Bywaj."]), extra.map(r => r.cmds || []).concat([[]]), extra.length);
+            if (extra.length) T.talk.menu(out, extra, "Bywaj.");
             return out;
         }
         m = /<Garnizon:rekrut=(\w+)>/.exec(note);
@@ -777,7 +660,7 @@
             return;
         }
         if (what === "lista") {
-            if (marketNow()) popupOnce("lista", "Lista poborowa z pieczęcią z feniksem. Kilka nazwisk już przekreślonych.");
+            if (marketNow()) popupOnce("lista", TK.kod.look[0]);
             return;
         }
         const t = TX.looks[what];
@@ -794,7 +677,7 @@
         vgive("worek_zboza", 4 - vcount("worek_zboza"));
         s.d27.stolen = day();
         s.d27.carry = 1;
-        T.popup("Worek zboża z rekwizycji ×4", { icon: 74, kind: "good" });
+        T.popup(TK.kod.granary[0], { icon: 74, kind: "good" });
         const out = linesTo([], HERO, TX.granaryTake);
         if (interp) interp.setupChild(out.concat([C(0, [])]), interp.eventId());
     }
@@ -829,19 +712,19 @@
                     s.met[a] = day();
                     if (a === "rotmistrz") {
                         setFlag("garnizonPoznany");
-                        note("Garnizon nad zatoką", "Na południe od przystani stoi garnizon wojsk królewskich z lądu - chorągiew z feniksem. Rotmistrz Florian Bełza: surowy, sprawiedliwy, zmęczony wojną. Lord wpuścił ich za pieniądze i płaci Koronie podatek wojenny - dlatego tak naciska na dług dziadka. Kwatermistrz Kłos skupuje dla wojska zboże i drwa.");
+                        note(TK.kod.actCall[0], TK.kod.actCall[1]);
                     }
                 }
             } else if (what === "favorInfo") {
                 const fv = favor(), next = [10, 40, 60, 80].find(x => x > fv);
-                T.popup("Przychylność garnizonu: " + fv + "/100 (" + favorWord(fv) + ")" + (next ? " - następny próg: " + next : ""), { kind: "info" });
+                T.popup(Watki.wstaw(TK.kod.actCall[3], { fv: fv, "2": favorWord(fv), "3": next ? Watki.wstaw(TK.kod.actCall[2], { next: next }) : "" }), { kind: "info" });
             } else if (what === "sell") {
                 sell([].concat(a || []));
             } else if (what === "smith") {
                 const x = D.SMITH.find(o => o.id === a);
                 if (!x) return;
                 const cost = x.price * x.n;
-                if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, "Potrzebujesz " + cost + " G"); stop(); return; }
+                if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.actCall[4], { cost: cost })); stop(); return; }
                 $gameParty.loseGold(cost);
                 $gameParty.gainItem(item(x.id), x.n);
                 s.smith += cost;
@@ -850,29 +733,29 @@
                     s.glejt = day();
                     setFlag("glejtWrak");
                     vgive("glejt_wrak", 1);
-                    T.popup("Glejt garnizonu na wrak", { top: true, color: "#ffd866", sub: "Wartownicy i łódź ratownicza przepuszczą cię na wrak." });
-                    note("Glejt na wrak", "Rotmistrz Bełza dał mi glejt garnizonu na wrak na mieliźnie. Do wraku dojdę w odpływie po łasze spod garnizonu. Papiery z kajuty mam przynieść najpierw jemu.");
+                    T.popup(TK.kod.actCall[5], { top: true, color: "#ffd866", sub: TK.kod.actCall[6] });
+                    note(TK.kod.actCall[7], TK.kod.actCall[8]);
                 }
             } else if (what === "missing") {
                 if (!s.missing) {
                     s.missing = day();
-                    note("Lista zaginionych", "Na stole rotmistrza leży lista zaginionych czterech chorągwi. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”. Nazwisk nie ma. „Zaginiony to nie poległy” - powiedział.");
+                    note(TK.kod.actCall[9], TK.kod.actCall[10]);
                 }
             } else if (what === "grain") {
                 if (!atStep("D27", 0)) return;
                 const cost = 4 * D.GRAIN_PRICE;
-                if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, "Potrzebujesz " + cost + " G"); stop(); return; }
+                if ($gameParty.gold() < cost) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.actCall[4], { cost: cost })); stop(); return; }
                 $gameParty.loseGold(cost);
                 vgive("worek_zboza", Math.max(0, 4 - vcount("worek_zboza")));
                 s.d27.bought = day();
                 setFlag("d27Kupione");
-                T.popup("Worek zboża z rekwizycji ×4", { icon: 74, kind: "good" });
+                T.popup(TK.kod.actCall[11], { icon: 74, kind: "good" });
             } else if (what === "patrol") {
                 s.patrolDay = day();
                 const out = [], spk = { id: interp ? interp.eventId() : -1, name: "Patrol" };
-                if (!f.rochMet) { addFavor(F.stonesSeen, "kruk na szyi"); linesTo(out, spk, TX.patrolPendant); }
+                if (!f.rochMet) { addFavor(F.stonesSeen, TK.kod.actCall[12]); linesTo(out, spk, TX.patrolPendant); }
                 else {
-                    if ($gameParty.gold() >= 5) { $gameParty.loseGold(5); T.popup("-5 G (opłata za przepustkę)", { icon: COIN_ICON, kind: "bad" }); }
+                    if ($gameParty.gold() >= 5) { $gameParty.loseGold(5); T.popup(TK.kod.actCall[13], { icon: COIN_ICON, kind: "bad" }); }
                     linesTo(out, spk, TX.patrolClean);
                 }
                 if (interp && out.length) interp.setupChild(out.concat([C(0, [])]), interp.eventId());
@@ -883,13 +766,13 @@
                 $gamePlayer.locate(46, 19);
                 $gamePlayer.setDirection(2);
                 s.stocks = day();
-                addFavor(F.caught, "złodziej zboża");
+                addFavor(F.caught, TK.kod.actCall[14]);
                 if (window.$gameScreen) $gameScreen.clearWeather && $gameScreen.clearWeather();
                 lastHour = null;
                 placeAll();
                 const L = TL();
                 if (L && L.placeAll) L.placeAll();
-                note("Noc w dybach", "Złapali mnie przy spichlerzu garnizonu z workami zboża. Noc w dybach, rano rotmistrz kazał mnie wypuścić. Worki zostały w spichlerzu.");
+                note(TK.kod.actCall[15], TK.kod.actCall[16]);
             }
         } catch (e) { console.error("[Garnizon] act " + JSON.stringify(args), e); }
     }
@@ -911,7 +794,7 @@
         q.FX.d26Ludzie = {
             vars: () => {
                 const s = S();
-                const lista = d26List().map(k => RECRUIT_NAMES[k] + (s.d26.who[k] === "help" ? " (zgłosił się)" : s.d26.who[k] === "warn" ? " (ukryty)" : "")).join(", ");
+                const lista = d26List().map(k => RECRUIT_NAMES[k] + (s.d26.who[k] === "help" ? TK.kod.vars[0] : s.d26.who[k] === "warn" ? TK.kod.vars[1] : "")).join(", ");
                 return { lista, n: d26Resolved() };
             },
             check: () => has() && (S().d26.deal > 0 || d26Resolved() >= 3),
@@ -921,7 +804,7 @@
                 if (!d26List().includes(key) || s.d26.who[key]) return null;
                 const out = [];
                 linesTo(out, HERO, ["> " + L.ask]);
-                choiceTo(out, [L.help, L.warn, "(Nic nie mów.)"], [
+                choiceTo(out, [L.help, L.warn, TK.kod.talk[0]], [
                     linesTo([], HERO, ["> " + L.help]).concat(script([], ["D26", "fx", "d26Ludzie", { key, how: "help" }]), linesTo([], spk, [helpReply(key)])),
                     linesTo([], HERO, ["> " + L.warn]).concat(script([], ["D26", "fx", "d26Ludzie", { key, how: "warn" }]), linesTo([], spk, [warnReply(key)])),
                     []], 2);
@@ -934,7 +817,7 @@
                     if (s.d26.deal) return;
                     s.d26.deal = day();
                     setFlag("d26Dziennik");
-                    addFavor(F.d26Deal, "dziennik okrętu");
+                    addFavor(F.d26Deal, TK.kod.act[0]);
                     q.completeStep("D26", { reward: { opinion: 5 } });
                     return;
                 }
@@ -942,14 +825,14 @@
                 s.d26.who[key] = b.how;
                 if (b.how === "help") {
                     $gameParty.gainGold(10);
-                    T.popup("+10 G od werbownika", { icon: COIN_ICON, kind: "gold" });
-                    addFavor(F.d26Help, "pobór");
+                    T.popup(TK.kod.act[1], { icon: COIN_ICON, kind: "gold" });
+                    addFavor(F.d26Help, TK.kod.act[2]);
                     opinion(-3, Q.title);
                     T.call("TownLife", "setGone", key, day() + D.RECRUIT_STAY);
                     setFlag("d26Wzieci");
                 } else {
                     s.d26.warned = day();
-                    addFavor(Math.round(F.d26Warn / 3), "pobór");
+                    addFavor(Math.round(F.d26Warn / 3), TK.kod.act[2]);
                     opinion(3, Q.title);
                     T.call("TownLife", "setGone", key, day() + 2);
                     setFlag("d26Ostrzezeni");
@@ -967,40 +850,43 @@
                 if (!atStep("D27", 2)) return;
                 if (how === "accuse") {
                     setFlag("klosWydany");
-                    addFavor(F.d27Accuse, "kwatermistrz wydany");
+                    addFavor(F.d27Accuse, TK.kod.act[3]);
                     T.call("TownLife", "setGone", "kwatermistrz", true);
-                    note("Kłos wydany", "Powiedziałem rotmistrzowi, że kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kłos popłynie najbliższym promem - w łańcuchu. Baltazar z kantoru stracił dostawcę.");
+                    note(TK.kod.act[4], TK.kod.act[5]);
                 } else {
                     setFlag("d27Milczy");
-                    note("Kłos moim dłużnikiem", "Obiecałem Kłosowi, że nikomu nie powiem o nocnym zbożu. W skupie płaci mi teraz lepiej - „jak dla swojego”.");
+                    note(TK.kod.act[6], TK.kod.act[7]);
                 }
                 q.autoChecks();
             }
         };
     }
     function helpReply(key) {
-        return { bartek: "Wojsko? ...Może i lepiej. W wojsku przynajmniej nie ma kości. Pójdę.", drwal: "Siekierę zostawię Marcie. ...Pójdę. Tam przynajmniej karmią.",
-            uchodzca: "Znowu wojsko. Dobrze. Lepiej z własnej woli niż w łańcuchu. Pójdę." }[key] || "Pójdę.";
+        return { bartek: TK.kod.helpReply[0], drwal: TK.kod.helpReply[1],
+            uchodzca: TK.kod.helpReply[2] }[key] || TK.kod.helpReply[3];
     }
     function warnReply(key) {
-        return { bartek: "Werbownik? Dzięki, chłopcze. Schowam się u szwagra na Młynówce.", drwal: "Dzięki. Pójdę w las na dzień czy dwa. Las mnie zna.",
-            uchodzca: "Znowu ktoś mnie ostrzega. Na kontynencie też ostrzegali. Dziękuję. Zniknę." }[key] || "Dzięki.";
+        return { bartek: TK.kod.warnReply[0], drwal: TK.kod.warnReply[1],
+            uchodzca: TK.kod.warnReply[2] }[key] || TK.kod.warnReply[3];
     }
     hookQuests();
 
     // ------------------------------------------------------------------
     // Act III: two royal soldiers defend the tavern after the alarm, once the garrison counts the hero as its own (favour 80)
     // ------------------------------------------------------------------
+    // (the two soldiers' words: js/teksty/garnizon.txt, obrona - the second one starts with his own line; the objects stay these
+    // very objects, Act III reads them in the fight)
+    const OBRONA = { imie: {}, a: {}, b: {} };
+    Watki.scal(OBRONA, "garnizon", "obrona");   // (its words: js/teksty/garnizon.txt, obrona)
     (function defenders() {
         const A3 = window.Act3Data;
         if (!A3 || !Array.isArray(A3.DEFENDERS) || A3.DEFENDERS.some(d => d.key === "garnizon")) return;
         const when = c => !!(c && c.bell) && favor() >= F.defenders;
-        const lines = { start: "Garnizon królewski! Za tawernę!", hit: "Za króla!", down: "Ranny... trzymajcie... linię...", win: "Rotmistrz kazał przekazać: garnizon pamięta przyjaciół." };
         A3.DEFENDERS.push(
-            { key: "garnizon", name: "Żołnierz królewski", sheet: "Npc_Zolnierz_Walk8", maps: [8], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30,
-              cd: [80, 110], speed: 3.9, armor: 0.2, swing: "#d8d8e0", when, lines },
-            { key: "garnizon_b", name: "Żołnierz królewski", sheet: "Npc_Zolnierz_B_Walk8", maps: [8], from: "gate", delay: 560, hp: 120, dmg: 13, poise: 30,
-              cd: [80, 110], speed: 3.9, armor: 0.2, swing: "#d8d8e0", when, lines: Object.assign({}, lines, { start: "Za króla! I za Stacha!" }) });
+            { key: "garnizon", get name() { return OBRONA.imie.name; }, sheet: "Npc_Zolnierz_Walk8", maps: [8], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30,
+              cd: [80, 110], speed: 3.9, armor: 0.2, swing: "#d8d8e0", when, lines: OBRONA.a },
+            { key: "garnizon_b", get name() { return OBRONA.imie.name; }, sheet: "Npc_Zolnierz_B_Walk8", maps: [8], from: "gate", delay: 560, hp: 120, dmg: 13, poise: 30,
+              cd: [80, 110], speed: 3.9, armor: 0.2, swing: "#d8d8e0", when, lines: OBRONA.b });
     })();
 
     // (the busts of our people - Rotmistrz, Kwatermistrz, Werbownik, Zolnierz(_B) - are in SpeechBubbles' own BUSTS table since the integration)
@@ -1032,7 +918,7 @@
         const s = S(), f = flags();
         // K52 done: +20 once; the castaway given to the garrison (Wrak, E): +10 once
         if (f.k52Skup && !s.k52) { s.k52 = day(); addFavor(F.k52, "K52"); }
-        if (f.ansgarGiven && !s.ansgar) { s.ansgar = day(); addFavor(F.ansgar, "rozbitek wydany"); }
+        if (f.ansgarGiven && !s.ansgar) { s.ansgar = day(); addFavor(F.ansgar, TK.kod.sync[0]); }
         const id = $gameMap.mapId();
         if (id === MAP) {
             for (const [key, r] of Object.entries(D.RECRUITS)) {
@@ -1123,7 +1009,7 @@
     // ------------------------------------------------------------------
     const api = {
         MAP, QUARTERS, DATA: D, TX, state: () => S(), favor, addFavor, favorWord, priceOf, sell, waveWeek, hungerWeek, recruitDay, kantorNight,
-        marketNow, klosGone, addMenu, act: actCall, talk, look, granary, bar, door, barOpen, barCell, lowTide, sees, seenBy, sync, placeAll,
+        marketNow, klosGone, act: actCall, talk, look, granary, bar, door, barOpen, barCell, lowTide, sees, seenBy, sync, placeAll,
         built: () => built, d26List, d26Resolved, entryAt, spot
     };
     window.Garnizon = T.register(PLUGIN, api);

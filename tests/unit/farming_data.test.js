@@ -38,8 +38,11 @@ unit.test(t => {
     // ---- the food table
     const rows = Object.keys(FT.ROWS).map(Number);
     t.check("every food row (" + rows.length + ") is a real item", rows.every(real), rows.filter(id => !real(id)));
-    const diffs = FT.check();
-    t.check("the database's <Food:> notes agree with the table (FoodTable.check)", diffs.length === 0, diffs.slice(0, 6));
+    // (2026-10-23: the extension package's foods - Zasoby.js: the raw and the roasted crab 186 / 187, the valerian brew 196 - are rows
+    // it adds to the table as it loads, below Farming; the game's check runs when the items load, after every plugin)
+    const w2 = unit.load(FAMILY.concat(["Okolice_Data", "Zasoby_Data", "Okolice", "Zasoby"]), { globals: { $dataItems, DataManager } });
+    const diffs = w2.FoodTable.check();
+    t.check("the database's <Food:> notes agree with the table (FoodTable.check; with the rows Zasoby.js adds)", diffs.length === 0, diffs.slice(0, 6));
     const raw = rows.filter(id => FT.ROWS[id].raw);
     t.check("raw food (" + raw.length + ": raw meat, fish, the old carcass) is not eaten as it is", raw.length >= 5 && raw.every(id => !FT.edible(id) && FT.eatInfo(id) === null), raw);
     const eat = rows.filter(id => FT.edible(id));

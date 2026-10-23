@@ -1,0 +1,795 @@
+# Długie zadania miasteczka D (wtyczka TownQuests_Data.js): tytuły, opisy, rozmowy, kroki. Klucze: zadania.<id zadania>.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zadania_d
+
+# ======================================================================== QUESTS (zadania)
+# D4, „Złodziej o świcie”
+zadania.D4.title = Złodziej o świcie
+zadania.D4.where = stragan na rynku + obóz pod murem
+zadania.D4.when = od dnia 11, o świcie
+zadania.D4.desc = Co rano z kosza Hanki znika jeden bochen. Zaczaj się przed szóstą przy straganie - po cichu - i zobacz, kto to.
+[zadania.D4.offer.say]
+Co rano znika mi jeden bochen. Z kosza, przed szóstą, kiedy jeszcze rozkładam stragan.
+Zaczaisz się jutro o wpół do szóstej przy straganie? Tylko cicho - złodziej nie może cię zobaczyć.
+
+zadania.D4.offer.yes = Zaczaję się.
+zadania.D4.offer.no = To tylko jeden bochen.
+[zadania.D4.offer.accept]
+Wpół do szóstej, przy moim straganie. Ja udam, że nic nie wiem.
+
+[zadania.D4.offer.decline]
+Jeden dziś, jeden jutro... Ech.
+
+zadania.D4.steps.0.text = Zaczaj się przy straganie Hanki między 5:20 a 5:50, skradając się (C). Złodziej nie może cię zobaczyć.
+zadania.D4.steps.1.text = Mała postać uciekła w stronę obozu pod murem. Porozmawiaj z Elą.
+[zadania.D4.steps.1.say]
+> To ty bierzesz chleb od pani Hanki?
+...Dla mamy. Mama nie je, żebym ja jadła. Nie mów pani Hance. Proszę.
+
+zadania.D4.steps.1.choice.options.0.label = Muszę jej powiedzieć.
+[zadania.D4.steps.1.choice.options.0.say]
+(Ela płacze.)
+
+zadania.D4.steps.1.choice.options.1.label = Będę płacił za twój chleb.
+[zadania.D4.steps.1.choice.options.1.say]
+> Od dziś chleb dla ciebie jest zapłacony. Na tydzień z góry.
+Naprawdę? ...Dziękuję!
+
+zadania.D4.steps.1.choice.options.2.label = Pogadam z Hanką o pracy dla twojej mamy.
+[zadania.D4.steps.1.choice.options.2.say]
+Mama umie piec! W domu piekła dla całej wsi!
+
+zadania.D4.steps.2.text = Wróć do Hanki.
+[zadania.D4.lines.seen]
+> (Mała postać wysuwa się zza straganu, łapie bochen z kosza i biegnie w dół, w stronę muru. Dwa warkoczyki.)
+
+zadania.D4.lines.spotted = Złodziej cię zobaczył i uciekł. Spróbuj jutro - po cichu (C).
+[zadania.D4.lines.hankaTell]
+> To Ela, córka Ludmiły z obozu. Nosi chleb matce.
+Mała Ela? ...Powiem sołtysowi. Złodziej to złodziej, choćby i mały. Dziękuję ci.
+
+[zadania.D4.lines.hankaPay]
+> To Ela, córka Ludmiły z obozu. Za jej chleb zapłacę ja - masz za tydzień z góry.
+Ty płacisz za cudzy chleb? ...Dobry z ciebie chłopak. Niech mała bierze, co trzeba.
+
+[zadania.D4.lines.hankaWork]
+> To Ela, córka Ludmiły z obozu. Jej matka umie piec. Może by ci pomagała przy piecu o czwartej?
+Ludmiła przy moim piecu? ...A wiesz, że czwarta rano to ciężka godzina dla jednej baby? Niech przyjdzie jutro. Zobaczymy, co umie.
+@ela: Narysowałam ci coś. To kruk nad tawerną. A tu schody w dół. Mama mówi, że w nocy coś tam stuka.
+
+# D10, „Gorączka Eli”
+zadania.D10.title = Gorączka Eli
+zadania.D10.where = obóz + łąki + kantor
+zadania.D10.when = wiosna i lato, 2 dni
+zadania.D10.desc = Ela ma gorączkę. Pomoże gorący wywar z ziół i trochę czystej wody do przemywania czoła - z twojej deszczówki. Baltazar ma też „lek z kontynentu”.
+[zadania.D10.offer.say]
+Ela ma gorączkę. Od wczoraj. Pali się cała.
+Wywar z ziół by pomógł. I trochę czystej wody do przemywania czoła. Ja nie mam ani ognia, ani wody.
+
+zadania.D10.offer.yes = Zrobię wywar.
+zadania.D10.offer.no = Nie mam wody dla innych.
+[zadania.D10.offer.accept]
+Dziękuję... Będę przy niej. Cały czas.
+
+[zadania.D10.offer.decline]
+...Rozumiem. Woda to woda.
+
+zadania.D10.steps.0.text = Zaparz Wywar ziołowy (3× Zioła na ogniu) i oddaj go Ludmile z 1 porcją swojej deszczówki. (Baltazar sprzedaje też „lek z kontynentu” za 60 G.)
+[zadania.D10.steps.0.remind]
+Wywar z ziół. I trochę wody na czoło. Tylko tyle.
+
+[zadania.D10.steps.0.hero]
+> Wywar dla Eli. I czysta woda - z mojej deszczówki.
+
+[zadania.D10.steps.0.done]
+Ciepły... Ela, pij powoli. Ja przy niej posiedzę całą noc.
+
+zadania.D10.steps.1.text = Ela przespi noc z gorączką. Zajrzyj rano.
+zadania.D10.steps.2.text = Zajrzyj rano do Ludmiły i Eli (obóz pod murem).
+[zadania.D10.lines.lek]
+Lek z kontynentu. Działa na wszystko, co ma gorączkę. Sześćdziesiąt groszy, przyjacielu.
+
+[zadania.D10.lines.lekBuy]
+Mądry wybór. Proszę. Tylko nie pytaj, skąd mam.
+
+[zadania.D10.lines.lekNo]
+Zioła też leczą. Czasem.
+
+[zadania.D10.lines.morning]
+Gorączka spadła! Ela zjadła pół kromki i spytała o konika. Nie wiem, jak ci dziękować.
+
+[zadania.D10.lines.morningLek]
+Gorączka spadła. Ten flakonik... spójrz. Pieczęć wojska z kontynentu. Skąd kupiec ma lekarstwa armii?
+
+# D18, „Płaszcze przed zimą”
+zadania.D18.title = Płaszcze przed zimą
+zadania.D18.where = garbarnia + obóz pod murem (+ Feliks na rynku)
+zadania.D18.when = jesień, od dnia 70
+zadania.D18.desc = Idzie zima, a obóz pod murem marznie. Ignac uszyje pięć płaszczy z dziesięciu skór i pięciu kłębków wełny. Komu je oddasz?
+[zadania.D18.offer.say]
+Idzie zima. Ci pod murem nie przeżyją jej w tym, w czym przypłynęli.
+Uszyję pięć płaszczy, jeśli przyniesiesz dziesięć surowych skór i pięć kłębków wełny. Robotę daję za darmo. Raz w życiu.
+
+zadania.D18.offer.yes = Przyniosę.
+zadania.D18.offer.no = Nie dam rady.
+[zadania.D18.offer.accept]
+Dziesięć skór, pięć wełny. Zima nie poczeka.
+
+[zadania.D18.offer.decline]
+Rozumiem. Ale zima zrozumie mniej.
+
+zadania.D18.steps.0.text = Przynieś Ignacowi 10× Surowa skóra i 5× Wełna (garbarnia).
+[zadania.D18.steps.0.remind]
+Dziesięć skór i pięć wełny. Liczę dni do mrozu.
+
+[zadania.D18.steps.0.hero]
+> Skóry i wełna. Wszystko.
+
+[zadania.D18.steps.0.done]
+Dwa dni szycia. Przyjdź pojutrze.
+
+zadania.D18.steps.1.text = Odbierz płaszcze u Ignaca (2 dni szycia).
+[zadania.D18.steps.1.early]
+Jeszcze szyję. Pojutrze, mówiłem.
+
+[zadania.D18.steps.1.say]
+Gotowe. Pięć płaszczy, ciepłych jak piec. Zanieś je do obozu, zanim ktoś się zainteresuje.
+
+zadania.D18.steps.2.text = Zanieś płaszcze do obozu pod murem (Ludmiła). Feliks kręci się rano przy straganach - też coś o nich słyszał.
+[zadania.D18.lines.camp]
+> Płaszcze. Od Ignaca. Dla was wszystkich.
+Płaszcze... Ela, patrz! Ciepłe! ...Nie wiem, co powiedzieć. Weź jeden dla siebie - Ignac uszył sześć, wiem, liczyłam.
+
+[zadania.D18.lines.feliks]
+Słyszałem o tych płaszczach. Straż dworu marznie na murach - zapłacę za nie trzy razy tyle, co są warte. Dziewięćdziesiąt groszy.
+
+[zadania.D18.lines.feliksYes]
+Rozsądna decyzja. Jaśnie pan doceni. Pan Ignac... cóż, nie musi wiedzieć od razu.
+
+[zadania.D18.lines.feliksNo]
+Szkoda. Straż będzie marzła. Ale to pana sumienie.
+
+# D1, „Buty od szewca”
+zadania.D1.title = Buty od szewca
+zadania.D1.where = garbarnia + łąki i las + kuźnia
+zadania.D1.when = od dnia 5, 4–6 dni
+zadania.D1.desc = Ignac nie może patrzeć na bose stopy bohatera. Trzy skóry, ćwieki od Tadka, miara o świcie i dwa dni czekania - a potem prawdziwe buty.
+[zadania.D1.offer.say]
+Patrzę na twoje bose nogi i serce mi pęka. Szewc ze mnie czy nie szewc?
+Zrobię ci buty. Prawdziwe. Przynieś trzy surowe skóry - z jelenia albo z dzika, zając za cienki.
+
+zadania.D1.offer.yes = Przyniosę skóry.
+zadania.D1.offer.no = Bosy też dojdę.
+[zadania.D1.offer.accept]
+Trzy skóry. A potem zobaczymy, jaką masz stopę.
+
+[zadania.D1.offer.decline]
+Dojdziesz. Do pierwszego ciernia.
+
+zadania.D1.steps.0.text = Przynieś Ignacowi 3× Surowa skóra (z jelenia albo z dzika).
+[zadania.D1.steps.0.remind]
+Trzy skóry, chłopcze. Grube.
+
+[zadania.D1.steps.0.hero]
+> Trzy skóry. Grube, jak chciałeś.
+
+[zadania.D1.steps.0.done]
+Dobre. Dwa dni w kadzi. A ty idź do Tadka - niech wykuje dwanaście ćwieków. Żelazo daj swoje.
+
+zadania.D1.steps.1.text = Zanieś Tadkowi 1× Żelazo - wykuje 12 ćwieków do butów.
+[zadania.D1.steps.1.remind]
+Ćwieki? Z czego, z powietrza? Daj kawałek żelaza.
+
+[zadania.D1.steps.1.hero]
+> Ignac mówi, że wykujesz dwanaście ćwieków do butów.
+
+[zadania.D1.steps.1.done]
+Ćwieki dla Ignaca? Ha, buty z ćwiekami - jak u rycerza. Masz, jeszcze ciepłe.
+
+zadania.D1.steps.2.text = Miara: przyjdź do Ignaca o 7:00 rano (7–8), boso, po rosie - najwcześniej 2 dni po oddaniu skór. Przynieś ćwieki.
+[zadania.D1.steps.2.early]
+Miarę biorę o siódmej rano, po rosie. Wtedy ślad najlepszy. I skóry muszą swoje odleżeć - dwa dni.
+
+[zadania.D1.steps.2.say]
+> Ćwieki od Tadka. I stopy, jak chciałeś.
+Stań na glinie. O tak. Dobra stopa - szeroka, chłopska. Za dwa dni odbierasz.
+
+zadania.D1.steps.3.text = Odbierz buty u Ignaca (2 dni po mierze, 6:30–17).
+[zadania.D1.steps.3.early]
+Jeszcze szyję. Dwa dni, mówiłem.
+
+[zadania.D1.steps.3.say]
+Gotowe. Ale powiedz mi jeszcze, jak je wykończyć. Miękko, żeby zwierz nie słyszał? Czy na ćwiekach, żeby śnieg i kamień nie straszne?
+
+zadania.D1.steps.3.choice.options.0.label = Buty łowcy - ciche.
+[zadania.D1.steps.3.choice.options.0.say]
+Ciche jak kot. Zwierz usłyszy cię dopiero, jak już będziesz przy nim.
+
+zadania.D1.steps.3.choice.options.1.label = Podkute buty - pewne.
+[zadania.D1.steps.3.choice.options.1.say]
+Na ćwiekach. Po lodzie przejdziesz jak po rynku, a kamienie ci nie straszne.
+
+[zadania.D1.reward.note]
+Buty od Ignaca
+Ignac uszył mi buty na miarę. Pierwsze prawdziwe buty w moim życiu.
+
+# D3, „Ręka kowala”
+zadania.D3.title = Ręka kowala
+zadania.D3.where = kuźnia + brama wschodnia + ratusz + garbarnia
+zadania.D3.when = 3 kolejne dni, 6–17
+zadania.D3.desc = Tadek poparzył dłoń. Przez trzy dni zastępujesz go: podkowy dla straży, gwoździe dla sołtysa, nóż dla Ignaca. Spóźnisz się - klient się obrazi.
+[zadania.D3.offer.cond.done]
+K1
+
+[zadania.D3.offer.say]
+Poparzyłem dłoń. Głupio, o własne szczypce. Trzy dni nie utrzymam młota.
+Zastąpisz mnie? Mam trzy zamówienia, każde na inny dzień. Spóźnisz się - klient się obrazi, a obrażony klient to stracony klient.
+
+zadania.D3.offer.yes = Zastąpię cię.
+zadania.D3.offer.no = Nie dam rady.
+[zadania.D3.offer.accept]
+Dziś podkowy dla straży. Przynieś dwa kawałki żelaza i worek węgla - wykujesz je tu, przy mnie. Wit odbiera o piątej.
+
+[zadania.D3.offer.decline]
+To kuźnia postoi. Ech.
+
+zadania.D3.steps.0.deadline.text = Wit wziął podkowy od kowala z sąsiedniej wsi.
+zadania.D3.steps.0.text = Dzień 1: wykuj u Tadka 4 podkowy (2× Żelazo, 1× Węgiel drzewny), potem oddaj je kapralowi Witowi do 17:00.
+[zadania.D3.steps.0.remind]
+Dwa kawałki żelaza i węgiel. Bez tego nie ma podków.
+
+[zadania.D3.steps.0.hero]
+> Żelazo i węgiel. Pokaż, jak się kuje podkowy.
+
+[zadania.D3.steps.0.done]
+Grzej... teraz klepnij... obróć... Ha! Krzywa, ale koń nie zauważy.
+> (Godzina przy palenisku. Cztery podkowy, ręce czarne od sadzy.)
+Leć z nimi do Wita. Do piątej.
+
+zadania.D3.steps.1.deadline.text = Kapral Wit czekał na podkowy do piątej.
+zadania.D3.steps.1.text = Dzień 1: oddaj 4 podkowy kapralowi Witowi przy bramie wschodniej do 17:00.
+[zadania.D3.steps.1.hero]
+> Podkowy od Tadka. Cztery.
+
+[zadania.D3.steps.1.done]
+Na czas. Konie straży dziękują. Ja też.
+
+zadania.D3.steps.2.deadline.text = Sołtys kupił gwoździe u Baltazara. Drożej.
+zadania.D3.steps.2.text = Dzień 2: zanieś sołtysowi 20× Gwoździe (na scenę na dożynki) do 18:00 następnego dnia.
+[zadania.D3.steps.2.remind]
+Dwadzieścia gwoździ, młody. Scena sama się nie zbije.
+
+[zadania.D3.steps.2.hero]
+> Gwoździe od Tadka. Dwadzieścia.
+
+[zadania.D3.steps.2.done]
+Dwadzieścia, równiutko. Na dożynki będzie scena jak się patrzy.
+
+zadania.D3.steps.3.deadline.text = Ignac kroi skóry kamiennym nożem i klnie.
+zadania.D3.steps.3.text = Dzień 3: zanieś Ignacowi 1× Nóż żelazny do 17:00.
+[zadania.D3.steps.3.remind]
+Nóż, chłopcze. Żelazny. Moim kamiennym to można chleb kroić, nie skórę.
+
+[zadania.D3.steps.3.hero]
+> Nóż żelazny. Od Tadka.
+
+[zadania.D3.steps.3.done]
+Ostry jak język sołtysa. Dzięki.
+
+zadania.D3.steps.4.text = Wróć do Tadka po zapłatę.
+[zadania.D3.steps.4.say]
+Słyszałem, słyszałem. Ludzie zadowoleni.
+Mam dla ciebie sześćdziesiąt groszy. Albo... wiesz, ręka goi się długo, a cyrulik drogi. Wybieraj, ja nie będę.
+
+zadania.D3.steps.4.choice.options.0.label = Wezmę 60 groszy.
+[zadania.D3.steps.4.choice.options.0.say]
+Uczciwie zarobione. Masz.
+
+zadania.D3.steps.4.choice.options.1.label = Zostaw je sobie na leczenie.
+[zadania.D3.steps.4.choice.options.1.say]
+...Tego ci nie zapomnę, chłopcze. Póki mam kuźnię, masz u mnie wszystko.
+
+# D5, „Wataha pod bramą”
+zadania.D5.title = Wataha pod bramą
+zadania.D5.where = brama południowa + Polna droga + Skraj lasu
+zadania.D5.when = 3 noce
+zadania.D5.desc = Wilki podchodzą pod mur, a straż ma z dworu rozkaz nie wychodzić. Ślady o świcie, dwa wilki zwiadowcy na Polnej drodze, a potem przewodnik watahy na Skraju lasu.
+[zadania.D5.offer.say]
+Wilki podchodzą pod mur. Nocą słychać je aż na rynku. A ja mam z dworu rozkaz: straż nie wychodzi za bramy.
+Ty nie jesteś strażą. Obejrzyj o świcie ślady pod bramą południową. Weź strzały - przydadzą się.
+
+zadania.D5.offer.yes = Zajmę się tym.
+zadania.D5.offer.no = To nie dla mnie.
+[zadania.D5.offer.accept]
+Sześć strzał. Nie zmarnuj ani jednej.
+
+[zadania.D5.offer.decline]
+Rozumiem. Wilk to nie zając.
+
+zadania.D5.steps.0.text = O świcie (5–9) obejrzyj tropy pod bramą południową.
+[zadania.D5.steps.0.early]
+Tropy najlepiej widać o świcie, po rosie.
+
+[zadania.D5.steps.0.say]
+> Tropy. Duże. Trzy, może cztery wilki... Jeden ślad większy od reszty. Idą od Polnej drogi.
+
+zadania.D5.steps.1.text = Nocą (21–5) zabij 2 wilki zwiadowców na Polnej drodze.
+zadania.D5.steps.2.text = Nocą zabij przewodnika watahy na Skraju lasu (największy wilk).
+zadania.D5.steps.3.text = Wróć do kaprala Wita (brama wschodnia, 6–18).
+[zadania.D5.steps.3.say]
+Słyszałem. Przewodnik watahy, mówią. Sam?
+No to teraz pytanie: komu przypiszemy zasługę? Mnie by się przydała. Ale ty ją masz.
+
+zadania.D5.steps.3.choice.options.0.label = Zasługa twoja, kapralu.
+[zadania.D5.steps.3.choice.options.0.say]
+...Jestem twoim dłużnikiem. Raz przepuszczę cię nocą bez pytań. Raz.
+
+zadania.D5.steps.3.choice.options.1.label = Powiem o wszystkim sołtysowi.
+[zadania.D5.steps.3.choice.options.1.say]
+Uczciwie. Sołtys ogłosi to na rynku. Masz osiemdziesiąt groszy od miasta.
+
+# D11, „Ognie na murach”
+zadania.D11.title = Ognie na murach
+zadania.D11.where = brama wschodnia i mury
+zadania.D11.when = 5 wieczorów, 18–21
+zadania.D11.desc = Kosze żarowe gasną, a dwór nie przysyła węgla. Przez pięć wieczorów przynoś kapralowi po 3× Węgiel drzewny przed 21:00. Czwartej nocy ktoś zalewa kosz wodą.
+[zadania.D11.offer.say]
+Kosze żarowe gasną. Dwór obiecał węgiel i jak zwykle - obiecał.
+Pięć wieczorów, po trzy worki węgla, przed dziewiątą. Płacę na koniec. Siedemdziesiąt groszy.
+
+zadania.D11.offer.yes = Będę nosił węgiel.
+zadania.D11.offer.no = Nie mam tyle węgla.
+[zadania.D11.offer.accept]
+Pięć wieczorów. Każdego wieczoru trzy worki. Przed dziewiątą.
+
+[zadania.D11.offer.decline]
+To będziemy marzli przy zimnych koszach.
+
+zadania.D11.steps.0.text = Przynieś kapralowi Witowi 3× Węgiel drzewny przed 21:00 (obchód murów, 18–21) - po jednej dostawie na wieczór. Dostawy: {n}/5.
+zadania.D11.steps.1.text = Nocą (po 21:00) zajrzyj do kosza żarowego przy bramie wschodniej.
+[zadania.D11.steps.1.early]
+Kosz płonie równo. Coś się stanie dopiero nocą.
+
+[zadania.D11.steps.1.say]
+> Kosz zgaszony. Zalany wodą - w taką suszę! Z popiołu jeszcze kapie.
+> Na bruku mokre ślady butów. Prowadzą w stronę kantoru.
+
+zadania.D11.steps.1.choice.options.0.label = Powiem kapralowi.
+[zadania.D11.steps.1.choice.options.0.say]
+> Wit musi to wiedzieć.
+
+zadania.D11.steps.1.choice.options.1.label = Pójdę do Baltazara.
+[zadania.D11.steps.1.choice.options.1.say]
+> Kantor... Ciekawe, co Baltazar na to.
+
+zadania.D11.steps.2.text = Powiedz o zalanym koszu kapralowi Witowi (18–23) albo idź do Baltazara (kantor).
+zadania.D11.steps.3.text = Dokończ dostawy węgla dla kaprala Wita (po 3× Węgiel drzewny, 18–21). Dostawy: {n}/5.
+[zadania.D11.lines.give]
+> Trzy worki węgla.
+
+[zadania.D11.lines.thanks]
+Kosze dziękują. Dostaw: {n} z pięciu.
+
+[zadania.D11.lines.remind]
+Trzy worki węgla, przed dziewiątą. Kosze ledwo się tlą.
+
+[zadania.D11.lines.wit]
+> Ktoś zalał kosz przy bramie wschodniej. Wodą. Mokre ślady prowadziły do kantoru.
+Wodą? W taką suszę?! ...Kantor, mówisz. Tej nocy popilnuję sam. A ty noś węgiel dalej.
+
+[zadania.D11.lines.bribe]
+Mokre ślady? Ach, ludzie chodzą, gdzie chcą, przyjacielu.
+Trzydzieści groszy i zapomnisz, dokąd prowadziły?
+
+[zadania.D11.lines.bribeYes]
+Rozsądny człowiek. Ciemność przy bramie też jest towarem, wiesz?
+
+[zadania.D11.lines.bribeNo]
+Szkoda. No cóż - idź do swojego kaprala.
+
+# D14, „Zboże na wojnę”
+zadania.D14.title = Zboże na wojnę
+zadania.D14.where = brama wschodnia + działka dziadka
+zadania.D14.when = od dnia 24, 3 dni
+zadania.D14.desc = Dwór zbiera „zboże na wojnę”: trzecią część jęczmienia z każdego pola. Z działki dziadka - sześć garści. Oddać, przekupić kaprala czy schować?
+[zadania.D14.offer.say]
+Rozkaz z dworu. Po bitwie na kontynencie zbieramy zboże na wojnę - trzecią część jęczmienia z każdego pola.
+Z działki twojego dziadka: sześć garści jęczmienia. Za trzy dni. Nie mów, że nie ostrzegałem.
+
+zadania.D14.offer.options.0.label = Oddam.
+[zadania.D14.offer.options.0.say]
+Za trzy dni, tu, przy bramie. Lord zapisze to na poczet długu.
+
+zadania.D14.offer.options.1.label = Ile, żebyś zapomniał?
+[zadania.D14.offer.options.1.say]
+Dwadzieścia groszy... Nie widziałem działki twojego dziadka. Nikt nie widział.
+
+zadania.D14.offer.options.2.label = Nie mam zboża.
+[zadania.D14.offer.options.2.say]
+Nie masz? Za trzy dni sprawdzę. Lepiej, żebyś naprawdę nie miał.
+
+zadania.D14.steps.0.text = Oddaj kapralowi Witowi 6× Jęczmień w ciągu 3 dni (brama wschodnia, 6–18).
+[zadania.D14.steps.0.remind]
+Sześć garści jęczmienia. Rozkaz to rozkaz.
+
+[zadania.D14.steps.0.hero]
+> Sześć garści. Na wojnę.
+
+[zadania.D14.steps.0.done]
+Zapisane. Lord zaliczy to na dług twojego dziadka - pięćdziesiąt groszy. Przynajmniej tyle.
+
+zadania.D14.steps.1.text = Za 3 dni kapral Wit sprawdzi, czy na pewno nie masz jęczmienia (brama wschodnia, 6–18).
+zadania.D14.fail.text = Kapral nie dostał zboża. Straż patrzy na ciebie krzywo.
+[zadania.D14.lines.caught]
+Nie masz zboża? A to co w worku? Jęczmień, jak żywy.
+Czterdzieści groszy kary. I straż cię zapamięta.
+
+[zadania.D14.lines.clean]
+Nic? Pusto w worku? No to nic. Masz szczęście, że nie lubię grzebać w cudzych skrzyniach.
+
+# D16, „Uczeń dzwonnika”
+zadania.D16.title = Uczeń dzwonnika
+zadania.D16.where = dzwonnica
+zadania.D16.when = od Opinii 40, 4 dni (6:00, 12:00 albo 18:00)
+zadania.D16.desc = Ambroży szuka następcy „na wszelki wypadek”. Przez cztery dni dzwonisz z nim o szóstej, w południe albo o osiemnastej - rytmy coraz trudniejsze.
+[zadania.D16.offer.say]
+Jestem stary. Kiedyś ktoś będzie musiał dzwonić za mnie. Na wszelki wypadek.
+Przyjdź do dzwonu o szóstej, w południe albo o osiemnastej. Cztery dni. Nauczę cię wszystkiego... co wolno.
+
+zadania.D16.offer.yes = Będę przychodził.
+zadania.D16.offer.no = Nie mam głowy do dzwonów.
+[zadania.D16.offer.accept]
+Dzwon nie czeka. Bądź przed pełną godziną.
+
+[zadania.D16.offer.decline]
+Nikt nie ma. To właśnie jest kłopot.
+
+zadania.D16.steps.0.text = Dzwoń z Ambrożym przy dzwonnicy o 6:00, 12:00 albo 18:00 (raz dziennie, 4 różne dni). Lekcje: {n}/4.
+[zadania.D16.lines.go]
+Teraz. Licz w myślach i ciągnij równo.
+
+[zadania.D16.lines.ok]
+Dobrze. Lekcja {n} z czterech.
+
+[zadania.D16.lines.again]
+Jeszcze nie. Następnym razem, przy dzwonie.
+
+[zadania.D16.lines.done]
+Zwykłe godziny już umiesz. Inne... może kiedyś.
+
+[zadania.D16.lines.wait]
+Dziś już dzwoniłeś. Jutro.
+
+[zadania.D16.reward.note]
+Uczeń dzwonnika
+Ambroży dał mi klucz do dzwonnicy. „Zwykłe godziny już umiesz. Inne... może kiedyś.”
+
+# D17, „Petycja do Lorda”
+zadania.D17.title = Petycja do Lorda
+zadania.D17.where = ratusz + kuźnia + garbarnia + piekarnia + dzwonnica + drzwi dworu
+zadania.D17.when = po dniu 20
+zadania.D17.desc = Dwór chce od każdego domu dziesięć groszy podatku wojennego. Zbierz krzyżyki pod petycją - każdego łap przy robocie - i zanieś ją Lordowi.
+[zadania.D17.offer.say]
+Dwór chce od każdego domu dziesięć groszy podatku wojennego. Kuby, Ignaca i połowy miasta na to nie stać.
+Napisałem petycję. Zbierz podpisy - krzyżyki - od ludzi. Każdego łap wtedy, kiedy jest przy robocie. Potem zanieś ją Lordowi.
+
+zadania.D17.offer.yes = Zbiorę podpisy.
+zadania.D17.offer.no = To się nie uda.
+[zadania.D17.offer.accept]
+Tadek, Hanka, Kuba, Ignac, Ambroży... I kto jeszcze zechce. Kapral nie podpisze, nawet nie próbuj.
+
+[zadania.D17.offer.decline]
+Może i nie. Ale trzeba spróbować.
+
+zadania.D17.steps.0.text = Zbierz krzyżyki pod petycją (co najmniej 5): Tadek, Hanka, Kuba, Ignac, Ambroży, może Baltazar. Podpisy: {n}.
+zadania.D17.steps.1.text = Zanieś petycję Lordowi (drzwi dworu, 8–20).
+[zadania.D17.steps.1.hero]
+> Petycja od miasta, panie. Ludzie nie mają z czego płacić.
+
+[zadania.D17.steps.1.done]
+Petycja? (czyta długo) ...Pół. Obniżam o połowę. Tylko dlatego, że to ty przyniosłeś, a nie sołtys.
+I jeszcze jedno. Mój dziadek zbierał bajki o Kruczych Skałach. Gdybyś kiedyś coś znalazł... przyjdź najpierw do mnie. Dla porządku.
+
+zadania.D17.steps.2.text = Wróć do sołtysa z odpowiedzią Lorda.
+[zadania.D17.steps.2.say]
+> Lord obniżył podatek o połowę.
+O połowę! Chłopcze... Całe miasto będzie o tym gadać. Masz trzydzieści groszy - z kasy ratusza, uczciwie.
+
+[zadania.D17.reward.note]
+Petycja do Lorda
+Lord obniżył podatek wojenny o połowę. I dodał: „Gdybyś coś znalazł pod Kruczymi Skałami... przyjdź najpierw do mnie.”
+
+# D13, „Zakład Ozzy'ego”
+zadania.D13.title = Zakład Ozzy'ego
+zadania.D13.where = tawerna + cała okolica + piekarnia + brama wschodnia
+zadania.D13.when = 3 dni
+zadania.D13.desc = Ozzy po pijaku przepowiada trzy rzeczy na trzy dni. Grum zakłada się, że to bzdury. Sprawdź każdą przepowiednię na własne oczy.
+zadania.D13.offer.yes = Sprawdzę to.
+zadania.D13.offer.no = Dziadku, ty już nie pij.
+[zadania.D13.offer.accept]
+(Z drugiego końca sali dobiega głos Gruma: „Bzdury! Dziesięć groszy za każdą, że nic się nie sprawdzi!”)
+Słyszałeś? Idź do niego, synku. Weź zakład. *hep*
+
+[zadania.D13.offer.decline]
+Nie wierzysz? Nikt nie wierzy. Dlatego ciągle mam rację. *hep*
+
+zadania.D13.steps.0.text = Grum słyszał przepowiednie Ozzy'ego i chce się założyć. Pogadaj z Grumem (tawerna).
+zadania.D13.steps.1.text = Sprawdź przepowiednie Ozzy'ego na własne oczy: {p1}; {p2}; {p3}. Sprawdzone: {n}/3.
+zadania.D13.steps.2.text = Przepowiednie minęły. Odbierz zakład od Gruma (tawerna).
+zadania.D13.steps.3.text = Wróć do Ozzy'ego (tawerna).
+[zadania.D13.lines.offer]
+*hep* Słuchajcie wszyscy! Ozzy wie, co będzie!
+
+[zadania.D13.lines.bet]
+> Grum, słyszałeś Ozzy'ego?
+Cała sala słyszała. Bzdury.
+Zakład: dziesięć groszy za każdą przepowiednię, która się sprawdzi - płacę ja.
+Ale musisz to zobaczyć na własne oczy. Z gadania nie płacę.
+> Stoi.
+
+zadania.D13.lines.storm = > (Burza. {hour}, co do kwadransa. Tak, jak mówił Ozzy.)
+zadania.D13.lines.rain = > (Pada. {hour}. Tak, jak mówił Ozzy.)
+[zadania.D13.lines.hankaOven]
+Piec! Mój piec pękł! W nocy coś trzasnęło i sklepienie rozeszło się na dwoje - chleb na dziś mam z żaren i z płaczu!
+> (Piec Hanki. Pojutrze, mówił Ozzy. Pojutrze.)
+
+[zadania.D13.lines.witShoe]
+Koń zgubił podkowę. Na równej drodze, na rynku, w biały dzień. Kowal mówi, że gwoździe były nowe. Tfu.
+> (Koń kaprala. Za trzy dni, mówił Ozzy.)
+
+zadania.D13.lines.missed = > (Przepowiednia minęła, a mnie przy niej nie było. Grum za nią nie zapłaci.)
+[zadania.D13.lines.pay]
+> Sprawdziło się, Grum. Widziałem na własne oczy.
+Hm. {n} na trzy. Masz. {gold} groszy. Zakład to zakład.
+Ten stary pijak mnie przeraża. Nie mów mu, że to powiedziałem.
+
+[zadania.D13.lines.payNone]
+> Nic nie widziałem na własne oczy.
+To nic nie płacę. Zakład to zakład. Ale... słyszałem, że wszystko się sprawdziło. Hm.
+
+[zadania.D13.lines.ozzy]
+> Dziadku. Wszystko się sprawdziło. Burza, piec, podkowa.
+(Ozzy odstawia kufel. Pierwszy raz widzisz go trzeźwego. Mówi cicho i ani razu nie czka.)
+
+[zadania.D13.lines.ozzyEnd]
+(Ozzy mruga - i znowu jest pijany.) *hep* Co ja gadałem? Nieważne. Postaw piwo, to ci powiem, co będzie jutro.
+
+# D6, „Siłacz z targu”
+zadania.D6.title = Siłacz z targu
+zadania.D6.where = kuźnia → tawerna (Grum, Borgar, stół do siłowania)
+zadania.D6.when = do najbliższego targu (3 dni i więcej), wieczorem
+zadania.D6.desc = W dzień targowy wieczorem w tawernie jest turniej siłowania na rękę o beczkę piwa od Borgara. Co roku wygrywa Grum. Tadek chce, żeby ktoś wreszcie utarł mu nosa.
+[zadania.D6.offer.say]
+Wiesz, że w dzień targowy wieczorem w tawernie jest turniej na rękę? Przy stole Gruma, o beczkę piwa od Borgara. Ja i Grum, co roku. I co roku Grum.
+Ty masz krzepę, widziałem, jak nosisz polana. Stań do turnieju.
+Potrenuj z Grumem trzy wieczory - niech się nauczy, że też można przegrać.
+
+zadania.D6.offer.yes = Stanę do turnieju.
+zadania.D6.offer.no = Nie mam krzepy.
+[zadania.D6.offer.accept]
+Ha! Trzy wieczory z Grumem przy stole, potem zapis u Borgara - dwa grosze. Turniej w targ wieczorem, od szóstej.
+
+[zadania.D6.offer.decline]
+Szkoda. To Grum znowu wypije beczkę sam.
+
+zadania.D6.steps.0.text = Trenuj z Grumem: siłuj się z nim w trzech różnych dniach przed turniejem (dzień {market}). Treningi: {n}/3.
+zadania.D6.steps.1.text = Zapisz się na turniej u Borgara przy barze (2 G) - najpóźniej wieczorem w dzień targowy (dzień {market}).
+zadania.D6.steps.2.text = Dzień {market}, wieczór 18–22: turniej przy stole do siłowania w tawernie. Podejdź do stołu - trzy walki.
+zadania.D6.lines.signTopic = Zapisz mnie na turniej na rękę (2 G).
+[zadania.D6.lines.sign]
+> Chcę stanąć do turnieju na rękę.
+Ty? No, no. Dwa grosze wpisowego - zbieram na beczkę dla zwycięzcy. W targ wieczorem, od szóstej, przy stole Gruma.
+
+[zadania.D6.lines.signDone]
+A, i jeszcze jedno. Kantorowy Baltazar o ciebie pytał. Ten od zakładów. Uważaj na niego.
+
+[zadania.D6.lines.bribe]
+Przyjacielu... słyszałem, że stajesz do turnieju. Postawiłem trochę na Gruma. Ot, drobny zakład.
+Czterdzieści groszy dla ciebie, jeśli przegrasz pierwszą walkę. Z woźnicą. Nikt się nie dowie, a ty nic nie tracisz.
+
+[zadania.D6.lines.bribeYes]
+Rozsądny człowiek. Proszę - czterdzieści. Miło robić z tobą interesy.
+
+[zadania.D6.lines.bribeNo]
+Szkoda. Honor to piękna rzecz. I bardzo droga.
+
+[zadania.D6.lines.walkover]
+> (Turniej się skończył - nie stawiłem się do następnej walki.)
+
+[zadania.D6.lines.call]
+> (Borgar uderza kuflem w ladę: „Ludzie! Turniej na rękę! Pierwsza walka: wnuk Stacha przeciw Wojciechowi, woźnicy!”)
+> (Borgar woła: „Półfinał! Wnuk Stacha przeciw Tadkowi Młotowi, kowalowi!”)
+> (Borgar woła: „Finał! Wnuk Stacha przeciw Grumowi Żelaznej Pięści! O beczkę piwa!”)
+
+zadania.D6.lines.go = Do stołu!
+zadania.D6.lines.wait = Jeszcze chwilę.
+zadania.D6.lines.throw = Przegram. (Jak chciał Baltazar.)
+zadania.D6.lines.fair = Walczę uczciwie.
+[zadania.D6.lines.won]
+> (Łokieć drży, ale ręka rywala ląduje na blacie. Sala wiwatuje.)
+
+zadania.D6.lines.next = > (Następna walka przy tym samym stole. Teraz: {who}.)
+[zadania.D6.lines.champion]
+> (Ręka Gruma uderza o blat. W sali cisza - a potem ryk całej tawerny.)
+> (Borgar woła: „Mamy nowego siłacza! Beczka piwa dla wnuka Stacha! I pas siłacza, jak co roku!”)
+
+[zadania.D6.lines.lostQf]
+> (Woźnica kładzie ci rękę na blat. Ludzie wzruszają ramionami.)
+
+[zadania.D6.lines.lostSf]
+> (Tadek wygrywa i klepie cię po plecach: „Dobra robota, chłopcze. Za rok!”)
+
+[zadania.D6.lines.lostF]
+> (Grum kładzie ci rękę na blat. Powoli, prawie z szacunkiem.)
+> (Borgar woła: „Grum znowu! Ale co to była za walka, ludzie!”)
+
+[zadania.D6.lines.sold]
+> (Puszczasz rękę. Woźnica nie może uwierzyć, że wygrał. Baltazar przy stoliku pod ścianą kiwa ci głową.)
+
+[zadania.D6.lines.noteWon]
+Siłacz z targu
+Wygrałem turniej na rękę w tawernie, w wieczór dnia targowego - po kolei z woźnicą Wojciechem, kowalem Tadkiem i z Grumem. Mam pas siłacza (większy udźwig) i beczkę piwa, którą wypiliśmy razem.
+
+[zadania.D6.lines.noteSold]
+Sprzedana walka
+Wziąłem od Baltazara czterdzieści groszy i przegrałem pierwszą walkę turnieju w tawernie. Grum coś podejrzewa.
+
+zadania.D6.rivals.0.name = Wojciech
+zadania.D6.rivals.0.sub = woźnica
+zadania.D6.rivals.0.with = z Wojciechem, woźnicą
+zadania.D6.rivals.0.kicker = TURNIEJ W TAWERNIE · ĆWIERĆFINAŁ
+[zadania.D6.rivals.0.lines.hello]
+Na rękę? Ja całe życie lejce trzymam. Łapa jak imadło!
+
+[zadania.D6.rivals.0.lines.round]
+No, chłopcze, łokieć na stół.
+
+[zadania.D6.rivals.0.lines.burst]
+Wio!
+Hej-ha!
+Prrr!
+
+[zadania.D6.rivals.0.lines.winning]
+Lejce cięższe!
+Ha! Słabo, słabo!
+
+[zadania.D6.rivals.0.lines.losing]
+Ej... ej, spokojnie!
+Co ty jesz, kamienie?
+
+[zadania.D6.rivals.0.lines.roundHe]
+Raz dla mnie!
+
+[zadania.D6.rivals.0.lines.roundYou]
+No dobra, raz dla ciebie.
+
+[zadania.D6.rivals.0.lines.won]
+Ha! Woźnica jeszcze umie!
+
+[zadania.D6.rivals.0.lines.lost]
+Dobra, dobra. Idź, pokaż reszcie.
+
+zadania.D6.rivals.1.name = Tadek Młot
+zadania.D6.rivals.1.sub = kowal
+zadania.D6.rivals.1.with = z Tadkiem Młotem, kowalem
+zadania.D6.rivals.1.kicker = TURNIEJ W TAWERNIE · PÓŁFINAŁ
+[zadania.D6.rivals.1.lines.hello]
+Sam cię namówiłem, to teraz nie płacz. Kowadło nie płacze.
+
+[zadania.D6.rivals.1.lines.round]
+Łokieć na stół. Jak przy kowadle.
+
+[zadania.D6.rivals.1.lines.burst]
+Hah!
+Młotem!
+Uch!
+
+[zadania.D6.rivals.1.lines.winning]
+Żelazo giąłem grubsze od ciebie!
+To wszystko?
+
+[zadania.D6.rivals.1.lines.losing]
+No, no... nieźle!
+Uch... mocny jesteś!
+
+[zadania.D6.rivals.1.lines.roundHe]
+Kowal górą!
+
+[zadania.D6.rivals.1.lines.roundYou]
+Dobrze! Tak trzymaj!
+
+[zadania.D6.rivals.1.lines.won]
+Kowal wygrywa! Ale ty, chłopcze, nie wstydź się.
+
+[zadania.D6.rivals.1.lines.lost]
+Pokonałeś mnie! Ha! To teraz idź i pokonaj Gruma!
+
+zadania.D6.rivals.2.name = Grum
+zadania.D6.rivals.2.sub = Żelazna Pięść, najemnik
+zadania.D6.rivals.2.with = z Grumem - finał
+zadania.D6.rivals.2.kicker = TURNIEJ W TAWERNIE · FINAŁ
+[zadania.D6.rivals.2.lines.hello]
+Finał. Tylko ty i ja. Nie oszczędzaj mnie. Ja ciebie nie będę.
+
+# D20, „Kuter na pochylni”
+zadania.D20.title = Kuter na pochylni
+zadania.D20.where = Przystań (plaża, pochylnia), Podgrodzie
+zadania.D20.when = od spotkania z Rochem
+zadania.D20.desc = Roch chce połatać rozbity kuter, którym przywiózł bohatera z lądu. Deski, gwoździe, smoła, żagiel - i noc, w którą trzeba wypłynąć przed nosem celnika.
+[zadania.D20.offer.say]
+Kuter da się połatać. Kadłub cały, tylko burta i maszt. I żagiel, bo z tamtego zostały szmaty.
+Najpierw trzeba go ściągnąć z plaży na pochylnię. Sam nie dam rady. Janek ma silne ręce i nie zadaje pytań.
+
+zadania.D20.offer.yes = Pomogę ci.
+zadania.D20.offer.no = Nie teraz.
+[zadania.D20.offer.accept]
+Wiedziałem. Pogadaj z Jankiem. Mnie się boi, ciebie lubi.
+
+[zadania.D20.offer.decline]
+Kuter nie ucieknie. Leży, jak leżał.
+
+zadania.D20.steps.0.text = Poproś Janka o pomoc przy wraku (przystań).
+[zadania.D20.steps.0.say]
+> Roch chce połatać kuter. Pomożesz ściągnąć wrak z plaży na pochylnię?
+Roch, mówisz... (Janek drapie się po zaroście.) Ja tam nic nie wiem o żadnym Rochu. Ale wrak to wrak, a pochylnia stoi pusta.
+Jutro o świcie, przy wraku. Przynieś dwie liny - moje są w sieciach.
+
+zadania.D20.steps.1.text = O świcie (5–10) przyjdź do wraku na plaży z 2 linami.
+[zadania.D20.steps.1.early]
+> O świcie, mówił Janek. Jeszcze nie pora.
+
+[zadania.D20.steps.1.say]
+@janek: Jest i nasz pomocnik! Liny tu, pod dziób. Roch, łap za rufę!
+@przemytnik: Na trzy. Raz... dwa... ciągnij!
+> (Kadłub zgrzyta po kamieniach, ale idzie. Krok po kroku, aż na deski pochylni.)
+
+[zadania.D20.steps.1.done]
+@janek: Uff. Leży. Ja wracam do sieci - a wy róbcie, co chcecie. Ja nic nie widziałem.
+
+zadania.D20.steps.2.text = Przynieś Rochowi 8× Deski i 20× Gwoździe na burtę.
+[zadania.D20.steps.2.remind]
+Osiem desek i dwadzieścia gwoździ. Burta sama się nie zrośnie.
+
+[zadania.D20.steps.2.hero]
+> Deski i gwoździe.
+
+[zadania.D20.steps.2.done]
+Porządne deski. Burtę zrobię w dwa dni. Teraz smoła - bez smoły kuter to sito.
+Zbych z Podgrodzia pędzi smołę z karpiny. Smolarz, to i nazwisko ma. Zanieś mu drewna, zrobi.
+
+zadania.D20.steps.3.text = Zanieś Zbychowi Smolarzowi 6× Drewno - napędzi smoły (Podgrodzie, drewutnia).
+[zadania.D20.steps.3.remind]
+Smoła? Z karpiny się pędzi. Daj sześć polan, to ci napędzę.
+
+[zadania.D20.steps.3.hero]
+> Roch z przystani potrzebuje smoły. Na kuter.
+
+[zadania.D20.steps.3.done]
+Roch, powiadasz? Nie znam. ...Ale smołę znam. Masz, dwa garnki. Smarować na ciepło.
+
+zadania.D20.steps.4.text = Zanieś praczce Marcie 10× Włókno - uszyje żagiel (Podgrodzie).
+[zadania.D20.steps.4.remind]
+Żagiel? Z czego, z powietrza? Dziesięć garści lnu, to uszyję.
+
+[zadania.D20.steps.4.hero]
+> Uszyjesz żagiel na kuter? Mam len.
+
+[zadania.D20.steps.4.done]
+(Marta rozkłada płótno na kolanach.) Takiego wielkiego jeszcze nie szyłam. Masz. Mocne, podwójnym ściegiem.
+
+zadania.D20.steps.5.text = Zanieś Rochowi smołę i żagiel.
+[zadania.D20.steps.5.remind]
+Smoła i żagiel. Bez nich nigdzie nie popłynę.
+
+[zadania.D20.steps.5.hero]
+> Smoła od Zbycha i żagiel od Marty.
+
+[zadania.D20.steps.5.done]
+(Roch długo gładzi płótno.) Dobra robota. Kuter będzie pływał. Jutro go zwodujemy.
+A potem trzeba wypłynąć. Nocą. Celnik nie może wiedzieć. Przyjdź wieczorem, po dwudziestej.
+
+zadania.D20.steps.6.text = Kuter gotowy. Wieczorem (20–2) pomóż Rochowi wypłynąć przed nosem strażnika - albo donieś na niego celnikowi (komora celna, 8–18).
+
+# ======================================================================== QUESTS (zadania)
+# D6
+zadania.D6.lines.late = Turniej odbył się bez ciebie.

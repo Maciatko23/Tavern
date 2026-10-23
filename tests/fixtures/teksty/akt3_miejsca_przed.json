@@ -1,0 +1,11 @@
+{
+ "miejsca": {
+  "1": {
+   "doorName": "Stare drzwi (piwnica)"
+  },
+  "8": {
+   "doorName": "Drzwi tawerny"
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Act3_Data.js: SPOTS=miejsca:/doorName$/)"
+}

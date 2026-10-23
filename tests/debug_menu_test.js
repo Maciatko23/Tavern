@@ -120,8 +120,8 @@ const { launch, sleep } = require("./cdp.js");
         check("...'Przenieś mnie do': the harbour, the six places, the hut under the forest, the burnt farm; a room picker",
             goNames.join("|") === "Przystań|Pustelnia na klifie|Urwisko Kruków|Przylądek z latarnią|Garnizon nad zatoką|Wrak na mieliźnie|Stara cysterna zakonu|Chata pod lasem|Spalona zagroda" &&
             isleKinds.includes("isleInside"), goNames);
-        check("...the sea (low tide, high tide, a misty night, the water red / grey), the story (day 61 unpaid, pay the debt, +1000 G, the prologue), the people (the raven, the garrison's favour, the cistern), W5's chapters, W7's chapters, W9's rival (2026-10-17), the white eagle's eight rows (2026-10-18: the egg, the egg ready on the ridge, the stage, the bond, mount, land, the theft, to the ridge)",
-            isleKinds.filter(k => k !== "isleGo" && k !== "isleOkolice").join() === "isleInside,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,islePrologue,isleRaven,isleFavor,isleCistern,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleW4,isleW5,isleW7,isleW9,isleW9Meet,isleW10" &&
+        check("...the sea (low tide, high tide, a misty night, the water red / grey), the story (day 61 unpaid, pay the debt, +1000 G, the prologue, the texts read again - 2026-10-23), the people (the raven, the garrison's favour, the cistern), W5's chapters, W7's chapters, W9's rival (2026-10-17), the white eagle's eight rows (2026-10-18: the egg, the egg ready on the ridge, the stage, the bond, mount, land, the theft, to the ridge)",
+            isleKinds.filter(k => k !== "isleGo" && k !== "isleOkolice").join() === "isleInside,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,isleXp,islePrologue,isleTexts,isleRaven,isleFavor,isleCistern,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleW4,isleW5,isleW7,isleW9,isleW9Meet,isleW10" &&
             /^Przychylność garnizonu: \d+ \/ 100/.test(isle.rows.find(r => r.kind === "isleFavor").label), isleKinds);
         check("...the new terrain's sections (Okolice.f9, 2026-10-21): each one a header with its rows (isleOkolice), the core's first",
             isle.okolice.length >= 1 && isle.okolice[0][0] === "Nowy teren (pakiet 0: Okolice):" && isle.okolice.every(([title, n]) => {
@@ -233,6 +233,9 @@ const { launch, sleep } = require("./cdp.js");
         const g0 = await ev("$gameParty.gold()");
         await isleSel("isleGold"); await key(OK); await frames(6);
         check("'+1000 G': a thousand gold, the menu stays", (await ev("$gameParty.gold()")) === g0 + 1000 && (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
+        const lv0 = await ev("Combat.hero().level");
+        await isleSel("isleXp"); await key(OK); await frames(6);
+        check("'+10 000 doswiadczenia': levels come at once, the menu stays", (await ev("Combat.hero().level")) > lv0 && (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug", [lv0, await ev("Combat.hero().level")]);
         await isleSel("isleFavor");
         const fav0 = await ev("Garnizon.favor()");
         await key(RIGHT); await frames(4);
@@ -256,6 +259,16 @@ const { launch, sleep } = require("./cdp.js");
         await isleSel("isleCistern"); await key(OK); await frames(6);
         check("'Otwórz cysternę': cisternOpen (and the rest of W1 ch. 7's flags), the label says so",
             (await J("['cisternOpen','sluiceHalf','millRuns','kubaHonest'].every(k => !!TownQuests.state().flags[k])")) && /^Cysterna otwarta/.test(await isleRow("isleCistern")));
+        // (2026-10-23) the texts' files read again (Watki.przeladuj): the label says how many, a notice waits for the map
+        await ev("$gameTemp._topNotices = []; 0");
+        await isleSel("isleTexts"); await key(OK);
+        let texts = null;
+        for (let i = 0; i < 40 && !(texts = await J("(function(){ const r = Watki.ostatnieWczytanie(); return r ? r : null; })()")); i++) await frames(5);
+        await frames(4);
+        const textsLab = await isleRow("isleTexts"), textsTop = await J("($gameTemp._topNotices || []).map(n => n.text || n)");
+        check("'Wczytaj teksty od nowa': every file of js/teksty read again - the label 'Teksty wczytane od nowa: N plik...', the same notice for the map, the menu stays",
+            !!texts && !texts.bad && texts.n === texts.files && texts.n >= 1 && /Teksty wczytane od nowa: \d+ plik/.test(textsLab) && textsTop.some(t => /Teksty wczytane od nowa/.test(JSON.stringify(t))) &&
+            (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug", { texts, textsLab, textsTop });
         await isleSel("isleLose"); await key(OK); await frames(6);
         check("'Świt dnia 61 bez spłaty' in a game without the story: nothing (the label says why), the menu stays",
             /gra bez fabuły/.test(await isleRow("isleLose")) && (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug" && (await ev("$gameSystem.dayNightDay()")) < 61);

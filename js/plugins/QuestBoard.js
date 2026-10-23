@@ -696,12 +696,11 @@
         return yes;
     }
     const OPEN_LIST = [{ code: 355, indent: 0, parameters: ["QuestBoard.open()"] }, { code: 0, indent: 0, parameters: [] }];
-    const _Game_Event_list = Game_Event.prototype.list;
-    Game_Event.prototype.list = function() {
-        const p = this.page();
-        if (p && p.trigger <= 2 && isBoardEvent(this)) return OPEN_LIST;   // (the action button / touch: never an autorun or a parallel page)
-        return _Game_Event_list.call(this);
-    };
+    // (2026-10-23) the core's one list hook (Tawerna.onEventList): a system's own use of an event - after TavernLife's, before Story's
+    T.onEventList(ev => {
+        const p = ev.page();
+        return p && p.trigger <= 2 && isBoardEvent(ev) ? OPEN_LIST : null;   // (the action button / touch: never an autorun or a parallel page)
+    }, { owner: PLUGIN, priority: T.onEventList.PRIORITY.own });
     function open() {
         const S = P.Scene;
         if (!S) { console.error("QuestBoard.js: brak QuestBoard_Scene.js (the board's scene)"); return false; }

@@ -1,0 +1,1782 @@
+{
+ "views": [
+  "chód S",
+  "chód SW",
+  "chód W",
+  "chód NW",
+  "chód N",
+  "chód NE",
+  "chód E",
+  "chód SE",
+  "bieg S",
+  "bieg E",
+  "siekiera",
+  "siekiera: cios",
+  "siekiera z boku",
+  "pałka",
+  "włócznia",
+  "miecz",
+  "miecz S",
+  "kilof N",
+  "siedzi",
+  "leży",
+  "przewrót",
+  "pochodnia"
+ ],
+ "sets": {
+  "skora": {
+   "old": [
+    "z_skora_old_Hero_Walk_0_0.png",
+    "z_skora_old_Hero_Walk_3_1.png",
+    "z_skora_old_Hero_Walk_3_2.png",
+    "z_skora_old_Hero_Walk_6_3.png",
+    "z_skora_old_Hero_Walk_0_4.png",
+    "z_skora_old_Hero_Walk_3_5.png",
+    "z_skora_old_Hero_Walk_7_6.png",
+    "z_skora_old_Hero_Walk_6_7.png",
+    "z_skora_old_Hero_Run_3_0.png",
+    "z_skora_old_Hero_Run_5_6.png",
+    "z_skora_old_Hero_Axe_3_0.png",
+    "z_skora_old_Hero_Axe_8_0.png",
+    "z_skora_old_Hero_AxeSide_10_2.png",
+    "z_skora_old_Hero_Club_9_1.png",
+    "z_skora_old_Hero_Spear_10_2.png",
+    "z_skora_old_Hero_Sword_11_2.png",
+    "z_skora_old_Hero_Sword_9_0.png",
+    "z_skora_old_Hero_Pick_9_3.png",
+    "z_skora_old_Hero_Sit_16_0.png",
+    "z_skora_old_Hero_LieDown_16_1.png",
+    "z_skora_old_Hero_Roll_6_1.png",
+    "z_skora_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_skora_new_Hero_Walk_0_0.png",
+    "z_skora_new_Hero_Walk_3_1.png",
+    "z_skora_new_Hero_Walk_3_2.png",
+    "z_skora_new_Hero_Walk_6_3.png",
+    "z_skora_new_Hero_Walk_0_4.png",
+    "z_skora_new_Hero_Walk_3_5.png",
+    "z_skora_new_Hero_Walk_7_6.png",
+    "z_skora_new_Hero_Walk_6_7.png",
+    "z_skora_new_Hero_Run_3_0.png",
+    "z_skora_new_Hero_Run_5_6.png",
+    "z_skora_new_Hero_Axe_3_0.png",
+    "z_skora_new_Hero_Axe_8_0.png",
+    "z_skora_new_Hero_AxeSide_10_2.png",
+    "z_skora_new_Hero_Club_9_1.png",
+    "z_skora_new_Hero_Spear_10_2.png",
+    "z_skora_new_Hero_Sword_11_2.png",
+    "z_skora_new_Hero_Sword_9_0.png",
+    "z_skora_new_Hero_Pick_9_3.png",
+    "z_skora_new_Hero_Sit_16_0.png",
+    "z_skora_new_Hero_LieDown_16_1.png",
+    "z_skora_new_Hero_Roll_6_1.png",
+    "z_skora_new_Hero_TorchWalk_3_6.png"
+   ]
+  },
+  "zelazo": {
+   "old": [
+    "z_zelazo_old_Hero_Walk_0_0.png",
+    "z_zelazo_old_Hero_Walk_3_1.png",
+    "z_zelazo_old_Hero_Walk_3_2.png",
+    "z_zelazo_old_Hero_Walk_6_3.png",
+    "z_zelazo_old_Hero_Walk_0_4.png",
+    "z_zelazo_old_Hero_Walk_3_5.png",
+    "z_zelazo_old_Hero_Walk_7_6.png",
+    "z_zelazo_old_Hero_Walk_6_7.png",
+    "z_zelazo_old_Hero_Run_3_0.png",
+    "z_zelazo_old_Hero_Run_5_6.png",
+    "z_zelazo_old_Hero_Axe_3_0.png",
+    "z_zelazo_old_Hero_Axe_8_0.png",
+    "z_zelazo_old_Hero_AxeSide_10_2.png",
+    "z_zelazo_old_Hero_Club_9_1.png",
+    "z_zelazo_old_Hero_Spear_10_2.png",
+    "z_zelazo_old_Hero_Sword_11_2.png",
+    "z_zelazo_old_Hero_Sword_9_0.png",
+    "z_zelazo_old_Hero_Pick_9_3.png",
+    "z_zelazo_old_Hero_Sit_16_0.png",
+    "z_zelazo_old_Hero_LieDown_16_1.png",
+    "z_zelazo_old_Hero_Roll_6_1.png",
+    "z_zelazo_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_zelazo_new_Hero_Walk_0_0.png",
+    "z_zelazo_new_Hero_Walk_3_1.png",
+    "z_zelazo_new_Hero_Walk_3_2.png",
+    "z_zelazo_new_Hero_Walk_6_3.png",
+    "z_zelazo_new_Hero_Walk_0_4.png",
+    "z_zelazo_new_Hero_Walk_3_5.png",
+    "z_zelazo_new_Hero_Walk_7_6.png",
+    "z_zelazo_new_Hero_Walk_6_7.png",
+    "z_zelazo_new_Hero_Run_3_0.png",
+    "z_zelazo_new_Hero_Run_5_6.png",
+    "z_zelazo_new_Hero_Axe_3_0.png",
+    "z_zelazo_new_Hero_Axe_8_0.png",
+    "z_zelazo_new_Hero_AxeSide_10_2.png",
+    "z_zelazo_new_Hero_Club_9_1.png",
+    "z_zelazo_new_Hero_Spear_10_2.png",
+    "z_zelazo_new_Hero_Sword_11_2.png",
+    "z_zelazo_new_Hero_Sword_9_0.png",
+    "z_zelazo_new_Hero_Pick_9_3.png",
+    "z_zelazo_new_Hero_Sit_16_0.png",
+    "z_zelazo_new_Hero_LieDown_16_1.png",
+    "z_zelazo_new_Hero_Roll_6_1.png",
+    "z_zelazo_new_Hero_TorchWalk_3_6.png"
+   ]
+  }
+ },
+ "materials": [
+  {
+   "label": "skóra czarna",
+   "set": {
+    "glowa": "helm_kaptur_skora_czarna",
+    "tors": "zbroja_skorznia_skora_czarna",
+    "rece": "karwasze_skora_czarna"
+   },
+   "files": [
+    "m_0_Hero_Walk_0_0.png",
+    "m_0_Hero_Walk_3_2.png",
+    "m_0_Hero_Walk_0_4.png",
+    "m_0_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "kaptur lniany / wełniany",
+   "set": {
+    "glowa": "helm_kaptur_len",
+    "tors": "zbroja_skorznia_skora",
+    "rece": "karwasze_braz"
+   },
+   "files": [
+    "m_1_Hero_Walk_0_0.png",
+    "m_1_Hero_Walk_3_2.png",
+    "m_1_Hero_Walk_0_4.png",
+    "m_1_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "kaptur wełniany, karwasze żelazne",
+   "set": {
+    "glowa": "helm_kaptur_welna",
+    "tors": "zbroja_skorznia_skora",
+    "rece": "karwasze_zelazo"
+   },
+   "files": [
+    "m_2_Hero_Walk_0_0.png",
+    "m_2_Hero_Walk_3_2.png",
+    "m_2_Hero_Walk_0_4.png",
+    "m_2_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "stal",
+   "set": {
+    "glowa": "helm_kapalin_stal",
+    "tors": "zbroja_kolczuga_stal",
+    "nogi": "nagolenniki_stal",
+    "stopy": "buty_okute_stal"
+   },
+   "files": [
+    "m_3_Hero_Walk_0_0.png",
+    "m_3_Hero_Walk_3_2.png",
+    "m_3_Hero_Walk_0_4.png",
+    "m_3_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "brąz",
+   "set": {
+    "glowa": "helm_kapalin_braz",
+    "tors": "zbroja_kolczuga_zelazo",
+    "nogi": "nagolenniki_braz",
+    "stopy": "buty_okute_zelazo"
+   },
+   "files": [
+    "m_4_Hero_Walk_0_0.png",
+    "m_4_Hero_Walk_3_2.png",
+    "m_4_Hero_Walk_0_4.png",
+    "m_4_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "zakonne",
+   "set": {
+    "glowa": "helm_kapalin_zakon",
+    "tors": "zbroja_kolczuga_zakon",
+    "nogi": "nagolenniki_zakon",
+    "stopy": "buty_okute_zakon"
+   },
+   "files": [
+    "m_5_Hero_Walk_0_0.png",
+    "m_5_Hero_Walk_3_2.png",
+    "m_5_Hero_Walk_0_4.png",
+    "m_5_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "skórzane nagolenniki",
+   "set": {
+    "glowa": "",
+    "tors": "zbroja_skorznia_skora",
+    "nogi": "nagolenniki_skora",
+    "stopy": "buty_okute_zelazo"
+   },
+   "files": [
+    "m_6_Hero_Walk_0_0.png",
+    "m_6_Hero_Walk_3_2.png",
+    "m_6_Hero_Walk_0_4.png",
+    "m_6_Hero_AxeSide_10_2.png"
+   ]
+  }
+ ],
+ "matViews": [
+  "chód S",
+  "chód W",
+  "chód N",
+  "siekiera z boku"
+ ],
+ "sword": [
+  {
+   "key": "bron_miecz_zelazo",
+   "own": true,
+   "files": [
+    "s_bron_miecz_zelazo_0_4.png",
+    "s_bron_miecz_zelazo_0_9.png",
+    "s_bron_miecz_zelazo_0_13.png",
+    "s_bron_miecz_zelazo_2_6.png",
+    "s_bron_miecz_zelazo_2_9.png",
+    "s_bron_miecz_zelazo_2_11.png",
+    "s_bron_miecz_zelazo_2_14.png",
+    "s_bron_miecz_zelazo_3_11.png"
+   ]
+  },
+  {
+   "key": "bron_miecz_stal",
+   "own": false,
+   "files": [
+    "s_bron_miecz_stal_0_4.png",
+    "s_bron_miecz_stal_0_9.png",
+    "s_bron_miecz_stal_0_13.png",
+    "s_bron_miecz_stal_2_6.png",
+    "s_bron_miecz_stal_2_9.png",
+    "s_bron_miecz_stal_2_11.png",
+    "s_bron_miecz_stal_2_14.png",
+    "s_bron_miecz_stal_3_11.png"
+   ]
+  },
+  {
+   "key": "bron_miecz_braz",
+   "own": false,
+   "files": [
+    "s_bron_miecz_braz_0_4.png",
+    "s_bron_miecz_braz_0_9.png",
+    "s_bron_miecz_braz_0_13.png",
+    "s_bron_miecz_braz_2_6.png",
+    "s_bron_miecz_braz_2_9.png",
+    "s_bron_miecz_braz_2_11.png",
+    "s_bron_miecz_braz_2_14.png",
+    "s_bron_miecz_braz_3_11.png"
+   ]
+  },
+  {
+   "key": "bron_dlugi_miecz_stal",
+   "own": false,
+   "files": [
+    "s_bron_dlugi_miecz_stal_0_4.png",
+    "s_bron_dlugi_miecz_stal_0_9.png",
+    "s_bron_dlugi_miecz_stal_0_13.png",
+    "s_bron_dlugi_miecz_stal_2_6.png",
+    "s_bron_dlugi_miecz_stal_2_9.png",
+    "s_bron_dlugi_miecz_stal_2_11.png",
+    "s_bron_dlugi_miecz_stal_2_14.png",
+    "s_bron_dlugi_miecz_stal_3_11.png"
+   ]
+  },
+  {
+   "key": "bron_szabla_stal",
+   "own": false,
+   "files": [
+    "s_bron_szabla_stal_0_4.png",
+    "s_bron_szabla_stal_0_9.png",
+    "s_bron_szabla_stal_0_13.png",
+    "s_bron_szabla_stal_2_6.png",
+    "s_bron_szabla_stal_2_9.png",
+    "s_bron_szabla_stal_2_11.png",
+    "s_bron_szabla_stal_2_14.png",
+    "s_bron_szabla_stal_3_11.png"
+   ]
+  },
+  {
+   "key": "bron_tasak_zelazo",
+   "own": false,
+   "files": [
+    "s_bron_tasak_zelazo_0_4.png",
+    "s_bron_tasak_zelazo_0_9.png",
+    "s_bron_tasak_zelazo_0_13.png",
+    "s_bron_tasak_zelazo_2_6.png",
+    "s_bron_tasak_zelazo_2_9.png",
+    "s_bron_tasak_zelazo_2_11.png",
+    "s_bron_tasak_zelazo_2_14.png",
+    "s_bron_tasak_zelazo_3_11.png"
+   ]
+  }
+ ],
+ "swordFrames": [
+  [
+   0,
+   4
+  ],
+  [
+   0,
+   9
+  ],
+  [
+   0,
+   13
+  ],
+  [
+   2,
+   6
+  ],
+  [
+   2,
+   9
+  ],
+  [
+   2,
+   11
+  ],
+  [
+   2,
+   14
+  ],
+  [
+   3,
+   11
+  ]
+ ],
+ "mapa": [
+  {
+   "set": "skora",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_skora_old_0.png",
+   "head": true
+  },
+  {
+   "set": "skora",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_skora_old_1.png",
+   "head": true
+  },
+  {
+   "set": "skora",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_skora_old_2.png",
+   "head": true
+  },
+  {
+   "set": "skora",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_skora_old_3.png",
+   "head": true
+  },
+  {
+   "set": "skora",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_skora_old_4.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_skora_old_5.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": false,
+   "label": "leży",
+   "file": "map_skora_old_6.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_skora_new_0.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_skora_new_1.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_skora_new_2.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_skora_new_3.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_skora_new_4.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_skora_new_5.png",
+   "head": false
+  },
+  {
+   "set": "skora",
+   "on": true,
+   "label": "leży",
+   "file": "map_skora_new_6.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_zelazo_old_0.png",
+   "head": true
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_zelazo_old_1.png",
+   "head": true
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_zelazo_old_2.png",
+   "head": true
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_zelazo_old_3.png",
+   "head": true
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_zelazo_old_4.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_zelazo_old_5.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": false,
+   "label": "leży",
+   "file": "map_zelazo_old_6.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_zelazo_new_0.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_zelazo_new_1.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_zelazo_new_2.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_zelazo_new_3.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_zelazo_new_4.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_zelazo_new_5.png",
+   "head": false
+  },
+  {
+   "set": "zelazo",
+   "on": true,
+   "label": "leży",
+   "file": "map_zelazo_new_6.png",
+   "head": false
+  }
+ ],
+ "miecz_mapa": [
+  {
+   "dir": 2,
+   "label": "zamach",
+   "file": "miecz_2_zamach.png"
+  },
+  {
+   "dir": 2,
+   "label": "cios",
+   "file": "miecz_2_cios.png"
+  },
+  {
+   "dir": 2,
+   "label": "po",
+   "file": "miecz_2_po.png"
+  },
+  {
+   "dir": 4,
+   "label": "zamach",
+   "file": "miecz_4_zamach.png"
+  },
+  {
+   "dir": 4,
+   "label": "cios",
+   "file": "miecz_4_cios.png"
+  },
+  {
+   "dir": 4,
+   "label": "po",
+   "file": "miecz_4_po.png"
+  },
+  {
+   "dir": 6,
+   "label": "zamach",
+   "file": "miecz_6_zamach.png"
+  },
+  {
+   "dir": 6,
+   "label": "cios",
+   "file": "miecz_6_cios.png"
+  },
+  {
+   "dir": 6,
+   "label": "po",
+   "file": "miecz_6_po.png"
+  },
+  {
+   "dir": 8,
+   "label": "zamach",
+   "file": "miecz_8_zamach.png"
+  },
+  {
+   "dir": 8,
+   "label": "cios",
+   "file": "miecz_8_cios.png"
+  },
+  {
+   "dir": 8,
+   "label": "po",
+   "file": "miecz_8_po.png"
+  }
+ ],
+ "sets2": {
+  "przeszywanica": {
+   "old": [
+    "z_przeszywanica_old_Hero_Walk_0_0.png",
+    "z_przeszywanica_old_Hero_Walk_3_1.png",
+    "z_przeszywanica_old_Hero_Walk_3_2.png",
+    "z_przeszywanica_old_Hero_Walk_6_3.png",
+    "z_przeszywanica_old_Hero_Walk_0_4.png",
+    "z_przeszywanica_old_Hero_Walk_3_5.png",
+    "z_przeszywanica_old_Hero_Walk_7_6.png",
+    "z_przeszywanica_old_Hero_Walk_6_7.png",
+    "z_przeszywanica_old_Hero_Run_3_0.png",
+    "z_przeszywanica_old_Hero_Run_5_6.png",
+    "z_przeszywanica_old_Hero_Axe_3_0.png",
+    "z_przeszywanica_old_Hero_Axe_8_0.png",
+    "z_przeszywanica_old_Hero_AxeSide_10_2.png",
+    "z_przeszywanica_old_Hero_Club_9_1.png",
+    "z_przeszywanica_old_Hero_Spear_10_2.png",
+    "z_przeszywanica_old_Hero_Sword_11_2.png",
+    "z_przeszywanica_old_Hero_Sword_9_0.png",
+    "z_przeszywanica_old_Hero_Pick_9_3.png",
+    "z_przeszywanica_old_Hero_Sit_16_0.png",
+    "z_przeszywanica_old_Hero_LieDown_16_1.png",
+    "z_przeszywanica_old_Hero_Roll_6_1.png",
+    "z_przeszywanica_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_przeszywanica_new_Hero_Walk_0_0.png",
+    "z_przeszywanica_new_Hero_Walk_3_1.png",
+    "z_przeszywanica_new_Hero_Walk_3_2.png",
+    "z_przeszywanica_new_Hero_Walk_6_3.png",
+    "z_przeszywanica_new_Hero_Walk_0_4.png",
+    "z_przeszywanica_new_Hero_Walk_3_5.png",
+    "z_przeszywanica_new_Hero_Walk_7_6.png",
+    "z_przeszywanica_new_Hero_Walk_6_7.png",
+    "z_przeszywanica_new_Hero_Run_3_0.png",
+    "z_przeszywanica_new_Hero_Run_5_6.png",
+    "z_przeszywanica_new_Hero_Axe_3_0.png",
+    "z_przeszywanica_new_Hero_Axe_8_0.png",
+    "z_przeszywanica_new_Hero_AxeSide_10_2.png",
+    "z_przeszywanica_new_Hero_Club_9_1.png",
+    "z_przeszywanica_new_Hero_Spear_10_2.png",
+    "z_przeszywanica_new_Hero_Sword_11_2.png",
+    "z_przeszywanica_new_Hero_Sword_9_0.png",
+    "z_przeszywanica_new_Hero_Pick_9_3.png",
+    "z_przeszywanica_new_Hero_Sit_16_0.png",
+    "z_przeszywanica_new_Hero_LieDown_16_1.png",
+    "z_przeszywanica_new_Hero_Roll_6_1.png",
+    "z_przeszywanica_new_Hero_TorchWalk_3_6.png"
+   ]
+  },
+  "luska": {
+   "old": [
+    "z_luska_old_Hero_Walk_0_0.png",
+    "z_luska_old_Hero_Walk_3_1.png",
+    "z_luska_old_Hero_Walk_3_2.png",
+    "z_luska_old_Hero_Walk_6_3.png",
+    "z_luska_old_Hero_Walk_0_4.png",
+    "z_luska_old_Hero_Walk_3_5.png",
+    "z_luska_old_Hero_Walk_7_6.png",
+    "z_luska_old_Hero_Walk_6_7.png",
+    "z_luska_old_Hero_Run_3_0.png",
+    "z_luska_old_Hero_Run_5_6.png",
+    "z_luska_old_Hero_Axe_3_0.png",
+    "z_luska_old_Hero_Axe_8_0.png",
+    "z_luska_old_Hero_AxeSide_10_2.png",
+    "z_luska_old_Hero_Club_9_1.png",
+    "z_luska_old_Hero_Spear_10_2.png",
+    "z_luska_old_Hero_Sword_11_2.png",
+    "z_luska_old_Hero_Sword_9_0.png",
+    "z_luska_old_Hero_Pick_9_3.png",
+    "z_luska_old_Hero_Sit_16_0.png",
+    "z_luska_old_Hero_LieDown_16_1.png",
+    "z_luska_old_Hero_Roll_6_1.png",
+    "z_luska_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_luska_new_Hero_Walk_0_0.png",
+    "z_luska_new_Hero_Walk_3_1.png",
+    "z_luska_new_Hero_Walk_3_2.png",
+    "z_luska_new_Hero_Walk_6_3.png",
+    "z_luska_new_Hero_Walk_0_4.png",
+    "z_luska_new_Hero_Walk_3_5.png",
+    "z_luska_new_Hero_Walk_7_6.png",
+    "z_luska_new_Hero_Walk_6_7.png",
+    "z_luska_new_Hero_Run_3_0.png",
+    "z_luska_new_Hero_Run_5_6.png",
+    "z_luska_new_Hero_Axe_3_0.png",
+    "z_luska_new_Hero_Axe_8_0.png",
+    "z_luska_new_Hero_AxeSide_10_2.png",
+    "z_luska_new_Hero_Club_9_1.png",
+    "z_luska_new_Hero_Spear_10_2.png",
+    "z_luska_new_Hero_Sword_11_2.png",
+    "z_luska_new_Hero_Sword_9_0.png",
+    "z_luska_new_Hero_Pick_9_3.png",
+    "z_luska_new_Hero_Sit_16_0.png",
+    "z_luska_new_Hero_LieDown_16_1.png",
+    "z_luska_new_Hero_Roll_6_1.png",
+    "z_luska_new_Hero_TorchWalk_3_6.png"
+   ]
+  },
+  "napiersnik": {
+   "old": [
+    "z_napiersnik_old_Hero_Walk_0_0.png",
+    "z_napiersnik_old_Hero_Walk_3_1.png",
+    "z_napiersnik_old_Hero_Walk_3_2.png",
+    "z_napiersnik_old_Hero_Walk_6_3.png",
+    "z_napiersnik_old_Hero_Walk_0_4.png",
+    "z_napiersnik_old_Hero_Walk_3_5.png",
+    "z_napiersnik_old_Hero_Walk_7_6.png",
+    "z_napiersnik_old_Hero_Walk_6_7.png",
+    "z_napiersnik_old_Hero_Run_3_0.png",
+    "z_napiersnik_old_Hero_Run_5_6.png",
+    "z_napiersnik_old_Hero_Axe_3_0.png",
+    "z_napiersnik_old_Hero_Axe_8_0.png",
+    "z_napiersnik_old_Hero_AxeSide_10_2.png",
+    "z_napiersnik_old_Hero_Club_9_1.png",
+    "z_napiersnik_old_Hero_Spear_10_2.png",
+    "z_napiersnik_old_Hero_Sword_11_2.png",
+    "z_napiersnik_old_Hero_Sword_9_0.png",
+    "z_napiersnik_old_Hero_Pick_9_3.png",
+    "z_napiersnik_old_Hero_Sit_16_0.png",
+    "z_napiersnik_old_Hero_LieDown_16_1.png",
+    "z_napiersnik_old_Hero_Roll_6_1.png",
+    "z_napiersnik_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_napiersnik_new_Hero_Walk_0_0.png",
+    "z_napiersnik_new_Hero_Walk_3_1.png",
+    "z_napiersnik_new_Hero_Walk_3_2.png",
+    "z_napiersnik_new_Hero_Walk_6_3.png",
+    "z_napiersnik_new_Hero_Walk_0_4.png",
+    "z_napiersnik_new_Hero_Walk_3_5.png",
+    "z_napiersnik_new_Hero_Walk_7_6.png",
+    "z_napiersnik_new_Hero_Walk_6_7.png",
+    "z_napiersnik_new_Hero_Run_3_0.png",
+    "z_napiersnik_new_Hero_Run_5_6.png",
+    "z_napiersnik_new_Hero_Axe_3_0.png",
+    "z_napiersnik_new_Hero_Axe_8_0.png",
+    "z_napiersnik_new_Hero_AxeSide_10_2.png",
+    "z_napiersnik_new_Hero_Club_9_1.png",
+    "z_napiersnik_new_Hero_Spear_10_2.png",
+    "z_napiersnik_new_Hero_Sword_11_2.png",
+    "z_napiersnik_new_Hero_Sword_9_0.png",
+    "z_napiersnik_new_Hero_Pick_9_3.png",
+    "z_napiersnik_new_Hero_Sit_16_0.png",
+    "z_napiersnik_new_Hero_LieDown_16_1.png",
+    "z_napiersnik_new_Hero_Roll_6_1.png",
+    "z_napiersnik_new_Hero_TorchWalk_3_6.png"
+   ]
+  },
+  "zakonny": {
+   "old": [
+    "z_zakonny_old_Hero_Walk_0_0.png",
+    "z_zakonny_old_Hero_Walk_3_1.png",
+    "z_zakonny_old_Hero_Walk_3_2.png",
+    "z_zakonny_old_Hero_Walk_6_3.png",
+    "z_zakonny_old_Hero_Walk_0_4.png",
+    "z_zakonny_old_Hero_Walk_3_5.png",
+    "z_zakonny_old_Hero_Walk_7_6.png",
+    "z_zakonny_old_Hero_Walk_6_7.png",
+    "z_zakonny_old_Hero_Run_3_0.png",
+    "z_zakonny_old_Hero_Run_5_6.png",
+    "z_zakonny_old_Hero_Axe_3_0.png",
+    "z_zakonny_old_Hero_Axe_8_0.png",
+    "z_zakonny_old_Hero_AxeSide_10_2.png",
+    "z_zakonny_old_Hero_Club_9_1.png",
+    "z_zakonny_old_Hero_Spear_10_2.png",
+    "z_zakonny_old_Hero_Sword_11_2.png",
+    "z_zakonny_old_Hero_Sword_9_0.png",
+    "z_zakonny_old_Hero_Pick_9_3.png",
+    "z_zakonny_old_Hero_Sit_16_0.png",
+    "z_zakonny_old_Hero_LieDown_16_1.png",
+    "z_zakonny_old_Hero_Roll_6_1.png",
+    "z_zakonny_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_zakonny_new_Hero_Walk_0_0.png",
+    "z_zakonny_new_Hero_Walk_3_1.png",
+    "z_zakonny_new_Hero_Walk_3_2.png",
+    "z_zakonny_new_Hero_Walk_6_3.png",
+    "z_zakonny_new_Hero_Walk_0_4.png",
+    "z_zakonny_new_Hero_Walk_3_5.png",
+    "z_zakonny_new_Hero_Walk_7_6.png",
+    "z_zakonny_new_Hero_Walk_6_7.png",
+    "z_zakonny_new_Hero_Run_3_0.png",
+    "z_zakonny_new_Hero_Run_5_6.png",
+    "z_zakonny_new_Hero_Axe_3_0.png",
+    "z_zakonny_new_Hero_Axe_8_0.png",
+    "z_zakonny_new_Hero_AxeSide_10_2.png",
+    "z_zakonny_new_Hero_Club_9_1.png",
+    "z_zakonny_new_Hero_Spear_10_2.png",
+    "z_zakonny_new_Hero_Sword_11_2.png",
+    "z_zakonny_new_Hero_Sword_9_0.png",
+    "z_zakonny_new_Hero_Pick_9_3.png",
+    "z_zakonny_new_Hero_Sit_16_0.png",
+    "z_zakonny_new_Hero_LieDown_16_1.png",
+    "z_zakonny_new_Hero_Roll_6_1.png",
+    "z_zakonny_new_Hero_TorchWalk_3_6.png"
+   ]
+  },
+  "czepiec_kolczy": {
+   "old": [
+    "z_czepiec_kolczy_old_Hero_Walk_0_0.png",
+    "z_czepiec_kolczy_old_Hero_Walk_3_1.png",
+    "z_czepiec_kolczy_old_Hero_Walk_3_2.png",
+    "z_czepiec_kolczy_old_Hero_Walk_6_3.png",
+    "z_czepiec_kolczy_old_Hero_Walk_0_4.png",
+    "z_czepiec_kolczy_old_Hero_Walk_3_5.png",
+    "z_czepiec_kolczy_old_Hero_Walk_7_6.png",
+    "z_czepiec_kolczy_old_Hero_Walk_6_7.png",
+    "z_czepiec_kolczy_old_Hero_Run_3_0.png",
+    "z_czepiec_kolczy_old_Hero_Run_5_6.png",
+    "z_czepiec_kolczy_old_Hero_Axe_3_0.png",
+    "z_czepiec_kolczy_old_Hero_Axe_8_0.png",
+    "z_czepiec_kolczy_old_Hero_AxeSide_10_2.png",
+    "z_czepiec_kolczy_old_Hero_Club_9_1.png",
+    "z_czepiec_kolczy_old_Hero_Spear_10_2.png",
+    "z_czepiec_kolczy_old_Hero_Sword_11_2.png",
+    "z_czepiec_kolczy_old_Hero_Sword_9_0.png",
+    "z_czepiec_kolczy_old_Hero_Pick_9_3.png",
+    "z_czepiec_kolczy_old_Hero_Sit_16_0.png",
+    "z_czepiec_kolczy_old_Hero_LieDown_16_1.png",
+    "z_czepiec_kolczy_old_Hero_Roll_6_1.png",
+    "z_czepiec_kolczy_old_Hero_TorchWalk_3_6.png"
+   ],
+   "new": [
+    "z_czepiec_kolczy_new_Hero_Walk_0_0.png",
+    "z_czepiec_kolczy_new_Hero_Walk_3_1.png",
+    "z_czepiec_kolczy_new_Hero_Walk_3_2.png",
+    "z_czepiec_kolczy_new_Hero_Walk_6_3.png",
+    "z_czepiec_kolczy_new_Hero_Walk_0_4.png",
+    "z_czepiec_kolczy_new_Hero_Walk_3_5.png",
+    "z_czepiec_kolczy_new_Hero_Walk_7_6.png",
+    "z_czepiec_kolczy_new_Hero_Walk_6_7.png",
+    "z_czepiec_kolczy_new_Hero_Run_3_0.png",
+    "z_czepiec_kolczy_new_Hero_Run_5_6.png",
+    "z_czepiec_kolczy_new_Hero_Axe_3_0.png",
+    "z_czepiec_kolczy_new_Hero_Axe_8_0.png",
+    "z_czepiec_kolczy_new_Hero_AxeSide_10_2.png",
+    "z_czepiec_kolczy_new_Hero_Club_9_1.png",
+    "z_czepiec_kolczy_new_Hero_Spear_10_2.png",
+    "z_czepiec_kolczy_new_Hero_Sword_11_2.png",
+    "z_czepiec_kolczy_new_Hero_Sword_9_0.png",
+    "z_czepiec_kolczy_new_Hero_Pick_9_3.png",
+    "z_czepiec_kolczy_new_Hero_Sit_16_0.png",
+    "z_czepiec_kolczy_new_Hero_LieDown_16_1.png",
+    "z_czepiec_kolczy_new_Hero_Roll_6_1.png",
+    "z_czepiec_kolczy_new_Hero_TorchWalk_3_6.png"
+   ]
+  }
+ },
+ "materials2": [
+  {
+   "label": "przeszywanica wełniana, czepiec skórzany",
+   "set": {
+    "glowa": "helm_czepiec_skora",
+    "tors": "zbroja_przeszywanica_welna"
+   },
+   "files": [
+    "m2_0_Hero_Walk_0_0.png",
+    "m2_0_Hero_Walk_3_2.png",
+    "m2_0_Hero_Walk_0_4.png",
+    "m2_0_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "przeszywanica skórzana",
+   "set": {
+    "glowa": "",
+    "tors": "zbroja_przeszywanica_skora"
+   },
+   "files": [
+    "m2_1_Hero_Walk_0_0.png",
+    "m2_1_Hero_Walk_3_2.png",
+    "m2_1_Hero_Walk_0_4.png",
+    "m2_1_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "przeszywanica jedwabna",
+   "set": {
+    "glowa": "helm_czepiec_len",
+    "tors": "zbroja_przeszywanica_jedwab"
+   },
+   "files": [
+    "m2_2_Hero_Walk_0_0.png",
+    "m2_2_Hero_Walk_3_2.png",
+    "m2_2_Hero_Walk_0_4.png",
+    "m2_2_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "brąz: nosal, łuska",
+   "set": {
+    "glowa": "helm_nosal_braz",
+    "tors": "zbroja_luska_braz"
+   },
+   "files": [
+    "m2_3_Hero_Walk_0_0.png",
+    "m2_3_Hero_Walk_3_2.png",
+    "m2_3_Hero_Walk_0_4.png",
+    "m2_3_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "zakonne: nosal, łuska",
+   "set": {
+    "glowa": "helm_nosal_zakon",
+    "tors": "zbroja_luska_zakon"
+   },
+   "files": [
+    "m2_4_Hero_Walk_0_0.png",
+    "m2_4_Hero_Walk_3_2.png",
+    "m2_4_Hero_Walk_0_4.png",
+    "m2_4_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "brąz: otwarty, napierśnik",
+   "set": {
+    "glowa": "helm_otwarty_braz",
+    "tors": "zbroja_napiersnik_braz"
+   },
+   "files": [
+    "m2_5_Hero_Walk_0_0.png",
+    "m2_5_Hero_Walk_3_2.png",
+    "m2_5_Hero_Walk_0_4.png",
+    "m2_5_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "żelazo / skóra: napierśnik, otwarty",
+   "set": {
+    "glowa": "helm_otwarty_skora",
+    "tors": "zbroja_napiersnik_zelazo"
+   },
+   "files": [
+    "m2_6_Hero_Walk_0_0.png",
+    "m2_6_Hero_Walk_3_2.png",
+    "m2_6_Hero_Walk_0_4.png",
+    "m2_6_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "zakonne: hełm zakonny, napierśnik",
+   "set": {
+    "glowa": "helm_zakonny_zakon",
+    "tors": "zbroja_napiersnik_zakon"
+   },
+   "files": [
+    "m2_7_Hero_Walk_0_0.png",
+    "m2_7_Hero_Walk_3_2.png",
+    "m2_7_Hero_Walk_0_4.png",
+    "m2_7_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "hełm zakonny stalowy, kolczuga zakonna",
+   "set": {
+    "glowa": "helm_zakonny_stal",
+    "tors": "zbroja_kolczuga_zakon"
+   },
+   "files": [
+    "m2_8_Hero_Walk_0_0.png",
+    "m2_8_Hero_Walk_3_2.png",
+    "m2_8_Hero_Walk_0_4.png",
+    "m2_8_Hero_AxeSide_10_2.png"
+   ]
+  },
+  {
+   "label": "czepiec kolczy zakonny",
+   "set": {
+    "glowa": "helm_czepiec_zakon",
+    "tors": ""
+   },
+   "files": [
+    "m2_9_Hero_Walk_0_0.png",
+    "m2_9_Hero_Walk_3_2.png",
+    "m2_9_Hero_Walk_0_4.png",
+    "m2_9_Hero_AxeSide_10_2.png"
+   ]
+  }
+ ],
+ "mapa2": [
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_przeszywanica_old_0.png",
+   "head": true
+  },
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_przeszywanica_old_1.png",
+   "head": true
+  },
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_przeszywanica_old_2.png",
+   "head": true
+  },
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_przeszywanica_old_3.png",
+   "head": true
+  },
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_przeszywanica_old_4.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_przeszywanica_old_5.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": false,
+   "label": "leży",
+   "file": "map_przeszywanica_old_6.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_przeszywanica_new_0.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_przeszywanica_new_1.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_przeszywanica_new_2.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_przeszywanica_new_3.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_przeszywanica_new_4.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_przeszywanica_new_5.png",
+   "head": false
+  },
+  {
+   "set": "przeszywanica",
+   "on": true,
+   "label": "leży",
+   "file": "map_przeszywanica_new_6.png",
+   "head": false
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_luska_old_0.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_luska_old_1.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_luska_old_2.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_luska_old_3.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_luska_old_4.png",
+   "head": false
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_luska_old_5.png",
+   "head": false
+  },
+  {
+   "set": "luska",
+   "on": false,
+   "label": "leży",
+   "file": "map_luska_old_6.png",
+   "head": false
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_luska_new_0.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_luska_new_1.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_luska_new_2.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_luska_new_3.png",
+   "head": true
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_luska_new_4.png",
+   "head": false
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_luska_new_5.png",
+   "head": false
+  },
+  {
+   "set": "luska",
+   "on": true,
+   "label": "leży",
+   "file": "map_luska_new_6.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_napiersnik_old_0.png",
+   "head": true
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_napiersnik_old_1.png",
+   "head": true
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_napiersnik_old_2.png",
+   "head": true
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_napiersnik_old_3.png",
+   "head": true
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_napiersnik_old_4.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_napiersnik_old_5.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": false,
+   "label": "leży",
+   "file": "map_napiersnik_old_6.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_napiersnik_new_0.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_napiersnik_new_1.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_napiersnik_new_2.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_napiersnik_new_3.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_napiersnik_new_4.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_napiersnik_new_5.png",
+   "head": false
+  },
+  {
+   "set": "napiersnik",
+   "on": true,
+   "label": "leży",
+   "file": "map_napiersnik_new_6.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_zakonny_old_0.png",
+   "head": true
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_zakonny_old_1.png",
+   "head": true
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_zakonny_old_2.png",
+   "head": true
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_zakonny_old_3.png",
+   "head": true
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_zakonny_old_4.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_zakonny_old_5.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": false,
+   "label": "leży",
+   "file": "map_zakonny_old_6.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_zakonny_new_0.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_zakonny_new_1.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_zakonny_new_2.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_zakonny_new_3.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_zakonny_new_4.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_zakonny_new_5.png",
+   "head": false
+  },
+  {
+   "set": "zakonny",
+   "on": true,
+   "label": "leży",
+   "file": "map_zakonny_new_6.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "chód: dół",
+   "file": "map_czepiec_kolczy_old_0.png",
+   "head": true
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "chód: prawo-dół",
+   "file": "map_czepiec_kolczy_old_1.png",
+   "head": true
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "chód: prawo",
+   "file": "map_czepiec_kolczy_old_2.png",
+   "head": true
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "chód: góra",
+   "file": "map_czepiec_kolczy_old_3.png",
+   "head": true
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "siekiera z boku",
+   "file": "map_czepiec_kolczy_old_4.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "siedzi",
+   "file": "map_czepiec_kolczy_old_5.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": false,
+   "label": "leży",
+   "file": "map_czepiec_kolczy_old_6.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "chód: dół",
+   "file": "map_czepiec_kolczy_new_0.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "chód: prawo-dół",
+   "file": "map_czepiec_kolczy_new_1.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "chód: prawo",
+   "file": "map_czepiec_kolczy_new_2.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "chód: góra",
+   "file": "map_czepiec_kolczy_new_3.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "siekiera z boku",
+   "file": "map_czepiec_kolczy_new_4.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "siedzi",
+   "file": "map_czepiec_kolczy_new_5.png",
+   "head": false
+  },
+  {
+   "set": "czepiec_kolczy",
+   "on": true,
+   "label": "leży",
+   "file": "map_czepiec_kolczy_new_6.png",
+   "head": false
+  }
+ ],
+ "mapa_helm": [
+  {
+   "k": "kaptur",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "kaptur",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "kaptur",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "kaptur",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  },
+  {
+   "k": "kapalin",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "kapalin",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "kapalin",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "kapalin",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  },
+  {
+   "k": "czepiec",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "czepiec",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "czepiec",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "czepiec",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  },
+  {
+   "k": "nosal",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "nosal",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "nosal",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "nosal",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  },
+  {
+   "k": "otwarty",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "otwarty",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "otwarty",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "otwarty",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  },
+  {
+   "k": "zakonny",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "zakonny",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "zakonny",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "zakonny",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  },
+  {
+   "k": "czepiec kolczy",
+   "sheet": "Hero_Walk",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "czepiec kolczy",
+   "sheet": "Hero_Run",
+   "pr": {
+    "clipped": 0,
+    "cells": 72
+   }
+  },
+  {
+   "k": "czepiec kolczy",
+   "sheet": "Hero_Axe",
+   "pr": {
+    "clipped": 0,
+    "cells": 68
+   }
+  },
+  {
+   "k": "czepiec kolczy",
+   "sheet": "Hero_LieDown",
+   "pr": {
+    "clipped": 0,
+    "cells": 132
+   }
+  }
+ ],
+ "ms": {
+  "Hero_Walk": {
+   "n": 55,
+   "max": 18.3,
+   "avg": 5
+  },
+  "Hero_Run": {
+   "n": 21,
+   "max": 17.4,
+   "avg": 5.3
+  },
+  "Hero_Axe": {
+   "n": 21,
+   "max": 17.4,
+   "avg": 7.1
+  },
+  "Hero_AxeSide": {
+   "n": 45,
+   "max": 16.1,
+   "avg": 6.9
+  },
+  "Hero_Club": {
+   "n": 14,
+   "max": 17.9,
+   "avg": 7.3
+  },
+  "Hero_Spear": {
+   "n": 14,
+   "max": 14.3,
+   "avg": 7
+  },
+  "Hero_Sword": {
+   "n": 22,
+   "max": 15.8,
+   "avg": 7.5
+  },
+  "Hero_Pick": {
+   "n": 14,
+   "max": 11.4,
+   "avg": 6.7
+  },
+  "Hero_Sit": {
+   "n": 28,
+   "max": 24.8,
+   "avg": 14.5
+  },
+  "Hero_LieDown": {
+   "n": 36,
+   "max": 32.5,
+   "avg": 14.5
+  },
+  "Hero_Roll": {
+   "n": 14,
+   "max": 14.1,
+   "avg": 6.2
+  },
+  "Hero_TorchWalk": {
+   "n": 14,
+   "max": 8.9,
+   "avg": 4.9
+  }
+ }
+}

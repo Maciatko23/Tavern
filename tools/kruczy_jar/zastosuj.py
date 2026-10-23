@@ -18,7 +18,7 @@ Co zmienia:
   data/MapInfos.json    nazwa mapy 3 w drzewie map edytora -> „Kruczy Jar”
   data/Map017.json, Map018.json, Map023.json
                         nazwy zdarzeń „Przejście -> Domek - Zewnętrze” -> „Przejście -> Kruczy Jar” (tylko nazwy w edytorze)
-  js/plugins.js         opisy wtyczek Homes i Debug („pole dziadka” / „strata pola” -> działka)
+  js/tawerna_wtyczki.js opisy wtyczek Homes i Debug (lista gry; do 2026-10-23 w js/plugins.js) („pole dziadka” / „strata pola” -> działka)
 (Teksty zdarzeń map, zdarzeń wspólnych i opisy przedmiotów nie mówią o „polu dziadka” - sprawdzone 2026-10-22.)
 
 Uruchom (przy ZAMKNIĘTYM edytorze):  python tools/kruczy_jar/zastosuj.py        (--proba = tylko pokaż, co by zmienił)
@@ -38,8 +38,8 @@ CHANGES = [
     ("data/Map017.json", r'"name":"Przejście -> Domek - Zewnętrze"', '"name":"Przejście -> Kruczy Jar"', 3, '"name":"Przejście -> Kruczy Jar"'),
     ("data/Map018.json", r'"name":"Przejście -> Domek - Zewnętrze"', '"name":"Przejście -> Kruczy Jar"', 3, '"name":"Przejście -> Kruczy Jar"'),
     ("data/Map023.json", r'"name":"Przejście -> Domek - Zewnętrze"', '"name":"Przejście -> Kruczy Jar"', 3, '"name":"Przejście -> Kruczy Jar"'),
-    ("js/plugins.js", r'"description":"Ziemia: pole dziadka po stracie', '"description":"Ziemia: działka dziadka po stracie', 1, '"description":"Ziemia: działka dziadka po stracie'),
-    ("js/plugins.js", r'czerwona woda, strata pola, dług', 'czerwona woda, strata działki, dług', 1, 'czerwona woda, strata działki, dług'),
+    ("js/tawerna_wtyczki.js", r'"description":"Ziemia: pole dziadka po stracie', '"description":"Ziemia: działka dziadka po stracie', 1, '"description":"Ziemia: działka dziadka po stracie'),
+    ("js/tawerna_wtyczki.js", r'czerwona woda, strata pola, dług', 'czerwona woda, strata działki, dług', 1, 'czerwona woda, strata działki, dług'),
 ]
 
 

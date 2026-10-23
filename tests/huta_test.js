@@ -17,7 +17,8 @@ const { launch, sleep } = require("./cdp.js");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const J = async e => JSON.parse(await ev("JSON.stringify(" + e + ")"));
         const B = await ev(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y);
+            // (2026-10-23: inside the field's fence - Farming.fieldAllows; the doubled map's new part is not grandpa's land)
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y) && Farming.fieldAllows(x, y);
             for (let by = 2; by < $gameMap.height() - 5; by++) for (let bx = 2; bx < $gameMap.width() - 7; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 3 && ok; y++) for (let x = bx; x < bx + 5; x++) { if (!free(x, y)) { ok = false; break; } }

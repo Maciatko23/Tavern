@@ -719,12 +719,12 @@
     }
     const option = key => (ConfigManager[OPTS[key]] === undefined ? OPT_DEFAULTS[OPTS[key]] : ConfigManager[OPTS[key]]);
 
-    // a map event about to start: an automatic combat mode goes off before a talk or a riddle (Combat_Feel.js beforeEvent)
-    const _Game_Event_start = Game_Event.prototype.start;
-    Game_Event.prototype.start = function() {
-        if (P.feel && P.feel.beforeEvent) { try { P.feel.beforeEvent(this); } catch (e) { /* never stop the event */ } }
-        _Game_Event_start.call(this);
-    };
+    // a map event about to start: an automatic combat mode goes off before a talk or a riddle (Combat_Feel.js beforeEvent) - the core's one
+    // start hook (2026-10-23), "before": told only when no other system took the start (a hidden character, the dice table), never takes it
+    T.onEventStart(ev => {
+        if (P.feel && P.feel.beforeEvent) { try { P.feel.beforeEvent(ev); } catch (e) { /* never stop the event */ } }
+        return false;
+    }, { owner: "Combat", priority: "before" });
     // Kupiecka żyłka: things sell dearer in any shop
     const _Scene_Shop_sellingPrice = Scene_Shop.prototype.sellingPrice;
     Scene_Shop.prototype.sellingPrice = function() {

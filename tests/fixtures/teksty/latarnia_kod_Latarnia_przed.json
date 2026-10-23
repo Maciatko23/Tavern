@@ -1,0 +1,79 @@
+{
+ "kod": {
+  "nightsText": {
+   "0": "jedną noc",
+   "1": "{k} noce",
+   "2": "{k} nocy"
+  },
+  "weatherOf": {
+   "0": "burza od {1} do {2}, potem deszcz do {3}",
+   "1": "śnieg",
+   "2": ", rano gęsta mgła",
+   "3": ", rano trochę mgły"
+  },
+  "bazyliTalk": {
+   "0": "Kupisz opał?",
+   "1": "Jaka będzie pogoda?",
+   "2": "Ile masz opału?",
+   "3": "Co piszesz w księdze?",
+   "4": "Co słychać?",
+   "5": "Cicho. Morze gada za nas."
+  },
+  "janekTalk": {
+   "0": "Kupię dzbanek tranu (6 G).",
+   "1": "Nie, w innej sprawie."
+  },
+  "actCall": {
+   "0": "Potrzebujesz {1} G"
+  },
+  "seeVision": {
+   "0": "Księga mgieł: {title}",
+   "1": "wizja w latarni"
+  },
+  "spawnRaid": {
+   "0": "Szkło! Brać szkło!",
+   "1": "Cicho... do wieży."
+  },
+  "build": {
+   "0": "Worek złodziei"
+  },
+  "w11Act": {
+   "0": "Soczewka latarni",
+   "1": "Zanieś ją bratu Kleofasowi.",
+   "2": "Potrzebujesz {price} G",
+   "3": "Odkupiona od Baltazara."
+  },
+  "vars": {
+   "0": " Mgła jest teraz - wejdź na górę.",
+   "1": " Dziś w nocy będzie mgła.",
+   "2": " Bazyli mówi, że mgła przyjdzie w nocy z dnia {nf} na {2}.",
+   "3": "Łódź zabrała soczewkę z zatoczki. Baltazar ma ją w kantorze - odkup ją ({1} G, 8–18).",
+   "4": "Złodzieje czekają na łódź w zatoczce szczątków na przylądku - w nocy z dnia {1} na {2}. Odbierz im worek.",
+   "5": "Weź soczewkę od Bazylego i zanieś ją bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.",
+   "6": "Zanieś soczewkę bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest."
+  },
+  "talk": {
+   "0": "Trzy mgły. Trzy razy patrzyłeś w szkło. (Bazyli otwiera Księgę mgieł na czystej stronie.)",
+   "1": "Co widziałeś?",
+   "2": "Powiem ci.",
+   "3": "Zachowam to dla siebie.",
+   "4": "> Statek bez bandery. Człowieka z piórem w czarnej wodzie. I kobietę nad rzeką.",
+   "5": "(Bazyli pisze długo, nie podnosząc głowy.) Teraz to i twoje, i księgi. Lżej będzie nieść we dwóch.",
+   "6": "Weź to. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu, zanim umarł. Szyfr. Ja nie umiem tego czytać.",
+   "7": "> Zachowam to dla siebie.",
+   "8": "Niektóre rzeczy lepiej nosić samemu. Rozumiem.",
+   "9": "Ale to weź. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu. Szyfr. Mnie się nie przyda.",
+   "10": "Nie sprzedam cudzego.",
+   "11": "Pomyślę.",
+   "12": "Biorę ({1} G).",
+   "13": "Nie teraz.",
+   "14": "Zostaw je w latarni.",
+   "15": "Rozbij je.",
+   "16": "Sprzedam je Baltazarowi."
+  },
+  "defineBuffs": {
+   "0": "po wizji w latarni: do południa prace kosztują więcej sił"
+  }
+ },
+ "_opis": "Napisy kodu Latarnia.js sprzed przeniesienia do js/teksty/latarnia.txt (kod.*)"
+}

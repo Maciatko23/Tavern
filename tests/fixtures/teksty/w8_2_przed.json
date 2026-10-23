@@ -1,0 +1,13 @@
+{
+ "zadania": {
+  "W8": {
+   "lines": {
+    "need": [
+     "Żeby iść przeciw tym, co płacą, muszę mieć pewność. Nie tę z jaskini - zwykłą, ludzką.",
+     "Pokaż mi, że ktoś wraca z dołu cały - Marek. Albo że zakon wiedział, co trzyma - ich kroniki. Albo pokonaj mnie na rękę, na honor, przy wszystkich. Dwie z trzech."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W8\\./)"
+}

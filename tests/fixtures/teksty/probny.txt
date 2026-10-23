@@ -1,0 +1,22 @@
+# Próbny wątek dla tests/unit/watki.test.js (silnik Watki.js) - nie z gry.
+tytul = Próbny wątek
+opis = Opis próbnego wątku.
+powitanie = Dzień dobry.
+obcy = Obcy? Idź stąd.
+opcje.tak = Tak
+opcje.nie = Nie
+opcje.ukryta = Ukryta
+zgoda = Zgoda.
+[odmowy]
+Nie.
+Nie teraz.
+
+[notka]
+Notka
+Licznik: {n}.
+
+kroki.pierwszy = Pierwszy krok. Zrób coś.
+kroki.drugi = Teraz licznik {n}. Dalej.
+f9.naglowek = Wątek próbny:
+f9.etykieta = Próbny: rozdział {ch} - {nazwa}
+f9.nazwy.1 = drugi krok

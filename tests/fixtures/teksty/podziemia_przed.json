@@ -1,0 +1,1342 @@
+{
+ "floorNameN": "Podziemia - piętro {n}",
+ "noticeN": "Piętro {n}",
+ "noticeSubDeep": "{band} · najgłębiej: {n}",
+ "deeperN": "Najgłębiej, jak dotąd: piętro {n}",
+ "empty": {
+  "skrzynia": "Pusta.",
+  "skrzynka": "Pusta skrzynka.",
+  "beczka": "Na dnie tylko kurz.",
+  "worek": "Pusty worek.",
+  "dzban": "Pusty dzban.",
+  "monety": "Nic więcej tu nie ma.",
+  "kosci": "Zostawię go w spokoju.",
+  "grzyby": "",
+  "wozek": "Wózek jest pusty.",
+  "sakwa": "Pusta sakwa.",
+  "relikwiarz": "Pusty relikwiarz."
+ },
+ "found": {
+  "skrzynia": "W skrzyni...",
+  "skrzynka": "W skrzynce...",
+  "beczka": "Na dnie beczki...",
+  "worek": "W worku...",
+  "dzban": "W dzbanie...",
+  "monety": "Stare monety, rozsypane w kurzu.",
+  "kosci": "Przy kościach strażnika...",
+  "grzyby": "Grzyby z jaskini.",
+  "wozek": "W wózku...",
+  "sakwa": "W sakwie...",
+  "relikwiarz": "W relikwiarzu..."
+ },
+ "nothing": {
+  "skrzynia": "Ktoś był tu przede mną.",
+  "skrzynka": "Same drzazgi.",
+  "beczka": "Pusta. Pachnie jeszcze winem.",
+  "worek": "Zbutwiałe płótno, nic w środku.",
+  "dzban": "Pusty.",
+  "monety": "",
+  "kosci": "Nic przy nim nie ma.",
+  "grzyby": "",
+  "wozek": "Tylko kamienny pył.",
+  "sakwa": "Ktoś ją już opróżnił.",
+  "relikwiarz": "Pusty. Ktoś zabrał to, co w nim było."
+ },
+ "goldN": "Stare monety: {n} G",
+ "torchOut": "Wypalona pochodnia. Ktoś zapalił ją dawno temu.",
+ "stairsUp": "Schody w górę",
+ "stairsDown": "Schody w dół",
+ "noFloor": "Dalej nie ma już schodów. Tylko skała.",
+ "gateClosed": [
+  "Stara krata, wpuszczona w mur dawnej twierdzy. Za nią schody znikają w ciemności.",
+  "Zamek ma wyryty znak kruka i zardzewiał na kamień. Krata ani drgnie."
+ ],
+ "gateOpen": "Krata stoi otworem. Schody prowadzą w dół, do ruin twierdzy.",
+ "trapHit": "Kolce!",
+ "water": "Mętna, lodowata woda. Pachnie żelazem i kamieniem - tego nie będę pić.",
+ "windlassLook": [
+  "> (Kołowrót windy kasztelana. Łańcuch zardzewiały, ale cały - idzie w górę, w ciemność szybu.)"
+ ],
+ "windlassAsk": "Zakręcić kołowrotem?",
+ "windlassYes": "Zakręcić",
+ "windlassNo": "Zostawić",
+ "windlassTurned": [
+  "> (Coś wysoko w górze szczęka i zgrzyta... Klatka drgnęła. Winda znów chodzi!)"
+ ],
+ "windlassOn": [
+  "> (Kołowrót chodzi lekko. Klatka czeka.)"
+ ],
+ "cageStuck": [
+  "> (Klatka windy wisi na łańcuchu, zablokowana. Trzeba poruszyć kołowrót.)"
+ ],
+ "shaftEmpty": [
+  "> (Pusty szyb. Łańcuchy giną w ciemności, gdzieś bardzo głęboko.)"
+ ],
+ "liftAsk": "Dokąd jechać?",
+ "liftStay": "Zostać",
+ "liftRuins": "Ruiny Zamku (na górę)",
+ "liftStopN": "Piętro {n}",
+ "liftStopNamed": "Piętro {n} - {name}",
+ "liftOnN": "Winda kasztelana staje na piętrze {n}",
+ "liftSub": "Kołowrót poruszony - klatka zjedzie tu z Ruin Zamku",
+ "bossBlocksN": "Najpierw {name}. Tędy nie przejdę.",
+ "bossDoneN": "{name} - pokonany",
+ "firstVisit": {
+  "1": "Piwnice zamku... Ktoś tu kiedyś naprawdę mieszkał.",
+  "3": "Im niżej, tym starsze kamienie.",
+  "5": "Zimno tu. I cicho - aż za cicho.",
+  "7": "Ściany są tu gładsze. Jakby ktoś je wycierał rękami.",
+  "9": "Słyszę coś... jakby ktoś szeptał za murem.",
+  "11": "Cele, refektarz... Tu zakon naprawdę żył.",
+  "15": "Wszędzie ta sama zasada, wyryta w kamieniu. Jedno pytanie.",
+  "21": "Pachnie wilgocią. Gdzieś tu była woda.",
+  "25": "Ktoś zostawił świecę. Wypalona do końca.",
+  "31": "Koniec murów. Dalej jest już tylko skała.",
+  "35": "Słyszę rzekę. Gdzieś pod nogami.",
+  "41": "Świeża kreda na ścianie. Ktoś tu był niedawno.",
+  "45": "Grzyby świecą tu jak gwiazdy. Nie podoba mi się to.",
+  "51": "Tych ścian nie stawiał zakon.",
+  "55": "Twarze na kamieniu... zatarte. Wszystkie.",
+  "61": "Kurz nie opada. Wisi w powietrzu i czeka.",
+  "65": "Każdy ślad stóp prowadzi w dół.",
+  "71": "Ciepło. Coraz cieplej, choć to nie ma sensu.",
+  "76": "Ktoś mnie woła. Moim głosem.",
+  "81": "Znam to miejsce. Nigdy tu nie byłem.",
+  "85": "Wiem rzeczy, których nikt mi nie powiedział.",
+  "91": "Ostatnie piętra. Czuję je w zębach.",
+  "95": "Jeszcze trochę. Tylko jeszcze trochę.",
+  "99": "Za tymi drzwiami... wiem, co jest za tymi drzwiami."
+ },
+ "lockKeyNo": [
+  "> (Zamek z krukiem, taki sam jak na kracie w piwnicy Borgara. Bez klucza ani drgnie.)"
+ ],
+ "lockKeyYes": [
+  "> (Klucz kasztelana wchodzi w zamek. Obraca się sam, jakby ktoś po drugiej stronie na niego czekał.)"
+ ],
+ "lockKeyDone": [
+  "> (Zamek z krukiem jest otwarty.)"
+ ],
+ "lockSignalNo": [
+  "> (Kamienny dzwon bez serca, a pod nim siedem nacięć w kamieniu. Ile razy uderzyć? Nie znam sygnału, który by tu pasował.)"
+ ],
+ "lockSignalAsk": "Uderzyć w kamienny dzwon?",
+ "lockSignalOpt": "Siedem razy - sygnał „pytanie”",
+ "lockSignalLeave": "Zostawić",
+ "lockSignalYes": [
+  "> (Siedem uderzeń. Kamień odpowiada z głębi - siódmym, którego nie zadałem.)"
+ ],
+ "lockSignalDone": [
+  "> (Dzwon jeszcze drży. Zamek dzwonu jest otwarty.)"
+ ],
+ "lockSongNo": [
+  "> (Kamień z wyrytymi pustymi wersami - sześć rzędów kresek, bez słów. Ktoś musiałby znać pieśń, żeby je wypełnić.)"
+ ],
+ "lockSongAsk": "Zaśpiewać przy kamieniu?",
+ "lockSongOpt": "Pieśń o Kruczych Skałach",
+ "lockSongYes": [
+  "> (Śpiewasz cicho, zwrotka po zwrotce. Puste wersy na kamieniu wypełniają się słowami.)",
+  "> (Przy ostatniej - „nie odpowiadaj, gdy głos nieznany” - kamień milknie i ustępuje.)"
+ ],
+ "lockSongDone": [
+  "> (Na kamieniu stoją słowa pieśni. Zamek pieśni jest otwarty.)"
+ ],
+ "doorShutN": [
+  "> (Ostatnie drzwi. Trzy zamki: klucz, dzwon i pieśń. Otwartych: {n} z 3.)",
+  "> (Napis nad drzwiami: KTO MA DWA, TEN WEJDZIE. KTO MA TRZY, TEN WYJDZIE.)"
+ ],
+ "doorOpen": [
+  "> (Drzwi Komnaty Serca stoją otworem. Za nimi światło, które nie rzuca cienia.)"
+ ],
+ "lockNames": {
+  "key": "klucz kasztelana",
+  "signal": "sygnał dzwonu",
+  "song": "pieśń"
+ },
+ "heartLook": [
+  "> (Na kamiennym cokole, w środku kręgu, jest Serce Twierdzy.)",
+  "> (Nie da się powiedzieć, czym jest. Kiedy patrzysz wprost, widzisz światło. Kiedy odwracasz wzrok - wiesz, że ono patrzy na ciebie.)",
+  "> (Wiesz naraz kilka rzeczy, o które nie pytałeś. Odsuwasz je, zanim się ułożą w zdania.)"
+ ],
+ "heartAsk": "Co zrobić z Sercem?",
+ "heartChoices": {
+  "zniszczyc": "Zniszczyć Serce",
+  "straznik": "Zostać strażnikiem",
+  "uwolnic": "Uwolnić prawdę dla wszystkich",
+  "zapieczetowac": "Zapieczętować je - z zasadami",
+  "wait": "Jeszcze nie"
+ },
+ "heartConfirm": "Tego nie da się cofnąć. Na pewno?",
+ "heartYes": "Tak",
+ "heartNo": "Nie, jeszcze nie",
+ "guardianWho": "Kto zostanie strażnikiem?",
+ "guardianHero": "Ja",
+ "guardianBorgar": "Borgar",
+ "guardianAmbrozy": "Ambroży",
+ "heartAfter": {
+  "zniszczyc": [
+   "> (Na cokole leżą ciemne odłamki. Nie świecą. Nic nie mówią.)"
+  ],
+  "straznik": [
+   "> (Kamienna ława przed Sercem jest zajęta. Strażnik nie podnosi głowy.)"
+  ],
+  "uwolnic": [
+   "> (Cokół jest pusty. Światło poszło w górę i już nie wróci.)"
+  ],
+  "zapieczetowac": [
+   "> (Serce śpi pod kamienną pieczęcią. Na pieczęci wyryto: JEDNO PYTANIE. RAZ W ROKU. PRZY ŚWIADKACH.)"
+  ]
+ },
+ "heartAfterGuardian": {
+  "hero": [
+   "> (Kamienna ława przed Sercem czeka na ciebie. Raz w roku wolno ci wyjść na górę - i zawsze wracasz.)"
+  ],
+  "borgar": [
+   "Nie pytaj. ...Dobra, jedno powiem: tu na dole przynajmniej nikt nie zamawia na krechę."
+  ],
+  "ambrozy": [
+   "Cztery i dwa... siedem... Ciii. Liczę. Nikt nie odwołał warty, więc liczę."
+  ]
+ },
+ "endTitle": "KONIEC",
+ "endAsk": "Co dalej?",
+ "endContinue": "Wrócić do gry (tawerna, następny dzień)",
+ "endTitleScreen": "Do ekranu tytułowego",
+ "zakonczenia": {
+  "zniszczyc": {
+   "title": "Serce zniszczone",
+   "lines": [
+    "Uderzasz raz. Światło pęka jak lód na wiosnę - i przez jedną chwilę wiesz wszystko. Potem nic.",
+    "Gdzieś wysoko, w piwnicy tawerny, Borgar budzi się w nocy i nie pamięta, po co wstał.",
+    "Na kontynencie wojna trwa dalej. Nikt już nie dostanie pewności. Wszyscy muszą zgadywać - jak przedtem.",
+    "Wracasz na górę z pustymi rękami. Pierwszy raz od dawna niczego nie musisz wiedzieć."
+   ]
+  },
+  "straznik": {
+   "title": "Nowy strażnik",
+   "guardian": {
+    "hero": [
+     "Siadasz na kamiennej ławie przed Sercem. Jest zimna, jakby czekała na ciebie od trzystu lat.",
+     "Raz w roku ktoś zejdzie i zada jedno pytanie. Ty zdecydujesz, ile prawdy udźwignie.",
+     "Na górze życie toczy się bez ciebie. Borgar stawia na barze kufel dla kogoś, kto nie przychodzi.",
+     "Uczysz się milczeć. Uczysz się nie pytać."
+    ],
+    "borgar": [
+     "Borgar siada na kamiennej ławie. „Ktoś z rodu musiał wrócić na wartę” - mówi. „Ja przynajmniej wiem, czego nie chcę wiedzieć.”",
+     "Raz w roku ktoś zejdzie i zada jedno pytanie. Borgar odpowie tyle, ile trzeba - ani słowa więcej.",
+     "Warta idzie jak za zakonu: zmiana co trzy dni. Co trzecią noc Borgar zamyka wcześniej i schodzi na dół. Nad barem wisi pusty gwóźdź po połówce klucza."
+    ],
+    "ambrozy": [
+     "Ambroży schodzi, choć kolana bolą go przy każdym stopniu. „Nikt nie odwołał warty” - mówi i siada przed Sercem.",
+     "Raz w roku dzwon na górze uderzy siedem razy. Ambroży nauczył cię rytmu - w dni jego warty dzwonisz ty.",
+     "Warta idzie jak za zakonu: zmiana co trzy dni. Miasto jeszcze nie wie, czego mu brakuje, kiedy dzwonnica milczy."
+    ]
+   }
+  },
+  "uwolnic": {
+   "title": "Prawda dla wszystkich",
+   "lines": [
+    "Otwierasz Serce jak okno. Światło idzie w górę - przez sto pięter, przez piwnicę, przez deski tawerny.",
+    "Rano całe miasto wie wszystko o wszystkich.",
+    "Nikt nie krzyczy. Ludzie po prostu przestają się do siebie odzywać.",
+    "Po tygodniu na rynku stoją puste stragany. Prawda nikogo nie uczyniła szczerym - tylko samotnym.",
+    "Ty też wiesz wszystko. Także to, czego nie chciałeś."
+   ]
+  },
+  "zapieczetowac": {
+   "title": "Pieczęć z zasadami",
+   "lines": [
+    "Zamykasz Serce. Nie na zawsze - na rok.",
+    "Spisujesz zasady na nowo: jedno pytanie, przy świadkach, zapisane w księdze. Ale tym razem księga zostaje na górze, u ludzi.",
+    "Twierdza znów odmierza prawdę. Nikomu jej nie zabraniasz - pilnujesz tylko, żeby nikt nie wziął więcej, niż uniesie.",
+    "To nie jest szczęśliwe zakończenie. To uczciwe."
+   ]
+  }
+ },
+ "epilog": {
+  "allLocks": "Trzy zamki otworzyły się przed tobą - klucz Borgara, dzwon Ambrożego, pieśń Melii. Na górze ktoś ci zaufał. Zabierasz to ze sobą.",
+  "opinionHigh": "W miasteczku mówią o tobie dobrze. Kiedy wrócisz, będzie do kogo wrócić.",
+  "opinionLow": "W miasteczku mało kto pyta, gdzie byłeś.",
+  "water": "Woda znów płynie pod rynek - mniej, niż by chcieli, ale płynie.",
+  "ambrozyBook": "Ambroży trzyma Księgę sygnałów na kolanach. Siódme uderzenie znów coś znaczy.",
+  "island": {
+   "pustelnia": {
+    "kroniki": "Brat Kleofas skończył odpis „Kroniki upadku”. Leży w skryptorium na klifie - dla każdego, kto wejdzie po schodach.",
+    "dzwon": "W wieży skryptorium na klifie wisi serce dzwonu. W Wigilię o północy bije siedem razy, a brat Kleofas czeka na jedno pytanie."
+   },
+   "kruk": "{imie} siedział na grzędzie, kiedy wróciłeś. Jakby wiedział, że wrócisz.",
+   "krukStraznik": "{imie} co rano siada na kracie w piwnicy tawerny i czeka.",
+   "latarnia": {
+    "zniszczyc": "Latarnia na przylądku świeci dalej, ale soczewka ślepnie: we mgle Bazyli widzi już tylko mgłę.",
+    "zapieczetowac": "Bazyli widzi w soczewce tylko w Noc Pytania - raz w roku, jak każe reguła zakonu.",
+    "uwolnic": "Bazyli zasłonił soczewkę płótnem. Mówi, że prawdy jest teraz dość na całą wyspę - nie musi jej wypatrywać we mgle.",
+    "rozbita": "Bazyli pali ogień w latarni za pękniętym szkłem i nigdy już nie zagląda w mgłę.",
+    "sprzedana": "Pusty pierścień w laternie przypomina Bazylemu, że Czarne Oczy wiedziały o jedną noc więcej.",
+    "zgasla": "Latarnia na przylądku zgasła na dobre. Rybacy wracają przed zmierzchem."
+   },
+   "garnizon": {
+    "klos": "Kwatermistrza Kłosa odesłano promem w kajdanach. Skup w garnizonie nad zatoką płaci teraz uczciwie.",
+    "nasz": "Żołnierze z garnizonu nad zatoką salutują ci na drodze. Rotmistrz mówi o tobie „nasz”.",
+    "wrog": "Patrol z garnizonu wciąż zatrzymuje cię na drodze. Rotmistrz ma długą pamięć."
+   },
+   "wrak": {
+    "ally": "Eryk Sowa - Ansgar Wiel - został na wyspie. Rysuje mapy dla rybaków z przystani i nikomu nie mówi, skąd zna te wody.",
+    "given": "Rozbitka z wraku zabrał garnizon. Melia nie śpiewa już wesołych piosenek.",
+    "fled": "Eryk Sowa odpłynął kutrem Rocha. Czasem przychodzi list bez podpisu, z rysunkiem kruka w rogu."
+   },
+   "cysterna": {
+    "galaz": "Gałąź dworska cysterny została zamknięta. Pierwszy raz od stu lat dwór czeka na deszcz jak wszyscy.",
+    "rynny": "Rynny zakonu na Urwisku są czyste. Po każdym deszczu stara cysterna pije razem z miastem.",
+    "otwarta": "Stara cysterna zakonu znów zbiera deszcz - głęboko pod ziemią, tam gdzie nikt jej nie widzi."
+   }
+  }
+ },
+ "szepty": [
+  "...nie odwracaj się...",
+  "Wiesz już. Zawsze wiedziałeś.",
+  "Zapytaj. Tylko jedno pytanie...",
+  "Kto schodzi, ten pyta.",
+  "Oni na górze też kłamią.",
+  "Policz, ile kosztuje prawda.",
+  "Za tobą ktoś idzie. To ty.",
+  "Dlaczego tu zszedłeś? Naprawdę?",
+  "Ciepło... coraz cieplej...",
+  "Nie odpowiadaj.",
+  "Twoje imię brzmi tu inaczej.",
+  "Jeszcze jedno piętro. Jeszcze jedno.",
+  "Ile razy już tu byłeś?",
+  "Wróć na górę. Albo zostań.",
+  "Ktoś cię kocha. Ktoś cię zdradzi. Który to który?",
+  "...siedem... siedem..."
+ ],
+ "zjawy": {
+  "0": {
+   "name": "Borgar",
+   "line": "Wracaj na górę. Zawsze wracaj na górę."
+  },
+  "1": {
+   "name": "Melia",
+   "line": "Nie tę zwrotkę... nie tę."
+  },
+  "2": {
+   "name": "Ozzy",
+   "line": "Mówiłem ci. Mówiłem wszystkim."
+  },
+  "3": {
+   "name": "Dziadek Stach",
+   "line": "Wnusiu? Co ty tu robisz tak głęboko?"
+  },
+  "4": {
+   "name": "Hanka",
+   "line": "Weź bochenek. Zostało."
+  },
+  "5": {
+   "name": "Ambroży",
+   "line": "Siedem... liczyłeś? Siedem?"
+  },
+  "6": {
+   "name": "Grum",
+   "line": "Nie patrz na mnie tak."
+  },
+  "7": {
+   "name": "Feliks",
+   "line": "Nikt nie musi wiedzieć."
+  },
+  "8": {
+   "name": "Lord Zaleski",
+   "line": "Mówiłem: najpierw do mnie."
+  },
+  "9": {
+   "name": "Tadek",
+   "line": "Za ciężki ten klucz. Za ciężki."
+  },
+  "10": {
+   "name": "Ludmiła",
+   "line": "Ciii... Ela śpi."
+  },
+  "11": {
+   "name": "Kuba",
+   "line": "Wody? Nie mam już wody."
+  }
+ },
+ "prawdaKto": {
+  "borgar": "Borgar",
+  "melia": "Melia",
+  "ozzy": "Ozzy",
+  "grum": "Grum",
+  "piekarka": "Hanka Mączna",
+  "woziwoda": "Kuba Woziwoda",
+  "feliks": "Feliks",
+  "dzwonnik": "Ambroży",
+  "kowal": "Tadek Młot",
+  "dziadek": "Dziadek Stach",
+  "kapral": "Kapral Wit",
+  "ludmila": "Ludmiła",
+  "lord": "Lord Zaleski",
+  "soltys": "Sołtys Bronisław",
+  "kupiec": "Baltazar Vey",
+  "garbarz": "Ignac",
+  "rafal": "Rafał",
+  "kot": "Mruczek",
+  "hero": "ty",
+  "straznik": "strażnik, który pytał ponad miarę"
+ },
+ "notatki": {
+  "1": {
+   "title": "Spis piwnicy",
+   "where": "kartka przybita do beczki",
+   "text": "Wino - czterdzieści beczek. Zboże - dwanaście worków. Łój - trzy skrzynie.\nKlucz u kasztelana. Kto bierze, ten wpisuje.\nKto nie wpisze, ten tłumaczy się przeorowi."
+  },
+  "2": {
+   "title": "Brat Jarosz",
+   "where": "notatka na skrawku pergaminu",
+   "text": "Brat Jarosz znowu zszedł niżej bez latarni. Mówi, że na dole i tak jest jasno.\nPrzeor kazał mu pościć trzy dni. Jarosz się śmiał - że już wie, ile wytrzyma."
+  },
+  "3": {
+   "title": "Napis w murze",
+   "where": "litery wyryte w kamieniu",
+   "text": "NIE PYTAJ O TO, CZEGO NIE CHCESZ WIEDZIEĆ.\n\nPod spodem, mniejszymi literami, inną ręką:\n...a jeśli chcesz, pytaj raz w roku. Nie częściej."
+  },
+  "4": {
+   "title": "Rok trzydziesty drugi straży",
+   "where": "zapiski kronikarza",
+   "text": "Nowicjusze pytali o pogodę na zbiory. Odpowiedź była dobra, żniwa też.\nDwóch płakało potem do rana. Żaden nie chciał powiedzieć dlaczego."
+  },
+  "5": {
+   "title": "Rozkaz o zmianach warty",
+   "where": "kartka pod kamieniem",
+   "text": "Straż przy schodach zmieniamy co trzy dni, nie co siedem.\nKto stoi dłużej, zaczyna słyszeć pytania, których nikt nie zadał."
+  },
+  "6": {
+   "title": "Kasztelan Kowal",
+   "where": "zatarty napis nad niszą",
+   "text": "Z rozkazu kasztelana Kowala zamurowano boczne korytarze.\nZa dużo ich było - za dużo dróg w dół.\nKowale kują zamki. Kowale trzymają klucze."
+  },
+  "7": {
+   "title": "Liczenie stopni",
+   "where": "rysy na ścianie, jak u więźnia",
+   "text": "Liczę stopnie, żeby nie myśleć.\nCzterysta dwanaście do dziesiątej bramy.\nTrzeci od góry jest pusty. Wiedzą o tym tylko ci, którzy śpiewają."
+  },
+  "8": {
+   "title": "Straż dziesiątej bramy",
+   "where": "list bez podpisu",
+   "text": "Straż na dziesiątym nie śpi i nie je. Zbroja pamięta słowa, które jej daliśmy.\nKto zapomni słów, niech nie schodzi.\nKto ich nigdy nie znał - niech zawróci, póki może."
+  },
+  "9": {
+   "title": "Jeszcze jedno pytanie",
+   "where": "pomięta kartka, pismo się trzęsie",
+   "text": "Jeszcze jedno. Tylko jedno. Wiem, że mój rok jeszcze nie minął.\nAle muszę wiedzieć, czy ona... Czy on mnie zdradzi... Czy twierdza...\nJedno. Potem już nigdy."
+  },
+  "11": {
+   "title": "Rozpiska cel",
+   "where": "tabliczka przy drzwiach",
+   "text": "Cela pierwsza - brat furtian. Druga i trzecia - nowicjusze. Czwarta - brat kucharz.\nCela siódma - pusta.\nNikt nie chce spać tam, gdzie spał brat Dobiesz."
+  },
+  "12": {
+   "title": "Kuchnia zakonu",
+   "where": "kartka nad paleniskiem",
+   "text": "Na dzień: dwie miski kaszy, chleb, kubek wody z cysterny.\nW post - sama woda.\nWoda jest święta, bo jest jej mało. Kto ją rozleje, ten nosi wiadra przez tydzień."
+  },
+  "13": {
+   "title": "Brat furtian",
+   "where": "zapiski przy schodach",
+   "text": "Kto schodzi niżej niż kaplica, wpisuje się u mnie.\nKto nie wraca do wieczerzy, temu zapalam świecę.\nWczoraj zapaliłem trzy."
+  },
+  "14": {
+   "title": "Reguła milczenia",
+   "where": "napis nad drzwiami refektarza",
+   "text": "W REFEKTARZU MILCZYMY.\nNie dlatego, że słowa grzeszą.\nDlatego, że pytania same się rodzą, kiedy się mówi."
+  },
+  "15": {
+   "title": "Losowanie",
+   "where": "kartka w pustym dzbanie",
+   "text": "Kto zada pytanie w tym roku, rozstrzyga los: kamyki w dzbanie, jeden czarny.\nBrat Sulisław wyciągnął czarny trzeci raz z rzędu. Przeor kazał losować jeszcze raz.\nSulisław płakał. Z ulgi."
+  },
+  "16": {
+   "title": "Pytania odrzucone",
+   "where": "lista w księdze, przekreślona",
+   "text": "Czy wojna dojdzie do wyspy? - odrzucone, za duże.\nCzy moja matka żyje? - odrzucone, nie dla zakonu.\nGdzie zgubiłem nóż? - odrzucone, za małe.\nPrzeor mówi: pytanie ma ważyć tyle, ile człowiek udźwignie."
+  },
+  "17": {
+   "title": "Kapelan do nowicjuszy",
+   "where": "kazanie zapisane na marginesie",
+   "text": "Nie bójcie się ciemności na dole. Ciemność niczego wam nie powie.\nBójcie się światła."
+  },
+  "18": {
+   "title": "Dzwon na górze",
+   "where": "kartka przybita do drzwi celi",
+   "text": "Gdy dzwon uderzy siedem razy, kto ma prawo pytać, schodzi.\nReszta zostaje w celach i nie wygląda przez drzwi.\nTaka jest umowa. Nie my ją wymyśliliśmy."
+  },
+  "19": {
+   "title": "Skarga brata kucharza",
+   "where": "kartka w spiżarni",
+   "text": "Znowu ktoś wyjadł miód ze spiżarni. Znowu nikt nie wie kto.\nW zakonie, który strzeże prawdy!\nWstyd. Pytam: kto? I nikt nie chce wiedzieć."
+  },
+  "21": {
+   "title": "Spis wody",
+   "where": "tabliczka przy cysternie",
+   "text": "Poziom w cysternie: dwa łokcie mniej niż wiosną.\nKanał pod rynek otwieramy co trzeci dzień.\nMłyn dostaje resztę. Jeśli zostanie reszta."
+  },
+  "22": {
+   "title": "Sygnał wody",
+   "where": "rozkaz na ścianie śluzy",
+   "text": "Cztery i dwa - woda idzie.\nKiedy dzwon tak bije, brat od zasuwy schodzi i otwiera kanał.\nBez sygnału zasuwa zostaje zamknięta. Woda nie płynie sama do tych, którzy o nią nie proszą."
+  },
+  "23": {
+   "title": "Brat Dobiesz",
+   "where": "list bez adresata",
+   "text": "Dobiesz zapytał mnie przy wieczerzy, czy wiem, co o mnie myśli przeor.\nNie wiem. Nie chcę wiedzieć.\nDobiesz się śmiał: - Ja już wiem. I o tobie też."
+  },
+  "24": {
+   "title": "Lista kasztelanów (odpis)",
+   "where": "zwój w skrzyni",
+   "text": "...Radomił z Kruczych Skał. Sobiesław z Brodu. Bogumił z rodu Kowali, kasztelan i klucznik.\nKlucz nosi przy sobie. Słowa zna na pamięć.\nNastępny - z tego samego rodu. Jeśli ród przetrwa."
+  },
+  "25": {
+   "title": "Rok bez pytania",
+   "where": "kronika, jedna linijka",
+   "text": "Tego roku nikt nie zapytał. Los padł na brata, który umarł zimą.\nPrzeor powiedział, że to też jest odpowiedź."
+  },
+  "26": {
+   "title": "Modlitwa nad cysterną",
+   "where": "słowa wydrapane przy misie",
+   "text": "Daj nam wody tyle, ile trzeba.\nDaj nam prawdy tyle, ile uniesiemy.\nReszty nie dawaj."
+  },
+  "27": {
+   "title": "List do domu",
+   "where": "niewysłany list nowicjusza",
+   "text": "Mamo, jest tu ciepło i sucho. Jemy dobrze.\nNie pytaj, czym się zajmujemy - i tak nie mógłbym powiedzieć.\nMógłbym tylko zapytać. Ale o ciebie nie wolno mi pytać."
+  },
+  "28": {
+   "title": "Rozkaz przeora",
+   "where": "pieczęć na drzwiach dolnej kaplicy",
+   "text": "Zamknąć dolną kaplicę. Brat Dobiesz schodził tamtędy nocą.\nKto go spotka na schodach, niech nie odpowiada, gdy będzie pytał.\nNawet jeśli zapyta o imię."
+  },
+  "29": {
+   "title": "Ostatni dzień kwater",
+   "where": "kartka na pustym łóżku",
+   "text": "Wynieśliśmy z cel wszystko, co dało się unieść.\nReszta zostaje dla tych, którzy przyjdą po nas.\nNiech myślą, że żyliśmy biednie. To prawda."
+  },
+  "31": {
+   "title": "Znak zwiadowcy",
+   "where": "kreda na ścianie",
+   "text": "Tu kończą się mury zakonu. Dalej skała robi, co chce.\nIdźcie przy lewej ścianie. Prawa kłamie."
+  },
+  "32": {
+   "title": "Mapa zwiadowcy",
+   "where": "strzęp mapy",
+   "text": "Rzeka płynie z północy na południe. Albo odwrotnie.\nKompas tu kręci się w kółko - jakby i on wolał nie wiedzieć."
+  },
+  "33": {
+   "title": "O grzybach",
+   "where": "kartka w sakwie zwiadowcy",
+   "text": "Szare jeść można. Fioletowych nie ruszać.\nBrat Bogusz zjadł jednego i przez dwa dni opowiadał nam nasze sny. Wszystkie się zgadzały."
+  },
+  "34": {
+   "title": "Ruda",
+   "where": "zapiski kowala zakonu",
+   "text": "W ścianach jest żelazo. Kowale zakonu brali je stąd na zamki i klucze.\nŻelazo z dołu jest cięższe, niż powinno. Kowal mówi, że pamięta, skąd je wzięto."
+  },
+  "35": {
+   "title": "Nie pić z rzeki",
+   "where": "wyryte nad brzegiem",
+   "text": "NIE PIĆ Z RZEKI.\nKto pił, ten słyszał potem płynącą wodę w każdej ciszy.\nWodę bierzcie z góry, w bukłakach. Każda kropla z góry jest warta więcej niż cała rzeka."
+  },
+  "36": {
+   "title": "Kamieniarze",
+   "where": "ślady dłut i kilka słów",
+   "text": "Kamień na twierdzę ciosano tu, pod ziemią, i wyciągano szybem.\nNiektóre ślady dłut są starsze niż zakon.\nStarsze niż kamieniarze? Tego nie wiem."
+  },
+  "37": {
+   "title": "Nietoperze",
+   "where": "kartka zwiadowcy",
+   "text": "Gdy nietoperze zrywają się naraz, gaś pochodnię i licz do stu.\nOne wiedzą, kiedy coś idzie. My dowiadujemy się za późno."
+  },
+  "38": {
+   "title": "Echo",
+   "where": "dwie linijki na skale",
+   "text": "Zawołałem swoje imię.\nEcho wróciło z cudzym."
+  },
+  "39": {
+   "title": "Lina",
+   "where": "kartka przy wbitym haku",
+   "text": "Brat Zbysław poszedł dalej sam. Zostawił linę przywiązaną do skały.\nLina jest. Zbysława nie ma.\nLina jest ciepła."
+  },
+  "41": {
+   "title": "Kartka kopacza",
+   "where": "świeży papier, nie zakonny",
+   "text": "Płacą za każdy sążeń. Nie mówią, kto płaci.\nMówią tylko: szukajcie drzwi pod skałą.\nJakby skała miała drzwi."
+  },
+  "42": {
+   "title": "Znak na ścianie",
+   "where": "kreda, świeża",
+   "text": "Strzałka w dół i trzy kreski.\nKtoś tu był przede mną. Niedawno.\nPod strzałką, inną ręką: NIE TĘDY."
+  },
+  "43": {
+   "title": "Milcząca",
+   "where": "zapiski zwiadowcy zakonu",
+   "text": "Rzeka nie ma nazwy. Zakon nazywał ją Milczącą,\nbo tam, gdzie jest najgłębsza, nie szumi wcale."
+  },
+  "44": {
+   "title": "Brat od pochodni",
+   "where": "kartka w pustej skrzynce",
+   "text": "Każda pochodnia, którą tu zapalisz, zgaśnie po trzech dniach.\nZostaw następną dla tego, kto pójdzie po tobie.\nTak robimy. Dlatego ktoś jeszcze wraca."
+  },
+  "45": {
+   "title": "Kopacz, który przestał mówić",
+   "where": "zapiski kopacza",
+   "text": "Jan dotknął ściany, tam gdzie świeciła. Od wtedy siedzi i patrzy.\nKiedy pytamy, co widział, kręci głową.\nKiedy pytamy, czy nas słyszy - kiwa."
+  },
+  "46": {
+   "title": "Kryształy",
+   "where": "dopisek na mapie kopaczy",
+   "text": "Kryształy rosną tylko tam, gdzie ktoś kiedyś płakał - tak mówił stary kopacz.\nGłupota. Ale jest ich tu dużo."
+  },
+  "47": {
+   "title": "Sieci",
+   "where": "kartka owinięta pajęczyną",
+   "text": "Pajęczyny są tu grube jak liny. Nie przecinać nożem - ostrze grzęźnie.\nPalić. I nie patrzeć w górę, kiedy się pali."
+  },
+  "48": {
+   "title": "Rozkaz (strzęp)",
+   "where": "podarty list z obcą pieczęcią",
+   "text": "...znaleźć wejście za każdą cenę. Świadków nie...\n...drzwi pod skałą mają być otwarte przed...\nReszta zamoczona w rzece."
+  },
+  "49": {
+   "title": "Ostatni zwiadowca",
+   "where": "kartka wciśnięta w szczelinę",
+   "text": "Dalej nie ma już ścian zakonu. Są inne. Starsze.\nKtoś je wyrównał, zanim urodził się ktokolwiek z nas.\nZanim urodził się zakon."
+  },
+  "51": {
+   "title": "Uczony zakonu",
+   "where": "zapiski na woskowej tabliczce",
+   "text": "Te ściany nie są nasze. Nasi kamieniarze nie znali takich łuków.\nZakon nie zbudował twierdzy na pustym miejscu. Zbudował ją nad czymś."
+  },
+  "52": {
+   "title": "Pismo",
+   "where": "przerysowane znaki",
+   "text": "Znaki biegną w trzech rzędach. Jeden rząd powtarza się co siedem znaków.\nSiedem - jak uderzenia dzwonu.\nPrzypadek? Przeor mówi, że tu nie ma przypadków."
+  },
+  "53": {
+   "title": "Twarze",
+   "where": "kartka uczonego",
+   "text": "Na każdej płaskorzeźbie postacie mają zatarte twarze.\nNie zniszczone przez czas. Zatarte dłutem. Starannie, jedna po drugiej."
+  },
+  "54": {
+   "title": "Pierwsza myśl",
+   "where": "woskowa tabliczka brata Wincentego",
+   "text": "Brat Wincenty: to była świątynia.\nLudzie przychodzili tu modlić się do światła i odchodzili mądrzejsi."
+  },
+  "55": {
+   "title": "Druga myśl",
+   "where": "dopisek brata Radosta",
+   "text": "Brat Radost: to nie świątynia, tylko straż. Tacy jak my, tylko dawniej.\nNas też ktoś kiedyś znajdzie i nazwie świątynią."
+  },
+  "56": {
+   "title": "Trzecia myśl",
+   "where": "zdanie zamazane węglem",
+   "text": "Nikt z nas nie chce powiedzieć głośno trzeciej możliwości.\nZapisuję ją tu i zamazuję:\n(dalej tylko czarna smuga węgla)"
+  },
+  "57": {
+   "title": "Kości",
+   "where": "zapiski uczonego",
+   "text": "Kości tutaj nie leżą jak w krypcie.\nLeżą jak ludzie, którzy usiedli i już nie wstali.\nWszyscy twarzą w tę samą stronę. W dół."
+  },
+  "58": {
+   "title": "Dłuto z brązu",
+   "where": "kartka owinięta wokół dłuta",
+   "text": "Znaleźliśmy dłuto z brązu. Ostrze wyszczerbione,\njakby ktoś zacierał nim coś twardszego niż kamień."
+  },
+  "59": {
+   "title": "Rachunek lat",
+   "where": "liczby na marginesie",
+   "text": "Przeor kazał liczyć warstwy kurzu na posadzce.\nWyszło więcej lat, niż ma wyspa.\nPrzeor kazał przestać liczyć."
+  },
+  "61": {
+   "title": "Płaskorzeźba z misą",
+   "where": "opis uczonego",
+   "text": "Postać nalewa wodę do misy przed światłem.\nNastępna scena: misa pusta, postać leży.\nNastępna: inna postać nalewa wodę."
+  },
+  "62": {
+   "title": "Imię",
+   "where": "dwie ręce na jednej kartce",
+   "text": "Przy każdej scenie powtarza się jedno słowo.\nWincenty czyta je: „Pierwszy”. Radost czyta: „Ostatni”.\nRóżnica jednej kreski."
+  },
+  "63": {
+   "title": "Kamienne straże",
+   "where": "zapiski uczonego",
+   "text": "Posągi przy przejściach mają oczy zwrócone do środka, nie na zewnątrz.\nNie pilnowały, żeby nikt nie wszedł."
+  },
+  "64": {
+   "title": "Ślady stóp",
+   "where": "kartka uczonego",
+   "text": "W kurzu ślady bosych stóp. Prowadzą w dół. Żaden nie wraca.\nŚlady są stare. Albo nie - kurz tu nie opada."
+  },
+  "65": {
+   "title": "Notatka przeora",
+   "where": "rozkaz z pieczęcią",
+   "text": "Nie przepisujcie tych znaków na górę.\nCo jest wyryte w kamieniu, niech zostanie w kamieniu."
+  },
+  "66": {
+   "title": "Sale",
+   "where": "plan narysowany palcem w sadzy",
+   "text": "Sale układają się w krąg, a krąg w spiralę.\nKażda następna jest trochę mniejsza. Jakby ktoś szedł w dół i za każdym razem brał ze sobą mniej."
+  },
+  "67": {
+   "title": "Brat Wincenty",
+   "where": "zapiski brata Radosta",
+   "text": "Wincenty przestał spać. Mówi, że rozumie już połowę znaków.\nPytam, co mówią. Odpowiada: że nie powinienem rozumieć drugiej połowy."
+  },
+  "68": {
+   "title": "Pochodnie Pierwszych",
+   "where": "kartka przy pustym koszu na ogień",
+   "text": "Kosze na ogień stoją tu wszędzie. Puste od wieków.\nZapaliliśmy jeden. Płonął do rana bez drewna. Zgasiliśmy go wodą ze święconego dzbana."
+  },
+  "69": {
+   "title": "Ołtarz bez boga",
+   "where": "zapiski uczonego",
+   "text": "Ołtarz jest pusty. Na nim wgłębienie - jakby coś tu kiedyś leżało,\na potem ktoś to zniósł niżej."
+  },
+  "71": {
+   "title": "Pęknięcie",
+   "where": "kartka uczonego",
+   "text": "Tu ruiny się kończą. Dalej ściany wyglądają jak...\nnie wiem. Jak pamięć o ścianach."
+  },
+  "72": {
+   "title": "Ostatnia płaskorzeźba",
+   "where": "zapiski brata Radosta",
+   "text": "Postać stoi sama przed światłem. Twarz nietknięta.\nWincenty mówi, że to nie jest żadna postać. Że to my."
+  },
+  "73": {
+   "title": "Zakaz",
+   "where": "rozkaz na drzwiach",
+   "text": "Od tego miejsca bracia schodzą tylko parami.\nJeden mówi. Drugi słucha, czy tamten mówi prawdę."
+  },
+  "74": {
+   "title": "Wincenty odszedł",
+   "where": "kartka zostawiona na posłaniu",
+   "text": "Nie szukajcie mnie.\nWiem, gdzie jestem. Pierwszy raz w życiu wiem.\n- W."
+  },
+  "75": {
+   "title": "Granica",
+   "where": "zapiski brata Radosta",
+   "text": "Za tą salą zaczyna się to, co przeor nazywa Warstwą.\nPowietrze jest ciepłe. Słychać głosy - zawsze w języku tego, kto słucha."
+  },
+  "76": {
+   "title": "Prawda o Borgarze",
+   "where": "kartka zapisana twoim pismem, choć nic nie pisałeś",
+   "text": "Borgar co noc schodzi do piwnicy i staje przed kratą.\nRano tego nie pamięta. Przestawia beczki, żeby mieć powód, dla którego tam był."
+  },
+  "77": {
+   "title": "Prawda o Melii",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Melia zna jeszcze jedną zwrotkę. Ósmą.\nNigdy jej nie zaśpiewała - za każdym razem, gdy zaczyna, zapomina melodii."
+  },
+  "78": {
+   "title": "Prawda o Ozzym",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Ozzy nie jest tak pijany, jak udaje.\nPije, żeby nikt nie pytał, skąd wie to, co wie."
+  },
+  "79": {
+   "title": "Prawda o Grumie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Grum nosi w sakwie list, którego nie otworzył od roku.\nWie, co w nim jest. Dlatego go nie otwiera."
+  },
+  "81": {
+   "title": "Prawda o Hance",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Hanka Mączna piecze codziennie o jeden bochenek za dużo.\nOd dnia, w którym ktoś przestał po niego przychodzić."
+  },
+  "82": {
+   "title": "Prawda o Kubie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Kuba Woziwoda nie umie pływać i boi się głębokiej wody.\nWozi ją całe życie."
+  },
+  "83": {
+   "title": "Prawda o Feliksie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Feliks zapisuje każdą beczkę wody, którą sprzedał.\nNa osobnej kartce liczy, ile kosztowały miasto. Ta druga kartka jest dłuższa."
+  },
+  "84": {
+   "title": "Prawda o Ambrożym",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Ambroży raz w życiu zadzwonił źle. Nikt tego nie zauważył.\nPamięta to każdej nocy, zanim zaśnie."
+  },
+  "85": {
+   "title": "Prawda o Tadku",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Tadek kuje lepiej niż jego ojciec i dobrze o tym wie.\nPozwala staremu poprawiać swoją robotę, żeby ojciec miał po co przychodzić do kuźni."
+  },
+  "86": {
+   "title": "Prawda o dziadku Stachu",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Dziadek Stach bał się nie tylko Lorda.\nBał się, że kiedy dług zniknie, nikt już nie zapuka do jego drzwi."
+  },
+  "87": {
+   "title": "Prawda o kapralu Wicie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Kapral Wit śpi z mieczem pod poduszką.\nNie boi się wroga. Boi się swoich."
+  },
+  "88": {
+   "title": "Prawda o Ludmile",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Ludmiła śpiewa kołysankę zza morza dopiero wtedy, gdy Ela już śpi.\nŚpiewa ją sobie."
+  },
+  "89": {
+   "title": "Prawda o Lordzie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Lord Zaleski boi się ciszy we dworze bardziej niż czegokolwiek.\nDlatego zawsze ktoś tam musi mówić - choćby on sam, do siebie."
+  },
+  "91": {
+   "title": "Prawda o sołtysie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Sołtys Bronisław zna na pamięć, ile wiader daje studnia.\nLiczy je przed snem zamiast pacierza."
+  },
+  "92": {
+   "title": "Prawda o Baltazarze",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Baltazar Vey nie urodził się kupcem.\nLiczyć nauczył się tam, gdzie liczono ludzi. Nie mówi gdzie."
+  },
+  "93": {
+   "title": "Prawda o Ignacu",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Ignac nie znosi zapachu skór.\nRobi to, bo robił to jego ojciec, a on nigdy nie zapytał, czy musi."
+  },
+  "94": {
+   "title": "Prawda o Rafale",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Rafał widział przez chwilę to, czego dotknął jego towarzysz w skale.\nOd tamtej pory nie śpi pod ścianą."
+  },
+  "95": {
+   "title": "Prawda o Mruczku",
+   "where": "kartka zapisana twoim pismem, w rogu ślad łapy",
+   "text": "Mruczek schodził tu przed tobą. Wiele razy.\nKoty o nic nie pytają, więc nikt im niczego nie mówi."
+  },
+  "96": {
+   "title": "Prawda o tobie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Zszedłeś tu nie dla długu, nie dla pieniędzy i nie dla Borgara.\nZszedłeś, bo chciałeś wiedzieć. Tak samo zaczynał każdy z nich."
+  },
+  "97": {
+   "title": "Prawda o kłamstwie",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Ktoś na górze kłamie ci prosto w oczy. Nie powiem kto.\nI tak zaczniesz się zastanawiać. To też jest cena."
+  },
+  "98": {
+   "title": "Prawda o strażniku",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Nikt nie wie, co zrobił strażnik, który pytał ponad miarę.\nMoże otworzył bramy. A może tylko przestał ich pilnować - bo nic już nie miało dla niego wagi."
+  },
+  "99": {
+   "title": "Ostatnie schody",
+   "where": "kartka zapisana twoim pismem",
+   "text": "Za następnymi drzwiami są trzy zamki: klucz, dzwon i pieśń.\nJeden to za mało. Trzy - więcej, niż ktokolwiek przed tobą przyniósł."
+  },
+  "10a": {
+   "title": "Reguła straży dziesiątej bramy",
+   "where": "zwój na kamiennym cokole",
+   "text": "Tu kończą się piwnice, a zaczyna straż.\nKto zszedł aż tutaj, niech wie: twierdza nie strzeże skarbu. Twierdza odmierza.\nJedno pytanie na rok. Zadane przy świadkach, zapisane w księdze.\nKto pyta ponad miarę, temu Serce odpowie na wszystko naraz - i nic już nie będzie miało dla niego wagi."
+  },
+  "10b": {
+   "title": "Dziennik wartownika",
+   "where": "księga na pulpicie",
+   "text": "Brat Dobiesz wrócił z dołu przed świtem, choć jego rok jeszcze nie minął.\nNie powiedział, o co pytał. Od tamtej pory nie gasi świec i nie zamyka drzwi.\nMówi, że nie ma już przed czym się chować. Przeor kazał zdjąć go z warty. Za późno."
+  },
+  "10c": {
+   "title": "Napis nad windą",
+   "where": "litery wykute nad klatką",
+   "text": "WINDA KASZTELANA.\nW dół - tylko dla straży.\nW górę - dla każdego, kto jeszcze chce wrócić."
+  },
+  "10d": {
+   "title": "Ostatni wpis",
+   "where": "kartka wciśnięta w szczelinę muru",
+   "text": "Zamurowaliśmy przejścia i rozgłosiliśmy, że to przeklęta ruina. Niech myślą, że nic tu nie ma.\nZbroja zostaje na straży. Słowa zna tylko krew kasztelana - niech je powtarza, choćby jako żart przy piwie.\nNiech nikt nie pamięta, po co."
+  },
+  "20a": {
+   "title": "Księga pytań",
+   "where": "ciężka księga na pulpicie w kręgu",
+   "text": "Rok po roku, imię i pytanie. Przy większości pytań - odpowiedź zakryta czarnym pasem atramentu.\nRok sto czwarty: brat Wszebor - „czy brat mój żyje?” Rok sto piąty: nikt. Rok sto szósty: brat Dobiesz - „czy twierdza przetrwa?”\nRok sto szósty, drugi wpis, inną ręką: brat Dobiesz. Trzeci wpis: brat Dobiesz. Dalej strony są wyrwane."
+  },
+  "20b": {
+   "title": "Reguła rytuału",
+   "where": "zwój wiszący przy krześle pytającego",
+   "text": "Pytający siada w kręgu. Bracia stoją za kręgiem, plecami do światła.\nPytanie mówi się raz, głośno. Odpowiedź słyszy tylko pytający.\nKto wyjdzie z kręgu przed końcem, ten pytał na próżno. Kto zostanie po końcu - ten pyta dalej. Takiego trzeba wynieść."
+  },
+  "20c": {
+   "title": "Przeor do kasztelana",
+   "where": "list z pękniętą pieczęcią",
+   "text": "Bogumile, zbroja w kaplicy znów się ruszała. Mówią, że to moja dawna zbroja i że pilnuje kręgu lepiej niż ja.\nNiech pilnuje. Ja już nie umiem odmawiać.\nZejdę na dół z ostatnimi. Klucz zostaw swojemu rodowi. Słowa też."
+  },
+  "30a": {
+   "title": "Dziennik cysterny",
+   "where": "księga w niszy przy zasuwie",
+   "text": "Wiosna: po brzegi. Lato: łokieć mniej. Jesień: dwa.\nKanał pod rynek otwarty co trzeci dzień, jak nakazano.\nOstatni wpis: zamykamy zasuwę na dobre. Nikt na górze nie będzie wiedział, skąd szła woda. Niech myślą, że ze studni."
+  },
+  "30b": {
+   "title": "Zasuwa główna",
+   "where": "litery wykute na zasuwie, pod krukiem",
+   "text": "ZASUWA GŁÓWNA. CZTERY I DWA.\nOtwiera ją sygnał wody z dzwonu na górze, nie ręka.\nKto ją otworzy bez sygnału, ten zaleje rynek albo nie da nic - zasuwa sama wie, którą drogą puścić wodę."
+  },
+  "30c": {
+   "title": "Gniazdo",
+   "where": "kartka przy kościach, przegryziona",
+   "text": "Szczury urosły od czasu, gdy cysterna wyschła. Piją z kałuży na dnie.\nNajwiększa siedzi w gnieździe z kości. Bracia mówią, że jest stara jak zakon.\nNie schodzić na dno w pojedynkę."
+  },
+  "40a": {
+   "title": "Zwiadowcy przy brodzie",
+   "where": "dziennik pod kamieniem",
+   "text": "Bród na Milczącej - jedyne miejsce, gdzie da się przejść na drugi brzeg.\nPostawiliśmy most z lin. Pająki postawiły swój.\nNasz się trzyma. Na razie."
+  },
+  "40b": {
+   "title": "Winda zwiadowców",
+   "where": "tabliczka przy kołowrocie",
+   "text": "Szyb z czasów kamieniarzy. Kasztelan kazał go odkopać i zawiesić klatkę.\nŁańcuch jest jeden, od Ruin Zamku aż tutaj. Kto kręci kołowrotem, ten wraca."
+  },
+  "50a": {
+   "title": "Obóz kopaczy",
+   "where": "kartka przy posłaniu",
+   "text": "Szóstego dnia skończył się chleb. Siódmego - lampa.\nPrzekop doszedł do rzeki i tu się skończył. Od strony gór zawaliło się za nami.\nKto czyta, niech powie mojej żonie, że wrócę. Niech nie pyta, kiedy."
+  },
+  "50b": {
+   "title": "Źródło",
+   "where": "napis nad misą źródła",
+   "text": "ŹRÓDŁO POD SKAŁĄ. Jedyna czysta woda pod twierdzą.\nTrzy czerpania na dzień - nie więcej. Kto zaczerpnie więcej, ten zamąci je dla wszystkich.\nZakon wpisał je do regestru. Kopacze nie umieli czytać."
+  },
+  "50c": {
+   "title": "Zawał",
+   "where": "ślady na belce",
+   "text": "Belki pękły od strony gór. Za zawałem słychać kilofy - albo wodę.\nTunel kopaczy prowadzi stąd na wschód, do kopalni. Kiedyś znów się otworzy."
+  },
+  "60a": {
+   "title": "Brama Pierwszych",
+   "where": "zapiski uczonego zakonu",
+   "text": "Brama jest starsza niż wszystko, co znamy. Zakon nazwał ją Bramą Pierwszych, bo nie wiedział, jak ją nazwać.\nOdźwierny stoi przy niej, odkąd ktokolwiek pamięta. Zakon nigdy go nie ruszył.\nOn też nigdy nie ruszył zakonu. Do czasu."
+  },
+  "60b": {
+   "title": "Napis nad bramą",
+   "where": "dwa odczyty na jednej tabliczce",
+   "text": "Odczyt brata Wincentego: TU ZACZYNA SIĘ ODPOWIEDŹ.\nOdczyt brata Radosta: TU KOŃCZY SIĘ PYTANIE.\nPrzeor: oba są złe. I oba prawdziwe."
+  },
+  "70a": {
+   "title": "Sala płaskorzeźb",
+   "where": "opis uczonego",
+   "text": "Siedem płaskorzeźb, jedna po drugiej. Ludzie schodzą, klękają przed światłem, wstają.\nNa szóstej nikt już nie wstaje. Na siódmej - ktoś schodzi znowu.\nNie umiemy powiedzieć, czy to opowieść o pierwszych, czy rada dla następnych."
+  },
+  "70b": {
+   "title": "Wincenty o twarzach",
+   "where": "pismo brata Wincentego, drżące",
+   "text": "Już wiem, czemu zatarli twarze. Nie żeby ich nie poznano.\nŻeby nikt nie zobaczył na nich tego, co zobaczyli oni.\nAlbo żeby nie zobaczył siebie. Nie wiem. Jeszcze nie."
+  },
+  "80a": {
+   "title": "Sala echa",
+   "where": "słowa, które słyszysz, zanim je przeczytasz",
+   "text": "Tu każde słowo wraca dwa razy. Raz takie, jakie je powiedziałeś.\nDrugi raz - takie, jakie je pomyślałeś."
+  },
+  "80b": {
+   "title": "Ostatni zapis Radosta",
+   "where": "kartka przygnieciona kamieniem",
+   "text": "Doszedłem do sali, w której echo odpowiada.\nZadałem mu jedno pytanie. Odpowiedziało moim głosem i miało rację.\nWracam na górę. Jeśli nie wrócę - to też odpowiedź."
+  },
+  "90a": {
+   "title": "Ostatnia straż",
+   "where": "księga warty na stole",
+   "text": "Warta przy Sercu: dwóch braci, zmiana co trzy dni. Nie patrzeć w dół. Nie odpowiadać.\nOstatni wpis: zostałem sam. Zmiany nie będzie."
+  },
+  "90b": {
+   "title": "Ostatni przeor",
+   "where": "list przybity nożem do belki",
+   "text": "Zostaję. Ktoś musi.\nGdy przyjdzie następny, niech wie: nie byłem bohaterem. Byłem tym, który nie miał już dokąd wrócić.\nNie bądź taki jak ja. Miej dokąd wracać."
+  },
+  "90c": {
+   "title": "Lista tych, co zeszli",
+   "where": "imiona wydrapane na ścianie",
+   "text": "Jarosz. Dobiesz. Sulisław. Bogusz. Zbysław. Wincenty. Radost.\nPod spodem miejsce na jeszcze jedno imię - puste.\nKamień jest tam gładki, jakby ktoś często przesuwał po nim palcem."
+  },
+  "100a": {
+   "title": "Napis nad drzwiami",
+   "where": "litery nad ostatnimi drzwiami",
+   "text": "TRZY ZAMKI: KLUCZ, DZWON I PIEŚŃ.\nKTO MA DWA, TEN WEJDZIE.\nKTO MA TRZY, TEN WYJDZIE."
+  }
+ },
+ "lupy": {
+  "skrzynia": "Skrzynia",
+  "skrzynka": "Skrzynka",
+  "beczka": "Beczka",
+  "worek": "Worek",
+  "dzban": "Dzban",
+  "monety": "Stare monety",
+  "kosci": "Szczątki strażnika",
+  "grzyby": "Grzyby",
+  "wozek": "Wózek kopaczy",
+  "sakwa": "Porzucona sakwa",
+  "relikwiarz": "Relikwiarz"
+ },
+ "bossowie": {
+  "20": {
+   "name": "Przeor w zbroi"
+  },
+  "30": {
+   "name": "Królowa szczurów"
+  },
+  "40": {
+   "name": "Matka pająków"
+  },
+  "50": {
+   "name": "Topielec z głębiny"
+  },
+  "60": {
+   "name": "Kamienny Odźwierny"
+  },
+  "70": {
+   "name": "Zbroja bez herbu"
+  },
+  "80": {
+   "name": "Upiór pytającego"
+  },
+  "90": {
+   "name": "Ostatni Strażnik"
+  }
+ },
+ "pietra": {
+  "10": {
+   "name": "Strażnica"
+  },
+  "20": {
+   "name": "Sala jednego pytania"
+  },
+  "30": {
+   "name": "Wielka cysterna"
+  },
+  "40": {
+   "name": "Bród Milczącej"
+  },
+  "50": {
+   "name": "Przekop kopaczy"
+  },
+  "60": {
+   "name": "Brama Pierwszych"
+  },
+  "70": {
+   "name": "Sala płaskorzeźb"
+  },
+  "80": {
+   "name": "Sala echa"
+  },
+  "90": {
+   "name": "Ostatnia straż"
+  },
+  "100": {
+   "name": "Komnata Serca"
+  }
+ },
+ "pasma": {
+  "0": {
+   "name": "Piwnice zamku"
+  },
+  "1": {
+   "name": "Kwatery i kaplica zakonu"
+  },
+  "2": {
+   "name": "Jaskinie i podziemna rzeka"
+  },
+  "3": {
+   "name": "Ruiny starsze niż zakon"
+  },
+  "4": {
+   "name": "Warstwa Prawdy"
+  },
+  "5": {
+   "name": "Serce Twierdzy"
+  }
+ },
+ "serce": {
+  "ACTORS": {
+   "lord": {
+    "name": "Lord Zaleski"
+   },
+   "guard": {
+    "name": "Strażnik dworu"
+   },
+   "borgar": {
+    "name": "Borgar"
+   },
+   "ambrozy": {
+    "name": "Ambroży"
+   },
+   "melia": {
+    "name": "Melia"
+   },
+   "ozzy": {
+    "name": "Ozzy"
+   },
+   "grum": {
+    "name": "Grum"
+   },
+   "dziadek": {
+    "name": "Dziadek Stach"
+   },
+   "kuba": {
+    "name": "Kuba"
+   },
+   "hanka": {
+    "name": "Hanka"
+   },
+   "soltys": {
+    "name": "Sołtys"
+   },
+   "tadek": {
+    "name": "Tadek"
+   },
+   "ludmila": {
+    "name": "Ludmiła"
+   },
+   "ela": {
+    "name": "Ela"
+   },
+   "marek": {
+    "name": "Marek"
+   },
+   "rafal": {
+    "name": "Rafał"
+   },
+   "teodor": {
+    "name": "Teodor"
+   },
+   "feliks": {
+    "name": "Feliks"
+   }
+  },
+  "SON": "Kazimierz",
+  "NAMES": {
+   "borgar": "Borgar",
+   "grum": "Grum",
+   "tadek": "Tadek",
+   "kowal": "Tadek",
+   "melia": "Melia",
+   "ozzy": "Ozzy",
+   "ambrozy": "Ambroży",
+   "dzwonnik": "Ambroży",
+   "rafal": "Rafał",
+   "marek": "Marek",
+   "kuba": "Kuba",
+   "woziwoda": "Kuba",
+   "ignac": "Ignac",
+   "garbarz": "Ignac",
+   "wit": "Wit",
+   "kapral": "Kapral Wit",
+   "hanka": "Hanka",
+   "piekarka": "Hanka",
+   "ludmila": "Ludmiła",
+   "soltys": "sołtys",
+   "kupiec": "Baltazar",
+   "baltazar": "Baltazar",
+   "hero": "ty",
+   "dog": "pies",
+   "uchodzcy": "uchodźcy z obozu",
+   "straz": "strażnicy dworu"
+  },
+  "LORD": {
+   "arrive": {
+    "ally": {
+     "0": {
+      "1": "Za tobą kroki - ciche, ostrożne. Ktoś schodzi ostatnimi schodami."
+     },
+     "4": {
+      "1": "Zaczekaj. To ja - Zaleski. Nie bój się."
+     },
+     "5": {
+      "1": "Szedłem za tobą od dziewięćdziesiątego piętra. Moi ludzie trzymali linę, a ja trzymałem się ściany. Lewą ręką."
+     },
+     "6": {
+      "1": "Nie przyszedłem po Serce. Dwór ma dość kamieni z tej twierdzy. Przyszedłem po jedno pytanie."
+     },
+     "8": {
+      "1": "Mój syn, Kazimierz, popłynął na kontynent w pierwszym roku wojny. Wrócił tylko jego pierścień."
+     },
+     "9": {
+      "1": "Chcę wiedzieć, czy zginął przeze mnie. Tylko to. Pozwolisz mi?"
+     }
+    },
+    "rival": {
+     "0": {
+      "1": "Za tobą kroki - ciężkie, w butach z cholewami. I stuk drzewca o kamień."
+     },
+     "6": {
+      "1": "Mówiłem: najpierw do mnie."
+     },
+     "10": {
+      "1": "Dwór stoi na kamieniach tej twierdzy. To, co pod nimi, należy do mnie. Odsuń się od tego światła."
+     },
+     "11": {
+      "1": "Po co ci ono?"
+     },
+     "12": {
+      "1": "...Jedno pytanie. Mój syn, Kazimierz, zginął na kontynencie w pierwszym roku wojny."
+     },
+     "13": {
+      "1": "Chcę wiedzieć, czy przeze mnie. Potem zdecyduję, co dalej z tym... światłem."
+     }
+    }
+   },
+   "ask": "Co zrobisz?",
+   "opts": {
+    "allow": "Pozwól mu zapytać.",
+    "refuseAlly": "Nie. To za dużo dla każdego.",
+    "refuseRival": "Nie. Stań mu na drodze.",
+    "askFor": "Zapytam za ciebie."
+   },
+   "allow": {
+    "2": {
+     "1": "Czy mój syn zginął przeze mnie?"
+    },
+    "5": {
+     "1": "Światło nie odpowiada słowami. Lord po prostu wie - widać to po jego twarzy."
+    },
+    "6": {
+     "1": "Tak. I nie."
+    },
+    "7": {
+     "1": "Raz, przy stole, nazwałem go tchórzem. Raz. Popłynął, żeby mi pokazać, że nim nie jest."
+    },
+    "8": {
+     "1": "Zginął, osłaniając odwrót innych. Nikt mu tego nie kazał. ...Był odważniejszy niż jego ojciec."
+    },
+    "10": {
+     "1": "Czekaj... ono mówi dalej... o dworze, o żonie, o mnie... Nie! Nie pytałem o to!"
+    },
+    "11": {
+     "1": "Odciągasz Lorda od światła. Jest lekki jak dziecko."
+    }
+   },
+   "refuse": {
+    "rival": {
+     "0": {
+      "1": "Odsuń go."
+     },
+     "4": {
+      "1": "Jaśnie panie... ja widzę swoją matkę. Nie żyje od dziesięciu lat."
+     },
+     "5": {
+      "1": "Nie podejdę bliżej. Nie tutaj."
+     },
+     "11": {
+      "1": "Nie... Nie chcę wiedzieć."
+     },
+     "12": {
+      "1": "Nie pytam o to, czego nie chcę wiedzieć."
+     },
+     "13": {
+      "1": "(To powiedzenie Borgara. Lord nie wie, skąd je zna.)"
+     },
+     "14": {
+      "1": "Zostaw to sobie. Zostaw to wszystko sobie."
+     }
+    }
+   },
+   "askFor": {
+    "1": {
+     "1": "Czy syn Lorda zginął przez niego?"
+    },
+    "4": {
+     "1": "Wiesz. Lord raz, przy stole, nazwał syna tchórzem. Kazimierz popłynął na wojnę, żeby pokazać ojcu, że nim nie jest."
+    },
+    "5": {
+     "1": "Zginął, osłaniając odwrót innych. Nikt mu tego nie kazał."
+    },
+    "7": {
+     "1": "I wiesz jeszcze więcej - o Lordzie, o dworze, o sobie. Odsuwasz to, zanim ułoży się w zdania."
+    },
+    "10": {
+     "1": "I? Co powiedziało?"
+    }
+   },
+   "tellOpts": {
+    "truth": "Powiedz mu całą prawdę.",
+    "mercy": "Powiedz: „Nie przez ciebie.”",
+    "silent": "Nic nie mów."
+   },
+   "told": {
+    "truth": {
+     "0": {
+      "1": "Raz nazwałeś go tchórzem. Popłynął, żeby ci pokazać, że nim nie jest. Zginął, osłaniając innych."
+     },
+     "2": {
+      "1": "Tak. Pamiętam ten wieczór. Myślałem, że on nie pamięta."
+     },
+     "3": {
+      "1": "Dziękuję, że powiedziałeś mi wszystko. Ciężko to unieść - ale to moje."
+     }
+    },
+    "mercy": {
+     "0": {
+      "1": "Nie przez ciebie. Zginął, osłaniając innych. Był odważny."
+     },
+     "1": {
+      "1": "Odważny... tak. Zawsze był."
+     },
+     "2": {
+      "1": "Lord uśmiecha się - pierwszy raz, odkąd go znasz."
+     },
+     "3": {
+      "1": "(Połowa prawdy. Serce wie, która połowa.)"
+     }
+    }
+   },
+   "leave": {
+    "2": {
+     "1": "(Znowu jesteś z Sercem sam.)"
+    }
+   }
+  },
+  "COMPANIONS": {
+   "arrive": {
+    "1": "Za tobą kroki. Nie jesteś tu sam."
+   },
+   "borgar": {
+    "1": "Nie puszczę cię samego na ostatnie piętro. Dziadek by mi nie darował."
+   },
+   "ambrozy": {
+    "1": "Powoli, powoli... Kolana już nie te. Ale wartę zdaje się osobiście."
+   }
+  },
+  "AFTER": "Wracasz na górę. Sto pięter - i ani jednego głosu za plecami.",
+  "AFTER_GUARDIAN": "Na górę już nie wracasz. Ale Serce pokazuje strażnikowi, co dzieje się w mieście. Tylko to, co trzeba.",
+  "DEBUG": {
+   "worlds": {
+    "0": {
+     "name": "jak w grze"
+    },
+    "1": {
+     "name": "dobry (trzy zamki, Opinia 75, Grum i Rafał z tobą, Marek wrócił, tawerna obroniona)"
+    },
+    "2": {
+     "name": "zły (dwa zamki, Opinia 10, Grum zginął, Rafał wydany, obóz za murem, tawerna padła)"
+    },
+    "3": {
+     "name": "mieszany (Opinia 45, Grum z frakcją, Rafał za morzem, oblężenie drogo okupione)",
+     "world": {
+      "siege": {
+       "defenders": {
+        "1": "tadek"
+       }
+      }
+     }
+    }
+   },
+   "lords": {
+    "0": {
+     "name": "jak w grze"
+    },
+    "1": {
+     "name": "sojusznik"
+    },
+    "2": {
+     "name": "rywal (chce być pierwszy)"
+    },
+    "3": {
+     "name": "nieobecny"
+    }
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Underground_Data.js: T, ENDINGS=zakonczenia, EPILOGUE=epilog, WHISPERS=szepty, APPARITIONS=zjawy:/(name|line)$/, TRUTH_WHO=prawdaKto, NOTES=notatki:/(title|where|text)$/, LOOT_NAMES=lupy, BOSSES=bossowie:/^\\d+\\.name$/, FLOORS=pietra:/^\\d+\\.name$/, BANDS=pasma:/^\\d+\\.name$/, HEART=serce:pary:/(^|\\.)(name|ask|notice|caption|SON|AFTER|AFTER_GUARDIAN)$|(^|\\.)(NAMES|opts|tellOpts|card)(\\.|$)|\\.1$/)"
+}

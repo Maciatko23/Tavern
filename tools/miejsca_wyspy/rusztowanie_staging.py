@@ -1,11 +1,11 @@
 # python tools/miejsca_wyspy/rusztowanie_staging.py   - PAKIET 0 (rusztowanie), część danych: przygotowuje pliki TYLKO w
-# tools/miejsca_wyspy/staging/ (nic w data/ ani w js/plugins.js). Instaluje je koordynator albo użytkownik, przy zamkniętym edytorze
+# tools/miejsca_wyspy/staging/ (nic w data/ ani na liście gry js/tawerna_wtyczki.js). Instaluje je koordynator albo użytkownik, przy zamkniętym edytorze
 # (docs/miejsca_wyspy/PAKIETY.md, „Pakiet 0 - instalacja”).
 #   staging/data/Map155..167.json   puste szkielety map (rozmiar z koncepcji, tileset, nazwa, notatka <Wyspa:szkielet>); 158 i 164 wolne
 #   staging/data/MapInfos.json      obecne MapInfos + wpisy 155-157, 159-163, 165-167
 #   staging/data/Items.json         obecne Items + 177 Tran, 178 Mapa z zaznaczeniami, 179 Obrączka z krukiem (ikony zastępcze z RTP)
 #   staging/data/System.json        obecne System + nazwy przełączników 17-20
-#   staging/js/plugins.js           obecne plugins.js + 14 wtyczek na stałych miejscach
+#   staging/js/tawerna_wtyczki.js   obecna lista gry + 14 wtyczek na stałych miejscach (do 2026-10-23: js/plugins.js)
 #   staging/ZMIANY.txt         co się zmienia, plik po pliku, ze skrótami SHA-256 oryginałów (instalacja sprawdza, że oryginał
 #                              się nie zmienił od przygotowania)
 # GAME_OVERLAY=tools/miejsca_wyspy/staging podaje grze staging/data/ zamiast data/ (test bez instalacji: tests/wyspa_szkielet_test.js).
@@ -153,7 +153,7 @@ def system(report):
 
 
 def plugins(report):
-    b = raw(ROOT + "js/plugins.js")
+    b = raw(ROOT + "js/tawerna_wtyczki.js")   # (the game's plugin list)
     lines = b.decode("utf-8").split("\n")
     for group, after in ((DATA_PLUGINS, "TownLife_Data"), (ENGINE_PLUGINS, "CzerwonaWoda")):
         anchor = after
@@ -161,15 +161,15 @@ def plugins(report):
             assert os.path.exists(ROOT + "js/plugins/%s.js" % name), "brak pliku wtyczki " + name
             if not any(l.startswith('{"name":"%s",' % name) for l in lines):
                 i = [j for j, l in enumerate(lines) if l.startswith('{"name":"%s",' % anchor)]
-                assert len(i) == 1 and lines[i[0]].endswith(","), "plugins.js: kotwica %s" % anchor
+                assert len(i) == 1 and lines[i[0]].endswith(","), "lista gry: kotwica %s" % anchor
                 lines.insert(i[0] + 1, dump({"name": name, "status": True, "description": desc, "parameters": {}}) + ",")
             anchor = name
     names = [l.split('"')[3] for l in lines if l.startswith('{"name":"')]
     assert names.index("TownLife_Data") < names.index("Wyspa_Data") < names.index("Cysterna_Data") < names.index("TownLife") < names.index("TownQuests_Data")
     assert names.index("TownQuests_Data") + 1 == names.index("TownQuests")
     assert names.index("CzerwonaWoda") < names.index("Wyspa") < names.index("Cysterna") < names.index("CleanHUD")
-    open(OUT + "js/plugins.js", "wb").write("\n".join(lines).encode("utf-8"))
-    report.append("plugins.js (oryginał sha256 %s): +%s pod TownLife_Data, +%s pod CzerwonaWoda" % (
+    open(OUT + "js/tawerna_wtyczki.js", "wb").write("\n".join(lines).encode("utf-8"))
+    report.append("tawerna_wtyczki.js (oryginał sha256 %s): +%s pod TownLife_Data, +%s pod CzerwonaWoda" % (
         sha(b), ", ".join(n for n, _ in DATA_PLUGINS), ", ".join(n for n, _ in ENGINE_PLUGINS)))
 
 
@@ -182,7 +182,7 @@ def main():
     items(report)
     system(report)
     plugins(report)
-    text = "PAKIET 0 - pliki do instalacji (tools/miejsca_wyspy/staging -> data/, js/plugins.js), przy zamkniętym edytorze.\n" + "\n".join(report) + "\n"
+    text = "PAKIET 0 - pliki do instalacji (tools/miejsca_wyspy/staging -> data/, js/tawerna_wtyczki.js), przy zamkniętym edytorze.\n" + "\n".join(report) + "\n"
     open(OUT + "ZMIANY.txt", "wb").write(text.encode("utf-8"))
     print(text)
 

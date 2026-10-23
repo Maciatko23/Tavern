@@ -1,0 +1,147 @@
+{
+ "kod": {
+  "refuse": {
+   "0": "Działka należy teraz do Lorda",
+   "1": "To nie twoja ziemia"
+  },
+  "noBuild": {
+   "0": "Budować możesz tylko na własnej ziemi"
+  },
+  "build": {
+   "0": "Strażnik dworu",
+   "1": "Znak: Własność Lorda Zaleskiego",
+   "2": "Przejście -> Spalona zagroda",
+   "3": "Drogowskaz: Spalona zagroda",
+   "4": "Marta Ługowa"
+  },
+  "smokeEv": {
+   "0": "Dym z komina"
+  },
+  "door": {
+   "0": "Na sprzedaż: {price} G. Pytaj sołtysa w ratuszu."
+  },
+  "guardTalk": {
+   "0": "Działka należy teraz do jaśnie pana Zaleskiego. Rozkaz: nikogo nie wpuszczać. Jak chcesz ją odzyskać - idź do dworu.",
+   "1": "Rozkaz to rozkaz, młodzieńcze."
+  },
+  "glowna": {
+   "0": "Pies przybiegł z działki - jego buda została u Lorda. Idzie z tobą.",
+   "1": "zwierzęta",
+   "2": "Zwierzęta",
+   "3": " poszły z tobą.",
+   "4": " sprzedane.",
+   "5": "Zagroda pusta - {1}{2}",
+   "6": "Sprzedaj zwierzęta ({price} G)",
+   "7": "Kupiec bydła z miasteczka czeka przy drodze z wozem - płaci od ręki: {n} × {2} G. Zagroda zostaje pusta.",
+   "8": "Zabierz zwierzęta",
+   "9": "{1} pójdą z tobą. Poczekają u dziadka, aż na własnej ziemi postawisz nową zagrodę tego rodzaju - wtedy w niej zamieszkają.",
+   "10": "Twoje {1} z działki zamieszkały w nowej {2}.",
+   "11": "Chata na sprzedaż! Na Podgrodziu, pod lasem, z działką - pytać w ratuszu!"
+  },
+  "reserveTransfer": {
+   "0": "Działka należy teraz do Lorda."
+  },
+  "sellAnimals": {
+   "0": "{1} sprzedane: +{price} G"
+  },
+  "takeAnimals": {
+   "0": "{1} idą z tobą - poczekają u dziadka na nową zagrodę."
+  },
+  "soltysList": {
+   "0": "Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - za palisadą, przy lesie, na południe od osady. Wyjdź południową bramą i idź ścieżką na zachód.",
+   "1": "Nowa, z bali. Postawił ją cieśla na sprzedaż i kupca się nie doczekał. Obok ogrodzona działka pod uprawę. {price} G.",
+   "2": "Na swojej ziemi budujesz, co chcesz. Tylko studni nie obiecuję - wodę i tak dzielimy z rynku.",
+   "3": "Jest jeszcze zagroda Ługów za Skrajem lasu, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.",
+   "4": "W sprawie chaty? Ratusz słucha.",
+   "5": "Kup {what} ({price} G)",
+   "6": "Nic, dziękuję"
+  },
+  "run": {
+   "0": "Domy na sprzedaż",
+   "1": "Do widzenia"
+  },
+  "buyNow": {
+   "0": "Kupiłeś: {name}",
+   "1": "Klucz w kieszeni. Działka obok chaty jest twoja - możesz na niej budować.",
+   "2": "Akt kupna: {name}",
+   "3": "Dzień {1}: kupiłem od sołtysa {what} za {price} G.\nGdzie: {where}\nW izbie: palenisko, łóżko i skrzynia. Na działce wolno mi budować, co zechcę - także chatkę. Studni nie ma: wodę trzeba łapać albo nosić."
+  },
+  "buy": {
+   "0": "Za mało złota: {1} / {price} G",
+   "1": "Wróć, jak uzbierasz. Chata poczeka - nikt się o nią nie bije.",
+   "2": "Proszę - klucz. Wpisuję do księgi gruntów: {1}, właściciel... ty. Witaj w sąsiedztwie!"
+  },
+  "grantLand": {
+   "0": "Akt własności: {name}",
+   "1": "Pole i podwórze są twoje. Dom trzeba odbudować - zacznij od zgliszcz.",
+   "2": "po staremu prawu, przez Martę Ługową (sto do księgi, reszta dla niej)",
+   "3": "od dworu, przez ratusz",
+   "4": "Dzień {1}: {2} - {price} G.\nGdzie: {where}\nDom spalony: odbudowa w pięciu etapach (akcja przy zgliszczach). Na polu i podwórzu wolno mi budować, kopać i siać. Studnia zasypana - i pewnie sucha."
+  },
+  "ruin": {
+   "0": "Zgliszcza domu. Ogień był tu dawno - w popiele rośnie trawa. Czyj to był dom?",
+   "1": "Zgliszcza domu Ługów. Ziemia zapisana na dwór."
+  },
+  "well": {
+   "0": "Stara studnia, zasypana gruzem po samą cembrowinę.",
+   "1": "Sucho. Ani kropli - tylko piach i kamienie na dnie."
+  },
+  "cross": {
+   "0": "Prosty krzyż z brzozy. Wycięte nożem: „Jan Ług”. Ktoś zostawił polne kwiaty."
+  },
+  "signpost": {
+   "0": "Na zachód: zagroda Ługów. Deska omszała, napis ledwo widać."
+  },
+  "costText": {
+   "0": "{1} ×{n} (masz {3})",
+   "1": "bez materiałów"
+  },
+  "needTool": {
+   "0": "Potrzebujesz: {name}",
+   "1": "Potrzebujesz łopaty albo siekiery"
+  },
+  "houseMenu": {
+   "0": "łopata albo siekiera",
+   "1": "młotek",
+   "2": "Dom Ługów: {1}{2}",
+   "3": "Pracuj dalej: {1}",
+   "4": "Zacznij: ",
+   "5": "Zostało uderzeń: {left}.",
+   "6": "Materiały: {1}. Uderzeń: {left}.",
+   "7": "{help}\n{2} Narzędzie: {tool}. Każde uderzenie kosztuje {4} wytrzymałości. Przytrzymaj O, a będziesz pracować bez przerwy.",
+   "8": "Co dalej",
+   "9": "Potem: {next}. Na koniec z komina pójdzie dym, a w izbie staną łóżko, duża skrzynia i kredens."
+  },
+  "wellMenu": {
+   "0": "Stara studnia{1}",
+   "1": "Kop dalej",
+   "2": "Odkop studnię",
+   "3": "Wybierz gruz łopatą. Uderzeń: {1}. Każde kosztuje {2} wytrzymałości."
+  },
+  "begin": {
+   "0": "Brakuje: {name} {2}/{n}"
+  },
+  "strike": {
+   "0": "Jesteś zbyt zmęczony"
+  },
+  "stageDone": {
+   "0": "Zgliszcza uprzątnięte",
+   "1": "Z gruzu: Kamień ×12, Drewno ×6, Gwoździe ×6 - i osmalony drewniany konik pod belką przy piecu.",
+   "2": "Dom Ługów: {1}",
+   "3": "Dalej: {1}.",
+   "4": "Dom stoi. Z komina idzie dym.",
+   "5": "Dom Ługów odbudowany",
+   "6": "Dzień {1}: dom w zagrodzie Ługów stoi znowu - podmurówka, bale, strzecha, drzwi i palenisko. W izbie łóżko, duża skrzynia i kredens. Z komina idzie dym."
+  },
+  "wellDug": {
+   "0": "Studnia odkopana",
+   "1": "Na dnie sucho - piach i kamienie. Woda odeszła stąd dawno.",
+   "2": "Studnia Ługów",
+   "3": "Dzień {1}: odkopałem starą studnię w zagrodzie Ługów. Sucha. Susza zabrała wodę głęboko pod ziemię - deszczówka zostaje jedyną wodą tutaj."
+  },
+  "martaTalk": {
+   "0": "Marta Ługowa"
+  }
+ },
+ "_opis": "Napisy kodu Homes.js sprzed przeniesienia do js/teksty/domy.txt (kod.*)"
+}

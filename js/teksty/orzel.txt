@@ -1,0 +1,412 @@
+# Teksty białego orła (wtyczki Orzel_Data.js, Orzel.js i Orzel_Lot.js): jajo i wykluwanie, opieka, lot, kradzież, zadania D29 i W13.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz orzel
+
+# ======================================================================== STAGES (etapy)
+etapy.0.name = Jajo
+etapy.1.name = Pisklę
+etapy.2.name = Młody
+etapy.3.name = Podrostek
+etapy.4.name = Prawie dorosły
+etapy.5.name = Dorosły
+
+# ======================================================================== TX
+defaultName = Śnieżny
+[stageUp]
+""
+Pisklę się wykluło!
+{imie} podrósł - już nie pisklę.
+{imie} wyrósł na podrostka. Pierwsze pióra, pierwsze podloty.
+{imie} jest prawie dorosły. Lata, gdzie chce, i uniesie cię na grzbiecie (L).
+{imie} jest dorosły - największy i najsilniejszy. Z tobą na grzbiecie nurkuje na wrogów.
+
+eggCold = Jajo stygnie. Ogrzej je: przy ogniu, w domu albo śpiąc z nim przy sobie.
+eggWarm = Jajo jest ciepłe ({h}/{n} godz.)
+eggKnock = Coś puka w skorupkę od środka...
+[hatch]
+(Skorupka pęka. Ze środka wypełza mokre, białe pisklę i od razu wpatruje się w ciebie.)
+Ma cię za matkę. Cóż - teraz jesteś.
+
+noEgg = Nie masz jaja
+noMeat = Nie masz mięsa ani ryby
+noWater = Nie masz wody: nabierz do wiadra albo bukłaka
+bowlFull = Miska jest pełna
+fed = {imie} zjadł {co}
+notHungry = {imie} nie jest głodny
+[pet]
+{imie} stroszy pióra ♥
+{imie} trąca cię dziobem ♥
+{imie} przymyka oczy ♥
+
+petAgain = {imie} lubi to, ale wystarczy na dziś
+follow = {imie} idzie za tobą
+followAir = {imie} leci z tobą
+rose = {imie} wzbił się w powietrze
+stay = {imie} zostaje tutaj
+home = {imie} wraca do gniazda
+noNest = Najpierw postaw mu gniazdo
+cold = {imie} zmarzł w nocy - trzymaj go przy ogniu albo w domu
+hungry = {imie} jest głodny
+thirsty = {imie} chce pić
+[fled]
+{imie} krąży nad polem i krzyczy...
+...i odlatuje w stronę gór.
+
+[fledNote]
+Orzeł odleciał
+Zaniedbałem go. {imie} odleciał na Orlą Grań. Za trzy dni mogę go zawołać (L) albo pójść po niego na grań z mięsem.
+
+callTooSoon = {imie} jeszcze nie wróci. Daj mu czas ({d} dni).
+callBack = {imie} wraca z gór!
+ridgeBack = {imie} sfruwa ci na rękę. Wrócił.
+[ridgeBackNote]
+Wrócił
+Poszedłem po niego na Orlą Grań z mięsem. {imie} sfrunął mi na rękę i wrócił ze mną.
+
+hurt = {imie} ranny - odlatuje do gniazda
+healed = {imie} wyzdrowiał
+hurtAir = {imie} jest ranny - ląduj!
+hurtDown = {imie} opada - jest ranny!
+tired = {imie} jest zmęczony - musi odpocząć
+tiredAway = {imie} jest zmęczony - odlatuje odpocząć
+tiredHop = {imie} jest zmęczony - odskakuje na bok odpocząć
+restedBack = {imie} odpoczął - wraca do walki!
+outside = {imie} czeka na zewnątrz
+tooBig = {imie} się tu nie zmieści
+noSneak = Orzeł jest za duży, żeby się skradać - {imie} czeka
+cannotFly = {imie} jeszcze nie uniesie człowieka
+bondLow = {imie} jeszcze ci nie ufa na tyle (więź {b}/{n})
+tooTired = {imie} jest za zmęczony na lot ({p}%)
+storm = Nie w taką pogodę - {imie} nie wystartuje w burzę
+notHere = Tu {imie} nie wystartuje - za ciasno albo pod dachem
+mount = Wsiadasz na grzbiet. Trzymaj się!
+high = Wysoko
+low = Nisko
+landOk = L: tu wylądujesz
+landNo = Tu nie wylądujesz
+landWhyTrees = Za ciasno: drzewa, skały albo budynki
+landWhyWater = Pod tobą woda
+landWhyCrops = Nie siadaj na uprawach
+landWhyMap = Tu nie wolno lądować
+landWhyTown = W mieście lądujesz tylko na placu
+landWhyHigh = Zniż lot (Q), żeby wylądować
+tiredAir = {imie} słabnie - wyląduj!
+forced = {imie} musi wylądować
+stormLand = Burza! {imie} schodzi do lądowania
+edgeSea = Dalej tylko morze.
+edgeFog = Za gęsta mgła - {imie} zawraca.
+edgeMountain = Za wysokie góry - {imie} zawraca.
+noSaveAir = Najpierw wyląduj
+dive = Nurkuj!
+diveTired = {imie} jest za zmęczony na nurkowanie
+diveWait = {imie} łapie oddech
+diveHigh = Najpierw zniż lot (Q)
+diveYoung = {imie} jeszcze nie nurkuje z tobą na grzbiecie - dopiero dorosły
+farTitle = Lot daleki
+farNone = Nie znasz jeszcze żadnego lądowiska poza tym
+farHelp = Lecisz nad chmurami do miejsca, w którym już raz wylądowałeś ({c}% sił).
+panelTitle = Lot: {imie}
+panelStrength = Siła skrzydeł
+panelKeys = WASD / strzałki: lot   Shift: szybciej   Spacja: nurkuj   Q: wyżej / niżej   L: ląduj   M: lot daleki
+menuTitle = Orzeł: {imie}
+menuEgg = Orle jajo
+mPet = Pogłaszcz
+mFeed = Nakarm
+mWater = Nalej wody
+mFollow = Chodź za mną
+mStay = Zostań tu
+mHome = Wracaj do gniazda
+mFly = Leć!
+mAttack = Atakuj!
+mEggPut = Połóż jajo w koszu
+mEggTake = Weź jajo z kosza
+hPet = Raz dziennie głaskanie umacnia więź.
+hFeed = Surowe mięso albo ryba (pieczone mniej syci, owoców nie je).
+hWater = Porcja wody z wiadra albo bukłaka do jego miski. Starszy orzeł pije też sam, w górach.
+hFollow = Idzie (albo leci) za tobą, także na inne mapy. Przed domami i pod ziemią czeka na zewnątrz.
+hStay = Siada tutaj i czeka.
+hHome = Wraca do gniazda i tam czeka (je i pije z miski).
+hFly = Wsiadasz mu na grzbiet i lecisz nisko nad koronami drzew (Q - wyżej: kamera się oddala; L - lądowanie).
+hAttack = Rzuca się na wroga, którego masz na celu (F).
+status = Życie {hp}/{mhp} · Siła {st}/{mst} · Jedzenie {f} · Woda {w} · Więź {b} · {etap}{dni}
+statusEgg = Ciepło: {h}/{n} godz. · {gdzie}
+nestFood = Miska: jedzenie
+nestNote = Miska: jedzenie {f}, woda {w}/{max}
+basketEmpty = Kosz czeka na jajo.
+basketEgg = W koszu leży orle jajo ({h}/{n} godz. ciepła).
+[eggTake]
+(Pod nawisem, w szczelinie, leży jedno jajo - całe. Jeszcze ciepłe.)
+> Ostatnie...
+
+eggTaken = Masz orle jajo. Trzeba je ogrzać: przy ogniu, w domu albo śpiąc z nim przy sobie.
+[mother]
+(Biała orlica leży w kamieniach. Wielka jak wóz. W piersi tkwią dwie strzały z lotkami z białym okiem.)
+(Ktoś wyrwał jej najdłuższe lotki z obu skrzydeł. Na trofeum.)
+
+[arrows]
+(Strzały czarne, groty kute, lotki ze znakiem otwartego oka.)
+> Czarne Oczy...
+
+[bowl]
+(Kamienna misa wykuta w skale, większa niż koryto. Po deszczu stoi w niej woda - nie dla ludzi.)
+(Na krawędzi wyryto orła nad krukiem.)
+
+[carving]
+(Na płycie wyryty orzeł z rozpostartymi skrzydłami, a pod nim kruk.)
+(Pod spodem napis zakonu, zatarty: ...STRAŻ...)
+
+[camp]
+(Zimne ognisko, kości, pusta manierka i zerwana sieć. Myśliwi siedzieli tu kilka dni.)
+
+[noEggYet]
+(Gniazdo jest całe, ale puste. Orły krążą wysoko nad granią i krzyczą.)
+> Lepiej ich nie płoszyć.
+
+wayUp = Ścieżka wspinaczy prowadzi na grań
+wayUpLocked = Ściana jest za stroma. Ktoś tu się kiedyś wspinał - stare kołki w skale.
+theftWarn = Ktoś kręci się nocą przy gnieździe...
+[theftDone]
+Gniazdo jest puste. Sieć, ślady butów, czarna lotka ze znakiem oka.
+Zabrali go w góry.
+
+theftSaved = Złodzieje uciekli bez łupu!
+epilogue.gone = Biały orzeł nie wrócił z gór. Rybacy mówią, że czasem widzą go nad granią.
+epilogue.zniszczyc = {imie} odleciał na Orlą Grań, gdy Serce ucichło. Wraca co wiosnę i siada na dachu tawerny.
+epilogue.straznik = {imie} siedzi na dzwonnicy w każdą Noc Pytania i patrzy na morze, jak Skrzydlata Straż przed wiekami.
+epilogue.uwolnic = Kiedy prawda rozlała się po mieście, tylko {imie} niczego się nie bał. Krąży nad wyspą jak dawniej.
+epilogue.zapieczetowac = {imie} krąży o świcie nad tawerną. Dzieci z miasteczka liczą, ile razy okrąży wieżę.
+epilogue.any = {imie} krąży o świcie nad tawerną.
+
+# ======================================================================== D29 (zadania.D29)
+zadania.D29.title = Jajo z grani
+zadania.D29.where = przylądek z latarnią → Góry → Orla Grań
+zadania.D29.when = Akt II, po burzy
+zadania.D29.desc = W noc burzy Bazyli widział z laterny białe skrzydła nad granią w górach - i pochodnie. Orły nie latają w burzę bez powodu.
+[zadania.D29.offer.say]
+W noc burzy patrzyłem na góry. W błyskach - białe skrzydła nad granią. Ogromne. I pochodnie pod nimi.
+Mój dziad mówił, że nad kamieniołomem gnieździły się kiedyś białe orły zakonu. Skrzydlata Straż. Myślałem, że to bajka.
+Pochodnie w burzę, na grani? Tam nikt nie chodzi po dobremu.
+
+zadania.D29.offer.yes = Pójdę zobaczyć.
+zadania.D29.offer.no = To nie moja sprawa.
+[zadania.D29.offer.accept]
+Na wysokiej półce nad kamieniołomem są stare kołki w skale - wspinacze zakonu tamtędy chodzili. Uważaj na siebie.
+
+[zadania.D29.offer.decline]
+Jak chcesz. Wiatr i tak wszystko zapisze. Ja też.
+
+zadania.D29.steps.0.text = Wejdź na Orlą Grań (Góry, wysoka półka nad kamieniołomem: stare kołki w skale) i zobacz, co się stało z gniazdem.
+[zadania.D29.reward.note]
+Strzały z białym okiem
+Na Orlej Grani leży martwa biała orlica - zastrzelona strzałami Czarnych Oczu, z wyrwanymi lotkami. W gnieździe ocalało jedno jajo. Wziąłem je. Trzeba je ogrzać: przy ogniu, w domu albo śpiąc z nim przy sobie.
+
+# ======================================================================== W13 (zadania.W13)
+zadania.W13.title = Skrzydlata Straż
+zadania.W13.where = dom, Orla Grań, pustelnia na klifie, dwór Lorda
+zadania.W13.when = Akt II
+zadania.W13.desc = Wychowuję białego orła z jaja z Orlej Grani. Zakon miał kiedyś takie orły - Skrzydlatą Straż.
+zadania.W13.steps.0.text = Ogrzej orle jajo: {cieplo}. Ciepło jest przy ogniu, w domu albo gdy śpisz z jajem przy sobie.
+zadania.W13.steps.1.text = Pokaż pisklę dziadkowi.
+[zadania.W13.steps.1.say]
+> Dziadku... wykluł się. Orzeł. Biały.
+
+[zadania.W13.steps.1.done]
+(Dziadek długo patrzy na pisklę.) Biały... Skąd to masz? ...Z grani nad kamieniołomem?
+Dziad mi mówił, że kruczarze mieli kiedyś i orły. Kruki nosiły listy, a białe orły pilnowały wybrzeża. Skrzydlata Straż. Myślałem, że zmyśla, jak zawsze.
+No to masz teraz kłopot na dwadzieścia lat. Karm go surowym mięsem, nie dawaj zmarznąć. I nie pozwól mu zjeść mojego kota.
+
+[zadania.W13.steps.1.reward.note]
+Skrzydlata Straż
+Dziadek mówi, że kruczarze - nasz ród - trzymali kiedyś nie tylko kruki, ale i białe orły zakonu. Kruki nosiły listy, orły pilnowały wybrzeża. Skrzydlata Straż.
+
+zadania.W13.steps.2.text = Zanieś pióro białego orła bratu Kleofasowi (pustelnia na klifie). Pióra zrzuca podrostek.
+[zadania.W13.steps.2.remind]
+Orzeł? Biały? Przynieś mi pióro, to uwierzę.
+
+[zadania.W13.steps.2.say]
+> Bracie, to pióro mojego orła. Białego.
+
+[zadania.W13.steps.2.done]
+(Kleofas obraca pióro pod światło.) Na Serce... „Pióro długie na łokieć, białe jak sól”. Tak pisze Księga gniazd.
+Skrzydlata Straż. Zakon hodował je na Orlej Grani - kruczarze, twój ród. Wypatrywały okrętów, zanim ktokolwiek zobaczył żagiel.
+W Księdze jest też, że orły piły tylko z kamiennych mis na grani. Deszczówkę. I że jeźdźca nosi tylko orzeł, który sam go wybrał.
+Postaw mu grzędę, kiedy dorośnie. Prawdziwą, z pnia. Napiszę ci, jak.
+
+[zadania.W13.steps.2.reward.note]
+Księga gniazd
+Brat Kleofas przeczytał w Księdze gniazd o Skrzydlatej Straży: białe orły zakonu wychowywane przez kruczarzy na Orlej Grani, wypatrywały okrętów. Piły deszczówkę z kamiennych mis. Jeźdźca nosi tylko orzeł, który sam go wybrał. Kleofas pokazał mi, jak zbudować Orlą grzędę.
+
+zadania.W13.steps.3.text = Zrób w garbarni Rękawicę sokolnika (skóra, ścięgno) i naucz podrostka siadać na ręce: {gdzie}
+zadania.W13.steps.4.text = {kradziez}
+zadania.W13.steps.5.text = Lord Zaleski chce widzieć białego orła. Porozmawiaj z nim przed dworem (8–20).
+[zadania.W13.steps.5.say]
+> Jaśnie panie, słyszałem, że pan o mnie pytał.
+
+[zadania.W13.steps.5.done]
+Pytałem, pytałem! Cała wyspa mówi o białym orle! Wiesz, młodzieńcze, że w herbie Zaleskich jest orzeł? Nad krukiem! To znak!
+Sprzedaj mi go. Dam ci... tysiąc pięćset. Nie? To chociaż - w dzień mojej uczty niech przeleci nad dworem. Goście będą mówić o tym latami!
+
+[zadania.W13.steps.5.choice.ask]
+(Co odpowiesz Lordowi?)
+
+zadania.W13.steps.5.choice.options.0.label = Orzeł nie jest na sprzedaż. I nie lata na pokaz.
+[zadania.W13.steps.5.choice.options.0.say]
+Ach! Hm. Rozumiem. Wolny ptak, wolny człowiek. ...Szkoda.
+
+zadania.W13.steps.5.choice.options.1.label = Przelecę z nim nad dworem.
+[zadania.W13.steps.5.choice.options.1.say]
+Wspaniale! Wspaniale! Powiem Feliksowi, żeby przygotował balkon. To będzie dzień!
+
+zadania.W13.steps.6.text = {lot}
+[zadania.W13.reward.note]
+Skrzydlata Straż
+Pierwszy lot na grzbiecie {imie}. Z góry wyspa jest mała: latarnia, port, dym z komina dziadka. Ostatni orzeł Skrzydlatej Straży wybrał mnie na jeźdźca.
+
+# ======================================================================== REMARKS (uwagi)
+# orzelJanek, mówi: janek
+[uwagi.0.lines]
+Widziałem cię! Nad zatoką! Na orle! Mówiłem żonie, nie uwierzyła. Mówi, że za dużo słońca.
+
+# orzelKleofas, mówi: pustelnik
+[uwagi.1.lines]
+Jeździec Skrzydlatej Straży. W kronikach ostatni był trzysta lat temu. ...Tylko nie lataj nad pustelnią. Pszczoły się denerwują.
+
+# orzelBazyli, mówi: latarnik
+[uwagi.2.lines]
+Białe orły... W noc burzy wiatr niósł krzyk. Zapisałem go. Nie wiem jak, ale zapisałem.
+
+# orzelRoch, mówi: przemytnik
+[uwagi.3.lines]
+Przemytnik z orłem byłby bogaty. Ty jesteś tylko głupi. I szczęśliwy. Zazdroszczę.
+
+# orzelAmbrozy, mówi: dzwonnik
+[uwagi.4.lines]
+Orzeł nad dzwonnicą... Mój mistrz mówił, że Skrzydlata Straż siadała na wieży, kiedy szedł okręt. Dzwoniło się wtedy cztery i jeden.
+
+# ======================================================================== z kodu Orzel.js (kod.<funkcja>.<n>, w kolejności kodu)
+# giveFeather
+kod.giveFeather.0 = Orzeł zrzucił pióro: {name}
+# done
+kod.done.0 = {n} - tak będzie się nazywał
+# redraw
+kod.redraw.0 = Jak nazwiesz orła?
+kod.redraw.1 = Białe pisklę patrzy na ciebie i piszczy. Czeka.
+kod.redraw.2 = Puste pole = „{defaultName}”
+# pourWater
+kod.pourWater.0 = Woda w misce: {bowlWater}/{max}
+# giveWater
+kod.giveWater.0 = {imie} pije
+# statusNote
+kod.statusNote.0 = w koszu
+kod.statusNote.1 = w torbie
+kod.statusNote.2 = " ({1} dni do kolejnego)"
+# callKey
+kod.callKey.0 = {imie} jest w niewoli - na Orlej Grani
+kod.callKey.1 = {imie} jest gdzie indziej - wróć po niego
+# openEggMenu
+kod.openEggMenu.0 = Jajo w cieple: {1}/{warmHours} godz.
+kod.openEggMenu.1 = Ciepło jest przy ogniu (do 3 pól), w domu, w koszu z sianem przy ognisku albo gdy śpisz z jajem w torbie.
+# glowna
+kod.glowna.0 = Bierzesz jajo do torby.
+kod.glowna.1 = Jajo w koszu z sianem jest w cieple, gdy kosz stoi do 3 pól od płonącego ogniska (albo w izbie chatki).
+kod.glowna.2 = Nalej wody do miski
+kod.glowna.3 = Porcja wody z wiadra (albo z bukłaka). Orzeł napije się z miski, kiedy będzie w gnieździe.
+kod.glowna.4 = Menu orła (albo klawisz L).
+# eggIn
+kod.eggIn.0 = Jajo leży w koszu
+# eggOut
+kod.eggOut.0 = Jajo w torbie
+# build
+kod.build.0 = Ścieżka wspinaczy (Orla Grań)
+kod.build.1 = Orle gniazdo (rozbite)
+kod.build.2 = Martwa orlica
+kod.build.3 = Strzały z białym okiem
+kod.build.4 = Kamienna misa
+kod.build.5 = Płyta z orłem
+kod.build.6 = Zimne ognisko myśliwych
+kod.build.7 = Przejście -> Góry i kamieniołom
+# look
+kod.look.0 = Rozbite gniazdo. Puste.
+# theftMorning
+kod.theftMorning.0 = Złodzieje Czarnych Oczu zabrali {imie} z gniazda w nocy. Ślady prowadzą w góry - na Orlą Grań.
+# theftCage
+kod.theftCage.0 = Pusta klatka z żerdzi. Ktoś ją tu zostawił.
+kod.theftCage.1 = Najpierw strażnicy!
+kod.theftCage.2 = Otwierasz klatkę. {imie} wyskakuje i stroszy pióra!
+# campGuards
+kod.campGuards.0 = Myśliwy Czarnych Oczu
+# vars
+kod.vars.0 = {1}/{warmHours} godzin
+kod.vars.1 = pierwsze podloty dopiero u podrostka (dzień {1} opieki).
+kod.vars.2 = rękawica jeszcze nieuszyta.
+kod.vars.3 = stań przy nim z rękawicą i zawołaj go (L).
+kod.vars.4 = Pilnuj gniazda nocą - ktoś pytał w tawernie o białego ptaka.
+kod.vars.5 = Złodzieje przy gnieździe! Przegoń ich.
+kod.vars.6 = Złodzieje zabrali orła na Orlą Grań. Odbij go z klatki.
+kod.vars.7 = Orzeł bezpieczny.
+kod.vars.8 = Gdy będzie prawie dorosły (dzień {1} opieki), poleć na nim pierwszy raz (L przy orle).
+kod.vars.9 = Wsiądź na grzbiet i leć (L przy orle).
+# gloveCheck
+kod.gloveCheck.0 = {imie} siada ci na rękawicy. Ciężki jak worek zboża!
+kod.gloveCheck.1 = Na rękawicy
+kod.gloveCheck.2 = {imie} pierwszy raz usiadł mi na rękawicy sokolnika. Brat Kleofas mówił, że jeźdźca nosi tylko orzeł, który sam go wybrał.
+# f9Rows
+kod.f9Rows.0 = etap {stage}
+kod.f9Rows.1 = {1}/{warmHours} godz.
+kod.f9Rows.2 = Orle jajo: już jest ({1})
+kod.f9Rows.3 = Daj orle jajo
+kod.f9Rows.4 = Jajo w torbie, flaga orzelJajo, D29 zrobione, W13 rusza. Wykluje się po 36 godzinach w cieple.
+kod.f9Rows.5 = Jajo na grani gotowe (Akt II + burza)
+kod.f9Rows.6 = Na Orlej Grani w gnieździe leży jajo - bez czekania na Akt II i burzę.
+kod.f9Rows.7 = Etap orła: {f9Stage} - {name}   ←→ zmień, OK ustaw
+kod.f9Rows.8 = Wykluty od razu, dni opieki jak na tym etapie, najedzony i napojony, staje obok ciebie (5: dorosły, nosi bohatera).
+kod.f9Rows.9 = " (najpierw orzeł)"
+kod.f9Rows.10 = Więź 100, najedzony, napojony, wypoczęty{1}
+kod.f9Rows.11 = Więź z orłem na 100 (lot od 60), pełne życie i siła skrzydeł.
+kod.f9Rows.12 = Dosiądź orła (lot)
+kod.f9Rows.13 = Dorosły orzeł przy tobie, od razu w powietrzu (wysoko, x0,5). L - lądowanie.
+kod.f9Rows.14 = Wyląduj teraz
+kod.f9Rows.15 = Orzeł schodzi w najbliższym wolnym miejscu (także awaryjnie).
+kod.f9Rows.16 = Kradzież (W13 rozdz. 5): orzeł w klatce na grani
+kod.f9Rows.17 = Czarne Oczy zabrały orła do klatki na Orlej Grani; przenosi tam (dwóch strażników).
+kod.f9Rows.18 = Przenieś na Orlą Grań (Map175)
+kod.f9Rows.19 = Szczyt ścieżki wspinaczy nad kamieniołomem w Górach.
+# f9Pick
+kod.f9Pick.0 = Etap orła: {f9Stage} - {name}   ←→ zmień, OK ustaw
+# f9
+kod.f9.0 = Orle jajo już jest
+kod.f9.1 = Orle jajo w torbie
+kod.f9.2 = Jajo czeka w gnieździe na Orlej Grani
+kod.f9.3 = Najpierw orzeł
+kod.f9.4 = Więź 100
+kod.f9.5 = Orla Grań
+
+# ======================================================================== z kodu Orzel_Lot.js (kodLot.<funkcja>.<n>, w kolejności kodu)
+# dive
+kodLot.dive.0 = Nie ma na kogo nurkować
+# dismount
+kodLot.dismount.0 = Mapa {1}
+# flightMenu
+kodLot.flightMenu.0 = Ląduj tutaj
+kodLot.flightMenu.1 = Orzeł siada na otwartej ziemi (4 × 4 pola, w miastach na placu).
+kodLot.flightMenu.2 = Zniż lot
+kodLot.flightMenu.3 = Wznieś się
+kodLot.flightMenu.4 = Wysoko lecisz szybciej i widzisz więcej. Nisko orzeł nurkuje i ląduje (to samo: Q).
+kodLot.flightMenu.5 = {cost}% sił
+kodLot.flightMenu.6 = {1} / {2} sił skrzydeł
+# updatePanel
+kodLot.updatePanel.0 = {landLine}WASD: lot  Shift: szybciej  Q: wyżej/niżej  Spacja: nurkuj  L: ląduj  Enter: menu
+
+# ======================================================================== NAMES (imiona)
+[imiona]
+Śnieżny
+Szron
+Biel
+Zefir
+Grom
+Strażnik
+Obłok
+Lodowy
+Wicher
+Perłowy
+

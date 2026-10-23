@@ -43,26 +43,15 @@
     const PLAN = [[0, "inside", "laterna"], [6.4, "inside", "izba"], [8, "inside", "izba_sen"],
                   [15, "work", "drewutnia"], [17, "inside", "izba"], [20.3, "inside", "laterna"]];
     const RESIDENT = {
-        key: "latarnik", id: 943, name: "Bazyli Krzesiwo", title: "latarnik", sheet: "$Npc_Latarnik", map: MAP, speed: 2,
+        key: "latarnik", id: 943, sheet: "$Npc_Latarnik", map: MAP, speed: 2,
         away: ["izba_sen"],
         plan: PLAN,
         barks: {
-            work: ["Drewno na noc. Noc zawsze jest dłuższa, niż się myśli.", "(Bazyli rąbie równo, bez pośpiechu. Polano za polanem.)",
-                "Tran śmierdzi, drewno dymi. Ogień nie wybiera."],
-            stand: ["(Bazyli patrzy w morze jednym okiem. Drugie, białe, patrzy gdzie indziej.)"],
-            rain: ["Deszcz. W deszcz morze kłamie mniej niż we mgle."],
-            night: ["Nie stój po ciemku pod wieżą. Statki patrzą w ogień, nie pod nogi."],
-            home: ["(Bazyli pisze coś w grubej księdze. Pióro skrzypi.)", "Ogień trzeba karmić jak dziecko. Po trochu i często.",
-                "(Bazyli przeciera soczewkę skórką. Długo. Bardzo długo.)", "(Bazyli dorzuca do kosza polano i patrzy, jak się zajmuje.)"]
         },
         talk: {
-            morning: ["Noc minęła. Żaden statek nie poszedł na skały. Zapisane.", "O świcie gaszę ogień. Dzień świeci sam."],
-            day: ["Za dnia śpię. Jak sowa. Tylko mniej mądry.", "Drewno, tran, węgiel. Ogień nie pyta, skąd."],
-            evening: ["Zaraz zmierzch. Trzeba wejść na górę.", "Soczewkę czyszczę co wieczór. Kurz to też mgła, tylko mała."],
-            night: ["Nie gadaj tyle. Patrz na morze.", "Tam, gdzie ogień nie sięga, zaczyna się to, czego nie ma na żadnej mapie."],
-            rain: ["W deszcz ogień widać na pół mili. We mgle - na rzut kamieniem. Dlatego dzwon."]
         }
     };
+    Watki.scal(RESIDENT, "latarnia", "mieszkaniec");   // (its words: js/teksty/latarnia.txt, mieszkaniec)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(RESIDENT);
     // where he stands: the map's "Miejsce:" events win on Map159 (tools/latarnia/build.py puts them there); indoors only the room his
     // plan has him in now (a getter: TownLife reads it when the map loads - then always there, the engine decides who is shown - and
@@ -94,225 +83,80 @@
     // pic: img/pictures/<pic>.png (PixelLab, tools/latarnia/art/build_art.py); line: the one sentence on the white board; note: the
     // journal's chapter of "Księga mgieł"; flag: set when seen (TownQuests flags: "mgla" is the contract's - Wrak.js W12 reads it)
     const VISIONS = [
-        { n: 1, pic: "Latarnia_Wizja_1", title: "Statek bez bandery", flag: "latarniaWizja1",
-            line: "Statek bez bandery przybija nocą. Nikt nie zapala na nim światła.",
-            note: "W soczewce latarni: statek bez bandery i bez świateł wypływa z mgły i przybija nocą do kamienistego brzegu. Z łodzi wysiadają ludzie w kapturach, jedna przysłonięta latarnia. Bazyli nie powiedział, czy to już było, czy dopiero będzie." },
-        { n: 2, pic: "Latarnia_Wizja_2", title: "Człowiek z piórem", flag: "mgla",
-            line: "Człowiek z piórem stoi w czarnej wodzie i rysuje wyspę. Na nadgarstku ma białe oko.",
-            note: "W soczewce latarni: chudy człowiek w długim płaszczu stoi po pas w czarnej wodzie i rysuje na karcie wybrzeże wyspy. Atrament kapie z pióra do wody. Na lewym nadgarstku ma wytatuowane białe, otwarte oko." },
-        { n: 3, pic: "Latarnia_Wizja_3", title: "Kobieta nad rzeką", flag: "latarniaWizja3",
-            line: "Kobieta w chuście w czerwone kwiaty ogląda się za siebie. Tabor idzie na północ.",
-            note: "W soczewce latarni: kobieta w chuście w czerwone kwiaty stoi nad szeroką rzeką i ogląda się za siebie, a za nią długi tabor idzie na północ. Wyglądała jak mama. Tyle samo mówiły wieści z lądu: poszła z taborem na północ. Nic więcej szkło nie pokazało." }
+        { n: 1, pic: "Latarnia_Wizja_1", flag: "latarniaWizja1" },
+        { n: 2, pic: "Latarnia_Wizja_2", flag: "mgla" },
+        { n: 3, pic: "Latarnia_Wizja_3", flag: "latarniaWizja3" }
     ];
+    Watki.scal(VISIONS, "latarnia", "wizje");   // (its words: js/teksty/latarnia.txt, wizje)
     // "Ciężka głowa" the next morning: the cost of the stamina works (Survival.defineBuff) until noon; Hart ducha takes off a part of it
-    const HEAVY = { key: "ciezkaGlowa", name: "Ciężka głowa", icon: 6, cost: 1.2, until: 12, power: 0.15 };
+    const HEAVY = { key: "ciezkaGlowa", icon: 6, cost: 1.2, until: 12, power: 0.15 };
+    Watki.scal(HEAVY, "latarnia", "bufor");   // (its words: js/teksty/latarnia.txt, bufor)
 
     // ------------------------------------------------------------------ W11: the raid on the lighthouse, the thieves
     const RAID = { after: 1, from: 0.5, until: 3, kinds: ["bandit", "knifer", "bandit"], inside: ["bandit", "knifer"], tag: "latarniaNapad",
         thieves: ["bandit", "bandit", "archer"], thievesTag: "latarniaZlodzieje", buyBack: 150, sale: 400 };
 
     // ------------------------------------------------------------------ Bazyli's own talk
-    const TX = {
-        meet: ["(Bazyli długo na ciebie patrzy. Jedno oko ma białe jak mleko.) Kruk na szyi.",
-            "Widziałem go we mgle. Trzy noce temu. Na szyi chłopca, który wyszedł z morza.",
-            "> ...Mnie? Trzy noce temu byłem jeszcze w gorączce u dziadka.",
-            "Wiem. Zapisałem. (Bazyli stuka palcem w grubą księgę pod pachą.) Bazyli. Pilnuję ognia, żeby statki nie szły na skały. Czasem ogień pokazuje więcej, niż powinien.",
-            "Jak przyniesiesz tranu, zapłacę. Jak będzie mgła, możesz wejść na górę. Ale tylko raz na noc. I nie pytaj mnie, co znaczy to, co zobaczysz."],
-        meetNote: ["Latarnik z przylądka", "Na północno-wschodnim przylądku pilnuje ognia latarnik Bazyli Krzesiwo. Mówi, że trzy noce przed moim przebudzeniem widział we mgle kruka na szyi chłopca, który wyszedł z morza. Wszystko, co widzi w szkle latarni, zapisuje w Księdze mgieł."],
-        ask: ["Hm.", "Mów.", "Słucham. Krótko, ogień czeka."],
-        sell: ["Za drewno dwa grosze, za węgiel cztery, za tran sześć. Więcej nie dam, ale biorę zawsze."],
-        sellNone: ["Nie masz nic, co się pali. Poza sobą."],
-        sellDone: ["Ogień ci dziękuje. Ja też, tylko ciszej."],
-        sellFull: ["Szopa pełna. Przynieś, jak ubędzie."],
-        sellDay: ["Dziś już dość. Więcej nie zmieszczę w szopie."],
-        weatherAgain: ["Już mówiłem dziś. Pogoda nie zmienia się od pytania."],
-        weatherHead: "Jutro: {d1}. Pojutrze: {d2}.",
-        book: ["„Noc spokojna. Morze czerwone aż po widnokrąg. Śnięte ryby na kamieniach.” Tyle dziś.",
-            "„Kuter bez latarni minął cypel o drugiej. Nie mój interes.” Tak piszę. Krótko.",
-            "Księga mgieł ma sto lat. Pisał ją latarnik przede mną i ten przed nim. Wszystko, co widzieli w szkle.",
-            "Nie czytam ci, co tam jest. Czytają to ci, co przyjdą po mnie."],
-        stock: "Opału na {n}.",
-        stockNone: ["Nic. Dziś zgaśnie, jak nikt nie przyniesie."],
-        stockFerry: ["Prom przywozi tran co tydzień. Póki przywozi."],
-        stockWar: ["Prom już nie wozi tranu. Wojna. Jak nikt nie przyniesie, latarnia zgaśnie."],
-        up: ["Drzwi na górę są otwarte. Tylko nie dotykaj ognia."],
-        sleepyDay: ["(Bazyli przeciera twarz.) Śpię za dnia, chłopcze. Mów szybko."],
-        mistComing: ["Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi."],
-        afterVision: ["Nie mów nic. Jeszcze nie.", "(Bazyli maczy pióro i coś zapisuje, nie patrząc na ciebie.)"],
-        visionsDone: ["Szkło pokazało ci, co miało. Teraz pokazuje tylko twoją twarz."],
-        // doors and things
-        izbaAsleep: "Drzwi zaryglowane od środka. Zza nich słychać miarowe chrapanie.",
-        towerDay: "Drzwi latarni zamknięte. Bazyli nosi klucz przy pasie.",
-        towerNight: "Z góry dobiega głos Bazylego: „Nie teraz. Przyjdź z tranem albo we mgłę.”",
-        towerMist: "Z góry woła Bazyli: „Wejdź. Mgła idzie.”",
-        towerBroken: "Drzwi latarni wyważone. Zamek zwisa na jednym gwoździu.",
-        edge: "Ścieżka na zachód urywa się nad osuwiskiem. Dalej nie przejdziesz.",
-        slup: "Słup dawnej strażnicy zakonu. Na górze wykuty kruk z rozpostartymi skrzydłami - taki sam jak na twoim wisiorku.",
-        slupNoPendant: "Słup dawnej strażnicy zakonu. Na górze wykuty kruk z rozpostartymi skrzydłami.",
-        plyta: "Płyta posadzki dawnej strażnicy. Wyryty krąg i słowa: „Patrz, a nie pytaj”.",
-        dzwon: "Dzwon mgłowy. Linka biegnie od jego serca aż na galerię latarni.",
-        dzwonMist: "Dzwon mgłowy. Co godzinę, kiedy jest mgła, Bazyli ciągnie linkę z galerii.",
-        drewno: "Drewutnia. Polana ułożone równo jak książki na półce.",
-        beczki: "Beczki tranu. Zapas latarni: {n}.",
-        beczkiNone: "Beczki tranu. Puste. Pachną tylko rybą.",
-        lensDay: "Soczewka. Grube, zielonkawe szkło w mosiężnym pierścieniu. W dzień tylko szkło.",
-        lensNoMist: "Soczewka. Za nią tylko ogień i noc nad morzem.",
-        lensUsed: "Dziś już patrzyłeś. Szkło nie pokazuje dwa razy tej samej nocy.",
-        lensNoQuest: ["(Bazyli kładzie dłoń na pierścieniu.) Najpierw pogadamy. Potem patrz."],
-        lensNoBazyli: "Bez Bazylego nie dotykaj szkła.",
-        lensGone: "Pusty pierścień. Ktoś wyważył soczewkę z oprawy.",
-        lensBag: "Pusty pierścień. Soczewka jest w twojej torbie.",
-        lensBroken: "Pęknięte szkło. Ogień przez nie świeci, ale mgła nic już w nim nie pokazuje.",
-        lensSold: "Pusty pierścień. Soczewka płynie na ląd.",
-        bookLook: "Księga mgieł. Gruba, oprawiona w skórę foczą. Pismo kilku rąk, coraz młodsze ku końcowi.",
-        bookOwn: "Księga mgieł. Na ostatnich stronach twoje wizje, zapisane ręką Bazylego.",
-        heavy: "Ciężka głowa",
-        heavySub: "Po wizji: do południa prace kosztują więcej sił.",
-        heavyResist: "Głowa lekka - Hart ducha",
-        wreckEmpty: "Zatoczka szczątków. Nic nowego. Morze wyrzuca coś dopiero po sztormie.",
-        wreckGot: "Morze wyrzuciło po sztormie",
-        wreckEye: "Na desce rozbitej skrzyni wypalone oko - znak Czarnych Oczu.",
-        bell: "Dzwon mgłowy",
-        fireOut: "Latarnia nie świeci. Brak opału.",
-        // Janek sells oil while K49 is on
-        janekTran: ["Tran? Mam trochę z wątroby dorsza. Śmierdzi, ale się pali. Sześć groszy dzbanek."],
-        janekTranBuy: ["Masz. Tylko nie rozlej w łodzi, bo mi ryby uciekną."],
-        janekTranNone: ["Więcej nie mam. Wątroba dorsza to nie studnia."],
-        // W11
-        baltazar: ["Ach, przyjaciel! Ty bywasz na przylądku, prawda? U tego latarnika z bielmem.",
-            "Mam kupca na lądzie, który płaci za stare szkła. Takie z latarni, w mosiężnym pierścieniu. Czterysta groszy, przyjacielu. Czterysta.",
-            "Gdyby szkiełko... zginęło, nikt by nie płakał. Latarnia świeci ogniem, nie szkłem."],
-        baltazarNo: ["> Nie sprzedam cudzego.", "Szkoda. Ktoś inny sprzeda. Zawsze ktoś sprzedaje."],
-        baltazarMaybe: ["> Pomyślę.", "Myśl, przyjacielu. Tylko szybko. Mój kupiec nie lubi czekać."],
-        warn: ["> Baltazar z kantoru chce kupić twoją soczewkę. Za czterysta.",
-            "(Bazyli długo milczy.) Czterysta. Za szkło, w którym widać Serce przez łzy. Tanio.",
-            "Przyjdą po nie. Widziałem to we mgle, tylko nie wiedziałem kiedy. Teraz wiem: jutro w nocy.",
-            "Jak chcesz pomóc, czuwaj tu jutro w nocy. Po północy."],
-        raidStart: "Ktoś wyważa drzwi latarni!",
-        raidInside: "Na schodach kroki! Ktoś wbiegł na górę!",
-        raidWin: "Latarnia obroniona",
-        raidWinSub: "Soczewka została na miejscu.",
-        raidLost: "Soczewka skradziona",
-        raidLostSub: "Złodzieje czekają w zatoczce szczątków na łódź - tej nocy jeszcze tam będą.",
-        bazyliRobbed: ["(Bazyli ma rozbitą wargę i siniak pod zdrowym okiem.) Przyszli we trzech. Wyważyli drzwi i wyrwali szkło z oprawy.",
-            "Nie płyną od razu. Czekają na łódź w zatoczce, tam gdzie morze wyrzuca szczątki. Dziś w nocy jeszcze tam będą."],
-        bazyliDefended: ["(Bazyli ociera krew z czoła.) Dobrze, że byłeś. Sam bym ich nie zatrzymał.",
-            "Weź szkło do pustelnika na klifie. Kroniki znają je lepiej niż ja. I przynieś z powrotem."],
-        bazyliGive: ["Weź szkło do pustelnika na klifie. Niech przeczyta w kronikach, czym jest. I przynieś z powrotem."],
-        bazyliBagFirst: ["Masz je? Zanieś najpierw pustelnikowi. Potem pogadamy."],
-        sack: "Worek złodziei. W środku, owinięta w szmatę - soczewka latarni.",
-        sackGot: "Soczewka latarni",
-        baltazarBack: ["Ach, szkiełko z latarni! Trafiło do mnie przez... pośrednika. Czysta uczciwość, przyjacielu.",
-            "Dla ciebie - sto pięćdziesiąt groszy. Bo cię lubię."],
-        baltazarBackYes: ["Interes to interes. Szkiełko twoje."],
-        baltazarBackNo: ["Szkiełko poczeka. Mój kupiec - nie."],
-        kleofas: ["> Bracie, to szkło z latarni na przylądku. Bazyli widzi w nim rzeczy we mgle.",
-            "(Kleofas obraca soczewkę w palcach i długo patrzy przez nią na płomień świecy.) Zielonkawe. Ciężkie jak kamień. Takiego szkła nie robi żadna huta.",
-            "(Kleofas wyjmuje najstarszą z kronik.) „Oko Strażnicy. Wyszlifowane z kryształu Pierwszych, z głębi, gdzie kamień świeci sam z siebie.”",
-            "„We mgle odbija Serce jak przez łzy. Pokazuje, co Serce wie, ale nie odpowiada. Strażnica patrzyła przez nie na morze, żeby nikt nie przypłynął niezapowiedziany.”",
-            "To nie jest kawałek Serca, chłopcze. Serce jest jedno. Ale ludzie na lądzie nie odróżniają odbicia od źródła. Dlatego płacą."],
-        kleofasNote: ["Oko Strażnicy", "Brat Kleofas przeczytał w kronikach: soczewka latarni to „Oko Strażnicy”, wyszlifowane przez zakon z kryształu Pierwszych. We mgle odbija Serce jak przez łzy - pokazuje, co Serce wie, ale nie odpowiada. To nie odłamek Serca: Serce jest jedno."],
-        bazyliReads: ["(Bazyli otwiera Księgę mgieł na pierwszej stronie, pisanej ręką kogoś bardzo starego.)",
-            "„Oko Strażnicy. Szlifowane z kryształu Pierwszych. We mgle odbija Serce jak przez łzy. Nie odpowiada - pokazuje.”",
-            "Tyle wiem od tego, co był przede mną. Pustelnik na klifie wiedziałby więcej, gdyby ktoś do niego doszedł."],
-        choiceAsk: ["Teraz już wiesz, co to jest. Ja wiedziałem od dawna.", "Zrób, co trzeba. Ja tylko pilnuję ognia."],
-        choiceLeave: ["> Zostaw je w latarni. Ty go pilnujesz najlepiej.",
-            "(Bazyli wkłada soczewkę w pierścień i dokręca śruby.) Będzie świecić. I patrzeć. Ja też."],
-        choiceBreak: ["> Rozbij je. Nikt więcej po nie nie przyjdzie.",
-            "(Bazyli waży soczewkę w dłoni, potem uderza nią o kamienny parapet. Szkło pęka z dźwiękiem jak dzwon.)",
-            "Latarnia będzie świecić dalej. Ogień nie potrzebuje oka. Tylko ja już nic nie zobaczę we mgle.",
-            "(Wkłada pęknięte szkło z powrotem w pierścień.) Niech zostanie. Na pamiątkę."],
-        choiceSell: ["> Sprzedam je Baltazarowi.",
-            "(Bazyli patrzy na ciebie zdrowym okiem.) Twoja wola. Ja i tak widziałem dość.",
-            "Tylko pamiętaj: kto kupuje szkło, chce widzieć, co ono widzi. Czarne Oczy będą wiedziały jedną noc więcej niż my."],
-        sold: ["Ach! Szkiełko! (Baltazar ogląda soczewkę pod światło.) Piękne. Czterysta, jak mówiłem. Słowo kupca.",
-            "Mój kupiec się ucieszy. A ty... ty niczego nie widziałeś, przyjacielu."],
-        soldNote: ["Soczewka sprzedana", "Sprzedałem Oko Strażnicy Baltazarowi za czterysta groszy. Płynie na ląd. Bazyli mówi, że Czarne Oczy będą wiedziały jedną noc więcej niż my."],
-        leaveNote: ["Oko Strażnicy zostaje", "Soczewka wróciła do latarni na przylądku. Bazyli jej pilnuje - i dalej patrzy przez nią we mgle."],
-        breakNote: ["Oko Strażnicy rozbite", "Bazyli rozbił soczewkę o parapet. Latarnia świeci dalej, ale we mgle nikt już nic w niej nie zobaczy."]
-    };
+    const TX = Watki.teksty("latarnia");
 
     // ------------------------------------------------------------------ the quests (TownQuests packs - docs/QUESTY_STAN.md "Jak dopisać")
     const K49 = {
-        id: "K49", kind: "K", title: "Tran dla latarni", giver: "latarnik", icon: 176, where: "przylądek z latarnią", when: "od dnia 24",
-        desc: "Od drugiej fali prom nie przywozi tranu. Bazylemu kończy się opał - bez niego latarnia zgaśnie, a statki pójdą na skały.",
+        id: "K49", kind: "K", giver: "latarnik", icon: 176, 
         offer: {
-            cond: { day: 24, flags: ["latarnikMet"] },
-            say: ["Słuchaj. Od drugiej fali prom nie przywozi tranu. Wojsko bierze wszystko, co się pali.",
-                "Opału mam na kilka nocy. Potem latarnia zgaśnie, a statki pójdą na skały. Albo przypłyną tam, gdzie nie powinny.",
-                "Przynieś mi cztery dzbanki tranu i sześć polan. Tran wytopisz z ryb w kociołku - trzy ryby na dzbanek. Albo kup od Janka na przystani."],
-            yes: "Przyniosę.", no: "Nie teraz.",
-            accept: ["Ryby, kociołek, ogień. Smród na pół wyspy, ale się pali."],
-            decline: ["To będę palił krzesłami."]
+            cond: { day: 24, flags: ["latarnikMet"] }
         },
         steps: [
-            { type: "bring", to: "latarnik", need: [[177, 4], [61, 6]], fx: "k49Paliwo",
-                text: "Przynieś Bazylemu 4× Tran i 6× Drewno (przylądek z latarnią). Tran: 3 surowe ryby w kociołku albo od Janka na przystani (6 G).",
-                remind: ["Cztery dzbanki tranu i sześć polan. Ogień nie czeka."],
-                hero: ["> Masz. Tran i drewno."],
-                done: ["(Bazyli wącha tran, kiwa głową i niesie dzbanki do beczek.)", "Dobry. Rybny, gęsty. Tydzień nocy z głowy.",
-                    "Masz. I... drzwi latarni są dla ciebie otwarte. Nocą też. Tylko nie dotykaj ognia."] }
+            { type: "bring", to: "latarnik", need: [[177, 4], [61, 6]], fx: "k49Paliwo" }
         ],
-        reward: { gold: 30, xp: 60, flag: "latarniaUfa",
-            note: ["Tran dla latarni", "Przyniosłem Bazylemu tran i drewno. Latarnia na przylądku świeci dalej, a drzwi do laterny są dla mnie otwarte."] }
+        reward: { gold: 30, xp: 60, flag: "latarniaUfa" }
     };
+    Watki.scal(K49, "latarnia", "zadania.K49");   // (its words: js/teksty/latarnia.txt, zadania.K49)
     const D22 = {
-        id: "D22", kind: "D", title: "Księga mgieł", giver: "latarnik", icon: 189, where: "laterna na przylądku, mgliste noce", when: "po pierwszej rozmowie z Bazylem",
-        desc: "We mgle soczewka latarni pokazuje rzeczy, których nikt nie powinien wiedzieć. Bazyli wszystko zapisuje w Księdze mgieł.",
+        id: "D22", kind: "D", giver: "latarnik", icon: 189, 
         offer: {
-            cond: { flags: ["latarnikMet"], fn: "d22Ready" },
-            say: ["Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi.",
-                "Jak przyjdzie, wejdź na górę. Spójrz w szkło. Raz. Potem nic nie mów.",
-                "Trzy mgły. Trzy razy. Wtedy pogadamy."],
-            yes: "Przyjdę.", no: "Nie dziś.",
-            accept: ["Tylko raz na noc. Szkło nie lubi chciwych."],
-            decline: ["Mgła wróci. Zawsze wraca."]
+            cond: { flags: ["latarnikMet"], fn: "d22Ready" }
         },
         steps: [
-            { type: "custom", check: "d22Wizje", vars: "d22Wizje",
-                text: "W mgliste noce spójrz w soczewkę latarni (laterna na szczycie wieży, nocą we mgle, raz na noc). Wizje: {n}/3.{kiedy}" },
-            { type: "custom", talk: "d22Koniec", text: "Bazyli pyta, co widziałeś. Powiedz mu - albo zachowaj to dla siebie." }
+            { type: "custom", check: "d22Wizje", vars: "d22Wizje" },
+            { type: "custom", talk: "d22Koniec" }
         ],
-        reward: { gold: 60, xp: 120, flag: "kronikaKarta5",
-            note: ["Księga mgieł", "Trzy mgliste noce przy soczewce latarni. Bazyli dał mi kartę, którą dawny latarnik przepisał do Księgi mgieł z kroniki zakonu - pisaną szyfrem."] }
+        reward: { gold: 60, xp: 120, flag: "kronikaKarta5" }
     };
+    Watki.scal(D22, "latarnia", "zadania.D22");   // (its words: js/teksty/latarnia.txt, zadania.D22)
     const W11 = {
-        id: "W11", kind: "W", title: "Soczewka", giver: null, icon: 0, where: "kantor Baltazara, przylądek z latarnią, pustelnia na klifie",
-        when: "Akt II", desc: "Ktoś na lądzie płaci za „szkiełko z latarni”. Soczewka Bazylego to nie zwykłe szkło.",
+        id: "W11", kind: "W", giver: null, icon: 0, 
         autoStart: "w11Auto",
         steps: [
-            { ch: 1, type: "custom", talk: "w11Oferta", text: "Baltazar Vey pyta o „szkiełko z latarni”. Porozmawiaj z nim w kantorze (8–18)." },
-            { ch: 2, type: "custom", talk: "w11Ostrzez", text: "Baltazar chce kupić soczewkę latarni za 400 G. Ostrzeż Bazylego (przylądek)." },
-            { ch: 3, type: "custom", vars: "w11Vars", text: "Ktoś przyjdzie po soczewkę. Czuwaj przy latarni w nocy z dnia {d} na {d1} - po północy." },
-            { ch: 4, type: "custom", talk: "w11Odkup", vars: "w11Vars", text: "Soczewkę skradziono. {gdzie}" },
-            { ch: 5, type: "custom", talk: "w11Kleofas", vars: "w11Vars", text: "{kto}" },
-            { ch: 6, type: "custom", talk: "w11Wybor", text: "Wiesz, czym jest Oko Strażnicy. Zdecyduj u Bazylego: zostawić soczewkę w latarni, rozbić ją albo sprzedać Baltazarowi." },
-            { ch: 7, type: "custom", talk: "w11Sprzedaz", text: "Zanieś soczewkę Baltazarowi (kantor, 8–18) - 400 G." }
+            { ch: 1, type: "custom", talk: "w11Oferta" },
+            { ch: 2, type: "custom", talk: "w11Ostrzez" },
+            { ch: 3, type: "custom", vars: "w11Vars" },
+            { ch: 4, type: "custom", talk: "w11Odkup", vars: "w11Vars" },
+            { ch: 5, type: "custom", talk: "w11Kleofas", vars: "w11Vars" },
+            { ch: 6, type: "custom", talk: "w11Wybor" },
+            { ch: 7, type: "custom", talk: "w11Sprzedaz" }
         ]
     };
+    Watki.scal(W11, "latarnia", "zadania.W11");   // (its words: js/teksty/latarnia.txt, zadania.W11)
     const VITEMS = {
-        soczewka: { name: "Soczewka latarni (Oko Strażnicy)", icon: 176 }
+        soczewka: { icon: 176 }
     };
+    Watki.scal(VITEMS, "latarnia", "rzeczy");   // (its words: js/teksty/latarnia.txt, rzeczy)
     const REMARKS = [
-        { id: "latJanekOgien", who: "janek", flag: "latarniaZgasla", lines: ["Latarnia na przylądku zgasła tej nocy. Pierwszy raz, odkąd pamiętam. Rybacy mówią, że to zły znak. Ja mówię, że brak tranu."] },
-        { id: "latCelnik", who: "celnik", flag: "latarnikMet", lines: ["Latarnik z przylądka? Zapisuje wszystko w swojej księdze. Nawet więcej niż ja. Tylko jego księgi nikt nie sprawdza."] },
-        { id: "latRoch", who: "przemytnik", flag: "latarniaUfa", lines: ["Bazyli dalej pali? To dobrze. Bez jego ognia pół zatoki to same skały. Nawet przemytnik woli widzieć, gdzie umiera."] },
-        { id: "latKleofas", who: "pustelnik", flag: "latarniaObroniona", lines: ["Słyszałem, że ktoś napadł na latarnię. Kroniki piszą, że po Oko przychodzili zawsze nocą. I zawsze odchodzili z pustymi rękami. Do teraz."] }
+        { id: "latJanekOgien", who: "janek", flag: "latarniaZgasla" },
+        { id: "latCelnik", who: "celnik", flag: "latarnikMet" },
+        { id: "latRoch", who: "przemytnik", flag: "latarniaUfa" },
+        { id: "latKleofas", who: "pustelnik", flag: "latarniaObroniona" }
     ];
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({
-        owner: "Latarnia", quests: [K49, D22, W11], vitems: VITEMS, remarks: REMARKS,
-        gossip: { latarnik: ["Chleb? Dziękuję. Zjem o świcie, jak zgaszę ogień. Przy ogniu nie jem - okruchy na soczewce."] }
-    });
+    Watki.scal(REMARKS, "latarnia", "uwagi");   // (its words: js/teksty/latarnia.txt, uwagi)
+    const GOSSIP = { latarnik: [] };
+    Watki.scal(GOSSIP, "latarnia", "plotki");   // (its words: js/teksty/latarnia.txt, plotki)
+    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Latarnia", quests: [K49, D22, W11], vitems: VITEMS, remarks: REMARKS, gossip: GOSSIP });
 
     // ------------------------------------------------------------------ the epilogue (floor 100, Underground_Data.js - the integration
     // puts these lines in; one sentence each, by the ending and by what became of the lens)
     const EPILOG = {
-        zniszczenie: "Latarnia na przylądku świeci dalej, ale soczewka ślepnie: we mgle Bazyli widzi już tylko mgłę.",
-        zasady: "Bazyli widzi w soczewce tylko w Noc Pytania - raz w roku, jak każe reguła zakonu.",
-        rozbita: "Bazyli pali ogień w latarni za pękniętym szkłem i nigdy już nie zagląda w mgłę.",
-        sprzedana: "Pusty pierścień w laternie przypomina Bazylemu, że Czarne Oczy wiedziały o jedną noc więcej.",
-        zgasla: "Latarnia na przylądku zgasła na dobre. Rybacy wracają przed zmierzchem."
     };
+    Watki.scal(EPILOG, "latarnia", "epilog");   // (its words: js/teksty/latarnia.txt, epilog)
 
     window.LatarniaData = { MAP, IZBA, LATERNA, ITEM, IDS: [630, 639], OWNER: "Latarnia", PLAN, RESIDENT, INDOOR, FUEL, FOG, VISIONS, HEAVY,
         RAID, TX, K49, D22, W11, VITEMS, REMARKS, EPILOG,

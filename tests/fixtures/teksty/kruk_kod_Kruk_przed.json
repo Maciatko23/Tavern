@@ -1,0 +1,138 @@
+{
+ "kod": {
+  "openYoungMenu": {
+   "0": "Połóż mu mięso",
+   "1": "Kładziesz kawałek mięsa na kamieniu pod żerdzią. Kruk bierze jedzenie z ręki dopiero po kilku dniach. Raz dziennie.",
+   "2": "Młody kruk",
+   "3": "Wrócił na Urwisko, bo był głodny. Nakarm go, to wróci z tobą.",
+   "4": "Karmienia: {1}/{feedNeed} (każde innego dnia)."
+  },
+  "tameNow": {
+   "0": "Obrączka z krukiem"
+  },
+  "redraw": {
+   "0": "Jak nazwiesz kruka?",
+   "1": "Kruk siedzi ci na ramieniu i przechyla łeb. Czeka.",
+   "2": "Puste pole = „{defaultName}”"
+  },
+  "letterMenu": {
+   "0": "Zadanie: {title}",
+   "1": "Kruk zaniesie to, co trzeba, za ciebie.",
+   "2": "Kruk zaniesie list i wróci z odpowiedzią za godzinę albo dwie.",
+   "3": "Zanieś list",
+   "4": "Raz dziennie. Tylko po wyspie."
+  },
+  "scoutMenu": {
+   "0": "Kruk obleci okolicę i wróci z raportem na dziś: zwierzyna, ludzie, ruda, krzaki z jagodami i grzyby. Zapisze się w dzienniku; o niebezpieczeństwie ostrzeże.",
+   "1": "Nie znasz jeszcze takich miejsc",
+   "2": "Leć na zwiad",
+   "3": "Raz dziennie. Miejsca, w których byłeś."
+  },
+  "checkAway": {
+   "0": "list przez kruka"
+  },
+  "letterChoice": {
+   "0": "Czytasz cudzy list. Właściciel to pozna po pieczęci.",
+   "1": " albo sprzedasz Baltazarowi w kantorze.",
+   "2": "Chowasz list. Oddasz go {ownerName}{2}",
+   "3": "Właściciel: {ownerName}"
+  },
+  "talkHook": {
+   "0": "To chyba twoje. Kruk przyniósł.",
+   "1": "Nic. Zapomnij."
+  },
+  "finishAway": {
+   "0": " roślinę",
+   "1": " rośliny",
+   "2": " roślin",
+   "3": "Pod twoją nieobecność ptaki wyjadły {eaten}{2} (za daleko od grzędy)"
+  },
+  "warnCheck": {
+   "0": "Kra! Kra!"
+  },
+  "rabbit": {
+   "0": "zając",
+   "1": "zające",
+   "2": "zajęcy"
+  },
+  "deer": {
+   "0": "jeleń"
+  },
+  "boar": {
+   "0": "dzików"
+  },
+  "wolf": {
+   "0": "wataha wilków ({n})"
+  },
+  "whenToday": {
+   "0": "nocą",
+   "1": "po południu"
+  },
+  "scoutReport": {
+   "0": "ślady niedźwiedzia",
+   "1": "obcy kopacze nocą (3)",
+   "2": "obóz bandytów nocą ({size})",
+   "3": "możliwa zasadzka przy drodze",
+   "4": "żyła rudy",
+   "5": "żyły rudy",
+   "6": "żył rudy",
+   "7": "krzak jagód",
+   "8": "krzaki jagód",
+   "9": "krzaków jagód",
+   "10": "grzybów"
+  },
+  "finishScout": {
+   "0": "Dzień {1} ({2}), godz. {3}:{4}"
+  },
+  "glowna": {
+   "0": "Urwisko spokojne",
+   "1": "Trzy noce z rzędu przepędziłem obcych kopaczy z Urwiska. Chyba dali sobie spokój z kamieniami z krukiem. Na razie.",
+   "2": "Weź, co przyniósł kruk",
+   "3": "Rano na grzędzie coś leży. Kruki znoszą, co błyszczy - i co komuś wypadło.",
+   "4": "Nalej wody do miseczki",
+   "5": "Nalewasz porcję wody z wiadra (albo z bukłaka). Kruk napije się, kiedy zechce.",
+   "6": "Kruk: {1}",
+   "7": "Menu kruka (albo klawisz K).",
+   "8": "Grzęda czeka na kruka."
+  },
+  "openRavenMenu": {
+   "0": "Pogłaszcz",
+   "1": "Kruk stroszy pióra.",
+   "2": "Leć ze mną",
+   "3": "Kruk leci z tobą z mapy na mapę i siada na drzewach, na ziemi albo na twoim ramieniu. Przed domami czeka na zewnątrz.",
+   "4": "Zostań na grzędzie",
+   "5": "Kruk wraca na grzędę i tam czeka.",
+   "6": "Pilnuj pola",
+   "7": "Kruk siedzi na grzędzie i przegania wrony i wróble z zasiewów w promieniu {guardRadius} pól - także pod twoją nieobecność.",
+   "8": "Kruk zje kawałek mięsa albo rybę.",
+   "9": "Zanieś list",
+   "10": "Raz dziennie: list do kogoś na wyspie. Kruk wróci z odpowiedzią.",
+   "11": "Leć na zwiad",
+   "12": "Raz dziennie: kruk obleci miejsce, w którym byłeś, i wróci z raportem na dziś (zapisze go w dzienniku, ostrzeże przed niebezpieczeństwem).",
+   "13": "Cudzy list: {name}",
+   "14": "Właściciel: {ownerName}. {2}"
+  },
+  "statusNote": {
+   "0": "leci z tobą",
+   "1": "na grzędzie",
+   "2": "pilnuje pola",
+   "3": " · w drodze",
+   "4": "Jedzenie {1} · Woda {2} · {mode}{4}"
+  },
+  "callRaven": {
+   "0": "{imie} czeka na zewnątrz"
+  },
+  "look": {
+   "0": "Stare żerdzie zakonu. {imie} czasem tu zagląda - do swoich."
+  },
+  "actCall": {
+   "0": "oddany list"
+  },
+  "vars": {
+   "0": "Kruk czeka przy górnej krawędzi przystani (ścieżka na klif).",
+   "1": "Kruk przysiadł przy pustelni na klifie.",
+   "2": "Kruk poleciał na wschód, na Urwisko Kruków."
+  }
+ },
+ "_opis": "Napisy kodu Kruk.js sprzed przeniesienia do js/teksty/kruk.txt (kod.*)"
+}

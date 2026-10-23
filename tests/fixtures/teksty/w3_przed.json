@@ -1,0 +1,255 @@
+{
+ "zadania": {
+  "W3": {
+   "title": "Pieśń o Kruczych Skałach",
+   "where": "tawerna, dzwonnica, obóz pod murem, ogród rycerzy, dwór, tawerna nocą",
+   "when": "po sześciu balladach Melii i „Strunie dla Melii”",
+   "desc": "Melii śni się siódma ballada - melodię zna, słów nie. Zwrotki rozeszły się po mieście: u dzwonnika, u kobiety zza morza, na kamieniu, w kronice dworu i w głowie starego pijaka. Ostatnia opisuje drogę w dół.",
+   "steps": {
+    "0": {
+     "text": "Melia ma ci coś do powiedzenia o swoim śnie (tawerna)."
+    },
+    "1": {
+     "text": "Zbierz zwrotki siódmej ballady ({n}/6). Masz: {got}. Szukaj: {miss}."
+    },
+    "2": {
+     "text": "Masz wszystkie zwrotki. Wróć do Melii po północy (0:00–4:00), kiedy sala opustoszeje."
+    },
+    "3": {
+     "text": "Gdzie Melia zaśpiewa całą pieśń? Zdecyduj razem z nią (tawerna)."
+    },
+    "4": {
+     "text": "Noc Kupały (dzień {kupala}), 20:00–23:30: Melia zaśpiewa całą pieśń przy ognisku przed bramą południową. Bądź tam."
+    },
+    "5": {
+     "text": "Ludzie w kapturach chcą porwać Melię! Obroń ją przy ognisku."
+    },
+    "6": {
+     "text": "Po zamknięciu (23:00–1:00) Melia zaśpiewa całą pieśń tylko dla Borgara. Przyjdź do niej do tawerny."
+    }
+   },
+   "verses": {
+    "0": {
+     "name": "struna",
+     "from": "Melia, na nowej strunie",
+     "lines": [
+      "Na Kruczych Skałach, na wysokiej,",
+      "stał gród z kamienia, mur szeroki.",
+      "Kruki krążyły nad wieżami,",
+      "a straż milczała pod gwiazdami."
+     ]
+    },
+    "1": {
+     "name": "dzwon",
+     "from": "Ambroży, w rytm dzwonu",
+     "lines": [
+      "Raz dzwon uderzy - śpijcie, ludzie,",
+      "trzy razy - straż czuwa w trudzie.",
+      "Lecz gdy uderzy siedem razy,",
+      "zejdź tam, gdzie milkną wszystkie głazy."
+     ]
+    },
+    "2": {
+     "name": "kołysanka",
+     "from": "Ludmiła, kołysanka zza morza",
+     "lines": [
+      "Lulaj, dziecię, za siódmą górą",
+      "śpi Serce, co nie kłamie, pod kamienną skórą.",
+      "Królowie ślą po nie wojsko i złoto,",
+      "a ono patrzy w ciemność i nie wie, po co."
+     ]
+    },
+    "3": {
+     "name": "cokół",
+     "from": "cokół posągu w ogrodzie rycerzy",
+     "lines": [
+      "Strażniku, stój na progu twardy,",
+      "nie pytaj więcej, niż jest warty.",
+      "Jedno pytanie raz do roku -",
+      "reszta niech śpi w kamiennym mroku."
+     ]
+    },
+    "4": {
+     "name": "kronika",
+     "from": "kronika rodu Zaleskich",
+     "lines": [
+      "Dwór z kamieni - kamień pamięta,",
+      "skąd go wzięła ręka przeklęta.",
+      "Kruk na progu, kruk na ścianie -",
+      "nikt nie pyta, co się stanie."
+     ]
+    },
+    "5": {
+     "name": "bełkot Ozzy'ego",
+     "from": "Ozzy, przez sen o drugiej w nocy",
+     "lines": [
+      "Za luźną cegłą - schody w dół,",
+      "trzeci jest pusty, przeskocz pół.",
+      "Lewą ręką trzymaj się ściany,",
+      "nie odpowiadaj, gdy głos nieznany."
+     ]
+    }
+   },
+   "hints": {
+    "dzwon": "Ambroży (dzwonnik, za dnia) - kiedy zostaniesz jego uczniem",
+    "kolysanka": "Ludmiła (obóz pod murem, wieczorem 17–20) - kiedy obóz ci zaufa (konik dla Eli albo jej gorączka)",
+    "cokoly": "cokół lewego posągu w ogrodzie rycerzy (za dnia; klucz do furtki ma Ambroży)",
+    "kronika": "kronika rodu we dworze: Lord, gdy spłacisz połowę długu (8–20), albo kamerdyner za dzban miodu pitnego (rano przy straganach)",
+    "belkot": "Ozzy: wieczorem dzban miodu pitnego, a o drugiej w nocy przy nim w sali (z wynajętym pokojem)"
+   },
+   "lines": {
+    "dream": [
+     "Śniło mi się coś. Znowu. Siódma ballada - o Kruczych Skałach.",
+     "Melodię znam całą. Mogłabym ją zagrać teraz, o, tak... (Melia nuci półgłosem.) Ale słów nie ma. Jakby ktoś je rozsypał po mieście.",
+     "Ty chodzisz wszędzie, słyszysz wszystko. Zbierzesz mi te słowa? Zwrotka po zwrotce. Jedną już mam - tę ze struny."
+    ],
+    "dreamVerse": [
+     "Na nowej strunie przyszła mi jedna zwrotka sama. Posłuchaj."
+    ],
+    "noteDream": [
+     "Siódma ballada",
+     "Melii śni się siódma ballada - „Pieśń o Kruczych Skałach”. Melodię zna, słów nie. Zwrotki rozeszły się po mieście; zbieram je dla niej."
+    ],
+    "ambrozy": [
+     "> Ambroży, Melia z tawerny szuka słów do starej melodii. O Kruczych Skałach i o dzwonie.",
+     "Do melodii? (Ambroży stuka palcem w ławę: raz, trzy razy, siedem.) Tak się kiedyś dzwoniło. Mój mistrz to nucił. Słowa szły tak:"
+    ],
+    "ludmila": [
+     "> Ludmiło, śpiewasz Eli coś do snu?",
+     "Kołysankę. Od mojej matki, z kontynentu. U nas wszystkie dzieci ją znają. (Ludmiła nuci cicho, kołysząc się.)"
+    ],
+    "ludmilaAfter": [
+     "Tam, skąd jesteśmy, to tylko kołysanka. Tutaj... chyba nie tylko."
+    ],
+    "meadGive": [
+     "> Dziadku, miód pitny. Dla ciebie. Cały dzban.",
+     "Miód! Pitny! Synku, ty wiesz, jak starca uszczęśliwić. *glug, glug* Aaach... Dziś będzie mi się dobrze spało. Oj, dobrze..."
+    ],
+    "meadNoRoom": "> (Ozzy chrapie i mruczy przez sen. Gdybym tu nocował, mógłbym przy nim posiedzieć... Bez pokoju Borgar zaraz mnie wyprosi.)",
+    "ozzySleep": [
+     "(Ozzy śpi na ławie z głową na stole. Mruczy. Potem - nagle wyraźnie, prawie śpiewnie:)"
+    ],
+    "ozzyAfter": [
+     "(Ozzy chrapie dalej, jakby nic nie powiedział. Na stole stoi pusty dzban po miodzie.)"
+    ],
+    "plinth": [
+     "> (Na cokole posągu ktoś wyrył wersy. Litery płytkie, zatarte deszczem, ale da się czytać.)"
+    ],
+    "plinthDark": "Za ciemno, żeby czytać wyryte litery. Trzeba przyjść za dnia.",
+    "lordAsk": [
+     "> Panie, czy w kronice rodu jest pieśń? O Kruczych Skałach.",
+     "Kronika? (Lord uśmiecha się z wyższością.) To bajki, młodzieńcze. Ale ładne bajki. Spłaciłeś już połowę - zasłużyłeś, żeby je zobaczyć.",
+     "(Lord przynosi gruby tom w skórze i czyta głośno, przesuwając palcem po wersach:)"
+    ],
+    "lordAfter": [
+     "Dziadek kazał to wpisać, kiedy stawiał dwór. Twierdził, że kamienie same mu to zaśpiewały. Ha! Mój dziadek lubił wino."
+    ],
+    "feliksAsk": [
+     "> Kronika rodu jaśnie pana. Jest tam pieśń o Kruczych Skałach?",
+     "Pieśń? Jest. Jaśnie pan trzyma kronikę w bibliotece.",
+     "Mógłbym przepisać jedną zwrotkę... za dzban miodu pitnego. Jaśnie pan nie musi o tym wiedzieć."
+    ],
+    "feliksGive": [
+     "> Masz. Dzban miodu pitnego.",
+     "Dziękuję. Proszę - mam ją już tutaj. (Kamerdyner wyjmuje z kieszeni złożoną kartkę.) Przypadkiem."
+    ],
+    "origin": [
+     "Nie śpisz? Ja też. Siedzę i patrzę na te słowa. Wszystkie, co do jednej. Wiesz, co mnie przeraża? Że je znam. Znałam zawsze.",
+     "> Melio... Zakon, który pilnował twierdzy, nie spisywał wszystkiego w księgach. Księgę można ukraść.",
+     "> Może przechowywał pamięć w pieśniach. I w ludziach, którzy je śpiewali.",
+     "To znaczy... że ja...?"
+    ],
+    "gentle": [
+     "> Myślę, że twoja babka, albo babka twojej babki, śpiewała w zakonie. A pieśni przyszły do ciebie same, jak wnuk przychodzi do domu.",
+     "(Melia płacze. Cicho, długo. Potem ściska ci rękę.) Dziękuję. Nikt mi jeszcze nie powiedział, skąd jestem."
+    ],
+    "joke": [
+     "> Albo jesteś czarownicą i zjadłaś kronikarza!",
+     "(Melia parska śmiechem - pierwszy raz tej nocy.) Ty łobuzie... Ale wiesz co? Lżej mi. Dużo lżej."
+    ],
+    "quiet": [
+     "> Nie wiem, Melio. Może to tylko sen.",
+     "Może. (Melia długo patrzy w ciemne okno.) Ale sny nie mają zwrotek, które się rymują."
+    ],
+    "optGentle": "Twoja babka śpiewała w zakonie.",
+    "optJoke": "Może jesteś czarownicą?",
+    "optQuiet": "Nie wiem. Może to tylko sen.",
+    "finalAsk": [
+     "Mam całą pieśń. Siódmą balladę - a jej ostatnia zwrotka mówi, jak zejść pod skałę.",
+     "Nie wiem, czy wolno mi ją śpiewać. Ty zdecyduj, gdzie i komu."
+    ],
+    "optKupala": "Przy wszystkich, w Noc Kupały.",
+    "optBorgar": "Tylko Borgarowi, po zamknięciu.",
+    "optBurn": "Spal słowa.",
+    "optLater": "Jeszcze pomyślę.",
+    "sayKupala": [
+     "Przy ognisku, w Noc Kupały... Przy wszystkich. Dobrze. Niech miasto pamięta to, co zapomniało.",
+     "Dzień {kupala}, o zmroku, przed bramą południową. Przyjdź."
+    ],
+    "sayBorgar": [
+     "Tylko Borgarowi... Tak. To jego tawerna stoi na tych kamieniach. Przyjdź po zamknięciu - od jedenastej do pierwszej w nocy."
+    ],
+    "sayBurn": [
+     "(Melia długo patrzy na kartki. Potem podaje ci je i odwraca głowę.) Spal. Tylko nie przy mnie.",
+     "> (Kartki zwijają się w płomieniu świecy. Drogę w dół znasz teraz tylko ty.)"
+    ],
+    "sayLater": [
+     "Pomyśl. Ta pieśń czekała trzysta lat - poczeka jeszcze trochę."
+    ],
+    "kupalaMissed": [
+     "> (Noc Kupały minęła - a mnie przy ognisku nie było. Trzeba pomówić z Melią jeszcze raz.)"
+    ],
+    "kupala": [
+     "(Przed bramą południową płonie ognisko. Dziewczęta plotą wianki, a pół miasta zeszło się posłuchać.)",
+     "Ludzie! Ta pieśń jest stara jak kamienie pod waszymi domami. Posłuchajcie."
+    ],
+    "kupalaEnd": [
+     "(Cisza. Długa. Potem ktoś zaczyna klaskać - i całe miasto klaszcze.)",
+     "Zaśpiewałam. Wszystko. Niech pamiętają."
+    ],
+    "kupalaAfter": [
+     "> (Kiedy ognisko przygasa, dwóch ludzi w kapturach chwyta Melię za ramiona i ciągnie w ciemność.)",
+     "> (Zanim zdążysz krzyknąć, Grum wyrasta jak spod ziemi. Jeden z kapturów pada, drugi ucieka za mur.)",
+     "> (Melia jest cała. Grum milczy. Długo patrzy na ciebie.)"
+    ],
+    "attack": [
+     "> (Kiedy ognisko przygasa, z ciemności wychodzą ludzie w kapturach.)"
+    ],
+    "attackShout": "Bierz śpiewaczkę! Szybko!",
+    "meliaHelp": "Pomocy!",
+    "defendWon": [
+     "> (Ostatni z kapturów leży albo ucieka. Melia drży, ale jest cała.)",
+     "> (Grum dobiega z pałką, kiedy już po wszystkim. Patrzy na ciebie długo - i kiwa głową.)"
+    ],
+    "defendLost": [
+     "> (Leżysz na bruku. Kaptury ciągną Melię w ciemność...)",
+     "> (...i wtedy wyrasta Grum. Jeden z kapturów pada, drugi ucieka za mur. Melia jest cała.)"
+    ],
+    "defendAway": [
+     "> (Odszedłem od ogniska. Rano ludzie mówią, że Grum przegonił jakichś kapturów. Melia jest cała.)"
+    ],
+    "borgar": [
+     "Po zamknięciu? Dobrze. (Melia odkłada lutnię, idzie do baru i wraca z Borgarem. Karczmarz siada ciężko na ławie.)",
+     "Borgarze, posłuchaj. Do końca. Nie przerywaj."
+    ],
+    "borgarEnd": [
+     "> (Borgar długo milczy. Kręci w palcach ścierkę. W końcu mówi cicho: „Babka śpiewała mi to do snu. Bez słów. Tylko melodię.”)",
+     "> („Pół klucza nad barem... Ona też kazała mi go nie zdejmować.” Borgar wstaje i wychodzi bez słowa.)"
+    ],
+    "noteKupala": [
+     "Pieśń przy ognisku",
+     "W Noc Kupały Melia zaśpiewała całą „Pieśń o Kruczych Skałach” przy ognisku przed bramą południową. Całe miasto słyszało. Potem ludzie w kapturach próbowali ją porwać."
+    ],
+    "noteBorgar": [
+     "Pieśń dla Borgara",
+     "Melia zaśpiewała całą „Pieśń o Kruczych Skałach” tylko Borgarowi, po zamknięciu. Babka śpiewała mu tę melodię do snu i kazała nie zdejmować pół klucza znad baru."
+    ],
+    "noteBurn": [
+     "Spalone słowa",
+     "Spaliłem kartki z „Pieśnią o Kruczych Skałach”. Drogę w dół znam tylko ja: za luźną cegłą schody, trzeci schodek pusty, lewa ręka na ścianie, nie odpowiadać."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownQuests_Data.js: QUESTS=zadania:id:miasto+/^W3\\./)"
+}

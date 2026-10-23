@@ -78,7 +78,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         const n = await t.json(REACH(land[0], land[1]));
         const W = await t.json(`(function(){ const S = ${SEEN_AT}, free = (x, y) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d)) &&
                 !$gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
-            const floor = ${JSON.stringify(m.floor.map(c => [c[0], c[1]]))}, looks = ${JSON.stringify(m.looks)};
+            // (2026-10-23: a cell under a furniture's upper part - a tile drawn over the characters, the "star" - is the room under it,
+            // not floor to walk to: Wspólna izba's (2,4) under the cupboard's top, behind the barrel, since the maps' fixes of 2026-10-22)
+            const star = (x, y) => $gameMap.layeredTiles(x, y).some(t => t > 0 && ($gameMap.tilesetFlags()[t] & 0x10));
+            const floor = ${JSON.stringify(m.floor.map(c => [c[0], c[1]]))}.filter(([x, y]) => !star(x, y)), looks = ${JSON.stringify(m.looks)};
             const near = (x, y) => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => S(x + dx, y + dy));
             return { landingOut: [2, 4, 6].filter(d => $gameMap.isPassable(${land[0]}, ${land[1]}, d)).length,
                      pockets: floor.filter(([x, y]) => free(x, y) && !S(x, y)), exit: S(${exitXY[0]}, ${exitXY[1]}),

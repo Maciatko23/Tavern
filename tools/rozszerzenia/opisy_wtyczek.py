@@ -1,5 +1,5 @@
-# Opisy wtyczek nowego terenu w js/plugins.js (integracja 2026-10-22, docs/rozszerzenia/PLAN.md): opis wpisu = @plugindesc z pliku
-# wtyczki (Okolice, Zasoby, Lowy, Ludzie, Zakon i ich _Data). Edytor RPG Maker MZ musi być zamknięty (sprawdza tasklist).
+# Opisy wtyczek nowego terenu na liście gry js/tawerna_wtyczki.js (integracja 2026-10-22, docs/rozszerzenia/PLAN.md): opis wpisu = @plugindesc z pliku
+# wtyczki (Okolice, Zasoby, Lowy, Ludzie, Zakon i ich _Data). Lista gry - edytor może być otwarty (od 2026-10-23).
 #   python tools/rozszerzenia/opisy_wtyczek.py            pokazuje, co by się zmieniło
 #   python tools/rozszerzenia/opisy_wtyczek.py --wykonaj  zapisuje (kopia do archiwum: dane_przed_rozszerzeniami/integracja/)
 import os, sys, json, re
@@ -17,14 +17,13 @@ def plugindesc(name):
 
 def main():
     do = "--wykonaj" in sys.argv
-    if do: need_editor_closed()
-    p = os.path.join(ROOT, "js", "plugins.js")
+    p = os.path.join(ROOT, "js", "tawerna_wtyczki.js")   # (the game's plugin list - not written by the editor)
     raw = open(p, "rb").read().decode("utf-8")
-    head, sep, rest = raw.partition("var $plugins =\n[\n")
-    if not sep: raise SystemExit("STOP: js/plugins.js w nieznanym układzie")
+    head, sep, rest = raw.partition("var $tawernaWtyczki =\n[\n")
+    if not sep: raise SystemExit("STOP: js/tawerna_wtyczki.js w nieznanym układzie")
     body, tail = rest.rsplit("\n];", 1)
     entries = [json.loads(l) for l in body.split(",\n")]
-    if ",\n".join(dump(e) for e in entries) != body: raise SystemExit("STOP: js/plugins.js nie wraca do tej samej postaci po odczycie")
+    if ",\n".join(dump(e) for e in entries) != body: raise SystemExit("STOP: js/tawerna_wtyczki.js nie wraca do tej samej postaci po odczycie")
     changed = []
     for e in entries:
         if e["name"] in NAMES:
@@ -33,16 +32,15 @@ def main():
                 changed.append("%s: %s -> %s" % (e["name"], e["description"][-24:], d[-24:]))
                 e["description"] = d
     missing = [n for n in NAMES if n not in [e["name"] for e in entries]]
-    if missing: raise SystemExit("STOP: js/plugins.js nie ma wpisów: %s (edytor je zgubił? - wpisy dodaje tools/rozszerzenia/pakiet0.py)" % ", ".join(missing))
+    if missing: raise SystemExit("STOP: lista gry nie ma wpisów: %s (wpisy dodaje tools/rozszerzenia/pakiet0.py)" % ", ".join(missing))
     for c in changed: print("opis  " + c)
     if not changed: print("opisy aktualne - nic do zmiany"); return
     if not do: print("(podgląd - nic nie zmieniono; dodaj --wykonaj)"); return
     take_lock("integracja")
     try:
-        need_editor_closed()
-        bak = archive("js/plugins.js", "integracja")
+        bak = archive("js/tawerna_wtyczki.js", "integracja")
         open(p, "wb").write((head + sep + ",\n".join(dump(e) for e in entries) + "\n];" + tail).encode("utf-8"))
-        print("zapisano js/plugins.js (kopia: %s)" % bak)
+        print("zapisano js/tawerna_wtyczki.js (kopia: %s)" % bak)
     finally:
         drop_lock()
 

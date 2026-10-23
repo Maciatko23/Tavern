@@ -13,7 +13,7 @@
 //     park's bounds by its isMapPassable; the mud and the hide by a wrapper of Combat.perk("sneak") / Combat.aimSteady (Hunting asks
 //     them through the API), the woken bear's rage by a wrapper of Combat.hitPlayer
 //   - the camps are Humans.js's (Humans.fixedCamp - the one marked block in Humans.js)
-//   - the gamekeeper is a TownLife resident (2905, Lowy_Data); his and the others' extra talk by TownLife.addTalkHook
+//   - the gamekeeper is a TownLife resident (2905, Lowy_Data); his and the others' extra talk by Tawerna.talk.takeover
 //   - the quests are TownQuests' (K59-K62, D32-D33 in Lowy_Data; their custom steps' FX here), the board's contracts QuestBoard's
 //   - the strays are characters of this file (like Livestock.js's animals: not events, not saved - their state is)
 
@@ -61,6 +61,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("lowy");   // (the words of this file: js/teksty/lowy.txt, kod.*)
 
     const PLUGIN = "Lowy";
     const T = window.Tawerna;
@@ -190,34 +191,34 @@
     const look = what => scr("Lowy.look(this, " + JSON.stringify(what) + ")");
     const BUILD = {
         23: () => [
-            ev(IDS.nora, "Wilcza nora", NORA.x, NORA.y, [page({ image: img("!$Low_Nora"), list: look("nora") })], "<Occupy:left=1,right=1,up=1>"),
-            ev(IDS.czoNamiot, "Namiot obcych myśliwych", OBOZY.czo.tent[0], OBOZY.czo.tent[1], [hidden(), pageW("campCzo", { image: img("!$Mt_Tent"), list: look("namiot") })])
+            ev(IDS.nora, TK.kod.n23[0], NORA.x, NORA.y, [page({ image: img("!$Low_Nora"), list: look("nora") })], "<Occupy:left=1,right=1,up=1>"),
+            ev(IDS.czoNamiot, TK.kod.n23[1], OBOZY.czo.tent[0], OBOZY.czo.tent[1], [hidden(), pageW("campCzo", { image: img("!$Mt_Tent"), list: look("namiot") })])
         ],
         13: () => [
             ev(IDS.gawra, "Gawra", GAWRA.ev[0], GAWRA.ev[1], [page({ image: img("!$Low_Gawra"), list: look("gawra") })]),
-            ev(IDS.gawraBok, "Gawra (wylot)", GAWRA.side[0], GAWRA.side[1], [page({ list: look("gawra") })])
+            ev(IDS.gawraBok, TK.kod.n13[0], GAWRA.side[0], GAWRA.side[1], [page({ list: look("gawra") })])
         ],
         21: () => [
-            ev(IDS.bloto, "Błotnisko", BLOTO.ev[0], BLOTO.ev[1], [page({ image: img("!$Low_Bloto"), priority: 0, through: true, list: look("bloto") })]),
-            ev(IDS.rabNamiot, "Namiot rabusiów", OBOZY.rabusie.tent[0], OBOZY.rabusie.tent[1], [hidden(), pageW("campRab", { image: img("!$Mt_Tent"), list: look("namiotRab") })])
+            ev(IDS.bloto, TK.kod.n21[0], BLOTO.ev[0], BLOTO.ev[1], [page({ image: img("!$Low_Bloto"), priority: 0, through: true, list: look("bloto") })]),
+            ev(IDS.rabNamiot, TK.kod.n21[1], OBOZY.rabusie.tent[0], OBOZY.rabusie.tent[1], [hidden(), pageW("campRab", { image: img("!$Mt_Tent"), list: look("namiotRab") })])
         ],
         4: () => [
             ev(IDS.lizawka, "Lizawka", LIZAWKA.x, LIZAWKA.y, [page({ image: img("!$Low_Lizawka", 2), list: look("lizawka") }),
                 pageW("lickOn", { image: img("!$Low_Lizawka", 4), list: look("lizawka") })]),
             ev(IDS.zasiadka, "Zasiadka", LIZAWKA.hide[0], LIZAWKA.hide[1], [page({ image: img("!$Low_Zasiadka"), priority: 2, through: true })]),
-            ev(IDS.poroze, "Zrzucone poroże", LIZAWKA.antler[0], LIZAWKA.antler[1], [hidden(), pageW("antler", { image: img("!$Low_Poroze"), list: scr("Lowy.pickAntler(this)") })])
+            ev(IDS.poroze, TK.kod.n4[0], LIZAWKA.antler[0], LIZAWKA.antler[1], [hidden(), pageW("antler", { image: img("!$Low_Poroze"), list: scr("Lowy.pickAntler(this)") })])
         ],
         24: () => {
             const sw = { switch1Valid: true, switch1Id: D.SW_WYLOM };
             const out = [
-                ev(IDS.wylomL, "Wyłom (cierń)", PARK.gap[0][0], PARK.gap[0][1], [hidden(), page({ cond: sw, list: look("ciernie") })]),
-                ev(IDS.wylomP, "Wyłom w żywopłocie", PARK.gap[1][0], PARK.gap[1][1], [page({ image: img("!$Low_Wylom", 2), priority: 0, through: true }),
+                ev(IDS.wylomL, TK.kod.n24[0], PARK.gap[0][0], PARK.gap[0][1], [hidden(), page({ cond: sw, list: look("ciernie") })]),
+                ev(IDS.wylomP, TK.kod.n24[1], PARK.gap[1][0], PARK.gap[1][1], [page({ image: img("!$Low_Wylom", 2), priority: 0, through: true }),
                     page({ cond: sw, image: img("!$Low_Wylom", 4), list: look("ciernie") })]),
-                ev(IDS.lesniczowka, "Leśniczówka", PARK.hut[0], PARK.hut[1], [page({ image: img("!$Low_Lesniczowka"), list: look("lesniczowka") })], "<Occupy:left=2,right=2,up=2>"),
-                ev(IDS.pasnik, "Paśnik", PARK.feeder[0], PARK.feeder[1], [page({ image: img("!$Low_Pasnik"), list: look("pasnik") })], "<Occupy:left=1>"),
-                ev(IDS.rysiek, "Rysiek Sidło", PARK.rysiek[0], PARK.rysiek[1], [hidden(), pageW("rysiek", { image: img("$Npc_Klusownik", 4, 1), list: scr("Lowy.rysiekTalk(this)") })])
+                ev(IDS.lesniczowka, TK.kod.n24[2], PARK.hut[0], PARK.hut[1], [page({ image: img("!$Low_Lesniczowka"), list: look("lesniczowka") })], "<Occupy:left=2,right=2,up=2>"),
+                ev(IDS.pasnik, TK.kod.n24[3], PARK.feeder[0], PARK.feeder[1], [page({ image: img("!$Low_Pasnik"), list: look("pasnik") })], "<Occupy:left=1>"),
+                ev(IDS.rysiek, TK.kod.n24[4], PARK.rysiek[0], PARK.rysiek[1], [hidden(), pageW("rysiek", { image: img("$Npc_Klusownik", 4, 1), list: scr("Lowy.rysiekTalk(this)") })])
             ];
-            PARK.snares.forEach(([x, y], i) => out.push(ev(IDS.sidla[i], "Sidła", x, y, [hidden(), pageW("sidlo" + i, { image: img("!$Low_Sidla"), list: scr("Lowy.takeSnare(this, " + i + ")") })])));
+            PARK.snares.forEach(([x, y], i) => out.push(ev(IDS.sidla[i], TK.kod.n24[5], x, y, [hidden(), pageW("sidlo" + i, { image: img("!$Low_Sidla"), list: scr("Lowy.takeSnare(this, " + i + ")") })])));
             return out;
         },
         162: () => {
@@ -225,11 +226,11 @@
             // cell (the hero does not walk through it; Hunting's arrows stop only at events with a picture)
             const out = [];
             RANGE.targets.forEach((t, i) => {
-                out.push(ev(IDS.tarcze[i], "Tarcza (" + t.d + " kroków)", t.x, t.y, [page({ image: img("!$Low_Tarcza"), priority: 0, list: look("tarcza" + i) })]));
-                out.push(ev(IDS.tarczeBlok[i], "Tarcza (" + t.d + " kroków)", t.x, t.y, [page({ list: look("tarcza" + i) })]));
+                out.push(ev(IDS.tarcze[i], Watki.wstaw(TK.kod.n162[0], { d: t.d }), t.x, t.y, [page({ image: img("!$Low_Tarcza"), priority: 0, list: look("tarcza" + i) })]));
+                out.push(ev(IDS.tarczeBlok[i], Watki.wstaw(TK.kod.n162[0], { d: t.d }), t.x, t.y, [page({ list: look("tarcza" + i) })]));
             });
-            out.push(ev(IDS.stojak, "Stojak z łukami", RANGE.rack[0], RANGE.rack[1], [page({ image: img("!$Low_Stojak"), list: scr("Lowy.rangeMenu(this)") })]));
-            RANGE.soldiers.forEach(([x, y], i) => out.push(ev(IDS.zolnierze[i], "Żołnierz na strzelnicy", x, y,
+            out.push(ev(IDS.stojak, TK.kod.n162[1], RANGE.rack[0], RANGE.rack[1], [page({ image: img("!$Low_Stojak"), list: scr("Lowy.rangeMenu(this)") })]));
+            RANGE.soldiers.forEach(([x, y], i) => out.push(ev(IDS.zolnierze[i], TK.kod.n162[2], x, y,
                 [hidden(), pageW("drill", { image: img(i ? "$Npc_Zolnierz_B" : "$Npc_Zolnierz", 6, 1), directionFix: true, list: look("zolnierz") })])));
             return out;
         }
@@ -287,7 +288,7 @@
     }
     // the speakers a line may name with "@key: ": a resident (TownLife), the poacher by the snares, the hunters of the camp
     function speaker(key) {
-        if (key === "rysiek") { const e = $gameMap.event(IDS.rysiek); return { id: e && mapId() === PARK.map ? IDS.rysiek : -1, name: "Rysiek Sidło" }; }
+        if (key === "rysiek") { const e = $gameMap.event(IDS.rysiek); return { id: e && mapId() === PARK.map ? IDS.rysiek : -1, name: TK.kod.speaker[0] }; }
         if (key === "czo") return { id: -1, name: OBOZY.czo.name };
         const L = TLf(), e = L && L.eventOf ? L.eventOf(key) : null, r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === key) : null;
         return { id: e && $gameMap.event(e.eventId()) === e ? e.eventId() : -1, name: r ? r.name : key };
@@ -352,7 +353,7 @@
         const Q = QBd(), n = bountyNotice(tpl);
         if (!Q || !n || !Q.spawnBounty) return null;
         if (animals().some(a => !a._dead && a._qbBounty === n.id)) return null;
-        try { return Q.spawnBounty(n.id, at); } catch (e) { warn("spawnBounty " + tpl + ": " + e.message); return null; }
+        try { return Q.spawnBounty(n.id, at); } catch (e) { warn(Watki.wstaw(TK.kod.spawnBountyAt[0], { tpl: tpl, message: e.message })); return null; }
     }
     function markDen(a, leaderGoal) {
         a._lowDen = true;
@@ -415,14 +416,14 @@
             for (const p of pups) { p._alarm = 600; p._goal = null; p._summoned = false; }
             setTimeout(() => { for (const p of denPups()) removeAnimal(p); }, 1500);
         }
-        if (!qDone("K59")) T.call("TownQuests", "finish", "K59", { gold: 60, xp: 120, note: ["Nora pod korzeniami", "Rozbiłem watahę spod nory na Skraju lasu. Szczenięta uciekły w gąszcz. Nora będzie pusta przez kilka tygodni."] });
+        if (!qDone("K59")) T.call("TownQuests", "finish", "K59", { gold: 60, xp: 120, note: [TK.kod.denBroken[0], TK.kod.denBroken[1]] });
     }
     function befriend() {
         const d = S().den;
         d.friendly = true;
         d.choice = "zostawione";
         popup(TX.denFriend, { top: true, color: "#9ff0a8", sub: TX.denFriendSub });
-        if (!qDone("K59")) T.call("TownQuests", "finish", "K59", { xp: 150, note: ["Nora pod korzeniami", "Trzy dni zostawiałem mięso przy wilczej norze. Wataha mnie zna: wilki z Leśnej drogi i Skraju lasu mnie nie atakują, a raz w tygodniu przy norze leży zając - dar watahy."] });
+        if (!qDone("K59")) T.call("TownQuests", "finish", "K59", { xp: 150, note: [TK.kod.befriend[0], TK.kod.befriend[1]] });
     }
     function betray() {
         const d = S().den;
@@ -712,7 +713,7 @@
         if (!near || men.some(h => h._engaged)) return;
         if (qStep("D33") === 0 && !z.choice) {
             const out = linesTo([], speaker("czo"), TALK.czoMeet);
-            choiceTo(out, ["Pomogę wam.", "Wynoście się z naszego lasu."], [
+            choiceTo(out, [TK.kod.czoTick[0], TK.kod.czoTick[1]], [
                 act([], ["czoHelp"]).concat(linesTo([], speaker("czo"), TALK.czoHelp)),
                 linesTo([], speaker("czo"), TALK.czoDrive).concat(act([], ["czoDrive"]))], 1);
             runList(null, out);
@@ -728,9 +729,9 @@
         if (z.resolved) return;
         z.resolved = how;
         if (how === "drive") T.call("TownQuests", "finish", "D33", { opinion: 3, flag: "lowCzoPrzegnani",
-            note: ["Gawra pod granią", "Przegnałem obcych myśliwych ze Skraju lasu. Niedźwiedź spod grani ma spokój - chodzę przy gawrze, a on mnie nie rusza, póki nie biegnę."] });
+            note: [TK.kod.czoResolve[0], TK.kod.czoResolve[1]] });
         else T.call("TownQuests", "finish", "D33", { gold: 80, flag: "lowCzoPomoc",
-            note: ["Gawra pod granią", "Pomogłem obcym myśliwym ubić niedźwiedzia spod grani. Zapłacili osiemdziesiąt groszy i powiedzieli, że ich dowódca szuka w górach wejścia pod ziemię - przy obozie kopaczy jest szyb."] });
+            note: [TK.kod.czoResolve[0], TK.kod.czoResolve[2]] });
         boardTemplates();
     }
 
@@ -794,9 +795,9 @@
         p.count++;
         const n = Math.min(p.count, 3);
         p.wanted = { how, n, fine: PARK.fines[n - 1], day: day() };
-        popup(how === "seen" ? TX.caught : TX.found, { top: true, color: "#ff9f8f", sub: "Kłusownictwo w zwierzyńcu Lorda" });
+        popup(how === "seen" ? TX.caught : TX.found, { top: true, color: "#ff9f8f", sub: TK.kod.crime[0] });
         const g = gajowyEv();
-        if (g && how === "seen") say(g, "Stój! Kłusownik!", 180);
+        if (g && how === "seen") say(g, TK.kod.crime[1], 180);
     }
     const carcassNear = (x, y) => { const Hn = H(); try { return !!(Hn && Hn.carcasses && Hn.carcasses().some(c => dist(c.x, c.y, x + 0.5, y + 0.5) <= 1.2)); } catch (e) { return false; } };
     function parkTick() {
@@ -827,14 +828,14 @@
         if (!w) return;
         p.wanted = null;
         p.fines++;
-        if ($gameParty.gold() >= w.fine) { $gameParty.loseGold(w.fine); popup("-" + w.fine + " G (grzywna)", { icon: D.ICON.gold, color: "#ff9f8f" }); }
+        if ($gameParty.gold() >= w.fine) { $gameParty.loseGold(w.fine); popup(Watki.wstaw(TK.kod.payFine[0], { fine: w.fine }), { icon: D.ICON.gold, color: "#ff9f8f" }); }
         else {
             const take = D.MEATS.concat([ITEM.skora, ITEM.skoraNiedzwiedzia, 163]);
             let n = 0;
             for (const id of take) { const c = count(id); if (c > 0) { lose(id, c); n += c; } }
-            popup("Gajowy zabrał mięso i skóry (" + n + ")", { icon: 94, color: "#ff9f8f" });
+            popup(Watki.wstaw(TK.kod.payFine[1], { n: n }), { icon: 94, color: "#ff9f8f" });
         }
-        opinion(PARK.opinion, "kłusownictwo w zwierzyńcu");
+        opinion(PARK.opinion, TK.kod.payFine[2]);
         if (w.n >= 3) shutGap(true);
     }
     function shutGap(escort) {
@@ -860,7 +861,7 @@
     }
     function rysiekList() {
         const out = linesTo([], speaker("rysiek"), TALK.rysiekMeet);
-        choiceTo(out, ["Pójdziesz ze mną do gajowego.", "Uciekaj. Gajowy wie o sidłach."], [
+        choiceTo(out, [TK.kod.rysiekList[0], TK.kod.rysiekList[1]], [
             linesTo([], speaker("rysiek"), TALK.rysiekGive).concat(act([], ["rysiek", "give"])),
             linesTo([], speaker("rysiek"), TALK.rysiekWarn).concat(act([], ["rysiek", "warn"]))], -1);
         return out;
@@ -872,11 +873,11 @@
         d.met = true;
         if (how === "give") {
             setTqFlag("lowWydalRyska");
-            opinion(2, "kłusownik wydany gajowemu");
+            opinion(2, TK.kod.rysiekDecide[0]);
             T.call("TownLife", "setGone", "klusownik", day() + 7);
         } else {
             setTqFlag("lowOstrzegl");
-            opinion(3, "kłusownik ostrzeżony");
+            opinion(3, TK.kod.rysiekDecide[1]);
         }
         refreshWhen(true);
         if (qStep("D32") === 1) T.call("TownQuests", "completeStep", "D32");
@@ -1026,18 +1027,18 @@
         if (a._mode === "home") { say(a, def.kind === "cow" ? "Muuu." : def.kind === "sheep" ? "Beee." : "Ko-ko.", 120); return; }
         if (a._mode === "led") {
             const out = heroLines(["> " + def.name + "."]);
-            choiceTo(out, ["Puść wolno", "Prowadź dalej"], [act([], ["strayLet", def.key]), []], 1);
+            choiceTo(out, [TK.kod.strayAction[0], TK.kod.strayAction[1]], [act([], ["strayLet", def.key]), []], 1);
             runList(null, out);
             return;
         }
-        if (s.led) { need(D.ICON.lina, "Prowadzisz już zwierzę."); return; }
+        if (s.led) { need(D.ICON.lina, TK.kod.strayAction[2]); return; }
         if (def.kind === "hen") {
             if (Math.random() < ZBLAKANE.catchHen) { strayLead(a); popup(TX.henCaught, { icon: 0, color: "#9ff0a8" }); se("Chicken", 80, 110); }
             else { a._runT = ZBLAKANE.henRun; popup(TX.henMissed, { icon: 0, color: "#ff9f8f" }); se("Chicken", 90, 130); }
             return;
         }
-        const out = heroLines(["> " + def.name + ". " + (def.kind === "cow" ? "Krowa patrzy na ciebie spokojnie." : "Owca drepcze w miejscu.")]);
-        choiceTo(out, ["Załóż powróz (lina)", "Zostaw"], [act([], ["strayRope", def.key]), []], 1);
+        const out = heroLines(["> " + def.name + ". " + (def.kind === "cow" ? TK.kod.strayAction[3] : TK.kod.strayAction[4])]);
+        choiceTo(out, [TK.kod.strayAction[5], "Zostaw"], [act([], ["strayRope", def.key]), []], 1);
         runList(null, out);
     }
     function strayLead(a) {
@@ -1135,7 +1136,7 @@
         try { if (Cb && Cb.setHand) Cb.setHand("ranged"); } catch (e) { /* (an older Combat) */ }
         $gamePlayer.locate(RANGE.stand[0], RANGE.stand[1]);   // (from here no target stands in the way of another)
         $gamePlayer.setDirection(6);
-        popup(contest ? fill(TX.contest, { list: RANGE.rivals.map(r => r.score).join(" / ") }) : TX.roundStart, { top: true, color: "#ffe27a", sub: "Strzelaj z łuku (F) do trzech tarcz. Środek 10, pierścień 5, brzeg 2." });
+        popup(contest ? fill(TX.contest, { list: RANGE.rivals.map(r => r.score).join(" / ") }) : TX.roundStart, { top: true, color: "#ffe27a", sub: TK.kod.startRound[0] });
         return true;
     }
     function scoreShot(e) {
@@ -1165,20 +1166,20 @@
         if (now > r.arrows0) lose(ITEM.strzaly, now - r.arrows0); else if (now < r.arrows0) gain(ITEM.strzaly, r.arrows0 - now);
         s.rounds++;
         s.last = { pts: r.pts, list: r.list, contest: r.contest, day: day() };
-        if (forfeit) { popup("Runda przerwana", { icon: 0, color: "#cfd6de" }); return; }
+        if (forfeit) { popup(TK.kod.endRound[0], { icon: 0, color: "#cfd6de" }); return; }
         s.best = Math.max(s.best, r.pts);
-        popup(fill(TX.roundEnd, { n: r.pts }), { top: true, color: "#ffe27a", sub: r.list.join(" + ") || "same pudła" });
+        popup(fill(TX.roundEnd, { n: r.pts }), { top: true, color: "#ffe27a", sub: r.list.join(" + ") || TK.kod.endRound[1] });
         if (r.contest) contestResult(r.pts);
     }
     function contestResult(pts) {
         const s = S().range, beat = RANGE.rivals.filter(x => pts > x.score).length;
         s.contestDay = day();
-        if (!beat) { popup("Zawody: wygrał " + RANGE.rivals[2].name + " (" + RANGE.rivals[2].score + " pkt).", { top: true, color: "#cfd6de" }); return; }
+        if (!beat) { popup(Watki.wstaw(TK.kod.contestResult[0], { name: RANGE.rivals[2].name, score: RANGE.rivals[2].score }), { top: true, color: "#cfd6de" }); return; }
         const gold = RANGE.prizes[beat - 1], favor = RANGE.favor[beat - 1];
         $gameParty.gainGold(gold);
-        T.call("Garnizon", "addFavor", favor, "zawody strzeleckie");
+        T.call("Garnizon", "addFavor", favor, TK.kod.contestResult[1]);
         s.wins++;
-        popup("Zawody: pokonałeś " + beat + " z 3 rywali! +" + gold + " G", { top: true, color: "#9ff0a8", sub: beat === 3 ? "Sierżant Bełt kłania się nisko." : "" });
+        popup(Watki.wstaw(TK.kod.contestResult[2], { beat: beat, gold: gold }), { top: true, color: "#9ff0a8", sub: beat === 3 ? TK.kod.contestResult[3] : "" });
         if (beat === 3) {
             s.beatBest = true;
             if (!s.silver) { s.silver = true; gain(ITEM.srebrnaStrzala, 1); popup(TX.silver, { icon: D.ICON.srebrnaStrzala, color: "#ffe27a", gain: true }); }
@@ -1194,7 +1195,7 @@
         if (mapId() !== RANGE.map || !WHEN.drill() || --drillBark > 0) return;
         drillBark = rnd(12, 24);
         const e = $gameMap.event(pick(IDS.zolnierze));
-        if (e && heroDist(e.x, e.y) < 12) say(e, pick(["Napnij! ...Puść!", "Wiatr od morza, bierz poprawkę.", "Dziesiątka! Widziałeś?", "Łokieć wyżej, ciamajdo."]), 200);
+        if (e && heroDist(e.x, e.y) < 12) say(e, pick([TK.kod.drillTick[0], TK.kod.drillTick[1], TK.kod.drillTick[2], TK.kod.drillTick[3]]), 200);
     }
 
     // ==================================================================
@@ -1314,15 +1315,15 @@
         F.lowD33Wybor = { check: () => false };
         F.lowD33Koniec = { check: () => false, vars: () => {
             const z = S().czo;
-            return { co: z.choice === "help" ? (z.bearDead ? "Niedźwiedź spod grani nie żyje. Wróć do obozu myśliwych na Skraju lasu po zapłatę." : "Upoluj niedźwiedzia spod gawry w Górach (Góry, nad kamieniołomem) i wróć do obozu myśliwych.")
-                : "Przegnaj obcych myśliwych: pokonaj wszystkich w ich obozie na Skraju lasu (za dnia)." };
+            return { co: z.choice === "help" ? (z.bearDead ? TK.kod.vars[0] : TK.kod.vars[1])
+                : TK.kod.vars[2] };
         } };
         // the quest done: the garrison's favour for K61
-        T.on("townQuestDone", e => { if (e && e.id === "K61") T.call("Garnizon", "addFavor", 5, "zawody strzeleckie"); }, { owner: PLUGIN });
+        T.on("townQuestDone", e => { if (e && e.id === "K61") T.call("Garnizon", "addFavor", 5, TK.kod.hookQuests[0]); }, { owner: PLUGIN });
     })();
 
     // ==================================================================
-    // The talks of the residents (TownLife.addTalkHook, first): the gamekeeper's fine, the white-eye arrow shown, Rysiek's hides,
+    // The talks of the residents (Tawerna.talk.takeover, "owner" priority): the gamekeeper's fine, the white-eye arrow shown, Rysiek's hides,
     // Marta's milk
     // ==================================================================
     function questWants(key) { const q = TQ(); try { const m = q && q.markers ? q.markers()[key] : null; return m === "new" || m === "ready"; } catch (e) { return false; } }
@@ -1336,7 +1337,7 @@
         }
         if (key === "klusownik" && tqFlag("lowOstrzegl")) {
             const out = linesTo([], spk, [TALK.rysiekShop]);
-            choiceTo(out, ["Pokaż skóry", "Nic nie trzeba"], [[C(302, [0, ITEM.skora, 1, 4, true]), C(605, [0, 163, 1, 3])], []], 1);
+            choiceTo(out, [TK.kod.talkHook[0], TK.kod.talkHook[1]], [[C(302, [0, ITEM.skora, 1, 4, true]), C(605, [0, 163, 1, 3])], []], 1);
             return out;
         }
         if (key === "praczka" && tqFlag("lowMlekoMarty") && day() - S().strays.milkDay >= ZBLAKANE.milkEvery) {
@@ -1345,10 +1346,10 @@
         }
         return null;
     }
-    (function hookTalks() {
-        const L = TLf();
-        if (L && L.addTalkHook) L.addTalkHook(talkHook, true);
-    })();
+    // (2026-10-23, docs/ROZMOWY.md) the core's talk service: an "owner" takeover, after Zakon's and Ludzie's, before Zasoby's (as the old
+    // hooks: the arrow shown to the captain comes before Garnizon's menu, to Kleofas after Zakon's reading)
+    T.talk.takeover({ owner: PLUGIN, who: [D.GAJOWY.key, "rotmistrz", "pustelnik", "klusownik", "praczka"], priority: T.talk.PRIORITY.owner + 40,
+        run: ctx => talkHook(ctx.who, ctx.ev) });
 
     // ==================================================================
     // The events' calls (Lowy.look, Lowy.act, ...)
@@ -1357,7 +1358,7 @@
         const s = S();
         if (what === "nora") {
             if (denEmpty()) return runList(interp, heroLines(["> " + TX.denEmpty]));
-            return runList(interp, heroLines([friendOn() ? "> (Z nory dochodzi ciche skomlenie. Wataha cię zna.)" : "> (Korzenie, jama, kości. Pachnie wilkiem. Lepiej nie podchodzić bliżej.)"]));
+            return runList(interp, heroLines([friendOn() ? TK.kod.lookAt[0] : TK.kod.lookAt[1]]));
         }
         if (what === "gawra") {
             if (bearDeadNow()) return runList(interp, heroLines(["> " + TX.empty]));
@@ -1375,23 +1376,23 @@
             choiceTo(out, [TX.lickPut, TX.lickNo], [act([], ["salt"]), []], 1);
             return runList(interp, out);
         }
-        if (what === "namiot") return runList(interp, heroLines(["> (Skórzany namiot. Na kołku kołczan: lotki strzał znaczone białym okiem.)"]));
-        if (what === "namiotRab") return runList(interp, heroLines(["> (Połatany namiot. W środku śmierdzi dymem i kwaśnym piwem.)"]));
+        if (what === "namiot") return runList(interp, heroLines([TK.kod.lookAt[2]]));
+        if (what === "namiotRab") return runList(interp, heroLines([TK.kod.lookAt[3]]));
         if (what === "ciernie") return runList(interp, heroLines(["> " + fill(TX.parkShut, { n: Math.max(1, s.park.shutUntil - day()) })]));
-        if (what === "lesniczowka") return runList(interp, heroLines(["> (Leśniczówka gajowego. Nad drzwiami poroże, przy drzwiach róg. Drzwi zamknięte na skobel.)"]));
-        if (what === "pasnik") return runList(interp, heroLines([season() === 3 ? "> (Paśnik pełen siana. Wokół tropy jeleni.)" : "> (Paśnik. Latem pusty - zimą gajowy dokłada tu siana.)"]));
-        if (what === "zolnierz") return runList(interp, linesTo([], { id: interp ? interp.eventId() : -1, name: "Żołnierz" }, [pick(["Chcesz postrzelać? Stojak z łukami po lewej. Strzały są wojska.", "Co siódmy dzień są zawody. Sierżant Bełt wygrywa od roku."])]));
+        if (what === "lesniczowka") return runList(interp, heroLines([TK.kod.lookAt[4]]));
+        if (what === "pasnik") return runList(interp, heroLines([season() === 3 ? TK.kod.lookAt[5] : TK.kod.lookAt[6]]));
+        if (what === "zolnierz") return runList(interp, linesTo([], { id: interp ? interp.eventId() : -1, name: TK.kod.lookAt[7] }, [pick([TK.kod.lookAt[8], TK.kod.lookAt[9]])]));
         const m = /^tarcza(\d)$/.exec(what);
-        if (m) return runList(interp, heroLines(["> (Słomiana tarcza na " + RANGE.targets[Number(m[1])].d + " kroków. Pełna dziur.)"]));
+        if (m) return runList(interp, heroLines([Watki.wstaw(TK.kod.lookAt[10], { d: RANGE.targets[Number(m[1])].d })]));
         return false;
     }
     function rangeMenu(interp) {
-        if (round) { popup("Najpierw dokończ rundę (" + round.shots + "/" + RANGE.shots + ")", { icon: 0 }); return; }
-        const labels = ["Runda ćwiczebna (5 strzał)"], branches = [act([], ["round", false])];
-        if (contestToday() && contestHours() && S().range.contestDay !== day()) { labels.push("Zawody (dziś!)"); branches.push(act([], ["round", true])); }
-        labels.push("Odejdź");
+        if (round) { popup(Watki.wstaw(TK.kod.rangeMenu[0], { shots: round.shots, shots2: RANGE.shots }), { icon: 0 }); return; }
+        const labels = [TK.kod.rangeMenu[1]], branches = [act([], ["round", false])];
+        if (contestToday() && contestHours() && S().range.contestDay !== day()) { labels.push(TK.kod.rangeMenu[2]); branches.push(act([], ["round", true])); }
+        labels.push(TK.kod.rangeMenu[3]);
         branches.push([]);
-        const out = heroLines(["> (Stojak z łukami. Na desce: „Strzały ćwiczebne - wojsko”.)" + (contestToday() ? " Dziś zawody, od 10 do 12." : "")]);
+        const out = heroLines([Watki.wstaw(TK.kod.rangeMenu[5], { "1": contestToday() ? TK.kod.rangeMenu[4] : "" })]);
         choiceTo(out, labels, branches, labels.length - 1);
         runList(interp, out);
     }
@@ -1434,8 +1435,8 @@
             if (what === "czoPaid") return czoResolve("help");
             if (what === "arrow") {
                 S().arrow[a] = true;
-                if (a === "rotmistrz") T.call("Garnizon", "addFavor", 5, "strzała z białym okiem");
-                else T.call("Journal", "addNote", "Strzały z białym okiem (las)", "Pokazałem bratu Kleofasowi strzałę z obozu obcych myśliwych na Skraju lasu. Te same lotki z białym okiem, co w piersi orlicy na Orlej Grani. Czarne Oczy są już na wyspie - nie tylko na morzu.");
+                if (a === "rotmistrz") T.call("Garnizon", "addFavor", 5, TK.kod.actCall[0]);
+                else T.call("Journal", "addNote", TK.kod.actCall[1], TK.kod.actCall[2]);
                 return true;
             }
             if (what === "milk") { S().strays.milkDay = day(); gain(ITEM.mleko, ZBLAKANE.milk); const it = item(ITEM.mleko); if (it) popup(it.name + " ×" + ZBLAKANE.milk, { icon: it.iconIndex, gain: true }); return true; }
@@ -1500,37 +1501,37 @@
         oboz_rabusiow: ["Obóz rabusiów", 21, 60, 45, 8], oboz_czo: ["Obóz myśliwych", 23, 66, 24, 8], zwierzyniec: ["Zwierzyniec (wyłom)", 24, 7, 31, 2],
         zblakane: ["Zbłąkane zwierzęta", 168, 85, 32, 8], strzelnica: ["Strzelnica", 162, 74, 52, 6]
     };
-    const placeLabel = i => { const d = D.DISCOVER[i]; return "Miejsce " + (i + 1) + "/" + D.DISCOVER.length + ": " + d.name + "   ←→"; };
+    const placeLabel = i => { const d = D.DISCOVER[i]; return Watki.wstaw(TK.kod.placeLabel[0], { "1": i + 1, length: D.DISCOVER.length, name: d.name }); };
     function f9Rows() {
         const s = S();
         return [
-            { label: placeLabel(f9Place), icon: D.ICON.poroze, desc: "←→ wybierz miejsce paczki B, OK przenosi na nie.", what: "place", pick: f9Place },
-            { label: "Wataha i szczenięta przy norze (dzień)", icon: D.ICON.kiel, desc: "Dzień (10:00), szczenięta także poza wiosną i latem; przenosi pod norę.", what: "den" },
-            { label: "Zostaw szczenięta: wataha przyjazna (" + (friendOn() ? "TAK" : "nie") + ")", icon: D.ICON.kiel, desc: "Przełącza przyjaźń watahy spod nory (jak po trzech dniach z mięsem).", what: "friend" },
-            { label: "Niedźwiedź w gawrze: obudź (zima)", icon: D.ICON.pazur, desc: "Dziś jak zima: niedźwiedź śpi w gawrze. Przenosi pod gawrę - zajrzyj, a się obudzi.", what: "bear" },
-            { label: "Sól na lizawce + świt w zasiadce", icon: D.ICON.sol, desc: "Sól na 6 dni, godzina 5:30, przenosi do zasiadki.", what: "salt" },
-            { label: "Obóz rabusiów teraz (noc)", icon: 156, desc: "Godzina 22:00, obóz przy Leśnej drodze stoi tej nocy.", what: "rab" },
-            { label: "Obóz myśliwych Czarnych Oczu teraz", icon: D.ICON.strzalaOko, desc: "Godzina 10:00, obóz na Skraju lasu stoi dziś (także przed Aktem II).", what: "czo" },
-            { label: "Kłusownictwo: " + s.park.count + " razy   ←→", icon: D.ICON.zezwolenie, desc: "←→ ile razy już złapany; OK ustawia (następne złapanie liczy się od tego).", what: "poach", pick: f9Poach },
-            { label: "Zawody strzeleckie dziś", icon: D.ICON.srebrnaStrzala, desc: "Dziś zawody, godzina 10:30, przenosi na linię strzału.", what: "contest" },
-            { label: "Zbłąkane zwierzęta Ługów", icon: D.ICON.lina, desc: "Przenosi na łąki Spalonej zagrody (lina w torbie).", what: "strays" }
+            { label: placeLabel(f9Place), icon: D.ICON.poroze, desc: TK.kod.f9Rows[0], what: "place", pick: f9Place },
+            { label: TK.kod.f9Rows[1], icon: D.ICON.kiel, desc: TK.kod.f9Rows[2], what: "den" },
+            { label: Watki.wstaw(TK.kod.f9Rows[3], { "1": friendOn() ? "TAK" : "nie" }), icon: D.ICON.kiel, desc: TK.kod.f9Rows[4], what: "friend" },
+            { label: TK.kod.f9Rows[5], icon: D.ICON.pazur, desc: TK.kod.f9Rows[6], what: "bear" },
+            { label: TK.kod.f9Rows[7], icon: D.ICON.sol, desc: TK.kod.f9Rows[8], what: "salt" },
+            { label: TK.kod.f9Rows[9], icon: 156, desc: TK.kod.f9Rows[10], what: "rab" },
+            { label: TK.kod.f9Rows[11], icon: D.ICON.strzalaOko, desc: TK.kod.f9Rows[12], what: "czo" },
+            { label: Watki.wstaw(TK.kod.f9Rows[13], { count: s.park.count }), icon: D.ICON.zezwolenie, desc: TK.kod.f9Rows[14], what: "poach", pick: f9Poach },
+            { label: TK.kod.f9Rows[15], icon: D.ICON.srebrnaStrzala, desc: TK.kod.f9Rows[16], what: "contest" },
+            { label: TK.kod.f9Rows[17], icon: D.ICON.lina, desc: TK.kod.f9Rows[18], what: "strays" }
         ].map(r => Object.assign(r, { owner: PLUGIN }));
     }
     function f9Pick(row, delta) {
         if (row.what === "place") { f9Place = row.pick = ((row.pick || 0) + delta + D.DISCOVER.length) % D.DISCOVER.length; row.label = placeLabel(row.pick); }
-        if (row.what === "poach") { f9Poach = row.pick = ((row.pick || 0) + delta + 4) % 4; row.label = "Kłusownictwo: " + row.pick + " razy (OK ustawia)   ←→"; }
+        if (row.what === "poach") { f9Poach = row.pick = ((row.pick || 0) + delta + 4) % 4; row.label = Watki.wstaw(TK.kod.f9Pick[0], { pick: row.pick }); }
     }
     const setHour = h => { if ($gameSystem.setDayNightHour) $gameSystem.setDayNightHour(h); };
     function f9Ok(row) {
         const s = S();
         if (row.what === "place") { const d = D.DISCOVER[row.pick || 0], g = F9_GO[d.key]; return g ? { go: g } : { go: [d.name, d.map, d.x, d.y, 2] }; }
         if (row.what === "den") { setHour(10); s.den.forcePups = day(); s.den.emptyUntil = 0; return { go: F9_GO.nora }; }
-        if (row.what === "friend") { s.den.friendly = !friendOn(); s.den.betrayed = false; if (s.den.friendly) s.den.choice = "zostawione"; return { say: "Wataha przyjazna: " + (friendOn() ? "tak" : "nie") }; }
+        if (row.what === "friend") { s.den.friendly = !friendOn(); s.den.betrayed = false; if (s.den.friendly) s.den.choice = "zostawione"; return { say: Watki.wstaw(TK.kod.f9Ok[0], { "1": friendOn() ? "tak" : "nie" }) }; }
         if (row.what === "bear") { s.bear.forceWinter = day(); s.bear.wokeDay = -1; s.bear.deadYear = 0; return { go: F9_GO.gawra }; }
         if (row.what === "salt") { s.lick.until = day() + LIZAWKA.days; s.lick.ever = true; s.lick.windows = {}; setHour(5.5); return { go: F9_GO.lizawka }; }
         if (row.what === "rab") { s.camps.forceRab = day(); setHour(22); return { go: F9_GO.oboz_rabusiow }; }
         if (row.what === "czo") { s.camps.forceCzo = day(); setHour(10); return { go: F9_GO.oboz_czo }; }
-        if (row.what === "poach") { s.park.count = row.pick || 0; s.park.wanted = null; return { say: "Kłusownictwo: " + s.park.count }; }
+        if (row.what === "poach") { s.park.count = row.pick || 0; s.park.wanted = null; return { say: Watki.wstaw(TK.kod.f9Ok[1], { count: s.park.count }) }; }
         if (row.what === "contest") { s.range.forceContest = day(); s.range.contestDay = -1; setHour(10.5); return { go: F9_GO.strzelnica }; }
         if (row.what === "strays") { if (!has(ITEM.lina)) gain(ITEM.lina, 2); return { go: F9_GO.zblakane }; }
         return null;

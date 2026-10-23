@@ -301,8 +301,12 @@ const DRIVER = String.raw`
         await ev("$gameSystem.setDayNightHour(10); $gameParty.gainGold(4900); 0");
         await frames(45);
         const xp0 = await J("({ level: Combat.hero().level, xp: Combat.hero().xp })");
+        // (2026-10-23: every top notice of the payment noted - Combat's summed "+300 dośw." comes some frames after the chapter's notice,
+        // so the last one said depended on how quickly the talk was read back)
+        await ev("(function(){ window.__notices3 = []; const f = window.__notices3F = $gameTemp.pushTopNotice; $gameTemp.pushTopNotice = function(t) { window.__notices3.push(t); return f.apply(this, arguments); }; return 0; })()");
         const pay3 = await talkTo("$gameMap.event(902)", ["Spłać cały dług"]);
-        const p3 = await J("({ gold: $gameParty.gold(), s: $gameSystem._story, xp: { level: Combat.hero().level, xp: Combat.hero().xp }, notice: $gameTemp._lastTopNotice, notes: $gameSystem._journal.notes.map(n => n.title), day: $gameSystem.dayNightDay() })");
+        const p3 = await J("({ gold: $gameParty.gold(), s: $gameSystem._story, xp: { level: Combat.hero().level, xp: Combat.hero().xp }, notice: (window.__notices3.find(t => /Rozdział 1 zakończony/.test(t)) || $gameTemp._lastTopNotice), notices: window.__notices3, notes: $gameSystem._journal.notes.map(n => n.title), day: $gameSystem.dayNightDay() })");
+        await ev("delete $gameTemp.pushTopNotice; 0");
         await ev("Journal.evaluateGoals(); 0");
         const debtDone = await ev("Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_debt'))");
         const debtBus = await J("window.__debt");

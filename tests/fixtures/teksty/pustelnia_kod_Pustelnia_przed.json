@@ -1,0 +1,12 @@
+{
+ "kod": {
+  "build": {
+   "0": "Karta kroniki (Księga pytań)",
+   "1": "Karta kroniki (regał w Archiwum)"
+  },
+  "glowna": {
+   "0": "Rejestr straży"
+  }
+ },
+ "_opis": "Napisy kodu Pustelnia.js sprzed przeniesienia do js/teksty/pustelnia.txt (kod.*)"
+}

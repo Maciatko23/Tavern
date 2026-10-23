@@ -28,12 +28,19 @@ const OUT = process.argv[2] || "";
         check("...just after the rain started: only that middle tile is wet", small.length === 1 && small[0][0] === 0 && small[0][1] === 0, small);
 
         // a workbench to shape the pot on, and clay
+        // (2026-10-23: inside the field's fence - Farming.fieldAllows. The fenced field is wild: the 5 x 3 with the fewest trees, rocks
+        // and bushes is taken and they are carried off to the map's far corner, as yard_test does)
         const spot = await J(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.isPassable(x, y, 2) && $gameMap.eventsXy(x, y).length === 0 && !Farming.buildingAt(x, y) && !Farming.gatherAt(x, y);
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.isPassable(x, y, 2) && !Farming.buildingAt(x, y) && Farming.fieldAllows(x, y);
+            const evsIn = (bx, by) => { const out = []; for (let j = 0; j < 3; j++) for (let i = 0; i < 5; i++) out.push(...$gameMap.eventsXy(bx + i, by + j)); return out; };
+            let best = null;
             for (let y = 8; y < $gameMap.height() - 4; y++) for (let x = 3; x < $gameMap.width() - 6; x++) {
                 let ok = true; for (let j = 0; j < 3 && ok; j++) for (let i = 0; i < 5 && ok; i++) ok = free(x + i, y + j);
-                if (ok) return { x, y };
-            } return null; })()`);
+                if (ok) { const n = evsIn(x, y).length; if (!best || n < best.n) best = { x, y, n }; }
+            }
+            if (!best) return null;
+            for (const e of evsIn(best.x, best.y)) e.locate($gameMap.width() - 1, $gameMap.height() - 1);
+            return { x: best.x, y: best.y }; })()`);
         check("found free ground for the workbench and the pot", !!spot, spot);
         await ev(`(function(){ Farming.placeFree("workbench", ${spot.x}, ${spot.y}); $gamePlayer.locate(${spot.x}, ${spot.y + 1}); $gamePlayer.setDirection(8); $gameParty.gainItem($dataItems[164], 7); return 0; })()`);
         await frames(5);

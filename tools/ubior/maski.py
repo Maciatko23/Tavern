@@ -50,7 +50,7 @@ ARKUSZE = {
 }
 for _n, _t in [('Axe', 1), ('AxeSide', 1), ('Pick', 1), ('Shovel', 1), ('Rake', 1), ('Hoe', 1), ('Hammer', 1), ('Rod', 1), ('Sling', 1),
                ('Bow', 1), ('Spear', 1), ('Club', 1), ('Punch', 0), ('Crouch', 0), ('Sit', 0), ('Roast', 1), ('LieDown', 0), ('Roll', 0),
-               ('Torch', 1), ('TorchCrouch', 1), ('Net', 1)]:
+               ('Torch', 1), ('TorchCrouch', 1), ('Net', 1), ('Sword', 1)]:
     ARKUSZE['Hero_' + _n] = dict(folder='system', cell=96, rows=W4, narzedzie=bool(_t))
 ARKUSZE['Hero_Roast']['szare'] = False     # (patyk z mięsem nie ma szarego metalu: każda szarość to koszula, także rozłożona na ziemi)
 CHAR_SHEETS = {n for n, a in ARKUSZE.items() if a['folder'] == 'characters'}
@@ -92,6 +92,7 @@ POPRAWKI = [
     ('Hero_Net', 11, 2, (34, 79, 41, 84), ('stopy',), 'narzedzie'),
     ('Hero_Net', 11, 2, (42, 71, 43, 80), ('stopy',), 'narzedzie'),
     ('Hero_Net', 12, 2, (16, 64, 29, 75), ('stopy',), 'narzedzie'),
+    ('Hero_Sword', 11, 0, (53, 48, 66, 51), ('koszula', 'kontur_koszuli'), 'narzedzie'),   # ostrze w prawo na tle tuniki (cięcie, przodem)
 ]
 
 K, D, G, S, B, O = 1, 2, 3, 4, 5, 6

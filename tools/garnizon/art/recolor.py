@@ -1,4 +1,5 @@
 # python tools/garnizon/art/recolor.py   -> img/characters/$Npc_Zolnierz_B.png + Npc_Zolnierz_B_Walk8.png
+#                                            + img/pictures/Zolnierz_B_Bust.png (2026-10-23: his bust, the same rule)
 # The royal soldier in a second colour (KONCEPCJA.md: "żołnierze jednym arkuszem w dwóch kolorach") - 0 PixelLab generations:
 #   - the tabard's sky blue -> a deeper cornflower blue (hue 200-215 -> 222, a little darker)
 #   - the brown beard and the hair under the helmet (only in the upper part of each 64x64 cell: the boots stay brown) -> black-brown
@@ -9,18 +10,21 @@ from PIL import Image
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
 CH = os.path.join(ROOT, "img", "characters")
 PAIRS = [("$Npc_Zolnierz.png", "$Npc_Zolnierz_B.png"), ("Npc_Zolnierz_Walk8.png", "Npc_Zolnierz_B_Walk8.png")]
+PICS = os.path.join(ROOT, "img", "pictures")
+BUST = ("Zolnierz_Bust.png", "Zolnierz_B_Bust.png")
+BUST_HEAD = 0.62        # the bust's head and beard: above this share of its height (the phoenix and the tabard below)
 C = 64
 HAIR_ROWS = 30          # rows of a cell where brown is hair / beard (the head), not boots
 
 
-def shift(p, y):
+def shift(p, y, head=None):
     r, g, b, a = p
     if not a: return p
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
     hd = h * 360
     if 190 <= hd <= 215 and s > 0.35:                       # the tabard's blue
         h, s, v = 222 / 360, min(1, s * 1.08), v * 0.86
-    elif (y % C) < HAIR_ROWS and 8 <= hd <= 30 and s > 0.45 and 0.2 < v < 0.6:   # the beard / hair
+    elif ((y < head) if head is not None else (y % C) < HAIR_ROWS) and 8 <= hd <= 30 and s > 0.45 and 0.2 < v < 0.6:   # the beard / hair
         h, s, v = 20 / 360, s * 0.45, v * 0.55
     else:
         return p
@@ -37,6 +41,13 @@ def main():
                 px[x, y] = shift(px[x, y], y)
         im.save(os.path.join(CH, dst))
         print("zapisano", dst)
+    im = Image.open(os.path.join(PICS, BUST[0])).convert("RGBA")
+    px, head = im.load(), int(im.height * BUST_HEAD)
+    for y in range(im.height):
+        for x in range(im.width):
+            px[x, y] = shift(px[x, y], y, head)
+    im.save(os.path.join(PICS, BUST[1]))
+    print("zapisano", BUST[1])
 
 
 if __name__ == "__main__":

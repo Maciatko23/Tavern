@@ -45,10 +45,12 @@ fs.mkdirSync(OUT, { recursive: true });
         const wbCost = await ev("Farming.BUILDINGS.workbench.cost.map(([id, n]) => id + 'x' + n)");
         check("the workbench costs only branches, stones and flax", wbCost.map(s => s.split("x")[0]).sort().join() === "64,77,92", wbCost);
         const wbRecipes = await ev("Farming.BUILDINGS.workbench.recipes.map(r => r.id)");
-        check("the workbench makes every tool: axe, pickaxe, shovel, rake, hoe, the clay pot, knife, rod, saw, the two iron tools - and the hunting weapons (arrows also with feathers, the spear), the club and the wooden shield - and the butterfly net (Motyle.js); (2026-10-22) splitting driftwood (package A, Zasoby.js)", wbRecipes.join() === "axe_stone,pick_stone,shovel,rake,hoe,pot,knife,rod,saw,axe_iron,pick_iron,sling,bow,arrows,arrows_feather,spear,club,shield,butterfly_net,zas_split_drift", wbRecipes);
+        check("the workbench makes every tool: axe, pickaxe, shovel, rake, hoe, the clay pot, knife, rod, saw, the two iron tools - and the hunting weapons (arrows also with feathers, the spear), the club and the wooden shield - and the butterfly net (Motyle.js); (2026-10-22) splitting driftwood (package A, Zasoby.js)", wbRecipes.slice(0, 20).join() === "axe_stone,pick_stone,shovel,rake,hoe,pot,knife,rod,saw,axe_iron,pick_iron,sling,bow,arrows,arrows_feather,spear,club,shield,butterfly_net,zas_split_drift" &&
+            wbRecipes.slice(20).every(id => /^(ubior_|bron_)/.test(id)), wbRecipes);   // (2026-10-23: then the clothes' and the weapons' own - Ubior_Sklepy.js, Bron.js)
         check("the sawmill only saws: planks and planks with the saw", (await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)")).join() === "planks,planks_saw");
         const forgeRecipes = await ev("Farming.BUILDINGS.forge.recipes.map(r => r.id)");
-        check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, the bucket, nails, the cauldron, shears, tongs; (2026-10-22) melting scrap iron (package A, Zasoby.js)", forgeRecipes.join() === "iron,knife_iron,head_axe,head_pick,blade_saw,can,bucket_item,nails,cauldron_item,shears,tongs,zas_scrap_iron", forgeRecipes);
+        check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, the bucket, nails, the cauldron, shears, tongs; (2026-10-22) melting scrap iron (package A, Zasoby.js)", forgeRecipes.slice(0, 12).join() === "iron,knife_iron,head_axe,head_pick,blade_saw,can,bucket_item,nails,cauldron_item,shears,tongs,zas_scrap_iron" &&
+            forgeRecipes.slice(12).every(id => /^(ubior_|bron_)/.test(id)), forgeRecipes);   // (2026-10-23: then the weapons' own - Bron.js)
         check("BUILDINGS lists the workbench first (first entry of the build menu)", (await ev("Farming.BUILDING_IDS ? Farming.BUILDING_IDS[0] : Object.keys(Farming.BUILDINGS)[0]")) === "workbench");
 
         // ================= 2. branches lie on the ground =================
@@ -145,8 +147,9 @@ fs.mkdirSync(OUT, { recursive: true });
         const menu0 = await ev(`JSON.stringify(Farming.menuFor(${bx + 1}, ${by + 1}).entries.map(e => e.name + (e.enabled === false ? "(x)" : "")))`);
         console.log("workbench menu:", menu0);
         const m0 = JSON.parse(menu0);
-        // (2026-10-22) + splitting driftwood (package A, Zasoby.js): 21 lines before the repairs
-        check("the workbench menu lists the ten tools, the clay pot, four weapons, the feathered arrows, the club, the shield, the butterfly net (Motyle.js) and splitting driftwood (Zasoby.js), all dimmed without materials, then Rozbierz (no 'Zostaw')", m0.filter(n => !/^Napraw/.test(n)).length === 21 && m0.slice(0, 20).every(n => n.endsWith("(x)")) && m0.includes("Rozłup drewno dryfowe(x)") && m0[m0.length - 1] === "Rozbierz" && !m0.includes("Zostaw"), m0);
+        // (2026-10-22) + splitting driftwood (package A, Zasoby.js): 21 lines before the repairs; (2026-10-23) the clothes' and the
+        // weapons' own lines ("Upleć łapcie", "Zrób: ...") after them, dimmed too
+        check("the workbench menu lists the ten tools, the clay pot, four weapons, the feathered arrows, the club, the shield, the butterfly net (Motyle.js) and splitting driftwood (Zasoby.js), all dimmed without materials, then Rozbierz (no 'Zostaw')", m0.filter(n => !/^Napraw/.test(n) && !/^(Zrób: |Upleć łapcie)/.test(n)).length === 21 && m0.slice(0, 20).every(n => n.endsWith("(x)")) && m0.filter(n => /^(Zrób: |Upleć łapcie)/.test(n)).every(n => n.endsWith("(x)")) && m0.includes("Rozłup drewno dryfowe(x)") && m0[m0.length - 1] === "Rozbierz" && !m0.includes("Zostaw"), m0);
         await press("ok"); await frames(24);
         await b.shot(OUT + "workbench_menu.png");
         const realTitle = await ev("$gameTemp._farmMenuOpen ? SceneManager._scene._farmMenu._title : ''");

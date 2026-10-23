@@ -168,15 +168,15 @@
    "key": "bron_miecz_braz",
    "rodzaj": "miecz",
    "material": "braz",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_miecz_braz_0_4.png",
     "b_bron_miecz_braz_0_9.png",
     "b_bron_miecz_braz_0_13.png",
-    "b_bron_miecz_braz_1_2.png",
-    "b_bron_miecz_braz_1_7.png",
-    "b_bron_miecz_braz_1_11.png"
+    "b_bron_miecz_braz_1_6.png",
+    "b_bron_miecz_braz_1_11.png",
+    "b_bron_miecz_braz_1_15.png"
    ],
    "frames": [
     [
@@ -193,15 +193,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -209,15 +209,15 @@
    "key": "bron_miecz_zelazo",
    "rodzaj": "miecz",
    "material": "zelazo",
-   "sheet": "Hero_Club",
-   "own": false,
+   "sheet": "Hero_Sword",
+   "own": true,
    "files": [
     "b_bron_miecz_zelazo_0_4.png",
     "b_bron_miecz_zelazo_0_9.png",
     "b_bron_miecz_zelazo_0_13.png",
-    "b_bron_miecz_zelazo_1_2.png",
-    "b_bron_miecz_zelazo_1_7.png",
-    "b_bron_miecz_zelazo_1_11.png"
+    "b_bron_miecz_zelazo_1_6.png",
+    "b_bron_miecz_zelazo_1_11.png",
+    "b_bron_miecz_zelazo_1_15.png"
    ],
    "frames": [
     [
@@ -234,15 +234,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -250,15 +250,15 @@
    "key": "bron_miecz_stal",
    "rodzaj": "miecz",
    "material": "stal",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_miecz_stal_0_4.png",
     "b_bron_miecz_stal_0_9.png",
     "b_bron_miecz_stal_0_13.png",
-    "b_bron_miecz_stal_1_2.png",
-    "b_bron_miecz_stal_1_7.png",
-    "b_bron_miecz_stal_1_11.png"
+    "b_bron_miecz_stal_1_6.png",
+    "b_bron_miecz_stal_1_11.png",
+    "b_bron_miecz_stal_1_15.png"
    ],
    "frames": [
     [
@@ -275,15 +275,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -291,15 +291,15 @@
    "key": "bron_miecz_pierwszych",
    "rodzaj": "miecz",
    "material": "pierwszych",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_miecz_pierwszych_0_4.png",
     "b_bron_miecz_pierwszych_0_9.png",
     "b_bron_miecz_pierwszych_0_13.png",
-    "b_bron_miecz_pierwszych_1_2.png",
-    "b_bron_miecz_pierwszych_1_7.png",
-    "b_bron_miecz_pierwszych_1_11.png"
+    "b_bron_miecz_pierwszych_1_6.png",
+    "b_bron_miecz_pierwszych_1_11.png",
+    "b_bron_miecz_pierwszych_1_15.png"
    ],
    "frames": [
     [
@@ -316,15 +316,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -332,15 +332,15 @@
    "key": "bron_miecz_zakon",
    "rodzaj": "miecz",
    "material": "zakon",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_miecz_zakon_0_4.png",
     "b_bron_miecz_zakon_0_9.png",
     "b_bron_miecz_zakon_0_13.png",
-    "b_bron_miecz_zakon_1_2.png",
-    "b_bron_miecz_zakon_1_7.png",
-    "b_bron_miecz_zakon_1_11.png"
+    "b_bron_miecz_zakon_1_6.png",
+    "b_bron_miecz_zakon_1_11.png",
+    "b_bron_miecz_zakon_1_15.png"
    ],
    "frames": [
     [
@@ -357,15 +357,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -373,15 +373,15 @@
    "key": "bron_dlugi_miecz_stal",
    "rodzaj": "dlugi_miecz",
    "material": "stal",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_dlugi_miecz_stal_0_4.png",
     "b_bron_dlugi_miecz_stal_0_9.png",
     "b_bron_dlugi_miecz_stal_0_13.png",
-    "b_bron_dlugi_miecz_stal_1_2.png",
-    "b_bron_dlugi_miecz_stal_1_7.png",
-    "b_bron_dlugi_miecz_stal_1_11.png"
+    "b_bron_dlugi_miecz_stal_1_6.png",
+    "b_bron_dlugi_miecz_stal_1_11.png",
+    "b_bron_dlugi_miecz_stal_1_15.png"
    ],
    "frames": [
     [
@@ -398,15 +398,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -414,15 +414,15 @@
    "key": "bron_dlugi_miecz_pierwszych",
    "rodzaj": "dlugi_miecz",
    "material": "pierwszych",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_dlugi_miecz_pierwszych_0_4.png",
     "b_bron_dlugi_miecz_pierwszych_0_9.png",
     "b_bron_dlugi_miecz_pierwszych_0_13.png",
-    "b_bron_dlugi_miecz_pierwszych_1_2.png",
-    "b_bron_dlugi_miecz_pierwszych_1_7.png",
-    "b_bron_dlugi_miecz_pierwszych_1_11.png"
+    "b_bron_dlugi_miecz_pierwszych_1_6.png",
+    "b_bron_dlugi_miecz_pierwszych_1_11.png",
+    "b_bron_dlugi_miecz_pierwszych_1_15.png"
    ],
    "frames": [
     [
@@ -439,15 +439,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -455,15 +455,15 @@
    "key": "bron_dlugi_miecz_zakon",
    "rodzaj": "dlugi_miecz",
    "material": "zakon",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_dlugi_miecz_zakon_0_4.png",
     "b_bron_dlugi_miecz_zakon_0_9.png",
     "b_bron_dlugi_miecz_zakon_0_13.png",
-    "b_bron_dlugi_miecz_zakon_1_2.png",
-    "b_bron_dlugi_miecz_zakon_1_7.png",
-    "b_bron_dlugi_miecz_zakon_1_11.png"
+    "b_bron_dlugi_miecz_zakon_1_6.png",
+    "b_bron_dlugi_miecz_zakon_1_11.png",
+    "b_bron_dlugi_miecz_zakon_1_15.png"
    ],
    "frames": [
     [
@@ -480,15 +480,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -496,15 +496,15 @@
    "key": "bron_tasak_zelazo",
    "rodzaj": "tasak",
    "material": "zelazo",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_tasak_zelazo_0_4.png",
     "b_bron_tasak_zelazo_0_9.png",
     "b_bron_tasak_zelazo_0_13.png",
-    "b_bron_tasak_zelazo_1_2.png",
-    "b_bron_tasak_zelazo_1_7.png",
-    "b_bron_tasak_zelazo_1_11.png"
+    "b_bron_tasak_zelazo_1_6.png",
+    "b_bron_tasak_zelazo_1_11.png",
+    "b_bron_tasak_zelazo_1_15.png"
    ],
    "frames": [
     [
@@ -521,15 +521,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -537,15 +537,15 @@
    "key": "bron_tasak_stal",
    "rodzaj": "tasak",
    "material": "stal",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_tasak_stal_0_4.png",
     "b_bron_tasak_stal_0_9.png",
     "b_bron_tasak_stal_0_13.png",
-    "b_bron_tasak_stal_1_2.png",
-    "b_bron_tasak_stal_1_7.png",
-    "b_bron_tasak_stal_1_11.png"
+    "b_bron_tasak_stal_1_6.png",
+    "b_bron_tasak_stal_1_11.png",
+    "b_bron_tasak_stal_1_15.png"
    ],
    "frames": [
     [
@@ -562,15 +562,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -578,15 +578,15 @@
    "key": "bron_szabla_zelazo",
    "rodzaj": "szabla",
    "material": "zelazo",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_szabla_zelazo_0_4.png",
     "b_bron_szabla_zelazo_0_9.png",
     "b_bron_szabla_zelazo_0_13.png",
-    "b_bron_szabla_zelazo_1_2.png",
-    "b_bron_szabla_zelazo_1_7.png",
-    "b_bron_szabla_zelazo_1_11.png"
+    "b_bron_szabla_zelazo_1_6.png",
+    "b_bron_szabla_zelazo_1_11.png",
+    "b_bron_szabla_zelazo_1_15.png"
    ],
    "frames": [
     [
@@ -603,15 +603,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -619,15 +619,15 @@
    "key": "bron_szabla_stal",
    "rodzaj": "szabla",
    "material": "stal",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_szabla_stal_0_4.png",
     "b_bron_szabla_stal_0_9.png",
     "b_bron_szabla_stal_0_13.png",
-    "b_bron_szabla_stal_1_2.png",
-    "b_bron_szabla_stal_1_7.png",
-    "b_bron_szabla_stal_1_11.png"
+    "b_bron_szabla_stal_1_6.png",
+    "b_bron_szabla_stal_1_11.png",
+    "b_bron_szabla_stal_1_15.png"
    ],
    "frames": [
     [
@@ -644,15 +644,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -2505,15 +2505,15 @@
    "key": "bron_miecz_bogumila",
    "rodzaj": "miecz",
    "material": "zakon",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_miecz_bogumila_0_4.png",
     "b_bron_miecz_bogumila_0_9.png",
     "b_bron_miecz_bogumila_0_13.png",
-    "b_bron_miecz_bogumila_1_2.png",
-    "b_bron_miecz_bogumila_1_7.png",
-    "b_bron_miecz_bogumila_1_11.png"
+    "b_bron_miecz_bogumila_1_6.png",
+    "b_bron_miecz_bogumila_1_11.png",
+    "b_bron_miecz_bogumila_1_15.png"
    ],
    "frames": [
     [
@@ -2530,15 +2530,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -2587,15 +2587,15 @@
    "key": "bron_dlugi_miecz_bez_herbu",
    "rodzaj": "dlugi_miecz",
    "material": "pierwszych",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_dlugi_miecz_bez_herbu_0_4.png",
     "b_bron_dlugi_miecz_bez_herbu_0_9.png",
     "b_bron_dlugi_miecz_bez_herbu_0_13.png",
-    "b_bron_dlugi_miecz_bez_herbu_1_2.png",
-    "b_bron_dlugi_miecz_bez_herbu_1_7.png",
-    "b_bron_dlugi_miecz_bez_herbu_1_11.png"
+    "b_bron_dlugi_miecz_bez_herbu_1_6.png",
+    "b_bron_dlugi_miecz_bez_herbu_1_11.png",
+    "b_bron_dlugi_miecz_bez_herbu_1_15.png"
    ],
    "frames": [
     [
@@ -2612,15 +2612,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -2628,15 +2628,15 @@
    "key": "bron_szabla_brzozowa",
    "rodzaj": "szabla",
    "material": "stal",
-   "sheet": "Hero_Club",
+   "sheet": "Hero_Sword",
    "own": false,
    "files": [
     "b_bron_szabla_brzozowa_0_4.png",
     "b_bron_szabla_brzozowa_0_9.png",
     "b_bron_szabla_brzozowa_0_13.png",
-    "b_bron_szabla_brzozowa_1_2.png",
-    "b_bron_szabla_brzozowa_1_7.png",
-    "b_bron_szabla_brzozowa_1_11.png"
+    "b_bron_szabla_brzozowa_1_6.png",
+    "b_bron_szabla_brzozowa_1_11.png",
+    "b_bron_szabla_brzozowa_1_15.png"
    ],
    "frames": [
     [
@@ -2653,15 +2653,15 @@
     ],
     [
      1,
-     2
-    ],
-    [
-     1,
-     7
+     6
     ],
     [
      1,
      11
+    ],
+    [
+     1,
+     15
     ]
    ]
   },
@@ -3849,93 +3849,99 @@
   "w": 320,
   "h": 380,
   "y": 80,
-  "over": 1025,
+  "over": 75,
   "x": 480
  },
  "ms": {
+  "Hero_Sword": {
+   "n": 12,
+   "min": 5.7,
+   "max": 6.3,
+   "avg": 6
+  },
   "Hero_Club": {
-   "n": 72,
+   "n": 68,
    "min": 2.4,
-   "max": 12.9,
-   "avg": 4.4
+   "max": 13.2,
+   "avg": 4.5
   },
   "Hero_Axe": {
-   "n": 12,
-   "min": 5.6,
-   "max": 11,
-   "avg": 7.2
+   "n": 11,
+   "min": 5.5,
+   "max": 10,
+   "avg": 6.7
   },
   "Hero_Pick": {
-   "n": 8,
-   "min": 5.5,
-   "max": 10.6,
+   "n": 7,
+   "min": 6.1,
+   "max": 9.1,
    "avg": 7.4
   },
   "Hero_Spear": {
-   "n": 10,
-   "min": 5.7,
-   "max": 9.7,
-   "avg": 7
+   "n": 9,
+   "min": 5.4,
+   "max": 11.7,
+   "avg": 7.3
   },
   "Hero_Bow": {
-   "n": 6,
-   "min": 5.6,
-   "max": 8.8,
-   "avg": 7
+   "n": 5,
+   "min": 6.6,
+   "max": 8.7,
+   "avg": 7.5
   },
   "Hero_Sling": {
-   "n": 4,
-   "min": 5.4,
+   "n": 3,
+   "min": 6.3,
    "max": 9.4,
-   "avg": 7.1
+   "avg": 7.5
   },
   "Hero_Punch": {
-   "n": 2,
-   "min": 8.1,
-   "max": 9.9,
-   "avg": 9
+   "n": 1,
+   "min": 6.6,
+   "max": 6.6,
+   "avg": 6.6
   },
   "Hero_Walk": {
-   "n": 63,
+   "n": 64,
    "min": 1.3,
-   "max": 12.9,
+   "max": 17.5,
    "avg": 3.1
   },
   "Hero_Run": {
-   "n": 25,
+   "n": 24,
    "min": 3,
-   "max": 6.1,
-   "avg": 3.9
+   "max": 7,
+   "avg": 3.6
   },
   "Hero_AxeSide": {
    "n": 57,
-   "min": 3.3,
-   "max": 10.9,
-   "avg": 5
+   "min": 3.4,
+   "max": 14.4,
+   "avg": 5.2
   },
   "Hero_Sit": {
    "n": 56,
    "min": 4.6,
-   "max": 17.8,
-   "avg": 7.1
+   "max": 19.4,
+   "avg": 7.6
   },
   "Hero_LieDown": {
    "n": 57,
-   "min": 4.5,
-   "max": 23.5,
-   "avg": 7.7
+   "min": 4.6,
+   "max": 31.6,
+   "avg": 8.4
   },
   "Hero_Roll": {
-   "n": 25,
-   "min": 3.1,
-   "max": 10.7,
-   "avg": 4.1
+   "n": 24,
+   "min": 3.2,
+   "max": 12.4,
+   "avg": 4.2
   },
   "Hero_Bust": {
    "n": 7,
-   "min": 3.5,
-   "max": 15.1,
-   "avg": 6.8
+   "min": 3.2,
+   "max": 16.1,
+   "avg": 7
   }
  }
 }

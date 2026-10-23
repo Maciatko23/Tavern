@@ -1,6 +1,6 @@
 // Maski wszystkich arkuszy bohatera - kontrola jakości (js/plugins/Ubior.js, tools/ubior/maski.py). Nowa gra, Ubior.js włożony do
 // strony (nie ma go w js/plugins.js), kolejno trzy stroje: A czerwony kaftan + łapcie + kapelusz, B lniana koszula + łapcie +
-// kapelusz, C niebieskie spodnie + skórzany pas + szare rękawice (części, których A i B nie ruszają). Każdy arkusz (27) przebrany
+// kapelusz, C niebieskie spodnie + skórzany pas + szare rękawice (części, których A i B nie ruszają). Każdy arkusz (28) przebrany
 // w grze i wyjęty (canvas) do tests/ubior_maski/shots/, do tego: czas składania, klatki z kapeluszem schowanym / źle siedzącym
 // (Ubior.problems), błędy w konsoli. Na końcu tools/ubior/przeglad_masek.py składa docs/ekwipunek/maski/<arkusz>.png
 // (oryginał / maska / A / B / C) i docs/ekwipunek/maski/PRZEGLAD.md.
@@ -27,7 +27,7 @@ kit.test({ port: 9575, plugins: ["Ubior"], evalTimeout: 90000 }, async t => {
     t.check("nowa gra", ok);
     if (!ok) return;
     const sheets = await t.json("Object.keys(Ubior.SHEETS)");
-    t.check("Ubior zna wszystkie arkusze bohatera (27)", sheets.length === 27, sheets.length);
+    t.check("Ubior zna wszystkie arkusze bohatera (28: z zamachem mieczem Hero_Sword, 2026-10-23)", sheets.length === 28 && sheets.includes("Hero_Sword"), sheets.length);
     t.clearErrors();
     const meta = { outfits: OUTFITS.map(o => ({ key: o.key, label: o.label })), sheets: {}, problems: {}, stats: [] };
     const before = await t.eval("Ubior.stats().length");

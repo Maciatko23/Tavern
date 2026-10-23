@@ -1,0 +1,23 @@
+{
+ "kodLot": {
+  "dive": {
+   "0": "Nie ma na kogo nurkować"
+  },
+  "dismount": {
+   "0": "Mapa {1}"
+  },
+  "flightMenu": {
+   "0": "Ląduj tutaj",
+   "1": "Orzeł siada na otwartej ziemi (4 × 4 pola, w miastach na placu).",
+   "2": "Zniż lot",
+   "3": "Wznieś się",
+   "4": "Wysoko lecisz szybciej i widzisz więcej. Nisko orzeł nurkuje i ląduje (to samo: Q).",
+   "5": "{cost}% sił",
+   "6": "{1} / {2} sił skrzydeł"
+  },
+  "updatePanel": {
+   "0": "{landLine}WASD: lot  Shift: szybciej  Q: wyżej/niżej  Spacja: nurkuj  L: ląduj  Enter: menu"
+  }
+ },
+ "_opis": "Napisy kodu Orzel_Lot.js sprzed przeniesienia do js/teksty/orzel.txt (kodLot.*)"
+}

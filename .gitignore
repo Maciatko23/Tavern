@@ -16,6 +16,8 @@ desktop.ini
 /tests/edge_profile_*/
 /tests/*.png
 /tests/*/*.png
+# (tests/watki_test.js makes it each run: the texts' file changed, served to the game instead of the real one)
+/tests/watki/nakladka/
 
 # the marathon's report and log (regenerated every run) and the phone notification settings (a private ntfy topic)
 /tests/marathon/raport.md
@@ -48,3 +50,10 @@ __pycache__/
 /tests/*/shots/
 /*.png
 /backup_art_*/
+
+# tests/run.js: the session markers (`znacznik` - the files as they were, for `zmiany --od znacznik`) and the map's lock
+/tests/znaczniki/
+/tests/mapa_testow.json.lock
+# the test map (tests/lib/mapa.js): per machine, like last_results.json - the texts of its measured versions are objects in this
+# machine's .git (git hash-object -w), not in any commit; 1-5 MB, rewritten by every measurement
+/tests/mapa_testow.json

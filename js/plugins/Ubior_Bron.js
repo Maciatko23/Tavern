@@ -60,18 +60,22 @@
 
     // ---- the kinds: the swing sheets each is drawn on, and each sheet's own weapon with the material its drawing already has
     const CLUB = ["Hero_Club"], AXE = ["Hero_Axe", "Hero_AxeSide"];
+    // (2026-10-23: the blades also on the sword's own swing - Hero_Sword, PixelLab: a wide cut with the arm stretched out; the club's
+    // swing stays theirs until Bron_Data.js gives them zamach "sword")
+    const BLADE = ["Hero_Sword", "Hero_Club"];
     const SHEETS_OF = {
-        palka: CLUB, miecz: CLUB, dlugi_miecz: CLUB, tasak: CLUB, szabla: CLUB, buzdygan: CLUB, kiscien: CLUB, kostur: CLUB,
+        palka: CLUB, miecz: BLADE, dlugi_miecz: BLADE, tasak: BLADE, szabla: BLADE, buzdygan: CLUB, kiscien: CLUB, kostur: CLUB,
         sztylet: ["Hero_Punch", "Hero_Club"], mlot: ["Hero_Pick", "Hero_Club"],
         siekiera: AXE, topor: AXE, czekan: AXE, bardysz: AXE, kilof: ["Hero_Pick"],
         wlocznia: ["Hero_Spear"], rohatyna: ["Hero_Spear"], sulica: ["Hero_Spear"],
         luk: ["Hero_Bow"], proca: ["Hero_Sling"]
     };
     const RODZAJE = Object.keys(SHEETS_OF).sort((a, b) => b.length - a.length);   // (the longest first: dlugi_miecz before miecz)
-    const NATIVE = { Hero_Club: "palka", Hero_Axe: "siekiera", Hero_AxeSide: "siekiera", Hero_Pick: "kilof", Hero_Spear: "wlocznia", Hero_Bow: "luk", Hero_Sling: "proca" };
-    const NATIVE_MATERIAL = { palka: "drewno", siekiera: "zelazo", kilof: "zelazo", wlocznia: "kamien", luk: "krotki", proca: "prosta" };
+    const NATIVE = { Hero_Club: "palka", Hero_Axe: "siekiera", Hero_AxeSide: "siekiera", Hero_Pick: "kilof", Hero_Spear: "wlocznia", Hero_Bow: "luk", Hero_Sling: "proca",
+        Hero_Sword: "miecz" };
+    const NATIVE_MATERIAL = { palka: "drewno", siekiera: "zelazo", kilof: "zelazo", wlocznia: "kamien", luk: "krotki", proca: "prosta", miecz: "zelazo" };
     // the sheets drawn under a picture of a kind (the swing without its old weapon); the bow and the sling: repainted in place
-    const CLEAN = { Hero_Club: true, Hero_Axe: true, Hero_AxeSide: true, Hero_Pick: true, Hero_Spear: true };
+    const CLEAN = { Hero_Club: true, Hero_Axe: true, Hero_AxeSide: true, Hero_Pick: true, Hero_Spear: true, Hero_Sword: true };
     const RECOLOUR = { Hero_Bow: true, Hero_Sling: true };
     const fileOf = (sheet, kind) => "Ubior_Bron_" + sheet.replace("Hero_", "") + "_" + kind[0].toUpperCase() + kind.slice(1);
     // the old items (without Bron_Data.js): their looks

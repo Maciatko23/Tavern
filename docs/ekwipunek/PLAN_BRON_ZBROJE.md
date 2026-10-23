@@ -132,7 +132,37 @@ karta postaci, czas składania (najdłużej ~35-45 ms pierwsze złożenie, zwykl
 `helmy_karta.png`, `zbroje_tors.png`, `zbroje_rece_nogi.png`, `zbroje_tarcze.png`, `zbroje_tarcze_w_grze.png`.
 
 **Znane ograniczenia.** Zbroja nie zmienia kształtu (postrzępiony dół tuniki, krótkie rękawy - jak cały ubiór); faktury na 1 px są
-delikatne. Wymazanie starej broni jest automatyczne: w kilku klatkach (głównie tyłem i przy głowie) zostają drobne ślady starej
+delikatne (2026-10-23: już nieaktualne - cała zbroja i wszystkie hełmy z PixelLab, sekcja 8). Wymazanie starej broni jest automatyczne: w kilku klatkach (głównie tyłem i przy głowie) zostają drobne ślady starej
 pałki / siekiery - poprawki ręczne w `tools/ubior/bron.py` (`POPRAWKI`: `zmaz`, `z_klatki`). Tarcza widoczna tylko w gardzie (jak
 dotąd ikona); w marszu tarczy na ręce / plecach nie ma. Ikona „Postać” w menu (32 px, głowa i ramiona) nie pokazuje korony hełmu.
 Cień słońca bohatera nie ma korony hełmu (cień liczony z ramki klatki).
+
+## 8. Próba PixelLab (2026-10-23): zbroja na postaci i zamach mieczem
+
+Zgłoszenie gracza: kaptur i część hełmów za duże, zbroi nie widać na postaci, szabla / miecz tną „tuż przy sobie” (rysowane na zamachu
+pałki). Próba na kilku rzeczach (reszta po odnowieniu generacji 29.10), metoda: `docs/ekwipunek/METODA.md`, „Zbroja z PixelLab”.
+
+**Na grafice PixelLab są już** (wszystkie materiały - natywny bez zmian, reszta przemalowana): `helm_kaptur_*` (len, welna, skora,
+skora_czarna), `helm_kapalin_*` (zelazo, stal, braz, zakon), `zbroja_skorznia_*` (skora, skora_czarna), `zbroja_kolczuga_*` (zelazo, stal,
+zakon), `karwasze_*` (wszystkie 6), `nagolenniki_*` (wszystkie 5), `buty_okute_*` (zelazo, stal, zakon). Drugi etap (tego samego dnia):
+`zbroja_przeszywanica_*`, `zbroja_luska_*`, `zbroja_napiersnik_*`, `helm_czepiec_*` (pikowany: len, skora; kolczy: zelazo, stal, zakon),
+`helm_nosal_*`, `helm_otwarty_*`, `helm_zakonny_*` (w skali głowy) - **wszystkie klucze zbroi i hełmów są już z PixelLab** (popiersia: dalej
+rysowane `Ubior_Bust_Helm_*`); METODA.md, „Drugi etap”.
+
+**Zamach mieczem** `img/system/Hero_Sword.png` (stan „Sword” `b2072ed2-c074-4917-8c5b-4e404e354931`, 96x96, miecz w prawej ręce; animacje
+v3 „sword16”: południe, wschód, północ - tyłem wyszło bez białych plam, więc bez obejścia; zachód = lustro wschodu; `tools/ubior/miecz_arkusz.py`,
+klatki źródłowe w `tools/ubior/pixellab/miecz/`): krok w wypad, ręka z mieczem wyciągnięta daleko przed siebie, szerokie cięcie i powrót;
+z boku czubek ostrza 48 px od środka tułowia w klatce ciosu (pałka: 35 px), do tego krok w wypad (stopy rozstawione na 38 px). 17 klatek x 4 wiersze, stopy jak w Hero_Club, cios `[9, 11, 11, 11]`.
+Rejestracja: ChoppableTree `SWING_KINDS[21]` (`name: "sword"`, 26 klatek gry, uderzenie w 13., krok 5 px; stary Reid - arkusz pałki),
+HeroLook `SWINGS[21]`, Ubior `SHEETS.Hero_Sword` (maska `Ubior_Maska_Hero_Sword`), Ubior_Bron: `SHEETS_OF` miecz / dlugi_miecz / szabla /
+tasak = `["Hero_Sword", "Hero_Club"]`, `NATIVE.Hero_Sword = "miecz"` (żelazny miecz = zwykły arkusz), szablony `Ubior_Bron_Sword_*`
+(bron.py: oś z samego ostrza - `OSTRZE` - chwyt przy dłoni najbliżej nasady; długi miecz dłuższy, szabla zakrzywiona, tasak szeroki).
+
+**Do zrobienia w danych (Bron_Data.js, Combat_Fight.js - nie ruszane w tej próbie):**
+1. `js/plugins/Bron_Data.js`, tabela rodzajów (ok. wiersze 109-116): `miecz`, `tasak`, `szabla`, `dlugi_miecz`: `zamach: "club"` ->
+   `zamach: "sword"`. Zasięg bez zmian (miecz 1.55, tasak 1.5, szabla 1.6, długi miecz 1.75 - to już „półtorej kratki”, a teraz rysunek
+   się z tym zgadza).
+2. `js/plugins/Combat_Fight.js`, tabela `SWING` (ok. wiersz 170) - dopisać rodzaj (bez tego broń z `zamach: "sword"` wypadłaby z MELEE):
+   `sword: () => { const k = swingKindOf("sword"); return k >= 0 ? { combo: [k, k, k], heavy: k, hold: 8 } : SWING.club(); },`
+   (`hold: 8` - klatka z mieczem wzniesionym do ciosu, trzymana przy ładowaniu ciężkiego ciosu).
+Do tego czasu miecze dalej tną na zamachu pałki (z nowymi rysunkami broni z bron.py) - nic się nie psuje.
