@@ -758,7 +758,7 @@
             for (const [id, n] of D.FARMSTEAD.ruin.gives) gain(id, n);
             se("Chest1", 70, 90);
             runList(plain([], TX.farm.letterTitle, TX.farm.letter));
-            note(TX.farm.letterTitle, "Dzień " + day() + ": w ruinie chaty Rzepków (za lasem, na południe od pola) list Wojciecha Rzepki: ziemia nie rodziła, studnia wyschła, poszli do miasta. Studnię zasypał, żeby bydło nie wpadło.");
+            note(TX.farm.letterTitle, "Dzień " + day() + ": w ruinie chaty Rzepków (za lasem, na południe od działki) list Wojciecha Rzepki: ziemia nie rodziła, studnia wyschła, poszli do miasta. Studnię zasypał, żeby bydło nie wpadło.");
             T.call("TownQuests", "autoChecks");
         });
     }
@@ -1415,9 +1415,9 @@
     const GO = [].concat(
         D.SPRINGS.map(s => [s.name, s.map, s.sx, s.sy + 1, 8]),
         [["Zagroda Rzepków", 3, 42, 52, 8], ["Studnia sąsiada", 3, 47, 54, 8], ["Dziki ul", 3, 66, 39, 8], ["Polanka Jagny", 17, 67, 16, 8],
-         ["Czarci krąg", 17, 54, 45, 8], ["Ogródki Podgrodzia", 111, 56, 13, 8], ["Wysypisko", 111, 52, 27, 8], ["Glinianka", 111, 56, 40, 8],
+         ["Czarci krąg", 17, 54, 45, 8], ["Ogródki Podgrodzia", 111, 66, 15, 8], ["Wysypisko", 111, 72, 66, 8], ["Glinianka", 111, 48, 74, 8],
          ["Ściana ciosowa", 13, 108, 82, 8], ["Żyła rudy", 13, 114, 79, 8], ["Zatoczka", 125, 17, 67, 8], ["Drewno: Pustelnia", 155, 4, 53, 4],
-         ["Drewno: Garnizon", 162, 3, 47, 4], ["Spalony sad", 168, 62, 22, 2], ["Pola mieszczan", 8, 9, 80, 8]]);
+         ["Drewno: Garnizon", 162, 3, 47, 4], ["Spalony sad", 168, 62, 22, 2], ["Pola mieszczan", 8, 10, 108, 8]]);
     let goPick = 0, wellPick = 0, treePick = 0, d30Pick = 0;
     const onOff = v => (v ? "wł." : "wył.");
     OK.f9.add({ owner: PLUGIN, title: "Paczka A: Woda i zasoby:",

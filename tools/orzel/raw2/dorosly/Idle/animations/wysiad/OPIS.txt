@@ -1,0 +1,1 @@
+(wysiad: 0 = stoi, 1-2 = przysiada (sit), 3 = leży brzuchem w dół, skrzydła przy ciele - tools/orzel/poza5.py)

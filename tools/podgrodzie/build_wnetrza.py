@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/build_wnetrza.py [112 113 ...]  -> tools/podgrodzie/staging/Map112..117.json (+ _meta.json)
 # The six interiors of Podgrodzie (children of Map111), poor wooden rooms on tileset 8 in the manner of the town's interiors
 # (tools/interiors: ilib's Interior on grandpa's cottage shell - log / plank wall faces 3 rows tall, the dark rim border,

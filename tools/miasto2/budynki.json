@@ -1,0 +1,934 @@
+{
+ "opis": "Budynki z wnętrzami na nowej mapie miasta (Map008, kopia robocza tools/miasto2/staging). drzwi = kratka zdarzenia drzwi, przed_drzwiami = lądowanie z wnętrza; nowe budynki mają przeniesienie zastępcze (wnetrze, 1, 1) do połączenia przez koordynatora.",
+ "budynki": [
+  {
+   "klucz": "tawerna",
+   "nazwa": "Tawerna (Drzwi tawerny)",
+   "prostokat": [
+    27,
+    0,
+    78,
+    19
+   ],
+   "drzwi_id": 22,
+   "drzwi": [
+    51,
+    16
+   ],
+   "przed_drzwiami": [
+    51,
+    17
+   ],
+   "wnetrze": 1,
+   "wnetrze_xy": [
+    50,
+    53
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: taras_tawerna",
+   "nowy": false,
+   "stare_drzwi": [
+    24,
+    16
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "piekarnia",
+   "nazwa": "Piekarnia",
+   "prostokat": [
+    34,
+    64,
+    40,
+    74
+   ],
+   "drzwi_id": 88,
+   "drzwi": [
+    38,
+    72
+   ],
+   "przed_drzwiami": [
+    38,
+    73
+   ],
+   "wnetrze": 102,
+   "wnetrze_xy": [
+    8,
+    10
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: piekarnia",
+   "nowy": false,
+   "stare_drzwi": [
+    6,
+    38
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "kantor",
+   "nazwa": "Kantor (tylne drzwi)",
+   "prostokat": [
+    13,
+    39,
+    24,
+    48
+   ],
+   "drzwi_id": 94,
+   "drzwi": [
+    14,
+    47
+   ],
+   "przed_drzwiami": [
+    14,
+    48
+   ],
+   "wnetrze": 103,
+   "wnetrze_xy": [
+    3,
+    10
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: kantor",
+   "nowy": false,
+   "stare_drzwi": [
+    10,
+    39
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "kantor",
+   "nazwa": "Kantor (front)",
+   "prostokat": [
+    13,
+    39,
+    24,
+    48
+   ],
+   "drzwi_id": 95,
+   "drzwi": [
+    18,
+    46
+   ],
+   "przed_drzwiami": [
+    18,
+    47
+   ],
+   "wnetrze": 103,
+   "wnetrze_xy": [
+    12,
+    10
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: kantor",
+   "nowy": false,
+   "stare_drzwi": [
+    14,
+    38
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "ratusz",
+   "nazwa": "Ratusz",
+   "prostokat": [
+    81,
+    37,
+    93,
+    48
+   ],
+   "drzwi_id": 114,
+   "drzwi": [
+    85,
+    47
+   ],
+   "przed_drzwiami": [
+    85,
+    48
+   ],
+   "wnetrze": 104,
+   "wnetrze_xy": [
+    7,
+    11
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: ratusz",
+   "nowy": false,
+   "stare_drzwi": [
+    41,
+    39
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "ratusz",
+   "nazwa": "Ratusz (kancelaria)",
+   "prostokat": [
+    81,
+    37,
+    93,
+    48
+   ],
+   "drzwi_id": 4,
+   "drzwi": [
+    91,
+    47
+   ],
+   "przed_drzwiami": [
+    91,
+    48
+   ],
+   "wnetrze": 104,
+   "wnetrze_xy": [
+    17,
+    11
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: ratusz",
+   "nowy": false,
+   "stare_drzwi": [
+    47,
+    39
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom_mieszczan",
+   "nazwa": "Dom mieszczan",
+   "prostokat": [
+    29,
+    37,
+    50,
+    38
+   ],
+   "drzwi_id": 121,
+   "drzwi": [
+    36,
+    38
+   ],
+   "przed_drzwiami": [
+    36,
+    39
+   ],
+   "wnetrze": 109,
+   "wnetrze_xy": [
+    8,
+    9
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: pod_skala",
+   "nowy": false,
+   "stare_drzwi": [
+    9,
+    30
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "izba_pod_skala",
+   "nazwa": "Izba pod skałą",
+   "prostokat": [
+    29,
+    37,
+    50,
+    38
+   ],
+   "drzwi_id": 124,
+   "drzwi": [
+    39,
+    37
+   ],
+   "przed_drzwiami": [
+    39,
+    38
+   ],
+   "wnetrze": 110,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: pod_skala",
+   "nowy": false,
+   "stare_drzwi": [
+    12,
+    29
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "kuznia",
+   "nazwa": "Kuźnia (dom kowala)",
+   "prostokat": [
+    3,
+    56,
+    14,
+    63
+   ],
+   "drzwi_id": 134,
+   "drzwi": [
+    13,
+    60
+   ],
+   "przed_drzwiami": [
+    13,
+    61
+   ],
+   "wnetrze": 105,
+   "wnetrze_xy": [
+    7,
+    9
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: kuznia",
+   "nowy": false,
+   "stare_drzwi": [
+    12,
+    46
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom_woziwody",
+   "nazwa": "Dom woziwody",
+   "prostokat": [
+    57,
+    68,
+    62,
+    73
+   ],
+   "drzwi_id": 137,
+   "drzwi": [
+    59,
+    73
+   ],
+   "przed_drzwiami": [
+    59,
+    74
+   ],
+   "wnetrze": 107,
+   "wnetrze_xy": [
+    7,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: dom_woziwody",
+   "nowy": false,
+   "stare_drzwi": [
+    29,
+    46
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom_garbarza",
+   "nazwa": "Dom garbarza",
+   "prostokat": [
+    2,
+    80,
+    12,
+    88
+   ],
+   "drzwi_id": 141,
+   "drzwi": [
+    6,
+    88
+   ],
+   "przed_drzwiami": [
+    6,
+    89
+   ],
+   "wnetrze": 106,
+   "wnetrze_xy": [
+    8,
+    9
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: dom_garbarza",
+   "nowy": false,
+   "stare_drzwi": [
+    37,
+    49
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dzwonnica",
+   "nazwa": "Dzwonnica",
+   "prostokat": [
+    85,
+    30,
+    87,
+    32
+   ],
+   "drzwi_id": 236,
+   "drzwi": [
+    86,
+    31
+   ],
+   "przed_drzwiami": [
+    86,
+    32
+   ],
+   "wnetrze": 108,
+   "wnetrze_xy": [
+    5,
+    11
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: dzwonnica",
+   "nowy": false,
+   "stare_drzwi": [
+    48,
+    30
+   ],
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "kaplica",
+   "nazwa": "Kaplica",
+   "prostokat": [
+    3,
+    5,
+    13,
+    17
+   ],
+   "drzwi_id": 50,
+   "drzwi": [
+    8,
+    16
+   ],
+   "przed_drzwiami": [
+    8,
+    17
+   ],
+   "wnetrze": 178,
+   "wnetrze_xy": [
+    7,
+    13
+   ],
+   "prefabrykat": "twierdza_front (poszerzony) + dach A3 k56",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom_grabarza",
+   "nazwa": "Dom grabarza",
+   "prostokat": [
+    17,
+    9,
+    22,
+    12
+   ],
+   "drzwi_id": 57,
+   "drzwi": [
+    20,
+    12
+   ],
+   "przed_drzwiami": [
+    20,
+    13
+   ],
+   "wnetrze": 179,
+   "wnetrze_xy": [
+    5,
+    8
+   ],
+   "prefabrykat": "chata_strzecha",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom1",
+   "nazwa": "Dom Agaty",
+   "prostokat": [
+    84,
+    6,
+    87,
+    12
+   ],
+   "drzwi_id": 63,
+   "drzwi": [
+    85,
+    12
+   ],
+   "przed_drzwiami": [
+    85,
+    13
+   ],
+   "wnetrze": 182,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "dom_lukarny_czarny",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom7",
+   "nazwa": "Dom staruszków",
+   "prostokat": [
+    40,
+    81,
+    43,
+    87
+   ],
+   "drzwi_id": 80,
+   "drzwi": [
+    42,
+    87
+   ],
+   "przed_drzwiami": [
+    42,
+    88
+   ],
+   "wnetrze": 188,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "dom_lukarny_czarny",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom2",
+   "nazwa": "Kamienica",
+   "prostokat": [
+    92,
+    20,
+    99,
+    29
+   ],
+   "drzwi_id": 84,
+   "drzwi": [
+    96,
+    28
+   ],
+   "przed_drzwiami": [
+    96,
+    29
+   ],
+   "wnetrze": 183,
+   "wnetrze_xy": [
+    10,
+    10
+   ],
+   "prefabrykat": "kamienice_szachulec",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom3",
+   "nazwa": "Dom szwaczki",
+   "prostokat": [
+    3,
+    40,
+    9,
+    48
+   ],
+   "drzwi_id": 129,
+   "drzwi": [
+    7,
+    48
+   ],
+   "przed_drzwiami": [
+    7,
+    49
+   ],
+   "wnetrze": 184,
+   "wnetrze_xy": [
+    5,
+    9
+   ],
+   "prefabrykat": "dom_lukarny_mikstury",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "straznica",
+   "nazwa": "Strażnica Lorda",
+   "prostokat": [
+    95,
+    42,
+    100,
+    47
+   ],
+   "drzwi_id": 152,
+   "drzwi": [
+    98,
+    47
+   ],
+   "przed_drzwiami": [
+    98,
+    48
+   ],
+   "wnetrze": 180,
+   "wnetrze_xy": [
+    6,
+    10
+   ],
+   "prefabrykat": "kamienica_choragiew",
+   "nowy": true,
+   "zawsze_otwarte": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom4",
+   "nazwa": "Dom Haliny",
+   "prostokat": [
+    81,
+    54,
+    88,
+    63
+   ],
+   "drzwi_id": 180,
+   "drzwi": [
+    84,
+    63
+   ],
+   "przed_drzwiami": [
+    84,
+    64
+   ],
+   "wnetrze": 185,
+   "wnetrze_xy": [
+    5,
+    9
+   ],
+   "prefabrykat": "karczma_szachulcowa",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom5",
+   "nazwa": "Stary dom kupca",
+   "prostokat": [
+    92,
+    56,
+    99,
+    63
+   ],
+   "drzwi_id": 197,
+   "drzwi": [
+    95,
+    62
+   ],
+   "przed_drzwiami": [
+    95,
+    63
+   ],
+   "wnetrze": 186,
+   "wnetrze_xy": [
+    5,
+    9
+   ],
+   "prefabrykat": "chata_z_bali",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom6",
+   "nazwa": "Dom cieśli",
+   "prostokat": [
+    29,
+    78,
+    34,
+    88
+   ],
+   "drzwi_id": 204,
+   "drzwi": [
+    33,
+    86
+   ],
+   "przed_drzwiami": [
+    33,
+    87
+   ],
+   "wnetrze": 187,
+   "wnetrze_xy": [
+    5,
+    9
+   ],
+   "prefabrykat": "dom_szczyt_kuznia (bez kuźni)",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "stajnia",
+   "nazwa": "Stajnia",
+   "prostokat": [
+    57,
+    79,
+    74,
+    89
+   ],
+   "drzwi_id": 209,
+   "drzwi": [
+    61,
+    87
+   ],
+   "przed_drzwiami": [
+    61,
+    88
+   ],
+   "wnetrze": 181,
+   "wnetrze_xy": [
+    11,
+    11
+   ],
+   "prefabrykat": "spichlerz_drewutnia + wozownia (stary budynek przy bramie wschodniej) + woz_siano",
+   "nowy": true,
+   "zawsze_otwarte": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom8",
+   "nazwa": "Dom weterana",
+   "prostokat": [
+    82,
+    84,
+    87,
+    88
+   ],
+   "drzwi_id": 216,
+   "drzwi": [
+    84,
+    88
+   ],
+   "przed_drzwiami": [
+    84,
+    89
+   ],
+   "wnetrze": 189,
+   "wnetrze_xy": [
+    6,
+    9
+   ],
+   "prefabrykat": "kantor_waga",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom9",
+   "nazwa": "Izba do wynajęcia",
+   "prostokat": [
+    92,
+    85,
+    100,
+    88
+   ],
+   "drzwi_id": 218,
+   "drzwi": [
+    95,
+    88
+   ],
+   "przed_drzwiami": [
+    95,
+    89
+   ],
+   "wnetrze": 190,
+   "wnetrze_xy": [
+    4,
+    8
+   ],
+   "prefabrykat": "chata_strzecha + drewutnia",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom10",
+   "nazwa": "Dom 10 (przy piekarni)",
+   "prostokat": [
+    30,
+    67,
+    33,
+    73
+   ],
+   "drzwi_id": 231,
+   "drzwi": [
+    31,
+    73
+   ],
+   "przed_drzwiami": [
+    31,
+    74
+   ],
+   "wnetrze": 193,
+   "wnetrze_xy": [
+    3,
+    8
+   ],
+   "prefabrykat": "dom_lukarny_czarny",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "pierzeja": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom11",
+   "nazwa": "Dom 11 (kamienice przy ulicy południowej)",
+   "prostokat": [
+    41,
+    65,
+    48,
+    74
+   ],
+   "drzwi_id": 235,
+   "drzwi": [
+    45,
+    73
+   ],
+   "przed_drzwiami": [
+    45,
+    74
+   ],
+   "wnetrze": 194,
+   "wnetrze_xy": [
+    4,
+    10
+   ],
+   "prefabrykat": "kamienice_szachulec",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "pierzeja": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom12",
+   "nazwa": "Dom 12 (bliźniak domu staruszków)",
+   "prostokat": [
+    44,
+    81,
+    47,
+    87
+   ],
+   "drzwi_id": 250,
+   "drzwi": [
+    45,
+    87
+   ],
+   "przed_drzwiami": [
+    45,
+    88
+   ],
+   "wnetrze": 195,
+   "wnetrze_xy": [
+    4,
+    8
+   ],
+   "prefabrykat": "dom_lukarny_czarny",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "pierzeja": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom13",
+   "nazwa": "Dom 13 (dom z lukarnami na wschodzie)",
+   "prostokat": [
+    75,
+    66,
+    81,
+    74
+   ],
+   "drzwi_id": 253,
+   "drzwi": [
+    79,
+    74
+   ],
+   "przed_drzwiami": [
+    79,
+    75
+   ],
+   "wnetrze": 196,
+   "wnetrze_xy": [
+    7,
+    9
+   ],
+   "prefabrykat": "dom_lukarny_mikstury",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "pierzeja": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom14",
+   "nazwa": "Dom 14 (obok domu weterana)",
+   "prostokat": [
+    77,
+    82,
+    80,
+    88
+   ],
+   "drzwi_id": 254,
+   "drzwi": [
+    78,
+    88
+   ],
+   "przed_drzwiami": [
+    78,
+    89
+   ],
+   "wnetrze": 197,
+   "wnetrze_xy": [
+    6,
+    9
+   ],
+   "prefabrykat": "dom_lukarny_czarny",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "pierzeja": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "dom15",
+   "nazwa": "Dom 15 (przy cmentarzu)",
+   "prostokat": [
+    17,
+    25,
+    23,
+    33
+   ],
+   "drzwi_id": 259,
+   "drzwi": [
+    21,
+    33
+   ],
+   "przed_drzwiami": [
+    21,
+    34
+   ],
+   "wnetrze": 198,
+   "wnetrze_xy": [
+    9,
+    9
+   ],
+   "prefabrykat": "dom_lukarny_mikstury",
+   "nowy": true,
+   "zawsze_otwarte": false,
+   "pierzeja": true,
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  }
+ ]
+}

@@ -1,3 +1,4 @@
+// UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 // node tools/town/shot_town.js <A|B|C> <out dir> [hour=11]   (CDP_PORT, default 9412; the game served at 127.0.0.1:8765)
 // Daytime game screens of a staged town concept in the real game: the concept's overlay (python tools/town/make_overlay.py:
 // data/Map008.json + data/Tilesets.json + the missing character sheets) is served in place of the game's files through the

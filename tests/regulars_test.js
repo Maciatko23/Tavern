@@ -68,7 +68,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ K22: the string
     await t.give(163, 2);
-    await t.go(8, 16, 46, 8);
+    await t.go(8, 15, 86, 8);
     await at(3, 13, 30);
     const ig1 = await talk(res("garbarz"), []);
     const ig2 = await talk(res("garbarz"), []);
@@ -90,28 +90,28 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.locate(46, 41, 8);
     const k33 = await talk(reg(4), ["Przyniosę ci czapkę", "Bywaj"]);
     t.check("K33: at evening Ozzy's cap 'leży na głowie rycerza, tego bez nosa' - the hero will bring it", /[Tt]ego bez nosa/.test(k33.text) && (await step("K33")) === "active:0", k33.text.slice(0, 200));
-    await t.go(8, 6, 18, 8);
+    await t.go(8, 33, 18, 8);
     await at(4, 11, 20);
     await t.give(125, 1);
     await t.give(64, 10);
     await t.eval("$gameSystem.setStamina && $gameSystem.setStamina(100); 0");
-    await t.locate(5, 17, 8);
+    await t.locate(32, 17, 8);
     await t.frames(70);
     const cap0 = await J("(function(){ const st = TownQuests.capState(), spr = SceneManager._scene._spriteset._characterSprites.find(s => s._character === $gameMap.event(st.statue)); return { st, cap: !!(spr && spr._tqCap && spr._tqCap.visible), y: spr && spr._tqCap ? spr._tqCap.y : null, scroll: +($gamePlayer._realY - $gameMap._displayY).toFixed(2) }; })()");
     t.check("the cap sits on the left statue's head (a picture on event 43); standing at the gate facing in, the view eases up over the wall",
         cap0.st.step === 0 && cap0.st.statue === 43 && cap0.cap && cap0.y < -120 && cap0.scroll > 10, cap0);
     await t.shot(path.join(SHOTS, "k33_czapka_na_posagu.png"));
-    await t.locate(6, 17, 8);
+    await t.locate(33, 17, 8);
     await t.frames(30);
     await t.eval("Hunting.resetCooldown(); Hunting.shoot([0, -1], 'sling'); 0");
     await t.frames(90);
-    t.check("a stone through the grate, but not in line with the statue (from 6,17): a miss, the cap stays", (await step("K33")) === "active:0");
-    await t.locate(5, 17, 8);
+    t.check("a stone through the grate, but not in line with the statue (from 33,17): a miss, the cap stays", (await step("K33")) === "active:0");
+    await t.locate(32, 17, 8);
     await t.frames(30);
     await t.eval("Hunting.resetCooldown(); Hunting.shoot([0, -1], 'sling'); 0");
     await t.until("TownQuests.rec('K33').step === 1", 10, 100);
     await t.frames(60);
-    t.check("...in line with the left statue (from 5,17): the stone stops at the grate, but the cap falls - 'Trafiony!', it lands just behind the bars",
+    t.check("...in line with the left statue (from 32,17): the stone stops at the grate, but the cap falls - 'Trafiony!', it lands just behind the bars",
         (await step("K33")) === "active:1" && (await J("SpeechBubbles.log.join('|')")).includes("Trafiony!"));
     const pick = await talk("$gameMap.event(39)", [], { place: false });
     t.check("...O at the locked gate: the hero reaches through the bars and has it", /sięgasz ręką między pręty/.test(pick.text) && (await J("TownQuests.vcount('czapka')")) === 1 && (await step("K33")) === "active:2", pick.text.slice(0, 120));
@@ -124,7 +124,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         (await J("Journal.data().notes.some(n => n.title === \"Czapka Ozzy'ego\")")), oz2.text.slice(0, 200));
 
     // ------------------------------------------------------------------ K27, Melia's way
-    await t.go(8, 31, 52, 8);
+    await t.go(8, 58, 91, 8);
     await at(5, 18, 40);
     await talk(res("ludmila"), ["Wystrugam"]);
     t.check("K27: Ludmiła asks for a toy horse for Ela (the step's text names Melia's way too)", (await step("K27")) === "active:0" && /poproś Melię/.test(await J("TownQuests.Q.K27.steps[0].text")));
@@ -134,7 +134,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const away = await J("({ flag: TownQuests.state().flags.k27Melia, song: TavernLife.song(0) })");
     t.check("...Melia's own topic 'Zaśpiewasz Eli kołysankę pod murem?': she goes - and that evening there is no song in the tavern",
         /Dziecku, które nie śpi/.test(k27.text) && away.flag === 5 && away.song === false, { away, text: k27.text.slice(0, 160) });
-    await t.go(8, 31, 52, 8);
+    await t.go(8, 58, 91, 8);
     await at(6, 9, 40);
     const lu = await talk(res("ludmila"), []);
     t.check("...the next morning Ludmiła: Ela slept the whole night - K27 done, Melia's trust +5", /przespała całą noc/.test(lu.text) && (await step("K27")).startsWith("done"), lu.text.slice(0, 160));

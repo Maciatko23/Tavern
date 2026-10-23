@@ -219,8 +219,8 @@ kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.key("P");
     t.check("Grafit: P otwiera menu", await t.until(inMenu, 10));
     await t.frames(40);
-    // (the tabs go with A / D since 2026-10-12 - no Q / E: hero -> item -> journal -> options, then O into the list)
-    for (let i = 0; i < 3; i++) { await t.key("D"); await t.frames(18); }
+    // (the menu's tabs since 2026-10-23: A / D along them - Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Opcje -, then O into Opcje)
+    for (let i = 0; i < 5; i++) { await t.key("D"); await t.frames(12); }
     await t.key("O");
     await t.frames(6);
     const grafit = await t.json(`(function(){ const w = SceneManager._scene._views && SceneManager._scene._views.options && SceneManager._scene._views.options._win; if (!w) return null;
@@ -233,6 +233,8 @@ kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.key("Enter");
     await t.frames(6);
     t.check("Grafit: drugi Enter z powrotem Wł", (await t.eval("ConfigManager.moodFx")) === true);
+    await t.key("Escape");   // (out of Opcje onto the menu's list, then out of the menu)
+    await t.frames(8);
     await t.key("Escape");
     await t.until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 10);
     await t.frames(20);

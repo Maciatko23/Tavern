@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/build_podgrodzie.py  -> tools/podgrodzie/staging/Map111.json (+ Map111_meta.json)
 # Podgrodzie (Map111, 46x36, tileset 11): the poor quarter outside the town's west wall (user 2026-10-05). Composed cell by
 # cell in the tileset author's manner (plib.py header, tools/town/RECIPES.md):

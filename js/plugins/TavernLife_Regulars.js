@@ -129,7 +129,7 @@
             name: "Melia", full: "Melia Srebrogłosa", title: "pieśniarka",
             tierText: ["", "Melia zapamiętała twoją twarz.", "Melia nazywa cię swoim słuchaczem.", "Melia ci ufa - opowie więcej.", "Melia powierza ci to, czego nie śpiewa nikomu."],
             greet: [["O, nowa twarz. Wędrowiec? Każdy wędrowiec to niedokończona ballada.", "Witaj, wędrowcze. Siadaj bliżej - z daleka pieśń brzmi gorzej."],
-                ["A, to ty! Ten od pola za lasem. Pamiętam twarze - to połowa mojej roboty.", "Znowu ty, złotko? Dobrze. Lubię stałą publiczność."],
+                ["A, to ty! Ten od działki za lasem. Pamiętam twarze - to połowa mojej roboty.", "Znowu ty, złotko? Dobrze. Lubię stałą publiczność."],
                 ["Mój ulubiony słuchacz! Siadaj, zanim Ozzy zajmie ci miejsce.", "Jesteś! Czekałam, aż ktoś mi opowie coś, czego nie ma w żadnej balladzie."],
                 ["Przyjacielu... Kiedy wchodzisz, w sali robi się cieplej. Nie śmiej się.", "Ty jeden słuchasz słów, a nie tylko melodii. Chodź, siadaj."],
                 ["Wiesz, że o tobie też kiedyś zaśpiewam? Tylko jeszcze nie wiem, jak się ta pieśń skończy.", "Moja lutnia i ja - obie nastrojone pod ciebie. No, prawie."]],
@@ -152,9 +152,9 @@
                     "Susza. Ziemia pęka jak stara struna. Ktoś musi o tym zaśpiewać, zanim wszyscy zapomną, jak brzmi deszcz."],
                 debtNear: ["Słyszałam o długu twojego dziadka. Lord ma dwór z kamieni i serce do kompletu. Trzymaj się, złotko.",
                     "Termin u Lorda tuż-tuż, prawda? Widać ci to po oczach. Gdyby pieśnią dało się płacić, zaśpiewałabym za ciebie."],
-                debtPaid: ["Spłaciłeś Lorda! Cała sala o tym mówiła. Ułożę pieśń: „Wnuk, co pole wykupił”. Albo coś krótszego."],
-                fieldLost: ["Słyszałam o polu, złotko. Przykro mi. Lord ma dwór z kamieni i serce do kompletu. Ale ty masz ręce i głos - zaśpiewasz jeszcze o tym polu, jak je odkupisz."],
-                fieldBack: ["Odkupiłeś pole od samego Zaleskiego! To już nie pieśń, to ballada. Trzy zwrotki co najmniej."]
+                debtPaid: ["Spłaciłeś Lorda! Cała sala o tym mówiła. Ułożę pieśń: „Wnuk, co działkę wykupił”. Albo coś krótszego."],
+                fieldLost: ["Słyszałam o działce, złotko. Przykro mi. Lord ma dwór z kamieni i serce do kompletu. Ale ty masz ręce i głos - zaśpiewasz jeszcze o tej działce, jak ją odkupisz."],
+                fieldBack: ["Odkupiłeś działkę od samego Zaleskiego! To już nie pieśń, to ballada. Trzy zwrotki co najmniej."]
             },
             rumours: [
                 { id: "kubaWater", when: () => !qRec("W1"), text: "Kuba Woziwoda nosi wodę, której w studni nie ma. Ludzie mówią: z nieba. Ja mówię: z czyjejś piwnicy." },
@@ -202,8 +202,8 @@
                 drought: ["Ile dni bez deszczu? *hep* Ja wiem ile. I wiem, gdzie jest woda. Tylko nikt nie pyta.", "Sucho, synku. Sucho w ziemi, sucho w gardle. Z tych dwóch to drugie da się naprawić."],
                 debtNear: ["Dług, dług... Lordowie liczą grosze, a nie widzą, na czym siedzą. *hep* Zdążysz, synku. Albo nie. Ale raczej zdążysz."],
                 debtPaid: ["Spłacone? Hehe. Widziałem to we śnie. Wczoraj albo przedwczoraj. *hep*"],
-                fieldLost: ["Pole poszło do Lorda? *hep* Ziemia nie ucieka, synku. Lordowie przychodzą i odchodzą, a pole zostaje. Wróci do ciebie. Widziałem to... albo mi się wydawało."],
-                fieldBack: ["Pole wróciło? A nie mówiłem? *hep* Mówiłem. Na pewno mówiłem."]
+                fieldLost: ["Działka poszła do Lorda? *hep* Ziemia nie ucieka, synku. Lordowie przychodzą i odchodzą, a ziemia zostaje. Wróci do ciebie. Widziałem to... albo mi się wydawało."],
+                fieldBack: ["Działka wróciła? A nie mówiłem? *hep* Mówiłem. Na pewno mówiłem."]
             },
             sleep: ["Chrrr... *hep* ...co? Kto? A, to ty. Śniła mi się woda. Dużo wody. Pod ziemią.", "Chrrr... fiuuu... (Ozzy śpi na ławie z głową na stole. Uśmiecha się przez sen.)",
                 "...nie ta cegła... trzecia od dołu... chrrr...", "(Ozzy mruczy coś przez sen i przewraca się na drugi bok. Ława trzeszczy.)"],
@@ -227,7 +227,7 @@
         grum: {
             name: "Grum", full: "Grum Żelazna Pięść", title: "najemnik",
             tierText: ["", "Grum kiwa ci głową na powitanie.", "Grum mówi do ciebie pełnymi zdaniami. Czasem.", "Grum ma do ciebie zaufanie. Rzadka rzecz.", "Grum stanąłby za tobą w szyku."],
-            greet: [["Hm.", "Czego?"], ["Ty. Siadaj albo idź.", "A, chudzielec od pola."], ["Siadaj. Piwo jest, gadać nie muszę.", "No. Jesteś."],
+            greet: [["Hm.", "Czego?"], ["Ty. Siadaj albo idź.", "A, chudzielec od działki."], ["Siadaj. Piwo jest, gadać nie muszę.", "No. Jesteś."],
                 ["Dobrze cię widzieć. Nie mów nikomu, że to powiedziałem.", "Siadaj, chłopcze. Masz łokieć - masz kompana."],
                 ["Ty jeden tu nie kłamiesz. Chyba. Siadaj.", "Bracie od stołu. Mów."]],
             again: ["Coś jeszcze?", "No?", "Mów."],
@@ -244,7 +244,7 @@
                 drought: ["Woda drożeje. Wojna zaczyna się od wody. Zapamiętaj.", "Sucho. Pod Wrzosową Przełęczą piliśmy z kałuż. Tu jeszcze nie jest tak źle. Jeszcze."],
                 debtNear: ["Lord chce pieniędzy. Lordowie zawsze chcą. Zarób albo uciekaj. Ja bym zarobił."],
                 debtPaid: ["Spłaciłeś. Dobrze. Wolny człowiek śpi lepiej."],
-                fieldLost: ["Lord wziął pole. Tak bywa. Ja straciłem więcej niż pole i siedzę tu, piję piwo. Ty też przeżyjesz."],
+                fieldLost: ["Lord wziął działkę. Tak bywa. Ja straciłem więcej niż działkę i siedzę tu, piję piwo. Ty też przeżyjesz."],
                 fieldBack: ["Odkupiłeś. Uparty jesteś. To dobrze."]
             },
             rumours: [

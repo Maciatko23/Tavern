@@ -1,6 +1,6 @@
 // The town's quests (TownQuests.js + TownQuests_Data.js, user 2026-10-04: "zrób to wszystko co tylko możesz"): the engine (offers in
 // the residents' talks, steps, rewards, notices, the state in the save), "Opinia w miasteczku" and its tiers and greetings, the
-// journal's tab "Miasteczko" and the goal window, the markers over the residents, the places of the quests (injected events 951-959),
+// journal's tab "Zadania" (the quests, MIASTECZKO, one thing pinned) and the goal window, the markers over the residents, the places of the quests (injected events 951-959),
 // the market day, the drought rule (quests only take the hero's water), and quests end to end: K1, K2, K4, K5, K8, K10, K12, K13
 // (failed: the noon bell is silent), K14 (the bell mini-game), K16 (trade), K17 (notices), D1 (time passes), D5 (the wolves), D16,
 // W1 (the clues, following Kuba at night - caught once, then unseen) and W2 (the bell's signals), and in a story game K32 and K31
@@ -24,8 +24,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         return false;
     };
 
-    await t.newGame({ map: 8, x: 8, y: 50, dir: 8, hour: 8, day: 2, quiet: true, minimap: false });
-    await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_grafit_test.js)
+    await t.newGame({ map: 8, x: 9, y: 64, dir: 8, hour: 8, day: 2, quiet: true, minimap: false });
+    await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_lista_test.js)
     await at(2, 8, 40);
 
     // ------------------------------------------------------------------ the engine
@@ -44,6 +44,16 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const notes1 = await t.notices();
     t.check("a notice at the top: 'Nowe zadanie: Węgiel do paleniska' with the step", notes1.some(n => /Nowe zadanie: Węgiel do paleniska \| Przynieś Tadkowi 5× Węgiel/.test(n)), notes1);
     t.check("the new quest is followed in the goal window (MIASTECZKO)", (await J("TownQuests.state().track")) === "K1" && /\|tq\|K1\|/.test(await J("SceneManager._scene._goalTracker._key")), await J("SceneManager._scene._goalTracker._key"));
+    // (2026-10-23) the journal's "Zadania": K1 under POBOCZNE with the diamond; one thing pinned at a time - a goal pinned lets K1 go,
+    // K1 pinned lets the goal go; a quest taken while a goal is pinned is not followed by itself
+    const one = await J(`(function(){ const rows = Journal.itemsForTab(0), k1 = rows.find(r => r.quest && r.quest.id === 'K1'), g = rows.find(r => r.goal && !Journal.goalDone(r.goal));
+        const out = { k1: k1 && k1.group + ":" + k1.mark, goal: g && g.goal.id };
+        Journal.pinTask(g); out.goalPinned = { track: TownQuests.state().track, pinned: Journal.data().pinned, src: Journal.tracked().source };
+        Journal.pinTask(Journal.itemsForTab(0).find(r => r.quest && r.quest.id === 'K1')); out.questPinned = { track: TownQuests.state().track, pinned: Journal.data().pinned, src: Journal.tracked().source, label: Journal.tracked().label };
+        return out; })()`);
+    t.check("Zadania: K1 under POBOCZNE with the diamond; pinning a goal lets K1 go, pinning K1 lets the goal go (one at a time)",
+        one.k1 === "side:pin" && one.goalPinned.track === null && one.goalPinned.pinned === one.goal && one.goalPinned.src === "goal" &&
+        one.questPinned.track === "K1" && one.questPinned.pinned === null && one.questPinned.src === "town" && one.questPinned.label === "MIASTECZKO", one);
     const rem = await talk("kowal", []);
     const pops = await t.popups();
     t.check("without the coal Tadek reminds, and what is missing pops up over the hero (never a message window)", /Pięć worków/.test(rem.text) && pops.some(p => /Potrzebujesz: Węgiel drzewny 0\/5/.test(p)), { text: rem.text, pops });
@@ -79,13 +89,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const greet = await talk("garbarz", []);
     t.check("the first talk of the day greets by the tier (Ignac, 'Bywalec': 'A, bosy. Dzień dobry.'), then his usual line", /^A, bosy\. Dzień dobry\. \S/.test(greet.text), greet.text);
     await t.key("J"); await t.frames(20);
-    const jr = await J(`(function(){ const s = SceneManager._scene; const names = s._tabs._list.map(c => c.name); const i = names.indexOf('Miasteczko'); if (i < 0) return { names };
-        s._tab = i; s.showTab(); const out = { names, items: s._list._items.map(it => it.label + ' | ' + (it.right || '')), ops: [] };
-        for (let k = 0; k < s._list.maxItems(); k++) { s._list.select(k); s._list.updateHelp(); out.ops.push(s._detail._ops.length); } s._list.select(0); s._list.updateHelp(); return out; })()`);
+    const jr = await J(`(function(){ const s = SceneManager._scene; const names = s._tabs._list.map(c => c.name); const i = names.indexOf('Zadania'); if (i < 0) return { names };
+        s._tab = i; s.showTab(); const items = s._list._items, out = { names, tab: i, items: items.filter(it => !it.head).map(it => it.label + ' | ' + (it.right || '') + ' | ' + it.group), heads: items.filter(it => it.head).map(it => it.label), ops: [] };
+        for (let k = 0; k < items.length; k++) { if (items[k].head) continue; s._list.select(k); s._list.updateHelp(); out.ops.push(s._detail._ops.length); }
+        const town = items.findIndex(it => it.info === 'opinion'); s._list.select(town); s._list.ensureCursorVisible(false); s._list.updateHelp(); return out; })()`);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "questy_dziennik.png"));
-    t.check("the journal has the tab 'Miasteczko': the opinion, the calendar and the quests done, each row with its detail",
-        jr.names && jr.names.includes("Miasteczko") && jr.items.some(i => /^Opinia w miasteczku \| 20 · Bywalec/.test(i)) && jr.items.some(i => /^Kalendarz miasteczka/.test(i)) && jr.items.some(i => /^Woda do hartowania \| dz\./.test(i)) && jr.ops.every(n => n >= 3), jr);
+    t.check("the journal's tab 'Zadania' (no 'Miasteczko' any more): the opinion and the calendar under MIASTECZKO, the quests done under UKOŃCZONE, each row with its detail",
+        jr.names && jr.tab === 0 && !jr.names.includes("Miasteczko") && jr.heads.includes("MIASTECZKO") && jr.heads[jr.heads.length - 1] === "UKOŃCZONE" &&
+        jr.items.some(i => /^Opinia w miasteczku \| 20 · Bywalec \| town$/.test(i)) && jr.items.some(i => /^Kalendarz miasteczka .*\| town$/.test(i)) && jr.items.some(i => /^Woda do hartowania \| dz\.\d+ \| done$|^Woda do hartowania \| dz\. \d+ \| done$/.test(i)) && jr.ops.every(n => n >= 3), jr);
     await t.eval("SceneManager.pop(); 0"); await t.until(t.onMap(8), 20); await t.frames(10);
 
     // ------------------------------------------------------------------ K8, K10, K12: the water's clues -> W1 starts, its chapter 2 opens
@@ -110,15 +122,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ W1: following Kuba at night (caught once, then unseen)
     await at(d8 + 1, 1.7, 5);
-    await t.locate(29, 48, 8);
+    await t.locate(59, 75, 8);
     await t.eval("Hunting.setSneak(false); 0");
     const op0 = await opinion();
     const caught = await t.until("TownQuests.rec('W1').t.follow && TownQuests.rec('W1').t.follow.tried === $gameSystem.dayNightDay()", 40, 300);
     t.check("standing at Kuba's door when he comes out at night, not sneaking: he sees the hero ('Kuba cię zauważył'), opinion -3, no more tries tonight",
         caught && (await opinion()) === op0 - 3 && (await t.notices()).some(n => /Kuba cię zauważył/.test(n)) && (await step("W1")) === "active:1", { caught, op: await opinion(), op0 });
-    await t.locate(6, 40, 2);   // (away from Kuba's door before the clock moves: he must not step out next to the hero)
+    await t.locate(38, 74, 2);   // (away from Kuba's door before the clock moves: he must not step out next to the hero)
     await at(d8 + 2, 1.7, 5);
-    await t.locate(6, 40, 2);
+    await t.locate(38, 74, 2);
     await t.eval("Hunting.setSneak(true); 0");
     const atPond = await t.until("(function(){ const s = TownLife.state('woziwoda'), p = TownLife.spot('staw'); return !!s && !s.hidden && s.act === 'work' && s.x === p[0] && s.y === p[1]; })()", 90, 300);
     const hide = await J(`(function(){ const p = TownLife.spot('staw'); for (let r = 3; r <= 6; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= 0; dx++) {
@@ -134,7 +146,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ W2: the bell's signals
     await at(d8 + 3, 2.95, 5);
-    await t.locate(24, 37, 8);
+    await t.locate(53, 55, 8);
     const heard = await t.until("TownQuests.state().bells.some(b => b.sig === '3')", 30, 300);
     t.check("on the town map at 3:00 the bell rings three: noted, and W2 'Kod dzwonu' starts (its first step done)", heard && (await step("W2")) === "active:1" && (await t.notices()).some(n => /Nowy wątek: Kod dzwonu/.test(n)), await rec("W2"));
     await at(d8 + 3, 9);
@@ -204,7 +216,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const sprOf = id => `SceneManager._scene._spriteset._characterSprites.find(s => s._character === $gameMap.event(${id}))`;
     const mark = await J(`(function(){ const s = ${sprOf(952)}; return { visible: !!s && s.visible, mark: !!(s && s._tqMark && s._tqMark.visible) }; })()`);
     t.check("the four walls of the notices come up as places of the quest (their events active, a yellow marker shown over them)", sw.every(Boolean) && mark.visible && mark.mark, { sw, mark });
-    for (const [id, x, y] of [[952, 25, 17], [953, 7, 40], [954, 8, 49], [955, 15, 40]]) {
+    for (const [id, x, y] of [[952, 52, 17], [953, 39, 74], [954, 9, 63], [955, 19, 48]]) {
         await t.locate(x, y, 8);
         await t.talkTo(`$gameMap.event(${id})`, [], { place: false });
     }
@@ -230,7 +242,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // ------------------------------------------------------------------ K4: wood under the bakery's window before dawn (the next day)
     await t.give(61, 4);
     await at(d5 + 1, 3.7);
-    await t.locate(6, 40, 8);
+    await t.locate(38, 74, 8);
     const b0 = await t.count(83);
     const k4 = await t.talkTo("$gameMap.event(951)", [], { place: false });
     t.check("K4: at 3:40 the bakery's window answers (Hanka from inside), 4 wood taken, 2 warm loaves", (await step("K4")) === "done:0" && (await t.count(83)) === b0 + 2 && (await t.count(61)) === 0 && /Hanka/.test(JSON.stringify(k4.log.map(l => l.name))), k4.log);
@@ -259,7 +271,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const ar0 = await t.count(127);
     await accept("kapral", "Zajmę się tym.", "D5");
     await at(dw + 1, 6);
-    await t.locate(26, 55, 8);
+    await t.locate(53, 94, 8);
     await t.talkTo("$gameMap.event(956)", [], { place: false });
     t.check("D5: six arrows from Wit; the tracks at the south gate at dawn", (await t.count(127)) === ar0 + 6 && (await step("D5")) === "active:1", await rec("D5"));
     await at(dw + 1, 22);
@@ -272,7 +284,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const notLeader = await step("D5");
     await t.eval("Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 23, animal: { _tqLeader: true } }); 0");
     t.check("two wolves on Polna droga move it on; on Skraj lasu only the pack's leader counts", notLeader === "active:2" && (await step("D5")) === "active:3", notLeader);
-    await t.go(8, 46, 51, 6);
+    await t.go(8, 98, 51, 6);
     await at(dw + 2, 9);
     const g5w = await t.gold(), o5 = await opinion();
     await talk("kapral", ["Powiem o wszystkim sołtysowi."]);
@@ -282,7 +294,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const dm = Math.ceil((dw + 3) / 7) * 7;
     await t.notices({ clear: true });
     await at(dm, 9.5, 60);
-    await t.locate(25, 33, 8);
+    await t.locate(52, 49, 8);
     const mk = await t.until("SpeechBubbles.log.some(l => /targ|Targ|Dzień targowy|Opłata targowa|sakiewek|na szczęście|Sukno|Kolejka|Pasy|weselej/.test(l))", 40, 300);
     t.check("the market day (every 7 days): a notice at the top and the residents call out the market", mk && (await t.notices()).some(n => /Dziś dzień targowy/.test(n)), await J("SpeechBubbles.log.slice(-5)"));
     await t.shot(path.join(SHOTS, "questy_targ.png"));
@@ -311,7 +323,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await at(dc + 1, 9.6);
     await talk("ludmila", []); await talk("ela", []);
     await at(dc + 1, 22);
-    await t.locate(13, 51, 4);
+    await t.locate(13, 65, 4);
     await t.until("!!TownLife.eventOf('rafal') && !TownLife.state('rafal').hidden", 20, 300);
     const rc = await talk("rafal", ["Dobrze. Nie liczę cię."]);
     t.check("K19: the camp counted (Ludmiła, Ela, Rafał - who asks not to be counted)", (await step("K19")) === "active:1" && /Nie licz mnie/.test(rc.text), rc.text.slice(0, 200));
@@ -320,14 +332,14 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.eval("(function(){ const r = TownLife.eventOf('rafal'), w = TownLife.eventOf('kapral'); if (w) { w._town.hidden = false; w.setTransparent(false); w.locate(r.x + 2, r.y); } return 0; })()");
     const guard = await talk("rafal", []);
     const g29 = await step("K29");
-    await t.eval("(function(){ const w = TownLife.eventOf('kapral'); if (w) w.locate(48, 51); return 0; })()");
+    await t.eval("(function(){ const w = TownLife.eventOf('kapral'); if (w) w.locate(100, 51); return 0; })()");
     await talk("rafal", []);
     t.check("K29: not while the corporal stands near ('Cicho! Kapral idzie'); with him gone the wound is dressed", g29 === "active:0" && /Kapral idzie/.test(guard.text) && (await step("K29")) === "done:0" && (await t.count(152)) === 0, { g29, text: guard.text });
     await at(dc + 2, 9);
     await talk("soltys", ["Dwoje: matka z córką."]);
     t.check("K19: told the sołtys 'two' - Rafał stays off the list", (await step("K19")) === "done:1" && !!(await J("TownQuests.state().flags.rafalHidden")));
     await accept("piekarka", "Zaczaję się.", "D4");
-    await t.locate(20, 34, 8);
+    await t.locate(32, 62, 8);
     await t.eval("Hunting.setSneak(true); 0");
     await at(dc + 3, 5.35, 5);
     const amb = await t.until("TownQuests.rec('D4').step === 1", 40, 300);
@@ -354,8 +366,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.go(24, 20, 14, 8);
     await at(5, 9, 30);
     const lord = await t.talkTo("$gameMap.event(902)", ["Odejdź"]);
-    t.check("K32: the Lord takes the letter, asks about the stones with a raven - then his own talk about the debt", (await step("K32")) === "done:0" && /kamienie\? Z wyrytym krukiem/.test(lord.text) && lord.done, lord.text.slice(0, 300));
-    await t.go(8, 22, 31, 8);
+    t.check("K32: the Lord takes the letter, asks about the stones with a raven - then his own talk about the debt", (await step("K32")) === "done:0" && /kamienie\?\s+Z\s+wyrytym\s+krukiem/.test(lord.text) && lord.done, lord.text.slice(0, 300));
+    await t.go(8, 34, 59, 8);
     await at(30, 7.5, 30);
     await accept("feliks", "Zaniosę prezent.", "K31");
     await t.give(137, 2); await t.give(136, 1);

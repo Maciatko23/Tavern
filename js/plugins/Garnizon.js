@@ -265,7 +265,7 @@
     // TEXTS
     // ------------------------------------------------------------------
     const TX = {
-        belzaMeet: ["Stój. Czyj jesteś?", "> Wnuk Stacha. Z pola za lasem.",
+        belzaMeet: ["Stój. Czyj jesteś?", "> Wnuk Stacha. Z działki za lasem.",
             "Stacha... Ten od długu u Lorda. (Rotmistrz mierzy cię wzrokiem od bosych stóp po czuprynę.) Ile masz lat? ...Jeszcze nie. Przyjdź za rok, to dostaniesz buty i żołd.",
             "Florian Bełza, rotmistrz chorągwi królewskiej. Stoimy tu z łaski twojego Lorda - i za pieniądze Korony.",
             "Masz zboże, to sprzedaj je Kłosowi, kwatermistrzowi. Na wojnie każdy worek się liczy. Masz ręce, to drwa zawsze się przydadzą."],
@@ -426,6 +426,15 @@
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
+    // (2026-10-23, Bron.js) other trades of the same people, as lines of their own menus - their rules, hours and words kept:
+    // addMenu(fn(key, ev) -> [{ label, cmds, say }]) - say: a line said before a soldier's choice
+    const extraMenus = [];
+    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
+    function extraRows(key, ev) {
+        const out = [];
+        for (const fn of extraMenus) { try { for (const r of fn(key, ev) || []) if (r && r.label) out.push(r); } catch (e) { console.error("[Garnizon] menu " + key, e); } }
+        return out;
+    }
     function kwatTalk(ev) {
         const spk = { id: ev.eventId(), name: "Kwatermistrz Kłos" }, f = flags(), out = [], s = S();
         if (!s.met.kwatermistrz) return metTalk("kwatermistrz", out, spk, s.met.rotmistrz ? TX.klosMeetKnown : TX.klosMeet);
@@ -447,6 +456,7 @@
             labels.unshift("Nikomu nie powiem o nocnym zbożu.");
             branches.unshift(linesTo([], spk, L.silent.slice(0, 1)).concat(tqAct([], ["D27", "fx", "d27Klos", "silent"]), linesTo([], spk, L.silent.slice(1))));
         }
+        for (const r of extraRows("kwatermistrz", ev)) { labels.push(r.label); branches.push(r.cmds || []); }
         labels.push("Co słychać?");
         branches.push(linesTo([], spk, [usual("kwatermistrz") || "Liczę. Zawsze liczę."]));
         labels.push("Bywaj.");
@@ -733,6 +743,9 @@
             } else if (isNight() && soldierOf(ev.eventId()) && soldierOf(ev.eventId()).sentry) {
                 linesTo(out, spk, [pick(TX.soldier.bramaNoc)]);
             } else linesTo(out, spk, [pick(TX.soldier[role] || TX.soldier.cwiczy)]);
+            const extra = extraRows("zolnierz:" + role, ev), said = extra.find(r => r.say);
+            if (said) linesTo(out, spk, [said.say]);
+            if (extra.length) choiceTo(out, extra.map(r => r.label).concat(["Bywaj."]), extra.map(r => r.cmds || []).concat([[]]), extra.length);
             return out;
         }
         m = /<Garnizon:rekrut=(\w+)>/.exec(note);
@@ -1110,7 +1123,7 @@
     // ------------------------------------------------------------------
     const api = {
         MAP, QUARTERS, DATA: D, TX, state: () => S(), favor, addFavor, favorWord, priceOf, sell, waveWeek, hungerWeek, recruitDay, kantorNight,
-        marketNow, klosGone, act: actCall, talk, look, granary, bar, door, barOpen, barCell, lowTide, sees, seenBy, sync, placeAll,
+        marketNow, klosGone, addMenu, act: actCall, talk, look, granary, bar, door, barOpen, barCell, lowTide, sees, seenBy, sync, placeAll,
         built: () => built, d26List, d26Resolved, entryAt, spot
     };
     window.Garnizon = T.register(PLUGIN, api);

@@ -72,7 +72,7 @@
         { key: "koszar", map: 4, kind: "fold", name: "Koszar", mode: "reach", x: 50, y: 40, w: 5, h: 4 },
         { key: "pastwisko", map: 4, kind: "pasture", name: "Pastwisko", mode: "zone", x: 43, y: 44, w: 7, h: 6 },
         { key: "postoj_004", map: 4, kind: "wagon", name: "Postój handlarza (Łąka)", mode: "reach", x: 59, y: 10, w: 4, h: 2 },
-        { key: "postoj_003", map: 3, kind: "wagon", name: "Postój handlarza (pole dziadka)", mode: "reach", x: 59, y: 9, w: 4, h: 3 },
+        { key: "postoj_003", map: 3, kind: "wagon", name: "Postój handlarza (Kruczy Jar)", mode: "reach", x: 59, y: 9, w: 4, h: 3 },
         { key: "pastwisko_018", map: 18, kind: "pasture", name: "Pastwisko przy menhirach", mode: "reach", x: 65, y: 29, w: 7, h: 5 },
         { key: "owca_017", map: 17, kind: "sheep", name: "Zabłąkana owca", mode: "reach", cells: [[40, 40], [60, 38], [72, 30]] },
         { key: "oboz_kopaczy", map: 13, kind: "camp", name: "Obóz kopaczy", mode: "reach", x: 97, y: 70, w: 8, h: 6 },
@@ -90,7 +90,7 @@
         { key: "lud_koszar", map: 4, x: 52, y: 44, near: 2, name: "Koszar pasterza", icon: 367,
           text: "Wiklinowa zagroda na Łące. Wawrzyn Owczarz pasie tu sześć owiec, wieczorem zagania je za płot - wilki nocą nie przeskoczą plecionki. Co trzeci dzień pasie stado przy menhirach." },
         { key: "lud_postoj", map: 22, x: 51, y: 21, near: 2, name: "Postój wędrownego handlarza", icon: 496,
-          text: "Wóz pod plandeką, osiołek i ognisko przy Polnej drodze. Szymon Juczny krąży czterema postojami: Polna droga, Leśna droga, Łąka, pole dziadka - dzień tu, dzień tam. Sprzedaje to, czego w miasteczku nie ma, i słyszy, co gdzie leży." },
+          text: "Wóz pod plandeką, osiołek i ognisko przy Polnej drodze. Szymon Juczny krąży czterema postojami: Polna droga, Leśna droga, Łąka, Kruczy Jar - dzień tu, dzień tam. Sprzedaje to, czego w miasteczku nie ma, i słyszy, co gdzie leży." },
         { key: "lud_oboz", map: 13, x: 100, y: 73, near: 3, name: "Obóz kopaczy Czarnych Oczu", icon: 499,
           text: "Dwa namioty pod skałą na wschodzie gór i szyb wykuty w kamieniu. Kopacze Czarnych Oczu drążą tu coś po cichu - za dnia pilnują, nocą śpią przy ognisku." },
         { key: "lud_jaskinia", map: 125, x: 16, y: 65, near: 1, name: "Jaskinia pod zatoczką", icon: 498,
@@ -174,7 +174,7 @@
                 night: ["Ognisko grzeje. Siadaj, jak chcesz, tylko nic nie ruszaj z wozu."]
             },
             talk: {
-                morning: ["Rano rozkładam towar. Cztery drogi, cztery postoje - Polna, Leśna, Łąka i pole twojego dziadka. Dzień tu, dzień tam.",
+                morning: ["Rano rozkładam towar. Cztery drogi, cztery postoje - Polna, Leśna, Łąka i Kruczy Jar przy działce twojego dziadka. Dzień tu, dzień tam.",
                           "Co dzień inny towar. Co mi wpadnie w ręce po drodze, to sprzedaję."],
                 day: ["Chodzę od wsi do wsi od dwudziestu lat. Słyszę to, czego w miasteczku nikt ci nie powie.",
                       "Skupuję skóry, wełnę, miód, wosk, rzadkie zioła, poroże, pazury. Płacę lepiej niż w mieście - bo w mieście płacą źle."],

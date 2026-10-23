@@ -1,0 +1,1 @@
+c2455e533adb4e2293883f0f999ab1558bc5be63169cf31d4c5015eca73c3416  data/Map008.json (2026-10-22, przed instalacją nowego miasta; build.py czytał tę wersję)

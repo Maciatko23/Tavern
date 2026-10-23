@@ -1,0 +1,7801 @@
+{
+ "opis": "Mapowanie starej mapy Podgrodzia (data/Map111.json) na nową (tools/podgrodzie2/staging/Map111.json). (a) bloki: stare prostokąty -> przesunięcie dx,dy (pierwszy pasujący blok wygrywa); (b) zdarzenia: id -> stare/nowe x,y, usunięte, nowe; (c) miejsca: TownLife („Miejsce:” stare i nowe) i punkty wtyczek, testów, przeniesień; (d) strefy i nowe prostokąty (Zasoby/Okolice: ogródki, wysypisko, glinianka; orzeł; działka).",
+ "a_bloki": [
+  {
+   "blok": "chata_drwala",
+   "stary": [
+    1,
+    2,
+    13,
+    12
+   ],
+   "prostokaty": [
+    [
+     1,
+     2,
+     11,
+     12
+    ],
+    [
+     12,
+     11,
+     13,
+     12
+    ]
+   ],
+   "dx": 3,
+   "dy": 3,
+   "nowy": [
+    4,
+    5,
+    16,
+    15
+   ],
+   "zdarzenia": [
+    1,
+    2,
+    3,
+    80,
+    81
+   ]
+  },
+  {
+   "blok": "chata_pod_strzecha",
+   "stary": [
+    12,
+    3,
+    19,
+    10
+   ],
+   "prostokaty": [
+    [
+     12,
+     3,
+     19,
+     10
+    ]
+   ],
+   "dx": 6,
+   "dy": 4,
+   "nowy": [
+    18,
+    7,
+    25,
+    14
+   ],
+   "zdarzenia": [
+    4
+   ]
+  },
+  {
+   "blok": "dom_uchodzcow_i_oboz",
+   "stary": [
+    26,
+    2,
+    42,
+    13
+   ],
+   "prostokaty": [
+    [
+     29,
+     2,
+     42,
+     12
+    ],
+    [
+     28,
+     2,
+     28,
+     10
+    ],
+    [
+     26,
+     7,
+     27,
+     10
+    ],
+    [
+     33,
+     13,
+     33,
+     13
+    ]
+   ],
+   "dx": 1,
+   "dy": 4,
+   "nowy": [
+    27,
+    6,
+    43,
+    17
+   ],
+   "zdarzenia": [
+    7,
+    8,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    73,
+    74
+   ]
+  },
+  {
+   "blok": "kram_starzyzny",
+   "stary": [
+    18,
+    7,
+    28,
+    14
+   ],
+   "prostokaty": [
+    [
+     20,
+     7,
+     25,
+     14
+    ],
+    [
+     26,
+     11,
+     28,
+     14
+    ],
+    [
+     18,
+     11,
+     19,
+     14
+    ]
+   ],
+   "dx": 27,
+   "dy": 16,
+   "nowy": [
+    45,
+    23,
+    55,
+    30
+   ],
+   "zdarzenia": [
+    5,
+    6,
+    76
+   ]
+  },
+  {
+   "blok": "chalupa_z_desek",
+   "stary": [
+    10,
+    13,
+    17,
+    17
+   ],
+   "prostokaty": [
+    [
+     10,
+     13,
+     17,
+     17
+    ]
+   ],
+   "dx": 4,
+   "dy": 11,
+   "nowy": [
+    14,
+    24,
+    21,
+    28
+   ],
+   "zdarzenia": [
+    9
+   ]
+  },
+  {
+   "blok": "chata_klusownika",
+   "stary": [
+    1,
+    21,
+    7,
+    28
+   ],
+   "prostokaty": [
+    [
+     1,
+     21,
+     7,
+     28
+    ]
+   ],
+   "dx": 4,
+   "dy": 2,
+   "nowy": [
+    5,
+    23,
+    11,
+    30
+   ],
+   "zdarzenia": [
+    10,
+    11,
+    83
+   ]
+  },
+  {
+   "blok": "izba_znachorki",
+   "stary": [
+    12,
+    20,
+    22,
+    27
+   ],
+   "prostokaty": [
+    [
+     12,
+     20,
+     16,
+     27
+    ],
+    [
+     17,
+     22,
+     22,
+     27
+    ]
+   ],
+   "dx": 12,
+   "dy": 5,
+   "nowy": [
+    24,
+    25,
+    34,
+    32
+   ],
+   "zdarzenia": [
+    13,
+    14,
+    84,
+    85
+   ]
+  },
+  {
+   "blok": "kapliczka",
+   "stary": [
+    24,
+    22,
+    27,
+    25
+   ],
+   "prostokaty": [
+    [
+     24,
+     22,
+     27,
+     25
+    ]
+   ],
+   "dx": 11,
+   "dy": 4,
+   "nowy": [
+    35,
+    26,
+    38,
+    29
+   ],
+   "zdarzenia": [
+    69,
+    86
+   ]
+  },
+  {
+   "blok": "chata_praczki",
+   "stary": [
+    29,
+    20,
+    39,
+    30
+   ],
+   "prostokaty": [
+    [
+     31,
+     20,
+     37,
+     25
+    ],
+    [
+     29,
+     26,
+     39,
+     30
+    ]
+   ],
+   "dx": 28,
+   "dy": 4,
+   "nowy": [
+    57,
+    24,
+    67,
+    34
+   ],
+   "zdarzenia": [
+    15,
+    16,
+    87,
+    88
+   ]
+  },
+  {
+   "blok": "szopa",
+   "stary": [
+    8,
+    20,
+    11,
+    27
+   ],
+   "prostokaty": [
+    [
+     8,
+     20,
+     11,
+     27
+    ]
+   ],
+   "dx": 61,
+   "dy": 3,
+   "nowy": [
+    69,
+    23,
+    72,
+    30
+   ],
+   "zdarzenia": [
+    12
+   ]
+  },
+  {
+   "blok": "komorka",
+   "stary": [
+    38,
+    21,
+    43,
+    25
+   ],
+   "prostokaty": [
+    [
+     38,
+     21,
+     43,
+     25
+    ]
+   ],
+   "dx": 39,
+   "dy": 4,
+   "nowy": [
+    77,
+    25,
+    82,
+    29
+   ],
+   "zdarzenia": [
+    17
+   ]
+  },
+  {
+   "blok": "brama_zebrak",
+   "stary": [
+    40,
+    10,
+    43,
+    21
+   ],
+   "prostokaty": [
+    [
+     43,
+     10,
+     43,
+     21
+    ],
+    [
+     40,
+     13,
+     42,
+     21
+    ]
+   ],
+   "dx": 46,
+   "dy": 0,
+   "nowy": [
+    86,
+    10,
+    89,
+    21
+   ],
+   "zdarzenia": [
+    18,
+    20,
+    67,
+    70,
+    71,
+    72
+   ]
+  },
+  {
+   "blok": "ogrod_strzechy",
+   "stary": [
+    20,
+    2,
+    27,
+    6
+   ],
+   "prostokaty": [
+    [
+     20,
+     2,
+     27,
+     6
+    ]
+   ],
+   "dx": 39,
+   "dy": 48,
+   "nowy": [
+    59,
+    50,
+    66,
+    54
+   ],
+   "zdarzenia": []
+  },
+  {
+   "blok": "ogrod_deski",
+   "stary": [
+    2,
+    13,
+    9,
+    17
+   ],
+   "prostokaty": [
+    [
+     2,
+     13,
+     9,
+     17
+    ]
+   ],
+   "dx": 67,
+   "dy": 37,
+   "nowy": [
+    69,
+    50,
+    76,
+    54
+   ],
+   "zdarzenia": []
+  },
+  {
+   "blok": "chata_pod_lasem_z_dzialka",
+   "stary": [
+    2,
+    35,
+    36,
+    51
+   ],
+   "prostokaty": [
+    [
+     2,
+     35,
+     36,
+     51
+    ]
+   ],
+   "dx": 2,
+   "dy": 40,
+   "nowy": [
+    4,
+    75,
+    38,
+    91
+   ],
+   "zdarzenia": [
+    93,
+    94
+   ]
+  }
+ ],
+ "b_zdarzenia": {
+  "zachowane": {
+   "1": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     5,
+     2
+    ],
+    "nowe": [
+     8,
+     5
+    ],
+    "blok": "chata_drwala"
+   },
+   "2": {
+    "nazwa": "Okienko w dachu",
+    "stare": [
+     8,
+     5
+    ],
+    "nowe": [
+     11,
+     8
+    ],
+    "blok": "chata_drwala"
+   },
+   "3": {
+    "nazwa": "Drzwi: Chata drwala",
+    "stare": [
+     7,
+     8
+    ],
+    "nowe": [
+     10,
+     11
+    ],
+    "blok": "chata_drwala"
+   },
+   "4": {
+    "nazwa": "Drzwi (zamknięte): Chata pod strzechą",
+    "stare": [
+     15,
+     9
+    ],
+    "nowe": [
+     21,
+     13
+    ],
+    "blok": "chata_pod_strzecha"
+   },
+   "5": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     23,
+     7
+    ],
+    "nowe": [
+     50,
+     23
+    ],
+    "blok": "kram_starzyzny"
+   },
+   "6": {
+    "nazwa": "Drzwi: Kram starzyzny",
+    "stare": [
+     21,
+     13
+    ],
+    "nowe": [
+     48,
+     29
+    ],
+    "blok": "kram_starzyzny"
+   },
+   "7": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     29,
+     2
+    ],
+    "nowe": [
+     30,
+     6
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "8": {
+    "nazwa": "Drzwi: Dom uchodźców",
+    "stare": [
+     32,
+     8
+    ],
+    "nowe": [
+     33,
+     12
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "9": {
+    "nazwa": "Drzwi (zamknięte): Chałupa z desek",
+    "stare": [
+     13,
+     17
+    ],
+    "nowe": [
+     17,
+     28
+    ],
+    "blok": "chalupa_z_desek"
+   },
+   "10": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     2,
+     21
+    ],
+    "nowe": [
+     6,
+     23
+    ],
+    "blok": "chata_klusownika"
+   },
+   "11": {
+    "nazwa": "Drzwi: Chata kłusownika",
+    "stare": [
+     4,
+     27
+    ],
+    "nowe": [
+     8,
+     29
+    ],
+    "blok": "chata_klusownika"
+   },
+   "12": {
+    "nazwa": "Drzwi (zamknięte): Szopa",
+    "stare": [
+     9,
+     27
+    ],
+    "nowe": [
+     70,
+     30
+    ],
+    "blok": "szopa"
+   },
+   "13": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     16,
+     20
+    ],
+    "nowe": [
+     28,
+     25
+    ],
+    "blok": "izba_znachorki"
+   },
+   "14": {
+    "nazwa": "Drzwi: Izba znachorki",
+    "stare": [
+     15,
+     26
+    ],
+    "nowe": [
+     27,
+     31
+    ],
+    "blok": "izba_znachorki"
+   },
+   "15": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     32,
+     20
+    ],
+    "nowe": [
+     60,
+     24
+    ],
+    "blok": "chata_praczki"
+   },
+   "16": {
+    "nazwa": "Drzwi: Chata praczki",
+    "stare": [
+     33,
+     26
+    ],
+    "nowe": [
+     61,
+     30
+    ],
+    "blok": "chata_praczki"
+   },
+   "17": {
+    "nazwa": "Drzwi (zamknięte): Komórka",
+    "stare": [
+     39,
+     25
+    ],
+    "nowe": [
+     78,
+     29
+    ],
+    "blok": "komorka"
+   },
+   "18": {
+    "nazwa": "Latarnia przy bramie",
+    "stare": [
+     42,
+     19
+    ],
+    "nowe": [
+     88,
+     19
+    ],
+    "blok": "brama_zebrak"
+   },
+   "19": {
+    "nazwa": "Pochodnia na baszcie",
+    "stare": [
+     44,
+     13
+    ],
+    "nowe": [
+     90,
+     13
+    ],
+    "blok": "brama miasta (+46)"
+   },
+   "20": {
+    "nazwa": "Posłanie żebraka",
+    "stare": [
+     42,
+     14
+    ],
+    "nowe": [
+     88,
+     14
+    ],
+    "blok": "brama_zebrak"
+   },
+   "21": {
+    "nazwa": "Namiot uchodźców",
+    "stare": [
+     39,
+     5
+    ],
+    "nowe": [
+     40,
+     9
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "22": {
+    "nazwa": "Namiot",
+    "stare": [
+     41,
+     9
+    ],
+    "nowe": [
+     42,
+     13
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "23": {
+    "nazwa": "Posłanie",
+    "stare": [
+     42,
+     7
+    ],
+    "nowe": [
+     43,
+     11
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "24": {
+    "nazwa": "Posłanie",
+    "stare": [
+     36,
+     10
+    ],
+    "nowe": [
+     37,
+     14
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "25": {
+    "nazwa": "Ognisko uchodźców",
+    "stare": [
+     39,
+     9
+    ],
+    "nowe": [
+     40,
+     13
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "26": {
+    "nazwa": "Posłanie pod daszkiem",
+    "stare": [
+     27,
+     8
+    ],
+    "nowe": [
+     28,
+     12
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "27": {
+    "nazwa": "Sucha studnia",
+    "stare": [
+     23,
+     17
+    ],
+    "nowe": [
+     44,
+     33
+    ],
+    "blok": "placyk (ręcznie)"
+   },
+   "65": {
+    "nazwa": "Przejście -> Okolice Tawerny (brama zachodnia)",
+    "stare": [
+     91,
+     17
+    ],
+    "nowe": [
+     91,
+     17
+    ],
+    "blok": "bez zmian (brzeg mapy)"
+   },
+   "66": {
+    "nazwa": "Przejście -> Okolice Tawerny (brama zachodnia)",
+    "stare": [
+     91,
+     18
+    ],
+    "nowe": [
+     91,
+     18
+    ],
+    "blok": "bez zmian (brzeg mapy)"
+   },
+   "67": {
+    "nazwa": "Drogowskaz: Podgrodzie",
+    "stare": [
+     40,
+     15
+    ],
+    "nowe": [
+     86,
+     15
+    ],
+    "blok": "brama_zebrak"
+   },
+   "68": {
+    "nazwa": "Obwieszczenie sołtysa",
+    "stare": [
+     29,
+     15
+    ],
+    "nowe": [
+     38,
+     23
+    ],
+    "blok": "placyk (ręcznie)"
+   },
+   "69": {
+    "nazwa": "Kapliczka: przydrożny krzyż",
+    "stare": [
+     26,
+     23
+    ],
+    "nowe": [
+     37,
+     27
+    ],
+    "blok": "kapliczka"
+   },
+   "70": {
+    "nazwa": "Miejsce: brama_zach",
+    "stare": [
+     41,
+     18
+    ],
+    "nowe": [
+     87,
+     18
+    ],
+    "blok": "brama_zebrak"
+   },
+   "71": {
+    "nazwa": "Miejsce: zebrak",
+    "stare": [
+     43,
+     16
+    ],
+    "nowe": [
+     89,
+     16
+    ],
+    "blok": "brama_zebrak"
+   },
+   "72": {
+    "nazwa": "Miejsce: zebrak_noc",
+    "stare": [
+     43,
+     14
+    ],
+    "nowe": [
+     89,
+     14
+    ],
+    "blok": "brama_zebrak"
+   },
+   "73": {
+    "nazwa": "Miejsce: namioty",
+    "stare": [
+     38,
+     9
+    ],
+    "nowe": [
+     39,
+     13
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "74": {
+    "nazwa": "Miejsce: uchodzcy_drzwi",
+    "stare": [
+     32,
+     9
+    ],
+    "nowe": [
+     33,
+     13
+    ],
+    "blok": "dom_uchodzcow_i_oboz"
+   },
+   "75": {
+    "nazwa": "Miejsce: kram",
+    "stare": [
+     26,
+     15
+    ],
+    "nowe": [
+     53,
+     31
+    ],
+    "blok": "miejsce (ręcznie)"
+   },
+   "76": {
+    "nazwa": "Miejsce: szmaciarz_drzwi",
+    "stare": [
+     21,
+     14
+    ],
+    "nowe": [
+     48,
+     30
+    ],
+    "blok": "kram_starzyzny"
+   },
+   "77": {
+    "nazwa": "Miejsce: plac",
+    "stare": [
+     26,
+     18
+    ],
+    "nowe": [
+     43,
+     36
+    ],
+    "blok": "miejsce (ręcznie)"
+   },
+   "78": {
+    "nazwa": "Miejsce: studnia_sucha",
+    "stare": [
+     23,
+     18
+    ],
+    "nowe": [
+     44,
+     34
+    ],
+    "blok": "miejsce (ręcznie)"
+   },
+   "79": {
+    "nazwa": "Miejsce: zabawa",
+    "stare": [
+     20,
+     18
+    ],
+    "nowe": [
+     51,
+     38
+    ],
+    "blok": "miejsce (ręcznie)"
+   },
+   "80": {
+    "nazwa": "Miejsce: drwal_drzwi",
+    "stare": [
+     7,
+     9
+    ],
+    "nowe": [
+     10,
+     12
+    ],
+    "blok": "chata_drwala"
+   },
+   "81": {
+    "nazwa": "Miejsce: drewutnia",
+    "stare": [
+     10,
+     11
+    ],
+    "nowe": [
+     13,
+     14
+    ],
+    "blok": "chata_drwala"
+   },
+   "82": {
+    "nazwa": "Miejsce: skraj_lasu",
+    "stare": [
+     0,
+     19
+    ],
+    "nowe": [
+     0,
+     19
+    ],
+    "blok": "miejsce (ręcznie)"
+   },
+   "83": {
+    "nazwa": "Miejsce: klusownik_drzwi",
+    "stare": [
+     4,
+     28
+    ],
+    "nowe": [
+     8,
+     30
+    ],
+    "blok": "chata_klusownika"
+   },
+   "84": {
+    "nazwa": "Miejsce: znachorka_drzwi",
+    "stare": [
+     15,
+     27
+    ],
+    "nowe": [
+     27,
+     32
+    ],
+    "blok": "izba_znachorki"
+   },
+   "85": {
+    "nazwa": "Miejsce: ziola",
+    "stare": [
+     20,
+     27
+    ],
+    "nowe": [
+     32,
+     32
+    ],
+    "blok": "izba_znachorki"
+   },
+   "86": {
+    "nazwa": "Miejsce: kapliczka",
+    "stare": [
+     26,
+     24
+    ],
+    "nowe": [
+     37,
+     28
+    ],
+    "blok": "kapliczka"
+   },
+   "87": {
+    "nazwa": "Miejsce: praczka_drzwi",
+    "stare": [
+     33,
+     27
+    ],
+    "nowe": [
+     61,
+     31
+    ],
+    "blok": "chata_praczki"
+   },
+   "88": {
+    "nazwa": "Miejsce: pranie",
+    "stare": [
+     32,
+     30
+    ],
+    "nowe": [
+     60,
+     34
+    ],
+    "blok": "chata_praczki"
+   },
+   "89": {
+    "nazwa": "Brama zachodnia: dach i słupy",
+    "stare": [
+     45,
+     19
+    ],
+    "nowe": [
+     91,
+     19
+    ],
+    "blok": "brama miasta (+46)"
+   },
+   "90": {
+    "nazwa": "Brama zachodnia: skrzydło i cień",
+    "stare": [
+     44,
+     18
+    ],
+    "nowe": [
+     90,
+     18
+    ],
+    "blok": "brama miasta (+46)"
+   },
+   "91": {
+    "nazwa": "Brama zachodnia: światło latarni",
+    "stare": [
+     45,
+     16
+    ],
+    "nowe": [
+     91,
+     16
+    ],
+    "blok": "brama miasta (+46)"
+   },
+   "92": {
+    "nazwa": "Przejście -> Przystań",
+    "stare": [
+     0,
+     19
+    ],
+    "nowe": [
+     0,
+     19
+    ],
+    "blok": "bez zmian (brzeg mapy)"
+   },
+   "93": {
+    "nazwa": "Dym z komina",
+    "stare": [
+     4,
+     35
+    ],
+    "nowe": [
+     6,
+     75
+    ],
+    "blok": "chata_pod_lasem_z_dzialka"
+   },
+   "94": {
+    "nazwa": "Drzwi (zamknięte): Chata pod lasem",
+    "stare": [
+     6,
+     40
+    ],
+    "nowe": [
+     8,
+     80
+    ],
+    "blok": "chata_pod_lasem_z_dzialka"
+   },
+   "111": {
+    "nazwa": "Drzewo",
+    "stare": [
+     90,
+     84
+    ],
+    "nowe": [
+     90,
+     84
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "115": {
+    "nazwa": "Drzewo",
+    "stare": [
+     13,
+     93
+    ],
+    "nowe": [
+     13,
+     93
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "131": {
+    "nazwa": "Drzewo",
+    "stare": [
+     33,
+     96
+    ],
+    "nowe": [
+     33,
+     96
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "132": {
+    "nazwa": "Drzewo",
+    "stare": [
+     79,
+     104
+    ],
+    "nowe": [
+     79,
+     104
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "133": {
+    "nazwa": "Drzewo",
+    "stare": [
+     38,
+     97
+    ],
+    "nowe": [
+     38,
+     97
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "136": {
+    "nazwa": "Drzewo",
+    "stare": [
+     37,
+     93
+    ],
+    "nowe": [
+     37,
+     93
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "140": {
+    "nazwa": "Drzewo",
+    "stare": [
+     25,
+     108
+    ],
+    "nowe": [
+     25,
+     108
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "151": {
+    "nazwa": "Drzewo",
+    "stare": [
+     29,
+     94
+    ],
+    "nowe": [
+     29,
+     94
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "154": {
+    "nazwa": "Drzewo",
+    "stare": [
+     74,
+     94
+    ],
+    "nowe": [
+     74,
+     94
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "158": {
+    "nazwa": "Drzewo",
+    "stare": [
+     28,
+     100
+    ],
+    "nowe": [
+     28,
+     100
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "160": {
+    "nazwa": "Drzewo",
+    "stare": [
+     72,
+     87
+    ],
+    "nowe": [
+     72,
+     87
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "162": {
+    "nazwa": "Drzewo",
+    "stare": [
+     78,
+     96
+    ],
+    "nowe": [
+     78,
+     96
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "169": {
+    "nazwa": "Drzewo",
+    "stare": [
+     42,
+     94
+    ],
+    "nowe": [
+     42,
+     94
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "181": {
+    "nazwa": "Drzewo",
+    "stare": [
+     34,
+     109
+    ],
+    "nowe": [
+     34,
+     109
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "182": {
+    "nazwa": "Drzewo",
+    "stare": [
+     65,
+     94
+    ],
+    "nowe": [
+     65,
+     94
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "185": {
+    "nazwa": "Drzewo",
+    "stare": [
+     80,
+     99
+    ],
+    "nowe": [
+     80,
+     99
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "187": {
+    "nazwa": "Drzewo",
+    "stare": [
+     15,
+     98
+    ],
+    "nowe": [
+     15,
+     98
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "188": {
+    "nazwa": "Drzewo",
+    "stare": [
+     46,
+     100
+    ],
+    "nowe": [
+     46,
+     100
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "189": {
+    "nazwa": "Drzewo",
+    "stare": [
+     57,
+     104
+    ],
+    "nowe": [
+     57,
+     104
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "193": {
+    "nazwa": "Drzewo",
+    "stare": [
+     48,
+     103
+    ],
+    "nowe": [
+     48,
+     103
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "198": {
+    "nazwa": "Drzewo",
+    "stare": [
+     49,
+     91
+    ],
+    "nowe": [
+     49,
+     91
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "200": {
+    "nazwa": "Drzewo",
+    "stare": [
+     70,
+     90
+    ],
+    "nowe": [
+     70,
+     90
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "202": {
+    "nazwa": "Drzewo",
+    "stare": [
+     52,
+     104
+    ],
+    "nowe": [
+     52,
+     104
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "215": {
+    "nazwa": "Drzewo",
+    "stare": [
+     48,
+     88
+    ],
+    "nowe": [
+     48,
+     88
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "216": {
+    "nazwa": "Drzewo",
+    "stare": [
+     75,
+     98
+    ],
+    "nowe": [
+     75,
+     98
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "217": {
+    "nazwa": "Drzewo",
+    "stare": [
+     42,
+     99
+    ],
+    "nowe": [
+     42,
+     99
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "220": {
+    "nazwa": "Drzewo",
+    "stare": [
+     85,
+     78
+    ],
+    "nowe": [
+     85,
+     78
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "228": {
+    "nazwa": "Drzewo",
+    "stare": [
+     34,
+     104
+    ],
+    "nowe": [
+     34,
+     104
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "231": {
+    "nazwa": "Drzewo",
+    "stare": [
+     18,
+     94
+    ],
+    "nowe": [
+     18,
+     94
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "236": {
+    "nazwa": "Drzewo",
+    "stare": [
+     45,
+     96
+    ],
+    "nowe": [
+     45,
+     96
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "238": {
+    "nazwa": "Drzewo",
+    "stare": [
+     77,
+     101
+    ],
+    "nowe": [
+     77,
+     101
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "241": {
+    "nazwa": "Drzewo",
+    "stare": [
+     15,
+     109
+    ],
+    "nowe": [
+     15,
+     109
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "243": {
+    "nazwa": "Drzewo",
+    "stare": [
+     23,
+     101
+    ],
+    "nowe": [
+     23,
+     101
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "248": {
+    "nazwa": "Drzewo",
+    "stare": [
+     6,
+     70
+    ],
+    "nowe": [
+     6,
+     70
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "250": {
+    "nazwa": "Drzewo",
+    "stare": [
+     71,
+     109
+    ],
+    "nowe": [
+     71,
+     109
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "254": {
+    "nazwa": "Drzewo",
+    "stare": [
+     90,
+     88
+    ],
+    "nowe": [
+     90,
+     88
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "260": {
+    "nazwa": "Drzewo",
+    "stare": [
+     73,
+     91
+    ],
+    "nowe": [
+     73,
+     91
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "265": {
+    "nazwa": "Skała",
+    "stare": [
+     60,
+     72
+    ],
+    "nowe": [
+     60,
+     72
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "266": {
+    "nazwa": "Skała",
+    "stare": [
+     41,
+     92
+    ],
+    "nowe": [
+     41,
+     92
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "272": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     60,
+     108
+    ],
+    "nowe": [
+     60,
+     108
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "274": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     0,
+     96
+    ],
+    "nowe": [
+     0,
+     96
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "278": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     88,
+     100
+    ],
+    "nowe": [
+     88,
+     100
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "279": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     78,
+     76
+    ],
+    "nowe": [
+     78,
+     76
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "285": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     0,
+     89
+    ],
+    "nowe": [
+     0,
+     89
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "290": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     90,
+     101
+    ],
+    "nowe": [
+     90,
+     101
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "297": {
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     10,
+     67
+    ],
+    "nowe": [
+     10,
+     67
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "302": {
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     47,
+     82
+    ],
+    "nowe": [
+     47,
+     82
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "303": {
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     3,
+     73
+    ],
+    "nowe": [
+     3,
+     73
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "307": {
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     0,
+     99
+    ],
+    "nowe": [
+     0,
+     99
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "326": {
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     48,
+     84
+    ],
+    "nowe": [
+     48,
+     84
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "336": {
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     88,
+     108
+    ],
+    "nowe": [
+     88,
+     108
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "341": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     6,
+     109
+    ],
+    "nowe": [
+     6,
+     109
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "342": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     55,
+     84
+    ],
+    "nowe": [
+     55,
+     84
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "344": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     72,
+     81
+    ],
+    "nowe": [
+     72,
+     81
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "345": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     11,
+     99
+    ],
+    "nowe": [
+     11,
+     99
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "348": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     9,
+     102
+    ],
+    "nowe": [
+     9,
+     102
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "353": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     7,
+     101
+    ],
+    "nowe": [
+     7,
+     101
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "356": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     86,
+     74
+    ],
+    "nowe": [
+     86,
+     74
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "359": {
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     61,
+     94
+    ],
+    "nowe": [
+     61,
+     94
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "366": {
+    "nazwa": "Płaski kamień",
+    "stare": [
+     51,
+     76
+    ],
+    "nowe": [
+     51,
+     76
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "367": {
+    "nazwa": "Płaski kamień",
+    "stare": [
+     63,
+     89
+    ],
+    "nowe": [
+     63,
+     89
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "373": {
+    "nazwa": "Płaski kamień",
+    "stare": [
+     46,
+     78
+    ],
+    "nowe": [
+     46,
+     78
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "390": {
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     77,
+     88
+    ],
+    "nowe": [
+     77,
+     88
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "393": {
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     86,
+     107
+    ],
+    "nowe": [
+     86,
+     107
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "394": {
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     1,
+     67
+    ],
+    "nowe": [
+     1,
+     67
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "399": {
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     4,
+     73
+    ],
+    "nowe": [
+     4,
+     73
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "408": {
+    "nazwa": "Dzika grusza",
+    "stare": [
+     57,
+     93
+    ],
+    "nowe": [
+     57,
+     93
+    ],
+    "blok": "bez zmian (poza osadą)"
+   },
+   "410": {
+    "nazwa": "Dzika grusza",
+    "stare": [
+     89,
+     72
+    ],
+    "nowe": [
+     89,
+     72
+    ],
+    "blok": "bez zmian (poza osadą)"
+   }
+  },
+  "usuniete": [
+   {
+    "id": 28,
+    "nazwa": "Drzewo",
+    "stare": [
+     1,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 29,
+    "nazwa": "Drzewo",
+    "stare": [
+     3,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 30,
+    "nazwa": "Drzewo",
+    "stare": [
+     10,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 31,
+    "nazwa": "Drzewo",
+    "stare": [
+     12,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 32,
+    "nazwa": "Drzewo",
+    "stare": [
+     19,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 33,
+    "nazwa": "Drzewo",
+    "stare": [
+     25,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 34,
+    "nazwa": "Drzewo",
+    "stare": [
+     28,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 35,
+    "nazwa": "Drzewo",
+    "stare": [
+     36,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 36,
+    "nazwa": "Drzewo",
+    "stare": [
+     39,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 37,
+    "nazwa": "Drzewo",
+    "stare": [
+     42,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 38,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     4
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 39,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     8
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 40,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     12
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 41,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     16
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 42,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     22
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 43,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     26
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 44,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     30
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 45,
+    "nazwa": "Drzewo",
+    "stare": [
+     1,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 46,
+    "nazwa": "Drzewo",
+    "stare": [
+     4,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 47,
+    "nazwa": "Drzewo",
+    "stare": [
+     7,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 48,
+    "nazwa": "Drzewo",
+    "stare": [
+     10,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 49,
+    "nazwa": "Drzewo",
+    "stare": [
+     13,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 50,
+    "nazwa": "Drzewo",
+    "stare": [
+     17,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 51,
+    "nazwa": "Drzewo",
+    "stare": [
+     19,
+     33
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 52,
+    "nazwa": "Drzewo",
+    "stare": [
+     22,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 53,
+    "nazwa": "Drzewo",
+    "stare": [
+     25,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 54,
+    "nazwa": "Drzewo",
+    "stare": [
+     28,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 55,
+    "nazwa": "Drzewo",
+    "stare": [
+     31,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 56,
+    "nazwa": "Drzewo",
+    "stare": [
+     34,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 57,
+    "nazwa": "Drzewo",
+    "stare": [
+     37,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 58,
+    "nazwa": "Drzewo",
+    "stare": [
+     42,
+     30
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 59,
+    "nazwa": "Drzewo",
+    "stare": [
+     44,
+     32
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 60,
+    "nazwa": "Drzewo",
+    "stare": [
+     40,
+     33
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 61,
+    "nazwa": "Drzewo",
+    "stare": [
+     42,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 62,
+    "nazwa": "Drzewo",
+    "stare": [
+     45,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 63,
+    "nazwa": "Drzewo",
+    "stare": [
+     17,
+     2
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 64,
+    "nazwa": "Drzewo",
+    "stare": [
+     31,
+     14
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 95,
+    "nazwa": "Drzewo",
+    "stare": [
+     1,
+     39
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 96,
+    "nazwa": "Drzewo",
+    "stare": [
+     0,
+     45
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 97,
+    "nazwa": "Drzewo",
+    "stare": [
+     1,
+     51
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 98,
+    "nazwa": "Drzewo",
+    "stare": [
+     4,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 99,
+    "nazwa": "Drzewo",
+    "stare": [
+     9,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 100,
+    "nazwa": "Drzewo",
+    "stare": [
+     16,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 101,
+    "nazwa": "Drzewo",
+    "stare": [
+     22,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 102,
+    "nazwa": "Drzewo",
+    "stare": [
+     28,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 103,
+    "nazwa": "Drzewo",
+    "stare": [
+     34,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 104,
+    "nazwa": "Drzewo",
+    "stare": [
+     39,
+     39
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 105,
+    "nazwa": "Drzewo",
+    "stare": [
+     42,
+     43
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 106,
+    "nazwa": "Drzewo",
+    "stare": [
+     45,
+     47
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 107,
+    "nazwa": "Drzewo",
+    "stare": [
+     39,
+     49
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 108,
+    "nazwa": "Drzewo",
+    "stare": [
+     43,
+     52
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 109,
+    "nazwa": "Drzewo",
+    "stare": [
+     40,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 110,
+    "nazwa": "Drzewo",
+    "stare": [
+     45,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 113,
+    "nazwa": "Drzewo",
+    "stare": [
+     86,
+     41
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 118,
+    "nazwa": "Drzewo",
+    "stare": [
+     9,
+     59
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 119,
+    "nazwa": "Drzewo",
+    "stare": [
+     86,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 120,
+    "nazwa": "Drzewo",
+    "stare": [
+     34,
+     75
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 121,
+    "nazwa": "Drzewo",
+    "stare": [
+     48,
+     31
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 122,
+    "nazwa": "Drzewo",
+    "stare": [
+     59,
+     2
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 123,
+    "nazwa": "Drzewo",
+    "stare": [
+     86,
+     60
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 124,
+    "nazwa": "Drzewo",
+    "stare": [
+     5,
+     58
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 127,
+    "nazwa": "Drzewo",
+    "stare": [
+     88,
+     31
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 138,
+    "nazwa": "Drzewo",
+    "stare": [
+     85,
+     63
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 139,
+    "nazwa": "Drzewo",
+    "stare": [
+     52,
+     12
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 142,
+    "nazwa": "Drzewo",
+    "stare": [
+     28,
+     87
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 143,
+    "nazwa": "Drzewo",
+    "stare": [
+     32,
+     82
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 145,
+    "nazwa": "Drzewo",
+    "stare": [
+     80,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 147,
+    "nazwa": "Drzewo",
+    "stare": [
+     48,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 148,
+    "nazwa": "Drzewo",
+    "stare": [
+     80,
+     46
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 150,
+    "nazwa": "Drzewo",
+    "stare": [
+     55,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 156,
+    "nazwa": "Drzewo",
+    "stare": [
+     61,
+     50
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 157,
+    "nazwa": "Drzewo",
+    "stare": [
+     34,
+     61
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 159,
+    "nazwa": "Drzewo",
+    "stare": [
+     20,
+     59
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 161,
+    "nazwa": "Drzewo",
+    "stare": [
+     68,
+     45
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 164,
+    "nazwa": "Drzewo",
+    "stare": [
+     81,
+     11
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 167,
+    "nazwa": "Drzewo",
+    "stare": [
+     69,
+     14
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 168,
+    "nazwa": "Drzewo",
+    "stare": [
+     82,
+     31
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 173,
+    "nazwa": "Drzewo",
+    "stare": [
+     87,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 174,
+    "nazwa": "Drzewo",
+    "stare": [
+     73,
+     6
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 176,
+    "nazwa": "Drzewo",
+    "stare": [
+     41,
+     74
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "droga za palisadą (do lasu, chaty pod lasem, glinianki, wysypiska)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 177,
+    "nazwa": "Drzewo",
+    "stare": [
+     78,
+     5
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 180,
+    "nazwa": "Drzewo",
+    "stare": [
+     47,
+     20
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 184,
+    "nazwa": "Drzewo",
+    "stare": [
+     24,
+     59
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 186,
+    "nazwa": "Drzewo",
+    "stare": [
+     51,
+     7
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 190,
+    "nazwa": "Drzewo",
+    "stare": [
+     74,
+     15
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 194,
+    "nazwa": "Drzewo",
+    "stare": [
+     50,
+     48
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 195,
+    "nazwa": "Drzewo",
+    "stare": [
+     65,
+     48
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 196,
+    "nazwa": "Drzewo",
+    "stare": [
+     56,
+     62
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 201,
+    "nazwa": "Drzewo",
+    "stare": [
+     81,
+     60
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 203,
+    "nazwa": "Drzewo",
+    "stare": [
+     46,
+     59
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 204,
+    "nazwa": "Drzewo",
+    "stare": [
+     50,
+     56
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 206,
+    "nazwa": "Drzewo",
+    "stare": [
+     33,
+     72
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "droga za palisadą (do lasu, chaty pod lasem, glinianki, wysypiska)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 207,
+    "nazwa": "Drzewo",
+    "stare": [
+     32,
+     92
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 208,
+    "nazwa": "Drzewo",
+    "stare": [
+     29,
+     79
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 210,
+    "nazwa": "Drzewo",
+    "stare": [
+     83,
+     7
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 213,
+    "nazwa": "Drzewo",
+    "stare": [
+     35,
+     83
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 218,
+    "nazwa": "Drzewo",
+    "stare": [
+     30,
+     59
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 221,
+    "nazwa": "Drzewo",
+    "stare": [
+     26,
+     92
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 232,
+    "nazwa": "Drzewo",
+    "stare": [
+     60,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 235,
+    "nazwa": "Drzewo",
+    "stare": [
+     32,
+     88
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 237,
+    "nazwa": "Drzewo",
+    "stare": [
+     88,
+     15
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 245,
+    "nazwa": "Drzewo",
+    "stare": [
+     48,
+     45
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 249,
+    "nazwa": "Drzewo",
+    "stare": [
+     61,
+     46
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 253,
+    "nazwa": "Drzewo",
+    "stare": [
+     90,
+     60
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 257,
+    "nazwa": "Drzewo",
+    "stare": [
+     70,
+     42
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 259,
+    "nazwa": "Drzewo",
+    "stare": [
+     84,
+     56
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 262,
+    "nazwa": "Drzewo",
+    "stare": [
+     11,
+     74
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 263,
+    "nazwa": "Drzewo",
+    "stare": [
+     37,
+     74
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 264,
+    "nazwa": "Skała",
+    "stare": [
+     54,
+     40
+    ],
+    "obraz": "",
+    "notatka": "<Rock:hits=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 269,
+    "nazwa": "Skała",
+    "stare": [
+     52,
+     39
+    ],
+    "obraz": "",
+    "notatka": "<Rock:hits=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 270,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     69,
+     9
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 271,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     60,
+     5
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 276,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     76,
+     71
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "wysypisko (Zasoby DUMP)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 277,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     71,
+     28
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 280,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     52,
+     29
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 281,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     38,
+     91
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 282,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     37,
+     66
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 283,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     83,
+     39
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 287,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     78,
+     62
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 288,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     3,
+     63
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 292,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     12,
+     77
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 293,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     57,
+     7
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 295,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     69,
+     53
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 296,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     0,
+     59
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 298,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     56,
+     25
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 299,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     77,
+     45
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 308,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     66,
+     55
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 311,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     19,
+     82
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 315,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     75,
+     21
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 317,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     15,
+     62
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 319,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     1,
+     66
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 320,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     86,
+     45
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 321,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     26,
+     64
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 324,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     72,
+     62
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 325,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     79,
+     25
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 327,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     8,
+     85
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 330,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     61,
+     29
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 331,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     47,
+     39
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 333,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     77,
+     71
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "wysypisko (Zasoby DUMP)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 334,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     53,
+     64
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 339,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     49,
+     64
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 343,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     60,
+     58
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 351,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     3,
+     90
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 355,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     65,
+     65
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 362,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     57,
+     17
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 363,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     51,
+     33
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 364,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     81,
+     22
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 365,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     56,
+     15
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 368,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     68,
+     25
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 370,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     20,
+     88
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 375,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     87,
+     28
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 376,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     43,
+     64
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 378,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     62,
+     54
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 379,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     7,
+     83
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 383,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     65,
+     13
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 384,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     64,
+     1
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 385,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     40,
+     62
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 389,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     75,
+     67
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "wysypisko (Zasoby DUMP)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 392,
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     58,
+     66
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 396,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     50,
+     28
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 398,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     58,
+     27
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 401,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     60,
+     61
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 402,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     75,
+     0
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 403,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     75,
+     65
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 404,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     67,
+     33
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 406,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     62,
+     64
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 407,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     21,
+     66
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 411,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     86,
+     51
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 412,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     9,
+     79
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 413,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     11,
+     90
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "Chata pod lasem z działką (przeniesiona z 3-36 x 35-51)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 414,
+    "nazwa": "Małe drzewo",
+    "stare": [
+     68,
+     62
+    ],
+    "obraz": "",
+    "notatka": "<Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 418,
+    "nazwa": "Małe drzewo",
+    "stare": [
+     63,
+     61
+    ],
+    "obraz": "",
+    "notatka": "<Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 419,
+    "nazwa": "Małe drzewo",
+    "stare": [
+     46,
+     67
+    ],
+    "obraz": "",
+    "notatka": "<Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>",
+    "powod": "droga za palisadą (do lasu, chaty pod lasem, glinianki, wysypiska)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 420,
+    "nazwa": "Małe drzewo",
+    "stare": [
+     49,
+     68
+    ],
+    "obraz": "",
+    "notatka": "<Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>",
+    "powod": "glinianka (Zasoby CLAYPIT)",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 421,
+    "nazwa": "Małe drzewo",
+    "stare": [
+     59,
+     55
+    ],
+    "obraz": "",
+    "notatka": "<Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 428,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     85,
+     29
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 429,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     46,
+     43
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 430,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     76,
+     52
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób/ozdoba w obrębie nowej osady",
+    "numer_przejety_przez_nowe": null
+   }
+  ],
+  "nowe": [
+   {
+    "id": 112,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     1
+    ]
+   },
+   {
+    "id": 114,
+    "nazwa": "Drzewo",
+    "xy": [
+     5,
+     1
+    ]
+   },
+   {
+    "id": 116,
+    "nazwa": "Drzewo",
+    "xy": [
+     9,
+     1
+    ]
+   },
+   {
+    "id": 117,
+    "nazwa": "Drzewo",
+    "xy": [
+     13,
+     1
+    ]
+   },
+   {
+    "id": 125,
+    "nazwa": "Drzewo",
+    "xy": [
+     17,
+     1
+    ]
+   },
+   {
+    "id": 126,
+    "nazwa": "Drzewo",
+    "xy": [
+     21,
+     1
+    ]
+   },
+   {
+    "id": 128,
+    "nazwa": "Drzewo",
+    "xy": [
+     25,
+     1
+    ]
+   },
+   {
+    "id": 129,
+    "nazwa": "Drzewo",
+    "xy": [
+     29,
+     1
+    ]
+   },
+   {
+    "id": 130,
+    "nazwa": "Drzewo",
+    "xy": [
+     33,
+     1
+    ]
+   },
+   {
+    "id": 134,
+    "nazwa": "Drzewo",
+    "xy": [
+     37,
+     1
+    ]
+   },
+   {
+    "id": 135,
+    "nazwa": "Drzewo",
+    "xy": [
+     41,
+     1
+    ]
+   },
+   {
+    "id": 137,
+    "nazwa": "Drzewo",
+    "xy": [
+     45,
+     1
+    ]
+   },
+   {
+    "id": 141,
+    "nazwa": "Drzewo",
+    "xy": [
+     49,
+     1
+    ]
+   },
+   {
+    "id": 144,
+    "nazwa": "Drzewo",
+    "xy": [
+     53,
+     1
+    ]
+   },
+   {
+    "id": 146,
+    "nazwa": "Drzewo",
+    "xy": [
+     57,
+     1
+    ]
+   },
+   {
+    "id": 149,
+    "nazwa": "Drzewo",
+    "xy": [
+     61,
+     1
+    ]
+   },
+   {
+    "id": 152,
+    "nazwa": "Drzewo",
+    "xy": [
+     65,
+     1
+    ]
+   },
+   {
+    "id": 153,
+    "nazwa": "Drzewo",
+    "xy": [
+     69,
+     1
+    ]
+   },
+   {
+    "id": 155,
+    "nazwa": "Drzewo",
+    "xy": [
+     73,
+     1
+    ]
+   },
+   {
+    "id": 163,
+    "nazwa": "Drzewo",
+    "xy": [
+     77,
+     1
+    ]
+   },
+   {
+    "id": 165,
+    "nazwa": "Drzewo",
+    "xy": [
+     81,
+     1
+    ]
+   },
+   {
+    "id": 166,
+    "nazwa": "Drzewo",
+    "xy": [
+     85,
+     1
+    ]
+   },
+   {
+    "id": 170,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     5
+    ]
+   },
+   {
+    "id": 171,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     9
+    ]
+   },
+   {
+    "id": 172,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     13
+    ]
+   },
+   {
+    "id": 175,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     25
+    ]
+   },
+   {
+    "id": 178,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     29
+    ]
+   },
+   {
+    "id": 179,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     33
+    ]
+   },
+   {
+    "id": 183,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     37
+    ]
+   },
+   {
+    "id": 191,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     41
+    ]
+   },
+   {
+    "id": 192,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     45
+    ]
+   },
+   {
+    "id": 197,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     49
+    ]
+   },
+   {
+    "id": 199,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     53
+    ]
+   },
+   {
+    "id": 205,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     57
+    ]
+   },
+   {
+    "id": 209,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     61
+    ]
+   },
+   {
+    "id": 211,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     65
+    ]
+   },
+   {
+    "id": 212,
+    "nazwa": "Dym z komina",
+    "xy": [
+     56,
+     6
+    ]
+   },
+   {
+    "id": 214,
+    "nazwa": "Drzwi: Przytułek",
+    "xy": [
+     53,
+     12
+    ]
+   },
+   {
+    "id": 219,
+    "nazwa": "Dym z komina",
+    "xy": [
+     82,
+     5
+    ]
+   },
+   {
+    "id": 222,
+    "nazwa": "Okienko w dachu",
+    "xy": [
+     78,
+     8
+    ]
+   },
+   {
+    "id": 223,
+    "nazwa": "Drzwi: Szynk",
+    "xy": [
+     79,
+     11
+    ]
+   },
+   {
+    "id": 224,
+    "nazwa": "Dym z komina",
+    "xy": [
+     51,
+     44
+    ]
+   },
+   {
+    "id": 225,
+    "nazwa": "Drzwi: Garncarnia",
+    "xy": [
+     49,
+     50
+    ]
+   },
+   {
+    "id": 226,
+    "nazwa": "Dym z komina",
+    "xy": [
+     9,
+     38
+    ]
+   },
+   {
+    "id": 227,
+    "nazwa": "Drzwi: Lepianka 1",
+    "xy": [
+     7,
+     43
+    ]
+   },
+   {
+    "id": 229,
+    "nazwa": "Dym z komina",
+    "xy": [
+     15,
+     38
+    ]
+   },
+   {
+    "id": 230,
+    "nazwa": "Drzwi: Lepianka 2",
+    "xy": [
+     17,
+     43
+    ]
+   },
+   {
+    "id": 233,
+    "nazwa": "Dym z komina",
+    "xy": [
+     24,
+     38
+    ]
+   },
+   {
+    "id": 234,
+    "nazwa": "Drzwi: Chata 3",
+    "xy": [
+     26,
+     43
+    ]
+   },
+   {
+    "id": 239,
+    "nazwa": "Dym z komina",
+    "xy": [
+     9,
+     50
+    ]
+   },
+   {
+    "id": 240,
+    "nazwa": "Drzwi: Chata 4",
+    "xy": [
+     7,
+     55
+    ]
+   },
+   {
+    "id": 242,
+    "nazwa": "Dym z komina",
+    "xy": [
+     15,
+     50
+    ]
+   },
+   {
+    "id": 244,
+    "nazwa": "Drzwi: Chata 5",
+    "xy": [
+     17,
+     55
+    ]
+   },
+   {
+    "id": 246,
+    "nazwa": "Świeczka przy kapliczce",
+    "xy": [
+     38,
+     27
+    ]
+   },
+   {
+    "id": 247,
+    "nazwa": "Piłka ze szmat",
+    "xy": [
+     50,
+     39
+    ]
+   },
+   {
+    "id": 251,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     14,
+     15
+    ]
+   },
+   {
+    "id": 252,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     15,
+     14
+    ]
+   },
+   {
+    "id": 255,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     25,
+     9
+    ]
+   },
+   {
+    "id": 256,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     27,
+     9
+    ]
+   },
+   {
+    "id": 258,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     27,
+     10
+    ]
+   },
+   {
+    "id": 261,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     11,
+     26
+    ]
+   },
+   {
+    "id": 267,
+    "nazwa": "Taczka",
+    "xy": [
+     20,
+     25
+    ]
+   },
+   {
+    "id": 268,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     14,
+     27
+    ]
+   },
+   {
+    "id": 273,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     32,
+     30
+    ]
+   },
+   {
+    "id": 275,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     59,
+     31
+    ]
+   },
+   {
+    "id": 284,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     57,
+     31
+    ]
+   },
+   {
+    "id": 286,
+    "nazwa": "Taczka",
+    "xy": [
+     72,
+     31
+    ]
+   },
+   {
+    "id": 289,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     11,
+     40
+    ]
+   },
+   {
+    "id": 291,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     13,
+     40
+    ]
+   },
+   {
+    "id": 294,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     4,
+     40
+    ]
+   },
+   {
+    "id": 300,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     20,
+     40
+    ]
+   },
+   {
+    "id": 301,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     22,
+     40
+    ]
+   },
+   {
+    "id": 304,
+    "nazwa": "Taczka",
+    "xy": [
+     31,
+     40
+    ]
+   },
+   {
+    "id": 306,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     13,
+     52
+    ]
+   },
+   {
+    "id": 309,
+    "nazwa": "Beczka na deszczówkę",
+    "xy": [
+     16,
+     57
+    ]
+   },
+   {
+    "id": 310,
+    "nazwa": "Kocioł z zupą",
+    "xy": [
+     50,
+     15
+    ]
+   },
+   {
+    "id": 312,
+    "nazwa": "Szyld: Szynk",
+    "xy": [
+     82,
+     10
+    ]
+   },
+   {
+    "id": 313,
+    "nazwa": "Stół przed szynkiem",
+    "xy": [
+     77,
+     14
+    ]
+   },
+   {
+    "id": 314,
+    "nazwa": "Stół przed szynkiem",
+    "xy": [
+     82,
+     14
+    ]
+   },
+   {
+    "id": 316,
+    "nazwa": "Beczki",
+    "xy": [
+     84,
+     16
+    ]
+   },
+   {
+    "id": 318,
+    "nazwa": "Piec garncarski",
+    "xy": [
+     55,
+     50
+    ]
+   },
+   {
+    "id": 322,
+    "nazwa": "Dzbany schną",
+    "xy": [
+     45,
+     54
+    ]
+   },
+   {
+    "id": 323,
+    "nazwa": "Garnki schną",
+    "xy": [
+     46,
+     54
+    ]
+   },
+   {
+    "id": 328,
+    "nazwa": "Dzbany schną",
+    "xy": [
+     53,
+     54
+    ]
+   },
+   {
+    "id": 329,
+    "nazwa": "Garnki schną",
+    "xy": [
+     52,
+     54
+    ]
+   },
+   {
+    "id": 332,
+    "nazwa": "Taczka z gliną",
+    "xy": [
+     55,
+     56
+    ]
+   },
+   {
+    "id": 335,
+    "nazwa": "Kurnik (wybieg)",
+    "xy": [
+     60,
+     41
+    ]
+   },
+   {
+    "id": 337,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     65,
+     44
+    ]
+   },
+   {
+    "id": 338,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     64,
+     43
+    ]
+   },
+   {
+    "id": 340,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     64,
+     40
+    ]
+   },
+   {
+    "id": 346,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     66,
+     42
+    ]
+   },
+   {
+    "id": 347,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     62,
+     41
+    ]
+   },
+   {
+    "id": 349,
+    "nazwa": "Chlewik (zagroda)",
+    "xy": [
+     80,
+     41
+    ]
+   },
+   {
+    "id": 350,
+    "nazwa": "Owca sąsiadów",
+    "xy": [
+     78,
+     43
+    ]
+   },
+   {
+    "id": 352,
+    "nazwa": "Owca sąsiadów",
+    "xy": [
+     77,
+     40
+    ]
+   },
+   {
+    "id": 354,
+    "nazwa": "Owca sąsiadów",
+    "xy": [
+     76,
+     42
+    ]
+   },
+   {
+    "id": 357,
+    "nazwa": "Kurnik (kurnik)",
+    "xy": [
+     26,
+     54
+    ]
+   },
+   {
+    "id": 358,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     33,
+     54
+    ]
+   },
+   {
+    "id": 360,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     27,
+     55
+    ]
+   },
+   {
+    "id": 361,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     28,
+     55
+    ]
+   },
+   {
+    "id": 369,
+    "nazwa": "Kura sąsiadów",
+    "xy": [
+     29,
+     55
+    ]
+   },
+   {
+    "id": 371,
+    "nazwa": "Miejsce: placyk_1",
+    "xy": [
+     39,
+     30
+    ]
+   },
+   {
+    "id": 372,
+    "nazwa": "Miejsce: placyk_2",
+    "xy": [
+     47,
+     34
+    ]
+   },
+   {
+    "id": 374,
+    "nazwa": "Miejsce: placyk_3",
+    "xy": [
+     42,
+     39
+    ]
+   },
+   {
+    "id": 377,
+    "nazwa": "Miejsce: placyk_4",
+    "xy": [
+     50,
+     31
+    ]
+   },
+   {
+    "id": 380,
+    "nazwa": "Miejsce: placyk_5",
+    "xy": [
+     39,
+     35
+    ]
+   },
+   {
+    "id": 381,
+    "nazwa": "Miejsce: placyk_6",
+    "xy": [
+     53,
+     36
+    ]
+   },
+   {
+    "id": 382,
+    "nazwa": "Miejsce: szynk_lawy",
+    "xy": [
+     79,
+     15
+    ]
+   },
+   {
+    "id": 386,
+    "nazwa": "Miejsce: przytulek_kociol",
+    "xy": [
+     50,
+     16
+    ]
+   },
+   {
+    "id": 387,
+    "nazwa": "Miejsce: garncarnia_lawy",
+    "xy": [
+     47,
+     55
+    ]
+   },
+   {
+    "id": 388,
+    "nazwa": "Miejsce: glinianka",
+    "xy": [
+     48,
+     74
+    ]
+   },
+   {
+    "id": 391,
+    "nazwa": "Miejsce: brama_pal_zach",
+    "xy": [
+     4,
+     19
+    ]
+   },
+   {
+    "id": 395,
+    "nazwa": "Miejsce: brama_pal_pd",
+    "xy": [
+     41,
+     62
+    ]
+   },
+   {
+    "id": 397,
+    "nazwa": "Miejsce: wybieg",
+    "xy": [
+     63,
+     37
+    ]
+   },
+   {
+    "id": 400,
+    "nazwa": "Miejsce: w5_lada",
+    "xy": [
+     89,
+     17
+    ]
+   },
+   {
+    "id": 405,
+    "nazwa": "Miejsce: przytulek_drzwi",
+    "xy": [
+     53,
+     13
+    ]
+   },
+   {
+    "id": 409,
+    "nazwa": "Miejsce: szynk_drzwi",
+    "xy": [
+     79,
+     12
+    ]
+   },
+   {
+    "id": 415,
+    "nazwa": "Miejsce: garncarnia_drzwi",
+    "xy": [
+     49,
+     51
+    ]
+   },
+   {
+    "id": 416,
+    "nazwa": "Miejsce: lepianka1_drzwi",
+    "xy": [
+     7,
+     44
+    ]
+   },
+   {
+    "id": 417,
+    "nazwa": "Miejsce: lepianka2_drzwi",
+    "xy": [
+     17,
+     44
+    ]
+   },
+   {
+    "id": 422,
+    "nazwa": "Miejsce: chata3_drzwi",
+    "xy": [
+     26,
+     44
+    ]
+   },
+   {
+    "id": 423,
+    "nazwa": "Miejsce: chata4_drzwi",
+    "xy": [
+     7,
+     56
+    ]
+   },
+   {
+    "id": 424,
+    "nazwa": "Miejsce: chata5_drzwi",
+    "xy": [
+     17,
+     56
+    ]
+   },
+   {
+    "id": 425,
+    "nazwa": "Miejsce: strzecha_drzwi",
+    "xy": [
+     21,
+     14
+    ]
+   },
+   {
+    "id": 426,
+    "nazwa": "Miejsce: deski_drzwi",
+    "xy": [
+     17,
+     29
+    ]
+   },
+   {
+    "id": 427,
+    "nazwa": "Miejsce: szopa_drzwi",
+    "xy": [
+     70,
+     31
+    ]
+   },
+   {
+    "id": 431,
+    "nazwa": "Miejsce: komorka_drzwi",
+    "xy": [
+     78,
+     30
+    ]
+   },
+   {
+    "id": 432,
+    "nazwa": "Łopata",
+    "xy": [
+     52,
+     71
+    ]
+   },
+   {
+    "id": 433,
+    "nazwa": "Nosidła na wodę",
+    "xy": [
+     66,
+     28
+    ]
+   },
+   {
+    "id": 434,
+    "nazwa": "Wóz z sianem",
+    "xy": [
+     70,
+     44
+    ]
+   },
+   {
+    "id": 435,
+    "nazwa": "Latarnia",
+    "xy": [
+     2,
+     16
+    ]
+   },
+   {
+    "id": 436,
+    "nazwa": "Latarnia",
+    "xy": [
+     83,
+     16
+    ]
+   },
+   {
+    "id": 437,
+    "nazwa": "Latarnia",
+    "xy": [
+     39,
+     62
+    ]
+   },
+   {
+    "id": 438,
+    "nazwa": "Latarnia",
+    "xy": [
+     44,
+     22
+    ]
+   },
+   {
+    "id": 439,
+    "nazwa": "Latarnia",
+    "xy": [
+     55,
+     40
+    ]
+   },
+   {
+    "id": 440,
+    "nazwa": "Latarnia",
+    "xy": [
+     75,
+     14
+    ]
+   },
+   {
+    "id": 441,
+    "nazwa": "Latarnia",
+    "xy": [
+     13,
+     21
+    ]
+   },
+   {
+    "id": 442,
+    "nazwa": "Latarnia",
+    "xy": [
+     35,
+     21
+    ]
+   },
+   {
+    "id": 443,
+    "nazwa": "Latarnia",
+    "xy": [
+     66,
+     21
+    ]
+   },
+   {
+    "id": 444,
+    "nazwa": "Latarnia",
+    "xy": [
+     34,
+     38
+    ]
+   },
+   {
+    "id": 445,
+    "nazwa": "Latarnia",
+    "xy": [
+     70,
+     38
+    ]
+   },
+   {
+    "id": 446,
+    "nazwa": "Latarnia",
+    "xy": [
+     22,
+     50
+    ]
+   },
+   {
+    "id": 447,
+    "nazwa": "Latarnia",
+    "xy": [
+     58,
+     55
+    ]
+   },
+   {
+    "id": 448,
+    "nazwa": "Latarnia",
+    "xy": [
+     51,
+     61
+    ]
+   },
+   {
+    "id": 449,
+    "nazwa": "Latarnia",
+    "xy": [
+     30,
+     61
+    ]
+   },
+   {
+    "id": 450,
+    "nazwa": "Latarnia",
+    "xy": [
+     8,
+     61
+    ]
+   },
+   {
+    "id": 451,
+    "nazwa": "Latarnia",
+    "xy": [
+     78,
+     61
+    ]
+   },
+   {
+    "id": 452,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     73
+    ]
+   },
+   {
+    "id": 453,
+    "nazwa": "Drzewo",
+    "xy": [
+     2,
+     77
+    ]
+   },
+   {
+    "id": 454,
+    "nazwa": "Drzewo",
+    "xy": [
+     1,
+     81
+    ]
+   },
+   {
+    "id": 455,
+    "nazwa": "Drzewo",
+    "xy": [
+     3,
+     86
+    ]
+   },
+   {
+    "id": 456,
+    "nazwa": "Drzewo",
+    "xy": [
+     7,
+     88
+    ]
+   },
+   {
+    "id": 457,
+    "nazwa": "Drzewo",
+    "xy": [
+     12,
+     87
+    ]
+   },
+   {
+    "id": 458,
+    "nazwa": "Drzewo",
+    "xy": [
+     2,
+     91
+    ]
+   },
+   {
+    "id": 459,
+    "nazwa": "Drzewo",
+    "xy": [
+     9,
+     72
+    ]
+   },
+   {
+    "id": 460,
+    "nazwa": "Drzewo",
+    "xy": [
+     21,
+     62
+    ]
+   },
+   {
+    "id": 461,
+    "nazwa": "Drzewo",
+    "xy": [
+     14,
+     62
+    ]
+   },
+   {
+    "id": 462,
+    "nazwa": "Drzewo",
+    "xy": [
+     54,
+     62
+    ]
+   },
+   {
+    "id": 463,
+    "nazwa": "Drzewo",
+    "xy": [
+     66,
+     62
+    ]
+   },
+   {
+    "id": 464,
+    "nazwa": "Drzewo",
+    "xy": [
+     83,
+     62
+    ]
+   },
+   {
+    "id": 465,
+    "nazwa": "Drzewo",
+    "xy": [
+     73,
+     22
+    ]
+   },
+   {
+    "id": 466,
+    "nazwa": "Drzewo",
+    "xy": [
+     87,
+     7
+    ]
+   },
+   {
+    "id": 467,
+    "nazwa": "Drzewo",
+    "xy": [
+     87,
+     28
+    ]
+   },
+   {
+    "id": 468,
+    "nazwa": "Drzewo",
+    "xy": [
+     87,
+     40
+    ]
+   },
+   {
+    "id": 469,
+    "nazwa": "Drzewo",
+    "xy": [
+     87,
+     52
+    ]
+   },
+   {
+    "id": 470,
+    "nazwa": "Drzewo",
+    "xy": [
+     87,
+     63
+    ]
+   },
+   {
+    "id": 471,
+    "nazwa": "Drzewo",
+    "xy": [
+     14,
+     5
+    ]
+   },
+   {
+    "id": 472,
+    "nazwa": "Drzewo",
+    "xy": [
+     58,
+     5
+    ]
+   },
+   {
+    "id": 473,
+    "nazwa": "Drzewo",
+    "xy": [
+     26,
+     5
+    ]
+   },
+   {
+    "id": 474,
+    "nazwa": "Drzewo",
+    "xy": [
+     44,
+     5
+    ]
+   },
+   {
+    "id": 475,
+    "nazwa": "Drzewo",
+    "xy": [
+     74,
+     5
+    ]
+   },
+   {
+    "id": 476,
+    "nazwa": "Drzewo",
+    "xy": [
+     9,
+     22
+    ]
+   },
+   {
+    "id": 477,
+    "nazwa": "Drzewo",
+    "xy": [
+     30,
+     22
+    ]
+   },
+   {
+    "id": 478,
+    "nazwa": "Drzewo",
+    "xy": [
+     52,
+     22
+    ]
+   },
+   {
+    "id": 479,
+    "nazwa": "Drzewo",
+    "xy": [
+     36,
+     52
+    ]
+   },
+   {
+    "id": 480,
+    "nazwa": "Drzewo",
+    "xy": [
+     24,
+     50
+    ]
+   },
+   {
+    "id": 481,
+    "nazwa": "Drzewo",
+    "xy": [
+     88,
+     46
+    ]
+   },
+   {
+    "id": 482,
+    "nazwa": "Drzewo",
+    "xy": [
+     36,
+     57
+    ]
+   }
+  ]
+ },
+ "c_miejsca": {
+  "stare_miejsca": {
+   "brama_zach": {
+    "id": 70,
+    "stare": [
+     41,
+     18
+    ],
+    "nowe": [
+     87,
+     18,
+     6
+    ],
+    "przechodnie": true
+   },
+   "zebrak": {
+    "id": 71,
+    "stare": [
+     43,
+     16
+    ],
+    "nowe": [
+     89,
+     16,
+     2
+    ],
+    "przechodnie": true
+   },
+   "zebrak_noc": {
+    "id": 72,
+    "stare": [
+     43,
+     14
+    ],
+    "nowe": [
+     89,
+     14,
+     2
+    ],
+    "przechodnie": true
+   },
+   "namioty": {
+    "id": 73,
+    "stare": [
+     38,
+     9
+    ],
+    "nowe": [
+     39,
+     13,
+     6
+    ],
+    "przechodnie": true
+   },
+   "uchodzcy_drzwi": {
+    "id": 74,
+    "stare": [
+     32,
+     9
+    ],
+    "nowe": [
+     33,
+     13,
+     8
+    ],
+    "przechodnie": true
+   },
+   "kram": {
+    "id": 75,
+    "stare": [
+     26,
+     15
+    ],
+    "nowe": [
+     53,
+     31,
+     2
+    ],
+    "przechodnie": true
+   },
+   "szmaciarz_drzwi": {
+    "id": 76,
+    "stare": [
+     21,
+     14
+    ],
+    "nowe": [
+     48,
+     30,
+     8
+    ],
+    "przechodnie": true
+   },
+   "plac": {
+    "id": 77,
+    "stare": [
+     26,
+     18
+    ],
+    "nowe": [
+     43,
+     36,
+     4
+    ],
+    "przechodnie": true
+   },
+   "studnia_sucha": {
+    "id": 78,
+    "stare": [
+     23,
+     18
+    ],
+    "nowe": [
+     44,
+     34,
+     8
+    ],
+    "przechodnie": true
+   },
+   "zabawa": {
+    "id": 79,
+    "stare": [
+     20,
+     18
+    ],
+    "nowe": [
+     51,
+     38,
+     2
+    ],
+    "przechodnie": true
+   },
+   "drwal_drzwi": {
+    "id": 80,
+    "stare": [
+     7,
+     9
+    ],
+    "nowe": [
+     10,
+     12,
+     8
+    ],
+    "przechodnie": true
+   },
+   "drewutnia": {
+    "id": 81,
+    "stare": [
+     10,
+     11
+    ],
+    "nowe": [
+     13,
+     14,
+     6
+    ],
+    "przechodnie": true
+   },
+   "skraj_lasu": {
+    "id": 82,
+    "stare": [
+     0,
+     19
+    ],
+    "nowe": [
+     0,
+     19,
+     4
+    ],
+    "przechodnie": true
+   },
+   "klusownik_drzwi": {
+    "id": 83,
+    "stare": [
+     4,
+     28
+    ],
+    "nowe": [
+     8,
+     30,
+     8
+    ],
+    "przechodnie": true
+   },
+   "znachorka_drzwi": {
+    "id": 84,
+    "stare": [
+     15,
+     27
+    ],
+    "nowe": [
+     27,
+     32,
+     8
+    ],
+    "przechodnie": true
+   },
+   "ziola": {
+    "id": 85,
+    "stare": [
+     20,
+     27
+    ],
+    "nowe": [
+     32,
+     32,
+     8
+    ],
+    "przechodnie": true
+   },
+   "kapliczka": {
+    "id": 86,
+    "stare": [
+     26,
+     24
+    ],
+    "nowe": [
+     37,
+     28,
+     8
+    ],
+    "przechodnie": true
+   },
+   "praczka_drzwi": {
+    "id": 87,
+    "stare": [
+     33,
+     27
+    ],
+    "nowe": [
+     61,
+     31,
+     8
+    ],
+    "przechodnie": true
+   },
+   "pranie": {
+    "id": 88,
+    "stare": [
+     32,
+     30
+    ],
+    "nowe": [
+     60,
+     34,
+     8
+    ],
+    "przechodnie": true
+   }
+  },
+  "nowe_miejsca": {
+   "placyk_1": {
+    "nowe": [
+     39,
+     30,
+     6
+    ],
+    "przechodnie": true
+   },
+   "placyk_2": {
+    "nowe": [
+     47,
+     34,
+     4
+    ],
+    "przechodnie": true
+   },
+   "placyk_3": {
+    "nowe": [
+     42,
+     39,
+     8
+    ],
+    "przechodnie": true
+   },
+   "placyk_4": {
+    "nowe": [
+     50,
+     31,
+     2
+    ],
+    "przechodnie": true
+   },
+   "placyk_5": {
+    "nowe": [
+     39,
+     35,
+     6
+    ],
+    "przechodnie": true
+   },
+   "placyk_6": {
+    "nowe": [
+     53,
+     36,
+     4
+    ],
+    "przechodnie": true
+   },
+   "szynk_lawy": {
+    "nowe": [
+     79,
+     15,
+     8
+    ],
+    "przechodnie": true
+   },
+   "przytulek_kociol": {
+    "nowe": [
+     50,
+     16,
+     8
+    ],
+    "przechodnie": true
+   },
+   "garncarnia_lawy": {
+    "nowe": [
+     47,
+     55,
+     8
+    ],
+    "przechodnie": true
+   },
+   "glinianka": {
+    "nowe": [
+     48,
+     74,
+     8
+    ],
+    "przechodnie": true
+   },
+   "brama_pal_zach": {
+    "nowe": [
+     4,
+     19,
+     6
+    ],
+    "przechodnie": true
+   },
+   "brama_pal_pd": {
+    "nowe": [
+     41,
+     62,
+     2
+    ],
+    "przechodnie": true
+   },
+   "wybieg": {
+    "nowe": [
+     63,
+     37,
+     2
+    ],
+    "przechodnie": true
+   },
+   "w5_lada": {
+    "nowe": [
+     89,
+     17,
+     6
+    ],
+    "przechodnie": true
+   },
+   "przytulek_drzwi": {
+    "nowe": [
+     53,
+     13,
+     8
+    ],
+    "przechodnie": true
+   },
+   "szynk_drzwi": {
+    "nowe": [
+     79,
+     12,
+     8
+    ],
+    "przechodnie": true
+   },
+   "garncarnia_drzwi": {
+    "nowe": [
+     49,
+     51,
+     8
+    ],
+    "przechodnie": true
+   },
+   "lepianka1_drzwi": {
+    "nowe": [
+     7,
+     44,
+     8
+    ],
+    "przechodnie": true
+   },
+   "lepianka2_drzwi": {
+    "nowe": [
+     17,
+     44,
+     8
+    ],
+    "przechodnie": true
+   },
+   "chata3_drzwi": {
+    "nowe": [
+     26,
+     44,
+     8
+    ],
+    "przechodnie": true
+   },
+   "chata4_drzwi": {
+    "nowe": [
+     7,
+     56,
+     8
+    ],
+    "przechodnie": true
+   },
+   "chata5_drzwi": {
+    "nowe": [
+     17,
+     56,
+     8
+    ],
+    "przechodnie": true
+   },
+   "strzecha_drzwi": {
+    "nowe": [
+     21,
+     14,
+     8
+    ],
+    "przechodnie": true
+   },
+   "deski_drzwi": {
+    "nowe": [
+     17,
+     29,
+     8
+    ],
+    "przechodnie": true
+   },
+   "szopa_drzwi": {
+    "nowe": [
+     70,
+     31,
+     8
+    ],
+    "przechodnie": true
+   },
+   "komorka_drzwi": {
+    "nowe": [
+     78,
+     30,
+     8
+    ],
+    "przechodnie": true
+   }
+  },
+  "punkty_wtyczek": [
+   {
+    "co": "TownQuests_Data.js:225 w6_tent2_o (903)",
+    "stare": [
+     41,
+     7
+    ],
+    "nowe": [
+     42,
+     11
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "TownQuests_Data.js:227 w6_bogdan_o (906)",
+    "stare": [
+     37,
+     8
+    ],
+    "nowe": [
+     38,
+     12
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:228 w6_halina_o (907)",
+    "stare": [
+     41,
+     10
+    ],
+    "nowe": [
+     42,
+     14
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Garnizon_Data.js:285 PODGRODZIE_EVENTS 660",
+    "stare": [
+     27,
+     19
+    ],
+    "nowe": [
+     45,
+     21
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Garnizon_Data.js:285 PODGRODZIE_EVENTS 661",
+    "stare": [
+     36,
+     10
+    ],
+    "nowe": [
+     37,
+     14
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:728 oboz kamera (outside)",
+    "stare": [
+     38,
+     11
+    ],
+    "nowe": [
+     39,
+     15
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Underground_Data.js:730 oboz Ludmiła",
+    "stare": [
+     37,
+     11
+    ],
+    "nowe": [
+     38,
+     15
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:730 oboz Ela",
+    "stare": [
+     38,
+     12
+    ],
+    "nowe": [
+     39,
+     16
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:730 oboz Marek",
+    "stare": [
+     39,
+     11
+    ],
+    "nowe": [
+     40,
+     15
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Underground_Data.js:730 oboz Rafał",
+    "stare": [
+     41,
+     12
+    ],
+    "nowe": [
+     42,
+     16
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:349 SPOTS_PODGRODZIE w5_lada (jest też „Miejsce: w5_lada” na mapie)",
+    "stare": [
+     44,
+     17
+    ],
+    "nowe": [
+     89,
+     17
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Okolice_Data.js:89 ENTRY[111] (musi być przechodnie)",
+    "stare": [
+     23,
+     28
+    ],
+    "nowe": [
+     41,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Homes.js:128 HOUSES.chata.front (też tools/domy/build.py)",
+    "stare": [
+     6,
+     41
+    ],
+    "nowe": [
+     8,
+     81
+    ],
+    "jak": "chata_pod_lasem_z_dzialka",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Debug.js:155 F9 Chata pod lasem",
+    "stare": [
+     6,
+     41
+    ],
+    "nowe": [
+     8,
+     81
+    ],
+    "jak": "chata_pod_lasem_z_dzialka",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zasoby.js:1418 F9 Ogródki Podgrodzia",
+    "stare": [
+     56,
+     13
+    ],
+    "nowe": [
+     66,
+     15
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zasoby.js:1418 F9 Wysypisko",
+    "stare": [
+     52,
+     27
+    ],
+    "nowe": [
+     72,
+     66
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zasoby.js:1418 F9 Glinianka",
+    "stare": [
+     56,
+     40
+    ],
+    "nowe": [
+     48,
+     74
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zasoby_Data.js:229 odkrycie wysypisko",
+    "stare": [
+     52,
+     25
+    ],
+    "nowe": [
+     72,
+     70
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zasoby_Data.js:230 odkrycie glinianka",
+    "stare": [
+     56,
+     38
+    ],
+    "nowe": [
+     48,
+     71
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map112 Chata praczki ev10",
+    "stare": [
+     33,
+     27
+    ],
+    "nowe": [
+     61,
+     31
+    ],
+    "jak": "chata_praczki",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map113 Chata drwala ev7",
+    "stare": [
+     7,
+     9
+    ],
+    "nowe": [
+     10,
+     12
+    ],
+    "jak": "chata_drwala",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map114 Chata kłusownika ev8",
+    "stare": [
+     4,
+     28
+    ],
+    "nowe": [
+     8,
+     30
+    ],
+    "jak": "chata_klusownika",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map115 Izba znachorki ev9",
+    "stare": [
+     15,
+     27
+    ],
+    "nowe": [
+     27,
+     32
+    ],
+    "jak": "izba_znachorki",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map116 Kram starzyzny ev3",
+    "stare": [
+     21,
+     14
+    ],
+    "nowe": [
+     48,
+     30
+    ],
+    "jak": "kram_starzyzny",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map117 Dom uchodźców ev5",
+    "stare": [
+     32,
+     9
+    ],
+    "nowe": [
+     33,
+     13
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map154 Chata pod lasem ev7",
+    "stare": [
+     6,
+     41
+    ],
+    "nowe": [
+     8,
+     81
+    ],
+    "jak": "chata_pod_lasem_z_dzialka",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map125 Przystań ev92",
+    "stare": [
+     1,
+     19
+    ],
+    "nowe": [
+     1,
+     19
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map008 ev237",
+    "stare": [
+     90,
+     17
+    ],
+    "nowe": [
+     90,
+     17
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map008 ev238",
+    "stare": [
+     90,
+     18
+    ],
+    "nowe": [
+     90,
+     18
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/garnizon_test.js:220 go(111)",
+    "stare": [
+     10,
+     12
+    ],
+    "nowe": [
+     13,
+     15
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/garnizon_test.js:234 go(111)",
+    "stare": [
+     26,
+     18
+    ],
+    "nowe": [
+     43,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/podgrodzie_quests_test.js:8 newGame",
+    "stare": [
+     26,
+     17
+    ],
+    "nowe": [
+     43,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/ludzie_test.js:117 go(111)",
+    "stare": [
+     23,
+     28
+    ],
+    "nowe": [
+     41,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/w6_test.js:193 go(111)",
+    "stare": [
+     38,
+     12
+    ],
+    "nowe": [
+     39,
+     16
+    ],
+    "jak": "dom_uchodzcow_i_oboz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/przystan_test.js:29 newGame",
+    "stare": [
+     2,
+     19
+    ],
+    "nowe": [
+     1,
+     19
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/wrak_test.js:189 go(111)",
+    "stare": [
+     20,
+     20
+    ],
+    "nowe": [
+     43,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "tests/field_loss_test.js:242 go(111)",
+    "stare": [
+     20,
+     20
+    ],
+    "nowe": [
+     43,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "tests/podgrodzie_life_test.js:16 newGame",
+    "stare": [
+     1,
+     1
+    ],
+    "nowe": [
+     43,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "tests/zasoby_test.js:264 go(111)",
+    "stare": [
+     56,
+     13
+    ],
+    "nowe": [
+     66,
+     15
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/zasoby_test.js:269 go(111)",
+    "stare": [
+     52,
+     27
+    ],
+    "nowe": [
+     72,
+     66
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "tests/zasoby_test.js:283 go(111)",
+    "stare": [
+     56,
+     39
+    ],
+    "nowe": [
+     48,
+     74
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   }
+  ]
+ },
+ "d_strefy": {
+  "mur_miasta": {
+   "x": [
+    90,
+    91
+   ],
+   "rzedy": [
+    0,
+    69
+   ],
+   "zrodlo": "Map008 x 0-1, rzędy 33..102",
+   "brama": [
+    [
+     90,
+     17
+    ],
+    [
+     90,
+     18
+    ],
+    [
+     91,
+     17
+    ],
+    [
+     91,
+     18
+    ]
+   ]
+  },
+  "pas_lasu": "rzędy 0-2 (x 0-89) i kolumny 0-2 (rzędy 0-66) poza drogą do Przystani (rzędy 17-21)",
+  "palisada": {
+   "pierscien": [
+    3,
+    3,
+    85,
+    64
+   ],
+   "bramy": {
+    "zach": [
+     [
+      3,
+      18
+     ],
+     [
+      3,
+      19
+     ],
+     [
+      3,
+      20
+     ]
+    ],
+    "wsch": [
+     [
+      85,
+      18
+     ],
+     [
+      85,
+      19
+     ],
+     [
+      85,
+      20
+     ]
+    ],
+    "pd": [
+     [
+      40,
+      64
+     ],
+     [
+      41,
+      64
+     ],
+     [
+      42,
+      64
+     ]
+    ]
+   },
+   "kafel": "A2 k38 (pionowe bale) na warstwie 1, region 2"
+  },
+  "drogi": {
+   "glowna": [
+    0,
+    18,
+    85,
+    20
+   ],
+   "na_poludnie": [
+    40,
+    21,
+    42,
+    64
+   ],
+   "uliczka_A": [
+    [
+     4,
+     36,
+     39,
+     37
+    ],
+    [
+     43,
+     36,
+     84,
+     37
+    ]
+   ],
+   "uliczka_B": [
+    4,
+    48,
+    39,
+    49
+   ],
+   "pod_palisada": [
+    [
+     4,
+     59,
+     39,
+     60
+    ],
+    [
+     43,
+     59,
+     84,
+     60
+    ]
+   ]
+  },
+  "placyk_studnia": [
+   44,
+   32,
+   45,
+   33
+  ],
+  "placyk_bruk": {
+   "prostokat": [
+    36,
+    24,
+    55,
+    40
+   ],
+   "kafel": "A2 k18 (bruk z trawiastym obrzeżem), rogi zaokrąglone"
+  },
+  "ogrodek_1": {
+   "x": 61,
+   "y": 10,
+   "w": 4,
+   "h": 3,
+   "uprawy": [
+    [
+     61,
+     10
+    ],
+    [
+     63,
+     10
+    ],
+    [
+     62,
+     12
+    ],
+    [
+     64,
+     12
+    ]
+   ],
+   "furtka": [
+    61,
+    13
+   ]
+  },
+  "ogrodek_2": {
+   "x": 66,
+   "y": 10,
+   "w": 4,
+   "h": 3,
+   "uprawy": [
+    [
+     66,
+     10
+    ],
+    [
+     68,
+     10
+    ],
+    [
+     67,
+     12
+    ],
+    [
+     69,
+     12
+    ]
+   ],
+   "furtka": [
+    66,
+    13
+   ]
+  },
+  "ogrodek_3": {
+   "x": 71,
+   "y": 10,
+   "w": 4,
+   "h": 3,
+   "uprawy": [
+    [
+     71,
+     10
+    ],
+    [
+     73,
+     10
+    ],
+    [
+     72,
+     12
+    ],
+    [
+     74,
+     12
+    ]
+   ],
+   "furtka": [
+    71,
+    13
+   ]
+  },
+  "glinianka": {
+   "x": 46,
+   "y": 69,
+   "w": 5,
+   "h": 4,
+   "ex": 48,
+   "ey": 71
+  },
+  "wysypisko": {
+   "x": 70,
+   "y": 68,
+   "w": 6,
+   "h": 4,
+   "sterty": [
+    [
+     72,
+     70,
+     "główna, Occupy l/r"
+    ],
+    [
+     74,
+     71
+    ],
+    [
+     70,
+     68
+    ]
+   ]
+  },
+  "orzel_TOWN_SQUARES_111": [
+   [
+    4,
+    18,
+    84,
+    20
+   ],
+   [
+    36,
+    24,
+    55,
+    40
+   ],
+   [
+    17,
+    78,
+    36,
+    89
+   ]
+  ],
+  "region31_kratek": 911,
+  "dzialka_chaty_pod_lasem": {
+   "region8": [
+    17,
+    78,
+    36,
+    89
+   ],
+   "przesuniecie": [
+    2,
+    40
+   ],
+   "uwaga": "Farming: budynki/uprawy gracza na mapie 111 (zapisy) trzeba przesunąć o (dx, dy) jak działkę"
+  },
+  "okolice_OLD_111": {
+   "OLD": [
+    92,
+    67
+   ],
+   "powieksz_stan_old": [
+    92,
+    67
+   ],
+   "allowOld": [
+    "ogrodek_1",
+    "ogrodek_2",
+    "ogrodek_3"
+   ],
+   "decyzja": "koordynator 2026-10-22: TAK - osada w palisadzie, pas lasu i mur to „stara część”; ogródki 1-3 (w osadzie) z allowOld; wysypisko i glinianka (rzędy >= 68) w nowej części"
+  },
+  "zapisy_gry": "brak (użytkownik usunął zapisy 2026-10-22): działka Chaty pod lasem przesunięta o (+2, +40) bez migracji",
+  "podworka": {
+   "drwal": {
+    "plot_x": [
+     3,
+     17
+    ],
+    "rzad_szczytu": 6,
+    "rzad_plotu": 16,
+    "furtka": [
+     [
+      10,
+      16
+     ],
+     [
+      11,
+      16
+     ]
+    ],
+    "drzwi": [
+     10,
+     11
+    ],
+    "rzeczy": [
+     [
+      "deszczowka",
+      14,
+      15
+     ],
+     [
+      "kury",
+      15,
+      14
+     ],
+     [
+      "kosze",
+      4,
+      12
+     ],
+     [
+      "kwiaty",
+      4,
+      9
+     ],
+     [
+      "krzaki",
+      4,
+      9
+     ]
+    ]
+   },
+   "strzecha": {
+    "plot_x": [
+     17,
+     26
+    ],
+    "rzad_szczytu": 8,
+    "rzad_plotu": 16,
+    "furtka": [
+     [
+      21,
+      16
+     ],
+     [
+      22,
+      16
+     ]
+    ],
+    "drzwi": [
+     21,
+     13
+    ],
+    "rzeczy": [
+     [
+      "deszczowka",
+      25,
+      9
+     ],
+     [
+      "kury",
+      25,
+      9
+     ],
+     [
+      "kosze",
+      18,
+      15
+     ],
+     [
+      "kwiaty",
+      23,
+      14
+     ],
+     [
+      "krzaki",
+      23,
+      14
+     ]
+    ]
+   },
+   "klusownik": {
+    "plot_x": [
+     3,
+     12
+    ],
+    "rzad_szczytu": 24,
+    "rzad_plotu": 35,
+    "furtka": [
+     [
+      8,
+      35
+     ],
+     [
+      9,
+      35
+     ]
+    ],
+    "drzwi": [
+     8,
+     29
+    ],
+    "rzeczy": [
+     [
+      "deszczowka",
+      11,
+      26
+     ],
+     [
+      "pieniek",
+      4,
+      30
+     ],
+     [
+      "kosze",
+      10,
+      30
+     ],
+     [
+      "kwiaty",
+      4,
+      25
+     ],
+     [
+      "krzaki",
+      4,
+      25
+     ]
+    ]
+   },
+   "deski": {
+    "plot_x": [
+     12,
+     22
+    ],
+    "rzad_szczytu": 24,
+    "rzad_plotu": 35,
+    "furtka": [
+     [
+      17,
+      35
+     ],
+     [
+      18,
+      35
+     ]
+    ],
+    "drzwi": [
+     17,
+     28
+    ],
+    "rzeczy": [
+     [
+      "grzadka",
+      19,
+      29
+     ],
+     [
+      "sag",
+      19,
+      34
+     ],
+     [
+      "taczka",
+      20,
+      25
+     ],
+     [
+      "kury",
+      14,
+      27
+     ],
+     [
+      "kwiaty",
+      13,
+      34
+     ],
+     [
+      "krzaki",
+      13,
+      25
+     ]
+    ]
+   },
+   "znachorka": {
+    "plot_x": [
+     22,
+     34
+    ],
+    "rzad_szczytu": 26,
+    "rzad_plotu": 35,
+    "furtka": [
+     [
+      27,
+      35
+     ],
+     [
+      28,
+      35
+     ]
+    ],
+    "drzwi": [
+     27,
+     31
+    ],
+    "rzeczy": [
+     [
+      "deszczowka",
+      32,
+      30
+     ],
+     [
+      "kosze",
+      30,
+      27
+     ],
+     [
+      "grzadka_mala",
+      23,
+      27
+     ],
+     [
+      "kwiaty",
+      29,
+      34
+     ],
+     [
+      "krzaki",
+      32,
+      27
+     ]
+    ]
+   },
+   "praczka": {
+    "plot_x": [
+     56,
+     68
+    ],
+    "rzad_szczytu": 25,
+    "rzad_plotu": 35,
+    "furtka": [
+     [
+      60,
+      35
+     ],
+     [
+      61,
+      35
+     ]
+    ],
+    "drzwi": [
+     61,
+     30
+    ],
+    "rzeczy": [
+     [
+      "deszczowka",
+      59,
+      31
+     ],
+     [
+      "kosze",
+      62,
+      31
+     ],
+     [
+      "kury",
+      57,
+      31
+     ],
+     [
+      "kwiaty",
+      58,
+      33
+     ],
+     [
+      "krzaki",
+      58,
+      33
+     ]
+    ]
+   },
+   "szopa": {
+    "plot_x": [
+     68,
+     75
+    ],
+    "rzad_szczytu": 26,
+    "rzad_plotu": 35,
+    "furtka": [
+     [
+      70,
+      35
+     ],
+     [
+      71,
+      35
+     ]
+    ],
+    "drzwi": [
+     70,
+     30
+    ],
+    "rzeczy": [
+     [
+      "stog",
+      72,
+      34
+     ],
+     [
+      "taczka",
+      72,
+      31
+     ],
+     [
+      "kwiaty",
+      73,
+      27
+     ],
+     [
+      "krzaki",
+      73,
+      27
+     ]
+    ]
+   },
+   "komorka": {
+    "plot_x": [
+     75,
+     85
+    ],
+    "rzad_szczytu": 25,
+    "rzad_plotu": 35,
+    "furtka": [
+     [
+      78,
+      35
+     ],
+     [
+      79,
+      35
+     ]
+    ],
+    "drzwi": [
+     78,
+     29
+    ],
+    "rzeczy": [
+     [
+      "sag",
+      80,
+      34
+     ],
+     [
+      "beczka",
+      77,
+      34
+     ],
+     [
+      "kosze",
+      81,
+      27
+     ],
+     [
+      "kwiaty",
+      80,
+      30
+     ],
+     [
+      "krzaki",
+      82,
+      29
+     ]
+    ]
+   },
+   "lepianka1": {
+    "plot_x": [
+     3,
+     12
+    ],
+    "rzad_szczytu": 39,
+    "rzad_plotu": 47,
+    "furtka": [
+     [
+      7,
+      47
+     ],
+     [
+      8,
+      47
+     ]
+    ],
+    "drzwi": [
+     7,
+     43
+    ],
+    "rzeczy": [
+     [
+      "grzadka",
+      9,
+      45
+     ],
+     [
+      "kury",
+      11,
+      40
+     ],
+     [
+      "deszczowka",
+      4,
+      40
+     ],
+     [
+      "kosze",
+      4,
+      46
+     ],
+     [
+      "kwiaty",
+      4,
+      45
+     ],
+     [
+      "krzaki",
+      4,
+      45
+     ]
+    ]
+   },
+   "lepianka2": {
+    "plot_x": [
+     12,
+     21
+    ],
+    "rzad_szczytu": 39,
+    "rzad_plotu": 47,
+    "furtka": [
+     [
+      17,
+      47
+     ],
+     [
+      18,
+      47
+     ]
+    ],
+    "drzwi": [
+     17,
+     43
+    ],
+    "rzeczy": [
+     [
+      "grzadka",
+      13,
+      45
+     ],
+     [
+      "pieniek",
+      13,
+      42
+     ],
+     [
+      "kosze",
+      19,
+      45
+     ],
+     [
+      "kury",
+      20,
+      40
+     ],
+     [
+      "kwiaty",
+      19,
+      46
+     ],
+     [
+      "krzaki",
+      19,
+      46
+     ]
+    ]
+   },
+   "chata3": {
+    "plot_x": [
+     21,
+     33
+    ],
+    "rzad_szczytu": 39,
+    "rzad_plotu": 47,
+    "furtka": [
+     [
+      26,
+      47
+     ],
+     [
+      27,
+      47
+     ]
+    ],
+    "drzwi": [
+     26,
+     43
+    ],
+    "rzeczy": [
+     [
+      "sag",
+      28,
+      46
+     ],
+     [
+      "pieniek",
+      22,
+      42
+     ],
+     [
+      "taczka",
+      31,
+      40
+     ],
+     [
+      "grzadka",
+      22,
+      45
+     ],
+     [
+      "kwiaty",
+      31,
+      43
+     ],
+     [
+      "krzaki",
+      31,
+      43
+     ]
+    ]
+   },
+   "chata4": {
+    "plot_x": [
+     3,
+     12
+    ],
+    "rzad_szczytu": 51,
+    "rzad_plotu": 58,
+    "furtka": [
+     [
+      7,
+      58
+     ],
+     [
+      8,
+      58
+     ]
+    ],
+    "drzwi": [
+     7,
+     55
+    ],
+    "rzeczy": [
+     [
+      "beczka",
+      11,
+      56
+     ],
+     [
+      "kury",
+      11,
+      52
+     ],
+     [
+      "kwiaty",
+      9,
+      57
+     ],
+     [
+      "krzaki",
+      9,
+      57
+     ]
+    ]
+   },
+   "chata5": {
+    "plot_x": [
+     12,
+     21
+    ],
+    "rzad_szczytu": 51,
+    "rzad_plotu": 58,
+    "furtka": [
+     [
+      17,
+      58
+     ],
+     [
+      18,
+      58
+     ]
+    ],
+    "drzwi": [
+     17,
+     55
+    ],
+    "rzeczy": [
+     [
+      "deszczowka",
+      16,
+      57
+     ],
+     [
+      "kosze",
+      19,
+      57
+     ],
+     [
+      "kwiaty",
+      14,
+      57
+     ],
+     [
+      "krzaki",
+      14,
+      57
+     ]
+    ]
+   },
+   "garncarnia": {
+    "plot_x": [
+     44,
+     57
+    ],
+    "rzad_szczytu": 45,
+    "rzad_plotu": 58,
+    "furtka": [
+     [
+      49,
+      58
+     ],
+     [
+      50,
+      58
+     ]
+    ],
+    "drzwi": [
+     49,
+     50
+    ],
+    "rzeczy": []
+   }
+  },
+  "okolice_ENTRY_111": [
+   41,
+   30
+  ],
+  "zasoby_GARDENS": {
+   "ogrodek_1": {
+    "x": 61,
+    "y": 10,
+    "w": 4,
+    "h": 3,
+    "uprawy": [
+     [
+      61,
+      10
+     ],
+     [
+      63,
+      10
+     ],
+     [
+      62,
+      12
+     ],
+     [
+      64,
+      12
+     ]
+    ],
+    "furtka": [
+     61,
+     13
+    ]
+   },
+   "ogrodek_2": {
+    "x": 66,
+    "y": 10,
+    "w": 4,
+    "h": 3,
+    "uprawy": [
+     [
+      66,
+      10
+     ],
+     [
+      68,
+      10
+     ],
+     [
+      67,
+      12
+     ],
+     [
+      69,
+      12
+     ]
+    ],
+    "furtka": [
+     66,
+     13
+    ]
+   },
+   "ogrodek_3": {
+    "x": 71,
+    "y": 10,
+    "w": 4,
+    "h": 3,
+    "uprawy": [
+     [
+      71,
+      10
+     ],
+     [
+      73,
+      10
+     ],
+     [
+      72,
+      12
+     ],
+     [
+      74,
+      12
+     ]
+    ],
+    "furtka": [
+     71,
+     13
+    ]
+   }
+  },
+  "swiatla": [
+   {
+    "nazwa": "Świeczka przy kapliczce",
+    "x": 38,
+    "y": 27,
+    "notatka": "<Light:120,80,50,10><LightFlicker:0.2>"
+   },
+   {
+    "nazwa": "Kocioł z zupą",
+    "x": 50,
+    "y": 15,
+    "notatka": "<Light:200,120,60,14><LightFlicker:0.15>"
+   },
+   {
+    "nazwa": "Piec garncarski",
+    "x": 55,
+    "y": 50,
+    "notatka": "<Light:170,100,50,12><LightFlicker:0.12>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 2,
+    "y": 16,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 83,
+    "y": 16,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 39,
+    "y": 62,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 44,
+    "y": 22,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 55,
+    "y": 40,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 75,
+    "y": 14,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 13,
+    "y": 21,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 35,
+    "y": 21,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 66,
+    "y": 21,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 34,
+    "y": 38,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 70,
+    "y": 38,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 22,
+    "y": 50,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 58,
+    "y": 55,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 51,
+    "y": 61,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 30,
+    "y": 61,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 8,
+    "y": 61,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   },
+   {
+    "nazwa": "Latarnia",
+    "x": 78,
+    "y": 61,
+    "notatka": "<Light:150,90,62,24><LightWhen:night>"
+   }
+  ]
+ }
+}

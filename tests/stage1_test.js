@@ -44,10 +44,14 @@ const { launch, sleep } = require("./cdp.js");
                 71: 480, 72: 360, 73: 480, 75: 240, 83: 120, 123: 48, 124: 720, 130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96,
                 149: 72, 150: 168, 151: 96, 153: 72, 157: 60, 158: 120, 159: 60, 160: 120, 161: 60, 162: 120,
                 168: 60, 169: 120,   // (+ the bear's meat, combat stage 2 - 2026-10-05: like the other meats)
-                173: 40, 174: 48 };   // (+ the harbour's sea fish, 2026-10-14: herring and cod)
+                173: 40, 174: 48,   // (+ the harbour's sea fish, 2026-10-14: herring and cod)
+                186: 24, 187: 48, 196: 240 };   // (+ Zasoby.js's rows, 2026-10-21: the raw and the roasted crab, the valerian brew)
+            // (+ Zasoby.js's rows: what the roasted crab and the valerian brew feed and quench - their own numbers, not 80% of the stamina;
+            // the crab in the bowl: raw 30, roasted 35)
+            const NEW_FED = { 187: [20, 0], 196: [2, 12] }, NEW_DOG = { 186: 30, 187: 35 };
             const OLD_DOG_EAT = { berries: 14, bush: 18, mushroom: 12, wildPotato: 20, wildCarrot: 16 };
             const OLD_MEATS = [94, 95, 157, 158, 159, 160, 161, 162, 105, 98, 99, 106, 168, 169, 173, 174], OLD_RAW = [94, 157, 159, 161, 168];   // (the bear's meat: stage 2; the sea fish last: the harbour)
-            const oldDog = id => OLD_RAW.includes(id) ? 40 : OLD_MEATS.includes(id) ? 45 : OLD_FEED[id] ? Math.max(8, Math.min(40, Math.round(OLD_FEED[id][0] * 1.5))) : 10;
+            const oldDog = id => NEW_DOG[id] !== undefined ? NEW_DOG[id] : OLD_RAW.includes(id) ? 40 : OLD_MEATS.includes(id) ? 45 : OLD_FEED[id] ? Math.max(8, Math.min(40, Math.round(OLD_FEED[id][0] * 1.5))) : 10;
             const oldNote = item => { const raw = item && item.meta && item.meta.Food; if (typeof raw !== "string") return null; const info = {};
                 for (const pair of raw.split(",")) { const [k, v] = pair.split("=").map(s => s.trim()); info[k] = isNaN(Number(v)) ? v : Number(v); } return info; };
             const out = { table: !!window.FoodTable, diffs: window.FoodTable ? FoodTable.check() : ["no table"], info: [], fed: [], dog: [], life: null, eat: null, meats: null, feed: [] };
@@ -57,7 +61,7 @@ const { launch, sleep } = require("./cdp.js");
                 if (!!note !== !!now) { out.info.push(item.id + " food? note " + !!note + " table " + !!now); continue; }
                 if (note) {
                     for (const k of ["stamina", "buff", "hours", "buff2", "hours2"]) if (note[k] !== now[k]) out.info.push(item.id + " " + k + ": " + note[k] + " / " + now[k]);
-                    const t = OLD_FEED[item.id] || [Math.round((note.stamina || 0) * 0.8), 0];
+                    const t = OLD_FEED[item.id] || NEW_FED[item.id] || [Math.round((note.stamina || 0) * 0.8), 0];
                     const old = [note.fed !== undefined ? note.fed : t[0], note.water !== undefined ? note.water : t[1]], got = Needs.foodValues(item, now);
                     if (old[0] !== got[0] || old[1] !== got[1]) out.fed.push(item.id + ": " + old + " / " + got);
                 }
@@ -283,13 +287,13 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`$gamePlayer.locate(${spot.x}, ${spot.y + 1}); $gamePlayer.setDirection(8); 0`);
         await frames(10);
         const why = await J(`({ chest: Farming.whyNotBuild("chest_s", ${spot.x}, ${spot.y}), snare: Farming.whyNotBuild("snare", ${spot.x}, ${spot.y}), f9: Farming.whyNotBuild("chest_s", ${spot.x}, ${spot.y}, false, true), problem: Farming.placementProblem("chest_s", ${spot.x}, ${spot.y}) })`);
-        check("C2 on the meadow a chest may not stand ('Budować możesz tylko na polu dziadka.'), a snare may; the F9 placer ignores the rule",
-            why.chest === "Budować możesz tylko na polu dziadka." && why.snare === null && why.f9 === null && why.problem === why.chest, why);
+        check("C2 on the meadow a chest may not stand ('Budować możesz tylko na działce dziadka.'), a snare may; the F9 placer ignores the rule",
+            why.chest === "Budować możesz tylko na działce dziadka." && why.snare === null && why.f9 === null && why.problem === why.chest, why);
         await ev("window.__pops.length = 0; $gameParty.gainItem($dataItems[Farming.ITEM.planks], 20); 0");
         await press("pageup"); await frames(15);
         const qm = await J(`(function(){ const m = SceneManager._scene._farmMenu; return { open: !!$gameTemp._farmMenuOpen, names: m._entries.map(e => e.name) }; })()`);
         const qp = await pops();
-        check("C3 Q on the meadow: a popup over the player 'Budować możesz tylko na polu dziadka'; the list has only the snare", qp.some(p => /^Budować możesz tylko na polu dziadka/.test(p)) && qm.open && qm.names.includes("Pułapka") && !qm.names.includes("Mała skrzynia") && !qm.names.includes("Warsztat"), { qp, qm });
+        check("C3 Q on the meadow: a popup over the player 'Budować możesz tylko na działce dziadka'; the list has only the snare", qp.some(p => /^Budować możesz tylko na działce dziadka/.test(p)) && qm.open && qm.names.includes("Pułapka") && !qm.names.includes("Mała skrzynia") && !qm.names.includes("Warsztat"), { qp, qm });
         await press("pageup"); await frames(10);
         await press("ok"); await frames(20);
         const gm = await J(`(function(){ const m = SceneManager._scene._farmMenu; return { open: !!$gameTemp._farmMenuOpen, names: m._entries.map(e => e.name) }; })()`);
@@ -298,7 +302,7 @@ const { launch, sleep } = require("./cdp.js");
         const c4 = await J(`(function(){ const p = $gamePlayer, x = p.x, y = p.y - 2, w = t => Farming.whyNotBuild(t, x, y, false, false) || "";
             return { tent: w("tent"), bedroll: w("bedroll"), bucket: w("bucket"), pot: w("clay_pot"), workbench: w("workbench") }; })()`);
         check("C4 on the meadow the tent, the forest bed, the bucket and the clay pot may be put down (anywhere); a building may not", gm.names.includes("Postaw...") &&
-            ["tent", "bedroll", "bucket", "pot"].every(k => !/tylko na polu/.test(c4[k])) && /tylko na polu/.test(c4.workbench), c4);
+            ["tent", "bedroll", "bucket", "pot"].every(k => !/tylko na działce/.test(c4[k])) && /tylko na działce/.test(c4.workbench), c4);
         await ev("if ($gameTemp._farmMenuOpen) SceneManager._scene.closeFarmMenu(); 0");
         const tag = await J(`(function(){ const n0 = $dataMap.note; $dataMap.note = n0 + " <Build:on>"; const on = Farming.mapAllowsBuilding(); $dataMap.note = n0 + " <Build: off>"; const off = Farming.mapAllowsBuilding(); $dataMap.note = n0; return { on, off, back: Farming.mapAllowsBuilding() }; })()`);
         check("C5 a map note <Build:on> / <Build:off> overrides the list (data-driven)", tag.on === true && tag.off === false && tag.back === false, tag);

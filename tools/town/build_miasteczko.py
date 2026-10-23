@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python build_miasteczko.py  -> tools/town/staging/Map008_C2.json (+ _meta.json)
 # The town around the tavern, layout C "Tarasy na wzgórzu twierdzy" (the user's choice, 2026-09-29), rebuilt from the tileset
 # author's own pieces on the proposed town tileset 11 (town_tileset.py = his tileset 1, his passage flags):

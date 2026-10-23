@@ -46,6 +46,8 @@
  *  Tawerna.popup(tekst, opcje) - dymek nad bohaterem (braki: kind "need").
  *  Tawerna.has("Wtyczka"), Tawerna.api("Wtyczka"), Tawerna.call(...)
  *  Tawerna.debug - stany, wstawienia, zegary (czas na klatkę) dla F9.
+ *  <Px:dx,dy> w notatce zdarzenia - jego obrazek przesunięty o piksele
+ *      (np. przedmiot na środku blatu stołu).
  * ============================================================================
  */
 
@@ -285,6 +287,22 @@
         if (a.y !== b.y) return a.y - b.y;
         return a.spriteId - b.spriteId;
     };
+    // <Px:dx,dy> in an event's note: its picture drawn that many pixels off its cell (2026-10-22, user: "książki leżą na krawędzi
+    // stołu" - an item tile on a two-row table stands half off it in either cell; tools/mapy/popraw.py puts such an item as an
+    // event with its tile's picture, moved onto the middle of the table top)
+    const pxOff = new WeakMap();
+    const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
+    Sprite_Character.prototype.updatePosition = function() {
+        _Sprite_Character_updatePosition.call(this);
+        const ch = this._character;
+        if (!(ch instanceof Game_Event)) return;
+        if (!pxOff.has(ch)) {
+            const d = ch.event(), m = d && /<Px:(-?\d+),(-?\d+)>/i.exec(d.note || "");
+            pxOff.set(ch, m ? [Number(m[1]), Number(m[2])] : null);
+        }
+        const o = pxOff.get(ch);
+        if (o) { this.x += o[0]; this.y += o[1]; }
+    };
 
     // ------------------------------------------------------------------
     // Map injection: events put into a map's data as it loads (the map files stay as they are)
@@ -309,7 +327,7 @@
         { owner: "Story", from: 901, to: 902, what: "dziadek (mapa 19), Lord (dwór)" },
         // (2026-10-18) the white eagle (Orzel.js): the climbers' path on the user's Map013, the ridge's things on Map175 (Orla Grań)
         { owner: "Orzel", from: 500, to: 539, what: "biały orzeł: ścieżka na Orlą Grań (mapa 13), gniazdo, orlica, misa, obóz i klatka (mapa 175)" },
-        { owner: "Homes", from: 700, to: 729, what: "pole po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
+        { owner: "Homes", from: 700, to: 729, what: "działka po stracie: ludzie Lorda, znak, straż (mapy 3, 4, 23); droga i drogowskaz do Spalonej zagrody (mapa 23); dym z komina i Marta przy grobie (mapa 168)" },
         // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): the kantor's trapdoor, stack and counter (Map103), the night visitors of
         // the back door (Map008), the cellar (Map171), the smugglers' camp (Map023), the ferry night's cart (Map022)
         { owner: "Kantor", from: 730, to: 759, what: "W5: kantor nocą (klapa, skrzynie, lada - mapa 103), goście tylnych drzwi (mapa 8), piwnica kantoru (mapa 171), obóz przemytników (mapa 23), wóz w noc promu (mapa 22)" },
@@ -329,7 +347,10 @@
         { owner: "Lowy", from: 2300, to: 2499, what: "nowy teren: paczka B „Zwierzęta i łowy”" },
         { owner: "Ludzie", from: 2500, to: 2699, what: "nowy teren: paczka C „Ludzie”" },
         { owner: "Zakon", from: 2700, to: 2899, what: "nowy teren: paczka D „Tajemnice i zakon”" },
-        { owner: "TownLife", from: 2900, to: 2949, what: "mieszkańcy paczek nowego terenu (drugi zakres)" }
+        { owner: "TownLife", from: 2900, to: 2949, what: "mieszkańcy paczek nowego terenu (drugi zakres)" },
+        // (2026-10-22) the new Podgrodzie's residents (docs/podgrodzie/NOWE_PODGRODZIE.md): 2900-2949 is given out (packages A-D,
+        // the new town 2940-2947, 2948-2949 the tests' and spare) - a third range of the same owner
+        { owner: "TownLife", from: 2950, to: 2959, what: "nowi mieszkańcy Podgrodzia (trzeci zakres; 2950-2953 dane)" }
     ];
     const injectors = [];     // { owner, from, to, maps(id), mapsText, build, when, fixSaved, editorWins }
     const dataHooks = [];     // { fn, owner }

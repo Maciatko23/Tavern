@@ -32,7 +32,9 @@ const { launch, sleep } = require("./cdp.js");
         // ---------- loose stones
         await ev("Farming; 0");
         const stones = await ev(`(function(){ let n = 0, list = []; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) { const s = Farming.stoneSpot(x, y); if (s === undefined) return "wait"; if (Farming.stoneAt(x, y)) { n++; if (list.length < 3) list.push([x, y]); } } return { n, list }; })()`);
-        check("loose stones lie on the map (about 5% of free grass)", stones !== "wait" && stones.n >= 15 && stones.n <= 120, stones);
+        // (2026-10-22: the field doubled to 80 x 60 - as many as before on every 40 x 30 of it: 15 to 120)
+        const per1200 = (await ev("$gameMap.width() * $gameMap.height()")) / 1200;
+        check("loose stones lie on the map (about 5% of free grass: 15 to 120 on every 40 x 30 tiles)", stones !== "wait" && stones.n >= 15 * per1200 && stones.n <= 120 * per1200, { per1200, stones });
         const [sx, sy] = stones.list[0];
         const layer = await ev("({entries: SceneManager._scene._spriteset._stoneLayer._entries.length})");
         const gatherAll = await ev(`(function(){ let n = 0; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) if (Farming.gatherAt(x, y)) n++; return n; })()`);

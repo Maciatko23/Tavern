@@ -10,10 +10,10 @@ const FRAMES = path.join(os.tmpdir(), "waterfall_frames");
 // on the map the test checks only what is left - the water sheet and drinking at the pond; with one back, everything as before)
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
-    await t.newGame({ map: 8, x: 39, y: 11, dir: 6, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 66, y: 11, dir: 6, hour: 12, quiet: true, minimap: false });
     const set = await t.json(`({ a1: $gameMap.tileset().tilesetNames[0], fx: WaterFx.effects().map(f => f.constructor.name) })`);
     t.check("the town's tileset uses the recoloured water sheet", /A1_green_town$/.test(set.a1), set);
-    const drink0 = await t.json(`({ water: !!Tawerna.call("Farming", "isWaterTile", 40, 11), events: $gameMap.eventsXy(40, 11).length })`);
+    const drink0 = await t.json(`({ water: !!Tawerna.call("Farming", "isWaterTile", 67, 11), events: $gameMap.eventsXy(67, 11).length })`);
     if (!set.fx.length) {   // (no waterfall on the map now)
         t.check("no waterfall on the town map now (the author's redesign): no water effects left behind", set.fx.length === 0, set);
         // (the author's redesign took the pond too - the town's water is now the market well alone, two draws a day)
@@ -44,14 +44,14 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the falling water slides down smoothly (a little every frame, the front layer faster) over the 2x4 cells inside the rock rims",
         fall.ready && fall.w === 96 - 14 && fall.h === 192 && fall.moved > 5 && fall.moved < 40 && fall.frontFaster, fall);
 
-    const drink = await t.json(`({ water: !!Tawerna.call("Farming", "isWaterTile", 40, 11), events: $gameMap.eventsXy(40, 11).length })`);
+    const drink = await t.json(`({ water: !!Tawerna.call("Farming", "isWaterTile", 67, 11), events: $gameMap.eventsXy(67, 11).length })`);
     t.check("the pond by the shore is still water to drink from, with no event in the way", drink.water && drink.events === 0, drink);
 
     // frames for a GIF of the waterfall
     fs.mkdirSync(FRAMES, { recursive: true });
-    await t.eval("$gameMap.setDisplayPos(31, 0); 0");   // (the camera on the whole stream, fall and pond; it stays while the hero stands)
+    await t.eval("$gameMap.setDisplayPos(58, 0); 0");   // (the camera on the whole stream, fall and pond; it stays while the hero stands)
     await t.frames(5);
-    const box = await t.json(`({ x: $gameMap.adjustX(40) * 48, y: $gameMap.adjustY(0) * 48, w: 9 * 48, h: 15 * 48, gw: Graphics.width })`);
+    const box = await t.json(`({ x: $gameMap.adjustX(67) * 48, y: $gameMap.adjustY(0) * 48, w: 9 * 48, h: 15 * 48, gw: Graphics.width })`);
     for (let i = 0; i < 40; i++) {
         await t.frames(4);
         await t.shot(path.join(FRAMES, "f" + String(i).padStart(2, "0") + ".png"));

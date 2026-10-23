@@ -59,7 +59,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 2. the trigger =================
     await fresh();
     await t.eval("Underground.state().deepest = 30; Underground.open(); 0");
-    await t.go(8, 24, 19, 8);
+    await t.go(8, 51, 19, 8);
     await t.frames(80);
     t.check("floor 30 only: nothing (idle) on the town map", (await S("Act3.phase()")) === "idle");
     await t.eval("Underground.state().deepest = 50; Underground.open(); Act3.auto(false); 0");
@@ -86,10 +86,10 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     await t.setHour(22);
     await t.frames(60);
     t.check("the night, but the hero at grandpa's: they wait (armed)", (await S("Act3.phase()")) === "armed");
-    await t.go(8, 24, 19, 8);
+    await t.go(8, 51, 19, 8);
     await t.frames(60);
     const started = await S("({ ph: Act3.phase(), bus: __bus.filter(b => b.n === 'act3Start').length, rope: !!$gameMap.event(859), ropeAt: $gameMap.event(859) ? [$gameMap.event(859).x, $gameMap.event(859).y] : null })");
-    t.check("the night on the town map: the siege (act3Start); the bell's rope (event 859) under the bell", started.ph === "siege" && started.bus === 1 && started.rope && started.ropeAt.join() === "47,29", started);
+    t.check("the night on the town map: the siege (act3Start); the bell's rope (event 859) under the bell", started.ph === "siege" && started.bus === 1 && started.rope && started.ropeAt.join() === "85,30", started);
 
     // ================= 3. the bell: nobody trusts the hero - the rope and the mini-game; Opinia 30 - the doors stay shut =================
     await god(true);
@@ -105,8 +105,8 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // the first wave: at the yard's gate, marching to the tavern's door
     await t.until("Act3.live().length > 0", 20);
     let L1 = await live();
-    t.check("wave 1 on the town map: 2 bandits and a knife bandit of the faction (tag act3_w1), their way to the tavern's door (24,17)",
-        L1.length === 3 && L1.every(h => h.tag === "act3_w1" && h.hx === 24 && h.hy === 17) && L1.filter(h => h.kind === "bandit").length === 2, L1);
+    t.check("wave 1 on the town map: 2 bandits and a knife bandit of the faction (tag act3_w1), their way to the tavern's door (51,17)",
+        L1.length === 3 && L1.every(h => h.tag === "act3_w1" && h.hx === 51 && h.hy === 17) && L1.filter(h => h.kind === "bandit").length === 2, L1);
     await shot("akt3_fala1.png");
 
     // ================= 4. the doors: the hero far away - the men work at the door, it breaks, they go in =================
@@ -135,7 +135,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
 
     // ================= 5. all the help: Grum ally, Ambroży, Opinia 70, Rafał and Marek, the manor's guards =================
     await fresh({ grumAlly: 1, ambrozyTrust: 1, marekSaved: 1, rafalAlly: 1, lordAlly: 1 }, 70);
-    await heroAt(10, 19, 6);
+    await heroAt(37, 19, 6);
     await t.eval("Act3.debugStart(); 0");
     await t.frames(30);
     const g1 = await defs();
@@ -149,7 +149,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     t.check("the defenders outside: Grum, Rafał and Marek (W6), the manor's two guards, Tadek, Ignac, Kuba and two refugees",
         ["grum", "rafal", "marek", "straz0", "straz1", "tadek", "ignac", "kuba", "uchodzcy0", "uchodzcy1"].every(k => ids2.includes(k)), ids2);
     // they fight the faction's men: a man struck by a defender fights it back (Humans.setFoe)
-    await heroAt(10, 19, 6);
+    await heroAt(37, 19, 6);
     const duel = await t.until("Act3.live().some(h => !h._dead && h._foe && h._foe.isDefender)", 40);
     t.check("a defender fights a man: the man fights it back (his foe - Humans.setFoe)", duel, await live());
     const hurt = await t.until("Act3.defenders().some(d => d._hp < d._maxHp)", 40);
@@ -196,7 +196,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     const gf = await S("({ out: Act3.outcome(), gone: TownQuests.state().flags.grumGone, away: TownQuests.grumAway() })");
     t.check("Grum beaten and spared: he leaves on the ferry (outcome grum 'gone', the flag grumGone - gone from the tavern)", gf.out && gf.out.grum === "gone" && !!gf.gone && gf.away, gf);
     await t.eval("(function(){ Act3.reset(); const f = TownQuests.state().flags; f.rafalEnemy = 1; delete f.w8Faction; delete f.grumGone; return 0; })()");
-    await t.go(8, 24, 19, 8);
+    await t.go(8, 51, 19, 8);
     await t.eval("Act3.debugStart({ wave: 1 }); 0");
     await t.until("Act3.live().length > 0", 20);
     const L7b = await live();
@@ -212,7 +212,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 8. a save and a load in the middle of the siege =================
     await t.eval("Act3.reset(); 0");
     await fresh({ grumAlly: 1 }, 30);
-    await t.go(8, 10, 19, 6);
+    await t.go(8, 37, 19, 6);
     await t.eval("Act3.debugStart(); 0");
     await t.until("Act3.live().length === 3", 20);
     await t.eval("(function(){ const h = Act3.live()[0]; Humans.kill(h, 'melee'); return 0; })()");
@@ -229,7 +229,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     await god(false);
     await t.eval("Act3.reset(); Humans.clear(); 0");
     await fresh({}, 30);
-    await t.go(8, 24, 19, 8);
+    await t.go(8, 51, 19, 8);
     await t.eval("$gameParty.gainGold(100); Act3.debugStart(); 0");
     await t.until("Act3.live().length > 0", 20);
     const g0 = await t.gold();

@@ -1,0 +1,133 @@
+{
+ "mapa": 105,
+ "nazwa": "Dom kowala",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 3,
+   "y": 8,
+   "stary": 597,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 17,
+   "nazwa": "Na stole: D 5,10",
+   "zd": {
+    "id": 17,
+    "name": "Na stole: D 5,10",
+    "note": "<Px:0,-20>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 597
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 3,
+    "y": 8
+   }
+  }
+ ],
+ "log": [
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 8,
+   "problem": "kafel 597 (D 5,10) zwisa 8 px z przedniej krawędzi blatu w (3,8)",
+   "poprawka": "kafel 597 w (3,8) jako zdarzenie 17 z obrazkiem kafla, -20 px w pionie (17 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 8,
+   "kandydat": "przesunięto kafel 597 z (3,8) do (3,7)",
+   "odrzucony": "nowe problemy: P2(3,7)"
+  },
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 8,
+   "kandydat": "przesunięto kafel 597 z (3,8) do (4,8)",
+   "odrzucony": "nowe problemy: P2(4,8)"
+  },
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 8,
+   "kandydat": "kafel 597 w (3,8) jako zdarzenie 17 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 8,
+   "kandydat": "kafel 597 w (3,8) jako zdarzenie 17 z obrazkiem kafla, +8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 8,
+   "kandydat": "kafel 597 w (3,8) jako zdarzenie 17 z obrazkiem kafla, +12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  }
+ ],
+ "przed": [
+  "P2 3,8"
+ ],
+ "po": [],
+ "sha_data": "9fed2561da919b457add4b3d993017d93aeea445ef199805c3bfd2bd368c550c",
+ "zainstalowano": "2026-10-22T11:30:43",
+ "sha_po": "d921ee9fd460354f7328778f7caf73d0250c58677134cdb0507920a90f23e001"
+}

@@ -1,0 +1,125 @@
+{
+ "mapa": 110,
+ "nazwa": "Izba pod skałą",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 5,
+   "stary": 415,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 5,
+   "stary": 415,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 7,
+   "stary": 0,
+   "nowy": 407
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 6,
+   "stary": 605,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 6,
+   "stary": 605,
+   "nowy": 0
+  },
+  {
+   "op": "przesun",
+   "id": 6,
+   "nazwa": "Świeca",
+   "stary": [
+    2,
+    8
+   ],
+   "nowy": [
+    3,
+    7
+   ]
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 4,
+   "y": 5,
+   "problem": "obiekt rozcięty: kafel 415 (C 15,3) - dół bez góry (brak kafla 407 nad) w (4,5)",
+   "poprawka": "usunięto resztkę obiektu C (15,3) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 8,
+   "y": 5,
+   "problem": "obiekt rozcięty: kafel 415 (C 15,3) - dół bez góry (brak kafla 407 nad) w (8,5)",
+   "poprawka": "usunięto resztkę obiektu C (15,3) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 3,
+   "y": 8,
+   "problem": "obiekt rozcięty: kafel 415 (C 15,3) - dół bez góry (brak kafla 407 nad) w (3,8)",
+   "poprawka": "dołożono górę obiektu C (15,3) 1 kafli"
+  },
+  {
+   "kod": "G1",
+   "x": 1,
+   "y": 6,
+   "problem": "kafel 605 (D 5,11) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (1,6)",
+   "poprawka": "usunięto kafel 605 z gwiazdką"
+  },
+  {
+   "kod": "G1",
+   "x": 10,
+   "y": 6,
+   "problem": "kafel 605 (D 5,11) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (10,6)",
+   "poprawka": "usunięto kafel 605 z gwiazdką"
+  },
+  {
+   "kod": "P3",
+   "x": 2,
+   "y": 8,
+   "problem": "zdarzenie 6 'Świeca' (!Decoration2|1|2|0) stoi na podłodze tuż przed meblem - pewnie miał stać na blacie (we wzorcach: na blacie 6, na podłodze 2) (2,8)",
+   "poprawka": "przesunięto zdarzenie 6 z (2,8) do (3,7) (2 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "G1",
+   "x": 1,
+   "y": 6,
+   "kandydat": "kratka pod kaflem 605 zablokowana regionem 2 (RegionLayers: mebel stoi na niej)",
+   "odrzucony": "odcięte zdarzenie w (1,8)"
+  }
+ ],
+ "przed": [
+  "G1 1,6",
+  "G1 10,6",
+  "O1 3,8",
+  "O1 4,5",
+  "O1 8,5",
+  "P3 2,8"
+ ],
+ "po": [],
+ "sha_data": "be719507600f9faadface02dd8bfd582e4243c420c019941c0815fd9741bd95d",
+ "zainstalowano": "2026-10-22T10:51:28",
+ "sha_po": "c6e5b437e4d02cb9b7084f4e5cf331b83ed32f2972827ff78e765b84214b7628"
+}

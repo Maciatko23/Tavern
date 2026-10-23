@@ -1,0 +1,7 @@
+PixelLab Pro Flash (2026-10-22), obrazki do arkusza img/characters/!Miasto2_Wnetrza.png (tools/miasto2/wnetrza/props.py):
+kon_gniady.png  job 9e2f441b-0b25-412d-8c15-d70d1a529f02  96x96 (skala 1x)  ~5 gen  wzór: osioł !$Lud_Osiol (kierunek lewo)
+ikona.png       job 05765712-aac4-403d-8235-a06dfd95dff4  192x192 (2x)     ~6 gen  wzór: tools/interiors/props/ref/ref_banner_96x192
+siodlo.png      job 85279b89-7f7b-4c02-b10d-f3d53eaefffd  192x128 (2x)     ~6 gen  wzór: ref_wood_192x128
+koziol.png      job a4f6e94c-eb56-4132-b4ed-162e939d354a  192x128 (2x)     ~6 gen  wzór: ref_wood_192x128
+chomato.png     job c25b97c7-ff39-4152-9c97-9cfc265faf6a  96x96 (2x)       ~5 gen  wzór: ref_shield_96
+(razem ok. 28 generacji). Siwek i kary to przemalowany gniady (props.py: recolor).

@@ -30,10 +30,13 @@
 // the spot "ludmila_lada" of whichever interior has it (Ludmiła behind the counter of the town's honest kantor, Map103), not at home.
 // (v1.6.0, 2026-10-21, the new terrain - docs/rozszerzenia/PLAN.md) A second range of ids for the residents of other plugins:
 // TownLifeExtra takes an id of 910-949 (as before) or of TownLifeData.EXTRA_RANGE (2900-2949); one Tawerna.inject per range.
+// (v1.7.0, 2026-10-22, the new Podgrodzie - docs/podgrodzie/NOWE_PODGRODZIE.md) a third range, 2950-2959 (TawernaCore's registry):
+// TownLifeData.EXTRA_RANGES lists every range past 910-949 ([[2900, 2949], [2950, 2959]]) - one Tawerna.inject per range, ids of
+// TownLifeExtra checked against all of them.
 
 /*:
  * @target MZ
- * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.6.0
+ * @plugindesc Miasteczko żyje według zegara: mieszkańcy chodzą, pracują, wchodzą do domów i tawerny, wołają, rozmawiają; dzwon wybija godziny. v1.7.0
  * @author Claude
  *
  * @help
@@ -71,6 +74,10 @@
     // (2026-10-21, docs/rozszerzenia/PLAN.md) a second range for the residents of the new terrain's packages (TownLifeExtra with an id
     // of 2900-2949: A 2900-2904, B 2905-2909, C 2910-2929, D 2930-2939) - 910-949 is full
     const EXTRA = D.EXTRA_RANGE || [2900, 2949];
+    // (v1.7.0, 2026-10-22) every range past 910-949: TownLifeData.EXTRA_RANGES (the second one and the new Podgrodzie's third,
+    // 2950-2959 - docs/podgrodzie/NOWE_PODGRODZIE.md); old data with only EXTRA_RANGE keeps its one range
+    const RANGES = (Array.isArray(D.EXTRA_RANGES) && D.EXTRA_RANGES.length ? D.EXTRA_RANGES : [EXTRA]).map(r => [Number(r[0]), Number(r[1])]);
+    const inExtra = id => RANGES.some(r => id >= r[0] && id <= r[1]);
     const RES = D.RESIDENTS;
     // (2026-10-16, docs/miejsca_wyspy/PAKIETY.md) residents of other plugins: a data plugin above this one puts them into
     // window.TownLifeExtra, each with its OWN fixed event id (910-949, given out in the plan) - the ids of the residents above stay
@@ -83,7 +90,7 @@
         for (const r of extra) {
             if (!r || !r.key) continue;
             const id = Number(r.id);
-            if (!(id >= FIRST + plain && id <= LAST) && !(id >= EXTRA[0] && id <= EXTRA[1])) { warn(r.key + ": the id " + r.id + " is not free (" + (FIRST + plain) + "-" + LAST + " or " + EXTRA[0] + "-" + EXTRA[1] + ") - left out"); continue; }
+            if (!(id >= FIRST + plain && id <= LAST) && !inExtra(id)) { warn(r.key + ": the id " + r.id + " is not free (" + (FIRST + plain) + "-" + LAST + " or " + RANGES.map(x => x[0] + "-" + x[1]).join(", ") + ") - left out"); continue; }
             if (RES.some(o => o.key === r.key || o.id === id)) { warn(r.key + ": the key or the id " + id + " is taken - left out"); continue; }
             RES.push(r);
         }
@@ -235,7 +242,7 @@
     // (2026-10-21) one injection per range of ids (the core takes only the ids of its range from each)
     const inRange = (lo, hi) => e => !!e && e.id >= lo && e.id <= hi;
     T.inject("*", { ids: [FIRST, LAST], owner: PLUGIN, build: (data, mapId) => residentEvents(data, mapId).filter(inRange(FIRST, LAST)) });
-    T.inject("*", { ids: [EXTRA[0], EXTRA[1]], owner: PLUGIN, build: (data, mapId) => residentEvents(data, mapId).filter(inRange(EXTRA[0], EXTRA[1])) });
+    for (const [lo, hi] of RANGES) T.inject("*", { ids: [lo, hi], owner: PLUGIN, build: (data, mapId) => residentEvents(data, mapId).filter(inRange(lo, hi)) });
 
     // ------------------------------------------------------------------
     // Hidden (inside a building): not seen, not in the way, not spoken to

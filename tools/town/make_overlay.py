@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python make_overlay.py [A] [B] [C]  -> tools/town/staging/overlay_<X>/ (data/Map008.json, data/Tilesets.json, img/characters/*)
 # A folder for the game harness's GAME_OVERLAY (tests/cdp.js serves its data/*.json and img/characters/*.png instead of the
 # game's own), so a staged concept can be walked and photographed in the real game without touching data/ or img/.

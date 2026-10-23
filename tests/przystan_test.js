@@ -26,7 +26,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         && new Set([173, 174, 175, 176].map(i => items[i][1])).size === 4, items);
 
     // ---------------------------------------------------------------- the way in from Podgrodzie, walked
-    await t.newGame({ map: 111, x: 2, y: 19, dir: 4, hour: 10, day: 2, quiet: true, minimap: false });
+    await t.newGame({ map: 111, x: 1, y: 19, dir: 4, hour: 10, day: 2, quiet: true, minimap: false });
     await t.hold("left", 50);
     const inHarbour = await t.until(t.onMap(125), 20);
     await t.frames(30);

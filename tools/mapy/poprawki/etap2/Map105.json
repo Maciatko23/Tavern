@@ -1,0 +1,76 @@
+{
+ "mapa": 105,
+ "nazwa": "Dom kowala",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 3,
+   "y": 7,
+   "stary": 597,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 3,
+   "y": 8,
+   "stary": 0,
+   "nowy": 597
+  },
+  {
+   "op": "przesun",
+   "id": 14,
+   "nazwa": "Świeca",
+   "stary": [
+    4,
+    8
+   ],
+   "nowy": [
+    4,
+    7
+   ]
+  }
+ ],
+ "log": [
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 7,
+   "problem": "kafel 597 (D 5,10) stoi na tylnej krawędzi blatu: 1 px od płaskiego wierzchu w (3,7)",
+   "poprawka": "przesunięto kafel 597 z (3,7) do (3,8) (1 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 4,
+   "y": 8,
+   "problem": "zdarzenie 14 'Świeca' (!Decoration2|1|2|0) stoi przed blatem (na jego przodzie / nogach): 7 px poza płaskim wierzchem w (4,8)",
+   "poprawka": "przesunięto zdarzenie 14 z (4,8) do (4,7) (5 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 3,
+   "y": 7,
+   "kandydat": "przesunięto kafel 597 z (3,7) do (4,7)",
+   "odrzucony": "nowe problemy: P2(4,7)"
+  },
+  {
+   "kod": "P2",
+   "x": 4,
+   "y": 8,
+   "kandydat": "przesunięto zdarzenie 14 z (4,8) do (5,8)",
+   "odrzucony": "nowe problemy: P2(5,8)"
+  }
+ ],
+ "przed": [
+  "P2 3,7",
+  "P2 4,8"
+ ],
+ "po": [],
+ "sha_data": "65c2a91db5b901f1786558bf5398fccc9fe7808891e648e3288c121f79dbe185",
+ "zainstalowano": "2026-10-22T10:51:26",
+ "sha_po": "9fed2561da919b457add4b3d993017d93aeea445ef199805c3bfd2bd368c550c"
+}

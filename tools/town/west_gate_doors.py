@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python tools/town/west_gate_doors.py [--dry] [--preview DIR]
 # Puts the wooden gate (img/characters/!$West_Gate.png, drawn by tools/town/west_gate_art.py) into the town's west gate on both
 # maps it is seen from (user 2026-10-05: the plain gap in the wall -> "jak prawdziwa brama miejska"):

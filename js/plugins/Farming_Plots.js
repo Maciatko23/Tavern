@@ -218,7 +218,17 @@
         if (!f.stones) f.stones = {};
         return f.stones[mapId] || (f.stones[mapId] = {});
     };
+    // (2026-10-22) the new land of the 21 doubled maps (tools/powieksz: x >= the old width or y >= the old height; the table of the old
+    // sizes is OkoliceData.OLD) has half as many things lying about - berry bushes, mushrooms, herbs, flax, branches, cones, pebbles,
+    // wild vegetables: a tile of it out of the NEW_LAND_GATHER share (a hash) holds nothing (the user: fewer plants and mushrooms,
+    // clearer and faster). The old part of every map is as it was. The one place for it: everything asks gatherKindOf.
+    const NEW_LAND_GATHER = 0.5;
+    function newLandBare(x, y) {
+        const O = window.OkoliceData, old = O && O.OLD && window.$gameMap ? O.OLD[$gameMap.mapId()] : null;
+        return !!old && (x >= old[0] || y >= old[1]) && hash2(x, y, 419) >= NEW_LAND_GATHER;
+    }
     function gatherKindOf(x, y) {
+        if (newLandBare(x, y)) return null;
         if (hash2(x, y, 811) < BUSH_SHARE) return "bush";
         const r = hash2(x, y, 301);
         let acc = 0;

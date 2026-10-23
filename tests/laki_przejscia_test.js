@@ -1,4 +1,4 @@
-// Łąki #2 i #3 (2026-10-18): pole dziadka (Map003) ma przejścia na Łąkę#2 (Map017, krawędź południowa) i na Łąkę#3 (Map018,
+// Łąki #2 i #3 (2026-10-18): Kruczy Jar (Map003) ma przejścia na Łąkę#2 (Map017, krawędź południowa) i na Łąkę#3 (Map018,
 // krawędź zachodnia) - tools/apply_laki.py, tools/newstart/layout.py MEADOW_EDGES. Bohater staje przed wyjściem, trzyma strzałkę
 // aż do zmiany mapy, sprawdzamy mapę, kafelek i kierunek; ścieżka widoczna aż do krawędzi (kafelek drogi w danych); kompas zna
 // wyjścia; usunięte puste mapy 5, 6, 7, 15, 16 nie wiszą w MapInfos.
@@ -16,7 +16,7 @@ const WALKS = [
 const KEY = { 2: "down", 4: "left", 6: "right", 8: "up" }, STEP = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
 
 kit.test({ port: 9541 }, async t => {
-    t.check("nowa gra na polu dziadka (Map003), południe", await t.newGame({ map: 3, x: 9, y: 26, hour: 12, quiet: true, minimap: false }));
+    t.check("nowa gra w Kruczym Jarze (Map003), południe", await t.newGame({ map: 3, x: 9, y: 26, hour: 12, quiet: true, minimap: false }));
     await t.eval("(function(){ if (window.Hunting) Hunting.auto(false); if (window.Birds) Birds.auto(false); if (window.Needs && Needs.setEnabled) Needs.setEnabled(false); return 0; })()");
 
     // the data: the paths reach the edges, the empty maps are gone from the tree
@@ -27,7 +27,7 @@ kit.test({ port: 9541 }, async t => {
                  gone: [5, 6, 7, 15, 16].filter(id => $dataMapInfos[id]), meadows: [17, 18].map(id => !!$dataMapInfos[id]) }; })()`);
     t.check("Map003 80x60: droga (rodzaj 39) przez starą lukę (9..10, 29) aż do nowej południowej krawędzi (9..10, 59)",
         data.size.join() === "80,60" && data.south.every(v => v === 39) && data.south2.every(v => v === 39), data);
-    t.check("Map003: nowa część to region 9 (nie pole dziadka - Farming_Build nie pozwala tam budować)", data.region9 === 9, data.region9);
+    t.check("Map003: nowa część to region 9 (nie działka dziadka - Farming_Build nie pozwala tam budować)", data.region9 === 9, data.region9);
     t.check("Map003: ścieżka (rodzaj 39) aż do zachodniej krawędzi (0..2, 16) i połączona z drogą przy (9, 17)", data.west.every(v => v === 39) && data.joined === 39, data);
     t.check("MapInfos: bez pustych map 5, 6, 7, 15, 16; Łąki #2 i #3 są", data.gone.length === 0 && data.meadows.every(Boolean), data);
 

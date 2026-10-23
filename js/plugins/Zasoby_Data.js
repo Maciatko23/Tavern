@@ -158,15 +158,15 @@
     // A6 Podgrodzie (Map111): three kitchen gardens, the rubbish heap, the clay pit
     // ------------------------------------------------------------------
     const GARDENS = [
-        { key: "ogrodek_1", owner: "praczka", ids: [2205, 2206, 2207, 2208], cells: [[55, 10], [57, 10], [56, 12], [58, 12]], crop: 2, veg: ITEM.cabbage },
-        { key: "ogrodek_2", owner: "franek", ids: [2209, 2210, 2211, 2212], cells: [[60, 10], [62, 10], [61, 12], [63, 12]], crop: 0, veg: ITEM.potato },
-        { key: "ogrodek_3", owner: "znachorka", ids: [2213, 2214, 2215, 2216], cells: [[65, 8], [67, 8], [66, 10], [68, 10]], crop: 1, veg: ITEM.carrot }
+        { key: "ogrodek_1", owner: "praczka", ids: [2205, 2206, 2207, 2208], cells: [[61, 10], [63, 10], [62, 12], [64, 12]], crop: 2, veg: ITEM.cabbage },
+        { key: "ogrodek_2", owner: "franek", ids: [2209, 2210, 2211, 2212], cells: [[66, 10], [68, 10], [67, 12], [69, 12]], crop: 0, veg: ITEM.potato },
+        { key: "ogrodek_3", owner: "znachorka", ids: [2213, 2214, 2215, 2216], cells: [[71, 10], [73, 10], [72, 12], [74, 12]], crop: 1, veg: ITEM.carrot }
     ];
     const GARDEN_RULE = { hours: [6, 12], hits: 8, give: 2, opinion: 1, steal: 3, stealOpinion: -5, seeRange: 8, stealGap: 7 };
-    const DUMP = { key: "wysypisko", map: 111, x: 50, y: 23, w: 6, h: 4, heaps: [{ id: 2217, x: 52, y: 25, main: true, pat: 0 }, { id: 2218, x: 54, y: 26, pat: 1 }, { id: 2219, x: 50, y: 23, pat: 2 }],
+    const DUMP = { key: "wysypisko", map: 111, x: 70, y: 68, w: 6, h: 4, heaps: [{ id: 2217, x: 72, y: 70, main: true, pat: 0 }, { id: 2218, x: 74, y: 71, pat: 1 }, { id: 2219, x: 70, y: 68, pat: 2 }],
         perDay: 4, shovelBonus: 1,
         loot: [[ITEM.zlom, 30], [ITEM.fiber, 25], [ITEM.nails, 15], [ITEM.planks, 10], [ITEM.moneta, 8], [0, 12]] };
-    const CLAYPIT = { key: "glinianka", map: 111, x: 54, y: 36, w: 5, h: 4, id: 2220, ex: 56, ey: 38, occupy: "<Occupy:left=1,right=1,up=1>", perDig: 2, perDay: 6, blanks: [2221, 2222, 2223, 2224] };
+    const CLAYPIT = { key: "glinianka", map: 111, x: 46, y: 69, w: 5, h: 4, id: 2220, ex: 48, ey: 71, occupy: "<Occupy:left=1,right=1,up=1>", perDig: 2, perDay: 6, blanks: [2221, 2222, 2223, 2224] };
     // D31's things in the heap (TownQuests vitems): found while D31 is on, in this order
     const D31_THINGS = ["zas_medalik", "zas_klucz", "zas_moneta_kruk"];
 
@@ -204,9 +204,9 @@
     // A10 the townsfolk's fields (Map008): day labour at sowing (spring, days 1-10) and harvest (autumn, days 1-14), 6-14
     // ------------------------------------------------------------------
     const FIELDS = [
-        { key: "pole_1", x: 5, y: 76, w: 8, h: 4, crop: 3, item: ITEM.barley },
-        { key: "pole_2", x: 5, y: 82, w: 8, h: 4, crop: 2, item: ITEM.cabbage },
-        { key: "pole_3", x: 31, y: 74, w: 8, h: 5, crop: 0, item: ITEM.potato }
+        { key: "pole_1", x: 6, y: 104, w: 8, h: 4, crop: 3, item: ITEM.barley },
+        { key: "pole_2", x: 32, y: 118, w: 8, h: 4, crop: 2, item: ITEM.cabbage },
+        { key: "pole_3", x: 62, y: 104, w: 8, h: 5, crop: 0, item: ITEM.potato }
     ];
     const FIELD_RULE = { sow: [1, 10], reap: [1, 14], hours: [6, 14], hits: 20, cost: 2, gold: 15, give: 2, opinion: 1, theft: -4 };
 
@@ -222,12 +222,12 @@
     const DISCOVERIES = SPRINGS.map(s => ({ key: s.key, map: s.map, x: s.sx, y: s.sy, near: 1, name: s.name,
         text: "Źródełko (" + s.where + "): daje wodę kilka razy na dzień; w upał wysycha, zimą zamarza." })).concat([
         { key: "zagroda", map: 3, x: 42, y: 52, near: 3, name: "Zagroda Rzepków", text: "Opuszczona zagroda sąsiadów: chata bez dachu, zdziczały ogródek i sucha studnia. Rzepkowie poszli do miasta, kiedy studnia wyschła." },
-        { key: "dzikie_ule", map: 3, x: 66, y: 38, near: -1, name: "Dzikie ule", text: "Trzy dziuple z pszczołami w sosnach za polem. Miód i wosk co kilka dni - z dymem i nożem, bo pszczoły żądlą." },
+        { key: "dzikie_ule", map: 3, x: 66, y: 38, near: -1, name: "Dzikie ule", text: "Trzy dziuple z pszczołami w sosnach za murem działki. Miód i wosk co kilka dni - z dymem i nożem, bo pszczoły żądlą." },
         { key: "grzyby_krag1", map: 17, x: 54, y: 44, near: -1, name: "Czarci krąg", text: "Po deszczu grzyby wyrastają tu w kręgu. Nocą w środku coś szepcze. Jagna mówi: grzybnia." },
         { key: "grzyby_krag2", map: 17, x: 63, y: 44, near: -1, name: "Czarci krąg (drugi)", text: "Drugi krąg obok pierwszego. Nocą mgła siada w jego środku." },
         { key: "ziola_jagny", map: 17, x: 67, y: 13, near: 2, name: "Polanka Jagny", text: "Ciche miejsce zielarki: kępy arcydzięgla, dziurawca i kozłka. Nie twoje - chyba że Jagna pozwoli." },
-        { key: "wysypisko", map: 111, x: 52, y: 25, near: 2, name: "Wysypisko", text: "Kupa śmieci za chatami Podgrodzia. Złom, szmaty, gwoździe - i czasem coś cenniejszego. Raz na dzień." },
-        { key: "glinianka", map: 111, x: 56, y: 38, near: 2, name: "Glinianka", text: "Dół z gliną. Łopatą wykopiesz mokrą glinę na garnki. Po deszczu stoi w nim mętna woda - nie do picia." },
+        { key: "wysypisko", map: 111, x: 72, y: 70, near: 2, name: "Wysypisko", text: "Kupa śmieci za chatami Podgrodzia. Złom, szmaty, gwoździe - i czasem coś cenniejszego. Raz na dzień." },
+        { key: "glinianka", map: 111, x: 48, y: 71, near: 2, name: "Glinianka", text: "Dół z gliną. Łopatą wykopiesz mokrą glinę na garnki. Po deszczu stoi w nim mętna woda - nie do picia." },
         { key: "kamieniolom_bloki", map: 13, x: 109, y: 82, near: 2, name: "Ściana ciosowa", text: "Dawny kamieniołom bloków: kilofem wyrąbiesz blok kamienny. Ściana daje sześć bloków na tydzień." },
         { key: "zatoczka", map: 125, x: 17, y: 66, near: 2, name: "Zatoczka", text: "Mała zatoczka za przystanią. W odpływie kałuże z krabami, po sztormie morze wyrzuca tu drewno." },
         { key: "sad_spalony", map: 168, x: 65, y: 22, near: 3, name: "Spalony sad", text: "Osiem jabłonek Ługów spaliło się razem z domem. Przycięte, opatrzone i podlane mogą jeszcze ożyć." }
@@ -332,7 +332,7 @@
     // in Zasoby.js (TownQuests.FX)
     // ------------------------------------------------------------------
     const Q_K55 = {
-        id: "K55", kind: "K", title: "Świece dla dzwonnika", giver: "dzwonnik", icon: ITEM.wosk, where: "dzwonnica → dzikie ule za polem dziadka", when: "8-18, od dnia 3",
+        id: "K55", kind: "K", title: "Świece dla dzwonnika", giver: "dzwonnik", icon: ITEM.wosk, where: "dzwonnica → dzikie ule za działką dziadka", when: "8-18, od dnia 3",
         desc: "Ambrożemu kończą się świece, a w dzwonnicy po ciemku łatwo skręcić kark. Potrzebuje wosku - z dzikich uli w sosnach.",
         offer: {
             cond: { hours: [8, 18], day: 3 },
@@ -344,8 +344,8 @@
         },
         steps: [
             { type: "bring", to: "dzwonnik", need: [[ITEM.wosk, 4]], hours: [6, 21],
-              text: "Przynieś Ambrożemu 4× Wosk pszczeli (dzikie ule w dziuplach sosen za polem dziadka).",
-              remind: ["Cztery kawałki wosku. Pszczoły w sosnach za polem twojego dziadka - słyszałem, jak bzyczą."],
+              text: "Przynieś Ambrożemu 4× Wosk pszczeli (dzikie ule w dziuplach sosen za działką dziadka).",
+              remind: ["Cztery kawałki wosku. Pszczoły w sosnach za działką twojego dziadka - słyszałem, jak bzyczą."],
               hero: ["> Wosk, jak prosiłeś. Cztery kawałki."],
               done: ["Pachnie latem... Dobry wosk, żółty. Wystarczy na całą zimę.", "Masz trzydzieści groszy. I dziękuję - w imieniu schodów dzwonnicy."] }
         ],
@@ -370,18 +370,18 @@
         fail: { opinion: -1, text: "Tydzień minął, a grządki same się nie opielą." }
     };
     const Q_K57 = {
-        id: "K57", kind: "K", title: "Studnia sąsiada", giver: "grandpa", icon: ITEM.bucket, where: "pole dziadka → zagroda Rzepków na południu", when: "od dnia 3",
+        id: "K57", kind: "K", title: "Studnia sąsiada", giver: "grandpa", icon: ITEM.bucket, where: "działka dziadka → zagroda Rzepków na południu", when: "od dnia 3",
         desc: "Za lasem stała zagroda Rzepków. Studnia im wyschła i poszli do miasta. Dziadek myśli, że dałoby się ją wzmocnić - choćby na deszczówkę.",
         offer: {
             cond: { day: 3, story: true },
-            say: ["Wnuku... za lasem, na południe od pola, stała zagroda Rzepków. Wojciech z żoną i dzieciakami. Studnia im wyschła i poszli do miasta.",
+            say: ["Wnuku... za lasem, na południe od działki, stała zagroda Rzepków. Wojciech z żoną i dzieciakami. Studnia im wyschła i poszli do miasta.",
                   "Studnia była głęboka, kamienna - stary Rzepka ją kopał. Może dałoby się ją oczyścić i wzmocnić, choćby na deszczówkę. Bliżej niż do miasta."],
             yes: "Zajrzę tam.", no: "Później, dziadku.",
             accept: ["Weź łopatę - gruzu tam pewnie po samą cembrowinę. A na naprawę trzeba porządnych bloków z kamieniołomu w górach, nie polnych kamyków."],
             decline: ["Studnia nie ucieknie. Woda już uciekła."]
         },
         steps: [
-            { type: "custom", check: "k57Zagroda", text: "Znajdź opuszczoną zagrodę Rzepków (pole dziadka, na południe za lasem)." },
+            { type: "custom", check: "k57Zagroda", text: "Znajdź opuszczoną zagrodę Rzepków (Kruczy Jar, na południe od działki, za lasem)." },
             { type: "custom", check: "k57Oczyszczona", text: "Oczyść zasypaną studnię Rzepków łopatą." },
             { type: "custom", check: "k57Bloki", vars: "k57Bloki", text: "Zdobądź materiał na naprawę: Blok kamienny {b}/4 (ściana ciosowa w górach), Lina {l}/2, Deski {d}/2." },
             { type: "custom", check: "k57Naprawiona", text: "Napraw studnię Rzepków młotkiem." }
@@ -526,7 +526,7 @@
     // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Zasoby.epilogue): one or two by what the hero did
     const EPILOG = {
         springs: "Źródełka, które znalazłeś w lasach i pod skałami, dalej biją - miska, dwie na dzień, w upał ani kropli. Nie mówisz o nich nikomu.",
-        well: "Studnia Rzepków za polem dziadka zbiera deszcz w nową cembrowinę. Kiedy pada, ktoś zawsze przychodzi z wiadrem - nie zawsze ty."
+        well: "Studnia Rzepków za działką dziadka zbiera deszcz w nową cembrowinę. Kiedy pada, ktoś zawsze przychodzi z wiadrem - nie zawsze ty."
     };
     window.ZasobyData = { EPILOG, VERSION, PKG: "A", OWNER: "Zasoby", STATE: "zasoby", IDS_RANGE: P ? P.ids : [2100, 2299], RESIDENTS: P ? P.residents : [2900, 2904],
         ITEMS: P ? P.items : [185, 199], ICONS: P ? P.icons : [464, 479], SWITCHES: { studnia: 21, rez: 22 }, ITEM, ICON, IDS,

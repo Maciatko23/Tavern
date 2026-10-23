@@ -18,7 +18,7 @@
  *
  * Gatunki: cytrynek, pawik (rzadki: tylko o świcie po deszczu), modraszek,
  * bielinek (lubi kapustę) i ćma (nocą przy ogniu).
- * Mapy z motylami: łąki (4, 17, 18), pole dziadka (3), podwórze dziadka (20),
+ * Mapy z motylami: łąki (4, 17, 18), Kruczy Jar (3), podwórze dziadka (20),
  * ogród Lorda (24), ogród rycerzy na mapie 8, działki domów (111, 168 - tylko
  * kupiona ziemia), pustelnia (155); inne mapy pod niebem z tilesetem łąk -
  * nieliczne. Miasta, wnętrza i podziemia - bez motyli.
@@ -45,7 +45,7 @@
         cytrynek: { name: "Cytrynek", latin: "Gonepteryx rhamni", row: 0, season: [3, 1.6, 1.4, 0], speed: 1.15, shy: 1.7, net: 0.72, size: 1,
             card: "Motyle_Gablotka_Cytrynek",
             desc: "Pierwszy motyl wiosny. Cytrynowożółty, z ostro zakończonymi skrzydłami i pomarańczową kropką na każdym z nich. Zimuje jako dorosły motyl w gęstwinie, więc budzi się, kiedy w cieniu jeszcze leży śnieg.",
-            where: "Łąki, pole dziadka, ogrody. Najwięcej wiosną, latem mniej, jesienią pojedyncze." },
+            where: "Łąki, Kruczy Jar, ogrody. Najwięcej wiosną, latem mniej, jesienią pojedyncze." },
         pawik: { name: "Pawik", latin: "Aglais io", row: 1, season: [0, 0, 0, 0], speed: 1.05, shy: 2.1, net: 0.55, size: 1, rare: true, likes: ["nettle"],
             card: "Motyle_Gablotka_Pawik",
             desc: "Rdzawoczerwony, z czterema oczkami jak na pawim piórze - błękitnymi, w żółtej obwódce. Złożone skrzydła ma niemal czarne, jak zeschły liść. Jego gąsienice żyją na pokrzywach.",
@@ -70,7 +70,7 @@
     const MAPS = {
         4: { k: 1, name: "łąka" }, 17: { k: 1, name: "łąka" }, 18: { k: 1, name: "łąka" },
         24: { k: 1, name: "ogród Lorda" },
-        3: { k: 0.85, name: "pole dziadka" }, 20: { k: 0.8, name: "podwórze dziadka" },
+        3: { k: 0.85, name: "Kruczy Jar" }, 20: { k: 0.8, name: "podwórze dziadka" },
         8: { k: 0.8, name: "ogród rycerzy", zone: [1, 5, 12, 16] },
         111: { k: 0.8, name: "działka pod lasem", region: true }, 168: { k: 0.8, name: "Spalona zagroda", region: true },
         155: { k: 0.6, name: "pustelnia" },

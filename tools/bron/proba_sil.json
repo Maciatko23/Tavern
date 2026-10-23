@@ -1,0 +1,148 @@
+{
+ "data": "2026-10-23",
+ "opis": "Bot jak w WALKA.md (75% uników, bez parowania i jedzenia, 2 walki na wiersz; odnowienie = życie z powrotem, gdy spadnie poniżej 30%). Stary sprzęt: żelazna siekiera, drewniana tarcza, kurtka. Nowy: komplet materiału z pasma bohatera - miecz, tarcza i pięć części zbroi (poziom 6-11 brąz, 12-17 żelazo, 18-22 stal, 23+ stal zakonna). Pierwsza próba (stal x1,24, zakonne x1,5, sufit zbroi 65%) była za mocna: Ostatni Strażnik 0,5 odnowienia zamiast 6,5, Upiór pytającego w 18 s; po niej stal x1,15, kruszec Pierwszych x1,24, stal zakonna x1,32, sufit zbroi 58%, napierśnik i pancerz zakonny słabsze (tabela - po zmianie).",
+ "wiersze": [
+  {
+   "name": "Strażnik bramy (piętro 10)",
+   "level": 9,
+   "hero": 6,
+   "gear": "brąz",
+   "stary": "2/2, 57.2 s, 75%, 0.5",
+   "nowy": "2/2, 58.3 s, 73%, 0.5"
+  },
+  {
+   "name": "Pusta zbroja (piętro 20)",
+   "level": 13,
+   "hero": 9,
+   "gear": "brąz",
+   "stary": "2/2, 54.8 s, 58%, 0.5",
+   "nowy": "2/2, 56.1 s, 35%, 0"
+  },
+  {
+   "name": "Pająk (piętro 20)",
+   "level": 13,
+   "hero": 9,
+   "gear": "brąz",
+   "stary": "2/2, 9.1 s, 3%, 0",
+   "nowy": "2/2, 6 s, 1%, 0"
+  },
+  {
+   "name": "Przeor w zbroi (boss 20)",
+   "level": 14,
+   "hero": 9,
+   "gear": "brąz",
+   "stary": "2/2, 102.5 s, 265%, 3.5",
+   "nowy": "1/2, 170.3 s, 271%, 3"
+  },
+  {
+   "name": "Królowa szczurów (boss 30)",
+   "level": 19,
+   "hero": 12,
+   "gear": "żelazo",
+   "stary": "2/2, 63 s, 91%, 0.5",
+   "nowy": "2/2, 61.8 s, 58%, 0.5"
+  },
+  {
+   "name": "Topielec (piętro 40)",
+   "level": 23,
+   "hero": 15,
+   "gear": "żelazo",
+   "stary": "2/2, 23.8 s, 51%, 0",
+   "nowy": "2/2, 10.9 s, 14%, 0"
+  },
+  {
+   "name": "Rój nietoperzy (piętro 40)",
+   "level": 22,
+   "hero": 15,
+   "gear": "żelazo",
+   "stary": "2/2, 21.8 s, 29%, 0",
+   "nowy": "2/2, 11 s, 7%, 0"
+  },
+  {
+   "name": "Matka pająków (boss 40)",
+   "level": 24,
+   "hero": 15,
+   "gear": "żelazo",
+   "stary": "2/2, 116.8 s, 219%, 2.5",
+   "nowy": "2/2, 86.3 s, 142%, 1.5"
+  },
+  {
+   "name": "Topielec z głębiny (boss 50)",
+   "level": 29,
+   "hero": 17,
+   "gear": "żelazo",
+   "stary": "2/2, 151.6 s, 126%, 1",
+   "nowy": "2/2, 78.7 s, 102%, 1"
+  },
+  {
+   "name": "Kamiennik (piętro 60)",
+   "level": 33,
+   "hero": 19,
+   "gear": "stal",
+   "stary": "2/2, 201.2 s, 459%, 6",
+   "nowy": "2/2, 88.2 s, 104%, 1"
+  },
+  {
+   "name": "Pusta zbroja (piętro 60)",
+   "level": 33,
+   "hero": 19,
+   "gear": "stal",
+   "stary": "2/2, 56.9 s, 148%, 1.5",
+   "nowy": "2/2, 51.6 s, 54%, 0"
+  },
+  {
+   "name": "Kamienny Odźwierny (boss 60)",
+   "level": 34,
+   "hero": 19,
+   "gear": "stal",
+   "stary": "1/2, 178.6 s, 498%, 6",
+   "nowy": "2/2, 93.5 s, 113%, 1"
+  },
+  {
+   "name": "Zbroja bez herbu (boss 70)",
+   "level": 39,
+   "hero": 21,
+   "gear": "stal",
+   "stary": "2/2, 113.9 s, 366%, 4",
+   "nowy": "2/2, 81.3 s, 140%, 1"
+  },
+  {
+   "name": "Upiór prawdy (piętro 85)",
+   "level": 46,
+   "hero": 24,
+   "gear": "zakonne",
+   "stary": "2/2, 109 s, 0%, 0",
+   "nowy": "2/2, 38.7 s, 0%, 0"
+  },
+  {
+   "name": "Cień (piętro 85)",
+   "level": 46,
+   "hero": 24,
+   "gear": "zakonne",
+   "stary": "2/2, 23 s, 39%, 0",
+   "nowy": "2/2, 9.5 s, 12%, 0"
+  },
+  {
+   "name": "Upiór pytającego (boss 80)",
+   "level": 45,
+   "hero": 23,
+   "gear": "zakonne",
+   "stary": "2/2, 107.9 s, 170%, 2",
+   "nowy": "2/2, 57.2 s, 86%, 1"
+  },
+  {
+   "name": "Ostatni Strażnik (boss 90)",
+   "level": 50,
+   "hero": 25,
+   "gear": "zakonne",
+   "stary": "1/2, 178.6 s, 519%, 6.5",
+   "nowy": "2/2, 59.5 s, 101%, 1"
+  }
+ ],
+ "wnioski": [
+  "Brąz (poz. 6-9) to bok, nie skok: zbroja lepsza od kurtki, miecz (23) słabszy od żelaznej siekiery (26) - wyniki jak ze starym sprzętem.",
+  "Żelazo (12-17): bossowie 40-50 lżejsi - Matka pająków 2,5 -> 1,5 odnowienia, Topielec z głębiny w połowie czasu.",
+  "Stal i stal zakonna (19-25): najtrudniejsze walki gry spadają z 4-6,5 odnowienia do ok. 1 - pełny komplet z kantoru, kuźni albo z najgłębszych pięter wyraźnie się opłaca, ale bossowie dalej biją (ok. 1 odnowienia, 1-1,5 min). Bossów nie ruszałem.",
+  "Kto ma tylko część kompletu, wypada między starym a nowym wynikiem."
+ ]
+}

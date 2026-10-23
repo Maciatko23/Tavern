@@ -2149,7 +2149,7 @@
             for (const ev of $gameMap.events()) {
                 const n = ev.eventId();
                 if (mine.has(n)) continue;
-                if ((id === 1 && n >= 1 && n <= 4) || (n >= 900 && n <= 949) || (n >= 951 && n <= 959) || (n >= 2900 && n <= 2949)) ev.erase();   // (2900-2949: the new terrain's residents)
+                if ((id === 1 && n >= 1 && n <= 4) || (n >= 900 && n <= 949) || (n >= 951 && n <= 959) || (n >= 2900 && n <= 2959)) ev.erase();   // (2900-2959: the new terrain's residents, the new town's, the new Podgrodzie's)
             }
             $gamePlayer.setTransparent(!hero);
             if (hero) { $gamePlayer.locate(hero[0], hero[1]); $gamePlayer.setDirection(hero[2] || 8); }

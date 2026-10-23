@@ -1,0 +1,148 @@
+{
+ "mapa": 109,
+ "nazwa": "Dom mieszczan",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 4,
+   "stary": 317,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 3,
+   "stary": 309,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 3,
+   "stary": 0,
+   "nowy": 317
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 2,
+   "stary": 0,
+   "nowy": 309
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 4,
+   "stary": 0,
+   "nowy": 325
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 4,
+   "stary": 319,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 3,
+   "stary": 311,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 3,
+   "stary": 0,
+   "nowy": 319
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 2,
+   "stary": 0,
+   "nowy": 311
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 4,
+   "stary": 0,
+   "nowy": 327
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 6,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 317 (C 5,7) - góra bez dołu (brak kafla 325 pod) w (6,4)",
+   "poprawka": "przesunięto obiekt C (5,7) 2 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "O1",
+   "x": 10,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 319 (C 7,7) - góra bez dołu (brak kafla 327 pod) w (10,4)",
+   "poprawka": "przesunięto obiekt C (7,7) 2 kafli o 1 w górę i dołożono dół"
+  }
+ ],
+ "pominiete": [
+  {
+   "kod": "P2",
+   "x": 5,
+   "y": 7,
+   "dlaczego": "przesunięto kafel 596 z (5,7) do (4,6): nowe problemy: P2(4,6); przesunięto kafel 596 z (5,7) do (6,6): nowe problemy: P2(6,6)"
+  },
+  {
+   "kod": "P2",
+   "x": 6,
+   "y": 8,
+   "dlaczego": "brak kandydatów"
+  }
+ ],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 5,
+   "y": 7,
+   "kandydat": "przesunięto kafel 596 z (5,7) do (4,6)",
+   "odrzucony": "nowe problemy: P2(4,6)"
+  },
+  {
+   "kod": "P2",
+   "x": 5,
+   "y": 7,
+   "kandydat": "przesunięto kafel 596 z (5,7) do (6,6)",
+   "odrzucony": "nowe problemy: P2(6,6)"
+  }
+ ],
+ "przed": [
+  "G1 10,4",
+  "O1 10,4",
+  "O1 6,4",
+  "P1 13,5",
+  "P2 5,7",
+  "P2 6,8"
+ ],
+ "po": [
+  "P1 13,5",
+  "P2 5,7",
+  "P2 6,8"
+ ],
+ "sha_data": "28a128e84bc6186ff564ff9eb4bc25f00eabbc90c07797eab05ae1f88d0dec72",
+ "zainstalowano": "2026-10-22T10:51:27",
+ "sha_po": "177f2c09a477bfb4672512323a5d7df0ea523bad24e30cdb33d791b8252a187d"
+}

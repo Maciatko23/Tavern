@@ -10,7 +10,7 @@ const path = require("path");
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
-        // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_grafit_test.js)
+        // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_lista_test.js)
         await ev(`(function(){ ConfigManager.uiClean = false; DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(2000);
@@ -267,7 +267,8 @@ const path = require("path");
         await frames(20);
         await key(K.Q);
         st = await state();
-        const expectHut = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && Farming.BUILDINGS[t].indoor).map(t => Farming.BUILDINGS[t].name)`);
+        // (needFlag: the eagle's basket only once the egg is found - orzelJajo, 2026-10-18)
+        const expectHut = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && Farming.BUILDINGS[t].indoor && (!Farming.BUILDINGS[t].needFlag || !!(window.TownQuests && TownQuests.state().flags[Farming.BUILDINGS[t].needFlag]))).map(t => Farming.BUILDINGS[t].name)`);
         check("Q in the hut opens 'Wyposaż chatkę' with only the indoor things", st.open && st.kind === "build" && st.title === "Wyposaż chatkę" && JSON.stringify(st.names.slice().sort()) === JSON.stringify(expectHut.slice().sort()) && expectHut.length >= 2 && st.enabled.filter((e, i) => st.names[i] !== "Zrób młotek").every((e, i, a) => i === 0 || !e || a[i - 1]), { title: st.title, names: st.names, want: expectHut });
         await key(K.Q);
         check("...Q closes it", !(await state()).open);

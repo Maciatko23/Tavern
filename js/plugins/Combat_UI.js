@@ -348,13 +348,13 @@
         bmp.clear();
         if (U) U.panel(ctx, 0, 0, bmp.width, bmp.height, { cut: 4 });
         else { ctx.fillStyle = "rgba(0,0,0,0.7)"; ctx.fillRect(0, 0, bmp.width, bmp.height); }
-        const id = h[0] === "m" ? Number(h.slice(1)) : (has(126) ? 126 : 125), icon = handIcon(h);
+        const id = h[0] === "m" ? Number(h.slice(1)) : (P.fight.rangedItem ? P.fight.rangedItem() || 125 : has(126) ? 126 : 125), icon = handIcon(h);
         bmp.blt(set, (icon % 16) * 32, Math.floor(icon / 16) * 32, 32, 32, 4, 3);
         bmp.fontSize = 17;
         bmp.textColor = (U && U.text) || "#eceef0";
         bmp.outlineColor = "rgba(0,0,0,0.9)";
         bmp.outlineWidth = 3;
-        bmp.drawText(h[0] === "m" ? MELEE[id].name : "Łuk / proca", 40, 0, 150, 38, "left");
+        bmp.drawText(h[0] === "m" ? MELEE[id].name : $dataItems[id] ? $dataItems[id].name : "Łuk / proca", 40, 0, 150, 38, "left");
         bmp.textColor = (U && U.muted) || "#9aa0a8";
         bmp.drawText("[ ]", bmp.width - 40, 0, 32, 38, "center");
     };
@@ -470,7 +470,7 @@
             bmp.drawText("Poziom " + levelBanner.level + "!", 0, 6, bmp.width, 44, "center");
             bmp.fontSize = 18;
             bmp.textColor = (U && U.text) || "#eceef0";
-            bmp.drawText("+" + POINTS_PER_LEVEL + " punkty atrybutów, +" + SKILL_POINTS_PER_LEVEL + " punkt umiejętności  ·  menu P → Postać", 0, 48, bmp.width, 28, "center");
+            bmp.drawText("+" + POINTS_PER_LEVEL + " punkty atrybutów, +" + SKILL_POINTS_PER_LEVEL + " punkt umiejętności  ·  menu P → Postać, Umiejętności", 0, 48, bmp.width, 28, "center");
         }
         levelBanner.t++;
         const t = levelBanner.t;
@@ -679,7 +679,7 @@
             y += 34;
         };
         row("Tarcza", sh, sh ? "blok zatrzymuje " + Math.round(sh.reduce * 100) + "% ciosu" : "", "brak (warsztat)");
-        row("Kurtka", ar, ar ? "obrażenia o " + Math.round(ar.reduce * 100) + "% mniejsze" : "", "brak (garbarnia)");
+        row("Zbroja", ar, ar ? "obrażenia o " + Math.round(ar.reduce * 100) + "% mniejsze" + (ar.pieces && ar.pieces.length > 1 ? " (części: " + ar.pieces.length + ")" : "") : "", "brak (garbarnia, kowal)");
         this.resetFontSettings();
     };
 

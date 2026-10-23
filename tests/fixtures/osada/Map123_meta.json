@@ -1,0 +1,855 @@
+{
+ "concept": "starszy",
+ "width": 15,
+ "height": 11,
+ "zones": [],
+ "spots": {
+  "res_starszy": [
+   10,
+   5,
+   6
+  ],
+  "landing": [
+   7,
+   9,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "fireplace",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     4
+    ]
+   ],
+   "group": "Izba"
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     6,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 6,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     8,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 8,
+   "y": 4
+  },
+  {
+   "kind": "kruk_choragiew",
+   "cat": "wallitem",
+   "cells": [
+    [
+     4,
+     2
+    ]
+   ],
+   "group": "Izba znaki",
+   "x": 4,
+   "y": 2,
+   "event": true,
+   "art": [
+    49,
+    50,
+    95,
+    143
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "kruk_plaskorzezba",
+   "cat": "wallitem",
+   "cells": [
+    [
+     10,
+     2
+    ]
+   ],
+   "group": "Izba znaki",
+   "x": 10,
+   "y": 2,
+   "event": true,
+   "art": [
+    52,
+    102,
+    91,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "miecz zakonu",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Izba miecz",
+   "x": 5,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 4,
+   "sr": 0
+  },
+  {
+   "kind": "kreda_kreski",
+   "cat": "wallitem",
+   "cells": [
+    [
+     9,
+     2
+    ]
+   ],
+   "group": "Izba kreski",
+   "x": 9,
+   "y": 2,
+   "event": true,
+   "art": [
+    53,
+    96,
+    68,
+    134
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     1,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "skrzynia zakonu",
+   "cat": "floorprop",
+   "cells": [
+    [
+     3,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 3,
+   "y": 4
+  },
+  {
+   "kind": "pulpit",
+   "cat": "floorprop",
+   "cells": [
+    [
+     11,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 5
+  },
+  {
+   "kind": "candelabra",
+   "cat": "floorprop",
+   "cells": [
+    [
+     12,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 12,
+   "y": 6
+  },
+  {
+   "kind": "regał z księgami zakonu",
+   "cat": "furniture",
+   "cells": [
+    [
+     13,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 13,
+   "y": 3,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 0,
+   "sr": 0
+  },
+  {
+   "kind": "table_sq",
+   "cat": "table",
+   "cells": [
+    [
+     4,
+     7
+    ],
+    [
+     4,
+     8
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     8
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 4,
+   "y": 7
+  },
+  {
+   "kind": "chair",
+   "cat": "seat",
+   "cells": [
+    [
+     6,
+     8
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 6,
+   "y": 8,
+   "facing": 4
+  },
+  {
+   "kind": "miska_kamykow",
+   "cat": "tableitem",
+   "cells": [
+    [
+     4,
+     8
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 4,
+   "y": 8,
+   "event": true,
+   "art": [
+    64,
+    86,
+    104,
+    114
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "swieca",
+   "cat": "tableitem",
+   "cells": [
+    [
+     5,
+     8
+    ]
+   ],
+   "group": "Izba stół",
+   "x": 5,
+   "y": 8,
+   "event": true,
+   "art": [
+    16,
+    24,
+    32,
+    56
+   ],
+   "fw": 48,
+   "fh": 96
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "furniture",
+   "cells": [
+    [
+     13,
+     9
+    ]
+   ],
+   "group": "Izba",
+   "x": 13,
+   "y": 8,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 12,
+   "sr": 3
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": null,
+   "x": 13,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   7,
+   10
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba okna",
+   "window",
+   2,
+   1
+  ],
+  [
+   "Izba okna",
+   "window",
+   12,
+   1
+  ],
+  [
+   "Izba znaki",
+   "kruk_choragiew",
+   4,
+   2
+  ],
+  [
+   "Izba znaki",
+   "kruk_plaskorzezba",
+   10,
+   2
+  ],
+  [
+   "Izba miecz",
+   "miecz zakonu",
+   5,
+   1
+  ],
+  [
+   "Izba kreski",
+   "kreda_kreski",
+   9,
+   2
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    7,
+    10,
+    7,
+    10
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   1,
+   9,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   9,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   9,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   9,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   9,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   7,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   10,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   9,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   9,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   9,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   9,
+   "Izba"
+  ],
+  [
+   12,
+   4,
+   "Izba"
+  ],
+  [
+   12,
+   5,
+   "Izba"
+  ],
+  [
+   12,
+   6,
+   "Izba"
+  ],
+  [
+   12,
+   7,
+   "Izba"
+  ],
+  [
+   12,
+   8,
+   "Izba"
+  ],
+  [
+   12,
+   9,
+   "Izba"
+  ],
+  [
+   13,
+   4,
+   "Izba"
+  ],
+  [
+   13,
+   5,
+   "Izba"
+  ],
+  [
+   13,
+   6,
+   "Izba"
+  ],
+  [
+   13,
+   7,
+   "Izba"
+  ],
+  [
+   13,
+   8,
+   "Izba"
+  ],
+  [
+   13,
+   9,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 123,
+ "key": "starszy",
+ "display": "Chata Najstarszego",
+ "exits": [
+  {
+   "x": 7,
+   "y": 10,
+   "door": "Drzwi chaty 3",
+   "town": [
+    29,
+    26
+   ],
+   "landing": [
+    7,
+    9,
+    8
+   ],
+   "name": "Drzwi -> Osada Milczących"
+  }
+ ],
+ "residents": [
+  {
+   "key": "starszy",
+   "x": 10,
+   "y": 5,
+   "dir": 6
+  }
+ ],
+ "looks": [
+  [
+   11,
+   5,
+   "Rejestr straży"
+  ],
+  [
+   3,
+   4,
+   "Okuta skrzynia"
+  ],
+  [
+   4,
+   3,
+   "Chorągiew"
+  ],
+  [
+   10,
+   3,
+   "Płaskorzeźba z krukiem"
+  ],
+  [
+   13,
+   4,
+   "Regał z księgami"
+  ],
+  [
+   5,
+   3,
+   "Miecz zakonu"
+  ],
+  [
+   9,
+   3,
+   "Kreski kredą"
+  ],
+  [
+   4,
+   8,
+   "Miska kamyków"
+  ]
+ ]
+}

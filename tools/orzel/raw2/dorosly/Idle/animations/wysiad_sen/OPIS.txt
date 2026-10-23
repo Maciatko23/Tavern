@@ -1,0 +1,1 @@
+(wysiad_sen: 0 = stoi, 1 = leży, 2 = śpi z głową w piórach - tools/orzel/poza5.py)

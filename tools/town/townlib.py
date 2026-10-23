@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # Shared pieces of the town concepts: Map008 "Okolice Tawerny" grown into a town around the tavern "Pod Złotym Kuflem".
 # Grown out of tools/newstart (nslib: the editor-exact autotile shapes, NewMap's layers and writing; build_tavern_area /
 # build_tavern_props: the tavern's front and the !Tavern_Yard things) and tools/house (records for a checker, docs).

@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python check_town.py [A] [B] [C]  -> prints every problem of the staged town maps, exit code 1 if any (the build must pass)
 # Reads tools/town/staging/Map008_<X>.json (+ _meta.json) and checks it against the game's own rules (the passability of
 # tools/tavern/engine.py: tile flags of tileset 9 + events "same as characters" + ChoppableTree's <Occupy> / solid pictures):

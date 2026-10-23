@@ -5,10 +5,15 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 PICS = os.path.join(ROOT, 'img', 'pictures')
+# (2026-10-22) the RTP busts the 2026-10-18 cleanup took out of img/pictures (the bases of most make_<key>.py) are in the archive
+# next to the project - a base not found in img/pictures is read from there
+ARCHIVE_PICS = os.path.join(ROOT, '..', 'Tawerna_archiwum_2026-10-18', 'pliki', 'img', 'pictures')
 
 
 def load(name_or_path):
     p = name_or_path if os.path.isabs(name_or_path) else os.path.join(PICS, name_or_path + '.png')
+    if not os.path.isabs(name_or_path) and not os.path.exists(p) and os.path.exists(os.path.join(ARCHIVE_PICS, name_or_path + '.png')):
+        p = os.path.join(ARCHIVE_PICS, name_or_path + '.png')
     return np.asarray(Image.open(p).convert('RGBA')).astype(np.float32) / 255.0
 
 

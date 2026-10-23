@@ -1,0 +1,35 @@
+{
+ "mapa": 128,
+ "nazwa": "Komora celna",
+ "ops": [
+  {
+   "op": "prio",
+   "id": 6,
+   "nazwa": "Księga celna",
+   "strony": {
+    "0": [
+     0,
+     1
+    ]
+   }
+  }
+ ],
+ "log": [
+  {
+   "kod": "D4",
+   "x": 5,
+   "y": 6,
+   "problem": "zdarzenie 6 'Księga celna' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (5,6)",
+   "poprawka": "zdarzenie 6 'Księga celna': priorytet 'jak postać' - akcja z sąsiedniej kratki"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "D4 5,6"
+ ],
+ "po": [],
+ "sha_data": "f2fd48b42f9f29ebd0e809efe38629001077ee6d521c082aac381371e9dc9ff7",
+ "zainstalowano": "2026-10-22T10:51:34",
+ "sha_po": "6dbd92006a2fc7aeaa3cd6b1412b9fc0395ee6c15acb8b9d65629ceb00ccf8c7"
+}

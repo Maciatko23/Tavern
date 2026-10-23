@@ -1,0 +1,66 @@
+{
+ "mapa": 176,
+ "nazwa": "Komora pod menhirami",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 7,
+   "stary": 0,
+   "nowy": 451
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 15,
+   "y": 7,
+   "stary": 0,
+   "nowy": 451
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 4,
+   "y": 8,
+   "problem": "obiekt rozcięty: kafel 459 (C 11,9) - dół bez góry (brak kafla 451 nad) w (4,8)",
+   "poprawka": "dołożono górę obiektu C (11,9) 2 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 15,
+   "y": 8,
+   "problem": "obiekt rozcięty: kafel 459 (C 11,9) - dół bez góry (brak kafla 451 nad) w (15,8)",
+   "poprawka": "dołożono górę obiektu C (11,9) 2 kafli"
+  }
+ ],
+ "pominiete": [
+  {
+   "kod": "O1",
+   "x": 3,
+   "y": 4,
+   "dlaczego": "decyzja: zostawione"
+  },
+  {
+   "kod": "O1",
+   "x": 16,
+   "y": 10,
+   "dlaczego": "decyzja: zostawione"
+  }
+ ],
+ "proby": [],
+ "przed": [
+  "O1 15,8",
+  "O1 16,10",
+  "O1 3,4",
+  "O1 4,8"
+ ],
+ "po": [
+  "O1 16,10",
+  "O1 3,4"
+ ],
+ "sha_data": "3b87e77acf1582206ee8e21c0119136b04780f6c0207ee099ae2c4a7def5f59d",
+ "zainstalowano": "2026-10-22T10:51:39",
+ "sha_po": "f21bafbc4445583c1dd17bc264d7901aa50ac7b238cb9fa6dadbc434eb9dccea"
+}

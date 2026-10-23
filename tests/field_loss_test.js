@@ -68,14 +68,14 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const notices = await t.notices();
     t.check("A1 dawn of day 61 away from the field: NO ending (the map goes on), saving works, the field is the Lord's now (3 days to carry things off)",
         lostOk && A.scene === "Scene_Map" && A.save === true && !A.doomed && A.lost.day === 61 && A.fieldLost && !A.locked && A.carry === 3 && !A.open && A.ended, A);
-    t.check("A2 the Lord's letter and the note 'Pole przepadło' (with the buyback 3000 G and the hook of Krucze Skały); chapter 1 over (top notice)",
-        A.notes.some(n => /^List od Lorda \(dzień 61\)/.test(n)) && A.notes.includes("Pole przepadło") && A.buy.price === 3000 && A.buy.paid === 0 &&
-        notices.some(n => /Rozdział 1 zakończony: pole przepadło/.test(n)) && notices.some(n => /List od Lorda Zaleskiego/.test(n)), { notes: A.notes, notices });
-    const note = await J("Journal.data().notes.find(n => n.title === 'Pole przepadło').text");
+    t.check("A2 the Lord's letter and the note 'Działka przepadła' (with the buyback 3000 G and the hook of Krucze Skały); chapter 1 over (top notice)",
+        A.notes.some(n => /^List od Lorda \(dzień 61\)/.test(n)) && A.notes.includes("Działka przepadła") && A.buy.price === 3000 && A.buy.paid === 0 &&
+        notices.some(n => /Rozdział 1 zakończony: działka przepadła/.test(n)) && notices.some(n => /List od Lorda Zaleskiego/.test(n)), { notes: A.notes, notices });
+    const note = await J("Journal.data().notes.find(n => n.title === 'Działka przepadła').text");
     t.check("A3 the note: 3 days (till dawn of day 64), the buyback 3000 G, grandpa's house, Chata pod lasem (the sołtys) and the Ług farm, the doors under Krucze Skały",
         /do świtu dnia 64/.test(note) && /3000 G/.test(note) && /Chatę pod lasem/.test(note) && /zagroda Ługów/.test(note) && /Kruczych Skał/.test(note), note.slice(0, 500));
     t.check("A4 the journal: the debt's goal closed (no 'Cel wykonany'), the loss's goals in: carry off (3 days), a new roof (not done by the hut on the lost field), the buyback",
-        A.debtDone && A.goals.join() === "story_carry,story_roof,story_buyback" && /Wynieś dobytek z pola \(zostały 3 dni\)/.test(A.carryTitle) && !A.roofDone &&
+        A.debtDone && A.goals.join() === "story_carry,story_roof,story_buyback" && /Wynieś dobytek z działki \(zostały 3 dni\)/.test(A.carryTitle) && !A.roofDone &&
         !notices.some(n => /Cel wykonany: (Spłać dług|Dług dziadka|Znajdź nowy dach)/.test(n)), { A, notices });
     t.check("A5 a save after the loss works and loads with the loss kept", (await t.saveTo(1)) === true && (await t.loadFrom(1, { quiet: true })) && !!(await J("Story.state().lost.day")));
     await t.eval(LOG);
@@ -110,7 +110,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         for (let y = 5; y < 25 && !free.length; y++) for (let x = 5; x < 35; x++) { if (Farming.plotAt(x, y) && !Farming.buildingAt(x, y) && $gameMap.eventsXy(x, y).length === 0) { free.push([x, y]); break; } }
         const why = free.length ? Farming.whyNotBuild('chest_s', free[0][0], free[0][1]) : null;
         return { allows: Farming.mapAllowsBuilding(), why, hut: Farming.hutOf() && Farming.hutOf().mapId }; })()`);
-    t.check("C1 nothing new on the Lord's field: 'Pole należy teraz do Lorda.' (the hut still the hero's to carry things out of)", !C.allows && C.why === "Pole należy teraz do Lorda." && C.hut === 3, C);
+    t.check("C1 nothing new on the Lord's field: 'Działka należy teraz do Lorda.' (the hut still the hero's to carry things out of)", !C.allows && C.why === "Działka należy teraz do Lorda." && C.hut === 3, C);
     const dem = await J(`(function(){ const list = Farming.farm().buildings[3], b = list.find(x => x.type === 'scarecrow' && !x.site) || list.find(x => x.type === 'compost' && !x.site);
         if (!b) return null; const n = list.length, ok = Farming.demolish(b); return { type: b.type, ok, n0: n, n1: list.length }; })()`);
     t.check("C2 a building taken down in those days gives its materials back (as always)", dem && dem.ok && dem.n1 === dem.n0 - 1, dem);
@@ -125,7 +125,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("C4 the guard by the sign: 'Masz jeszcze 3 dni' (day 61)", watch.done && /Masz jeszcze 3 dni/.test(watch.text), watch.text);
     await t.setDay(62, 9);
     await t.frames(20);
-    t.check("C5 day 62: the journal says 2 days, the menu foot the buyback", /Wynieś dobytek z pola \(zostały 2 dni\)/.test(await J("Journal.GOALS.find(g => g.id === 'story_carry').title")), await J("Journal.GOALS.find(g => g.id === 'story_carry').title"));
+    t.check("C5 day 62: the journal says 2 days, the menu foot the buyback", /Wynieś dobytek z działki \(zostały 2 dni\)/.test(await J("Journal.GOALS.find(g => g.id === 'story_carry').title")), await J("Journal.GOALS.find(g => g.id === 'story_carry').title"));
 
     // ================= D. the dawn of day 64 on the field: shut
     const hutCount = await J("(Farming.farm().buildings[3] || []).length");
@@ -141,8 +141,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         held: ((Farming.farm().buildings[3] || []).find(b => b.type === 'hut') || {}).held, hutOf: Farming.hutOf(), dog: Dog.state(), carryDone: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_carry')),
         held3: Farming.landHeld(3) })`);
     const escText = await logFrom(n1), pop1 = await t.popups({ clear: true });
-    t.check("D1 dawn of day 64 on the field: the guard sees him out ('Minęły 3 dni') to Skraj lasu (1,13); 'Pole należy teraz do Lorda.' over the hero",
-        escort && D.map === 23 && D.x === 1 && D.y === 13 && D.locked === 64 && /Minęły 3 dni/.test(escText) && pop1.includes("Pole należy teraz do Lorda."), { D: { map: D.map, x: D.x, y: D.y, locked: D.locked }, escText, pop1 });
+    t.check("D1 dawn of day 64 on the field: the guard sees him out ('Minęły 3 dni') to Skraj lasu (1,13); 'Działka należy teraz do Lorda.' over the hero",
+        escort && D.map === 23 && D.x === 1 && D.y === 13 && D.locked === 64 && /Minęły 3 dni/.test(escText) && pop1.includes("Działka należy teraz do Lorda."), { D: { map: D.map, x: D.x, y: D.y, locked: D.locked }, escText, pop1 });
     t.check("D2 a guard of the Lord at the way in; the carrying-out goal ticked off", D.guard && D.carryDone, { guard: D.guard, carry: D.carryDone });
     t.check("D3 the hut's furniture stays in the hut with the field (Map100 empty for a new hut), the field held: no hut of the hero's now", D.inside === 0 && Array.isArray(D.held) && D.held.length === before.inside && D.hutOf === null && D.held3, { inside: D.inside, held: D.held && D.held.length, hutOf: D.hutOf });
     t.check("D4 the dog comes along (its kennel stays on the field): following the hero on Skraj lasu", D.dog.map === 23 && D.dog.mode === "follow", { map: D.dog.map, mode: D.dog.mode });
@@ -153,13 +153,13 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.frames(30);
     const pop2 = await t.popups({ clear: true });
     t.check("D5 the way onto the field refused (a transfer and the passage event): still Skraj lasu, the popup over the hero", (await t.eval("$gameMap.mapId()")) === 23 && !(await t.eval("$gamePlayer.isTransferring()")) &&
-        pop2.includes("Pole należy teraz do Lorda."), pop2);
+        pop2.includes("Działka należy teraz do Lorda."), pop2);
     await t.locate(2, 13, 4);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "pole_zamkniete.png"));
 
     // ================= E. the homes: Chata pod lasem (the sołtys) and the burnt farm of the Ług family (D21), rebuilt
-    await t.go(8, 38, 42, 8);
+    await t.go(8, 82, 50, 8);
     await t.setHour(10);
     await t.calm();
     await t.frames(60);
@@ -182,13 +182,13 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("E2 bought for 600 G: the key, the bed and the chest in the room (fixed), the deed in the journal, the goal 'a new roof' done, nothing more for sale",
         E1.own && E1.gold === 2400 && E1.furn.join() === "bed!,chest_s!" && E1.roof && E1.notes.includes("Akt kupna: Chata pod lasem") && /klucz/i.test(s2.text) && E1.forSale.length === 0, E1);
     // the hut on Podgrodzie's new rows: its door -> the room, and back
-    t.check("E3 Podgrodzie is 92 x 112 now (20 rows added at the bottom, then doubled 2026-10-18 by tools/powieksz), <BuildRegion:8>", await t.go(111, 6, 41, 8) &&
+    t.check("E3 Podgrodzie is 92 x 112 now (20 rows added at the bottom, then doubled 2026-10-18 by tools/powieksz), <BuildRegion:8>", await t.go(111, 8, 81, 8) &&
         (await J("$gameMap.width() + 'x' + $gameMap.height() + ' ' + Farming.buildRegion()")) === "92x112 8");
     await t.eval("$gameMap.events().find(e => /Chata pod lasem/.test(e.event().name)).start(); 0");
     const inHut = await t.until(t.onMap(154), 20);
     await t.frames(30);
     const R = await J(`({ x: $gamePlayer.x, y: $gamePlayer.y, bed: Farming.menuFor(7, 4).entries.map(e => e.name), chest: Farming.menuFor(9, 4).entries.map(e => [e.name, e.enabled !== false, e.help]) })`);
-    t.check("E4 the door 'Chata pod lasem' (6,40) opens now: the room (Map154, landing 4,8); the bed sleeps the night, the chest opens, neither can be taken down",
+    t.check("E4 the door 'Chata pod lasem' (8,80) opens now: the room (Map154, landing 4,8); the bed sleeps the night, the chest opens, neither can be taken down",
         inHut && R.x === 4 && R.y === 8 && R.bed.includes("Prześpij noc") && R.chest.some(e => e[0] === "Otwórz") && R.chest.some(e => e[0] === "Rozbierz" && !e[1] && /część domu/.test(e[2])), R);
     await t.locate(6, 6, 8);
     await t.frames(20);
@@ -199,17 +199,17 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.give(80, 10);   // (planks for a small chest)
     const P = await J(`(function(){ let reg = 0, ground = 0; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) if ($gameMap.regionId(x, y) === 8) { reg++; if (Farming.plotAt(x, y)) ground++; }
         const hutWhy = []; let hut = null;
-        for (let y = 41; y <= 49 && !hut; y++) for (let x = 15; x <= 31 && !hut; x++) { const w = Farming.whyNotBuild('hut', x, y); if (w === null) hut = [x, y]; else hutWhy.push(w); }
+        for (let y = 81; y <= 89 && !hut; y++) for (let x = 17; x <= 33 && !hut; x++) { const w = Farming.whyNotBuild('hut', x, y); if (w === null) hut = [x, y]; else hutWhy.push(w); }
         return { x: $gamePlayer.x, y: $gamePlayer.y, allows: Farming.mapAllowsBuilding(), reg, ground, hut, single: hutWhy.filter(w => /Masz już chatkę/.test(w)).length,
-            inPlot: Farming.whyNotBuild('chest_s', 20, 44), outside: Farming.whyNotBuild('chest_s', 9, 46), town: Farming.whyNotBuild('chest_s', 20, 20),
+            inPlot: Farming.whyNotBuild('chest_s', 22, 84), outside: Farming.whyNotBuild('chest_s', 11, 86), town: Farming.whyNotBuild('chest_s', 20, 20),
             clean: Object.keys((Farming.farm().stones || {})[111] || {}).length }; })()`);
-    t.check("E5 out of the room in front of the hut (6,41); the plot beside it is his own land: 20 x 12 = 240 cells of region 8, ground to build on, a new hut allowed (the old one is the Lord's); nothing outside the plot",
-        outHut && P.x === 6 && P.y === 41 && P.allows && P.reg === 240 && P.ground >= 230 && !!P.hut && P.single === 0 && P.inPlot === null && P.outside !== null && P.town !== null, P);
+    t.check("E5 out of the room in front of the hut (8,81); the plot beside it is his own land: 20 x 12 = 240 cells of region 8, ground to build on, a new hut allowed (the old one is the Lord's); nothing outside the plot",
+        outHut && P.x === 8 && P.y === 81 && P.allows && P.reg === 240 && P.ground >= 230 && !!P.hut && P.single === 0 && P.inPlot === null && P.outside !== null && P.town !== null, P);
     t.check("E5b the plot clean at the purchase: whatever wild grew there gone that day (it grows back as anywhere)", P.clean >= 240, P.clean);
-    const built = await J("(function(){ return Farming.build('chest_s', 20, 44); })()");
+    const built = await J("(function(){ return Farming.build('chest_s', 22, 84); })()");
     await t.frames(90);
     t.check("E6 a chest built on the plot", built && (await J("(Farming.farm().buildings[111] || []).some(b => b.type === 'chest_s' && !b.site)")), built);
-    await t.locate(13, 42, 6);
+    await t.locate(15, 82, 6);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "chata_pod_lasem.png"));
 
@@ -239,7 +239,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("E8 the ruin looked at: a popup over the hero, the quest D21 'Spalona zagroda' starts by itself (Józek Łata first)",
         popRuin.some(p => /Zgliszcza domu/.test(p)) && !!d21a && d21a.s === "active" && d21a.step === 0 && ntRuin.some(n => /Spalona zagroda/.test(n)), { popRuin, d21a, ntRuin });
     // Józek, Marta, the sołtys
-    await t.go(111, 20, 20, 2);
+    await t.go(111, 43, 30, 2);
     await t.setHour(10);
     await t.frames(60);
     const jo = await t.talkTo("TownLife.eventOf('szmaciarz')", []);
@@ -248,7 +248,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const ma = await t.talkTo("TownLife.eventOf('praczka')", []);
     t.check("E10 Marta: no going back there ('tylko popiół i grób'), but she would like smoke from the chimney again; the sołtys keeps the book", ma.done && /popiół i grób/.test(ma.text) && /dym/.test(ma.text) &&
         (await J("TownQuests.rec('D21').step")) === 2, ma.text.slice(0, 400));
-    await t.go(8, 38, 42, 8);
+    await t.go(8, 82, 50, 8);
     await t.setHour(11);
     await t.calm();
     await t.frames(60);
@@ -290,7 +290,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         menu0 && menu0.entries[0].name === "Uprzątnij zgliszcza" && began && w3 && w3.done === 3 && w3.need === 30 && S1.stage === 1 && S1.d === 2 && S1.p === 1 &&
         S1.items[0] === items0[0] + 12 && S1.items[1] === items0[1] + 6 && S1.items[2] === items0[2] + 6 && S1.konik === 1 && S1.step === 4, { menu0: menu0 && menu0.entries.map(e => e.name), began, w3, S1, items0 });
     // the toy back to Marta
-    await t.go(111, 20, 20, 2);
+    await t.go(111, 43, 30, 2);
     await t.frames(40);
     const op1 = await J("TownQuests.opinion()");
     const ma2 = await t.talkTo("TownLife.eventOf('praczka')", []);
@@ -390,7 +390,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const lord = await t.talkTo(902, ["Oddaj 500 G"], { shotAtChoice: path.join(SHOTS, "oferta_odkupu.png") });
     const G1 = await J("({ paid: Story.state().buy.paid, flag: Story.state().flags.lordLost, title: Journal.GOALS.find(g => g.id === 'story_buyback').title })");
     t.check("G1 the Lord after the loss: he sells the field back for 3000 G in instalments, no deadline; 500 G paid", lord.done && /Odsprzedam je: 3000/.test(lord.text) && /Bez terminu/.test(lord.text) &&
-        G1.paid === 500 && G1.flag && G1.title === "Odkup pole dziadka (500 / 3000 G)", { text: lord.text.slice(0, 500), G1 });
+        G1.paid === 500 && G1.flag && G1.title === "Odkup działkę dziadka (500 / 3000 G)", { text: lord.text.slice(0, 500), G1 });
     await t.gold(3000);
     await t.notices({ clear: true });
     const got = await J("Story.pay(2500)");
@@ -401,8 +401,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const backNotices = await t.notices();
     t.check("G2 the last 2500 G: the field back - every building left on it there again, the hut's furniture back inside, the hut the hero's",
         got === 2500 && back.done && back.back && !back.lost && back.field === hutCount && back.inside === before.inside && !back.boarded && back.hutOf === 3, back);
-    t.check("G3 the sign and the guards gone, the deed 'Akt odkupu pola', the goal done, the top notice; the Heart's world: bought back",
-        !back.sign && !back.guard && back.notes.includes("Akt odkupu pola") && back.goal && back.world && backNotices.some(n => /Pole dziadka znowu wasze/.test(n)), { back, backNotices });
+    t.check("G3 the sign and the guards gone, the deed 'Akt odkupu działki', the goal done, the top notice; the Heart's world: bought back",
+        !back.sign && !back.guard && back.notes.includes("Akt odkupu działki") && back.goal && back.world && backNotices.some(n => /Działka dziadka znowu wasza/.test(n)), { back, backNotices });
     t.check("G4 the way onto the field open again", await t.go(23, 2, 13, 4) && (await t.go(3, 37, 13, 4)));
     await t.go(19, 8, 7, 8);
     await t.setHour(12);

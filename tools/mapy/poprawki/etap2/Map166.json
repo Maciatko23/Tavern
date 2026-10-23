@@ -1,0 +1,129 @@
+{
+ "mapa": 166,
+ "nazwa": "Wrak - pod pokładem",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 1,
+   "stary": 1,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 0,
+   "stary": 0,
+   "nowy": 1
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 1,
+   "stary": 0,
+   "nowy": 9
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 1,
+   "stary": 1,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 0,
+   "stary": 0,
+   "nowy": 1
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 1,
+   "stary": 0,
+   "nowy": 9
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 10,
+   "y": 4,
+   "stary": 0,
+   "nowy": 677
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 20,
+   "y": 8,
+   "stary": 0,
+   "nowy": 677
+  },
+  {
+   "op": "notatka",
+   "id": 10,
+   "nazwa": "Szkielet bosmana",
+   "stary": "<Wrak:szkielet>",
+   "nowy": "<Wrak:szkielet><Occupy:right=1>"
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 2,
+   "y": 1,
+   "problem": "obiekt rozcięty: kafel 1 (B 1,0) - góra bez dołu (brak kafla 9 pod) w (2,1)",
+   "poprawka": "przesunięto obiekt B (1,0) 1 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "O1",
+   "x": 6,
+   "y": 1,
+   "problem": "obiekt rozcięty: kafel 1 (B 1,0) - góra bez dołu (brak kafla 9 pod) w (6,1)",
+   "poprawka": "przesunięto obiekt B (1,0) 1 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "O1",
+   "x": 10,
+   "y": 3,
+   "problem": "obiekt rozcięty: kafel 669 (D 13,3) - góra bez dołu (brak kafla 677 pod) w (10,3)",
+   "poprawka": "dołożono dół obiektu D (13,3) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 20,
+   "y": 7,
+   "problem": "obiekt rozcięty: kafel 669 (D 13,3) - góra bez dołu (brak kafla 677 pod) w (20,7)",
+   "poprawka": "dołożono dół obiektu D (13,3) 1 kafli"
+  },
+  {
+   "kod": "W1",
+   "x": 20,
+   "y": 10,
+   "problem": "obraz zdarzenia 10 'Szkielet bosmana' (!$Wrak_Szkielet|0|2|0) zajmuje 19% dołu wolnej kratki (20,10): przejście węższe niż kratka",
+   "poprawka": "zdarzenie 10 'Szkielet bosmana': <Occupy:right=1> - obraz nie wchodzi na wolną kratkę"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "G1 10,3",
+  "G1 20,7",
+  "O1 10,3",
+  "O1 2,1",
+  "O1 20,7",
+  "O1 6,1",
+  "W1 20,10"
+ ],
+ "po": [],
+ "sha_data": "327f300c284e1c332ad5c9a904226604243171b928c030ac2abc72931e29f759",
+ "zainstalowano": "2026-10-22T10:51:36",
+ "sha_po": "fb55e2bd231ba6a8a4160ed4c2c2fcb11a5f1125899a1f54d244643d433f9bb5"
+}

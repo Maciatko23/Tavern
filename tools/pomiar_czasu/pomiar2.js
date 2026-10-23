@@ -60,15 +60,15 @@ const save = () => fs.writeFileSync(OUT, JSON.stringify(R, null, 1));
 
         // ---- (c) drogi na mapach (Dijkstra; start = pole wejścia, cel = pole przejścia / miejsce)
         const ROUTES = [
-            [8, 23, 17, 0, 50, "miasteczko: tawerna -> brama zachodnia (Podgrodzie)"],
-            [8, 23, 17, 25, 33, "miasteczko: tawerna -> studnia na rynku"],
-            [8, 23, 17, 48, 31, "miasteczko: tawerna -> dzwonnica"],
-            [8, 23, 17, 47, 40, "miasteczko: tawerna -> ratusz"],
-            [8, 23, 17, 12, 47, "miasteczko: tawerna -> dom kowala"],
-            [8, 23, 17, 10, 40, "miasteczko: tawerna -> kantor"],
-            [8, 23, 17, 51, 50, "miasteczko: tawerna -> brama dworu"],
+            [8, 50, 17, 0, 50, "miasteczko: tawerna -> brama zachodnia (Podgrodzie)"],
+            [8, 50, 17, 52, 49, "miasteczko: tawerna -> studnia na rynku"],
+            [8, 50, 17, 86, 32, "miasteczko: tawerna -> dzwonnica"],
+            [8, 50, 17, 91, 48, "miasteczko: tawerna -> ratusz"],
+            [8, 50, 17, 13, 61, "miasteczko: tawerna -> dom kowala"],
+            [8, 50, 17, 14, 48, "miasteczko: tawerna -> kantor"],
+            [8, 50, 17, 103, 50, "miasteczko: tawerna -> brama dworu"],
             [8, 24, 67, 23, 17, "miasteczko: brama płd. -> tawerna"],
-            [111, 44, 17, 0, 19, "Podgrodzie: brama -> droga na przystań"],
+            [111, 90, 17, 0, 19, "Podgrodzie: brama -> droga na przystań"],
             [125, 54, 19, 15, 0, "Przystań: wejście -> ścieżka do pustelni"],
             [125, 54, 19, 22, 39, "Przystań: wejście -> garnizon"],
             [125, 54, 19, 24, 5, "Przystań: wejście -> chata Janka"],

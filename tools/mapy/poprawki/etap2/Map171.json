@@ -1,0 +1,91 @@
+{
+ "mapa": 171,
+ "nazwa": "Piwnica kantoru",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 6,
+   "stary": 669,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 5,
+   "stary": 0,
+   "nowy": 669
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 6,
+   "stary": 0,
+   "nowy": 677
+  },
+  {
+   "op": "przesun",
+   "id": 18,
+   "nazwa": "Mapa Kruczej Wyspy",
+   "stary": [
+    15,
+    3
+   ],
+   "nowy": [
+    14,
+    3
+   ]
+  },
+  {
+   "op": "prio",
+   "id": 18,
+   "nazwa": "Mapa Kruczej Wyspy",
+   "strony": {
+    "0": [
+     0,
+     1
+    ]
+   }
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 6,
+   "problem": "obiekt rozcięty: kafel 669 (D 13,3) - góra bez dołu (brak kafla 677 pod) w (1,6)",
+   "poprawka": "przesunięto obiekt D (13,3) 1 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "D4",
+   "x": 15,
+   "y": 3,
+   "problem": "zdarzenie 18 'Mapa Kruczej Wyspy' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (15,3)",
+   "poprawka": "niewidoczne zdarzenie 18 'Mapa Kruczej Wyspy' przesunięte z (15,3) do (14,3) (przed nim da się stanąć)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "D4",
+   "x": 15,
+   "y": 3,
+   "kandydat": "zdarzenie 18 'Mapa Kruczej Wyspy': priorytet 'jak postać' - akcja z sąsiedniej kratki",
+   "odrzucony": "problem nie zniknął"
+  }
+ ],
+ "przed": [
+  "D1 16,4",
+  "D4 15,3",
+  "O1 1,6"
+ ],
+ "po": [
+  "D1 16,4"
+ ],
+ "sha_data": "7becf157d5cc0e7fdc4a83210bafe92ab7e38b0f14665e71eae2ab1d0ee7db81",
+ "zainstalowano": "2026-10-22T10:51:37",
+ "sha_po": "8daffe063f9db16ba6f6fe885a29ca0cb00b8ada98d0f496ec14360121385e9a"
+}

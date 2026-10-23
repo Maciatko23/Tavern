@@ -1,0 +1,64 @@
+{
+ "mapa": 123,
+ "nazwa": "Chata Najstarszego",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 4,
+   "stary": 264,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 3,
+   "stary": 256,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 3,
+   "stary": 0,
+   "nowy": 264
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 2,
+   "stary": 0,
+   "nowy": 256
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 4,
+   "stary": 0,
+   "nowy": 272
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 13,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 264 (C 0,1) - góra bez dołu (brak kafla 272 pod) w (13,4)",
+   "poprawka": "przesunięto obiekt C (0,1) 2 kafli o 1 w górę i dołożono dół"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "O1 13,4"
+ ],
+ "po": [],
+ "sha_data": "678643874f180f2e7c6a991820a447c8b20d5f636f772d99b33f9a23401be9b2",
+ "zainstalowano": "2026-10-22T10:51:32",
+ "sha_po": "347153307195d1836d7a503f236d2096e395b9200a92cad365cbd27d9e9a2b49"
+}

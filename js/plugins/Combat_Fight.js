@@ -55,6 +55,7 @@
             if (n.water < 25) m *= 0.85;
         }
         if (typeof $gameSystem.isWounded === "function" && $gameSystem.isWounded()) m *= 0.85;
+        m *= 1 - gearBreathCut();   // (2026-10-23: heavy armour and shields - Bron_Data.js `kara.oddech`)
         return Math.max(30, Math.round(m));
     }
     function breathNow() {
@@ -156,17 +157,123 @@
     // shield in the left hand - not while the burning torch is there -, the jacket on the torso); without Equipment.js: owned is worn.
     const ARMORS = { 171: { name: "Skórzana kurtka", reduce: 0.2 } };
     const has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
-    const wornNow = id => { const E = T.api("Equipment"); return E && E.worn ? E.worn(id) : has(id); };
-    const meleeOwned = () => MELEE_ORDER.filter(id => (id === TORCH_ITEM ? torchLit() : has(id)));   // (the torch: while it burns)
-    const hasRanged = () => (has(126) && has(127)) || (has(125) && has(64));
+    const meleeOwned = () => { refreshGear(); return MELEE_ORDER.filter(id => (id === TORCH_ITEM ? torchLit() : has(id))); };   // (the torch: while it burns)
+
+    // ==================================================================
+    // The gear from the items' notes (2026-10-23, docs/ekwipunek/PLAN_BRON_ZBROJE.md - the list: BRON_LISTA.md): <Bron:rodzaj,material>
+    // -> MELEE, <Tarcza:wzor> -> SHIELDS, <Zbroja:miejsce,wzor> -> ARMORS, with the numbers of Bron_Data.js (an item it does not list: its
+    // kind x its material). Read again when the database changes; until the notes are there the old weapons above stay as they are (their
+    // notes bring the same numbers). The bows and the slings with notes are Bron.js's ranged variants (Hunting_Weapons.defOf).
+    // A thing of a level above the hero's works weaker (Bron_Data.brak: 3% a level, at most 45%): weaponNow, shield, armor.
+    // ==================================================================
+    const BD = () => T.api("Bron_Data");
+    const SWING = { club: () => ({ combo: [CLUB, CLUB, CLUB], heavy: CLUB, hold: 7 }), punch: () => ({ combo: [PUNCH, PUNCH, PUNCH], heavy: PUNCH, hold: 5 }),
+        axe: () => ({ combo: [3, 3, 0], heavy: 0, hold: 10 }), pick: () => ({ combo: [1, 1], heavy: 1, hold: 14 }), spear: () => ({ combo: [15, 15, 15], heavy: 15, hold: 9 }) };
+    const OLD_ORDER = MELEE_ORDER.slice();
+    const NOTE = { bron: /<Bron:\s*([a-z_]+)\s*,\s*([a-z_]+)\s*(?:,\s*[A-Za-z0-9_]+\s*)?>/, tarcza: /<Tarcza:\s*[A-Za-z0-9_]+\s*>/, zbroja: /<Zbroja:\s*([a-z]+)\s*,/ };
+    let gearOf = null, gearLen = 0;
+    function refreshGear(force) {
+        const d = BD();
+        if (!d || !window.$dataItems || (!force && gearOf === $dataItems && gearLen === $dataItems.length)) return false;
+        gearOf = $dataItems;
+        gearLen = $dataItems.length;
+        const fresh = [];
+        for (const it of $dataItems) {
+            if (!it || !it.name || !it.note || it.id === TORCH_ITEM) continue;
+            const m = NOTE.bron.exec(it.note);
+            if (m) {
+                const known = d.przedmiot(it.id), M = d.MATERIALY[m[2]];
+                const p = known || { id: it.id, rodzaj: m[1], material: m[2], poziom: M && M.poziom ? M.poziom[0] : 1 }, s = d.staty(p);
+                if (s && !s.dystans && SWING[s.zamach]) {
+                    MELEE[it.id] = Object.assign({ name: it.name, dmg: s.dmg, poise: s.poise, reach: s.reach, cone: s.cone, cost: s.cost, se: s.se || "Blow1", sweep: !!s.sweep,
+                        crit: s.crit || 0, pancerz: s.pancerz || 1, zwierz: s.zwierz || 1, ukrycie: s.ukrycie || 1, klasa: s.klasa || "blunt", poziom: p.poziom || 1 }, SWING[s.zamach]());
+                    if (!OLD_ORDER.includes(it.id)) fresh.push(it.id);
+                }
+                continue;
+            }
+            const p = d.przedmiot(it.id);
+            if (!p) continue;
+            if (p.typ === "tarcza" && NOTE.tarcza.test(it.note))
+                SHIELDS[it.id] = { name: it.name, reduce: p.blok, breath: p.oddechBloku, parry: p.parowanie || 0, cover: p.oslona || 0, kara: p.kara || {}, poziom: p.poziom || 1 };
+            else if (p.typ === "zbroja" && NOTE.zbroja.test(it.note))
+                ARMORS[it.id] = { name: it.name, reduce: p.obrona, miejsce: p.miejsce, kara: p.kara || {}, piesci: p.piesci || null, poziom: p.poziom || 1 };
+        }
+        // the order of [ ] (and the weapon taken when none was chosen): the new ones - the best first (the level, then the blow) - then the old ones
+        fresh.sort((a, b) => (MELEE[b].poziom - MELEE[a].poziom) || (MELEE[b].dmg - MELEE[a].dmg) || a - b);
+        MELEE_ORDER.length = 0;
+        MELEE_ORDER.push(...fresh, ...OLD_ORDER);
+        gearAt = -1;
+        return true;
+    }
+    const heroLevel = () => { const c = P.core; try { return c && c.hero && window.$gameSystem ? c.hero().level || 1 : 1; } catch (e) { return 1; } };
+    const lackOf = poziom => { const d = BD(); return poziom > 1 && d && d.brak ? d.brak(poziom, heroLevel()) : 0; };
+    // the weapon as it strikes now: its level's lack (weaker, dearer in breath) and, for the fists, the gauntlets (armour with `piesci`)
+    function weaponNow(id) {
+        refreshGear();
+        const w = MELEE[id];
+        if (!w) return null;
+        const lack = lackOf(w.poziom), ar = id === 0 ? armor() : null, fist = ar && ar.piesci ? ar.piesci : null;
+        if (!lack && !fist) return w;
+        const o = Object.assign({}, w);
+        if (fist) { o.dmg += fist.dmg || 0; o.poise += fist.poise || 0; }
+        if (lack) { o.dmg = Math.max(1, Math.round(o.dmg * (1 - lack))); o.poise = Math.round(o.poise * (1 - lack)); o.cost = Math.round(o.cost * (1 + lack)); o.lack = lack; }
+        return o;
+    }
     function shield() {
-        for (const id of Object.keys(SHIELDS)) if (wornNow(Number(id))) return Object.assign({ id: Number(id) }, SHIELDS[id]);
+        refreshGear();
+        const E = T.api("Equipment");
+        const ids = E && E.current ? [E.current("left")] : Object.keys(SHIELDS).map(Number).filter(has);
+        for (const id of ids) {
+            if (!id || !SHIELDS[id]) continue;
+            const s = SHIELDS[id], lack = lackOf(s.poziom), o = Object.assign({ id: Number(id) }, s);
+            if (lack) { o.reduce = s.reduce * (1 - lack); o.parry = (s.parry || 0) * (1 - lack); o.lack = lack; }
+            return o;
+        }
         return null;
     }
+    // the armour worn, all its pieces together: { id (the torso's piece, else the first), name, reduce (their sum, at most
+    // Bron_Data.ZBROJA_MAX), pieces: [{ id, name, reduce }], kara: { oddech, skradanie, chod } (summed), piesci }
+    const ARMOR_PARTS = ["torso", "head", "hands", "legs", "feet"];
     function armor() {
-        for (const id of Object.keys(ARMORS)) if (wornNow(Number(id))) return Object.assign({ id: Number(id) }, ARMORS[id]);
-        return null;
+        refreshGear();
+        const E = T.api("Equipment"), ids = [];
+        if (E && E.current) { for (const part of ARMOR_PARTS) { const id = E.current(part); if (id && ARMORS[id] && !ids.includes(id)) ids.push(id); } }
+        else for (const id of Object.keys(ARMORS).map(Number)) if (has(id)) ids.push(id);
+        if (!ids.length) return null;
+        const pieces = [], kara = { oddech: 0, skradanie: 0, chod: 0 };
+        let reduce = 0, piesci = null;
+        for (const id of ids) {
+            const a = ARMORS[id], lack = lackOf(a.poziom), r = a.reduce * (1 - lack);
+            reduce += r;
+            pieces.push({ id, name: a.name, reduce: r, lack });
+            const k = a.kara || {};
+            kara.oddech += k.oddech || 0;
+            kara.skradanie += k.skradanie || 0;
+            kara.chod += k.chod || 0;
+            if (a.piesci) piesci = { dmg: Math.round((a.piesci.dmg || 0) * (1 - lack)), poise: Math.round((a.piesci.poise || 0) * (1 - lack)) };
+        }
+        const max = BD() && BD().ZBROJA_MAX ? BD().ZBROJA_MAX : 0.65, main = pieces[0];
+        return { id: main.id, name: main.name, reduce: pieces.length > 1 ? Math.min(max, reduce) : reduce, pieces, kara, piesci };
     }
+    // the breath the heavy gear takes off (the armour's and the shield's `oddech`, at most a third) - worked out once a frame
+    let gearAt = -1, gearBreath = 0;
+    function gearBreathCut() {
+        if (gearAt !== Graphics.frameCount) {
+            gearAt = Graphics.frameCount;
+            const ar = armor(), sh = shield();
+            gearBreath = Math.min(0.33, (ar ? ar.kara.oddech : 0) + (sh && sh.kara ? sh.kara.oddech || 0 : 0));
+        }
+        return gearBreath;
+    }
+    // the bow / the sling in hand (2026-10-23): the best one owned - Bron.js's variants too - else the old 126 / 125
+    const BR = () => T.api("Bron");
+    function rangedItem() {
+        const b = BR(), id = b && b.rangedItem ? b.rangedItem() : 0;
+        return id || (has(126) && has(127) ? 126 : has(125) ? 125 : has(126) ? 126 : 0);
+    }
+    const rangedKind = id => { const b = BR(); return b && b.rangedKind ? b.rangedKind(id) : id === 126 ? "bow" : "sling"; };
+    const hasRanged = () => { const b = BR(); return b && b.hasRanged ? b.hasRanged() : (has(126) && has(127)) || (has(125) && has(64)); };
+    const anyRanged = () => { const b = BR(); return b && b.anyRanged ? b.anyRanged() : has(125) || has(126); };
 
     // ==================================================================
     // A blow from hiding (stage 2, 2026-10-05; docs/WALKA.md: "C + cios"). An animal that has not noticed the hero yet - no "!" over it
@@ -193,11 +300,11 @@
     // owned, else the best melee weapon, else the ranged one
     function handChoices() {
         const out = meleeOwned().map(id => "m" + id);
-        if (hasRanged() || has(125) || has(126)) out.push("ranged");
+        if (hasRanged() || anyRanged()) out.push("ranged");
         out.push("m0");   // the bare fists: the last choice, the only one with nothing else
         return out;
     }
-    const handIcon = h => h === "m0" ? FIST_ICON : $dataItems[h[0] === "m" ? Number(h.slice(1)) : (has(126) ? 126 : 125)].iconIndex;
+    const handIcon = h => h === "m0" ? FIST_ICON : $dataItems[h[0] === "m" ? Number(h.slice(1)) : rangedItem() || 125].iconIndex;
     function hand() {
         const list = handChoices(), stored = modes().hand;
         if (stored && list.includes(stored)) return stored;
@@ -329,7 +436,7 @@
     }
     const maxCombo = w => w.combo.length + (hasSkill("combo4") ? 1 : 0);
     function startAttack(id, i) {
-        const w = MELEE[id];
+        const w = weaponNow(id) || MELEE[id];
         if (!spendBreath(w.cost * (1 - perk("melee.breath")))) { act.mode = "idle"; return false; }
         autoFace(w);
         act.mode = "attack";
@@ -385,7 +492,7 @@
         return "flesh";
     }
     function hitSound(id, ref, heavy, i, recoiled) {
-        const own = surfaceOf(ref), cls = WEAPON_CLASS[id] || "blunt", w = MELEE[id];
+        const own = surfaceOf(ref), cls = WEAPON_CLASS[id] || (MELEE[id] && MELEE[id].klasa) || "blunt", w = MELEE[id];
         const surf = recoiled && own !== "armor" && own !== "stone" ? "shield" : own;   // (thrown back by a shield or a club; by iron or stone: their clank)
         const [name, pitch] = (HIT_SE[cls] || HIT_SE.blunt)[surf] || [w.se, 100];
         se(name, 85, Math.round((heavy ? pitch - 18 : pitch + i * 5) * (0.97 + Math.random() * 0.06)));
@@ -394,7 +501,7 @@
     }
     // the blow lands: everything in reach and in front takes it (the nearest only, unless the weapon sweeps and the hero has the skill)
     function strike(id, i) {
-        const w = MELEE[id], Hn = H();
+        const w = weaponNow(id) || MELEE[id], Hn = H();
         const heavy = i === 0 && act.charge >= HEAVY.min;
         if (heavy) { breath = Math.max(0, breathNow() - w.cost * HEAVY.cost); if (breath <= 0) winded = true; }
         const full = heavy && act.charge >= HEAVY.max - 1;
@@ -424,9 +531,12 @@
             const a = t.ref && t.ref.isAnimal ? t.ref : null;
             let m = mult * strMult() * (1 + perk("melee.dmg")), tag = heavy ? "heavy" : "", pz = poise;
             const hidden = sneakAttack(a) === "hidden";   // (a blow from hiding: see SNEAK)
-            if (hidden) { m *= sneakMult(false); tag = "sneak"; pz = Math.max(pz * SNEAK.poise, (a._poise || 0) + 1); }   // (it breaks its balance whole: it reels)
+            if (hidden) { m *= sneakMult(false) * (w.ukrycie || 1); tag = "sneak"; pz = Math.max(pz * SNEAK.poise, (a._poise || 0) + 1); }   // (it breaks its balance whole: it reels)
+            // (2026-10-23, Bron_Data.js) the weapon against what it strikes: blunt ones on armour, stone and mail (pancerz), the boar spear on animals
+            if (w.pancerz > 1) { const surf = surfaceOf(t.ref); if (surf === "armor" || surf === "stone" || surf === "mail") m *= w.pancerz; }
+            if (w.zwierz > 1 && a) m *= w.zwierz;
             if (a && a._stun > 0 && hasSkill("execute")) { m *= 2.5; tag = "execute"; }
-            const crit = act.riposteT > 0 || Math.random() < critChance();
+            const crit = act.riposteT > 0 || Math.random() < critChance() + (w.crit || 0);
             if (crit) { m *= 1.6; act.riposteT = 0; act.counterT = 0; tag = tag || "crit"; }
             else if (act.counterT > 0) { m *= act.counterMult || COUNTER.mult; act.counterT = 0; counter = true; }   // (the counter after a parry: see COUNTER)
             const dmg = Math.max(1, Math.round(w.dmg * m)) + (w.fire && !a ? w.fireBonus || 0 : 0);   // (fire: a man or a creature burns at once; an animal - Torch.struck)
@@ -644,7 +754,8 @@
             numberAt(px(), py() - 1.35, "Odbity!", "#ffb07f", 0.8);
         }
         const ax = from.x - px(), ay = from.y - py(), ad = Math.hypot(ax, ay) || 1, [fx, fy] = facingVec();
-        const frontal = (ax * fx + ay * fy) / ad > 0.25;
+        const guardSh = act.mode === "block" ? shield() : null;   // (a wide shield covers more to the side: its `cover`)
+        const frontal = (ax * fx + ay * fy) / ad > 0.25 - (guardSh && guardSh.cover ? guardSh.cover : 0);
         let damage = opts.damage || 0, poise = opts.poise || 0;
         // (a blow no shield and no parry holds - the bear's paw and its pin: the guard is up for nothing, and he sees why)
         if (act.mode === "block" && frontal && opts.unblockable && opts.unparryable) numberAt(px(), py() - 1.55, "Tego nie zatrzymasz!", "#ff9f8f", 0.8);
@@ -667,7 +778,7 @@
                 return tell("parried", 0, src);
             }
             if (!opts.unblockable) {
-                const sh = shield() || NO_SHIELD;
+                const sh = guardSh || NO_SHIELD;
                 damage = Math.round(damage * (1 - Math.min(0.9, sh.reduce + perk("block.reduce"))));
                 if (sh.id) T.call("Durability", "use", sh.id);   // (every blow taken on it wears the shield; a parry does not)
                 breath = Math.max(0, breathNow() - poise * sh.breath * (hasSkill("guard") ? 0.6 : 1));
@@ -727,7 +838,7 @@
     function applyDamage(actor, damage, nonLethal) {
         if (!(damage > 0)) return 0;
         const ar = armor();
-        if (ar) T.call("Durability", "use", ar.id);   // (every blow that gets through wears the jacket)
+        if (ar) for (const piece of ar.pieces || [ar]) T.call("Durability", "use", piece.id);   // (every blow that gets through wears the jacket - every piece worn)
         const dk = FE() && FE().diff ? FE().diff().dmg : 1;   // (the difficulty of the fight: Łatwy 0.7, Trudny 1.3 - Combat_Feel.js)
         damage = Math.max(1, Math.round(damage * dk * (1 - (ar ? ar.reduce : 0)) * (1 - Math.min(0.6, perk("hurt")))));   // (the jacket, Niezłomny)
         if (nonLethal) damage = Math.max(0, Math.min(damage, actor.hp - 1));
@@ -897,7 +1008,7 @@
     const mayRun = player => act.mode !== "block" && (player !== $gamePlayer || canRun());
 
     P.fight = { act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
-        setHand, handChoices, shield, armor, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
+        setHand, handChoices, shield, armor, weaponNow, refreshGear, gearChanged: () => { gearAt = -1; }, rangedItem, rangedKind, hasRanged, anyRanged, lackOf, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
         sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
         stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };
 })();

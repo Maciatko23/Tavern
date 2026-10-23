@@ -1,0 +1,124 @@
+{
+ "mapa": 116,
+ "nazwa": "Kram starzyzny",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 3,
+   "stary": 325,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 4,
+   "stary": 333,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 3,
+   "stary": 0,
+   "nowy": 333
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 4,
+   "stary": 0,
+   "nowy": 341
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 7,
+   "y": 4,
+   "stary": 318,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 7,
+   "y": 3,
+   "stary": 310,
+   "nowy": 0
+  },
+  {
+   "op": "przesun",
+   "id": 7,
+   "nazwa": "Świeca",
+   "stary": [
+    7,
+    6
+   ],
+   "nowy": [
+    7,
+    5
+   ]
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 3,
+   "y": 3,
+   "problem": "obiekt rozcięty: kafel 325 (C 5,8) - dół bez góry (brak kafla 317 nad) w (3,3)",
+   "poprawka": "usunięto resztkę obiektu C (5,8) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 3,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 333 (C 5,9) - góra bez dołu (brak kafla 341 pod) w (3,4)",
+   "poprawka": "przesunięto obiekt C (5,9) 1 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "O1",
+   "x": 7,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 318 (C 6,7) - góra bez dołu (brak kafla 326 pod) w (7,4)",
+   "poprawka": "usunięto resztkę obiektu C (6,7) 2 kafli"
+  },
+  {
+   "kod": "P2",
+   "x": 7,
+   "y": 6,
+   "problem": "zdarzenie 7 'Świeca' (!Decoration2|1|2|0) stoi na przedniej krawędzi blatu: 4 px poza płaskim wierzchem w (7,6)",
+   "poprawka": "przesunięto zdarzenie 7 z (7,6) do (7,5) (5 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 7,
+   "y": 6,
+   "kandydat": "przesunięto zdarzenie 7 z (7,6) do (6,6)",
+   "odrzucony": "nowe problemy: P2(6,6)"
+  },
+  {
+   "kod": "P2",
+   "x": 7,
+   "y": 6,
+   "kandydat": "przesunięto zdarzenie 7 z (7,6) do (8,6)",
+   "odrzucony": "nowe problemy: P2(8,6)"
+  }
+ ],
+ "przed": [
+  "O1 3,3",
+  "O1 3,4",
+  "O1 7,4",
+  "P2 7,6"
+ ],
+ "po": [],
+ "sha_data": "86bc7a054401c937896372069eda967d7a650cc129d6751b89a4406607b862fd",
+ "zainstalowano": "2026-10-22T10:51:30",
+ "sha_po": "715832fe21c96979888f18e439c66fcd4a2558520cd5e395449accbbad00ea09"
+}

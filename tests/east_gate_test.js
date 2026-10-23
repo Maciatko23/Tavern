@@ -16,13 +16,13 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         await t.until("$gamePlayer.isTransferring() || $gameMap.mapId() !== " + map, 10, 30);
         await t.eval(`(function(){ Input._currentState["${key}"] = false; return 0; })()`);
     };
-    await t.newGame({ map: 8, x: 46, y: 50, dir: 6, hour: 12, quiet: true });
+    await t.newGame({ map: 8, x: 98, y: 50, dir: 6, hour: 12, quiet: true });
     const cells = await t.json(`(function(){ const p = (x, y) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d));
-        return { gate: [p(50, 50), p(51, 50), p(50, 51), p(51, 51)], pillars: [p(49, 49), p(49, 53)], towers: [p(50, 49), p(50, 53)],
+        return { gate: [p(102, 50), p(103, 50), p(102, 51), p(103, 51)], pillars: [p(101, 49), p(101, 53)], towers: [p(102, 49), p(102, 53)],
                  exits: $gameMap.events().filter(e => /Posiadłość Lorda/.test(e.event().name)).map(e => [e.x, e.y]),
                  banners: $gameMap.events().filter(e => /Chorągiew Lorda/.test(e.event().name)).length }; })()`);
     t.check("the gate's four cells are free, the fire baskets' pillars and the towers beside it are not", cells.gate.every(Boolean) && !cells.pillars.some(Boolean) && !cells.towers.some(Boolean), cells);
-    t.check("two exits at the map's edge (51,50..51) and the Lord's two banners on the tower", JSON.stringify(cells.exits) === "[[51,50],[51,51]]" && cells.banners === 2, cells);
+    t.check("two exits at the map's edge (103,50..51) and the Lord's two banners on the tower", JSON.stringify(cells.exits) === "[[103,50],[103,51]]" && cells.banners === 2, cells);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "brama_lorda.png"));
     await t.setHour(22);
@@ -31,7 +31,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.setHour(12);
 
     // through the gate on foot
-    await t.locate(48, 50, 6);
+    await t.locate(100, 50, 6);
     await walkOut("right", 8);
     const out = await t.until(t.onMap(24), 10);
     const at24 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
@@ -42,5 +42,5 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await walkOut("left", 24);
     const back = await t.until(t.onMap(8), 10);
     const at8 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
-    t.check("walking left off the road's third row lands in the gate (Map008 50,51, facing left)", back && at8.x === 50 && at8.y === 51 && at8.d === 4, at8);
+    t.check("walking left off the road's third row lands in the gate (Map008 102,51, facing left)", back && at8.x === 102 && at8.y === 51 && at8.d === 4, at8);
 });

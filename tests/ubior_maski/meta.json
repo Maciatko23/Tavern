@@ -1,0 +1,3745 @@
+{
+ "outfits": [
+  {
+   "key": "A",
+   "label": "czerwony kaftan + łapcie + kapelusz"
+  },
+  {
+   "key": "B",
+   "label": "lniana koszula + łapcie + kapelusz"
+  },
+  {
+   "key": "C",
+   "label": "niebieskie spodnie + skórzany pas + szare rękawice"
+  }
+ ],
+ "sheets": {
+  "Hero_Walk": {
+   "A": "A_Hero_Walk.png",
+   "B": "B_Hero_Walk.png",
+   "C": "C_Hero_Walk.png"
+  },
+  "Hero_Run": {
+   "A": "A_Hero_Run.png",
+   "B": "B_Hero_Run.png",
+   "C": "C_Hero_Run.png"
+  },
+  "Hero_Sneak": {
+   "A": "A_Hero_Sneak.png",
+   "B": "B_Hero_Sneak.png",
+   "C": "C_Hero_Sneak.png"
+  },
+  "Hero_TorchWalk": {
+   "A": "A_Hero_TorchWalk.png",
+   "B": "B_Hero_TorchWalk.png",
+   "C": "C_Hero_TorchWalk.png"
+  },
+  "Hero_TorchRun": {
+   "A": "A_Hero_TorchRun.png",
+   "B": "B_Hero_TorchRun.png",
+   "C": "C_Hero_TorchRun.png"
+  },
+  "Hero_TorchSneak": {
+   "A": "A_Hero_TorchSneak.png",
+   "B": "B_Hero_TorchSneak.png",
+   "C": "C_Hero_TorchSneak.png"
+  },
+  "Hero_Axe": {
+   "A": "A_Hero_Axe.png",
+   "B": "B_Hero_Axe.png",
+   "C": "C_Hero_Axe.png"
+  },
+  "Hero_AxeSide": {
+   "A": "A_Hero_AxeSide.png",
+   "B": "B_Hero_AxeSide.png",
+   "C": "C_Hero_AxeSide.png"
+  },
+  "Hero_Pick": {
+   "A": "A_Hero_Pick.png",
+   "B": "B_Hero_Pick.png",
+   "C": "C_Hero_Pick.png"
+  },
+  "Hero_Shovel": {
+   "A": "A_Hero_Shovel.png",
+   "B": "B_Hero_Shovel.png",
+   "C": "C_Hero_Shovel.png"
+  },
+  "Hero_Rake": {
+   "A": "A_Hero_Rake.png",
+   "B": "B_Hero_Rake.png",
+   "C": "C_Hero_Rake.png"
+  },
+  "Hero_Hoe": {
+   "A": "A_Hero_Hoe.png",
+   "B": "B_Hero_Hoe.png",
+   "C": "C_Hero_Hoe.png"
+  },
+  "Hero_Hammer": {
+   "A": "A_Hero_Hammer.png",
+   "B": "B_Hero_Hammer.png",
+   "C": "C_Hero_Hammer.png"
+  },
+  "Hero_Rod": {
+   "A": "A_Hero_Rod.png",
+   "B": "B_Hero_Rod.png",
+   "C": "C_Hero_Rod.png"
+  },
+  "Hero_Sling": {
+   "A": "A_Hero_Sling.png",
+   "B": "B_Hero_Sling.png",
+   "C": "C_Hero_Sling.png"
+  },
+  "Hero_Bow": {
+   "A": "A_Hero_Bow.png",
+   "B": "B_Hero_Bow.png",
+   "C": "C_Hero_Bow.png"
+  },
+  "Hero_Spear": {
+   "A": "A_Hero_Spear.png",
+   "B": "B_Hero_Spear.png",
+   "C": "C_Hero_Spear.png"
+  },
+  "Hero_Club": {
+   "A": "A_Hero_Club.png",
+   "B": "B_Hero_Club.png",
+   "C": "C_Hero_Club.png"
+  },
+  "Hero_Punch": {
+   "A": "A_Hero_Punch.png",
+   "B": "B_Hero_Punch.png",
+   "C": "C_Hero_Punch.png"
+  },
+  "Hero_Crouch": {
+   "A": "A_Hero_Crouch.png",
+   "B": "B_Hero_Crouch.png",
+   "C": "C_Hero_Crouch.png"
+  },
+  "Hero_Sit": {
+   "A": "A_Hero_Sit.png",
+   "B": "B_Hero_Sit.png",
+   "C": "C_Hero_Sit.png"
+  },
+  "Hero_Roast": {
+   "A": "A_Hero_Roast.png",
+   "B": "B_Hero_Roast.png",
+   "C": "C_Hero_Roast.png"
+  },
+  "Hero_LieDown": {
+   "A": "A_Hero_LieDown.png",
+   "B": "B_Hero_LieDown.png",
+   "C": "C_Hero_LieDown.png"
+  },
+  "Hero_Roll": {
+   "A": "A_Hero_Roll.png",
+   "B": "B_Hero_Roll.png",
+   "C": "C_Hero_Roll.png"
+  },
+  "Hero_Torch": {
+   "A": "A_Hero_Torch.png",
+   "B": "B_Hero_Torch.png",
+   "C": "C_Hero_Torch.png"
+  },
+  "Hero_TorchCrouch": {
+   "A": "A_Hero_TorchCrouch.png",
+   "B": "B_Hero_TorchCrouch.png",
+   "C": "C_Hero_TorchCrouch.png"
+  },
+  "Hero_Net": {
+   "A": "A_Hero_Net.png",
+   "B": "B_Hero_Net.png",
+   "C": "C_Hero_Net.png"
+  }
+ },
+ "problems": {
+  "Hero_Walk": {
+   "median": 0.76,
+   "list": [],
+   "cells": 72
+  },
+  "Hero_Run": {
+   "median": 0.75,
+   "list": [
+    {
+     "where": "Hero_Run wiersz 0 (S) klatka 1",
+     "c": 1,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Run wiersz 2 (W) klatka 1",
+     "c": 1,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Run wiersz 2 (W) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Run wiersz 3 (NW) klatka 1",
+     "c": 1,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Run wiersz 5 (NE) klatka 1",
+     "c": 1,
+     "r": 5,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Run wiersz 7 (SE) klatka 1",
+     "c": 1,
+     "r": 7,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 72
+  },
+  "Hero_Sneak": {
+   "median": 0.77,
+   "list": [
+    {
+     "where": "Hero_Sneak wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sneak wiersz 4 (N) klatka 4",
+     "c": 4,
+     "r": 4,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sneak wiersz 4 (N) klatka 6",
+     "c": 6,
+     "r": 4,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sneak wiersz 5 (NE) klatka 4",
+     "c": 4,
+     "r": 5,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 56
+  },
+  "Hero_TorchWalk": {
+   "median": 0.76,
+   "list": [],
+   "cells": 72
+  },
+  "Hero_TorchRun": {
+   "median": 0.75,
+   "list": [
+    {
+     "where": "Hero_TorchRun wiersz 0 (S) klatka 1",
+     "c": 1,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchRun wiersz 2 (W) klatka 1",
+     "c": 1,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchRun wiersz 2 (W) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchRun wiersz 3 (NW) klatka 1",
+     "c": 1,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchRun wiersz 5 (NE) klatka 1",
+     "c": 1,
+     "r": 5,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchRun wiersz 7 (SE) klatka 1",
+     "c": 1,
+     "r": 7,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 72
+  },
+  "Hero_TorchSneak": {
+   "median": 0.77,
+   "list": [
+    {
+     "where": "Hero_TorchSneak wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchSneak wiersz 4 (N) klatka 4",
+     "c": 4,
+     "r": 4,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchSneak wiersz 4 (N) klatka 6",
+     "c": 6,
+     "r": 4,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchSneak wiersz 5 (NE) klatka 4",
+     "c": 4,
+     "r": 5,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 56
+  },
+  "Hero_Axe": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Axe wiersz 0 (S) klatka 7",
+     "c": 7,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (46,24) - wg środka głowy (46,22)"
+    },
+    {
+     "where": "Hero_Axe wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Axe wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_AxeSide": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_AxeSide wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (45,20) - wg środka głowy (47,20)"
+    },
+    {
+     "where": "Hero_AxeSide wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (50,20) - wg środka głowy (48,20)"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Pick": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Pick wiersz 1 (W) klatka 9",
+     "c": 9,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Pick wiersz 2 (E) klatka 9",
+     "c": 9,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,1 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Shovel": {
+   "median": 0.75,
+   "list": [
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 3",
+     "c": 3,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,5 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 4",
+     "c": 4,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 5",
+     "c": 5,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,3 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 10",
+     "c": 10,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,3 px od klatki 9 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 11",
+     "c": 11,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-3 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 14",
+     "c": 14,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,-5 px od klatki 13 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Shovel wiersz 3 (N) klatka 15",
+     "c": 15,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-3 px od klatki 14 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Rake": {
+   "median": 0.74,
+   "list": [
+    {
+     "where": "Hero_Rake wiersz 0 (S) klatka 11",
+     "c": 11,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-3 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Rake wiersz 0 (S) klatka 15",
+     "c": 15,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 14 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Rake wiersz 1 (W) klatka 0",
+     "c": 0,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (69,13) - wg środka głowy (71,13)"
+    },
+    {
+     "where": "Hero_Rake wiersz 1 (W) klatka 1",
+     "c": 1,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (69,13) - wg środka głowy (71,13)"
+    },
+    {
+     "where": "Hero_Rake wiersz 1 (W) klatka 2",
+     "c": 2,
+     "r": 1,
+     "jump": true,
+     "note": false,
+     "what": "skok o -4,0 px od klatki 1 - głowa tylko o -2.2,0.0"
+    },
+    {
+     "where": "Hero_Rake wiersz 1 (W) klatka 3",
+     "c": 3,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Rake wiersz 2 (E) klatka 3",
+     "c": 3,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,1 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Hoe": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Hoe wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (59,20) - wg środka głowy (61,20)"
+    },
+    {
+     "where": "Hero_Hoe wiersz 1 (W) klatka 6",
+     "c": 6,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (58,20) - wg środka głowy (60,20)"
+    },
+    {
+     "where": "Hero_Hoe wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,0 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hoe wiersz 1 (W) klatka 8",
+     "c": 8,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,3 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hoe wiersz 1 (W) klatka 16",
+     "c": 16,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-3 px od klatki 15 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hoe wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (36,20) - wg środka głowy (34,20)"
+    },
+    {
+     "where": "Hero_Hoe wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hoe wiersz 2 (E) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,3 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hoe wiersz 2 (E) klatka 16",
+     "c": 16,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-3 px od klatki 15 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Hammer": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Hammer wiersz 0 (S) klatka 2",
+     "c": 2,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (48,21) - wg środka głowy (45,21)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 0 (S) klatka 2",
+     "c": 2,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 0 (S) klatka 7",
+     "c": 7,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 1 (W) klatka 1",
+     "c": 1,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (48,20) - wg środka głowy (46,20)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 1 (W) klatka 2",
+     "c": 2,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (49,20) - wg środka głowy (51,20)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 1 (W) klatka 2",
+     "c": 2,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 5,0 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,1 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 1 (W) klatka 8",
+     "c": 8,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 2 (E) klatka 1",
+     "c": 1,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (47,20) - wg środka głowy (49,20)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 2 (E) klatka 2",
+     "c": 2,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (46,20) - wg środka głowy (44,20)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 2 (E) klatka 2",
+     "c": 2,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -5,0 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,1 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 2 (E) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Hammer wiersz 3 (N) klatka 0",
+     "c": 0,
+     "r": 3,
+     "note": true,
+     "what": "góra włosów myląca (48,21) - wg środka głowy (50,23)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 3 (N) klatka 1",
+     "c": 1,
+     "r": 3,
+     "note": true,
+     "what": "góra włosów myląca (48,21) - wg środka głowy (51,23)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 3 (N) klatka 2",
+     "c": 2,
+     "r": 3,
+     "note": true,
+     "what": "góra włosów myląca (47,21) - wg środka głowy (50,21)"
+    },
+    {
+     "where": "Hero_Hammer wiersz 3 (N) klatka 3",
+     "c": 3,
+     "r": 3,
+     "note": true,
+     "what": "góra włosów myląca (46,21) - wg środka głowy (48,21)"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Rod": {
+   "median": 0.74,
+   "list": [
+    {
+     "where": "Hero_Rod wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,0 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Rod wiersz 1 (W) klatka 8",
+     "c": 8,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Rod wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,0 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Rod wiersz 2 (E) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Sling": {
+   "median": 0.74,
+   "list": [
+    {
+     "where": "Hero_Sling wiersz 1 (W) klatka 11",
+     "c": 11,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -5,-2 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sling wiersz 2 (E) klatka 11",
+     "c": 11,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 5,-2 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Bow": {
+   "median": 0.75,
+   "list": [
+    {
+     "where": "Hero_Bow wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (48,21) - wg środka głowy (46,21)"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Spear": {
+   "median": 0.78,
+   "list": [
+    {
+     "where": "Hero_Spear wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Spear wiersz 1 (W) klatka 6",
+     "c": 6,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Spear wiersz 1 (W) klatka 8",
+     "c": 8,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Spear wiersz 1 (W) klatka 10",
+     "c": 10,
+     "r": 1,
+     "jump": true,
+     "note": false,
+     "what": "skok o -3,-1 px od klatki 9 - głowa tylko o -1.4,-1.4"
+    },
+    {
+     "where": "Hero_Spear wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Spear wiersz 2 (E) klatka 6",
+     "c": 6,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Spear wiersz 2 (E) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Spear wiersz 2 (E) klatka 10",
+     "c": 10,
+     "r": 2,
+     "jump": true,
+     "note": false,
+     "what": "skok o 3,-1 px od klatki 9 - głowa tylko o 1.4,-1.4"
+    },
+    {
+     "where": "Hero_Spear wiersz 3 (N) klatka 13",
+     "c": 13,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 12 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Club": {
+   "median": 0.75,
+   "list": [
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 2",
+     "c": 2,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (47,20) - wg środka głowy (49,20)"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 2",
+     "c": 2,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 3",
+     "c": 3,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (49,16) - wg środka głowy (46,19)"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 3",
+     "c": 3,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-1 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 3",
+     "c": 3,
+     "r": 1,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (38,16) - wg środka głowy (43,20)"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 14",
+     "c": 14,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (46,22) - wg środka głowy (48,25)"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 14",
+     "c": 14,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 13 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 15",
+     "c": 15,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-3 px od klatki 14 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 1 (W) klatka 16",
+     "c": 16,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (45,21) - wg środka głowy (47,21)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 2",
+     "c": 2,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (48,20) - wg środka głowy (46,20)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 2",
+     "c": 2,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 2",
+     "c": 2,
+     "r": 2,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 3",
+     "c": 3,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (46,16) - wg środka głowy (49,20)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 3",
+     "c": 3,
+     "r": 2,
+     "jump": true,
+     "note": false,
+     "what": "skok o 3,0 px od klatki 2 - głowa tylko o 2.7,-1.8"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 3",
+     "c": 3,
+     "r": 2,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (57,16) - wg środka głowy (52,20)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 14",
+     "c": 14,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (49,22) - wg środka głowy (47,25)"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 14",
+     "c": 14,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 13 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 15",
+     "c": 15,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-3 px od klatki 14 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Club wiersz 2 (E) klatka 16",
+     "c": 16,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (50,21) - wg środka głowy (48,21)"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Punch": {
+   "median": 0.77,
+   "list": [
+    {
+     "where": "Hero_Punch wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 1 (W) klatka 13",
+     "c": 13,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 5,1 px od klatki 12 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 1 (W) klatka 14",
+     "c": 14,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 5,-1 px od klatki 13 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 1 (W) klatka 15",
+     "c": 15,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-4 px od klatki 14 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 1 (W) klatka 16",
+     "c": 16,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -12,5 px od klatki 15 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 2 (E) klatka 13",
+     "c": 13,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -5,1 px od klatki 12 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 2 (E) klatka 14",
+     "c": 14,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -5,-1 px od klatki 13 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 2 (E) klatka 15",
+     "c": 15,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-4 px od klatki 14 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Punch wiersz 2 (E) klatka 16",
+     "c": 16,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 12,5 px od klatki 15 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_Crouch": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Crouch wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 0 (S) klatka 28",
+     "c": 28,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 0 (S) klatka 29",
+     "c": 29,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 0 (S) klatka 30",
+     "c": 30,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 1",
+     "c": 1,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (44,21) - wg środka głowy (46,21)"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 3",
+     "c": 3,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,4 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,5 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 26",
+     "c": 26,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-3 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 28",
+     "c": 28,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 29",
+     "c": 29,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-5 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 30",
+     "c": 30,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-4 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 1 (W) klatka 31",
+     "c": 31,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (44,21) - wg środka głowy (46,21)"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 1",
+     "c": 1,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (51,21) - wg środka głowy (49,21)"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 3",
+     "c": 3,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,4 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,5 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 26",
+     "c": 26,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-3 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 28",
+     "c": 28,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 29",
+     "c": 29,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-5 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 30",
+     "c": 30,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-4 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 2 (E) klatka 31",
+     "c": 31,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (51,21) - wg środka głowy (49,21)"
+    },
+    {
+     "where": "Hero_Crouch wiersz 3 (N) klatka 4",
+     "c": 4,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 3 (N) klatka 5",
+     "c": 5,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 3 (N) klatka 6",
+     "c": 6,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 3 (N) klatka 27",
+     "c": 27,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 3 (N) klatka 28",
+     "c": 28,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Crouch wiersz 3 (N) klatka 29",
+     "c": 29,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 132
+  },
+  "Hero_Sit": {
+   "median": 0.78,
+   "list": [
+    {
+     "where": "Hero_Sit wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 0 (S) klatka 9",
+     "c": 9,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 0 (S) klatka 24",
+     "c": 24,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 0 (S) klatka 30",
+     "c": 30,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,5 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 6",
+     "c": 6,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,2 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 9",
+     "c": 9,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-1 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 24",
+     "c": 24,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 26",
+     "c": 26,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,-2 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 27",
+     "c": 27,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 28",
+     "c": 28,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-5 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 1 (W) klatka 29",
+     "c": 29,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-4 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,5 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 6",
+     "c": 6,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,2 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 9",
+     "c": 9,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-1 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 24",
+     "c": 24,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,1 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 26",
+     "c": 26,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,-2 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 27",
+     "c": 27,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 28",
+     "c": 28,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-5 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 2 (E) klatka 29",
+     "c": 29,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-4 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 3 (N) klatka 6",
+     "c": 6,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 3 (N) klatka 7",
+     "c": 7,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 3 (N) klatka 8",
+     "c": 8,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 3 (N) klatka 25",
+     "c": 25,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 3 (N) klatka 26",
+     "c": 26,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Sit wiersz 3 (N) klatka 27",
+     "c": 27,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 132
+  },
+  "Hero_Roast": {
+   "median": 0.72,
+   "list": [
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,5 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 6",
+     "c": 6,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,5 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 8",
+     "c": 8,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 6,0 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 9",
+     "c": 9,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-1 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 24",
+     "c": 24,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,1 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 25",
+     "c": 25,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -6,0 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 26",
+     "c": 26,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-5 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 27",
+     "c": 27,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-2 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 1 (W) klatka 28",
+     "c": 28,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,-5 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,5 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 6",
+     "c": 6,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,2 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,5 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -6,-1 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 9",
+     "c": 9,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 24",
+     "c": 24,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 25",
+     "c": 25,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 6,1 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 26",
+     "c": 26,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-5 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 27",
+     "c": 27,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,-2 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 2 (E) klatka 28",
+     "c": 28,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-5 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 3 (N) klatka 5",
+     "c": 5,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 3 (N) klatka 6",
+     "c": 6,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 3 (N) klatka 7",
+     "c": 7,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 3 (N) klatka 26",
+     "c": 26,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-4 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 3 (N) klatka 27",
+     "c": 27,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roast wiersz 3 (N) klatka 28",
+     "c": 28,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 132
+  },
+  "Hero_LieDown": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 7",
+     "c": 7,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (47,31) - wg środka głowy (47,33)"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 8",
+     "c": 8,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (44,29) - wg środka głowy (44,31)"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 8",
+     "c": 8,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-2 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 9",
+     "c": 9,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o -5,-3 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 10",
+     "c": 10,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,0 px od klatki 9 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 12",
+     "c": 12,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 13",
+     "c": 13,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 14",
+     "c": 14,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 15",
+     "c": 15,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 16",
+     "c": 16,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 17",
+     "c": 17,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 18",
+     "c": 18,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 19",
+     "c": 19,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 20",
+     "c": 20,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 23",
+     "c": 23,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 22 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 24",
+     "c": 24,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (44,29) - wg środka głowy (44,31)"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 24",
+     "c": 24,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 5,3 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 25",
+     "c": 25,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (47,31) - wg środka głowy (47,33)"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 25",
+     "c": 25,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 0 (S) klatka 29",
+     "c": 29,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 8",
+     "c": 8,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,3 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 11",
+     "c": 11,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,2 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 13",
+     "c": 13,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 14",
+     "c": 14,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 15",
+     "c": 15,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 16",
+     "c": 16,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 17",
+     "c": 17,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 18",
+     "c": 18,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 19",
+     "c": 19,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 22",
+     "c": 22,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-2 px od klatki 21 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 25",
+     "c": 25,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,-3 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 1 (W) klatka 29",
+     "c": 29,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-3 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 8",
+     "c": 8,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,3 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 11",
+     "c": 11,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 13",
+     "c": 13,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 14",
+     "c": 14,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 15",
+     "c": 15,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 16",
+     "c": 16,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 17",
+     "c": 17,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 18",
+     "c": 18,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 19",
+     "c": 19,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 22",
+     "c": 22,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-2 px od klatki 21 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 25",
+     "c": 25,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,-3 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 2 (E) klatka 29",
+     "c": 29,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,-3 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 7",
+     "c": 7,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,4 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 8",
+     "c": 8,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -2,3 px od klatki 7 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 9",
+     "c": 9,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,2 px od klatki 8 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 10",
+     "c": 10,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 11",
+     "c": 11,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 12",
+     "c": 12,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 13",
+     "c": 13,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 14",
+     "c": 14,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 15",
+     "c": 15,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 16",
+     "c": 16,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 17",
+     "c": 17,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 18",
+     "c": 18,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 19",
+     "c": 19,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 20",
+     "c": 20,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 21",
+     "c": 21,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 22",
+     "c": 22,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 24",
+     "c": 24,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-2 px od klatki 23 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 25",
+     "c": 25,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-3 px od klatki 24 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_LieDown wiersz 3 (N) klatka 26",
+     "c": 26,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 2,-4 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 132
+  },
+  "Hero_Roll": {
+   "median": 0.77,
+   "list": [
+    {
+     "where": "Hero_Roll wiersz 0 (S) klatka 1",
+     "c": 1,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,9 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 0 (S) klatka 2",
+     "c": 2,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,6 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 0 (S) klatka 6",
+     "c": 6,
+     "r": 0,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 0 (S) klatka 10",
+     "c": 10,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-6 px od klatki 9 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 0 (S) klatka 11",
+     "c": 11,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-9 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 1",
+     "c": 1,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -6,12 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 2",
+     "c": 2,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,7 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 6",
+     "c": 6,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 11",
+     "c": 11,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-7 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 1 (W) klatka 12",
+     "c": 12,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 6,-12 px od klatki 11 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 1",
+     "c": 1,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 6,12 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 2",
+     "c": 2,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,7 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 6",
+     "c": 6,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 11",
+     "c": 11,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-7 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 2 (E) klatka 12",
+     "c": 12,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -6,-12 px od klatki 11 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 3 (N) klatka 1",
+     "c": 1,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,7 px od klatki 0 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 3 (N) klatka 2",
+     "c": 2,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,10 px od klatki 1 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 3 (N) klatka 5",
+     "c": 5,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 3 (N) klatka 6",
+     "c": 6,
+     "r": 3,
+     "off": true,
+     "note": true,
+     "what": "głowa nie nad ciałem (leży, przewrót) - nakrycie schowane"
+    },
+    {
+     "where": "Hero_Roll wiersz 3 (N) klatka 10",
+     "c": 10,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-10 px od klatki 9 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Roll wiersz 3 (N) klatka 11",
+     "c": 11,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-7 px od klatki 10 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 52
+  },
+  "Hero_Torch": {
+   "median": 0.76,
+   "list": [],
+   "cells": 68
+  },
+  "Hero_TorchCrouch": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_TorchCrouch wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 0 (S) klatka 28",
+     "c": 28,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 0 (S) klatka 29",
+     "c": 29,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 0 (S) klatka 30",
+     "c": 30,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 1",
+     "c": 1,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (44,21) - wg środka głowy (46,21)"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 3",
+     "c": 3,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,4 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 4",
+     "c": 4,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,5 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 26",
+     "c": 26,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-3 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 28",
+     "c": 28,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 29",
+     "c": 29,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,-5 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 30",
+     "c": 30,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,-4 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 1 (W) klatka 31",
+     "c": 31,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (44,21) - wg środka głowy (46,21)"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 1",
+     "c": 1,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (51,21) - wg środka głowy (49,21)"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 3",
+     "c": 3,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,4 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 4",
+     "c": 4,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,5 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 1,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 26",
+     "c": 26,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-3 px od klatki 25 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 28",
+     "c": 28,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 29",
+     "c": 29,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -1,-5 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 30",
+     "c": 30,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o -3,-4 px od klatki 29 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 2 (E) klatka 31",
+     "c": 31,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (51,21) - wg środka głowy (49,21)"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 3 (N) klatka 4",
+     "c": 4,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 3 (N) klatka 5",
+     "c": 5,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,4 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 3 (N) klatka 6",
+     "c": 6,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,3 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 3 (N) klatka 27",
+     "c": 27,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 26 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 3 (N) klatka 28",
+     "c": 28,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-4 px od klatki 27 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_TorchCrouch wiersz 3 (N) klatka 29",
+     "c": 29,
+     "r": 3,
+     "jump": true,
+     "note": true,
+     "what": "skok o 0,-3 px od klatki 28 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 132
+  },
+  "Hero_Net": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "what": "mało nad włosami (38% przy zwykłych 76%)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (55,22) - wg środka głowy (55,20)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 3",
+     "c": 3,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 3,0 px od klatki 2 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "what": "mało nad włosami (31% przy zwykłych 76%)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (43,24) - wg środka głowy (43,22)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o -12,2 px od klatki 3 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 4",
+     "c": 4,
+     "r": 0,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (47,23) - wg środka głowy (47,21)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,-1 px od klatki 4 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 5",
+     "c": 5,
+     "r": 0,
+     "note": true,
+     "what": "narzędzie zasłania część nakrycia (tak ma być)"
+    },
+    {
+     "where": "Hero_Net wiersz 0 (S) klatka 6",
+     "c": 6,
+     "r": 0,
+     "jump": true,
+     "note": true,
+     "what": "skok o 5,0 px od klatki 5 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  }
+ },
+ "stats": [
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 8.4,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Run",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 5.9,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Sneak",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 4.7,
+   "w": 448,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchWalk",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 5.9,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchRun",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 5.5,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchSneak",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 3.6,
+   "w": 448,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 10.4,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.6,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Pick",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 8.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Shovel",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 8.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Rake",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.4,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Hoe",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 8.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Hammer",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 10.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Rod",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Sling",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Bow",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 7.1,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Spear",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 7.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Club",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.1,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Punch",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 11.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Crouch",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 17.9,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Sit",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 19,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Roast",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 13.7,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_LieDown",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 19.5,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Roll",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.3,
+   "w": 1248,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Torch",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 9.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_TorchCrouch",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 18.1,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Net",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||lapcie|||",
+   "ms": 8.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.3,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Run",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 2.3,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Sneak",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 1.5,
+   "w": 448,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchWalk",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 2.6,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchRun",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 2.3,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchSneak",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 1.6,
+   "w": 448,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.7,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Pick",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.2,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Shovel",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.9,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Rake",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Hoe",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.1,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Hammer",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Rod",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Sling",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.4,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Bow",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Spear",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 5.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Club",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Punch",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 4.4,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Crouch",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 6.4,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Sit",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 6,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Roast",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 6.1,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_LieDown",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 6.1,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Roll",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 2.5,
+   "w": 1248,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Torch",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.7,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_TorchCrouch",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 6.2,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Net",
+   "outfit": "kapelusz_slomkowy|koszula_lniana_biala||lapcie|||",
+   "ms": 3.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.7,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Run",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 1.7,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Sneak",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 1.1,
+   "w": 448,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchWalk",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 1.7,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchRun",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 1.4,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_TorchSneak",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 0.9,
+   "w": 448,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3.1,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Pick",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 5.6,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Shovel",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.9,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Rake",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.8,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Hoe",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3.5,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Hammer",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Rod",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.9,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Sling",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Bow",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.7,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Spear",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.9,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Club",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3.1,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Punch",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Crouch",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 5,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Sit",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 5.4,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Roast",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 4.9,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_LieDown",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 7.1,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Roll",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 1.9,
+   "w": 1248,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Torch",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_TorchCrouch",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 4.9,
+   "w": 3168,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Net",
+   "outfit": "||spodnie_plocienne_niebieskie||pas_skorzany_braz|rekawice_szare|",
+   "ms": 2.9,
+   "w": 1632,
+   "h": 384
+  }
+ ],
+ "ms": {
+  "Hero_Walk": {
+   "n": 3,
+   "min": 2.7,
+   "max": 8.4,
+   "avg": 4.8
+  },
+  "Hero_Run": {
+   "n": 3,
+   "min": 1.7,
+   "max": 5.9,
+   "avg": 3.3
+  },
+  "Hero_Sneak": {
+   "n": 3,
+   "min": 1.1,
+   "max": 4.7,
+   "avg": 2.43
+  },
+  "Hero_TorchWalk": {
+   "n": 3,
+   "min": 1.7,
+   "max": 5.9,
+   "avg": 3.4
+  },
+  "Hero_TorchRun": {
+   "n": 3,
+   "min": 1.4,
+   "max": 5.5,
+   "avg": 3.07
+  },
+  "Hero_TorchSneak": {
+   "n": 3,
+   "min": 0.9,
+   "max": 3.6,
+   "avg": 2.03
+  },
+  "Hero_Axe": {
+   "n": 3,
+   "min": 3,
+   "max": 10.4,
+   "avg": 5.73
+  },
+  "Hero_AxeSide": {
+   "n": 3,
+   "min": 3.1,
+   "max": 9.6,
+   "avg": 5.47
+  },
+  "Hero_Pick": {
+   "n": 3,
+   "min": 3.2,
+   "max": 8.8,
+   "avg": 5.87
+  },
+  "Hero_Shovel": {
+   "n": 3,
+   "min": 2.9,
+   "max": 8.3,
+   "avg": 5.03
+  },
+  "Hero_Rake": {
+   "n": 3,
+   "min": 2.8,
+   "max": 9.4,
+   "avg": 5.23
+  },
+  "Hero_Hoe": {
+   "n": 3,
+   "min": 3.1,
+   "max": 8.8,
+   "avg": 5.13
+  },
+  "Hero_Hammer": {
+   "n": 3,
+   "min": 3,
+   "max": 10.5,
+   "avg": 5.67
+  },
+  "Hero_Rod": {
+   "n": 3,
+   "min": 2.9,
+   "max": 9.5,
+   "avg": 5.3
+  },
+  "Hero_Sling": {
+   "n": 3,
+   "min": 3,
+   "max": 9.8,
+   "avg": 5.4
+  },
+  "Hero_Bow": {
+   "n": 3,
+   "min": 2.7,
+   "max": 7.1,
+   "avg": 4.53
+  },
+  "Hero_Spear": {
+   "n": 3,
+   "min": 2.9,
+   "max": 7.3,
+   "avg": 5.33
+  },
+  "Hero_Club": {
+   "n": 3,
+   "min": 3.1,
+   "max": 9.1,
+   "avg": 5.23
+  },
+  "Hero_Punch": {
+   "n": 3,
+   "min": 3,
+   "max": 11.3,
+   "avg": 6.23
+  },
+  "Hero_Crouch": {
+   "n": 3,
+   "min": 5,
+   "max": 17.9,
+   "avg": 9.77
+  },
+  "Hero_Sit": {
+   "n": 3,
+   "min": 5.4,
+   "max": 19,
+   "avg": 10.13
+  },
+  "Hero_Roast": {
+   "n": 3,
+   "min": 4.9,
+   "max": 13.7,
+   "avg": 8.23
+  },
+  "Hero_LieDown": {
+   "n": 3,
+   "min": 6.1,
+   "max": 19.5,
+   "avg": 10.9
+  },
+  "Hero_Roll": {
+   "n": 3,
+   "min": 1.9,
+   "max": 9.3,
+   "avg": 4.57
+  },
+  "Hero_Torch": {
+   "n": 3,
+   "min": 3,
+   "max": 9.3,
+   "avg": 5.33
+  },
+  "Hero_TorchCrouch": {
+   "n": 3,
+   "min": 4.9,
+   "max": 18.1,
+   "avg": 9.73
+  },
+  "Hero_Net": {
+   "n": 3,
+   "min": 2.9,
+   "max": 8.3,
+   "avg": 4.9
+  }
+ }
+}

@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # Installs town C (the user approved it 2026-09-29: "wrzuć tą mapę, a ja ją doprecyzuję ręcznie").
 # The RPG Maker editor must be CLOSED. Backups go to backup_art_2026-09-29/town_install/ first.
 #  - data/Map008.json <- tools/town/staging/Map008_C2.json (editor format); closed doors show a popup "Zamknięte." (no message window)

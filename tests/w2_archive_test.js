@@ -17,7 +17,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const at = async (day, hour, frames) => { await t.setDay(day, hour); await t.calm(); await t.frames(frames || 12); };
     const slab = "TownQuests.slabId()";
 
-    await t.newGame({ map: 8, x: 40, y: 32, dir: 6, hour: 10, day: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 85, y: 33, dir: 6, hour: 10, day: 10, quiet: true, minimap: false });
     await at(10, 10, 30);
     // W2 right after the knights' garden (chapters 1-4 and the garden: town_quests_test, knights_garden_test)
     await t.eval("(function(){ const s = TownQuests.state(); s.flags.gardenKey = 9; s.flags.bellKey = 9; TownQuests.start('W2', 6); $gameSelfSwitches.setValue([8, 39, 'A'], true); return 0; })()");
@@ -43,15 +43,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await talk("dzwonnik", [], { secs: 60 });
     await t.until("TownQuests.rec('W2').step === 7 && !Tawerna.ui.running && SceneManager._scene instanceof Scene_Map", 60, 300);
     await t.dismiss();
-    await t.locate(6, 15, 8);
+    await t.locate(33, 15, 8);
     await at(11, 12.05, 10);
-    await t.locate(6, 10, 2);
+    await t.locate(33, 10, 2);
     const opened = await t.until("$gameSelfSwitches.value([8, " + slab + ", 'A'])", 20, 200);
     await t.until("SpeechBubbles.log.some(l => /płycie w ścieżce/.test(l))", 20, 300);   // (the hero's thoughts come one after another)
     const sl = await J(`({ r: TownQuests.rec('W2'), id: ${slab}, page: $gameMap.event(${slab}).page() && $gameMap.event(${slab})._pageIndex, notes: Journal.data().notes.map(n => n.title), log: SpeechBubbles.log.slice(-3) })`);
     t.check("the next day, rung again; in the garden at 12:03 the shadows meet on the slab: it opens (self switch A - the stairs), the note, chapter 6 next",
         opened && sl.id === 246 && sl.page === 1 && sl.r.step === 8 && sl.notes.includes("Płyta w ogrodzie rycerzy") && sl.log.some(l => /płycie w ścieżce|schody/.test(l)), sl);
-    await t.locate(6, 13, 8);
+    await t.locate(33, 13, 8);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "w2_plyta.png"));
 
@@ -74,7 +74,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const chron = flat(await t.talkTo("$gameMap.event(952)", ["Zanieś je Ambrożemu."], { place: false }));
     t.check("the chronicles: the rule of one question, the last castellan 'z rodu Kowali', the cistern's sluice - carried for Ambroży",
         /jedno pytanie na rok/.test(chron.text) && /z rodu Kowali/.test(chron.text) && (await J("TownQuests.vcount('kroniki')")) === 1 && (await step()) === "active:9", chron.text.slice(0, 300));
-    await t.go(8, 20, 37, 8);
+    await t.go(8, 51, 48, 8);
     await at(12, 9, 30);
     const op0 = await J("TownQuests.opinion()");
     const amb = await talk("dzwonnik", []);
@@ -85,7 +85,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.loadFrom(7, { quiet: true });
     const take = flat(await t.talkTo("$gameMap.event(952)", ["Zabierz kroniki."], { place: false }));
     t.check("taken instead: the chronicles in the bag, W2 at its pause", (await J("TownQuests.vcount('kroniki')")) === 1 && (await step()) === "active:10" && !!(await J("TownQuests.state().flags.chroniclesTaken")), take.text.slice(-120));
-    await t.go(8, 10, 40, 6);
+    await t.go(8, 14, 48, 6);
     await at(12, 9, 30);
     const g0 = await t.gold();
     const sell = await talk("kupiec", ["Sprzedam"]);

@@ -1,0 +1,705 @@
+{
+ "opis": "Wnętrza nowego Podgrodzia (tools/podgrodzie2/wnetrza/build.py). Instaluje koordynator: MapNNN.json -> data/, MapInfos: nazwa = 'nazwa', rodzic = 111, nazwa wyświetlana już w mapie. 'wejscie' = kratka, na którą mają przenosić drzwi budynku na Map111 (twarzą w górę, kierunek 8). 'wyjscie'.'do' = kratka przed drzwiami z tools/podgrodzie2/budynki.json ('zastepcze': true = brak wpisu, (1,1) - po pojawieniu się pliku wystarczy uruchomić build.py ponownie). 'miejsca' = zdarzenia 'Miejsce: <nazwa>' dla TownLife (nowi mieszkańcy: szynkarz, opiekunka, garncarz, dziecko).",
+ "mapy": {
+  "201": {
+   "klucz": "szynk",
+   "mapa": 201,
+   "plik": "Map201.json",
+   "nazwa": "Szynk",
+   "nazwa_wyswietlana": "Szynk",
+   "rodzic": 111,
+   "opis": "podła karczemka: szynkwas z beczkami, stoły z ławami, kąt szynkarza",
+   "rozmiar": [
+    20,
+    12
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 6,
+    "y": 10,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 16,
+     "x": 6,
+     "y": 11,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 79,
+      "y": 12,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 223,
+    "x": 79,
+    "y": 11,
+    "przed_drzwiami": [
+     79,
+     12
+    ],
+    "nazwa": "Szynk",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {
+    "szynkarz_wnetrze": {
+     "x": 11,
+     "y": 5,
+     "kierunek": 2,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 17,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "202": {
+   "klucz": "przytulek",
+   "mapa": 202,
+   "plik": "Map202.json",
+   "nazwa": "Przytułek",
+   "nazwa_wyswietlana": "Przytułek",
+   "rodzic": 111,
+   "opis": "izba z pryczami dla chorych i uchodźców, kocioł z zupą, kąt opiekunki",
+   "rozmiar": [
+    22,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 10,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 21,
+     "x": 10,
+     "y": 10,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 53,
+      "y": 13,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 214,
+    "x": 53,
+    "y": 12,
+    "przed_drzwiami": [
+     53,
+     13
+    ],
+    "nazwa": "Przytułek",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {
+    "opiekunka_wnetrze": {
+     "x": 9,
+     "y": 6,
+     "kierunek": 4,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 21,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "203": {
+   "klucz": "garncarnia",
+   "mapa": 203,
+   "plik": "Map203.json",
+   "nazwa": "Garncarnia",
+   "nazwa_wyswietlana": "Garncarnia",
+   "rodzic": 111,
+   "opis": "warsztat garncarza z piecem i kołem, kąt mieszkalny",
+   "rozmiar": [
+    16,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 6,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 19,
+     "x": 6,
+     "y": 10,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 49,
+      "y": 51,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 225,
+    "x": 49,
+    "y": 50,
+    "przed_drzwiami": [
+     49,
+     51
+    ],
+    "nazwa": "Garncarnia",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {
+    "garncarz_wnetrze": {
+     "x": 4,
+     "y": 7,
+     "kierunek": 4,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 19,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "204": {
+   "klucz": "lepianka1",
+   "mapa": 204,
+   "plik": "Map204.json",
+   "nazwa": "Lepianka 1 (rodzina z dzieckiem)",
+   "nazwa_wyswietlana": "Lepianka",
+   "rodzic": 111,
+   "opis": "gliniana izba biednej rodziny z dzieckiem",
+   "rozmiar": [
+    12,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 7,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 13,
+     "x": 7,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 7,
+      "y": 44,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 227,
+    "x": 7,
+    "y": 43,
+    "przed_drzwiami": [
+     7,
+     44
+    ],
+    "nazwa": "Lepianka 1",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {
+    "dziecko_wnetrze": {
+     "x": 8,
+     "y": 6,
+     "kierunek": 8,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 13,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "205": {
+   "klucz": "lepianka2",
+   "mapa": 205,
+   "plik": "Map205.json",
+   "nazwa": "Lepianka 2 (wdowa z kozą)",
+   "nazwa_wyswietlana": "Lepianka wdowy",
+   "rodzic": 111,
+   "opis": "gliniana izba wdowy z kozą w kącie",
+   "rozmiar": [
+    13,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 6,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 16,
+     "x": 6,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 17,
+      "y": 44,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 230,
+    "x": 17,
+    "y": 43,
+    "przed_drzwiami": [
+     17,
+     44
+    ],
+    "nazwa": "Lepianka 2",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 16,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "206": {
+   "klucz": "chata3",
+   "mapa": 206,
+   "plik": "Map206.json",
+   "nazwa": "Chata 3 (węglarz)",
+   "nazwa_wyswietlana": "Chata węglarza",
+   "rodzic": 111,
+   "opis": "izba węglarza i komora z węglem",
+   "rozmiar": [
+    14,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 4,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 12,
+     "x": 4,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 26,
+      "y": 44,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 234,
+    "x": 26,
+    "y": 43,
+    "przed_drzwiami": [
+     26,
+     44
+    ],
+    "nazwa": "Chata 3",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 13,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "207": {
+   "klucz": "chata4",
+   "mapa": 207,
+   "plik": "Map207.json",
+   "nazwa": "Chata 4 (tkaczka)",
+   "nazwa_wyswietlana": "Chata tkaczki",
+   "rodzic": 111,
+   "opis": "izba tkaczki z krosnem",
+   "rozmiar": [
+    14,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 6,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 14,
+     "x": 6,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 7,
+      "y": 56,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 240,
+    "x": 7,
+    "y": 55,
+    "przed_drzwiami": [
+     7,
+     56
+    ],
+    "nazwa": "Chata 4",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 14,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "208": {
+   "klucz": "chata5",
+   "mapa": 208,
+   "plik": "Map208.json",
+   "nazwa": "Chata 5 (stary rybak)",
+   "nazwa_wyswietlana": "Chata rybaka",
+   "rodzic": 111,
+   "opis": "izba starego rybaka",
+   "rozmiar": [
+    12,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 5,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 11,
+     "x": 5,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 17,
+      "y": 56,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 244,
+    "x": 17,
+    "y": 55,
+    "przed_drzwiami": [
+     17,
+     56
+    ],
+    "nazwa": "Chata 5",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 12,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "209": {
+   "klucz": "strzecha",
+   "mapa": 209,
+   "plik": "Map209.json",
+   "nazwa": "Chata pod strzechą",
+   "nazwa_wyswietlana": "Chata pod strzechą",
+   "rodzic": 111,
+   "opis": "biedna izba",
+   "rozmiar": [
+    13,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 6,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 10,
+     "x": 6,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 21,
+      "y": 14,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 4,
+    "x": 21,
+    "y": 13,
+    "przed_drzwiami": [
+     21,
+     14
+    ],
+    "nazwa": "Chata pod strzechą",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 10,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "210": {
+   "klucz": "deski",
+   "mapa": 210,
+   "plik": "Map210.json",
+   "nazwa": "Chałupa z desek",
+   "nazwa_wyswietlana": "Chałupa z desek",
+   "rodzic": 111,
+   "opis": "izba i spiżarka",
+   "rozmiar": [
+    15,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 5,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 9,
+     "x": 5,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 17,
+      "y": 29,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 9,
+    "x": 17,
+    "y": 28,
+    "przed_drzwiami": [
+     17,
+     29
+    ],
+    "nazwa": "Chałupa z desek",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 10,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "211": {
+   "klucz": "szopa",
+   "mapa": 211,
+   "plik": "Map211.json",
+   "nazwa": "Szopa",
+   "nazwa_wyswietlana": "Szopa",
+   "rodzic": 111,
+   "opis": "narzędzia, rupiecie, taczka, siano",
+   "rozmiar": [
+    13,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 6,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 15,
+     "x": 6,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 70,
+      "y": 31,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 12,
+    "x": 70,
+    "y": 30,
+    "przed_drzwiami": [
+     70,
+     31
+    ],
+    "nazwa": "Szopa",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 15,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "212": {
+   "klucz": "komorka",
+   "mapa": 212,
+   "plik": "Map212.json",
+   "nazwa": "Komórka",
+   "nazwa_wyswietlana": "Komórka",
+   "rodzic": 111,
+   "opis": "skład: worki, beczki, skrzynie, spiżarka",
+   "rozmiar": [
+    12,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 5,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z Podgrodzia (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 7,
+     "x": 5,
+     "y": 9,
+     "nazwa": "Wyjście -> Podgrodzie",
+     "do": {
+      "mapa": 111,
+      "x": 78,
+      "y": 30,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_111": {
+    "id": 17,
+    "x": 78,
+    "y": 29,
+    "przed_drzwiami": [
+     78,
+     30
+    ],
+    "nazwa": "Komórka",
+    "uwaga": "drzwi mają przenosić na kratkę 'wejscie' tego wnętrza (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 7,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  }
+ }
+}

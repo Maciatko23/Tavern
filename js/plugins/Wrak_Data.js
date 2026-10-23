@@ -50,10 +50,10 @@
     // ------------------------------------------------------------------ the castaway
     const RES = { key: "rozbitek", id: 948 };
     const SPOTS_TOWN = {   // Map008 (the town's spots; new keys only)
-        rozbitek_noc: [24, 17, 8],        // (the tavern's gate: he goes in to sleep upstairs)
-        rozbitek_rynek: [28, 35, 2],      // the market, the far side from the money changer's
-        rozbitek_mury: [3, 19, 4],        // under the west wall, looking towards the sea
-        rozbitek_studnia: [25, 34, 4]     // the market well at night (the sleeve rolled up - W12's clue)
+        rozbitek_noc: [51, 17, 8],        // (the tavern's gate: he goes in to sleep upstairs)
+        rozbitek_rynek: [56, 51, 2],      // the market, the far side from the money changer's
+        rozbitek_mury: [30, 19, 4],        // under the west wall, looking towards the sea
+        rozbitek_studnia: [52, 50, 4]     // the market well at night (the sleeve rolled up - W12's clue)
     };
     const SPOT_TAVERN = [61, 33, 4];      // Map001: the free stool at the right-hand table (gosc_9 - Map001 unchanged)
     const SPOT_ROOMS = [6, 38, 4];        // Map025: room 7, by the narrow bed (Map025 unchanged)
@@ -151,7 +151,7 @@
     // ------------------------------------------------------------------ the seven marks of the chart from the captain's cabin
     // (item 178): the white eyes. `ready`: a place of another package - only once Wyspa.isReady(map)
     const MARKS = [
-        { key: "tawerna", name: "Wzgórze tawerny", map: 8, x: 24, y: 18 },
+        { key: "tawerna", name: "Wzgórze tawerny", map: 8, x: 51, y: 18 },
         { key: "kamieniolom", name: "Kamieniołom w Górach", map: 13, x: 40, y: 18 },
         { key: "latarnia", name: "Przylądek z latarnią", map: 159, ready: 159 },
         { key: "pustelnia", name: "Pustelnia na klifie", map: 155, ready: 155 },

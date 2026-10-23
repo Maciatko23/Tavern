@@ -101,7 +101,7 @@ kit.test({ port: 9541, errorCheck: false }, async t => {
 
     if (on("ela")) {
         await t.setDay(35, 10);
-        await t.go(8, 26, 30, 2);
+        await t.go(8, 53, 46, 2);
         await t.frames(60);
         const id = await t.eval("(function(){ const e = TownLife.eventOf('ela'); return e ? e.eventId() : 0; })()");
         if (id) {

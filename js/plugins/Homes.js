@@ -25,7 +25,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Ziemia: pole dziadka po stracie (ludzie Lorda, znak, dni na wyniesienie dobytku, straż), Chata pod lasem u sołtysa i Spalona zagroda Ługów do odbudowy (zadanie D21). v1.1.0
+ * @plugindesc Ziemia: działka dziadka po stracie (ludzie Lorda, znak, dni na wyniesienie dobytku, straż), Chata pod lasem u sołtysa i Spalona zagroda Ługów do odbudowy (zadanie D21). v1.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -52,22 +52,22 @@
  *
  * @help
  * ============================================================================
- * Homes.js - pole dziadka po stracie, Chata pod lasem i Spalona zagroda
+ * Homes.js - działka dziadka po stracie, Chata pod lasem i Spalona zagroda
  * ============================================================================
- * POLE (gra z fabułą, Story.js): gdy o świcie po terminie dług nie jest
- * spłacony, pole przechodzi na Lorda. Na polu (mapa 3) pojawiają się na
+ * DZIAŁKA (gra z fabułą, Story.js): gdy o świcie po terminie dług nie jest
+ * spłacony, działka przechodzi na Lorda. Na działce (mapa 3, Kruczy Jar) pojawiają się na
  * scenę ludzie Lorda: kamerdyner (Feliks albo Teodor) i dwóch strażników;
  * stawiają znak „Własność Lorda Zaleskiego”. Jeden strażnik zostaje przy
  * znaku na dni wynoszenia dobytku (parametr Story.js, domyślnie 3). W te
  * dni: plony, skrzynie, rozbiórka (połowa materiałów, jak zawsze), w menu
  * zagrody „Sprzedaj zwierzęta” albo „Zabierz zwierzęta” (zamieszkają w nowej
  * zagrodzie tego rodzaju, postawionej na własnej ziemi), pies. Budować na
- * polu już nie wolno. Potem pole jest zamknięte: strażnik przy wejściach
- * (Skraj lasu, Łąka), przejście odmawia dymkiem „Pole należy teraz do
- * Lorda.”. Meble chatki zostają w niej (należą do pola); nową chatkę można
- * postawić na własnej ziemi. Pies, którego buda została na polu, idzie z
- * bohaterem. Nic nie jest kasowane: po odkupie (Story.js) pole wraca z tym,
- * co na nim zostało.
+ * działce już nie wolno. Potem działka jest zamknięta: strażnik przy wejściach
+ * (Skraj lasu, Łąka), przejście odmawia dymkiem „Działka należy teraz do
+ * Lorda.”. Meble chatki zostają w niej (należą do działki); nową chatkę można
+ * postawić na własnej ziemi. Pies, którego buda została na działce, idzie z
+ * bohaterem. Nic nie jest kasowane: po odkupie (Story.js) działka wraca z tym,
+ * co na niej zostało.
  *
  * CHATA POD LASEM (Podgrodzie, na dole mapy, drzwi 6,40) - 600 G u sołtysa
  * (8-16, przed ratuszem albo w środku; w rozmowie pozycja „Domy na
@@ -125,13 +125,13 @@
     // put in at the purchase - the farm's when the house is rebuilt (tools/domy/build.py keeps their cells free)
     const HOUSES = {
         chata: { key: "chata", name: "Chata pod lasem", what: "chatę pod lasem na Podgrodziu", price: num(params.priceHut, 600), soltys: true,
-            land: PODGRODZIE, doorName: /Chata pod lasem/, front: [6, 41], inside: 154, landing: [4, 8, 8],
+            land: PODGRODZIE, doorName: /Chata pod lasem/, front: [8, 81], inside: 154, landing: [4, 8, 8],
             furniture: [{ type: "bed", x: 7, y: 4 }, { type: "chest_s", x: 9, y: 4 }],
-            where: "Podgrodzie: na samym dole, za lasem na końcu ścieżki od południowej drogi. Obok chaty ogrodzona działka (furtka od ścieżki)." },
+            where: "Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki)." },
         zagroda: { key: "zagroda", name: "Zagroda Ługów", what: "spaloną zagrodę Ługów", price: num(params.priceFarm, 350), soltys: false,
             land: ZAGRODA, front: [20, 10], inside: 169, landing: [6, 8, 8],
             furniture: [{ type: "bed", x: 9, y: 4 }, { type: "larder", x: 11, y: 4 }, { type: "chest_l", x: 1, y: 4 }],
-            where: "na zachód od Skraju lasu (ścieżka przy drogowskazie, nad drogą na pole dziadka). Pole i podwórze wokół domu." }
+            where: "na zachód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu." }
     };
     const KEYS = Object.keys(HOUSES);
     const houseOfLand = mapId => KEYS.map(k => HOUSES[k]).find(h => h.land === mapId) || null;
@@ -148,7 +148,7 @@
         { name: "Drzwi, okiennice, palenisko", cost: [[80, 12], [86, 4], [84, 12]], hits: 30, help: "Drzwi na żelaznych zawiasach, okiennice, palenisko z cegły z kominem." }
     ];
     const WELL_HITS = 15;
-    const ITEM = { stone: 64, wood: 61, nails: 88, shovel: 62, axe: 60, ironAxe: 115, hammer: 89 };
+    const ITEM = { stone: 64, wood: 61, nails: 88, shovel: 62, axe: 60, ironAxe: 115, steelAxe: 407, hammer: 89 };
     const KIND = { hammer: 7, shovel: 2, axe: 0 };
 
     // state: owned { key: day }, heard (the day he first heard of the homes), told (the sołtys's long words said), herd { animal: n }
@@ -244,8 +244,8 @@
         own(mapId) { const h = houseOfLand(mapId); return h ? owns(h.key) : undefined; },
         refuse(mapId) {
             if (fieldLost()) {
-                if (mapId === FIELD) return "Pole należy teraz do Lorda";
-                if (mapId === HUT_MAP) { const h = F().hutOf ? F().hutOf() : null; if (h && h.mapId === FIELD) return "Pole należy teraz do Lorda"; }
+                if (mapId === FIELD) return "Działka należy teraz do Lorda";
+                if (mapId === HUT_MAP) { const h = F().hutOf ? F().hutOf() : null; if (h && h.mapId === FIELD) return "Działka należy teraz do Lorda"; }
             }
             const house = houseOfLand(mapId);
             if (house && !owns(house.key)) return "To nie twoja ziemia";
@@ -424,7 +424,7 @@
         const ev = interp && $gameMap.event(interp.eventId());
         if (!ev) return;
         const out = [];
-        say(out, ev.eventId(), fieldLocked() ? "Pole należy teraz do jaśnie pana Zaleskiego. Rozkaz: nikogo nie wpuszczać. Jak chcesz je odzyskać - idź do dworu."
+        say(out, ev.eventId(), fieldLocked() ? "Działka należy teraz do jaśnie pana Zaleskiego. Rozkaz: nikogo nie wpuszczać. Jak chcesz ją odzyskać - idź do dworu."
             : "Rozkaz to rozkaz, młodzieńcze.");
         interp.setupChild(end(out), ev.eventId());
     }
@@ -449,7 +449,7 @@
         if (d && d.tame && (d.map === FIELD || d.map === HUT_MAP)) {
             const here = window.$gameMap ? $gameMap.mapId() : 0, there = here === FIELD || here === HUT_MAP ? EDGE : here;
             d.map = there; d.x = -1; d.y = -1; d.mode = "follow";
-            if (here !== FIELD && here !== HUT_MAP) T.popup("Pies przybiegł z pola - jego buda została u Lorda. Idzie z tobą.", { icon: 431, color: "#cfe6a8" });
+            if (here !== FIELD && here !== HUT_MAP) T.popup("Pies przybiegł z działki - jego buda została u Lorda. Idzie z tobą.", { icon: 431, color: "#cfe6a8" });
         }
     }, { owner: PLUGIN });
     // the field bought back: the sign and the guards go, the hut's furniture comes back (or the old hut is boarded up while a new one stands)
@@ -480,7 +480,7 @@
     Game_Player.prototype.reserveTransfer = function(mapId, x, y, d, fadeType) {
         if (mapId === FIELD && fieldLocked() && !($gameTemp && $gameTemp._homesLetIn) && window.$gameMap && $gameMap.mapId() !== FIELD) {
             if ($gameMap.mapId() === HUT_MAP) return _reserveTransfer.call(this, EDGE, 1, 13, 6, fadeType);
-            popupOnce("Pole należy teraz do Lorda.", { color: "#ff9f8f" });
+            popupOnce("Działka należy teraz do Lorda.", { color: "#ff9f8f" });
             stepBack(this);
             return;
         }
@@ -532,7 +532,7 @@
         if (!a || !(S().herd[a] > 0)) return;
         S().herd[a] = 0;
         const names = ANIMALS[a] || ["zwierzęta", "Zwierzęta", "zagrodzie"];
-        T.popup("Twoje " + names[0] + " z pola zamieszkały w nowej " + names[2] + ".", { icon: 82, color: "#9ff0a8" });
+        T.popup("Twoje " + names[0] + " z działki zamieszkały w nowej " + names[2] + ".", { icon: 82, color: "#9ff0a8" });
     }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
@@ -545,7 +545,7 @@
     function soltysList(ev) {
         const o = [], id = ev.eventId(), s = S(), left = forSale();
         if (!s.told) {
-            say(o, id, "Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - na samym dole, za lasem, na końcu ścieżki od południowej drogi.", SOLTYS);
+            say(o, id, "Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - za palisadą, przy lesie, na południe od osady. Wyjdź południową bramą i idź ścieżką na zachód.", SOLTYS);
             say(o, id, "Nowa, z bali. Postawił ją cieśla na sprzedaż i kupca się nie doczekał. Obok ogrodzona działka pod uprawę. " + HOUSES.chata.price + " G.", SOLTYS);
             say(o, id, "Na swojej ziemi budujesz, co chcesz. Tylko studni nie obiecuję - wodę i tak dzielimy z rynku.", SOLTYS);
             if (!owns("zagroda")) say(o, id, "Jest jeszcze zagroda Ługów za Skrajem lasu, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.", SOLTYS);
@@ -709,7 +709,7 @@
         const w = workOf();
         if (w && w.clear) {
             if (countOf(ITEM.shovel) > 0) return { id: ITEM.shovel, kind: KIND.shovel };
-            const axe = [ITEM.ironAxe, ITEM.axe].find(id => countOf(id) > 0);
+            const axe = [ITEM.steelAxe, ITEM.ironAxe, ITEM.axe].find(id => countOf(id) > 0);
             return axe ? { id: axe, kind: KIND.axe } : null;
         }
         return countOf(ITEM.hammer) > 0 ? { id: ITEM.hammer, kind: KIND.hammer } : null;

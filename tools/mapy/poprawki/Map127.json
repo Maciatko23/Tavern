@@ -1,0 +1,104 @@
+{
+ "mapa": 127,
+ "nazwa": "Szopa przy pochylni",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 2,
+   "stary": 1,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 1,
+   "stary": 0,
+   "nowy": 1
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 2,
+   "stary": 0,
+   "nowy": 9
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 7,
+   "y": 5,
+   "stary": 0,
+   "nowy": 407
+  },
+  {
+   "op": "prio",
+   "id": 4,
+   "nazwa": "Mapa morska",
+   "strony": {
+    "0": [
+     0,
+     1
+    ]
+   }
+  },
+  {
+   "op": "przesun",
+   "id": 5,
+   "nazwa": "Beczka smoły",
+   "stary": [
+    10,
+    4
+   ],
+   "nowy": [
+    10,
+    5
+   ]
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 8,
+   "y": 2,
+   "problem": "obiekt rozcięty: kafel 1 (B 1,0) - góra bez dołu (brak kafla 9 pod) w (8,2)",
+   "poprawka": "przesunięto obiekt B (1,0) 1 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "O1",
+   "x": 7,
+   "y": 6,
+   "problem": "obiekt rozcięty: kafel 415 (C 15,3) - dół bez góry (brak kafla 407 nad) w (7,6)",
+   "poprawka": "dołożono górę obiektu C (15,3) 1 kafli"
+  },
+  {
+   "kod": "D4",
+   "x": 6,
+   "y": 3,
+   "problem": "zdarzenie 4 'Mapa morska' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (6,3)",
+   "poprawka": "zdarzenie 4 'Mapa morska': priorytet 'jak postać' - akcja z sąsiedniej kratki"
+  },
+  {
+   "kod": "D4",
+   "x": 10,
+   "y": 4,
+   "problem": "zdarzenie 5 'Beczka smoły' z akcją jest nieosiągalne - bohater musi stać z sąsiedniej kratki (10,4)",
+   "poprawka": "niewidoczne zdarzenie 5 'Beczka smoły' przesunięte z (10,4) do (10,5) (przed nim da się stanąć)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "D4 10,4",
+  "D4 6,3",
+  "O1 7,6",
+  "O1 8,2"
+ ],
+ "po": [],
+ "sha_data": "d91e24b6067b65064209d3ab8cb3f22d0635e2b7ca40cdac8f8784c03a0733e1",
+ "zainstalowano": "2026-10-22T10:51:33",
+ "sha_po": "73acec5e53f39f40e87fa2b6f853f320723e70a555e54695719fa308520c7539"
+}

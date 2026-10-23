@@ -116,6 +116,69 @@
         return cellsOfGeo(BUILDINGS[type], x, y);
     }
     const OUTSIDE_FIELD_REGION = 9;   // the meadow round grandpa's field (Map003's new part): not his land - no building there
+    // (2026-10-22, the user walled grandpa's field in the editor: "tylko tam można budować, 2 kratki od muru") - on the field's map the
+    // buildings go up only inside the ring of wall tiles (the A3 wall autotiles the user painted on the lower layers; the new land's
+    // A4 cliffs are not it), at least WALL_GAP free tiles from the wall and from the gates. Read from the map's own tiles as it loads, so a
+    // wall the user moves later moves the rule with it.
+    const WALLED_FIELD_MAP = 3, WALL_GAP = 2;
+    let walledFor = null, walledSet = null;
+    function walledField() {
+        if ($gameMap.mapId() !== WALLED_FIELD_MAP || !$dataMap) return null;
+        if (walledFor === $dataMap) return walledSet;
+        walledFor = $dataMap; walledSet = null;
+        const W = $dataMap.width, H = $dataMap.height, d = $dataMap.data;
+        const isWall = (x, y) => { for (let z = 0; z < 2; z++) { const t = d[(z * H + y) * W + x] || 0; if (t >= 4352 && t < 5888) return true; } return false; };
+        // the ring: every wall tile (its pieces between the gates)
+        const ring = [];
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (isWall(x, y)) ring.push([x, y]);
+        if (ring.length < 40) return null;   // (no ring of wall here: the old rules only)
+        let x0 = W, y0 = H, x1 = 0, y1 = 0;
+        const wall = new Uint8Array(W * H);
+        for (const [x, y] of ring) { wall[y * W + x] = 1; x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+        // (the user: "u góry mur jest na wzniesieniu - 2 od wzniesienia") the rise the wall stands on counts as the wall: a tile nobody can
+        // walk over (the rise's edge) within 3 tiles of the wall is part of it, so the gap is measured from the rise's foot
+        const nearRing = new Uint8Array(W * H);
+        for (const [x, y] of ring) for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) {
+            const nx = x + dx, ny = y + dy;
+            if (nx >= 0 && ny >= 0 && nx < W && ny < H) nearRing[ny * W + nx] = 1;
+        }
+        for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+            if (!wall[y * W + x] && nearRing[y * W + x] && !$gameMap.checkPassage(x, y, 0x0f)) wall[y * W + x] = 1;
+        }
+        // inside: filled from the middle, the wall and the ring's outer line (where its gates are) stop it
+        const inside = new Uint8Array(W * H), sx = (x0 + x1) >> 1, sy = (y0 + y1) >> 1, stack = [[sx, sy]];
+        const stop = (x, y) => x <= x0 || y <= y0 || x >= x1 || y >= y1 || wall[y * W + x];
+        if (stop(sx, sy)) return null;
+        inside[sy * W + sx] = 1;
+        while (stack.length) {
+            const [cx, cy] = stack.pop();
+            for (const [nx, ny] of [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]]) {
+                if (stop(nx, ny) || inside[ny * W + nx]) continue;
+                inside[ny * W + nx] = 1; stack.push([nx, ny]);
+            }
+        }
+        // the gap: no wall tile and not the ring's outer line (a gate) within WALL_GAP tiles
+        const ok = new Set();
+        for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+            if (!inside[y * W + x]) continue;
+            if (x - x0 <= WALL_GAP || x1 - x <= WALL_GAP || y - y0 <= WALL_GAP || y1 - y <= WALL_GAP) continue;
+            let near = false;
+            for (let dy = -WALL_GAP; dy <= WALL_GAP && !near; dy++) for (let dx = -WALL_GAP; dx <= WALL_GAP; dx++) {
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && ny >= 0 && nx < W && ny < H && wall[ny * W + nx]) { near = true; break; }
+            }
+            if (!near) ok.add(x + "," + y);
+        }
+        walledSet = ok;
+        return ok;
+    }
+    // may a building (not one that goes up anywhere) stand on (x, y) as far as the land goes: the field's wall and its new part (tests,
+    // the F9 placer's hints)
+    function fieldAllows(x, y) {
+        if (OUTSIDE_FIELD_REGION > 0 && $gameMap.regionId(x, y) === OUTSIDE_FIELD_REGION) return false;
+        const wf = walledField();
+        return !wf || wf.has(x + "," + y);
+    }
     function tileIsFree(x, y) {
         return $gameMap.eventsXy(x, y).every(e => !e.isNormalPriority()) &&
             !($gamePlayer.x === x && $gamePlayer.y === y);
@@ -134,7 +197,11 @@
         const br = buildRegion ? buildRegion() : 0;
         if (br && $gameMap.regionId(x, y) !== br && !free) return "Tu nie twoja ziemia.";   // (a map with bought land: only on it)
         // (2026-10-18) the field doubled to 80x60 (tools/powieksz): the new land round grandpa's old field is region 9 - not his
-        if (!free && OUTSIDE_FIELD_REGION > 0 && $gameMap.regionId(x, y) === OUTSIDE_FIELD_REGION && !buildsAnywhere(BUILDINGS[type])) return "To już nie pole dziadka.";
+        if (!free && OUTSIDE_FIELD_REGION > 0 && $gameMap.regionId(x, y) === OUTSIDE_FIELD_REGION && !buildsAnywhere(BUILDINGS[type])) return "To już nie działka dziadka.";
+        if (!free && !buildsAnywhere(BUILDINGS[type])) {
+            const wf = walledField();
+            if (wf && !wf.has(x + "," + y)) return "Buduj w obrębie muru, 2 kratki od niego.";
+        }
         if (!plot && !free) return "Trzeba oczyszczonej ziemi.";
         if (!plot && (!$gameMap.checkPassage(x, y, 0x0f) || hasObjectTile(x, y))) return "Tu nic nie stanie.";
         if (plot && plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
@@ -930,5 +997,5 @@
         wakeHour, sleepInTent, placeSite, placeFree, strikeSite, cancelSite, siteMenu, demolishBlock, demolish, readyProduce,
         daysToProduce, collect, snares, snareSprung, snareBait, snareCatch, snareEatBait, baitSnare, snareBaitEntry, rest,
         restDanger, awakeHours, sleepy, restCap, sleepyNote, whyNoRest, noRestHelp, groundRate, lieDown, enterHut, leaveHut,
-        placementProblem, startFreePlacement, startPlacement };
+        placementProblem, startFreePlacement, startPlacement, fieldAllows };
 })();

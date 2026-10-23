@@ -38,7 +38,7 @@ const SHOTS = process.argv[3] === "ryzyka" ? [
     [3, 20, 15, 38, 22.5, [[1, false], [0.5, true]]],
     [3, 20, 15, 38, 14, [[0.5, true]], "$gameScreen.changeWeather('rain', 6, 0); 0"],
 ] : [
-    [8, 26, 36, 38, 11.5, [[1, false], [0.5, false], [0.5, true], [0.67, true]]],
+    [8, 53, 52, 38, 11.5, [[1, false], [0.5, false], [0.5, true], [0.67, true]]],
     [13, 30, 22, 38, 11.5, [[0.5, true]]],
     [3, 20, 15, 38, 11.5, [[1, false], [0.5, true]]],
 ];

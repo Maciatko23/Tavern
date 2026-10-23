@@ -238,7 +238,17 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const fol = await t.json(`({ pet: ${P} && [${P}.x, ${P}.y, ${P}.z, ${P}.state], hero: [$gamePlayer.x + 0.5, $gamePlayer.y + 0.9], mode: Kruk.state().mode })`);
     const dist = p => p.pet ? Math.hypot(p.pet[0] - p.hero[0], p.pet[1] - p.hero[1]) : 99;
     t.check("„Leć ze mną”: kruk jest przy bohaterze na polu (drzewo, ziemia albo ramię)", fol.mode === "follow" && fol.pet && dist(fol) < 7.5, fol);
-    const far = await free(near.x + 12, near.y, 8);
+    // (on his shoulder the raven rides along with him - Kruk.js thinkTame: it leaves the shoulder only when he runs or fights; after 300
+    // frames of standing still it often sits there by now: the flaky case of the full runs. Then a few running steps first: it flies down
+    // to a spot near him and sits; then the hero goes far)
+    const onShoulder = `(!!${P} && (${P}.state === "shoulder" || !!(${P}.target && ${P}.target.hero)))`;
+    if (await t.eval(onShoulder)) {
+        await t.eval("(function(){ $gameSystem.setStamina(100); Input._currentState.shift = true; Input._currentState.right = true; return 0; })()");
+        await t.until(`!${onShoulder}`, 6, 30);
+        await t.eval("(function(){ Input._currentState.shift = false; Input._currentState.right = false; return 0; })()");
+        await t.until(`!!${P} && ${P}.state === "sit"`, 10, 30);
+    }
+    const far = await free(await t.eval("$gamePlayer.x") + 12, await t.eval("$gamePlayer.y"), 8);
     await t.locate(far.x, far.y, 2);
     await t.frames(30);
     const flying = await t.json(`${P} && ${P}.state`);
@@ -340,7 +350,7 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.eval("(function(){ Kruk.state().trinket = { kind: 'letter', id: 'tadek' }; Kruk.takeTrinket(); SceneManager._scene.closeFarmMenu(); return 0; })()");
     t.check("cudzy list: „Liścik Tadka do Hanki” schowany (nieprzeczytany)", await t.eval("!!Kruk.state().held.tadek && !Kruk.state().held.tadek.read"));
     await t.setDay(12, 10);
-    await t.go(8, 30, 30, 2);
+    await t.go(8, 57, 46, 2);
     await t.frames(60);
     const op0 = await t.eval("TownQuests.opinion()");
     const tad = await t.talkTo("TownLife.eventOf('kowal')", []);

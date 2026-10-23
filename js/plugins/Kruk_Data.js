@@ -69,7 +69,7 @@
     // answer the raven brings back (a bubble over it and a popup)
     const LETTERS = [
         { key: "grandpa", name: "Dziadek Stach", replies: ["Dziadek: „Dostałem. Kruk zjadł mi pół chleba. Dobry ptak, tylko bezczelny.”",
-            "Dziadek: „Na polu spokojnie. Kapusta rośnie. Ty uważaj na siebie, wnuku.”", "Dziadek: „Mój dziad mówił, że kruk z listem wraca szybciej niż bez. Prawda.”"] },
+            "Dziadek: „Na działce spokojnie. Kapusta rośnie. Ty uważaj na siebie, wnuku.”", "Dziadek: „Mój dziad mówił, że kruk z listem wraca szybciej niż bez. Prawda.”"] },
         { key: "janek", name: "Janek (przystań)", flag: "janekMet", replies: ["Janek: „Kruk usiadł mi na łodzi i nie chciał zejść, póki nie dałem mu śledzia. Pozdrów dziadka.”",
             "Janek: „Morze czerwone. Ryby uciekają w głąb. Przyjdź, to coś odłożę.”"] },
         { key: "przemytnik", name: "Roch (przystań)", flag: "rochMet", replies: ["Roch: „Nie pisz do mnie listów. Listy się czyta. ...Ale ptak ładny.”",
@@ -240,7 +240,7 @@
     };
     const D24 = {
         id: "D24", kind: "D", title: "Oswojony kruk", giver: "grandpa", icon: RING_ICON, autoStart: "d24Start",
-        where: "kruczarnia na Urwisku → dom dziadka → pole", when: "3–5 dni",
+        where: "kruczarnia na Urwisku → dom dziadka → działka", when: "3–5 dni",
         desc: "Młody kruk z obrączką zakonu siedzi w kruczarni na Urwisku. Kruki nie biorą jedzenia z byle ręki - trzeba przychodzić, dzień po dniu.",
         steps: [
             { type: "custom", check: "d24Feed", vars: "d24Feed",
@@ -250,12 +250,12 @@
                 done: ["(Dziadek bierze obrączkę i długo obraca ją w palcach.) Skąd to masz? ...Siadaj.",
                     "Mój dziad trzymał kruki. Tam, na Urwisku, zanim na górze postawili karczmę. Mówił, że nasza rodzina nosi listy, których nikt nie powinien czytać. Śmiałem się z niego.",
                     "Twój ojciec też się śmiał. A potem dał ci ten kamień na szyję.",
-                    "(Dziadek milknie. Oddaje ci obrączkę.) Dbaj o tego ptaka. I postaw mu grzędę na polu. Kruk musi mieć swoje miejsce, jak każdy."],
+                    "(Dziadek milknie. Oddaje ci obrączkę.) Dbaj o tego ptaka. I postaw mu grzędę na działce. Kruk musi mieć swoje miejsce, jak każdy."],
                 reward: { note: ["Ród kruczarzy", "Dziadek rozpoznał obrączkę kruka. Jego dziad trzymał kruki na Urwisku, zanim na górze postawiono karczmę - „nasza rodzina nosi listy, których nikt nie powinien czytać”. Dziadek mówi, że sam się z tego śmiał, dopóki jego ojciec nie dał mu wisiorka z krukiem - tego samego, który potem dał mojej matce, a ona mnie."] } },
-            { type: "custom", check: "d24Perch", vars: "d24Perch", text: "Postaw grzędę na polu - {imie} potrzebuje swojego miejsca (budowanie: Q - 4× Gałęzie, 2× Deski, 1× Lina)." }
+            { type: "custom", check: "d24Perch", vars: "d24Perch", text: "Postaw grzędę na działce - {imie} potrzebuje swojego miejsca (budowanie: Q - 4× Gałęzie, 2× Deski, 1× Lina)." }
         ],
         reward: { xp: 100,
-            note: ["Oswojony kruk", "Kruk z Urwiska mieszka teraz na grzędzie na polu. Lata ze mną, nosi listy po wyspie (nie przez morze), leci na zwiad, pilnuje pola przed ptakami, a czasem coś przynosi. Na noc wraca na grzędę."] },
+            note: ["Oswojony kruk", "Kruk z Urwiska mieszka teraz na grzędzie na działce. Lata ze mną, nosi listy po wyspie (nie przez morze), leci na zwiad, pilnuje pola przed ptakami, a czasem coś przynosi. Na noc wraca na grzędę."] },
         lines: { guard: "Hm? Pokaż, co tam masz." }
     };
     const REMARKS = [

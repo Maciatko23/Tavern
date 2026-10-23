@@ -1,0 +1,90 @@
+{
+ "mapa": 177,
+ "nazwa": "Jaskinia przemytników",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 2,
+   "stary": 896,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 16,
+   "y": 8,
+   "stary": 0,
+   "nowy": 667
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 5,
+   "y": 9,
+   "stary": 0,
+   "nowy": 592
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 6,
+   "y": 9,
+   "stary": 0,
+   "nowy": 593
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 4,
+   "y": 2,
+   "problem": "obiekt rozcięty: kafel 896 (E 8,0) - góra bez dołu (brak kafla 904 pod) w (4,2)",
+   "poprawka": "usunięto resztkę obiektu E (8,0) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 16,
+   "y": 7,
+   "problem": "obiekt rozcięty: kafel 659 (D 11,2) - góra bez dołu (brak kafla 667 pod) w (16,7)",
+   "poprawka": "dołożono dół obiektu D (11,2) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 5,
+   "y": 10,
+   "problem": "obiekt rozcięty: kafel 600 (D 0,11) - dół bez góry (brak kafla 592 nad) w (5,10)",
+   "poprawka": "dołożono górę obiektu D (0,11) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 6,
+   "y": 10,
+   "problem": "obiekt rozcięty: kafel 601 (D 1,11) - dół bez góry (brak kafla 593 nad) w (6,10)",
+   "poprawka": "dołożono górę obiektu D (1,11) 1 kafli"
+  }
+ ],
+ "pominiete": [
+  {
+   "kod": "G3",
+   "x": 8,
+   "y": 5,
+   "dlaczego": "decyzja: zostawione"
+  }
+ ],
+ "proby": [],
+ "przed": [
+  "G3 8,5",
+  "O1 16,7",
+  "O1 4,2",
+  "O1 5,10",
+  "O1 6,10"
+ ],
+ "po": [
+  "G3 8,5"
+ ],
+ "sha_data": "38cbd7c43cd55c970fa034b3ea0865a614fb814043ca5a7305737c9eba6e010d",
+ "zainstalowano": "2026-10-22T10:51:39",
+ "sha_po": "c0e934e5f07e50ccc1ce0b6dd71acc53f6eb04433daa6cdb25e69c9d59903407"
+}

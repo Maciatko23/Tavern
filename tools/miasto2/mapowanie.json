@@ -1,0 +1,9492 @@
+{
+ "opis": "Mapowanie starej mapy miasta (data/Map008.json) na nową (tools/miasto2/staging/Map008.json). (a) bloki: stary prostokąt -> przesunięcie dx,dy (pierwszy pasujący blok wygrywa); (b) zdarzenia: id -> stare/nowe x,y, usunięte, nowe; (c) miejsca: klucze TownLife SPOTS i punkty wtyczek; (d) strefy i nowe prostokąty.",
+ "a_bloki": [
+  {
+   "blok": "taras_tawerna",
+   "stary": [
+    0,
+    0,
+    51,
+    19
+   ],
+   "dx": 27,
+   "dy": 0,
+   "nowy": [
+    27,
+    0,
+    78,
+    19
+   ],
+   "zdarzenia": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    43,
+    44,
+    45,
+    246,
+    247
+   ]
+  },
+  {
+   "blok": "mur_zamku",
+   "stary": [
+    2,
+    20,
+    49,
+    28
+   ],
+   "dx": 27,
+   "dy": 8,
+   "nowy": [
+    29,
+    28,
+    76,
+    36
+   ],
+   "zdarzenia": [
+    40,
+    77,
+    122
+   ]
+  },
+  {
+   "blok": "pod_skala",
+   "stary": [
+    2,
+    29,
+    23,
+    30
+   ],
+   "dx": 27,
+   "dy": 8,
+   "nowy": [
+    29,
+    37,
+    50,
+    38
+   ],
+   "zdarzenia": [
+    41,
+    121,
+    123,
+    124
+   ]
+  },
+  {
+   "blok": "staw",
+   "stary": [
+    38,
+    5,
+    49,
+    16
+   ],
+   "dx": 52,
+   "dy": 0,
+   "nowy": [
+    90,
+    5,
+    101,
+    16
+   ],
+   "zdarzenia": []
+  },
+  {
+   "blok": "studnia",
+   "stary": [
+    23,
+    31,
+    26,
+    36
+   ],
+   "dx": 27,
+   "dy": 16,
+   "nowy": [
+    50,
+    47,
+    53,
+    52
+   ],
+   "zdarzenia": [
+    241,
+    242,
+    245
+   ]
+  },
+  {
+   "blok": "donice",
+   "stary": [
+    31,
+    29,
+    36,
+    40
+   ],
+   "dx": 42,
+   "dy": 8,
+   "nowy": [
+    73,
+    37,
+    78,
+    48
+   ],
+   "zdarzenia": [
+    5,
+    6,
+    104
+   ]
+  },
+  {
+   "blok": "ratusz",
+   "stary": [
+    37,
+    29,
+    49,
+    40
+   ],
+   "dx": 44,
+   "dy": 8,
+   "nowy": [
+    81,
+    37,
+    93,
+    48
+   ],
+   "zdarzenia": [
+    4,
+    103,
+    105,
+    113,
+    114,
+    115,
+    116,
+    117
+   ]
+  },
+  {
+   "blok": "dzwonnica",
+   "stary": [
+    47,
+    29,
+    49,
+    31
+   ],
+   "dx": 38,
+   "dy": 1,
+   "nowy": [
+    85,
+    30,
+    87,
+    32
+   ],
+   "zdarzenia": [
+    126,
+    236
+   ]
+  },
+  {
+   "blok": "kantor",
+   "stary": [
+    9,
+    31,
+    20,
+    40
+   ],
+   "dx": 4,
+   "dy": 8,
+   "nowy": [
+    13,
+    39,
+    24,
+    48
+   ],
+   "zdarzenia": [
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    106,
+    173
+   ]
+  },
+  {
+   "blok": "piekarnia",
+   "stary": [
+    2,
+    30,
+    8,
+    40
+   ],
+   "dx": 32,
+   "dy": 34,
+   "nowy": [
+    34,
+    64,
+    40,
+    74
+   ],
+   "zdarzenia": [
+    88,
+    89,
+    107,
+    130
+   ]
+  },
+  {
+   "blok": "kuznia",
+   "stary": [
+    2,
+    42,
+    13,
+    49
+   ],
+   "dx": 1,
+   "dy": 14,
+   "nowy": [
+    3,
+    56,
+    14,
+    63
+   ],
+   "zdarzenia": [
+    132,
+    133,
+    134,
+    142,
+    240
+   ]
+  },
+  {
+   "blok": "dom_woziwody",
+   "stary": [
+    27,
+    41,
+    32,
+    46
+   ],
+   "dx": 30,
+   "dy": 27,
+   "nowy": [
+    57,
+    68,
+    62,
+    73
+   ],
+   "zdarzenia": [
+    137
+   ]
+  },
+  {
+   "blok": "dom_garbarza",
+   "stary": [
+    33,
+    41,
+    43,
+    49
+   ],
+   "dx": -31,
+   "dy": 39,
+   "nowy": [
+    2,
+    80,
+    12,
+    88
+   ],
+   "zdarzenia": [
+    139,
+    140,
+    141,
+    161
+   ]
+  },
+  {
+   "blok": "garbarnia",
+   "stary": [
+    14,
+    41,
+    23,
+    48
+   ],
+   "dx": -1,
+   "dy": 40,
+   "nowy": [
+    13,
+    81,
+    22,
+    88
+   ],
+   "zdarzenia": [
+    135,
+    136
+   ]
+  },
+  {
+   "blok": "wozownia",
+   "stary": [
+    44,
+    41,
+    48,
+    49
+   ],
+   "dx": 20,
+   "dy": 39,
+   "nowy": [
+    64,
+    80,
+    68,
+    88
+   ],
+   "zdarzenia": []
+  },
+  {
+   "blok": "stragan_czerwony",
+   "stary": [
+    27,
+    29,
+    30,
+    30
+   ],
+   "dx": 5,
+   "dy": 14,
+   "nowy": [
+    32,
+    43,
+    35,
+    44
+   ],
+   "zdarzenia": [
+    101
+   ]
+  },
+  {
+   "blok": "brama_zachodnia",
+   "stary": [
+    0,
+    46,
+    2,
+    53
+   ],
+   "dx": 0,
+   "dy": 0,
+   "nowy": [
+    0,
+    46,
+    2,
+    53
+   ],
+   "zdarzenia": [
+    237,
+    238,
+    239,
+    243,
+    244
+   ]
+  },
+  {
+   "blok": "brama_wschodnia",
+   "stary": [
+    47,
+    46,
+    49,
+    54
+   ],
+   "dx": 52,
+   "dy": 0,
+   "nowy": [
+    99,
+    46,
+    101,
+    54
+   ],
+   "zdarzenia": [
+    160,
+    225,
+    226,
+    227,
+    228,
+    229
+   ]
+  },
+  {
+   "blok": "mur_W",
+   "stary": [
+    0,
+    0,
+    1,
+    51
+   ],
+   "dx": 0,
+   "dy": 0,
+   "nowy": [
+    0,
+    0,
+    1,
+    51
+   ],
+   "zdarzenia": []
+  },
+  {
+   "blok": "mur_E",
+   "stary": [
+    50,
+    0,
+    51,
+    51
+   ],
+   "dx": 52,
+   "dy": 0,
+   "nowy": [
+    102,
+    0,
+    103,
+    51
+   ],
+   "zdarzenia": [
+    223,
+    224
+   ]
+  },
+  {
+   "blok": "mur_S",
+   "stary": [
+    2,
+    50,
+    49,
+    63
+   ],
+   "dx": 27,
+   "dy": 39,
+   "nowy": [
+    29,
+    89,
+    76,
+    102
+   ],
+   "zdarzenia": [
+    120,
+    125,
+    143,
+    144
+   ]
+  },
+  {
+   "blok": "rynek (punkty wokół studni)",
+   "stary": [
+    19,
+    29,
+    33,
+    40
+   ],
+   "dx": 27,
+   "dy": 16
+  },
+  {
+   "blok": "cmentarz Zakonu (punkty)",
+   "stary": [
+    78,
+    10,
+    89,
+    19
+   ],
+   "dx": -75,
+   "dy": 11
+  },
+  {
+   "blok": "szubienica Zakonu (punkty)",
+   "stary": [
+    91,
+    52,
+    97,
+    60
+   ],
+   "dx": -6,
+   "dy": 67
+  }
+ ],
+ "b_zdarzenia": {
+  "zachowane": {
+   "1": {
+    "nazwa": "Przejście -> Polna droga",
+    "stare": [
+     24,
+     137
+    ],
+    "nowe": [
+     24,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "2": {
+    "nazwa": "Przejście -> Polna droga",
+    "stare": [
+     25,
+     137
+    ],
+    "nowe": [
+     25,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "3": {
+    "nazwa": "Przejście -> Polna droga",
+    "stare": [
+     26,
+     137
+    ],
+    "nowe": [
+     26,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "4": {
+    "nazwa": "Drzwi: Ratusz",
+    "stare": [
+     47,
+     39
+    ],
+    "nowe": [
+     91,
+     47
+    ],
+    "blok": "ratusz"
+   },
+   "5": {
+    "nazwa": "EV005",
+    "stare": [
+     33,
+     30
+    ],
+    "nowe": [
+     75,
+     38
+    ],
+    "blok": "donice"
+   },
+   "6": {
+    "nazwa": "EV006",
+    "stare": [
+     33,
+     34
+    ],
+    "nowe": [
+     75,
+     42
+    ],
+    "blok": "donice"
+   },
+   "7": {
+    "nazwa": "EV007",
+    "stare": [
+     14,
+     5
+    ],
+    "nowe": [
+     41,
+     5
+    ],
+    "blok": "taras_tawerna"
+   },
+   "8": {
+    "nazwa": "EV008",
+    "stare": [
+     18,
+     12
+    ],
+    "nowe": [
+     45,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "9": {
+    "nazwa": "EV009",
+    "stare": [
+     22,
+     5
+    ],
+    "nowe": [
+     49,
+     5
+    ],
+    "blok": "taras_tawerna"
+   },
+   "10": {
+    "nazwa": "EV010",
+    "stare": [
+     14,
+     12
+    ],
+    "nowe": [
+     41,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "11": {
+    "nazwa": "EV011",
+    "stare": [
+     22,
+     12
+    ],
+    "nowe": [
+     49,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "12": {
+    "nazwa": "EV012",
+    "stare": [
+     26,
+     5
+    ],
+    "nowe": [
+     53,
+     5
+    ],
+    "blok": "taras_tawerna"
+   },
+   "13": {
+    "nazwa": "EV013",
+    "stare": [
+     18,
+     5
+    ],
+    "nowe": [
+     45,
+     5
+    ],
+    "blok": "taras_tawerna"
+   },
+   "14": {
+    "nazwa": "EV014",
+    "stare": [
+     30,
+     5
+    ],
+    "nowe": [
+     57,
+     5
+    ],
+    "blok": "taras_tawerna"
+   },
+   "15": {
+    "nazwa": "EV015",
+    "stare": [
+     34,
+     5
+    ],
+    "nowe": [
+     61,
+     5
+    ],
+    "blok": "taras_tawerna"
+   },
+   "16": {
+    "nazwa": "EV016",
+    "stare": [
+     26,
+     12
+    ],
+    "nowe": [
+     53,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "17": {
+    "nazwa": "EV017",
+    "stare": [
+     30,
+     12
+    ],
+    "nowe": [
+     57,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "18": {
+    "nazwa": "EV018",
+    "stare": [
+     34,
+     12
+    ],
+    "nowe": [
+     61,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "19": {
+    "nazwa": "EV019",
+    "stare": [
+     14,
+     10
+    ],
+    "nowe": [
+     41,
+     10
+    ],
+    "blok": "taras_tawerna"
+   },
+   "20": {
+    "nazwa": "EV020",
+    "stare": [
+     20,
+     17
+    ],
+    "nowe": [
+     47,
+     17
+    ],
+    "blok": "taras_tawerna"
+   },
+   "21": {
+    "nazwa": "EV021",
+    "stare": [
+     28,
+     17
+    ],
+    "nowe": [
+     55,
+     17
+    ],
+    "blok": "taras_tawerna"
+   },
+   "22": {
+    "nazwa": "Drzwi tawerny -> Tawerna",
+    "stare": [
+     24,
+     16
+    ],
+    "nowe": [
+     51,
+     16
+    ],
+    "blok": "taras_tawerna"
+   },
+   "23": {
+    "nazwa": "EV023",
+    "stare": [
+     18,
+     10
+    ],
+    "nowe": [
+     45,
+     10
+    ],
+    "blok": "taras_tawerna"
+   },
+   "24": {
+    "nazwa": "EV024",
+    "stare": [
+     22,
+     10
+    ],
+    "nowe": [
+     49,
+     10
+    ],
+    "blok": "taras_tawerna"
+   },
+   "25": {
+    "nazwa": "EV025",
+    "stare": [
+     26,
+     10
+    ],
+    "nowe": [
+     53,
+     10
+    ],
+    "blok": "taras_tawerna"
+   },
+   "26": {
+    "nazwa": "EV026",
+    "stare": [
+     30,
+     10
+    ],
+    "nowe": [
+     57,
+     10
+    ],
+    "blok": "taras_tawerna"
+   },
+   "27": {
+    "nazwa": "EV027",
+    "stare": [
+     34,
+     10
+    ],
+    "nowe": [
+     61,
+     10
+    ],
+    "blok": "taras_tawerna"
+   },
+   "28": {
+    "nazwa": "EV028",
+    "stare": [
+     25,
+     14
+    ],
+    "nowe": [
+     52,
+     14
+    ],
+    "blok": "taras_tawerna"
+   },
+   "29": {
+    "nazwa": "EV029",
+    "stare": [
+     24,
+     11
+    ],
+    "nowe": [
+     51,
+     11
+    ],
+    "blok": "taras_tawerna"
+   },
+   "30": {
+    "nazwa": "EV030",
+    "stare": [
+     26,
+     17
+    ],
+    "nowe": [
+     53,
+     17
+    ],
+    "blok": "taras_tawerna"
+   },
+   "31": {
+    "nazwa": "EV031",
+    "stare": [
+     22,
+     17
+    ],
+    "nowe": [
+     49,
+     17
+    ],
+    "blok": "taras_tawerna"
+   },
+   "32": {
+    "nazwa": "EV032",
+    "stare": [
+     24,
+     15
+    ],
+    "nowe": [
+     51,
+     15
+    ],
+    "blok": "taras_tawerna"
+   },
+   "33": {
+    "nazwa": "EV033",
+    "stare": [
+     16,
+     16
+    ],
+    "nowe": [
+     43,
+     16
+    ],
+    "blok": "taras_tawerna"
+   },
+   "34": {
+    "nazwa": "EV034",
+    "stare": [
+     32,
+     16
+    ],
+    "nowe": [
+     59,
+     16
+    ],
+    "blok": "taras_tawerna"
+   },
+   "35": {
+    "nazwa": "EV035",
+    "stare": [
+     12,
+     11
+    ],
+    "nowe": [
+     39,
+     11
+    ],
+    "blok": "taras_tawerna"
+   },
+   "36": {
+    "nazwa": "EV036",
+    "stare": [
+     36,
+     11
+    ],
+    "nowe": [
+     63,
+     11
+    ],
+    "blok": "taras_tawerna"
+   },
+   "37": {
+    "nazwa": "EV037",
+    "stare": [
+     20,
+     15
+    ],
+    "nowe": [
+     47,
+     15
+    ],
+    "blok": "taras_tawerna"
+   },
+   "38": {
+    "nazwa": "EV038",
+    "stare": [
+     28,
+     15
+    ],
+    "nowe": [
+     55,
+     15
+    ],
+    "blok": "taras_tawerna"
+   },
+   "39": {
+    "nazwa": "Furtka ogrodu rycerzy",
+    "stare": [
+     6,
+     16
+    ],
+    "nowe": [
+     33,
+     16
+    ],
+    "blok": "taras_tawerna"
+   },
+   "40": {
+    "nazwa": "EV040",
+    "stare": [
+     28,
+     22
+    ],
+    "nowe": [
+     56,
+     30
+    ],
+    "blok": "mur_zamku"
+   },
+   "41": {
+    "nazwa": "EV041",
+    "stare": [
+     21,
+     30
+    ],
+    "nowe": [
+     33,
+     58
+    ],
+    "blok": "pod_skala"
+   },
+   "43": {
+    "nazwa": "EV043",
+    "stare": [
+     5,
+     9
+    ],
+    "nowe": [
+     32,
+     9
+    ],
+    "blok": "taras_tawerna"
+   },
+   "44": {
+    "nazwa": "EV044",
+    "stare": [
+     7,
+     9
+    ],
+    "nowe": [
+     34,
+     9
+    ],
+    "blok": "taras_tawerna"
+   },
+   "45": {
+    "nazwa": "EV045",
+    "stare": [
+     6,
+     9
+    ],
+    "nowe": [
+     33,
+     9
+    ],
+    "blok": "taras_tawerna"
+   },
+   "55": {
+    "nazwa": "EV146",
+    "stare": [
+     33,
+     103
+    ],
+    "nowe": [
+     33,
+     103
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "65": {
+    "nazwa": "EV005",
+    "stare": [
+     73,
+     119
+    ],
+    "nowe": [
+     73,
+     119
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "67": {
+    "nazwa": "EV149",
+    "stare": [
+     12,
+     121
+    ],
+    "nowe": [
+     12,
+     121
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "70": {
+    "nazwa": "EV150",
+    "stare": [
+     21,
+     135
+    ],
+    "nowe": [
+     21,
+     135
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "77": {
+    "nazwa": "EV003",
+    "stare": [
+     22,
+     22
+    ],
+    "nowe": [
+     48,
+     30
+    ],
+    "blok": "mur_zamku"
+   },
+   "78": {
+    "nazwa": "EV146",
+    "stare": [
+     6,
+     110
+    ],
+    "nowe": [
+     6,
+     110
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "82": {
+    "nazwa": "EV145",
+    "stare": [
+     92,
+     112
+    ],
+    "nowe": [
+     92,
+     112
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "85": {
+    "nazwa": "EV104",
+    "stare": [
+     39,
+     103
+    ],
+    "nowe": [
+     39,
+     103
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "88": {
+    "nazwa": "Drzwi: Piekarnia",
+    "stare": [
+     6,
+     38
+    ],
+    "nowe": [
+     38,
+     72
+    ],
+    "blok": "piekarnia"
+   },
+   "89": {
+    "nazwa": "Szyld: Piekarnia",
+    "stare": [
+     7,
+     37
+    ],
+    "nowe": [
+     39,
+     71
+    ],
+    "blok": "piekarnia"
+   },
+   "90": {
+    "nazwa": "EV011",
+    "stare": [
+     10,
+     35
+    ],
+    "nowe": [
+     14,
+     43
+    ],
+    "blok": "kantor"
+   },
+   "91": {
+    "nazwa": "EV012",
+    "stare": [
+     10,
+     37
+    ],
+    "nowe": [
+     14,
+     45
+    ],
+    "blok": "kantor"
+   },
+   "92": {
+    "nazwa": "EV047",
+    "stare": [
+     12,
+     39
+    ],
+    "nowe": [
+     16,
+     47
+    ],
+    "blok": "kantor"
+   },
+   "93": {
+    "nazwa": "EV048",
+    "stare": [
+     11,
+     39
+    ],
+    "nowe": [
+     15,
+     47
+    ],
+    "blok": "kantor"
+   },
+   "94": {
+    "nazwa": "Drzwi: Kantor „Towary z kontynentu”",
+    "stare": [
+     10,
+     39
+    ],
+    "nowe": [
+     14,
+     47
+    ],
+    "blok": "kantor"
+   },
+   "95": {
+    "nazwa": "Drzwi: Kantor „Towary z kontynentu”",
+    "stare": [
+     14,
+     38
+    ],
+    "nowe": [
+     18,
+     46
+    ],
+    "blok": "kantor"
+   },
+   "96": {
+    "nazwa": "EV002",
+    "stare": [
+     13,
+     37
+    ],
+    "nowe": [
+     17,
+     45
+    ],
+    "blok": "kantor"
+   },
+   "97": {
+    "nazwa": "EV005",
+    "stare": [
+     15,
+     37
+    ],
+    "nowe": [
+     19,
+     45
+    ],
+    "blok": "kantor"
+   },
+   "98": {
+    "nazwa": "EV009",
+    "stare": [
+     16,
+     39
+    ],
+    "nowe": [
+     20,
+     47
+    ],
+    "blok": "kantor"
+   },
+   "99": {
+    "nazwa": "EV010",
+    "stare": [
+     15,
+     39
+    ],
+    "nowe": [
+     19,
+     47
+    ],
+    "blok": "kantor"
+   },
+   "100": {
+    "nazwa": "EV088",
+    "stare": [
+     17,
+     38
+    ],
+    "nowe": [
+     21,
+     46
+    ],
+    "blok": "kantor"
+   },
+   "101": {
+    "nazwa": "EV101",
+    "stare": [
+     28,
+     30
+    ],
+    "nowe": [
+     33,
+     44
+    ],
+    "blok": "stragan_czerwony"
+   },
+   "103": {
+    "nazwa": "EV006",
+    "stare": [
+     39,
+     32
+    ],
+    "nowe": [
+     83,
+     40
+    ],
+    "blok": "ratusz"
+   },
+   "104": {
+    "nazwa": "EV104",
+    "stare": [
+     33,
+     38
+    ],
+    "nowe": [
+     75,
+     46
+    ],
+    "blok": "donice"
+   },
+   "105": {
+    "nazwa": "EV105",
+    "stare": [
+     37,
+     35
+    ],
+    "nowe": [
+     81,
+     43
+    ],
+    "blok": "ratusz"
+   },
+   "106": {
+    "nazwa": "EV106",
+    "stare": [
+     14,
+     37
+    ],
+    "nowe": [
+     18,
+     45
+    ],
+    "blok": "kantor"
+   },
+   "107": {
+    "nazwa": "EV107",
+    "stare": [
+     5,
+     37
+    ],
+    "nowe": [
+     37,
+     71
+    ],
+    "blok": "piekarnia"
+   },
+   "113": {
+    "nazwa": "EV022",
+    "stare": [
+     43,
+     32
+    ],
+    "nowe": [
+     87,
+     40
+    ],
+    "blok": "ratusz"
+   },
+   "114": {
+    "nazwa": "Drzwi: Ratusz",
+    "stare": [
+     41,
+     39
+    ],
+    "nowe": [
+     85,
+     47
+    ],
+    "blok": "ratusz"
+   },
+   "115": {
+    "nazwa": "Szyld: Ratusz",
+    "stare": [
+     43,
+     37
+    ],
+    "nowe": [
+     87,
+     45
+    ],
+    "blok": "ratusz"
+   },
+   "116": {
+    "nazwa": "EV011",
+    "stare": [
+     47,
+     35
+    ],
+    "nowe": [
+     91,
+     43
+    ],
+    "blok": "ratusz"
+   },
+   "117": {
+    "nazwa": "EV012",
+    "stare": [
+     47,
+     37
+    ],
+    "nowe": [
+     91,
+     45
+    ],
+    "blok": "ratusz"
+   },
+   "119": {
+    "nazwa": "EV123",
+    "stare": [
+     36,
+     106
+    ],
+    "nowe": [
+     36,
+     106
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "120": {
+    "nazwa": "EV120",
+    "stare": [
+     23,
+     58
+    ],
+    "nowe": [
+     50,
+     97
+    ],
+    "blok": "mur_S"
+   },
+   "121": {
+    "nazwa": "Drzwi: Dom mieszczan",
+    "stare": [
+     9,
+     30
+    ],
+    "nowe": [
+     36,
+     38
+    ],
+    "blok": "pod_skala"
+   },
+   "122": {
+    "nazwa": "EV122",
+    "stare": [
+     9,
+     28
+    ],
+    "nowe": [
+     36,
+     36
+    ],
+    "blok": "mur_zamku"
+   },
+   "123": {
+    "nazwa": "EV123",
+    "stare": [
+     7,
+     30
+    ],
+    "nowe": [
+     34,
+     38
+    ],
+    "blok": "pod_skala"
+   },
+   "124": {
+    "nazwa": "EV124",
+    "stare": [
+     12,
+     29
+    ],
+    "nowe": [
+     39,
+     37
+    ],
+    "blok": "pod_skala"
+   },
+   "125": {
+    "nazwa": "EV125",
+    "stare": [
+     27,
+     58
+    ],
+    "nowe": [
+     54,
+     97
+    ],
+    "blok": "mur_S"
+   },
+   "126": {
+    "nazwa": "EV126",
+    "stare": [
+     48,
+     30
+    ],
+    "nowe": [
+     86,
+     31
+    ],
+    "blok": "dzwonnica"
+   },
+   "128": {
+    "nazwa": "EV146",
+    "stare": [
+     83,
+     134
+    ],
+    "nowe": [
+     83,
+     134
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "130": {
+    "nazwa": "Latarnia",
+    "stare": [
+     5,
+     40
+    ],
+    "nowe": [
+     37,
+     74
+    ],
+    "blok": "piekarnia"
+   },
+   "132": {
+    "nazwa": "EV132",
+    "stare": [
+     4,
+     46
+    ],
+    "nowe": [
+     5,
+     60
+    ],
+    "blok": "kuznia"
+   },
+   "133": {
+    "nazwa": "EV133",
+    "stare": [
+     8,
+     46
+    ],
+    "nowe": [
+     9,
+     60
+    ],
+    "blok": "kuznia"
+   },
+   "134": {
+    "nazwa": "EV134",
+    "stare": [
+     12,
+     46
+    ],
+    "nowe": [
+     13,
+     60
+    ],
+    "blok": "kuznia"
+   },
+   "135": {
+    "nazwa": "EV135",
+    "stare": [
+     18,
+     48
+    ],
+    "nowe": [
+     17,
+     88
+    ],
+    "blok": "garbarnia"
+   },
+   "136": {
+    "nazwa": "EV136",
+    "stare": [
+     18,
+     46
+    ],
+    "nowe": [
+     17,
+     86
+    ],
+    "blok": "garbarnia"
+   },
+   "137": {
+    "nazwa": "EV137",
+    "stare": [
+     29,
+     46
+    ],
+    "nowe": [
+     59,
+     73
+    ],
+    "blok": "dom_woziwody"
+   },
+   "139": {
+    "nazwa": "EV139",
+    "stare": [
+     34,
+     42
+    ],
+    "nowe": [
+     3,
+     81
+    ],
+    "blok": "dom_garbarza"
+   },
+   "140": {
+    "nazwa": "EV140",
+    "stare": [
+     39,
+     42
+    ],
+    "nowe": [
+     8,
+     81
+    ],
+    "blok": "dom_garbarza"
+   },
+   "141": {
+    "nazwa": "EV141",
+    "stare": [
+     37,
+     49
+    ],
+    "nowe": [
+     6,
+     88
+    ],
+    "blok": "dom_garbarza"
+   },
+   "142": {
+    "nazwa": "EV142",
+    "stare": [
+     6,
+     48
+    ],
+    "nowe": [
+     7,
+     62
+    ],
+    "blok": "kuznia"
+   },
+   "143": {
+    "nazwa": "EV143",
+    "stare": [
+     23,
+     55
+    ],
+    "nowe": [
+     50,
+     94
+    ],
+    "blok": "mur_S"
+   },
+   "144": {
+    "nazwa": "EV144",
+    "stare": [
+     28,
+     55
+    ],
+    "nowe": [
+     55,
+     94
+    ],
+    "blok": "mur_S"
+   },
+   "151": {
+    "nazwa": "EV005",
+    "stare": [
+     29,
+     123
+    ],
+    "nowe": [
+     29,
+     123
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "157": {
+    "nazwa": "EV148",
+    "stare": [
+     59,
+     134
+    ],
+    "nowe": [
+     59,
+     134
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "159": {
+    "nazwa": "EV148",
+    "stare": [
+     95,
+     109
+    ],
+    "nowe": [
+     95,
+     109
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "160": {
+    "nazwa": "EV004",
+    "stare": [
+     49,
+     46
+    ],
+    "nowe": [
+     101,
+     46
+    ],
+    "blok": "brama_wschodnia"
+   },
+   "161": {
+    "nazwa": "EV005",
+    "stare": [
+     39,
+     48
+    ],
+    "nowe": [
+     8,
+     87
+    ],
+    "blok": "dom_garbarza"
+   },
+   "173": {
+    "nazwa": "Kantor „Towary z kontynentu”",
+    "stare": [
+     16,
+     37
+    ],
+    "nowe": [
+     20,
+     45
+    ],
+    "blok": "kantor"
+   },
+   "177": {
+    "nazwa": "EV123",
+    "stare": [
+     102,
+     118
+    ],
+    "nowe": [
+     102,
+     118
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "183": {
+    "nazwa": "EV123",
+    "stare": [
+     55,
+     137
+    ],
+    "nowe": [
+     55,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "186": {
+    "nazwa": "EV145",
+    "stare": [
+     95,
+     115
+    ],
+    "nowe": [
+     95,
+     115
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "187": {
+    "nazwa": "EV005",
+    "stare": [
+     65,
+     137
+    ],
+    "nowe": [
+     65,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "188": {
+    "nazwa": "EV006",
+    "stare": [
+     34,
+     123
+    ],
+    "nowe": [
+     34,
+     123
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "191": {
+    "nazwa": "EV005",
+    "stare": [
+     103,
+     133
+    ],
+    "nowe": [
+     103,
+     133
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "199": {
+    "nazwa": "EV148",
+    "stare": [
+     13,
+     117
+    ],
+    "nowe": [
+     13,
+     117
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "206": {
+    "nazwa": "EV145",
+    "stare": [
+     71,
+     128
+    ],
+    "nowe": [
+     71,
+     128
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "207": {
+    "nazwa": "EV145",
+    "stare": [
+     102,
+     122
+    ],
+    "nowe": [
+     102,
+     122
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "221": {
+    "nazwa": "Przejście -> Posiadłość Lorda",
+    "stare": [
+     103,
+     50
+    ],
+    "nowe": [
+     103,
+     50
+    ],
+    "blok": "brama_wschodnia (bez zmian)"
+   },
+   "222": {
+    "nazwa": "Przejście -> Posiadłość Lorda",
+    "stare": [
+     103,
+     51
+    ],
+    "nowe": [
+     103,
+     51
+    ],
+    "blok": "brama_wschodnia (bez zmian)"
+   },
+   "223": {
+    "nazwa": "Chorągiew Lorda Zaleskiego",
+    "stare": [
+     50,
+     49
+    ],
+    "nowe": [
+     102,
+     49
+    ],
+    "blok": "mur_E"
+   },
+   "224": {
+    "nazwa": "Chorągiew Lorda Zaleskiego",
+    "stare": [
+     51,
+     49
+    ],
+    "nowe": [
+     103,
+     49
+    ],
+    "blok": "mur_E"
+   },
+   "225": {
+    "nazwa": "Kosz żarowy (słup)",
+    "stare": [
+     49,
+     49
+    ],
+    "nowe": [
+     101,
+     49
+    ],
+    "blok": "brama_wschodnia"
+   },
+   "226": {
+    "nazwa": "Kosz żarowy (ogień)",
+    "stare": [
+     49,
+     48
+    ],
+    "nowe": [
+     101,
+     48
+    ],
+    "blok": "brama_wschodnia"
+   },
+   "227": {
+    "nazwa": "Kosz żarowy (słup)",
+    "stare": [
+     49,
+     53
+    ],
+    "nowe": [
+     101,
+     53
+    ],
+    "blok": "brama_wschodnia"
+   },
+   "228": {
+    "nazwa": "Kosz żarowy (ogień)",
+    "stare": [
+     49,
+     52
+    ],
+    "nowe": [
+     101,
+     52
+    ],
+    "blok": "brama_wschodnia"
+   },
+   "229": {
+    "nazwa": "Drogowskaz",
+    "stare": [
+     47,
+     52
+    ],
+    "nowe": [
+     99,
+     52
+    ],
+    "blok": "brama_wschodnia"
+   },
+   "230": {
+    "nazwa": "EV145",
+    "stare": [
+     87,
+     136
+    ],
+    "nowe": [
+     87,
+     136
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "232": {
+    "nazwa": "EV149",
+    "stare": [
+     30,
+     127
+    ],
+    "nowe": [
+     30,
+     127
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "233": {
+    "nazwa": "EV104",
+    "stare": [
+     74,
+     108
+    ],
+    "nowe": [
+     74,
+     108
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "234": {
+    "nazwa": "EV005",
+    "stare": [
+     28,
+     132
+    ],
+    "nowe": [
+     28,
+     132
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "236": {
+    "nazwa": "Drzwi: Dzwonnica",
+    "stare": [
+     48,
+     30
+    ],
+    "nowe": [
+     86,
+     31
+    ],
+    "blok": "dzwonnica"
+   },
+   "237": {
+    "nazwa": "Przejście -> Podgrodzie",
+    "stare": [
+     0,
+     50
+    ],
+    "nowe": [
+     0,
+     50
+    ],
+    "blok": "brama_zachodnia"
+   },
+   "238": {
+    "nazwa": "Przejście -> Podgrodzie",
+    "stare": [
+     0,
+     51
+    ],
+    "nowe": [
+     0,
+     51
+    ],
+    "blok": "brama_zachodnia"
+   },
+   "239": {
+    "nazwa": "Latarnia na baszcie",
+    "stare": [
+     1,
+     49
+    ],
+    "nowe": [
+     1,
+     49
+    ],
+    "blok": "brama_zachodnia"
+   },
+   "240": {
+    "nazwa": "Drogowskaz (brama zachodnia)",
+    "stare": [
+     2,
+     49
+    ],
+    "nowe": [
+     3,
+     63
+    ],
+    "blok": "kuznia"
+   },
+   "241": {
+    "nazwa": "Studnia miejska",
+    "stare": [
+     24,
+     35
+    ],
+    "nowe": [
+     51,
+     51
+    ],
+    "blok": "studnia"
+   },
+   "242": {
+    "nazwa": "Studnia miejska",
+    "stare": [
+     25,
+     35
+    ],
+    "nowe": [
+     52,
+     51
+    ],
+    "blok": "studnia"
+   },
+   "243": {
+    "nazwa": "Brama zachodnia: dach i słupy",
+    "stare": [
+     1,
+     52
+    ],
+    "nowe": [
+     1,
+     52
+    ],
+    "blok": "brama_zachodnia"
+   },
+   "244": {
+    "nazwa": "Brama zachodnia: skrzydło i cień",
+    "stare": [
+     1,
+     51
+    ],
+    "nowe": [
+     1,
+     51
+    ],
+    "blok": "brama_zachodnia"
+   },
+   "245": {
+    "nazwa": "Studnia miejska: zejście",
+    "stare": [
+     25,
+     34
+    ],
+    "nowe": [
+     52,
+     50
+    ],
+    "blok": "studnia"
+   },
+   "246": {
+    "nazwa": "Płyta w ścieżce (ogród rycerzy)",
+    "stare": [
+     6,
+     12
+    ],
+    "nowe": [
+     33,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "247": {
+    "nazwa": "Miejsce: plyta",
+    "stare": [
+     6,
+     12
+    ],
+    "nowe": [
+     33,
+     12
+    ],
+    "blok": "taras_tawerna"
+   },
+   "248": {
+    "nazwa": "EV006",
+    "stare": [
+     4,
+     137
+    ],
+    "nowe": [
+     4,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "249": {
+    "nazwa": "EV005",
+    "stare": [
+     39,
+     126
+    ],
+    "nowe": [
+     39,
+     126
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "251": {
+    "nazwa": "EV006",
+    "stare": [
+     61,
+     137
+    ],
+    "nowe": [
+     61,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "252": {
+    "nazwa": "EV123",
+    "stare": [
+     98,
+     113
+    ],
+    "nowe": [
+     98,
+     113
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "258": {
+    "nazwa": "EV005",
+    "stare": [
+     64,
+     129
+    ],
+    "nowe": [
+     64,
+     129
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "261": {
+    "nazwa": "EV147",
+    "stare": [
+     10,
+     126
+    ],
+    "nowe": [
+     10,
+     126
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "264": {
+    "nazwa": "EV150",
+    "stare": [
+     20,
+     126
+    ],
+    "nowe": [
+     20,
+     126
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "268": {
+    "nazwa": "EV150",
+    "stare": [
+     10,
+     137
+    ],
+    "nowe": [
+     10,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "270": {
+    "nazwa": "EV149",
+    "stare": [
+     89,
+     115
+    ],
+    "nowe": [
+     89,
+     115
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "274": {
+    "nazwa": "EV145",
+    "stare": [
+     83,
+     110
+    ],
+    "nowe": [
+     83,
+     110
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "282": {
+    "nazwa": "EV123",
+    "stare": [
+     77,
+     110
+    ],
+    "nowe": [
+     77,
+     110
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "290": {
+    "nazwa": "EV005",
+    "stare": [
+     103,
+     137
+    ],
+    "nowe": [
+     103,
+     137
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "298": {
+    "nazwa": "Skała",
+    "stare": [
+     66,
+     111
+    ],
+    "nowe": [
+     66,
+     111
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "301": {
+    "nazwa": "Skała",
+    "stare": [
+     102,
+     113
+    ],
+    "nowe": [
+     102,
+     113
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "303": {
+    "nazwa": "Skała",
+    "stare": [
+     65,
+     117
+    ],
+    "nowe": [
+     65,
+     117
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "305": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     80,
+     122
+    ],
+    "nowe": [
+     80,
+     122
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "319": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     101,
+     107
+    ],
+    "nowe": [
+     101,
+     107
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "328": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     79,
+     117
+    ],
+    "nowe": [
+     79,
+     117
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "331": {
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     16,
+     127
+    ],
+    "nowe": [
+     16,
+     127
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "337": {
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     77,
+     123
+    ],
+    "nowe": [
+     77,
+     123
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "370": {
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     69,
+     135
+    ],
+    "nowe": [
+     69,
+     135
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "386": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     97,
+     119
+    ],
+    "nowe": [
+     97,
+     119
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "390": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     75,
+     103
+    ],
+    "nowe": [
+     75,
+     103
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "394": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     1,
+     121
+    ],
+    "nowe": [
+     1,
+     121
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "403": {
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     97,
+     126
+    ],
+    "nowe": [
+     97,
+     126
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "428": {
+    "nazwa": "Płaski kamień",
+    "stare": [
+     27,
+     113
+    ],
+    "nowe": [
+     27,
+     113
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "429": {
+    "nazwa": "Płaski kamień",
+    "stare": [
+     51,
+     136
+    ],
+    "nowe": [
+     51,
+     136
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "436": {
+    "nazwa": "Omszały kamień",
+    "stare": [
+     5,
+     125
+    ],
+    "nowe": [
+     5,
+     125
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "439": {
+    "nazwa": "Omszały kamień",
+    "stare": [
+     59,
+     119
+    ],
+    "nowe": [
+     59,
+     119
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "450": {
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     68,
+     115
+    ],
+    "nowe": [
+     68,
+     115
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "458": {
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     48,
+     130
+    ],
+    "nowe": [
+     48,
+     130
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "459": {
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     32,
+     113
+    ],
+    "nowe": [
+     32,
+     113
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "471": {
+    "nazwa": "Dzika grusza",
+    "stare": [
+     61,
+     111
+    ],
+    "nowe": [
+     61,
+     111
+    ],
+    "blok": "bez zmian (za murem)"
+   },
+   "489": {
+    "nazwa": "EV104",
+    "stare": [
+     52,
+     131
+    ],
+    "nowe": [
+     52,
+     131
+    ],
+    "blok": "bez zmian (za murem)"
+   }
+  },
+  "usuniete": [
+   {
+    "id": 42,
+    "nazwa": "EV042",
+    "stare": [
+     24,
+     42
+    ],
+    "obraz": "!Decoration",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Stragan"
+   },
+   {
+    "id": 46,
+    "nazwa": "EV149",
+    "stare": [
+     57,
+     58
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stragan"
+   },
+   {
+    "id": 48,
+    "nazwa": "EV145",
+    "stare": [
+     85,
+     21
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 51,
+    "nazwa": "EV146",
+    "stare": [
+     55,
+     1
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 52,
+    "nazwa": "EV104",
+    "stare": [
+     76,
+     89
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 53,
+    "nazwa": "EV123",
+    "stare": [
+     60,
+     8
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 56,
+    "nazwa": "EV150",
+    "stare": [
+     54,
+     55
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Tablica ogłoszeń"
+   },
+   {
+    "id": 61,
+    "nazwa": "EV005",
+    "stare": [
+     10,
+     111
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "droga od bramy południowej",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 66,
+    "nazwa": "EV146",
+    "stare": [
+     70,
+     109
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "pole mieszczan pole_3",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 71,
+    "nazwa": "EV005",
+    "stare": [
+     53,
+     46
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Krzew w donicy"
+   },
+   {
+    "id": 72,
+    "nazwa": "EV123",
+    "stare": [
+     74,
+     113
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ścieżka do pól / szubienicy",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 73,
+    "nazwa": "EV104",
+    "stare": [
+     66,
+     107
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "pole mieszczan pole_3",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 74,
+    "nazwa": "EV148",
+    "stare": [
+     90,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Krzew w donicy"
+   },
+   {
+    "id": 76,
+    "nazwa": "EV104",
+    "stare": [
+     96,
+     89
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Krzew w donicy"
+   },
+   {
+    "id": 79,
+    "nazwa": "EV150",
+    "stare": [
+     77,
+     51
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Krzew w donicy"
+   },
+   {
+    "id": 81,
+    "nazwa": "EV123",
+    "stare": [
+     61,
+     103
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "pole mieszczan pole_3",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 86,
+    "nazwa": "EV150",
+    "stare": [
+     59,
+     11
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 102,
+    "nazwa": "EV102",
+    "stare": [
+     26,
+     42
+    ],
+    "obraz": "!Decoration",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 109,
+    "nazwa": "EV104",
+    "stare": [
+     68,
+     15
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 111,
+    "nazwa": "EV147",
+    "stare": [
+     9,
+     94
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 112,
+    "nazwa": "EV146",
+    "stare": [
+     67,
+     78
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 118,
+    "nazwa": "EV145",
+    "stare": [
+     86,
+     87
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 127,
+    "nazwa": "EV123",
+    "stare": [
+     13,
+     72
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 145,
+    "nazwa": "EV145",
+    "stare": [
+     3,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 146,
+    "nazwa": "EV146",
+    "stare": [
+     11,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 147,
+    "nazwa": "EV147",
+    "stare": [
+     19,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 148,
+    "nazwa": "EV148",
+    "stare": [
+     31,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Poręcz do wiązania koni"
+   },
+   {
+    "id": 149,
+    "nazwa": "EV149",
+    "stare": [
+     39,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Wóz"
+   },
+   {
+    "id": 150,
+    "nazwa": "EV150",
+    "stare": [
+     47,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Stół w ogródku piwnym"
+   },
+   {
+    "id": 153,
+    "nazwa": "EV148",
+    "stare": [
+     80,
+     34
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 155,
+    "nazwa": "EV147",
+    "stare": [
+     46,
+     70
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 156,
+    "nazwa": "EV123",
+    "stare": [
+     95,
+     86
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stół w ogródku piwnym"
+   },
+   {
+    "id": 162,
+    "nazwa": "EV006",
+    "stare": [
+     21,
+     74
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 163,
+    "nazwa": "EV146",
+    "stare": [
+     67,
+     56
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 165,
+    "nazwa": "EV005",
+    "stare": [
+     76,
+     43
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stół w ogródku piwnym"
+   },
+   {
+    "id": 167,
+    "nazwa": "EV104",
+    "stare": [
+     82,
+     2
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 169,
+    "nazwa": "EV123",
+    "stare": [
+     81,
+     100
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 170,
+    "nazwa": "EV149",
+    "stare": [
+     81,
+     39
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stół w ogródku piwnym"
+   },
+   {
+    "id": 174,
+    "nazwa": "EV104",
+    "stare": [
+     79,
+     77
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 181,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     0,
+     33
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=1,up=14>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Stołek"
+   },
+   {
+    "id": 189,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     0,
+     47
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=1,up=11>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Beczki piwa"
+   },
+   {
+    "id": 190,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     50,
+     47
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=1,up=7>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Beczka"
+   },
+   {
+    "id": 192,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     50,
+     56
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=1,up=4>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 193,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     10,
+     56
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=1,up=2>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 194,
+    "nazwa": "EV146",
+    "stare": [
+     64,
+     70
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 195,
+    "nazwa": "EV145",
+    "stare": [
+     72,
+     18
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Taczka grabarza"
+   },
+   {
+    "id": 196,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     40,
+     56
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=1,up=2>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Łopata"
+   },
+   {
+    "id": 198,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     12,
+     56
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=9,up=1>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 200,
+    "nazwa": "Mury miejskie",
+    "stare": [
+     42,
+     56
+    ],
+    "obraz": "",
+    "notatka": "<Occupy:right=7,up=1>",
+    "powod": "ozdoba starego miasta poza przeniesionymi blokami",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 201,
+    "nazwa": "EV146",
+    "stare": [
+     81,
+     87
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 202,
+    "nazwa": "EV145",
+    "stare": [
+     66,
+     102
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 203,
+    "nazwa": "EV005",
+    "stare": [
+     86,
+     25
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 205,
+    "nazwa": "EV123",
+    "stare": [
+     24,
+     108
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "droga od bramy południowej",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 208,
+    "nazwa": "EV150",
+    "stare": [
+     53,
+     59
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 211,
+    "nazwa": "EV147",
+    "stare": [
+     57,
+     5
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 214,
+    "nazwa": "EV145",
+    "stare": [
+     82,
+     91
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 215,
+    "nazwa": "EV006",
+    "stare": [
+     91,
+     16
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 217,
+    "nazwa": "EV006",
+    "stare": [
+     30,
+     73
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 219,
+    "nazwa": "EV104",
+    "stare": [
+     66,
+     35
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 220,
+    "nazwa": "EV006",
+    "stare": [
+     82,
+     31
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stojak z bronią"
+   },
+   {
+    "id": 255,
+    "nazwa": "EV104",
+    "stare": [
+     90,
+     89
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Stojak z bronią"
+   },
+   {
+    "id": 256,
+    "nazwa": "EV005",
+    "stare": [
+     82,
+     79
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Kukła do ćwiczeń"
+   },
+   {
+    "id": 257,
+    "nazwa": "EV149",
+    "stare": [
+     90,
+     28
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 260,
+    "nazwa": "EV148",
+    "stare": [
+     85,
+     0
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 263,
+    "nazwa": "EV104",
+    "stare": [
+     66,
+     30
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 266,
+    "nazwa": "EV149",
+    "stare": [
+     39,
+     72
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 271,
+    "nazwa": "EV123",
+    "stare": [
+     74,
+     49
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 272,
+    "nazwa": "EV145",
+    "stare": [
+     84,
+     35
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Wóz z sianem"
+   },
+   {
+    "id": 273,
+    "nazwa": "EV123",
+    "stare": [
+     17,
+     74
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Strach na wróble"
+   },
+   {
+    "id": 277,
+    "nazwa": "EV006",
+    "stare": [
+     59,
+     2
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Wózek z beczką"
+   },
+   {
+    "id": 278,
+    "nazwa": "EV104",
+    "stare": [
+     57,
+     45
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 279,
+    "nazwa": "EV147",
+    "stare": [
+     79,
+     45
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 280,
+    "nazwa": "EV150",
+    "stare": [
+     64,
+     66
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 283,
+    "nazwa": "EV123",
+    "stare": [
+     56,
+     13
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 285,
+    "nazwa": "EV146",
+    "stare": [
+     56,
+     52
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 286,
+    "nazwa": "EV123",
+    "stare": [
+     10,
+     70
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 291,
+    "nazwa": "EV006",
+    "stare": [
+     89,
+     122
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "wzgórze z szubienicą",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 293,
+    "nazwa": "EV148",
+    "stare": [
+     64,
+     85
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 294,
+    "nazwa": "EV006",
+    "stare": [
+     83,
+     84
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Drzewo (ozdobne)"
+   },
+   {
+    "id": 295,
+    "nazwa": "EV147",
+    "stare": [
+     78,
+     98
+    ],
+    "obraz": "!$Big_Trees_green",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 297,
+    "nazwa": "Skała",
+    "stare": [
+     74,
+     65
+    ],
+    "obraz": "",
+    "notatka": "<Rock:hits=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 299,
+    "nazwa": "Skała",
+    "stare": [
+     50,
+     99
+    ],
+    "obraz": "",
+    "notatka": "<Rock:hits=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Miejsce: dom11_drzwi"
+   },
+   {
+    "id": 300,
+    "nazwa": "Skała",
+    "stare": [
+     6,
+     75
+    ],
+    "obraz": "",
+    "notatka": "<Rock:hits=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 302,
+    "nazwa": "Skała",
+    "stare": [
+     92,
+     20
+    ],
+    "obraz": "",
+    "notatka": "<Rock:hits=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 309,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     90,
+     49
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 311,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     82,
+     19
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 315,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     27,
+     97
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Miejsce: dom12_drzwi"
+   },
+   {
+    "id": 316,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     86,
+     46
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 318,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     72,
+     30
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 320,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     72,
+     96
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Miejsce: dom13_drzwi"
+   },
+   {
+    "id": 325,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     88,
+     12
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 327,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     102,
+     68
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 329,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     12,
+     90
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 330,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     4,
+     85
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 333,
+    "nazwa": "Suchy krzaczek",
+    "stare": [
+     57,
+     112
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "ścieżka do pól / szubienicy",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 336,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     49,
+     108
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "droga od bramy południowej",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 340,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     76,
+     3
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Miejsce: dom14_drzwi"
+   },
+   {
+    "id": 342,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     78,
+     55
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 347,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     96,
+     17
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 349,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     57,
+     34
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Miejsce: dom15_drzwi"
+   },
+   {
+    "id": 350,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     40,
+     84
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 351,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     4,
+     98
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 352,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     84,
+     57
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 353,
+    "nazwa": "Kolczaste pnącza",
+    "stare": [
+     88,
+     68
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 354,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     4,
+     76
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 357,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     52,
+     33
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 358,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     79,
+     113
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "ścieżka do pól / szubienicy",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 359,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     64,
+     18
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 361,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     12,
+     75
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 362,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     0,
+     102
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 363,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     13,
+     94
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 364,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     55,
+     107
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "ścieżka do pól / szubienicy",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 365,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     71,
+     36
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 366,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     100,
+     16
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 367,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     53,
+     63
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 368,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     97,
+     45
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 369,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     76,
+     80
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 371,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     54,
+     86
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 372,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     83,
+     70
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 374,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     68,
+     39
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 377,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     68,
+     52
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 378,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     62,
+     29
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 380,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     96,
+     2
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Latarnia"
+   },
+   {
+    "id": 381,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     76,
+     13
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 382,
+    "nazwa": "Wysoki suchy krzak",
+    "stare": [
+     101,
+     45
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 385,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     36,
+     70
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 389,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     91,
+     38
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 391,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     38,
+     98
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 395,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     45,
+     94
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 398,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     74,
+     71
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 399,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     44,
+     108
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "droga od bramy południowej",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 400,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     56,
+     30
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 402,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     38,
+     110
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "droga od bramy południowej",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 404,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     99,
+     7
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 405,
+    "nazwa": "Splot gałęzi",
+    "stare": [
+     47,
+     78
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 407,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     64,
+     41
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 408,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     2,
+     79
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 409,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     93,
+     57
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 410,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     52,
+     15
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 413,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     59,
+     19
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 414,
+    "nazwa": "Pęknięty kamień",
+    "stare": [
+     9,
+     81
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 416,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     69,
+     63
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 417,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     103,
+     85
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 420,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     99,
+     29
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 422,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     13,
+     87
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 423,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     52,
+     0
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 424,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     4,
+     90
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 425,
+    "nazwa": "Płaski kamień",
+    "stare": [
+     10,
+     86
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 431,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     100,
+     22
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 432,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     46,
+     89
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 435,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     99,
+     90
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 437,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     70,
+     88
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 440,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     60,
+     56
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 443,
+    "nazwa": "Omszały kamień",
+    "stare": [
+     79,
+     60
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 447,
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     84,
+     97
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 448,
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     43,
+     80
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 449,
+    "nazwa": "Sterta kamieni",
+    "stare": [
+     99,
+     13
+    ],
+    "obraz": "",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 454,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     4,
+     102
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 455,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     75,
+     77
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 456,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     71,
+     11
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 460,
+    "nazwa": "Wysoki pieniek",
+    "stare": [
+     42,
+     70
+    ],
+    "obraz": "",
+    "notatka": "<Stump:digs=3,digmin=1,digmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 461,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     88,
+     8
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 462,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     87,
+     125
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "wzgórze z szubienicą",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 465,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     62,
+     49
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 466,
+    "nazwa": "Dzika jabłoń",
+    "stare": [
+     48,
+     81
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 468,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     87,
+     75
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 469,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     17,
+     69
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 470,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     69,
+     70
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 472,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     96,
+     82
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 473,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     67,
+     21
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 474,
+    "nazwa": "Dzika grusza",
+    "stare": [
+     18,
+     81
+    ],
+    "obraz": "",
+    "notatka": "<Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropmax=3>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 476,
+    "nazwa": "EV104",
+    "stare": [
+     58,
+     82
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 478,
+    "nazwa": "EV005",
+    "stare": [
+     99,
+     74
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 479,
+    "nazwa": "EV005",
+    "stare": [
+     54,
+     103
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "droga od bramy południowej",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 481,
+    "nazwa": "EV005",
+    "stare": [
+     44,
+     73
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Ozdoba"
+   },
+   {
+    "id": 482,
+    "nazwa": "EV104",
+    "stare": [
+     56,
+     98
+    ],
+    "obraz": "!$Tree_Small",
+    "notatka": "",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": "Miejsce: dom10_drzwi"
+   },
+   {
+    "id": 491,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     40,
+     79
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 492,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     76,
+     59
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 493,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     85,
+     11
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   },
+   {
+    "id": 498,
+    "nazwa": "Martwe drzewo",
+    "stare": [
+     96,
+     12
+    ],
+    "obraz": "",
+    "notatka": "<Log:hits=2>",
+    "powod": "drzewo/zasób nowego terenu w obrębie miasta",
+    "numer_przejety_przez_nowe": null
+   }
+  ],
+  "nowe": [
+   {
+    "id": 42,
+    "nazwa": "Stragan",
+    "xy": [
+     65,
+     58
+    ]
+   },
+   {
+    "id": 46,
+    "nazwa": "Stragan",
+    "xy": [
+     70,
+     58
+    ]
+   },
+   {
+    "id": 47,
+    "nazwa": "Posąg przed kaplicą",
+    "xy": [
+     5,
+     17
+    ]
+   },
+   {
+    "id": 48,
+    "nazwa": "Latarnia",
+    "xy": [
+     31,
+     43
+    ]
+   },
+   {
+    "id": 49,
+    "nazwa": "Posąg przed kaplicą",
+    "xy": [
+     11,
+     17
+    ]
+   },
+   {
+    "id": 50,
+    "nazwa": "Drzwi: Kaplica",
+    "xy": [
+     8,
+     16
+    ]
+   },
+   {
+    "id": 51,
+    "nazwa": "Latarnia",
+    "xy": [
+     72,
+     43
+    ]
+   },
+   {
+    "id": 52,
+    "nazwa": "Latarnia",
+    "xy": [
+     31,
+     56
+    ]
+   },
+   {
+    "id": 53,
+    "nazwa": "Latarnia",
+    "xy": [
+     72,
+     56
+    ]
+   },
+   {
+    "id": 54,
+    "nazwa": "Wieża kaplicy",
+    "xy": [
+     15,
+     16
+    ]
+   },
+   {
+    "id": 56,
+    "nazwa": "Tablica ogłoszeń",
+    "xy": [
+     57,
+     38
+    ]
+   },
+   {
+    "id": 57,
+    "nazwa": "Drzwi: Dom grabarza",
+    "xy": [
+     20,
+     12
+    ]
+   },
+   {
+    "id": 58,
+    "nazwa": "Ozdoba",
+    "xy": [
+     85,
+     8
+    ]
+   },
+   {
+    "id": 59,
+    "nazwa": "Ozdoba",
+    "xy": [
+     85,
+     10
+    ]
+   },
+   {
+    "id": 60,
+    "nazwa": "Ozdoba",
+    "xy": [
+     87,
+     12
+    ]
+   },
+   {
+    "id": 62,
+    "nazwa": "Ozdoba",
+    "xy": [
+     86,
+     12
+    ]
+   },
+   {
+    "id": 63,
+    "nazwa": "Drzwi: Dom Agaty",
+    "xy": [
+     85,
+     12
+    ]
+   },
+   {
+    "id": 64,
+    "nazwa": "Ozdoba",
+    "xy": [
+     41,
+     83
+    ]
+   },
+   {
+    "id": 68,
+    "nazwa": "Ozdoba",
+    "xy": [
+     41,
+     85
+    ]
+   },
+   {
+    "id": 69,
+    "nazwa": "Ozdoba",
+    "xy": [
+     43,
+     87
+    ]
+   },
+   {
+    "id": 71,
+    "nazwa": "Krzew w donicy",
+    "xy": [
+     61,
+     38
+    ]
+   },
+   {
+    "id": 74,
+    "nazwa": "Krzew w donicy",
+    "xy": [
+     65,
+     38
+    ]
+   },
+   {
+    "id": 75,
+    "nazwa": "Ozdoba",
+    "xy": [
+     42,
+     87
+    ]
+   },
+   {
+    "id": 76,
+    "nazwa": "Krzew w donicy",
+    "xy": [
+     69,
+     38
+    ]
+   },
+   {
+    "id": 79,
+    "nazwa": "Krzew w donicy",
+    "xy": [
+     72,
+     38
+    ]
+   },
+   {
+    "id": 80,
+    "nazwa": "Drzwi: Dom staruszków",
+    "xy": [
+     42,
+     87
+    ]
+   },
+   {
+    "id": 83,
+    "nazwa": "Ozdoba",
+    "xy": [
+     93,
+     27
+    ]
+   },
+   {
+    "id": 84,
+    "nazwa": "Drzwi: Kamienica",
+    "xy": [
+     96,
+     28
+    ]
+   },
+   {
+    "id": 86,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     35,
+     23
+    ]
+   },
+   {
+    "id": 87,
+    "nazwa": "Ozdoba",
+    "xy": [
+     6,
+     43
+    ]
+   },
+   {
+    "id": 102,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     42,
+     24
+    ]
+   },
+   {
+    "id": 108,
+    "nazwa": "Szyld: Szwaczka",
+    "xy": [
+     6,
+     47
+    ]
+   },
+   {
+    "id": 109,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     61,
+     24
+    ]
+   },
+   {
+    "id": 110,
+    "nazwa": "Ozdoba",
+    "xy": [
+     8,
+     43
+    ]
+   },
+   {
+    "id": 111,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     69,
+     23
+    ]
+   },
+   {
+    "id": 112,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     38,
+     21
+    ]
+   },
+   {
+    "id": 118,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     64,
+     21
+    ]
+   },
+   {
+    "id": 127,
+    "nazwa": "Latarnia",
+    "xy": [
+     48,
+     21
+    ]
+   },
+   {
+    "id": 129,
+    "nazwa": "Drzwi: Dom szwaczki",
+    "xy": [
+     7,
+     48
+    ]
+   },
+   {
+    "id": 131,
+    "nazwa": "Ozdoba",
+    "xy": [
+     95,
+     46
+    ]
+   },
+   {
+    "id": 138,
+    "nazwa": "Chorągiew na strażnicy",
+    "xy": [
+     97,
+     45
+    ]
+   },
+   {
+    "id": 145,
+    "nazwa": "Latarnia",
+    "xy": [
+     55,
+     21
+    ]
+   },
+   {
+    "id": 146,
+    "nazwa": "Latarnia",
+    "xy": [
+     48,
+     27
+    ]
+   },
+   {
+    "id": 147,
+    "nazwa": "Latarnia",
+    "xy": [
+     55,
+     27
+    ]
+   },
+   {
+    "id": 148,
+    "nazwa": "Poręcz do wiązania koni",
+    "xy": [
+     31,
+     18
+    ]
+   },
+   {
+    "id": 149,
+    "nazwa": "Wóz",
+    "xy": [
+     74,
+     18
+    ]
+   },
+   {
+    "id": 150,
+    "nazwa": "Stół w ogródku piwnym",
+    "xy": [
+     68,
+     8
+    ]
+   },
+   {
+    "id": 152,
+    "nazwa": "Drzwi: Strażnica Lorda",
+    "xy": [
+     98,
+     47
+    ]
+   },
+   {
+    "id": 153,
+    "nazwa": "Stołek",
+    "xy": [
+     67,
+     9
+    ]
+   },
+   {
+    "id": 154,
+    "nazwa": "Ozdoba",
+    "xy": [
+     82,
+     56
+    ]
+   },
+   {
+    "id": 155,
+    "nazwa": "Stołek",
+    "xy": [
+     69,
+     9
+    ]
+   },
+   {
+    "id": 156,
+    "nazwa": "Stół w ogródku piwnym",
+    "xy": [
+     73,
+     8
+    ]
+   },
+   {
+    "id": 158,
+    "nazwa": "Ozdoba",
+    "xy": [
+     83,
+     58
+    ]
+   },
+   {
+    "id": 162,
+    "nazwa": "Stołek",
+    "xy": [
+     72,
+     9
+    ]
+   },
+   {
+    "id": 163,
+    "nazwa": "Stołek",
+    "xy": [
+     74,
+     9
+    ]
+   },
+   {
+    "id": 164,
+    "nazwa": "Ozdoba",
+    "xy": [
+     84,
+     58
+    ]
+   },
+   {
+    "id": 165,
+    "nazwa": "Stół w ogródku piwnym",
+    "xy": [
+     68,
+     12
+    ]
+   },
+   {
+    "id": 166,
+    "nazwa": "Ozdoba",
+    "xy": [
+     84,
+     59
+    ]
+   },
+   {
+    "id": 167,
+    "nazwa": "Stołek",
+    "xy": [
+     67,
+     13
+    ]
+   },
+   {
+    "id": 168,
+    "nazwa": "Ozdoba",
+    "xy": [
+     83,
+     59
+    ]
+   },
+   {
+    "id": 169,
+    "nazwa": "Stołek",
+    "xy": [
+     69,
+     13
+    ]
+   },
+   {
+    "id": 170,
+    "nazwa": "Stół w ogródku piwnym",
+    "xy": [
+     73,
+     12
+    ]
+   },
+   {
+    "id": 171,
+    "nazwa": "Ozdoba",
+    "xy": [
+     86,
+     60
+    ]
+   },
+   {
+    "id": 172,
+    "nazwa": "Ozdoba",
+    "xy": [
+     86,
+     59
+    ]
+   },
+   {
+    "id": 174,
+    "nazwa": "Stołek",
+    "xy": [
+     72,
+     13
+    ]
+   },
+   {
+    "id": 175,
+    "nazwa": "Ozdoba",
+    "xy": [
+     86,
+     58
+    ]
+   },
+   {
+    "id": 176,
+    "nazwa": "Ozdoba",
+    "xy": [
+     82,
+     59
+    ]
+   },
+   {
+    "id": 178,
+    "nazwa": "Ozdoba",
+    "xy": [
+     85,
+     59
+    ]
+   },
+   {
+    "id": 179,
+    "nazwa": "Ozdoba",
+    "xy": [
+     86,
+     56
+    ]
+   },
+   {
+    "id": 180,
+    "nazwa": "Drzwi: Dom Haliny",
+    "xy": [
+     84,
+     63
+    ]
+   },
+   {
+    "id": 181,
+    "nazwa": "Stołek",
+    "xy": [
+     74,
+     13
+    ]
+   },
+   {
+    "id": 182,
+    "nazwa": "Ozdoba",
+    "xy": [
+     94,
+     59
+    ]
+   },
+   {
+    "id": 184,
+    "nazwa": "Ozdoba",
+    "xy": [
+     93,
+     62
+    ]
+   },
+   {
+    "id": 185,
+    "nazwa": "Ozdoba",
+    "xy": [
+     94,
+     62
+    ]
+   },
+   {
+    "id": 189,
+    "nazwa": "Beczki piwa",
+    "xy": [
+     75,
+     6
+    ]
+   },
+   {
+    "id": 190,
+    "nazwa": "Beczka",
+    "xy": [
+     66,
+     6
+    ]
+   },
+   {
+    "id": 192,
+    "nazwa": "Latarnia",
+    "xy": [
+     66,
+     14
+    ]
+   },
+   {
+    "id": 193,
+    "nazwa": "Latarnia",
+    "xy": [
+     75,
+     14
+    ]
+   },
+   {
+    "id": 194,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     70,
+     5
+    ]
+   },
+   {
+    "id": 195,
+    "nazwa": "Taczka grabarza",
+    "xy": [
+     22,
+     7
+    ]
+   },
+   {
+    "id": 196,
+    "nazwa": "Łopata",
+    "xy": [
+     23,
+     11
+    ]
+   },
+   {
+    "id": 197,
+    "nazwa": "Drzwi: Stary dom kupca",
+    "xy": [
+     95,
+     62
+    ]
+   },
+   {
+    "id": 198,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     3,
+     21
+    ]
+   },
+   {
+    "id": 200,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     14,
+     21
+    ]
+   },
+   {
+    "id": 201,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     3,
+     31
+    ]
+   },
+   {
+    "id": 202,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     14,
+     31
+    ]
+   },
+   {
+    "id": 203,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     2,
+     26
+    ]
+   },
+   {
+    "id": 204,
+    "nazwa": "Drzwi: Dom cieśli",
+    "xy": [
+     33,
+     86
+    ]
+   },
+   {
+    "id": 208,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     11,
+     41
+    ]
+   },
+   {
+    "id": 209,
+    "nazwa": "Drzwi: Stajnia",
+    "xy": [
+     61,
+     87
+    ]
+   },
+   {
+    "id": 210,
+    "nazwa": "Szyld: Stajnia",
+    "xy": [
+     62,
+     86
+    ]
+   },
+   {
+    "id": 211,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     83,
+     21
+    ]
+   },
+   {
+    "id": 212,
+    "nazwa": "Ozdoba",
+    "xy": [
+     87,
+     87
+    ]
+   },
+   {
+    "id": 213,
+    "nazwa": "Ozdoba",
+    "xy": [
+     87,
+     86
+    ]
+   },
+   {
+    "id": 214,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     88,
+     21
+    ]
+   },
+   {
+    "id": 215,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     82,
+     26
+    ]
+   },
+   {
+    "id": 216,
+    "nazwa": "Drzwi: Dom weterana",
+    "xy": [
+     84,
+     88
+    ]
+   },
+   {
+    "id": 217,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     89,
+     27
+    ]
+   },
+   {
+    "id": 218,
+    "nazwa": "Drzwi: Izba do wynajęcia",
+    "xy": [
+     95,
+     88
+    ]
+   },
+   {
+    "id": 219,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     86,
+     24
+    ]
+   },
+   {
+    "id": 220,
+    "nazwa": "Stojak z bronią",
+    "xy": [
+     96,
+     38
+    ]
+   },
+   {
+    "id": 231,
+    "nazwa": "Drzwi: Dom 10",
+    "xy": [
+     31,
+     73
+    ]
+   },
+   {
+    "id": 235,
+    "nazwa": "Drzwi: Dom 11",
+    "xy": [
+     45,
+     73
+    ]
+   },
+   {
+    "id": 250,
+    "nazwa": "Drzwi: Dom 12",
+    "xy": [
+     45,
+     87
+    ]
+   },
+   {
+    "id": 253,
+    "nazwa": "Drzwi: Dom 13",
+    "xy": [
+     79,
+     74
+    ]
+   },
+   {
+    "id": 254,
+    "nazwa": "Drzwi: Dom 14",
+    "xy": [
+     78,
+     88
+    ]
+   },
+   {
+    "id": 255,
+    "nazwa": "Stojak z bronią",
+    "xy": [
+     99,
+     38
+    ]
+   },
+   {
+    "id": 256,
+    "nazwa": "Kukła do ćwiczeń",
+    "xy": [
+     97,
+     40
+    ]
+   },
+   {
+    "id": 257,
+    "nazwa": "Latarnia",
+    "xy": [
+     94,
+     47
+    ]
+   },
+   {
+    "id": 259,
+    "nazwa": "Drzwi: Dom 15",
+    "xy": [
+     21,
+     33
+    ]
+   },
+   {
+    "id": 260,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     17,
+     55
+    ]
+   },
+   {
+    "id": 262,
+    "nazwa": "Miejsce: tawerna",
+    "xy": [
+     51,
+     17
+    ]
+   },
+   {
+    "id": 263,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     21,
+     57
+    ]
+   },
+   {
+    "id": 265,
+    "nazwa": "Miejsce: przed_tawerna",
+    "xy": [
+     58,
+     19
+    ]
+   },
+   {
+    "id": 266,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     17,
+     60
+    ]
+   },
+   {
+    "id": 267,
+    "nazwa": "Miejsce: brama_twierdzy",
+    "xy": [
+     51,
+     29
+    ]
+   },
+   {
+    "id": 269,
+    "nazwa": "Miejsce: ogrod_zakonu",
+    "xy": [
+     33,
+     17
+    ]
+   },
+   {
+    "id": 271,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     22,
+     61
+    ]
+   },
+   {
+    "id": 272,
+    "nazwa": "Wóz z sianem",
+    "xy": [
+     15,
+     61
+    ]
+   },
+   {
+    "id": 273,
+    "nazwa": "Strach na wróble",
+    "xy": [
+     10,
+     70
+    ]
+   },
+   {
+    "id": 275,
+    "nazwa": "Miejsce: staw",
+    "xy": [
+     66,
+     10
+    ]
+   },
+   {
+    "id": 276,
+    "nazwa": "Miejsce: stragan1",
+    "xy": [
+     33,
+     59
+    ]
+   },
+   {
+    "id": 277,
+    "nazwa": "Wózek z beczką",
+    "xy": [
+     60,
+     66
+    ]
+   },
+   {
+    "id": 278,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     68,
+     67
+    ]
+   },
+   {
+    "id": 279,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     72,
+     71
+    ]
+   },
+   {
+    "id": 280,
+    "nazwa": "Latarnia",
+    "xy": [
+     66,
+     73
+    ]
+   },
+   {
+    "id": 281,
+    "nazwa": "Miejsce: stragan2",
+    "xy": [
+     33,
+     45
+    ]
+   },
+   {
+    "id": 283,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     86,
+     69
+    ]
+   },
+   {
+    "id": 284,
+    "nazwa": "Miejsce: studnia_rynek",
+    "xy": [
+     50,
+     50
+    ]
+   },
+   {
+    "id": 285,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     93,
+     70
+    ]
+   },
+   {
+    "id": 286,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     98,
+     68
+    ]
+   },
+   {
+    "id": 287,
+    "nazwa": "Miejsce: rynek_srodek",
+    "xy": [
+     53,
+     52
+    ]
+   },
+   {
+    "id": 288,
+    "nazwa": "Miejsce: rynek_lawka",
+    "xy": [
+     50,
+     46
+    ]
+   },
+   {
+    "id": 289,
+    "nazwa": "Miejsce: piekarnia_drzwi",
+    "xy": [
+     38,
+     73
+    ]
+   },
+   {
+    "id": 292,
+    "nazwa": "Miejsce: kantor_drzwi",
+    "xy": [
+     18,
+     47
+    ]
+   },
+   {
+    "id": 293,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     28,
+     41
+    ]
+   },
+   {
+    "id": 294,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     28,
+     46
+    ]
+   },
+   {
+    "id": 295,
+    "nazwa": "Ozdoba",
+    "xy": [
+     31,
+     69
+    ]
+   },
+   {
+    "id": 296,
+    "nazwa": "Miejsce: kantor_przed",
+    "xy": [
+     16,
+     48
+    ]
+   },
+   {
+    "id": 297,
+    "nazwa": "Ozdoba",
+    "xy": [
+     42,
+     72
+    ]
+   },
+   {
+    "id": 299,
+    "nazwa": "Miejsce: dom11_drzwi",
+    "xy": [
+     45,
+     74
+    ]
+   },
+   {
+    "id": 300,
+    "nazwa": "Ozdoba",
+    "xy": [
+     45,
+     83
+    ]
+   },
+   {
+    "id": 302,
+    "nazwa": "Ozdoba",
+    "xy": [
+     45,
+     85
+    ]
+   },
+   {
+    "id": 304,
+    "nazwa": "Miejsce: kantor_rog",
+    "xy": [
+     20,
+     48
+    ]
+   },
+   {
+    "id": 306,
+    "nazwa": "Miejsce: ratusz_drzwi",
+    "xy": [
+     85,
+     48
+    ]
+   },
+   {
+    "id": 307,
+    "nazwa": "Miejsce: ratusz_przed",
+    "xy": [
+     83,
+     48
+    ]
+   },
+   {
+    "id": 308,
+    "nazwa": "Miejsce: dzwonnica",
+    "xy": [
+     85,
+     31
+    ]
+   },
+   {
+    "id": 309,
+    "nazwa": "Ozdoba",
+    "xy": [
+     47,
+     87
+    ]
+   },
+   {
+    "id": 310,
+    "nazwa": "Miejsce: schody_rzem",
+    "xy": [
+     51,
+     65
+    ]
+   },
+   {
+    "id": 311,
+    "nazwa": "Ozdoba",
+    "xy": [
+     46,
+     87
+    ]
+   },
+   {
+    "id": 312,
+    "nazwa": "Miejsce: ulica_rzem",
+    "xy": [
+     12,
+     64
+    ]
+   },
+   {
+    "id": 313,
+    "nazwa": "Miejsce: kowadlo",
+    "xy": [
+     8,
+     63
+    ]
+   },
+   {
+    "id": 314,
+    "nazwa": "Miejsce: kuznia_dom",
+    "xy": [
+     13,
+     61
+    ]
+   },
+   {
+    "id": 315,
+    "nazwa": "Miejsce: dom12_drzwi",
+    "xy": [
+     45,
+     88
+    ]
+   },
+   {
+    "id": 316,
+    "nazwa": "Ozdoba",
+    "xy": [
+     78,
+     69
+    ]
+   },
+   {
+    "id": 317,
+    "nazwa": "Miejsce: garbarnia",
+    "xy": [
+     15,
+     85
+    ]
+   },
+   {
+    "id": 318,
+    "nazwa": "Ozdoba",
+    "xy": [
+     80,
+     69
+    ]
+   },
+   {
+    "id": 320,
+    "nazwa": "Miejsce: dom13_drzwi",
+    "xy": [
+     79,
+     75
+    ]
+   },
+   {
+    "id": 321,
+    "nazwa": "Miejsce: garbarz_dom",
+    "xy": [
+     6,
+     89
+    ]
+   },
+   {
+    "id": 322,
+    "nazwa": "Miejsce: woziwoda_dom",
+    "xy": [
+     59,
+     74
+    ]
+   },
+   {
+    "id": 323,
+    "nazwa": "Miejsce: brama_wsch",
+    "xy": [
+     100,
+     51
+    ]
+   },
+   {
+    "id": 324,
+    "nazwa": "Miejsce: brama_pld",
+    "xy": [
+     52,
+     92
+    ]
+   },
+   {
+    "id": 325,
+    "nazwa": "Ozdoba",
+    "xy": [
+     78,
+     84
+    ]
+   },
+   {
+    "id": 326,
+    "nazwa": "Miejsce: dom_mieszczan",
+    "xy": [
+     36,
+     39
+    ]
+   },
+   {
+    "id": 327,
+    "nazwa": "Ozdoba",
+    "xy": [
+     78,
+     86
+    ]
+   },
+   {
+    "id": 329,
+    "nazwa": "Ozdoba",
+    "xy": [
+     80,
+     88
+    ]
+   },
+   {
+    "id": 330,
+    "nazwa": "Ozdoba",
+    "xy": [
+     79,
+     88
+    ]
+   },
+   {
+    "id": 332,
+    "nazwa": "Miejsce: pod_murem",
+    "xy": [
+     58,
+     90
+    ]
+   },
+   {
+    "id": 334,
+    "nazwa": "Miejsce: stodola",
+    "xy": [
+     48,
+     90
+    ]
+   },
+   {
+    "id": 335,
+    "nazwa": "Miejsce: rynek_rog",
+    "xy": [
+     71,
+     47
+    ]
+   },
+   {
+    "id": 338,
+    "nazwa": "Miejsce: ratusz_obok",
+    "xy": [
+     84,
+     48
+    ]
+   },
+   {
+    "id": 339,
+    "nazwa": "Miejsce: stragan1_obok",
+    "xy": [
+     31,
+     58
+    ]
+   },
+   {
+    "id": 340,
+    "nazwa": "Miejsce: dom14_drzwi",
+    "xy": [
+     78,
+     89
+    ]
+   },
+   {
+    "id": 341,
+    "nazwa": "Miejsce: stragan_kosci",
+    "xy": [
+     35,
+     45
+    ]
+   },
+   {
+    "id": 342,
+    "nazwa": "Ozdoba",
+    "xy": [
+     20,
+     28
+    ]
+   },
+   {
+    "id": 343,
+    "nazwa": "Miejsce: woz_pld",
+    "xy": [
+     54,
+     90
+    ]
+   },
+   {
+    "id": 344,
+    "nazwa": "Miejsce: w6_ognisko",
+    "xy": [
+     60,
+     90
+    ]
+   },
+   {
+    "id": 345,
+    "nazwa": "Miejsce: plac_studnia",
+    "xy": [
+     50,
+     52
+    ]
+   },
+   {
+    "id": 346,
+    "nazwa": "Miejsce: plac_tablica",
+    "xy": [
+     57,
+     39
+    ]
+   },
+   {
+    "id": 347,
+    "nazwa": "Ozdoba",
+    "xy": [
+     22,
+     28
+    ]
+   },
+   {
+    "id": 348,
+    "nazwa": "Miejsce: plac_1",
+    "xy": [
+     38,
+     47
+    ]
+   },
+   {
+    "id": 349,
+    "nazwa": "Miejsce: dom15_drzwi",
+    "xy": [
+     21,
+     34
+    ]
+   },
+   {
+    "id": 350,
+    "nazwa": "Latarnia",
+    "xy": [
+     12,
+     48
+    ]
+   },
+   {
+    "id": 351,
+    "nazwa": "Latarnia",
+    "xy": [
+     24,
+     48
+    ]
+   },
+   {
+    "id": 352,
+    "nazwa": "Latarnia",
+    "xy": [
+     40,
+     48
+    ]
+   },
+   {
+    "id": 353,
+    "nazwa": "Latarnia",
+    "xy": [
+     64,
+     48
+    ]
+   },
+   {
+    "id": 354,
+    "nazwa": "Latarnia",
+    "xy": [
+     79,
+     48
+    ]
+   },
+   {
+    "id": 355,
+    "nazwa": "Miejsce: plac_2",
+    "xy": [
+     64,
+     47
+    ]
+   },
+   {
+    "id": 356,
+    "nazwa": "Miejsce: plac_3",
+    "xy": [
+     38,
+     55
+    ]
+   },
+   {
+    "id": 357,
+    "nazwa": "Latarnia",
+    "xy": [
+     90,
+     48
+    ]
+   },
+   {
+    "id": 359,
+    "nazwa": "Latarnia",
+    "xy": [
+     24,
+     37
+    ]
+   },
+   {
+    "id": 360,
+    "nazwa": "Miejsce: plac_4",
+    "xy": [
+     64,
+     55
+    ]
+   },
+   {
+    "id": 361,
+    "nazwa": "Latarnia",
+    "xy": [
+     81,
+     33
+    ]
+   },
+   {
+    "id": 362,
+    "nazwa": "Latarnia",
+    "xy": [
+     24,
+     74
+    ]
+   },
+   {
+    "id": 363,
+    "nazwa": "Latarnia",
+    "xy": [
+     55,
+     74
+    ]
+   },
+   {
+    "id": 365,
+    "nazwa": "Latarnia",
+    "xy": [
+     49,
+     88
+    ]
+   },
+   {
+    "id": 366,
+    "nazwa": "Latarnia",
+    "xy": [
+     54,
+     88
+    ]
+   },
+   {
+    "id": 367,
+    "nazwa": "Latarnia",
+    "xy": [
+     27,
+     88
+    ]
+   },
+   {
+    "id": 368,
+    "nazwa": "Latarnia",
+    "xy": [
+     76,
+     88
+    ]
+   },
+   {
+    "id": 369,
+    "nazwa": "Latarnia",
+    "xy": [
+     24,
+     16
+    ]
+   },
+   {
+    "id": 371,
+    "nazwa": "Latarnia",
+    "xy": [
+     81,
+     16
+    ]
+   },
+   {
+    "id": 372,
+    "nazwa": "Latarnia",
+    "xy": [
+     2,
+     36
+    ]
+   },
+   {
+    "id": 373,
+    "nazwa": "Miejsce: plac_5",
+    "xy": [
+     45,
+     47
+    ]
+   },
+   {
+    "id": 374,
+    "nazwa": "Latarnia",
+    "xy": [
+     101,
+     36
+    ]
+   },
+   {
+    "id": 375,
+    "nazwa": "Miejsce: plac_6",
+    "xy": [
+     58,
+     47
+    ]
+   },
+   {
+    "id": 376,
+    "nazwa": "Miejsce: plac_7",
+    "xy": [
+     45,
+     54
+    ]
+   },
+   {
+    "id": 377,
+    "nazwa": "Latarnia",
+    "xy": [
+     12,
+     74
+    ]
+   },
+   {
+    "id": 378,
+    "nazwa": "Latarnia",
+    "xy": [
+     37,
+     88
+    ]
+   },
+   {
+    "id": 379,
+    "nazwa": "Miejsce: plac_8",
+    "xy": [
+     58,
+     54
+    ]
+   },
+   {
+    "id": 380,
+    "nazwa": "Latarnia",
+    "xy": [
+     66,
+     88
+    ]
+   },
+   {
+    "id": 383,
+    "nazwa": "Miejsce: plac_9",
+    "xy": [
+     40,
+     41
+    ]
+   },
+   {
+    "id": 384,
+    "nazwa": "Miejsce: plac_10",
+    "xy": [
+     63,
+     41
+    ]
+   },
+   {
+    "id": 387,
+    "nazwa": "Miejsce: plac_11",
+    "xy": [
+     40,
+     61
+    ]
+   },
+   {
+    "id": 388,
+    "nazwa": "Miejsce: plac_12",
+    "xy": [
+     63,
+     61
+    ]
+   },
+   {
+    "id": 392,
+    "nazwa": "Miejsce: stragan_1",
+    "xy": [
+     38,
+     45
+    ]
+   },
+   {
+    "id": 393,
+    "nazwa": "Miejsce: stragan_2",
+    "xy": [
+     65,
+     45
+    ]
+   },
+   {
+    "id": 396,
+    "nazwa": "Miejsce: stragan_3",
+    "xy": [
+     70,
+     45
+    ]
+   },
+   {
+    "id": 397,
+    "nazwa": "Miejsce: stragan_4",
+    "xy": [
+     38,
+     59
+    ]
+   },
+   {
+    "id": 401,
+    "nazwa": "Miejsce: stragan_5",
+    "xy": [
+     65,
+     59
+    ]
+   },
+   {
+    "id": 406,
+    "nazwa": "Miejsce: stragan_6",
+    "xy": [
+     70,
+     59
+    ]
+   },
+   {
+    "id": 411,
+    "nazwa": "Miejsce: skwer",
+    "xy": [
+     70,
+     71
+    ]
+   },
+   {
+    "id": 412,
+    "nazwa": "Miejsce: brama_pd",
+    "xy": [
+     52,
+     91
+    ]
+   },
+   {
+    "id": 415,
+    "nazwa": "Miejsce: stajnia_woz",
+    "xy": [
+     69,
+     86
+    ]
+   },
+   {
+    "id": 418,
+    "nazwa": "Miejsce: straznica_warta",
+    "xy": [
+     99,
+     50
+    ]
+   },
+   {
+    "id": 419,
+    "nazwa": "Miejsce: kaplica_lawka",
+    "xy": [
+     14,
+     22
+    ]
+   },
+   {
+    "id": 421,
+    "nazwa": "Miejsce: ciesla_warsztat",
+    "xy": [
+     33,
+     89
+    ]
+   },
+   {
+    "id": 426,
+    "nazwa": "Miejsce: kaplica_drzwi",
+    "xy": [
+     8,
+     17
+    ]
+   },
+   {
+    "id": 427,
+    "nazwa": "Miejsce: dom_grabarza_drzwi",
+    "xy": [
+     20,
+     13
+    ]
+   },
+   {
+    "id": 430,
+    "nazwa": "Miejsce: dom1_drzwi",
+    "xy": [
+     85,
+     13
+    ]
+   },
+   {
+    "id": 433,
+    "nazwa": "Miejsce: dom7_drzwi",
+    "xy": [
+     42,
+     88
+    ]
+   },
+   {
+    "id": 434,
+    "nazwa": "Miejsce: dom2_drzwi",
+    "xy": [
+     96,
+     29
+    ]
+   },
+   {
+    "id": 438,
+    "nazwa": "Miejsce: dom3_drzwi",
+    "xy": [
+     7,
+     49
+    ]
+   },
+   {
+    "id": 441,
+    "nazwa": "Miejsce: straznica_drzwi",
+    "xy": [
+     98,
+     48
+    ]
+   },
+   {
+    "id": 442,
+    "nazwa": "Miejsce: dom4_drzwi",
+    "xy": [
+     84,
+     64
+    ]
+   },
+   {
+    "id": 444,
+    "nazwa": "Miejsce: dom5_drzwi",
+    "xy": [
+     95,
+     63
+    ]
+   },
+   {
+    "id": 445,
+    "nazwa": "Miejsce: dom6_drzwi",
+    "xy": [
+     33,
+     87
+    ]
+   },
+   {
+    "id": 446,
+    "nazwa": "Miejsce: stajnia_drzwi",
+    "xy": [
+     61,
+     88
+    ]
+   },
+   {
+    "id": 451,
+    "nazwa": "Miejsce: dom8_drzwi",
+    "xy": [
+     84,
+     89
+    ]
+   },
+   {
+    "id": 452,
+    "nazwa": "Miejsce: dom9_drzwi",
+    "xy": [
+     95,
+     89
+    ]
+   },
+   {
+    "id": 453,
+    "nazwa": "Kosz żarowy (słup)",
+    "xy": [
+     48,
+     37
+    ]
+   },
+   {
+    "id": 457,
+    "nazwa": "Kosz żarowy (ogień)",
+    "xy": [
+     48,
+     36
+    ]
+   },
+   {
+    "id": 463,
+    "nazwa": "Kosz żarowy (słup)",
+    "xy": [
+     55,
+     37
+    ]
+   },
+   {
+    "id": 464,
+    "nazwa": "Kosz żarowy (ogień)",
+    "xy": [
+     55,
+     36
+    ]
+   },
+   {
+    "id": 467,
+    "nazwa": "Donica z kwiatami",
+    "xy": [
+     47,
+     46
+    ]
+   },
+   {
+    "id": 475,
+    "nazwa": "Donica z kwiatami",
+    "xy": [
+     56,
+     46
+    ]
+   },
+   {
+    "id": 476,
+    "nazwa": "Ozdoba",
+    "xy": [
+     31,
+     71
+    ]
+   },
+   {
+    "id": 477,
+    "nazwa": "Donica z kwiatami",
+    "xy": [
+     47,
+     54
+    ]
+   },
+   {
+    "id": 478,
+    "nazwa": "Ozdoba",
+    "xy": [
+     33,
+     73
+    ]
+   },
+   {
+    "id": 480,
+    "nazwa": "Donica z kwiatami",
+    "xy": [
+     56,
+     54
+    ]
+   },
+   {
+    "id": 481,
+    "nazwa": "Ozdoba",
+    "xy": [
+     32,
+     73
+    ]
+   },
+   {
+    "id": 482,
+    "nazwa": "Miejsce: dom10_drzwi",
+    "xy": [
+     31,
+     74
+    ]
+   },
+   {
+    "id": 483,
+    "nazwa": "Latarnia",
+    "xy": [
+     49,
+     45
+    ]
+   },
+   {
+    "id": 484,
+    "nazwa": "Latarnia",
+    "xy": [
+     54,
+     45
+    ]
+   },
+   {
+    "id": 485,
+    "nazwa": "Latarnia",
+    "xy": [
+     49,
+     54
+    ]
+   },
+   {
+    "id": 486,
+    "nazwa": "Latarnia",
+    "xy": [
+     54,
+     54
+    ]
+   },
+   {
+    "id": 487,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     44,
+     41
+    ]
+   },
+   {
+    "id": 488,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     59,
+     41
+    ]
+   },
+   {
+    "id": 490,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     44,
+     57
+    ]
+   },
+   {
+    "id": 494,
+    "nazwa": "Drzewo (ozdobne)",
+    "xy": [
+     59,
+     57
+    ]
+   },
+   {
+    "id": 495,
+    "nazwa": "Stragan",
+    "xy": [
+     38,
+     44
+    ]
+   },
+   {
+    "id": 496,
+    "nazwa": "Stragan",
+    "xy": [
+     65,
+     44
+    ]
+   },
+   {
+    "id": 497,
+    "nazwa": "Stragan",
+    "xy": [
+     70,
+     44
+    ]
+   },
+   {
+    "id": 499,
+    "nazwa": "Stragan",
+    "xy": [
+     38,
+     58
+    ]
+   }
+  ]
+ },
+ "c_miejsca": {
+  "TownLife_SPOTS": {
+   "tawerna": {
+    "stare": [
+     24,
+     17,
+     8
+    ],
+    "nowe": [
+     51,
+     17,
+     8
+    ],
+    "przechodnie": true
+   },
+   "przed_tawerna": {
+    "stare": [
+     31,
+     19,
+     2
+    ],
+    "nowe": [
+     58,
+     19,
+     2
+    ],
+    "przechodnie": true
+   },
+   "brama_twierdzy": {
+    "stare": [
+     24,
+     21,
+     2
+    ],
+    "nowe": [
+     51,
+     29,
+     2
+    ],
+    "przechodnie": true
+   },
+   "ogrod_zakonu": {
+    "stare": [
+     6,
+     17,
+     8
+    ],
+    "nowe": [
+     33,
+     17,
+     8
+    ],
+    "przechodnie": true
+   },
+   "staw": {
+    "stare": [
+     39,
+     10,
+     6
+    ],
+    "nowe": [
+     66,
+     10,
+     6
+    ],
+    "przechodnie": true
+   },
+   "stragan1": {
+    "stare": [
+     21,
+     31,
+     2
+    ],
+    "nowe": [
+     33,
+     59,
+     2
+    ],
+    "przechodnie": true
+   },
+   "stragan2": {
+    "stare": [
+     27,
+     30,
+     2
+    ],
+    "nowe": [
+     33,
+     45,
+     2
+    ],
+    "przechodnie": true
+   },
+   "studnia_rynek": {
+    "stare": [
+     23,
+     34,
+     2
+    ],
+    "nowe": [
+     50,
+     50,
+     2
+    ],
+    "przechodnie": true
+   },
+   "rynek_srodek": {
+    "stare": [
+     26,
+     36,
+     2
+    ],
+    "nowe": [
+     53,
+     52,
+     2
+    ],
+    "przechodnie": true
+   },
+   "rynek_lawka": {
+    "stare": [
+     19,
+     35,
+     2
+    ],
+    "nowe": [
+     50,
+     46,
+     2
+    ],
+    "przechodnie": true
+   },
+   "piekarnia_drzwi": {
+    "stare": [
+     6,
+     39,
+     8
+    ],
+    "nowe": [
+     38,
+     73,
+     8
+    ],
+    "przechodnie": true
+   },
+   "kantor_drzwi": {
+    "stare": [
+     14,
+     39,
+     8
+    ],
+    "nowe": [
+     18,
+     47,
+     8
+    ],
+    "przechodnie": true
+   },
+   "kantor_przed": {
+    "stare": [
+     12,
+     40,
+     2
+    ],
+    "nowe": [
+     16,
+     48,
+     2
+    ],
+    "przechodnie": true
+   },
+   "kantor_rog": {
+    "stare": [
+     16,
+     40,
+     4
+    ],
+    "nowe": [
+     20,
+     48,
+     4
+    ],
+    "przechodnie": true
+   },
+   "ratusz_drzwi": {
+    "stare": [
+     41,
+     40,
+     8
+    ],
+    "nowe": [
+     85,
+     48,
+     8
+    ],
+    "przechodnie": true
+   },
+   "ratusz_przed": {
+    "stare": [
+     39,
+     40,
+     2
+    ],
+    "nowe": [
+     83,
+     48,
+     2
+    ],
+    "przechodnie": true
+   },
+   "dzwonnica": {
+    "stare": [
+     47,
+     30,
+     8
+    ],
+    "nowe": [
+     85,
+     31,
+     8
+    ],
+    "przechodnie": true
+   },
+   "schody_rzem": {
+    "stare": [
+     24,
+     44,
+     2
+    ],
+    "nowe": [
+     51,
+     65,
+     2
+    ],
+    "przechodnie": true
+   },
+   "ulica_rzem": {
+    "stare": [
+     12,
+     50,
+     2
+    ],
+    "nowe": [
+     12,
+     64,
+     2
+    ],
+    "przechodnie": true
+   },
+   "kowadlo": {
+    "stare": [
+     7,
+     49,
+     8
+    ],
+    "nowe": [
+     8,
+     63,
+     8
+    ],
+    "przechodnie": true
+   },
+   "kuznia_dom": {
+    "stare": [
+     12,
+     47,
+     8
+    ],
+    "nowe": [
+     13,
+     61,
+     8
+    ],
+    "przechodnie": true
+   },
+   "garbarnia": {
+    "stare": [
+     16,
+     45,
+     8
+    ],
+    "nowe": [
+     15,
+     85,
+     8
+    ],
+    "przechodnie": true
+   },
+   "garbarz_dom": {
+    "stare": [
+     37,
+     50,
+     8
+    ],
+    "nowe": [
+     6,
+     89,
+     8
+    ],
+    "przechodnie": true
+   },
+   "woziwoda_dom": {
+    "stare": [
+     29,
+     47,
+     8
+    ],
+    "nowe": [
+     59,
+     74,
+     8
+    ],
+    "przechodnie": true
+   },
+   "brama_wsch": {
+    "stare": [
+     48,
+     51,
+     4
+    ],
+    "nowe": [
+     100,
+     51,
+     4
+    ],
+    "przechodnie": true
+   },
+   "brama_pld": {
+    "stare": [
+     25,
+     53,
+     2
+    ],
+    "nowe": [
+     52,
+     92,
+     2
+    ],
+    "przechodnie": true
+   },
+   "dom_mieszczan": {
+    "stare": [
+     9,
+     31,
+     8
+    ],
+    "nowe": [
+     36,
+     39,
+     8
+    ],
+    "przechodnie": true
+   },
+   "pod_murem": {
+    "stare": [
+     31,
+     51,
+     2
+    ],
+    "nowe": [
+     58,
+     90,
+     2
+    ],
+    "przechodnie": true
+   },
+   "stodola": {
+    "stare": [
+     21,
+     51,
+     2
+    ],
+    "nowe": [
+     48,
+     90,
+     2
+    ],
+    "przechodnie": true
+   },
+   "rynek_rog": {
+    "stare": [
+     30,
+     38,
+     2
+    ],
+    "nowe": [
+     71,
+     47,
+     2
+    ],
+    "przechodnie": true
+   },
+   "ratusz_obok": {
+    "stare": [
+     40,
+     40,
+     4
+    ],
+    "nowe": [
+     84,
+     48,
+     4
+    ],
+    "przechodnie": true
+   },
+   "stragan1_obok": {
+    "stare": [
+     19,
+     31,
+     6
+    ],
+    "nowe": [
+     31,
+     58,
+     6
+    ],
+    "przechodnie": true
+   },
+   "stragan_kosci": {
+    "stare": [
+     30,
+     31,
+     4
+    ],
+    "nowe": [
+     35,
+     45,
+     4
+    ],
+    "przechodnie": true
+   },
+   "woz_pld": {
+    "stare": [
+     27,
+     51,
+     2
+    ],
+    "nowe": [
+     54,
+     90,
+     2
+    ],
+    "przechodnie": true
+   },
+   "w6_ognisko": {
+    "stare": [
+     33,
+     51,
+     4
+    ],
+    "nowe": [
+     60,
+     90,
+     4
+    ],
+    "przechodnie": true
+   }
+  },
+  "nowe_miejsca": {
+   "plac_studnia": {
+    "nowe": [
+     50,
+     52
+    ],
+    "przechodnie": true
+   },
+   "plac_tablica": {
+    "nowe": [
+     57,
+     39
+    ],
+    "przechodnie": true
+   },
+   "plac_1": {
+    "nowe": [
+     38,
+     47
+    ],
+    "przechodnie": true
+   },
+   "plac_2": {
+    "nowe": [
+     64,
+     47
+    ],
+    "przechodnie": true
+   },
+   "plac_3": {
+    "nowe": [
+     38,
+     55
+    ],
+    "przechodnie": true
+   },
+   "plac_4": {
+    "nowe": [
+     64,
+     55
+    ],
+    "przechodnie": true
+   },
+   "plac_5": {
+    "nowe": [
+     45,
+     47
+    ],
+    "przechodnie": true
+   },
+   "plac_6": {
+    "nowe": [
+     58,
+     47
+    ],
+    "przechodnie": true
+   },
+   "plac_7": {
+    "nowe": [
+     45,
+     54
+    ],
+    "przechodnie": true
+   },
+   "plac_8": {
+    "nowe": [
+     58,
+     54
+    ],
+    "przechodnie": true
+   },
+   "plac_9": {
+    "nowe": [
+     40,
+     41
+    ],
+    "przechodnie": true
+   },
+   "plac_10": {
+    "nowe": [
+     63,
+     41
+    ],
+    "przechodnie": true
+   },
+   "plac_11": {
+    "nowe": [
+     40,
+     61
+    ],
+    "przechodnie": true
+   },
+   "plac_12": {
+    "nowe": [
+     63,
+     61
+    ],
+    "przechodnie": true
+   },
+   "stragan_1": {
+    "nowe": [
+     38,
+     45
+    ],
+    "przechodnie": true
+   },
+   "stragan_2": {
+    "nowe": [
+     65,
+     45
+    ],
+    "przechodnie": true
+   },
+   "stragan_3": {
+    "nowe": [
+     70,
+     45
+    ],
+    "przechodnie": true
+   },
+   "stragan_4": {
+    "nowe": [
+     38,
+     59
+    ],
+    "przechodnie": true
+   },
+   "stragan_5": {
+    "nowe": [
+     65,
+     59
+    ],
+    "przechodnie": true
+   },
+   "stragan_6": {
+    "nowe": [
+     70,
+     59
+    ],
+    "przechodnie": true
+   },
+   "skwer": {
+    "nowe": [
+     70,
+     71
+    ],
+    "przechodnie": true
+   },
+   "brama_pd": {
+    "nowe": [
+     52,
+     91
+    ],
+    "przechodnie": true
+   },
+   "stajnia_woz": {
+    "nowe": [
+     69,
+     86
+    ],
+    "przechodnie": true
+   },
+   "straznica_warta": {
+    "nowe": [
+     99,
+     50
+    ],
+    "przechodnie": true
+   },
+   "kaplica_lawka": {
+    "nowe": [
+     14,
+     22
+    ],
+    "przechodnie": true
+   },
+   "ciesla_warsztat": {
+    "nowe": [
+     33,
+     89
+    ],
+    "przechodnie": true
+   },
+   "kaplica_drzwi": {
+    "nowe": [
+     8,
+     17
+    ],
+    "przechodnie": true
+   },
+   "dom_grabarza_drzwi": {
+    "nowe": [
+     20,
+     13
+    ],
+    "przechodnie": true
+   },
+   "dom1_drzwi": {
+    "nowe": [
+     85,
+     13
+    ],
+    "przechodnie": true
+   },
+   "dom7_drzwi": {
+    "nowe": [
+     42,
+     88
+    ],
+    "przechodnie": true
+   },
+   "dom2_drzwi": {
+    "nowe": [
+     96,
+     29
+    ],
+    "przechodnie": true
+   },
+   "dom3_drzwi": {
+    "nowe": [
+     7,
+     49
+    ],
+    "przechodnie": true
+   },
+   "straznica_drzwi": {
+    "nowe": [
+     98,
+     48
+    ],
+    "przechodnie": true
+   },
+   "dom4_drzwi": {
+    "nowe": [
+     84,
+     64
+    ],
+    "przechodnie": true
+   },
+   "dom5_drzwi": {
+    "nowe": [
+     95,
+     63
+    ],
+    "przechodnie": true
+   },
+   "dom6_drzwi": {
+    "nowe": [
+     33,
+     87
+    ],
+    "przechodnie": true
+   },
+   "stajnia_drzwi": {
+    "nowe": [
+     61,
+     88
+    ],
+    "przechodnie": true
+   },
+   "dom8_drzwi": {
+    "nowe": [
+     84,
+     89
+    ],
+    "przechodnie": true
+   },
+   "dom9_drzwi": {
+    "nowe": [
+     95,
+     89
+    ],
+    "przechodnie": true
+   },
+   "dom10_drzwi": {
+    "nowe": [
+     31,
+     74
+    ],
+    "przechodnie": true
+   },
+   "dom11_drzwi": {
+    "nowe": [
+     45,
+     74
+    ],
+    "przechodnie": true
+   },
+   "dom12_drzwi": {
+    "nowe": [
+     45,
+     88
+    ],
+    "przechodnie": true
+   },
+   "dom13_drzwi": {
+    "nowe": [
+     79,
+     75
+    ],
+    "przechodnie": true
+   },
+   "dom14_drzwi": {
+    "nowe": [
+     78,
+     89
+    ],
+    "przechodnie": true
+   },
+   "dom15_drzwi": {
+    "nowe": [
+     21,
+     34
+    ],
+    "przechodnie": true
+   }
+  },
+  "punkty_wtyczek": [
+   {
+    "co": "Garnizon_Data.js:140 garnizon_werbownik",
+    "stare": [
+     22,
+     37
+    ],
+    "nowe": [
+     24,
+     46
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN groby",
+    "stare": [
+     82,
+     14
+    ],
+    "nowe": [
+     7,
+     25
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN groby_2",
+    "stare": [
+     85,
+     14
+    ],
+    "nowe": [
+     10,
+     25
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN kopie",
+    "stare": [
+     85,
+     16
+    ],
+    "nowe": [
+     10,
+     27
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN furtka",
+    "stare": [
+     84,
+     18
+    ],
+    "nowe": [
+     9,
+     29
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN przerwa",
+    "stare": [
+     86,
+     14
+    ],
+    "nowe": [
+     11,
+     25
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN lampa",
+    "stare": [
+     84,
+     13
+    ],
+    "nowe": [
+     9,
+     24
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:495 SPOTS_TOWN chata",
+    "stare": [
+     84,
+     20
+    ],
+    "nowe": [
+     20,
+     13
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Wrak_Data.js:52 rozbitek_noc",
+    "stare": [
+     24,
+     17
+    ],
+    "nowe": [
+     51,
+     17
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Wrak_Data.js:53 rozbitek_rynek",
+    "stare": [
+     28,
+     35
+    ],
+    "nowe": [
+     56,
+     51
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Wrak_Data.js:54 rozbitek_mury",
+    "stare": [
+     3,
+     19
+    ],
+    "nowe": [
+     30,
+     19
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Wrak_Data.js:55 rozbitek_studnia (Wrak.js wellWatch - dokładnie)",
+    "stare": [
+     25,
+     34
+    ],
+    "nowe": [
+     52,
+     50
+    ],
+    "jak": "studnia",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Wrak_Data.js:154 znak mapy Wzgórze tawerny",
+    "stare": [
+     24,
+     18
+    ],
+    "nowe": [
+     51,
+     18
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:346 w5_piwnica",
+    "stare": [
+     10,
+     40
+    ],
+    "nowe": [
+     14,
+     48
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:351 w5_lada",
+    "stare": [
+     14,
+     39
+    ],
+    "nowe": [
+     18,
+     47
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:67 PLACES.backDoor (ev 94, dokładnie)",
+    "stare": [
+     10,
+     39
+    ],
+    "nowe": [
+     14,
+     47
+    ],
+    "jak": "kantor",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Kantor_Data.js:67 PLACES.backFront",
+    "stare": [
+     10,
+     40
+    ],
+    "nowe": [
+     14,
+     48
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:67 PLACES.frontDoor (ev 95)",
+    "stare": [
+     14,
+     38
+    ],
+    "nowe": [
+     18,
+     46
+    ],
+    "jak": "kantor",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Kantor_Data.js:68 PLACES.gateIn",
+    "stare": [
+     25,
+     66
+    ],
+    "nowe": [
+     52,
+     104
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:68 PLACES.gateOut",
+    "stare": [
+     25,
+     67
+    ],
+    "nowe": [
+     52,
+     105
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:68 PLACES.east",
+    "stare": [
+     50,
+     50
+    ],
+    "nowe": [
+     101,
+     50
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor_Data.js:68 PLACES.tavern",
+    "stare": [
+     24,
+     18
+    ],
+    "nowe": [
+     51,
+     18
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor.js:1286 F9 W5",
+    "stare": [
+     12,
+     41
+    ],
+    "nowe": [
+     16,
+     49
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor.js:1286 F9 W5",
+    "stare": [
+     8,
+     37
+    ],
+    "nowe": [
+     10,
+     49
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kantor.js:1286 F9 W5",
+    "stare": [
+     10,
+     41
+    ],
+    "nowe": [
+     14,
+     49
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Dwor_Data.js:53 manor.out (też TownQuests.js:2242)",
+    "stare": [
+     50,
+     51
+    ],
+    "nowe": [
+     102,
+     51
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Dwor_Data.js:54 town.gate",
+    "stare": [
+     48,
+     51
+    ],
+    "nowe": [
+     100,
+     51
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Dwor_Data.js:55 town.f9",
+    "stare": [
+     24,
+     33
+    ],
+    "nowe": [
+     50,
+     46
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Kasztelan.js:891 F9 rozdz. 3",
+    "stare": [
+     8,
+     50
+    ],
+    "nowe": [
+     8,
+     50
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Garnizon_Data.js:284 lista 656",
+    "stare": [
+     20,
+     37
+    ],
+    "nowe": [
+     25,
+     47
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Garnizon_Data.js:284 szukający 657",
+    "stare": [
+     32,
+     50
+    ],
+    "nowe": [
+     59,
+     89
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Garnizon_Data.js:284 szukający 658",
+    "stare": [
+     20,
+     50
+    ],
+    "nowe": [
+     47,
+     89
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Garnizon_Data.js:284 Kłos 659 (przy tylnych drzwiach kantoru)",
+    "stare": [
+     9,
+     40
+    ],
+    "nowe": [
+     13,
+     48
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:171 bakery_window (951)",
+    "stare": [
+     6,
+     39
+    ],
+    "nowe": [
+     38,
+     73
+    ],
+    "jak": "piekarnia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:172 notice_tavern (952)",
+    "stare": [
+     25,
+     16
+    ],
+    "nowe": [
+     52,
+     16
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "TownQuests_Data.js:173 notice_bakery (953)",
+    "stare": [
+     7,
+     39
+    ],
+    "nowe": [
+     39,
+     73
+    ],
+    "jak": "piekarnia",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "TownQuests_Data.js:174 notice_smithy (954)",
+    "stare": [
+     8,
+     48
+    ],
+    "nowe": [
+     9,
+     62
+    ],
+    "jak": "kuznia",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "TownQuests_Data.js:175 notice_kantor (955)",
+    "stare": [
+     15,
+     39
+    ],
+    "nowe": [
+     19,
+     47
+    ],
+    "jak": "kantor",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "TownQuests_Data.js:176 south_gate (956)",
+    "stare": [
+     26,
+     54
+    ],
+    "nowe": [
+     53,
+     93
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:177 watch_post (957)",
+    "stare": [
+     26,
+     20
+    ],
+    "nowe": [
+     53,
+     28
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:178 east_brazier (958)",
+    "stare": [
+     49,
+     49
+    ],
+    "nowe": [
+     101,
+     49
+    ],
+    "jak": "brama_wschodnia",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "TownQuests_Data.js:200 w3_kupala (959)",
+    "stare": [
+     24,
+     51
+    ],
+    "nowe": [
+     51,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:217 W6 namiot 903",
+    "stare": [
+     31,
+     53
+    ],
+    "nowe": [
+     58,
+     92
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:218 W6 namiot 904",
+    "stare": [
+     19,
+     51
+    ],
+    "nowe": [
+     46,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:219 W6 ognisko 905",
+    "stare": [
+     32,
+     51
+    ],
+    "nowe": [
+     59,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:220 W6 Bogdan 906",
+    "stare": [
+     23,
+     51
+    ],
+    "nowe": [
+     50,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests_Data.js:221 W6 Halina 907",
+    "stare": [
+     29,
+     52
+    ],
+    "nowe": [
+     56,
+     91
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "TownQuests.js:1531 CAP posąg (ev 43, dokładnie)",
+    "stare": [
+     5,
+     9
+    ],
+    "nowe": [
+     32,
+     9
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3_Data.js:41 door",
+    "stare": [
+     24,
+     17
+    ],
+    "nowe": [
+     51,
+     17
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:41 doorTile",
+    "stare": [
+     24,
+     16
+    ],
+    "nowe": [
+     51,
+     16
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     24,
+     23
+    ],
+    "nowe": [
+     51,
+     31
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     25,
+     23
+    ],
+    "nowe": [
+     52,
+     31
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     24,
+     22
+    ],
+    "nowe": [
+     51,
+     30
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     25,
+     22
+    ],
+    "nowe": [
+     52,
+     30
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     23,
+     22
+    ],
+    "nowe": [
+     50,
+     30
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     26,
+     21
+    ],
+    "nowe": [
+     53,
+     29
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     23,
+     21
+    ],
+    "nowe": [
+     50,
+     29
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     24,
+     24
+    ],
+    "nowe": [
+     51,
+     32
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:42 gate",
+    "stare": [
+     25,
+     24
+    ],
+    "nowe": [
+     52,
+     32
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     21,
+     18
+    ],
+    "nowe": [
+     48,
+     18
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     27,
+     18
+    ],
+    "nowe": [
+     54,
+     18
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     19,
+     19
+    ],
+    "nowe": [
+     46,
+     19
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     29,
+     19
+    ],
+    "nowe": [
+     56,
+     19
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     22,
+     20
+    ],
+    "nowe": [
+     49,
+     28
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     26,
+     20
+    ],
+    "nowe": [
+     53,
+     28
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     17,
+     18
+    ],
+    "nowe": [
+     44,
+     18
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:43 guard",
+    "stare": [
+     31,
+     18
+    ],
+    "nowe": [
+     58,
+     18
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:44 from",
+    "stare": [
+     24,
+     24
+    ],
+    "nowe": [
+     51,
+     32
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:44 from",
+    "stare": [
+     25,
+     24
+    ],
+    "nowe": [
+     52,
+     32
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:44 from",
+    "stare": [
+     24,
+     23
+    ],
+    "nowe": [
+     51,
+     31
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:44 from",
+    "stare": [
+     25,
+     23
+    ],
+    "nowe": [
+     52,
+     31
+    ],
+    "jak": "mur_zamku",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:45 bell (lina 859)",
+    "stare": [
+     47,
+     29
+    ],
+    "nowe": [
+     85,
+     30
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:45 bellStand",
+    "stare": [
+     47,
+     30
+    ],
+    "nowe": [
+     85,
+     31
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Act3_Data.js:46 fires",
+    "stare": [
+     21,
+     15
+    ],
+    "nowe": [
+     48,
+     15
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3_Data.js:46 fires",
+    "stare": [
+     27,
+     15
+    ],
+    "nowe": [
+     54,
+     15
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3_Data.js:46 fires",
+    "stare": [
+     18,
+     16
+    ],
+    "nowe": [
+     45,
+     16
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3_Data.js:46 fires",
+    "stare": [
+     30,
+     16
+    ],
+    "nowe": [
+     57,
+     16
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3_Data.js:46 fires",
+    "stare": [
+     24,
+     14
+    ],
+    "nowe": [
+     51,
+     14
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": false,
+    "stare_przechodnie": false
+   },
+   {
+    "co": "Act3.js:1340 F9 (drzwi + 2)",
+    "stare": [
+     24,
+     19
+    ],
+    "nowe": [
+     51,
+     19
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:697 rynek kamera",
+    "stare": [
+     24,
+     37
+    ],
+    "nowe": [
+     53,
+     55
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:698 rynek sołtys",
+    "stare": [
+     26,
+     36
+    ],
+    "nowe": [
+     53,
+     52
+    ],
+    "jak": "studnia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:698 rynek Hanka",
+    "stare": [
+     21,
+     33
+    ],
+    "nowe": [
+     47,
+     49
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:698 rynek Kuba",
+    "stare": [
+     24,
+     36
+    ],
+    "nowe": [
+     51,
+     52
+    ],
+    "jak": "studnia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:698 rynek Ambroży",
+    "stare": [
+     20,
+     36
+    ],
+    "nowe": [
+     24,
+     44
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:728 oboz kamera",
+    "stare": [
+     30,
+     50
+    ],
+    "nowe": [
+     57,
+     89
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:729 oboz Ludmiła",
+    "stare": [
+     30,
+     51
+    ],
+    "nowe": [
+     57,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:729 oboz Ela",
+    "stare": [
+     31,
+     52
+    ],
+    "nowe": [
+     58,
+     91
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:730 oboz Marek",
+    "stare": [
+     32,
+     51
+    ],
+    "nowe": [
+     59,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Underground_Data.js:730 oboz Rafał",
+    "stare": [
+     28,
+     51
+    ],
+    "nowe": [
+     55,
+     90
+    ],
+    "jak": "mur_S",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Okolice_Data.js:88 ENTRY[8] (musi być przechodnie)",
+    "stare": [
+     27,
+     34
+    ],
+    "nowe": [
+     54,
+     50
+    ],
+    "jak": "rynek (punkty wokół studni)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon.js:1304 F9 cmentarz",
+    "stare": [
+     84,
+     16
+    ],
+    "nowe": [
+     9,
+     27
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon.js:1304 F9 szubienica",
+    "stare": [
+     94,
+     58
+    ],
+    "nowe": [
+     88,
+     125
+    ],
+    "jak": "szubienica Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:299 odkrycie cmentarz",
+    "stare": [
+     84,
+     16
+    ],
+    "nowe": [
+     9,
+     27
+    ],
+    "jak": "cmentarz Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zakon_Data.js:300 odkrycie szubienica",
+    "stare": [
+     94,
+     57
+    ],
+    "nowe": [
+     88,
+     124
+    ],
+    "jak": "szubienica Zakonu (punkty)",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Zasoby.js:1420 F9 Pola mieszczan",
+    "stare": [
+     9,
+     80
+    ],
+    "nowe": [
+     10,
+     108
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map001 ev10 (wyjście z tawerny)",
+    "stare": [
+     23,
+     17
+    ],
+    "nowe": [
+     50,
+     17
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map001 ev11",
+    "stare": [
+     24,
+     17
+    ],
+    "nowe": [
+     51,
+     17
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map001 ev12",
+    "stare": [
+     25,
+     17
+    ],
+    "nowe": [
+     52,
+     17
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map102 Piekarnia ev11",
+    "stare": [
+     6,
+     39
+    ],
+    "nowe": [
+     38,
+     73
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map103 Kantor ev7",
+    "stare": [
+     14,
+     39
+    ],
+    "nowe": [
+     18,
+     47
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map103 Kantor ev13 (tylne)",
+    "stare": [
+     10,
+     40
+    ],
+    "nowe": [
+     14,
+     48
+    ],
+    "jak": "kantor",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map104 Ratusz ev12",
+    "stare": [
+     41,
+     40
+    ],
+    "nowe": [
+     85,
+     48
+    ],
+    "jak": "ratusz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map104 Ratusz ev15 (kancelaria)",
+    "stare": [
+     47,
+     40
+    ],
+    "nowe": [
+     91,
+     48
+    ],
+    "jak": "ratusz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map105 Dom kowala ev8",
+    "stare": [
+     12,
+     47
+    ],
+    "nowe": [
+     13,
+     61
+    ],
+    "jak": "kuznia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map106 Dom garbarza ev13",
+    "stare": [
+     37,
+     50
+    ],
+    "nowe": [
+     6,
+     89
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map107 Dom woziwody ev9",
+    "stare": [
+     29,
+     47
+    ],
+    "nowe": [
+     59,
+     74
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map108 Dzwonnica ev13",
+    "stare": [
+     48,
+     31
+    ],
+    "nowe": [
+     92,
+     39
+    ],
+    "jak": "ratusz",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map109 Dom mieszczan ev14",
+    "stare": [
+     9,
+     31
+    ],
+    "nowe": [
+     36,
+     39
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map110 Izba pod skałą ev3",
+    "stare": [
+     12,
+     30
+    ],
+    "nowe": [
+     39,
+     38
+    ],
+    "jak": "pod_skala",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map118 Dno studni ev14 Lina",
+    "stare": [
+     26,
+     34
+    ],
+    "nowe": [
+     53,
+     50
+    ],
+    "jak": "studnia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map119 Archiwum ev2 Schody",
+    "stare": [
+     6,
+     13
+    ],
+    "nowe": [
+     33,
+     13
+    ],
+    "jak": "taras_tawerna",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map111 Podgrodzie ev65",
+    "stare": [
+     1,
+     50
+    ],
+    "nowe": [
+     1,
+     50
+    ],
+    "jak": "brama_zachodnia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map111 Podgrodzie ev66",
+    "stare": [
+     1,
+     51
+    ],
+    "nowe": [
+     1,
+     51
+    ],
+    "jak": "brama_zachodnia",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map024 Posiadłość ev65",
+    "stare": [
+     102,
+     50
+    ],
+    "nowe": [
+     102,
+     50
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map024 Posiadłość ev66",
+    "stare": [
+     102,
+     51
+    ],
+    "nowe": [
+     102,
+     51
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   },
+   {
+    "co": "Map022 Polna droga ev65-67",
+    "stare": [
+     25,
+     136
+    ],
+    "nowe": [
+     25,
+     136
+    ],
+    "jak": "ręcznie",
+    "przechodnie": true,
+    "stare_przechodnie": true
+   }
+  ]
+ },
+ "d_strefy": {
+  "schody_na_plac": [
+   49,
+   34,
+   54,
+   36
+  ],
+  "plac": [
+   30,
+   37,
+   73,
+   63
+  ],
+  "plac_kwadrat_studni": [
+   47,
+   45,
+   56,
+   54
+  ],
+  "dziedziniec_tawerny": [
+   29,
+   17,
+   76,
+   27
+  ],
+  "ogrodek_piwny": [
+   65,
+   5,
+   76,
+   15
+  ],
+  "cmentarz": {
+   "x": 5,
+   "y": 23,
+   "w": 8,
+   "h": 6,
+   "furtka": [
+    [
+     8,
+     28
+    ],
+    [
+     9,
+     28
+    ]
+   ],
+   "lampka": [
+    9,
+    23
+   ],
+   "przed_furtka": [
+    8,
+    29
+   ]
+  },
+  "skwer": [
+   66,
+   65,
+   73,
+   73
+  ],
+  "pole_1": {
+   "x": 6,
+   "y": 104,
+   "w": 8,
+   "h": 4
+  },
+  "pole_2": {
+   "x": 32,
+   "y": 118,
+   "w": 8,
+   "h": 4
+  },
+  "pole_3": {
+   "x": 62,
+   "y": 104,
+   "w": 8,
+   "h": 5
+  },
+  "szubienica": {
+   "x": 87,
+   "y": 121,
+   "w": 3,
+   "h": 3,
+   "at": [
+    88,
+    123
+   ]
+  },
+  "ogrod_rycerzy": {
+   "prostokat": [
+    29,
+    2,
+    37,
+    16
+   ],
+   "TownQuests_w2Garden_i_cienie": "x 29-37, y 4-13 (było x 2-10)",
+   "podgladanie": "x 31-35, y 16-19 (było x 4-8)",
+   "strzal_w_czapke": "sy >= 15.5, x 28.5-37.5, y >= 6.5",
+   "CAP": {
+    "posag": [
+     32,
+     9
+    ],
+    "glowa": [
+     32.5,
+     7.15
+    ],
+    "czapka": [
+     32.6,
+     16.3
+    ]
+   },
+   "uwaga": "cokoły W3 = każde !Statue z y === 9: posągi 43/44 na (32,9)/(34,9); posągi 20/21 przed tawerną na y=17, posągi kaplicy na y=17"
+  },
+  "orzel_TOWN_SQUARES_8": [
+   [
+    29,
+    17,
+    76,
+    27
+   ],
+   [
+    30,
+    37,
+    73,
+    63
+   ],
+   [
+    2,
+    89,
+    101,
+    92
+   ]
+  ],
+  "region31_plac_kratek": 1006,
+  "okolice_OLD_8": "miasto zajmuje teraz x 0-103, y 0-102 (mury ze skarpą); poza nim tylko rzędy 103-137",
+  "zakon_CEMETERY": {
+   "x": 5,
+   "y": 23,
+   "w": 8,
+   "h": 6,
+   "gate": [
+    [
+     8,
+     28
+    ],
+    [
+     9,
+     28
+    ]
+   ],
+   "lamp": [
+    9,
+    23
+   ],
+   "graves": [
+    [
+     6,
+     24
+    ],
+    [
+     7,
+     24
+    ],
+    [
+     10,
+     24
+    ],
+    [
+     11,
+     24
+    ],
+    [
+     6,
+     26
+    ],
+    [
+     7,
+     26
+    ],
+    [
+     10,
+     26
+    ],
+    [
+     11,
+     26
+    ]
+   ]
+  },
+  "zasoby_FIELDS": {
+   "pole_1": {
+    "x": 6,
+    "y": 104,
+    "w": 8,
+    "h": 4
+   },
+   "pole_2": {
+    "x": 32,
+    "y": 118,
+    "w": 8,
+    "h": 4
+   },
+   "pole_3": {
+    "x": 62,
+    "y": 104,
+    "w": 8,
+    "h": 5
+   }
+  }
+ }
+}

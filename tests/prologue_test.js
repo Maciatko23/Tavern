@@ -124,7 +124,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     t.check("rozmowa do końca (O)", await t.until("$gameSystem._story.intro === 2 && !$gameMap.isEventRunning() && !$gameMessage.isBusy()", 90));
     await t.eval("window.__drv.on = false; 0");
     const talk = await t.json("window.__drv.log.slice(window.__drv.mark).map(l => l.t).join(' / ')");
-    t.check("w rozmowie: list córki, dług 2500 do dnia 60, pole, Borgar, dwór, kapuśniak, wisiorek", /Moja córka/.test(talk) && /2500/.test(talk) && /Termin: dzień 60/.test(talk) && /stawiaj na nim/.test(talk) &&
+    t.check("w rozmowie: list córki, dług 2500 do dnia 60, działka, Borgar, dwór, kapuśniak, wisiorek", /Moja córka/.test(talk) && /2500/.test(talk) && /Termin: dzień 60/.test(talk) && /stawiaj\s+na\s+niej/.test(talk) &&
         /Borgar/.test(talk) && /Dwór Lorda/.test(talk) && /kapuśniak/.test(talk) && /wisiorek/.test(talk) && /Kruk w tej rodzinie/.test(talk), talk.slice(0, 160));
     const after = await t.json("({ pendant: $gameParty.numItems($dataItems[172]), soup: $gameParty.numItems($dataItems[131]), notes: $gameSystem._journal.notes.map(n => n.title), letter: ($gameSystem._journal.notes.find(n => n.title === 'List od matki') || {}).text || '' })");
     t.check("wisiorek z krukiem w plecaku (od startu fabuły) i kapuśniak od dziadka", after.pendant === 1 && after.soup === 1, after);

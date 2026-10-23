@@ -24,7 +24,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const caveEv = name => `$gameMap.events().find(e => e.event() && e.event().name === '${name}' && !e._erased)`;
     const jtext = () => J("TownQuests.journalOps({ quest: TownQuests.Q.W6 }).map(o => o.text || '').join(' | ')");
 
-    await t.newGame({ map: 8, x: 31, y: 49, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 58, y: 89, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
     await at(12, 10, 30);
     // ------------------------------------------------------------------ the start and ch2 (the camp's trust)
     await t.eval("(function(){ TownQuests.start('K19'); TownQuests.finish('K19'); TownQuests.autoChecks(); return 0; })()");
@@ -39,9 +39,9 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await at(12, 21, 60);
     const rs = await J(`(function(){ const s = TownLife.state('rafal'); return { x: s.x, y: s.y, hidden: s.hidden, act: s.act }; })()`);
     const fire = await prop(905);
-    t.check("ch3: at 21:00 Rafał stands by the camp's fire (TownLife 'w6Fire': w6_ognisko 33,51); the fire is a prop (905, a flame)",
-        !rs.hidden && rs.act === "stand" && Math.abs(rs.x - 33) + Math.abs(rs.y - 51) <= 1 && fire && fire.page && fire.img === "!Decoration", { rs, fire });
-    await t.locate(33, 49, 2);
+    t.check("ch3: at 21:00 Rafał stands by the camp's fire (TownLife 'w6Fire': w6_ognisko 60,90); the fire is a prop (905, a flame)",
+        !rs.hidden && rs.act === "stand" && Math.abs(rs.x - 60) + Math.abs(rs.y - 90) <= 1 && fire && fire.page && fire.img === "!Decoration", { rs, fire });
+    await t.locate(60, 89, 2);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "w6_ognisko_noc.png"));
     const story = await talkTo(res("rafal"), []);
@@ -62,7 +62,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         /POSZUKIWANY/.test(board.text) && /sto dwadzieścia groszy/.test(board.text) && /Kapral Wit Czerwień, z rozkazu dworu/.test(board.text) && onBoard && s4.step === 3 && s4.t.search === 16,
         { text: board.text.slice(0, 260), onBoard, step: s4.step, search: s4.t.search });
     t.check("...and a paper on the tavern's outer wall (the notice place's paper, 7 days)", (await J("TownQuests.state().flags.notice_notice_tavern")) === 13);
-    await t.go(8, 22, 49, 2);
+    await t.go(8, 49, 89, 2);
     await at(14, 5, 40);
     await t.saveTo(1);
 
@@ -88,7 +88,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const h3 = await J("({ r: TownQuests.rec('W6'), f: TownQuests.state().flags, gone: TownLife.gone('rafal') })");
     t.check("...day 21: Rafał back in the camp - rafalAlly (Act III: he fights with the hero); chapter 5", h3.r.step === 5 && h3.f.rafalAlly && !h3.gone && (await notes()).includes("Rafał ocalony"), { step: h3.r.step, ally: h3.f.rafalAlly, gone: h3.gone });
     await t.eval("TownQuests.w6Opts = null; 0");
-    await t.go(8, 30, 49, 2);
+    await t.go(8, 57, 89, 2);
     await at(21, 12, 30);
     const lr = await talkTo(res("ludmila"), []);
     t.check("...Ludmiła says it once: 'Rafał wrócił do obozu... Dziękuję ci'", /Rafał wrócił do obozu/.test(lr.text), lr.text.slice(0, 120));
@@ -144,7 +144,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await at(24, 10, 60);
     const wave = { tent: await prop(904), bogdan: await prop(906), halina: await prop(907), tent1: await prop(903) };
     t.check("day 24: the second wave - a tent more (904), Bogdan (906) and Halina (907): PixelLab sheets", wave.tent.page && wave.bogdan.page && wave.bogdan.img === "$Npc_Bogdan" && wave.halina.img === "$Npc_Halina" && wave.tent1.page, wave);
-    await t.locate(26, 49, 2);
+    await t.locate(53, 89, 2);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "w6_druga_fala.png"));
     const pb = await talkTo("$gameMap.event(906)", []);
@@ -186,11 +186,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await talkTo(res("soltys"), ["Zamknąć bramę"]);
     const cl = await J("({ f: TownQuests.state().flags, home: TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === 'ludmila')), w6: TownQuests.w6() })");
     t.check("ch5 the other way: 'Zamknąć bramę' - campOutside: Ludmiła now lives on Map111 (TownLife alt)", cl.f.campOutside && cl.home === 111 && cl.w6.camp === "outside", cl.w6);
-    await t.go(8, 30, 49, 2);
+    await t.go(8, 57, 89, 2);
     await at(25, 15, 40);
     const inTown = await J(`({ ludmila: !TownLife.state('ludmila') || TownLife.state('ludmila').hidden, tent: !!($gameMap.event(903) && $gameMap.event(903).page()) })`);
     t.check("...in the town she is away and the camp's tent is gone", inTown.ludmila && !inTown.tent, inTown);
-    await t.go(111, 38, 12, 8);
+    await t.go(111, 39, 16, 8);
     await at(25, 15, 60);
     const pod = await J(`({ ludmila: (function(){ const s = TownLife.state('ludmila'); return s && !s.hidden; })(), tent: !!($gameMap.event(903) && $gameMap.event(903).page()) })`);
     t.check("...in Podgrodzie: Ludmiła by the tents, the second wave's tent (903 on Map111)", pod.ludmila && pod.tent, pod);
@@ -204,7 +204,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ ch6-7: Marek
     await t.loadFrom(4, { quiet: true });
-    await t.go(8, 20, 33, 8);
+    await t.go(8, 47, 49, 8);
     await at(27, 10, 60);
     const jh = await jtext();
     t.check("the last step holds chapters 6 and 7: the Wigilia (day 96) and Marek (Act II - no story game here: now)", /Wigilia w dniu 96/.test(jh) && /Powiedz Ludmile, czego się dowiedziałeś o Marku/.test(jh) && /Rozdział 7/.test(jh), jh.slice(0, 400));
@@ -231,7 +231,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const out = await J("({ r: TownQuests.rec('W6'), f: TownQuests.state().flags, marek: !!" + caveEv("Marek") + ", w8: TownQuests.FX.w8Choice.count() })");
     t.check("...out of the cave's mouth with him: marekSaved (W8's 'two of three' counts it), Marek gone from the cave, the note",
         out.f.marekSaved && out.r.t.m === 3 && !out.marek && out.w8 >= 1 && (await notes()).includes("Marek wyprowadzony"), { m: out.r.t.m, w8: out.w8 });
-    await t.go(8, 20, 33, 8);
+    await t.go(8, 47, 49, 8);
     await at(27, 11, 60);
     const mk = await J(`(function(){ const s = TownLife.state('marek'); return s ? { hidden: s.hidden, x: s.x, y: s.y } : null; })()`);
     t.check("in the town Marek lives with his family now (TownLife resident, $Npc_Marek)", mk && !mk.hidden, mk);
@@ -303,7 +303,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the drought: W6 gives no water", (await J(`(function(){ const W = [129, 138, 166, 167]; const q = TownQuests.Q.W6; return [q.reward].concat(q.steps.map(s => s.reward)).filter(r => r && r.items && r.items.some(([i]) => W.includes(i))).length; })()`)) === 0);
 
     // ------------------------------------------------------------------ (2026-10-07, the user) Baltazar's "!" for his trade (K16) only when it can happen
-    await t.go(8, 12, 42, 8);
+    await t.go(8, 16, 50, 8);
     const fd = await J("(function(){ let d = TownQuests.state() ? Tawerna.time.day() + 1 : 100; while (!TownQuests.isFerry(d - 1)) d++; return d; })()");
     await at(fd, 10, 40);
     await t.eval("(function(){ for (const id of TownQuests.FX.k16Trade.GOODS) $gameParty.loseItem($dataItems[id], 99); TownQuests.refreshMarkers(); return 0; })()");

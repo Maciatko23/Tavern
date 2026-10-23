@@ -3,6 +3,7 @@
 // (Map008 keeps its own 14); at 10:00 each is where its plan says (Marta at the laundry, Józek at his stall, Zbych gone to the
 // forest, Rysiek asleep at home...), all are indoors at 23:48 except the poacher (out in the forest - also hidden), Marta and her
 // son are seen inside their cabin at night, Józek calls out and answers when spoken to. Shot: docs/podgrodzie/mieszkancy.png.
+// (2026-10-22) 12 on Map111 now: + the new Podgrodzie's four (2950-2953), away until the new map has their doors.
 const path = require("path");
 const kit = require("./lib/kit.js");
 const SHOTS = path.join(__dirname, "..", "docs", "podgrodzie");
@@ -13,13 +14,21 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const gate = await t.json(`(function(){ const m = $dataMapInfos[111]; return m ? m.name : null; })()`);
     t.check("Map111 (Podgrodzie) is in the game", !!gate, gate);
     // start by the junk stall (its "Miejsce: kram" event)
-    await t.newGame({ map: 111, x: 1, y: 1, dir: 2, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 111, x: 43, y: 30, dir: 2, hour: 10, quiet: true, minimap: false });
     const kram = await t.json("TownLife.spot('kram')");
     await t.eval(`(function(){ const k = ${JSON.stringify(kram)}; if (k) $gamePlayer.locate(k[0], k[1] + 2); return 0; })()`);
     await t.frames(30);
     const at10 = await t.json(`(function(){ const out = {}; for (const k of ${JSON.stringify(KEYS)}) { const e = TownLife.eventOf(k);
         out[k] = e ? [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName(), e.eventId()] : null; } return out; })()`);
     t.check("the 8 residents of Podgrodzie (with the beggar Gaweł) are on Map111, each with its own sheet", KEYS.every(k => at10[k] && /^\$Npc_/.test(at10[k][3])), at10);
+    // (2026-10-22) + the new Podgrodzie's four (TownLife_Data.js "NOWE PODGRODZIE", 2950-2953): 12 live on Map111; while the map has no
+    // "Miejsce:" of their doors (the old map) they are away - hidden, not in anyone's way (tests/podgrodzie_mieszkancy_test.js has the rest)
+    const all111 = await t.json(`(function(){ const o = {}; for (const r of TownLife.RESIDENTS.filter(r => r.map === 111)) { const e = TownLife.eventOf(r.key);
+        o[r.key] = e ? [e.eventId(), !!e._town.hidden, TownLife.absent(r.key)] : null; } return o; })()`);
+    const NEW4 = ["szynkarz", "opiekunka", "garncarz", "dziecko"];
+    const newMap = await t.json("!!TownLife.spot('szynk_drzwi')");
+    t.check("12 residents live on Map111: the 8 + the new Podgrodzie's four (ids 2950-2953)" + (newMap ? "" : ", away (hidden) while the old map has no doors of their houses"),
+        Object.keys(all111).length === 12 && NEW4.every(k => all111[k] && all111[k][0] >= 2950 && all111[k][0] <= 2953 && (newMap || (all111[k][1] && all111[k][2]))), all111);
     const spots = await t.json(`(function(){ const o = {}; for (const k of ["pranie", "kram", "kapliczka", "brama_zach", "zabawa", "zebrak"]) o[k] = TownLife.spot(k); return o; })()`);
     const near = (a, s, r) => !!a && !!s && Math.abs(a[0] - s[0]) <= r && Math.abs(a[1] - s[1]) <= r;
     t.check("at 10:00: Marta works at the laundry, Józek stands at his stall (on their spots)",
@@ -40,19 +49,21 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.until("SpeechBubbles.log.some(l => /Starzyzna|cenę|Hełm/i.test(l))", 25);
     const heard = await t.json("SpeechBubbles.log.slice(-6)");
     t.check("passing the stall, Józek calls out his junk", heard.some(l => /Starzyzna|cenę|Hełm/i.test(l)), heard);
-    const talk = await t.talkTo("TownLife.eventOf('szmaciarz')", []);
+    // (2026-10-22: Józek ma sklep z ubraniami - rozmowa zaczyna się od menu sklepu, tu „Porozmawiaj”)
+    const talk = await t.talkTo("TownLife.eventOf('szmaciarz')", ["Porozmawiaj"]);
     t.check("spoken to in the morning, Józek answers with one of his morning lines", talk.done && /Kupię wszystko|sklep na rynku/.test(talk.text), talk.text);
 
     // the town keeps its own: none of Podgrodzie's on Map008, its 14 there
-    await t.go(8, 24, 37, 8);
+    await t.go(8, 53, 55, 8);
     const town = await t.json(`(function(){ const o = { podgrodzie: [], town: 0 }; for (const r of TownLife.RESIDENTS) { const e = TownLife.eventOf(r.key);
         if (TownLife.homeOf(r) === 111 && e) o.podgrodzie.push(r.key); if (TownLife.homeOf(r) === 8 && e) o.town++; } return o; })()`);
     // (2026-10-16) + Eryk Sowa, the castaway of the wreck (Wrak_Data.js, resident 948 "rozbitek": he lives in the town, the tavern's guest)
     // (2026-10-22) + Hieronim the gravedigger of package D (Zakon_Data.js, resident 2930 "grabarz": the old graveyard east of the town)
-    t.check("on Map008 the town's 22 residents (14 + the quests' four + Teodor, hidden till Feliks goes, + Marek, hidden till W6 brings him home, + Eryk Sowa the castaway, + Hieronim the gravedigger) and none of Podgrodzie's", town.town === 22 && !town.podgrodzie.length, town);
+    // (2026-10-22) + the eight of the new town's houses (TownLife_Data.js 2940-2947, away while Map008 has no "Miejsce:" of their doors)
+    t.check("on Map008 the town's 30 residents (14 + the quests' four + Teodor, hidden till Feliks goes, + Marek, hidden till W6 brings him home, + Eryk Sowa the castaway, + Hieronim the gravedigger, + the new town's eight) and none of Podgrodzie's", town.town === 30 && !town.podgrodzie.length, town);
 
     // the night: back in Podgrodzie at 23:48 everyone is hidden (indoors, or the poacher in the forest)
-    await t.go(111, 1, 1, 2);
+    await t.go(111, 43, 30, 2);
     await t.eval(`(function(){ const k = ${JSON.stringify(kram)}; $gamePlayer.locate(k[0], k[1] + 2); return 0; })()`);
     await t.setHour(23.8);
     await t.frames(10);

@@ -32,11 +32,11 @@ ART = {
 }
 
 # ---- the ends of the new transfers (the other ends are on Map008, build.py)
-WELL_DOWN_AT = (25, 34)     # Map008: the descent event on the well's east stones (24-25 x 32-35); seen from (26,34) / (25,33)
-WELL_OUT = (26, 34, 4)      # Map008: where one comes out of the well (beside it, facing it)
+WELL_DOWN_AT = (52, 50)     # Map008: the descent event on the well's east stones (24-25 x 32-35); seen from (26,34) / (25,33)
+WELL_OUT = (53, 50, 4)      # Map008: where one comes out of the well (beside it, facing it)
 WELL_LAND = (7, 6, 2)       # Map118: where one lands at the bottom (below the rope, facing down)
-SLAB_AT = (6, 12)           # Map008: the slab in the knights' garden (the axis, three cells south of the sword in the stone)
-SLAB_OUT = (6, 13, 2)       # Map008: where one comes up (just south of the slab, facing down)
+SLAB_AT = (33, 12)           # Map008: the slab in the knights' garden (the axis, three cells south of the sword in the stone)
+SLAB_OUT = (33, 13, 2)       # Map008: where one comes up (just south of the slab, facing down)
 ARCH_LAND = (2, 4, 2)       # Map119: the bottom of the stairs, facing down
 
 WELL_NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:150>\n<DarkNight:205>\n<Ambience:cave>"

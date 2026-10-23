@@ -127,8 +127,8 @@
     const LAND_REGION = 31;                // a painted region: the town's squares where the eagle may land
     // where it may land in the towns (the squares): map -> [[x0, y0, x1, y1], ...] - also without the region painted
     const TOWN_SQUARES = {
-        8: [[0, 18, 51, 21], [12, 29, 37, 40], [4, 47, 34, 51]],         // the street before the tavern, the well square, the south square
-        111: [[1, 18, 41, 20], [2, 27, 28, 31], [15, 38, 34, 49]],       // the street, the lower lane, the field of the Chata pod lasem
+        8: [[29, 17, 76, 27], [30, 37, 73, 63], [2, 89, 101, 92]],   // (2026-10-22 the new town) the tavern's yard, the market square, the street inside the south wall
+        111: [[4, 18, 84, 20], [36, 24, 55, 40], [17, 78, 36, 89]],   // (2026-10-22 the new Podgrodzie) the road through the settlement, the square, the field of the Chata pod lasem
         125: [[20, 26, 34, 34]]                                          // the quay square
     };
     // the maps' sides for the flight over the edge (tools/orzel/krawedzie.py: EDGES and ISLAND_EDGES of tools/newstart/layout.py and the

@@ -1,0 +1,30 @@
+{
+ "mapa": 104,
+ "nazwa": "Ratusz",
+ "ops": [],
+ "log": [],
+ "pominiete": [
+  {
+   "kod": "P2",
+   "x": 18,
+   "y": 8,
+   "dlaczego": "przesunięto zdarzenie 18 z (18,8) do (17,8): nowe problemy: P2(17,8)"
+  }
+ ],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 18,
+   "y": 8,
+   "kandydat": "przesunięto zdarzenie 18 z (18,8) do (17,8)",
+   "odrzucony": "nowe problemy: P2(17,8)"
+  }
+ ],
+ "przed": [
+  "P2 18,8"
+ ],
+ "po": [
+  "P2 18,8"
+ ],
+ "sha_data": "0eb11b7f6bb17ed438870c24caf2bd3abc3a91b556da8e03504c1227049ddec2"
+}

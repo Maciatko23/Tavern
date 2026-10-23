@@ -1,0 +1,103 @@
+{
+ "mapa": 172,
+ "nazwa": "Dwór - Hol",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 4,
+   "stary": 580,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 21,
+   "y": 4,
+   "stary": 580,
+   "nowy": 0
+  },
+  {
+   "op": "przesun",
+   "id": 11,
+   "nazwa": "Kandelabr",
+   "stary": [
+    9,
+    5
+   ],
+   "nowy": [
+    9,
+    6
+   ]
+  },
+  {
+   "op": "przesun",
+   "id": 12,
+   "nazwa": "Kandelabr",
+   "stary": [
+    13,
+    5
+   ],
+   "nowy": [
+    13,
+    6
+   ]
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 10,
+   "stary": 0,
+   "nowy": 574
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 21,
+   "y": 10,
+   "stary": 0,
+   "nowy": 574
+  }
+ ],
+ "log": [
+  {
+   "kod": "ręcznie",
+   "x": -1,
+   "y": -1,
+   "problem": "decyzja ręczna",
+   "poprawka": "Hol: kamienie z krukiem (1,3) i (21,3) zasłaniała dolna połowa doniczki bez rośliny (kafel D(4,8) bez D(4,6..7)) -     usunięta (mały wazon pod nią zostaje); (9,3) i (13,3) zamykały kandelabry przy schodach - o kratkę niżej, symetrycznie."
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 11,
+   "problem": "obiekt rozcięty: kafel 582 (D 6,8) - dół bez góry (brak kafla 574 nad) w (1,11)",
+   "poprawka": "dołożono górę obiektu D (6,8) 1 kafli"
+  },
+  {
+   "kod": "O1",
+   "x": 21,
+   "y": 11,
+   "problem": "obiekt rozcięty: kafel 582 (D 6,8) - dół bez góry (brak kafla 574 nad) w (21,11)",
+   "poprawka": "dołożono górę obiektu D (6,8) 1 kafli"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "D1 13,4",
+  "D1 9,4",
+  "D4 1,3",
+  "D4 13,3",
+  "D4 21,3",
+  "D4 9,3",
+  "O1 1,11",
+  "O1 21,11"
+ ],
+ "po": [],
+ "sha_data": "2d9ec452fb6ec3dbeae098a273d804550cec73f4cf7f529bd29ad9e08ab8a72a",
+ "zainstalowano": "2026-10-22T10:51:37",
+ "sha_po": "34b792117d73b91591616238daa24a4956e4d3fd3ddb40163c8b61a6b7dcb37d"
+}

@@ -7,11 +7,13 @@
 # obecne pliki najpierw do archiwum: Tawerna_archiwum_2026-10-18/dane_przed_powiekszeniem/data/ (pierwsza kopia zostaje, kolejne
 # z datą). Po instalacji: tools/powieksz/stan.json dostaje powiększone mapy (stary i nowy rozmiar, ziarno losu).
 # Po instalacji otwórz projekt w edytorze na nowo, zanim cokolwiek w nim zapiszesz.
+#   --archiwum NAZWA   kopie do Tawerna_archiwum_2026-10-18/NAZWA/data/ (np. dane_przed_przerzedzeniem dla tools/powieksz/przerzedz.py)
 import os, sys, json, hashlib, shutil, subprocess, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
-ARCH = os.path.join(os.path.dirname(ROOT), "Tawerna_archiwum_2026-10-18", "dane_przed_powiekszeniem")
+ARCH_NAME = sys.argv[sys.argv.index("--archiwum") + 1] if "--archiwum" in sys.argv else "dane_przed_powiekszeniem"
+ARCH = os.path.join(os.path.dirname(ROOT), "Tawerna_archiwum_2026-10-18", ARCH_NAME)
 DO = "--wykonaj" in sys.argv
 ST = sys.argv[1]
 
@@ -27,6 +29,17 @@ for rel, new, old in rows:
     elif sha1(cur) == new: print("już jest   " + rel)
     elif sha1(cur) != old: bad.append("%s: zmienił się w data/ od przygotowania stagingu" % rel)
     else: todo.append((rel, new)); print("instaluję  " + rel)
+# kontrola map (tools/mapy/kontrola.py, docs/MAPY_ZASADY.md): mapa z błędami (zablokowane wejścia / wyjścia, zdarzenia poza mapą...)
+# nie trafia do data/; nowe uwagi tylko się wypisują
+sys.path.insert(0, os.path.join(ROOT, "tools", "mapy"))
+import re as _re
+import kontrola as _kontrola
+for rel, new in todo:
+    m = _re.search(r"Map(\d+)\.json$", rel)
+    if not m: continue
+    ok, _probs, txt = _kontrola.bramka(int(m.group(1)), os.path.join(ST, os.path.basename(rel)), quiet=True, scisle=False)
+    if not ok: bad.append("%s: kontrola map - błędy:\n%s" % (rel, txt))
+    elif "NOWE uwagi" in txt: print("uwaga      %s: %s" % (rel, txt.split("NOWE uwagi", 1)[1].strip()[:300]))
 if bad:
     for b in bad: print("STOP: " + b)
     raise SystemExit("Nic nie zainstalowano - przygotuj staging na nowo.")

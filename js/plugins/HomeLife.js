@@ -799,8 +799,8 @@
         else if (W && W.storm && (T.call("Survival", "stormLevel", day(), h) || 0) > 0.3) lines.push("Słyszysz, jak grzmi? Mruczek już siedzi pod piecem.", "Burza jak za starych czasów... Dobrze, że dach połatany.");
         else if (W) lines.push("Zmokłeś? Siadaj bliżej ognia, bo mi się przeziębisz.", "Leje jak z cebra. Dobrze, że dach po burzy połatany... prawie.");
         const st = T.call("Story", "state") || null, Story = T.api("Story");
-        if (st && st.lost) lines.push(st.buy && st.buy.done ? "Pole znowu nasze - odkupione! Czasem chodzę tam rano, tak tylko, popatrzeć." : "Siadaj, wnuku. O polu dziś nie gadamy - ziemia to tylko ziemia.");
-        else if (st && (st.done || st.paid >= st.debt)) lines.push("Pole nasze! Jeszcze mi się w głowie nie mieści.");
+        if (st && st.lost) lines.push(st.buy && st.buy.done ? "Działka znowu nasza - odkupiona! Czasem chodzę tam rano, tak tylko, popatrzeć." : "Siadaj, wnuku. O działce dziś nie gadamy - ziemia to tylko ziemia.");
+        else if (st && (st.done || st.paid >= st.debt)) lines.push("Działka nasza! Jeszcze mi się w głowie nie mieści.");
         else if (st && T.call("Story", "isOpen")) {
             const n = Story.daysLeft(), left = Story.left();
             if (n <= 5) lines.push("Termin za pasem, wnuku... Trzymam kciuki. Oba.");

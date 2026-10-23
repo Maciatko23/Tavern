@@ -51,8 +51,8 @@
         bib: { land: [8, 10, 8], lord: [7, 7, 6], kronika: [8, 7] },
         gab: { land: [7, 9, 8], trapLand: [11, 8, 4], trap: [12, 8], feliks: [12, 9, 8], listy: [2, 4], exitTo: [19, 4, 2] },
         manor: { door: [20, 12], doorLand: [20, 13, 2], hatch: [3, 20], hatchLand: [3, 21, 2], feliksNoc: [2, 20, 6], kubaNoc: [3, 19, 2],
-            garden: { x1: 21, y0: 17 }, out: [8, 50, 51, 4], f9: [20, 14, 8] },
-        town: { gate: [48, 51], f9: [24, 33, 8] }
+            garden: { x1: 21, y0: 17 }, out: [8, 102, 51, 4], f9: [20, 14, 8] },
+        town: { gate: [100, 51], f9: [50, 46, 8] }
     };
 
     // ------------------------------------------------------------------ the clock
@@ -103,7 +103,7 @@
         // ---- chapter 2: the invitation, the tour, the chronicle
         zaproAsk: ["Wnuku Stacha! Połowa długu - i to przed terminem. Przyznam, zaczynam cię lubić.",
             "Ty pewnie nigdy nie byłeś w środku? Wejdź. Pokażę ci coś, czego nawet Stach nie widział: ściany z kamieni twierdzy."],
-        zaproAskBuy: ["Wnuku Stacha. Połowa za pole - przyznam, nie wierzyłem. Ty pewnie nigdy nie byłeś w środku?",
+        zaproAskBuy: ["Wnuku Stacha. Połowa za działkę - przyznam, nie wierzyłem. Ty pewnie nigdy nie byłeś w środku?",
             "Wejdź. Pokażę ci, z czego jest ten dom. Ściany z kamieni twierdzy."],
         // (2026-10-17) after W1's big choice: shamed at the market (W1 a) - cold, but the debt is the debt; the quiet way (W1 b) - a friend
         zaproAskCold: ["Wnuku Stacha. Po tamtym targu nie myślałem, że jeszcze cię tu zobaczę. A jednak - połowa długu, co do grosza.",
@@ -222,7 +222,7 @@
         },
         reward: {
             debt: "Dług twojego dziadka... Zapiszę sam: dwieście pięćdziesiąt mniej. Nie, nie dziękuj. To ja dziękuję.",
-            buyback: "Pole Stacha odsprzedam ci za dwa tysiące. Tysiąc mniej. Tyle są warte te listy - i to, że przyszedłeś z nimi do mnie.",
+            buyback: "Działkę Stacha odsprzedam ci za dwa tysiące. Tysiąc mniej. Tyle są warte te listy - i to, że przyszedłeś z nimi do mnie.",
             other: "Weź to - sto groszy. I zapamiętaj: drzwi tego domu są dla ciebie otwarte zawsze."
         },
         prawdaPays: "„Wnuk Stacha wie o zasuwie. Płacę mu...” (Lord podnosi wzrok.) Brałeś od niego pieniądze. ...A jednak przyszedłeś z tym do mnie. To liczę bardziej.",
@@ -325,7 +325,7 @@
     // through the east gate; indoors on the hall's marker feliks_hol / kamerdyner_hol), the night at the manor (no interior shows it)
     const TLD = window.TownLifeData;
     if (TLD) {
-        if (TLD.SPOTS && !TLD.SPOTS.dwor) TLD.SPOTS.dwor = (TLD.SPOTS.brama_wsch || [48, 51, 4]).slice();
+        if (TLD.SPOTS && !TLD.SPOTS.dwor) TLD.SPOTS.dwor = (TLD.SPOTS.brama_wsch || [100, 51, 4]).slice();
         for (const key of ["feliks", "kamerdyner"]) {
             const r = (TLD.RESIDENTS || []).find(x => x.key === key);
             if (!r || r._w7) continue;

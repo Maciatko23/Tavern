@@ -70,7 +70,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("plan Baltazara: trzy wpisy nocnej zmiany (w5Shift) i przeprowadzka na przystań (alt: mapa 125)", pl.plan === 3 && pl.alt === 125, pl);
 
     // ===================================================================== rozdz. 1: poszlaki
-    await t.newGame({ map: 8, x: 12, y: 41, quiet: true, day: 9, hour: 10 });
+    await t.newGame({ map: 8, x: 16, y: 49, quiet: true, day: 9, hour: 10 });
     await E("Humans.auto(false); Humans.clear(); 0");
     await flagOn("k15Clean");
     let s = await st();
@@ -81,7 +81,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // Kłos at the back door on the night after a ferry (Garnizon.js's event 659): a clue
     const ferryD = await E("(function(){ let d = 10; while (!TownQuests.isFerry(d) && d < 40) d++; return d; })()");
     await setTime(ferryD, 23.3);
-    await go(8, 8, 40, 6);
+    await go(8, 12, 49, 6);
     await t.frames(80);
     const klos = await J("({ ev: !!$gameMap.event(659) && !$gameMap.event(659).isTransparent(), at: $gameMap.event(659) ? [$gameMap.event(659).x, $gameMap.event(659).y] : null, clue: Kantor.state().clues.klos, step: Kantor.step() })");
     t.check("hak D27: kwatermistrz Kłos nocą po promie przy tylnych drzwiach kantoru - poszlaka „nocni goście”, druga poszlaka kończy rozdz. 1",
@@ -91,21 +91,21 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // spooked: the hero stands in the courier's way, not hiding
     const night1 = ferryD + 1;
     await setTime(night1, 0.05);
-    await go(8, 16, 40, 4);
+    await go(8, 20, 48, 4);
     await E("Hunting.setSneak(false); 0");
     await t.until("!!Kantor.visitors()[733] && Kantor.visitors()[733].phase === 'come'", 10);
-    await E("$gameMap.event(733).locate(22, 40); 0");
+    await E("$gameMap.event(733).locate(26, 48); 0");
     await t.until(`Kantor.state().knock.spooked === TownQuests.nightOf()`, 25);
     s = await st();
     t.check("rozdz. 2: kurier w kapturze widzi bohatera na swojej drodze - „Ktoś tu jest... Nie dziś.” - i zawraca (nie puka)", s.s.knock.spooked === night1 - 1 && !s.s.knock.seen, s.s.knock);
     // the next night: hidden up the alley, sneaking
     await setTime(night1 + 1, 0.12);
-    await go(8, 8, 37, 2);
+    await go(8, 10, 49, 2);
     await E("Hunting.setSneak(true); TownQuests.state().bells.length = 0; 0");
     await t.until("!!Kantor.visitors()[733] && Kantor.visitors()[733].phase === 'come'", 10);
-    await E("$gameMap.event(733).locate(13, 40); 0");
+    await E("$gameMap.event(733).locate(17, 48); 0");
     await t.until("Kantor.visitors()[733] && Kantor.visitors()[733].phase === 'knock'", 15);
-    await E("$gamePlayer.locate(7, 40); $gamePlayer.setDirection(6); 0");   // (for the picture: by the street lamp, three steps from the door)
+    await E("$gamePlayer.locate(11, 48); $gamePlayer.setDirection(6); 0");   // (for the picture: by the street lamp, three steps from the door)
     await t.frames(75);
     await shot("tylne_drzwi_noca.png");
     await t.until("Kantor.state().knock.seen > 0", 10);
@@ -169,7 +169,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("TownQuests.start('D23'); 0");
     const dHire = await calm(night1 + 3);
     await setTime(dHire, 10);
-    await go(8, 12, 41, 8);
+    await go(8, 16, 49, 8);
     await t.frames(20);
     // the card of the chronicles: in Baltazar's strongbox, no buy-back by day (Pustelnia.js)
     let r = await talk("kupiec", ["Przyjdę."]);
@@ -182,7 +182,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // a porter's night: the back door (Map008) -> the back room (Map103) -> the trapdoor -> the cellar (Map171): three crates
     const shiftNight = async (d) => {
         await setTime(d, 22.05);
-        await go(8, 10, 40, 8);
+        await go(8, 14, 48, 8);
         const door = await E("Kantor.backDoorEv() ? Kantor.backDoorEv().eventId() : 0");
         await E(`$gameMap.event(${door}).start(); 0`);
         await t.until(t.onMap(103), 15); await t.frames(15);
@@ -219,7 +219,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ===================================================================== rozdz. 4: rejestr
     const dReg = dHire + 2;
     await setTime(dReg, 22.05);
-    await go(8, 10, 40, 8);
+    await go(8, 14, 48, 8);
     await E("Kantor.backDoorEv().start(); 0");
     await t.until(t.onMap(103), 15); await t.frames(10);
     await use(730);
@@ -274,14 +274,14 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("Humans.auto(false); 0");
     await flagOn("witOwes");
     await setTime(dReg + 1, 10);
-    await go(8, 48, 50, 6);
+    await go(8, 100, 50, 6);
     r = await talk("kapral", []);
     s = await st();
     t.check("rozdz. 5 a: Wit (dłużnik z D5) przyznaje się do 5 G na tydzień; razem do sołtysa: kantor zamknięty, Wit sojusznikiem, Baltazar znika",
         s.s.outcome === "closed" && s.s.komu === "wit" && !!s.f.w5WitAlly && !!s.f.w5Zamkniety && (await E("TownLife.gone('kupiec')")) && s.step === "w5Prom" && !s.v.rejestr,
         { outcome: s.s.outcome, komu: s.s.komu, step: s.step, text: r.text.slice(0, 160) });
-    await go(8, 14, 39, 8);
-    await E("window.__kit.pops.length = 0; $gameMap.events().find(e => e.x === 14 && e.y === 38 && /door=kantor/.test(e.event().note)).start(); 0");
+    await go(8, 18, 47, 8);
+    await E("window.__kit.pops.length = 0; $gameMap.events().find(e => e.x === 18 && e.y === 46 && /door=kantor/.test(e.event().note)).start(); 0");
     await t.frames(20);
     t.check("...drzwi kantoru: „Kantor zamknięty z rozkazu sołtysa.”", (await t.popups()).some(p => /zamknięty z rozkazu/.test(p)), await t.popups());
     // a2) Wit without trust: the register burnt, a night in the guardhouse, Baltazar an enemy
@@ -289,7 +289,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("Humans.auto(false); 0");
     await flagOff("witOwes", "k15Wit", "d11Told");
     await setTime(dReg + 1, 10);
-    await go(8, 48, 50, 6);
+    await go(8, 100, 50, 6);
     r = await talk("kapral", []);
     s = await st();
     t.check("rozdz. 5 a (bez zaufania): Wit pali rejestr w koszu żarowym, noc w wartowni (rano następnego dnia), Baltazar wrogiem, napad zaplanowany",
@@ -299,7 +299,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.loadFrom(4, { quiet: true });
     await E("Humans.auto(false); 0");
     await setTime(dReg + 1, 9);
-    await go(8, 30, 40, 8);
+    await go(8, 74, 48, 8);
     r = await talk("soltys", []);
     s = await st();
     const op0 = await E("TownQuests.opinion()");
@@ -317,7 +317,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("Humans.auto(false); 0");
     const dDeal = await calm(dReg + 1), dWeek = await calm(dDeal + 7), dAct = await calm(dWeek + 1);
     await setTime(dDeal, 10);
-    await go(8, 12, 41, 8);
+    await go(8, 16, 49, 8);
     r = await talk("kupiec", ["Pracujmy razem"]);
     s = await st();
     t.check("rozdz. 5 c: podwójna gra - Baltazar odbiera oryginał, bohater jego wspólnikiem (frakcja patrzy na kroki w podziemiach)",
@@ -335,7 +335,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.loadFrom(4, { quiet: true });
     await E("Humans.auto(false); 0");
     await setTime(dDeal, 10);
-    await go(8, 12, 41, 8);
+    await go(8, 16, 49, 8);
     const g3 = (await st()).gold;
     r = await talk("kupiec", ["Pięćdziesiąt groszy"]);
     s = await st();
@@ -431,7 +431,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.frames(40);
     const back = await J("({ back: Kantor.state().back, gone: TownLife.gone('kupiec'), harbour: TownLife.condOk('w5Harbour'), home: TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === 'kupiec')) })");
     t.check("rozdz. 7 (Akt II): Baltazar wraca - na przystań, ze składu portowego (alt mapa 125)", back.back > 0 && !back.gone && back.harbour && back.home === 125, back);
-    await go(8, 30, 40, 8);
+    await go(8, 74, 48, 8);
     r = await talk("soltys", ["Ludmiła", "Do widzenia"]);   // (Homes.js: the reeve's menu of the houses for sale comes after)
     if (!r.done) console.log("NOTE rozmowa z sołtysem nie skończyła się:", JSON.stringify(await J("({ run: $gameMap.isEventRunning(), busy: $gameMessage.isBusy(), ev: $gameMap._interpreter.eventId(), text: $gameMessage.allText().slice(0, 80), ch: $gameMessage.choices() })")));
     s = await st();
@@ -460,7 +460,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("Humans.auto(false); Humans.clear(); 0");
     await E("(function(){ const s = Kantor.state(); s.ferry.state = 'letgo'; const r = TownQuests.rec('W5'); r.step = TownQuests.Q.W5.steps.findIndex(x => x.talk === 'w5Akt2'); return 0; })()");
     await setTime(dDeal + 1 + ((await E(`TownQuests.isFerry(${dDeal})`)) ? 1 : 0), 10);
-    await go(8, 12, 41, 8);
+    await go(8, 16, 49, 8);
     r = await talk("kupiec", []);
     await t.frames(10);
     await E("TownQuests.state().greeted.kupiec = $gameSystem.dayNightDay(); 0");

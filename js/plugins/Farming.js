@@ -309,9 +309,9 @@
  *   pilnuj pola, nakarm, list, zwiad); gdy kruka nie ma przy tobie, przylatuje.
  *
  * BUDOWANIE
- *   Budować wolno tylko na polu dziadka (mapa 3) i w chatce (mapa 100) - lista BUILD_MAPS w Farming_Data.js,
+ *   Budować wolno tylko na działce dziadka (mapa 3 „Kruczy Jar”, w obrębie muru) i w chatce (mapa 100) - lista BUILD_MAPS w Farming_Data.js,
  *   a notatka mapy <Build:on> / <Build:off> ją nadpisuje. Gdzie indziej Q pokazuje dymek "Budować możesz
- *   tylko na polu dziadka" i na liście zostają tylko pułapki (one stoją na każdej mapie). Menu F9 nie pyta.
+ *   tylko na działce dziadka" i na liście zostają tylko pułapki (one stoją na każdej mapie). Menu F9 nie pyta.
  *   Klawisz Q (z każdego miejsca) otwiera listę prawdziwych budynków (młotek i plac budowy). To, co się
  *   stawia od razu bez młotka (namiot, wiadro, leśne legowisko), jest w menu ziemi pod "Postaw...".
  *   Po wyborze jednej pokazuje siatkę wokół gracza i półprzezroczysty obraz budowli,
@@ -912,7 +912,7 @@
         return false;
     }
 
-    const NO_BUILD = "Budować możesz tylko na polu dziadka";
+    const NO_BUILD = "Budować możesz tylko na działce dziadka";
     // ---- whose the land is (Homes.js, 2026-10-15: the field lost to the Lord, land bought with a house): rules
     // { held(mapId) -> true: the land is someone else's now (a hut there no longer counts, a kennel there is not the dog's home),
     //   refuse(mapId) -> a reason why nothing may be built there now (null: the usual rules), noBuild() -> the words of the popup
@@ -1159,7 +1159,7 @@
         "upgradeBuilding", "roomFor", "build", "demolish", "collect", "rest", "readyProduce", "snares", "snareBait", "snareSprung",
         "snareCatch", "snareEatBait", "baitSnare", "whyNotBuild", "awakeHours", "restCap", "siteHits", "hitCost", "demolishBlock",
         "pitchInstant", "packUp", "sleepInTent", "wakeHour", "startPlacement", "placementProblem", "tileWhyNot", "placeSite",
-        "strikeSite", "cancelSite", "missingMaterials", "tilesOfBuilding"]);
+        "strikeSite", "cancelSite", "missingMaterials", "tilesOfBuilding", "fieldAllows"]);
     exportFrom(S, ["jobCount", "jobFinished", "jobCollectable", "queueMax", "recipeEntry", "startJob", "collectJob", "jobReady",
         "jobHoursLeft", "jobHours", "putInChest", "takeFromChest", "isFood", "ownedOutput", "chestStacks", "chestKinds",
         "chestHolds", "packStacks", "whyNotMove", "openChest", "craftManual", "recipeOf", "fuelLeft", "fireLit", "smoulderOf",

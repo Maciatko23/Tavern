@@ -39,12 +39,12 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(40);
     const w = await J("TownQuests.rec('D13').t.got");
     t.check("...the day and hour come: the weather as he said - seen (a thought: 'Tak, jak mówił Ozzy')", w.weather === true && (await J("SpeechBubbles.log.join('|')")).includes("Tak, jak mówił Ozzy"), w);
-    await t.go(8, 22, 33, 8);
+    await t.go(8, 34, 61, 8);
     await at(p.oven, 9, 40);
     const hanka = await talk(res("piekarka"), []);
     t.check("...day " + p.oven + ", the stall: Hanka - 'Mój piec pękł!'", /Mój piec pękł/.test(hanka.text) && (await J("TownQuests.rec('D13').t.got.oven")) === true, hanka.text.slice(0, 120));
     await at(p.shoe, 10, 40);
-    await t.locate(46, 51, 6);
+    await t.locate(98, 51, 6);
     const wit = await talk(res("kapral"), []);
     t.check("...day " + p.shoe + ", the east gate: the corporal's horse lost a shoe - all three seen, back to the tavern", /zgubił podkowę/.test(wit.text) && (await step("D13")) === "active:2", wit.text.slice(0, 120));
     await t.go(1, 95, 33, 8);
@@ -64,7 +64,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("(a load: the three days slept through - each prediction missed, the step moves on all the same)", miss.got.weather === false && miss.got.oven === false && miss.got.shoe === false && miss.step === 2, miss);
 
     // ------------------------------------------------------------------ D6: the tournament - in the tavern, the market day's evening
-    await t.newGame({ map: 8, x: 8, y: 50, dir: 4, hour: 10, day: 4, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 9, y: 64, dir: 4, hour: 10, day: 4, quiet: true, minimap: false });
     await t.frames(40);
     await t.gold(30);
     await t.eval("(function(){ for (const q of TownQuests.QUESTS) if (q.giver === 'kowal' && q.id !== 'D6') TownQuests.state().q[q.id] = { s: 'done', step: 0, day: 1, sday: 1, end: 1, t: { done: {} }, times: 1 }; return 0; })()");   // (Tadek's other quests out of the way)
@@ -80,7 +80,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await at(6, 9, 20);
     const sign = await talk("$gameMap.event(38)", ["Zapisz mnie na turniej", "Nic"]);
     t.check("...the sign-up at the bar: Borgar (the counter) takes 2 G - and warns: Baltazar asked about the hero", /Dwa grosze wpisowego/.test(sign.text) && /Baltazar o ciebie pytał/.test(sign.text) && (await t.gold()) === 28 && (await step("D6")) === "active:2", { text: sign.text.slice(0, 200), choices: sign.choices });
-    await t.go(8, 12, 41, 8);
+    await t.go(8, 16, 49, 8);
     await at(6, 9, 40);
     const bal = await talk(res("kupiec"), ["Biorę."]);
     t.check("...Baltazar: forty groszy to lose the first bout - taken", /Czterdzieści groszy dla ciebie/.test(bal.text) && (await t.gold()) === 68 && (await J("TownQuests.state().flags.d6Bribe")) === 6, bal.text.slice(0, 200));
@@ -142,11 +142,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await done("D16"); await done("K27");
     await t.eval("TownQuests.state().flags.gardenKey = 3; 0");
     await t.give(137, 2);
-    await t.go(8, 20, 36, 8);
+    await t.go(8, 51, 47, 8);
     await at(10, 10, 40);
     const amb = await talk(res("dzwonnik"), []);
     t.check("ch. 2: Ambroży (an apprentice's master by now) taps the rhythm and hums the bell's verse", /♪ Raz dzwon uderzy/.test(amb.text) && (await J("TownQuests.hasVerse('dzwon')")), amb.text.slice(0, 200));
-    await t.locate(5, 10, 8);
+    await t.locate(32, 10, 8);
     await at(10, 11, 20);
     const pl = await talk("$gameMap.event(43)", [], { place: false });
     t.check("ch. 5: the plinth of the left statue in the knights' garden - the carved verse ('Strażniku, stój na progu twardy')", /Strażniku, stój na progu twardy/.test(pl.text) && (await J("TownQuests.hasVerse('cokoly')")), pl.text.slice(0, 200));
@@ -186,7 +186,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const fk = await talk(reg(2), ["Przy wszystkich", "Bywaj"]);
     const kd = await J("TownQuests.rec('W3').t.kupala");
     t.check("(a load) ch. 8 a: at the Kupała bonfire - day " + kd + " (the 14th of summer), by the south gate", kd === 42 && /Dzień 42/.test(fk.text) && (await step("W3")) === "active:4", fk.text.slice(0, 200));
-    await t.go(8, 24, 53, 8);
+    await t.go(8, 51, 92, 8);
     await at(42, 20.5, 40);
     const mel = await J("(function(){ const e = $gameMap.event(959); return e && e.page() ? [e.x, e.y, e.characterName(), e.event().note] : null; })()");
     await t.shot(path.join(SHOTS, "w3_noc_kupaly.png"));

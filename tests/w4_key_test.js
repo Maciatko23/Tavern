@@ -54,7 +54,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         (await J("$gameSystem.dayNightHour()")) >= h0 + 0.9 && (await step()) === "active:2", dig.text.slice(0, 200));
 
     // b. Tadek joins them
-    await t.go(8, 8, 50, 4);
+    await t.go(8, 9, 64, 4);
     await at(21, 10, 40);
     await t.eval("(function(){ for (const q of TownQuests.QUESTS) if (q.giver === 'kowal') TownQuests.state().q[q.id] = { s: 'done', step: 0, day: 1, sday: 1, end: 1, t: { done: {} }, times: 1 }; return 0; })()");   // (Tadek's own offers out of the way)
     const t0 = await talk("TownLife.eventOf('kowal')", []);

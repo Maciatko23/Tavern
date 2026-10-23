@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata pola, dług, prolog, kruk, garnizon, cysterna, wątki W4, W5, W7 i W9, wiersze paczek nowego terenu z Okolice.js). v1.11.0
+ * @plugindesc Menu deweloperskie (F9) w sześciu zakładkach: zdarzenia (czas, pogoda, ptaki, dzik), budowanie (każda budowla za darmo), przedmioty (dowolna ilość; narzędzia i broń / surowce / jedzenie), rdzeń (stany, numery zdarzeń, zegary mapy - TawernaCore.js), kot Mruczek (co robi, każ mu) oraz wyspa i fabuła (przejścia do nowych miejsc, pływy, mgła, czerwona woda, strata działki, dług, prolog, kruk, garnizon, cysterna, wątki W4, W5, W7 i W9, wiersze paczek nowego terenu z Okolice.js). v1.11.0
  * @author Tawerna
  *
  * @param enabled
@@ -64,10 +64,11 @@
  *        D22 „Księga mgieł” zaczęte, jeśli jeszcze nie było; przenosi do laterny - OK przy soczewce pokazuje wizję.
  *      - "Woda w morzu": ←→ albo OK - z pogody / czerwona / szara (CzerwonaWoda.force; nie zapisuje się).
  *      Fabuła:
- *      - "Świt dnia 61 bez spłaty": zegar na świt dnia po terminie, bohater na polu dziadka - pole przechodzi na
+ *      - "Świt dnia 61 bez spłaty": zegar na świt dnia po terminie, bohater na działce dziadka - działka przechodzi na
  *        Lorda, scena ludzi dworu (Story.js); tylko w grze z fabułą, gdy dług nie jest spłacony.
- *      - "Spłać dług" (po stracie pola: "Odkup pole"): dodaje brakujące złoto i od razu je płaci.
+ *      - "Spłać dług" (po stracie działki: "Odkup działkę"): dodaje brakujące złoto i od razu je płaci.
  *      - "+1000 G".
+ *      - "+10 000 doświadczenia": Combat.gainXp(10000) - poziomy i punkty jak za zwykłe zdobycie.
  *      - "Odtwórz prolog": sam film „Ostatni prom” (bez ekranu imienia), potem powrót na mapę, na to samo
  *        miejsce - stan gry bez zmian, muzyka mapy wraca.
  *      Postacie:
@@ -152,7 +153,7 @@
         ["Garnizon nad zatoką", 162, 22, 1, 2, "Map162: rotmistrz, kwatermistrz Kłos, palisada, łacha do wraku. Lądujesz przy drodze z przystani."],
         ["Wrak na mieliźnie", 165, 78, 20, 4, "Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej.", "low"],
         ["Stara cysterna zakonu", 167, 3, 20, 6, "Map167: zbiornik, słup z miarą, czerpak, dźwignia kraty. Lądujesz przy zejściu z piętra 30."],
-        ["Chata pod lasem", 111, 6, 41, 2, "Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa)."],
+        ["Chata pod lasem", 111, 8, 81, 2, "Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa)."],
         ["Spalona zagroda", 168, 98, 12, 4, "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."]
     ];
     const ISLE_INSIDE = [["Skryptorium", 156, 6, 8, 8], ["Izba latarnika", 160, 6, 8, 8], ["Laterna", 161, 5, 7, 8], ["Kwatera rotmistrza", 163, 6, 8, 8],
@@ -195,14 +196,14 @@
         lose: () => {
             if (!storyOn()) return "Świt dnia 61 bez spłaty (gra bez fabuły - nie ma długu)";
             const s = Story.state();
-            if (s.lost) return "Pole już przepadło (dzień " + s.lost.day + ")";
+            if (s.lost) return "Działka już przepadła (dzień " + s.lost.day + ")";
             if (s.done || s.paid >= s.debt) return "Świt dnia 61 bez spłaty (dług już spłacony)";
-            return "Świt dnia 61 bez spłaty: strata pola, scena na polu dziadka";
+            return "Świt dnia 61 bez spłaty: strata działki, scena na działce dziadka";
         },
         pay: () => {
             if (!storyOn()) return "Spłać dług (gra bez fabuły - nie ma długu)";
             const s = Story.state();
-            if (s.lost) return s.buy && s.buy.done ? "Pole odkupione od Lorda (dzień " + s.buy.done + ")" : "Odkup pole od Lorda: " + Story.buyLeft() + " G";
+            if (s.lost) return s.buy && s.buy.done ? "Działka odkupiona od Lorda (dzień " + s.buy.done + ")" : "Odkup działkę od Lorda: " + Story.buyLeft() + " G";
             if (s.done || s.paid >= s.debt) return "Dług spłacony (" + s.paid + " / " + s.debt + " G)";
             return "Spłać dług: " + Story.left() + " G (z " + s.debt + " G)";
         },
@@ -441,9 +442,10 @@
         row("isleFog", "Mglista noc na przylądku (wizja w latarni)", 70, "Noc z mgłą morską, D22 zaczęte; przenosi do laterny - OK przy soczewce, gdy Bazyli jest na górze.");
         row("isleWater", isleLabel.water(), isleIcon(173) || 70, "Morze przy wyspie: kolejno z pogody / czerwone (zakwit, śnięte ryby) / szare (po deszczu).");
         head("Fabuła:");
-        row("isleLose", isleLabel.lose(), 241, "Zegar na świt dnia po terminie, bohater na polu dziadka: pole przechodzi na Lorda, scena ludzi dworu.");
-        row("islePay", isleLabel.pay(), 314, "Brakujące złoto dodane i od razu zapłacone (po stracie pola: odkup za 3000 G).");
+        row("isleLose", isleLabel.lose(), 241, "Zegar na świt dnia po terminie, bohater na działce dziadka: działka przechodzi na Lorda, scena ludzi dworu.");
+        row("islePay", isleLabel.pay(), 314, "Brakujące złoto dodane i od razu zapłacone (po stracie działki: odkup za 3000 G).");
         row("isleGold", "+1000 G", 314, "Tysiąc sztuk złota do sakiewki.");
+        row("isleXp", "+10 000 doświadczenia", 87, "Dziesięć tysięcy punktów doświadczenia naraz: poziomy, punkty atrybutów i umiejętności jak za zwykłe zdobycie.");
         row("islePrologue", "Odtwórz prolog „Ostatni prom”", isleIcon(172) || 87, "Sam film (bez ekranu imienia), potem powrót na mapę w to samo miejsce - stan gry bez zmian.");
         head("Postacie:");
         row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
@@ -840,11 +842,11 @@
             case "isleLose": {
                 if (!storyOn()) { say(row.icon, "Gra bez fabuły - nie ma długu", true); break; }
                 const s = Story.state();
-                if (s.lost || s.done || s.paid >= s.debt || s.pending) { say(row.icon, s.lost ? "Pole już przepadło" : "Dług spłacony - pola nie stracisz", true); break; }
+                if (s.lost || s.done || s.paid >= s.debt || s.pending) { say(row.icon, s.lost ? "Działka już przepadła" : "Dług spłacony - działki nie stracisz", true); break; }
                 s.off = false;                                              // (the deadline on, as in a real game)
                 $gameSystem._dayNightDay = s.deadline + 1;
                 $gameSystem.setDayNightHour((Story.DAWN || 6) + 0.05);
-                return go(["Pole dziadka", Story.MAP && Story.MAP.field ? Story.MAP.field : 3, 22, 14, 2]);
+                return go(["Działka dziadka", Story.MAP && Story.MAP.field ? Story.MAP.field : 3, 22, 14, 2]);
             }
             case "islePay": {
                 if (!storyOn()) { say(row.icon, "Gra bez fabuły - nie ma długu", true); break; }
@@ -853,13 +855,21 @@
                 if (!(n > 0)) { say(row.icon, "Nie ma czego spłacać", true); break; }
                 $gameParty.gainGold(n);
                 const got = Story.pay(n);
-                say(row.icon, (lost ? "Odkup pola: " : "Dług: ") + got + " G zapłacone");
+                say(row.icon, (lost ? "Odkup działki: " : "Dług: ") + got + " G zapłacone");
                 break;
             }
             case "isleGold":
                 $gameParty.gainGold(1000);
                 say(row.icon, "+1000 G");
                 break;
+            case "isleXp": {
+                if (!window.Combat || !Combat.gainXp) { say(row.icon, "Brak Combat.js", true); break; }
+                const lv0 = Combat.hero().level, got = Combat.gainXp(10000, "F9");
+                if (!got) { say(row.icon, "Już najwyższy poziom", true); break; }
+                const lv = Combat.hero().level;
+                say(row.icon, "+10 000 dośw." + (lv > lv0 ? " (poziom " + lv0 + " → " + lv + ")" : ""));
+                break;
+            }
             case "islePrologue":
                 if (!window.Prologue || !Prologue.replay) { say(row.icon, "Brak Prologue.js", true); break; }
                 $gameTemp._isleAct = "prologue";   // (pushed over the map once it is back: Debug's Scene_Map.update)

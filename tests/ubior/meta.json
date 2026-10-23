@@ -1,0 +1,806 @@
+{
+ "views": [
+  "chód: dół",
+  "chód: prawo",
+  "chód: góra",
+  "z pochodnią",
+  "siekiera z boku",
+  "łuk",
+  "siedzi",
+  "leży"
+ ],
+ "patterns": [
+  {
+   "key": "_bez",
+   "miejsce": "-",
+   "nakladka": "",
+   "files": [
+    "w__bez_Hero_Walk_3_0.png",
+    "w__bez_Hero_Walk_3_6.png",
+    "w__bez_Hero_Walk_0_4.png",
+    "w__bez_Hero_TorchWalk_3_7.png",
+    "w__bez_Hero_AxeSide_10_2.png",
+    "w__bez_Hero_Bow_14_0.png",
+    "w__bez_Hero_Sit_16_0.png",
+    "w__bez_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kapelusz_slomkowy",
+   "miejsce": "glowa",
+   "nakladka": "kapelusz",
+   "files": [
+    "w_kapelusz_slomkowy_Hero_Walk_3_0.png",
+    "w_kapelusz_slomkowy_Hero_Walk_3_6.png",
+    "w_kapelusz_slomkowy_Hero_Walk_0_4.png",
+    "w_kapelusz_slomkowy_Hero_TorchWalk_3_7.png",
+    "w_kapelusz_slomkowy_Hero_AxeSide_10_2.png",
+    "w_kapelusz_slomkowy_Hero_Bow_14_0.png",
+    "w_kapelusz_slomkowy_Hero_Sit_16_0.png",
+    "w_kapelusz_slomkowy_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kapelusz_slomkowy_ciemny",
+   "miejsce": "glowa",
+   "nakladka": "kapelusz",
+   "files": [
+    "w_kapelusz_slomkowy_ciemny_Hero_Walk_3_0.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_Walk_3_6.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_Walk_0_4.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_TorchWalk_3_7.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_AxeSide_10_2.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_Bow_14_0.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_Sit_16_0.png",
+    "w_kapelusz_slomkowy_ciemny_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "chusta_biala",
+   "miejsce": "glowa",
+   "nakladka": "chusta",
+   "files": [
+    "w_chusta_biala_Hero_Walk_3_0.png",
+    "w_chusta_biala_Hero_Walk_3_6.png",
+    "w_chusta_biala_Hero_Walk_0_4.png",
+    "w_chusta_biala_Hero_TorchWalk_3_7.png",
+    "w_chusta_biala_Hero_AxeSide_10_2.png",
+    "w_chusta_biala_Hero_Bow_14_0.png",
+    "w_chusta_biala_Hero_Sit_16_0.png",
+    "w_chusta_biala_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "chusta_czerwona",
+   "miejsce": "glowa",
+   "nakladka": "chusta",
+   "files": [
+    "w_chusta_czerwona_Hero_Walk_3_0.png",
+    "w_chusta_czerwona_Hero_Walk_3_6.png",
+    "w_chusta_czerwona_Hero_Walk_0_4.png",
+    "w_chusta_czerwona_Hero_TorchWalk_3_7.png",
+    "w_chusta_czerwona_Hero_AxeSide_10_2.png",
+    "w_chusta_czerwona_Hero_Bow_14_0.png",
+    "w_chusta_czerwona_Hero_Sit_16_0.png",
+    "w_chusta_czerwona_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "chusta_niebieska",
+   "miejsce": "glowa",
+   "nakladka": "chusta",
+   "files": [
+    "w_chusta_niebieska_Hero_Walk_3_0.png",
+    "w_chusta_niebieska_Hero_Walk_3_6.png",
+    "w_chusta_niebieska_Hero_Walk_0_4.png",
+    "w_chusta_niebieska_Hero_TorchWalk_3_7.png",
+    "w_chusta_niebieska_Hero_AxeSide_10_2.png",
+    "w_chusta_niebieska_Hero_Bow_14_0.png",
+    "w_chusta_niebieska_Hero_Sit_16_0.png",
+    "w_chusta_niebieska_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "czapka_filc_braz",
+   "miejsce": "glowa",
+   "nakladka": "czapka",
+   "files": [
+    "w_czapka_filc_braz_Hero_Walk_3_0.png",
+    "w_czapka_filc_braz_Hero_Walk_3_6.png",
+    "w_czapka_filc_braz_Hero_Walk_0_4.png",
+    "w_czapka_filc_braz_Hero_TorchWalk_3_7.png",
+    "w_czapka_filc_braz_Hero_AxeSide_10_2.png",
+    "w_czapka_filc_braz_Hero_Bow_14_0.png",
+    "w_czapka_filc_braz_Hero_Sit_16_0.png",
+    "w_czapka_filc_braz_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "czapka_filc_szara",
+   "miejsce": "glowa",
+   "nakladka": "czapka",
+   "files": [
+    "w_czapka_filc_szara_Hero_Walk_3_0.png",
+    "w_czapka_filc_szara_Hero_Walk_3_6.png",
+    "w_czapka_filc_szara_Hero_Walk_0_4.png",
+    "w_czapka_filc_szara_Hero_TorchWalk_3_7.png",
+    "w_czapka_filc_szara_Hero_AxeSide_10_2.png",
+    "w_czapka_filc_szara_Hero_Bow_14_0.png",
+    "w_czapka_filc_szara_Hero_Sit_16_0.png",
+    "w_czapka_filc_szara_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "czapka_filc_zielona",
+   "miejsce": "glowa",
+   "nakladka": "czapka",
+   "files": [
+    "w_czapka_filc_zielona_Hero_Walk_3_0.png",
+    "w_czapka_filc_zielona_Hero_Walk_3_6.png",
+    "w_czapka_filc_zielona_Hero_Walk_0_4.png",
+    "w_czapka_filc_zielona_Hero_TorchWalk_3_7.png",
+    "w_czapka_filc_zielona_Hero_AxeSide_10_2.png",
+    "w_czapka_filc_zielona_Hero_Bow_14_0.png",
+    "w_czapka_filc_zielona_Hero_Sit_16_0.png",
+    "w_czapka_filc_zielona_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "opaska_braz",
+   "miejsce": "glowa",
+   "nakladka": "opaska",
+   "files": [
+    "w_opaska_braz_Hero_Walk_3_0.png",
+    "w_opaska_braz_Hero_Walk_3_6.png",
+    "w_opaska_braz_Hero_Walk_0_4.png",
+    "w_opaska_braz_Hero_TorchWalk_3_7.png",
+    "w_opaska_braz_Hero_AxeSide_10_2.png",
+    "w_opaska_braz_Hero_Bow_14_0.png",
+    "w_opaska_braz_Hero_Sit_16_0.png",
+    "w_opaska_braz_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "opaska_czarna",
+   "miejsce": "glowa",
+   "nakladka": "opaska",
+   "files": [
+    "w_opaska_czarna_Hero_Walk_3_0.png",
+    "w_opaska_czarna_Hero_Walk_3_6.png",
+    "w_opaska_czarna_Hero_Walk_0_4.png",
+    "w_opaska_czarna_Hero_TorchWalk_3_7.png",
+    "w_opaska_czarna_Hero_AxeSide_10_2.png",
+    "w_opaska_czarna_Hero_Bow_14_0.png",
+    "w_opaska_czarna_Hero_Sit_16_0.png",
+    "w_opaska_czarna_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "koszula_lniana_biala",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_koszula_lniana_biala_Hero_Walk_3_0.png",
+    "w_koszula_lniana_biala_Hero_Walk_3_6.png",
+    "w_koszula_lniana_biala_Hero_Walk_0_4.png",
+    "w_koszula_lniana_biala_Hero_TorchWalk_3_7.png",
+    "w_koszula_lniana_biala_Hero_AxeSide_10_2.png",
+    "w_koszula_lniana_biala_Hero_Bow_14_0.png",
+    "w_koszula_lniana_biala_Hero_Sit_16_0.png",
+    "w_koszula_lniana_biala_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "koszula_lniana_zolta",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_koszula_lniana_zolta_Hero_Walk_3_0.png",
+    "w_koszula_lniana_zolta_Hero_Walk_3_6.png",
+    "w_koszula_lniana_zolta_Hero_Walk_0_4.png",
+    "w_koszula_lniana_zolta_Hero_TorchWalk_3_7.png",
+    "w_koszula_lniana_zolta_Hero_AxeSide_10_2.png",
+    "w_koszula_lniana_zolta_Hero_Bow_14_0.png",
+    "w_koszula_lniana_zolta_Hero_Sit_16_0.png",
+    "w_koszula_lniana_zolta_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "koszula_lniana_niebieska",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_koszula_lniana_niebieska_Hero_Walk_3_0.png",
+    "w_koszula_lniana_niebieska_Hero_Walk_3_6.png",
+    "w_koszula_lniana_niebieska_Hero_Walk_0_4.png",
+    "w_koszula_lniana_niebieska_Hero_TorchWalk_3_7.png",
+    "w_koszula_lniana_niebieska_Hero_AxeSide_10_2.png",
+    "w_koszula_lniana_niebieska_Hero_Bow_14_0.png",
+    "w_koszula_lniana_niebieska_Hero_Sit_16_0.png",
+    "w_koszula_lniana_niebieska_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kaftan_czerwony",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_kaftan_czerwony_Hero_Walk_3_0.png",
+    "w_kaftan_czerwony_Hero_Walk_3_6.png",
+    "w_kaftan_czerwony_Hero_Walk_0_4.png",
+    "w_kaftan_czerwony_Hero_TorchWalk_3_7.png",
+    "w_kaftan_czerwony_Hero_AxeSide_10_2.png",
+    "w_kaftan_czerwony_Hero_Bow_14_0.png",
+    "w_kaftan_czerwony_Hero_Sit_16_0.png",
+    "w_kaftan_czerwony_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kaftan_brazowy",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_kaftan_brazowy_Hero_Walk_3_0.png",
+    "w_kaftan_brazowy_Hero_Walk_3_6.png",
+    "w_kaftan_brazowy_Hero_Walk_0_4.png",
+    "w_kaftan_brazowy_Hero_TorchWalk_3_7.png",
+    "w_kaftan_brazowy_Hero_AxeSide_10_2.png",
+    "w_kaftan_brazowy_Hero_Bow_14_0.png",
+    "w_kaftan_brazowy_Hero_Sit_16_0.png",
+    "w_kaftan_brazowy_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kaftan_granatowy",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_kaftan_granatowy_Hero_Walk_3_0.png",
+    "w_kaftan_granatowy_Hero_Walk_3_6.png",
+    "w_kaftan_granatowy_Hero_Walk_0_4.png",
+    "w_kaftan_granatowy_Hero_TorchWalk_3_7.png",
+    "w_kaftan_granatowy_Hero_AxeSide_10_2.png",
+    "w_kaftan_granatowy_Hero_Bow_14_0.png",
+    "w_kaftan_granatowy_Hero_Sit_16_0.png",
+    "w_kaftan_granatowy_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kurta_zielona",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_kurta_zielona_Hero_Walk_3_0.png",
+    "w_kurta_zielona_Hero_Walk_3_6.png",
+    "w_kurta_zielona_Hero_Walk_0_4.png",
+    "w_kurta_zielona_Hero_TorchWalk_3_7.png",
+    "w_kurta_zielona_Hero_AxeSide_10_2.png",
+    "w_kurta_zielona_Hero_Bow_14_0.png",
+    "w_kurta_zielona_Hero_Sit_16_0.png",
+    "w_kurta_zielona_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kurta_brazowa",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_kurta_brazowa_Hero_Walk_3_0.png",
+    "w_kurta_brazowa_Hero_Walk_3_6.png",
+    "w_kurta_brazowa_Hero_Walk_0_4.png",
+    "w_kurta_brazowa_Hero_TorchWalk_3_7.png",
+    "w_kurta_brazowa_Hero_AxeSide_10_2.png",
+    "w_kurta_brazowa_Hero_Bow_14_0.png",
+    "w_kurta_brazowa_Hero_Sit_16_0.png",
+    "w_kurta_brazowa_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "koszula_odswietna",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_koszula_odswietna_Hero_Walk_3_0.png",
+    "w_koszula_odswietna_Hero_Walk_3_6.png",
+    "w_koszula_odswietna_Hero_Walk_0_4.png",
+    "w_koszula_odswietna_Hero_TorchWalk_3_7.png",
+    "w_koszula_odswietna_Hero_AxeSide_10_2.png",
+    "w_koszula_odswietna_Hero_Bow_14_0.png",
+    "w_koszula_odswietna_Hero_Sit_16_0.png",
+    "w_koszula_odswietna_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_plocienne_szare",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_plocienne_szare_Hero_Walk_3_0.png",
+    "w_spodnie_plocienne_szare_Hero_Walk_3_6.png",
+    "w_spodnie_plocienne_szare_Hero_Walk_0_4.png",
+    "w_spodnie_plocienne_szare_Hero_TorchWalk_3_7.png",
+    "w_spodnie_plocienne_szare_Hero_AxeSide_10_2.png",
+    "w_spodnie_plocienne_szare_Hero_Bow_14_0.png",
+    "w_spodnie_plocienne_szare_Hero_Sit_16_0.png",
+    "w_spodnie_plocienne_szare_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_plocienne_niebieskie",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_plocienne_niebieskie_Hero_Walk_3_0.png",
+    "w_spodnie_plocienne_niebieskie_Hero_Walk_3_6.png",
+    "w_spodnie_plocienne_niebieskie_Hero_Walk_0_4.png",
+    "w_spodnie_plocienne_niebieskie_Hero_TorchWalk_3_7.png",
+    "w_spodnie_plocienne_niebieskie_Hero_AxeSide_10_2.png",
+    "w_spodnie_plocienne_niebieskie_Hero_Bow_14_0.png",
+    "w_spodnie_plocienne_niebieskie_Hero_Sit_16_0.png",
+    "w_spodnie_plocienne_niebieskie_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_plocienne_brazowe",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_plocienne_brazowe_Hero_Walk_3_0.png",
+    "w_spodnie_plocienne_brazowe_Hero_Walk_3_6.png",
+    "w_spodnie_plocienne_brazowe_Hero_Walk_0_4.png",
+    "w_spodnie_plocienne_brazowe_Hero_TorchWalk_3_7.png",
+    "w_spodnie_plocienne_brazowe_Hero_AxeSide_10_2.png",
+    "w_spodnie_plocienne_brazowe_Hero_Bow_14_0.png",
+    "w_spodnie_plocienne_brazowe_Hero_Sit_16_0.png",
+    "w_spodnie_plocienne_brazowe_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_welniane_brazowe",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_welniane_brazowe_Hero_Walk_3_0.png",
+    "w_spodnie_welniane_brazowe_Hero_Walk_3_6.png",
+    "w_spodnie_welniane_brazowe_Hero_Walk_0_4.png",
+    "w_spodnie_welniane_brazowe_Hero_TorchWalk_3_7.png",
+    "w_spodnie_welniane_brazowe_Hero_AxeSide_10_2.png",
+    "w_spodnie_welniane_brazowe_Hero_Bow_14_0.png",
+    "w_spodnie_welniane_brazowe_Hero_Sit_16_0.png",
+    "w_spodnie_welniane_brazowe_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_welniane_zielone",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_welniane_zielone_Hero_Walk_3_0.png",
+    "w_spodnie_welniane_zielone_Hero_Walk_3_6.png",
+    "w_spodnie_welniane_zielone_Hero_Walk_0_4.png",
+    "w_spodnie_welniane_zielone_Hero_TorchWalk_3_7.png",
+    "w_spodnie_welniane_zielone_Hero_AxeSide_10_2.png",
+    "w_spodnie_welniane_zielone_Hero_Bow_14_0.png",
+    "w_spodnie_welniane_zielone_Hero_Sit_16_0.png",
+    "w_spodnie_welniane_zielone_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_skorzane_czarne",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_skorzane_czarne_Hero_Walk_3_0.png",
+    "w_spodnie_skorzane_czarne_Hero_Walk_3_6.png",
+    "w_spodnie_skorzane_czarne_Hero_Walk_0_4.png",
+    "w_spodnie_skorzane_czarne_Hero_TorchWalk_3_7.png",
+    "w_spodnie_skorzane_czarne_Hero_AxeSide_10_2.png",
+    "w_spodnie_skorzane_czarne_Hero_Bow_14_0.png",
+    "w_spodnie_skorzane_czarne_Hero_Sit_16_0.png",
+    "w_spodnie_skorzane_czarne_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "spodnie_skorzane_brazowe",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_spodnie_skorzane_brazowe_Hero_Walk_3_0.png",
+    "w_spodnie_skorzane_brazowe_Hero_Walk_3_6.png",
+    "w_spodnie_skorzane_brazowe_Hero_Walk_0_4.png",
+    "w_spodnie_skorzane_brazowe_Hero_TorchWalk_3_7.png",
+    "w_spodnie_skorzane_brazowe_Hero_AxeSide_10_2.png",
+    "w_spodnie_skorzane_brazowe_Hero_Bow_14_0.png",
+    "w_spodnie_skorzane_brazowe_Hero_Sit_16_0.png",
+    "w_spodnie_skorzane_brazowe_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "lapcie",
+   "miejsce": "stopy",
+   "nakladka": "",
+   "files": [
+    "w_lapcie_Hero_Walk_3_0.png",
+    "w_lapcie_Hero_Walk_3_6.png",
+    "w_lapcie_Hero_Walk_0_4.png",
+    "w_lapcie_Hero_TorchWalk_3_7.png",
+    "w_lapcie_Hero_AxeSide_10_2.png",
+    "w_lapcie_Hero_Bow_14_0.png",
+    "w_lapcie_Hero_Sit_16_0.png",
+    "w_lapcie_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "buty_brazowe",
+   "miejsce": "stopy",
+   "nakladka": "buty",
+   "files": [
+    "w_buty_brazowe_Hero_Walk_3_0.png",
+    "w_buty_brazowe_Hero_Walk_3_6.png",
+    "w_buty_brazowe_Hero_Walk_0_4.png",
+    "w_buty_brazowe_Hero_TorchWalk_3_7.png",
+    "w_buty_brazowe_Hero_AxeSide_10_2.png",
+    "w_buty_brazowe_Hero_Bow_14_0.png",
+    "w_buty_brazowe_Hero_Sit_16_0.png",
+    "w_buty_brazowe_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "buty_czarne",
+   "miejsce": "stopy",
+   "nakladka": "buty",
+   "files": [
+    "w_buty_czarne_Hero_Walk_3_0.png",
+    "w_buty_czarne_Hero_Walk_3_6.png",
+    "w_buty_czarne_Hero_Walk_0_4.png",
+    "w_buty_czarne_Hero_TorchWalk_3_7.png",
+    "w_buty_czarne_Hero_AxeSide_10_2.png",
+    "w_buty_czarne_Hero_Bow_14_0.png",
+    "w_buty_czarne_Hero_Sit_16_0.png",
+    "w_buty_czarne_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "pas_skorzany_braz",
+   "miejsce": "pas",
+   "nakladka": "",
+   "files": [
+    "w_pas_skorzany_braz_Hero_Walk_3_0.png",
+    "w_pas_skorzany_braz_Hero_Walk_3_6.png",
+    "w_pas_skorzany_braz_Hero_Walk_0_4.png",
+    "w_pas_skorzany_braz_Hero_TorchWalk_3_7.png",
+    "w_pas_skorzany_braz_Hero_AxeSide_10_2.png",
+    "w_pas_skorzany_braz_Hero_Bow_14_0.png",
+    "w_pas_skorzany_braz_Hero_Sit_16_0.png",
+    "w_pas_skorzany_braz_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "pas_skorzany_czarny",
+   "miejsce": "pas",
+   "nakladka": "",
+   "files": [
+    "w_pas_skorzany_czarny_Hero_Walk_3_0.png",
+    "w_pas_skorzany_czarny_Hero_Walk_3_6.png",
+    "w_pas_skorzany_czarny_Hero_Walk_0_4.png",
+    "w_pas_skorzany_czarny_Hero_TorchWalk_3_7.png",
+    "w_pas_skorzany_czarny_Hero_AxeSide_10_2.png",
+    "w_pas_skorzany_czarny_Hero_Bow_14_0.png",
+    "w_pas_skorzany_czarny_Hero_Sit_16_0.png",
+    "w_pas_skorzany_czarny_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "pas_sakiewka",
+   "miejsce": "pas",
+   "nakladka": "sakiewka",
+   "files": [
+    "w_pas_sakiewka_Hero_Walk_3_0.png",
+    "w_pas_sakiewka_Hero_Walk_3_6.png",
+    "w_pas_sakiewka_Hero_Walk_0_4.png",
+    "w_pas_sakiewka_Hero_TorchWalk_3_7.png",
+    "w_pas_sakiewka_Hero_AxeSide_10_2.png",
+    "w_pas_sakiewka_Hero_Bow_14_0.png",
+    "w_pas_sakiewka_Hero_Sit_16_0.png",
+    "w_pas_sakiewka_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "rekawice_brazowe",
+   "miejsce": "rece",
+   "nakladka": "",
+   "files": [
+    "w_rekawice_brazowe_Hero_Walk_3_0.png",
+    "w_rekawice_brazowe_Hero_Walk_3_6.png",
+    "w_rekawice_brazowe_Hero_Walk_0_4.png",
+    "w_rekawice_brazowe_Hero_TorchWalk_3_7.png",
+    "w_rekawice_brazowe_Hero_AxeSide_10_2.png",
+    "w_rekawice_brazowe_Hero_Bow_14_0.png",
+    "w_rekawice_brazowe_Hero_Sit_16_0.png",
+    "w_rekawice_brazowe_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "rekawice_szare",
+   "miejsce": "rece",
+   "nakladka": "",
+   "files": [
+    "w_rekawice_szare_Hero_Walk_3_0.png",
+    "w_rekawice_szare_Hero_Walk_3_6.png",
+    "w_rekawice_szare_Hero_Walk_0_4.png",
+    "w_rekawice_szare_Hero_TorchWalk_3_7.png",
+    "w_rekawice_szare_Hero_AxeSide_10_2.png",
+    "w_rekawice_szare_Hero_Bow_14_0.png",
+    "w_rekawice_szare_Hero_Sit_16_0.png",
+    "w_rekawice_szare_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "plecak",
+   "miejsce": "plecy",
+   "nakladka": "plecak",
+   "files": [
+    "w_plecak_Hero_Walk_3_0.png",
+    "w_plecak_Hero_Walk_3_6.png",
+    "w_plecak_Hero_Walk_0_4.png",
+    "w_plecak_Hero_TorchWalk_3_7.png",
+    "w_plecak_Hero_AxeSide_10_2.png",
+    "w_plecak_Hero_Bow_14_0.png",
+    "w_plecak_Hero_Sit_16_0.png",
+    "w_plecak_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "torba_plocienna",
+   "miejsce": "plecy",
+   "nakladka": "torba",
+   "files": [
+    "w_torba_plocienna_Hero_Walk_3_0.png",
+    "w_torba_plocienna_Hero_Walk_3_6.png",
+    "w_torba_plocienna_Hero_Walk_0_4.png",
+    "w_torba_plocienna_Hero_TorchWalk_3_7.png",
+    "w_torba_plocienna_Hero_AxeSide_10_2.png",
+    "w_torba_plocienna_Hero_Bow_14_0.png",
+    "w_torba_plocienna_Hero_Sit_16_0.png",
+    "w_torba_plocienna_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "torba_skorzana",
+   "miejsce": "plecy",
+   "nakladka": "torba",
+   "files": [
+    "w_torba_skorzana_Hero_Walk_3_0.png",
+    "w_torba_skorzana_Hero_Walk_3_6.png",
+    "w_torba_skorzana_Hero_Walk_0_4.png",
+    "w_torba_skorzana_Hero_TorchWalk_3_7.png",
+    "w_torba_skorzana_Hero_AxeSide_10_2.png",
+    "w_torba_skorzana_Hero_Bow_14_0.png",
+    "w_torba_skorzana_Hero_Sit_16_0.png",
+    "w_torba_skorzana_Hero_LieDown_16_0.png"
+   ]
+  }
+ ],
+ "outfits": [
+  {
+   "key": "A",
+   "label": "słomkowy kapelusz, lniana koszula, płócienne spodnie, łapcie, skórzany pas"
+  },
+  {
+   "key": "B",
+   "label": "filcowa czapka, czerwony kaftan, wełniane spodnie, buty, rękawice, plecak"
+  },
+  {
+   "key": "C",
+   "label": "czerwona chusta, odświętna koszula, niebieskie spodnie, czarne buty, pas z sakiewką, skórzana torba"
+  },
+  {
+   "key": "D",
+   "label": "czarna opaska, skórzana kurta, skórzane spodnie, łapcie, szare rękawice, płócienna torba"
+  }
+ ],
+ "cells": {},
+ "shots": {
+  "A": [
+   {
+    "label": "chód: dół",
+    "file": "s_A_walk2.png"
+   },
+   {
+    "label": "chód: prawo",
+    "file": "s_A_walk6.png"
+   },
+   {
+    "label": "chód: góra",
+    "file": "s_A_walk8.png"
+   },
+   {
+    "label": "chód: lewo",
+    "file": "s_A_walk4.png"
+   },
+   {
+    "label": "siekiera z boku",
+    "file": "s_A_k3.png"
+   },
+   {
+    "label": "siedzi przy ognisku",
+    "file": "s_A_k11.png"
+   },
+   {
+    "label": "kuca",
+    "file": "s_A_k6.png"
+   }
+  ],
+  "B": [
+   {
+    "label": "chód: dół",
+    "file": "s_B_walk2.png"
+   },
+   {
+    "label": "chód: prawo",
+    "file": "s_B_walk6.png"
+   },
+   {
+    "label": "chód: góra",
+    "file": "s_B_walk8.png"
+   },
+   {
+    "label": "chód: lewo",
+    "file": "s_B_walk4.png"
+   },
+   {
+    "label": "siekiera z boku",
+    "file": "s_B_k3.png"
+   },
+   {
+    "label": "siedzi przy ognisku",
+    "file": "s_B_k11.png"
+   },
+   {
+    "label": "kuca",
+    "file": "s_B_k6.png"
+   }
+  ],
+  "C": [
+   {
+    "label": "chód: dół",
+    "file": "s_C_walk2.png"
+   },
+   {
+    "label": "chód: prawo",
+    "file": "s_C_walk6.png"
+   },
+   {
+    "label": "chód: góra",
+    "file": "s_C_walk8.png"
+   },
+   {
+    "label": "chód: lewo",
+    "file": "s_C_walk4.png"
+   },
+   {
+    "label": "siekiera z boku",
+    "file": "s_C_k3.png"
+   },
+   {
+    "label": "siedzi przy ognisku",
+    "file": "s_C_k11.png"
+   },
+   {
+    "label": "kuca",
+    "file": "s_C_k6.png"
+   }
+  ],
+  "D": [
+   {
+    "label": "chód: dół",
+    "file": "s_D_walk2.png"
+   },
+   {
+    "label": "chód: prawo",
+    "file": "s_D_walk6.png"
+   },
+   {
+    "label": "chód: góra",
+    "file": "s_D_walk8.png"
+   },
+   {
+    "label": "chód: lewo",
+    "file": "s_D_walk4.png"
+   },
+   {
+    "label": "siekiera z boku",
+    "file": "s_D_k3.png"
+   },
+   {
+    "label": "siedzi przy ognisku",
+    "file": "s_D_k11.png"
+   },
+   {
+    "label": "kuca",
+    "file": "s_D_k6.png"
+   }
+  ]
+ },
+ "busts": [
+  {
+   "key": "A",
+   "file": "bust_A.png",
+   "ok": true
+  },
+  {
+   "key": "B",
+   "file": "bust_B.png",
+   "ok": true
+  },
+  {
+   "key": "C",
+   "file": "bust_C.png",
+   "ok": true
+  },
+  {
+   "key": "D",
+   "file": "bust_D.png",
+   "ok": true
+  }
+ ],
+ "talk": {
+  "kit": true,
+  "shown": false
+ },
+ "card": {
+  "view": true,
+  "w": 320,
+  "key": "l:Hero_Walk:czapka_filc_zielona|kaftan_czerwony|spodnie_welniane_brazowe|buty_brazowe||rekawice_brazowe|plecak:1:0"
+ },
+ "ms": {
+  "Hero_Walk": {
+   "n": 41,
+   "min": 1.2,
+   "max": 7.7,
+   "avg": 2.3
+  },
+  "Hero_TorchWalk": {
+   "n": 38,
+   "min": 2.6,
+   "max": 7.4,
+   "avg": 4
+  },
+  "Hero_AxeSide": {
+   "n": 41,
+   "min": 4.2,
+   "max": 14,
+   "avg": 6.2
+  },
+  "Hero_Bow": {
+   "n": 38,
+   "min": 3.7,
+   "max": 10.6,
+   "avg": 5.5
+  },
+  "Hero_Sit": {
+   "n": 41,
+   "min": 8.4,
+   "max": 18.7,
+   "avg": 10.9
+  },
+  "Hero_LieDown": {
+   "n": 38,
+   "min": 7.1,
+   "max": 18.1,
+   "avg": 9.6
+  },
+  "Hero_Crouch": {
+   "n": 4,
+   "min": 5.6,
+   "max": 18.4,
+   "avg": 11.7
+  },
+  "Hero_Bust": {
+   "n": 4,
+   "min": 3.6,
+   "max": 8.9,
+   "avg": 6
+  }
+ }
+}

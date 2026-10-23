@@ -16,7 +16,7 @@
  * robione gołymi rękami, bez żadnego budynku). Nową roślinę albo budowlę
  * dopisuje się TUTAJ, nie w Farming.js.
  *
- * BUILD_MAPS: mapy, na których gracz może budować (pole dziadka - mapa 3 - i
+ * BUILD_MAPS: mapy, na których gracz może budować (działka dziadka - mapa 3 „Kruczy Jar” - i
  * wnętrze chatki - mapa 100). Notatka mapy <Build:on> / <Build:off> nadpisuje
  * listę. Pułapki (budowle z "lure" albo "anywhere") stawia się na każdej mapie.
  *
@@ -505,7 +505,11 @@
             161: { raw: true, spoil: 60, dog: 40, tame: 7 },                                                                // Surowe mięso wilka
             162: { stamina: 35, buff: "sated", hours: 3, fed: 40, water: 0, spoil: 120, dog: 45, tame: 8 },                 // Pieczone mięso wilka
             168: { raw: true, spoil: 60, dog: 40, tame: 13 },                                                               // Surowe mięso niedźwiedzia
-            169: { stamina: 60, buff: "sated", hours: 5, fed: 70, water: 0, spoil: 120, dog: 45, tame: 14 }                 // Pieczone mięso niedźwiedzia
+            169: { stamina: 60, buff: "sated", hours: 5, fed: 70, water: 0, spoil: 120, dog: 45, tame: 14 },                // Pieczone mięso niedźwiedzia
+            // (Zakon.js, 2026-10-21: the herbs from the eagle's flights - the same as their <Food:> notes, so the table knows every food;
+            // Zasoby.js puts its own rows - the crab, the valerian brew - in at the start)
+            228: { stamina: 45, fed: 2, water: 0 },                                                                         // Szarotka skalna (keeps)
+            229: { stamina: 12, fed: 14, water: 0 }                                                                         // Warzucha nadmorska (keeps)
         };
         const DOG_DEFAULT = 10, FED_FROM_STAMINA = 0.8;
         const EAT_KEYS = ["stamina", "buff", "hours", "buff2", "hours2", "fed", "water"];

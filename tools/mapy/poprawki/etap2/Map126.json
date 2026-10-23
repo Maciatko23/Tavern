@@ -1,0 +1,49 @@
+{
+ "mapa": 126,
+ "nazwa": "Chata Janka",
+ "ops": [
+  {
+   "op": "region",
+   "x": 3,
+   "y": 4,
+   "stary": 0,
+   "nowy": 2
+  }
+ ],
+ "log": [
+  {
+   "kod": "G1",
+   "x": 3,
+   "y": 4,
+   "problem": "kafel 595 (D 3,10) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (3,4)",
+   "poprawka": "kratka pod kaflem 595 zablokowana regionem 2 (RegionLayers: mebel stoi na niej)"
+  }
+ ],
+ "pominiete": [
+  {
+   "kod": "P2",
+   "x": 9,
+   "y": 8,
+   "dlaczego": "przesunięto zdarzenie 12 z (9,8) do (8,8): nowe problemy: P2(8,8)"
+  }
+ ],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 9,
+   "y": 8,
+   "kandydat": "przesunięto zdarzenie 12 z (9,8) do (8,8)",
+   "odrzucony": "nowe problemy: P2(8,8)"
+  }
+ ],
+ "przed": [
+  "G1 3,4",
+  "P2 9,8"
+ ],
+ "po": [
+  "P2 9,8"
+ ],
+ "sha_data": "bd74e4ef3d941602f181b14f805cfe94792d03c3c36be4a23ea32ff94aaa7212",
+ "zainstalowano": "2026-10-22T10:51:33",
+ "sha_po": "e3460259a79fc2dede6b87d26c455aa11bf79bbefecfdc8a6dcf5180cbda587d"
+}

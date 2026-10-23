@@ -31,7 +31,7 @@ kit.test({}, async t => {
 
     // ---- the field, the tavern, Borgar
     await t.go(3, 26, 14);
-    t.check("grandpa's field (Map003, 'Pole dziadka') reached: the story's step done", await t.eval("!!$gameSystem._story.flags.field && $gameMap.displayName() === 'Pole dziadka'"));
+    t.check("grandpa's field (Map003, 'Kruczy Jar') reached: the story's step done", await t.eval("!!$gameSystem._story.flags.field && $gameMap.displayName() === 'Kruczy Jar'"));
     await t.go(1, 50, 82, 8);
     await t.setHour(10);
     const hire = await t.talkTo("Story.borgarEvent()", [], { secs: 40 });

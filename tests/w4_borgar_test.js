@@ -109,10 +109,10 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
         /Bogumił, był z twojej krwi/.test(angry.text) && /przysięga straży klucza/.test(angry.text) && /Kładziesz klucz kasztelana na ladzie/.test(angry.text) && /Jutro nie otwieram/.test(angry.text) &&
         an.step === "w4Piwnica" && an.closed === 64 && !!an.f && !!an.wie && /zamknął tawernę na dzień 64/.test(await W4ops()), { an, t: angry.text.slice(-300) });
     // the shut day: the town's door, Borgar inside, no shift
-    await t.go(8, 24, 17, 8);
+    await t.go(8, 51, 17, 8);
     await at(64, 10);
     await t.popups({ clear: true });
-    await t.eval("(function(){ $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); $gameMap.event(22).start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); $gameMap.event(22).start(); return 0; })()");
     await t.frames(60);
     const door = await J("({ map: $gameMap.mapId(), y: $gamePlayer.y, ban: Kasztelan.shiftBan() })");
     const dp = await t.popups();

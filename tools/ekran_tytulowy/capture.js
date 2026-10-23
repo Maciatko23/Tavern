@@ -10,8 +10,8 @@ const OUT = path.join(__dirname, "zrzuty");
 fs.mkdirSync(OUT, { recursive: true });
 
 const SHOTS = [
-    { name: "tawerna_deszcz", map: 8, x: 24, y: 19, cx: 24, cy: 13, hour: 22.5, weather: ["rain", 8], hide: true },
-    { name: "tawerna_noc", map: 8, x: 24, y: 19, cx: 24, cy: 13, hour: 22.5, hide: true },
+    { name: "tawerna_deszcz", map: 8, x: 51, y: 19, cx: 51, cy: 13, hour: 22.5, weather: ["rain", 8], hide: true },
+    { name: "tawerna_noc", map: 8, x: 51, y: 19, cx: 51, cy: 13, hour: 22.5, hide: true },
     { name: "kominek", map: 1, x: 40, y: 30, cx: 40, cy: 28, hour: 22, zoom: 2, hide: true },
     { name: "kominek_sala", map: 1, x: 50, y: 32, cx: 50, cy: 30, hour: 22, hide: true },
     { name: "ruiny_schody", map: 10, x: 14, y: 10, cx: 14, cy: 8, hour: 22, hide: true },
@@ -22,9 +22,9 @@ const SHOTS = [
     // (2026-10-18) the empty Map005 "Las" was removed in the clean-up: the night forest is now Skraj lasu's woods (Map023)
     { name: "las_pochodnia", map: 23, x: 20, y: 19, cx: 20, cy: 19, hour: 23.5, torch: true, hide: false, dir: 2 },
     { name: "droga_pochodnia", map: 21, x: 20, y: 12, cx: 20, cy: 12, hour: 23.5, torch: true, hide: false, dir: 2 },
-    { name: "tawerna_burza", map: 8, x: 24, y: 19, cx: 24, cy: 13, hour: 23, weather: ["storm", 9], storm: true, hide: true },
-    { name: "tawerna_burza_b", map: 8, x: 24, y: 19, cx: 24, cy: 14.5, hour: 23, weather: ["storm", 9], storm: true, strikeD: 0.0, strikeWait: 3, hide: true },
-    { name: "tawerna_zima", map: 8, x: 24, y: 19, cx: 24, cy: 13, hour: 21.5, day: 95, weather: ["snow", 7], hide: true },
+    { name: "tawerna_burza", map: 8, x: 51, y: 19, cx: 51, cy: 13, hour: 23, weather: ["storm", 9], storm: true, hide: true },
+    { name: "tawerna_burza_b", map: 8, x: 51, y: 19, cx: 51, cy: 14.5, hour: 23, weather: ["storm", 9], storm: true, strikeD: 0.0, strikeWait: 3, hide: true },
+    { name: "tawerna_zima", map: 8, x: 51, y: 19, cx: 51, cy: 13, hour: 21.5, day: 95, weather: ["snow", 7], hide: true },
     { name: "dwor_noc", map: 24, x: 20, y: 30, cx: 20, cy: 22, hour: 22, hide: true },
 ];
 

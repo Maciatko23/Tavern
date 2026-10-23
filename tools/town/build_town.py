@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python build_town.py [A] [B] [C]  -> tools/town/staging/Map008_<X>.json (+ _meta.json for check_town.py / render_town.py)
 # Three concepts of the town around the tavern (Map008 "Okolice Tawerny" grown to about three times its area), for the user
 # to choose from. Nothing is installed: data/, js/ and System.json are never written.

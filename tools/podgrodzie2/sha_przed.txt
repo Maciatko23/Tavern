@@ -1,0 +1,1 @@
+352b3eb3d5c76fd14fbcd05f6cfc0deef0ae13681365123dbba30394c498ee0a  data/Map111.json (2026-10-22, przed instalacją nowego Podgrodzia; build.py czytał tę wersję - zmieniona 09:34, staging 16:52)

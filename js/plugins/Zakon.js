@@ -1301,7 +1301,7 @@
         [["Krąg menhirów (przy dole)", 18, 52, 44], ["Komora pod menhirami", 176, D.CHAMBER.entry[0], D.CHAMBER.entry[1]]],
         D.EAGLE.map(e => [e.name + " (tylko z orła)", e.map, e.x + 1, e.y + 1]),
         D.PERCHES.map(p => ["Orla grzęda " + p.n, p.map, p.at[0], p.at[1] + 1]),
-        [["Stary cmentarz", 8, 84, 16], ["Szubienica", 8, 94, 58], ["Gaj Milczących (środek)", 120, 57, 54], ["Kruki: pustelnia", 155, 76, 49], ["Kruki: Urwisko", 157, 78, 39],
+        [["Stary cmentarz", 8, 9, 27], ["Szubienica", 8, 88, 125], ["Gaj Milczących (środek)", 120, 57, 54], ["Kruki: pustelnia", 155, 76, 49], ["Kruki: Urwisko", 157, 78, 39],
          ["Płycizna P2 (wrak)", 165, 62, 19]]);
     let f9Spot = 0;
     const f9Label = i => "Miejsce D " + (i + 1) + "/" + GO.length + ": " + GO[i][0] + " (mapa " + GO[i][1] + ")   ←→";

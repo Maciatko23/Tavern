@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/install.py [--dry-run]   - puts the staged Podgrodzie into the game (the RPG Maker MZ editor must be CLOSED)
 #   1. data/Map111.json        <- tools/podgrodzie/staging/Map111.json with the six interiors' doors filled in: player touch;
 #                                 open hours (the town's homes, 6-21; the refugees' house always) -> Door1, the door swings

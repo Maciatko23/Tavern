@@ -242,20 +242,20 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("orla grzęda: obejrzana (wpis, odkrycie), pod nią strzemię jeźdźca (227)", pe.p && pe.st === 1 && pe.found, pe);
 
     // ---------------------------------------------------------------- 7.7 cmentarz, grabarz, szubienica
-    await go(8, 84, 19, 10);
+    await go(8, 9, 30, 10);
     await t.frames(60);
     const gr = await t.json(`(function(){ const e = $gameMap.event(2930); return { e: !!e, note: e ? e.event().note : null, walls: [2800, 2810, 2820, 2821].map(id => !!$gameMap.event(id)) }; })()`);
     t.check("cmentarz: murek, lampka i groby stoją; grabarz Hieronim (2930) na Map008 za dnia", gr.e && /<Town:grabarz>/.test(gr.note || "") && gr.walls.every(Boolean), gr);
-    await t.eval(`__near(82, 13); 0`);
+    await t.eval(`__near(7, 24); 0`);
     await work(["graveWork", 1], 4);
     await t.eval(`(function(){ const s = Zakon.state(); s.graves[2] = s.graves[2] || 1; return 0; })()`);
-    await t.eval(`__near(85, 15); 0`);
+    await t.eval(`__near(10, 26); 0`);
     await work(["graveWork", 3], 4);
     await t.frames(10);
     const gv = await t.json(`({ g: Zakon.state().graves, names: TownQuests.state().v.zak_imiona || 0, sw: $gameSelfSwitches.value([8, 2831, "B"]) })`);
     t.check("grób z krukiem: 4 uderzenia rękami odsłaniają imię; trzy groby = „Imiona z grobów z krukiem” dla Ambrożego", gv.g[1] && gv.g[3] && gv.names === 1 && gv.sw, gv);
     await t.setHour(23);
-    await t.eval(`$gamePlayer.locate(94, 59); 0`);
+    await t.eval(`$gamePlayer.locate(88, 126); 0`);
     await t.frames(240);
     const fog = await t.json(`Zakon.fog()`);
     t.check("szubienica nocą (22-3): mgła wokół niej", fog && fog.alpha > 0.3 && fog.visible, fog);

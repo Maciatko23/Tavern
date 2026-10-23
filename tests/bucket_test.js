@@ -37,7 +37,10 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- an open place
         const B = await ev(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y);
+            // (2026-10-22: Map003 was doubled - its new part is not grandpa's field - and walled by the user: buildings only inside the wall,
+            // 2 tiles from it - look where the field allows it)
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y)
+                && Farming.fieldAllows(x, y);
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 10; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 7 && ok; y++) for (let x = bx; x < bx + 8; x++) { if (!free(x, y)) { ok = false; break; } }

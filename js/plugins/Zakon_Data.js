@@ -193,20 +193,20 @@
         { n: 3, key: "orle_grzedy_3", map: 175, x: 67, y: 43, at: [68, 45], id: 2792, trace: { id: 2795, x: 69, y: 45, kind: "pioro" } }
     ];
     const PERCH_BOND = 5, PERCH_NEAR = 1.6;
-    // 7.7: the old cemetery on Map008 (x 80-87, y 12-17): the low wall round it, the gate below (83-84, 17), eight graves, three with
+    // 7.7: the old cemetery on Map008 (x 5-12, y 23-28): the low wall round it, the gate below (8-9, 28), eight graves, three with
     // the raven; the lamp on its post at the back wall; the gravedigger's places (TownLifeData.SPOTS - Map008 reads only those)
     const CEMETERY = {
-        map: 8, x: 80, y: 12, w: 8, h: 6,
+        map: 8, x: 5, y: 23, w: 8, h: 6,
         wall: { from: 2800 },   // 2800-2820: the wall's 21 pieces (built by the engine round the rectangle, the gate's gap left open)
-        gate: [[83, 17], [84, 17]], lamp: { id: 2821, x: 84, y: 12 },
+        gate: [[8, 28], [9, 28]], lamp: { id: 2821, x: 9, y: 23 },
         graves: [
-            { id: 2830, x: 81, y: 13, img: "grob" }, { id: 2831, x: 82, y: 13, raven: 1 }, { id: 2832, x: 85, y: 13, img: "grob2" },
-            { id: 2833, x: 86, y: 13, raven: 2 }, { id: 2834, x: 81, y: 15, img: "grob2" }, { id: 2835, x: 82, y: 15, img: "grob" },
-            { id: 2836, x: 85, y: 15, raven: 3 }, { id: 2837, x: 86, y: 15, img: "grob" }
+            { id: 2830, x: 6, y: 24, img: "grob" }, { id: 2831, x: 7, y: 24, raven: 1 }, { id: 2832, x: 10, y: 24, img: "grob2" },
+            { id: 2833, x: 11, y: 24, raven: 2 }, { id: 2834, x: 6, y: 26, img: "grob2" }, { id: 2835, x: 7, y: 26, img: "grob" },
+            { id: 2836, x: 10, y: 26, raven: 3 }, { id: 2837, x: 11, y: 26, img: "grob" }
         ],
         cleanHits: 4
     };
-    const GALLOWS = { map: 8, x: 93, y: 54, w: 3, h: 3, id: 2840, at: [94, 56], creak: [22, 3] };
+    const GALLOWS = { map: 8, x: 87, y: 121, w: 3, h: 3, id: 2840, at: [88, 123], creak: [22, 3] };
     // 7.8: the grove of the Silent on Map120 (Act II: switch 16 opens the settlement), the seven white stones round (57, 54)
     const GROVE = {
         map: 120, x: 53, y: 51, w: 9, h: 7, centre: [57, 54], r: 3, ids: 2850, centreId: 2857,
@@ -238,7 +238,7 @@
     SPOTS.push({ key: "menhiry_krag", map: 18, kind: "ring", name: "Krąg menhirów", mode: "reach",
         cells: RING.stones.concat([[RING.watchman.x, RING.watchman.y], RING.plate && [RING.plate.x, RING.plate.y], [RING.hole.x, RING.hole.y]]) });
     for (const p of PERCHES) SPOTS.push({ key: p.key, map: p.map, kind: "perch", name: "Orla grzęda", mode: "reach", x: p.x, y: p.y, w: 3, h: 3 });
-    SPOTS.push({ key: "cmentarz", map: 8, kind: "cemetery", name: "Stary cmentarz", mode: "reach", x: CEMETERY.x, y: CEMETERY.y, w: CEMETERY.w, h: CEMETERY.h });
+    SPOTS.push({ key: "cmentarz", map: 8, kind: "cemetery", name: "Stary cmentarz", mode: "reach", x: CEMETERY.x, y: CEMETERY.y, w: CEMETERY.w, h: CEMETERY.h, allowOld: true });
     SPOTS.push({ key: "szubienica", map: 8, kind: "gallows", name: "Wzgórze z szubienicą", mode: "reach", x: GALLOWS.x, y: GALLOWS.y, w: 3, h: 3 });
     SPOTS.push({ key: "gaj_milczacych", map: 120, kind: "grove", name: "Gaj Milczących", mode: "reach", x: GROVE.x, y: GROVE.y, w: GROVE.w, h: GROVE.h });
     for (const e of EAGLE) {
@@ -296,9 +296,9 @@
           text: "Druga grzęda Straży. Pod nią zbutwiałe siodło - za małe dla konia, za szerokie dla człowieka." },
         { key: "orle_grzedy_3", map: 175, x: 68, y: 45, near: 2, name: "Orla grzęda (południowa)", icon: ICON.gniazdo, xp: 30,
           text: "Ostatnia grzęda, nad samym urwiskiem. W szczelinie słupa tkwią stare pióra." },
-        { key: "cmentarz", map: 8, x: 84, y: 16, near: 3, name: "Stary cmentarz", icon: ICON.grob, xp: 25,
+        { key: "cmentarz", map: 8, x: 9, y: 27, near: 3, name: "Stary cmentarz", icon: ICON.grob, xp: 25,
           text: "Stary cmentarz za miasteczkiem, za niskim murkiem. Większość krzyży zwykłych, ale na trzech kamieniach wyryto kruka." },
-        { key: "szubienica", map: 8, x: 94, y: 57, near: 2, name: "Wzgórze z szubienicą", icon: ICON.grob, xp: 20,
+        { key: "szubienica", map: 8, x: 88, y: 124, near: 2, name: "Wzgórze z szubienicą", icon: ICON.grob, xp: 20,
           text: "Szubienica Lorda przy wschodniej drodze. Tu dwór wiesza kłusowników i przemytników. Nocą skrzypi, choć nikt na niej nie wisi." },
         { key: "gaj", map: 120, x: 57, y: 54, near: 3, name: "Gaj Milczących", icon: ICON.kamien, xp: 40,
           text: "Polana w lesie za osadą. Siedem białych, płaskich kamieni w kręgu. Milczący przychodzą tu o zmierzchu i stoją godzinę bez słowa." },
@@ -493,8 +493,8 @@
     (window.TownLifeExtra = window.TownLifeExtra || []).push(RESIDENT);
     // his places on Map008 (TownLife reads only TownLifeData.SPOTS on its own map - not SPOTS_BY_MAP[8])
     const SPOTS_TOWN = {
-        grabarz_groby: [82, 14, 8], grabarz_groby_2: [85, 14, 8], grabarz_kopie: [85, 16, 8], grabarz_furtka: [84, 18, 2],
-        grabarz_przerwa: [86, 14, 4], grabarz_lampa: [84, 13, 8], grabarz_chata: [84, 20, 2]
+        grabarz_groby: [7, 25, 8], grabarz_groby_2: [10, 25, 8], grabarz_kopie: [10, 27, 8], grabarz_furtka: [9, 29, 2],
+        grabarz_przerwa: [11, 25, 4], grabarz_lampa: [9, 24, 8], grabarz_chata: [20, 13, 2]
     };
     const TLD = window.TownLifeData;
     if (TLD && TLD.SPOTS) for (const [k, v] of Object.entries(SPOTS_TOWN)) if (!TLD.SPOTS[k]) TLD.SPOTS[k] = v;

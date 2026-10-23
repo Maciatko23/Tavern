@@ -1,0 +1,2073 @@
+[
+ {
+  "ikona": 576,
+  "id": 300,
+  "typ": "bron",
+  "nazwa": "Brązowy sztylet",
+  "rodzaj": "sztylet",
+  "material": "braz",
+  "rysunek": "sztylet",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 577,
+  "id": 301,
+  "typ": "bron",
+  "nazwa": "Żelazny sztylet",
+  "rodzaj": "sztylet",
+  "material": "zelazo",
+  "rysunek": "sztylet",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 578,
+  "id": 302,
+  "typ": "bron",
+  "nazwa": "Stalowy sztylet",
+  "rodzaj": "sztylet",
+  "material": "stal",
+  "rysunek": "sztylet",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 579,
+  "id": 303,
+  "typ": "bron",
+  "nazwa": "Mizerykordia zakonna",
+  "rodzaj": "sztylet",
+  "material": "zakon",
+  "rysunek": "sztylet",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 580,
+  "id": 304,
+  "typ": "bron",
+  "nazwa": "Brązowy miecz",
+  "rodzaj": "miecz",
+  "material": "braz",
+  "rysunek": "miecz",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 581,
+  "id": 305,
+  "typ": "bron",
+  "nazwa": "Żelazny miecz",
+  "rodzaj": "miecz",
+  "material": "zelazo",
+  "rysunek": "miecz",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 582,
+  "id": 306,
+  "typ": "bron",
+  "nazwa": "Tasak",
+  "rodzaj": "tasak",
+  "material": "zelazo",
+  "rysunek": "tasak",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 583,
+  "id": 307,
+  "typ": "bron",
+  "nazwa": "Żelazna szabla",
+  "rodzaj": "szabla",
+  "material": "zelazo",
+  "rysunek": "szabla",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 584,
+  "id": 308,
+  "typ": "bron",
+  "nazwa": "Stalowy miecz",
+  "rodzaj": "miecz",
+  "material": "stal",
+  "rysunek": "miecz",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 585,
+  "id": 309,
+  "typ": "bron",
+  "nazwa": "Stalowy długi miecz",
+  "rodzaj": "dlugi_miecz",
+  "material": "stal",
+  "rysunek": "dlugi_miecz",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 586,
+  "id": 310,
+  "typ": "bron",
+  "nazwa": "Prastary miecz",
+  "rodzaj": "miecz",
+  "material": "pierwszych",
+  "rysunek": "miecz",
+  "rampa": [
+   "#141310",
+   "#2a2620",
+   "#423b2e",
+   "#5e523c",
+   "#7f6e4b",
+   "#a8925f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 587,
+  "id": 311,
+  "typ": "bron",
+  "nazwa": "Miecz zakonny",
+  "rodzaj": "miecz",
+  "material": "zakon",
+  "rysunek": "miecz",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 588,
+  "id": 312,
+  "typ": "bron",
+  "nazwa": "Dębowy kostur",
+  "rodzaj": "kostur",
+  "material": "drewno",
+  "rysunek": "kostur",
+  "rampa": [
+   "#2a1a0e",
+   "#43291a",
+   "#5e3c24",
+   "#7a5232",
+   "#966a42",
+   "#b08458"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 589,
+  "id": 313,
+  "typ": "bron",
+  "nazwa": "Okuta pałka",
+  "rodzaj": "palka",
+  "material": "okute",
+  "rysunek": "palka",
+  "rampa": [
+   "#2a1a0e",
+   "#43291a",
+   "#5e3c24",
+   "#7a5232",
+   "#8e8a82",
+   "#c8c2b4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 590,
+  "id": 314,
+  "typ": "bron",
+  "nazwa": "Brązowa maczuga",
+  "rodzaj": "palka",
+  "material": "braz",
+  "rysunek": "palka",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 591,
+  "id": 315,
+  "typ": "bron",
+  "nazwa": "Kiścień",
+  "rodzaj": "kiscien",
+  "material": "zelazo",
+  "rysunek": "kiscien",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 592,
+  "id": 316,
+  "typ": "bron",
+  "nazwa": "Brązowy buzdygan",
+  "rodzaj": "buzdygan",
+  "material": "braz",
+  "rysunek": "buzdygan",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 593,
+  "id": 317,
+  "typ": "bron",
+  "nazwa": "Żelazny buzdygan",
+  "rodzaj": "buzdygan",
+  "material": "zelazo",
+  "rysunek": "buzdygan",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 594,
+  "id": 318,
+  "typ": "bron",
+  "nazwa": "Stalowy pernacz",
+  "rodzaj": "buzdygan",
+  "material": "stal",
+  "rysunek": "buzdygan",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 595,
+  "id": 319,
+  "typ": "bron",
+  "nazwa": "Buzdygan zakonny",
+  "rodzaj": "buzdygan",
+  "material": "zakon",
+  "rysunek": "buzdygan",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 596,
+  "id": 320,
+  "typ": "bron",
+  "nazwa": "Brązowy topór",
+  "rodzaj": "topor",
+  "material": "braz",
+  "rysunek": "topor",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 597,
+  "id": 321,
+  "typ": "bron",
+  "nazwa": "Żelazny topór bojowy",
+  "rodzaj": "topor",
+  "material": "zelazo",
+  "rysunek": "topor",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 598,
+  "id": 322,
+  "typ": "bron",
+  "nazwa": "Czekan",
+  "rodzaj": "czekan",
+  "material": "zelazo",
+  "rysunek": "czekan",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 599,
+  "id": 323,
+  "typ": "bron",
+  "nazwa": "Stalowy topór bojowy",
+  "rodzaj": "topor",
+  "material": "stal",
+  "rysunek": "topor",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 600,
+  "id": 324,
+  "typ": "bron",
+  "nazwa": "Bardysz",
+  "rodzaj": "bardysz",
+  "material": "stal",
+  "rysunek": "bardysz",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 601,
+  "id": 325,
+  "typ": "bron",
+  "nazwa": "Topór zakonny",
+  "rodzaj": "topor",
+  "material": "zakon",
+  "rysunek": "topor",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 602,
+  "id": 326,
+  "typ": "bron",
+  "nazwa": "Kamienny młot",
+  "rodzaj": "mlot",
+  "material": "kamien",
+  "rysunek": "mlot",
+  "rampa": [
+   "#2e2b28",
+   "#46423d",
+   "#5f5a53",
+   "#7a746b",
+   "#968f85",
+   "#b3ab9f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 603,
+  "id": 327,
+  "typ": "bron",
+  "nazwa": "Żelazny młot bojowy",
+  "rodzaj": "mlot",
+  "material": "zelazo",
+  "rysunek": "mlot",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 604,
+  "id": 328,
+  "typ": "bron",
+  "nazwa": "Stalowy młot bojowy",
+  "rodzaj": "mlot",
+  "material": "stal",
+  "rysunek": "mlot",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 605,
+  "id": 329,
+  "typ": "bron",
+  "nazwa": "Młot zakonny",
+  "rodzaj": "mlot",
+  "material": "zakon",
+  "rysunek": "mlot",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 606,
+  "id": 330,
+  "typ": "bron",
+  "nazwa": "Brązowa włócznia",
+  "rodzaj": "wlocznia",
+  "material": "braz",
+  "rysunek": "wlocznia",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 607,
+  "id": 331,
+  "typ": "bron",
+  "nazwa": "Żelazna włócznia",
+  "rodzaj": "wlocznia",
+  "material": "zelazo",
+  "rysunek": "wlocznia",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 608,
+  "id": 332,
+  "typ": "bron",
+  "nazwa": "Rohatyna",
+  "rodzaj": "rohatyna",
+  "material": "zelazo",
+  "rysunek": "rohatyna",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 609,
+  "id": 333,
+  "typ": "bron",
+  "nazwa": "Stalowa włócznia",
+  "rodzaj": "wlocznia",
+  "material": "stal",
+  "rysunek": "wlocznia",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 610,
+  "id": 334,
+  "typ": "bron",
+  "nazwa": "Włócznia zakonna",
+  "rodzaj": "wlocznia",
+  "material": "zakon",
+  "rysunek": "wlocznia",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 611,
+  "id": 335,
+  "typ": "bron",
+  "nazwa": "Łuk długi",
+  "rodzaj": "luk",
+  "material": "dlugi",
+  "rysunek": "luk",
+  "rampa": [
+   "#2b1408",
+   "#47220f",
+   "#663418",
+   "#864922",
+   "#a5622f",
+   "#c27f45"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 612,
+  "id": 336,
+  "typ": "bron",
+  "nazwa": "Łuk refleksyjny",
+  "rodzaj": "luk",
+  "material": "refleksyjny",
+  "rysunek": "luk",
+  "rampa": [
+   "#1e1712",
+   "#3b2c20",
+   "#5c4632",
+   "#8a6c4a",
+   "#b99a6f",
+   "#e2cfa4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 613,
+  "id": 337,
+  "typ": "bron",
+  "nazwa": "Łuk zakonny",
+  "rodzaj": "luk",
+  "material": "zakon",
+  "rysunek": "luk",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 614,
+  "id": 338,
+  "typ": "bron",
+  "nazwa": "Proca skórzana",
+  "rodzaj": "proca",
+  "material": "skorzana",
+  "rysunek": "proca",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 615,
+  "id": 339,
+  "typ": "bron",
+  "nazwa": "Proca rzemienna",
+  "rodzaj": "proca",
+  "material": "rzemienna",
+  "rysunek": "proca",
+  "rampa": [
+   "#1c120c",
+   "#2f1d13",
+   "#462b1b",
+   "#5f3b24",
+   "#7a4e30",
+   "#97663f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 616,
+  "id": 340,
+  "typ": "zbroja",
+  "nazwa": "Skórzany kaptur",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "kaptur",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 617,
+  "id": 341,
+  "typ": "zbroja",
+  "nazwa": "Futrzany kaptur",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "kaptur_futro",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 618,
+  "id": 342,
+  "typ": "zbroja",
+  "nazwa": "Czepiec pikowany",
+  "rodzaj": "",
+  "material": "plotno",
+  "rysunek": "czepiec",
+  "rampa": [
+   "#3a352a",
+   "#575040",
+   "#756c57",
+   "#948a70",
+   "#b0a78b",
+   "#cbc3a8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 619,
+  "id": 343,
+  "typ": "zbroja",
+  "nazwa": "Kaptur zwiadowcy",
+  "rodzaj": "",
+  "material": "plotno",
+  "rysunek": "kaptur",
+  "rampa": [
+   "#3a352a",
+   "#575040",
+   "#756c57",
+   "#948a70",
+   "#b0a78b",
+   "#cbc3a8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 620,
+  "id": 344,
+  "typ": "zbroja",
+  "nazwa": "Brązowy kapalin",
+  "rodzaj": "",
+  "material": "braz",
+  "rysunek": "kapalin",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 621,
+  "id": 345,
+  "typ": "zbroja",
+  "nazwa": "Czepiec kolczy",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "czepiec_kolczy",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 622,
+  "id": 346,
+  "typ": "zbroja",
+  "nazwa": "Hełm z nosalem",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "helm_nosal",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 623,
+  "id": 347,
+  "typ": "zbroja",
+  "nazwa": "Stalowy szyszak",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "szyszak",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 624,
+  "id": 348,
+  "typ": "zbroja",
+  "nazwa": "Hełm zakonny",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "helm_zakonny",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 625,
+  "id": 349,
+  "typ": "zbroja",
+  "nazwa": "Przeszywanica",
+  "rodzaj": "",
+  "material": "plotno",
+  "rysunek": "przeszywanica",
+  "rampa": [
+   "#3a352a",
+   "#575040",
+   "#756c57",
+   "#948a70",
+   "#b0a78b",
+   "#cbc3a8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 626,
+  "id": 350,
+  "typ": "zbroja",
+  "nazwa": "Skórznia",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "skorznia",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 627,
+  "id": 351,
+  "typ": "zbroja",
+  "nazwa": "Ćwiekowana skórznia",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "skorznia_cwieki",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 628,
+  "id": 352,
+  "typ": "zbroja",
+  "nazwa": "Brązowa łuska",
+  "rodzaj": "",
+  "material": "braz",
+  "rysunek": "luska",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 629,
+  "id": 353,
+  "typ": "zbroja",
+  "nazwa": "Kolczuga",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "kolczuga",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 630,
+  "id": 354,
+  "typ": "zbroja",
+  "nazwa": "Żelazna łuska",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "luska",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 631,
+  "id": 355,
+  "typ": "zbroja",
+  "nazwa": "Brygantyna",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "brygantyna",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 632,
+  "id": 356,
+  "typ": "zbroja",
+  "nazwa": "Jedwabna przeszywanica",
+  "rodzaj": "",
+  "material": "jedwab",
+  "rysunek": "przeszywanica",
+  "rampa": [
+   "#3c3f44",
+   "#5a5e65",
+   "#7b8088",
+   "#a0a5ad",
+   "#c6cad0",
+   "#eef0f2"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 633,
+  "id": 357,
+  "typ": "zbroja",
+  "nazwa": "Stalowa kolczuga",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "kolczuga",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 634,
+  "id": 358,
+  "typ": "zbroja",
+  "nazwa": "Stalowy napierśnik",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "napiersnik",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 635,
+  "id": 359,
+  "typ": "zbroja",
+  "nazwa": "Pancerz zakonny",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "napiersnik",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 636,
+  "id": 360,
+  "typ": "zbroja",
+  "nazwa": "Skórzane karwasze",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "karwasze",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 637,
+  "id": 361,
+  "typ": "zbroja",
+  "nazwa": "Brązowe karwasze",
+  "rodzaj": "",
+  "material": "braz",
+  "rysunek": "karwasze",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 638,
+  "id": 362,
+  "typ": "zbroja",
+  "nazwa": "Żelazne karwasze",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "karwasze",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 639,
+  "id": 363,
+  "typ": "zbroja",
+  "nazwa": "Rękawice kolcze",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "rekawice",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 640,
+  "id": 364,
+  "typ": "zbroja",
+  "nazwa": "Stalowe rękawice płytowe",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "rekawice_plyty",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 641,
+  "id": 365,
+  "typ": "zbroja",
+  "nazwa": "Karwasze zakonne",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "karwasze",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 642,
+  "id": 366,
+  "typ": "zbroja",
+  "nazwa": "Skórzane nagolenniki",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "nagolenniki",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 643,
+  "id": 367,
+  "typ": "zbroja",
+  "nazwa": "Brązowe nagolenniki",
+  "rodzaj": "",
+  "material": "braz",
+  "rysunek": "nagolenniki",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 644,
+  "id": 368,
+  "typ": "zbroja",
+  "nazwa": "Żelazne nagolenniki",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "nagolenniki",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 645,
+  "id": 369,
+  "typ": "zbroja",
+  "nazwa": "Stalowe nagolenniki",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "nagolenniki",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 646,
+  "id": 370,
+  "typ": "zbroja",
+  "nazwa": "Nagolenniki zakonne",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "nagolenniki",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 647,
+  "id": 371,
+  "typ": "zbroja",
+  "nazwa": "Wysokie buty",
+  "rodzaj": "",
+  "material": "skora",
+  "rysunek": "buty_wysokie",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 648,
+  "id": 372,
+  "typ": "zbroja",
+  "nazwa": "Buty okute",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "buty_okute",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 649,
+  "id": 373,
+  "typ": "zbroja",
+  "nazwa": "Stalowe trzewiki",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "buty_okute",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 650,
+  "id": 374,
+  "typ": "zbroja",
+  "nazwa": "Buty zakonne",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "buty_wysokie",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 651,
+  "id": 375,
+  "typ": "tarcza",
+  "nazwa": "Okuta tarcza",
+  "rodzaj": "",
+  "material": "okute",
+  "rysunek": "tarcza_okragla",
+  "rampa": [
+   "#2a1a0e",
+   "#43291a",
+   "#5e3c24",
+   "#7a5232",
+   "#8e8a82",
+   "#c8c2b4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 652,
+  "id": 376,
+  "typ": "tarcza",
+  "nazwa": "Okrągła tarcza z umbem",
+  "rodzaj": "",
+  "material": "braz",
+  "rysunek": "tarcza_okragla",
+  "rampa": [
+   "#3a2108",
+   "#5c3611",
+   "#82521c",
+   "#a86e2a",
+   "#c98f3f",
+   "#e6b766"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 653,
+  "id": 377,
+  "typ": "tarcza",
+  "nazwa": "Puklerz",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "puklerz",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 654,
+  "id": 378,
+  "typ": "tarcza",
+  "nazwa": "Migdałowa tarcza",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "tarcza_migdalowa",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 655,
+  "id": 379,
+  "typ": "tarcza",
+  "nazwa": "Żelazna tarcza",
+  "rodzaj": "",
+  "material": "stal",
+  "rysunek": "tarcza_migdalowa",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 656,
+  "id": 380,
+  "typ": "tarcza",
+  "nazwa": "Tarcza zakonna",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "tarcza_migdalowa",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 657,
+  "id": 381,
+  "typ": "dodatek",
+  "nazwa": "Amulet z kłem wilka",
+  "rodzaj": "amulet",
+  "material": "kamienie",
+  "rysunek": "amulet",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#efe6cf",
+  "unikat": false
+ },
+ {
+  "ikona": 658,
+  "id": 382,
+  "typ": "dodatek",
+  "nazwa": "Bursztynowy amulet",
+  "rodzaj": "amulet",
+  "material": "kamienie",
+  "rysunek": "amulet",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#e8a33a",
+  "unikat": false
+ },
+ {
+  "ikona": 659,
+  "id": 383,
+  "typ": "dodatek",
+  "nazwa": "Miedziany pierścień",
+  "rodzaj": "pierscien",
+  "material": "kamienie",
+  "rysunek": "pierscien",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#c9773c",
+  "unikat": false
+ },
+ {
+  "ikona": 660,
+  "id": 384,
+  "typ": "dodatek",
+  "nazwa": "Pierścień z hematytem",
+  "rodzaj": "pierscien",
+  "material": "kamienie",
+  "rysunek": "pierscien",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#3b3f48",
+  "unikat": false
+ },
+ {
+  "ikona": 661,
+  "id": 385,
+  "typ": "dodatek",
+  "nazwa": "Kciukowy pierścień łucznika",
+  "rodzaj": "pierscien",
+  "material": "kamienie",
+  "rysunek": "pierscien",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#d9c8a0",
+  "unikat": false
+ },
+ {
+  "ikona": 662,
+  "id": 386,
+  "typ": "dodatek",
+  "nazwa": "Kruczy talizman",
+  "rodzaj": "talizman",
+  "material": "kamienie",
+  "rysunek": "talizman",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#2a2a30",
+  "unikat": false
+ },
+ {
+  "ikona": 663,
+  "id": 387,
+  "typ": "dodatek",
+  "nazwa": "Amulet z pazurem niedźwiedzia",
+  "rodzaj": "amulet",
+  "material": "kamienie",
+  "rysunek": "amulet",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#ece2c8",
+  "unikat": false
+ },
+ {
+  "ikona": 664,
+  "id": 388,
+  "typ": "dodatek",
+  "nazwa": "Pierścień z akwamarynem",
+  "rodzaj": "pierscien",
+  "material": "kamienie",
+  "rysunek": "pierscien",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#5fc4d0",
+  "unikat": false
+ },
+ {
+  "ikona": 665,
+  "id": 389,
+  "typ": "dodatek",
+  "nazwa": "Talizman zakonu",
+  "rodzaj": "talizman",
+  "material": "kamienie",
+  "rysunek": "talizman",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#c98f3f",
+  "unikat": false
+ },
+ {
+  "ikona": 666,
+  "id": 390,
+  "typ": "dodatek",
+  "nazwa": "Paciorki strażnika",
+  "rodzaj": "talizman",
+  "material": "kamienie",
+  "rysunek": "talizman",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#a8a49a",
+  "unikat": false
+ },
+ {
+  "ikona": 667,
+  "id": 391,
+  "typ": "dodatek",
+  "nazwa": "Pierścień najemnika",
+  "rodzaj": "pierscien",
+  "material": "kamienie",
+  "rysunek": "pierscien",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#9aa3ad",
+  "unikat": false
+ },
+ {
+  "ikona": 668,
+  "id": 392,
+  "typ": "dodatek",
+  "nazwa": "Muszla z przystani",
+  "rodzaj": "amulet",
+  "material": "kamienie",
+  "rysunek": "amulet",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#f0d8c8",
+  "unikat": false
+ },
+ {
+  "ikona": 669,
+  "id": 393,
+  "typ": "dodatek",
+  "nazwa": "Krwawnikowy pierścień",
+  "rodzaj": "pierscien",
+  "material": "kamienie",
+  "rysunek": "pierscien",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#3f8a4e",
+  "unikat": false
+ },
+ {
+  "ikona": 670,
+  "id": 394,
+  "typ": "dodatek",
+  "nazwa": "Grosz strażnicy",
+  "rodzaj": "talizman",
+  "material": "kamienie",
+  "rysunek": "talizman",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#c9b46a",
+  "unikat": false
+ },
+ {
+  "ikona": 671,
+  "id": 395,
+  "typ": "dodatek",
+  "nazwa": "Amulet z kłem odyńca",
+  "rodzaj": "amulet",
+  "material": "kamienie",
+  "rysunek": "amulet",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#f2ead2",
+  "unikat": false
+ },
+ {
+  "ikona": 672,
+  "id": 396,
+  "typ": "bron",
+  "nazwa": "Miecz Bogumiła",
+  "rodzaj": "miecz",
+  "material": "zakon",
+  "rysunek": "miecz",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 673,
+  "id": 397,
+  "typ": "zbroja",
+  "nazwa": "Rękawice Żelaznej Pięści",
+  "rodzaj": "",
+  "material": "zelazo",
+  "rysunek": "rekawice_plyty",
+  "rampa": [
+   "#1f2124",
+   "#363a3f",
+   "#50555b",
+   "#6c7279",
+   "#8e949b",
+   "#b9bec4"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 674,
+  "id": 398,
+  "typ": "bron",
+  "nazwa": "Kostur przeora",
+  "rodzaj": "kostur",
+  "material": "zakon",
+  "rysunek": "kostur",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 675,
+  "id": 399,
+  "typ": "bron",
+  "nazwa": "Długi miecz bez herbu",
+  "rodzaj": "dlugi_miecz",
+  "material": "pierwszych",
+  "rysunek": "dlugi_miecz",
+  "rampa": [
+   "#141310",
+   "#2a2620",
+   "#423b2e",
+   "#5e523c",
+   "#7f6e4b",
+   "#a8925f"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 676,
+  "id": 400,
+  "typ": "zbroja",
+  "nazwa": "Hełm strażnika bramy",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "helm_zakonny",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 677,
+  "id": 401,
+  "typ": "tarcza",
+  "nazwa": "Tarcza Skrzydlatej Straży",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "tarcza_migdalowa",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 678,
+  "id": 402,
+  "typ": "bron",
+  "nazwa": "Szabla spod Brzozowej Woli",
+  "rodzaj": "szabla",
+  "material": "stal",
+  "rysunek": "szabla",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 679,
+  "id": 403,
+  "typ": "bron",
+  "nazwa": "Krucze pióro",
+  "rodzaj": "sztylet",
+  "material": "stal",
+  "rysunek": "sztylet",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 680,
+  "id": 404,
+  "typ": "dodatek",
+  "nazwa": "Oko Pierwszych",
+  "rodzaj": "talizman",
+  "material": "kamienie",
+  "rysunek": "oko",
+  "rampa": [
+   "#3a2a12",
+   "#5e451c",
+   "#8a6a2c",
+   "#b38f40",
+   "#d6b45e",
+   "#f2dc94"
+  ],
+  "akcent": "#9fe6f2",
+  "unikat": true
+ },
+ {
+  "ikona": 681,
+  "id": 405,
+  "typ": "zbroja",
+  "nazwa": "Kolczuga Ostatniej Straży",
+  "rodzaj": "",
+  "material": "zakon",
+  "rysunek": "kolczuga",
+  "rampa": [
+   "#141d2a",
+   "#22324a",
+   "#35506e",
+   "#4f7193",
+   "#7b9cbb",
+   "#c6d8ea"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 682,
+  "id": 406,
+  "typ": "bron",
+  "nazwa": "Łuk Białej Źrenicy",
+  "rodzaj": "luk",
+  "material": "refleksyjny",
+  "rysunek": "luk",
+  "rampa": [
+   "#1e1712",
+   "#3b2c20",
+   "#5c4632",
+   "#8a6c4a",
+   "#b99a6f",
+   "#e2cfa4"
+  ],
+  "akcent": null,
+  "unikat": true
+ },
+ {
+  "ikona": 683,
+  "id": 407,
+  "typ": "bron",
+  "nazwa": "Stalowa siekiera",
+  "rodzaj": "siekiera",
+  "material": "stal",
+  "rysunek": "siekiera",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ },
+ {
+  "ikona": 684,
+  "id": 408,
+  "typ": "bron",
+  "nazwa": "Stalowy kilof",
+  "rodzaj": "kilof",
+  "material": "stal",
+  "rysunek": "kilof",
+  "rampa": [
+   "#1a2129",
+   "#2c3845",
+   "#425465",
+   "#5d7387",
+   "#8199ad",
+   "#b7c9d8"
+  ],
+  "akcent": null,
+  "unikat": false
+ }
+]

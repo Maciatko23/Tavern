@@ -1,0 +1,1 @@
+(lezy: 0 = start siadania, 1 = siedzi, 2 = lezy ranny - edycja PixelLab raw3/lezy_dorosly.png, opuszczona do linii stop)

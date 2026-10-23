@@ -2,7 +2,7 @@
 # The two homes after the field (Homes.js, the user 2026-10-15: no house in the town - "gdzie tam miejsce na pole z tyłu" -, a hut
 # on Podgrodzie with a plot beside it and the burnt farm of the Ług family to buy through the quest D21 and rebuild):
 #   154 Chata pod lasem (wnętrze)  Podgrodzie's new log hut under the forest (tools/domy/podgrodzie_zagroda.py put it on Map111's
-#                                  added rows): plank walls, the hearth, a table, pegs; the door (bottom) -> Map111 (6,41). The
+#                                  added rows): plank walls, the hearth, a table, pegs; the door (bottom) -> Map111 (8,81). The
 #                                  bed and the chest are Farming's furniture, put in when the hut is bought (Homes.js HOUSES)
 #   169 Dom Ługów (wnętrze)        the rebuilt house of the burnt farm (Map168, tools/domy/ruina.py): new log walls, the hearth, a
 #                                  table with stools; the door -> Map168 (20,10), before the house. Bed, big chest and larder:
@@ -32,7 +32,7 @@ NOTE_POOR = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<D
 
 # the houses (Homes.js keeps the same numbers in its own data; the test reads domy.json to check them)
 HOUSES = {
-    "chata": {"inside": 154, "land": 111, "map": 111, "front": [6, 41], "door_x": 4,
+    "chata": {"inside": 154, "land": 111, "map": 111, "front": [8, 81], "door_x": 4,
               "furniture": [{"type": "bed", "x": 7, "y": 4}, {"type": "chest_s", "x": 9, "y": 4}]},
     "zagroda": {"inside": 169, "land": 168, "map": 168, "front": [20, 10], "door_x": 6,
                 "furniture": [{"type": "bed", "x": 9, "y": 4}, {"type": "larder", "x": 11, "y": 4}, {"type": "chest_l", "x": 1, "y": 4}]},

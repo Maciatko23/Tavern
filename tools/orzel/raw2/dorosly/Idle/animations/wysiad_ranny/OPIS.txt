@@ -1,0 +1,1 @@
+(wysiad_ranny: 0 = stoi, 1 = leży, 2 = leży ranny - tools/orzel/poza5.py)

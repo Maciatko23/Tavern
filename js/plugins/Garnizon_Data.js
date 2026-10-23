@@ -137,7 +137,7 @@
         });
         TL.SPOTS_BY_MAP[QUARTERS] = Object.assign(TL.SPOTS_BY_MAP[QUARTERS] || {}, { rotmistrz_wnetrze: [6, 4, 2] });
         if (TL.SPOTS) {
-            const add = { garnizon_werbownik: [22, 37, 2] };
+            const add = { garnizon_werbownik: [24, 46, 2] };
             for (const [k, v] of Object.entries(add)) if (!TL.SPOTS[k]) TL.SPOTS[k] = v;
         }
     }
@@ -281,8 +281,8 @@
     // the patrol on the road (favour under 10), event 652 on Map162
     const PATROL = { id: 652, x: 22, y: 5 };
     // Map008: the recruiter's list on the market (656); the search after D26 b (657-658); Map111: the search (660-661)
-    const TOWN_EVENTS = { list: { id: 656, x: 20, y: 37 }, search: [{ id: 657, x: 32, y: 50 }, { id: 658, x: 20, y: 50 }], klos: { id: 659, x: 9, y: 40, d: 6 } };
-    const PODGRODZIE_EVENTS = [{ id: 660, x: 27, y: 19 }, { id: 661, x: 36, y: 10 }];
+    const TOWN_EVENTS = { list: { id: 656, x: 25, y: 47 }, search: [{ id: 657, x: 59, y: 89 }, { id: 658, x: 47, y: 89 }], klos: { id: 659, x: 13, y: 48, d: 6 } };
+    const PODGRODZIE_EVENTS = [{ id: 660, x: 45, y: 21 }, { id: 661, x: 37, y: 14 }];
     // the captain's quarters (Map163): where the door of Map162 lands, where its doorway leads back
     const QUARTERS_LANDING = [6, 8], QUARTERS_EXIT = [42, 18];
 

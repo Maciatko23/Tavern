@@ -1,4 +1,4 @@
-// "Wyrzuć" in the bag (MenuRing.js BagView, the user 2026-10-14) and the bundles on the ground (Drops.js): X on a thing - how many
+// "Wyrzuć" in the bag (MenuRing.js BagView - the list of the "Lista" menu since 2026-10-22; the user 2026-10-14) and the bundles on the ground (Drops.js): X on a thing - how many
 // (A / D by one, W / S by ten, Tab all), O, then Tak / Nie; the things lie in a bundle in front of the hero (another drop on the same
 // place adds to it), the bag's load at once lower; the bundle stays in the save; O on it takes everything back (the gains' list);
 // a keepsake (the pendant) cannot go - a plate over it, no message window; a worn thing whose last one goes is taken off.
@@ -39,15 +39,14 @@ kit.test({ port: 9460, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const pick = id => t.eval(`(function(){ const l = SceneManager._scene._views.item._list; const i = l._data.findIndex(it => it && it.id === ${id}); if (i >= 0) { l.select(i); l.ensureCursorVisible(false); SceneManager._scene._views.item._detail.setItem(l.item()); } return i; })()`);
     const load = () => t.eval("Survival.carriedWeight()");
 
-    // ---------------------------------------------------------------- into the bag's grid (level 3)
+    // ---------------------------------------------------------------- into the bag's list (the menu's tabs, 2026-10-23: D three times to Plecak, O in)
     await t.key("P");
     t.check("P otwiera menu", await t.until(inMenu, 10));
     await t.frames(45);
-    await t.key("D"); await t.frames(18);
-    await t.key("O"); await t.frames(6);
+    for (let i = 0; i < 3; i++) { await t.key("D"); await t.frames(12); }
     await t.key("O"); await t.frames(6);
     let m = await info();
-    t.check("Plecak: siatka (poziom 3), w podpowiedziach X wyrzuć", m.level === 3 && m.bag.active && m.keyCaps.includes("X") && m.keys.includes("wyrzuć"), { level: m.level, keys: m.keys });
+    t.check("Plecak: lista ma klawisze (poziom 2), w podpowiedziach X wyrzuć", m.active === "item" && m.level === 2 && m.bag.active && m.keyCaps.includes("X") && m.keys.includes("wyrzuć"), { level: m.level, keys: m.keys });
 
     // ---------------------------------------------------------------- X: how many
     t.check("kamień wybrany", (await pick(64)) >= 0);
@@ -93,9 +92,9 @@ kit.test({ port: 9460, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     d = await t.json("Drops.list()");
     t.check("kolejne wyrzucenie w to samo miejsce dokłada do tobołka (5 kamieni, jeden tobołek)", d.length === 1 && d[0].items[64] === 5 && (await t.count(64)) === setup.stones - 5, d);
     t.check("mięso wybrane", (await pick(95)) >= 0);
-    const load0 = await load(), head0 = await t.eval("SceneManager._scene._views.item._head.bitmap.context.getImageData(1000, 116, 160, 28).data.join()");
+    const load0 = await load(), head0 = await t.eval("SceneManager._scene._views.item._head.bitmap.context.getImageData(1080, 56, 130, 50).data.join()");
     await key("X", 6); await key("D"); await key("O", 6); b = await key("O", 6);
-    const load1 = await load(), head1 = await t.eval("SceneManager._scene._views.item._head.bitmap.context.getImageData(1000, 116, 160, 28).data.join()");
+    const load1 = await load(), head1 = await t.eval("SceneManager._scene._views.item._head.bitmap.context.getImageData(1080, 56, 130, 50).data.join()");
     d = await t.json("Drops.list()");
     t.check("2 mięsa wyrzucone: obciążenie od razu mniejsze (i napis w nagłówku inny)", load1 === load0 - 2 && head1 !== head0 && d[0].items[95] === 2, { load0, load1, items: d[0].items });
 
@@ -112,9 +111,8 @@ kit.test({ port: 9460, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- on the map: the bundle lies there
     await t.key("P"); await t.frames(6);
-    await t.key("P"); await t.frames(6);
     await t.key("P");
-    t.check("P, P, P: z powrotem na mapie", await t.until(t.onMap(), 10));
+    t.check("P, P: z powrotem na mapie", await t.until(t.onMap(), 10));
     await t.frames(40);
     let layer = await t.json("Drops.layer()");
     t.check("na mapie tobołek (obrazek Gather_Bundle_0) przed bohaterem", layer.length === 1 && layer[0].pic === "Gather_Bundle_0", layer);

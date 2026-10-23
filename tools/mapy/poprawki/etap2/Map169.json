@@ -1,0 +1,45 @@
+{
+ "mapa": 169,
+ "nazwa": "Dom Ługów",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 2,
+   "y": 6,
+   "stary": 597,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 2,
+   "y": 7,
+   "stary": 0,
+   "nowy": 597
+  }
+ ],
+ "log": [
+  {
+   "kod": "P2",
+   "x": 2,
+   "y": 6,
+   "problem": "kafel 597 (D 5,10) stoi na tylnej krawędzi blatu: 1 px od płaskiego wierzchu w (2,6)",
+   "poprawka": "przesunięto kafel 597 z (2,6) do (2,7) (1 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "D1 1,7",
+  "D1 11,8",
+  "P2 2,6"
+ ],
+ "po": [
+  "D1 1,7",
+  "D1 11,8"
+ ],
+ "sha_data": "20f89453cce506001e070023777cdea2991d2fd79d080f63c57c5c9d95661479",
+ "zainstalowano": "2026-10-22T10:51:36",
+ "sha_po": "b4c0e6995f7a6fc8d005724f2ffa8219b23468a6877a024cedd74b85612d6f45"
+}

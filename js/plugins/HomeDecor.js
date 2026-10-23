@@ -166,7 +166,7 @@
         list: () => { const t = state().noticeTitle; return t ? "Moje pierwsze zlecenie: „" + t + "”. Wisi na pamiątkę." : "Moje pierwsze zlecenie z tablicy w tawernie. Wisi na pamiątkę."; },
         kufel: "Cynowy kufel od Borgara - na pamiątkę pierwszej zmiany w tawernie.",
         kosci: "Moje kości. Z nimi pierwszy raz kogoś ograłem w tawernie.",
-        pokwitowanie: "„Dług Stanisława spłacony co do grosza. Pole zostaje przy nim.” - L. Zaleski",
+        pokwitowanie: "„Dług Stanisława spłacony co do grosza. Działka zostaje przy nim.” - L. Zaleski",
         pokwitowanieDziadek: "Oprawiłem, jak Lord radził. Niech wisi - niech każdy widzi, że u nas długów nie ma.",
         gwozdz: "Pusty gwóźdź. Dziadek mówi: „Tu zawiśnie pokwitowanie od Lorda”.",
         recznik: "Haftowany ręcznik na obrazku Matki Boskiej. Krzyżyki wyszywała jeszcze babcia.",
@@ -181,7 +181,7 @@
         kwiaty: "Polne kwiaty: maki, chabry i rumianek.",
         pisanki: "Koszyczek z pisankami na Wielkanoc. Dziadek maluje je woskiem.",
         jablka: "Kosz jabłek. Pachną na całą izbę.",
-        dynie: "Dynie z pola - będzie zupa na zimę.",
+        dynie: "Dynie z działki - będzie zupa na zimę.",
         wigilia: "Opłatek na stole, sianko pod obrusem - Wigilia w chacie.",
         snop: "Snop zboża w kącie za skrzynią - na Wigilię, na dobry rok."
     };

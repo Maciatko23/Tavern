@@ -74,7 +74,7 @@
     };
     // the core's icons (458-463 are kept for pakiet 0's own drawings; until they are drawn the tab uses these from the set)
     const ICONS = { okolice: 190, odkrycie: 190, nieznane: 0, orzel: 190, f9: 189 };
-    const MAPS = { komora: 176, jaskinia: 177, spare: [178, 179] };
+    const MAPS = { komora: 176, jaskinia: 177, spare: [199, 200] };
     const SWITCHES = { Zas_Studnia: 21, Zas_rez: 22, Low_Wylom: 23, Low_rez: 24, Lud_Jaskinia: 25, Lud_rez: 26, Zak_Komora: 27, Zak_rez: 28 };
 
     // the weather words of the plan (PLAN.md 1): "upał" - summer and 6+ days without rain; "susza" - 10+ days without rain
@@ -82,11 +82,11 @@
 
     // the enlarged maps: their old size (tools/powieksz/stan.json; the new terrain is x >= w or y >= h) and a cell of the old part one
     // reaches on foot (the start of the collision test's walk)
-    const OLD = { 3: [40, 30], 4: [40, 30], 8: [52, 69], 13: [60, 48], 17: [40, 30], 18: [40, 30], 20: [30, 22], 21: [40, 30], 22: [40, 30],
-        23: [40, 30], 24: [40, 30], 111: [46, 56], 120: [40, 34], 125: [56, 40], 155: [48, 36], 157: [56, 36], 159: [44, 40], 162: [56, 40],
+    const OLD = { 3: [40, 30], 4: [40, 30], 8: [104, 103], 13: [60, 48], 17: [40, 30], 18: [40, 30], 20: [30, 22], 21: [40, 30], 22: [40, 30],
+        23: [40, 30], 24: [40, 30], 111: [92, 67], 120: [40, 34], 125: [56, 40], 155: [48, 36], 157: [56, 36], 159: [44, 40], 162: [56, 40],
         165: [40, 30], 168: [50, 36], 175: [40, 30] };
-    const ENTRY = { 3: [25, 15], 4: [20, 15], 8: [27, 34], 13: [29, 25], 17: [20, 15], 18: [20, 15], 20: [15, 11], 21: [20, 15], 22: [20, 15],
-        23: [20, 15], 24: [20, 15], 111: [23, 28], 120: [20, 17], 125: [27, 20], 155: [24, 18], 157: [28, 18], 159: [22, 20], 162: [28, 20],
+    const ENTRY = { 3: [25, 15], 4: [20, 15], 8: [54, 50], 13: [29, 25], 17: [20, 15], 18: [20, 15], 20: [15, 11], 21: [20, 15], 22: [20, 15],
+        23: [20, 15], 24: [20, 15], 111: [41, 30], 120: [20, 17], 125: [27, 20], 155: [24, 18], 157: [28, 18], 159: [22, 20], 162: [28, 20],
         165: [20, 15], 168: [25, 17], 175: [20, 15] };
 
     // pakiet 0's tile changes (PLAN.md 2.6; tools/rozszerzenia/kafle.py)
@@ -130,19 +130,19 @@
         {key: "grzyby_krag1", pkg: "A", map: 17, kind: "ring", name: "Czarci krąg", mode: "reach", cells: [[54, 41], [56, 42], [57, 44], [56, 46], [54, 47], [52, 46], [51, 44], [52, 42], [54, 44]]},
         {key: "grzyby_krag2", pkg: "A", map: 17, kind: "ring", name: "Czarci krąg (drugi)", mode: "reach", cells: [[63, 41], [65, 42], [66, 44], [65, 46], [63, 47], [61, 46], [60, 44], [61, 42], [63, 44]]},
         {key: "ziola_jagny", pkg: "A", map: 17, kind: "herbs", name: "Polanka Jagny", mode: "reach", x: 65, y: 12, w: 5, h: 3},
-        {key: "ogrodek_1", pkg: "A", map: 111, kind: "plot", name: "Ogródek praczki", mode: "reach", x: 55, y: 10, w: 4, h: 3},
-        {key: "ogrodek_2", pkg: "A", map: 111, kind: "plot", name: "Ogródek Franka", mode: "reach", x: 60, y: 10, w: 4, h: 3},
-        {key: "ogrodek_3", pkg: "A", map: 111, kind: "plot", name: "Ogródek znachorki", mode: "reach", x: 65, y: 8, w: 4, h: 3},
-        {key: "wysypisko", pkg: "A", map: 111, kind: "dump", name: "Wysypisko", mode: "reach", x: 50, y: 23, w: 6, h: 4},
-        {key: "glinianka", pkg: "A", map: 111, kind: "claypit", name: "Glinianka", mode: "reach", x: 54, y: 36, w: 5, h: 4},
+        {key: "ogrodek_1", pkg: "A", map: 111, kind: "plot", name: "Ogródek praczki", mode: "reach", x: 61, y: 10, w: 4, h: 3, allowOld: true},
+        {key: "ogrodek_2", pkg: "A", map: 111, kind: "plot", name: "Ogródek Franka", mode: "reach", x: 66, y: 10, w: 4, h: 3, allowOld: true},
+        {key: "ogrodek_3", pkg: "A", map: 111, kind: "plot", name: "Ogródek znachorki", mode: "reach", x: 71, y: 10, w: 4, h: 3, allowOld: true},
+        {key: "wysypisko", pkg: "A", map: 111, kind: "dump", name: "Wysypisko", mode: "reach", x: 70, y: 68, w: 6, h: 4},
+        {key: "glinianka", pkg: "A", map: 111, kind: "claypit", name: "Glinianka", mode: "reach", x: 46, y: 69, w: 5, h: 4},
         {key: "kamieniolom_bloki", pkg: "A", map: 13, kind: "quarry", name: "Ściana ciosowa", mode: "reach", x: 107, y: 80, w: 6, h: 3},
         {key: "zyla_1", pkg: "A", map: 13, kind: "ore", name: "Żyła rudy", mode: "reach", x: 114, y: 78, w: 2, h: 1},
         {key: "zyla_2", pkg: "A", map: 13, kind: "ore", name: "Żyła rudy", mode: "reach", x: 104, y: 88, w: 2, h: 1},
         {key: "zyla_3", pkg: "A", map: 13, kind: "ore", name: "Żyła rudy", mode: "reach", x: 111, y: 87, w: 2, h: 1},
         {key: "sad_spalony", pkg: "A", map: 168, kind: "orchard", name: "Spalony sad", mode: "reach", x: 60, y: 20, w: 12, h: 5},
-        {key: "pole_1", pkg: "A", map: 8, kind: "field", name: "Pole mieszczan", mode: "reach", x: 5, y: 76, w: 8, h: 4},
-        {key: "pole_2", pkg: "A", map: 8, kind: "field", name: "Pole mieszczan", mode: "reach", x: 5, y: 82, w: 8, h: 4},
-        {key: "pole_3", pkg: "A", map: 8, kind: "field", name: "Pole mieszczan", mode: "reach", x: 31, y: 74, w: 8, h: 5},
+        {key: "pole_1", pkg: "A", map: 8, kind: "field", name: "Pole mieszczan", mode: "reach", x: 6, y: 104, w: 8, h: 4},
+        {key: "pole_2", pkg: "A", map: 8, kind: "field", name: "Pole mieszczan", mode: "reach", x: 32, y: 118, w: 8, h: 4},
+        {key: "pole_3", pkg: "A", map: 8, kind: "field", name: "Pole mieszczan", mode: "reach", x: 62, y: 104, w: 8, h: 5},
         {key: "drewno_155_a", pkg: "A", map: 155, kind: "drift", name: "Brzeg (drewno)", mode: "reach", x: 3, y: 52, w: 1, h: 1},
         {key: "drewno_155_b", pkg: "A", map: 155, kind: "drift", name: "Brzeg (drewno)", mode: "reach", x: 3, y: 56, w: 1, h: 1},
         {key: "drewno_155_c", pkg: "A", map: 155, kind: "drift", name: "Brzeg (drewno)", mode: "reach", x: 4, y: 60, w: 1, h: 1},
@@ -186,8 +186,8 @@
         {key: "orle_grzedy_1", pkg: "D", map: 175, kind: "perch", name: "Orla grzęda", mode: "reach", x: 67, y: 11, w: 3, h: 3},
         {key: "orle_grzedy_2", pkg: "D", map: 175, kind: "perch", name: "Orla grzęda", mode: "reach", x: 67, y: 24, w: 3, h: 3},
         {key: "orle_grzedy_3", pkg: "D", map: 175, kind: "perch", name: "Orla grzęda", mode: "reach", x: 67, y: 43, w: 3, h: 3},
-        {key: "cmentarz", pkg: "D", map: 8, kind: "cemetery", name: "Stary cmentarz", mode: "reach", x: 80, y: 12, w: 8, h: 6},
-        {key: "szubienica", pkg: "D", map: 8, kind: "gallows", name: "Wzgórze z szubienicą", mode: "reach", x: 93, y: 54, w: 3, h: 3},
+        {key: "cmentarz", pkg: "D", map: 8, kind: "cemetery", name: "Stary cmentarz", mode: "reach", x: 5, y: 23, w: 8, h: 6, allowOld: true},
+        {key: "szubienica", pkg: "D", map: 8, kind: "gallows", name: "Wzgórze z szubienicą", mode: "reach", x: 87, y: 121, w: 3, h: 3},
         {key: "gaj_milczacych", pkg: "D", map: 120, kind: "grove", name: "Gaj Milczących", mode: "reach", x: 53, y: 51, w: 9, h: 7},
         {key: "orzel_125_a", pkg: "D", map: 125, kind: "eagle", name: "Skrytka w gąszczu", mode: "eagle", seed: [97, 44], x: 97, y: 44, w: 4, h: 4},
         {key: "orzel_125_b", pkg: "D", map: 125, kind: "eagle", name: "Stare gniazdo", mode: "eagle", seed: [106, 30], x: 105, y: 30, w: 4, h: 4},

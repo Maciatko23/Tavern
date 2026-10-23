@@ -35,16 +35,17 @@
  * ============================================================================
  * W prawym górnym rogu okrągły kompas (N E S W, północ u góry jak na
  * mapie). Żółta strzałka pokazuje kierunek do bieżącego celu, a pod tarczą
- * stoi nazwa celu i odległość w krokach, np. „Tawerna · 140 kroków”. Pod
- * kompasem: obciążenie plecaka, pochodnia, minimapa (M).
+ * stoi nazwa celu i odległość w krokach, np. „Tawerna · 140 kroków”. Z lewej
+ * tuż obok zegar tej samej wielkości (CleanHUD.js); pod nimi pora dnia,
+ * pochodnia i minimapa (M).
  * Cel to ten z lewego górnego rogu: śledzone zadanie z miasteczka (osoba
  * albo miejsce z jego kroku), zlecenie z tablicy (gdy gotowe do oddania)
- * albo cel z dziennika (fabuła: dziadek, pole, Borgar, Lord...).
+ * albo cel z dziennika (fabuła: dziadek, działka, Borgar, Lord...).
  * Gdy cel jest na innej mapie, strzałka wskazuje przejście, które prowadzi
  * najkrótszą drogą w jego stronę. Bez celu widać sam kompas.
  * Notatka mapy <Compass:off> - bez kompasu na tej mapie.
  * Dla twórcy: cel dziennika może mieć pole where, np.
- *   where: { map: 8, x: 39, y: 10, name: "Staw" }
+ *   where: { map: 8, x: 66, y: 10, name: "Staw" }
  *   where: { person: "kowal" }   (mieszkaniec, "lord", "grandpa", "borgar")
  *   where: { map: 1, event: "Borgar", name: "Borgar" }
  * ============================================================================
@@ -121,7 +122,7 @@
     function mapName(id) {
         if ($gameMap && id === $gameMap.mapId() && $gameMap.displayName()) return $gameMap.displayName();
         const ST = T.api("Story");
-        if (id === 3 && ST && ST.active && ST.active()) return "Pole dziadka";   // (Story renames the field in a story game)
+        if (id === 3 && ST && ST.active && ST.active()) return "Kruczy Jar";   // (Story's name of the whole map in a story game; grandpa's land in it: landName)
         const d = mapData(id);
         if (d && d.displayName) return d.displayName;
         const info = window.$dataMapInfos && $dataMapInfos[id];
@@ -224,7 +225,7 @@
         const H = T.api("Homes"), m = H && H.homeLand ? H.homeLand() : FIELD;
         return m || null;
     }
-    const landName = m => (m === FIELD ? "Pole dziadka" : mapName(m) || "Twoja ziemia");
+    const landName = m => (m === FIELD ? "Działka dziadka" : mapName(m) || "Twoja ziemia");
     function buildingPlace(type) {
         const F = T.api("Farming"), farm = F && F.farm ? F.farm() : null, list = farm && farm.buildings ? farm.buildings : {};
         const def = F && F.BUILDINGS ? F.BUILDINGS[type] : null, name = def ? def.name : "";
@@ -338,7 +339,8 @@
     // outline over a lightly darkened inside, N E S W (north up, as the map is), the goal's arrow from the middle to the rim, and the
     // label under the dial ("Tawerna · 151 kroków"); the load, the torch's gauge and the minimap stand under it (CleanHUD.js)
     // ------------------------------------------------------------------
-    const DIAL = { R: 44, right: 18, top: 8, think: 15, labelGap: 10, labelH: 26, turn: 0.25, pillRight: 8 };
+    // (right / pillRight: the HUD's margin, CleanHUD's EDGE - 2026-10-23: the clock of one size stands left of the dial, CleanHUD.js)
+    const DIAL = { R: 44, right: 12, top: 8, think: 15, labelGap: 10, labelH: 26, turn: 0.25, pillRight: 12 };
     const SIZE = DIAL.R * 2 + 30;
     function Sprite_CleanCompass() {
         this.initialize(...arguments);

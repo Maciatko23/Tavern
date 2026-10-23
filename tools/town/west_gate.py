@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python tools/town/west_gate.py [--dry] [--out preview.json]
 # The west gate of the town (Map008) to Podgrodzie, the poor quarter outside the wall (Map111; user 2026-10-05: "daj jeszcze
 # wyjście z mapy na zachód ... droga możesz iść w lewo przy kowalu"). Modelled on east_gate.py. The crafts terrace's street

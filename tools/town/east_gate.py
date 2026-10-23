@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python tools/town/east_gate.py [--dry]
 # The east gate to the Lord's manor on the town (Map008), put back after the user's rebuild walled it up (user 2026-10-04:
 # "wschodnia brama musi być, przejście ładne do posesji lorda"). The crafts terrace's street (rows 49-53) and its light paved path

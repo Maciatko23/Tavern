@@ -29,11 +29,13 @@ const { launch, sleep } = require("./cdp.js");
         check("plugin loaded", await ev("typeof Game_Player.prototype.freeStep === 'function' && $gamePlayer.isFreeMoving()"));
 
         // an open meadow: 9x7 tiles with no event and no blocking tile
+        // (2026-10-22: Map003 was doubled - also natural grass, so that its tiles have the farm menu of step 7: the new land's bare
+        // clearings - not soil - have none)
         const B = await ev(`(function(){
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 10; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 7 && ok; y++) for (let x = bx; x < bx + 9; x++) {
-                    if ($gameMap.eventsXy(x, y).length || !$gameMap.checkPassage(x, y, 0x0f)) { ok = false; break; }
+                    if ($gameMap.eventsXy(x, y).length || !$gameMap.checkPassage(x, y, 0x0f) || !Farming.naturalFarmland(x, y)) { ok = false; break; }
                 }
                 if (ok) return { bx, by };
             }
@@ -109,9 +111,14 @@ const { launch, sleep } = require("./cdp.js");
         check("no bogus sliding when the lane is blocked", Math.abs(p1.y - (by + 1)) < 0.001 && p1.x < bx + 6.5, p1);
 
         // 5. the ends of the map
+        // (2026-10-22: Krawedzie.js takes him on to the next map at an edge whose side has a way on - all four sides of Map003 have one.
+        // This is FreeMovement's own bound, as on a side with no way on: the edge walk is off for it (<EdgeWalk:off>, only in memory) -
+        // tests/krawedzie_test.js walks the edges)
+        await ev(`window.__note0 = $dataMap.note; $dataMap.note = String($dataMap.note || "") + " <EdgeWalk:off>"; 0`);
         await put(1, 1);
         await hold(["up", "left"], 120);
         p1 = await pos();
+        await ev(`$dataMap.note = window.__note0; 0`);
         check("cannot leave the map", p1.x >= -0.4 && p1.y >= -0.6 && p1.x < 1 && p1.y < 1, p1);
 
         // 6. a move-route step glides from where the player stands, then sits on a tile centre

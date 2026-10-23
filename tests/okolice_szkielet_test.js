@@ -2,7 +2,7 @@
 // paczki A-D zaczną budować (i potem w każdej z nich - test kolizji):
 //   - 10 wtyczek na swoich miejscach (dane nad TownLife, silniki pod Orzel_Lot) i ładują się
 //   - rejestr numerów zdarzeń: Forestry 1000-1999, Okolice 2000-2099, Zasoby/Lowy/Ludzie/Zakon 2100-2899, TownLife 2900-2949
-//   - przedmioty 185-249 (puste rezerwy albo już wypełnione przez paczkę), IconSet 33 wiersze, mapy 176-177, przełączniki 21-28
+//   - przedmioty 185-249 (puste rezerwy albo już wypełnione przez paczkę; 250+ to ubiór), IconSet 33 wiersze (+ rzędy ubioru), mapy 176-177, przełączniki 21-28
 //   - TownLife: mieszkaniec z drugiego zakresu (2949 w teście) wchodzi na swoją mapę
 //   - Forestry: na mapie z wstawionym zdarzeniem 2000+ nowa sosna i tak dostaje numer z 1000-1999
 //   - kafle: wyłom w żywopłocie Map024 (7-8,29), zatoczka Map125 (15-19 x 65-67), płycizny Map165 (suche w odpływie, zalane w przypływie)
@@ -44,17 +44,23 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- dane: przedmioty, ikony, mapy, przełączniki
     const db = await t.json(`(function(){ const it = []; for (let i = 185; i <= 249; i++) it.push($dataItems[i] ? [i, $dataItems[i].name, $dataItems[i].note] : [i, null]);
-        const m = {}; for (const id of [176, 177, 178]) m[id] = $dataMapInfos[id] ? [$dataMapInfos[id].name, $dataMapInfos[id].parentId] : null;
-        return { it, after: $dataItems.length, m, sw: [21, 22, 23, 24, 25, 26, 27, 28].map(i => $dataSystem.switches[i]) }; })()`);
-    t.check("przedmioty 185-249 są (puste rezerwy <Okolice:rezerwa> albo wypełnione przez paczkę), nic za 249",
-        db.it.every(([i, name, note]) => name !== null && (name !== "" || /<Okolice:rezerwa>/.test(note))) && db.after === 250, { last: db.it.slice(-2), after: db.after });
-    t.check("mapy 176 „Komora pod menhirami” (pod 18) i 177 „Jaskinia przemytników” (pod 125), 178 wolna",
-        JSON.stringify(db.m) === JSON.stringify({ 176: ["Komora pod menhirami", 18], 177: ["Jaskinia przemytników", 125], 178: null }), db.m);
+        const m = {}; for (const id of [176, 177, 199]) m[id] = $dataMapInfos[id] ? [$dataMapInfos[id].name, $dataMapInfos[id].parentId] : null;
+        const past = []; for (let i = 250; i < $dataItems.length; i++) past.push($dataItems[i] ? $dataItems[i].note : "");
+        return { it, after: $dataItems.length, past, m, sw: [21, 22, 23, 24, 25, 26, 27, 28].map(i => $dataSystem.switches[i]) }; })()`);
+    // (2026-10-22: 250-299 to ubiór - tools/ubior/instaluj_dane.py; zakres paczek to 185-249; 2026-10-23: rezerwa ubioru <Rezerwa:ubior> do 299,
+    // od 300 broń, zbroje, tarcze i dodatki - tools/bron/instaluj_dane.py)
+    t.check("przedmioty 185-249 są (puste rezerwy <Okolice:rezerwa> albo wypełnione przez paczkę), od 250 ubiór albo jego rezerwa, od 300 broń / zbroje / tarcze / dodatki",
+        db.it.every(([i, name, note]) => name !== null && (name !== "" || /<Okolice:rezerwa>/.test(note))) && db.after >= 250
+        && db.past.every((n, k) => (250 + k < 300 ? /<Ubior:|<Rezerwa:ubior>/.test(n) : /<(Bron|Zbroja|Tarcza|Dodatek):/.test(n))),
+        { last: db.it.slice(-2), after: db.after, past: db.past.length });
+    // (2026-10-22: 178-190 i 193-198 to wnętrza nowego miasta, zapas paczek przeniesiony na 199-200 - Okolice_Data MAPS.spare)
+    t.check("mapy 176 „Komora pod menhirami” (pod 18) i 177 „Jaskinia przemytników” (pod 125), 199 wolna",
+        JSON.stringify(db.m) === JSON.stringify({ 176: ["Komora pod menhirami", 18], 177: ["Jaskinia przemytników", 125], 199: null }), db.m);
     t.check("przełączniki 21-28 nazwane", JSON.stringify(db.sw) === JSON.stringify(["Zas_Studnia", "Zas_rez", "Low_Wylom", "Low_rez", "Lud_Jaskinia", "Lud_rez", "Zak_Komora", "Zak_rez"]), db.sw);
     await t.eval(`(function(){ window.__icon = ImageManager.loadSystem("IconSet"); return 0; })()`);
     await t.until("window.__icon && window.__icon.isReady()", 20);
     const icon = await t.json(`({ w: __icon.width, h: __icon.height })`);
-    t.check("IconSet ma 33 wiersze (512x1056: ikony do 527)", icon.w === 512 && icon.h === 1056, icon);
+    t.check("IconSet: 33 wiersze paczek (ikony do 527), dalej najwyżej rzędy ubioru (528-575) i broni (576-687)", icon.w === 512 && icon.h >= 1056 && icon.h % 32 === 0 && icon.h <= 43 * 32, icon);
 
     // ---------------------------------------------------------------- Forestry: numer z 1000-1999 także przy zdarzeniu 2000+
     await t.eval(`(function(){ Tawerna.inject(3, { ids: [2050, 2050], owner: "Okolice", build: () => [Okolice.blank(2050, 5, 5, "test Forestry")] }); return 0; })()`);
@@ -127,6 +133,14 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const tab = Journal.TABS.includes("Okolice"), def = Journal.TAB_DEFS.find(d => d.name === "Okolice"), items = def ? def.items() : [];
         return { before, ok, again, found: Okolice.isFound("test_okolice"), tab, item: items.some(i => i.okolice === "test_okolice" && i.mark === "done"), legend: def ? def.legend() : "" }; })()`);
     t.check("odkrycie raz (dymek, PD), zakładka dziennika „Okolice” z tym miejscem", !disc.before && disc.ok && !disc.again && disc.found && disc.tab && disc.item, disc);
+    // (2026-10-23) jedno śledzenie naraz: kompas na miejsce odpina przypięty cel dziennika, przypięty cel („Zadania”) zdejmuje kompas
+    const one = await t.json(`(function(){ const def = Journal.TAB_DEFS.find(d => d.name === "Okolice"), it = def.items().find(i => i.okolice === "test_okolice");
+        const g = Journal.GOALS.find(x => !Journal.goalDone(x) && Journal.goalAvailable(x)); Okolice.track(null); Journal.data().pinned = g.id;
+        def.ok(it); const a = { track: Okolice.track(), goal: Journal.data().pinned, now: Journal.pinnedNow() };
+        Journal.pinTask(Journal.itemsForTab(0).find(r => r.goal && r.goal.id === g.id)); const b = { track: Okolice.track(), goal: Journal.data().pinned, now: Journal.pinnedNow() };
+        Journal.data().pinned = null; return { a, b, gid: g.id }; })()`);
+    t.check("jedno śledzenie: O w „Okolicach” odpina cel, przypięty cel w „Zadaniach” zdejmuje kompas z miejsca",
+        one.a.track === "test_okolice" && one.a.goal === null && one.a.now.owner === "okolice" && one.b.track === null && one.b.goal === one.gid && one.b.now.owner === "goal", one);
     const f9 = await t.json(`(function(){ const secs = Okolice.f9.sections(), core = secs.find(s => s.owner === "Okolice");
         const row = core ? Object.assign({ owner: "Okolice" }, core.rows.find(r => r.what === "check")) : null, r = row ? Okolice.f9.ok(row) : null;
         const sp = core ? Object.assign({ owner: "Okolice" }, core.rows.find(r => r.what === "spot")) : null; if (sp) Okolice.f9.pick(sp, 1);

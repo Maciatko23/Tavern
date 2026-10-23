@@ -594,7 +594,7 @@
     T.inject([URW], { ids: D.IDS, owner: PLUGIN, build: data => gutterEvents(data) });
     function gutter(interp, n) {
         if (!has() || S().gutters[n]) return false;
-        const tools = [D.ITEM.ironPick, D.ITEM.pickaxe, D.ITEM.shovel];
+        const tools = [D.ITEM.steelPick, D.ITEM.ironPick, D.ITEM.pickaxe, D.ITEM.shovel].filter(Boolean);
         if (!tools.some(id => count(id) > 0)) { need(iconOf(D.ITEM.pickaxe), TX.gutterNeed); return false; }
         if (typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(D.GUTTER.stamina)) { need(D.ICON.stamina, TX.rainTired); return false; }
         S().gutters[n] = day();

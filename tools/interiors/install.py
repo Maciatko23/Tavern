@@ -19,7 +19,7 @@ NAMES = {102: "Piekarnia", 103: "Kantor", 104: "Ratusz", 105: "Dom kowala", 106:
          108: "Dzwonnica", 109: "Dom mieszczan", 110: "Izba pod skałą"}
 # open hours by building (from TownLife_Data.js: the resident is up and about); None = always open
 HOURS = {102: (6, 21), 103: (8, 21), 104: (8, 18), 105: (6, 21), 106: (6, 21), 107: (6, 21), 108: None, 109: (6, 21), 110: (6, 21)}
-BELL_DOOR = {"id": 236, "x": 48, "y": 30, "name": "Drzwi: Dzwonnica", "note": "<Town:door=dzwonnica>"}
+BELL_DOOR = {"id": 236, "x": 86, "y": 31, "name": "Drzwi: Dzwonnica", "note": "<Town:door=dzwonnica>"}
 
 def dump(o):
     return json.dumps(o, ensure_ascii=False, separators=(",", ":"))

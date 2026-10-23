@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python street_test.py  -> tools/town/staging/Map008_ulica.json + docs/miasteczko/proba_ulicy.png
 # A proof of the prefab route: one street of the town put together only from prefabs (prefabs.stamp) on the proposed town
 # tileset 11 (town_tileset.py), fronts in one line along a cobbled street with a kerb, the buildings touching like in the

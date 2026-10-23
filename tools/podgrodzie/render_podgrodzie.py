@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/render_podgrodzie.py [out_dir] [--grid]
 # Pictures of the staged Podgrodzie (tools/town/mzrender.py: the game's tile and sprite rules, no animation):
 #   podgrodzie_cala_mapa.png      the whole map at 1:1

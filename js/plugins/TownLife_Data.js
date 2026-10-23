@@ -33,18 +33,18 @@
     "use strict";
 
     const SPOTS = {
-        tawerna: [24, 17, 8], przed_tawerna: [31, 19, 2], brama_twierdzy: [24, 21, 2], ogrod_zakonu: [6, 17, 8], staw: [39, 10, 6],
-        stragan1: [21, 31, 2], stragan2: [27, 30, 2], studnia_rynek: [23, 34, 2], rynek_srodek: [26, 36, 2], rynek_lawka: [19, 35, 2],
-        piekarnia_drzwi: [6, 39, 8], kantor_drzwi: [14, 39, 8], kantor_przed: [12, 40, 2], kantor_rog: [16, 40, 4],
-        ratusz_drzwi: [41, 40, 8], ratusz_przed: [39, 40, 2], dzwonnica: [47, 30, 8],
-        schody_rzem: [24, 44, 2], ulica_rzem: [12, 50, 2], kowadlo: [7, 49, 8], kuznia_dom: [12, 47, 8], garbarnia: [16, 45, 8],
-        garbarz_dom: [37, 50, 8], woziwoda_dom: [29, 47, 8], brama_wsch: [48, 51, 4], brama_pld: [25, 53, 2],
-        dom_mieszczan: [9, 31, 8], pod_murem: [31, 51, 2], stodola: [21, 51, 2], rynek_rog: [30, 38, 2],
-        ratusz_obok: [40, 40, 4], stragan1_obok: [19, 31, 6],
+        tawerna: [51, 17, 8], przed_tawerna: [58, 19, 2], brama_twierdzy: [51, 29, 2], ogrod_zakonu: [33, 17, 8], staw: [66, 10, 6],
+        stragan1: [33, 59, 2], stragan2: [33, 45, 2], studnia_rynek: [50, 50, 2], rynek_srodek: [53, 52, 2], rynek_lawka: [50, 46, 2],
+        piekarnia_drzwi: [38, 73, 8], kantor_drzwi: [18, 47, 8], kantor_przed: [16, 48, 2], kantor_rog: [20, 48, 4],
+        ratusz_drzwi: [85, 48, 8], ratusz_przed: [83, 48, 2], dzwonnica: [85, 31, 8],
+        schody_rzem: [51, 65, 2], ulica_rzem: [12, 64, 2], kowadlo: [8, 63, 8], kuznia_dom: [13, 61, 8], garbarnia: [15, 85, 8],
+        garbarz_dom: [6, 89, 8], woziwoda_dom: [59, 74, 8], brama_wsch: [100, 51, 4], brama_pld: [52, 92, 2],
+        dom_mieszczan: [36, 39, 8], pod_murem: [58, 90, 2], stodola: [48, 90, 2], rynek_rog: [71, 47, 2],
+        ratusz_obok: [84, 48, 4], stragan1_obok: [31, 58, 6],
         // (2026-10-05, the quests' new people) Lucjan's dice by the right stall; the carter's cart on the street before the south gate
-        stragan_kosci: [30, 31, 4], woz_pld: [27, 51, 2],
+        stragan_kosci: [35, 45, 4], woz_pld: [54, 90, 2],
         // (2026-10-07, W6 "Ludzie z promu") Rafał's seat by the camp's fire under the wall (the fire: TownQuests' prop "w6_fire" 32,51)
-        w6_ognisko: [33, 51, 4]
+        w6_ognisko: [60, 90, 4]
     };
     const PATROL = ["brama_wsch", "ulica_rzem", "schody_rzem", "rynek_srodek", "brama_twierdzy", "przed_tawerna", "brama_twierdzy", "rynek_srodek", "schody_rzem", "brama_pld"];
     // the manor guard's night round in the west garden (Map024, its "Miejsce: straz_1..4" events - docs/miasta_miejsca_zadan.md)
@@ -82,7 +82,7 @@
                 night: []
             },
             talk: {
-                morning: ["Wstaję o czwartej, żeby chleb był na szóstą. Weź bochenek, póki ciepły.", "Gdybyś miał trochę zboża z pola dziadka - kupię. Mąka z młyna przestała przychodzić."],
+                morning: ["Wstaję o czwartej, żeby chleb był na szóstą. Weź bochenek, póki ciepły.", "Gdybyś miał trochę zboża z działki dziadka - kupię. Mąka z młyna przestała przychodzić."],
                 day: ["Młyn stoi, bo strumień opadł i koło nie ma siły. Studnia ledwo daje, Kuba mówi, że wody brak... a jednak co rano ma pełne beczki.", "Bierz chleb na drogę. Tobie i dziadkowi potrzeba sił."],
                 evening: ["Zamknięte, kochaneczku. Jutro od szóstej."],
                 night: ["Zamknięte, kochaneczku. Jutro od szóstej."],
@@ -351,7 +351,7 @@
                 home: ["Nie chcę spać...", "Mamo, a kiedy będzie deszcz?"]
             },
             talk: {
-                morning: ["Nosiłem drewno za Zbycha. Dał mi za to suchara. Chcesz pół?", "Ty jesteś od tego dziadka z pola za lasem? On kiedyś dał mi jabłko."],
+                morning: ["Nosiłem drewno za Zbycha. Dał mi za to suchara. Chcesz pół?", "Ty jesteś od tego dziadka z działki za lasem? On kiedyś dał mi jabłko."],
                 day: ["Widziałem, jak Kuba woziwoda jechał przed świtem z pustymi beczkami. A wracał z pełnymi! Skąd?", "Józek ma w kramie prawdziwy hełm z kontynentu. Dziurawy, ale prawdziwy!"],
                 evening: ["Mama mówi, że nie wolno chodzić do namiotów uchodźców. A Darin opowiada najlepsze historie o wojnie."],
                 night: ["..."],
@@ -397,11 +397,11 @@
                 morning: ["Mhm... śpię. Przyjdź po południu."],
                 day: ["Las Lorda jest pełen zwierzyny. A ludzie tutaj jedzą trawę. Powiedz mi, kto tu jest złodziejem?", "Umiesz zastawić sidła? Przynęta to połowa roboty. Zając sam do pustej pętli nie przyjdzie."],
                 evening: ["Jak zajdzie słońce, idę na swoje. Gajowi Lorda śpią pijani, ale kapral Wit - nie śpi nigdy.", "Chcesz kupić skórkę? Taniej niż u kupca z kontynentu. I nie pytaj skąd."],
-                night: ["Psst. W lesie za polem twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja."],
+                night: ["Psst. W lesie za działką twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja."],
                 rain: ["Deszcz zatrze ślady. Dzisiaj wrócę z pełną torbą."],
                 // (in the woods, Skraj lasu - whatever the hour)
                 skraj_lasu: ["Cicho! ...Ty tutaj, o tej porze? Las nocą nie jest dla chłopaków z pola. Wracaj, zanim wilki cię zwęszą.",
-                             "Psst. W lesie za polem twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja.",
+                             "Psst. W lesie za działką twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja.",
                              "Widzisz tę pętlę przy ścieżce? Zając chodzi zawsze tą samą drogą. Głupi jak gajowy Lorda."]
             }
         },
@@ -711,6 +711,349 @@
         }
     ];
 
+    // ==================================================================== (2026-10-22) THE NEW TOWN: the eight residents of the new houses
+    // of Map008 (docs/miasteczko/NOWE_MIASTO.md, "Nowi mieszkańcy"; fixed ids 2940-2947 of EXTRA_RANGE). Sheets in the hero's style
+    // (tools/npc/build_npc.py, npcs.json), talk busts tools/busts/make_<key>.py (registered below). Their places are ONLY the new map's
+    // "Miejsce: <key>" events (<house>_drzwi, plac_1..12, plac_studnia, plac_tablica, stragan_1..6, skwer, brama_pd, stajnia_woz,
+    // straznica_warta, kaplica_lawka, ciesla_warsztat) - on purpose no coordinates in SPOTS; at home "Miejsce: <key>_wnetrze" in their
+    // interiors (Map181-189). Until Map008 has the "Miejsce:" of a resident's door (the old map) the resident is away (when) - nobody
+    // stands in the map's corner. The carter's key is "kolodziej" (Szczepan Kołodziej): "woznica" is Wojciech's (above).
+    // Barks by the time of day: getters (morning 5-11, day 11-17, evening from 17; rain and night first, as for everyone - TownLife),
+    // the raw lists in "zaczepki" (rano / dzien / wieczor / deszcz / noc / dom).
+    const hourOf = () => (window.$gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12);
+    function byTime(z) {
+        const now = () => { const h = hourOf(); return h >= 5 && h < 11 ? z.rano : h >= 11 && h < 17 ? z.dzien : z.wieczor; };
+        return { get stand() { return now(); }, get work() { return now(); }, get wander() { return now(); }, get patrol() { return now(); },
+                 rain: z.deszcz, night: z.noc, home: z.dom || [] };
+    }
+    const onNewMap = door => () => !window.$gameMap || $gameMap.mapId() !== 8 || !(window.TownLife && TownLife.spot) || !!TownLife.spot(door);
+    const newTown = (r, door, z) => Object.assign(r, { map: 8, when: onNewMap(door), zaczepki: z, barks: byTime(z) });
+    const NEW_TOWN = [
+        newTown({
+            // Szczepan, the carter of the stable with the cart shed: early to the fields beyond the south gate and back twice a day
+            // ("inside brama_pd" = out on the road, away), the horses' water his worry
+            key: "kolodziej", id: 2940, name: "Szczepan Kołodziej", title: "woźnica", sheet: "$Npc_Kolodziej", speed: 3, away: ["brama_pd"],
+            plan: [[0, "inside", "stajnia_drzwi"], [5, "work", "stajnia_woz"], [7, "inside", "brama_pd"], [10.5, "work", "stajnia_woz"],
+                   [12, "wander", "plac_studnia"], [13, "stand", "stragan_2"], [14, "inside", "brama_pd"], [17.5, "work", "stajnia_woz"],
+                   [19, "wander", "plac_5"], [20.5, "inside", "stajnia_drzwi"]],
+            talk: {
+                morning: ["Szczepan Kołodziej, woźnica. Wożę wszystko, co się na wóz zmieści: zboże z pól za murem, drewno, kamień, czasem i człowieka.",
+                    "Rano jadę na Polną drogę, póki chłodno. W południe koń by mi padł od upału."],
+                day: ["Wojciech wozi skrzynie dla kupca z kantoru i dobrze na tym wychodzi. Ja wożę ludziom. Mniej grosza, za to sumienie lekkie.",
+                    "Najgorsza w tej suszy jest woda dla koni. Człowiek wytrzyma na dzbanie, koń - nie. Sołtys daje mi wiadro z przydziału, a Siwek wypija dwa.",
+                    "Na drogach za murem kręcą się rabusie. Wóz z sianem ich nie kusi, ale wóz z workami - i owszem. Jak chodzisz sam, chodź za dnia."],
+                evening: ["Wieczorem obrządzam konie. Siwek ma już swoje lata, jak ja. Obaj kaszlemy od kurzu.",
+                    "Mówią, że na kontynencie konie biorą do wojska co do jednego. Tu przynajmniej Siwek ciągnie siano, a nie wóz z rannymi."],
+                night: ["Nocą nie jeżdżę. Brama zamknięta, a na drogach ciemno jak w worku."],
+                rain: ["Deszcz! Wystawiłem koryto i wszystkie wiadra. Siwek stoi z łbem do góry i łapie krople jak dziecko."]
+            }
+        }, "stajnia_drzwi", {
+            rano: ["Wio, Siwku! Wio, nie śpij!", "Z drogi, chłopcze, koła nie patrzą, kogo przejadą.", "Na Polną drogę i z powrotem, zanim słońce przygrzeje."],
+            dzien: ["Kto ma ładunek na wóz? Tanio wiozę, uczciwie!", "Koń pije więcej niż ja, a to już coś znaczy.", "Kurz na drodze taki, że koń kicha jak stary dziad."],
+            wieczor: ["Siwek wyprzęgnięty, wóz pod wiatą. Dzień zaliczony.", "Wieczorem nawet kurz się kładzie spać.", "Jeszcze tylko koryto napełnić... z czego, pytam się?"],
+            deszcz: ["Deszcz! Siwku, pij, póki leje!", "Błoto po piasty, ale niech leje, niech leje!"],
+            noc: ["Ciii... konie śpią.", "Po nocy nie wożę. Na drogach różni się kręcą."],
+            dom: ["Uprząż trzeba nasmarować, bo skrzypi jak stara brama.", "Siwek kaszle od kurzu... martwię się o niego.", "Nie stój za koniem, kopnie."]
+        }),
+        newTown({
+            // Agata, the market woman with the basket: her stall on the square, a round with the basket, the notice board's gossip
+            key: "przekupka", id: 2941, name: "Agata", title: "przekupka", sheet: "$Npc_Przekupka", speed: 3,
+            plan: [[0, "inside", "dom1_drzwi"], [5.5, "wander", "plac_studnia"], [6.5, "work", "stragan_1"], [10, "wander", "plac_3"],
+                   [11, "work", "stragan_1"], [13, "wander", "plac_tablica"], [14, "work", "stragan_1"], [17, "wander", "plac_9"],
+                   [18.5, "inside", "dom1_drzwi"]],
+            talk: {
+                morning: ["Agata jestem, przekupka. Jajka, cebula, czosnek, zioła z ogródka. A plotki gratis, do każdego zakupu!",
+                    "Kury pić chcą jak ludzie. Każdą kroplę z przydziału dzielę: łyk dla mnie, dwa dla kur. Bez kur nie ma jajek, bez jajek nie ma grosza."],
+                day: ["Wiesz, że kapral Wit chodzi do kantoru częściej niż do kaplicy? Ja nic nie mówię. Ja tylko widzę.",
+                    "Ceny? Ceny robi susza, nie ja. Za cebulę płacę chłopom z pól więcej niż rok temu, a i tak marnieje w ziemi.",
+                    "Prom co trzy dni przywozi obcych z kontynentu. Jedni mówią, że to biedacy, drudzy, że szpiedzy. A ja mówię - jeść muszą jedni i drudzy. Byle płacili."],
+                evening: ["Wieczorem w tawernie Melia śpiewa. Ja tam nie chodzę, piwo drogie. Ale pod oknem słychać tak samo.",
+                    "Lord Zaleski znowu podniósł targowe. Mówią, że się na coś szykuje. Ja mówię - na nasze grosze się szykuje."],
+                night: ["Zamknięte, złociutki. Przekupka też człowiek, też śpi."],
+                rain: ["Deszcz! Wystawiłam wszystkie garnki i miskę po zupie. Dziś kury będą piły jak jaśnie pan."]
+            }
+        }, "dom1_drzwi", {
+            rano: ["Jajka! Świeże jajka, cebula, czosnek!", "Kto pierwszy, ten lepszy - jajek mało, kury też pić chcą!", "Przy studni zawsze kolejka... a ja mam pełny kosz plotek!"],
+            dzien: ["Cebula słodka jak miód! No, prawie jak miód!", "Taniej nie będzie, złociutki, susza!", "Słyszałeś? Prom znowu przywiózł obcych!"],
+            wieczor: ["Kosz pusty, nogi pełne... pora do domu.", "Co zostało, oddam za pół ceny! No, za trzy czwarte.", "Tablica znowu pełna ogłoszeń. Sołtys pisze, ludzie czytają, nikt nie słucha."],
+            deszcz: ["Deszcz! Kury się ucieszą!", "Zakryć cebulę, zakryć jajka! A gębę otworzyć!"],
+            noc: ["Późno już, złociutki. Jutro przyjdź, jajka będą."],
+            dom: ["Jajka liczę... sześć, siedem... kura znowu nie zniosła.", "Siadaj, ale nic nie ruszaj, to na sprzedaż."]
+        }),
+        newTown({
+            // Dorota, the seamstress: sews at home in the morning and after noon (her interior), to the stalls for cloth and thread,
+            // the guard's mended tabards to the guardhouse before the evening
+            key: "szwaczka", id: 2942, name: "Dorota Igła", title: "szwaczka", sheet: "$Npc_Szwaczka", speed: 3,
+            plan: [[0, "inside", "dom3_drzwi"], [9.5, "wander", "stragan_4"], [11, "wander", "plac_2"], [12, "inside", "dom3_drzwi"],
+                   [15.5, "wander", "plac_8"], [16.5, "wander", "straznica_warta"], [17.5, "inside", "dom3_drzwi"]],
+            talk: {
+                morning: ["Dorota Igła. Szyję, ceruję, przerabiam. Z dwóch starych koszul zrobię jedną nową, a z jednej starej - porządną łatę.",
+                    "Rano szyję w domu, póki światło dobre. Potem idę na plac po nici i sukno. Jak jakiś kupiec coś przywiezie."],
+                day: ["Twoja koszula... wybacz, ale to już nie koszula, to wspomnienie koszuli. Przynieś mi kiedyś grosz, a coś z niej uratuję.",
+                    "Straż Lorda Zaleskiego zamawia u mnie kaftany. Czerwone, z czarnym koniem na piersi. Wyszyłam już tyle koni, że śnią mi się po nocach.",
+                    "Płótna nie ma czym prać. Wodę z przydziału każdy pije, nie płucze. Toteż w mieście chodzą szarzy, choć wszyscy byli kiedyś biali."],
+                evening: ["Wieczorem szyję przy łuczywie. Oczy bolą, ale zamówienia same się nie zrobią.",
+                    "Wdowa Halina przyprowadza mi czasem dzieci do przymiarki. Kostek wyrasta ze wszystkiego w miesiąc, a Jagódka dostaje to, co po nim zostanie."],
+                night: ["Już nie szyję. Przyjdź jutro, po świcie."],
+                rain: ["Deszcz! Wystawię balię i wypiorę wszystko, co mam. Nawet to, co mam na sobie."]
+            }
+        }, "dom3_drzwi", {
+            rano: ["Nici... ciemne nici... gdzie są ciemne nici?", "Sukno z kontynentu znowu droższe. Wojna wszystko podraża.", "Igła, naparstek, nożyce - i do roboty."],
+            dzien: ["Hej, ty! Ta koszula prosi się o łatę!", "Dwa łokcie płótna i szpulka nici, na więcej mnie nie stać.", "Czerwone sukno dla straży Lorda... znowu czerwone."],
+            wieczor: ["Oczy już nie te... przy łuczywie szyć to męka.", "Kaftany dla straży oddane. Może wreszcie zapłacą.", "Jeszcze dwa guziki i koniec na dziś."],
+            deszcz: ["Deszcz! Płótno wreszcie się wypierze!", "Do środka, do środka, sukno zmoknie!"],
+            noc: ["Późno już. Igła też musi odpocząć."],
+            dom: ["Nie ruszaj tego - to płaszcz dla żony sołtysa.", "Ścieg za ściegiem... jak życie.", "Usiądź, tylko nie na szpilkach."]
+        }),
+        newTown({
+            // Halina, the widow (her husband Michał, Leon's journeyman, fell off the chapel roof last autumn): the water queue at the
+            // well morning and evening, the square and the green with her children
+            key: "wdowa", id: 2943, name: "Halina", title: "wdowa", sheet: "$Npc_Wdowa", speed: 3,
+            plan: [[0, "inside", "dom4_drzwi"], [6, "stand", "plac_studnia"], [7.5, "inside", "dom4_drzwi"], [9, "wander", "plac_6"],
+                   [12, "inside", "dom4_drzwi"], [13.5, "wander", "skwer"], [16, "stand", "plac_studnia"], [17, "wander", "plac_6"],
+                   [18.5, "inside", "dom4_drzwi"]],
+            talk: {
+                morning: ["Halina. Wdowa. Rano stoję w kolejce do studni - jedno wiadro na rodzinę, tak kazał sołtys. Na nas troje. Musi wystarczyć.",
+                    "Kostek chce iść na żołnierza, jak stary Wacław. Wybij mu to z głowy, jak będziesz mógł. Wojna zabiera, nic nie oddaje."],
+                day: ["Mój Michał kładł gont na dachu kaplicy. Ostatniej jesieni spadł. Leon mówi, że belka pękła. Przynosi nam czasem drewno, ale w oczy patrzeć mi nie umie.",
+                    "Szyję dla Doroty, piorę dla Agaty, sprzątam u sołtysa. Grosz do grosza. Dzieci muszą jeść.",
+                    "Masz dziadka, prawda? Dbaj o niego. Starych trzeba pilnować jak dzieci, tylko że oni się nie dają."],
+                evening: ["Wieczorem idę jeszcze raz do studni. Czasem zostaje na dnie choć pół wiadra, jak inni już wezmą.",
+                    "Jagódka pyta, kiedy tata wróci z dachu. Nie umiem jej powiedzieć. Ty byś umiał?"],
+                night: ["Ciii... dzieci śpią. Przyjdź jutro."],
+                rain: ["Deszcz! Wszystkie garnki i miski pod rynnę. Dziś dzieci się umyją, a ja zasnę bez liczenia kropel."]
+            }
+        }, "dom4_drzwi", {
+            rano: ["Kostek, nie pchaj się, kolejka jest kolejka.", "Jedno wiadro na rodzinę... jak z tego ugotować i umyć dzieci?", "Jagódko, trzymaj się spódnicy."],
+            dzien: ["Kostek! Nie łaź pod konie!", "Jagódko, nie dotykaj, to nie nasze.", "Dzieci, nie odchodźcie daleko!"],
+            wieczor: ["Do domu, dzieci, słońce zachodzi.", "Jeszcze wiadro i do domu...", "Kostek, Jagódka! Kolacja!"],
+            deszcz: ["Dzieci, wiadra! Wszystkie garnki na dwór!", "Deszcz... Michał zawsze się cieszył z deszczu."],
+            noc: ["Dzieci śpią. Ja też powinnam."],
+            dom: ["Cicho, dzieci śpią.", "Garnek pusty... jutro coś wymyślę.", "Siadaj, chłopcze. Nie mam czym poczęstować, ale siadaj."]
+        }),
+        newTown({
+            // Kostek, Halina's son (8): carries water with his mother, plays soldier on the square, listens to Wacław, loves the horses
+            key: "kostek", id: 2944, name: "Kostek", title: "syn Haliny", sheet: "$Npc_Kostek", speed: 4,
+            plan: [[0, "inside", "dom4_drzwi"], [6.1, "wander", "plac_studnia"], [7.5, "inside", "dom4_drzwi"], [9, "wander", "plac_6"],
+                   [10.5, "wander", "plac_1"], [12, "inside", "dom4_drzwi"], [13.5, "wander", "skwer"], [15, "wander", "stajnia_woz"],
+                   [16.5, "wander", "plac_6"], [18.5, "inside", "dom4_drzwi"]],
+            talk: {
+                morning: ["Jestem Kostek! Mam osiem lat i miecz! No, z drewna, ale jak się nim walnie, to boli. Pan Leon mi wystrugał.",
+                    "Mama mówi, że wody jest mało i nie wolno chlapać. To ja nie chlapię. Tylko troszkę."],
+                day: ["Pan Wacław był na prawdziwej wojnie! Ma bliznę i kulę, i opowiada o rycerzach, co mieli konie w żelazie! Jak urosnę, też pójdę na wojnę!",
+                    "Pan Szczepan dał mi potrzymać lejce! Siwek mnie zna, naprawdę! Jak mówię „wio”, to rusza uchem.",
+                    "Ty nie masz butów! Ja też nie! Jesteśmy jak żołnierze w marszu, tak mówi pan Wacław."],
+                evening: ["Już? Mama woła? Dobra, ale jutro znowu bitwa!",
+                    "Tata spadł z dachu. Mama płacze w nocy, jak myśli, że śpię. Ja nie płaczę. Żołnierze nie płaczą."],
+                night: ["Zzz... na lewo... patrz... zzz..."],
+                rain: ["Deszcz! Kto zrobi większy plusk w kałuży, ten jest generałem! Ja pierwszy!"]
+            }
+        }, "dom4_drzwi", {
+            rano: ["Mamo, ja poniosę wiadro! Ja jestem silny!", "Patrz, jak pije koń! Glu, glu, glu!", "Ja pierwszy w kolejce! ...No dobra, drugi."],
+            dzien: ["Baczność! Na lewo patrz! Raz, dwa!", "Ciach! Ciach! Pokonałem smoka!", "Pan Wacław mówi, że miecz trzyma się lekko, jak ptaszka!", "Konie! Mogę pogłaskać? Proszę!"],
+            wieczor: ["Jeszcze troszkę, mamo! Jeszcze jedna bitwa!", "Jagódka, ty jesteś wróg! Uciekaj!"],
+            deszcz: ["Deszcz! Kałuża jak morze!", "Hop! Hop! Mokry jestem jak ryba!"],
+            noc: [],
+            dom: ["Mamo, ja nie chcę spać, ja jestem żołnierz!", "Jagódka chrapie... hi, hi."]
+        }),
+        newTown({
+            // Jagódka, Halina's daughter (6): never far from her mother - the well, the square, the green
+            key: "jagodka", id: 2945, name: "Jagódka", title: "córka Haliny", sheet: "$Npc_Jagodka", speed: 3,
+            plan: [[0, "inside", "dom4_drzwi"], [6.2, "wander", "plac_studnia"], [7.5, "inside", "dom4_drzwi"], [9.1, "wander", "plac_6"],
+                   [12, "inside", "dom4_drzwi"], [13.6, "wander", "skwer"], [16.1, "wander", "plac_studnia"], [17.1, "wander", "plac_6"],
+                   [18.3, "inside", "dom4_drzwi"]],
+            talk: {
+                morning: ["Jestem Jagódka. Jak jagódki w lesie, tylko większa. Mam tyle lat! (Pokazuje pięć paluszków, potem namyśla się i dokłada szósty.)",
+                    "Mama mówi, że wody nie wolno marnować. Ja piję po troszeczku. Jak ptaszek."],
+                day: ["Masz jagódki? Ja nigdy nie jadłam prawdziwych jagódek. Mama mówi, że w lesie rosną, ale las daleko i wilki.",
+                    "Kostek ma miecz, a ja mam lalę ze szmatki. Pani Dorota mi uszyła! Ma guziczki zamiast oczu.",
+                    "Pan z kulą opowiada straszne bajki. Ale ja się nie boję. Trochę się boję."],
+                evening: ["Tata naprawiał dach w kaplicy i spadł. Teraz jest w niebie. A w niebie jest woda?",
+                    "Mama mówi, że jak będę grzeczna, to w Kupałę pójdziemy szukać kwiatu paproci."],
+                night: ["Zzz..."],
+                rain: ["Pada! Pada! Kropelki są zimne i słodkie. Spróbuj!"]
+            }
+        }, "dom4_drzwi", {
+            rano: ["Mamo, ja też niosę! Ten mały garnuszek!", "Kap, kap, kap... studnia płacze?", "Jeszcze jestem śpiąca..."],
+            dzien: ["Kostek, poczekaj na mnie!", "Kwiatek! Dla mamy!", "Motylek! Motylku, chodź tu!", "Lala, nie płacz, zaraz pójdziemy do domu."],
+            wieczor: ["Mamo, nóżki bolą...", "Kostek mnie goni! Ratunku! Hi, hi!"],
+            deszcz: ["Deszcz! Buzia do góry - am!", "Kropelki łaskoczą!"],
+            noc: [],
+            dom: ["Mama mówi, że tata patrzy z nieba. Ale przez dach nieba nie widać.", "Ciii... lala śpi."]
+        }),
+        newTown({
+            // Leon, the carpenter: his workshop yard, mending the stalls of the square, the chapel's roof (where Michał fell)
+            key: "ciesla", id: 2946, name: "Leon Dłuto", title: "cieśla", sheet: "$Npc_Ciesla", speed: 3,
+            plan: [[0, "inside", "dom6_drzwi"], [6, "work", "ciesla_warsztat"], [9.5, "wander", "plac_4"], [10.5, "work", "stragan_3"],
+                   [12, "inside", "dom6_drzwi"], [13, "work", "ciesla_warsztat"], [16, "wander", "kaplica_lawka"], [17, "work", "ciesla_warsztat"],
+                   [18.5, "wander", "plac_10"], [20, "inside", "dom6_drzwi"]],
+            talk: {
+                morning: ["Leon Dłuto, cieśla. Stawiam dachy, kładę belki, naprawiam wszystko, co z drewna. Rano robię w warsztacie, póki drewno chłodne i nie pęka.",
+                    "W tę suszę drewno schnie za szybko. Belka pęka wzdłuż słoja, deska paczy się na słońcu. Jak będziesz coś budował, kładź drewno w cieniu."],
+                day: ["Stragany na placu stawiałem wszystkie. Teraz chodzę je łatać. Przekupki tłuką w nie koszami, a dzieci włażą na daszki.",
+                    "Zbych Smolarz zza muru wozi mi drewno. Uczciwy człowiek, tylko krzywe pnie mu się trafiają. Jak całe to miasto.",
+                    "Hieronim zamawia u mnie trumny. W suszę starzy umierają szybciej. Smutna robota, ale ktoś musi ją zrobić porządnie."],
+                evening: ["Michał, mąż Haliny, był moim czeladnikiem. Spadł z dachu kaplicy, bo belka pękła. Moja belka. Noszę im drewno na zimę i nie umiem spojrzeć Halinie w oczy.",
+                    "Kaplica ma nowy gont. Położyłem go sam, po Michale. Każdy gwóźdź wbijałem, jakby był ostatni."],
+                night: ["Warsztat zamknięty. Przyjdź jutro, o świcie."],
+                rain: ["Deszcz to dla cieśli zła pogoda i dobra nowina naraz. Robota stoi, za to drewno pije i przestaje pękać."]
+            }
+        }, "dom6_drzwi", {
+            rano: ["Piła ostra, dłuto ostre, tylko ręce stare.", "Deska krzywa jak ta susza... ech.", "Raz, dwa... trach! Dobrze siadło."],
+            dzien: ["Ten stragan trzyma się na słowo honoru. Trzeba podbić.", "Drewno wyschło na wiór, pęka pod dłutem.", "Hej, młody! Podaj no tamten klin!"],
+            wieczor: ["Wióry z brody, trociny z uszu... koniec dnia.", "Kaplica jeszcze stoi. Dobrze. Niech stoi.", "Jutro trumna dla Hieronima. Znaczy - dla kogoś, kogo Hieronim pochowa."],
+            deszcz: ["Deszcz! Drewno odetchnie, i ja z nim.", "Pod dach z deskami, szybko!"],
+            noc: ["Idź spać, chłopcze. Ja też już kończę."],
+            dom: ["Siekiera naostrzona, piła naostrzona... a sen nie przychodzi.", "Siadaj na zydlu. Sam go zrobiłem. Nie skrzypi.", "Michał... dobry był chłopak. Dobry."]
+        }),
+        newTown({
+            // Wacław, the old soldier on a crutch: his bench on the square (plac_1) with his stories, the guard at the east gate in the
+            // evening (he grumbles at their posture)
+            key: "weteran", id: 2947, name: "Wacław Siwy", title: "stary żołnierz", sheet: "$Npc_Weteran", speed: 2,
+            plan: [[0, "inside", "dom8_drzwi"], [8, "stand", "plac_1"], [11.5, "wander", "plac_studnia"], [12.5, "inside", "dom8_drzwi"],
+                   [14, "stand", "plac_1"], [17, "wander", "straznica_warta"], [18, "stand", "plac_1"], [20.5, "inside", "dom8_drzwi"]],
+            talk: {
+                morning: ["Wacław Siwy. Służyłem w piechocie królewskiej, czterdzieści lat temu. Pod Czarnym Brodem kopia strzaskała mi kolano, a resztę przyniosłem tutaj.",
+                    "Rano siedzę na ławce i patrzę, kto idzie na plac. Stary żołnierz zawsze patrzy. Nawet jak już nie ma czego pilnować."],
+                day: ["Ta wojna na kontynencie to nie wojna, chłopcze. Za moich czasów król bił się z królem. Teraz biją się wszyscy ze wszystkimi o coś, czego nikt nie widział. Serce, mówią. Ja tam widziałem tylko błoto i krew.",
+                    "Kostek chce iść na żołnierza. Opowiadam mu o wojnie, żeby się bał. A on słucha z otwartą gębą i chce jeszcze. Głupi stary, sam sobie winien.",
+                    "Werbownicy z garnizonu nad zatoką kręcą się po wyspie. Jak przyjdą do ciebie z grosikiem i dobrym słowem - uciekaj. Wojsko płaci z góry, a odbiera z odsetkami."],
+                evening: ["Wieczorem idę popatrzeć na wartę przy strażnicy. Chłopcy Lorda stoją krzywo jak płot. Ale mówię im to tylko w myślach. O kuli nie ucieknę.",
+                    "Ten zamek nad placem... kiedyś była tu prawdziwa załoga. Ojciec mówił, że strzegli czegoś pod skałą. Teraz Borgar strzeże beczek. Też zacna służba."],
+                night: ["Nie śpię. Starzy żołnierze śpią na jedno oko. Idź do domu, chłopcze."],
+                rain: ["Deszcz! Siadaj obok, przeczekamy razem. Pod Brodem padało trzy dni i trzy noce, a my staliśmy w szyku. Tu przynajmniej jest ławka."]
+            }
+        }, "dom8_drzwi", {
+            rano: ["Wstawać, maruderzy! Słońce już wysoko!", "Kolano boli... będzie deszcz. Albo i nie będzie.", "Ech, dawniej to warta stała prosto."],
+            dzien: ["Siadaj, chłopcze, opowiem ci, jak było pod Czarnym Brodem.", "Lewa, prawa, lewa... za moich czasów chodziło się w nogę.", "Kto pamięta starą wojnę? Nikt. A nowa już puka do drzwi."],
+            wieczor: ["Wartownicy! Hełm prosto, włócznia prosto, gęba na kłódkę!", "Słońce zachodzi jak wtedy, nad Brodem... czerwono.", "Do domu, staruszku. Kula sama nie zaniesie."],
+            deszcz: ["Deszcz! Jak w obozie pod Brodem - tylko błota mniej.", "Kości mówiły, że będzie deszcz. Kości nie kłamią."],
+            noc: ["Nocą każdy szelest to wróg. Tak już zostaje na zawsze."],
+            dom: ["Medal gdzieś tu był... w skrzyni. Albo przepiłem.", "Siadaj. Wody nie mam, ale opowieść mam."]
+        })
+    ];
+    RESIDENTS.push(...NEW_TOWN);
+    // their talk busts (tools/busts/make_<key>.py; SpeechBubbles stands above this plugin and checks the files at the database's load)
+    if (window.SpeechBubbles && SpeechBubbles.BUSTS) for (const r of NEW_TOWN) SpeechBubbles.BUSTS[r.sheet + ":0"] = r.sheet.slice(5) + "_Bust";
+
+    // ==================================================================== (2026-10-22) NOWE PODGRODZIE: the four residents of the new
+    // houses of Map111 (docs/podgrodzie/NOWE_PODGRODZIE.md, "Nowi mieszkańcy"; fixed ids 2950-2953 of the third range, EXTRA_RANGES
+    // below - 2900-2949 is given out). Sheets in the hero's style (tools/npc/build_npc.py, npcs.json), talk busts
+    // tools/busts/make_<key>.py (registered below). Their places are ONLY the new map's "Miejsce: <key>" events (szynk_drzwi,
+    // przytulek_drzwi, garncarnia_drzwi, lepianka1_drzwi, placyk_1..6, szynk_lawy, przytulek_kociol, garncarnia_lawy, glinianka, wybieg
+    // and the moved old ones brama_zach, namioty, ziola, zebrak, zabawa); at home "Miejsce: <key>_wnetrze" in their interiors
+    // (Map201-204). Until Map111 has the "Miejsce:" of a resident's door (the old map) the resident is away (when), as THE NEW TOWN's.
+    // Barks by the time of day (byTime above; the raw lists in "zaczepki"). No new quests: talk and barks only.
+    const onNewPodgrodzie = door => () => !window.$gameMap || $gameMap.mapId() !== 111 || !(window.TownLife && TownLife.spot) || !!TownLife.spot(door);
+    const newPodgrodzie = (r, door, z) => Object.assign(r, { map: 111, when: onNewPodgrodzie(door), zaczepki: z, barks: byTime(z) });
+    const NEW_PODGRODZIE = [
+        newPodgrodzie({
+            // Mietek, the keeper of the poor man's szynk: kvass of stale bread crusts, thin beer, the benches before the door till late;
+            // in the afternoon to the town for Hanka's unsold bread ("inside brama_zach" = gone to the town, away)
+            key: "szynkarz", id: 2950, name: "Mietek Kwaśniak", title: "szynkarz", sheet: "$Npc_Szynkarz", speed: 3, away: ["brama_zach"],
+            plan: [[0, "inside", "szynk_drzwi"], [7.5, "work", "szynk_lawy"], [10, "inside", "szynk_drzwi"], [11.5, "wander", "placyk_1"],
+                   [12.5, "work", "szynk_lawy"], [14, "inside", "brama_zach"], [16, "work", "szynk_lawy"], [23, "inside", "szynk_drzwi"]],
+            talk: {
+                morning: ["Mietek Kwaśniak, do usług. Szynk mam, nie karczmę - karczma jest na wzgórzu, u Borgara. U Borgara kufel po trzy grosze, u mnie kubek po jednym. I smakuje akurat na jeden.",
+                    "Rano warzę kwas. Z czego? Ze skórek chleba, których Hanka z piekarni nie sprzeda, z garści jęczmienia i z wody... której nie ma. Dlatego taki kwaśny."],
+                day: ["Do szynku przychodzą ci od gliny, drwale, ludzie z promu. Płacą miedziakiem, guzikiem, czasem obietnicą. Obietnic mam już pełną beczkę.",
+                    "Po południu chodzę do miasta po suchy chleb na kwas. Strażnik przy bramie za każdym razem zagląda do worka. Chleb, panie władzo. Stary chleb. A on i tak grzebie.",
+                    "Ludzie Lorda, co kopią przy skałach, zaglądają tu czasem nocą. Piją dużo, mówią mało. Raz jeden się upił i gadał, że oni tam wcale nie kamienia szukają. Następnego dnia już go nie przysłali."],
+                evening: ["Wieczorem szynk ożywa. Darin opowiada o wojnie, Zbych pije na krechę, a Rysiek płaci zającem, o którego nikt nie pyta.",
+                    "Grosz, który tu zostawisz, nie pójdzie do Lorda. To już coś. Siadaj, kwasu naleję. Na krechę też można - ale krótką."],
+                night: ["Szynk zamknięty... no, prawie zamknięty. Kubek kwasu się znajdzie, tylko cicho - kapral Wit nie lubi, jak biedota pije po nocy."],
+                rain: ["Deszcz! Beczki pod rynnę, wszystkie! Dziś kwas będzie z prawdziwej wody, a nie z modlitwy."]
+            }
+        }, "szynk_drzwi", {
+            rano: ["Kwas świeży, prosto z beczki! No, prawie świeży.", "Ławy wytarte, beczka wytoczona. Można żyć.", "Kubek kwasu na dzień dobry? Grosz, nie więcej!"],
+            dzien: ["Siadaj, spocznij! Pod daszkiem jeszcze chłodno.", "Kwas po groszu, cienkusz po dwa! Kto pije?", "U Borgara drożej, u mnie bliżej!"],
+            wieczor: ["Wieczór, ludzie! Szynk otwarty do późna!", "Kto ma grosz, niech siada. Kto nie ma - niech siada ciszej.", "Zbych, znowu na krechę? Ech... siadaj."],
+            deszcz: ["Deszcz! Beczki pod rynnę!", "Leje! Kwas z deszczówki - jak u króla!"],
+            noc: ["Ciszej, ciszej... kapral nie śpi.", "Ostatni kubek i do domu, chłopcze."],
+            dom: ["Kwas musi postać trzy dni. Nie ruszaj beczki.", "Krecha Zbycha, krecha Ryśka, krecha Józka... sama krecha, grosza nie widać.", "Siadaj, jest jeszcze ława. Kulawa, ale jest."]
+        }),
+        newPodgrodzie({
+            // Stefa, the keeper of the poorhouse: the cauldron before the door morning, noon and evening, the poorhouse's water ration from
+            // the town's well ("inside brama_zach" = away), the tents of the ferry people, herbs from babka Jadwiga, a bowl for old Gaweł
+            key: "opiekunka", id: 2951, name: "Ciotka Stefa", title: "opiekunka przytułku", sheet: "$Npc_Opiekunka", speed: 3, away: ["brama_zach"],
+            plan: [[0, "inside", "przytulek_drzwi"], [5.5, "work", "przytulek_kociol"], [7.5, "inside", "brama_zach"], [9, "work", "przytulek_kociol"],
+                   [12, "wander", "namioty"], [13, "wander", "ziola"], [14, "inside", "przytulek_drzwi"], [16, "work", "przytulek_kociol"],
+                   [18.5, "wander", "zebrak"], [19.5, "inside", "przytulek_drzwi"]],
+            talk: {
+                morning: ["Stefania, ale wszyscy mówią: ciotka Stefa. Prowadzę przytułek. Kto chory, stary albo nie ma dachu - dostaje u mnie siennik i miskę. Siennik twardy, miska płytka, ale są.",
+                    "O świcie rozpalam pod kotłem. Kasza, pokrzywa, czasem kość od rzeźnika z miasta. Jak gotujesz dla dwudziestu z garści, to się uczysz liczyć ziarnka."],
+                day: ["Sołtys liczy mi wodę jak jednej rodzinie: wiadro na dzień. A pod dachem mam dwadzieścia gąb, gorączkę i dwoje niemowląt. Noszę, ile udźwignę, a resztę wymadlam.",
+                    "Ludzie z promu przypływają chorzy: kaszel, rany, głód. Babka Jadwiga daje mi zioła, Darin pomaga nosić. Lord przysłał nam kiedyś jeden kocioł i dużo obietnic. Kocioł się przydał.",
+                    "Masz dziadka? To go pilnuj. Połowa moich starych ma dzieci w mieście. Tylko że dzieci w mieście mają ważniejsze sprawy."],
+                evening: ["Wieczorem nalewam zupę każdemu, kto przyjdzie z miską. Nikogo nie pytam, skąd jest. Głód nie ma ojczyzny.",
+                    "Zanoszę miskę staremu Gawłowi. Do przytułku nie przyjdzie, uparty. Mówi, że pod murem śpi się jak za młodu na warcie."],
+                night: ["Ciii... chorzy śpią. Jak cię coś boli, wejdź. Jak nie - idź spać, póki możesz."],
+                rain: ["Deszcz! Kocioł pod niebo, beczki, miski, wszystko! Dziś zupa będzie gęsta, a dzieci umyte."]
+            }
+        }, "przytulek_drzwi", {
+            rano: ["Kasza się gotuje! Kto głodny - z miską!", "Ostrożnie, gorące! Dzieci, odsuńcie się od kotła.", "Jeszcze garść pokrzywy... i będzie zupa."],
+            dzien: ["Kto chory, niech przyjdzie. Kto zdrowy - niech pomoże nosić.", "Wiadro z miasta, wiadro na dwudziestu... Panie, daj siły.", "Masz może garść kaszy? Nie dla mnie, dla dzieci."],
+            wieczor: ["Zupa! Kto ma miskę, niech podchodzi!", "Po kolei, po kolei, dla każdego starczy... może.", "Gaweł, uparciuchu, zjedz chociaż ciepłe."],
+            deszcz: ["Deszcz! Kocioł pod niebo!", "Dzieci, łapcie wodę, w co się da!"],
+            noc: ["Ciszej, chorzy śpią."],
+            dom: ["Cii... ten mały ma gorączkę.", "Wolny siennik został jeden. I ten mokry.", "Pij powoli, po łyczku. Woda droższa niż chleb."]
+        }),
+        newPodgrodzie({
+            // Wit, the potter: clay dug in the pit beyond the palisade at dawn, the pots drying on the benches before the workshop, the
+            // wheel indoors, selling on the little square in the afternoon, the kiln in the evening, a mug at Mietek's (the QuestBoard's
+            // "Wit, garncarz" - QuestBoard_Data GIVERS.wit - is the same man)
+            key: "garncarz", id: 2952, name: "Wit Zduń", title: "garncarz", sheet: "$Npc_Garncarz", speed: 3,
+            plan: [[0, "inside", "garncarnia_drzwi"], [5, "work", "glinianka"], [8, "work", "garncarnia_lawy"], [10, "inside", "garncarnia_drzwi"],
+                   [13, "work", "placyk_3"], [16, "work", "garncarnia_lawy"], [19, "wander", "szynk_lawy"], [21, "inside", "garncarnia_drzwi"]],
+            talk: {
+                morning: ["Wit Zduń, garncarz. Wit, jak kapral - tylko że ja ludziom lepię garnki, a on guzy. Moje przynajmniej się przydają.",
+                    "Rano kopię glinę w gliniance za palisadą, póki chłodno. W tę suszę glina twarda jak cegła, zanim jeszcze trafi do pieca. Trzeba ją moczyć, a czym? Śliną?"],
+                day: ["W suszę garnek to skarb. Każdy chce dzban na wodę, której nie ma, i miskę na zupę od ciotki Stefy. Sprzedaję po groszu albo za garść kaszy. Bogaty nie będę, ale garnki idą.",
+                    "Matka Tośki ugniata mi glinę, a ojciec dziewczyny kopie u Lorda przy skałach. Przyniósł mi stamtąd skorupy - stare, z jakimś znakiem. Takich tu nikt nie lepi od stu lat.",
+                    "Znajdziesz po deszczu mokrą glinę przy kałuży - ulep sobie garnek i wysusz w cieniu. Krzywy będzie, ale twój. Mój pierwszy też był krzywy."],
+                evening: ["Wieczorem palę w piecu. Drewno od Zbycha, ogień do nocy. Jak garnek pęknie w ogniu, słychać - jak strzał. Trzy strzały na wieczór to zły wieczór.",
+                    "Potem kubek kwasu u Mietka. Mówię mu, że jego kwas jest kwaśniejszy niż moja glina. Śmieje się. Nalewa. Takie życie."],
+                night: ["Piec stygnie, ja też. Przyjdź jutro, za dnia."],
+                rain: ["Deszcz! Glinę do koryt, niech pije! Dziś ulepię tyle, co przez cały tydzień."]
+            }
+        }, "garncarnia_drzwi", {
+            rano: ["Hop! ...Twarda jak kamień, ta glina.", "Kto kopie glinę o świcie, ten ma garnki o zmierzchu.", "Uważaj, dół głęboki! Wpadniesz - wylepię z ciebie dzban."],
+            dzien: ["Garnki! Dzbany! Miski! Po groszu albo za garść kaszy!", "Dzban na wodę, której nie ma - najlepszy towar w suszy!", "Ten krzywy? Taniej. Krzywy też trzyma wodę."],
+            wieczor: ["Piec dyszy, garnki się pieką... oby żaden nie strzelił.", "Mietek, kubek kwasu dla garncarza!", "Dzień zaliczony. Dwa garnki pękły, osiem całych."],
+            deszcz: ["Deszcz! Glina pije!", "Koryta pod rynnę! Dziś lepimy!"],
+            noc: ["Piec stygnie. Idź spać, chłopcze."],
+            dom: ["Koło się kręci, glina się kręci, świat się kręci...", "Nie dotykaj, mokre! Zostawisz palec na wieki.", "Ten dzbanek dla ciotki Stefy. Za darmo. Nie mów nikomu."]
+        }),
+        newPodgrodzie({
+            // Tośka (7), the girl of the first mud hut: the hens and goats of the run in the morning, then with Franek (the play place,
+            // the town gate, the play place again - his plan's hours), by her mother at the pottery, the noon soup at ciotka Stefa's
+            key: "dziecko", id: 2953, name: "Tośka", title: "dziecko z lepianki", sheet: "$Npc_Dziecko", speed: 4,
+            plan: [[0, "inside", "lepianka1_drzwi"], [6.5, "wander", "wybieg"], [8, "wander", "zabawa"], [10, "wander", "garncarnia_lawy"],
+                   [11, "wander", "przytulek_kociol"], [12, "wander", "placyk_5"], [14, "wander", "brama_zach"], [16, "wander", "zabawa"],
+                   [18.5, "inside", "lepianka1_drzwi"]],
+            talk: {
+                morning: ["Jestem Tośka. Z lepianki, tej pierwszej. Mam siedem lat i brata, co ciągle ryczy. Ja nie ryczę.",
+                    "Rano sypię kurom ziarno. Znaczy, nie ziarno, bo ziarna nie ma - plewy. Kury też ich nie lubią."],
+                day: ["Mama ugniata glinę u pana Wita. Ma potem szare ręce aż po łokcie, jak w rękawiczkach. Ja też chcę takie rękawiczki!",
+                    "Tata kopie u Lorda przy skałach. Wraca raz na tydzień, brudny, i nic nie mówi. Mama mówi, żeby nie pytać. To nie pytam. Ale ty możesz zapytać.",
+                    "Ciotka Stefa daje w południe zupę. Jak się ładnie podziękuje, to nalewa z dna, gdzie gęsto!"],
+                evening: ["Franek mówi, że jak dorośniemy, pójdziemy razem do miasta i będziemy bogaci. Ja będę piekła chleb, a on będzie kowalem. I będziemy pili wodę, ile się chce.",
+                    "Za murem, w mieście, dzieci mają buty. Widziałam przez bramę. Po co komu buty? Boso szybciej się biega."],
+                night: ["Zzz... kura... uciekła... zzz..."],
+                rain: ["Deszcz! Deszcz! Franek, chodź, łapiemy do garnka! Pan Wit da nam największy!"]
+            }
+        }, "lepianka1_drzwi", {
+            rano: ["Cip, cip, cip! Kurki, chodźcie!", "Ta koza znowu mnie goni!", "Franek! Franek, poczekaj na mnie!"],
+            dzien: ["Berek! Ty gonisz!", "Patrz, ulepiłam ludzika z gliny!", "Masz coś do jedzenia? Tylko pytam.", "Franek mówi, że ty walczyłeś z wilkiem. Naprawdę?"],
+            wieczor: ["Jeszcze troszkę! Mama jeszcze nie woła!", "Franek, kto pierwszy do bramy!"],
+            deszcz: ["Deszcz! Kałuża jak jezioro!", "Pada! Język na wierzch!"],
+            noc: [],
+            dom: ["Mama, a kiedy tata wróci?", "Ciii... brat śpi. Nareszcie."]
+        })
+    ];
+    RESIDENTS.push(...NEW_PODGRODZIE);
+    if (window.SpeechBubbles && SpeechBubbles.BUSTS) for (const r of NEW_PODGRODZIE) SpeechBubbles.BUSTS[r.sheet + ":0"] = r.sheet.slice(5) + "_Bust";
+
     // the spots of the other maps residents live on ("map" in their data): defaults only - the map's "Miejsce: <key>" events win
     // (Map024: the guard's day post beside the left fire basket of the forecourt; his night round straz_1..4 - the map's "Miejsce:"
     // markers win; 2026-10-12: the user's rebuilt garden has no straz_4 any more - the defaults keep the round: the orangery's corner,
@@ -719,5 +1062,6 @@
     const SPOTS_BY_MAP = { 111: {}, 125: { tawerna: [53, 19, 6] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [15, 16, 2], straz_1: [10, 19, 6], straz_2: [19, 19, 2], straz_3: [19, 28, 4], straz_4: [10, 28, 8] } };
 
     // (2026-10-21) EXTRA_RANGE: the second range of ids for TownLifeExtra (the new terrain's packages, docs/rozszerzenia/PLAN.md)
-    window.TownLifeData = { MAP: 8, FIRST_ID: 910, EXTRA_RANGE: [2900, 2949], SPOTS, SPOTS_BY_MAP, RESIDENTS };
+    // (2026-10-22) EXTRA_RANGES: every range past 910-949 - the second one and the new Podgrodzie's third (TawernaCore's registry)
+    window.TownLifeData = { MAP: 8, FIRST_ID: 910, EXTRA_RANGE: [2900, 2949], EXTRA_RANGES: [[2900, 2949], [2950, 2959]], SPOTS, SPOTS_BY_MAP, RESIDENTS };
 })();

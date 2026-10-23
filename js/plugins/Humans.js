@@ -70,7 +70,7 @@
  * czuwa przy ogniu; obok worek z łupem. Śpiący słyszą tylko z bliska -
  * skradaj się (C): atak z ukrycia na śpiącego zbija mu równowagę; hałas
  * walki budzi resztę. Worek można ukraść po cichu. Nie w pierwsze 3 dni, nie
- * w miasteczku ani na polu dziadka; rozbity obóz nie wraca przez 2 dni.
+ * w miasteczku ani na działce dziadka; rozbity obóz nie wraca przez 2 dni.
  * O świcie obóz się zwija. Od 5. dnia w obozie bywa też nożownik.
  * NAPAD NA ŚPIĄCEGO: kto śpi pod gołym niebem (namiot, legowisko) tam, gdzie
  * bywają obozy, może się obudzić z bandytami tuż obok (23-4; jak wilki, ale

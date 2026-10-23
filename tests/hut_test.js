@@ -44,8 +44,9 @@ const { launch, sleep } = require("./cdp.js");
             indoor: Object.keys(B).filter(k => B[k].indoor).sort(), indoorOnly: Object.keys(B).filter(k => B[k].indoorOnly).sort(), bed: { sleep: B.bed.sleep, w: B.bed.w, cost: B.bed.cost }, larder: { keeps: B.larder.keeps, slots: B.larder.slots, food: B.larder.foodOnly, w: B.larder.w } }; })()`);
         check("Chatka: 5 x 3 field, the doorway in column 1, only one, costs 50 planks + 60 nails + 40 stones + 10 iron",
             def.w === 5 && def.h === 3 && def.door.dx === 1 && def.single === true && JSON.stringify(def.cost) === JSON.stringify([[IT.planks, 50], [IT.nails, 60], [IT.stone, 40], [IT.iron, 10]]), def);
-        check("furniture that may stand inside: bench, both chests, workbench, bedroll, a clay pot drying + the bed and the larder (only inside); the pantry stays outdoors",
-            JSON.stringify(def.indoor) === JSON.stringify(["bed", "bedroll", "bench", "chest_l", "chest_s", "larder", "pot", "workbench"]) && JSON.stringify(def.indoorOnly) === JSON.stringify(["bed", "larder"]), { indoor: def.indoor, only: def.indoorOnly });
+        // (2026-10-18 the white eagle: its egg's basket "orzel_kosz" may stand in the hut's room too)
+        check("furniture that may stand inside: bench, both chests, workbench, bedroll, a clay pot drying, the eagle's basket + the bed and the larder (only inside); the pantry stays outdoors",
+            JSON.stringify(def.indoor) === JSON.stringify(["bed", "bedroll", "bench", "chest_l", "chest_s", "larder", "orzel_kosz", "pot", "workbench"]) && JSON.stringify(def.indoorOnly) === JSON.stringify(["bed", "larder"]), { indoor: def.indoor, only: def.indoorOnly });
         check("bed: 2 wide, sleeps; larder: 1 tile, keeps food 5 x longer (0.2), 24 kinds, food only", def.bed.sleep === true && def.bed.w === 2 && def.larder.keeps === 0.2 && def.larder.slots === 24 && def.larder.food === true && def.larder.w === 1, def);
         const imgs = await ev(`Promise.all(["Farm_Hut_L", "Farm_Bed", "Farm_Larder"].map(n => new Promise(res => { const bm = ImageManager.loadSystem(n); bm.addLoadListener(() => res(bm.width + "x" + bm.height)); })))`);
         check("the pictures load: hut 238 x 203, bed 96 x 64, larder 61 x 101", JSON.stringify(imgs) === JSON.stringify(["238x203", "96x64", "61x101"]), imgs);
@@ -54,7 +55,10 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- an open place
         const B = await ev(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y);
+            // (2026-10-22: Map003 was doubled - its new part is not grandpa's field - and walled by the user: buildings only inside the wall,
+            // 2 tiles from it - look where the field allows it)
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y)
+                && Farming.fieldAllows(x, y);
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 10; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 7 && ok; y++) for (let x = bx; x < bx + 8; x++) { if (!free(x, y)) { ok = false; break; } }

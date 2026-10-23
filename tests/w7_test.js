@@ -130,16 +130,16 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ===================================================================== rozdz. 3: dwa życia Feliksa
     // the market: too close without sneaking - he notices (nothing seen that day)
     await setTime(10, 7.2);
-    await go(8, 24, 36, 8);
+    await go(8, 51, 52, 8);
     await t.until(`!!${resident("feliks")} && !${resident("feliks")}._town.hidden`, 15);
     await E(`(function(){ const f = ${resident("feliks")}; $gamePlayer.locate(f.x, f.y + 1); Hunting.setSneak(false); return 0; })()`);
     await t.until(`Dwor.state().spotted.rano === $gameSystem.dayNightDay()`, 10);
     s = await st();
     const spot = await J("SpeechBubbles.log.slice(-4)");
     t.check("rozdz. 3: na rynku tuż obok Feliksa bez skradania - „Pan coś ode mnie chciał?” - tego ranka nic nie widać", s.s.spotted.rano === 10 && !s.s.obs.rano && spot.some(l => /Pan coś ode mnie chciał/.test(l)), spot);
-    await t.locate(24, 44, 8);   // (away from him before the clock moves on - else he notices the next morning at once)
+    await t.locate(51, 65, 8);   // (away from him before the clock moves on - else he notices the next morning at once)
     await setTime(11, 7.2);
-    await go(8, 24, 36, 8);
+    await go(8, 51, 52, 8);
     for (let i = 0; i < 20 && !(await J("!!Dwor.state().obs.rano")); i++) {   // (following him round the stalls, a few steps behind)
         await E(`(function(){ const f = ${resident("feliks")}; $gamePlayer.locate(f.x + 3, f.y + 3); Hunting.setSneak(true); return 0; })()`);
         await t.frames(60);
@@ -321,7 +321,7 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const doorLie = await J("$gameMap.event(1).list()[0].parameters[0]");
     t.check("...drzwi dworu już nie wpuszczają (kłamca nie wejdzie)", !/Dwor\.door/.test(doorLie), doorLie);
     const g2 = await t.gold(50);
-    await go(8, 47, 51, 4);
+    await go(8, 99, 51, 4);
     await t.until("Dwor.state().toll === $gameSystem.dayNightDay()", 10);
     t.check("...wyższe myto przy bramie wschodniej: 5 G", (await t.gold()) === g2 - 5, await t.gold());
     // silence with Feliks still at the manor (the letters left, the Lord never told): Feliks spies
@@ -369,7 +369,7 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await setTime(11, 12);
     await go(172, 16, 7, 6);
     const teo = await talkRes("kamerdyner", []);
-    await go(8, 22, 33, 8);
+    await go(8, 34, 61, 8);
     await setTime(11, 9);
     const han = await talkRes("piekarka", []);
     await setTime(11, 10);
@@ -406,7 +406,7 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await lordTalk(["Pokaż Lordowi listy", "Odejdź"]);
     await w1At("w1Kuba");
     await saidAll(["w7Kuba", "w7Soltys", "w7Hanka"]);
-    await go(8, 24, 36, 8);
+    await go(8, 51, 52, 8);
     const kuba = await talkRes("woziwoda", ["Będę milczał"]);
     const flat = x => x.replace(/\s+\/\s+/g, " ").replace(/\s+/g, " ");   // (the talk's pages joined)
     t.check("...W1 rozdz. 3 po W7: Kuba - „Feliks siedzi w wieży, a zasuwy pod włazem nikt nie ruszył”; Lord wie o listach, o zasuwie nie",

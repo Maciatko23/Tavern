@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python render_town.py [A] [B] [C]  -> docs/miasteczko/koncepcja_<X>.png, koncepcja_<X>_blokady.png, koncepcja_<X>_czysta.png
 # The concept pictures, drawn in Python from the staged maps (mzrender.py: the game's tile and sprite rules, no animation),
 # so the same maps always give the same bytes:

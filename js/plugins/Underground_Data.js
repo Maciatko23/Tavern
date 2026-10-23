@@ -694,8 +694,8 @@
                 }
             },
             {
-                key: "rynek", map: 8, cam: [24, 37],
-                actors: (w, e) => [["soltys", 26, 36, 4], ["hanka", 21, 33, 6], ["kuba", 24, 36, 8], ["ambrozy", 20, 36, 6]],
+                key: "rynek", map: 8, cam: [53, 55],
+                actors: (w, e) => [["soltys", 53, 52, 4], ["hanka", 47, 49, 6], ["kuba", 51, 52, 8], ["ambrozy", 47, 52, 6]],
                 steps: (w, e) => {
                     const out = [];
                     if (e.kind === "uwolnic") out.push(
@@ -725,10 +725,10 @@
                 }
             },
             {
-                key: "oboz", map: w => (w.camp === "outside" ? 111 : 8), cam: w => (w.camp === "outside" ? [38, 11] : [30, 50]),
+                key: "oboz", map: w => (w.camp === "outside" ? 111 : 8), cam: w => (w.camp === "outside" ? [39, 15] : [57, 89]),
                 actors: (w, e) => {
-                    const at = w.camp === "outside" ? { ludmila: [37, 11, 6], ela: [38, 12, 8], marek: [39, 11, 4], rafal: [41, 12, 4] }
-                        : { ludmila: [30, 51, 6], ela: [31, 52, 8], marek: [32, 51, 4], rafal: [28, 51, 6] };
+                    const at = w.camp === "outside" ? { ludmila: [38, 15, 6], ela: [39, 16, 8], marek: [40, 15, 4], rafal: [42, 16, 4] }
+                        : { ludmila: [57, 90, 6], ela: [58, 91, 8], marek: [59, 90, 4], rafal: [55, 90, 6] };
                     const out = [["ludmila"].concat(at.ludmila), ["ela"].concat(at.ela)];
                     if (w.marek) out.push(["marek"].concat(at.marek));
                     if (w.rafal === "ally") out.push(["rafal"].concat(at.rafal));
@@ -769,9 +769,9 @@
                         ["dziadek", "Tego, że cię kocham, i tak nikt mi nie musiał mówić."]);
                     else if (e.kind === "zniszczyc") out.push(["dziadek", "Coś się w nocy zmieniło. Spałem jak dziecko - pierwszy raz od lat."]);
                     else if (e.kind === "zapieczetowac") out.push(["dziadek", "Nie mów mi, co tam było. Wystarczy, że wróciłeś."]);
-                    else if (w.fieldLost) out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Pole poczeka - Lord też kiedyś umrze." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, a my - siebie nawzajem. Pole poczeka."]);
-                    else out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Pole czeka." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, ty pilnuj pola."]);
-                    out.push(["dziadek", w.fieldLost ? "Bałem się, że jak pole przepadnie, to nikt już nie zapuka. A tu proszę - ktoś puka." : "Bałem się, że jak dług zniknie, to nikt już nie zapuka. A tu proszę - ktoś puka."]);
+                    else if (w.fieldLost) out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Działka poczeka - Lord też kiedyś umrze." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, a my - siebie nawzajem. Działka poczeka."]);
+                    else out.push(["dziadek", e.guardian === "borgar" ? "Borgar został na dole, a ty wróciłeś? Dobrze. Działka czeka." : "Ambroży został na dole? Dzwonnik pilnuje dzwonów, ty pilnuj działki."]);
+                    out.push(["dziadek", w.fieldLost ? "Bałem się, że jak działka przepadnie, to nikt już nie zapuka. A tu proszę - ktoś puka." : "Bałem się, że jak dług zniknie, to nikt już nie zapuka. A tu proszę - ktoś puka."]);
                     return out;
                 }
             },

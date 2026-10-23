@@ -1,0 +1,73 @@
+{
+ "mapa": 163,
+ "nazwa": "Kwatera rotmistrza",
+ "ops": [
+  {
+   "op": "prio",
+   "id": 8,
+   "nazwa": "Rozkazy garnizonu",
+   "strony": {
+    "0": [
+     0,
+     1
+    ]
+   }
+  },
+  {
+   "op": "prio",
+   "id": 6,
+   "nazwa": "Mapa Kruczej Wyspy",
+   "strony": {
+    "0": [
+     0,
+     1
+    ]
+   }
+  },
+  {
+   "op": "prio",
+   "id": 10,
+   "nazwa": "Lista zaginionych",
+   "strony": {
+    "0": [
+     0,
+     1
+    ]
+   }
+  }
+ ],
+ "log": [
+  {
+   "kod": "D4",
+   "x": 4,
+   "y": 3,
+   "problem": "zdarzenie 8 'Rozkazy garnizonu' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (4,3)",
+   "poprawka": "zdarzenie 8 'Rozkazy garnizonu': priorytet 'jak postać' - akcja z sąsiedniej kratki"
+  },
+  {
+   "kod": "D4",
+   "x": 6,
+   "y": 3,
+   "problem": "zdarzenie 6 'Mapa Kruczej Wyspy' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (6,3)",
+   "poprawka": "zdarzenie 6 'Mapa Kruczej Wyspy': priorytet 'jak postać' - akcja z sąsiedniej kratki"
+  },
+  {
+   "kod": "D4",
+   "x": 6,
+   "y": 6,
+   "problem": "zdarzenie 10 'Lista zaginionych' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (6,6)",
+   "poprawka": "zdarzenie 10 'Lista zaginionych': priorytet 'jak postać' - akcja z sąsiedniej kratki"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "D4 4,3",
+  "D4 6,3",
+  "D4 6,6"
+ ],
+ "po": [],
+ "sha_data": "d7e6b1b8adea706e89ba26649cf5c2f7c7a66f26b7b1eba5434b0ef5a026cf4d",
+ "zainstalowano": "2026-10-22T10:51:35",
+ "sha_po": "ea1a504ca014b921b9dfcfdb762f947dc431bd8be500297c33ca4a16de03eafe"
+}

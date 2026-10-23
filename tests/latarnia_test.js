@@ -247,7 +247,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---------------------------------------------------------------- W11 „Soczewka”: droga przez kradzież i sprzedaż
     await t.eval("(function(){ window.__actTwo = Wyspa.actTwo; Wyspa.actTwo = () => true; $gameSystem._dayNightDay = 70; $gameSystem.setDayNightHour(10); TownQuests.autoChecks(); return 0; })()");
     t.check("W11 zaczyna się sam w Akcie II (po spotkaniu Bazylego)", await t.json("TownQuests.isActive('W11') && TownQuests.rec('W11').step === 0"));
-    await t.go(8, 26, 30, 2);
+    await t.go(8, 53, 46, 2);
     await t.setDay(70, 10);
     await t.frames(60);
     const balt = await t.talkTo("TownLife.eventOf('kupiec')", ["Nie sprzedam"]);
@@ -260,7 +260,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("rozdz. 2: ostrzeżenie - Bazyli widział to we mgle: przyjdą jutro w nocy; napad zapisany na noc z dnia 71 na 72",
         /jutro w nocy/.test(warn.text) && raid && raid.day === 71 && raid.state === "wait" && (await t.json("TownQuests.rec('W11').step")) === 2, [raid, warn.text.slice(-150)]);
     // nobody watching: they come and go - the lens stolen
-    await t.go(8, 26, 30, 2);
+    await t.go(8, 53, 46, 2);
     await t.setDay(72, 4);
     await t.frames(60);
     const st = await t.json(`({ lens: Latarnia.state().lens, step: TownQuests.rec('W11').step, f: !!TownQuests.state().flags.latarniaSkradziona })`);
@@ -291,7 +291,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.frames(40);
     await t.talkTo(B, ["Sprzedam je"]);
     t.check("rozdz. 6: wybór u Bazylego - „Sprzedam je Baltazarowi” (rozdz. 7)", (await t.json("TownQuests.rec('W11').step")) === 6);
-    await t.go(8, 26, 30, 2);
+    await t.go(8, 53, 46, 2);
     await t.setDay(74, 10);
     await t.frames(60);
     const g3 = await t.gold();

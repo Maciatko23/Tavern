@@ -66,10 +66,10 @@ const save = () => fs.writeFileSync(OUT, JSON.stringify(R, null, 1));
             [3, 39, 12, true, 23, "pole -> Skraj lasu (bieg)"],
             [23, 23, 0, true, 22, "Skraj lasu -> Polna droga (bieg)"],
             [22, 11, 0, false, 8, "Polna droga -> miasteczko"],
-            [8, 24, 16, false, 1, "miasteczko (brama płd.) -> tawerna"],
+            [8, 51, 16, false, 1, "miasteczko (brama płd.) -> tawerna"],
             [1, 50, 30, false, 0, "wejście tawerny -> Borgar przy ladzie"],
             [1, 49, 54, false, 8, "Borgar -> wyjście z tawerny"],
-            [8, 51, 50, false, 24, "tawerna -> posiadłość Lorda"],
+            [8, 103, 50, false, 24, "tawerna -> posiadłość Lorda"],
             [24, 20, 13, false, 0, "brama dworu -> drzwi dworu"]
         ];
         for (const [map, x, y, run, next, name] of ROUTE) {

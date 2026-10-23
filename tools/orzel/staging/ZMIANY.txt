@@ -1,0 +1,6 @@
+Biały orzeł - pliki do instalacji (python tools/orzel/install.py --install, przy zamkniętym edytorze)
+9a8125b6acccbf5dffb32dc56276b4fd5bbff407f6382ce9b7ec0a88a6ea95b8  data/Map175.json  zmieniony
+385de98ea142464b1754768e1397b1f630c01551b84d95b74af56b58e9f5d95c  data/MapInfos.json  bez zmian
+9314a3ce026174e04af4702b26c670d31f303dfb80ea1f6882b6f89474956632  data/Items.json  bez zmian
+df3a495c706165e3a55a73e3e06c48549aaec9406d8a60be0b8acafcf52ce7cf  img/system/IconSet.png  bez zmian
+36568815fe631eb1e2b74b77fb8c17465d3544d9b4f7274e5411597a4a6355a6  js/plugins.js  bez zmian

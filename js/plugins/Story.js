@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Fabuła nowej gry: dom dziadka, dług u Lorda (spłata do terminu albo strata pola i odkup), praca u Borgara, rozdział 1 w dzienniku. v1.2.0
+ * @plugindesc Fabuła nowej gry: dom dziadka, dług u Lorda (spłata do terminu albo strata działki i odkup), praca u Borgara, rozdział 1 w dzienniku. v1.2.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -21,33 +21,33 @@
  *
  * @param deadline
  * @text Termin (dzień)
- * @desc Ostatni dzień spłaty. Kamerdyner przyjmuje pieniądze jeszcze w nocy po nim; o świcie (6:00) następnego dnia pole przechodzi na Lorda.
+ * @desc Ostatni dzień spłaty. Kamerdyner przyjmuje pieniądze jeszcze w nocy po nim; o świcie (6:00) następnego dnia działka przechodzi na Lorda.
  * @type number
  * @min 2
  * @default 60
  *
  * @param endOnDeadline
  * @text Termin działa
- * @desc Wyłączone: termin mija bez skutków - pole zostaje (do testów i botów).
+ * @desc Wyłączone: termin mija bez skutków - działka zostaje (do testów i botów).
  * @type boolean
  * @default true
  *
  * @param loseEndsGame
  * @text Przegrana kończy grę
- * @desc Włączone: jak dawniej - niespłacony dług o świcie po terminie kończy grę (ekran końca, bez zapisu). Wyłączone: pole przechodzi na Lorda, gra toczy się dalej.
+ * @desc Włączone: jak dawniej - niespłacony dług o świcie po terminie kończy grę (ekran końca, bez zapisu). Wyłączone: działka przechodzi na Lorda, gra toczy się dalej.
  * @type boolean
  * @default false
  *
  * @param carryDays
  * @text Dni na wyniesienie dobytku
- * @desc Ile dni po stracie pola wolno jeszcze z niego zabierać rzeczy (do świtu kolejnego dnia).
+ * @desc Ile dni po stracie działki wolno jeszcze z niej zabierać rzeczy (do świtu kolejnego dnia).
  * @type number
  * @min 1
  * @default 3
  *
  * @param buybackPrice
- * @text Odkup pola (G)
- * @desc Za ile Lord odsprzeda pole po stracie (w ratach, bez terminu).
+ * @text Odkup działki (G)
+ * @desc Za ile Lord odsprzeda działkę po stracie (w ratach, bez terminu).
  * @type number
  * @min 1
  * @default 3000
@@ -79,8 +79,8 @@
  * ============================================================================
  * Nowa gra zaczyna się w domu dziadka Stacha (mapa 19). Po rozjaśnieniu
  * ekranu dziadek opowiada o długu: 2500 G dla Lorda Leopolda Zaleskiego
- * (dwór obok tawerny, mapa 24), termin: dzień 60. Na swoim polu (mapa 3,
- * w grze z fabułą nazwana „Pole dziadka”) dziadek pozwala budować.
+ * (dwór obok tawerny, mapa 24), termin: dzień 60. Na swojej działce (mapa 3
+ * „Kruczy Jar”, tylko w obrębie muru) dziadek pozwala budować.
  * Pieniądze da praca u Borgara w tawernie „Pod Złotym Kuflem” (mapa 1):
  * zmiany od 16 do 21 (TavernShift.js).
  *
@@ -98,15 +98,15 @@
  * Przypomnienia: listy od Lorda w dniach 20, 40, 55, 59 i 60.
  * Termin: pieniądze liczą się do świtu (6:00) dnia po terminie - w tę
  * ostatnią noc przyjmuje je kamerdyner. O świcie, gdy dług wciąż
- * niespłacony, pole przechodzi na Lorda (gra toczy się dalej, zapis
- * działa): ludzie Lorda (kamerdyner i strażnicy) mierzą pole i stawiają
- * znak - scena, gdy bohater jest na polu albo pierwszy raz tam wejdzie;
- * gdzie indziej przychodzi list. Przez 3 dni (parametr) wolno z pola
+ * niespłacony, działka przechodzi na Lorda (gra toczy się dalej, zapis
+ * działa): ludzie Lorda (kamerdyner i strażnicy) mierzą działkę i stawiają
+ * znak - scena, gdy bohater jest na działce albo pierwszy raz tam wejdzie;
+ * gdzie indziej przychodzi list. Przez 3 dni (parametr) wolno z działki
  * zabrać, co się da (plony, skrzynie, rozbiórka, zwierzęta, pies, chatka);
- * potem pole jest zamknięte (Homes.js: strażnik, dymek nad bohaterem).
- * Lord odsprzeda pole za 3000 G (w ratach, bez terminu) - po spłacie
- * wraca z tym, co na nim zostało. Rozdział 1 kończy się spłatą ALBO
- * stratą pola; haczyk o drzwiach pod Kruczymi Skałami pada w obu.
+ * potem działka jest zamknięta (Homes.js: strażnik, dymek nad bohaterem).
+ * Lord odsprzeda działkę za 3000 G (w ratach, bez terminu) - po spłacie
+ * wraca z tym, co na niej zostało. Rozdział 1 kończy się spłatą ALBO
+ * stratą działki; haczyk o drzwiach pod Kruczymi Skałami pada w obu.
  * Parametr „Przegrana kończy grę” przywraca dawny koniec gry (ekran
  * końca, bez zapisu). Wszystko czeka, aż bohater wstanie (odpoczynek) i
  * skończy rozmowę czy zmianę.
@@ -124,7 +124,7 @@
  *
  * Dla innych wtyczek i testów: Story.state(), Story.active(), Story.pay(n)
  * (spłata poza rozmową; całość od razu kończy rozdział 1; po stracie
- * pola - rata odkupu), Story.left(), Story.daysLeft(), Story.skipIntro()
+ * działki - rata odkupu), Story.left(), Story.daysLeft(), Story.skipIntro()
  * (rozmowa z dziadkiem jak wysłuchana - dla botów), Story.setDeadlineOn(
  * false) (termin bez skutków), Story.fieldLost() / fieldLocked() /
  * fieldBack() / carryLeft() / buyLeft() / chapterEnded() / halfWay().
@@ -175,7 +175,7 @@
         lord: { id: 902, map: MAP.manor, name: "Lord Leopold Zaleski", sheet: "$Npc_Lord", index: 0, face: ["People2", 4], at: null, dir: 2 }   // (hero-style sheet 2026-10-04; the face is still the old one)
     };
     // map names in a story game (the map files stay as they are: an old save keeps the old names)
-    const MAP_NAMES = { [MAP.field]: "Pole dziadka" };
+    const MAP_NAMES = { [MAP.field]: "Kruczy Jar" };   // (the map; grandpa's działka = inside its wall)
     const BORGAR_FACE = ["People3", 4];
     const CHAPTER = "Rozdział 1: Dług dziadka";
 
@@ -259,14 +259,14 @@
     // a phrase that stands on its own ("zostało 59 dni", "dziś ostatni dzień", "termin mija o świcie")
     const daysPhrase = n => (n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? "dziś ostatni dzień" : lastNight() ? "termin mija o świcie" : "termin minął");
     // what the Lord and his butler say about the debt
-    // the carrying out as said: "zostały 3 dni", "dziś ostatni dzień", "o świcie pole zamkną"
-    const carryPhrase = n => (n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? "dziś ostatni dzień" : "o świcie pole zamkną");
+    // the carrying out as said: "zostały 3 dni", "dziś ostatni dzień", "o świcie działkę zamkną"
+    const carryPhrase = n => (n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? "dziś ostatni dzień" : "o świcie działkę zamkną");
     function statusLine() {
         const s = state();
         if (!s) return "";
-        if (fieldBack()) return "Pole odkupione: " + s.buy.price + " G.";
-        if (s.lost) return (s.buy.paid > 0 ? "Za pole oddałeś już " + s.buy.paid + " z " + s.buy.price + " G, brakuje " + buyLeft() + " G."
-            : "Pole odkupisz za " + s.buy.price + " G - w ratach, bez terminu.");
+        if (fieldBack()) return "Działka odkupiona: " + s.buy.price + " G.";
+        if (s.lost) return (s.buy.paid > 0 ? "Za działkę oddałeś już " + s.buy.paid + " z " + s.buy.price + " G, brakuje " + buyLeft() + " G."
+            : "Działkę odkupisz za " + s.buy.price + " G - w ratach, bez terminu.");
         if (s.done || s.paid >= s.debt) return "Dług spłacony: " + s.debt + " G.";
         const n = daysLeft(), when = n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? "to dziś" : lastNight() ? "mija o świcie" : "minął";
         return (s.paid > 0 ? "Oddałeś już " + s.paid + " G, brakuje " + left() + " G." : "Na razie nic nie oddałeś - brakuje " + left() + " G.") +
@@ -448,11 +448,12 @@
         hSay(o, "Dług?");
         gSay(o, "Jestem winien Lordowi Zaleskiemu - temu z pięknego dworu obok tawerny - " + DEBT + " złotych monet. Termin: dzień " + DEADLINE + ".");
         hSay(o, DEBT + "?! Coś ty kupił, dziadku, krowę ze złota?");
-        gSay(o, "Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moje pole za lasem. A to wszystko, co mamy. Teraz: co my mamy.");
-        gSay(o, "Ja już za stary na siekierę, ale ty masz ręce i głowę. Pole jest twoje - stawiaj na nim, co zechcesz. Tylko tam: reszta ziemi w okolicy jest cudza.");
-        gSay(o, "Droga: z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód.");
+        gSay(o, "Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moją działkę za lasem. A to wszystko, co mamy. Teraz: co my mamy.");
+        gSay(o, "Ja już za stary na siekierę, ale ty masz ręce i głowę. Działka jest twoja - stawiaj na niej, co zechcesz.");
+        gSay(o, "Tylko tam, wnuku: moja działka w Kruczym Jarze to to, co w obrębie muru. Dalej, za murem, to już nie moja ziemia - tam nic nie stawiaj.");
+        gSay(o, "Droga: z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód, do Kruczego Jaru.");
         gSay(o, "A pieniądze... Borgar z tawerny „Pod Złotym Kuflem” szuka rąk do pracy, po południu i wieczorem. Z Polnej drogi ścieżką na północ. Dwór Lorda jest tuż obok - tam zanosisz spłatę.");
-        hSay(o, "Czyli rano pole, wieczorem kufle. A spać kiedy?");
+        hSay(o, "Czyli rano działka, wieczorem kufle. A spać kiedy?");
         gSay(o, "Na starość. Jak ja. I jak się wykurujesz, a nie od razu, gorączko jedna.");
         gSay(o, "Masz tu kapuśniak na drogę - z mojej kapusty. A wisiorek trzymaj przy sobie. Kruk w tej rodzinie... no, to długa historia. Opowiem ci kiedyś. No, zmykaj!");
         script(o, "Story.introDone()");
@@ -460,12 +461,12 @@
     }
     const HINTS = [
         "Głodny? Na łąkach rosną jagody i grzyby - po deszczu wyłażą nowe. Dzikie ziemniaki i marchew wykopiesz gołymi rękami.",
-        "Studni na polu nie ma, a susza trzyma. Łap deszczówkę: garnek, wiadro, beczka - co tylko masz.",
+        "Studni na działce nie ma, a susza trzyma. Łap deszczówkę: garnek, wiadro, beczka - co tylko masz.",
         "Borgar daje jedną zmianę dziennie, od " + SHIFT_FROM + " do " + SHIFT_TO + ". Przyjdź wypoczęty, bo zmęczony kufla nie udźwigniesz.",
         "Nadmiar plonów sprzedasz Borgarowi. Uczciwie płaci... jak na karczmarza.",
         "Twoje posłanie zawsze tu czeka. Pod dachem śpi się lepiej niż pod krzakiem.",
         "Zające łatwiej złapać we wnyki z przynętą niż gołymi rękami. Ja w twoim wieku... no, ja też nie łapałem.",
-        "Na polu stawiaj, co chcesz - to nasza ziemia. Gdzie indziej Lord by się wściekł."
+        "Na działce stawiaj, co chcesz - to nasza ziemia, wszystko w obrębie muru. Za murem już nie nasze: tam nic nie stawiaj, bo Lord by się wściekł."
     ];
     const WHERE_TO_PAY = () => "Lord przyjmuje za dnia, od " + LORD_HOURS[0] + " do " + LORD_HOURS[1] + ", przed swoim dworem obok tawerny. Nocą zapukaj do drzwi - " + butler() + ", jego kamerdyner, też weźmie pieniądze.";
     // after the field is lost (the user 2026-10-15: sad but warm, no blame): where to sleep, the houses for sale, the buyback
@@ -475,7 +476,7 @@
         "Borgar wynajmuje pokoje nad tawerną. Drogo, ale za to pod dachem i blisko roboty.",
         "Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Kiedyś ją odkupimy - albo i nie. Ziemia to tylko ziemia.",
         "Na noc w lesie wystarczy namiot albo leśne legowisko. Ale pod dachem śpi się lepiej - wiesz, gdzie mnie szukać.",
-        "Za Skrajem lasu, na zachód, stoi zagroda Ługów. Lord wziął ją za długi, jak nasze pole, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu."
+        "Za Skrajem lasu, na zachód, stoi zagroda Ługów. Lord wziął ją za długi, jak naszą działkę, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu."
     ];
     function lossFirstList() {
         const o = [], n = carryLeft();
@@ -483,8 +484,8 @@
         hSay(o, "Dziadku, ja... Zabrakło niewiele.");
         gSay(o, "Cicho. Nie po to cię matka do mnie przysłała, żebyś się zamartwiał o kawałek ziemi. Jesteś cały i zdrowy - to więcej, niż śmiałem prosić.");
         gSay(o, "Dom nie był w zastawie. Twoje posłanie stoi, gdzie stało, i będzie stało, póki ja tu jestem.");
-        if (n > 0) gSay(o, "Tylko leć zabrać z pola, co twoje - " + (n === 1 ? "masz na to już tylko dzisiejszy dzień" : "masz na to " + dni(n)) + ". Narzędzia, co tam w skrzyniach, zwierzaki, psa. Bierz najpierw to, czego nie odbudujesz.");
-        gSay(o, "A pole... Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Może kiedyś je odkupimy. A jak nie - ziemia to tylko ziemia.");
+        if (n > 0) gSay(o, "Tylko leć zabrać z działki, co twoje - " + (n === 1 ? "masz na to już tylko dzisiejszy dzień" : "masz na to " + dni(n)) + ". Narzędzia, co tam w skrzyniach, zwierzaki, psa. Bierz najpierw to, czego nie odbudujesz.");
+        gSay(o, "A działka... Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Może kiedyś ją odkupimy. A jak nie - ziemia to tylko ziemia.");
         gSay(o, LOSS_HINTS[1]);
         gSay(o, LOSS_HINTS[5]);
         script(o, "Story.step(\"grandpaLost\")");
@@ -494,13 +495,13 @@
     function grandpaLossList() {
         const s = state(), o = [];
         if (fieldBack()) {
-            gSay(o, ["Pole znowu nasze. Czasem chodzę tam rano, tak tylko, popatrzeć.", "Odkupiłeś ziemię od samego Zaleskiego. Twoja matka by nie uwierzyła. Ja też ledwo wierzę."][s.hint++ % 2]);
+            gSay(o, ["Działka znowu nasza. Czasem chodzę tam rano, tak tylko, popatrzeć.", "Odkupiłeś ziemię od samego Zaleskiego. Twoja matka by nie uwierzyła. Ja też ledwo wierzę."][s.hint++ % 2]);
             gSay(o, HINTS[s.hint % HINTS.length]);
             return o;
         }
         const n = carryLeft();
-        if (n > 0) gSay(o, "Z pola zostało ci do zabrania " + (n === 1 ? "już tylko dziś" : dni(n)) + ". Potem straż Lorda nikogo tam nie wpuści.");
-        else gSay(o, s.buy.paid > 0 ? "Za pole oddałeś już " + s.buy.paid + " z " + s.buy.price + " G. Nie śpiesz się - Lord nie ma terminu, a ja mam czas." : "Pole... Nie myśl o nim za dużo, wnuku. Lord odsprzeda je za " + s.buy.price + " G, kiedy będzie cię stać. Albo nigdy - też dobrze.");
+        if (n > 0) gSay(o, "Z działki zostało ci do zabrania " + (n === 1 ? "już tylko dziś" : dni(n)) + ". Potem straż Lorda nikogo tam nie wpuści.");
+        else gSay(o, s.buy.paid > 0 ? "Za działkę oddałeś już " + s.buy.paid + " z " + s.buy.price + " G. Nie śpiesz się - Lord nie ma terminu, a ja mam czas." : "Działka... Nie myśl o niej za dużo, wnuku. Lord odsprzeda ją za " + s.buy.price + " G, kiedy będzie cię stać. Albo nigdy - też dobrze.");
         gSay(o, LOSS_HINTS[s.hint++ % LOSS_HINTS.length]);
         return o;
     }
@@ -508,26 +509,26 @@
         const s = state(), o = [], h = hour(), n = daysLeft();
         if (s.lost && !s.flags.grandpaLost) return lossFirstList();
         if (fieldBack() && !s.flags.thankedBack) {
-            gSay(o, "Wnuku! " + butler() + " przyniósł akt odkupu. Pole za lasem znowu nasze - z tym, co na nim zostało!");
+            gSay(o, "Wnuku! " + butler() + " przyniósł akt odkupu. Działka za lasem znowu nasza - z tym, co na niej zostało!");
             gSay(o, "Trzy tysiące... Ile ty się nadźwigałeś kufli. Masz, dwa kapuśniaki. Na więcej mnie nie stać, ale serce mam pełne.");
             script(o, "Story.thanksBack()");
             return o;
         }
         if (s.done && !s.flags.thanked) {
             gSay(o, "Wnuku! " + butler() + ", kamerdyner Lorda, przyniósł pokwitowanie. Spłaciłeś wszystko, co do grosza!");
-            gSay(o, "Pole zostaje przy nas. Nie wiem, jak ci dziękować... Masz, dwa kapuśniaki. Na więcej mnie nie stać - sam wiesz czemu.");
+            gSay(o, "Działka zostaje przy nas. Nie wiem, jak ci dziękować... Masz, dwa kapuśniaki. Na więcej mnie nie stać - sam wiesz czemu.");
             script(o, "Story.thanks()");
             return o;
         }
         if (h >= NIGHT[0] || h < NIGHT[1]) {
             if (isOpen() && n <= 1) gSay(o, "Chrrr... Hm? Wnuku, czemu nie jesteś u Lorda?! Brakuje jeszcze " + left() + " G, a o świcie mija termin. " + butler() + " przyjmuje pieniądze i nocą - leć!");
-            else if (fieldLost() && !fieldLocked() && carryLeft() <= 1) gSay(o, "Chrrr... Hm? Wnuku... O świcie straż Lorda zamyka pole. Zabrałeś już, co twoje?");
+            else if (fieldLost() && !fieldLocked() && carryLeft() <= 1) gSay(o, "Chrrr... Hm? Wnuku... O świcie straż Lorda zamyka działkę. Zabrałeś już, co twoje?");
             else gSay(o, "Chrrr... Hm? A, to ty. Idź spać, jutro też jest dzień.");
             return o;
         }
         if (s.lost) return grandpaLossList();
         if (s.done) {
-            gSay(o, ["Pole nasze, dług spłacony... a ja dalej nie mogę w to uwierzyć.", "Lord podobno raczył cię bajdami o starej twierdzy. On tak zawsze - nie słuchaj go za bardzo."][s.hint++ % 2]);
+            gSay(o, ["Działka nasza, dług spłacony... a ja dalej nie mogę w to uwierzyć.", "Lord podobno raczył cię bajdami o starej twierdzy. On tak zawsze - nie słuchaj go za bardzo."][s.hint++ % 2]);
             gSay(o, HINTS[s.hint % HINTS.length]);
             return o;
         }
@@ -544,7 +545,7 @@
         gSay(o, status);
         let tip;
         if (n <= 5) tip = WHERE_TO_PAY();   // (the last days: where the money goes comes first)
-        else if (!s.flags.field) tip = "Pole jest za lasem: z podwórza na południe, leśną drogą do Polnej, potem na południe na skraj lasu i na zachód.";
+        else if (!s.flags.field) tip = "Działka jest za lasem, w Kruczym Jarze: z podwórza na południe, leśną drogą do Polnej, na skraj lasu i na zachód. Moje jest to, co w obrębie muru.";
         else if (!s.flags.hired) tip = "Borgar szuka ludzi do pracy. Od " + SHIFT_FROM + " do " + SHIFT_TO + " zajrzyj do „Złotego Kufla”: z Polnej drogi ścieżką na północ.";
         else tip = HINTS[s.hint++ % HINTS.length];
         gSay(o, tip);
@@ -557,7 +558,7 @@
         // (a sum equal to all he has is left to "all you have")
         for (const n of [100, 500]) if (gold > n && need > n) opts.push({ label: "Oddaj " + n + " G", js: "Story.pick(this, \"" + who + "\", \"" + what + "\", " + n + ")" });
         const all = Math.min(gold, need);
-        if (all > 0) opts.push({ label: all >= need ? (buy ? "Odkup pole (" + need + " G)" : "Spłać cały dług (" + need + " G)") : "Oddaj wszystko, co masz (" + all + " G)", js: "Story.pick(this, \"" + who + "\", \"" + what + "\", " + all + ")" });
+        if (all > 0) opts.push({ label: all >= need ? (buy ? "Odkup działkę (" + need + " G)" : "Spłać cały dług (" + need + " G)") : "Oddaj wszystko, co masz (" + all + " G)", js: "Story.pick(this, \"" + who + "\", \"" + what + "\", " + all + ")" });
         opts.push({ label: "Odejdź", js: [] });
         return opts;
     }
@@ -565,24 +566,24 @@
     function payList(who, spk, face, first, buy) {
         const o = [], status = first ? "" : statusLine() + " ";
         if ($gameParty.gold() <= 0) {
-            say(o, spk, status + (who === "lord" ? (buy ? "Pusta sakiewka? Pole poczeka - ja nie mam terminu." : "Pusta sakiewka? Wróć, gdy coś zarobisz. Podobno Borgar z tawerny szuka ludzi.")
+            say(o, spk, status + (who === "lord" ? (buy ? "Pusta sakiewka? Działka poczeka - ja nie mam terminu." : "Pusta sakiewka? Wróć, gdy coś zarobisz. Podobno Borgar z tawerny szuka ludzi.")
                 : "Bez pieniędzy? Jaśnie pan przyjmuje tylko monety. " + butlerBye()), face);
             return o;
         }
-        say(o, spk, status + (buy ? "Ile dziś dajesz za pole?" : first ? "Ile dziś przynosisz?" : "Ile dziś oddajesz?"), face);
+        say(o, spk, status + (buy ? "Ile dziś dajesz za działkę?" : first ? "Ile dziś przynosisz?" : "Ile dziś oddajesz?"), face);
         choose(o, payOptions(who, buy));
         return o;
     }
     // ---- the field lost: the Lord's offer to sell it back (the first time with the hook of the old fortress, if nobody told it yet)
     const HOOK = [
         "Mój dwór postawiono z kamieni dawnej twierdzy - Kruczych Skał. Najstarsze z nich wciąż leżą pod tawerną Borgara.",
-        "Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną... przyjdź najpierw do mnie. To może być warte więcej niż pole."
+        "Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną... przyjdź najpierw do mnie. To może być warte więcej niż działka."
     ];
     function lordLossList() {
         const s = state(), o = [], lo = lostState();
-        if (fieldBack()) { lSay(o, "Pole znów wasze, akt podpisany. Pozdrów Stacha. A gdybyś coś znalazł pod tawerną Borgara... najpierw przyjdź z tym do mnie."); return o; }
+        if (fieldBack()) { lSay(o, "Działka znów wasza, akt podpisany. Pozdrów Stacha. A gdybyś coś znalazł pod tawerną Borgara... najpierw przyjdź z tym do mnie."); return o; }
         if (!s.flags.lordLost) {
-            lSay(o, (s.flags.lordMet ? "A, wnuk Stacha. " : "Ty pewnie jesteś wnukiem Stacha. Lord Leopold Zaleski. ") + "Przykra sprawa z tym polem - ale akt to akt, a termin to termin.");
+            lSay(o, (s.flags.lordMet ? "A, wnuk Stacha. " : "Ty pewnie jesteś wnukiem Stacha. Lord Leopold Zaleski. ") + "Przykra sprawa z tą działką - ale akt to akt, a termin to termin.");
             lSay(o, "Nie jestem jednak zachłanny. Odsprzedam je: " + s.buy.price + " złotych monet, w ratach, jak dług. Bez terminu - ziemia nie ucieknie, a mnie się nie śpieszy z oraniem.");
             if (!lo.hook) { lSay(o, "Jeszcze jedno, młodzieńcze. " + HOOK[0]); lSay(o, HOOK[1]); script(o, "Story.hookTold()"); }
             else lSay(o, "I pamiętaj, co ci przekazał " + butler() + " o drzwiach pod Kruczymi Skałami. Nie żartowałem.");
@@ -596,10 +597,10 @@
     function buyFinalList(spk, face, byButler) {
         const o = [], s = state();
         if (byButler) {
-            say(o, spk, "Całe " + s.buy.price + " złotych monet za pole. Zapisuję... i podpisuję w imieniu jaśnie pana - kazał, gdyby do tego doszło.", face);
-            say(o, spk, "Pole wraca do Stacha z tym, co na nim zostało. Akt odkupu zaniosę mu osobiście, a strażnika odwołamy jeszcze dziś.", face);
+            say(o, spk, "Całe " + s.buy.price + " złotych monet za działkę. Zapisuję... i podpisuję w imieniu jaśnie pana - kazał, gdyby do tego doszło.", face);
+            say(o, spk, "Działka wraca do Stacha z tym, co na niej zostało. Akt odkupu zaniosę mu osobiście, a strażnika odwołamy jeszcze dziś.", face);
         } else {
-            say(o, spk, "Trzy tysiące, co do grosza. Słowo się rzekło: pole wraca do Stacha - z tym, co na nim zostało.", face);
+            say(o, spk, "Trzy tysiące, co do grosza. Słowo się rzekło: działka wraca do Stacha - z tym, co na niej zostało.", face);
             say(o, spk, butler() + " zaniesie mu akt odkupu, a strażnika odwołam jeszcze dziś. Ród Stacha mnie zaskakuje, młodzieńcze. Coraz częściej.", face);
         }
         script(o, "Story.fieldReturned()");
@@ -629,8 +630,8 @@
         hSay(o, "*puk, puk*");
         say(o, id, "Kto tam o tej porze? A, wnuk Stacha. Jaśnie pan " + (hour() < 12 ? "jeszcze" : "już") + " śpi.", null);
         if (s.lost) {
-            if (fieldBack()) { say(o, id, "Pole odkupione, akt podpisany. " + butlerBye(), null); return o; }
-            say(o, id, "Jeśli przyniosłeś pieniądze za pole, przyjmę je i zapiszę w księdze. Jaśnie pan przyjmuje gości od " + LORD_HOURS[0] + " do " + LORD_HOURS[1] + ".", null);
+            if (fieldBack()) { say(o, id, "Działka odkupiona, akt podpisany. " + butlerBye(), null); return o; }
+            say(o, id, "Jeśli przyniosłeś pieniądze za działkę, przyjmę je i zapiszę w księdze. Jaśnie pan przyjmuje gości od " + LORD_HOURS[0] + " do " + LORD_HOURS[1] + ".", null);
             return o.concat(payList("door", id, null, false, true));
         }
         if (s.done) { say(o, id, "Dług spłacony, młodzieńcze. " + butlerBye(), null); return o; }
@@ -692,8 +693,8 @@
         return o;
     }
     function shiftIntro() {
-        if (buyOpen()) return "Fartuch na grzbiet i do roboty! Na odkup pola dziadka brakuje jeszcze " + buyLeft() + " G - każda zmiana to krok bliżej.";
-        if (fieldBack()) return "Fartuch na grzbiet! Pole odkupione, więc dziś pracujesz na własną kieszeń.";
+        if (buyOpen()) return "Fartuch na grzbiet i do roboty! Na odkup działki dziadka brakuje jeszcze " + buyLeft() + " G - każda zmiana to krok bliżej.";
+        if (fieldBack()) return "Fartuch na grzbiet! Działka odkupiona, więc dziś pracujesz na własną kieszeń.";
         return isOpen() ? "Fartuch na grzbiet i do roboty! Do spłaty długu dziadka brakuje jeszcze " + left() + " G - każda zmiana to krok bliżej."
             : "Fartuch na grzbiet! Dług dziadka spłacony, więc dziś pracujesz na własną kieszeń.";
     }
@@ -709,7 +710,7 @@
         const warn = deadlineWarn();
         if (warn) t += warn;
         else if (isOpen()) t += " Lordowi wisicie jeszcze " + left() + " G - zanieś mu, zanim przepijesz.";
-        else if (buyOpen() && !r.aborted) t += " Odkładaj na pole - Lord sprzedaje, ale nie rozdaje.";
+        else if (buyOpen() && !r.aborted) t += " Odkładaj na działkę - Lord sprzedaje, ale nie rozdaje.";
         bSay(o, ev, t);
         return o;
     }
@@ -725,14 +726,14 @@
         const o = [], s = state(), sum = s.debt, hired = !!s.flags.hired;
         if (byButler) {
             say(o, spk, "Całe " + sum + " złotych monet, co do grosza! Jaśnie pan będzie zachwycony... na swój sposób.", face);
-            say(o, spk, "Kazał przekazać, gdyby do tego doszło: pole zostaje przy was. Pokwitowanie zaniosę dziadkowi osobiście.", face);
+            say(o, spk, "Kazał przekazać, gdyby do tego doszło: działka zostaje przy was. Pokwitowanie zaniosę dziadkowi osobiście.", face);
             say(o, spk, hired ? "Skoro pracujesz u Borgara, powinieneś wiedzieć: dwór postawiono z kamieni dawnej twierdzy, Kruczych Skał. Najstarsze wciąż leżą pod jego tawerną."
                 : "Znasz tawernę Borgara? Dwór postawiono z kamieni dawnej twierdzy, Kruczych Skał. Najstarsze wciąż leżą pod tawerną.", face);
             say(o, spk, "Jaśnie pan mawia, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. I proszę mi wierzyć - wcale się przy tym nie śmieje.", face);
             say(o, spk, "Kazał też przekazać: gdybyś kiedyś znalazł zejście pod tawerną, przyjdź z tym najpierw do niego. Dobranoc... to znaczy, do widzenia.", face);
         } else {
             say(o, spk, "Całe " + sum + " złotych monet, co do grosza. Przyznam, nie wierzyłem, że ktoś z rodu Stacha odda choćby połowę.", face);
-            say(o, spk, "Pole zostaje przy was. " + butler() + " zaniesie dziadkowi pokwitowanie - niech je sobie oprawi w ramkę.", face);
+            say(o, spk, "Działka zostaje przy was. " + butler() + " zaniesie dziadkowi pokwitowanie - niech je sobie oprawi w ramkę.", face);
             say(o, spk, (hired ? "Jeszcze jedno, młodzieńcze. Pracujesz u Borgara, prawda? " : "Jeszcze jedno, młodzieńcze. Znasz tawernę Borgara? ") +
                 "Mój dwór postawiono z kamieni dawnej twierdzy - Kruczych Skał. Najstarsze z nich wciąż leżą pod jego tawerną.", face);
             say(o, spk, "Mój ojciec mawiał, że pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Długo miałem to za bajdy dla dzieci.", face);
@@ -775,20 +776,20 @@
         waitF(o, 30);
         say(o, B, "Dzień dobry, młodzieńcze. Proszę się nie niepokoić - przychodzimy z pismem, nie z widłami.", null);
         hSay(o, "Z pismem? O tej porze?");
-        say(o, B, "Termin minął o świcie, a dług Stacha wciąż niespłacony - zabrakło " + lo.missing + " G. Zgodnie z aktem pole za lasem należy od dziś do jaśnie pana Zaleskiego.", null);
+        say(o, B, "Termin minął o świcie, a dług Stacha wciąż niespłacony - zabrakło " + lo.missing + " G. Zgodnie z aktem działka za lasem należy od dziś do jaśnie pana Zaleskiego.", null);
         route(o, M, [LEFT, LEFT, LEFT, FACE_DOWN]);
         se(o, "Equip1", 60, 90);
         waitF(o, 40);
         say(o, M, "Czterdzieści kroków na trzydzieści. Zgadza się z aktem.", null);
-        say(o, B, "Jaśnie pan nie jest potworem. Masz " + dni(CARRY_DAYS) + ": zbierz plony, opróżnij skrzynie, rozbierz, co postawiłeś, zabierz zwierzęta i psa. Co zostanie po " + (CARRY_DAYS === 3 ? "trzecim" : "ostatnim") + " świcie, zostaje przy polu.", null);
+        say(o, B, "Jaśnie pan nie jest potworem. Masz " + dni(CARRY_DAYS) + ": zbierz plony, opróżnij skrzynie, rozbierz, co postawiłeś, zabierz zwierzęta i psa. Co zostanie po " + (CARRY_DAYS === 3 ? "trzecim" : "ostatnim") + " świcie, zostaje przy działce.", null);
         route(o, W, [RIGHT, RIGHT, FACE_RIGHT], true);
         se(o, "Hammer", 70, 95); waitF(o, 16); se(o, "Hammer", 70, 105); waitF(o, 16);
         script(o, "Tawerna.call(\"Homes\", \"signShow\")");
         se(o, "Hammer", 75, 90); waitF(o, 20);
         say(o, W, "Znak stoi. Własność Lorda Zaleskiego.", null);
-        say(o, B, "I jeszcze jedno. Jaśnie pan pole odsprzeda - " + s.buy.price + " złotych monet, w ratach, jak dług. Bez terminu. Wystarczy przyjść do dworu.", null);
+        say(o, B, "I jeszcze jedno. Jaśnie pan działkę odsprzeda - " + s.buy.price + " złotych monet, w ratach, jak dług. Bez terminu. Wystarczy przyjść do dworu.", null);
         say(o, B, "Kazał też przekazać rzecz dziwniejszą. Dwór postawiono z kamieni dawnej twierdzy, Kruczych Skał - najstarsze leżą podobno pod tawerną Borgara.", null);
-        say(o, B, "Pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną, przyjdź z tym najpierw do niego. Jaśnie pan mówi, że to może być warte więcej niż pole... Ja tylko przekazuję.", null);
+        say(o, B, "Pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś kiedyś znalazł zejście pod tawerną, przyjdź z tym najpierw do niego. Jaśnie pan mówi, że to może być warte więcej niż działka... Ja tylko przekazuję.", null);
         hSay(o, (CARRY_DAYS === 3 ? "Trzy dni" : dni(CARRY_DAYS)) + "...");
         say(o, B, "Strażnik zostanie przy znaku, żeby nikt nie wynosił więcej, niż swoje. Pozdrów Stacha, młodzieńcze.", null);
         script(o, "Story.measured()");
@@ -802,7 +803,7 @@
         const o = [], id = ev.eventId(), n = carryLeft();
         if (fieldLocked() || !fieldLost()) { say(o, id, "Rozkaz to rozkaz, młodzieńcze.", null); return o; }
         say(o, id, n > 1 ? "Masz jeszcze " + dni(n) + ". Bierz, co twoje - ja tylko patrzę, żeby nikt nie zabrał więcej."
-            : n === 1 ? "Dziś ostatni dzień. O świcie mam rozkaz nikogo tu nie wpuszczać." : "O świcie zamykamy pole. Pośpiesz się, młodzieńcze.", null);
+            : n === 1 ? "Dziś ostatni dzień. O świcie mam rozkaz nikogo tu nie wpuszczać." : "O świcie zamykamy działkę. Pośpiesz się, młodzieńcze.", null);
         return o;
     }
     // the dawn that shuts the field, with the hero on it (or in his hut on it): the guard sees him out to the forest's edge
@@ -810,29 +811,29 @@
         const o = [];
         if (inHut) {
             hSay(o, "*Ktoś wali w drzwi chatki.*");
-            say(o, -1, "Strażnik (zza drzwi): Minęły " + dni(CARRY_DAYS) + ", młodzieńcze! Pole należy teraz do jaśnie pana - wychodź, odprowadzę cię.", null);
+            say(o, -1, "Strażnik (zza drzwi): Minęły " + dni(CARRY_DAYS) + ", młodzieńcze! Działka należy teraz do jaśnie pana - wychodź, odprowadzę cię.", null);
         } else if ($gameMap.event(CAST.watch) && !$gameMap.event(CAST.watch).isTransparent()) {
-            say(o, CAST.watch, "Minęły " + dni(CARRY_DAYS) + ", młodzieńcze. Pole należy teraz do jaśnie pana. Proszę za mną - bez awantur.", null);
-        } else say(o, -1, "Strażnik Lorda: Minęły " + dni(CARRY_DAYS) + "! Pole należy teraz do jaśnie pana - proszę je opuścić.", null);
-        hSay(o, "...Do widzenia, polu dziadka.");
+            say(o, CAST.watch, "Minęły " + dni(CARRY_DAYS) + ", młodzieńcze. Działka należy teraz do jaśnie pana. Proszę za mną - bez awantur.", null);
+        } else say(o, -1, "Strażnik Lorda: Minęły " + dni(CARRY_DAYS) + "! Działka należy teraz do jaśnie pana - proszę ją opuścić.", null);
+        hSay(o, "...Do widzenia, działko dziadka.");
         o.push(C(201, [0, 23, 1, 13, 6, 0]));   // (Skraj lasu, where the way from the field comes out)
         waitF(o, 20);
-        script(o, "Tawerna.popup(\"Pole należy teraz do Lorda.\", { color: \"#ff9f8f\" })");
+        script(o, "Tawerna.popup(\"Działka należy teraz do Lorda.\", { color: \"#ff9f8f\" })");
         return o;
     }
     // the words the Lord sends when the hero is not on the field at dawn (and the journal's note on the loss)
     function lostNoteText() {
         const s = state(), lo = lostState();
-        return "Dzień " + lo.day + ": termin minął o świcie, a dług dziadka nie został spłacony (zabrakło " + lo.missing + " G). Pole za lasem należy teraz do Lorda Zaleskiego.\n" +
-            "Mam " + dni(CARRY_DAYS) + " (do świtu dnia " + (lo.day + CARRY_DAYS) + "), żeby zabrać z pola, co moje: plony, skrzynie, budynki (rozbiórka oddaje część materiałów), zwierzęta z zagród i psa. Potem straż nikogo tam nie wpuści, a to, co zostanie, należy do Lorda.\n" +
-            "Lord odsprzeda pole za " + s.buy.price + " G - w ratach, bez terminu (dwór obok tawerny: za dnia Lord, nocą kamerdyner). Po spłacie pole wróci z tym, co na nim zostało.\n" +
+        return "Dzień " + lo.day + ": termin minął o świcie, a dług dziadka nie został spłacony (zabrakło " + lo.missing + " G). Działka za lasem należy teraz do Lorda Zaleskiego.\n" +
+            "Mam " + dni(CARRY_DAYS) + " (do świtu dnia " + (lo.day + CARRY_DAYS) + "), żeby zabrać z działki, co moje: plony, skrzynie, budynki (rozbiórka oddaje część materiałów), zwierzęta z zagród i psa. Potem straż nikogo tam nie wpuści, a to, co zostanie, należy do Lorda.\n" +
+            "Lord odsprzeda działkę za " + s.buy.price + " G - w ratach, bez terminu (dwór obok tawerny: za dnia Lord, nocą kamerdyner). Po spłacie działka wróci z tym, co na niej zostało.\n" +
             "Dom dziadka nie był w zastawie - posłanie czeka. Pokój wynajmie Borgar, a sołtys w ratuszu (8-16) sprzedaje Chatę pod lasem na Podgrodziu (600 G) - z działką, na której wolno budować. Za Skrajem lasu, na zachód, stoi spalona zagroda Ługów: ziemia też zabrana za długi, odłogiem od lat - może da się ją odkupić i odbudować dom.\n" +
             "Słowa Lorda: dwór zbudowano z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać. Lord chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...";
     }
     function lostLetterText() {
         const s = state(), lo = lostState();
-        return "Termin minął o świcie, a dług Stacha pozostał niespłacony (zabrakło " + lo.missing + " G). Zgodnie z aktem pole za lasem przechodzi na własność dworu - moi ludzie zmierzą je i postawią znak. " +
-            "Daję ci " + dni(CARRY_DAYS) + " na zabranie z niego twoich rzeczy. Pole odsprzedam: " + s.buy.price + " G, w ratach, bez terminu. " +
+        return "Termin minął o świcie, a dług Stacha pozostał niespłacony (zabrakło " + lo.missing + " G). Zgodnie z aktem działka za lasem przechodzi na własność dworu - moi ludzie zmierzą ją i postawią znak. " +
+            "Daję ci " + dni(CARRY_DAYS) + " na zabranie z niej twoich rzeczy. Działkę odsprzedam: " + s.buy.price + " G, w ratach, bez terminu. " +
             "Gdybyś szukał dachu nad głową: sołtys sprzedaje chatę pod lasem na Podgrodziu. A jeśli wolisz popiół - zagroda Ługów za Skrajem lasu też jest moja.\n" +
             "PS. Pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Gdybyś znalazł zejście pod tawerną Borgara, przyjdź najpierw do mnie. Leopold Zaleski.";
     }
@@ -863,7 +864,7 @@
             if (n <= 0) return;
             payBuy(n);
             if (s.buy.paid >= s.buy.price) return run(interp, buyFinalList(spk, face, role !== "lord"));
-            say(o, spk, (role === "lord" ? butler() + ", zapisz: " : "Zapisuję: ") + n + " G za pole od wnuka Stacha. Brakuje jeszcze " + buyLeft() + " G.", face);
+            say(o, spk, (role === "lord" ? butler() + ", zapisz: " : "Zapisuję: ") + n + " G za działkę od wnuka Stacha. Brakuje jeszcze " + buyLeft() + " G.", face);
             return run(interp, o);
         }
         if (what === "pay") {
@@ -980,14 +981,14 @@
         syncGoals();
         T.emit("fieldLost", { day: day(), missing: s.lost.missing });
         tell("chapterLost");
-        T.popup("Rozdział 1 zakończony: pole przepadło", { top: true, color: "#ffb4a0", sub: dni(CARRY_DAYS) + " na wyniesienie dobytku  ·  odkup: " + BUYBACK + " G" });
+        T.popup("Rozdział 1 zakończony: działka przepadła", { top: true, color: "#ffb4a0", sub: dni(CARRY_DAYS) + " na wyniesienie dobytku  ·  odkup: " + BUYBACK + " G" });
         if ($gameMap.mapId() === MAP.field && T.call("Homes", "castReady")) { startMeasure(); return; }   // (the Lord's men come over the field now)
         // elsewhere: the Lord's letter (the scene comes when he walks onto the field in the next days)
         s.lost.hook = 1;
         s.lost.noted = day();
-        T.popup("List od Lorda Zaleskiego", { top: true, color: U().accent, sub: "Pole przechodzi na dwór. (Dziennik: Notatki)" });
+        T.popup("List od Lorda Zaleskiego", { top: true, color: U().accent, sub: "Działka przechodzi na dwór. (Dziennik: Notatki)" });
         T.call("Journal", "addNote", "List od Lorda (dzień " + day() + ")", lostLetterText());
-        T.call("Journal", "addNote", "Pole przepadło", lostNoteText());
+        T.call("Journal", "addNote", "Działka przepadła", lostNoteText());
         T.call("Journal", "evaluateGoals");
     }
     function startMeasure() {
@@ -1006,7 +1007,7 @@
         step("measured");
         if (!lo.noted) {
             lo.noted = day();
-            T.call("Journal", "addNote", "Pole przepadło", lostNoteText());
+            T.call("Journal", "addNote", "Działka przepadła", lostNoteText());
         }
         T.call("Journal", "evaluateGoals");
     }
@@ -1024,8 +1025,8 @@
         T.emit("fieldLocked", { day: day() });
         tell("fieldLocked");
         if (onField) { $gameMap._interpreter.setup(end(escortList(inHut)), 0); return true; }
-        T.popup("Pole dziadka zamknięte", { top: true, color: "#ff9f8f", sub: "Minęły " + dni(CARRY_DAYS) + " - pole należy teraz do Lorda." });
-        T.call("Journal", "addNote", "List od Lorda (dzień " + day() + ")", "Minęły " + dni(CARRY_DAYS) + ". Pole za lasem jest własnością dworu, a moja straż pilnuje, by tak zostało. Oferta pozostaje aktualna: " + s.buy.price + " G, w ratach, bez terminu. Leopold Zaleski.");
+        T.popup("Działka dziadka zamknięta", { top: true, color: "#ff9f8f", sub: "Minęły " + dni(CARRY_DAYS) + " - działka należy teraz do Lorda." });
+        T.call("Journal", "addNote", "List od Lorda (dzień " + day() + ")", "Minęły " + dni(CARRY_DAYS) + ". Działka za lasem jest własnością dworu, a moja straż pilnuje, by tak zostało. Oferta pozostaje aktualna: " + s.buy.price + " G, w ratach, bez terminu. Leopold Zaleski.");
         T.call("Journal", "evaluateGoals");
         return true;
     }
@@ -1034,10 +1035,10 @@
         const s = state();
         if (!s || !s.buy || s.buy.done || s.buy.paid < s.buy.price) return;
         s.buy.done = day();
-        if (REWARD_XP > 0) T.call("Combat", "gainXp", Math.round(REWARD_XP / 2), "odkup pola");
-        T.popup("Pole dziadka znowu wasze!", { top: true, color: U().accent, sub: "Wraca z tym, co na nim zostało." });
+        if (REWARD_XP > 0) T.call("Combat", "gainXp", Math.round(REWARD_XP / 2), "odkup działki");
+        T.popup("Działka dziadka znowu wasza!", { top: true, color: U().accent, sub: "Wraca z tym, co na niej zostało." });
         AudioManager.playMe({ name: "Victory1", volume: 70, pitch: 100, pan: 0 });
-        T.call("Journal", "addNote", "Akt odkupu pola", "Dzień " + day() + ": oddałem Lordowi ostatnią ratę - razem " + s.buy.price + " G. Pole za lasem znowu należy do dziadka Stacha, a z nim wszystko, czego nie zdążyłem rozebrać. " + butler() + " zaniesie dziadkowi akt odkupu.");
+        T.call("Journal", "addNote", "Akt odkupu działki", "Dzień " + day() + ": oddałem Lordowi ostatnią ratę - razem " + s.buy.price + " G. Działka za lasem znowu należy do dziadka Stacha, a z nim wszystko, czego nie zdążyłem rozebrać. " + butler() + " zaniesie dziadkowi akt odkupu.");
         T.emit("fieldBack", { day: day(), price: s.buy.price });
         tell("fieldBack");
         T.call("Journal", "evaluateGoals");
@@ -1056,10 +1057,10 @@
         const first = mark("talk");
         if ($dataItems[SOUP]) $gameParty.gainItem($dataItems[SOUP], 1);
         T.call("Journal", "addNote", "Dług dziadka Stacha", "Dziadek jest winien Lordowi Leopoldowi Zaleskiemu " + s.debt + " G. Termin: dzień " + s.deadline +
-            " (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego pole za lasem.\nNa tym polu mogę budować (i tylko tam).\n" +
+            " (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego działkę za lasem, w Kruczym Jarze.\nNa tej działce mogę budować (i tylko tam: w obrębie muru; za murem to już nie ziemia dziadka).\n" +
             "Borgar z tawerny „Pod Złotym Kuflem” daje pracę po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ".\n" +
             "Spłatę zanoszę do dworu Lorda, obok tawerny: za dnia (" + LORD_HOURS[0] + "-" + LORD_HOURS[1] + ") Lordowi, nocą kamerdynerowi.\n" +
-            "Droga na pole: podwórze - Leśna droga - Polna droga - Skraj lasu - pole.\n" +
+            "Droga na działkę: podwórze - Leśna droga - Polna droga - Skraj lasu - Kruczy Jar.\n" +
             "Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ. Dwór Lorda stoi na wschód od tawerny.");
         // the prologue's wet letter (the mother's): the first open thread
         const J = T.api("Journal"), notes = J && J.data ? (J.data().notes || []) : [];
@@ -1082,9 +1083,9 @@
         if (!s || s.done) return;
         s.done = day();
         if (REWARD_XP > 0) T.call("Combat", "gainXp", REWARD_XP, "rozdział 1");
-        T.popup("Rozdział 1 zakończony: dług dziadka spłacony!", { top: true, color: U().accent, sub: "Pole zostaje przy was." });
+        T.popup("Rozdział 1 zakończony: dług dziadka spłacony!", { top: true, color: U().accent, sub: "Działka zostaje przy was." });
         AudioManager.playMe({ name: "Victory1", volume: 70, pitch: 100, pan: 0 });
-        T.call("Journal", "addNote", "Pokwitowanie od Lorda", "Dług dziadka spłacony w dniu " + s.done + ": " + s.debt + " G. Pole zostaje przy nas.\nW dworze wspomnieli, że zbudowano go z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze z nich leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać.\nLord nie żartował. Chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...");
+        T.call("Journal", "addNote", "Pokwitowanie od Lorda", "Dług dziadka spłacony w dniu " + s.done + ": " + s.debt + " G. Działka zostaje przy nas.\nW dworze wspomnieli, że zbudowano go z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze z nich leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać.\nLord nie żartował. Chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...");
         T.call("Journal", "evaluateGoals");
         tell("chapterDone");
     }
@@ -1121,7 +1122,7 @@
         if (active()) onArrive($gameMap.mapId());
     };
     function onArrive(mapId) {
-        if (mapId === MAP.field && step("field")) T.call("SpeechBubbles", "say", $gamePlayer, "Więc to jest pole dziadka...", 200);
+        if (mapId === MAP.field && step("field")) T.call("SpeechBubbles", "say", $gamePlayer, "Więc to jest Kruczy Jar... A w obrębie muru - działka dziadka.", 200);
         if (mapId === MAP.tavern) step("tavern");
         if (mapId === MAP.cellar) step("cellar");
         if (mapId === MAP.manor) step("manor");
@@ -1159,47 +1160,50 @@
         return {
             talk: { id: "story_talk", story: true, ch, title: "Porozmawiaj z dziadkiem", item: SOUP, where: { person: "grandpa" }, after: [], done: () => !!(state() && state().flags.talk),
                 text: "Dziadek Stach czeka w swoim domu. Ma ci coś ważnego do powiedzenia." },
-            field: { id: "story_field", story: true, ch, title: "Dojdź na pole dziadka", item: 67, where: { map: MAP.field, name: "Pole dziadka" }, after: ["story_talk"], done: () => !!(state() && state().flags.field),
-                text: "Z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód. Tylko na tym polu wolno ci budować." },
+            field: { id: "story_field", story: true, ch, title: "Dojdź na działkę dziadka", item: 67, where: { map: MAP.field, name: "Działka dziadka" }, after: ["story_talk"], done: () => !!(state() && state().flags.field),
+                text: "Z podwórza na południe, leśną drogą do Polnej, stamtąd na południe na skraj lasu i dalej na zachód, do Kruczego Jaru. Budować wolno ci tylko na działce dziadka - w obrębie muru." },
             work: { id: "story_work", story: true, ch, title: "Znajdź pracę w tawernie", item: 81, where: { person: "borgar" }, after: ["story_field"], done: () => !!(state() && state().flags.hired),
                 text: "Borgar, karczmarz z tawerny „Pod Złotym Kuflem”, szuka rąk do pracy. Tawerna stoi przy ścieżce na północ od Polnej drogi. Porozmawiaj z nim." },
             shift: { id: "story_shift", story: true, ch, title: "Przepracuj zmianę u Borgara", item: 81, where: { person: "borgar" }, after: ["story_work"],
                 done: () => { const st = T.call("TavernShift", "stats"); return !!st && st.done > 0; },
                 text: "Zmiany są po południu i wieczorem, od " + SHIFT_FROM + " do " + SHIFT_TO + ", jedna dziennie. Sprzątanie, beczka, kuchnia i sala - płaci od roboty, a goście dają napiwki." },
             shelter: { id: "story_shelter", story: true, ch, item: 121, after: ["story_field"],
-                get title() { return lostState() ? "Zbuduj schronienie" : "Zbuduj schronienie na polu"; },
-                get where() { return lostState() ? null : { map: MAP.field, name: "Pole dziadka" }; },
+                get title() { return lostState() ? "Zbuduj schronienie" : "Zbuduj schronienie na działce"; },
+                get where() { return lostState() ? null : { map: MAP.field, name: "Działka dziadka" }; },
                 done: () => (!lostState() && farmBuilt(MAP.field, SHELTERS)) || farmBuiltAnywhere(SHELTERS.concat(["bed"])),
                 get text() { return lostState() ? "Postaw legowisko, namiot, wiatę albo chatkę - na własnej ziemi (chatę z działką sprzedaje sołtys, a zagrodę Ługów za Skrajem lasu da się odkupić), a namiot i leśne legowisko gdziekolwiek. Noc pod gołym niebem męczy i bywa niebezpieczna."
-                    : "Na polu dziadka postaw legowisko, namiot, wiatę albo chatkę. Noc pod gołym niebem męczy i bywa niebezpieczna."; } },
+                    : "Na działce dziadka postaw legowisko, namiot, wiatę albo chatkę. Noc pod gołym niebem męczy i bywa niebezpieczna."; } },
             // ---- the field lost (only in the goals' list once it is: syncGoals)
-            carry: { id: "story_carry", story: true, storyLoss: true, ch, item: 67, where: { map: MAP.field, name: "Pole dziadka" }, after: [], done: () => fieldLocked() || fieldBack(),
-                get title() { const n = carryLeft(); return "Wynieś dobytek z pola (" + (n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? "ostatni dzień" : "do świtu") + ")"; },
+            carry: { id: "story_carry", story: true, storyLoss: true, ch, item: 67, where: { map: MAP.field, name: "Działka dziadka" }, after: [], done: () => fieldLocked() || fieldBack(),
+                get title() { const n = carryLeft(); return "Wynieś dobytek z działki (" + (n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? "ostatni dzień" : "do świtu") + ")"; },
                 get text() {
                     const lo = lostState();
-                    return "Pole przechodzi na Lorda o świcie dnia " + ((lo ? lo.day : 0) + CARRY_DAYS) + ". Do tego czasu zbierz plony, opróżnij skrzynie, rozbierz budynki (rozbiórka oddaje część materiałów), sprzedaj zwierzęta z zagród (menu zagrody) i zabierz psa. " +
-                        "Meble z chatki zostaną w niej, jeśli ich nie wyniesiesz. Co zostanie na polu, należy potem do Lorda - wróci, gdy odkupisz pole.";
+                    return "Działka przechodzi na Lorda o świcie dnia " + ((lo ? lo.day : 0) + CARRY_DAYS) + ". Do tego czasu zbierz plony, opróżnij skrzynie, rozbierz budynki (rozbiórka oddaje część materiałów), sprzedaj zwierzęta z zagród (menu zagrody) i zabierz psa. " +
+                        "Meble z chatki zostaną w niej, jeśli ich nie wyniesiesz. Co zostanie na działce, należy potem do Lorda - wróci, gdy odkupisz działkę.";
                 } },
             roof: { id: "story_roof", story: true, storyLoss: true, ch, item: 80, where: { person: "soltys" }, after: [], done: () => !!T.call("Homes", "hasRoof") || farmBuiltAnywhere(["hut"], true),
                 title: "Znajdź nowy dach nad głową",
                 text: "Dom dziadka nie był w zastawie - posłanie zawsze czeka, a pokój wynajmie Borgar. Własny dach z ziemią, na której wolno budować: Chata pod lasem na Podgrodziu (sołtys w ratuszu, 8-16, 600 G) albo spalona zagroda Ługów za Skrajem lasu - do odkupienia i odbudowy. Chatkę postawisz od nowa na własnej ziemi." },
+            // (count: the goal window's bar on the map - Journal.goalNeeds)
             buyback: { id: "story_buyback", story: true, storyLoss: true, ch, icon: GOLD_ICON, where: { person: "lord" }, after: [], done: () => fieldBack(),
-                get title() { const s = state(); return s && s.buy ? "Odkup pole dziadka (" + Math.min(s.buy.paid, s.buy.price) + " / " + s.buy.price + " G)" : "Odkup pole dziadka"; },
-                get text() { const s = state(); return "Lord odsprzeda pole za " + (s && s.buy ? s.buy.price : BUYBACK) + " G - w ratach, jak dług, bez terminu: za dnia (" + LORD_HOURS[0] + "-" + LORD_HOURS[1] + ") przed dworem, nocą u kamerdynera. " + (s && s.buy && s.buy.paid > 0 ? "Oddałeś już " + s.buy.paid + " G. " : "") + "Po spłacie pole wraca z tym, co na nim zostało."; } },
+                count: () => { const s = state(); return s && s.buy ? { have: Math.min(s.buy.paid, s.buy.price), need: s.buy.price, unit: "G" } : null; },
+                get title() { const s = state(); return s && s.buy ? "Odkup działkę dziadka (" + Math.min(s.buy.paid, s.buy.price) + " / " + s.buy.price + " G)" : "Odkup działkę dziadka"; },
+                get text() { const s = state(); return "Lord odsprzeda działkę za " + (s && s.buy ? s.buy.price : BUYBACK) + " G - w ratach, jak dług, bez terminu: za dnia (" + LORD_HOURS[0] + "-" + LORD_HOURS[1] + ") przed dworem, nocą u kamerdynera. " + (s && s.buy && s.buy.paid > 0 ? "Oddałeś już " + s.buy.paid + " G. " : "") + "Po spłacie działka wraca z tym, co na niej zostało."; } },
             cellar: { id: "story_cellar", story: true, ch, title: "Drzwi pod Kruczymi Skałami", item: TORCH, where: { map: MAP.tavern, name: "Tawerna" }, after: ["story_debt"],
                 done: () => !!(state() && state().flags.cellar),
                 text: "Lord mówił poważnie: najstarsze kamienie dawnej twierdzy leżą pod tawerną Borgara, a pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać. Rozejrzyj się w tawernie - może jest tam zejście do piwnic." },
             debt: { id: "story_debt", story: true, ch, icon: GOLD_ICON, where: { person: "lord" }, after: ["story_talk"], done: () => !!(state() && (state().done || state().paid >= state().debt)),
-                get title() { const s = state(); return s && s.lost ? "Dług dziadka: pole przepadło (" + s.paid + "/" + s.debt + " G)" : s ? "Spłać dług dziadka (" + Math.min(s.paid, s.debt) + "/" + s.debt + " G)" : "Spłać dług dziadka"; },
+                count: () => { const s = state(); return s && !s.lost ? { have: Math.min(s.paid, s.debt), need: s.debt, unit: "G" } : null; },
+                get title() { const s = state(); return s && s.lost ? "Dług dziadka: działka przepadła (" + s.paid + "/" + s.debt + " G)" : s ? "Spłać dług dziadka (" + Math.min(s.paid, s.debt) + "/" + s.debt + " G)" : "Spłać dług dziadka"; },
                 get text() {
                     const s = state();
                     if (!s) return "Dług dziadka.";
-                    if (s.lost) return "Termin minął w dniu " + s.deadline + " - spłacono " + s.paid + " z " + s.debt + " G. O świcie dnia " + s.lost.day + " pole przeszło na Lorda Zaleskiego. Lord odsprzeda je za " + s.buy.price + " G.";
-                    if (s.done || s.paid >= s.debt) return "Dług spłacony: " + s.debt + " G. Pole zostaje przy was.";
+                    if (s.lost) return "Termin minął w dniu " + s.deadline + " - spłacono " + s.paid + " z " + s.debt + " G. O świcie dnia " + s.lost.day + " działka przeszła na Lorda Zaleskiego. Lord odsprzeda ją za " + s.buy.price + " G.";
+                    if (s.done || s.paid >= s.debt) return "Dług spłacony: " + s.debt + " G. Działka zostaje przy was.";
                     const n = daysLeft();
                     return "Spłacono " + s.paid + " z " + s.debt + " G, " + (n > 1 ? "do terminu " + daysPhrase(n) : n === 1 ? "dziś mija termin" : "termin mija o świcie") +
                         ". Dziś dzień " + day() + ", termin: dzień " + s.deadline + ". Pieniądze zanosisz Lordowi Zaleskiemu do dworu obok tawerny (za dnia, od " +
-                        LORD_HOURS[0] + " do " + LORD_HOURS[1] + ") albo kamerdynerowi (nocą). W noc po terminie kamerdyner przyjmuje je jeszcze do świtu - o świcie Lord zabierze pole.";
+                        LORD_HOURS[0] + " do " + LORD_HOURS[1] + ") albo kamerdynerowi (nocą). W noc po terminie kamerdyner przyjmuje je jeszcze do świtu - o świcie Lord zabierze działkę.";
                 } }
         };
     }
@@ -1247,9 +1251,9 @@
     }
     function letterText(d) {
         const s = state(), n = daysLeft(), sum = left() + " G";
-        if (d >= s.deadline) return "Uprzejmie przypominam, że dziś mija termin spłaty długu (" + sum + "). " + butler() + " przyjmie pieniądze jeszcze tej nocy, do świtu. O świcie moi ludzie przyjdą zmierzyć pole.";
-        if (d >= s.deadline - 1) return "Pojutrze o świcie pole przechodzi na własność dworu, chyba że wcześniej zobaczę " + sum + ". " + butler() + " już grzeje lak do pieczęci.";
-        if (d >= s.deadline - 5) return "Do terminu " + daysPhrase(n) + ". Brakuje " + sum + ". " + butler() + " ostrzy pióro do aktu przejęcia pola - proszę go do tego nie zmuszać.";
+        if (d >= s.deadline) return "Uprzejmie przypominam, że dziś mija termin spłaty długu (" + sum + "). " + butler() + " przyjmie pieniądze jeszcze tej nocy, do świtu. O świcie moi ludzie przyjdą zmierzyć działkę.";
+        if (d >= s.deadline - 1) return "Pojutrze o świcie działka przechodzi na własność dworu, chyba że wcześniej zobaczę " + sum + ". " + butler() + " już grzeje lak do pieczęci.";
+        if (d >= s.deadline - 5) return "Do terminu " + daysPhrase(n) + ". Brakuje " + sum + ". " + butler() + " ostrzy pióro do aktu przejęcia działki - proszę go do tego nie zmuszać.";
         return "Uprzejmie przypominam o długu Stacha: " + sum + " do dnia " + s.deadline + ". Do terminu " + daysPhrase(n) + ". Z wyrazami szacunku, Leopold Zaleski. PS. " + butler() + " pozdrawia.";
     }
     function updateLetters() {
@@ -1314,7 +1318,7 @@
         this.addChild(this._back);
         const pw = Math.min(780, W - 80), S = U(), lines = [], para = [
             "Świt " + (s.deadline + 1) + ". dnia przyniósł ludzi Lorda Zaleskiego - z pieczęcią, sznurem mierniczym i bardzo uprzejmym kamerdynerem.",
-            "Dziadek Stach długo stał przy płocie i nic nie mówił. Pole za lasem, a z nim wszystko, co na nim postawiłeś, należy teraz do dworu.",
+            "Dziadek Stach długo stał przy płocie i nic nie mówił. Działka za lasem, a z nią wszystko, co na niej postawiłeś, należy teraz do dworu.",
             "Może gdzieś, w innym zapisie, ta historia potoczy się inaczej..."
         ];
         const m = new Bitmap(8, 8);
@@ -1331,7 +1335,7 @@
         b.fontSize = 16; b.textColor = S.accent;
         b.drawText("KONIEC GRY", 40, 26, pw - 80, 22);
         b.fontSize = 34; b.textColor = S.text;
-        b.drawText("Pole przepadło", 40, 50, pw - 80, 44);
+        b.drawText("Działka przepadła", 40, 50, pw - 80, 44);
         ctx.fillStyle = S.accent;
         ctx.fillRect(40, 100, 56, 2);
         b.fontSize = 21;
@@ -1375,12 +1379,12 @@
     // short: without "do dnia 60" (a narrow band keeps the label rather than the day)
     function debtText(short) {
         const s = state();
-        if (fieldBack()) return "odkupione · pole znowu wasze";
+        if (fieldBack()) return "odkupiona · działka znowu wasza";
         if (s.lost) {
             const n = carryLeft();
-            return s.buy.paid + " / " + s.buy.price + " G" + (fieldLocked() ? (short ? "" : "  ·  pole należy do Lorda") : "  ·  wynieś dobytek: " + carryPhrase(n));
+            return s.buy.paid + " / " + s.buy.price + " G" + (fieldLocked() ? (short ? "" : "  ·  działka należy do Lorda") : "  ·  wynieś dobytek: " + carryPhrase(n));
         }
-        if (s.done || s.paid >= s.debt) return "spłacony · pole zostaje przy was";
+        if (s.done || s.paid >= s.debt) return "spłacony · działka zostaje przy was";
         return s.paid + " / " + s.debt + " G  ·  " + (short ? "" : "do dnia " + s.deadline + "  ·  ") + daysPhrase(daysLeft());
     }
     // area (MenuPanel.addFoot): y - the keys' line, right - the edge to keep to, room - the px between the last key and that edge
@@ -1425,7 +1429,7 @@
             _queueDayBanner.call(this, text);
             if (!this._dayBanner) return;
             let add = "";
-            if (fieldLost() && !fieldLocked() && carryLeft() >= 1) add = "z pola wynieś dobytek: " + carryPhrase(carryLeft());
+            if (fieldLost() && !fieldLocked() && carryLeft() >= 1) add = "z działki wynieś dobytek: " + carryPhrase(carryLeft());
             else if (isOpen() && daysLeft() >= 1) add = "do spłaty " + left() + " G, " + daysPhrase(daysLeft());
             if (!add) return;
             this._dayBanner.text = (this._dayBanner.text ? this._dayBanner.text + "   ·   " : "") + add.charAt(0).toUpperCase() + add.slice(1);

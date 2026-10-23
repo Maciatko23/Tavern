@@ -48,7 +48,7 @@ kit.test({ port: 9442, bootCheck: "the game boots", errorCheck: "no errors in th
     // ---- the town at night: a fire put on the map as an event (a <Light> with no <LightWhen> - since the town's rebuild the
     // braziers by the Lord's gate; the cauldron, event 75, is gone) lights the night and the hero two tiles left of it throws a shadow
     // away from it (to the left)
-    await t.newGame({ map: 8, x: 46, y: 50, day: 3, hour: 23, quiet: true, minimap: false });   // (a new game: leaving the house is the story's door)
+    await t.newGame({ map: 8, x: 98, y: 50, day: 3, hour: 23, quiet: true, minimap: false });   // (a new game: leaving the house is the story's door)
     const fire = await t.json(`(function(){ const e = $dataMap.events.find(e => e && /<Light:/i.test(e.note) && !/<LightWhen|<LightSoft|<LightCone/i.test(e.note));
         if (!e) return null; $gamePlayer.locate(e.x - 2, e.y); return { id: e.id, x: e.x, y: e.y }; })()`);
     await t.frames(30);

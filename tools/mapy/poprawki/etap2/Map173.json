@@ -1,0 +1,399 @@
+{
+ "mapa": 173,
+ "nazwa": "Dwór - Biblioteka",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 6,
+   "stary": 304,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 7,
+   "stary": 312,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 6,
+   "stary": 305,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 7,
+   "stary": 313,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 6,
+   "stary": 306,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 7,
+   "stary": 314,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 6,
+   "stary": 307,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 7,
+   "stary": 315,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 4,
+   "stary": 0,
+   "nowy": 304
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 5,
+   "stary": 0,
+   "nowy": 312
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 4,
+   "stary": 0,
+   "nowy": 305
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 5,
+   "stary": 0,
+   "nowy": 313
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 4,
+   "stary": 0,
+   "nowy": 306
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 5,
+   "stary": 0,
+   "nowy": 314
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 4,
+   "stary": 0,
+   "nowy": 307
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 5,
+   "stary": 0,
+   "nowy": 315
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 6,
+   "stary": 0,
+   "nowy": 320
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 6,
+   "stary": 0,
+   "nowy": 321
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 3,
+   "y": 6,
+   "stary": 0,
+   "nowy": 322
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 4,
+   "y": 6,
+   "stary": 0,
+   "nowy": 323
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 12,
+   "y": 6,
+   "stary": 304,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 12,
+   "y": 7,
+   "stary": 312,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 6,
+   "stary": 305,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 7,
+   "stary": 313,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 14,
+   "y": 6,
+   "stary": 306,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 14,
+   "y": 7,
+   "stary": 314,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 15,
+   "y": 6,
+   "stary": 307,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 15,
+   "y": 7,
+   "stary": 315,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 12,
+   "y": 4,
+   "stary": 0,
+   "nowy": 304
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 12,
+   "y": 5,
+   "stary": 0,
+   "nowy": 312
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 4,
+   "stary": 0,
+   "nowy": 305
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 5,
+   "stary": 0,
+   "nowy": 313
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 14,
+   "y": 4,
+   "stary": 0,
+   "nowy": 306
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 14,
+   "y": 5,
+   "stary": 0,
+   "nowy": 314
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 15,
+   "y": 4,
+   "stary": 0,
+   "nowy": 307
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 15,
+   "y": 5,
+   "stary": 0,
+   "nowy": 315
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 12,
+   "y": 6,
+   "stary": 0,
+   "nowy": 320
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 13,
+   "y": 6,
+   "stary": 0,
+   "nowy": 321
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 14,
+   "y": 6,
+   "stary": 0,
+   "nowy": 322
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 15,
+   "y": 6,
+   "stary": 0,
+   "nowy": 323
+  },
+  {
+   "op": "przesun",
+   "id": 14,
+   "nazwa": "Kandelabr",
+   "stary": [
+    1,
+    5
+   ],
+   "nowy": [
+    1,
+    9
+   ]
+  },
+  {
+   "op": "przesun",
+   "id": 15,
+   "nazwa": "Regały",
+   "stary": [
+    3,
+    7
+   ],
+   "nowy": [
+    3,
+    6
+   ]
+  },
+  {
+   "op": "przesun",
+   "id": 16,
+   "nazwa": "Regały",
+   "stary": [
+    13,
+    7
+   ],
+   "nowy": [
+    13,
+    6
+   ]
+  }
+ ],
+ "log": [
+  {
+   "kod": "ręcznie",
+   "x": -1,
+   "y": -1,
+   "problem": "decyzja ręczna",
+   "poprawka": "Biblioteka: dwa regały 4x2 (C(0..3,6..7)) bez dolnego rzędu stały na środku - bohater wchodził pod nie. Regały     stają pod tylną ścianą (rzędy 4-6) z dolnym rzędem C(0..3,8), przejście w rzędzie 7 zostaje wolne; kandelabr     spod lewego regału na (1,9), jak prawy na (15,9). Zdarzenia „Regały” (3,7) i (13,7) o rząd wyżej, przy regałach."
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "G1 1,6",
+  "G1 1,7",
+  "G1 14,6",
+  "G1 14,7",
+  "G1 15,6",
+  "G1 15,7",
+  "G1 2,6",
+  "G1 2,7",
+  "O1 1,7",
+  "O1 13,7",
+  "O1 14,7",
+  "O1 2,7",
+  "O1 3,7",
+  "O1 4,7",
+  "P1 2,9"
+ ],
+ "po": [
+  "P1 2,9"
+ ],
+ "sha_data": "4587682b16b6845d3192b6f0fbfc38e54539398d8d107c996e98545fafad5659",
+ "zainstalowano": "2026-10-22T10:51:38",
+ "sha_po": "cba6dcce67b5cc73b2b242a4986e78afba487e95e3625274e24669db7b3c31ba"
+}

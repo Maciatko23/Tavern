@@ -1,0 +1,1189 @@
+{
+ "opis": "Wnętrza nowego miasta (tools/miasto2/wnetrza/build.py). Instaluje koordynator: MapNNN.json -> data/, MapInfos: nazwa = 'nazwa', rodzic = 8, nazwa wyświetlana już w mapie. 'wejscie' = kratka, na którą mają przenosić drzwi z 'drzwi_na_mapie_8' (twarzą w górę, kierunek 8). 'wyjscie'.'do' = kratka przed drzwiami z tools/miasto2/budynki.json ('zastepcze': true = brak wpisu, (1,1)). 'miejsca' = zdarzenia 'Miejsce: <nazwa>' dla TownLife; 'proponowane': true = mieszkańca o tym kluczu jeszcze nie ma w TownLife (decyzja agenta mieszkańców).",
+ "mapy": {
+  "178": {
+   "klucz": "kaplica",
+   "mapa": 178,
+   "plik": "Map178.json",
+   "nazwa": "Kaplica",
+   "nazwa_wyswietlana": "Kaplica",
+   "rodzic": 8,
+   "opis": "nawa z ławami, ołtarz, zakrystia; opiekun: grabarz Hieronim",
+   "rozmiar": [
+    20,
+    15
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:80>\n<DarkNight:185>",
+   "wejscie": {
+    "x": 7,
+    "y": 13,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 25,
+     "x": 7,
+     "y": 14,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 8,
+      "y": 17,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 50,
+    "x": 8,
+    "y": 16,
+    "przed_drzwiami": [
+     8,
+     17
+    ],
+    "nazwa": "Kaplica",
+    "uwaga": "drzwi przenoszą teraz na ([7, 13]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "grabarz_kaplica": {
+     "x": 12,
+     "y": 6,
+     "kierunek": 4,
+     "proponowane": true
+    }
+   },
+   "zdarzen": 25,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "179": {
+   "klucz": "dom_grabarza",
+   "mapa": 179,
+   "plik": "Map179.json",
+   "nazwa": "Dom grabarza",
+   "nazwa_wyswietlana": "Dom grabarza",
+   "rodzic": 8,
+   "opis": "chata Hieronima",
+   "rozmiar": [
+    11,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 5,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 13,
+     "x": 5,
+     "y": 9,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 20,
+      "y": 13,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 57,
+    "x": 20,
+    "y": 12,
+    "przed_drzwiami": [
+     20,
+     13
+    ],
+    "nazwa": "Dom grabarza",
+    "uwaga": "drzwi przenoszą teraz na ([5, 8]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "grabarz_wnetrze": {
+     "x": 6,
+     "y": 7,
+     "kierunek": 8,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 13,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "180": {
+   "klucz": "straznica",
+   "mapa": 180,
+   "plik": "Map180.json",
+   "nazwa": "Strażnica Lorda",
+   "nazwa_wyswietlana": "Strażnica Lorda",
+   "rodzic": 8,
+   "opis": "izba straży i sala sypialna; kapral Wit Czerwień",
+   "rozmiar": [
+    19,
+    12
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 6,
+    "y": 10,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 25,
+     "x": 6,
+     "y": 11,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 98,
+      "y": 48,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 152,
+    "x": 98,
+    "y": 47,
+    "przed_drzwiami": [
+     98,
+     48
+    ],
+    "nazwa": "Strażnica Lorda",
+    "uwaga": "drzwi przenoszą teraz na ([6, 10]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "kapral_wnetrze": {
+     "x": 5,
+     "y": 7,
+     "kierunek": 4,
+     "proponowane": false
+    },
+    "straz_1_wnetrze": {
+     "x": 14,
+     "y": 7,
+     "kierunek": 2,
+     "proponowane": true
+    },
+    "straz_2_wnetrze": {
+     "x": 16,
+     "y": 7,
+     "kierunek": 2,
+     "proponowane": true
+    }
+   },
+   "zdarzen": 25,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "181": {
+   "klucz": "stajnia",
+   "mapa": 181,
+   "plik": "Map181.json",
+   "nazwa": "Stajnia z wozownią",
+   "nazwa_wyswietlana": "Stajnia z wozownią",
+   "rodzic": 8,
+   "opis": "boksy z końmi, wozownia, kąt woźnicy Szczepana",
+   "rozmiar": [
+    24,
+    13
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 11,
+    "y": 11,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 38,
+     "x": 11,
+     "y": 12,
+     "nazwa": "Wyjście -> Okolice Tawerny (brama stajni)",
+     "do": {
+      "mapa": 8,
+      "x": 61,
+      "y": 88,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    },
+    {
+     "id": 39,
+     "x": 12,
+     "y": 12,
+     "nazwa": "Wyjście -> Okolice Tawerny (brama stajni)",
+     "do": {
+      "mapa": 8,
+      "x": 61,
+      "y": 88,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 209,
+    "x": 61,
+    "y": 87,
+    "przed_drzwiami": [
+     61,
+     88
+    ],
+    "nazwa": "Stajnia",
+    "uwaga": "drzwi przenoszą teraz na ([11, 11]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "kolodziej_wnetrze": {
+     "x": 20,
+     "y": 6,
+     "kierunek": 6,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 39,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "182": {
+   "klucz": "dom1",
+   "mapa": 182,
+   "plik": "Map182.json",
+   "nazwa": "Dom 1 (przekupka Agata)",
+   "nazwa_wyswietlana": "Dom przekupki",
+   "rodzic": 8,
+   "opis": "izba przekupki Agaty",
+   "rozmiar": [
+    13,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 6,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 11,
+     "x": 6,
+     "y": 9,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 85,
+      "y": 13,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 63,
+    "x": 85,
+    "y": 12,
+    "przed_drzwiami": [
+     85,
+     13
+    ],
+    "nazwa": "Dom Agaty",
+    "uwaga": "drzwi przenoszą teraz na ([6, 8]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "przekupka_wnetrze": {
+     "x": 4,
+     "y": 8,
+     "kierunek": 8,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 12,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "183": {
+   "klucz": "dom2",
+   "mapa": 183,
+   "plik": "Map183.json",
+   "nazwa": "Dom 2 (kamienica mieszczan)",
+   "nazwa_wyswietlana": "Kamienica mieszczan",
+   "rodzic": 8,
+   "opis": "kamienica: izba, kuchnia, sypialnia",
+   "rozmiar": [
+    20,
+    12
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 10,
+    "y": 10,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 16,
+     "x": 10,
+     "y": 11,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 96,
+      "y": 29,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 84,
+    "x": 96,
+    "y": 28,
+    "przed_drzwiami": [
+     96,
+     29
+    ],
+    "nazwa": "Kamienica",
+    "uwaga": "drzwi przenoszą teraz na ([10, 10]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 19,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "184": {
+   "klucz": "dom3",
+   "mapa": 184,
+   "plik": "Map184.json",
+   "nazwa": "Dom 3 (szwaczka Dorota)",
+   "nazwa_wyswietlana": "Dom szwaczki",
+   "rodzic": 8,
+   "opis": "pracownia szwaczki i izdebka",
+   "rozmiar": [
+    17,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 5,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 13,
+     "x": 5,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 7,
+      "y": 49,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 129,
+    "x": 7,
+    "y": 48,
+    "przed_drzwiami": [
+     7,
+     49
+    ],
+    "nazwa": "Dom szwaczki",
+    "uwaga": "drzwi przenoszą teraz na ([5, 9]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "szwaczka_wnetrze": {
+     "x": 3,
+     "y": 8,
+     "kierunek": 8,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 15,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "185": {
+   "klucz": "dom4",
+   "mapa": 185,
+   "plik": "Map185.json",
+   "nazwa": "Dom 4 (wdowa Halina z dziećmi)",
+   "nazwa_wyswietlana": "Dom wdowy",
+   "rodzic": 8,
+   "opis": "izba Haliny i izba dzieci",
+   "rozmiar": [
+    17,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 5,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 19,
+     "x": 5,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 84,
+      "y": 64,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 180,
+    "x": 84,
+    "y": 63,
+    "przed_drzwiami": [
+     84,
+     64
+    ],
+    "nazwa": "Dom Haliny",
+    "uwaga": "drzwi przenoszą teraz na ([5, 9]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "wdowa_wnetrze": {
+     "x": 6,
+     "y": 6,
+     "kierunek": 8,
+     "proponowane": false
+    },
+    "kostek_wnetrze": {
+     "x": 12,
+     "y": 7,
+     "kierunek": 6,
+     "proponowane": false
+    },
+    "jagodka_wnetrze": {
+     "x": 14,
+     "y": 7,
+     "kierunek": 4,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 19,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "186": {
+   "klucz": "dom5",
+   "mapa": 186,
+   "plik": "Map186.json",
+   "nazwa": "Dom 5 (stary dom kupca)",
+   "nazwa_wyswietlana": "Stary dom kupca",
+   "rodzic": 8,
+   "opis": "izba kupca i komora służącej",
+   "rozmiar": [
+    16,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 5,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 14,
+     "x": 5,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 95,
+      "y": 63,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 197,
+    "x": 95,
+    "y": 62,
+    "przed_drzwiami": [
+     95,
+     63
+    ],
+    "nazwa": "Stary dom kupca",
+    "uwaga": "drzwi przenoszą teraz na ([5, 9]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "sluzaca_wnetrze": {
+     "x": 12,
+     "y": 6,
+     "kierunek": 8,
+     "proponowane": true
+    }
+   },
+   "zdarzen": 15,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "187": {
+   "klucz": "dom6",
+   "mapa": 187,
+   "plik": "Map187.json",
+   "nazwa": "Dom 6 (cieśla Leon)",
+   "nazwa_wyswietlana": "Dom cieśli",
+   "rodzic": 8,
+   "opis": "warsztat ciesielski i izba",
+   "rozmiar": [
+    17,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 5,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 20,
+     "x": 5,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 33,
+      "y": 87,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 204,
+    "x": 33,
+    "y": 86,
+    "przed_drzwiami": [
+     33,
+     87
+    ],
+    "nazwa": "Dom cieśli",
+    "uwaga": "drzwi przenoszą teraz na ([5, 9]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "ciesla_wnetrze": {
+     "x": 4,
+     "y": 7,
+     "kierunek": 4,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 21,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "188": {
+   "klucz": "dom7",
+   "mapa": 188,
+   "plik": "Map188.json",
+   "nazwa": "Dom 7 (para staruszków)",
+   "nazwa_wyswietlana": "Dom staruszków",
+   "rodzic": 8,
+   "opis": "ciepła izba starszej pary",
+   "rozmiar": [
+    13,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 6,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 16,
+     "x": 6,
+     "y": 9,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 42,
+      "y": 88,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 80,
+    "x": 42,
+    "y": 87,
+    "przed_drzwiami": [
+     42,
+     88
+    ],
+    "nazwa": "Dom staruszków",
+    "uwaga": "drzwi przenoszą teraz na ([6, 8]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "staruszek_wnetrze": {
+     "x": 8,
+     "y": 7,
+     "kierunek": 8,
+     "proponowane": true
+    },
+    "staruszka_wnetrze": {
+     "x": 3,
+     "y": 7,
+     "kierunek": 6,
+     "proponowane": true
+    }
+   },
+   "zdarzen": 17,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "189": {
+   "klucz": "dom8",
+   "mapa": 189,
+   "plik": "Map189.json",
+   "nazwa": "Dom 8 (weteran Wacław)",
+   "nazwa_wyswietlana": "Dom weterana",
+   "rodzic": 8,
+   "opis": "kamienna izba starego żołnierza",
+   "rozmiar": [
+    14,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 6,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 13,
+     "x": 6,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 84,
+      "y": 89,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 216,
+    "x": 84,
+    "y": 88,
+    "przed_drzwiami": [
+     84,
+     89
+    ],
+    "nazwa": "Dom weterana",
+    "uwaga": "drzwi przenoszą teraz na ([6, 9]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {
+    "weteran_wnetrze": {
+     "x": 7,
+     "y": 7,
+     "kierunek": 8,
+     "proponowane": false
+    }
+   },
+   "zdarzen": 13,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "190": {
+   "klucz": "dom9",
+   "mapa": 190,
+   "plik": "Map190.json",
+   "nazwa": "Dom 9 (izba do wynajęcia)",
+   "nazwa_wyswietlana": "Izba do wynajęcia",
+   "rodzic": 8,
+   "opis": "biedna izba i komórka",
+   "rozmiar": [
+    12,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 4,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 8,
+     "x": 4,
+     "y": 9,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 95,
+      "y": 89,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 218,
+    "x": 95,
+    "y": 88,
+    "przed_drzwiami": [
+     95,
+     89
+    ],
+    "nazwa": "Izba do wynajęcia",
+    "uwaga": "drzwi przenoszą teraz na ([4, 8]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 8,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "193": {
+   "klucz": "dom10",
+   "mapa": 193,
+   "plik": "Map193.json",
+   "nazwa": "Dom 10 (przy piekarni)",
+   "nazwa_wyswietlana": "Dom czeladnika piekarza",
+   "rodzic": 8,
+   "opis": "izba czeladnika piekarza",
+   "rozmiar": [
+    12,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 3,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 8,
+     "x": 3,
+     "y": 9,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 31,
+      "y": 74,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 231,
+    "x": 31,
+    "y": 73,
+    "przed_drzwiami": [
+     31,
+     74
+    ],
+    "nazwa": "Dom 10 (przy piekarni)",
+    "uwaga": "drzwi przenoszą teraz na ([1, 1]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 9,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "194": {
+   "klucz": "dom11",
+   "mapa": 194,
+   "plik": "Map194.json",
+   "nazwa": "Dom 11 (kamienice przy ulicy południowej)",
+   "nazwa_wyswietlana": "Kamienica ze sklepikiem",
+   "rodzic": 8,
+   "opis": "sklepik ze świecami i mydłem oraz izba mieszkalna",
+   "rozmiar": [
+    18,
+    12
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 4,
+    "y": 10,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 11,
+     "x": 4,
+     "y": 11,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 45,
+      "y": 74,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 235,
+    "x": 45,
+    "y": 73,
+    "przed_drzwiami": [
+     45,
+     74
+    ],
+    "nazwa": "Dom 11 (kamienice przy ulicy południowej)",
+    "uwaga": "drzwi przenoszą teraz na ([1, 1]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 12,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "195": {
+   "klucz": "dom12",
+   "mapa": 195,
+   "plik": "Map195.json",
+   "nazwa": "Dom 12 (bliźniak domu staruszków)",
+   "nazwa_wyswietlana": "Dom rybaka",
+   "rodzic": 8,
+   "opis": "izba rodziny rybaka i alkowa",
+   "rozmiar": [
+    13,
+    10
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 4,
+    "y": 8,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 12,
+     "x": 4,
+     "y": 9,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 45,
+      "y": 88,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 250,
+    "x": 45,
+    "y": 87,
+    "przed_drzwiami": [
+     45,
+     88
+    ],
+    "nazwa": "Dom 12 (bliźniak domu staruszków)",
+    "uwaga": "drzwi przenoszą teraz na ([1, 1]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 13,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "196": {
+   "klucz": "dom13",
+   "mapa": 196,
+   "plik": "Map196.json",
+   "nazwa": "Dom 13 (dom z lukarnami na wschodzie)",
+   "nazwa_wyswietlana": "Dom balwierza",
+   "rodzic": 8,
+   "opis": "izba balwierza i zielarnia",
+   "rozmiar": [
+    16,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 7,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 13,
+     "x": 7,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 79,
+      "y": 75,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 253,
+    "x": 79,
+    "y": 74,
+    "przed_drzwiami": [
+     79,
+     75
+    ],
+    "nazwa": "Dom 13 (dom z lukarnami na wschodzie)",
+    "uwaga": "drzwi przenoszą teraz na ([1, 1]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 13,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "197": {
+   "klucz": "dom14",
+   "mapa": 197,
+   "plik": "Map197.json",
+   "nazwa": "Dom 14 (obok domu weterana)",
+   "nazwa_wyswietlana": "Dom skryby",
+   "rodzic": 8,
+   "opis": "izba skryby i nauczyciela",
+   "rozmiar": [
+    13,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>",
+   "wejscie": {
+    "x": 6,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 9,
+     "x": 6,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 78,
+      "y": 89,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 254,
+    "x": 78,
+    "y": 88,
+    "przed_drzwiami": [
+     78,
+     89
+    ],
+    "nazwa": "Dom 14 (obok domu weterana)",
+    "uwaga": "drzwi przenoszą teraz na ([1, 1]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 10,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  },
+  "198": {
+   "klucz": "dom15",
+   "mapa": 198,
+   "plik": "Map198.json",
+   "nazwa": "Dom 15 (przy cmentarzu)",
+   "nazwa_wyswietlana": "Dom kamieniarza",
+   "rodzic": 8,
+   "opis": "pracownia kamieniarza i izdebka",
+   "rozmiar": [
+    16,
+    11
+   ],
+   "tileset": 8,
+   "notatka_mapy": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>",
+   "wejscie": {
+    "x": 9,
+    "y": 9,
+    "kierunek": 8,
+    "opis": "tu staje gracz wchodząc z miasta (twarzą w górę)"
+   },
+   "wyjscie": [
+    {
+     "id": 19,
+     "x": 9,
+     "y": 10,
+     "nazwa": "Wyjście -> Okolice Tawerny",
+     "do": {
+      "mapa": 8,
+      "x": 21,
+      "y": 34,
+      "kierunek": 2
+     },
+     "zastepcze": false
+    }
+   ],
+   "drzwi_na_mapie_8": {
+    "id": 259,
+    "x": 21,
+    "y": 33,
+    "przed_drzwiami": [
+     21,
+     34
+    ],
+    "nazwa": "Dom 15 (przy cmentarzu)",
+    "uwaga": "drzwi przenoszą teraz na ([1, 1]) - zastępczo; mają przenosić na kratkę 'wejscie' (twarzą w górę)"
+   },
+   "miejsca": {},
+   "zdarzen": 19,
+   "kontrola": {
+    "bramka": true,
+    "bledy": 0,
+    "uwagi": 0,
+    "info": 0,
+    "lista": []
+   }
+  }
+ }
+}

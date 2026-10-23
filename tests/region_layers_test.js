@@ -11,15 +11,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const api = await t.json(`(function(){ const a = Tawerna.api("RegionLayers"); return a && { b: a.BELOW, l: a.LEVEL, a: a.ABOVE, win: window.RegionLayers === a }; })()`);
     t.check("RegionLayers is loaded (T.api and window.RegionLayers) with the regions 1 / 2 / 3", api && api.b === 1 && api.l === 2 && api.a === 3 && api.win, api);
 
-    await t.newGame({ map: 8, x: 19, y: 18, dir: 8, hour: 12, quiet: true });
+    await t.newGame({ map: 8, x: 46, y: 18, dir: 8, hour: 12, quiet: true });
     const walk = "(x, y) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d))";
     const cells = await t.json(`(function(){ const k = (x, y) => RegionLayers.kindAt(x, y), p = ${walk};
-        return { facade: [k(19, 15), p(19, 15)], arcade: [k(20, 9), p(20, 9)], street: [k(19, 18), p(19, 18)], gate: [k(24, 17), p(24, 17)] }; })()`);
+        return { facade: [k(46, 15), p(46, 15)], arcade: [k(47, 9), p(47, 9)], street: [k(46, 18), p(46, 18)], gate: [k(51, 17), p(51, 17)] }; })()`);
     t.check("the hall's facade (19,15) and its arcade (20,9) are region 2 and blocked; the street (19,18) and the cell in front of the gate (24,17) are free",
         cells.facade[0] === "level" && !cells.facade[1] && cells.arcade[0] === "level" && !cells.arcade[1] && cells.street[0] === null && cells.street[1] && cells.gate[0] === null && cells.gate[1], cells);
 
     // walking up against the facade (FreeMovement's own steps): the hero stops on the street, before he walked 3 rows into the wall
-    await t.locate(19, 18, 8);
+    await t.locate(46, 18, 8);
     await t.hold("up", 90);
     const stop = await t.json("({ y: $gamePlayer.y, ry: +$gamePlayer._realY.toFixed(2), map: $gameMap.mapId() })");
     // (FreeMovement: the feet at the wall's foot = realY 16.5 on cell 17; before the paint he got to row 14)
@@ -28,7 +28,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // through the gate: walking up into it takes him into the tavern
     // (where it lands: the gate event's own transfer - Map001 50,53 since the tavern's v2 rebuild, 50,82 before)
     const to = await t.json("(function(){ const c = $dataMap.events[22].pages[0].list.find(c => c.code === 201); return c ? c.parameters.slice(1, 4) : null; })()");
-    await t.locate(24, 17, 8);
+    await t.locate(51, 17, 8);
     await t.hold("up", 40);
     const inside = await t.until(t.onMap(1), 10);
     const at1 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
@@ -36,37 +36,38 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         inside && !!to && to[0] === 1 && at1.x === to[1] && at1.y === to[2], { at1, to });
 
     // regions 1 and 3 on a facade cell, set in the page for the test (the town has none of them yet)
-    await t.go(8, 19, 17, 8);
-    const setRegion = r => t.json(`(function(){ const W = $dataMap.width, H = $dataMap.height; $dataMap.data[5 * W * H + 15 * W + 20] = ${r};
+    await t.go(8, 46, 17, 8);
+    const setRegion = r => t.json(`(function(){ const W = $dataMap.width, H = $dataMap.height; $dataMap.data[5 * W * H + 15 * W + 47] = ${r};
         SceneManager._scene._spriteset._tilemap.refresh(); return 0; })()`);
     const layers = () => t.json(`(function(){ const tm = SceneManager._scene._spriteset._tilemap; return { lower: tm._lowerLayer.size(), upper: tm._upperLayer.size() }; })()`);
     const before = await layers();
     await setRegion(1);
     await t.frames(3);
-    const r1 = await t.json(`(function(){ const p = ${walk}; return { kind: RegionLayers.kindAt(20, 15), walk: p(20, 15) }; })()`);
+    const r1 = await t.json(`(function(){ const p = ${walk}; return { kind: RegionLayers.kindAt(47, 15), walk: p(47, 15) }; })()`);
     t.check("region 1 on the facade cell (20,15): walkable", r1.kind === "below" && r1.walk, r1);
     await setRegion(3);
     await t.frames(3);
-    const r3 = await t.json(`(function(){ const p = ${walk}; return { kind: RegionLayers.kindAt(20, 15), walk: p(20, 15) }; })()`);
+    const r3 = await t.json(`(function(){ const p = ${walk}; return { kind: RegionLayers.kindAt(47, 15), walk: p(47, 15) }; })()`);
     const lifted = await layers();
     t.check("region 3 on it: walkable (nothing but wall there), its wall tiles move from the lower layer to the one over the hero",
         r3.kind === "above" && r3.walk && lifted.upper > before.upper && lifted.lower < before.lower, { r3, before, lifted });
-    await t.locate(20, 15, 2);
+    await t.locate(47, 15, 2);
     await t.frames(10);
     await t.shot(path.join(SHOTS, "warstwy_region3.png"));
-    await t.locate(19, 17, 8);   // (the same view as before: the layers hold only the tiles on the screen)
+    await t.locate(46, 17, 8);   // (the same view as before: the layers hold only the tiles on the screen)
     await setRegion(2);
     await t.frames(3);
     const back = await layers();
     t.check("region 2 again: blocked, the layers as they were", back.upper === before.upper && back.lower === before.lower
-        && !(await t.eval(`(${walk})(20, 15)`)), { before, back });
+        && !(await t.eval(`(${walk})(47, 15)`)), { before, back });
 
     // the colours over the map (F9 -> "Warstwy z regionów: pokaż kolory")
-    await t.locate(19, 18, 8);
+    await t.locate(46, 18, 8);
     await t.eval("RegionLayers.overlay = true; 0");
     await t.frames(10);
-    const ov = await t.json(`(function(){ const s = SceneManager._scene._spriteset._layersOverlay; return s && { vis: s.visible, w: s.bitmap && s.bitmap.width, h: s.bitmap && s.bitmap.height, sx: s.scale.x }; })()`);
-    t.check("the F9 colours: one pixel a cell (52x69) scaled to the tiles, shown over the map", ov && ov.vis && ov.w === 52 && ov.h === 69 && ov.sx === 48, ov);
+    // (2026-10-19 the town doubled: 52 x 69 -> 104 x 138 - one pixel a cell of the map as it is now)
+    const ov = await t.json(`(function(){ const s = SceneManager._scene._spriteset._layersOverlay; return s && { vis: s.visible, w: s.bitmap && s.bitmap.width, h: s.bitmap && s.bitmap.height, sx: s.scale.x, mw: $gameMap.width(), mh: $gameMap.height() }; })()`);
+    t.check("the F9 colours: one pixel a cell (the map's " + (ov && ov.mw) + "x" + (ov && ov.mh) + ") scaled to the tiles, shown over the map", ov && ov.vis && ov.w === ov.mw && ov.h === ov.mh && ov.sx === 48, ov);
     await t.shot(path.join(SHOTS, "warstwy_f9.png"));
     await t.eval("RegionLayers.overlay = false; 0");
     await t.frames(3);

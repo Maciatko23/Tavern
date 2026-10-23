@@ -9,8 +9,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ilib import *   # noqa: F401,F403
 
 # the doors on Map008 (event id: the cell in front of the door, where one comes out facing down)
-DOORS = {88: (6, 39), 94: (10, 40), 95: (14, 39), 114: (41, 40), 4: (47, 40), 121: (9, 31), 124: (12, 30),
-         134: (12, 47), 137: (29, 47), 141: (37, 50), 236: (48, 31)}
+DOORS = {88: (38, 73), 94: (14, 48), 95: (18, 47), 114: (85, 48), 4: (91, 48), 121: (36, 39), 124: (39, 38),
+         134: (13, 61), 137: (59, 74), 141: (6, 89), 236: (86, 32)}
 
 # ---- kinds (A2 borders, A3 walls, A4 floors) - tools/tavern/catalog.json
 B_WOOD, B_WOOD2, B_STONE, B_LOG = 24, 25, 16, 33

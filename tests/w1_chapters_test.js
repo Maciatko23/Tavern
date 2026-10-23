@@ -23,7 +23,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const notes = () => J("Journal.data().notes.map(n => n.title)");
     const market = d => Math.ceil(d / 7) * 7;
 
-    await t.newGame({ map: 8, x: 24, y: 37, dir: 8, hour: 9, day: 4, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 50, y: 52, dir: 8, hour: 9, day: 4, quiet: true, minimap: false });
     await at(4, 9, 30);
     // W1 at chapter 3 (the clues and the night at the pond are town_quests_test's)
     await t.eval("TownQuests.start('W1', 2); 0");
@@ -65,7 +65,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ ch. 4: the raven grate at the well's bottom, then Tadek
     await t.give(93, 2);
-    await t.locate(26, 34, 4);
+    await t.locate(53, 50, 4);
     await t.frames(10);
     await t.eval(`(function(){ window.__drvPick = null; return 0; })()`);
     const down = await t.talkTo("$gameMap.event(245)", ["Zejść"], { place: false });
@@ -80,7 +80,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const gr = await t.talkTo("$gameMap.event(952)", [], { place: false }); gr.text = gr.text.replace(/\s+/g, " ");
     t.check("...listening at the grate: 'Płynie... ale nie tutaj', the note 'Krata z krukiem' - next: ask Tadek",
         /ale nie tutaj/.test(gr.text) && (await notes()).includes("Krata z krukiem") && (await step()) === "active:4", gr.text.slice(0, 200));
-    await t.go(8, 8, 50, 8);
+    await t.go(8, 9, 64, 8);
     await at(4, 10, 20);
     const tadek = await talk("kowal", []);
     t.check("...Tadek: 'Tej kraty nie kuł kowal, tylko zakon' - and the same raven on a hatch by the orangery - chapter 5 next",
@@ -99,7 +99,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(20);
     const thrown = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, tried: TownQuests.rec('W1').t.tried, night: TownQuests.nightOf(), op: TownQuests.opinion() })");
     t.check("walking up to him unsneaking: caught ('Stój! Kto tu?!'), thrown out to the town's side of the east gate, opinion -3, not again tonight",
-        out && thrown.x === 50 && thrown.y === 51 && thrown.tried === thrown.night && thrown.op === op1 - 3 && (await t.notices()).some(n => /Złapali cię w ogrodzie dworu/.test(n)), thrown);
+        out && thrown.x === 102 && thrown.y === 51 && thrown.tried === thrown.night && thrown.op === op1 - 3 && (await t.notices()).some(n => /Złapali cię w ogrodzie dworu/.test(n)), thrown);
 
     // the next night: Feliks at the hatch behind the orangery 1:30-3:00 with Kuba and his barrels, watched unseen (sneaking). (2026-10-12:
     // the user's rebuilt garden - no back gate, no pump: the wooden hatch under the pine, 3,20; Kuba comes in by the main gate)
@@ -132,7 +132,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the hatch with the raven on its bolt ('Dwór stoi na kanale zakonu'), the planter holds the sluice drawing signed 'F.' - evidence; chapter 6 next",
         /kanale zakonu/.test(pump.text) && /zasuwa na dworze/.test(drawer.text) && w5.v === 1 && w5.clue && w5.r.step === 6 && (await notes()).includes("Oranżeria nocą"), { pump: pump.text.slice(0, 120), w5 });
     await t.eval("TownLife.hold('straznik', false); Hunting.setSneak(false); 0");
-    await t.go(8, 36, 40, 8);
+    await t.go(8, 80, 48, 8);
     await at(6, 9, 20);
     await t.saveTo(6);
 
@@ -186,7 +186,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const wonNotes = await notes();
     t.check("...beaten (one spared - he blurts out who pays them): Feliks broke the deal, the drawing is still the hero's - the choice of chapter 6 comes back, with a witness",
         won.f.w1AmbushWon && won.f.w1Confession && won.f.feliksBroke && won.v === 1 && won.r.step === 6 && wonNotes.includes("Napad na Polnej drodze") && wonNotes.includes("Człowiek Feliksa mówi"), won);
-    await t.go(8, 36, 40, 8);
+    await t.go(8, 80, 48, 8);
     await at(23, 8, 30);
     const g3 = await t.gold();
     const fel = await talk("feliks", []);
@@ -213,7 +213,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.loadFrom(8, { quiet: true });
     await at(22, 10, 20);
     await toRoad();
-    await t.go(8, 36, 40, 8);
+    await t.go(8, 80, 48, 8);
     await t.frames(30);
     const away = await J("({ r: TownQuests.rec('W1'), f: TownQuests.state().flags, text: TownQuests.Q.W1.steps[8].text })");
     t.check("...or away from the road mid-fight: he got away - Feliks pays no more, his men wait again three days on",
@@ -222,7 +222,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const again = await toRoad();
     t.check("...three days later on Polna droga they are there again", again && (await J("TownQuests.rec('W1').t.amb")) === 25);
     await t.eval("Humans.clear('w1Feliks'); 0");
-    await t.go(8, 36, 40, 8);
+    await t.go(8, 80, 48, 8);
 
     // ------------------------------------------------------------------ ch. 6 b) quietly to the Lord (a story game: the debt)
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
@@ -237,7 +237,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("ch. 6 b: the Lord (a tick over him) is shown the drawing - he did not know; Feliks disappears quietly, 200 G off grandpa's debt, the Lord an ally",
         lordMark === "ready" && /pismo Feliksa/.test(lord.text) && b.paid === paid0 + 200 && (await t.gold()) === gl && b.f.lordAlly && b.feliks && b.v === 0 && b.r.step === 9,
         { text: lord.text.slice(0, 200), b, paid0 });
-    await t.go(8, 23, 36, 8);
+    await t.go(8, 50, 52, 8);
     await at(10, 9, 20);
     const kuba = await talk("woziwoda", []);
     t.check("...Kuba, without his trade, holds it against the hero (once)", /nie mam towaru/.test(kuba.text), kuba.text);

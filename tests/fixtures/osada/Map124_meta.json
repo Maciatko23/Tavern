@@ -1,0 +1,676 @@
+{
+ "concept": "rzezbiarz",
+ "width": 13,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "res_rzezbiarz": [
+   3,
+   5,
+   2
+  ],
+  "landing": [
+   6,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "deski_znaki",
+   "cat": "floorprop",
+   "cells": [
+    [
+     1,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 4,
+   "event": true,
+   "art": [
+    48,
+    51,
+    95,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "deski_znaki",
+   "cat": "floorprop",
+   "cells": [
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 2,
+   "y": 4,
+   "event": true,
+   "art": [
+    48,
+    51,
+    95,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "warsztat_rzezbiarza",
+   "cat": "floorprop",
+   "cells": [
+    [
+     3,
+     6
+    ],
+    [
+     4,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 3,
+   "y": 6,
+   "event": true,
+   "art": [
+    53,
+    86,
+    139,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "polka_kruki",
+   "cat": "wallitem",
+   "cells": [
+    [
+     5,
+     2
+    ]
+   ],
+   "group": "Izba półka",
+   "x": 5,
+   "y": 2,
+   "event": true,
+   "art": [
+    48,
+    112,
+    95,
+    138
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     5,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 5,
+   "y": 6
+  },
+  {
+   "kind": "swieca_stolek",
+   "cat": "tableitem",
+   "cells": [
+    [
+     5,
+     6
+    ]
+   ],
+   "group": "Izba świece",
+   "x": 5,
+   "y": 6,
+   "event": true,
+   "art": [
+    40,
+    39,
+    56,
+    71
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "tarcza",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Izba tarcza",
+   "x": 9,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 3,
+   "sr": 1
+  },
+  {
+   "kind": "miecz",
+   "cat": "wallitem",
+   "cells": [],
+   "group": "Izba miecz",
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 2,
+   "sheet": "D",
+   "sc": 5,
+   "sr": 0
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     4
+    ],
+    [
+     11,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "cauldron",
+   "cat": "floorprop",
+   "cells": [
+    [
+     7,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 7,
+   "y": 6
+  },
+  {
+   "kind": "blok",
+   "cat": "floorprop",
+   "cells": [
+    [
+     9,
+     8
+    ],
+    [
+     10,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 8
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     11,
+     8
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 11,
+   "y": 8
+  },
+  {
+   "kind": "odcięte deski",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 10,
+   "sr": 5
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     8,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 8,
+   "y": 7
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": null,
+   "x": 11,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   6,
+   9
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba półka",
+   "polka_kruki",
+   5,
+   2
+  ],
+  [
+   "Izba okna",
+   "window",
+   7,
+   1
+  ],
+  [
+   "Izba tarcza",
+   "tarcza",
+   9,
+   2
+  ],
+  [
+   "Izba miecz",
+   "miecz",
+   10,
+   1
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    6,
+    9,
+    6,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 124,
+ "key": "rzezbiarz",
+ "display": "Chata rzeźbiarza",
+ "exits": [
+  {
+   "x": 6,
+   "y": 9,
+   "door": "Drzwi chaty 4",
+   "town": [
+    8,
+    26
+   ],
+   "landing": [
+    6,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Osada Milczących"
+  }
+ ],
+ "residents": [
+  {
+   "key": "rzezbiarz",
+   "x": 3,
+   "y": 5,
+   "dir": 2
+  }
+ ],
+ "looks": [
+  [
+   1,
+   4,
+   "Deski ze znakami"
+  ],
+  [
+   2,
+   4,
+   "Deski ze znakami"
+  ],
+  [
+   3,
+   6,
+   "Warsztat"
+  ],
+  [
+   5,
+   3,
+   "Półka z krukami"
+  ],
+  [
+   9,
+   3,
+   "Tarcza"
+  ],
+  [
+   10,
+   3,
+   "Miecz"
+  ],
+  [
+   10,
+   8,
+   "Kamień z krukiem"
+  ]
+ ]
+}

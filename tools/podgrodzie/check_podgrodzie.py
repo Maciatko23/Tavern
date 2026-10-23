@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/check_podgrodzie.py [path to Map111.json]  -> every problem of Podgrodzie, exit code 1 if any
 # The staged map (or the installed one) checked with the game's walking rules in Python (tools/tavern/engine.py: tile flags,
 # events "same as characters", <Occupy>) plus RegionLayers.js (region 1 always walkable, 2 always closed, 3 = the tiles that

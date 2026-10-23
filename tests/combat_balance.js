@@ -6,7 +6,9 @@
 // the life it lost is counted, and below REFILL of it it gets its life back (a "refill" - what a player pays in food and bandages).
 // Not a pass / fail test (not *_test.js): it prints the table and writes tests/balance/wyniki.json.
 //
-//   CDP_PORT=9465 node tests/combat_balance.js [filter|filter...] [--skill 0.75] [--reps 2] [--speed 4] [--limit 240] [--grow '{"dmg":0.05}']
+//   CDP_PORT=9465 node tests/combat_balance.js [filter|filter...] [--skill 0.75] [--reps 2] [--speed 4] [--limit 240] [--grow '{"dmg":0.05}'] [--bron]
+// (--bron: the new weapons and armour - js/plugins/Bron_Data.js + Bron.js put into the page with tools/bron/staging's items, not installed:
+// the hero gets the set of his level's material - 6-11 bronze, 12-17 iron, 18-22 steel, 23+ the order's - a sword, a shield, five pieces)
 // (--grow: CreaturesData.GROW for this run - the old rates were {"hp":0.12,"bossHp":0.06,"dmg":0.1,"str":0.035})
 "use strict";
 const fs = require("fs");
@@ -21,7 +23,17 @@ const SPEED = Number(opt("speed", 4));
 const GROW = opt("grow", "");
 const SET = opt("set", "");   // (a trial of the bosses' / kinds' numbers: '{"boss_70":{"dmg":0.9},"kamiennik":{"moves":{"slam":{"dmg":18}}}}')
 const LIMIT = Number(opt("limit", 240));   // seconds of game time a fight may last
+const BRON = argv.includes("--bron");
+if (BRON) argv.splice(argv.indexOf("--bron"), 1);
 const FILTER = argv[0] || "";
+// the new gear by the hero's level (Bron_Data.js ids): [the weapon, the shield, head, torso, hands, legs, feet]
+const GEAR = [
+    [6, "brąz", [304, 376, 344, 352, 361, 367, 371]],
+    [12, "żelazo", [305, 378, 346, 353, 362, 368, 372]],
+    [18, "stal", [308, 379, 347, 357, 364, 369, 373]],
+    [23, "zakonne", [311, 380, 348, 359, 365, 370, 374]]
+];
+const gearOf = level => { let g = null; for (const x of GEAR) if (level >= x[0]) g = x; return g; };
 
 // the hero at each depth: level, attributes (3 points a level: Siła 35%, Kondycja 30%, Zręczność 15%, Czujność 10%, Hart ducha 10% -
 // deeper Hart ducha 15%), the weapon in hand (60 stone axe, 115 iron axe), the wooden shield 155, the leather jacket 171
@@ -240,7 +252,16 @@ const BOT = String.raw`(function(){
     return 0;
 })()`;
 
-kit.test({ port: 9465 }, async t => {
+kit.test({ port: 9465, plugins: BRON ? ["Bron_Data", "Bron"] : [] }, async t => {
+    if (BRON) {
+        const items = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "bron", "staging", "Items_dopisek.json"), "utf8"));
+        const notes = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "bron", "staging", "Items_notatki.json"), "utf8"));
+        await t.eval(`(function(){ const add = ${JSON.stringify(items)}, notes = ${JSON.stringify(notes)};
+            for (let i = $dataItems.length; i < 300; i++) $dataItems[i] = { id: i, name: "", note: "", meta: {}, iconIndex: 0, itypeId: 1, price: 0, description: "" };
+            for (const it of add) { DataManager.extractMetadata(it); $dataItems[it.id] = it; }
+            for (const id of Object.keys(notes)) { const it = $dataItems[id]; if (it.note.indexOf(notes[id]) < 0) it.note = it.note ? it.note + "\\n" + notes[id] : notes[id]; DataManager.extractMetadata(it); }
+            Equipment.readNotes(); Combat.refreshGear(true); Bron.wire(); return 0; })()`);
+    }
     t.check("a new game on the meadow (Map004), 12:00", await t.newGame({ map: 4, x: 20, y: 14, hour: 12, quiet: true }));
     await t.eval("Hunting.RAID.perHour = 0; Creatures.auto(false); Humans.auto(false); Combat.setCombatMode(true); 0");
     if (GROW) await t.eval(`Object.assign(CreaturesData.GROW, ${GROW}); 0`);
@@ -262,13 +283,20 @@ kit.test({ port: 9465 }, async t => {
     const rows = [];
     for (const [name, floor, kind, level, hero, opts = {}] of FIGHTS) {
         if (FILTER && !FILTER.split("|").some(f => name.toLowerCase().includes(f.toLowerCase()) || kind.indexOf(f) >= 0)) continue;   // (a|b|c: any of them)
-        const runs = [];
+        const runs = [], gear = BRON ? gearOf(hero.level) : null;
         for (let rep = 0; rep < REPS; rep++) {
             await t.eval(`(function(){
                 Creatures.clear(); Humans.clear(); for (const l of [Creatures.drops(), Humans.drops()]) l.length = 0; Combat.resetAct();
                 const h = Combat.hero(); h.level = ${hero.level}; h.attr = ${JSON.stringify(hero.attr)}; h.points = 0; h.skillPoints = 0; h.skills = {}; h.rev = (h.rev || 0) + 1;
                 for (const id of [60, 63, 115, 116, 155, 171, 156, 154, 125, 126]) $gameParty.loseItem($dataItems[id], 99);
-                $gameParty.gainItem($dataItems[${hero.weapon}], 1); if (${hero.shield}) $gameParty.gainItem($dataItems[155], 1); if (${hero.jacket}) $gameParty.gainItem($dataItems[171], 1);
+                for (let id = 300; id < $dataItems.length; id++) if ($dataItems[id] && $dataItems[id].name) $gameParty.loseItem($dataItems[id], 99);
+                const gear = ${JSON.stringify(gear ? gear[2] : null)};
+                if (gear) {
+                    for (const id of gear) $gameParty._items[id] = 1;
+                    Equipment.ensure(); Equipment.equip("left", gear[1]);
+                    ["head", "torso", "hands", "legs", "feet"].forEach((p, i) => Equipment.equip(p, gear[2 + i]));
+                    Combat.setHand("m" + gear[0]); if (window.Bron) Bron.refresh();
+                } else { $gameParty.gainItem($dataItems[${hero.weapon}], 1); if (${hero.shield}) $gameParty.gainItem($dataItems[155], 1); if (${hero.jacket}) $gameParty.gainItem($dataItems[171], 1); }
                 const a = $gameParty.leader(); a.refresh(); a.recoverAll(); $gameSystem.setStamina(100);
                 $gamePlayer.locate(${room.x - 3}, ${room.y}); $gamePlayer.setDirection(6); $gameMap.setDisplayPos(${room.x} - 13, ${room.y} - 7);
                 const kind = ${JSON.stringify(kind)}, out = [];
@@ -294,13 +322,13 @@ kit.test({ port: 9465 }, async t => {
             await t.frames(10);
         }
         const avg = k => Math.round(runs.reduce((s, r) => s + r[k], 0) / runs.length * 10) / 10;
-        rows.push({ name, floor, kind, level, hero: hero.level, attr: hero.attr, weapon: hero.weapon, won: runs.filter(r => r.won).length + "/" + runs.length,
+        rows.push({ name, floor, kind, level, hero: hero.level, attr: hero.attr, weapon: gear ? gear[2][0] : hero.weapon, gear: gear ? gear[1] : "", won: runs.filter(r => r.won).length + "/" + runs.length,
             s: avg("s"), lostPct: Math.round(runs.reduce((s, r) => s + r.lost / r.mhp, 0) / runs.length * 100), refills: avg("refills"), mhp: runs[0].mhp, foeHp: runs[0].foeHp });
     }
-    console.log("\n| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |");
-    console.log("|---|---|---|---|---|---|---|");
-    for (const r of rows) console.log(`| ${r.name} | ${r.level} (${r.foeHp} życia) | ${r.hero} (${r.attr.str}/${r.attr.con}, ${r.mhp} życia) | ${r.won} | ${r.s} | ${r.lostPct} | ${r.refills} |`);
+    console.log("\n| Walka | Wróg (poz.) | Bohater (poz., Siła/Kond.) | Sprzęt | Wygrane | Czas [s] | Stracone życie [% max] | Odnowienia |");
+    console.log("|---|---|---|---|---|---|---|---|");
+    for (const r of rows) console.log(`| ${r.name} | ${r.level} (${r.foeHp} życia) | ${r.hero} (${r.attr.str}/${r.attr.con}, ${r.mhp} życia) | ${r.gear || "stary (" + r.weapon + ")"} | ${r.won} | ${r.s} | ${r.lostPct} | ${r.refills} |`);
     fs.mkdirSync(path.join(__dirname, "balance"), { recursive: true });
-    fs.writeFileSync(path.join(__dirname, "balance", "wyniki" + (FILTER ? "_" + FILTER.replace(/\W+/g, "_") : "") + ".json"), JSON.stringify({ skill: SKILL, grow: GROW || null, rows }, null, 1));
+    fs.writeFileSync(path.join(__dirname, "balance", "wyniki" + (BRON ? "_bron" : "") + (FILTER ? "_" + FILTER.replace(/\W+/g, "_") : "") + ".json"), JSON.stringify({ skill: SKILL, grow: GROW || null, bron: BRON, rows }, null, 1));
     t.check("the fights ran", rows.length > 0);
 });

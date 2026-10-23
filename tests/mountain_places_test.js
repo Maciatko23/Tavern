@@ -1,6 +1,7 @@
 // The mountain world of W8 "Żelazna Pięść" (tools/mountains, docs/miasta_miejsca_zadan.md "Góry"; 2026-10-06) - maps, ways in and
 // out, markers; no quest logic:
-//   - Leśna droga (Map021) -> its trail's end on the east edge (39, 8..10) -> Map013 "Góry i kamieniołom" (1, 38..40) and back
+//   - Leśna droga (Map021) -> its trail's end on the east edge (79, 8..10; the map doubled 2026-10-19, tools/powieksz) -> Map013
+//     "Góry i kamieniołom" (1, 38..40) and back (-> Leśna droga 78, 9)
 //   - Map013: the markers (13 keys), each reachable on foot from the west edge; the steps up both shelves; the quarry's things
 //     (the raven in the wall, blocks, the crane, the dry pond: no water tile anywhere on the map); the cave's mouth (44,7) -> Map014
 //   - Map014 "Jaskinia": the camp (fire = a light, lanterns), the guard and diggers standing (no human enemies: <Humans:off>),
@@ -8,7 +9,8 @@
 //   - the tunnel: closed while switch 15 is off (the rubble blocks, a popup, no transfer) on both sides - Map014 (3,9) and floor 50
 //     Map149 (37,8); with the switch on the passages lead to each other
 //   - the Silent's gate (Map013 6,3): closed while switch 16 is off (it blocks, the exits behind it do nothing); with the switch on
-//     the hero walks through to Map120 "Osada Milczących" (20,31); its markers; back -> Map013 (6,1)
+//     the hero walks through to Map120 "Osada Milczących" (20,31); its markers; back from its bottom edge (row 67 since the map
+//     doubled) -> Map013 (6,1)
 // Shots: docs/gory/ (gory_wejscie, kamieniolom, kamieniolom_znak, jaskinia_wejscie, oboz_kopaczy, marek, tunel_zawal, tunel_otwarty,
 // pietro50_przekop, brama_milczacych, osada, osada_krag).
 // CDP_PORT=9466 node tests/run.js mountain_places_test
@@ -51,9 +53,9 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const popups = async () => (await t.popups({ clear: true })).join(" | ");
 
     // ================================================================ Leśna droga -> Góry
-    await t.newGame({ map: 21, x: 36, y: 9, dir: 6, day: 3, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 21, x: 76, y: 9, dir: 6, day: 3, hour: 10, quiet: true, minimap: false });
     const road = await t.json(`$gameMap.events().filter(e => /Góry i kamieniołom/.test(e.event().name)).map(e => [e.x, e.y])`);
-    t.check("Leśna droga has three exits at the end of its east trail (39, 8..10)", JSON.stringify(road) === "[[39,8],[39,9],[39,10]]", road);
+    t.check("Leśna droga has three exits at the end of its east trail (79, 8..10)", JSON.stringify(road) === "[[79,8],[79,9],[79,10]]", road);
     await walkOut("right", 21);
     const in13 = await t.until(t.onMap(13), 15);
     const at13 = await t.json(where);
@@ -191,7 +193,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.locate(19, 23, 8);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "osada_krag.png"));
-    await t.locate(20, 32, 2);
+    await t.locate(20, 65, 2);                       // (the bottom edge is row 67 since the map doubled, tools/powieksz)
     await walkOut("down", 120);
     const back13 = await t.until(t.onMap(13), 15);
     const atg = await t.json(where);
@@ -203,5 +205,5 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await walkOut("left", 13);
     const in21 = await t.until(t.onMap(21), 15);
     const at21 = await t.json(where);
-    t.check("walking left off Map013's west edge -> Leśna droga (38, 9) facing left", in21 && at21.x === 38 && at21.y === 9 && at21.d === 4, at21);
+    t.check("walking left off Map013's west edge -> Leśna droga (78, 9) facing left", in21 && at21.x === 78 && at21.y === 9 && at21.d === 4, at21);
 });

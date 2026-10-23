@@ -114,7 +114,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.setDay(10, 9);
         await t.eval(`TownQuests.start("K63"); Ludzie.opts.kilnWait = 20; 0`);
         await t.give(61, 12);
-        await t.go(111, 23, 28);
+        await t.go(111, 41, 30);
         await t.frames(20);
         const zb = await resHere("drwal");
         const h = await talk(ev("drwal"), []);
@@ -129,12 +129,12 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const r2 = await rec("K63");
         t.check("...odparci (humansDone) -> krok „odbierz węgiel”", r2.step === 2 && !!(await S()).k63.guarded, r2);
         await t.setDay(12, 9);
-        await t.go(111, 23, 28);
+        await t.go(111, 41, 30);
         const c0 = await t.count(79);
         await talk(ev("drwal"), []);
         const r3 = await rec("K63");
         t.check("...dzień 12: Zbych daje 10 worków węgla, krok „do kowala”", (await t.count(79)) === c0 + 10 && r3.step === 3, { c: await t.count(79), r3 });
-        await t.go(8, 8, 50);
+        await t.go(8, 9, 64);
         await t.setHour(10);
         await t.frames(20);
         await t.eval(`(function(){ for (const q of TownQuests.QUESTS) if (q.giver === "kowal" && q.id !== "K63") TownQuests.state().declined[q.id] = Tawerna.time.day(); return 0; })()`);
@@ -159,7 +159,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             const wagon = m === 21 ? true : await shown({ 22: 2520, 4: 2554, 3: 2570 }[m]);
             seen.push([d, m, stop, !!r && !r.hidden, wagon]);
         }
-        t.check("handlarz krąży: dzień % 4 = 0 Polna droga, 1 Leśna droga, 2 Łąka, 3 pole dziadka - stoi na postoju, wóz widać",
+        t.check("handlarz krąży: dzień % 4 = 0 Polna droga, 1 Leśna droga, 2 Łąka, 3 Kruczy Jar - stoi na postoju, wóz widać",
             seen.every(([d, m, stop, here, wagon]) => stop === m && here && wagon), seen);
         await t.setHour(21);
         await t.frames(25);

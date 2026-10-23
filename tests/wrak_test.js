@@ -186,7 +186,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("...w rozmowie popiersie rozbitka (Rozbitek_Bust)", meet.log.some(l => l.who === ery[0] && l.bust) && /Rozbitek_Bust/.test(JSON.stringify(bustOk)), { bustOk, log: meet.log.slice(0, 3) });
 
     // ---------------------------------------------------------------- poszlaka u Józka Łaty (Podgrodzie)
-    await t.go(111, 20, 20, 2);
+    await t.go(111, 43, 30, 2);
     await t.setHour(11);
     await t.frames(40);
     const jozekTalk = await t.talkTo(`TownLife.eventOf("szmaciarz")`, ["Nie"], { secs: 30 });
@@ -195,7 +195,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         /okiem/.test(jozekTalk.text) && !!c2.clues.jozek && c2.w12.step === 1, { text: jozekTalk.text, c2 });
 
     // ---------------------------------------------------------------- nocą przy studni: tatuaż (skradanie / zza pleców)
-    await t.go(8, 30, 34, 4);
+    await t.go(8, 57, 50, 4);
     await t.setHour(22.3);
     await t.frames(60);
     const wellEv = await t.json(`(function(){ const e = TownLife.eventOf("rozbitek"); return e ? [e.x, e.y, e.direction(), !!(e._town && e._town.hidden)] : null; })()`);

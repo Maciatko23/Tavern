@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python fidelity.py  -> docs/miasteczko/wiernosc_<n>.png + tools/town/staging/fidelity.json
 # The fidelity test: every reference picture the user gave (the pack's store screenshots, shown at 2x) is found in the
 # author's sample maps (tools/town/winlu_samples, rendered by mzrender.py with the author's tileset 1 from our copies of the

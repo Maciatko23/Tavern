@@ -38,8 +38,8 @@
  * Mielerz Zbycha Smolarza przy Leśnej drodze (co 6 dni dwa dni wypału,
  * węgiel po 4 G, drewno na wypał), pasterz Wawrzyn Owczarz z sześcioma
  * owcami (koszar na Łące, co trzeci dzień przy menhirach), wędrowny handlarz
- * Szymon Juczny (cztery postoje: Polna droga, Leśna droga, Łąka, pole
- * dziadka), patrole garnizonu na przylądku i wybrzeżu, obóz kopaczy Czarnych
+ * Szymon Juczny (cztery postoje: Polna droga, Leśna droga, Łąka, Kruczy
+ * Jar), patrole garnizonu na przylądku i wybrzeżu, obóz kopaczy Czarnych
  * Oczu w górach (od W8 rozdz. 3), jaskinia przemytników pod zatoczką na
  * przystani (tylko w odpływie, od W5 rozdz. 4), stare groby Ługów.
  * Zadania: K63, K64, K65, K66, D34, D35.
@@ -210,7 +210,7 @@
     const kilnCycle = () => Math.floor((workDay(D.CYCLE.kiln.dawn) - D.CYCLE.kiln.work[0]) / D.CYCLE.kiln.every);
     const stopIndex = () => ((workDay(D.CYCLE.dawn) % 4) + 4) % 4;
     const stopMap = () => D.CYCLE.stops[stopIndex()];
-    const stopName = m => ({ 22: "Polna droga", 21: "Leśna droga", 4: "Łąka", 3: "pole dziadka" })[m === undefined ? stopMap() : m] || "";
+    const stopName = m => ({ 22: "Polna droga", 21: "Leśna droga", 4: "Łąka", 3: "Kruczy Jar" })[m === undefined ? stopMap() : m] || "";
     function pasterz018() {
         if (!has()) return false;
         const p = D.CYCLE.pasture018, h = hour();
@@ -350,7 +350,8 @@
     Sprite_Character.prototype.updatePosition = function() {
         _Sprite_Character_updatePosition.call(this);
         const ch = this._character;
-        if (ch instanceof Game_Event && ch.eventId() >= D.IDS[0] && ch.eventId() <= D.IDS[1]) { const o = offOf(ch); if (o) { this.x += o[0]; this.y += o[1]; } }
+        // (2026-10-22: also the cave's own events on Map177 - its table has <LudOff:24,0> in the map file)
+        if (ch instanceof Game_Event && ((ch.eventId() >= D.IDS[0] && ch.eventId() <= D.IDS[1]) || $gameMap.mapId() === D.MAP.jaskinia)) { const o = offOf(ch); if (o) { this.x += o[0]; this.y += o[1]; } }
     };
 
     // the looks by the state (every 20 frames and as the map comes up)
@@ -873,11 +874,20 @@
         branches.push(cmdAct([], ["talk", "drwal"]), []);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
+    // (2026-10-23, Bron.js) other trades of the same people, as lines of their own menus - their rules, hours and words kept:
+    // addMenu(fn(key, ev) -> [{ label, cmds, say }]) - say: a line said before a soldier's choice
+    const extraMenus = [];
+    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
+    function extraRows(key, ev) {
+        const out = [];
+        for (const fn of extraMenus) { try { for (const r of fn(key, ev) || []) if (r && r.label) out.push(r); } catch (e) { console.error("[Ludzie] menu " + key, e); } }
+        return out;
+    }
     function smithMenu(ev) {
-        const spk = spkOf(ev, "Tadek Młot"), it = item(D.SMITH.steel);
+        const spk = spkOf(ev, "Tadek Młot"), it = item(D.SMITH.steel), extra = extraRows("kowal", ev);
         const out = linesTo([], spk, TX.smithHello);
-        return choiceTo(out, [TX.menu.steel + " (" + (it ? it.name : "Stal") + " - " + D.SMITH.price + " G)", TX.menu.talk, TX.menu.bye],
-            [cmdAct([], ["steel"]), cmdAct([], ["talk", "kowal"]), []], 2);
+        return choiceTo(out, [TX.menu.steel + " (" + (it ? it.name : "Stal") + " - " + D.SMITH.price + " G)"].concat(extra.map(r => r.label), [TX.menu.talk, TX.menu.bye]),
+            [cmdAct([], ["steel"])].concat(extra.map(r => r.cmds || []), [cmdAct([], ["talk", "kowal"]), []]), extra.length + 2);
     }
     // the patrol: the search (under the garrison's favour 10) when the hero comes close, else its usual words
     let searchFor = "";
@@ -1427,7 +1437,7 @@
     // ------------------------------------------------------------------
     const PLACES = [
         ["Mielerz Zbycha (Leśna droga)", 21, 49, 21, 8], ["Szałas węglarza", 21, 53, 23, 8], ["Postój handlarza (Polna droga)", 22, 52, 23, 8],
-        ["Postój handlarza (Leśna droga)", 21, 54, 18, 8], ["Postój handlarza (Łąka)", 4, 62, 12, 8], ["Postój handlarza (pole dziadka)", 3, 61, 12, 8],
+        ["Postój handlarza (Leśna droga)", 21, 54, 18, 8], ["Postój handlarza (Łąka)", 4, 62, 12, 8], ["Postój handlarza (Kruczy Jar)", 3, 61, 12, 8],
         ["Koszar i pastwisko (Łąka)", 4, 52, 45, 8], ["Pastwisko przy menhirach", 18, 68, 34, 8], ["Omszała łąka (owca K64)", 17, 60, 40, 8],
         ["Juk K65 (Leśna droga)", 21, 55, 13, 8], ["Obóz kopaczy (Góry)", 13, 101, 77, 8], ["Szyb kopaczy", 13, 105, 73, 8],
         ["Zatoczka: wylot jaskini (Przystań)", 125, 16, 66, 8], ["Jaskinia przemytników (mapa 177)", 177, 3, 11, 8], ["Stare groby Ługów", 168, 89, 28, 8],
@@ -1496,7 +1506,7 @@
         if (c) out.push(D.EPILOG.cave[c]);
         return out;
     }
-    window.Ludzie = T.register(PLUGIN, { epilogue,
+    window.Ludzie = T.register(PLUGIN, { epilogue, addMenu,
         PKG: "C", VERSION: D.VERSION, DATA: D, ready: true, state: () => S(), act, opts: OPTS, auto: v => { OPTS.auto = !!v; },
         // for the other packages: B (the bandits' camp by the kiln), D (the eagle's stash)
         mielerzBurning, stashFound,

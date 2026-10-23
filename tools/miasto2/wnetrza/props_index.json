@@ -1,0 +1,623 @@
+{
+ "kon_gniady": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   75,
+   136,
+   144
+  ],
+  "name": "koń gniady w boksie (głową w lewo)",
+  "occupy": "right=1"
+ },
+ "kon_gniady_prawo": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   75,
+   136,
+   144
+  ],
+  "name": "koń gniady w boksie (głową w prawo)",
+  "occupy": "right=1"
+ },
+ "kon_siwy": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   75,
+   136,
+   144
+  ],
+  "name": "koń siwy w boksie (głową w lewo)",
+  "occupy": "right=1"
+ },
+ "kon_siwy_prawo": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   75,
+   136,
+   144
+  ],
+  "name": "koń siwy w boksie (głową w prawo)",
+  "occupy": "right=1"
+ },
+ "kon_kary": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   75,
+   136,
+   144
+  ],
+  "name": "koń kary w boksie (głową w lewo)",
+  "occupy": "right=1"
+ },
+ "kon_kary_prawo": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 4,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   75,
+   136,
+   144
+  ],
+  "name": "koń kary w boksie (głową w prawo)",
+  "occupy": "right=1"
+ },
+ "siodlo": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 6,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   47,
+   92,
+   97,
+   144
+  ],
+  "name": "siodło na stojaku"
+ },
+ "chomato": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 6,
+  "pattern": 1,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   57,
+   84,
+   87,
+   130
+  ],
+  "name": "chomąto i lejce na kołku"
+ },
+ "stog_siana": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 6,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   7,
+   48,
+   137,
+   144
+  ],
+  "name": "stóg siana",
+  "occupy": "left=1,right=1"
+ },
+ "koryto": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 8,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   100,
+   142,
+   144
+  ],
+  "name": "koryto z wodą",
+  "occupy": "right=1"
+ },
+ "kolo_wozu": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 8,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   100,
+   96,
+   144
+  ],
+  "name": "koło od wozu oparte o ścianę"
+ },
+ "sloma": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 0,
+  "direction": 8,
+  "pattern": 2,
+  "place": "decal",
+  "w": 144,
+  "h": 144,
+  "art": [
+   52,
+   107,
+   91,
+   144
+  ],
+  "name": "rozsypana słoma"
+ },
+ "krucyfiks": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   68,
+   91,
+   114
+  ],
+  "name": "krucyfiks na ścianie"
+ },
+ "krzyz_oltarz": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 2,
+  "pattern": 1,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   87,
+   91,
+   130
+  ],
+  "name": "drewniany krzyż na ołtarzu"
+ },
+ "oltarz": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   0,
+   89,
+   144,
+   144
+  ],
+  "name": "ołtarz z czerwonym obrusem",
+  "occupy": "left=1,right=1"
+ },
+ "ikona": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 4,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   52,
+   85,
+   91,
+   132
+  ],
+  "name": "ikona świętej w złoconej ramie"
+ },
+ "witraz_1": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 4,
+  "pattern": 1,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   45,
+   96,
+   138
+  ],
+  "name": "witraż"
+ },
+ "witraz_2": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 4,
+  "pattern": 2,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   45,
+   96,
+   138
+  ],
+  "name": "witraż"
+ },
+ "witraz_3": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 1,
+  "direction": 6,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   45,
+   96,
+   138
+  ],
+  "name": "witraż"
+ },
+ "koziol": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   55,
+   89,
+   136,
+   144
+  ],
+  "name": "kozioł ciesielski z deską i piłą",
+  "occupy": "right=1"
+ },
+ "deski_oparte": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   56,
+   80,
+   87,
+   144
+  ],
+  "name": "deski oparte o ścianę"
+ },
+ "deska": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   55,
+   96,
+   88,
+   144
+  ],
+  "name": "deska oparta o ścianę"
+ },
+ "pniak_siekiera": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 4,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   74,
+   96,
+   144
+  ],
+  "name": "pniak z wbitą siekierą"
+ },
+ "kloda": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   108,
+   139,
+   144
+  ],
+  "name": "kłoda do obróbki",
+  "occupy": "right=1"
+ },
+ "stos_drewna": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 4,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   0,
+   83,
+   144,
+   144
+  ],
+  "name": "stos drewna i desek",
+  "occupy": "left=1,right=1"
+ },
+ "kula": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 6,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   60,
+   79,
+   79,
+   143
+  ],
+  "name": "kula (laska) weterana"
+ },
+ "lina": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 6,
+  "pattern": 1,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   65,
+   81,
+   78,
+   128
+  ],
+  "name": "zwój liny na kołku"
+ },
+ "rozsypane_wiory": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 6,
+  "pattern": 2,
+  "place": "decal",
+  "w": 144,
+  "h": 144,
+  "art": [
+   52,
+   107,
+   91,
+   144
+  ],
+  "name": "wióry / słoma na podłodze"
+ },
+ "lopata": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 8,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   61,
+   77,
+   81,
+   144
+  ],
+  "name": "łopata oparta o ścianę"
+ },
+ "lopaty": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 8,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   54,
+   77,
+   89,
+   144
+  ],
+  "name": "dwie łopaty grabarza"
+ },
+ "przegroda": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 2,
+  "direction": 8,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   57,
+   32,
+   87,
+   144
+  ],
+  "name": "przegroda boksu (deski na kozłach)",
+  "occupy": "up=1"
+ },
+ "siec": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 2,
+  "pattern": 0,
+  "place": "wall",
+  "w": 144,
+  "h": 144,
+  "art": [
+   50,
+   90,
+   93,
+   133
+  ],
+  "name": "sieć rybacka na kołkach"
+ },
+ "wioslo": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   65,
+   69,
+   80,
+   144
+  ],
+  "name": "wiosło oparte o ścianę"
+ },
+ "wiosla": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   60,
+   69,
+   84,
+   144
+  ],
+  "name": "para wioseł"
+ },
+ "mozdzierz": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 4,
+  "pattern": 0,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   64,
+   125,
+   80,
+   144
+  ],
+  "name": "moździerz z tłuczkiem"
+ },
+ "tabliczki": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 4,
+  "pattern": 1,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   58,
+   127,
+   85,
+   144
+  ],
+  "name": "tabliczki łupkowe z kredą"
+ },
+ "dluta": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 4,
+  "pattern": 2,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   58,
+   132,
+   86,
+   144
+  ],
+  "name": "dłuta i pobijak kamieniarza"
+ },
+ "mydlo": {
+  "sheet": "!Miasto2_Wnetrza",
+  "index": 3,
+  "direction": 6,
+  "pattern": 0,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   62,
+   131,
+   82,
+   144
+  ],
+  "name": "kostki mydła"
+ }
+}

@@ -5,7 +5,7 @@ const kit = require("./lib/kit.js");
 const OURS = ["K40", "K41", "K42", "K43", "K44", "K45", "K46"];
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
-    await t.newGame({ map: 111, x: 26, y: 17, dir: 2, day: 4, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 111, x: 43, y: 30, dir: 2, day: 4, hour: 10, quiet: true, minimap: false });
     await t.frames(30);
     const data = await t.json(`(function(){ const Q = TownQuests.QUESTS.filter(q => ${JSON.stringify(OURS)}.includes(q.id));
         const water = [138, 165, 166, 167];   // (the bucket, pots: never handed out)

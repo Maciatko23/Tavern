@@ -1,0 +1,16 @@
+Pakiet 0 rozszerzeń nowego terenu (docs/rozszerzenia/PLAN.md) - staging z tools/rozszerzenia/pakiet0.py
+
+Items.json: rezerwy 185-249 (było 184 przedmiotów)
+IconSet.png: 512x928 -> 512x1056 (ikony 464-527 wolne, przezroczyste)
+Map176.json: szkielet „Komora pod menhirami” 20x14, tileset 12 (pod mapą 18)
+Map177.json: szkielet „Jaskinia przemytników” 20x14, tileset 12 (pod mapą 125)
+System.json: przełączniki 21-28 nazwane
+Map024: wyłom w żywopłocie (7,29), (8,29)
+Map125: zatoczka x 15-19, y 65-67 (wejście od drogi przez (20,66))
+Map165: płycizna P1 x 46-48, y 23-24
+Map165: płycizna P2 x 61-63, y 18-19
+Map165: płycizna P3 x 70-72, y 23-24
+js/plugins.js: +Okolice_Data, Zasoby_Data, Lowy_Data, Ludzie_Data, Zakon_Data (po Dwor_Data), +Okolice, Zasoby, Lowy, Ludzie, Zakon (po Orzel_Lot); opisy: Forestry, TownLife, Debug
+
+Instalacja: python tools/rozszerzenia/instaluj.py --pakiet0 --wykonaj (edytor zamknięty; kopie: Tawerna_archiwum_2026-10-18/dane_przed_rozszerzeniami/pakiet0/)
+Po instalacji: otwórz projekt w edytorze na nowo i raz zajrzyj do Menedżera wtyczek przed zapisem.

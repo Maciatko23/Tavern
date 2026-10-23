@@ -8,7 +8,7 @@
 // needs (a window, a wall, a gate, a glint on the road) are events put into the maps (Tawerna.inject, ids 951-959), there only while
 // a quest needs them. "Opinia w miasteczku" 0-100 (the town's opinion of the hero, its tiers and greetings), the market day every
 // 7 days, the calendar (ferry days, the dated days of the year), the bell's signals (W2) and a little bell-ringing mini-game.
-// The journal has the tab "Miasteczko" (quests, the opinion, the calendar, the bell's signals) and the goal window follows one quest.
+// The journal's tab "Zadania" lists the quests (Journal.addQuestSource; the opinion, the calendar, the bell's signals under MIASTECZKO) and the goal window follows one quest.
 // Data: TownQuests_Data.js (right above this plugin). The state: Tawerna.state("townQuests").
 // Bus: emits townQuestAccepted { id, title }, townQuestDone { id, kind, title, giver, gold, xp, opinion }, townQuestFailed { id }.
 // DROUGHT (the user's rule): nothing here ever gives the hero water.
@@ -48,7 +48,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Questy miasteczka: zadania od mieszkańców i stałych bywalców tawerny (oferta, kroki, nagrody), Opinia w miasteczku, dzień targowy, kalendarz, sygnały dzwonu, mini-gra dzwonu, zakładka „Miasteczko” w dzienniku. v1.4.0
+ * @plugindesc Questy miasteczka: zadania od mieszkańców i stałych bywalców tawerny (oferta, kroki, nagrody), Opinia w miasteczku, dzień targowy, kalendarz, sygnały dzwonu, mini-gra dzwonu, zadania miasteczka w zakładce „Zadania” dziennika. v1.4.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -60,7 +60,7 @@
  * ============================================================================
  * Zadania, teksty i nagrody są w TownQuests_Data.js (ma stać nad tą
  * wtyczką). Działa z TownLife.js (mieszkańcy miasteczka, mapa 8), Journal.js
- * (zakładka „Miasteczko”, okienko celu), Story.js (Lord i dziadek Stach).
+ * (zakładka „Zadania”, okienko celu), Story.js (Lord i dziadek Stach).
  *
  * Mieszkaniec z zadaniem ma nad głową żółty „!”, a z zadaniem do oddania -
  * zielony ptaszek. Miejsca zadań (okienko piekarni, ściany do obwieszczeń,
@@ -522,7 +522,15 @@
     // ------------------------------------------------------------------
     // The life of a quest: start, the steps, finish, fail
     // ------------------------------------------------------------------
-    const trackedElsewhere = () => { const QB = T.api("QuestBoard"); try { return !!(QB && QB.state && QB.state().track); } catch (e) { return false; } };
+    // (a new quest is followed by itself only while nothing else is pinned by hand: a goal, a contract, a place - Journal.pinnedNow)
+    const trackedElsewhere = () => {
+        const Jn = T.api("Journal");
+        try {
+            if (Jn && Jn.pinnedNow) { const p = Jn.pinnedNow(); return !!p && p.owner !== "town"; }
+            const QB = T.api("QuestBoard");
+            return !!(QB && QB.state && QB.state().track);
+        } catch (e) { return false; }
+    };
     function start(q, step, quiet) {
         if (typeof q === "string") q = Q[q];
         if (!q || !has()) return false;
@@ -1501,7 +1509,7 @@
         let story = null;
         try { story = St && St.active && St.active() ? St : null; } catch (e) { story = null; }
         if (story && story.isOpen && story.isOpen()) out.push("Twój dziadek nie śpi po nocach. Liczy dni do terminu - zostało ich " + Math.max(0, story.daysLeft()) + ". I modli się za ciebie, choć mówi, że nie umie.");
-        else if (story && story.fieldLost && story.fieldLost()) out.push("Twój dziadek chodzi o świcie na skraj lasu i patrzy na pole, którego już nie ma. Nie mów mu, że wiesz. Nie żal mu ziemi - żal mu ciebie.");
+        else if (story && story.fieldLost && story.fieldLost()) out.push("Twój dziadek chodzi o świcie na skraj lasu i patrzy na działkę, której już nie ma. Nie mów mu, że wiesz. Nie żal mu ziemi - żal mu ciebie.");
         else out.push("Śni ci się woda. Ciemna, pod kamieniem. Ta sama, co mnie.");
         out.push("Zejdziesz kiedyś tam, gdzie ja wpadłem. Nie bój się ciemności, synku. Bój się pytań. Jedno pytanie - nigdy więcej.");
         return out;
@@ -1527,8 +1535,8 @@
         think(i === 0 ? L.lostQf : i === 1 ? L.lostSf : L.lostF);
         finish(q, i === 0 ? { xp: 30, opinion: 1 } : i === 1 ? { gold: 5, xp: 50, opinion: 1 } : { gold: 15, xp: 80, opinion: 2, trust: { grum: 5 } }, { replace: true });
     }
-    // K33: the cap on the left statue of the knights' garden (Map008 5,9 - its head at y 7.15), fallen just behind the gate's grate
-    const CAP = { statue: [5, 9], head: { x: 5.5, y: 7.15 }, ground: { x: 5.6, y: 16.3 }, r: 0.38, fall: 40 };
+    // K33: the cap on the left statue of the knights' garden (Map008 32,9 - its head at y 7.15), fallen just behind the gate's grate
+    const CAP = { statue: [32, 9], head: { x: 32.5, y: 7.15 }, ground: { x: 32.6, y: 16.3 }, r: 0.38, fall: 40 };
     let capFall = null;   // { t } frames since it was knocked off (the fall is drawn; the step has moved on already)
     const capStep = () => { const r = has() ? rec("K33") : null; return r && r.s === "active" ? r.step : -1; };
     function gateEv() {
@@ -1549,7 +1557,7 @@
     function shotAtCap(e) {
         if (capStep() !== 0 || capFall || !onTown() || !e || e.hit) return false;
         const p = $gamePlayer, sx = p._realX + 0.5, sy = p._realY + 0.3;
-        if (sy < 15.5 || !(e.y < sy - 0.3) || e.x < 1.5 || e.x > 10.5 || e.y < 6.5) return false;
+        if (sy < 15.5 || !(e.y < sy - 0.3) || e.x < 28.5 || e.x > 37.5 || e.y < 6.5) return false;
         const dx = e.x - sx, dy = e.y - sy, xAt = sx + dx * (CAP.head.y - sy) / dy;
         return Math.abs(xAt - CAP.head.x) <= CAP.r + 0.04 ? knockCap() : false;
     }
@@ -1616,7 +1624,7 @@
         if (!window.$gameMap || !$gamePlayer) return;
         if (!onTown() || $gamePlayer.isTransferring()) { peeking = false; return; }
         const p = $gamePlayer, st = capStep();
-        const inZone = (st === 0 || st === 1) && p.x >= 4 && p.x <= 8 && p.y >= 16 && p.y <= 19 && p.direction() === 8;
+        const inZone = (st === 0 || st === 1) && p.x >= 31 && p.x <= 35 && p.y >= 16 && p.y <= 19 && p.direction() === 8;
         if (!inZone && !peeking) return;
         peeking = true;
         const target = inZone ? Math.max(0, centeredY() - PEEK.tiles) : centeredY(), d = target - $gameMap._displayY;
@@ -2151,7 +2159,7 @@
         w2Garden: {
             tick(q) {
                 const p = $gamePlayer;
-                if (!onTown() || p.x < 2 || p.x > 10 || p.y < 4 || p.y > 13) return;
+                if (!onTown() || p.x < 29 || p.x > 37 || p.y < 4 || p.y > 13) return;
                 const L = q.lines || {};
                 if (L.garden) think(L.garden);
                 if (L.note) addNote(L.note);
@@ -2239,7 +2247,7 @@
                 if (SB && SB.say && who) SB.say(who, line, 160);
                 const got = addOpinion(-3, "nocą w ogrodzie dworu");
                 T.popup("Złapali cię w ogrodzie dworu", { top: true, color: "#ff9f8f", sub: "Wyrzucony za bramę dworu - spróbuj innej nocy" + (got ? "  ·  Opinia " + got : "") });
-                pendingOut = { at: Graphics.frameCount + 75, map: TOWN, x: 50, y: 51, dir: 4 };
+                pendingOut = { at: Graphics.frameCount + 75, map: TOWN, x: 102, y: 51, dir: 4 };
             }
         },
         // rozdz. 6: the big choice - the sołtys (a market day: reveal it to the town; any day: stay silent), the Lord (quietly), Feliks (pay me)
@@ -2435,7 +2443,7 @@
                     return;
                 }
                 const p = $gamePlayer;
-                if (!onTown() || h < 12 || p.x < 2 || p.x > 10 || p.y < 4 || p.y > 13) return;
+                if (!onTown() || h < 12 || p.x < 29 || p.x > 37 || p.y < 4 || p.y > 13) return;
                 think(L.shadow);
                 $gameSelfSwitches.setValue([TOWN, slabId(), "A"], true);
                 T.audio.se("Earth2", { volume: 70, pitch: 80 });
@@ -2461,7 +2469,7 @@
                     r.t.book = day();
                     setFlag("signalBook");
                     addNote(["Księga sygnałów", "W Archiwum zakonu przeczytałem Księgę sygnałów: " + Object.values(D.SIGNALS).map(sg => sg.pattern.join(" + ") + " - " + sg.meaning).join("; ") + "."]);
-                    T.popup("Księga sygnałów", { top: true, color: "#ffe27a", sub: "Znasz wszystkie sygnały dzwonu (dziennik: Miasteczko - Sygnały dzwonu)" });
+                    T.popup("Księga sygnałów", { top: true, color: "#ffe27a", sub: "Znasz wszystkie sygnały dzwonu (dziennik: Zadania - Sygnały dzwonu)" });
                 } else {
                     if (r.t.chron) return;
                     r.t.chron = what;
@@ -4054,7 +4062,7 @@
         if (Object.keys(left).length) { w.pend = w.pend || {}; for (const [id, c] of Object.entries(left)) w.pend[id] = (w.pend[id] || 0) + c; }
         const L = Q.W6.lines || {}, names = Object.entries(got).map(([id, c]) => (item(+id) ? item(+id).name : "?") + " ×" + c).join(", ");
         if ($gameMap && $gameMap.mapId() === FIELD) { T.popup(L.helpersDone, { top: true, color: "#9ff0a8", sub: names }); w6Pending(); }
-        else addNote(["Pomocnicy na polu dziadka", "Dzień " + day() + ": Bogdan i Halina zebrali z pola dziadka: " + names + "."]);
+        else addNote(["Pomocnicy na działce dziadka", "Dzień " + day() + ": Bogdan i Halina zebrali z działki dziadka: " + names + "."]);
         return { plots: n, got, chest, left };
     }
     // what did not fit into the chests: handed over when the hero comes to the field
@@ -4476,7 +4484,7 @@
     }
 
     // ------------------------------------------------------------------
-    // The journal: the tab "Miasteczko" and the goal window
+    // The journal: the quests in its tab "Zadania" and the goal window
     // ------------------------------------------------------------------
     const iconOf = q => (q.icon && item(q.icon) ? iconOfItem(q.icon) : NOTE_ICON);
     // an arc's chapter in the journal: the step's ch - or its handler's (W6's last step holds chapters 6 and 7 at once)
@@ -4550,7 +4558,7 @@
         }
         if (q.reward && rewardText(q.reward)) ops.push({ k: "gap", n: 6 }, { k: "h", text: "Nagroda" }, { k: "p", text: rewardText(q.reward) });
         ops.push({ k: "gap", n: 6 }, { k: "muted", text: "Gdzie: " + q.where + ".  Kiedy: " + q.when + "." });
-        if (r && r.s === "active" && q.kind !== "W") ops.push({ k: "muted", text: s.track === q.id ? "Śledzisz to zadanie w okienku celu. OK: przestań śledzić." : "OK: śledź to zadanie w okienku celu." });
+        if (r && r.s === "active") ops.push({ k: "muted", text: s.track === q.id ? "Przypięte: widzisz je w okienku celu i na kompasie. OK: odepnij." : "OK: przypnij, żeby widzieć je w okienku celu i na kompasie." });
         return ops;
     }
     function opinionOps() {
@@ -4629,15 +4637,36 @@
         if (it.info === "regulars") return regularsOps();
         return questOps(it);
     }
+    // the journal's "Zadania" (2026-10-23, in place of the tab "Miasteczko"): the threads under FABUŁA, the errands under
+    // POBOCZNE, the opinion / the calendar / the bells / the regulars under MIASTECZKO, what ended under UKOŃCZONE; OK pins one
+    // (the journal lets go of whatever else was pinned)
+    function taskRows() {
+        if (!has()) return [];
+        const s = S(), out = [];
+        for (const q of activeQuests()) {
+            const r = rec(q.id), st = q.steps[r.step];
+            out.push({ id: q.id, group: q.kind === "W" ? "story" : "side", label: q.title, icon: iconOf(q), quest: q,
+                mark: s.track === q.id ? "pin" : stepReadyAny(q, r, st) ? "ready" : "todo",
+                right: st && st.type === "pause" ? "wkrótce" : q.kind === "W" ? (st ? "rozdz. " + chOf(q, r, st) : "") : KIND[q.kind] });
+        }
+        for (const row of journalItems()) if (row.info) out.push(Object.assign(row, { id: "info:" + row.info, group: "town" }));
+        for (const q of QUESTS) {
+            const r = rec(q.id);
+            if (!r || r.s === "active") continue;
+            out.push({ id: q.id, group: "done", label: q.title, icon: iconOf(q), mark: r.s === "done" ? "done" : "locked", dim: true, quest: q, hist: true, day: r.end,
+                right: (r.s === "done" ? "dz. " : r.s === "failed" ? "przepadło, dz. " : "odmówione, dz. ") + r.end });
+        }
+        return out;
+    }
     const J = T.api("Journal");
-    if (J && J.addTab) {
-        J.addTab({
-            name: "Miasteczko",
-            items: () => journalItems(),
-            detail: it => ({ ops: journalOps(it) }),
-            legend: () => { if (!has()) return ""; const s = S(); return "Opinia " + s.opinion + "/100  ·  " + D.OPINION.tiers[tierOf(s.opinion)].name + "  ·  w toku: " + activeQuests().length + "  ·  wykonane: " + s.stats.done; },
-            help: "OK: śledź zadanie na ekranie   ←/→: zakładka",
-            ok: it => { if (it && it.quest && isActive(it.quest.id) && it.quest.kind !== "W") { const s = S(); s.track = s.track === it.quest.id ? null : it.quest.id; SoundManager.playOk(); } }
+    if (J && J.addQuestSource) {
+        J.addQuestSource({
+            name: "town",
+            items: () => taskRows(),
+            detail: it => journalOps(it),
+            canPin: it => !!(it && it.quest && isActive(it.quest.id)),
+            pinned: () => (has() ? S().track || null : null),
+            pin: id => { if (has()) S().track = id && isActive(id) ? id : null; }
         });
     }
     if (J && J.addTrackerSource) {
@@ -4650,7 +4679,11 @@
             const st = q.steps[r.step];
             if (!st) return null;
             const line = trackLine(q, r, st);
-            return { label: "MIASTECZKO", title: q.title, line, key: "tq|" + q.id + "|" + r.step + "|" + line, source: "town", id: q.id, icon: iconOf(q) };
+            // (the clean look's goal window: the step's first sentence with its term, and what it asks for - have / need)
+            const dl = deadlineAt(r, st), d = dl === null ? 0 : Math.floor(dl / 24);
+            const sub = fill(st.text, varsOf(q, r)).split(/(?<=[.!?])\s/)[0] + (dl === null ? "" : " · " + (d === day() ? "do " : "dz. " + d + ", do ") + hm(dl - d * 24));
+            const needs = needRows(st).map(x => ({ icon: x.icon, name: x.name, have: x.have, need: x.n, tool: !!x.tool }));
+            return { label: q.kind === "W" ? "WĄTEK" : "MIASTECZKO", title: q.title, line, sub, needs, key: "tq|" + q.id + "|" + r.step + "|" + line, source: "town", id: q.id, icon: iconOf(q) };
         });
     }
 
@@ -4662,7 +4695,7 @@
         completeStep: (id, o) => completeStep(Q[id], o), state: () => S(), rec, isActive, isDone, opinion, addOpinion, tier: () => tierOf(opinion()),
         tierName: () => D.OPINION.tiers[tierOf(opinion())].name, offerable: id => offerable(Q[id]), dryDays, isMarket, isFerry, markers: () => Object.assign({}, markers),
         refreshMarkers, syncSpots, spotWanted, checkDeadlines, autoChecks, waterParts, hearSignal, ringPattern, bellQueue: () => bellQueue.slice(), muted,
-        talkFor: (key, story) => talkFor(key, speakerOf(key), !!story), openBell, Scene_TownBell, journalItems, journalOps, calendarEvents, track: id => { S().track = id || null; return S().track; },
+        talkFor: (key, story) => talkFor(key, speakerOf(key), !!story), openBell, Scene_TownBell, journalItems, journalOps, calendarEvents, track: id => { if (id && J && J.unpinOthers) J.unpinOthers("town"); S().track = id || null; return S().track; },
         bellOpts: null, vcount, FX,
         // (2026-10-05) the market well's ration grows once the sluice is half open (Farming_Plots.rationOf asks it), the dice's options
         // for the tests (K39: { auto, turbo, seed, rules }), the places' events, what a resident would remark now

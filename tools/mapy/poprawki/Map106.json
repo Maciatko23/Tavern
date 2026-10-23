@@ -1,0 +1,147 @@
+{
+ "mapa": 106,
+ "nazwa": "Dom garbarza",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 12,
+   "y": 8,
+   "stary": 584,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 33,
+   "nazwa": "Na stole: D 0,9",
+   "zd": {
+    "id": 33,
+    "name": "Na stole: D 0,9",
+    "note": "<Px:0,-20>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 584
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 12,
+    "y": 8
+   }
+  }
+ ],
+ "log": [
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "problem": "kafel 584 (D 0,9) zwisa 9 px z przedniej krawędzi blatu w (12,8)",
+   "poprawka": "kafel 584 w (12,8) jako zdarzenie 33 z obrazkiem kafla, -20 px w pionie (9 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "przesunięto kafel 584 z (12,8) do (12,7)",
+   "odrzucony": "nowe problemy: P2(12,7)"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "przesunięto kafel 584 z (12,8) do (11,8)",
+   "odrzucony": "nowe problemy: P2(11,8)"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "przesunięto kafel 584 z (12,8) do (13,8)",
+   "odrzucony": "nowe problemy: P2(13,8)"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "przesunięto kafel 584 z (12,8) do (13,9)",
+   "odrzucony": "nowe problemy: P2(13,9)"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "kafel 584 w (12,8) jako zdarzenie 33 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "kafel 584 w (12,8) jako zdarzenie 33 z obrazkiem kafla, +8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 8,
+   "kandydat": "kafel 584 w (12,8) jako zdarzenie 33 z obrazkiem kafla, +12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  }
+ ],
+ "przed": [
+  "P2 12,8"
+ ],
+ "po": [],
+ "sha_data": "125b7d19ee8018f06c370ca8bcde53eb67577c94c4f07b0a71a6fed0ea958db2",
+ "zainstalowano": "2026-10-22T11:30:44",
+ "sha_po": "b5147745504c29c292c3d1fca0dde9287b906d5a86f6eb4314960ba0c1631f61"
+}

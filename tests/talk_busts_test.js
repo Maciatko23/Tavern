@@ -315,7 +315,7 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     t.check("every speaking resident (" + (table.length - 1) + ", all maps, Teodor too) and the Lord: a bust of their own in the table, the file there",
         // (2026-10-14: one bust per sheet - the harbour's guard wears the manor guard's sheet, so his bust too)
         table.length >= 29 && !noBust.length && new Set(table.map(r => r.bust)).size === new Set(table.map(r => r.sheet)).size, { count: table.length, noBust });
-    await t.newGame({ map: 8, x: 20, y: 30, hour: 10, minimap: false });
+    await t.newGame({ map: 8, x: 32, y: 57, hour: 10, minimap: false });
     await t.eval("TownLife.placeAll(); 0");
     await t.frames(30);
     const onMap = await t.json(`(function(){ const out = {}; TownLife.RESIDENTS.forEach(r => { const e = TownLife.eventOf(r.key); if (e) out[r.key] = { bust: SpeechBubbles.bustOf(e), want: SpeechBubbles.BUSTS[r.sheet + ":0"] }; }); return out; })()`);

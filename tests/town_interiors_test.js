@@ -33,7 +33,7 @@ async function knock(t, d) {
 }
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
-    await t.newGame({ map: 8, x: 24, y: 37, dir: 2, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 53, y: 55, dir: 2, hour: 12, quiet: true, minimap: false });
     await t.eval(`(function(){ const _s = Game_Event.prototype.start; Game_Event.prototype.start = function() { if (/^Drzwi: /.test(this.event().name)) window.__doorRan = true; return _s.apply(this, arguments); }; return 0; })()`);
     t.check("9 interiors staged, 11 doors", metas.length === 9 && doors.length === 11, doors.map(d => d.door));
     const shot = {};

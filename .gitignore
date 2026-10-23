@@ -42,3 +42,9 @@ __pycache__/
 # the tavern v2 generator's regenerated renders and the test overlay (copies of data/ and img/ for GAME_OVERLAY)
 /tools/tavern/v2/out/
 /tools/tavern/v2/overlay/
+
+# screenshots the newer tests save under their own folder (tests/<name>/shots/), stray test pictures in the root,
+# and the art backups kept next to the work (the archive Tawerna_archiwum_* holds the real copies)
+/tests/*/shots/
+/*.png
+/backup_art_*/

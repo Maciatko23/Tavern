@@ -63,9 +63,18 @@
     // Shooting
     // ------------------------------------------------------------------
     const countItem = id => $gameParty.numItems($dataItems[id]);
+    // (2026-10-23) the bow / the sling in use: the best one owned - Bron.js's variants (the long bow, the recurve, the leather sling...,
+    // <Bron:luk,...> / <Bron:proca,...>) put their numbers over the old ones (defOf); without Bron.js the old 126 / 125
+    const BR = () => T.api("Bron");
+    function defOf(w) {
+        const b = BR(), v = b && b.rangedDef ? b.rangedDef(w) : null;
+        return v ? Object.assign({}, WEAPONS[w], v) : WEAPONS[w];
+    }
+    const ownsBow = () => { const b = BR(); return b && b.owns ? b.owns("bow") : countItem(ITEM.bow) > 0; };
+    const ownsSling = () => { const b = BR(); return b && b.owns ? b.owns("sling") : countItem(ITEM.sling) > 0; };
     // the bow when there are arrows, else the sling when there are stones; null with the reason (a popup) otherwise
     function pickWeapon() {
-        const bow = countItem(ITEM.bow) > 0, sling = countItem(ITEM.sling) > 0;
+        const bow = ownsBow(), sling = ownsSling();
         if (bow && countItem(ITEM.arrows) > 0) return "bow";
         if (sling && countItem(ITEM.stone) > 0) return "sling";
         if (bow) popup($dataItems[ITEM.arrows].iconIndex, "Potrzebujesz strzał", "#ff9f8f");
@@ -73,7 +82,7 @@
         else popup($dataItems[ITEM.sling].iconIndex, "Potrzebujesz procy, łuku albo oszczepu", "#ff9f8f");
         return null;
     }
-    const hasRanged = () => (countItem(ITEM.bow) > 0 && countItem(ITEM.arrows) > 0) || (countItem(ITEM.sling) > 0 && countItem(ITEM.stone) > 0);
+    const hasRanged = () => (ownsBow() && countItem(ITEM.arrows) > 0) || (ownsSling() && countItem(ITEM.stone) > 0);
     // unit vector of a shot: the two held arrows (a diagonal) or else the way the player faces
     function aimVector() {
         const d8 = Input.dir8;
@@ -110,10 +119,11 @@
     }
     // the stone / the arrow leaves (the direction is a unit vector)
     function launch(w, dx, dy) {
-        const def = WEAPONS[w];
+        const def = defOf(w);
         se(def.se, 85, def.pitch);
-        const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3;
-        projectiles.push(makeProjectile(w, sx, sy, dx, dy));
+        const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3, p = makeProjectile(w, sx, sy, dx, dy);
+        p.def = def;   // (the bow it left: its damage and range, whatever is in hand when it lands)
+        projectiles.push(p);
         makeNoise(sx, sy, NOISE_RADIUS * (knowsSkill("r_silent") ? 0.5 : 1));   // (Cichy strzał)
     }
     // A straight shot, no aiming (tests, events). Returns true when a projectile left. dir: [dx, dy] (defaults to the facing),
@@ -122,7 +132,7 @@
         if (!ENABLED || cooldown > 0) return false;
         const w = which || pickWeapon();
         if (!w) return false;
-        if (!payShot(WEAPONS[w])) return false;
+        if (!payShot(defOf(w))) return false;
         const [dx, dy] = dir || aimVector();
         faceVector(dx, dy);
         if (animate && typeof $gamePlayer.startToolSwing === "function" && $gamePlayer.startToolSwing(SHOT_SWING[w], () => launch(w, dx, dy))) {
@@ -167,7 +177,7 @@
         if (!ENABLED || cooldown > 0 || aim) return false;
         const w = pickWeapon();
         if (!w) return false;
-        const def = WEAPONS[w];
+        const def = defOf(w);
         if ($gameSystem.stamina() < def.stamina) { popup(82, "Jesteś zbyt zmęczony", "#ff9f8f"); return false; }
         aim = { weapon: w, t: 0, ref: null, point: null, radius: def.spread, manual: false };
         updateAim();
@@ -181,7 +191,7 @@
     }
     function updateAim() {
         if (!aim) return;
-        const def = WEAPONS[aim.weapon];
+        const def = defOf(aim.weapon);
         aim.t++;
         const d4 = Input.dir4;
         if (d4 && d4 !== $gamePlayer.direction()) $gamePlayer.setDirection(d4);   // turning to another target
@@ -207,7 +217,7 @@
         if (!aim) return;
         const w = aim.weapon, a = aim.point, ang = Math.random() * Math.PI * 2, rr = aim.radius * Math.sqrt(Math.random());
         endAim();
-        if (!a || !payShot(WEAPONS[w])) return;
+        if (!a || !payShot(defOf(w))) return;
         const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3;
         let dx = a.x + Math.cos(ang) * rr - sx, dy = a.y + Math.sin(ang) * rr - sy;
         const len = Math.hypot(dx, dy) || 1;
@@ -335,7 +345,7 @@
         const targets = projectiles.length ? allTargets() : [];
         for (const p of projectiles) {
             if (p.done) continue;
-            const def = WEAPONS[p.weapon];
+            const def = p.def || WEAPONS[p.weapon];
             const steps = 3, step = def.speed / steps;
             for (let i = 0; i < steps && !p.done; i++) {
                 p.x += p.dx * step; p.y += p.dy * step; p.travelled += step;
@@ -591,7 +601,7 @@
     function updateShootKey() {
         if (aim && aim.manual) {
             updateAim();
-            if (!Input.isPressed("shoot") && aim.t >= WEAPONS[aim.weapon].release) fireAimed();
+            if (!Input.isPressed("shoot") && aim.t >= defOf(aim.weapon).release) fireAimed();
         } else if (aim && !$gamePlayer.isToolSwinging()) {
             endAim();   // the swing was taken away (a scene change...)
         } else if (aim) {
@@ -601,7 +611,7 @@
         }
     }
 
-    P.weapons = { WEAPONS, SPEAR, SHOT_SWING, YIELD, CARCASS, animate: v => { animate = !!v; }, projectiles: () => projectiles, aim: () => aim,
+    P.weapons = { WEAPONS, defOf, SPEAR, SHOT_SWING, YIELD, CARCASS, animate: v => { animate = !!v; }, projectiles: () => projectiles, aim: () => aim,
         cooldown: () => cooldown, resetCooldown: () => { cooldown = 0; }, countDown: () => { if (cooldown > 0) cooldown--; }, clearShots: () => { projectiles = []; },
         clearCarcassSprites: () => { carcassSprites = []; }, pickWeapon, shoot, facingVector, faceSlant, startAim, updateAim, fireAimed, endAim, thrust, spearTarget,
         pressShoot, allTargets, makeNoise, updateProjectiles, hit, kill, dropCarcass, removeCarcass, rotCarcasses, carcasses: () => carcassList(), carcassAhead, gnawLeft,

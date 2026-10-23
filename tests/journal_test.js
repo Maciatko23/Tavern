@@ -1,4 +1,5 @@
-// Journal: goals (state driven), the five tabs, pinning, the tracker, notes, the summary of the day, the menu entry.
+// Journal: goals (state driven), the five tabs ("Zadania" first: the goals and the town's quests under headings), pinning (one thing
+// at a time: a goal or a quest), the tracker, notes, the summary of the day, the menu entry.
 const { launch, sleep } = require("./cdp.js");
 const OUT = __dirname + "/";
 (async () => {
@@ -12,7 +13,7 @@ const OUT = __dirname + "/";
         await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
-        // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_grafit_test.js)
+        // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_lista_test.js)
         await ev("ConfigManager.uiClean = false; SceneManager._scene.startFadeIn(1,false); if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; if (window.Needs) Needs.setEnabled(false); $gameSystem.setDayNightHour(10); $gameSystem.setStamina(60); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const press = async k => { await ev(`Input._currentState.${k} = true; 0`); await frames(3); await ev(`Input._currentState.${k} = false; 0`); await frames(3); };
@@ -59,6 +60,17 @@ const OUT = __dirname + "/";
         // ---- the scene: open with J, the five tabs
         await press("journal"); await frames(30);
         check("J opens the journal", (await ev("SceneManager._scene.constructor.name")) === "Scene_Journal");
+        // (2026-10-23: one tab "Zadania" in place of "Cele" and TownQuests' "Miasteczko" - the goals and the quests under headings)
+        const zad = await ev(`(function(){ const s = SceneManager._scene, items = s._list._items, grp = id => (items.find(i => i.goal && i.goal.id === id) || {}).group;
+            return { names: s._tabs._list.map(c => c.name), tab: s._tab, heads: items.filter(i => i.head).map(i => i.label + " " + i.count), first: !!(items[0] && items[0].head), idx: s._list.index(),
+                head: !!(s._list.currentItem() || {}).head, borgar: grp("borgar"), branches: grp("branches"), wood: grp("wood") }; })()`);
+        check("tab 0 is 'Zadania' (no 'Cele', no 'Miasteczko'): Borgar's goal under FABUŁA, the first steps under ROZWÓJ, the done ones under UKOŃCZONE; the cursor on a row, not a heading",
+            zad.names[0] === "Zadania" && !zad.names.includes("Cele") && !zad.names.includes("Miasteczko") && zad.tab === 0 && zad.first && zad.idx === 1 && !zad.head &&
+            zad.borgar === "story" && zad.branches === "growth" && zad.wood === "done" && /^UKOŃCZONE \d+$/.test(zad.heads[zad.heads.length - 1]), zad);
+        await press("down"); await frames(4);
+        const crossed = await ev("(function(){ const l = SceneManager._scene._list, it = l.currentItem(); return { idx: l.index(), head: !!it.head, group: it.group }; })()");
+        await press("up"); await frames(4);
+        check("down from FABUŁA's last row goes over the heading to ROZWÓJ's first, up comes back", crossed.idx === 3 && !crossed.head && crossed.group === "growth" && (await ev("SceneManager._scene._list.index()")) === 1, crossed);
         await shot("goals");
         const tabInfo = [];
         for (let tab = 0; tab < 5; tab++) {
@@ -90,6 +102,19 @@ const OUT = __dirname + "/";
         check("OK pins the goal", (await ev("$gameSystem._journal.pinned")) === second, second);
         await press("ok"); await frames(6);
         check("OK again unpins it", (await ev("$gameSystem._journal.pinned")) === null);
+        // one thing pinned at a time: a town quest (TownQuests.js gives its rows to "Zadania" - an errand under POBOCZNE) and a goal
+        const k1 = await ev(`(function(){ TownQuests.start('K1'); const s = SceneManager._scene; s.showTab(); const i = s._list._items.findIndex(r => r.quest && r.quest.id === 'K1'), r = s._list._items[i];
+            return { i, group: r && r.group, mark: r && r.mark, track: TownQuests.state().track }; })()`);
+        check("a town quest is listed under POBOCZNE, followed by itself (a diamond) while nothing is pinned", k1.i > 0 && k1.group === "side" && k1.mark === "pin" && k1.track === "K1", k1);
+        await ev("(function(){ const s = SceneManager._scene; s._list.select(1); s._list.updateHelp(); return 0; })()");
+        await press("ok"); await frames(6);
+        check("OK on a goal pins it and lets the quest go", (await ev("$gameSystem._journal.pinned")) === second && (await ev("TownQuests.state().track")) === null);
+        await ev(`(function(){ const s = SceneManager._scene; s._list.select(${k1.i}); s._list.updateHelp(); return 0; })()`);
+        await press("ok"); await frames(6);
+        check("OK on the quest pins it and lets the goal go (the tracker follows the quest)", (await ev("TownQuests.state().track")) === "K1" && (await ev("$gameSystem._journal.pinned")) === null && (await ev("Journal.tracked().source")) === "town");
+        await press("ok"); await frames(6);
+        check("OK again unpins the quest", (await ev("TownQuests.state().track")) === null && (await ev("Journal.pinnedNow()")) === null);
+        await ev("(function(){ const s = SceneManager._scene; s._list.select(1); s._list.updateHelp(); return 0; })()");
         await press("ok"); await frames(6);
         await press("cancel"); await frames(30);
         check("cancel returns to the map", (await ev("SceneManager._scene.constructor.name")) === "Scene_Map");

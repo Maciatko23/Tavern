@@ -181,7 +181,7 @@ const MAKERS = {
         await t.frames(120);
         await dismiss(t);
         t.check("nothing running when it is saved (as the save menu requires)", await t.until(t.idle + " && SceneManager._scene instanceof Scene_Map && !$gameTemp._pendingSummary", 30));
-        const r = await t.saveFixture("day40_farm", { desc: "Gra fabularna, dzień 40 (lato), 17:00 na polu dziadka (Map003): ~25 budynków stawianych przez tygodnie, oswojony pies przy budzie, chatka z łóżkiem, kredensem i skrzynią (jedzenie w kredensie i spiżarni), ziemniaki i jęczmień w ziemi, narzędzia, poziom, połowa długu spłacona." });
+        const r = await t.saveFixture("day40_farm", { desc: "Gra fabularna, dzień 40 (lato), 17:00 na działce dziadka (Map003, Kruczy Jar): ~25 budynków stawianych przez tygodnie, oswojony pies przy budzie, chatka z łóżkiem, kredensem i skrzynią (jedzenie w kredensie i spiżarni), ziemniaki i jęczmień w ziemi, narzędzia, poziom, połowa długu spłacona." });
         t.check("saved: " + JSON.stringify(Object.assign({}, r.summary, { buildings: r.summary.buildings.length })), r.summary.day === 40 && r.summary.map === 3 && r.summary.buildings.length >= 15 && r.summary.dog, { failed: built.filter(b => b.failed).map(b => b.type), bytes: r.bytes });
     }
 };

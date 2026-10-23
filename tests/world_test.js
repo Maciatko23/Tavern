@@ -99,7 +99,10 @@ const { launch, sleep } = require("./cdp.js");
         await setDay(rainy.dry.d); const dryN = await scan("mushroom");
         check("mushrooms after rain are far more numerous than after dry days (autumn): " + wetN + " vs " + dryN, wetN >= 6 && wetN >= dryN * 2, { wet: rainy.wet, dry: rainy.dry, wetN, dryN });
         await setDay(1);
-        check("in the first days of spring only a few grow", (await scan("mushroom")) <= 3);
+        // (2026-10-22: the field doubled to 80 x 60 - "a few" is as many as before on every 40 x 30 of it)
+        const per1200 = (await ev("$gameMap.width() * $gameMap.height()")) / 1200;
+        const spring = await scan("mushroom");
+        check("in the first days of spring only a few grow (at most 3 on every 40 x 30 tiles)", spring <= 3 * per1200, { spring, max: 3 * per1200 });
         await setDay(100);
         check("in winter there are none", (await scan("mushroom")) === 0);
         await setDay(rainy.wet.d); await frames(30);
@@ -138,8 +141,10 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- berry bushes
         await setDay(1);
-        const bushes = await J(`(function(){ const out = []; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) { if (Farming.gatherAt(x, y) !== "bush") continue; for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) if ($gameMap.isPassable(x + dx, y + dy, 2) && !Farming.gatherAt(x + dx, y + dy)) { out.push({ x, y, sx: x + dx, sy: y + dy }); break; } } return out; })()`);
+        const bushes = await J(`(function(){ const out = []; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) { if (Farming.gatherAt(x, y) !== "bush") continue; for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) if ($gameMap.isPassable(x + dx, y + dy, 2) && !Farming.gatherAt(x + dx, y + dy)) { out.push({ x, y, sx: x + dx, sy: y + dy, field: Farming.fieldAllows(x, y) }); break; } } return out.sort((a, b) => b.field - a.field); })()`);
         check("the farm map has berry bushes (at least 8), all with berries in the first spring", bushes.length >= 8 && (await J(`${JSON.stringify(bushes.map(b => [b.x, b.y]))}.every(([x, y]) => Farming.bushState(x, y) === "full")`)), bushes.length);
+        // (2026-10-22: the bushes on the land where a building may stand come first - Map003's new part and the strip by the wall refuse
+        // any building before the ground is asked about: 'To już nie działka dziadka.' / 'Buduj w obrębie muru...')
         const bu = bushes[0];
         check("a bush keeps the player out and nothing can be raked, dug or built on it", (await ev(`$gameMap.isPassable(${bu.x}, ${bu.y}, 8) || $gameMap.isPassable(${bu.x}, ${bu.y}, 2)`)) === false && (await ev(`Farming.plotAt(${bu.x}, ${bu.y})`)) === null && (await ev(`Farming.whyNotBuild("chest_s", ${bu.x}, ${bu.y})`)) === "Trzeba oczyszczonej ziemi.");
         const bushPics = await J(`(function(){ const layer = SceneManager._scene._spriteset._stoneLayer; const list = layer._entries.filter(e => /Gather_Bush_/.test(e.sprite.bitmap._url || "")); return { n: list.length, full: list.filter(e => /Bush_[01]\.png/.test(e.sprite.bitmap._url)).length, size: list[0] && [list[0].sprite.bitmap.width, list[0].sprite.bitmap.height] }; })()`);

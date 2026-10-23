@@ -44,16 +44,16 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     };
 
     // ================================================================ the well
-    await t.newGame({ map: 8, x: 26, y: 34, dir: 4, day: 3, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 53, y: 50, dir: 4, day: 3, hour: 11, quiet: true, minimap: false });
     const well = await t.json(`(function(){ const d = ${byName("Studnia miejska: zejście")};
         return { down: d && [d.eventId(), d.x, d.y, d._priorityType, d.isThrough()], rations: $gameMap.events().filter(e => e.event().name === "Studnia miejska").map(e => [e.eventId(), e.x, e.y, e.event().note]) }; })()`);
     t.check("the market well keeps its two ration events (241/242, <Studnia:2>) and has 'Studnia miejska: zejście' on its east stones (25,34)",
-        well.down && well.down[1] === 25 && well.down[2] === 34 && well.down[0] < 355 && well.rations.length === 2 &&
-        well.rations.every(r => r[2] === 35 && /<Studnia:2>/.test(r[3])), well);
+        well.down && well.down[1] === 52 && well.down[2] === 50 && well.down[0] < 355 && well.rations.length === 2 &&
+        well.rations.every(r => r[2] === 51 && /<Studnia:2>/.test(r[3])), well);
     await t.eval(`$gameParty.loseItem($dataItems[${LINA}], 999); 0`);
     const refuse = async () => {
         await t.popups({ clear: true });
-        await t.locate(26, 34, 4);
+        await t.locate(53, 50, 4);
         await t.frames(5);
         await t.press("ok");
         await t.frames(40);
@@ -67,7 +67,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...with one rope the same", r1.pops.some(p => /2× Lina/.test(p)) && r1.map === 8 && !r1.msg, r1);
     await t.give(LINA, 1);
     await t.frames(240);                                   // (the popups and the gain notes fade first: the picture)
-    await t.locate(26, 34, 4);
+    await t.locate(53, 50, 4);
     await t.frames(5);
     await t.press("ok");
     await t.until("!!(SceneManager._scene._choiceListWindow && SceneManager._scene._choiceListWindow.active)", 15);
@@ -119,17 +119,17 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(20);
     const top = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
     t.check("the rope: OK -> 'Wspiąć się po linie na górę?' -> back in town beside the well (26,34)",
-        Array.isArray(q2) && q2[0] === "Wspiąć się" && up && top.map === 8 && top.x === 26 && top.y === 34, { q2, top });
+        Array.isArray(q2) && q2[0] === "Wspiąć się" && up && top.map === 8 && top.x === 53 && top.y === 50, { q2, top });
 
     // ================================================================ the slab in the knights' garden
-    await t.go(8, 6, 13, 8);
+    await t.go(8, 33, 13, 8);
     await t.calm();
     const slab = await t.json(`(function(){ const e = ${byName("Płyta w ścieżce (ogród rycerzy)")}, m = ${byName("Miejsce: plyta")};
         return { id: e && e.eventId(), at: e && [e.x, e.y], page: e && e._pageIndex, pic: e && e.characterName(), through: e && e.isThrough(), prio: e && e._priorityType,
                  list: e && e.list().length, marker: m && [m.x, m.y] }; })()`);
     t.check("the slab (6,12) on page 1 is nothing: no picture, walk-through, under the hero, no commands; the marker 'Miejsce: plyta' on it",
-        slab.id && slab.id < 355 && JSON.stringify(slab.at) === "[6,12]" && slab.page === 0 && slab.pic === "" && slab.through && slab.prio === 0 && slab.list <= 1 &&
-        JSON.stringify(slab.marker) === "[6,12]", slab);
+        slab.id && slab.id < 355 && JSON.stringify(slab.at) === "[33,12]" && slab.page === 0 && slab.pic === "" && slab.through && slab.prio === 0 && slab.list <= 1 &&
+        JSON.stringify(slab.marker) === "[33,12]", slab);
     await t.press("ok");
     await t.frames(30);
     await t.hold("up", 30);
@@ -137,16 +137,16 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const over = await t.json("({ map: $gameMap.mapId(), y: $gamePlayer.y, run: $gameMap.isEventRunning() })");
     t.check("...the action button facing it does nothing, and one walks over it (still in the garden)", over.map === 8 && over.y <= 12 && !over.run, over);
     await t.eval(`$gameSelfSwitches.setValue([8, ${slab.id}, "A"], true); 0`);
-    await t.locate(6, 13, 8);
+    await t.locate(33, 13, 8);
     await t.frames(20);
     const open = await t.json(`(function(){ const e = $gameMap.event(${slab.id}); return { page: e._pageIndex, pic: e.characterName(), prio: e._priorityType, through: e.isThrough() }; })()`);
     t.check("with its self-switch A: the opened slab with the stairs down (!Quest_Places), standing like a thing (blocks)",
         open.page === 1 && open.pic === "!Quest_Places" && open.prio === 1 && !open.through, open);
-    await t.locate(8, 12, 4);
-    await t.eval("$gameMap.setDisplayPos(0, 4); 0");
+    await t.locate(35, 12, 4);
+    await t.eval("$gameMap.setDisplayPos(27, 4); 0");
     await t.frames(30);
     await t.shot(path.join(SHOTS, "plyta_otwarta.png"));
-    await t.locate(6, 13, 8);
+    await t.locate(33, 13, 8);
     await t.frames(5);
     await t.press("ok");
     const arch = await t.until(t.onMap(119), 20);
@@ -181,7 +181,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const back = await t.until(t.onMap(8), 20);
     await t.frames(20);
     const garden = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
-    t.check("the stairs (walking into them) lead back up into the garden, beside the slab (6,13)", back && garden.map === 8 && garden.x === 6 && garden.y === 13, garden);
+    t.check("the stairs (walking into them) lead back up into the garden, beside the slab (6,13)", back && garden.map === 8 && garden.x === 33 && garden.y === 13, garden);
     await t.eval(`$gameSelfSwitches.setValue([8, ${slab.id}, "A"], false); 0`);
 
     // ================================================================ the orangery (Map024)

@@ -21,6 +21,13 @@ RESIDENTS = [
     ('zebrak', 'Stary Gaweł', 'People4_5'), ('marek', 'Marek', 'SF_Actor3_3'),
     # the harbour (2026-10-14): the fisherman, the smuggler from the prologue's boat, the Lord's customs officer
     ('janek', 'Janek (rybak)', 'Actor3_1'), ('przemytnik', 'Roch Szkwał', 'People2_1'), ('celnik', 'Celnik', 'SF_People1_5'),
+    # the new town's houses (2026-10-22, docs/miasteczko/NOWE_MIASTO.md, TownLife 2940-2947)
+    ('kolodziej', 'Szczepan Kołodziej', 'People1_5'), ('przekupka', 'Agata', 'People2_4'), ('szwaczka', 'Dorota Igła', 'SF_Actor2_8'),
+    ('wdowa', 'Halina', 'People2_6'), ('kostek', 'Kostek', 'People1_3'), ('jagodka', 'Jagódka', 'SF_People1_2'),
+    ('ciesla', 'Leon Dłuto', 'People1_7'), ('weteran', 'Wacław Siwy', 'People4_7'),
+    # the new Podgrodzie's houses (2026-10-22, docs/podgrodzie/NOWE_PODGRODZIE.md, TownLife 2950-2953)
+    ('szynkarz', 'Mietek Kwaśniak', 'SF_People1_5'), ('opiekunka', 'Ciotka Stefa', 'SF_People1_8'), ('garncarz', 'Wit Zduń', 'SF_Actor1_3'),
+    ('dziecko', 'Tośka', 'SF_People1_4'),
 ]
 # the tavern regulars (2026-10-07): their own busts <Name>_Bust (their old RTP busts did not look like their map sheets; the RTP
 # names stay their keys in the game - SpeechBubbles.RENAMED); and Ambrozy's kept Order bust (Ambrozy_Bust_Zakon)

@@ -1,0 +1,14 @@
+{
+ "bledy_kontroli": 0,
+ "wyciek": 0,
+ "dojscie": 0,
+ "waskie": 0,
+ "licznik_kontroli": {
+  "D1": 3,
+  "G3": 5,
+  "G4": 2,
+  "O1": 1,
+  "P1": 1,
+  "D4": 71
+ }
+}

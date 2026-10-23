@@ -1,0 +1,97 @@
+{
+ "mapa": 106,
+ "nazwa": "Dom garbarza",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 4,
+   "stary": 319,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 3,
+   "stary": 311,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 3,
+   "stary": 0,
+   "nowy": 319
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 2,
+   "stary": 0,
+   "nowy": 311
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 4,
+   "stary": 0,
+   "nowy": 327
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 12,
+   "y": 7,
+   "stary": 584,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 12,
+   "y": 8,
+   "stary": 0,
+   "nowy": 584
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 8,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 319 (C 7,7) - góra bez dołu (brak kafla 327 pod) w (8,4)",
+   "poprawka": "przesunięto obiekt C (7,7) 2 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 7,
+   "problem": "kafel 584 (D 0,9) stoi na tylnej krawędzi blatu: 3 px od płaskiego wierzchu w (12,7)",
+   "poprawka": "przesunięto kafel 584 z (12,7) do (12,8) (3 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 12,
+   "y": 7,
+   "kandydat": "przesunięto kafel 584 z (12,7) do (13,8)",
+   "odrzucony": "nowe problemy: P2(13,8)"
+  }
+ ],
+ "przed": [
+  "G1 8,4",
+  "O1 8,4",
+  "P2 12,7"
+ ],
+ "po": [],
+ "sha_data": "8096aa3587aabe03d84e5ff434449db33ef33819043587c1941ab4808f0c6299",
+ "zainstalowano": "2026-10-22T10:51:27",
+ "sha_po": "125b7d19ee8018f06c370ca8bcde53eb67577c94c4f07b0a71a6fed0ea958db2"
+}

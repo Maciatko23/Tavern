@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # Shared pieces of Podgrodzie (Map111, the poor suburb outside the town's west wall, user 2026-10-05: "wyjście z mapy na zachód
 # i tam mapa z domkami drewnianymi i wnętrzami i mieszkańcami, biedniejsza dzielnica miasta").
 #

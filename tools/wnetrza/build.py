@@ -191,6 +191,7 @@ def main():
     ap.add_argument("--install", action="store_true")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--rebase", nargs="*", type=int)
+    ap.add_argument("--mimo-uwag", action="store_true", help="instaluj mimo nowych uwag kontroli map (błędy dalej blokują)")
     a = ap.parse_args()
     ids = a.ids or IDS
     ensure_base(IDS, rebase=a.rebase or ())
@@ -226,12 +227,28 @@ def main():
         if not a.force and sha(cur) not in (sha(read(BASE + n)), rec.get(n), sha(raw)):
             print("POMIJAM %s: zmieniona w edytorze po zrobieniu kopii bazowej (--rebase %d, potem build jeszcze raz)" % (n, mid))
             continue
+        # kontrola map (tools/mapy/kontrola.py, docs/MAPY_ZASADY.md): bez błędów i bez nowych uwag względem data/
+        ok, _, txt = kontrola_map(mid, raw)
+        if not ok:
+            print("POMIJAM %s: kontrola map znalazła błędy albo nowe uwagi (popraw plan; --mimo-uwag instaluje mimo uwag, nie błędów):\n%s" % (n, txt))
+            continue
         shutil.copy2(DATA + n, BACKUP + n.replace(".json", "_przed_%s.json" % stamp))
         with open(DATA + n, "wb") as f: f.write(raw)
         rec[n] = sha(raw)
         done.append(n)
     with open(REC, "wb") as f: f.write((json.dumps(rec, indent=1, sort_keys=True) + "\n").encode("utf-8"))
     print("zainstalowano:", ", ".join(done), "- kopie w", os.path.relpath(BACKUP, ROOT))
+
+
+def kontrola_map(mid, raw):
+    """bramka jakości przed zapisem do data/: (ok, problemy, tekst). ok=False przy błędach; przy nowych uwagach też,
+    chyba że w wywołaniu jest --mimo-uwag (wtedy blokują tylko błędy)"""
+    sys.path.insert(0, os.path.join(ROOT, "tools", "mapy"))
+    import kontrola
+    ok, probs, txt = kontrola.bramka(mid, raw, quiet=True, scisle=True)
+    if not ok and "--mimo-uwag" in sys.argv:
+        ok = not any(p["waga"] == "błąd" for p in probs)
+    return ok, probs, txt
 
 
 if __name__ == "__main__":

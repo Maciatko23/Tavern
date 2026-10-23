@@ -57,17 +57,20 @@ kit.test({ port: 9465, beforeLoad: missingBands.length ? TRAP : "" }, async t =>
         stack.length === 5 && stack.filter(f => f.t === "Utknął!").length === 1 && overlaps.length === 0, { overlaps, stack });
     if (SHOTS) { await t.frames(4); await t.shot("../docs/walka/napisy_stos.png"); }
 
-    // an open field round the hero (the fights below)
+    // an open field round the hero (the fights below). A berry bush is no event and no tile, but it blocks (Farming's isPassable): since
+    // the meadow doubled (2026-10-19) the field nearest the middle had one on the spider's cell. No field of the meadow is quite without
+    // them: the one with the fewest, its middle row (where the creatures stand and run) without any
     const room = await t.json(`(function(){
         const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y) && !Farming.buildingAt(x, y);
+        const open = (x, y) => [2, 4, 6, 8].every(d => $gameMap.isPassable(x, y, d));
         let best = null;
         for (let y = 7; y < $gameMap.height() - 7; y++) for (let x = 9; x < $gameMap.width() - 9; x++) {
-            let ok = true;
-            for (let dx = -7; dx <= 7 && ok; dx++) for (let dy = -3; dy <= 3; dy++) if (!free(x + dx, y + dy)) { ok = false; break; }
-            if (ok && (!best || Math.abs(x - $gameMap.width() / 2) < Math.abs(best.x - $gameMap.width() / 2))) best = { x, y };
+            let ok = true, bushes = 0;
+            for (let dx = -7; dx <= 7 && ok; dx++) for (let dy = -3; dy <= 3; dy++) { if (!free(x + dx, y + dy) || (dy === 0 && !open(x + dx, y))) { ok = false; break; } if (!open(x + dx, y + dy)) bushes++; }
+            if (ok && (!best || bushes < best.bushes || (bushes === best.bushes && Math.abs(x - $gameMap.width() / 2) < Math.abs(best.x - $gameMap.width() / 2)))) best = { x, y, bushes };
         }
         return best; })()`);
-    t.check("an open field 15 x 7 on the meadow", !!room, room);
+    t.check("an open field 15 x 7 on the meadow (its middle row open)", !!room, room);
     const cx = room.x, cy = room.y;
     await t.eval(`window.__bus = []; for (const n of ['heroHit', 'kill', 'creatureBoss', 'heroMind']) Tawerna.on(n, e => __bus.push(Object.assign({ n }, e, { animal: undefined })), { owner: 'CreaturesTest' }); 0`);
     // keys pressed inside the game loop (__auto): "roll" (Space + the arrow away) / "parry" (P) when the creature's wind-up has A.at frames left

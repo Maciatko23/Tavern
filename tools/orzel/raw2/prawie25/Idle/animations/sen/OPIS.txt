@@ -1,0 +1,1 @@
+(sen: klatka 0 = start siadania, 1 = siedzi, 2 = siedzi i śpi - głowa z edycji PixelLab raw3/glowy)

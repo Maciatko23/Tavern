@@ -543,8 +543,8 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await shot("11_po_ladowaniu.png");
 
     // ================================================================ lądowanie w mieście: tylko na placu
-    await go(8, 25, 19, 2);
-    const town = await t.json(`(function(){ const a = OrzelLot.landingSpot(); $gamePlayer.locate(29, 25); const b = OrzelLot.landingSpot(); $gamePlayer.locate(25, 19);
+    await go(8, 52, 19, 2);
+    const town = await t.json(`(function(){ const a = OrzelLot.landingSpot(); $gamePlayer.locate(56, 33); const b = OrzelLot.landingSpot(); $gamePlayer.locate(52, 19);
         return { square: a, lane: b }; })()`);
     t.check("Map008: na ulicy przed tawerną (plac) wolno wylądować, w wąskim przejściu nie („W mieście lądujesz tylko na placu”)",
         !town.square.why && /tylko na placu/.test(town.lane.why || ""), town);

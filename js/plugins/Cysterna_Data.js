@@ -37,7 +37,7 @@
     const MAP = 167, FLOOR30 = 147, URWISKO = 157, TOWN = 8;
     const IDS = [680, 689];                     // Tawerna.inject on the other maps: 680-683 the gutters on the Urwisko (K53)
     const SW = { krata: 17, zasuwa: 18 };       // WyspaData.SWITCHES: krataUrwisko, zasuwaCysterny
-    const ITEM = { pickaxe: 63, ironPick: 116, shovel: 62, skin: 129, bucket: 138, firedPot: 167, can: 87 };
+    const ITEM = { pickaxe: 63, ironPick: 116, steelPick: 408, shovel: 62, skin: 129, bucket: 138, firedPot: 167, can: 87 };
     const ICON = { water: 391, stamina: 82, pick: 0 };
 
     // ------------------------------------------------------------------ the reserve

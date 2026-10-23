@@ -74,6 +74,28 @@ PRZED = {
 }
 # after the pass: only what changed (the rest keeps its verdict from PRZED)
 PO = {
+    # the new town's houses (2026-10-22): made to match their sheets from the start
+    'kolodziej': (OK, 'ciemnoczerwona chusta zawiązana z tyłu, czarne włosy, krótka pełna czarna broda z wąsami, ogorzała skóra, brązowa '
+                      'kamizelka z owczej skóry (runo na brzegach) na spranej niebieskiej koszuli.'),
+    'przekupka': (OK, 'musztardowa chusta na głowie, brązowe włosy i oczy, opalona twarz, ciemnozielony sznurowany gorset, płócienna bluzka '
+                      '(kosz i fartuch poniżej kadru).'),
+    'szwaczka': (OK, 'ciemnobrązowe włosy upięte w kok, śliwkowa wełniana suknia, biały kołnierzyk, żółta miara krawiecka na szyi.'),
+    'wdowa': (OK, 'ciemnoszara wełniana chusta na głowie i ramionach, ciemne włosy, zmęczona zamknięta twarz, brązowy wełniany szal z łatą, '
+                  'czarna suknia żałobna (wiadro poniżej kadru).'),
+    'kostek': (OK, 'potargane czarne włosy, brązowe oczy, brud na policzku, za duża sprana niebieska tunika z łatami, sznurek przy szyi.'),
+    'jagodka': (OK, 'dwa ciemnobrązowe kucyki, brązowe oczy, sprana mszystozielona sukienka z łatą, płócienny kołnierzyk.'),
+    'ciesla': (OK, 'szaroniebieska filcowa czapka z wywiniętym brzegiem, krótka brązowa broda z siwizną, płócienna koszula, płócienny '
+                   'fartuch z kieszenią (ołówek, trociny). Twarz starsza niż 45 lat (baza RTP), broda to łagodzi.'),
+    'weteran': (OK, 'siwe włosy, krzaczaste białe brwi, wielkie opadające białe wąsy i krótka biała broda, blizna na policzku, sprany '
+                    'granatowy płaszcz żołnierski z mosiężnymi epoletami i guzikami, szary wełniany szal (kula poniżej kadru).'),
+    # the new Podgrodzie's houses (2026-10-22, docs/podgrodzie/NOWE_PODGRODZIE.md): made to match their sheets from the start
+    'szynkarz': (OK, 'łysa czaszka z wiankiem siwobrązowych włosów, gęste opadające wąsy, rumiana pełna twarz, czerwony nos, rozpięta '
+                     'zgniłozielona kamizelka na złamanobiałej koszuli (fartuch i ścierka poniżej kadru).'),
+    'opiekunka': (OK, 'biała lniana chusta zawiązana pod brodą, siwe włosy na czole, rumiana życzliwa twarz, granatowa suknia, biały '
+                      'kołnierzyk, góra białego fartucha z plamą.'),
+    'garncarz': (OK, 'kręcone rudobrązowe włosy, szara opaska z węzłem, krótka ruda broda, ceglasta tunika, szary skórzany fartuch na '
+                     'rzemieniu, grudki gliny (szare przedramiona poniżej kadru).'),
+    'dziecko': (OK, 'nierówno obcięte słomkowe włosy, piegi, smuga gliny na policzku, za duża ochrowa sukienka z worka z szarą łatą.'),
     'kowal': (FIXED, 'łysy (ogolona, lśniąca czaszka z sadzą), krótkie ciemne włosy tylko nad uszami, pełna gęsta ciemnobrązowa broda z wąsami.'),
     'dzwonnik': (FIXED, 'zwykły ciemnoszary wełniany habit z wyłożonym kapturem, sznur z kluczem; ozdobna szata zakonu zachowana jako Ambrozy_Bust_Zakon.png.'),
     'borgar': (FIXED, 'nowe Borgar_Bust: pełna siwa broda, kremowa koszula, fioletowa chusta, musztardowa kamizelka (fartuch poniżej kadru).'),

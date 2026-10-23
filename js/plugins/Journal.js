@@ -41,12 +41,15 @@
  * ============================================================================
  * Journal.js
  * ============================================================================
- * DZIENNIK (klawisz J albo menu główne > Dziennik) ma pięć zakładek:
- *   Cele        - kolejne zadania prowadzące przez rozwój: od pierwszego drewna
- *                 po kuźnię, jedzenie i tajemnice tawerny. Cele wykonują się
- *                 same, gdy zrobisz to, czego wymagają (nic nie trzeba
- *                 zgłaszać). OK przypina cel: widać go wtedy w prawym górnym
- *                 rogu (pod minimapą z wtyczki Minimap) razem z tym, czego jeszcze brakuje.
+ * DZIENNIK (klawisz J albo menu główne > Dziennik) ma swoje zakładki (inne
+ * wtyczki dokładają kolejne):
+ *   Zadania     - wszystko do zrobienia w grupach: FABUŁA (cele fabuły i wątki
+ *                 miasteczka), POBOCZNE (sprawy ludzi), ROZWÓJ (cele rozwoju: od
+ *                 pierwszego drewna po kuźnię i jedzenie), MIASTECZKO (opinia,
+ *                 kalendarz...), UKOŃCZONE. Cele wykonują się same, gdy zrobisz
+ *                 to, czego wymagają; zadania miasteczka podaje TownQuests.js
+ *                 (Journal.addQuestSource). OK przypina wpis - zawsze jeden:
+ *                 widać go wtedy w okienku celu i na kompasie.
  *   Surowce     - skąd wziąć każdy materiał, do czego służy i czy już go miałeś.
  *   Budynki     - koszt, opis, co produkują; zielone = starcza materiałów.
  *   Receptury   - wszystko, co da się zrobić w budynkach, ze składnikami
@@ -258,10 +261,10 @@
             text: "Nocą (od 20 do 5) na łąkach i w lesie krążą watahy wilków. Otaczają cię i atakują po jednym: wilk kuca i szczeka (\"!\"), a potem skacze. Przetocz się Spacją albo odbij go klawiszem P (tryb walki), a gdy stoi po skoku - uderz. Zabij przewodnika (największy), a reszta ucieknie." },
         // (stage 2 of the fight, 2026-10-05: the leather jacket from the tannery, and the bear - lived through: it went home, ran off or died)
         { id: "jacket", ch: 4, title: "Uszyj skórzaną kurtkę", item: 171, recipe: ["tannery", "jacket"], after: ["tannery"], done: () => has(171),
-            text: "W garbarni z trzech wyprawionych skór, dwóch ścięgien i liny uszyjesz skórzaną kurtkę. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie. Widać ją w menu P → Postać." },
+            text: "W garbarni z trzech wyprawionych skór, dwóch ścięgien i liny uszyjesz skórzaną kurtkę. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie. Widać ją w menu P → Ekwipunek." },
         { id: "bear", ch: 4, title: "Przeżyj spotkanie z niedźwiedziem", item: 170, after: ["wolves"],
             done: () => { const h = $gameSystem._hunt || {}; return ((h.bears || {}).survived || 0) > 0 || ((h.kills || {}).bear || 0) > 0; },
-            text: "Niedźwiedź czasem wychodzi z lasu na pole, łąki i leśne drogi. Gdy cię zobaczy, staje na tylnych łapach i ryczy: cofnij się wtedy, a da ci spokój. Jeśli podejdziesz albo go uderzysz, ruszy na ciebie. Jego łapy (\"!\" i cios) ani przygniecenia (staje dęba i skacze) nie zatrzyma tarcza ani parowanie - tylko przewrót (Spacja) albo krok w bok. Po każdym ataku stoi chwilę: wtedy bij. Zatacza się tylko od ciężkiego ciosu albo od ataku z ukrycia. Raz rozjuszony walczy do końca, ale daleko za tobą nie pójdzie." },
+            text: "Niedźwiedź czasem wychodzi z lasu do Kruczego Jaru, na łąki i leśne drogi. Gdy cię zobaczy, staje na tylnych łapach i ryczy: cofnij się wtedy, a da ci spokój. Jeśli podejdziesz albo go uderzysz, ruszy na ciebie. Jego łapy (\"!\" i cios) ani przygniecenia (staje dęba i skacze) nie zatrzyma tarcza ani parowanie - tylko przewrót (Spacja) albo krok w bok. Po każdym ataku stoi chwilę: wtedy bij. Zatacza się tylko od ciężkiego ciosu albo od ataku z ukrycia. Raz rozjuszony walczy do końca, ale daleko za tobą nie pójdzie." },
         { id: "plant", ch: 4, title: "Posadź sosnę", item: 148, after: ["axe"], done: () => Object.values((($gameSystem._forest || {}).maps) || {}).some(list => list.length > 0),
             text: "Pod sosnami leżą szyszki. W \"Wytwórz...\" wyłuskasz z nich nasiona, a w menu wolnej ziemi posadzisz sosnę. Przez 8 dni rośnie w pełne drzewo - tak odnowisz wycięty las." },
         { id: "pantry", ch: 4, title: "Zbuduj spiżarnię", item: 99, build: "pantry", after: ["planks", "meat"], done: () => isBuilt("pantry"),
@@ -278,9 +281,10 @@
         { id: "furnish", ch: 4, title: "Urządź wnętrze chatki", item: 80, after: ["hut", "chest"], done: () => ((farmData().buildings || {})[100] || []).some(b => !b.site),
             text: "W środku masz podłogę 5 × 2 pola (pole przed drzwiami zostaje wolne, a meble nie mogą cię zamknąć w środku). Stań przed wolnym polem podłogi i naciśnij przycisk akcji: wybierzesz, co postawić (łóżko, kredens, warsztat, skrzynię, ławkę albo legowisko). Pod dachem śpi się dobrze także w deszczu i zimą." },
 
-        { id: "borgar", ch: 5, title: "Zapytaj Borgara o zamek", item: 59, where: { person: "borgar" }, after: [], done: () => $gameVariables.value(1) >= 1,
+        // (main: the story's - "Zadania" shows them under FABUŁA, with Story.js's goals; not `story`, which Story.js keeps for its own)
+        { id: "borgar", ch: 5, main: true, title: "Zapytaj Borgara o zamek", item: 59, where: { person: "borgar" }, after: [], done: () => $gameVariables.value(1) >= 1,
             text: "Karczmarz zawsze coś przemilcza. Zapytaj go wprost, co wie o dawnym zamku." },
-        { id: "cellar", ch: 5, title: "Znajdź przejście do piwnic", item: 59, where: { map: 1, name: "Tawerna" }, after: ["borgar"], done: () => $gameSelfSwitches.value([9, 1, "A"]),
+        { id: "cellar", ch: 5, main: true, title: "Znajdź przejście do piwnic", item: 59, where: { map: 1, name: "Tawerna" }, after: ["borgar"], done: () => $gameSelfSwitches.value([9, 1, "A"]),
             text: "Po rozmowie z Borgarem przyjrzyj się ścianom tawerny. Coś w nich wygląda inaczej niż powinno." }
     ];
     const goalById = id => GOALS.find(g => g.id === id);
@@ -410,7 +414,7 @@
         157: "Oprawiony jeleń: nóż i przycisk akcji przy zwłokach.",
         159: "Oprawiony dzik: nóż i przycisk akcji przy zwłokach.",
         161: "Oprawiony wilk: nóż i przycisk akcji przy zwłokach.",
-        168: "Oprawiony niedźwiedź: nóż i przycisk akcji przy zwłokach. Niedźwiedź czasem wychodzi z lasu na pole, łąki i leśne drogi.",
+        168: "Oprawiony niedźwiedź: nóż i przycisk akcji przy zwłokach. Niedźwiedź czasem wychodzi z lasu do Kruczego Jaru, na łąki i leśne drogi.",
         170: "Oprawiony niedźwiedź (nóż i przycisk akcji przy zwłokach). Cenna: w garbarni wyprawisz z niej trzy skóry, albo ją sprzedaj.",
         96: "Każde oprawione zwierzę (nóż i przycisk akcji przy zwłokach).",
         163: "Każde oprawione zwierzę (nóż i przycisk akcji przy zwłokach). Potrzebne do łuku.",
@@ -720,15 +724,16 @@
                 if (!C) return;
                 if (op.sub) {   // "Rozdział 1: Dług dziadka" -> spaced small capitals, a little tighter when it is long
                     const sub = op.sub.replace(/:\s*/g, " · ").replace(/\s+·\s+/g, " · "), room = w - x;
-                    const sp = C.spacedWidth(sub, 13, 2) <= room ? 2 : 1;
-                    C.spaced(c, C.spacedWidth(sub, 13, sp) <= room ? sub : C.fit(sub, 13, room - 20, "sc"), x, op.y + 2, 18, { size: 13, sp });
+                    // (15 px: the P menu shows the page a little smaller - MenuRing.js UI.s, 2026-10-23 - and stays readable)
+                    const sp = C.spacedWidth(sub, 15, 2) <= room ? 2 : 1;
+                    C.spaced(c, C.spacedWidth(sub, 15, sp) <= room ? sub : C.fit(sub, 15, room - 20, "sc"), x, op.y + 1, 18, { size: 15, sp });
                 }
                 C.textOut(c, op.text, x, op.y + (op.sub ? 22 : 8), w - x, 38, "left", { size: 26, face: "bold", plain: true });
             }
         },
         gh: {
             measure: (win, op) => { op.h = 30; },
-            paint: (win, op) => { const C = CHu(); if (C) C.spaced(win.contents, op.text, 0, op.y + 8, 18, { size: 13 }); }
+            paint: (win, op) => { const C = CHu(); if (C) C.spaced(win.contents, op.text, 0, op.y + 8, 18, { size: 15 }); }
         },
         gp: {
             measure: (win, op, w) => { win.contents.fontSize = 18; op.lines = wrapText(win, op.text, w); op.h = 4 + op.lines.length * 27; },
@@ -750,7 +755,7 @@
                 const c = win.contents, C = CHu();
                 UIStyle.bar(c.context, 0, op.y + 6, w, 4, op.ratio, UIStyle.accent);
                 c._baseTexture.update();
-                if (C) C.textOut(c, op.text, 0, op.y + 13, w, 22, "right", { size: 15, face: "regular", color: UIStyle.muted, plain: true });
+                if (C) C.textOut(c, op.text, 0, op.y + 13, w, 22, "right", { size: 16, face: "regular", color: UIStyle.muted, plain: true });
             }
         }
     });
@@ -794,6 +799,24 @@
         if (C) C.textOut(win.contents, C.fit(it.label, 18, Math.max(10, right - x)), x, rect.y, Math.max(0, right - x) + 4, rect.height, "left", { size: 18, color: it.dim ? "#5e5a54" : U.text, plain: true });
         else win.drawText(it.label, x, rect.y, Math.max(0, right - x), "left");
     }
+    // a group's heading: its name and count (copper in the graphite look, the system colour in the classic one), a thin line after
+    function drawHead(win, index) {
+        const it = win._items[index], rect = win.itemLineRect(index), C = CHu(), text = it.label + (it.count !== undefined ? "  " + it.count : "");
+        let x2;
+        if (isGrafit() && C) {
+            const w = C.measure(text, 16);
+            C.textOut(win.contents, text, rect.x + 2, rect.y + 4, w + 6, rect.height, "left", { size: 16, color: UIStyle.accent, plain: true });
+            x2 = rect.x + w + 14;
+        } else {
+            win.contents.fontSize = 18;
+            win.changeTextColor(ColorManager.systemColor());
+            const w = win.textWidth(text);
+            win.drawText(text, rect.x + 2, rect.y + 2, w + 4, "left");
+            win.resetFontSettings();
+            x2 = rect.x + w + 14;
+        }
+        if (x2 < rect.x + rect.width) win.contents.fillRect(x2, rect.y + Math.round(rect.height / 2) + 3, rect.x + rect.width - x2, 1, "rgba(255,255,255,0.18)");
+    }
     // the tabs: text, the chosen one bright with a copper line under it (no cursor)
     function grafitTabs(w) {
         w.tabWidth = i => (CHu() ? CHu().measure(w.commandName(i), 17) + 4 : 90);
@@ -819,8 +842,7 @@
         c.clear();
         if (!C) return false;
         const pairs = [["←→", "zakładka"], ["↑↓", "wybierz"]];
-        if (scene._tab === 0) pairs.push(["Enter", "przypnij cel"]);
-        else if (def && def.ok) pairs.push(["Enter", "śledź"]);
+        if (def && def.ok) pairs.push(["Enter", def.okWord || "śledź"]);
         pairs.push(["Esc", "wróć"]);
         let x = 0;
         const y = 4;
@@ -844,10 +866,10 @@
     // below are function declarations (hoisted), so it's fine that this
     // table is defined before their source text.
     // ------------------------------------------------------------------
+    // (ok(item): what OK on a row does - false when nothing happened; okWord: the key's word in the foot)
     const TAB_DEFS = [
-        { name: "Cele", items: () => goalItems(), detail: item => ({ ops: goalOps(item.goal) }),
-            legend: () => "Wykonano " + GOALS.filter(goalDone).length + " z " + GOALS.length + " celów",
-            help: "←/→ lub Q/E: zakładka   OK: przypnij cel   Anuluj: wróć" },
+        { name: "Zadania", items: () => taskItems(), detail: item => taskDetail(item), legend: () => taskLegend(), ok: item => pinTask(item), okWord: "przypnij",
+            help: "←/→ lub Q/E: zakładka   OK: przypnij / odepnij   Anuluj: wróć" },
         { name: "Surowce", items: () => materialItems(), detail: item => ({ ops: materialOps(item.itemId) }),
             legend: () => { const ids = materialIds(); return "Poznano " + ids.filter(has).length + " z " + ids.length + " surowców"; },
             help: "Ptaszek: poznane   ←/→ lub Q/E: zakładka   Anuluj: wróć" },
@@ -876,11 +898,100 @@
         return true;
     }
 
-    function goalItems() {
-        const d = data();
-        const active = GOALS.filter(g => !goalDone(g) && goalAvailable(g)).map(g => ({ label: g.title, icon: goalIcon(g), mark: d.pinned === g.id ? "pin" : "todo", goal: g }));
-        const done = GOALS.filter(goalDone).sort((a, b) => d.done[b.id] - d.done[a.id]).map(g => ({ label: g.title, icon: goalIcon(g), mark: "done", right: "dz. " + d.done[g.id], dim: true, goal: g }));
-        return active.concat(done);
+    // ------------------------------------------------------------------
+    // Zadania (the user, 2026-10-23: "Cele" and "Miasteczko" made one tab): the goals above and the quests of other plugins in
+    // one list, under headings - FABUŁA (Story.js's goals and the `main` ones, a source's story threads), POBOCZNE (a source's
+    // errands), ROZWÓJ (the other goals open now), a source's own rows (TownQuests.js: MIASTECZKO - the opinion, the calendar...),
+    // UKOŃCZONE (all that ended, newest first). One thing is pinned at a time: the tracker and the compass follow it.
+    // A source: { name, items() -> rows { id, group, label, icon, mark, right, dim, day (an ended one's) },
+    //   detail(row) -> ops, canPin(row), pinned() -> the id pinned or null, pin(id | null) }
+    // ------------------------------------------------------------------
+    const TASK_GROUPS = [["story", "FABUŁA"], ["side", "POBOCZNE"], ["growth", "ROZWÓJ"], ["town", "MIASTECZKO"], ["done", "UKOŃCZONE"]];
+    const TASK_OPEN = ["story", "side", "growth"];
+    const questSources = [];
+    // whoever lets the player pin things (a quest source, a tracker source with its unpin: QuestBoard.js, Okolice.js):
+    // { owner, pinned() -> id | null, unpin() }
+    const pinners = [];
+    function addQuestSource(src) {
+        if (!src || !src.name || typeof src.items !== "function" || questSources.some(s => s.name === src.name)) return false;
+        questSources.push(src);
+        if (src.pin) pinners.push({ owner: src.name, pinned: () => (src.pinned ? src.pinned() : null), unpin: () => src.pin(null) });
+        return true;
+    }
+    const isMainGoal = g => !!(g.story || g.main);
+    const sourceOf = row => (row && row.source ? questSources.find(s => s.name === row.source) : null) || null;
+    function taskItems() {
+        const d = data(), by = {};
+        const put = (key, row) => (by[key] = by[key] || []).push(row);
+        for (const g of GOALS) {
+            if (goalDone(g)) put("done", { label: g.title, icon: goalIcon(g), mark: "done", right: "dz. " + d.done[g.id], dim: true, goal: g, day: d.done[g.id] });
+            else if (goalAvailable(g)) put(isMainGoal(g) ? "story" : "growth", { label: g.title, icon: goalIcon(g), mark: d.pinned === g.id ? "pin" : "todo", goal: g });
+        }
+        for (const src of questSources) {
+            let rows = [];
+            try { rows = src.items() || []; } catch (e) { console.error("[Journal] " + src.name, e); rows = []; }
+            for (const row of rows) put(TASK_GROUPS.some(([k]) => k === row.group) ? row.group : "side", Object.assign(row, { source: src.name }));
+        }
+        if (by.done) by.done.sort((a, b) => (b.day || 0) - (a.day || 0));   // (stable: on the same day the goals first, as they were)
+        const out = [];
+        for (const [key, label] of TASK_GROUPS) {
+            const list = by[key];
+            if (!list || !list.length) continue;
+            out.push({ head: true, label, count: list.length, group: key });
+            for (const row of list) out.push(Object.assign(row, { group: key }));
+        }
+        return out.length ? out : [{ label: "Nic tu jeszcze nie ma", mark: "locked", dim: true, empty: true }];
+    }
+    function taskDetail(it) {
+        if (!it || it.empty || it.head) return { ops: [...opsHeader("Zadania", undefined, null),
+            { k: "p", text: "Tu jest wszystko, co masz do zrobienia: fabuła, sprawy ludzi i to, czego się jeszcze nauczysz. OK przypina wpis - widzisz go wtedy w okienku celu i na kompasie." }] };
+        if (it.goal) return { ops: goalOps(it.goal) };
+        const src = sourceOf(it);
+        if (!src || !src.detail) return { ops: [] };
+        const r = src.detail(it);
+        return Array.isArray(r) ? { ops: r } : r || { ops: [] };
+    }
+    function taskLegend() {
+        const rows = taskItems().filter(r => !r.head && !r.empty);
+        return "w toku " + rows.filter(r => TASK_OPEN.includes(r.group)).length + "  ·  wykonane " + rows.filter(r => r.group === "done" && r.mark === "done").length;
+    }
+    // OK on a row: pinned (all else unpinned) or unpinned; false when the row cannot be pinned
+    function pinTask(it) {
+        if (!it || it.head || it.empty) return false;
+        if (it.goal) {
+            if (goalDone(it.goal)) return false;
+            const d = data();
+            if (d.pinned === it.goal.id) d.pinned = null;
+            else { unpinOthers("goal"); d.pinned = it.goal.id; }
+            return true;
+        }
+        const src = sourceOf(it);
+        if (!src || !src.pin || !(src.canPin ? src.canPin(it) : true)) return false;
+        if (src.pinned && src.pinned() === it.id) src.pin(null);
+        else { unpinOthers(src.name); src.pin(it.id); }
+        return true;
+    }
+    // one thing followed at a time: whatever `owner` pins now, the rest let go ("goal": the journal's own pinned goal)
+    function unpinOthers(owner) {
+        if (!window.$gameSystem) return;
+        if (owner !== "goal") data().pinned = null;
+        for (const p of pinners) if (p.owner !== owner) { try { p.unpin(); } catch (e) { /* (a source without its state yet) */ } }
+    }
+    // what is pinned now: { owner, id } (the journal's goal first, then the sources in their order) or null - nothing chosen by hand
+    function pinnedNow() {
+        if (!window.$gameSystem) return null;
+        const g = pinnedGoal();
+        if (g) return { owner: "goal", id: g.id };
+        for (const p of pinners) {
+            let id = null;
+            try { id = p.pinned ? p.pinned() : null; } catch (e) { id = null; }
+            if (id) return { owner: p.owner, id };
+        }
+        return null;
+    }
+    function pinnedGoal() {
+        const d = data(), g = d.pinned ? goalById(d.pinned) : null;
+        return g && !goalDone(g) ? g : null;
     }
     function materialItems() {
         return materialIds().map(id => ({ label: dataItem(id).name, icon: iconOfItem(id), mark: has(id) ? "done" : "todo", right: countOf(id) > 0 ? "×" + countOf(id) : "", dim: !has(id), itemId: id }));
@@ -1068,7 +1179,47 @@
         this.select(items.length ? 0 : -1);
         this.updateHelp();
     };
+    // a group's heading (Zadania: { head: true, label, count }) is a row of its own that the cursor passes over
+    const isHead = (w, i) => !!(w._items[i] && w._items[i].head);
+    Window_JournalList.prototype.select = function(index) {
+        if (index >= 0 && isHead(this, index)) {   // (onto a heading - the mouse, a list just filled: the row under it, else the one above)
+            let k = index;
+            while (k < this._items.length && isHead(this, k)) k++;
+            if (k >= this._items.length) { k = index; while (k >= 0 && isHead(this, k)) k--; }
+            index = k;
+        }
+        Window_Selectable.prototype.select.call(this, index);
+    };
+    Window_JournalList.prototype.cursorDown = function(wrap) {
+        const i = this.index(), n = this._items.length;
+        let k = i + 1;
+        while (k < n && isHead(this, k)) k++;
+        if (k < n) this.smoothSelect(k);
+        else if (wrap) { k = 0; while (k < n && isHead(this, k)) k++; if (k < i) this.smoothSelect(k); }
+    };
+    Window_JournalList.prototype.cursorUp = function(wrap) {
+        const i = this.index(), n = this._items.length;
+        let k = i - 1;
+        while (k >= 0 && isHead(this, k)) k--;
+        if (k >= 0) this.smoothSelect(k);
+        else if (wrap) { k = n - 1; while (k >= 0 && isHead(this, k)) k--; if (k > i) this.smoothSelect(k); }
+    };
+    // (a group's first row brings its heading into view with it)
+    Window_JournalList.prototype.ensureCursorVisible = function(smooth) {
+        const i = this.index();
+        if (i > 0 && isHead(this, i - 1) && this.innerHeight > 0) {
+            const top = (this.row() - 1) * this.itemHeight(), bottom = (this.row() + 1) * this.itemHeight(), y = this.scrollY();
+            const to = y > top ? top : y < bottom - this.innerHeight ? bottom - this.innerHeight : null;
+            if (to !== null) { if (smooth) this.smoothScrollTo(0, to); else this.scrollTo(0, to); }
+            return;
+        }
+        Window_Selectable.prototype.ensureCursorVisible.call(this, smooth);
+    };
+    Window_JournalList.prototype.drawItemBackground = function(index) {
+        if (!isHead(this, index)) Window_Selectable.prototype.drawItemBackground.call(this, index);
+    };
     Window_JournalList.prototype.drawItem = function(index) {
+        if (isHead(this, index)) return drawHead(this, index);
         if (isGrafit()) return drawItemGrafit(this, index);
         const it = this._items[index], rect = this.itemLineRect(index);
         this.changePaintOpacity(!it.dim);
@@ -1260,29 +1411,16 @@
         w.changeTextColor(ColorManager.textColor(16));
         w.drawText(legendFor(this._tab), w.innerWidth - 400, 0, 400, "right");
     };
-    // OK on a row of a tab: a goal pinned / unpinned, another plugin's row (follow a quest); true when something happened
+    // OK on a row of a tab (Zadania: a goal or a quest pinned / unpinned, another plugin's tab: follow a contract...); true when
+    // something happened
     function listOk(tab, it) {
         const def = TAB_DEFS[tab];
-        if (tab === 0 && it && it.goal && !goalDone(it.goal)) {
-            const d = data();
-            d.pinned = d.pinned === it.goal.id ? null : it.goal.id;
-            return true;
-        }
-        if (it && def && def.ok) { def.ok(it); return true; }
-        return false;
+        if (!it || !def || !def.ok) return false;
+        return def.ok(it) !== false;
     }
     Scene_Journal.prototype.onListOk = function() {
-        const it = this._list.currentItem(), def = TAB_DEFS[this._tab];
-        if (this._tab === 0 && it && it.goal && !goalDone(it.goal)) {
-            const d = data();
-            d.pinned = d.pinned === it.goal.id ? null : it.goal.id;
-            const index = this._list.index();
-            this._list.setItems(itemsForTab(0));
-            this._list.select(Math.min(index, this._list.maxItems() - 1));
-            this._list.updateHelp();
-        } else if (it && def && def.ok) {   // (another plugin's tab)
-            const index = this._list.index();
-            def.ok(it);
+        const index = this._list.index();
+        if (listOk(this._tab, this._list.currentItem())) {
             this._list.setItems(itemsForTab(this._tab));
             this._list.select(Math.min(index, this._list.maxItems() - 1));
             this._list.updateHelp();
@@ -1652,9 +1790,42 @@
         return first.length > 58 ? first.slice(0, 56) + "…" : first;
     }
 
+    // What a goal needs, for the goal window on the map (the user, 2026-10-23: "widzieć nie tylko nazwę zadania, ale też potrzebne
+    // i aktualne składniki"): { needs: [{ icon, name, have, need, tool }] - its recipe's or its building's rows from the real tables
+    // (a recipe's tool, the hammer of a building site), at / atOk - where it is made and whether that stands, count: { have, need,
+    // unit } - a goal that counts (g.count(): Story.js's debt) }
+    function goalNeeds(g) {
+        const F = Farm(), out = { needs: [], at: "", atOk: true, count: null };
+        if (g.count) { try { out.count = g.count() || null; } catch (e) { out.count = null; } }
+        if (!F) return out;
+        const row = (id, n, tool) => ({ icon: iconOfItem(id), name: dataItem(id).name, have: countOf(id), need: n, tool: !!tool });
+        if (g.build && F.BUILDINGS[g.build]) {
+            const def = F.BUILDINGS[g.build];
+            out.needs = def.cost.filter(([id]) => dataItem(id)).map(([id, n]) => row(id, n));
+            if (!def.instant && F.ITEM && dataItem(F.ITEM.hammer)) out.needs.push(row(F.ITEM.hammer, 1, true));
+            out.at = "Gdzie: menu budowy (Q)";
+        } else if (g.recipe) {
+            const e = recipeRef(g.recipe);
+            if (e) {
+                out.needs = recipeRows(e.r).map(c => ({ icon: c.icon, name: c.name, have: c.have, need: c.need, tool: false }));
+                if (e.r.tool && dataItem(e.r.tool)) out.needs.push(row(e.r.tool, 1, true));
+                out.atOk = stationBuilt(e.type);
+                out.at = e.type === "hand" ? "Gdzie: Wytwórz… (z ziemi)" : "Gdzie: " + e.def.name + (out.atOk ? "" : " (jeszcze nie stoi)");
+            }
+        }
+        return out;
+    }
+    const goalTracked = g => Object.assign({ source: "goal", label: "CEL", title: g.title, line: goalProgress(g), key: g.id, goal: g, icon: goalIcon(g), id: g.id }, goalNeeds(g));
+
     // other plugins may put their own line in the goal window instead of the goal (QuestBoard.js: a contract being followed):
-    // fn() -> null or { label, title, line, key }; the first that gives one wins
+    // fn() -> null or { label, title, line, key, sub, needs: [{ icon, name, have, need, tool }] } (sub: the step under the title, needs:
+    // what it asks for with the counts - CleanHUD.js draws them); the first that gives one wins. opts { owner, pinned(), unpin() }: a source the
+    // player pins things in by hand (a contract, a place) - pinning anything else lets it go (unpinOthers)
     const trackerSources = [];
+    function addTrackerSource(fn, opts) {
+        if (typeof fn === "function") trackerSources.push(fn);
+        if (opts && opts.owner && typeof opts.unpin === "function") pinners.push({ owner: opts.owner, pinned: opts.pinned || null, unpin: opts.unpin });
+    }
     function trackedExtra() {
         for (const fn of trackerSources) {
             let r = null;
@@ -1667,12 +1838,15 @@
     // What the goal window follows now, for whoever shows it some other way (CleanHUD.js - the clean look's goal line and its compass):
     // a source's line (a contract, a town quest: with its source, id and icon when the source gives them) or the journal's own goal
     // (with the goal itself - its `where` is read by the compass); null when there is nothing (or the tracker is switched off)
+    // (a goal pinned by hand comes first: a source's own line - a mark of the wreck's map - must not hide it)
     function tracked() {
         if (!SHOW_TRACKER || !$gameSystem) return null;
+        const pg = pinnedGoal();
+        if (pg) return goalTracked(pg);
         const extra = trackedExtra();
         if (extra) return Object.assign({ source: "extra", icon: 0, id: null }, extra);
         const g = currentGoal();
-        return g ? { source: "goal", label: "CEL", title: g.title, line: goalProgress(g), key: g.id, goal: g, icon: goalIcon(g), id: g.id } : null;
+        return g ? goalTracked(g) : null;
     }
 
     // The goal window: right under the minimap in the top right corner (Minimap.js), in the map's place on maps
@@ -1699,7 +1873,7 @@
             this.x = hud.x + hud._gauge.x;
             this.y = hud.y + (hud.rowY ? hud.rowY(5) : hud._gauge.y + 105) + 6;   // under the five HUD rows
         }
-        const extra = SHOW_TRACKER && $gameSystem ? trackedExtra() : null;
+        const extra = SHOW_TRACKER && $gameSystem && !pinnedGoal() ? trackedExtra() : null;
         const g = extra ? null : SHOW_TRACKER && $gameSystem ? currentGoal() : null;
         this.visible = !!(g || extra) && !!hud && !!hud._gauge && hud._gauge.visible && !$gameMessage.isBusy();
         if (extra) {
@@ -1806,5 +1980,5 @@
     PluginManager.registerCommand(pluginName, "addNote", args => addNote(args.title, String(args.text || "").replace(/\\n/g, "\n")));
     PluginManager.registerCommand(pluginName, "openJournal", () => { SceneManager.push(Scene_Journal); });
 
-    window.Journal = T.register(pluginName, { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource: fn => { trackerSources.push(fn); }, tracked, recipeRef, TABS, TAB_DEFS, listOk, Window_JournalList, Window_JournalDetail, grafitTabs, legendGrafit, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary, GOAL_EVENTS });
+    window.Journal = T.register(pluginName, { onGoalDone: fn => { goalListeners.push(fn); }, addTab, addTrackerSource, addQuestSource, unpinOthers, pinnedNow, pinTask, TASK_GROUPS, tracked, goalNeeds, recipeRef, TABS, TAB_DEFS, listOk, Window_JournalList, Window_JournalDetail, grafitTabs, legendGrafit, GOALS, CHAPTERS, data, evaluateGoals, currentGoal, goalAvailable, goalDone, addNote, afterRest, buildSummary, summaryOps, itemsForTab, detailFor, materialIds, allRecipes, sourceLines, usesLines, goalProgress, has, Scene_Journal, Scene_DaySummary, GOAL_EVENTS });
 })();

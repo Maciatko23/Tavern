@@ -165,14 +165,14 @@ const DRIVER = String.raw`
         await until(`$gameSystem._story.intro === 2 && ${calmMap}`, 60);
         const intro = await J("({ log: window.__drv.log.slice(window.__drv.mark), s: $gameSystem._story, soup: $gameParty.numItems($dataItems[131]), notes: $gameSystem._journal.notes.map(n => n.title) })");
         const introText = intro.log.map(l => l.t).join(" / ");
-        check("the intro (since the prologue, 2026-10-12: the fisherman, the mother's letter, then the debt): grandpa and the hero talk in bubbles (grandpa over 901, the hero over 0), 17 messages", intro.log.length === 17 && intro.log[0].who === 901 && intro.log[1].who === 0 && intro.log.filter(l => l.who === 0).length === 5,
+        check("the intro (since the prologue, 2026-10-12: the fisherman, the mother's letter, then the debt): grandpa and the hero talk in bubbles (grandpa over 901, the hero over 0), 18 messages (2026-10-22: + his wall line)", intro.log.length === 18 && intro.log[0].who === 901 && intro.log[1].who === 0 && intro.log.filter(l => l.who === 0).length === 5,
             intro.log.map(l => l.who));
         check("it tells the debt (2500, Lord Zaleski, day 60), the field (build only there), the tavern job (Borgar, afternoons and evenings)",
-            /2500/.test(introText) && /Lordowi Zaleskiemu/.test(introText) && /Termin: dzień 60/.test(introText) && /stawiaj na nim/.test(introText) && /Tylko tam/.test(introText) && /Borgar/.test(introText) &&
+            /2500/.test(introText) && /Lordowi Zaleskiemu/.test(introText) && /Termin: dzień 60/.test(introText) && /stawiaj\s+na\s+niej/.test(introText) && /Tylko\s+tam/.test(introText) && /w\s+obrębie\s+muru/.test(introText) && /Kruczym\s+Jarze/.test(introText) && /Borgar/.test(introText) &&
             /po południu i wieczorem/.test(introText) && /A pieniądze\.\.\./.test(introText) && !/Hrabi/.test(introText), introText.slice(0, 200));
         const note = await ev("($gameSystem._journal.notes.find(n => n.title === 'Dług dziadka Stacha') || {}).text || ''");
         check("after the intro: talk done, a cabbage soup from grandpa, a journal note (with the way to the field and to the tavern, the dawn rule)", intro.s.intro === 2 && intro.s.flags.talk && intro.soup === 1 &&
-            /Droga na pole:/.test(note) && /Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ/.test(note) && /na wschód od tawerny/.test(note) && /do świtu/.test(note),
+            /Droga na działkę:/.test(note) && /Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ/.test(note) && /na wschód od tawerny/.test(note) && /do świtu/.test(note),
             { flags: intro.s.flags, soup: intro.soup, note });
         await ev("Journal.evaluateGoals(); 0");
         const jr = await J(`(function(){ const G = Journal.GOALS, ids = G.map(g => g.id), story = G.filter(g => g.story), at = id => ids.indexOf(id);
@@ -209,26 +209,26 @@ const DRIVER = String.raw`
         // ---- grandpa again: the debt and a hint
         const g2 = await talkTo("$gameMap.event(901)");
         check("talking to grandpa again: where the debt stands (no praise for nothing paid) and a hint (the way to the field)", g2.done && g2.log.length === 2 && /nie oddaliśmy jeszcze ani grosza/.test(g2.text) &&
-            /Czasu jeszcze sporo, ale nie zwlekaj/.test(g2.text) && !/Idzie ci lepiej/.test(g2.text) && /Pole jest za lasem/.test(g2.text) && g2.log.every(l => l.who === 901), g2.text);
+            /Czasu jeszcze sporo, ale nie zwlekaj/.test(g2.text) && !/Idzie ci lepiej/.test(g2.text) && /Działka\s+jest\s+za\s+lasem/.test(g2.text) && g2.log.every(l => l.who === 901), g2.text);
 
         // ================= 2. the field, the tavern: Borgar
         await go(3, 26, 14);
         await ev("Journal.evaluateGoals(); 0");
         const fld = await J("({ f: $gameSystem._story.flags.field, done: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_field')), cur: Journal.currentGoal().id, name: $gameMap.displayName() })");
-        check("reaching grandpa's field (Map003, shown as 'Pole dziadka') ticks 'Dojdź na pole dziadka'; the tracker then says find the job", fld.f && fld.done && fld.cur === "story_work" && fld.name === "Pole dziadka", fld);
+        check("reaching grandpa's field (Map003, shown as 'Kruczy Jar') ticks 'Dojdź na działkę dziadka'; the tracker then says find the job", fld.f && fld.done && fld.cur === "story_work" && fld.name === "Kruczy Jar", fld);
         // the way in, walked with the keys: Polna droga north -> Okolice Tawerny (Map008) -> the tavern's door -> the tavern (Map001), out and in again
         await go(22, 12, 1, 8);
         const to8 = await walkTo("up", 8);
         const at8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, door: ($gameMap.events().find(e => /^Drzwi tawerny/.test(e.event().name)) || { x: -1 }).x })");
-        await ev("(function(){ $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); return 0; })()");   // (in front of the tavern's gate, the hall since 2026-10-04)
+        await ev("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); return 0; })()");   // (in front of the tavern's gate, the hall since 2026-10-04)
         const to1 = await walkTo("up", 1);
         const at1 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, borgar: !!Story.borgarEvent() })");
         const back8 = await walkTo("down", 8);
         const out8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y })");
-        await ev("(function(){ $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); return 0; })()");
+        await ev("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); return 0; })()");
         const in1 = await walkTo("up", 1);
-        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 24 && to1 && at1.borgar &&
-            back8 && out8.x === 24 && out8.y === 17 && in1, { to8, at8, to1, at1, back8, out8, in1 });
+        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 51 && to1 && at1.borgar &&
+            back8 && out8.x === 51 && out8.y === 17 && in1, { to8, at8, to1, at1, back8, out8, in1 });
         await ev("$gameSystem.setDayNightHour(10); $gameSystem.setStamina(100); 0");
         const bor = await J("(function(){ const e = Story.borgarEvent(); return e && { id: e.eventId(), name: e.event().name, stub: e.list().length === 2 && e.list()[0].code === 355, atmo: $gameMap.events().filter(x => /Atmosfera - Borgar/.test(x.event().name)).map(x => Story.roleOf(x)) }; })()");
         check("Borgar's event is found by its name; the story speaks through it (his 'Atmosfera' parallel event is left alone)", bor && bor.name === "Borgar Kowal" && bor.stub && bor.atmo.every(r => r === null), bor);
@@ -415,8 +415,8 @@ const DRIVER = String.raw`
         const lostAt = await until("!!$gameSystem._story.lost", 30);
         await frames(30);
         const lostSt = await J("({ scene: SceneManager._scene.constructor.name, lost: $gameSystem._story.lost, ended: $gameSystem._story.ended, save: $gameSystem.isSaveEnabled(), notes: $gameSystem._journal.notes.map(n => n.title) })");
-        check("then no ending: the field is the Lord's (day 61), the Lord's letter and the note 'Pole przepadło', the game goes on and saves", lostAt && lostSt.scene === "Scene_Map" && lostSt.lost.day === 61 && !lostSt.ended &&
-            lostSt.save === true && lostSt.notes.includes("Pole przepadło") && lostSt.notes.some(n => /List od Lorda \(dzień 61\)/.test(n)), lostSt);
+        check("then no ending: the field is the Lord's (day 61), the Lord's letter and the note 'Działka przepadła', the game goes on and saves", lostAt && lostSt.scene === "Scene_Map" && lostSt.lost.day === 61 && !lostSt.ended &&
+            lostSt.save === true && lostSt.notes.includes("Działka przepadła") && lostSt.notes.some(n => /List od Lorda \(dzień 61\)/.test(n)), lostSt);
         await b.shot(path.join(SHOTS, "fabula_4_koniec.png"));
         check("the old ending screen is not used (it sleeps behind the parameter 'Przegrana kończy grę')", !(await ev("Story.LOSE_ENDS")) && (await ev("SceneManager._scene.constructor.name")) !== "Scene_StoryEnding");
 
@@ -452,8 +452,8 @@ const DRIVER = String.raw`
         await until("$gameSystem.dayNightHour() >= 6.4", 10);
         await frames(30);
         const resting = await J("({ hour: $gameSystem.dayNightHour(), sitting: $gamePlayer.isToolSwinging(), due: Story.pastDue(), lost: !!$gameSystem._story.lost, ended: $gameSystem._story.ended, running: $gameMap.isEventRunning(), save: $gameSystem.isSaveEnabled() })");
-        check("day 61 before 6:00 (the field shown as 'Pole dziadka'): not lost yet; resting past 6:00 the loss waits while he sits (due, saving on)", before6.night && !before6.doomed && before6.save &&
-            before6.name === "Pole dziadka" && !!spot && resting.sitting && resting.hour >= 6.4 && resting.due && !resting.lost && !resting.ended && !resting.running && resting.save === true, { before6, spot, resting });
+        check("day 61 before 6:00 (the field's map shown as 'Kruczy Jar'): not lost yet; resting past 6:00 the loss waits while he sits (due, saving on)", before6.night && !before6.doomed && before6.save &&
+            before6.name === "Kruczy Jar" && !!spot && resting.sitting && resting.hour >= 6.4 && resting.due && !resting.lost && !resting.ended && !resting.running && resting.save === true, { before6, spot, resting });
         await ev("window.__drv.on = false; ConfigManager.uiClean = false; Input._currentState.ok = true; 0");
         await frames(4);
         await ev("Input._currentState.ok = false; 0");
@@ -474,7 +474,7 @@ const DRIVER = String.raw`
         await ev(quiet);
         await ev("Journal.evaluateGoals(); 0");
         const old = await J("({ story: $gameSystem._story === undefined, active: Story.active(), goals: Journal.GOALS.some(g => g.story), cur: Journal.currentGoal() && Journal.currentGoal().id, name: $gameMap.displayName() })");
-        check("an old-style game (begun on Map003): no story state, no story goals, the journal's first goal is 'stone', the map keeps its own name", old.story && !old.active && !old.goals && old.cur === "stone" && old.name === "Domek - Zewnętrze", old);
+        check("an old-style game (begun on Map003): no story state, no story goals, the journal's first goal is 'stone', the map keeps its own name", old.story && !old.active && !old.goals && old.cur === "stone" && old.name === "Kruczy Jar", old);
         await go(1, 50, 53);
         const oldB = await J("(function(){ const e = $gameMap.events().find(x => x.event().name === 'Borgar Kowal'); return { first: e.list()[0].code, text: e.list()[1].parameters[0] }; })()");
         check("...Borgar keeps his own commands", oldB.first === 101 && /Witaj, podróżniku/.test(oldB.text), oldB);

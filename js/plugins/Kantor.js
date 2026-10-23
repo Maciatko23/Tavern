@@ -919,7 +919,7 @@
     function w5Vars() {
         const s = S(), r = w5();
         const d = s.ferry.day || (at("w5Prom") ? ferryDay() : 0);
-        const akt2 = !actTwo() ? "zacznie się w Akcie II (po spłacie długu albo stracie pola)." :
+        const akt2 = !actTwo() ? "zacznie się w Akcie II (po spłacie długu albo stracie działki)." :
             s.outcome === "closed" ? "sołtys szuka kogoś do pustego kantoru (ratusz, 8–18)." :
             s.outcome === "double" ? "Baltazar ma dla wspólnika nowy towar (kantor, 8–18)." : "Baltazar sprzedaje wrogom drożej (kantor, 8–18).";
         return { n: Math.min(2, clueList().length), zmiany: Math.min(D.SHIFTS, s.shifts), rejestr: vcount("rejestr") > 0 ? "Rejestr Baltazara masz w torbie" : "Odpis rejestru masz w torbie",
@@ -1131,22 +1131,33 @@
             act(out, ["pay", D.PAY.double]);
         }
         if (isDone("W5") && (mode() === "grip" || mode() === "enemy") && inHours(hour(), TM.work)) {
-            choiceTo(out, [TX.sklepAsk, TX.sklepBye], [shopList(spk), []], 1);
+            const extra = extraRows("kupiec", ev);
+            choiceTo(out, [TX.sklepAsk].concat(extra.map(r => r.label), [TX.sklepBye]), [shopList(spk)].concat(extra.map(r => r.cmds || []), [[]]), extra.length + 1);
         }
         return out.length ? out : null;
     }
     // (2026-10-17, the user) Ludmiła behind the counter of the honest kantor (Map103, 9-15): a short word and the shop - her quests'
     // hand-ins first (TownQuests), her camp's news on a choice (TownQuests' talk of her: offers, reminders - or a line of the camp)
     const ludmilaHere = () => { const L = TL(), ev = L && L.eventOf ? L.eventOf("ludmila") : null; return onMap(M.kantor) && !!ev && !(ev._town && ev._town.hidden) ? ev : null; };
-    function ladaMenu(spk) {
-        const out = linesTo([], spk, [pick(TX.ladaLudmila)]);
-        return choiceTo(out, [TX.ladaPokaz, TX.ladaOboz, TX.ladaBywaj], [shopList(spk, "honest", true), act([], ["ludmilaTalk"]), []], 2);
+    // (2026-10-23, Bron.js) other trades of the same people, as lines of their own menus - their rules, hours and words kept:
+    // addMenu(fn(key, ev) -> [{ label, cmds, say }]) - say: a line said before a soldier's choice
+    const extraMenus = [];
+    const addMenu = fn => { if (typeof fn === "function" && !extraMenus.includes(fn)) extraMenus.push(fn); };
+    function extraRows(key, ev) {
+        const out = [];
+        for (const fn of extraMenus) { try { for (const r of fn(key, ev) || []) if (r && r.label) out.push(r); } catch (e) { console.error("[Kantor] menu " + key, e); } }
+        return out;
+    }
+    function ladaMenu(spk, ev) {
+        const out = linesTo([], spk, [pick(TX.ladaLudmila)]), extra = extraRows("ludmila", ev);
+        return choiceTo(out, [TX.ladaPokaz].concat(extra.map(r => r.label), [TX.ladaOboz, TX.ladaBywaj]),
+            [shopList(spk, "honest", true)].concat(extra.map(r => r.cmds || []), [act([], ["ludmilaTalk"]), []]), extra.length + 2);
     }
     function ludmilaHook(key, ev) {
         if (key !== "ludmila" || !has() || !onMap(M.kantor) || S().honest !== "ludmila") return null;
         const q = TQ();
         try { if (q && q.talkFor && q.talkFor("ludmila", true)) return null; } catch (e) { /* (her quests speak through TownQuests) */ }
-        return ladaMenu({ id: ev.eventId(), name: "Ludmiła" });
+        return ladaMenu({ id: ev.eventId(), name: "Ludmiła" }, ev);
     }
     (function hookTalk() {
         const L = TL();
@@ -1283,13 +1294,13 @@
     // F9 ("Wyspa i fabuła"): straight to a chapter - the flags, the hour, the place
     // ------------------------------------------------------------------
     const JUMP = {
-        1: { step: "w5Poszlaki", hour: 10, go: [M.town, 12, 41, 8] },
-        2: { step: "w5Stuk", hour: 23.85, go: [M.town, 8, 37, 2] },
-        3: { step: "w5Najem", hour: 10, go: [M.town, 12, 41, 8] },
-        4: { step: "w5Rejestr", hour: 22.05, go: [M.town, 10, 41, 8] },
-        5: { step: "w5Komu", hour: 10, go: [M.town, 12, 41, 8] },
+        1: { step: "w5Poszlaki", hour: 10, go: [M.town, 16, 49, 8] },
+        2: { step: "w5Stuk", hour: 23.85, go: [M.town, 10, 49, 2] },
+        3: { step: "w5Najem", hour: 10, go: [M.town, 16, 49, 8] },
+        4: { step: "w5Rejestr", hour: 22.05, go: [M.town, 14, 49, 8] },
+        5: { step: "w5Komu", hour: 10, go: [M.town, 16, 49, 8] },
         6: { step: "w5Prom", hour: 21.5, go: [M.droga, 12, 2, 2] },
-        7: { step: "w5Akt2", hour: 10, go: [M.town, 12, 41, 8] }
+        7: { step: "w5Akt2", hour: 10, go: [M.town, 16, 49, 8] }
     };
     function debugJump(ch) {
         const j = JUMP[ch], q = TQ();
@@ -1317,7 +1328,7 @@
     // API
     // ------------------------------------------------------------------
     window.Kantor = T.register(PLUGIN, {
-        DATA: D, state: () => S(), act: actCall, door, clues: clueList, trust, witTrusts, registerText, cardInBox, priceMul, priceOf, mode,
+        DATA: D, state: () => S(), act: actCall, addMenu, door, clues: clueList, trust, witTrusts, registerText, cardInBox, priceMul, priceOf, mode,
         ferryDay, ferryNow, shiftOn, checkedIn, outcome: () => S().outcome, debugJump, JUMP, step: () => cur(),
         // tests: a visitor's phase, the camp's men, the ferry's men
         visitors: () => Object.assign({}, vis), campMen, promMen, fightingMen, spawnCamp, campWanted, opts: OPTS, backDoorEv, cellarState: () => S().reg

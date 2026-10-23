@@ -20,7 +20,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const opinion = () => J("TownQuests.opinion()");
 
     // ================================================================== W1 rozdz. 7: the cistern's sluice and the bell
-    await t.newGame({ map: 8, x: 24, y: 37, dir: 8, hour: 9, day: 40, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 53, y: 55, dir: 8, hour: 9, day: 40, quiet: true, minimap: false });
     await at(40, 9, 30);
     await t.eval("(function(){ TownQuests.start('W1', 9); TownQuests.state().flags.w1Silent = 40; return 0; })()");
     const c7 = await J("({ r: TownQuests.rec('W1'), text: TownQuests.Q.W1.steps[9].text, head: TownQuests.journalOps({ quest: TownQuests.Q.W1 }).filter(o => o.k === 'h').map(o => o.text) })");
@@ -91,7 +91,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...talked to again: Mruczek's truth (it goes to grandpa) - kept silent", /Mruczek schodził/.test(g2.text) && /Nic nie mówisz/.test(g2.text) && (await flags()).truthKept_kot, g2.text.slice(0, 240));
 
     // the town: Hanka told (opinion +2), Kuba 'not now' (asked once a day), then kept
-    await t.go(8, 24, 37, 8);
+    await t.go(8, 53, 55, 8);
     await at(40, 9, 40);
     t.check("a tick over Hanka (a truth waits for her)", (await J("TownQuests.markers().piekarka")) === "ready");
     const opH = await opinion();

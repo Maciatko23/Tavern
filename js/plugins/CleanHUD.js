@@ -4,16 +4,16 @@
 // "Czysty widok" (the user's choice, 2026-10-08: docs/ui_pomysly/POMYSLY.md, idea 4; mock-ups docs/ui_pomysly/pomysl_4_czysty_hud.png
 // and pomysl_4_czysty_okno.png, made by tools/ui_pomysly/pomysl4_czysty.py): the map's HUD without panels - outlined text, thin
 // bars, a soft shade at the top and bottom edges of the screen so the text reads on any ground.
-//   top left      a round clock with hands and the sun; right of it the needs as thin level bars one under another (health,
-//                 stamina, food, water - the breath a fifth one in the combat mode) with their icons and numbers (the user,
-//                 2026-10-12; before: arcs round the clock); under the clock the goal ("CEL", icon, title), the day's line, "Tryb
-//                 walki", the premia
+//   top left      (2026-10-23) the goal followed in the corner (label, icon, title, the step, what it needs with the counts now);
+//                 under it the needs as thin level bars one under another on a plate as wide as the goal's (health, stamina, food,
+//                 water - the breath a fifth one in the combat mode), with their icons and numbers; under them "Tryb walki", the premia
 //   top centre    the map's name as one comes in, the notices, the banners
-//   top right     the round goal compass (CleanHUD_Compass.js) and its label; under it the load (41 / 120 and the bag), the torch's
-//                 gauge, the minimap only on M (hidden by default)
+//   top right     a round clock with hands and the sun right beside the round goal compass (CleanHUD_Compass.js), both of one size;
+//                 the compass's label under it, the day's line under them, the torch's gauge, the minimap only on M (hidden by
+//                 default); the load (41 / 120 and the bag) is hidden for now (SHOW_LOAD)
 //   bottom left   empty
 //   over him      his thoughts and the "you need..." popups as outlined text, no plates, no bubble; no bars under him (the user,
-//                 2026-10-08: the breath bar under his feet is not drawn - it is the fifth bar beside the clock)
+//                 2026-10-08: the breath bar under his feet is not drawn - it is the fifth bar of the needs' plate)
 //   bottom right  what he gains: text and icons, the older ones fading; the weapon in the combat mode
 // No experience bar (the user: "pasek doświadczenia z dołu wywalić"): the level is in the P menu and Postać, a new level still has
 // its "Poziom N!" banner at the top.
@@ -49,17 +49,19 @@
  * Interfejs na mapie bez ciężkich paneli: tekst z ciemnym obrysem, grafitowe
  * pigułki i lekkie przyciemnienie przy górnej i dolnej krawędzi ekranu
  * (mocniejsze na jasnym tle: śnieg, piasek, błysk burzy).
- *  - Lewy górny róg: okrągły zegar ze wskazówkami i słońcem, po prawej od
- *    niego poziome paski potrzeb jeden pod drugim (życie, kondycja, sytość,
- *    nawodnienie; w trybie walki oddech jako piąty pasek) z ikonkami
- *    i liczbami, a pod zegarem cel (ikona, tytuł), pora dnia, dzień i pora
- *    roku, plakietka „Tryb walki” i premie. Niska wartość: pasek czerwony,
- *    miga.
+ *  - Lewy górny róg: śledzony cel lub zadanie (ikona, tytuł, bieżący krok
+ *    i potrzebne rzeczy z ilościami „mam/potrzeba”), pod nim okno z poziomymi
+ *    paskami potrzeb (życie, kondycja, sytość, nawodnienie; w trybie walki
+ *    oddech jako piąty pasek) z ikonkami i liczbami, a pod nim plakietka
+ *    „Tryb walki” i premie. Bez celu paski stoją w samym rogu. Niska
+ *    wartość: pasek czerwony, miga.
  *  - Góra, środek: nazwa miejsca, która gaśnie po wejściu, i komunikaty
  *    (doświadczenie, cele, „Poziom N!”, powitanie dnia).
- *  - Prawy górny róg: okrągły kompas celu (CleanHUD_Compass.js), pod nim
- *    obciążenie plecaka, pochodnia i minimapa (klawisz M; w czystym widoku
- *    domyślnie ukryta).
+ *  - Prawy górny róg: okrągły zegar ze wskazówkami i słońcem tuż obok
+ *    okrągłego kompasu celu (CleanHUD_Compass.js), oba tej samej wielkości;
+ *    pod kompasem jego podpis, pod nimi pora dnia, dzień i pora roku, dalej
+ *    pochodnia i minimapa (klawisz M; w czystym widoku domyślnie ukryta).
+ *    Obciążenie plecaka na razie ukryte.
  *  - Lewy dolny róg: pusty. Pod bohaterem nie ma żadnych pasków.
  *  - Myśli bohatera i komunikaty o brakach - tekst z obrysem nad nim.
  *  - Prawy dolny róg: zdobycze (starsze bledną) i broń w trybie walki.
@@ -489,15 +491,22 @@
         return { top: this._top.opacity / 255, bottom: this._bottom.opacity / 255, groundTop: this._bright.top, groundBottom: this._bright.bottom };
     };
 
-    // ---- top left (the user, 2026-10-12: "paski zdrowia wytrzymałości itd. niech będą poziome i po prawo od zegara, a pod zegarem
-    // aktywne zadanie"): a round clock with hands (the sun inside it at the hour of a 24 h day, noon at the top - the moon at night);
-    // right of it the needs as thin level bars one under another on a light graphite plate (health, stamina, food, water - the breath a
-    // fifth one in the combat mode), each with its small icon and its number; under the clock the goal followed ("CEL", its icon and
-    // title), the day's line ("Południe · dzień 40 · lato"), the pills ("Tryb walki", the premia). The bottom left corner stays empty.
-    // Two sprites: Sprite_CleanClock (the clock and the text) and Sprite_CleanNeeds (the bars); they fade as one.
-    const CLK = { cx: 58, cy: 56, r: 40 };
-    // the bars' plate: gap from the clock; a row every `step` px (centred on the clock's middle); inside: padX, the icon, the bar, the number
-    const BARS = { gap: 12, step: 18, padX: 10, icon: 20, barW: 128, barH: 6, valW: 40, pad: 4 };
+    // ---- the layout (the user, 2026-10-23: "okno z celem w lewo u góry w kącie, ładnie; zegar tuż przy kompasie po prawej stronie
+    // (niech obydwa są tej samej wielkości), a okno z paskami stanu gracza pod oknem celu"):
+    //   top left    (2026-10-23, the user: "zmieniamy tylko okno celu z oknem pasków", "wyłączyć u nich ramki i tła, ale żeby
+    //               zawartość była dobrze widoczna") the needs' bars in the corner - health, stamina, food, water, the breath in the
+    //               combat mode - as wide as the goal (Sprite_CleanNeeds), the pills ("Tryb walki", the premia) under them; under all
+    //               that the goal followed (Sprite_CleanGoal). No plates behind the two: the words and the icons have a dark outline and
+    //               a shadow, the bars their own dark tracks. The two fade as one.
+    //   top right   the round clock with hands (the sun inside it at the hour of a 24 h day, noon at the top - the moon at night) right
+    //               beside the compass, both of one size in one line (CleanHUD_Compass.js: the compass in the corner, its label under it);
+    //               the day's line ("Południe · dzień 40 · lato") under them, right-aligned; the load (hidden for now), the torch's
+    //               gauge and the minimap under that.
+    // EDGE: the HUD's margin from the screen's edges (the compass's too). CLK.r: the compass's DIAL.R - one size.
+    const EDGE = 12;
+    const CLK = { r: 44, gap: 10 };
+    // the bars' plate: a row every `step` px; inside: padX, the icon, the bar (as long as the plate allows), the number
+    const BARS = { gap: 6, step: 18, padX: 10, icon: 20, barW: 128, barH: 6, valW: 40, pad: 4 };
     BARS.w = BARS.padX + BARS.icon + 6 + BARS.barW + 8 + BARS.valW + BARS.padX;
     const GOAL = { x: 14, gap: 8, maxW: 400, titleSize: 19, lineSize: 14, line: "#b4aea2", pillH: 24 };
     const LOW_COLOUR = "#ff6f5e";
@@ -519,11 +528,11 @@
     }
     const combatOn = () => { const Cb = T.api("Combat"); return !!(Cb && Cb.combatMode && Cb.combatMode()); };
 
-    // the corner fades as one (the clock, the text, the bars): the box of each is the box of both
-    function cornerRect() {
+    // the left column fades as one (the goal, the bars and the pills): the box of each is the box of both
+    function columnRect() {
         const scene = SceneManager._scene;
         let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-        for (const p of scene ? [scene._cleanClock, scene._cleanNeeds] : []) {
+        for (const p of scene ? [scene._cleanGoal, scene._cleanNeeds] : []) {
             if (!p || !p.visible || !p._box) continue;
             const r = Sprite_CleanPart.prototype.hudRect.call(p);
             if (!(r.width > 0)) continue;
@@ -532,94 +541,74 @@
         return x1 > x0 ? new PIXI.Rectangle(x0, y0, x1 - x0, y1 - y0) : new PIXI.Rectangle(0, 0, 0, 0);
     }
 
+    // ---- top right: the clock beside the compass and the day's line under them
     function Sprite_CleanClock() {
         this.initialize(...arguments);
     }
     Sprite_CleanClock.prototype = Object.create(Sprite_CleanPart.prototype);
     Sprite_CleanClock.prototype.constructor = Sprite_CleanClock;
     Sprite_CleanClock.prototype.initialize = function() {
-        Sprite_CleanPart.prototype.initialize.call(this, 640, 240);
+        Sprite_CleanPart.prototype.initialize.call(this, 460, 200);
         this._mapId = 0;
         this._showClock = true;
+        this._layout = null;
     };
     Sprite_CleanClock.prototype.ownRect = Sprite_CleanPart.prototype.hudRect;
-    Sprite_CleanClock.prototype.hudRect = function() {
-        return this.visible ? cornerRect() : new PIXI.Rectangle(0, 0, 0, 0);
+    // where it goes (on the screen): left of the compass, its middle on the compass's line (no compass on this map: in the corner);
+    // the day's line right under the two - under the compass's label while it has one (a long label reaches under the clock)
+    Sprite_CleanClock.prototype.layout = function() {
+        const scene = SceneManager._scene, cmp = scene && scene._cleanCompass, R = CLK.r, on = !!(cmp && cmp.visible);
+        const cx = on ? cmp.x - R - CLK.gap - R : W() - EDGE - R, cy = on ? cmp.y : EDGE + R;
+        const label = on && cmp._label && cmp._label.visible && cmp.bottom;
+        const dayY = label ? cmp.bottom() + 2 : cy + R + 8;
+        return { cx: Math.round(cx), cy: Math.round(cy), dayY: Math.round(dayY) };
     };
     Sprite_CleanClock.prototype.update = function() {
         Sprite.prototype.update.call(this);
         this.visible = isClean();
         if (!this.visible || !$gameSystem) return;
         if ($gameMap.mapId() !== this._mapId) { this._mapId = $gameMap.mapId(); this._showClock = T.mapFlag("Clock", true, "off"); }
-        const hour = T.time.hour(), scene = SceneManager._scene, shown = this.goalShown();
-        // (the goal: a few times a second - the old goal window still works it out every frame for its own text)
-        if (!shown) { this._goal = null; this._goalT = 0; }
-        else if (!(this._goalT-- > 0)) { this._goal = goalInfo(scene); this._goalT = 10; }
-        const goal = this._goal, gy = this.textY(scene), combat = shown && combatOn(), buffs = shown ? buffList() : [];
-        const day = shown && this._showClock ? dayLine(hour) : "";
+        this.x = W() - this.bitmap.width;
+        this.y = 0;
+        const hour = T.time.hour(), L = this._layout = this.layout();
+        const day = this.goalShown() && this._showClock ? dayLine(hour) : "";
         // (the hands move every game minute; the sun's place with them)
-        const key = [this._showClock ? Math.floor(hour * 60) : "", goal ? goal.title + "|" + goal.icon : "", gy, day, combat,
-            buffs.map(f => (f.icon || f.glyph) + f.text).join(","), iconsReady(), facesReady()].join("#");
+        const key = [this._showClock ? Math.floor(hour * 60) : "", day, L.cx, L.cy, L.dayY, W(), iconsReady(), facesReady()].join("#");
         if (key === this._key) return;
         this._key = key;
-        this.redraw(hour, goal, gy, day, combat, buffs);
+        this.redraw(hour, day, L);
     };
-    // the goal, the day's line and the pills hide while a message is up (as the old goal window did)
+    // the day's line hides while a message is up (as the old goal window did)
     Sprite_CleanClock.prototype.goalShown = function() {
         return !$gameMessage.isBusy();
     };
-    // the text's top: under the clock and under the bars beside it (the combat mode's fifth bar reaches a little lower)
-    Sprite_CleanClock.prototype.textY = function(scene) {
-        const needs = scene && scene._cleanNeeds, under = needs && needs.bottom ? needs.bottom() : 0;
-        return Math.round(Math.max(this._showClock ? CLK.cy + CLK.r : 4, under) + GOAL.gap);
-    };
-    Sprite_CleanClock.prototype.redraw = function(hour, goal, gy, day, combat, buffs) {
-        const b = this.bitmap, ctx = b.context, clock = this._showClock, gx = GOAL.x, tx = gx + 32;
+    Sprite_CleanClock.prototype.redraw = function(hour, day, L) {
+        const b = this.bitmap, ctx = b.context, clock = this._showClock, ox = this.x, R = CLK.r;
         b.clear();
-        let right = 0, bottom = 0;
+        let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+        const grow = (a, c, d, e) => { x0 = Math.min(x0, a); y0 = Math.min(y0, c); x1 = Math.max(x1, d); y1 = Math.max(y1, e); };
         if (clock) {
-            drawClock(ctx, CLK.cx, CLK.cy, CLK.r, hour);
-            right = CLK.cx + CLK.r + 2;
-            bottom = CLK.cy + CLK.r + 2;
+            drawClock(ctx, L.cx - ox, L.cy, R, hour);
+            grow(L.cx - ox - R - 2, L.cy - R - 2, L.cx - ox + R + 3, L.cy + R + 4);
         }
-        let y = gy;
-        if (goal) {
-            spaced(b, "Cel", gx + 2, y - 2, 16, { size: 12, outline: true, ow: 3 });
-            if (goal.icon > 0) drawIcon(b, goal.icon, gx - 2, y + 13, 28);
-            else drawGoalMark(b, gx + 12, y + 27);
-            const title = fit(goal.title, GOAL.titleSize, GOAL.maxW);
-            textOut(b, title, tx, y + 13, GOAL.maxW + 10, 28, "left", { size: GOAL.titleSize, ow: 4, outline: "rgba(0,0,0,0.62)", shadow: 0.45, blur: 4 });
-            right = Math.max(right, tx + measure(title, GOAL.titleSize) + 8);
-            y += 41;
-            bottom = Math.max(bottom, y);
+        let dayX = 0;
+        if (day) {   // (right-aligned to the HUD's edge, under the clock and the compass)
+            const tw = measure(day, GOAL.lineSize), right = b.width - EDGE;
+            textOut(b, day, right - tw - 8, L.dayY, tw + 10, 22, "left", { size: GOAL.lineSize, color: GOAL.line, ow: 3, outline: "rgba(0,0,0,0.6)", shadow: 0.4, blur: 4 });
+            grow(right - tw - 8, L.dayY, right + 2, L.dayY + 22);
+            dayX = ox + right - tw - 8;
         }
-        if (day) {   // (no goal: the day's line right under the clock)
-            textOut(b, day, goal ? tx : gx, y, GOAL.maxW, 22, "left", { size: GOAL.lineSize, color: GOAL.line, ow: 3, outline: "rgba(0,0,0,0.6)", shadow: 0.4, blur: 4 });
-            right = Math.max(right, (goal ? tx : gx) + measure(day, GOAL.lineSize) + 8);
-            y += 24;
-            bottom = Math.max(bottom, y);
-        }
-        // the pills under the day's line: "Tryb walki", then the premia
-        let px = goal ? tx : gx;
-        const x0 = px, py = y + 2, ph = GOAL.pillH;
-        if (combat) {
-            const w = Math.max(112, measure("Tryb walki", 15) + 28);
-            rpanel(ctx, px, py, w, ph, ph / 2, { fill: "rgba(30,32,36,0.86)", line: "#e8806a", shadow: 0 });
-            textOut(b, "Tryb walki", px, py, w, ph, "center", { size: 15, color: "#f0b0a0", plain: true });
-            px += w + 8;
-        }
-        for (const f of buffs) {
-            const tw = measure(f.text, 15), w = 28 + tw + 10;
-            rpanel(ctx, px, py, w, ph, ph / 2, { shadow: 0.12 });
-            if (f.glyph && window.UIStyle && UIStyle.glyph) UIStyle.glyph(ctx, f.glyph, px + 6, py + 3, 18, f.colour);
-            else if (f.icon) drawIcon(b, f.icon, px + 4, py + 2, 20);
-            textOut(b, f.text, px + 27, py, tw + 6, ph, "left", { size: 15, color: f.colour || (f.bad ? "#e88e80" : C.text), plain: true });
-            px += w + 6;
-        }
-        if (px > x0) { right = Math.max(right, px); bottom = Math.max(bottom, py + ph + 2); }
         b._baseTexture.update();
-        this._text = { x: tx, y: gy, goal: !!goal, day, combat, buffs: buffs.length, pillY: py };   // (the tests read what is drawn)
-        this._box = right > 0 ? { x: 0, y: 0, w: right, h: bottom + 2 } : null;
+        // (the tests read what is drawn: the day's line, the clock's middle and size)
+        this._text = { x: Math.round(dayX), y: L.dayY, day, goal: false, clock: clock ? { x: L.cx, y: L.cy, r: R } : null };
+        this._box = x1 > x0 ? { x: x0, y: y0, w: x1 - x0, h: y1 - y0 } : null;
+    };
+    // where the right column goes on under it (the load, the torch's gauge, the minimap)
+    Sprite_CleanClock.prototype.bottom = function() {
+        const L = this._layout || this.layout(), scene = SceneManager._scene, cmp = scene && scene._cleanCompass;
+        const under = cmp && cmp.visible && cmp.bottom ? cmp.bottom() : 8;
+        if (!this.visible) return under;
+        return this._text && this._text.day ? Math.max(under, L.dayY + 22) : this._showClock ? Math.max(under, L.cy + CLK.r + 4) : under;
     };
     // no icon of its own: a small copper diamond
     function drawGoalMark(b, cx, cy) {
@@ -667,6 +656,9 @@
     }
 
     // ---- top right, under the compass and its label: the load - "41 / 120" and the bag (copper when heavy, red when full)
+    // SHOW_LOAD: hidden for now (the user, 2026-10-23: "udźwig można usunąć z ekranu na razie") - true brings it back; the load itself
+    // works as before (Survival.js) and the P menu's Plecak still shows it
+    const SHOW_LOAD = false;
     function Sprite_CleanLoad() {
         this.initialize(...arguments);
     }
@@ -677,12 +669,12 @@
     };
     Sprite_CleanLoad.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        const L = isClean() && $gameSystem ? loadInfo() : null;
+        const L = SHOW_LOAD && isClean() && $gameSystem ? loadInfo() : null;
         this.visible = !!L;
         if (!L) return;
-        const scene = SceneManager._scene, c = scene && scene._cleanCompass;
-        this.x = W() - this.bitmap.width;
-        this.y = c && c.visible && c.bottom ? c.bottom() + 2 : 4;   // (under the compass and its label)
+        const scene = SceneManager._scene, ck = scene && scene._cleanClock;
+        this.x = W() - EDGE + 6 - this.bitmap.width;
+        this.y = (ck && ck.bottom ? ck.bottom() : 136) + 2;   // (under the clock, the compass and the day's line)
         const key = L.carried + "/" + L.cap + "/" + iconsReady() + facesReady();
         if (key === this._key) return;
         this._key = key;
@@ -695,50 +687,177 @@
         this._box = { x: 168 - tw, y: 2, w: tw + 48, h: 36 };
     };
     Sprite_CleanLoad.prototype.bottom = function() {
-        const scene = SceneManager._scene, c = scene && scene._cleanCompass, top = c && c.visible && c.bottom ? c.bottom() : 8;
+        const scene = SceneManager._scene, ck = scene && scene._cleanClock, top = ck && ck.bottom ? ck.bottom() : 136;
         return this.visible ? this.y + 40 : top;
     };
 
-    // ---- the needs' bars right of the clock (top left, see Sprite_CleanClock): on a light graphite plate, one row each - the small
-    // icon, a thin dark track with the need's colour as far as it is full, the number (health in %, the others as the game counts them);
-    // low: red, pulsing, the number red. The breath (no icon of its own) a small pixel sign of gusts, only in the combat mode.
+    // ---- top left, in the corner (the user, 2026-10-23: first "czy Cel można dać na prawo pod kompasem?", then "okno z celem w lewo
+    // u góry w kącie, ładnie"): the goal followed, "widzieć nie tylko nazwę zadania, ale też potrzebne i aktualne składniki". On a
+    // graphite plate: its label (CEL, WĄTEK, MIASTECZKO, ZLECENIE...), the icon and the title, the step / the line under it, then what it
+    // needs with the counts as they are now ("Gałąź 2/5": a done row green with a tick, a missing one yellow), "+N" past the rows, where
+    // it is made, a bar for a goal that counts (the debt). All of it from Journal.tracked() (its sources' needs / sub, Journal.goalNeeds).
+    const GBOX = { pad: 10, minW: 236, maxW: 340, rows: 5, row: 24, titleSize: 17, subSize: 14, rowSize: 15, ok: "#9fdc8a", lack: "#f2c25a" };
+    function Sprite_CleanGoal() {
+        this.initialize(...arguments);
+    }
+    Sprite_CleanGoal.prototype = Object.create(Sprite_CleanPart.prototype);
+    Sprite_CleanGoal.prototype.constructor = Sprite_CleanGoal;
+    Sprite_CleanGoal.prototype.initialize = function() {
+        Sprite_CleanPart.prototype.initialize.call(this, GBOX.maxW + 4, 340);
+        this._goal = null;
+        this._t = 0;
+        this._drawn = null;
+    };
+    Sprite_CleanGoal.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        // (hidden while a message is up, as the old goal window; the goal a few times a second - the counts follow what he picks up)
+        const on = isClean() && !!$gameSystem && !$gameMessage.isBusy();
+        if (!on) { this.visible = false; this._goal = null; this._t = 0; return; }
+        if (!(this._t-- > 0)) { this._goal = goalInfo(SceneManager._scene); this._t = 10; }
+        const g = this._goal;
+        this.visible = !!g;
+        if (!g) return;
+        const nd = SceneManager._scene && SceneManager._scene._cleanNeeds, nb = nd && nd.fullBottom ? nd.fullBottom() : 0;
+        this.x = EDGE;
+        this.y = nb > 0 ? nb + GOAL.gap : EDGE;
+        const key = [g.label, g.title, g.icon, g.sub || "", g.line || "", g.at || "", g.atOk, g.count ? g.count.have + "/" + g.count.need : "",
+            (g.needs || []).map(n => n.icon + n.name + n.have + "/" + n.need).join(","), iconsReady(), facesReady()].join("#");
+        if (key === this._key) return;
+        this._key = key;
+        this.redraw(g);
+    };
+    // the left column: the goal and the bars under it fade as one
+    Sprite_CleanGoal.prototype.ownRect = Sprite_CleanPart.prototype.hudRect;
+    Sprite_CleanGoal.prototype.hudRect = function() {
+        return this.visible ? columnRect() : new PIXI.Rectangle(0, 0, 0, 0);
+    };
+    // the goal's bottom edge on the screen (nothing under it now: the bars are above it)
+    Sprite_CleanGoal.prototype.bottom = function() {
+        return this.visible && this._box ? this.y + this._box.h : 0;
+    };
+    // a text in up to `lines` lines of `max` px (the last one shortened with "…")
+    function wrapLines(text, size, max, lines) {
+        const words = String(text || "").split(/\s+/).filter(Boolean), out = [];
+        let cur = "";
+        for (let i = 0; i < words.length; i++) {
+            const t = cur ? cur + " " + words[i] : words[i];
+            if (measure(t, size) <= max || !cur) { cur = t; continue; }
+            out.push(cur);
+            cur = words[i];
+            if (out.length === lines - 1) { cur = words.slice(i).join(" "); break; }
+        }
+        if (cur) out.push(cur);
+        return out.slice(0, lines).map((l, i) => (i === lines - 1 ? fit(l, size, max) : l));
+    }
+    Sprite_CleanGoal.prototype.redraw = function(g) {
+        const b = this.bitmap, ctx = b.context, P = GBOX.pad, S = GBOX;
+        const needs = (g.needs || []).filter(n => n && n.name && n.need > 0);
+        const rows = needs.slice(0, needs.length > S.rows ? S.rows - 1 : S.rows), more = needs.length - rows.length;
+        const label = String(g.label || "Cel"), cnt = g.count && g.count.need > 0 ? g.count : null;
+        const sub = g.sub || (!needs.length && !cnt ? g.line || "" : "");
+        const num = n => Math.min(n.have, n.need) + "/" + n.need;
+        const cntText = cnt ? Math.min(cnt.have, cnt.need) + " / " + cnt.need + (cnt.unit ? " " + cnt.unit : "") : "";
+        // the width: what it holds, within minW..maxW
+        let want = Math.max(spacedWidth(label, 12), 30 + measure(g.title, S.titleSize), cnt ? measure(cntText, S.rowSize, "bold") + 40 : 0, g.at ? measure(g.at, S.subSize) : 0);
+        for (const n of rows) want = Math.max(want, 26 + measure(n.name, S.rowSize) + 16 + 16 + measure(num(n), S.rowSize, "bold"));
+        if (sub) want = Math.max(want, Math.min(measure(sub, S.subSize), S.maxW));
+        const w = Math.round(Math.max(S.minW, Math.min(S.maxW, want + P * 2))), iw = w - P * 2;
+        const subLines = sub ? wrapLines(sub, S.subSize, iw, 2) : [];
+        const h = P - 2 + 16 + 28 + subLines.length * 18 + (rows.length ? 4 + rows.length * S.row : 0) + (more ? 18 : 0) + (g.at && needs.length ? 20 : 0) + (cnt ? 30 : 0) + P;
+        const x0 = 0;
+        b.clear();   // (no plate behind it: outlined words, the user 2026-10-23)
+        let y = P - 2;
+        spaced(b, label, x0 + P, y, 16, { size: 12, outline: true, ow: 3 });
+        y += 16;
+        if (g.icon > 0) drawIcon(b, g.icon, x0 + P - 2, y + 2, 24);
+        else drawGoalMark(b, x0 + P + 10, y + 14);
+        const title = fit(g.title, S.titleSize, iw - 30);
+        textOut(b, title, x0 + P + 30, y, iw - 26, 28, "left", { size: S.titleSize });
+        y += 28;
+        for (const l of subLines) { textOut(b, l, x0 + P, y, iw + 4, 18, "left", { size: S.subSize, color: GOAL.line, ow: 3 }); y += 18; }
+        if (rows.length) y += 4;
+        for (const n of rows) {
+            const ok = n.have >= n.need, t = num(n), tw = measure(t, S.rowSize, "bold");
+            if (n.icon > 0) drawIcon(b, n.icon, x0 + P, y + 2, 20);
+            textOut(b, t, x0 + w - P - tw - 4, y, tw + 6, S.row, "left", { size: S.rowSize, face: "bold", color: ok ? S.ok : S.lack });
+            if (ok) goalTick(ctx, x0 + w - P - tw - 20, y + S.row / 2, S.ok);
+            textOut(b, fit(n.name, S.rowSize, iw - 26 - tw - 26), x0 + P + 26, y, iw - 26, S.row, "left", { size: S.rowSize, color: ok ? GOAL.line : C.text });
+            y += S.row;
+        }
+        if (more) { textOut(b, "+" + more + " więcej", x0 + P + 26, y, iw, 18, "left", { size: S.subSize, color: GOAL.line, ow: 3 }); y += 18; }
+        if (g.at && needs.length) { textOut(b, fit(g.at, S.subSize, iw), x0 + P, y + 2, iw + 4, 18, "left", { size: S.subSize, color: g.atOk === false ? S.lack : GOAL.line, ow: 3 }); y += 20; }
+        if (cnt) {
+            const ok = cnt.have >= cnt.need, tw = measure(cntText, S.rowSize, "bold");
+            textOut(b, cntText, x0 + w - P - tw - 4, y, tw + 6, 20, "left", { size: S.rowSize, face: "bold", color: ok ? S.ok : S.lack });
+            thinBar(ctx, x0 + P, y + 23, iw, 4, cnt.have / cnt.need, ok ? S.ok : C.accent);
+            y += 30;
+        }
+        b._baseTexture.update();
+        this._box = { x: x0, y: 0, w, h };
+        // (the tests read what is drawn)
+        this._drawn = { label, title: g.title, sub: subLines.join(" "), needs: rows.map(n => ({ name: n.name, have: Math.min(n.have, n.need), need: n.need, ok: n.have >= n.need, tool: !!n.tool })),
+            more, at: g.at && needs.length ? g.at : "", count: cntText, w, h };
+    };
+    // a small tick (the font has no ✓)
+    function goalTick(ctx, x, cy, colour) {
+        ctx.save();
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = colour;
+        ctx.beginPath(); ctx.moveTo(x, cy); ctx.lineTo(x + 4, cy + 4); ctx.lineTo(x + 11, cy - 5); ctx.stroke();
+        ctx.restore();
+    }
+
+    // ---- the needs' bars under the goal (top left, see the layout above; no goal: in the corner): on a light graphite plate as wide as
+    // the goal's, one row each - the small icon, a thin dark track with the need's colour as far as it is full, the number (health in %,
+    // the others as the game counts them); low: red, pulsing, the number red. The breath (no icon of its own) a small pixel sign of
+    // gusts, only in the combat mode. Under the plate the pills: "Tryb walki", the premia (hidden while a message is up).
     function Sprite_CleanNeeds() {
         this.initialize(...arguments);
     }
     Sprite_CleanNeeds.prototype = Object.create(Sprite_CleanPart.prototype);
     Sprite_CleanNeeds.prototype.constructor = Sprite_CleanNeeds;
     Sprite_CleanNeeds.prototype.initialize = function() {
-        Sprite_CleanPart.prototype.initialize.call(this, 400, 140);
+        Sprite_CleanPart.prototype.initialize.call(this, 440, 220);
         this._pulse = 0;
         this._mapId = 0;
         this._show = true;
         this._rings = [];
         this._bars = [];
         this._bottom = 0;
+        this._pills = null;
     };
     Sprite_CleanNeeds.prototype.ownRect = Sprite_CleanPart.prototype.hudRect;
     Sprite_CleanNeeds.prototype.hudRect = function() {
-        return this.visible ? cornerRect() : new PIXI.Rectangle(0, 0, 0, 0);
+        return this.visible ? columnRect() : new PIXI.Rectangle(0, 0, 0, 0);
     };
-    // the plate's bottom edge (the corner's text starts under it and under the clock); 0 when no bar is drawn
+    // the plate's bottom edge on the screen; 0 when no bar is drawn
     Sprite_CleanNeeds.prototype.bottom = function() {
-        return this.visible && this._rings.length ? this._bottom : 0;
+        return this.visible && this._rings.length ? this.y + this._bottom : 0;
+    };
+    // the bottom of all of it - the bars and the pills under them (the goal goes under this); 0 when nothing is drawn
+    Sprite_CleanNeeds.prototype.fullBottom = function() {
+        return this.visible && this._box ? this.y + this._box.h : 0;
     };
     Sprite_CleanNeeds.prototype.update = function() {
         Sprite.prototype.update.call(this);
         if ($gameMap && $gameMap.mapId() !== this._mapId) { this._mapId = $gameMap.mapId(); this._show = T.mapFlag("Stamina", true, "off"); }
-        this.visible = isClean() && this._show && !!$gameSystem;
+        this.visible = isClean() && !!$gameSystem;
         if (!this.visible) return;
-        this.x = 0;
-        this.y = 0;
-        const v = needValues(), scene = SceneManager._scene, clock = !!(scene && scene._cleanClock && scene._cleanClock._showClock);
+        // in the corner, as wide as the goal under it (no goal: as wide as the goal would be at the least)
+        const scene = SceneManager._scene, goal = scene && scene._cleanGoal, gw = goal && goal.visible && goal._box ? goal._box.w : 0;
+        this.x = EDGE;
+        this.y = EDGE;
+        const width = gw > 0 ? gw : GBOX.minW;
+        const v = this._show ? needValues() : {}, shown = !$gameMessage.isBusy(), combat = shown && combatOn(), buffs = shown ? buffList() : [];
         this._pulse = (this._pulse + 1) % 60;
         const low = NEED_KEYS.filter(k => v[k] !== undefined && needLow(k, v[k]));
         const blink = low.length ? (this._pulse < 30 ? "a" : "b") : "-";
-        const key = NEED_KEYS.map(k => (v[k] === undefined ? "x" : needNumber(k, v[k]) + ":" + Math.round(v[k] * 300))).join(",") + "|" + low.join(",") + blink + "|" + clock + iconsReady() + facesReady();
+        const key = NEED_KEYS.map(k => (v[k] === undefined ? "x" : needNumber(k, v[k]) + ":" + Math.round(v[k] * 300))).join(",") + "|" + low.join(",") + blink + "|" + width + "|" + this.y + "|" + combat + "|" +
+            buffs.map(f => (f.icon || f.glyph) + f.text).join(",") + "|" + iconsReady() + facesReady();
         if (key === this._key) return;
         this._key = key;
-        this.redraw(v, low, blink === "a", clock);
+        this.redraw(v, low, blink === "a", width, combat, buffs);
     };
     // the number by a bar: health in % of the most, the stamina, the food and the water as the game counts them, the breath in %
     function needNumber(k, v) {
@@ -747,48 +866,72 @@
         if ((k === "food" || k === "water") && N && N.state) return String(Math.round(N.state()[k]));
         return Math.round(v * 100) + "%";
     }
-    Sprite_CleanNeeds.prototype.redraw = function(v, low, blinkOn, clock) {
+    Sprite_CleanNeeds.prototype.redraw = function(v, low, blinkOn, width, combat, buffs) {
         const b = this.bitmap, ctx = b.context, keys = NEED_KEYS.filter(k => v[k] !== undefined);
         b.clear();
         this._rings = keys;
         this._bars = [];
-        if (!keys.length) { this._box = null; this._bottom = 0; return; }
-        const n = keys.length, x0 = clock ? CLK.cx + CLK.r + BARS.gap : 12, ys = keys.map((k, i) => CLK.cy - (n - 1) * BARS.step / 2 + i * BARS.step);
-        const top = Math.max(2, ys[0] - BARS.step / 2 - BARS.pad), bottom = ys[n - 1] + BARS.step / 2 + BARS.pad;
-        rpanel(ctx, x0, top, BARS.w, bottom - top, 10, { fill: "rgba(20,21,24,0.62)", line: "rgba(64,66,74,0.75)", shadow: 0.14 });
-        const ix = x0 + BARS.padX, bx = ix + BARS.icon + 6, vx = bx + BARS.barW + 8;
-        keys.forEach((k, i) => {
-            const y = ys[i], isLow = low.includes(k), col = isLow ? LOW_COLOUR : C[k], ratio = clamp01(v[k]), by = Math.round(y - BARS.barH / 2);
-            if (k === "breath") drawBreathGlyph(ctx, ix + BARS.icon / 2, y, isLow ? LOW_COLOUR : C.breath, 2);
-            else { const [icon, mode] = NEED_ICONS[k]; drawIcon(b, icon, ix, y - BARS.icon / 2, BARS.icon, mode); }
-            ctx.save();
-            ctx.fillStyle = "rgba(8,9,11,0.8)";   // the track: a dark edge, the dark inside
-            roundPath(ctx, bx - 1, by - 1, BARS.barW + 2, BARS.barH + 2, (BARS.barH + 2) / 2);
-            ctx.fill();
-            ctx.fillStyle = "rgba(52,54,60,0.95)";
-            roundPath(ctx, bx, by, BARS.barW, BARS.barH, BARS.barH / 2);
-            ctx.fill();
-            const fw = Math.round(BARS.barW * ratio);
-            if (fw > 0) {
-                if (isLow && blinkOn) { ctx.shadowColor = col; ctx.shadowBlur = 8; }
-                ctx.globalAlpha = isLow && !blinkOn ? 0.6 : 1;
-                ctx.fillStyle = col;
-                roundPath(ctx, bx, by, Math.max(BARS.barH, fw), BARS.barH, BARS.barH / 2);
+        let right = 0, bottom = 0;
+        if (keys.length) {
+            const n = keys.length, barW = Math.max(60, width - (BARS.w - BARS.barW)), ys = keys.map((k, i) => BARS.pad + BARS.step / 2 + i * BARS.step);
+            bottom = n * BARS.step + BARS.pad * 2;
+            // (no plate behind the bars: the user, 2026-10-23 - the tracks are dark, the numbers outlined)
+            const ix = BARS.padX, bx = ix + BARS.icon + 6, vx = bx + barW + 8;
+            keys.forEach((k, i) => {
+                const y = ys[i], isLow = low.includes(k), col = isLow ? LOW_COLOUR : C[k], ratio = clamp01(v[k]), by = Math.round(y - BARS.barH / 2);
+                if (k === "breath") drawBreathGlyph(ctx, ix + BARS.icon / 2, y, isLow ? LOW_COLOUR : C.breath, 2);
+                else { const [icon, mode] = NEED_ICONS[k]; drawIcon(b, icon, ix, y - BARS.icon / 2, BARS.icon, mode); }
+                ctx.save();
+                ctx.fillStyle = "rgba(8,9,11,0.8)";   // the track: a dark edge, the dark inside
+                roundPath(ctx, bx - 1, by - 1, barW + 2, BARS.barH + 2, (BARS.barH + 2) / 2);
                 ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.globalAlpha = 1;
-                ctx.fillStyle = "rgba(255,255,255,0.22)";   // a faint light on its top edge
-                ctx.fillRect(bx + 2, by, Math.max(0, Math.max(BARS.barH, fw) - 4), 1);
-            }
-            ctx.restore();
-            textOut(b, needNumber(k, v[k]), vx, y - 10, BARS.valW, 20, "right", { size: 14, color: isLow ? LOW_COLOUR : C.text, plain: true });
-            this._bars.push({ key: k, x: bx, y, w: BARS.barW, h: BARS.barH, ratio: +ratio.toFixed(3), fill: fw, colour: col, low: isLow, number: needNumber(k, v[k]) });
-        });
+                ctx.fillStyle = "rgba(52,54,60,0.95)";
+                roundPath(ctx, bx, by, barW, BARS.barH, BARS.barH / 2);
+                ctx.fill();
+                const fw = Math.round(barW * ratio);
+                if (fw > 0) {
+                    if (isLow && blinkOn) { ctx.shadowColor = col; ctx.shadowBlur = 8; }
+                    ctx.globalAlpha = isLow && !blinkOn ? 0.6 : 1;
+                    ctx.fillStyle = col;
+                    roundPath(ctx, bx, by, Math.max(BARS.barH, fw), BARS.barH, BARS.barH / 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1;
+                    ctx.fillStyle = "rgba(255,255,255,0.22)";   // a faint light on its top edge
+                    ctx.fillRect(bx + 2, by, Math.max(0, Math.max(BARS.barH, fw) - 4), 1);
+                }
+                ctx.restore();
+                textOut(b, needNumber(k, v[k]), vx, y - 10, BARS.valW, 20, "right", { size: 14, color: isLow ? LOW_COLOUR : C.text, ow: 3 });
+                // (the tests read what is drawn - on the screen)
+                this._bars.push({ key: k, x: this.x + bx, y: this.y + y, w: barW, h: BARS.barH, ratio: +ratio.toFixed(3), fill: fw, colour: col, low: isLow, number: needNumber(k, v[k]) });
+            });
+            right = width;
+        }
+        // the pills under the plate: "Tryb walki", then the premia
+        let px = 0;
+        const py = keys.length ? bottom + 6 : 0, ph = GOAL.pillH;
+        if (combat) {
+            const w = Math.max(112, measure("Tryb walki", 15) + 28);
+            rpanel(ctx, px, py, w, ph, ph / 2, { fill: "rgba(30,32,36,0.86)", line: "#e8806a", shadow: 0 });
+            textOut(b, "Tryb walki", px, py, w, ph, "center", { size: 15, color: "#f0b0a0", plain: true });
+            px += w + 8;
+        }
+        for (const f of buffs) {
+            const tw = measure(f.text, 15), w = 28 + tw + 10;
+            rpanel(ctx, px, py, w, ph, ph / 2, { shadow: 0.12 });
+            if (f.glyph && window.UIStyle && UIStyle.glyph) UIStyle.glyph(ctx, f.glyph, px + 6, py + 3, 18, f.colour);
+            else if (f.icon) drawIcon(b, f.icon, px + 4, py + 2, 20);
+            textOut(b, f.text, px + 27, py, tw + 6, ph, "left", { size: 15, color: f.colour || (f.bad ? "#e88e80" : C.text), plain: true });
+            px += w + 6;
+        }
+        const pills = px > 0;
         b._baseTexture.update();
-        this._slices = keys.filter(k => k !== "breath").length;   // (the tests read what is drawn)
+        this._slices = keys.filter(k => k !== "breath").length;
         this._breathBand = keys.includes("breath");
         this._bottom = bottom;
-        this._box = { x: x0, y: top, w: BARS.w, h: bottom - top };
+        this._pills = { pillY: this.y + py, combat: !!combat, buffs: buffs.length };
+        const h = Math.max(bottom, pills ? py + ph + 2 : 0), w = Math.max(right, px);
+        this._box = h > 0 && w > 0 ? { x: 0, y: 0, w, h } : null;
     };
     // the breath's sign (no icon of its own): three gusts of air - a 7 x 6 pixel sign drawn `scale` x (3 by default), outlined
     const BREATH_GLYPH = ["#####..", ".....#.", "######.", ".......", "####...", "....#.."];
@@ -1155,12 +1298,13 @@
         layer.addChild(this._cleanLayer);
         this._cleanClock = new Sprite_CleanClock();
         this._cleanLoad = new Sprite_CleanLoad();
+        this._cleanGoal = new Sprite_CleanGoal();
         this._cleanNeeds = new Sprite_CleanNeeds();
         this._cleanGains = new Sprite_CleanGains();
         this._cleanWeapon = new Sprite_CleanWeapon();
         this._cleanSneak = new Sprite_CleanSneak();
         this._cleanTop = new Sprite_CleanTop();
-        for (const s of [this._cleanClock, this._cleanLoad, this._cleanNeeds, this._cleanWeapon, this._cleanGains, this._cleanSneak, this._cleanTop]) {
+        for (const s of [this._cleanClock, this._cleanLoad, this._cleanGoal, this._cleanNeeds, this._cleanWeapon, this._cleanGains, this._cleanSneak, this._cleanTop]) {
             this._cleanLayer.addChild(s);
         }
         const db = this._dayBanner;
@@ -1172,7 +1316,7 @@
     };
     // the parts of the clean look (another plugin's - the compass - adds itself here)
     Scene_Map.prototype.cleanHudParts = function() {
-        return [this._cleanClock, this._cleanLoad, this._cleanNeeds, this._cleanGains, this._cleanWeapon, this._cleanSneak, this._cleanTop, this._cleanCompass];
+        return [this._cleanClock, this._cleanLoad, this._cleanGoal, this._cleanNeeds, this._cleanGains, this._cleanWeapon, this._cleanSneak, this._cleanTop, this._cleanCompass];
     };
     Scene_Map.prototype.updateCleanHud = function() {
         if (!this._cleanLayer) return;
@@ -1193,8 +1337,9 @@
             if (clean) { if (breath.renderable) { breath.renderable = false; breath._cleanHid = true; } }
             else if (breath._cleanHid) { breath.renderable = true; breath._cleanHid = false; }
         }
-        // the top right column: the compass, its label, the load, the torch's gauge (RoomLighting), the minimap (M)
-        let y = this._cleanLoad ? this._cleanLoad.bottom() + 2 : 8;
+        // the top right column: the clock and the compass, the compass's label, the day's line, the load (hidden for now), the torch's
+        // gauge (RoomLighting), the minimap (M)
+        let y = this._cleanLoad ? this._cleanLoad.bottom() + 4 : this._cleanClock ? this._cleanClock.bottom() + 4 : 8;
         const torch = set && set._torchGauge;
         if (torch) {
             if (clean) { if (torch._cleanY === undefined) torch._cleanY = torch.y; torch.y = y; y += 36; }
@@ -1238,16 +1383,18 @@
         const scene = SceneManager._scene;
         if (!(scene instanceof Scene_Map) || !scene._cleanLayer) return null;
         const out = { clean: isClean(), parts: {} };
-        for (const k of ["Clock", "Load", "Needs", "Gains", "Weapon", "Sneak", "Top", "Compass"]) out.parts[k.toLowerCase()] = rectOf(scene["_clean" + k]);
-        out.corner = rectOf({ visible: true, alpha: 1, opacity: 255, hudRect: cornerRect });   // (the top left corner as one: its fade)
+        for (const k of ["Clock", "Load", "Goal", "Needs", "Gains", "Weapon", "Sneak", "Top", "Compass"]) out.parts[k.toLowerCase()] = rectOf(scene["_clean" + k]);
+        out.goalBox = scene._cleanGoal && scene._cleanGoal.visible && scene._cleanGoal._drawn ? JSON.parse(JSON.stringify(scene._cleanGoal._drawn)) : null;
+        out.corner = rectOf({ visible: true, alpha: 1, opacity: 255, hudRect: columnRect });   // (the top left column as one: its fade)
         const nd = scene._cleanNeeds, ck = scene._cleanClock;
         out.bars = nd && nd.visible ? (nd._bars || []).slice() : [];
-        out.text = ck && ck._text ? Object.assign({}, ck._text) : null;
+        out.text = ck && ck._text ? Object.assign({}, ck._text, nd && nd.visible && nd._pills ? nd._pills : {}) : null;
         out.shade = scene._cleanShade ? scene._cleanShade.levels() : null;
         out.old = {};
         for (const k of OLD) if (scene[k]) out.old[k.slice(1)] = !!scene[k].renderable;
         out.goal = goalInfo(scene);
-        if (out.goal) out.goal = { source: out.goal.source, title: out.goal.title, line: out.goal.line, icon: out.goal.icon, id: out.goal.id };
+        if (out.goal) out.goal = { source: out.goal.source, title: out.goal.title, line: out.goal.line, icon: out.goal.icon, id: out.goal.id, sub: out.goal.sub || "",
+            needs: (out.goal.needs || []).map(n => ({ name: n.name, have: n.have, need: n.need })), at: out.goal.at || "", count: out.goal.count || null };
         const top = scene._cleanTop;
         out.top = top ? Object.keys(top._items).filter(k => top._items[k].visible).map(k => ({ k, y: Math.round(top._items[k].y) })) : [];
         if (scene._minimap) out.minimap = { visible: !!scene._minimap.visible, y: scene._minimap.y, hidden: $gameSystem._minimapHidden };

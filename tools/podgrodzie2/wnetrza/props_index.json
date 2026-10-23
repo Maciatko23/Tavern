@@ -1,0 +1,282 @@
+{
+ "piec_garncarski": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 0,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   59,
+   139,
+   144
+  ],
+  "name": "piec do wypalania garnków (ogień)",
+  "occupy": "right=1",
+  "anim": true
+ },
+ "kolo_garncarskie": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 0,
+  "direction": 4,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   52,
+   95,
+   92,
+   144
+  ],
+  "name": "koło garncarskie z mokrą gliną"
+ },
+ "koryto_glina": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 0,
+  "direction": 4,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   100,
+   142,
+   144
+  ],
+  "name": "koryto z mokrą gliną",
+  "occupy": "right=1"
+ },
+ "dzbany_wypalone": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 0,
+  "direction": 4,
+  "pattern": 2,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   42,
+   109,
+   101,
+   144
+  ],
+  "name": "wypalone dzbany i garnki"
+ },
+ "dzbany_surowe": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 0,
+  "direction": 6,
+  "pattern": 0,
+  "place": "table",
+  "w": 144,
+  "h": 144,
+  "art": [
+   42,
+   109,
+   101,
+   144
+  ],
+  "name": "surowe dzbany (schną przed wypałem)"
+ },
+ "dzbany_podloga": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 0,
+  "direction": 6,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   41,
+   107,
+   103,
+   144
+  ],
+  "name": "wypalone garnki na podłodze"
+ },
+ "poslanie": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   46,
+   55,
+   98,
+   144
+  ],
+  "name": "posłanie ze słomy na ziemi",
+  "occupy": "up=1"
+ },
+ "poslanie_szare": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   46,
+   55,
+   98,
+   144
+  ],
+  "name": "posłanie ze słomy z połatanym kocem",
+  "occupy": "up=1"
+ },
+ "poslanie_male": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   53,
+   79,
+   91,
+   144
+  ],
+  "name": "małe posłanie dziecka",
+  "occupy": "up=1"
+ },
+ "zabawki": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 4,
+  "pattern": 0,
+  "place": "decal",
+  "w": 144,
+  "h": 144,
+  "art": [
+   52,
+   116,
+   93,
+   143
+  ],
+  "name": "zabawki z patyków i kamyków"
+ },
+ "koza": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 6,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   103,
+   94,
+   144
+  ],
+  "name": "koza (głową w lewo)"
+ },
+ "koza_prawo": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 6,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   49,
+   103,
+   94,
+   144
+  ],
+  "name": "koza (głową w prawo)"
+ },
+ "kupa_wegla": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 8,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   62,
+   101,
+   130,
+   144
+  ],
+  "name": "kupa węgla drzewnego",
+  "occupy": "right=1"
+ },
+ "worki_wegla": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 1,
+  "direction": 8,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   48,
+   106,
+   144,
+   144
+  ],
+  "name": "worki z węglem drzewnym",
+  "occupy": "right=1"
+ },
+ "grabie": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 2,
+  "direction": 2,
+  "pattern": 0,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   58,
+   72,
+   79,
+   142
+  ],
+  "name": "grabie oparte o ścianę"
+ },
+ "widly": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 2,
+  "direction": 2,
+  "pattern": 1,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   68,
+   68,
+   83,
+   142
+  ],
+  "name": "widły oparte o ścianę"
+ },
+ "grabie_widly": {
+  "sheet": "!Podgrodzie2_Wnetrza",
+  "index": 2,
+  "direction": 2,
+  "pattern": 2,
+  "place": "floor",
+  "w": 144,
+  "h": 144,
+  "art": [
+   50,
+   68,
+   91,
+   142
+  ],
+  "name": "grabie i widły oparte o ścianę"
+ }
+}

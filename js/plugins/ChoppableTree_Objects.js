@@ -431,23 +431,36 @@
     // A forged iron axe (115) / pickaxe (116), made in the forge (Farming.js), REPLACES the plain tool: it works
     // on its own (the old axe / pickaxe may be gone) and is clearly better - about a third fewer blows and a
     // little less stamina per blow. The first blow on every object says how much it saved.
+    // (2026-10-23, the user) The steel axe (407) / pickaxe (408) of Bron_Data.js, forged of steel, are better still: half the blows
+    // and a third less stamina a blow. The best one owned works (steel, then iron); its blow wears it.
     const IRON_HIT_FACTOR = 0.65;
     const IRON_ITEM = { axe: 115, pick: 116 };
+    const BETTER_TOOLS = {   // [item, x blows, x stamina] - the best first
+        axe: [[407, 0.5, 0.65], [IRON_ITEM.axe, IRON_HIT_FACTOR, 0.75]],
+        pick: [[408, 0.5, 0.65], [IRON_ITEM.pick, IRON_HIT_FACTOR, 0.75]]
+    };
+    function betterTool(tool) {
+        const kind = tool > 0 && tool === TREE_DEFAULTS.axe ? "axe" : tool > 0 && tool === ROCK_DEFAULTS.tool ? "pick" : "";
+        for (const [id, hits, cost] of BETTER_TOOLS[kind] || []) {
+            const item = $dataItems[id];
+            if (item && item.name && $gameParty.hasItem(item)) return { item, hits, cost };
+        }
+        return null;
+    }
     function ironTool(tool) {
-        const id = tool > 0 && tool === TREE_DEFAULTS.axe ? IRON_ITEM.axe : tool > 0 && tool === ROCK_DEFAULTS.tool ? IRON_ITEM.pick : 0;
-        const item = id ? $dataItems[id] : null;
-        return item && $gameParty.hasItem(item) ? item : null;
+        const b = betterTool(tool);
+        return b ? b.item : null;
     }
     function ownsTool(tool) {
         return $gameParty.hasItem($dataItems[tool]) || !!ironTool(tool);
     }
     function applyIronTool(action) {
-        const item = ironTool(action.tool);
-        if (!item) return;
+        const b = betterTool(action.tool);
+        if (!b) return;
         const before = action.needed;
-        action.needed = Math.max(1, Math.round(before * IRON_HIT_FACTOR));
-        if (action.cost > 1) action.cost = Math.max(1, Math.round(action.cost * 0.75));
-        action.ironItem = item;
+        action.needed = Math.max(1, Math.round(before * b.hits));
+        if (action.cost > 1) action.cost = Math.max(1, Math.round(action.cost * b.cost));
+        action.ironItem = b.item;
         action.ironFrom = before;
     }
     // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a

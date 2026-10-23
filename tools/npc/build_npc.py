@@ -41,6 +41,8 @@
 #                         feet shift to the hero's rows follows. Done after --mirror.
 #   --head F              with --scale: the factor for the top third (the head) - a child's head is relatively big, e.g.
 #                         --scale 0.75 --head 0.88. Default: the head shrinks like the rest.
+#   --recolor A=B,C=D     exact colours (hex RRGGBB) of every rotation and walk frame swapped before anything else, e.g. a dark red
+#                         stain the walk template put on a child's trousers: --recolor 230302=301e16,2b0615=34221a (2026-10-22)
 #
 # Fixing a bad walk direction (seen 2026-10-04 on 12 characters: a south walk turning its back in 2 frames, a shirt or a cloak
 # vanishing, a braid flickering): delete just that direction from the group (delete_animation with animation_group_id +
@@ -373,6 +375,7 @@ def main():
     ap.add_argument("--head", type=float, default=0)
     ap.add_argument("--notes", default="")
     ap.add_argument("--gif", default="")
+    ap.add_argument("--recolor", default="")
     args = ap.parse_args()
     key = args.key
 
@@ -385,8 +388,23 @@ def main():
     src_anim = {d: anim for d in DIRS}
     src_anim.update(kv(args.from_))
 
+    swap = {}
+    for pair in filter(None, args.recolor.split(",")):
+        a, b = pair.split("=")
+        swap[tuple(int(a[i:i + 2], 16) for i in (0, 2, 4))] = tuple(int(b[i:i + 2], 16) for i in (0, 2, 4))
+
+    def recolor(im):
+        if swap:
+            px = im.load()
+            for y in range(im.height):
+                for x in range(im.width):
+                    p = px[x, y]
+                    if p[3] and p[:3] in swap:
+                        px[x, y] = swap[p[:3]] + (p[3],)
+        return im
+
     def read(path):
-        return to_cell(clean(Image.open(io.BytesIO(z.read(path))).convert("RGBA"), where=path))
+        return to_cell(recolor(clean(Image.open(io.BytesIO(z.read(path))).convert("RGBA"), where=path)))
 
     rot = {d: read(rots[d]) for d in DIRS}
     walk = {}
@@ -517,7 +535,7 @@ def main():
         "walk8": "Npc_%s_Walk8" % key,
         "steps": [sa, sb],
         "fixes": {"from": kv(args.from_), "mirror": kv(args.mirror), "mirror_walk": kv(args.mirror_walk),
-                  "flip_frames": kv(args.flip_frames)},
+                  "flip_frames": kv(args.flip_frames), "recolor": args.recolor},
         "feet_dy": {d: report[d]["dy"] for d in DIRS},
         "scale": ({"body": args.scale, "head": args.head or args.scale} if args.scale and args.scale < 1 else None),
         "height_px": report["south"]["height"],

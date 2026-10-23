@@ -1,0 +1,546 @@
+[
+ {
+  "ikona": 528,
+  "id": 250,
+  "wzor": "kapelusz_slomkowy",
+  "nazwa": "Słomkowy kapelusz",
+  "rysunek": "kapelusz",
+  "rampa": [
+   "#5a4220",
+   "#7d5e2c",
+   "#a07c3a",
+   "#c29d4f",
+   "#dcbd6e",
+   "#efd894"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 529,
+  "id": 251,
+  "wzor": "kapelusz_slomkowy_ciemny",
+  "nazwa": "Ciemny słomkowy kapelusz",
+  "rysunek": "kapelusz",
+  "rampa": [
+   "#33240f",
+   "#4a3416",
+   "#63461f",
+   "#7c5a29",
+   "#957037",
+   "#ad8749"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 530,
+  "id": 252,
+  "wzor": "chusta_biala",
+  "nazwa": "Biała lniana chusta",
+  "rysunek": "chusta",
+  "rampa": [
+   "#6e6656",
+   "#8f8672",
+   "#b0a68e",
+   "#cdc4aa",
+   "#e3dcc6",
+   "#f3eee0"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 531,
+  "id": 253,
+  "wzor": "chusta_czerwona",
+  "nazwa": "Czerwona lniana chusta",
+  "rysunek": "chusta",
+  "rampa": [
+   "#4a1414",
+   "#6b1d1a",
+   "#8c2a22",
+   "#ab3a2c",
+   "#c4533b",
+   "#d9725a"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 532,
+  "id": 254,
+  "wzor": "chusta_niebieska",
+  "nazwa": "Niebieska lniana chusta",
+  "rysunek": "chusta",
+  "rampa": [
+   "#1c2640",
+   "#28365a",
+   "#364a75",
+   "#47608f",
+   "#5d79a8",
+   "#7d96c0"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 533,
+  "id": 255,
+  "wzor": "czapka_filc_braz",
+  "nazwa": "Brązowa filcowa czapka",
+  "rysunek": "czapka",
+  "rampa": [
+   "#2a1d14",
+   "#3e2b1d",
+   "#544028",
+   "#6b5434",
+   "#836a44",
+   "#9a8158"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 534,
+  "id": 256,
+  "wzor": "czapka_filc_szara",
+  "nazwa": "Szara filcowa czapka",
+  "rysunek": "czapka",
+  "rampa": [
+   "#2b2b2a",
+   "#3f3e3c",
+   "#555350",
+   "#6c6a66",
+   "#85827d",
+   "#9e9b95"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 535,
+  "id": 257,
+  "wzor": "czapka_filc_zielona",
+  "nazwa": "Zielona filcowa czapka",
+  "rysunek": "czapka",
+  "rampa": [
+   "#1d2618",
+   "#2a3822",
+   "#3a4b2e",
+   "#4b5f3a",
+   "#5f7449",
+   "#768a5c"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 536,
+  "id": 258,
+  "wzor": "opaska_braz",
+  "nazwa": "Brązowa skórzana opaska",
+  "rysunek": "opaska",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 537,
+  "id": 259,
+  "wzor": "opaska_czarna",
+  "nazwa": "Czarna skórzana opaska",
+  "rysunek": "opaska",
+  "rampa": [
+   "#0f0d0c",
+   "#1c1816",
+   "#2a2522",
+   "#3a3430",
+   "#4c4540",
+   "#605852"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 538,
+  "id": 260,
+  "wzor": "koszula_lniana_biala",
+  "nazwa": "Biała lniana koszula",
+  "rysunek": "koszula",
+  "rampa": [
+   "#4a4538",
+   "#6b6452",
+   "#8f8770",
+   "#b0a88f",
+   "#cdc6ac",
+   "#e6e0c8"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 539,
+  "id": 261,
+  "wzor": "koszula_lniana_zolta",
+  "nazwa": "Żółta lniana koszula",
+  "rysunek": "koszula",
+  "rampa": [
+   "#4d3c16",
+   "#6e5620",
+   "#91722c",
+   "#b18f3b",
+   "#ccab52",
+   "#e2c66f"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 540,
+  "id": 262,
+  "wzor": "koszula_lniana_niebieska",
+  "nazwa": "Niebieska lniana koszula",
+  "rysunek": "koszula",
+  "rampa": [
+   "#1f2a3d",
+   "#2d3c56",
+   "#3e5070",
+   "#516689",
+   "#687ea2",
+   "#849abb"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 541,
+  "id": 263,
+  "wzor": "kaftan_czerwony",
+  "nazwa": "Czerwony wełniany kaftan",
+  "rysunek": "kaftan",
+  "rampa": [
+   "#3a1214",
+   "#561a1a",
+   "#73241f",
+   "#8f3024",
+   "#a8402c",
+   "#bf5638"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 542,
+  "id": 264,
+  "wzor": "kaftan_brazowy",
+  "nazwa": "Brązowy wełniany kaftan",
+  "rysunek": "kaftan",
+  "rampa": [
+   "#2a1a10",
+   "#3f2717",
+   "#56351f",
+   "#6e4529",
+   "#875735",
+   "#a06b43"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 543,
+  "id": 265,
+  "wzor": "kaftan_granatowy",
+  "nazwa": "Granatowy wełniany kaftan",
+  "rysunek": "kaftan",
+  "rampa": [
+   "#141a2b",
+   "#1e273f",
+   "#2a3554",
+   "#38456a",
+   "#485880",
+   "#5c6d96"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 544,
+  "id": 266,
+  "wzor": "kurta_zielona",
+  "nazwa": "Zielona skórzana kurta",
+  "rysunek": "kurta",
+  "rampa": [
+   "#1c2614",
+   "#2a3a1c",
+   "#3a4f25",
+   "#4b6330",
+   "#5f793c",
+   "#78914c"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 545,
+  "id": 267,
+  "wzor": "koszula_odswietna",
+  "nazwa": "Odświętna koszula z haftem",
+  "rysunek": "koszula_haft",
+  "rampa": [
+   "#5a5548",
+   "#7d7765",
+   "#a29b86",
+   "#c4bea8",
+   "#dfdac8",
+   "#f5f2e6"
+  ],
+  "akcent": "#b8342c"
+ },
+ {
+  "ikona": 546,
+  "id": 268,
+  "wzor": "spodnie_plocienne_szare",
+  "nazwa": "Szare płócienne spodnie",
+  "rysunek": "spodnie",
+  "rampa": [
+   "#2e2c29",
+   "#423f3b",
+   "#57534d",
+   "#6d6862",
+   "#847f77",
+   "#9b958c"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 547,
+  "id": 269,
+  "wzor": "spodnie_plocienne_niebieskie",
+  "nazwa": "Niebieskie płócienne spodnie",
+  "rysunek": "spodnie",
+  "rampa": [
+   "#1a2233",
+   "#263147",
+   "#33425c",
+   "#435472",
+   "#566888",
+   "#6c7f9e"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 548,
+  "id": 270,
+  "wzor": "spodnie_plocienne_brazowe",
+  "nazwa": "Brązowe płócienne spodnie",
+  "rysunek": "spodnie",
+  "rampa": [
+   "#2e1d12",
+   "#442b1d",
+   "#533624",
+   "#62452e",
+   "#78573b",
+   "#8e6c4c"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 549,
+  "id": 271,
+  "wzor": "spodnie_welniane_brazowe",
+  "nazwa": "Brązowe wełniane spodnie",
+  "rysunek": "spodnie_welna",
+  "rampa": [
+   "#2a1c14",
+   "#3d2a1e",
+   "#52392a",
+   "#684a37",
+   "#7e5c46",
+   "#946f57"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 550,
+  "id": 272,
+  "wzor": "spodnie_welniane_zielone",
+  "nazwa": "Zielone wełniane spodnie",
+  "rysunek": "spodnie_welna",
+  "rampa": [
+   "#1c2419",
+   "#283424",
+   "#364531",
+   "#45573f",
+   "#566a4e",
+   "#6a7e60"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 551,
+  "id": 273,
+  "wzor": "spodnie_skorzane_czarne",
+  "nazwa": "Czarne skórzane spodnie",
+  "rysunek": "spodnie_skora",
+  "rampa": [
+   "#0e0b0a",
+   "#1a1513",
+   "#28211d",
+   "#373029",
+   "#4a4038",
+   "#5e5349"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 552,
+  "id": 274,
+  "wzor": "spodnie_skorzane_brazowe",
+  "nazwa": "Brązowe skórzane spodnie",
+  "rysunek": "spodnie_skora",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 553,
+  "id": 275,
+  "wzor": "lapcie",
+  "nazwa": "Łapcie z łyka",
+  "rysunek": "lapcie",
+  "rampa": [
+   "#3d2c17",
+   "#5a4222",
+   "#77592f",
+   "#937340",
+   "#ad8c55",
+   "#c4a56e"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 554,
+  "id": 276,
+  "wzor": "buty_czarne",
+  "nazwa": "Czarne skórzane buty",
+  "rysunek": "buty",
+  "rampa": [
+   "#0d0b0a",
+   "#191513",
+   "#262019",
+   "#352d25",
+   "#463c32",
+   "#5a4e42"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 555,
+  "id": 277,
+  "wzor": "pas_skorzany_braz",
+  "nazwa": "Brązowy skórzany pas",
+  "rysunek": "pas",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": "#b9b3a6"
+ },
+ {
+  "ikona": 556,
+  "id": 278,
+  "wzor": "pas_skorzany_czarny",
+  "nazwa": "Czarny skórzany pas",
+  "rysunek": "pas",
+  "rampa": [
+   "#0e0b0a",
+   "#1a1513",
+   "#28211d",
+   "#373029",
+   "#4a4038",
+   "#5e5349"
+  ],
+  "akcent": "#b9b3a6"
+ },
+ {
+  "ikona": 557,
+  "id": 279,
+  "wzor": "pas_sakiewka",
+  "nazwa": "Pas z sakiewką",
+  "rysunek": "pas_sakiewka",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": "#b9b3a6"
+ },
+ {
+  "ikona": 558,
+  "id": 280,
+  "wzor": "rekawice_brazowe",
+  "nazwa": "Brązowe skórzane rękawice",
+  "rysunek": "rekawice",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 559,
+  "id": 281,
+  "wzor": "rekawice_szare",
+  "nazwa": "Szare skórzane rękawice",
+  "rysunek": "rekawice",
+  "rampa": [
+   "#2b2a28",
+   "#3e3c39",
+   "#53504c",
+   "#6a6661",
+   "#827d77",
+   "#9a958e"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 560,
+  "id": 282,
+  "wzor": "torba_plocienna",
+  "nazwa": "Płócienna torba przez ramię",
+  "rysunek": "torba",
+  "rampa": [
+   "#4a4436",
+   "#665e4b",
+   "#837962",
+   "#a0967c",
+   "#bbb197",
+   "#d3cab2"
+  ],
+  "akcent": null
+ },
+ {
+  "ikona": 561,
+  "id": 283,
+  "wzor": "torba_skorzana",
+  "nazwa": "Skórzana torba przez ramię",
+  "rysunek": "torba",
+  "rampa": [
+   "#24150c",
+   "#3b2414",
+   "#55341d",
+   "#704628",
+   "#8b5a33",
+   "#a6703f"
+  ],
+  "akcent": null
+ }
+]

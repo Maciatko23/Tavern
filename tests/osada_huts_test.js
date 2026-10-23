@@ -13,9 +13,11 @@
 const path = require("path");
 const fs = require("fs");
 const kit = require("./lib/kit.js");
-const STAGING = path.join(__dirname, "..", "tools", "osada", "staging");
+// the huts' meta (exits, floor, looks, residents) as tools/osada/build.py staged it - kept with the tests (tests/fixtures/osada/)
+// since the staging folder went to the archive (2026-10-18 cleanup, Tawerna_archiwum_2026-10-18/zip/tools_robocze.zip)
+const META_DIR = path.join(__dirname, "fixtures", "osada");
 const SHOTS = path.join(__dirname, "..", "docs", "osada");
-const META = id => JSON.parse(fs.readFileSync(path.join(STAGING, "Map" + id + "_meta.json"), "utf8"));
+const META = id => JSON.parse(fs.readFileSync(path.join(META_DIR, "Map" + id + "_meta.json"), "utf8"));
 
 // the contract (tools/osada/osada_data.py): door on Map120, the cell in front, the resident outside / inside, home at 13:00
 const HUTS = [

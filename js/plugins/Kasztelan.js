@@ -49,7 +49,7 @@
  *  6 Ród Kowali - trzy poszlaki: zapiski zakonu w podziemiach (piętra 3, 6,
  *    10, 20, 24), kroniki z Archiwum (lista kasztelanów), brat Kleofas
  *    (pokaż mu klucz), dziadek Stach.
- *  7 Konfrontacja - po rozdziale 1 (spłata długu albo strata pola), po
+ *  7 Konfrontacja - po rozdziale 1 (spłata długu albo strata działki), po
  *    zamknięciu (23-1) przy barze: powiedz Borgarowi wszystko albo przemilcz.
  *    Powiedziane: Borgar się wścieka i zamyka tawernę na dzień (bez zmiany),
  *    następnej nocy czeka w piwnicy przy kracie. Kto mu wcześniej zaśpiewał
@@ -888,7 +888,7 @@
     const JUMP = {
         1: { ch: 1, step: 0, hour: 11, go: [MAP.tavern, 52, 31, 8] },
         2: { ch: 2, step: 1, hour: 12, go: [MAP.cairn, 8, 7, 8] },
-        3: { ch: 3, step: 2, hour: 10, go: [MAP.town, 8, 50, 4] },
+        3: { ch: 3, step: 2, hour: 10, go: [MAP.town, 9, 64, 4] },
         4: { ch: 4, step: 4, hour: 12, go: [MAP.cellar, 15, 3, 8] },
         5: { ch: 5, step: 5, hour: 12, go: [MAP.tavern, 52, 31, 8] },
         6: { ch: 6, name: "w4Rod", hour: 10, go: [MAP.house, 10, 7, 8] },

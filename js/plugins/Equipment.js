@@ -13,6 +13,9 @@
 // that leaves the bag (torn, sold, used up) leaves its part, and goes on again when it comes back. The burning torch is in the left
 // hand (the shield waits on the back and comes back when the torch goes out) - unless it is the weapon of the combat mode: then it is
 // in the right hand and the shield in the left.
+// (2026-10-22) The clothes (Ubior_Data.js / Ubior_Sklepy.js): every item with <Ubior:miejsce,wzor> in its note goes on its part
+// (glowa head, tors torso, nogi legs, stopy feet, pas belt, rece hands, plecy back) - read from the database once it is there; what
+// one does and where it is bought: Ubior_Data's words. The old things keep their places (113, 114, 171 get the note too).
 // No engine hooks here (MenuRing.js puts this file into the page while it is not in js/plugins.js): the others ask -
 // Combat_Fight.js (shield, armour), Survival.js (cold, boots, backpack), MenuRing.js (the card's figure with its places).
 
@@ -41,7 +44,7 @@
  *   Pochodnia (lewa ręka)       - świeci i płoszy zwierzęta, dopóki płonie
  *   Broń (prawa ręka)           - ta sama, co wybrana w trybie walki [ ]
  * Rzecz, która trafia do plecaka, zakłada się sama, gdy jej miejsce jest
- * wolne. Zakładanie i zdejmowanie: menu P → Postać (ekwipunek).
+ * wolne. Zakładanie i zdejmowanie: menu P → Ekwipunek.
  * Skrypt: Equipment.worn(id), Equipment.equip(część, id),
  * Equipment.unequip(część), Equipment.slots().
  * ============================================================================
@@ -83,6 +86,41 @@
         59: () => { const Tr = T.api("Torch"), r = Tr && Tr.ratio ? Tr.ratio() : 0, h = Tr && Tr.TORCH ? Tr.TORCH.hours : 3; return "płonie jeszcze ok. " + Math.max(1, Math.round(r * h * 60)) + " min · światło, płoszy zwierzęta"; }
     };
 
+    // the clothes from the items' notes: <Ubior:miejsce,wzor> -> the part (read again when the database changes); (2026-10-23) the
+    // armour <Zbroja:miejsce,wzor> the same way, the shields <Tarcza:wzor> -> the left hand, the trinkets <Dodatek:rodzaj> -> Dodatek
+    // (Bron_Data.js; the weapons <Bron:...> are Combat's right hand)
+    const UBIOR_PART = { glowa: "head", tors: "torso", nogi: "legs", stopy: "feet", pas: "belt", rece: "hands", plecy: "back" };
+    const NOTED = new Set();   // (the things put on a part by their note - not the old ones above)
+    let notesOf = null, notesLen = 0;
+    function partOfNote(note) {
+        const m = /<(?:Ubior|Zbroja):\s*([a-z]+)\s*,/.exec(note);
+        if (m) return UBIOR_PART[m[1]] || null;
+        if (/<Tarcza:/.test(note)) return "left";
+        if (/<Dodatek:/.test(note)) return "extra";
+        return null;
+    }
+    function readNotes() {
+        if (!window.$dataItems || (notesOf === $dataItems && notesLen === $dataItems.length)) return;
+        notesOf = $dataItems;
+        notesLen = $dataItems.length;
+        for (const it of $dataItems) {
+            const slot = it && it.name ? partOfNote(it.note || "") : null;
+            if (!slot || WEARABLE[it.id]) continue;
+            WEARABLE[it.id] = slot;
+            if (!SLOT[slot].items.includes(it.id)) SLOT[slot].items.push(it.id);
+            NOTED.add(it.id);
+        }
+    }
+    // what a thing does (the card's words): the old ones here, the gear Bron's (with its level), the clothes Ubior_Data's
+    const effectOf = id => (EFFECT[id] ? EFFECT[id]() : String(T.call("Bron", "opis", id) || T.call("Ubior_Data", "opis", id) || ""));
+    // where a thing not had comes from: made (the old ones: the part's workshop) and / or bought (Ubior_Data, Bron_Data)
+    function source(id) {
+        readNotes();
+        const def = SLOT[WEARABLE[id]], buy = String(T.call("Ubior_Data", "gdzie", id) || T.call("Bron_Data", "gdzie", id) || "");
+        const made = def && def.from && !NOTED.has(Number(id)) ? "zrobisz: " + def.from : "";
+        return [made, buy ? "kupisz: " + buy : ""].filter(Boolean).join(" · ") || "zrobisz: " + ((def && def.from) || "?");
+    }
+
     const store = T.state.define("equip", () => ({ slots: {}, seen: {} }), { version: 1, owner: PLUGIN });
     const item = id => (window.$dataItems && $dataItems[id]) || null;
     const has = id => !!item(id) && !!window.$gameParty && $gameParty.numItems(item(id)) > 0;
@@ -96,6 +134,7 @@
     // ---- the bag and the parts kept in step: new things go on by themselves where the part is free, the gone ones come off
     function ensure() {
         if (!window.$gameSystem || !window.$gameParty || !window.$dataItems) return null;
+        readNotes();
         const s = store();
         for (const key of Object.keys(WEARABLE)) {
             const id = Number(key), slot = WEARABLE[key];
@@ -120,9 +159,12 @@
         return id && has(id) ? id : 0;
     }
     // the right hand: the weapon of the combat mode ("m<id>", "ranged" = the bow or the sling, "m0" = the fists)
+    // the bow / the sling the "ranged" hand holds: the best one owned (Combat.rangedItem - Bron.js's variants too)
+    const rangedId = () => { const C = Cb(); return C && C.rangedItem ? C.rangedItem() || 0 : has(126) && has(127) ? 126 : has(125) ? 125 : has(126) ? 126 : 0; };
+    const isRanged = id => id === 125 || id === 126 || !!T.call("Bron", "isRanged", id);
     function rightNow() {
         const h = hand();
-        if (h === "ranged") return has(126) && has(127) ? 126 : has(125) ? 125 : has(126) ? 126 : 0;
+        if (h === "ranged") return rangedId();
         return h[0] === "m" ? Number(h.slice(1)) || 0 : 0;
     }
     // what is on a part now: an item id (0: nothing)
@@ -145,13 +187,14 @@
     // ---- putting on and taking off
     // the choices for a part: { id, name, icon, worn, note } - the right hand: Combat's weapons; the left: the shield, the torch
     function choices(slot) {
+        readNotes();
         const def = SLOT[slot], out = [];
         if (!def) return out;
         if (slot === "right") {
             const C = Cb(), list = C && C.handChoices ? C.handChoices() : ["m0"], now = hand();
             for (const h of list) {
-                const id = h === "ranged" ? (has(126) ? 126 : 125) : Number(h.slice(1)) || 0;
-                const name = h === "m0" ? "Pięści" : h === "ranged" ? (has(126) ? "Łuk" : "Proca") : item(id) ? item(id).name : h;
+                const id = h === "ranged" ? rangedId() || (has(126) ? 126 : 125) : Number(h.slice(1)) || 0;
+                const name = h === "m0" ? "Pięści" : h === "ranged" ? (item(id) ? item(id).name : "Łuk / proca") : item(id) ? item(id).name : h;
                 const icon = h === "m0" ? (fightParts() ? fightParts().FIST_ICON : 0) : item(id) ? item(id).iconIndex : 0;
                 out.push({ id, hand: h, name, icon, worn: h === now, note: weaponNote(h) });
             }
@@ -159,20 +202,23 @@
         }
         if (slot === "left") {
             const now = leftNow();
-            if (has(SHIELD)) out.push({ id: SHIELD, name: item(SHIELD).name, icon: item(SHIELD).iconIndex, worn: now === SHIELD, note: EFFECT[SHIELD]() });
+            // the shields owned: the wooden one, then the others of their notes <Tarcza:...> (Bron_Data.js)
+            for (const id of def.items) if (id !== TORCH && has(id)) out.push({ id, name: item(id).name, icon: item(id).iconIndex, worn: now === id, note: effectOf(id) });
             if (torchLit()) out.push({ id: TORCH, name: "Pochodnia (płonie)", icon: torchIcon(), worn: now === TORCH, note: EFFECT[TORCH]() });
             else if (has(TORCH)) out.push({ id: TORCH, name: "Pochodnia - zapal", icon: torchIcon(), worn: false, note: "zapalisz jedną z " + $gameParty.numItems(item(TORCH)) });
             return out;
         }
-        for (const id of def.items) if (has(id)) out.push({ id, name: item(id).name, icon: item(id).iconIndex, worn: current(slot) === id, note: EFFECT[id] ? EFFECT[id]() : "" });
+        for (const id of def.items) if (has(id)) out.push({ id, name: item(id).name, icon: item(id).iconIndex, worn: current(slot) === id, note: effectOf(id) });
         return out;
     }
     const torchIcon = () => { const Tr = T.api("Torch"); return Tr && Tr.ICON ? Tr.ICON : item(TORCH) ? item(TORCH).iconIndex : 0; };
     function weaponNote(h) {
         const F = fightParts();
-        if (h === "ranged") return "strzela z daleka (F)";
-        const w = F && F.MELEE ? F.MELEE[h === "m0" ? 0 : Number(h.slice(1))] : null;
-        return w ? "obrażenia " + w.dmg + " · zasięg " + w.reach.toFixed(1).replace(".", ",") + (w.fire ? " · podpala" : "") : "";
+        if (h === "ranged") { const t = String(T.call("Bron", "opis", rangedId()) || ""); return t || "strzela z daleka (F)"; }
+        const id = h === "m0" ? 0 : Number(h.slice(1)), w = F && F.weaponNow ? F.weaponNow(id) : F && F.MELEE ? F.MELEE[id] : null;
+        if (!w) return "";
+        const lack = w.lack ? " · poziom " + w.poziom + ": słabiej o " + Math.round(w.lack * 100) + "%" : "";
+        return "obrażenia " + w.dmg + " · zasięg " + w.reach.toFixed(1).replace(".", ",") + (w.crit ? " · krytyk +" + Math.round(w.crit * 100) + "%" : "") + (w.fire ? " · podpala" : "") + lack;
     }
     // the burning torch out of the hand: into the ground in front of him (or where he stands) - it keeps burning there - else put out
     function torchAway() {
@@ -190,7 +236,7 @@
         if (!s || !def) return false;
         id = Number(id) || 0;
         if (slot === "right") {
-            const C = Cb(), want = h || (id === 0 ? "m0" : id === 125 || id === 126 ? "ranged" : "m" + id);
+            const C = Cb(), want = h || (id === 0 ? "m0" : isRanged(id) ? "ranged" : "m" + id);
             if (want === "m" + TORCH && !torchLit()) return false;
             return !!(C && C.setHand && C.setHand(want));
         }
@@ -224,6 +270,7 @@
 
     // ---- for the card: every part with what is on it and a word on it
     function slots() {
+        readNotes();
         return SLOTS.map(def => {
             const id = current(def.id), it = id ? item(id) : null;
             const out = { id: def.id, label: def.label, item: id, extra: !!def.extra, none: !def.items.length && !def.hand, from: def.from || "" };
@@ -239,18 +286,20 @@
             if (it) {
                 out.name = id === TORCH ? "Pochodnia (płonie)" : it.name;
                 out.icon = id === TORCH ? torchIcon() : it.iconIndex;
-                out.note = EFFECT[id] ? EFFECT[id]() : "";
+                out.note = effectOf(id);
                 const D = T.api("Durability");
                 if (D && D.TOOLS && D.TOOLS[id] && D.left && D.lifeOf) out.wear = { left: D.left(id), life: D.lifeOf(id) };
             } else {
                 out.name = "";
                 out.icon = 0;
                 const owned = def.items.filter(has);
-                out.note = out.none ? "brak w grze" : owned.length ? "zdjęte · Enter: załóż" : def.id === "left" ? "zrobisz: warsztat (tarcza) · pochodnia: kupisz, zrobisz" : "zrobisz: " + def.from;
+                const buy = String(T.call("Ubior_Data", "gdzieMiejsce", def.id) || "");   // (the clothes: who sells them)
+                out.note = out.none ? "brak w grze" : owned.length ? "zdjęte · Enter: załóż" : def.id === "left" ? "zrobisz: warsztat (tarcza) · pochodnia: kupisz, zrobisz"
+                    : [def.from ? "zrobisz: " + def.from : "", buy ? "kupisz: " + buy : ""].filter(Boolean).join(" · ") || "zrobisz: " + def.from;
             }
             return out;
         });
     }
 
-    window.Equipment = T.register(PLUGIN, { SLOTS, WEARABLE, TORCH, SHIELD, worn, current, choices, equip, unequip, slots, ensure, state: () => ensure() });
+    window.Equipment = T.register(PLUGIN, { SLOTS, WEARABLE, TORCH, SHIELD, worn, current, choices, equip, unequip, slots, ensure, state: () => ensure(), source, readNotes });
 })();

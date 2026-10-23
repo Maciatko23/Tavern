@@ -261,12 +261,12 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- A6 Podgrodzie
     await t.setHour(8);
-    await t.go(111, 56, 13, 8);
+    await t.go(111, 66, 15, 8);
     await t.frames(30);
     const cab0 = await t.count(73), op0 = await Z("TownQuests.opinion()");
     await finishWork("plot:ogrodek_1");
     t.check("ogródek: pomoc rano motyką - 2 warzywa (kapusta) i Opinia +1", (await t.count(73)) === cab0 + 2 && (await Z("TownQuests.opinion()")) === op0 + 1);
-    await t.go(111, 52, 27, 8);
+    await t.go(111, 72, 72, 8);
     await t.frames(30);
     t.check("wysypisko odkryte przy podejściu", await Z("Okolice.isFound('wysypisko')"));
     await use(2217);
@@ -280,7 +280,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         dump1.hero > 0 && dump1.n === 2 && dumpPops.some(p => /Na dziś dość grzebania/.test(p)), { dump1, dumpPops });
     await run("TownQuests.start('D31'); const s = TownQuests.state(); s.v.zas_medalik = 1; s.v.zas_klucz = 1; s.v.zas_moneta_kruk = 1;");
     t.check("D31: trzy rzeczy z wysypiska spełniają krok „Znalezione: 3/3”", await Z("TownQuests.FX.d31Rzeczy.check() && TownQuests.FX.d31Rzeczy.vars().n === 3"));
-    await t.go(111, 56, 39, 8);
+    await t.go(111, 48, 72, 8);
     await t.frames(20);
     await run("$gameParty.loseItem($dataItems[62], 9);");
     await use(2220);
@@ -384,7 +384,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- A10 pola mieszczan (wiosna, dzień 3 pory: siew)
     await t.setDay(3, 8);
-    await t.go(8, 9, 81, 8);
+    await t.go(8, 10, 109, 8);
     await t.frames(30);
     const gold0 = await t.gold(), barley0 = await t.count(74);
     await finishWork("field:pole_1");

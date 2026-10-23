@@ -98,14 +98,14 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
 
 - **Dziadek Stach** — dziadek bohatera (inna postać niż Dziadek Ozzy
   z tawerny). Jest winien pieniądze Lordowi i pozwala wnukowi budować na
-  swoim polu za lasem („Pole dziadka”, Map003) — tylko tam wolno budować.
+  swojej działce za lasem: to, co w obrębie muru w Kruczym Jarze (Map003; od 2026-10-22 tak się nazywa ta mapa, dawniej „Domek - Zewnętrze”). Za murem to już nie jego ziemia — budować wolno tylko w obrębie muru, 2 kratki od niego.
 - **Lord Leopold Zaleski** — mieszka w pięknym dworze obok tawerny
   (Posiadłość Lorda, Map024). Za dnia (8–20) stoi przed drzwiami dworu
   i przyjmuje spłatę, nocą przez drzwi odzywa się jego kamerdyner
   **Feliks**, który też przyjmuje pieniądze.
 - **Dług:** 2500 G do dnia 60. Pieniądze liczą się jeszcze w nocy po
   terminie, do świtu (6:00) dnia 61. O świcie ludzie Lorda przychodzą
-  zmierzyć pole — jeśli dług nie jest spłacony, pole przechodzi na Lorda,
+  zmierzyć działkę — jeśli dług nie jest spłacony, działka przechodzi na Lorda,
   ale gra toczy się dalej (od 2026-10-15; dawny koniec gry śpi za
   parametrem „Przegrana kończy grę”). Przypomnienia: listy od Lorda w
   dniach 20, 40, 55, 59 i 60.
@@ -113,19 +113,19 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
   dziennie, 4 godziny) to cztery mini-gry, płaca od wyniku + napiwki.
   Borgar skupuje też towar.
 - **Koniec rozdziału — dwie wersje:**
-  - **spłata całości** — pole zostaje przy rodzinie, dziadek dziękuje
+  - **spłata całości** — działka zostaje przy rodzinie, dziadek dziękuje
     (pokwitowanie przynosi Feliks);
-  - **strata pola** (dług niespłacony o świcie dnia 61) — kamerdyner
+  - **strata działki** (dług niespłacony o świcie dnia 61) — kamerdyner
     (Feliks, a gdy go nie ma, Teodor) i dwóch strażników w barwach Lorda
-    mierzą pole i stawiają znak „Własność Lorda Zaleskiego” (scena, gdy
-    bohater jest na polu albo pierwszy raz tam wejdzie; gdzie indziej list
+    mierzą działkę i stawiają znak „Własność Lorda Zaleskiego” (scena, gdy
+    bohater jest na działce albo pierwszy raz tam wejdzie; gdzie indziej list
     od Lorda). Bohater ma **3 dni** na wyniesienie dobytku: plony, skrzynie,
     rozbiórka budynków (połowa materiałów, jak zawsze), zwierzęta z zagród
     (sprzedać kupcowi bydła albo zabrać — zamieszkają w nowej zagrodzie na
     własnej ziemi), pies (idzie z bohaterem; buda i składowisko zostają przy
-    polu). Meble chatki zostają w niej, z polem; chatkę można postawić od
-    nowa na własnej ziemi. Po trzecim świcie straż zamyka pole (strażnik
-    przy wejściach ze Skraju lasu i z Łąki, dymek „Pole należy teraz do
+    działce). Meble chatki zostają w niej, z działką; chatkę można postawić od
+    nowa na własnej ziemi. Po trzecim świcie straż zamyka działkę (strażnik
+    przy wejściach ze Skraju lasu i z Łąki, dymek „Działka należy teraz do
     Lorda.”); to, co zostało, należy do Lorda, ale nie znika.
   - **Gdzie mieszkać potem:** dom dziadka nie był w zastawie (posłanie
     czeka), pokój w tawernie, namiot albo leśne legowisko — i dwa domy z
@@ -154,9 +154,9 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
       do usunięcia). Marta co tydzień przychodzi na grób męża przy lesie.
     Ziemia obu domów to własna ziemia — wolno tam budować wszystko, także
     chatkę. Bez studni (susza; studnia zagrody po odkopaniu jest sucha).
-  - **Odkup:** Lord (przed dworem 8–20, nocą kamerdyner) odsprzeda pole za
-    **3000 G**, w ratach jak dług, bez terminu. Po spłacie całości pole
-    wraca z tym, co na nim zostało (budynki, meble chatki); dziadek dziękuje
+  - **Odkup:** Lord (przed dworem 8–20, nocą kamerdyner) odsprzeda działkę za
+    **3000 G**, w ratach jak dług, bez terminu. Po spłacie całości działka
+    wraca z tym, co na niej zostało (budynki, meble chatki); dziadek dziękuje
     jak po spłacie, Lordowski akt odkupu wisi w ramce.
   - Dziadek po stracie: smutny, ale ciepły — „Dom nie był w zastawie…
     Jesteś cały i zdrowy - to więcej, niż śmiałem prosić.” Nikogo nie obwinia.
@@ -166,9 +166,9 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
   Skałami są drzwi, których nikt nie powinien otwierać”. Lord traktuje to
   jak bajkę dla dzieci — nie wiadomo jeszcze, czy dwór ma związek z
   frakcją, która wynajęła Gruma (patrz „Otwarte wątki”). **W wersji ze
-  stratą pola** haczyk przekazuje kamerdyner przy mierzeniu pola („Jaśnie
-  pan mówi, że to może być warte więcej niż pole”), a gdy bohatera nie ma
-  na polu — list od Lorda (dopisek); Lord przypomina o tym przy pierwszej
+  stratą działki** haczyk przekazuje kamerdyner przy mierzeniu działki („Jaśnie
+  pan mówi, że to może być warte więcej niż działka”), a gdy bohatera nie ma
+  na działce — list od Lorda (dopisek); Lord przypomina o tym przy pierwszej
   rozmowie o odkupie. Dalej obie wersje idą tak samo (Akt II, W4).
 - **Dwór od środka (W7, wariant A - decyzja autora 2026-10-17; w grze: `Dwor.js`, mapy 172-174):** Lord Zaleski nic nie wie. Jest
   próżny i naiwny: liczy gości, prezenty i ukłony, a w kamienie twierdzy wierzy jak w „bajkę, ale ładną”. Dziadek Lorda postawił dwór
@@ -183,7 +183,7 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
   co jest pod Kruczymi Skałami: kto mówi mu wszystko, dostaje sto groszy na tydzień i ekwipunek, ale ludzie Lorda schodzą za nim w
   ruiny; kto kłamie, ma po czasie wrogi dwór (myto, przeszukanie chaty); kto milczy, a Feliks wciąż jest w dworze - ma szpiega frakcji
   za plecami. Przy Sercu Lord pyta o syna Kazimierza (Underground.js).
-- **Serce (Akt III) po stracie pola:** póki pole nie jest odkupione, Lord
+- **Serce (Akt III) po stracie działki:** póki działka nie jest odkupiona, Lord
   przy Sercu jest **rywalem** (trzyma ziemię dziadka i chce być pierwszy
   pod tawerną) — chyba że bohater zrobił z niego sojusznika (W1, cicha
   droga) albo powiedział mu jego prawdę (W9 rozdz. 6). Po odkupie — jak po
@@ -267,7 +267,7 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
 - **Tawerna „Pod Złotym Kuflem”** (Map001, piętra Map025 „Pokoje gości”, Map026 „Apartamenty”) - na fundamentach Twierdzy Kruczych Skał.
 - **Piwnica tawerny i luźna cegła** (Map009) - pierwsze wejście w głąb.
 - **Posiadłość Lorda Zaleskiego** (Map024) - dwór z kamieni twierdzy; dług dziadka.
-- **Dom dziadka Stacha i podwórze** (Map019, Map020), **Pole dziadka** (Map003).
+- **Dom dziadka Stacha i podwórze** (Map019, Map020), **Kruczy Jar** z działką dziadka w obrębie muru (Map003).
 - **Drogi i łąki**: Leśna droga (Map021), Polna droga (Map022), Skraj lasu (Map023), Łąki (Map004, Map017, Map018).
 - Mapy w projekcie do podpięcia: Okolice Tawerny (Map008), Ruiny Zamku (Map010), Komnata Serca (Map011), Mroczny Las (Map012), Góry (Map013),
   Jaskinia (Map014), Polana (Map015), Las (Map005), Wzgórza (Map006), Brzeg Rzeki (Map007).
@@ -299,7 +299,7 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   dziadek Stach wreszcie opowiada „długą historię”: ród bohatera to **kruczarze**, posłańcy zakonu z Urwiska. Dziad Stacha trzymał tu
   kruki, zanim na górze postawiono karczmę („nasza rodzina nosi listy, których nikt nie powinien czytać”), Stach się z tego
   śmiał, dopóki jego ojciec nie dał mu wisiorka; Stach dał go potem córce, kiedy wyjeżdżała z wyspy, a ona - synowi. **Wisiorek z krukiem** to znak posłańca i zarazem klucz do szyfru kronik zakonu. Oswojony kruk
-  (imię nadaje gracz) mieszka na grzędzie na polu: lata z bohaterem, nosi listy po wyspie (nigdy przez morze - do matki nie poleci),
+  (imię nadaje gracz) mieszka na grzędzie na działce: lata z bohaterem, nosi listy po wyspie (nigdy przez morze - do matki nie poleci),
   leci na zwiad, pilnuje pola przed ptakami, rano przynosi błyskotki, a czasem cudze listy (małe sekrety mieszkańców). Po wyprawie na
   wrak nocą kopią tu w gruzie obcy ludzie Czarnych Oczu: szukają kamieni z krukiem.
 - **Orla Grań** (W13 „Skrzydlata Straż”, w grze od 2026-10-18: Orzel.js, Map175 nad kamieniołomem w Górach) - kruczarze nosili listy
@@ -409,7 +409,7 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
 
 **Woda i zasoby (A)**
 
-- Zagroda Rzepków za lasem na południe od pola dziadka: Wojciech Rzepka z rodziną odszedł do miasta, kiedy studnia wyschła
+- Zagroda Rzepków za lasem na południe od działki dziadka (Kruczy Jar): Wojciech Rzepka z rodziną odszedł do miasta, kiedy studnia wyschła
   (list w ruinie chaty).
 - Babka Jagna, zielarka z Omszałej łąki: ma swoją polankę z arcydzięglem, dziurawcem i kozłkiem; po deszczu wychodzą
   obok czarcie kręgi grzybów - nocą w środku siada mgła i coś szepcze („grzybnia oddycha”).

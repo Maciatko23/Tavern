@@ -1,0 +1,647 @@
+{
+ "concept": "tkaczka",
+ "width": 13,
+ "height": 10,
+ "zones": [],
+ "spots": {
+  "res_tkaczka": [
+   2,
+   5,
+   8
+  ],
+  "landing": [
+   6,
+   8,
+   8
+  ]
+ },
+ "things": [
+  {
+   "kind": "hearth",
+   "cat": "floorprop",
+   "cells": [
+    [
+     9,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 9,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     8,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 8,
+   "y": 4
+  },
+  {
+   "kind": "firewood",
+   "cat": "floorprop",
+   "cells": [
+    [
+     10,
+     4
+    ]
+   ],
+   "group": "Izba drewno",
+   "x": 10,
+   "y": 4
+  },
+  {
+   "kind": "tkanina_kruk",
+   "cat": "wallitem",
+   "cells": [
+    [
+     6,
+     2
+    ]
+   ],
+   "group": "Izba tkanina",
+   "x": 6,
+   "y": 2,
+   "event": true,
+   "art": [
+    49,
+    46,
+    95,
+    138
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "krosno",
+   "cat": "floorprop",
+   "cells": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 4,
+   "event": true,
+   "art": [
+    58,
+    52,
+    133,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "kolowrotek",
+   "cat": "floorprop",
+   "cells": [
+    [
+     3,
+     4
+    ]
+   ],
+   "group": "Izba",
+   "x": 3,
+   "y": 4,
+   "event": true,
+   "art": [
+    20,
+    35,
+    75,
+    95
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "kosz z lnem",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     6
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 3,
+   "sr": 10
+  },
+  {
+   "kind": "zwój płótna",
+   "cat": "furniture",
+   "cells": [
+    [
+     1,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 1,
+   "y": 7,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 2,
+   "sr": 10
+  },
+  {
+   "kind": "stojak_pasy",
+   "cat": "floorprop",
+   "cells": [
+    [
+     8,
+     7
+    ],
+    [
+     9,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 8,
+   "y": 7,
+   "event": true,
+   "art": [
+    53,
+    91,
+    138,
+    144
+   ],
+   "fw": 144,
+   "fh": 144
+  },
+  {
+   "kind": "skrzynia",
+   "cat": "floorprop",
+   "cells": [
+    [
+     11,
+     7
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 7,
+   "event": true
+  },
+  {
+   "kind": "siennik",
+   "cat": "furniture",
+   "cells": [
+    [
+     11,
+     4
+    ],
+    [
+     11,
+     5
+    ]
+   ],
+   "group": "Izba",
+   "x": 11,
+   "y": 4,
+   "w": 1,
+   "h": 2,
+   "sheet": "C",
+   "sc": 9,
+   "sr": 13
+  },
+  {
+   "kind": "stool",
+   "cat": "seat",
+   "cells": [
+    [
+     4,
+     8
+    ]
+   ],
+   "group": "Izba",
+   "x": 4,
+   "y": 8
+  },
+  {
+   "kind": "swieca_stolek",
+   "cat": "tableitem",
+   "cells": [
+    [
+     4,
+     8
+    ]
+   ],
+   "group": "Izba świece",
+   "x": 4,
+   "y": 8,
+   "event": true,
+   "art": [
+    40,
+    39,
+    56,
+    71
+   ],
+   "fw": 96,
+   "fh": 96
+  },
+  {
+   "kind": "pajęczyna",
+   "cat": "furniture",
+   "cells": [],
+   "group": null,
+   "x": 11,
+   "y": 1,
+   "w": 1,
+   "h": 1,
+   "sheet": "D",
+   "sc": 15,
+   "sr": 7
+  }
+ ],
+ "hooks": [
+  [
+   "exit",
+   6,
+   9
+  ]
+ ],
+ "wall_items": [
+  [
+   "Izba okna",
+   "window",
+   4,
+   1
+  ],
+  [
+   "Izba tkanina",
+   "tkanina_kruk",
+   6,
+   2
+  ]
+ ],
+ "openings": [
+  [
+   "Izba",
+   [
+    6,
+    9,
+    6,
+    9
+   ]
+  ]
+ ],
+ "floor": [
+  [
+   1,
+   4,
+   "Izba"
+  ],
+  [
+   1,
+   5,
+   "Izba"
+  ],
+  [
+   1,
+   6,
+   "Izba"
+  ],
+  [
+   1,
+   7,
+   "Izba"
+  ],
+  [
+   1,
+   8,
+   "Izba"
+  ],
+  [
+   2,
+   4,
+   "Izba"
+  ],
+  [
+   2,
+   5,
+   "Izba"
+  ],
+  [
+   2,
+   6,
+   "Izba"
+  ],
+  [
+   2,
+   7,
+   "Izba"
+  ],
+  [
+   2,
+   8,
+   "Izba"
+  ],
+  [
+   3,
+   4,
+   "Izba"
+  ],
+  [
+   3,
+   5,
+   "Izba"
+  ],
+  [
+   3,
+   6,
+   "Izba"
+  ],
+  [
+   3,
+   7,
+   "Izba"
+  ],
+  [
+   3,
+   8,
+   "Izba"
+  ],
+  [
+   4,
+   4,
+   "Izba"
+  ],
+  [
+   4,
+   5,
+   "Izba"
+  ],
+  [
+   4,
+   6,
+   "Izba"
+  ],
+  [
+   4,
+   7,
+   "Izba"
+  ],
+  [
+   4,
+   8,
+   "Izba"
+  ],
+  [
+   5,
+   4,
+   "Izba"
+  ],
+  [
+   5,
+   5,
+   "Izba"
+  ],
+  [
+   5,
+   6,
+   "Izba"
+  ],
+  [
+   5,
+   7,
+   "Izba"
+  ],
+  [
+   5,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   4,
+   "Izba"
+  ],
+  [
+   6,
+   5,
+   "Izba"
+  ],
+  [
+   6,
+   6,
+   "Izba"
+  ],
+  [
+   6,
+   7,
+   "Izba"
+  ],
+  [
+   6,
+   8,
+   "Izba"
+  ],
+  [
+   6,
+   9,
+   "Izba"
+  ],
+  [
+   7,
+   4,
+   "Izba"
+  ],
+  [
+   7,
+   5,
+   "Izba"
+  ],
+  [
+   7,
+   6,
+   "Izba"
+  ],
+  [
+   7,
+   7,
+   "Izba"
+  ],
+  [
+   7,
+   8,
+   "Izba"
+  ],
+  [
+   8,
+   4,
+   "Izba"
+  ],
+  [
+   8,
+   5,
+   "Izba"
+  ],
+  [
+   8,
+   6,
+   "Izba"
+  ],
+  [
+   8,
+   7,
+   "Izba"
+  ],
+  [
+   8,
+   8,
+   "Izba"
+  ],
+  [
+   9,
+   4,
+   "Izba"
+  ],
+  [
+   9,
+   5,
+   "Izba"
+  ],
+  [
+   9,
+   6,
+   "Izba"
+  ],
+  [
+   9,
+   7,
+   "Izba"
+  ],
+  [
+   9,
+   8,
+   "Izba"
+  ],
+  [
+   10,
+   4,
+   "Izba"
+  ],
+  [
+   10,
+   5,
+   "Izba"
+  ],
+  [
+   10,
+   6,
+   "Izba"
+  ],
+  [
+   10,
+   7,
+   "Izba"
+  ],
+  [
+   10,
+   8,
+   "Izba"
+  ],
+  [
+   11,
+   4,
+   "Izba"
+  ],
+  [
+   11,
+   5,
+   "Izba"
+  ],
+  [
+   11,
+   6,
+   "Izba"
+  ],
+  [
+   11,
+   7,
+   "Izba"
+  ],
+  [
+   11,
+   8,
+   "Izba"
+  ]
+ ],
+ "notes": [],
+ "axes": [],
+ "pins": [],
+ "id": 122,
+ "key": "tkaczka",
+ "display": "Chata tkaczki",
+ "exits": [
+  {
+   "x": 6,
+   "y": 9,
+   "door": "Drzwi chaty 2",
+   "town": [
+    29,
+    15
+   ],
+   "landing": [
+    6,
+    8,
+    8
+   ],
+   "name": "Drzwi -> Osada Milczących"
+  }
+ ],
+ "residents": [
+  {
+   "key": "tkaczka",
+   "x": 2,
+   "y": 5,
+   "dir": 8
+  }
+ ],
+ "looks": [
+  [
+   1,
+   4,
+   "Krosno"
+  ],
+  [
+   8,
+   7,
+   "Stojak z pasami"
+  ],
+  [
+   6,
+   3,
+   "Tkanina z krukiem"
+  ],
+  [
+   3,
+   4,
+   "Kołowrotek"
+  ],
+  [
+   11,
+   7,
+   "Skrzynia z płótnem"
+  ]
+ ]
+}

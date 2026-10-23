@@ -71,7 +71,8 @@
         cut: ["cięcie", "cięcia", "cięć"],
         shot: ["strzał", "strzały", "strzałów"],
         jab: ["pchnięcie", "pchnięcia", "pchnięć"],
-        block: ["cios", "ciosy", "ciosów"]
+        block: ["cios", "ciosy", "ciosów"],
+        wear: ["dzień pracy", "dni pracy", "dni pracy"]   // (the clothes, Ubior_Sklepy.js: 100 points of strength spent = one day)
     };
     const TOOLS = {
         60: { life: 70, unit: "blow", g: "f", fix: [[77, 1], [92, 1]] },              // kamienna siekiera: gałąź + len
@@ -155,7 +156,8 @@
     // Recipes of Farming.js's workbench menu: one "Napraw: ..." per tool in the bag that has been used.
     function repairRecipes() {
         if (!ENABLED) return [];
-        return Object.keys(TOOLS).map(Number).filter(id => owns(id) && used(id) > 0).map(id => ({
+        // (a thing with no materials of its own is not mended here - the clothes of cloth go to the seamstress, Ubior_Sklepy.js)
+        return Object.keys(TOOLS).map(Number).filter(id => owns(id) && used(id) > 0 && TOOLS[id].fix && TOOLS[id].fix.length).map(id => ({
             id: "repair_" + id, name: "Napraw: " + dataItem(id).name, output: [id, 1], repair: id, manual: true,
             inputs: knowsSkill("c_repair") ? TOOLS[id].fix.map(([i, n]) => [i, Math.max(1, Math.ceil(n / 2))]) : TOOLS[id].fix,   // (Naprawiacz)
             hours: 1, stamina: 2, startSe: "Hammer",
@@ -186,5 +188,13 @@
         _Window_Help_setItem.call(this, item);
     };
 
-    window.Durability = { TOOLS, use, repair, left, used, lifeOf, enabled, repairRecipes, unitWord };
+    // the wear set outright (Ubior_Sklepy.js: a used shirt from the rag-and-bone man, the wear kept through the dyeing; 0: as new)
+    function setUsed(id, n) {
+        if (!TOOLS[id]) return false;
+        if (n > 0) state().used[id] = Math.min(lifeOf(id) - 1, n); else delete state().used[id];
+        delete state().warned[id];
+        return true;
+    }
+
+    window.Durability = { TOOLS, use, repair, left, used, lifeOf, enabled, repairRecipes, unitWord, setUsed };
 })();

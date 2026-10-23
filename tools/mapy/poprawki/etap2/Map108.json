@@ -1,0 +1,22 @@
+{
+ "mapa": 108,
+ "nazwa": "Dzwonnica",
+ "ops": [],
+ "log": [],
+ "pominiete": [
+  {
+   "kod": "P3",
+   "x": 1,
+   "y": 7,
+   "dlaczego": "brak kandydatów"
+  }
+ ],
+ "proby": [],
+ "przed": [
+  "P3 1,7"
+ ],
+ "po": [
+  "P3 1,7"
+ ],
+ "sha_data": "87523d064e3cec365e64b14ed294ef25cbebcce304046b69b6633205d9bdcb4f"
+}

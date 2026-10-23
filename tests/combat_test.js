@@ -158,7 +158,10 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         await down(40); await key(SPACE); await up(40);   // (down arrow held: rolls sideways out of the lane)
         const rolled = await J("({ mode: Combat.act.mode, iframes: Combat.act.iframes })");
         for (let i = 0; i < 60 && ["charge", "overshoot"].includes(await ev("__boar._mode")) === false; i++) await frames(2);
-        await frames(40);
+        // (it still runs past him: about 2 tiles in, then 3.5 past at its charge speed - some 50 frames from the roll; a fixed 40 frames
+        // after it was a race the full run sometimes lost, 2026-10-22. Waited until it stops, the overshoot itself ends by 90 frames)
+        await frames(20);
+        for (let i = 0; i < 60 && ["charge", "overshoot"].includes(await ev("__boar._mode")); i++) await frames(2);
         const afterRoll = await J("({ hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp, boar: __boar._mode, dist: Math.round(__boar.playerDistance() * 10) / 10 })");
         check("Space as it comes: a roll with a moment of safety - no damage", rolled.mode === "roll" && rolled.iframes > 0 && afterRoll.hp === afterRoll.mhp, { rolled, afterRoll });
         check("missed, it runs on well past him (3+ tiles), stops and stands panting (recover) - the moment to hit it", afterRoll.boar === "recover" && afterRoll.dist >= 3, afterRoll);

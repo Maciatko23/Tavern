@@ -180,7 +180,7 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const w2a = await t.json("({ ch: TownQuests.journalOps({ quest: TownQuests.Q.W2 }).map(o => o.text || '').join(' ') })");
     t.check("W2 rozdz. 7 przed Aktem II: dziennik mówi, że rozdział czeka na Akt II", /Akcie II/.test(w2a.ch) && /Jedno pytanie/.test(w2a.ch), w2a.ch.slice(0, 300));
     await t.eval("(function(){ const s = Story.state(); s.paid = s.debt; s.done = Tawerna.time.day(); return 0; })()");
-    await t.go(8, 30, 40, 2);
+    await t.go(8, 71, 49, 2);
     await t.setHour(10);
     await t.frames(40);
     const amb = { text: "" };   // (the first talk may be his remark about the hermit - once - then the heart)
@@ -226,7 +226,7 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("kroniki z Archiwum w torbie: Kleofas wysuwa z grzbietu luźną kartę szyfru (karta 1)", (await t.json("TownQuests.vcount('karta_1')")) === 1 && /luźną\s+kartę/.test(chron.text), chron.text.slice(-200));
     await t.eval(reset1);
     await t.eval("(function(){ const s = TownQuests.state(); delete s.v.kroniki; s.flags.ambrozyChronicles = 5; s.q.D23 = { s: 'active', step: 0, day: 5, sday: 5, sh: 10, t: { done: {} }, times: 0 }; return 0; })()");
-    await t.go(8, 30, 40, 2);
+    await t.go(8, 71, 49, 2);
     await t.frames(30);
     const ambC = await t.talkTo("TownLife.eventOf('dzwonnik')", []);
     t.check("kroniki oddane Ambrożemu: Ambroży oddaje luźną kartę (karta 1)", (await t.json("TownQuests.vcount('karta_1')")) === 1 && /Ambroży\s+wyciąga/.test(ambC.text), ambC.text.slice(-200));

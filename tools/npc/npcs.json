@@ -2065,5 +2065,502 @@
     "scale": null,
     "height_px": 60,
     "notes": ""
+  },
+  {
+    "key": "Kolodziej",
+    "name": "Szczepan Kołodziej (woźnica, stajnia nowego miasta)",
+    "pixellab_id": "da2f1c0b-ef5c-44bf-91fd-556cddf53105",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "fb17272f-1c6e-4bf4-942b-da196244ea26",
+    "animation": "walk",
+    "description": "Szczepan the town carter, a lean wiry man about 40, sun-tanned narrow face, short black beard and short black hair, a faded dark-red cloth kerchief tied over his head, a sleeveless shaggy brown sheepskin vest over a faded blue linen shirt with rolled-up sleeves, a wide brown leather belt with a coil of rope hanging at his hip, patched grey-brown trousers, worn brown leather shoes with cloth leg wraps",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_south_reroll": 1
+    },
+    "sheet": "$Npc_Kolodziej",
+    "walk8": "Npc_Kolodziej_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2940, klucz kolodziej (bo woznica = Wojciech), stajnia z wozownią (Map181)."
+  },
+  {
+    "key": "Szwaczka",
+    "name": "Dorota Igła (szwaczka, dom 3 nowego miasta)",
+    "pixellab_id": "c57a27dd-92a6-4acc-9edb-5899f081dd63",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0c720050-65c9-4489-8d6f-299ca9f8289c",
+    "animation": "walk",
+    "description": "Dorota the seamstress, a thin neat woman about 30, narrow pale face, dark brown hair pinned in a tight bun with a few loose strands, a faded plum-purple wool dress with darned elbows, a small white linen collar, a short off-white apron with a small red pincushion at the waist, a yellow measuring cord hanging around her neck, simple dark shoes",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Szwaczka",
+    "walk8": "Npc_Szwaczka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 1,
+      "north": 0,
+      "north-east": 1,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2942, dom 3 (Map184)."
+  },
+  {
+    "key": "Przekupka",
+    "name": "Agata (przekupka, dom 1 nowego miasta)",
+    "pixellab_id": "a628827f-faa3-4302-8483-443468093c5c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "59a98235-7f0e-4735-820d-f5f4a80ff678",
+    "animation": "walk",
+    "description": "Agata the market woman, a sturdy cheerful peasant woman about 35, round tanned face, brown hair under a faded mustard-yellow headscarf tied at the back, a dark green laced bodice over an off-white linen blouse with rolled-up sleeves, a long faded brown wool skirt with a patched grey apron, a wicker basket with eggs and onions hanging on her right forearm, simple worn leather shoes",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_s_n_e_w": 12
+    },
+    "sheet": "$Npc_Przekupka",
+    "walk8": "Npc_Przekupka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2941, stragan na placu, dom 1 (Map182). Chód S, N, E, W z trybu skeleton-v3 (szablonowy gubił kosz i czernił spódnicę w E)."
+  },
+  {
+    "key": "Wdowa",
+    "name": "Halina (wdowa, dom 4 nowego miasta)",
+    "pixellab_id": "fc548bd4-f149-4329-a843-8f0fca23627c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "087d7b75-0bab-4926-8a7b-f79341e3ef8e",
+    "animation": "walk",
+    "description": "Halina the widow, a tired thin woman about 35, pale worn face, a dark grey headscarf covering all her hair, a long plain faded black wool dress of mourning, a patched brown wool shawl over her shoulders, a small empty wooden bucket hanging from her right hand, worn dark shoes",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 5,
+      "walk_skeleton_v3": 21
+    },
+    "sheet": "$Npc_Wdowa",
+    "walk8": "Npc_Wdowa_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2943, matka Kostka i Jagódki, dom 4 (Map185). Chód E szablonowy (wiadro schowane za nią), pozostałe 7 kierunków skeleton-v3 (szablonowy gubił i przerzucał wiadro)."
+  },
+  {
+    "key": "Jagodka",
+    "name": "Jagódka (córka Haliny, ok. 6 lat)",
+    "pixellab_id": "f591df51-d587-4cbf-a3f0-f5103bddd739",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "fc624f2d-61ce-40ab-bf2e-8e8518758be9",
+    "animation": "walk",
+    "description": "Jagodka, a tiny little girl about 6 years old, a very small child about half the height of an adult, round face, dark brown hair in two short pigtails, a faded moss-green linen dress with patches and a small off-white apron, barefoot",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Jagodka",
+    "walk8": "Npc_Jagodka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.66,
+      "head": 0.82
+    },
+    "height_px": 40,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2945, córka Haliny, dom 4 (Map185). Dziecko: zmniejszona --scale 0.66 --head 0.82 (między Elą 0.62 a Zosią 0.70)."
+  },
+  {
+    "key": "Ciesla",
+    "name": "Leon Dłuto (cieśla, dom 6 nowego miasta)",
+    "pixellab_id": "8b4f13b8-a0cc-4ddd-a317-23791f92b59f",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0db92625-cc16-44fc-8328-659daeaf0bf7",
+    "animation": "walk",
+    "description": "Leon the town carpenter, a broad-shouldered strong man about 45, weathered face, short brown beard with a few grey hairs, short brown hair under a faded grey-blue felt cap, an off-white linen shirt with rolled-up sleeves, a long tan canvas work apron with a front pocket and sawdust on it, a small carpenter's hand axe tucked in his leather belt, dark brown trousers, worn leather boots",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Ciesla",
+    "walk8": "Npc_Ciesla_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {
+        "west": "east"
+      },
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2946, warsztat ciesielski, dom 6 (Map187). Chód W = lustro chodu E (szablonowy W gubił fartuch w połowie klatek)."
+  },
+  {
+    "key": "Weteran",
+    "name": "Wacław Siwy (stary żołnierz o kuli, dom 8 nowego miasta)",
+    "pixellab_id": "c8914467-c0bf-42d3-8092-b2563d4e7d11",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "f402106b-c935-4d08-9f2b-6213d1fb2f60",
+    "animation": "walk",
+    "description": "Waclaw the old war veteran, a gaunt old man about 65, weathered lined face with a long drooping white moustache and a scar across his cheek, short cropped grey hair, an old faded dark-blue soldier's coat with tarnished brass buttons, frayed and patched, a grey wool scarf, a simple wooden crutch under his left arm, patched grey trousers, worn old boots",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_skeleton_v3": 24
+    },
+    "sheet": "$Npc_Weteran",
+    "walk8": "Npc_Weteran_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {}
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2947, ławka na placu (plac_1), dom 8 (Map189). Chód od razu w trybie skeleton-v3 (kula w ręku - szablonowy gubi rzeczy trzymane)."
+  },
+  {
+    "key": "Kostek",
+    "name": "Kostek (syn Haliny, ok. 8 lat)",
+    "pixellab_id": "c665991e-f542-41d1-8e8c-7b0acaf9f1e1",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "bd2b90ff-1249-4152-81b6-b576aa2d11df",
+    "animation": "walk",
+    "description": "Kostek, a small peasant boy about 8 years old, a small child much shorter than an adult, thin, messy black hair, a cheeky grin, a too-big faded blue linen tunic with patches and a rope belt, a small wooden toy sword tucked in the belt, short brown trousers torn at the knees, barefoot",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Kostek",
+    "walk8": "Npc_Kostek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": "230302=4e3528,2b0615=4e3528,1f0b06=3a281e"
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.74,
+      "head": 0.86
+    },
+    "height_px": 44,
+    "notes": "Nowe miasto (docs/miasteczko/NOWE_MIASTO.md): TownLife 2944, syn Haliny, dom 4 (Map185). Dziecko: PixelLab narysował go wzrostu dorosłego, zmniejszony --scale 0.74 --head 0.86 (jak Bronek/Franek). Chód N i E miał ciemnoczerwone plamy na spodniach - --recolor na brąz spodni."
+  },
+  {
+    "key": "Garncarz",
+    "name": "Wit Zduń (garncarz, garncarnia Nowego Podgrodzia)",
+    "pixellab_id": "c0a7edae-eeb5-427d-b7fb-4338e90a6796",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "ca48c4f4-d5e2-4ee4-ac26-5ccdc4361552",
+    "animation": "walk",
+    "description": "Wit the village potter, a lean wiry man about 35, narrow face with a short scruffy reddish-brown beard, short curly reddish-brown hair held by a grey cloth headband, a faded brick-red linen tunic with the sleeves rolled up above the elbows, hands and forearms grey with dried clay, a long grey leather apron smeared with clay, patched brown trousers rolled up to the shins, barefoot with clay-caked feet, poor medieval craftsman, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Garncarz",
+    "walk8": "Npc_Garncarz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe Podgrodzie (docs/podgrodzie/NOWE_PODGRODZIE.md): TownLife 2952, garncarnia (Map203); ten sam Wit garncarz co na tablicy zleceń (QuestBoard_Data GIVERS.wit)."
+  },
+  {
+    "key": "Dziecko",
+    "name": "Tośka (dziecko z lepianki 1 Nowego Podgrodzia, ok. 7 lat)",
+    "pixellab_id": "e699290a-5ecf-4d53-a395-8ef57842bf1d",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "8dec2f3d-8c0c-4d83-8125-bf805dc32e8d",
+    "animation": "walk",
+    "description": "Tośka, a small skinny peasant girl about 7 years old, a small child about half the height of an adult, thin freckled face, short choppy uneven straw-blond hair cut like a boy's, a far too big faded ochre-brown sackcloth smock dress reaching below her knees, tied at the waist with a string, a big sewn-on grey patch, grey clay smudges on her hands and shins, barefoot, poor medieval village child, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Dziecko",
+    "walk8": "Npc_Dziecko_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": "5b4f49=8b6636,141111=291c10"
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.7,
+      "head": 0.84
+    },
+    "height_px": 42,
+    "notes": "Nowe Podgrodzie (docs/podgrodzie/NOWE_PODGRODZIE.md): TownLife 2953, klucz dziecko, lepianka 1 (Map204), biega z Frankiem. Dziecko: zmniejszona --scale 0.7 --head 0.84 (jak Zosia, 7 lat). Chód N miał pół sukienki ciemnoszare (szablon) - --recolor na brąz sukienki."
+  },
+  {
+    "key": "Szynkarz",
+    "name": "Mietek Kwaśniak (szynkarz, szynk Nowego Podgrodzia)",
+    "pixellab_id": "c1642c1f-c0d7-4ac7-b7df-d6652a1f354a",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0349d09b-75e8-4936-b385-374892a1c3b8",
+    "animation": "walk",
+    "description": "Mietek the poor village tavern keeper of a shabby inn, a stout paunchy man about 50, ruddy round face with a red nose, bald crown with a fringe of grey-brown hair, a thick drooping grey-brown moustache, an off-white linen shirt with rolled-up sleeves, a faded moss-green wool vest left open over it, a long stained dark-brown apron tied at the waist, a dirty grey rag tucked in the apron string, patched grey trousers, worn wooden clogs, poor medieval innkeeper, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_west": 3
+    },
+    "sheet": "$Npc_Szynkarz",
+    "walk8": "Npc_Szynkarz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "west": "walk_sk_w"
+      },
+      "mirror": {},
+      "mirror_walk": {
+        "east": "west"
+      },
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Nowe Podgrodzie (docs/podgrodzie/NOWE_PODGRODZIE.md): TownLife 2950, szynk (Map201). Chód W z trybu skeleton-v3 (szablonowy W i E gubił fartuch i brzuch), chód E = lustro chodu W (własna rotacja E)."
+  },
+  {
+    "key": "Opiekunka",
+    "name": "Ciotka Stefa (opiekunka przytułku Nowego Podgrodzia)",
+    "pixellab_id": "2f26216c-6930-4e1e-ae14-5d05b94d36af",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "91bab8fc-3ef4-41a5-8d3d-f567767d5336",
+    "animation": "walk",
+    "description": "Stefa the keeper of the poorhouse, a sturdy kind woman about 55, round weathered face with rosy cheeks and kind tired eyes, grey hair under a plain white linen headscarf tied under the chin, a long faded dark-blue wool dress with patched elbows and the sleeves pushed up, a big off-white apron with a soup stain, a small brown cloth bag of herbs hanging at her hip, worn dark shoes, poor medieval peasant woman, empty hands, full body, standing, facing the viewer",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_west": 3
+    },
+    "sheet": "$Npc_Opiekunka",
+    "walk8": "Npc_Opiekunka_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "west": "walk_sk_w"
+      },
+      "mirror": {},
+      "mirror_walk": {
+        "east": "west"
+      },
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Nowe Podgrodzie (docs/podgrodzie/NOWE_PODGRODZIE.md): TownLife 2951, przytułek (Map202). Chód W z trybu skeleton-v3 (szablonowy W i E gubił fartuch w części klatek), chód E = lustro chodu W (własna rotacja E). Czerwona plama na fartuchu = barszcz."
   }
 ]

@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python tools/town/waterfall_fx.py [--dry]
 # The town's waterfall (Map008, x 43-44, rows 5-8, A1 waterfall over the cliff) made alive (user 2026-10-04: "the water splashing
 # where it hits the pond", "the current should look real"), the way the Winlu author dresses his own waterfalls (his sample maps

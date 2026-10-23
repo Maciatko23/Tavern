@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/make_docs.py  -> docs/podgrodzie/MIEJSCA.md
 # The list of Podgrodzie's places for TownLife (the "Miejsce: <key>" events of Map111 and of the six interiors), the doors and
 # the gate, written from the staged maps' records (tools/podgrodzie/staging/Map111..117_meta.json) - run after the builders.

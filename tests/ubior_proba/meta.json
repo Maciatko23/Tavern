@@ -1,0 +1,825 @@
+{
+ "outfits": [
+  {
+   "key": "bez",
+   "label": "bez stroju"
+  },
+  {
+   "key": "len",
+   "label": "lniana koszula"
+  },
+  {
+   "key": "welna",
+   "label": "czerwony wełniany kaftan"
+  },
+  {
+   "key": "ziel",
+   "label": "zielona skórzana kurta"
+  },
+  {
+   "key": "buty",
+   "label": "skórzane buty"
+  },
+  {
+   "key": "kapelusz",
+   "label": "słomkowy kapelusz"
+  },
+  {
+   "key": "wszystko",
+   "label": "wszystko: kapelusz + kaftan + buty"
+  }
+ ],
+ "cols": [
+  {
+   "key": "walk2",
+   "label": "chód: dół"
+  },
+  {
+   "key": "walk1",
+   "label": "chód: dół-lewo"
+  },
+  {
+   "key": "walk4",
+   "label": "chód: lewo"
+  },
+  {
+   "key": "walk7",
+   "label": "chód: góra-lewo"
+  },
+  {
+   "key": "walk8",
+   "label": "chód: góra"
+  },
+  {
+   "key": "walk9",
+   "label": "chód: góra-prawo"
+  },
+  {
+   "key": "walk6",
+   "label": "chód: prawo"
+  },
+  {
+   "key": "walk3",
+   "label": "chód: dół-prawo"
+  },
+  {
+   "key": "swing0",
+   "label": "siekiera z góry: nad głową"
+  },
+  {
+   "key": "swing1",
+   "label": "siekiera z góry: uderzenie (dół)"
+  },
+  {
+   "key": "swing2",
+   "label": "uderzenie (lewo)"
+  },
+  {
+   "key": "swing3",
+   "label": "uderzenie (góra)"
+  },
+  {
+   "key": "swing4",
+   "label": "siekiera z boku: uderzenie (prawo)"
+  },
+  {
+   "key": "swing5",
+   "label": "z boku (dół)"
+  }
+ ],
+ "cells": {
+  "bez/walk2": {
+   "file": "bez_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "bez/walk1": {
+   "file": "bez_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "bez/walk4": {
+   "file": "bez_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "bez/walk7": {
+   "file": "bez_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "bez/walk8": {
+   "file": "bez_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "bez/walk9": {
+   "file": "bez_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "bez/walk6": {
+   "file": "bez_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "bez/walk3": {
+   "file": "bez_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "bez/swing0": {
+   "file": "bez_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "bez/swing1": {
+   "file": "bez_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "bez/swing2": {
+   "file": "bez_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "bez/swing3": {
+   "file": "bez_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "bez/swing4": {
+   "file": "bez_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "bez/swing5": {
+   "file": "bez_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  },
+  "len/walk2": {
+   "file": "len_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "len/walk1": {
+   "file": "len_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "len/walk4": {
+   "file": "len_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "len/walk7": {
+   "file": "len_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "len/walk8": {
+   "file": "len_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "len/walk9": {
+   "file": "len_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "len/walk6": {
+   "file": "len_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "len/walk3": {
+   "file": "len_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "len/swing0": {
+   "file": "len_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "len/swing1": {
+   "file": "len_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "len/swing2": {
+   "file": "len_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "len/swing3": {
+   "file": "len_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "len/swing4": {
+   "file": "len_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "len/swing5": {
+   "file": "len_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  },
+  "welna/walk2": {
+   "file": "welna_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "welna/walk1": {
+   "file": "welna_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "welna/walk4": {
+   "file": "welna_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "welna/walk7": {
+   "file": "welna_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "welna/walk8": {
+   "file": "welna_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "welna/walk9": {
+   "file": "welna_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "welna/walk6": {
+   "file": "welna_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "welna/walk3": {
+   "file": "welna_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "welna/swing0": {
+   "file": "welna_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "welna/swing1": {
+   "file": "welna_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "welna/swing2": {
+   "file": "welna_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "welna/swing3": {
+   "file": "welna_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "welna/swing4": {
+   "file": "welna_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "welna/swing5": {
+   "file": "welna_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  },
+  "ziel/walk2": {
+   "file": "ziel_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "ziel/walk1": {
+   "file": "ziel_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "ziel/walk4": {
+   "file": "ziel_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "ziel/walk7": {
+   "file": "ziel_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "ziel/walk8": {
+   "file": "ziel_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "ziel/walk9": {
+   "file": "ziel_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "ziel/walk6": {
+   "file": "ziel_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "ziel/walk3": {
+   "file": "ziel_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "ziel/swing0": {
+   "file": "ziel_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "ziel/swing1": {
+   "file": "ziel_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "ziel/swing2": {
+   "file": "ziel_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "ziel/swing3": {
+   "file": "ziel_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "ziel/swing4": {
+   "file": "ziel_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "ziel/swing5": {
+   "file": "ziel_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  },
+  "buty/walk2": {
+   "file": "buty_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "buty/walk1": {
+   "file": "buty_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "buty/walk4": {
+   "file": "buty_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "buty/walk7": {
+   "file": "buty_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "buty/walk8": {
+   "file": "buty_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "buty/walk9": {
+   "file": "buty_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "buty/walk6": {
+   "file": "buty_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "buty/walk3": {
+   "file": "buty_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "buty/swing0": {
+   "file": "buty_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "buty/swing1": {
+   "file": "buty_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "buty/swing2": {
+   "file": "buty_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "buty/swing3": {
+   "file": "buty_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "buty/swing4": {
+   "file": "buty_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "buty/swing5": {
+   "file": "buty_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  },
+  "kapelusz/walk2": {
+   "file": "kapelusz_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "kapelusz/walk1": {
+   "file": "kapelusz_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "kapelusz/walk4": {
+   "file": "kapelusz_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "kapelusz/walk7": {
+   "file": "kapelusz_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "kapelusz/walk8": {
+   "file": "kapelusz_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "kapelusz/walk9": {
+   "file": "kapelusz_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "kapelusz/walk6": {
+   "file": "kapelusz_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "kapelusz/walk3": {
+   "file": "kapelusz_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "kapelusz/swing0": {
+   "file": "kapelusz_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "kapelusz/swing1": {
+   "file": "kapelusz_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "kapelusz/swing2": {
+   "file": "kapelusz_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "kapelusz/swing3": {
+   "file": "kapelusz_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "kapelusz/swing4": {
+   "file": "kapelusz_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "kapelusz/swing5": {
+   "file": "kapelusz_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  },
+  "wszystko/walk2": {
+   "file": "wszystko_walk2.png",
+   "col": 3,
+   "row": 0
+  },
+  "wszystko/walk1": {
+   "file": "wszystko_walk1.png",
+   "col": 3,
+   "row": 1
+  },
+  "wszystko/walk4": {
+   "file": "wszystko_walk4.png",
+   "col": 3,
+   "row": 2
+  },
+  "wszystko/walk7": {
+   "file": "wszystko_walk7.png",
+   "col": 3,
+   "row": 3
+  },
+  "wszystko/walk8": {
+   "file": "wszystko_walk8.png",
+   "col": 3,
+   "row": 4
+  },
+  "wszystko/walk9": {
+   "file": "wszystko_walk9.png",
+   "col": 3,
+   "row": 5
+  },
+  "wszystko/walk6": {
+   "file": "wszystko_walk6.png",
+   "col": 3,
+   "row": 6
+  },
+  "wszystko/walk3": {
+   "file": "wszystko_walk3.png",
+   "col": 3,
+   "row": 7
+  },
+  "wszystko/swing0": {
+   "file": "wszystko_swing0.png",
+   "col": 7,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "wszystko/swing1": {
+   "file": "wszystko_swing1.png",
+   "col": 8,
+   "row": 0,
+   "sheet": "Hero_Axe"
+  },
+  "wszystko/swing2": {
+   "file": "wszystko_swing2.png",
+   "col": 7,
+   "row": 1,
+   "sheet": "Hero_Axe"
+  },
+  "wszystko/swing3": {
+   "file": "wszystko_swing3.png",
+   "col": 10,
+   "row": 3,
+   "sheet": "Hero_Axe"
+  },
+  "wszystko/swing4": {
+   "file": "wszystko_swing4.png",
+   "col": 10,
+   "row": 2,
+   "sheet": "Hero_AxeSide"
+  },
+  "wszystko/swing5": {
+   "file": "wszystko_swing5.png",
+   "col": 10,
+   "row": 0,
+   "sheet": "Hero_AxeSide"
+  }
+ },
+ "sheets": {
+  "bez/Hero_Walk": "sheet_bez_Hero_Walk.png",
+  "bez/Hero_Axe": "sheet_bez_Hero_Axe.png",
+  "bez/Hero_AxeSide": "sheet_bez_Hero_AxeSide.png",
+  "len/Hero_Walk": "sheet_len_Hero_Walk.png",
+  "len/Hero_Axe": "sheet_len_Hero_Axe.png",
+  "len/Hero_AxeSide": "sheet_len_Hero_AxeSide.png",
+  "welna/Hero_Walk": "sheet_welna_Hero_Walk.png",
+  "welna/Hero_Axe": "sheet_welna_Hero_Axe.png",
+  "welna/Hero_AxeSide": "sheet_welna_Hero_AxeSide.png",
+  "ziel/Hero_Walk": "sheet_ziel_Hero_Walk.png",
+  "ziel/Hero_Axe": "sheet_ziel_Hero_Axe.png",
+  "ziel/Hero_AxeSide": "sheet_ziel_Hero_AxeSide.png",
+  "wszystko/Hero_Walk": "sheet_wszystko_Hero_Walk.png",
+  "wszystko/Hero_Axe": "sheet_wszystko_Hero_Axe.png",
+  "wszystko/Hero_AxeSide": "sheet_wszystko_Hero_AxeSide.png"
+ },
+ "problems": {
+  "Hero_Walk": {
+   "median": 0.76,
+   "list": [],
+   "cells": 72
+  },
+  "Hero_Axe": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_Axe wiersz 0 (S) klatka 7",
+     "c": 7,
+     "r": 0,
+     "note": true,
+     "what": "góra włosów myląca (46,24) - wg środka głowy (46,22)"
+    },
+    {
+     "where": "Hero_Axe wiersz 1 (W) klatka 7",
+     "c": 7,
+     "r": 1,
+     "jump": true,
+     "note": true,
+     "what": "skok o -4,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    },
+    {
+     "where": "Hero_Axe wiersz 2 (E) klatka 7",
+     "c": 7,
+     "r": 2,
+     "jump": true,
+     "note": true,
+     "what": "skok o 4,3 px od klatki 6 - cała głowa tyle samo: nakrycie idzie z nią"
+    }
+   ],
+   "cells": 68
+  },
+  "Hero_AxeSide": {
+   "median": 0.76,
+   "list": [
+    {
+     "where": "Hero_AxeSide wiersz 1 (W) klatka 5",
+     "c": 5,
+     "r": 1,
+     "note": true,
+     "what": "góra włosów myląca (45,20) - wg środka głowy (47,20)"
+    },
+    {
+     "where": "Hero_AxeSide wiersz 2 (E) klatka 5",
+     "c": 5,
+     "r": 2,
+     "note": true,
+     "what": "góra włosów myląca (50,20) - wg środka głowy (48,20)"
+    }
+   ],
+   "cells": 68
+  }
+ },
+ "stats": [
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "|koszula_lniana_biala|||||",
+   "ms": 1.6,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "|koszula_lniana_biala|||||",
+   "ms": 2.9,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|koszula_lniana_biala|||||",
+   "ms": 2.7,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "|kaftan_czerwony|||||",
+   "ms": 1.6,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "|kaftan_czerwony|||||",
+   "ms": 3.2,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|kaftan_czerwony|||||",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "|kurta_zielona|||||",
+   "ms": 1.7,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|kurta_zielona|||||",
+   "ms": 3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "|kurta_zielona|||||",
+   "ms": 3.4,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "|||buty_brazowe|||",
+   "ms": 2.2,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|||buty_brazowe|||",
+   "ms": 3.7,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "|||buty_brazowe|||",
+   "ms": 3.9,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "kapelusz_slomkowy||||||",
+   "ms": 1.5,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "kapelusz_slomkowy||||||",
+   "ms": 2.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "kapelusz_slomkowy||||||",
+   "ms": 2,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe|||",
+   "ms": 3.6,
+   "w": 576,
+   "h": 512
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe|||",
+   "ms": 5.3,
+   "w": 1632,
+   "h": 384
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe|||",
+   "ms": 5.6,
+   "w": 1632,
+   "h": 384
+  }
+ ]
+}

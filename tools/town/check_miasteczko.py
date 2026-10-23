@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python check_miasteczko.py  -> prints every problem of tools/town/staging/Map008_C2.json, exit code 1 if any
 # The town of prefabs on the town tileset 11 (the author's flags), checked with the game's own walking rules
 # (tools/tavern/engine.py: tile flags + events "same as characters" + <Occupy>):

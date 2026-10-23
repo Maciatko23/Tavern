@@ -24,6 +24,13 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const rec = id => t.json(`TownQuests.rec(${JSON.stringify(id)})`);
     const favor = () => t.eval("Garnizon.favor()");
     const setFavor = n => t.eval(`Garnizon.state().favor = ${n}; Garnizon.favor()`);
+    // (2026-10-21, Ludzie_Data.js K66 „Nocny patrol”) rotmistrz od dnia 6 (8-20, po poznaniu) zaczyna rozmowę od propozycji patrolu -
+    // raz dziennie, do odmowy (TownQuests: declined). Odmowa, a potem jego zwykłe sprawy, o które pyta ten test
+    const bezPatrolu = async () => {
+        if (!(await t.eval(`TownQuests.offerable("K66")`))) return null;
+        const r = await quietTalk(ev("rotmistrz"), ["Nie tej nocy"]);
+        return /Noc jest długa/.test(r.text) && !(await t.eval(`TownQuests.offerable("K66")`));
+    };
 
     // ---------------------------------------------------------------- wtyczki, mapy, gotowość
     const pl = await t.json(`({ g: !!window.Garnizon && !Tawerna.api("Garnizon").skeleton, d: !!(window.GarnizonData && GarnizonData.QUESTS),
@@ -101,6 +108,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         const f1 = await flags();
         t.check("pierwsze spotkanie z rotmistrzem Bełzą: „Ile masz lat? ...Jeszcze nie.” (bohater nie jest wcielany), flaga garnizonPoznany",
             /Ile masz lat/.test(meet.text) && /Jeszcze nie/.test(meet.text) && !!f1.garnizonPoznany, meet.text.slice(0, 300));
+        await bezPatrolu();
         const list = await quietTalk(ev("rotmistrz"), ["Co to za lista", "Bywaj"]);
         t.check("lista zaginionych: chorągiew brzozowska, tylko słowo „zaginiony” (cichy haczyk o ojcu)", /brzozowska/.test(list.text) && /zaginiony/.test(list.text), list.text.slice(-300));
         const draft = await quietTalk(ev("rotmistrz"), ["Weźmiecie mnie", "Bywaj"]);
@@ -189,13 +197,13 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     }
 
     if (part("d26")) {
-        await t.newGame({ map: 8, x: 24, y: 38, dir: 8, hour: 10, day: 11, quiet: true, minimap: false });
+        await t.newGame({ map: 8, x: 26, y: 47, dir: 8, hour: 10, day: 11, quiet: true, minimap: false });
         await t.eval("$gamePlayer.requestMapReload(); 0");
-        await t.go(8, 24, 38, 8);   // (the new game's map loaded on day 1: TownLife puts the recruiter in as the map loads - set it up again)
+        await t.go(8, 26, 47, 8);   // (the new game's map loaded on day 1: TownLife puts the recruiter in as the map loads - set it up again)
         await t.frames(40);
         const w = await t.json(`(function(){ const e = TownLife.eventOf("werbownik"); const l = $gameMap.event(656);
             return { w: e ? [e.x, e.y, !!(e._town && e._town.hidden)] : null, list: l ? [l.x, l.y, !!(l._garn && l._garn.hidden)] : null }; })()`);
-        t.check("dzień po fali (11): werbownik na rynku w miasteczku (22,37) z listą poborową (zdarzenie 656)", w.w && w.w[0] === 22 && w.w[1] === 37 && !w.w[2] && w.list && !w.list[2], w);
+        t.check("dzień po fali (11): werbownik na rynku w miasteczku (24,46) z listą poborową (zdarzenie 656)", w.w && w.w[0] === 24 && w.w[1] === 46 && !w.w[2] && w.list && !w.list[2], w);
         await quietTalk(ev("werbownik"), []);   // (first meeting)
         const off = await quietTalk(ev("werbownik"), ["Pomogę"]);
         const r0 = await rec("D26");
@@ -209,7 +217,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             await t.eval(`TownQuests.act(null, ["D26", "fx", "d26Ludzie", { key: "bartek", how: "warn" }]); 0`);
             t.check("Bartek ostrzeżony (przez act - nie stał w miasteczku o tej porze)", await t.eval(`TownLife.gone("bartek")`));
         }
-        await t.go(111, 10, 12, 8);
+        await t.go(111, 13, 15, 8);
         await t.setHour(16);
         await t.frames(40);
         const g0 = await t.gold();
@@ -223,7 +231,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             { g0, g1, r1, z: z.text.slice(-120), d: d.text.slice(-120) });
         // the search in Podgrodzie the next day; the recruits drilling in the garrison
         await t.setDay(12, 10);
-        await t.go(111, 26, 18, 2);
+        await t.go(111, 43, 30, 2);
         await t.frames(40);
         const se = await t.json(`[660, 661].map(id => { const e = $gameMap.event(id); return e ? !(e._garn && e._garn.hidden) : null; })`);
         t.check("dzień po ostrzeżeniu: żołnierze przeszukują Podgrodzie (660-661)", se.every(Boolean), se);
@@ -234,9 +242,9 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     }
 
     if (part("d27")) {
-        await t.newGame({ map: 8, x: 31, y: 50, dir: 8, hour: 10, day: 30, quiet: true, minimap: false });
+        await t.newGame({ map: 8, x: 58, y: 89, dir: 8, hour: 10, day: 30, quiet: true, minimap: false });
         await t.eval("$gamePlayer.requestMapReload(); 0");
-        await t.go(8, 31, 50, 8);
+        await t.go(8, 58, 89, 8);
         await t.frames(40);
         const lud = await t.eval(`!!TownLife.eventOf("ludmila") && !TownLife.eventOf("ludmila")._town.hidden`);
         let off = null;
@@ -260,7 +268,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         const r1 = await rec("D27");
         t.check("nocą Kłos sprzedaje 4 worki za 60 G: krok 2 (zanieść Ludmile)", (await t.gold()) === 40 && r1.step === 1 && (await t.eval("TownQuests.vcount('worek_zboza')")) === 4,
             { r1, gold: await t.gold(), t: night.text.slice(-200) });
-        await t.go(8, 31, 50, 8);
+        await t.go(8, 58, 89, 8);
         await t.setHour(10);
         await t.frames(30);
         if (lud) await quietTalk(ev("ludmila"), []);
@@ -269,6 +277,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         t.check("worki u Ludmiły (Opinia +5); krok 3: wydać Kłosa albo milczeć", r2.step === 2, r2);
         await t.go(163, 6, 6, 8);
         await t.frames(30);
+        await bezPatrolu();
         const fvA = await favor();
         const acc = await quietTalk(ev("rotmistrz"), ["Kwatermistrz sprzedaje"]);
         await t.frames(30);
@@ -298,7 +307,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     }
 
     // ---------------------------------------------------------------- Act III, the kantor's night
-    await t.newGame({ map: 8, x: 10, y: 42, dir: 8, hour: 10, day: 3, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 14, y: 50, dir: 8, hour: 10, day: 3, quiet: true, minimap: false });
     const def = await t.json(`(function(){ const d = Act3Data.DEFENDERS.filter(x => /^garnizon/.test(x.key)); Garnizon.state().favor = 85;
         const on = d.map(x => x.when({ bell: true })), off = d.map(x => x.when({ bell: false })); Garnizon.state().favor = 50; const low = d.map(x => x.when({ bell: true }));
         return { n: d.length, on, off, low, sheets: d.map(x => x.sheet) }; })()`);
@@ -307,7 +316,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const fd = await t.json(`(function(){ let d = 4; while (!TownQuests.isFerry(d)) d++; return d; })()`);
     await t.setDay(fd, 23.5);
     await t.eval("$gamePlayer.requestMapReload(); 0");
-    await t.go(8, 10, 42, 8);
+    await t.go(8, 14, 50, 8);
     await t.frames(40);
     const kn1 = await t.json(`(function(){ const e = $gameMap.event(659); return e ? [e.x, e.y, !(e._garn && e._garn.hidden)] : null; })()`);
     const kr = await t.json(`(function(){ const e = TownLife.eventOf("kwatermistrz"); return [TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === "kwatermistrz")), !!e]; })()`);
@@ -315,5 +324,5 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.frames(40);
     const kn2 = await t.json(`(function(){ const e = $gameMap.event(659); return e ? !(e._garn && e._garn.hidden) : null; })()`);
     t.check("kwatermistrz w noc po promie (23-1) przy tylnych drzwiach kantoru na Map008 (zdarzenie 659), za dnia nie; mieszkańcem TownLife zostaje na Map162",
-        kn1 && kn1[0] === 9 && kn1[1] === 40 && kn1[2] && kn2 === false && kr[0] === 162 && !kr[1], { fd, kn1, kn2, kr });
+        kn1 && kn1[0] === 13 && kn1[1] === 48 && kn1[2] && kn2 === false && kr[0] === 162 && !kr[1], { fd, kn1, kn2, kr });
 });

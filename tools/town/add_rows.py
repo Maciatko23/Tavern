@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # Adds N rows of grass at the bottom of the town (Map008) - user 2026-09-30: "dodać od dołu dodatkowe kratki tak ze 10 wierszy".
 # Everything on the map keeps its place; the south exit (the events that transfer to Polna droga, Map022) moves down to the new
 # bottom edge and Map022's way in (events 65-67) lands one row above it. The editor must be CLOSED.

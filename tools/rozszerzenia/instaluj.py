@@ -101,6 +101,12 @@ def mapfile(pkg, mid, path, do):
     if map_text(m).encode("utf-8") != raw: raise SystemExit("STOP: %s nie jest w układzie edytora (wspolne.map_text)" % path)
     infos, _ = read_json("data/MapInfos.json")
     if mid >= len(infos) or not infos[mid]: raise SystemExit("STOP: MapInfos bez mapy %d - najpierw pakiet 0" % mid)
+    # kontrola map (tools/mapy/kontrola.py, docs/MAPY_ZASADY.md): mapa z błędami nie trafia do data/, nowe uwagi się wypisują
+    sys.path.insert(0, os.path.join(ROOT, "tools", "mapy"))
+    import kontrola
+    ok, _probs, txt = kontrola.bramka(mid, m, quiet=True, scisle="--mimo-uwag" not in sys.argv)
+    if not ok: raise SystemExit("STOP: kontrola map - mapa %d ma błędy albo nowe uwagi względem data/ (--mimo-uwag: blokują tylko błędy):\n%s" % (mid, txt))
+    if "NOWE uwagi" in txt: print("uwaga: Map%03d - nowe uwagi kontroli map (tools/mapy/kontrola.py %d):%s" % (mid, mid, txt.split("NOWE uwagi", 1)[1][:300]))
     return write("data/Map%03d.json" % mid, raw, "paczka_" + pkg, do)
 
 
@@ -112,6 +118,7 @@ def main():
     ap.add_argument("--ikony")
     ap.add_argument("--mapa", nargs=2, metavar=("NR", "PLIK"))
     ap.add_argument("--wykonaj", action="store_true")
+    ap.add_argument("--mimo-uwag", action="store_true", help="mapa mimo nowych uwag kontroli map (błędy dalej blokują)")
     a = ap.parse_args()
     need_editor_closed()
     who = "pakiet0" if a.pakiet0 else "paczka_" + str(a.paczka)

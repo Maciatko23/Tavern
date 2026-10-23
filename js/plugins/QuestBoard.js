@@ -508,8 +508,11 @@
     function notice(text, color, sub) {
         T.popup(text, { top: true, color, sub });
     }
+    // (one thing followed at a time: a contract followed lets go of the journal's pinned goal / quest / place - Journal.unpinOthers)
     function track(id) {
         const d = data(), n = id ? find(id) : null;
+        const J = n && n.state === "active" ? T.api("Journal") : null;
+        if (J && J.unpinOthers) J.unpinOthers("board");
         d.track = n && n.state === "active" ? n.id : null;
         return d.track;
     }
@@ -774,9 +777,13 @@
             if (!n || n.state !== "active") { d.track = null; return null; }
             const line = trackLine(n);
             const q = n.req.find(r => !rowDone(r)) || n.req[0];   // (source / id / icon: for the clean look's goal line and compass - CleanHUD.js)
-            return { label: "ZLECENIE", title: n.title, line, key: n.id + "|" + line, source: "board", id: n.id,
+            // (the clean look's goal window: what the contract asks for, have / need, and its term)
+            const reqIcon = r => (r.k === "item" ? iconOf(r.id) : D().BEASTS[r.kind] ? iconOf(D().BEASTS[r.kind].icon) : 0);
+            const needs = n.req.map(r => ({ icon: reqIcon(r), name: reqName(r), have: have(r), need: r.n }));
+            return { label: "ZLECENIE", title: n.title, line, key: n.id + "|" + line, source: "board", id: n.id, needs,
+                sub: isReady(n) ? "Gotowe! Oddaj przy tablicy w tawernie." : daysText(n),
                 icon: q ? (q.k === "item" ? iconOf(q.id) : iconOf(D().BEASTS[q.kind].icon)) : 0 };
-        });
+        }, { owner: "board", pinned: () => (hasState() ? data().track || null : null), unpin: () => { if (hasState()) data().track = null; } });
     }
 
     // ------------------------------------------------------------------

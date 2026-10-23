@@ -1,0 +1,6 @@
+PixelLab (2026-10-22), obrazki do arkusza img/characters/!Podgrodzie2_Wnetrza.png (tools/podgrodzie2/wnetrza/props.py):
+piec.png     job 77ab851a-324d-4892-9ea7-d27adb537a82  pixflux 96x96, paleta z kafli Winlu       1 gen  (ogień w otworze przemalowany i ożywiony w props.py)
+koza.png     job 0d917ff0-33c0-4619-a6c5-ddc65230ce06  pixflux 64x64                              1 gen
+kolo_v3.png  job 5d293a0a-7f77-4870-9eea-62588bf8e336  Pro Flash 64x64, wzór: stołek i dzban Winlu  5 gen  (surowy wynik)
+kolo.png     = kolo_v3.png bez drobnych odprysków gliny (pojedyncze piksele nad misą)
+Odrzucone: 2 próby koła w pixflux (stół z dzbanem; kołowrotek) - 2 gen. Razem 9 generacji.

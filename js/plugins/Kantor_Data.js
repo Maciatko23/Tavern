@@ -65,7 +65,7 @@
         piwnicaLand: [2, 4, 2], schody: [2, 4], baltazar: [16, 4, 2], biurko: [15, 6], szkatula: [17, 8], sterta: [8, 9], worki: [5, 9],
         kamienie: [3, 8], slawek: [9, 7, 8], siedzisko: [3, 6], gabinetDoor: [12, 8], gabinet: [12, 4, 17, 10],   // (x0, y0, x1, y1 - with its door)
         // Map008 (the town): the back door (event 94 of the user's map), the cell before it, where the visitors come from and go
-        backDoor: [10, 39], backFront: [10, 40, 8], frontDoor: [14, 38], gateIn: [25, 66], gateOut: [25, 67], east: [50, 50], tavern: [24, 18],
+        backDoor: [14, 47], backFront: [14, 48, 8], frontDoor: [18, 46], gateIn: [52, 104], gateOut: [52, 105], east: [101, 50], tavern: [51, 18],
         // Map023 (Skraj lasu): the smugglers' fire, its seats, the cart, the courier
         ognisko: [33, 4], seats: [[32, 4, "sit"], [34, 4, "sit"], [33, 2, "sleep"], [32, 3, "sit"]], wozOboz: [35, 2], skrzynieOboz: [37, 3], kurierOboz: [35, 4, 4],
         listen: 3.4,                                                  // tiles from the fire the talk is heard from
@@ -343,10 +343,10 @@
     // own event: "inside" at the place w5_piwnica, which no interior shows - `away`). In Act II, when the town shut his kantor, he
     // lives at the harbour (Map125) by the port's storehouse with a mercenary's guard (alt, condition "w5Harbour").
     const TLD = window.TownLifeData;
-    const SPOTS_TOWN = { w5_piwnica: [10, 40, 8], w5_lada: [14, 39, 8] };       // (w5_lada: the kantor's front door - Ludmiła goes in)
+    const SPOTS_TOWN = { w5_piwnica: [14, 48, 8], w5_lada: [18, 47, 8] };       // (w5_lada: the kantor's front door - Ludmiła goes in)
     const SPOTS_HARBOUR = { w5_sklad: [26, 14, 8], w5_przystan: [27, 15, 2] };
     const SPOTS_KANTOR = { ludmila_lada: [12, 5, 2] };                            // Map103: behind the counter (the merchant's chair)
-    const SPOTS_PODGRODZIE = { w5_lada: [44, 17, 6] };                           // Map111: the west gate's way into the town
+    const SPOTS_PODGRODZIE = { w5_lada: [89, 17, 6] };                           // Map111: the west gate's way into the town
     if (TLD) {
         if (TLD.SPOTS) for (const [k, v] of Object.entries(SPOTS_TOWN)) if (!TLD.SPOTS[k]) TLD.SPOTS[k] = v;
         TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};

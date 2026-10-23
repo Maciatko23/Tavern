@@ -350,7 +350,7 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const pora = await M(`(function(){ const d = $gameSystem.dayNightDay(), f = TownQuests.FX.k54Pora, out = {}; $gameSystem._dayNightDay = 8; out.spring = f.cond(); $gameSystem._dayNightDay = ${SUMMER}; out.summer = f.cond(); $gameSystem._dayNightDay = 70; out.autumn = f.cond(); $gameSystem._dayNightDay = 92; out.winter = f.cond(); $gameSystem._dayNightDay = d; return out; })()`);
     t.check("K54 oferowane tylko gdy latają pawiki (wiosna, lato, pierwszy tydzień jesieni)", pora.spring && pora.summer && !pora.autumn && !pora.winter, pora);
     await t.setDay(SUMMER, 10);
-    await t.go(8, 26, 30, 2);
+    await t.go(8, 53, 46, 2);
     await t.frames(60);
     const elaId = await t.eval("(function(){ const e = TownLife.eventOf('ela'); return e ? e.eventId() : 0; })()");
     let started = false;

@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # The palette map for building the town by hand (user 2026-09-30: "chcę mapę ręcznie zbudować", on the current town, with a
 # palette of the author's buildings): data/Map101.json "Paleta miasteczka (do kopiowania)" under Okolice Tawerny in MapInfos,
 # not linked to the game world. Every prefab of tools/town/prefabs/ stamped tile-for-tile (4 layers + shadows) with its events

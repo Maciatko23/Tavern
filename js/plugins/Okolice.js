@@ -334,7 +334,11 @@
         const d = it && DISC.get(it.okolice), s = store();
         if (!d || !(isFound(d.key) || known(d.key))) return;
         if (s.track === d.key) { track(null); T.popup(D.TEXT.trackOff, { kind: "info", menu: true }); }
-        else if (track(d.key)) T.popup(fill(D.TEXT.trackOn, { name: d.name }), { kind: "info", menu: true });
+        else {
+            const J = T.api("Journal");   // (one thing followed at a time: the journal lets go of its pinned goal / quest / contract)
+            if (J && J.unpinOthers) J.unpinOthers("okolice");
+            if (track(d.key)) T.popup(fill(D.TEXT.trackOn, { name: d.name }), { kind: "info", menu: true });
+        }
     }
     (function addTab() {
         const J = T.api("Journal") || window.Journal;
@@ -345,7 +349,7 @@
             const s = window.$gameSystem ? store() : null, d = s && s.track ? DISC.get(s.track) : null;
             if (!d) return null;
             return { label: "OKOLICE", title: d.name, line: mapName(d.map), key: "okolice:" + d.key, icon: d.icon, where: { map: d.map, x: d.x, y: d.y, name: d.name } };
-        });
+        }, { owner: "okolice", pinned: () => (window.$gameSystem ? store().track || null : null), unpin: () => { if (window.$gameSystem) store().track = null; } });
     })();
 
     // ------------------------------------------------------------------

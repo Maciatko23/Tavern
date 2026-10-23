@@ -386,7 +386,7 @@
         letterTitles: ["List od mamy", "Drugi list od mamy", "Trzeci list od mamy"],
         reply: {
             first: "> (Piszesz węglem na papierze od Janka: że jesteś cały, że dziadek zrzędzi i pali fajkę, że morze oddało jej chustę.)",
-            second: "> (Piszesz o polu dziadka, o tawernie Borgara, o Janku i jego śledziach. O ruinach pod tawerną nie piszesz ani słowa.)",
+            second: "> (Piszesz o działce dziadka, o tawernie Borgara, o Janku i jego śledziach. O ruinach pod tawerną nie piszesz ani słowa.)",
             more: "> (Piszesz krótko: że żyjesz, że czekasz, że wyspa trzyma się mocno. I że dziadek też.)",
             pipe: "> (Na końcu dopisujesz od dziadka: „Fajka dalej śmierdzi”.)",
             gold: "> (Zawijasz w list {n} groszy.)",

@@ -606,7 +606,7 @@
             T.popup("Lord odpisuje z długu", { top: true, color: "#ffe27a", sub: paid + " G mniej do spłaty" });
         } else if (ss && ss.lost && ss.buy && !ss.buy.done) {
             ss.buy.price = Math.max(ss.buy.paid, ss.buy.price - D.PAY.truthBuyback);
-            T.popup("Odkup pola tańszy", { top: true, color: "#ffe27a", sub: "Lord odsprzeda pole za " + ss.buy.price + " G" });
+            T.popup("Odkup działki tańszy", { top: true, color: "#ffe27a", sub: "Lord odsprzeda działkę za " + ss.buy.price + " G" });
             if (ss.buy.paid >= ss.buy.price && St.fieldReturned) St.fieldReturned();
         } else {
             $gameParty.gainGold(D.PAY.truthElse);
@@ -771,7 +771,7 @@
     // ------------------------------------------------------------------
     function w7Vars() {
         const s = S(), St = ST(), ss = St && St.state ? St.state() : null, f = flags();
-        const dlug = !ss ? "-" : ss.lost ? "pole przepadło - odkup: " + Math.min(ss.buy.paid, ss.buy.price) + " / " + ss.buy.price + " G (połowa otworzy drzwi dworu)"
+        const dlug = !ss ? "-" : ss.lost ? "działka przepadła - odkup: " + Math.min(ss.buy.paid, ss.buy.price) + " / " + ss.buy.price + " G (połowa otworzy drzwi dworu)"
             : "spłacono " + Math.min(ss.paid, ss.debt) + " z " + ss.debt + " G. Kiedy oddasz połowę, Lord zaprosi cię do dworu.";
         const zapro = s.tour === 1 ? "Lord czeka w bibliotece dworu (hol, drzwi na lewo) - kronika rodu leży na pulpicie."
             : "Lord przed dworem (8–20) chce cię zaprosić do środka - porozmawiaj z nim.";
@@ -784,8 +784,8 @@
             : s.letters === "left" ? (s.told ? "Lord sprawdza kantorek sam - przyjdź do niego następnego dnia (8–20)." : "Prawda dla Lorda: listy zostały w kantorku. Możesz powiedzieć o nich Lordowi (przed dworem, 8–20) - albo milczeć.")
             : "Prawda dla Lorda.";
         const extra = !s.truth && hasProof() ? " Listy Feliksa wciąż masz w torbie - Lord czeka na prawdę." : "";
-        const splata = (ss && (ss.done || ss.paid >= ss.debt) ? "dług spłacony." : ss && ss.lost ? "pole przepadło - rozdział 1 i tak się skończył." : "Lord przyjmuje spłatę przed dworem (8–20), nocą kamerdyner. Termin: dzień " + (ss ? ss.deadline : 60) + ".") + extra;
-        const najpierw = (!actTwo() ? "w Akcie II (po spłacie długu albo stracie pola)." : !beenDown() ? "kiedy zejdziesz pod tawernę (krata w piwnicy), Lord zapyta, co tam jest." : "Lord pyta przed dworem (8–20), co jest pod Kruczymi Skałami.") + extra;
+        const splata = (ss && (ss.done || ss.paid >= ss.debt) ? "dług spłacony." : ss && ss.lost ? "działka przepadła - rozdział 1 i tak się skończył." : "Lord przyjmuje spłatę przed dworem (8–20), nocą kamerdyner. Termin: dzień " + (ss ? ss.deadline : 60) + ".") + extra;
+        const najpierw = (!actTwo() ? "w Akcie II (po spłacie długu albo stracie działki)." : !beenDown() ? "kiedy zejdziesz pod tawernę (krata w piwnicy), Lord zapyta, co tam jest." : "Lord pyta przed dworem (8–20), co jest pod Kruczymi Skałami.") + extra;
         const U = UG();
         let stance = "absent";
         try { stance = U && U.world && U.lordStance ? U.lordStance(U.world()) : "absent"; } catch (e) { stance = "absent"; }

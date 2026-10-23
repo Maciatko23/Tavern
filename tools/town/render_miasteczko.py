@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python render_miasteczko.py [--game]  -> docs/miasteczko/miasteczko_C.png, miasteczko_C_czysta.png, miasteczko_C_blokady.png
 # The pictures of the town of prefabs (build_miasteczko.py, tileset 11), drawn in Python by mzrender.py (byte-identical on a
 # rerun), and the harness overlay tools/town/staging/overlay_C2/ (data/Map008.json, data/Tilesets.json = the staged tileset

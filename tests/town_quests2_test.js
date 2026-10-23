@@ -22,7 +22,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const who = keys => J(`(function(){ const o = {}; for (const k of ${JSON.stringify(keys)}) { const e = TownLife.eventOf(k); o[k] = e && [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName()]; } return o; })()`);
 
     // ------------------------------------------------------------------ the new residents
-    await t.newGame({ map: 8, x: 26, y: 36, dir: 8, hour: 10, day: 7, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 53, y: 52, dir: 8, hour: 10, day: 7, quiet: true, minimap: false });
     await at(7, 10.2, 60);
     const m = await who(["zlodziej", "gracz", "bartek", "woznica"]);
     const spot = await J("({ dice: TownLife.spot('stragan_kosci'), cart: TownLife.spot('woz_pld') })");
@@ -36,7 +36,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await at(9, 10, 30);
     t.check("K26: Zosia offers 'Pierścionek w studni'", await accept("zosia", "Zejdę po niego.", "K26"), await step("K26"));
     await t.give(93, 2);
-    await t.locate(26, 34, 4);
+    await t.locate(53, 50, 4);
     await t.talkTo("$gameMap.event(245)", ["Zejść"], { place: false });
     await t.until(t.onMap(118), 20);
     await t.frames(30);
@@ -82,14 +82,14 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ K37: the purse - Szymek runs
     await at(14, 8.55, 30);
-    await t.locate(33, 30, 4);   // (near Feliks at the right stall, off the thief's way down the stairs)
+    await t.locate(39, 45, 4);   // (near Feliks at the right stall, off the thief's way down the stairs)
     await t.saveTo(8);
     const started = await t.until("!!TownQuests.rec('K37')", 20, 200);
     const z0 = await J("(function(){ const z = TownLife.eventOf('zlodziej'), f = TownLife.eventOf('feliks'); return { z: [z.x, z.y], f: [f.x, f.y], held: TownLife.held('zlodziej') }; })()");
     await t.frames(90);
     const z1 = await J("(function(){ const z = TownLife.eventOf('zlodziej'); return [z.x, z.y]; })()");
     t.check("K37: a market day by Feliks at the stalls - 'Złodziej! Sakiewka jaśnie pana!', the thief beside him runs off (taken over from his plan)",
-        started && z0.held && Math.hypot(z0.z[0] - z0.f[0], z0.z[1] - z0.f[1]) < 2 && (z1[0] !== z0.z[0] || z1[1] !== z0.z[1]) && (await J("SpeechBubbles.log.join('|')")).includes("Złodziej! Sakiewka jaśnie pana!"), { z0, z1 });
+        started && z0.held && Math.hypot(z0.z[0] - z0.f[0], z0.z[1] - z0.f[1]) < 2.5 && (z1[0] !== z0.z[0] || z1[1] !== z0.z[1]) && (await J("SpeechBubbles.log.join('|')")).includes("Złodziej! Sakiewka jaśnie pana!"), { z0, z1 });
     const lost = await t.until("TownQuests.rec('K37').s === 'failed'", 40, 300);
     t.check("...nobody chases him: he gets away into the camp - the quest is lost", lost && !(await J("TownLife.held('zlodziej')")), await J("TownQuests.rec('K37')"));
     // caught: give it back to Feliks
@@ -122,7 +122,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const bartek = await who(["bartek"]);
     t.check("K39: Bartek Kmieć sits in the tavern in the afternoon (Map001, 'Miejsce: gosc_6')", bartek.bartek && bartek.bartek[2] === "shown" && bartek.bartek[0] === 57 && bartek.bartek[1] === 35, bartek);
     t.check("...and asks the hero to watch the market's dice player", await accept("bartek", "Zagram z nim", "K39"), await step("K39"));
-    await t.go(8, 30, 33, 8);
+    await t.go(8, 35, 47, 8);
     await at(21, 10.5, 40);
     await t.eval("Combat.hero().attr.per = 5; TownQuests.diceOpts = { auto: 'steady', turbo: 8, rules: false, seed: 5 }; $gameParty.gainGold(50); 0");
     const play = async () => {

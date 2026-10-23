@@ -21,7 +21,7 @@ const LANDING = [50, 53];
 const HOOKS = ["board", "dice", "darts", "arm", "bath", "stage", "meal", "mealtable", "attendant"];
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no console errors" }, async t => {
-    await t.newGame({ map: 8, x: 24, y: 17, dir: 8, quiet: true });   // (in front of the tavern's gate, the hall since 2026-10-04)
+    await t.newGame({ map: 8, x: 51, y: 17, dir: 8, quiet: true });   // (in front of the tavern's gate, the hall since 2026-10-04)
     // the transfer an event would make (its first Transfer Player command, any page) - followed as the event would
     const transferOf = eid => t.json(`(function(){ const e = $dataMap.events[${eid}]; if (!e) return null; for (const p of e.pages) for (const c of p.list) if (c.code === 201 && c.parameters[0] === 0) return c.parameters; return null; })()`);
     const follow = async eid => { const tr = await transferOf(eid); if (!tr) return null; const ok = await t.go(tr[1], tr[2], tr[3], tr[4]); return { to: tr.slice(1, 5), ok }; };
@@ -75,7 +75,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no console errors" }, async
     for (const eid of [10, 11, 12]) outs.push(await transferOf(eid));
     r = await follow(10);
     const yard = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, pass: $gameMap.isPassable($gamePlayer.x, $gamePlayer.y, 2) })");
-    t.check("the doorway (events 10..12 at 49..51,54) leads out in front of the gate (Map008 23..25,17)", outs.every(o => o && o[1] === 8 && o[3] === 17) && yard.map === 8 && yard.x === 23 && yard.y === 17, { outs, yard });
+    t.check("the doorway (events 10..12 at 49..51,54) leads out in front of the gate (Map008 50..52,17)", outs.every(o => o && o[1] === 8 && o[3] === 17) && yard.map === 8 && yard.x === 50 && yard.y === 17, { outs, yard });
     r = await follow(22);
     t.check("...and the gate leads back in", r && r.ok && (await t.eval("$gameMap.mapId()")) === 1, r);
 

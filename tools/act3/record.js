@@ -22,11 +22,11 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
         await t.until("Act3.live().some(h => !h._dead && h._label === 'Dowódca kopaczy')", 30);
         cam = [50, 45];
     } else {
-        await t.go(8, 15, 19, 6, { calm: false });
+        await t.go(8, 42, 19, 6, { calm: false });
         await t.setHour(22);
         await t.eval("Act3.debugStart(); Act3.damage(40); 0");
         await t.until("Act3.siege() && Act3.siege().wave === 1 && Act3.live().length > 0 && Act3.defenders().length >= 6", 60);
-        cam = [23, 19];
+        cam = [50, 19];
     }
     await t.eval(`$gameMap.setDisplayPos(${cam[0]} - 13, ${cam[1]} - 7); 0`);
     if (LEAD) await t.frames(LEAD);

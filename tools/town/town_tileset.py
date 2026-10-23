@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowym mieście - Map008 przebudowana (tools/miasto2, docs/miasteczko/NOWE_MIASTO.md); ten generator zna stary układ.
 # python town_tileset.py  -> tools/town/staging/Tilesets_town.json (NOT data/: installed only with the editor closed, when
 # the user has chosen)
 # The proposed tileset of the town (Map008): the tileset author's own "Fantasy Exterior green" (his sample maps' tileset 1,

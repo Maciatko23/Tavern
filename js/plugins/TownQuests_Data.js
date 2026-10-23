@@ -168,14 +168,14 @@
     // usable only while a quest needs them (self switch A). wall: true - it is a wall / a window (O facing it); deco: a little
     // picture drawn on it (paper - a notice, glint - something shining, tracks - paw prints, doused - a drowned fire basket)
     const SPOTS = {
-        bakery_window: { map: 8, id: 951, x: 6, y: 39, name: "Hanka (zza okienka)" },
-        notice_tavern: { map: 8, id: 952, x: 25, y: 16, name: "Ściana tawerny", wall: true, deco: "paper", owner: null },
-        notice_bakery: { map: 8, id: 953, x: 7, y: 39, name: "Ściana piekarni", wall: true, deco: "paper", owner: "piekarka" },
-        notice_smithy: { map: 8, id: 954, x: 8, y: 48, name: "Ściana kuźni", wall: true, deco: "paper", owner: "kowal" },
-        notice_kantor: { map: 8, id: 955, x: 15, y: 39, name: "Ściana kantoru", wall: true, deco: "paper", owner: "kupiec" },
-        south_gate: { map: 8, id: 956, x: 26, y: 54, name: "Pod bramą południową", deco: "tracks" },
-        watch_post: { map: 8, id: 957, x: 26, y: 20, name: "Posterunek przy bramie twierdzy" },
-        east_brazier: { map: 8, id: 958, x: 49, y: 49, name: "Kosz żarowy", wall: true, deco: "doused" },
+        bakery_window: { map: 8, id: 951, x: 38, y: 73, name: "Hanka (zza okienka)" },
+        notice_tavern: { map: 8, id: 952, x: 52, y: 16, name: "Ściana tawerny", wall: true, deco: "paper", owner: null },
+        notice_bakery: { map: 8, id: 953, x: 39, y: 73, name: "Ściana piekarni", wall: true, deco: "paper", owner: "piekarka" },
+        notice_smithy: { map: 8, id: 954, x: 9, y: 62, name: "Ściana kuźni", wall: true, deco: "paper", owner: "kowal" },
+        notice_kantor: { map: 8, id: 955, x: 19, y: 47, name: "Ściana kantoru", wall: true, deco: "paper", owner: "kupiec" },
+        south_gate: { map: 8, id: 956, x: 53, y: 93, name: "Pod bramą południową", deco: "tracks" },
+        watch_post: { map: 8, id: 957, x: 53, y: 28, name: "Posterunek przy bramie twierdzy" },
+        east_brazier: { map: 8, id: 958, x: 101, y: 49, name: "Kosz żarowy", wall: true, deco: "doused" },
         horseshoe: { map: 22, id: 951, x: 20, y: 14, name: "Polna droga", deco: "glint" },
         // (2026-10-05) the places another agent built for these quests (docs/miasta_miejsca_zadan.md - on their "Miejsce:" markers):
         // Map118 "Dno studni", Map024 the orangery of the manor's garden, Map119 "Archiwum zakonu". img: [sheet, index, direction,
@@ -197,7 +197,7 @@
         // (2026-10-06) W3 a: Melia by the Kupała bonfire before the south gate (only that night; bust: her own)
         // (2026-10-06) W4: where the other half of the key lies - at the foot of the stone cairn in grandpa's yard (Map020, the cairn 8,5)
         w4_dig: { map: 20, id: 951, x: 8, y: 6, name: "Kopiec z krukiem", deco: "dig" },
-        w3_kupala: { map: 8, id: 959, x: 24, y: 51, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
+        w3_kupala: { map: 8, id: 959, x: 51, y: 90, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
         // (2026-10-06) W8 in the mountains: on the maps agent's markers ("Miejsce: <marker>" - docs/miasta_miejsca_zadan.md "Góry"; dx/dy
         // shift; x/y only a fallback) - Grum as a picture with his bust at each place, the commander's crate in the diggers' camp
         w8_start: { map: 13, id: 951, marker: "grum_przewodnik_start", x: 4, y: 38, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
@@ -214,18 +214,18 @@
         // event's note (Occupy - the tent's footprint); light: added only while shown when the map loads (the camp's fire: a flame);
         // step: an animated picture. talkFx: what the action button says (FX[talkFx].spot). The hiding places of Rafał (W6 rozdz. 4 a)
         // are ordinary quest places (951) on the guest rooms (Map025), grandpa's house (Map019) and the bell tower (Map108).
-        w6_tent1: { map: 8, id: 903, x: 31, y: 53, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
+        w6_tent1: { map: 8, id: 903, x: 58, y: 92, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_fire: { map: 8, id: 905, x: 32, y: 51, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
+        w6_fire: { map: 8, id: 905, x: 59, y: 90, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
             light: "<Light:190,255,150,70><LightFlicker:0.18,255,110,40><LightHeight:20>" },
-        w6_tent2: { map: 8, id: 904, x: 19, y: 51, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+        w6_tent2: { map: 8, id: 904, x: 46, y: 90, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_bogdan: { map: 8, id: 906, x: 23, y: 51, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_halina: { map: 8, id: 907, x: 29, y: 52, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_tent2_o: { map: 111, id: 903, x: 41, y: 7, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+        w6_bogdan: { map: 8, id: 906, x: 50, y: 90, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina: { map: 8, id: 907, x: 56, y: 91, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_tent2_o: { map: 111, id: 903, x: 42, y: 11, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_bogdan_o: { map: 111, id: 906, x: 37, y: 8, name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_halina_o: { map: 111, id: 907, x: 41, y: 10, name: "Halina", img: ["$Npc_Halina", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_bogdan_o: { map: 111, id: 906, x: 38, y: 12, name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina_o: { map: 111, id: 907, x: 42, y: 14, name: "Halina", img: ["$Npc_Halina", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
         w6_help1: { map: 3, id: 906, x: 20, y: 26, at: "w6Helper", name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
         w6_help2: { map: 3, id: 907, x: 22, y: 26, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
         w6_hide_tavern: { map: 25, id: 951, x: 40, y: 38, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
@@ -276,7 +276,7 @@
         { id: "feliksRobbed", who: "feliks", flag: "w1Robbed", lines: ["Słyszałem o napadzie na Polnej drodze. Straszne czasy, młodzieńcze. Mówiłem - drogi bywają niebezpieczne."] },
         { id: "kapralAmbushWon", who: "kapral", flag: "w1AmbushWon", lines: ["Na Polnej drodze ktoś przetrzepał trzech zbirów w kapturach. Bosy, mówią. Nie pytam, kto. Ale dobra robota."] },
         { id: "soltysCistern", who: "soltys", flag: "cisternOpen", lines: ["Studnia pełna! Pierwszy raz od trzech lat! Klucz noszę przy sobie - racje po równo, dla każdego domu.",
-            "Tobie dalej dwa wiadra na dzień, jak dotąd. Wiem, wiem... Ale ty masz swoją deszczówkę na polu Stacha. A miasto ma tylko tę studnię."] },
+            "Tobie dalej dwa wiadra na dzień, jak dotąd. Wiem, wiem... Ale ty masz swoją deszczówkę na działce Stacha. A miasto ma tylko tę studnię."] },
         { id: "kubaCistern", who: "woziwoda", flag: "cisternOpen", lines: ["Rozwożę racje ze studni. Za grosz od domu, z kasy sołtysa. Uczciwy grosz. ...Lżej się nosi, wiesz? Beczka ta sama, a jakby lżejsza."] },
         { id: "hankaCistern", who: "piekarka", flag: "cisternOpen", lines: ["Woda w studni i mąka z młyna! Kochaneczku, pierwszy chleb z tego ciasta jest twój. Nie dyskutuj."] },
         { id: "tadekCistern", who: "kowal", flag: "cisternOpen", lines: ["Koryto pełne, młyn się kręci, a ja chłodzę żelazo w prawdziwej wodzie. Ojciec mówił, że zakon wiedział, co robi. Miał rację, stary."] },
@@ -298,7 +298,7 @@
         { id: "ludmilaTaken", who: "ludmila", flag: "rafalTaken", lines: ["Zabrali Rafała. Związanego. Ela pytała, czy go powieszą. Co miałam jej powiedzieć?"] },
         { id: "kapralTaken", who: "kapral", flag: "rafalTaken", lines: ["Dezertera mamy. Ktoś go chował - nie pytam kto. Tym razem."] },
         { id: "soltysOutside", who: "soltys", flag: "campOutside", lines: ["Brama zamknięta dla nowych. Miasto zdecydowało. ...Dobrze mi z tym nie jest, ale wody nie wyczaruję."] },
-        { id: "soltysInside", who: "soltys", flag: "campInside", lines: ["Wpuściliśmy ich. Pracują - przy polu Stacha, przy studni, gdzie trzeba. Kłótni przy beczkach mniej. Zobaczymy."] },
+        { id: "soltysInside", who: "soltys", flag: "campInside", lines: ["Wpuściliśmy ich. Pracują - na działce Stacha, przy studni, gdzie trzeba. Kłótni przy beczkach mniej. Zobaczymy."] },
         { id: "kubaInside", who: "woziwoda", flag: "campInside", lines: ["Ci nowi noszą ze mną beczki. Za miskę zupy. Dziwne czasy - ale plecy mniej bolą."] },
         { id: "kubaOutside", who: "woziwoda", flag: "campOutside", lines: ["Kolejka przy beczkach krótsza. A za murem, na Podgrodziu, nocą wyją wilki. Nie wiem, co gorsze."] },
         { id: "hankaWigilia", who: "piekarka", flag: "w6Wigilia", lines: ["Wigilia przy jednym stole z obozem... Kochaneczku, dawno tak nie płakałam przy opłatku."] },
@@ -358,11 +358,11 @@
         // =========================================================== K1
         {
             id: "K1", kind: "K", title: "Węgiel do paleniska", giver: "kowal", icon: 79, where: "kuźnia, taras rzemieślników", when: "6–17, od dnia 2",
-            desc: "Palenisko Tadka przygasa, a węgla nie ma - węglarz z gór nie przyjechał. Węgiel drzewny daje piec na polu albo drzewo zwęglone piorunem.",
+            desc: "Palenisko Tadka przygasa, a węgla nie ma - węglarz z gór nie przyjechał. Węgiel drzewny daje piec na działce albo drzewo zwęglone piorunem.",
             offer: {
                 cond: { hours: H_KOWAL, day: 2 },
                 say: ["Palenisko mi przygasa, a węgla ani grudki. Węglarz z gór nie przyjechał - wojna, drogi, licho wie co.",
-                    "Przyniesiesz pięć worków węgla drzewnego? Z pieca na polu albo z drzewa, w które walnął piorun. Przed dziewiątą - to ci jeszcze naostrzę narzędzie."],
+                    "Przyniesiesz pięć worków węgla drzewnego? Z pieca na działce albo z drzewa, w które walnął piorun. Przed dziewiątą - to ci jeszcze naostrzę narzędzie."],
                 yes: "Przyniosę węgiel.", no: "Nie teraz.",
                 accept: ["No to czekam. Tylko nie każ mi czekać do zimy."], decline: ["Twoja wola. Palenisko poczeka. Ja też."]
             },
@@ -466,17 +466,17 @@
         // =========================================================== K6
         {
             id: "K6", kind: "K", title: "Jęczmień do żaren", giver: "piekarka", icon: 74, where: "stragan na rynku", when: "lato i jesień, 6–14",
-            desc: "Mąki z młyna nie ma, bo koło stoi, odkąd opadł strumień. Hanka zmieli jęczmień z pola dziadka w ręcznych żarnach.",
+            desc: "Mąki z młyna nie ma, bo koło stoi, odkąd opadł strumień. Hanka zmieli jęczmień z działki dziadka w ręcznych żarnach.",
             offer: {
                 cond: { hours: H_PIEK, season: [1, 2] },
                 say: ["Mąki z młyna już nie będzie, póki koło stoi. Mam stare żarna po babce - zmielę ręcznie, byle było co.",
-                    "Masz jęczmień z pola dziadka? Cztery garście. Upiekę ci za to placek z jagodami."],
+                    "Masz jęczmień z działki dziadka? Cztery garście. Upiekę ci za to placek z jagodami."],
                 yes: "Przyniosę jęczmień.", no: "Jeszcze nie urósł.",
                 accept: ["Czekam, kochaneczku. Żarna już naoliwione."], decline: ["Jak urośnie, to pamiętaj o mnie."]
             },
             steps: [
                 { type: "bring", to: "piekarka", need: [[74, 4]], hours: H_PIEK, text: "Przynieś Hance 4× Jęczmień (stragan, 6–14).",
-                    remind: ["Cztery garście jęczmienia, kochaneczku. Żarna czekają."], hero: ["> Jęczmień z pola dziadka. Cztery garście."],
+                    remind: ["Cztery garście jęczmienia, kochaneczku. Żarna czekają."], hero: ["> Jęczmień z działki dziadka. Cztery garście."],
                     done: ["Piękne ziarno! Jutro będą podpłomyki. A to placek dla ciebie - obiecałam."] }
             ],
             reward: { gold: 10, items: [[136, 1]], xp: 50, opinion: 2,
@@ -778,10 +778,10 @@
                 { type: "bring", to: "lord", need: [["v:list", 1]], hours: [8, 20], kruk: true, text: "Zanieś list dziadka Lordowi (drzwi dworu, 8–20).",
                     hero: ["> List od dziadka Stacha. Do rąk własnych."],
                     done: ["List od Stacha? (czyta) Zwłoki nie będzie. Dług to dług.",
-                        "Ale powiedz mi... na polu twojego dziadka leżą jeszcze te stare kamienie? Z wyrytym krukiem? Mój dziadek je zbierał. Ładne kamienie."] }
+                        "Ale powiedz mi... na działce twojego dziadka leżą jeszcze te stare kamienie? Z wyrytym krukiem? Mój dziadek je zbierał. Ładne kamienie."] }
             ],
             reward: { xp: 40, clue: "lord_stones",
-                note: ["Lord pyta o kamienie", "Lord nie da zwłoki. Za to zapytał, czy na polu dziadka leżą jeszcze stare kamienie z wyrytym krukiem - „mój dziadek je zbierał”."] }
+                note: ["Lord pyta o kamienie", "Lord nie da zwłoki. Za to zapytał, czy na działce dziadka leżą jeszcze stare kamienie z wyrytym krukiem - „mój dziadek je zbierał”."] }
         },
         // =========================================================== K38
         {
@@ -1356,16 +1356,16 @@
         },
         // =========================================================== D14
         {
-            id: "D14", kind: "D", title: "Zboże na wojnę", giver: "kapral", icon: 74, where: "brama wschodnia + pole dziadka", when: "od dnia 24, 3 dni",
-            desc: "Dwór zbiera „zboże na wojnę”: trzecią część jęczmienia z każdego pola. Z pola dziadka - sześć garści. Oddać, przekupić kaprala czy schować?",
+            id: "D14", kind: "D", title: "Zboże na wojnę", giver: "kapral", icon: 74, where: "brama wschodnia + działka dziadka", when: "od dnia 24, 3 dni",
+            desc: "Dwór zbiera „zboże na wojnę”: trzecią część jęczmienia z każdego pola. Z działki dziadka - sześć garści. Oddać, przekupić kaprala czy schować?",
             offer: {
                 cond: { hours: H_WIT, day: 24 },
                 say: ["Rozkaz z dworu. Po bitwie na kontynencie zbieramy zboże na wojnę - trzecią część jęczmienia z każdego pola.",
-                    "Z pola twojego dziadka: sześć garści jęczmienia. Za trzy dni. Nie mów, że nie ostrzegałem."],
+                    "Z działki twojego dziadka: sześć garści jęczmienia. Za trzy dni. Nie mów, że nie ostrzegałem."],
                 options: [
                     { label: "Oddam.", then: "accept", step: 0, say: ["Za trzy dni, tu, przy bramie. Lord zapisze to na poczet długu."] },
                     { label: "Ile, żebyś zapomniał?", then: "close", cost: 20, flag: "witBribed", reward: { opinion: -1, xp: 20 },
-                        say: ["Dwadzieścia groszy... Nie widziałem pola twojego dziadka. Nikt nie widział."] },
+                        say: ["Dwadzieścia groszy... Nie widziałem działki twojego dziadka. Nikt nie widział."] },
                     { label: "Nie mam zboża.", then: "accept", step: 1, say: ["Nie masz? Za trzy dni sprawdzę. Lepiej, żebyś naprawdę nie miał."] }
                 ]
             },
@@ -1549,7 +1549,7 @@
                 waterAmbrozy: "Cztery i dwa... Słyszysz? Woda idzie.",
                 shout: { soltys: "Studnia! W studni stoi woda! Ludzie, nie pchać się - po kolei!", kowal: "Koryto młynówki mokre! Młyn ruszy!", piekarka: "Woda! Prawdziwa woda w studni!",
                     woziwoda: "W studni... woda? Sama przyszła?!", garbarz: "Słyszycie? Pod rynkiem szumi!" },
-                noteCistern: ["Zasuwa główna otwarta", "Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu puściła wodę starym kanałem pod rynek. Studnia na rynku znów ma wodę - ale sołtys zamknął ją na klucz i wydziela racje domom; przybysz dalej dostaje swoje dwa nabrania na dzień. Młyn ruszył, Kuba rozwozi racje za uczciwy grosz od sołtysa. Mnie z tego nic nie kapnie: na polu dziadka liczy się tylko moja deszczówka."]
+                noteCistern: ["Zasuwa główna otwarta", "Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu puściła wodę starym kanałem pod rynek. Studnia na rynku znów ma wodę - ale sołtys zamknął ją na klucz i wydziela racje domom; przybysz dalej dostaje swoje dwa nabrania na dzień. Młyn ruszył, Kuba rozwozi racje za uczciwy grosz od sołtysa. Mnie z tego nic nie kapnie: na działce dziadka liczy się tylko moja deszczówka."]
             },
             steps: [
                 { ch: 1, type: "custom", check: "w1Clues", text: "Zbieraj poszlaki o wodzie Kuby ({n}/3): „Pęknięta beczka”, „Smak wody”, „Łój do latarni”, „Nocna warta”, „Pierścionek w studni”." },
@@ -1607,7 +1607,7 @@
                 sellYes: ["Interes życia, przyjacielu. Twojego, nie mojego."], sellNo: ["Szkoda. Oferta nie wygasa. Ja też nie."],
                 // rozdz. 7 "Jedno pytanie" (2026-10-16, pakiet A: przeniesiony do pustelni na klifie - Pustelnia.js FX.w2Pytanie)
                 stage0: "w Akcie II Ambroży (rynek albo dzwonnica, 6–21) ma dla ciebie coś po rodzie dzwonników.",
-                stage0Wait: "zacznie się w Akcie II (po spłacie długu albo stracie pola). Ambroży ma coś po rodzie dzwonników.",
+                stage0Wait: "zacznie się w Akcie II (po spłacie długu albo stracie działki). Ambroży ma coś po rodzie dzwonników.",
                 stage1: "zanieś serce dzwonu bratu Kleofasowi, pustelnikowi na klifie nad przystanią (za dnia).",
                 stage2: "Noc Pytania: w Wigilię (dzień {wigilia}) o północy dzwon w wieży skryptorium uderzy siedem razy. Bądź wtedy przy wieży - Kleofas odpowie na jedno pytanie.",
                 stage3: "pytanie zadane. Rozdział 8 „Alarm” czeka na Akt III. Następne pytanie u Kleofasa: Wigilia roku {rok} (dzień {wigilia}).",
@@ -1895,7 +1895,7 @@
                 { ch: 4, type: "custom", talk: "w8Letter", tick: "w8Wall", spotFx: "w8Crate", spots: ["w8_crate"], vars: "w8Vars",
                     text: "Do Gruma idzie przez Baltazara list od mocodawców (od dnia {letter}). Dowiedz się, co w nim jest: podsłuchaj Gruma z wynajętego pokoju nad tawerną (22–24), postaw mu dzban miodu pitnego albo dwa piwa (wieczorem) - albo poszukaj kopii rozkazu w skrzyni dowódcy kopaczy (nocą, po cichu)." },
                 { ch: 5, type: "custom", spotFx: "w8Osada", spots: ["w8_gate", "w8_osada"], vars: "w8Vars",
-                    text: "Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po rozdziale 1 - spłacie długu albo stracie pola). {osada}" },
+                    text: "Grum chce zobaczyć Osadę Milczących - za bramą w wąwozie, w górach (Akt II: po rozdziale 1 - spłacie długu albo stracie działki). {osada}" },
                 { ch: 6, type: "custom", talk: "w8Choice", vars: "w8Vars",
                     text: "Wybór Gruma (tawerna). Żeby przeszedł na twoją stronę, potrzeba dwóch rzeczy z trzech: uratowanego Marka ({marek}), kronik zakonu ({kroniki}) i wygranego siłowania „na honor” ({honor}). Inaczej - walka z nim przy wejściu do tunelu albo praca dla jego mocodawców." },
                 { ch: 6, type: "custom", tick: "w8Duel",
@@ -1905,7 +1905,7 @@
                 ask: ["Siadaj. Pokonałeś mnie na rękę. I w kości. Dwa razy to nie przypadek.", "Pytanie. Byłeś na wschodzie? W górach? Słyszałeś coś o jaskiniach? O starym kamieniołomie?"],
                 optStones: "Lord pyta o kamienie z krukiem.", optHeart: "Na kontynencie szukają serca skały.",
                 optArchive: "Pod ogrodem rycerzy jest archiwum zakonu.", optNothing: "Nic nie wiem o górach.", optWhy: "A po co ci to?",
-                stones: ["> Lord pyta, czy na polu dziadka leżą kamienie z krukiem. Jego dziadek je zbierał.", "Kamienie z krukiem. (Grum marszczy brwi.) Takie same kupują ludzie z kontynentu. Hm. Kamieniołom jest w górach. Stamtąd je brano."],
+                stones: ["> Lord pyta, czy na działce dziadka leżą kamienie z krukiem. Jego dziadek je zbierał.", "Kamienie z krukiem. (Grum marszczy brwi.) Takie same kupują ludzie z kontynentu. Hm. Kamieniołom jest w górach. Stamtąd je brano."],
                 heart: ["> Ludmiła z obozu mówi, że na kontynencie wszyscy szukają serca skały.", "Serce skały. (Grum milknie na dłużej.) To samo słyszałem w obozie, zanim tu przypłynąłem. Myślałem, że to bajka dla rekrutów."],
                 archive: ["> Pod ogrodem rycerzy jest archiwum zakonu. Byłem tam.", "Zakon. Archiwum. Pod ogrodem. (Grum patrzy na ciebie inaczej niż zwykle.) Nie mów o tym nikomu. Mnie też nie powinieneś."],
                 nothing: ["> Nic nie wiem o górach.", "Nic. Jak wszyscy. Hm."],
@@ -1986,7 +1986,7 @@
                 duelShout: "Bez urazy, chłopcze. Robota to robota.",
                 duelWon: ["> (Grum klęczy przy wejściu do tunelu. Tarcza leży obok.)", "> („Dobra robota... Odpływam pierwszym promem. Mocodawcy znajdą sobie innego przewodnika - ale nie tak szybko.”)"],
                 duelKilled: ["> (Grum leży przy wejściu do tunelu i już nie wstanie. Kopacze patrzą z daleka. Nikt nic nie mówi.)"],
-                duelLost: ["> (Budzę się przy wejściu do jaskini. Grum stał nade mną: „Nie zabijam chłopców. Wracaj na swoje pole.”)", "> (Z głębi tunelu słychać kilofy. Kopacze przebijają zawał.)"],
+                duelLost: ["> (Budzę się przy wejściu do jaskini. Grum stał nade mną: „Nie zabijam chłopców. Wracaj na swoją działkę.”)", "> (Z głębi tunelu słychać kilofy. Kopacze przebijają zawał.)"],
                 duelAway: ["> (Odszedłem od tunelu. Grum czeka dalej - wie, że wrócę.)"],
                 noteDuelWon: ["Grum pokonany", "Pobiłem Gruma przy wejściu do tunelu kopaczy. Odpłynie pierwszym promem; mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma."],
                 noteDuelKilled: ["Grum nie żyje", "Grum zginął przy wejściu do tunelu kopaczy, z mojej ręki. Mocodawcy zostali bez przewodnika. Zawał w tunelu dalej trzyma."],
@@ -1996,7 +1996,7 @@
         // =========================================================== W4 (compact, 2026-10-06): the castellan's key opens the old grate in the cellar
         {
             id: "W4", kind: "W", title: "Krew kasztelana", giver: null, icon: 0, where: "bar w tawernie, podwórze dziadka, kuźnia, piwnica tawerny, podziemia, pustelnia na klifie",
-            when: "po rozdziale 1 (spłata długu albo strata pola)",
+            when: "po rozdziale 1 (spłata długu albo strata działki)",
             desc: "Lord mówił, że najstarsze kamienie twierdzy leżą pod tawerną Borgara. W piwnicy jest stara krata zakonu z krukiem na zamku. Nad barem wisi pół klucza „na szczęście”.",
             steps: [
                 { ch: 1, type: "custom", talk: "w4Borgar", text: "Zapytaj Borgara o stare kamienie pod tawerną (przy barze)." },
@@ -2204,7 +2204,7 @@
         // rafalSmuggled | rafalTaken, campInside | campOutside, marekSaved, w6Wigilia (+ w6WigiliaCamp | w6WigiliaTavern).
         {
             id: "W6", kind: "W", title: "Ludzie z promu", giver: null, icon: 0,
-            where: "obóz pod murem (albo za murem, na Podgrodziu), tablica zleceń w tawernie, ratusz, pole dziadka, Jaskinia nad kamieniołomem (Akt II)",
+            where: "obóz pod murem (albo za murem, na Podgrodziu), tablica zleceń w tawernie, ratusz, działka dziadka, Jaskinia nad kamieniołomem (Akt II)",
             when: "od pierwszej fali (dzień 10) do Aktu II",
             desc: "Wojna przypływa falami. Pod murem śpią ludzie z promu: Ludmiła z małą Elą czeka na męża, Marka, a Rafał chowa się przed kapralem - to dezerter. Komu pomożesz, kogo wydasz i czy miasto zamknie przed nimi bramę?",
             steps: [
@@ -2302,20 +2302,20 @@
                     "Ty też masz głos, wnuku Stacha. Tyle wart, ile cię tu szanują."],
                 optClose: "Zamknąć bramę. Niech stoją za murem.", optOpen: "Wpuścić - ale niech pracują.", optAbstain: "Nie zabieram głosu.",
                 sayClose: ["> Zamknąć bramę. Wody nie starczy dla wszystkich."],
-                sayOpen: ["> Wpuścić. Ale niech pracują - przy polu, przy wodzie. Ręce się przydadzą."],
+                sayOpen: ["> Wpuścić. Ale niech pracują - na działce, przy wodzie. Ręce się przydadzą."],
                 sayAbstain: ["> (Nic nie mówię. Niech miasto samo zdecyduje.)"],
                 tally: "Za zamknięciem: {close}. Za wpuszczeniem: {open}.",
                 resultClose: ["Brama zamknięta dla nowych. Obóz wyprowadzi się za mur, na Podgrodzie. Niech Bóg ma ich w opiece. I nas.", "> (Ludmiła w drzwiach spuszcza głowę.)"],
-                resultOpen: ["Wpuszczamy. Ale nie za darmo: tydzień pracy, kto ma ręce. Dwoje pójdzie na pole Stacha - zbierać, co dojrzeje.", "> (Ludmiła w drzwiach zakrywa usta ręką. Płacze.)"],
+                resultOpen: ["Wpuszczamy. Ale nie za darmo: tydzień pracy, kto ma ręce. Dwoje pójdzie na działkę Stacha - zbierać, co dojrzeje.", "> (Ludmiła w drzwiach zakrywa usta ręką. Płacze.)"],
                 noteClose: ["Brama zamknięta", "Zebranie w ratuszu: miasto zamknęło bramę przed nowymi z promu. Obóz Ludmiły przeniósł się za mur, na Podgrodzie, do namiotów Darina. Nocą podchodzą tam wilki."],
-                noteOpen: ["Obóz w mieście", "Zebranie w ratuszu: miasto wpuściło ludzi z promu - z obowiązkiem pracy. Przez tydzień Bogdan i Halina z drugiej fali zbierają dojrzałe plony na polu dziadka i znoszą je do skrzyń."],
+                noteOpen: ["Obóz w mieście", "Zebranie w ratuszu: miasto wpuściło ludzi z promu - z obowiązkiem pracy. Przez tydzień Bogdan i Halina z drugiej fali zbierają dojrzałe plony na działce dziadka i znoszą je do skrzyń."],
                 // ---- rozdz. 6 "Zima" and 7 "Marek" (one step: they can come in either order - Act II may begin before the winter)
                 hubWig0: "Zima (Wigilia w dniu {wig}): obóz chce zjeść Wigilię razem - pogadaj z Ludmiłą, kiedy przyjdą mrozy.",
                 hubWigAsk: "Wigilia w dniu {wig}: pogadaj z Ludmiłą, gdzie ją zjecie.",
                 hubWigCamp: "Wigilia w dniu {wig}, 17–20, przy ognisku obozu ({camp}): przynieś Ludmile 4 gorące dania z kociołka (gulasz, kapuśniak, zupa grzybowa, owsianka). Masz: {dishes}/4.",
                 hubWigTavern: "Wigilia w dniu {wig}, 17–23, w tawernie: przynieś Borgarowi (przy barze) 4 gorące dania z kociołka (gulasz, kapuśniak, zupa grzybowa, owsianka). Masz: {dishes}/4.",
                 hubWigDone: "Wigilia: zjedzona razem ✓.", hubWigMissed: "Wigilia minęła beze mnie.",
-                hubMarek0: "Marek (Akt II - po rozdziale 1: spłacie długu albo stracie pola): mąż Ludmiły kopał w drużynie Rafała.",
+                hubMarek0: "Marek (Akt II - po rozdziale 1: spłacie długu albo stracie działki): mąż Ludmiły kopał w drużynie Rafała.",
                 hubMarekAsk: "Akt II. Powiedz Ludmile, czego się dowiedziałeś o Marku (obóz, za dnia).",
                 hubMarek1: "Marek stoi w niszy obozu kopaczy w Jaskini nad kamieniołomem (Góry, za Leśną drogą) - twarzą do ściany. Masz chustę Ludmiły.",
                 hubMarek2: "Marek idzie za tobą. Wyprowadź go z Jaskini (wyjście na dole): nocą po cichu (C), siłą albo dogadaj się ze strażnikiem obozu.",

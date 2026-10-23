@@ -225,6 +225,9 @@
     // Combat.perk(key): what the learnt skills add up to for one effect (Skills_Data.js fx: the value per rank times the rank);
     // every plugin asks it (e.g. Farming: "crop.growth"). Worked out again only when a skill is learnt or another game is loaded.
     let perkCache = null;
+    // (2026-10-23) other sources of the same effects: Bron.js - the weapon in hand, the armour and the trinket worn
+    // (Combat.addPerkSource(fn(key) -> number)); they count in every perk asked, the fight's own too
+    const perkSources = [];
     function perk(key) {
         if (!$gameSystem) return 0;
         const h = hero();
@@ -236,8 +239,11 @@
             }
             perkCache = { h, rev: h.rev || 0, sum };
         }
-        return perkCache.sum[key] || 0;
+        let v = perkCache.sum[key] || 0;
+        for (let i = 0; i < perkSources.length; i++) { try { v += perkSources[i](key) || 0; } catch (e) { /* (a source that failed this time) */ } }
+        return v;
     }
+    const addPerkSource = fn => { if (typeof fn === "function" && !perkSources.includes(fn)) perkSources.push(fn); };
     // a roll against a perk that is a chance (e.g. "crop.yield" 0.4): true that often
     const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
     // experience to go from `level` to the next: 500 for the second level, then 20% more each level, to the full hundred (the user's
@@ -385,7 +391,9 @@
     const rollCost = () => Math.max(10, Math.round(24 - 0.25 * (attr("dex") - ATTR_START)));
     const rollIFrames = () => Math.min(24, 13 + Math.floor(0.2 * (attr("dex") - ATTR_START))) + perk("roll.iframes");
     // (the difficulty of the fight - Combat_Feel.js, Opcje: Łatwy x1.5, Trudny x0.75)
-    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1));
+    // (2026-10-23, Bron_Data.js: a light shield - the buckler, the round one - lengthens it: its `parry`)
+    const shieldParry = () => { const f = P.fight, s = f && f.shield ? f.shield() : null; return s && s.parry > 0 ? s.parry : 0; };
+    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1) * (1 + shieldParry()));
     const knockdownAt = () => Math.round((60 + 1.8 * (attr("con") - ATTR_START)) * (1 + perk("knock.resist")));
     const woundChance = base => base * (hasSkill("thickskin") ? 0.5 : 1) * Math.max(0.25, 1 - 0.014 * (attr("con") - ATTR_START));
     const carryBonus = () => Math.round(0.9 * Math.max(0, attr("str") - ATTR_START)) + perk("carry");
@@ -455,17 +463,20 @@
     // -> { hand, ranged, weapon: { id, name, hit, series[], heavy, heavyFull, crit, poise, poiseLast, poiseHeavy, breath, reach, fire },
     //      fists, critChance, critMul }
     function meleeInfo(id) {
-        const f = F(), w = f.MELEE[id] || f.MELEE[0], s = strMult() * (1 + perk("melee.dmg")), pz = poiseMult() * (1 + perk("melee.poise")), cm = f.COMBO_MULT;
+        const f = F(), w = (f.weaponNow ? f.weaponNow(id) : null) || f.MELEE[id] || f.MELEE[0], s = strMult() * (1 + perk("melee.dmg")), pz = poiseMult() * (1 + perk("melee.poise")), cm = f.COMBO_MULT;
         const n = f.maxCombo ? f.maxCombo(w) : w.combo.length, hit = m => Math.max(1, Math.round(w.dmg * m * s));
         return { id, name: w.name, hit: hit(1), series: Array.from({ length: n }, (_, i) => hit(cm[Math.min(i, cm.length - 1)])), heavy: hit(f.HEAVY.mult),
             heavyFull: hit(f.HEAVY.full), crit: hit(1.6), poise: Math.round(w.poise * pz), poiseLast: Math.round(w.poise * pz * 1.5), poiseHeavy: Math.round(w.poise * pz * f.HEAVY.poise),
-            breath: Math.round(w.cost * (1 - perk("melee.breath"))), reach: w.reach, fire: !!w.fire, fireBonus: w.fireBonus || 0, sweep: !!w.sweep && hasSkill("sweep") };
+            breath: Math.round(w.cost * (1 - perk("melee.breath"))), reach: w.reach, fire: !!w.fire, fireBonus: w.fireBonus || 0, sweep: !!w.sweep && hasSkill("sweep"),
+            critBonus: w.crit || 0, lack: w.lack || 0, poziom: w.poziom || 1 };
     }
     function fightInfo() {
         const f = F(), h = f.hand ? f.hand() || "m0" : "m0", out = { hand: h, ranged: h === "ranged", critChance: critChance(), critMul: 1.6, fists: meleeInfo(0) };
         if (h !== "ranged") { out.weapon = meleeInfo(Number(h.slice(1)) || 0); return out; }
         const HW = (T.api("Hunting_parts") || {}).weapons, has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
-        const key = has(126) && has(127) ? "bow" : "sling", def = HW && HW.WEAPONS ? HW.WEAPONS[key] : null, item = key === "bow" ? 126 : 125;
+        // (2026-10-23: the bow or the sling in hand - the best one owned, Bron.js's variants too)
+        const item = f.rangedItem ? f.rangedItem() : has(126) && has(127) ? 126 : 125, key = f.rangedKind ? f.rangedKind(item) : item === 126 ? "bow" : "sling";
+        const def = HW && HW.defOf ? HW.defOf(key) : HW && HW.WEAPONS ? HW.WEAPONS[key] : null;
         const dmg = def ? Math.round(def.damage * (1 + 0.02 * (attr("dex") - ATTR_START)) * (1 + perk("ranged.dmg"))) : 0;
         out.weapon = { id: item, name: $dataItems[item] ? $dataItems[item].name : key, shot: dmg, range: def ? def.range : 0, ammo: def ? def.ammo : 0,
             ammoLeft: def && $dataItems[def.ammo] ? $gameParty.numItems($dataItems[def.ammo]) : 0, aim: aimSteady(), breath: def ? def.stamina : 0 };
@@ -743,11 +754,11 @@
     window.Combat = T.register("Combat", {
         ATTRS, SKILLS, TREES, get MELEE() { return F().MELEE; }, get SHIELDS() { return F().SHIELDS; }, get ARMORS() { return F().ARMORS; }, armor: fight("armor"),
         get SNEAK() { return F().SNEAK; }, sneakAttack: fight("sneakAttack"), sneakMult: fight("sneakMult"), MAX_LEVEL, ATTR_MAX, POINTS_PER_LEVEL, XP, KILL_XP,
-        hero, attr, hasSkill, skillRank, perk, perkRoll, skillText, ROW_LEVEL, xpToNext, gainXp, killXp, skillBlock, learnSkill, spendPoints, discover, placeLevel, levelColor,
+        hero, attr, hasSkill, skillRank, perk, perkRoll, addPerkSource, skillText, ROW_LEVEL, xpToNext, gainXp, killXp, skillBlock, learnSkill, spendPoints, discover, placeLevel, levelColor,
         combatMode, setCombatMode, maxBreath: fight("maxBreath"), breathNow: fight("breathNow"), spendBreath: fight("spendBreath"),
         get breath() { return F().breathNow(); }, get winded() { return F().isWinded(); }, get RUN() { return F().RUN; }, canRun: fight("canRun"),
         hand: fight("hand"), handMelee: fight("handMelee"), switchHand: fight("switchHand"), setHand: fight("setHand"), handChoices: fight("handChoices"), attrInfo, fightInfo, defenseInfo, meleeInfo, woundChance,
-        shield: fight("shield"), pressAttack: fight("pressAttack"),
+        shield: fight("shield"), pressAttack: fight("pressAttack"), rangedItem: fight("rangedItem"), weaponNow: fight("weaponNow"), refreshGear: fight("refreshGear"),
         pressDodge: fight("pressDodge"), hitPlayer: fight("hitPlayer"), enemyHurtFx: fight("enemyHurtFx"), hitstop: fight("hitstop"), numberAt: fight("numberAt"),
         sparksAt: fight("sparksAt"), shovePlayer: fight("shovePlayer"), recoil: fight("recoil"), downPlayer: fight("downPlayer"), foes, addFoes: fn => { foeSources.push(fn); },
         stunPlayer: fight("stunPlayer"), drainBreath: fight("drainBreath"), mindResist, mindTime,

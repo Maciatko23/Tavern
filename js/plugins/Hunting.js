@@ -91,7 +91,7 @@
  * w promieniu 7 kratek. Trafiony jeleń, który jeszcze żyje, ucieka ranny.
  *
  * NIEDŹWIEDŹ (2026-10-05, etap 2 walki): rzadko, jeden naraz, na mapach leśnych
- * (pole dziadka, łąki, Las, Wzgórza, Mroczny Las, Leśna droga, Skraj lasu) - co
+ * (Kruczy Jar, łąki, Las, Wzgórza, Mroczny Las, Leśna droga, Skraj lasu) - co
  * pełną godzinę między 4 a 22 10% szans, że wyjdzie z lasu (notatka mapy
  * <Bear:0.2> albo <Bear:off> zmienia szansę).
  * Gdy cię zauważy, zwykle staje na tylnych łapach i ryczy: cofnij się (ponad 5,5

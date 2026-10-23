@@ -251,7 +251,7 @@ kit.test({ port: 9506, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const lowT = await t.json(`({ lv: Cysterna.level(), low: ${ST}.low, f: !!${flagsOf}.cysternaNisko, op: TownQuests.opinion(), band: Cysterna.band() })`);
     t.check("zapas spada poniżej 15: flaga cysternaNisko (uwagi sołtysa i Kuby), Opinia -2, pas 4 (ściana zbiornika czterema rzędami)",
         lowT.lv < 15 && lowT.low === DAY + 3 && lowT.f && lowT.op === Math.max(0, op1 - 2) && lowT.band === 4, { lowT, op1 });
-    await t.go(8, 24, 36, 8);
+    await t.go(8, 51, 52, 8);
     await t.frames(20);
     const well = await t.json(`(function(){ const ev = $gameMap.event(241) || $gameMap.events().find(e => /<Studnia:/.test(e.event().note || "")); const r = Farming.rationOf(ev);
         const f = Farming.farm(), all = f.rations || (f.rations = {}); all[r.key] = { day: Farming.today(), n: 1 }; window.__kit.pops.length = 0;

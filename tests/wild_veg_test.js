@@ -20,7 +20,9 @@ const { launch, sleep } = require("./cdp.js");
             return out; })()`);
         await frames(30);
         const w = await find();
-        check("day 1 (spring): a few wild potatoes and wild carrots on the meadow, seldom", w.wildPotato.length >= 1 && w.wildCarrot.length >= 1 && w.wildPotato.length + w.wildCarrot.length <= 16, { potatoes: w.wildPotato, carrots: w.wildCarrot });
+        // (2026-10-22: the field doubled to 80 x 60 - "seldom" is as many as before on every 40 x 30 of it: 16)
+        const max = 16 * (await ev("$gameMap.width() * $gameMap.height()")) / 1200;
+        check("day 1 (spring): a few wild potatoes and wild carrots on the meadow, seldom (at most 16 on every 40 x 30 tiles)", w.wildPotato.length >= 1 && w.wildCarrot.length >= 1 && w.wildPotato.length + w.wildCarrot.length <= max, { potatoes: w.wildPotato, carrots: w.wildCarrot, max });
         check("...the journal says where to find them (the potato's and the carrot's sources)", /dziko/.test(await ev("Journal.sourceLines(71).join(' ')")) && /dziko/.test(await ev("Journal.sourceLines(72).join(' ')")));
 
         // stand next to one and look at it

@@ -1,0 +1,55 @@
+{
+ "mapa": 122,
+ "nazwa": "Chata tkaczki",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 7,
+   "y": 2,
+   "stary": 0,
+   "nowy": 319
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 7,
+   "y": 1,
+   "stary": 0,
+   "nowy": 311
+  },
+  {
+   "op": "region",
+   "x": 7,
+   "y": 4,
+   "stary": 0,
+   "nowy": 2
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 7,
+   "y": 3,
+   "problem": "obiekt rozcięty: kafel 327 (C 7,8) - dół bez góry (brak kafla 319 nad) w (7,3)",
+   "poprawka": "dołożono górę obiektu C (7,8) 1 kafli"
+  },
+  {
+   "kod": "G1",
+   "x": 7,
+   "y": 4,
+   "problem": "kafel 335 (C 7,9) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (7,4)",
+   "poprawka": "kratka pod kaflem 335 zablokowana regionem 2 (RegionLayers: mebel stoi na niej)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "G1 7,4",
+  "O1 7,3"
+ ],
+ "po": [],
+ "sha_data": "dc19c520da0f75237c32bbba52bf6f375a17472e98c458d24f32fdfcbccfaea3",
+ "zainstalowano": "2026-10-22T10:51:31",
+ "sha_po": "d33933c86d0b1922b497b132832c498c20331eaa41292cb6f0dd7cb6ca122e3c"
+}

@@ -1,3 +1,4 @@
+# UWAGA (2026-10-22): NIE URUCHAMIAĆ na nowej mapie - Map111 przebudowana (tools/podgrodzie2, docs/podgrodzie/NOWE_PODGRODZIE.md); to narzędzie zna stary układ Podgrodzia.
 # python tools/podgrodzie/check_wnetrza.py [112 ...] [--png DIR]  -> the town interiors' checks (tools/interiors/check_interiors.py:
 # table items on their tops, nothing squeezed, every floor cell reachable from the landing, the doorway free, the residents'
 # spots free and reachable) on the staged Podgrodzie interiors; --png: the walking previews (tools/interiors/preview.py) and

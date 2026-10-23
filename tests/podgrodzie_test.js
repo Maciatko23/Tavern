@@ -1,31 +1,49 @@
-// Podgrodzie (Map111) - the poor quarter outside the town's west wall (user 2026-10-05: "wyjście z mapy na zachód ... mapa z
-// domkami drewnianymi i wnętrzami i mieszkańcami"; tools/podgrodzie, tools/town/west_gate.py). CDP_PORT=9461 node tests/podgrodzie_test.js
-//   - the west gate on Map008 (by the smithy, between two towers): its four cells free, the towers beside it closed, two exits;
-//     walking left through it -> Map111 (44,17) facing left; walking right off Map111's east edge -> back in the gate (1,51)
+// Podgrodzie (Map111) - the poor suburb between the town's west wall and the forest, rebuilt 2026-10-22 (docs/podgrodzie/NOWE_PODGRODZIE.md,
+// tools/podgrodzie2): a settlement in a palisade with a little square, the old cabins moved in, new houses with interiors (Map201-212),
+// the Chata pod lasem behind the palisade. The cells come from tools/podgrodzie2/budynki.json, wnetrza/meta.json and mapowanie.json
+// (read when the test starts). CDP_PORT=9461 node tests/podgrodzie_test.js
+//   - the west gate on Map008 (x 0-1, rows 50-51): its four cells free, the towers beside it closed, two exits; walking left through
+//     it -> Map111 in the town wall's gate (mapowanie: the landing of Map008 ev237) facing left; walking right off Map111's east
+//     edge -> back in the town's gate (1,51)
 //   - on Map111, by the game's own walking rules ($gameMap.isPassable both ways, RegionLayers, events and <Occupy>; TownLife's
-//     residents left out - they walk about): every door front, every "Miejsce: <key>" spot and both exits reached from the gate
+//     residents left out - they walk about): every door front of budynki.json, every "Miejsce: <key>" of mapowanie.json (once,
+//     below the characters, walk-through) and every exit reached from the gate
 //   - no water of its own: no water tile on the map (Farming.isWaterTile, the game's own test) - its well is dry, water is
 //     carried from the town (the user 2026-10-05: water is in the town and the tavern)
-//   - RegionLayers: the town wall level with the hero (closed), the gate free, the washing line over the hero
-//   - the six doors: by day in (the interior's landing, facing up; its resident spots there) and out again (the front, facing
-//     down); at 23:00 "Zamknięte." and no way in - except the refugees' house, open at any hour
+//   - RegionLayers: the town wall and the palisade level with the hero, their gates free, the roofs closed, the washing lines over him
+//   - MapInfos: the new interiors (wnetrza/meta.json) under Podgrodzie with their names
+//   - every door with an interior (the old cabins Map112-117 and the new houses Map201-212): by day in (the interior's landing,
+//     facing up; its residents' spots there) and out again (in front of the door, facing down); at 23:00 "Zamknięte." and no
+//     way in - except the houses open at any hour (budynki.json: zawsze_otwarte - the refugees' house, the almshouse)
+//   (the Chata pod lasem is Homes.js's house - closed till bought: tests/field_loss_test.js)
 // Shots: docs/podgrodzie/gra_*.png
 const path = require("path");
 const fs = require("fs");
 const kit = require("./lib/kit.js");
-const STAGING = path.join(__dirname, "..", "tools", "podgrodzie", "staging");
+const P2 = path.join(__dirname, "..", "tools", "podgrodzie2");
 const SHOTS = path.join(__dirname, "..", "docs", "podgrodzie");
+const readJson = p => JSON.parse(fs.readFileSync(p, "utf8").replace(/^﻿/, ""));
 
-const meta = JSON.parse(fs.readFileSync(path.join(STAGING, "Map111_meta.json"), "utf8"));
-const inner = [112, 113, 114, 115, 116, 117].map(id => JSON.parse(fs.readFileSync(path.join(STAGING, "Map" + id + "_meta.json"), "utf8")));
-const doors = [];
-for (const m of inner) for (const ex of m.exits) {
-    const b = meta.buildings.find(bb => bb.event_id === ex.door);
-    doors.push({ map: m.id, name: m.display, door: ex.door, town: ex.town, landing: ex.landing, exit: [ex.x, ex.y], always: !b.hours, residents: m.residents });
-}
-const SPOT_KEYS = ["brama_zach", "plac", "studnia_sucha", "kapliczka", "pranie", "drewutnia", "kram", "ziola", "namioty", "zebrak", "zebrak_noc",
-    "zabawa", "skraj_lasu", "praczka_drzwi", "drwal_drzwi", "klusownik_drzwi", "znachorka_drzwi", "szmaciarz_drzwi", "uchodzcy_drzwi"];
-const DOOR_NAMES = ["Drzwi: Chata praczki", "Drzwi: Chata drwala", "Drzwi: Chata kłusownika", "Drzwi: Izba znachorki", "Drzwi: Kram starzyzny", "Drzwi: Dom uchodźców"];
+const BUD = readJson(path.join(P2, "budynki.json")).budynki;
+const META = readJson(path.join(P2, "wnetrza", "meta.json")).mapy;
+const MAPOWANIE = readJson(path.join(P2, "mapowanie.json"));
+const point = what => {
+    const p = MAPOWANIE.c_miejsca.punkty_wtyczek.find(q => q.co.indexOf(what) >= 0);
+    if (!p) throw new Error("tools/podgrodzie2/mapowanie.json: brak punktu " + what);
+    return p.nowe;
+};
+const IN_GATE = point("Map008 ev237"), IN_GATE2 = point("Map008 ev238");
+const WALL = MAPOWANIE.d_strefy.mur_miasta, PAL = MAPOWANIE.d_strefy.palisada;
+const SPOT_KEYS = Object.keys(MAPOWANIE.c_miejsca.stare_miejsca).concat(Object.keys(MAPOWANIE.c_miejsca.nowe_miejsca));
+// the old cabins' residents: their "Miejsce: <key>_wnetrze" inside (data/Map112-117)
+const OLD_RESIDENTS = { 112: ["praczka", "franek"], 113: ["drwal"], 114: ["klusownik"], 115: ["znachorka"], 116: ["szmaciarz"], 117: ["uchodzca"] };
+const doors = BUD.filter(b => b.wnetrze && b.klucz !== "chata_pod_lasem").map(b => {
+    const m = META[String(b.wnetrze)];
+    const residents = m ? Object.entries(m.miejsca || {}).map(([k, v]) => ({ n: "Miejsce: " + k, x: v.x, y: v.y }))
+        : (OLD_RESIDENTS[b.wnetrze] || []).map(k => ({ n: "Miejsce: " + k + "_wnetrze" }));
+    return { map: b.wnetrze, name: b.nazwa, door: b.drzwi_id, at: b.drzwi, town: b.przed_drzwiami, landing: b.wnetrze_xy,
+        always: !!b.zawsze_otwarte || !b.godziny, residents };
+});
 
 // TownLife's residents walk about: out of the way for the checks (erased on this map until it loads again)
 const RESIDENTS_OFF = "(function(){ const TL = window.TownLife; if (TL && TL.residents) for (const e of TL.residents()) e.erase(); return 0; })()";
@@ -50,7 +68,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         await t.eval(`(function(){ Input._currentState["${key}"] = false; return 0; })()`);
     };
     const toPod = async (x, y, d) => { const ok = await t.go(111, x, y, d); await t.eval(RESIDENTS_OFF); return ok; };
+    const atSpot = async (key, d) => { const s = await t.json(`TownLife.spot(${JSON.stringify(key)})`); if (s) await t.locate(s[0], s[1], d); return !!s; };
     fs.mkdirSync(SHOTS, { recursive: true });
+    t.check(`tools/podgrodzie2: ${doors.length} doors with interiors (budynki.json), ${SPOT_KEYS.length} spots (mapowanie.json)`, doors.length >= 18 && SPOT_KEYS.length > 19,
+        doors.map(d => d.map));
     await t.newGame({ map: 8, x: 5, y: 50, dir: 4, hour: 12, quiet: true, minimap: false });
     await t.eval(`(function(){ const _s = Game_Event.prototype.start; Game_Event.prototype.start = function() { if (/^Drzwi/.test(this.event().name)) window.__doorRan = true; return _s.apply(this, arguments); }; return 0; })()`);
 
@@ -70,38 +91,52 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await walkOut("left", 8);
     const out = await t.until(t.onMap(111), 10);
     const at111 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
-    t.check("walking left through the gate leads to Podgrodzie (Map111 44,17, facing left)", out && at111.x === 44 && at111.y === 17 && at111.d === 4, at111);
+    t.check(`walking left through the gate leads to Podgrodzie (Map111 ${IN_GATE}, the town wall's gate, facing left)`,
+        out && at111.x === IN_GATE[0] && at111.y === IN_GATE[1] && at111.d === 4, at111);
     await t.eval(RESIDENTS_OFF);
-    await t.locate(41, 17, 6);
+    await atSpot("brama_zach", 4);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "gra_brama_od_podgrodzia.png"));
 
-    // ---- the whole quarter, by the game's own rules (residents left out)
+    // ---- the whole suburb, by the game's own rules (residents left out)
     const R = await t.json(`(function(){ const w = $gameMap.width(), h = $gameMap.height(), key = (x, y) => x + "," + y;
         const blocked = (x, y) => $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && e.eventId() < 900);
         const step = (x, y, d) => { const nx = $gameMap.roundXWithDirection(x, d), ny = $gameMap.roundYWithDirection(y, d);
             if (!$gameMap.isValid(nx, ny) || !$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d) || blocked(nx, ny)) return null; return [nx, ny]; };
-        const seen = new Set([key(44, 17)]), todo = [[44, 17]];
+        const start = ${JSON.stringify(IN_GATE)}, seen = new Set([key(start[0], start[1])]), todo = [start.slice(0, 2)];
         while (todo.length) { const [x, y] = todo.pop(); for (const d of [2, 4, 6, 8]) { const n = step(x, y, d); if (n && !seen.has(key(...n))) { seen.add(key(...n)); todo.push(n); } } }
         const spots = {}; for (const e of $gameMap.events()) { const m = /^Miejsce: (\\S+)$/.exec(e.event().name); if (m) spots[m[1]] = { x: e.x, y: e.y, prio: e.event().pages[0].priorityType, through: e.event().pages[0].through, n: (spots[m[1]] ? spots[m[1]].n : 0) + 1 }; }
-        const doorEvs = $gameMap.events().filter(e => /^Drzwi: /.test(e.event().name)).map(e => ({ n: e.event().name, x: e.x, y: e.y, front: seen.has(key(e.x, e.y + 1)) }));
+        const doors = ${JSON.stringify(BUD.map(b => ({ n: b.nazwa, id: b.drzwi_id, at: b.drzwi, front: b.przed_drzwiami })))}.map(b => {
+            const e = $gameMap.event(b.id);
+            return { n: b.n, id: b.id, ok: !!e && e.x === b.at[0] && e.y === b.at[1] && /^Drzwi/.test(e.event().name), front: seen.has(key(b.front[0], b.front[1])) }; });
+        const exits = $gameMap.events().filter(e => /^Przejście/.test(e.event().name)).map(e => ({ n: e.event().name, x: e.x, y: e.y, reached: seen.has(key(e.x, e.y)) }));
         let water = 0; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (Farming.isWaterTile && Farming.isWaterTile(x, y)) water++;
-        const RL = window.RegionLayers;
-        return { reached: seen.size, spots, doorEvs, water, exits: [seen.has(key(45, 17)), seen.has(key(45, 18))],
+        const RL = window.RegionLayers, WALL = ${JSON.stringify(WALL)}, PAL = ${JSON.stringify(PAL)}, drwal = ${JSON.stringify((BUD.find(b => b.klucz === "drwal") || BUD[0]).drzwi)};
+        let lines = 0, linesAbove = 0;
+        if (RL) for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if ($gameMap.regionId(x, y) === 3) { lines++; if (RL.kindAt(x, y) === "above") linesAbove++; }
+        return { reached: seen.size, spots, doors, exits, water,
                  spotReached: Object.fromEntries(Object.entries(spots).map(([k, s]) => [k, seen.has(key(s.x, s.y))])),
-                 regions: RL ? { wall: RL.kindAt(44, 5), tower: RL.kindAt(45, 12), gate: RL.kindAt(44, 17), line: RL.kindAt(31, 28), roof: RL.kindAt(6, 4) } : null }; })()`);
+                 regions: RL ? { wall: RL.kindAt(WALL.x[0], 5), gate: RL.kindAt(WALL.brama[0][0], WALL.brama[0][1]), palisade: RL.kindAt(PAL.pierscien[0], 10),
+                                 palGate: RL.kindAt(PAL.bramy.zach[1][0], PAL.bramy.zach[1][1]), roof: RL.kindAt(drwal[0], drwal[1] - 2), lines, linesAbove } : null }; })()`);
     t.check(`Podgrodzie has no water tile of its own (Farming.isWaterTile) - ${R.reached} cells walkable from the gate`, R.water === 0, R.water);
-    t.check("both exits reached from the gate", R.exits.every(Boolean), R.exits);
+    t.check("every exit (to the town, to the harbour) reached from the gate", R.exits.length >= 3 && R.exits.every(e => e.reached), R.exits);
     const missingSpots = SPOT_KEYS.filter(k => !R.spots[k] || R.spots[k].n !== 1 || R.spots[k].prio !== 0 || !R.spots[k].through);
     t.check(`all ${SPOT_KEYS.length} TownLife spots are there once, below the characters and walk-through`, missingSpots.length === 0, missingSpots);
     const farSpots = SPOT_KEYS.filter(k => R.spots[k] && !R.spotReached[k]);
     t.check("every spot can be walked to from the gate", farSpots.length === 0, farSpots);
-    t.check("the six doors with interiors are named as agreed and their fronts are reached", DOOR_NAMES.every(n => R.doorEvs.some(e => e.n === n && e.front)), R.doorEvs);
-    t.check("RegionLayers: the wall and its tower level with the hero, the gate free, the washing line over him, the roofs closed",
-        R.regions && R.regions.wall === "level" && R.regions.tower === "level" && R.regions.gate === null && R.regions.line === "above" && R.regions.roof === "level", R.regions);
+    const badDoors = R.doors.filter(d => !d.ok || !d.front);
+    t.check(`the ${R.doors.length} doors of budynki.json stand where it says and their fronts are reached`, badDoors.length === 0, badDoors);
+    t.check("RegionLayers: the town wall and the palisade level with the hero, their gates free, the roofs closed, the washing lines over him",
+        R.regions && R.regions.wall === "level" && R.regions.gate === null && R.regions.palisade === "level" && R.regions.palGate === null &&
+        R.regions.roof === "level" && R.regions.lines > 0 && R.regions.linesAbove === R.regions.lines, R.regions);
+
+    // ---- the new interiors in MapInfos
+    const infos = await t.json(`(function(){ const o = {}; for (const id of ${JSON.stringify(Object.keys(META).map(Number))}) { const m = $dataMapInfos[id]; o[id] = m ? [m.name, m.parentId] : null; } return o; })()`);
+    const badInfos = Object.keys(META).filter(id => !infos[id] || infos[id][0] !== META[id].nazwa || infos[id][1] !== 111);
+    t.check(`MapInfos: the ${Object.keys(META).length} new interiors under Podgrodzie (111) with the names of wnetrza/meta.json`, badInfos.length === 0, { badInfos, infos });
 
     // ---- back into the town over the east edge
-    await t.locate(43, 18, 6);
+    await t.locate(IN_GATE2[0], IN_GATE2[1], 6);
     await walkOut("right", 111);
     const back = await t.until(t.onMap(8), 10);
     const at8 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
@@ -122,9 +157,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         if (!inOk) continue;
         if (!shot[d.map]) {
             shot[d.map] = true;
-            const spots = await t.json(`$gameMap.events().filter(e => /^Miejsce: /.test(e.event().name)).map(e => ({ n: e.event().name, x: e.x, y: e.y, prio: e.event().pages[0].priorityType, through: e.event().pages[0].through }))`);
-            const want = d.residents.map(r => ({ n: "Miejsce: " + r.key + "_wnetrze", x: r.x, y: r.y }));
-            t.check(`${d.name}: the residents' spots ${want.map(w => w.n.slice(9)).join(", ")}`, want.length > 0 && want.every(w => spots.some(s => s.n === w.n && s.x === w.x && s.y === w.y && s.prio === 0 && s.through)), { want, spots });
+            if (d.residents.length) {
+                const spots = await t.json(`$gameMap.events().filter(e => /^Miejsce: /.test(e.event().name)).map(e => ({ n: e.event().name, x: e.x, y: e.y, prio: e.event().pages[0].priorityType, through: e.event().pages[0].through }))`);
+                t.check(`${d.name}: the residents' spots ${d.residents.map(w => w.n.slice(9)).join(", ")}`,
+                    d.residents.every(w => spots.some(s => s.n === w.n && (w.x === undefined || (s.x === w.x && s.y === w.y)) && s.prio === 0 && s.through)), { want: d.residents, spots });
+            }
             await t.frames(20);
             await t.shot(path.join(SHOTS, "gra_" + d.map + ".png"));
         }
@@ -137,21 +174,21 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         t.check(`${d.name}: out through the doorway -> in front of its door ${d.town} facing down`, outOk && b[0] === d.town[0] && b[1] === d.town[1] && b[2] === 2, { b, want: d.town });
     }
 
-    // ---- a shot of the square and the refugees' camp by day
-    if (!(await t.eval(t.onMap(111)))) await toPod(26, 19, 4);
+    // ---- shots of the square, the woodcutter's yard and the laundry by day
+    if (!(await t.eval(t.onMap(111)))) await toPod(IN_GATE[0], IN_GATE[1], 4);
     await t.eval(RESIDENTS_OFF);
-    await t.locate(25, 19, 4); await t.frames(20);
+    await atSpot("plac", 4); await t.frames(20);
     await t.shot(path.join(SHOTS, "gra_plac.png"));
-    await t.locate(9, 12, 2); await t.frames(20);
+    await atSpot("drewutnia", 2); await t.frames(20);
     await t.shot(path.join(SHOTS, "gra_drwal.png"));
-    await t.locate(34, 30, 8); await t.frames(20);
+    await atSpot("pranie", 8); await t.frames(20);
     await t.shot(path.join(SHOTS, "gra_pranie.png"));
 
-    // ---- at night (23:00): closed, the refugees' house open
+    // ---- at night (23:00): closed, the houses open at any hour open
     await t.setHour(23);
     await t.frames(20);
     await t.dismiss();
-    await t.locate(39, 12, 8); await t.frames(30);
+    await atSpot("namioty", 8); await t.frames(30);
     await t.shot(path.join(SHOTS, "gra_noc_obozowisko.png"));
     for (const d of doors) {
         if (!(await t.eval(t.onMap(111)))) await toPod(d.town[0], d.town[1], 2);

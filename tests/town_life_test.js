@@ -7,32 +7,33 @@ const kit = require("./lib/kit.js");
 const SHOTS = path.join(__dirname, "..", "docs", "miasteczko");
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
-    await t.newGame({ map: 8, x: 24, y: 37, dir: 8, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 53, y: 55, dir: 8, hour: 10, quiet: true, minimap: false });
     const at10 = await t.json(`(function(){ const out = {}; for (const r of TownLife.RESIDENTS.filter(r => TownLife.homeOf(r) === 8)) { const e = TownLife.eventOf(r.key);   // (Podgrodzie's live on Map111)
         out[r.key] = e ? [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName()] : null; } return out; })()`);
     // (19 since 2026-10-05: + Szymek, Lucjan Kość - only on market days, hidden the rest -, Bartek Kmieć, the carter Wojciech,
     // and Teodor the new butler - only once W1 has sent Feliks away, hidden till then; 20 since 2026-10-07: + Marek, Ludmila's
     // husband - only once W6 has brought him out of the diggers' cave, hidden till then; 21 since 2026-10-16: + Eryk Sowa, the
     // castaway of package E - Wrak_Data.js, TownLifeExtra 948 - on the market at 10:00; 22 since 2026-10-22: + Hieronim the gravedigger
-    // of package D - Zakon_Data.js, TownLifeExtra 2930 - by the old graveyard east of the town)
-    t.check("22 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 22 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
-    const want = { piekarka: [21, 31], woziwoda: [23, 34], kapral: [48, 51], kowal: [7, 49], soltys: [39, 40], kupiec: [12, 40], garbarz: [16, 45], feliks: [40, 40] };
+    // of package D - Zakon_Data.js, TownLifeExtra 2930 - by the old graveyard east of the town; 30 since 2026-10-22: + the eight of the
+    // new town's houses, TownLife_Data.js 2940-2947 - away (hidden) while Map008 has no "Miejsce:" of their doors)
+    t.check("30 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 30 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
+    const want = { piekarka: [33, 59], woziwoda: [50, 50], kapral: [100, 51], kowal: [8, 63], soltys: [83, 48], kupiec: [16, 48], garbarz: [15, 85], feliks: [84, 48] };
     t.check("at 10:00 each stands at its place (the baker at her stall, the water seller by the dry well, the corporal at the east gate...)",
         Object.entries(want).every(([k, [x, y]]) => at10[k][0] === x && at10[k][1] === y && at10[k][2] === "shown"), { at10 });
     // (judged by where his stroll goes: walking round a stall on the way he may be a cell or two further)
     const amb = await t.json("(function(){ const s = TownLife.state('dzwonnik'), w = s.wanderTo || [s.x, s.y]; return { act: s.act, hidden: s.hidden, to: w, at: [s.x, s.y] }; })()");
-    t.check("...and Ambroży strolls round the bench on the market (3 tiles)", amb.act === "wander" && !amb.hidden && Math.abs(amb.to[0] - 19) <= 3 && Math.abs(amb.to[1] - 35) <= 3, amb);
+    t.check("...and Ambroży strolls round the bench on the market (3 tiles)", amb.act === "wander" && !amb.hidden && Math.abs(amb.to[0] - 50) <= 3 && Math.abs(amb.to[1] - 46) <= 3, amb);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "mieszkancy_rynek.png"));
 
     // calls and talk: by the baker's stall
-    await t.locate(21, 33, 8);
+    await t.locate(33, 61, 8);
     await t.until("SpeechBubbles.log.some(l => /chleb|Bułki|kromka/i.test(l))", 20);
     const heard = await t.json("SpeechBubbles.log.slice(-5)");
     t.check("passing the baker's stall, Hanka calls out her bread", heard.some(l => /chleb|Bułki|kromka/i.test(l)), heard);
-    await t.locate(21, 32, 8);
+    await t.locate(33, 60, 8);
     const talk = await t.talkTo("TownLife.eventOf('piekarka')", []);
-    t.check("spoken to in the morning, Hanka answers with one of her morning lines", talk.done && /Wstaję o czwartej|zboża z pola dziadka/.test(talk.text), talk.text);
+    t.check("spoken to in the morning, Hanka answers with one of her morning lines", talk.done && /Wstaję o czwartej|zboża z działki dziadka/.test(talk.text), talk.text);
 
     // the night: everyone inside
     await t.setHour(23.8);   // (Rafał the deserter lurks out till 23:30)
@@ -47,7 +48,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const before = await t.json("TownLife.state('piekarka')");
     await t.until("TownLife.state('piekarka').hidden", 40, 300);
     const after = await t.json("TownLife.state('piekarka')");
-    t.check("at 14:00 Hanka walks from the market bench to the bakery's door and goes in", !before.hidden && after.hidden && after.x === 6 && after.y === 39, { before, after });
+    t.check("at 14:00 Hanka walks from the market bench to the bakery's door and goes in", !before.hidden && after.hidden && after.x === 38 && after.y === 73, { before, after });
 
     // the bell at noon
     await t.eval("window.__bells = 0; const _p = AudioManager.playSe; AudioManager.playSe = function(se){ if (se && se.name === 'Bell3') window.__bells++; return _p.call(this, se); }; 0");

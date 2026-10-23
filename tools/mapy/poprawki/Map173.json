@@ -1,0 +1,273 @@
+{
+ "mapa": 173,
+ "nazwa": "Dwór - Biblioteka",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 11,
+   "y": 8,
+   "stary": 598,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 18,
+   "nazwa": "Na stole: D 6,10",
+   "zd": {
+    "id": 18,
+    "name": "Na stole: D 6,10",
+    "note": "<Px:0,16>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 598
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 11,
+    "y": 8
+   }
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 13,
+   "y": 8,
+   "stary": 599,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 19,
+   "nazwa": "Na stole: D 7,10",
+   "zd": {
+    "id": 19,
+    "name": "Na stole: D 7,10",
+    "note": "<Px:0,16>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 599
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 13,
+    "y": 8
+   }
+  }
+ ],
+ "log": [
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "problem": "kafel 598 (D 6,10) stoi na tylnej krawędzi blatu: 1 px od płaskiego wierzchu w (11,8)",
+   "poprawka": "kafel 598 w (11,8) jako zdarzenie 18 z obrazkiem kafla, +16 px w pionie (13 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "problem": "kafel 599 (D 7,10) stoi na tylnej krawędzi blatu: 2 px od płaskiego wierzchu w (13,8)",
+   "poprawka": "kafel 599 w (13,8) jako zdarzenie 19 z obrazkiem kafla, +16 px w pionie (14 px od krawędzi)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "kandydat": "przesunięto kafel 598 z (11,8) do (11,9)",
+   "odrzucony": "nowe problemy: P2(11,9)"
+  },
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "kandydat": "przesunięto kafel 598 z (11,8) do (12,8)",
+   "odrzucony": "nowe problemy: P2(12,8)"
+  },
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "kandydat": "kafel 598 w (11,8) jako zdarzenie 18 z obrazkiem kafla, -16 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "kandydat": "kafel 598 w (11,8) jako zdarzenie 18 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "kandydat": "kafel 598 w (11,8) jako zdarzenie 18 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 11,
+   "y": 8,
+   "kandydat": "kafel 598 w (11,8) jako zdarzenie 18 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "przesunięto kafel 599 z (13,8) do (13,9)",
+   "odrzucony": "nowe problemy: P2(13,9)"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "przesunięto kafel 599 z (13,8) do (12,8)",
+   "odrzucony": "nowe problemy: P2(12,8)"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "kafel 599 w (13,8) jako zdarzenie 19 z obrazkiem kafla, -16 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "kafel 599 w (13,8) jako zdarzenie 19 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "kafel 599 w (13,8) jako zdarzenie 19 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "kafel 599 w (13,8) jako zdarzenie 19 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 13,
+   "y": 8,
+   "kandydat": "kafel 599 w (13,8) jako zdarzenie 19 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  }
+ ],
+ "przed": [
+  "P1 2,9",
+  "P2 11,8",
+  "P2 13,8"
+ ],
+ "po": [
+  "P1 2,9"
+ ],
+ "sha_data": "cba6dcce67b5cc73b2b242a4986e78afba487e95e3625274e24669db7b3c31ba",
+ "zainstalowano": "2026-10-22T11:30:49",
+ "sha_po": "02adf5a3e5429a41e8e99466db3e452d310cf773d419b2c8038e320cfc25c1a6"
+}

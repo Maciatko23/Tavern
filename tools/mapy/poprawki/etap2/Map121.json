@@ -1,0 +1,97 @@
+{
+ "mapa": 121,
+ "nazwa": "Wspólna izba",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 4,
+   "stary": 316,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 3,
+   "stary": 308,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 3,
+   "stary": 0,
+   "nowy": 316
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 2,
+   "stary": 0,
+   "nowy": 308
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 1,
+   "y": 4,
+   "stary": 0,
+   "nowy": 324
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 2,
+   "y": 5,
+   "stary": 0,
+   "nowy": 327
+  },
+  {
+   "op": "region",
+   "x": 12,
+   "y": 4,
+   "stary": 0,
+   "nowy": 2
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 316 (C 4,7) - góra bez dołu (brak kafla 324 pod) w (1,4)",
+   "poprawka": "przesunięto obiekt C (4,7) 2 kafli o 1 w górę i dołożono dół"
+  },
+  {
+   "kod": "O1",
+   "x": 2,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 319 (C 7,7) - góra bez dołu (brak kafla 327 pod) w (2,4)",
+   "poprawka": "dołożono dół obiektu C (7,7) 2 kafli"
+  },
+  {
+   "kod": "G1",
+   "x": 12,
+   "y": 4,
+   "problem": "kafel 581 (D 5,8) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (12,4)",
+   "poprawka": "kratka pod kaflem 581 zablokowana regionem 2 (RegionLayers: mebel stoi na niej)"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "G1 1,4",
+  "G1 12,4",
+  "G1 2,4",
+  "O1 1,4",
+  "O1 2,4"
+ ],
+ "po": [],
+ "sha_data": "c1567dad9910bcab1f230aa96addf363af63142a927eb93fa4744ed3b2f3c673",
+ "zainstalowano": "2026-10-22T10:51:31",
+ "sha_po": "0b7678219e0a43984380d3072656732a0d5e63f3814f6154d04f2da59ba9d338"
+}

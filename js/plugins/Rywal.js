@@ -37,7 +37,7 @@
  * Rywal.js - W9 rozdz. 3 „Rywal w ruinach”
  * ============================================================================
  * Kto: Grum z najemnikami (W8: frakcja albo przegrana przy tunelu), ludzie
- * Lorda (Lord rywalem: W1 a, chłodny, gałąź dworska, pole u Lorda), ludzie
+ * Lorda (Lord rywalem: W1 a, chłodny, gałąź dworska, działka u Lorda), ludzie
  * Baltazara (Baltazar nie w garści bohatera - W5), a gdy Baltazar w garści
  * (podwójna gra) albo wszyscy po stronie bohatera - kopacze Czarnych Oczu
  * z dowódcą. Dokładnie jedna drużyna, w tej kolejności.

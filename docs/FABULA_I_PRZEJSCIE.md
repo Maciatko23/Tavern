@@ -13,7 +13,7 @@
 5. [Rozdział 1: Dług dziadka (dni 1–60)](#5-rozdział-1-dług-dziadka-dni-160)
 6. [Wątki miasta w rozdziale 1](#6-wątki-miasta-w-rozdziale-1)
 7. [Wyspa: przystań i sześć miejsc na wybrzeżu](#7-wyspa-przystań-i-sześć-miejsc-na-wybrzeżu)
-8. [Koniec rozdziału 1: spłata albo strata pola](#8-koniec-rozdziału-1-spłata-albo-strata-pola)
+8. [Koniec rozdziału 1: spłata albo strata działki](#8-koniec-rozdziału-1-spłata-albo-strata-działki)
 9. [Akt II: pod tawerną](#9-akt-ii-pod-tawerną)
 10. [Akt III: napad na tawernę](#10-akt-iii-napad-na-tawernę)
 11. [Głębiny: piętra 51–99 i Warstwa Prawdy](#11-głębiny-piętra-5199-i-warstwa-prawdy)
@@ -31,7 +31,7 @@ Tą relikwią jest **Serce Twierdzy**, ukryte głęboko pod **Kruczą Wyspą**. 
 
 Bohater to biedny chłopak z lądu. Wojna spaliła jego wieś, ojciec zaginął, a matka wysłała go przez morze do dziadka Stacha na Kruczej Wyspie. Statek rozbił się w sztormie. Bohater budzi się w chacie dziadka, bez niczego poza wisiorkiem z krukiem, i dowiaduje się, że dziadek jest winien Lordowi 2500 G, a termin mija za 60 dni.
 
-Gra zaczyna się jako ciepła, zabawna historia o pracy w karczmie i ratowaniu pola. Z każdym tygodniem robi się poważniejsza i mroczniejsza: kto kradnie miastu wodę, kim jest kamerdyner Lorda, czemu Czarne Oczy skupują kamienie z krukiem, co jest pod kratą w piwnicy tawerny. Na końcu bohater staje przed Sercem i decyduje, co zrobić z prawdą, której świat tak bardzo chce.
+Gra zaczyna się jako ciepła, zabawna historia o pracy w karczmie i ratowaniu działki dziadka. Z każdym tygodniem robi się poważniejsza i mroczniejsza: kto kradnie miastu wodę, kim jest kamerdyner Lorda, czemu Czarne Oczy skupują kamienie z krukiem, co jest pod kratą w piwnicy tawerny. Na końcu bohater staje przed Sercem i decyduje, co zrobić z prawdą, której świat tak bardzo chce.
 
 **Ton:** najpierw codzienność, przetrwanie i humor; im głębiej, dosłownie pod ziemię, tym mniej do śmiechu.
 
@@ -48,7 +48,7 @@ Wyspa jest ziemią niczyją, kilka godzin promem od lądu. Ciągną na nią ucho
 | Miejsce | Co tam jest |
 |---|---|
 | Chata dziadka Stacha i podwórze | start gry; dom, który zostaje zawsze |
-| Pole dziadka | jedyna ziemia do budowy w rozdziale 1 |
+| Działka dziadka (Kruczy Jar, Map003) | jedyna ziemia do budowy w rozdziale 1: tylko w obrębie muru, 2 kratki od niego; za murem to już nie ziemia dziadka |
 | Tawerna „Pod Złotym Kuflem” | praca u Borgara, goście, piwnica i krata do podziemi |
 | Miasteczko | rynek, studnia (racje), dzwonnica, ratusz, Kantor Baltazara, kuźnia, garbarnia, dom kowala |
 | Posiadłość Lorda (dwór) | Lord Zaleski, kamerdyner Feliks, ogród z oranżerią, wnętrze: hol, biblioteka, gabinet |
@@ -164,8 +164,8 @@ Spłacić Lordowi **2500 G do dnia 60**. Pieniądze przyjmuje się jeszcze w noc
 
 ### Pierwsze kroki (dni 1–4)
 
-1. **Rozmowa z dziadkiem.** Dziadek wyjaśnia dług, pokazuje drogę na pole za lasem (podwórze → Leśna droga → Polna droga → Skraj lasu → pole) i do tawerny (z Polnej drogi ścieżką na północ). Dostajesz kapuśniak na drogę.
-2. **Pole dziadka.** Zbierasz kamienie, gałęzie i len z ziemi. Robisz pierwsze narzędzia gołymi rękami (kamienny młotek), potem **warsztat**, w którym powstają wszystkie narzędzia. Rąbiesz drzewa i krzaki, kopiesz kamień i rudę.
+1. **Rozmowa z dziadkiem.** Dziadek wyjaśnia dług, pokazuje drogę na swoją działkę za lasem (podwórze → Leśna droga → Polna droga → Skraj lasu → Kruczy Jar) i mówi, że działka to to, co w obrębie muru - dalej to już nie jego ziemia; pokazuje też drogę do tawerny (z Polnej drogi ścieżką na północ). Dostajesz kapuśniak na drogę.
+2. **Działka dziadka w Kruczym Jarze.** Budujesz tylko w obrębie muru (2 kratki od niego). Zbierasz kamienie, gałęzie i len z ziemi. Robisz pierwsze narzędzia gołymi rękami (kamienny młotek), potem **warsztat**, w którym powstają wszystkie narzędzia. Rąbiesz drzewa i krzaki, kopiesz kamień i rudę.
 3. **Schronienie.** Namiot, legowisko z gałęzi, a później **chatka** z wnętrzem (łóżko, spiżarnia, skrzynie). Pod dachem śpi się najlepiej.
 4. **Praca w tawernie.** Borgar zatrudnia Cię na jedną zmianę dziennie, **16–21**. Zmiana to cztery mini-gry: nalewanie, roznoszenie, zmywanie i kuchnia. Płaca zależy od wyniku, do tego dochodzą napiwki. Borgar skupuje też Twoje plony i wyroby.
 5. **Miasteczko.** Pierwsze zadania mieszkańców (K1, K4, K5, K8, K11, K17, K20). Tablica zleceń w tawernie odświeża się co 3 dni.
@@ -306,7 +306,7 @@ Pieśń daje skrót przez piętra 1–10 i jest jednym z trzech zamków Serca.
 **Lord nic nie wie. Zdrajcą jest Feliks.**
 
 1. **Dług:** spłaty i odpisy za wybory w innych wątkach.
-2. **Zaproszenie** po spłacie połowy długu (1250 G) albo połowy odkupu pola. Lord oprowadza po **holu** z kamieni twierdzy, gdzie na co dziesiątym wyryto kruka, a trzy są świeżo wyjęte. W **bibliotece** pokazuje kronikę rodu, czyli piątą zwrotkę pieśni.
+2. **Zaproszenie** po spłacie połowy długu (1250 G) albo połowy odkupu działki. Lord oprowadza po **holu** z kamieni twierdzy, gdzie na co dziesiątym wyryto kruka, a trzy są świeżo wyjęte. W **bibliotece** pokazuje kronikę rodu, czyli piątą zwrotkę pieśni.
 3. **Dwa życia Feliksa.** Śledzisz go przez dobę i z obserwacji składa się jego plan dnia (3 z 4 wystarczą):
 
    | Godzina | Gdzie jest Feliks |
@@ -317,7 +317,7 @@ Pieśń daje skrót przez piętra 1–10 i jest jednym z trzech zamków Serca.
    | raz w tygodniu o północy | Kantor |
 
 4. **Gabinet nocą.** Wchodzisz kanałem spod włazu za oranżerią. W szufladzie leżą listy pisane ręką Feliksa „Do sztabu Straży Pewności”: o wodzie, o krukach wyjętych z muru, donosy na wnuka Stacha. Zabierasz je, przepisujesz albo zostawiasz. Uważaj: Feliks przechodzi przez klapę o 1:30 i 3:00.
-5. **Prawda.** Pokazujesz listy Lordowi. Lord się łamie, Feliks trafia do wieży albo ucieka promem. Lord staje się **sojusznikiem**, odpisuje 250 G długu (albo 1000 G z odkupu pola), a garnizon dostaje +10 przychylności.
+5. **Prawda.** Pokazujesz listy Lordowi. Lord się łamie, Feliks trafia do wieży albo ucieka promem. Lord staje się **sojusznikiem**, odpisuje 250 G długu (albo 1000 G z odkupu działki), a garnizon dostaje +10 przychylności.
 6. **Akt II, „do kogo najpierw”:**
    - **powiem wszystko:** 100 G tygodniowo i ekwipunek, ale ludzie Lorda schodzą za Tobą pod ziemię;
    - **kłamstwo:** wychodzi na jaw po 7 dniach, dwór staje się wrogi, myto i przeszukanie chatki;
@@ -387,7 +387,7 @@ Wszystkie drogi na wybrzeże zaczynają się na **przystani**. Idziesz z miastec
 ### Urwisko Kruków (za pustelnią)
 
 - **K51 „Kruk z masztu”** (od Rocha, od dnia 8): kruk z wraku kutra prowadzi Cię aż do kruczarni.
-- **D24 „Oswojony kruk”:** trzy karmienia w trzy różne dni. Kruk siada Ci na ramieniu, dostajesz obrączkę i **nadajesz mu imię**. Dziadek opowiada o rodzie kruczarzy. Potem stawiasz **grzędę na polu**.
+- **D24 „Oswojony kruk”:** trzy karmienia w trzy różne dni. Kruk siada Ci na ramieniu, dostajesz obrączkę i **nadajesz mu imię**. Dziadek opowiada o rodzie kruczarzy. Potem stawiasz **grzędę na działce**.
 - **Co potrafi kruk** (klawisz **K**):
   - nosi listy po wyspie, nigdy przez morze;
   - leci na **zwiad**: po powrocie mówi, co jest na tamtej mapie, i ostrzega przed wilkami, niedźwiedziem albo bandytami;
@@ -438,23 +438,23 @@ Opis w punkcie 9.
 
 ---
 
-## 8. Koniec rozdziału 1: spłata albo strata pola
+## 8. Koniec rozdziału 1: spłata albo strata działki
 
 ### Spłata (2500 G do świtu dnia 61)
 
 Feliks albo Teodor przynosi pokwitowanie, a dziadek dziękuje. Lord opowiada rodzinną „bajkę”: „pod Kruczymi Skałami są drzwi, których nikt nie powinien otwierać… gdybyś coś znalazł, przyjdź najpierw do mnie”.
 
-### Strata pola (dług niespłacony)
+### Strata działki (dług niespłacony)
 
 Gra się **nie kończy**.
-- **Świt dnia 61:** kamerdyner ze strażnikami mierzy pole i wbija znak „Własność Lorda Zaleskiego”. Też mówi o drzwiach pod skałą.
+- **Świt dnia 61:** kamerdyner ze strażnikami mierzy działkę i wbija znak „Własność Lorda Zaleskiego”. Też mówi o drzwiach pod skałą.
 - **Masz 3 dni**, żeby zebrać plony, opróżnić skrzynie i rozebrać budynki (połowa materiałów wraca). Zwierzęta możesz sprzedać albo zabrać, a pies przybiega do Ciebie.
-- **Od dnia 64** pola pilnują strażnicy.
+- **Od dnia 64** działki pilnują strażnicy.
 - **Gdzie mieszkać:**
   - **chata dziadka** zostaje;
   - **Chata pod lasem** na Podgrodziu: 600 G u sołtysa, ogrodzona działka 20×12;
   - **Spalona zagroda Ługów**, zadanie D21: historię opowiada Józek Łata, potem Marta (wdowa) i sołtys ze starym prawem. Kupujesz ziemię za 350 G od dworu albo przez Martę. Odbudowa idzie w 5 etapach (uprzątnięcie, podmurówka, ściany, strzecha, drzwi i palenisko) i daje 779 pól ziemi.
-- **Odkup pola** za 3000 G w ratach, bez terminu. Po spłacie pole wraca ze wszystkim, co na nim zostało.
+- **Odkup działki** za 3000 G w ratach, bez terminu. Po spłacie działka wraca ze wszystkim, co na niej zostało.
 
 Rozdział 1 kończy się w obu wersjach i w obu otwiera się Akt II.
 
@@ -586,7 +586,7 @@ Zaczyna się, gdy **pierwszy raz zejdziesz na 50. piętro**.
   2. powiedziana mu jego własna prawda czyni go sojusznikiem;
   3. zamknięta gałąź cysterny czyni go rywalem;
   4. prawda o Feliksie, cicha droga z W1 albo „powiem wszystko” czynią go sojusznikiem;
-  5. pole stracone i nieodkupione czyni go rywalem;
+  5. działka stracona i nieodkupiona czyni go rywalem;
   6. publiczny wstyd z W1 albo chłód czynią go rywalem;
   7. w pozostałych przypadkach nie przychodzi.
 - **Lord chce zadać swoje jedno pytanie:** czy jego syn Kazimierz zginął na wojnie przez niego. Pozwalasz mu, odmawiasz albo pytasz za niego.
@@ -612,7 +612,7 @@ Zakończenie to seria scen na prawdziwych mapach: Komnata, czarna karta, dwór, 
 | **Opinia w miasteczku** | ilu ludzi przyszło z widłami; zdania mieszkańców |
 | **Uchodźcy (W6):** Rafał, obóz, Marek | scena w obozie |
 | **Akt III:** obroniona, drogo, padła | tawerna w epilogu |
-| **Lord (W7)** i strata albo odkup pola | dwór, dom dziadka |
+| **Lord (W7)** i strata albo odkup działki | dwór, dom dziadka |
 | **Baltazar (W5)** | Kantor, frakcja |
 | **Grum (W8)** | tawerna, tunel |
 | **Borgar (W4)** | strażnik, piwnica |
@@ -627,7 +627,7 @@ Zakończenie to seria scen na prawdziwych mapach: Komnata, czarna karta, dwór, 
 
 - **Woda jest cenna.** Stawiaj garnki i wiadra przed deszczem. Jedz owoce, noś bukłak. Czerwonego morza nie pij.
 - **Pieniądze na dług:** codzienna zmiana u Borgara plus sprzedaż. Zadania miasta dają pieniądze „ciekawe”, nie „konieczne”.
-- **Jeśli nie zdążysz z długiem, gra trwa dalej:** kupisz chatę albo odbudujesz zagrodę, a pole odkupisz później.
+- **Jeśli nie zdążysz z długiem, gra trwa dalej:** kupisz chatę albo odbudujesz zagrodę, a działkę odkupisz później.
 - **Nocą** trzymaj się ognia. Wilki boją się płomieni, a do wbitej pochodni nie podejdą. Nie zostawiaj zwłok zwierząt na noc, bo ściągają wilki.
 - **Kruk** oszczędza chodzenia: zwiad przed wyprawą mówi, co Cię czeka.
 - **Skradanie (C)** przydaje się przy śledzeniu Kuby, Feliksa i kuriera Baltazara.

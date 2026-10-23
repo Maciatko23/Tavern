@@ -1,0 +1,65 @@
+{
+ "mapa": 160,
+ "nazwa": "Izba latarnika",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 4,
+   "stary": 319,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 3,
+   "stary": 311,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 3,
+   "stary": 0,
+   "nowy": 319
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 2,
+   "stary": 0,
+   "nowy": 311
+  },
+  {
+   "op": "kafel",
+   "z": 2,
+   "x": 8,
+   "y": 4,
+   "stary": 0,
+   "nowy": 327
+  }
+ ],
+ "log": [
+  {
+   "kod": "O1",
+   "x": 8,
+   "y": 4,
+   "problem": "obiekt rozcięty: kafel 319 (C 7,7) - góra bez dołu (brak kafla 327 pod) w (8,4)",
+   "poprawka": "przesunięto obiekt C (7,7) 2 kafli o 1 w górę i dołożono dół"
+  }
+ ],
+ "pominiete": [],
+ "proby": [],
+ "przed": [
+  "G1 8,4",
+  "O1 8,4"
+ ],
+ "po": [],
+ "sha_data": "fe500d2d14992edeea5850c737a0a438e31f90c839d2a5c7607833f4a564dbe8",
+ "zainstalowano": "2026-10-22T10:51:34",
+ "sha_po": "7965cca170e514caff823f88351e2c0f13183021479e78362e864298e5d48447"
+}

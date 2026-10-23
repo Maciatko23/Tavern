@@ -133,7 +133,7 @@
     const WHY = {
         grumFaction: "Grum przeszedł do frakcji (W8: praca dla Czarnych Oczu, zawał przebity).",
         grumLost: "Grum pobił mnie przy tunelu i został z frakcją (W8).",
-        lordField: "Lord trzyma pole dziadka i chce być pierwszy pod tawerną.",
+        lordField: "Lord trzyma działkę dziadka i chce być pierwszy pod tawerną.",
         lordBranch: "Zamknąłem gałąź dworską w cysternie - Lord jest chłodny.",
         lordShamed: "Lord nie zapomniał wstydu na rynku (W1).",
         lordCold: "Lord patrzy na mnie chłodno.",
@@ -214,7 +214,7 @@
             }
         },
         lordWhy: {
-            field: "Pole twojego dziadka jest teraz pana. Ta piwnica pod tawerną... też kiedyś będzie.",
+            field: "Działka twojego dziadka jest teraz pana. Ta piwnica pod tawerną... też kiedyś będzie.",
             branch: "Ogród jaśnie pana usycha, a ty grzebiesz w rurach zakonu.",
             shamed: "Pan nie zapomniał rynku. I tego, kto go tam ośmieszył.",
             cold: "Pan mówił: kto coś znajdzie, ma przyjść najpierw do niego. Nie przyszedłeś.",

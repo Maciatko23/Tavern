@@ -1,0 +1,699 @@
+{
+ "opis": "Budynki z wnętrzami na nowej mapie Podgrodzia (Map111, kopia robocza tools/podgrodzie2/staging). drzwi = kratka zdarzenia drzwi, przed_drzwiami = lądowanie z wnętrza (twarzą w dół); nowe budynki i 4 dotąd zamknięte mają przeniesienie zastępcze (wnetrze, 1, 1) - łączy build.py z wnetrza/meta.json albo koordynator. wymiary/prefabrykat = wygląd z zewnątrz (dla wnętrz: wielkość, drewno/glina).",
+ "budynki": [
+  {
+   "klucz": "drwal",
+   "nazwa": "Chata drwala",
+   "prostokat": [
+    4,
+    5,
+    16,
+    15
+   ],
+   "drzwi_id": 3,
+   "drzwi": [
+    10,
+    11
+   ],
+   "przed_drzwiami": [
+    10,
+    12
+   ],
+   "wnetrze": 113,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: chata_drwala",
+   "nowy": false,
+   "stare_drzwi": [
+    7,
+    8
+   ],
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "szmaciarz",
+   "nazwa": "Kram starzyzny",
+   "prostokat": [
+    45,
+    23,
+    55,
+    30
+   ],
+   "drzwi_id": 6,
+   "drzwi": [
+    48,
+    29
+   ],
+   "przed_drzwiami": [
+    48,
+    30
+   ],
+   "wnetrze": 116,
+   "wnetrze_xy": [
+    7,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: kram_starzyzny",
+   "nowy": false,
+   "stare_drzwi": [
+    21,
+    13
+   ],
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "uchodzcy",
+   "nazwa": "Dom uchodźców",
+   "prostokat": [
+    27,
+    6,
+    43,
+    17
+   ],
+   "drzwi_id": 8,
+   "drzwi": [
+    33,
+    12
+   ],
+   "przed_drzwiami": [
+    33,
+    13
+   ],
+   "wnetrze": 117,
+   "wnetrze_xy": [
+    8,
+    9
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: dom_uchodzcow_i_oboz",
+   "nowy": false,
+   "stare_drzwi": [
+    32,
+    8
+   ],
+   "godziny": null,
+   "zawsze_otwarte": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "klusownik",
+   "nazwa": "Chata kłusownika",
+   "prostokat": [
+    5,
+    23,
+    11,
+    30
+   ],
+   "drzwi_id": 11,
+   "drzwi": [
+    8,
+    29
+   ],
+   "przed_drzwiami": [
+    8,
+    30
+   ],
+   "wnetrze": 114,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: chata_klusownika",
+   "nowy": false,
+   "stare_drzwi": [
+    4,
+    27
+   ],
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "znachorka",
+   "nazwa": "Izba znachorki",
+   "prostokat": [
+    24,
+    25,
+    34,
+    32
+   ],
+   "drzwi_id": 14,
+   "drzwi": [
+    27,
+    31
+   ],
+   "przed_drzwiami": [
+    27,
+    32
+   ],
+   "wnetrze": 115,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: izba_znachorki",
+   "nowy": false,
+   "stare_drzwi": [
+    15,
+    26
+   ],
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "praczka",
+   "nazwa": "Chata praczki",
+   "prostokat": [
+    57,
+    24,
+    67,
+    34
+   ],
+   "drzwi_id": 16,
+   "drzwi": [
+    61,
+    30
+   ],
+   "przed_drzwiami": [
+    61,
+    31
+   ],
+   "wnetrze": 112,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: chata_praczki",
+   "nowy": false,
+   "stare_drzwi": [
+    33,
+    26
+   ],
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "chata_pod_lasem",
+   "nazwa": "Chata pod lasem (dom gracza, Homes.js)",
+   "prostokat": [
+    4,
+    75,
+    38,
+    91
+   ],
+   "drzwi_id": 94,
+   "drzwi": [
+    8,
+    80
+   ],
+   "przed_drzwiami": [
+    8,
+    81
+   ],
+   "wnetrze": 154,
+   "wnetrze_xy": [
+    4,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy (chata z działką, region 8)",
+   "nowy": false,
+   "stare_drzwi": [
+    6,
+    40
+   ],
+   "uwaga": "drzwi obsługuje Homes.js (po nazwie „Chata pod lasem”), front w Homes.js",
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "przytulek",
+   "nazwa": "Przytułek",
+   "prostokat": [
+    46,
+    6,
+    58,
+    12
+   ],
+   "drzwi_id": 214,
+   "drzwi": [
+    53,
+    12
+   ],
+   "przed_drzwiami": [
+    53,
+    13
+   ],
+   "wnetrze": 202,
+   "wnetrze_xy": [
+    10,
+    9
+   ],
+   "prefabrykat": "plib-style chata: długi dom z desek (dach z desek A3 k64, ściana z desek A3 k75), przybudówka, kocioł na trójnogu przed wejściem",
+   "nowy": true,
+   "godziny": null,
+   "zawsze_otwarte": true,
+   "wymiary": {
+    "szer": 12,
+    "dach_rzedy": 4,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "szynk",
+   "nazwa": "Szynk",
+   "prostokat": [
+    76,
+    5,
+    83,
+    11
+   ],
+   "drzwi_id": 223,
+   "drzwi": [
+    79,
+    11
+   ],
+   "przed_drzwiami": [
+    79,
+    12
+   ],
+   "wnetrze": 201,
+   "wnetrze_xy": [
+    6,
+    10
+   ],
+   "prefabrykat": "plib-style chata: drewniany dom z bali, gont, szyld z kuflem (!Signs 2/6/1) na wysięgniku, ławy i stół przed wejściem",
+   "nowy": true,
+   "godziny": [
+    10,
+    23
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 8,
+    "dach_rzedy": 4,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "garncarnia",
+   "nazwa": "Garncarnia",
+   "prostokat": [
+    45,
+    44,
+    52,
+    50
+   ],
+   "drzwi_id": 225,
+   "drzwi": [
+    49,
+    50
+   ],
+   "przed_drzwiami": [
+    49,
+    51
+   ],
+   "wnetrze": 203,
+   "wnetrze_xy": [
+    6,
+    9
+   ],
+   "prefabrykat": "plib-style chata: chata z bali pod strzechą, piec garncarski z gliny (!$Pod_Piec) z boku, stoły z dzbanami przed wejściem",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 7,
+    "dach_rzedy": 4,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "lepianka1",
+   "nazwa": "Lepianka 1",
+   "prostokat": [
+    5,
+    38,
+    10,
+    43
+   ],
+   "drzwi_id": 227,
+   "drzwi": [
+    7,
+    43
+   ],
+   "przed_drzwiami": [
+    7,
+    44
+   ],
+   "wnetrze": 204,
+   "wnetrze_xy": [
+    7,
+    8
+   ],
+   "prefabrykat": "plib-style chata: lepianka: ściana z gliny w ramie z belek (A4 k89), strzecha",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 6,
+    "dach_rzedy": 3,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "lepianka2",
+   "nazwa": "Lepianka 2",
+   "prostokat": [
+    14,
+    38,
+    19,
+    43
+   ],
+   "drzwi_id": 230,
+   "drzwi": [
+    17,
+    43
+   ],
+   "przed_drzwiami": [
+    17,
+    44
+   ],
+   "wnetrze": 205,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "plib-style chata: lepianka: ściana z gliny w ramie z belek (A4 k89), ciemna strzecha",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 6,
+    "dach_rzedy": 3,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "chata3",
+   "nazwa": "Chata 3",
+   "prostokat": [
+    23,
+    38,
+    30,
+    43
+   ],
+   "drzwi_id": 234,
+   "drzwi": [
+    26,
+    43
+   ],
+   "przed_drzwiami": [
+    26,
+    44
+   ],
+   "wnetrze": 206,
+   "wnetrze_xy": [
+    4,
+    8
+   ],
+   "prefabrykat": "plib-style chata: chata z bali, gont, przybudówka z drewnem",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 7,
+    "dach_rzedy": 3,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "chata4",
+   "nazwa": "Chata 4",
+   "prostokat": [
+    5,
+    50,
+    10,
+    55
+   ],
+   "drzwi_id": 240,
+   "drzwi": [
+    7,
+    55
+   ],
+   "przed_drzwiami": [
+    7,
+    56
+   ],
+   "wnetrze": 207,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "plib-style chata: chata z desek, dach z desek",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 6,
+    "dach_rzedy": 3,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "chata5",
+   "nazwa": "Chata 5",
+   "prostokat": [
+    14,
+    50,
+    19,
+    55
+   ],
+   "drzwi_id": 244,
+   "drzwi": [
+    17,
+    55
+   ],
+   "przed_drzwiami": [
+    17,
+    56
+   ],
+   "wnetrze": 208,
+   "wnetrze_xy": [
+    5,
+    8
+   ],
+   "prefabrykat": "plib-style chata: chata z bali pod strzechą",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "wymiary": {
+    "szer": 6,
+    "dach_rzedy": 3,
+    "sciana_rzedy": 2
+   },
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "strzecha",
+   "nazwa": "Chata pod strzechą",
+   "prostokat": [
+    18,
+    7,
+    25,
+    14
+   ],
+   "drzwi_id": 4,
+   "drzwi": [
+    21,
+    13
+   ],
+   "przed_drzwiami": [
+    21,
+    14
+   ],
+   "wnetrze": 209,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: chata_pod_strzecha (dotąd zamknięte, teraz z wnętrzem)",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "stare_drzwi": [
+    15,
+    9
+   ],
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "deski",
+   "nazwa": "Chałupa z desek",
+   "prostokat": [
+    14,
+    24,
+    21,
+    28
+   ],
+   "drzwi_id": 9,
+   "drzwi": [
+    17,
+    28
+   ],
+   "przed_drzwiami": [
+    17,
+    29
+   ],
+   "wnetrze": 210,
+   "wnetrze_xy": [
+    5,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: chalupa_z_desek (dotąd zamknięte, teraz z wnętrzem)",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "stare_drzwi": [
+    13,
+    17
+   ],
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "szopa",
+   "nazwa": "Szopa",
+   "prostokat": [
+    69,
+    23,
+    72,
+    30
+   ],
+   "drzwi_id": 12,
+   "drzwi": [
+    70,
+    30
+   ],
+   "przed_drzwiami": [
+    70,
+    31
+   ],
+   "wnetrze": 211,
+   "wnetrze_xy": [
+    6,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: szopa (dotąd zamknięte, teraz z wnętrzem)",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "stare_drzwi": [
+    9,
+    27
+   ],
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  },
+  {
+   "klucz": "komorka",
+   "nazwa": "Komórka",
+   "prostokat": [
+    77,
+    25,
+    82,
+    29
+   ],
+   "drzwi_id": 17,
+   "drzwi": [
+    78,
+    29
+   ],
+   "przed_drzwiami": [
+    78,
+    30
+   ],
+   "wnetrze": 212,
+   "wnetrze_xy": [
+    5,
+    8
+   ],
+   "prefabrykat": "przeniesiony blok starej mapy: komorka (dotąd zamknięte, teraz z wnętrzem)",
+   "nowy": true,
+   "godziny": [
+    6,
+    21
+   ],
+   "zawsze_otwarte": false,
+   "stare_drzwi": [
+    39,
+    25
+   ],
+   "polaczone_z_wnetrzem": true,
+   "przed_drzwiami_przechodnie": true
+  }
+ ]
+}

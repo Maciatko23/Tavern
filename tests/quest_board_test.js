@@ -37,7 +37,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
         fam.data && fam.art && fam.scene && PARTS.every(n => t.plugins[n] !== "failed") && (!REGISTERED || fam.order.join() === PARTS.join()), Object.assign(fam, { plugins: t.plugins }));
     // (a story game in grandpa's cottage, whatever data/System.json says)
     t.check("a new game starts", await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true }));
-    await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_grafit_test.js)
+    await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_lista_test.js)
     await t.frames(30);
 
     // ---------------------------------------------------------------- the data: templates, givers, items
@@ -353,7 +353,10 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     await shot("zasady");
     // accept one more and follow it; P leaves
     const second = fresh.find(n => n.id !== deliver.id && n.type !== "bounty");
-    await t.eval(`(function(){ QuestBoard.accept("${second.id}"); QuestBoard.track("${second.id}"); return 0; })()`);
+    // (one thing followed at a time - 2026-10-23: a contract followed lets go of the journal's pinned goal, Journal.unpinOthers)
+    const gPin = await t.eval(`(function(){ const g = Journal.GOALS.find(x => !Journal.goalDone(x) && Journal.goalAvailable(x)); Journal.data().pinned = g.id; QuestBoard.accept("${second.id}"); QuestBoard.track("${second.id}"); return g.id; })()`);
+    const one = await t.json("({ goal: Journal.data().pinned, now: Journal.pinnedNow() })");
+    t.check("following a contract unpins the journal's pinned goal (one thing at a time)", !!gPin && one.goal === null && one.now && one.now.owner === "board" && one.now.id === second.id, { gPin, one });
     await t.press("cancel");
     t.check("P leaves the board", await t.until(t.onMap(19), 15));
     await t.frames(20);
