@@ -471,7 +471,9 @@
             this._stamp = stamp;
             this._scrollKey = null;
         }
-        const scrollKey = $gameMap.displayX() + "," + $gameMap.displayY();
+        // (the part of the world on the screen too: a zoom or the eagle's flight shows more of it without a scroll - reposition culls)
+        const v = T.view && T.view.rect ? T.view.rect() : null;
+        const scrollKey = $gameMap.displayX() + "," + $gameMap.displayY() + (v ? "," + v.x0 + "," + v.y0 + "," + v.x1 + "," + v.y1 : "");
         if (scrollKey !== this._scrollKey) {
             this._scrollKey = scrollKey;
             this.reposition();
@@ -572,11 +574,16 @@
         return true;
     };
 
+    // (2026-10-24, wydajność: what lies off the screen is not drawn - renderable; a few hundred stones and plants on a big map,
+    // a screenful of them seen; the plants' sway leaves those off the screen alone already, updateSway)
     Sprite_StoneLayer.prototype.reposition = function() {
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), ox = $gameMap.displayX() * tw, oy = $gameMap.displayY() * th;
+        const sees = T.view && T.view.sees;
         for (const e of this._entries) {
-            e.sprite.x = Math.round(e.px - ox);
-            e.sprite.y = Math.round(e.py - oy);
+            const s = e.sprite;
+            s.x = Math.round(e.px - ox);
+            s.y = Math.round(e.py - oy);
+            s.renderable = !sees || sees(s.x - 64, s.y - 64, s.x + 128, s.y + 128);
         }
     };
 
@@ -848,11 +855,19 @@
     }
     Sprite_NightLight.prototype = Object.create(Sprite.prototype);
     Sprite_NightLight.prototype.constructor = Sprite_NightLight;
+    // the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): gfx.nightScale - the night's picture at 1/n of the screen each way
+    // (2 as always at Wysoka, 3 Średnia, 4 Niska - the bitmaps smooth, so the edge of a light stays soft); gfx.fireShadows false
+    // (Niska) - the things round a fire throw no shadows in its light. The light itself, its warmth and its glow stay at every level:
+    // every light is a fire. (RoomLighting's lamps in a room have their own darkness, untouched.)
+    const gfxNight = () => { const W = T.api("Wydajnosc"); return W && W.gfx; };
+    const nightScale = () => { const g = gfxNight(), n = g ? Number(g.nightScale) : 2; return n >= 1 && n <= 8 ? n : 2; };
+    const fireShadowsOn = () => { const g = gfxNight(); return !g || g.fireShadows !== false; };
     Sprite_NightLight.prototype.initialize = function(spriteset) {
-        const w = Math.ceil(Graphics.width / 2), h = Math.ceil(Graphics.height / 2);   // half the resolution: cheaper, and the edge of the light is soft
+        const S = nightScale(), w = Math.ceil(Graphics.width / S), h = Math.ceil(Graphics.height / S);   // 1/S the resolution: cheaper, and the edge of the light is soft
         Sprite.prototype.initialize.call(this, new Bitmap(w, h));
         this.bitmap.smooth = true;
-        this.scale.set(2, 2);
+        this.scale.set(S, S);
+        this._nightK = S;
         this.visible = false;
         this._spriteset = spriteset;
         this._age = 0;
@@ -913,14 +928,18 @@
         if (stuck && stuck.length) out.push(...stuck);
         return out;
     };
+    // the night's picture every other frame while nothing moves (Wydajnosc.js opts.night: false - every frame, as before)
+    const nightHalf = () => { const W = T.api("Wydajnosc"); return !W || !W.opts || W.opts.night !== false; };
     const TORCH_SWITCH = Number((PluginManager.parameters("RoomLighting") || {}).torchSwitch || 0);
     const TORCH_LIGHT = 300;   // px: a campfire's reach
     function torchLit() { return TORCH_SWITCH > 0 && !!$gameSwitches && $gameSwitches.value(TORCH_SWITCH); }
     // (2026-10-18) the layer covers the WORLD's view: flying high on the eagle (Orzel_Lot.js) the world is drawn at half the size and
     // the screen shows twice as much of it each way - the night's picture follows (Tawerna.view; at scale 1 nothing changes)
     Sprite_NightLight.prototype.fitView = function() {
-        const w = Math.ceil(T.view.w() / 2), h = Math.ceil(T.view.h() / 2);
-        if (this.bitmap && this.bitmap.width === w && this.bitmap.height === h) return;
+        const S = nightScale(), w = Math.ceil(T.view.w() / S), h = Math.ceil(T.view.h() / S);
+        if (this._nightK === S && this.bitmap && this.bitmap.width === w && this.bitmap.height === h) return;
+        this._nightK = S;   // (another level of quality: the picture at its size from this frame on)
+        this.scale.set(S, S);
         for (const sp of [this, this._warm, this._glow]) {
             const old = sp.bitmap;
             sp.bitmap = new Bitmap(w, h);
@@ -936,22 +955,38 @@
         const dark = ($gameSystem && $gameSystem._dayNightTinting && typeof $gameSystem.dayNightHour === "function" ? nightAmount() : 0) * (window.Storm ? 1 - 0.85 * Storm.flash() : 1);
         this.visible = dark > 0.01;
         if (!this.visible) return;
+        const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows && fireShadowsOn() ? Sun.occluders(this._spriteset) : [];
+        const lights = this.lights(), S = this._nightK || 2;
+        this._nightInfo = { lights: lights.length, things: things.length, blockers: 0, k: S };   // (the tests)
+        // (2026-10-24, wydajność - the player agreed: the flames may flicker 30 times a second) when nothing moved since the last
+        // frame - the view, the lights, what stands in them, how dark it is - every other frame keeps the last picture: the flicker
+        // goes on every 2nd frame; anything moving draws at once, as before
+        if (nightHalf()) {
+            let sig = $gameMap.displayX() * 7.31 + $gameMap.displayY() * 3.17 + dark * 1013 + (window.Storm ? Storm.flash() * 977 : 0);
+            for (const l of lights) sig += l.x * 1.31 + l.y * 2.17 + l.r * 0.73;
+            for (const o of things) sig += o.fx * 1.7 + o.fy * 3.1 + o.alpha * 5.3;
+            const same = sig === this._nightSig, frame = Graphics.frameCount;
+            this._nightSig = sig;
+            // (only the frame loop's own call: drawn again in the same frame - by hand, a test - it is always drawn)
+            if (same && (frame & 1) && this._nightDrawnAt !== frame) return;
+            this._nightDrawnAt = frame;
+        }
         const bmp = this.bitmap, ctx = bmp.context, w = bmp.width, h = bmp.height;
         ctx.globalCompositeOperation = "source-over";
         ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = "rgba(3,7,24," + (NIGHT_ALPHA * dark).toFixed(3) + ")";
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = "destination-out";
-        const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows ? Sun.occluders(this._spriteset) : [];
         const glows = [], warms = [];
         let stands = null;   // (what stands on the screen - made once a frame, when a light first has shadows to keep off it)
-        for (const l of this.lights()) {
+        for (const l of lights) {
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
-            const x = l.x / 2, y = l.y / 2, r = (l.r / 2) * (0.97 + 0.03 * flick);
+            const x = l.x / S, y = l.y / S, r = (l.r / S) * (0.97 + 0.03 * flick);
             if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
             if (l.glow) glows.push({ x, y, r, a: l.i * fireGlowAlpha(this._age + l.id * 17) });
             warms.push({ x, y, r, a: l.i * flick });
             const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : [];
+            this._nightInfo.blockers += blockers.length;
             // the light straight into the dark - or, with things standing in it, first on its own canvas with their shadows cut out
             // of it: in a shadow the night stays as dark as around (user 2026-09-30: fires make the things around throw shadows)
             let c = ctx, ox = 0, oy = 0;
@@ -973,7 +1008,7 @@
             // the shadows lie on the ground: what stands in the light (trees, people, rocks, the buildings...) is lit where it stands -
             // a shadow passing behind it on the screen is hidden by it, one that reaches its foot climbs it (user 2026-10-08)
             if (!stands) stands = Sun.standing ? Sun.standing(this._spriteset, this.standingSprites()) : undefined;
-            Sun.cutLightShadows(c, blockers, 0.5, ox, oy, stands);   // (the night layer is half the screen's size)
+            Sun.cutLightShadows(c, blockers, 1 / S, ox, oy, stands);   // (the night layer is 1/S the screen's size)
             ctx.globalCompositeOperation = "destination-out";
             ctx.drawImage(c.canvas, ox, oy);
         }
@@ -1026,6 +1061,11 @@
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), W = $gameMap.width(), H = $gameMap.height();
         const x0 = Math.floor($gameMap.displayX()) - 1, y0 = Math.floor($gameMap.displayY()) - 1;
         const cols = Math.ceil(T.view.w() / tw) + 3, rows = Math.ceil(T.view.h() / th) + 3;
+        // (2026-10-24, wydajność: the same view - the hero standing - the same mask: kept, not painted again every frame)
+        const key = this._warmMaskKey, ax = $gameMap.adjustX(x0), ay = $gameMap.adjustY(y0), w0 = this.bitmap.width, h0 = this.bitmap.height;
+        if (key && this._warmMaskCanvas && key.grid === grid && key.x0 === x0 && key.y0 === y0 && key.cols === cols && key.rows === rows && key.ax === ax && key.ay === ay &&
+            key.w === w0 && key.h === h0) return this._warmMaskCanvas;
+        this._warmMaskKey = { grid, x0, y0, cols, rows, ax, ay, w: w0, h: h0 };
         const cells = this._warmCells || (this._warmCells = document.createElement("canvas"));
         if (cells.width !== cols || cells.height !== rows) { cells.width = cols; cells.height = rows; }
         const cc = cells.getContext("2d"), img = cc.createImageData(cols, rows), land = Math.round(255 * WARM_LAND);
@@ -1043,7 +1083,8 @@
         const mc = mask.getContext("2d");
         mc.clearRect(0, 0, w, h);
         mc.imageSmoothingEnabled = true;
-        mc.drawImage(cells, $gameMap.adjustX(x0) * tw / 2, $gameMap.adjustY(y0) * th / 2, cols * tw / 2, rows * th / 2);
+        const S = this._nightK || 2;   // (the mask at the night's picture's size)
+        mc.drawImage(cells, $gameMap.adjustX(x0) * tw / S, $gameMap.adjustY(y0) * th / S, cols * tw / S, rows * th / S);
         return mask;
     };
     // paint(c, k) draws the warm part (at k of its strength) - straight onto the target at WARM_LAND, or (a map with water) at full

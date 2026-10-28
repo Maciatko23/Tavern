@@ -275,6 +275,9 @@
         if (h > c) return smooth((e - h) / (e - c));
         return 1;
     }
+    // the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): gfx.critters - the share of the butterflies wanted and of the
+    // moths at the fires at once (1 Wysoka, 0.5 Średnia, about a third Niska)
+    const critterShare = () => { const W = T.api("Wydajnosc"), k = W && W.gfx && typeof W.gfx.critters === "number" ? W.gfx.critters : 1; return Math.max(0, Math.min(1, k)); };
     // { k, n, why }: n butterflies on the map round the screen
     function wanted() {
         const p = profile();
@@ -296,7 +299,7 @@
             if (wind() >= D.WEATHER.windy[0]) wk *= D.WEATHER.windy[1];
         } else { wk *= D.WEATHER.afterRain; why = "F9"; }
         const near = spotsNearView(), fk = forced ? 1 : Math.min(1, near / 5);
-        let n = Math.round(D.LIMITS.base * k * hk * wk * fk);
+        let n = Math.round(D.LIMITS.base * k * hk * wk * fk * critterShare());
         if (s === 2) n = Math.min(n, D.LIMITS.autumnMax);
         return { n: clamp(n, 0, D.LIMITS.max), k, hk, wk, near, why };
     }
@@ -700,7 +703,7 @@
         const byId = new Map(lightsNow.map(l => [l.id, l]));
         if (on && (Graphics.frameCount % 20 === 0 || force)) {
             let total = moths.filter(m => m.state !== "go").length;
-            const cap = lightsNow.some(l => l.room) ? D.LIMITS.roomMoths : D.LIMITS.moths;
+            const cap = Math.max(1, Math.round((lightsNow.some(l => l.room) ? D.LIMITS.roomMoths : D.LIMITS.moths) * critterShare()));
             for (const l of lightsNow) {
                 const have = moths.filter(m => m.moth.light === l.id && m.state !== "go").length;
                 for (let i = have; i < l.count && total < cap; i++, total++) spawnMoth(l, fresh > 0 || (force && force.moths));

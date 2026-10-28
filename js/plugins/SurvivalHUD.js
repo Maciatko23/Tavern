@@ -1043,6 +1043,8 @@
                 if (r.width > 0 && r.height > 0 && p.x < r.x + r.width + HUD_FADE_ROOM && p.x + p.width > r.x - HUD_FADE_ROOM &&
                     p.y < r.y + r.height + HUD_FADE_ROOM && p.y + p.height > r.y - HUD_FADE_ROOM) target = HUD_FADE_ALPHA;
             }
+            // (2026-10-23) the map's name, "Kinowy" (CleanHUD): while its bars are in, the HUD goes (all but what keeps itself)
+            if (window.$gameTemp && $gameTemp._hudCinema && !el._cinemaKeep) target = 0;
             let k = el._hudFadeK === undefined ? 1 : el._hudFadeK;
             if (k === 1 && target === 1) continue;   // (never faded: its own alpha is left alone)
             k += (target - k) * HUD_FADE_STEP;

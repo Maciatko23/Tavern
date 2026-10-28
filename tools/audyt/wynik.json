@@ -1,0 +1,2850 @@
+{
+ "summary": {
+  "zadania": 106,
+  "mieszkancy": 60,
+  "mapy": 126,
+  "znaczniki": 332,
+  "problemy": {
+   "do sprawdzenia": 1,
+   "uciążliwość": 2,
+   "info": 20
+  },
+  "bledyWczytania": []
+ },
+ "problems": [
+  {
+   "waga": "do sprawdzenia",
+   "zadanie": "W13",
+   "krok": "krok 2 (rozdz. 3) talk",
+   "co": "przedmiot „Pióro białego orła” (184) ×1 - nie znalazłem źródła (receptura, zbiór, sklep, łup, nagroda)"
+  },
+  {
+   "waga": "uciążliwość",
+   "zadanie": "D21",
+   "krok": "krok 2 talk",
+   "co": "krok wymaga 350 G"
+  },
+  {
+   "waga": "uciążliwość",
+   "zadanie": "K19",
+   "krok": "krok 0 custom",
+   "co": "Rafał dostępny tylko przez 8% okna 0-24 (w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze))"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D20",
+   "krok": "krok 2 bring",
+   "co": "Roch bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D20",
+   "krok": "krok 5 bring",
+   "co": "Roch bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D30",
+   "krok": "krok 0 (rozdz. 1) bring",
+   "co": "Babka Jagna w godzinach kroku 5-21 tylko pod warunkiem: zasRosa, zasPoDeszczu"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D30",
+   "krok": "krok 1 (rozdz. 2) bring",
+   "co": "Babka Jagna w godzinach kroku 5-21 tylko pod warunkiem: zasRosa, zasPoDeszczu"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D30",
+   "krok": "krok 2 (rozdz. 3) bring",
+   "co": "Babka Jagna w godzinach kroku 5-21 tylko pod warunkiem: zasRosa, zasPoDeszczu"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D30",
+   "krok": "oferta",
+   "co": "Babka Jagna w godzinach oferty 5-20 tylko pod warunkiem: zasRosa, zasPoDeszczu"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D31",
+   "krok": "krok 1 (rozdz. 2) bring",
+   "co": "rzecz spoza bazy „zas_medalik” daje kod wtyczki (nie vgives w danych)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D31",
+   "krok": "krok 1 (rozdz. 2) bring",
+   "co": "rzecz spoza bazy „zas_klucz” daje kod wtyczki (nie vgives w danych)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D31",
+   "krok": "krok 1 (rozdz. 2) bring",
+   "co": "rzecz spoza bazy „zas_moneta_kruk” daje kod wtyczki (nie vgives w danych)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec bartek",
+   "krok": "inside brama_pld",
+   "co": "Bartek Kmieć w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: bartek_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec ela",
+   "krok": "inside pod_murem",
+   "co": "Ela w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: ela_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec feliks",
+   "krok": "inside brama_wsch",
+   "co": "Feliks w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: feliks_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec gracz",
+   "krok": "inside brama_pld",
+   "co": "Lucjan Kość w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gracz_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec kamerdyner",
+   "krok": "inside brama_wsch",
+   "co": "Teodor w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: kamerdyner_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec ludmila",
+   "krok": "inside pod_murem",
+   "co": "Ludmiła w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: ludmila_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec marek",
+   "krok": "inside pod_murem",
+   "co": "Marek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: marek_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec rafal",
+   "krok": "inside stodola",
+   "co": "Rafał w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec woznica",
+   "krok": "inside brama_pld",
+   "co": "Wojciech w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: woznica_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec zebrak",
+   "krok": "inside zebrak_noc",
+   "co": "Stary Gaweł w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: zebrak_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec zlodziej",
+   "krok": "inside pod_murem",
+   "co": "Szymek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: zlodziej_wnetrze)"
+  }
+ ],
+ "quests": [
+  {
+   "id": "K1",
+   "kind": "K",
+   "title": "Węgiel do paleniska",
+   "giver": "kowal",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K2",
+   "kind": "K",
+   "title": "Woda do hartowania",
+   "giver": "kowal",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K3",
+   "kind": "K",
+   "title": "Podkowa w słońcu",
+   "giver": "kowal",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K4",
+   "kind": "K",
+   "title": "Chleb przed świtem",
+   "giver": "piekarka",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K5",
+   "kind": "K",
+   "title": "Bochenki do dziewiątej",
+   "giver": "piekarka",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K6",
+   "kind": "K",
+   "title": "Jęczmień do żaren",
+   "giver": "piekarka",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K8",
+   "kind": "K",
+   "title": "Pęknięta beczka",
+   "giver": "woziwoda",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K9",
+   "kind": "K",
+   "title": "Kłótnia w kolejce",
+   "giver": "woziwoda",
+   "steps": 0,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K10",
+   "kind": "K",
+   "title": "Smak wody",
+   "giver": "garbarz",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K11",
+   "kind": "K",
+   "title": "Myto przy bramie",
+   "giver": "kapral",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K12",
+   "kind": "K",
+   "title": "Łój do latarni",
+   "giver": "kapral",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K13",
+   "kind": "K",
+   "title": "Sznur dzwonu",
+   "giver": "dzwonnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K14",
+   "kind": "K",
+   "title": "Dzwonnik ma chore kolana",
+   "giver": "dzwonnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K15",
+   "kind": "K",
+   "title": "Ostrożnie, kruche",
+   "giver": "kupiec",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K16",
+   "kind": "K",
+   "title": "Grzyby po dwakroć",
+   "giver": "kupiec",
+   "steps": 0,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K17",
+   "kind": "K",
+   "title": "Obwieszczenie o racjach",
+   "giver": "soltys",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K20",
+   "kind": "K",
+   "title": "Pierwsza skóra",
+   "giver": "garbarz",
+   "steps": 0,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K21",
+   "kind": "K",
+   "title": "Garbnik z lasu",
+   "giver": "garbarz",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K31",
+   "kind": "K",
+   "title": "Imieniny Lorda",
+   "giver": "feliks",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K32",
+   "kind": "K",
+   "title": "List od dziadka",
+   "giver": "grandpa",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K38",
+   "kind": "K",
+   "title": "Nocna warta",
+   "giver": "kapral",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K26",
+   "kind": "K",
+   "title": "Pierścionek w studni",
+   "giver": "zosia",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K37",
+   "kind": "K",
+   "title": "Sakiewka Lorda",
+   "giver": "feliks",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K39",
+   "kind": "K",
+   "title": "Kości z targu",
+   "giver": "bartek",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K19",
+   "kind": "K",
+   "title": "Spis obozu",
+   "giver": "soltys",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "K27",
+   "kind": "K",
+   "title": "Konik dla Eli",
+   "giver": "ludmila",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K28",
+   "kind": "K",
+   "title": "Kocioł dla obozu",
+   "giver": "ludmila",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K29",
+   "kind": "K",
+   "title": "Rana Rafała",
+   "giver": "rafal",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K30",
+   "kind": "K",
+   "title": "Koszyki dla dworu",
+   "giver": "feliks",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D4",
+   "kind": "D",
+   "title": "Złodziej o świcie",
+   "giver": "piekarka",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D10",
+   "kind": "D",
+   "title": "Gorączka Eli",
+   "giver": "ludmila",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D18",
+   "kind": "D",
+   "title": "Płaszcze przed zimą",
+   "giver": "garbarz",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K40",
+   "kind": "K",
+   "title": "Woda na pranie",
+   "giver": "praczka",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K41",
+   "kind": "K",
+   "title": "Zioła dla babki Jadwigi",
+   "giver": "znachorka",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K42",
+   "kind": "K",
+   "title": "Kram Józka",
+   "giver": "szmaciarz",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K43",
+   "kind": "K",
+   "title": "Drewno na ognisko",
+   "giver": "uchodzca",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K44",
+   "kind": "K",
+   "title": "Lina dla Zbycha",
+   "giver": "drwal",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K45",
+   "kind": "K",
+   "title": "Włókno na pętle",
+   "giver": "klusownik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K46",
+   "kind": "K",
+   "title": "Suchar dla Franka",
+   "giver": "franek",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D1",
+   "kind": "D",
+   "title": "Buty od szewca",
+   "giver": "garbarz",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D3",
+   "kind": "D",
+   "title": "Ręka kowala",
+   "giver": "kowal",
+   "steps": 5,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D5",
+   "kind": "D",
+   "title": "Wataha pod bramą",
+   "giver": "kapral",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D11",
+   "kind": "D",
+   "title": "Ognie na murach",
+   "giver": "kapral",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D14",
+   "kind": "D",
+   "title": "Zboże na wojnę",
+   "giver": "kapral",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D16",
+   "kind": "D",
+   "title": "Uczeń dzwonnika",
+   "giver": "dzwonnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D17",
+   "kind": "D",
+   "title": "Petycja do Lorda",
+   "giver": "soltys",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W1",
+   "kind": "W",
+   "title": "Woda spod Kruczych Skał",
+   "giver": "-",
+   "steps": 11,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W2",
+   "kind": "W",
+   "title": "Kod dzwonu",
+   "giver": "-",
+   "steps": 11,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K22",
+   "kind": "K",
+   "title": "Struna dla Melii",
+   "giver": "melia",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K33",
+   "kind": "K",
+   "title": "Czapka Ozzy'ego",
+   "giver": "ozzy",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D13",
+   "kind": "D",
+   "title": "Zakład Ozzy'ego",
+   "giver": "ozzy",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D6",
+   "kind": "D",
+   "title": "Siłacz z targu",
+   "giver": "kowal",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W3",
+   "kind": "W",
+   "title": "Pieśń o Kruczych Skałach",
+   "giver": "-",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W8",
+   "kind": "W",
+   "title": "Żelazna Pięść",
+   "giver": "-",
+   "steps": 9,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W4",
+   "kind": "W",
+   "title": "Krew kasztelana",
+   "giver": "-",
+   "steps": 10,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W9",
+   "kind": "W",
+   "title": "Serce Twierdzy",
+   "giver": "-",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W6",
+   "kind": "W",
+   "title": "Ludzie z promu",
+   "giver": "-",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K47",
+   "kind": "K",
+   "title": "Pierwszy połów",
+   "giver": "janek",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K48",
+   "kind": "K",
+   "title": "Sieci po sztormie",
+   "giver": "janek",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D20",
+   "kind": "D",
+   "title": "Kuter na pochylni",
+   "giver": "przemytnik",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 2
+  },
+  {
+   "id": "W10",
+   "kind": "W",
+   "title": "List do matki",
+   "giver": "janek",
+   "steps": 6,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K54",
+   "kind": "K",
+   "title": "Motyl z oczkami",
+   "giver": "ela",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K50",
+   "kind": "K",
+   "title": "Atrament dla pustelnika",
+   "giver": "pustelnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D23",
+   "kind": "D",
+   "title": "Zaszyfrowane kroniki",
+   "giver": "pustelnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K51",
+   "kind": "K",
+   "title": "Kruk z masztu",
+   "giver": "przemytnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D24",
+   "kind": "D",
+   "title": "Oswojony kruk",
+   "giver": "grandpa",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D29",
+   "kind": "D",
+   "title": "Jajo z grani",
+   "giver": "latarnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W13",
+   "kind": "W",
+   "title": "Skrzydlata Straż",
+   "giver": "-",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "K49",
+   "kind": "K",
+   "title": "Tran dla latarni",
+   "giver": "latarnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D22",
+   "kind": "D",
+   "title": "Księga mgieł",
+   "giver": "latarnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W11",
+   "kind": "W",
+   "title": "Soczewka",
+   "giver": "-",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K52",
+   "kind": "K",
+   "title": "Drewno dla garnizonu",
+   "giver": "kwatermistrz",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D26",
+   "kind": "D",
+   "title": "Lista poborowa",
+   "giver": "werbownik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D27",
+   "kind": "D",
+   "title": "Zboże dla obozu",
+   "giver": "ludmila",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D25",
+   "kind": "D",
+   "title": "Mapa z wraku",
+   "giver": "przemytnik",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W12",
+   "kind": "W",
+   "title": "Rozbitek",
+   "giver": "rozbitek",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D28",
+   "kind": "D",
+   "title": "Zapas zakonu",
+   "giver": "-",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K53",
+   "kind": "K",
+   "title": "Rynny zakonu",
+   "giver": "-",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W5",
+   "kind": "W",
+   "title": "Towary z kontynentu",
+   "giver": "-",
+   "steps": 10,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "W7",
+   "kind": "W",
+   "title": "Dwór z kamieni twierdzy",
+   "giver": "-",
+   "steps": 8,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K55",
+   "kind": "K",
+   "title": "Świece dla dzwonnika",
+   "giver": "dzwonnik",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K56",
+   "kind": "K",
+   "title": "Ogródki Podgrodzia",
+   "giver": "znachorka",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K57",
+   "kind": "K",
+   "title": "Studnia sąsiada",
+   "giver": "grandpa",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K58",
+   "kind": "K",
+   "title": "Sad Ługów",
+   "giver": "praczka",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D30",
+   "kind": "D",
+   "title": "Zioła Jagny",
+   "giver": "jagna",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 4
+  },
+  {
+   "id": "D31",
+   "kind": "D",
+   "title": "Skarby wysypiska",
+   "giver": "szmaciarz",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 3
+  },
+  {
+   "id": "K59",
+   "kind": "K",
+   "title": "Nora pod korzeniami",
+   "giver": "-",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K60",
+   "kind": "K",
+   "title": "Sól dla jeleni",
+   "giver": "-",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K61",
+   "kind": "K",
+   "title": "Zawody strzeleckie",
+   "giver": "kwatermistrz",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K62",
+   "kind": "K",
+   "title": "Krasula i kury Ługów",
+   "giver": "praczka",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D32",
+   "kind": "D",
+   "title": "Gajowy i kłusownik",
+   "giver": "gajowy",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D33",
+   "kind": "D",
+   "title": "Gawra pod granią",
+   "giver": "-",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K63",
+   "kind": "K",
+   "title": "Węgiel dla kowala",
+   "giver": "kowal",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K64",
+   "kind": "K",
+   "title": "Zabłąkana owca",
+   "giver": "pasterz",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K65",
+   "kind": "K",
+   "title": "Zgubiony juk",
+   "giver": "handlarz",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K66",
+   "kind": "K",
+   "title": "Nocny patrol",
+   "giver": "rotmistrz",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D34",
+   "kind": "D",
+   "title": "Jaskinia pod zatoczką",
+   "giver": "celnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D35",
+   "kind": "D",
+   "title": "Szyb pod Orlą Granią",
+   "giver": "-",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K67",
+   "kind": "K",
+   "title": "Trzy kruki przy drogach",
+   "giver": "dzwonnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K68",
+   "kind": "K",
+   "title": "Zapiski strażnic",
+   "giver": "pustelnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D36",
+   "kind": "D",
+   "title": "Cień Strażnika",
+   "giver": "-",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K69",
+   "kind": "K",
+   "title": "Grzędy Straży",
+   "giver": "latarnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "K70",
+   "kind": "K",
+   "title": "Kawałki wraku",
+   "giver": "rozbitek",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D37",
+   "kind": "D",
+   "title": "Groby z krukiem",
+   "giver": "dzwonnik",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D38",
+   "kind": "D",
+   "title": "Godzina milczenia",
+   "giver": "-",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D21",
+   "kind": "D",
+   "title": "Spalona zagroda",
+   "giver": "-",
+   "steps": 6,
+   "blokady": 0,
+   "inne": 1
+  }
+ ],
+ "residents": [
+  {
+   "key": "kowal",
+   "name": "Tadek Młot",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "piekarka",
+   "name": "Hanka Mączna",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "woziwoda",
+   "name": "Kuba Woziwoda",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kapral",
+   "name": "Kapral Wit Czerwień",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "dzwonnik",
+   "name": "Ambroży",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kupiec",
+   "name": "Baltazar Vey",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "soltys",
+   "name": "Sołtys Bronisław",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "garbarz",
+   "name": "Ignac",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "feliks",
+   "name": "Feliks",
+   "map": 8,
+   "reach": 58,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: feliks_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "bronek",
+   "name": "Bronek",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "zosia",
+   "name": "Zosia",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "ludmila",
+   "name": "Ludmiła",
+   "map": 8,
+   "reach": 56,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: ludmila_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "ela",
+   "name": "Ela",
+   "map": 8,
+   "reach": 55,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: ela_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "rafal",
+   "name": "Rafał",
+   "map": 8,
+   "reach": 8,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "praczka",
+   "name": "Marta Ługowa",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "franek",
+   "name": "Franek",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "drwal",
+   "name": "Zbych Smolarz",
+   "map": 111,
+   "reach": 79,
+   "whys": [
+    "poza mapą (skraj_lasu)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "klusownik",
+   "name": "Rysiek Sidło",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "znachorka",
+   "name": "Babka Jadwiga",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "szmaciarz",
+   "name": "Józek Łata",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "uchodzca",
+   "name": "Darin z Kontynentu",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "zebrak",
+   "name": "Stary Gaweł",
+   "map": 111,
+   "reach": 63,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: zebrak_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "zlodziej",
+   "name": "Szymek",
+   "map": 8,
+   "reach": 58,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: zlodziej_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "gracz",
+   "name": "Lucjan Kość",
+   "map": 8,
+   "reach": 18,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: gracz_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "bartek",
+   "name": "Bartek Kmieć",
+   "map": 8,
+   "reach": 48,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: bartek_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "woznica",
+   "name": "Wojciech",
+   "map": 8,
+   "reach": 34,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: woznica_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "straznik",
+   "name": "Strażnik dworu",
+   "map": 24,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kamerdyner",
+   "name": "Teodor",
+   "map": 8,
+   "reach": 58,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: kamerdyner_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "marek",
+   "name": "Marek",
+   "map": 8,
+   "reach": 54,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: marek_wnetrze)"
+   ],
+   "problems": 1
+  },
+  {
+   "key": "janek",
+   "name": "Janek",
+   "map": 125,
+   "reach": 85,
+   "whys": [
+    "poza mapą (na_morze)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "przemytnik",
+   "name": "Roch",
+   "map": 125,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "celnik",
+   "name": "Sambor Kwit",
+   "map": 125,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "straznik_przystan",
+   "name": "Strażnik przystani",
+   "map": 125,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kolodziej",
+   "name": "Szczepan Kołodziej",
+   "map": 8,
+   "reach": 71,
+   "whys": [
+    "poza mapą (brama_pd)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "przekupka",
+   "name": "Agata",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "szwaczka",
+   "name": "Dorota Igła",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "wdowa",
+   "name": "Halina",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kostek",
+   "name": "Kostek",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "jagodka",
+   "name": "Jagódka",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "ciesla",
+   "name": "Leon Dłuto",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "weteran",
+   "name": "Wacław Siwy",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "szynkarz",
+   "name": "Mietek Kwaśniak",
+   "map": 111,
+   "reach": 92,
+   "whys": [
+    "poza mapą (brama_zach)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "opiekunka",
+   "name": "Ciotka Stefa",
+   "map": 111,
+   "reach": 94,
+   "whys": [
+    "poza mapą (brama_zach)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "garncarz",
+   "name": "Wit Zduń",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "dziecko",
+   "name": "Tośka",
+   "map": 111,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "pustelnik",
+   "name": "Brat Kleofas",
+   "map": 155,
+   "reach": 54,
+   "whys": [
+    "poza mapą (cela_drzwi)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "latarnik",
+   "name": "Bazyli Krzesiwo",
+   "map": 159,
+   "reach": 71,
+   "whys": [
+    "poza mapą (izba_sen)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "rotmistrz",
+   "name": "Rotmistrz Bełza",
+   "map": 162,
+   "reach": 67,
+   "whys": [
+    "poza mapą (spi)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "kwatermistrz",
+   "name": "Kwatermistrz Kłos",
+   "map": 162,
+   "reach": 63,
+   "whys": [
+    "poza mapą (namiot_kwat)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "werbownik",
+   "name": "Werbownik Bęben",
+   "map": 162,
+   "reach": 63,
+   "whys": [
+    "poza mapą (koszary_drzwi)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "rozbitek",
+   "name": "Eryk Sowa",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "jagna",
+   "name": "Babka Jagna",
+   "map": 17,
+   "reach": 0,
+   "whys": [
+    "poza mapą (jagna_las)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "gajowy",
+   "name": "Gajowy Gniewko Bór",
+   "map": 24,
+   "reach": 58,
+   "whys": [
+    "poza mapą (lesniczowka)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "pasterz",
+   "name": "Wawrzyn Owczarz",
+   "map": 4,
+   "reach": 63,
+   "whys": [
+    "poza mapą (koszar_brama)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "handlarz",
+   "name": "Szymon Juczny",
+   "map": 22,
+   "reach": 65,
+   "whys": [
+    "poza mapą (handlarz_woz)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "patrol_latarnia_1",
+   "name": "Żołnierz z patrolu",
+   "map": 159,
+   "reach": 50,
+   "whys": [
+    "poza mapą (lud_p159_noc)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "patrol_latarnia_2",
+   "name": "Żołnierz z patrolu",
+   "map": 159,
+   "reach": 50,
+   "whys": [
+    "poza mapą (lud_p159_noc)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "patrol_garnizon_1",
+   "name": "Żołnierz z patrolu",
+   "map": 162,
+   "reach": 50,
+   "whys": [
+    "poza mapą (koszary_drzwi)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "patrol_garnizon_2",
+   "name": "Żołnierz z patrolu",
+   "map": 162,
+   "reach": 50,
+   "whys": [
+    "poza mapą (koszary_drzwi)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "grabarz",
+   "name": "Hieronim",
+   "map": 8,
+   "reach": 50,
+   "whys": [
+    "poza mapą (grabarz_chata)"
+   ],
+   "problems": 0
+  }
+ ],
+ "ekonomia": [
+  {
+   "id": "K1",
+   "kind": "K",
+   "title": "Węgiel do paleniska",
+   "day": 2,
+   "gold": 15,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K2",
+   "kind": "K",
+   "title": "Woda do hartowania",
+   "day": 3,
+   "gold": 0,
+   "optMax": 25,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K3",
+   "kind": "K",
+   "title": "Podkowa w słońcu",
+   "day": 2,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K4",
+   "kind": "K",
+   "title": "Chleb przed świtem",
+   "day": 2,
+   "gold": 8,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Chleb ×2 (16 G)"
+   ]
+  },
+  {
+   "id": "K5",
+   "kind": "K",
+   "title": "Bochenki do dziewiątej",
+   "day": 1,
+   "gold": 12,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "daily",
+   "items": []
+  },
+  {
+   "id": "K6",
+   "kind": "K",
+   "title": "Jęczmień do żaren",
+   "day": 1,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Placek jagodowy ×1 (24 G)"
+   ]
+  },
+  {
+   "id": "K8",
+   "kind": "K",
+   "title": "Pęknięta beczka",
+   "day": 2,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K9",
+   "kind": "K",
+   "title": "Kłótnia w kolejce",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K10",
+   "kind": "K",
+   "title": "Smak wody",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K11",
+   "kind": "K",
+   "title": "Myto przy bramie",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K12",
+   "kind": "K",
+   "title": "Łój do latarni",
+   "day": 2,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K13",
+   "kind": "K",
+   "title": "Sznur dzwonu",
+   "day": 2,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K14",
+   "kind": "K",
+   "title": "Dzwonnik ma chore kolana",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K15",
+   "kind": "K",
+   "title": "Ostrożnie, kruche",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K16",
+   "kind": "K",
+   "title": "Grzyby po dwakroć",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "trade",
+   "items": []
+  },
+  {
+   "id": "K17",
+   "kind": "K",
+   "title": "Obwieszczenie o racjach",
+   "day": 2,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K20",
+   "kind": "K",
+   "title": "Pierwsza skóra",
+   "day": 1,
+   "gold": 0,
+   "optMax": 8,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K21",
+   "kind": "K",
+   "title": "Garbnik z lasu",
+   "day": 2,
+   "gold": 12,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K31",
+   "kind": "K",
+   "title": "Imieniny Lorda",
+   "day": 26,
+   "gold": 0,
+   "optMax": 40,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K32",
+   "kind": "K",
+   "title": "List od dziadka",
+   "day": 5,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K38",
+   "kind": "K",
+   "title": "Nocna warta",
+   "day": 3,
+   "gold": 15,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K26",
+   "kind": "K",
+   "title": "Pierścionek w studni",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K37",
+   "kind": "K",
+   "title": "Sakiewka Lorda",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 50,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K39",
+   "kind": "K",
+   "title": "Kości z targu",
+   "day": 7,
+   "gold": 5,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K19",
+   "kind": "K",
+   "title": "Spis obozu",
+   "day": 10,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K27",
+   "kind": "K",
+   "title": "Konik dla Eli",
+   "day": 2,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K28",
+   "kind": "K",
+   "title": "Kocioł dla obozu",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K29",
+   "kind": "K",
+   "title": "Rana Rafała",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K30",
+   "kind": "K",
+   "title": "Koszyki dla dworu",
+   "day": 1,
+   "gold": 5,
+   "optMax": 0,
+   "debt": 5,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D4",
+   "kind": "D",
+   "title": "Złodziej o świcie",
+   "day": 11,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D10",
+   "kind": "D",
+   "title": "Gorączka Eli",
+   "day": 11,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D18",
+   "kind": "D",
+   "title": "Płaszcze przed zimą",
+   "day": 70,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K40",
+   "kind": "K",
+   "title": "Woda na pranie",
+   "day": 2,
+   "gold": 8,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K41",
+   "kind": "K",
+   "title": "Zioła dla babki Jadwigi",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Opatrunek ×2 (12 G)"
+   ]
+  },
+  {
+   "id": "K42",
+   "kind": "K",
+   "title": "Kram Józka",
+   "day": 3,
+   "gold": 10,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Lina ×2 (8 G)"
+   ]
+  },
+  {
+   "id": "K43",
+   "kind": "K",
+   "title": "Drewno na ognisko",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K44",
+   "kind": "K",
+   "title": "Lina dla Zbycha",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Węgiel drzewny ×3 (18 G)"
+   ]
+  },
+  {
+   "id": "K45",
+   "kind": "K",
+   "title": "Włókno na pętle",
+   "day": 2,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Surowe mięso zająca ×2 (12 G)"
+   ]
+  },
+  {
+   "id": "K46",
+   "kind": "K",
+   "title": "Suchar dla Franka",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D1",
+   "kind": "D",
+   "title": "Buty od szewca",
+   "day": 5,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D3",
+   "kind": "D",
+   "title": "Ręka kowala",
+   "day": 6,
+   "gold": 0,
+   "optMax": 60,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D5",
+   "kind": "D",
+   "title": "Wataha pod bramą",
+   "day": 8,
+   "gold": 0,
+   "optMax": 80,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D11",
+   "kind": "D",
+   "title": "Ognie na murach",
+   "day": 6,
+   "gold": 70,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D14",
+   "kind": "D",
+   "title": "Zboże na wojnę",
+   "day": 24,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 50,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D16",
+   "kind": "D",
+   "title": "Uczeń dzwonnika",
+   "day": 7,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D17",
+   "kind": "D",
+   "title": "Petycja do Lorda",
+   "day": 20,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W1",
+   "kind": "W",
+   "title": "Woda spod Kruczych Skał",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W2",
+   "kind": "W",
+   "title": "Kod dzwonu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K22",
+   "kind": "K",
+   "title": "Struna dla Melii",
+   "day": 2,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K33",
+   "kind": "K",
+   "title": "Czapka Ozzy'ego",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Piwo ×1 (10 G)"
+   ]
+  },
+  {
+   "id": "D13",
+   "kind": "D",
+   "title": "Zakład Ozzy'ego",
+   "day": 5,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D6",
+   "kind": "D",
+   "title": "Siłacz z targu",
+   "day": 4,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W3",
+   "kind": "W",
+   "title": "Pieśń o Kruczych Skałach",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W8",
+   "kind": "W",
+   "title": "Żelazna Pięść",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W4",
+   "kind": "W",
+   "title": "Krew kasztelana",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W9",
+   "kind": "W",
+   "title": "Serce Twierdzy",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W6",
+   "kind": "W",
+   "title": "Ludzie z promu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K47",
+   "kind": "K",
+   "title": "Pierwszy połów",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Wędzona ryba ×2 (40 G)"
+   ]
+  },
+  {
+   "id": "K48",
+   "kind": "K",
+   "title": "Sieci po sztormie",
+   "day": 1,
+   "gold": 20,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Wędzona ryba ×2 (40 G)"
+   ]
+  },
+  {
+   "id": "D20",
+   "kind": "D",
+   "title": "Kuter na pochylni",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W10",
+   "kind": "W",
+   "title": "List do matki",
+   "day": 4,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K54",
+   "kind": "K",
+   "title": "Motyl z oczkami",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Rysunek Eli ×1 (0 G)"
+   ]
+  },
+  {
+   "id": "K50",
+   "kind": "K",
+   "title": "Atrament dla pustelnika",
+   "day": 6,
+   "gold": 15,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Miód ×2 (30 G)"
+   ]
+  },
+  {
+   "id": "D23",
+   "kind": "D",
+   "title": "Zaszyfrowane kroniki",
+   "day": 1,
+   "gold": 120,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K51",
+   "kind": "K",
+   "title": "Kruk z masztu",
+   "day": 8,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D24",
+   "kind": "D",
+   "title": "Oswojony kruk",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D29",
+   "kind": "D",
+   "title": "Jajo z grani",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W13",
+   "kind": "W",
+   "title": "Skrzydlata Straż",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K49",
+   "kind": "K",
+   "title": "Tran dla latarni",
+   "day": 24,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D22",
+   "kind": "D",
+   "title": "Księga mgieł",
+   "day": 1,
+   "gold": 60,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W11",
+   "kind": "W",
+   "title": "Soczewka",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K52",
+   "kind": "K",
+   "title": "Drewno dla garnizonu",
+   "day": 5,
+   "gold": 20,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D26",
+   "kind": "D",
+   "title": "Lista poborowa",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D27",
+   "kind": "D",
+   "title": "Zboże dla obozu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D25",
+   "kind": "D",
+   "title": "Mapa z wraku",
+   "day": 15,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W12",
+   "kind": "W",
+   "title": "Rozbitek",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D28",
+   "kind": "D",
+   "title": "Zapas zakonu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K53",
+   "kind": "K",
+   "title": "Rynny zakonu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W5",
+   "kind": "W",
+   "title": "Towary z kontynentu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W7",
+   "kind": "W",
+   "title": "Dwór z kamieni twierdzy",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K55",
+   "kind": "K",
+   "title": "Świece dla dzwonnika",
+   "day": 3,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K56",
+   "kind": "K",
+   "title": "Ogródki Podgrodzia",
+   "day": 4,
+   "gold": 25,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Zioła ×3 (9 G)"
+   ]
+  },
+  {
+   "id": "K57",
+   "kind": "K",
+   "title": "Studnia sąsiada",
+   "day": 3,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K58",
+   "kind": "K",
+   "title": "Sad Ługów",
+   "day": 1,
+   "gold": 40,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D30",
+   "kind": "D",
+   "title": "Zioła Jagny",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D31",
+   "kind": "D",
+   "title": "Skarby wysypiska",
+   "day": 3,
+   "gold": 40,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K59",
+   "kind": "K",
+   "title": "Nora pod korzeniami",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K60",
+   "kind": "K",
+   "title": "Sól dla jeleni",
+   "day": 1,
+   "gold": 40,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K61",
+   "kind": "K",
+   "title": "Zawody strzeleckie",
+   "day": 1,
+   "gold": 50,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K62",
+   "kind": "K",
+   "title": "Krasula i kury Ługów",
+   "day": 1,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D32",
+   "kind": "D",
+   "title": "Gajowy i kłusownik",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Zezwolenie na odstrzał ×1 (0 G)"
+   ]
+  },
+  {
+   "id": "D33",
+   "kind": "D",
+   "title": "Gawra pod granią",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K63",
+   "kind": "K",
+   "title": "Węgiel dla kowala",
+   "day": 4,
+   "gold": 40,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K64",
+   "kind": "K",
+   "title": "Zabłąkana owca",
+   "day": 1,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Ser ×3 (72 G)"
+   ]
+  },
+  {
+   "id": "K65",
+   "kind": "K",
+   "title": "Zgubiony juk",
+   "day": 3,
+   "gold": 25,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K66",
+   "kind": "K",
+   "title": "Nocny patrol",
+   "day": 6,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D34",
+   "kind": "D",
+   "title": "Jaskinia pod zatoczką",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D35",
+   "kind": "D",
+   "title": "Szyb pod Orlą Granią",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K67",
+   "kind": "K",
+   "title": "Trzy kruki przy drogach",
+   "day": 4,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K68",
+   "kind": "K",
+   "title": "Zapiski strażnic",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D36",
+   "kind": "D",
+   "title": "Cień Strażnika",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K69",
+   "kind": "K",
+   "title": "Grzędy Straży",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": [
+    "Strzemię jeźdźca ×1 (0 G)"
+   ]
+  },
+  {
+   "id": "K70",
+   "kind": "K",
+   "title": "Kawałki wraku",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D37",
+   "kind": "D",
+   "title": "Groby z krukiem",
+   "day": 6,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D38",
+   "kind": "D",
+   "title": "Godzina milczenia",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D21",
+   "kind": "D",
+   "title": "Spalona zagroda",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  }
+ ]
+}

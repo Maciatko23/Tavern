@@ -154,36 +154,37 @@ raz (tytuł + mapa).
 
 ### 2.1 Lista
 
-Lista gry `js/tawerna_wtyczki.js` (do 2026-10-23 `js/plugins.js`; 82 wtyczek w tym zestawieniu; dziś 148, wszystkie włączone; numer = miejsce na liście; w `$plugins` stoi przed nią jeszcze TawernaLoader):
+Lista gry `js/tawerna_wtyczki.js` (do 2026-10-23 `js/plugins.js`; 82 wtyczek w tym zestawieniu; dziś 151, wszystkie włączone; numer = miejsce na liście; w `$plugins` stoi przed nią jeszcze TawernaLoader):
 
 ```
  0  TawernaCore                ← pierwsza, nad wszystkim
- 1  ActorPictures, AltMenuScreen, AltSaveScreen, OptionEx, HDLayout                     (obce)
- 6  DustMotes, RoomLighting, DayNightCycle, CloudShadows, SwayingFoliage, Sky, MapZoom   ← Sky: słońce, niebo, cienie
-13  ChoppableTree, ChoppableTree_Objects, ChoppableTree_Swing, ChoppableTree_Render  ← części zaraz pod główną (przed SurvivalHUD)
-17  SurvivalHUD, Farming_Data
-19  Farming, Farming_Plots, Farming_Build, Farming_Stations, Farming_UI  ← części zaraz pod główną (za nimi Farming_Render)
-24  Farming_Render, CharacterPolish, GroundDetail, FreeMovement, RegionLayers, WaterFx, Fullscreen, Survival   ← RegionLayers: regiony 1/2/3 = pod / na równi / nad graczem; WaterFx: płynny wodospad, plusk, fale, nurt (<Fall>, <Splash>, <Flow>)
-32  UITheme
-33  TawernaUI                  ← zaraz pod UITheme
-34  Journal, Minimap, Atmosphere, Storm, Puddles, Durability, Spoilage
-41  Hunting, Hunting_Path, Hunting_AI, Hunting_Weapons  ← części zaraz pod główną (przed Birds)
-45  Birds, Motyle_Data, Motyle, Forestry, Needs, Livestock, Dog, Skills_Data   ← Motyle (2026-10-18): motyle za dnia, ćmy nocą przy ogniu, siatka, gablotka (zakładka Dziennika), zapylanie; stan Tawerna.state("motyle"); szyna: butterflyCaught; dane i K54 w Motyle_Data (pakiet TownQuests, nad TownQuests_Data)
-51  Combat, Combat_Fight, Combat_UI                     ← części zaraz pod główną
-54  SpeechBubbles, Debug
-56  MenuPanel                  ← pod Journal (układa jego scenę), nad wtyczkami, które dokładają wpisy do menu P
-57  HeroLook
-58  TavernShift, TavernShift_Hall, TavernShift_Parts
-61  Story                      ← pod MenuPanel (linia długu: MenuPanel.addFoot)
-62  QuestBoard_Data, QuestBoard, QuestBoard_Art, QuestBoard_Scene
-66  TavernDice_Data, TavernDice, TavernDice_Art, TavernDice_Scene
-70  TavernLife, TavernLife_Render, TavernLife_ArmWrestle, TavernLife_Darts, TavernLife_Plan
-75  HomeAmbience, HomeDecor, HomeLife
-78  TownLife_Data, TownLife     ← miasteczko według zegara: mieszkańcy 910-949 na mapie 8 (plany dnia, okrzyki, rozmowy, dzwon)
-80  TownQuests_Data, TownQuests ← questy miasteczka (docs/QUESTY.md, stan: docs/QUESTY_STAN.md): zadania w rozmowach mieszkańców (TownLife.addTalkHook), Opinia w miasteczku 0-100, zakładka dziennika „Miasteczko”, dzień targowy, sygnały dzwonu; stan Tawerna.state("townQuests"); szyna: townQuestAccepted / townQuestDone / townQuestFailed / townOpinion; zdarzenia 951-959
-86  Underground_Data, Underground ← podziemia pod tawerną (docs/PODZIEMIA.md): piętra 1-9 składane z kawałków mapy 130 (ziarno zapisu, Tawerna.onMapData na mapach 131-139), piętro 10 ręcznie (Map140), krata w piwnicy (przełącznik 11); stan Tawerna.state("underground"); szyna: undergroundFloor / undergroundDeeper / undergroundLoot / undergroundNote / undergroundGate / undergroundLift; zdarzenia stworów 860-899
-95  Okolice_Data, Zasoby_Data, Lowy_Data, Ludzie_Data, Zakon_Data ← (2026-10-21/22) nowy teren 21 powiększonych map (docs/rozszerzenia/PLAN.md): dane rdzenia i czterech paczek, nad TownLife (TownLifeExtra, TownQuestsPacks)
-134 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
+ 1  Wydajnosc                  ← (2026-10-24) mniej pustej pracy silnika co klatkę: puste aktualizacje obrazków, pole filtrów sceny mapy, postacie poza ekranem nierysowane, szybkie „czy to przedmiot”; etap 2: zdarzenia daleko poza ekranem co 4. klatkę, filtry kolorów MZ w spoczynku wyłączone, opts dla konturu (CharacterPolish) i nocy (Farming_Render); Opcje -> „Jakość grafiki” (Automatycznie / Wysoka / Średnia / Niska, ConfigManager.gfxQuality + gfxAuto): jeden obiekt `gfx` (mood, bloom, particles, grass, critters, lazyEvery, smallShadows, fireShadows, nightScale, skyFx, version), który czytają Mood, GroundDetail, Birds, Motyle, Storm, Sky, ChoppableTree_Render, Farming_Render i pogoda MZ; Automatycznie mierzy czas klatki w Graphics._onTick (docs/WYDAJNOSC.md „Jakość grafiki”)
+ 2  ActorPictures, AltMenuScreen, AltSaveScreen, OptionEx, HDLayout                     (obce)
+ 7  DustMotes, RoomLighting, DayNightCycle, CloudShadows, SwayingFoliage, Sky, MapZoom   ← Sky: słońce, niebo, cienie
+14  ChoppableTree, ChoppableTree_Objects, ChoppableTree_Swing, ChoppableTree_Render  ← części zaraz pod główną (przed SurvivalHUD)
+18  SurvivalHUD, Farming_Data
+20  Farming, Farming_Plots, Farming_Build, Farming_Stations, Farming_UI  ← części zaraz pod główną (za nimi Farming_Render)
+25  Farming_Render, CharacterPolish, GroundDetail, FreeMovement, RegionLayers, WaterFx, Fullscreen, Survival   ← RegionLayers: regiony 1/2/3 = pod / na równi / nad graczem; WaterFx: płynny wodospad, plusk, fale, nurt (<Fall>, <Splash>, <Flow>)
+33  UITheme
+34  TawernaUI                  ← zaraz pod UITheme
+35  Journal, Minimap, Atmosphere, Storm, Puddles, Durability, Spoilage
+42  Hunting, Hunting_Path, Hunting_AI, Hunting_Weapons  ← części zaraz pod główną (przed Birds)
+46  Birds, Motyle_Data, Motyle, Forestry, Needs, Livestock, Dog, Skills_Data   ← Motyle (2026-10-18): motyle za dnia, ćmy nocą przy ogniu, siatka, gablotka (zakładka Dziennika), zapylanie; stan Tawerna.state("motyle"); szyna: butterflyCaught; dane i K54 w Motyle_Data (pakiet TownQuests, nad TownQuests_Data)
+52  Combat, Combat_Fight, Combat_UI                     ← części zaraz pod główną
+55  SpeechBubbles, Debug
+57  MenuPanel                  ← pod Journal (układa jego scenę), nad wtyczkami, które dokładają wpisy do menu P
+58  HeroLook
+59  TavernShift, TavernShift_Hall, TavernShift_Parts
+62  Story                      ← pod MenuPanel (linia długu: MenuPanel.addFoot)
+63  QuestBoard_Data, QuestBoard, QuestBoard_Art, QuestBoard_Scene
+67  TavernDice_Data, TavernDice, TavernDice_Art, TavernDice_Scene
+71  TavernLife, TavernLife_Render, TavernLife_ArmWrestle, TavernLife_Darts, TavernLife_Plan
+76  HomeAmbience, HomeDecor, HomeLife
+79  TownLife_Data, TownLife     ← miasteczko według zegara: mieszkańcy 910-949 na mapie 8 (plany dnia, okrzyki, rozmowy, dzwon)
+81  TownQuests_Data, TownQuests ← questy miasteczka (docs/QUESTY.md, stan: docs/QUESTY_STAN.md): zadania w rozmowach mieszkańców (TownLife.addTalkHook), Opinia w miasteczku 0-100, zakładka dziennika „Miasteczko”, dzień targowy, sygnały dzwonu; stan Tawerna.state("townQuests"); szyna: townQuestAccepted / townQuestDone / townQuestFailed / townOpinion; zdarzenia 951-959
+87  Underground_Data, Underground ← podziemia pod tawerną (docs/PODZIEMIA.md): piętra 1-9 składane z kawałków mapy 130 (ziarno zapisu, Tawerna.onMapData na mapach 131-139), piętro 10 ręcznie (Map140), krata w piwnicy (przełącznik 11); stan Tawerna.state("underground"); szyna: undergroundFloor / undergroundDeeper / undergroundLoot / undergroundNote / undergroundGate / undergroundLift; zdarzenia stworów 860-899
+96  Okolice_Data, Zasoby_Data, Lowy_Data, Ludzie_Data, Zakon_Data ← (2026-10-21/22) nowy teren 21 powiększonych map (docs/rozszerzenia/PLAN.md): dane rdzenia i czterech paczek, nad TownLife (TownLifeExtra, TownQuestsPacks)
+135 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
 ```
 
 **Wtyczki nowego terenu (2026-10-22):** każda paczka ma swoje zdarzenia (`Tawerna.inject`, rejestr w §6), mieszkańców TownLife z drugiego zakresu 2900–2949, przedmioty (A 185–199, B 200–209, C 210–224, D 225–239), ikony (wiersze 29–32 IconSet: 464–527), stan w zapisie (`okolice`, `zasoby`, `lowy`, `ludzie`, `zakon`) i test (`okolice_szkielet_test` 9550, `zasoby_test` 9551, `lowy_test` 9552, `ludzie_test` 9553, `zakon_test` 9554). Mapy 176 (komora pod menhirami, D) i 177 (jaskinia przemytników, C). Szyna: `okoliceDiscover`, `zakonGrove`. Epilog po Sercu pyta `Zasoby/Lowy/Ludzie/Zakon.epilogue(kind, w)` (linijka albo lista). Instalator danych: `tools/rozszerzenia/instaluj.py`, opisy na liście gry: `tools/rozszerzenia/opisy_wtyczek.py`.
@@ -464,7 +465,8 @@ jeden numer = jeden właściciel na każdej mapie. Nakładanie się zakresów = 
 | 2500–2699 | Ludzie (paczka C) | nowy teren | ludzie przy drogach | `Tawerna.inject` |
 | 2700–2899 | Zakon (paczka D) | nowy teren | tajemnice i zakon | `Tawerna.inject` |
 | 2900–2949 | TownLife (drugi zakres) | każda | mieszkańcy paczek nowego terenu: A 2900–2904, B 2905–2909, C 2910–2929, D 2930–2939, rezerwa 2940–2949 | `Tawerna.inject` ✓ |
-| 3000+ | *wolne* | | | |
+| 3000–3001 | Woz | 8, 111, 3, 21, 125 | wóz Wojciecha (3000) i Wojciech poza miasteczkiem (3001) na postojach szybkiej podróży (docs/ROZMOWY.md, tests/mapa_woz_test.js); ukryte, gdy wóz jest gdzie indziej | `Tawerna.inject` ✓ |
+| 3002+ | *wolne* | | | |
 
 ```js
 Tawerna.inject(19, { ids: [980, 998], owner: "HomeDecor",

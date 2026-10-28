@@ -154,6 +154,25 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             const s = await quietTalk(ev("kwatermistrz"), ["Sprzedam coś wojsku", "Jęczmień"]);
             const gb = await t.gold(), left = await t.count(74);
             t.check("skup: 5× Jęczmień sprzedane za 30 G", gb - ga === 30 && left === 0, { ga, gb, left, text: s.text.slice(-200) });
+            // (2026-10-24 audyt) the day's book: at most 10 of each good a day; wood 3 G, charcoal 5 G (under the base price)
+            const dayNow = await t.eval("$gameSystem.dayNightDay()");
+            const pw = await t.json("[Garnizon.priceOf(61), Garnizon.priceOf(79), Garnizon.skupLeft(61), Garnizon.BUY_LIMIT]");
+            await t.give(61, 23);
+            await t.popups({ clear: true });
+            const gc = await t.gold();
+            const sw = await quietTalk(ev("kwatermistrz"), ["Sprzedam coś wojsku", "Drewno"]);
+            const gd = await t.gold(), wood = await t.count(61), pops = await t.popups({ clear: true });
+            t.check("skup: drewno 3 G, węgiel 5 G; z 23 polan Kłos bierze dziś 10 (wiersz „Drewno ×10 z 23 ... (dziennie po 10)”), 13 zostaje, popup „resztę jutro”",
+                pw[0] === 3 && pw[1] === 5 && pw[2] === 10 && pw[3] === 10 && gd - gc === 30 && wood === 13 && sw.choices.some(c => c.some(x => /Drewno ×10 z 23 - 3 G\/szt\. \(dziennie po 10\)/.test(x))) &&
+                pops.some(p => /Resztę jutro/.test(p)), { pw, gc, gd, wood, pops, choices: sw.choices });
+            const sw2 = await quietTalk(ev("kwatermistrz"), ["Sprzedam coś wojsku"]);
+            t.check("...drugi raz tego dnia: drewna nie ma już na liście, Kłos mówi „dość na dziś” (jutro od nowa)", /Dość na dziś|dziesięć sztuk i ani jednej więcej/.test(sw2.text) && !sw2.choices.some(c => c.some(x => /Drewno/.test(x))) &&
+                (await t.eval("Garnizon.skupLeft(61)")) === 0, { text: sw2.text.slice(-200), choices: sw2.choices });
+            await t.setDay(dayNow + 1);
+            const ge = await t.gold();
+            await quietTalk(ev("kwatermistrz"), ["Sprzedam coś wojsku", "Drewno"]);
+            t.check("...nazajutrz księga od nowa: znów 10 polan za 30 G, 3 zostają", (await t.gold()) - ge === 30 && (await t.count(61)) === 3, { ge, gold: await t.gold(), wood: await t.count(61) });
+            await t.setDay(dayNow);
             // the hungry week (no D14: days 27-33): selling food costs the town's opinion, once a day
             await t.setDay(28);
             await t.give(71, 3);

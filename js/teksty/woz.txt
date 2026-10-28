@@ -1,0 +1,47 @@
+# Teksty wozu Wojciecha (wtyczka Woz.js): szybka podróż wozem między postojami - menu woźnicy, odmowy, ceny, przyjazd, postoje.
+# Woźnica to mieszkaniec TownLife „woznica” (jego codzienne kwestie: TownLife_Data.js); tu tylko to, co dotyczy przewozu.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz woz
+
+# ======================================================================== Menu woźnicy (przy wozie, za dnia)
+menu.podwiez = Podwieź mnie
+menu.bywaj = Bywaj.
+# co mówi, gdy stoi przy wozie i może wieźć (jedno z nich, po kolei)
+[wita]
+Siadaj na wóz, konie już przebierają nogami. Płacisz z góry, jedziemy zaraz.
+Wożę skrzynie, wożę i ludzi. Mów, dokąd - ale najpierw grosz.
+Droga pusta, konie wypoczęte. Dokąd cię wieźć?
+
+# ======================================================================== Odmowy (dymek nad bohaterem)
+odmowa.noc = Woźnica nie jeździ po zmroku (wóz kursuje 7:00-19:30)
+odmowa.zagrozenie = Nie teraz - w pobliżu {kto}!
+odmowa.nieznane = Nie znasz jeszcze innych postojów wozu
+odmowa.pieniadze = Potrzebujesz {cena} G
+# pod nazwą miejsca w wyborze (gdy nie da się tam jechać)
+powod.zamkniete = zamknięte
+powod.brak = brakuje {n} G
+
+# ======================================================================== Wybór miejsca na mapie wyspy
+scena.tytul = Dokąd cię podwieźć?
+scena.wiersz = {cena} G · {czas} · na miejscu ok. {godzina}
+scena.jedz = jedź
+
+# ======================================================================== Przyjazd (dymek nad bohaterem)
+przyjazd = {miejsce}: {cena} G, w drodze {czas}
+czas.godz = {h} godz.
+czas.min = {m} min
+
+# ======================================================================== Postoje (nazwy w wyborze i na karcie miejsca)
+postoj.miasto = Miasteczko - brama południowa
+postoj.podgrodzie = Podgrodzie - plac przy suchej studni
+postoj.jar = Kruczy Jar - droga przy działce
+postoj.lesna = Leśna droga - przy trakcie
+postoj.przystan = Przystań - droga od Podgrodzia
+postoj.godziny = wóz Wojciecha stoi tu: {godziny}
+postoj.droga = w drodze
+
+# ======================================================================== Zdarzenia na mapie
+zdarzenie.woz = Wóz Wojciecha
+zdarzenie.woznica = Wojciech (woźnica)
+[woz.ogladanie]
+Wóz Wojciecha: słoma, sznury i zapach koni. Woźnica stoi obok.

@@ -77,6 +77,10 @@ kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- on the map: the filter on the world only
     await t.newGame({ map: 3, x: 28, y: 12, dir: 6, day: 10, hour: 12, quiet: true, minimap: false });
+    // (2026-10-24) the first visit to Kruczy Jar: the map's name "Kinowy" (CleanHUD) hides the HUD behind black bars for ~5 s - the
+    // HUD's pixels are counted once it is over and the HUD is back
+    await t.until("!(window.CleanHUD && CleanHUD.debug() && CleanHUD.debug().name) && !$gameTemp._hudCinema", 15, 100);
+    await t.frames(45);
     await t.eval(PIXELS);
     await t.frames(5);
     let info = await t.json("Mood.info()");

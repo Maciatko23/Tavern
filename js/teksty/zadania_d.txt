@@ -482,6 +482,13 @@ Tadek, Hanka, Kuba, Ignac, Ambroży... I kto jeszcze zechce. Kapral nie podpisze
 Może i nie. Ale trzeba spróbować.
 
 zadania.D17.steps.0.text = Zbierz krzyżyki pod petycją (co najmniej 5): Tadek, Hanka, Kuba, Ignac, Ambroży, może Baltazar. Podpisy: {n}.
+# lista w celu na ekranie (kto już postawił krzyżyk; wystarczy pięciu)
+zadania.D17.steps.0.lista.kowal = Tadek
+zadania.D17.steps.0.lista.piekarka = Hanka
+zadania.D17.steps.0.lista.woziwoda = Kuba
+zadania.D17.steps.0.lista.garbarz = Ignac
+zadania.D17.steps.0.lista.dzwonnik = Ambroży
+zadania.D17.steps.0.lista.kupiec = Baltazar (może)
 zadania.D17.steps.1.text = Zanieś petycję Lordowi (drzwi dworu, 8–20).
 [zadania.D17.steps.1.hero]
 > Petycja od miasta, panie. Ludzie nie mają z czego płacić.

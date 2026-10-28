@@ -26,8 +26,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await at(7, 10.2, 60);
     const m = await who(["zlodziej", "gracz", "bartek", "woznica"]);
     const spot = await J("({ dice: TownLife.spot('stragan_kosci'), cart: TownLife.spot('woz_pld') })");
-    t.check("market day 7, 10:12: Szymek, Lucjan Kość (at his dice by the right stall), Bartek Kmieć and the carter are in the town, each with his own sheet",
-        Object.values(m).every(v => v && v[2] === "shown" && /^\$Npc_/.test(v[3])) && m.gracz[0] === spot.dice[0] && m.gracz[1] === spot.dice[1], { m, spot });
+    // (2026-10-24, Woz.js: by day the carter drives his round - at 10:12 the cart stands at the harbour, so he is out of the town (hidden);
+    // tests/mapa_woz_test.js has his day)
+    t.check("market day 7, 10:12: Szymek, Lucjan Kość (at his dice by the right stall) and Bartek Kmieć are in the town, each with his own sheet; the carter is out on his round (hidden)",
+        Object.entries(m).every(([k, v]) => v && v[2] === (k === "woznica" ? "hidden" : "shown") && /^\$Npc_/.test(v[3])) && m.gracz[0] === spot.dice[0] && m.gracz[1] === spot.dice[1]
+        && (await J("Woz.where()")) === "przystan", { m, spot });
     await at(8, 10.2, 30);
     const off = await who(["gracz"]);
     t.check("...the next day (no market) Lucjan is not there at all (hidden all day)", off.gracz && off.gracz[2] === "hidden" && (await J("TownLife.absent('gracz')")), off);

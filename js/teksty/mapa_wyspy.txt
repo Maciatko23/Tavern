@@ -1,0 +1,38 @@
+# Teksty mapy wyspy (wtyczka MapaWyspy.js): zakładka „Mapa” w menu P i wybór miejsca na schemacie.
+# Nazwy miejsc są w danych (MapaWyspy_Data.js), podpisy i zdania o miejscach - w miejsca.txt (mapa.<id>.pod, mapa.<id>.opis).
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz mapa_wyspy
+
+# ======================================================================== Zakładka Mapa (jej nazwa „Mapa” stoi w MenuRing.js jak nazwy innych zakładek)
+naglowek.podglad = podgląd
+naglowek.wybor = strzałki: miejsca · O: karta miejsca
+naglowek.karta = karta miejsca · P: wróć do mapy
+legenda.tu = tu jesteś
+legenda.cel = cel
+legenda.nieznane = nieznane
+legenda.odkryte = odkryte miejsca: {n} z {wszystkich}
+nieznane.nazwa = Nieznane miejsce
+nieznane.opis = Jeszcze tam nie byłeś. Droga prowadzi z sąsiedniego miejsca.
+podziemia.pietro = piętro {n}
+podziemia.brak = jeszcze nie zszedłeś
+klawisz.miejsce = miejsce
+klawisz.karta = karta miejsca
+klawisz.wroc = wróć
+
+# ======================================================================== Karta miejsca
+karta.ludzie = LUDZIE
+karta.sklepy = SKLEPY I USŁUGI
+karta.zadania = ZADANIA
+karta.wnetrza = WNĘTRZA
+karta.woz = POSTÓJ WOZU
+karta.brak = nic
+karta.wnetrza_wiecej = i jeszcze {n}
+karta.tawerna = Tawerna „Pod Złotym Kuflem”: posiłek, nocleg, tablica zleceń
+karta.kantor = Kantor: towar zza morza
+karta.szynk = Szynk Mietka: tanie piwo
+karta.cel = cel: {co}
+
+# ======================================================================== Wybór miejsca (scena, np. wóz)
+wybor.klawisz.wybierz = wybierz
+wybor.klawisz.jedz = jedź
+wybor.klawisz.wroc = wróć

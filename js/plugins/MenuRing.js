@@ -121,6 +121,7 @@
         { sym: "skills", label: "Umiejętności", icon: [89, "dark"] },
         { sym: "item", label: "Plecak", icon: [370, "plain"] },
         { sym: "journal", label: "Dziennik", icon: [499, "plain"] },
+        { sym: "mapa", label: "Mapa", icon: "mapa" },   // (2026-10-24: the island's sketch - MapaWyspy.js draws the page)
         { sym: "options", label: "Opcje", icon: [83, "dark"] },
         { sym: "save", label: "Zapisz grę", icon: [455, "plain"] },
         { sym: "gameEnd", label: "Wyjdź", icon: [197, "green"] }
@@ -485,6 +486,7 @@
     }
     function entryIcon(e) {
         if (e.icon === "hero") return heroIcon(32);
+        if (e.icon === "mapa") { const M = T.api("MapaWyspy"); return M && M.tabIcon ? M.tabIcon(32) : CH.iconBitmap(499, "plain"); }
         if (Array.isArray(e.icon)) return CH.iconBitmap(e.icon[0], e.icon[1]);
         return null;
     }
@@ -2656,7 +2658,13 @@
         }
     };
 
-    const VIEWS = { hero: PostacView, equip: EquipView, skills: SkillsView, item: BagView, journal: JournalView, options: OptionsView, save: SaveView, gameEnd: EndView };
+    // Mapa (2026-10-24): the page lives in MapaWyspy.js, built from this file's pieces (PARTS) when first shown; without the plugin - a note
+    const PARTS = { View, RX, L, K, tx, header, heading, hl, vl, rr, bubble, wrapWords, done, keycap, smallKeys, tabStrip, inBox, touchAt, measure, textOut };
+    function MapaView(scene, def) {
+        const M = T.api("MapaWyspy"), V = M && M.menuView ? M.menuView(PARTS) : ExtraView;
+        return new V(scene, def);
+    }
+    const VIEWS = { hero: PostacView, equip: EquipView, skills: SkillsView, item: BagView, journal: JournalView, mapa: MapaView, options: OptionsView, save: SaveView, gameEnd: EndView };
 
     // ==================================================================
     // The menu scene in the graphite look: the list, the page, the keys
@@ -2920,6 +2928,6 @@
     if (!(window.$plugins || []).some(p => p && p.name === "Drops") && !T.api("Drops")) PluginManager.loadScript("Drops");   // (the bundles - "Wyrzuć")
 
     window.MenuRing = T.register(PLUGIN, { files: filesInfo, drawSaveCard, fillOldPlaces, placeOfSave, placeFill, ENTRIES, TABS: ENTRIES, L, K, heroXp, needRows, debtInfo,
-        opinionInfo, totals, eqCells, VIEWS, SORTS, GROUPS, sortBag, groupOf, bagSort, equipSlotOf, UI: { s: UI.s, toScreen, toLocal },
+        opinionInfo, totals, eqCells, VIEWS, PARTS, SORTS, GROUPS, sortBag, groupOf, bagSort, equipSlotOf, UI: { s: UI.s, toScreen, toLocal },
         info: () => { const s = SceneManager._scene; return s instanceof Scene_Menu && s.menuInfo ? s.menuInfo() : null; } });
 })();

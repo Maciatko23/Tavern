@@ -449,7 +449,9 @@
         fruitmin: num(params.fruitMin, 2),
         fruitmax: num(params.fruitMax, 4),
         scale: 1,   // shrinks the whole picture (and the sway with it) around the foot of the tree; <Tree:scale=0.65>
-        nostump: 0   // 1: felled, it leaves no stump (a seedling planted by Forestry.js) - the ground is free at once
+        nostump: 0,   // 1: felled, it leaves no stump (a seedling planted by Forestry.js) - the ground is free at once
+        // (2026-10-24, the user) felled, it gives as many branches as wood; 0: none (the small tree !$Tree_Small never does); <Tree:branches=0>
+        branches: 1
     };
     const FRUIT_SEASON_FROM = num(params.fruitSeasonFrom, 1);
     const FRUIT_SEASON_TO = num(params.fruitSeasonTo, 2);
@@ -720,13 +722,16 @@
     };
     // catches regrowth while the player just stands around on the map (refresh() otherwise only
     // runs on map load and self-switch/variable changes, not every time an hour passes) - the map's clock (TawernaCore)
+    // (2026-10-24, wydajność: the hour is a fraction that changes on every frame, so this ran every frame - the whole refresh of every
+    // fruit tree, its pages searched again. Now only the self-switch is kept in step, as refresh() does first: when it flips, MZ
+    // refreshes the map's events itself - the same page picked, the same moment)
     let lastFruitHour = -1;
     T.onMapUpdate(() => {
         if (!$gameSystem || typeof $gameSystem.dayNightHour !== "function") return;
         const h = T.time.day() * 24 + T.time.hour();
         if (h === lastFruitHour) return;
         lastFruitHour = h;
-        for (const event of $gameMap.events()) if (treeConfig(event) && treeConfig(event).fruit) event.refresh();
+        for (const event of $gameMap.events()) if (treeConfig(event) && treeConfig(event).fruit) O().syncFruitSwitch(event);
     }, { owner: pluginName, name: "fruit" });
 
     const _Game_Event_pos = Game_Event.prototype.pos;

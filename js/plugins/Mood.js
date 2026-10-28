@@ -509,14 +509,19 @@ void main(void) {
     // the options on a look: the strength (0..1) towards the neutral one, an effect off = its part neutral
     function withOptions(P) {
         const s = clamp01(Number(opt(OPT.power)) / 100), out = mixLook(LOOKS.neutral, P, opt(OPT.grade) ? s : 0);
-        out.bloom = opt(OPT.bloom) ? P.bloom * s : 0;
+        out.bloom = opt(OPT.bloom) && gfxBloom() ? P.bloom * s : 0;
         out.thr = P.thr; out.knee = P.knee; out.white = P.white; out.flat = P.flat; out.bloomSat = P.bloomSat; out.bloomTint = P.bloomTint.slice(); out.split = P.split.slice();
         out.vig = opt(OPT.vig) ? P.vig * s : 0;
         out.vigIn = P.vigIn; out.vigCol = P.vigCol.slice();
         return out;
     }
     const combatOn = () => !!T.call("Combat", "combatMode");
-    const isOn = () => !!opt(OPT.on) && Number(opt(OPT.power)) > 0;
+    // the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): Niska - no mood at all (the filter off: no pass over the screen);
+    // Średnia - no bloom (its five small passes a frame); Wysoka - as the options above say
+    const gfxQ = () => { const W = T.api("Wydajnosc"); return W && W.gfx; };
+    const gfxMood = () => { const g = gfxQ(); return !g || g.mood !== false; };
+    const gfxBloom = () => { const g = gfxQ(); return !g || g.bloom !== false; };
+    const isOn = () => !!opt(OPT.on) && Number(opt(OPT.power)) > 0 && gfxMood();
 
     // ------------------------------------------------------------------
     // On the map: the filter first in the spriteset's own list (the world only), the look eased towards what is asked
@@ -583,7 +588,7 @@ void main(void) {
             const s = set(), f = F && F.main;
             return { on: isOn(), kind: kindOf(), state: s ? s._mood || null : null, cur: s && s._moodCur ? JSON.parse(JSON.stringify(s._moodCur)) : null,
                 enabled: !!(f && f.enabled), inSpriteset: !!(s && f && s.filters && s.filters[0] === f),
-                options: Object.fromEntries(Object.values(OPT).map(k => [k, opt(k)])) };
+                options: Object.fromEntries(Object.values(OPT).map(k => [k, opt(k)])), quality: { mood: gfxMood(), bloom: gfxBloom() } };
         },
         // the look jumps to what is asked now (screenshots, tests)
         snap() { const s = set(); if (s) { s._moodCur = null; s.updateMood(); } return !!s; },

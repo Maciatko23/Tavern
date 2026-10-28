@@ -139,7 +139,8 @@
     const rec = id => (has() ? S().q[id] || null : null);
     const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
     const isDone = id => { const r = rec(id); return !!r && (r.s === "done" || (r.times || 0) > 0); };
-    const activeQuests = () => QUESTS.filter(q => isActive(q.id));
+    // (the store read once, not once per quest - 2026-10-24, wydajność: every quest place's marker asks on every frame; the same list)
+    const activeQuests = () => { if (!has()) return []; const all = S().q; return QUESTS.filter(q => { const r = all[q.id]; return !!r && r.s === "active"; }); };
 
     // things carried that are not database items ("v:key")
     const vcount = k => (has() ? S().v[k] || 0 : 0);
@@ -915,7 +916,11 @@
 
     // the places of the quests (injected events): which one, what it says
     const SPOT_LIST = Object.keys(D.SPOTS).map(k => Object.assign({ key: k }, D.SPOTS[k]));
-    const spotOf = (mapId, id) => SPOT_LIST.find(s => s.map === mapId && s.id === id) || null;
+    // (by map and id - 2026-10-24, wydajność: every sprite asked on every frame, a search through the whole list; the first one of a
+    // map and id, as find gave)
+    const SPOT_AT = new Map();   // map -> id -> spot
+    for (const s of SPOT_LIST) { const m = SPOT_AT.get(s.map) || SPOT_AT.set(s.map, new Map()).get(s.map); if (!m.has(s.id)) m.set(s.id, s); }
+    const spotOf = (mapId, id) => { const m = SPOT_AT.get(mapId); return (m && m.get(id)) || null; };
     function spotTalk(interp) {
         if (!has() || !interp) return;
         const ev = $gameMap.event(interp.eventId()), s = ev && spotOf($gameMap.mapId(), ev.eventId());
@@ -1098,9 +1103,15 @@
         return (decoCache[kind] = b);
     }
     // a TownLife resident (on the town map, in the tavern, at home): its note says <Town:key>
+    const residentKeys = new WeakMap();   // (the note read once per event and its data - asked by every sprite on every frame)
     function residentKeyOf(ev) {
-        const d = ev.event && ev.event(), m = d && d.note ? /<Town:(\w+)>/.exec(d.note) : null;
-        return m ? m[1] : null;
+        const d = ev.event && ev.event();
+        if (!d) return null;
+        const got = residentKeys.get(ev);
+        if (got && got.d === d && got.note === d.note) return got.key;
+        const m = d.note ? /<Town:(\w+)>/.exec(d.note) : null, key = m ? m[1] : null;
+        residentKeys.set(ev, { d, note: d.note, key });
+        return key;
     }
     function storyRoleOf(ev) {
         const St = ST(), N = St && St.NPCS;
@@ -4670,6 +4681,17 @@
             pin: id => { if (has()) S().track = id && isActive(id) ? id : null; }
         });
     }
+    // (2026-10-24, the user: "jak są questy typu roznieś 4 chleby, to niech w celu na ekranie będzie wylistowane: chleb do tej osoby
+    // i czy oddany - wszystkie cztery widoczne") a step with several people: each one a row of the goal - its words from the quest's
+    // texts (zadania.<id>.steps.<n>.lista.<key>, e.g. "Chleb dla Ambrożego (rynek)"; else the person's name) and whether it is done (the
+    // step's own record of them: K5 the loaves given, K19 the counted, D17 the signed)
+    const TARGET_DONE = { k5: "k5", k19Count: "count", d17Sign: "sign" };
+    function targetList(q, r, st) {
+        const keys = Array.isArray(st.targets) ? st.targets : Array.isArray(st.signers) ? st.signers : null;
+        if (!keys || keys.length < 2) return null;
+        const done = (r.t && r.t[TARGET_DONE[st.talk]]) || {}, words = st.lista || {};
+        return keys.map(key => ({ name: words[key] || nameOf(key), done: !!done[key] }));
+    }
     if (J && J.addTrackerSource) {
         J.addTrackerSource(() => {
             if (!has()) return null;
@@ -4681,10 +4703,13 @@
             if (!st) return null;
             const line = trackLine(q, r, st);
             // (the clean look's goal window: the step's first sentence with its term, and what it asks for - have / need)
-            const dl = deadlineAt(r, st), d = dl === null ? 0 : Math.floor(dl / 24);
-            const sub = fill(st.text, varsOf(q, r)).split(/(?<=[.!?])\s/)[0] + (dl === null ? "" : " · " + (d === day() ? "do " : "dz. " + d + ", do ") + hm(dl - d * 24));
+            const dl = deadlineAt(r, st), d = dl === null ? 0 : Math.floor(dl / 24), list = targetList(q, r, st);
+            let head = fill(st.text, varsOf(q, r)).split(/(?<=[.!?])\s/)[0];
+            if (list) head = head.split(/:\s/)[0];   // (the names are the list's rows now: "Roznieś 4 bochny przed 9:00" without them)
+            const sub = head + (dl === null ? "" : " · " + (d === day() ? "do " : "dz. " + d + ", do ") + hm(dl - d * 24));
             const needs = needRows(st).map(x => ({ icon: x.icon, name: x.name, have: x.have, need: x.n, tool: !!x.tool }));
-            return { label: q.kind === "W" ? "WĄTEK" : "MIASTECZKO", title: q.title, line, sub, needs, key: "tq|" + q.id + "|" + r.step + "|" + line, source: "town", id: q.id, icon: iconOf(q) };
+            return { label: q.kind === "W" ? "WĄTEK" : "MIASTECZKO", title: q.title, line, sub, needs, list, key: "tq|" + q.id + "|" + r.step + "|" + line,
+                source: "town", id: q.id, icon: iconOf(q) };
         });
     }
 

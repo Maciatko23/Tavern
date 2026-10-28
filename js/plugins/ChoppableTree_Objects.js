@@ -120,6 +120,9 @@
         return page ? page.image.characterName : "";
     }
     const rockConfig = event => {
+        // (the remembered answer first - 2026-10-24, wydajność: the pages were searched and the defaults copied for every event on
+        // every frame before readConfig found it remembered; the same answer)
+        if (configCaches.Rock.has(event)) return configCaches.Rock.get(event);
         const graphic = rockGraphic(event);
         return readConfig(event, "Rock", ROCK_DEFAULTS, graphic ? Object.assign({}, ROCK_DEFAULTS, ROCK_PROFILES[graphic] || SMALL_ROCK) : null);
     };
@@ -191,7 +194,11 @@
 
     // ---- a tree struck by lightning (Storm.js) is charred: self-switch D (saved with the game). It stays where it
     // is, black; it falls after half the blows and gives charcoal instead of wood, and so does its stump.
-    const isCharred = event => !!event && !!treeConfig(event) && $gameSelfSwitches.value([event._mapId, event._eventId, "D"]);
+    // (the self switch's key made once per event - 2026-10-24, wydajność: asked for every tree twice a frame; the same [map, event,
+    // "D"] as before, kept, not a new one each time)
+    const charredKeys = new WeakMap();
+    const charredKey = event => { let k = charredKeys.get(event); if (k === undefined) charredKeys.set(event, (k = [event._mapId, event._eventId, "D"])); return k; };
+    const isCharred = event => !!event && !!treeConfig(event) && $gameSelfSwitches.value(charredKey(event));
     // a standing tree lightning can hit: an ordinary one (not a fruit tree), not felled, showing its picture
     function isStandingTree(event) {
         const cfg = treeConfig(event);
@@ -332,7 +339,15 @@
             clearLandUnder(this);
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "B"], true);
         } else {
-            drops.push({ item: cfg.drop, amount: giveReward("Ścięto drzewo!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, "chop.yield") });
+            const wood = giveReward("Ścięto drzewo!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, "chop.yield");
+            drops.push({ item: cfg.drop, amount: wood });
+            // (2026-10-24, the user: "ile wypada drewna, to też jeszcze gałęzi niech wypada, oprócz małego drzewka") as many branches
+            // as the wood it gave - every tree but the small one
+            const branch = BUSH_DEFAULTS.drop;
+            if (wood > 0 && cfg.branches > 0 && $dataItems[branch] && !/Tree_Small/i.test(this.characterName())) {
+                $gameParty.gainItem($dataItems[branch], wood);
+                drops.push({ item: branch, amount: wood });
+            }
             // a grown pine sheds its cones as it falls (a young planted one has none yet)
             if (isPine(this) && (cfg.scale || 1) >= 0.9 && $dataItems[CONE]) {
                 const cones = 1 + Math.floor(Math.random() * 3);

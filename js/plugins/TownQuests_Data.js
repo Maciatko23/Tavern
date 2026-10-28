@@ -1394,7 +1394,9 @@
                 REMARKS.push(r); got.remarks++;
             }
             for (const [k, v] of Object.entries(p.gossip || {})) {
-                if (GOSSIP[k]) { warn(owner + ": the gossip of " + k + " is taken - left out"); continue; }
+                // (2026-10-24 audyt) a resident who already has gossip (Ambroży: the town's, Cysterna's and Zakon's) gets the pack's
+                // lines after his own instead of losing them - once the words are in (the pack's list is filled from its file later)
+                if (GOSSIP[k]) { if (Array.isArray(GOSSIP[k]) && Array.isArray(v)) Watki.poTekstach(() => { for (const line of v) if (!GOSSIP[k].includes(line)) GOSSIP[k].push(line); }); else warn(owner + ": the gossip of " + k + " is taken - left out"); continue; }
                 GOSSIP[k] = v; got.gossip.push(k);
             }
             PACKS.push(got);

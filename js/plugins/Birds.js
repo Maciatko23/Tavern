@@ -185,6 +185,12 @@
     function newBird(kind, x, y, z, flock) {
         return { kind, x, y, z, state: z > 0 ? "air" : "ground", tx: x, ty: y, facing: 1, act: "idle", actT: 0, plot: null, eatT: 0, _aware: 0, flock, flap: Math.floor(rand(0, 10)), sprite: null, shadow: null };
     }
+    // the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): gfx.critters - the share of the birds of a flyover or of a flock on
+    // the ground (at least one); never of a raid on the crops - that is the game, not the picture
+    function flockSize(n) {
+        const W = T.api("Wydajnosc"), k = W && W.gfx && typeof W.gfx.critters === "number" ? W.gfx.critters : 1;
+        return k >= 1 ? n : Math.max(1, Math.round(n * k));
+    }
     // a point well outside the screen on the side the flock comes from
     function offscreenPoint(side) {
         const w = T.view.w() / TILE(), h = T.view.h() / TILE(), ox = $gameMap.displayX(), oy = $gameMap.displayY();   // (the world's view: Tawerna.view)
@@ -227,7 +233,7 @@
     function startFlyover(kind) {
         kind = kind || pickWeighted([["crow", 40], ["pigeon", 30], ["sparrow", 30]]);
         const side = pick(["l", "r"]), from = offscreenPoint(side), to = offscreenPoint(opposite[side]);
-        const [a, b] = SPECIES[kind].flock, n = a + Math.floor(Math.random() * (b - a + 1));
+        const [a, b] = SPECIES[kind].flock, n = flockSize(a + Math.floor(Math.random() * (b - a + 1)));
         const flock = { kind, mode: "flyover", birds: [], t: 0 };
         for (let i = 0; i < n; i++) {
             const bird = newBird(kind, from.x + rand(-1.5, 1.5), from.y + rand(-1, 1), rand(70, 120), flock);
@@ -248,7 +254,7 @@
         const away = SPECIES[kind].sight * 0.6 + 1;
         spot = spot || groundSpot(away, away + 2.5);
         if (!spot) return null;
-        const from = offscreenPoint(), [a, b] = SPECIES[kind].flock, n = a + Math.floor(Math.random() * (b - a + 1));
+        const from = offscreenPoint(), [a, b] = SPECIES[kind].flock, n = flockSize(a + Math.floor(Math.random() * (b - a + 1)));
         const flock = { kind, mode: "ground", birds: [], t: 0, stay: Math.round(rand(1800, 4200)), spot };
         for (let i = 0; i < n; i++) {
             const bird = newBird(kind, from.x + rand(-1, 1), from.y + rand(-1, 1), rand(60, 100), flock);

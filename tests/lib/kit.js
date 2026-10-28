@@ -245,6 +245,10 @@ class Test extends Report {
         if (!this.booted) return false;
         await this.injectPlugins(this.opts.plugins || []);
         await this.eval(HOOKS);
+        // (2026-10-24) the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): the tests run at Wysoka - the picture as always,
+        // and never Automatycznie's step down on a busy machine (jakosc_grafiki_test switches it itself; opts.gfxQuality: false - as
+        // the page's config says). Only in the page: not saved to the config.
+        if (this.opts.gfxQuality !== false) await this.eval("(function(){ const W = window.Wydajnosc; if (W && W.quality) W.quality.set('high'); return 0; })()");
         return true;
     }
     // plugins not on the plugin list yet (the game's list js/tawerna_wtyczki.js + js/plugins.js): put into the page (a script tag);

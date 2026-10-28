@@ -537,8 +537,11 @@
         },
         {
             key: "woznica", name: "Wojciech", title: "woźnica", sheet: "$Npc_Woznica",
-            plan: [[0, "inside", "brama_pld"], [8, "work", "kantor_rog"], [11.5, "inside", "tawerna"], [15, "inside", "brama_pld"], [21.3, "stand", "woz_pld"],
-                   [22.7, "inside", "brama_pld"]],
+            // (2026-10-24, Woz.js: by day he drives his round - at the cart before the south gate while the timetable has it in the town
+            // ("wozMiasto"), out through the gate ("inside brama_pld") when the cart is on the road or at another stop, his dinner in the
+            // tavern 12:30-13:30 while the cart is away (he stays among the tavern's guests - gosc_N seats as before); K15: 21:20-22:40 as before)
+            plan: [[0, "stand", "woz_pld", "wozMiasto"], [0, "inside", "brama_pld", "!wozMiasto"], [12.5, "inside", "tawerna", "!wozMiasto"], [13.5, "inside", "brama_pld", "!wozMiasto"],
+                   [21.3, "stand", "woz_pld"], [22.7, "inside", "brama_pld"]],
             barks: {
                 work: ["Skrzynie do kantoru! Z drogi!", "Ostrożnie, to z kontynentu!", "Konie się płoszą, nie stój za wozem."],
                 stand: ["Czekam na towar. Nie twoja sprawa jaki.", "Konie zmarzną, zanim ten kupiec się ruszy..."],

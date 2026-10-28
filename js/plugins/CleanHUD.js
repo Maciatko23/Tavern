@@ -705,14 +705,14 @@
     // graphite plate: its label (CEL, WĄTEK, MIASTECZKO, ZLECENIE...), the icon and the title, the step / the line under it, then what it
     // needs with the counts as they are now ("Gałąź 2/5": a done row green with a tick, a missing one yellow), "+N" past the rows, where
     // it is made, a bar for a goal that counts (the debt). All of it from Journal.tracked() (its sources' needs / sub, Journal.goalNeeds).
-    const GBOX = { pad: 10, minW: 236, maxW: 340, rows: 5, row: 24, titleSize: 17, subSize: 14, rowSize: 15, ok: "#9fdc8a", lack: "#f2c25a" };
+    const GBOX = { pad: 10, minW: 236, maxW: 340, rows: 5, row: 24, titleSize: 17, subSize: 14, rowSize: 15, ok: "#9fdc8a", lack: "#f2c25a", list: 8, listRow: 22 };
     function Sprite_CleanGoal() {
         this.initialize(...arguments);
     }
     Sprite_CleanGoal.prototype = Object.create(Sprite_CleanPart.prototype);
     Sprite_CleanGoal.prototype.constructor = Sprite_CleanGoal;
     Sprite_CleanGoal.prototype.initialize = function() {
-        Sprite_CleanPart.prototype.initialize.call(this, GBOX.maxW + 4, 340);
+        Sprite_CleanPart.prototype.initialize.call(this, GBOX.maxW + 4, 440);
         this._goal = null;
         this._t = 0;
         this._drawn = null;
@@ -730,7 +730,8 @@
         this.x = EDGE;
         this.y = nb > 0 ? nb + GOAL.gap : EDGE;
         const key = [g.label, g.title, g.icon, g.sub || "", g.line || "", g.at || "", g.atOk, g.count ? g.count.have + "/" + g.count.need : "",
-            (g.needs || []).map(n => n.icon + n.name + n.have + "/" + n.need).join(","), iconsReady(), facesReady()].join("#");
+            (g.needs || []).map(n => n.icon + n.name + n.have + "/" + n.need).join(","), (g.list || []).map(l => l.name + (l.done ? "+" : "-")).join(","),
+            iconsReady(), facesReady()].join("#");
         if (key === this._key) return;
         this._key = key;
         this.redraw(g);
@@ -762,6 +763,9 @@
         const b = this.bitmap, ctx = b.context, P = GBOX.pad, S = GBOX;
         const needs = (g.needs || []).filter(n => n && n.name && n.need > 0);
         const rows = needs.slice(0, needs.length > S.rows ? S.rows - 1 : S.rows), more = needs.length - rows.length;
+        // (2026-10-24, the user: "jak są questy typu roznieś 4 chleby, to niech w celu będzie wylistowane: chleb do tej osoby i czy
+        // oddany - wszystkie cztery widoczne") a step with several people or places: each one a row, a tick when done, a ring when not
+        const list = (g.list || []).filter(l => l && l.name).slice(0, S.list);
         const label = String(g.label || "Cel"), cnt = g.count && g.count.need > 0 ? g.count : null;
         const sub = g.sub || (!needs.length && !cnt ? g.line || "" : "");
         const num = n => Math.min(n.have, n.need) + "/" + n.need;
@@ -769,10 +773,11 @@
         // the width: what it holds, within minW..maxW
         let want = Math.max(spacedWidth(label, 12), 30 + measure(g.title, S.titleSize), cnt ? measure(cntText, S.rowSize, "bold") + 40 : 0, g.at ? measure(g.at, S.subSize) : 0);
         for (const n of rows) want = Math.max(want, 26 + measure(n.name, S.rowSize) + 16 + 16 + measure(num(n), S.rowSize, "bold"));
+        for (const l of list) want = Math.max(want, 26 + measure(l.name, S.rowSize) + 6);
         if (sub) want = Math.max(want, Math.min(measure(sub, S.subSize), S.maxW));
         const w = Math.round(Math.max(S.minW, Math.min(S.maxW, want + P * 2))), iw = w - P * 2;
         const subLines = sub ? wrapLines(sub, S.subSize, iw, 2) : [];
-        const h = P - 2 + 16 + 28 + subLines.length * 18 + (rows.length ? 4 + rows.length * S.row : 0) + (more ? 18 : 0) + (g.at && needs.length ? 20 : 0) + (cnt ? 30 : 0) + P;
+        const h = P - 2 + 16 + 28 + subLines.length * 18 + (list.length ? 4 + list.length * S.listRow : 0) + (rows.length ? 4 + rows.length * S.row : 0) + (more ? 18 : 0) + (g.at && needs.length ? 20 : 0) + (cnt ? 30 : 0) + P;
         const x0 = 0;
         b.clear();   // (no plate behind it: outlined words, the user 2026-10-23)
         let y = P - 2;
@@ -784,6 +789,13 @@
         textOut(b, title, x0 + P + 30, y, iw - 26, 28, "left", { size: S.titleSize });
         y += 28;
         for (const l of subLines) { textOut(b, l, x0 + P, y, iw + 4, 18, "left", { size: S.subSize, color: GOAL.line, ow: 3 }); y += 18; }
+        if (list.length) y += 4;
+        for (const l of list) {
+            if (l.done) goalTick(ctx, x0 + P + 3, y + S.listRow / 2, S.ok);
+            else goalRing(ctx, x0 + P + 9, y + S.listRow / 2, S.lack);
+            textOut(b, fit(l.name, S.rowSize, iw - 26), x0 + P + 26, y, iw - 26, S.listRow, "left", { size: S.rowSize, color: l.done ? GOAL.line : C.text });
+            y += S.listRow;
+        }
         if (rows.length) y += 4;
         for (const n of rows) {
             const ok = n.have >= n.need, t = num(n), tw = measure(t, S.rowSize, "bold");
@@ -804,9 +816,17 @@
         b._baseTexture.update();
         this._box = { x: x0, y: 0, w, h };
         // (the tests read what is drawn)
-        this._drawn = { label, title: g.title, sub: subLines.join(" "), needs: rows.map(n => ({ name: n.name, have: Math.min(n.have, n.need), need: n.need, ok: n.have >= n.need, tool: !!n.tool })),
+        this._drawn = { label, title: g.title, sub: subLines.join(" "), list: list.map(l => ({ name: l.name, done: !!l.done })), needs: rows.map(n => ({ name: n.name, have: Math.min(n.have, n.need), need: n.need, ok: n.have >= n.need, tool: !!n.tool })),
             more, at: g.at && needs.length ? g.at : "", count: cntText, w, h };
     };
+    // a small ring: a row of the list not done yet
+    function goalRing(ctx, cx, cy, colour) {
+        ctx.save();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = colour;
+        ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+    }
     // a small tick (the font has no ✓)
     function goalTick(ctx, x, cy, colour) {
         ctx.save();
@@ -1181,7 +1201,7 @@
         const s = visits();
         s.odw[info.id] = (s.odw[info.id] || 0) + 1;
         if (info.band) s.pasma[info.band] = true;
-        const top = scene && scene._cleanTop, chron = top && top._items ? top._items.name : null;
+        const top = scene && scene._cleanTop, chron = NAME_STYLE === "kinowy" ? scene && scene._cleanCinema : top && top._items ? top._items.name : null;
         if (chron && chron.start) chron.start(info);
     }
     const _nameOpen = Window_MapName.prototype.open;
@@ -1504,6 +1524,199 @@
             box: this._box ? { x: Math.round(this.x - this._box.w / 2), y: Math.round(this.y), w: this._box.w, h: this._box.h } : null };
     };
 
+    // ---- the map's name, "Kinowy" (the user 2026-10-23: "możemy przejść z kroniki na kinowy?", docs/ui_nazwa_mapy/3_kinowy_*.png):
+    // on the first visit black bars come in at the top and the bottom and the HUD goes (SurvivalHUD's fade: $gameTemp._hudCinema; the
+    // top stack's notices stay, on the bar), the place's words, its name, a gold line and a sentence in the bottom left corner; later
+    // visits and rooms: the same corner, smaller, no bars. The same visits, texts and timeline as the chronicle (its subclass).
+    const NAME_STYLE = "kinowy";   // "kronika": the chronicle at the top centre (Sprite_CleanChronicle)
+    const KN = {
+        bar: 64, left: 70, foot: 22, slide: 26,
+        first: { size: 60, sp: 2, tag: 17, tagSp: 5, opis: 25, line: 120 },
+        again: { size: 44, sp: 2, tag: 15, tagSp: 4, opis: 0, line: 90 },
+        inside: { size: 32, sp: 2, tag: 14, tagSp: 3, opis: 0, line: 64 },
+        cream: [[252, 247, 234], [214, 204, 182]], night: [[255, 236, 200], [236, 170, 92]], red: [[255, 182, 156], [178, 30, 24]],
+        glow: "rgba(255,146,52,0.5)", line: [255, 210, 63], redLine: [226, 86, 58], text: "#dcd4c4", tagColour: "#ffd23f",
+        // frames: the bars [start, length], the words over the name, the letters [start, the last one starts by, one letter's own], the
+        // line, the sentence, the red (the guardians' floors), hold: when it starts to go, out: how long it goes
+        times: {
+            first: { bars: [0, 22], tag: [12, 20], letters: [18, 64, 16], line: [50, 24], opis: [70, 30], red: [50, 60], hold: 270, out: 36 },
+            again: { bars: null, tag: [0, 14], letters: [4, 26, 12], line: [16, 14], opis: null, red: [20, 40], hold: 156, out: 24 },
+            inside: { bars: null, tag: [0, 12], letters: [2, 20, 10], line: [12, 12], opis: null, red: [18, 30], hold: 126, out: 24 }
+        }
+    };
+    function Sprite_CleanCinema() {
+        this.initialize(...arguments);
+    }
+    Sprite_CleanCinema.prototype = Object.create(Sprite_CleanChronicle.prototype);
+    Sprite_CleanCinema.prototype.constructor = Sprite_CleanCinema;
+    Sprite_CleanCinema.prototype.start = function(info) {
+        Sprite_CleanChronicle.prototype.start.call(this, info);
+        this._T = KN.times[this._mode];
+    };
+    Sprite_CleanCinema.prototype.clear = function(why) {
+        Sprite_CleanChronicle.prototype.clear.call(this, why);
+        if (window.$gameTemp) $gameTemp._hudCinema = false;
+    };
+    Sprite_CleanCinema.prototype.build = function() {
+        const info = this._info, mode = this._mode, L = KN[mode], tl = this._T, Wd = W(), Hd = H();
+        const S = T.api("Survival"), outdoors = !S || !S.isOutdoors || S.isOutdoors();
+        const night = mode !== "inside" && !info.floor && outdoors && !!(T.time && T.time.isNight());
+        const P = this._parts = { letters: [], hintText: null, night, L };
+        this.x = this.y = 0;
+        const maxW = Wd - 2 * KN.left;
+        // the name: smaller when it does not fit
+        const caps = Array.from(String(info.title));
+        let size = L.size, ws = [], tot = 0;
+        for (let i = 0; i < 5; i++) {
+            ws = caps.map(ch => measure(ch, size, "caps"));
+            tot = ws.reduce((a, b) => a + b, 0) + L.sp * Math.max(0, caps.length - 1);
+            if (tot <= maxW || size <= 20) break;
+            size = Math.max(20, Math.floor(size * maxW / tot));
+        }
+        P.size = size;
+        P.w = tot;
+        // the block from its foot up: the small line (always room for it), the sentence, the gold line, the name, the words
+        const tagH = info.sub ? L.tag + 10 : 0, nameH = Math.round(size * 1.28), opisH = info.opis && tl.opis && L.opis ? L.opis + 14 : 0;
+        const foot = Hd - (tl.bars ? KN.bar : 0) - KN.foot, blockH = tagH + nameH + 14 + opisH + 20;
+        let y = foot - blockH;
+        P.top0 = y;
+        // the shade: the whole bottom on the first visit (with the bars), a soft corner otherwise
+        // (the corner: a quarter circle reaching exactly the picture's edges, stretched sideways - no hard edge)
+        const shadeH = blockH + 120, sh = this.keep(new Bitmap(tl.bars ? 8 : shadeH, shadeH)), cx = sh.context;
+        const g = tl.bars ? cx.createLinearGradient(0, 0, 0, shadeH) : cx.createRadialGradient(0, shadeH, 0, 0, shadeH, shadeH);
+        g.addColorStop(0, tl.bars ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.5)");
+        g.addColorStop(1, tl.bars ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0)");
+        cx.fillStyle = g;
+        cx.fillRect(0, 0, sh.width, shadeH);
+        sh._baseTexture.update();
+        P.shade = new Sprite(sh);
+        P.shade.scale.x = tl.bars ? Wd / sh.width : Math.min(Wd, Math.round(tot + 260)) / sh.width;
+        P.shade.y = foot + KN.foot - shadeH;
+        P.shade.opacity = 0;
+        this.addChild(P.shade);
+        if (tl.bars) {
+            const blk = this.keep(new Bitmap(4, 4));
+            blk.fillAll("rgba(0,0,0,0.94)");
+            P.top = new Sprite(blk);
+            P.bottom = new Sprite(blk);
+            for (const s of [P.top, P.bottom]) { s.scale.x = Wd / 4; s.scale.y = 0; this.addChild(s); }
+        }
+        // the words over the name (gold spaced capitals)
+        if (info.sub) {
+            P.tag = new Sprite(this.keep(kronikaCaps(info.sub, L.tag, L.tagSp, KN.tagColour, maxW)));
+            P.tagX = KN.left - 12;
+            P.tagY = y - 4;
+            P.tag.opacity = 0;
+            this.addChild(P.tag);
+            y += tagH;
+        }
+        // the name, letter by letter from the left
+        const fill = info.boss ? KN.cream : night ? KN.night : KN.cream;
+        let x = KN.left;
+        caps.forEach((ch, i) => {
+            if (ch.trim()) {
+                const b = this.keep(kronikaLetter(ch, size, fill, { glow: night ? KN.glow : null })), s = new Sprite(b);
+                s._x0 = Math.round(x) - b._pad;
+                s.x = s._x0;
+                s.y = y - b._pad;
+                s.opacity = 0;
+                if (info.boss) { s._red = new Sprite(this.keep(kronikaLetter(ch, size, KN.red, { fillOnly: true }))); s._red.opacity = 0; s.addChild(s._red); }
+                this.addChild(s);
+                P.letters.push(s);
+            }
+            x += ws[i] + L.sp;
+        });
+        y += nameH + 4;
+        // the gold line
+        const lb = this.keep(new Bitmap(L.line, 3)), lc = lb.context, colour = info.boss ? KN.redLine : KN.line;
+        lc.fillStyle = rgbOf(colour);
+        lc.fillRect(0, 0, L.line, 2);
+        lc.fillStyle = "rgba(0,0,0,0.5)";
+        lc.fillRect(0, 2, L.line, 1);
+        lb._baseTexture.update();
+        P.line = new Sprite(lb);
+        P.line.x = KN.left;
+        P.line.y = y;
+        P.line.opacity = 0;
+        this.addChild(P.line);
+        y += 10;
+        // the sentence
+        if (opisH) {
+            P.opis = new Sprite(this.keep(kronikaLine(info.opis, L.opis, KN.text, maxW)));
+            P.opisX = KN.left - 12;
+            P.opisY = y;
+            P.opis.opacity = 0;
+            this.addChild(P.opis);
+            y += opisH;
+        }
+        P.hintY = y;
+        P.wide = Math.max(tot, P.tag ? P.tag.bitmap._w : 0, P.opis ? P.opis.bitmap._w : 0);
+        this.buildHint(this.hintText());
+    };
+    // the small line (the deepest floor, "M: pokaż mapę"), left under the block
+    Sprite_CleanCinema.prototype.buildHint = function(text) {
+        const P = this._parts;
+        if (P.hint) { this.removeChild(P.hint); this._bitmaps = this._bitmaps.filter(b => b !== P.hint.bitmap); P.hint.bitmap.destroy(); P.hint = null; }
+        P.hintText = text;
+        if (text) {
+            const b = this.keep(new Bitmap(Math.ceil(measure(text, 12)) + 30, 18));
+            textOut(b, text, 0, 0, b.width, 18, "left", { size: 12, color: C.muted, ow: 3 });
+            P.hint = new Sprite(b);
+            P.hint.x = KN.left;
+            P.hint.y = P.hintY;
+            P.hint.opacity = 0;
+            this.addChild(P.hint);
+        }
+        this._h = 0;   // (not in the top stack)
+        this._box = { w: Math.round(P.wide + 8), h: Math.round(P.hintY + 20 - P.top0) };
+    };
+    Sprite_CleanCinema.prototype.animate = function(t) {
+        const P = this._parts, tl = this._T, n = P.letters.length;
+        const cut = Math.min(tl.hold, this._cut), out = t < cut ? 0 : clamp01((t - cut) / tl.out);
+        if (tl.bars) {
+            const kb = easeOut((t - tl.bars[0]) / tl.bars[1]) * (1 - easeOut(out)), h = KN.bar * kb;
+            P.top.scale.y = P.bottom.scale.y = h / 4;
+            P.bottom.y = H() - h;
+            P.shade.opacity = Math.round(255 * kb);
+            if (window.$gameTemp) $gameTemp._hudCinema = t < cut;
+        } else {
+            P.shade.opacity = Math.round(255 * easeOut((t - tl.tag[0]) / 20));
+        }
+        const fadeIn = (s, from, x0, y0) => {
+            if (!s || !from) return;
+            const k = easeOut((t - from[0]) / from[1]);
+            s.opacity = Math.round(255 * k);
+            s.x = x0 - Math.round((1 - k) * 10);
+            s.y = y0;
+        };
+        fadeIn(P.tag, tl.tag, P.tagX, P.tagY);
+        // the letters from the left, one after another
+        const [l0, lAll, lOne] = tl.letters, step = n > 1 ? (lAll - lOne) / (n - 1) : 0;
+        P.letters.forEach((s, i) => {
+            const k = easeOut((t - l0 - i * step) / lOne);
+            s.opacity = Math.round(255 * k);
+            s.x = s._x0 - Math.round((1 - k) * KN.slide);
+        });
+        // the gold line grows from the left
+        const lw = Math.round(P.L.line * easeOut((t - tl.line[0]) / tl.line[1]));
+        P.line.opacity = lw > 0 ? 255 : 0;
+        P.line.setFrame(0, 0, Math.max(1, lw), 3);
+        fadeIn(P.opis, tl.opis, P.opisX, P.opisY);
+        fadeIn(P.hint, tl.tag, KN.left, P.hintY);
+        if (this._info.boss) {
+            const kr = easeOut((t - tl.red[0]) / tl.red[1]);
+            for (const s of P.letters) if (s._red) s._red.opacity = Math.round(255 * kr);
+        }
+        // the end: the words fade (the bars go back above) - over each part's own fade-in set above (a Sprite's opacity is its alpha:
+        // setting the alpha outright had every part shown whole from the first frame - 2026-10-24, clean_hud_test)
+        for (const s of this.children) if (s !== P.top && s !== P.bottom) s.alpha *= 1 - out;
+    };
+    Sprite_CleanCinema.prototype.info = function() {
+        const o = Sprite_CleanChronicle.prototype.info.call(this);
+        if (o) { o.style = "kinowy"; o.bars = !!this._T.bars; o.hud = !!(window.$gameTemp && $gameTemp._hudCinema); }
+        return o;
+    };
+
     // ---- the top centre: the map's name as one comes in, the dog's stockpile strip, the level banner, the day's greeting, the
     // notices ("Tryb walki" is a pill in the top left corner, under the goal) - one under another, each sliding to its place (their timing is the old parts')
     const TOP = { gap: 4, slide: 0.25 };
@@ -1708,7 +1921,11 @@
         this._cleanWeapon = new Sprite_CleanWeapon();
         this._cleanSneak = new Sprite_CleanSneak();
         this._cleanTop = new Sprite_CleanTop();
-        for (const s of [this._cleanClock, this._cleanLoad, this._cleanGoal, this._cleanNeeds, this._cleanWeapon, this._cleanGains, this._cleanSneak, this._cleanTop]) {
+        this._cleanTop._cinemaKeep = true;   // (its notices stay while the name's bars hide the rest)
+        this._cleanCinema = new Sprite_CleanCinema();   // (the map's name, "Kinowy": over all of it, not in the fade under the hero)
+        if (window.$gameTemp) $gameTemp._hudCinema = false;
+        // (the top stack over the name's bars: its notices are on the bar, not under it - 2026-10-24, clean_hud_test's shot)
+        for (const s of [this._cleanClock, this._cleanLoad, this._cleanGoal, this._cleanNeeds, this._cleanWeapon, this._cleanGains, this._cleanSneak, this._cleanCinema, this._cleanTop]) {
             this._cleanLayer.addChild(s);
         }
         const db = this._dayBanner;
@@ -1801,7 +2018,8 @@
             needs: (out.goal.needs || []).map(n => ({ name: n.name, have: n.have, need: n.need })), at: out.goal.at || "", count: out.goal.count || null };
         const top = scene._cleanTop;
         out.top = top ? Object.keys(top._items).filter(k => top._items[k].visible).map(k => ({ k, y: Math.round(top._items[k].y) })) : [];
-        out.name = top && top._items.name && top._items.name.info ? top._items.name.info() : null;   // (the map's name now: Sprite_CleanChronicle.info)
+        const nameSprite = NAME_STYLE === "kinowy" ? scene._cleanCinema : top && top._items.name;
+        out.name = nameSprite && nameSprite.info ? nameSprite.info() : null;   // (the map's name now: Sprite_CleanCinema / Sprite_CleanChronicle .info)
         out.nameLast = lastShow ? Object.assign({}, lastShow) : null;
         if (scene._minimap) out.minimap = { visible: !!scene._minimap.visible, y: scene._minimap.y, hidden: $gameSystem._minimapHidden };
         return out;

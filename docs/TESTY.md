@@ -130,13 +130,38 @@ Razem te sześć: ok. 12,7 min → ok. 6 min. ×6 psuje już `tavern_dice_test` 
 2026-10-23): `tavern_shift_test` (pauza i przerwanie zmiany klawiszami w czasie zegarowym), `heart_test` (staje), `creatures_test`,
 `birds_test` (kółko celowania); `underground_test` jest z turbo wolniejszy (pracę robi generator pięter, nie klatki). Nowy kandydat: `node tests/run.js <test> --turbo 3` dwa razy zielono → na listę. `--bez-turbo` wyłącza listę.
 
-## Znane czerwone - czekają na decyzję (2026-10-23)
+## Znane czerwone - czekają na decyzję (2026-10-23, wieczór)
 
 | zestaw | wynik | przyczyna |
 |---|---|---|
-| `home_decor_test`, `core_fixtures_test` | 34/43, 26/29 | autor przesunął w Map019 świecę na stole (zdarzenie 13) z (3,10) na (2,10) (commit z 17.10); HomeDecor.js sprawdza „kotwicę” stołu (świeca na 3,10) i celowo pomija trzy ozdoby stołu (993-995: `stol_p`, `stol_l`, `wigilia`) - na stole nie ma pisanek, jabłek, Wigilii. Do wyboru: świeca z powrotem na (3,10) albo kotwica „świeca gdziekolwiek na stole” i nowe miejsce `stol_l` (dziś byłoby pod świecą) |
-| `prologue_test` | 28/37 | od 22.10 (między 7:51 a 10:18; w commicie 6cd5534) `data/System.json` zaczyna nową grę na Map003 (12,22) zamiast w domu dziadka (Map019 2,5) - prolog po filmie wchodzi na Kruczy Jar, rozmowa dziadka nie rusza. Do wyboru: pozycja startowa w edytorze z powrotem (Map019 2,5) albo Prologue.js zawsze stawia nową grę fabularną w domu dziadka |
 | `tavern_interior_test` | 12/14 | Map001 (zmiana między 6 a 15.10): przejścia do zaplecza (50,24-26) i do dolnych skrzydeł (9,42), (95,42) są ścianami, na nich drzwi-zdarzenia (246, 247 „nad postaciami”, bez polecenia; „Drzwi na zaplecze” - sam obrazek). Pieszo nie da się wejść do korytarza, kuchni, browaru, łaźni (`bath`), sali rzutek (`darts`), jadalni prywatnej (2 z `mealtable`) |
+
+## Test wydajności (od 2026-10-24)
+
+`tests/wydajnosc_test.js` (port 9493, ok. 1,5 min; docs/WYDAJNOSC.md): procesor spowolniony 4× przez CDP
+(`Emulation.setCPUThrottlingRate` - szybki komputer udaje średni) i czas klatki (krok gry + rysowanie, strona CPU), lepszy z 3
+pomiarów po 150 klatek: Kruczy Jar idąc (budżet 22 ms), miasteczko idąc (15 ms), Przystań nocą (14 ms). Po przyspieszeniach ok. 12,
+8,5 i 9 ms; „przed” (git HEAD 2026-10-24) ok. 47, 19 i 16,5 ms - powrót do „przed” jest czerwony na wszystkich trzech. Do tego
+zamrożona klatka narysowana z przyspieszeniami wyłączonymi i włączonymi (`Wydajnosc.opts`: `leaf`, `filterArea`, `cull` - przez
+`Tawerna.view.sees` także odcinanie drzew i cieni -, `lazy`, `outline`): Kruczy Jar i miasteczko z ludźmi w kadrze - te same piksele
+(nie więcej różnych bajtów niż między dwoma rysunkami tej samej klatki); filtry kolorów MZ w spoczynku (`idleFilters`) - różnice
+najwyżej o 1/255; drzewa i postacie poza ekranem są odcinane. **Czerwony = nowa funkcja spowolniła mapę: przyspieszyć ją, nie
+podnosić budżetu.** Na bardzo zajętym komputerze (obok idą testy innych sesji) czas potrafi urosnąć 1,5-2× - wtedy powtórzyć.
+Pomiar wszystkich ciężkich miejsc (przed/po, profil): `node tools/wydajnosc/pomiar.js` (opis w pliku i w docs/WYDAJNOSC.md).
+Koszt samych cieni drzew mierzy dalej `tree_shadow_test` (próg 1 ms; po zmianach ok. 0,1-0,15 ms).
+
+`tests/jakosc_grafiki_test.js` (port 9494, ok. 70 s; docs/WYDAJNOSC.md „Jakość grafiki”): wiersz Opcje -> „Jakość grafiki”
+(Wydajnosc.js). Presety: Wysoka = każde pole w pełni (obraz jak dotąd), Średnia i Niska wyłączają, co obiecują; zapis
+(`ConfigManager.gfxQuality`, `gfxAuto`) przez makeData/applyData, śmieci -> domyślne. Na Kruczym Jarze w deszczu każdy poziom
+od razu: trawa 2165 / 1082 / 0 kępek, deszcz 50 / 30 / 15 kropli, poświata i nastrój, cienie kamieni (a drzew zawsze), noc w 1/2,
+1/3, 1/4 ekranu, przelot wróbli, mgła i promienie o 5:30; zamrożona klatka Wysoka -> Niska -> Wysoka to ten sam obraz (do 0,05%
+bajtów), Niska i Średnia różnią się wyraźnie. Przystań 22:00: na Niskiej te same światła z poświatą, ale rzeczy nie rzucają od nich
+cieni. Automatycznie (krótsze okna przez `quality.auto.tune`): sztucznie wolna klatka (~20 kl/s) -> Średnia -> Niska, zapis
+`gfxAuto`; szybka klatka na tej samej mapie NIE wraca wyżej; po zmianie mapy z zapasem jeden poziom wyżej i tylko raz; poziom, który
+dwa razy nie utrzymał się, nie jest już próbowany. Opcje klawiszami w menu Grafit: wiersz pod „Wygląd” i wiersz opisu pod nim,
+A / D poziom (bez zawijania), O w kółko, W / S przeskakują opis; wybrana Średnia działa po wyjściu z menu bez restartu i jest w
+pliku ustawień. **Wszystkie testy idą na Wysokiej** (kit.js ustawia ją po starcie strony; `gfxQuality: false` w opcjach testu
+zostawia ustawienia strony) - obraz jak dotąd i Automatycznie nie zejdzie na zajętym komputerze w środku innego testu.
 
 ## Szybkie testy (od 2026-09-29)
 
@@ -217,6 +242,11 @@ Stary `tests/run.sh` dalej działa.
 `marathon_test.js` nie wchodzi do `full` (gra autopilotem całe dni i wysyła powiadomienia na telefon) -
 tylko na życzenie: `node tests/marathon_test.js [dni] [przyspieszenie]`.
 
+`przejscie_ciagiem_test.js` (2026-10-24, audyt przejścia) też nie wchodzi do `full` ani `smoke`: jeden przebieg całej gry od prologu do
+Komnaty Serca przez prawdziwe bramki między aktami (spłata u Lorda, klucz kasztelana i krata, strażnik 10. piętra, piętro 50 i
+oblężenie, Księga sygnałów, dwa zamki Serca, zakończenie) ze skrótami czasu między nimi; ok. 10-15 min - tylko na życzenie:
+`node tests/run.js przejscie_ciagiem_test --port 9684 --timeout 1500`.
+
 ### Teksty wątków (od 2026-10-23)
 
 Wątki i ich teksty są danymi (`js/plugins/Watki.js`, pliki `js/teksty/*.txt`, `docs/WATKI_DANE.md`):
@@ -240,6 +270,31 @@ Kłos z jego kwestiami i sklepem Bron jako jednym wierszem; stary `TownLife.addT
 `tavern_evening` - menu Borgara z wierszami TavernLife. W teście opcja albo przejęcie na chwilę: `const off = Tawerna.talk.option(...)`,
 potem `off()`; zadania wyciszone podmianą `TownQuests.remarkFor / talkFor / markers / offerable` (jak `bron_dane_test`).
 
+### Nazwa mapy „Kinowy” i lista w celu (od 2026-10-24)
+
+`tests/clean_hud_test.js` (port 9486, 95 sprawdzeń, ok. 55 s) sprawdza nazwę mapy w wariancie „Kinowy” (`CleanHUD.js`,
+`NAME_STYLE = "kinowy"`, `Sprite_CleanCinema`; `CleanHUD.debug().name` z `style`, `bars`, `hud`):
+
+- pierwsza wizyta: nazwa 60 px, podpis złotymi wersalikami, złota kreska i zdanie w lewym dolnym rogu (nad dolnym pasem), litery
+  wchodzą po kolei z lewej, czarne pasy 64 px u góry i u dołu, HUD schowany (`$gameTemp._hudCinema`; zegar, cel, paski, kompas
+  zgaszone, stos komunikatów u góry zostaje - nad pasem), cały pokaz 306 klatek, potem HUD wraca;
+- kolejna wizyta 44 px / 180 klatek, wnętrze 32 px / 150 klatek - bez pasów, HUD zostaje, napis nie nachodzi na HUD;
+- przejście na inną mapę w trakcie (Polna droga, pasy): napis znika po 2 klatkach i oddaje HUD;
+- podziemia: piętro 12 z pasmem, piętro 20 (strażnik) - litery w czerwień i czerwona kreska, piętro 13 krótko;
+- stary zapis: znane mapy bez długiego pokazu; stara „Kronika” (`Sprite_CleanChronicle`, dalej pierwsza w stosie u góry)
+  uruchomiona ręcznie - stała `NAME_STYLE` siedzi w wtyczce, więc test nie przełącza samego wyboru, tylko sprawdza, że stara
+  ścieżka rysuje się (48 px, ornament, zdanie, między rogami) i kończy po 300 klatkach;
+- lista w celu (`Journal.tracked().list: [{ name, done }]`, TownQuests `targetList`): K5 - 4 wiersze z
+  `js/teksty/zadania_k.txt` (`zadania.K5.steps.0.lista.*`), ptaszek po oddaniu chleba (`TownQuests.act` - to samo polecenie, które
+  wykonuje rozmowa), linijka kroku bez imion; D17 (6 wierszy) i K19 (3) krótko; najwyżej 8 wierszy; zwykły cel i krok bez osób -
+  pusta lista.
+
+**Pierwsza wizyta na mapie chowa HUD na ok. 5 s** (czysty widok, mapa „miejsce”, nie wnętrze). Test, który liczy piksele albo
+przezroczystość HUD-u zaraz po wejściu na nową mapę, czeka na koniec napisu:
+`await t.until("!(CleanHUD.debug() && CleanHUD.debug().name) && !$gameTemp._hudCinema", 15, 100); await t.frames(45);`
+(tak robi `mood_test`, 46 sprawdzeń) albo oznacza mapę jako odwiedzoną przed wejściem (po `newGame`, przed `go`):
+`Tawerna.state("nazwaMapy").odw[id] = 1` - wtedy jest krótki pokaz bez pasów.
+
 ### Porty CDP
 
 Każda przeglądarka testowa słucha na swoim porcie CDP. Dwie przeglądarki na jednym porcie się gryzą,
@@ -253,6 +308,9 @@ więc każdy, kto testuje równolegle (np. drugi agent), bierze **własny** port
 - 9603 - `rozmowy_test` i testy etapu rozmów (2026-10-23),
 - 9621-9624 - etap „mniej czekania na testy” (2026-10-23): 9623 i 9624 pomiar mapy (`mapa --czesc 1/2`, `2/2`),
 - 9625 - `watki_test` (teksty wątków, 2026-10-23),
+- 9701 - `mapa_woz_test` (mapa wyspy w menu P i wóz Wojciecha, 2026-10-24; zrzuty docs/mapa_wyspy/),
+- 9493 - `wydajnosc_test` (czas klatki przy CPU 4× wolniejszym, 2026-10-24); 9651-9654 - pomiary etapu wydajności
+  (`tools/wydajnosc/pomiar.js` domyślnie 9652); 9494 - `jakosc_grafiki_test` (Opcje -> Jakość grafiki, 2026-10-24),
 - 9334 - podglądane okno gry (autopilot `play.js`),
 - 9333 - domyślny `cdp.js` (stare testy bez `CDP_PORT`),
 - stare testy mają w komentarzu swój port (np. `CDP_PORT=9394` dla `home_decor_test.js`).

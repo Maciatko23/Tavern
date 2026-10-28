@@ -142,8 +142,10 @@ unit.test(t => {
         ev1.x === 87 && ev1.y === 5 && switches["3,77,A"] === true && sys.cleared.some(c => c.tiles.some(p => p.x === 87 && p.y === 5)), ev1 && Object.assign({}, ev1, { event: undefined }));
     t.check("... pebbles picked up by hand: kind rock, hand; a big bush cut: kind bush, 3-5 branches",
         ev2.kind === "rock" && ev2.hand === true && ev2.drops[0].item === 64 && ev3.kind === "bush" && ev3.drops[0].item === 77 && ev3.drops[0].amount >= 3 && ev3.drops[0].amount <= 5 && ev3.done === true);
-    t.check("... a grown pine felled: kind tree, 6-8 wood and 1-3 cones, not done (its stump is left), A on, B off",
+    // (2026-10-24, the user: as many branches as wood from every tree but the small one)
+    t.check("... a grown pine felled: kind tree, 6-8 wood, as many branches, 1-3 cones, not done (its stump is left), A on, B off",
         ev4.kind === "tree" && ev4.done === false && ev4.charred === false && ev4.drops[0].item === 61 && ev4.drops[0].amount >= 6 && ev4.drops[0].amount <= 8 &&
-        ev4.drops[1].item === 147 && ev4.drops[1].amount >= 1 && switches["3,12,A"] === true && !switches["3,12,B"], ev4 && ev4.drops);
+        ev4.drops[1].item === 77 && ev4.drops[1].amount === ev4.drops[0].amount &&
+        ev4.drops[2].item === 147 && ev4.drops[2].amount >= 1 && switches["3,12,A"] === true && !switches["3,12,B"], ev4 && ev4.drops);
     t.check("... what went into the bag is what the bus says", JSON.stringify(gained) === JSON.stringify(bus.flatMap(e => e.drops.map(d => [d.item, d.amount]))), gained);
 });

@@ -1818,8 +1818,9 @@
     const goalTracked = g => Object.assign({ source: "goal", label: "CEL", title: g.title, line: goalProgress(g), key: g.id, goal: g, icon: goalIcon(g), id: g.id }, goalNeeds(g));
 
     // other plugins may put their own line in the goal window instead of the goal (QuestBoard.js: a contract being followed):
-    // fn() -> null or { label, title, line, key, sub, needs: [{ icon, name, have, need, tool }] } (sub: the step under the title, needs:
-    // what it asks for with the counts - CleanHUD.js draws them); the first that gives one wins. opts { owner, pinned(), unpin() }: a source the
+    // fn() -> null or { label, title, line, key, sub, needs: [{ icon, name, have, need, tool }], list: [{ name, done }] } (sub: the step
+    // under the title, needs: what it asks for with the counts, list: the people / places of the step, each done or not - CleanHUD.js
+    // draws them); the first that gives one wins. opts { owner, pinned(), unpin() }: a source the
     // player pins things in by hand (a contract, a place) - pinning anything else lets it go (unpinOthers)
     const trackerSources = [];
     function addTrackerSource(fn, opts) {

@@ -174,9 +174,11 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.setHour(14);
     await t.frames(40);
     const ery = await t.json(`(function(){ const e = TownLife.eventOf("rozbitek"); return e ? [e.eventId(), e.x, e.y, !!(e._town && e._town.hidden), e.characterName()] : null; })()`);
-    const seat = await t.json("Object.entries(TownLifeData.SPOTS_BY_MAP[1]).find(([k, v]) => v === WrakData.SPOT_TAVERN)");
-    t.check("o 14 rozbitek siedzi w tawernie na wolnym stołku (miejsce z danych, Map001 bez zmian)",
-        ery && !ery[3] && ery[1] === seat[1][0] && ery[2] === seat[1][1] && ery[4] === "$Npc_Rozbitek", { ery, seat });
+    // (2026-10-24: the user's rebuilt tavern has its own "Miejsce: gosc_N" markers - the map's marker wins over the data's stool, as for
+    // every guest; the seat is wherever TownLife puts that key on Map001)
+    const seat = await t.json(`(function(){ const e = Object.entries(TownLifeData.SPOTS_BY_MAP[1]).find(([k, v]) => v === WrakData.SPOT_TAVERN); return e ? [e[0], TownLife.spot(e[0]) || e[1]] : null; })()`);
+    t.check("o 14 rozbitek siedzi w tawernie na wolnym stołku (miejsce gościa z danych albo ze znacznika „Miejsce: gosc_N” mapy)",
+        ery && seat && !ery[3] && ery[1] === seat[1][0] && ery[2] === seat[1][1] && ery[4] === "$Npc_Rozbitek", { ery, seat });
     await t.gold(10);
     const meet = await t.talkTo(ery[0], ["Narysuj"], { secs: 40, shotAtChoice: path.join(SHOTS, "wrak_rozbitek.png") });
     const met = await t.json(`({ met: Wrak.state().met, gold: $gameParty.gold(), portret: TownQuests.vcount("portret"), w12: TownQuests.rec("W12") })`);

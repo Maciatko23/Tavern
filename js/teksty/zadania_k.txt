@@ -147,6 +147,11 @@ Leć! Tylko nie zjedz po drodze.
 To sama polecę. Moje nogi, moja sprawa.
 
 zadania.K5.steps.0.text = Roznieś 4 bochny przed 9:00: Ambroży (rynek), kapral Wit (brama wschodnia), Ludmiła (obóz pod murem), sołtys (ratusz, od 8:00).
+# lista w celu na ekranie (kto dostaje chleb; ptaszek, gdy oddany)
+zadania.K5.steps.0.lista.dzwonnik = Chleb dla Ambrożego (rynek)
+zadania.K5.steps.0.lista.kapral = Chleb dla kaprala Wita (brama wschodnia)
+zadania.K5.steps.0.lista.ludmila = Chleb dla Ludmiły (obóz pod murem)
+zadania.K5.steps.0.lista.soltys = Chleb dla sołtysa (ratusz, od 8:00)
 zadania.K5.steps.1.text = Wróć do Hanki po zapłatę (stragan, do 14:00).
 [zadania.K5.steps.1.say]
 > Wszystko rozniesione.
@@ -831,6 +836,10 @@ Pod murem na tarasie rzemieślników. Rano albo wieczorem ich zastaniesz.
 To policzę na oko. Jak zawsze.
 
 zadania.K19.steps.0.text = Porozmawiaj z każdym w obozie pod murem: Ludmiła, Ela i... ktoś jeszcze (Rafał wychodzi tylko o świcie i późnym wieczorem). Policzeni: {n}/3.
+# lista w celu na ekranie (kogo już policzył)
+zadania.K19.steps.0.lista.ludmila = Ludmiła
+zadania.K19.steps.0.lista.ela = Ela
+zadania.K19.steps.0.lista.rafal = Ktoś jeszcze (o świcie i późnym wieczorem)
 zadania.K19.steps.1.text = Powiedz sołtysowi, ilu ludzi jest w obozie.
 [zadania.K19.steps.1.say]
 Policzyłeś? No, mów. Ilu?

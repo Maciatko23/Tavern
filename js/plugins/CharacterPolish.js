@@ -56,8 +56,11 @@
     const CHAR_OUTLINE = params.characterOutline !== "false";
 
     // no <Polish:off> in the map's note (it wins over a <Polish:on> beside it; GroundDetail.js reads the same)
+    // (asked by every sprite on every frame: read once a frame - 2026-10-24, wydajność)
+    let polishMemo = { f: -1, map: null, on: true };
     function polishOn() {
-        return T.mapFlag("Polish", true, "off");
+        if (polishMemo.f !== Graphics.frameCount || polishMemo.map !== window.$dataMap) polishMemo = { f: Graphics.frameCount, map: window.$dataMap, on: T.mapFlag("Polish", true, "off") };
+        return polishMemo.on;
     }
 
     // ------------------------------------------------------------------
@@ -115,11 +118,17 @@
     }
 
     // a person, not an object: the "!" prefix marks trees, rocks, chests and the like
+    const objectNames = new Map();   // (the answer for each picture's name, read once: a regex per sprite per frame before)
+    const isObjectName = name => {
+        let v = objectNames.get(name);
+        if (v === undefined) objectNames.set(name, (v = !!ImageManager.isObjectCharacter(name)));
+        return v;
+    };
     Sprite_Character.prototype.isPerson = function() {
         const c = this._character;
         // (by the picture's name: a character whose picture was changed without setImage - grandpa's cat lying down to sleep,
         // "!$Animal_Cat_Sleep" - keeps its old object flag)
-        return !!c && !!this._characterName && !this._tileId && !ImageManager.isObjectCharacter(this._characterName) &&
+        return !!c && !!this._characterName && !this._tileId && !isObjectName(this._characterName) &&
             !(typeof Game_Vehicle !== "undefined" && c instanceof Game_Vehicle);
     };
 
@@ -182,14 +191,14 @@
         // (the shape in a light's way is kept on a map without polish too - <Polish:off>: a lamp there still makes people throw shadows)
         const on = Sun && Sun.occluder && this.parent && this.visible && this.opacity > 0 && !c.isTransparent() &&
             src.bitmap && src.bitmap.isReady() && frame && frame.width > 0 && frame.height > 0;
-        const bmp = on ? Sun.silhouette(src.bitmap, frame.x, frame.y, frame.width, frame.height, false) : null;
+        const bmp = on ? (Sun.silhouetteOf ? Sun.silhouetteOf(this, src.bitmap, frame.x, frame.y, frame.width, frame.height, false) : Sun.silhouette(src.bitmap, frame.x, frame.y, frame.width, frame.height, false)) : null;
         if (bmp) {
             // the feet on the screen: the frame's lowest solid row under its anchor, on the ground (a jump lifts the figure, not its shadow)
             const sx = this.scale.x * (body ? body.scale.x : 1), sy = this.scale.y * (body ? body.scale.y : 1);
             const ox = this.x + (body ? body.x * this.scale.x : 0), oy = this.y + (body ? body.y * this.scale.y : 0) + (c.jumpHeight ? c.jumpHeight() : 0);
             const fw = frame.width, fh = frame.height;
             const fx = ox + (fw / 2 - src.anchor.x * fw) * sx, fy = oy + (bmp._footRow + 1 - src.anchor.y * fh - SUN_SHADOW_INSET) * sy;
-            this._occluder = Sun.occluder(bmp, fx, fy, fw / 2, sx, sy, 0, this.opacity / 255);   // (a fire's light at night uses it too)
+            this._occluder = this._occPerson = Sun.occluder(bmp, fx, fy, fw / 2, sx, sy, 0, this.opacity / 255, this._occPerson);   // (a fire's light at night uses it too)
             this._occluderByPolish = true;
         } else {
             this._occluder = null;
@@ -202,7 +211,10 @@
         const layer = Sun.layer(this.parent);
         if (!shadow) shadow = this._sunShadow = new Sprite();
         if (shadow.parent !== layer) layer.addChild(shadow);
-        Sun.lay(shadow, this._occluder);
+        if (Sun.lay(shadow, this._occluder) === false) {   // (the whole shadow off the screen: shown, not drawn - Sky.js lay)
+            shadow.visible = Sun.layerAlpha(layer) * (this.opacity / 255) > 0.005;
+            return;
+        }
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
         const cloud = Sun.now().flash ? 0 : Sun.cloudCover((c._realX + 0.5) * tw, (c._realY + 1) * th);
         shadow.alpha = Sun.layerAlpha(layer) * (this.opacity / 255) * (1 - 0.85 * cloud);
@@ -213,14 +225,97 @@
     // shot or caught in a snare (Hunting.js drops its sprite) once left its shadow lying on the grass until the map was built again
     const _Sprite_Character_destroy = Sprite_Character.prototype.destroy;
     Sprite_Character.prototype.destroy = function(options) {
-        for (const shadow of [this._groundShadow, this._sunShadow]) if (shadow && shadow.parent) shadow.parent.removeChild(shadow);
+        for (const shadow of [this._groundShadow, this._sunShadow, this._outlineSprite]) if (shadow && shadow.parent) shadow.parent.removeChild(shadow);
         this._groundShadow = null;
         this._sunShadow = null;
+        if (this._outlineSprite) this._outlineSprite._owner = null;
+        this._outlineSprite = null;
         _Sprite_Character_destroy.call(this, options);
     };
 
+    // ---- the outline (2026-10-24, wydajność: a filter of its own on every person was a whole pass of its own - the batch broken,
+    // a texture drawn and read back - for every one of them on every frame). A plain figure - its own frame only (no marker over the
+    // head, no swing, no half body in a bush drawn by children), not scaled, not turned, not the hero (his sheet is dressed live) -
+    // gets the outline as a picture of its own drawn right under it: the same dark pixels where the filter put them (every
+    // pixel next to the figure on four sides: 0.8 x the most solid of those four neighbours, in the outline's colour), drawn
+    // before the figure (the same z and y, just before it in the map's order), so the figure covers it as the filter's
+    // "colour + outline x (1 - its alpha)" did. Anything else keeps the filter. Wydajnosc.js opts.outline false: the filter for all.
+    const OUTLINE_RGB = [0.09, 0.05, 0.03], OUTLINE_A = 0.8;
+    const outlineBitmaps = new Map();
+    let outlineIds = 0;
+    function outlineBitmap(src, f) {
+        const id = src._outlineId || (src._outlineId = ++outlineIds);
+        const key = id + ":" + (src._url || "") + ":" + f.x + "," + f.y + "," + f.width + "," + f.height;
+        let out = outlineBitmaps.get(key);
+        if (out) return out;
+        const w = f.width, h = f.height, tmp = new Bitmap(w, h);
+        tmp.blt(src, f.x, f.y, w, h, 0, 0);
+        const d = tmp.context.getImageData(0, 0, w, h).data;
+        tmp.destroy();
+        const alpha = (x, y) => (x < 0 || y < 0 || x >= w || y >= h ? 0 : d[(y * w + x) * 4 + 3]);
+        out = new Bitmap(w + 2, h + 2);
+        const img = out.context.createImageData(w + 2, h + 2), o = img.data, R = Math.round(OUTLINE_RGB[0] * 255), G = Math.round(OUTLINE_RGB[1] * 255),
+            B = Math.round(OUTLINE_RGB[2] * 255);
+        for (let Y = 0; Y < h + 2; Y++) {
+            for (let X = 0; X < w + 2; X++) {
+                const x = X - 1, y = Y - 1, a = Math.max(alpha(x - 1, y), alpha(x + 1, y), alpha(x, y - 1), alpha(x, y + 1));
+                if (!a) continue;
+                const i = (Y * (w + 2) + X) * 4;
+                o[i] = R; o[i + 1] = G; o[i + 2] = B; o[i + 3] = Math.round(OUTLINE_A * a);
+            }
+        }
+        out.context.putImageData(img, 0, 0);
+        out._baseTexture.update();
+        out.smooth = src.smooth;
+        if (outlineBitmaps.size > 1500) outlineBitmaps.delete(outlineBitmaps.keys().next().value);   // (old frames go - they are made again when needed)
+        outlineBitmaps.set(key, out);
+        return out;
+    }
+    const outlineBySprite = () => { const W = T.api("Wydajnosc"); return !!(W && W.opts && W.opts.outline !== false); };
+    // the figure is drawn by its own frame alone, at its size, upright
+    function plainFigure(spr) {
+        const c = spr._character, f = spr._frame;
+        if (!c || c === $gamePlayer || c.isCreature || !spr.bitmap || spr.bitmap._ubior || !f || f.width <= 0 || f.height <= 0) return false;
+        if (Math.abs(spr.scale.x) !== 1 || Math.abs(spr.scale.y) !== 1 || spr.rotation !== 0) return false;
+        for (const ch of spr.children) {
+            if (ch === spr._outlineSprite || !ch.visible || ch.renderable === false || !(ch.alpha > 0)) continue;
+            if ((ch._frame && ch._frame.width > 0 && ch._bitmap) || (ch.children && ch.children.length) || !(ch instanceof Sprite)) return false;
+        }
+        return true;
+    }
+    function Sprite_PolishOutline() {
+        this.initialize(...arguments);
+    }
+    Sprite_PolishOutline.prototype = Object.create(Sprite.prototype);
+    Sprite_PolishOutline.prototype.constructor = Sprite_PolishOutline;
+    Sprite_PolishOutline.prototype.initialize = function(owner) {
+        Sprite.prototype.initialize.call(this);
+        this._owner = owner;
+        this._on = false;
+    };
+    Sprite_PolishOutline.prototype.update = function() {};
+    // just before the drawing: the figure as it is now (after every plugin's update), its frame's outline under it
+    Sprite_PolishOutline.prototype.updateTransform = function() {
+        const o = this._owner, f = o && o._frame;
+        const ok = this._on && !!o && o.parent === this.parent && o.visible && o.renderable !== false && plainFigure(o);
+        if (ok) {
+            const bmp = outlineBitmap(o.bitmap, f);
+            if (this.bitmap !== bmp) this.bitmap = bmp;
+            this.anchor.set((o.anchor.x * f.width + 1) / (f.width + 2), (o.anchor.y * f.height + 1) / (f.height + 2));
+            this.x = o.x;
+            this.y = o.y;
+            this.scale.set(o.scale.x, o.scale.y);
+            this.alpha = o.alpha;
+            this.blendMode = o.blendMode;
+        }
+        this.renderable = ok;
+        Sprite.prototype.updateTransform.call(this);
+    };
+
     Sprite_Character.prototype.updateOutline = function(show) {
-        const filter = show ? sharedOutlineFilter() : null;
+        const shared = show ? sharedOutlineFilter() : null;
+        const bySprite = !!shared && !!this.parent && outlineBySprite() && plainFigure(this);
+        const filter = bySprite ? null : shared;
         const has = !!this._polishOutline;
         if (filter && !has) {
             this.filters = (this.filters || []).concat([filter]);
@@ -229,6 +324,19 @@
             this.filters = (this.filters || []).filter(f => f !== outlineFilter);
             this._polishOutline = false;
         }
+        let ol = this._outlineSprite;
+        if (bySprite && !ol) ol = this._outlineSprite = new Sprite_PolishOutline(this);
+        if (!ol) return;
+        ol._on = bySprite;
+        ol.visible = bySprite;
+        if (!bySprite) return;
+        if (ol.parent !== this.parent) this.parent.addChild(ol);
+        // its place in the map's order: right before the figure (the same z and y; the figure's id less a half)
+        ol.z = this.z;
+        ol.y = this.y;
+        ol.spriteId = this.spriteId - 0.5;
+        if (this._sortY !== undefined) ol._sortY = this._sortY;
+        else if (ol._sortY !== undefined) delete ol._sortY;
     };
 
     window.CharacterPolish = { sharedOutlineFilter };

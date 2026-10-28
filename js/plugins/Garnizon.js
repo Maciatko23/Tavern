@@ -164,21 +164,37 @@
         if (has() && flags().d27Milczy && !klosGone()) p *= D.BUY_FRIEND;
         return Math.max(1, Math.round(p));
     }
-    const sellable = () => D.BUY.filter(b => count(b.id) > 0);
+    // (2026-10-24 audyt, the user's decision) the day's book: at most D.BUY_LIMIT (10) of each good a day; the rest waits for tomorrow -
+    // Kłos says so in the talk, a popup over the hero when a sale stops at the limit (never a message window)
+    const LIMIT = Number(D.BUY_LIMIT) > 0 ? Number(D.BUY_LIMIT) : 10;
+    function skupToday() {
+        const s = S(), d = day();
+        if (!s.skup || s.skup.day !== d) s.skup = { day: d, n: {} };
+        return s.skup;
+    }
+    const skupLeft = id => Math.max(0, LIMIT - (skupToday().n[id] || 0));
+    const sellable = () => D.BUY.filter(b => count(b.id) > 0 && skupLeft(b.id) > 0);
+    const atLimit = () => D.BUY.filter(b => count(b.id) > 0 && skupLeft(b.id) <= 0);   // (in the bag, but today's ten already taken)
     function sell(ids) {
-        let gold = 0, food = false;
+        let gold = 0, food = false, capped = 0;
+        const book = skupToday();
         for (const id of ids) {
-            const n = count(id), b = D.BUY.find(x => x.id === id);
-            if (!b || n <= 0) continue;
+            const have = count(id), b = D.BUY.find(x => x.id === id);
+            if (!b || have <= 0) continue;
+            const n = Math.min(have, skupLeft(id));
+            if (n <= 0) { capped++; continue; }
             gold += n * priceOf(id);
+            book.n[id] = (book.n[id] || 0) + n;
             if (b.food) food = true;
             $gameParty.loseItem(item(id), n, false);
+            if (have > n) capped++;
         }
-        if (!gold) return 0;
+        if (!gold) { if (capped) T.popup(Watki.wstaw(TK.kod.sell[3], { n: LIMIT }), { kind: "bad" }); return 0; }
         const s = S();
         $gameParty.gainGold(gold);
         s.sold += gold;
         T.popup("+" + gold + " G", { icon: COIN_ICON, kind: "good" });
+        if (capped) T.popup(Watki.wstaw(TK.kod.sell[4], { n: LIMIT }), { kind: "info" });
         if (s.saleDay !== day()) { s.saleDay = day(); addFavor(F.saleDay, "skup"); }
         if (food && hungerWeek() && s.hungerDay !== day()) {
             s.hungerDay = day();
@@ -276,12 +292,14 @@
     function skupBranch(spk, who) {
         const b = [];
         const items = sellable();
-        if (!items.length) return linesTo(b, spk, TX.klosNothing);
+        if (!items.length) return linesTo(b, spk, atLimit().length ? TX.klosLimit : TX.klosNothing);   // (goods in the bag, the day's ten taken: "dość na dziś")
         linesTo(b, spk, [TX.klosPrices[waveWeek() ? 1 : 0]]);
-        const labels = items.map(x => Watki.wstaw(TK.kod.skupBranch[0], { name: item(x.id).name, "2": count(x.id), "3": priceOf(x.id) })).slice(0, 7);
+        // (a row: "Drewno ×10 z 23 - 3 G/szt. (dziennie po 10)" when the bag holds more than the day's book still takes)
+        const nOf = x => Math.min(count(x.id), skupLeft(x.id));
+        const labels = items.map(x => Watki.wstaw(TK.kod.skupBranch[count(x.id) > skupLeft(x.id) ? 2 : 0], { name: item(x.id).name, "2": nOf(x), "3": priceOf(x.id), "4": count(x.id), "5": LIMIT })).slice(0, 7);
         const shown = items.slice(0, 7);
         const branches = shown.map(x => act([], ["sell", [x.id]]).concat(linesTo([], spk, [pick(TX.klosSold)])));
-        labels.push(Watki.wstaw(TK.kod.skupBranch[1], { "1": shown.reduce((s, x) => s + count(x.id) * priceOf(x.id), 0) }));
+        labels.push(Watki.wstaw(TK.kod.skupBranch[1], { "1": shown.reduce((s, x) => s + nOf(x) * priceOf(x.id), 0) }));
         branches.push(act([], ["sell", shown.map(x => x.id)]).concat(linesTo([], spk, [pick(TX.klosSold)])));
         labels.push("Nic.");
         branches.push([]);
@@ -1008,7 +1026,7 @@
     // The API
     // ------------------------------------------------------------------
     const api = {
-        MAP, QUARTERS, DATA: D, TX, state: () => S(), favor, addFavor, favorWord, priceOf, sell, waveWeek, hungerWeek, recruitDay, kantorNight,
+        MAP, QUARTERS, DATA: D, TX, state: () => S(), favor, addFavor, favorWord, priceOf, sell, skupLeft, BUY_LIMIT: LIMIT, waveWeek, hungerWeek, recruitDay, kantorNight,
         marketNow, klosGone, act: actCall, talk, look, granary, bar, door, barOpen, barCell, lowTide, sees, seenBy, sync, placeAll,
         built: () => built, d26List, d26Resolved, entryAt, spot
     };

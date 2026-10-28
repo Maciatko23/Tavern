@@ -56,6 +56,11 @@
     function polishOn() {
         return T.mapFlag("Polish", true, "off");
     }
+    // the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): gfx.grass - the share of the tufts and the patches (1 Wysoka: as
+    // always, 0.5 Średnia, 0 Niska: none at all); laid again when the level changes (gfx.version goes up)
+    const gfxQ = () => { const W = T.api("Wydajnosc"); return W && W.gfx; };
+    const grassShare = () => { const g = gfxQ(); return g && typeof g.grass === "number" ? Math.max(0, Math.min(1, g.grass)) : 1; };
+    const gfxVersion = () => { const g = gfxQ(); return g ? g.version : 0; };
 
     // the same deterministic tile hash as Farming.js (Sprite_GrassDetail.build already requires
     // window.Farming to be loaded before it calls this, see below)
@@ -172,7 +177,8 @@
     };
 
     Sprite_GrassDetail.prototype.update = function() {
-        Sprite.prototype.update.call(this);
+        // (its children are plain pictures - nothing to update in them; 2026-10-24, wydajność: 2000 of them on a big meadow)
+        if (this._built && this._gfxVersion !== gfxVersion()) this.clearAll();   // (another level of quality: laid again at once)
         if (!this._built) this.build();
         const scrollKey = $gameMap.displayX() + "," + $gameMap.displayY();
         if (this._built && scrollKey !== this._scrollKey) {
@@ -183,13 +189,15 @@
 
     // Waits until the tileset images are loaded (Farming.groundInfoAt answers undefined until then).
     Sprite_GrassDetail.prototype.build = function() {
-        const farming = window.Farming;
-        if (!GRASS_DETAIL || !polishOn() || !farming || typeof farming.groundInfoAt !== "function") { this._built = true; return; }
+        const farming = window.Farming, share = grassShare();
+        this._gfxVersion = gfxVersion();
+        if (!GRASS_DETAIL || !polishOn() || share <= 0 || !farming || typeof farming.groundInfoAt !== "function") { this._built = true; return; }
         const mapId = $gameMap.mapId(), stored = ($gameSystem._farm && $gameSystem._farm.plots && $gameSystem._farm.plots[mapId]) || {};
+        const density = GRASS_DENSITY * share, patchChance = PATCH_CHANCE * share;   // (the same tiles keep theirs at a lower share: the hash decides)
         const built = [];
         for (let y = 0; y < $gameMap.height(); y++) {
             for (let x = 0; x < $gameMap.width(); x++) {
-                if (hash2(x, y, 51) >= GRASS_DENSITY) continue;   // most tiles stay plain
+                if (hash2(x, y, 51) >= density) continue;   // most tiles stay plain
                 if (stored[x + "," + y] || $gameMap.eventsXy(x, y).length > 0 || farming.hasObjectTile(x, y)) continue;
                 if (!$gameMap.checkPassage(x, y, 0x0f)) continue;
                 const ground = farming.groundInfoAt(x, y);
@@ -207,7 +215,7 @@
         const patches = [];
         for (let y = 1; y < $gameMap.height() - 1; y++) {
             for (let x = 1; x < $gameMap.width() - 1; x++) {
-                if (hash2(x, y, 71) >= PATCH_CHANCE) continue;
+                if (hash2(x, y, 71) >= patchChance) continue;
                 let ok = true, tint = null;
                 for (let dy = -1; dy <= 1 && ok; dy++) {   // the centre and its four neighbours must be plain grass
                     for (let dx = -1; dx <= 1 && ok; dx++) {
@@ -225,18 +233,119 @@
                 patches.push({ bitmap: patchBitmap(light ? "light" : "dark", Math.floor(hash2(x, y, 73) * 4), tint), wx: x * TILE + TILE / 2 - PATCH_W / 2, wy: y * TILE + TILE / 2 - PATCH_H / 2 });
             }
         }
-        for (const d of patches.concat(built)) {
+        const list = patches.concat(built);
+        // (2026-10-24, wydajność: on a map that does not loop all of them are ONE mesh over one picture holding every tuft and patch -
+        // the same pictures at the same whole-pixel places, in the same order; it moves as a whole with the scroll. The map that
+        // loops keeps its sprites)
+        if (!$gameMap.isLoopHorizontal() && !$gameMap.isLoopVertical() && this.buildMesh(list)) {
+            this._built = true;
+            this._scrollKey = null;
+            return;
+        }
+        for (const d of list) {
             const sprite = new Sprite(d.bitmap);
             this._items.push({ sprite, wx: d.wx, wy: d.wy });
             this.addChild(sprite);
         }
+        // (by their row on the map, for reposition: only the rows near the screen are looked at)
+        this._byY = this._items.slice().sort((a, b) => a.wy - b.wy);
+        this._shown = null;   // (the first placing goes through all of them)
         this._built = true;
         this._scrollKey = null;
     };
 
+    // One picture (an atlas) with every tuft and patch of the map in it, each once, 2 px apart; one quad per tuft or patch in the
+    // map's px, in the order they were drawn as sprites (the patches under the tufts). false: they do not fit (the sprites then)
+    const ATLAS_W = 2048, ATLAS_MAX_H = 2048, ATLAS_GAP = 2, MESH_QUADS = 16000;
+    const atlasCache = new Map();   // (the same pictures - the same map again: the same atlas)
+    let pictureIds = 0;
+    function atlasOf(bitmaps) {
+        const key = bitmaps.map(b => b._gdId || (b._gdId = ++pictureIds)).join(",");
+        if (atlasCache.has(key)) return atlasCache.get(key);
+        const at = new Map();
+        let x = 0, y = 0, rowH = 0;
+        for (const b of bitmaps) {   // (shelves: left to right, then a row lower)
+            if (x + b.width > ATLAS_W) { x = 0; y += rowH + ATLAS_GAP; rowH = 0; }
+            at.set(b, { x, y });
+            x += b.width + ATLAS_GAP;
+            rowH = Math.max(rowH, b.height);
+        }
+        const h = y + rowH;
+        if (h > ATLAS_MAX_H) return null;
+        const atlas = new Bitmap(ATLAS_W, Math.max(1, h));
+        for (const b of bitmaps) { const p = at.get(b); atlas.context.drawImage(b.canvas, p.x, p.y); }   // (onto clear: the same pixels)
+        atlas._baseTexture.update();
+        atlas.smooth = false;   // (as the tufts' own pictures)
+        const out = { atlas, at };
+        if (atlasCache.size > 8) atlasCache.delete(atlasCache.keys().next().value);
+        atlasCache.set(key, out);
+        return out;
+    }
+    Sprite_GrassDetail.prototype.buildMesh = function(list) {
+        if (!list.length) return true;
+        if (list.length > MESH_QUADS || !PIXI.SimpleMesh) return false;
+        const bitmaps = Array.from(new Set(list.map(d => d.bitmap)));
+        const A = atlasOf(bitmaps);
+        if (!A) return false;
+        const n = list.length, W = A.atlas.width, H = A.atlas.height;
+        const vertices = new Float32Array(n * 8), uvs = new Float32Array(n * 8), indices = new Uint16Array(n * 6);
+        list.forEach((d, i) => {
+            const p = A.at.get(d.bitmap), w = d.bitmap.width, h = d.bitmap.height, j = i * 8, k = i * 6, v = i * 4;
+            vertices[j] = d.wx; vertices[j + 1] = d.wy; vertices[j + 2] = d.wx + w; vertices[j + 3] = d.wy;
+            vertices[j + 4] = d.wx + w; vertices[j + 5] = d.wy + h; vertices[j + 6] = d.wx; vertices[j + 7] = d.wy + h;
+            const u0 = p.x / W, u1 = (p.x + w) / W, v0 = p.y / H, v1 = (p.y + h) / H;
+            uvs[j] = u0; uvs[j + 1] = v0; uvs[j + 2] = u1; uvs[j + 3] = v0; uvs[j + 4] = u1; uvs[j + 5] = v1; uvs[j + 6] = u0; uvs[j + 7] = v1;
+            indices[k] = v; indices[k + 1] = v + 1; indices[k + 2] = v + 2; indices[k + 3] = v; indices[k + 4] = v + 2; indices[k + 5] = v + 3;
+        });
+        const mesh = new PIXI.SimpleMesh(new PIXI.Texture(A.atlas._baseTexture), vertices, uvs, indices);
+        mesh.autoUpdate = false;   // (the corners never change: the mesh itself moves with the scroll)
+        this._mesh = mesh;
+        this._meshItems = n;
+        this.addChild(mesh);
+        return true;
+    };
+
+    // everything taken away (the mesh with its corners, or the sprites), to be laid again on the next frame
+    Sprite_GrassDetail.prototype.clearAll = function() {
+        if (this._mesh) {
+            this.removeChild(this._mesh);
+            this._mesh.destroy({ children: false, texture: false, baseTexture: false });   // (the atlas stays in its cache)
+            this._mesh = null;
+        }
+        for (const item of this._items) this.removeChild(item.sprite);
+        this._items = [];
+        this._byY = null;
+        this._shown = null;
+        this._meshItems = 0;
+        this._built = false;
+        this._scrollKey = null;
+    };
+    // how many tufts and patches lie on this map now (the tests)
+    Sprite_GrassDetail.prototype.count = function() { return this._mesh ? this._meshItems : this._items.length; };
+
     Sprite_GrassDetail.prototype.reposition = function() {
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), ox = $gameMap.displayX() * tw, oy = $gameMap.displayY() * th;
+        // (the mesh: its quads at whole map px, so Math.round(wx - ox) of a sprite is wx + Math.round(-ox))
+        if (this._mesh) { this._mesh.x = Math.round(-ox); this._mesh.y = Math.round(-oy); return; }
         const w = T.view.w() + 32, h = T.view.h() + 32;   // (the world's view: Tawerna.view)
+        // (2026-10-24, wydajność: on a map that does not loop only the rows near the screen - the ones shown last time are hidden first,
+        // then the rows from -110 to h + 96 placed and shown exactly as below; the rest stay hidden, as below)
+        const windowed = this._byY && !$gameMap.isLoopHorizontal() && !$gameMap.isLoopVertical();
+        if (windowed && this._shown) {
+            for (const item of this._shown) item.sprite.visible = false;
+            const list = this._byY, shown = [], to = oy + h + 96;
+            let lo = 0, hi = list.length;
+            while (lo < hi) { const mid = (lo + hi) >> 1; if (list[mid].wy - oy > -110) hi = mid; else lo = mid + 1; }
+            for (let i = lo; i < list.length && list[i].wy < to; i++) {
+                const item = list[i], x = item.wx - ox, y = item.wy - oy;
+                item.sprite.x = Math.round(x);
+                item.sprite.y = Math.round(y);
+                item.sprite.visible = x > -160 && x < w + 128 && y > -110 && y < h + 96;
+                if (item.sprite.visible) shown.push(item);
+            }
+            this._shown = shown;
+            return;
+        }
         for (const item of this._items) {
             let x = item.wx - ox, y = item.wy - oy;
             if ($gameMap.isLoopHorizontal()) x = ((x % ($gameMap.width() * tw)) + $gameMap.width() * tw) % ($gameMap.width() * tw);
@@ -245,6 +354,7 @@
             item.sprite.y = Math.round(y);
             item.sprite.visible = x > -160 && x < w + 128 && y > -110 && y < h + 96;
         }
+        this._shown = windowed ? this._items.filter(item => item.sprite.visible) : null;
     };
 
     const _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
@@ -254,5 +364,6 @@
         this._tilemap.addChild(this._grassDetail);
     };
 
-    window.GroundDetail = { Sprite_GrassDetail, decalBitmap, DECALS };
+    window.GroundDetail = { Sprite_GrassDetail, decalBitmap, DECALS, share: grassShare,
+        count: () => { const s = SceneManager._scene && SceneManager._scene._spriteset; return s && s._grassDetail ? s._grassDetail.count() : 0; } };
 })();

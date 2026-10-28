@@ -59,6 +59,7 @@ Wyjątki wpisane w sklepach (`questFirst`, `YIELD` w Bron i Ubior_Sklepy) znikn�
 | 14 | `quest` (500) | TownQuests | każdy mieszkaniec | **co zadania mają do powiedzenia**, po kolei: pieniądze Kuby w dzień targowy, uwaga po zdarzeniu (raz), gotowe oddanie / przypomnienie własnego zadania / oferta / rozmowa kroku w toku (np. „Jeszcze schnie” K22, łapówka D6), chłód W6 | sprawy zadań |
 | 15 | `shop+20` (470) | Kantor („baltazar”) | `kupiec` | po W5: cotygodniowa działka (podwójny kantor), sklep w godzinach pracy (wróg / w garści) | działka; „Pokaż towar”, opcje innych (Bron), „Bywaj” |
 | 16 | `shop+10` (460) | Bron | `kowal`, `kupiec` | sklep otwarty (godziny, towar) - i nikt wyżej nic nie ma (zadania, menu Ludzi z rabatem, sklep Kantoru po W5, listy kruka, karta Pustelni, skrzynia D34) | menu sklepu: „Pokaż broń i zbroje” / „Sprzedaj...” / „Napraw...” / „Porozmawiaj” (= ta sama rozmowa bez Bron) / „Nic, dziękuję” |
+| 16a | `shop+5` (455) | Woz (2026-10-24) | `woznica` | wóz stoi na postoju tej mapy i są godziny przewozu (7:00-19:30) - i nikt wyżej nic nie ma (K15 i inne zadania pierwsze) | zaproszenie na wóz, menu: „Podwieź mnie” (opcja `Woz`: wybór postoju na mapie wyspy), opcje innych, „Bywaj.” |
 | 17 | `shop` (450) | Ubior_Sklepy | `szwaczka`, `garbarz`, `przekupka`, `szmaciarz` (sklep z godzinami w `Ubior_Data.SKLEPY`) | sklep otwarty - i nikt wyżej nic nie ma (zadania, poszlaka Wraku u Józka) | powitanie dnia (kopia powitania TownQuests) + słowa sklepikarza, menu zakładek, opcje innych (Bron), „Porozmawiaj”, „Nic, dziękuję” |
 | 18 | `greet` (400) | TownQuests („greeting”) | każdy mieszkaniec | raz dziennie, gdy nic wyżej | **powitanie dnia** (wg Opinii, z linijką mieszkańca) |
 | 19 | `after` (300) | Act3 | `dzwonnik` | oblężenie uzbrojone albo trwa | słowa Ambrożego o dzwonie |
@@ -78,6 +79,7 @@ mieszkańca na poziomie `owner` („first”) albo `after` (bez), z ostrzeżenie
 | `kupiec` (Baltazar po W5) | Kantor | „Pokaż towar” | Bron: „Broń z kontynentu” | „Bywaj” |
 | `szwaczka`, `garbarz`, `przekupka`, `szmaciarz` | Ubior_Sklepy | zakładki (Pokaż / Sprzedaj / Napraw / Ufarbuj) | Bron: skórzane zbroje, przeszywanice, stara broń (garbarz, szwaczka, szmaciarz) | „Porozmawiaj”, „Nic, dziękuję” |
 | `borgar` (Story) | Story | „Weź zmianę” (w godzinach), „Sprzedaj towar” | TavernLife: „Zjedz coś”, „Wynajmij pokój” + tematy zadań przy barze (TownQuests przez TavernLife) | „Pogadaj”, „Nie teraz” |
+| `woznica` (Wojciech przy wozie; na innych mapach jego zastępca - zdarzenie 3001 Woz) | Woz | - (jedna z jego kwestii „wita”) | Woz: „Podwieź mnie” (gdy wóz tu stoi, 7:00-19:30) | „Bywaj.” |
 
 `addMenu` w Garnizon, Kantor, Ludzie i Ubior_Sklepy - **usunięte**; jedynym użytkownikiem był Bron, który rejestruje teraz opcje
 (`Tawerna.talk.option`, po jednej na postać, `rows`: lista zmienna - towar, przychylność, godziny). `Bron.menuRows(klucz, ev)` zostaje
@@ -108,7 +110,7 @@ jako odczyt (testy).
 
 | priorytet | wtyczka | co |
 |---|---|---|
-| `hidden` (900) | Garnizon, Ludzie, Przystan, TownLife, Wrak | ukryta postać / rzecz nie startuje (każda sprawdza swoje pole: `_garn`, `_ludHidden`, `_przystan`, `_town`, `_wrak`) |
+| `hidden` (900) | Garnizon, Ludzie, Przystan, TownLife, Woz, Wrak | ukryta postać / rzecz nie startuje (każda sprawdza swoje pole: `_garn`, `_ludHidden`, `_przystan`, `_town`, `_wozShown` (wóz i Wojciech poza postojem), `_wrak`) |
 | `instead` (500) | HomeLife | kot na posłaniu nie zabiera startu łóżku („spać?”) |
 | `instead` (500) | TavernDice | stół z `<Tavern:dice>` otwiera grę zamiast strony |
 | `before` (100) | Combat | automatyczny tryb walki wyłączany przed rozmową (Combat_Feel `beforeEvent`); nigdy nie przejmuje |

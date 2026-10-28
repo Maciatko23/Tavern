@@ -273,7 +273,7 @@
         autoStart: "lowD33Start",
         steps: [
             { type: "custom", check: "lowD33Wybor" },
-            { type: "custom", check: "lowD33Koniec", vars: "lowD33" }
+            { type: "custom", check: "lowD33Koniec", vars: "lowD33Koniec" }   // (2026-10-24 audyt: the words {co} come from lowD33Koniec.vars - "lowD33" had no handler, the journal showed "{co}")
         ],
         reward: { xp: 150 }
     };

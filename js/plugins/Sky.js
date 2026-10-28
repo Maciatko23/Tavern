@@ -44,7 +44,8 @@
  *
  * Dla innych wtyczek: Tawerna.api("Sun") (też window.Sky) - now(), sky(godz,
  * dzień), sunTimes(dzień), mistOfDay(dzień), forceMist(m, dzień), raysAt,
- * mistAt, cloudCover, layer, silhouette, occluder, lightBlockers,
+ * mistAt, cloudCover, layer, silhouette, silhouetteOf, occluder, lay
+ * (false: cień cały poza ekranem - nie rysowany), lightBlockers,
  * cutLightShadows, standing (rzeczy stojące na ekranie); shadows = false
  * wyłącza cienie (testy).
  * ============================================================================
@@ -142,12 +143,16 @@
     }
 
     // how much a passing cloud's shadow (CloudShadows.js) covers a spot of the map (px): the sun behind it, the shadows there fade
+    // (2026-10-24, wydajność: asked for every tree, rock and person on every frame - the far clouds are left at once by the square of
+    // the distance, the root only for the few that may cover the spot; the same numbers as before)
     function cloudCover(mx, my) {
         const set = SceneManager._scene && SceneManager._scene._spriteset, clouds = set && set._cloudSprites;
         if (!clouds) return 0;
         let cover = 0;
-        for (const cloud of clouds) {
-            const r = (cloud._radius || 0) * 0.8, d = Math.hypot(mx - cloud._wx, my - cloud._wy);
+        for (let i = 0; i < clouds.length; i++) {
+            const cloud = clouds[i], r = (cloud._radius || 0) * 0.8, dx = mx - cloud._wx, dy = my - cloud._wy;
+            if (!(dx * dx + dy * dy <= r * r * 1.0001)) continue;
+            const d = Math.hypot(dx, dy);
             if (d < r) cover = Math.max(cover, (1 - d / r) * (cloud.opacity / 255) * 3);
         }
         return Math.min(1, cover);
@@ -172,6 +177,9 @@
         let filter = null;
         try { filter = new PIXI.filters.ColorMatrixFilter(); } catch (e) { filter = null; }
         if (filter) layer.filters = [filter];
+        // (2026-10-24, wydajność: the filter's area is the whole screen - without it PIXI measured the bounds of every shadow in the
+        // layer on every frame; the picture is the same: outside the shadows the layer is clear, and the filter leaves clear clear)
+        if (filter) layer.filterArea = screenArea();
         layer._shadowFilter = filter;
         layer._shadowAlpha = SUN_SHADOW_ALPHA;
         layer.update = function() {
@@ -190,6 +198,8 @@
         tilemap.addChild(layer);
         return layer;
     }
+    // the screen in the renderer's own px (PIXI keeps it right after a resize)
+    const screenArea = () => (Graphics._app && Graphics._app.renderer && Graphics._app.renderer.screen) || new Rectangle(0, 0, Graphics.width, Graphics.height);
     // the layer's strength for a shadow in it: 1 with the filter (the layer holds the rest), else the whole of it on the shadow
     function layerAlpha(layer) {
         return layer._shadowFilter ? 1 : SUN_SHADOW_ALPHA * sunNow().light;
@@ -235,14 +245,30 @@
         silhouetteCache.set(key, out);
         return out;
     }
+    // the same, remembered on the thing that asks (a sprite) for as long as it asks for the same picture and frame (2026-10-24,
+    // wydajność: the key above is a new string each time - every tree, rock and person asked on every frame)
+    function silhouetteOf(holder, src, sx, sy, pw, ph, skipPainted, blurPx) {
+        const m = holder._silMemo;
+        if (m && m.src === src && m.url === src._url && m.sx === sx && m.sy === sy && m.pw === pw && m.ph === ph && m.p === !!skipPainted && m.b === blurPx) return m.out;
+        const out = silhouetteBitmap(src, sx, sy, pw, ph, skipPainted, blurPx);
+        holder._silMemo = { src, url: src._url, sx, sy, pw, ph, p: !!skipPainted, b: blurPx, out };
+        return out;
+    }
 
     // A thing standing in the light (a tree, a person): its silhouette and where it stands - fx, fy: its foot on the screen; ax: the
     // column of the frame over it; sx, sy: its own scale (sx < 0: mirrored); top: how far its top is pushed aside (a tree's sway);
     // alpha: how solid it is now. cx, cy: the foot in the silhouette's canvas. Every tree and person keeps one (sprite._occluder) each
     // frame while on screen, night or day: the sun lays its shadow from it, and the fires of the night layer (Farming_Render.js) cut
     // theirs out of their light with it.
-    function makeOccluder(bmp, fx, fy, ax, sx, sy, top, alpha) {
-        return { bmp, fx, fy, ax, sx, sy, top: top || 0, alpha: alpha === undefined ? 1 : alpha, cx: SHADOW_PAD + ax, cy: SHADOW_PAD + bmp._footRow + 1 };
+    // out (2026-10-24, wydajność): the thing's own occluder of the frame before, filled again (no new object each frame); its lift and
+    // stand are cleared - the caller sets them again
+    function makeOccluder(bmp, fx, fy, ax, sx, sy, top, alpha, out) {
+        if (!out) return { bmp, fx, fy, ax, sx, sy, top: top || 0, alpha: alpha === undefined ? 1 : alpha, cx: SHADOW_PAD + ax, cy: SHADOW_PAD + bmp._footRow + 1 };
+        out.bmp = bmp; out.fx = fx; out.fy = fy; out.ax = ax; out.sx = sx; out.sy = sy; out.top = top || 0; out.alpha = alpha === undefined ? 1 : alpha;
+        out.cx = SHADOW_PAD + ax; out.cy = SHADOW_PAD + bmp._footRow + 1;
+        if (out.lift !== undefined) out.lift = undefined;
+        if (out.stand !== undefined) out.stand = undefined;
+        return out;
     }
     // the matrix (a, b, c, d, tx, ty - a PIXI.Matrix or any object) that lays an occluder's silhouette on the ground: (ux, uy) the way
     // its shadow runs over the ground (a unit vector, the ground not yet shortened), len its length for 1 px of height, widen its width.
@@ -270,13 +296,35 @@
         out._pad = SOFT_PAD;
         return (bmp._soft = out);
     }
-    // lay the sun's shadow (a Sprite) of an occluder
+    // lay the sun's shadow (a Sprite) of an occluder (its matrix: shadow._matrix). Returns false when the whole shadow lies off the
+    // screen (2026-10-24, wydajność: 335 trees on Kruczy Jar, a few dozen of them on the screen): it is laid all the same, but not
+    // drawn (renderable false - it still counts as shown, visible); the caller skips the rest of its work (the clouds over it)
+    const VIEW_PAD = 16;
     function laySunShadow(shadow, o) {
         const sun = sunNow();
         if (shadow.bitmap !== o.bmp) shadow.bitmap = o.bmp;
-        shadow.anchor.set(o.cx / o.bmp.width, o.cy / o.bmp.height);
+        const W = o.bmp.width, H = o.bmp.height;
+        shadow.anchor.set(o.cx / W, o.cy / H);
         const m = shadow._matrix || (shadow._matrix = new PIXI.Matrix());
-        shadow.transform.setFromMatrix(shadowMatrix(o, sun.dx, sun.dy, sun.len, 1, m));
+        shadowMatrix(o, sun.dx, sun.dy, sun.len, 1, m);
+        // its box on the map (the layer lies in the tilemap at 0,0, as the characters): the four corners of the picture through m
+        const x0 = -o.cx, x1 = W - o.cx, y0 = -o.cy, y1 = H - o.cy;
+        const ax0 = m.a * x0, ax1 = m.a * x1, cy0 = m.c * y0, cy1 = m.c * y1, bx0 = m.b * x0, bx1 = m.b * x1, dy0 = m.d * y0, dy1 = m.d * y1;
+        const L = m.tx + Math.min(ax0, ax1) + Math.min(cy0, cy1), R = m.tx + Math.max(ax0, ax1) + Math.max(cy0, cy1);
+        const U = m.ty + Math.min(bx0, bx1) + Math.min(dy0, dy1), D = m.ty + Math.max(bx0, bx1) + Math.max(dy0, dy1);
+        shadow.renderable = !T.view.sees || T.view.sees(L - VIEW_PAD, U - VIEW_PAD, R + VIEW_PAD, D + VIEW_PAD);
+        if (shadow.renderable) setLocalMatrix(shadow, m);   // (the sprite's own matrix only when it is drawn: the next frame on the screen puts it in)
+        return shadow.renderable;
+    }
+    // the sprite's own matrix put in as it is (it was transform.setFromMatrix: taken apart into a position, a scale, a skew and a
+    // rotation, which PIXI put together again with sines and cosines on the next frame - the same matrix, the long way round). Only
+    // for sprites laid by a matrix and nothing else (their x, y, scale are never set).
+    function setLocalMatrix(sprite, m) {
+        const tf = sprite.transform, lt = tf.localTransform;
+        if (tf._currentLocalID === tf._localID && lt.a === m.a && lt.b === m.b && lt.c === m.c && lt.d === m.d && lt.tx === m.tx && lt.ty === m.ty) return;
+        lt.a = m.a; lt.b = m.b; lt.c = m.c; lt.d = m.d; lt.tx = m.tx; lt.ty = m.ty;
+        tf._currentLocalID = tf._localID;   // (PIXI does not make it again from the position and the scale)
+        tf._parentID = -1;                  // (the world's matrix again on the next frame)
     }
     // every thing in the light on this map now (trees and people on screen)
     function occluders(spriteset) {
@@ -617,7 +665,7 @@
         return blockers.map(b => Math.round(b.o.fx) + "," + Math.round(b.o.fy) + "," + (b.o.bmp._key || "") + "," + b.o.alpha.toFixed(2)).join(";");
     }
     const SunApi = T.api("Sun") || T.register("Sun", { now: sunNow, shadows: true });
-    Object.assign(SunApi, { now: sunNow, cloudCover, layer: sunShadowLayer, layerAlpha, silhouette: silhouetteBitmap, occluder: makeOccluder,
+    Object.assign(SunApi, { now: sunNow, cloudCover, layer: sunShadowLayer, layerAlpha, silhouette: silhouetteBitmap, silhouetteOf, occluder: makeOccluder,
         matrix: shadowMatrix, lay: laySunShadow, occluders, soft: softSilhouette, FLAT: SHADOW_FLAT, sky: skyAt, elevation: sunElev, NIGHT_TONE,
         lightBlockers, cutLightShadows, scratchCanvas, blockersKey, standing, standOfSprite, standOfOccluder, keepOffStanding, drawLightShadows,
         shadeOf, shadeAt, maskCanvas, standOrder });
@@ -801,7 +849,9 @@
             if (!Sun || !Sun.sky) return;
             this.createSkyFx();
         }
-        const sun = Sun.now(), sky = sun.sky, hour = T.time.hour(), on = !!$gameSystem._dayNightTinting && sun.outdoors;
+        // (the graphics' quality - Wydajnosc.js, Opcje -> Jakość grafiki: gfx.skyFx false at Niska - no rays and no mist)
+        const W = T.api("Wydajnosc"), skyFx = !W || !W.gfx || W.gfx.skyFx !== false;
+        const sun = Sun.now(), sky = sun.sky, hour = T.time.hour(), on = !!$gameSystem._dayNightTinting && sun.outdoors && skyFx;
         const storm = window.Storm ? Storm.level() : 0, rain = rainingNow();
         const rays = on && !sun.flash ? raysAt(hour) * (1 - rain) * (1 - storm) : 0;
         const mist = on ? mistAt(hour) * (1 - 0.5 * rain) : 0;

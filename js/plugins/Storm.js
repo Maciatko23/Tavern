@@ -355,9 +355,11 @@
         s._bob = rand(0.6, 2.2);
         s._spin = rand(-0.35, 0.35);
     };
+    // the graphics' quality (Wydajnosc.js, Opcje -> Jakość grafiki): gfx.particles - the share of the leaves flying (as of the rain's drops)
+    const leafShare = () => { const W = T.api("Wydajnosc"), k = W && W.gfx && typeof W.gfx.particles === "number" ? W.gfx.particles : 1; return Math.max(0, Math.min(1, k)); };
     Sprite_StormLeaves.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        const n = state.outdoors ? Math.round(LEAF_COUNT * clamp01((state.wind - 0.25) / 0.75)) : 0;
+        const n = state.outdoors ? Math.round(LEAF_COUNT * leafShare() * clamp01((state.wind - 0.25) / 0.75)) : 0;
         const k = 0.5 + state.wind;
         this._leaves.forEach((s, i) => {
             if (i >= n) {   // not needed now: finish crossing the screen, then rest

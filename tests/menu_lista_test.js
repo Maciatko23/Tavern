@@ -50,8 +50,9 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- P: the tabs (level 1), Postać first, its page as a preview
     t.check("P otwiera menu", await open());
     let m = await info();
-    t.check("rząd 8 zakładek u góry: Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Opcje, Zapisz grę, Wyjdź", m && m.labels.join() === "Postać,Ekwipunek,Umiejętności,Plecak,Dziennik,Opcje,Zapisz grę,Wyjdź"
-        && m.rows.length === 8 && m.rows.every(r => r.y1 <= 84) && m.rows.every((r, i) => i === 0 || r.x0 > m.rows[i - 1].x1), m && m.rows);
+    // (2026-10-24: the ninth tab "Mapa" between Dziennik and Opcje - MapaWyspy.js, tests/mapa_woz_test.js)
+    t.check("rząd 9 zakładek u góry: Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Mapa, Opcje, Zapisz grę, Wyjdź", m && m.labels.join() === "Postać,Ekwipunek,Umiejętności,Plecak,Dziennik,Mapa,Opcje,Zapisz grę,Wyjdź"
+        && m.rows.length === 9 && m.rows.every(r => r.y1 <= 84) && m.rows.every((r, i) => i === 0 || r.x0 > m.rows[i - 1].x1), m && m.rows);
     t.check("na początku zakładki (poziom 1), Postać, podgląd bez klawiszy", m.level === 1 && m.active === "hero" && m.activeWindows.length === 0, { level: m.level, active: m.active });
     t.check("pasek klawiszy: A/D zakładka · O wybierz · P wróć do gry", m.keyCaps.join() === "A/D,O,P" && m.keys.join() === "zakładka,wybierz,wróć do gry", m.keys);
     t.check("stare okno poleceń i panel MenuPanel ukryte", !m.window.visible && !m.window.active && !(await t.eval("SceneManager._scene._menuPanel && SceneManager._scene._menuPanel.visible")));
@@ -63,8 +64,8 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- A / D along the tabs (round), the arrows too; the page follows
     const order = [];
-    for (let i = 0; i < 8; i++) order.push((await key("D", 12)).active);
-    t.check("D: w prawo po całym rzędzie, w kółko", order.join() === "equip,skills,item,journal,options,save,gameEnd,hero", order);
+    for (let i = 0; i < 9; i++) order.push((await key("D", 12)).active);
+    t.check("D: w prawo po całym rzędzie, w kółko", order.join() === "equip,skills,item,journal,mapa,options,save,gameEnd,hero", order);
     m = await key("A", 12);
     t.check("A: w lewo (z Postaci na Wyjdź)", m.active === "gameEnd" && m.level === 1, m.active);
     m = await key("ArrowRight", 12);
@@ -358,7 +359,7 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("P: zakładki", m.level === 1 && m.active === "journal", m.level);
 
     // ---------------------------------------------------------------- Opcje: W / S, A / D a value
-    m = await key("D", 12);
+    m = await goTo("options");   // (2026-10-24: past the Mapa tab)
     m = await key("O", 6);
     t.check("Opcje: lista opcji ma klawisze, pierwsza „Wygląd”", m.level === 2 && m.options.symbol === "uiClean" && m.activeWindows.includes("Window_Options"), m.options);
     m = await key("S");

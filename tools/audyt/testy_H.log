@@ -1,0 +1,9 @@
+1 test(s), CDP port 9682, one at a time, one shared browser
+
+przejscie_ciagiem_test               24/24  ok       140 s   before: 2/6 FAIL
+
+test                               result   status   time  tries  before
+------------------------------------------------------------------------------------
+przejscie_ciagiem_test               24/24  ok       140 s  1      2/6 FAIL
+
+SUITES: 1 clean, 0 with a FAIL/ERR line  (time: 2 min 21 s)

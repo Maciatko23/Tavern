@@ -91,6 +91,30 @@
     T.view.w = () => Graphics.width / viewScale;
     T.view.h = () => Graphics.height / viewScale;
     T.view.scale = () => viewScale;
+    // (2026-10-24, wydajność) the part of the map world the screen shows now, in the tilemap's own px - where the characters' sprites
+    // and the layers in the tilemap stand: { x0, y0, x1, y1 }, read from the tilemap's place on the last drawn frame (the eagle's
+    // flight, a zoom, a shake are in it); the screen itself while there is no map. T.view.sees(x0, y0, x1, y1): a box of the tilemap
+    // touches it - a thing off it need not be drawn (culling: "is it on the screen").
+    const viewBox = { f: -1, x0: 0, y0: 0, x1: 0, y1: 0 };
+    T.view.rect = function() {
+        if (viewBox.f === Graphics.frameCount) return viewBox;
+        viewBox.f = Graphics.frameCount;
+        const s = SceneManager._scene, tm = s && s._spriteset && s._spriteset._tilemap, wt = tm && tm.worldTransform;
+        const W = Graphics.width, H = Graphics.height;
+        if (wt && wt.b === 0 && wt.c === 0 && wt.a > 0 && wt.d > 0) {
+            viewBox.x0 = -wt.tx / wt.a; viewBox.x1 = (W - wt.tx) / wt.a;
+            viewBox.y0 = -wt.ty / wt.d; viewBox.y1 = (H - wt.ty) / wt.d;
+        } else if (wt && (wt.b !== 0 || wt.c !== 0 || !(wt.a > 0) || !(wt.d > 0))) {
+            viewBox.x0 = viewBox.y0 = -Infinity; viewBox.x1 = viewBox.y1 = Infinity;   // (turned or mirrored: everything counts as seen)
+        } else {
+            viewBox.x0 = 0; viewBox.y0 = 0; viewBox.x1 = W / viewScale; viewBox.y1 = H / viewScale;
+        }
+        return viewBox;
+    };
+    T.view.sees = function(x0, y0, x1, y1) {
+        const r = T.view.rect();
+        return x1 >= r.x0 && x0 <= r.x1 && y1 >= r.y0 && y0 <= r.y1;
+    };
     T.view.setScale = function(s) {
         const v = s > 0 && isFinite(s) ? s : 1;
         if (v === viewScale) return viewScale;

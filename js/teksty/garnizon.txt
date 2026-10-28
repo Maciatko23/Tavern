@@ -362,6 +362,11 @@ Skup tylko dla tych z księgi. Przynieś najpierw drwa dla kuchni - to cię wpis
 [klosNothing]
 Nic z mojej listy nie masz. Zboże, warzywa, mięso wędzone, ryby, skóry, strzały, drewno, węgiel - to kupuję.
 
+# limit dzienny skupu (po dziesięć sztuk każdego towaru) - gracz ma w torbie tylko to, co dziś już wziąłem
+[klosLimit]
+Dość na dziś. Po dziesięć sztuk każdego towaru - tyle wolno mi wpisać do księgi na jeden dzień. Przyjdź jutro.
+Z tego, co masz, dziś już swoje wziąłem. Księga, chłopcze: dziesięć sztuk i ani jednej więcej. Jutro od nowa.
+
 [klosSold]
 Dobre. Król płaci, Kłos liczy. Masz.
 Wpisane. Z ciebie dobry dostawca.
@@ -549,9 +554,13 @@ kod.favorWord.1 = przyjaciel garnizonu
 kod.sell.0 = Skup wojskowy
 kod.sell.1 = " - Opinia {got}"
 kod.sell.2 = „Nasze zboże idzie na wojnę”{1}
+# popupy nad bohaterem przy limicie dziennym (po {n} sztuk każdego towaru): nic nie sprzedane / sprzedana tylko część
+kod.sell.3 = Skup: dziś już po {n} sztuk każdego - resztę jutro
+kod.sell.4 = Resztę jutro - skup bierze po {n} sztuk dziennie
 # skupBranch
 kod.skupBranch.0 = {name} ×{2} - {3} G/szt.
 kod.skupBranch.1 = Wszystko z tej listy ({1} G).
+kod.skupBranch.2 = {name} ×{2} z {4} - {3} G/szt. (dziennie po {5})
 # rotmistrzTalk
 kod.rotmistrzTalk.0 = Rotmistrz Bełza
 kod.rotmistrzTalk.1 = Jak garnizon na mnie patrzy?

@@ -155,7 +155,7 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // (2026-10-23: the words are data now - js/teksty/orzel.txt, kod.campGuards.0 - and the code hands them on as name)
     const orzelTx = fs.readFileSync(path.join(__dirname, "..", "js", "teksty", "orzel.txt"), "utf8");
     t.check("Orzel.js: strażnicy klatki mają name: „Myśliwy Czarnych Oczu” (Humans czyta opts.name)", (/tag: "orzelStraz", name: "Myśliwy Czarnych Oczu"/.test(orzel) ||
-        (/tag: "orzelStraz", name: TK\.kod\.campGuards\[0\]/.test(orzel) && /^kod\.campGuards\.0 = Myśliwy Czarnych Oczu\s*$/m.test(orzelTx))) && !/label: /.test(orzel.split("orzelStraz")[1] || ""));
+        (/tag: "orzelStraz", name: TK\.kod\.campGuards\[0\]/.test(orzel) && /^kod\.campGuards\.0 = Myśliwy Czarnych Oczu\s*$/m.test(orzelTx))) && !/tag: "orzelStraz", label:/.test(orzel));
 
     await t.done();
 });

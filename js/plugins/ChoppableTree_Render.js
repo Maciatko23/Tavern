@@ -94,13 +94,15 @@
         const w = (2 * Math.PI) / SWAY_CYCLE;
         const phase = event.eventId() * 1.7 + event.x * 0.35;
         const gust = 0.5 + 0.5 * Math.sin((w * t) / 2.7 - event.x * 0.12);   // 0..1
+        const swingPhase = w * t + phase, whipPhase = 2.7 * w * t + 1.7 * phase;
         return {
+            sinSwing: Math.sin(swingPhase), cosSwing: Math.cos(swingPhase), sinWhip: Math.sin(whipPhase), cosWhip: Math.cos(whipPhase),
             amp: treeHeight * Math.tan((cfg.sway * Math.PI) / 180) * (1 + 2 * W),
             lean: 0.6 * gust * (1 + W),        // a gust pushes the whole tree downwind
             swing: 0.3 + 0.6 * gust,           // and the main swing grows with it
             whip: 0.2 * (0.4 + 0.6 * gust) * (1 + 1.5 * W),   // the quick shiver of the crown
-            swingPhase: w * t + phase,
-            whipPhase: 2.7 * w * t + 1.7 * phase
+            swingPhase,
+            whipPhase
         };
     }
 
@@ -118,6 +120,26 @@
             if (elapsed > 0 && elapsed < 2) {
                 d += (event._treeKickDir || 1) * KICK_PIXELS * Math.exp(-3.2 * elapsed) *
                     Math.sin(2 * Math.PI * 2.3 * elapsed) * bendProfile(h);
+            }
+        }
+        return d;
+    }
+
+    // treeOffset for a strip whose bendProfile(h) and whipProfile(h) are known (the same arithmetic, the same numbers)
+    // (2026-10-24, wydajność: the sines of the tree's two phases taken once a frame - sin(a - b) = sin a cos b - cos a sin b, with
+    // the strip's own cos/sin of b worked out once; whole pixels come out the same - checked on 680 000 strips, none differed)
+    function stripOffset(event, wind, h, bend, whip, strip) {
+        let d = 0;
+        if (wind) {
+            const swing = wind.sinSwing * strip._c35 - wind.cosSwing * strip._s35;
+            const whipNow = wind.sinWhip * strip._c60 - wind.cosWhip * strip._s60;
+            d += wind.amp * (bend * (wind.lean + wind.swing * swing) + whip * wind.whip * whipNow);
+        }
+        if (event._treeKickAt !== undefined) {
+            const elapsed = (Graphics.frameCount - event._treeKickAt) / 60 - 0.07 * h;
+            if (elapsed > 0 && elapsed < 2) {
+                d += (event._treeKickDir || 1) * KICK_PIXELS * Math.exp(-3.2 * elapsed) *
+                    Math.sin(2 * Math.PI * 2.3 * elapsed) * bend;
             }
         }
         return d;
@@ -147,6 +169,9 @@
         }
     }
 
+    // (2026-10-24, wydajność: a tree is 25-40 strips; the engine's Sprite.update called each of them on every frame for nothing - a
+    // strip, an ember strip has no children and no update of its own)
+    const bodyUpdate = function() {};
     function ensureTreeStrips(frameHeight) {
         if (!this._treeBody) {
             this._stumpPreview = new Sprite();
@@ -155,26 +180,101 @@
             this._stumpPreview.alpha = 0;
             this._stumpPreview.visible = false;
             this._treeBody = new Sprite();
+            this._treeBody.update = bodyUpdate;   // (its strips are plain pictures: nothing in them to update each frame)
             this.addChild(this._stumpPreview);
             this.addChild(this._treeBody);
         }
         if (this._treeStrips && this._treeStripsFor === frameHeight) return;
-        if (this._treeStrips) {
-            for (const strip of this._treeStrips) {
-                this._treeBody.removeChild(strip);
-            }
-        }
+        if (this._treeMeshes) for (const mesh of this._treeMeshes) { this._treeBody.removeChild(mesh); mesh.destroy(); }
         this._treeStrips = [];
         this._treeStripsFor = frameHeight;
         this._treeFrameKey = null;   // the new strips have no picture frame yet
-        for (let row = 0; row < frameHeight; row += STRIP_HEIGHT) {
-            const strip = new Sprite();
-            strip.anchor.x = 0;
-            strip.anchor.y = 0;
-            strip._rowStart = row;
-            strip._rowHeight = Math.min(STRIP_HEIGHT, frameHeight - row);
-            this._treeStrips.push(strip);
-            this._treeBody.addChild(strip);
+        this._treeStripsLaid = undefined;
+        for (let row = 0; row < frameHeight; row += STRIP_HEIGHT) this._treeStrips.push(new TreeStrip(row, Math.min(STRIP_HEIGHT, frameHeight - row)));
+        // the strips drawn by meshes of up to MESH_STRIPS strips each, under the embers (first in the body)
+        this._treeMeshes = [];
+        for (let i = 0; i < this._treeStrips.length; i += MESH_STRIPS) {
+            const mesh = stripMesh(Math.min(MESH_STRIPS, this._treeStrips.length - i));
+            mesh._from = i;
+            this._treeMeshes.push(mesh);
+            this._treeBody.addChildAt(mesh, this._treeMeshes.length - 1);
+        }
+    }
+    // (2026-10-24, wydajność) A strip of a tree: a band of STRIP_HEIGHT rows of its picture, shifted sideways by whole pixels as the
+    // crown sways. It was a Sprite each - 25-40 sprites a tree, each with its own transform, bounds and draw on every frame; now the
+    // band's numbers (the same as a sprite's: x, y, scale, its frame of the picture, the picture) and the tree's meshes draw them: the
+    // same corners on the screen, the same corners of the picture - the same pixels.
+    function TreeStrip(row, height) {
+        this._rowStart = row;
+        this._rowHeight = height;
+        this.x = 0;
+        this.y = 0;
+        this.scale = { x: 1, y: 1 };
+        this.bitmap = null;
+        this.visible = true;
+        this._frame = new Rectangle(0, 0, 0, 0);
+    }
+    TreeStrip.prototype.setFrame = function(x, y, width, height) {
+        const f = this._frame;
+        f.x = x; f.y = y; f.width = width; f.height = height;
+    };
+    // MESH_STRIPS strips: 4 corners each, 96 in all - under PIXI's Mesh.BATCHABLE_SIZE (100), so a tree is drawn in the same batch as
+    // the sprites round it (one draw call for many trees); two triangles a strip, corners in a sprite's order (TL, TR, BR, BL)
+    const MESH_STRIPS = 24;
+    function stripMesh(n) {
+        const vertices = new Float32Array(n * 8), uvs = new Float32Array(n * 8), indices = new Uint16Array(n * 6);
+        for (let i = 0; i < n; i++) {
+            const v = i * 4, k = i * 6;
+            indices[k] = v; indices[k + 1] = v + 1; indices[k + 2] = v + 2;
+            indices[k + 3] = v; indices[k + 4] = v + 2; indices[k + 5] = v + 3;
+        }
+        const mesh = new PIXI.SimpleMesh(PIXI.Texture.EMPTY, vertices, uvs, indices);
+        mesh.autoUpdate = false;   // (the corners are sent again only when a strip moved: layStrips)
+        mesh.update = bodyUpdate;
+        mesh._bitmap = null;
+        return mesh;
+    }
+    // the whole picture as a texture for the meshes (one per picture: its frames are the strips' corners of the picture)
+    const meshTextures = new WeakMap();
+    function meshTexture(bitmap) {
+        const base = bitmap && bitmap._baseTexture;
+        if (!base) return PIXI.Texture.EMPTY;
+        let t = meshTextures.get(base);
+        if (!t) meshTextures.set(base, (t = new PIXI.Texture(base)));
+        return t;
+    }
+    // the strips' corners into the meshes: on the screen (x, y, the frame's size by the scale - as a sprite with anchor 0 puts them)
+    // and in the picture (the frame over the picture's size - as a sprite's texture does); only what changed is sent
+    function layStrips(sprite, pic, reframe) {
+        const strips = sprite._treeStrips, base = pic._baseTexture, W = base ? base.width : 0, H = base ? base.height : 0;
+        for (const mesh of sprite._treeMeshes) {
+            const n = mesh.geometry.indexBuffer.data.length / 6, vbuf = mesh.geometry.getBuffer("aVertexPosition"), v = vbuf.data;
+            const newPic = mesh._bitmap !== pic || mesh._picW !== W || mesh._picH !== H;
+            if (newPic) {
+                mesh._bitmap = pic;
+                mesh._picW = W;
+                mesh._picH = H;
+                mesh.texture = meshTexture(pic);
+            }
+            let moved = false;
+            for (let i = 0; i < n; i++) {
+                const st = strips[mesh._from + i], f = st._frame, j = i * 8;
+                const x0 = st.x, y0 = st.y, x1 = x0 + f.width * st.scale.x, y1 = y0 + f.height * st.scale.y;
+                if (v[j] !== x0 || v[j + 1] !== y0 || v[j + 2] !== x1 || v[j + 5] !== y1) {
+                    v[j] = x0; v[j + 1] = y0; v[j + 2] = x1; v[j + 3] = y0; v[j + 4] = x1; v[j + 5] = y1; v[j + 6] = x0; v[j + 7] = y1;
+                    moved = true;
+                }
+            }
+            if (moved) vbuf.update();
+            if ((reframe || newPic) && W > 0 && H > 0) {
+                const ubuf = mesh.geometry.getBuffer("aTextureCoord"), u = ubuf.data;
+                for (let i = 0; i < n; i++) {
+                    const f = strips[mesh._from + i]._frame, j = i * 8;
+                    const u0 = f.x / W, u1 = (f.x + f.width) / W, v0 = f.y / H, v1 = (f.y + f.height) / H;
+                    u[j] = u0; u[j + 1] = v0; u[j + 2] = u1; u[j + 3] = v0; u[j + 4] = u1; u[j + 5] = v1; u[j + 6] = u0; u[j + 7] = v1;
+                }
+                ubuf.update();
+            }
         }
     }
 
@@ -191,10 +291,10 @@
         this.setFrame(sx, sy, 0, ph);
         this.bitmap.smooth = true;
         this.ensureTreeStrips(ph);
-        this._treeBody.visible = true;
         this.updateStumpPreviewFrame(event);
         const wind = treeWind(event, cfg, ph);
-        const half = Math.floor(pw / 2);
+        this._treeWind = wind;                       // (the shadow's sway this frame: updateTreeShadow)
+        this._treeWindAt = Graphics.frameCount;
         // a charred tree draws its strips from a soot-black copy of its picture (a colour tone on the sprite would dull its embers
         // too) - but while it still smoulders it keeps its own picture: the burn creeping down it covers it pixel by pixel
         const charred = isCharred(event), age = charred ? smoulderAge(event) : -1, burning = age >= 0 && age < EMBER_LIFE;
@@ -202,25 +302,61 @@
         // a new picture resets the strips' frames: set them again. The picture itself is part of the key: a fruit tree swapping its bare
         // sheet for the fruiting one (the same size, so the same sx/sy/pw) would otherwise keep the old frames - and a strip given a
         // bitmap that is still loading gets the WHOLE sheet as its frame once it loads (every row of it: the tree drawn over and over)
-        const frameKey = (pic._url || "") + "," + sx + "," + sy + "," + pw + (sooty ? ",c" : "");
-        const reframe = this._treeFrameKey !== frameKey;
-        this._treeFrameKey = frameKey;
+        // (2026-10-24: the key's parts kept apart - no new string per tree per frame; null after ensureTreeStrips made new strips)
+        const fk = this._treeFrameKey, url = pic._url || "";
+        const reframe = !fk || fk.url !== url || fk.sx !== sx || fk.sy !== sy || fk.pw !== pw || fk.sooty !== sooty;
+        if (reframe) this._treeFrameKey = { url, sx, sy, pw, sooty };
+        // off the screen (2026-10-24, wydajność): its strips are neither laid nor drawn (renderable: it still counts as shown) - the
+        // next frame it is on the screen lays them all again from the same sway; a new picture is always cut into the strips at once;
+        // a burning tree (its glow, its smoke) and a falling one always go on
+        this._treeBody.visible = true;
+        if (!reframe && !burning && !(event._treeFallT >= 0) && treeOffView(this, event, pw, ph, scale, wind)) {
+            this._treeBody.renderable = false;
+            this._treeCulled = true;
+            return;
+        }
+        this._treeCulled = false;
+        this._treeBody.renderable = true;
+        const half = Math.floor(pw / 2);
         // scale shrinks (or grows) the whole picture around the foot of the tree (local 0,0): both the
         // strip size and its position get the same factor, so a smaller tree still stands on its own tile.
         // Each strip reaches exactly to the whole pixel where the next one starts: a strip of 6 rows at 0.74 is 4.44 px high, and
         // with its top rounded a gap of up to a pixel was left under it (a line of grass across a young planted pine)
-        for (const strip of this._treeStrips) {
+        // (its place up the tree, its bend and whip there: the same numbers each frame - worked out once per strip and scale)
+        const strips = this._treeStrips, laid = this._treeStripsLaid !== scale || this._treeStripsLaidH !== ph;
+        if (laid) { this._treeStripsLaid = scale; this._treeStripsLaidH = ph; }
+        for (let i = 0; i < strips.length; i++) {
+            const strip = strips[i];
             strip.bitmap = pic;
             strip.visible = true;
             if (reframe) strip.setFrame(sx, sy + strip._rowStart, pw, strip._rowHeight);
-            const top = Math.round((strip._rowStart - ph) * scale), bottom = Math.round((strip._rowStart + strip._rowHeight - ph) * scale);
+            if (laid || strip._top === undefined) {
+                const top = Math.round((strip._rowStart - ph) * scale), bottom = Math.round((strip._rowStart + strip._rowHeight - ph) * scale);
+                strip._top = top;
+                strip._sy = (bottom - top) / strip._rowHeight;
+                const h = 1 - (strip._rowStart + strip._rowHeight / 2) / ph;
+                strip._h = h;
+                strip._bend = bendProfile(h);
+                strip._whip = whipProfile(h);
+                strip._c35 = Math.cos(0.35 * h); strip._s35 = Math.sin(0.35 * h);
+                strip._c60 = Math.cos(0.6 * h); strip._s60 = Math.sin(0.6 * h);
+            }
             strip.scale.x = scale;
-            strip.scale.y = (bottom - top) / strip._rowHeight;
-            const h = 1 - (strip._rowStart + strip._rowHeight / 2) / ph;
-            strip.x = Math.round((treeOffset(event, wind, h) - half) * scale);
-            strip.y = top;
+            strip.scale.y = strip._sy;
+            strip.x = Math.round((stripOffset(event, wind, strip._h, strip._bend, strip._whip, strip) - half) * scale);
+            strip.y = strip._top;
         }
+        layStrips(this, pic, reframe);
         this.updateEmbers(burning ? age : -1, sx, sy, pw, ph, scale);
+    }
+
+    // a tree whose picture (with its sway and CULL_PAD round it) is nowhere on the screen (Tawerna.view.sees; the event's own place
+    // on the screen: the sprite's x, y are still the last frame's here)
+    const CULL_PAD = 96;
+    function treeOffView(sprite, event, pw, ph, scale, wind) {
+        if (!T.view || !T.view.sees) return false;
+        const x = event.screenX(), y = event.screenY(), half = (pw / 2) * scale + CULL_PAD + (wind ? Math.abs(wind.amp) * 3 : 0);
+        return !T.view.sees(x - half, y - ph * scale - CULL_PAD, x + half, y + CULL_PAD);
     }
 
     // ---- a charred tree: its picture turned to soot (made once per picture), and the embers smouldering in it
@@ -525,9 +661,12 @@
     const cloudCover = (x, y) => Sun().cloudCover(x, y);
     const sunShadowLayer = tilemap => Sun().layer(tilemap);
     const layerAlpha = layer => Sun().layerAlpha(layer);
-    const silhouetteBitmap = (...a) => Sun().silhouette(...a);
-    const makeOccluder = (...a) => Sun().occluder(...a);
-    const laySunShadow = (shadow, o) => Sun().lay(shadow, o);
+    // (the sprite remembers its silhouette, and keeps one occluder object of its own - 2026-10-24, wydajność: no new string, no new
+    // object per thing per frame)
+    const silhouetteOf = (sprite, src, sx, sy, pw, ph, skipPainted, blurPx) =>
+        Sun().silhouetteOf ? Sun().silhouetteOf(sprite, src, sx, sy, pw, ph, skipPainted, blurPx) : Sun().silhouette(src, sx, sy, pw, ph, skipPainted, blurPx);
+    const makeOccluder = (bmp, fx, fy, ax, sx, sy, top, alpha, out) => Sun().occluder(bmp, fx, fy, ax, sx, sy, top, alpha, out);
+    const laySunShadow = (shadow, o) => Sun().lay(shadow, o) !== false;
 
     // A tree's shadow (from the foot of the trunk, user: "od samego pieńka równo" - its lowest row and the middle of it, 4 px above
     // the frame's bottom on our trees, a little aside on the fruit trees; starting TREE_SHADOW_INSET px up inside the trunk, where
@@ -539,13 +678,15 @@
         if (!Sun()) { this._occluder = null; if (this._treeShadow) this._treeShadow.visible = false; return; }
         let shadow = this._treeShadow;
         const pw = this.patternWidth(), ph = this.patternHeight();
-        const bmp = !event._treeGone && tilt < 1 && this.parent ? silhouetteBitmap(this.bitmap,
+        const bmp = !event._treeGone && tilt < 1 && this.parent ? silhouetteOf(this, this.bitmap,
             (this.characterBlockX() + this.characterPatternX()) * pw, (this.characterBlockY() + this.characterPatternY()) * ph, pw, ph, true) : null;
         if (bmp) {
             const cfg = treeConfig(event), scale = (cfg && cfg.scale) || 1, h = bmp._footRow + 1;
-            const sway = treeOffset(event, treeWind(event, cfg, ph), 1) * scale;   // the crown's sway, laid on the ground with it
-            this._occluder = makeOccluder(bmp, this.x + (bmp._footX - pw / 2) * scale, this.y - (ph - h + TREE_SHADOW_INSET) * scale, bmp._footX, scale, scale, sway,
-                TREE_CROWN_SOLID * (1 - tilt));   // (how much light a fire's shadow of it takes away: see Farming_Render.js)
+            // the crown's sway, laid on the ground with it (the wind of this frame: updateTreeFrame has it already)
+            const wind = this._treeWindAt === Graphics.frameCount ? this._treeWind : treeWind(event, cfg, ph);
+            const sway = treeOffset(event, wind, 1) * scale;
+            this._occluder = this._occTree = makeOccluder(bmp, this.x + (bmp._footX - pw / 2) * scale, this.y - (ph - h + TREE_SHADOW_INSET) * scale, bmp._footX, scale, scale, sway,
+                TREE_CROWN_SOLID * (1 - tilt), this._occTree);   // (how much light a fire's shadow of it takes away: see Farming_Render.js)
             // its foot is TREE_SHADOW_INSET px up inside the picture; a falling tree no longer stands (Sky.js keeps the night's shadows
             // off what stands, by its upright silhouette)
             this._occluder.lift = TREE_SHADOW_INSET;
@@ -560,10 +701,17 @@
         const layer = sunShadowLayer(this.parent);
         if (!shadow) shadow = this._treeShadow = new Sprite();
         if (shadow.parent !== layer) layer.addChild(shadow);
-        laySunShadow(shadow, this._occluder);
+        if (!this.visible) {
+            shadow.visible = false;
+            return;
+        }
+        if (!laySunShadow(shadow, this._occluder)) {   // (wholly off the screen: shown, not drawn - Sky.js lay)
+            shadow.visible = layerAlpha(layer) * (1 - tilt) > 0.005;
+            return;
+        }
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
         shadow.alpha = layerAlpha(layer) * (sunNow().flash ? 1 : 1 - 0.85 * cloudCover((event._realX + 0.5) * tw, (event._realY + 1) * th)) * (1 - tilt);
-        shadow.visible = this.visible && shadow.alpha > 0.005;
+        shadow.visible = shadow.alpha > 0.005;
     }
 
     // ---- rocks (user 2026-10-01: "cienie kamienie"): stones, boulders, ore and tall stumps throw the sun's shadow in their own shape
@@ -573,10 +721,11 @@
     const ROCK_PIC = /^!\$(Rock_|Boulder|Stump_|Bush_)/;
     // bushes too (user 2026-10-01: "gąszcze gałęzi też mogą cień rzucać fajnie"): a thicket of bare branches throws a lacy shadow - the
     // branches sharp in it (little blur) and the light coming through between them (lighter); a leafy bush a soft, full one
+    const KIND_LACY = { blur: 0.6, solid: 0.88 }, KIND_BUSH = { blur: 1.2, solid: 0.9 }, KIND_ROCK = { blur: undefined, solid: 1 };
     function groundShadowKind(name) {
-        if (/^!\$Bush_Bare/.test(name)) return { blur: 0.6, solid: 0.88 };
-        if (/^!\$Bush_/.test(name)) return { blur: 1.2, solid: 0.9 };
-        return { blur: undefined, solid: 1 };
+        if (/^!\$Bush_Bare/.test(name)) return KIND_LACY;
+        if (/^!\$Bush_/.test(name)) return KIND_BUSH;
+        return KIND_ROCK;
     }
     const AMBIENT_KEEP = 0.35, ROCK_SHADOW_INSET = 2;
     // a rock is bulky: it stands on the ground with a whole footprint, whose middle lies behind the bottom edge we see (the picture is
@@ -614,10 +763,16 @@
     function updateRockShadow(event) {
         if (!Sun()) { this._occluder = null; if (this._treeShadow) this._treeShadow.visible = false; return; }
         let shadow = this._treeShadow;
-        const f = this._frame, rock = ROCK_PIC.test(this._characterName || "") && this.bitmap && this.bitmap.isReady() && this.parent && f && f.width > 0;
+        const name = this._characterName || "";
+        if (this._rockName !== name) {   // (what its picture is: read once per picture's name - three regexes per thing per frame before)
+            this._rockName = name;
+            this._rockPic = ROCK_PIC.test(name);
+            this._rockKind = this._rockPic ? groundShadowKind(name) : null;
+        }
+        const f = this._frame, rock = this._rockPic && this.bitmap && this.bitmap.isReady() && this.parent && f && f.width > 0;
         if (rock && !this.bitmap._softShade) this.bitmap = withSoftShade(this.bitmap);   // (set once: the sprite keeps it while the picture is the same)
-        const kind = rock ? groundShadowKind(this._characterName) : null;
-        const bmp = rock && this.visible && this.opacity > 0 ? silhouetteBitmap(this.bitmap, f.x, f.y, f.width, f.height, false, kind.blur) : null;
+        const kind = rock ? this._rockKind : null;
+        const bmp = rock && this.visible && this.opacity > 0 ? silhouetteOf(this, this.bitmap, f.x, f.y, f.width, f.height, false, kind.blur) : null;
         if (!bmp) {
             this._occluder = null;
             if (shadow) shadow.visible = false;
@@ -625,17 +780,23 @@
         }
         const sx = this.scale.x, sy = this.scale.y, h = bmp._footRow + 1;   // (squashed while it breaks: the shadow with it)
         const depth = Math.round(Math.min(rockWidth(bmp) * ROCK_DEPTH, h * ROCK_DEPTH_MAX));
-        this._occluder = makeOccluder(bmp, this.x + (bmp._footX - f.width / 2) * sx, this.y - (f.height - h + ROCK_SHADOW_INSET + depth) * sy, bmp._footX, sx, sy, 0,
-            kind.solid * this.opacity / 255);
+        this._occluder = this._occRock = makeOccluder(bmp, this.x + (bmp._footX - f.width / 2) * sx, this.y - (f.height - h + ROCK_SHADOW_INSET + depth) * sy, bmp._footX, sx, sy, 0,
+            kind.solid * this.opacity / 255, this._occRock);
         this._occluder.lift = ROCK_SHADOW_INSET + depth;   // (its foot: up inside the picture, the middle of its footprint)
-        if (!Sun().shadows || sunNow().light <= 0.01) {
+        // (the graphics' quality - Wydajnosc.js, Opcje -> Jakość grafiki: gfx.smallShadows false at Niska - the rocks, the bushes and
+        // the stumps throw no sun's shadow; the trees' and the people's stay. The occluder above stays for the fires' shadows at night)
+        const W = T.api("Wydajnosc"), small = !W || !W.gfx || W.gfx.smallShadows !== false;
+        if (!Sun().shadows || sunNow().light <= 0.01 || !small) {
             if (shadow) shadow.visible = false;
             return;
         }
         const layer = sunShadowLayer(this.parent);
         if (!shadow) shadow = this._treeShadow = new Sprite();
         if (shadow.parent !== layer) layer.addChild(shadow);
-        laySunShadow(shadow, this._occluder);
+        if (!laySunShadow(shadow, this._occluder)) {   // (wholly off the screen: shown, not drawn - Sky.js lay)
+            shadow.visible = layerAlpha(layer) * kind.solid * (this.opacity / 255) > 0.005;
+            return;
+        }
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
         shadow.alpha = layerAlpha(layer) * kind.solid * (this.opacity / 255) * (sunNow().flash ? 1 : 1 - 0.85 * cloudCover((event._realX + 0.5) * tw, (event._realY + 1) * th));
         shadow.visible = shadow.alpha > 0.005;

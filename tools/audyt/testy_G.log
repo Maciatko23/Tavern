@@ -1,0 +1,9 @@
+1 test(s), CDP port 9681, one at a time, one shared browser
+
+garnizon_test                        48/48  ok       140 s   before: 45/45 ok
+
+test                               result   status   time  tries  before
+------------------------------------------------------------------------------------
+garnizon_test                        48/48  ok       140 s  1      45/45 ok
+
+SUITES: 1 clean, 0 with a FAIL/ERR line  (time: 2 min 21 s)

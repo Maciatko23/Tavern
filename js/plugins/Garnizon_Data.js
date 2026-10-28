@@ -179,8 +179,12 @@
     const BUY = [
         { id: 74, price: 6, food: true }, { id: 71, price: 7, food: true }, { id: 72, price: 6, food: true }, { id: 73, price: 13, food: true },
         { id: 105, price: 24, food: true }, { id: 106, price: 21, food: true }, { id: 96, price: 9 }, { id: 97, price: 22 },
-        { id: 127, price: 3 }, { id: 61, price: 6 }, { id: 79, price: 8 }
+        { id: 127, price: 3 }, { id: 61, price: 3 }, { id: 79, price: 5 }   // (2026-10-24 audyt: wood 6 -> 3, charcoal 8 -> 5 - under the base price, as Borgar)
     ];
+    // (2026-10-24 audyt, the user's decision) the day's book: Kłos takes at most this many of EACH good a day - the debt was to be
+    // chopped out of the forest in a few evenings (a tree = 6-8 wood at 6 G, no cap). The wave's x1.5 stays: a premium for the time,
+    // not for the heap
+    const BUY_LIMIT = 10;
     const BUY_WAVE = 1.5, BUY_WAVE_DAYS = 7;          // half again dearer for a week after each wave
     const BUY_FRIEND = 1.2;                           // Kłos owes the hero (D27: he kept quiet)
     const HUNGER_DAYS = 7;                            // after the requisition (D14) the town is hungry for a week
@@ -226,7 +230,7 @@
     // ------------------------------------------------------------------ the sandbar (rows 20-21: sea tiles; at low tide sand)
     const BAR = { rows: [20, 21], x0: 0, x1: 11, picture: "Garnizon_Lacha", px: 0, py: 19, fadeFrom: 0.15, fadeTo: 0.3 };
 
-    window.GarnizonData = { MAP, QUARTERS, TOWN, PODGRODZIE, WAVES, RECRUIT_DAYS, RESIDENTS, QUESTS: [Q_K52, Q_D26, Q_D27], BUY, BUY_WAVE,
+    window.GarnizonData = { MAP, QUARTERS, TOWN, PODGRODZIE, WAVES, RECRUIT_DAYS, RESIDENTS, QUESTS: [Q_K52, Q_D26, Q_D27], BUY, BUY_LIMIT, BUY_WAVE,
         BUY_WAVE_DAYS, BUY_FRIEND, HUNGER_DAYS, FAVOR, SMITH, GRAIN_PRICE, SOLDIERS, RECRUITS, RECRUIT_STAY, PATROL, TOWN_EVENTS,
         PODGRODZIE_EVENTS, QUARTERS_LANDING, QUARTERS_EXIT, BAR, IDS: [640, 669] };
 })();
